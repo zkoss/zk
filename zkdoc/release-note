@@ -7,6 +7,8 @@ ZK 3.0.0 Freshly
 
 * Bugs:
   1797527: malformed zul.xsd
+  1801028: Failed to include ZUL located in classpath
+  1798123: DHtmlLayoutPortlet.handleError throws exception in Pluto
 
 	--------
 ZK 3.0.0 RC
