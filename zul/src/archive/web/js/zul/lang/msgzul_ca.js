@@ -17,6 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.UNKNOWN_TYPE = "Tipus de component desconegut: ";
+msgzul.UNKNOWN_TYPE = "El tipus de component és desconegut: ";
 msgzul.DATE_REQUIRED = "Heu d'especificar una data. Format: ";
-msgzul.NO_AUDIO_SUPPORT = "El navegador no suporta àudio dinàmic";
+msgzul.NO_AUDIO_SUPPORT = "El navegador no admet l'àudio dinàmic";
