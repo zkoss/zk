@@ -4,11 +4,13 @@ ZK 3.0.0 Freshly
   1777430: Add getNextSibling/getPreviousSibling to Component Interface
   1678806: Allow comboitems to carry a value payload
   1800058: Provide align property for Box component
+  1802860: New improved translation to the the Catalan language
 
 * Bugs:
   1797527: malformed zul.xsd
   1801028: Failed to include ZUL located in classpath
   1798123: DHtmlLayoutPortlet.handleError throws exception in Pluto
+  1802487: Custom error page not loaded if failed to load classpath URL
 
 	--------
 ZK 3.0.0 RC
