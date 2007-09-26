@@ -94,7 +94,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		final PageDefinition pagedef = (PageDefinition)_cache.get(path);
 		if (pagedef == null) {
 			//FUTURE: support the error page (from Configuration)
-			Utils.handleError(getServletContext(), request, response, path, null);
+			handleError(sess, request, response, path, null);
 			return;
 		}
 
@@ -104,11 +104,12 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		try {
 			process(sess, request, response, pagedef, path);
 		} catch (Throwable ex) {
-			Utils.handleError(getServletContext(), request, response, path, ex);
+			handleError(sess, request, response, path, ex);
 		} finally {
 			I18Ns.cleanup(request, old);
 		}
 	}
+
 	//-- private --//
 	/**
 	 * Process the request.
@@ -151,6 +152,35 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 				response.getWriter().write(result);
 			}
 		}
+	}
+	/** Handles exception being thrown when rendering a page.
+	 * @param err the exception being throw. If null, it means the page
+	 * is not found.
+	 */
+	private void handleError(Session sess, HttpServletRequest request,
+	HttpServletResponse response, String path, Throwable err)
+	throws ServletException, IOException {
+		//Note: if not included it is handled by Web container
+		if (err != null && Servlets.isIncluded(request)) {
+			//Bug 1802487 and 1714094
+			final String errpg = sess.getWebApp().getConfiguration()
+				.getErrorPage(sess.getDeviceType(), err);
+			if (errpg != null) {
+				try {
+					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+					request.setAttribute("javax.servlet.error.exception", err);
+					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
+					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+					Servlets.forward(getServletContext(), request, response, errpg, null, 0);
+					return; //done
+				} catch (IOException ex) { //eat it (connection off)
+				} catch (Throwable ex) {
+					log.warning("Failed to load the error page: "+errpg, ex);
+				}
+			}
+		}
+
+		Utils.handleError(getServletContext(), request, response, path, err);
 	}
 
 	/** Helper class. */

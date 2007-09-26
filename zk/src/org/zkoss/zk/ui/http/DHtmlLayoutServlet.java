@@ -211,12 +211,13 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		return true; //success
 	}
 	/** Handles exception being thrown when rendering a page.
-	 * @param ex the exception being throw. If null, it means the page
+	 * @param err the exception being throw. If null, it means the page
 	 * is not found.
 	 */
 	private void handleError(Session sess, HttpServletRequest request,
 	HttpServletResponse response, String path, Throwable err)
 	throws ServletException, IOException {
+		//Note: if not included, it is handled by Web container
 		if (err != null && Servlets.isIncluded(request)) {
 			//Bug 1714094: we have to handle err, because Web container
 			//didn't allow developer to intercept errors caused by inclusion
