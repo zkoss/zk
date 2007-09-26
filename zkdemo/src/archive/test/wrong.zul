@@ -17,4 +17,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window>
+<window use="UnknownWindow">
+</window>
