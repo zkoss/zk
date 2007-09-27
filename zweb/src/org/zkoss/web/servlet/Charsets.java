@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Locales;
@@ -112,7 +113,7 @@ public class Charsets {
 			} catch (Throwable ex) {
 				final String v = request.getCharacterEncoding();
 				if (!Objects.equals(v, charset))
-					log.warning("Unable to set request's charset: "+charset+" (current="+v+')', ex);
+					log.warning("Unable to set request's charset: "+charset+" (current="+v+"): "+Exceptions.getMessage(ex));
 			}
 		}
 
