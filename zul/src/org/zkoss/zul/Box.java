@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.ext.render.Floating;
 
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zulex.impl.Utils;
 
 /**
  * A box.

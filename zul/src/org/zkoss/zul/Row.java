@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zulex.impl.Utils;
 
 /**
  * A single row in a {@link Rows} element.
