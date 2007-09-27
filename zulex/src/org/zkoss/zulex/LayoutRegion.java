@@ -18,17 +18,13 @@
  */
 package org.zkoss.zulex;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zulex.impl.Utils;
 
 /**
  * This class represents a region in a layout manager.
@@ -190,7 +186,7 @@ public abstract class LayoutRegion extends XulElement {
 	 * Default: "0,0,0,0".
 	 */
 	public String getMargins() {
-		return LayoutRegion.intsToString(_margins); //Utils.intsToString(_margins);
+		return Utils.intsToString(_margins);
 	}
 
 	/**
@@ -198,10 +194,10 @@ public abstract class LayoutRegion extends XulElement {
 	 * "top,left,right,bottom"
 	 */
 	public void setMargins(String margins) {
-		final int[] imargins = LayoutRegion.stringToInts(margins, 0); //Utils.stringToInts(margins, 0);
+		final int[] imargins = Utils.stringToInts(margins, 0);
 		if (!Objects.equals(imargins, _margins)) {
 			_margins = imargins;
-			smartUpdate("z.mars",  LayoutRegion.intsToString(_margins));//Utils.intsToString(_margins));
+			smartUpdate("z.mars", Utils.intsToString(_margins));
 		}
 	}
 
@@ -351,59 +347,6 @@ public abstract class LayoutRegion extends XulElement {
 		HTMLs.appendAttribute(sb, "z.maxs", getMaxsize());
 		HTMLs.appendAttribute(sb, "z.mins", getMinsize());
 		HTMLs.appendAttribute(sb, "z.autoscl", isAutoscroll());
-		return sb.toString();
-	}
-	
-	/*package*/ static final
-	int[] stringToInts(String numbers, int defaultValue)
-	throws WrongValueException {
-		if (numbers == null)
-			return null;
-
-		List list = new LinkedList();
-		for (int j = 0;;) {
-			int k = numbers.indexOf(',', j);
-			final String s =
-				(k >= 0 ? numbers.substring(j, k): numbers.substring(j)).trim();
-			if (s.length() == 0) {
-				if (k < 0) break;
-				list.add(null);
-			} else {
-				try {
-					list.add(Integer.valueOf(s));
-				} catch (Throwable ex) {
-					throw new WrongValueException("Not a valid number list: "+numbers);
-				}
-			}	
-
-			if (k < 0) break;
-			j = k + 1;
-		}
-
-		int[] ary;
-		final int sz = list.size();
-		if (sz > 0) {
-			ary = new int[sz];
-			int j = 0;
-			for (Iterator it = list.iterator(); it.hasNext(); ++j) {
-				final Integer i = (Integer)it.next();
-				ary[j] = i != null ? i.intValue(): defaultValue;
-			}
-		} else {
-			ary = null;
-		}
-		return ary;
-	}
-	/*package*/ static final String intsToString(int[] ary) {
-		if (ary == null || ary.length == 0)
-			return "";
-
-		final StringBuffer sb = new StringBuffer(50);
-		for (int j = 0; j < ary.length; ++j) {
-			if (j > 0)
-				sb.append(',');
-			sb.append(ary[j]);
-		}
 		return sb.toString();
 	}
 }
