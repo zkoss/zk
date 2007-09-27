@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zul;
+package org.zkoss.zulex.impl;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -29,14 +29,14 @@ import org.zkoss.zk.ui.WrongValueException;
  *
  * @author tomyeh
  */
-/*package*/ class Utils {
+public class Utils {
 	/** Parse a list of numbers.
 	 *
 	 * @param defaultValue the value if a number is omitted. For example, ",2"
 	 * means "1,2" if defafultValue is 1
 	 * @return an array of int, or null if no integer at all
 	 */
-	/*package*/ static final
+	public static final
 	int[] stringToInts(String numbers, int defaultValue)
 	throws WrongValueException {
 		if (numbers == null)
@@ -80,7 +80,7 @@ import org.zkoss.zk.ui.WrongValueException;
 	 * @param defaultValue the default value that will be replaced with defaultString
 	 * @param defaultString the default string used if defaultValue is found in the array
 	 */
-	/*package*/ static final String intsToString(int[] ary) {
+	public static final String intsToString(int[] ary) {
 		if (ary == null || ary.length == 0)
 			return "";
 
@@ -99,7 +99,7 @@ import org.zkoss.zk.ui.WrongValueException;
 	 * For example, ",2" means "1,2" if defafultValue is "1"
 	 * @return an array of string, or null if no data at all
 	 */
-	/*package*/ static final
+	public static final
 	String[] stringToArray(String src, String defaultValue) {
 		if (src == null)
 			return null;
@@ -125,7 +125,7 @@ import org.zkoss.zk.ui.WrongValueException;
 	/** Converts an array of objects to a string, by catenating them
 	 * together and separated with comma.
 	 */
-	/*package*/ static final String arrayToString(Object[] ary) {
+	public static final String arrayToString(Object[] ary) {
 		if (ary == null || ary.length == 0)
 			return "";
 
