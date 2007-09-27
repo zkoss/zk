@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title>LabelElement</title>
-<para>A HTML element with a label. </para>
-<para/><sect3><title/><sect4><title>Class Name</title>
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>LabelElement</title>
+<para>A HTML element with a label. </para><sect4><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.LabelElement</code>
-</para></sect4></sect3><sect3><title/><sect4><title>Properties</title>
+</para></sect4><sect4><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -44,9 +43,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable>
-<para/>
-<para>Inherited From </para>
+</informaltable></sect4><sect4><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
