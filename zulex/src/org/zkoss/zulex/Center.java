@@ -35,6 +35,13 @@ public class Center extends LayoutRegion {
 	public void setSplitable(boolean splitable) {
 		throw new UnsupportedOperationException("readonly");
 	}
+	
+	/**
+	 * Center region can't be enabled the collapse functionality.
+	 */
+	public void setCollapsible(boolean collapsible) {
+		throw new UnsupportedOperationException("readonly");
+	}
 
 	/**
 	 * Returns {@link Borderlayout#CENTER}.

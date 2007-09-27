@@ -242,6 +242,8 @@ public abstract class LayoutRegion extends XulElement {
 	/**
 	 * Returns whether it is opne (i.e., not collapsed. Meaningful only if
 	 * {@link #isCollapsible} is not false.
+	 * <p>
+	 * Default: true.
 	 */
 	public boolean isOpen() {
 		return _open;
