@@ -1,0 +1,8 @@
+Manifest-Version: 0.6.1
+Specification-Title: Yuiext Components for ZK
+Specification-Version: 0.6.1
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkforge.yuiext
+Implementation-URL: http://www.zkforge.org/yuiext
+Implementation-Version: 0.6.1
+Implementation-Vendor: Potix Corporation
