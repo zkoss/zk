@@ -4,7 +4,8 @@
 <para>The fundamental class for XUL elements.</para><sect4><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.XulElement</code>
-</para></sect4><sect4><title>Properties</title>Properties<informaltable frame="all">
+</para></sect4><sect4><title>Properties</title>
+<informaltable frame="all">
 <tgroup cols="4">
 <thead>
 <row>

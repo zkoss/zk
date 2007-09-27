@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>AbstractListModel</title>
+<para>A skeletal implementation for <olink targetdocent="ListModel.xml">
+<code>ListModel</code>
+</olink>.</para><sect4><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.AbstractListModel</code>
+</para></sect4><sect4><title>Methods</title>Methods<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>AddListDataListener</code>
+</para>
+<para>
+<code>(ListDataListener l)</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+<entry>
+<para>Adds a listener to the list that's notified each time a change to the data model occurs.</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>RemoveListDataListener</code>
+</para>
+<para>
+<code>(ListDataListener l)</code>
+</para>
+</entry>
+<entry>
+<para>Removes a listener from the list that's notified each time a change to the data model occurs.</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="ListModel.xml">org.zkoss.zul.ListModel</olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4></sect3></sect2></sect1></article>
