@@ -36,8 +36,11 @@ thead tr {
 
 img	{border: 0;}<%-- opera (9.2) not support hspace and vspace --%>
 
-<%-- The hyperlink's style class. --%>
-.link {cursor: hand; cursor: pointer;}
+<%-- DSP --%>
+a.gamma {color: #000000; text-decoration: none;}
+a.gamma:hover {color: #000000; text-decoration: underline;}
+tr.gamma {background: #F4F4F4;}
+td.gamma {background: #F4F4F4;}
 
 <%-- ZK --%>
 <%-- groupbox caption --%>
@@ -155,7 +158,7 @@ td.rwt-wndcyan {
 	text-decoration: underline;
 }
 
-div.modal_mask { <%-- don't change --%>
+div.modal_mask {<%-- don't change --%>
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
 	opacity: .8;
@@ -220,10 +223,10 @@ td.hbox {
 }
 
 <%-- ZK tree, listbox, grid --%>
-div.listbox, div.tree, div.grid { <%-- depends sclass --%>
+div.listbox, div.tree, div.grid {<%-- depends sclass --%>
 	background: threedface; border: 1px solid #7F9DB9;
 }
-div.tree-head, div.listbox-head, div.grid-head { <%-- always used. --%>
+div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
 	background: threedface; border: 0; overflow: hidden; width: 100%;
 }
 div.listbox-paging th, div.grid-paging th {
@@ -254,7 +257,7 @@ div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc, div.listbox-paging th.s
 	background-repeat: no-repeat;
 }
 
-div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging { <%-- always used. --%>
+div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging {<%-- always used. --%>
 	background: window; border: 0; overflow: auto; width: 100%;
 }
 div.listbox-paging, div.grid-paging {
@@ -268,7 +271,7 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	font-size: small; font-weight: normal;
 }
 
-div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-foot, tbody.tree-foot { <%-- always used --%>
+div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-foot, tbody.tree-foot {<%-- always used --%>
 	background: threedface; border-top: 1px solid threedshadow;
 }
 
@@ -327,14 +330,14 @@ span.treeitem-paging {
 	text-decoration: underline;
 }
 
-div.gc-default { <%-- content of 3d groupbox --%>
+div.gc-default {<%-- content of 3d groupbox --%>
 	border: 1px solid #5C6C7C; padding: 5px;
 }
-tr.tabpanel td.tabpanel-hr, div.tabpanel-accordion { <%-- horz, accd --%>
+tr.tabpanel td.tabpanel-hr, div.tabpanel-accordion {<%-- horz, accd --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
-td.tabpanels { <%-- vert --%>
+td.tabpanels {<%-- vert --%>
 	border-top: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
@@ -596,7 +599,7 @@ span.rbtnbk {<%-- button at the right edge --%>
 	background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); background-repeat: no-repeat;
 	border: 1px solid #7f9db9; border-left: none;
 }
-div.comboboxpp, div.bandboxpp { <%--hardcoded in DSP--%>
+div.comboboxpp, div.bandboxpp {<%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid black; padding: 2px;
 	font-size: x-small;
@@ -604,10 +607,10 @@ div.comboboxpp, div.bandboxpp { <%--hardcoded in DSP--%>
 div.comboboxpp {
 	overflow: auto; <%-- if bandboxpp overflow:auto, crop popup if any --%>
 }
-.comboboxpp td { <%--label--%>
+.comboboxpp td {<%--label--%>
 	white-space: nowrap; font-size: x-small; cursor: hand; cursor: pointer; 
 }
-.comboboxpp td span { <%--description--%>
+.comboboxpp td span {<%--description--%>
 	color: #888; font-size: xx-small; padding-left: 6px;
 }
 
@@ -635,7 +638,7 @@ div.paging a:hover {
 }
 
 <%-- ZK datebox and calendar--%>
-div.dateboxpp { <%--hardcoded in DSP--%>
+div.dateboxpp {<%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid black; padding: 2px;
 }
@@ -755,7 +758,7 @@ td.groupbox-lite-b {
 	background-image: url(${c:encodeURL('~./zul/img/tab/lite-b.gif')});
 	height: 1px;
 }
-div.gc-lite { <%-- content of 3d groupbox --%>
+div.gc-lite {<%-- content of 3d groupbox --%>
 	border: 1px solid #9095a1; padding: 5px;
 }
 

@@ -50,3 +50,6 @@ dfn {
 	font-family: "Lucida Console", "Courier New", Courier, mono;
 	font-size: x-small; font-style: normal;
 }
+
+<%-- The hyperlink's style class. --%>
+.link {cursor: pointer;}
