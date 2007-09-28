@@ -1,8 +1,5 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-body{
-	height:100%;
-}
 div.layout-container {
     width:100%;
     height:100%;
