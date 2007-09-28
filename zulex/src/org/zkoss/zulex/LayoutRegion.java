@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zulex.impl.Utils;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * This class represents a region in a layout manager.
