@@ -72,8 +72,8 @@ public class Label extends XulElement {
 	 * <dt>hyphen="false" and pre="false"</dt>
 	 * <dd>maxlength is the maximal length to display. Exceeding part is truncated.</dd>
 	 * <dt>hyphen="true"</dt>
-	 * <dd>maxlength is the maximal length of each word, and hyphenation is added
-	 * if a word exceeds maxlength.</dd>
+	 * <dd>maxlength is the maximal length of each line, and hyphenation is added
+	 * if a line exceeds maxlength.</dd>
 	 * <dt>hyphen="false" and pre="true"</dt>
 	 * <dd>maxlength has no effect.</dd>
 	 * <dt>maxlength=0</dt>
