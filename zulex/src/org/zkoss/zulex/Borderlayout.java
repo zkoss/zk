@@ -45,7 +45,7 @@ import org.zkoss.zul.impl.XulElement;
  *  West
  *  &lt;/div&gt;
  *  &lt;/west&gt;
- *  &lt;center flex=&quot;true&quot; splittable=&quot;true&quot;&gt;
+ *  &lt;center flex=&quot;true&quot;&gt;
  *  &lt;div&gt;
  *  Center
  *  &lt;/div&gt;
