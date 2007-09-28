@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Window</title>
+<para>A window is, like HTML DIV tag, used to group components. Unlike other components, a window has the following characteristics. </para>
+<orderedlist>
+<listitem>
+<para>A window is an owner of an ID space. Any component contained in a window, including itself, could be found by use of the getFellow method, if it is assigned with an identifier.</para>
+</listitem>
+<listitem>
+<para>A window could be overlapped, popup, and embedded.</para>
+</listitem>
+<listitem>
+<para>A window could be a modal dialog.</para>
+</listitem>
+</orderedlist>
+<para>
+<inlinegraphic fileref="" width=""/>
+</para>
+<para>&lt;hbox&gt;</para>
+<para>&lt;window title="Embedded Style" border="normal" width="200px"&gt;</para>
+<para>Hello, Embedded!</para>
+<para>&lt;/window&gt;</para>
+<para>&lt;window title="Cyan Style" sclass="wndcyan" border="normal" width="200px"&gt;</para>
+<para>Hello, Cyan!</para>
+<para>&lt;/window&gt;</para>
+<para>&lt;window title="Popup Style" sclass="popup" border="normal" width="200px"&gt;</para>
+<para>Hello, Popup!</para>
+<para>&lt;/window&gt;</para>
+<para>&lt;window title="Modal Style" sclass="modal" border="normal" width="200px"&gt;</para>
+<para>Hello, Modal!</para>
+<para>&lt;/window&gt;</para>
+<para>&lt;/hbox&gt;</para><sect4><title>Class Name</title>
+<para>org.zkoss.zul.Window</para></sect4><sect4><title>Supported Child Components</title>
+<para>*ALL</para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>onMove </para>
+</entry>
+<entry>
+<para>Event: <olink targetdocent="Event.xml">org.zkoss.ui.zk.ui.event.Event</olink>
+</para>
+<para>Denotes the close button is pressed by a user, and the</para>
+<para>component shall detach itself.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onOpen </para>
+</entry>
+<entry>
+<para>Event: <olink targetdocent="OpenEvent.xml">org.zkoss.zk.ui.event.OpenEvent</olink>
+</para>
+<para>Denotes user has opened or closed a component. </para>
+<para>Note:</para>
+<para>Unlike onClose, this event is only a notification. The</para>
+<para>client sends this event after opening or closing the</para>
+<para>component.</para>
+<para>It is useful to implement load-on-demand by listening to</para>
+<para>the onOpen event, and creating components when the</para>
+<para>first time the component is opened.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onClose </para>
+</entry>
+<entry>
+<para>Event: <olink targetdocent="Event.xml">org.zkoss.ui.zk.ui.event.Event</olink>
+</para>
+<para>Denotes the close button is pressed by a user, and the</para>
+<para>component shall detach itself.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onOK </para>
+</entry>
+<entry>
+<para>Event: <olink targetdocent="KeyEvent.xml">org.zkoss.zk.ui.event.KeyEvent</olink>
+</para>
+<para>Denotes user has pressed the ENTER key.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onCacnel </para>
+</entry>
+<entry>
+<para>Event: <olink targetdocent="KeyEvent.xml">org.zkoss.zk.ui.event.KeyEvent</olink>
+</para>
+<para>Denotes user has pressed the ESC key.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onCtrlKey</para>
+</entry>
+<entry>
+<para>Event: <olink targetdocent="KeyEvent.xml">org.zkoss.zk.ui.event.KeyEvent</olink>
+</para>
+<para>Denotes user has pressed a special key, such as PgUp, Home and a key combined with the Ctrl or Alt key. Refer to the ctrlKeys Property section below for details.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4><sect4><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>border </para>
+</entry>
+<entry>
+<para>Sets the border </para>
+<para>Values: none | normal </para>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+<entry>
+<para>none</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>closable</para>
+</entry>
+<entry>
+<para>Sets whether to show a close button on the title bar. </para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+<entry>
+<para>false</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>contentStyle</para>
+</entry>
+<entry>
+<para>Sets the CSS style for the content block of the window. </para>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+<entry>
+<para>&lt;empty string&gt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>ctrlKeys</para>
+</entry>
+<entry>
+<para>Sets what keystrokes to intercept. </para>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+<entry>
+<para>&lt;null&gt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>draggable</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+<entry>
+<para>&lt;null&gt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>mode</para>
+</entry>
+<entry>
+<para>Sets the mode of window.</para>
+<para>Values: overlapped | popup | modal | embedded | highlighted. </para>
+</entry>
+<entry>
+<para>int</para>
+</entry>
+<entry>
+<para>0</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>position</para>
+</entry>
+<entry>
+<para>Sets how to position the window at the client screen. </para>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+<entry>
+<para>&lt;null&gt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>sizable</para>
+</entry>
+<entry>
+<para>Sets whether the window is sizable. </para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+<entry>
+<para>false</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>title</para>
+</entry>
+<entry>
+<para>Sets the title. </para>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+<entry>
+<para>&lt;empty string&gt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>visible</para>
+</entry>
+<entry>
+<para>Changes the visibility of the window. </para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+<entry>
+<para>false</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4><sect4><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>clone()</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>java.lang.Object</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>doEmbedded()</para>
+</entry>
+<entry>
+<para>Makes this window as embeded with other components </para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>doHighlighted()</para>
+</entry>
+<entry>
+<para>Makes this window as highlited.</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>doModal()</para>
+</entry>
+<entry>
+<para>Makes this window as a modal dialog.</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>doOverlapped()</para>
+</entry>
+<entry>
+<para>Makes this window as overlapped with other components.</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>doPopup()</para>
+</entry>
+<entry>
+<para>Makes this window as popup, which is overlapped with other </para>
+<para>component and auto-hiden when user clicks outside of the window.</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getContentSclass()</para>
+</entry>
+<entry>
+<para>Returns the style class used for the content block.</para>
+</entry>
+<entry>
+<para>java.lang.String </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getOuterAttrs() </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>java.lang.String </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getTitleSclass()</para>
+</entry>
+<entry>
+<para>Returns the style class used for the title.</para>
+</entry>
+<entry>
+<para>java.lang.String </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>inEmbedded()</para>
+</entry>
+<entry>
+<para>Returns whether this is embedded with other components </para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>inHighlighted()</para>
+</entry>
+<entry>
+<para>Returns whether this is a highlighted window.</para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>inModal()</para>
+</entry>
+<entry>
+<para>Returns whether this is a modal dialog.</para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>inOverlapped()</para>
+</entry>
+<entry>
+<para>Returns whether this is a overlapped window.</para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>inPopup()</para>
+</entry>
+<entry>
+<para>Returns whether this is a popup window.</para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>insertBefore(org.zkoss.zk.ui.Component child, </para>
+<para>org.zkoss.zk.ui.Component insertBefore) </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onChildRemoved(org.zkoss.zk.ui.Component child)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onClose()</para>
+</entry>
+<entry>
+<para>Process the onClose event sent when the close button is </para>
+<para>pressed.</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onModal()</para>
+</entry>
+<entry>
+<para>Process the onModal event by making itself a modal window.</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setPage(org.zkoss.zk.ui.Page page)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setParent(org.zkoss.zk.ui.Component parent)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect4></sect3></sect2></sect1></article>
