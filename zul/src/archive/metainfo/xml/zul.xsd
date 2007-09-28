@@ -213,6 +213,7 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="audio" />
 			<xs:element ref="bandbox" />
+			<xs:element ref="borderlayout" />
 			<xs:element ref="box" />
 			<xs:element ref="button" />
 			<xs:element ref="calendar" />
@@ -223,6 +224,9 @@
 			<xs:element ref="decimalbox" />
 			<xs:element ref="div" />
 			<xs:element ref="doublebox" />
+			<xs:element ref="fckeditor" />
+			<xs:element ref="fisheyelist" />
+			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
 			<xs:element ref="hbox" />
@@ -321,6 +325,19 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
+	<!-- borderlayout -->
+	<xs:element name="borderlayout" type="borderlayoutType" />
+	<xs:complexType name="borderlayoutType" mixed="true">
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element ref="north" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="south" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="center" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="west" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="east" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
 	<!-- box -->
 	<xs:element name="box" type="boxType" />
 	<xs:complexType name="boxType" mixed="true">
@@ -377,6 +394,18 @@
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- center -->
+	<xs:element name="center" type="centerType" />
+	<xs:complexType name="centerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="flex" type="xs:string" use="optional" />
+		<xs:attribute name="margins" type="xs:string" use="optional" />
+		<xs:attribute name="autoscroll" type="xs:string" use="optional" />
+		<xs:attribute name="border" type="xs:string" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- chart -->
 	<xs:element name="chart" type="chartType" />
@@ -540,6 +569,24 @@
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- east -->
+	<xs:element name="east" type="eastType" />
+	<xs:complexType name="eastType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="flex" type="xs:string" use="optional" />
+		<xs:attribute name="size" type="xs:string" use="optional" />
+		<xs:attribute name="splittable" type="xs:string" use="optional" />
+		<xs:attribute name="collapsible" type="xs:string" use="optional" />
+		<xs:attribute name="margins" type="xs:string" use="optional" />
+		<xs:attribute name="open" type="xs:string" use="optional" />
+		<xs:attribute name="autoscroll" type="xs:string" use="optional" />
+		<xs:attribute name="border" type="xs:string" use="optional" />
+		<xs:attribute name="maxsize" type="xs:string" use="optional" />
+		<xs:attribute name="minsize" type="xs:string" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- flash -->
 	<xs:element name="flash" type="flashType" />
@@ -965,6 +1012,24 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
+	<!-- north -->
+	<xs:element name="north" type="northType" />
+	<xs:complexType name="northType">		
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="flex" type="xs:string" use="optional" />
+		<xs:attribute name="size" type="xs:string" use="optional" />
+		<xs:attribute name="splittable" type="xs:string" use="optional" />
+		<xs:attribute name="collapsible" type="xs:string" use="optional" />
+		<xs:attribute name="margins" type="xs:string" use="optional" />
+		<xs:attribute name="open" type="xs:string" use="optional" />
+		<xs:attribute name="autoscroll" type="xs:string" use="optional" />
+		<xs:attribute name="border" type="xs:string" use="optional" />
+		<xs:attribute name="maxsize" type="xs:string" use="optional" />
+		<xs:attribute name="minsize" type="xs:string" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+	</xs:complexType>
 	<!-- paging -->
 	<xs:element name="paging" type="pagingType" />
 	<xs:complexType name="pagingType">
@@ -1083,6 +1148,24 @@
 		<xs:attribute name="onScrolling" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- south -->
+	<xs:element name="south" type="southType" />
+	<xs:complexType name="southType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="flex" type="xs:string" use="optional" />
+		<xs:attribute name="size" type="xs:string" use="optional" />
+		<xs:attribute name="splittable" type="xs:string" use="optional" />
+		<xs:attribute name="collapsible" type="xs:string" use="optional" />
+		<xs:attribute name="margins" type="xs:string" use="optional" />
+		<xs:attribute name="open" type="xs:string" use="optional" />
+		<xs:attribute name="autoscroll" type="xs:string" use="optional" />
+		<xs:attribute name="border" type="xs:string" use="optional" />
+		<xs:attribute name="maxsize" type="xs:string" use="optional" />
+		<xs:attribute name="minsize" type="xs:string" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- space -->
 	<xs:element name="space" type="spaceType" />
@@ -1449,6 +1532,24 @@
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="valign" type="valignAttrType" use="optional" />
+	</xs:complexType>	
+	<!-- west -->
+	<xs:element name="west" type="westType" />
+	<xs:complexType name="westType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="flex" type="xs:string" use="optional" />
+		<xs:attribute name="size" type="xs:string" use="optional" />
+		<xs:attribute name="splittable" type="xs:string" use="optional" />
+		<xs:attribute name="collapsible" type="xs:string" use="optional" />
+		<xs:attribute name="margins" type="xs:string" use="optional" />
+		<xs:attribute name="open" type="xs:string" use="optional" />
+		<xs:attribute name="autoscroll" type="xs:string" use="optional" />
+		<xs:attribute name="border" type="xs:string" use="optional" />
+		<xs:attribute name="maxsize" type="xs:string" use="optional" />
+		<xs:attribute name="minsize" type="xs:string" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- window -->
 	<xs:element name="window" type="windowType" />
@@ -1503,11 +1604,16 @@
 			<xs:element ref="area" />
 			<xs:element ref="bandpopup" />
 			<xs:element ref="caption" />
+			<xs:element ref="center" />
 			<xs:element ref="columns" />
 			<xs:element ref="column" />
 			<xs:element ref="comboitem" />
+			<xs:element ref="east" />
+			<xs:element ref="fisheyeitem" />
 			<xs:element ref="foot" />
 			<xs:element ref="footer" />
+			<xs:element ref="ginfo" />
+			<xs:element ref="gmarker" />
 			<xs:element ref="listcell" />
 			<xs:element ref="listfoot" />
 			<xs:element ref="listfooter" />
@@ -1517,9 +1623,11 @@
 			<xs:element ref="menu" />
 			<xs:element ref="menuitem" />
 			<xs:element ref="menuseparator" />
+			<xs:element ref="north" />
 			<xs:element ref="rows" />
 			<xs:element ref="row" />
 			<xs:element ref="splitter" />
+			<xs:element ref="south" />
 			<xs:element ref="tab" />
 			<xs:element ref="tabpanel" />
 			<xs:element ref="tabpanels" />
@@ -1532,6 +1640,7 @@
 			<xs:element ref="treefooter" />
 			<xs:element ref="treeitem" />
 			<xs:element ref="treerow" />
+			<xs:element ref="west" />
 		</xs:choice>
 		<xs:attributeGroup ref="zkAttrGroup" />
 	</xs:complexType>
@@ -1545,5 +1654,121 @@
 				<xs:attribute name="deferred" type="xs:string" use="optional" />
 			</xs:extension>
 		</xs:simpleContent>
+	</xs:complexType>
+	<!-- zkforge -->
+	<!-- fckeditor -->
+	<xs:element name="fckeditor" type="fckeditorType" />
+	<xs:complexType name="fckeditorType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="abstractComponentAttrGroup" />
+		<xs:attribute name="width" type="xs:string" use="optional" />
+		<xs:attribute name="height" type="xs:string" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="toolbarSet" type="xs:string" use="optional" />
+		<xs:attribute name="onSave" type="xs:string" use="optional" />
+		<xs:attribute name="customConfigurationsPath" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- fisheyeitem -->
+	<xs:element name="fisheyeitem" type="fisheyeitemType" />
+	<xs:complexType name="fisheyeitemType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="abstractComponentAttrGroup" />
+		<xs:attribute name="label" type="xs:string" use="optional" />
+		<xs:attribute name="image" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- fisheyelist -->
+	<xs:element name="fisheyelist" type="fisheyelistType" />
+	<xs:complexType name="fisheyelistType">
+		<xs:element ref="fisheyeitem" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="itemWidth" type="xs:string" use="optional" />
+		<xs:attribute name="itemHeight" type="xs:string" use="optional" />
+		<xs:attribute name="itemMaxWidth" type="xs:string" use="optional" />
+		<xs:attribute name="itemMaxHeight" type="xs:string" use="optional" />
+		<xs:attribute name="itemPadding" type="xs:string" use="optional" />		
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="attachEdge" type="xs:string" use="optional" />
+		<xs:attribute name="labelEdge" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- ginfo -->
+	<xs:element name="ginfo" type="ginfoType" />
+	<xs:complexType name="ginfoType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="open" type="xs:string" use="optional" />
+		<xs:attribute name="lng" type="xs:string" use="optional" />
+		<xs:attribute name="lat" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- gmarker -->
+	<xs:element name="gmarker" type="gmarkerType" />
+	<xs:complexType name="gmarkerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="open" type="xs:string" use="optional" />
+		<xs:attribute name="lng" type="xs:string" use="optional" />
+		<xs:attribute name="lat" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="iconAnchorX" type="xs:string" use="optional" />
+		<xs:attribute name="iconAnchorY" type="xs:string" use="optional" />
+		<xs:attribute name="iconDragCrossAnchorX" type="xs:string" use="optional" />
+		<xs:attribute name="iconDragCrossAnchorY" type="xs:string" use="optional" />
+		<xs:attribute name="iconDragCrossHeight" type="xs:string" use="optional" />
+		<xs:attribute name="iconDragCrossImage" type="xs:string" use="optional" />
+		<xs:attribute name="iconDragCrossWidth" type="xs:string" use="optional" />
+		<xs:attribute name="iconImage" type="xs:string" use="optional" />
+		<xs:attribute name="iconImageMap" type="xs:string" use="optional" />
+		<xs:attribute name="iconInfoAnchorX" type="xs:string" use="optional" />
+		<xs:attribute name="iconInfoAnchorY" type="xs:string" use="optional" />
+		<xs:attribute name="iconMaxHeight" type="xs:string" use="optional" />
+		<xs:attribute name="iconMozPrintImage" type="xs:string" use="optional" />
+		<xs:attribute name="iconPrintImage" type="xs:string" use="optional" />
+		<xs:attribute name="iconPrintShadow" type="xs:string" use="optional" />
+		<xs:attribute name="iconShadow" type="xs:string" use="optional" />
+		<xs:attribute name="iconShadowHeight" type="xs:string" use="optional" />
+		<xs:attribute name="iconShadowWidth" type="xs:string" use="optional" />
+		<xs:attribute name="iconHeight" type="xs:string" use="optional" />
+		<xs:attribute name="iconWidth" type="xs:string" use="optional" />
+		<xs:attribute name="iconTransparent" type="xs:string" use="optional" />
+		<xs:attribute name="onMarkerDrop" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- gmaps -->
+	<xs:element name="gmaps" type="gmapsType" />
+	<xs:complexType name="gmapsType">
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:choice minOccurs="0" maxOccurs="1">
+				<xs:sequence>
+					<xs:element ref="ginfo" />
+					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					<xs:sequence minOccurs="0" maxOccurs="unbounded" >
+						<xs:element ref="gpolyline" />
+						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:element ref="gmarker" />
+					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					<xs:sequence minOccurs="0" maxOccurs="unbounded" >
+						<xs:element ref="gpolyline" />
+						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="lat" type="xs:string" use="optional" />
+		<xs:attribute name="lng" type="xs:string" use="optional" />
+		<xs:attribute name="zoom" type="xs:string" use="optional" />
+		<xs:attribute name="showLargeCtrl" type="xs:string" use="optional" />
+		<xs:attribute name="showSmallCtrl" type="xs:string" use="optional" />
+		<xs:attribute name="showTypeCtrl" type="xs:string" use="optional" />
+		<xs:attribute name="mapType" type="xs:string" use="optional" />
+		<xs:attribute name="onMapMove" type="xs:string" use="optional" />
+		<xs:attribute name="onMapZoom" type="xs:string" use="optional" />
+		<xs:attribute name="onInfoChange" type="xs:string" use="optional" />
+		<xs:attribute name="onMapClick" type="xs:string" use="optional" />
+		<xs:attribute name="onMapDoubleClick" type="xs:string" use="optional" />
+		<xs:attribute name="onMarkerDrop" type="xs:string" use="optional" />
 	</xs:complexType>
 </xs:schema>
