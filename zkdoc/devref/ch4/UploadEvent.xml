@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article lang="en-US"><sect1><title/><sect2><title>UploadEvent</title>
+<para>Represents that user has uploaded one or several files from the client to the server.</para><sect3><title/><sect4><title>Class Name</title>
+<para>
+<code>org.zkoss.zk.ui.event.UploadEvent</code>
+</para></sect4></sect3><sect3><title/><sect4><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getMedia()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the first media being uploaded, or null if no file is uploaded.</para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.util.media.Media</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getMedias()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the array of media being uploaded, or null if the user uploaded no file at all.</para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.util.media.Media[]</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect4></sect3><sect3><title/><sect4><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<olink targetdocent="Event.xml">
+<code>org.zkoss.zk.ui.event.Event </code>
+</olink>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect4></sect3></sect2></sect1></article>
