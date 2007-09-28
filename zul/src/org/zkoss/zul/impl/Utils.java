@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zulex.impl;
+package org.zkoss.zul.impl;
 
 import java.util.List;
 import java.util.LinkedList;
