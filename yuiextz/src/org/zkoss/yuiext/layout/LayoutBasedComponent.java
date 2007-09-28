@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.layout;
+package org.zkoss.yuiext.layout;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

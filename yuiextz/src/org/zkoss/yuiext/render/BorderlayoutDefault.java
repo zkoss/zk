@@ -16,12 +16,12 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.render;
+package org.zkoss.yuiext.render;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkforge.yuiext.layout.Borderlayout;
+import org.zkoss.yuiext.layout.Borderlayout;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;

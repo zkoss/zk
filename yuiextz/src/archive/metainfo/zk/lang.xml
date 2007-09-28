@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<extension>yui</extension>
 
 	<version>
-		<version-class>org.zkforge.yuiext.Version</version-class>
+		<version-class>org.zkoss.yuiext.Version</version-class>
 		<version-uid>0.6.1</version-uid>
 		<zk-version>3.0.0</zk-version><!-- or later -->
 	</version>
@@ -44,31 +44,31 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	-->
 	
 	<zscript language="Java">
-	import org.zkforge.yuiext.*;
-	import org.zkforge.yuiext.grid.*;
-	import org.zkforge.yuiext.layout.*;
+	import org.zkoss.yuiext.*;
+	import org.zkoss.yuiext.grid.*;
+	import org.zkoss.yuiext.layout.*;
 	</zscript>	
 
 	<zscript language="JavaScript">
-	importPackage(Packages.org.zkforge.yuiext);
-	importPackage(Packages.org.zkforge.yuiext.grid);
-	importPackage(Packages.org.zkforge.yuiext.layout);
+	importPackage(Packages.org.zkoss.yuiext);
+	importPackage(Packages.org.zkoss.yuiext.grid);
+	importPackage(Packages.org.zkoss.yuiext.layout);
 	</zscript>
 
 	<!-- Groovy "forgot" what are imported, so we have to import each time
 	-->
 	<zscript language="Groovy" each-time="true">
-	import org.zkforge.yuiext.*;
-	import org.zkforge.yuiext.grid.*;
-	import org.zkforge.yuiext.layout.*;
+	import org.zkoss.yuiext.*;
+	import org.zkoss.yuiext.grid.*;
+	import org.zkoss.yuiext.layout.*;
 	</zscript>
 
 	<zscript language="Ruby">
 	require 'java'
 	module Java
-		include_package 'org.zkforge.yuiext'
-		include_package 'org.zkforge.yuiext.grid'
-		include_package 'org.zkforge.yuiext.layout'
+		include_package 'org.zkoss.yuiext'
+		include_package 'org.zkoss.yuiext.grid'
+		include_package 'org.zkoss.yuiext.layout'
 	end
 	</zscript>
 	
@@ -96,10 +96,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	
 	<component>
 		<component-name>grid</component-name>
-		<component-class>org.zkforge.yuiext.grid.Grid</component-class>
+		<component-class>org.zkoss.yuiext.grid.Grid</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.GridDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.GridDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/grid.dsp</mold-uri>-->
 		</mold>
 		<annotation>
@@ -127,50 +127,50 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>converter</attribute-name>
-				<attribute-value>org.zkforge.yuiext.zkplus.databind.SelectedItemConverter</attribute-value>
+				<attribute-value>org.zkoss.yuiext.zkplus.databind.SelectedItemConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
 	<component>
 		<component-name>columns</component-name>
-		<component-class>org.zkforge.yuiext.grid.Columns</component-class>
+		<component-class>org.zkoss.yuiext.grid.Columns</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.ColumnsDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.ColumnsDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/columns.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
 		<component-name>column</component-name>
-		<component-class>org.zkforge.yuiext.grid.Column</component-class>
+		<component-class>org.zkoss.yuiext.grid.Column</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.ColumnDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.ColumnDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/column.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
 		<component-name>rows</component-name>
-		<component-class>org.zkforge.yuiext.grid.Rows</component-class>
+		<component-class>org.zkoss.yuiext.grid.Rows</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.RowsDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.RowsDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/rows.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
 		<component-name>row</component-name>
-		<component-class>org.zkforge.yuiext.grid.Row</component-class>
+		<component-class>org.zkoss.yuiext.grid.Row</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.RowDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.RowDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/row.dsp</mold-uri> -->
 		</mold>
 	</component>
 	
 	<component>
 		<component-name>label</component-name>
-		<component-class>org.zkforge.yuiext.grid.Label</component-class>
+		<component-class>org.zkoss.yuiext.grid.Label</component-class>
 		<annotation>
 			<annotation-name>default-bind</annotation-name>
 			<property-name>value</property-name>
@@ -185,14 +185,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</annotation>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.LabelDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.LabelDefault</mold-uri>
 			<!-- <mold-uri>~./zul/html/label.dsp</mold-uri> -->
 		</mold>
 	</component>
 	
 	<component>
 		<component-name>listbox</component-name>
-		<component-class>org.zkforge.yuiext.grid.Listbox</component-class>		
+		<component-class>org.zkoss.yuiext.grid.Listbox</component-class>		
 		<annotation>
 			<annotation-name>default-bind</annotation-name>
 			<property-name>model</property-name>
@@ -223,31 +223,31 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</annotation>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.ListboxDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.ListboxDefault</mold-uri>
 			<!-- <mold-uri>~./zul/html/listbox.dsp</mold-uri> -->
 		</mold>
 		<mold>
 			<mold-name>select</mold-name>			
-			<mold-uri>class:org.zkforge.yuiext.render.ListboxSelect</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.ListboxSelect</mold-uri>
 			<!-- <mold-uri>~./zul/html/listbox-select.dsp</mold-uri> -->
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.ListboxPaging</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.ListboxPaging</mold-uri>
 			<!-- <mold-uri>~./zul/html/listbox-pg.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
 		<component-name>image</component-name>
-		<component-class>org.zkforge.yuiext.grid.Image</component-class>
+		<component-class>org.zkoss.yuiext.grid.Image</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.ImageDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.ImageDefault</mold-uri>
 			<!-- <mold-uri>~./zul/html/image.dsp</mold-uri> -->
 		</mold>
 		<mold>
 			<mold-name>alphafix</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.ImageDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.ImageDefault</mold-uri>
 			<!-- <mold-uri>~./zul/html/image.dsp</mold-uri> -->
 		</mold>
 	</component>
@@ -255,73 +255,73 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!--  layout component -->	
 	<component>
 		<component-name>borderlayout</component-name>
-		<component-class>org.zkforge.yuiext.layout.Borderlayout</component-class>
+		<component-class>org.zkoss.yuiext.layout.Borderlayout</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.BorderlayoutDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.BorderlayoutDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/borderlayout.dsp</mold-uri> -->
 		</mold>
 	</component>	
 	<component>
 		<component-name>contentpanel</component-name>
-		<component-class>org.zkforge.yuiext.layout.Contentpanel</component-class>
+		<component-class>org.zkoss.yuiext.layout.Contentpanel</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.ContentpanelDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.ContentpanelDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/contentpanel.dsp</mold-uri> -->
 		</mold>
 	</component>	
 	<component>
 		<component-name>nestedpanel</component-name>
-		<component-class>org.zkforge.yuiext.layout.Nestedpanel</component-class>
+		<component-class>org.zkoss.yuiext.layout.Nestedpanel</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.NestedpanelDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.NestedpanelDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/nestedpanel.dsp</mold-uri> -->
 		</mold>
 	</component>	
 	<component>
 		<component-name>north</component-name>
-		<component-class>org.zkforge.yuiext.layout.North</component-class>
+		<component-class>org.zkoss.yuiext.layout.North</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.BorderlayoutRegionDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.BorderlayoutRegionDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/borderlayoutregion.dsp</mold-uri> -->
 		</mold>
 	</component>	
 	<component>
 		<component-name>south</component-name>
-		<component-class>org.zkforge.yuiext.layout.South</component-class>
+		<component-class>org.zkoss.yuiext.layout.South</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.BorderlayoutRegionDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.BorderlayoutRegionDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/borderlayoutregion.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
 		<component-name>west</component-name>
-		<component-class>org.zkforge.yuiext.layout.West</component-class>
+		<component-class>org.zkoss.yuiext.layout.West</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.BorderlayoutRegionDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.BorderlayoutRegionDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/borderlayoutregion.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
 		<component-name>east</component-name>
-		<component-class>org.zkforge.yuiext.layout.East</component-class>
+		<component-class>org.zkoss.yuiext.layout.East</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.BorderlayoutRegionDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.BorderlayoutRegionDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/borderlayoutregion.dsp</mold-uri> -->
 		</mold>
 	</component>
 	<component>
 		<component-name>center</component-name>
-		<component-class>org.zkforge.yuiext.layout.Center</component-class>
+		<component-class>org.zkoss.yuiext.layout.Center</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkforge.yuiext.render.BorderlayoutRegionDefault</mold-uri>
+			<mold-uri>class:org.zkoss.yuiext.render.BorderlayoutRegionDefault</mold-uri>
 			<!-- <mold-uri>~./yuiextz/borderlayoutregion.dsp</mold-uri> -->
 		</mold>
 	</component>

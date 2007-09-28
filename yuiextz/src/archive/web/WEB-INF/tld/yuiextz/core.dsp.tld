@@ -18,9 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>getColAttrs</name>
-		<function-class>org.zkforge.yuiext.fn.YuiextzFns</function-class>
+		<function-class>org.zkoss.yuiext.fn.YuiextzFns</function-class>
 		<function-signature>
-	java.lang.String getColAttrs(org.zkforge.yuiext.grid.Row, int)
+	java.lang.String getColAttrs(org.zkoss.yuiext.grid.Row, int)
 		</function-signature>
 		<description>
 	Returns the attribute used for the cell of the specified row and index.

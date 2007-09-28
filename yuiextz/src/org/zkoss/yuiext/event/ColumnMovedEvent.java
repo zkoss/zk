@@ -16,9 +16,9 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.event;
+package org.zkoss.yuiext.event;
 
-import org.zkforge.yuiext.grid.Column;
+import org.zkoss.yuiext.grid.Column;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 

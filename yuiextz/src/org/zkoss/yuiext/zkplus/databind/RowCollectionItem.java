@@ -16,10 +16,10 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.zkplus.databind;
+package org.zkoss.yuiext.zkplus.databind;
 
-import org.zkforge.yuiext.grid.Grid;
-import org.zkforge.yuiext.grid.Row;
+import org.zkoss.yuiext.grid.Grid;
+import org.zkoss.yuiext.grid.Row;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zkplus.databind.CollectionItem;

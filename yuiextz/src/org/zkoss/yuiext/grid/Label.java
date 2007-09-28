@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.grid;
+package org.zkoss.yuiext.grid;
 
 import java.math.BigDecimal;
 import java.text.ParseException;

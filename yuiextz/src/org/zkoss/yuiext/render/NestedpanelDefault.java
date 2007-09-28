@@ -16,12 +16,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkforge.yuiext.render;
+package org.zkoss.yuiext.render;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkforge.yuiext.layout.Nestedpanel;
+import org.zkoss.yuiext.layout.Nestedpanel;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;

@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkforge.yuiext.grid;
+package org.zkoss.yuiext.grid;
 
 import java.util.List;
 import java.util.Comparator;

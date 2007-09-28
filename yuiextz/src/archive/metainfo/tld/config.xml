@@ -13,7 +13,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 <config>
 	<version>
-		<version-class>org.zkforge.yuiext.Version</version-class>
+		<version-class>org.zkoss.yuiext.Version</version-class>
 		<version-uid>0.6.1</version-uid>
 		<zk-version>3.0.0</zk-version><!-- or later -->
 	</version>

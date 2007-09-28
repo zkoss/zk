@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.event;
+package org.zkoss.yuiext.event;
 
 import java.util.Set;
 import java.util.Collections;

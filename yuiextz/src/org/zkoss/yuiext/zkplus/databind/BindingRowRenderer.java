@@ -16,10 +16,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkforge.yuiext.zkplus.databind;
+package org.zkoss.yuiext.zkplus.databind;
 
-import org.zkforge.yuiext.grid.Grid;
-import org.zkforge.yuiext.grid.Row;
+import org.zkoss.yuiext.grid.Grid;
+import org.zkoss.yuiext.grid.Row;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zkplus.databind.DataBinder;
@@ -33,7 +33,7 @@ import java.util.Iterator;
 import java.io.Serializable;
 
 /*package*/ class BindingRowRenderer 
-implements org.zkforge.yuiext.grid.RowRenderer, org.zkforge.yuiext.grid.RowRendererExt, Serializable {
+implements org.zkoss.yuiext.grid.RowRenderer, org.zkoss.yuiext.grid.RowRendererExt, Serializable {
 	private static final String KIDS = "zkplus.databind.KIDS";
 	private Row _template;
 	private DataBinder _binder;

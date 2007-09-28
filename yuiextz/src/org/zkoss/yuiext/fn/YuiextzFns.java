@@ -14,9 +14,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package org.zkforge.yuiext.fn;
+package org.zkoss.yuiext.fn;
 
-import org.zkforge.yuiext.grid.Row;
+import org.zkoss.yuiext.grid.Row;
 
 /**
  * Utilities for using EL.

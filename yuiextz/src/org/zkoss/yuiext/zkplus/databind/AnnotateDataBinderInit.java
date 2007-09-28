@@ -16,9 +16,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkforge.yuiext.zkplus.databind;
+package org.zkoss.yuiext.zkplus.databind;
 
-import org.zkforge.yuiext.grid.Row;
+import org.zkoss.yuiext.grid.Row;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;

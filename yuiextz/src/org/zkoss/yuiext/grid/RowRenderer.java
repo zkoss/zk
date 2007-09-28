@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkforge.yuiext.grid;
+package org.zkoss.yuiext.grid;
 
 /**
  * Identifies components that can be used as "rubber stamps" to paint

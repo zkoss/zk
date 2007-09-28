@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.grid;
+package org.zkoss.yuiext.grid;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -29,9 +29,9 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.client.Updatable;
-import org.zkforge.yuiext.ColumnLockChangeCommand;
-import org.zkforge.yuiext.grid.Column;
-import org.zkforge.yuiext.grid.Grid;
+import org.zkoss.yuiext.ColumnLockChangeCommand;
+import org.zkoss.yuiext.grid.Column;
+import org.zkoss.yuiext.grid.Grid;
 import org.zkoss.zul.impl.HeadersElement;
 import org.zkoss.zul.impl.XulElement;
 

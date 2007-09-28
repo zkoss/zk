@@ -14,10 +14,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package org.zkforge.yuiext.zkplus.databind;
+package org.zkoss.yuiext.zkplus.databind;
 
-import org.zkforge.yuiext.grid.Grid;
-import org.zkforge.yuiext.grid.Row;
+import org.zkoss.yuiext.grid.Grid;
+import org.zkoss.yuiext.grid.Row;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListModel;
 

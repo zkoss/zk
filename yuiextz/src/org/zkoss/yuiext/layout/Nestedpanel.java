@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.layout;
+package org.zkoss.yuiext.layout;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;

@@ -16,11 +16,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkforge.yuiext;
+package org.zkoss.yuiext;
 
 import java.util.Set;
 
-import org.zkforge.yuiext.event.ColumnLockChangeEvent;
+import org.zkoss.yuiext.event.ColumnLockChangeEvent;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;

@@ -1,4 +1,4 @@
-package org.zkforge.yuiext;
+package org.zkoss.yuiext;
 
 /* Version.java
 

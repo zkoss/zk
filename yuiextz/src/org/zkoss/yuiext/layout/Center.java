@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.layout;
+package org.zkoss.yuiext.layout;
 
 /**
  * This component is a center region.

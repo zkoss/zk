@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.grid;
+package org.zkoss.yuiext.grid;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -30,10 +30,10 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.client.Updatable;
-import org.zkforge.yuiext.grid.Column;
-import org.zkforge.yuiext.grid.Columns;
-import org.zkforge.yuiext.grid.Grid;
-import org.zkforge.yuiext.grid.Rows;
+import org.zkoss.yuiext.grid.Column;
+import org.zkoss.yuiext.grid.Columns;
+import org.zkoss.yuiext.grid.Grid;
+import org.zkoss.yuiext.grid.Rows;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -339,8 +339,8 @@ public class Row extends XulElement {
 	}
 
 	public boolean insertBefore(Component child, Component insertBefore) {
-		if (!(child instanceof org.zkforge.yuiext.grid.Label) 
-				&& !(child instanceof org.zkforge.yuiext.grid.Image) )
+		if (!(child instanceof org.zkoss.yuiext.grid.Label) 
+				&& !(child instanceof org.zkoss.yuiext.grid.Image) )
 			throw new UiException("Unsupported child for rows: " + child);
 		final Grid grid = getGrid();
 		if (!getChildren().contains(child)

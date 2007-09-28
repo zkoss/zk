@@ -16,7 +16,7 @@
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
-package org.zkforge.yuiext.grid;
+package org.zkoss.yuiext.grid;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,7 +40,7 @@ import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelExt;
 import org.zkoss.zul.ListitemComparator;
 import org.zkoss.zul.impl.HeaderElement;
-import org.zkforge.yuiext.grid.Columns;
+import org.zkoss.yuiext.grid.Columns;
 
 /**
  * A single column in a {@link Columns} element. Each child of the
@@ -157,7 +157,7 @@ public class Column extends HeaderElement {
 	}
 
 	/**
-	 * Returns the ID of {@link org.zkforge.yuiext.grid.Listbox} that should
+	 * Returns the ID of {@link org.zkoss.yuiext.grid.Listbox} that should
 	 * appear when the user clicks on the element.
 	 * 
 	 * <p>
@@ -168,7 +168,7 @@ public class Column extends HeaderElement {
 	}
 
 	/**
-	 * Sets the ID of {@link org.zkforge.yuiext.grid.Listbox} that should appear
+	 * Sets the ID of {@link org.zkoss.yuiext.grid.Listbox} that should appear
 	 * when the user clicks on the element.
 	 */
 	public void setCombo(String combo) {
