@@ -21,10 +21,19 @@ package org.zkoss.zulex;
 /**
  * This component is a center region. The default class of CSS is specified
  * "layout-region-center".
+ * <p>
+ * <strong>Note:</strong> This component doesn't support the following method,
+ * including {@link #setSplittable(boolean)}, {@link #setOpen(boolean)},
+ * {@link #setCollapsible(boolean)}, {@link #setMaxsize(int)},
+ * {@link #setMinsize(int)}, {@link #setHeight(String)},
+ * {@link #setWidth(String)}, {@link #getSize()}, {@link #setSize(String)},
+ * and {@link #setVisible(boolean)}.
+ * 
  * @author jumperchen
  * @since 3.0.0
  */
 public class Center extends LayoutRegion {
+
 	public Center() {
 		addSclass("layout-region-center");
 	}
@@ -32,14 +41,35 @@ public class Center extends LayoutRegion {
 	/**
 	 * Center region can't be enabled the split functionality.
 	 */
-	public void setSplitable(boolean splitable) {
+	public void setSplittable(boolean splittable) {
 		throw new UnsupportedOperationException("readonly");
 	}
-	
+
+	/**
+	 * Center region can't be closed.
+	 */
+	public void setOpen(boolean open) {
+		throw new UnsupportedOperationException("readonly");
+	}
+
 	/**
 	 * Center region can't be enabled the collapse functionality.
 	 */
 	public void setCollapsible(boolean collapsible) {
+		throw new UnsupportedOperationException("readonly");
+	}
+
+	/**
+	 * Center region can't be enabled the split functionality.
+	 */
+	public void setMaxsize(int maxsize) {
+		throw new UnsupportedOperationException("readonly");
+	}
+
+	/**
+	 * Center region can't be enabled the split functionality.
+	 */
+	public void setMinsize(int minsize) {
 		throw new UnsupportedOperationException("readonly");
 	}
 
