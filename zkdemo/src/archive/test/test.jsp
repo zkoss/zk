@@ -32,7 +32,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<p>3. Content in z:window</p>
 		<z:button label="Overlap" onClick="win.doOverlapped()"/>
 	</z:window>
-		<p>4. Content in z:page after z:window</h2>
+		<p>4. Content in z:page after z:window</p>
 </z:page>
 
 	<p>5. Content after z:page</p>
