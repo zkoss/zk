@@ -328,14 +328,14 @@
 	<!-- borderlayout -->
 	<xs:element name="borderlayout" type="borderlayoutType" />
 	<xs:complexType name="borderlayoutType" mixed="true">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:all>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />				
 			<xs:element ref="north" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="south" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="center" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="west" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="east" minOccurs="0" maxOccurs="1"/>
-		</xs:sequence>
+		</xs:all>	
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- box -->
@@ -398,8 +398,15 @@
 	<!-- center -->
 	<xs:element name="center" type="centerType" />
 	<xs:complexType name="centerType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:choice minOccurs="0" maxOccurs="1">
+				<xs:sequence>
+					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="xs:string" use="optional" />
 		<xs:attribute name="margins" type="xs:string" use="optional" />
@@ -573,8 +580,15 @@
 	<!-- east -->
 	<xs:element name="east" type="eastType" />
 	<xs:complexType name="eastType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:choice minOccurs="0" maxOccurs="1">
+				<xs:sequence>
+					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="xs:string" use="optional" />
 		<xs:attribute name="size" type="xs:string" use="optional" />
@@ -1015,8 +1029,15 @@
 	<!-- north -->
 	<xs:element name="north" type="northType" />
 	<xs:complexType name="northType">		
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:choice minOccurs="0" maxOccurs="1">
+				<xs:sequence>
+					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="xs:string" use="optional" />
 		<xs:attribute name="size" type="xs:string" use="optional" />
@@ -1152,8 +1173,15 @@
 	<!-- south -->
 	<xs:element name="south" type="southType" />
 	<xs:complexType name="southType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:choice minOccurs="0" maxOccurs="1">
+				<xs:sequence>
+					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="xs:string" use="optional" />
 		<xs:attribute name="size" type="xs:string" use="optional" />
@@ -1536,8 +1564,15 @@
 	<!-- west -->
 	<xs:element name="west" type="westType" />
 	<xs:complexType name="westType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:choice minOccurs="0" maxOccurs="1">
+				<xs:sequence>
+					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="xs:string" use="optional" />
 		<xs:attribute name="size" type="xs:string" use="optional" />
@@ -1770,5 +1805,15 @@
 		<xs:attribute name="onMapClick" type="xs:string" use="optional" />
 		<xs:attribute name="onMapDoubleClick" type="xs:string" use="optional" />
 		<xs:attribute name="onMarkerDrop" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- gpolyline -->
+	<xs:element name="gpolyline" type="gpolylineType" />
+	<xs:complexType name="gpolylineType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="points" type="xs:string" use="optional" />
+		<xs:attribute name="color" type="xs:string" use="optional" />
+		<xs:attribute name="weight" type="xs:string" use="optional" />
+		<xs:attribute name="numLevels" type="xs:string" use="optional" />
 	</xs:complexType>
 </xs:schema>
