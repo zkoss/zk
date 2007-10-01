@@ -301,7 +301,7 @@ public class Binding {
 	}		
 	
 	/*package*/ void registerSaveEvents(Component comp) {
-		if (_saveWhenEvents != null) {
+		if (_saveWhenEvents != null && isSavable()) { //bug 1804356
 			for(final Iterator it = _saveWhenEvents.iterator(); it.hasNext(); ) {
 				final String expr = (String) it.next();
 				final Object[] objs =
@@ -323,7 +323,7 @@ public class Binding {
 	}
 	
 	/*package*/ void registerLoadEvents(Component comp) {
-		if (_loadWhenEvents != null) {
+		if (_loadWhenEvents != null && isLoadable()) { //bug 1804356
 			for(final Iterator it = _loadWhenEvents.iterator(); it.hasNext(); ) {
 				final String expr = (String) it.next();
 				final Object[] objs =
