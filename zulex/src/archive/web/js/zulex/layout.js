@@ -241,7 +241,13 @@ zk.Layout.prototype = {
 			cmp.style.height = ambit.height + "px";
             ambit.height =  zk.Layout.reviseSize(bodyEl, ambit.height, true);
 			bodyEl.style.height = ambit.height + "px";
-	        bodyEl.style["overflow"] = getZKAttr(cmp, "autoscl") == "true" ? "auto" : "hidden";
+			if (getZKAttr(cmp, "autoscl") == "true") { 
+	        	bodyEl.style["overflow"] = "auto";				
+				bodyEl.style.position = "relative";
+			} else {
+				bodyEl.style["overflow"] = "hidden";							
+				bodyEl.style.position = "";
+			}
 		}
 	},
     ignoreResize : function(cmp, w, h) { 
@@ -351,7 +357,13 @@ zkLayoutRegion.setAttr = function (cmp, nm, val) {
 			return true; 
 		case "z.autoscl" :
 			setZKAttr(cmp, "autoscl", val);
-			cmp.bodyEl.style["overflow"] = val == "true" ? "auto" : "hidden";
+			if (val == "true") { 
+	        	cmp.bodyEl.style["overflow"] = "auto";				
+				cmp.bodyEl.style.position = "relative";
+			} else {
+				cmp.bodyEl.style["overflow"] = "hidden";							
+				cmp.bodyEl.style.position = "";
+			}
 			return true;
 		case "z.colps" :
 		 	setZKAttr(cmp, "colps", val);
