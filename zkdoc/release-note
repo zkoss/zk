@@ -8,12 +8,14 @@ ZK 3.0.0 Freshly
   1803181: Change the modifier of org.zkoss.zul.Utils
   1803253: Provide a simply layout component for ZK
   1803964: Label's hyphen shall apply maxlength to each line
-
+  1806058: Listbox.selectedIndex should be setup default databinding
+  
 * Bugs:
   1797527: malformed zul.xsd
   1801028: Failed to include ZUL located in classpath
   1798123: DHtmlLayoutPortlet.handleError throws exception in Pluto
   1802487: Custom error page not loaded if failed to load classpath URL
+  1804356: NullPointerException in databinder using access load
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
