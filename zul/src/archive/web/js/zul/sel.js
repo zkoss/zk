@@ -46,7 +46,13 @@ zk.Selectable.prototype = {
 	init: function () {
 		this.element = $e(this.id);
 		if (!this.element) return;
-
+		if (getZKAttr(this.element, "vflex") == "true") {
+			if (zk.ie) this.element.style.overflow = "hidden"; 
+			// added by Jumper for IE to get a correct offsetHeight so we need 
+			// to add this command faster than the this._calcSize() function.
+			var hgh = this.element.style.height;
+			if (!hgh || hgh == "auto") this.element.style.height = "99%"; // avoid border 1px;
+		}
 		//_headtbl might be null, while other must be NOT null
 		this.body = $e(this.id + "!body");
 		if (this.body) {
@@ -155,8 +161,8 @@ zk.Selectable.prototype = {
 		}
 
 		this.stripe();
-
-		setTimeout("zkSel._calcSize('"+this.id+"')", 5);
+		var mate = this; 
+		zk.addInitLater(function () {zkSel._calcSize(mate.id);}, true);	// added by Jumper  setTimeout("zkSel._calcSize('"+this.id+"')", 5);
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 
@@ -415,6 +421,15 @@ zk.Selectable.prototype = {
 				this._changeSelect(rows[j], sels[rows[j].id] == true);
 			return true;
 		case "z.vflex":
+		if (val == "true") {
+			if (zk.ie) this.element.style.overflow = "hidden"; 
+			// added by Jumper for IE to get a correct offsetHeight so we need 
+			// to add this command faster than the this._calcSize() function.
+			var hgh = this.element.style.height;
+			if (!hgh || hgh == "auto") this.element.style.height = "99%"; // avoid border 1px;
+		} else {
+			if (zk.ie) this.element.style.overflow = ""; // cleanup style 
+		}
 		case "z.size":
 			zkau.setAttr(this.element, nm, val);
 			this.recalcSize(true);
@@ -852,6 +867,8 @@ zk.Selectable.prototype = {
 	/** Returns the size for vflex
 	 */
 	_vflexSize: function () {
+		return this.element.offsetHeight - this.head.offsetHeight - 2;
+		/** disabled by Jumper 	
 		var diff = zk.pageHeight() - zk.innerHeight()
 				+ $int(Element.getStyle(document.body, "margin-top"))
 				+ $int(Element.getStyle(document.body, "margin-bottom"))
@@ -870,13 +887,14 @@ zk.Selectable.prototype = {
 				}
 			}
 		return this.body.offsetHeight - diff;
+		*/
 	},
 
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
-		if (cleansz) this.cleanSize();
+		// if (cleansz) this.cleanSize(); disabled by Jumper
 		setTimeout("zkSel._calcSize('"+this.id+"')", 50);
-	},
+	},/** disabled by Jumper
 	cleanSize: function () {
 		if (this.paging) return; //nothing to adjust since single table
 
@@ -897,7 +915,7 @@ zk.Selectable.prototype = {
 					footrow.cells[j].style.width = "";
 			}
 		}
-	},
+	},*/
 	/** Resize the specified column. */
 	resizeCol: function (cmp, icol, col1, wd1, col2, wd2, keys) {
 		var rows = this.bodyrows;

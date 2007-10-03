@@ -9,7 +9,7 @@ p, div, span, label, a, li, dt, dd, input, textarea, pre, body {
 	font-size: small; font-weight: normal;
 }
 body {
-	margin: 2px 5px; padding: 0;
+	height:100%; margin: 0px; padding: 0px 5px;
 }
 button {
 	font-family: Verdana, Tahoma, Arial, serif;

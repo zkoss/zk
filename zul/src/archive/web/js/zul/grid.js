@@ -56,11 +56,6 @@ zk.Grid.prototype = {
 
 		if (!zk.isRealVisible(this.element)) return;
 
-		if (!this.bodyrows) {
-			alert(mesg.INVALID_STRUCTURE + this.id);
-			return;
-		}
-
 		var meta = this; //the nested function only see local var
 		if (!this.paging && !this._inited) {
 			this._inited = true;
@@ -97,7 +92,8 @@ zk.Grid.prototype = {
 
 		this.stripe();
 
-		setTimeout("zkGrid._calcSize('"+this.id+"')", 5);
+		var mate = this;		
+		zk.addInitLater( function () {zkGrid._calcSize(mate.id);}, true);	// added by Jumper setTimeout("zkGrid._calcSize('"+this.id+"')", 5);
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 
@@ -111,6 +107,9 @@ zk.Grid.prototype = {
 			this.body.style.height = hgh;
 			this.element.style.height = "";	
 			this.element.setAttribute("zk_hgh", hgh);
+			if (this.body.offsetHeight < 0) {} 
+			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
+			// and IE7 at initializing phase.
 		} else {
 			//Bug 1556099: it is strange if we ever check the value of
 			//body.offsetWidth. The grid's body's height is 0 if init called
@@ -170,6 +169,7 @@ zk.Grid.prototype = {
 
 	/** Calculates the size. */
 	_calcSize: function () {
+
 		this.updSize();
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 
@@ -208,11 +208,11 @@ zk.Grid.prototype = {
 	},
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
-		if (cleansz) this.cleanSize();
+		// if (cleansz) this.cleanSize(); disabled by Jumper
 		setTimeout("zkGrid._calcSize('"+this.id+"')", 20);
 	},
 	/** Cleanup size */
-	cleanSize: function () {
+	/** cleanSize: function () { disabled by Jumper
 		if (this.paging) return; //nothing to adjust since single table
 
 		this.body.style.width = this.bodytbl.style.width = "";
@@ -232,7 +232,7 @@ zk.Grid.prototype = {
 					footrow.cells[j].style.width = "";
 			}
 		}
-	},
+	},*/
 	/** Resize the specified column.
 	 * @param cmp columns
 	 */
