@@ -17,23 +17,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zk.Layout = Class.create();
-zk.Layout.borders = {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"};
-zk.Layout.paddings = {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"};
-zk.Layout.getStyleSize = function (el, areas, styles) {
-	var val = 0;
-    for (var i = 0, l = areas.length; i < l; i++){
-		 var w = $int(Element.getStyle(el, styles[areas.charAt(i)]));
-         if (!isNaN(w)) val += w;
-    }
-    return val;
-};
-zk.Layout.reviseSize = function (el, size, height) {
-	var areas = "lr";
-	if (height) areas = "tb";
-    size -= (zk.Layout.getStyleSize(el, areas, zk.Layout.borders) + zk.Layout.getStyleSize(el, areas, zk.Layout.paddings));
-    if (size < 0) size = 0;
-	return size;
-};
 zk.Layout.prototype = {
 	initialize: function (cmp) {
 		this.id = cmp.id;			
@@ -232,20 +215,20 @@ zk.Layout.prototype = {
 		} 	
 		cmp.bodyEl = bodyEl;
 		if (!this.ignoreResize(bodyEl, ambit.width, ambit.height)) {     
-			ambit.width = zk.Layout.reviseSize(cmp, ambit.width);
+			ambit.width = zk.reviseSize(cmp, ambit.width);
 			cmp.style.width = ambit.width + "px";	   			
-        	ambit.width = zk.Layout.reviseSize(bodyEl, ambit.width);
+        	ambit.width = zk.reviseSize(bodyEl, ambit.width);
 			bodyEl.style.width = ambit.width + "px";
 	        
-			ambit.height =  zk.Layout.reviseSize(cmp, ambit.height, true);
+			ambit.height = zk.reviseSize(cmp, ambit.height, true);
 			cmp.style.height = ambit.height + "px";
-            ambit.height =  zk.Layout.reviseSize(bodyEl, ambit.height, true);
+            ambit.height = zk.reviseSize(bodyEl, ambit.height, true);
 			bodyEl.style.height = ambit.height + "px";
 			if (getZKAttr(cmp, "autoscl") == "true") { 
-	        	bodyEl.style["overflow"] = "auto";				
+	        	bodyEl.style.overflow = "auto";				
 				bodyEl.style.position = "relative";
 			} else {
-				bodyEl.style["overflow"] = "hidden";							
+				bodyEl.style.overflow = "hidden";							
 				bodyEl.style.position = "";
 			}
 		}
@@ -358,10 +341,10 @@ zkLayoutRegion.setAttr = function (cmp, nm, val) {
 		case "z.autoscl" :
 			setZKAttr(cmp, "autoscl", val);
 			if (val == "true") { 
-	        	cmp.bodyEl.style["overflow"] = "auto";				
+	        	cmp.bodyEl.style.overflow = "auto";				
 				cmp.bodyEl.style.position = "relative";
 			} else {
-				cmp.bodyEl.style["overflow"] = "hidden";							
+				cmp.bodyEl.style.overflow = "hidden";							
 				cmp.bodyEl.style.position = "";
 			}
 			return true;
@@ -466,11 +449,11 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 			var ol = zk.Layout.getOwnerLayout(real);
 			var xy = zk.Layout.cumulativeOffset(ol.el, el);	
 			var mars = ol._paserMargin(getZKAttr(real, "mars") || "0,0,0,0");
-		    var lr = zk.Layout.getStyleSize(real, "lr", zk.Layout.borders) + 
-				zk.Layout.getStyleSize(real, "lr", zk.Layout.paddings) + 
+		    var lr = zk.getStyleSize(real, "lr", zk.borders) + 
+				zk.getStyleSize(real, "lr", zk.paddings) + 
 				(split.pos == "west" ? mars.left : mars.right);
-			var tb = zk.Layout.getStyleSize(real, "tb", zk.Layout.borders) + 
-				zk.Layout.getStyleSize(real, "tb", zk.Layout.paddings) + 
+			var tb = zk.getStyleSize(real, "tb", zk.borders) + 
+				zk.getStyleSize(real, "tb", zk.paddings) + 
 				(split.pos == "north" ? mars.top : mars.bottom);
 			dg.drag.z_rootlyt = {
 				el: el,
