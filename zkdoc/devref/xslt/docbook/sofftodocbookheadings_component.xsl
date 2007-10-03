@@ -705,8 +705,8 @@
 			</xsl:element>
 		</xsl:element>
 	</xsl:when>
-	<xsl:otherwise>
-		<xsl:element name="inlinegraphic">
+	<xsl:otherwise>	
+		<xsl:element name="graphic">
 			<xsl:attribute name="fileref">
 					<xsl:value-of select="substring-after(@xlink:href,'#')"/>
 			</xsl:attribute>

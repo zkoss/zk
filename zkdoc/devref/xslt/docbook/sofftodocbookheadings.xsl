@@ -702,7 +702,7 @@
 		<xsl:element name="imageobject">
 			<xsl:element name="imagedata">
 			<xsl:attribute name="fileref">
-				<xsl:value-of select="@xlink:href"/>
+				<xsl:value-of select="substring-after(@xlink:href,'#')"/>
 			</xsl:attribute>
 			</xsl:element>
 			<xsl:element name="caption">
@@ -713,7 +713,7 @@
 	<xsl:otherwise>
 		<xsl:element name="graphic">
 			<xsl:attribute name="fileref">
-					<xsl:value-of select="substring-after(@xlink:href,'#')"/>
+					<xsl:value-of select="substring-after(@xlink:href,'../')"/>
 			</xsl:attribute>
 			<!--
 			<xsl:attribute name="width">
@@ -891,39 +891,60 @@
 
 
 <xsl:template match="text:p[@text:style-name='Code']">
-	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code']])">			
-			<xsl:element name="programlisting">
+	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code']])">
+			<xsl:element name="programlisting">			 
 				<xsl:for-each select="child::text:tab-stop" xml:space="preserve">    </xsl:for-each>
 				<xsl:value-of select="." />
 				<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
 				<xsl:apply-templates mode="in-list"
 						select="following-sibling::*[1][self::text:p[@text:style-name='Code']]" />
 			</xsl:element>
-
 	</xsl:if>
 </xsl:template>
 
 <xsl:template match="text:p[@text:style-name='Code']" mode="in-list">
+ <xsl:for-each select="child::draw:image">			 
+ <xsl:variable name="align" select="'right'" />
+	      <xsl:element name="inlinegraphic">
+			    <xsl:attribute name="fileref">
+					    <xsl:value-of select="substring-after(@xlink:href,'../')"/>
+			    </xsl:attribute>
+			    <xsl:attribute name="align">
+			      <xsl:value-of select="$align"/>
+			    </xsl:attribute>
+			   </xsl:element>
+	</xsl:for-each>
 	<xsl:for-each select="child::text:tab-stop" xml:space="preserve">    </xsl:for-each>
 	<xsl:value-of select="." />
 	<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
 	<xsl:apply-templates mode="in-list" select="following-sibling::*[1][self::text:p[@text:style-name='Code']]"/>
 </xsl:template>
 
-<xsl:template match="text:p[@text:style-name='Code Indent 1']">
-	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code Indent 1']])">
+<xsl:template match="text:p[@text:style-name='Code Indent']">
+	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code Indent']])">
 			<xsl:element name="programlisting">
+			 <xsl:for-each select="child::draw:image">			 
+ <xsl:variable name="align" select="'right'" />
+	      <xsl:element name="inlinegraphic">
+			    <xsl:attribute name="fileref">
+					    <xsl:value-of select="substring-after(@xlink:href,'../')"/>
+			    </xsl:attribute>
+			    <xsl:attribute name="align">
+			      <xsl:value-of select="$align"/>
+			    </xsl:attribute>
+			   </xsl:element>
+	</xsl:for-each>
 				<xsl:for-each select="child::text:tab-stop" xml:space="preserve">    </xsl:for-each>
 				<xsl:value-of select="." />
 				<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
 				<xsl:apply-templates mode="in-list"
-						select="following-sibling::*[1][self::text:p[@text:style-name='Code Indent 1']]" />
+						select="following-sibling::*[1][self::text:p[@text:style-name='Code Indent']]" />
 			</xsl:element>
 
 	</xsl:if>
 </xsl:template>
 
-<xsl:template match="text:p[@text:style-name='Code Indent 1']" mode="in-list">
+<xsl:template match="text:p[@text:style-name='Code Indent']" mode="in-list">
 	<xsl:for-each select="child::text:tab-stop" xml:space="preserve">    </xsl:for-each>
 	<xsl:value-of select="." />
 	<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
@@ -934,6 +955,17 @@
 <xsl:template match="text:p[@text:style-name='Code Indent 2']">
 	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code Indent 2']])">
 			<xsl:element name="programlisting">
+			 <xsl:for-each select="child::draw:image">			 
+ <xsl:variable name="align" select="'right'" />
+	      <xsl:element name="inlinegraphic">
+			    <xsl:attribute name="fileref">
+					    <xsl:value-of select="substring-after(@xlink:href,'../')"/>
+			    </xsl:attribute>
+			    <xsl:attribute name="align">
+			      <xsl:value-of select="$align"/>
+			    </xsl:attribute>
+			   </xsl:element>
+	</xsl:for-each>
 				<xsl:for-each select="child::text:tab-stop" xml:space="preserve">    </xsl:for-each>
 				<xsl:value-of select="." />
 				<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
