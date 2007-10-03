@@ -177,6 +177,37 @@ zk.offsetLeft = function (el) {
 		el = el.cells[0];
 	return el.offsetLeft;
 };
+zk.borders = {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"};
+zk.paddings = {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"};
+/** Returns the style size of the specified element.
+ *  For example,
+ *  zk.getStyleSize(el, "lr", zk.paddings)
+ * @param {String} areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b".
+ * So you can specify to be "lr" or "tb" or more.
+ * @param styles {zk.paddings} or {zk.borders}. 
+ * @since 3.0.0
+ */
+zk.getStyleSize = function (el, areas, styles) {
+	var val = 0;
+    for (var i = 0, l = areas.length; i < l; i++){
+		 var w = $int(Element.getStyle(el, styles[areas.charAt(i)]));
+         if (!isNaN(w)) val += w;
+    }
+    return val;
+};
+/**
+ * Return the revised size for the specified element.
+ * @param {Number} size original size of the specified element. 
+ * @param {Boolean} isHgh if true it will be "tb" top and bottom.
+ * @since 3.0.0
+ */
+zk.reviseSize = function (el, size, isHgh) {
+	var areas = "lr";
+	if (isHgh) areas = "tb";
+    size -= (zk.getStyleSize(el, areas, zk.borders) + zk.getStyleSize(el, areas, zk.paddings));
+    if (size < 0) size = 0;
+	return size;
+};
 if (zk.safari) {
 	//fix safari's bug
 	zk._oldposofs = Position.positionedOffset;
