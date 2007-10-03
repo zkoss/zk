@@ -174,7 +174,7 @@ public class Log {
 	/** Returns the closest logger that has been created (never null).
 	 */
 	private final Logger getClosestLogger() {
-		if (_hierarchy)
+		if (!_hierarchy)
 			return Logger.getLogger(DEFAULT_NAME);
 
 		final LogManager logman = LogManager.getLogManager();
