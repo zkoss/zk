@@ -180,9 +180,10 @@ zulHdr._endsizing = function (cmp, evt) {
 			if (evt.ctrlKey) keys += 'c';
 			if (evt.shiftKey) keys += 's';
 		}
-
 		var wd = zk.offsetWidth(cmp) + dg.z_szofs,
 			wd2 = zk.offsetWidth(cmp2) - dg.z_szofs;
+		wd = zk.reviseSize(cmp, wd);
+		wd2 = zk.reviseSize(cmp2, wd2);
 		if (wd < 0) {
 			wd2 += wd;
 			wd = 0;
