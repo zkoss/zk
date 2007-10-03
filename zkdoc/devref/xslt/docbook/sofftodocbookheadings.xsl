@@ -104,12 +104,15 @@
 				        <xsl:apply-templates select="key('headchildren', generate-id())"/>
 				        <xsl:apply-templates select="key('children', generate-id())"/>
 				     </chapter>
+		     </xsl:when>
+		     <xsl:when test="descendant::*[contains(@xlink:href,'xml')]">
+		       <xsl:apply-templates/>		       
 		     </xsl:when>		  
 			    <xsl:otherwise>
-			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-			      <title>
-     	    <xsl:apply-templates/>
-    	    </title>
+			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>			      
+			        <title>
+     	      <xsl:apply-templates/>
+    	      </title>    	    
 				     <xsl:apply-templates select="key('headchildren', generate-id())"/>
 				     <xsl:apply-templates select="key('children', generate-id())"/>
 			      <xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
@@ -848,12 +851,17 @@
             </xsl:element>
         </xsl:when>
 		<xsl:when test="not(contains(@xlink:href,'#'))">
+		 <xsl:text  disable-output-escaping="yes">&lt;xi:include href="</xsl:text><xsl:value-of select="substring-before(@xlink:href,'.xml')"/>
+   <xsl:text  disable-output-escaping="yes">.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /&gt;</xsl:text>
+		 
+		 <!--
 			<xsl:element name="link">
 				<xsl:attribute name="linkend">
 					<xsl:value-of select="substring-before(@xlink:href,'.xml')"/>
 				</xsl:attribute>
 				<xsl:apply-templates/>
 			</xsl:element>
+			-->
 		</xsl:when>
 		<xsl:otherwise>
 		<xsl:variable name="linkvar" select="substring-after(@xlink:href,'#')"/>

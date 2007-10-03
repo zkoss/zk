@@ -34,9 +34,11 @@
 
 -->
 <xsl:stylesheet version="1.0" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" xmlns:config="http://openoffice.org/2001/config" office:class="text" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="office meta  table number dc fo xlink chart math script xsl draw svg dr3d form config text style">
-<xsl:output method="xml" indent="yes" omit-xml-declaration="no"  />
-<xsl:output method="xml" version="1.0" encoding="UTF-8" doctype-public="-//OASIS//DTD DocBook XML V4.5//EN" doctype-system="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" />
 
+<xsl:output method="xml" indent="yes" omit-xml-declaration="yes"  />
+<!--
+<xsl:output method="xml" version="1.0" encoding="UTF-8" doctype-public="-//OASIS//DTD DocBook XML V4.5//EN" doctype-system="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" />
+-->
 
 
 <xsl:key name='headchildren' match="text:p |table:table | text:span | text:ordered-list | office:annotation | text:unordered-list | text:footnote | text:a | text:list-item | draw:plugin | draw:text-box | text:footnote-body | text:section"
@@ -98,10 +100,10 @@
 		<xsl:otherwise>
 		  <xsl:choose>
 		     <xsl:when test="$current = 3">
-			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current"/><xsl:text> id="</xsl:text><xsl:value-of select="."/><xsl:text>"</xsl:text><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text> id="</xsl:text><xsl:value-of select="."/><xsl:text>"</xsl:text><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 			    </xsl:otherwise>
 			    </xsl:choose>
 					    <title>
@@ -109,7 +111,7 @@
     	    </title>
 				    <xsl:apply-templates select="key('headchildren', generate-id())"/>
 				    <xsl:apply-templates select="key('children', generate-id())"/>
-			     <xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text><xsl:value-of select="$current"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			     <xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		 </xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
@@ -124,11 +126,13 @@
 
 
 <xsl:template match="/office:document">
-	<xsl:element name="article">
+<!--	<xsl:element name="article">
 		<xsl:attribute name="lang"><xsl:value-of select="/office:document/office:meta/dc:language"/>
 		</xsl:attribute>
         <xsl:apply-templates select="office:body"/>
 	</xsl:element>
+	-->
+	<xsl:apply-templates select="office:body"/>
 </xsl:template>
 
 <xsl:template match="office:meta">
