@@ -18,6 +18,7 @@ ZK 3.0.0 Freshly
   1802487: Custom error page not loaded if failed to load classpath URL
   1804356: NullPointerException in databinder using access load
   1806741: Log does not work correctly
+  1806831: Resizing header is wrong for Gird, Tree, and Listbox
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
