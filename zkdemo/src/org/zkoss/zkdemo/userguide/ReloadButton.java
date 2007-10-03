@@ -29,6 +29,6 @@ import org.zkoss.zul.*;
  */
 public class ReloadButton extends Button {
 	public void onClick() {
-		Path.getComponent("//userGuide/root/contents/xcontents").invalidate();
+		Path.getComponent("//userGuide/xcontents").invalidate();
 	}
 }

@@ -21,10 +21,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <style src="~./zul/css/ext*.css.dsp*"/>
-<window id="root" use="org.zkoss.zkdemo.userguide.MainWindow">
-	<hbox width="100%">
-	<window id="treelist" width="320px">
-		<tree id="toc" use="org.zkoss.zkdemo.userguide.TocTree" pageSize="-1" vflex="true">
+<style>
+div.layout-container{
+	background:white;
+}
+.sort{
+	position: none;
+}
+</style>
+<borderlayout use="org.zkoss.zkdemo.userguide.MainLayout">
+	<west border="none" size="320px" splittable="true" minsize="300" maxsize="500" collapsible="true">
+		<tree id="toc" use="org.zkoss.zkdemo.userguide.LayoutTree" pageSize="-1" vflex="true" height="100%">
 			<treecols>
 				<treecol image="/img/home.gif" label="ZK ${desktop.webApp.version} Live Demo"
 				onClick="Executions.sendRedirect(&quot;http://www.zkoss.org&quot;)"/>
@@ -62,6 +69,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="l4" label="Groupbox" value="/userguide/layout/groupbox.zul"/>
 						<treeitem id="l5" label="More groupboxes" value="/userguide/layout/moreGroupbox.zul"/>
 						<treeitem id="l6" label="Grids" value="/userguide/layout/grid.zul"/>
+						<treeitem id="l7" label="BorderLayout" value="/userguide/layout/borderlayout.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Toolbar and Menus" value="/userguide/toolbar/index.zul">
@@ -137,11 +145,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				</treeitem>
 			</treechildren>
 		</tree>
-	</window>
-	<window id="contents" border="normal" width="99%">
-		<include id="xcontents" src="${requestScope.contentSrc}"/><!-- prepared by TocTree -->
-	</window>
-	</hbox>
+	</west>
+	<center autoscroll="true">
+		<include style="padding:3px;" width="99%" id="xcontents" src="${requestScope.contentSrc}"/><!-- prepared by TocTree -->
+	</center>
+</borderlayout>
 <script type="text/javascript"
 if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}"><![CDATA[
 if (!zk.https()) {
@@ -154,5 +162,4 @@ if (!zk.https()) {
 	setTimeout('zk.loadJS("http://www.google-analytics.com/urchin.js", _urchin)', 5000);
 }
 ]]></script>
-</window>
 </zk>

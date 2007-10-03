@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window xmlns:h="http://www.w3.org/1999/xhtml">
 	<zscript><![CDATA[
 		void doSelect(String s) {
-			Tree tree = Path.getComponent("//userGuide/root/treelist/toc");
+			Tree tree = Path.getComponent("//userGuide/toc");
 			Treeitem treeitem = tree.getSpaceOwner().getFellow(s);
 			tree.selectItem(treeitem);
 			java.util.Set items = new HashSet();
