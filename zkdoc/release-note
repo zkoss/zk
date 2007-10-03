@@ -14,8 +14,10 @@ ZK 3.0.0 Freshly
   1797527: malformed zul.xsd
   1801028: Failed to include ZUL located in classpath
   1798123: DHtmlLayoutPortlet.handleError throws exception in Pluto
+  1802187: zcommons-el 3.0.0-RC missing from Maven repo
   1802487: Custom error page not loaded if failed to load classpath URL
   1804356: NullPointerException in databinder using access load
+  1806741: Log does not work correctly
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
