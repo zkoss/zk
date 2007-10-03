@@ -39,25 +39,25 @@
 
 
 
-<xsl:key name='headchildren' match="text:p |table:table | text:ordered-list | office:annotation | text:unordered-list | text:footnote | text:a | text:list-item | draw:plugin | draw:text-box | text:footnote-body | text:section"
-   use="generate-id((..|preceding-sibling::text:h[@text:level='1']|preceding-sibling::text:h[@text:level='2']|preceding-sibling::text:h[@text:level='3']|preceding-sibling::text:h[@text:level='4']|preceding-sibling::text:h[@text:level='5'])[last()])"/>
+<xsl:key name='headchildren' match="text:p |table:table | text:span | text:ordered-list | office:annotation | text:unordered-list | text:footnote | text:a | text:list-item | draw:plugin | draw:text-box | text:footnote-body | text:section"
+   use="generate-id((..|preceding-sibling::text:h[@text:level='3']|preceding-sibling::text:h[@text:level='4']|preceding-sibling::text:h[@text:level='5'])[last()])"/>
 
-<xsl:key name="children" match="text:h[@text:level &gt; '1' and @text:level &lt; '6']"
+<xsl:key name="children" match="text:h[@text:level &gt; '3' and @text:level &lt; '6']"
   use="generate-id(preceding-sibling::text:h[@text:level &lt; current()/@text:level][1])"/>
 
-<xsl:template match="text:h[@text:level='1']">
 
+<xsl:template match="text:h[@text:level='3']">
 <xsl:choose>
 	<xsl:when test=".='Abstract'">
 		<abstract>
 			<xsl:apply-templates select="key('headchildren', generate-id())"/>
-   <xsl:apply-templates select="key('children', generate-id())"/>
+     			<xsl:apply-templates select="key('children', generate-id())"/>
 		</abstract>
 	</xsl:when>
 	<xsl:otherwise>
 		<xsl:call-template name="make-section">
 			<xsl:with-param name="current" select="@text:level"/>
-				<xsl:with-param name="prev" select="1"/>
+				<xsl:with-param name="prev" select="3"/>
 		</xsl:call-template>
 		<!--<sect1>
    			  <title>
@@ -71,7 +71,7 @@
 
 </xsl:template>
 
-<xsl:template match="text:h[@text:level='2'] |text:h[@text:level='3'] |text:h[@text:level='4'] | text:h[@text:level='5']">
+<xsl:template match="text:h[@text:level='4'] | text:h[@text:level='5']">
 <xsl:variable name="level" select="@text:level"></xsl:variable>
 <xsl:call-template name="make-section">
 	<xsl:with-param name="current" select="$level"/>
@@ -83,10 +83,11 @@
 <xsl:template name="make-section">
 	<xsl:param name="current"/>
 	<xsl:param name="prev"/>
-	
-	<xsl:choose>		
+	<xsl:choose>	
 		<xsl:when test="$current &gt; $prev+1">
-			<xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$prev +1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>	
+			<xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$prev +1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			<title>
+		    	</title>
 			<xsl:call-template name="make-section">
 				<xsl:with-param name="current" select="$current"/>
 				<xsl:with-param name="prev" select="$prev +1"/>
@@ -94,28 +95,22 @@
 		<xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text><xsl:value-of select="$prev +1 "/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		</xsl:when>
   
-		<xsl:otherwise>		
+		<xsl:otherwise>
 		  <xsl:choose>
-		     <xsl:when test="$current = 1">		     
-		       <chapter>
-		         <title>		        
-     	      <xsl:apply-templates/>
-    	      </title>		       		       		       
-				        <xsl:apply-templates select="key('headchildren', generate-id())"/>
-				        <xsl:apply-templates select="key('children', generate-id())"/>
-				     </chapter>
-		     </xsl:when>		  
+		     <xsl:when test="$current = 3">
+			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current"/><xsl:text> id="</xsl:text><xsl:value-of select="."/><xsl:text>"</xsl:text><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			    </xsl:when>
 			    <xsl:otherwise>
-			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-			      <title>
-     	    <xsl:apply-templates/>
-    	    </title>
-				     <xsl:apply-templates select="key('headchildren', generate-id())"/>
-				     <xsl:apply-templates select="key('children', generate-id())"/>
-			      <xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 			    </xsl:otherwise>
-			  </xsl:choose>					   
-		 </xsl:otherwise>		 
+			    </xsl:choose>
+					    <title>
+     	     <xsl:apply-templates/>
+    	    </title>
+				    <xsl:apply-templates select="key('headchildren', generate-id())"/>
+				    <xsl:apply-templates select="key('children', generate-id())"/>
+			     <xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text><xsl:value-of select="$current"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+		 </xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
 
@@ -129,7 +124,7 @@
 
 
 <xsl:template match="/office:document">
-	<xsl:element name="book">
+	<xsl:element name="article">
 		<xsl:attribute name="lang"><xsl:value-of select="/office:document/office:meta/dc:language"/>
 		</xsl:attribute>
         <xsl:apply-templates select="office:body"/>
@@ -171,7 +166,7 @@
 
 <xsl:template match="office:body">
 <xsl:apply-templates select="key('headchildren', generate-id())"/>
-   <xsl:apply-templates select="text:h[@text:level='1']"/>
+   <xsl:apply-templates select="text:h[@text:level='3']"/>
 	<!--<xsl:apply-templates/>-->
 </xsl:template>
 
@@ -820,7 +815,7 @@
 		<keycombo>
 			<xsl:apply-templates/>
 		</keycombo>
-	</xsl:when>	
+	</xsl:when>
 	<xsl:otherwise>
 		<xsl:apply-templates/>
 	</xsl:otherwise>
@@ -891,7 +886,7 @@
 
 
 <xsl:template match="text:p[@text:style-name='Code']">
-	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code']])">			
+	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code']])">
 			<xsl:element name="programlisting">
 				<xsl:for-each select="child::text:tab-stop" xml:space="preserve">    </xsl:for-each>
 				<xsl:value-of select="." />
