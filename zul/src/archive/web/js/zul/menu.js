@@ -103,15 +103,13 @@ zkMenu.open = function (menu, toggle) {
  * @param pos how to position the menu
  */
 zkMenu._open = function (pp, top, ref, pos) {
-	/* not yet: we have to adjust CSS and some codes
+	/** not yet: we have to adjust CSS and some codes*/
 	//FF: Bug 1486840
 	//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
-	if (zk.gecko || zk.ie) {
-		setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
-		document.body.appendChild(pp);
-	}*/
-
-
+		
+	setZKAttr(pp, "vparent", $uuid(ref));
+	document.body.appendChild(pp);
+	
 	pp.style.position = "absolute"; //just in case
 	if (ref) zk.position(pp, ref, pos);
 	zk.show(pp); //animation effect, if any
@@ -147,10 +145,11 @@ zkMenu.close = function (pp) {
 zkMenu._close = function (pp) {
 	pp = $e(pp);
 	if (pp) {
-		/*if (zk.gecko || zk.ie) {
-			$e(uuid).appendChild(pp);
+		var uuid = $e(getZKAttr(pp, "vparent"));
+		if (uuid) {
+			uuid.appendChild(pp);
 			rmZKAttr(pp, "vparent");
-		}*/
+		}
 		pp.style.display = "none";
 
 		if (zkau.asap(pp, "onOpen"))
