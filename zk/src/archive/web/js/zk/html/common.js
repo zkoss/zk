@@ -185,6 +185,7 @@ zk.paddings = {l: "padding-left", r: "padding-right", t: "padding-top", b: "padd
  * @param {String} areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b".
  * So you can specify to be "lr" or "tb" or more.
  * @param styles {zk.paddings} or {zk.borders}. 
+ * @return {Number}
  * @since 3.0.0
  */
 zk.getStyleSize = function (el, areas, styles) {
@@ -199,6 +200,7 @@ zk.getStyleSize = function (el, areas, styles) {
  * Return the revised size for the specified element.
  * @param {Number} size original size of the specified element. 
  * @param {Boolean} isHgh if true it will be "tb" top and bottom.
+ * @return {Number}
  * @since 3.0.0
  */
 zk.reviseSize = function (el, size, isHgh) {
@@ -207,6 +209,38 @@ zk.reviseSize = function (el, size, isHgh) {
     size -= (zk.getStyleSize(el, areas, zk.borders) + zk.getStyleSize(el, areas, zk.paddings));
     if (size < 0) size = 0;
 	return size;
+};
+/**
+ * Returns the cumulative size of scroll for the specified element.
+ * @param {Object} el
+ * @return {Array} [left, top];
+ * @since 3.0.0
+ */
+zk.getCumulativeScroll = function (el) {
+	var valueT = 0, valueL = 0;
+	do {
+		if (Element.getStyle(el, "position") == 'fixed') {
+			break;
+		} else {		 
+			valueL += el.scrollLeft;
+			if (!zk.opera || (el.nodeName != "INPUT" && el.nodeName != "SPAN")){				
+				valueT += el.scrollTop;				
+			}
+			el = el.parentNode;
+		} 
+	} while (el != document.body);
+	return [valueL, valueT];
+};
+/**
+ * Return the revised position for the specified element.
+ * @param {Object} el
+ * @param {Array} size [left, top];
+ * @return {Array} [left, top];
+ * @since 3.0.0
+ */
+zk.revisePosition = function (el, size) {
+	var scrolls = zk.getCumulativeScroll(el);
+	return [size[0] - scrolls[0], size[1] - scrolls[1]];
 };
 if (zk.safari) {
 	//fix safari's bug
@@ -309,8 +343,7 @@ zk.getDimension = function (el) {
 zk.position = function (el, ref, type) {
 	var refofs = zk.getDimension(el);
 	var wd = refofs[0], hgh = refofs[1];
-
-	refofs = Position.cumulativeOffset(ref);
+	refofs = zk.revisePosition(ref, Position.cumulativeOffset(ref)); // fixed the position of ref in scrollbar. 
 	var x, y;
 	var scx = zk.innerX(), scy = zk.innerY(),
 		scmaxx = scx + zk.innerWidth(), scmaxy = scy + zk.innerHeight();
