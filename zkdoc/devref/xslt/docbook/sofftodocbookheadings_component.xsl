@@ -845,7 +845,16 @@
                 </xsl:attribute>
                 <xsl:apply-templates/>
             </xsl:element>
-        </xsl:when>
+        </xsl:when>  
+		<xsl:when test="contains(@xlink:href,'ch4')">
+		<xsl:variable name="linkvar" select="substring-after(@xlink:href,'ch4/')"/>
+			<xsl:element name="link">
+				<xsl:attribute name="linkend">
+					<xsl:value-of select="substring-before($linkvar,'.xml')"/>
+				</xsl:attribute>
+				<xsl:apply-templates/>
+			</xsl:element>
+		</xsl:when>
 		<xsl:when test="not(contains(@xlink:href,'#'))">
 			<xsl:element name="link">
 				<xsl:attribute name="linkend">
