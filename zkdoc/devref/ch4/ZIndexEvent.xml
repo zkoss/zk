@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>ZIndexEvent</title>
+<sect2 id="ZIndexEvent"><title>ZIndexEvent</title>
 <para>Represents an event caused by a component whose z-index is modified by the client. A z-indexed component must send ZindexEvent once the z-index of component is modifiable by the client. </para>
-<para>The components which are supported this event are: <olink targetdocent="Window.xml">
+<para>The components which are supported this event are: <link linkend="Window">
 <code>org.zkoss.zul.Window</code>
-</olink>.</para>
-<para/><sect4><title>Class Name</title>
+</link>.</para>
+<para/><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.ZIndexEvent</code>
-</para></sect4><sect4><title>Methods</title>
+</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -45,7 +43,7 @@
 <para/>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>InheritedFrom <informaltable frame="all">
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>InheritedFrom <informaltable frame="all">
 <tgroup cols="1">
 <thead>
 <row>
@@ -57,12 +55,12 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.event.Event</code>
-</olink>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

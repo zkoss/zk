@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>LabelImageElement</title>
-<para>A HTML element with a label and an image. </para><sect4><title>Class Name</title>
+<sect2 id="LabelImageElement"><title>LabelImageElement</title>
+<para>A HTML element with a label and an image. </para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.LabelImageElement</code>
-</para></sect4><sect4><title>Properties</title>
+</para></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -84,7 +82,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Methods</title>
+</informaltable></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -136,7 +134,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -149,30 +147,30 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="LabelElement.xml">org.zkoss.zul.impl.LabelElement</olink>
+<link linkend="LabelElement">org.zkoss.zul.impl.LabelElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title>Box</title>
+<sect2 id="Box"><title>Box</title>
 <para>The box model of XUL is used to divide a portion of the display into a series of boxes. Components inside of a box will orient themselves horizontally or vertically. By combining a series of boxes and separators, you can control the layout of the visual representation.</para>
 <para>A box can lay out its children in one of two orientations, either horizontally or vertically. A horizontal box lines up its components horizontally and a vertical box orients its components vertically. You can think of a box as one row or one column from an HTML table.</para>
 <para/>
 <para>
-<inlinegraphic fileref="images/box.png" width="4.047cm"/>
+<graphic fileref="images/box.png"/>
 </para>
-<title/>
-<programlisting>&lt;zk&gt;&#13;&lt;box orient="vertical"&gt;&#13;&lt;button label="Button 1"/&gt;&#13;&lt;button label="Button 2"/&gt;&#13;&lt;/box&gt;&#13;&lt;box orient="horizontal"&gt;&#13;&lt;button label="Button 3"/&gt;&#13;&lt;button label="Button 4"/&gt;&#13;&lt;/box&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect2><title/><sect3><title/><sect4><title>Class Name</title>
+<programlisting>&lt;zk&gt;&#13;    &lt;box orient="vertical"&gt;&#13;        &lt;button label="Button 1"/&gt;&#13;        &lt;button label="Button 2"/&gt;&#13;    &lt;/box&gt;&#13;    &lt;box orient="horizontal"&gt;&#13;        &lt;button label="Button 3"/&gt;&#13;        &lt;button label="Button 4"/&gt;&#13;    &lt;/box&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Box</code>
-</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Child Components</title>
-<para>*ALL</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Events </title> <para>*NONE</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Properties</title>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events </title> <para>*NONE</para></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -139,7 +136,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -200,7 +197,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -213,22 +210,22 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

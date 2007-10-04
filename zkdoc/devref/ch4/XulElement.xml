@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>XulElement</title>
-<para>The fundamental class for XUL elements.</para><sect4><title>Class Name</title>
+<sect2 id="XulElement"><title>XulElement</title>
+<para>The fundamental class for XUL elements.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.XulElement</code>
-</para></sect4><sect4><title>Properties</title>
+</para></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -50,9 +48,9 @@
 </para>
 </entry>
 <entry>
-<para>Sets the ID of <olink targetdocent="Popup.odt">
+<para>Sets the ID of <link linkend="">
 <code>Popup</code>
-</olink> that should appear when the user right-clicks on the element (aka., context menu).</para>
+</link> that should appear when the user right-clicks on the element (aka., context menu).</para>
 </entry>
 <entry>
 <para>
@@ -72,9 +70,9 @@
 </para>
 </entry>
 <entry>
-<para>Sets the ID of <olink targetdocent="Popup.odt">
+<para>Sets the ID of <link linkend="">
 <code>Popup</code>
-</olink> that should appear when the user clicks on the element. </para>
+</link> that should appear when the user clicks on the element. </para>
 </entry>
 <entry>
 <para>
@@ -94,9 +92,9 @@
 </para>
 </entry>
 <entry>
-<para>Sets the ID of <olink targetdocent="Popup.odt">
+<para>Sets the ID of <link linkend="">
 <code>Popup</code>
-</olink> that should be used as a tooltip window when the mouse hovers over the element for a moment.</para>
+</link> that should be used as a tooltip window when the mouse hovers over the element for a moment.</para>
 </entry>
 <entry>
 <para>
@@ -109,7 +107,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Methods</title>
+</informaltable></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -159,7 +157,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -172,16 +170,16 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

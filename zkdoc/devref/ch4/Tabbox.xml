@@ -1,29 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Tabbox</title>
+<sect2 id="Tabbox"><title>Tabbox</title>
 <para>A <code>tabbox </code>that contains the <code>tabs </code>and <code>tabpanels </code>allows developers to separate a large number of components into several groups(each group contains a <code>tab </code>and a <code>tabpanel), </code>and show one group each time, such that the user interface won't be too complicate to read. There is only one group (aka., a <code>tabpanel) </code>is visible at the same time. Once the <code>tab </code>of an invisible group is clicked, it becomes visible and the previous visible group becomes invisible.</para>
 <para>The currently selected tab component is given an additional <code>selected </code>property which is set to true. This is used to give the currently selected tab a different appearance so that it will look selected. Only one tab will have a true value for this property at a time. If none of tabs are selected, the first one is selected automatically.</para>
 <para>
-<olink targetdocent="Toolbar.xml">
+<link linkend="Toolbar">
 <code/>
-</olink>
+</link>
 </para>
 <para>
-<inlinegraphic fileref="#images/tabbox.png" width="4.302inch"/>
+<graphic fileref="images/tabbox.png"/>
 </para>
-<title/>
-<programlisting>&lt;zk&gt;&#13;&lt;tabbox width="400px"&gt;&#13;&lt;tabs&gt;&#13;&lt;tab label="Tab 1"/&gt;&#13;&lt;tab label="Tab 2"/&gt;&#13;&lt;/tabs&gt;&#13;&lt;tabpanels&gt;&#13;&lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;&#13;&lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;&#13;&lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;&lt;space/&gt;&#13;&lt;tabbox width="400px" mold="accordion"&gt;&#13;&lt;tabs&gt;&#13;&lt;tab label="Tab 3"/&gt;&#13;&lt;tab label="Tab 4"/&gt;&#13;&lt;/tabs&gt;&#13;&lt;tabpanels&gt;&#13;&lt;tabpanel&gt;This is panel 3&lt;/tabpanel&gt;&#13;&lt;tabpanel&gt;This is panel 4&lt;/tabpanel&gt;&#13;&lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<programlisting>&lt;zk&gt;&#13;&lt;tabbox width="400px"&gt;&#13;    &lt;tabs&gt;&#13;        &lt;tab label="Tab 1"/&gt;&#13;        &lt;tab label="Tab 2"/&gt;&#13;    &lt;/tabs&gt;&#13;    &lt;tabpanels&gt;&#13;        &lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;&#13;        &lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;&#13;    &lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;&lt;space/&gt;&#13;&lt;tabbox width="400px" mold="accordion"&gt;&#13;    &lt;tabs&gt;&#13;        &lt;tab label="Tab 3"/&gt;&#13;        &lt;tab label="Tab 4"/&gt;&#13;    &lt;/tabs&gt;&#13;    &lt;tabpanels&gt;&#13;        &lt;tabpanel&gt;This is panel 3&lt;/tabpanel&gt;&#13;        &lt;tabpanel&gt;This is panel 4&lt;/tabpanel&gt;&#13;    &lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Tabbox</code>
-</para></sect4><sect4><title>Supported Child Components</title>
-<para>*<olink targetdocent="Tabs.xml">
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*<link linkend="Tabs">
 <code>org.zkoss.zul.Tabs</code>
-</olink>
+</link>
 </para>
-<para>*<olink targetdocent="Tabpanels.xml">
+<para>*<link linkend="Tabpanels">
 <code>org.zkoss.zul.Tabpanels</code>
-</olink>
-</para></sect4><sect4><title>Supported Events</title>
+</link>
+</para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -44,9 +41,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="MousetEvent.xml">
+<link linkend="MousetEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>Description: </para>
 <para>Denotes user has right-clicked the component.</para>
@@ -60,15 +57,15 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="SelectEvent.xml">
+<link linkend="SelectEvent">
 <code>org.zkoss.zk.ui.event.SelectEvent</code>
-</olink>
+</link>
 </para>
 <para>Description: </para>
 <para>Denotes user has selected a tab. onSelect is sent to both tab and tabbox.</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Properties</title>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -199,7 +196,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -274,7 +271,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Inherited From </title>
+<para/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -287,28 +284,28 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">
+<link linkend="XulElement">
 <code>org.zkoss.zul.imp.XulElement</code>
-</olink>
+</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">
+<link linkend="HtmlBasedComponent">
 <code>org.zkoss.zk.ui.HtmlBasedComponent</code>
-</olink> </para>
+</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">
+<link linkend="AbstractComponent">
 <code>org.zkoss.zk.ui.AbstractComponent </code>
-</olink>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

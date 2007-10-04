@@ -1,16 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>RendererCtrl</title>
+<sect2 id="RendererCtrl"><title>RendererCtrl</title>
 <para>This interface defines the methods components like Listbox use to notify the renderer for several circumstance.</para>
 <para>Though <code>ListitemRenderer.render(org.zkoss.zul.Listitem, java.lang.Object)</code> is called one item a timer, a request might have several items to render. And, if the renderer implements this interface, <code>doTry()</code> will be called before any rendering, and <code>doFinally() </code>will be called after all rendering. If any exception occurs, <code>doCatch(java.lang.Throwable)</code> will be called.</para>
-<para>A typical use is to start a transaction and use it for rendering all items from the same request. </para><sect4><title>Interface Name</title>
+<para>A typical use is to start a transaction and use it for rendering all items from the same request. </para><sect3><title>Interface Name</title>
 <para>
 <code>org.zkoss.zul.</code>
 <code>RendererCtrl</code>
 </para>
 <para>
 <code/>
-</para></sect4><sect4><title>Methods</title>
+</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -74,4 +72,4 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title/></sect4><sect4><title/></sect4></sect3></sect2></sect1></article>
+</informaltable></sect3><sect3><title/></sect3><sect3><title/></sect3></sect2>

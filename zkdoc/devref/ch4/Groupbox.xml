@@ -1,17 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Groupbox</title>
+<sect2 id="Groupbox"><title>Groupbox</title>
 <para>Components: <code>groupbox</code>.</para>
 <para>A group box is used to group components together. A border is typically drawn around the components to show that they are related. The label across the top of the group box can be created by using the <code>caption</code> component. It works much like the HTML legend element. Unlike windows, a group box is not an owner of the ID space. It cannot be overlapped or popup.</para>
 <para>
-<inlinegraphic fileref="images/groupbox.png" width="7.434cm"/>
+<graphic fileref="images/groupbox.png"/>
 </para>
-<title/>
-<programlisting>&lt;groupbox width="250px"&gt;&#13;&lt;caption label="Fruits"/&gt;&#13;&lt;radiogroup&gt;&#13;&lt;radio label="Apple"/&gt;&#13;&lt;radio label="Orange"/&gt;&#13;&lt;radio label="Banana"/&gt;&#13;&lt;/radiogroup&gt;&#13;&lt;/groupbox&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<programlisting>&lt;groupbox width="250px"&gt;&#13;    &lt;caption label="Fruits"/&gt;&#13;    &lt;radiogroup&gt;&#13;        &lt;radio label="Apple"/&gt;&#13;        &lt;radio label="Orange"/&gt;&#13;        &lt;radio label="Banana"/&gt;&#13;    &lt;/radiogroup&gt;&#13;&lt;/groupbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Groupbox</code>
-</para></sect4><sect4><title>Supported Child Components</title>
-<para>*ALL </para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -32,14 +29,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -55,14 +52,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -78,14 +75,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -101,14 +98,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/OpenEvent.xml">
+<link linkend="OpenEvent">
 <code>org.zkoss.zk.ui.event.OpenEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -119,7 +116,7 @@
 <para>It is useful to implement load-on-demand by listening to the <code>onOpen</code> event, and creating components when the first time the component is opened.</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Properties</title>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -207,7 +204,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -304,7 +301,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -317,22 +314,22 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

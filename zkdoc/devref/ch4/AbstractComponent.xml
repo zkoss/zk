@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>AbstractComponent</title>
-<para>A skeletal implementation of Component. Though it is OK to implement Component from scratch, this class simplifies some of the chores.</para><sect4><title>Class Name</title>
+<sect2 id="AbstractComponent"><title>AbstractComponent</title>
+<para>A skeletal implementation of Component. Though it is OK to implement Component from scratch, this class simplifies some of the chores.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.AbstractComponent</code>
-</para></sect4><sect4><title>Properties</title>
+</para></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -87,7 +85,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -1078,4 +1076,4 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

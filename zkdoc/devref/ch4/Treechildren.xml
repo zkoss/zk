@@ -1,26 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Treechildren</title>
+<sect2 id="Treechildren"><title>Treechildren</title>
 <para>
 <code>Treechildren </code>contains a collection of treeitem components. It is main body of the <code>Tree </code>and it also the main body of a <code>Treeitem</code>'s children.</para>
 <para>You can change the page size of each <code>treechildren </code>instance by modifying the <code>pageSize </code>property</para>
 <para>
-<olink targetdocent="Toolbar.xml">
+<link linkend="Toolbar">
 <code/>
-</olink>
+</link>
 </para>
 <para>
-<inlinegraphic fileref="#images/treechildren.png" width="4.7811inch"/>
+<graphic fileref="images/treechildren.png"/>
 </para>
-<title/>
-<programlisting>&lt;window title="tree demo" border="normal" width="450px"&gt;&#13;&lt;tree id="tree" width="90%" &gt;&#13;&lt;treecols sizable="true"&gt;&#13;&lt;treecol label="Name"/&gt;&#13;&lt;treecol label="Description"/&gt;&#13;&lt;/treecols&gt;&#13;&lt;treechildren&gt;&#13;&lt;treeitem&gt;&#13;&lt;treerow&gt;&#13;&lt;treecell label="Item 1"/&gt;&#13;&lt;treecell label="Item 1 description"/&gt;&#13;&lt;/treerow&gt;&#13;&lt;/treeitem&gt;&#13;&lt;treeitem&gt;&#13;&lt;treerow&gt;&#13;&lt;treecell label="Item 2"/&gt;&#13;&lt;treecell label="Item 2 description"/&gt;&#13;&lt;/treerow&gt;&#13;&lt;treechildren&gt;&#13;&lt;treeitem&gt;&#13;&lt;treerow&gt;&#13;&lt;treecell label="Item 2.1"/&gt;&#13;&lt;/treerow&gt;&#13;&lt;treechildren pageSize="3"&gt;&#13;&lt;treeitem&gt;&#13;&lt;treerow&gt;&#13;&lt;treecell label="Item 2.1.1"/&gt;&#13;&lt;/treerow&gt;&#13;&lt;/treeitem&gt;&#13;&lt;treeitem&gt;&#13;&lt;treerow&gt;&#13;&lt;treecell label="Item 2.1.2"/&gt;&#13;&lt;/treerow&gt;&#13;&lt;/treeitem&gt;&#13;&lt;treeitem&gt;&#13;&lt;treerow&gt;&#13;&lt;treecell label="Item 2.1.3"/&gt;&#13;&lt;/treerow&gt;&#13;&lt;/treeitem&gt;&#13;&lt;treeitem&gt;&#13;&lt;treerow&gt;&#13;&lt;treecell label="Item 2.1.4"/&gt;&#13;&lt;/treerow&gt;&#13;&lt;/treeitem&gt;&#13;&lt;/treechildren&gt;&#13;&lt;/treeitem&gt;&#13;&lt;treeitem&gt;&#13;&lt;treerow&gt;&#13;&lt;treecell label="Item 2.2"/&gt;&#13;&lt;treecell label="Item 2.2 is something who cares"/&gt;&#13;&lt;/treerow&gt;&#13;&lt;/treeitem&gt;&#13;&lt;/treechildren&gt;&#13;&lt;/treeitem&gt;&#13;&lt;treeitem label="Item 3"/&gt;&#13;&lt;/treechildren&gt;&#13;&lt;/tree&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<programlisting>&lt;window title="tree demo" border="normal" width="450px"&gt;&#13;    &lt;tree id="tree" width="90%" &gt;&#13;        &lt;treecols sizable="true"&gt;&#13;            &lt;treecol label="Name"/&gt;&#13;            &lt;treecol label="Description"/&gt;&#13;        &lt;/treecols&gt;&#13;        &lt;treechildren&gt;&#13;            &lt;treeitem&gt;&#13;                &lt;treerow&gt;&#13;                    &lt;treecell label="Item 1"/&gt;&#13;                    &lt;treecell label="Item 1 description"/&gt;&#13;                &lt;/treerow&gt;&#13;            &lt;/treeitem&gt;&#13;            &lt;treeitem&gt;&#13;                &lt;treerow&gt;&#13;                    &lt;treecell label="Item 2"/&gt;&#13;                    &lt;treecell label="Item 2 description"/&gt;&#13;                &lt;/treerow&gt;&#13;                &lt;treechildren&gt;&#13;                    &lt;treeitem&gt;&#13;                        &lt;treerow&gt;&#13;                            &lt;treecell label="Item 2.1"/&gt;&#13;                        &lt;/treerow&gt;&#13;                        &lt;treechildren pageSize="3"&gt;&#13;                            &lt;treeitem&gt;&#13;                                &lt;treerow&gt;&#13;                                    &lt;treecell label="Item 2.1.1"/&gt;&#13;                                &lt;/treerow&gt;&#13;                            &lt;/treeitem&gt;&#13;                            &lt;treeitem&gt;&#13;                                &lt;treerow&gt;&#13;                                    &lt;treecell label="Item 2.1.2"/&gt;&#13;                                &lt;/treerow&gt;&#13;                            &lt;/treeitem&gt;&#13;                            &lt;treeitem&gt;&#13;                                &lt;treerow&gt;&#13;                                    &lt;treecell label="Item 2.1.3"/&gt;&#13;                                &lt;/treerow&gt;&#13;                            &lt;/treeitem&gt;&#13;                            &lt;treeitem&gt;&#13;                                &lt;treerow&gt;&#13;                                    &lt;treecell label="Item 2.1.4"/&gt;&#13;                                &lt;/treerow&gt;&#13;                            &lt;/treeitem&gt;&#13;                        &lt;/treechildren&gt;&#13;                    &lt;/treeitem&gt;&#13;                    &lt;treeitem&gt;&#13;                        &lt;treerow&gt;&#13;                            &lt;treecell label="Item 2.2"/&gt;&#13;                            &lt;treecell label="Item 2.2 is something who cares"/&gt;&#13;                        &lt;/treerow&gt;&#13;                    &lt;/treeitem&gt;&#13;                &lt;/treechildren&gt;&#13;            &lt;/treeitem&gt;&#13;            &lt;treeitem label="Item 3"/&gt;&#13;        &lt;/treechildren&gt;&#13;    &lt;/tree&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Treechildren</code>
-</para></sect4><sect4><title>Supported Child Components</title>
-<para>*<olink targetdocent="Treeitem.xml">
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*<link linkend="Treeitem">
 <code>org.zkoss.zul.Treeitem</code>
-</olink>
-</para></sect4><sect4><title>Supported Events</title>
+</link>
+</para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -41,9 +38,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="PagingEvent.xml">
+<link linkend="PagingEvent">
 <code>org.zkoss.zul.event.PagingEvent</code>
-</olink>
+</link>
 </para>
 <para>Description: </para>
 <para>Notifies one of the pages of a multi-page component is selected by the user.</para>
@@ -55,15 +52,15 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="PageSizeEvent.xml">
+<link linkend="PageSizeEvent">
 <code>org.zkoss.zul.event.PageSizeEvent</code>
-</olink>
+</link>
 </para>
 <para>Description: </para>
 <para>Used to notify that the page size is changed (by the user) </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Properties</title>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -123,7 +120,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -290,7 +287,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Inherited From </title>
+<para/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -303,28 +300,28 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">
+<link linkend="XulElement">
 <code>org.zkoss.zul.imp.XulElement</code>
-</olink>
+</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">
+<link linkend="HtmlBasedComponent">
 <code>org.zkoss.zk.ui.HtmlBasedComponent</code>
-</olink> </para>
+</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">
+<link linkend="AbstractComponent">
 <code>org.zkoss.zk.ui.AbstractComponent </code>
-</olink>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

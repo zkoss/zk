@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title>Combobox</title>bobox<para>Components: <code>combobox</code> and <code>comboitem</code>.</para>
+<sect2 id="Combobox"><title>Combobox</title>bobox<para>Components: <code>combobox</code> and <code>comboitem</code>.</para>
 <para>A <code>combobox</code> is a special text box that embeds a drop-down list. With <code>comboboxes</code>, users are allowed to select from a drop-down list, in addition to entering the text manually. </para>
 <para>
-<inlinegraphic fileref="images/combobox.png" width="5.026cm"/>
+<graphic fileref="images/combobox.png"/>
 </para>
-<title/>
-<programlisting>&lt;combobox&gt;&#13;&lt;comboitem label="Simple and Rich"/&gt;&#13;&lt;comboitem label="Cool!"/&gt;&#13;&lt;comboitem label="Ajax and RIA"/&gt;&#13;&lt;/combobox&gt;&#13;</programlisting><sect2><title/><sect3><title/><sect4><title>Class Name</title>
+<programlisting>&lt;combobox&gt;&#13;    &lt;comboitem label="Simple and Rich"/&gt;&#13;    &lt;comboitem label="Cool!"/&gt;&#13;    &lt;comboitem label="Ajax and RIA"/&gt;&#13;&lt;/combobox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Combobox</code>
-</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Comboitem </para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Events</title></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*org.zkoss.zul.Comboitem </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -31,14 +28,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/InputEvent.xml">
+<link linkend="InputEvent">
 <code>org.zkoss.zk.ui.event.InputEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -60,9 +57,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/InputEvent.xml">
+<link linkend="InputEvent">
 <code>org.zkoss.zk.ui.event.InputEvent</code>
-</olink>
+</link>
 </para>
 <para>
 <code/>
@@ -82,14 +79,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/SelectionEvent.xml">
+<link linkend="SelectionEvent">
 <code>org.zkoss.zk.ui.event.SelectionEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -105,9 +102,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.event.Event</code>
-</olink>
+</link>
 </para>
 <para>
 <code/>
@@ -126,9 +123,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.even.Event</code>
-</olink>
+</link>
 </para>
 <para>
 <code/>
@@ -147,9 +144,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="OpenEvent.xml">
+<link linkend="OpenEvent">
 <code>org.zkoss.zk.ui.event.OpenEvent</code>
-</olink>
+</link>
 </para>
 <para>
 <code/>
@@ -167,7 +164,7 @@
 <para>first time the component is opened.</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Properties</title>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -274,7 +271,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -496,7 +493,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -509,36 +506,36 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="Textbox.xml">org.zkoss.zul.Textbox</olink>
+<link linkend="Textbox">org.zkoss.zul.Textbox</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="InputElement.xml">org.zkoss.zul.impl.InputElement</olink>
+<link linkend="InputElement">org.zkoss.zul.impl.InputElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

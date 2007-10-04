@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title>SizeEvent</title>
+<sect2 id="SizeEvent"><title>SizeEvent</title>
 <para/>
 <para>Represents an event caused by a component being re-sized.</para>
 <para/>
 <para>Component Implementation Note: A sizable component must implement <code>Sizable</code> for the returned object of <code>ComponentCtrl.getExtraCtrl(). </code>
-</para><sect3><title/><sect4><title>Class Name</title>
+</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.SizeEvent</code>
-</para></sect4></sect3><sect3><title/><sect4><title>Methods</title>
+</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -69,7 +67,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4></sect3><sect3><title/><sect4><title/>
+</informaltable></sect3><sect3><title/>
 <para>Inherited From </para>
 <informaltable frame="all">
 <tgroup cols="1">
@@ -83,11 +81,11 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.event.Event </code>
-</olink>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

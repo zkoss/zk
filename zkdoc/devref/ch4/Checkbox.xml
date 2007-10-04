@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Checkbox</title>
+<sect2 id="Checkbox"><title>Checkbox</title>
 <para>A checkbox.</para>
 <para>
-<inlinegraphic fileref="images/checkbox.png" width="9.498cm"/>
+<graphic fileref="images/checkbox.png"/>
 </para>
-<title/>
-<programlisting>&lt;window title="Checkbox demo" border="normal" width="350px"&gt;&#13;&lt;checkbox id="apple" label="Apple" onCheck="doChecked()" /&gt;&#13;&lt;checkbox id="orange" label="Orange" onCheck="doChecked()" /&gt;&#13;&lt;checkbox id="banana" label="Banana" onCheck="doChecked()" /&gt;&#13;&lt;hbox&gt;You have selected :&lt;label id="fruit2"/&gt;&lt;/hbox&gt;&#13;&lt;zscript&gt;&#13;void doChecked() {&#13;fruit2.value = (apple.isChecked() ? apple.label+' ' : &amp;quot;&amp;quot;) &#13;+ (orange.isChecked() ? orange.label+' ' : &amp;quot;&amp;quot;) &#13;+ (banana.isChecked() ? banana.label+' ' : &amp;quot;&amp;quot;);&#13;}&#13;&lt;/zscript&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<programlisting>&lt;window title="Checkbox demo" border="normal" width="350px"&gt;&#13;        &lt;checkbox id="apple" label="Apple" onCheck="doChecked()" /&gt;&#13;        &lt;checkbox id="orange" label="Orange" onCheck="doChecked()" /&gt;&#13;        &lt;checkbox id="banana" label="Banana" onCheck="doChecked()" /&gt;&#13;        &lt;hbox&gt;You have selected :&lt;label id="fruit2"/&gt;&lt;/hbox&gt;&#13;        &lt;zscript&gt;&#13;            void doChecked() {&#13;                fruit2.value = (apple.isChecked() ? apple.label+' ' : &amp;quot;&amp;quot;) &#13;                    + (orange.isChecked() ? orange.label+' ' : &amp;quot;&amp;quot;) &#13;                    + (banana.isChecked() ? banana.label+' ' : &amp;quot;&amp;quot;);&#13;            }&#13;        &lt;/zscript&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Button</code>
-</para></sect4><sect4><title>Supported Child Components</title>
-<para>*ALL </para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -31,14 +28,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -54,14 +51,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -77,9 +74,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.event.Event</code>
-</olink>
+</link>
 </para>
 <para>
 <code/>
@@ -98,9 +95,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.even.Event</code>
-</olink>
+</link>
 </para>
 <para>
 <code/>
@@ -116,16 +113,16 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="CheckEvent.xml">
+<link linkend="CheckEvent">
 <code>org.zkoss.zk.ui.event.CheckEvent</code>
-</olink>
+</link>
 </para>
 <para>
 <code>Description: Denotes when a component loses the focus.</code>
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Properties</title>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -229,7 +226,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -290,7 +287,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -303,36 +300,36 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="LabelImageElement.xml">org.zkoss.zul.impl.LabelImageElement</olink>
+<link linkend="LabelImageElement">org.zkoss.zul.impl.LabelImageElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="LabelElement.xml">org.zkoss.zul.impl.LabelElement</olink>
+<link linkend="LabelElement">org.zkoss.zul.impl.LabelElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

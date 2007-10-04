@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title>MouseEvent</title>
-<para>Represents an event cause by mouse activitly. There are two possible way to identify a mouse event. One is by coordination (<code>getX()</code> and <code>getY().</code> The other is by a logical name, called area (<code>getArea()</code>).</para><sect3><title/><sect4><title>Class Name</title>
+<sect2 id="MouseEvent"><title>MouseEvent</title>
+<para>Represents an event cause by mouse activitly. There are two possible way to identify a mouse event. One is by coordination (<code>getX()</code> and <code>getY().</code> The other is by a logical name, called area (<code>getArea()</code>).</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</para></sect4></sect3><sect3><title/><sect4><title>Methods</title>
+</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -74,7 +72,7 @@
 <para>int</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4></sect3><sect3><title/><sect4><title/>
+</informaltable></sect3><sect3><title/>
 <para>Inherited From </para>
 <informaltable frame="all">
 <tgroup cols="1">
@@ -88,12 +86,12 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.event.Event </code>
-</olink>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

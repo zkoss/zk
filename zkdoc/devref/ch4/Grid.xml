@@ -1,19 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Grid</title>
+<sect2 id="Grid"><title>Grid</title>
 <para>Components: <code>grid, columns, column, rows and row.</code>
 </para>
 <para>A <code>grid</code> contains components that are aligned in rows like tables. Inside a <code>grid</code>, you declare two things, the <code>columns</code>, that define the header and <code>column</code> attributes, and the <code>rows</code>, that provide the content. To declare a set of rows, use the <code>rows</code> component, which should be a child element of <code>grid</code>. Inside that you should add <code>row</code> components, which are used for each <code>row</code>. Inside the <code>row</code> element, you should place the content that you want inside that <code>row</code>. Each child is a <code>column</code> of the specific <code>row</code>. Similarly, the <code>columns</code> are declared with the <code>columns</code> component, which should be placed as a child element of the <code>grid</code>. Unlike <code>row</code> is used to hold the content of each <code>row</code>, <code>column</code> declares the common attributes of each <code>column</code>, such as the width and alignment, and and optional headers, i.e., label and/or image. </para>
 <para>
-<inlinegraphic fileref="images/grid.png" width="9.762cm"/>
+<graphic fileref="images/grid.png"/>
 </para>
-<title/>
-<programlisting>&lt;window title="Grid Demo" border="normal" width="360px"&gt;&#13;&lt;zscript&gt;&#13;class Comp implements Comparator {&#13;private boolean _asc;&#13;public Comp(boolean asc) {&#13;_asc = asc;&#13;}&#13;public int compare(Object o1, Object o2) {&#13;String s1 = o1.getChildren().get(0).getValue(),&#13;s2 = o2.getChildren().get(0).getValue();&#13;int v = s1.compareTo(s2);&#13;return _asc ? v: -v;&#13;}&#13;}&#13;Comp asc = new Comp(true), dsc = new Comp(false);&#13;&lt;/zscript&gt;&#13;&lt;grid&gt;&#13;&lt;columns sizable="true"&gt;&#13;&lt;column label="Type" sortAscending="&amp;#36;{asc}" sortDescending="&amp;#36;{dsc}"/&gt;&#13;&lt;column label="Content"/&gt;&#13;&lt;/columns&gt;&#13;&lt;rows&gt;&#13;&lt;row&gt;&#13;&lt;label value="File:"/&gt;&#13;&lt;textbox width="99%"/&gt;&#13;&lt;/row&gt;&#13;&lt;row&gt;&#13;&lt;label value="Type:"/&gt;&#13;&lt;hbox&gt;&#13;&lt;listbox rows="1" mold="select"&gt;&#13;&lt;listitem label="Java Files,(*.java)"/&gt;&#13;&lt;listitem label="All Files,(*.*)"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;button label="Browse..."/&gt;&#13;&lt;/hbox&gt;&#13;&lt;/row&gt;&#13;&lt;row&gt;&#13;&lt;label value="Options:"/&gt;&#13;&lt;textbox rows="3" width="99%"/&gt;&#13;&lt;/row&gt;&#13;&lt;/rows&gt;&#13;&lt;/grid&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<programlisting>&lt;window title="Grid Demo" border="normal" width="360px"&gt;&#13;    &lt;zscript&gt;&#13;    class Comp implements Comparator {&#13;        private boolean _asc;&#13;        public Comp(boolean asc) {&#13;            _asc = asc;&#13;        }&#13;        public int compare(Object o1, Object o2) {&#13;            String s1 = o1.getChildren().get(0).getValue(),&#13;                s2 = o2.getChildren().get(0).getValue();&#13;            int v = s1.compareTo(s2);&#13;            return _asc ? v: -v;&#13;        }&#13;    }&#13;    Comp asc = new Comp(true), dsc = new Comp(false);&#13;    &lt;/zscript&gt;&#13;    &lt;grid&gt;&#13;        &lt;columns sizable="true"&gt;&#13;            &lt;column label="Type" sortAscending="&amp;#36;{asc}" sortDescending="&amp;#36;{dsc}"/&gt;&#13;            &lt;column label="Content"/&gt;&#13;        &lt;/columns&gt;&#13;        &lt;rows&gt;&#13;            &lt;row&gt;&#13;                &lt;label value="File:"/&gt;&#13;                &lt;textbox width="99%"/&gt;&#13;            &lt;/row&gt;&#13;            &lt;row&gt;&#13;                &lt;label value="Type:"/&gt;&#13;                &lt;hbox&gt;&#13;                    &lt;listbox rows="1" mold="select"&gt;&#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;&#13;                        &lt;listitem label="All Files,(*.*)"/&gt;&#13;                    &lt;/listbox&gt;&#13;                    &lt;button label="Browse..."/&gt;&#13;                &lt;/hbox&gt;&#13;            &lt;/row&gt;&#13;            &lt;row&gt;&#13;                &lt;label value="Options:"/&gt;&#13;                &lt;textbox rows="3" width="99%"/&gt;&#13;            &lt;/row&gt;&#13;        &lt;/rows&gt;&#13;    &lt;/grid&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Grid</code>
-</para></sect4><sect4><title>Supported Child Components</title>
+</para></sect3><sect3><title>Supported Child Components</title>
 <para>*org.zkoss.zul.Columns</para>
-<para>*org.zkoss.zul.Rows</para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
+<para>*org.zkoss.zul.Rows</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -34,9 +31,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="PagingEvent.xml">
+<link linkend="PagingEvent">
 <code>org.zkoss.zul.event.PagingEvent</code>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -48,7 +45,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Properties</title>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -205,7 +202,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -484,7 +481,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -497,22 +494,22 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

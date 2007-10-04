@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title>CreateEvent</title>
-<para>Used to notify a window that all its children are created and initialized. <code>UiEngine</code> post this event to components that declares the <code>onCreate</code> handler (either as a method or as in instance definition).</para><sect3><title/><sect4><title>Class Name</title>
+<sect2 id="CreateEvent"><title>CreateEvent</title>
+<para>Used to notify a window that all its children are created and initialized. <code>UiEngine</code> post this event to components that declares the <code>onCreate</code> handler (either as a method or as in instance definition).</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.CreateEvent</code>
-</para></sect4></sect3><sect3><title/><sect4><title>Methods</title>
+</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -35,7 +33,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4></sect3><sect3><title/><sect4><title/>
+</informaltable></sect3><sect3><title/>
 <para>Inherited From </para>
 <informaltable frame="all">
 <tgroup cols="1">
@@ -49,12 +47,12 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.event.Event </code>
-</olink>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

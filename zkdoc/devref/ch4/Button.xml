@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>Button</title>
+<sect2 id="Button"><title>Button</title>
 <para>You could assign a <code>label</code> and an <code>image</code> to a button by the <code>label</code> and <code>image</code> properties. If both are specified, the <code>dir</code> property control which is displayed up front, and the <code>orient</code> property controls whether the layout is horizontal or vertical. </para>
 <para>
-<inlinegraphic fileref="images/button.jpg" width="3.388cm"/>
+<graphic fileref="images/button.jpg"/>
 </para>
-<title/>
-<programlisting>&lt;button label="Left" image="/img/folder.gif" width="125px"/&gt;&#13;&lt;button label="Right" image="/img/folder.gif" dir="reverse" width="125px"/&gt;&#13;&lt;button label="Above" image="/img/folder.gif" orient="vertical" width="125px"/&gt;&#13;&lt;button label="Below" image="/img/folder.gif" orient="vertical" dir="reverse" width="125px"/&gt;&#13;</programlisting><sect4><title>Class Name</title>
+<programlisting>&lt;button label="Left" image="/img/folder.gif" width="125px"/&gt;&#13;&lt;button label="Right" image="/img/folder.gif" dir="reverse" width="125px"/&gt;&#13;&lt;button label="Above" image="/img/folder.gif" orient="vertical" width="125px"/&gt;&#13;&lt;button label="Below" image="/img/folder.gif" orient="vertical" dir="reverse" width="125px"/&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Button</code>
-</para></sect4><sect4><title>Supported Child Components</title>
-<para>*NONE </para></sect4><sect4><title>Supported Events</title></sect4><sect4><title/>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -31,14 +28,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -54,14 +51,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -77,14 +74,14 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
-</olink>
+</link>
 </para>
 <para>
-<olink targetdocent="../../../home/robbiecheng/prj/zk1/zkdoc/devref/ch4/MouseEvent.xml">
+<link linkend="MouseEvent">
 <code/>
-</olink>
+</link>
 </para>
 <para>
 <code>Description:</code>
@@ -100,9 +97,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.event.Event</code>
-</olink>
+</link>
 </para>
 <para>
 <code/>
@@ -121,9 +118,9 @@
 </entry>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.even.Event</code>
-</olink>
+</link>
 </para>
 <para>
 <code/>
@@ -133,7 +130,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title>Properties</title>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -275,7 +272,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -310,7 +307,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title/></sect4><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -323,36 +320,36 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="LabelImageElement.xml">org.zkoss.zul.impl.LabelImageElement</olink>
+<link linkend="LabelImageElement">org.zkoss.zul.impl.LabelImageElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="LabelElement.xml">org.zkoss.zul.impl.LabelElement</olink>
+<link linkend="LabelElement">org.zkoss.zul.impl.LabelElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

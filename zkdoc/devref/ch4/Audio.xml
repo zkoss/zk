@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title>Audio</title>
+<sect2 id="Audio"><title>Audio</title>
 <para>An <code>audio</code> component is used to play the audio at the browser. Like <code>image</code>, you could use the <code>src</code> property to specify an URL of an audio resource, or the <code>setContent</code> method to specify a dynamically generated audio.</para>
 <para>Depending on the browser and the <code>audio</code> plugin, developers might be able to control the play of an audio by the <code>play</code>, <code>stop</code> and <code>pause</code> methods. Currently, Internet Explorer with Media Player is capable of such controls.</para>
 <para>
-<inlinegraphic fileref="images/audio.png" width="8.175cm"/>
+<graphic fileref="images/audio.png"/>
 </para>
-<title/>
-<programlisting>&lt;audio id="audio" height="20"/&gt;&#13;</programlisting><sect2><title/><sect3><title/><sect4><title>Class Name</title>
+<programlisting>&lt;audio id="audio" height="20"/&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Audio</code>
-</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Child Components</title>
-<para>*NONE</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Supported Events</title>
-<para>*NONE</para></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Properties</title>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE</para></sect3><sect3><title>Supported Events</title>
+<para>*NONE</para></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -38,7 +35,11 @@
 </para>
 </entry>
 <entry>
-<para>Sets the alignment: one of top<code>, texttop, middle, absmiddle, bottom, absbottom, baseline, left, right and center.</code>
+<para>Sets the alignment: one of top<code>, </code>
+</para>
+<para>
+<code>Value:</code>
+<code>texttop, middle, absmiddle, bottom, absbottom, baseline, left, right and center.</code>
 </para>
 </entry>
 <entry>
@@ -138,7 +139,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Methods</title>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -206,7 +207,7 @@
 <para>void</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title/></sect4></sect3></sect2><sect2><title/><sect3><title/><sect4><title>Inherited From </title>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -219,22 +220,22 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="XulElement.xml">org.zkoss.zul.impl.XulElement</olink>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="HtmlBasedComponent.xml">org.zkoss.zk.ui.HtmlBasedComponent</olink> </para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<olink targetdocent="AbstractComponent.xml">org.zkoss.zk.ui.AbstractComponent </olink>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>
