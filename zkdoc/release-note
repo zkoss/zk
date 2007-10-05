@@ -24,6 +24,7 @@ ZK 3.0.0 Freshly
   1536757: splitter problem
   1577997: tabbox overflow error
   1807361: Problem with slider in a scrolled grid
+  1806152: listbox fail to update when model's size is zero (IE only)
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
