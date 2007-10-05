@@ -2061,6 +2061,7 @@ if (!window.opera || element.tagName=='BODY') {
 
   cumulativeOffset: function(element) {
     var valueT = 0, valueL = 0;
+	var operaBug = false;
     do {
 //Tom M. Yeh, Potix: Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
 if (Element.getStyle(element, "position") == 'fixed') {
@@ -2068,6 +2069,15 @@ if (Element.getStyle(element, "position") == 'fixed') {
 	valueL += zk.innerX() + element.offsetLeft;
 	break;
 } else {
+//Jumper Chen, Poitx: fix opera bug. If the parent of "INPUT" or "SPAN" element is "DIV" 
+// and the scrollTop of "DIV" element is more than 0, the offsetTop of "INPUT" or "SPAN" element always is wrong.
+	if (window.opera) { 
+		if (element.nodeName == "SPAN" || element.nodeName == "INPUT") operaBug = true;
+		else if (element.nodeName == "DIV" && operaBug) {
+			operaBug = false;
+			if (element.scrollTop != 0) valueT += element.scrollTop  || 0;
+		}			
+	}
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
 //Tom M. Yeh, Potix: Bug 1721158: In FF, element.offsetParent is null in this case

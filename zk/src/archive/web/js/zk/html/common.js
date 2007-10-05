@@ -212,22 +212,19 @@ zk.reviseSize = function (el, size, isHgh) {
 };
 /**
  * Returns the cumulative size of scroll for the specified element.
+ * <p><strong>Note:</strong> Excluding document.body</p>
  * @param {Object} el
  * @return {Array} [left, top];
  * @since 3.0.0
  */
 zk.getCumulativeScroll = function (el) {
 	var valueT = 0, valueL = 0;
-	do {
-		if (Element.getStyle(el, "position") == 'fixed') {
-			break;
-		} else {		 
-			valueL += el.scrollLeft;
-			if (!zk.opera || (el.nodeName != "INPUT" && el.nodeName != "SPAN")){				
-				valueT += el.scrollTop;				
-			}
-			el = el.parentNode;
-		} 
+	do {		 
+		if (!zk.opera || el.nodeName == "BODY" || el.nodeName == "DIV"){
+			valueL += el.scrollLeft;				
+			valueT += el.scrollTop;
+		}
+		el = el.parentNode;	 
 	} while (el != document.body);
 	return [valueL, valueT];
 };
