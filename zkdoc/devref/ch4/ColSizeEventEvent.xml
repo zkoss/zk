@@ -5,7 +5,7 @@
 <para>When an user drags the border of sizable columns, the width of the adjacent columns are changed accordingly - one is enlarged, the other is shrunk and the total width is not changed.</para>
 <para>The event is sent to the parent (e.g., Columns and Treecols).</para><sect4><title>Class Name</title>
 <para>
-<code>org.zkoss.zk.ui.event.CheckEvent</code>
+<code>org.zkoss.zul.event.ColSizeEvent</code>
 </para></sect4><sect4><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
