@@ -165,7 +165,9 @@
 </para>
 </entry>
 <entry>
-<para>&lt;null&gt;</para>
+<para>
+<code>&lt;null&gt;</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
@@ -222,7 +224,7 @@
 <row>
 <entry>
 <para>
-<link linkend="ImageLabelElement">
+<link linkend="LabelImageElement">
 <code>org.zkoss.zul.impl.LabelImageElement</code>
 </link>
 </para>

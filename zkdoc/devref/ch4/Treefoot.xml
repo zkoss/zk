@@ -1,5 +1,5 @@
 <sect2 id="Treefoot"><title>Treefoot</title>
-<para>A <code>treefoot </code>is main part of tree which contains set of footers. The set of footers is defined by a number of <code>treefooter </code>components, one for each column. Each column will appear as a footer at the bottom of the tree.</para>
+<para>A <code>treefoot </code>is main part of tree which contains set of footers. The set of footers is defined by a number of <code>treefooter </code>components. Each column will appear as a footer at the bottom of the tree.</para>
 <para>
 <link linkend="Toolbar">
 <code/>
@@ -12,7 +12,7 @@
 <para>
 <code>org.zkoss.zul.Treefoot</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Treefooterl">
+<para>*<link linkend="Treefooter">
 <code>org.zkoss.zul.Treefooter</code>
 </link>
 </para></sect3><sect3><title>Supported Events</title>

@@ -58,7 +58,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="SelectiontEvent">
+<link linkend="SelectionEvent">
 <code>org.zkoss.zk.ui.event.SelectionEvent</code>
 </link>
 </para>

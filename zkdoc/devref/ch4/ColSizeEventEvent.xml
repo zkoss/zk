@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<article lang="en-US"><sect1><title/><sect2><title/><sect3><title>ColSizeEvent</title>
+<sect2 id="ColSizeEvent"><title>ColSizeEvent</title>
 <para>Used to notify that the widths of two adjacent column are changed.</para>
 <para>When an user drags the border of sizable columns, the width of the adjacent columns are changed accordingly - one is enlarged, the other is shrunk and the total width is not changed.</para>
-<para>The event is sent to the parent (e.g., Columns and Treecols).</para><sect4><title>Class Name</title>
+<para>The event is sent to the parent (e.g., Columns and Treecols).</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.event.ColSizeEvent</code>
-</para></sect4><sect4><title>Methods</title>
+</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -70,7 +68,7 @@
 <para>int</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect4><sect4><title/>
+</informaltable></sect3><sect3><title/>
 <para>Inherited From </para>
 <informaltable frame="all">
 <tgroup cols="1">
@@ -84,12 +82,12 @@
 <row>
 <entry>
 <para>
-<olink targetdocent="Event.xml">
+<link linkend="Event">
 <code>org.zkoss.zk.ui.event.Event </code>
-</olink>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect4></sect3></sect2></sect1></article>
+<para/></sect3></sect2>

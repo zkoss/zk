@@ -44,7 +44,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -60,7 +60,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>

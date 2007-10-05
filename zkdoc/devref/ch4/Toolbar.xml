@@ -128,7 +128,7 @@
 <row>
 <entry>
 <para>
-<link linkend="XulElement">
+<link linkend="temp/XulElement">
 <code>org.zkoss.zul.imp.XulElement</code>
 </link>
 </para>
@@ -137,7 +137,7 @@
 <row>
 <entry>
 <para>
-<link linkend="HtmlBasedComponent">
+<link linkend="temp/HtmlBasedComponent">
 <code>org.zkoss.zk.ui.HtmlBasedComponent</code>
 </link> </para>
 </entry>
@@ -145,7 +145,7 @@
 <row>
 <entry>
 <para>
-<link linkend="AbstractComponent">
+<link linkend="temp/AbstractComponent">
 <code>org.zkoss.zk.ui.AbstractComponent </code>
 </link>
 </para>
