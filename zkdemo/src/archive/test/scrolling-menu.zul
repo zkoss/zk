@@ -37,12 +37,13 @@
 					</menupopup>
 				</menu>
 			</menubar>
-			
+
 			<combobox>
-	<comboitem label="First"/>
-	<comboitem label="Second"/>
-	<comboitem label="Third"/>
-	</combobox>
+				<comboitem label="First" />
+				<comboitem label="Second" />
+				<comboitem label="Third" />
+			</combobox>
+			<datebox/>
 		</div>
 	</window>
 	<grid height="100px">
@@ -86,21 +87,21 @@
 
 			</row>
 			<row>
-			<combobox>
-	<comboitem label="First"/>
-	<comboitem label="Second"/>
-	<comboitem label="Third"/>
-	</combobox>
+				<combobox>
+					<comboitem label="First" />
+					<comboitem label="Second" />
+					<comboitem label="Third" />
+				</combobox>
 			</row>
 			<row>
 				<combobox>
-	<comboitem label="First"/>
-	<comboitem label="Second"/>
-	<comboitem label="Third"/>
-	</combobox>
+					<comboitem label="First" />
+					<comboitem label="Second" />
+					<comboitem label="Third" />
+				</combobox>
 			</row>
 			<row>
-				
+
 				<menubar autodrop="true">
 					<menu label="File">
 						<menupopup>
@@ -138,7 +139,7 @@
 				</menubar>
 			</row>
 			<row>
-				
+
 				<menubar autodrop="true">
 					<menu label="File">
 						<menupopup>
@@ -176,7 +177,7 @@
 				</menubar>
 			</row>
 			<row>
-				
+
 				<menubar autodrop="true">
 					<menu label="File">
 						<menupopup>
