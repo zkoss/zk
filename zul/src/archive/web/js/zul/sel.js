@@ -850,8 +850,9 @@ zk.Selectable.prototype = {
 			hgh = this.element.style.height;
 			if (zk.ie && (!hgh || hgh == "auto")
 			&& this.body.offsetWidth - this.body.clientWidth > 11) {
-				this.body.style.height =
-					(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
+				if (!len) this.body.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
+				else this.body.style.height =
+						(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
 			} else {
 				this.body.style.height = "";
 			}
