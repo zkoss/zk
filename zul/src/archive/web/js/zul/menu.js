@@ -223,7 +223,7 @@ zkMpop = {};
 /** Called by au.js's context menu. */
 zkMpop.context = function (ctx, ref) {
 	if (!$visible(ctx)) {
-		zkMenu._open(ctx, true);
+		zkMenu._open(ctx, true, ref);
 
 		if (zkau.asap(ctx, "onOpen"))
 			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
