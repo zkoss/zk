@@ -312,14 +312,18 @@ zkLayoutRegion.init = function (cmp) {
 zkLayoutRegion.cleanup = function (cmp) {
 	cmp = $real(cmp);		
 	var layout = zk.Layout.getOwnerLayout(cmp);	
-	layout.removeRegion(cmp.split.pos);
-	var dg = zkLayoutRegionSplit._drags[cmp.split.id];
-	if (dg) {
-		delete zkLayoutRegionSplit._drags[cmp.split.id];
-		dg.drag.destroy();
+	if (cmp.split) {
+		layout.removeRegion(cmp.split.pos);
+		var dg = zkLayoutRegionSplit._drags[cmp.split.id];
+		if (dg) {
+			delete zkLayoutRegionSplit._drags[cmp.split.id];
+			dg.drag.destroy();
+		}
+		cmp.split.splitbtn = null;
+		cmp.split = null;
+	} else {
+		layout.removeRegion(getZKAttr(cmp, "pos"));
 	}
-	cmp.split.splitbtn = null;
-	cmp.split = null;
 	cmp.bodyEl = null;
 	zk.onResize();
 };
