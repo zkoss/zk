@@ -300,10 +300,12 @@ zkLayoutRegion.init = function (cmp) {
 	var split = $e(cmp.id + "!split");	
 	cmp = $real(cmp);	
 	var pos = getZKAttr(cmp, "pos");
-	cmp.split = split;
-	cmp.split.pos = pos;
-	cmp.split.splitbtn = $e($uuid(cmp) + "!splitbtn");
-	zkLayoutRegionSplit.init(split);
+	if (split) {
+		cmp.split = split;
+		cmp.split.pos = pos;
+		cmp.split.splitbtn = $e($uuid(cmp) + "!splitbtn");
+		zkLayoutRegionSplit.init(split);
+	}
 	var layout = zk.Layout.getOwnerLayout(cmp);	
 	if (layout)	layout.addRegion(pos, cmp);
 };

@@ -27,5 +27,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</c:forEach>
 		</div>
 	</div>
+	<c:if test="${self.position != 'center'}">
 	<div id="${self.uuid}!split" class="layout-split <c:if test="${self.position == 'north' || self.position == 'south'}">layout-split-v</c:if><c:if test="${self.position == 'west' || self.position == 'east'}">layout-split-h</c:if>"><img id="${self.uuid}!splitbtn" class="layout-split-button" src="<c:if test="${self.position == 'north'}">${c:encodeURL('~./zulex/img/layout/colps-t.png')}</c:if><c:if test="${self.position == 'south'}">${c:encodeURL('~./zulex/img/layout/colps-b.png')}</c:if><c:if test="${self.position == 'west'}">${c:encodeURL('~./zulex/img/layout/colps-l.png')}</c:if><c:if test="${self.position == 'east'}">${c:encodeURL('~./zulex/img/layout/colps-r.png')}</c:if>"/></div>
+	</c:if>
 </div>
