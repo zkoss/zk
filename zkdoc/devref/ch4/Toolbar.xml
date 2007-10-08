@@ -3,8 +3,8 @@
 <para>The toolbar has two orientation: <code>horizontal </code>and <code>vertical. </code>It controls how the buttons are placed.</para>
 <para>See also : <link linkend="Button">
 <code>org.zkoss.zul.Button</code>
-</link>, <link linkend="">
-<code>org.zkoss.zul.Toolbar</code>
+</link>, <link linkend="Toolbarbutton">
+<code>org.zkoss.zul.Toolbarbutton</code>
 </link>
 </para>
 <para>

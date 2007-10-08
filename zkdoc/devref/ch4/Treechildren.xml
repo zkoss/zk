@@ -201,9 +201,7 @@
 </para>
 </entry>
 <entry>
-<para>
-<code>Returns the Treerow that is associated with this treechildren, or null if no such treerow.</code>
-</para>
+<para>Returns the <code>Treerow</code> that is associated with this treechildren, or null if no such treerow.</para>
 </entry>
 <entry>
 <para>

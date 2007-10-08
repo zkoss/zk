@@ -1,8 +1,5 @@
 <sect2 id="Tabpanels"><title>Tabpanels</title>
-<para>A <code>ta</code>
-<code>b</code>
-<code>pan</code>
-<code>els</code> is the container for the tab panels, i.e., a collection of tabpanel components.</para>
+<para>A <code>tabpanels</code> is the container for the tab panels, i.e., a collection of tabpanel components.</para>
 <para>
 <link linkend="Toolbar">
 <code/>

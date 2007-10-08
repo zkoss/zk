@@ -163,7 +163,7 @@
 <para>Sets whether it is multiline. </para>
 <para>Values: <code>true | false</code>
 </para>
-<para>Note: If rows &gt; 1 multiline will always return <code>true</code>
+<para>Note: If <code>rows &gt; 1</code>, multiline will always return <code>true</code>
 </para>
 </entry>
 <entry>
