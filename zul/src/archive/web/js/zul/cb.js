@@ -300,10 +300,7 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	//NOTE: since the parent/child relation is changed, new listitem
 	//must be inserted into the popup (by use of uuid!child) rather
 	//than invalidate!!
-	
-	setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
-	document.body.appendChild(pp);
-	
+	zk.setVParent(pp);
 
 	zkCmbox._fixsz(cb, pp, pp2, ppofs);//fix size
 
@@ -508,10 +505,7 @@ zkCmbox.cbclose = function (cb) {
 zkCmbox.close = function (pp, focus) {
 	pp = $e(pp);
 	var uuid = $uuid(pp.id);
-	
-	$e(uuid).appendChild(pp);
-	rmZKAttr(pp, "vparent");
-	
+	zk.unsetVParent(pp);
 
 	zkCmbox._pop.removeFloatId(pp.id);
 	pp.style.display = "none";

@@ -524,9 +524,7 @@ zkDtbox.open = function (pp) {
 
 	//FF: Bug 1486840
 	//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
-	setZKAttr(pp, "vparent", uuid); //used by zkTxbox._noonblur
-	document.body.appendChild(pp);
-	
+	zk.setVParent(pp);	
 
 	//fix size
 	if (pp.offsetHeight > 200) {
@@ -565,9 +563,8 @@ zkDtbox._repos = function (uuid) {
 
 zkDtbox.close = function (pp, focus) {
 	var uuid = $uuid(pp.id);
-	
-	$e(uuid).appendChild(pp);
-	rmZKAttr(pp, "vparent");	
+
+	zk.unsetVParent(pp);
 
 	pp = $e(pp);
 	zkau._dtbox.setFloatId(null);

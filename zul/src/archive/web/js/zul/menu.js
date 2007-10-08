@@ -106,9 +106,7 @@ zkMenu._open = function (pp, top, ref, pos) {
 	/** not yet: we have to adjust CSS and some codes*/
 	//FF: Bug 1486840
 	//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
-		
-	setZKAttr(pp, "vparent", $uuid(ref));
-	document.body.appendChild(pp);
+	zk.setVParent(pp);
 	
 	pp.style.position = "absolute"; //just in case
 	if (ref) zk.position(pp, ref, pos);
@@ -145,11 +143,7 @@ zkMenu.close = function (pp) {
 zkMenu._close = function (pp) {
 	pp = $e(pp);
 	if (pp) {
-		var uuid = $e(getZKAttr(pp, "vparent"));
-		if (uuid) {
-			uuid.appendChild(pp);
-			rmZKAttr(pp, "vparent");
-		}
+		zk.unsetVParent(pp);
 		pp.style.display = "none";
 
 		if (zkau.asap(pp, "onOpen"))
