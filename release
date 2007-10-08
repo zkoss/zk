@@ -33,8 +33,8 @@ ver=${ver#version=}
 #jar
 if [ "$target" == "official" ] ; then
 	binnm=zk-bin-$ver
-	exprnm=zk-bin-express-$ver
-	classicnm=zk-bin-classic-$ver
+	stdnm=zk-bin-std-$ver
+	profnm=zk-bin-prof-$ver
 	demonm=zk-demo-$ver
 	javadocnm=zk-javadoc-$ver
 	srcnm=zk-src-$ver
@@ -240,7 +240,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	fi
 
 	if [ "$target" == "official" ] ; then
-		#Ouput ${classicnm}
+		#Ouput ${profnm}
 		cd $binnm/dist/lib/ext
 		rm -rf js.jar groovy.jar jruby.jar mvel.jar 
 
@@ -255,12 +255,12 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		cd /tmp/zk
 
-		#echo Output ${classicnm}.tar.gz
-		#tar zcf ${classicnm}.tar.gz $binnm
-		echo Output ${classicnm}.zip
-		zip -qr9 ${classicnm}.zip $binnm
+		#echo Output ${profnm}.tar.gz
+		#tar zcf ${profnm}.tar.gz $binnm
+		echo Output ${profnm}.zip
+		zip -qr9 ${profnm}.zip $binnm
 
-		#Ouput ${exprnm}
+		#Ouput ${stdnm}
 		cd $binnm/dist/lib/ext
 		rm -rf jcommon.jar jfreechart.jar Filters.jar
 
@@ -270,10 +270,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		cd /tmp/zk
 
-		#echo Output ${exprnm}.tar.gz
-		#tar zcf ${exprnm}.tar.gz $binnm
-		echo Output ${exprnm}.zip
-		zip -qr9 ${exprnm}.zip $binnm
+		#echo Output ${stdnm}.tar.gz
+		#tar zcf ${stdnm}.tar.gz $binnm
+		echo Output ${stdnm}.zip
+		zip -qr9 ${stdnm}.zip $binnm
 	fi
 
 	rm -rf $binnm
