@@ -317,6 +317,42 @@ function $parent(n) {
 	var p = $e(getZKAttr(n, "vparent"));
 	return p ?  p: n.parentNode;
 }
+/** Sets vparent. It is used if a popup is limited (cropped) by a parent div.
+ * @since 3.0.0
+ */
+zk.setVParent = function (n) {
+	var p = n.parentNode;
+	if (!p.id) {
+		zk.error("parent.id must be specified, "+n);
+		return;
+	}
+
+	setZKAttr(n, "vparent", p.id);
+	setZKAttr(n, "vnsib", n.nextSibling);
+	for (;; p = p.parentNode) {
+		if (!p) {
+			p = document.body;
+			break;
+		}
+		if (getZKAttr(p, "zidsp") == "page")
+			break;
+	}
+	p.appendChild(n);
+};
+/** Unsets vparent.
+ * @since 3.0.0
+ */
+zk.unsetVParent = function (n) {
+	var p = $e(getZKAttr(n, "vparent"));
+	if (p) {
+		var sib = getZKAttr(n, "vnsib");
+		if (sib) p.insertBefore(n, sib);
+		else p.appendChild(n);
+	}
+	rmZKAttr(n, "vparent");
+	rmZKAttr(n, "vnsib");
+};
+
 /** Returns the nearest parent element, including el itself, with the specified type.
  */
 function $parentByType(el, type) {
