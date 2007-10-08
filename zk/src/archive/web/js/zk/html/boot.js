@@ -321,7 +321,7 @@ function $parent(n) {
  * @since 3.0.0
  */
 zk.setVParent = function (n) {
-	var id = n.id, p = n.parentNode;
+	var id = n.id, p = n.parentNode, last;
 	if (!id) {
 		zk.error("id required, "+n);
 		return;
@@ -329,15 +329,11 @@ zk.setVParent = function (n) {
 
 	zk._vpts[id] = p;
 	zk._vnsibs[id] = n.nextSibling;
-	for (;; p = p.parentNode) {
-		if (!p) {
-			p = document.body;
-			break;
-		}
-		if (getZKAttr(p, "zidsp") == "page")
-			break;
-	}
-	p.appendChild(n);
+
+	for (; p && p != document.body; p = p.parentNode)
+		if (getZKAttr(p, "zidsp") == "page") //lookup the topmost page
+			last = p;
+	(last ? last: document.body).appendChild(n);
 };
 /** Unsets virtual parent.
  * @since 3.0.0
