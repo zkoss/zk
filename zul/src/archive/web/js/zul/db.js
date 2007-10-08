@@ -564,11 +564,11 @@ zkDtbox._repos = function (uuid) {
 zkDtbox.close = function (pp, focus) {
 	var uuid = $uuid(pp.id);
 
+	pp.style.display = "none";
 	zk.unsetVParent(pp);
 
 	pp = $e(pp);
 	zkau._dtbox.setFloatId(null);
-	pp.style.display = "none";
 	//No special child, so no need to: zk.onHideAt(pp);
 	zkau.hideCovered();
 

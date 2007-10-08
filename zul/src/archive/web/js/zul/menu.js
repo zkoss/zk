@@ -143,8 +143,8 @@ zkMenu.close = function (pp) {
 zkMenu._close = function (pp) {
 	pp = $e(pp);
 	if (pp) {
-		zk.unsetVParent(pp);
 		pp.style.display = "none";
+		zk.unsetVParent(pp);
 
 		if (zkau.asap(pp, "onOpen"))
 			zkau.send({uuid: pp.id, cmd: "onOpen", data: [false]});

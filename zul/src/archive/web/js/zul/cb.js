@@ -504,11 +504,11 @@ zkCmbox.cbclose = function (cb) {
 };
 zkCmbox.close = function (pp, focus) {
 	pp = $e(pp);
-	var uuid = $uuid(pp.id);
+	var uuid = $uuid(pp.id);	
+	pp.style.display = "none";
 	zk.unsetVParent(pp);
 
 	zkCmbox._pop.removeFloatId(pp.id);
-	pp.style.display = "none";
 	zk.onHideAt(pp);
 	zkau.hideCovered();
 
