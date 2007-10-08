@@ -12,7 +12,7 @@
 </listitem>
 </orderedlist>
 <para>
-<graphic fileref=""/>
+<graphic fileref="images/window.PNG"/>
 </para>
 <programlisting>&lt;hbox&gt;&#13;    &lt;window title="Embedded Style" border="normal" width="200px"&gt;&#13;        Hello, Embedded!&#13;    &lt;/window&gt;&#13;    &lt;window title="Cyan Style" sclass="wndcyan" border="normal" width="200px"&gt;&#13;        Hello, Cyan!&#13;    &lt;/window&gt;&#13;    &lt;window title="Popup Style" sclass="popup" border="normal" width="200px"&gt;&#13;        Hello, Popup!&#13;    &lt;/window&gt;&#13;    &lt;window title="Modal Style" sclass="modal" border="normal" width="200px"&gt;&#13;        Hello, Modal!&#13;    &lt;/window&gt;&#13;&lt;/hbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
