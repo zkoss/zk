@@ -1,24 +1,12 @@
 <?xml version="1.0"?>
 <book lang="en-US">
-<para>
-<graphic fileref=""/>
-<graphic fileref=""/>
-</para>
-<para>SIMPLY RICH</para>
-<para>ZKTM</para>
-<para>The Developer's Reference</para>
-<para>Version 3.0.0 RC</para>
-<para>September 2007</para>
-<para>Potix Corporation</para>
-<para>Revision 71</para>
-<para/>
-<para/>
-<para>Copyright © Potix Corporation. All rights reserved.</para>
-<para>The material in this document is for information only and is subject to change without notice. While reasonable efforts have been made to assure its accuracy, Potix Corporation assumes no liability resulting from errors or omissions in this document, or from the use of the information contained herein.</para>
-<para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
-<para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
-<para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
-<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para>
+<bookinfo>
+    <title>ZK Developer's Reference</title>
+	 <copyright>
+      <year>2007</year>
+      <holder>Potix Corporation. All rights reserved.</holder>
+	</copyright>
+</bookinfo>
 <chapter>
 <title>1. Introduction</title>
 <para>Welcome to ZK, the simplest way to make Web applications rich.</para>
@@ -408,9 +396,10 @@
 <para>forEach="${an-EL-expr}"</para>
 <para>It specifies a collection of objects, such that the associated element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored, and the element is evaluated only once. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para>
 <para>For each iteration, two variables, each and forEachStatus, are assigned automatically to let developers control how to evaluate the associated element.</para>
-<programlisting format="linespecific">&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;classes = new String[] {"College", "Graduate"};&#13;grades = new Object[] {&#13;new String[] {"Best", "Better"}, new String[] {"A++", "A+", "A"}&#13;};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="200px" forEach="${classes}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="${each}"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem label="${forEachStatus.previous.each}: ${each}"&#13;forEach="${grades[forEachStatus.index]}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/hbox&gt;&#13;</programlisting>
 <para>
-<graphic fileref=""/>&lt;/hbox&gt;</para></sect2><sect2><title>The forEachBegin Attribute</title>
+<graphic fileref="images/foreach-example.PNG"/>
+</para></sect2><sect2><title>The forEachBegin Attribute</title>
 <para>forEachBegin="${an-EL-expr}"</para>
 <para>It is used with the forEach attribute to specify the index (starting from 0) that the iteration shall begin at. If not specified, the iteration begins at the first element, i.e., 0 is assumed.</para>
 <para>If forEachBegin is greater than or equals to the number of elements, no iteration is performed.</para>
@@ -539,7 +528,7 @@
 </para>
 </entry>
 <entry>
-<para>Sets the ID of <link linkend="">
+<para>Sets the ID of <link linkend="Popup">
 <code>Popup</code>
 </link> that should appear when the user right-clicks on the element (aka., context menu).</para>
 </entry>
@@ -561,7 +550,7 @@
 </para>
 </entry>
 <entry>
-<para>Sets the ID of <link linkend="">
+<para>Sets the ID of <link linkend="Popup">
 <code>Popup</code>
 </link> that should appear when the user clicks on the element. </para>
 </entry>
@@ -583,7 +572,7 @@
 </para>
 </entry>
 <entry>
-<para>Sets the ID of <link linkend="">
+<para>Sets the ID of <link linkend="Popup">
 <code>Popup</code>
 </link> that should be used as a tooltip window when the mouse hovers over the element for a moment.</para>
 </entry>
@@ -2281,6 +2270,300 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/></sect3></sect2><sect2 id="HeaderElement" xml:base="ch4/HeaderElement.xml"><title>HeaderElement</title>
+<para>A skeletal implementation for a header.</para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.impl.HeaderElement</code>
+</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>align</code>
+</para>
+</entry>
+<entry>
+<para>Sets the horizontal alignment of this column. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>valign</code>
+</para>
+</entry>
+<entry>
+<para>Sets the vertical alignment of this grid. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getColAttrs()</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+<entry>
+<para>Returns the attributes used to generate HTML TD tag for each cell of the rows contained in the parent control, e.g., Listcell.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>isChildable()</code>
+</para>
+</entry>
+<entry>
+<para>Children are not allowed.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setWidth(java.lang.String width)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LabelElement">org.zkoss.zul.impl.LabelElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="LabelImageElement">
+<code>org.zkoss.zul.impl.LabelImageElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="HeadersElement" xml:base="ch4/HeadersElement.xml"><title>HeadersElement</title>
+<para>A skeletal implementation for headers, the parent of a group of <code>HeaderElement</code>.</para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.impl.HeadersElement</code>
+</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>sizeable</code>
+</para>
+</entry>
+<entry>
+<para>Sets the horizontal alignment of this column. Sets whether the width of the child column is sizable.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
 <para/></sect3></sect2><sect2 id="InputElement" xml:base="ch4/InputElement.xml"><title>InputElement</title>
 <para>
 <code>InputElement</code> is a super class for components which provie user key input, such as Textbox, Intbox, etc. </para>
@@ -2760,7 +3043,144 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2> </sect1><sect1><title>Components</title><sect2 id="Audio" xml:base="ch4/Audio.xml"><title>Audio</title>
+<para/></sect3></sect2> <sect2 id="NumberInputElement" xml:base="ch4/NumberInputElement.xml"><title>NumberInputElement</title>
+<para>A skeletal implementation for number-type input box. </para>
+<para/><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.impl.NumberInputElement</code>
+</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>RoundingMode</code>
+</para>
+</entry>
+<entry>
+<para>the rounding mode.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>BigDecimal.ROUND_HALF_EVEN.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>setRoundingMode()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="FormatInputElement">
+<code>org.zkoss.zul.impl.FormatInputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="InputElement">
+<code>org.zkoss.zul.impl.InputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.impl.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+<code> </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect3></sect2></sect1><sect1><title>Components</title><sect2 id="Audio" xml:base="ch4/Audio.xml"><title>Audio</title>
 <para>An <code>audio</code> component is used to play the audio at the browser. Like <code>image</code>, you could use the <code>src</code> property to specify an URL of an audio resource, or the <code>setContent</code> method to specify a dynamically generated audio.</para>
 <para>Depending on the browser and the <code>audio</code> plugin, developers might be able to control the play of an audio by the <code>play</code>, <code>stop</code> and <code>pause</code> methods. Currently, Internet Explorer with Media Player is capable of such controls.</para>
 <para>
@@ -5459,7 +5879,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="SelectiontEvent">
+<link linkend="SelectionEvent">
 <code>org.zkoss.zk.ui.event.SelectionEvent</code>
 </link>
 </para>
@@ -12937,7 +13357,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -12953,7 +13373,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -12969,7 +13389,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -13265,7 +13685,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -13567,7 +13987,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -13583,7 +14003,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -13599,7 +14019,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -13739,10 +14159,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/></sect3></sect2><sect2 id="Tabpanels" xml:base="ch4/Tabpanels.xml"><title>Tabpanels</title>
-<para>A <code>ta</code>
-<code>b</code>
-<code>pan</code>
-<code>els</code> is the container for the tab panels, i.e., a collection of tabpanel components.</para>
+<para>A <code>tabpanels</code> is the container for the tab panels, i.e., a collection of tabpanel components.</para>
 <para>
 <link linkend="Toolbar">
 <code/>
@@ -14098,7 +14515,7 @@
 <para>Sets whether it is multiline. </para>
 <para>Values: <code>true | false</code>
 </para>
-<para>Note: If rows &gt; 1 multiline will always return <code>true</code>
+<para>Note: If <code>rows &gt; 1</code>, multiline will always return <code>true</code>
 </para>
 </entry>
 <entry>
@@ -14434,8 +14851,8 @@
 <para>The toolbar has two orientation: <code>horizontal </code>and <code>vertical. </code>It controls how the buttons are placed.</para>
 <para>See also : <link linkend="Button">
 <code>org.zkoss.zul.Button</code>
-</link>, <link linkend="">
-<code>org.zkoss.zul.Toolbar</code>
+</link>, <link linkend="Toolbarbutton">
+<code>org.zkoss.zul.Toolbarbutton</code>
 </link>
 </para>
 <para>
@@ -14750,7 +15167,9 @@
 </para>
 </entry>
 <entry>
-<para>&lt;null&gt;</para>
+<para>
+<code>&lt;null&gt;</code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
@@ -14807,7 +15226,7 @@
 <row>
 <entry>
 <para>
-<link linkend="ImageLabelElement">
+<link linkend="LabelImageElement">
 <code>org.zkoss.zul.impl.LabelImageElement</code>
 </link>
 </para>
@@ -15486,7 +15905,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -15502,7 +15921,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -15940,9 +16359,7 @@
 </para>
 </entry>
 <entry>
-<para>
-<code>Returns the Treerow that is associated with this treechildren, or null if no such treerow.</code>
-</para>
+<para>Returns the <code>Treerow</code> that is associated with this treechildren, or null if no such treerow.</para>
 </entry>
 <entry>
 <para>
@@ -16234,31 +16651,26 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Tree" xml:base="ch4/Treecols.xml"><title>Tree</title>
-<para>A <code>tree </code>consists of tree parts, the set of columns, the set of footers, and the tree body. The set of columns is defined by a number of <code>treecol </code>components, one for each column. Each column will appear as a header at the top of the tree. Teh second part, The set of footers is defined by a number of <code>treefooter </code>components, one for each column also. Each column will appear as a footer at the bottom of the tree. The third part, the tree body, contains the data to appear in the tree and is created with a <code>treechildren </code>component.</para>
+<para/></sect3></sect2><sect2 id="Treecols" xml:base="ch4/Treecols.xml"><title>Treecols</title>
+<para>A <code>treecols </code>is main part of tree which contains set of columns. The set of columns is defined by a number of <code>treecol </code>components. Each column will appear as a column at the top of the tree.</para>
 <para>
 <link linkend="Toolbar">
 <code/>
 </link>
 </para>
 <para>
-<graphic fileref="images/tree.png"/>
+<graphic fileref="images/treecol.png"/>
 </para>
-<programlisting>&lt;window title="tree demo" border="normal"&gt;&#13;    &lt;tree id="tree" width="400px" rows="5"&gt;&#13;        &lt;treecols sizable="true"&gt;&#13;            &lt;treecol label="Name"/&gt;&#13;            &lt;treecol label="Description"/&gt;&#13;        &lt;/treecols&gt;&#13;        &lt;treechildren&gt;&#13;            &lt;treeitem&gt;&#13;                &lt;treerow&gt;&#13;                    &lt;treecell label="Item 1"/&gt;&#13;                    &lt;treecell label="Item 1 description"/&gt;&#13;                &lt;/treerow&gt;&#13;            &lt;/treeitem&gt;&#13;            &lt;treeitem&gt;&#13;                &lt;treerow&gt;&#13;                    &lt;treecell label="Item 2"/&gt;&#13;                    &lt;treecell label="Item 2 description"/&gt;&#13;                &lt;/treerow&gt;&#13;                &lt;treechildren&gt;&#13;                    &lt;treeitem&gt;&#13;                        &lt;treerow&gt;&#13;                            &lt;treecell label="Item 2.1"/&gt;&#13;                        &lt;/treerow&gt;&#13;                    &lt;/treeitem&gt;&#13;                    &lt;treeitem&gt;&#13;                        &lt;treerow&gt;&#13;                            &lt;treecell label="Item 2.2"/&gt;&#13;                            &lt;treecell label="Item 2.2 is something who cares"/&gt;&#13;                        &lt;/treerow&gt;&#13;                    &lt;/treeitem&gt;&#13;                &lt;/treechildren&gt;&#13;            &lt;/treeitem&gt;&#13;            &lt;treeitem label="Item 3"/&gt;&#13;        &lt;/treechildren&gt;&#13;        &lt;treefoot&gt;&#13;            &lt;treefooter label="Count"/&gt;&#13;            &lt;treefooter label="Summary"/&gt;&#13;        &lt;/treefoot&gt;&#13;    &lt;/tree&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<programlisting>&lt;window title="tree demo" border="normal" width="400px"&gt;&#13;    &lt;tree id="tree" width="90%" rows="2"&gt;&#13;        &lt;treecols sizable="true"&gt;&#13;            &lt;treecol label="Name"/&gt;&#13;            &lt;treecol label="Description"/&gt;&#13;            &lt;treecol label="Remark"/&gt;&#13;        &lt;/treecols&gt;&#13;        &lt;treechildren&gt;&#13;            &lt;treeitem&gt;&#13;                &lt;treerow&gt;&#13;                    &lt;treecell label="Item 1"/&gt;&#13;                    &lt;treecell label="Item 1 description"/&gt;&#13;                    &lt;treecell label="Item 1 remark"/&gt;&#13;                &lt;/treerow&gt;&#13;            &lt;treechildren&gt;&#13;                &lt;treeitem&gt;&#13;                    &lt;treerow&gt;&#13;                        &lt;treecell label="Item 1.2"/&gt;&#13;                        &lt;treecell label="Item 1.2 description"/&gt;&#13;                    &lt;/treerow&gt;&#13;                &lt;/treeitem&gt;&#13;            &lt;/treechildren&gt;&#13;            &lt;/treeitem&gt;&#13;        &lt;/treechildren&gt;&#13;    &lt;/tree&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zul.Tree</code>
-</para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="">
 <code>org.zkoss.zul.Treecols</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*<link linkend="Treecol">
+<code>org.zkoss.zul.Treecol</code>
 </link>
 </para>
-<para>*<link linkend="Treechildren">
-<code>org.zkoss.zul.Treechildren</code>
-</link>
-</para>
-<para>*<link linkend="Treefoot">
-<code>org.zkoss.zul.Treefoot</code>
-</link>
+<para>
+<code/>
 </para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
 <tgroup cols="2">
@@ -16275,246 +16687,22 @@
 <row>
 <entry>
 <para>
-<code>onSelect</code>
+<code>onColSize</code>
 </para>
 </entry>
 <entry>
 <para>
-<link linkend="SelectEvent">
-<code>org.zkoss.zk.ui.event.SelectEvent</code>
+<link linkend="ColSizeEvent">
+<code>org.zkoss.zul.event.ColSizeEvent</code>
 </link>
 </para>
 <para>Description: </para>
-<para>Denotes user has selected one or multiple child components(a set of treeitem).</para>
+<para>Notifies the parent of a group of headers that the widths</para>
+<para>of two of its children are changed by the user.</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title>Properties</title>
-<informaltable frame="all">
-<tgroup cols="4">
-<thead>
-<row>
-<entry>
-<para>Property</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Data Type</para>
-</entry>
-<entry>
-<para>Default Value</para>
-</entry>
-</row>
-</thead><tbody>
-<row>
-<entry>
-<para>
-<code>checkmark </code>
-</para>
-</entry>
-<entry>
-<para>Sets whether the check mark shall be displayed in front of each item.</para>
-<para>The check mark is a <code>checkbox </code>if <code>isMultiple() </code>returns true. It is a <code>radio </code>button if <code>isMultiple() </code>returns false. </para>
-<para>Values : <code>true|false</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>boolean</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>false</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>model</code>
-</para>
-</entry>
-<entry>
-<para>Sets the tree model associated with this tree.</para>
-</entry>
-<entry>
-<para>
-<code>org.zkoss.zul.TreeModel</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>&lt;null&gt;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>multiple</code>
-</para>
-</entry>
-<entry>
-<para>Sets whether multiple selections are allowed.</para>
-<para>Values : <code>true|false</code> </para>
-</entry>
-<entry>
-<para>
-<code>boolean</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>false</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>name</code>
-</para>
-</entry>
-<entry>
-<para>Sets the name of this component. </para>
-<para>The name is used only to work with "legacy" Web application that handles user's request by servlets. It works only with HTTP/HTML-based browsers. It doesn't work with other kind of clients. </para>
-<para>Don't use this method if your application is purely based on ZK's event-driven model. </para>
-</entry>
-<entry>
-<para>
-<code>String</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>&lt;null&gt;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>pageSize</code>
-</para>
-</entry>
-<entry>
-<para>Sets the page size that is used by all <code>Treechildren </code>to display a portion of their child <code>Treeitem, </code>or -1 if no limitation.</para>
-</entry>
-<entry>
-<para>
-<code>int</code>
-</para>
-</entry>
-<entry>
-<para>10</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>rows</code>
-</para>
-</entry>
-<entry>
-<para>Sets the rows. Zero means no limitation. </para>
-</entry>
-<entry>
-<para>
-<code>int</code>
-</para>
-</entry>
-<entry>
-<para>0</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>selectedItem</code>
-</para>
-</entry>
-<entry>
-<para>Deselects all of the currently selected items and selects the given item. </para>
-</entry>
-<entry>
-<para>
-<code>org.zkoss.zul.Treeitem</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>&lt;null&gt;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>seltype</code>
-</para>
-</entry>
-<entry>
-<para>Sets the seltype. Currently, only "<code>single" </code>is supported. </para>
-<para>Values : <code>single</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>String</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>&lt;single&gt;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>treeitemRender</code>
-</para>
-</entry>
-<entry>
-<para>Sets the renderer which is used to render each item if <code>getModel() </code>is not null.</para>
-<para>Note: changing a render will not cause the tree to re-render. If you want it to re-render, you could assign the same model again (i.e., <code>setModel(getModel())), </code>or fire an <code>TreeDataEvent </code>event. </para>
-</entry>
-<entry>
-<para>
-<code>org.zkoss.zul.TreeitemRenderer</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>&lt;null&gt;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>vflex</para>
-</entry>
-<entry>
-<para>Sets whether to grow and shrink vertical to fit their given space, so called vertial flexibility.</para>
-<para>Note: this attribute is ignored if <code>setRows(int)</code> is specified </para>
-<para>Values : <code>true|false</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>boolean</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>false</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect3><sect3><title>Methods</title>
+<para>*NONE</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -16536,245 +16724,16 @@
 <row>
 <entry>
 <para>
-<code>addItemToSelection</code>
+<code>get</code>
+<code>Tree</code>
 </para>
 </entry>
 <entry>
-<para>Selects the given item, without deselecting any other items that are already selected.</para>
+<para>Returns the tree that it belongs to.</para>
 </entry>
 <entry>
 <para>
-<code>Treeitem</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>clear</code>
-</para>
-</entry>
-<entry>
-<para>Clears all child tree items </para>
-<para>Note: after clear, <code>getTreechildren() </code>won't be null, but it has no child </para>
-</entry>
-<entry>
-<para/>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>clearSelection</code>
-</para>
-</entry>
-<entry>
-<para>Clears the selection. </para>
-</entry>
-<entry>
-<para/>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>getItemCount</code>
-</para>
-</entry>
-<entry>
-<para>Returns the number of child <code>Treeitem</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>int</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>getItems</code>
-</para>
-</entry>
-<entry>
-<para>Returns a readonly list of all descending <code>Treeitem</code> (children's children and so on) ,</para>
-</entry>
-<entry>
-<para>
-<code>Collection</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>getSelectedCount</code>
-</para>
-</entry>
-<entry>
-<para>Returns the number of items being selected. </para>
-</entry>
-<entry>
-<para>
-<code>int</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>getSelectedItems</code>
-</para>
-</entry>
-<entry>
-<para>Returns all selected items. </para>
-</entry>
-<entry>
-<para>
-<code>Set</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>getTreechildren</code>
-</para>
-</entry>
-<entry>
-<para>Returns the treechildren that this tree owns (might null). </para>
-</entry>
-<entry>
-<para>
-<code>Treechildren</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>getTreecols</code>
-</para>
-</entry>
-<entry>
-<para>Returns the treecols that this tree owns (might null). </para>
-</entry>
-<entry>
-<para>
-<code>Treecols</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>getTreefoot</code>
-</para>
-</entry>
-<entry>
-<para>Returns the treefoot that this tree owns (might null). </para>
-</entry>
-<entry>
-<para>
-<code>Treefoot</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>removeItemFromSelection</code>
-</para>
-</entry>
-<entry>
-<para>Deselects the given item without deselecting other items. </para>
-</entry>
-<entry>
-<para>
-<code>Treeitem</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>selectAll</code>
-</para>
-</entry>
-<entry>
-<para>Selects all items. </para>
-</entry>
-<entry>
-<para/>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>selectItem</code>
-</para>
-</entry>
-<entry>
-<para>Deselects all of the currently selected items and selects the given item. </para>
-</entry>
-<entry>
-<para>
-<code>Treeitem</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>toggleItemSelection</code>
-</para>
-</entry>
-<entry>
-<para>If the specified item is selected, it is deselected. </para>
-</entry>
-<entry>
-<para>
-<code>Treeitem</code>
+<code>org.zkoss.zul.Tree</code>
 </para>
 </entry>
 <entry>
@@ -16792,6 +16751,18 @@
 </entry>
 </row>
 </thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="HeadersElement">
+<code>org</code>
+</link>
+<link linkend="HeadersElement">
+<code>.zkoss.zul.impl.HeadersElement</code>
+</link>
+</para>
+</entry>
+</row>
 <row>
 <entry>
 <para>
@@ -16820,7 +16791,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/></sect3></sect2><sect2 id="Treefoot" xml:base="ch4/Treefoot.xml"><title>Treefoot</title>
-<para>A <code>treefoot </code>is main part of tree which contains set of footers. The set of footers is defined by a number of <code>treefooter </code>components, one for each column. Each column will appear as a footer at the bottom of the tree.</para>
+<para>A <code>treefoot </code>is main part of tree which contains set of footers. The set of footers is defined by a number of <code>treefooter </code>components. Each column will appear as a footer at the bottom of the tree.</para>
 <para>
 <link linkend="Toolbar">
 <code/>
@@ -16833,7 +16804,7 @@
 <para>
 <code>org.zkoss.zul.Treefoot</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Treefooterl">
+<para>*<link linkend="Treefooter">
 <code>org.zkoss.zul.Treefooter</code>
 </link>
 </para></sect3><sect3><title>Supported Events</title>
@@ -16913,6 +16884,190 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/></sect3></sect2><sect2 id="Treefooter" xml:base="ch4/Treefooter.xml"><title>Treefooter</title>
+<para>A <code>treefooter </code>is a bottom column of tree, Its parent must be <code>Treefoot. </code>You colud place any child in a tree footer.</para>
+<para>
+<link linkend="Toolbar">
+<code/>
+</link>
+</para>
+<para>
+<graphic fileref="images/treefooter.png"/>
+</para>
+<programlisting>&lt;window title="tree demo" border="normal" width="400px"&gt;&#13;    &lt;tree id="tree" width="90%" rows="2"&gt;&#13;        &lt;treecols sizable="true"&gt;&#13;            &lt;treecol label="Name"/&gt;&#13;            &lt;treecol label="Description"/&gt;&#13;        &lt;/treecols&gt;&#13;        &lt;treechildren&gt;&#13;            &lt;treeitem&gt;&#13;                &lt;treerow&gt;&#13;                    &lt;treecell label="Item 1"/&gt;&#13;                    &lt;treecell label="Item 1 description"/&gt;&#13;                &lt;/treerow&gt;&#13;            &lt;treechildren&gt;&#13;                &lt;treeitem&gt;&#13;                    &lt;treerow&gt;&#13;                        &lt;treecell label="Item 1.2"/&gt;&#13;                        &lt;treecell label="Item 1.2 description"/&gt;&#13;                    &lt;/treerow&gt;&#13;                &lt;/treeitem&gt;&#13;            &lt;/treechildren&gt;&#13;            &lt;/treeitem&gt;&#13;        &lt;/treechildren&gt;&#13;        &lt;treefoot &gt;&#13;            &lt;treefooter&gt;&lt;image src="/img/folder.gif"/&gt;Count&lt;/treefooter&gt;&#13;            &lt;treefooter&gt;&lt;image src="/img/folder.gif"/&gt;Summary&lt;/treefooter&gt;&#13;        &lt;/treefoot&gt;&#13;    &lt;/tree&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Treefooter</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events</title>
+<para>*NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>span</code>
+</para>
+</entry>
+<entry>
+<para>Sets the number of columns to span this footer. </para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>1</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Values</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getColumnIndex</code>
+</para>
+</entry>
+<entry>
+<para>Returns the column index, starting from 0. </para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getTree</code>
+</para>
+</entry>
+<entry>
+<para>Returns the tree that this belongs to.</para>
+</entry>
+<entry>
+<para>
+<code>Tree</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getTreecol</code>
+</para>
+</entry>
+<entry>
+<para>Returns the tree header that is in the same column as this footer, or null if not available. </para>
+</entry>
+<entry>
+<para>
+<code>Treecol</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LabelImageElement">
+<code>org.zkoss.zul.impl.LabelImageElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="LabelElement">
+<code>org.zkoss.zul.impl.LabelElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.imp.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
 <para/></sect3></sect2><sect2 id="Treeitem" xml:base="ch4/Treeitem.xml"><title>Treeitem</title>
 <para>
 <code>Treeitem </code>contains a row of data (<code>treerow), </code>and an optional treechildren.</para>
@@ -16959,7 +17114,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -16975,7 +17130,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MousetEvent">
+<link linkend="MouseEvent">
 <code>org.zkoss.zk.ui.event.MouseEvent</code>
 </link>
 </para>
@@ -17603,7 +17758,7 @@
 </listitem>
 </orderedlist>
 <para>
-<graphic fileref=""/>
+<graphic fileref="images/window.PNG"/>
 </para>
 <programlisting>&lt;hbox&gt;&#13;    &lt;window title="Embedded Style" border="normal" width="200px"&gt;&#13;        Hello, Embedded!&#13;    &lt;/window&gt;&#13;    &lt;window title="Cyan Style" sclass="wndcyan" border="normal" width="200px"&gt;&#13;        Hello, Cyan!&#13;    &lt;/window&gt;&#13;    &lt;window title="Popup Style" sclass="popup" border="normal" width="200px"&gt;&#13;        Hello, Popup!&#13;    &lt;/window&gt;&#13;    &lt;window title="Modal Style" sclass="modal" border="normal" width="200px"&gt;&#13;        Hello, Modal!&#13;    &lt;/window&gt;&#13;&lt;/hbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -18353,7 +18508,99 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2> <sect2 id="CreateEvent" xml:base="ch4/CreateEvent.xml"><title>CreateEvent</title>
+<para/></sect3></sect2> <sect2 id="ColSizeEvent" xml:base="ch4/ColSizeEvent.xml"><title>ColSizeEvent</title>
+<para>Used to notify that the widths of two adjacent column are changed.</para>
+<para>When an user drags the border of sizable columns, the width of the adjacent columns are changed accordingly - one is enlarged, the other is shrunk and the total width is not changed.</para>
+<para>The event is sent to the parent (e.g., Columns and Treecols).</para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.event.ColSizeEvent</code>
+</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getColIndex()</code>
+</para>
+</entry>
+<entry>
+<para>Return the column index of the first column whose width is changed. </para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getColumn1()</para>
+</entry>
+<entry>
+<para>Returns the first column whose width is changed. </para>
+</entry>
+<entry>
+<para>org.zkoss.zk.ui.Component</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getColumn2()</para>
+</entry>
+<entry>
+<para>Returns the second column whose width is changed. </para>
+</entry>
+<entry>
+<para>org.zkoss.zk.ui.Component</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getKeys()</para>
+</entry>
+<entry>
+<para>Returns what keys were pressed when the column is resized, or 0 if none of them was pressed. </para>
+</entry>
+<entry>
+<para>int</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect3></sect2><sect2 id="CreateEvent" xml:base="ch4/CreateEvent.xml"><title>CreateEvent</title>
 <para>Used to notify a window that all its children are created and initialized. <code>UiEngine</code> post this event to components that declares the <code>onCreate</code> handler (either as a method or as in instance definition).</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.CreateEvent</code>
@@ -19124,7 +19371,153 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2> <sect2 id="SelectEvent" xml:base="ch4/SelectEvent.xml"><title>SelectEvent</title>
+<para/></sect3></sect2> <sect2 id="PagingEvent" xml:base="ch4/PagingEvent.xml"><title>PagingEvent</title>
+<para>Used to notify that a new page is selected by the user, or by <code>Paginal </code>(such as <code>Paging</code>). It is used for paging long content. </para>
+<para/><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zk.ui.event.PagingEvent</code>
+</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getPageable</code>
+</para>
+</entry>
+<entry>
+<para>Returns the <code>pageable controller</code>.</para>
+</entry>
+<entry>
+<para>
+<code>Pageable</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getActivePage</code>
+</para>
+</entry>
+<entry>
+<para>Returns the active page (starting from 0).</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect3></sect2><sect2 id="PageSizeEvent" xml:base="ch4/PageSizeEvent.xml"><title>PageSizeEvent</title>
+<para/>
+<para>Used to notify that the page size is changed (by the user), or by paginal (such as <code>Paging</code>).</para>
+<para/><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zk.event.PageSizeEvent</code>
+</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getPageable</code>
+</para>
+</entry>
+<entry>
+<para>Returns the pageable controller.</para>
+</entry>
+<entry>
+<para>
+<code>org</code>
+<code>.zkoss.zul.ext.Pageable</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getPageSize()</para>
+</entry>
+<entry>
+<para>Returns the page size.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect3></sect2><sect2 id="SelectEvent" xml:base="ch4/SelectEvent.xml"><title>SelectEvent</title>
 <para>Represents an event cause by user's the list selection is changed at the client.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.SelectEvent</code>
@@ -19156,6 +19549,93 @@
 <entry>
 <para>
 <code>java.util.Set</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect3></sect2><sect2 id="SelectionEvent" xml:base="ch4/SelectionEvent.xml"><title>SelectionEvent</title>
+<para>Represents an event cause by user's the list selection is changed at the client.</para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zk.ui.event.SelectionEvent</code>
+</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getSelectedText()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the selected text contained in this text.</para>
+</entry>
+<entry>
+<para>
+<code>java.util.Set</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getSart()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the selected text's start position.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getEnd()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the selected text's end position.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -20402,298 +20882,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/></sect3><sect3><title/></sect3></sect2></sect1></chapter>
-<chapter>
-<title>5. The XHTML Components</title><sect1><title>Overview</title>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>All XHTML components are packed in the org.zkoss.zhtml package.</para>
-</listitem>
-<listitem>
-<para>The XML name space is http://www.w3.org/1999/xhtml</para>
-</listitem>
-<listitem>
-<para>The extensions include htm, html, xhtml and zhtml.</para>
-</listitem>
-<listitem>
-<para>The component names are case-insensitive. Developers could use any combination of lower or upper cases.</para>
-</listitem>
-</orderedlist><sect2><title>URL and encodeURL</title>
-<para>A XHTML component generates attributes directly to native HTML tags. It means, unlike XUL, it doesn't prefix the servlet context path to attributes for specifying URL. For example, the following codes don't work (unless the servlet context is "").</para>
-<programlisting format="linespecific">&lt;img href="/my/good.png"/&gt;&#13;</programlisting>
-<para>Rather, you shall use the encodeURL function in EL expressions as follows.</para>
-<programlisting format="linespecific">&lt;?taglib uri="http://www.zkoss.org/dsp/web/core.dsp.tld" prefix="p"?&gt;&#13;...&#13;</programlisting>
-<para>In Java, you shall use the encodeURL method from org.zkoss.zk.ui.Execution.</para>
-<programlisting format="linespecific">&lt;img id="another"/&gt;&#13;&lt;zscript&gt;&#13;</programlisting>
-<para>&lt;/zscript&gt;</para>
-<para>Notice that XUL components and all ZK features that accept an URL will invoke the encodeURL method automatically<footnote>
-<para>The reason not to handle XHTML compoents is that we don't know which attribute requires URL.</para>
-</footnote>.</para></sect2><sect2><title>AbstractTag</title>
-<para>All XHTML components are derived from the org.zkoss.zhtml.impl.AbstractTag class.</para>
-<para>A XHTML component is a thin wrapper that encapsulates a native HTML tag. It is different from a XUL component or other none-native component in several ways.</para>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>By implementing the org.zkoss.zk.ui.ext.RawId interface, the universal identifier (getUuid) is the same as the identifier (getId).</para>
-</listitem>
-<listitem>
-<para>By implementing the org.zkoss.zk.ui.ext.DynamicAttributes interface, all XHTML components support arbitrary attributes. In other words, any attribute name is legal (as long as the targeted browser supports).</para>
-</listitem>
-</orderedlist></sect2><sect2><title>Raw</title>
-<para>A special component, org.zkoss.zhtml.Raw, used to represent any component that is not declared in the following section (i.e., not in lang.xml). In other words, if any unrecognized component name is found, an instance of Raw is created, such that a proper HTML tag will be generated correspondingly. In other words, any component name is legal (as long as the targeted browser supports).</para>
-<programlisting format="linespecific">&lt;marquee align="top"&gt;...&lt;/marquee&gt;&#13;</programlisting>
-<para>It is equivalent to</para>
-<para>new Raw().setDynamicAttribute("align", "top");</para></sect2></sect1><sect1><title>Components</title><sect2><title>A</title>
-<para/></sect2><sect2><title>Abbr</title>
-<para/></sect2><sect2><title>Acronym</title>
-<para/></sect2><sect2><title>Address</title>
-<para/></sect2><sect2><title>Area</title>
-<para/></sect2><sect2><title>B</title>
-<para/></sect2><sect2><title>Base</title>
-<para/></sect2><sect2><title>Big</title>
-<para/></sect2><sect2><title>Blockquote</title>
-<para/></sect2><sect2><title>Body</title>
-<para/></sect2><sect2><title>Br</title>
-<para/></sect2><sect2><title>Button</title>
-<para/></sect2><sect2><title>Caption</title>
-<para/></sect2><sect2><title>Cite</title>
-<para/></sect2><sect2><title>Code</title>
-<para/></sect2><sect2><title>Collection</title>
-<para/></sect2><sect2><title>Colgroup</title>
-<para/></sect2><sect2><title>Dd</title>
-<para/></sect2><sect2><title>Del</title>
-<para/></sect2><sect2><title>Dfn</title>
-<para/></sect2><sect2><title>Dir</title>
-<para/></sect2><sect2><title>Div</title>
-<para/></sect2><sect2><title>Dl</title>
-<para/></sect2><sect2><title>Dt</title>
-<para/></sect2><sect2><title>Em</title>
-<para/></sect2><sect2><title>Embed</title>
-<para/></sect2><sect2><title>Fieldset</title>
-<para/></sect2><sect2><title>Font</title>
-<para/></sect2><sect2><title>Form</title>
-<para/></sect2><sect2><title>H1</title>
-<para/></sect2><sect2><title>H2</title>
-<para/></sect2><sect2><title>H3</title>
-<para/></sect2><sect2><title>H4</title>
-<para/></sect2><sect2><title>Head</title>
-<para/></sect2><sect2><title>Hr</title>
-<para/></sect2><sect2><title>Html</title>
-<para/></sect2><sect2><title>I</title>
-<para/></sect2><sect2><title>Iframe</title>
-<para/></sect2><sect2><title>Img</title>
-<para/></sect2><sect2><title>Input</title>
-<para/></sect2><sect2><title>Ins</title>
-<para/></sect2><sect2><title>Isindex</title>
-<para/></sect2><sect2><title>Kbd</title>
-<para/></sect2><sect2><title>Label</title>
-<para/></sect2><sect2><title>Legend</title>
-<para/></sect2><sect2><title>Li</title>
-<para/></sect2><sect2><title>Link</title>
-<para/></sect2><sect2><title>Map</title>
-<para/></sect2><sect2 id="Menu" xml:base="ch4/Menu.xml"><title>Menu</title>
-<para>
-<code>An element, much like a button, that is placed on a menu bar. When the user clicks the menu element, the child </code>
-<code>Menupopup</code>
-<code> of the menu will be displayed. This element is also used to create submenus of </code>
-<code>Menupopup</code>
-<code>.</code>
-<code> </code>
-</para>
-<para>
-<graphic fileref="images/Menu.png"/>
-<code/>
-</para>
-<programlisting>&lt;menu label="File"&gt;&#13;    &lt;menupopup&gt;&#13;        &lt;menuitem label="New" onClick="alert(self.label)"/&gt;&#13;        &lt;menuitem label="Open" onClick="alert(self.label)"/&gt;&#13;        &lt;menuitem label="Save" onClick="alert(self.label)"/&gt;&#13;        &lt;menuseparator/&gt;&#13;        &lt;menuitem label="Exit" onClick="alert(self.label)"/&gt;&#13;    &lt;/menupopup&gt;&#13;&lt;/menu&gt;&#13;</programlisting><sect3><title>Class Name</title>
-<para>
-<code>org.zkoss.zul.Menu</code> </para></sect3><sect3><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Menupopup</para></sect3><sect3><title>Supported Events</title>
-<para>*NONE</para></sect3><sect3><title>Properties</title>
-<para>*NONE</para></sect3><sect3><title>Methods</title>
-<informaltable frame="all">
-<tgroup cols="4">
-<thead>
-<row>
-<entry>
-<para>Name</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Data Type</para>
-</entry>
-<entry>
-<para>Values</para>
-</entry>
-</row>
-</thead><tbody>
-<row>
-<entry>
-<para>
-<code>getMenupopup()</code>
-</para>
-</entry>
-<entry>
-<para>Returns the <code>Menupopup</code> it owns, or null if not available.</para>
-</entry>
-<entry>
-<para>
-<code>Object</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>&lt;null&gt;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>isTopmost()</code>
-</para>
-</entry>
-<entry>
-<para>Returns whether this is an top-level menu, i.e., not owning by another <code>Menupopup</code>.</para>
-<para>Values: <code>true | false</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Boolean</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>True</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>getOutAttrs()</code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-<entry>
-<para/>
-</entry>
-<entry>
-<para>
-<code>String</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore) </code>
-</para>
-</entry>
-<entry>
-<para/>
-</entry>
-<entry>
-<para/>
-</entry>
-<entry>
-<para>
-<code>boolean</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect3><sect3><title>Inherited From </title>Inherited <informaltable frame="all">
-<tgroup cols="1">
-<thead>
-<row>
-<entry>
-<para>Inherited From</para>
-</entry>
-</row>
-</thead><tbody>
-<row>
-<entry>
-<para>
-<link linkend="LabelImageElement">
-<code>org.zkoss.zul.impl.LabelImageElement</code>
-</link>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<link linkend="LabelElement">
-<code>org.zkoss.zul.impl.LabelElement</code>
-</link>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<link linkend="XulElement">
-<code>org.zkoss.zul.impl.XulElement</code>
-</link>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<link linkend="HtmlBasedComponent">
-<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
-</link>
-<code> </code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<link linkend="AbstractComponent">
-<code>org.zkoss.zk.ui.AbstractComponent </code>
-</link>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect3></sect2><sect2><title>Meta</title>
-<para/></sect2><sect2><title>Nobr</title>
-<para/></sect2><sect2><title>Object</title>
-<para/></sect2><sect2><title>Ol</title>
-<para/></sect2><sect2><title>Optgroup</title>
-<para/></sect2><sect2><title>Option</title>
-<para/></sect2><sect2><title>P</title>
-<para/></sect2><sect2><title>Pre</title>
-<para/></sect2><sect2><title>Q</title>
-<para/></sect2><sect2><title>S</title>
-<para/></sect2><sect2><title>Sam</title>
-<para/></sect2><sect2><title>Script</title>
-<para/></sect2><sect2><title>Select</title>
-<para/></sect2><sect2><title>Small</title>
-<para/></sect2><sect2><title>Span</title>
-<para/></sect2><sect2><title>Strong</title>
-<para/></sect2><sect2><title>Style</title>
-<para/></sect2><sect2><title>Sub</title>
-<para/></sect2><sect2><title>Sup</title>
-<para/></sect2><sect2><title>Table</title>
-<para/></sect2><sect2><title>Tbody</title>
-<para/></sect2><sect2><title>Td</title>
-<para/></sect2><sect2><title>Text</title>
-<para/></sect2><sect2><title>Textarea</title>
-<para/></sect2><sect2><title>Tfoot</title>
-<para/></sect2><sect2><title>Th</title>
-<para/></sect2><sect2><title>Thead</title>
-<para/></sect2><sect2><title>Title</title>
-<para/></sect2><sect2><title>Tr</title>
-<para/></sect2><sect2><title>Tt</title>
-<para/></sect2><sect2><title>Ul</title>
-<para/></sect2><sect2><title>Var</title>
-<para/></sect2></sect1><sect1><title>Supplement Classes</title><sect2><title>Fileupload</title>
-<para/></sect2><sect2><title>Messagebox</title></sect2></sect1></chapter>
+
 <chapter>
 <title>Appendix A. WEB-INF/web.xml</title>
 <para>To add ZK a Web application, you have to add servlets, listeners and a optional filter to web.xml.</para><sect1><title>ZK Loader</title>
