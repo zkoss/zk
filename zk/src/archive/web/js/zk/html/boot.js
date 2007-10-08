@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "7a"; //increase this if we want the browser to reload JavaScript
+zk.build = "7b"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -95,7 +95,7 @@ zk.unlisten = function (el, evtnm, fn) {
 };
 
 if (zk.ie) { //Bug 1741959: avoid memory leaks
-	zk._ltns = {} // map(String id, [evtnm, fn])
+	zk._ltns = {} // map(el, [evtnm, fn])
 	zk._unltns = []; //array of [el, [evtnm, fn]]
 
 	zk._listen = zk.listen;
@@ -311,24 +311,24 @@ function $childExterior(cmp) {
 }
 
 /** Returns the parent node of the specified element.
- * It handles vparent.
+ * It handles virtual parent.
  */
 function $parent(n) {
-	var p = $e(getZKAttr(n, "vparent"));
-	return p ?  p: n.parentNode;
+	var p = zk._vpts[n.id];
+	return p ? p: n.parentNode;
 }
-/** Sets vparent. It is used if a popup is limited (cropped) by a parent div.
+/** Sets virtual parent. It is used if a popup is limited (cropped) by a parent div.
  * @since 3.0.0
  */
 zk.setVParent = function (n) {
-	var p = n.parentNode;
-	if (!p.id) {
-		zk.error("parent.id must be specified, "+n);
+	var id = n.id, p = n.parentNode;
+	if (!id) {
+		zk.error("id required, "+n);
 		return;
 	}
 
-	setZKAttr(n, "vparent", p.id);
-	setZKAttr(n, "vnsib", n.nextSibling);
+	zk._vpts[id] = p;
+	zk._vnsibs[id] = n.nextSibling;
 	for (;; p = p.parentNode) {
 		if (!p) {
 			p = document.body;
@@ -339,19 +339,24 @@ zk.setVParent = function (n) {
 	}
 	p.appendChild(n);
 };
-/** Unsets vparent.
+/** Unsets virtual parent.
  * @since 3.0.0
  */
 zk.unsetVParent = function (n) {
-	var p = $e(getZKAttr(n, "vparent"));
+	var id = n.id, p = zk._vpts[id];
+	delete zk._vpts[id];
 	if (p) {
-		var sib = getZKAttr(n, "vnsib");
-		if (sib) p.insertBefore(n, sib);
-		else p.appendChild(n);
+		var sib = zk._vnsibs[id];
+		delete zk._vnsibs[id];
+		if (sib)
+			p.insertBefore(n, sib);
+		else
+			p.appendChild(n);
 	}
-	rmZKAttr(n, "vparent");
-	rmZKAttr(n, "vnsib");
 };
+//Note: we have to use string to access {}. Otherwise, the behavior is strange
+zk._vpts = {}; //a map of virtual parent (n.id, n's parent)
+zk._vnsibs = {}; //a map of next sibling used with zk._vpts (n.id, n's next sibling)
 
 /** Returns the nearest parent element, including el itself, with the specified type.
  */
