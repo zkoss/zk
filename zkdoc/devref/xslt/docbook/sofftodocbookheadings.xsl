@@ -137,6 +137,11 @@
 		</xsl:attribute>
         <xsl:apply-templates select="office:body"/>
 	</xsl:element>
+	<title></title>
+	 <copyright>
+      <year>2007</year>
+      <holder>Potix Corporation. All rights reserved.</holder>
+	</copyright>
 </xsl:template>
 
 <xsl:template match="office:meta">
@@ -716,7 +721,7 @@
 	<xsl:otherwise>
 		<xsl:element name="graphic">
 			<xsl:attribute name="fileref">
-					<xsl:value-of select="substring-after(@xlink:href,'../')"/>
+					<xsl:value-of select="substring-after(@xlink:href,'#')"/>
 			</xsl:attribute>
 			<!--
 			<xsl:attribute name="width">
