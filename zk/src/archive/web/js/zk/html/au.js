@@ -909,7 +909,9 @@ zkau._onDocLClick = function (evt) {
 					var type = $type(ctx);
 					if (type) {
 						zkau.closeFloats(ctx, cmp);
-
+						
+						ctx.style.position = "absolute";
+						zk.setVParent(ctx); //FF: Bug 1486840, IE: Bug 1766244
 						zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 						zk.eval(ctx, "context", type, cmp);
 					}
@@ -1009,6 +1011,7 @@ zkau._onDocCtxMnu = function (evt) {
 				if (type) {
 					zkau.closeFloats(ctx, cmp);
 
+					ctx.style.position = "absolute";
 					zk.setVParent(ctx); //FF: Bug 1486840, IE: Bug 1766244
 					zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 					zk.eval(ctx, "context", type, cmp);
@@ -1119,6 +1122,9 @@ zkau._openTip = function (cmpId) {
 		if (tip) {
 			var cmp = $e(cmpId);
 			zkau._tipz.open = true;
+			
+			tip.style.position = "absolute";
+			zk.setVParent(tip); //FF: Bug 1486840, IE: Bug 1766244
 			zkau._autopos(tip, zkau._tipz.x, zkau._tipz.y);
 			zk.eval(tip, "context", null, cmp);
 		} else {
@@ -1608,13 +1614,13 @@ zkau.beginGhostToDIV = function (dg) {
 	zk.dragging = true;
 	dg.delta = dg.currentDelta();
 	dg.z_elorg = dg.element;
-
+	
 	var ofs = Position.cumulativeOffset(dg.element);
 	dg.z_scrl = Position.realOffset(dg.element);
 	dg.z_scrl[0] -= zk.innerX(); dg.z_scrl[1] -= zk.innerY();
 		//Store scrolling offset since Draggable.draw not handle DIV well
-
-	ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];
+	
+	ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];	
 	return ofs;
 };
 /** Returns the origin element before ghosted.

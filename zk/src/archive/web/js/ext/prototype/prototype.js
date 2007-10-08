@@ -2047,10 +2047,12 @@ var Position = {
   },
 
   realOffset: function(element) {
-    var valueT = 0, valueL = 0;
+    var valueT = 0, valueL = 0, tagName = element.tagName;
     do {
 //Tom M. Yeh, Potix: fix opera bug (see the page function)
-if (!window.opera || element.tagName=='BODY') { 
+// If tagName is "IMG" or "TR", the "DIV" element's scrollTop should be ignored.
+// Because the offsetTop of element "IMG" or "TR" is excluded its scrollTop.  
+if (!window.opera || element.tagName == 'BODY' || (tagName != "TR" && tagName != "IMG"  && element.tagName == 'DIV') ) { 
       valueT += element.scrollTop  || 0;
       valueL += element.scrollLeft || 0;
 }

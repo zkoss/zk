@@ -211,24 +211,6 @@ zk.reviseSize = function (el, size, isHgh) {
 	return size;
 };
 /**
- * Returns the cumulative size of scroll for the specified element.
- * <p><strong>Note:</strong> Excluding document.body</p>
- * @param {Object} el
- * @return {Array} [left, top];
- * @since 3.0.0
- */
-zk.getCumulativeScroll = function (el) {
-	var valueT = 0, valueL = 0;
-	do {		 
-		if (!zk.opera || el.nodeName == "BODY" || el.nodeName == "DIV"){
-			valueL += el.scrollLeft;				
-			valueT += el.scrollTop;
-		}
-		el = el.parentNode;	 
-	} while (el != document.body);
-	return [valueL, valueT];
-};
-/**
  * Returns the revised position for the specified element.
  * @param {Object} el
  * @param {Array} size [left, top];
@@ -236,7 +218,8 @@ zk.getCumulativeScroll = function (el) {
  * @since 3.0.0
  */
 zk.revisePosition = function (el, size) {
-	var scrolls = zk.getCumulativeScroll(el);
+	var scrolls = Position.realOffset(el);
+	scrolls[0] -= zk.innerX(); scrolls[1] -= zk.innerY(); 
 	return [size[0] - scrolls[0], size[1] - scrolls[1]];
 };
 /**
