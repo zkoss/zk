@@ -229,7 +229,7 @@ zk.getCumulativeScroll = function (el) {
 	return [valueL, valueT];
 };
 /**
- * Return the revised position for the specified element.
+ * Returns the revised position for the specified element.
  * @param {Object} el
  * @param {Array} size [left, top];
  * @return {Array} [left, top];
@@ -238,6 +238,20 @@ zk.getCumulativeScroll = function (el) {
 zk.revisePosition = function (el, size) {
 	var scrolls = zk.getCumulativeScroll(el);
 	return [size[0] - scrolls[0], size[1] - scrolls[1]];
+};
+/**
+ * Returns the accurate position of the specified element on browser.
+ * @param {Object} el
+ * @return {Array} [x, y];
+ * @since 3.0.0
+ */
+zk.getXY = function (el) {
+	if(el.getBoundingClientRect){ // IE
+		var b = el.getBoundingClientRect();
+		return [b.left + zk.innerX() - 3 , b.top + zk.innerY() - 3];
+	} else {
+		return zk.revisePosition(el, Position.cumulativeOffset(el));
+	}	
 };
 if (zk.safari) {
 	//fix safari's bug
@@ -340,7 +354,8 @@ zk.getDimension = function (el) {
 zk.position = function (el, ref, type) {
 	var refofs = zk.getDimension(el);
 	var wd = refofs[0], hgh = refofs[1];
-	refofs = zk.revisePosition(ref, Position.cumulativeOffset(ref)); // fixed the position of ref in scrollbar. 
+	refofs = zk.getXY(ref); 
+	
 	var x, y;
 	var scx = zk.innerX(), scy = zk.innerY(),
 		scmaxx = scx + zk.innerWidth(), scmaxy = scy + zk.innerHeight();
