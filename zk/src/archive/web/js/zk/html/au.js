@@ -1575,34 +1575,29 @@ zkau._ghostdrag = function (dg, ghosting) {
 		special = zk.zk_special;
 	}
 
-	if (special) {
-		if (ghosting) {
-			var ofs = zkau.beginGhostToDIV(dg);
+	if (ghosting) {
+		var ofs = zkau.beginGhostToDIV(dg);
+		if (special) {
 			var el = dg.element;
 			document.body.insertAdjacentHTML("afterbegin",
 				'<div id="zk_ddghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 				+zk.offsetWidth(el)+'px;height:'+zk.offsetHeight(el)
-				+'px;border:1px dotted black"></div>');
-			dg.element = $e("zk_ddghost");
-			zk.disableSelection(dg.element);
-		} else {
-			zkau.endGhostToDIV(dg);
+				+'px;border:1px dotted black"></div>');				
+		}else {
+			var el  = dg.element.cloneNode(true);
+			el.id = "zk_ddghost";
+			el.style.position = "absolute";
+			el.style.top = ofs[1] + "px";
+			el.style.left = ofs[0] + "px";		
+			document.body.appendChild(el);
 		}
-		return false
-	}
-
-	if (ghosting) {
-		zk.dragging = true;
-		dg.delta = dg.currentDelta();
-			//dragdrop.js cache left/top, but we might change it in other way
-		dg.z_x = dg.element.style.left; dg.z_y = dg.element.style.top;
-		zkau._revertpending = null;
+		dg.element = $e("zk_ddghost");
+		zk.disableSelection(dg.element);
 	} else {
-		setTimeout("zk.dragging=false", 0);
-			//we have to reset it later since onclick is fired later (after onmouseup)
+		zkau.endGhostToDIV(dg);
 	}
-	return true;
+	return false	
 };
 /** Prepares to ghost dg.element to a DIV.
  * It is used when you want to ghost with a div.
