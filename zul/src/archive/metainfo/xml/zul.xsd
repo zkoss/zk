@@ -328,14 +328,16 @@
 	<!-- borderlayout -->
 	<xs:element name="borderlayout" type="borderlayoutType" />
 	<xs:complexType name="borderlayoutType" mixed="true">
-		<xs:all>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />				
+		<xs:all>		
+			<xs:element ref="attribute" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="custom-attributes" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="variables" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="north" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="south" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="center" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="west" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="east" minOccurs="0" maxOccurs="1"/>
-		</xs:all>	
+		</xs:all>			
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- box -->
@@ -1714,7 +1716,10 @@
 	<!-- fisheyelist -->
 	<xs:element name="fisheyelist" type="fisheyelistType" />
 	<xs:complexType name="fisheyelistType">
-		<xs:element ref="fisheyeitem" minOccurs="0" maxOccurs="unbounded" />
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup"/>
+			<xs:element ref="fisheyeitem"/>
+		</xs:choice>
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 		<xs:attribute name="itemWidth" type="xs:string" use="optional" />
 		<xs:attribute name="itemHeight" type="xs:string" use="optional" />
