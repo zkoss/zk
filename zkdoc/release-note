@@ -26,6 +26,7 @@ ZK 3.0.0 Freshly
   1807361: Problem with slider in a scrolled grid
   1806152: listbox fail to update when model's size is zero (IE only)
   1808433: ZK Layout with center always loads twice on FF
+  1799602: The popup of combox e datebox out of position in IE
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
