@@ -1009,6 +1009,7 @@ zkau._onDocCtxMnu = function (evt) {
 				if (type) {
 					zkau.closeFloats(ctx, cmp);
 
+					zk.setVParent(ctx); //FF: Bug 1486840, IE: Bug 1766244
 					zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 					zk.eval(ctx, "context", type, cmp);
 				}
