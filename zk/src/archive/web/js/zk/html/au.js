@@ -44,7 +44,7 @@ zkau._drags = {}; //(id, Draggable): draggables
 zkau._drops = []; //dropables
 zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
 zkau._stamp = 0; //used to make a time stamp
-zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
+zkau.topZIndex = 12; //topmost z-index for overlap/popup/modal
 zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau._sendNow
 zkau._seqId = 0; //starting at 0 - the same as Desktop.getResponseSequence
@@ -751,7 +751,7 @@ zkau.rmAttr = function (cmp, name) {
  */
 zkau.fixZIndex = function (cmp, silent, autoz) {
 	if (!zkau._popups.length && !zkau._overlaps.length && !zkau._modals.length)
-		zkau.topZIndex = 0; //reset it!
+		zkau.topZIndex = 12; //reset it!
 
 	var zi = $int(cmp.style.zIndex);
 	if (zi > zkau.topZIndex) {
@@ -1304,6 +1304,7 @@ zkau._closeFloats = function (method, ancestors) {
 		&& !zk.isAncestorX(n, ancestors, true)) {
 		//we avoid hiding twice we have to check animating
 			closed = true;
+			zk.unsetVParent(n);
 			zk.hide(n);
 			zkau.send({uuid: n.id, cmd: "onOpen", data: [false]},
 				zkau.asapTimeout(n, "onOpen"));

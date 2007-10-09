@@ -197,7 +197,7 @@ zk.getStyleSize = function (el, areas, styles) {
     return val;
 };
 /**
- * Return the revised size for the specified element.
+ * Returns the revised size, which is fixed the size of its CSS border or padding, for the specified element.
  * @param {Number} size original size of the specified element. 
  * @param {Boolean} isHgh if true it will be "tb" top and bottom.
  * @return {Number}
@@ -211,7 +211,8 @@ zk.reviseSize = function (el, size, isHgh) {
 	return size;
 };
 /**
- * Returns the revised position for the specified element.
+ * Returns the revised position, which is fixed the size of its scrollbar top or 
+ * left, for the specified element.
  * @param {Object} el
  * @param {Array} size [left, top];
  * @return {Array} [left, top];
@@ -223,7 +224,7 @@ zk.revisePosition = function (el, size) {
 	return [size[0] - scrolls[0], size[1] - scrolls[1]];
 };
 /**
- * Returns the accurate position of the specified element on browser.
+ * Returns the absolutely accurate position of the specified element on browser.
  * @param {Object} el
  * @return {Array} [x, y];
  * @since 3.0.0
