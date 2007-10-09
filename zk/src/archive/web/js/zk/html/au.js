@@ -1863,7 +1863,7 @@ zkau.cmd1 = {
 			zkau.rmAttr(cmp, dt1);
 	},
 	outer: function (uuid, cmp, html) {
-		var bo = zk.beforeOuter(cmp);
+		zk.unsetChildVParent(cmp);
 
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
@@ -1872,7 +1872,6 @@ zkau.cmd1 = {
 		if (from) zkau._initSibs(from, to, true);
 		else zkau._initChildren(from2, to);
 
-		zk.afterOuter(cmp, bo);
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
 	addAft: function (uuid, cmp, html) {
@@ -1923,6 +1922,8 @@ zkau.cmd1 = {
 		//NOTE: it is possible the server asking removing a non-exist cmp
 		//so keep silent if not found
 		if (cmp) {
+			zk.unsetChildVParent(cmp);
+
 			zk.cleanupAt(cmp);
 			cmp = $childExterior(cmp);
 			zk.remove(cmp);

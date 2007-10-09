@@ -352,11 +352,10 @@ zk.unsetVParent = function (n) {
 			p.appendChild(n);
 	}
 };
-/** Called right before processing the outer command.
- * @return what are processed and it must be the second argument of afterOuter
+/** unsetVParent if it is a child of the specified node, n.
  * @since 3.0.0
  */
-zk.beforeOuter = function (n) {
+zk.unsetChildVParent = function (n) {
 	var bo = [];
 	for (var id in zk._vpts) {
 		var vp = zk._vpts[id];
@@ -366,17 +365,7 @@ zk.beforeOuter = function (n) {
 	for (var j = bo.length; --j >= 0;) {
 		n = $e(bo[j]);
 		zk.unsetVParent(n);
-		zk.remove(n);
 	}
-	return bo;
-};
-/** Called right after processing the outer command.
- * @param bo the argument must be the value returned by zk.beforeOuter
- * @since 3.0.0
- */
-zk.afterOuter = function (n, bo) {
-	for (var j = bo.length; --j >= 0;)
-		zk.setVParent($e(bo[j]));
 };
 //Note: we have to use string to access {}. Otherwise, the behavior is strange
 zk._vpts = {}; //a map of virtual parent (n.id, n's parent)
