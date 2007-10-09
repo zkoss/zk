@@ -382,16 +382,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private void bindToIdSpace(Component comp) {
 		final String compId = comp.getId();
 		_spaceInfo.fellows.put(compId, comp);
-		if (Names.isValid(compId))
-			_spaceInfo.ns.setVariable(compId, comp, true);
 	}
 	/** Unbind comp from this ID space (owned by this component).
 	 * Called only if IdSpace is implemented.
 	 */
 	private void unbindFromIdSpace(String compId) {
 		_spaceInfo.fellows.remove(compId);
-		if (Names.isValid(compId))
-			_spaceInfo.ns.unsetVariable(compId, true);
 	}
 
 	//-- Extra utlities --//
@@ -1573,11 +1569,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		private Map fellows = new HashMap(32);
 
 		private SpaceInfo(Component owner) {
-			ns = new SimpleNamespace();
+			ns = new SimpleNamespace(owner);
 			init(owner);
 		}
 		private SpaceInfo(Component owner, SimpleNamespace from) {
-			ns = new SimpleNamespace();
+			ns = new SimpleNamespace(owner);
 			ns.copy(from);
 			init(owner);
 		}

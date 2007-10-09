@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.scripting.Namespace;
 
 /**
@@ -33,9 +34,22 @@ import org.zkoss.zk.scripting.Namespace;
 public class SimpleNamespace extends AbstractNamespace {
 	private Namespace _parent;
 	private final Map _vars;
+	private final Component _owner;
 
 	public SimpleNamespace() {
-		_vars = new HashMap();
+		_vars = new HashMap(8);
+		_owner = null;
+	}
+	/**
+	 * @param owner the owner of this namespace.
+	 * If not null, the fellow of the owner is considered as part of this namespace.
+	 * In other words, {@link #containsVariable} and {@link #getVariable}
+	 * will check {@link Component#getFellow}.
+	 * @since 3.0.0
+	 */
+	public SimpleNamespace(Component owner) {
+		_vars = new HashMap(8);
+		_owner = owner;
 	}
 
 	/** Copies all variables from the specified namespace.
@@ -56,13 +70,20 @@ public class SimpleNamespace extends AbstractNamespace {
 	}
 	public boolean containsVariable(String name, boolean local) {
 		return _vars.containsKey(name)
-		|| (!local && _parent != null && _parent.containsVariable(name, true));
+		|| (_owner != null && _owner.getFellowIfAny(name) != null)
+		|| (!local && _parent != null && _parent.containsVariable(name, false));
 	}
 	public Object getVariable(String name, boolean local) {
 		Object val = _vars.get(name);
-		if (local || _parent == null || val != null || _vars.containsKey(name))
+		if (val != null || _vars.containsKey(name))
 			return val;
-		return _parent.getVariable(name, false);
+
+		if (_owner != null) {
+			val = _owner.getFellowIfAny(name);
+			if (val != null)
+				return val;
+		}
+		return local || _parent == null ? null: _parent.getVariable(name, false);
 	}
 	public void setVariable(String name, Object value, boolean local) {
 		if (!local && _parent != null && !_vars.containsKey(name)) {

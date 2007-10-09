@@ -773,25 +773,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				_fellows.put(((Component)old).getId(), old); //recover
 				throw new InternalError("Called shall prevent replicated ID for roots");
 			}
-
-			if (Names.isValid(compId)) {
-				try {
-					setVariable(compId, comp);
-				} catch (Throwable ex) {
-					if (D.ON) log.warningBriefly("Unable to setVariable: "+compId, ex);
-				}
-			}
 		}
 	}
 	public void removeFellow(Component comp) {
-		final String compId = comp.getId();
-		if (_fellows.remove(compId) != null && Names.isValid(compId)) {
-			try {
-				unsetVariable(compId);
-			} catch (Throwable ex) {
-				if (D.ON) log.warningBriefly("Unable to unsetVariable: "+compId, ex);
-			}
-		}
+		_fellows.remove(comp.getId());
 	}
 	public boolean hasFellow(String compId) {
 		return _fellows.containsKey(compId);
@@ -1178,13 +1163,16 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			return _vars.keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return _vars.containsKey(name)
+			return _vars.containsKey(name) || _fellows.containsKey(name)
 				|| resolveVariable(name) != null;
 		}
 		public Object getVariable(String name, boolean local) {
-			final Object o = _vars.get(name);
-			return o != null || _vars.containsKey(name) ?
-				o: resolveVariable(name);
+			Object val = _vars.get(name);
+			if (val != null || _vars.containsKey(name))
+				return val;
+
+			val = _fellows.get(name);
+			return val != null ? val: resolveVariable(name);
 		}
 		public void setVariable(String name, Object value, boolean local) {
 			_vars.put(name, value);
