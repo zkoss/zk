@@ -90,6 +90,9 @@ zkMenu.open = function (menu, toggle) {
 		var top = getZKAttr(menu, "top") == "true"; //top-level menu
 		var ref = top || $tag(menu) != "TD" ? menu: $parent(menu); //use TR if not top
 		var pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
+		
+		pp.style.position = "absolute"; //just in case
+		zk.setVParent(pp);
 		zkMenu._open(pp, top, ref, pos);
 
 		if (zkau.asap(pp, "onOpen"))
@@ -106,9 +109,6 @@ zkMenu._open = function (pp, top, ref, pos) {
 	/** not yet: we have to adjust CSS and some codes*/
 	//FF: Bug 1486840
 	//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
-	zk.setVParent(pp);
-	
-	pp.style.position = "absolute"; //just in case
 	if (ref) zk.position(pp, ref, pos);
 	zk.show(pp); //animation effect, if any
 
@@ -217,7 +217,7 @@ zkMpop = {};
 /** Called by au.js's context menu. */
 zkMpop.context = function (ctx, ref) {
 	if (!$visible(ctx)) {
-		zkMenu._open(ctx, true, ref);
+		zkMenu._open(ctx, true);
 
 		if (zkau.asap(ctx, "onOpen"))
 			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
