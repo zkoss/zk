@@ -746,7 +746,7 @@ zkau.rmAttr = function (cmp, name) {
 
 /** Corrects zIndex of the specified component, which must be absolute.
  * @param silent whether to send onZIndex
- * @param autoz whether to adjust zIndex only necessary.
+ * @param autoz whether to adjust zIndex only if necessary.
  * If false (used when creating a window), it always increases zIndex
  */
 zkau.fixZIndex = function (cmp, silent, autoz) {
@@ -1863,12 +1863,16 @@ zkau.cmd1 = {
 			zkau.rmAttr(cmp, dt1);
 	},
 	outer: function (uuid, cmp, html) {
+		var bo = zk.beforeOuter(cmp);
+
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
 			to = cmp.nextSibling;
 		zk.setOuterHTML(cmp, html);
 		if (from) zkau._initSibs(from, to, true);
 		else zkau._initChildren(from2, to);
+
+		zk.afterOuter(cmp, bo);
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
 	addAft: function (uuid, cmp, html) {
