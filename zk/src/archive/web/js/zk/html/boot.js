@@ -326,6 +326,8 @@ zk.setVParent = function (n) {
 		zk.error("id required, "+n);
 		return;
 	}
+	if (zk._vpts[id])
+		return; //called twice
 
 	zk._vpts[id] = p;
 	zk._vnsibs[id] = n.nextSibling;
