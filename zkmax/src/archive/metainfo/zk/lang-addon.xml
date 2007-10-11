@@ -13,9 +13,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <language-addon>
 	<!-- The name of this addon. It must be unique -->
 	<addon-name>zkmax</addon-name>
-	<!-- Specifies what other addon this depends
-	<depends></depends>
-	-->
+	<!-- Specifies what other addon this depends-->
+	<depends>zulex</depends>
+	
 
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>
@@ -110,6 +110,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>borderlayout</component-name>
+		<extends>borderlayout</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.BorderlayoutDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>box</component-name>
 		<extends>box</extends>
 		<mold>
@@ -143,6 +151,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
  			<mold-uri>class:org.zkoss.zkmax.zul.render.CaptionDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>center</component-name>
+		<extends>center</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -224,6 +240,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.DoubleboxDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>east</component-name>
+		<extends>east</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -465,6 +489,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>north</component-name>
+		<extends>north</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>paging</component-name>
 		<extends>paging</extends>
 		<mold>
@@ -544,6 +576,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>sphere</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.SliderSphere</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>south</component-name>
+		<extends>south</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -733,6 +773,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>vertical</mold-name>
 				<mold-uri>class:org.zkoss.zkmax.zul.render.BoxVertical</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>west</component-name>
+		<extends>west</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
 	<component>

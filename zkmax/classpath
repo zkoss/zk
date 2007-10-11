@@ -2,6 +2,7 @@
 ../dist/lib/zweb.jar
 ../dist/lib/zk.jar
 ../dist/lib/zul.jar
+../dist/lib/zulex.jar
 ../dist/lib/ext/el-api.jar
 ../dist/lib/ext/jasper-el.jar
 ../dist/lib/ext/commons-el.jar
