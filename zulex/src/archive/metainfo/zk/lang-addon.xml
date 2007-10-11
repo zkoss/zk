@@ -28,7 +28,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<version-uid>3.0.0</version-uid>
 		<zk-version>3.0.0</zk-version><!-- or later -->
 	</version>
-
+	
+	<component>
+		<component-name>borderlayout</component-name>
+		<component-class>org.zkoss.zulex.Borderlayout</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zulex/html/borderlayout.dsp</mold-uri>
+		</mold>
+	</component>	
 	<component>
 		<component-name>captcha</component-name>
 		<extends>captcha</extends>
@@ -39,6 +47,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</custom-attribute>
 	</component>
 	<component>
+		<component-name>center</component-name>
+		<component-class>org.zkoss.zulex.Center</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zulex/html/layoutregion.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>chart</component-name>
 		<extends>chart</extends>
 
@@ -46,15 +62,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<attribute-name>chart-engine</attribute-name>
 			<attribute-value>org.zkoss.zulex.impl.JFreeChartEngine</attribute-value>
 		</custom-attribute>
-	</component>
+	</component>	
 	<component>
-		<component-name>borderlayout</component-name>
-		<component-class>org.zkoss.zulex.Borderlayout</component-class>
+		<component-name>east</component-name>
+		<component-class>org.zkoss.zulex.East</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zulex/html/borderlayout.dsp</mold-uri>
+			<mold-uri>~./zulex/html/layoutregion.dsp</mold-uri>
 		</mold>
-	</component>	
+	</component>
 	<component>
 		<component-name>north</component-name>
 		<component-class>org.zkoss.zulex.North</component-class>
@@ -74,22 +90,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>west</component-name>
 		<component-class>org.zkoss.zulex.West</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zulex/html/layoutregion.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>east</component-name>
-		<component-class>org.zkoss.zulex.East</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zulex/html/layoutregion.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>center</component-name>
-		<component-class>org.zkoss.zulex.Center</component-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zulex/html/layoutregion.dsp</mold-uri>
