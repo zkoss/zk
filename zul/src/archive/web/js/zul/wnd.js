@@ -382,7 +382,7 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 	var pos = getZKAttr(cmp, "pos");
 	var isV = zkWnd._isVParent(cmp);
 	if (!pos && isV && !cmp.style.top && !cmp.style.left) {		
-		var xy = zk.getXY(cmp);
+		var xy = zk.revisedOffset(cmp);
 		cmp.style.left = xy[0] + "px";
 		cmp.style.top = xy[1] + "px";
 	}
