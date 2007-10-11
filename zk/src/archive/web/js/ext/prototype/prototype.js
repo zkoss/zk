@@ -2078,7 +2078,7 @@ if (Element.getStyle(element, "position") == 'fixed') {
 		else if (element.nodeName == "DIV" && operaBug) {
 			operaBug = false;
 			if (element.scrollTop != 0) valueT += element.scrollTop  || 0;
-		}			
+		} else operaBug = false;			
 	}
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
