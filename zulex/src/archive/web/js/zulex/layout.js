@@ -215,14 +215,14 @@ zk.Layout.prototype = {
 		} 	
 		cmp.bodyEl = bodyEl;
 		if (!this.ignoreResize(bodyEl, ambit.width, ambit.height)) {     
-			ambit.width = zk.reviseSize(cmp, ambit.width);
+			ambit.width = zk.revisedSize(cmp, ambit.width);
 			cmp.style.width = ambit.width + "px";	   			
-        	ambit.width = zk.reviseSize(bodyEl, ambit.width);
+        	ambit.width = zk.revisedSize(bodyEl, ambit.width);
 			bodyEl.style.width = ambit.width + "px";
 	        
-			ambit.height = zk.reviseSize(cmp, ambit.height, true);
+			ambit.height = zk.revisedSize(cmp, ambit.height, true);
 			cmp.style.height = ambit.height + "px";
-            ambit.height = zk.reviseSize(bodyEl, ambit.height, true);
+            ambit.height = zk.revisedSize(bodyEl, ambit.height, true);
 			bodyEl.style.height = ambit.height + "px";
 			if (getZKAttr(cmp, "autoscl") == "true") { 
 	        	bodyEl.style.overflow = "auto";				
@@ -455,11 +455,11 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 			var ol = zk.Layout.getOwnerLayout(real);
 			var xy = zk.Layout.cumulativeOffset(ol.el, el);	
 			var mars = ol._paserMargin(getZKAttr(real, "mars") || "0,0,0,0");
-		    var lr = zk.getStyleSize(real, "lr", zk.borders) + 
-				zk.getStyleSize(real, "lr", zk.paddings) + 
+		    var lr = zk.sumStyles(real, "lr", zk.borders) + 
+				zk.sumStyles(real, "lr", zk.paddings) + 
 				(split.pos == "west" ? mars.left : mars.right);
-			var tb = zk.getStyleSize(real, "tb", zk.borders) + 
-				zk.getStyleSize(real, "tb", zk.paddings) + 
+			var tb = zk.sumStyles(real, "tb", zk.borders) + 
+				zk.sumStyles(real, "tb", zk.paddings) + 
 				(split.pos == "north" ? mars.top : mars.bottom);
 			dg.drag.z_rootlyt = {
 				el: el,
