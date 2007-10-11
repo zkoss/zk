@@ -121,7 +121,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
-		final Desktop desktop = getWebManager().getDesktop(sess, request, path, true);
+		final Desktop desktop =
+			getWebManager().getDesktop(sess, request, response, path, true);
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request, PageDefinitions.getLocator(wapp, path));
 

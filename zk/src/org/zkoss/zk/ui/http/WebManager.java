@@ -27,7 +27,9 @@ import java.net.URL;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.portlet.RenderRequest;
 
@@ -40,6 +42,7 @@ import org.zkoss.web.util.resource.ServletLabelLocator;
 import org.zkoss.web.util.resource.ServletLabelResovler;
 import org.zkoss.web.util.resource.ClassWebResource;
 
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
@@ -47,6 +50,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -364,23 +368,43 @@ public class WebManager {
 	 * if not found and autocreate is false.
 	 * @param path the path of the ZUML page.
 	 * @param autocreate whether to create one if not found
+	 * @since 3.0.0
 	 */
 	public Desktop getDesktop(Session sess, ServletRequest request,
-	String path, boolean autocreate) {
+	ServletResponse response, String path, boolean autocreate) {
 		Desktop desktop = (Desktop)getRequestLocal(request, ATTR_DESKTOP);
 		if (desktop == null && autocreate) {
 			if (D.ON && log.debugable()) log.debug("Create desktop for "+path);
 			setRequestLocal(request, ATTR_DESKTOP,
-				desktop = newDesktop(sess, request, path));
+				desktop = newDesktop(sess, request, response, path));
 		}
 		return desktop;
 	}
+	/** Returns the desktop of the specified request, or null if not found.
+	 * @deprecated As of release 3.0.0, replaced by
+	 * {@link #getDesktop(Session,ServletRequest,ServletResponse,String,boolean)}.
+	 */
+	public Desktop getDesktop(Session sess, ServletRequest request,
+	String path, boolean autocreate) {
+		return getDesktop(sess, request, null, path, autocreate);
+	}
 	/** Creates an desktop. */
-	/*package*/ Desktop newDesktop(Session sess, Object request, String path) {
-		return ((WebAppCtrl)_wapp).getUiFactory().newDesktop(
-			new RequestInfoImpl(_wapp, sess, null, request,
-				PageDefinitions.getLocator(_wapp, path)),
-			_updateURI, path);
+	/*package*/ Desktop newDesktop(Session sess, ServletRequest request,
+	ServletResponse response, String path) {
+		final Execution exec = ExecutionsCtrl.getCurrent();
+		if (exec == null) //it shall be null, but, just in case,
+			ExecutionsCtrl.setCurrent(
+				new ExecutionImpl(
+					_ctx, (HttpServletRequest)request,
+					(HttpServletResponse)response, null, null));
+		try {
+			return ((WebAppCtrl)_wapp).getUiFactory().newDesktop(
+				new RequestInfoImpl(_wapp, sess, null, request,
+					PageDefinitions.getLocator(_wapp, path)),
+				_updateURI, path);
+		} finally {
+			ExecutionsCtrl.setCurrent(exec);
+		}
 	}
 	/** Sets the desktop to the specified request.
 	 * Used internally for implementation only.

@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -41,7 +42,7 @@ public interface ExecutionCtrl {
 	 * <p>Design decision: we put it here because user need not to know
 	 * about the conccept of the current page.
 	 *
-	 * @see org.zkoss.zk.ui.Desktop#getPage
+	 * @see Desktop#getPage
 	 */
 	public Page getCurrentPage();
 	/** Sets the current page.
@@ -127,4 +128,18 @@ public interface ExecutionCtrl {
 	 * (e.g., HTTP request) that creates this execution.
 	 */
 	public void setRequestAttribute(String name, Object value);
+
+	/** Sets the desktop associated with this execution.
+	 * You rarely need to use this method, since the desktop is associated
+	 * when this execution is created.
+	 *
+	 * <p>Currently, it is used to communicate between WebManager.newDesktop
+	 * and DesktopImpl's constructor.
+	 *
+	 * @exception IllegalArgumentException if desktop is null
+	 * @exception IllegalStateException if there is already a desktop
+	 * is associated with it.
+	 * @since 3.0.0
+	 */
+	public void setDesktop(Desktop desktop);
 }

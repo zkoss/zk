@@ -310,7 +310,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				if (failover.isRecoverable(sess, dtid)) {
 					desktop = WebManager.getWebManager(_ctx)
-						.getDesktop(sess, request, null, true);
+						.getDesktop(sess, request, response, null, true);
 					wappc.getUiEngine().execRecover(
 						new ExecutionImpl(_ctx, request, response, desktop, null),
 						failover);

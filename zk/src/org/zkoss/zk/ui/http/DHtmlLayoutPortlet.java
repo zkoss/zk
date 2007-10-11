@@ -170,7 +170,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final WebApp wapp = getWebManager().getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
-		final Desktop desktop = getDesktop(sess, request, path);
+		final Desktop desktop = getDesktop(sess, request, response, path);
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
@@ -220,13 +220,17 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 	/** Returns the desktop of the specified request.
 	 */
-	private Desktop getDesktop(Session sess, RenderRequest request, String path)
+	private Desktop getDesktop(Session sess, RenderRequest request,
+	RenderResponse response, String path)
 	throws PortletException {
 		Desktop desktop =
 			(Desktop)WebManager.getRequestLocal(request, WebManager.ATTR_DESKTOP);
-		if (desktop == null)
-			WebManager.setRequestLocal(request, WebManager.ATTR_DESKTOP,
-				desktop = getWebManager().newDesktop(sess, request, path));
+		if (desktop == null) {
+			desktop = getWebManager().newDesktop(sess, 
+				RenderHttpServletRequest.getInstance(request),
+				RenderHttpServletResponse.getInstance(response), path);
+			WebManager.setRequestLocal(request, WebManager.ATTR_DESKTOP, desktop);
+		}
 		return desktop;
 	}
 	/** Returns the layout servlet.

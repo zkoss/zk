@@ -56,6 +56,9 @@ public interface IdGenerator {
 	/** Returns the next desktop ID for the specified desktop,
 	 * or null to generate the default UUID.
 	 *
+	 * <p>Note: we can retrieve the execution by use of
+	 * {@link Desktop#getExecution}, or {@link org.zkoss.zk.ui.Executions#getCurrent}.
+	 *
 	 * @return the next desktop UUID, or null to generate the
 	 * default UUID.
 	 */

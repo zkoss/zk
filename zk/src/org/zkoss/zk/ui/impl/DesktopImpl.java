@@ -149,6 +149,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (updateURI == null || wapp == null)
 			throw new IllegalArgumentException("null");
 
+		//Feature 1811241: we create a temporary exec (in WebManager.newDesktop),
+		//so DesktopInit can access Executions.getCurrent
+		final Execution exec = Executions.getCurrent();
+		if (exec != null)
+			((ExecutionCtrl)exec).setDesktop(this);
+
 		_wapp = wapp;
 		_updateURI = updateURI;
 		init();
@@ -166,28 +172,33 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (deviceType != null && deviceType.length() != 0)
 			setDeviceType(deviceType);
 
-		final WebAppCtrl wappc = (WebAppCtrl)_wapp;
-		final DesktopCache dc = wappc.getDesktopCache(_sess);
-		final IdGenerator idgen = wappc.getIdGenerator();
-		if (idgen != null)
-			_id = idgen.nextDesktopId(this);
-		if (_id == null)
-			_id = Strings.encode(
-				new StringBuffer(12).append("g"), dc.getNextKey()).toString();
-		updateUuidPrefix();
-
 		final Configuration config = _wapp.getConfiguration();
-		config.invokeDesktopInits(this); //it might throw exception
+		_exec = exec; //fake
+		try {
+			final WebAppCtrl wappc = (WebAppCtrl)_wapp;
+			final DesktopCache dc = wappc.getDesktopCache(_sess);
+			final IdGenerator idgen = wappc.getIdGenerator();
+			if (idgen != null)
+				_id = idgen.nextDesktopId(this);
+			if (_id == null)
+				_id = Strings.encode(
+					new StringBuffer(12).append("g"), dc.getNextKey()).toString();
+			updateUuidPrefix();
 
-		dc.addDesktop(this); //add to cache after invokeDesktopInits
+			config.invokeDesktopInits(this); //it might throw exception
 
-		final Monitor monitor = config.getMonitor();
-		if (monitor != null) {
-			try {
-				monitor.desktopCreated(this);
-			} catch (Throwable ex) {
-				log.error(ex);
+			dc.addDesktop(this); //add to cache after invokeDesktopInits
+
+			final Monitor monitor = config.getMonitor();
+			if (monitor != null) {
+				try {
+					monitor.desktopCreated(this);
+				} catch (Throwable ex) {
+					log.error(ex);
+				}
 			}
+		} finally {
+			_exec = null;
 		}
 	}
 	/** Initialization for contructor and de-serialized. */

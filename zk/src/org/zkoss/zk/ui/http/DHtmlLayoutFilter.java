@@ -88,7 +88,8 @@ public class DHtmlLayoutFilter implements Filter {
 		final Object old = I18Ns.setup(sess, request, response, _charset);
 		try {
 			final String path = Https.getThisServletPath(request);
-			final Desktop desktop = webman.getDesktop(sess, request, path, true);
+			final Desktop desktop =
+				webman.getDesktop(sess, request, response, path, true);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, null);
 			((SessionCtrl)sess).notifyClientRequest(true);

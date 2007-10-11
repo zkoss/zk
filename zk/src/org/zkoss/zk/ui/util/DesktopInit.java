@@ -36,6 +36,10 @@ import org.zkoss.zk.ui.Desktop;
  */
 public interface DesktopInit {
 	/** Called when a desktop is created and initialized.
+	 *
+	 * <p>Note: you can access the execution by calling
+	 * {@link Desktop#getExecution} or
+	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
 	 */
 	public void init(Desktop desktop) throws Exception;
 }

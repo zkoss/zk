@@ -50,7 +50,7 @@ import org.zkoss.zk.au.AuResponse;
  * @author tomyeh
  */
 abstract public class AbstractExecution implements Execution, ExecutionCtrl {
-	private final Desktop _desktop;
+	private Desktop _desktop;
 	private Page _curpage;
 	private PageDefinition _curpgdef;
 	private Visualizer _ei;
@@ -69,7 +69,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	 * {@link #isAsyncUpdate} returns based on this.
 	 */
 	protected AbstractExecution(Desktop desktop, Page creating) {
-		_desktop = desktop;
+		_desktop = desktop; //it is null if it is created by WebManager.newDesktop
 		_creating = creating;
 	}
 
@@ -247,6 +247,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public void addAuResponse(String key, AuResponse response) {
 		getUiEngine().addResponse(key, response);
+	}
+	public void setDesktop(Desktop desktop) {
+		if (desktop == null) throw new IllegalArgumentException("null");
+		if (_desktop != null) throw new IllegalStateException();
+		_desktop = desktop;
 	}
 
 	//Object//
