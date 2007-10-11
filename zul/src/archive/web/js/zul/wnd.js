@@ -70,9 +70,21 @@ zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
 zkWnd.setAttr = function (cmp, nm, val) {
 	switch (nm) {
 	case "visibility":
-		zkau.setAttr(cmp, nm, val);
+		var bo = zk.unsetChildVParent(cmp);
+		if (cmp._pvisible == undefined || cmp._pvisible == "true") {			
+			zkau.setAttr(cmp, nm, val);
+		} 
+		cmp._visible = val;
 		if (getZKAttr(cmp, "mode") != "embedded")
 			zkau.hideCovered(); //Bug 1719826 
+		for (var j = bo.length; --j >= 0;) {
+			n = $e(bo[j]);		
+			if (n.id != cmp.id) {
+				n._pvisible = val;			
+				zkau.setAttr(n, nm, n._pvisible == "true" ? n._visible : n._pvisible);
+			}				
+			zk.setVParent(n);
+		}
 		return true;
 
 	case "z.sizable":
@@ -368,7 +380,7 @@ zkWnd._endOverlapped = function (uuid, replace) {
 zkWnd._doOverpop = function (cmp, storage, replace) {
 	
 	var pos = getZKAttr(cmp, "pos");
-	var isV = zkWnd._isVparent(cmp);
+	var isV = zkWnd._isVParent(cmp);
 	if (!pos && isV && !cmp.style.top && !cmp.style.left) {		
 		var xy = zk.getXY(cmp);
 		cmp.style.left = xy[0] + "px";
@@ -408,7 +420,7 @@ zkWnd._endOverpop = function (uuid, storage, replace) {
 		if (cmp) zkWnd._stick(cmp);
 	}
 };
-zkWnd._isVparent = function (el) {
+zkWnd._isVParent = function (el) {
 	el = $parent(el);
 	for (; el; el = $parent(el))
 		if ($type(el) == "Wnd") {
@@ -430,7 +442,7 @@ zkWnd._doModal = function (cmp, replace) {
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
 	var zi = ++zkau.topZIndex; //mask also need another index
 	
-	if (zkWnd._isVparent(cmp)) zk.setVParent(cmp);
+	if (zkWnd._isVParent(cmp)) zk.setVParent(cmp);
 	zkWnd._center(cmp, zi, getZKAttr(cmp, "pos")); //called even if pos not defined
 		//show dialog first to have better response.
 
