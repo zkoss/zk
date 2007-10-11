@@ -326,7 +326,7 @@ zk.setVParent = function (n) {
 		zk.error("id required, "+n);
 		return;
 	}
-	if (zk._vpts[id])
+	if (zk.isVParent(id))
 		return; //called twice
 
 	zk._vpts[id] = p;
@@ -336,6 +336,15 @@ zk.setVParent = function (n) {
 		if (getZKAttr(p, "zidsp") == "page") //lookup the topmost page
 			last = p;
 	(last ? last: document.body).appendChild(n);
+};
+/**
+ * Returns whether the element has a virtual parent.
+ * @since 3.0.0
+ * @param {Object} or {String} n
+ */
+zk.isVParent = function (n) {
+	if (typeof n == "object") n = n.id;
+	return zk._vpts[n];
 };
 /** Unsets virtual parent.
  * @since 3.0.0
@@ -357,16 +366,16 @@ zk.unsetVParent = function (n) {
  * @since 3.0.0
  */
 zk.unsetChildVParent = function (n) {
-	var bo = [n.id];
+	var bo = [];
 	for (var id in zk._vpts) {
-		var vp = zk._vpts[id];
-		if (zk.isAncestor(n, vp))
+		if (zk.isAncestor(n, id))
 			bo.push(id);
 	}
 	for (var j = bo.length; --j >= 0;) {
 		n = $e(bo[j]);
 		zk.unsetVParent(n);
 	}
+	return bo;
 };
 //Note: we have to use string to access {}. Otherwise, the behavior is strange
 zk._vpts = {}; //a map of virtual parent (n.id, n's parent)

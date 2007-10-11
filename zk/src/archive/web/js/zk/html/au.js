@@ -1882,16 +1882,22 @@ zkau.cmd1 = {
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
 	addAft: function (uuid, cmp, html) {
+		var v = zk.isVParent(cmp);
+		if (v) zk.unsetVParent(cmp);
 		var n = $childExterior(cmp);
 		var to = n.nextSibling;
 		zk.insertHTMLAfter(n, html);
 		zkau._initSibs(n, to, true);
+		if (v) zk.setVParent(cmp);
 	},
 	addBfr: function (uuid, cmp, html) {
+		var v = zk.isVParent(cmp);
+		if (v) zk.unsetVParent(cmp);
 		var n = $childExterior(cmp);
 		var to = n.previousSibling;
 		zk.insertHTMLBefore(n, html);
 		zkau._initSibs(n, to, false);
+		if (v) zk.setVParent(cmp);
 	},
 	addChd: function (uuid, cmp, html) {
 		/* To add the first child properly, it checks as follows.
