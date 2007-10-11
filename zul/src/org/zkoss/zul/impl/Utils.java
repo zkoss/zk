@@ -77,8 +77,6 @@ public class Utils {
 		return ary;
 	}
 	/** Converts an array of numbers to a string.
-	 * @param defaultValue the default value that will be replaced with defaultString
-	 * @param defaultString the default string used if defaultValue is found in the array
 	 */
 	public static final String intsToString(int[] ary) {
 		if (ary == null || ary.length == 0)
