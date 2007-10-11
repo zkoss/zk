@@ -353,10 +353,11 @@ zk.unsetVParent = function (n) {
 	}
 };
 /** unsetVParent if it is a child of the specified node, n.
+ * 	Note: including itself.
  * @since 3.0.0
  */
 zk.unsetChildVParent = function (n) {
-	var bo = [];
+	var bo = [n.id];
 	for (var id in zk._vpts) {
 		var vp = zk._vpts[id];
 		if (zk.isAncestor(n, vp))
