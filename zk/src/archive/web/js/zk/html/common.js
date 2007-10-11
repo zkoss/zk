@@ -179,16 +179,18 @@ zk.offsetLeft = function (el) {
 };
 zk.borders = {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"};
 zk.paddings = {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"};
-/** Returns the style size of the specified element.
+/** Returns the summation of the specified styles.
  *  For example,
- *  zk.getStyleSize(el, "lr", zk.paddings)
+ *  zk.sumStyles(el, "lr", zk.paddings) sums the style values of
+ * zk.paddings['l'] and zk.paddings['r'].
+ *
  * @param {String} areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b".
  * So you can specify to be "lr" or "tb" or more.
  * @param styles {zk.paddings} or {zk.borders}. 
  * @return {Number}
  * @since 3.0.0
  */
-zk.getStyleSize = function (el, areas, styles) {
+zk.sumStyles = function (el, areas, styles) {
 	var val = 0;
     for (var i = 0, l = areas.length; i < l; i++){
 		 var w = $int(Element.getStyle(el, styles[areas.charAt(i)]));
@@ -197,45 +199,38 @@ zk.getStyleSize = function (el, areas, styles) {
     return val;
 };
 /**
- * Returns the revised size, which is fixed the size of its CSS border or padding, for the specified element.
+ * Returns the revised size, which subtracted the size of its CSS border or padding, for the specified element.
  * @param {Number} size original size of the specified element. 
  * @param {Boolean} isHgh if true it will be "tb" top and bottom.
  * @return {Number}
  * @since 3.0.0
  */
-zk.reviseSize = function (el, size, isHgh) {
+zk.revisedSize = function (el, size, isHgh) {
 	var areas = "lr";
 	if (isHgh) areas = "tb";
-    size -= (zk.getStyleSize(el, areas, zk.borders) + zk.getStyleSize(el, areas, zk.paddings));
+    size -= (zk.sumStyles(el, areas, zk.borders) + zk.sumStyles(el, areas, zk.paddings));
     if (size < 0) size = 0;
 	return size;
 };
 /**
- * Returns the revised position, which is fixed the size of its scrollbar top or 
- * left, for the specified element.
+ * Returns the revised position, which subtracted the offset of its scrollbar,
+ * for the specified element.
  * @param {Object} el
- * @param {Array} size [left, top];
+ * @param {Array} ofs [left, top];
  * @return {Array} [left, top];
  * @since 3.0.0
  */
-zk.revisePosition = function (el, size) {
+zk.revisedOffset = function (el, ofs) {
+	if(!ofs) {
+		if (el.getBoundingClientRect){ // IE
+			var b = el.getBoundingClientRect();
+			return [b.left + zk.innerX() - 3 , b.top + zk.innerY() - 3];
+		}
+		ofs = Position.cumulativeOffset(el);
+	}
 	var scrolls = Position.realOffset(el);
 	scrolls[0] -= zk.innerX(); scrolls[1] -= zk.innerY(); 
-	return [size[0] - scrolls[0], size[1] - scrolls[1]];
-};
-/**
- * Returns the absolutely accurate position of the specified element on browser.
- * @param {Object} el
- * @return {Array} [x, y];
- * @since 3.0.0
- */
-zk.getXY = function (el) {
-	if(el.getBoundingClientRect){ // IE
-		var b = el.getBoundingClientRect();
-		return [b.left + zk.innerX() - 3 , b.top + zk.innerY() - 3];
-	} else {
-		return zk.revisePosition(el, Position.cumulativeOffset(el));
-	}	
+	return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 };
 if (zk.safari) {
 	//fix safari's bug
