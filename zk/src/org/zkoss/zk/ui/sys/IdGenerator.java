@@ -49,6 +49,9 @@ public interface IdGenerator {
 	/** Returns the next page UUID for the specified page,
 	 * or null to generate the default UUID.
 	 *
+	 * <p>Note: we can retrieve the execution by use of
+	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
+	 *
 	 * @return the next page UUID, or null to generate the
 	 * default UUID.
 	 */

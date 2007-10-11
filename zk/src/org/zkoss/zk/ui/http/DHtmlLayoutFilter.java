@@ -97,7 +97,7 @@ public class DHtmlLayoutFilter implements Filter {
 			final PageDefinition pagedef =
 				uf.getPageDefinitionDirectly(ri, content, _ext);
 
-			final Page page = uf.newPage(ri, pagedef, path);
+			final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
 			final Execution exec =
 				new ExecutionImpl(_ctx, request, response, desktop, page);
 			final StringWriter out = new StringWriter(4096*2);

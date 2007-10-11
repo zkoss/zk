@@ -40,8 +40,7 @@ public interface RequestInfo {
 	 */
 	public Desktop getDesktop();
 	/** Returns the native request. For HTTP, it is
-	 * javax.servlet.http.HttpServletRequest. For portlets, it is
-	 * javax.portlet.RenderRequest
+	 * javax.servlet.http.HttpServletRequest.
 	 */
 	public Object getNativeRequest();
 

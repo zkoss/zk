@@ -31,7 +31,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.portlet.RenderRequest;
 
 import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
@@ -45,17 +44,22 @@ import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.ConfigParser;
+import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
@@ -231,38 +235,6 @@ public class WebManager {
 		if (local != null) local.put(name, value);
 */
 	}
-	/** Returns the value of the specified attribute in the request.
-	 * The implementation shall use this method instead of request.getAttribute,
-	 * since it resolves the limitation of incapability of inter-portlet
-	 * communication.
-	 *
-	 * @param name the attribute's name
-	 */
-	public static Object getRequestLocal(RenderRequest request, String name) {
-		return request.getAttribute(name);
-/*deprecated
-		final Object o = request.getAttribute(name);
-		if (o != null) return o;
-
-		final Map local = (Map)_reqLocal.get();
-		return local != null ? local.get(name): null;
-*/
-	}
-	/** Sets the value of the specified attribute in the request.
-	 * The implementation shall use this method instead of request.setAttribute,
-	 * since it resolves the limitation of incapability of inter-portlet
-	 * communication.
-	 * @param name the attribute's name
-	 * @param value the attribute's value
-	 */
-	public static
-	void setRequestLocal(RenderRequest request, String name, Object value) {
-		request.setAttribute(name, value);
-/*deprecated
-		final Map local = (Map)_reqLocal.get();
-		if (local != null) local.put(name, value);
-*/
-	}
 
 	/** Register a listener to the specified context such that
 	 * it will be invoked if the corresponding {@link WebManager} is created.
@@ -403,7 +375,8 @@ public class WebManager {
 					PageDefinitions.getLocator(_wapp, path)),
 				_updateURI, path);
 		} finally {
-			ExecutionsCtrl.setCurrent(exec);
+			if (exec == null)
+				ExecutionsCtrl.setCurrent(null);
 		}
 	}
 	/** Sets the desktop to the specified request.
@@ -416,5 +389,61 @@ public class WebManager {
 			assert dt == null || dt == desktop: "old:"+dt+", new:"+desktop;
 		}*/
 		setRequestLocal(request, ATTR_DESKTOP, desktop);
+	}
+	/** Creates a page.
+	 * It invokes {@link UiFactory#newPage}. However, it prepares
+	 * {@link Executions#getCurrent} for {@link org.zkoss.zk.ui.sys.IdGenerator#nextPageUuid}
+	 *
+	 * <p>Note: Use this method to create a page, rather than invoking
+	 * {@link UiFactory#newPage} directly.
+	 */
+	/*package*/ static
+	Page newPage(UiFactory uf, RequestInfo ri, PageDefinition pagedef,
+	ServletResponse response, String path) {
+		final Execution exec = ExecutionsCtrl.getCurrent();
+		if (exec == null) { //it shall be null, but, just in case,
+			final ExecutionImpl ei = new ExecutionImpl(
+				(ServletContext)ri.getWebApp().getNativeContext(),
+				(HttpServletRequest)ri.getNativeRequest(),
+				(HttpServletResponse)response, ri.getDesktop(), null);
+			((DesktopCtrl)ri.getDesktop()).setExecution(ei);
+			ExecutionsCtrl.setCurrent(ei);
+		}
+		try {
+			return uf.newPage(ri, pagedef, path);
+		} finally {
+			if (exec == null) {
+				ExecutionsCtrl.setCurrent(null);
+				((DesktopCtrl)ri.getDesktop()).setExecution(null);
+			}
+		}
+	}
+	/** Creates a page.
+	 * It invokes {@link UiFactory#newPage}. However, it prepares
+	 * {@link Executions#getCurrent} for {@link org.zkoss.zk.ui.sys.IdGenerator#nextPageUuid}
+	 *
+	 * <p>Note: Use this method to create a page, rather than invoking
+	 * {@link UiFactory#newPage} directly.
+	 */
+	/*package*/ static
+	Page newPage(UiFactory uf, RequestInfo ri, Richlet richlet,
+	ServletResponse response, String path) {
+		final Execution exec = ExecutionsCtrl.getCurrent();
+		if (exec == null) { //it shall be null, but, just in case,
+			final ExecutionImpl ei = new ExecutionImpl(
+				(ServletContext)ri.getWebApp().getNativeContext(),
+				(HttpServletRequest)ri.getNativeRequest(),
+				(HttpServletResponse)response, ri.getDesktop(), null);
+			((DesktopCtrl)ri.getDesktop()).setExecution(ei);
+			ExecutionsCtrl.setCurrent(ei);
+		}
+		try {
+			return uf.newPage(ri, richlet, path);
+		} finally {
+			if (exec == null) {
+				ExecutionsCtrl.setCurrent(null);
+				((DesktopCtrl)ri.getDesktop()).setExecution(null);
+			}
+		}
 	}
 }

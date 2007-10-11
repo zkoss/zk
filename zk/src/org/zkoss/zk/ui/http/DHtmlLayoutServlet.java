@@ -171,7 +171,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			if (richlet == null)
 				return false; //not found
 
-			final Page page = uf.newPage(ri, richlet, path);
+			final Page page = WebManager.newPage(uf, ri, richlet, response, path);
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
 			out = compress ? (Writer)new StringWriter(): response.getWriter();
@@ -182,7 +182,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			if (pagedef == null)
 				return false; //not found
 
-			final Page page = uf.newPage(ri, pagedef, path);
+			final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
 			final Execution exec = new ExecutionImpl(
 				_ctx, request, response, desktop, page);
 			out = compress ? (Writer)new StringWriter(): response.getWriter();

@@ -24,6 +24,8 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
@@ -167,13 +169,15 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	RenderResponse response, String path, boolean bRichlet)
 	throws PortletException, IOException {
 		if (D.ON && log.debugable()) log.debug("Creates from "+path);
-		final WebApp wapp = getWebManager().getWebApp();
+		final WebManager webman = getWebManager();
+		final WebApp wapp = webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
-		final Desktop desktop = getDesktop(sess, request, response, path);
+		final HttpServletRequest httpreq = RenderHttpServletRequest.getInstance(request);
+		final HttpServletResponse httpres = RenderHttpServletResponse.getInstance(response);
+		final Desktop desktop = webman.getDesktop(sess, httpreq, httpres, path, true);
 		final RequestInfo ri = new RequestInfoImpl(
-			wapp, sess, desktop, request,
-			PageDefinitions.getLocator(wapp, path));
+			wapp, sess, desktop, httpreq, PageDefinitions.getLocator(wapp, path));
 		((SessionCtrl)sess).notifyClientRequest(true);
 
 		final UiFactory uf = wappc.getUiFactory();
@@ -182,13 +186,11 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			if (richlet == null)
 				return false; //not found
 
-			final Page page = uf.newPage(ri, richlet, path);
+			final Page page = WebManager.newPage(uf, ri, richlet, httpres, path);
 			final Execution exec =
 				new ExecutionImpl(
 					(ServletContext)wapp.getNativeContext(),
-					RenderHttpServletRequest.getInstance(request),
-					RenderHttpServletResponse.getInstance(response),
-					desktop, page);
+					httpreq, httpres, desktop, page);
 
 			//Bug 1548478: content-type is required for some implementation (JBoss Portal)
 			if (response.getContentType() == null)
@@ -200,13 +202,11 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			if (pagedef == null)
 				return false; //not found
 
-			final Page page = uf.newPage(ri, pagedef, path);
+			final Page page = WebManager.newPage(uf, ri, pagedef, httpres, path);
 			final Execution exec =
 				new ExecutionImpl(
 					(ServletContext)wapp.getNativeContext(),
-					RenderHttpServletRequest.getInstance(request),
-					RenderHttpServletResponse.getInstance(response),
-					desktop, page);
+					httpreq, httpres, desktop, page);
 
 			//Bug 1548478: content-type is required for some implementation (JBoss Portal)
 			if (response.getContentType() == null)
@@ -218,21 +218,6 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		return true; //success
 	}
 
-	/** Returns the desktop of the specified request.
-	 */
-	private Desktop getDesktop(Session sess, RenderRequest request,
-	RenderResponse response, String path)
-	throws PortletException {
-		Desktop desktop =
-			(Desktop)WebManager.getRequestLocal(request, WebManager.ATTR_DESKTOP);
-		if (desktop == null) {
-			desktop = getWebManager().newDesktop(sess, 
-				RenderHttpServletRequest.getInstance(request),
-				RenderHttpServletResponse.getInstance(response), path);
-			WebManager.setRequestLocal(request, WebManager.ATTR_DESKTOP, desktop);
-		}
-		return desktop;
-	}
 	/** Returns the layout servlet.
 	 */
 	private final WebManager getWebManager()

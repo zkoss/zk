@@ -127,7 +127,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 			wapp, sess, desktop, request, PageDefinitions.getLocator(wapp, path));
 
 		final boolean compress = !Servlets.isIncluded(request);
-		final Page page = wappc.getUiFactory().newPage(ri, pagedef, path);
+		final Page page = WebManager.newPage(
+			wappc.getUiFactory(), ri, pagedef, response, path);
 		final Execution exec = new ExecutionImpl(
 			getServletContext(), request, response, desktop, page);
 		final Writer out = compress ? (Writer)new StringWriter(): response.getWriter();
