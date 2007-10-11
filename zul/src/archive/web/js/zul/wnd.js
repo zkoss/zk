@@ -42,7 +42,6 @@ zkWnd.init = function (cmp) {
 		//our js are unloaded. It causes JavaScript error though harmlessly
 		//This is a dirty fix (since onclick and others still fail but hardly happen)
 	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));
-
 	zkWnd._initMode(cmp);
 };
 zkWnd.cleanup = function (cmp) {
@@ -297,7 +296,6 @@ zkWnd._initMode = function (cmp) {
 		delete zkWnd._clean2[cmp.id]; //and _doXxx will handle it
 	else if (zkWnd._clean2[cmp.id])
 		zkWnd._cleanMode2(cmp.id, true); //replace with a new mode
-
 	switch (mode) {
 	case "modal":
 	case "highlighted":
@@ -368,14 +366,25 @@ zkWnd._endOverlapped = function (uuid, replace) {
 };
 
 zkWnd._doOverpop = function (cmp, storage, replace) {
+	
+	var pos = getZKAttr(cmp, "pos");
+	var isV = zkWnd._isVparent(cmp);
+	if (!pos && isV && !cmp.style.top && !cmp.style.left) {		
+		var xy = zk.getXY(cmp);
+		cmp.style.left = xy[0] + "px";
+		cmp.style.top = xy[1] + "px";
+	}
+	if (isV) zk.setVParent(cmp);
+	
 	if (replace) {
 		zkau.fixZIndex(cmp);
 		zkWnd._float(cmp);
 		return;
 	}
-
-	var pos = getZKAttr(cmp, "pos");
-	if (pos) zkWnd._center(cmp, null, pos); //unlike modal, change only if pos
+	
+	if (pos) {
+		zkWnd._center(cmp, null, pos); //unlike modal, change only if pos
+	}
 
 	zkau.closeFloats(cmp);
 
@@ -390,15 +399,24 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 	zk.asyncFocusDown(cmp.id);
 };
 zkWnd._endOverpop = function (uuid, storage, replace) {
-	storage.remove(uuid);
+	storage.remove(uuid);		
+	var cmp = $e(uuid);
+	if (cmp) zk.unsetVParent($e(uuid));
 	zkau.hideCovered();
 
 	if (!replace) {
-		var cmp = $e(uuid);
 		if (cmp) zkWnd._stick(cmp);
 	}
 };
-
+zkWnd._isVparent = function (el) {
+	el = $parent(el);
+	for (; el; el = $parent(el))
+		if ($type(el) == "Wnd") {
+			var m = getZKAttr(el, "mode");
+			if (m && m != "embedded") return false;
+		}
+	return true;
+};
 //Modal//
 /** Makes the window as modal. */
 zkWnd._doModal = function (cmp, replace) {
@@ -411,6 +429,8 @@ zkWnd._doModal = function (cmp, replace) {
 	var nModals = zkau._modals.length;
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
 	var zi = ++zkau.topZIndex; //mask also need another index
+	
+	if (zkWnd._isVparent(cmp)) zk.setVParent(cmp);
 	zkWnd._center(cmp, zi, getZKAttr(cmp, "pos")); //called even if pos not defined
 		//show dialog first to have better response.
 
@@ -483,7 +503,9 @@ zkWnd._endModal = function (uuid, replace) {
 
 	zkau._modals.remove(uuid);
 	delete zkWnd._modal2[uuid];
-
+	
+	var cmp = $e(uuid);
+	if (cmp) zk.unsetVParent($e(uuid));
 	if (zkau._modals.length == 0) {
 		zk.unlisten(window, "resize", zkWnd._onMoveMask);
 		zk.unlisten(window, "scroll", zkWnd._onMoveMask);
@@ -499,7 +521,6 @@ zkWnd._endModal = function (uuid, replace) {
 	}
 
 	if (!replace) {
-		var cmp = $e(uuid);
 		if (cmp) zkWnd._stick(cmp);
 	}
 
