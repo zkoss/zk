@@ -333,7 +333,7 @@ zk.getDimension = function (el) {
 zk.position = function (el, ref, type) {
 	var refofs = zk.getDimension(el);
 	var wd = refofs[0], hgh = refofs[1];
-	refofs = zk.getXY(ref); 
+	refofs = zk.revisedOffset(ref); 
 	
 	var x, y;
 	var scx = zk.innerX(), scy = zk.innerY(),
