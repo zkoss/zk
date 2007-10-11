@@ -28,7 +28,8 @@ ZK 3.0.0 Freshly
   1808433: ZK Layout with center always loads twice on FF
   1799602: The popup of combox/datebox out of position in IE
   1810142: Component.containsVariable failed if used in nest windows
-
+  1808035: ZK Layout vs Modal Windows
+  
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
     length of each line, rather than each word.
