@@ -312,6 +312,12 @@ zkau.addOnSend = function (func) {
 zkau.removeOnSend = function (func) {
 	zkau._onsends.remove(func);
 };
+/** Returns an array of queued events.
+ * @since 3.0.0
+ */
+zkau.events = function (uuid) {
+	return zkau._events(zkau._dtid(uuid));
+};
 /** Sends a request to the client and queue it to zkau._reqs.
  * @param timout milliseconds.
  * If negative, it won't be sent until next non-negative event
