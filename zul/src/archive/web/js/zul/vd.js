@@ -187,10 +187,10 @@ zkVld._errbox = function () {
 	if (!zkVld._cnt) zkVld._cnt = 0;
 	box.style.zIndex = 70000 + zkVld._cnt++;
 	if (cmp) {
-		var ofs = Position.cumulativeOffset(cmp), wd = cmp.offsetWidth,
+		var ofs = zk.getXY(cmp), wd = cmp.offsetWidth,
 			hgh = cmp.offsetHeight, atTop;
 		if (zkau.currentFocus && zkau.currentFocus != cmp) {
-			var o2 = Position.cumulativeOffset(zkau.currentFocus);
+			var o2 = zk.getXY(zkau.currentFocus);
 			if (o2[0] < ofs[0] + wd
 			&& ofs[0] + wd + 220 < zk.innerX() + zk.innerWidth()) //Bug 1731646 (box's width unknown, so use 220)
 				ofs[0] += wd + 2;
@@ -284,8 +284,8 @@ zkVld._fiximg = function (box) {
 	var cmp = $e(id);
 	var img = $e(id + "!img");
 	if (cmp && img) {
-		var cmpofs = Position.cumulativeOffset(cmp);
-		var boxofs = Position.cumulativeOffset(box);
+		var cmpofs = zk.getXY(cmp);
+		var boxofs = zk.getXY(box);
 		var dx = boxofs[0] - cmpofs[0], dy = boxofs[1] - cmpofs[1], dir;
 		if (dx > cmp.offsetWidth) {
 			dir = dy < -10 ? "LD": dy > cmp.offsetHeight + 10 ? "LU": "L";
