@@ -35,6 +35,7 @@ import javax.servlet.http.HttpSession;
 import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.util.resource.Locator;
 
 import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ServletLabelLocator;
@@ -363,6 +364,10 @@ public class WebManager {
 	/** Creates an desktop. */
 	/*package*/ Desktop newDesktop(Session sess, ServletRequest request,
 	ServletResponse response, String path) {
+		final Locator loc = PageDefinitions.getLocator(_wapp, path);
+			//we have to retrieve locator before setting execution,
+			//since it assumes exec.getDesktop not null
+
 		final Execution exec = ExecutionsCtrl.getCurrent();
 		if (exec == null) //it shall be null, but, just in case,
 			ExecutionsCtrl.setCurrent(
@@ -371,8 +376,7 @@ public class WebManager {
 					(HttpServletResponse)response, null, null));
 		try {
 			return ((WebAppCtrl)_wapp).getUiFactory().newDesktop(
-				new RequestInfoImpl(_wapp, sess, null, request,
-					PageDefinitions.getLocator(_wapp, path)),
+				new RequestInfoImpl(_wapp, sess, null, request, loc),
 				_updateURI, path);
 		} finally {
 			if (exec == null)
