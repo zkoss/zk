@@ -33,6 +33,7 @@ ZK 3.0.0 Freshly
   1810142: Component.containsVariable failed if used in nest windows
   1808035: ZK Layout vs Modal Windows
   1794296: fckeditor: onchange event issue
+  1804858: Toolbarbuttons in window caption without separating space
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
