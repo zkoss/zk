@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+alignpack.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 12 23:10:06     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of align and pack">
+ <hbox align="start">
+  <textbox/>
+  <textbox rows="3"/>
+ </hbox>
+ <hbox align="center">
+  <textbox/>
+  <textbox rows="3"/>
+ </hbox>
+ <hbox align="end">
+  <textbox/>
+  <textbox rows="3"/>
+ </hbox>
+ 
+ <vbox align="start">
+  <textbox/>
+  <textbox rows="3"/>
+ </vbox>
+ <vbox align="center">
+  <textbox/>
+  <textbox rows="3"/>
+ </vbox>
+ <vbox align="end">
+  <textbox/>
+  <textbox rows="3"/>
+ </vbox>
+</window>
