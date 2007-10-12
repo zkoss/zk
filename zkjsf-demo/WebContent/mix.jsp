@@ -4,7 +4,7 @@
 
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-<TITLE>Reservation of Conference Room</TITLE>
+<TITLE>Mix Example</TITLE>
 <link rel="stylesheet" type="text/css"
 	href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 </HEAD>

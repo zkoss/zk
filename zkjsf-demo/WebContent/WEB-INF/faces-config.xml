@@ -59,6 +59,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<managed-bean-class>org.zkoss.jsfdemo.ValidatorBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CommandBean</managed-bean-name>
+		<managed-bean-class>org.zkoss.jsfdemo.CommandBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	
 	<converter>
 		<converter-id>dateConverter</converter-id>
