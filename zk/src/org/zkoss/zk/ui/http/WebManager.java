@@ -367,6 +367,7 @@ public class WebManager {
 		final Locator loc = PageDefinitions.getLocator(_wapp, path);
 			//we have to retrieve locator before setting execution,
 			//since it assumes exec.getDesktop not null
+			//which is true except this moment (before desktop is created)
 
 		final Execution exec = ExecutionsCtrl.getCurrent();
 		if (exec == null) //it shall be null, but, just in case,

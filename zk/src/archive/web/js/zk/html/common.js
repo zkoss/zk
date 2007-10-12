@@ -84,15 +84,35 @@ Array.prototype.contains = function (o) {
 
 ////
 //Form//
-function z_fmsubm() {
+function z_fmsubm(a, b, c) {
 	var fns = this._submfns;
 	for (var j = 0; j < (fns ? fns.length: 0); ++j)
 		fns[j].apply(this, arguments);
-	return this._rogsubm.apply(this, arguments);
+	return this._ogsubm(a, b, c);
+		//If IE, we cannot use _ogsubm.apply. Reason unknown.
 };
 if (zk.ie) {
+	zk.fixSubmit = function (n) {
+		n._ogsubm = n.submit;
+		n.submit = z_fmsubm;
+	}
+
+	//Step 1. Override document.createElement
+	zk._newElem = document.createElement;
+	document.createElement = function (tag) {
+		var n = zk._newElem(tag);
+			//we cannot use zk._newElem.apply. Reason unknown.
+		if (tag.toUpperCase() == "FORM")
+			zk.fixSubmit(n);
+		return n;
+	};
+
+	//Step 2: HTC (http://delete.me.uk/2004/09/addbehaviour.html)
+	//Due to performance issue and unable to really make it work
+	//we change submit in zk.init
+
 } else {
-	HTMLFormElement.prototype._rogsubm = HTMLFormElement.prototype.submit;
+	HTMLFormElement.prototype._ogsubm = HTMLFormElement.prototype.submit;
 	HTMLFormElement.prototype.submit = z_fmsubm;
 }
 

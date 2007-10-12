@@ -81,6 +81,7 @@ zk.listen = function (el, evtnm, fn) {
 	else /*if (el.attachEvent)*/
 		el.attachEvent('on' + evtnm, fn);
 
+	//Bug 1811352
 	if ("submit" == evtnm && $tag(el) == "FORM") {
 		if (!el._submfns) el._submfns = [];
 		el._submfns.push(fn);
@@ -97,6 +98,8 @@ zk.unlisten = function (el, evtnm, fn) {
 		} catch (e) {
 		}
 	}
+
+	//Bug 1811352
 	if ("submit" == evtnm && $tag(el) == "FORM" && el._submfns)
 		el._submfns.remove(fn);
 };
@@ -766,11 +769,20 @@ zk._loadAndInit = function (inf) {
 			case "OPTION":
 				if (n.selected != n.defaultSelected)
 					n.selected = n.defaultSelected;
-				break;
+				//break;
 			}
-		} else if (zk.ie && $tag(n) == 'A' && n.href.indexOf("javascript:") >= 0) {
-			//Fix bug 1635685 and 1612312
-			zk.listen(n, "click", zk._ieFixBfUnload);
+		} else if (zk.ie) {
+			switch ($tag(n)) {
+			case "A":
+				//Bug 1635685 and 1612312
+				if (n.href.indexOf("javascript:") >= 0)
+					zk.listen(n, "click", zk._ieFixBfUnload);
+				break;
+			case "FORM":
+				//Bug 1811352
+				zk.fixSubmit(n);
+				//break;
+			}
 		}
 
 		var v = getZKAttr(n, "dtid");
