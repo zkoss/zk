@@ -59,11 +59,14 @@ zkau.addDesktop = function (dtid) {
 			return; //nothing to do
 	ds.push(dtid);
 };
-/** Returns the desktop's ID. */
-zkau.dtid = function (uuid) {
+/** Returns the desktop's ID.
+ * @param {String or Element} n the component to look for its desktop ID.
+ * @since 3.0.0
+ */
+zkau.dtid = function (n) {
 	if (zkau._dtids.length == 1) return zkau._dtids[0];
 
-	for (var n = $e(uuid); n; n = $parent(n)) {
+	for (n = $e(n); n; n = $parent(n)) {
 		var id = getZKAttr(n, "dtid");
 		if (id) return id;
 	}

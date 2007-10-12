@@ -342,7 +342,7 @@ zk.setVParent = function (n) {
 	zk._vpts[id] = p;
 	zk._vnsibs[id] = n.nextSibling;
 
-	if (!getZKAttr(n, "dtid")) setZKAttr(n, "dtid", zkau.dtid($uuid(n)));
+	if (!getZKAttr(n, "dtid")) setZKAttr(n, "dtid", zkau.dtid(n));
 	document.body.appendChild(n);
 };
 /**
