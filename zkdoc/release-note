@@ -38,6 +38,7 @@ ZK 3.0.0 Freshly
   1812001: A scrollbar shows wrong in IE6&7
   1692556: IE6 &7 drag performance becomes slower with Tree&ListBox
   1807414: listbox/grid: setModel shall clean the current content
+  1797140: OnClick+OnDoubleClick on the same comp onDoubleClick ignored
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
