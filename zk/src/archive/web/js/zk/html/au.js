@@ -60,7 +60,7 @@ zkau.addDesktop = function (dtid) {
 	ds.push(dtid);
 };
 /** Returns the desktop's ID. */
-zkau._dtid = function (uuid) {
+zkau.dtid = function (uuid) {
 	if (zkau._dtids.length == 1) return zkau._dtids[0];
 
 	for (var n = $e(uuid); n; n = $parent(n)) {
@@ -316,7 +316,7 @@ zkau.removeOnSend = function (func) {
  * @since 3.0.0
  */
 zkau.events = function (uuid) {
-	return zkau._events(zkau._dtid(uuid));
+	return zkau._events(zkau.dtid(uuid));
 };
 /** Sends a request to the client and queue it to zkau._reqs.
  * @param timout milliseconds.
@@ -326,7 +326,7 @@ zkau.send = function (evt, timeout) {
 	if (timeout < 0) evt.implicit = true;
 
 	if (evt.uuid) {
-		zkau._send(zkau._dtid(evt.uuid), evt, timeout);
+		zkau._send(zkau.dtid(evt.uuid), evt, timeout);
 	} else if (evt.dtid) {
 		zkau._send(evt.dtid, evt, timeout);
 	} else {
@@ -358,7 +358,7 @@ zkau._send = function (dtid, evt, timeout) {
  */
 zkau.sendAhead = function (evt) {
 	if (evt.uuid) {
-		zkau._events(zkau._dtid(evt.uuid)).unshift(evt);
+		zkau._events(zkau.dtid(evt.uuid)).unshift(evt);
 	} else if (evt.dtid) {
 		zkau._events(evt.dtid).unshift(evt);
 	} else {
@@ -1445,7 +1445,7 @@ zkau._zidOwner = function (n) {
 		if (getZKAttr(p, "zidsp"))
 			return p.id;
 	}
-	return "_zdt_" + zkau._dtid(n);
+	return "_zdt_" + zkau.dtid(n);
 };
 
 ///////////////
@@ -1682,7 +1682,7 @@ zkau.beginUpload = function (wndid) {
 	zkau.endUpload();
 	zkau._upldWndId = wndid;
 	zkau._tmupload = setInterval(function () {
-		zkau.send({dtid: zkau._dtid(wndid), cmd: "getUploadInfo", data: null});
+		zkau.send({dtid: zkau.dtid(wndid), cmd: "getUploadInfo", data: null});
 	}, 660);
 };
 zkau.updateUploadInfo = function (p, cb) {

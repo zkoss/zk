@@ -331,7 +331,7 @@ function $parent(n) {
  * @since 3.0.0
  */
 zk.setVParent = function (n) {
-	var id = n.id, p = n.parentNode, last;
+	var id = n.id, p = n.parentNode;
 	if (!id) {
 		zk.error("id required, "+n);
 		return;
@@ -342,10 +342,8 @@ zk.setVParent = function (n) {
 	zk._vpts[id] = p;
 	zk._vnsibs[id] = n.nextSibling;
 
-	for (; p && p != document.body; p = p.parentNode)
-		if (getZKAttr(p, "zidsp") == "page") //lookup the topmost page
-			last = p;
-	(last ? last: document.body).appendChild(n);
+	if (!getZKAttr(n, "dtid")) setZKAttr(n, "dtid", zkau.dtid($uuid(n)));
+	document.body.appendChild(n);
 };
 /**
  * Returns whether the element has a virtual parent.
@@ -530,6 +528,8 @@ zk.onResize = function (timeout) {
 			timeout ? timeout: zk.ie && zk._reszcnt < 4 ? 200: 35);
 			//IE: we have to prolong since onresize might come too fast
 			//It is an experimental value. Not sure the real cause.
+	} else {
+		setTimeout(zk.onResize, 100);
 	}
 };
 zk._onResize = function () {
