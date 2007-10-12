@@ -126,8 +126,10 @@ public class Box extends XulElement {
 	/** Returns the vertical alignment of the adjacent cells of a box
 	 * (top, middle or bottom).
 	 * <p>Default: null (i.e., use the browser default, usually middle).
+	 * @deprecated As of release 3.0.0, since it is not compliant to XUL.
+	 * Use {@link #getAlign} and {@link #getPack} instead.
 	 */
-	public String getValign() { //not deprecated to simplify ComponentRenderer
+	public String getValign() {
 		return toValign(isVertical() ? getPack(): getAlign());
 	}
 	/** Sets the vertical alignment of the adjacent cells of a box.
@@ -400,6 +402,13 @@ public class Box extends XulElement {
 			sb.append(" style=\"").append(stylesb).append('"');
 		}
 		return sb.toString();
+	}
+	/** Returns the attributes used by the 'cave' element (never null).
+	 * Used only by component development to generate HTML tags.
+	 * @since 3.0.0
+	 */
+	public String getCaveAttrs() {
+		return isVertical() ? "": " valign=\"" + toValign(_align) + '"';
 	}
 
 	//-- Component --//

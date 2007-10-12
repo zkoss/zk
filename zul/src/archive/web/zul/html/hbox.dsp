@@ -21,7 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}" z.type="zul.box.Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
-<tr valign="${self.valign}" id="${self.uuid}!cave">
+<tr id="${self.uuid}!cave"${self.caveAttrs}>
 	<c:forEach var="child" items="${self.children}">
  <td id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td>
 	</c:forEach>
