@@ -118,7 +118,7 @@ zulHdr.onclick = function (evt, cmp) {
 		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
 };
 zulHdr.onmove = function (evt, cmp) {
-	var ofs = Position.cumulativeOffset(cmp);
+	var ofs = zk.revisedOffset(cmp); // Bug #1812154
 	var v = zulHdr._insizer(cmp, Event.pointerX(evt) - ofs[0]);
 	if (v) {
 		zk.backupStyle(cmp, "cursor");
@@ -129,7 +129,7 @@ zulHdr.onmove = function (evt, cmp) {
 };
 /** Called by zkau._ignoredrag (in au.js) for generic drag&drop. */
 zulHdr.ignoredrag = function (cmp, pointer) {
-	var ofs = Position.cumulativeOffset(cmp);
+	var ofs = zk.revisedOffset(cmp); // Bug #1812154
 	return zulHdr._insizer(cmp, pointer[0] - ofs[0]);
 };
 /** Returns 1 if right, -1 if left, 0 if none. */
@@ -145,7 +145,7 @@ zulHdr._insizer = function (cmp, x) {
 zulHdr._ignoresizing = function (cmp, pointer) {
 	var dg = zulHdr._szs[cmp.id];
 	if (dg) {
-		var ofs = Position.cumulativeOffset(cmp);
+		var ofs = zk.revisedOffset(cmp); // Bug #1812154
 		var v = zulHdr._insizer(cmp, pointer[0] - ofs[0]);
 		if (v) {
 			dg.z_szlft = v == -1;
