@@ -82,7 +82,21 @@ Array.prototype.contains = function (o) {
 	return false;
 };
 
-//
+////
+//Form//
+function z_fmsubm() {
+	var fns = this._submfns;
+	for (var j = 0; j < (fns ? fns.length: 0); ++j)
+		fns[j].apply(this, arguments);
+	return this._rogsubm.apply(this, arguments);
+};
+if (zk.ie) {
+} else {
+	HTMLFormElement.prototype._rogsubm = HTMLFormElement.prototype.submit;
+	HTMLFormElement.prototype.submit = z_fmsubm;
+}
+
+//////
 // More zk utilities (defined also in boot.js) //
 
 /** Returns the index of the class name if it is part of the class name

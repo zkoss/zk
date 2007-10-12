@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "7c"; //increase this if we want the browser to reload JavaScript
+zk.build = "7d"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -80,6 +80,11 @@ zk.listen = function (el, evtnm, fn) {
 		el.addEventListener(evtnm, fn, false);
 	else /*if (el.attachEvent)*/
 		el.attachEvent('on' + evtnm, fn);
+
+	if ("submit" == evtnm && $tag(el) == "FORM") {
+		if (!el._submfns) el._submfns = [];
+		el._submfns.push(fn);
+	}
 };
 /** Un-listen an event.
  */
@@ -92,6 +97,8 @@ zk.unlisten = function (el, evtnm, fn) {
 		} catch (e) {
 		}
 	}
+	if ("submit" == evtnm && $tag(el) == "FORM" && el._submfns)
+		el._submfns.remove(fn);
 };
 
 if (zk.ie) { //Bug 1741959: avoid memory leaks
