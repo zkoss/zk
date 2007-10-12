@@ -163,7 +163,7 @@ abstract public class RootTag extends AbstractTag {
 			final WebApp wapp = sess.getWebApp();
 			final WebAppCtrl wappc = (WebAppCtrl)wapp;
 
-			final Desktop desktop = webman.getDesktop(sess, request, null, true);
+			final Desktop desktop = webman.getDesktop(sess, request, response, null, true);
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request,
 				PageDefinitions.getLocator(wapp, null));
