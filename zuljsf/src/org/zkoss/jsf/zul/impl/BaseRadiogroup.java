@@ -38,9 +38,9 @@ import org.zkoss.zul.Radiogroup;
 abstract public class BaseRadiogroup extends BranchInput {
 
 	/**
-	 * Overrride , and return null, It means that do not map value of ValueHolder to zul component. i
+	 * Override it, and return null, It means that do not map value of ValueHolder to zul component. i
 	 * will take case value of ValueHolder to selecteItem of radiogroup .
-	 * @return null
+	 * @return always null
 	 */
 	public String getMappedAttributeName() {
 		return null;

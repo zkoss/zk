@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BaseListbox;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Listbox is a JSF component implementation for org.zkoss.zul.Listbox, 
+ * Listbox is a JSF component implementation for {@link org.zkoss.zul.Listbox}, 
  * This class also implements {@link javax.faces.component.EditableValueHolder}.
  * That means you can use bidirection value binding, immediate, required, converter, validator, valueChangeListener features on this component.
  * <br/>

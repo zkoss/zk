@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Splitter is a JSF component implementation for org.zkoss.zul.Splitter, 
+ * Splitter is a JSF component implementation for {@link org.zkoss.zul.Splitter}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

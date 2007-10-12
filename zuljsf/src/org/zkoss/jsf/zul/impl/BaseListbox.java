@@ -44,10 +44,10 @@ import org.zkoss.zul.Listitem;
 abstract public class BaseListbox extends BranchInput {
 
 	/**
-	 * Overrride , and return null, It means that do not map value of ValueHolder to zul component. i
+	 * Override it , and return null, It means that do not map value of ValueHolder to zul component. i
 	 * will take case value of ValueHolder to selecteItem of listbox.
 	 * 
-	 * @return null
+	 * @return always null
 	 */
 	public String getMappedAttributeName() {
 		return null;

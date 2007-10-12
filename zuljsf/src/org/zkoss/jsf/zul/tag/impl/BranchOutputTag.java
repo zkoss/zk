@@ -51,13 +51,13 @@ abstract public class BranchOutputTag extends LeafTag implements DynamicAttribut
 		//block the attribute of value
 		if(comp instanceof ValueHolderSupport){
 			String attName = ((ValueHolderSupport)comp).getMappedAttributeName();
-			if(attName!=null && _dynamicAttrMap.get(attName)!=null && !JSF_CORD_NS.equals(_specialNS.get(attName))){
-				throw new IllegalArgumentException("for JSF feature of ValueHolder, use perfix of <"+JSF_CORD_NS+">:value instead of "+attName+" in component:"+this.getClass());
+			if(attName!=null && _dynamicAttrMap.get(attName)!=null && !JSF_CORE_NS.equals(_specialNS.get(attName))){
+				throw new IllegalArgumentException("for JSF feature of ValueHolder, use perfix of <"+JSF_CORE_NS+">:value instead of "+attName+" in component:"+this.getClass());
 			}
 		}
 		
 		//take value & converter.
-		if(JSF_CORD_NS.equals(_specialNS.get("value"))){
+		if(JSF_CORE_NS.equals(_specialNS.get("value"))){
 			Object obj = _dynamicAttrMap.get("value");
 			
 			if(obj!=null){
@@ -72,7 +72,7 @@ abstract public class BranchOutputTag extends LeafTag implements DynamicAttribut
 		}
 		
 		
-		if (JSF_CORD_NS.equals(_specialNS.get("converter"))) {
+		if (JSF_CORE_NS.equals(_specialNS.get("converter"))) {
 			Object obj = _dynamicAttrMap.get("converter");
 			
 			if(obj!=null){

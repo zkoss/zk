@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Row is a JSF component implementation for org.zkoss.zul.Row, 
+ * Row is a JSF component implementation for {@link org.zkoss.zul.Row}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

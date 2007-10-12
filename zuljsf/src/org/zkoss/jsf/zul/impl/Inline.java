@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.zkoss.zk.ui.AbstractComponent;
 
 /**
- * A comonent used to embed the browser native content (i.e., HTML tags)
+ * A component used to embed the browser native content (i.e., HTML tags)
  * into the output sent to the browser without additional HTML SPAN.
  * The browser native content is specified by {@link #setContent}.
  *
@@ -47,11 +47,11 @@ import org.zkoss.zk.ui.AbstractComponent;
 public class Inline extends AbstractComponent {
 	private String _content = "";
 
-	/** Contructs a {@link Inline} component to embed HTML tags.
+	/** Constructs a {@link Inline} component to embed HTML tags.
 	 */
 	public Inline() {
 	}
-	/** Contructs a {@link Inline} component to embed HTML tags
+	/** Constructs a {@link Inline} component to embed HTML tags
 	 * with the specified content.
 	 */
 	public Inline(String content) {

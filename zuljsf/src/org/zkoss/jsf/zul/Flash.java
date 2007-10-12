@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Flash is a JSF component implementation for org.zkoss.zul.Flash, 
+ * Flash is a JSF component implementation for {@link org.zkoss.zul.Flash}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

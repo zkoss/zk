@@ -18,10 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.jsf.zul.tag;
 
-import org.zkoss.jsf.zul.tag.impl.BranchTag;
+import org.zkoss.jsf.zul.tag.impl.CommandTag;
 
 
-public class ButtonTag extends BranchTag {
+public class ButtonTag extends CommandTag {
 
 	public ButtonTag() {
 		super("Button");

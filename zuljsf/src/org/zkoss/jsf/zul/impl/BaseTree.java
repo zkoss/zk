@@ -45,7 +45,7 @@ import org.zkoss.zul.Treeitem;
 abstract public class BaseTree extends BranchInput {
 
 	/**
-	 * Overrride , and return null, It means that do not map value of ValueHolder to zul component. i
+	 * Override , and return null, It means that do not map value of ValueHolder to zul component. i
 	 * will take case value of ValueHolder to selecteItem of tree 
 	 * @return null
 	 */
@@ -120,13 +120,13 @@ abstract public class BaseTree extends BranchInput {
 
 
 	/**
-	 * a recursive deep first search for searh and select tree item by value in selections
+	 * a recursive deep first search for search and select tree item by value in selections
 	 * @param tree the tree instance
 	 * @param root the root object of model
 	 * @param parent the parent object to search
 	 * @param model the tree model
 	 * @param selections a Hashmap of selection
-	 * @param isMulti true if is Mutliple selection
+	 * @param isMulti true if is multiple selections
 	 * @return true if skip search 
 	 */
 	private boolean dfSearchAndSelect(final Tree tree,final Object root,final Object parent,final  TreeModel model,final  HashMap selections,final  boolean isMulti) {
@@ -162,11 +162,11 @@ abstract public class BaseTree extends BranchInput {
 	}
 
 	/**
-	 * a recursive deep for searh and select tree item by value in selections
-	 * @param tree the tree instnace
+	 * a recursive deep for search and select tree item by value in selections
+	 * @param tree the tree instance
 	 * @param children a List of Treeitem
 	 * @param selections a Hashmap of selection
-	 * @parm isMulti true if is Mutliple selection
+	 * @param isMulti true if is multiple selections
 	 * @return return true if skip search 
 	 */
 	private boolean dfSearchAndSelect(final Tree tree,final List children,final HashMap selections,final boolean isMulti) {

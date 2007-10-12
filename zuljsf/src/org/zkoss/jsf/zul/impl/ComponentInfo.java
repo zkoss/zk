@@ -68,7 +68,7 @@ import java.util.Map;
 	}
 	
 	 /**
-	  * register ZULJSF Component to ComponentInfo, a temporary id will be associated to this componet
+	  * register ZULJSF Component to ComponentInfo, a temporary id will be associated to this component
 	  * @param comp a component
 	  * @return a temporary id for this ComponentInfo.
 	  */

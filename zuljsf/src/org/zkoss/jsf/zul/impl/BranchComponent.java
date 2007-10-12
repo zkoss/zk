@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.jsf.zul.impl;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,7 +41,7 @@ abstract public class BranchComponent extends LeafComponent{
 	/**
 	 * Call by RootComponent or BranchComponent to load zk stuff and all it's children
 	 */
-	protected void doZKLoading() throws IOException{
+	protected void loadZULTree(StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
 		
@@ -52,7 +53,7 @@ abstract public class BranchComponent extends LeafComponent{
 		if(children!=null){
 			for (Iterator kids = children.iterator(); kids.hasNext(); ){
 				AbstractComponent kid = (AbstractComponent) kids.next();
-	            kid.doZKLoading();
+	            kid.loadZULTree(writer);
 	        }
 			
 			Utils.adjustChildren(

@@ -274,7 +274,7 @@ abstract public class BranchInput extends BranchOutput implements
 
 	public void broadcast(FacesEvent event) throws AbortProcessingException {
 
-		// why MyFaces chek Event type here? should it never wrong?, remove by dennis...
+		// why MyFaces check Event type here? should it never wrong?, remove by dennis...
 		/*
 		 * if (!(event instanceof ValueChangeEvent)) { throw new
 		 * IllegalArgumentException("FacesEvent of class " +

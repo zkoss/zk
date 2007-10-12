@@ -57,7 +57,7 @@ abstract public class BaseIntbox extends BranchInput {
 
 	/**
 	 * Override Method, Return ZUL Component attribute name which can handler
-	 * the submition of input. Always return "text"
+	 * the submitting of input. Always return "text"
 	 * 
 	 * @see ClientInputSupport
 	 */

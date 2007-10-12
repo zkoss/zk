@@ -44,7 +44,7 @@ abstract public class AbstractTag extends UIComponentBodyTag {
 	
 	protected static String ZUL_JSF_NS = "http://www.zkoss.org/jsf/zul";
 	protected static String JSF_HTML_NS = "http://java.sun.com/jsf/html";
-	protected static String JSF_CORD_NS = "http://java.sun.com/jsf/core";
+	protected static String JSF_CORE_NS = "http://java.sun.com/jsf/core";
 	
 	/**
 	 * constructor.

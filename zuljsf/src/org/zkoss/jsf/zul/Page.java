@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Execution;
 
 /**
  * Defines a ZK page.
- * It is reponsible for doing the lifecycle for ZK components, such
+ * It is responsible for handling the lifecycle for ZK components, such
  * as event processing and rendering,
  *
  * <p>All other ZULJSF Component  must be placed inside a {@link org.zkoss.jsf.zul.Page}.

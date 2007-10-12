@@ -19,8 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.jsf.zul.impl;
 
 import java.io.IOException;
-
-import javax.faces.component.UIComponent;
+import java.io.StringWriter;
 import javax.faces.context.FacesContext;
 
 import org.zkoss.util.logging.Log;
@@ -33,7 +32,6 @@ import org.zkoss.zk.ui.metainfo.ZScript;
  * @author Dennis.Chen
  */
 public class BaseZScript extends AbstractComponent {
-	private static final Log log = Log.lookup(BaseZScript.class);
 
 	private boolean _deferred;
 	private String _lang = null;
@@ -42,7 +40,7 @@ public class BaseZScript extends AbstractComponent {
 	private BranchComponent _parentcomp;
 	
 
-	public void doZKLoading() throws IOException {
+	public void loadZULTree(StringWriter writer) throws IOException {
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
 		
@@ -81,7 +79,7 @@ public class BaseZScript extends AbstractComponent {
 			throw new IllegalStateException("Must be nested inside the page component: "+this);
 		}
 		
-		//keep component tree structure for zuljsfcomponent
+		//keep component tree structure for zul jsf component
 		ComponentInfo cinfo = getComponentInfo();
 		if(cinfo!=null){
 			if(_parentcomp!=null){

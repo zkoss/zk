@@ -50,7 +50,7 @@ abstract public class BranchInputTag extends BranchOutputTag implements DynamicA
 		super.setProperties(comp);
 		
 		//take care immedate,require,validator,valuechange listener
-		if(JSF_CORD_NS.equals(_specialNS.get("immediate"))){
+		if(JSF_CORE_NS.equals(_specialNS.get("immediate"))){
 			Object obj = _dynamicAttrMap.get("immediate");
 			if(obj!=null){
 				if(!(obj instanceof String)) throw new RuntimeException("attribute 'immediate' must be String");
@@ -65,7 +65,7 @@ abstract public class BranchInputTag extends BranchOutputTag implements DynamicA
 			
 		}
 		
-		if (JSF_CORD_NS.equals(_specialNS.get("required"))) {
+		if (JSF_CORE_NS.equals(_specialNS.get("required"))) {
 			Object obj = _dynamicAttrMap.get("required");
 			if(obj!=null){
 				if(!(obj instanceof String)) throw new RuntimeException("attribute 'required' must be String");
@@ -79,7 +79,7 @@ abstract public class BranchInputTag extends BranchOutputTag implements DynamicA
 			}
         }
 		
-		if (JSF_CORD_NS.equals(_specialNS.get("validator"))) {
+		if (JSF_CORE_NS.equals(_specialNS.get("validator"))) {
 			Object obj = _dynamicAttrMap.get("validator");
 			if(obj!=null){
 				if(!(obj instanceof String)) throw new RuntimeException("attribute 'validator' must be String");
@@ -93,11 +93,11 @@ abstract public class BranchInputTag extends BranchOutputTag implements DynamicA
 			}
         }
 		
-		if (JSF_CORD_NS.equals(_specialNS.get("valueChangeListener"))) {
+		if (JSF_CORE_NS.equals(_specialNS.get("valueChangeListener"))) {
 			Object obj = _dynamicAttrMap.get("valueChangeListener");
 			if(obj!=null){
+				if(!(obj instanceof String)) throw new RuntimeException("attribute 'valueChangeListener' must be String");
 				if (isValueReference((String)obj)) {
-					if(!(obj instanceof String)) throw new RuntimeException("attribute 'valueChangeListener' must be String");
 					Class args[] = { ValueChangeEvent.class };
 	                MethodBinding vb = FacesContext.getCurrentInstance().getApplication().createMethodBinding((String)obj, args);
 	                ((BranchInput)comp).setValueChangeListener(vb);

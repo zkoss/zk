@@ -56,7 +56,7 @@ abstract public class BaseSlider extends BranchInput {
 
 	/**
 	 * Override Method, Return ZUL Component attribute name which can handler
-	 * the submition of input. Always return "curpos"
+	 * the submitting of input. Always return "curpos"
 	 * 
 	 * @see ClientInputSupport
 	 */

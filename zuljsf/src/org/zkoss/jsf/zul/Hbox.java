@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Hbox is a JSF component implementation for org.zkoss.zul.Hbox, 
+ * Hbox is a JSF component implementation for {@link org.zkoss.zul.Hbox}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

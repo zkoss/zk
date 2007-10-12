@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Listfooter is a JSF component implementation for org.zkoss.zul.Listfooter, 
+ * Listfooter is a JSF component implementation for {@link org.zkoss.zul.Listfooter}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

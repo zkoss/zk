@@ -34,7 +34,7 @@ abstract public class BaseCheckbox extends BranchInput {
 
 
 	/**
-	 * Override Method, Return ZUL Component attribute name which can handler the submition of input. 
+	 * Override Method, Return ZUL Component attribute name which can handler the submitting of input. 
 	 * Always return "checked"
 	 * @see ClientInputSupport
 	 */
@@ -43,7 +43,7 @@ abstract public class BaseCheckbox extends BranchInput {
 	}
 	
 	/**
-	 * Overrid Method, Decode value in request's parameter. 
+	 * Override Method, Decode value in request's parameter. 
 	 * call by {@link #decode(FacesContext)}
 	 */
 	protected void clientInputDecode(FacesContext context) {

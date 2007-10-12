@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Menupopup is a JSF component implementation for org.zkoss.zul.Menupopup, 
+ * Menupopup is a JSF component implementation for {@link org.zkoss.zul.Menupopup}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

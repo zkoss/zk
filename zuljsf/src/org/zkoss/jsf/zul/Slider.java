@@ -22,20 +22,20 @@ import org.zkoss.jsf.zul.impl.BaseSlider;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Slider is a JSF component implementation for org.zkoss.zul.Slider, 
+ * Slider is a JSF component implementation for {@link org.zkoss.zul.Slider}, 
  * This class also implements {@link javax.faces.component.EditableValueHolder}.
- * That means you can use bidirection value binding, immediate, required, converter, validator, valueChangeListener features on this component.
+ * That means you can use bidirectional value binding, immediate, required, converter, validator, valueChangeListener features on this component.
  * <br/>
- * To use those features, you must decleare a namespace of "http://java.sun.com/jsf/core" 
+ * To use those features, you must declare a namespace of "http://java.sun.com/jsf/core" 
  * with a prefix (say 'f' in below example), add attribute of those feature with this namespace 
- * (for example f:required="true")in you jsf page. 
+ * (for example f:required="true")in the jsf page. 
  * For more detail of EditableValueHolder features of JSF, you can refer to <a href="http://java.sun.com/products/jsp/">http://java.sun.com/products/jsp/</a>
  * 
  * <p/>
  * The default binding value of this component is {@link java.lang.Integer}
  * 
  * <p/>
- * Example of use bidirection value binding:<br/>
+ * Example of use bidirectional value binding:<br/>
  * <pre>
  * &lt;z:slider f:value=&quot;#{yourBean.value}&quot; /&gt;
  * </pre>

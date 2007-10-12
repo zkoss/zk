@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Listitem is a JSF component implementation for org.zkoss.zul.Listitem, 
+ * Listitem is a JSF component implementation for {@link org.zkoss.zul.Listitem}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

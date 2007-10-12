@@ -28,10 +28,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
-import javax.servlet.jsp.JspException;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.reflect.Fields;
@@ -149,7 +149,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	
 
 	/**
-	 * Overrid Method, don't rednered children my self. return false;
+	 * Override Method, don't render children my self. return false;
 	 */
 	public boolean getRendersChildren() {
 		if(isSuppressed()){
@@ -215,7 +215,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	/**
 	 * Call by RootComponent or BranchComponent to load zk stuff. 
 	 */
-	protected void doZKLoading() throws IOException{
+	protected void loadZULTree(StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
 		initComponent();
@@ -225,7 +225,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	
 	/** 
 	 * Create ZUL Component, and then associate it to it's Parent Component or Page Component
-	 * Called by {@link #doZKLoading}.
+	 * Called by {@link #loadZULTree}.
 	 */
 	/*package*/ void initComponent() {
 		
@@ -259,16 +259,15 @@ abstract public class LeafComponent extends AbstractComponent{
 	
 	/** 
 	 * Returns the ZUL Component associated with this ZUL JSF Component
-	 * the associated ZUL Component is only exist after {@link #doZKLoading}
+	 * the associated ZUL Component is only exist after {@link #loadZULTree}
 	 */
-	/*package*/Component getZULComponent() {
+	protected Component getZULComponent() {
 		return _zulcomp;
 	}
 	
 	
 	/** after children creation do dynamic attributes setter work and registers event handler.
-	 * Called by {@link #doZKLoading}.
-	 * @throws JspException 
+	 * Called by {@link #loadZULTree}.
 	 */
 	/*package*/void afterComposeComponent(){
 		
@@ -376,7 +375,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	}
 	
 	/**
-	 * This mehtod give the delivering class a chance to handle ZUL Component just after it is composed.<br/>
+	 * This method give the delivering class a chance to handle ZUL Component just after it is composed.<br/>
 	 * This method will be invoked after ZUL component is composed and listener, attribute of ZUL component is setted.
 	 * Note: Default implementation do nothing.
 	 */
@@ -396,7 +395,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	/**
 	 * Get value of attribute of Component. if value of attribute is a ValueBinding, then Binding result will return.
 	 * @param att attribute name
-	 * @return value of attriubte
+	 * @return value of attribute
 	 */
 	public Object getAttributeValue(String att){
 		Object value = _compAttrMap.get(att);
@@ -409,7 +408,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	/**
 	 * set value to attribute of Component, if a ValueBinding is associated with attribute , then it will set value to Binding Object<br/>
 	 * 
-	 * Note: set attribute after {@link #doZKLoading} doesn't affect the ZUL Component which is associated to this component.
+	 * Note: set attribute after {@link #loadZULTree} doesn't affect the ZUL Component which is associated to this component.
 	 * 
 	 * @param att attribute name
 	 * @param value attribute value;
@@ -462,7 +461,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	/**
 	 * set the attribute(name) of this component to value, the difference between this method and {@link #setAttributeValue}
 	 * is this method directly replace the attribute whether the attribute associate to a ValueBinding.
-	 *  Note: set attribute after {@link #doZKLoading()} doesn't affect the ZUL Component which is associated to this component.
+	 *  Note: set attribute after {@link #loadZULTree(StringWriter)} doesn't affect the ZUL Component which is associated to this component.
 	 * @param name attribute name of component
 	 * @param value value of attribute
 	 */
@@ -560,6 +559,22 @@ abstract public class LeafComponent extends AbstractComponent{
 	 */
 	public void setForward(String forward) {
 		_forward = forward != null && forward.length() > 0 ? forward: null;
+	}
+	
+	
+	/**
+	 * get parent UI Form of this component.
+	 * @return the parent component which type is UIForm.
+	 */
+	/*package*/ UIForm getUIForm() {
+		UIComponent comp = getParent();
+		while(comp!=null){
+			if(comp instanceof UIForm){
+				return (UIForm)comp;
+			}
+			comp = comp.getParent();
+		}
+		return null;
 	}
 	
 	

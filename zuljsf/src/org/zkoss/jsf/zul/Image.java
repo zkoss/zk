@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Image is a JSF component implementation for org.zkoss.zul.Image, 
+ * Image is a JSF component implementation for {@link org.zkoss.zul.Image}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

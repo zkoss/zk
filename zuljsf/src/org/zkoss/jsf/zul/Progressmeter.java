@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Progressmeter is a JSF component implementation for org.zkoss.zul.Progressmeter, 
+ * Progressmeter is a JSF component implementation for {@link org.zkoss.zul.Progressmeter}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

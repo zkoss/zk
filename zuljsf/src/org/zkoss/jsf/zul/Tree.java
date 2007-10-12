@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BaseTree;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Tree is a JSF component implementation for org.zkoss.zul.Tree, 
+ * Tree is a JSF component implementation for {@link org.zkoss.zul.Tree}, 
  * This class also implements {@link javax.faces.component.EditableValueHolder}.
  * That means you can use bidirection value binding, immediate, required, converter, validator, valueChangeListener features on this component.
  * <br/>

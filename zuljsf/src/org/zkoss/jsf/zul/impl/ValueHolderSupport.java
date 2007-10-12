@@ -25,7 +25,7 @@ package org.zkoss.jsf.zul.impl;
 public interface ValueHolderSupport {
 
 	/**
-	 * Return the attriubte name of a zul component.
+	 * Return the attribute name of a zul component.
 	 * A Handler which process this interface will set the value of {@link javax.faces.component.ValueHolder} into the attribute of ZUL Component. 
 	 * return null means do not set the value of ValueHolder into zul component.
 	 * @return name of attribute of zul component.
@@ -33,7 +33,7 @@ public interface ValueHolderSupport {
 	public String getMappedAttributeName();
 	
 	/**
-	 * The value from a converter or from request submittion is a String.
+	 * The value from a converter or from request submitting is a String.
 	 * In some ZUL Component doen't have the suitable attribute to set a String as it's value,
 	 * such as Calendar, So we need Component implementation transfer String to suitable object.
 	 * @param value a String value to transfer to a component suitable Object.

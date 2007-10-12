@@ -19,8 +19,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.jsf.zul.impl;
 
 import java.io.IOException;
-
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
@@ -60,10 +58,9 @@ public class BaseAttribute extends AbstractComponent {
 		final AbstractComponent ac =
 		(AbstractComponent)findAncestorWithClass(this, AbstractComponent.class);
 		if (ac instanceof RootComponent) { //root component 
-			//_rootcomp = (RootComponent)ac;
+			//do nothing
 		} else if (ac instanceof BranchComponent) {
 			_parentcomp = (BranchComponent)ac;
-			//_rootcomp = _parentcomp.getRootComponent();
 		} else {
 			throw new IllegalStateException("Must be nested inside the page component: "+this);
 		}

@@ -22,11 +22,11 @@ import org.zkoss.jsf.zul.impl.BranchInput;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Combobox is a JSF component implementation for org.zkoss.zul.Combobox, 
+ * Combobox is a JSF component implementation for {@link org.zkoss.zul.Combobox}, 
  * This class also implements {@link javax.faces.component.EditableValueHolder}.
- * That means you can use bidirection value binding, immediate, required, converter, validator, valueChangeListener features on this component.
+ * That means you can use bidirectional value binding, immediate, required, converter, validator, valueChangeListener features on this component.
  * <br/>
- * To use those features, you must decleare a namespace of "http://java.sun.com/jsf/core" 
+ * To use those features, you must declare a namespace of "http://java.sun.com/jsf/core" 
  * with a prefix (say 'f' in below example), add attribute of those feature with this namespace 
  * (for example f:required="true")in you jsf page. 
  * For more detail of EditableValueHolder features of JSF, you can refer to <a href="http://java.sun.com/products/jsp/">http://java.sun.com/products/jsp/</a>
@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.Component;
  * The default binding value of this component is {@link java.lang.String}
  * 
  * <p/>
- * Example of use bidirection value binding:<br/>
+ * Example of use bidirectional value binding:<br/>
  * <pre>
  * &lt;z:combobox f:value=&quot;#{yourBean.value}&quot; /&gt;
  * </pre>

@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.Component;
 
 
 /**
- * The Base implementation of Datebox. 
+ * The Base implementation of Calendar. 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * @author Dennis.Chen
  *

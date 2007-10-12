@@ -19,6 +19,7 @@
 package org.zkoss.jsf.zul.impl;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -32,7 +33,7 @@ import javax.faces.context.FacesContext;
 /**
  * The skeletal class for implementing the generic ZULJSF Component.
  * This component handle _if, _unless attributes of ZUL Component.
- * This component also handle bodyContent which is setted by {@link org.zkoss.jsf.zul.tag.impl.AbstractTag#doAfterBody()}
+ * This component also handle bodyContent which is set by {@link org.zkoss.jsf.zul.tag.impl.AbstractTag#doAfterBody()}
  * 
  * @author Dennis.Chen
  */
@@ -47,7 +48,7 @@ public class AbstractComponent extends UIComponentBase {
 	private String _bodyContent;
 
 	/**
-	 * Returns whether this component is effecive. If false, this component does
+	 * Returns whether this component is effective. If false, this component does
 	 * nothing (as if not specified at all).
 	 */
 	public boolean isEffective() {
@@ -55,7 +56,7 @@ public class AbstractComponent extends UIComponentBase {
 	}
 
 	/**
-	 * Returns the if condition. If the if condition is false, this compoent is
+	 * Returns the if condition. If the if condition is false, this component is
 	 * ignored. If the unless condition ({@link #getUnless}) is true, this
 	 * component is ignored, too. Components deriving from this class shall
 	 * invoke {@link #isEffective} to know the result.
@@ -102,8 +103,8 @@ public class AbstractComponent extends UIComponentBase {
 	}
 
 	/**
-	 * A convenient method for finding ancestor of speical calss. 
-	 * this mehotd is use to build ZULJSF compoent tree under JSF component tree.
+	 * A convenient method for finding ancestor of special class. 
+	 * this method is use to build ZULJSF component tree under JSF component tree.
 	 * 
 	 * @param component
 	 *            a component, usually a AbstractComponent instance
@@ -123,13 +124,14 @@ public class AbstractComponent extends UIComponentBase {
 	}
 
 	/**
-	 * Call by RootComponent or BranchComponent to load zk stuff. 
-	 * This method is invoked from a RootComponent's encodeEnd() or a BranchComponent's doZKLoading().
+	 * Call by RootComponent or BranchComponent to load tree structure of zk zul components. 
+	 * This method is invoked from a RootComponent's encodeEnd() or a BranchComponent's loadZK().
 	 * It will go through all ZULJSF Component Tree to initial ZUL Component of corresponding ZULJSFComponent. 
 	 * <br/>Note: Do nothing in default implementation.
 	 */
-	protected void doZKLoading() throws IOException {
+	protected void loadZULTree(StringWriter writer) throws IOException {
 		// do nothing
+		
 	}
 
 	/**
@@ -150,7 +152,7 @@ public class AbstractComponent extends UIComponentBase {
 	}
 
 	/**
-	 * get current FacesContext for this component, this mothed is protected in
+	 * get current FacesContext for this component, this method is protected in
 	 * super class, I public it for convenient usage.
 	 */
 	public FacesContext getFacesContext() {

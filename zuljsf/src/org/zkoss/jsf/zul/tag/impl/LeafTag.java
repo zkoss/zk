@@ -97,7 +97,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 				this.setId((String)value);
 			}
 			
-		}else if(uri==null || JSF_CORD_NS.equals(uri)){
+		}else if(uri==null || JSF_CORE_NS.equals(uri)){
 			if("id".equals(localName)){
 				throw new JspException("don't assign id with namespace http://java.sun.com/jsf/core, use it directly");
 			}else if("binding".equals(localName)){
@@ -141,17 +141,6 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 				((LeafComponent)comp).setForward(_forward);
 			}
 		}
-		if(_use!=null ){
-			if(isValueReference(_use)){
-				javax.faces.el.ValueBinding _vb = getFacesContext().getApplication().createValueBinding(_use);
-				Object obj  = _vb.getValue(context);
-				if(obj!=null){
-					((LeafComponent)comp).setUse(obj.toString());
-				}
-			}else{
-				((LeafComponent)comp).setUse(_use);
-			}
-		}
 		
 		LinkedHashMap compAttMap = new LinkedHashMap();
 		for(Iterator itor = _dynamicAttrMap.entrySet().iterator();itor.hasNext();)
@@ -161,7 +150,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 			String prop = (String)entry.getKey();
 			Object value = _dynamicAttrMap.get(prop);
 			String ns = (String)_specialNS.get(prop);
-			/*ZK namespance*/
+			/*ZK namespace*/
 			if(ns==null){
 				if(!(value instanceof String)) throw new RuntimeException("attribute '"+prop+"' must be String");
 				if(value!=null && isValueReference((String)value)){

@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.jsf.zul.impl;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -71,7 +72,7 @@ public class RootComponent extends AbstractComponent{
 	
 
 	/**
-	 * protected Constractor. Constract a RootTag with
+	 * protected Constructor. Construct a RootTag with
 	 * LanguageDefinition =  "xul/html".
 	 */
 	protected RootComponent() {
@@ -89,7 +90,7 @@ public class RootComponent extends AbstractComponent{
 		return _lang;
 	}
 	/**
-	 * Sets the defult scripting language in this RootComponent.
+	 * Sets the default scripting language in this RootComponent.
 	 *
 	 * <p>Default: Java.
 	 *
@@ -100,7 +101,7 @@ public class RootComponent extends AbstractComponent{
 		_lang = lang != null ? lang: "Java";
 	}
 	/** 
-	 * Sets the defult scripting language in this RootComponent.
+	 * Sets the default scripting language in this RootComponent.
 	 * It is the same as {@link #setZScriptLanguage} (used to simplify
 	 * the typing in JSF page).
 	 */
@@ -158,15 +159,17 @@ public class RootComponent extends AbstractComponent{
 				ComponentInfo ci = getComponentInfo();
 				List children = ci.getChildrenInfo(RootComponent.this);
 				if(children!=null){
+					StringWriter writer = new StringWriter();
+					writer.write(getBodyContent());
 					for (Iterator kids = children.iterator(); kids.hasNext(); ){
 						AbstractComponent kid = (AbstractComponent) kids.next();
-			            kid.doZKLoading();
+			            kid.loadZULTree(writer);
 			        }
 					if(inits!=null)inits.doAfterCompose(page);
 					Utils.adjustChildren(
-							page, RootComponent.this, ci.getChildrenInfo(RootComponent.this), getBodyContent()/*new String(bos.toString("UTF-8"))*/);
+							page, RootComponent.this, ci.getChildrenInfo(RootComponent.this), writer.toString()/*new String(bos.toString("UTF-8"))*/);
 					//a bug? if last child of page is inline, then Messagebox.show will cause error.
-					//so, add a unvisible label to workarond this.
+					//so, add a unvisible label to work around this.
 					Label junk = new Label();
 					junk.setVisible(false);
 					
@@ -223,7 +226,7 @@ public class RootComponent extends AbstractComponent{
 	/**
 	 * Override Method, 
 	 * When encodeEnd in RootComponent, all it's children ZULJSF Component has encoded,
-	 * then we start initial the ZK evnironment, and initial ZUL component by calling {@link AbstractComponent#doZKLoading} of each children under RootComponent.
+	 * then we start initial the ZK environment, and initial ZUL component by calling {@link AbstractComponent#loadZULTree} of each children under RootComponent.
 	 */
 	public void encodeEnd(FacesContext context) throws IOException {
 		if (!isRendered() || !isEffective())
@@ -259,7 +262,8 @@ public class RootComponent extends AbstractComponent{
 			_wapp = sess.getWebApp();
 			_wappc = (WebAppCtrl)_wapp;
 
-			final Desktop desktop = webman.getDesktop(sess, request, null, true);
+			//final Desktop desktop = webman.getDesktop(sess, request, null, true);
+			final Desktop desktop = webman.getDesktop(sess, request,response, null, true);
 			final RequestInfo ri = new RequestInfoImpl(
 				_wapp, sess, desktop, request,
 				PageDefinitions.getLocator(_wapp, null));

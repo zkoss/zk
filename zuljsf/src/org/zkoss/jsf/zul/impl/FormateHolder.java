@@ -24,7 +24,7 @@ import javax.faces.context.FacesContext;
 import org.zkoss.lang.Objects;
 
 /**
- * A base class implemenation of StateHolder to keep a format.
+ * A base class implementation of StateHolder to keep a format.
  * @author Dennis.Chen
  *
  */

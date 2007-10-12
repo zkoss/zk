@@ -184,7 +184,7 @@ abstract public class BranchOutput extends BranchComponent implements ValueHolde
 	}
 	
 	/**
-	 * Default implementation return orginal String
+	 * Default implementation return original String
 	 * @see ValueHolderSupport
 	 */
 	public Object transferValueForAttribute(String value){
