@@ -55,6 +55,13 @@
 			<xs:enumeration value="bottom" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="packAttrType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="start" />
+			<xs:enumeration value="center" />
+			<xs:enumeration value="end" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="orientAttrType">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="horizontal" />
@@ -354,7 +361,8 @@
 		<xs:attribute name="heights" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
-		<xs:attribute name="valign" type="valignAttrType" use="optional" />
+		<xs:attribute name="align" type="packAttrType" use="optional" />
+		<xs:attribute name="pack" type="packAttrType" use="optional" />
 	</xs:complexType>
 	<!-- button -->
 	<xs:element name="button" type="buttonType" />
@@ -757,7 +765,8 @@
 		<xs:attribute name="widths" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
-		<xs:attribute name="valign" type="valignAttrType" use="optional" />
+		<xs:attribute name="align" type="packAttrType" use="optional" />
+		<xs:attribute name="pack" type="packAttrType" use="optional" />
 	</xs:complexType>
 	<!-- html -->
 	<xs:element name="html" type="htmlType" />
@@ -1561,7 +1570,8 @@
 		<xs:attribute name="heights" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
-		<xs:attribute name="valign" type="valignAttrType" use="optional" />
+		<xs:attribute name="align" type="packAttrType" use="optional" />
+		<xs:attribute name="pack" type="packAttrType" use="optional" />
 	</xs:complexType>	
 	<!-- west -->
 	<xs:element name="west" type="westType" />

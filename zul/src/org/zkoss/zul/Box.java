@@ -42,8 +42,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Box extends XulElement {
 	private String _spacing;
-	private String _valign = "top";
-	private String _align;
+	private String _align, _pack;
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
 
@@ -79,6 +78,19 @@ public class Box extends XulElement {
 				appendChild(children[j]);
 	}
 
+	/** Returns whether it is a horizontal box.
+	 * @since 3.0.0
+	 */
+	public boolean isHorizontal() {
+		return "horizontal".equals(getOrient());
+	}
+	/** Returns whether it is a vertical box.
+	 * @since 3.0.0
+	 */
+	public boolean isVertical() {
+		return "vertical".equals(getOrient());
+	}
+
 	/** Returns the orient (the same as {@link #getMold}).
 	 * <p>Default: "vertical".
 	 */
@@ -111,45 +123,130 @@ public class Box extends XulElement {
 		}
 	}
 
-	/** Returns the vertical alignment of the adjacent cells of a box.
-	 * It is meaningful only if {@link #getOrient} is horizontal (i.e.,
-	 * {@link Hbox}).
-	 * <p>Default: top.
+	/** Returns the vertical alignment of the adjacent cells of a box
+	 * (top, middle or bottom).
+	 * <p>Default: null (i.e., use the browser default, usually middle).
 	 */
-	public String getValign() {
-		return _valign;
+	public String getValign() { //not deprecated to simplify ComponentRenderer
+		return toValign(isVertical() ? getPack(): getAlign());
 	}
 	/** Sets the vertical alignment of the adjacent cells of a box.
+	 *
 	 * @param valign the vertical alignment: top, middle and bottom.
-	 * If empty or null, the system default is used (usually middle).
+	 * @deprecated As of release 3.0.0, since it is not compliant to XUL.
+	 * Use {@link #setAlign} and {@link #setPack} instead.
 	 */
 	public void setValign(String valign) {
-		if (!Objects.equals(_valign, valign)) {
-			_valign = valign;
-			smartUpdate("valign", _valign);
-		}
+		valign = valign == null ? null:
+			"top".equalsIgnoreCase(valign) ? "start": 
+			"middle".equalsIgnoreCase(valign) ? "center":
+			"bottom".equalsIgnoreCase(valign) ? "end": valign;
+
+		if (isVertical()) setPack(valign);
+		else setAlign(valign);
+	}
+	private static String toValign(String v) {
+		return v == null ? null: "start".equalsIgnoreCase(v) ? "top": 
+			"center".equalsIgnoreCase(v) ? "middle":
+			"end".equalsIgnoreCase(v) ? "bottom": v;
+	}
+	private static String toHalign(String v) {
+		return v == null ? null: "start".equalsIgnoreCase(v) ? "left": 
+			"end".equalsIgnoreCase(v) ? "right": v;
 	}
 	
-	/** Returns the horizontal alignment within a cell of a box (left, center, right).
+	/** Returns the alignment of cells of a box in the 'opposite' direction
+	 * (<i>null</i>, start, center, end).
+	 *
 	 * <p>Default: null</p>
+	 *
+	 * <p>The align attribute specifies how child elements of the box are aligned,
+	 * when the size of the box is larger than the total size of the children. For
+	 * boxes that have horizontal orientation, it specifies how its children will
+	 * be aligned vertically. For boxes that have vertical orientation, it is used
+	 * to specify how its children are algined horizontally. The pack attribute
+	 * ({@link #getPack}) is
+	 * related to the alignment but is used to specify the position in the
+	 * opposite direction.
+	 *
+	 * <dl>
+	 * <dt>start</dt>
+	 * <dd>Child elements are aligned starting from the left or top edge of
+	 * the box. If the box is larger than the total size of the children, the
+	 * extra space is placed on the right or bottom side.</dd>
+	 * <dt>center</dt>
+	 * <dd>Extra space is split equally along each side of the child
+	 * elements, resulting in the children being placed in the center of the box.</dd>
+	 * <dt>end</dt>
+	 * <dd>Child elements are placed on the right or bottom edge of the box. If
+	 * the box is larger than the total size of the children, the extra space is
+	 * placed on the left or top side.</dd>
+	 * </dl>
+	 *
 	 * @since 3.0.0
 	 */
 	public String getAlign() {
 		return _align;
 	}
-	
-	/** Sets the horizontal alignment within a cell of a box (left, center, right).
-	 * @param align the horizontal alignment: left, center, right.
-	 * If empty or null, the browser's default is used (IE center, FF left).
+	/** Sets the alignment of cells of this box in the 'opposite' direction
+	 * (<i>null</i>, start, center, end).
+	 *
+	 * @param align the alignment in the 'opposite' direction.
+	 * Allowed values: start, center, end.
+	 * If empty or null, the browser's default is used
+	 * (IE center and FF left, if vertical).
 	 * @since 3.0.0
 	 */
 	public void setAlign(String align) {
-		if (align != null) {
-			align = align.trim();
-		}
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			invalidate();
+			if (isVertical()) invalidate();
+			else smartUpdate("valign", toValign(align));
+		}
+	}
+	/** Returns the alignment of cells of this box
+	 * (<i>null</i>, start, center, end).
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>The pack attribute specifies where child elements of the box are placed
+	 * when the box is larger that the size of the children. For boxes with
+	 * horizontal orientation, it is used to indicate the position of children
+	 * horizontally. For boxes with vertical orientation, it is used to indicate
+	 * the position of children vertically. The align attribute 
+	 * ({@link #getAlign})is used to specify
+	 * the position in the opposite direction.
+	 *
+	 * <dl>
+	 * <dt>start</dt>
+	 * <dd>Child elements are aligned starting from the left or top edge of
+	 * the box. If the box is larger than the total size of the children, the
+	 * extra space is placed on the right or bottom side.</dd>
+	 * <dt>center</dt>
+	 * <dd>Extra space is split equally along each side of the child
+	 * elements, resulting in the children being placed in the center of the box.</dd>
+	 * <dt>end</dt>
+	 * <dd>Child elements are placed on the right or bottom edge of the box. If
+	 * the box is larger than the total size of the children, the extra space is
+	 * placed on the left or top side.</dd>
+	 * </dl>
+	 *
+	 * @since 3.0.0
+	 */
+	public String getPack() {
+		return _pack;
+	}
+	/** Sets the alignment of cells of this box
+	 * (<i>null</i>, start, center, end).
+	 *
+	 * @param pack the alignment. Allowed values: start, center, end.
+	 * If empty or null, the browser's default is used.
+	 * @since 3.0.0
+	 */
+	public void setPack(String pack) {
+		if (!Objects.equals(_pack, pack)) {
+			_pack = pack;
+			invalidate(); //generated to all cells
 		}
 	}
 
@@ -217,7 +314,7 @@ public class Box extends XulElement {
 	 * It is used only for the vertical layout.
 	 */
 	public String getChildOuterAttrs(Component child) {
-		final boolean vert = "vertical".equals(getOrient());
+		final boolean vert = isVertical();
 		if (child instanceof Splitter)
 			return (vert ? " height": " width") + "=\"8px\"";
 		
@@ -227,7 +324,7 @@ public class Box extends XulElement {
 
 		//Note: visible is handled in getChildInnerAttrs if horizontal layout
 		if (vert) {
-			HTMLs.appendAttribute(sb, "valign", _valign);
+			HTMLs.appendAttribute(sb, "valign", toValign(_pack));
 			if (!child.isVisible()) {
 				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
 				if (!(xc instanceof Floating) || !((Floating)xc).isFloating())
@@ -243,14 +340,15 @@ public class Box extends XulElement {
 		if (child instanceof Splitter)
 			return "";
 
-		final boolean vert = "vertical".equals(getOrient());
+		final boolean vert = isVertical();
 		final StringBuffer sb = new StringBuffer(64);
 
 		String stylesb = "";
 		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
-		if (_align != null && _align.length() > 0) {
-			HTMLs.appendAttribute(sb, "align", _align);
-			stylesb = "text-align:"+_align+" ";
+		final String align = toHalign(vert ? _align: _pack);
+		if (align != null && align.length() > 0) {
+			HTMLs.appendAttribute(sb, "align", align);
+			stylesb = "text-align:"+align+';';
 		}
 
 		String size = null;
@@ -307,7 +405,7 @@ public class Box extends XulElement {
 	//-- Component --//
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws IOException {
-		if ("vertical".equals(getOrient())) {
+		if (isVertical()) {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<tr id=\"").append(child.getUuid())
 				.append("!chdextr\"")
