@@ -338,10 +338,13 @@ zkau.send = function (evt, timeout) {
 zkau._send = function (dtid, evt, timeout) {
 	if (evt.ctl) {
 		var t = $now();
-		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 450)
+		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 450
+		&& (evt.cmd != "onDoubleClick" || zkau._ctlc != "onClick")) //Bug 1797140
 			return; //to prevent key stroke are pressed twice (quickly)
+
 		zkau._ctlt = t;
 		zkau._ctl = evt.uuid;
+		zkau._ctlc = evt.cmd;
 	}
 
 	zkau._events(dtid).push(evt);
