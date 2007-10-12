@@ -34,7 +34,9 @@ ZK 3.0.0 Freshly
   1808035: ZK Layout vs Modal Windows
   1794296: fckeditor: onchange event issue
   1804858: Toolbarbuttons in window caption without separating space
-  1811352: slider/calendar/tree doesn't post value if form.submit()
+  1811352: slider/calendar/tree doesn't post value if form.submit()  
+  1812001: A scrollbar shows wrong in IE6&7
+  1692556: IE6 &7 drag performance becomes slower with Tree&ListBox
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
