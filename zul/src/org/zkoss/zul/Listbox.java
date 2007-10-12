@@ -1044,6 +1044,7 @@ public class Listbox extends XulElement {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
 				} else {
+					getItems().clear(); //Bug 1807414
 					if (!inSelectMold())
 						smartUpdate("z.model", "true");
 				}
@@ -1206,6 +1207,7 @@ public class Listbox extends XulElement {
 				}
 
 				final Listcell listcell = (Listcell)cells.get(0);
+				listcell.getChildren().clear(); //another renderer might do diff
 				listcell.setLabel(null);
 				listcell.setImage(null);
 			}

@@ -333,6 +333,7 @@ public class Grid extends XulElement {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
 				} else {
+					if (_rows != null) _rows.getChildren().clear(); //Bug 1807414
 					smartUpdate("z.model", "true");
 				}
 
