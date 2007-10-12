@@ -37,6 +37,7 @@ ZK 3.0.0 Freshly
   1811352: slider/calendar/tree doesn't post value if form.submit()  
   1812001: A scrollbar shows wrong in IE6&7
   1692556: IE6 &7 drag performance becomes slower with Tree&ListBox
+  1807414: listbox/grid: setModel shall clean the current content
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
