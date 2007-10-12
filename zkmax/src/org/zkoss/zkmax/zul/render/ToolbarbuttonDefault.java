@@ -54,6 +54,6 @@ public class ToolbarbuttonDefault implements ComponentRenderer {
 			new Out(self.getLabel()).render(out);
 		}		
 
-		wh.write("</a>");
+		wh.writeln("</a>"); // Bug #1804858.
 	}
 }
