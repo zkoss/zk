@@ -2136,12 +2136,15 @@ if (Element.getStyle(element, "position") == 'fixed') {
 //Tom Yeh, Potix: make the name shorter
 //  withinIncludingScrolloffsets: function(element, x, y) {
   withinScroll: function(element, x, y) {
+  	/**
     var offsetcache = this.realOffset(element);
 
     this.xcomp = x + offsetcache[0] - this.deltaX;
     this.ycomp = y + offsetcache[1] - this.deltaY;
-    this.offset = this.cumulativeOffset(element);
-
+    this.offset = this.cumulativeOffset(element);*/ // Jumper Chen, Potix: bug #1692556
+	this.xcomp = x;
+	this.ycomp = y;
+	this.offset = zk.revisedOffset(element);
     return (this.ycomp >= this.offset[1] &&
             this.ycomp <  this.offset[1] + zk.offsetHeight(element) && //Tom M. Yeh, Potix: safari bug
             this.xcomp >= this.offset[0] &&
