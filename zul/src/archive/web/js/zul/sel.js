@@ -807,6 +807,10 @@ zk.Selectable.prototype = {
 
 				this.realsize(sz);
 				this.body.style.height = hgh + "px";
+				
+				if (this.body.offsetHeight) {} // bug #1812001
+				// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
+				// and IE7 at initializing phase.
 				return; //done
 			}
 		}
@@ -844,6 +848,10 @@ zk.Selectable.prototype = {
 			}
 
 			this.body.style.height = hgh + "px";
+			
+			if (this.body.offsetHeight) {} // bug #1812001
+			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
+			// and IE7 at initializing phase.
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height

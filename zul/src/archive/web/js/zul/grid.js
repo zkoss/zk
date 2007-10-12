@@ -107,7 +107,7 @@ zk.Grid.prototype = {
 			this.body.style.height = hgh;
 			this.element.style.height = "";	
 			this.element.setAttribute("zk_hgh", hgh);
-			if (this.body.offsetHeight < 0) {} 
+			if (this.body.offsetHeight) {} // bug #1812001
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 			// and IE7 at initializing phase.
 		} else {
