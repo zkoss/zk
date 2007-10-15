@@ -80,7 +80,8 @@ public class Serializables {
 		if (col != null) {
 			for (Iterator it = col.iterator(); it.hasNext();) {
 				final Object val = it.next();
-				if ((val instanceof Serializable) || (val instanceof Externalizable)) {
+				if ((val instanceof Serializable)
+				|| (val instanceof Externalizable)) {
 					s.writeObject(val);
 				}
 			}
@@ -103,5 +104,23 @@ public class Serializables {
 			col.add(val);
 		}
 		return col;
+	}
+
+	/** Writes only serializable elements of the specified array.
+	 * <p>To read back, use {@link #smartRead(ObjectInputStream, Collection)}.
+	 * @since 3.0.0
+	 */
+	public static void smartWrite(ObjectOutputStream s, Object[] ary)
+	throws IOException {
+		if (ary != null) {
+			for (int j = 0; j < ary.length; ++j) {
+				final Object val = ary[j];
+				if ((val instanceof Serializable)
+				|| (val instanceof Externalizable)) {
+					s.writeObject(val);
+				}
+			}
+		}
+		s.writeObject(null);
 	}
 }
