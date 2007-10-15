@@ -13,6 +13,7 @@ ZK 3.0.0 Freshly
   1811274: A way to access Execution in IdGenerate.newDesktopId
   1811281: A way to access Execution in IdGenerator.newPage
   1811700: XUL box model: align and pack
+  1796284: MVEL easy way to access Resource Labels
   
 * Bugs:
   1797527: malformed zul.xsd
