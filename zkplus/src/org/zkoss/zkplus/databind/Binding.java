@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
 
 import org.zkoss.util.ModificationException;
 import org.zkoss.lang.Classes;
