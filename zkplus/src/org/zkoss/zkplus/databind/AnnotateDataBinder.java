@@ -228,6 +228,15 @@ public class AnnotateDataBinder extends DataBinder {
 	}
 
 	/**
+	 * Constructor that read all binding annotations of the given components array.
+	 * @param comps the Component array.
+	 * @since 3.0.0
+	 */
+	public AnnotateDataBinder(Component[] comps) {
+		this(comps, true);
+	}
+	
+	/**
 	 * Constructor that read all binding annotations of the components inside the specified desktop.
 	 * @param desktop the ZUML desktop.
 	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
@@ -248,6 +257,19 @@ public class AnnotateDataBinder extends DataBinder {
 		setDefaultConfig(defaultConfig);
 		for (final Iterator it = page.getRoots().iterator(); it.hasNext(); ) {
 			loadAnnotations((Component) it.next());
+		}
+	}
+	
+	/**
+	 * Constructor that read all binding annotations of the given component array.
+	 * @param comps the Component array
+	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
+	 * @since 3.0.0
+	 */
+	public AnnotateDataBinder(Component[] comps, boolean defaultConfig) {
+		setDefaultConfig(defaultConfig);
+		for (int j = 0; j < comps.length; ++j) {
+			loadAnnotations(comps[j]);
 		}
 	}
 	
