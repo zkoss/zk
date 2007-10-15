@@ -313,12 +313,13 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
-					if (!uv.isAborting() && !exec.isVoided())
-						execCreate(
+					final Component[] comps =
+						uv.isAborting() || exec.isVoided() ? null:
+							execCreate(
 							new CreateInfo(
 								((WebAppCtrl)_wapp).getUiFactory(), exec, page),
 							pagedef, null);
-					inits.doAfterCompose(page);
+					inits.doAfterCompose(page, comps);
 				} catch(Throwable ex) {
 					inits.doCatch(ex);
 					throw UiException.Aide.wrap(ex);
@@ -569,13 +570,13 @@ public class UiEngineImpl implements UiEngine {
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
-			final Component[] cs = execCreate(
+			final Component[] comps = execCreate(
 				new CreateInfo(
 					((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
 					exec, page),
 				pagedef, parent);
-			inits.doAfterCompose(page);
-			return cs;
+			inits.doAfterCompose(page, comps);
+			return comps;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
 			throw UiException.Aide.wrap(ex);

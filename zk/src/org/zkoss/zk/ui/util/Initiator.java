@@ -39,6 +39,7 @@ import org.zkoss.zk.ui.UiException;
  * (if {@link #doCatch} is not called).
  *
  * @author tomyeh
+ * @see InitiatorExt
  */
 public interface Initiator {
 	/** Does the initializes before the page is evaluated.
@@ -63,6 +64,10 @@ public interface Initiator {
 	public void doInit(Page page, Object[] args) throws Exception;
 	/** Called after all components are created (aka., composed),
 	 * and before any event is processed.
+	 *
+	 * <p>Note: if {@link InitiatorExt} is also implemented,
+	 * this method won't be called. Rather, {@link InitiatorExt#doAfterCompose}
+	 * will be called instead.
 	 *
 	 * <p>For example, the data-binding managers could process the binding
 	 * at this callback.

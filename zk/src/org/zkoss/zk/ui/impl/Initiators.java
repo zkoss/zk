@@ -26,8 +26,10 @@ import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
+import org.zkoss.zk.ui.util.InitiatorExt;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
@@ -50,7 +52,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	protected Initiators() {
 	}
 
-	public void doAfterCompose(Page page) throws Exception {
+	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 	}
 	public void doCatch(Throwable t) {
 	}
@@ -71,9 +73,15 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 * @param page
 	 * @throws Exception
 	 */
-	public void doAfterCompose(Page page) throws Exception {
+	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
-			((Initiator)it.next()).doAfterCompose(page);
+			final Object init = it.next();
+			if (init instanceof InitiatorExt) {
+				if (comps == null) comps = new Component[0];
+				((InitiatorExt)init).doAfterCompose(page, comps);
+			} else {
+				((Initiator)init).doAfterCompose(page);
+			}
 		}
 	}
 	/** Invokes {@link Initiator#doCatch}.
