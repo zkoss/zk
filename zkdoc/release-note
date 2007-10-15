@@ -45,7 +45,10 @@ ZK 3.0.0 Freshly
   1797140: OnClick+OnDoubleClick on the same comp onDoubleClick ignored
   1664661: Popups rendering behind portlet windows in IE
   1812154: A wrong drag-position when the cursor moves on the header
+  1813055: Multiple listboxes with same selectedItem causes NPE
   1813060: AbstractTag.clone() causes NPE
+  1813271: Data binding generates duplicate ids in grids/listboxes
+  1813278: Annotations do not work with xhtml tags
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
