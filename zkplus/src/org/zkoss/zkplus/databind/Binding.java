@@ -309,7 +309,7 @@ public class Binding {
 			if (comp instanceof DynamicPropertied) {
 				final DynamicPropertied dpcomp = (DynamicPropertied) comp;
  				if (dpcomp.hasDynamicProperty(_attr)) {
- 					rawval = dpcomp.getDynamicProperty(_attr, bean);
+ 					rawval = dpcomp.getDynamicProperty(_attr);
  				} else {
  					throw UiException.Aide.wrap(ex);
  				}
