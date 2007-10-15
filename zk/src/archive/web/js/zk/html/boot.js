@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "7d"; //increase this if we want the browser to reload JavaScript
+zk.build = "7e"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -250,8 +250,17 @@ function $now() {
  * it tried to extend the element.
  */
 function $e(id) {
-    return typeof id == 'string' ? id ? document.getElementById(id): null: id;
-    	//strange but getElementById("") fails in IE7
+	return typeof id == 'string' ? id ? document.getElementById(id): null: id;
+		//strange but getElementById("") fails in IE7
+}
+/** It is the same as $e(id), except it returns id if the element is not found.
+ */
+function $e2(id) {
+	if (typeof id == 'string' && id) {
+		var n = document.getElementById(id);
+   		return n ?  n: id; //yes, rerturn id if not found
+    }
+    return id;
 }
 /** A control might be enclosed by other tag while event is sent from
  * the control directly, so... */
