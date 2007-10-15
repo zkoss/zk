@@ -140,9 +140,6 @@ public class Treerow extends XulElement {
 		final StringBuffer sb = new StringBuffer(80)
 			.append(attrs).append(item.getActionAttrs());
 
-		HTMLs.appendAttribute(sb, "z.drag", item.getDraggable());
-		HTMLs.appendAttribute(sb, "z.drop", item.getDroppable());
-
 		final Tree tree = getTree();
 		if (tree != null && tree.getName() != null)
 			HTMLs.appendAttribute(sb, "z.value",  Objects.toString(item.getValue()));

@@ -325,6 +325,25 @@ public class Treeitem extends XulElement {
 		if (_treerow != null) _treerow.smartUpdate(attr, value);
 	}
 
+	/** No callable. Use {@link Treerow#setDraggable} isntead.
+	 */
+	public void setDraggable(String draggable) {
+		if (draggable != null)
+			throw new UnsupportedOperationException("Use Treerow.setDraggable() instead");
+	}
+	/** No callable. Use {@link Treerow#setDropable} isntead.
+	 */
+	public void setDropable(String dropable) {
+		if (dropable != null)
+			throw new UnsupportedOperationException("Use Treerow.setDropable() instead");
+	}
+	/** Not callable. Use {@link Treerow#setAction} instead.
+	 */
+	public void setAction(String action) {
+		if (action != null)
+			throw new UnsupportedOperationException("Use Treerow.setAction() instead");
+	}
+
 	//impl note: no getOuterAttrs, ON_OPEN..., since treeitem is virtual
 	//and the related codes are in treerow
 
