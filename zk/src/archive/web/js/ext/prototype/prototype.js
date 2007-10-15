@@ -2062,8 +2062,19 @@ if (!window.opera || element.tagName == 'BODY' || (tagName != "TR" && tagName !=
   },
 
   cumulativeOffset: function(element) {
-    var valueT = 0, valueL = 0;
-	var operaBug = false;
+    var valueT = 0, valueL = 0, operaBug = false, el = element.parentNode;
+//Jumper Chen, Poitx: fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute.	
+	if (zk.gecko) {
+		while (el && el != document.body) {
+			var style = Element.getStyle(el, "position");
+			if (style == "relative" || style == "absolute") {
+				valueT += $int(Element.getStyle(el, "border-top-width"));
+				valueL += $int(Element.getStyle(el, "border-left-width"));
+			}
+	        el = el.parentNode;
+	    }
+	}
+	
     do {
 //Tom M. Yeh, Potix: Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
 if (Element.getStyle(element, "position") == 'fixed') {
@@ -2277,7 +2288,18 @@ if (Element.getStyle(element, "position") == 'fixed') {
 // KHTML/WebKit only.
 if (/Konqueror|Safari|KHTML/.test(navigator.userAgent)) {
   Position.cumulativeOffset = function(element) {
-    var valueT = 0, valueL = 0;
+    var valueT = 0, valueL = 0, el = element.parentNode;
+//Jumper Chen, Poitx: fix safari difference, the offset of safari excludes its border-width when its CSS position is relative or absolute.
+	if (zk.safari) {
+		while (el && el != document.body) {
+			var style = Element.getStyle(el, "position");
+			if (style == "relative" || style == "absolute") {
+				valueT += $int(Element.getStyle(el, "border-top-width"));
+				valueL += $int(Element.getStyle(el, "border-left-width"));
+			} 
+	        el = el.parentNode;
+	    }
+	}
     do {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
