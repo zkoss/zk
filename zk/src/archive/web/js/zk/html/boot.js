@@ -253,15 +253,6 @@ function $e(id) {
 	return typeof id == 'string' ? id ? document.getElementById(id): null: id;
 		//strange but getElementById("") fails in IE7
 }
-/** It is the same as $e(id), except it returns id if the element is not found.
- */
-function $e2(id) {
-	if (typeof id == 'string' && id) {
-		var n = document.getElementById(id);
-   		return n ?  n: id; //yes, rerturn id if not found
-    }
-    return id;
-}
 /** A control might be enclosed by other tag while event is sent from
  * the control directly, so... */
 function $uuid(n) {
