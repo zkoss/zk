@@ -72,8 +72,10 @@ zkExt.BorderLayout.prototype = {
 		this.init();
 	},
 	init: function () {
-		this.regions = this._regions = {};
-		this.panels = this._panels = {"north": [], "south": [], "east": [], "west": [], "center":[]};
+		this.regions = {}; 
+		this._regions = {};
+		this.panels = {"north": [], "south": [], "east": [], "west": [], "center":[]};
+		this._panels = {"north": [], "south": [], "east": [], "west": [], "center":[]};
 		this.el = null;
 		this.validRegions = ["north","south","east","west","center"];
 		this.updatedpool = [];
