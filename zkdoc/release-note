@@ -16,6 +16,7 @@ ZK 3.0.0 Freshly
   1796284: MVEL easy way to access Resource Labels
   1813503: A way to acess component being created in doAfterCompose
   1803419: Providing schema definitions of 3rd-party components
+  1794409: Treeitem need add onMouseover event
   
 * Bugs:
   1797527: malformed zul.xsd
