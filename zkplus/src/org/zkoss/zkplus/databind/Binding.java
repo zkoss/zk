@@ -249,7 +249,18 @@ public class Binding {
 		} catch (ClassCastException ex) {
 			throw UiException.Aide.wrap(ex);
 		} catch (NoSuchMethodException ex) {
-			throw UiException.Aide.wrap(ex);
+			//Bug #1813278, Annotations do not work with xhtml tags
+			if (comp instanceof DynamicPropertied) {
+				final DynamicPropertied dpcomp = (DynamicPropertied) comp;
+ 				if (dpcomp.hasDynamicProperty(_attr)) {
+					//no way to know destination type of the property, use bean as is
+ 					dpcomp.setDynamicProperty(_attr, bean);
+ 				} else {
+ 					throw UiException.Aide.wrap(ex);
+ 				}
+			} else {
+				throw UiException.Aide.wrap(ex);
+			}
 		} catch (ModificationException ex) {
 			throw UiException.Aide.wrap(ex);
 		} catch (WrongValueException ex) {
@@ -289,13 +300,26 @@ public class Binding {
 		if (!isSavable() || _attr.startsWith("_") || _binder.isTemplate(comp) || comp.getPage() == null) { 
 			return null; //cannot save, a control attribute, or a detached component, skip!
 		}
+		Object rawval = null;
 		try {
-			final Object rawval = Fields.get(comp, _attr);
+			rawval = Fields.get(comp, _attr);
+		} catch (NoSuchMethodException ex) {
+			//Bug #1813278, Annotations do not work with xhtml tags
+			if (comp instanceof DynamicPropertied) {
+				final DynamicPropertied dpcomp = (DynamicPropertied) comp;
+ 				if (dpcomp.hasDynamicProperty(_attr)) {
+ 					rawval = dpcomp.getDynamicProperty(_attr, bean);
+ 				} else {
+ 					throw UiException.Aide.wrap(ex);
+ 				}
+			} else {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+		try {
 			final Object val = (_converter == null) ? rawval : _converter.coerceToBean(rawval, comp);
 			return new Object[] {val, rawval};
 		} catch (ClassCastException ex) {
-			throw UiException.Aide.wrap(ex);
-		} catch (NoSuchMethodException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}		

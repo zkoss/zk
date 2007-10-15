@@ -701,12 +701,14 @@ public class DataBinder {
 	
 	//whether a cloned component from the template.
 	/* package */ static boolean isClone(Component comp) {
-		return (comp.getAttribute(TEMPLATE) instanceof Component);
+		//bug #1813055  Multiple listboxes with same selectedItem causes NPE
+		return comp != null && (comp.getAttribute(TEMPLATE) instanceof Component);
 	}
 	
 	//whether has template owner (collection in collection)
 	/* package */ static boolean hasTemplateOwner(Component comp) {
-		return (comp.getAttribute(HASTEMPLATEOWNER) != null);
+		//bug #1813055  Multiple listboxes with same selectedItem causes NPE
+		return comp != null && (comp.getAttribute(HASTEMPLATEOWNER) != null);
 	}
 	
 	//set a bean to SameNode Set 

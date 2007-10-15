@@ -124,7 +124,8 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 	
 	//setup id of cloned components (cannot called until the component is attached to Grid)
 	private void setupCloneIds(Component clone) {
-		clone.setId("@"+clone.getUuid()); //init id to @uuid to avoid duplicate id issue
+		//bug #1813271: Data binding generates duplicate ids in grids/listboxes
+		clone.setId("@" + clone.getUuid() + x++); //init id to @uuid to avoid duplicate id issue
 
 		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, no need to process
 		if (clone instanceof Grid || clone instanceof Listbox) {
