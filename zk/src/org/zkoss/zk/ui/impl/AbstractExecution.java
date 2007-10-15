@@ -84,6 +84,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public void postEvent(Event evt) {
 		if (evt == null)
 			throw new IllegalArgumentException("null");
+
+		evt = ((DesktopCtrl)_desktop).beforePostEvent(evt);
+		if (evt == null)
+			return; //done
+
 		if (_events == null)
 			_events = new LinkedList();
 		_events.add(evt);

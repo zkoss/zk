@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import org.zkoss.util.media.Media;
 
+import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.device.Device;
 
@@ -274,4 +275,14 @@ public interface Desktop {
 	 * @since 3.0.0
 	 */
 	public boolean isServerPushEnabled();
+
+	/** Adds an event interceptor to this desktop.
+	 * @since 3.0.0
+	 */
+	public void addEventInterceptor(EventInterceptor ei);
+	/** Removes an event interceptor from this desktop.
+	 * @return whether the interceptor is removed successfully.
+	 * @since 3.0.0
+	 */
+	public boolean removeEventInterceptor(EventInterceptor ei);
 }

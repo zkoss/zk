@@ -27,6 +27,8 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.util.EventInterceptor;
 
 /**
  * An addition interface to {@link org.zkoss.zk.ui.Desktop}
@@ -222,4 +224,41 @@ if (c.isEmpty()) {
 	 * @see org.zkoss.zk.ui.Desktop#enableServerPush
 	 */
 	public boolean enableServerPush(ServerPush serverpush);
+
+	/** Invokes {@link EventInterceptor#beforeSendEvent}
+	 * registered by {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+	 *
+	 * <p>Note: it invokes
+	 * {@link org.zkoss.zk.ui.util.Configuration#beforeSendEvent}
+	 * automatically.
+	 * @since 3.0.0
+	 */
+	public Event beforeSendEvent(Event event);
+	/** Invokes {@link EventInterceptor#beforePostEvent}
+	 * registered by {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+	 *
+	 * <p>Note: it invokes
+	 * {@link org.zkoss.zk.ui.util.Configuration#beforePostEvent}
+	 * automatically.
+	 * @since 3.0.0
+	 */
+	public Event beforePostEvent(Event event);
+	/** Invokes {@link EventInterceptor#beforeProcessEvent}
+	 * registered by {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+	 *
+	 * <p>Note: it invokes
+	 * {@link org.zkoss.zk.ui.util.Configuration#beforeProcessEvent}
+	 * automatically.
+	 * @since 3.0.0
+	 */
+	public Event beforeProcessEvent(Event event);
+	/** Invokes {@link EventInterceptor#afterProcessEvent}
+	 * registered by {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+	 *
+	 * <p>Note: it invokes
+	 * {@link org.zkoss.zk.ui.util.Configuration#afterProcessEvent}
+	 * automatically.
+	 * @since 3.0.0
+	 */
+	public void afterProcessEvent(Event event);
 }

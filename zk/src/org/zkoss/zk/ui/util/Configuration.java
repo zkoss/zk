@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
+import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.device.Devices;
 
 /**
@@ -108,6 +109,8 @@ public class Configuration {
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	/** A set of the language name whose theme is disabled. */
 	private Set _disabledDefThemes;
+	/** The event interceptors. */
+	private final EventInterceptors _eis = new EventInterceptors();
 	/** whether to use the event processing thread. */
 	private boolean _useEvtThd = true;
 	/** keep-across-visits. */
@@ -317,8 +320,8 @@ public class Configuration {
 	 * {@link EventThreadInit#prepare} for
 	 * each relevant listener registered by {@link #addListener}.
 	 *
-	 * <p>It is called by {@link UiEngine} before starting an event
-	 * processing thread.
+	 * <p>Used only internally (by {@link UiEngine} before starting an event
+	 * processing thread).
 	 *
 	 * @exception UiException to prevent a thread from being processed
 	 * if {@link EventThreadInit#prepare} throws an exception
@@ -351,6 +354,8 @@ public class Configuration {
 	/** Invokes {@link EventThreadInit#init} for each instance returned
 	 * by {@link #newEventThreadInits}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * @param inits a list of {@link EventThreadInit} instances returned from
 	 * {@link #newEventThreadInits}, or null if no instance at all.
 	 * @param comp the component which the event is targeting
@@ -374,6 +379,8 @@ public class Configuration {
 	}
 	/** Invokes {@link EventThreadCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link EventThreadCleanup} is constructed first,
 	 * and then invoke {@link EventThreadCleanup#cleanup}.
@@ -413,6 +420,8 @@ public class Configuration {
 	/** Invoke {@link EventThreadCleanup#complete} for each instance returned by
 	 * {@link #newEventThreadCleanups}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
 	 *
@@ -440,7 +449,10 @@ public class Configuration {
 	/** Constructs a list of {@link EventThreadSuspend} instances and invokes
 	 * {@link EventThreadSuspend#beforeSuspend} for each relevant
 	 * listener registered by {@link #addListener}.
-	 * Caller shall execute in the event processing thread.
+	 *
+ 	 * <p>Used only internally.
+ 	 *
+	 * <p>Note: caller shall execute in the event processing thread.
 	 *
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
@@ -474,6 +486,8 @@ public class Configuration {
 	 * Unlike {@link #invokeEventThreadSuspends}, caller shall execute in
 	 * the main thread (aka, servlet thread).
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>Unlike {@link #invokeEventThreadSuspends}, exceptions are logged
 	 * and ignored.
 	 *
@@ -500,8 +514,8 @@ public class Configuration {
 	 * {@link EventThreadResume#beforeResume} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
-	 * <p>It is called by {@link UiEngine} when resuming a suspended event
-	 * thread.
+	 * <p>Used only internally (by {@link UiEngine} when resuming a suspended event
+	 * thread).
 	 * Notice: it executes in the main thread (i.e., the servlet thread).
 	 *
 	 * @param comp the component which the event is targeting
@@ -537,6 +551,8 @@ public class Configuration {
 	/** Invokes {@link EventThreadResume#afterResume} for each instance returned
 	 * by {@link #newEventThreadResumes}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
 	 *
@@ -564,6 +580,8 @@ public class Configuration {
 	}
 	/** Invokes {@link EventThreadResume#abortResume} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link EventThreadResume} is constructed first,
 	 * and then invoke {@link EventThreadResume#abortResume}.
@@ -593,6 +611,8 @@ public class Configuration {
 	/** Invokes {@link WebAppInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>An instance of {@link WebAppInit} is constructed first,
 	 * and then invoke {@link WebAppInit#init}.
 	 *
@@ -617,6 +637,8 @@ public class Configuration {
 	/** Invokes {@link WebAppCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>An instance of {@link WebAppCleanup} is constructed first,
 	 * and then invoke {@link WebAppCleanup#cleanup}.
 	 *
@@ -640,6 +662,8 @@ public class Configuration {
 
 	/** Invokes {@link SessionInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link SessionInit} is constructed first,
 	 * and then invoke {@link SessionInit#init}.
@@ -667,6 +691,8 @@ public class Configuration {
 	/** Invokes {@link SessionCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>An instance of {@link SessionCleanup} is constructed first,
 	 * and then invoke {@link SessionCleanup#cleanup}.
 	 *
@@ -692,6 +718,8 @@ public class Configuration {
 
 	/** Invokes {@link DesktopInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link DesktopInit} is constructed first,
 	 * and then invoke {@link DesktopInit#init}.
@@ -719,6 +747,8 @@ public class Configuration {
 	/** Invokes {@link DesktopCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>An instance of {@link DesktopCleanup} is constructed first,
 	 * and then invoke {@link DesktopCleanup#cleanup}.
 	 *
@@ -744,6 +774,8 @@ public class Configuration {
 
 	/** Invokes {@link ExecutionInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link ExecutionInit} is constructed first,
 	 * and then invoke {@link ExecutionInit#init}.
@@ -771,6 +803,8 @@ public class Configuration {
 	}
 	/** Invokes {@link ExecutionCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link ExecutionCleanup} is constructed first,
 	 * and then invoke {@link ExecutionCleanup#cleanup}.
@@ -807,6 +841,8 @@ public class Configuration {
 	/** Invokes {@link URIInterceptor#request} for each relevant listner
 	 * registered by {@link #addListener}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>If any of them throws an exception, the exception is propogated to
 	 * the caller.
 	 *
@@ -828,6 +864,8 @@ public class Configuration {
 	}
 	/** Invokes {@link RequestInterceptor#request} for each relevant listner
 	 * registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>If any of them throws an exception, the exception is propogated to
 	 * the caller.
@@ -1681,6 +1719,52 @@ public class Configuration {
 	 */
 	public Class getExpressionFactoryClass() {
 		return Expressions.getExpressionFactoryClass();
+	}
+
+	/** Adds an event interceptor to the whole application.
+	 * @since 3.0.0
+	 */
+	public void addEventInterceptor(EventInterceptor ei) {
+		_eis.addEventInterceptor(ei);
+	}
+	/** Removes an event interceptor from the whole application.
+	 * @return whether the interceptor is removed successfully.
+	 * @since 3.0.0
+	 */
+	public boolean removeEventInterceptor(EventInterceptor ei) {
+		return _eis.removeEventInterceptor(ei);
+	}
+	/** Invokes {@link EventInterceptor#beforeSendEvent}
+	 * registered by {@link #addEventInterceptor}.
+	 * <p>Used only internally.
+	 * @since 3.0.0
+	 */
+	public Event beforeSendEvent(Event event) {
+		return _eis.beforeSendEvent(event);
+	}
+	/** Invokes {@link EventInterceptor#beforePostEvent}
+	 * registered by {@link #addEventInterceptor}.
+	 * <p>Used only internally.
+	 * @since 3.0.0
+	 */
+	public Event beforePostEvent(Event event) {
+		return _eis.beforePostEvent(event);
+	}
+	/** Invokes {@link EventInterceptor#beforeProcessEvent}
+	 * registered by {@link #addEventInterceptor}.
+	 * <p>Used only internally.
+	 * @since 3.0.0
+	 */
+	public Event beforeProcessEvent(Event event) {
+		return _eis.beforeProcessEvent(event);
+	}
+	/** Invokes {@link EventInterceptor#afterProcessEvent}
+	 * registered by {@link #addEventInterceptor}.
+	 * <p>Used only internally.
+	 * @since 3.0.0
+	 */
+	public void afterProcessEvent(Event event) {
+		_eis.afterProcessEvent(event);
 	}
 
 	/**

@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
@@ -57,7 +58,7 @@ public class EventProcessor {
 	/** Part of the command: component to handle the event. */
 	private final Component _comp;
 	/** Part of the command: event to process. */
-	private final Event _event;
+	private Event _event;
 	/** Whether it is in processing an event.
 	 * It is used only the event processing thread is disabled.
 	 */
@@ -127,6 +128,10 @@ public class EventProcessor {
 	 * See also {@link org.zkoss.zk.ui.util.Configuration#isEventThreadEnabled}.
 	 */
 	public void process() throws Exception {
+		_event = ((DesktopCtrl)_desktop).beforeProcessEvent(_event);
+		if (_event == null)
+			return; //done
+
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
 		final HashMap backup = new HashMap();
@@ -136,6 +141,7 @@ public class EventProcessor {
 			Namespaces.backupVariable(backup, ns, "event");
 			ns.setVariable("event", _event, true);
 			process0(ns);
+			((DesktopCtrl)_desktop).afterProcessEvent(_event);
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);
 		}

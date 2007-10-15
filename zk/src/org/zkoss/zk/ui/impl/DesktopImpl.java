@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
+import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -63,6 +64,7 @@ import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.impl.PollingServerPush;
+import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.AuBookmark;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
@@ -129,6 +131,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private int _medId;
 	/** The server push controller, or null if not enabled. */
 	private ServerPush _spush;
+	/** The event interceptors. */
+	private final EventInterceptors _eis = new EventInterceptors();
 
 	private static final int MAX_RESPONSE_SEQUENCE = 1024;
 	/** The response sequence ID. */
@@ -601,6 +605,35 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		addComponent(comp);
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 			addAllComponents((Component)it.next());
+	}
+
+	public void addEventInterceptor(EventInterceptor ei) {
+		_eis.addEventInterceptor(ei);
+	}
+	public boolean removeEventInterceptor(EventInterceptor ei) {
+		return _eis.removeEventInterceptor(ei);
+	}
+	public Event beforeSendEvent(Event event) {
+		event = _eis.beforeSendEvent(event);
+		if (event != null)
+			event = _wapp.getConfiguration().beforeSendEvent(event);
+		return event;
+	}
+	public Event beforePostEvent(Event event) {
+		event = _eis.beforePostEvent(event);
+		if (event != null)
+			event = _wapp.getConfiguration().beforePostEvent(event);
+		return event;
+	}
+	public Event beforeProcessEvent(Event event) {
+		event = _eis.beforeProcessEvent(event);
+		if (event != null)
+			event = _wapp.getConfiguration().beforeProcessEvent(event);
+		return event;
+	}
+	public void afterProcessEvent(Event event) {
+		_eis.afterProcessEvent(event);
+		_wapp.getConfiguration().afterProcessEvent(event);
 	}
 
 	//Server Push//

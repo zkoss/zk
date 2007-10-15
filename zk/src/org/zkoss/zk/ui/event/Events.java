@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
@@ -240,12 +241,17 @@ public class Events {
 	 * they are in the same desktop.
 	 */
 	public static void sendEvent(Component comp, Event event) {
+		final Execution exec = Executions.getCurrent();
+		final Desktop desktop = exec.getDesktop();
+			//note: we don't use comp.getDesktop because 1) it may be null
+			//2) it may be different from the current desktop
+
+		event = ((DesktopCtrl)desktop).beforeSendEvent(event);
+		if (event == null)
+			return; //done
+
 		final Thread thd = (Thread)Thread.currentThread();
 		if (!(thd instanceof EventProcessingThreadImpl)) {
-			final Execution exec = Executions.getCurrent();
-			final Desktop desktop = exec.getDesktop();
-				//note: we don't use comp.getDesktop because 1) it may be null
-				//2) it may be different from the current desktop
 			if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
 				final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 				final Page page = execCtrl.getCurrentPage();
