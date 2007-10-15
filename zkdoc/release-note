@@ -16,8 +16,8 @@ ZK 3.0.0 Freshly
   1796284: MVEL easy way to access Resource Labels
   1813503: A way to acess component being created in doAfterCompose
   1803419: Providing schema definitions of 3rd-party components
-  1794409: Treeitem need add onMouseover event
-  
+  1794409: Treerow need add onMouseover event  
+
 * Bugs:
   1797527: malformed zul.xsd
   1801028: Failed to include ZUL located in classpath
@@ -50,7 +50,6 @@ ZK 3.0.0 Freshly
   1813060: AbstractTag.clone() causes NPE
   1813271: Data binding generates duplicate ids in grids/listboxes
   1813278: Annotations do not work with xhtml tags
-  1813621: Treeitem's draggable/droppable has no function
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
