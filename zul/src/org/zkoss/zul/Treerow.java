@@ -137,7 +137,8 @@ public class Treerow extends XulElement {
 		final Treeitem item = getTreeitem();
 		if (item == null) return attrs;
 
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
+		final StringBuffer sb = new StringBuffer(80)
+			.append(attrs).append(item.getActionAttrs());
 
 		final Tree tree = getTree();
 		if (tree != null && tree.getName() != null)

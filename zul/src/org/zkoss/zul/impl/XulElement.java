@@ -167,6 +167,27 @@ abstract public class XulElement extends HtmlBasedComponent {
 		return sb != null ? sb.toString():  null;
 	}
 
+	/** Returns the HTML attributes representing the client-side action,
+	 * or "" if no client-side action is defined.
+	 *
+	 * @since 3.0.0
+	 */
+	public String getActionAttrs() {
+		if (_action == null)
+			return "";
+
+		//To have smaller footprint for each component, we don't cache
+		//the parsed result
+		final StringBuffer sb = new StringBuffer(100);
+		for (Iterator it = parseAction(_action).entrySet().iterator();
+		it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			HTMLs.appendAttribute(sb,
+				(String)me.getKey(), toJavaScript((String)me.getValue()));
+		}
+		return sb.toString();
+	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
@@ -187,19 +208,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 */
 	public String getInnerAttrs() {
 		final String attrs = super.getInnerAttrs();
-		if (_action == null)
-			return attrs;
-
-		//To have smaller footprint for each component, we don't cache
-		//the parsed result
-		final StringBuffer sb = new StringBuffer(100).append(attrs);
-		for (Iterator it = parseAction(_action).entrySet().iterator();
-		it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			HTMLs.appendAttribute(sb,
-				(String)me.getKey(), toJavaScript((String)me.getValue()));
-		}
-		return sb.toString();
+		return _action == null ? attrs: attrs + getActionAttrs();
 	}
 
 	/** Returns a map of actions (String name, String javascript).

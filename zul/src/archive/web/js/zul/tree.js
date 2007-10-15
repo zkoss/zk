@@ -74,17 +74,13 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doLeft: function (row) {
-		if (zkTree.isOpen(row)) {
-			var img = $e(row.id + "!open");
-			if (img) this._openItem(row, img, false);
-		}
+		if (zkTree.isOpen(row))
+			this._openItem(row, null, false);
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doRight: function (row) {
-		if (!zkTree.isOpen(row)) {
-			var img = $e(row.id + "!open");
-			if (img) this._openItem(row, img, true);
-		}
+		if (!zkTree.isOpen(row))
+			this._openItem(row, null, true);
 	},
 	/** Toggle the open/close status. */
 	toggleOpen: function (evt, target) {
@@ -102,6 +98,11 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	},
 	/** Opens an item */
 	_openItem: function (row, img, toOpen) {
+		if (!img) {
+			img = $e(row.id + "!open");
+			if (!img) return;
+		}
+
 		img.src = zk.renType(img.src, toOpen ? "open": "close");
 		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
 
@@ -257,12 +258,9 @@ zkTrow.setAttr = function (cmp, nm, val) {
 	if ("open" == nm) {
 		var toOpen = "true" == val;
 		if (toOpen != zkTree.isOpen(cmp)) {
-			var img = $e(cmp.id + "!open");
-			if (img) {
-				var meta = zkau.getMeta($parentByType(cmp, "Tree"));
-				if (meta)
-					meta._openItem(cmp, img, toOpen);
-			}
+			var meta = zkau.getMeta($parentByType(cmp, "Tree"));
+			if (meta)
+				meta._openItem(cmp, null, toOpen);
 		}
 		return true; //no more processing
 	} else if ("z.pgInfo" == nm) {
@@ -278,6 +276,22 @@ zkTrow._setPgInfo = function (cmp, pgInfo) {
 	setZKAttr(cmp, "pgi", pgInfo.substring(j + 1, k).trim());
 	setZKAttr(cmp, "pgsz", pgInfo.substring(k + 1).trim());
 }
+
+/** Opens a treeitem.
+ * @param {String or Element} n the ID of treeitem or treerow, or the treerow
+ * itself.
+ * @since 3.0.0
+ */
+zkTrow.open = function (n, open) {
+	if (typeof n == 'string') {
+		var p = $e(n);
+		n = p ? p: $e(_zktrx.sib[n]);
+	}
+
+	var meta = zkau.getMeta($parentByType(n, "Tree"));
+	if (meta)
+		meta._openItem(n, null, open != false);
+};
 
 /** Called when _onDocCtxMnu is called. */
 zkTrow.onrtclk = function (cmp) {
