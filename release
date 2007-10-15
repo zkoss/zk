@@ -317,7 +317,7 @@ if [ "$target" == "official" ]; then
 	mkdir -p /tmp/zk/doc
 
 	cd $maindir/zkdoc
-	for f in */ZK-dev*.pdf */ZK-quickstart.pdf ; do  
+	for f in */ZK-devguide*.pdf */ZK-quickstart*.pdf ; do  
 		fn=${f%.pdf}
 		cp $f /tmp/zk/doc/${fn#**/}-$ver.pdf
 	done
@@ -325,7 +325,7 @@ elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm
 
 	cd $maindir
-	cp zkdoc/*/ZK-dev*.pdf zkdoc/*/ZK-quickstart.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
+	cp zkdoc/*/ZK-devguide*.pdf zkdoc/*/ZK-quickstart*.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
 
 	echo Ouput ${docnm}.zip
