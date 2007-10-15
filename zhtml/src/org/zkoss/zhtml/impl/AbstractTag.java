@@ -322,7 +322,8 @@ implements DynamicPropertied, RawId {
 	//Cloneable//
 	public Object clone() {
 		final AbstractTag clone = (AbstractTag)super.clone();
-		clone._props = new LinkedHashMap(clone._props);
+		if (clone._props != null)
+			clone._props = new LinkedHashMap(clone._props);
 		return clone;
 	}
 
