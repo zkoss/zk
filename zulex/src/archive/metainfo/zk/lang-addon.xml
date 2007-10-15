@@ -22,12 +22,16 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<language-name>xul/html</language-name>
 	
 	<stylesheet href="~./zulex/css/layout.css.dsp" type="text/css"/>
-	
+
 	<version>
 		<version-class>org.zkoss.zulex.Version</version-class>
 		<version-uid>3.0.0</version-uid>
 		<zk-version>3.0.0</zk-version><!-- or later -->
 	</version>
+
+	<zscript language="Java">
+	import org.zkoss.zulex.*;
+	</zscript>
 	
 	<component>
 		<component-name>borderlayout</component-name>
