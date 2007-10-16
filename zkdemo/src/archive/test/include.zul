@@ -54,6 +54,6 @@ This includes another page.
 	</window>
 And, it includes '~./html/alert.dsp'
 	<include src="~./html/alert.dsp"/>
-And, it includes '~./zul/html/fileuploaddlg.zul'
-	<include src="~./zul/html/fileuploaddlg.zul"/>
+And, it includes '~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message'
+	<include src="~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message"/>
 </window>
