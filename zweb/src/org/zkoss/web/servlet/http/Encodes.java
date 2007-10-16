@@ -225,6 +225,7 @@ public class Encodes {
 	 * @param name The get parameter name.
 	 * @param value The value associated with the get parameter name. 
 	 * @return The new or result query string with your name/value.
+	 * @see #addToQueryString
 	 */
 	public static final
 	String setToQueryString(String str, String name, Object value)
@@ -238,6 +239,7 @@ public class Encodes {
 	 * Sets the parameter (name=value) to a query string.
 	 * If the name already exists in the query string, it will be
 	 * removed first.
+	 * @see #addToQueryString
 	 */
 	public static final StringBuffer
 	setToQueryString(StringBuffer sb, String name, Object value)
@@ -248,6 +250,7 @@ public class Encodes {
 	/**
 	 * Sets a map of parameters (name=value) to a query string.
 	 * If the name already exists in the query string, it will be removed first.
+	 * @see #addToQueryString
 	 */
 	public static final String setToQueryString(String str, Map params)
 	throws UnsupportedEncodingException {
@@ -256,6 +259,7 @@ public class Encodes {
 	/**
 	 * Sets a map of parameters (name=value) to a query string.
 	 * If the name already exists in the query string, it will be removed first.
+	 * @see #addToQueryString
 	 */
 	public static final StringBuffer 
 	setToQueryString(StringBuffer sb, Map params)
@@ -291,6 +295,7 @@ public class Encodes {
 	 * This method starts the searching from the last '?'.
 	 * If the query string doesn't contain '?', it is assumed to be a string
 	 * without query's name/value pairs.
+	 * @see #addToQueryString
 	 */
 	public static final
 	String removeFromQueryString(String str, String name)
@@ -307,6 +312,7 @@ public class Encodes {
 		return sb.length() == str.length() ? str: sb.toString();
 	}
 	/** Remove all name/value pairs of the specified name from a string.
+	 * @see #addToQueryString
 	 */
 	public static final StringBuffer
 	removeFromQueryString(StringBuffer sb, String name)
