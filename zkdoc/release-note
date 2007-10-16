@@ -51,6 +51,7 @@ ZK 3.0.0 Freshly
   1813060: AbstractTag.clone() causes NPE
   1813271: Data binding generates duplicate ids in grids/listboxes
   1813278: Annotations do not work with xhtml tags
+  1814259: Failed to include a classpath-based resource with param
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
