@@ -193,8 +193,11 @@ public class ExecutionImpl extends AbstractExecution {
 		final HttpServletResponse bufresp =
 			HttpBufferedResponse.getInstance(_response, out);
 		try {
+			//FUTURE: handle if ~./, PASS_THRU_ATTR and with query string
+			//In other words, we convert query string to params if
+			//PASS_THRU_ATTR and ~./ (to have a better performance)
 			if ((mode == PASS_THRU_ATTR || params == null)
-			&& page.startsWith("~./")) {
+			&& page.startsWith("~./") && page.indexOf('?') < 0) {
 				//Bug 1801028: We cannot invoke ZumlExtendlet directly
 				//The real reason is unknown yet -- it could be due to
 				//the re-creation of ExecutionImpl
