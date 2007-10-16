@@ -86,6 +86,34 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 		}
 		return false;
 	}
+	/** Removes an event interceptor with the specified class.
+	 *
+	 * <p>Note: we tests whether an interceptor is an instance of
+	 * the specified class. At most one instance is removed.
+	 *
+	 * @return whether the listener is removed successfully.
+	 */
+	public boolean removeEventInterceptor(Class klass) {
+		if (klass != null && _eis != null) {
+			final List eilst = new LinkedList();
+			final EventInterceptor[] eis = _eis;
+			boolean found = false;
+			for (int j = 0; j < eis.length; ++j) {
+				if (!found && klass.isInstance(eis[j]))
+					found = true;
+				else
+					eilst.add(eis[j]);
+			}
+
+			if (found) {
+				final int sz = eilst.size();
+				_eis = sz == 0 ? null:
+					(EventInterceptor[])eilst.toArray(new EventInterceptor[sz]);
+				return true;
+			}
+		}
+		return false;
+	}
 	/** Invokes {@link EventInterceptor#beforeSendEvent}
 	 */
 	public Event beforeSendEvent(Event event) {

@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.event.Event;
  * <p>To register an event intercetper to a desktop, invoke
  * {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
  * To register an event intercepter to a configuration, invoke
- * {@link Configuration#addEventInterceptor}.
+ * {@link Configuration#addListener}.
  *
  * @author tomyeh
  * @since 3.0.0

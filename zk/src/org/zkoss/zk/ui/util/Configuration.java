@@ -142,6 +142,15 @@ public class Configuration {
 	}
 
 	/** Adds a listener class.
+	 *
+	 * @param klass the listener class must implement at least one of
+	 * {@link Monitor}, {@link PerformanceMeter}, {@link EventThreadInit},
+	 * {@link EventThreadCleanup}, {@link EventThreadSuspend},
+	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
+	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
+	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
+	 * {@link URIInterceptor}, {@link RequestInterceptor}, {@link EventInterceptor}
+	 * interfaces.
 	 */
 	public void addListener(Class klass) throws Exception {
 		boolean added = false;
@@ -256,6 +265,14 @@ public class Configuration {
 			}
 			added = true;
 		}
+		if (EventInterceptor.class.isAssignableFrom(klass)) {
+			try {
+				_eis.addEventInterceptor((EventInterceptor)klass.newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+klass, ex);
+			}
+			added = true;
+		}
 
 		if (!added)
 			throw new UiException("Unknown listener: "+klass);
@@ -314,6 +331,8 @@ public class Configuration {
 					it.remove();
 			}
 		}
+
+		_eis.removeEventInterceptor(klass);
 	}
 
 	/** Contructs a list of {@link EventThreadInit} instances and invokes
@@ -1721,21 +1740,9 @@ public class Configuration {
 		return Expressions.getExpressionFactoryClass();
 	}
 
-	/** Adds an event interceptor to the whole application.
-	 * @since 3.0.0
-	 */
-	public void addEventInterceptor(EventInterceptor ei) {
-		_eis.addEventInterceptor(ei);
-	}
-	/** Removes an event interceptor from the whole application.
-	 * @return whether the interceptor is removed successfully.
-	 * @since 3.0.0
-	 */
-	public boolean removeEventInterceptor(EventInterceptor ei) {
-		return _eis.removeEventInterceptor(ei);
-	}
 	/** Invokes {@link EventInterceptor#beforeSendEvent}
-	 * registered by {@link #addEventInterceptor}.
+	 * registered by {@link #addListener} with a class implementing
+	 * {@link EventInterceptor}.
 	 * <p>Used only internally.
 	 * @since 3.0.0
 	 */
@@ -1743,7 +1750,8 @@ public class Configuration {
 		return _eis.beforeSendEvent(event);
 	}
 	/** Invokes {@link EventInterceptor#beforePostEvent}
-	 * registered by {@link #addEventInterceptor}.
+	 * registered by {@link #addListener} with a class implementing
+	 * {@link EventInterceptor}.
 	 * <p>Used only internally.
 	 * @since 3.0.0
 	 */
@@ -1751,7 +1759,8 @@ public class Configuration {
 		return _eis.beforePostEvent(event);
 	}
 	/** Invokes {@link EventInterceptor#beforeProcessEvent}
-	 * registered by {@link #addEventInterceptor}.
+	 * registered by {@link #addListener} with a class implementing
+	 * {@link EventInterceptor}.
 	 * <p>Used only internally.
 	 * @since 3.0.0
 	 */
@@ -1759,7 +1768,8 @@ public class Configuration {
 		return _eis.beforeProcessEvent(event);
 	}
 	/** Invokes {@link EventInterceptor#afterProcessEvent}
-	 * registered by {@link #addEventInterceptor}.
+	 * registered by {@link #addListener} with a class implementing
+	 * {@link EventInterceptor}.
 	 * <p>Used only internally.
 	 * @since 3.0.0
 	 */
