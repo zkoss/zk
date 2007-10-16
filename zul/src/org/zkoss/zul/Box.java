@@ -140,21 +140,21 @@ public class Box extends XulElement {
 	 */
 	public void setValign(String valign) {
 		valign = valign == null ? null:
-			"top".equalsIgnoreCase(valign) ? "start": 
-			"middle".equalsIgnoreCase(valign) ? "center":
-			"bottom".equalsIgnoreCase(valign) ? "end": valign;
+			"top".equals(valign) ? "start": 
+			"middle".equals(valign) ? "center":
+			"bottom".equals(valign) ? "end": valign;
 
 		if (isVertical()) setPack(valign);
 		else setAlign(valign);
 	}
 	private static String toValign(String v) {
-		return v == null ? null: "start".equalsIgnoreCase(v) ? "top": 
-			"center".equalsIgnoreCase(v) ? "middle":
-			"end".equalsIgnoreCase(v) ? "bottom": v;
+		return v == null ? null: "start".equals(v) ? "top": 
+			"center".equals(v) ? "middle":
+			"end".equals(v) ? "bottom": v;
 	}
 	private static String toHalign(String v) {
-		return v == null ? null: "start".equalsIgnoreCase(v) ? "left": 
-			"end".equalsIgnoreCase(v) ? "right": v;
+		return v == null ? null: "start".equals(v) ? "left": 
+			"end".equals(v) ? "right": v;
 	}
 	
 	/** Returns the alignment of cells of a box in the 'opposite' direction
