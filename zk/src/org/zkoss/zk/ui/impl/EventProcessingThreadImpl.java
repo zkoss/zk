@@ -175,7 +175,7 @@ implements EventProcessingThread {
 		try {
 			synchronized (_suspmutex) {
 				_suspended = true;
-				cleanup(false);
+				cleanup(false); //Bug 1814298: need to call Execution.onDeactive
 
 				//let the main thread continue
 				synchronized (_evtmutex) {
