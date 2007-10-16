@@ -175,6 +175,7 @@ implements EventProcessingThread {
 		try {
 			synchronized (_suspmutex) {
 				_suspended = true;
+				cleanup(false);
 
 				//let the main thread continue
 				synchronized (_evtmutex) {
@@ -331,10 +332,13 @@ implements EventProcessingThread {
 	synchronized private void setup() {
 		_proc.setup();
 	}
-	/** Cleanup for executionl. */
-	synchronized private void cleanup() {
+	/** Cleanup for execution.
+	 * @param end whether it is done (or suspended)
+	 */
+	synchronized private void cleanup(boolean end) {
 		_proc.cleanup();
-		_proc = null;
+		if (end)
+			_proc = null;
 	}
 	private void checkError() {
 		if (_ex != null) { //failed to process
@@ -377,7 +381,7 @@ implements EventProcessingThread {
 						if (!cleaned) newEventThreadCleanups(config, _ex);
 
 //						if (log.finerable()) log.finer("Real processing is done: "+_proc);
-						cleanup();
+						cleanup(true);
 						Locales.setThreadLocal(_locale = null);
 						TimeZones.setThreadLocal(_timeZone = null);
 					}
