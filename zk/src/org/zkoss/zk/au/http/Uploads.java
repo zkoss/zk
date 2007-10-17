@@ -290,7 +290,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 		private final String _charset;
 		public ReaderMedia(String name, String format, String ctype,
 		FileItem fi, String charset) {
-			super(name, format, ctype, DYNAMIC_STREAM);
+			super(name, format, ctype, DYNAMIC_READER);
 			_fi = fi;
 			_charset = charset;
 		}
