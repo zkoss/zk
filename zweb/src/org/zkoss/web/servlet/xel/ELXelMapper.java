@@ -42,12 +42,6 @@ public class ELXelMapper implements FunctionMapper {
 	}
 
 	//FunctionMapper//
-	/** Note: always returns an empty collection, no matter any function
-	 * is defined or not.
-	 */
-	public Collection getFunctionNames() {
-		return Collections.EMPTY_LIST;
-	}
 	public Function resolveFunction(String prefix, String name) {
 		if (_mapper != null) {
 			final Method mtd = _mapper.resolveFunction(prefix, name);
