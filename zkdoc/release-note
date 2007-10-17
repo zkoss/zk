@@ -54,6 +54,7 @@ ZK 3.0.0 Freshly
   1814259: Failed to include a classpath-based resource with param
   1814298: Memory Leak in EventThread
   1814819: Variable instance doesn't be gc in first zscript(bean shell)
+  1814838: The last desktop of a zul,with EL in it, will not be gc.
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed

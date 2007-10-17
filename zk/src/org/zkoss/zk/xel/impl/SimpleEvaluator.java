@@ -43,7 +43,6 @@ import org.zkoss.zk.xel.Evaluator;
  * @since 3.0.0
  */
 public class SimpleEvaluator implements Evaluator {
-	private transient SimpleXelContext _xelc;
 	private transient ExpressionFactory _expf;
 	private final Class _expfcls;
 	private final FunctionMapper _mapper;
@@ -72,7 +71,7 @@ public class SimpleEvaluator implements Evaluator {
 		return expression.evaluate(getXelContext(comp));
 	}
 
-	/** Returns the implementaion class of the epxrerssion factory,
+	/** Returns the implementation class of the expression factory,
 	 * or null to use the default.
 	 */
 	public Class getExpressionFactoryClass() {
@@ -90,13 +89,11 @@ public class SimpleEvaluator implements Evaluator {
 	private XelContext getXelContext(Object ref) {
 		final FunctionMapper mapper = getFunctionMapper(ref);
 		final VariableResolver resolver = getVariableResolver(ref);
-		if (_xelc == null) {
-			_xelc = new SimpleXelContext(resolver, mapper);
-		} else {
-			_xelc.setVariableResolver(resolver);
-			_xelc.setFunctionMapper(mapper);
-		}
-		return _xelc;
+		
+		//always return new one,
+		SimpleXelContext xelc = new SimpleXelContext(resolver, mapper);
+		
+		return xelc;
 	}
 
 	/** Returns the function mapper, or null if not available.
