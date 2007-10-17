@@ -23,4 +23,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<button label="Stop Push" onClick="org.zkoss.zkdemo.test.ServerPush.stop()"/>
 	<label id="info"/>
 	</vbox>
+	<zscript>
+	org.zkoss.zkdemo.test.ServerPush.start(info);
+	</zscript>
 </window>
