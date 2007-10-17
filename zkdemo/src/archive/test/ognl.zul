@@ -18,13 +18,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <?evaluator name="ognl"
-	import="org.zkoss.zul.Datebox,org.zkoss.zul.Combobox,org.zkoss.zul.Textbox"?>
+	import="org.zkoss.zul.Datebox,org.zkoss.zul.Combobox"?>
 
 <window id="w" title="OGNL Demo">
 	You see a textbox appended with OGNL:
 	${new Datebox().setParent(w)}
 	Another example:
-	${new Textbox().setParent(w)}
+	${new org.zkoss.zul.Textbox().setParent(w)}
 	Another:
 	${new Combobox().setParent(w)}
 </window>
