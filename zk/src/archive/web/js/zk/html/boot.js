@@ -580,11 +580,9 @@ zk.beforeUnload = function () {
  * @since 3.0.0
  */
 zk.invoke = function (nm, fn) {
-	if (zk._modules[nm]) {
-		fn();
-	} else {
-		zk.load(nm, fn);
-	}
+	if (!zk._modules[nm]) zk.load(nm, fn);
+	else if (zk.loading) zk.addModuleInit(fn);
+	else fn();
 };
 
 /** Loads the specified module (JS). If a feature is called "a.b.c", then
@@ -666,6 +664,8 @@ zk._load = function (nm, modver) {
 		e.src = zk.getUpdateURI("/web" + zcb + "/js" + uri, false, modver);
 	}
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
+		//Bug 1815074: IE bug:
+		//zk.ald might be called before returning from appendChild
 };
 /** before load. */
 zk._bld = function () {
@@ -818,41 +818,45 @@ if (zk.ie) {
 
 /** Initial components and init functions. */
 zk._evalInit = function () {
-	while (!zk.loading && zk._initmods.length)
-		(zk._initmods.shift())();
+	do {
+		while (!zk.loading && zk._initmods.length)
+			(zk._initmods.shift())();
 
-	//Note: if loading, zk._doLoad will execute zk._evalInit after finish
-	for (var j = 0; zk._initcmps.length && !zk.loading;) {
-		var n = zk._initcmps.pop(); //reverse-order
+		//Note: if loading, zk._doLoad will execute zk._evalInit after finish
+		for (var j = 0; zk._initcmps.length && !zk.loading;) {
+			var n = zk._initcmps.pop(); //reverse-order
 
-		var m = zk.eval(n, "init");
-		if (m) n = m; //it might be transformed
+			var m = zk.eval(n, "init");
+			if (m) n = m; //it might be transformed
 
-		if (getZKAttr(n, "zid")) zkau.initzid(n);
-		if (getZKAttr(n, "drag")) zkau.initdrag(n);
-		if (getZKAttr(n, "drop")) zkau.initdrop(n);
+			if (getZKAttr(n, "zid")) zkau.initzid(n);
+			if (getZKAttr(n, "drag")) zkau.initdrag(n);
+			if (getZKAttr(n, "drop")) zkau.initdrop(n);
 
-		var type = $type(n);
-		if (type) {
-			var o = window["zk" + type];
-			if (o) {
-				if (o["onVisi"]) zk._visicmps[n.id] = true;
-				if (o["onHide"]) zk._hidecmps[n.id] = true;
-				if (o["onSize"]) zk._sizecmps[n.id] = true;
+			var type = $type(n);
+			if (type) {
+				var o = window["zk" + type];
+				if (o) {
+					if (o["onVisi"]) zk._visicmps[n.id] = true;
+					if (o["onHide"]) zk._hidecmps[n.id] = true;
+					if (o["onSize"]) zk._sizecmps[n.id] = true;
+				}
+			}
+
+			if (++j > 3000 || zk.loading) {
+				if (!zk.loading)
+					setTimeout(zk._evalInit, 0); //let browser breath
+				return;
 			}
 		}
 
-		if (++j > 3000 || zk.loading) {
-			if (!zk.loading)
-				setTimeout(zk._evalInit, 0); //let browser breath
-			return;
-		}
-	}
+		while (!zk.loading && zk._initfns.length)
+			(zk._initfns.shift())();
 
-	while (!zk.loading && zk._initfns.length)
-		(zk._initfns.shift())();
-
-	zk.doInitLater(25);
+		zk.doInitLater(25);
+	} while (!zk.loading && (zk._initmods.length || zk._initcmps.length
+	|| zk._initfns.length || zk._inLatfns.length));
+	//Bug 1815074: _initfns might cause _initmods to be added
 };
 /** Invokes functions added by zk.addInitLater.
  * This method is called automaticaly after initializing the components,
