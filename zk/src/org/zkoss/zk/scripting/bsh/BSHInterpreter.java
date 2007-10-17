@@ -187,6 +187,13 @@ implements SerializableAware, HierachicalAware {
 	}
 	public void destroy() {
 		getOwner().getNamespace().unsetVariable(VAR_NS, false);
+		
+		//bug 1814819 ,clear variable, dennis
+		try{
+			_bshns.clear();
+			_ip.setNameSpace(null);
+		}catch(Throwable t){}
+		
 		_ip = null;
 		_bshns = null;
 		super.destroy();
