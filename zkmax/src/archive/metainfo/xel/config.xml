@@ -29,4 +29,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<evaluator-name>mvel</evaluator-name><!-- case insensitive -->
 		<evaluator-class>org.zkoss.zkmax.xel.mvel.MVELFactory</evaluator-class>
 	</xel-config>
+	<xel-config>
+		<evaluator-name>ognl</evaluator-name><!-- case insensitive -->
+		<evaluator-class>org.zkoss.zkmax.xel.ognl.OGNLFactory</evaluator-class>
+	</xel-config>
 </config>

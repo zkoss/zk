@@ -7,6 +7,7 @@
 ../dist/lib/ext/jasper-el.jar
 ../dist/lib/ext/commons-el.jar
 ../dist/lib/ext/mvel.jar
+../dist/lib/ext/ognl.jar
 ../dist/lib/ext/js.jar
 ../dist/lib/ext/groovy.jar
 ../dist/lib/ext/jruby.jar

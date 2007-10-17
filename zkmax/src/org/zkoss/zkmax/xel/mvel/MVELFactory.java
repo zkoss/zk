@@ -33,14 +33,13 @@ import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.XelException;
-import org.zkoss.xel.util.ExpressionFragment;
+
+import org.zkoss.zkmax.xel.util.ExpressionFragment;
 
 /**
  * An implementation based on MVEL.
  *
  * <p>Note: MVEL is not completely compatible with JSP EL.
- * For example, it doesn't support {@link org.zkoss.xel.FunctionMapper#resolveFunction}.
- * Rather, it supports {@link org.zkoss.xel.FunctionMapper#resolveFunction}.
  *
  * <p>See also <a href="http://mvel.codehaus.org/">MVEL website</a>.
  *
