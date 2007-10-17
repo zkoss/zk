@@ -53,6 +53,7 @@ ZK 3.0.0 Freshly
   1813278: Annotations do not work with xhtml tags
   1814259: Failed to include a classpath-based resource with param
   1814298: Memory Leak in EventThread
+  1814819: Variable instance doesn't be gc in first zscript(bean shell)
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
