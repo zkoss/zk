@@ -192,7 +192,8 @@ implements SerializableAware, HierachicalAware {
 		try{
 			_bshns.clear();
 			_ip.setNameSpace(null);
-		}catch(Throwable t){}
+		} catch (Throwable t) { //silently ignore (in case of upgrading to new bsh)
+		}
 		
 		_ip = null;
 		_bshns = null;

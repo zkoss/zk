@@ -89,11 +89,8 @@ public class SimpleEvaluator implements Evaluator {
 	private XelContext getXelContext(Object ref) {
 		final FunctionMapper mapper = getFunctionMapper(ref);
 		final VariableResolver resolver = getVariableResolver(ref);
-		
-		//always return new one,
-		SimpleXelContext xelc = new SimpleXelContext(resolver, mapper);
-		
-		return xelc;
+		return new SimpleXelContext(resolver, mapper);
+			//Bug 1814838: don't cache the instance
 	}
 
 	/** Returns the function mapper, or null if not available.
