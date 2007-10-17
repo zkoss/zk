@@ -22,6 +22,7 @@ import java.util.Map;
 
 import ognl.ClassResolver;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.xel.FunctionMapper;
 
 /**
@@ -40,8 +41,6 @@ import org.zkoss.xel.FunctionMapper;
 	throws ClassNotFoundException {
 		final Class cls =
 			_mapper != null ? _mapper.resolveClass(className): null;
-		if (cls == null)
-			throw new ClassNotFoundException(className);
-		return cls;
+		return cls != null ? cls: Classes.forNameByThread(className);
 	}
 }
