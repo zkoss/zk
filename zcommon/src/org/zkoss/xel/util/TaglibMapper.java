@@ -143,9 +143,6 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 	}
 
 	//-- FunctionMapper --//
-	public Collection getFunctionNames() {
-		return _mtds != null ? _mtds.keySet(): (Collection)Collections.EMPTY_LIST;
-	}
 	public Function resolveFunction(String prefix, String name) {
 		return _mtds != null ? (Function)_mtds.get(prefix+":"+name): null;
 	}

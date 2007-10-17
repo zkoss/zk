@@ -61,11 +61,6 @@ public class DualFunctionMapper implements FunctionMapper {
 	}
 
 	//-- FunctionMapper --//
-	public Collection getFunctionNames() {
-		return combine(
-			_first != null ? _first.getFunctionNames(): null,
-			_second != null ? _second.getFunctionNames(): null);
-	}
 	public Function resolveFunction(String prefix, String name) {
 		Function m = _first != null ? _first.resolveFunction(prefix, name): null;
 		return m != null ? m:
@@ -81,7 +76,7 @@ public class DualFunctionMapper implements FunctionMapper {
 		return m != null ? m:
 			_second != null ? _second.resolveClass(name): null;
 	}
-	private Collection combine(Collection first, Collection second) {
+	private static Collection combine(Collection first, Collection second) {
 		return DualCollection.combine(
 			first != null && !first.isEmpty() ? first: null,
 			second != null && !second.isEmpty() ? second: null);

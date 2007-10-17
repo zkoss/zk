@@ -28,11 +28,6 @@ import java.util.Collection;
  * @since 3.0.0
  */
 public interface FunctionMapper {
-	/** Returns a readonly collection of prefix + ":" + function names (String)
-	 * (never null).
-	 * For example, "c:isExplorer".
-	 */
-	public Collection getFunctionNames();
 	/** Resolves a function {@link Function} with the specified name and
 	 * prefix.
 	 *

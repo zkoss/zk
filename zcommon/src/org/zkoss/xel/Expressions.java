@@ -37,6 +37,11 @@ public class Expressions {
 	 * It is serializable.
 	 */
 	public static final FunctionMapper EMPTY_MAPPER = new EmptyMapper();
+	/** An empty variable resolver, i.e., it has no variable defined at all.
+	 * It is serializable.
+	 */
+	public static final VariableResolver EMPTY_RESOLVER = new EmptyResolver();
+
 	/** An dummy expression that does nothing.
 	 * It is usually used as a flag to denote exceptional cases.
 	 * It it serializable.
@@ -135,9 +140,6 @@ public class Expressions {
 /*package*/ class EmptyMapper
 implements FunctionMapper, java.io.Serializable {
 	//-- FunctionMapper --//
-	public Collection getFunctionNames() {
-		return Collections.EMPTY_LIST;
-	}
 	public Function resolveFunction(String prefix, String name) {
 		return null;
 	}
@@ -145,6 +147,12 @@ implements FunctionMapper, java.io.Serializable {
 		return Collections.EMPTY_LIST;
 	}
 	public Class resolveClass(String name) {
+		return null;
+	}
+}
+/*package*/ class EmptyResolver
+implements VariableResolver, java.io.Serializable {
+	public Object resolveVariable(String name) {
 		return null;
 	}
 }
