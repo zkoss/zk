@@ -209,9 +209,9 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 				throw new IllegalStateException("expung in expung?");
 			_inExpunge = true;
 			try {
-				int k = 5; //to speed up, limit # to remove
-				for (final Iterator it = _map.values().iterator();
-				--k >= 0 && it.hasNext();) {
+				//dennis, bug 1815633, remove some control code here 
+				
+				for (final Iterator it = _map.values().iterator();it.hasNext();) {
 					final Value v = (Value)it.next();
 					final int result = canExpunge(v);
 					if ((result & EXPUNGE_YES) != 0) {
