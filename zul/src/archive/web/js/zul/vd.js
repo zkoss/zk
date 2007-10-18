@@ -168,7 +168,7 @@ zkVld._errbox = function () {
 	if (cmp) {
 		var inp = $real(cmp);
 		cmp._vdOldStyle = {bgc:inp.style.backgroundColor};
-		inp.style.backgroundColor = "#ffd8c8";
+		inp.style.backgroundColor = "#FEF1E9";
 	}
 
 	if (!zk.isRealVisible(cmp)) return; //don't show the erro box
