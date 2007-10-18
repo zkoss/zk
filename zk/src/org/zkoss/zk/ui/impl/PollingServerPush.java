@@ -26,6 +26,7 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Threads;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.DesktopUnavailableException;
@@ -110,7 +111,9 @@ public class PollingServerPush implements ServerPush {
 		if (_desktop == null)
 			throw new IllegalStateException("Not started");
 
-		Clients.response(new AuScript(null, getStopScript()));
+		if (Executions.getCurrent() != null) //Bug 1815480: don't send if timeout
+			Clients.response(new AuScript(null, getStopScript()));
+
 		_desktop = null; //to cause DesktopUnavailableException being thrown
 		_config = null;
 

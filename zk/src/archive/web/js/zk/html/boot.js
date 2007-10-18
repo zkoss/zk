@@ -855,7 +855,7 @@ zk._evalInit = function () {
 
 		zk.doInitLater(25);
 	} while (!zk.loading && (zk._initmods.length || zk._initcmps.length
-	|| zk._initfns.length || zk._inLatfns.length));
+	|| zk._initfns.length));
 	//Bug 1815074: _initfns might cause _initmods to be added
 };
 /** Invokes functions added by zk.addInitLater.

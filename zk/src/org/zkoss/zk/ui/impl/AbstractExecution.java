@@ -134,7 +134,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public boolean isRecovering() {
-		return _ei.isRecovering();
+		return _ei != null && _ei.isRecovering();
 	}
 
 	public void setVisualizer(Visualizer ei) {
