@@ -107,6 +107,7 @@ public class Configuration {
 		_maxUploadSize = 5120, _maxProcTime = 3000,
 		_promptDelay = 900, _tooltipDelay = 800;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
+	private CharsetFinder _charsetFinderUpload;
 	/** A set of the language name whose theme is disabled. */
 	private Set _disabledDefThemes;
 	/** The event interceptors. */
@@ -1104,17 +1105,45 @@ public class Configuration {
 	 * (never null).
 	 *
 	 * <p>Default: UTF-8.
+	 * @see #getUploadCharsetFinder
 	 */
 	public String getUploadCharset() {
 		return _charsetUpload;
 	}
 	/** Sets the charset used to encode the upload text file.
 	 *
+	 * <p>Note: {@link #setUploadCharsetFinder} has the higher priority.
+	 *
 	 * @param charset the charset to use.
 	 * If null or empty, UTF-8 is assumed.
+	 * @see #setUploadCharsetFinder
 	 */
 	public void setUploadCharset(String charset) {
 		_charsetUpload = charset != null && charset.length() > 0 ? charset: "UTF-8";
+	}
+	/** Returns the finder that is used to decide the character set
+	 * for the uploaded text filie(s), or null if not available.
+	 *
+	 * <p>Default: null
+	 * @since 3.0.0
+	 * @see #getUploadCharset
+	 */
+	public CharsetFinder getUploadCharsetFinder() {
+		return _charsetFinderUpload;
+	}
+	/** Sets the finder that is used to decide the character set
+	 * for the uploaded text filie(s), or null if not available.
+	 *
+	 * <p>It has the higher priority than {@link #setUploadCharset}.
+	 * In other words, {@link #getUploadCharset} is used only if
+	 * this method returns null or {@link CharsetFinder#getCharset}
+	 * returns null.
+	 *
+	 * @since 3.0.0
+	 * @see #setUploadCharset
+	 */
+	public void setUploadCharsetFinder(CharsetFinder finder) {
+		_charsetFinderUpload = finder;
 	}
 
 	/** Specifies the time, in seconds, between client requests

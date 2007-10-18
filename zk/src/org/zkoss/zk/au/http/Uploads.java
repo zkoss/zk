@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -56,6 +57,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 
@@ -181,7 +183,18 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
 			} else if (ctypelc.startsWith("text/")) {
-				final String charset = getCharset(desktop, ctype);
+				String charset = getCharset(ctype);
+				if (charset == null) {
+					final Configuration conf = desktop.getWebApp().getConfiguration();
+					final CharsetFinder chfd = conf.getUploadCharsetFinder();
+					if (chfd != null)
+						charset = chfd.getCharset(ctype,
+							fi.isInMemory() ?
+								new ByteArrayInputStream(fi.get()):
+								fi.getInputStream());
+					if (charset == null)
+						charset = conf.getUploadCharset();
+				}
 				return fi.isInMemory() ?
 					new AMedia(name, null, ctype, fi.getString(charset)):
 					new ReaderMedia(name, null, ctype, fi, charset);
@@ -192,7 +205,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 			new AMedia(name, null, ctype, fi.get()):
 			new StreamMedia(name, null, ctype, fi);
 	}
-	private static String getCharset(Desktop desktop, String ctype) {
+	private static String getCharset(String ctype) {
 		final String ctypelc = ctype.toLowerCase();
 		for (int j = 0; (j = ctypelc.indexOf("charset", j)) >= 0; j += 7) {
 			int k = Strings.skipWhitespacesBackward(ctype, j - 1);
@@ -208,8 +221,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 				}
 			}
 		}
-
-		return desktop.getWebApp().getConfiguration().getUploadCharset();
+		return null;
 	}
 
 	/** Parses the multipart request into a map of
@@ -221,8 +233,8 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 		final Map params = new HashMap();
 		final ServletFileUpload sfu =
 			new ServletFileUpload(new ZkFileItemFactory(desktop, request));
-		final Configuration cfg = desktop.getWebApp().getConfiguration();
-		final int maxsz = cfg.getMaxUploadSize();
+		final Configuration conf = desktop.getWebApp().getConfiguration();
+		final int maxsz = conf.getMaxUploadSize();
 		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);
 
 		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {

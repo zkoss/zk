@@ -34,6 +34,7 @@ import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
@@ -167,6 +168,8 @@ public class ConfigParser {
 			//	max-spare-threads
 			//  max-suspended-threads
 			//  max-upload-size
+			//  upload-charset
+			//  upload-charset-finder-class
 			//  max-process-time
 			//	response-charset
 			//  cache-provider-class
@@ -200,7 +203,12 @@ public class ConfigParser {
 				s = el.getElementValue("response-charset", true);
 				if (s != null) config.setResponseCharset(s);
 
-				Class cls = parseClass(el, "cache-provider-class",
+				Class cls = parseClass(el, "upload-charset-finder-class",
+					CharsetFinder.class);
+				if (cls != null)
+					config.setUploadCharsetFinder((CharsetFinder)cls.newInstance());
+
+				cls = parseClass(el, "cache-provider-class",
 					DesktopCacheProvider.class);
 				if (cls != null) config.setDesktopCacheProviderClass(cls);
 
