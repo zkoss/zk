@@ -34,9 +34,9 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.Command;
-import org.zkoss.zul.au.impl.ColSizeCommand;
-import org.zkoss.zul.au.impl.PagingCommand;
-import org.zkoss.zul.au.impl.PageSizeCommand;
+import org.zkoss.zul.au.in.ColSizeCommand;
+import org.zkoss.zul.au.in.PagingCommand;
+import org.zkoss.zul.au.in.PageSizeCommand;
 import org.zkoss.zul.event.ZulEvents;
 
 /**

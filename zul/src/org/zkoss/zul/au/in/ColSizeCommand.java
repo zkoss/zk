@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zul.au.impl;
+package org.zkoss.zul.au.in;
 
 import org.zkoss.lang.Objects;
 
@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.ext.client.Sizable;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
-import org.zkoss.zk.au.impl.Commands;
+import org.zkoss.zk.au.in.Commands;
 
 import org.zkoss.zul.event.ColSizeEvent;
 import org.zkoss.zul.ext.Paginal;

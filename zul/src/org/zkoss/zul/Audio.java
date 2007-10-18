@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
-import org.zkoss.zk.au.AuInvoke;
+import org.zkoss.zk.au.out.AuInvoke;
 
 import org.zkoss.zul.impl.XulElement;
 

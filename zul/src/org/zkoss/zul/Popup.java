@@ -23,7 +23,9 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.ext.render.Floating;
+
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.au.AuPopup;
 
 /**
  * A container that is displayed as a popup.
@@ -40,6 +42,22 @@ public class Popup extends XulElement {
 	public Popup() {
 		super.setVisible(false);
 		if (!(this instanceof Menupopup)) setSclass("ctxpopup");
+	}
+
+	/**
+	 * Pop ups this component at the client.
+	 *
+	 * <p>In most cases, the popup is shown automatically when specified
+	 * in the tooltip, popup and context properties
+	 * ({@link XulElement#setTooltip}, {@link XulElement#setPopup},
+	 * and {@link XulElement#setContext}).
+	 * However, if you want to show it manually, you can invoke this
+	 * method directly.
+	 *
+	 * @since 3.0.0
+	 */
+	public void popup(String x, String y) {
+		response("popup", new AuPopup(this, x, y));
 	}
 
 	//super//

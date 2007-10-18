@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.au.AuInvoke;
+import org.zkoss.zk.au.out.AuInvoke;
 
 /**
  * A band box. A bank box consists of an input box ({@link Textbox} and
