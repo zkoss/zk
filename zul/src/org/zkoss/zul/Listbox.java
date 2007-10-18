@@ -138,7 +138,7 @@ public class Listbox extends XulElement {
 	 * If exists, it is the last child
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener;
+	private transient EventListener _pgListener, _pgImpListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = "odd";
 	private int _tabindex = -1;
@@ -732,17 +732,10 @@ public class Listbox extends XulElement {
 				}
 			};
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
-	}
-	/** Removes the event listener for the onPaging event. */
-	private void removePagingListener(Paginal pgi) {
-		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
-	}
 
-	/** Called when the onPaging event is received (from {@link #getPaginal}).
-	 *
-	 * <p>Default: re-render, if live data, and invalidate().
-	 */
-	public void onPaging() {
+		if (_pgImpListener == null)
+			_pgImpListener = new EventListener() {
+	public void onEvent(Event event) {
 		if (_model != null && inPagingMold()) {
 			final Renderer renderer = new Renderer();
 			try {
@@ -758,8 +751,15 @@ public class Listbox extends XulElement {
 				renderer.doFinally();
 			}
 		}
-
 		invalidate();
+	}
+			};
+		pgi.addEventListener("onPagingImpl", _pgImpListener);
+	}
+	/** Removes the event listener for the onPaging event. */
+	private void removePagingListener(Paginal pgi) {
+		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
+		pgi.removeEventListener("onPagingImpl", _pgImpListener);
 	}
 
 	/** Returns the child paging controller that is created automatically,

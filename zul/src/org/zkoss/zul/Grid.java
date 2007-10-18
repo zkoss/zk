@@ -113,7 +113,7 @@ public class Grid extends XulElement {
 	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener;
+	private transient EventListener _pgListener, _pgImpListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = "odd";
 	/** the # of rows to preload. */
@@ -248,17 +248,10 @@ public class Grid extends XulElement {
 				}
 			};
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
-	}
-	/** Removes the event listener for the onPaging event. */
-	private void removePagingListener(Paginal pgi) {
-		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
-	}
 
-	/** Called when the onPaging event is received (from {@link #getPaginal}).
-	 *
-	 * <p>Default: getRows().invalidate().
-	 */
-	public void onPaging() {
+		if (_pgImpListener == null)
+			_pgImpListener = new EventListener() {
+	public void onEvent(Event event) {
 		if (_rows != null && _model != null && inPagingMold()) {
 		//theorectically, _rows shall not be null if _model is not null when
 		//this method is called. But, just in case -- if sent manually
@@ -278,6 +271,14 @@ public class Grid extends XulElement {
 		}
 
 		if (_rows != null) _rows.invalidate();
+	}
+			};
+		pgi.addEventListener("onPagingImpl", _pgImpListener);
+	}
+	/** Removes the event listener for the onPaging event. */
+	private void removePagingListener(Paginal pgi) {
+		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
+		pgi.removeEventListener("onPagingImpl", _pgImpListener);
 	}
 
 	/** Returns the child paging controller that is created automatically,

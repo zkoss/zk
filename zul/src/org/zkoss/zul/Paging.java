@@ -75,7 +75,8 @@ public class Paging extends XulElement implements Paginal {
 		if (_pgsz != size) {
 			_pgsz = size;
 			updatePageNum();
-			Events.postEvent(new PagingEvent(ZulEvents.ON_PAGING, this, _actpg));
+			Events.postEvent(new PagingEvent("onPagingImpl", this, _actpg));
+				//onPagingImpl is used for implementation purpose only
 		}
 	}
 	public int getTotalSize() {
@@ -115,7 +116,8 @@ public class Paging extends XulElement implements Paginal {
 		if (_actpg != pg) {
 			_actpg = pg;
 			invalidate();
-			Events.postEvent(new PagingEvent(ZulEvents.ON_PAGING, this, _actpg));
+			Events.postEvent(new PagingEvent("onPagingImpl", this, _actpg));
+				//onPagingImpl is used for implementation purpose only
 		}
 	}
 

@@ -62,10 +62,6 @@ public class PagingCommand extends Command {
 			}
 		}
 		pageable.setActivePage(pgi);
-		if (!(comp instanceof Paginal))
-			Events.postEvent(new PagingEvent(getId(), comp, pgi));
-			//Don't send the onPaging event if paginal,
-			//since its setActivePage will do (to notify other
-			//components depending on it).
+		Events.postEvent(new PagingEvent(getId(), comp, pgi));
 	}
 }
