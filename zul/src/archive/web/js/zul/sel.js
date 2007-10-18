@@ -876,7 +876,7 @@ zk.Selectable.prototype = {
 	/** Returns the size for vflex
 	 */
 	_vflexSize: function () {
-		return this.element.offsetHeight - this.head.offsetHeight - 2;
+		return this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0); // Bug #1815882
 		/** disabled by Jumper 	
 		var diff = zk.pageHeight() - zk.innerHeight()
 				+ $int(Element.getStyle(document.body, "margin-top"))
