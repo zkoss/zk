@@ -68,6 +68,7 @@ ZK 3.0.0 Freshly
   1726038: Grid sizable bug
   1813722: Wrong grid column width
   1815482: Problem With Hidden Listbox and Rows
+  1815633: Desktop doesn't be expunged when # of desktop > max desktop per session.
   
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
