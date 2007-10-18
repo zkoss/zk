@@ -44,12 +44,13 @@ public class FileuploadDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		String hgh = self.getNumber() > 3 ? (self.getNumber() * 16 + 30) + "pt" : "";
-		wh.write("<iframe style=\"width:100%;height:").write(hgh);
-		wh.write("\" frameborder=\"0\" src=\"");
-		wh.write(exec.encodeURL("~./zul/html/fileuploaddlg.dsp"));
-		wh.write("?dtid=").write(self.getDesktop().getId()).write("&amp;uuid=");
-		wh.write(uuid).write("&amp;max=").write(Integer.toString(self.getNumber())).writeln("\">");
-		wh.write("</iframe></div>");
+		wh.write("<iframe style=\"width:100%;height:").write(hgh)
+		  .write("\" frameborder=\"0\" src=\"")
+		  .write(exec.encodeURL("~./zul/html/fileuploaddlg.dsp"))
+		  .write("?dtid=").write(self.getDesktop().getId()).write("&amp;uuid=")
+		  .write(uuid).write("&amp;max=").write(Integer.toString(self.getNumber()))
+		  .write("&amp;native=").write(self.isNative()).writeln("\">")
+		  .write("</iframe></div>");
 	}
 
 }
