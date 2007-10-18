@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.ext.render.Floating;
 
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.au.AuPopup;
+import org.zkoss.zul.au.out.AuPopup;
 
 /**
  * A container that is displayed as a popup.
