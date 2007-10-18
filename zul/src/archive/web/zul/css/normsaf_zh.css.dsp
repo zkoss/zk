@@ -234,6 +234,9 @@ div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, 
 	white-space: nowrap; padding: 2px;
 	font-size: medium; font-weight: normal;
 }
+div.head-cell-inner {
+	font-size: medium; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+}
 div.listbox-head th.sort, div.grid-head th.sort, div.listbox-paging th.sort, div.grid-paging th.sort {
 	cursor: pointer; padding-right: 9px;
 	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
@@ -271,6 +274,14 @@ div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-f
 	background: threedface; border-top: 1px solid threedshadow;
 }
 
+div.foot-cell-inner, div.cell-inner, div.head-cell-inner {
+	overflow:hidden; border: 0; margin: 0; padding: 0; 
+}
+
+div.gc {
+	padding: 2px; font-size: medium; font-weight: normal; color: black;
+}
+
 tr.item, tr.item a, tr.item a:visited {
 	font-size: medium; font-weight: normal; color: black;
 	text-decoration: none;
@@ -281,8 +292,7 @@ tr.item a:hover {
 
 tr.grid td.gc {
 	background: white; border-bottom: none; border-left: 1px solid white;
-	border-right: 1px solid #CCC; border-top: 1px solid #DDD; padding: 2px;
-	font-size: medium; font-weight: normal; color: black;
+	border-right: 1px solid #CCC; border-top: 1px solid #DDD;
 }
 tr.odd td.gc, tr.odd {
 	background: #EAF2F0;<%--#E8EFEA--%>

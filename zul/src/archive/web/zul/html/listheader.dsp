@@ -18,4 +18,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<th id="${self.uuid}" z.type="Lhr"${self.outerAttrs}${self.innerAttrs}>${self.imgTag}<c:out value="${self.label}"/></th>
+<th id="${self.uuid}" z.type="Lhr"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave" class="head-cell-inner">${self.imgTag}<c:out value="${self.label}"/></div></th>

@@ -161,7 +161,10 @@ zkTree.init = function (cmp) {
 	if (meta.bodytbl)
 		zkTrow._pgnt(cmp, meta.bodytbl.rows);
 };
-zkTree.childchg = zkTree.init;
+zkTree.childchg = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta._calcSize();
+};
 
 zkTree.cleanup = function (cmp) {
 	zkTrow._pgclean(cmp);
@@ -460,11 +463,11 @@ zk.addModuleInit(function () {
 	Object.extend(zkTcol, zulHdr);
 
 	/** Resize the column. */
-	zkTcol.resize = function (col1, col2, icol, wd1, wd2, keys) {
+	zkTcol.resize = function (col1, icol, wd1, keys) {
 		var meta = zkau.getMeta($parentByType(col1, "Tree"));
 		if (meta)
 			meta.resizeCol(
-				$parentByType(col1, "Tcols"), icol, col1, wd1, col2, wd2, keys);
+				$parentByType(col1, "Tcols"), icol, col1, wd1, keys);
 	};
 
 	//Treecols

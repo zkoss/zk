@@ -51,20 +51,18 @@ public class ColSizeCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || data.length != 6)
+		if (data == null || data.length != 4)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
 		final Desktop desktop = request.getDesktop();
 		final int icol = Integer.parseInt(data[0]);
 		final Component col1 = desktop.getComponentByUuid(data[1]);
-		final Component col2 = desktop.getComponentByUuid(data[3]);
 
 		((Sizable)((ComponentCtrl)col1).getExtraCtrl()).setWidthByClient(data[2]);
-		((Sizable)((ComponentCtrl)col2).getExtraCtrl()).setWidthByClient(data[4]);
 
 		Events.postEvent(
-			new ColSizeEvent(getId(), comp, icol, col1, col2,
-				Commands.parseKeys(data[5])));
+			new ColSizeEvent(getId(), comp, icol, col1, null,
+				Commands.parseKeys(data[3])));
 	}
 }

@@ -227,7 +227,8 @@ div.listbox, div.tree, div.grid {<%-- depends sclass --%>
 	background: threedface; border: 1px solid #7F9DB9;
 }
 div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
-	background: threedface; border: 0; overflow: hidden; width: 100%;
+	background: threedface; border: 0; overflow: hidden; width: 100%; position:relative;
+<%-- Bug 1712708:  we have to specify position:relative --%>
 }
 div.listbox-paging th, div.grid-paging th {
 	background: threedface;
@@ -237,6 +238,9 @@ div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, 
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
 	text-overflow: ellipsis; white-space: nowrap; padding: 2px;
 	font-size: x-small; font-weight: normal;
+}
+div.head-cell-inner {
+	font-size: x-small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
 div.listbox-head th.sort, div.grid-head th.sort, div.listbox-paging th.sort, div.grid-paging th.sort {
 	cursor: hand; cursor: pointer; padding-right: 9px;
@@ -279,6 +283,13 @@ div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-f
 	background: threedface; border-top: 1px solid threedshadow;
 }
 
+div.foot-cell-inner, div.cell-inner, div.head-cell-inner {
+	overflow:hidden; border: 0; margin: 0; padding: 0; 
+}
+
+div.gc {
+	padding: 2px; font-size: x-small; font-weight: normal; color: black;
+}
 tr.item, tr.item a, tr.item a:visited {
 	font-size: x-small; font-weight: normal; color: black;
 	text-decoration: none;
@@ -289,9 +300,9 @@ tr.item a:hover {
 
 tr.grid td.gc {
 	background: white; border-bottom: none; border-left: 1px solid white;
-	border-right: 1px solid #CCC; border-top: 1px solid #DDD; padding: 2px;
-	font-size: x-small; font-weight: normal; color: black;
+	border-right: 1px solid #CCC; border-top: 1px solid #DDD;
 }
+
 tr.odd td.gc, tr.odd {
 	background: #EAF2F0;<%--#E8EFEA--%>
 }

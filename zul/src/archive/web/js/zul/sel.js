@@ -160,9 +160,8 @@ zk.Selectable.prototype = {
 			};
 		}
 
-		this.stripe();
-		var mate = this; 
-		zk.addInitLater(function () {zkSel._calcSize(mate.id);}, true);	// added by Jumper  setTimeout("zkSel._calcSize('"+this.id+"')", 5);
+		//this.stripe();
+		setTimeout("zkSel._calcSize('"+this.id+"')", 150); // Bug #1813722
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 
@@ -746,12 +745,13 @@ zk.Selectable.prototype = {
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
 			if (this.headtbl.rows.length)
-				zk.cpCellWidth(this.headtbl.rows[0], this.bodyrows); //assign head's col width
-		}
-		if (this.foottbl) {
+				zk.cpCellWidth(this.headtbl.rows[0], this.bodyrows, this, true); //assign head's col width
+			if (this.foottbl && this.foottbl.rows.length)
+				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
+		} else if (this.foottbl) {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
-				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows); //assign foot's col width
+				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this, true); //assign foot's col width
 		}
 	},
 	/** Returns the visible row at the specified index. */
@@ -926,11 +926,11 @@ zk.Selectable.prototype = {
 		}
 	},*/
 	/** Resize the specified column. */
-	resizeCol: function (cmp, icol, col1, wd1, col2, wd2, keys) {
-		var rows = this.bodyrows;
-		if (rows) {
-			zulHdr.resizeAll(rows, cmp, icol, col1, wd1, col2, wd2, keys);
-			this.recalcSize();
+	resizeCol: function (cmp, icol, col, wd, keys) {
+		var mate = this;
+		if (mate.bodyrows) {
+			zulHdr.resizeAll(mate,
+				cmp, icol, col, wd, keys);
 		}
 	},
 
@@ -1147,7 +1147,7 @@ zkLibox.init = function (cmp) {
 			zk.listen(meta.body, "keydown", zkLibox.bodyonkeydown);
 	}
 };
-zkLibox.childchg = zkLibox.init;
+zkLibox.childchg = zkSel._calcSize;
 
 /** Called when a listbox becomes visible because of its parent. */
 zkLibox.onVisi = zkLibox.onSize = function (cmp) {
@@ -1186,13 +1186,13 @@ zk.addModuleInit(function () {
 	Object.extend(zkLhr, zulHdr);
 
 	/** Resize the column. */
-	zkLhr.resize = function (col1, col2, icol, wd1, wd2, keys) {
+	zkLhr.resize = function (col1, icol, wd1, keys) {
 		var box = $parentByType(col1, "Libox");
 		if (box) {
 			var meta = zkau.getMeta(box);
 			if (meta)
 				meta.resizeCol(
-					$parentByType(col1, "Lhrs"), icol, col1, wd1, col2, wd2, keys);
+					$parentByType(col1, "Lhrs"), icol, col1, wd1, keys);
 		}
 	};
 

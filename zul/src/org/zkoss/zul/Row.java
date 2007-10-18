@@ -197,7 +197,7 @@ public class Row extends XulElement {
 				if (realIndex < colchds.size()) {
 					final Column col = (Column)colchds.get(realIndex);
 					colattrs = col.getColAttrs();
-					if (span == 1) wd = col.getWidth();
+					//if (span == 1) wd = col.getWidth();
 						//Bug 1633982: don't generate width if span > 1
 						//Side effect: the width might not be the same as specified
 					hgh = col.getHeight();
@@ -215,7 +215,7 @@ public class Row extends XulElement {
 
 		if (wd != null || hgh != null) {
 			final StringBuffer sb = new StringBuffer(80).append(style);
-			HTMLs.appendStyle(sb, "width", wd);
+			//HTMLs.appendStyle(sb, "width", wd);		
 			HTMLs.appendStyle(sb, "height", hgh);
 			style = sb.toString();
 		}
@@ -303,9 +303,10 @@ public class Row extends XulElement {
 					break;
 			sb.append(getChildAttrs(j));
 		}
-		sb.append('>');
+		sb.append("><div id=\"").append(child.getUuid())
+		.append("!cell\"").append(" class=\"gc cell-inner\"");
 		if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 		else out.insert(0, sb.toString());
-		out.append("</td>");
+		out.append("</div></td>");
 	}
 }

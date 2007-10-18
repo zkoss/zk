@@ -53,7 +53,6 @@ zulHdrs.setAttr = function (cmp, nm, val) {
 	}
 	return true;
 };
-
 zulHdr = {}; //listheader
 zulHdr._szs = {};
 zulHdr.init = function (cmp) {
@@ -75,10 +74,11 @@ zulHdr.setSizable = function (cmp, sizable) {
 	var id = cmp.id;
 	if (sizable) {
 		if (!zulHdr._szs[id]) {
+			var snap = function (x, y) {return zulHdr._snap(cmp, x, y);};
 			zulHdr._szs[id] = new Draggable(cmp, {
 				starteffect: zk.voidf,
 				endeffect: zulHdr._endsizing, ghosting: zulHdr._ghostsizing,
-				revert: true, ignoredrag: zulHdr._ignoresizing,
+				revert: true, ignoredrag: zulHdr._ignoresizing, snap: snap,
 				constraint: "horizontal"
 			});
 		}
@@ -90,18 +90,26 @@ zulHdr.setSizable = function (cmp, sizable) {
 	}
 };
 /** Resize all rows. (Utilities used by derived). */
-zulHdr.resizeAll = function (rows, cmp, icol, col1, wd1, col2, wd2, keys) {
-	var icol2 = icol + 1;
-	for (var j = 0; j < rows.length; ++j) {
-		var cells = rows[j].cells;
-		if (icol < cells.length)
-			cells[icol].style.width = wd1;
-		if (icol2 < cells.length)
-			cells[icol2].style.width = wd2;
+zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
+	//var rows = mate.bodyrows;
+	mate.bodytbl.style.width = mate.headtbl.style.width;
+	wd = $int(wd);		
+	if (mate.foottbl) {
+		mate.foottbl.style.width = mate.headtbl.style.width;
+		if (mate.foottbl.rows.length) {
+			var cells = mate.foottbl.rows[0].cells;
+			if (icol < cells.length) {
+				var rwd = zk.revisedSize(cells[icol], wd);
+				cells[icol].style.width = rwd + "px";
+				var cell = $e($uuid(cells[icol]) + "!cave");
+				rwd = zk.revisedSize(cell, rwd);
+				cell.style.width = rwd + "px";		
+			}
+		}
 	}
-
+	zk.cpCellWidth(mate.headtbl.rows[0], mate.bodyrows, mate);
 	zkau.send({uuid: cmp.id, cmd: "onColSize",
-		data: [icol, col1.id, wd1, col2.id, wd2, keys]},
+		data: [icol, col.id, wd, keys]},
 		zkau.asapTimeout(cmp, "onColSize"));
 };
 zulHdr.cleanup = function (cmp) {
@@ -114,10 +122,11 @@ zulHdr.setAttr = function (cmp, nm, val) {
 };
 
 zulHdr.onclick = function (evt, cmp) {
-	if (zulHdr._sortable(cmp) && zkau.insamepos(evt))
+	if (!zk.dragging && zulHdr._sortable(cmp) && zkau.insamepos(evt))
 		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
 };
 zulHdr.onmove = function (evt, cmp) {
+	if (zk.dragging) return;
 	var ofs = zk.revisedOffset(cmp); // Bug #1812154
 	var v = zulHdr._insizer(cmp, Event.pointerX(evt) - ofs[0]);
 	if (v) {
@@ -135,9 +144,7 @@ zulHdr.ignoredrag = function (cmp, pointer) {
 /** Returns 1 if right, -1 if left, 0 if none. */
 zulHdr._insizer = function (cmp, x) {
 	if (zulHdr.sizable(cmp)) {
-		var cells = cmp.parentNode.cells;
-		if (cells[0] != cmp && x <= 5) return -1;
-		if (cells[cells.length-1] != cmp && x >= cmp.offsetWidth - 5) return 1;
+		if (x >= cmp.offsetWidth - 10) return 1;		
 	}
 	return 0;
 };
@@ -148,7 +155,7 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 		var ofs = zk.revisedOffset(cmp); // Bug #1812154
 		var v = zulHdr._insizer(cmp, pointer[0] - ofs[0]);
 		if (v) {
-			dg.z_szlft = v == -1;
+			dg.z_min = 5 + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings);		
 			return false;
 		}
 	}
@@ -157,63 +164,55 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 zulHdr._endsizing = function (cmp, evt) {
 	var dg = zulHdr._szs[cmp.id];
 	if (dg && dg.z_szofs) {
-		//Adjust column width
-		var cells = cmp.parentNode.cells, j = 0, cmp2;
+		var cells = cmp.parentNode.cells, j = 0;
 		for (;; ++j) {
 			if (j >= cells.length) return; //impossible, but just in case
 			if (cmp == cells[j]) {
-				if (dg.z_szlft) {
-					if (!j) return; //impossible, but just in case
-					cmp2 = cmp;
-					cmp = cells[--j];
-				} else {
-					if (j + 1 >= cells.length) return; //impossible, but just in case
-					cmp2 = cells[j + 1];
-				}
 				break;
-			}
+			} 
 		}
-
 		var keys = "";
 		if (evt) {
 			if (evt.altKey) keys += 'a';
 			if (evt.ctrlKey) keys += 'c';
 			if (evt.shiftKey) keys += 's';
 		}
-		var wd = zk.offsetWidth(cmp) + dg.z_szofs,
-			wd2 = zk.offsetWidth(cmp2) - dg.z_szofs;
-		wd = zk.revisedSize(cmp, wd);
-		wd2 = zk.revisedSize(cmp2, wd2);
-		if (wd < 0) {
-			wd2 += wd;
-			wd = 0;
-		} else if (wd2 < 0) {
-			wd += wd2;
-			wd2 = 0;
-		}
-
-		cmp.style.width = wd += "px";
-		cmp2.style.width = wd2 += "px";
-		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,$e('"+cmp2.id+"'),"+j+",'"+wd+"','"+wd2+"','"+keys+"')", 0);
+		
+		var wd = dg.z_szofs;
+		var rwd = zk.safari ? wd : zk.revisedSize(cmp, wd);
+		var table = $parentByTag(cmp, "TABLE");
+		var cells = table.rows[0].cells;
+		var total = 0;
+		for (var k = 0; k < cells.length; ++k)
+			if (cells[k] != cmp) total += cells[k].offsetWidth;
+			
+		cmp.style.width = rwd + "px";
+		var uuid = $uuid(cmp);
+		var cell = $e(uuid + "!cave");
+		//if (!cell) cell = $e(uuid + "!cave");
+		cell.style.width = zk.revisedSize(cell, rwd) + "px";	
+		table.style.width = total + wd + "px";					
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+j+",'"+wd+"','"+keys+"')", 0);		
 	}
 };
-
 /* @param ghosting whether to create or remove the ghosting
  */
 zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
 		var ofs = zkau.beginGhostToDIV(dg);
+		var head = $parentByTag(dg.element, "DIV");		
+		ofs[0] += zk.offsetWidth(dg.element);
 		document.body.insertAdjacentHTML("afterbegin",
 			'<div id="zk_ddghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-			+'px;border-'+(dg.z_szlft?'left':'right')+':3px solid darkgray"></div>');
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk.offsetHeight(head.parentNode)
+			+'px;background:darkgray"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
+					+'"/></div>');
 		dg.element = $e("zk_ddghost");
 	} else {
 		var org = zkau.getGhostOrgin(dg);
 		if (org) {
-			var ofs1 = Position.cumulativeOffset(dg.element);
-			var ofs2 = Position.cumulativeOffset(org);
+			var ofs1 = zk.revisedOffset(dg.element);
+			var ofs2 = zk.revisedOffset(org);
 			dg.z_szofs = ofs1[0] - ofs2[0];
 		} else {
 			dg.z_szofs = 0;
@@ -221,7 +220,16 @@ zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 		zkau.endGhostToDIV(dg);
 	}
 };
-
+zulHdr._snap = function (cmp, x, y) {
+	var dg = zulHdr._szs[cmp.id];
+	if (dg) {
+		var ofs = zk.revisedOffset(cmp);
+		x += zk.offsetWidth(cmp); 
+		if (ofs[0] + dg.z_min >= x)
+			x = ofs[0] + dg.z_min;
+	}
+	return [x, y];
+};
 /** Tests whether it is sortable.
  */
 zulHdr._sortable = function (cmp) {

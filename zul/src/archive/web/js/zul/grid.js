@@ -90,10 +90,8 @@ zk.Grid.prototype = {
 			};
 		}
 
-		this.stripe();
-
-		var mate = this;		
-		zk.addInitLater( function () {zkGrid._calcSize(mate.id);}, true);	// added by Jumper setTimeout("zkGrid._calcSize('"+this.id+"')", 5);
+		//this.stripe();	
+		setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722 
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 
@@ -169,7 +167,6 @@ zk.Grid.prototype = {
 
 	/** Calculates the size. */
 	_calcSize: function () {
-
 		this.updSize();
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 
@@ -198,50 +195,27 @@ zk.Grid.prototype = {
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + "px";
 			if (this.headtbl.rows.length)
-				zk.cpCellWidth(this.headtbl.rows[0], this.bodyrows);
-		}
-		if (this.foottbl) {
+				zk.cpCellWidth(this.headtbl.rows[0], this.bodyrows, this, true);
+			if (this.foottbl && this.foottbl.rows.length)
+				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
+		} else if (this.foottbl) {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
-				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows); //assign foot's col width
+				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this, true); //assign foot's col width
 		}
 	},
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
-		// if (cleansz) this.cleanSize(); disabled by Jumper
 		setTimeout("zkGrid._calcSize('"+this.id+"')", 20);
 	},
-	/** Cleanup size */
-	/** cleanSize: function () { disabled by Jumper
-		if (this.paging) return; //nothing to adjust since single table
-
-		this.body.style.width = this.bodytbl.style.width = "";
-		if (this.headtbl) {
-			this.head.style.width = "";
-			if (this.headtbl.rows.length) {
-				var headrow = this.headtbl.rows[0];
-				for (var j = headrow.cells.length; --j >=0;)
-					headrow.cells[j].style.width = "";
-			}
-		}
-		if (this.foottbl) {
-			this.foot.style.width = "";
-			if (this.foottbl.rows.length) {
-				var footrow = this.foottbl.rows[0];
-				for (var j = footrow.cells.length; --j >=0;)
-					footrow.cells[j].style.width = "";
-			}
-		}
-	},*/
 	/** Resize the specified column.
 	 * @param cmp columns
 	 */
-	resizeCol: function (cmp, icol, col1, wd1, col2, wd2, keys) {
-		var rows = this.bodyrows;
-		if (rows) {
-			zulHdr.resizeAll(rows,
-				cmp, icol, col1, wd1, col2, wd2, keys);
-			this.recalcSize(false);
+	resizeCol: function (cmp, icol, col, wd, keys) {
+		var mate = this;
+		if (mate.bodyrows) {
+			zulHdr.resizeAll(mate,
+				cmp, icol, col, wd, keys);
 		}
 	},
 
@@ -296,7 +270,7 @@ zkGrid.init = function (cmp) {
 	if (meta) meta.init();
 	else new zk.Grid(cmp);
 };
-zkGrid.childchg = zkGrid.init;
+zkGrid.childchg = zkGrid._calcSize;
 
 /** Called when a grid becomes visible because of its parent. */
 zkGrid.onVisi = zkGrid.onSize = function (cmp) {
@@ -351,13 +325,13 @@ zk.addModuleInit(function () {
 	Object.extend(zkCol, zulHdr);
 
 	/** Resize the column. */
-	zkCol.resize = function (col1, col2, icol, wd1, wd2, keys) {
+	zkCol.resize = function (col1, icol, wd1, keys) {
 		var grid = $parentByType(col1, "Grid");
 		if (grid) {
 			var meta = zkau.getMeta(grid);
 			if (meta)
 				meta.resizeCol(
-					$parentByType(col1, "Cols"), icol, col1, wd1, col2, wd2, keys);
+					$parentByType(col1, "Cols"), icol, col1, wd1, keys);
 		}
 	};
 

@@ -75,6 +75,7 @@ public class ColSizeEvent extends Event {
 		return _col1;
 	}
 	/** Returns the second column whose width is changed.
+	 * @deprecated As of release 3.0.0
 	 */
 	public Component getColumn2() {
 		return _col2;
