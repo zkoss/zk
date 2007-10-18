@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
-import org.zkoss.zk.au.impl.Commands;
+import org.zkoss.zk.au.in.Commands;
 
 /** 
  * Used only by {@link AuRequest} to implement the {@link ColumnLockChangeEvent}
