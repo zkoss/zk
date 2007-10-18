@@ -129,12 +129,13 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 	void processItems(Desktop desktop, Map params, Map attrs)
 	throws IOException {
 		final List meds = new LinkedList();
+		final boolean alwaysNative = "true".equals(params.get("native"));
 		final Object fis = params.get("file");
 		if (fis instanceof FileItem) {
-			meds.add(processItem(desktop, (FileItem)fis));
+			meds.add(processItem(desktop, (FileItem)fis, alwaysNative));
 		} else {
 			for (Iterator it = ((List)fis).iterator(); it.hasNext();) {
-				meds.add(processItem(desktop, (FileItem)it.next()));
+				meds.add(processItem(desktop, (FileItem)it.next(), alwaysNative));
 			}
 		}
 
@@ -146,7 +147,8 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 	}
 	/** Process the specified fileitem.
 	 */
-	private static final Media processItem(Desktop desktop, FileItem fi)
+	private static final
+	Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative)
 	throws IOException {
 		String name = getBaseName(fi);
 		if (name != null) {
@@ -162,7 +164,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 		final String ctype = fi.getContentType(),
 			ctypelc = ctype != null ? ctype.toLowerCase(): null;
-		if (ctype != null)
+		if (!alwaysNative && ctypelc != null) {
 			if (ctypelc.startsWith("image/")) {
 				try {
 					return fi.isInMemory() ? new AImage(name, fi.get()):
@@ -178,18 +180,17 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 				} catch (Throwable ex) {
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
+			} else if (ctypelc.startsWith("text/")) {
+				final String charset = getCharset(desktop, ctype);
+				return fi.isInMemory() ?
+					new AMedia(name, null, ctype, fi.getString(charset)):
+					new ReaderMedia(name, null, ctype, fi, charset);
 			}
-
-		if (ctypelc != null && ctypelc.startsWith("text/")) {
-			final String charset = getCharset(desktop, ctype);
-			return fi.isInMemory() ?
-				new AMedia(name, null, ctype, fi.getString(charset)):
-				new ReaderMedia(name, null, ctype, fi, charset);
-		} else {
-			return fi.isInMemory() ?
-				new AMedia(name, null, ctype, fi.get()):
-				new StreamMedia(name, null, ctype, fi);
 		}
+
+		return fi.isInMemory() ?
+			new AMedia(name, null, ctype, fi.get()):
+			new StreamMedia(name, null, ctype, fi);
 	}
 	private static String getCharset(Desktop desktop, String ctype) {
 		final String ctypelc = ctype.toLowerCase();
