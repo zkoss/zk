@@ -1,5 +1,5 @@
 	--------
-ZK 3.0.0 Freshly
+ZK 3.0.0 RC2
 * Features:
   1777430: Add getNextSibling/getPreviousSibling to Component Interface
   1678806: Allow comboitems to carry a value payload
@@ -73,6 +73,8 @@ ZK 3.0.0 Freshly
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
     length of each line, rather than each word.
+  + The org.zkoss.zk.au.impl package is renamed to org.zkoss.zk.au.cmd
+    and Au* are moved from org.zkoss.zk.au to org.zkoss.zk.au.resp
 
 	--------
 ZK 3.0.0 RC
