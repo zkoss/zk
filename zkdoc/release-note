@@ -62,7 +62,13 @@ ZK 3.0.0 Freshly
   1814931: Media get wrong result when uploaded a big text file.
   1815480: Session timeout with server push causing NPE
   1815513: Paging should not post a onPaging event when setPageSize
-
+  1656101: Resizing listview columns doesn't work properly with opera
+  1711480: resizable columns causes grid/listbox display error
+  1712708: Grid column size
+  1726038: Grid sizable bug
+  1813722: Wrong grid column width
+  1815482: Problem With Hidden Listbox and Rows
+  
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
     length of each line, rather than each word.
