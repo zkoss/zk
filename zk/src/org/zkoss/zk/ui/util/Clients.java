@@ -20,7 +20,8 @@ package org.zkoss.zk.ui.util;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.au.*;
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.out.*;
 
 /**
  * Utilities to send {@link AuResponse} to the client.

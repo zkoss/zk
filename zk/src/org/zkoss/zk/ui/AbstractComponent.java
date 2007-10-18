@@ -78,7 +78,7 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.impl.ListenerIterator;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.au.AuClientInfo;
+import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.util.SimpleNamespace;

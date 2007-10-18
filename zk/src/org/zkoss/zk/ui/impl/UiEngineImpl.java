@@ -51,6 +51,7 @@ import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.scripting.*;
 import org.zkoss.zk.au.*;
+import org.zkoss.zk.au.out.*;
 
 /**
  * An implementation of {@link UiEngine}.

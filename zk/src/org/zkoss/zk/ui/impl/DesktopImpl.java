@@ -65,7 +65,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.impl.PollingServerPush;
 import org.zkoss.zk.ui.impl.EventInterceptors;
-import org.zkoss.zk.au.AuBookmark;
+import org.zkoss.zk.au.out.AuBookmark;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;

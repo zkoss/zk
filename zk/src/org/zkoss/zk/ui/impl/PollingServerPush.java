@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.au.AuScript;
+import org.zkoss.zk.au.out.AuScript;
 
 /**
  * A server-push implementation that is based on client-polling.

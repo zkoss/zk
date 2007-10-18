@@ -81,7 +81,7 @@ import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.au.AuSetTitle;
+import org.zkoss.zk.au.out.AuSetTitle;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.scripting.HierachicalAware;

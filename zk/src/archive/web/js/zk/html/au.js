@@ -921,7 +921,7 @@ zkau._onDocLClick = function (evt) {
 					var type = $type(ctx);
 					if (type) {
 						zkau.closeFloats(ctx, cmp);
-						
+
 						ctx.style.position = "absolute";
 						zk.setVParent(ctx); //FF: Bug 1486840, IE: Bug 1766244
 						zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
@@ -1967,6 +1967,15 @@ zkau.cmd1 = {
 	},
 	invoke: function (uuid, cmp, func, arg0, arg1, arg2) {
 		zk.eval(cmp, func, null, arg0, arg1, arg2);
+	},
+	popup: function (uuid, cmp, x, y, ref) {
+		var type = $type(cmp);
+		if (type) {
+			cmp.style.position = "absolute";
+			zk.setVParent(cmp); //FF: Bug 1486840, IE: Bug 1766244
+			zkau._autopos(cmp, x || 0, y || 0);
+			zk.eval(cmp, "context", type, $e(ref));	
+		}
 	}
 };
 zkau.cmd1.cmd = zkau.cmd1.invoke; //backward compatibility (2.4.1 or before)

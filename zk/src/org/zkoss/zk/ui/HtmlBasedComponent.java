@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.ext.client.ZIndexed;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.au.AuFocus;
+import org.zkoss.zk.au.out.AuFocus;
 
 /**
  * A skeletal implementation for HTML based components.
