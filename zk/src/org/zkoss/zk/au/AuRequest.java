@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.au.impl.*;
+import org.zkoss.zk.au.in.*;
 
 /**
  * A request sent from the client to {@link org.zkoss.zk.ui.sys.UiEngine}.
