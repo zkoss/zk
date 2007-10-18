@@ -41,11 +41,12 @@ public class ListcellDefault implements ComponentRenderer {
 		final Listcell self = (Listcell)comp;
 		final String uuid = self.getUuid();
 		wh.write("<td id=\"").write(uuid).write("\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"cell-inner\">");
 		wh.write(self.getColumnHtmlPrefix()).write(self.getImgTag());
 		new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);
 		wh.writeChildren(self);
-		wh.write(self.getColumnHtmlPostfix()).writeln("</td>");
+		wh.write(self.getColumnHtmlPostfix()).writeln("</div></td>");
 	}
 
 }

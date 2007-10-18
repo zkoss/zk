@@ -42,12 +42,13 @@ public class TreefooterDefault implements ComponentRenderer {
 		final Treefooter self = (Treefooter) comp;
 		
 		wh.write("<td id=\"").write(self.getUuid()).write('"')
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>')
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"foot-cell-inner\">")
 			.write(self.getImgTag());
 
 		new Out(self.getLabel()).render(out);
 
 		wh.writeChildren(self)
-			.writeln("</td>");
+			.writeln("</div></td>");
 	}
 }

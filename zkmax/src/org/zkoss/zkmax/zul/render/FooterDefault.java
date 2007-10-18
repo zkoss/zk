@@ -41,11 +41,12 @@ public class FooterDefault implements ComponentRenderer {
 		final Footer self = (Footer) comp;
 		final String uuid = self.getUuid();
 		wh.write("<td id=\"").write(uuid).write('"')
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"foot-cell-inner\">")
 			.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
 
 		wh.writeChildren(self)
-			.writeln("</td>");
+			.writeln("</div></td>");
 	}
 }

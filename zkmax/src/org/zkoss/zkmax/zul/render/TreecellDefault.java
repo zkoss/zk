@@ -41,7 +41,8 @@ public class TreecellDefault implements ComponentRenderer{
 		final Treecell self = (Treecell) comp;
 		
 		wh.write("<td id=\"").write(self.getUuid()).write('"')
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>')
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"cell-inner\">")
 			.write(self.getColumnHtmlPrefix())
 			.write(self.getImgTag());
 
@@ -49,6 +50,6 @@ public class TreecellDefault implements ComponentRenderer{
 	
 		wh.writeChildren(self)
 			.write(self.getColumnHtmlPostfix())
-			.writeln("</td>");
+			.writeln("</div></td>");
 	}
 }

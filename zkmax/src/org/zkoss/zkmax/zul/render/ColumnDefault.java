@@ -42,10 +42,11 @@ public class ColumnDefault implements ComponentRenderer {
 		final Column self = (Column) comp;
 		final String uuid = self.getUuid();
 		wh.write("<th id=\"").write(uuid).write("\"").write(" z.type=\"Col\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+		.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"head-cell-inner\">");
 		wh.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
-		wh.writeln("</th>");
+		wh.writeln("</div></th>");
 	}
 
 }

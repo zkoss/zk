@@ -47,11 +47,12 @@ public class RowDefault implements ComponentRenderer {
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();i++) {
 			final Component child = (Component) it.next();
 			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
-				.write(self.getChildAttrs(i)).write('>');
+				.write(self.getChildAttrs(i)).write("><div id=\"").write(child.getUuid())
+				.write("!cell\" class=\"gc cell-inner\">");
 
 			child.redraw(out);
 
-			wh.writeln("</td>");
+			wh.writeln("</div></td>");
 		}
 
 		wh.writeln("</tr>");
