@@ -58,6 +58,7 @@ ZK 3.0.0 Freshly
   1814838: The last desktop of a zul,with EL in it, will not be gc.
   1815074: Server Push stoped after reload by F5 twice in IE6
   1814931: Media get wrong result when uploaded a big text file.
+  1815480: Session timeout with server push causing NPE
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
