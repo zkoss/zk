@@ -97,6 +97,8 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 * not to convert it to image, audio or text files.
 	 * <p>Default: false.
 	 * @since 3.0.0
+	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
+	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
 	 */
 	public boolean isNative() {
 		return _native;
@@ -110,6 +112,8 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
 	 * binary stream, or text files depending on the content type.
 	 * @since 3.0.0
+	 * @see org.zkoss.zk.ui.util.Configuration#setUploadCharset
+	 * @see org.zkoss.zk.ui.util.Configuration#setUploadCharsetFinder
 	 */
 	public void setNative(boolean alwaysNative) {
 		_native = alwaysNative;
@@ -168,6 +172,8 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 * binary stream, or text files depending on the content type.
 	 * @return the uploaded content, or null if not uploaded.
 	 * @since 3.0.0
+	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
+	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
 	 */
 	public static Media get(boolean alwaysNative) throws InterruptedException {
 		return get(null, null, alwaysNative);
@@ -195,6 +201,8 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 * binary stream, or text files depending on the content type.
 	 * @return the uploaded content, or null if not ready.
 	 * @since 3.0.0
+	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
+	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
 	 */
 	public static Media get(String message, String title, boolean alwaysNative)
 	throws InterruptedException {
@@ -225,6 +233,8 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 * @return an array of files that an users has uploaded,
 	 * or null if uploaded.
 	 * @since 3.0.0
+	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
+	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
 	 */
 	public static Media[] get(int max, boolean alwaysNative)
 	throws InterruptedException {
