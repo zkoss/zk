@@ -71,6 +71,7 @@ ZK 3.0.0 RC2
   1815482: Problem With Hidden Listbox and Rows
   1815633: Desktop doesn't be expunged when # of desktop > max desktop per session.
   1755342: Defining Meta Tags with keywords
+  1815882: Tree vflex is broken without treecol
   
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
