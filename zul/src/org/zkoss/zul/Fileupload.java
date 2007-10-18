@@ -65,8 +65,11 @@ import org.zkoss.zul.impl.FileuploadDlg;
 public class Fileupload extends HtmlBasedComponent { //not XulElement since not applicable
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
 
-	/////Embed: as a component/////
+	//Used when embedded as a component
+	/** The maximal alllowed number of files to upload. */
 	private int _maxnum = 1;
+	/** Wether to treat the uploaded file(s) as binary. */
+	private boolean _native;
 
 	/** No child is allowed. */
 	public boolean isChildable() {
@@ -89,6 +92,27 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 			throw new WrongValueException(
 				maxnum <= 0 ? "Positive is required": "Number too big (maximal 1000)");
 		_maxnum = maxnum;
+	}
+	/** Returns whether to treat the uploaded file(s) as binary, i.e.,
+	 * not to convert it to image, audio or text files.
+	 * <p>Default: false.
+	 * @since 3.0.0
+	 */
+	public boolean isNative() {
+		return _native;
+	}
+	/** Sets whether to treat the uploaded file(s) as binary, i.e.,
+	 * not to convert it to image, audio or text files.
+	 *
+	 * @param alwaysNative  whether to treat the uploaded file as binary
+	 * stream, regardless its content type.
+	 * If false (the default), it will convert to
+	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
+	 * binary stream, or text files depending on the content type.
+	 * @since 3.0.0
+	 */
+	public void setNative(boolean alwaysNative) {
+		_native = alwaysNative;
 	}
 
 	/** Hanldes the onClose event which is sent when file(s) is uploaded
@@ -128,10 +152,25 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	/////Open as a Modal Dialog/////
 	/** Opens a modal dialog with the default message and title,
 	 * and let user upload a file.
+	 *
 	 * @return the uploaded content, or null if not uploaded.
 	 */
 	public static Media get() throws InterruptedException {
-		return get(null, null);
+		return get(null, null, false);
+	}
+	/** Opens a modal dialog with the default message and title,
+	 * and let user upload a file.
+	 *
+	 * @param alwaysNative  whether to treat the uploaded file as binary
+	 * stream, regardless its content type.
+	 * If false (the default), it will convert to
+	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
+	 * binary stream, or text files depending on the content type.
+	 * @return the uploaded content, or null if not uploaded.
+	 * @since 3.0.0
+	 */
+	public static Media get(boolean alwaysNative) throws InterruptedException {
+		return get(null, null, alwaysNative);
 	}
 	/** Opens a modal dialog with the specified message and title,
 	 * and let user upload a file.
@@ -142,7 +181,24 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 */
 	public static Media get(String message, String title)
 	throws InterruptedException {
-		final Media[] result = get(message, title, 1);
+		return get(message, title, false);
+	}
+	/** Opens a modal dialog with the specified message and title,
+	 * and let user upload a file.
+	 *
+	 * @param message the message. If null, the default is used.
+	 * @param title the title. If null, the default is used.
+	 * @param alwaysNative  whether to treat the uploaded file as binary
+	 * stream, regardless its content type.
+	 * If false (the default), it will convert to
+	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
+	 * binary stream, or text files depending on the content type.
+	 * @return the uploaded content, or null if not ready.
+	 * @since 3.0.0
+	 */
+	public static Media get(String message, String title, boolean alwaysNative)
+	throws InterruptedException {
+		final Media[] result = get(message, title, 1, alwaysNative);
 		return result != null ? result[0]: null;
 	}
 	/** Opens a modal dialog to upload mulitple files with
@@ -154,10 +210,30 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 * or null if uploaded.
 	 */
 	public static Media[] get(int max) throws InterruptedException {
-		return get(null, null, max);
+		return get(null, null, max, false);
+	}
+	/** Opens a modal dialog to upload mulitple files with
+	 * the default message and title.
+	 *
+	 * @param max the maximal allowed number that an user can upload
+	 * at once. If nonpositive, 1 is assumed.
+	 * @param alwaysNative  whether to treat the uploaded files as binary
+	 * stream, regardless its content type.
+	 * If false (the default), it will convert to
+	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
+	 * binary stream, or text files depending on the content type.
+	 * @return an array of files that an users has uploaded,
+	 * or null if uploaded.
+	 * @since 3.0.0
+	 */
+	public static Media[] get(int max, boolean alwaysNative)
+	throws InterruptedException {
+		return get(null, null, max, alwaysNative);
 	}
 	/** Opens a modal dialog to upload multiple files with
 	 * the specified message and title.
+	 *
+	 * <p>The returned format depending on the content type.
 	 *
 	 * @param max the maximal allowed number that an user can upload
 	 * at once. If nonpositive, 1 is assumed.
@@ -167,13 +243,34 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 */
 	public static Media[] get(String message, String title, int max)
 	throws InterruptedException {
-		final Map params = new HashMap(5);
+		return get(message, title, max, false);
+	}
+	/** Opens a modal dialog to upload multiple files with
+	 * the specified message, title and options.
+	 *
+	 * @param max the maximal allowed number that an user can upload
+	 * at once. If nonpositive, 1 is assumed.
+	 * If max is larger than 1000, 1000 is assumed.
+	 * @param alwaysNative  whether to treat the uploaded files as binary
+	 * stream, regardless its content type.
+	 * If false (the default), it will convert to
+	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
+	 * binary stream, or text files depending on the content type.
+	 * @return an array of files that an users has uploaded,
+	 * or null if uploaded.
+	 * @since 3.0.0
+	 */
+	public static
+	Media[] get(String message, String title, int max, boolean alwaysNative)
+	throws InterruptedException {
+		final Map params = new HashMap(8);
 		final Execution exec = Executions.getCurrent();
 		params.put("message", message == null ?
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
 		params.put("title", title == null ?
 			Messages.get(MZul.UPLOAD_TITLE): title);
 		params.put("max", new Integer(max <= 1 ? 1: max > 1000 ? 1000: max));
+		params.put("native", Boolean.valueOf(alwaysNative));
 
 		final FileuploadDlg dlg = (FileuploadDlg)
 			exec.createComponents(

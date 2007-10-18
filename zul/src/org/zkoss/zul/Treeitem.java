@@ -331,9 +331,9 @@ public class Treeitem extends XulElement {
 		if (draggable != null)
 			throw new UnsupportedOperationException("Use Treerow.setDraggable() instead");
 	}
-	/** No callable. Use {@link Treerow#setDropable} isntead.
+	/** No callable. Use {@link Treerow#setDroppable} isntead.
 	 */
-	public void setDropable(String dropable) {
+	public void setDroppable(String dropable) {
 		if (dropable != null)
 			throw new UnsupportedOperationException("Use Treerow.setDropable() instead");
 	}

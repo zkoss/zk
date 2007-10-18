@@ -63,6 +63,7 @@ function init() {
 	<%-- change the following if you want the return URI to be different from the default
 	<input type="hidden" name="nextURI" value="~./zul/html/fileuploaddlg-done.dsp"/>
 	--%>
+	<input type="hidden" name="native" value="${param.native}"/>
 
 	<table border="0" width="100%">
 <c:set var="maxcnt" value="${empty param.max ? 1: param.max}"/>
