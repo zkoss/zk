@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.mil.device;
 
-import org.zkoss.mil.au.AuGoHome;
+import org.zkoss.mil.au.out.AuGoHome;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.au.AuResponse;

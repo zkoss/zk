@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.mil;
 
-import org.zkoss.mil.au.impl.CommandCommand;
+import org.zkoss.mil.au.in.CommandCommand;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.event.EventListener;

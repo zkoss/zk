@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 
-package org.zkoss.mil.au;
+package org.zkoss.mil.au.out;
 
 import org.zkoss.zk.au.AuResponse;
 
