@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.au;
+package org.zkoss.zk.au.in;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
