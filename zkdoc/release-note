@@ -20,6 +20,7 @@ ZK 3.0.0 Freshly
   1487212: A way to intercept events
   1773607: Provide pluggable OGNL expression evaluator
   1733589: get uploaded Media as InputStream regardless of its MIMEtype
+  1815594: A way to plugin a class to determine the encoding of upload
 
 * Bugs:
   1797527: malformed zul.xsd
