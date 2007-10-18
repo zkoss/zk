@@ -1340,94 +1340,120 @@ zk.ncols = function (cells) {
 /** Copies the width of each cell from one row to another.
  * It handles colspan of srcrows, but not dst's colspan, nor rowspan
  *
- * @param srcrows all rows from the source table. Don't pass just one row
- * because a row might not have all cells.
+ * @param {Object} srcrows all rows from the source table. Don't pass just one row
+ * @param {Object} mate a component gird or tree or listbox.
+ * @param {Boolean} stripe whether renders the stripe.
+ * @param {Boolean} again whether re-calculates the width of each cell for opera or safari
+ * @since 3.0.0
  */
-zk.cpCellWidth = function (dst, srcrows) {
+zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 	if (dst == null || srcrows == null || !srcrows.length
-	|| !dst.cells || !dst.cells.length)
+	|| !dst.cells.length)
 		return;
-
-	var ncols = dst.cells.length; //TODO: handle colspan for dst: ncols = zk.ncols(dst.cells);
-	var src, maxnc = 0;
-	for (var j = 0; j < srcrows.length; ++j) {
-		var row = srcrows[j];
-		var cells = row.cells;
-		var nc = zk.ncols(cells);
-		var valid = cells.length == nc && $visible(row);
-			//skip with colspan and invisible
-		if (valid && nc >= ncols) {
-			maxnc = ncols;
-			src = row;
-			break;
-		}
-		if (nc > maxnc) {
-			src = valid ? row: null;
-			maxnc = nc;
-		} else if (nc == maxnc && !src && valid) {
-			src = row;
-		}
-	}
-	if (!maxnc) return;
-
-	var fakeRow = !src;
-	if (fakeRow) { //the longest row containing colspan
-		src = document.createElement("TR");
-		src.style.height = "0px";
-			//Note: we cannot use display="none" (offsetWidth won't be right)
-		for (var j = 0; j < maxnc; ++j)
-			src.appendChild(document.createElement("TD"));
-		srcrows[0].parentNode.appendChild(src);
-	}
-
+		
 	//Note: With Opera, we cannot use table-layout=fixed and we have to assign
-	//the table width (test case: fixed-table-header.html)
-	var tbl;
-	if (zk.opera) {
-		tbl = dst.parentNode.parentNode;
-		if (tbl) {
-			tbl.style.tableLayout = "auto";
-			tbl.style.width = "";
+	//the table width (test case: fixed-table-header.html)	
+	var hdtable = dst.parentNode.parentNode;
+	if (hdtable.style.width) {
+		var bdtable = srcrows[0].parentNode.parentNode;
+		bdtable.style.width = hdtable.style.width;		
+	} else if (zk.opera && hdtable) {
+		hdtable.style.tableLayout = "auto";
+		hdtable.style.width = "";
+	}
+	
+	var scOdd = getZKAttr(mate.element, "scOddRow"), dstwds = [], cacheCss = [];
+	for (var i = 0, even = true; i < srcrows.length; ++i) {
+		var row = srcrows[i];
+		if (stripe && scOdd && zk.isVisible(row)) {
+			zk.addClass(row, scOdd, !even);
+			even = !even;
 		}
-	}
-
-	//we have to clean up first, since, in FF, if dst contains %
-	//the copy might not be correct
-	for (var j = maxnc; --j >=0;) {
-		var d = dst.cells[j];
-		if (d.style.width.indexOf('%') >= 0)
-			d.style.width = "";
-	}
-
-	var sum = 0;
-	for (var j = maxnc; --j >= 0;) {
-		var d = dst.cells[j], s = src.cells[j];
-		if (zk.opera) {
-			sum += s.offsetWidth;
-			var v = $int(Element.getStyle(s, "border-left"))
-				+ $int(Element.getStyle(s, "border-right"))
-				+ $int(Element.getStyle(s, "margin-left"))
-				+ $int(Element.getStyle(s, "margin-right"))
-				+ $int(Element.getStyle(s, "padding-left"))
-				+ $int(Element.getStyle(s, "padding-right"));
-			d.style.width = (s.offsetWidth - v) + "px";
-		} else if (d.offsetWidth != s.offsetWidth) { //note: opera cannot skip
-			d.style.width = s.offsetWidth + "px";
-			if (maxnc > 1) { //don't handle single cell case (bug 1729739)
-				var v = s.offsetWidth - d.offsetWidth;
-				if (v != 0) {
-					v += s.offsetWidth;
-					if (v < 0) v = 0;
-					d.style.width = v + "px";
+		var cells = row.cells;
+		for (var j = 0, z = 0; j < cells.length; ++j) {
+			if (j < dst.cells.length) {
+				var s = cells[j], d = dst.cells[z];
+				if (s.colSpan > 1) {
+					if (s.colSpan + z <= dst.cells.length) {
+						var unwd = [], total = 0, ttlOffset = 0;
+						for (var k = 0; k < s.colSpan; k++) {
+							var d = dst.cells[z+k];
+							if (!dstwds[z+k]) {
+								var wd =  d.style.width;
+								if (wd) {
+									if (wd == "auto" || wd.indexOf('%') > -1) 
+										d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
+									dstwds[z+k] = d.offsetWidth;
+									total += dstwds[z+k];
+									ttlOffset += d.offsetWidth;		
+								} else unwd.push([d, k]);
+							} else {
+								total += dstwds[z+k];
+								ttlOffset += d.offsetWidth;
+							}							
+						}
+						if (unwd.length) {
+							var amount = s.offsetWidth - total;
+							if (amount < unwd.length * 20) {
+								amount = unwd.length * 20;
+								var uuid = $uuid(s);
+								var cell = $e(uuid + "!cell");
+								if (!cell) cell = $e(uuid + "!cave");
+								var rwd = zk.revisedSize(s, amount + total);
+								cell.style.width = zk.revisedSize(cell, rwd) + "px";
+								s.style.width = rwd + "px";
+							}
+							var each = Math.max(Math.floor((amount) / unwd.length), 0);
+							while (unwd.length)	{								
+								var data = unwd.shift();
+								var d = data[0], k = data[1];
+								if (unwd.length) amount -= each;
+									else each = amount;
+								var wd = zk.safari ? each  : zk.revisedSize(d, each);
+								d.style.width = wd + "px";								
+								var cell = $e($uuid(d) + "!cave");
+								if (cell) cell.style.width = zk.revisedSize(cell, wd) + "px";
+								dstwds[z+k] = d.offsetWidth;
+								total += dstwds[z+k];
+								ttlOffset += d.offsetWidth;
+							} 
+						}					
+					}					
+				} else {
+					if (!dstwds[z] || d.offsetWidth != s.offsetWidth || zk.ie || zk.safari) { 
+					// Note: we have to specify the width of each column for opera.
+						if (!dstwds[z]) {
+							var wd =  d.style.width;							
+							if (wd == "auto" || wd.indexOf('%') > -1) 
+								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
+							dstwds[z] = wd ? d.offsetWidth : zk.ie && !zk.ie7 && z == dst.cells.length -1 ? s.offsetWidth - 3 : s.offsetWidth;
+							if (!wd) {
+								var w = zk.revisedSize(d, dstwds[z]);
+								d.style.width = w + "px";
+								var cell = $e($uuid(d) + "!cave");
+								if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";
+							}
+						} 
+						
+						var uuid = $uuid(s);
+						var cell = $e(uuid + "!cell");
+						if (!cell) cell = $e(uuid + "!cave");
+						if (!cacheCss[j] || s.className != cacheCss[j][0].el.className || s.style.cssText != "") {				
+							cacheCss[j] = [{el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)}, 
+								{el: cell, size : zk.sumStyles(cell, "lr", zk.borders) + zk.sumStyles(cell, "lr", zk.paddings)}];					
+						} 
+			
+						var rwd = dstwds[z] - cacheCss[j][0].size;
+						cell.style.width = rwd - cacheCss[j][1].size + "px";	
+						s.style.width = rwd + "px";
+					}
 				}
+				z += s.colSpan; // header count
 			}
-		}
+		}		
 	}
-
-	if (tbl) tbl.style.width = sum + "px"; //opera only
-
-	if (fakeRow)
-		src.parentNode.removeChild(src);
+	if (!again && (zk.safari || zk.opera)) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 5);	
+	// Note :we have to re-calculate the width of cell column for safari.
 };
 
 //Number//
