@@ -153,9 +153,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Horz Scrollbar only (20%)
 	<grid width="20%">
 		<columns>
-			<column label="Head 1"/>
-			<column label="Head 2" align="center"/>
-			<column label="Head 3" align="right"/>
+			<column width="200px" label="Head 1"/>
+			<column width="200px" label="Head 2" align="center"/>
+			<column width="200px" label="Head 3" align="right"/>
 		</columns>
 		<rows>
 			<row>
@@ -203,9 +203,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Horz and Vert Scrollbar (200px * 100px)
 	<grid width="200px" height="100px">
 		<columns>
-			<column label="Head 1"/>
-			<column label="Head 2" align="center"/>
-			<column label="Head 3" align="right"/>
+			<column width="200px" label="Head 1"/>
+			<column width="200px" label="Head 2" align="center"/>
+			<column width="200px" label="Head 3" align="right"/>
 		</columns>
 		<rows>
 			<row>

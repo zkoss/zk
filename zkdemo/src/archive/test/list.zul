@@ -181,8 +181,8 @@ void checkIndex(Listbox l) {
 H scroll only
 <listbox width="80px">
 	<listhead>
-		<listheader label="Population"/>
-		<listheader label="%"/>
+		<listheader width="50px" label="Population"/>
+		<listheader width="50px" label="%"/>
 	</listhead>
 	<listitem value="A">
 		<listcell label="A. Graduate"/>
@@ -210,7 +210,7 @@ H scroll only
 Both H and V scroll
 <listbox rows="4" width="80px">
 	<listhead>
-		<listheader label="Population"/>
+		<listheader width="50px" label="Population"/>
 		<listheader label="%"/>
 	</listhead>
 	<listitem value="A">
