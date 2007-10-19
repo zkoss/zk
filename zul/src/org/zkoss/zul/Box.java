@@ -42,7 +42,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Box extends XulElement {
 	private String _spacing;
-	private String _align, _pack;
+	private String _align = "start", _pack;
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
 
@@ -408,7 +408,11 @@ public class Box extends XulElement {
 	 * @since 3.0.0
 	 */
 	public String getCaveAttrs() {
-		return isVertical() ? "": " valign=\"" + toValign(_align) + '"';
+		if (isVertical())
+			return "";
+
+		final String valign = toValign(_align);
+		return valign != null ? " valign=\"" + valign + '"': null;
 	}
 
 	//-- Component --//
