@@ -339,13 +339,15 @@ zk.setVParent = function (n) {
 	if (zk.isVParent(id))
 		return; //called twice
 
-	//Bug 1816205: sibling also becomes a virtual parent
-	for (var id in zk._vpts)
-		if (zk._vnsibs[id] == n)
-			zk._vnsibs[id] = n.nextSibling;
+	var sib = n.nextSibling;
+	if (sib) {
+		var fake = document.createElement("SPAN");
+		fake.id = id + "!vpfk";
+		fake.style.display = "none";
+		p.insertBefore(fake, sib);
+	}
 
 	zk._vpts[id] = p;
-	zk._vnsibs[id] = n.nextSibling;
 
 	if (!getZKAttr(n, "dtid")) setZKAttr(n, "dtid", zkau.dtid(n));
 	document.body.appendChild(n);
@@ -356,7 +358,7 @@ zk.setVParent = function (n) {
  * @param {Object} or {String} n
  */
 zk.isVParent = function (n) {
-	if (n && n.id) n = n.id;
+	if (typeof n == 'object') n = n.id;
 	return zk._vpts[n];
 };
 /** Unsets virtual parent.
@@ -366,14 +368,11 @@ zk.unsetVParent = function (n) {
 	var id = n.id, p = zk._vpts[id];
 	delete zk._vpts[id];
 	if (p) {
-		var sib = zk._vnsibs[id];
-		delete zk._vnsibs[id];
-
-		//Bug 1816205: we have to detect if sib is gone
-		//FF: test parentNode is enough, but IE: we have to do more
-		if (sib && sib.parentNode && (!sib.id || $e(sib.id)))
+		var sib = $e(id + "!vpfk");
+		if (sib) {
 			p.insertBefore(n, sib);
-		else
+			zk.remove(sib);
+		} else
 			p.appendChild(n);
 	}
 };
@@ -395,7 +394,6 @@ zk.unsetChildVParent = function (n) {
 };
 //Note: we have to use string to access {}. Otherwise, the behavior is strange
 zk._vpts = {}; //a map of virtual parent (n.id, n's parent)
-zk._vnsibs = {}; //a map of next sibling used with zk._vpts (n.id, n's next sibling)
 
 /** Returns the nearest parent element, including el itself, with the specified type.
  */
