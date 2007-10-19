@@ -341,10 +341,10 @@ if [ "$target" == "official" ]; then
 	cd /tmp/zk/doc
 	cp -rP $docdir/devref .
 	find -name .svn | xargs rm -rf
-	mv devref ZK-devref-$ver
-	echo Output ZK-devref-$ver.zip
-	zip -qr9 ZK-devref-$ver.zip ZK-devref-$ver
-	rm -rf ZK-devref-$ver
+	mv devref zk-devref-$ver
+	echo Output zk-devref-$ver.zip
+	zip -qr9 zk-devref-$ver.zip zk-devref-$ver
+	rm -rf zk-devref-$ver
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm
 
