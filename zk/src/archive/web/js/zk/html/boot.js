@@ -341,10 +341,10 @@ zk.setVParent = function (n) {
 
 	var sib = n.nextSibling;
 	if (sib) {
-		var fake = document.createElement("SPAN");
-		fake.id = id + "!agtx";
-		fake.style.display = "none";
-		p.insertBefore(fake, sib);
+		var agtx = document.createElement("SPAN");
+		agtx.id = id + "!agtx";
+		agtx.style.display = "none";
+		p.insertBefore(agtx, sib);
 	}
 
 	zk._vpts[id] = p;
@@ -358,8 +358,7 @@ zk.setVParent = function (n) {
  * @param {Object} or {String} n
  */
 zk.isVParent = function (n) {
-	if (typeof n == 'object') n = n.id;
-	return zk._vpts[n];
+	return zk._vpts[n && n.id ? n.id: n];
 };
 /** Unsets virtual parent.
  * @since 3.0.0

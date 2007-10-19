@@ -556,12 +556,9 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 	}
 	var cmp = $e(uuid);
 
-//	if (zkau.procX
-//	&& zkau.procX(cmd, uuid, cmp, datanum, dt1, dt2, dt3, dt4))
-//		return;
-
 	fn = zkau.cmd1[cmd];
 	if (fn) {
+		//zk.debug("cmd: "+cmd+", "+uuid+", "+dt1);
 		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4);
 		return;
 	}
