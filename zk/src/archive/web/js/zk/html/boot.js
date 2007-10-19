@@ -1171,6 +1171,7 @@ zk.encodeXML = function (txt, multiline) {
 			case '<': out += "&lt;"; break;
 			case '>': out += "&gt;"; break;
 			case '&': out += "&amp;"; break;
+			case '"': out += "&quot;"; break;
 			case '\n':
 				if (multiline) {
 					out += "<br/>";
