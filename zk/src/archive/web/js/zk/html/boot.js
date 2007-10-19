@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "7e"; //increase this if we want the browser to reload JavaScript
+zk.build = "7f"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -339,6 +339,11 @@ zk.setVParent = function (n) {
 	if (zk.isVParent(id))
 		return; //called twice
 
+	//Bug 1816205: sibling also becomes a virtual parent
+	for (var id in zk._vpts)
+		if (zk._vnsibs[id] == n)
+			zk._vnsibs[id] = n.nextSibling;
+
 	zk._vpts[id] = p;
 	zk._vnsibs[id] = n.nextSibling;
 
@@ -351,7 +356,7 @@ zk.setVParent = function (n) {
  * @param {Object} or {String} n
  */
 zk.isVParent = function (n) {
-	if (typeof n == "object") n = n.id;
+	if (n && n.id) n = n.id;
 	return zk._vpts[n];
 };
 /** Unsets virtual parent.
@@ -363,7 +368,10 @@ zk.unsetVParent = function (n) {
 	if (p) {
 		var sib = zk._vnsibs[id];
 		delete zk._vnsibs[id];
-		if (sib)
+
+		//Bug 1816205: we have to detect if sib is gone
+		//FF: test parentNode is enough, but IE: we have to do more
+		if (sib && sib.parentNode && (!sib.id || $e(sib.id)))
 			p.insertBefore(n, sib);
 		else
 			p.appendChild(n);
