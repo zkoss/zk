@@ -414,9 +414,12 @@ function $parentByTag(el, tagName) {
 			return el;
 	return null;
 };
-/** Whether an element is visible. */
+/** Returns whether an element is visible.
+ * Returns false if none-existence.
+ * Returns true if no style.
+ */
 function $visible(el) {
-	return el && el.style && el.style.display != "none";
+	return el && (!el.style || el.style.display != "none");
 }
 
 /** Converts to an integer. It handles null and "07" */
@@ -939,7 +942,7 @@ zk.onVisiAt = function (n) {
 				zk.eval(elm, "onVisi");
 				break;
 			}
-			if (e.style && !$visible(e))
+			if (!$visible(e))
 				break;
 		}
 	}
@@ -962,7 +965,7 @@ zk.onHideAt = function (n) {
 				zk.eval(elm, "onHide");
 				break;
 			}
-			if (e.style && !$visible(e)) //yes, ignore hidden ones
+			if (!$visible(e)) //yes, ignore hidden ones
 				break;
 		}
 	}
@@ -982,7 +985,7 @@ zk.onSizeAt = function (n) {
 				zk._toOnSize[nid] = true;
 				break;
 			}
-			if (e.style && !$visible(e))
+			if (!$visible(e))
 				break;
 		}
 	}
