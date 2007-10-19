@@ -49,42 +49,10 @@ public class Treeitem extends XulElement {
 	private boolean _open = true;
 	private boolean _selected = false;
 	
-	// TODO AREA JEFF ADDED
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
 	 */
 	private boolean _loaded = false;
-	
-	/**
-	 * Return true whether this container is loaded
-	 * @return true whether this container is loaded
-	 * @since 3.0.0
-	 */
-	public boolean isLoaded(){
-		return _loaded;
-	}
-	
-	/**
-	 * Sets whether this container is loaded
-	 * @since 3.0.0
-	 */
-	public void setLoaded(boolean loaded){
-		_loaded = loaded;
-	}
-	
-	/**
-	 * return the index of this container 
-	 * @return the index of this container 
-	 * @since 3.0.0
-	 */
-	public int indexOf()
-	{
-		List list = this.getParent().getChildren();
-		return list.indexOf(this);
-	}
-
-	// TODO AREA JEFF ADDED END
-	
 	
 	public Treeitem() {
 	}
@@ -96,6 +64,34 @@ public class Treeitem extends XulElement {
 		setValue(value);
 	}
 
+	/**
+	 * Return true whether this tree item is loaded
+	 * @return true whether this tree item is loaded
+	 * @since 3.0.0
+	 */
+	public boolean isLoaded(){
+		return _loaded;
+	}
+	
+	/**
+	 * Sets whether this tree item is loaded.
+	 * @since 3.0.0
+	 */
+	public void setLoaded(boolean loaded){
+		_loaded = loaded;
+	}
+	
+	/**
+	 * return the index of this container 
+	 * @return the index of this container 
+	 * @since 3.0.0
+	 */
+	public int indexOf() {
+		List list = this.getParent().getChildren();
+		return list.indexOf(this);
+	}
+	
+	
 	/** Returns the treerow that this tree item owns (might null).
 	 * Each tree items has exactly one tree row.
 	 */
