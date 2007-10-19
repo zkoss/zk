@@ -73,7 +73,8 @@ ZK 3.0.0 RC2
   1755342: Defining Meta Tags with keywords
   1815882: Tree vflex is broken without treecol
   1605061: alert freeze only half page
-  
+  1816205: setVParent bug in modal window
+
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
     length of each line, rather than each word.
