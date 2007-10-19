@@ -440,7 +440,7 @@ zk.toStyleOffset = function (el, x, y) {
 		if (fixtop) el.style.top = "0";
 	}
 
-	var ofs1 = Position.cumulativeOffset(el);
+	var ofs1 = zk.revisedOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
 	ofs1 = [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
 
@@ -1348,9 +1348,8 @@ zk.ncols = function (cells) {
  */
 zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 	if (dst == null || srcrows == null || !srcrows.length
-	|| !dst.cells.length)
-		return;
-		
+	|| !dst.cells.length || !zk.isRealVisible(mate.element))
+		return;	
 	//Note: With Opera, we cannot use table-layout=fixed and we have to assign
 	//the table width (test case: fixed-table-header.html)	
 	var hdtable = dst.parentNode.parentNode;
@@ -1446,9 +1445,9 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 								{el: cell, size : zk.sumStyles(cell, "lr", zk.borders) + zk.sumStyles(cell, "lr", zk.paddings)}];					
 						} 
 			
-						var rwd = dstwds[z] - cacheCss[j][0].size;
-						cell.style.width = rwd - cacheCss[j][1].size + "px";	
-						s.style.width = rwd + "px";
+						var rwd = dstwds[z] - cacheCss[j][0].size;						
+						cell.style.width = Math.max(rwd - cacheCss[j][1].size, 0) + "px";
+						s.style.width = (rwd < 0 ? 0 : rwd) + "px";
 					}
 				}
 				z += s.colSpan; // header count
