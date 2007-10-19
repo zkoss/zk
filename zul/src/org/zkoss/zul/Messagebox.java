@@ -98,7 +98,9 @@ public class Messagebox {
 	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any URI of
 	 * an image.
 	 * @param focus one of button to have to focus. If 0, the first button
-	 * will gain the focus.
+	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}.
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}).
@@ -154,7 +156,7 @@ public class Messagebox {
 	 */
 	public static final int show(String message)
 	throws InterruptedException {
-		return show(message, null, OK, INFORMATION);
+		return show(message, null, OK, INFORMATION, 0);
 	}
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
@@ -163,10 +165,28 @@ public class Messagebox {
 	 * the default title is used.
 	 */
 	public static final
-	int show(int messageCode, Object[] args, int titleCode, int button, String icon)
+	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	String icon)
+	throws InterruptedException {
+		return show(messageCode, args, titleCode, buttons, icon, 0);
+	}
+	/** Shows a message box by specifying a message code, and returns what
+	 * button is pressed.
+	 *
+	 * @param titleCode the message code for the title. If non-positive,
+	 * the default title is used.
+	 * @param focus one of button to have to focus. If 0, the first button
+	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}.
+	 * @since 3.0.0
+	 */
+	public static final
+	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	String icon, int focus)
 	throws InterruptedException {
 		return show(Messages.get(messageCode, args),
-			titleCode > 0 ? Messages.get(titleCode): null, button, icon);
+			titleCode > 0 ? Messages.get(titleCode): null, buttons, icon, focus);
 	}
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
@@ -175,10 +195,27 @@ public class Messagebox {
 	 * the default title is used.
 	 */
 	public static final
-	int show(int messageCode, Object arg, int titleCode, int button, String icon)
+	int show(int messageCode, Object arg, int titleCode, int buttons, String icon)
+	throws InterruptedException {
+		return show(messageCode, arg, titleCode, buttons, icon, 0);
+	}
+	/** Shows a message box by specifying a message code, and returns what
+	 * button is pressed.
+	 *
+	 * @param titleCode the message code for the title. If non-positive,
+	 * the default title is used.
+	 * @param focus one of button to have to focus. If 0, the first button
+	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}.
+	 * @since 3.0.0
+	 */
+	public static final
+	int show(int messageCode, Object arg, int titleCode, int buttons,
+	String icon, int focus)
 	throws InterruptedException {
 		return show(Messages.get(messageCode, arg),
-			titleCode > 0 ? Messages.get(titleCode): null, button, icon);
+			titleCode > 0 ? Messages.get(titleCode): null, buttons, icon, focus);
 	}
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
@@ -187,10 +224,26 @@ public class Messagebox {
 	 * the default title is used.
 	 */
 	public static final
-	int show(int messageCode, int titleCode, int button, String icon)
+	int show(int messageCode, int titleCode, int buttons, String icon)
+	throws InterruptedException {
+		return show(messageCode, titleCode, buttons, icon, 0);
+	}
+	/** Shows a message box by specifying a message code, and returns what
+	 * button is pressed.
+	 *
+	 * @param titleCode the message code for the title. If non-positive,
+	 * the default title is used.
+	 * @param focus one of button to have to focus. If 0, the first button
+	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}.
+	 * @since 3.0.0
+	 */
+	public static final
+	int show(int messageCode, int titleCode, int buttons, String icon, int focus)
 	throws InterruptedException {
 		return show(Messages.get(messageCode),
-			titleCode > 0 ? Messages.get(titleCode): null, button, icon);
+			titleCode > 0 ? Messages.get(titleCode): null, buttons, icon, focus);
 	}
 
 	/** Sets the template used to create the message dialog.
