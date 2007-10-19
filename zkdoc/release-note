@@ -76,6 +76,7 @@ ZK 3.0.0 RC2
   1605061: alert freeze only half page
   1816205: setVParent bug in modal window
   1816372: Messagebox depends on BeanShell
+  1816666: ZK layout splitter disappears in its nightbor width
 
 * Upgrade Notes:
   + If the hyphen property of label is true, it means the maximal allowed
