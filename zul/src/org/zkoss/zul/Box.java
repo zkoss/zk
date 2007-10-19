@@ -160,7 +160,7 @@ public class Box extends XulElement {
 	/** Returns the alignment of cells of a box in the 'opposite' direction
 	 * (<i>null</i>, start, center, end).
 	 *
-	 * <p>Default: null</p>
+	 * <p>Default: start</p>
 	 *
 	 * <p>The align attribute specifies how child elements of the box are aligned,
 	 * when the size of the box is larger than the total size of the children. For
