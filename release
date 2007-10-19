@@ -26,6 +26,16 @@ if [ "$javadocdir" = "" ] ; then
 	exit 1
 fi
 javadocdir=${javadocdir/\~/$HOME}
+docdir=$HOME/prj/zkweb/ptroot/src/archive/doc
+
+if [ ! -d "$javadocdir" ] ; then
+	echo $javadocdir is not found
+	exit 1
+fi
+if [ ! -d "$docdir" ] ; then
+	echo $docdir is not found
+	exit 1
+fi
 
 ver=$(grep '^version=' build.setting.local)
 ver=${ver#version=}
@@ -257,8 +267,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		cd /tmp/zk
 
-		#echo Output ${profnm}.tar.gz
-		#tar zcf ${profnm}.tar.gz $binnm
+		if [ "$target" == "official" ] ; then
+			echo Output ${profnm}.tar.gz
+			tar zcf ${profnm}.tar.gz $binnm
+		fi
 		echo Output ${profnm}.zip
 		zip -qr9 ${profnm}.zip $binnm
 
@@ -272,8 +284,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		cd /tmp/zk
 
-		#echo Output ${stdnm}.tar.gz
-		#tar zcf ${stdnm}.tar.gz $binnm
+		if [ "$target" == "official" ] ; then
+			echo Output ${stdnm}.tar.gz
+			tar zcf ${stdnm}.tar.gz $binnm
+		fi
 		echo Output ${stdnm}.zip
 		zip -qr9 ${stdnm}.zip $binnm
 	fi
@@ -323,6 +337,14 @@ if [ "$target" == "official" ]; then
 		fn=${f%.pdf}
 		cp $f /tmp/zk/doc/${fn#**/}-$ver.pdf
 	done
+
+	cd /tmp/zk/doc
+	cp -rP $docdir/devref .
+	find -name .svn | xargs rm -rf
+	mv devref ZK-devref-$ver
+	echo Output ZK-devref-$ver.zip
+	zip -qr9 ZK-devref-$ver.zip ZK-devref-$ver
+	rm -rf ZK-devref-$ver
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm
 
