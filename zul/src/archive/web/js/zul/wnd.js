@@ -67,16 +67,23 @@ zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
 		}
 	}
 };
+zkWnd._embedded = function (cmp) {
+	var v = getZKAttr(cmp, "mode");
+	return !v || v == "embedded";
+};
 zkWnd.setAttr = function (cmp, nm, val) {
 	switch (nm) {
 	case "visibility":
 		var bo = zk.unsetChildVParent(cmp);
-		if (cmp._pvisible == undefined || cmp._pvisible == "true") {			
+		if (cmp._pvisible == undefined || cmp._pvisible == "true")
 			zkau.setAttr(cmp, nm, val);
-		} 
 		cmp._visible = val;
-		if (getZKAttr(cmp, "mode") != "embedded")
-			zkau.hideCovered(); //Bug 1719826 
+
+		if (!zkWnd._embedded(cmp)) {
+			zkau.hideCovered(); //Bug 1719826
+			if (val) zk.setVParent(cmp); //Bug 1816451
+		}
+
 		for (var j = bo.length; --j >= 0;) {
 			n = $e(bo[j]);		
 			if (n.id != cmp.id) {
@@ -102,7 +109,7 @@ zkWnd.setAttr = function (cmp, nm, val) {
 
 	case "z.pos":
 		zkau.setAttr(cmp, nm, val);
-		if (val && getZKAttr(cmp, "mode") != "embedded") {
+		if (val && !zkWnd._embedded(cmp)) {
 			zkWnd._center(cmp, null, val);
 			//if val is null, it means no change at all
 			zkau.hideCovered(); //Bug 1719826 
@@ -261,7 +268,7 @@ zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
 		zkau.sendOnMove(cmp, keys);
 	}
 
-	if (getZKAttr(cmp, "mode") != "embedded")
+	if (!zkWnd._embedded(cmp))
 		zkau.hideCovered();
 };
 
@@ -496,7 +503,7 @@ zkWnd._doModal2 = function (uuid) {
 	if (zkWnd._modal2[uuid]) {
 		delete zkWnd._modal2[uuid];
 
-		var cmp = $(uuid);
+		var cmp = $e(uuid);
 		if (cmp) {
 			zk.restoreDisabled(cmp); //there might be two or more modal dlgs
 			zk.disableAll(cmp);
