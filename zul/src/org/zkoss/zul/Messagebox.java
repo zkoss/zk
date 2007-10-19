@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.zkoss.mesg.Messages;
-import org.zkoss.zul.mesg.MZul;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
@@ -87,6 +86,27 @@ public class Messagebox {
 	public static final
 	int show(String message, String title, int buttons, String icon)
 	throws InterruptedException {
+		return show(message, title, buttons, icon, 0);
+	}
+	/** Shows a message box and returns what button is pressed.
+	 *
+	 * @param title the title. If null, {@link WebApp#getAppName} is used.
+	 * @param buttons a combination of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
+	 * @param icon one of predefined images: {@link #QUESTION},
+	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any URI of
+	 * an image.
+	 * @param focus one of button to have to focus. If 0, the first button
+	 * will gain the focus.
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * @since 3.0.0
+	 */
+	public static final
+	int show(String message, String title, int buttons, String icon, int focus)
+	throws InterruptedException {
 		final Map params = new HashMap();
 		params.put("message", message);
 		params.put("title", title != null ? title:
@@ -95,23 +115,24 @@ public class Messagebox {
 		params.put("buttons", new Integer(
 			(buttons & (OK|CANCEL|YES|NO|ABORT|RETRY|IGNORE)) != 0 ? buttons: OK));
 		if ((buttons & OK) != 0)
-			params.put("OK", Messages.get(MZul.OK));
+			params.put("OK", new Integer(OK));
 		if ((buttons & CANCEL) != 0)
-			params.put("CANCEL", Messages.get(MZul.CANCEL));
+			params.put("CANCEL", new Integer(CANCEL));
 		if ((buttons & YES) != 0)
-			params.put("YES", Messages.get(MZul.YES));
+			params.put("YES", new Integer(YES));
 		if ((buttons & NO) != 0)
-			params.put("NO", Messages.get(MZul.NO));
+			params.put("NO", new Integer(NO));
 		if ((buttons & RETRY) != 0)
-			params.put("RETRY", Messages.get(MZul.RETRY));
+			params.put("RETRY", new Integer(RETRY));
 		if ((buttons & ABORT) != 0)
-			params.put("ABORT", Messages.get(MZul.ABORT));
+			params.put("ABORT", new Integer(ABORT));
 		if ((buttons & IGNORE) != 0)
-			params.put("IGNORE", Messages.get(MZul.IGNORE));
+			params.put("IGNORE", new Integer(IGNORE));
 
 		final MessageboxDlg dlg = (MessageboxDlg)
 			Executions.createComponents(_templ, null, params);
 		dlg.setButtons(buttons);
+		if (focus > 0) dlg.setFocus(focus);
 
 		if (dlg.getDesktop().getWebApp().getConfiguration().isEventThreadEnabled()) {
 			try {

@@ -18,9 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import org.zkoss.zul.Window;
+import org.zkoss.mesg.Messages;
+import org.zkoss.zul.mesg.MZul;
+
 import org.zkoss.zk.ui.UiException;
 
+import org.zkoss.zul.Window;
 import org.zkoss.zul.Messagebox;
 
 /**
@@ -65,6 +68,18 @@ public class MessageboxDlg extends Window {
 	public void setButtons(int buttons) {
 		_buttons = buttons;
 	}
+	/** Sets the focus.
+	 * @param button the button to gain the focus. If 0, the default one
+	 * (i.e., the first one) is assumed.
+	 * @since 3.0.0
+	 */
+	public void setFocus(int button) {
+		if (button > 0) {
+			final Button btn = (Button)getFellowIfAny("btn" + button);
+			if (btn != null)
+				btn.focus();
+		}
+	}
 
 	/** Called only internally.
 	 */
@@ -76,5 +91,35 @@ public class MessageboxDlg extends Window {
 	 */
 	public int getResult() {
 		return _result;
+	}
+
+	/**
+	 * Represents a button on the message box.
+	 * @since 3.0.0
+	 */
+	public static class Button extends org.zkoss.zul.Button {
+		private int _button;
+
+		/** Sets the identity.
+		 */
+		public void setIdentity(int button) {
+			_button = button;
+
+			final int label;
+			switch (button) {
+			case YES:		label = MZul.YES; break;
+			case NO:		label = MZul.NO; break;
+			case RETRY:		label = MZul.RETRY; break;
+			case ABORT:		label = MZul.ABORT; break;
+			case IGNORE:	label = MZul.IGNORE; break;
+			case CANCEL:	label = MZul.CANCEL; break;
+			default:		label = MZul.OK;
+			}
+			setLabel(Messages.get(label));
+			setId("btn" + _button);
+		}
+		public void onClick() {
+			((MessageboxDlg)getSpaceOwner()).endModal(_button);
+		}
 	}
 }
