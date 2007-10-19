@@ -89,6 +89,7 @@ public class XMLs {
 			case '<': rep = "&lt;"; break;
 			case '>': rep = "&gt;"; break;
 			case '&': rep = "&amp;"; break;
+			case '"': rep = "&quot;"; break;
 			default:
 				if (sb != null) sb.append(cc);
 				continue;
@@ -119,6 +120,7 @@ public class XMLs {
 			case '<': sb.append("&lt;"); break;
 			case '>': sb.append("&gt;"); break;
 			case '&': sb.append("&amp;"); break;
+			case '"': sb.append("&quot;"); break;
 			default: sb.append(cc); break;
 			}
 		}
