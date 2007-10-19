@@ -1392,13 +1392,12 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 								ttlOffset += d.offsetWidth;
 							}							
 						}
+						var uuid = $uuid(s);
+						var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
 						if (unwd.length) {
 							var amount = s.offsetWidth - total;
 							if (amount < unwd.length * 20) {
 								amount = unwd.length * 20;
-								var uuid = $uuid(s);
-								var cell = $e(uuid + "!cell");
-								if (!cell) cell = $e(uuid + "!cave");
 								var rwd = zk.revisedSize(s, amount + total);
 								cell.style.width = zk.revisedSize(cell, rwd) + "px";
 								s.style.width = rwd + "px";
@@ -1417,7 +1416,12 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 								total += dstwds[z+k];
 								ttlOffset += d.offsetWidth;
 							} 
-						}					
+						}	
+						if (s.offsetWidth != ttlOffset || zk.ie || zk.safari) {							
+							var rwd = zk.revisedSize(s, total);
+							cell.style.width = zk.revisedSize(cell, rwd); + "px";	
+							s.style.width = rwd + "px";
+						}				
 					}					
 				} else {
 					if (!dstwds[z] || d.offsetWidth != s.offsetWidth || zk.ie || zk.safari) { 
@@ -1436,8 +1440,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 						} 
 						
 						var uuid = $uuid(s);
-						var cell = $e(uuid + "!cell");
-						if (!cell) cell = $e(uuid + "!cave");
+						var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
 						if (!cacheCss[j] || s.className != cacheCss[j][0].el.className || s.style.cssText != "") {				
 							cacheCss[j] = [{el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)}, 
 								{el: cell, size : zk.sumStyles(cell, "lr", zk.borders) + zk.sumStyles(cell, "lr", zk.paddings)}];					
