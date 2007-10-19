@@ -461,6 +461,37 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 			var tb = zk.sumStyles(real, "tb", zk.borders) + 
 				zk.sumStyles(real, "tb", zk.paddings) + 
 				(split.pos == "north" ? mars.top : mars.bottom);
+			var min = 20;
+			switch (split.pos) {
+				case "north":	
+				case "south":
+				  var uuid = $e($uuid(real));
+					var nbor = split.pos == "north" ? zk.nextSibling(uuid, "DIV") : zk.previousSibling(uuid, "DIV");
+					if (nbor) {
+				  	var rr =$real(nbor);
+				  	var pos = getZKAttr(rr, "pos");
+				    if (pos == "center") {
+				    	maxs = Math.min(maxs, (real.offsetHeight + rr.offsetHeight)- min);
+				    } else {
+				    	maxs = Math.min(maxs, ol.el.offsetHeight - rr.offsetHeight - rr.split.offsetHeight - split.offsetHeight - min); 
+				    }
+				  }
+				  break;				
+				case "west":				
+				case "east":
+					var uuid = $e($uuid(real));
+					var nbor = split.pos == "west" ? zk.nextSibling(uuid, "DIV") : zk.previousSibling(uuid, "DIV");
+					if (nbor) {
+				  	var rr =$real(nbor);
+				  	var pos = getZKAttr(rr, "pos");
+				    if (pos == "center") {
+				    	maxs = Math.min(maxs, (real.offsetWidth + rr.offsetWidth)- min);
+				    } else {
+				    	maxs = Math.min(maxs, ol.el.offsetWidth - rr.offsetWidth - rr.split.offsetWidth - split.offsetWidth - min); 
+				    }
+				  }
+					break;						
+			}
 			dg.drag.z_rootlyt = {
 				el: el,
 				width: el.offsetWidth,
