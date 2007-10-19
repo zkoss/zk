@@ -179,13 +179,6 @@ div.vsep-bar {
 	border-left: 1px solid #666; margin-left: 2pt;
 }
 
-td.vbox {
-	margin: 0; padding-bottom: 0.4em;
-}
-td.hbox {
-	margin: 0; padding-right: 0.6em;
-}
-
 <%-- ZK toolbar and toolbarbutton --%>
 .toolbar {
 	padding: 1px; background: threedface; border: 1px solid;

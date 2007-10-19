@@ -346,7 +346,7 @@ public class Box extends XulElement {
 		final StringBuffer sb = new StringBuffer(64);
 
 		String stylesb = "";
-		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
+		HTMLs.appendAttribute(sb, "class", vert ? "vbox cell-inner": "hbox cell-inner");
 		final String align = toHalign(vert ? _align: _pack);
 		if (align != null && align.length() > 0) {
 			HTMLs.appendAttribute(sb, "align", align);
@@ -422,20 +422,22 @@ public class Box extends XulElement {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<tr id=\"").append(child.getUuid())
 				.append("!chdextr\"")
-				.append(getChildOuterAttrs(child)).append("><td")
+				.append(getChildOuterAttrs(child)).append("><td><div id=\"")
+				.append(child.getUuid()).append("!cell\"")
 				.append(getChildInnerAttrs(child)).append('>');
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
-			out.append("</td></tr>");
+			out.append("</div></td></tr>");
 		} else {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<td id=\"").append(child.getUuid())
 				.append("!chdextr\"")
-				.append(getChildOuterAttrs(child))
-			 	.append(getChildInnerAttrs(child)).append('>');
+				.append(getChildOuterAttrs(child)).append("><div id=\"")
+				.append(child.getUuid()).append("!cell\"")
+				.append(getChildInnerAttrs(child)).append('>');
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
-			out.append("</td>");
+			out.append("</div></td>");
 		}
 	}
 }
