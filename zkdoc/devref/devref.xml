@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <book lang="en-US">
 <bookinfo>
-    <title>ZK Developer's Reference</title>
-	 <copyright>
-      <year>2007</year>
-      <holder>Potix Corporation. All rights reserved.</holder>
-	</copyright>
+<title>ZK Developer's Reference</title>
+<subtitle>Version 3.0.0 RC2</subtitle>
+<copyright>
+<year>2007</year>
+<holder>Potix Corporation. All rights reserved.</holder>
+</copyright>
+<edition/>
 </bookinfo>
 <chapter>
 <title>1. Introduction</title>
@@ -134,7 +136,17 @@
 </entry>
 <entry>
 <para>org.zkoss.zkmax.xel.mvel.MVELFactory</para>
-<para>The implementation based on MVEL.</para>
+<para>The implementation based on MVEL, http://mvel.codehaus.org.</para>
+<para>[available only if zkmax.jar is loaded]</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>ognl</para>
+</entry>
+<entry>
+<para>org.zkoss.zkmax.xel.ognl.OGNLFactory</para>
+<para>The implementation based on OGNL, <ulink url="http://www.ognl.org/">http://www.ognl.org</ulink>.</para>
 <para>[available only if zkmax.jar is loaded]</para>
 </entry>
 </row>
@@ -396,9 +408,9 @@
 <para>forEach="${an-EL-expr}"</para>
 <para>It specifies a collection of objects, such that the associated element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored, and the element is evaluated only once. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para>
 <para>For each iteration, two variables, each and forEachStatus, are assigned automatically to let developers control how to evaluate the associated element.</para>
-<programlisting format="linespecific">&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;classes = new String[] {"College", "Graduate"};&#13;grades = new Object[] {&#13;new String[] {"Best", "Better"}, new String[] {"A++", "A+", "A"}&#13;};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="200px" forEach="${classes}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="${each}"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem label="${forEachStatus.previous.each}: ${each}"&#13;forEach="${grades[forEachStatus.index]}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/hbox&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/foreach-example.PNG"/>
+<graphic fileref=""/>
 </para></sect2><sect2><title>The forEachBegin Attribute</title>
 <para>forEachBegin="${an-EL-expr}"</para>
 <para>It is used with the forEach attribute to specify the index (starting from 0) that the iteration shall begin at. If not specified, the iteration begins at the first element, i.e., 0 is assumed.</para>
@@ -3043,7 +3055,353 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2> <sect2 id="NumberInputElement" xml:base="ch4/NumberInputElement.xml"><title>NumberInputElement</title>
+<para/></sect3></sect2> <sect2 id="LayoutRegion" xml:base="ch4/LayoutRegion.xml"><title>LayoutRegion</title>
+<para>This class represents a region in a layout manager. </para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zulex.LayoutRegion</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>OnOpen</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="OpenEvent">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
+</link>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>Description: </code>
+<code>When a layout is collapsed or opened by a user, the </code>
+<code>onOpen</code>
+<code> event is sent to the application.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>flex </code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to grow and shrink vertical/horizontal to fit their given space, so called flexibility.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>size </code>
+</para>
+</entry>
+<entry>
+<para>Sets the size of this region. This method is shortcut for <emphasis>setHeight(String) </emphasis>and <emphasis>setWidth(String).</emphasis> If this region is <emphasis>North </emphasis>or <emphasis>South</emphasis>, this method will invoke <emphasis>setHeight(String)</emphasis>. If this region is <emphasis>West </emphasis>or <emphasis>East</emphasis>, this method will invoke <emphasis>setWidth(String)</emphasis>. Otherwise it will throw a UnsupportedOperationException. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>splittable </code>
+</para>
+</entry>
+<entry>
+<para>Sets whether enable the split functionality.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>collapsible </code>
+</para>
+</entry>
+<entry>
+<para>Sets whether set the initial display to collapse.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>margins </code>
+</para>
+</entry>
+<entry>
+<para>Sets margins for the element "0,1,2,3" that direction is "top,left,right,bottom".</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>0,0,0,0</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>open </code>
+</para>
+</entry>
+<entry>
+<para>Opens or collapses the splitter. Meaningful only if isCollapsible is not false.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>autoscroll </code>
+</para>
+</entry>
+<entry>
+<para>Sets whether enable overflow scrolling.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>border </code>
+</para>
+</entry>
+<entry>
+<para>Sets the border (either none or normal).</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>normal</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>maxsize </code>
+</para>
+</entry>
+<entry>
+<para>Sets the maximum size of the resizing element.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>2000</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>minsize </code>
+</para>
+</entry>
+<entry>
+<para>Sets the minimum size of the resizing element.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>0</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore) </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>onChildRemoved(org.zkoss.zk.ui.Component child) </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="NumberInputElement" xml:base="ch4/NumberInputElement.xml"><title>NumberInputElement</title>
 <para>A skeletal implementation for number-type input box. </para>
 <para/><sect3><title>Class Name</title>
 <para>
@@ -4004,6 +4362,167 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/></sect3></sect2><sect2 id="Borderlayout" xml:base="ch4/BorderLayout.xml"><title>Borderlayout</title>
+<para>The layout component is a nested component. The parent component is <code>borderlayout</code>, and its children components include north, south, center, west, and east. The combination of children components of <code>borderlayout</code> is free.</para>
+<para>
+<graphic fileref="images/layout.jpg"/>
+</para>
+<programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zulex.Borderlayout</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="North">
+<code>North</code>
+</link>, <link linkend="East">
+<code>East</code>
+</link>, <link linkend="West">West</link>, <link linkend="South">
+<code>South</code>
+</link> , <link linkend="Center">
+<code>Center</code>
+</link> </para></sect3><sect3><title>Supported Events</title>
+<para> *None</para></sect3><sect3><title>Properties</title>
+<para>*None</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getCenter()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>center</code> component</para>
+</entry>
+<entry>
+<para>
+<code>Center</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getEast()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>east</code> component</para>
+</entry>
+<entry>
+<para>
+<code>East</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getNorth()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>north</code> component</para>
+</entry>
+<entry>
+<para>
+<code>North</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getSouth()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>south</code> component</para>
+</entry>
+<entry>
+<para>
+<code>South</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getWest()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>west</code> componennt</para>
+</entry>
+<entry>
+<para>
+<code>West</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>resize()</code>
+</para>
+</entry>
+<entry>
+<para>Re-size the layout component.</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
 <para/></sect3></sect2><sect2 id="Caption" xml:base="ch4/Caption.xml"><title>Caption</title>
 <para>A header for a <code>Groupbox</code>. It may contain either a text label, using <code>LabelElement.setLabel(java.lang.String)</code>, or child elements for a more complex caption.</para>
 <para/>
@@ -4217,6 +4736,501 @@
 <entry>
 <para>
 <code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LabelImageElement">org.zkoss.zul.impl.LabelImageElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="LabelElement">org.zkoss.zul.impl.LabelElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Center" xml:base="ch4/Center.xml"><title>Center</title>
+<para>This component is a center region. The default class of CSS is specified "layout-region-center".</para>
+<para/>
+<para>
+<graphic fileref="images/layout.jpg"/>
+</para>
+<programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zulex.center</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>OnOpen</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="OpenEvent">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
+</link>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>Description: </code>
+<code>When a layout is collapsed or opened by a user, the </code>
+<code>onOpen</code>
+<code> event is sent to the application.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>size</code>
+</para>
+</entry>
+<entry>
+<para>Sets the size of this region.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getPosition()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>Borderlayout.NORTH.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.</code>
+<code>String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setWidth(java.lang.String width)</para>
+</entry>
+<entry>
+<para>The width can't be specified in this component because its width is determined by other region components (West or East).</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Checkbox" xml:base="ch4/Checkbox.xml"><title>Checkbox</title>
+<para>A checkbox.</para>
+<para>
+<graphic fileref="images/checkbox.png"/>
+</para>
+<programlisting>&lt;window title="Checkbox demo" border="normal" width="350px"&gt;&#13;        &lt;checkbox id="apple" label="Apple" onCheck="doChecked()" /&gt;&#13;        &lt;checkbox id="orange" label="Orange" onCheck="doChecked()" /&gt;&#13;        &lt;checkbox id="banana" label="Banana" onCheck="doChecked()" /&gt;&#13;        &lt;hbox&gt;You have selected :&lt;label id="fruit2"/&gt;&lt;/hbox&gt;&#13;        &lt;zscript&gt;&#13;            void doChecked() {&#13;                fruit2.value = (apple.isChecked() ? apple.label+' ' : &amp;quot;&amp;quot;) &#13;                    + (orange.isChecked() ? orange.label+' ' : &amp;quot;&amp;quot;) &#13;                    + (banana.isChecked() ? banana.label+' ' : &amp;quot;&amp;quot;);&#13;            }&#13;        &lt;/zscript&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Button</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onRightClick</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="MouseEvent">
+<code>org.zkoss.zk.ui.event.MouseEvent</code>
+</link>
+</para>
+<para>
+<link linkend="MouseEvent">
+<code/>
+</link>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes user has right-clicked the component.</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onDoubleClick</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="MouseEvent">
+<code>org.zkoss.zk.ui.event.MouseEvent</code>
+</link>
+</para>
+<para>
+<link linkend="MouseEvent">
+<code/>
+</link>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes user has double-clicked the component.</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onFocus</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event</code>
+</link>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes when a component gets the focus.</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onBlur</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.even.Event</code>
+</link>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>Description: Denotes when a component loses the focus.</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onCheck</para>
+</entry>
+<entry>
+<para>
+<link linkend="CheckEvent">
+<code>org.zkoss.zk.ui.event.CheckEvent</code>
+</link>
+</para>
+<para>
+<code>Description: Denotes when a component loses the focus.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>checked</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets whether it is checked.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>dis</code>
+<code>abled</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether it is disabled.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>name</code>
+</para>
+</entry>
+<entry>
+<para>Sets the name of this component.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>tabindex</code>
+</para>
+</entry>
+<entry>
+<para>Sets the tab order of this component. </para>
+</entry>
+<entry>
+<para>
+<code>int </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>-1</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getInnerAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>Appends interior attributes for generating the HTML <code>checkbox</code> tag (the name, disabled and other attribute).</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getLabelAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the attributes used by the embedded HTML LABEL tag.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>Appends exterior attributes for generating the HTML span tag (the event relevant attribute). </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -6750,6 +7764,167 @@
 <link linkend="AbstractComponent">
 <code>org.zkoss.zk.ui.AbstractComponent </code>
 </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="East" xml:base="ch4/East.xml"><title>East</title>
+<para>This component is a east region. The default class of CSS is specified "layout-region-east".</para>
+<para/>
+<para>
+<graphic fileref="images/layout.jpg"/>
+</para>
+<programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zulex.east</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>OnOpen</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="OpenEvent">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
+</link>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>Description: </code>
+<code>When a layout is collapsed or opened by a user, the </code>
+<code>onOpen</code>
+<code> event is sent to the application.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>size</code>
+</para>
+</entry>
+<entry>
+<para>Sets the size of this region.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getPosition()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>Borderlayout.NORTH.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.</code>
+<code>String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setWidth(java.lang.String width)</para>
+</entry>
+<entry>
+<para>The width can't be specified in this component because its width is determined by other region components (West or East).</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -11427,6 +12602,168 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/></sect3></sect2><sect2 id="North" xml:base="ch4/North.xml"><title>North</title>
+<para>This component is a north region. The default class of CSS is specified "layout-region-north".</para>
+<para/>
+<para>
+<graphic fileref="images/layout.jpg"/>
+</para>
+<programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&#13;</programlisting>
+<para/><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zulex.north</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>OnOpen</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="OpenEvent">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
+</link>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>Description: </code>
+<code>When a layout is collapsed or opened by a user, the </code>
+<code>onOpen</code>
+<code> event is sent to the application.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>size</code>
+</para>
+</entry>
+<entry>
+<para>Sets the size of this region.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getPosition()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>Borderlayout.NORTH.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.</code>
+<code>String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setWidth(java.lang.String width)</para>
+</entry>
+<entry>
+<para>The width can't be specified in this component because its width is determined by other region components (West or East).</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
 <para/></sect3></sect2><sect2 id="Popup" xml:base="ch4/Popup.xml"><title>Popup</title>
 <para>
 <code>A container that is displayed as a popup. The popup window does not have any special frame. Popups can be displayed when an element is clicked by assigning the id of the popup to either the </code>
@@ -12846,6 +14183,168 @@
 <link linkend="AbstractComponent">
 <code>org.zkoss.zk.ui.AbstractComponent </code>
 </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="South" xml:base="ch4/South.xml"><title>South</title>
+<para>This component is a south region. The default class of CSS is specified "layout-region-south".</para>
+<para/>
+<para>
+<graphic fileref="images/layout.jpg"/>
+</para>
+<programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zulex.south</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE</para></sect3><sect3><title>Supported Events</title>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>OnOpen</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="OpenEvent">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
+</link>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>Description: </code>
+<code>When a layout is collapsed or opened by a user, the </code>
+<code>onOpen</code>
+<code> event is sent to the application.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>size</code>
+</para>
+</entry>
+<entry>
+<para>Sets the size of this region.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getPosition()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>Borderlayout.NORTH.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.</code>
+<code>String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setWidth(java.lang.String width)</para>
+</entry>
+<entry>
+<para>The width can't be specified in this component because its width is determined by other region components (West or East).</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -17744,6 +19243,168 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/></sect3></sect2><sect2 id="West" xml:base="ch4/West.xml"><title>West</title>
+<para>This component is a west region. The default class of CSS is specified "layout-region-west".</para>
+<para/>
+<para>
+<graphic fileref="images/layout.jpg"/>
+</para>
+<programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&#13;</programlisting>
+<para/><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zulex.west</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>OnOpen</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="OpenEvent">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
+</link>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>Description: </code>
+<code>When a layout is collapsed or opened by a user, the </code>
+<code>onOpen</code>
+<code> event is sent to the application.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>size</code>
+</para>
+</entry>
+<entry>
+<para>Sets the size of this region.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getPosition()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>Borderlayout.NORTH.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.</code>
+<code>String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setWidth(java.lang.String width)</para>
+</entry>
+<entry>
+<para>The width can't be specified in this component because its width is determined by other region components (West or East).</para>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
 <para/></sect3></sect2><sect2 id="Window" xml:base="ch4/Window.xml"><title>Window</title>
 <para>A window is, like HTML DIV tag, used to group components. Unlike other components, a window has the following characteristics. </para>
 <orderedlist>
@@ -21069,7 +22730,9 @@
 <para>If a developer wants to prevent an event from being resumed, he can throw an exception in the beforeResume method.</para>
 <para>Notice that beforeResume executes in the main thread, so it shares the same thread-local storage with the main thread. On the other hand, afterResume executes in the event processing thread, so it shares the same thread-local storage with the event thread (and application event listeners).</para>
 <para>In additions to resuming normally, a suspended event processing thread might be aborted abnormally. For example, when the desktop is being destroyed, all suspended event threads will be aborted. When the suspended event processing thread is aborted, an instance is created, and the abortResume method is called in the main thread.</para>
-<para>Note: If a suspended event thread is aborted, none of the beforeResume and afterResume is called. Moreover, the cleanup and complete methods of EventThreadCleanup won't be called, either. Thus, you have to handle all necessary cleanups in abortResume.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.WebAppInit interface</title>
+<para>Note: If a suspended event thread is aborted, none of the beforeResume and afterResume is called. Moreover, the cleanup and complete methods of EventThreadCleanup won't be called, either. Thus, you have to handle all necessary cleanups in abortResume.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.EventInterceptor interface</title>
+<para>It is implemented by a listener class that will be used to intercept when an event is sent, posted and processed.</para>
+<para>Like other configurations, the event interceptors registered here are application-wide. It means they will intercept all events for the whole application. If you want to intercept events only for a particular desktop, use the addEventInterceptor method of the org.zkoss.zk.ui.Desktop interface.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.WebAppInit interface</title>
 <para>It is implemented by a listener class that will be used to initialize a ZK application.</para>
 <para>When a ZK application is created, it invokes the init method of this interface such that developers could plug the application-specific codes to initialize the application.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.WebAppCleanup interface</title>
 <para>It is implemented by a listener class that will be used to cleanup a ZK application that is being destroyed.</para>
@@ -21280,8 +22943,14 @@
 <para>[Default: org.zkoss.zk.ui.impl.PollingServerPush]</para>
 <para>It specifies which class used to implement the server-push feature. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.ServerPush interface.</para></sect3><sect3><title>The upload-charset Element</title>
 <para>[Default: UTF-8]</para>
-<para>It specifies the charset for the uploaded text files if the content type is not specified, or no charset is specified with the content type.</para>
-<para>If the uploaded file is binary, there is no encoding issue at all.</para></sect3><sect3><title>The ui-factory-class Element</title>
+<para>It specifies the charset (aka., encoding) for the uploaded text files if no charset is specified with the content type.</para>
+<para>If the uploaded file is binary, there is no encoding issue at all.</para>
+<para>Note: the upload-charset-finder-class element, see blow, has the higher priority.</para></sect3><sect3><title>The upload-charset-finder-class Element</title>
+<para>[Default: null]</para>
+<para>It specifies the finder that determines charset (aka.., encoding) for the uploaded text files if no charset is specified with the content type.</para>
+<para>If the uploaded file is binary, there is no encoding issue at all.</para>
+<para>The finder must implement the org.zkoss.zk.ui.util.CharsetFinder interface. Then, when a text file is uploaded, the getCharset method is called and it can determines the encoding based on the content type and/or the content of the uploaded file.</para>
+<para>Note: it has the higher priority than the upload-charset element, see above.</para></sect3><sect3><title>The ui-factory-class Element</title>
 <para>[Default: org.zkoss.zk.ui.http.SimpleUiFactory]</para>
 <para>It specifies which class used to create desktops and pages, and to convert URL to a page definition. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.UiFactory interface.</para>
 <para>One instance of the UI factory is created and shared for each Web application, so you have to synchronize the access properly.</para>
