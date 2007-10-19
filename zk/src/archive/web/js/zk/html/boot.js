@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "7f"; //increase this if we want the browser to reload JavaScript
+zk.build = "7g"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -342,7 +342,7 @@ zk.setVParent = function (n) {
 	var sib = n.nextSibling;
 	if (sib) {
 		var fake = document.createElement("SPAN");
-		fake.id = id + "!vpfk";
+		fake.id = id + "!agtx";
 		fake.style.display = "none";
 		p.insertBefore(fake, sib);
 	}
@@ -368,7 +368,7 @@ zk.unsetVParent = function (n) {
 	var id = n.id, p = zk._vpts[id];
 	delete zk._vpts[id];
 	if (p) {
-		var sib = $e(id + "!vpfk");
+		var sib = $e(id + "!agtx");
 		if (sib) {
 			p.insertBefore(n, sib);
 			zk.remove(sib);
