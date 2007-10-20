@@ -106,7 +106,6 @@ zkMenu.open = function (menu, toggle) {
  * @param pos how to position the menu
  */
 zkMenu._open = function (pp, top, ref, pos) {
-	/** not yet: we have to adjust CSS and some codes*/
 	//FF: Bug 1486840
 	//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 	if (ref) zk.position(pp, ref, pos);
