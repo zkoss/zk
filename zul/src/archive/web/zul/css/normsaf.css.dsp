@@ -293,13 +293,13 @@ tr.odd td.gc, tr.odd {
 	background: #EAF2F0;<%--#E8EFEA--%>
 }
 tr.seld {
-	background: #316ac5; color: white; <%--Safari Bug 47298: no highlight --%>
+	background: #bbd1ed; border: 1px solid #aac6e9;
 }
 tr.overd {<%-- item onmouseover --%>
 	background: #DAE8FF;
 }
 tr.overseld {<%-- item selected and onmouseover --%>
-	background: #115588;
+	background: #5588bb;
 }
 
 <%--
@@ -564,10 +564,10 @@ td.slidersph-bkr {
 
 <%-- ZK menu --%>
 div.menubar, div.menupopup, div.ctxpopup {
-	cursor: pointer; background: menu; padding: 1px;
+	cursor: pointer; background: #eff0f3; padding: 1px;
 }
 div.menubar {
-	border: 1px solid black;
+	border: 1px solid #919397;
 }
 div.menupopup, div.ctxpopup {
 	display: block; position: absolute; z-index: 88000;
@@ -578,18 +578,14 @@ div.menubar td, div.menupopup td {
 }
 div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
 	font-size: x-small; font-weight: normal;
-	border: 1px solid menu; background: menu; color: black; <%--menutext is white--%>
+	border: 1px solid #eff0f3; background: #eff0f3; color: black;
 	text-decoration: none;
 }
-div.menubar a:hover {
-	background: threedface;
-	border-color: threedhighlight threedshadow threedshadow threedhighlight;
-}
-div.menupopup a:hover {
-	background: #316ac5; color: white; <%--Safari Bug 47298: no highlight --%>
+div.menubar a:hover, div.menupopup a:hover {
+	background: #bbd1ed; border: 1px solid #aac6e9;
 }
 div.menupopup hr {
-	border: 0; color: gray; background: gray; height: 1px;
+	border: 0; color: #c5c5c5; background: #c3c3c3; height: 1px;
 }
 
 <%-- Combobox and Datebox --%>
@@ -669,7 +665,7 @@ tr.calday td a:hover {
 	text-decoration: underline;
 }
 table.calmon td.seld, tr.calday td.seld {
-	background: #cddeee;
+	background: #bbd1ed; border: 1px solid #aac6e9;
 }
 table.calmon td.dis, tr.calday td.dis {
 	color: #888;

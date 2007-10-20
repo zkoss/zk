@@ -300,13 +300,13 @@ tr.odd td.gc, tr.odd {
 	background: #EAF2F0;<%--#E8EFEA--%>
 }
 tr.seld {<%-- item selected --%>
-	background: highlight; color: highlighttext;
+	background: #bbd1ed; border: 1px solid #aac6e9;
 }
 tr.overd {<%-- item onmouseover --%>
 	background: #DAE8FF;
 }
 tr.overseld {<%-- item selected and onmouseover --%>
-	background: #115588;
+	background: #5588bb;
 }
 
 <%--
@@ -571,10 +571,10 @@ td.slidersph-bkr {
 
 <%-- ZK menu --%>
 div.menubar, div.menupopup, div.ctxpopup {
-	cursor: hand; cursor: pointer; background: menu; padding: 1px;
+	cursor: hand; cursor: pointer; background: #eff0f3; padding: 1px;
 }
 div.menubar {
-	border: 1px solid black;
+	border: 1px solid #919397;
 }
 div.menupopup, div.ctxpopup {
 	display: block; position: absolute; z-index: 88000;
@@ -585,18 +585,14 @@ div.menubar td, div.menupopup td {
 }
 div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
 	font-size: xx-small; font-weight: normal; text-overflow: ellipsis;
-	border: 1px solid menu; background: menu; color: menutext;
+	border: 1px solid #eff0f3; background: #eff0f3; color: black;
 	text-decoration: none;
 }
-div.menubar a:hover {
-	background: threedface;
-	border-color: threedhighlight threedshadow threedshadow threedhighlight;
-}
-div.menupopup a:hover {
-	background: highlight; color: highlighttext;
+div.menubar a:hover, div.menupopup a:hover {
+	background: #bbd1ed; border: 1px solid #aac6e9;
 }
 div.menupopup hr {
-	border: 0; color: lightgray; background: lightgray; height: 1px;
+	border: 0; color: #c5c5c5; background: #c3c3c3; height: 1px;
 }
 
 <%-- combobox and datebox --%>
@@ -676,7 +672,7 @@ tr.calday td a:hover {
 	text-decoration: underline;
 }
 table.calmon td.seld, tr.calday td.seld {
-	background: #cddeee;
+	background: #bbd1ed; border: 1px solid #aac6e9;
 }
 table.calmon td.dis, tr.calday td.dis {
 	color: #888;
