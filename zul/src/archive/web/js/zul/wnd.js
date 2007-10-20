@@ -74,23 +74,52 @@ zkWnd._embedded = function (cmp) {
 zkWnd.setAttr = function (cmp, nm, val) {
 	switch (nm) {
 	case "visibility":
-		var bo = zk.unsetChildVParent(cmp);
-		if (cmp._pvisible == undefined || cmp._pvisible == "true")
-			zkau.setAttr(cmp, nm, val);
-		cmp._visible = val;
+		var visible = val == "true",
+			embedded = zkWnd._embedded(cmp),
+			order = embedded ? 0: 1;
 
-		if (!zkWnd._embedded(cmp)) {
-			zkau.hideCovered(); //Bug 1719826
-			if (val) zk.setVParent(cmp); //Bug 1816451
+		if (!embedded) zkau.hideCovered(); //Bug 1719826
+
+		//three cases:
+		//order=0: cmp and all its ancestor are embedded
+		//1: cmp is the first non-embedded, i.e., all its ancestors are embeded
+		//2: cmp has an ancesor is non-embedded
+		//
+		//Since vparent is used if order=1, we have to handle visibility diff
+		for (var n = cmp; n = $parent(n);) {
+			if ($type(n) == "Wnd" && !zkWnd._embedded(n)) {
+				order = 2;
+				break;
+			}
 		}
 
-		for (var j = bo.length; --j >= 0;) {
-			n = $e(bo[j]);		
-			if (n.id != cmp.id) {
-				n._pvisible = val;			
-				zkau.setAttr(n, nm, n._pvisible == "true" ? n._visible : n._pvisible);
-			}				
-			zk.setVParent(n);
+		if (order == 1) { //with vparent
+			setZKAttr(cmp, "vvisi", visible ? 't': 'f');
+			visible = visible && zk.isRealVisible($parent(cmp));
+			zkau.setAttr(cmp, nm, visible ? "true": "false");
+			if (visible) zk.setVParent(cmp); //Bug 1816451
+		} else {
+			//order=0: might have a child with vparent, and realVisi changed
+			if (order == 0 && (visible != zk.isRealVisible(cmp))) {
+				for (var id in zk._vpts)
+					if (zk.isAncestor(cmp, id)) {
+						var n = $e(id);
+						if (n) {
+							var vvisi = getZKAttr(n, "vvisi");
+							if (vvisi != 'f') {
+								var nvisi = $visible(n);
+								if (nvisi != visible) {
+									if (!vvisi)
+										setZKAttr(n, "vvisi", nvisi ? 't': 'f');
+									zkau.setAttr(n, nm, val);
+								}
+							}
+						}
+					}
+			}
+
+			rmZKAttr(cmp, "vvisi"); //just in case
+			zkau.setAttr(cmp, nm, val);
 		}
 		return true;
 
@@ -385,9 +414,8 @@ zkWnd._endOverlapped = function (uuid, replace) {
 };
 
 zkWnd._doOverpop = function (cmp, storage, replace) {
-	
 	var pos = getZKAttr(cmp, "pos");
-	var isV = zkWnd._isVParent(cmp);
+	var isV = zkWnd.shallVParent(cmp);
 	if (!pos && isV && !cmp.style.top && !cmp.style.left) {		
 		var xy = zk.revisedOffset(cmp);
 		cmp.style.left = xy[0] + "px";
@@ -401,9 +429,7 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 		return;
 	}
 	
-	if (pos) {
-		zkWnd._center(cmp, null, pos); //unlike modal, change only if pos
-	}
+	if (pos) zkWnd._center(cmp, null, pos); //unlike modal, change only if pos
 
 	zkau.closeFloats(cmp);
 
@@ -420,20 +446,19 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 zkWnd._endOverpop = function (uuid, storage, replace) {
 	storage.remove(uuid);		
 	var cmp = $e(uuid);
-	if (cmp) zk.unsetVParent($e(uuid));
-	zkau.hideCovered();
-
-	if (!replace) {
-		if (cmp) zkWnd._stick(cmp);
+	if (cmp) {
+		zk.unsetVParent(cmp);
+		zkau.hideCovered();
+		if (!replace) zkWnd._stick(cmp);
 	}
 };
-zkWnd._isVParent = function (el) {
-	el = $parent(el);
-	for (; el; el = $parent(el))
-		if ($type(el) == "Wnd") {
-			var m = getZKAttr(el, "mode");
-			if (m && m != "embedded") return false;
-		}
+/** Test whether el shall become a virtual parent (when overlap/...).
+ * Note: only the first overlap/... need to setVParent
+ */
+zkWnd.shallVParent = function (el) {
+	while (el = $parent(el))
+		if ($type(el) == "Wnd" && !zkWnd._embedded(el))
+			return false; //only one of them shall become a virtual parent
 	return true;
 };
 //Modal//
@@ -449,7 +474,7 @@ zkWnd._doModal = function (cmp, replace) {
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
 	var zi = ++zkau.topZIndex; //mask also need another index
 	
-	if (zkWnd._isVParent(cmp)) zk.setVParent(cmp);
+	if (zkWnd.shallVParent(cmp)) zk.setVParent(cmp);
 	zkWnd._center(cmp, zi, getZKAttr(cmp, "pos")); //called even if pos not defined
 		//show dialog first to have better response.
 
@@ -524,7 +549,7 @@ zkWnd._endModal = function (uuid, replace) {
 	delete zkWnd._modal2[uuid];
 	
 	var cmp = $e(uuid);
-	if (cmp) zk.unsetVParent($e(uuid));
+	if (cmp) zk.unsetVParent(cmp);
 	if (zkau._modals.length == 0) {
 		zk.unlisten(window, "resize", zkWnd._onMoveMask);
 		zk.unlisten(window, "scroll", zkWnd._onMoveMask);
@@ -539,9 +564,7 @@ zkWnd._endModal = function (uuid, replace) {
 		}
 	}
 
-	if (!replace) {
-		if (cmp) zkWnd._stick(cmp);
-	}
+	if (!replace && cmp) zkWnd._stick(cmp);
 
 	if (prevfocusId && !zk.inAsyncFocus) zk.asyncFocus(prevfocusId, 2);
 };
