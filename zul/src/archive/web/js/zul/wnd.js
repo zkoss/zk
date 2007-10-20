@@ -78,8 +78,6 @@ zkWnd.setAttr = function (cmp, nm, val) {
 			embedded = zkWnd._embedded(cmp),
 			order = embedded ? 0: 1;
 
-		if (!embedded) zkau.hideCovered(); //Bug 1719826
-
 		//three cases:
 		//order=0: cmp and all its ancestor are embedded
 		//1: cmp is the first non-embedded, i.e., all its ancestors are embeded
@@ -121,6 +119,7 @@ zkWnd.setAttr = function (cmp, nm, val) {
 			rmZKAttr(cmp, "vvisi"); //just in case
 			zkau.setAttr(cmp, nm, val);
 		}
+		if (!embedded) zkau.hideCovered(); //Bug 1719826
 		return true;
 
 	case "z.sizable":
