@@ -269,7 +269,8 @@ public class EventProcessor {
 		Execution exec = _desktop.getExecution();
 		if (exec == null) exec = ExecutionsCtrl.getCurrent();
 			//just in case that the execution is dead first
-		((ExecutionCtrl)exec).onDeactivate();
+		if (exec != null)
+			((ExecutionCtrl)exec).onDeactivate();
 		ExecutionsCtrl.setCurrent(null);
 		SessionsCtrl.setCurrent(null);
 	}
