@@ -451,9 +451,7 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 		if (real && getZKAttr(real, "open") == "true" && getZKAttr(real, "splt") == "true") {			
 			var maxs = $int(getZKAttr(real, "maxs")) || 2000;
 			var mins = $int(getZKAttr(real, "mins")) || 0;	
-			var el = zk.Layout.getRootLayout(real);
 			var ol = zk.Layout.getOwnerLayout(real);
-			var xy = zk.Layout.cumulativeOffset(ol.el, el);	
 			var mars = ol._paserMargin(getZKAttr(real, "mars") || "0,0,0,0");
 		    var lr = zk.sumStyles(real, "lr", zk.borders) + 
 				zk.sumStyles(real, "lr", zk.paddings) + 
@@ -475,6 +473,8 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 				    } else {
 				    	maxs = Math.min(maxs, ol.el.offsetHeight - rr.offsetHeight - rr.split.offsetHeight - split.offsetHeight - min); 
 				    }
+				  } else {
+				  	maxs = ol.el.offsetHeight - split.offsetHeight;
 				  }
 				  break;				
 				case "west":				
@@ -489,19 +489,16 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 				    } else {
 				    	maxs = Math.min(maxs, ol.el.offsetWidth - rr.offsetWidth - rr.split.offsetWidth - split.offsetWidth - min); 
 				    }
+				  } else {
+				  	maxs = ol.el.offsetWidth - split.offsetWidth;
 				  }
 					break;						
 			}
+			var ofs = Position.cumulativeOffset(real);
 			dg.drag.z_rootlyt = {
-				el: el,
-				width: el.offsetWidth,
-				height: el.offsetHeight,
 				maxs: maxs,
 				mins: mins,
-				top: xy[1] + tb,
-				left: xy[0] + lr,
-				right: el.offsetWidth - xy[0] - ol.el.offsetWidth + lr,
-				bottom: el.offsetHeight - xy[1] - ol.el.offsetHeight + tb
+				top: ofs[1], left : ofs[0], right : real.offsetWidth, bottom:real.offsetHeight
 			};
 			return false;
 		}
@@ -528,7 +525,6 @@ zkLayoutRegionSplit._snap = function (split, x, y) {
 	var dd = zkLayoutRegionSplit._drags[split.id];
 	if (dd) {
 		var b = dd.drag.z_rootlyt;
-		var width = b.width, height = b.height;
 		var w, h;
 		switch (split.pos) {
 			case "north":
@@ -538,15 +534,14 @@ zkLayoutRegionSplit._snap = function (split, x, y) {
 				h = y - b.top;
 				break;				
 			case "south":
-				height -= split.offsetHeight;
-				if (height - y > b.maxs + b.bottom) {
-					y = height - b.maxs - b.bottom;
+				if (b.top + b.bottom - y - split.offsetHeight > b.maxs) {
+					y = b.top + b.bottom - b.maxs - split.offsetHeight;
 					h = b.maxs;			
-				} else if (height - y <= b.mins + b.bottom) {
-					y = height - b.mins - b.bottom;
+				} else if (b.top + b.bottom - b.mins - split.offsetHeight <= y) {
+					y = b.top + b.bottom - b.mins - split.offsetHeight;
 					h = b.mins;	
-				} else h = height - y - b.bottom;
-				w = x;
+				} else h = b.top - y + b.bottom - split.offsetHeight;
+				w = x;	
 				break;				
 			case "west":
 				if (x > b.maxs + b.left) x = b.maxs + b.left;
@@ -554,15 +549,14 @@ zkLayoutRegionSplit._snap = function (split, x, y) {
 				w = x - b.left;
 				h = y;
 				break;		
-			case "east":
-				width -= split.offsetWidth;
-				if (width - x > b.maxs + b.right) {
-					x = width - b.maxs - b.right;
+			case "east":			
+				if (b.left + b.right - x - split.offsetWidth > b.maxs) {
+					x = b.left + b.right - b.maxs - split.offsetWidth;
 					w = b.maxs;
-				} else if (width - x <= b.mins + b.right) {
-					x = width - b.mins - b.right;
+				} else if (b.left + b.right - b.mins - split.offsetWidth <= x) {
+					x = b.left + b.right - b.mins - split.offsetWidth;
 					w = b.mins;
-				} else w = width - x - b.right;
+				} else w = b.left - x + b.right - split.offsetWidth;
 				h = y;
 				break;						
 		}
@@ -600,15 +594,13 @@ zkLayoutRegionSplit.open = function (split, open, silent, enforce) {
 };
 zkLayoutRegionSplit._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
-		zk.dragging = true;
-		dg.z_elorg = dg.element;		
-		var pointer = zk.Layout.cumulativeOffset(dg.element,zk.Layout.getRootLayout(dg.element));
+		var pointer = zkau.beginGhostToDIV(dg);	
 		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
 			+pointer[1]+'px;left:'+pointer[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
 					+'"/></div>';
-		dg.z_rootlyt.el.insertAdjacentHTML("afterbegin", html);
+		document.body.insertAdjacentHTML("afterbegin", html);
 		dg.element = $e("zk_ddghost");
 	} else {		
 		zkau.endGhostToDIV(dg);
