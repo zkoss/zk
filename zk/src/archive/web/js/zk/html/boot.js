@@ -381,10 +381,10 @@ zk.unsetVParent = function (n) {
  */
 zk.unsetChildVParent = function (n) {
 	var bo = [];
-	for (var id in zk._vpts) {
+	for (var id in zk._vpts)
 		if (zk.isAncestor(n, id))
 			bo.push(id);
-	}
+
 	for (var j = bo.length; --j >= 0;) {
 		n = $e(bo[j]);
 		zk.unsetVParent(n);
