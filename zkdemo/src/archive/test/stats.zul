@@ -33,7 +33,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<column width="180px" label="What"/>
 		<column width="100px" align="right" label="Total"/>
 		<column width="120px" align="right" label="Hourly Average"/>
-		<column width="100px" align="right" label="Active"/>
+		<column align="right" label="Active"/>
 	</columns>
 	<rows>
 		<row>
