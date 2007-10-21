@@ -246,10 +246,10 @@ zk.Layout.prototype = {
 		zk.rmOnResize(this.fnResize);
 	}
 };
-zk.Layout.getOwnerLayout = function (cmp) {
+zk.Layout.getOwnerLayout = function (cmp, cleanup) {
 	var bl = $parentByType(cmp, "BorderLayout");
 	var meta = zkau.getMeta(bl);
-	if (meta) return meta;
+	if (meta || cleanup) return meta;
 	else return new zk.Layout(bl);
 };
 zk.Layout.getRootLayout = function (el) {
@@ -311,9 +311,9 @@ zkLayoutRegion.init = function (cmp) {
 };
 zkLayoutRegion.cleanup = function (cmp) {
 	cmp = $real(cmp);		
-	var layout = zk.Layout.getOwnerLayout(cmp);	
+	var layout = zk.Layout.getOwnerLayout(cmp, true);	// Bug #1814702
 	if (cmp.split) {
-		layout.removeRegion(cmp.split.pos);
+		if (layout) layout.removeRegion(cmp.split.pos);
 		var dg = zkLayoutRegionSplit._drags[cmp.split.id];
 		if (dg) {
 			delete zkLayoutRegionSplit._drags[cmp.split.id];
@@ -321,7 +321,7 @@ zkLayoutRegion.cleanup = function (cmp) {
 		}
 		cmp.split.splitbtn = null;
 		cmp.split = null;
-	} else {
+	} else if (layout) {
 		layout.removeRegion(getZKAttr(cmp, "pos"));
 	}
 	cmp.bodyEl = null;
