@@ -48,7 +48,7 @@ public class BoxVertical implements ComponentRenderer {
 			wh.write("<div id=\"").write(child.getUuid()).write("!cell\" ")
 				.write(self.getChildInnerAttrs(child)).write('>');
 			wh.write(child);
-			wh.writeln("</td></tr>");
+			wh.writeln("</div></td></tr>");
 		}		
 		wh.write("</table>");
 	}
