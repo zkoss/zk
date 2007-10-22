@@ -459,7 +459,7 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 			var tb = zk.sumStyles(real, "tb", zk.borders) + 
 				zk.sumStyles(real, "tb", zk.paddings) + 
 				(split.pos == "north" ? mars.top : mars.bottom);
-			var min = 20;
+			var min = 0;
 			switch (split.pos) {
 				case "north":	
 				case "south":
