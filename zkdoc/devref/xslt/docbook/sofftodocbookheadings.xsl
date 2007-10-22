@@ -161,9 +161,19 @@ urchinTracker();
 </xsl:template>
 
 <xsl:template match="text:ordered-list">
-	<xsl:element name="orderedlist">
-		<xsl:apply-templates/>
-	</xsl:element>
+<xsl:choose>
+ <xsl:when test="self::*[@text:style-name='L1']">
+    	<xsl:element name="orderedlist">
+		     <xsl:apply-templates/>
+	    </xsl:element>
+ </xsl:when>
+ <xsl:when test="self::*[@text:style-name='L2']">
+	    <xsl:element name="itemizedlist">
+		     <xsl:apply-templates/>
+	    </xsl:element>
+	</xsl:when>    
+</xsl:choose>
+
 </xsl:template>
 
 
