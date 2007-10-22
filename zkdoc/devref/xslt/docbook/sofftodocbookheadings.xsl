@@ -122,20 +122,6 @@
 	</xsl:choose>
 </xsl:template>
 
-
-<xsl:template name="user.header.content">
-    <xsl:text disable-output-escaping="yes">
-       &lt;script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
-&lt;/script>
-&lt;script type="text/javascript">
-try {
-_uacct = "UA-121377-3";
-urchinTracker();
-} catch (e) {}
-&lt;/script>
-    </xsl:text>
-</xsl:template>
-
 <xsl:template match="text:p">
 		<xsl:element name="para">
 			  <xsl:apply-templates/>
@@ -147,7 +133,9 @@ urchinTracker();
 <xsl:template match="/office:document">
 	<xsl:element name="book">
 		<xsl:attribute name="lang"><xsl:value-of select="/office:document/office:meta/dc:language"/>
+		</xsl:attribute>
 		<title></title>
+		<subtitle>Version 3.0.0 RC2</subtitle>
 	 <copyright>
       <year>2007</year>
       <holder>Potix Corporation. All rights reserved.</holder>
