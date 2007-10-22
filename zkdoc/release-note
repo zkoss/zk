@@ -9,6 +9,7 @@ ZK 3.0.0
   1816982: IE6 only. Splitter in 3d groupbox. Close then Open.
   1816976: The contents shall resize when splitter collapse
   1536301: Combobox bugged when in position:fixed container in IE
+  1817636: hbox overlaps the adjacent cells
 
 * Upgrade Notes:
   + The look of a tree is now customizable by use of CSS. Refer to Java API.
