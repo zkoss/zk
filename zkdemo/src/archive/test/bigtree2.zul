@@ -26,7 +26,7 @@
 		</tabs>
 		<tabpanels>
 			<tabpanel>
-				<tree id="tree" rows="30" width="300px">
+				<tree id="tree" rows="30" width="100%">
 					<treecols>
 						<treecol />
 					</treecols>
@@ -355,7 +355,7 @@
 				</tree>
 			</tabpanel>
 			<tabpanel>
-				<tree rows="30" width="300px">
+				<tree rows="30" width="100%">
 					<treecols>
 						<treecol />
 					</treecols>
@@ -388,7 +388,7 @@
 				</tree>
 			</tabpanel>
 			<tabpanel>
-				<tree rows="30" width="300px">
+				<tree rows="30" width="100%">
 					<treecols>
 						<treecol />
 					</treecols>
@@ -434,7 +434,7 @@
 				</tree>
 			</tabpanel>
 			<tabpanel>
-				<tree rows="30" width="300px">
+				<tree rows="30" width="100%">
 					<treecols>
 						<treecol />
 					</treecols>
