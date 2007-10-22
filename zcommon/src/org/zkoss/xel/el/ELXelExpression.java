@@ -50,4 +50,16 @@ public class ELXelExpression implements Expression {
 			throw new XelException(ex);
 		}
 	}
+
+	//Object//
+	public boolean equals(Object o) {
+		return o instanceof ELXelExpression &&
+			((ELXelExpression)o)._expr.equals(_expr);
+	}
+	public int hashCode() {
+		return _expr.hashCode();
+	}
+	public String toString() {
+		return _expr.toString();
+	}
 }
