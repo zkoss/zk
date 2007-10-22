@@ -3,6 +3,7 @@
   1816970: Splitter bar shall extends when size change
   1816982: IE6 only. Splitter in 3d groupbox. Close then Open.
   1816976: The contents shall resize when splitter collapse
+  1536301: Combobox bugged when in position:fixed container in IE
 
 	--------
 ZK 3.0.0 RC2
