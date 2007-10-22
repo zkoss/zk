@@ -25,9 +25,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </c:when>
 <c:otherwise>
  <tr id="${self.uuid}" z.type="zul.menu.Menu"${self.outerAttrs}${self.innerAttrs}>
- <td><img src="${c:encodeURL('~./img/spacer.gif')}" width="11"/></td>
+ <td width="11px"></td>
  <td align="left"><a href="javascript:;" id="${self.uuid}!a">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}</td>
- <td><img src="${c:encodeURL('~./zul/img/menu/arrow.gif')}" width="9"/></td>
+ <td><img src="${c:encodeURL('~./zul/img/menu/arrow.gif')}"/></td>
  </tr>
 </c:otherwise>
 </c:choose>
