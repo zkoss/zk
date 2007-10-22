@@ -1439,13 +1439,13 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 						
 						var uuid = $uuid(s);
 						var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
-						if (!cacheCss[j] || s.className != cacheCss[j][0].el.className || s.style.cssText != "") {				
+						if (cell && (!cacheCss[j] || s.className != cacheCss[j][0].el.className || s.style.cssText != "")) {				
 							cacheCss[j] = [{el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)}, 
 								{el: cell, size : zk.sumStyles(cell, "lr", zk.borders) + zk.sumStyles(cell, "lr", zk.paddings)}];					
 						} 
 			
-						var rwd = dstwds[z] - cacheCss[j][0].size;						
-						cell.style.width = Math.max(rwd - cacheCss[j][1].size, 0) + "px";
+						var rwd = dstwds[z] - cacheCss[j][0].size;
+						if (cell) cell.style.width = Math.max(rwd - cacheCss[j][1].size, 0) + "px"; // #Bugs 1817636
 						s.style.width = (rwd < 0 ? 0 : rwd) + "px";
 					}
 				}
