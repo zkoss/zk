@@ -54,8 +54,7 @@ public class MenuDefault implements ComponentRenderer {
 		}else{
 			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"zul.menu.Menu\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-				.write(">\n<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif"))
-				.write("\" width=\"11\"/></td>\n<td align=\"left\"><a href=\"javascript:;\" id=\"")
+				.write(">\n<td width=\"11\"></td>\n<td align=\"left\"><a href=\"javascript:;\" id=\"")
 				.write(uuid).write("!a\">").write(self.getImgTag());
 
 			new Out(self.getLabel()).render(out);
@@ -63,7 +62,7 @@ public class MenuDefault implements ComponentRenderer {
 			wh.write("</a>")
 				.write(self.getMenupopup())
 				.write("</td>\n<td><img src=\"").write(exec.encodeURL("~./zul/img/menu/arrow.gif"))
-				.writeln("\" width=\"9\"/></td></tr>");
+				.writeln("\"/></td></tr>");
 		}
 
 	}

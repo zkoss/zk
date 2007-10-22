@@ -58,12 +58,12 @@ public class MenuitemDefault implements ComponentRenderer {
 		}else{
 			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Menuit\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-			wh.write("<td><img src=\"");
+			wh.write("<td width=\"11px\">");
 			if(self.isChecked())
-				wh.write(exec.encodeURL("~./zul/img/menu/checked.gif"));
-			else
-				wh.write(exec.encodeURL("~./img/spacer.gif"));
-			wh.write("\" width=\"11\"/></td>\n<td align=\"left\"><a href=\"");
+				wh.write("<img src=\"")
+				  .write(exec.encodeURL("~./zul/img/menu/checked.gif"))
+				  .write("\"/>");
+			wh.write("</td>\n<td align=\"left\"><a href=\"");
 			if(Strings.isBlank(self.getHref()))
 				wh.write("javascript:;");
 			else
@@ -71,8 +71,7 @@ public class MenuitemDefault implements ComponentRenderer {
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
 			new Out(self.getLabel()).render(out);
-			wh.write("</a></td>\n<td><img src=\"").write(exec.encodeURL("~./img/spacer.gif"))
-				.writeln("\" width=\"9\"/></td></tr>");
+			wh.writeln("</a></td>\n<td width=\"9px\"></td></tr>");
 		}
 	}
 }
