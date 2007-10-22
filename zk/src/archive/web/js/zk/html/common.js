@@ -934,6 +934,7 @@ zk.renType = function (url, type) {
 		suffix = "";
 
 	j = url.lastIndexOf('.');
+	if (j < 0) j = url.length; //no extension at all
 	var	k = url.lastIndexOf('-'),
 		m = url.lastIndexOf('/'),
 		ext = j <= m ? "": url.substring(j),
