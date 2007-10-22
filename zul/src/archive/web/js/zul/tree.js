@@ -161,10 +161,7 @@ zkTree.init = function (cmp) {
 	if (meta.bodytbl)
 		zkTrow._pgnt(cmp, meta.bodytbl.rows);
 };
-zkTree.childchg = function (cmp) {
-	var meta = zkau.getMeta(cmp);
-	if (meta) meta._calcSize();
-};
+zkTree.childchg = zkTree.init;
 
 zkTree.cleanup = function (cmp) {
 	zkTrow._pgclean(cmp);
