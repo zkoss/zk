@@ -62,8 +62,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Tree extends XulElement {
-	
+public class Tree extends XulElement {	
 	private transient Treecols _treecols;
 	private transient Treefoot _treefoot;
 	private transient Treechildren _treechildren;
@@ -74,6 +73,8 @@ public class Tree extends XulElement {
 	private int _rows = 0;
 	/** The name. */
 	private String _name;
+	/** The style class prefix for generating icons. */
+	private String _iconScls = "tree";
 	/** # of items per page. */
 	private int _pgsz = 10;
 	private boolean _multiple, _checkmark;
@@ -464,6 +465,52 @@ public class Tree extends XulElement {
 			invalidate();
 				//FUTURE: trade-off: search and update only
 				//necessary Treechildren is faster or not
+		}
+	}
+
+	/** Returns the style class prefix used to generate the icons of this tree.
+	 *
+	 * <p>Default: tree.
+	 *
+	 * <p>Assume that the icon style class is <code>tree</code>, then
+	 * the following style classes are used for the icons of each tree item:
+	 * <dl>
+	 * <dt>tree-root-open</dt>
+	 * <dd>The icon used to represent the open state for tree items at the root level.</dd>
+	 * <dt>tree-root-close</dt>
+	 * <dd>The icon used to represent the close state for tree items at the root level.</dd>
+	 * <dt>tree-tee-open</dt>
+	 * <dd>The icon used to represent the open state for tree items that have next siblings.</dd>
+	 * <dt>tree-tee-close</dt>
+	 * <dd>The icon used to represent the close state for tree items at have next siblings.</dd>
+	 * <dt>tree-last-open</dt>
+	 * <dd>The icon used to represent the open state for tree items that don't have next siblings.</dd>
+	 * <dt>tree-last-close</dt>
+	 * <dd>The icon used to represent the close state for tree items at don't have next siblings.</dd>
+	 * <dt>tree-tee</dt>
+	 * <dd>The icon used to represent the T-shape icon.</dd>
+	 * <dt>tree-vbar</dt>
+	 * <dd>The icon used to represent the |-shape (vertical bar) icon.</dd>
+	 * <dt>tree-last</dt>
+	 * <dd>The icon used to represent the L-shape icon -- no next sibling.</dd>
+	 * <dt>tree-spacer</dt>
+	 * <dd>The icon used to represent the blank icon.</dd>
+	 * </dl>
+	 *
+	 * @since 3.0.0
+	 */
+	public String getIconSclass() {
+		return _iconScls;
+	}
+	/** Sets the style class prefix used to generate the icons of this tree.
+	 *
+	 * @since 3.0.0
+	 * @see #getIconSclass
+	 */
+	public void setIconSclass(String scls) {
+		if (!Objects.equals(_iconScls, scls)) {
+			_iconScls = scls;
+			invalidate();
 		}
 	}
 

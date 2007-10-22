@@ -103,7 +103,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 			if (!img) return;
 		}
 
-		img.src = zk.renType(img.src, toOpen ? "open": "close");
+		img.className = zk.renType(img.className, toOpen ? "open": "close");
 		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
 
 		this._showKids(row, toOpen);

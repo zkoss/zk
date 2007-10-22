@@ -307,6 +307,68 @@ span.treeitem-paging {
 }
 --%>
 
+<%-- tree icons --%>
+span.tree-root-open {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/root-open.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-root-close {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/root-close.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-tee-open {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-open.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-tee-close {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-close.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-last-open {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/last-open.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-last-close {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/last-close.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-tee {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-vbar {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/vbar.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-last {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/last.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+span.tree-spacer {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/spacer.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top; display:inline-block;
+}
+
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;

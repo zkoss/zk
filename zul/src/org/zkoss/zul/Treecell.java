@@ -40,16 +40,16 @@ import org.zkoss.zul.impl.LabelImageElement;
  * @author tomyeh
  */
 public class Treecell extends LabelImageElement {
-	private static final String ROOT_OPEN = "/root-open.gif";
-	private static final String ROOT_CLOSE = "/root-close.gif";
-	private static final String LAST_OPEN = "/last-open.gif";
-	private static final String LAST_CLOSE = "/last-close.gif";
-	private static final String TEE_OPEN = "/tee-open.gif";
-	private static final String TEE_CLOSE = "/tee-close.gif";
-	private static final String TEE = "/tee.gif";
-	private static final String LAST = "/last.gif";
-	private static final String VBAR = "/vbar.gif";
-	private static final String SPACER = "/spacer.gif";
+	private static final String ROOT_OPEN = "root-open";
+	private static final String ROOT_CLOSE = "root-close";
+	private static final String LAST_OPEN = "last-open";
+	private static final String LAST_CLOSE = "last-close";
+	private static final String TEE_OPEN = "tee-open";
+	private static final String TEE_CLOSE = "tee-close";
+	private static final String TEE = "tee";
+	private static final String LAST = "last";
+	private static final String VBAR = "vbar";
+	private static final String SPACER = "spacer";
 
 	private int _span = 1;
 
@@ -154,13 +154,19 @@ public class Treecell extends LabelImageElement {
 					.append("!cm\" z.type=\"Tcfc\"/>");
 			}
 
+			String iconScls = null;
+			if (tree != null)
+				iconScls = tree.getIconSclass();
+			if (iconScls == null)
+				iconScls = ""; //default
+
 			final Treeitem[] pitems = getTreeitems(item);
 			for (int j = 0; j < pitems.length; ++j)
-				appendImage(sb,
+				appendIcon(sb, iconScls,
 					j == 0 || isLastChild(pitems[j]) ? SPACER: VBAR, false);
 	
 			if (item.isContainer()) {
-				appendImage(sb,
+				appendIcon(sb, iconScls,
 					item.isOpen() ?
 						pitems.length == 0 ? ROOT_OPEN:
 							isLastChild(item) ? LAST_OPEN: TEE_OPEN:
@@ -168,7 +174,7 @@ public class Treecell extends LabelImageElement {
 							isLastChild(item) ? LAST_CLOSE: TEE_CLOSE,
 						true);
 			} else {
-				appendImage(sb,
+				appendIcon(sb, iconScls,
 					pitems.length == 0 ? SPACER:
 						isLastChild(item) ? LAST: TEE, false);
 			}
@@ -239,56 +245,23 @@ public class Treecell extends LabelImageElement {
 	/** Generates HTML tags for &lt;img&gt;.
 	 * @param button whether this is the button to toggle open/close
 	 */
-	private void appendImage(StringBuffer sb, String name, boolean button) {
-		final int width = getIconWidth(), height = getIconHeight();
-		final String uri = getIconURI(name);
-		sb.append("<img align=\"top\" z.fc=\"t\"");
+	private void appendIcon(StringBuffer sb, String sclass,
+	String name, boolean button) {
+		sb.append("<span z.fc=\"t\" class=\"")
+			.append(sclass).append('-').append(name).append('"');
 			//z.fc used to let tree.js know what to clone
-		HTMLs.appendAttribute(
-			sb, "src", getDesktop().getExecution().encodeURL(uri));
-		HTMLs.appendAttribute(sb, "width", width);
-		HTMLs.appendAttribute(sb, "height", height);
+
 		if (button) {
 			final Treeitem item = getTreeitem();
 			if (item != null) {
-				sb.append(" z.type=\"Tcop\" id=\"")
-					.append(item.getTreerow().getUuid()).append("!open\"");
+				final Treerow tr = item.getTreerow();
+				if (tr != null)
+					sb.append(" z.type=\"Tcop\" id=\"")
+						.append(tr.getUuid()).append("!open\"");
 			}
-
-			//HTMLs.appendAttribute(sb, "title", title);
 		}
-		sb.append("/>");
-	}
 
-	/** Returns the width of the icon. */
-	private int getIconWidth() {
-		return getIntAttr("icon-width", 18);
-	}
-	/** Returns the height of the icon. */
-	private int getIconHeight() {
-		return getIntAttr("icon-height", 18);
-	}
-	/** Returns the icon URI.
-	 */
-	private String getIconURI(String name) {
-		String s = Objects.toString(getAttribute("icon-uri"));
-		if (s == null) s = "~./zul/img/tree";
-		return s + name;
-	}
-	private int getIntAttr(String name, int defVal) {
-		int v;
-		Object o = getAttribute(name);
-		if (o instanceof Number) {
-			v = ((Number)o).intValue();
-		} else {
-			String s = Objects.toString(o);
-			if (s == null || s.length() == 0)
-				return defVal;
-
-			v = Integer.parseInt(s);
-			setAttribute(name, new Integer(v)); //to have better performance
-		}
-		return v > 0 ? v: defVal;
+		sb.append("></span>");
 	}
 
 	//-- super --//
