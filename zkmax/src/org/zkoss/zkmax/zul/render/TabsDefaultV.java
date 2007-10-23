@@ -46,7 +46,9 @@ public class TabsDefaultV implements ComponentRenderer {
 		
 		/* prefix row */
 		wh.writeln("<tr><td align=\"right\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
-			.write("<tr><td class=\"").write(look).writeln("first\"></td></tr></table></td></tr>");
+			.write("<tr><td class=\"").write(look).writeln("first1\"></td></tr>")
+			.write("<tr id=\"").write(self.getUuid()).write("!first\"><td class=\"")
+			.write(look).writeln("first2\"></td></tr></table></td></tr>");
 
 		wh.writeChildren(self);
 

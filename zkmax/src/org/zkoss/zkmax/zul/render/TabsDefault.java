@@ -57,7 +57,9 @@ public class TabsDefault implements ComponentRenderer {
 		
 		/* prefix column */
 		wh.writeln("<td><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-		wh.write("<tr><td class=\"").write(look).writeln("first\"></td></tr></table></td>");				
+		wh.write("<tr><td class=\"").write(look).writeln("first1\"></td>");
+		wh.write("<td class=\"").write(look).writeln("first2\" id=\"").write(self.getUuid())
+			.write("!first\"></td></tr></table></td>");
 
 		wh.writeChildren(self);
 		

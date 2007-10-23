@@ -423,8 +423,12 @@ td.tabpanels {<%-- vert --%>
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
 
-td.tab-3d-first {
-	background-image: url(${c:encodeURL('~./zul/img/tab/3d-first.gif')});
+td.tab-3d-first1 {
+	background-image: url(${c:encodeURL('~./zul/img/tab/3d-first1.gif')});
+	width: 1px; height: 3px;
+}
+td.tab-3d-first2 {
+	background-image: url(${c:encodeURL('~./zul/img/tab/3d-first2.gif')});
 	width: 3px; height: 3px;
 }
 td.tab-3d-last1 {
@@ -518,8 +522,12 @@ td.tabaccd-3d-b, td.groupbox-3d-b {
 	height: 1px;
 }
 
-td.tab-v3d-first {
-	background-image: url(${c:encodeURL('~./zul/img/tab/v3d-first.gif')});
+td.tab-v3d-first1 {
+	background-image: url(${c:encodeURL('~./zul/img/tab/v3d-first1.gif')});
+	width: 3px; height: 1px;
+}
+td.tab-v3d-first2 {
+	background-image: url(${c:encodeURL('~./zul/img/tab/v3d-first2.gif')});
 	width: 3px; height: 3px;
 }
 td.tab-v3d-last1 {
@@ -760,8 +768,12 @@ div.dateboxpp table.calyear {
 }
 
 <%-- additional tab --%>
-td.tab-lite-first {
-	background-image: url(${c:encodeURL('~./zul/img/tab/lite-first.gif')});
+td.tab-lite-first1 {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-first1.gif')});
+	width: 1px; height: 3px;
+}
+td.tab-lite-first2 {
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-first2.gif')});
 	width: 3px; height: 3px;
 }
 td.tab-lite-last1 {

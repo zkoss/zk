@@ -20,10 +20,14 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
+import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -32,11 +36,42 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Tabs extends XulElement {
+	
+	private String _align = "start";
 	/** Returns the tabbox owns this component.
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tabbox getTabbox() {
 		return (Tabbox)getParent();
+	}
+	
+	/** Returns the alignment of tab.
+	 *
+	 * <p>Default: "start".
+	 *
+	 * <p>Note: only the default mold supports it (not supported if accordion).
+	 * 
+	 * @since 3.0.0
+	 */
+	public String getAlign() {
+		return _align;
+	}
+	/** Sets the alignment of tab.
+	 * @param align must be "start" or "center" or "end".
+	 * @since 3.0.0
+	 */
+	public void setAlign(String align) throws WrongValueException {
+		if (!"start".equals(align) && !"center".equals(align) && !"end".equals(align))
+			throw new WrongValueException(align);
+
+		if (!Objects.equals(_align, align)) {
+			_align = align;
+			Tabbox tabbox = getTabbox();
+			if(!tabbox.inAccordionMold()){
+				//getTabbox().invalidate();
+				invalidate();				
+			}
+		}
 	}
 
 	//-- Component --//
@@ -110,5 +145,17 @@ public class Tabs extends XulElement {
 	private static void invalidateIfAccordion(Tabbox tabbox) {
 		if (tabbox != null && tabbox.inAccordionMold())
 			tabbox.invalidate();
+	}
+	
+	//-- super --//
+	public String getOuterAttrs() {
+		Tabbox tabbox = getTabbox();
+		if(!tabbox.inAccordionMold()){
+			final StringBuffer sb =
+				new StringBuffer(64).append(super.getOuterAttrs());
+			HTMLs.appendAttribute(sb, "z.align", getAlign().substring(0,1));
+			return sb.toString();
+		}
+		return super.getOuterAttrs();
 	}
 }

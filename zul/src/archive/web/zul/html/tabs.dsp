@@ -28,7 +28,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%-- prefix column  --%>
 <td><table border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td class="${c:cat(look,'first')}"></td>
+	<td class="${c:cat(look,'first1')}"></td>
+	<td class="${c:cat(look,'first2')}" id="${self.uuid}!first"></td>
 </tr>
 </table></td>
 

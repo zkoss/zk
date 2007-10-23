@@ -203,27 +203,87 @@ zkTabs._fixWdLater = function (uuid) {
 };
 /** Fix the width of the last column in tabs. */
 zkTabs.fixWidth = function (uuid) {
-	var n = $e(uuid + "!last");
-	if (!n) return;
-
-	var tbl = zk.parentNode(zk.parentNode(n, "TABLE"), "TABLE");
+	var ft = $e(uuid + "!first");
+	var lt = $e(uuid + "!last");
+	if (!ft || !lt) return;
+	
+	var tabs = $e(uuid);
+	var align = getZKAttr(tabs,"align");
+	var tbl = zk.parentNode(zk.parentNode(ft, "TABLE"), "TABLE");
 	var tabs = zk.parentNode(tbl, "TABLE");
 		//Safari: THEAD's width and TD/TR's height is 0, so use TABLE instead
 	if (tabs) {
-		if ("TD" == $tag(n)) { //horizontal
-			n.style.width = "1px"; //let tab's width be re-calc
+		if ("TD" == $tag(lt)) { //horizontal
+			//let tab's width be re-calc
+			switch(align){
+				case 's'://start
+					lt.style.width = "1px";
+					break;
+				case 'e'://end
+				case 'c'://center
+					ft.style.width = ft.offsetWidth+"px";
+					break;
+			}
 			setTimeout(function () {
-				var v = tabs.offsetWidth - tbl.offsetWidth + n.offsetWidth;
-				if (v < 0) v = 0;
-				n.style.width = v + "px";
+				switch(align){
+					case 's':
+						var v = tabs.offsetWidth - tbl.offsetWidth +lt.offsetWidth;
+						if (v < 0) v = 0;
+						lt.style.width = v + "px";
+						break;
+					case 'e':
+						var v = tabs.offsetWidth - tbl.offsetWidth +ft.offsetWidth;
+						if (v < 0) v = 0;
+						ft.style.width = v + "px";
+						v2 = 0;
+						break;
+					case 'c':
+						var v = tabs.offsetWidth - tbl.offsetWidth +ft.offsetWidth+lt.offsetWidth;
+						if (v < 0) v = 0;
+						var v1,v2;
+						v1 = Math.floor(v/2);
+						v2 = v-v1;
+						ft.style.width = v1 + "px";
+						lt.style.width = v2 + "px";
+						break;
+				}
 			}, 30);
 		} else { //vertical
-			n.style.height = "1px"; //let tab's height be re-calc
+			//let tab's width be re-calc
+			switch(align){
+				case 's':
+					lt.style.height = "1px";
+					break;
+				case 'c':
+				case 'm':
+					ft.style.height = ft.offsetHeight+"px";
+					break;
+			}
 			setTimeout(function () {
-				if (n.cells && n.cells.length) n = n.cells[0];
-				var v = tabs.offsetHeight - tbl.offsetHeight + n.offsetHeight;
-				if (v < 0) v = 0;
-				n.style.height = v + "px";
+				if (ft.cells && ft.cells.length) ft = ft.cells[0];
+				if (lt.cells && lt.cells.length) lt = lt.cells[0];
+				switch(align){
+					case 's':
+						var v = tabs.offsetHeight - tbl.offsetHeight +lt.offsetHeight;
+						if (v < 0) v = 0;
+						lt.style.height = v + "px";
+						break;
+					case 'e':
+						var v = tabs.offsetHeight - tbl.offsetHeight +ft.offsetHeight;
+						if (v < 0) v = 0;
+						ft.style.height = v + "px";
+						v2 = 0;
+						break;
+					case 'c':
+						var v = tabs.offsetHeight - tbl.offsetHeight +ft.offsetHeight+lt.offsetHeight;
+						if (v < 0) v = 0;
+						var v1,v2;
+						v1 = Math.floor(v/2);
+						v2 = v-v1;
+						ft.style.height = v1 + "px";
+						lt.style.height = v2 + "px";
+						break;
+				}
 			}, 30);
 		}
 	}

@@ -27,7 +27,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <tr>
 <td align="right"><table border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td class="${c:cat(look,'first')}"></td>
+	<td class="${c:cat(look,'first1')}"></td>
+</tr>
+<tr id="${self.uuid}!first">
+	<td class="${c:cat(look,'first2')}"></td>
 </tr>
 </table></td>
 </tr>
