@@ -439,7 +439,7 @@ zkLayoutRegionSplit._fixbtn = function (split) {
 		var before = colps == "true";
 		if (split.pos == "east" || split.pos == "south") before = !before;
 		if (getZKAttr(real, "open") == "false") before = !before;
-		split.splitbtn.src = zk.renType(split.splitbtn.src,
+		split.splitbtn.className = zk.renType(split.splitbtn.className,
 			vert ? before ? 't': 'b': before ? 'l': 'r');
 		split.splitbtn.style.display = "";
 	}

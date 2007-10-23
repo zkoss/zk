@@ -55,7 +55,27 @@ div.layout-split{
 	opacity:1;
 }
 
-.layout-split-button{
+span.layout-split-button-l, span.layout-split-button-r, span.layout-split-button-t ,span.layout-split-button-b {
 	filter:alpha(opacity=50);  /* IE */
-	opacity:0.5;  /* Moz + FF */
+	opacity:0.5;  /* Moz + FF */	
+	background-repeat: no-repeat;
+	display:-moz-inline-box; vertical-align:top;
+	display:inline-block;
+}
+span.layout-split-button-l {
+	width: 6px; min-height: 50px; height: 50px;
+	background-image: url(${c:encodeURL('~./zulex/img/layout/colps-l.png')});
+}
+span.layout-split-button-r {
+	width: 6px; min-height: 50px; height: 50px;
+	background-image: url(${c:encodeURL('~./zulex/img/layout/colps-r.png')});
+}
+span.layout-split-button-t {
+	width: 50px; min-height: 6px; height: 6px;
+	background-image: url(${c:encodeURL('~./zulex/img/layout/colps-t.png')});
+
+}
+span.layout-split-button-b {
+	width: 50px; min-height: 5px; height: 6px;
+	background-image: url(${c:encodeURL('~./zulex/img/layout/colps-b.png')});
 }
