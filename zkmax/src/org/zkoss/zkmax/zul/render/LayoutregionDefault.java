@@ -40,7 +40,6 @@ public class LayoutregionDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final LayoutRegion self = (LayoutRegion) comp;
-		final Execution exec = Executions.getCurrent();
 		wh.write("<div id=\"").write(self.getUuid()).write('"')
 			.write(" z.type=\"zulex.layout.LayoutRegion\">").write("<div id=\"")
 			.write(self.getUuid()).write("!real\"").write(self.getOuterAttrs())
@@ -55,16 +54,16 @@ public class LayoutregionDefault implements ComponentRenderer {
 			if (self.getPosition().equals("west")
 					|| self.getPosition().equals("east"))
 				wh.write("layout-split-h");
-			wh.write("\"><img id=\"").write(self.getUuid()).write(
-					"!splitbtn\" class=\"layout-split-button\" src=\"");
+			wh.write("\"><span id=\"").write(self.getUuid()).write(
+					"!splitbtn\" class=\"layout-split-button-");
 			if (self.getPosition().equals("north"))
-				wh.write(exec.encodeURL("~./zulex/img/layout/colps-t.png"));
+				wh.write("t");
 			else if (self.getPosition().equals("south"))
-				wh.write(exec.encodeURL("~./zulex/img/layout/colps-b.png"));
+				wh.write("b");
 			else if (self.getPosition().equals("west"))
-				wh.write(exec.encodeURL("~./zulex/img/layout/colps-l.png"));
-			else wh.write(exec.encodeURL("~./zulex/img/layout/colps-r.png"));
-			wh.write("\"/></div>");
+				wh.write("l");
+			else wh.write("r");
+			wh.write("\"></span></div>");
 		}
 		wh.write("</div>");
 	}
