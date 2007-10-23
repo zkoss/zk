@@ -88,9 +88,8 @@ zk.Grid.prototype = {
 					//Moz has a bug to send the request out if we don't wait long enough
 					//How long is enough is unknown, but 200 seems fine
 			};
-		}
-
-		//this.stripe();	
+		} else this.stripe(); // Bug #1818331
+			
 		setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722 
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
