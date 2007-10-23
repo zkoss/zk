@@ -398,6 +398,7 @@ zk.Selectable.prototype = {
 		case "select": //select by uuid
 			var row = $e(val);
 			this._selectOne(row, false);
+			zk.scrollIntoView(this.body, row);
 			return true;
 		case "selectAll":
 			this._selectAll();
