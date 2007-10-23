@@ -1148,7 +1148,7 @@ zkLibox.init = function (cmp) {
 			zk.listen(meta.body, "keydown", zkLibox.bodyonkeydown);
 	}
 };
-zkLibox.childchg = zkSel._calcSize;
+zkLibox.childchg = zkLibox.init; // Bug #1817627.
 
 /** Called when a listbox becomes visible because of its parent. */
 zkLibox.onVisi = zkLibox.onSize = function (cmp) {

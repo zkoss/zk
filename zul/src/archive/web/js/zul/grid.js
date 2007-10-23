@@ -270,7 +270,7 @@ zkGrid.init = function (cmp) {
 	if (meta) meta.init();
 	else new zk.Grid(cmp);
 };
-zkGrid.childchg = zkGrid._calcSize;
+zkGrid.childchg = zkGrid.init; // Bug #1817627.
 
 /** Called when a grid becomes visible because of its parent. */
 zkGrid.onVisi = zkGrid.onSize = function (cmp) {
