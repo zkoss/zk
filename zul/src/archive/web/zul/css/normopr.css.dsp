@@ -182,7 +182,6 @@ div.hsep-bar {
 div.vsep-bar {
 	border-left: 1px solid #666; margin-left: 2pt;
 }
-
 <%-- ZK toolbar and toolbarbutton --%>
 .toolbar {
 	padding: 1px; background: threedface; border: 1px solid;
@@ -272,11 +271,16 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-foot, tbody.tree-foot {<%-- always used --%>
 	background: threedface; border-top: 1px solid threedshadow;
 }
-
-div.foot-cell-inner, div.cell-inner, div.head-cell-inner {
-	overflow:hidden; border: 0; margin: 0; padding: 0; 
+div.foot-cell-inner, div.cell-inner, div.head-cell-inner, div.vbox, div.hbox {
+	overflow:hidden; border: 0; margin: 0; padding: 0;
 }
 
+div.vbox {
+	padding-bottom: 0.4em;
+}
+div.hbox {
+	padding-right: 0.6em;
+}
 div.gc {
 	padding: 2px; font-size: x-small; font-weight: normal; color: black;
 }
