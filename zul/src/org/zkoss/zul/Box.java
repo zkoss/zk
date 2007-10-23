@@ -346,7 +346,7 @@ public class Box extends XulElement {
 		final StringBuffer sb = new StringBuffer(64);
 
 		String stylesb = "";
-		HTMLs.appendAttribute(sb, "class", vert ? "vbox cell-inner": "hbox cell-inner");
+		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
 		final String align = toHalign(vert ? _align: _pack);
 		if (align != null && align.length() > 0) {
 			HTMLs.appendAttribute(sb, "align", align);
