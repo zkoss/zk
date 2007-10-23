@@ -2,6 +2,7 @@
 ZK 3.0.0
 * Features:
   1817685: A way to use CSS to customize tree's icons
+  1732886: Scroll Listbox on Selection
 
 * Bugs:
   1814702: ZK Layout Fails to Resize
