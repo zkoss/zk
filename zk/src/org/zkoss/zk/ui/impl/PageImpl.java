@@ -812,9 +812,15 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				_cacheable != null ?  _cacheable.booleanValue():
 					_desktop.getDevice().isCacheable();
 			if (!cacheable) {
-				execCtrl.setHeader("Cache-Control", "no-cache,no-store,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0"); // bug 1520444
-				execCtrl.setHeader("Pragma", "no-cache,no-store"); // bug 1520444
-				execCtrl.setHeader("Expires", "-1");
+				if (exec.isExplorer() && !exec.isExplorer7()) {
+					//bug: IE6 has limitation upon what are specified
+					execCtrl.setHeader("Cache-Control", "no-cache");
+					execCtrl.setHeader("Pragma", "no-cache"); // bug 1520444
+				} else  {
+					execCtrl.setHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0,post-check=0,pre-check=0"); // bug 1520444
+					execCtrl.setHeader("Pragma", "no-cache,no-store"); // bug 1520444
+				}
+				execCtrl.setDateHeader("Expires", 0);
 			}
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
 				//Don't use include. Otherwise, headers will be gone.
