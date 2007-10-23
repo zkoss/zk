@@ -14,7 +14,8 @@ ZK 3.0.0
   1817636: hbox overlaps the adjacent cells
   1817627: Pageable sortable Listbox hides content when sorted
   1818331: No zebra color in paging mold.
-  1818382; Vbox and Hbox isn't padding between its neighbor.
+  1818382: Vbox and Hbox isn't padding between its neighbor.
+  1818500: IE Cache Problem.
 
 * Upgrade Notes:
   + The look of a tree is now customizable by use of CSS. Refer to Java API.
