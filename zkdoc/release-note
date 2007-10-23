@@ -13,6 +13,7 @@ ZK 3.0.0
   1536301: Combobox bugged when in position:fixed container in IE
   1817636: hbox overlaps the adjacent cells
   1817627: Pageable sortable Listbox hides content when sorted
+  1818331: No zebra color in paging mold.
 
 * Upgrade Notes:
   + The look of a tree is now customizable by use of CSS. Refer to Java API.
