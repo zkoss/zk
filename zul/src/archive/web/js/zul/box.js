@@ -107,11 +107,11 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
 			nd = tn == "TR" ? p.rows[j] : p.cells[j];
 			if (zk.isRealVisible(nd) && $type($real(nd)) != "Splt") {
 				var cell = $e($uuid(nd) + "!cell");
-				nd.style.height = nd.offsetHeight + "px";
-				cell.style.height = zk.revisedSize(cell, nd.offsetHeight) + "px";
+				nd.style.height = nd.style.height ? nd.style.height : nd.offsetHeight + "px";
+				cell.style.height = zk.revisedSize(cell, $int(nd.style.height), true) + "px";
 				if (!vert) {
-					nd.style.width = nd.offsetWidth + "px";					
-					cell.style.width = zk.revisedSize(cell, nd.offsetWidth) + "px";
+					nd.style.width = nd.style.width ? nd.style.width : nd.offsetWidth + "px";			
+					cell.style.width = zk.revisedSize(cell, $int(nd.style.width)) + "px";
 				}
 			}
 		}	
@@ -209,7 +209,7 @@ zkSplt._adj = function (n, fd, diff) {
 		var td = cell.parentNode;
 		var val = Math.max($int(n.style[fd]) + diff, 30);
 		n.style[fd] = val + "px";
-		cell.style[fd] = zk.revisedSize(cell, val) + "px";
+		cell.style[fd] = zk.revisedSize(cell, val, fd == "height") + "px";
 		zkSplt._adjBox(cell, fd);
 		zk.onSizeAt(n); //notify descendants
 	}
@@ -227,7 +227,7 @@ zkSplt._adjSplt = function (n, fd, diff) {
 			var cell = $e($uuid(n) + "!cell");
 			var val = Math.max($int(n.style[fd]) + diff, 0);
 			n.style[fd] = val + "px";
-			cell.style[fd] = zk.revisedSize(cell, val) + "px";
+			cell.style[fd] = zk.revisedSize(cell, val, fd == "height") + "px";
 			//No need to call zk.onSizeAt(n) since it is handled above
 		}
 	}
@@ -314,11 +314,11 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 			if (sib._prevSize) {
 					sib.style[pos] = sib._prevSize + "px";
 					var cell = $e($uuid(sib) + "!cell");
-					cell.style[pos] = zk.revisedSize(cell ,$int(sib.style[pos])) + "px";					
+					cell.style[pos] = zk.revisedSize(cell, $int(sib.style[pos]), pos == "height") + "px";					
 					zkSplt._adjBox(cell, pos);							
 					next.style[pos] = $int(next.style[pos]) - sib._prevSize + "px";		
 					cell = $e($uuid(next) + "!cell");
-					cell.style[pos] = zk.revisedSize(cell ,$int(next.style[pos])) + "px";
+					cell.style[pos] = zk.revisedSize(cell, $int(next.style[pos]), pos == "height") + "px";
 					sib._prevSize = false;					
 					zkSplt._adjBox(cell, pos);
 			}
@@ -330,7 +330,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 			cell.style[pos] = "0px";
 			next.style[pos] = p + $int(next.style[pos]) + "px";			
 			cell = $e($uuid(next) + "!cell");
-			cell.style[pos] = zk.revisedSize(cell ,$int(next.style[pos])) + "px";
+			cell.style[pos] = zk.revisedSize(cell, $int(next.style[pos]), pos == "height") + "px";
 			zkSplt._adjBox(cell, pos);
  		}
 		zk.show(sib, open);
