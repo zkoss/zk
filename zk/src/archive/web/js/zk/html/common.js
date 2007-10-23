@@ -1359,7 +1359,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 		hdtable.style.tableLayout = "auto";
 		hdtable.style.width = "";
 	}
-	
+	var found;
 	var scOdd = getZKAttr(mate.element, "scOddRow"), dstwds = [], cacheCss = [];
 	for (var i = 0, even = true; i < srcrows.length; ++i) {
 		var row = srcrows[i];
@@ -1367,6 +1367,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 			zk.addClass(row, scOdd, !even);
 			even = !even;
 		}
+		if(!found && getZKAttr(row, "sel") == "true") found = row;
 		var cells = row.cells;
 		for (var j = 0, z = 0; j < cells.length; ++j) {
 			if (j < dst.cells.length) {
@@ -1453,6 +1454,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 			}
 		}		
 	}
+	if (found) zk.scrollIntoView(mate.body, found);
 	if (!again && (zk.safari || zk.opera)) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 5);	
 	// Note :we have to re-calculate the width of cell column for safari.
 };
