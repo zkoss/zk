@@ -51,7 +51,7 @@ div.layout-split{
     z-index:12;
     background-color: #C4DCFB;
 }
-.layout-split-button:hover {
+span.layout-split-button-l:hover, span.layout-split-button-r:hover, span.layout-split-button-t:hover ,span.layout-split-button-b:hover {
 	opacity:1;
 }
 
