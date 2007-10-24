@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.render;
 
 import java.util.List;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.io.IOException;
@@ -78,7 +79,7 @@ public final class SmartWriter /*extends Writer*/ {
 	/** Writes all children.
 	 */
 	public SmartWriter writeChildren(Component comp) throws IOException {
-		return write(comp.getChildren());
+		return writeComponents(comp.getChildren());
 	}
 	/** Writes children in the specified range.
 	 *
@@ -87,11 +88,11 @@ public final class SmartWriter /*extends Writer*/ {
 	 */
 	public SmartWriter writeChildren(Component comp, int from, int to)
 	throws IOException {
-		return write(comp.getChildren(), from, to);
+		return writeComponents(comp.getChildren(), from, to);
 	}
 	/** Writes a list of components.
 	 */
-	public SmartWriter write(List comps) throws IOException {
+	public SmartWriter writeComponents(Collection comps) throws IOException {
 		for (Iterator it = comps.iterator(); it.hasNext();)
 			((Component)it.next()).redraw(_w);
 		return this;
@@ -101,7 +102,7 @@ public final class SmartWriter /*extends Writer*/ {
 	 * @param from the first index (included).
 	 * @param to the last index (included).
 	 */
-	public SmartWriter write(List comps, final int from, final int to)
+	public SmartWriter writeComponents(List comps, final int from, final int to)
 	throws IOException {
 		if (from < comps.size()) {
 			ListIterator it = comps.listIterator(from);
