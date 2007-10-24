@@ -50,7 +50,7 @@ public class ListboxPaging implements ComponentRenderer {
 
 		//body
 		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">")
-			.write(self.getItems(), self.getVisibleBegin(), self.getVisibleEnd())
+			.writeComponents(self.getItems(), self.getVisibleBegin(), self.getVisibleEnd())
 			.writeln("</tbody>");
 
 		//Footer

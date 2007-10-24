@@ -1,4 +1,4 @@
-/* ListheadDefault.java
+/* AuxheadDefault.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 6 2007, Created by Jeff.Liu
+		Wed Oct 24 11:42:31     2007, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -24,23 +24,23 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zul.Listhead;
+import org.zkoss.zul.Auxhead;
 
 /**
- * {@link Listhead}'s default mold.
- * @author Jeff Liu
+ * {@link Auxhead}'s default mold.
+ * 
+ * @author tomyeh
  * @since 3.0.0
  */
-public class ListheadDefault implements ComponentRenderer {
+public class AuxheadDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
-		final Listhead self = (Listhead)comp;
-		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lhrs\"")
+		final Auxhead self = (Auxhead)comp;
+		wh.write("<tr id=\"").write(self.getUuid()).write('"')
 		  .write(self.getOuterAttrs()).write(self.getInnerAttrs())
 		  .write(" align=\"left\">")
 		  .writeChildren(self)
 		  .writeln("</tr>");
 	}
-
 }

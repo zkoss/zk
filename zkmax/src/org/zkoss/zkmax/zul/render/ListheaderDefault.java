@@ -39,12 +39,12 @@ public class ListheaderDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Listheader self = (Listheader)comp;
 		wh.write("<th id=\"").write(self.getUuid()).write("\" z.type=\"Lhr\"")
-		.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-		.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"head-cell-inner\">");
-		wh.write(self.getImgTag());
+		  .write(self.getOuterAttrs()).write(self.getInnerAttrs())
+		  .write("><div id=\"").write(self.getUuid())
+		  .write("!cave\" class=\"head-cell-inner\">")
+		  .write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
-		wh.writeChildren(self);
-		wh.writeln("</div></th>");
+		wh.writeChildren(self).writeln("</div></th>");
 	}
 
 }

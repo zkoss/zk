@@ -1,4 +1,4 @@
-/* ListheadDefault.java
+/* AuxheaderDefault.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Sep 6 2007, Created by Jeff.Liu
+		Wed Oct 24 11:49:32     2007, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -24,23 +24,27 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zul.Listhead;
+import org.zkoss.zk.ui.render.Out;
+
+import org.zkoss.zul.Auxheader;
 
 /**
- * {@link Listhead}'s default mold.
- * @author Jeff Liu
+ * {@link Auxheader}'s default mold.
+ * 
+ * @author tomyeh
  * @since 3.0.0
  */
-public class ListheadDefault implements ComponentRenderer {
+public class AuxheaderDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
-		final Listhead self = (Listhead)comp;
-		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lhrs\"")
+		final Auxheader self = (Auxheader)comp;
+		wh.write("<th id=\"").write(self.getUuid()).write('"')
 		  .write(self.getOuterAttrs()).write(self.getInnerAttrs())
-		  .write(" align=\"left\">")
-		  .writeChildren(self)
-		  .writeln("</tr>");
+		  .write("><div id=\"").write(self.getUuid())
+		  .write("!cave\" class=\"head-cell-inner\">")
+		  .write(self.getImgTag());
+		new Out(self.getLabel()).render(out);
+		wh.writeChildren(self).writeln("</div></th>");
 	}
-
 }

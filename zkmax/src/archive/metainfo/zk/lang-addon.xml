@@ -89,6 +89,22 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>auxhead</component-name>
+		<extends>auxhead</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.AuxheadDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>auxheader</component-name>
+		<extends>auxheader</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.AuxheaderDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>bandbox</component-name>
 		<extends>bandbox</extends>
 		<mold>
@@ -424,19 +440,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
-		<component-name>listheader</component-name>
-		<extends>listheader</extends>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.ListheaderDefault</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>listhead</component-name>
 		<extends>listhead</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ListheadDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>listheader</component-name>
+		<extends>listheader</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.ListheaderDefault</mold-uri>
 		</mold>
 	</component>
 	<component>

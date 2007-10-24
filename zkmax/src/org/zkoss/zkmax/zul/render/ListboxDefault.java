@@ -51,7 +51,7 @@ public class ListboxDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("!body\" class=\"listbox-body\">")
 			.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"")
 			.write(uuid).writeln("!cave\" class=\"listbox-btable\">")
-			.write(self.getItems())
+			.writeComponents(self.getItems())
 			.write("\n</table></div>");
 
 		if(self.getListfoot() != null){
