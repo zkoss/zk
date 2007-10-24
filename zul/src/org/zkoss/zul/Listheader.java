@@ -56,8 +56,6 @@ public class Listheader extends HeaderElement {
 	private String _sortDir = "natural";
 	private transient Comparator _sortAsc, _sortDsc;
 	private int _maxlength;
-//	private int _span = 1;
-//FUTURE: we have to handle sortable header and enhance zk.cpCellWidth
 
 	public Listheader() {
 	}
@@ -213,22 +211,6 @@ public class Listheader extends HeaderElement {
 		}
 	}
 
-	/** Returns number of columns to span this header.
-	 * Default: 1.
-	 */
-/*	public int getSpan() {
-		return _span;
-	}*/
-	/** Sets the number of columns to span this header.
-	 * <p>It is the same as the colspan attribute of HTML TD tag.
-	 */
-/*	public void setSpan(int span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("colspan", Integer.toString(_span));
-		}
-	}*/
-
 	/** Returns the column index, starting from 0.
 	 */
 	public int getColumnIndex() {
@@ -373,9 +355,6 @@ public class Listheader extends HeaderElement {
 
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);
-
-//		if (_span != 1)
-//			HTMLs.appendAttribute(sb, "colspan", _span);
 
 		final String attrs = super.getOuterAttrs();
 		if (sb.length() == 0) return attrs;

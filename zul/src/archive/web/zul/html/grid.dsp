@@ -23,7 +23,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:if test="${!empty self.columns}">
 	<div id="${self.uuid}!head" class="grid-head">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
-	${z:redraw(self.columns, null)}
+	<c:forEach var="header" items="${self.headers}">
+${z:redraw(header, null)}
+	</c:forEach>
 	</table>
 	</div>
 </c:if>

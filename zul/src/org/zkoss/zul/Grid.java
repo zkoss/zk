@@ -18,8 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collection;
+import java.util.AbstractCollection;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -102,6 +105,7 @@ public class Grid extends XulElement {
 	private transient Rows _rows;
 	private transient Columns _cols;
 	private transient Foot _foot;
+	private transient Collection _headers;
 	private String _align;
 	private ListModel _model;
 	private RowRenderer _renderer;
@@ -121,6 +125,21 @@ public class Grid extends XulElement {
 
 	public Grid() {
 		setSclass("grid");
+		init();
+	}
+	private void init() {
+		_headers = new AbstractCollection() {
+			public int size() {
+				int sz = getChildren().size();
+				if (_rows != null) --sz;
+				if (_foot != null) --sz;
+				if (_paging != null) --sz;
+				return sz;
+			}
+			public Iterator iterator() {
+				return new Iter();
+			}
+		};
 	}
 
 	/** Returns the rows.
@@ -137,6 +156,14 @@ public class Grid extends XulElement {
 	 */
 	public Foot getFoot() {
 		return _foot;
+	}
+	/** Returns a collection of headers, including {@link #getColumns}
+	 * and auxiliary headers ({@link Auxhead}) (never null).
+	 *
+	 * @since 3.0.0
+	 */
+	public Collection getHeaders() {
+		return _headers;
 	}
 
 	/** Returns the specified cell, or null if not available.
@@ -834,7 +861,7 @@ public class Grid extends XulElement {
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
 			_pgi = _paging = (Paging)newChild;
-		} else {
+		} else if (!(newChild instanceof Auxhead)) {
 			throw new UiException("Unsupported child for grid: "+newChild);
 		}
  
@@ -862,6 +889,7 @@ public class Grid extends XulElement {
 	//Cloneable//
 	public Object clone() {
 		final Grid clone = (Grid)super.clone();
+		clone.init();
 
 		int cnt = 0;
 		if (clone._rows != null) ++cnt;
@@ -898,6 +926,7 @@ public class Grid extends XulElement {
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
+		init();
 		afterUnmarshal(-1);
 		//TODO: how to marshal _pgi if _pgi != _paging
 		//TODO: re-register event listener for onPaging
@@ -958,5 +987,31 @@ public class Grid extends XulElement {
 		public boolean isChildChangedAware() {
 			return true;
 		}
-	} 
+	}
+	/** An iterator used by _headers.
+	 */
+	private class Iter implements Iterator {
+		private final ListIterator _it = getChildren().listIterator();
+
+		public boolean hasNext() {
+			while (_it.hasNext()) {
+				Object o = _it.next();
+				if (o instanceof Columns || o instanceof Auxhead) {
+					_it.previous();
+					return true;
+				}
+			}
+			return false;
+		}
+		public Object next() {
+			for (;;) {
+				Object o = _it.next();
+				if (o instanceof Columns || o instanceof Auxhead)
+					return o;
+			}
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	}
 }

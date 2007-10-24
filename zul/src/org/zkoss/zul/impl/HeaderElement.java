@@ -58,7 +58,8 @@ abstract public class HeaderElement extends LabelImageElement {
 			invalidateWhole();
 		}
 	}
-	/** Called when the definition is changed.
+	/** Called when this component's content is changed.
+	 *
 	 * <p>Derived must override it to either do nothing, or invalidate
 	 * parent or others.
 	 */
