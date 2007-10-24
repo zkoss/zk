@@ -1610,7 +1610,6 @@ zkau._ghostdrag = function (dg, ghosting) {
 			document.body.appendChild(el);
 		}
 		dg.element = $e("zk_ddghost");
-		zk.disableSelection(dg.element);
 	} else {
 		zkau.endGhostToDIV(dg);
 	}

@@ -337,7 +337,7 @@ for (var n = src; n && n != this.element; n = n.parentNode)
 if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer))
 	return;
 //Tom M. Yeh, Potix: disable selection
-zk.disableSelection(this.handle);
+zk.disableSelection(document.body);
       var pos     = Position.cumulativeOffset(this.element);
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
       
@@ -427,7 +427,7 @@ if (this.z_orgpos != 'absolute')
     this.dragging = false;
 
 //Tom M. Yeh, Potix: enable selection back and clear selection if any
-zk.enableSelection(this.handle);
+zk.enableSelection(document.body);
 setTimeout("zk.clearSelection()", 0);
     if(this.options.ghosting) {
 //Tom M. Yeh: Potix: ghosting is controllable
