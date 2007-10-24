@@ -20,7 +20,7 @@ package org.zkoss.zkdemo.userguide;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zulex.Borderlayout;
+import org.zkoss.zkex.zul.Borderlayout;
 
 /**
  * The main window of userguide.
