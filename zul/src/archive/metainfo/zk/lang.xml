@@ -482,19 +482,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
-		<component-name>listheader</component-name>
-		<component-class>org.zkoss.zul.Listheader</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listheader.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>listhead</component-name>
 		<component-class>org.zkoss.zul.Listhead</component-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/listhead.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>listheader</component-name>
+		<component-class>org.zkoss.zul.Listheader</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/listheader.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
