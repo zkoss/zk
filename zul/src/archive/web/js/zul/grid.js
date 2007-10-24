@@ -71,13 +71,15 @@ zk.Grid.prototype = {
 				var headrow = this.headtbl.rows[0];
 				var empty = true;
 				l_out:
-				for (var j = headrow.cells.length; --j>=0;)
-					for (var n = headrow.cells[j].firstChild; n; n = n.nextSibling)
+				for (var j = headrow.cells.length; --j>=0;) {
+					var cave = $e(headrow.cells[j].id + "!cave"); // Bug #1819037
+					for (var n = cave.firstChild; n; n = n.nextSibling)
 						if (!n.id || !n.id.endsWith("!hint")) {
 							empty = false;
 							break l_out;
 						}
-				if (empty) this.head.style.display = "none";
+				}
+				if (empty) this.head.style.height = "0px"; // Bug #1819037
 					//we have to hide if empty (otherwise, a small block is shown)
 			}
 
