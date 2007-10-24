@@ -26,14 +26,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- [Optional, Multiple] Define a JavaScript module.
 		Change the version if JS files are modified, such that
 		browsers will reload them. -->
-	<javascript src="~./js/ext/prototype/prototype.js" charset="UTF-8"/>
-	<javascript src="~./js/ext/aculo/effects.js" charset="UTF-8"/>
-	<javascript src="~./js/ext/aculo/dragdrop.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/html/boot.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/html/lang/mesg*.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/html/common.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/html/au.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/locale.js.dsp" charset="UTF-8"/>
+	<!-- use zk.js.dsp to package all common js file in one http request.-->
+	<javascript src="~./js/zk/zk.js.dsp" charset="UTF-8"/>
 
 	<javascript-module name="yuiextz.grid" version="0.6.1"/>
 	<javascript-module name="yuiextz.layout" version="0.6.1"/>
