@@ -145,16 +145,17 @@ public class DefinitionLoaders {
 
 		//1. process config.xml (no particular dependency)
 		try {
-			for (Enumeration en = locator.getResources("metainfo/zk/config.xml");
-			en.hasMoreElements();) {
-				final URL url = (URL)en.nextElement();
-				if (log.debugable()) log.debug("Loading "+url);
+			final List xmls = locator.getDependentXMLResources(
+				"metainfo/zk/config.xml", "config-name", "depends");
+			for (Iterator it = xmls.iterator(); it.hasNext();) {
+				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
+				if (log.debugable()) log.debug("Loading "+res.url);
+System.out.println("load "+res.url);
 				try {
-					final Document doc = new SAXBuilder(false, false, true).build(url);
-					if (checkVersion(zkver, url, doc))
-						parseConfig(doc.getRootElement());
+					if (checkVersion(zkver, res.url, res.document))
+						parseConfig(res.document.getRootElement());
 				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex, "Failed to load "+url);
+					throw UiException.Aide.wrap(ex, "Failed to load "+res.url);
 						//abort since it is hardly to work then
 				}
 			}

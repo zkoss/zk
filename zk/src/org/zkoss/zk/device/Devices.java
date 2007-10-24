@@ -38,14 +38,8 @@ import org.zkoss.zk.ui.UiException;
 public class Devices {
 	private Devices() {}
 
-	/** Map(String type, String/Class cls). */
-	private static final Map _devs = new HashMap(5);
-	/** Map(String type, String unavailableMesssage).
-	 * Note: we store the message
-	 */
-	private static final Map _uamsgs = new HashMap(3);
-	/** Map(String type, String timeoutURI). */
-	private static final Map _tmoutURIs = new HashMap(3);
+	/** Map(String type, DeviceInfo info or Device device). */
+	private static final Map _devs = new HashMap(8);
 
 	/** Returns the device for the specified desktop type.
 	 *
@@ -54,51 +48,23 @@ public class Devices {
 	 * @since 3.0.0
 	 */
 	public static final Device getDevice(String deviceType) {
-		final Object obj;
+		final Object o; //null, Device or DeviceInfo
 		synchronized (_devs) {
-			obj = _devs.get(deviceType);
+			o = _devs.get(deviceType);
 		}
 
-		if (obj instanceof Device)
-			return (Device)obj;
-		if (obj == null)
+		if (o instanceof Device)
+			return (Device)o;
+		if (o == null)
 			throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
 
-		final Class cls;
-		if (obj instanceof Class) {
-			cls = (Class)obj;
-		} else {
-			try {
-				cls = Classes.forNameByThread((String)obj);
-			} catch (ClassNotFoundException ex) {
-				throw new UiException("Failed to load class "+obj);
-			}
-			if (!Device.class.isAssignableFrom(cls))
-				throw new IllegalArgumentException(cls+" must implements "+Device.class);
+		final Device device = ((DeviceInfo)o).newDevice(deviceType);
+		synchronized (_devs) {
+			final Object old = _devs.put(deviceType, device);
+			if (old != o)
+				_devs.put(deviceType, old); //changed by someone else; so restore
 		}
-
-		final String msg;
-		synchronized (_uamsgs) {
-			msg = (String)_uamsgs.get(deviceType);
-		}
-		final String timeoutURI;
-		synchronized (_tmoutURIs) {
-			timeoutURI = (String)_tmoutURIs.get(deviceType);
-		}
-
-		try {
-			final Device device = (Device)cls.newInstance();
-			device.init(deviceType, msg, timeoutURI);
-
-			synchronized (_devs) {
-				final Object old = _devs.put(deviceType, device);
-				if (old != obj)
-					_devs.put(deviceType, old); //changed by someone else; so restore
-			}
-			return device;
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex, "Unable to create "+cls);
-		}
+		return device;
 	}
 	/** Tests whether the device for the specified type exists.
 	 *
@@ -108,9 +74,12 @@ public class Devices {
 	public static final boolean exists(String deviceType) {
 		if (deviceType == null) return false;
 
+		final Object o;
 		synchronized (_devs) {
-			return _devs.containsKey(deviceType);
+			o = _devs.get(deviceType);
 		}
+		return o instanceof Device
+			|| (o != null && ((DeviceInfo)o).isValid());
 	}
 
 	/** Adds a device type.
@@ -139,33 +108,40 @@ public class Devices {
 		|| cls == null)
 			throw new IllegalArgumentException();
 
-		final Object old;
 		synchronized (_devs) {
-			old = _devs.put(deviceType, cls);
+			final Object o = _devs.get(deviceType);
+			if (o instanceof DeviceInfo) {
+				return ((DeviceInfo)o).setDeviceClass(cls);
+			} else if (o instanceof Device) {
+				final Device device = (Device)o;
+				_devs.put(deviceType,
+					new DeviceInfo(cls,
+						device.getUnavailableMessage(),
+						device.getTimeoutURI(), device.getServerPushClass()));
+				return device.getClass().getName();
+			} else {
+				_devs.put(deviceType, new DeviceInfo(cls));
+				return null;
+			}
 		}
-
-		return old instanceof Class ? ((Class)old).getName():
-			old instanceof Device ? old.getClass().getName(): (String)old;
 	}
 
 	/** Returns the unavailable message for the specified device type.
 	 *
 	 * <p>The result is the same as the invocation of {@link Device#getUnavailableMessage}
-	 * against {@link #getDevice}, but this method don't load the device
+	 * against {@link #getDevice}, but this method will not load the device
 	 * if it is not loaded yet.
 	 *
 	 * @see Device
 	 * @see Device#getUnavailableMessage
 	 */
 	public static final String getUnavailableMessage(String deviceType) {
+		final Object o;
 		synchronized (_devs) {
-			final Object o = _devs.get(deviceType);
-			if (o instanceof Device)
-				return ((Device)o).getUnavailableMessage();
+			o = _devs.get(deviceType);
 		}
-		synchronized (_uamsgs) {
-			return (String)_uamsgs.get(deviceType);
-		}
+		return o instanceof Device ? ((Device)o).getUnavailableMessage():
+			o instanceof DeviceInfo ? ((DeviceInfo)o).getUnavailableMessage(): null;
 	}
 	/** Sets the unavailable message for the specified device type.
 	 *
@@ -182,14 +158,16 @@ public class Devices {
 
 		synchronized (_devs) {
 			final Object o = _devs.get(deviceType);
-			if (o instanceof Device)
-				((Device)o).setUnavailableMessage(msg);
-		}
-		synchronized (_uamsgs) {
-			return (String)(
-				msg != null ?
-					_uamsgs.put(deviceType, msg):
-					_uamsgs.remove(deviceType));
+			if (o instanceof Device) {
+				return ((Device)o).setUnavailableMessage(msg);
+			} else if (o instanceof DeviceInfo) {
+				return ((DeviceInfo)o).setUnavailableMessage(msg);
+			} else {
+				final DeviceInfo info = new DeviceInfo();
+				_devs.put(deviceType, info);
+				info.setUnavailableMessage(msg);
+				return null;
+			}
 		}
 	}
 
@@ -200,18 +178,16 @@ public class Devices {
 	 * <p>Default: null (to shown an error message).
 	 *
 	 * <p>The result is the same as the invocation of {@link Device#getTimeoutURI}
-	 * against {@link #getDevice}, but this method don't load the device
+	 * against {@link #getDevice}, but this method will not load the device
 	 * if it is not loaded yet.
 	 */
 	public static final String getTimeoutURI(String deviceType) {
+		final Object o;
 		synchronized (_devs) {
-			final Object o = _devs.get(deviceType);
-			if (o instanceof Device)
-				return ((Device)o).getTimeoutURI();
+			o = _devs.get(deviceType);
 		}
-		synchronized (_tmoutURIs) {
-			return (String)_tmoutURIs.get(deviceType);
-		}
+		return o instanceof Device ? ((Device)o).getTimeoutURI():
+			o instanceof DeviceInfo ? ((DeviceInfo)o).getTimeoutURI(): null;
 	}
 	/** Sets the timeout URI for the specified device type.
 	 * It is used to show the error message if the desktop being requested
@@ -228,14 +204,82 @@ public class Devices {
 
 		synchronized (_devs) {
 			final Object o = _devs.get(deviceType);
-			if (o instanceof Device)
-				((Device)o).setTimeoutURI(timeoutURI);
+			if (o instanceof Device) {
+				return ((Device)o).setTimeoutURI(timeoutURI);
+			} else if (o instanceof DeviceInfo) {
+				return ((DeviceInfo)o).setTimeoutURI(timeoutURI);
+			} else {
+				final DeviceInfo info = new DeviceInfo();
+				_devs.put(deviceType, info);
+				info.setTimeoutURI(timeoutURI);
+				return null;
+			}
 		}
-		synchronized (_tmoutURIs) {
-			return (String)(
-				timeoutURI != null ?
-					_tmoutURIs.put(deviceType, timeoutURI):
-					_tmoutURIs.remove(deviceType));
+	}
+
+	/** Returns the class name that implements the server push feature.
+	 *
+	 * <p>Default: null (the server-push feature is not available).
+	 *
+	 * <p>The result is the same as the invocation of {@link Device#getServerPushClass}
+	 * against {@link #getDevice}, but this method will not load the device
+	 * if it is not loaded yet.
+	 * @since 3.0.0
+	 */
+	public static final String getServerPushClass(String deviceType) {
+		final Object o;
+		synchronized (_devs) {
+			o = _devs.get(deviceType);
+		}
+		if (o instanceof Device) {
+			final Class cls = ((Device)o).getServerPushClass();
+			return cls != null ? cls.getName(): null;
+		}
+		return o instanceof DeviceInfo ? ((DeviceInfo)o).getServerPushClassName(): null;
+	}
+	/** Sets the name of the class that implements the server-push feature.
+	 *
+	 * @param clsnm the class name that implements the server push.
+	 * If null, it means no server push is available.
+	 * @return the previous class name, or null if not available.
+	 * @since 3.0.0
+	 */
+	public static final String setServerPushClass(String deviceType, String clsnm) {
+		return setServerPushClass0(deviceType, clsnm);
+	}
+	/** Sets the class that implements the server-push feature.
+	 *
+	 * @param cls the class that implements the server push.
+	 * If null, it means no server push is available.
+	 * @return the previous class name, or null if not available.
+	 * @since 3.0.0
+	 */
+	public static final String setServerPushClass(String deviceType, Class cls) {
+		return setServerPushClass0(deviceType, cls);
+	}
+	private static final String setServerPushClass0(String deviceType, Object cls) {
+		if (deviceType == null || deviceType.length() == 0)
+			throw new IllegalArgumentException();
+
+		try {
+			synchronized (_devs) {
+				final Object o = _devs.get(deviceType);
+				if (o instanceof Device) {
+					final Class old = ((Device)o).setServerPushClass(
+						cls instanceof Class ? (Class)cls:
+						cls != null ? Classes.forNameByThread((String)cls): null);
+					return old != null ? old.getName(): null;
+				} else if (o instanceof DeviceInfo) {
+					return ((DeviceInfo)o).setServerPushClass(cls);
+				} else {
+					final DeviceInfo info = new DeviceInfo();
+					_devs.put(deviceType, info);
+					info.setServerPushClass(cls);
+					return null;
+				}
+			}
+		} catch (ClassNotFoundException ex) {
+			throw new UiException("Class not found: "+cls);
 		}
 	}
 
@@ -246,6 +290,8 @@ public class Devices {
   &lt;device-type&gt;superajax&lt;/device-type&gt;
   &lt;device-class&gt;my.MyDevice&lt;/device-class&gt;
   &lt;unavailable-message&gt;error message&lt;/unavailable-message&gt;
+  &lt;timeout-uri&gt;/WEB-INF/timeout.zul&lt;/timeout-uri&gt;
+  &lt;server-push-class&gt;my.MyServerPush&lt;/server-push-class&gt;
 &lt;/device-config&gt;
 	 * </code></pre>
 	 *
@@ -255,6 +301,7 @@ public class Devices {
 		//Spec: it is OK to declare an nonexist device
 		final String type =
 			IDOMs.getRequiredElementValue(config, "device-type");
+
 		String s = config.getElementValue("device-class", true);
 		if (s != null)
 			add(type, s);
@@ -266,5 +313,105 @@ public class Devices {
 		s = config.getElementValue("timeout-uri", true);
 		if (s != null)
 			setTimeoutURI(type, s);
+
+		s = config.getElementValue("server-push-class", true);
+		if (s != null)
+			setServerPushClass(type, s);
+	}
+	/** Device info.
+	 */
+	private static class DeviceInfo implements DeviceConfig {
+		/** The class or class name of {@link Device}
+		 * of the device's implementation.
+		 */
+		private Object _dvcls;
+		private String _uamsg, _tmoutURI;
+		/** The class name or class of {@link ServerPush}.
+		 */
+		private Object _spushcls;
+
+		private DeviceInfo() {
+		}
+		private DeviceInfo(Object deviceClass) {
+			_dvcls = deviceClass;
+		}
+		private DeviceInfo(Object deviceClass, String unavailable,
+		String timeoutURI, Class spushcls) {
+			_dvcls = deviceClass;
+			_uamsg = unavailable;
+			_tmoutURI = timeoutURI;
+			_spushcls = spushcls;
+		}
+		/** Returns whether this device is valid, i.e., defined with a device class.
+		 */
+		private boolean isValid() {
+			return _dvcls != null;
+		}
+		/** Sets the device class.
+		 */
+		private String setDeviceClass(Object cls) {
+			final Object old = _dvcls;
+			_dvcls = cls;
+			return old instanceof Class ? ((Class)old).getName(): (String)old;
+		}
+		public String getUnavailableMessage() {
+			return _uamsg;
+		}
+		public String setUnavailableMessage(String msg) {
+			final String old = _uamsg;
+			_uamsg = msg != null && msg.length() > 0 ? msg: null;
+			return old;
+		}
+		public String getTimeoutURI() {
+			return _tmoutURI;
+		}
+		public String setTimeoutURI(String timeoutURI) {
+			final String old = _tmoutURI;
+			_tmoutURI = timeoutURI;
+			return old;
+		}
+		/**
+		 * @param cls the class name or class of the server push.
+		 */
+		public String setServerPushClass(Object cls) {
+			final Object old = _spushcls;
+			_spushcls = cls;
+			return old instanceof Class ? ((Class)old).getName(): (String)old;
+		}
+		public String getServerPushClassName() {
+			return _spushcls instanceof Class ? ((Class)_spushcls).getName(): (String)_spushcls;
+		}
+		public Class getServerPushClass() {
+			try {
+				return _spushcls instanceof Class ? (Class)_spushcls:
+					_spushcls != null ?
+						Classes.forNameByThread((String)_spushcls): null;
+			} catch (ClassNotFoundException ex) {
+				throw new UiException("Class not found: "+_spushcls);
+			}
+		}
+		/** Creates a device based on this device info.
+		 */
+		private Device newDevice(String deviceType) {
+			if (_dvcls == null) //possible
+				throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
+
+			try {
+				final Class cls;
+				if (_dvcls instanceof Class) {
+					cls = (Class)_dvcls;
+				} else {
+					cls = Classes.forNameByThread((String)_dvcls);
+					if (!Device.class.isAssignableFrom(cls))
+						throw new IllegalArgumentException(cls+" must implements "+Device.class);
+				}
+
+				final Device device = (Device)cls.newInstance();
+				device.init(deviceType, this);
+				return device;
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to create "+_dvcls);
+			}
+		}
 	}
 }

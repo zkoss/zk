@@ -180,7 +180,6 @@ public class ConfigParser {
 			//  web-app-class
 			//  locale-provider-class
 			//	time-zone-provider-class
-			//  server-push-class
 			//	method-cache-class
 				String s = el.getElementValue("disable-event-thread", true);
 				if (s != null) config.enableEventThread("false".equals(s));
@@ -226,9 +225,6 @@ public class ConfigParser {
 
 				cls = parseClass(el, "web-app-class", WebApp.class);
 				if (cls != null) config.setWebAppClass(cls);
-
-				cls = parseClass(el, "server-push-class", ServerPush.class);
-				if (cls != null) config.setServerPushClass(cls);
 
 				cls = parseClass(el, "method-cache-class", Cache.class);
 				if (cls != null)

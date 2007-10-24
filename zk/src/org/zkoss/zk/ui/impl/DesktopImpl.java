@@ -63,7 +63,6 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
-import org.zkoss.zk.ui.impl.PollingServerPush;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.out.AuBookmark;
 import org.zkoss.zk.device.Device;
@@ -641,15 +640,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final boolean old = _spush != null;
 		if (old != enable) {
 			if (enable) {
-				final Class cls = _wapp.getConfiguration().getServerPushClass();
-				if (cls != null) {
-					try {
-						_spush = (ServerPush)cls.newInstance();
-					} catch (Throwable ex) {
-						throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
-					}
-				} else {
-					_spush = new PollingServerPush();
+				final Class cls = getDevice().getServerPushClass();
+				if (cls == null)
+					throw new UiException("No server push defined. Make sure you are using the professional or enterprise edition, or you configured your own implementation");
+
+				try {
+					_spush = (ServerPush)cls.newInstance();
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
 				}
 				_spush.start(this);
 			} else {

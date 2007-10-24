@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.device;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.sys.ServerPush;
 
 /**
  * Represents a client device.
@@ -52,9 +53,10 @@ public interface Device {
 	 * if the client doesn't support this device.
 	 *
 	 * @param unavailmsg the unavailable message.
+	 * @return the previous unavailable message, or null if not such message
 	 * @since 2.4.0
 	 */
-	public void setUnavailableMessage(String unavailmsg);
+	public String setUnavailableMessage(String unavailmsg);
 
 	/** Returns the timeout URI for this device.
 	 * It is used to show the error message if the desktop being requested
@@ -72,9 +74,31 @@ public interface Device {
 	 * @param timeoutURI the timeout URI. If empty, it means to reload
 	 * the same page. If null, an error message is shown instead of
 	 * redirecting to another page.
+	 * @return the previous timeout URI, or null if not available.
 	 * @since 3.0.0
 	 */
-	public void setTimeoutURI(String timeoutURI);
+	public String setTimeoutURI(String timeoutURI);
+
+	/** Returns the class that implements the server-push feature
+	 * ({@link ServerPush}) for this device, or null if the default is used.
+	 * @since 3.0.0
+	 */
+	public Class getServerPushClass();
+	/** Sets the class that implements the server-push feature
+	 * ({@link ServerPush}) for this device, or null to use the default.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>If the professional edition (with zkex.jar) is loaded,
+	 * the client-polling-based server push (org.zkoss.zkex.impl.PollingServerPush)
+	 * is the default.
+	 * If the enterprise edition (with zkmax.jar) is loaded,
+	 * the COMET-based server push (org.zkoss.zkmax.impl.CometServerPush)
+	 * is the default.
+	 * @return the previous class, or null if not available.
+	 * @since 3.0.0
+	 */
+	public Class setServerPushClass(Class cls);
 
 	/** Returns the default content type (never null).
 	 * 
@@ -91,15 +115,11 @@ public interface Device {
 	 * A device is created for each desktop, and this method is called
 	 * when it is associated to the desktop.
 	 *
-	 * @param type the device type
-	 * @param unavailmsg the message to shown when the device is not, or null
-	 * no message will be shown
-	 * @param timeoutURI the timeout URI. If empty, it means to reload
-	 * the same page. If null, an error message is shown instead of
-	 * redirecting to another page.
+	 * @param deviceType the device type (never null)
+	 * @param config the configuration to initialize the device (never null)
 	 * @since 3.0.0
 	 */
-	public void init(String type, String unavailmsg, String timeoutURI);
+	public void init(String deviceType, DeviceConfig config);
 	/** Notification that the desktop, which owns this device,
 	 * is about to be passivated (aka., serialized) by the Web container.
 	 * @since 2.4.0

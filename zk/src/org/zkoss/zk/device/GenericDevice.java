@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.device;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.sys.ServerPush;
 
 /**
  * A skeletal implementation of {@link Device}.
@@ -28,6 +29,7 @@ import org.zkoss.zk.ui.Desktop;
  */
 abstract public class GenericDevice implements Device {
 	private String _type, _uamsg, _tmoutURI;
+	private Class _spushcls;
 
 	//Device//
 	public String getType() {
@@ -41,14 +43,28 @@ abstract public class GenericDevice implements Device {
 	public String getUnavailableMessage() {
 		return _uamsg;
 	}
-	public void setUnavailableMessage(String msg) {
+	public String setUnavailableMessage(String msg) {
+		final String old = _uamsg;
 		_uamsg = msg != null && msg.length() > 0 ? msg: null;
+		return old;
 	}
 	public String getTimeoutURI() {
 		return _tmoutURI;
 	}
-	public void setTimeoutURI(String timeoutURI) {
+	public String setTimeoutURI(String timeoutURI) {
+		final String old = _tmoutURI;
 		_tmoutURI = timeoutURI;
+		return old;
+	}
+	public Class setServerPushClass(Class cls) {
+		if (cls != null && !ServerPush.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("ServerPush not implemented: "+cls);
+		final Class old = _spushcls;
+		_spushcls = cls;
+		return old;
+	}
+	public Class getServerPushClass() {
+		return _spushcls;
 	}
 
 	/** Returns null to indicate not to generate &lt;!DOCTYPE&gt; at all.
@@ -57,12 +73,11 @@ abstract public class GenericDevice implements Device {
 		return null;
 	}
 
-	public void init(String type, String unavailmsg, String timeoutURI) {
-		if (type == null || type.length() == 0)
-			throw new IllegalArgumentException("type");
+	public void init(String type, DeviceConfig config) {
 		_type = type;
-		_uamsg = unavailmsg;
-		_tmoutURI = timeoutURI;
+		_uamsg = config.getUnavailableMessage();
+		_tmoutURI = config.getTimeoutURI();
+		_spushcls = config.getServerPushClass();
 	}
 	public void sessionWillPassivate(Desktop desktop) {
 	}

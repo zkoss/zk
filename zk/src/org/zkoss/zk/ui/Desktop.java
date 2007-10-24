@@ -220,13 +220,13 @@ public interface Desktop {
 	 * <p>Default: false
 	 *
 	 * <p>This method uses the default class
-	 * (defined by {@link Configuration#getServerPushClass})
+	 * (defined by {@link Device#getServerPushClass})
 	 * to instantiate the server-push controller.
 	 *
 	 * @param enable whether to enable or to disable the server-push
 	 * feature.
 	 * @see Executions#activate
-	 * @see Configuration#setServerPushClass
+	 * @see Device#getServerPushClass
 	 * @since 3.0.0
 	 */
 	public boolean enableServerPush(boolean enable);
