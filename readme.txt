@@ -16,8 +16,9 @@ zul
 	XUL: XML user interface markup language
 
 ---
-zulex
-	The extension of the ZK XUL component set.
+zkex
+	The extension of the ZK, such as the extenstion to XUL component set,
+	and server-push features.
 	It includes the jFreechart-based engine.
 
 ---
