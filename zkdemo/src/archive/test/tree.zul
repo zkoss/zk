@@ -24,6 +24,14 @@ Tree with rows more than need:
 		<treecol label="From"/>
 		<treecol label="Received"/>
 	</treecols>
+	<auxhead>
+		<auxheader/>
+		<auxheader label="Details" span="2"/>
+	</auxhead>
+	<auxhead>
+		<auxheader label="Some" span="2"/>
+		<auxheader/>
+	</auxhead>
 	<treechildren>
 		<treeitem id="ti0" selected="true">
 			<treerow>

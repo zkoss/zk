@@ -30,6 +30,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<listheader width="150px" label="Population" sortAscending="${sa0}"/>
 		<listheader width="100px" align="right" label="%" sortAscending="${sa1}" sortDescending="${sd1}"/>
 	</listhead>
+	<auxhead>
+		<auxheader label="Total" span="2"/>
+	</auxhead>
+	<auxhead>
+		<auxheader label="Total 2" span="2"/>
+	</auxhead>
 	<listitem id="a" value="A">
 		<listcell label="A. Graduate"/>
 		<listcell label="20%"/>
