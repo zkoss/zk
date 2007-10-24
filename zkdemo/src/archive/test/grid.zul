@@ -24,6 +24,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<column label="BB"/>
 			<column label="CC"/>
 		</columns>
+		<auxhead>
+			<auxheader label="A+B" span="2"/>
+			<auxheader label="C"/>
+		</auxhead>
 		<rows>
 			<row>
 				<label value="AA01"/>
