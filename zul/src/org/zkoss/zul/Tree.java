@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 
 import org.zkoss.lang.Exceptions;
@@ -70,6 +72,7 @@ public class Tree extends XulElement {
 	private transient Set _selItems;
 	/** The first selected item. */
 	private transient Treeitem _sel;
+	private transient Collection _heads;
 	private int _rows = 0;
 	/** The name. */
 	private String _name;
@@ -88,6 +91,17 @@ public class Tree extends XulElement {
 	}
 	private void init() {
 		_selItems = new LinkedHashSet(5);
+		_heads = new AbstractCollection() {
+			public int size() {
+				int sz = getChildren().size();
+				if (_treechildren != null) --sz;
+				if (_treefoot != null) --sz;
+				return sz;
+			}
+			public Iterator iterator() {
+				return new Iter();
+			}
+		};
 	}
 
 	/** Returns the treecols that this tree owns (might null).
@@ -104,6 +118,14 @@ public class Tree extends XulElement {
 	 */
 	public Treechildren getTreechildren() {
 		return _treechildren;
+	}
+	/** Returns a collection of heads, including {@link #getTreecols}
+	 * and auxiliary heads ({@link Auxhead}) (never null).
+	 *
+	 * @since 3.0.0
+	 */
+	public Collection getHeads() {
+		return _heads;
 	}
 
 	/** Returns the rows. Zero means no limitation.
@@ -524,35 +546,31 @@ public class Tree extends XulElement {
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
-	public boolean insertBefore(Component child, Component refChild) {
-		if (child instanceof Treecols) {
-			if (_treecols != null && _treecols != child)
+	public boolean insertBefore(Component newChild, Component refChild) {
+		if (newChild instanceof Treecols) {
+			if (_treecols != null && _treecols != newChild)
 				throw new UiException("Only one treecols is allowed: "+this);
-			refChild = getFirstChild();
-				//always makes treecols as the first child
-			_treecols = (Treecols)child;
-			invalidate();
-		} else if (child instanceof Treefoot) {
-			if (_treefoot != null && _treefoot != child)
+			_treecols = (Treecols)newChild;
+		} else if (newChild instanceof Treefoot) {
+			if (_treefoot != null && _treefoot != newChild)
 				throw new UiException("Only one treefoot is allowed: "+this);
-			_treefoot = (Treefoot)child;
-			refChild = null; //treefoot as the last
-			invalidate();
-		} else if (child instanceof Treechildren) {
-			if (_treechildren != null && _treechildren != child)
+			_treefoot = (Treefoot)newChild;
+		} else if (newChild instanceof Treechildren) {
+			if (_treechildren != null && _treechildren != newChild)
 				throw new UiException("Only one treechildren is allowed: "+this);
-			if (refChild instanceof Treecols)
-				throw new UiException("treecols must be the first child");
-			if (refChild == null || refChild.getParent() != this)
-				refChild = _treefoot; //treefoot as the last
-			_treechildren = (Treechildren)child;
-			invalidate();
-
+			_treechildren = (Treechildren)newChild;
 			fixSelectedSet();
-		} else {
-			throw new UiException("Unsupported child for tree: "+child);
+		} else if (!(newChild instanceof Auxhead)) {
+			throw new UiException("Unsupported newChild: "+newChild);
 		}
-		return super.insertBefore(child, refChild);
+
+		if (super.insertBefore(newChild, refChild)) {
+			//not need to invalidate since auxhead visible only with _treecols
+			if (!(newChild instanceof Auxhead))
+				invalidate();
+			return true;
+		}
+		return false;
 	}
 	/** Called by {@link Treeitem} when is added to a tree. */
 	/*package*/ void onTreeitemAdded(Treeitem item) {
@@ -1141,8 +1159,7 @@ public class Tree extends XulElement {
 	private void  dfRenderItem(Object node, Treeitem item) throws Exception
 	{
 		//if treeitem is not loaded, load it
-		if(!item.isLoaded())
-		{
+		if(!item.isLoaded()) {
 			Treechildren children = null;
 			
 			if(item.getTreechildren()!=null){
@@ -1321,6 +1338,32 @@ public class Tree extends XulElement {
 		//ChildChangedAware//
 		public boolean isChildChangedAware() {
 			return true;
+		}
+	}
+	/** An iterator used by _heads.
+	 */
+	private class Iter implements Iterator {
+		private final ListIterator _it = getChildren().listIterator();
+
+		public boolean hasNext() {
+			while (_it.hasNext()) {
+				Object o = _it.next();
+				if (o instanceof Treecols || o instanceof Auxhead) {
+					_it.previous();
+					return true;
+				}
+			}
+			return false;
+		}
+		public Object next() {
+			for (;;) {
+				Object o = _it.next();
+				if (o instanceof Treecols || o instanceof Auxhead)
+					return o;
+			}
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 	}
 }

@@ -105,7 +105,7 @@ public class Grid extends XulElement {
 	private transient Rows _rows;
 	private transient Columns _cols;
 	private transient Foot _foot;
-	private transient Collection _headers;
+	private transient Collection _heads;
 	private String _align;
 	private ListModel _model;
 	private RowRenderer _renderer;
@@ -128,7 +128,7 @@ public class Grid extends XulElement {
 		init();
 	}
 	private void init() {
-		_headers = new AbstractCollection() {
+		_heads = new AbstractCollection() {
 			public int size() {
 				int sz = getChildren().size();
 				if (_rows != null) --sz;
@@ -157,13 +157,13 @@ public class Grid extends XulElement {
 	public Foot getFoot() {
 		return _foot;
 	}
-	/** Returns a collection of headers, including {@link #getColumns}
-	 * and auxiliary headers ({@link Auxhead}) (never null).
+	/** Returns a collection of heads, including {@link #getColumns}
+	 * and auxiliary heads ({@link Auxhead}) (never null).
 	 *
 	 * @since 3.0.0
 	 */
-	public Collection getHeaders() {
-		return _headers;
+	public Collection getHeads() {
+		return _heads;
 	}
 
 	/** Returns the specified cell, or null if not available.
@@ -866,7 +866,9 @@ public class Grid extends XulElement {
 		}
  
 		if (super.insertBefore(newChild, refChild)) {
-			invalidate();
+			//not need to invalidate since auxhead visible only with _cols
+			if (!(newChild instanceof Auxhead))
+				invalidate();
 			return true;
 		}
 		return false;
@@ -988,7 +990,7 @@ public class Grid extends XulElement {
 			return true;
 		}
 	}
-	/** An iterator used by _headers.
+	/** An iterator used by _heads.
 	 */
 	private class Iter implements Iterator {
 		private final ListIterator _it = getChildren().listIterator();

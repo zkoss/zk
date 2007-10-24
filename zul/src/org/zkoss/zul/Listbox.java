@@ -27,7 +27,9 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.AbstractCollection;
 import java.util.NoSuchElementException;
 
 import org.zkoss.lang.D;
@@ -129,6 +131,8 @@ public class Listbox extends XulElement {
 	private ListModel _model;
 	private ListitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
+	private transient Collection _heads;
+	private int _hdcnt;
 	/** The name. */
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
@@ -161,14 +165,13 @@ public class Listbox extends XulElement {
 			}
 			public Object get(int j) {
 				final Object o =
-					Listbox.this.getChildren().get(_listhead != null ? j + 1: j);
+					Listbox.this.getChildren().get(j + _hdcnt);
 				if (!(o instanceof Listitem))
 					throw new IndexOutOfBoundsException("Wrong index: "+j);
 				return o;
 			}
 			public int size() {
-				int sz = getChildren().size();
-				if (_listhead != null) --sz;
+				int sz = getChildren().size() - _hdcnt;
 				if (_listfoot != null) --sz;
 				if (_paging != null) --sz;
 				return sz;
@@ -176,6 +179,15 @@ public class Listbox extends XulElement {
 		};
 		_selItems = new LinkedHashSet(5);
 		_roSelItems = Collections.unmodifiableSet(_selItems);
+
+		_heads = new AbstractCollection() {
+			public int size() {
+				return _hdcnt;
+			}
+			public Iterator iterator() {
+				return new Iter();
+			}
+		};
 	}
 	/** Initializes _dataListener and register the listener to the model
 	 */
@@ -201,6 +213,14 @@ public class Listbox extends XulElement {
 	 */
 	public Listfoot getListfoot() {
 		return _listfoot;
+	}
+	/** Returns a collection of heads, including {@link #getColumns}
+	 * and auxiliary heads ({@link Auxhead}) (never null).
+	 *
+	 * @since 3.0.0
+	 */
+	public Collection getHeads() {
+		return _heads;
 	}
 
 	/** Returns whether the HTML's select tag is used.
@@ -856,28 +876,25 @@ public class Listbox extends XulElement {
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
-			//first: listhead
+			//first: listhead or auxhead
 			//last two: listfoot and paging
 			if (refChild != null && refChild.getParent() != this)
 				refChild = null; //Bug 1649625: it becomes the last child
-			if (refChild != null && refChild == _listhead)
-				refChild = _items.isEmpty() ? null: (Component)_items.get(0);
+			if (refChild != null
+			&& (refChild == _listhead || refChild instanceof Auxhead))
+				refChild = getChildren().size() > _hdcnt ?
+					(Component)getChildren().get(_hdcnt): null;
 
-			if (refChild == null) {
-				if (_listfoot != null) refChild = _listfoot;
-				else refChild = _paging;
-			} else if (refChild == _paging && _listfoot != null) {
-				refChild = _listfoot;
-			}
+			refChild = fixRefChildBeforeFoot(refChild);
 
 			final Listitem newItem = (Listitem)newChild;
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
 			if (super.insertBefore(newChild, refChild)) {
 				final List children = getChildren();
-				if (_listhead != null && children.get(1) == newChild)
+				if (_hdcnt > 0 && children.get(_hdcnt) == newChild)
 					invalidate();
-				//we place listhead and treeitem at different div, so
+				//we place listhead/auxhead and treeitem at different div, so
 				//this case requires invalidate (because we use insert-after)
 
 				//Maintain _items
@@ -929,15 +946,28 @@ public class Listbox extends XulElement {
 		} else if (newChild instanceof Listhead) {
 			if (_listhead != null && _listhead != newChild)
 				throw new UiException("Only one listhead is allowed: "+this);
-			refChild = getFirstChild();
-				//always makes listhead as the first child
 
-			if (inSelectMold())
-				log.warning("Mold select ignores listhead");
-			invalidate();
-				//we place listhead and treeitem at different div, so...
+			final boolean added = _listhead == null;
+			refChild = fixRefChildForHeader(refChild);
 			_listhead = (Listhead)newChild;
-			return super.insertBefore(newChild, refChild);
+			if (super.insertBefore(newChild, refChild)) {
+				if (added)
+					++_hdcnt; //it may be moved, not inserted
+				invalidate(); //required since it might be the first child
+				return true;
+			}
+			return false;
+		} else if (newChild instanceof Auxhead) {
+			final boolean added = newChild.getParent() != this;
+			refChild = fixRefChildForHeader(refChild);
+			if (super.insertBefore(newChild, refChild)) {
+				if (added)
+					++_hdcnt; //it may be moved, not inserted
+					//not need to invalidate since auxhead visible only
+					//with _listhead
+				return true;
+			}
+			return false;
 		} else if (newChild instanceof Listfoot) {
 			if (_listfoot != null && _listfoot != newChild)
 				throw new UiException("Only one listfoot is allowed: "+this);
@@ -965,12 +995,34 @@ public class Listbox extends XulElement {
 			throw new UiException("Unsupported child for Listbox: "+newChild);
 		}
 	}
+	private Component fixRefChildForHeader(Component refChild) {
+		if (refChild != null) {
+			if (refChild.getParent() != this)
+				refChild = null;
+			else if (refChild != _listhead
+			&& !(refChild instanceof Auxhead))
+				refChild = getChildren().size() > _hdcnt ?
+					(Component)getChildren().get(_hdcnt): null;
+		}
+		refChild = fixRefChildBeforeFoot(refChild);
+		return refChild;
+	}
+	private Component fixRefChildBeforeFoot(Component refChild) {
+		if (refChild == null) {
+			if (_listfoot != null) refChild = _listfoot;
+			else refChild = _paging;
+		} else if (refChild == _paging && _listfoot != null) {
+			refChild = _listfoot;
+		}
+		return refChild;
+	}
 	public boolean removeChild(Component child) {
 		if (!super.removeChild(child))
 			return false;
 
 		if (_listhead == child) {
 			_listhead = null;
+			--_hdcnt;
 		} else if (_listfoot == child) {
 			_listfoot = null;
 		} else if (child instanceof Listitem) {
@@ -998,6 +1050,8 @@ public class Listbox extends XulElement {
 		} else if (_paging == child) {
 			_paging = null;
 			if (_pgi == child) _pgi = null;
+		} else if (child instanceof Auxhead) {
+			--_hdcnt;
 		}
 		invalidate();
 		return true;
@@ -1552,11 +1606,8 @@ public class Listbox extends XulElement {
 			_it.set(o);
 		}
 		private void prepare() {
-			if (_it == null) {
-				int v = _j;
-				if (_listhead != null) ++v;
-				_it = getChildren().listIterator(v);
-			}
+			if (_it == null)
+				_it = getChildren().listIterator(_j + _hdcnt);
 		}
 	}
 
@@ -1670,7 +1721,7 @@ public class Listbox extends XulElement {
 				return null;
 
 			final Set avail = new HashSet(37);
-			if (_listhead != null) avail.add(_listhead);
+			avail.addAll(_heads);
 			if (_listfoot != null) avail.add(_listfoot);
 			if (_paging != null) avail.add(_paging);
 	
@@ -1722,6 +1773,24 @@ public class Listbox extends XulElement {
 			} finally {
 				_noSmartUpdate = false;
 			}
+		}
+	}
+	/** An iterator used by _heads.
+	 */
+	private class Iter implements Iterator {
+		private final Iterator _it = getChildren().iterator();
+		private int _j;
+
+		public boolean hasNext() {
+			return _j < _hdcnt;
+		}
+		public Object next() {
+			final Object o = _it.next();
+			++_j;
+			return o;
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 	}
 }

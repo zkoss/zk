@@ -23,8 +23,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<div id="${self.uuid}!paging" class="grid-paging">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
 	<tbody>
-	<c:forEach var="header" items="${self.headers}">
-${z:redraw(header, null)}
+	<c:forEach var="head" items="${self.heads}">
+${z:redraw(head, null)}
 	</c:forEach>
 	</tbody>
 ${z:redraw(self.rows, null)}
