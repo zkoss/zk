@@ -44,7 +44,7 @@ public class GridPaging implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("!paging\" class=\"grid-paging\">");
 		wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">")
 			.writeln("<tbody>")
-			.writeComponents(self.getHeaders())
+			.writeComponents(self.getHeads())
 			.writeln("</tbody>")
 			.writeln(self.getRows());
 

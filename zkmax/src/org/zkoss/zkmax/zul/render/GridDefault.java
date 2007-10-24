@@ -43,7 +43,7 @@ public class GridDefault implements ComponentRenderer {
 		if(self.getColumns() != null){
 			wh.write("<div id=\"").write(uuid).write("!head\" class=\"grid-head\">")
 				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
-				.writeComponents(self.getHeaders())
+				.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
 

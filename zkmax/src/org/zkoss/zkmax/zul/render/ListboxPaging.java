@@ -46,7 +46,7 @@ public class ListboxPaging implements ComponentRenderer {
 			.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
 
 		//header
-		wh.writeln("<tbody>").write(self.getListhead()).writeln("</tbody>");
+		wh.writeln("<tbody>").writeComponents(self.getHeads()).writeln("</tbody>");
 
 		//body
 		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">")

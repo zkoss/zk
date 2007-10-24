@@ -44,7 +44,7 @@ public class TreeDefault implements ComponentRenderer {
 		if(self.getTreecols() != null){
 			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"tree-head\">")
 				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
-				.writeln(self.getTreecols())
+				.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
 

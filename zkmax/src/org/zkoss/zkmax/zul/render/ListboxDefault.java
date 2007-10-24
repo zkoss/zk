@@ -44,7 +44,7 @@ public class ListboxDefault implements ComponentRenderer {
 		if(self.getListhead() != null){
 			wh.write("<div id=\"").write(uuid).write("!head\" class=\"listbox-head\">")
 				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
-				.writeln(self.getListhead())
+				.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
 
