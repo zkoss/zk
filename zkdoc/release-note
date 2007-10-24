@@ -18,6 +18,7 @@ ZK 3.0.0
   1818382: Vbox and Hbox isn't padding between its neighbor.
   1818500: IE Cache Problem.
   1818804: FF Only. ZK Layout OnMouseOver Efect
+  1819037: Grid & Tree columns in ZK RC2
 
 * Upgrade Notes:
   + The look of a tree is now customizable by use of CSS. Refer to Java API.
