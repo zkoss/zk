@@ -26,14 +26,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		sd1 = new ListitemComparator(1, false, true);
 </zscript>
 <listbox id="src" multiple="true" width="250px">
-	<listhead>
+	<listhead id="lh">
 		<listheader width="150px" label="Population" sortAscending="${sa0}"/>
 		<listheader width="100px" align="right" label="%" sortAscending="${sa1}" sortDescending="${sd1}"/>
 	</listhead>
-	<auxhead>
+	<auxhead id="ah1">
 		<auxheader label="Total" span="2"/>
 	</auxhead>
-	<auxhead>
+	<auxhead id="ah2">
 		<auxheader label="Total 2" span="2"/>
 	</auxhead>
 	<listitem id="a" value="A">
@@ -60,6 +60,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <vbox>
 	<button label="=&gt;" onClick="move(src, dst)"/>
 	<button label="&lt;=" onClick="move(dst, src)"/>
+	<button label="remove 1st head" onClick="ah1.detach()"/>
+	<button label="remove 2nd head" onClick="ah2.detach()"/>
+	<button label="add aux head">
+		<attribute name="onClick">{
+		Auxhead ah = new Auxhead();
+		Auxheader ahr = new Auxheader("New aux");
+		ahr.setParent(ah);
+		ahr.setSpan(2);
+		src.insertBefore(ah, lh);
+		}</attribute>
+	</button>
 </vbox>
 <listbox id="dst" checkmark="true" multiple="true" width="250px">
 	<listhead>
