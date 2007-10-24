@@ -3058,7 +3058,7 @@
 <para/></sect3></sect2> <sect2 id="LayoutRegion" xml:base="ch4/LayoutRegion.xml"><title>LayoutRegion</title>
 <para>This class represents a region in a layout manager. </para><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zulex.LayoutRegion</code>
+<code>org.zkoss.zkex.zul.LayoutRegion</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -4369,7 +4369,7 @@
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zulex.Borderlayout</code>
+<code>org.zkoss.zkex.zul.Borderlayout</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>
 <link linkend="North">
@@ -4792,7 +4792,7 @@
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zulex.center</code>
+<code>org.zkoss.zkex.zul.Center</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -4927,7 +4927,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -7776,7 +7776,7 @@
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zulex.east</code>
+<code>org.zkoss.zkex.zul.East</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -7911,7 +7911,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -12611,7 +12611,7 @@
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&#13;</programlisting>
 <para/><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zulex.north</code>
+<code>org.zkoss.zkex.zul.North</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -12746,7 +12746,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -14195,7 +14195,7 @@
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zulex.south</code>
+<code>org.zkoss.zkex.zul.South</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
@@ -14331,7 +14331,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -19252,7 +19252,7 @@
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&#13;</programlisting>
 <para/><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zulex.west</code>
+<code>org.zkoss.zkex.zul.West</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -19387,7 +19387,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
 </para>
 </entry>
 </row>

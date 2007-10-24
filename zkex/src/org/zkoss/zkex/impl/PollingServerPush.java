@@ -67,7 +67,7 @@ public class PollingServerPush implements ServerPush {
 		if (start != null)
 			return start;
 		final StringBuffer sb = new StringBuffer(128)
-			.append("zk.invoke('zul.cpsp',function(){zkCpsp.start('")
+			.append("zk.invoke('zkex.zul.cpsp',function(){zkCpsp.start('")
 			.append(_desktop.getId()).append('\'');
 
 		final int v1 = getIntPref("PollingServerPush.delay.min"),
