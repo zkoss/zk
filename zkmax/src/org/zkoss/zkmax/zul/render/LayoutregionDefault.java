@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zulex.LayoutRegion;
+import org.zkoss.zkex.zul.LayoutRegion;
 
 /**
  * {@link LayoutRegion}'s default mold.
@@ -41,7 +41,7 @@ public class LayoutregionDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final LayoutRegion self = (LayoutRegion) comp;
 		wh.write("<div id=\"").write(self.getUuid()).write('"')
-			.write(" z.type=\"zulex.layout.LayoutRegion\">").write("<div id=\"")
+			.write(" z.type=\"zkex.zul.layout.LayoutRegion\">").write("<div id=\"")
 			.write(self.getUuid()).write("!real\"").write(self.getOuterAttrs())
 			.write(self.getInnerAttrs()).write(">").write("<div id=\"").write(self.getUuid())
 			.write("!cave\" class=\"layout-region-body\">").writeChildren(self)

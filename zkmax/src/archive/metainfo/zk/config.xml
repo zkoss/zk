@@ -12,6 +12,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 
 <config>
+	<config-name>zkmax</config-name><!-- used to resolve dependency -->
+	<depends>zkex</depends>
+
 	<version>
 		<version-class>org.zkoss.zkmax.Version</version-class>
 		<version-uid>3.0.0</version-uid>

@@ -23,7 +23,7 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zulex.Borderlayout;
+import org.zkoss.zkex.zul.Borderlayout;
 
 
 /**
@@ -39,7 +39,7 @@ public class BorderlayoutDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Borderlayout self = (Borderlayout) comp;
 		wh.write("<div id=\"").write(self.getUuid()).write('"').write(self.getOuterAttrs())
-		.write(self.getInnerAttrs()).write(" z.type=\"zulex.layout.BorderLayout\">")
+		.write(self.getInnerAttrs()).write(" z.type=\"zkex.zul.layout.BorderLayout\">")
 		.writeChildren(self).write("</div>");
 	}
 }

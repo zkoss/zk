@@ -14,8 +14,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- The name of this addon. It must be unique -->
 	<addon-name>zkmax</addon-name>
 	<!-- Specifies what other addon this depends-->
-	<depends>zulex</depends>
-	
+	<depends>zkex</depends>	
 
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>
@@ -34,7 +33,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	importPackage(Packages.org.zkoss.zk.ui.event);
 	importPackage(Packages.org.zkoss.zk.ui);
 	importPackage(Packages.org.zkoss.zul);
-	importPackage(Packages.org.zkoss.zulex);
+	importPackage(Packages.org.zkoss.zkex.zul);
 	function alert(m) {
 		Messagebox.show(m);
 	}
@@ -49,7 +48,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	import org.zkoss.zk.ui.event.*
 	import org.zkoss.zk.ui.*
 	import org.zkoss.zul.*
-	import org.zkoss.zulex.*
+	import org.zkoss.zkex.zul.*
 	</zscript>
 	<zscript language="Groovy">
 	alert = {m -> Messagebox.show(m)}
@@ -64,7 +63,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		include_package 'org.zkoss.zk.ui.event'
 		include_package 'org.zkoss.zk.ui'
 		include_package 'org.zkoss.zul'
-		include_package 'org.zkoss.zulex'
+		include_package 'org.zkoss.zkex.zul'
 	end
 	def alert (m)
 		Java::Messagebox.show m
