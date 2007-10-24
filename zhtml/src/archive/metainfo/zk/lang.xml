@@ -27,14 +27,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<case-insensitive/>
 
-	<javascript src="~./js/ext/prototype/prototype.js" charset="UTF-8"/>
-	<javascript src="~./js/ext/aculo/effects.js" charset="UTF-8"/>
-	<javascript src="~./js/ext/aculo/dragdrop.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/html/boot.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/html/lang/mesg*.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/html/common.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/html/au.js" charset="UTF-8"/>
-	<javascript src="~./js/zk/locale.js.dsp" charset="UTF-8"/>
+	<!-- use zk.js.dsp to package all common js file in one http request.-->
+	<javascript src="~./js/zk/zk.js.dsp" charset="UTF-8"/>
 
 	<!-- To have better performance with BeanShell, import most-common later -->
 	<zscript language="Java">
