@@ -117,7 +117,7 @@ implements Condition, java.io.Serializable {
 						cls, mtdnm, new Class[] {null});
 				} catch (NoSuchMethodException e2) {
 					if (!DynamicPropertied.class.isAssignableFrom(cls))
-						throw new UiException("Method not found: "+mtdnm);
+						throw new UiException("Method, "+mtdnm+", not found for "+cls);
 					_mtd = null;
 				}
 			}
