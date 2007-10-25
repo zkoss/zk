@@ -42,7 +42,8 @@ public class TreecellDefault implements ComponentRenderer{
 		
 		wh.write("<td id=\"").write(self.getUuid()).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"cell-inner\">")
+			.write("><div id=\"").write(self.getUuid()).write("!cave\"")
+			.write(self.getLabelAttrs()).write(" class=\"cell-inner\">")
 			.write(self.getColumnHtmlPrefix())
 			.write(self.getImgTag());
 
