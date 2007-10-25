@@ -29,8 +29,7 @@ if (!window.Selectable_effect) { //define it only if not customized
 			zk.rmClass(row, "overseld");
 			zk.rmClass(row, "overd");
 		} else
-			zk.addClass(row,
-				zk.indexClass(row, "seld") >= 0 ? "overseld": "overd");
+			zk.addClass(row, zk.hasClass(row, "seld") ? "overseld": "overd");
 	};
 }
 

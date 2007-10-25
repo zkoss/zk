@@ -29,8 +29,7 @@ if (!window.Comboitem_effect) { //define it only if not customized
 			zk.rmClass(item, "overseld");
 			zk.rmClass(item, "overd");
 		} else
-			zk.addClass(item,
-				zk.indexClass(item, "seld") >= 0 ? "overseld": "overd");
+			zk.addClass(item, zk.hasClass(item, "seld") ? "overseld": "overd");
 	};
 }
 
