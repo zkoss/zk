@@ -28,6 +28,7 @@ import java.util.Collections;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Classes;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -37,10 +38,12 @@ import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
+import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
@@ -78,6 +81,9 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** The fulfill condition.
 	 */
 	private String _fulfill;
+	/** The apply attribute.
+	 */
+	private ExValue _apply;
 	/** The forward condition.
 	 */
 	private String _forward;
@@ -199,6 +205,54 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 */
 	public void setFulfill(String fulfill) {
 		_fulfill = fulfill != null && fulfill.length() > 0 ? fulfill: null;
+	}
+
+	/** Returns the composer for this info, or null if not available.
+	 * It evaluates the value returned by {@link #getApply}.
+	 *
+	 * @see #getApply
+	 * @since 3.0.0
+	 */
+	public Composer getComposer(Page page) {
+		if (_apply != null) {
+			Object o = _apply.getValue(_evalr.getEvaluator(), page);
+			try {
+				if (o instanceof String) {
+					o = Classes.newInstanceByThread((String)o);
+				} else if (o instanceof Class) {
+					o = ((Class)o).newInstance();
+				}
+				if (o instanceof Composer)
+					return (Composer)o;
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex);
+			}
+			if (o != null)
+				throw new UiException(Composer.class + " not implemented by "+o);
+		}
+		return null;
+	}
+	/** Returns the apply attribute that is the class that implements
+	 * {@link Composer}, an instance of it or null.
+	 *
+	 * @since 3.0.0
+	 * @see #getComposer
+	 */
+	public String getApply() {
+		return _apply != null ? _apply.getRawValue(): null;
+	}
+	/** Sets the apply attribute that is used to initialize
+	 * the component.
+	 *
+	 * @param apply the attribute which must be the class that implements
+	 * {@link org.zkoss.zk.ui.util.Composer}, an instance of it, or null.
+	 * El expressions are allowed, but self means the page (after all,
+	 * the component is not created yet).
+	 * @since 3.0.0
+	 */
+	public void setApply(String apply) {
+		_apply = apply != null && apply.length() > 0 ?
+			new ExValue(apply, Object.class): null;
 	}
 
 	/** Returns the forward condition that controls how to forward
@@ -568,6 +622,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		out.writeObject(_tag);
 		out.writeObject(_cond);
 		out.writeObject(_fulfill);
+		out.writeObject(_apply);
 		out.writeObject(_forward);
 		out.writeObject(_forEach);
 	}
@@ -588,6 +643,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_tag = (String)in.readObject();
 		_cond = (ConditionImpl)in.readObject();
 		_fulfill = (String)in.readObject();
+		_apply = (ExValue)in.readObject();
 		_forward = (String)in.readObject();
 		_forEach = (String[])in.readObject();
 	}

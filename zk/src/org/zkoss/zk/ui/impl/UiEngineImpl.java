@@ -46,7 +46,6 @@ import org.zkoss.zk.ui.*;
 import org.zkoss.zk.ui.sys.*;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
-import org.zkoss.zk.ui.ext.ComposeAware;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.util.*;
@@ -472,16 +471,25 @@ public class UiEngineImpl implements UiEngine {
 			return new Component[] {
 				ci.exec.createComponents(childdef.getMacroURI(), parent, props)};
 		} else {
-			final Component child =
-				ci.uf.newComponent(ci.page, parent, childInfo);
-
+			final Composer composer = childInfo.getComposer(ci.page);
+			final ComposerExt composerExt =
+				composer instanceof ComposerExt ? (ComposerExt)composer: null;
 			try {
+				if (composerExt != null) {
+					childInfo = composerExt.doBeforeCompose(ci.page, parent, childInfo);
+					if (childInfo == null)
+						return new Component[0];
+				}
+
+				final Component child =
+					ci.uf.newComponent(ci.page, parent, childInfo);
+
 				final boolean bNative = childInfo instanceof NativeInfo;
 				if (bNative)
 					setProlog(ci, child, (NativeInfo)childInfo);
 
-				if (child instanceof ComposeAware)
-					((ComposeAware)child).doBeforeComposeChildren();
+				if (composerExt != null)
+					composerExt.doBeforeComposeChildren(child);
 
 				execCreate(ci, childInfo, child); //recursive
 
@@ -490,8 +498,8 @@ public class UiEngineImpl implements UiEngine {
 
 				if (child instanceof AfterCompose)
 					((AfterCompose)child).afterCompose();
-				if (child instanceof ComposeAware)
-					((ComposeAware)child).doAfterCompose();
+				if (composer != null)
+					composer.doAfterCompose(child);
 
 				ComponentsCtrl.applyForward(child, childInfo.getForward());
 				//applies the forward condition
@@ -499,30 +507,30 @@ public class UiEngineImpl implements UiEngine {
 				//to it child (thought rarely happens)
 				//2) we did it after afterCompose, so what specified
 				//here has higher priority than class defined by app dev
+
+				if (Events.isListened(child, Events.ON_CREATE, false))
+					Events.postEvent(
+						new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
+
+				return new Component[] {child};
 			} catch (Throwable ex) {
-				if (child instanceof ComposeAware) {
+				if (composerExt != null) {
 					try {
-						((ComposeAware)child).doCatch(ex);
+						composerExt.doCatch(ex);
 					} catch (Throwable t) {
-						log.error("Failed to invoke doCatch for "+child, t);
+						log.error("Failed to invoke doCatch for "+childInfo, t);
 					}
 				}
 				throw UiException.Aide.wrap(ex);
 			} finally {
-				if (child instanceof ComposeAware) {
+				if (composerExt != null) {
 					try {
-						((ComposeAware)child).doFinally();
+						composerExt.doFinally();
 					} catch (Throwable ex) {
 						throw UiException.Aide.wrap(ex);
 					}
 				}
 			}
-
-			if (Events.isListened(child, Events.ON_CREATE, false))
-				Events.postEvent(
-					new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
-
-			return new Component[] {child};
 		}
 	}
 	/** Executes a non-component object, such as ZScript, AttributesInfo...

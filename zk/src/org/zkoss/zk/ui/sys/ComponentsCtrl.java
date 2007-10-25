@@ -90,6 +90,15 @@ public class ComponentsCtrl {
 		return isAutoId(id);
 	}
 
+	/** Returns if the attribute name is reserved.
+	 * If name is null, false is returned.
+	 * @since 3.0.0
+	 */
+	public static final boolean isReservedAttribute(String name) {
+		return name != null && !"use".equals(name) && !"if".equals(name)
+			&& !"unless".equals(name) && !"apply".equals(name)
+			&& !"forEach".equals(name);
+	}
 	/** Returns the current component info {@link ComponentInfo},
 	 * definition ({@link ComponentDefinition} or null, which is used only by
 	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with

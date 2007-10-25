@@ -37,11 +37,12 @@ package org.zkoss.zk.ui.ext;
  *
  * <p>If it is created manually, it is caller's job to invoke {@link #afterCompose}.
  *
- * <p>If you want to have the full control, you can implement
- * {@link ComposeAware} instead.
+ * <p>{@link AfterCompose} has to be implemented as part of
+ * a component. On the other hand, {@link org.zkoss.zk.ui.util.Composer} is
+ * an controller used to intiailize a component.
  *
  * @author tomyeh
- * @see ComposeAware
+ * @see org.zkoss.zk.ui.util.Composer
  */
 public interface AfterCompose {
 	/** Invokes after ZK loader creates this component,

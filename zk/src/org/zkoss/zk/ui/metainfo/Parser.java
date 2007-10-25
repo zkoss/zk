@@ -653,6 +653,8 @@ public class Parser {
 					if (attrAnnHelper == null)
 						attrAnnHelper = new AnnotationHelper();
 					attrAnnHelper.addByRawValue(attnm, attval);
+				} else if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
+					compInfo.setApply(attval);
 				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setForward(attval);
 				} else if ("if".equals(attnm) && isZkAttr(langdef, attrns)) {

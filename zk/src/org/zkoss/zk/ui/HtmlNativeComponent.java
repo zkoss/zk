@@ -33,6 +33,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.impl.NativeHelpers;
@@ -158,8 +159,7 @@ implements DynamicTag, Native {
 		return true; //accept anything
 	}
 	public boolean hasDynamicProperty(String name) {
-		return name != null && !"use".equals(name) && !"if".equals(name)
-			&& !"unless".equals(name) && !"forEach".equals(name);
+		return ComponentsCtrl.isReservedAttribute(name);
 	}
 	public Object getDynamicProperty(String name) {
 		return _props != null ? _props.get(name): null;
