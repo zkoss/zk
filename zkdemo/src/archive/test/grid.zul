@@ -25,7 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<column label="CC"/>
 		</columns>
 		<auxhead>
-			<auxheader label="A+B" span="2"/>
+			<auxheader label="A+B" colspan="2"/>
 			<auxheader label="C"/>
 		</auxhead>
 		<rows>
@@ -313,4 +313,38 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<row>10</row>
 		</rows>
 	</grid>
+	
+	<grid>
+	<auxhead>
+		<auxheader label="A" rowspan="2" />
+		<auxheader label="B" rowspan="2" />
+		<auxheader label="C" colspan="2" />
+	</auxhead>
+
+	<auxhead>
+		<auxheader label="C" colspan="2" />
+	</auxhead>
+	<columns sizable="true">
+		<column label="AA" />
+		<column label="BB" />
+		<column label="CC" />
+	</columns>
+	<rows>
+		<row>
+			<label value="AA01" />
+			<label value="BB01" />
+			<label value="CC01" />
+		</row>
+		<row>
+			<label value="AA01" />
+			<label value="BB01" />
+			<label value="CC01" />
+		</row>
+		<row>
+			<label value="AA01" />
+			<label value="BB01" />
+			<label value="CC01" />
+		</row>
+	</rows>
+</grid>
 </window>
