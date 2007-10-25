@@ -886,7 +886,6 @@ public class Listbox extends XulElement {
 					(Component)getChildren().get(_hdcnt): null;
 
 			refChild = fixRefChildBeforeFoot(refChild);
-
 			final Listitem newItem = (Listitem)newChild;
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
@@ -996,14 +995,16 @@ public class Listbox extends XulElement {
 		}
 	}
 	private Component fixRefChildForHeader(Component refChild) {
-		if (refChild != null) {
-			if (refChild.getParent() != this)
-				refChild = null;
-			else if (refChild != _listhead
-			&& !(refChild instanceof Auxhead))
-				refChild = getChildren().size() > _hdcnt ?
-					(Component)getChildren().get(_hdcnt): null;
-		}
+		if (refChild != null && refChild.getParent() != this)
+			refChild = null;
+
+		//try the first listitem
+		if (refChild == null
+		|| (refChild != _listhead && !(refChild instanceof Auxhead)))
+			refChild = getChildren().size() > _hdcnt ?
+				(Component)getChildren().get(_hdcnt): null;
+
+		//try listfoot or paging if no listem
 		refChild = fixRefChildBeforeFoot(refChild);
 		return refChild;
 	}
