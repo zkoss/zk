@@ -102,7 +102,8 @@ implements DynamicPropertied, RawId {
 	//-- DynamicPropertys --//
 	public boolean hasDynamicProperty(String name) {
 		return name != null && !"use".equals(name) && !"if".equals(name)
-			&& !"unless".equals(name) && !"forEach".equals(name);
+			&& !"unless".equals(name) && !"apply".equals(name)
+			&& !"forEach".equals(name);
 	}
 	/** Returns the dynamic property, or null if not found.
 	 * Note: it must be a String object or null.
