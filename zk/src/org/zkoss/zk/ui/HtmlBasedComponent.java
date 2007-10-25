@@ -168,6 +168,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	/** Returns the CSS class.
 	 * Due to Java's limitation, we cannot use the name called getClas.
 	 * <p>Default: null (the default value depends on element).
+	 * @see #getRealSclass
 	 */
 	public String getSclass() {
 		return _sclass;
@@ -321,7 +322,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 */
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64);
-		HTMLs.appendAttribute(sb, "class", getSclass());
+		HTMLs.appendAttribute(sb, "class", getRealSclass());
 		HTMLs.appendAttribute(sb, "style", getRealStyle());
 		HTMLs.appendAttribute(sb, "title", getTooltiptext());
 		HTMLs.appendAttribute(sb, "z.drag", _draggable);
@@ -346,8 +347,27 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		return "";
 	}
 
-	/** Returns the real style after appending width, height and others
+	/** Returns the real style class that will be generated to the client
+	 * (when {@link #getOuterAttrs} is called).
+	 *
+	 * <p>Default: it simply returns {@link #getSclass}.
+	 *
+	 * <p>Derived classes might override it to provide, say, dual style classes.
+	 * For example,
+	 * <pre><code>final String sclass = getSclass();
+	 *return sclass != null ? sclass + " my-addon": "myaddon";</code></pre>
+	 *
+	 * @since 3.0.0
+	 */
+	protected String getRealSclass() {
+		return getSclass();
+	}
+	/** Returns the real style that will be generated to client
+	 * (when {@link #getOuterAttrs} is called).
+	 *
+	 * <p>Default: this method will append width, height and others
 	 * to {@link #setStyle} (never null).
+	 *
 	 * <p>Use {@link #getRealStyleFlags} to control what attributes to
 	 * exclude.
 	 */
