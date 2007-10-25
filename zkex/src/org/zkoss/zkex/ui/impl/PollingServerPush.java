@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkex.impl;
+package org.zkoss.zkex.ui.impl;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -67,7 +67,7 @@ public class PollingServerPush implements ServerPush {
 		if (start != null)
 			return start;
 		final StringBuffer sb = new StringBuffer(128)
-			.append("zk.invoke('zkex.zul.cpsp',function(){zkCpsp.start('")
+			.append("zk.invoke('zkex.ui.cpsp',function(){zkCpsp.start('")
 			.append(_desktop.getId()).append('\'');
 
 		final int v1 = getIntPref("PollingServerPush.delay.min"),
