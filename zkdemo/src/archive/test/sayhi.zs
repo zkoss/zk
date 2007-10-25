@@ -1,4 +1,4 @@
-/* sayhi.zs
+/* sayhi.zs, charset=UTF-8
 
 {{IS_NOTE
 	Purpose:
@@ -15,5 +15,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 void sayhi() {
-	alert("Hi");
+	alert("Hi, 中文");
 }
