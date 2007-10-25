@@ -27,19 +27,19 @@ div.layout-region-north, div.layout-region-south {
     z-index:11;
 }
 div.layout-split-h {
-    background-image:url("${c:encodeURL('~./zkex/zul/img/layout/splt-h.png')}");
+    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
     background-position: left;
 }
 div.layout-split-v {
-    background-image:url("${c:encodeURL('~./zkex/zul/img/layout/splt-v.png')}");
+    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
     background-position: top;
 }
 div.layout-split-h-ns {
-    background-image:url("${c:encodeURL('~./zkex/zul/img/layout/splt-h-ns.png')}");
+    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h-ns.png')}");
     background-position: left;
 }
 div.layout-split-v-ns {
-    background-image:url("${c:encodeURL('~./zkex/zul/img/layout/splt-v-ns.png')}");
+    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
     background-position: top;
 }
 div.layout-split{
@@ -64,18 +64,18 @@ span.layout-split-button-l, span.layout-split-button-r, span.layout-split-button
 }
 span.layout-split-button-l {
 	width: 6px; min-height: 50px; height: 50px;
-	background-image: url(${c:encodeURL('~./zkex/zul/img/layout/colps-l.png')});
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.png')});
 }
 span.layout-split-button-r {
 	width: 6px; min-height: 50px; height: 50px;
-	background-image: url(${c:encodeURL('~./zkex/zul/img/layout/colps-r.png')});
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.png')});
 }
 span.layout-split-button-t {
 	width: 50px; min-height: 6px; height: 6px;
-	background-image: url(${c:encodeURL('~./zkex/zul/img/layout/colps-t.png')});
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.png')});
 
 }
 span.layout-split-button-b {
 	width: 50px; min-height: 5px; height: 6px;
-	background-image: url(${c:encodeURL('~./zkex/zul/img/layout/colps-b.png')});
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.png')});
 }
