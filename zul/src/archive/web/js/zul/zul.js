@@ -107,7 +107,15 @@ zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
 			}
 		}
 	}
-	zk.cpCellWidth(mate.headtbl.rows[0], mate.bodyrows, mate);
+	var head;
+	for(var j =0; j < mate.headtbl.rows.length; j++) {
+		var type = $type(mate.headtbl.rows[j]);
+		if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
+			head = mate.headtbl.rows[j];
+			break;
+		}
+	}
+	zk.cpCellWidth(head, mate.bodyrows, mate);
 	zkau.send({uuid: cmp.id, cmd: "onColSize",
 		data: [icol, col.id, wd, keys]},
 		zkau.asapTimeout(cmp, "onColSize"));
@@ -181,15 +189,24 @@ zulHdr._endsizing = function (cmp, evt) {
 		var wd = dg.z_szofs;
 		var rwd = zk.safari ? wd : zk.revisedSize(cmp, wd);
 		var table = $parentByTag(cmp, "TABLE");
-		var cells = table.rows[0].cells;
+		var head;
+		
+		for(var j =0; j < table.rows.length; j++) {
+			var type = $type(table.rows[j]);
+			if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
+				head = table.rows[j];
+				break;
+			}
+		}
+		var cells = head.cells;
 		var total = 0;
 		for (var k = 0; k < cells.length; ++k)
 			if (cells[k] != cmp) total += cells[k].offsetWidth;
-			
+		var row = table.rows[0];
+		row.cells[cmp.cellIndex].style.width = $int(rwd) + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings) + "px";
 		cmp.style.width = rwd + "px";
 		var uuid = $uuid(cmp);
 		var cell = $e(uuid + "!cave");
-		//if (!cell) cell = $e(uuid + "!cave");
 		cell.style.width = zk.revisedSize(cell, rwd) + "px";	
 		table.style.width = total + wd + "px";					
 		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+j+",'"+wd+"','"+keys+"')", 0);		
@@ -199,7 +216,10 @@ zulHdr._endsizing = function (cmp, evt) {
  */
 zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
+		var el = dg.element.parentNode.parentNode.parentNode;
+		var of = zk.revisedOffset(el);
 		var ofs = zkau.beginGhostToDIV(dg);
+		ofs[1] = of[1];
 		var head = $parentByTag(dg.element, "DIV");		
 		ofs[0] += zk.offsetWidth(dg.element);
 		document.body.insertAdjacentHTML("afterbegin",

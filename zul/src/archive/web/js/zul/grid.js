@@ -195,10 +195,39 @@ zk.Grid.prototype = {
 
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + "px";
-			if (this.headtbl.rows.length)
-				zk.cpCellWidth(this.headtbl.rows[0], this.bodyrows, this, true);
+			if (this.headtbl.rows.length) {
+				var head;
+				var j =0
+				for(; j < this.headtbl.rows.length; j++)
+					if ($type(this.headtbl.rows[j]) == "Cols") {
+						head = this.headtbl.rows[j];
+						break;
+					}
+				zk.cpCellWidth(head, this.bodyrows, this, true);	
+				var fake = $e(head.id + "!fake");
+				if (!fake || fake.cells.length != head.cells.length) {
+					if (fake) fake.parentNode.removeChild(fake);
+					var src = document.createElement("TR");
+					src.id = head.id + "!fake";
+					src.style.height = "0px";
+					//Note: we cannot use display="none" (offsetWidth won't be right)
+					for (var j = 0; j < head.cells.length; ++j)
+						src.appendChild(document.createElement("TD"));					
+					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]); 						
+					var row = this.headtbl.rows[0];
+					var cells = row.cells;
+					for (var k =0, z = 0; k < cells.length; k++) {
+						var s = cells[k], d = head.cells[k];
+						var wd =  d.style.width;							
+						if (wd == "auto" || wd.indexOf('%') > -1) 
+							d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
+							wd = d.style.width;
+						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
+					} 
+				}			
+			}
 			if (this.foottbl && this.foottbl.rows.length)
-				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
+				zk.cpCellWidth(head, this.foottbl.rows, this);
 		} else if (this.foottbl) {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
