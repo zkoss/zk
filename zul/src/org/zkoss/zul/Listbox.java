@@ -214,7 +214,7 @@ public class Listbox extends XulElement {
 	public Listfoot getListfoot() {
 		return _listfoot;
 	}
-	/** Returns a collection of heads, including {@link #getColumns}
+	/** Returns a collection of heads, including {@link #getListhead}
 	 * and auxiliary heads ({@link Auxhead}) (never null).
 	 *
 	 * @since 3.0.0

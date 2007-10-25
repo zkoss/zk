@@ -95,6 +95,8 @@ public class Window extends XulElement implements IdSpace {
 	private transient Object _mutex;
 	/** The style used for the content block. */
 	private String _cntStyle;
+	/** The style class used for the content block. */
+	private String _cntscls;
 	/** How to position the window. */
 	private String _pos;
 	/** Whether to show a close button. */
@@ -165,13 +167,10 @@ public class Window extends XulElement implements IdSpace {
 	}
 
 	/** Returns the border.
-	 * <p>The border actually controls what CSS class to use:
-	 * If border is null, it implies "none".
-	 * If border is "normal", the class called "window" is used.
-	 * If not, the class called "window-<i>border</i>" (e.g., "window-none").
-	 *
-	 * <p>If you also specify the CSS class ({@link #setClass}), it
-	 * overwrites whatever border you specify here.
+	 * The border actually controls what the content style class is
+	 * is used. In fact, the name of the border (except "normal")
+	 * is generate as part of the style class used for the content block.
+	 * Refer to {@link #getContentSclass} for more details.
 	 *
 	 * <p>Default: "none".
 	 */
@@ -679,20 +678,45 @@ public class Window extends XulElement implements IdSpace {
 
 	/** Returns the style class used for the content block.
 	 *
-	 * <p>If {@link #getBorder} is "normal", "wc-<i>sclass</i>" is returned,
-	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
-	 * Otherwise, "wc-<i>mode</i>-<i>border</i>",
-	 * where <i>border</i> is the value returned by {@link #getBorder}.
+	 * <p>If {@link #setContentSclass} was called with a non-empty value,
+	 * say, "mycnt", then
+	 * <ol>
+	 * <li>Case 1: If {@link #getBorder} is "normal", "mycnt" is returned.</li>
+	 * <li>Case 2: Otherwise, "mycnt-<i>border</i>" is returned
+	 * where <i>border</i> is the value returned by {@link #getBorder}.</li>
+	 * </ol>
+	 *
+	 * <p>If {@link #setContentSclass} was not called, or called with null,
+	 * then the content style class is decided by {@link #getSclass} as follows:
+	 * <ol>
+	 * <li>Case 1: If {@link #getBorder} is "normal", "wc-<i>sclass</i>" is
+	 * returned, where <i>sclass</i> is the value returned by {@link #getSclass}.</li>
+	 * <li>Otherwise, "wc-<i>mode</i>-<i>border</i>",
+	 * where <i>border</i> is the value returned by {@link #getBorder}.</li>
+	 * </li>
+	 * @see #setContentSclass
 	 */
 	public String getContentSclass() {
-		final StringBuffer sb =
-			new StringBuffer(30).append("wc-").append(getSclass());
-
+		String cntscls = _cntscls;
+		if (cntscls == null) {
+			cntscls = getSclass();
+			cntscls = cntscls != null ? "wc-" + cntscls: "wc";
+		}
 		final String border = getBorder();
-		if (!"normal".equals(border))
-			sb.append('-').append(border);
-		return sb.toString();
+		return "normal".equals(border) ? cntscls: cntscls + '-' + border;
 	}
+	/** Sets the style class used for the content block.
+	 *
+	 * @see #getContentSclass
+	 * @since 3.0.0
+	 */
+	public void setContentSclass(String scls) {
+		if (!Objects.equals(_cntscls, scls)) {
+			_cntscls = scls;
+			smartUpdate("z.cntScls", getContentSclass());
+		}
+	}
+
 	/** Returns the style class used for the title.
 	 *
 	 * <p>It returns "wt-<i>sclass</i>" is returned,

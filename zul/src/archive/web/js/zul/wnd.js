@@ -134,6 +134,13 @@ zkWnd.setAttr = function (cmp, nm, val) {
 			zkWnd._fixHgh(cmp); //border's dimension might be changed
 		}
 		return true;  //no need to store z.cntType
+	case "z.cntScls":
+		var n = $e(cmp.id + "!cave");
+		if (n) {
+			n.className = val != null ? val: "";
+			zkWnd._fixHgh(cmp); //border's dimension might be changed
+		}
+		return true; //no need to store it
 
 	case "z.pos":
 		zkau.setAttr(cmp, nm, val);
