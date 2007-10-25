@@ -55,6 +55,13 @@
 			<xs:enumeration value="bottom" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="tabsAlignAttrType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="start" />
+			<xs:enumeration value="center" />
+			<xs:enumeration value="end" />
+		</xs:restriction>
+	</xs:simpleType>	
 	<xs:simpleType name="packAttrType">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="start" />
@@ -1287,6 +1294,7 @@
 			<xs:element ref="tab" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="align" type="tabsAlignAttrType" use="optional" />
 	</xs:complexType>
 	<!-- textbox -->
 	<xs:element name="textbox" type="textboxType" />
