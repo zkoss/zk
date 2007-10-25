@@ -6,6 +6,7 @@ ZK 3.0.0
   1817456: Full Support ZK Layout Theme
   1765212: Annoying sellection during drag-drop
   1755433: Complex column heading
+  1707513: Provide Complex Header in Grid/Listbox
 
 * Bugs:
   1814702: ZK Layout Fails to Resize
