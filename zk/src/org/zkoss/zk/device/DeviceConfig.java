@@ -38,7 +38,7 @@ public interface DeviceConfig {
 	 */
 	public String getTimeoutURI();
 	/** Returns the class that implements the server-push feature
-	 * ({@link ServerPush}) for this device, or null if the default is used.
+	 * ({@link org.zkoss.zk.ui.sys.ServerPush}) for this device, or null if the default is used.
 	 * @since 3.0.0
 	 */
 	public Class getServerPushClass();
