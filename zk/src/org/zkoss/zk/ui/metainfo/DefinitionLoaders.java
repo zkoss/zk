@@ -150,7 +150,6 @@ public class DefinitionLoaders {
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				if (log.debugable()) log.debug("Loading "+res.url);
-System.out.println("load "+res.url);
 				try {
 					if (checkVersion(zkver, res.url, res.document))
 						parseConfig(res.document.getRootElement());
