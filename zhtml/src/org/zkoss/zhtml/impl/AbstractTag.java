@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
@@ -101,9 +102,7 @@ implements DynamicPropertied, RawId {
 
 	//-- DynamicPropertys --//
 	public boolean hasDynamicProperty(String name) {
-		return name != null && !"use".equals(name) && !"if".equals(name)
-			&& !"unless".equals(name) && !"apply".equals(name)
-			&& !"forEach".equals(name);
+		return ComponentsCtrl.isReservedAttribute(name);
 	}
 	/** Returns the dynamic property, or null if not found.
 	 * Note: it must be a String object or null.
