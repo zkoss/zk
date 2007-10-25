@@ -492,7 +492,8 @@ public class Tree extends XulElement {
 
 	/** Returns the style class prefix used to generate the icons of this tree.
 	 *
-	 * <p>Default: tree.
+	 * <p>Default: tree.</br>
+	 * Another builtin style class: dottree (the style used prior 3.0).
 	 *
 	 * <p>Assume that the icon style class is <code>tree</code>, then
 	 * the following style classes are used for the icons of each tree item:

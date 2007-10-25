@@ -1,6 +1,8 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+
 html {height:100%}
+
 <%-- paragraphs --%>
 p, div, span, label, a, li, dt, dd, input, textarea, pre, body {
 	font-family: Verdana, Tahoma, Arial, serif;
@@ -316,71 +318,93 @@ span.treeitem-paging {
 --%>
 
 <%-- tree icons --%>
-span.tree-root-open {
-	width: 18px; height: 100%;
+span.tree-root-open, span.tree-tee-open, span.tree-last-open {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});
+	background-repeat: no-repeat;
+	vertical-align:top;
+	display:inline-block;
+}
+span.tree-root-close, span.tree-tee-close, span.tree-last-close {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});
+	background-repeat: no-repeat;
+	vertical-align:top;
+	display:inline-block;
+}
+span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/spacer.gif')});
+	background-repeat: no-repeat;
+	vertical-align:top;
+	display:inline-block;
+}
+
+span.dottree-root-open {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/root-open.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-root-close {
-	width: 18px; height: 100%;
+span.dottree-root-close {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/root-close.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-tee-open {
-	width: 18px; height: 100%;
+span.dottree-tee-open {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-open.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-tee-close {
-	width: 18px; height: 100%;
+span.dottree-tee-close {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-close.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-last-open {
-	width: 18px; height: 100%;
+span.dottree-last-open {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last-open.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-last-close {
-	width: 18px; height: 100%;
+span.dottree-last-close {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last-close.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-tee {
-	width: 18px; height: 100%;
+span.dottree-tee {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-vbar {
-	width: 18px; height: 100%;
+span.dottree-vbar {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/vbar.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-last {
-	width: 18px; height: 100%;
+span.dottree-last {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
-span.tree-spacer {
-	width: 18px; height: 100%;
+span.dottree-spacer {
+	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/spacer.gif')});
 	background-repeat: no-repeat;
 	vertical-align:top;
