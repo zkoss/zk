@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.*;
 import org.zkoss.zk.ui.sys.*;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
+import org.zkoss.zk.ui.ext.ComposeAware;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.util.*;
@@ -474,24 +475,48 @@ public class UiEngineImpl implements UiEngine {
 			final Component child =
 				ci.uf.newComponent(ci.page, parent, childInfo);
 
-			final boolean bNative = childInfo instanceof NativeInfo;
-			if (bNative)
-				setProlog(ci, child, (NativeInfo)childInfo);
+			try {
+				final boolean bNative = childInfo instanceof NativeInfo;
+				if (bNative)
+					setProlog(ci, child, (NativeInfo)childInfo);
 
-			execCreate(ci, childInfo, child); //recursive
+				if (child instanceof ComposeAware)
+					((ComposeAware)child).doBeforeComposeChildren();
 
-			if (bNative)
-				setEpilog(ci, child, (NativeInfo)childInfo);
+				execCreate(ci, childInfo, child); //recursive
 
-			if (child instanceof AfterCompose)
-				((AfterCompose)child).afterCompose();
+				if (bNative)
+					setEpilog(ci, child, (NativeInfo)childInfo);
 
-			ComponentsCtrl.applyForward(child, childInfo.getForward());
+				if (child instanceof AfterCompose)
+					((AfterCompose)child).afterCompose();
+				if (child instanceof ComposeAware)
+					((ComposeAware)child).doAfterCompose();
+
+				ComponentsCtrl.applyForward(child, childInfo.getForward());
 				//applies the forward condition
 				//1) we did it after all child created, so it may reference
 				//to it child (thought rarely happens)
 				//2) we did it after afterCompose, so what specified
 				//here has higher priority than class defined by app dev
+			} catch (Throwable ex) {
+				if (child instanceof ComposeAware) {
+					try {
+						((ComposeAware)child).doCatch(ex);
+					} catch (Throwable t) {
+						log.error("Failed to invoke doCatch for "+child, t);
+					}
+				}
+				throw UiException.Aide.wrap(ex);
+			} finally {
+				if (child instanceof ComposeAware) {
+					try {
+						((ComposeAware)child).doFinally();
+					} catch (Throwable ex) {
+						throw UiException.Aide.wrap(ex);
+					}
+				}
+			}
 
 			if (Events.isListened(child, Events.ON_CREATE, false))
 				Events.postEvent(

@@ -19,10 +19,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.ext;
 
 /**
- * Implemented by a component if it needs the {@link #afterCompose} callback.
- * {@link #afterCompose} is called after ZK loader creates this component,
+ * Implemented by a component if it wants to know when ZK loader created it.
+ * If this interface is implemented,
+ * {@link #afterCompose} is called, after ZK loader creates this component,
  * all of its children, and assigns all properties defined in the ZUML page.
- * It is so-called "composing".
+ * It is so-called "compose".
  *
  * <p>It is similar to listen the onCreate event since it is called after
  * all children are created. However, unlike onCreate, it is called in
@@ -34,13 +35,17 @@ package org.zkoss.zk.ui.ext;
  * <p>A typical example is that macro components use this callback to
  * create its children based on the macro URI.
  *
- * <p>If it is created manually, it is caller's job to invoke afterCompose.
+ * <p>If it is created manually, it is caller's job to invoke {@link #afterCompose}.
+ *
+ * <p>If you want to have the full control, you can implement
+ * {@link ComposeAware} instead.
  *
  * @author tomyeh
+ * @see ComposeAware
  */
 public interface AfterCompose {
-	/** Invokes after ZK loader applies all properties.
-	 * Its meaning depends on the implementation class.
+	/** Invokes after ZK loader creates this component,
+	 * initializes it and composes all its children, if any.
 	 */
 	public void afterCompose();
 }
