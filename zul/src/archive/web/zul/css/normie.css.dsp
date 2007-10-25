@@ -18,6 +18,9 @@ img	{
 .caption input, .caption td {
 	font-size: xx-small;
 }
+.caption td.caption {
+	font-size: x-small;
+}
 .caption button {
 	font-size: 93%;
 }
