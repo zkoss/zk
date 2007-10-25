@@ -274,6 +274,17 @@ public class Treecell extends LabelImageElement {
 	public void setWidth(String width) {
 		throw new UnsupportedOperationException("Set treecol's width instead");
 	}
+
+
+	/** Returns the attributes used by the embedded HTML LABEL tag.
+	 * It returns text-relevant styles only.
+	 * <p>Used only by component developer.
+	 */
+	public String getLabelAttrs() {
+		final String style = HTMLs.getTextRelevantStyle(getRealStyle());
+		return style.length() > 0 ? " style=\""+style+'"': "";
+	}
+	
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 

@@ -214,6 +214,15 @@ public class Listcell extends LabelImageElement {
 		return sb.toString();
 	}
 
+	/** Returns the attributes used by the embedded HTML LABEL tag.
+	 * It returns text-relevant styles only.
+	 * <p>Used only by component developer.
+	 */
+	public String getLabelAttrs() {
+		final String style = HTMLs.getTextRelevantStyle(getRealStyle());
+		return style.length() > 0 ? " style=\""+style+'"': "";
+	}
+	
 	//-- Component --//
  	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listitem))
