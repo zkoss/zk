@@ -21,6 +21,7 @@ ZK 3.0.0
   1818500: IE Cache Problem.
   1818804: FF Only. ZK Layout OnMouseOver Efect
   1819037: Grid & Tree columns in ZK RC2
+  1819174: Listceel no more consider style
 
 * Upgrade Notes:
   + The look of a tree is now customizable by use of CSS. Refer to Java API.
