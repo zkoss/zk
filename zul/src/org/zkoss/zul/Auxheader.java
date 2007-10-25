@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * @since 3.0.0
  */
 public class Auxheader extends HeaderElement {
-	private int _span = 1;
+	private int _colspan = 1, _rowspan = 1;
 
 	public Auxheader() {
 	}
@@ -48,18 +48,36 @@ public class Auxheader extends HeaderElement {
 	/** Returns number of columns to span this header.
 	 * Default: 1.
 	 */
-	public int getSpan() {
-		return _span;
+	public int getColspan() {
+		return _colspan;
 	}
 	/** Sets the number of columns to span this header.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
-	public void setSpan(int span) throws WrongValueException {
-		if (span <= 0)
+	public void setColspan(int colspan) throws WrongValueException {
+		if (colspan <= 0)
 			throw new WrongValueException("Positive only");
-		if (_span != span) {
-			_span = span;
-			smartUpdate("colspan", Integer.toString(_span));
+		if (_colspan != colspan) {
+			_colspan = colspan;
+			smartUpdate("colspan", Integer.toString(_colspan));
+		}
+	}
+
+	/** Returns number of rows to span this header.
+	 * Default: 1.
+	 */
+	public int getRowspan() {
+		return _rowspan;
+	}
+	/** Sets the number of rows to span this header.
+	 * <p>It is the same as the rowspan attribute of HTML TD tag.
+	 */
+	public void setRowspan(int rowspan) throws WrongValueException {
+		if (rowspan <= 0)
+			throw new WrongValueException("Positive only");
+		if (_rowspan != rowspan) {
+			_rowspan = rowspan;
+			smartUpdate("rowspan", Integer.toString(_rowspan));
 		}
 	}
 
@@ -67,12 +85,13 @@ public class Auxheader extends HeaderElement {
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		final String clkattrs = getAllOnClickAttrs(false);
-		if (clkattrs == null && _span == 1)
+		if (clkattrs == null && _colspan == 1 && _rowspan == 1)
 			return attrs;
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
 		if (clkattrs != null) sb.append(clkattrs);
-		if (_span != 1) HTMLs.appendAttribute(sb, "colspan", _span);
+		if (_colspan != 1) HTMLs.appendAttribute(sb, "colspan", _colspan);
+		if (_rowspan != 1) HTMLs.appendAttribute(sb, "rowspan", _rowspan);
 		return sb.toString();
 	}
 
