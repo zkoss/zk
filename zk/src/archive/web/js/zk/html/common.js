@@ -119,14 +119,12 @@ if (zk.ie) {
 //////
 // More zk utilities (defined also in boot.js) //
 
-/** Returns the index of the class name if it is part of the class name
- * of the specified element, or -1 if not.
+/** Returns whether it is part of the class name
+ * of the specified element.
  */
-zk.indexClass = function (el, clsnm) {
+zk.hasClass = function (el, clsnm) {
 	var cn = el.className;
-	var j = cn.indexOf(clsnm), k = j + clsnm.length;
-	return j < 0 || (j && cn.charAt(j - 1) != ' ')
-	|| (k < cn.length && cn.charAt(k) != ' ') ? -1: j;
+	return cn && (' '+cn+' ').indexOf(' '+clsnm+' ') != -1;
 };
 
 /** Adds the specified class name to the class name of the specified element.
@@ -138,8 +136,7 @@ zk.addClass = function (el, clsnm, bAdd) {
 		return;
 	}
 
-	var j = zk.indexClass(el, clsnm);
-	if (j < 0) {
+	if (!zk.hasClass(el, clsnm)) {
 		var cn = el.className;
 		if (cn.length) cn += ' ';
 		el.className = cn + clsnm;
@@ -155,11 +152,9 @@ zk.rmClass = function (el, clsnm, bRemove) {
 		return;
 	}
 
-	var j = zk.indexClass(el, clsnm);
-	if (j >= 0) {
-		var cn = el.className, k = j + clsnm.length;
-		if (k < cn.length) ++k;
-		el.className = cn.substring(0, j) + cn.substring(k);
+	if (zk.hasClass(el, clsnm)) {
+    	var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
+        el.className = el.className.replace(re, " ");            
 	}
 };
 
