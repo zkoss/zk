@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
+import org.zkoss.zul.Tabpanel;
 
 /**
  * {@link Tab}'s default mold in vertical only.
@@ -47,11 +48,12 @@ public class TabDefaultV implements ComponentRenderer {
 		final Execution exec = Executions.getCurrent();
 		final String look = tabbox.getTabLook() + '-';
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
+		final Tabpanel panel = self.getLinkedPanel();
 
 		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Tab\"")
 			.write(self.getOuterAttrs()).write(" z.sel=\"").write(self.isSelected())
 			.write("\" z.box=\"").write(tabbox.getUuid()).write("\" z.panel=\"")
-			.write(self.getLinkedPanel().getUuid()).writeln("\">");
+			.write(panel==null?"":panel.getUuid()).writeln("\">");
 
 		wh.write("<td align=\"right\"").writeAttr("width", self.getWidth())
 			.writeln("><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">")
