@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkmax.xel.el;
+package org.zkoss.xel.el;
 
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
