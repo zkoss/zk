@@ -30,18 +30,12 @@ import java.util.Iterator;
 import java.util.Enumeration;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.BodyContent;
-
-import org.zkoss.util.CollectionsX;
 
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.VariableResolver;
@@ -60,8 +54,6 @@ abstract public class RequestXelResolver implements VariableResolver {
 	private final ServletResponse _response;
 	private HttpSession _sess;
 	private Map _reqScope, _sessScope, _appScope;
-	/** A fake page context implementation. */
-	private PageContextImpl _pc;
 	/** cached cookies. */
 	private Map _cookies;
 
@@ -92,12 +84,6 @@ abstract public class RequestXelResolver implements VariableResolver {
 	 */
 	abstract public ExpressionFactory getExpressionFactory();
 
-	/** Returns the page context. */
-	public PageContext getPageContext() {
-		if (_pc == null)
-			_pc = new PageContextImpl();
-		return _pc;
-	}
 	/** Returns the request. */
     public ServletRequest getRequest() {
     	return _request;
@@ -113,9 +99,7 @@ abstract public class RequestXelResolver implements VariableResolver {
 
 	//-- VariableResovler --//
 	public Object resolveVariable (String name) throws XelException {
-		if ("pageContext".equals(name)) {
-			return getPageContext();
-		} else if ("pageScope".equals(name)) {
+		if ("pageScope".equals(name)) {
 			return Collections.EMPTY_MAP;
 		} else if ("requestScope".equals(name)) {
 			return getRequestScope();
@@ -330,129 +314,4 @@ abstract public class RequestXelResolver implements VariableResolver {
 			throw new UnsupportedOperationException("readonly");
 		}
 	} //ParamMap
-	/** Fake page context implementation.
-	 * It is too costly to implement PageContext,
-	 * but only implement a subset that VariableResolver might need
-	 * (i.e., only getters are implemented).
-	 */
-	private class PageContextImpl extends PageContext {
-		private final javax.servlet.jsp.el.VariableResolver _elResolver
-			= new XelELResolver(RequestXelResolver.this);
-		javax.servlet.jsp.el.ExpressionEvaluator _elEval
-			= new XelELEvaluator(getExpressionFactory());
-	    public Exception getException() {
-	    	return null;
-	    }
-	    public Object getPage() {
-	    	return null;
-	    }
-	    public ServletRequest getRequest() {
-	    	return _request;
-	    }
-	    public ServletResponse getResponse() {
-	    	return _response;
-	    }
-	    public ServletConfig getServletConfig() {
-	    	return null;
-	    }
-	    public ServletContext getServletContext() {
-	    	return _ctx;
-	    }
-	    public HttpSession getSession() {
-	    	return RequestXelResolver.this.getSession();
-	    }
-		public javax.servlet.jsp.el.VariableResolver getVariableResolver() {
-			return _elResolver;
-		}
-		public javax.servlet.jsp.el.ExpressionEvaluator getExpressionEvaluator() {
-	    	return _elEval;
-	    }
-
-		public void forward(String relativeUrlPath) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void include(String relativeUrlPath) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void include(String relativeUrlPath, boolean flush) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void handlePageException(Exception e) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void handlePageException(Throwable e) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void initialize(Servlet servlet, ServletRequest request,
-		ServletResponse response, String errorPageURL, boolean needsSession,
-		int bufferSize, boolean autoFlush) {
-		}
-		public BodyContent pushBody() {
- 	    	throw new UnsupportedOperationException();
-	    }
-		public void release() {
-		}
-		public Object findAttribute(String name) {
-			return RequestXelResolver.this.findAttribute(name);
-	    }
-		public Object getAttribute(String name) {
-			return null;
-	    }
-		public Object getAttribute(String name, int scope) {
-			switch (scope) {
-			case PageContext.REQUEST_SCOPE:
-				return getRequestScope().get(name);
-			case PageContext.SESSION_SCOPE:
-				return getSessionScope().get(name);
-			case PageContext.APPLICATION_SCOPE:
-				return getApplicationScope().get(name);
-			default:
-				return null;
-			}
-	    }
-		public Enumeration getAttributeNamesInScope(int scope) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public int getAttributesScope(String name) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public JspWriter getOut() {
-	    	throw new UnsupportedOperationException();
-	    }
-		public JspWriter popBody() {
-	    	throw new UnsupportedOperationException();
-	    }
-		public JspWriter pushBody(java.io.Writer writer) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void removeAttribute(String name) {
-	    }
-		public void removeAttribute(String name, int scope) {
-			switch (scope) {
-			case PageContext.REQUEST_SCOPE:
-				getRequestScope().remove(name); return;
-			case PageContext.SESSION_SCOPE:
-				getSessionScope().remove(name); return;
-			case PageContext.APPLICATION_SCOPE:
-				getApplicationScope().remove(name); return;
-			}
-	    }
-		public void setAttribute(String name, Object value) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void setAttribute(String name, Object value, int scope) {
-			if (value == null) {
-				removeAttribute(name, scope);
-				return;
-			}
-			switch (scope) {
-			case PageContext.REQUEST_SCOPE:
-				getRequestScope().put(name, value); return;
-			case PageContext.SESSION_SCOPE:
-				getSessionScope().put(name, value); return;
-			case PageContext.APPLICATION_SCOPE:
-				getApplicationScope().put(name, value); return;
-			}
-	    }
-	}
 }

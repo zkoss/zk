@@ -32,8 +32,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletContext;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.JspException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
@@ -384,7 +382,6 @@ public class Encodes {
 	 * "*" for current browser code and Locale.
 	 * @param ctx the servlet context; used only if "*" is contained in uri
 	 * @exception IndexOutOfBoundException if uri is empty
-	 * @see #encodeURL(PageContext, String)
 	 * @see org.zkoss.web.servlet.Servlets#locate
 	 * @see org.zkoss.web.servlet.Servlets#generateURI
 	 */
@@ -396,24 +393,6 @@ public class Encodes {
 		} catch (Exception ex) {
 			log.realCause(ex);
 			throw new ServletException("Unable to encode "+uri, ex);
-		}
-	}
-	/** Encodes a URL.
-	 *
-	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
-	 * and the browser code.
-	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
-	 * for details. 
-	 *
-	 * @see #encodeURL(ServletContext, ServletRequest, ServletResponse, String)
-	 */
-	public static final String encodeURL(PageContext ctx, String uri)
-	throws JspException {
-		try {
-			return encodeURL0(ctx.getServletContext(),
-				ctx.getRequest(), ctx.getResponse(), uri);
-		} catch (Exception ex) {
-			throw new JspException("Unable to encode "+uri, ex);
 		}
 	}
 

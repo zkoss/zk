@@ -40,7 +40,6 @@ import javax.servlet.ServletException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
 
 import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.D;
@@ -215,19 +214,6 @@ public class Servlets {
 			final URIIndex idx = (URIIndex)o;
 			return _uri.equals(idx._uri) && _locale.equals(idx._locale);
 		}
-	}
-	/** Locates a page based on the current Locale.
-	 *
-	 * @param ctx the page context to locate pages
-	 * @param pgpath the page path excluding servlet name
-	 * @return pgpath if the original one matches; others if appending protocol
-	 * and/or locale matches; never null
-	 */
-	public static final
-	String locate(PageContext ctx, String pgpath)
-	throws ServletException {
-		return locate(ctx.getServletContext(), ctx.getRequest(),
-			pgpath, null);
 	}
 
 	/** Returns whether the client is a robot (such as Web crawlers).
