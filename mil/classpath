@@ -2,6 +2,3 @@
 ../dist/lib/zweb.jar
 ../dist/lib/zk.jar
 ../dist/lib/ext/servlet-api.jar
-../dist/lib/ext/jsp-api.jar
-../dist/lib/ext/jcommon.jar
-../dist/lib/ext/jfreechart.jar
