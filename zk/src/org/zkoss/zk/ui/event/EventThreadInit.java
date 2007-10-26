@@ -63,6 +63,9 @@ public interface EventThreadInit {
 
 	/** Initialize the event processing thread before processing the event.
 	 *
+	 * <p>The simplest form is
+	 * <code>void init(Component c, Event e) {return true;}</code>
+	 *
 	 * <p>Unlike {@link #prepare}, it is invoked in the event processing
 	 * thread (and after {@link #prepare}).
 	 * Thus, you can manipulate the desktop in this method such as
