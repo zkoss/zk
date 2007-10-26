@@ -31,6 +31,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
+import org.zkoss.xel.Function;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.taglib.Taglibs;
@@ -74,6 +75,8 @@ public class PageDefinition extends NodeInfo {
 	private List _taglibs;
 	/** A map of imported classes for expression, Map<String nm, Class cls>. */
 	private Map _expimps;
+	/** A map of XEL methods, List<[String prefix, String name, Function func]>. */
+	private List _xelmtds;
 	/** The evaluator. */
 	private Evaluator _eval;
 	/** The evaluator reference. */
@@ -279,6 +282,22 @@ public class PageDefinition extends NodeInfo {
 		if (_resolvdefs == null)
 			_resolvdefs = new LinkedList();
 		_resolvdefs.add(resolver);
+	}
+	/** Adds a XEL method.
+	 *
+	 * @param prefix the prefix of the method name
+	 * @param name the method name. The final name is "prefix:name"
+	 * @param func the function.
+	 * @since 3.0.0
+	 */
+	public void addXelMethod(String prefix, String name, Function func) {
+		if (name == null || prefix == null || func == null)
+			throw new IllegalArgumentException();
+		if (_xelmtds == null)
+			_xelmtds = new LinkedList();
+		_xelmtds.add(new Object[] {prefix, name, func});
+		_eval = null; //ask for re-gen
+		_mapper = null; //ask for re-parse
 	}
 	/** Initializes XEL context for the specified page.
 	 *
@@ -588,7 +607,7 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public FunctionMapper getFunctionMapper() {
 		if (_mapper == null) {
-			_mapper = Taglibs.getFunctionMapper(_taglibs, _expimps, _locator);
+			_mapper = Taglibs.getFunctionMapper(_taglibs, _expimps, _xelmtds, _locator);
 			if (_mapper == null)
 				_mapper = Expressions.EMPTY_MAPPER;
 		}

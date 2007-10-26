@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
@@ -50,6 +52,7 @@ import org.zkoss.idom.util.IDOMs;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.Evaluators;
+import org.zkoss.xel.util.MethodFunction;
 import org.zkoss.web.servlet.Servlets;
 	
 import org.zkoss.zk.ui.WebApp;
@@ -254,6 +257,8 @@ public class Parser {
 			pgdef.addTaglib(new Taglib(prefix, toAbsoluteURI(uri, false)));
 		} else if ("evaluator".equals(target)) {
 			parseEvaluatorDirective(pgdef, pi, params);
+		} else if ("xel-method".equals(target)) {
+			parseXelMethod(pgdef, pi, params);
 		} else if ("link".equals(target) || "meta".equals(target)) { //declare a header element
 			pgdef.addHeaderInfo(new HeaderInfo(target, params));
 		} else if ("root-attributes".equals(target)) {
@@ -424,7 +429,7 @@ public class Parser {
 			compdef.addProperty((String)me.getKey(), (String)me.getValue());
 		}
 	}
-	/** Process the evaluator directive. */
+	/** Parse the evaluator directive. */
 	private static void parseEvaluatorDirective(PageDefinition pgdef,
 	ProcessingInstruction pi, Map params) throws Exception {
 		final String clsnm = (String)params.remove("class");
@@ -460,6 +465,32 @@ public class Parser {
 				}
 			}
 		}
+	}
+	/** Parse the XEL method. */
+	private static void parseXelMethod(PageDefinition pgdef,
+	ProcessingInstruction pi, Map params) throws Exception {
+		final String prefix = (String)params.remove("prefix");
+		noELnorEmpty("prefix", prefix, pi);
+		final String nm = (String)params.remove("name");
+		noELnorEmpty("name", nm, pi);
+		final String clsnm = (String)params.remove("class");
+		noELnorEmpty("class", clsnm, pi);
+		final String sig = (String)params.remove("signature");
+		noELnorEmpty("signature", sig, pi);
+
+		final Method mtd;
+		try {
+			final Class cls = Classes.forNameByThread(clsnm);
+			mtd = Classes.getMethodBySignature(cls, sig, null);
+		} catch (ClassNotFoundException ex) {
+			throw new UiException("Class not found: "+clsnm+", "+pi.getLocator());
+		} catch (Exception ex) {
+			throw new UiException("Method not found: "+sig+" in "+clsnm+", "+pi.getLocator());
+		}
+		if ((mtd.getModifiers() & Modifier.STATIC) == 0)
+			throw new UiException("Not a static method: "+mtd);
+
+		pgdef.addXelMethod(prefix, nm, new MethodFunction(mtd));
 	}
 	private static void noELnorEmpty(String nm, String val, Item item)
 	throws UiException {
