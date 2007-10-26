@@ -75,9 +75,10 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 		_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
 	}
 	
-	public void init(Component comp, Event evt) {
+	public boolean init(Component comp, Event evt) {
 		SecurityContextHolder.setContext(_context); //store into event thread
 		_context = null;
+		return true;
 	}
 	
 	//-- EventThreadCleanup --//

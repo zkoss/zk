@@ -125,8 +125,9 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 		getThreadLocals(); //get from servlet thread's ThreadLocal
 	}
 
-	public void init(Component comp, Event evt) {
+	public boolean init(Component comp, Event evt) {
 		setThreadLocals(); //copy to event thread's ThreadLocal
+		return true;
 	}
 
 	//-- EventThreadCleanup --//

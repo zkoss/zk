@@ -100,10 +100,11 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 		//do nothing
 	}
 	
-	public void init(Component comp, Event evt) {
+	public boolean init(Component comp, Event evt) {
 		//Copy SessionMap stored in Execution attribute into event's ThreadLocal
 		Map map = (Map) Executions.getCurrent().getAttribute(HIBERNATE_SESSION_MAP);
 		setSessionMap(map); //copy to event thread's ThreadLocal
+		return true;
 	}
 
 	//-- EventThreadResume --//
