@@ -50,8 +50,10 @@ public interface EventThreadInit {
 	 * Thus, you can NOT manipulate the deskop in this method.
 	 *
 	 * <p>If this method throws an exception, it will abort the execution
-	 * and shows an error message to the end user (unless it is cleaned
-	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup}).
+	 * and shows an error message to the end user.
+	 * Note: {@link EventThreadCleanup#cleanup} won't be called if an
+	 * exception is thrown in this method, since it executes in
+	 * the main thread.
 	 *
 	 * <p>In addition to throwing an exception, you can prevent an event
 	 * from processing by returning false in {@link #init}.
@@ -77,7 +79,7 @@ public interface EventThreadInit {
 	 *
 	 * <p>If this method throws an exception, it will abort the execution
 	 * and shows an error message to the end user (unless it is cleaned
-	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup}).
+	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup#cleanup}).
 	 *
 	 * @return false to ignore the event, i.e., no event handler/listener
 	 * will be invoked.

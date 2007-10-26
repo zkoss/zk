@@ -48,16 +48,20 @@ public interface EventThreadResume {
 	 * Unlike {@link #afterResume}, it executes in the main thread that
 	 * resumes the suspended event processing thread.
 	 *
-	 * <p>If an exception is thrown, the event thread won't be resumed.
+	 * <p>If this method throws an exception, it will abort the execution
+	 * and shows an error message to the end user.
+	 * Note: {@link EventThreadCleanup#cleanup} won't be called if an
+	 * exception is thrown in this method, since it executes in
+	 * the main thread.
 	 */
 	public void beforeResume(Component comp, Event evt) throws Exception;
 	/** Called after the suspended event thread is resumed.
 	 * Unlike {@link #beforeResume}, it executes in the 
 	 * event processing thread that is resumed.
 	 *
-	 * <p>Unlike {@link #beforeResume}, you cannot prevent
-	 * a thread from resuming (by throwing an exception).
-	 * If an exception is thrown, it is only logged.
+	 * <p>If this method throws an exception, it will abort the execution
+	 * and shows an error message to the end user (unless it is cleaned
+	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup#cleanup}).
 	 */
 	public void afterResume(Component comp, Event evt) throws Exception;
 

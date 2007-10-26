@@ -194,13 +194,14 @@ implements EventProcessingThread {
 
 		setup();
 
-		if (_evtThdResumes != null && !_evtThdResumes.isEmpty()) {
+		final List resumes = _evtThdResumes;
+		_evtThdResumes = null;
+		if (resumes != null && !resumes.isEmpty()) {
 			_proc.getDesktop().getWebApp().getConfiguration()
 				.invokeEventThreadResumes(
-					_evtThdResumes, getComponent(), getEvent(), null);
+					resumes, getComponent(), getEvent());
 				//FUTURE: how to propogate errors to the client
 		}
-		_evtThdResumes = null;
 	}
 	/** Resumes this thread and returns only if the execution (being suspended
 	 * by {@link #doSuspend}) completes.

@@ -591,12 +591,10 @@ public class Configuration {
 	 * {@link #newEventThreadResumes}, or null if no instance at all.
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
-	 * @param errs used to hold the exceptions that are thrown by
-	 * {@link EventThreadResume#afterResume}.
 	 * If null, all exceptions are ignored (but logged)
 	 */
-	public void invokeEventThreadResumes(List resumes, Component comp, Event evt,
-	List errs) {
+	public void invokeEventThreadResumes(List resumes, Component comp, Event evt)
+	throws UiException {
 		if (resumes == null || resumes.isEmpty()) return;
 
 		for (Iterator it = resumes.iterator(); it.hasNext();) {
@@ -604,8 +602,7 @@ public class Configuration {
 			try {
 				fn.afterResume(comp, evt);
 			} catch (Throwable ex) {
-				if (errs != null) errs.add(ex);
-				log.error("Failed to invoke "+fn+" after resumed", ex);
+				throw UiException.Aide.wrap(ex);
 			}
 		}
 	}
