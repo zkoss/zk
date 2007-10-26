@@ -128,10 +128,6 @@ public class EventProcessor {
 	 * See also {@link org.zkoss.zk.ui.util.Configuration#isEventThreadEnabled}.
 	 */
 	public void process() throws Exception {
-		_event = ((DesktopCtrl)_desktop).beforeProcessEvent(_event);
-		if (_event == null)
-			return; //done
-
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
 		final HashMap backup = new HashMap();
@@ -140,8 +136,13 @@ public class EventProcessor {
 		try {
 			Namespaces.backupVariable(backup, ns, "event");
 			ns.setVariable("event", _event, true);
-			process0(ns);
-			((DesktopCtrl)_desktop).afterProcessEvent(_event);
+
+			_event = ((DesktopCtrl)_desktop).beforeProcessEvent(_event);
+			if (_event != null) {
+				ns.setVariable("event", _event, true); //_event might change
+				process0(ns);
+				((DesktopCtrl)_desktop).afterProcessEvent(_event);
+			}
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);
 		}

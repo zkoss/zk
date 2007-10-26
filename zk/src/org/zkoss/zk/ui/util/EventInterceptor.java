@@ -35,6 +35,10 @@ public interface EventInterceptor {
 	/** Called before sending an event
 	 * (with {@link org.zkoss.zk.ui.event.Events#sendEvent}).
 	 *
+	 * <p>If this method throws an exception, it will abort the execution
+	 * and shows an error message to the end user (unless it is cleaned
+	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup}).
+	 *
 	 * @param event the event being sent
 	 * @return the event to be sent (so it is usually the same event passed
 	 * by the event argument). If null, the event is dropped.
@@ -45,6 +49,10 @@ public interface EventInterceptor {
 	public Event beforeSendEvent(Event event);
 	/** Called before posting an event
 	 * (with {@link org.zkoss.zk.ui.event.Events#postEvent}).
+	 *
+	 * <p>If this method throws an exception, it will abort the execution
+	 * and shows an error message to the end user (unless it is cleaned
+	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup}).
 	 *
 	 * @param event the event being posted
 	 * @return the event to be posted (so it is usually the same event passed
@@ -58,6 +66,15 @@ public interface EventInterceptor {
 	 * By processing, we mean handing over the event to the event listeners
 	 * and handlers.
 	 *
+	 * <p>Note: it executes in the event processing thread, so you can
+	 * update the desktop whatever you need.
+	 * For example, you might create a highlighted window and return null
+	 * to prevent the user from accessing, if the system is too busy.
+	 *
+	 * <p>If this method throws an exception, it will abort the execution
+	 * and shows an error message to the end user (unless it is cleaned
+	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup}).
+	 *
 	 * @param event the event being processed
 	 * @return the event to be processed (so it is usually the same event passed
 	 * by the event argument). If null, the event is dropped.
@@ -69,6 +86,10 @@ public interface EventInterceptor {
 	/** Called after processing an event.
 	 * By processing, we mean handing over the event to the event listeners
 	 * and handlers.
+	 *
+	 * <p>If this method throws an exception, it will abort the execution
+	 * and shows an error message to the end user (unless it is cleaned
+	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup}).
 	 *
 	 * @param event the event being processed
 	 */

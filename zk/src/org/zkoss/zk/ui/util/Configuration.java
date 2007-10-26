@@ -346,11 +346,11 @@ public class Configuration {
 	 * if {@link EventThreadInit#prepare} throws an exception
 	 * @return a list of {@link EventThreadInit} instances that are
 	 * constructed in this method (and their {@link EventThreadInit#prepare}
-	 * are called successfully).
+	 * are called successfully), or null.
 	 */
 	public List newEventThreadInits(Component comp, Event evt)
 	throws UiException {
-		if (_evtInits.isEmpty()) return Collections.EMPTY_LIST;
+		if (_evtInits.isEmpty()) return null;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
 		final List inits = new LinkedList();
@@ -381,20 +381,30 @@ public class Configuration {
 	 * @param evt the event to process
 	 * @exception UiException to prevent a thread from being processed
 	 * if {@link EventThreadInit#prepare} throws an exception
+	 * @return false if you want to ignore the event, i.e., not to proceed
+	 * any event processing for the specified event (evt).
 	 */
-	public void invokeEventThreadInits(List inits, Component comp, Event evt) 
+	public boolean invokeEventThreadInits(List inits, Component comp, Event evt) 
 	throws UiException {
-		if (inits == null || inits.isEmpty()) return;
+		if (inits == null || inits.isEmpty()) return true; //not to ignore
 
 		for (Iterator it = inits.iterator(); it.hasNext();) {
 			final EventThreadInit fn = (EventThreadInit)it.next();
 			try {
-				fn.init(comp, evt);
+				try {
+					if (!fn.init(comp, evt))
+						return false; //ignore the event
+				} catch (AbstractMethodError ex) { //backward compatible prior to 3.0
+					fn.getClass().getMethod(
+						"init", new Class[] {Component.class, Event.class})
+					  .invoke(fn, new Object[] {comp, evt});
+				}
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
 				//Don't intercept; to prevent the event being processed
 			}
 		}
+		return true;
 	}
 	/** Invokes {@link EventThreadCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
@@ -414,9 +424,10 @@ public class Configuration {
 	 * Note: you can manipulate the list directly to add or clean up exceptions.
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
+	 * @return a list of {@link EventThreadCleanup}, or null
 	 */
 	public List newEventThreadCleanups(Component comp, Event evt, List errs) {
-		if (_evtCleans.isEmpty()) return Collections.EMPTY_LIST;
+		if (_evtCleans.isEmpty()) return null;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
 		final List cleanups = new LinkedList();
@@ -478,9 +489,10 @@ public class Configuration {
 	 * @param obj which object that {@link Executions#wait}
 	 * is called with.
 	 * @exception UiException to prevent a thread from suspending
+	 * @return a list of {@link EventThreadSuspend}, or null
 	 */
 	public List newEventThreadSuspends(Component comp, Event evt, Object obj) {
-		if (_evtSusps.isEmpty()) return Collections.EMPTY_LIST;
+		if (_evtSusps.isEmpty()) return null;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
 		final List suspends = new LinkedList();
@@ -543,11 +555,11 @@ public class Configuration {
 	 * if {@link EventThreadResume#beforeResume} throws an exception
 	 * @return a list of {@link EventThreadResume} instances that are constructed
 	 * in this method (and their {@link EventThreadResume#beforeResume}
-	 * are called successfully).
+	 * are called successfully), or null.
 	 */
 	public List newEventThreadResumes(Component comp, Event evt)
 	throws UiException {
-		if (_evtResus.isEmpty()) return Collections.EMPTY_LIST;
+		if (_evtResus.isEmpty()) return null;
 			//it is OK to test LinkedList.isEmpty without synchronized
 
 		final List resumes = new LinkedList();

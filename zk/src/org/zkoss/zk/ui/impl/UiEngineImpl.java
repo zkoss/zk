@@ -1112,12 +1112,12 @@ public class UiEngineImpl implements UiEngine {
 			//since they are in the same thread
 			EventProcessor proc = new EventProcessor(desktop, comp, event);
 				//Note: it also checks the correctness
-			config.invokeEventThreadInits(
-				config.newEventThreadInits(comp, event), comp, event);
 			List cleanups = null, errs = null;
-			EventProcessor.inEventListener(true);
 			try {
-				proc.process();
+				final List inits = config.newEventThreadInits(comp, event);
+				EventProcessor.inEventListener(true);
+				if (config.invokeEventThreadInits(inits, comp, event)) //false measn ignore
+					proc.process();
 			} catch (Throwable ex) {
 				errs = new LinkedList();
 				errs.add(ex);

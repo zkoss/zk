@@ -367,11 +367,11 @@ implements EventProcessingThread {
 						TimeZones.setThreadLocal(_timeZone);
 						setup();
 
-						config.invokeEventThreadInits(
+						final boolean b = config.invokeEventThreadInits(
 							_evtThdInits, getComponent(), getEvent());
 						_evtThdInits = null;
 
-						process0();
+						if (b) process0();
 					} catch (Throwable ex) {
 						cleaned = true;
 						newEventThreadCleanups(config, ex);

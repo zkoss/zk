@@ -45,14 +45,15 @@ import org.zkoss.zk.ui.Component;
  */
 public interface EventThreadResume {
 	/** Called just before the suspended event thread is resumed.
-	 * Unlike {@link #afterResume}, it executes in the main thread
-	 * (i.e., the servlet thread).
+	 * Unlike {@link #afterResume}, it executes in the main thread that
+	 * resumes the suspended event processing thread.
 	 *
 	 * <p>If an exception is thrown, the event thread won't be resumed.
 	 */
 	public void beforeResume(Component comp, Event evt) throws Exception;
 	/** Called after the suspended event thread is resumed.
-	 * Unlike {@link #beforeResume}, it executes in the event processing thread.
+	 * Unlike {@link #beforeResume}, it executes in the 
+	 * event processing thread that is resumed.
 	 *
 	 * <p>Unlike {@link #beforeResume}, you cannot prevent
 	 * a thread from resuming (by throwing an exception).

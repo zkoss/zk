@@ -45,22 +45,42 @@ import org.zkoss.zk.ui.Component;
  */
 public interface EventThreadInit {
 	/** Prepares the initialization at the servlet thread.
-	 * <p>It is invoked in the servlet thread (and before {@link #init}).
 	 *
-	 * @exception Exception to prevent an event from be processed
+	 * <p>It is invoked in the servlet thread (and before {@link #init}).
+	 * Thus, you can NOT manipulate the deskop in this method.
+	 *
+	 * <p>If this method throws an exception, it will abort the execution
+	 * and shows an error message to the end user (unless it is cleaned
+	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup}).
+	 *
+	 * <p>In addition to throwing an exception, you can prevent an event
+	 * from processing by returning false in {@link #init}.
+	 * The event is ignored 'silently' then.
 	 */
-	public void prepare(Component comp, Event evt) throws Exception;
+	public void prepare(Component comp, Event event) throws Exception;
 
 	/** Initialize the event processing thread before processing the event.
 	 *
 	 * <p>Unlike {@link #prepare}, it is invoked in the event processing
 	 * thread (and after {@link #prepare}).
+	 * Thus, you can manipulate the desktop in this method such as
+	 * creating a component.
+	 *
+	 * <p>If you want to prevent an event from processing, you can return
+	 * false in this method.
+	 * For example, you might create a highlighted window and return false
+	 * to prevent the user from accessing, if the system is too busy.
 	 *
 	 * <p>If the use of the event thread is disabled
 	 * ({@link org.zkoss.zk.ui.util.Configuration#isEventThreadEnabled}
 	 * returns false), this method is also invoked in the Servlet thread.
 	 *
-	 * <p>Any exception being thrown by this method is ignored (but logged).
+	 * <p>If this method throws an exception, it will abort the execution
+	 * and shows an error message to the end user (unless it is cleaned
+	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup}).
+	 *
+	 * @return false to ignore the event, i.e., no event handler/listener
+	 * will be invoked.
 	 */
-	public void init(Component comp, Event evt) throws Exception;
+	public boolean init(Component comp, Event event) throws Exception;
 }
