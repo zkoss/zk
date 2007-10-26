@@ -337,7 +337,7 @@ for (var n = src; n && n != this.element; n = n.parentNode)
 if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer))
 	return;
 //Tom M. Yeh, Potix: disable selection
-zk.disableSelection(document.body);
+//zk.disableSelection(document.body); // Bug #1820433
       var pos     = Position.cumulativeOffset(this.element);
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
       
@@ -349,6 +349,9 @@ zkau.autoZIndex(src, false, true);
   },
   
   startDrag: function(event) {
+//Tom M. Yeh, Potix: disable selection
+zk.disableSelection(document.body); // Bug #1820433
+  
     this.dragging = true;
     
     if(this.options.ghosting) {
