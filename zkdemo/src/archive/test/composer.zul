@@ -22,4 +22,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<window title="You shall not see this" apply="org.zkoss.zkdemo.test.VoidComposer">
 	Something wrong if you saw this
 	</window>
+	<window apply="org.zkoss.zkdemo.test.MyComposer, org.zkoss.zkdemo.test.VoidComposer">
+	This window also not created.
+	</window>
 </window>
