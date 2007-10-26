@@ -36,6 +36,7 @@ public class NPEEventThreadInit implements EventThreadInit {
 			throw new NullPointerException("EventThreadInit.prepare failed");
 		}
 	}
-	public void init(Component comp, Event evt) throws Exception {
+	public boolean init(Component comp, Event evt) throws Exception {
+		return true;
 	}
 }
