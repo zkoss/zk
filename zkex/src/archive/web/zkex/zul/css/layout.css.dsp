@@ -60,7 +60,9 @@ span.layout-split-button-l, span.layout-split-button-r, span.layout-split-button
 	opacity:0.5;  /* Moz + FF */	
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
+	display:inline-block;	
+    line-height:1px;
+    font-size:1px;
 }
 span.layout-split-button-l {
 	width: 6px; min-height: 50px; height: 50px;
