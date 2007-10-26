@@ -18,13 +18,11 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Openable;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -38,6 +36,8 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Events: onOpen
  *
+ * <p>Default {@link #getSclass}: splitter.
+ * 
  * @author tomyeh
  */
 public class Splitter extends XulElement {
@@ -45,8 +45,9 @@ public class Splitter extends XulElement {
 	private boolean _open = true;
 
 	public Splitter() {
-	}
-
+		setSclass("splitter");
+	}	
+	
 	/** Returns the orientation of the splitter.
 	 * It is the same as the parent's orientation ({@link Box#getOrient}.
 	 */
@@ -119,6 +120,13 @@ public class Splitter extends XulElement {
 			smartUpdate("z.open", open);
 		}
 	}
+	
+	protected String getRealSclass() {	
+		if ("vertical".equals(getOrient()))
+			return super.getRealSclass() + "-v";
+		else
+			return super.getRealSclass() + "-h";
+	}
 
 	//super//
 	public String getOuterAttrs() {
@@ -128,6 +136,7 @@ public class Splitter extends XulElement {
 
 		if ("vertical".equals(getOrient()))
 			HTMLs.appendAttribute(sb, "z.vert", "true");
+		
 		if (!"none".equals(_collapse))
 			HTMLs.appendAttribute(sb, "z.colps", _collapse);
 		if (!_open) sb.append(" z.open=\"false\"");

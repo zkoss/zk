@@ -55,22 +55,25 @@ zkSplt.init = function (cmp) {
 	};
 
 	var btn = $e(cmp.id + "!btn");
+	if (zk.ie) {
+		zk.listen(btn, "mouseover", function () {zk.addClass(btn, "splitter-button-visible")});
+	 	zk.listen(btn, "mouseout", function () {zk.rmClass(btn, "splitter-button-visible")});
+	}
 	zk.listen(btn, "click", function () {
+		zk.rmClass(btn, "splitter-button-visible")
 		zkSplt.open(cmp, getZKAttr(cmp, "open") == "false");
 	});
 
-	var bgi = getZKAttr(cmp, "bgi");
-	if (bgi) {
-		bgi = zk.renType(bgi, vert ? 'v': 'h');
-		cmp.style.backgroundImage = "url(" + bgi + ")";
-	}
-
 	zkSplt._fixbtn(cmp);
-	if (getZKAttr(cmp, "open") == "false")
-		zkSplt.open(cmp, false, true, true);
 
+	
 	zk.listen(window, "resize", drag.onResize);
 	zkSplt._resize2(cmp);
+	
+	setTimeout(function () {
+		if (getZKAttr(cmp, "open") == "false")
+		zkSplt.open(cmp, false, true, true);
+	}, 150);
 
 	cmp.style.cursor = getZKAttr(cmp, "open") == "false" ? "default" : vert ? "s-resize": "e-resize";
 	btn.style.cursor = "pointer";
@@ -118,7 +121,7 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
 	}
 };
 zkSplt._resize2 = function (cmp) {
-	setTimeout("zkSplt._resize('" + cmp.id + "')", 120);
+	setTimeout("zkSplt._resize('" + cmp.id + "')", 80);
 };
 zkSplt._fixbtn = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
@@ -129,7 +132,7 @@ zkSplt._fixbtn = function (cmp) {
 		var vert = getZKAttr(cmp, "vert");
 		var before = colps == "before";
 		if (getZKAttr(cmp, "open") == "false") before = !before;
-		btn.src = zk.renType(btn.src,
+		btn.className = zk.renType(btn.className,
 			vert ? before ? 't': 'b': before ? 'l': 'r');
 		btn.style.display = "";
 	}
@@ -242,16 +245,18 @@ zkSplt._fixsz = function (cmp) {
 	var parent = cell.parentNode;
 	if (parent && zk.isRealVisible(parent)) {
 		//Note: when window resize, it might adjust splitter's wd (hgh)
-		//if box's width is nn%. So we have to reset it to 8px
+		//if box's width is nn%. So we have to reset it to 6px
+		
+		var btn = $e(cmp.id + "!btn");
 		if (vert) {
 			var tr = parent.parentNode; //TR
-			cell.style.height = cmp.style.height = tr.style.height = "8px";
+			cell.style.height = cmp.style.height = tr.style.height = (btn && zk.isVisible(btn)) ? btn.offsetHeight + "px" : "6px";
 			cell.style.width = cmp.style.width = "0px"; // clean width
 			var table = $parentByTag(tr, "TABLE");
 			var wd = table.style.width && table.style.width.indexOf("px") > -1 ? Math.min($int(table.style.width), parent.clientWidth) : parent.clientWidth;
 				cell.style.width = cmp.style.width = wd + "px"; //all wd the same
 		} else {
-			cell.style.width = cmp.style.width = parent.style.width = "8px";
+			cell.style.width = cmp.style.width = parent.style.width = (btn && zk.isVisible(btn)) ? btn.offsetWidth + "px" : "6px";
 			cell.style.height = cmp.style.height = "0px"; // clean height
 			var hgh = parent.clientHeight;
 			if (zk.safari) { //safari: each cell has diff height and tr's hgh is 0
@@ -323,7 +328,8 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 					zkSplt._adjBox(cell, pos);
 			}
 		} else {
-			var p = $int(sib.style[pos]);
+			var s = sib.style[pos] || (pos == "height" ? sib.offsetHeight : sib.offsetWidth);
+			var p = $int(s);
 			sib._prevSize = p;
 			sib.style[pos] = "0px";
 			var cell = $e($uuid(sib) + "!cell");
@@ -340,6 +346,10 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	zkSplt._fixbtn(cmp);
 	zkSplt._fixszAll();
 	cmp.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
+	if (!cmp._precls)cmp._precls = cmp.className;	
+	if (open) zk.rmClass(cmp, cmp._precls + "-ns");
+	else zk.addClass(cmp, cmp._precls + "-ns");
+	
 	if (!silent)
 		zkau.send({uuid: cmp.id, cmd: "onOpen", data: [open]},
 			zkau.asapTimeout(cmp, "onOpen"));
