@@ -36,6 +36,8 @@ ZK 3.0.0
     Note: it is backward compatible that you don't need to re-compile your codes
   + EventThreadInit's init() now returns a boolean to indicate whether
     to continue the processing of the event.
+  + Throws an exception in EventThreadResume's afterResume() will stop
+    the execution.
   + The look of a tree is now customizable by use of CSS. Refer to Java API.
     The icon-uri, icon-width and icon-height attributes are no longer used
 
