@@ -2,6 +2,7 @@
 ZK 3.0.0
 * Features:
   1819982: Support the apply attribute to seperate view and controller
+  1820406: Support the xel-method directive to load method dynamically
   1817685: A way to use CSS to customize tree's icons
   1732886: Scroll Listbox on Selection
   1817456: Full Support ZK Layout Theme
