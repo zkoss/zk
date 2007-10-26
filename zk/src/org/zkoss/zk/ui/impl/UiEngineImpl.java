@@ -322,8 +322,8 @@ public class UiEngineImpl implements UiEngine {
 							pagedef, null);
 					inits.doAfterCompose(page, comps);
 				} catch(Throwable ex) {
-					inits.doCatch(ex);
-					throw UiException.Aide.wrap(ex);
+					if (!inits.doCatch(ex))
+						throw UiException.Aide.wrap(ex);
 				} finally {
 					inits.doFinally();
 				}
@@ -471,64 +471,75 @@ public class UiEngineImpl implements UiEngine {
 			return new Component[] {
 				ci.exec.createComponents(childdef.getMacroURI(), parent, props)};
 		} else {
-			final Composer composer = childInfo.getComposer(ci.page);
-			final ComposerExt composerExt =
-				composer instanceof ComposerExt ? (ComposerExt)composer: null;
-			try {
-				if (composerExt != null) {
-					childInfo = composerExt.doBeforeCompose(ci.page, parent, childInfo);
-					if (childInfo == null)
-						return new Component[0];
-				}
+			final Component child = execCreateChild0(ci, parent, childInfo);
+			return child != null ? new Component[] {child}: new Component[0];
+		}
+	}
+	private static Component execCreateChild0(
+	CreateInfo ci, Component parent, ComponentInfo childInfo)
+	throws IOException {
+		final Composer composer = childInfo.getComposer(ci.page);
+		final ComposerExt composerExt =
+			composer instanceof ComposerExt ? (ComposerExt)composer: null;
+		Component child = null;
+		try {
+			if (composerExt != null) {
+				childInfo = composerExt.doBeforeCompose(ci.page, parent, childInfo);
+				if (childInfo == null)
+					return null;
+			}
 
-				final Component child =
-					ci.uf.newComponent(ci.page, parent, childInfo);
+			child = ci.uf.newComponent(ci.page, parent, childInfo);
 
-				final boolean bNative = childInfo instanceof NativeInfo;
-				if (bNative)
-					setProlog(ci, child, (NativeInfo)childInfo);
+			final boolean bNative = childInfo instanceof NativeInfo;
+			if (bNative)
+				setProlog(ci, child, (NativeInfo)childInfo);
 
-				if (composerExt != null)
-					composerExt.doBeforeComposeChildren(child);
+			if (composerExt != null)
+				composerExt.doBeforeComposeChildren(child);
 
-				execCreate(ci, childInfo, child); //recursive
+			execCreate(ci, childInfo, child); //recursive
 
-				if (bNative)
-					setEpilog(ci, child, (NativeInfo)childInfo);
+			if (bNative)
+				setEpilog(ci, child, (NativeInfo)childInfo);
 
-				if (child instanceof AfterCompose)
-					((AfterCompose)child).afterCompose();
-				if (composer != null)
-					composer.doAfterCompose(child);
+			if (child instanceof AfterCompose)
+				((AfterCompose)child).afterCompose();
+			if (composer != null)
+				composer.doAfterCompose(child);
 
-				ComponentsCtrl.applyForward(child, childInfo.getForward());
+			ComponentsCtrl.applyForward(child, childInfo.getForward());
 				//applies the forward condition
 				//1) we did it after all child created, so it may reference
 				//to it child (thought rarely happens)
 				//2) we did it after afterCompose, so what specified
 				//here has higher priority than class defined by app dev
 
-				if (Events.isListened(child, Events.ON_CREATE, false))
-					Events.postEvent(
-						new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
+			if (Events.isListened(child, Events.ON_CREATE, false))
+				Events.postEvent(
+					new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
 
-				return new Component[] {child};
-			} catch (Throwable ex) {
-				if (composerExt != null) {
-					try {
-						composerExt.doCatch(ex);
-					} catch (Throwable t) {
-						log.error("Failed to invoke doCatch for "+childInfo, t);
-					}
+			return child;
+		} catch (Throwable ex) {
+			boolean ignore = false;
+			if (composerExt != null) {
+				try {
+					ignore = composerExt.doCatch(ex);
+				} catch (Throwable t) {
+					log.error("Failed to invoke doCatch for "+childInfo, t);
 				}
+			}
+			if (!ignore)
 				throw UiException.Aide.wrap(ex);
-			} finally {
-				if (composerExt != null) {
-					try {
-						composerExt.doFinally();
-					} catch (Throwable ex) {
-						throw UiException.Aide.wrap(ex);
-					}
+
+			return child != null && child.getPage() != null ? child: null;
+				//return child only if attached successfully
+		} finally {
+			if (composerExt != null) {
+				try {
+					composerExt.doFinally();
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
 				}
 			}
 		}

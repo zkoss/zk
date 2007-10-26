@@ -54,7 +54,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 	}
-	public void doCatch(Throwable t) {
+	public boolean doCatch(Throwable t) {
+		return false;
 	}
 	public void doFinally() {
 	}
@@ -88,15 +89,23 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 * It eats all exception without throwing one (but logging).
 	 * Caller has to re-throw the exception.
 	 */
-	public void doCatch(Throwable t) {
+	public boolean doCatch(Throwable t) {
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
 			final Initiator init = (Initiator)it.next();
 			try {
-				init.doCatch(t);
+				try {
+					if (init.doCatch(t))
+						return true; //ignore and skip all other initiators
+				} catch (AbstractMethodError ex) { //backward compatible prior to 3.0
+					init.getClass().getMethod(
+							"doCatch", new Class[] {Throwable.class})
+						.invoke(init, new Object[] {t});
+				}
 			} catch (Throwable ex) {
 				Initiators.log.error(ex);
 			}
 		}
+		return false;
 	}
 	/** Invokes {@link Initiator#doFinally}.
 	 */

@@ -23,9 +23,15 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
 /**
- * 
+ * An addition interface implemented with {@link Composer} to provide
+ * more control.
+ *
+ * <p>Note: any class that implements {@link ComposerExt} must implement
+ * {@link Composer}, but not vice-versa.
+ *
  * @author tomyeh
  * @since 3.0.0
+ * @since Composer
  */
 public interface ComposerExt {
 	/** Invokes before composing a component.
@@ -47,18 +53,32 @@ public interface ComposerExt {
 	public void doBeforeComposeChildren(Component comp) throws Exception;
 	/** Called when an exception occurs when composing the component.
 	 *
-	 * <p>This is only a notification for the happening of an exception.
-	 * You DO NOT re-throw exception here.
-	 * The exception is always re-throwed after calling this method
-	 * @param ex the exception being thrown
-	 */
-	public void doCatch(Throwable ex);
-	/** Do the cleanup after the component has been composed.
-	 * It is always called no matter whether {@link #doCatch},
-	 * {@link #doBeforeComposeChildren} or
-	 * {@link Composer#doAfterCompose} is called.
+	 * <p>If you don't want to handle the exception, simply returns false.
+	 * <code>boolean doCatch(Throwable ex) {return false;}</code>
 	 *
-	 * <p>Note: it is called before the onCreate event is handled.
+	 * <p>An exception thrown in this method is simply logged. It has no
+	 * effect on the execution.
+	 * If you want to ignore the exception, just return true.
+	 *
+	 * @param ex the exception being thrown
+	 * @return whether to ignore the exception. If false is returned,
+	 * the exception will be re-thrown.
+	 * Note: once a composer's doCatch returns true, the exception will be
+	 * ignored and it means doCatch of the following composers won't be called.
 	 */
-	public void doFinally();
+	public boolean doCatch(Throwable ex) throws Exception;
+	/** Called after the component has been composed completely.
+	 * It is the last step of the composing.
+	 *
+	 * <p>Note: it is always called even if {@link #doCatch},
+	 * {@link #doBeforeComposeChildren} or
+	 * {@link Composer#doAfterCompose} is not called (due to exceptions).
+	 *
+	 * <p>Note: it is called after the onCreate event is posted,
+	 * but before the onCreate and any other events are handled.
+	 *
+	 * <p>An exception thrown in this method is simply logged. It has no
+	 * effect on the execution.
+	 */
+	public void doFinally() throws Exception;
 }
