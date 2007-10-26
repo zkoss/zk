@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Splitter;
@@ -37,15 +35,12 @@ public class SplitterDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Splitter self = (Splitter)comp;
-		final Execution exec = Executions.getCurrent();
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.box.Splt\"");
-		wh.write(" z.bgi=\"").write(exec.encodeURL("~./zul/img/splt/splt-v.gif")).write("\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<img id=\"").write(self.getUuid()).write("!btn\" style=\"display:none\" ");
-		wh.write("src=\"").write(exec.encodeURL("~./zul/img/splt/colps-l.gif")).write("\" "); 
-		wh.write("/>");
+		wh.write("<span id=\"").write(self.getUuid()).write("!btn\" style=\"display:none\" ");
+		wh.write("class=\"").write(self.getSclass()).write("-button-l\""); 
+		wh.write("></span>");
 		wh.write("</div>");
-		//<div id="${self.uuid}" z.type="zul.box.Splt" z.bgi="${c:encodeURL('~./zul/img/splt/splt-v.gif')}"${self.outerAttrs}${self.innerAttrs}><img id="${self.uuid}!btn" style="display:none" src="${c:encodeURL('~./zul/img/splt/colps-l.gif')}"/></div>
 	}
 
 }
