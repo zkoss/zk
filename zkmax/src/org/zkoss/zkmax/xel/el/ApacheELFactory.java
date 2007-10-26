@@ -30,7 +30,7 @@ import javax.servlet.jsp.el.ELException;
  * An implemetation that is based on Apache commons-el:
  * org.apache.commons.el.ExpressionEvaluatorImpl.
  *
- * <p>{@link org.zkoss.xel.el.ELFactory} is recommended since the
+ * <p>The org.zkoss.xel.el.ELFactory class is recommended since the
  * implementation it encapsulates has the better performance.
  *
  * @author tomyeh
