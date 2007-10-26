@@ -84,8 +84,9 @@ public interface EventThreadInit {
 	 * and shows an error message to the end user (unless it is cleaned
 	 * up by {@link org.zkoss.zk.ui.event.EventThreadCleanup#cleanup}).
 	 *
-	 * @return false to ignore the event, i.e., no event handler/listener
-	 * will be invoked.
+	 * @return if it is initialized successfully.
+	 * If false is returned, the event is ignored, i.e., no event
+	 * handler/listener will be invoked.
 	 */
 	public boolean init(Component comp, Event event) throws Exception;
 }
