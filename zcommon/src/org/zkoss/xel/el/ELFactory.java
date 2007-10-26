@@ -23,22 +23,22 @@ import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 
-import javax.servlet.jsp.el.ExpressionEvaluator;
-import javax.servlet.jsp.el.ELException;
+import org.zkforge.apache.commons.el.ExpressionEvaluatorImpl;
 
 /**
  * An implementation based on ZK Commons EL (zcommons-el.jar: 
  * org.zkforge.apache.commons.el.ExpressionEvaluatorImpl).
- * ZK Commons EL is a peformance enhancement version of Apache Commons EL.
+ * ZK commons-EL is a peformance enhancement version of Apache Commons EL.
+ * It is also independent of JSP 2.0.
  *
  * @author tomyeh
  * @since 3.0.0
  */
 public class ELFactory implements ExpressionFactory {
-	private final ExpressionEvaluator _eval;
+	private final ExpressionEvaluatorImpl _eval;
 
 	public ELFactory() {
-		_eval = newExpressionEvaluator();
+		_eval = new ExpressionEvaluatorImpl();
 	}
 
 	//ExpressionFactory//
@@ -48,33 +48,15 @@ public class ELFactory implements ExpressionFactory {
 	public Expression parseExpression(XelContext xelc, String expression,
 	Class expectedType)
 	throws XelException {
-		try {
-			return new ELXelExpression(
-				_eval.parseExpression(expression, expectedType,
-					xelc != null ? new XelELMapper(xelc.getFunctionMapper()): null));
-		} catch (ELException ex) {
-			throw new XelException("Failed to parse "+expression, ex);
-		}
+		return new ELXelExpression(
+			_eval.parseExpression(expression, expectedType,
+				xelc != null ? xelc.getFunctionMapper(): null));
 	}
 	public Object evaluate(XelContext xelc, String expression,
 	Class expectedType)
 	throws XelException {
-		try {
-			return _eval.evaluate(expression, expectedType,
-				xelc != null ?
-					new XelELResolver(xelc.getVariableResolver()): null,
-				xelc != null ?
-					new XelELMapper(xelc.getFunctionMapper()): null);
-		} catch (ELException ex) {
-			throw new XelException("Failed to evaluate "+expression, ex);
-		}
-	}
-
-	/** Returns the EL expression factory.
-	 * <p>Default: Use org.apache.commons.el.ExpressionEvaluatorImpl.
-	 * <p>You might override it to use a different implementation.
-	 */
-	protected ExpressionEvaluator newExpressionEvaluator() {
-		return new org.zkforge.apache.commons.el.ExpressionEvaluatorImpl();
+		return _eval.evaluate(expression, expectedType,
+			xelc != null ? xelc.getVariableResolver(): null,
+			xelc != null ? xelc.getFunctionMapper(): null);
 	}
 }

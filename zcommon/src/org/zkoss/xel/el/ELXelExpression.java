@@ -16,14 +16,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.xel.el;
+package org.zkoss.zkmax.xel.el;
 
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 
-import javax.servlet.jsp.el.ELException;
+import org.zkforge.apache.commons.el.ExpressionApi;
 
 /**
  * A XEL expression that is based on a EL expression.
@@ -32,23 +32,17 @@ import javax.servlet.jsp.el.ELException;
  * @since 3.0.0
  */
 public class ELXelExpression implements Expression {
-	private final javax.servlet.jsp.el.Expression _expr;
+	private final ExpressionApi _expr;
 	/**
 	 * @param expr the expression. It cannot be null.
 	 */
-	public ELXelExpression(javax.servlet.jsp.el.Expression expr) {
+	public ELXelExpression(ExpressionApi expr) {
 		if (expr == null)
 			throw new IllegalArgumentException();
 		_expr = expr;
 	}
 	public Object evaluate(XelContext ctx) {
-		try {
-			final VariableResolver resolver = ctx.getVariableResolver();
-			return _expr.evaluate(
-				resolver != null ? new XelELResolver(resolver): null);
-		} catch (ELException ex) {
-			throw new XelException(ex);
-		}
+		return _expr.evaluate(ctx.getVariableResolver());
 	}
 
 	//Object//
