@@ -9,6 +9,7 @@ ZK 3.0.0
   1755433: Complex column heading
   1707513: Provide Complex Header in Grid/Listbox/Tree
   1819879: Windows allows developers to change the style class
+  1820434: A way to use CSS to customize splitter's icons
 
 * Bugs:
   1814702: ZK Layout Fails to Resize
@@ -24,6 +25,7 @@ ZK 3.0.0
   1818804: FF Only. ZK Layout OnMouseOver Efect
   1819037: Grid & Tree columns in ZK RC2
   1819174: Listceel no more consider style
+  1820433: The selection is disabled wrongly.
 
 * Upgrade Notes:
   + The look of a tree is now customizable by use of CSS. Refer to Java API.
