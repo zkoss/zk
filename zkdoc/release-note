@@ -12,6 +12,7 @@ ZK 3.0.0
   1819879: Windows allows developers to change the style class
   1820434: A way to use CSS to customize splitter's icons
   1820463: A way to ignore exception in Initiator's doCatch
+  1820519: A way to stop the processing an event in EventThreadInit
 
 * Bugs:
   1814702: ZK Layout Fails to Resize
@@ -30,9 +31,11 @@ ZK 3.0.0
   1820433: The selection is disabled wrongly.
 
 * Upgrade Notes:
-  + Initiator's doCatch now returns a boolean to indicate whether to ignore
+  + Initiator's doCatch() now returns a boolean to indicate whether to ignore
     the exception.
     Note: it is backward compatible that you don't need to re-compile your codes
+  + EventThreadInit's init() now returns a boolean to indicate whether
+    to continue the processing of the event.
   + The look of a tree is now customizable by use of CSS. Refer to Java API.
     The icon-uri, icon-width and icon-height attributes are no longer used
 
