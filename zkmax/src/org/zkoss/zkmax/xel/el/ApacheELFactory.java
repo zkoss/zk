@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Sep  4 14:02:44     2007, Created by tomyeh
+		Fri Aug 31 17:00:40     2007, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -18,21 +18,64 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmax.xel.el;
 
-import javax.servlet.jsp.el.ExpressionEvaluator;
+import org.zkoss.xel.Expression;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.XelException;
 
-import org.zkoss.xel.el.ELFactory;
+import javax.servlet.jsp.el.ExpressionEvaluator;
+import javax.servlet.jsp.el.ELException;
 
 /**
  * An implemetation that is based on Apache commons-el:
  * org.apache.commons.el.ExpressionEvaluatorImpl.
  *
- * <p>{@link ELFactory} is recommended since the implementation
- * it encapsulates has the better performance.
+ * <p>{@link org.zkoss.xel.el.ELFactory} is recommended since the
+ * implementation it encapsulates has the better performance.
  *
  * @author tomyeh
  * @since 3.0.0
  */
-public class ApacheELFactory extends ELFactory {
+public class ApacheELFactory implements ExpressionFactory {
+	private final ExpressionEvaluator _eval;
+
+	public ApacheELFactory() {
+		_eval = newExpressionEvaluator();
+	}
+
+	//ExpressionFactory//
+	public boolean isSupported(int feature) {
+		return feature == FEATURE_FUNCTION;
+	}
+	public Expression parseExpression(XelContext xelc, String expression,
+	Class expectedType)
+	throws XelException {
+		try {
+			return new ELXelExpression(
+				_eval.parseExpression(expression, expectedType,
+					xelc != null ? new XelELMapper(xelc.getFunctionMapper()): null));
+		} catch (ELException ex) {
+			throw new XelException("Failed to parse "+expression, ex);
+		}
+	}
+	public Object evaluate(XelContext xelc, String expression,
+	Class expectedType)
+	throws XelException {
+		try {
+			return _eval.evaluate(expression, expectedType,
+				xelc != null ?
+					new XelELResolver(xelc.getVariableResolver()): null,
+				xelc != null ?
+					new XelELMapper(xelc.getFunctionMapper()): null);
+		} catch (ELException ex) {
+			throw new XelException("Failed to evaluate "+expression, ex);
+		}
+	}
+
+	/** Returns the EL expression factory.
+	 * <p>Default: Use org.apache.commons.el.ExpressionEvaluatorImpl.
+	 * <p>You might override it to use a different implementation.
+	 */
 	protected ExpressionEvaluator newExpressionEvaluator() {
 		return new org.apache.commons.el.ExpressionEvaluatorImpl();
 	}
