@@ -334,8 +334,6 @@ span.tree-root-close, span.tree-tee-close, span.tree-last-close {
 }
 span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer {
 	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/spacer.gif')});
-	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
@@ -405,8 +403,6 @@ span.dottree-last {
 }
 span.dottree-spacer {
 	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/spacer.gif')});
-	background-repeat: no-repeat;
 	vertical-align:top;
 	display:inline-block;
 }
