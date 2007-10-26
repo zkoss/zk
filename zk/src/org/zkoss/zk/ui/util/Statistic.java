@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Desktop;
  * An implementation of {@link Monitor} to accumulate statistic data
  * in memory.
  *
- * <p>It has no effect until you specify it in web.xml.
+ * <p>It has no effect until you specify it in WEB-INF/zk.xml.
  *
  * @author tomyeh
  */
