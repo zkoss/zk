@@ -72,6 +72,26 @@ public class Taglibs {
 	 */
 	public static final
 	FunctionMapper getFunctionMapper(List taglibs, Map imports, Locator loc) {
+		return getFunctionMapper(taglibs, imports, null, loc);
+	}
+	/** Retursn the function mapper representing a list of {@link Taglib},
+	 * imports and functions, or null if nothing is loaded.
+	 *
+	 * <p>The returned mapper is serializable.
+	 *
+	 * @param taglibs a list of {@link Taglib}.
+	 * @param imports a map of imported classes, Map&lt;String nm, Class cls&gt;.
+	 * Ignored if null.
+	 * Note: imports has the higher priority than import classes defined
+	 * in taglibs.
+	 * @param funcs a list of three-element arrays,
+	 * Map&lt;String prefix, String name, Function func]&gt;.
+	 * Ignored if null.
+	 * @param loc the locator used to load taglib
+	 * @since 3.0.0
+	 */
+	public static final FunctionMapper getFunctionMapper(List taglibs,
+	Map imports, List funcs, Locator loc) {
 		TaglibMapper mapper = null;
 		if (taglibs != null && !taglibs.isEmpty()) {
 			mapper = new TaglibMapper();
@@ -86,6 +106,17 @@ public class Taglibs {
 			for (Iterator it = imports.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				mapper.addClass((String)me.getKey(), (Class)me.getValue());
+			}
+		}
+
+		if (funcs != null && !funcs.isEmpty()) {
+			if (mapper == null)
+				mapper = new TaglibMapper();
+
+			for (Iterator it = funcs.iterator(); it.hasNext();) {
+				final Object[] o = (Object[])it.next();
+				mapper.addFunction(
+					(String)o[0], (String)o[1], (Function)o[2]);
 			}
 		}
 		return mapper;
