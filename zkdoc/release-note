@@ -32,7 +32,8 @@ ZK 3.0.0
   1820433: The selection is disabled wrongly.
 
 * Upgrade Notes:
-  + The pageContext variable is no longer available for EL expressions
+  + The pageContext variable in EL expressions becomes an instance of
+    org.zkoss.web.servlet.xel.PageContext
   + Initiator's doCatch() now returns a boolean to indicate whether to ignore
     the exception.
     Note: it is backward compatible that you don't need to re-compile your codes
