@@ -56,7 +56,7 @@ abstract public class RequestXelResolver implements VariableResolver {
 	private HttpSession _sess;
 	private Map _reqScope, _sessScope, _appScope;
 	/** A fake page context implementation. */
-	private PageContextImpl _pc;
+	private PageContext _pc;
 	/** cached cookies. */
 	private Map _cookies;
 
