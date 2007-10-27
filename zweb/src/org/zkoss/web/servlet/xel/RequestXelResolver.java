@@ -92,7 +92,8 @@ abstract public class RequestXelResolver implements VariableResolver {
 		if (_pc == null)
 			_pc = new PageContextImpl();
 		return _pc;
-	}	/** Returns the request. */
+	}
+	/** Returns the request. */
 	public ServletRequest getRequest() {
 		return _request;
 	}
