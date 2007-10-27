@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.Enumeration;
 
 import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -54,6 +55,8 @@ abstract public class RequestXelResolver implements VariableResolver {
 	private final ServletResponse _response;
 	private HttpSession _sess;
 	private Map _reqScope, _sessScope, _appScope;
+	/** A fake page context implementation. */
+	private PageContextImpl _pc;
 	/** cached cookies. */
 	private Map _cookies;
 
@@ -84,22 +87,29 @@ abstract public class RequestXelResolver implements VariableResolver {
 	 */
 	abstract public ExpressionFactory getExpressionFactory();
 
-	/** Returns the request. */
-    public ServletRequest getRequest() {
-    	return _request;
-    }
+	/** Returns the page context. */
+	public PageContext getPageContext() {
+		if (_pc == null)
+			_pc = new PageContextImpl();
+		return _pc;
+	}	/** Returns the request. */
+	public ServletRequest getRequest() {
+		return _request;
+	}
 	/** Returns the response. */
-    public ServletResponse getResponse() {
-    	return _response;
-    }
+	public ServletResponse getResponse() {
+		return _response;
+	}
 	/** Returns the context. */
-    public ServletContext getServletContext() {
-    	return _ctx;
-    }
+	public ServletContext getServletContext() {
+		return _ctx;
+	}
 
 	//-- VariableResovler --//
 	public Object resolveVariable (String name) throws XelException {
-		if ("pageScope".equals(name)) {
+		if ("pageContext".equals(name)) {
+			return getPageContext();
+		} else if ("pageScope".equals(name)) {
 			return Collections.EMPTY_MAP;
 		} else if ("requestScope".equals(name)) {
 			return getRequestScope();
@@ -314,4 +324,25 @@ abstract public class RequestXelResolver implements VariableResolver {
 			throw new UnsupportedOperationException("readonly");
 		}
 	} //ParamMap
+	/** An implemnetation of PageContext. */
+	private class PageContextImpl implements PageContext {
+		public ServletRequest getRequest() {
+			return _request;
+		}
+		public ServletResponse getResponse() {
+			return _response;
+		}
+		public ServletConfig getServletConfig() {
+			return null;
+		}
+		public ServletContext getServletContext() {
+			return _ctx;
+		}
+		public HttpSession getSession() {
+			return RequestXelResolver.this.getSession();
+		}
+		public VariableResolver getVariableResolver() {
+			return RequestXelResolver.this;
+		}
+	}
 }
