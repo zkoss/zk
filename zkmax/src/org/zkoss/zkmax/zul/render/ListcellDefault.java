@@ -40,7 +40,7 @@ public class ListcellDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Listcell self = (Listcell)comp;
 		final String uuid = self.getUuid();
-		wh.write("<td id=\"").write(uuid).write("\"")
+		wh.write("<td z.type=\"Lic\" id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write("><div id=\"").write(self.getUuid()).write("!cave\"")
 			.write(self.getLabelAttrs()).write(" class=\"cell-inner\">");
