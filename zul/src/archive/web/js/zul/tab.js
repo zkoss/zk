@@ -44,11 +44,19 @@ zkTabbox.childchg = function (cmp) {
 ////
 // tab //
 zkTab = {};
-
+zkTab.setAttr = function (cmp, name, value) {
+	switch (name) {
+	case "z.disabled":
+		zkTab._disable(cmp,value);
+		return true;
+	}
+	return false;
+};
 /** Selects the specified tab. */
 zkTab.onclick = function (evt) {
 	if (!evt) evt = window.event;
 	var tab = $parentByType(Event.element(evt), "Tab");
+	if(getZKAttr(tab, "disabled")=="true") return;//return when disabled
 	if (!zkTab._sliding(tab)) //Bug 1571408
 		zkTab.selTab(tab);
 };
@@ -168,13 +176,66 @@ zkTab.init = function (cmp) {
 		zk.listen(anc, "blur", zkau.onblur);
 	}
 	var btn = $e(cmp.id + "!close");
-	if (btn) {
-		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
-		zk.listen(btn, "mouseover", zkau.onimgover);
-		zk.listen(btn, "mouseout", zkau.onimgout);
+	if(btn){
+		zk.listen(btn, "click", zkTab.onCloseBtnClick);
+		
+		if(getZKAttr(cmp, "disabled")!="true"){
+			zk.listen(btn, "mouseover", zkau.onimgover);
+			zk.listen(btn, "mouseout", zkau.onimgout);
+		}
 		if (!btn.style.cursor) btn.style.cursor = "default";
 	}
+	
+	
 };
+
+/** close button clicked**/
+zkTab.onCloseBtnClick = function(evt){
+	if (!evt) evt = window.event;
+	var tab = $parentByType(Event.element(evt), "Tab");
+	if(getZKAttr(tab, "disabled")=="true") return;//return when disabled
+	zkau.sendOnClose(tab, true); 
+	Event.stop(evt);
+}
+
+/** inner method, disable this tab 
+ * @param {Object} cmp tab element
+ * @param {string} disabled string "true" or "false"
+ */
+zkTab._disable = function(cmp, disabled){
+	var olddis = getZKAttr(cmp, "disabled");
+	if(olddis==disabled) return;
+	
+	var btn = $e(cmp.id + "!close");
+	var sel = getZKAttr(cmp, "sel");
+	
+	var clzn = cmp.className;
+	var len = clzn.length;
+	if(disabled=="true"){
+		if (btn) {
+			zk.unlisten(btn, "mouseover", zkau.onimgover);
+			zk.unlisten(btn, "mouseout", zkau.onimgout);
+		}
+		//change style from tab/tabsel to tabdis/tabdissel
+		if(sel=="true"){
+			cmp.className = clzn.substring(0, len - 3)+"dis"+"sel";
+		}else{
+			cmp.className = clzn+"dis";
+		}
+	}else{
+		if (btn) {
+			zk.listen(btn, "mouseover", zkau.onimgover);
+			zk.listen(btn, "mouseout", zkau.onimgout);
+		}
+		//change style from tabdis/tabdissel to tab/tabsel
+		if(sel=="true"){
+			cmp.className = clzn.substring(0, len - 6)+"sel";
+		}else{
+			cmp.className = clzn.substring(0, len - 3)
+		}
+	}
+	setZKAttr(cmp, "disabled",disabled);
+}
 
 ////
 // tabs //

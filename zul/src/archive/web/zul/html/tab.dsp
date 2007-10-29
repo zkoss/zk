@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="suffix" value="-uns" unless="${self.selected}"/>
 <c:set var="look" value="${self.tabbox.tabLook}-"/>
 <c:set var="hghStyle" value="height:${self.height}" unless="${empty self.height}"/>
-<td id="${self.uuid}" z.type="Tab"${self.outerAttrs}${self.innerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}">
+<td id="${self.uuid}" z.type="Tab"${self.outerAttrs}${self.innerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}" z.disabled="${self.disabled}">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td class="${c:cat3(look,'tl',suffix)}"></td>

@@ -37,6 +37,8 @@ public class Tab extends LabelImageElement {
 	private boolean _selected;
 	/** Whether to show a close button. */
 	private boolean _closable;
+	
+	private boolean _disabled;
 
 	public Tab() {
 	}
@@ -132,6 +134,26 @@ public class Tab extends LabelImageElement {
 			}
 		}
 	}
+	
+	/** Returns whether this tab is disabled.
+	 * <p>Default: false.
+	 * @since 3.0.0
+	 */
+	public final boolean isDisabled() {
+		return _disabled;
+	}
+	/** Sets whether this tab is disabled. If a tab is disabled, 
+	 * then it cann't be selected or closed by user, 
+	 * but it still can be controlled by server side program.
+	 * @since 3.0.0 
+	 */
+	public void setDisabled(boolean disabled) {
+		if (_disabled != disabled) {
+			_disabled = disabled;
+			smartUpdate("z.disabled", _disabled);
+		}
+	}
+	
 	/** Updates _selected directly without updating the client.
 	 */
 	/*package*/ void setSelectedDirectly(boolean selected) {
@@ -163,12 +185,16 @@ public class Tab extends LabelImageElement {
 		return sb.toString();
 	}
 	/** Returns the style class.
-	 * Note: 1) if not specified (or setSclass(null)), "tab" is assumed;
-	 * 2) if selected, it appends "sel" to super's getSclass().
+	 * Note: 
+	 * 1) if not specified (or setSclass(null))<br/>
+	 * 1.1) if not disabled ,"tab" is assumed; <br/>
+	 * 1.2) if disabled ,"tabdis" is assumed; <br/>
+	 * 2) if selected, it appends "sel" to step 1. <br/>
 	 */
 	public String getSclass() {
 		String scls = super.getSclass();
 		if (scls == null) scls = "tab";
+		if (isDisabled()) scls = scls+"dis";
 		return isSelected() ? scls + "sel": scls;
 	}
 

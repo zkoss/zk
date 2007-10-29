@@ -431,6 +431,32 @@ span.dottree-spacer {
 	text-decoration: underline;
 }
 
+.tabdis, .tabdis a, a.tabdis {
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: x-small; font-weight: normal; color: #AAAAAA;
+}
+.tabdis a, .tabdis a:visited, a.tabdis, a.tabdis:visited {
+	text-decoration: none;
+	cursor: default;
+}
+.tabdis a:hover, a.tabdis:hover {
+	text-decoration: none;
+	cursor: default;
+}
+.tabdissel, .tabdissel a, a.tabdissel {
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: x-small; font-weight: bold; color: #999999;
+}
+.tabdissel a, .tabdissel a:visited, a.tabdissel, a.tabdissel:visited {
+	text-decoration: none;
+	cursor: default;
+}
+.tabdissel a:hover, a.tabdissel:hover {
+	text-decoration: none;
+	cursor: default;
+}
+
+
 div.gc-default {<%-- content of 3d groupbox --%>
 	border: 1px solid #5C6C7C; padding: 5px;
 }
