@@ -214,17 +214,19 @@ div.vsep-bar {
 
 <%-- ZK tree, listbox, grid --%>
 div.listbox, div.tree, div.grid {<%-- depends sclass --%>
-	background: threedface; border: 1px solid #7F9DB9;
+	background: #DAE7F6; border: 1px solid #7F9DB9;
 }
-div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
-	background: threedface; border: 0; overflow: hidden; width: 100%;
+div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-head tr,
+	div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
+	border: 0; overflow: hidden; width: 100%;
 }
-div.listbox-paging th, div.grid-paging th {
-	background: threedface;
+
+div.tree-head tr, div.listbox-head tr, div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
+	background: url(${c:encodeURL('~./zul/img/grid/v_hd.gif')});
 }
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	overflow: hidden; border: 1px solid;
-	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	border-color: #DAE7F6 #7F9DB9 #7F9DB9 #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
@@ -233,21 +235,21 @@ div.head-cell-inner {
 	font-size: small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
 
-div.listbox-head th.sort, div.grid-head th.sort, div.listbox-paging th.sort, div.grid-paging th.sort {
+div.listbox-head th.sort div.head-cell-inner, div.grid-head th.sort div.head-cell-inner, div.listbox-paging th.sort div.head-cell-inner, div.grid-paging th.sort div.head-cell-inner{
 	cursor: pointer; padding-right: 9px;
-	background-image: url(${c:encodeURL('~./zul/img/sort/hint.png')});
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
-div.listbox-head th.sort-asc, div.grid-head th.sort-asc, div.listbox-paging th.sort-asc, div.grid-paging th.sort-asc {
+div.listbox-head th.sort-asc div.head-cell-inner, div.grid-head th.sort-asc div.head-cell-inner, div.listbox-paging th.sort-asc div.head-cell-inner, div.grid-paging th.sort-asc div.head-cell-inner{
 	cursor: pointer; padding-right: 9px;
-	background-image: url(${c:encodeURL('~./zul/img/sort/asc.png')});
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
-div.listbox-head th.sort-dsc, div.grid-head th.sort-dsc, div.listbox-paging th.sort-dsc, div.grid-paging th.sort-dsc {
+div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.head-cell-inner, div.listbox-paging th.sort-dsc div.head-cell-inner, div.grid-paging th.sort-dsc div.head-cell-inner{
 	cursor: pointer; padding-right: 9px;
-	background-image: url(${c:encodeURL('~./zul/img/sort/dsc.png')});
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 	background-position: right;
 	background-repeat: no-repeat;
 }
@@ -266,8 +268,8 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	font-size: small; font-weight: normal;
 }
 
-div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, div.tree-foot, tbody.tree-foot {<%-- always used --%>
-	background: threedface; border-top: 1px solid threedshadow;
+div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, tbody.listbox-foot, div.tree-foot, tbody.tree-foot {<%-- always used --%>
+	background: #DAE7F6; border-top: 1px solid #7F9DB9;
 }
 
 div.foot-cell-inner, div.cell-inner, div.head-cell-inner, div.vbox, div.hbox {
@@ -301,13 +303,13 @@ tr.odd td.gc, tr.odd {
 	background: #EAF2F0;<%--#E8EFEA--%>
 }
 tr.seld {
-	background: #bbd1ed; border: 1px solid #aac6e9;
+	background: #B6E6FB; border: 1px solid #82D5F8;
 }
 tr.overd {<%-- item onmouseover --%>
-	background: #DAE8FF;
+	background: #D3EFFA;
 }
 tr.overseld {<%-- item selected and onmouseover --%>
-	background: #5588bb;
+	background: #82D5F8;
 }
 
 <%-- The style for treeitem's paging

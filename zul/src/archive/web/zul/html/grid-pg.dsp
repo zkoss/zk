@@ -22,7 +22,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}" z.type="zul.grid.Grid"${self.outerAttrs}${self.innerAttrs}>
 	<div id="${self.uuid}!paging" class="grid-paging">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
-	<tbody>
+	<tbody class="grid-head">
 	<c:forEach var="head" items="${self.heads}">
 ${z:redraw(head, null)}
 	</c:forEach>

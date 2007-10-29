@@ -22,7 +22,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
 	<div id="${self.uuid}!paging" class="listbox-paging">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="listbox-btable">
-	<tbody>
+	<tbody class="listbox-head">
 	<c:forEach var="head" items="${self.heads}">
 ${z:redraw(head, null)}
 	</c:forEach>
@@ -34,7 +34,7 @@ ${z:redraw(item, null)}
 	</c:forEach>
 	</tbody>
 
-	<tbody class="grid-foot">
+	<tbody class="listbox-foot">
 ${z:redraw(self.listfoot, null)}
 	</tbody>
 	</table>

@@ -91,7 +91,7 @@ zulHdr.setSizable = function (cmp, sizable) {
 };
 /** Resize all rows. (Utilities used by derived). */
 zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
-	//var rows = mate.bodyrows;
+	if(mate.paging) return;
 	mate.bodytbl.style.width = mate.headtbl.style.width;
 	wd = $int(wd);		
 	if (mate.foottbl) {
