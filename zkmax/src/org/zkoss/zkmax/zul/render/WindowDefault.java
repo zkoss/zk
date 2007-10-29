@@ -49,7 +49,6 @@ public class WindowDefault implements ComponentRenderer {
 
 		final Caption caption = self.getCaption();
 		final String title = self.getTitle(), titlesc = self.getTitleSclass();
-		String wcExtStyle = "";
 		if (caption == null && title.length() == 0) {
 			if (exec.isExplorer() && !exec.isExplorer7()) { /* Bug 1579515: to clickable, a child with 100% width is required for DIV */
 				wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
@@ -78,15 +77,10 @@ public class WindowDefault implements ComponentRenderer {
 					.write("</td>\n<td class=\"r").write(titlesc).writeln("\"></td></tr>");
 			}
 			wh.write("</table>");
-			wcExtStyle = "border-top:0;";
 		}
 
-		final String cs = self.getContentStyle();
-		if(cs != null){
-			wcExtStyle += cs;
-		}
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"");
-		wh.write(self.getContentSclass()).write("\"").writeAttr("style", wcExtStyle);
+		wh.write(self.getContentSclass()).write("\"").writeAttr("style", self.getContentStyle());
 		wh.write(">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
