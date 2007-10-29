@@ -56,7 +56,9 @@ public class TabpanelAccordion implements ComponentRenderer {
 			.write(tab.getOuterAttrs()).write(tab.getInnerAttrs())
 			.write(" z.sel=\"").write(tab.isSelected()).write("\" z.type=\"zul.tab.Tab\" z.box=\"")
 			.write(tabbox.getUuid()).write("\" z.panel=\"").write(self.getUuid())
-			.writeln("\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
+			.write("\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ")
+			.write("z.disabled=\"").write(tab.isDisabled()).write("\"")
+			.writeln(">");		
 
 		if(!Strings.isBlank(tabbox.getPanelSpacing()) && self.getIndex() != 0)
 			wh.write("<tr height=\"").write(tabbox.getPanelSpacing()).writeln("\"><td></td></tr>");
@@ -81,7 +83,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 		if(tab.isClosable()){
 			wh.write("<td width=\"11\" align=\"right\" class=\"")
 			.write(look).write("mm").write(suffix).write("\"><img id=\"")
-			.write(self.getUuid()).write("!close\" src=\"")
+			.write(tab.getUuid()).write("!close\" src=\"")
 			.write(exec.encodeURL("~./zul/img/close-off.gif"))
 			.writeln("\"/></td>");
 		}

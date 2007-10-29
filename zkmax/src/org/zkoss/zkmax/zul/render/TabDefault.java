@@ -64,7 +64,9 @@ public class TabDefault implements ComponentRenderer {
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(" z.sel=\"").write(self.isSelected()).write("\" z.box=\"")
 			.write(tabbox.getUuid()).write("\" z.panel=\"")
-			.write(panel==null?"":panel.getUuid()).write("\">");
+			.write(panel==null?"":panel.getUuid()).write("\" ")
+			.write("z.disabled=\"").write(self.isDisabled())
+			.write("\">");
 
 		wh.writeln("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">")
 			.write("<tr><td class=\"").write(look).write("tl").write(suffix).writeln("\"></td>")
