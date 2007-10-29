@@ -46,7 +46,7 @@ public class ListboxPaging implements ComponentRenderer {
 			.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
 
 		//header
-		wh.writeln("<tbody>").writeComponents(self.getHeads()).writeln("</tbody>");
+		wh.writeln("<tbody class=\"listbox-head\">").writeComponents(self.getHeads()).writeln("</tbody>");
 
 		//body
 		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">")
@@ -54,7 +54,7 @@ public class ListboxPaging implements ComponentRenderer {
 			.writeln("</tbody>");
 
 		//Footer
-		wh.writeln("<tbody class=\"grid-foot\">").write(self.getListfoot())
+		wh.writeln("<tbody class=\"listbox-foot\">").write(self.getListfoot())
 			.write("</tbody>\n</table>");
 
 		//Paging
