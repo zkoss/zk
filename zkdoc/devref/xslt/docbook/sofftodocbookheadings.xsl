@@ -731,7 +731,7 @@
 	<xsl:otherwise>
 		<xsl:element name="graphic">
 			<xsl:attribute name="fileref">
-					<xsl:value-of select="substring-after(@xlink:href,'#')"/>
+					<xsl:value-of select="@xlink:href"/>
 			</xsl:attribute>
 			<!--
 			<xsl:attribute name="width">
@@ -971,7 +971,7 @@
 	<xsl:for-each select="child::text:tab-stop" xml:space="preserve">    </xsl:for-each>
 	<xsl:value-of select="." />
 	<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
-	<xsl:apply-templates mode="in-list" select="following-sibling::*[1][self::text:p[@text:style-name='Code Indent 2']]"/>
+	<xsl:apply-templates mode="in-list" select="following-sibling::*[1][self::text:p[@text:style-name='Code Indent']]"/>
 </xsl:template>
 
 
@@ -1006,7 +1006,7 @@
 	<xsl:apply-templates mode="in-list" select="following-sibling::*[1][self::text:p[@text:style-name='Code Indent 2']]"/>
 </xsl:template>
 
-<xsl:template match="text:p[@text:style-name='Code Indent 2']">
+<xsl:template match="text:p[@text:style-name='Code Indent 3']">
 	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code Indent 3']])">
 			<xsl:element name="programlisting">
 			 <xsl:for-each select="child::draw:image">			 
