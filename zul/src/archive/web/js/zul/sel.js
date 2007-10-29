@@ -1198,6 +1198,17 @@ zkLit.init = function (cmp) {
 	zk.listen(cmp, "mouseover", zkSel.onover);
 	zk.listen(cmp, "mouseout", zkSel.onout);
 };
+zkLic = {}; //listcell or Treecell
+zkLic.setAttr = function (cmp, nm, val) {
+	if ("style" == nm) {
+		var cell = $e(cmp.id + "!cave");
+		var v = zk.getTextStyle(val);
+		if (v) zkau.setAttr(cell, nm, v);
+		zkau.setAttr(cmp, nm, val);
+		return true;
+	}
+	return false;
+};
 /** Called when _onDocCtxMnu is called. */
 zkLit.onrtclk = function (cmp) {
 	var meta = zkau.getMetaByType(cmp, "Libox");
