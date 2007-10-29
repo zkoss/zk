@@ -33,6 +33,10 @@ td.lwt-wndcyan, td.mwt-wndcyan, td.rwt-wndcyan {
 .toolbar a, .toolbar a:visited, .toolbar a:hover {
 	font-size: xx-small;
 }
+td.mwt-embedded, td.mwt-popup, td.mwt-modal, td.mwt-highlighted,
+td.mwt-overlapped, td.lwt-wndcyan {
+	font-size: x-small;
+}
 div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
 	position:relative;
 	<%-- Bug 1712708:  we have to specify position:relative --%>
@@ -81,9 +85,6 @@ div.paging, div.paging a {
 }
 div.paging span {
 	font-size: xx-small;
-}
-table.calyear {
-	background: #f0f2f4;
 }
 table.calyear td {
 	font-size: x-small;

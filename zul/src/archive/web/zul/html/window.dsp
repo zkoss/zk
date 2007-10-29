@@ -52,11 +52,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
    </c:otherwise>
   </c:choose>
 </table>
-  <c:set var="wcExtStyle" value="border-top:0;"/><%-- used below --%>
  </c:otherwise>
 </c:choose>
-<c:set var="wcExtStyle" value="${c:cat(wcExtStyle, self.contentStyle)}"/>
-<div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style',wcExtStyle)}>
+<div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style',self.contentStyle)}>
 <c:forEach var="child" items="${self.children}">
 <c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
 </c:forEach>

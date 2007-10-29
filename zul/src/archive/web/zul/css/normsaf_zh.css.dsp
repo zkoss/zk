@@ -23,7 +23,8 @@ legend {
 .caption a, .caption a:visited {
 	font-size: small;
 }
-td.lwt-wndcyan, td.mwt-wndcyan, td.rwt-wndcyan {
+td.mwt-embedded, td.mwt-popup, td.mwt-modal, td.mwt-highlighted,
+td.mwt-overlapped, td.lwt-wndcyan {
 	font-size: medium;
 }
 .toolbar a, .toolbar a:visited, .toolbar a:hover {

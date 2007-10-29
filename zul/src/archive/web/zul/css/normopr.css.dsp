@@ -32,7 +32,10 @@ td.lwt-wndcyan, td.mwt-wndcyan, td.rwt-wndcyan {
 .toolbar a, .toolbar a:visited, .toolbar a:hover {
 	font-size: xx-small;
 }
-
+td.mwt-embedded, td.mwt-popup, td.mwt-modal, td.mwt-highlighted,
+td.mwt-overlapped, td.lwt-wndcyan {
+	font-size: x-small;
+}
 
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	font-size: x-small;
@@ -75,9 +78,6 @@ div.paging, div.paging a {
 }
 div.paging span {
 	font-size: xx-small;
-}
-table.calyear {
-	background: #f0f2f4;
 }
 
 table.calyear td {

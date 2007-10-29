@@ -65,7 +65,7 @@ div.wc-embedded-none, div.wc-wndcyan-none {
 	margin: 0; padding: 0;
 }
 div.wc-embedded, div.wc-wndcyan {
-	margin: 0; padding: 3px; border: 1px solid #aab;
+	margin: 0; padding: 3px; border: 1px solid #6082ac; border-top: 1px solid #cadef7;
 }
 div.wc-wndcyan {
 	background: white;
@@ -77,13 +77,13 @@ div.wc-overlapped, div.wc-overlapped-none {
 	margin: 0; padding: 2px; background: white;
 }
 div.wc-modal, div.wc-highlighted, div.wc-overlapped {
-	margin: 0; padding: 4px; border: 2px solid #1854c2;
+	margin: 0; padding: 4px; border: 2px solid #1854c2; border-top: none;
 }
 div.wc-popup, div.wc-popup-none {
 	margin: 0; padding: 1px; background: white;
 }
 div.wc-popup {
-	border: 1px solid #1854c2;
+	border: 1px solid #1854c2; border-top: none;
 }
 
 div.wc-embedded-none, div.wc-wndcyan-none,
@@ -103,14 +103,14 @@ td.lwt-wndcyan, td.mwt-wndcyan, td.rwt-wndcyan {
 }
 td.lwt-embedded {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wte-l.gif')}); background-repeat: no-repeat;
-	width: 7px;
+	width: 5px;
 }
 td.mwt-embedded {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wte-m.gif')}); background-repeat: repeat-x;
 }
 td.rwt-embedded {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wte-r.gif')}); background-repeat: no-repeat;
-	width: 7px;
+	width: 5px;
 }
 td.lwt-popup {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wtp-l.gif')}); background-repeat: no-repeat;
@@ -199,17 +199,26 @@ div.vsep-bar {
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
 }
 
+<%-- toolbar used in groupbox --%>
 .caption .toolbar a, .caption .toolbar a:visited, .caption .toolbar a:hover {
 	background: none; border: 0; color: black;
 }
 .caption .toolbar a:hover {
 	text-decoration: underline;
 }
+
+<%-- toolbar used in window --%>
 .title .toolbar a, .title .toolbar a:visited, .title .toolbar a:hover {
 	background: none; border: 0; color: white;
 }
 .title a:hover {
 	text-decoration: underline;
+}
+
+<%-- toolbar used in embedded window --%>
+td.mwt-embedded, td.mwt-embedded a,
+td.mwt-embedded a:visited, td.mwt-embedded a:hover {
+	color: #222222;
 }
 
 <%-- ZK tree, listbox, grid --%>
@@ -303,7 +312,7 @@ tr.odd td.gc, tr.odd {
 	background: #EAF2F0;<%--#E8EFEA--%>
 }
 tr.seld {
-	background: #B6E6FB; border: 1px solid #82D5F8;
+	background: #b3c8e8; border: 1px solid #82D5F8;
 }
 tr.overd {<%-- item onmouseover --%>
 	background: #D3EFFA;

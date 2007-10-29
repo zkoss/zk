@@ -29,6 +29,10 @@ td.lwt-wndcyan, td.mwt-wndcyan, td.rwt-wndcyan {
 .toolbar a, .toolbar a:visited, .toolbar a:hover {
 	font-size: small;
 }
+td.mwt-embedded, td.mwt-popup, td.mwt-modal, td.mwt-highlighted,
+td.mwt-overlapped, td.lwt-wndcyan {
+	font-size: medium;
+}
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	font-size: medium;
 }
