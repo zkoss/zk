@@ -136,10 +136,12 @@
 		</xsl:attribute>
 		<title></title>
 		<subtitle>Version 3.0.0 RC2</subtitle>
+		<bookinfo>
 	 <copyright>
       <year>2007</year>
       <holder>Potix Corporation. All rights reserved.</holder>
-	</copyright>
+	 </copyright>
+	 </bookinfo>
         <xsl:apply-templates select="office:body"/>
 	</xsl:element>	
 </xsl:template>
@@ -960,8 +962,7 @@
 				<xsl:for-each select="child::text:tab-stop" xml:space="preserve">    </xsl:for-each>
 				<xsl:value-of select="." />
 				<xsl:text disable-output-escaping="no">&#xD;</xsl:text>
-				<xsl:apply-templates mode="in-list"
-						select="following-sibling::*[1][self::text:p[@text:style-name='Code Indent']]" />
+				<xsl:apply-templates mode="in-list" select="following-sibling::*[1][self::text:p[@text:style-name='Code Indent']]" />
 			</xsl:element>
 
 	</xsl:if>
