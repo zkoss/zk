@@ -137,8 +137,7 @@ public class Treerow extends XulElement {
 		final Treeitem item = getTreeitem();
 		if (item == null) return attrs;
 
-		final StringBuffer sb = new StringBuffer(80)
-			.append(attrs).append(item.getActionAttrs());
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
 
 		final Tree tree = getTree();
 		if (tree != null && tree.getName() != null)
@@ -177,7 +176,7 @@ public class Treerow extends XulElement {
 			//it calls isAsapRequired, so it also tested Treeitem for onOpen
 		//TODO AREA JEFF ADDED END
 		
-		final String clkattrs = item.getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);
 		return sb.toString();
 	}

@@ -300,19 +300,6 @@ public class Treeitem extends XulElement {
 
 	//-- super --//
 
-	/** Returns the attributes for onClick, onRightClick and onDoubleClick
-	 * by checking whether the corresponding listeners are added,
-	 * or null if none is added.
-	 *
-	 * <p>Implementation Note: it is declared here to make it accessible by
-	 * {@link Treerow}.
-	 *
-	 * @param ignoreOnClick whether to ignore onClick
-	 */
-	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
-		return super.getAllOnClickAttrs(ignoreOnClick);
-	}
-
 	//this is declared to make it accessible to Treerow
 	protected boolean isAsapRequired(String evtnm) {
 		return super.isAsapRequired(evtnm);
