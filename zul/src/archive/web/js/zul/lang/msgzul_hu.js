@@ -1,4 +1,4 @@
-﻿/* msgzul_hu.js "charset=utf-8"
+/* msgzul_hu.js "charset=utf-8"
 
 {{IS_NOTE
 	Purpose:
