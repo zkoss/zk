@@ -6,11 +6,13 @@ function newWindow(url){
 }
 </h:script>
 <h:form id="newform" target="_blank" method="post"/>
-<window use="org.zkoss.zkdemo.test2.MainWindow" height="100%" >
+<window use="org.zkoss.zkdemo.test2.MainWindow" height="100%" id="main">
 	<window id="w1" width="760px">
 	<groupbox mold="3d" width="98%" >
-		<caption label="Filter"><button label="overlap" onClick='w1.setTitle("Filter");w1.doOverlapped();'/>
-		<button label="embed" onClick='w1.setTitle("");w1.doEmbedded()'/></caption>
+		<caption label="ZK Version:${desktop.webApp.version}"><button label="overlap" onClick='w1.setTitle("Filter");w1.doOverlapped();'/>
+		<button label="embed" onClick='w1.setTitle("");w1.doEmbedded()'/>
+		<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
+		</caption>
 		<hbox>
 			<vbox>
 			File Name Filter:<textbox id="fnf" value="Z30"/>
