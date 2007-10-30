@@ -65,7 +65,7 @@ div.wc-embedded-none, div.wc-wndcyan-none {
 	margin: 0; padding: 0;
 }
 div.wc-embedded, div.wc-wndcyan {
-	margin: 0; padding: 3px; border: 1px solid #6082ac; border-top: 1px solid #cadef7;
+	margin: 0; padding: 3px; border: 1px solid #6082ac; border-top: none;
 }
 div.wc-wndcyan {
 	background: white;
@@ -91,6 +91,7 @@ div.wc-modal-none, div.wc-highlighted-none,
 div.wc-overlapped-none, div.wc-popup-none {
 	border: 0;
 }
+
 td.lwt-embedded, td.mwt-embedded, td.rwt-embedded,
 td.lwt-popup, td.rwt-popup, td.mwt-popup,
 td.lwt-modal, td.mwt-modal, td.rwt-modal,
@@ -219,6 +220,9 @@ div.vsep-bar {
 td.mwt-embedded, td.mwt-embedded a,
 td.mwt-embedded a:visited, td.mwt-embedded a:hover {
 	color: #222222;
+}
+td.lwt-embedded, td.mwt-embedded, td.rwt-embedded {
+	border-bottom: 1px solid #b0cff7;
 }
 
 <%-- ZK tree, listbox, grid --%>
