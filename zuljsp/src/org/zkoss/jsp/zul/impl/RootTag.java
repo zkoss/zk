@@ -33,7 +33,6 @@ import javax.servlet.jsp.JspTagException;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.xel.RequestContexts;
-import org.zkoss.web.servlet.xel.PageRequestContext;
 
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
