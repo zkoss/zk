@@ -558,7 +558,7 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 
 	fn = zkau.cmd1[cmd];
 	if (fn) {
-		//zk.debug("cmd: "+cmd+", "+uuid+", "+dt1);
+//		zk.debug("cmd: "+cmd+", "+uuid+", "+dt1+", "+dt2);
 		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4);
 		return;
 	}
