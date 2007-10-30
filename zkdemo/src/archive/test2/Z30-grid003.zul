@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+{{IS_NOTE
+	Purpose:
+		Test Grid with live data and renderer and sort
+	Description:
+		
+	History:
+	Create by Dennis	
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<zscript>
+	
+	
+	</zscript>
+	<vbox>
+		<hbox>
+		</hbox>
+		
+		<grid>
+		</grid>
+	</vbox>
+</zk>
