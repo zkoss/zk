@@ -686,10 +686,8 @@ zk.Selectable.prototype = {
 		setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
 	},
 	_renderNow: function () {
-		if (getZKAttr(this.element, "model") != "true") return;
-
 		var rows = this.bodyrows;
-		if (!rows.length) return; //no row at all
+		if (!rows.length || getZKAttr(this.element, "model") != "true") return;
 
 		//Note: we have to calculate from top to bottom because each row's
 		//height might diff (due to different content)
@@ -700,7 +698,7 @@ zk.Selectable.prototype = {
 			if ($visible(r)) {
 				var top = zk.offsetTop(r);
 				if (top + zk.offsetHeight(r) < min) continue;
-				if (top >= max) break;
+				if (top > max) break; //Bug 1822517: max might be 0
 				if (getZKAttr(r, "loaded") != "true")
 					data += "," + this.getItemUuid(r);
 			}
