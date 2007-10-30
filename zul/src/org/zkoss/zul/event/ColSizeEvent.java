@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.event.MouseEvent;
  * @author tomyeh
  */
 public class ColSizeEvent extends Event {
-	private final Component _col1, _col2;
+	private final Component _col;
 	private final int _icol, _keys;
 
 	/** Indicates whether the Alt key is pressed.
@@ -51,16 +51,26 @@ public class ColSizeEvent extends Event {
 	 */
 	public static final int SHIFT_KEY = MouseEvent.SHIFT_KEY;
 
-	/**
+	/** Constructs an instance of {@link ColSizeEvent}.
+	 *
 	 * @param icol the index of the first colum whose width is changed.
 	 * The second column is icol+1.
 	 */
 	public ColSizeEvent(String evtnm, Component target, int icol,
-	Component col1, Component col2, int keys) {
+	Component col, int keys) {
 		super(evtnm, target);
 		_icol = icol;
-		_col1 = col1; _col2 = col2;
+		_col = col;
 		_keys = keys;
+	}
+	/**
+	 * @param icol the index of the first colum whose width is changed.
+	 * The second column is icol+1.
+	 * @deprecated As of release 3.0.0, since only one column is resized.
+	 */
+	public ColSizeEvent(String evtnm, Component target, int icol,
+	Component col1, Component col2, int keys) {
+		this(evtnm, target, icol, col1, keys);
 	}
 	/** Return the column index of the first column whose width is changed.
 	 * The other column is the returned index plus one.
@@ -69,16 +79,24 @@ public class ColSizeEvent extends Event {
 	public int getColIndex() {
 		return _icol;
 	}
+	/** Returns the column whose width is changed.
+	 * @since 3.0.0
+	 */
+	public Component getColumn() {
+		return _col;
+	}
 	/** Returns the first column whose width is changed.
+	 * @deprecated As of release 3.0.0, since only one column is resized
 	 */
 	public Component getColumn1() {
-		return _col1;
+		return getColumn();
 	}
 	/** Returns the second column whose width is changed.
-	 * @deprecated As of release 3.0.0
+	 * @deprecated As of release 3.0.0, since only one column is resized.
+	 * It always returns null since 3.0.0
 	 */
 	public Component getColumn2() {
-		return _col2;
+		return null;
 	}
 
 	/** Returns what keys were pressed when the column is resized, or 0 if
