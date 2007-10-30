@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--
-Z30-grid008.zul
-
-{{IS_NOTE
-	Purpose:
-		test grid span.
-	Description:
-		
-	History:
-		Create by Dennis
-}}IS_NOTE
-
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
-
-{{IS_RIGHT
-}}IS_RIGHT
--->
 <window > 
 Grid 1
 <grid height="100px">
