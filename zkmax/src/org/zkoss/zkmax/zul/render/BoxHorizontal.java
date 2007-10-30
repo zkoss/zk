@@ -48,10 +48,9 @@ public class BoxHorizontal implements ComponentRenderer{
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			wh.write("<td valign=\"top\" id=\"").write(child.getUuid()).write("!chdextr\"")
-				.write(self.getChildOuterAttrs(child)).write("><div id=\"")
-				.write(child.getUuid()).write("!cell\" ")
-				.write(self.getChildInnerAttrs(child)).write('>');
+			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
+				.write(self.getChildOuterAttrs(child)).write(self.getChildInnerAttrs(child))
+				.write("><div id=\"").write(child.getUuid()).write("!cell\" class=\"hbox\">");
 			wh.write(child);
 			wh.writeln("</div></td>");
 		}		
