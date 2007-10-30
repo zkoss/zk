@@ -1,0 +1,15 @@
+<zk>
+<zscript>
+import com.potix.zul.html.*;
+void popup(){
+Messagebox.show("test",null,Messagebox.OK,Messagebox.INFORMATION);
+
+}
+</zscript>
+<window title="root" border="normal">
+
+<button label="popup" onClick="popup()"/>
+
+
+</window>
+</zk>

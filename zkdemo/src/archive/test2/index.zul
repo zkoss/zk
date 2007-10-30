@@ -5,7 +5,7 @@ function newWindow(url){
 	document.forms["newform"].submit();
 }
 </h:script>
-<h:form id="newform" target="_blank"/>
+<h:form id="newform" target="_blank" method="post"/>
 <window use="org.zkoss.zkdemo.test2.MainWindow" height="100%" >
 	<window id="w1" width="760px">
 	<groupbox mold="3d" width="98%" >
