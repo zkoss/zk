@@ -62,7 +62,7 @@ public class ColSizeCommand extends Command {
 		((Sizable)((ComponentCtrl)col1).getExtraCtrl()).setWidthByClient(data[2]);
 
 		Events.postEvent(
-			new ColSizeEvent(getId(), comp, icol, col1, null,
+			new ColSizeEvent(getId(), comp, icol, col1,
 				Commands.parseKeys(data[3])));
 	}
 }

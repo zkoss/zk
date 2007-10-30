@@ -222,7 +222,7 @@ td.mwt-embedded a:visited, td.mwt-embedded a:hover {
 	color: #222222;
 }
 td.lwt-embedded, td.mwt-embedded, td.rwt-embedded {
-	border-bottom: 1px solid #b0cff7;
+	border-bottom: 1px solid #8aa3c1;
 }
 
 <%-- ZK tree, listbox, grid --%>
@@ -320,13 +320,13 @@ tr.grid td.gc {
 tr.odd td.gc, tr.odd {
 	background: #EAF2F0;<%--#E8EFEA--%>
 }
-tr.seld {
-	background: #b3c8e8; border: 1px solid #82D5F8;
+tr.seld, td.seld {
+	background: #b3c8e8; border: 1px solid #6f97d2;
 }
-tr.overd {<%-- item onmouseover --%>
+tr.overd, td.overd {<%-- item onmouseover --%>
 	background: #D3EFFA;
 }
-tr.overseld {<%-- item selected and onmouseover --%>
+tr.overseld, td.overseld {<%-- item selected and onmouseover --%>
 	background: #82D5F8;
 }
 
@@ -728,16 +728,15 @@ div.menupopup, div.ctxpopup {
 div.menubar td, div.menupopup td {
 	white-space: nowrap;
 }
+div.menubar td {
+	border: 1px solid transparent; <%-- IE7: unable to define it with menupopup td --%>
+}
 div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
 	font-size: x-small; font-weight: normal;
-	border: 1px solid #eff0f3; background: #eff0f3; color: black;
-	text-decoration: none;
+	color: black; text-decoration: none;
 }
-div.menubar a:hover, div.menupopup a:hover {
-	background: #bbd1ed; border: 1px solid #aac6e9;
-}
-div.menupopup hr {
-	border: 0; color: #c5c5c5; background: #c3c3c3; height: 1px;
+td.menusp {
+	height: 1px; background: #9ac6f0;
 }
 
 <%-- Combobox and Datebox --%>

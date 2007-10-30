@@ -35,6 +35,9 @@ zkMenu.onover = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 
+	if ($type(cmp) != "Menusp")
+		zk.addClass(cmp, "seld");
+
 	var menubar = $parentByType(cmp, "Menubar");
 	var autodrop = !menubar || getZKAttr(menubar, "autodrop") == "true";
 	if (autodrop) zkMenu._shallClose = false;
@@ -53,10 +56,13 @@ zkMenu.onover = function (evt) {
 	zkMenu.open(cmp, false);
 };
 zkMenu.onout = function (evt) {
-	if (zkMenu._pop.getFloatIds().length == 0) return; //nothing to do
-
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
+	zkMenu._onout($outer(Event.element(evt)));
+};
+zkMenu._onout = function (cmp) {
+	zk.rmClass(cmp, "seld");
+
+	if (zkMenu._pop.getFloatIds().length == 0) return; //nothing to do
 
 	var menubar = $parentByType(cmp, "Menubar");
 	if (menubar && getZKAttr(menubar, "autodrop") == "true") {
@@ -187,6 +193,8 @@ zkMenuit.init = function (cmp) {
 zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = $parentByType(Event.element(evt), "Menuit");
+	zkMenu._onout(cmp); //Bug 1822720
+
 	var anc = $e(cmp.id + "!a");
 	if ("javascript:;" == anc.href) {
 		var cmp = $outer(anc);
