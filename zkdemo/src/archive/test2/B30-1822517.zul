@@ -12,6 +12,18 @@ The difference between 2 Listbox is the renderer.
 
 -->
 <window>
+<html><![CDATA[
+1. Reload page.<br/>
+2. Press change1 to syncModel of the 1st Listbox, it show 3 new Listitems.<br/>
+3. Press change2 to syncModel of the 2nd Listbox, it should show 3 new Listitems but NONE is shown.<br/>
+4. Reload page.<br/>
+5. Press change3 to syncModel of the 2nd Listbox, it show 4 new Listitems.<br/>
+6. Press change3 to syncModel of the 2nd Listbox again, it should still show 4 Listitems but it shows nothing. (Looks something wrong with reuse existing Listitem)<br/>
+
+<p>The difference between 2 Listbox is the renderer. </p>
+	<ul><li>1st Listbox use renderer which form listitem - listcell (2 level of nested components)</li>
+    <li>2nd Listbox use renderer which form listitem - listcell - label (3 level of nested components)</li></ul>
+]]></html>
 	<zscript>
 	import java.util.*;
 	public List m = new ArrayList(6);
