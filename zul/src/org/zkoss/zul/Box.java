@@ -415,9 +415,10 @@ public class Box extends XulElement {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<tr id=\"").append(child.getUuid())
 				.append("!chdextr\"")
-				.append(getChildOuterAttrs(child)).append("><td><div id=\"")
-				.append(child.getUuid()).append("!cell\"")
-				.append(getChildInnerAttrs(child)).append('>');
+				.append(getChildOuterAttrs(child)).append("><td")
+				.append(getChildInnerAttrs(child)).append("><div id=\"")
+				.append(child.getUuid()).append("!cell\" class=\"vbox\"")
+				.append('>');
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
 			out.append("</div></td></tr>");
@@ -425,9 +426,9 @@ public class Box extends XulElement {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<td id=\"").append(child.getUuid())
 				.append("!chdextr\"")
-				.append(getChildOuterAttrs(child)).append("><div id=\"")
-				.append(child.getUuid()).append("!cell\"")
-				.append(getChildInnerAttrs(child)).append('>');
+				.append(getChildOuterAttrs(child))
+				.append(getChildInnerAttrs(child)).append("><div id=\"")
+				.append(child.getUuid()).append("!cell\" class=\"hbox\">");
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
 			out.append("</div></td>");
