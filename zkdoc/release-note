@@ -34,6 +34,7 @@ ZK 3.0.0
   1821912: Close Btn of Tab doesn't highlight when mouse over it
   1819220: IE 6 SP 2 Only. ZK Layout
   1822517: FF only. Listbox syncModel not working correctly
+  1821517: Nested components and children setVisible method
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
