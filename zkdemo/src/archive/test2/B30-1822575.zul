@@ -1,0 +1,28 @@
+<zk>
+	<button label="Set window to 50%">
+		<attribute name="onClick">win.setHeight("50%");</attribute>
+	</button>
+	<window title = "Win" id="win" height="100%" width="90%">
+		<tree id="tree2" vflex="true">
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2" />
+						<treecell label="Item 2 description" />
+					</treerow>
+				</treeitem>
+				<treeitem label="Item 3" />
+			</treechildren>
+		</tree>
+	</window>
+</zk>

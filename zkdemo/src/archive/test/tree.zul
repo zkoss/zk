@@ -26,10 +26,10 @@ Tree with rows more than need:
 	</treecols>
 	<auxhead>
 		<auxheader/>
-		<auxheader label="Details" span="2"/>
+		<auxheader label="Details" colspan="2"/>
 	</auxhead>
 	<auxhead>
-		<auxheader label="Some" span="2"/>
+		<auxheader label="Some" colspan="2"/>
 		<auxheader/>
 	</auxhead>
 	<treechildren>
