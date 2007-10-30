@@ -356,6 +356,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		_hsess = hsess;
 		WebManager.addActivationListener(
 			_hsess.getServletContext(),
+				//FUTURE: getServletContext only in Servlet 2.3 or later
 			new WebManagerActivationListener() {
 				public void didActivate(WebManager webman) {
 					_wapp = webman.getWebApp();
