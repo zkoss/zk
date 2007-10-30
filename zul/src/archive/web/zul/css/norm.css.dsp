@@ -288,11 +288,16 @@ div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, tbody.list
 div.foot-cell-inner, div.cell-inner, div.head-cell-inner, div.vbox, div.hbox {
 	overflow:hidden; border: 0; margin: 0; padding: 0;
 }
-
 div.vbox {
-	padding-bottom: 0.4em;
+	width:100%; 
 }
 div.hbox {
+	height:100%;
+}
+td.vbox {
+	padding-bottom: 0.4em;
+}
+td.hbox {
 	padding-right: 0.6em;
 }
 div.gc {

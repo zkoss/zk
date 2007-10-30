@@ -108,13 +108,16 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
 		var length = tn == "TR" ? p.rows.length : p.cells.length;
 		for (var j = 0; j < length; ++j) {
 			nd = tn == "TR" ? p.rows[j] : p.cells[j];
-			if (zk.isRealVisible(nd) && $type($real(nd)) != "Splt") {
-				var cell = $e($uuid(nd) + "!cell");
+			if (zk.isRealVisible(nd)) {
 				nd.style.height = nd.style.height ? nd.style.height : nd.offsetHeight + "px";
-				cell.style.height = zk.revisedSize(cell, $int(nd.style.height), true) + "px";
-				if (!vert) {
-					nd.style.width = nd.style.width ? nd.style.width : nd.offsetWidth + "px";			
-					cell.style.width = zk.revisedSize(cell, $int(nd.style.width)) + "px";
+				nd.style.width = nd.style.width ? nd.style.width : nd.offsetWidth + "px";
+				if ($type($real(nd)) != "Splt") {
+					var cell = $e($uuid(nd) + "!cell");				
+					if (vert) {					
+						cell.style.height = zk.revisedSize(cell, $int(nd.style.height), true) + "px";
+					} else {								
+						cell.style.width = zk.revisedSize(cell, $int(nd.style.width)) + "px";
+					}
 				}
 			}
 		}	
