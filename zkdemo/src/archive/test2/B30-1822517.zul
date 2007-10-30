@@ -60,9 +60,9 @@ The difference between 2 Listbox is the renderer.
 	public void change1()
 	{
 		public List m2 = new ArrayList(6);
-		m2.add("key1");
-		m2.add("key2");
-		m2.add("key3");
+		m2.add("change1.key1");
+		m2.add("change1.key2");
+		m2.add("change1.key3");
 		
 		ListModel lm2 = new ListModelList(m2);
 
@@ -72,9 +72,9 @@ The difference between 2 Listbox is the renderer.
 	public void change2()
 	{
 		public List m2 = new ArrayList(6);
-		m2.add("key1");
-		m2.add("key2");
-		m2.add("key3");
+		m2.add("change2.key1");
+		m2.add("change2.key2");
+		m2.add("change2.key3");
 		
 		ListModel lm2 = new ListModelList(m2);
 
@@ -84,21 +84,21 @@ The difference between 2 Listbox is the renderer.
 	public void change3()
 	{
 		public List m2 = new ArrayList(6);
-		m2.add("val1");
-		m2.add("val2");
-		m2.add("val3");
-		m2.add("val4");
+		m2.add("change3.val1");
+		m2.add("change3.val2");
+		m2.add("change3.val3");
+		m2.add("change3.val4");
 		
 		ListModel lm2 = new ListModelList(m2);
 
 		l2.setModel(lm2);
 	}
 	</zscript>
-	<groupbox><caption label="1st Listbox"/>
+	<groupbox><caption label="1st Listbox (listcell with label prop)"/>
 	<listbox model="${lm1}" itemRenderer="${rend1}" id="l1">
 	</listbox>
 	</groupbox>
-	<groupbox><caption label="2nd Listbox"/>
+	<groupbox><caption label="2nd Listbox (listcell with a label child)"/>
 	<listbox model="${lm1}" itemRenderer="${rend2}" id="l2">
 	</listbox>
 	</groupbox>
