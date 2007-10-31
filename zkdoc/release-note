@@ -11,6 +11,7 @@ ZK 3.0.0
   1755433: Complex column heading
   1707513: Provide Complex Header in Grid/Listbox/Tree
   1819879: Windows allows developers to change the style class
+  1823553: Groupbox allows developers to change the style class
   1820434: A way to use CSS to customize splitter's icons
   1820463: A way to ignore exception in Initiator's doCatch
   1820519: A way to stop the processing an event in EventThreadInit
