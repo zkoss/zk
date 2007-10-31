@@ -44,6 +44,8 @@ ZK 3.0.0
   1822566: Column set Width doesn't work correctly
   1822585: Grid:onColSize event.getColIndex() alwyas return 1
   1823240: Location of tree's paging icons is wrong (RC2 only)
+  1819318: ListModelSet not work when use SortedSet as its inner Set
+  1823207: ListModelMap not works when use SortedMap as its inner map
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
