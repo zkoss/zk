@@ -22,15 +22,12 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Iframe;
@@ -108,7 +105,11 @@ public class MainWindow extends Window{
 		String pattern = ((Textbox)getFellow("w1").getFellow("fnf")).getValue();
 		boolean reg = ((Checkbox)getFellow("w1").getFellow("reg")).isChecked();
 		File[] files = test2.listFiles(new MyFilenameFilter(pattern,reg));
-		Collections.addAll(fileModel,files);
+		ArrayList list = new ArrayList();
+		for(int i=0;i<files.length;i++){
+			list.add(files[i]);
+		}
+		fileModel.addAll(list);
 	}
 	
 	static class MyFilenameFilter implements FilenameFilter{
