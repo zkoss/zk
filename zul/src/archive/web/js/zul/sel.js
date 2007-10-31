@@ -725,7 +725,7 @@ zk.Selectable.prototype = {
 		//is sometime too big
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = this.element.clientWidth;
+			wd = this.element.clientWidth - (wd == "100%" ? 2 : 0);
 			if (wd) wd += "px";
 		}
 		if (wd) {

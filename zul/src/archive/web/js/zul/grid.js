@@ -135,7 +135,7 @@ zk.Grid.prototype = {
 		if (!this.paging) { //note: we don't solve this bug for paging yet
 			var wd = this.element.style.width;
 			if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-				wd = this.element.clientWidth;
+				wd = this.element.clientWidth - (wd == "100%" ? 2 : 0);
 				if (wd) wd += "px";
 			}
 			if (wd) {
@@ -173,18 +173,6 @@ zk.Grid.prototype = {
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 
 		if (this.paging) return; //nothing to adjust since single table
-
-		//refer to sel.js's _calcSize for why
-		var wd = this.element.style.width;
-		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = this.element.clientWidth;
-			if (wd) wd += "px";
-		}
-		if (wd) {
-			this.body.style.width = wd;
-			if (this.head) this.head.style.width = wd;
-			if (this.foot) this.foot.style.width = wd;
-		}
 
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
