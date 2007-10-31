@@ -42,7 +42,8 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 		DesktopCache dc = sessCtrl.getDesktopCache();
 		if (dc == null) {
 			synchronized (this) {
-				if (sessCtrl.getDesktopCache() == null) {
+				dc = sessCtrl.getDesktopCache();
+				if (dc == null) {
 					dc = new SimpleDesktopCache(_wapp.getConfiguration());
 					sessCtrl.setDesktopCache(dc);
 				}
