@@ -736,7 +736,7 @@
 		<xsl:element name="graphic">
 			<xsl:attribute name="fileref">
 					<xsl:value-of select="substring-after(@xlink:href,'#')"/>
-			</xsl:attribute>
+			</xsl:attribute>2
 			<!--
 			<xsl:attribute name="width">
     <xsl:value-of select="@svg:width"/>
