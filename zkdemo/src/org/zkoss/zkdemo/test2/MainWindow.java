@@ -76,8 +76,6 @@ public class MainWindow extends Window{
 				}else{
 					iframe.setSrc(path+"/"+((File)fileModel.get(index)).getName());
 				}
-				
-				
 			}});
 		getFellow("w1").addEventListener("onOK",new EventListener(){
 
@@ -94,6 +92,13 @@ public class MainWindow extends Window{
 			public void onEvent(Event arg0) throws Exception {
 				updateModel();
 			}});
+	}
+	
+	public void reload()
+	{
+		String src = iframe.getSrc();
+		iframe.setSrc(src+"?tid="+(new Date()).getTime());
+		
 	}
 	
 	private void updateModel(){
