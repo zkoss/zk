@@ -40,7 +40,7 @@ div.layout-container{
 				<treeitem label="Simple Elements" value="/userguide/simple/index.zul">
 					<treechildren>
 						<treeitem id="s1" label="First Window: Hello World" value="/userguide/simple/hello.zul"/>
-						<treeitem id="s2" label="Overlapped and popup windows" value="/userguide/simple/overlap.zul"/>
+						<treeitem id="s2" label="Overlap, popup and embed" value="/userguide/simple/overlap.zul"/>
 						<treeitem id="s3" label="Labels and images" value="/userguide/simple/label.zul"/>
 						<treeitem id="s4" label="Input" value="/userguide/simple/input.zul"/>
 						<treeitem id="s6" label="The onChanging event" value="/userguide/simple/onChanging.zul"/>
