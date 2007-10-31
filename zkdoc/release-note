@@ -37,6 +37,7 @@ ZK 3.0.0
   1818985: Treerow doesn't fire onDoubleClick
   1821517: Nested components and children setVisible method
   1822720: Menu highlight doesn't disappear after clikc (IE only)
+  1822564: Column can not resize by drag correctly
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
