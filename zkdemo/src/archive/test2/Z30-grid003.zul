@@ -16,14 +16,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<zscript>
-	
-	
+		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel();
+
+		import org.zkoss.zkdemo.userguide.*;
+		Comparator asc = new RowLabelComparator(true),
+		dsc = new RowLabelComparator(false);
 	</zscript>
 	<vbox>
-		<hbox>
-		</hbox>
-		
-		<grid>
+		<grid mold="paging"  model="${strset}">
+			<columns sizable="true">
+				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"/>
+			</columns>
 		</grid>
 	</vbox>
 </zk>
