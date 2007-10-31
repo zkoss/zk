@@ -234,7 +234,7 @@ zulHdr._endsizing = function (cmp, evt) {
 		var cell = $e(uuid + "!cave");
 		cell.style.width = zk.revisedSize(cell, rwd) + "px";	
 		table.style.width = total + wd + "px";					
-		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+j+",'"+wd+"','"+keys+"')", 0);		
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cmp.cellIndex+",'"+wd+"','"+keys+"')", 0);		
 	}
 };
 /* @param ghosting whether to create or remove the ghosting
