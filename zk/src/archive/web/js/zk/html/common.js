@@ -1425,12 +1425,14 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 							if (wd == "auto" || wd.indexOf('%') > -1) 
 								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
 							dstwds[z] = wd ? d.offsetWidth : zk.ie && !zk.ie7 && z == dst.cells.length -1 ? s.offsetWidth - 3 : s.offsetWidth;
+							var w;
 							if (!wd) {
-								var w = zk.revisedSize(d, dstwds[z]);
+								w = zk.revisedSize(d, dstwds[z]);
 								d.style.width = w + "px";
-								var cell = $e($uuid(d) + "!cave");
-								if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";
-							}
+							} else w = $int(wd);
+							var cell = $e($uuid(d) + "!cave");
+							if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";
+							
 						} 
 						
 						var uuid = $uuid(s);
