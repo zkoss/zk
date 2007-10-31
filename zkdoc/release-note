@@ -41,6 +41,7 @@ ZK 3.0.0
   1822720: Menu highlight doesn't disappear after clikc (IE only)
   1823190: The zebra color of listbox show up very show in IE
   1822564: Column can not resize by drag correctly
+  1822566: Column set Width doesn't work correctly
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
