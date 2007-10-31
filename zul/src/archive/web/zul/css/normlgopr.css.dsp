@@ -1,19 +1,12 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/normopr.css.dsp"/>
-<%-- Override norm font--%>
-p, div, span, label, a, li, dt, dd, input, textarea, pre, body {
+
+p, div, span, label, a, li, dt, dd, input, textarea, pre, body,
+button, input.button, input.file {
 	font-size: medium;
 }
-button {
-	font-size: small;
-}
-input.button{
-	font-size: small; 
-}
-input.file {
-	font-size: medium; 
-}
+
 legend {
 	font-size: medium;
 }

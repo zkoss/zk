@@ -1,18 +1,9 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/norm.css.dsp"/>
-<%-- Override or Append Exist--%>
-
 
 img	{
 	hspace: 0; vspace: 0
-}
-input.button{
-	font-size: xx-small; 
-}
-
-input.file {
-	font-size: x-small; 
 }
 
 div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>

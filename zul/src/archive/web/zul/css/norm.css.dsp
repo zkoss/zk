@@ -4,26 +4,14 @@
 html {height:100%}
 
 <%-- paragraphs --%>
-p, div, span, label, a, li, dt, dd, input, textarea, pre, body {
+p, div, span, label, a, li, dt, dd, input, textarea, pre, body,
+button, input.button, input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
 body {
 	height:100%; margin: 0px; padding: 0px 5px;
 }
-button {
-	font-family: Verdana, Tahoma, Arial, serif;
-	font-size: x-small; font-weight: normal;
-}
-
-input.button{
-	font-size: x-small; 
-}
-
-input.file {
-	font-size: small; 
-}
-
 
 <%-- don't set option in mozilla. or, its height too small --%>
 legend {
