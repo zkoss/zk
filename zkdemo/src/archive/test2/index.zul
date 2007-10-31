@@ -6,34 +6,38 @@ function newWindow(url){
 }
 </h:script>
 <h:form id="newform" target="_blank" method="post"/>
-<window use="org.zkoss.zkdemo.test2.MainWindow" height="100%" id="main">
-	<window id="w1" width="760px">
-	<groupbox mold="3d" width="98%" >
-		<caption label="ZK Version:${desktop.webApp.version}"><button label="overlap" onClick='w1.setTitle("Filter");w1.doOverlapped();'/>
-		<button label="embed" onClick='w1.setTitle("");w1.doEmbedded()'/>
-		<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
-		</caption>
-		<hbox>
+<window use="org.zkoss.zkdemo.test2.MainWindow" border="normal" height="100%" id="main">
+<hbox width="100%">
+	<window id="w1" width="355px" >
+		<groupbox mold="3d" width="352px" >
+			<caption label="ZK Version:${desktop.webApp.version}">
+			<button label="overlap" onClick='w1.setTitle("Filter");w1.doOverlapped();'/>
+			<button label="embed" onClick='w1.setTitle("");w1.doEmbedded()'/>
+			<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
+			</caption>
 			<vbox>
-			File Name Filter:<textbox id="fnf" value="Z30"/>
-			<hbox>
-			<checkbox id="reg"/>Regular Expression
-			</hbox>
-			<hbox>
-			<checkbox id="newb"/>Open in new Browser
-			</hbox>
+				<vbox>
+					File Name Filter:<textbox id="fnf" value="Z30"/>
+					<hbox>
+						<checkbox id="reg"/>Regular Expression
+					</hbox>
+					<hbox>
+						<checkbox id="newb"/>Open in new Browser
+					</hbox>
+				</vbox>
+				<listbox id="lb" mold="paging" pageSize="20" width="330px">
+					<listhead>
+						<listheader label="Name" width="50%"/>
+						<listheader label="Date" width="50%"/>
+					</listhead>
+				</listbox>
 			</vbox>
-			<listbox id="lb" mold="paging" pageSize="20" width="450px">
-				<listhead>
-					<listheader label="Name" width="70%"/>
-					<listheader label="Date" width="30%"/>
-				</listhead>
-			</listbox>
-		</hbox>
-	</groupbox>
+		</groupbox>
 	</window>
 	<window id="w2" border="normal" height="700px" width="100%">
-	<iframe  id="ifr" height="700px"  width="98%"/>
+		<iframe  id="ifr" height="700px"  width="98%"/>
 	</window>
+</hbox>
+
 </window>
 </zk>
