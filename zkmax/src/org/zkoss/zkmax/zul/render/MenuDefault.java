@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
@@ -41,7 +39,6 @@ public class MenuDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menu self = (Menu)comp;
 		final String uuid = self.getUuid();
-		final Execution exec = Executions.getCurrent();
 		
 		if(self.isTopmost()){
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"zul.menu.Menu\"");
@@ -54,15 +51,14 @@ public class MenuDefault implements ComponentRenderer {
 		}else{
 			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"zul.menu.Menu\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-				.write(">\n<td width=\"11\"></td>\n<td align=\"left\"><a href=\"javascript:;\" id=\"")
+				.write(">\n<td class=\"menu1\"></td>\n<td align=\"left\"><a href=\"javascript:;\" id=\"")
 				.write(uuid).write("!a\">").write(self.getImgTag());
 
 			new Out(self.getLabel()).render(out);
 
 			wh.write("</a>")
 				.write(self.getMenupopup())
-				.write("</td>\n<td><img src=\"").write(exec.encodeURL("~./zul/img/menu/arrow.gif"))
-				.writeln("\"/></td></tr>");
+				.write("</td>\n<td class=\"menu3ar\"></td></tr>");
 		}
 
 	}
