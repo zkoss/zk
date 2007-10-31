@@ -51,8 +51,9 @@ public class SelectCommand extends Command {
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 
 		final Set items = Commands.convertToItems(request);
-		((Selectable)((ComponentCtrl)comp).getExtraCtrl())
-			.selectItemsByClient(items);
+		final Object ec = ((ComponentCtrl)comp).getExtraCtrl();
+		if (ec instanceof Selectable)
+			((Selectable)ec).selectItemsByClient(items);
 		Events.postEvent(new SelectEvent(getId(), comp, items));
 	}
 }
