@@ -484,9 +484,27 @@ public class Tree extends XulElement {
 		if (size <= 0) size = -1; //no limitation
 		if (_pgsz != size) {
 			_pgsz = size;
+			updateActivePageChildren(_treechildren);
 			invalidate();
 				//FUTURE: trade-off: search and update only
 				//necessary Treechildren is faster or not
+		}
+	}
+	/** Updates the active page for all tree children if necessary.
+	 */
+	private static void updateActivePageChildren(Treechildren tc) {
+		if (tc != null) {
+			if (tc.getPageSizeDirectly() == 0) {
+				final int pgcnt = tc.getPageCount();
+				if (tc.getActivePage() >= pgcnt)
+					tc.setActivePageDirectly(pgcnt - 1);
+					//no need to invalidate since the whole tree is change
+			}
+
+			for (Iterator it = tc.getChildren().iterator(); it.hasNext();) {
+				final Treeitem ti = (Treeitem)it.next();
+				updateActivePageChildren(ti.getTreechildren()); //recursive
+			}
 		}
 	}
 

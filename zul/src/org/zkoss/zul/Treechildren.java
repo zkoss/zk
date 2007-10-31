@@ -159,6 +159,9 @@ public class Treechildren extends XulElement implements Pageable {
 		final Tree tree = getTree();
 		return tree != null ? tree.getPageSize(): -1;
 	}
+	/*package*/ int getPageSizeDirectly() {
+		return _pgsz;
+	}
 	/** Sets the page size which controls the number of
 	 * visible child {@link Treeitem}.
 	 *
@@ -213,13 +216,6 @@ public class Treechildren extends XulElement implements Pageable {
 	 * @since 2.4.1
 	 */
 	public int getActivePage() {
-		if (_actpg != 0 && _pgsz == -1) {
-			//We have to modify _actpg since Tree.setPageSize() might be
-			//called and cause getPageCount() to changed
-			final int pgcnt = getPageCount();
-			if (_actpg >= pgcnt)
-				_actpg = pgcnt - 1;
-		}
 		return _actpg;
 	}
 	/** Sets the active page (starting from 0).
@@ -238,6 +234,10 @@ public class Treechildren extends XulElement implements Pageable {
 			smartUpdatePaging();
 				//it affect treerow (so invalidate won't 'eat' it)
 		}
+	}
+	/** Called by {@link Tree} to set the active page directly. */
+	/*package*/ void setActivePageDirectly(int pg) {
+		_actpg = pg;
 	}
 	/** Returns the index of the first visible child.
 	 * <p>Used only for component development, not for application developers.
