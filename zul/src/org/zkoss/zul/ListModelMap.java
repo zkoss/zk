@@ -187,8 +187,9 @@ implements ListModelExt, Map, java.io.Serializable {
 			ret = _map.put(key, o);
 			fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 		} else {
-			int i1 = _map.size();
 			ret = _map.put(key, o);
+			//bug #1819318  Problem while using SortedSet with Databinding
+			final int i1 = _map instanceof LinkedHashMap ? _map.size() : indexOfKey(key);
 			fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
 		}
 		return ret;
@@ -220,36 +221,45 @@ implements ListModelExt, Map, java.io.Serializable {
 	}
 
 	public void putAll(Map c) {
-		int sz = c.size();
-		if (sz <= 0) {
-			return;
-		}
-		if (c == _map) { //special case
-			return;
-		}
-		
-		List added = new ArrayList(c.size());
-		for(Iterator it = c.entrySet().iterator(); it.hasNext();) {
-			final Entry entry = (Entry) it.next();
-			Object key = entry.getKey();
-			Object val = entry.getValue();
-			if (_map.containsKey(key)) {
-				put(key, val);
-			} else {
-				added.add(entry);
+		if (_map instanceof LinkedHashMap) {
+			int sz = c.size();
+			if (sz <= 0) {
+				return;
 			}
-		}
-		
-		for(Iterator it = added.iterator(); it.hasNext();) {
-			final Entry entry = (Entry) it.next();
-			Object key = entry.getKey();
-			Object val = entry.getValue();
-			_map.put(key, val);
-		}
+			if (c == _map) { //special case
+				return;
+			}
+			
+			List added = new ArrayList(c.size());
+			for(Iterator it = c.entrySet().iterator(); it.hasNext();) {
+				final Entry entry = (Entry) it.next();
+				Object key = entry.getKey();
+				Object val = entry.getValue();
+				if (_map.containsKey(key)) {
+					put(key, val);
+				} else {
+					added.add(entry);
+				}
+			}
+			
+			for(Iterator it = added.iterator(); it.hasNext();) {
+				final Entry entry = (Entry) it.next();
+				Object key = entry.getKey();
+				Object val = entry.getValue();
+				_map.put(key, val);
+			}
 
-		int len = added.size();
-		if (len > 0) {
-			fireEvent(ListDataEvent.INTERVAL_ADDED, sz, sz + len - 1);
+			int len = added.size();
+			if (len > 0) {
+				fireEvent(ListDataEvent.INTERVAL_ADDED, sz, sz + len - 1);
+			}
+		} else { //bug #1819318  Problem while using SortedSet with Databinding
+			for(Iterator it = c.entrySet().iterator(); it.hasNext();) {
+				final Entry entry = (Entry) it.next();
+				final Object key = entry.getKey();
+				final Object val = entry.getValue();
+				put(key, val);
+			}
 		}
 	}
 

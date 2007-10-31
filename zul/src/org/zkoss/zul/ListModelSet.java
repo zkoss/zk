@@ -144,12 +144,10 @@ implements ListModelExt, Set, java.io.Serializable {
 	 */
  	public boolean add(Object o) {
  		if (!_set.contains(o)) {
-			int i1 = _set.size();
 			boolean ret = _set.add(o);
 			//After add, the position can change if not LinkedHashSet
-			if (!(_set instanceof LinkedHashSet)) { //bug #1819318  Problem while using SortedSet with Databinding
-				i1 = indexOf(o);
-			}
+			//bug #1819318  Problem while using SortedSet with Databinding
+			final int i1 = _set instanceof LinkedHashSet ? _set.size() : indexOf(o);
 			fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
 			return ret;
 		}
@@ -161,8 +159,8 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * Other implementation needs one more linier search.
 	 */
 	public boolean addAll(Collection c) {
-		int begin = _set.size();
 		if (_set instanceof LinkedHashSet) {
+			int begin = _set.size();
 			int added = 0;
 			for(final Iterator it = c.iterator(); it.hasNext();) {
 				Object o = it.next();
