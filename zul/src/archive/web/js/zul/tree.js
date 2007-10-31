@@ -368,7 +368,8 @@ zkTrow._genpg = function (cmp, rows, end) {
 		var n = zk.nextSibling(end ? cmp: tr, "TR");
 		if (n.id.endsWith("!ph")) n = zk.nextSibling(n, "TR"); //skip head
 		var last = null;
-		for (n = n.cells[0].firstChild; n; n = n.nextSibling) {
+		for (n = n.cells[0].firstChild, n = n && n.firstChild ? n.firstChild: n; //TD/DIV/icons
+		n; n = n.nextSibling) {
 			if (n.getAttribute) {
 				if (!getZKAttr(n, "fc") && !n.id.endsWith("!cm"))
 					break;
