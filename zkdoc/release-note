@@ -48,7 +48,7 @@ ZK 3.0.0
   1819318: ListModelSet not work when use SortedSet as its inner Set
   1823207: ListModelMap not works when use SortedMap as its inner map
   1727873: Grids with width="100%" inside a vbox have artifacts
-  1822727: Listbox selection bug when toggle multiple.
+  1822727: Listbox/tree selection bug when toggle multiple
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
