@@ -263,16 +263,26 @@ public class Treeitem extends XulElement {
 		setSrc(image);
 	}
 
+	/** Returns the parent tree item,
+	 * or null if this item is already the top level of the tree.
+	 * The parent tree item is actually the grandparent if any.
+	 *
+	 * @since 3.0.0
+	 */
+	public Treeitem getParentItem() {
+		final Component p = getParent();
+		final Component gp = p != null ? p.getParent(): null;
+		return gp instanceof Treeitem ? (Treeitem)gp: null;
+	}
 	/** Returns the nestest ancestor {@link Treeitem}, if any, or null if it is
 	 * the top-level {@link Treeitem}. By top-level we mean the first level of
 	 * a {@link Tree}.
 	 *
-	 * @deprecated As of release 2.4.1, due to confusion
+	 * @deprecated As of release 2.4.1, replaced with {@link #getParentItem}
+	 * to avoid confusion
 	 */
 	public Treeitem getTreeitem() {
-		final Component p = getParent();
-		final Component gp = p != null ? p.getParent(): null;
-		return gp instanceof Treeitem ? (Treeitem)gp: null;
+		return getParentItem();
 	}
 	/** Returns the tree owning this item.
 	 */

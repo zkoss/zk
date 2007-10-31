@@ -86,7 +86,8 @@ public class ColSizeEvent extends Event {
 		return _col;
 	}
 	/** Returns the first column whose width is changed.
-	 * @deprecated As of release 3.0.0, since only one column is resized
+	 * @deprecated As of release 3.0.0, use {@link #getColumn} instead,
+	 * since only one column is resized
 	 */
 	public Component getColumn1() {
 		return getColumn();
