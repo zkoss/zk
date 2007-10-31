@@ -39,6 +39,8 @@ public class Groupbox extends XulElement {
 	private Caption _caption;
 	/** The style used for the content block. */
 	private String _cntStyle;
+	/** The style class used for the content block. */
+	private String _cntscls;
 	private Boolean _legend;
 	private boolean _open = true, _closable = true;
 
@@ -105,13 +107,32 @@ public class Groupbox extends XulElement {
 	/** Returns the style class used for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
 	 *
-	 * <p>If {@link #getSclass} is null, "gc-default" is returned,
-	 * Otherwise, "gc-<i>sclass</i>",
-	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
+	 * <ul>
+	 * <li>If {@link #setContentSclass} is called with non-null string,
+	 * this method returns it.</li>
+	 * <li>If {@link #getSclass} is null, "gc-default" is returned,</li>
+	 * <li>Otherwise, "gc-<i>sclass</i>",
+	 * where <i>sclass</i> is the value returned by {@link #getSclass}.</li>
+	 * </ul>
 	 */
 	public String getContentSclass() {
-		final String sclass = getSclass();
-		return sclass == null ? "gc-default": "gc-" + sclass;
+		String cntscls = _cntscls;
+		if (cntscls != null)
+			return cntscls;
+
+		cntscls = getSclass();
+		return cntscls == null ? "gc-default": "gc-" + cntscls;
+	}
+	/** Sets the style class used for the content block.
+	 *
+	 * @see #getContentSclass
+	 * @since 3.0.0
+	 */
+	public void setContentSclass(String scls) {
+		if (!Objects.equals(_cntscls, scls)) {
+			_cntscls = scls;
+			smartUpdate("z.cntScls", getContentSclass());
+		}
 	}
 
 	/** Returns whether this groupbox is in the legend mold.

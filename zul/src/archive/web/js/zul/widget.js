@@ -348,6 +348,13 @@ zkGrbox.setAttr = function (cmp, nm, val) {
 			zkGrbox._fixHgh(cmp);
 		}
 		return true; //no need to store z.cntType
+	case "z.cntScls":
+		var n = $e(cmp.id + "!cave");
+		if (n) {
+			n.className = val != null ? val: "";
+			zkGrbox._fixHgh(cmp); //border's dimension might be changed
+		}
+		return true; //no need to store it
 
 	case "style":
 	case "style.height":
