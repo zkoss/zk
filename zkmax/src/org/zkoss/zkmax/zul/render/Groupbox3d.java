@@ -96,7 +96,7 @@ public class Groupbox3d implements ComponentRenderer {
 		wh.write("<table id=\"").write(self.getUuid())
 			.writeln("!sdw\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
 		wh.write("<tr><td class=\"").write(look).writeln("shdl\"></td>");
-		wh.write("<td class=\"").write(look).write("shdm\"><img width=\"1\" height=\"1\" src=\"")
+		wh.write("<td class=\"").write(look).write("shdm\"><img src=\"")
 			.write(exec.encodeURL("~./img/spacer.gif"))
 			.writeln("\"/></td>");
 		wh.write("<td class=\"").write(look).writeln("shdr\"></td>");
