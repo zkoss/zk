@@ -47,6 +47,7 @@ ZK 3.0.0
   1822643: Tree setPageSize causes wrong active page of treechildren
   1819318: ListModelSet not work when use SortedSet as its inner Set
   1823207: ListModelMap not works when use SortedMap as its inner map
+  1727873: Grids with width="100%" inside a vbox have artifacts
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
