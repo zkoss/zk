@@ -15,7 +15,7 @@ ZK 3.0.0
   1820463: A way to ignore exception in Initiator's doCatch
   1820519: A way to stop the processing an event in EventThreadInit
   1739579: Tabbox supports disabled tabs
-  1823206: Menu's check icon can be customized by CSS
+  1823206: Menuitem's checked icon/separator customizable by CSS
 
 * Bugs:
   1814702: ZK Layout Fails to Resize
