@@ -1404,18 +1404,18 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 									else each = amount;
 								var wd = zk.safari ? each  : zk.revisedSize(d, each);
 								d.style.width = wd + "px";								
-								var cell = $e($uuid(d) + "!cave");
-								if (cell) cell.style.width = zk.revisedSize(cell, wd) + "px";
+								var cave = $e($uuid(d) + "!cave");
+								if (cave) cave.style.width = zk.revisedSize(cave, wd) + "px";
 								dstwds[z+k] = d.offsetWidth;
 								total += dstwds[z+k];
 								ttlOffset += d.offsetWidth;
 							} 
 						}	
-						if (s.offsetWidth != ttlOffset || zk.ie || zk.safari) {							
-							var rwd = zk.revisedSize(s, total);
-							cell.style.width = zk.revisedSize(cell, rwd); + "px";	
-							s.style.width = rwd + "px";
-						}				
+													
+						var rwd = zk.revisedSize(s, total);
+						cell.style.width = zk.revisedSize(cell, rwd); + "px";	
+						s.style.width = rwd + "px";		
+						if (!again && i == 0 && zk.ie) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 500);															
 					}					
 				} else {
 					if (!dstwds[z] || d.offsetWidth != s.offsetWidth || zk.ie || zk.safari) { 
@@ -1424,7 +1424,8 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 							var wd =  d.style.width;							
 							if (wd == "auto" || wd.indexOf('%') > -1) 
 								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-							dstwds[z] = wd ? d.offsetWidth : zk.ie && !zk.ie7 && z == dst.cells.length -1 ? s.offsetWidth - 3 : s.offsetWidth;
+							dstwds[z] = wd ? (zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth) 
+								: (zk.ie && z == dst.cells.length -1 ? s.offsetWidth - 1 : s.offsetWidth);
 							var w;
 							if (!wd) {
 								w = zk.revisedSize(d, dstwds[z]);
