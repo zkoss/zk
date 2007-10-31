@@ -135,7 +135,8 @@ zk.Grid.prototype = {
 		if (!this.paging) { //note: we don't solve this bug for paging yet
 			var wd = this.element.style.width;
 			if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-				wd = this.element.clientWidth - (wd == "100%" ? 2 : 0);
+				wd = zk.revisedSize(this.element, this.element.offsetWidth) - (wd == "100%" ? 2 : 0);
+				if (wd < 0) wd = 0;
 				if (wd) wd += "px";
 			}
 			if (wd) {
@@ -180,8 +181,8 @@ zk.Grid.prototype = {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			} else
-					this.bodytbl.style.width = "";
-
+				this.bodytbl.style.width = "";
+				
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + "px";
 			if (this.headtbl.rows.length) {
@@ -225,6 +226,7 @@ zk.Grid.prototype = {
 	},
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
+		if (!zk.isRealVisible(this.element)) return;
 		setTimeout("zkGrid._calcSize('"+this.id+"')", 20);
 	},
 	/** Resize the specified column.

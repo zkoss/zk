@@ -725,7 +725,8 @@ zk.Selectable.prototype = {
 		//is sometime too big
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = this.element.clientWidth - (wd == "100%" ? 2 : 0);
+			wd = zk.revisedSize(this.element, this.element.offsetWidth) - (wd == "100%" ? 2 : 0);
+			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
 		}
 		if (wd) {
@@ -934,6 +935,7 @@ zk.Selectable.prototype = {
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
 		// if (cleansz) this.cleanSize(); disabled by Jumper
+		if (!zk.isRealVisible(this.element)) return;
 		setTimeout("zkSel._calcSize('"+this.id+"')", 50);
 	},/** disabled by Jumper
 	cleanSize: function () {
