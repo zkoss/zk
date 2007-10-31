@@ -159,7 +159,8 @@ zk.Selectable.prototype = {
 					//Moz has a bug to send the request out if we don't wait long enough
 					//How long is enough is unknown, but 200 seems fine
 			};
-		} else this.stripe(); // Bug #1818331
+		}
+		this.stripe();
 		
 		setTimeout("zkSel._calcSize('"+this.id+"')", 150); // Bug #1813722
 			//don't calc now because browser might size them later
@@ -753,7 +754,7 @@ zk.Selectable.prototype = {
 						break;
 					}
 				}
-				zk.cpCellWidth(head, this.bodyrows, this, true);	
+				zk.cpCellWidth(head, this.bodyrows, this);	
 				var fake = $e(head.id + "!fake");
 				if (!fake || fake.cells.length != head.cells.length) {
 					if (fake) fake.parentNode.removeChild(fake);
@@ -781,7 +782,7 @@ zk.Selectable.prototype = {
 		} else if (this.foottbl) {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
-				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this, true); //assign foot's col width
+				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this); //assign foot's col width
 		}
 	},
 	/** Returns the visible row at the specified index. */
