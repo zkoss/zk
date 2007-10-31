@@ -1195,8 +1195,10 @@ Element.Methods = {
   makeClipping: function(element) {
     element = $(element);
     if (element._overflow) return element;
-    element._overflow = element.style.overflow || 'auto';
-    if ((Element.getStyle(element, 'overflow') || 'visible') != 'hidden')
+    element._overflow = element.style.overflow || 'visible'; //Tom M. Yeh, Potix: visible is default
+//Tom M. Yeh, Potix: optimize it
+//    if ((Element.getStyle(element, 'overflow') || 'visible') != 'hidden')
+    if (Element.getStyle(element, 'overflow') != 'hidden')
       element.style.overflow = 'hidden';
     return element;
   },
@@ -1204,8 +1206,12 @@ Element.Methods = {
   undoClipping: function(element) {
     element = $(element);
     if (!element._overflow) return element;
-    element.style.overflow = element._overflow == 'auto' ? '' : element._overflow;
-    element._overflow = null;
+//Tom M. Yeh, Potix
+//Bug 1822717: we cannot assign '' in IE (and it is OK in other browsers)
+//However, we don't know how to workaround IE6
+//    element.style.overflow = element._overflow == 'auto' ? '' : element._overflow;
+    element.style.overflow =  element._overflow == 'visible' ? zk.ie ? 'auto': '': element._overflow;
+    element._overflow = undefined;
     return element;
   }
 };
