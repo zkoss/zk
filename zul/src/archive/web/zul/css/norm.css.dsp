@@ -740,12 +740,16 @@ td.menusp {
 	height: 7px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/sep.gif')});
 }
-td.menu1 {
+td.menu1 {<%-- menuitem normal (unchecked) --%>
 	width: 11px;
 }
-td.menu1ck {
+td.menu1ck {<%-- menuitem checked --%>
 	width: 11px; height: 13px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/checked.gif')});
+}
+td.menu3ar {<%-- menuitem arrow --%>
+	width: 9px; height: 13px;
+	background-image: url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
 }
 
 <%-- Combobox and Datebox --%>
