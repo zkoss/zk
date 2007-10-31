@@ -124,6 +124,31 @@ zulHdr.cleanup = function (cmp) {
 	zulHdr.setSizable(cmp, false);
 };
 zulHdr.setAttr = function (cmp, nm, val) {
+	switch(nm) { // Bug #1822566 
+		case "style.width" :
+		case "style.height" :		
+		case "style" :			
+			var head = cmp.parentNode;
+			var fake = $e(head.id + "!fake");
+			
+			var cell = $e(cmp.id + "!cave");
+			var v = val;	
+			if (nm == "style") v = zk.getTextStyle(val, true, true);
+			if (v) zkau.setAttr(cell, nm, v);
+			zkau.setAttr(cmp, nm, val);
+			
+			if (nm == "style.width" && fake) {
+				var wd;
+				if (!val || val == "auto" || val.indexOf('%') >= 0) {
+					wd = cmp.offsetWidth + "px";
+				} else {
+					wd = $int(val) + zk.sumStyles(cmp, "lr", zk.borders) + 
+						zk.sumStyles(cmp, "lr", zk.paddings) + "px";
+				}
+				fake.cells[cmp.cellIndex].style.width = wd; 
+			}
+			return true;
+	}
 	zkau.setAttr(cmp, nm, val);
 	if (nm == "z.sort") zulHdr._show(cmp);
 	return true;
