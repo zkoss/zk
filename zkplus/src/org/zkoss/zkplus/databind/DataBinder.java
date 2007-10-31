@@ -79,7 +79,7 @@ public class DataBinder {
 	protected Map _collectionItemMap = new HashMap(3);
 	
 	/** Binding bean to UI component. This is the same as 
-	 * addBinding(Component comp, String attr, String expr, (List)null, (String)null, (String)null, (String)null). 
+	 * addBinding(Component comp, String attr, String expr, (List)null, (List)null, (String)null, (String)null). 
 	 * @param comp The component to be associated.
 	 * @param attr The attribute of the component to be associated.
 	 * @param expr The expression to associate the data bean.
