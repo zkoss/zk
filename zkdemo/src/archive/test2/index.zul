@@ -6,7 +6,7 @@ function newWindow(url){
 }
 </h:script>
 <h:form id="newform" target="_blank" method="post"/>
-<window use="org.zkoss.zkdemo.test2.MainWindow" border="normal" height="100%" id="main">
+<window id="main" use="org.zkoss.zkdemo.test2.MainWindow" height="100%">
 <hbox width="100%">
 	<window id="w1" width="355px" >
 		<groupbox mold="3d" width="352px" >
@@ -34,8 +34,11 @@ function newWindow(url){
 			</vbox>
 		</groupbox>
 	</window>
-	<window id="w2" border="normal" height="700px" width="100%">
-		<iframe  id="ifr" height="700px"  width="98%"/>
+	<window id="w2" border="normal" height="850px" width="100%">
+		<caption label="ZK TEST2"/>
+		<separator/>
+		<separator/>
+		<iframe  id="ifr" height="790px"  width="98%"/>
 	</window>
 </hbox>
 
