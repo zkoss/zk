@@ -15,6 +15,16 @@ button {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: x-small; font-weight: normal;
 }
+
+input.button{
+	font-size: x-small; 
+}
+
+input.file {
+	font-size: small; 
+}
+
+
 <%-- don't set option in mozilla. or, its height too small --%>
 legend {
 	font-family: Tahoma, Arial, serif;

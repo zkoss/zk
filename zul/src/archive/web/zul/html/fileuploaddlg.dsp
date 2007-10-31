@@ -70,13 +70,13 @@ function init() {
 <c:forEach var="cnt" begin="1" end="${maxcnt}">
 	<tr>
 		<td align="right"><c:if test="${maxcnt gt 2}">${cnt}</c:if></td>
-		<td><input type="file" id="file" name="file"/></td>
+		<td><input class="file" type="file" id="file" name="file"/></td>
 	</tr>
 </c:forEach>
 	<tr align="left">
 		<td colspan="2" style="border: outset 1px">
-		<input type="submit" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}" onclick="parent.zk.progress()"/>
-		<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="cancelUpload()"/>
+		<input class="button" type="submit" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}" onclick="parent.zk.progress()"/>
+		<input class="button" type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="cancelUpload()"/>
 		</td>
 	<tr>
 	</table>

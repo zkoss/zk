@@ -2,3 +2,6 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/norm.css.dsp"/>
 
+input.button{
+	font-size: small; 
+}
