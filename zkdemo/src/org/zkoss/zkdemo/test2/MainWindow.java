@@ -79,12 +79,17 @@ public class MainWindow extends Window{
 				
 				
 			}});
-		
+		getFellow("w1").addEventListener("onOK",new EventListener(){
+
+			public void onEvent(Event arg0) throws Exception {
+				updateModel();
+			}});
 		getFellow("w1").getFellow("fnf").addEventListener("onChange",new EventListener(){
 
 			public void onEvent(Event arg0) throws Exception {
 				updateModel();
 			}});
+
 		getFellow("w1").getFellow("reg").addEventListener("onCheck",new EventListener(){
 			public void onEvent(Event arg0) throws Exception {
 				updateModel();
