@@ -1,0 +1,18 @@
+<zk>
+
+<zscript><![CDATA[
+	import java.util.ArrayList;
+	ArrayList list = new ArrayList();
+	
+	for(int i=1;i<=50;i++)
+	{
+		list.add("entry "+i);
+	}
+]]></zscript>
+	<listbox width="250px" rows="6">
+		<listhead sizable="true">
+			<listheader label="name" sort="auto"/>
+		</listhead>
+		<listitem forEach="${list}" label="${each}"/>
+	</listbox>
+</zk>
