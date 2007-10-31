@@ -52,7 +52,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table id="${self.uuid}!sdw" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
  <td class="${c:cat(look,'shdl')}"></td>
- <td class="${c:cat(look,'shdm')}"><img width="1" height="1" src="${c:encodeURL('~./img/spacer.gif')}"/></td><%-- it must have something --%>
+ <td class="${c:cat(look,'shdm')}"><img src="${c:encodeURL('~./img/spacer.gif')}"/></td><%-- it must have something --%>
  <td class="${c:cat(look,'shdr')}"></td>
 </tr>
 </table>
