@@ -76,6 +76,7 @@ public class Menuitem extends LabelImageElement {
 			final Component parent = getParent();
 			if (parent instanceof Menupopup)
 				parent.invalidate();
+			//CONSIDER: to use smartUpdate instead of invalidate
 			//FUTURE: to support checked for top-level menuitems
 		}
 	}

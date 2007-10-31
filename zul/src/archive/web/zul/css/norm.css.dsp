@@ -729,14 +729,23 @@ div.menubar td, div.menupopup td {
 	white-space: nowrap;
 }
 div.menubar td {
-	border: 1px solid transparent; <%-- IE7: unable to define it with menupopup td --%>
+	border: 1px solid #eff0f3;
+	<%-- IE7: unable to define it with menupopup td; IE6: no transparent color --%>
 }
 div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
 	font-size: x-small; font-weight: normal;
 	color: black; text-decoration: none;
 }
 td.menusp {
-	height: 1px; background: #9ac6f0;
+	height: 7px;
+	background-image: url(${c:encodeURL('~./zul/img/menu/sep.gif')});
+}
+td.menu1 {
+	width: 11px;
+}
+td.menu1ck {
+	width: 11px; height: 13px;
+	background-image: url(${c:encodeURL('~./zul/img/menu/checked.gif')});
 }
 
 <%-- Combobox and Datebox --%>
