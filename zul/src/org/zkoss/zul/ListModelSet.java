@@ -138,32 +138,55 @@ implements ListModelExt, Set, java.io.Serializable {
 	}
 
 	//-- Set --//
+	/**
+	 * This implementation optimized on the LinkedHashSet(which guaratee the sequence of the added item). 
+	 * Other implementation needs one more linier search.
+	 */
  	public boolean add(Object o) {
  		if (!_set.contains(o)) {
 			int i1 = _set.size();
 			boolean ret = _set.add(o);
+			//After add, the position can change if not LinkedHashSet
+			if (!(_set instanceof LinkedHashSet)) { //bug #1819318  Problem while using SortedSet with Databinding
+				i1 = indexOf(o);
+			}
 			fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
 			return ret;
 		}
 		return false;
 	}
 
+	/**
+	 * This implementation optimized on the LinkedHashSet(which guaratee the sequence of the added item). 
+	 * Other implementation needs one more linier search.
+	 */
 	public boolean addAll(Collection c) {
 		int begin = _set.size();
-		int added = 0;
-		for(final Iterator it = c.iterator(); it.hasNext();) {
-			Object o = it.next();
-			if (_set.contains(o)) {
-				continue;
+		if (_set instanceof LinkedHashSet) {
+			int added = 0;
+			for(final Iterator it = c.iterator(); it.hasNext();) {
+				Object o = it.next();
+				if (_set.contains(o)) {
+					continue;
+				}
+				_set.add(o);
+				++added;
 			}
-			_set.add(o);
-			++added;
+			if (added > 0) {
+				fireEvent(ListDataEvent.INTERVAL_ADDED, begin, begin+added-1);
+				return true;
+			}
+			return false;
+		} else { //bug #1819318  Problem while using SortedSet with Databinding
+			boolean everTrue = false;
+			for(final Iterator it = c.iterator(); it.hasNext();) {
+				Object o = it.next();
+				if (!everTrue) {
+					everTrue = add(o);
+				}
+			}
+			return everTrue;
 		}
-		if (added > 0) {
-			fireEvent(ListDataEvent.INTERVAL_ADDED, begin, begin+added-1);
-			return true;
-		}
-		return false;
 	}
 	
 	public void clear() {
