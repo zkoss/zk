@@ -361,9 +361,13 @@ public class Listbox extends XulElement {
 			_multiple = multiple;
 			if (!_multiple && _selItems.size() > 1) {
 				final Listitem item = getSelectedItem();
-				_selItems.clear();
-				if (item != null)
-					_selItems.add(item);
+				for (Iterator it = _selItems.iterator(); it.hasNext();) {
+					final Listitem li = (Listitem)it.next();
+					if (li != item) {
+						li.setSelectedDirectly(false);
+						it.remove();
+					}
+				}
 				//No need to update z.selId because z.multiple will do the job
 			}
 
@@ -469,6 +473,7 @@ public class Listbox extends XulElement {
 	public void setSelectedIndex(int jsel) {
 		if (jsel >= _items.size())
 			throw new UiException("Out of bound: "+jsel+" while size="+_items.size());
+
 		if (jsel < -1) 
 			jsel = -1;
 		if (jsel < 0) { //unselct all

@@ -250,9 +250,13 @@ public class Tree extends XulElement {
 			_multiple = multiple;
 			if (!_multiple && _selItems.size() > 1) {
 				final Treeitem item = getSelectedItem();
-				_selItems.clear();
-				if (item != null)
-					_selItems.add(item);
+				for (Iterator it = _selItems.iterator(); it.hasNext();) {
+					final Treeitem ti = (Treeitem)it.next();
+					if (ti != item) {
+						ti.setSelectedDirectly(false);
+						it.remove();
+					}
+				}
 				//No need to update z.selId because z.multiple will do the job
 			}
 			if (isCheckmark()) invalidate(); //change check mark
