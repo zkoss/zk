@@ -50,6 +50,7 @@ ZK 3.0.0
   1727873: Grids with width="100%" inside a vbox have artifacts
   1822727: Listbox/tree selection bug when toggle multiple
   1822655: Gird: column and row doesn't align when set spans
+  1823510: If loading a page when the server starts, it sometime NPE
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
