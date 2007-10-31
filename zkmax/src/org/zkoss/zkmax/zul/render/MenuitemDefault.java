@@ -56,14 +56,13 @@ public class MenuitemDefault implements ComponentRenderer {
 			new Out(self.getLabel()).render(out);
 			wh.writeln("</a></td>");
 		}else{
-			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Menuit\"");
-			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-			wh.write("<td width=\"11px\">");
+			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Menuit\"")
+			  .write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			  .writeln(">")
+			  .write("<td class=\"menu1");
 			if(self.isChecked())
-				wh.write("<img src=\"")
-				  .write(exec.encodeURL("~./zul/img/menu/checked.gif"))
-				  .write("\"/>");
-			wh.write("</td>\n<td align=\"left\"><a href=\"");
+				wh.write("ck");
+			wh.write("\"></td>\n<td align=\"left\"><a href=\"");
 			if(Strings.isBlank(self.getHref()))
 				wh.write("javascript:;");
 			else
