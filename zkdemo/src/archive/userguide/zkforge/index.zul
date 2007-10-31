@@ -33,7 +33,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<h3>ZK.forge Components</h3>
 	<p>ZK.forge is a collection of components, themes and utilities
 	developed from community collaboration.</p>
-	<p>See also <a href="zkforge.sourceforge.net">ZK.forge at sourceforge.net</a></p>
+	<p>See also <a href="http://sourceforge.net/projects/zkforge/">ZK.forge at sourceforge.net</a></p>
 	]]></html> 
 	<h:ul>
 		<h:li><toolbarbutton label="FCKeditor" onClick="doSelect(&quot;zf1&quot;)"/></h:li>
