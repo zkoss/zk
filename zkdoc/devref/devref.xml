@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
 <book lang="en-US">
-<bookinfo>
-<title>ZK Developer's Reference</title>
+<title/>
 <subtitle>Version 3.0.0 RC2</subtitle>
+<bookinfo>
 <copyright>
 <year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
-<edition/>
 </bookinfo>
 <chapter>
 <title>1. Introduction</title>
@@ -33,9 +32,9 @@
 <para>A map of custom attributes associated with the desktop. It is the same as the getAttributes method in the org.zkoss.zk.ui.Desktop interface.</para>
 <para>It is mainly used to communicate among pages in the same desktop.</para></sect2><sect2><title>each - java.lang.Object</title>
 <para>The current item of the collection being iterated, when ZK evaluates an iterative element. An iterative element is an element with the forEach attribute.</para>
-<programlisting format="linespecific">&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${each}" forEach="${contacts}"/&gt;&#13;</programlisting></sect2><sect2><title>event - org.zkoss.zk.ui.event.Event or derived</title>
+<programlisting format="linespecific">&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${each}" forEach="${contacts}"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting></sect2><sect2><title>event - org.zkoss.zk.ui.event.Event or derived</title>
 <para>The current event. Available for the event listener only.</para>
-<programlisting format="linespecific">&lt;textbox onChanging="react(event.value)"/&gt;&#13;&lt;combobox onChanging="autoComplete()"/&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;textbox onChanging="react(event.value)"/&gt;&#13;&lt;combobox onChanging="autoComplete()"/&gt;&#13;&lt;zscript&gt;&#13;void react(String value) {&#13;</programlisting>
 <para>...</para>
 <para>}</para>
 <para>void autoComplete() {</para>
@@ -44,13 +43,14 @@
 <para>}</para>
 <para>&lt;/zscript&gt;</para></sect2><sect2><title>forEachStatus – org.zkoss.zk.ui.util.ForEachStatus</title>
 <para>The status of an iteration. ZK exposes the information relative to the iteration taking place when evaluating the iterative element.</para>
-<programlisting format="linespecific">&lt;zk&gt;&#13;&lt;zscript&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;zk&gt;&#13;&lt;zscript&gt;&#13;grades = new String[] {"Best", "Better", "Good"};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${forEachStatus.index}: ${each}" forEach="${grades}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
 <para>Note: forEachStatus.index is absolute with respect to the underlying collection, array or other type. For example, if forEachBegin is 5, then the first value of forEachStatus.index with be 5.</para></sect2><sect2><title>page - org.zkoss.zk.ui.Page</title>
-<para>The current page. It is the same as self.page.</para></sect2><sect2><title>pageScope - java.util.Map</title>
+<para>The current page. It is the same as self.page.</para></sect2><sect2><title>pageContext – org.zkoss.web.servlet.xel.PageContext</title>
+<para>The current page context used to retrieve the request, response, variable resolver and so on.</para></sect2><sect2><title>pageScope - java.util.Map</title>
 <para>A map of custom attributes associated with the current page. It is the same as the getAttributes method in the org.zkoss.zk.ui.Page interface.</para></sect2><sect2><title>requestScope – java.util.Map</title>
 <para>A map of custom attributes associated with the current execution. It is the same as getAttributes method in the org.zkoss.zk.ui.Execution interface.</para></sect2><sect2><title>self - org.zkoss.zk.ui.Component</title>
 <para>The component itself. In other words, it is the closest component, depicted as follows.</para>
-<programlisting format="linespecific">&lt;listbox&gt;&#13;&lt;zscript&gt;self.getItems();&lt;/zscript&gt;&lt;!-- self is listbox --&gt;&#13;</programlisting></sect2><sect2><title>session - org.zkoss.zk.ui.Session</title>
+<programlisting format="linespecific">&lt;listbox&gt;&#13;&lt;zscript&gt;self.getItems();&lt;/zscript&gt;&lt;!-- self is listbox --&gt;&#13;&lt;listitem value="ab" label="${self.value}"/&gt;&lt;!-- self is listitem --&gt;&#13;&lt;zscript&gt;self.getSelectedIndex();&lt;/zscript&gt;&lt;!-- self is listbox --&gt;&#13;&lt;/listbox&gt;&#13;</programlisting></sect2><sect2><title>session - org.zkoss.zk.ui.Session</title>
 <para>The session. It is similar to javax.servlet.http.HttpSession<footnote>
 <para>ZK session actually encapsulates the HTTP session to make ZK applications independent of HTTP.</para>
 </footnote>.</para></sect2><sect2><title>sessionScope - java.util.Map</title>
@@ -184,7 +184,7 @@
 <para>&lt;?import uri="..."?&gt;</para>
 <para>It imports the component definitions and initiators defined in another ZUML page. In other words, it imports the component and init directives from the specified page.</para>
 <para>A typical use is that you put a set of component definitions in one ZUML page, and then import it in other ZUML pages, such that they share the same set of component definitions, additional to the system default.</para>
-<programlisting format="linespecific">&lt;!-- special.zul: Common Definitions --&gt;&#13;&lt;?init zscript="/WEB-INF/macros/special.zs"?&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;!-- special.zul: Common Definitions --&gt;&#13;&lt;?init zscript="/WEB-INF/macros/special.zs"?&gt;&#13;&lt;?component name="special" macroURI="/WEB-INF/macros/special.zuml" class="Special"?&gt;&#13;&lt;?component name="another" macroURI="/WEB-INF/macros/another.zuml"?&gt;&#13;</programlisting>
 <para>where the Special class is assumed to be defined in /WEB-INF/macros/special.zs.</para>
 <para>Then, other ZUML pages can share the same set of component definitions as follows.</para>
 <para>&lt;?import uri="special.zul"?&gt;</para>
@@ -222,7 +222,7 @@
 <para>These are so-called header elements in HTML. Currently only HTML-based clients (so-called browsers) support them.</para>
 <para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
 <para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or servlets. Also, they are ignored if the page is a zhtml file.</para>
-<programlisting format="linespecific">&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;</programlisting>
 <para>My content</para>
 <para>&lt;/window&gt;</para></sect2><sect2><title>The page Directive</title>
 <para>&lt;?page [id="..."] [title="..."] [style="..."] [cacheable="false|true"] [language="xul/html"] [zscriptLanguage="Java"] [contentType="text/html;charset=UTF-8"] [docType="tag PUBLIC &amp;quot;doctype name&amp;quot; &amp;quot;doctype UI&amp;quot;"] [xml="version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;"]?&gt;</para>
@@ -293,18 +293,29 @@
 <para>The following is an example when using ZK with the Spring framework. It resolves Java Beans declared in the Spring framework, such that you access them directly.</para>
 <programlisting format="linespecific">&lt;?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?&gt;&#13;</programlisting><sect3><title>class</title>
 <para>[Optional]</para>
-<para>A class name that must implement the org.zkoss.zk.scripting.VariableResolver interface. Unlike the init directive, the class name cannot be the class that is defined in zscript codes.</para></sect3></sect2></sect1><sect1><title>ZK Elements</title>
+<para>A class name that must implement the org.zkoss.zk.scripting.VariableResolver interface. Unlike the init directive, the class name cannot be the class that is defined in zscript codes.</para></sect3></sect2><sect2><title>The xel-method Directive</title>
+<para>&lt;?xel-method prefix="..." name="..." class="..."signature="..."?&gt;</para>
+<para>Specifies a method that shall be imported by the EL evaluator. For example,</para>
+<programlisting format="linespecific">        &lt;?xel-method prefix="c" name="forName"class="java.lang.Class"signature="java.lang.Class forName(java.lang.String)"?&gt;&lt;textbox value="${c:forName('java.util.List')}"/&gt;&#13;</programlisting><sect3><title>prefix</title>
+<para>[Required]</para>
+<para>Specifies the prefix used to identify this method.</para></sect3><sect3><title>name</title>
+<para>[Required]</para>
+<para>Specifies the name used to identify this method. The full name is "prefix:name".</para></sect3><sect3><title>class</title>
+<para>[Required]</para>
+<para>Specifies the class that the method is defined in.</para></sect3><sect3><title>signature</title>
+<para>[Required]</para>
+<para>The signature of the method. Note: the method must be public static.</para></sect3></sect2></sect1><sect1><title>ZK Elements</title>
 <para>ZK elements are special XML elements that are used to control ZUML pages other than creating components.</para><sect2><title>The XML Namespace</title>
 <para>If there is name conflicts, you could specify the XML name space:</para>
 <para>http://www.zkoss.org/2005/zk</para>
 <programlisting format="linespecific">&lt;zk:attribute xmlns:zk="http://www.zkoss.org/2005/zk"&gt;&#13;...&#13;</programlisting></sect2><sect2><title>The attribute Element</title>
 <para>&lt;attribute name="myName" [trim="true|false"]&gt;myValue&lt;/attribute&gt;</para>
 <para>It defines a XML attribute of the enclosing element. The content of the element is the attribute value, while the name attribute specifies the attribute name. It is useful if the value of an attribute is sophisticated, or the attribute is conditional.</para>
-<programlisting format="linespecific">&lt;button label="Hi"&gt;&#13;&lt;attribute name="onClick"&gt;alert("Hi")&lt;/attribute&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;button label="Hi"&gt;&#13;&lt;attribute name="onClick"&gt;alert("Hi")&lt;/attribute&gt;&#13;&lt;/button&gt;&#13;</programlisting>
 <para>It is equivalent to</para>
 <para>&lt;button label="Hi" onClick="alert(&amp;quot;Hi&amp;quot;)"/&gt;</para>
 <para>Another example:</para>
-<programlisting format="linespecific">&lt;button&gt;&#13;&lt;attribute name="label" if="${param.happy}"&gt;Hello World!&lt;/attribute&gt;&#13;</programlisting><sect3><title>name</title>
+<programlisting format="linespecific">&lt;button&gt;&#13;&lt;attribute name="label" if="${param.happy}"&gt;Hello World!&lt;/attribute&gt;&#13;&lt;/button&gt;&#13;</programlisting><sect3><title>name</title>
 <para>[Required]</para>
 <para>Specifies the attribute name.</para></sect3><sect3><title>trim</title>
 <para>[Optional][Default: false]</para>
@@ -334,15 +345,15 @@
 <para>Specifies the condition not to evaluate this element. This element is ignored if the value specified to this attribute is evaluated to true.</para></sect3></sect2><sect2><title>The zk Element</title>
 <para>&lt;zk&gt;...&lt;/zk&gt;</para>
 <para>It is a special element used to aggregate other components. Unlike a real component (say, hbox or div), it is not part of the component tree being created. In other words, it doesn't represent any component. For example,</para>
-<programlisting format="linespecific">&lt;window&gt;&#13;    &lt;zk&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;window&gt;&#13;    &lt;zk&gt;&#13;                &lt;textbox/&gt;&lt;textbox/&gt;&#13;</programlisting>
 <para>&lt;/zk&gt;</para>
 <para>&lt;/window&gt;</para>
 <para>is equivalent to</para>
-<programlisting format="linespecific">&lt;window&gt;&#13;        &lt;textbox/&gt;&lt;textbox/&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;window&gt;&#13;        &lt;textbox/&gt;&lt;textbox/&gt;&#13;&lt;/window&gt;&#13;</programlisting>
 <para>The main use is to represent multiple root elements in XML format.</para>
-<programlisting format="linespecific">&lt;?page title="Multiple Root"?&gt;&#13;&lt;zk&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;?page title="Multiple Root"?&gt;&#13;&lt;zk&gt;&#13;    &lt;window title="First"&gt;&#13;    ...&#13;    &lt;/window&gt;&#13;    &lt;window title="Second" if="${param.secondRequired}"&gt;&#13;    ...&#13;    &lt;/window&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
 <para>The other use is to iterate over versatile components.</para>
-<programlisting format="linespecific">&lt;window&gt;&#13;    &lt;zk forEach="${mycols}"&gt;&#13;</programlisting><sect3><title>if</title>
+<programlisting format="linespecific">&lt;window&gt;&#13;    &lt;zk forEach="${mycols}"&gt;&#13;        &lt;textbox if="${each.useText}"/&gt;&#13;        &lt;datebox if="${each.useDate}"/&gt;&#13;        &lt;combobox if="${each.useCombo}"/&gt;&#13;    &lt;/zk&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>if</title>
 <para>[Optional][Default: true]</para>
 <para>Specifies the condition to evaluate this element. This element is ignored if the value specified to this attribute is evaluated to false.</para></sect3><sect3><title>unless</title>
 <para>[Optional][Default: false]</para>
@@ -362,13 +373,13 @@
 <para>Furthermore, you can use the page directive to change the default scripting language other than Java.</para>
 </footnote>.</para>
 <para>The zscript element has two formats as shown above. The first format is used to embed the scripting codes directly in the page. The second format is used to reference an external file that contains the scripting codes.</para>
-<programlisting format="linespecific">&lt;zscript&gt;&#13;alert("Hi");&#13;</programlisting>
+<programlisting format="linespecific">&lt;zscript&gt;&#13;alert("Hi");&#13;&lt;/zscript&gt;&#13;&lt;zscript src="/codes/my.bs"/&gt;&#13;</programlisting>
 <para>Like other ZK elements, it is not a component but a special XML element.</para><sect3><title>src</title>
 <para>[Optional][Default: none]</para>
 <para>Specifies the URI of the file containing the scripting codes. If specified, the scripting codes will be loaded as if they are embedded directly.</para>
 <para>Note: the file shall contain the source codes in the selected scripting language. The encoding must be UTF-8. Don't specify a class file (aka. byte codes).</para>
 <para>Like other URL and URI, it has several characteristics as follows.</para>
-<orderedlist inheritnum="ignore" continuation="restarts">
+<itemizedlist>
 <listitem>
 <para>It is relative to the servlet context path (aka., the getContextPath method from the javax.servlet.http.HttpServletRequest interface). In other words, ZK will prefix it with the servlet context automatically.</para>
 </listitem>
@@ -380,21 +391,8 @@
 <listitem>
 <para>It accepts "*" for loading browser and Locale dependent style sheet.</para>
 </listitem>
-</orderedlist>
-<para>The algorithm to resolve "*" is as follows.</para>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>If there is one "*" is specified in an URL or URI such as /my*.css, then "*" will be replaced with a proper Locale depending on the preferences of user's browser.For example, user's preferences is de_DE, then ZK searches /my_de_DE.css, /my_de.css, and /my.css one-by-one from your Web site, until any of them is found. If none of them is found, /my.css is still used.</para>
-</listitem>
-<listitem>
-<para>If two or more "*" are specified in an URL or URI such as "/my*/lang*.css", then the first "*" will be replaced with "ie" for Internet Explorer and "moz" for other browsers<footnote>
-<para>In the future editions, we will use different codes for browsers other than IE and FF.</para>
-</footnote>. If the last "*" will be replaced with a proper Locale as described above.</para>
-</listitem>
-<listitem>
-<para>All other "*" are ignored.</para>
-</listitem>
-</orderedlist></sect3><sect3><title>language</title>
+</itemizedlist>
+<para>The algorithm to resolve "*" is as follows.</para></sect3><sect3><title>language</title>
 <para>[Optional][Default: the page's default scripting language][Allowed Values: Java | JavaScript | Ruby | Groovy]</para>
 <para>It specifies the scripting language which the scripting codes are written in.</para></sect3><sect3><title>deferred</title>
 <para>[Optional][Default: false]</para>
@@ -404,11 +402,17 @@
 <para>Specifies the condition to evaluate this element. This element is ignored if the value specified to this attribute is evaluated to false.</para></sect3><sect3><title>unless</title>
 <para>[Optional][Default: false]</para>
 <para>Specifies the condition not to evaluate this element. This element is ignored if the value specified to this attribute is evaluated to true.</para></sect3></sect2></sect1><sect1><title>ZK Attributes</title>
-<para>ZK attributes are used to control the associated element, other than initializing the data member.</para><sect2><title>The forEach Attribute</title>
+<para>ZK attributes are used to control the associated element, other than initializing the data member.</para><sect2><title>The apply Attribute</title>
+<para>apply="a-class-name"apply="class1, class2,..."apply="${EL_returns_a_class_or_a_collection_of_classes}"apply="${EL_returns_an_instance_or_a_collection_of_Composer_instances}"</para>
+<para>It specifies a class, a collection of classes that are used to initialize the component. The class must implement the org.zkoss.zk.util.Composer interface. And then, you can do the initialization in the doAfterCompose method, since it is called after the component and all its children are instantiated.</para>
+<programlisting format="linespecific">&lt;window apply="MyComposer"/&gt;&#13;</programlisting>
+<para>In addition, you specify a Composer instance, or a collection of Composer instances by use of EL expressions.</para>
+<para>Note: the EL expressions are, if specified, evaluated before the component is instantiated. So you cannot reference to the component. Moreover, the self variable references to the current page in the EL expressions specified in this attribute.</para>
+<para>If you want more control such as handling the exception, you can also implement the org.zkoss.zk.util.ComposerExt interface. </para></sect2><sect2><title>The forEach Attribute</title>
 <para>forEach="${an-EL-expr}"</para>
 <para>It specifies a collection of objects, such that the associated element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored, and the element is evaluated only once. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para>
 <para>For each iteration, two variables, each and forEachStatus, are assigned automatically to let developers control how to evaluate the associated element.</para>
-<programlisting format="linespecific">&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;classes = new String[] {"College", "Graduate"};&#13;grades = new Object[] {&#13;new String[] {"Best", "Better"}, new String[] {"A++", "A+", "A"}&#13;};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="200px" forEach="${classes}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="${each}"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem label="${forEachStatus.previous.each}: ${each}"&#13;forEach="${grades[forEachStatus.index]}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/hbox&gt;&#13;</programlisting>
 <para>
 <graphic fileref=""/>
 </para></sect2><sect2><title>The forEachBegin Attribute</title>
@@ -444,15 +448,7 @@
 <programlisting format="linespecific">&lt;element attr1=”${bean.property}”.../&gt;&#13;${map[entry]}&#13;&lt;another-element&gt;${3+counter} is ${empty map}&lt;/another-element&gt;&#13;</programlisting>
 <para>When an EL expression is used as an attribute value, it could return any kind of objects as long as the component accepts it. For example, the following expression will be evaluated to a Boolean object.</para>
 <programlisting format="linespecific">&lt;window if="${some &gt; 10}"&gt;&#13;</programlisting><sect2><title>Using EL Expressions</title>
-<para>EL expressions can be used </para>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>In static text</para>
-</listitem>
-<listitem>
-<para>In any attribute's value including XML elements and XML processing instructions.</para>
-</listitem>
-</orderedlist></sect2><sect2><title>Variables</title>
+<para>EL expressions can be used </para></sect2><sect2><title>Variables</title>
 <para/></sect2><sect2><title>Implicit Objects</title>
 <para/></sect2><sect2><title>Literals</title>
 <para/></sect2><sect2><title>Operators</title>
@@ -464,8 +460,7 @@
 <para>A map of application-scoped attributes (String, Object).</para></sect2><sect2><title>cookie - java.util.Map</title>
 <para>A map of cookies of the request. (String, Cookie).</para></sect2><sect2><title>header - java.util.Map</title>
 <para>A map of headers of the request. (String, String).</para></sect2><sect2><title>headerValues - java.util.Map</title>
-<para>A map of headers of the request. (String, String[]).</para></sect2><sect2><title>pageContext - javax.servlet.jsp.PageContext</title>
-<para>The page context.</para></sect2><sect2><title>pageScope - java.util.Map</title>
+<para>A map of headers of the request. (String, String[]).</para></sect2><sect2><title>pageScope - java.util.Map</title>
 <para>A map of page-scoped attributes (String, Object).</para>
 <para>Notice: the page concept is a bit different from JSP because a ZK page exists across requests.</para></sect2><sect2><title>param - java.util.Map</title>
 <para>A map of parameters of the request (String, String).</para></sect2><sect2><title>paramValues - java.util.Map</title>
@@ -474,23 +469,7 @@
 <para>A map of session-scoped attributes (String, Object).</para></sect2></sect1><sect1><title>ZK Implicit Objects</title>
 <para>All variables defined in ZK scripts (aka., zscript) are available for the EL expressions. Thus, all implicit objects described in the previous chapter are also the implicit objects for the EL expressions. You are free to use self, event, componentScope and others. Refer to the Implict Objects section in the ZK User Interface Markup Language chapter.</para></sect1></chapter>
 <chapter>
-<title>4. The XUL Components</title><sect1><title>Overview</title>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>All XUL components are packed in the org.zkoss.zul.html package.</para>
-</listitem>
-</orderedlist>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>The XML name space is http://www.zkoss.org/2005/zul</para>
-</listitem>
-<listitem>
-<para>The extensions include xul and zul.</para>
-</listitem>
-<listitem>
-<para>The component names are case-sensitive. They are all in lower-cases.</para>
-</listitem>
-</orderedlist><sect2 id="XulElement" xml:base="ch4/XulElement.xml"><title>XulElement</title>
+<title>4. The XUL Components</title><sect1><title>Overview</title><sect2 id="XulElement" xml:base="ch4/XulElement.xml"><title>XulElement</title>
 <para>The fundamental class for XUL elements.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.XulElement</code>
@@ -3058,7 +3037,7 @@
 <para/></sect3></sect2> <sect2 id="LayoutRegion" xml:base="ch4/LayoutRegion.xml"><title>LayoutRegion</title>
 <para>This class represents a region in a layout manager. </para><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zkex.zul.LayoutRegion</code>
+<code>org.zkoss.zulex.LayoutRegion</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -4369,7 +4348,7 @@
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zkex.zul.Borderlayout</code>
+<code>org.zkoss.zulex.Borderlayout</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>
 <link linkend="North">
@@ -4792,7 +4771,7 @@
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zkex.zul.Center</code>
+<code>org.zkoss.zulex.center</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -4927,7 +4906,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -7776,7 +7755,7 @@
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zkex.zul.East</code>
+<code>org.zkoss.zulex.east</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -7911,7 +7890,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -12611,7 +12590,7 @@
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&#13;</programlisting>
 <para/><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zkex.zul.North</code>
+<code>org.zkoss.zulex.north</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -12746,7 +12725,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -14195,7 +14174,7 @@
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zkex.zul.South</code>
+<code>org.zkoss.zulex.south</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
@@ -14331,7 +14310,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -19252,7 +19231,7 @@
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="25%" border="none" flex="true"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center border="none" flex="true"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="25%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="50%" border="none" flex="true"&gt;&#13;                &lt;label value="Here is a non-border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/north&gt;&#13;    &lt;center border="0"&gt;&#13;        &lt;borderlayout&gt;&#13;            &lt;west size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#E6D92C"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/west&gt;&#13;            &lt;center&gt;&#13;                &lt;label value="Here is a border"&#13;                    style="color:gray;font-size:30px" /&gt;&#13;            &lt;/center&gt;&#13;            &lt;east size="30%" flex="true" border="0"&gt;&#13;                &lt;div style="background:#B8D335"&gt;&#13;                    &lt;label value="30%"&#13;                        style="color:white;font-size:50px" /&gt;&#13;                &lt;/div&gt;&#13;            &lt;/east&gt;&#13;        &lt;/borderlayout&gt;&#13;    &lt;/center&gt;&#13;&lt;/borderlayout&#13;</programlisting>
 <para/><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zkex.zul.West</code>
+<code>org.zkoss.zulex.west</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE</para></sect3><sect3><title>Supported Events </title> <informaltable frame="all">
 <tgroup cols="2">
@@ -19387,7 +19366,7 @@
 <row>
 <entry>
 <para>
-<link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
+<link linkend="LayoutRegion">org.zkoss.zulex.LayoutRegion </link>
 </para>
 </entry>
 </row>
@@ -22543,7 +22522,276 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/></sect3><sect3><title/></sect3></sect2></sect1></chapter>
-
+<chapter>
+<title>5. The XHTML Components</title><sect1><title>Overview</title><sect2><title>URL and encodeURL</title>
+<para>A XHTML component generates attributes directly to native HTML tags. It means, unlike XUL, it doesn't prefix the servlet context path to attributes for specifying URL. For example, the following codes don't work (unless the servlet context is "").</para>
+<programlisting format="linespecific">&lt;img href="/my/good.png"/&gt;&#13;</programlisting>
+<para>Rather, you shall use the encodeURL function in EL expressions as follows.</para>
+<programlisting format="linespecific">&lt;?taglib uri="http://www.zkoss.org/dsp/web/core.dsp.tld" prefix="p"?&gt;&#13;...&#13;&lt;img href="${p:encodeURL('/my/good.png')}"/&gt;&#13;</programlisting>
+<para>In Java, you shall use the encodeURL method from org.zkoss.zk.ui.Execution.</para>
+<programlisting format="linespecific">&lt;img id="another"/&gt;&#13;&lt;zscript&gt;&#13;another.setDynamicAttribute("href",&#13;Executions.getCurrent().encodeURL("/my/good.png"));&#13;</programlisting>
+<para>&lt;/zscript&gt;</para>
+<para>Notice that XUL components and all ZK features that accept an URL will invoke the encodeURL method automatically<footnote>
+<para>The reason not to handle XHTML compoents is that we don't know which attribute requires URL.</para>
+</footnote>.</para></sect2><sect2><title>AbstractTag</title>
+<para>All XHTML components are derived from the org.zkoss.zhtml.impl.AbstractTag class.</para>
+<para>A XHTML component is a thin wrapper that encapsulates a native HTML tag. It is different from a XUL component or other none-native component in several ways.</para></sect2><sect2><title>Raw</title>
+<para>A special component, org.zkoss.zhtml.Raw, used to represent any component that is not declared in the following section (i.e., not in lang.xml). In other words, if any unrecognized component name is found, an instance of Raw is created, such that a proper HTML tag will be generated correspondingly. In other words, any component name is legal (as long as the targeted browser supports).</para>
+<programlisting format="linespecific">&lt;marquee align="top"&gt;...&lt;/marquee&gt;&#13;</programlisting>
+<para>It is equivalent to</para>
+<para>new Raw().setDynamicAttribute("align", "top");</para></sect2></sect1><sect1><title>Components</title><sect2><title>A</title>
+<para/></sect2><sect2><title>Abbr</title>
+<para/></sect2><sect2><title>Acronym</title>
+<para/></sect2><sect2><title>Address</title>
+<para/></sect2><sect2><title>Area</title>
+<para/></sect2><sect2><title>B</title>
+<para/></sect2><sect2><title>Base</title>
+<para/></sect2><sect2><title>Big</title>
+<para/></sect2><sect2><title>Blockquote</title>
+<para/></sect2><sect2><title>Body</title>
+<para/></sect2><sect2><title>Br</title>
+<para/></sect2><sect2><title>Button</title>
+<para/></sect2><sect2><title>Caption</title>
+<para/></sect2><sect2><title>Cite</title>
+<para/></sect2><sect2><title>Code</title>
+<para/></sect2><sect2><title>Collection</title>
+<para/></sect2><sect2><title>Colgroup</title>
+<para/></sect2><sect2><title>Dd</title>
+<para/></sect2><sect2><title>Del</title>
+<para/></sect2><sect2><title>Dfn</title>
+<para/></sect2><sect2><title>Dir</title>
+<para/></sect2><sect2><title>Div</title>
+<para/></sect2><sect2><title>Dl</title>
+<para/></sect2><sect2><title>Dt</title>
+<para/></sect2><sect2><title>Em</title>
+<para/></sect2><sect2><title>Embed</title>
+<para/></sect2><sect2><title>Fieldset</title>
+<para/></sect2><sect2><title>Font</title>
+<para/></sect2><sect2><title>Form</title>
+<para/></sect2><sect2><title>H1</title>
+<para/></sect2><sect2><title>H2</title>
+<para/></sect2><sect2><title>H3</title>
+<para/></sect2><sect2><title>H4</title>
+<para/></sect2><sect2><title>Head</title>
+<para/></sect2><sect2><title>Hr</title>
+<para/></sect2><sect2><title>Html</title>
+<para/></sect2><sect2><title>I</title>
+<para/></sect2><sect2><title>Iframe</title>
+<para/></sect2><sect2><title>Img</title>
+<para/></sect2><sect2><title>Input</title>
+<para/></sect2><sect2><title>Ins</title>
+<para/></sect2><sect2><title>Isindex</title>
+<para/></sect2><sect2><title>Kbd</title>
+<para/></sect2><sect2><title>Label</title>
+<para/></sect2><sect2><title>Legend</title>
+<para/></sect2><sect2><title>Li</title>
+<para/></sect2><sect2><title>Link</title>
+<para/></sect2><sect2><title>Map</title>
+<para/></sect2><sect2 id="Menu" xml:base="ch4/Menu.xml"><title>Menu</title>
+<para>
+<code>An element, much like a button, that is placed on a menu bar. When the user clicks the menu element, the child </code>
+<code>Menupopup</code>
+<code> of the menu will be displayed. This element is also used to create submenus of </code>
+<code>Menupopup</code>
+<code>.</code>
+<code> </code>
+</para>
+<para>
+<graphic fileref="images/Menu.png"/>
+<code/>
+</para>
+<programlisting>&lt;menu label="File"&gt;&#13;    &lt;menupopup&gt;&#13;        &lt;menuitem label="New" onClick="alert(self.label)"/&gt;&#13;        &lt;menuitem label="Open" onClick="alert(self.label)"/&gt;&#13;        &lt;menuitem label="Save" onClick="alert(self.label)"/&gt;&#13;        &lt;menuseparator/&gt;&#13;        &lt;menuitem label="Exit" onClick="alert(self.label)"/&gt;&#13;    &lt;/menupopup&gt;&#13;&lt;/menu&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Menu</code> </para></sect3><sect3><title>Supported Child Components</title>
+<para>*org.zkoss.zul.Menupopup</para></sect3><sect3><title>Supported Events</title>
+<para>*NONE</para></sect3><sect3><title>Properties</title>
+<para>*NONE</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Values</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getMenupopup()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the <code>Menupopup</code> it owns, or null if not available.</para>
+</entry>
+<entry>
+<para>
+<code>Object</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>isTopmost()</code>
+</para>
+</entry>
+<entry>
+<para>Returns whether this is an top-level menu, i.e., not owning by another <code>Menupopup</code>.</para>
+<para>Values: <code>true | false</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>True</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOutAttrs()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore) </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>Inherited <informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LabelImageElement">
+<code>org.zkoss.zul.impl.LabelImageElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="LabelElement">
+<code>org.zkoss.zul.impl.LabelElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.impl.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+<code> </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title>Meta</title>
+<para/></sect2><sect2><title>Nobr</title>
+<para/></sect2><sect2><title>Object</title>
+<para/></sect2><sect2><title>Ol</title>
+<para/></sect2><sect2><title>Optgroup</title>
+<para/></sect2><sect2><title>Option</title>
+<para/></sect2><sect2><title>P</title>
+<para/></sect2><sect2><title>Pre</title>
+<para/></sect2><sect2><title>Q</title>
+<para/></sect2><sect2><title>S</title>
+<para/></sect2><sect2><title>Sam</title>
+<para/></sect2><sect2><title>Script</title>
+<para/></sect2><sect2><title>Select</title>
+<para/></sect2><sect2><title>Small</title>
+<para/></sect2><sect2><title>Span</title>
+<para/></sect2><sect2><title>Strong</title>
+<para/></sect2><sect2><title>Style</title>
+<para/></sect2><sect2><title>Sub</title>
+<para/></sect2><sect2><title>Sup</title>
+<para/></sect2><sect2><title>Table</title>
+<para/></sect2><sect2><title>Tbody</title>
+<para/></sect2><sect2><title>Td</title>
+<para/></sect2><sect2><title>Text</title>
+<para/></sect2><sect2><title>Textarea</title>
+<para/></sect2><sect2><title>Tfoot</title>
+<para/></sect2><sect2><title>Th</title>
+<para/></sect2><sect2><title>Thead</title>
+<para/></sect2><sect2><title>Title</title>
+<para/></sect2><sect2><title>Tr</title>
+<para/></sect2><sect2><title>Tt</title>
+<para/></sect2><sect2><title>Ul</title>
+<para/></sect2><sect2><title>Var</title>
+<para/></sect2></sect1><sect1><title>Supplement Classes</title><sect2><title>Fileupload</title>
+<para/></sect2><sect2><title>Messagebox</title></sect2></sect1></chapter>
 <chapter>
 <title>Appendix A. WEB-INF/web.xml</title>
 <para>To add ZK a Web application, you have to add servlets, listeners and a optional filter to web.xml.</para><sect1><title>ZK Loader</title>
@@ -22646,7 +22894,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect2><sect2><title>How to Specify in web.xml</title>
-<programlisting format="linespecific">&lt;filter&gt;&#13;    &lt;filter-name&gt;zkFilter&lt;/filter-name&gt;&#13;</programlisting></sect2></sect1><sect1><title>DSP Loader</title>
+<programlisting format="linespecific">&lt;filter&gt;&#13;    &lt;filter-name&gt;zkFilter&lt;/filter-name&gt;&#13;    &lt;filter-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutFilter&lt;/filter-class&gt;&#13;&lt;/filter&gt;&#13;</programlisting></sect2></sect1><sect1><title>DSP Loader</title>
 <para>[Optional] Class: org.zkoss.web.servlet.dsp.InterpreterServlet</para>
 <para>InterpreterServlet is a servlet used to process the DSP files. DSP is a JSP-like template technology. It takes the same syntax as that of JSP. Unlike JSP, DSP is interpreted at the run time, so it is easy to deploy DSP pages. No Java compiler is required in your run-time environment. In addition, you could distribute DSP pages in jar files. This is the way ZK is distributed.</para>
 <para>However, you cannot embed Java codes in DSP pages. Actions of DSP, though extensible through TLD files, are different from JSP tags.</para><sect2><title>The Initial Parameters</title>
@@ -22691,7 +22939,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect2><sect2><title>How to Specify in web.xml</title>
-<programlisting format="linespecific">&lt;servlet&gt;&#13;    &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;&#13;</programlisting></sect2></sect1><sect1><title>Sample of web.xml</title>
+<programlisting format="linespecific">&lt;servlet&gt;&#13;    &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;&#13;    &lt;servlet-class&gt;org.zkoss.web.servlet.dsp.InterpreterServlet&lt;/servlet-class&gt;&#13;&lt;/servlet&gt;&#13;</programlisting></sect2></sect1><sect1><title>Sample of web.xml</title>
 <programlisting format="linespecific">&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt; &#13;&#13;    &lt;!-- //// --&gt;&#13;    &lt;!-- ZK --&gt;&#13;    &lt;listener&gt;&#13;        &lt;description&gt;Used to cleanup when a session is destroyed&lt;/description&gt;&#13;        &lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt;&#13;        &lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;&#13;    &lt;/listener&gt;&#13;    &lt;servlet&gt;&#13;        &lt;description&gt;ZK loader for evaluating ZUML pages&lt;/description&gt;&#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;&#13;        &lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;&#13;&#13;        &lt;!-- Must. Specifies URI of the update engine (DHtmlUpdateServlet).&#13;        It must be the same as &lt;url-pattern&gt; for the update engine.&#13;        --&gt;&#13;        &lt;init-param&gt;&#13;            &lt;param-name&gt;update-uri&lt;/param-name&gt;&#13;            &lt;param-value&gt;/zkau&lt;/param-value&gt;&#13;        &lt;/init-param&gt;&#13;        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;&lt;!-- MUST --&gt;&#13;    &lt;/servlet&gt;&#13;    &lt;servlet-mapping&gt;&#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;&#13;        &lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;&#13;    &lt;/servlet-mapping&gt;&#13;    &lt;servlet-mapping&gt;&#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;&#13;        &lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;&#13;    &lt;/servlet-mapping&gt;&#13;    &lt;servlet&gt;&#13;        &lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;&#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;&#13;        &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;&#13;    &lt;/servlet&gt;&#13;    &lt;servlet-mapping&gt;&#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;&#13;        &lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;&#13;    &lt;/servlet-mapping&gt;&#13;    &lt;!-- //// --&gt;&#13;&#13;    &lt;!-- MIME mapping --&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;gif&lt;/extension&gt;&#13;        &lt;mime-type&gt;image/gif&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;html&lt;/extension&gt;&#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;htm&lt;/extension&gt;&#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;                            &lt;mime-mapping&gt;&lt;extension&gt;jad&lt;/extension&gt;&lt;mime-type&gt;text/vnd.sun.j2me.app-descriptor&lt;/mime-type&gt;&lt;/mime-mapping&gt;&lt;mime-mapping&gt;&#13;        &lt;extension&gt;jpeg&lt;/extension&gt;&#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;jpg&lt;/extension&gt;&#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;js&lt;/extension&gt;&#13;        &lt;mime-type&gt;application/x-javascript&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;png&lt;/extension&gt;&#13;        &lt;mime-type&gt;image/png&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;txt&lt;/extension&gt;&#13;        &lt;mime-type&gt;text/plain&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;xml&lt;/extension&gt;&#13;        &lt;mime-type&gt;text/xml&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;zhtml&lt;/extension&gt;&#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;    &lt;mime-mapping&gt;&#13;        &lt;extension&gt;zul&lt;/extension&gt;&#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;&#13;    &lt;/mime-mapping&gt;&#13;&#13;    &lt;welcome-file-list&gt;&#13;        &lt;welcome-file&gt;index.zul&lt;/welcome-file&gt;&#13;        &lt;welcome-file&gt;index.zhtml&lt;/welcome-file&gt;&#13;        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;&#13;        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;&#13;    &lt;/welcome-file-list&gt;&#13;&lt;/web-app&gt;&#13;</programlisting></sect1></chapter>
 <chapter>
 <title>Appendix B. WEB-INF/zk.xml</title>
@@ -22701,14 +22949,14 @@
 <para>The class name specified in the richlet-class element must implement the org.zkoss.zk.ui.Richlet interface. The name and value specified in the init-param element can be retrieved when the init method of org.zkoss.zk.ui.Richlet is called.</para>
 <programlisting format="linespecific">&lt;richlet&gt;&#13;                                &lt;richlet-name&gt;Test&lt;/richlet-name&gt;&lt;richlet-class&gt;org.zkoss.zkdemo.TestRichlet&lt;/richlet-class&gt;&lt;init-param&gt;&lt;param-name&gt;any&lt;/param-name&gt;&lt;param-value&gt;any&lt;/param-value&gt;&lt;/init-param&gt;&lt;/richlet&gt;&#13;</programlisting>
 <para>Once declaring a richlet, you can map it to any number of URL by use of richlet-mapping as depicted below.</para>
-<programlisting format="linespecific">&lt;richlet-mapping&gt;&#13;    &lt;richlet-name&gt;Test&lt;/richlet-name&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;richlet-mapping&gt;&#13;    &lt;richlet-name&gt;Test&lt;/richlet-name&gt;&#13;    &lt;url-pattern&gt;/test&lt;/url-pattern&gt;&#13;&lt;/richlet-mapping&gt;&#13;&lt;richlet-mapping&gt;&#13;    &lt;richlet-name&gt;Test&lt;/richlet-name&gt;&#13;    &lt;url-pattern&gt;/some/more/*&lt;/url-pattern&gt;&#13;&lt;/richlet-mapping&gt;&#13;</programlisting>
 <para>The URL specified in the url-pattern element must start with /. If the URI ends with /*, then it is matched to all request with the same prefix. To retrieve the real request, you can check the value returned by the getRequestPath method of the current page.</para>
 <programlisting format="linespecific">public void service(Page page) {&#13;</programlisting>
 <para>if ("/some/more/hi".equals(page.getRequestPath()) {</para>
 <para>...</para>
 <para>}}</para></sect2><sect2><title>The listener Element</title>
 <para>To declare a listener, you have to add the listener element to zk.xml. You could specify any number of listener elements. Each of them could have two child elements, description and listener-class, where description is optional.</para>
-<programlisting format="linespecific">&lt;zk&gt;&#13;    &lt;listener&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;zk&gt;&#13;    &lt;listener&gt;&#13;        &lt;listener-class&gt;my.MyInit&lt;/listener-class&gt;&#13;&lt;/listener&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
 <para>The type of a listener depends on what interface it implements. For example, if a listener implements the org.zkoss.zk.ui.event.EventThreadInit interface, then it is used to listen when an event processing thread is initialized. A listener could implement multiple interfaces and it will be used whenever the corresponding interface is about to call.</para><sect3><title>The org.zkoss.zk.ui.event.EventThreadInit Interface</title>
 <para>It is implemented by a listener class that will be used to initialize an event processing thread, before an event is dispatched to it for processing.</para>
 <para>If a listener implements this interface, an instance is created, and then the prepare method is called in the main thread (aka., the servlet thread), before processing an event. Then, the init method is called in the event processing thread.</para>
@@ -22756,35 +23004,22 @@
 <para>It is implemented by a listener class that will be used to intercept the retrieving of ZUML pages with the associated URI. Once registered, an instance of the specified class is created, and then the request method is invoked, each time the application wants to retrieve the page definition of a page based on an URI.</para>
 <para>A typical use of this interface is to ensure the current user has the authority to access the certain URI.</para>
 <para>You can register any number of URI interceptors (URIInterceptor).</para>
-<para>Note:</para>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>Unlike ExecutionInit and many other listeners, an instance of the registered URIInterceptor is created at the time of registration, and then it is shared by the whole application. Thus, you have to make sure it can be accessed concurrently.</para>
-</listitem>
-</orderedlist></sect3><sect3><title>The org.zkoss.zk.ui.util.RequestInterceptor interface</title>
+<para>Note:</para></sect3><sect3><title>The org.zkoss.zk.ui.util.RequestInterceptor interface</title>
 <para>It is implemented by a listener class that will be used to intercept each request made to ZK Loader and ZK Update Engine. Once registered, an instance of the specified class is created, and then the request method is invoked, each time a request is received by ZK Loader or ZK Update Engine.</para>
 <para>A typical use of this interface is to determine the locale and/or time zone of the request. Refer to the Developer's Guide for more information.</para>
 <para>You can register any number of the request interceptors (RequestInterceptor).</para>
-<para>Note:</para>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>Unlike ExecutionInit and many other listeners, an instance of the registered RequestInterceptor is created at the time of registration, and then it is shared by the whole application. Thus, you have to make sure it can be accessed concurrently.</para>
-</listitem>
-<listitem>
-<para>The request parameters will be parsed with the proper locale and character encoding, after the request method is called. It is not recommended to call the getParameter or getParameterValues methods (of javax.servlet.ServletRequest) in this method.</para>
-</listitem>
-</orderedlist></sect3><sect3><title>The org.zkoss.zk.ui.util.PerformanceMeter interface</title>
+<para>Note:</para></sect3><sect3><title>The org.zkoss.zk.ui.util.PerformanceMeter interface</title>
 <para>It is implemented by a listener that will measure the performance. Unlike other listeners, there is at most one performance meter listener for each Web application. If you like, you can chain them together manually.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.Monitor interface</title>
 <para>It is implemented by a listener that will be used to monitor the statuses of ZK. Unlike other listener, there is at most one monitor listener for each Web application. If you like, you can chain them together manually.</para>
 <para>ZK provides an implementation named org.zkoss.zk.ui.util.Statistic, which accumulates the statistic data in the memory. It is a good starting point to understand the load of your ZK application.</para></sect3></sect2><sect2><title>The log Element</title>
 <para>By default, ZK's logger depends on how the Web server is configured. However, you could configure ZK to load and monitor i3-log.conf as described in the Logger section of the Beyond ZK chapter.</para>
-<programlisting format="linespecific">&lt;log&gt;&#13;    &lt;log-base&gt;org.zkoss&lt;/log-base&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;log&gt;&#13;    &lt;log-base&gt;org.zkoss&lt;/log-base&gt;&#13;&lt;/log&gt;&#13;</programlisting>
 <para>If you want to use the same logging mechanism in your application, you could configure ZK to handle all loggers as follows.</para>
 <programlisting format="linespecific">&lt;log&gt;&#13;    &lt;log-base&gt;&lt;/log-base&gt;&#13;</programlisting>
 <para>&lt;/log&gt;</para>
 <para>where an empty string means all packages, not just org.zkoss in the previous example.</para></sect2><sect2><title>The client-config Element</title>
 <para>It is used to customize the behavior of the ZK Client Engine. You might have multiple client-config elements in one zk.xml.</para>
-<programlisting format="linespecific">&lt;client-config&gt;&#13;    &lt;disable-behind-modal&gt;true&lt;/disable-behind-modal&gt;&#13;</programlisting><sect3><title>The disable-behind-modal Element</title>
+<programlisting format="linespecific">&lt;client-config&gt;&#13;    &lt;disable-behind-modal&gt;true&lt;/disable-behind-modal&gt;&#13;    &lt;error-reload&gt;&#13;        &lt;error-code&gt;301&lt;/error-code&gt;&#13;        &lt;reload-uri&gt;&lt;/reload-uri&gt;&#13;    &lt;/error-reload&gt;&#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;&#13;    &lt;processing-prompt-delay&gt;900&lt;/processing-prompt-delay&gt;&#13;    &lt;tooltip-delay&gt;800&lt;/tooltip-delay&gt;&#13;&lt;/client-config&gt;&#13;</programlisting><sect3><title>The disable-behind-modal Element</title>
 <para>[Default: true]</para>
 <para>When a modal window is opened, all components that don't belong to the modal window are disabled. However, if the page is very big, the performance may not be acceptable (depending on the JavaScript interpreter of the browsers). If opening up a modal window is too slow for you, you can turn off this feature. The side effect is that a user may use TAB to move the focus to a component that shall be disabled.</para></sect3><sect3><title>The error-reload Element</title>
 <para>[Default: reload if 301, 402 or 403; show an error message, otherwise]</para>
@@ -22808,7 +23043,7 @@
 <para>[Default: 800]</para>
 <para>It specifies the time, in milliseconds, to wait before popping up the tooltip when the user moves the mouse pointer over particular UI components.</para></sect3></sect2><sect2><title>The desktop-config Element</title>
 <para>It is used to customize how ZK handles desktops. You might have multiple desktop-config elements in one zk.xml.</para>
-<programlisting format="linespecific">&lt;desktop-config&gt;&#13;    &lt;desktop-timeout&gt;3600&lt;/desktop-timeout&gt;&#13;</programlisting><sect3><title>The desktop-timeout Element</title>
+<programlisting format="linespecific">&lt;desktop-config&gt;&#13;    &lt;desktop-timeout&gt;3600&lt;/desktop-timeout&gt;&#13;    &lt;disasble-default-theme&gt;xul/html&lt;/disable-default-theme&gt;&#13;    &lt;file-check-period&gt;5&lt;/file-check-period&gt;&#13;    &lt;theme-uri&gt;/my/blue**.css&lt;/theme-uri&gt;&#13;&lt;/desktop-config&gt;&#13;</programlisting><sect3><title>The desktop-timeout Element</title>
 <para>[Default: 3600]</para>
 <para>It specifies the time, in seconds, between client requests before a desktop is invalidated. A negative time indicates the desktop should never timeout.</para></sect3><sect3><title>The disable-default-theme Element</title>
 <para>[Default: none]</para>
@@ -22823,39 +23058,15 @@
 <para>Like other URI, it accepts "*" for loading browser and Locale dependent style sheet. Refer to the Browser and Locale Dependent URI section in the Internationalization chapter for details.</para>
 <para>You can specify any number of them-uri as follows.</para>
 <programlisting format="linespecific">&lt;desktop-config&gt;&#13;    &lt;theme-uri&gt;/my/blue**.css&lt;/theme-uri&gt;&#13;    &lt;theme-uri&gt;/my/second.css&lt;/theme-uri&gt;&#13;&lt;/desktop-config&gt;&#13;</programlisting>
-<para>Notice:</para>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>All style sheets defined in lang.xml and lang-addon.xml are loaded, no matter this parameter is defined or not. It is convenient for developers to override certain styles.</para>
-</listitem>
-<listitem>
-<para>Each JAR could specify a lang-addon.xml file (under the metainfo/zk directory), so you could specify style sheets there if you have more than one style sheets.</para>
-</listitem>
-<listitem>
-<para>You could specify extra CSS files for individual ZUML pages by use of the style component. Refer to the ZUML with the XUL Component Set chapter.</para>
-</listitem>
-</orderedlist></sect3></sect2><sect2><title>The xel-config Element</title>
+<para>Notice:</para></sect3></sect2><sect2><title>The xel-config Element</title>
 <para>The allowed child elements include evaluator-class. At most one xel-config element is allowed for each zk.xml.</para>
-<programlisting format="linespecific">&lt;xel-config&gt;&#13;    &lt;evaluator-class&gt;my.MyExpressionFactory&lt;/evaluator-class&gt;&#13;</programlisting><sect3><title>The evaluator-class Element</title>
+<programlisting format="linespecific">&lt;xel-config&gt;&#13;    &lt;evaluator-class&gt;my.MyExpressionFactory&lt;/evaluator-class&gt;&#13;&lt;/xel-config&gt;&#13;</programlisting><sect3><title>The evaluator-class Element</title>
 <para>[Default: org.zkoss.xel.el.ELFactory]</para>
 <para>It specifies the class used to evaluate XEL (Extensible Expression Language) expressions. The specified class must implement the org.zkoss.xel.ExpressionFactory interface.</para>
 <para>If not specified, ZK uses the XEL implementation from ZK Commons EL (zcommons-el.jar), which is a performance-enhanced version of Apache Commons EL.</para>
-<para>If your Web server uses another implementation, you can do one of the following:</para>
-<orderedlist inheritnum="ignore" continuation="restarts">
-<listitem>
-<para>If you prefer the implementation based on Apache JSP 2.1 EL, you have to specify the org.zkoss.xel.el21.ApacheELFactory class. If the Web server doesn't support Apache JSP 2.1 EL, you have to copy el-api.jar (JSP 2.1 API<footnote>
-<para>Required only if you are using the Web server that supports only JSP 2.0.</para>
-</footnote>) and jasper-el.jar (Apache's implementation) to your Web application.</para>
-</listitem>
-<listitem>
-<para>If you prefer the implementation based on Apache Commons EL (JSP 2.0 EL), you have to specify the or.zkoss.xel.el.ApacheELFactory class. If the Web server doesn't support Apache Commons EL, you have to copy commons-el.jar to your Web application.</para>
-</listitem>
-<listitem>
-<para>If you want a different implementation, you can extend from org.zkoss.xel.el.ELFactory or org.zkoss.xel.el21.ApacheELFactory by simply overriding the newExpressionEvaluator method. Of course, if you prefer, you can implement the org.zkoss.xel.ExpressionFactory interface directly.</para>
-</listitem>
-</orderedlist></sect3></sect2><sect2><title>The language-config Element</title>
+<para>If your Web server uses another implementation, you can do one of the following:</para></sect3></sect2><sect2><title>The language-config Element</title>
 <para>The allowed child elements include addon-uri. You might have multiple language-config elements in one zk.xml.</para>
-<programlisting format="linespecific">&lt;language-config&gt;&#13;    &lt;addon-uri&gt;/WEB-INF/lang-addon.xml&lt;/addon-uri&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;language-config&gt;&#13;    &lt;addon-uri&gt;/WEB-INF/lang-addon.xml&lt;/addon-uri&gt;&#13;    &lt;addon-uri&gt;/WEB-INF/lang-addon2.xml&lt;/addon-uri&gt;&#13;&lt;/language-config&gt;&#13;</programlisting>
 <para>Note: Unlike most other configurations defined in WEB-INF/zk.xml, the definitions defined in language addons are applied to all Web applications sharing the same zk.jar.</para>
 <para>In other words, the definitions in language addons are visible to all Web applications sharing the same zk.jar. Furthermore, it may cause errors in another Web application, if the classes or resources are available only in the Web application defining this.</para>
 <para>Thus, if it is an issue, just put zk.jar and relevant ZK libraries under the WEB-INF/lib directory.</para><sect3><title>The addon-uri Element</title>
@@ -22863,7 +23074,7 @@
 <para>It specifies the URI of language add-on definitions. To specify more than one URIs, you have to define them with multiple addon-uri.</para>
 <para>A language addon is used to add new components and override the definitions of existent components. Refer to the Component Development Guide.</para></sect3></sect2><sect2><title>The session-config Element</title>
 <para>The allowed child elements include session-timeout and max-desktops-per-session. You might have multiple session-config elements in one zk.xml.</para>
-<programlisting format="linespecific">&lt;session-config&gt;&#13;    &lt;session-timeout&gt;1800&lt;/session-timeout&gt;&#13;</programlisting><sect3><title>The session-timeout Element</title>
+<programlisting format="linespecific">&lt;session-config&gt;&#13;    &lt;session-timeout&gt;1800&lt;/session-timeout&gt;&#13;    &lt;timer-keep-alive&gt;false&lt;/timer-keep-alive&gt;&#13;    &lt;max-desktops-per-session&gt;10&lt;/max-desktops-per-session&gt;&#13;&lt;/session-config&gt;&#13;</programlisting><sect3><title>The session-timeout Element</title>
 <para>[Default: 0 (depending on the Web server)]</para>
 <para>It specifies the time, in seconds, between client requests before a session is invalidated. A negative time indicates the session should never timeout. The default zero means to use the system default (which is usually specified in web.xml).</para></sect3><sect3><title>The timer-keep-alive Element</title>
 <para>[Default: false]</para>
@@ -22875,7 +23086,7 @@
 <para>It specifies the maximal allowed number of desktops per session. A desktop represents a HTML page for a browser. In other words, this number controls the number of concurrent browser windows allowed per session.</para>
 <para>Note: If you use org.zkoss.zk.ui.impl.GlobalDesktopCacheProvider, then you have to make this number much larger since it means the maximal allowed number of deskoper per system.</para></sect3></sect2><sect2><title>The system-config Element</title>
 <para>You might have multiple system-config elements in one zk.xml.</para>
-<programlisting format="linespecific">&lt;system-config&gt;&#13;    &lt;cache-provider-class&gt;my.CacheProvider&lt;/cache-provider-class&gt;&#13;</programlisting><sect3><title>The cache-provider-class Element</title>
+<programlisting format="linespecific">&lt;system-config&gt;&#13;    &lt;cache-provider-class&gt;my.CacheProvider&lt;/cache-provider-class&gt;&#13;    &lt;disable-event-thread/&gt;&#13;    &lt;engine-class&gt;my.UiEngine&lt;/engine-class&gt;&#13;&lt;failover-manager-class&gt;my.FailoverManager&lt;/failover-manager-class&gt;&#13;    &lt;id-generator-class&gt;my.IdGenerator&lt;/id-generator-class&gt;&#13;    &lt;max-spare-threads&gt;100&lt;/max-spare-threads&gt;&#13;    &lt;max-suspended-threads&gt;100&lt;/max-suspended-threads&gt;&#13;&lt;max-upload-size&gt;5120&lt;/max-upload-size&gt;&#13;    &lt;max-process-time&gt;3000&lt;/max-process-time&gt;&#13;    &lt;response-charset&gt;UTF-8&lt;/response-charset&gt;&#13;    &lt;upload-charset&gt;UTF-8&lt;/upload-charset&gt;&#13;    &lt;upload-charset-finder-class&gt;my.CharsetFinder&lt;/upload-charset-finder-class&gt;&#13;    &lt;ui-factory-class&gt;my.UiFactory&lt;/ui-factory-class&gt;&#13;    &lt;web-app-class&gt;my.WebApp&lt;/web-app-class&gt;&#13;&lt;/system-config&gt;&#13;</programlisting><sect3><title>The cache-provider-class Element</title>
 <para>[Default: org.zkoss.zk.ui.impl.SessionDesktopCacheProvider]</para>
 <para>It specifies which class used to implement the desktop cache. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.DesktopCacheProvider interface.</para>
 <para>One instance of the cache provider is created and shared for each Web application, so you have to synchronize the access properly.</para>
@@ -22939,9 +23150,7 @@
 <para>[Default: UTF-8]</para>
 <para>It specifies the charset for the rendering result of a ZUML page. In other words, it is used to load the ZUML page by the ZK Loader (i.e., DHtmlLayoutServlet).</para>
 <para>If you want to use the container's default value, you can specify an empty string as follows.</para>
-<programlisting format="linespecific">&lt;response-charset&gt;&lt;/response-charset&gt;&#13;</programlisting></sect3><sect3><title>The server-push-class Element</title>
-<para>[Default: org.zkoss.zk.ui.impl.PollingServerPush]</para>
-<para>It specifies which class used to implement the server-push feature. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.ServerPush interface.</para></sect3><sect3><title>The upload-charset Element</title>
+<programlisting format="linespecific">&lt;response-charset&gt;&lt;/response-charset&gt;&#13;</programlisting></sect3><sect3><title>The upload-charset Element</title>
 <para>[Default: UTF-8]</para>
 <para>It specifies the charset (aka., encoding) for the uploaded text files if no charset is specified with the content type.</para>
 <para>If the uploaded file is binary, there is no encoding issue at all.</para>
@@ -22989,7 +23198,7 @@
 <para>[Default: org.zkoss.zk.ui.http.SimpleWebApp]</para>
 <para>It specifies which class used to implement the Web application. The class must have a default constructor (without any argument), and implement both the org.zkoss.zk.ui.WebApp and org.zkoss.zk.ui.sys.WebAppCtrl interfaces. Instead of implementing from scratch, you can extend it from the org.zkoss.zk.ui.impl.AbstractWebApp or org.zkoss.zk.ui.http.SimpleWebApp classes.</para></sect3></sect2><sect2><title>The zscript-config Element</title>
 <para>It configures the interpreters to interpret the zscript codes. The allowed child element is language-name and interpreter-class. You might have multiple zscript-config elements in one zk.xml.</para>
-<programlisting format="linespecific">&lt;zscript-config&gt;&#13;    &lt;language-name&gt;Java&lt;/language-name&gt;&lt;!-- case insensitive --!&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;zscript-config&gt;&#13;    &lt;language-name&gt;Java&lt;/language-name&gt;&lt;!-- case insensitive --!&gt;&#13;    &lt;interpreter-class&gt;my.MySuperJavaInterpreter&lt;/interpreter-class&gt;&#13;&lt;/zscript-config&gt;&#13;</programlisting>
 <para>Note: Unlike most other configurations defined in WEB-INF/zk.xml, the definitions defined in zscript-config are applied to all Web applications sharing the same zk.jar.</para>
 <para>In other words, the scripting language defined here are visible to all Web applications sharing the same zk.jar. Furthermore, it may cause errors in another Web application, if the classes or resources are available only in the Web application defining this.</para>
 <para>Thus, if it is an issue, just put zk.jar and relevant ZK libraries under the WEB-INF/lib directory.</para><sect3><title>The language-name Element</title>
@@ -23001,19 +23210,25 @@
 <para>MIL is a ZK markup language used to communicate with the mobile devices.</para>
 </footnote>. It is used to create an instance returned by the getDevice method of the Desktop intereface.</para>
 <para>The allowed child element is device-type , device-class, timeout-uri, and unavailable-message. You might have multiple device-config elements in one zk.xml.</para>
-<programlisting format="linespecific">        &lt;device-config&gt;&lt;device-type&gt;ajax&lt;/device-type&gt;&lt;device-class&gt;my.MyAjaxDevice&lt;/device-class&gt;&#13;    &lt;timeout-uri&gt;/my-timeout.zul&lt;/timeout-uri&gt;&#13;</programlisting>
+<programlisting format="linespecific">        &lt;device-config&gt;&lt;device-type&gt;ajax&lt;/device-type&gt;&lt;device-class&gt;my.MyAjaxDevice&lt;/device-class&gt;&#13;    &lt;timeout-uri&gt;/my-timeout.zul&lt;/timeout-uri&gt;&#13;    &lt;server-push-class&gt;my.ServerPush&lt;/server-push-class&gt;&#13;        &lt;unavailable-message&gt;&lt;![CDATA[&lt;p style="color:red"&gt;Sorry, JavaScript must be enabled in order for you to use KillApp.&lt;/p&gt;]]&gt;&lt;/unavailable-message&gt;&lt;/device-config&gt;&#13;</programlisting>
 <para>Note: Unlike most other configurations defined in WEB-INF/zk.xml, the definitions defined in device-config are applied to all Web applications sharing the same zk.jar. Refer to the zscript-config element for more information.</para><sect3><title>The device-type Element</title>
 <para>[Required]</para>
 <para>It specifies the device type. The previous implementation with the same device type will be replaced if any.</para></sect3><sect3><title>The device-class Element</title>
 <para>[Optional]</para>
 <para>It specifies the implementation class. The class must implement the org.zkoss.zk.device.Device interface. Instead of implementing it from scratch, you can derive from the proper implementation, such as AjaxDevice and MilDevice.</para></sect3><sect3><title>The timeout-uri Element</title>
-<para>[Default: null]</para>
+<para>[Optional][Default: null]</para>
 <para>It specifies the target URI that will be used to redirect users to, when the desktop no longer exists – it is usually caused by session timeout. If this element is omitted, an error message will be shown up at the browser to alert users for what happens.</para>
 <para>To reload the same URI again, you can specify an empty content as follows.</para>
-<para>&lt;timeout-uri&gt;&lt;/timeout-uri&gt;</para></sect3><sect3><title>The unavailable-message Element</title>
-<para>[Optional]</para>
+<para>&lt;device-config&gt;</para>
+<para>&lt;device-type&gt;ajax&lt;/device-type&gt;</para>
+<para>&lt;timeout-uri&gt;&lt;/timeout-uri&gt;</para>
+<para>&lt;/device-config&gt;</para></sect3><sect3><title>The server-push-class Element</title>
+<para>[Optional][Default: depends on device and what edition you use]</para>
+<para>It specifies which class used to implement the server-push feature. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.ServerPush interface.</para>
+<programlisting format="linespecific">&lt;device-config&gt;&#13;        &lt;device-type&gt;ajax&lt;/device-type&gt;&lt;server-push-class&gt;my.ServerPush&lt;/server-push-class&gt;&#13;&lt;/device-config&gt;&#13;</programlisting></sect3><sect3><title>The unavailable-message Element</title>
+<para>[Optional][Default: depends on device]</para>
 <para>It specifies the message that will be displayed if the client doesn't support this device.</para></sect3></sect2><sect2><title>The error-page Element</title>
-<programlisting format="linespecific">&lt;error-page&gt;&#13;    &lt;device-type&gt;[ajax|mil]&lt;/device-type&gt;&#13;</programlisting>
+<programlisting format="linespecific">&lt;error-page&gt;&#13;    &lt;device-type&gt;[ajax|mil]&lt;/device-type&gt;&#13;    &lt;exception-type&gt;ClassName&lt;/exception-type&gt;&#13;</programlisting>
 <para>&lt;location&gt;the error page's URI&lt;/location&gt;</para>
 <para>&lt;/error-page&gt;</para>
 <para>It specifies an error page used when an un-caught exception is thrown in updating a ZUML page (e.g., in an event listener). Each page is associated with an exception type, aka, a class deriving from java.lang.Throwable. You can specify multiple error pages, each with a different exception type. When an error occurs, ZK searches the proper error page by examing the exception type one-by-one. If none is found, it shows, by default, an alert message at the client.</para>
@@ -23023,5 +23238,5 @@
 <para>&lt;/preference&gt;</para>
 <para>You can specify any number of preference with the preference element depicted above. The name and value are application specific and you can specify whatever value you like. To avoid name conflict, it is suggested to prefix the name with your domain name, such as com.poitx.some.another.</para>
 <para>The preferences can then be retrieved back by calling the getPreference method of the org.zkoss.zk.ui.util.Configuration class. Notice that each Web application has one configuration, which can be found by use of getConfiguration method of the org.zkoss.zk.ui.WebApp interface.</para>
-<programlisting format="linespecific">String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;</programlisting></sect2></sect1></chapter>
+<programlisting format="linespecific">String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;    ...&#13;}&#13;</programlisting></sect2></sect1></chapter>
 </book>
