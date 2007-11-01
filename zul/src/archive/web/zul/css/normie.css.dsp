@@ -24,7 +24,8 @@ table.calyear td {
 	color: black; <%-- 1735084 --%>
 }
 div.modal_mask {<%-- don't change --%>
-	opacity: .4; filter: alpha(opacity=40);
+	filter: alpha(opacity=40);
+	hasLayout:-1<%-- not a layout element in IE --%>
 }
 span.tree-root-open, span.tree-root-close, span.tree-tee-open, span.tree-tee-close, 
 span.tree-last-open, span.tree-last-close, span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer,

@@ -157,12 +157,8 @@ td.rwt-wndcyan {
 div.modal_mask {
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
-	opacity: .8;
-	background:transparent !important;
-	background: white;
-	background-image: url(${c:encodeURL('~./zk/img/xmask.png')}) !important; <%-- Moz... --%>
-	background-image: none; background-repeat: repeat;
-	display: none;
+	opacity: .4;
+	background-color:#80B4FF;
 }
 
 <%-- ZK separator --%>
