@@ -117,7 +117,7 @@ public class ConfigParser {
 			} else if ("desktop-config".equals(elnm)) {
 			//desktop-config
 			//	desktop-timeout
-			//  disable-default-theme
+			//  disable-theme-uri
 			//	file-check-period
 			//	theme-provider-class
 			//	theme-uri
@@ -286,13 +286,13 @@ public class ConfigParser {
 			if (uri.length() != 0) config.addThemeURI(uri);
 		}
 
-		//disable-default-theme
-		Element subel = conf.getElement("disable-default-theme");
+		//disable-theme-uri
+		Element subel = conf.getElement("disable-theme-uri");
 		if (subel != null) {
 			String s = subel.getText(true);
 			if (s.length() == 0)
-				throw new UiException("The language name, such as xul/html, is required, "+subel.getLocator());
-			config.enableDefaultTheme(s, false); //disable it
+				throw new UiException("disable-theme-uri cannot be empty, "+subel.getLocator());
+			config.addDisabledThemeURI(s);
 		}
 
 		//theme-provider-class

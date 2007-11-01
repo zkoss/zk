@@ -100,8 +100,8 @@ public class Configuration {
 	private final List _themeURIs = new LinkedList();
 	private transient String[] _roThemeURIs = new String[0];
 	private ThemeProvider _themeProvider;
-	/** A set of the language name whose theme is disabled. */
-	private Set _disabledDefThemes;
+	/** A set of disabled theme URIs. */
+	private Set _disThemeURIs;
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
@@ -949,31 +949,25 @@ public class Configuration {
 	 * @param enable whether to enable or disable.
 	 * If false, the default theme of the specified language is disabled.
 	 * Default: enabled.
+	 * @since 3.0.0
 	 */
-	public void enableDefaultTheme(String lang, boolean enable) {
-		if (lang == null || lang.length() == 0)
-			throw new IllegalArgumentException("lang is required");
+	public void addDisabledThemeURI(String uri) {
+		if (uri == null || uri.length() == 0)
+			throw new IllegalArgumentException();
 
 		synchronized (this) {
-			if (enable) {
-				if (_disabledDefThemes != null) {
-					_disabledDefThemes.remove(lang);
-					if (_disabledDefThemes.isEmpty())
-						_disabledDefThemes = null;
-				}
-			} else {
-				if (_disabledDefThemes == null)
-					_disabledDefThemes =
-						Collections.synchronizedSet(new HashSet(3));
-				_disabledDefThemes.add(lang);
-			}
+			if (_disThemeURIs == null)
+				_disThemeURIs = Collections.synchronizedSet(new HashSet(4));
 		}
+		_disThemeURIs.add(uri);
 	}
-	/** Returns whether the default theme of the specified language is
-	 * enabled.
+	/** Returns a set of the theme URIs that are disabled (never null).
+	 *
+	 * @since 3.0.0
+	 * @see #addDisabledThemeURI
 	 */
-	public boolean isDefaultThemeEnabled(String lang) {
-		return _disabledDefThemes == null || !_disabledDefThemes.contains(lang);
+	public Set getDisabledThemeURIs() {
+		return _disThemeURIs != null ? _disThemeURIs: Collections.EMPTY_SET;
 	}
 
 	/** Returns the theme provider for the current execution,

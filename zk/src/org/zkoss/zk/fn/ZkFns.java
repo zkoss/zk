@@ -296,13 +296,16 @@ public class ZkFns {
 		//Process all languages
 		final Desktop desktop = exec.getDesktop();
 		final Configuration config = desktop.getWebApp().getConfiguration();
+		final Set disabled = config.getDisabledThemeURIs();
 		final String deviceType = desktop.getDeviceType();
 		final List sses = new LinkedList(); //a list of StyleSheet
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
-			if (config.isDefaultThemeEnabled(langdef.getName())) {
-				sses.addAll(langdef.getStyleSheets());
+			for (Iterator e = langdef.getStyleSheets().iterator(); e.hasNext();) {
+				final StyleSheet ss = (StyleSheet)e.next();
+				if (!disabled.contains(ss.getHref()))
+					sses.add(ss);
 			}
 		}
 
