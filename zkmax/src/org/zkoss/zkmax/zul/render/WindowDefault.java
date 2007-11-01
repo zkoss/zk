@@ -49,12 +49,15 @@ public class WindowDefault implements ComponentRenderer {
 
 		final Caption caption = self.getCaption();
 		final String title = self.getTitle(), titlesc = self.getTitleSclass();
+		String wcExtStyle;
 		if (caption == null && title.length() == 0) {
+			wcExtStyle = "";
 			if (exec.isExplorer() && !exec.isExplorer7()) { /* Bug 1579515: to clickable, a child with 100% width is required for DIV */
 				wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
 					.write("<tr height=\"1px\"><td></td></tr>\n</table>");
 			}
 		} else {
+			wcExtStyle = "border-top:0;";
 			wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 			if (caption == null) {
 				wh.write("<tr id=\"").write(uuid).write("!caption\" class=\"title\">")
@@ -79,8 +82,12 @@ public class WindowDefault implements ComponentRenderer {
 			wh.write("</table>");
 		}
 
+		final String cs = self.getContentStyle();
+		if(cs != null){
+			wcExtStyle += cs;
+		}
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"");
-		wh.write(self.getContentSclass()).write("\"").writeAttr("style", self.getContentStyle());
+		wh.write(self.getContentSclass()).write("\"").writeAttr("style", wcExtStyle);
 		wh.write(">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
