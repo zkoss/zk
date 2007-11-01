@@ -1424,8 +1424,15 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 							var wd =  d.style.width;							
 							if (wd == "auto" || wd.indexOf('%') > -1) 
 								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-							dstwds[z] = wd ? (zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth) 
-								: (zk.ie && z == dst.cells.length -1 ? s.offsetWidth - 1 : s.offsetWidth);
+								var zwd = getZKAttr(d, "wd"); // Bug #1823236
+								if (wd && (!zwd || (zwd != "NaN" && $int(zwd) != d.offsetWidth))) {
+									dstwds[z] = zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth; 
+								} else {
+									dstwds[z] = zk.ie && z == dst.cells.length -1 ? s.offsetWidth - 1 : s.offsetWidth;
+									setZKAttr(d, "wd", dstwds[z]);
+									wd = "";
+								}
+							
 							var w;
 							if (!wd) {
 								w = zk.revisedSize(d, dstwds[z]);
