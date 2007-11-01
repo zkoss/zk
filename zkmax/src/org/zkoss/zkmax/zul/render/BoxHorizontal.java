@@ -42,17 +42,16 @@ public class BoxHorizontal implements ComponentRenderer{
 
 		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.box.Box\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.writeln(" cellpadding=\"0\" cellspacing=\"0\">")
+			.writeln(" cellpadding=\"0\" cellspacing=\"0\">")	
 			.write("<tr id=\"").write(uuid).writeln("!cave\"")
 			.write(self.getCaveAttrs()).write('>');
-
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
 			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
-				.write(self.getChildOuterAttrs(child)).write(self.getChildInnerAttrs(child))
-				.write("><div id=\"").write(child.getUuid()).write("!cell\" class=\"hbox\">");
+				.write(self.getChildOuterAttrs(child))
+				.write(self.getChildInnerAttrs(child)).write(">");
 			wh.write(child);
-			wh.writeln("</div></td>");
+			wh.writeln("</td>");
 		}		
 		wh.write("</tr></table>");
 	}
