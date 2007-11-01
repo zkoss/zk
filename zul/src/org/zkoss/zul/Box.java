@@ -27,7 +27,6 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.ext.render.Floating;
@@ -324,12 +323,14 @@ public class Box extends XulElement {
 			new StringBuffer(64).append(" z.coexist=\"true\"");
 			//coexist: the visibility of exterior is the same as child.
 
-		//Note: visible is handled in getChildInnerAttrs if horizontal layout		
-		if (vert) HTMLs.appendAttribute(sb, "valign", toValign(_pack));
-		if (!child.isVisible()) { // Bug #1821517
-			final Object xc = ((ComponentCtrl)child).getExtraCtrl();
-			if (!(xc instanceof Floating) || !((Floating)xc).isFloating())
-				sb.append(" style=\"display:none\"");
+		//Note: visible is handled in getChildInnerAttrs if horizontal layout
+		if (vert) {
+			HTMLs.appendAttribute(sb, "valign", toValign(_pack));
+			if (!child.isVisible()) {
+				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
+				if (!(xc instanceof Floating) || !((Floating)xc).isFloating())
+					sb.append(" style=\"display:none\"");
+			}
 		}
 		return sb.toString();
 	}
@@ -338,15 +339,17 @@ public class Box extends XulElement {
 	 */
 	public String getChildInnerAttrs(Component child) {
 		if (child instanceof Splitter)
-			return " align=\"left\" valign=\"top\"";
+			return "";
 
 		final boolean vert = isVertical();
 		final StringBuffer sb = new StringBuffer(64);
 
+		String stylesb = "";
 		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
 		final String align = toHalign(vert ? _align: _pack);
 		if (align != null && align.length() > 0) {
 			HTMLs.appendAttribute(sb, "align", align);
+			stylesb = "text-align:"+align+';';
 		}
 
 		String size = null;
@@ -378,8 +381,8 @@ public class Box extends XulElement {
 			wd = null; //don't generate it at TD
 
 		if (_spacing != null || size != null || wd != null || floating || !visible) {
-			sb.append(" style=\"");
-			if (vert && !visible) // Bug #1821517
+			sb.append(" style=\"").append(stylesb);
+			if (!visible)
 				sb.append("display:none;");
 
 			if (_spacing != null)
@@ -394,7 +397,9 @@ public class Box extends XulElement {
 				HTMLs.appendStyle(sb, "width", wd);
 
 			sb.append('"');
-		} 
+		} else if (stylesb.length() > 0) {
+			sb.append(" style=\"").append(stylesb).append('"');
+		}
 		return sb.toString();
 	}
 	/** Returns the attributes used by the 'cave' element (never null).
@@ -408,6 +413,7 @@ public class Box extends XulElement {
 		final String valign = toValign(_align);
 		return valign != null ? " valign=\"" + valign + '"': null;
 	}
+
 	//-- Component --//
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws IOException {
@@ -416,22 +422,19 @@ public class Box extends XulElement {
 				.append("<tr id=\"").append(child.getUuid())
 				.append("!chdextr\"")
 				.append(getChildOuterAttrs(child)).append("><td")
-				.append(getChildInnerAttrs(child)).append("><div id=\"")
-				.append(child.getUuid()).append("!cell\" class=\"vbox\"")
-				.append('>');
+				.append(getChildInnerAttrs(child)).append('>');
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
-			out.append("</div></td></tr>");
+			out.append("</td></tr>");
 		} else {
 			final StringBuffer sb = new StringBuffer(32)
 				.append("<td id=\"").append(child.getUuid())
 				.append("!chdextr\"")
 				.append(getChildOuterAttrs(child))
-				.append(getChildInnerAttrs(child)).append("><div id=\"")
-				.append(child.getUuid()).append("!cell\" class=\"hbox\">");
+			 	.append(getChildInnerAttrs(child)).append('>');
 			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 			else out.insert(0, sb.toString());
-			out.append("</div></td>");
+			out.append("</td>");
 		}
 	}
 }

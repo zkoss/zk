@@ -283,20 +283,15 @@ div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, tbody.list
 	background: #DAE7F6; border-top: 1px solid #7F9DB9;
 }
 
-div.foot-cell-inner, div.cell-inner, div.head-cell-inner, div.vbox, div.hbox {
+div.foot-cell-inner, div.cell-inner, div.head-cell-inner{
 	overflow:hidden; border: 0; margin: 0; padding: 0;
 }
-div.vbox {
-	width:100%; 
-}
-div.hbox {
-	height:100%;
-}
+
 td.vbox {
-	padding-bottom: 0.4em;
+	margin: 0; padding-bottom: 0.4em;
 }
 td.hbox {
-	padding-right: 0.6em;
+	margin: 0; padding-right: 0.6em;
 }
 div.gc {
 	padding: 2px; font-size: small; font-weight: normal; color: black;
