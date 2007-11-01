@@ -1,0 +1,22 @@
+<zk>
+B30-1823354.zul
+	<window id="win" title="test VFlex!!" sizable="true"
+		width="300px" height="300px" border="normal">
+		<zscript><![CDATA[
+			import java.util.ArrayList;
+			ArrayList list = new ArrayList();
+			
+			for(int i=1;i<=50;i++)
+			{
+				list.add("entry "+i);
+			}
+		]]></zscript>
+		<listbox id="libox" width="250px" vflex="true">
+			<listhead sizable="true">
+				<listheader label="name" sort="auto"/>
+			</listhead>
+			<listitem forEach="${list}" label="${each}"/>
+		</listbox>
+	</window>
+
+</zk>
