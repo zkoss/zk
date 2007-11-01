@@ -5,6 +5,7 @@ ZK 3.0.0
   1820406: Support the xel-method directive to load method dynamically
   1820771: Make ZK independent of JSP
   1817685: A way to use CSS to customize tree's icons
+  1823850: A way to use CSS to customize focused listitem/treeitem
   1732886: Scroll Listbox on Selection
   1817456: Full Support ZK Layout Theme
   1765212: Annoying sellection during drag-drop
