@@ -7,6 +7,7 @@ ZK 3.0.0
   1817685: A way to use CSS to customize tree's icons
   1823850: A way to use CSS to customize focused listitem/treeitem
   1823856: A way to change theme uri dynamically
+  1823965: A better way to do disable-default-theme
   1732886: Scroll Listbox on Selection
   1817456: Full Support ZK Layout Theme
   1765212: Annoying sellection during drag-drop
@@ -81,6 +82,7 @@ ZK 3.0.0
   + Initiator's doCatch() now returns a boolean to indicate whether to ignore
     the exception.
     Note: it is backward compatible that you don't need to re-compile your codes
+  + In zk.xml, disable-default-theme is replaced with disable-theme-uri.
   + EventThreadInit's init() now returns a boolean to indicate whether
     to continue the processing of the event.
   + Throws an exception in EventThreadResume's afterResume() will stop
