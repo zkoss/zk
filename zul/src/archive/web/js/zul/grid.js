@@ -247,7 +247,7 @@ zk.Grid.prototype = {
 	},
 	_renderNow: function () {
 		var rows = this.bodyrows;
-		if (!rows.length || getZKAttr(this.element, "model") != "true") return;
+		if (!rows || !rows.length || getZKAttr(this.element, "model") != "true") return;
 
 		//Note: we have to calculate from top to bottom because each row's
 		//height might diff (due to different content)
