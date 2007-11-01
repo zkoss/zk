@@ -55,6 +55,7 @@ ZK 3.0.0
   1823229: Splitter- The image of bar isn't updated
   1823226: Splitter- The bar can be dragged over hbox
   1823213: Listbox in hbox
+  1823832: Mask show up slowly when doModel in FF Linux
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
