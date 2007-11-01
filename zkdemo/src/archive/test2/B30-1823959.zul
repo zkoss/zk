@@ -24,7 +24,7 @@ multiple times.
 </h:pre>
 
 	<zscript>
-		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel(10);
+		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel(1);
 	</zscript>
 	<vbox>
 		<button label="Resync Model" onClick="strset.invalidate()"/>
