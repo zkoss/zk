@@ -196,7 +196,7 @@ zkSplt._adj = function (n, fd, diff) {
 		var val = $int(n.style[fd]) + diff;
 		n.style[fd] = (val > 0 ? val: 0) + "px";
 
-		zk.onSizeAt(n); //notify descendants
+		zk.onResize(0, n);  //notify descendants
 	}
 };
 /** Adjusts the width of the splitter in the opposite dir. */
