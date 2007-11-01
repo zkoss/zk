@@ -2,6 +2,11 @@
 The update of list cell freeze IE.<separator/>
 <button label="start timer" onClick="timer.start()"/>
 <button label="stop timer" onClick="timer.stop()"/>
+<timer id="timer" delay="1500" repeats="true" running="false">
+	<attribute name="onTimer">
+		c11.setLabel(""+new java.util.Date());
+	</attribute>
+</timer>
 <listbox>
 	<listhead sizable="true">
 		<listheader label="1" />
@@ -434,9 +439,4 @@ The update of list cell freeze IE.<separator/>
 		<listcell label="8" />
 	</listitem>
 </listbox>
-<timer id="timer" delay="1500" repeats="true" running="false">
-	<attribute name="onTimer">
-		c11.setLabel(""+new java.util.Date());
-	</attribute>
-</timer>
 </zk>
