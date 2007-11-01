@@ -318,6 +318,10 @@ tr.overd, td.overd {<%-- item onmouseover --%>
 tr.overseld, td.overseld {<%-- item selected and onmouseover --%>
 	background: #82D5F8;
 }
+tr.focusd {
+	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
+	background-repeat: no-repeat;
+}
 
 <%-- The style for treeitem's paging
 span.treeitem-paging {

@@ -628,12 +628,12 @@ zk.Selectable.prototype = {
 				if (!el) el = $e(row.id + "!sel");
 				if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
 					zk.asyncFocus(el.id);
-				if (!zk.safari) zkSel.cmonfocusTo(row);
+				zkSel.cmonfocusTo(row);
 
 				if (!this.paging && zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			} else {
-				if (!zk.safari) zkSel.cmonblurTo(row);
+				zkSel.cmonblurTo(row);
 			}
 		}
 		return changed;
@@ -646,10 +646,8 @@ zk.Selectable.prototype = {
 				el.href = "javascript:;";
 				el.id = row.id + "!sel";
 				el.innerHTML = " ";
-				if (!zk.safari) { //Safari: underline always appear, not key
-					el.onfocus = zkSel.cmonfocus;
-					el.onblur = zkSel.cmonblur;
-				}
+				el.onfocus = zkSel.cmonfocus;
+				el.onblur = zkSel.cmonblur;
 				$e(row.cells[0].id+ "!cave").appendChild(el);
 			}
 		} else {
@@ -1121,14 +1119,10 @@ zkSel.cmonblur = function (evt) {
 	zkSel.cmonblurTo($parentByTag(Event.element(evt), "TR"));
 };
 zkSel.cmonfocusTo = function (row) {
-	if (row)
-		if (!zk.gecko) row.style.textDecoration = "underline";
-		else if (row.cells.length) row.cells[0].style.textDecoration = "underline";	
+	if (row) zk.addClass(row, "focusd");
 };
 zkSel.cmonblurTo = function (row) {
-	if (row) 
-		if (!zk.gecko) row.style.textDecoration = "";
-		else if (row.cells.length) row.cells[0].style.textDecoration = "";
+	if (row) zk.rmClass(row, "focusd");
 };
 
 ////
@@ -1216,13 +1210,11 @@ zkLit.onrtclk = function (cmp) {
 	if (meta && !meta._isSelected(cmp)) meta.doclick(null, cmp);
 };
 
-if (!zk.safari) {
-	zkLcfc = {}; //checkmark or the first hyperlink of listcell
-	zkLcfc.init = function (cmp) {
-		zk.listen(cmp, "focus", zkSel.cmonfocus);
-		zk.listen(cmp, "blur", zkSel.cmonblur);
-	};
-}
+zkLcfc = {}; //checkmark or the first hyperlink of listcell
+zkLcfc.init = function (cmp) {
+	zk.listen(cmp, "focus", zkSel.cmonfocus);
+	zk.listen(cmp, "blur", zkSel.cmonblur);
+};
 
 zk.addModuleInit(function () {
 	//Listheader
