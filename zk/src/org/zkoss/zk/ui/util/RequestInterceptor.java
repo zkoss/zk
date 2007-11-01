@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Session;
  * <p>{@link #request} is called at very early stage, even before
  * setting the locale for the request.
  * Thus, you can configure the locale as follows:<br/>
- *   <code>sess.setAttribute(Attributes.PREFERRED_LOCALE, myLocale);</code>
+ *   <code>sess.setAttribute({@link org.zkoss.web.Attributes#PREFERRED_LOCALE}, myLocale);</code>
  *
  * <p>By default, the locale is decided by the browser's preference.
  * However, you may want to store the previous locale in the cookie
@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.Session;
  *
  * <p>Similarly, you can configure the time zone (that is used by
  * some components, such as Datebox) as follows:<br/>
- *   <code>sess.setAttribute(Attributes.PREFERRED_TIME_ZONE, myLocale);</code>
+ *   <code>sess.setAttribute({@link org.zkoss.web.Attributes#PREFERRED_TIME_ZONE}, myLocale);</code>
  *
  * <p>How this interface is used.
  * <ol>

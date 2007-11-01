@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.CharsetFinder;
+import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
@@ -118,6 +119,7 @@ public class ConfigParser {
 			//	desktop-timeout
 			//  disable-default-theme
 			//	file-check-period
+			//	theme-provider-class
 			//	theme-uri
 				parseDesktopConfig(config, el);
 				parseClientConfig(config, el); //backward compatible with 2.4
@@ -178,8 +180,6 @@ public class ConfigParser {
 			//	engine-class
 			//	id-generator-class
 			//  web-app-class
-			//  locale-provider-class
-			//	time-zone-provider-class
 			//	method-cache-class
 				String s = el.getElementValue("disable-event-thread", true);
 				if (s != null) config.enableEventThread("false".equals(s));
@@ -276,7 +276,8 @@ public class ConfigParser {
 	}
 
 	/** Parses desktop-config. */
-	private static void parseDesktopConfig(Configuration config, Element conf) {
+	private static void parseDesktopConfig(Configuration config, Element conf)
+	throws Exception {
 		//theme-uri
 		for (Iterator it = conf.getElements("theme-uri").iterator();
 		it.hasNext();) {
@@ -293,6 +294,12 @@ public class ConfigParser {
 				throw new UiException("The language name, such as xul/html, is required, "+subel.getLocator());
 			config.enableDefaultTheme(s, false); //disable it
 		}
+
+		//theme-provider-class
+		Class cls = parseClass(conf, "theme-provider-class",
+			ThemeProvider.class);
+		if (cls != null)
+			config.setThemeProvider((ThemeProvider)cls.newInstance());
 
 		//desktop-timeout
 		Integer v = parseInteger(conf, "desktop-timeout", false);

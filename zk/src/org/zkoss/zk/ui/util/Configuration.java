@@ -99,6 +99,9 @@ public class Configuration {
 	private PerformanceMeter _pfmeter;
 	private final List _themeURIs = new LinkedList();
 	private transient String[] _roThemeURIs = new String[0];
+	private ThemeProvider _themeProvider;
+	/** A set of the language name whose theme is disabled. */
+	private Set _disabledDefThemes;
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
@@ -107,8 +110,6 @@ public class Configuration {
 		_promptDelay = 900, _tooltipDelay = 800;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
-	/** A set of the language name whose theme is disabled. */
-	private Set _disabledDefThemes;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
 	/** whether to use the event processing thread. */
@@ -918,6 +919,9 @@ public class Configuration {
 	}
 
 	/** Adds an CSS resource that will be generated for each ZUML desktop.
+	 *
+	 * <p>Note: if {@link ThemeProvider} is specified ({@link #setThemeProvider}),
+	 * the final theme URIs generated depend on {@link ThemeProvider#getThemeURIs}.
 	 */
 	public void addThemeURI(String uri) {
 		if (uri == null || uri.length() == 0)
@@ -935,6 +939,69 @@ public class Configuration {
 	 */
 	public String[] getThemeURIs() {
 		return _roThemeURIs;
+	}
+	/** Enables or disables the default theme of the specified language.
+	 *
+	 * <p>Note: if {@link ThemeProvider} is specified ({@link #setThemeProvider}),
+	 * the final theme URIs generated depend on {@link ThemeProvider#getThemeURIs}.
+	 *
+	 * @param lang the language name, such as xul/html and xhtml.
+	 * @param enable whether to enable or disable.
+	 * If false, the default theme of the specified language is disabled.
+	 * Default: enabled.
+	 */
+	public void enableDefaultTheme(String lang, boolean enable) {
+		if (lang == null || lang.length() == 0)
+			throw new IllegalArgumentException("lang is required");
+
+		synchronized (this) {
+			if (enable) {
+				if (_disabledDefThemes != null) {
+					_disabledDefThemes.remove(lang);
+					if (_disabledDefThemes.isEmpty())
+						_disabledDefThemes = null;
+				}
+			} else {
+				if (_disabledDefThemes == null)
+					_disabledDefThemes =
+						Collections.synchronizedSet(new HashSet(3));
+				_disabledDefThemes.add(lang);
+			}
+		}
+	}
+	/** Returns whether the default theme of the specified language is
+	 * enabled.
+	 */
+	public boolean isDefaultThemeEnabled(String lang) {
+		return _disabledDefThemes == null || !_disabledDefThemes.contains(lang);
+	}
+
+	/** Returns the theme provider for the current execution,
+	 * or null if not available.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>Note: if specified, the final theme URIs is decided by
+	 * the provider. The URIs specified in {@link #getThemeURIs} are
+	 * passed to provider, and it has no effect if the provider decides
+	 * to ignore them.
+	 * @since 3.0.0
+	 * @see #getThemeURIs
+	 * @see #isDefaultThemeEnabled
+	 */
+	public ThemeProvider getThemeProvider() {
+		return _themeProvider;
+	}
+	/** Sets the theme provider for the current execution,
+	 * or null if not available.
+	 *
+	 * @param provider the theme provide. If null, the default theme URIs
+	 * will be used.
+	 * @see #getThemeProvider
+	 * @since 3.0.0
+	 */
+	public void setThemeProvider(ThemeProvider provider) {
+		_themeProvider = provider;
 	}
 
 	/**
@@ -1645,39 +1712,6 @@ public class Configuration {
 			}
 			_richlets.clear();
 		}
-	}
-
-	/** Enables or disables the default theme of the specified language.
-	 *
-	 * @param lang the language name, such as xul/html and xhtml.
-	 * @param enable whether to enable or disable.
-	 * If false, the default theme of the specified language is disabled.
-	 * Default: enabled.
-	 */
-	public void enableDefaultTheme(String lang, boolean enable) {
-		if (lang == null || lang.length() == 0)
-			throw new IllegalArgumentException("lang is required");
-
-		synchronized (this) {
-			if (enable) {
-				if (_disabledDefThemes != null) {
-					_disabledDefThemes.remove(lang);
-					if (_disabledDefThemes.isEmpty())
-						_disabledDefThemes = null;
-				}
-			} else {
-				if (_disabledDefThemes == null)
-					_disabledDefThemes =
-						Collections.synchronizedSet(new HashSet(3));
-				_disabledDefThemes.add(lang);
-			}
-		}
-	}
-	/** Returns whether the default theme of the specified language is
-	 * enabled.
-	 */
-	public boolean isDefaultThemeEnabled(String lang) {
-		return _disabledDefThemes == null || !_disabledDefThemes.contains(lang);
 	}
 
 	/** Specifies whether to keep the desktops across visits.

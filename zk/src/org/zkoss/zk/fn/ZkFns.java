@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Set;
@@ -52,6 +53,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.http.WebManager;
@@ -280,28 +282,57 @@ public class ZkFns {
 			return ""; //nothing to generate
 		WebManager.setRequestLocal(request, ATTR_LANG_CSS_GENED, Boolean.TRUE);
 
-		//Process all languages
+		final StringBuffer sb = new StringBuffer(512);
 		final Execution exec = Executions.getCurrent();
+		for (Iterator it = getStyleSheets(exec).iterator(); it.hasNext();)
+			append(sb, (StyleSheet)it.next(), exec, null);
+
+		return sb.toString();
+	}
+	/** Returns a list of {@link StyleSheet} that shall be generated
+	 * to the client for the specified execution.
+	 */
+	public static final List getStyleSheets(Execution exec) {
+		//Process all languages
 		final Desktop desktop = exec.getDesktop();
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		final String deviceType = desktop.getDeviceType();
-		final StringBuffer sb = new StringBuffer(512);
+		final List sses = new LinkedList(); //a list of StyleSheet
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 			if (config.isDefaultThemeEnabled(langdef.getName())) {
-				for (Iterator e = langdef.getStyleSheets().iterator();
-				e.hasNext();)
-					append(sb, (StyleSheet)e.next(), exec, null);
+				sses.addAll(langdef.getStyleSheets());
 			}
 		}
 
-		final String[] hrefs = config.getThemeURIs();
-		for (int j = 0; j < hrefs.length; ++j)
-			append(sb, new StyleSheet(hrefs[j], "text/css"), exec, null);
+		//Process configuration
+		final ThemeProvider themeProvider = config.getThemeProvider();
+		if (themeProvider != null) {
+			final List org = new LinkedList();
+			for (Iterator it =  sses.iterator(); it.hasNext();) {
+				final StyleSheet ss = (StyleSheet)it.next();
+				org.add(ss.getHref()); //we don't support getContent
+			}
 
-		return sb.toString();
+			final String[] hrefs = config.getThemeURIs();
+			for (int j = 0; j < hrefs.length; ++j)
+				org.add(hrefs[j]);
+
+			sses.clear();
+			final Collection res = themeProvider.getThemeURIs(exec, org);
+			if (res != null) {
+				for (Iterator it = res.iterator(); it.hasNext();)
+					sses.add(new StyleSheet((String)it.next(), "text/css"));
+			}
+		} else {
+			final String[] hrefs = config.getThemeURIs();
+			for (int j = 0; j < hrefs.length; ++j)
+				sses.add(new StyleSheet(hrefs[j], "text/css"));
+		}
+		return sses;
 	}
+
 	private static void append(StringBuffer sb, StyleSheet ss,
 	Execution exec, Page page) {
 		String href = ss.getHref();
