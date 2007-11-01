@@ -18,9 +18,9 @@
 <para>ZKTM</para>
 <para>The Developer's Reference</para>
 <para>Version 3.0.0</para>
-<para>October 2007</para>
+<para>November 2007</para>
 <para>Potix Corporation</para>
-<para>Revision 78</para>
+<para>Revision 79</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -44,8 +44,7 @@
 <para>It is the same as self.desktop.execution.arg.</para>
 <programlisting>params.put("name", "John");&#13;Executions.createComponents("/my.zul", null, params);&#13;</programlisting>
 <para>Then, in my.zul,</para>
-<para>&lt;window title="${arg.name}"&gt;</para>
-<para>...</para>
+<programlisting>&lt;window title="${arg.name}"&gt;&#13;...&#13;</programlisting>
 <para>Notice that arg is available only when creating the components for the included page, say my.zul. On the other hand, all events, including onCreate, are processed later. Thus, if you want to access arg in the onCreate's listener, use the getArg method of the org.zkoss.zk.ui.event.CreateEvent class.</para></sect2><sect2><title>componentScope - java.util.Map</title>
 <para>A map of custom attributes associated with the component. It is the same as the getAttributes method in the org.zkoss.zk.ui.Component interface.</para></sect2><sect2><title>desktop - org.zkoss.zk.ui.Desktop</title>
 <para>The current desktop. It is the same as self.desktop.</para>
@@ -55,14 +54,7 @@
 <para>The current item of the collection being iterated, when ZK evaluates an iterative element. An iterative element is an element with the forEach attribute.</para>
 <programlisting>&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${each}" forEach="${contacts}"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting></sect2><sect2><title>event - org.zkoss.zk.ui.event.Event or derived</title>
 <para>The current event. Available for the event listener only.</para>
-<programlisting>&lt;textbox onChanging="react(event.value)"/&gt;&#13;&lt;combobox onChanging="autoComplete()"/&gt;&#13;&lt;zscript&gt;&#13;void react(String value) {&#13;</programlisting>
-<para>...</para>
-<para>}</para>
-<para>void autoComplete() {</para>
-<para>String value = event.getValue();</para>
-<para>...</para>
-<para>}</para>
-<para>&lt;/zscript&gt;</para></sect2><sect2><title>forEachStatus – org.zkoss.zk.ui.util.ForEachStatus</title>
+<programlisting>&lt;textbox onChanging="react(event.value)"/&gt;&#13;&lt;combobox onChanging="autoComplete()"/&gt;&#13;&lt;zscript&gt;&#13;void react(String value) {&#13;...&#13;}&#13;void autoComplete() {&#13;String value = event.getValue();&#13;...&#13;}&#13;&lt;/zscript&gt;&#13;</programlisting></sect2><sect2><title>forEachStatus – org.zkoss.zk.ui.util.ForEachStatus</title>
 <para>The status of an iteration. ZK exposes the information relative to the iteration taking place when evaluating the iterative element.</para>
 <programlisting>&lt;zk&gt;&#13;&lt;zscript&gt;&#13;grades = new String[] {"Best", "Better", "Good"};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${forEachStatus.index}: ${each}" forEach="${grades}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
 <para>Note: forEachStatus.index is absolute with respect to the underlying collection, array or other type. For example, if forEachBegin is 5, then the first value of forEachStatus.index with be 5.</para></sect2><sect2><title>page - org.zkoss.zk.ui.Page</title>
@@ -96,13 +88,11 @@
 <para>For example, assume you want to use MyWindow instead of the default window, org.zkoss.zul.html.Window, for all windows defined in this ZUML page. Then, you can declare it as follows.</para>
 <programlisting>&lt;?component name="window" extend="true" class="MyWindow"?&gt;&#13;...&#13;&lt;window&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
 <para>It is equivalent to the following codes.</para>
-<para>&lt;window use="MyWindow"&gt;</para>
-<para>...</para>
-<para>&lt;/window&gt;</para>
+<programlisting>&lt;window use="MyWindow"&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
 <para>In addition, you could specify the properties to initialize. For example, you want to use the style class called blue for all buttons used in this page, then you could:</para>
-<para>&lt;?component name="button" extend="true" sclass="blue"?&gt;</para>
+<programlisting>&lt;?component name="button" extend="true" sclass="blue"?&gt;&#13;</programlisting>
 <para>Similarly, you could use the following definition to use OK as the default label for all buttons specified in this page.</para>
-<para>&lt;?component name="button" extend="true" label="OK"?&gt;</para>
+<programlisting>&lt;?component name="button" extend="true" label="OK"?&gt;&#13;</programlisting>
 <para>Notice that the properties won't be applied if a component is created manually (by zscript or by Java codes). If you still want them to be applied with the initialial properties, you could invoke the applyProperties method as follows.</para>
 <programlisting>&lt;zscript&gt;&#13;    Button btn = new Button();    &#13;    btn.applyProperties(); //apply the initial properties    &#13;</programlisting>
 <para>&lt;/zscript&gt;</para></sect3><sect3><title>class</title>
@@ -127,8 +117,7 @@
 <para>For example, if you want to use MVEL<footnote>
 <para>MVEL is a powerful expression language. Refer to <ulink url="http://mvel.codehaus.org/">http://mvel.codehaus.org/</ulink> for more information.</para>
 </footnote>, you can specify the name as follows.</para>
-<programlisting>&lt;?evaluator name="mvel"?&gt;&#13;&lt;window id="w" title="MVEL Demo"&gt;&#13;    ${new org.zkoss.zul.Textbox().setParent(w)}    &#13;</programlisting>
-<para>&lt;/window&gt;</para>
+<programlisting>&lt;?evaluator name="mvel"?&gt;&#13;&lt;window id="w" title="MVEL Demo"&gt;&#13;    ${new org.zkoss.zul.Textbox().setParent(w)}    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Here are a list of built-in implementations.</para>
 <informaltable frame="all">
 <tgroup cols="2">
@@ -208,9 +197,7 @@
 <programlisting>&lt;!-- special.zul: Common Definitions --&gt;&#13;&lt;?init zscript="/WEB-INF/macros/special.zs"?&gt;&#13;&lt;?component name="special" macroURI="/WEB-INF/macros/special.zuml" class="Special"?&gt;&#13;&lt;?component name="another" macroURI="/WEB-INF/macros/another.zuml"?&gt;&#13;</programlisting>
 <para>where the Special class is assumed to be defined in /WEB-INF/macros/special.zs.</para>
 <para>Then, other ZUML pages can share the same set of component definitions as follows.</para>
-<para>&lt;?import uri="special.zul"?&gt;</para>
-<para>...</para>
-<para>&lt;special/&gt;&lt;!-- you can use the component defined in special.zul --&gt;</para>
+<programlisting>&lt;?import uri="special.zul"?&gt;&#13;...&#13;&lt;special/&gt;&lt;!-- you can use the component defined in special.zul --&gt;&#13;</programlisting>
 <para>Notes</para>
 <itemizedlist>
 <listitem>
@@ -243,9 +230,7 @@
 <para>These are so-called header elements in HTML. Currently only HTML-based clients (so-called browsers) support them.</para>
 <para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
 <para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or servlets. Also, they are ignored if the page is a zhtml file.</para>
-<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;</programlisting>
-<para>My content</para>
-<para>&lt;/window&gt;</para></sect2><sect2><title>The page Directive</title>
+<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>The page Directive</title>
 <para>&lt;?page [id="..."] [title="..."] [style="..."] [cacheable="false|true"] [language="xul/html"] [zscriptLanguage="Java"] [contentType="text/html;charset=UTF-8"] [docType="tag PUBLIC &amp;quot;doctype name&amp;quot; &amp;quot;doctype UI&amp;quot;"] [xml="version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;"]?&gt;</para>
 <para>It specifies how a page shall be handled.</para><sect3><title>cacheable</title>
 <para>[Optional][Default: false if Ajax devices, true if XML and MIL devices]</para>
@@ -296,13 +281,10 @@
 <para>&lt;?tablib uri="myURI" prefix="my"?&gt;</para>
 <para>This directive is used to load a taglib file, which defines a set of EL functions. The format of a taglib file is the same as that of JSP taglib files.</para>
 <para>In the following example, we loads functions defined in the built-in TLD files identified as http://www.zkoss.org/dsp/web/core and then use one of these function called l.</para>
-<programlisting>&lt;?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?&gt;&#13;</programlisting>
-<para>&lt;window title="${c:l('my.title')}"&gt;</para>
-<para>...</para>
-<para>&lt;/window&gt;</para>
+<programlisting>&lt;?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?&gt;&#13;&lt;window title="${c:l('my.title')}"&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
 <para>Tip: ZK searches all TLD files defined in the /metainfo/tld/config.xml file from the classpath. If you want ZK to load your custom TLD files, add them to class path and then specify the following content in the /metainfo/tld/config.xml file. &lt;taglib&gt;&lt;taglib-uri&gt;http://your-domain.com/your-path&lt;/taglib-uri&gt;&lt;taglib-location&gt;/the/path/of/your/tld/file&lt;/taglib-location&gt;&lt;/taglib&gt;</para>
 <para>If you to load a TLD file from your Web application, you can specify the path as follows.</para>
-<para>&lt;?taglib uri="/WEB-INF/tld/my.tld" prefix="my"?&gt;</para><sect3><title>uri</title>
+<programlisting>&lt;?taglib uri="/WEB-INF/tld/my.tld" prefix="my"?&gt;&#13;</programlisting><sect3><title>uri</title>
 <para>[Required][EL is not allowed]</para>
 <para>A URL of the taglib file. Unlike other URL and URI, it doesn't interpret ~ or * specially. And, the page and the taglib files it references must be in the same Web application.</para></sect3><sect3><title>prefix</title>
 <para>[Required]</para>
@@ -5702,7 +5684,8 @@
 <para>
 <code>org.zkoss.zul.Columns</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Column</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<para>*<link linkend="Column">Column</link>
+</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -5849,7 +5832,7 @@
 <para>
 <code>org.zkoss.zul.Combobox</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Comboitem </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<para>*Comboitem </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -7371,7 +7354,7 @@
 <code>org.zkoss.zul.Div</code>
 <code> </code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*All Components </para></sect3><sect3><title>Supported Events</title>
+<para>*All</para></sect3><sect3><title>Supported Events</title>
 <para>*NONE </para></sect3><sect3><title>Attributes</title>
 <informaltable frame="all">
 <tgroup cols="4">
@@ -7659,8 +7642,9 @@
 <para>
 <code>org.zkoss.zul.Grid</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Columns</para>
-<para>*org.zkoss.zul.Rows</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<para>
+<link linkend="Columns">Columns</link> <link linkend="Rows">Rows</link>
+</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -9672,9 +9656,9 @@
 <para>
 <code>org.zkoss.zul.Listbox</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Listitem</para>
-<para>*org.zkoss.zul.Listhead</para>
-<para>*org.zkoss.zul.Listfoot</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<para>
+<link linkend="Listitem">Listitem</link> <link linkend="Listhead">Listhead</link> <link linkend="Listfoot">Listfoot</link>
+</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -10292,7 +10276,7 @@
 <para>
 <code>org.zkoss.zul.Listcell</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*ANY</para></sect3><sect3><title>Supported Events</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events</title>
 <para>*NONE</para></sect3><sect3><title>Properties</title>
 <para/>
 <informaltable frame="all">
@@ -10556,7 +10540,9 @@
 <para>
 <code>org.zkoss.zul.Listfoot</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>org.zkoss.zul.Listfooter</para></sect3><sect3><title>Supported Events</title>
+<para>
+<link linkend="Listfooter">Listfooter</link>
+</para></sect3><sect3><title>Supported Events</title>
 <para>*NONE</para></sect3><sect3><title>Properties</title>
 <para>*NONE</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
@@ -10635,7 +10621,7 @@
 <para>
 <code>org.zkoss.zul.Listfooter</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*ANY</para></sect3><sect3><title>Supported Events</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events</title>
 <para>*NONE</para></sect3><sect3><title>Properties</title>
 <para/>
 <informaltable frame="all">
@@ -10839,7 +10825,9 @@
 <para>
 <code>org.zkoss.zul.Listhead</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>org.zkoss.zul.Listheader</para></sect3><sect3><title>Supported Events</title>
+<para>
+<link linkend="Listheader">Listheader</link>
+</para></sect3><sect3><title>Supported Events</title>
 <para>*NONE</para></sect3><sect3><title>Properties</title>
 <para>*NONE</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
@@ -11311,7 +11299,9 @@
 <para>
 <code>org.zkoss.zul.Listitem</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Listcell</para></sect3><sect3><title>Supported Events</title>
+<para>
+<link linkend="Listcell">Listcell</link>
+</para></sect3><sect3><title>Supported Events</title>
 <para/>
 <informaltable frame="all">
 <tgroup cols="2">
@@ -11641,7 +11631,9 @@
 <programlisting>&lt;menu label="File"&gt;&#13;    &lt;menupopup&gt;    &#13;        &lt;menuitem label="New" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuitem label="Open" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuitem label="Save" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuseparator/&gt;        &#13;        &lt;menuitem label="Exit" onClick="alert(self.label)"/&gt;        &#13;    &lt;/menupopup&gt;    &#13;&lt;/menu&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Menu</code> </para></sect3><sect3><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Menupopup</para></sect3><sect3><title>Supported Events</title>
+<para>
+<link linkend="Menupopup">Menupopup</link>
+</para></sect3><sect3><title>Supported Events</title>
 <para>*NONE</para></sect3><sect3><title>Properties</title>
 <para>*NONE</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
@@ -12290,8 +12282,18 @@
 <para>
 <code>org.zkoss.zul.Menupopup</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para><xi:include href=".xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-<code>,org.zkoss.zul.Menuitem,org.zkoss.zul.Menuseparator</code> </para></sect3><sect3><title>Supported Events</title>
+<para>
+<link linkend="Menu">
+<code>Menu</code>
+</link>
+<code>,</code>
+<link linkend="Menuitem">
+<code>Menuitem</code>
+</link>
+<code>,</code>
+<link linkend="Menuseparator">
+<code>Menuseparator</code>
+</link> </para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -12312,7 +12314,7 @@
 </entry>
 <entry>
 <para>
-<link linkend="MouseEvent">
+<link linkend="OpenEvent">
 <code>org.zkoss.zk.ui.event.OpenEvent</code>
 </link>
 </para>
@@ -13038,7 +13040,7 @@
 <para>
 <code>org.zkoss.zul.Radiogroup</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*ANY </para></sect3><sect3><title>Supported Events</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events</title>
 <para>*NONE</para></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="3">
@@ -13522,7 +13524,9 @@
 <para>
 <code>org.zkoss.zul.Rows</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*org.zkoss.zul.Row</para></sect3><sect3><title>Supported Events</title>
+<para>
+<link linkend="Row">Row</link>
+</para></sect3><sect3><title>Supported Events</title>
 <para>*NONE</para></sect3><sect3><title>Properties</title>
 <para>*NONE</para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
@@ -13676,7 +13680,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title>Separator</title>
+<para/></sect3></sect2><sect2 id="Separator"><title>Separator</title>
 <para>A separator.</para>
 <para>A separator is used to insert a space between two components. There are several ways to</para>
 <para>customize the separator.</para>
@@ -15042,12 +15046,13 @@
 <para>
 <code>org.zkoss.zul.Tabbox</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Tabs">
-<code>org.zkoss.zul.Tabs</code>
+<para>
+<link linkend="Tabs">
+<code>Tabs</code>
 </link>
-</para>
-<para>*<link linkend="Tabpanels">
-<code>org.zkoss.zul.Tabpanels</code>
+<code>, </code>
+<link linkend="Tabpanels">
+<code>Tabpanels</code>
 </link>
 </para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
@@ -15561,8 +15566,9 @@
 <para>
 <code>org.zkoss.zul.Treepanels</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Tabpanel">
-<code>org.zkoss.zul.Tabpanel</code>
+<para>
+<link linkend="Tabpanel">
+<code>Tabpanel</code>
 </link>
 </para>
 <para/></sect3><sect3><title>Supported Events</title>
@@ -15659,8 +15665,9 @@
 <para>
 <code>org.zkoss.zul.Tabs</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Tab">
-<code>org.zkoss.zul.Tab</code>
+<para>
+<link linkend="Tab">
+<code>Tab</code>
 </link>
 </para>
 <para/></sect3><sect3><title>Supported Events</title>
@@ -16682,16 +16689,15 @@
 <para>
 <code>org.zkoss.zul.Tree</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Treecols">
-<code>org.zkoss.zul.Treecols</code>
+<para>
+<link linkend="Treecols">
+<code>Treecols, </code>
 </link>
-</para>
-<para>*<link linkend="Treechildren">
-<code>org.zkoss.zul.Treechildren</code>
+<link linkend="Treechildren">
+<code>Treechildren, </code>
 </link>
-</para>
-<para>*<link linkend="Treefoot">
-<code>org.zkoss.zul.Treefoot</code>
+<link linkend="Treefoot">
+<code>Treefoot</code>
 </link>
 </para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
@@ -17576,8 +17582,9 @@
 <para>
 <code>org.zkoss.zul.Treechildren</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Treeitem">
-<code>org.zkoss.zul.Treeitem</code>
+<para>
+<link linkend="Treeitem">
+<code>Treeitem</code>
 </link>
 </para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
@@ -18073,8 +18080,9 @@
 <para>
 <code>org.zkoss.zul.Treecols</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Treecol">
-<code>org.zkoss.zul.Treecol</code>
+<para>
+<link linkend="Treecol">
+<code>Treecol</code>
 </link>
 </para>
 <para>
@@ -18214,8 +18222,9 @@
 <para>
 <code>org.zkoss.zul.Treefoot</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Treefooter">
-<code>org.zkoss.zul.Treefooter</code>
+<para>
+<link linkend="Treefooter">
+<code>Treefooter</code>
 </link>
 </para></sect3><sect3><title>Supported Events</title>
 <para>*None</para></sect3><sect3><title>Properties</title>
@@ -18500,12 +18509,12 @@
 <para>
 <code>org.zkoss.zul.Treeitem</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Treerow">
-<code>org.zkoss.zul.Treerow</code>
+<para>
+<link linkend="Treerow">
+<code>Treerow, </code>
 </link>
-</para>
-<para>*<link linkend="Treechildren">
-<code>org.zkoss.zul.Treechildren</code>
+<link linkend="Treechildren">
+<code>Treechildren</code>
 </link>
 </para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
@@ -18897,8 +18906,9 @@
 <para>
 <code>org.zkoss.zul.Treerow</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*<link linkend="Treerow">
-<code>org.zkoss.zul.Treecell</code>
+<para>
+<link linkend="Treerow">
+<code>Treecell</code>
 </link>
 </para></sect3><sect3><title>Supported Events</title>
 <para>*None</para></sect3><sect3><title>Properties</title>
@@ -23042,9 +23052,7 @@
 <programlisting>&lt;device-config&gt;&#13;        &lt;device-type&gt;ajax&lt;/device-type&gt;&lt;server-push-class&gt;my.ServerPush&lt;/server-push-class&gt;        &#13;&lt;/device-config&gt;&#13;</programlisting></sect3><sect3><title>The unavailable-message Element</title>
 <para>[Optional][Default: depends on device]</para>
 <para>It specifies the message that will be displayed if the client doesn't support this device.</para></sect3></sect2><sect2><title>The error-page Element</title>
-<programlisting>&lt;error-page&gt;&#13;    &lt;device-type&gt;[ajax|mil]&lt;/device-type&gt;    &#13;    &lt;exception-type&gt;ClassName&lt;/exception-type&gt;    &#13;</programlisting>
-<para>&lt;location&gt;the error page's URI&lt;/location&gt;</para>
-<para>&lt;/error-page&gt;</para>
+<programlisting>&lt;error-page&gt;&#13;    &lt;device-type&gt;[ajax|mil]&lt;/device-type&gt;    &#13;    &lt;exception-type&gt;ClassName&lt;/exception-type&gt;    &#13;    &lt;location&gt;the error page's URI&lt;/location&gt;    &#13;&lt;/error-page&gt;&#13;</programlisting>
 <para>It specifies an error page used when an un-caught exception is thrown in updating a ZUML page (e.g., in an event listener). Each page is associated with an exception type, aka, a class deriving from java.lang.Throwable. You can specify multiple error pages, each with a different exception type. When an error occurs, ZK searches the proper error page by examing the exception type one-by-one. If none is found, it shows, by default, an alert message at the client.</para>
 <para>The device-type element is optional. If omitted, ajax is assumed. If you want to specify an error page for mobile devices, it has to be mil.</para></sect2><sect2><title>The preference Element</title>
 <programlisting>&lt;preference&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;</programlisting>
