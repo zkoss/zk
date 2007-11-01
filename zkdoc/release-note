@@ -105,7 +105,6 @@ ZK 3.0.0 RC2
   1806831: Resizing header is wrong for Gird, Tree, and Listbox
   1487289: Menubar in a grid is covered by another grid (FF only)
   1676365: Drag'n'Drop Problem on Opera
-  1536757: splitter problem
   1577997: tabbox overflow error
   1807361: Problem with slider in a scrolled grid
   1806152: listbox fail to update when model's size is zero (IE only)
@@ -148,7 +147,6 @@ ZK 3.0.0 RC2
   1816372: Messagebox depends on BeanShell
   1816666: ZK layout splitter disappears in its nightbor width
   1816451: In ZK Popup window demo, popuped window cann't move outside
-  1729456: Many Splitter Issues
   1816436: The scroll bar is disappear in ZK demo, IE 6
   1816892: If popup the same menu twice, the second time's offset wrong
 
