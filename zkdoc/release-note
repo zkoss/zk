@@ -62,6 +62,12 @@ ZK 3.0.0
   1823805: Button in a info window is incomplete.(IE7)
   1823218: Tree with vflex, body grows over boarder.
   1823858: Splitter- hbox in vbox
+  1823815: Can't add items in Mixed with HTML elements(Safari)
+  1823814: Listbox cannot display normally (Safari)
+  1823812: Side-menu will always jump to the top(Safari)
+  1823810: BorderLayout: "25%" areas are not displayed in Safari
+  1823809: Splittered areas are not normally displayed (Safari)
+  1823807: File Download doesn't work in Safari.
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
