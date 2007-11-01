@@ -900,7 +900,7 @@ zk.Selectable.prototype = {
 	_headHgh: function (defVal) {
 		var n = this.headtbl;
 		n = n && n.rows.length ? n.rows[0]: null;
-		var hgh = n ? zk.offsetHeight(n): 0;
+		var hgh = n ? zk.offsetHeight($real(n)): 0; // Bug #1823218 
 		return hgh ? hgh: defVal;
 	},
 	/** Returns the size for vflex
