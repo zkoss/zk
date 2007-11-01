@@ -14,7 +14,7 @@ function newWindow(url){
 			<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();h1.setWidths("0px,");w2.setWidth("90%")'/>
 			<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();h1.setWidths(null);w2.setWidth("800px")'/>
 			<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
-			<button label="reload page" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
+			<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
 			</caption>
 			<vbox>
 				<vbox>
