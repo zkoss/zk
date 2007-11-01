@@ -1,0 +1,442 @@
+<zk>
+The update of list cell freeze IE.<separator/>
+<button label="start timer" onClick="timer.start()"/>
+<button label="stop timer" onClick="timer.stop()"/>
+<listbox>
+	<listhead sizable="true">
+		<listheader label="1" />
+		<listheader label="2" />
+		<listheader label="3" />
+		<listheader label="4" />
+		<listheader label="5" />
+		<listheader label="6" />
+		<listheader label="7" />
+		<listheader label="8" />
+	</listhead>
+	<listitem>
+		<listcell label="1" id="c11"/>
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+</listbox>
+<timer id="timer" delay="1500" repeats="true" running="false">
+	<attribute name="onTimer">
+		c11.setLabel(""+new java.util.Date());
+	</attribute>
+</timer>
+</zk>
