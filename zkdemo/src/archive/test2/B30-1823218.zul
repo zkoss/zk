@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<window border="normal"> 
+<tree id="tree" width="400px" height="600px" vflex="true">
+	<treecols id="cols">
+		<treecol label="Header"/>
+	</treecols>
+</tree>
+<button label="remove header" onClick="cols.setParent(null)" />
+LALLALALALALALAL
+</window> 

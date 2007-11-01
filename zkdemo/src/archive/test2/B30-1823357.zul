@@ -1,0 +1,13 @@
+<zk>
+	<tree id="tree2" width="240px">
+		<treecols>
+			<treecol label="A" />
+			<treecol label="B" />
+			<treecol label="C" />
+		</treecols>
+		<auxhead>
+			<auxheader id="Phi" label="Phi" rowspan="2" colspan="2" />
+		</auxhead>
+	</tree>
+	<button label="test" onClick="Phi.setColspan(3)" />
+</zk>

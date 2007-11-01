@@ -1,147 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
-alignpack.zul
-
-{{IS_NOTE
-	Purpose:
+<zk>
+	PACK AND ALIGN:
+		<style>
+			div.hbox{
+			border-color: red;
+			border-width: 1px;
+			border: solid;
+			}
+			td.hbox{
+			border-color: blue;
+			border-width: 1px;
+			border: solid;
+			}
+		</style>
+		<hbox sclass="b" id="hb" pack="start" align="start" height ="90px" width="90px">
+			<textbox height="30px" width="30px"/>
+		</hbox>
+		 PACK:
+		 <radiogroup>
+		 <attribute name="onCheck">
+		 		hb.setPack(self.selectedItem.label);
+		 </attribute>
+			<radio checked="true" label="start"/>
+			<radio label="center"/>
+			<radio label="end"/>
+		</radiogroup>
+		ALIGN:
+		 <radiogroup>
+		 <attribute name="onCheck">
+		 		hb.setAlign(self.selectedItem.label);
+		 </attribute>
+			<radio checked="true" label="start"/>
+			<radio label="center"/>
+			<radio label="end"/>
+		</radiogroup>
 		
-	Description:
-		
-	History:
-		Fri Oct 12 23:10:06     2007, Created by tomyeh
-}}IS_NOTE
-
-Copyright (C) 2007 Potix Corporation. All Rights Reserved.
-
-{{IS_RIGHT
-}}IS_RIGHT
--->
-<hbox>
-<window title="Test of align" border="normal" width="250px">
- <hbox align="start">
-  <textbox/>
-  <textbox rows="3"/>
- </hbox>
- <hbox align="center">
-  <textbox/>
-  <textbox rows="3"/>
- </hbox>
- <hbox align="end">
-  <textbox/>
-  <textbox rows="3"/>
- </hbox>
- <!--  -->
- <vbox align="start">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
- <vbox align="center">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
- <vbox align="end">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
-</window>
-<window title="Test of pack" border="normal"  width="250px">
- <hbox pack="start" widths="150px,150px">
-  <textbox width="50px"/>
-  <textbox width="50px" rows="3"/>
- </hbox>
- <hbox pack="center" widths="150px,150px">
-  <textbox width="50px"/>
-  <textbox width="50px" rows="3"/>
- </hbox>
- <hbox pack="end" widths="150px,150px">
-  <textbox width="50px"/>
-  <textbox width="50px" rows="3"/>
- </hbox>
- 
- <vbox pack="start" widths="50px,50px">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
- <vbox pack="center" widths="50px,50px">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
- <vbox pack="end" widths="50px,50px">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
-</window>
-
-<window title="Test of align and pack" border="normal"  width="250px">
- <hbox pack="start" align="start" widths="150px,150px">
-  <textbox width="50px"/>
-  <textbox width="50px" rows="3"/>
- </hbox>
- <hbox pack="center" align="center" widths="150px,150px">
-  <textbox width="50px"/>
-  <textbox width="50px" rows="3"/>
- </hbox>
- <hbox pack="end" align="end" widths="150px,150px">
-  <textbox width="50px"/>
-  <textbox width="50px" rows="3"/>
- </hbox>
- 
- <vbox pack="start" align="start" widths="50px,50px">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
- <vbox pack="center" align="center"  widths="50px,50px">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
- <vbox pack="end" align="end" widths="50px,50px">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
-</window>
-<window title="Test of align and pack dinamicly dynamically" border="normal"  width="250px">
-<vbox>
- <hbox id="hb" pack="start" align="start" widths="150px,150px">
-  <textbox width="50px"/>
-  <textbox width="50px" rows="3"/>
- </hbox> 
- <vbox id="vb" pack="start" align="start" widths="50px,50px">
-  <textbox/>
-  <textbox rows="3"/>
- </vbox>
- <radiogroup id="rg">
- <attribute name="onCheck">
- 	if(pack.isChecked()) {
- 		hb.setPack(self.selectedItem.label);
- 		vb.setPack(self.selectedItem.label);
- 	}
- 	if (align.isChecked()) {
- 		hb.setAlign(self.selectedItem.label);
- 		vb.setAlign(self.selectedItem.label);
- 	}
- </attribute>
-	<radio checked="true" label="start"/>
-	<radio label="center"/>
-	<radio label="end"/>
-</radiogroup>
-
-<checkbox id="pack" label="Pack">
-	<attribute name="onCheck">
-		if(self.isChecked()) {	 		
-	 		hb.setPack(rg.selectedItem.label);
-	 		vb.setPack(rg.selectedItem.label);
-	 	}
-	</attribute>
-</checkbox>
-<checkbox id="align" label="Align" >
-	<attribute name="onCheck">
-		if(self.isChecked()) {	 		
-	 		hb.setAlign(rg.selectedItem.label);
-	 		vb.setAlign(rg.selectedItem.label);
-	 	}
-	</attribute>
-</checkbox>
- </vbox>
-</window>
-</hbox>
+		<vbox id="vb" pack="start" align="start" height ="90px" width="90px">
+			<textbox height="30px" width="30px"/>
+		</vbox>
+		 PACK:
+		 <radiogroup>
+		 <attribute name="onCheck">
+		 		vb.setPack(self.selectedItem.label);
+		 </attribute>
+			<radio checked="true" label="start"/>
+			<radio label="center"/>
+			<radio label="end"/>
+		</radiogroup>
+		ALIGN:
+		 <radiogroup>
+		 <attribute name="onCheck">
+		 		vb.setAlign(self.selectedItem.label);
+		 </attribute>
+			<radio checked="true" label="start"/>
+			<radio label="center"/>
+			<radio label="end"/>
+		</radiogroup>
+</zk>

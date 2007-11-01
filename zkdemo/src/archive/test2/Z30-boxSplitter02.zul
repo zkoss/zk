@@ -1,0 +1,57 @@
+<zk>
+	<window border="normal" height="500px" width="500px">
+		<hbox sclass="b" id="hb" pack="start" align="start"
+			height="500px" width="500px">
+			<textbox height="30px" width="30px" />
+			<splitter />
+			<textbox height="30px" width="30px" />
+		</hbox>
+		PACK:
+		<radiogroup>
+			<attribute name="onCheck">
+				hb.setPack(self.selectedItem.label);
+			</attribute>
+			<radio checked="true" label="start" />
+			<radio label="center" />
+			<radio label="end" />
+		</radiogroup>
+		ALIGN:
+		<radiogroup>
+			<attribute name="onCheck">
+				hb.setAlign(self.selectedItem.label);
+			</attribute>
+			<radio checked="true" label="start" />
+			<radio label="center" />
+			<radio label="end" />
+		</radiogroup>
+	</window>
+	<window>
+		TEST
+	</window>
+	<window border="normal" height="500px" width="500px">
+		<vbox sclass="b" id="vb" pack="start" align="start"
+			height="500px" width="500px">
+			<textbox height="30px" width="30px" />
+			<splitter />
+			<textbox height="30px" width="30px" />
+		</vbox>
+		PACK:
+		<radiogroup>
+			<attribute name="onCheck">
+				vb.setPack(self.selectedItem.label);
+			</attribute>
+			<radio checked="true" label="start" />
+			<radio label="center" />
+			<radio label="end" />
+		</radiogroup>
+		ALIGN:
+		<radiogroup>
+			<attribute name="onCheck">
+				vb.setAlign(self.selectedItem.label);
+			</attribute>
+			<radio checked="true" label="start" />
+			<radio label="center" />
+			<radio label="end" />
+		</radiogroup>
+	</window>
+</zk>
