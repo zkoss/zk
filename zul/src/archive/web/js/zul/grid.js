@@ -26,7 +26,7 @@ zk.Grid.prototype = {
 		zkau.setMeta(comp, this);
 		this.init();
 	},
-	init: function () {
+	init: function (ignoreAuto) {
 		this.element = $e(this.id);
 		if (!this.element) return;
 
@@ -93,7 +93,7 @@ zk.Grid.prototype = {
 		} 
 		this.stripe();
 			
-		setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722 
+		if (!ignoreAuto) setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722 
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
 
@@ -195,26 +195,26 @@ zk.Grid.prototype = {
 					}
 				zk.cpCellWidth(head, this.bodyrows, this);	
 				var fake = $e(head.id + "!fake");
-				if (!fake || fake.cells.length != head.cells.length) {
-					if (fake) fake.parentNode.removeChild(fake);
-					var src = document.createElement("TR");
-					src.id = head.id + "!fake";
-					src.style.height = "0px";
+				if (fake) fake.parentNode.removeChild(fake);
+				var src = document.createElement("TR");
+				src.id = head.id + "!fake";
+				src.style.height = "0px";
 					//Note: we cannot use display="none" (offsetWidth won't be right)
-					for (var j = 0; j < head.cells.length; ++j)
-						src.appendChild(document.createElement("TD"));					
-					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]); 						
-					var row = this.headtbl.rows[0];
-					var cells = row.cells;
-					for (var k =0, z = 0; k < cells.length; k++) {
-						var s = cells[k], d = head.cells[k];
-						var wd =  d.style.width;							
-						if (!wd || wd == "auto" || wd.indexOf('%') > -1) // Bug #1822564
-							d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-							wd = d.style.width;
-						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
-					} 
-				}			
+				for (var j = 0; j < head.cells.length; ++j)
+					src.appendChild(document.createElement("TD"));					
+				this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);						
+				var row = this.headtbl.rows[0];
+				var cells = row.cells;
+				for (var k =0, z = 0; k < cells.length; k++) {
+					var s = cells[k], d = head.cells[k];
+					var wd =  d.style.width;							
+					if (!wd || wd == "auto" || wd.indexOf('%') > -1) {// Bug #1822564
+						d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
+						setZKAttr(d, "wd", "NaN"); // Bug #1823236
+					}
+					wd = d.style.width;
+					s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
+				} 						
 			}
 			if (this.foottbl && this.foottbl.rows.length)
 				zk.cpCellWidth(head, this.foottbl.rows, this);
@@ -289,7 +289,11 @@ zkGrid.init = function (cmp) {
 	if (meta) meta.init();
 	else new zk.Grid(cmp);
 };
-zkGrid.childchg = zkGrid.init; // Bug #1817627.
+zkGrid.childchg = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta.init(getZKAttr(cmp, "autowidth") != "true");
+	else new zk.Grid(cmp);
+}; // Bug #1817627.
 
 /** Called when a grid becomes visible because of its parent. */
 zkGrid.onVisi = zkGrid.onSize = function (cmp) {

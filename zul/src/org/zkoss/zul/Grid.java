@@ -122,6 +122,7 @@ public class Grid extends XulElement {
 	private String _scOddRow = "odd";
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
+	private boolean _autoWidth = true;
 
 	public Grid() {
 		setSclass("grid");
@@ -424,6 +425,32 @@ public class Grid extends XulElement {
 			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));
 	}
 
+	/**
+	 * Specifies whether the width of grid will be re-sized automatically once 
+	 * any of its child components' properties is modified.
+	 * <br/>
+	 * However,this property will be ignored when the grid is rendered at the first time.
+	 * 
+	 * Note:
+	 * If the width of child component in grid is fixed, you should turn-off this function for better performance.
+	 * But, if the width of child components is dynamically, you should turn-on this function or the layout of grid will be in a mess once
+	 * any of its child components' width exceeds the width of cell of grid.
+	 * @param autoWidth 
+	 * @since 3.0.0
+	 */
+	public void setAutoWidth(boolean autoWidth) {
+		if (_autoWidth != autoWidth) {
+			_autoWidth = autoWidth;
+			smartUpdate("z.autowidth", _autoWidth);
+		}			
+	}
+	
+	/**
+	 * Returns whether auto culative width. 
+	 */
+	public boolean isAutoWidth(){
+		return _autoWidth;
+	}
 	/** Returns the number of rows to preload when receiving
 	 * the rendering request from the client.
 	 *
@@ -833,7 +860,7 @@ public class Grid extends XulElement {
 			HTMLs.appendAttribute(sb, "align", _align);
 		if (_model != null)
 			HTMLs.appendAttribute(sb, "z.model", true);
-
+		HTMLs.appendAttribute(sb, "z.autowidth", isAutoWidth());
 		if (_scOddRow != null)
 			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 		return sb.toString();

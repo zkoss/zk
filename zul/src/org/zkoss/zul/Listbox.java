@@ -153,7 +153,8 @@ public class Listbox extends XulElement {
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
-
+	private boolean _autoWidth = true;
+	
 	public Listbox() {
 		setSclass("listbox");
 		init();
@@ -1521,6 +1522,33 @@ public class Listbox extends XulElement {
 			if (!inSelectMold()) initAtClient();
 		}
 	}
+	/**
+	 * Specifies whether the width of listbox will be re-sized automatically once 
+	 * any of its child components' properties is modified.
+	 * <br/>
+	 * However,this property will be ignored when the listbox is rendered at the first time.
+	 * 
+	 * Note:
+	 * If the width of child component in listbox is fixed, you should turn-off this function for better performance.
+	 * But, if the width of child components is dynamically, you should turn-on this function or the layout of listbox will be in a mess once
+	 * any of its child components' width exceeds the width of cell of listbox.
+	 * @param autoWidth 
+	 * @since 3.0.0
+	 */
+	public void setAutoWidth(boolean autoWidth) {
+		if (_autoWidth != autoWidth) {
+			_autoWidth = autoWidth;
+			smartUpdate("z.autowidth", _autoWidth);
+		}			
+	}
+	
+	/**
+	 * Returns whether auto culative width. 
+	 */
+	public boolean isAutoWidth(){
+		return _autoWidth;
+	}
+	
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
@@ -1554,6 +1582,7 @@ public class Listbox extends XulElement {
 				HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 		}
 
+		HTMLs.appendAttribute(sb, "z.autowidth", isAutoWidth());
 		appendAsapAttr(sb, Events.ON_SELECT);
 		return sb.toString();
 	}
