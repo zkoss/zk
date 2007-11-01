@@ -528,7 +528,7 @@ zkau.cmd1.outer = function (uuid, cmp, html) {
 			}
 		}
 	}
-	if (cmp || html.trim()) //if treechildren has no children at all
+	if (cmp && html.trim()) //if treechildren has no children at all
 		_zktrx.au.outer(uuid, cmp, html);
 };
 
