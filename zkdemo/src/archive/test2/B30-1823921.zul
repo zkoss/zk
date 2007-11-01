@@ -1,14 +1,14 @@
-<zk>
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<h:h3> [ 1823921 ] Listbox crashed with complex Header</h:h3>
+<h:pre>
 
-	<toolbarbutton label="B30-1823354.zul :: Listbox's content is fixed while vflex = true"  href="B30-1823354.zul"/>
-	<separator/>
-	<toolbarbutton label="B30-1823921.zul :: Listbox crashed with complex Header"  href="B30-1823921.zul"/>
-	<separator/>
-	<window id="win" title="test VFlex!!" sizable="true"
+Firefox and IE6 can't draw Listbox correctly while
+Listhead's sizable is true and Listheader with image, label and percentage
+width.
+</h:pre>
+	<window id="win" title="TEST" sizable="true"
 		width="600px" height="350px" border="normal">
-		<caption>
-			<button label="test Selected Items" onClick="findSelected()"/>
-		</caption>
+		<caption label="Sizable, percentage, Header"/>
 		<zscript><![CDATA[
 			import java.util.ArrayList;
 			ArrayList list = new ArrayList();
@@ -18,15 +18,7 @@
 				
 				list.add(new String[] {"name"+i, i%2==1?"Male":"Female",""+i,"addr"+i});
 			}
-			
-			void findSelected()
-			{
-				items = libox.getSelectedItems();
-				alert("items: "+items.size());
-			}
-			
 		]]></zscript>
-		
 		<listbox id="libox" width="100%" multiple="true" vflex="true">
 			<listhead  sizable="true">
 				<listheader label="Name" sort="auto" width="25%" image="/img/coffee.gif"/>

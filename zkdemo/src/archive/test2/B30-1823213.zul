@@ -1,4 +1,9 @@
-
+<?xml version="1.0" encoding="UTF-8"?> 
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:h3> [ 1823213 ] Listbox in hbox right side bound is gone</h:h3>
+	<h:pre>
+While put listbox in hbox the right side of listbox is gone.
+	</h:pre>
 <vbox>
 
 	<hbox width="502px">
@@ -35,3 +40,4 @@
 		</listitem>
 	</listbox>
 </vbox>
+</zk>

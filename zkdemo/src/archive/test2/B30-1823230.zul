@@ -1,5 +1,9 @@
-<zk>
-	Both H and V scroll
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:h3> [ 1823230 ] listbox H scroll doesn't work</h:h3>
+	<h:pre>
+Horizontal scroll doesn't work.
+	</h:pre>
 	<listbox rows="4" width="80px">
 		<listhead>
 			<listheader width="50px" label="Population"/>

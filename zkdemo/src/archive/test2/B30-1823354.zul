@@ -1,5 +1,9 @@
-<zk>
-B30-1823354.zul
+<?xml version="1.0" encoding="UTF-8"?> 
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:h3> [ 1823354 ] Listbox's content is fixed while vflex = true</h:h3>
+	<h:pre>
+While user change outer window's height, listbox wont span it's content.
+	</h:pre>
 	<window id="win" title="test VFlex!!" sizable="true"
 		width="300px" height="300px" border="normal">
 		<zscript><![CDATA[

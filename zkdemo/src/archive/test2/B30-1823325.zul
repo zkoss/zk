@@ -1,6 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:h3> [ 1823325 ] Aux rowspan error in Firefox and Safari</h:h3>
+	<h:pre>
+this is a general Bug in Tree, Listbox and Grid.
 
+In Firefox and Safari, Auxheader will lost it's bottom and right border.
+
+In Safari header label will be cut to half.
+	</h:pre>
 <vbox width="100%">
-	B30-1823325
 
 	<label value="Tree"/>
 	<tree id="tree2" >
@@ -87,3 +95,4 @@
 
 
 </vbox>
+</zk>

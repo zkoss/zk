@@ -18,10 +18,10 @@
 			<auxheader label="D"/>
 		</auxhead>
 		<listhead  sizable="true">
-			<listheader label="Name" sort="auto" image="/img/coffee.gif"/>
-			<listheader label="Gender" sort="auto" image="/img/folder.gif"/>
-			<listheader label="Age" sort="auto" width="20%" align="center" image="/img/cubfirs.gif"/>
-			<listheader label="Description" sort="auto" image="/img/home.gif"/>
+			<listheader label="Name" sort="auto" width="25%" image="/img/coffee.gif"/>
+			<listheader label="Gender" sort="auto" width="25%" image="/img/folder.gif"/>
+			<listheader label="Age" sort="auto" width="25%" align="center" image="/img/cubfirs.gif"/>
+			<listheader label="Description" width="25%" sort="auto" image="/img/home.gif"/>
 		</listhead>
 		<listitem>
 			<listcell label="Mary"/>
