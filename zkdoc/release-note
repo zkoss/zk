@@ -57,6 +57,7 @@ ZK 3.0.0
   1823213: Listbox in hbox
   1823832: Mask show up slowly when doModel in FF Linux
   1823354: Listbox's content is fixed while vflex = true
+  1823802: Scroll-bar show up when click the last item in Listboxes
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
