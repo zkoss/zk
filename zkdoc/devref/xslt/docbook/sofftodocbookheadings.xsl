@@ -105,8 +105,14 @@
 				        <xsl:apply-templates select="key('children', generate-id())"/>
 				     </chapter>
 		     </xsl:when>
-		     <xsl:when test="descendant::*[contains(@xlink:href,'xml')]">
-		       <xsl:apply-templates/>		       
+		     <xsl:when test="child::text:bookmark-start">
+         <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text> id="</xsl:text><xsl:value-of select="."/><xsl:text>"</xsl:text><xsl:text disable-output-escaping="yes">&gt;</xsl:text>			      
+			        <title>
+     	      <xsl:apply-templates/>
+    	      </title>    	    
+				     <xsl:apply-templates select="key('headchildren', generate-id())"/>
+				     <xsl:apply-templates select="key('children', generate-id())"/>
+			      <xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		     </xsl:when>		  
 			    <xsl:otherwise>
 			      <xsl:text disable-output-escaping="yes">&lt;sect</xsl:text><xsl:value-of select="$current - 1"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>			      
@@ -883,10 +889,10 @@
 			-->
 		</xsl:when>
 		<xsl:otherwise>
-		<xsl:variable name="linkvar" select="substring-after(@xlink:href,'#')"/>
+		<xsl:variable name="linkvar" select="@xlink:href"/>
 			<xsl:element name="link">
 				<xsl:attribute name="linkend">
-					<xsl:value-of select="substring-before($linkvar,'%')"/>
+					<xsl:value-of select="substring-after($linkvar,'#')"/>
 				</xsl:attribute>
 				<xsl:apply-templates/>
 			</xsl:element>
