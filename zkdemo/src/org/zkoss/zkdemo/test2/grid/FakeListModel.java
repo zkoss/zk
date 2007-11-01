@@ -1,3 +1,21 @@
+/* MainWindow.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Oct ,31st    2007, Created by Jeff Liu
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
 package org.zkoss.zkdemo.test2.grid;
 
 import java.util.Comparator;
@@ -5,26 +23,34 @@ import java.util.Comparator;
 import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.ListModelExt;
 import org.zkoss.zul.event.ListDataEvent;
-
+/**
+ * 
+ * @author Jeff
+ *
+ */
 public class FakeListModel extends AbstractListModel implements ListModelExt {
 	
 	private int _size = 10000;
 	
+	// ListModelExt
 	public void sort(Comparator arg0, boolean arg1) {
 		System.out.println("==================SORT DATA================");
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
-
+	
+	//AbstractListModel
 	public Object getElementAt(int arg0) {
 		String value = "Element At :"+arg0;
 		System.out.println(value);
 		return value;
 	}
-
+	
+	//AbstractListModel
 	public int getSize() {
 		return _size;
 	}
 	
+	//AbstractListModel
 	public void setSize(int size){
 		_size = size;
 	}
