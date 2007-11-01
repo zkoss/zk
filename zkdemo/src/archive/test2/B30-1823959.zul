@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+{{IS_NOTE
+	Purpose:
+		Test Grid with live data and renderer and sort
+	Description:
+		
+	History:
+	Create by Dennis	
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<h:h3> [ 1823959 ] Grid sortAscending sortDescending Null Object error</h:h3>
+<h:pre>
+
+In <h:b>Opera</h:b>, <h:b>IE6</h:b> try to invoke "sortAscending" "sortDescending" functions
+will get null Object Error.
+
+</h:pre>
+	<zscript>
+		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel();
+
+		import org.zkoss.zkdemo.userguide.*;
+		Comparator asc = new RowLabelComparator(true),
+		dsc = new RowLabelComparator(false);
+	</zscript>
+	<vbox>
+		<grid mold="paging"  model="${strset}">
+			<columns sizable="true">
+				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"/>
+			</columns>
+		</grid>
+	</vbox>
+</zk>

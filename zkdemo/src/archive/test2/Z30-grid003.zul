@@ -14,7 +14,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<h:h3> Test "sortAscending" and "sortDescending"  </h:h3>
+<h:p>
+See if the sorted result printed in console is same as the data collection displayed in Browser.
+</h:p>
+<toolbarbutton label="B30-1823959.zul :: Grid sortAscending sortDescending Null Object error" 
+	href="B30-1823959.zul"/>
+	<separator/>
 	<zscript>
 		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel();
 
