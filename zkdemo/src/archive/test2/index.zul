@@ -7,41 +7,43 @@ function newWindow(url){
 </h:script>
 <h:form id="newform" target="_blank" method="post"/>
 <window id="main" use="org.zkoss.zkdemo.test2.MainWindow" height="100%">
-<hbox width="100%" id="h1">
-	<window id="w1" width="355px" >
-		<groupbox mold="3d" width="352px" >
-			<caption label="ZK Version:${desktop.webApp.version}">
-			<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();h1.setWidths("0px,");w2.setWidth("90%")'/>
-			<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();h1.setWidths(null);w2.setWidth("800px")'/>
-			<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
-			<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
-			</caption>
-			<vbox>
+	<hbox width="100%" id="h1">
+		<window id="w1" width="355px" >
+			<groupbox mold="3d" width="352px" >
+				<caption label="ZK Version:${desktop.webApp.version}">
+					<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();h1.setWidths("0px,");w2.setWidth("90%")'/>
+					<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();h1.setWidths(null);w2.setWidth("800px")'/>
+					<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
+					<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
+				</caption>
 				<vbox>
-					File Name Filter:<textbox id="fnf" value="Z30"/>
-					<hbox>
-						<checkbox id="reg"/>Regular Expression
-					</hbox>
-					<hbox>
-						<checkbox id="newb"/>Open in new Browser
-					</hbox>
+					<vbox>
+						File Name Filter:<textbox id="fnf" value="Z30"/>
+						<hbox>
+							<checkbox id="reg"/>Regular Expression
+						</hbox>
+						<hbox>
+							<checkbox id="newb"/>Open in new Browser
+						</hbox>
+					</vbox>
+					<listbox id="lb" mold="paging" pageSize="20" width="330px">
+						<listhead>
+							<listheader label="Name" width="50%"/>
+							<listheader label="Date" width="50%"/>
+						</listhead>
+					</listbox>
 				</vbox>
-				<listbox id="lb" mold="paging" pageSize="20" width="330px">
-					<listhead>
-						<listheader label="Name" width="50%"/>
-						<listheader label="Date" width="50%"/>
-					</listhead>
-				</listbox>
-			</vbox>
-		</groupbox>
-	</window>
-	<window id="w2" border="normal" height="850px" width="800px">
-		<caption label="ZK TEST2"/>
-		<separator/>
-		<separator/>
-		<iframe  id="ifr" height="790px"  width="98%"/>
-	</window>
-</hbox>
+			</groupbox>
+			
+		</window>
+		
+		<window id="w2" border="normal" height="850px" width="800px">
+			<caption label="ZK TEST2"/>
+			<separator/>
+			<separator/>
+			<iframe  id="ifr" height="790px"  width="98%"/>
+		</window>
+	</hbox>
 
 </window>
 </zk>

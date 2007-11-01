@@ -1,0 +1,34 @@
+<zk>
+
+	<toolbarbutton label="B30-1823354.zul :: Listbox's content is fixed while vflex = true"  href="B30-1823354.zul"/>
+	<separator/>
+	<window id="win" title="test VFlex!!" sizable="true"
+		width="300px" height="350px" border="normal">
+		<caption>
+			<button label="test Selected Items" onClick="findSelected()"/>
+		</caption>
+		<zscript><![CDATA[
+			import java.util.ArrayList;
+			ArrayList list = new ArrayList();
+			
+			for(int i=1;i<=50;i++)
+			{
+				list.add("entry "+i);
+			}
+			
+			void findSelected()
+			{
+				items = libox.getSelectedItems();
+				alert("items: "+items.size());
+			}
+			
+		]]></zscript>
+		
+		<listbox id="libox" width="250px" multiple="true" vflex="true">
+			<listhead sizable="true">
+				<listheader label="name" sort="auto"/>
+			</listhead>
+			<listitem forEach="${list}" label="${each}"/>
+		</listbox>
+	</window>
+</zk>
