@@ -15,24 +15,22 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
-<h:h3> [ 1823959 ] Grid sortAscending sortDescending Null Object error</h:h3>
+<h:h3> [ 1823959 ] Grid failed to re-sync model (Opera/IE/IE7)</h:h3>
 <h:pre>
 
-In <h:b>Opera</h:b>, <h:b>IE6</h:b> try to invoke "sortAscending" "sortDescending" functions
-will get null Object Error.
+In IE/IE7/Opera, JavaScript error when re-sync model
+multiple times.
 
 </h:pre>
-	<zscript>
-		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel();
 
-		import org.zkoss.zkdemo.userguide.*;
-		Comparator asc = new RowLabelComparator(true),
-		dsc = new RowLabelComparator(false);
+	<zscript>
+		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel(10);
 	</zscript>
 	<vbox>
-		<grid mold="paging"  model="${strset}">
+		<button label="Resync Model" onClick="strset.invalidate()"/>
+		<grid model="${strset}">
 			<columns sizable="true">
-				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"/>
+				<column label="Type"/>
 			</columns>
 		</grid>
 	</vbox>
