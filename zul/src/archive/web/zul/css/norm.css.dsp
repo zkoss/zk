@@ -63,7 +63,7 @@ div.wc-embedded-none, div.wc-wndcyan-none {
 	margin: 0; padding: 0;
 }
 div.wc-embedded, div.wc-wndcyan {
-	margin: 0; padding: 3px; border: 1px solid #6082ac; border-top: none;
+	margin: 0; padding: 3px; border: 1px solid #6082ac;
 }
 div.wc-wndcyan {
 	background: white;
@@ -75,13 +75,13 @@ div.wc-overlapped, div.wc-overlapped-none {
 	margin: 0; padding: 2px; background: white;
 }
 div.wc-modal, div.wc-highlighted, div.wc-overlapped {
-	margin: 0; padding: 4px; border: 2px solid #1854c2; border-top: none;
+	margin: 0; padding: 4px; border: 2px solid #1854c2;
 }
 div.wc-popup, div.wc-popup-none {
 	margin: 0; padding: 1px; background: white;
 }
 div.wc-popup {
-	border: 1px solid #1854c2; border-top: none;
+	border: 1px solid #1854c2;
 }
 
 div.wc-embedded-none, div.wc-wndcyan-none,
