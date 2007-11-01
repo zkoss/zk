@@ -650,7 +650,7 @@ zk.Selectable.prototype = {
 					el.onfocus = zkSel.cmonfocus;
 					el.onblur = zkSel.cmonblur;
 				}
-				row.cells[0].appendChild(el);
+				$e(row.cells[0].id+ "!cave").appendChild(el);
 			}
 		} else {
 			zk.remove(el);
