@@ -96,6 +96,7 @@ zkSplt.setAttr = function (cmp, nm, val) {
 	return false;
 };
 zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
+	if (!zk.isRealVisible(cmp))return;
 	cmp = $e(cmp);
 	if (cmp) {
 		zkSplt._fixsz(cmp);
