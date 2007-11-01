@@ -21,6 +21,7 @@ ZK 3.0.0
   1739579: Tabbox supports disabled tabs
   1823206: Menuitem's checked icon/separator customizable by CSS
   1822158: Add getParentItem to replace deprecated getTreeitem
+  1823959: Grid failed to re-sync model (Opera/IE/IE7)
 
 * Bugs:
   1814702: ZK Layout Fails to Resize
