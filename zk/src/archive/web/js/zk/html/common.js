@@ -1424,6 +1424,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 							var wd =  d.style.width;							
 							if (wd == "auto" || wd.indexOf('%') > -1) 
 								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
+								wd = d.style.width;
 								var zwd = getZKAttr(d, "wd"); // Bug #1823236
 								if (wd && (!zwd || (zwd != "NaN" && $int(zwd) != d.offsetWidth))) {
 									dstwds[z] = zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth; 
