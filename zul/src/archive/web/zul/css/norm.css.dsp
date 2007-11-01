@@ -158,7 +158,7 @@ div.modal_mask {
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
 	opacity: .4;
-	background-color:#80B4FF;
+	background-color: #e6edf9; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
 
 <%-- ZK separator --%>
