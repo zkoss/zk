@@ -61,6 +61,7 @@ ZK 3.0.0
   1823802: Scroll-bar show up when click the last item in Listboxes
   1823805: Button in a info window is incomplete.(IE7)
   1823218: Tree with vflex, body grows over boarder.
+  1823858: Splitter- hbox in vbox
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
