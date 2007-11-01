@@ -1279,6 +1279,7 @@ zkau.sendOnSize = function (cmp, keys) {
 	zkau.send({uuid: cmp.id, cmd: "onSize",
 		data: [cmp.style.width, cmp.style.height, keys]},
 		zkau.asapTimeout(cmp, "onSize"));
+	zk.onResize(0, cmp);
 };
 zkau.sendOnClose = function (uuid, closeFloats) {
 	var el = $e(uuid);
