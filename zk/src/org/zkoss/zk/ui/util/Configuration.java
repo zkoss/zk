@@ -945,10 +945,7 @@ public class Configuration {
 	 * <p>Note: if {@link ThemeProvider} is specified ({@link #setThemeProvider}),
 	 * the final theme URIs generated depend on {@link ThemeProvider#getThemeURIs}.
 	 *
-	 * @param lang the language name, such as xul/html and xhtml.
-	 * @param enable whether to enable or disable.
-	 * If false, the default theme of the specified language is disabled.
-	 * Default: enabled.
+	 * @param uri the theme URI to disable
 	 * @since 3.0.0
 	 */
 	public void addDisabledThemeURI(String uri) {
@@ -981,7 +978,7 @@ public class Configuration {
 	 * to ignore them.
 	 * @since 3.0.0
 	 * @see #getThemeURIs
-	 * @see #isDefaultThemeEnabled
+	 * @see #getDisabledThemeURIs
 	 */
 	public ThemeProvider getThemeProvider() {
 		return _themeProvider;
