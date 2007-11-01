@@ -54,6 +54,7 @@ ZK 3.0.0
   1823510: If loading a page when the server starts, it sometime NPE
   1823229: Splitter- The image of bar isn't updated
   1823226: Splitter- The bar can be dragged over hbox
+  1823213: Listbox in hbox
 
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
