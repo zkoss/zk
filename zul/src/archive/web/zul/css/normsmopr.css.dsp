@@ -60,9 +60,6 @@ tr.item, tr.item a, tr.item a:visited {
 .tabdissel, .tabdissel a, a.tabdissel {
 	font-size: xx-small;
 }
-div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
-	font-size: xx-small;
-}
 .comboboxpp td {
 	font-size: xx-small;
 }

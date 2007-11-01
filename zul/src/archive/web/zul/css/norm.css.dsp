@@ -233,7 +233,7 @@ div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-he
 }
 
 div.tree-head tr, div.listbox-head tr, div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
-	background: url(${c:encodeURL('~./zul/img/grid/v_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/v_hd.gif')});
 }
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	overflow: hidden; border: 1px solid;
@@ -325,7 +325,8 @@ tr.overseld, td.overseld {<%-- item selected and onmouseover --%>
 
 <%-- The style for treeitem's paging
 span.treeitem-paging {
-	background-image: url(${c:encodeURL('~./zul/img/bgbtnbk.gif')}); background-repeat: no-repeat;
+	background-image: url(${c:encodeURL('~./zul/img/bgbtnbk.gif')});
+	background-repeat: no-repeat;
 	border: 1px solid #7f9db9;
 }
 --%>
@@ -726,12 +727,12 @@ div.menubar td {
 	<%-- IE7: unable to define it with menupopup td; IE6: no transparent color --%>
 }
 div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.menupopup a:visited, div.menupopup a:hover {
-	font-size: x-small; font-weight: normal;
 	color: black; text-decoration: none;
 }
 td.menusp {
 	height: 7px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/sep.gif')});
+	background-repeat: no-repeat;
 }
 td.menu1 {<%-- menuitem normal (unchecked) --%>
 	width: 11px;
@@ -739,10 +740,12 @@ td.menu1 {<%-- menuitem normal (unchecked) --%>
 td.menu1ck {<%-- menuitem checked --%>
 	width: 11px; height: 13px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/checked.gif')});
+	background-repeat: no-repeat;
 }
 td.menu3ar {<%-- menuitem arrow --%>
 	width: 9px; height: 13px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
+	background-repeat: no-repeat;
 }
 
 <%-- Combobox and Datebox --%>
