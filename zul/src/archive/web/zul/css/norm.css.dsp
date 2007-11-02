@@ -710,7 +710,10 @@ td.slidersph-bkr {
 
 <%-- ZK menu --%>
 div.menubar, div.menupopup, div.ctxpopup {
-	cursor: pointer; background: #eff0f3; padding: 1px;
+	cursor: pointer; background: #e9effa; padding: 1px;
+}
+div.menupopup, div.ctxpopup {
+	background: #f0f5ff;
 }
 div.menubar {
 	border: 1px solid #919397;
