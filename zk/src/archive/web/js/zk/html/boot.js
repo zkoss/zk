@@ -518,6 +518,36 @@ zk.addInitCmp = function (cmp) {
 	zk._initcmps.push(cmp);
 };
 
+/** Adds a function that will be invoked after all components are
+ * cleaned up.
+ * Unlike zk.addCleanupLater, the components being cleaned up are
+ * still available when fn is called.
+ * <p>Note: it is called after all components are initialized.
+ * <p>The function is removed from the list right before invoked,
+ * so it won't be called twice (unless you call zk.addInit again).
+ * @param front whether to add the function to the front of the list
+ * @param unique whether not to add if redundant. If true, fn is added
+ * only if fn was not added before.
+ */
+zk.addCleanup = function (fn, front, unique) {
+	zk._addfn(zk._cufns, fn, front, unique);
+};
+/** Adds a function that will be invoked 25 milliseconds, after
+ * all components are cleaned up.
+ * Note: when fn is called, the component being cleaned up may be removed.
+ *
+ * <p>The function is removed from the list right before invoked,
+ * so it won't be called twice (unless you call zk.addInitLater again).
+ *
+ * @param front whether to add the function to the front of the list
+ * @param unique whether not to add if redundant. If true, fn is added
+ * only if fn was not added before.
+ * @since 3.0.0
+ */
+zk.addCleanupLater = function (fn, front, unique) {
+	zk._addfn(zk._cuLatfns, fn, front, unique);
+};
+
 /** Adds a function that will be invoked when the browser is resized
  * (window's resize).
  * <p>Unlike zk.addInit, the function won't be detached after invoked.
@@ -876,23 +906,16 @@ zk._evalInit = function () {
 		while (!zk.loading && zk._initfns.length)
 			(zk._initfns.shift())();
 
-		zk.doInitLater(25);
+		setTimeout(zk._initLater, 25);
 	} while (!zk.loading && (zk._initmods.length || zk._initcmps.length
 	|| zk._initfns.length));
 	//Bug 1815074: _initfns might cause _initmods to be added
-};
-/** Invokes functions added by zk.addInitLater.
- * This method is called automaticaly after initializing the components,
- * so you rarely need to inovke it directly.
- * @since 3.0.0
- */
-zk.doInitLater = function (timeout) {
-	setTimeout(zk._initLater, timeout);
 };
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
 		(zk._inLatfns.shift())();
 };
+
 /** Evaluate a method of the specified component.
  *
  * It assumes fn is a method name of a object called "zk" + type
@@ -927,6 +950,17 @@ zk.eval = function (n, fn, type, a0, a1, a2, a3, a4, a5, a6, a7) {
 /** Check z.type and invoke zkxxx.cleanup if declared.
  */
 zk.cleanupAt = function (n) {
+	zk._cleanupAt(n);
+
+	while (zk._cufns.length)
+		(zk._cufns.shift())();
+	setTimeout(zk._cleanLater, 25);
+};
+zk._cleanLater = function () {
+	while (zk._cuLatfns.length)
+		(zk._cuLatfns.shift())();
+};
+zk._cleanupAt = function (n) {
 	if (getZKAttr(n, "zid")) zkau.cleanzid(n);
 	if (getZKAttr(n, "zidsp")) zkau.cleanzidsp(n);
 	if (getZKAttr(n, "drag")) zkau.cleandrag(n);
@@ -943,7 +977,7 @@ zk.cleanupAt = function (n) {
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
-		zk.cleanupAt(n); //recursive for child component
+		zk._cleanupAt(n); //recursive for child component
 };
 
 /** To notify a component that it becomes visible because one its ancestors
@@ -1267,6 +1301,8 @@ zk._modules = {}; //Map(String nm, boolean loaded)
 zk._initfns = []; //used by addInit
 zk._inLatfns = []; //used by addInitLater
 zk._initmods = []; //used by addModuleInit
+zk._cufns = []; //used by addCleanup
+zk._cuLatfns = []; //used by addCleanupLater
 zk._reszfns = []; //used by addOnResize
 zk._reszcnt = 0; //# of pending zk.onResize
 zk._bfunld = []; //used by addBeforeUnload
