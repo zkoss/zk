@@ -850,6 +850,7 @@ zk.Selectable.prototype = {
 		if (!sz) {
 			if (getZKAttr(this.element, "vflex") == "true") {
 				hgh = this._vflexSize();
+				if (zk.ie) hgh -= 1; // need to display the bottom border.
 				if (hgh < 25) hgh = 25;
 
 				var rowhgh = zk.offsetHeight(firstVisiRow);
