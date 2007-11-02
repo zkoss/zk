@@ -1424,15 +1424,15 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 							var wd =  d.style.width;							
 							if (wd == "auto" || wd.indexOf('%') > -1) 
 								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-								wd = d.style.width;
-								var zwd = getZKAttr(d, "wd"); // Bug #1823236
-								if (wd && (!zwd || (zwd != "NaN" && $int(zwd) != d.offsetWidth))) {
-									dstwds[z] = zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth; 
-								} else {
-									dstwds[z] = zk.ie && z == dst.cells.length -1 ? s.offsetWidth - 1 : s.offsetWidth;
-									setZKAttr(d, "wd", dstwds[z]);
-									wd = "";
-								}
+							wd = d.style.width;
+							var zwd = getZKAttr(d, "wd"); // Bug #1823236
+							if (wd && (!zwd || (zwd != "NaN" && $int(zwd) != d.offsetWidth))) {
+								dstwds[z] = zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth; 
+							} else {
+								dstwds[z] = zk.ie && z == dst.cells.length -1 ? s.offsetWidth - 1 : s.offsetWidth;
+								setZKAttr(d, "wd", dstwds[z]);
+								wd = "";
+							}
 							
 							var w;
 							if (!wd) {
@@ -1464,7 +1464,39 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 	if (!again && (zk.safari || zk.opera)) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 5);	
 	// Note :we have to re-calculate the width of cell column for safari.
 };
-
+/**
+Copies the width of each cell from the element's header.
+ * It handles colspan of srcrows.
+ *
+ * @param {Array} dst the element's header. 
+ * @param {Array} srcrows each cell.
+ * @since 3.0
+ */
+zk.cpCellWidthByArray = function (dst, srcrows) {
+	if (dst == null || srcrows == null || !srcrows.length
+	|| !dst.cells.length)
+		return;	
+	for (var j = 0, k = srcrows.length; j < k; j++) {
+		var s = srcrows.shift();
+		var z = s.cellIndex;
+		var d = dst.cells[z];
+		var wd = 0;
+		if (s.colSpan > 1) {
+			if (s.colSpan + z <= dst.cells.length) {				
+				for (var k = 0; k < s.colSpan; k++) {
+					var hd = dst.cells[z+k];
+					wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 1 : hd.offsetWidth; 												
+				}
+			}
+		} else
+			wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth;
+		var uuid = $uuid(s);
+		var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
+		var rwd = zk.revisedSize(s, wd);
+		if (cell) cell.style.width = zk.revisedSize(cell, rwd) + "px";
+		s.style.width = rwd + "px";
+	}
+};
 //Number//
 /** digits specifies at least the number of digits must be ouput. */
 zk.formatFixed = function (val, digits) {
