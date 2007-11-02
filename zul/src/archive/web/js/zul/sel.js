@@ -39,10 +39,11 @@ zk.Selectable = Class.create();
 zk.Selectable.prototype = {
 	initialize: function (cmp) {
 		this.id = cmp.id;
-		zkau.setMeta(cmp, this);
+		zkau.setMeta(cmp, this);		
+		this.cells = [];
 		this.init();
 	},
-	init: function (ignoreAuto) {
+	init: function (isLater) {
 		this.element = $e(this.id);
 		if (!this.element) return;
 		if (getZKAttr(this.element, "vflex") == "true") {
@@ -160,13 +161,24 @@ zk.Selectable.prototype = {
 					//How long is enough is unknown, but 200 seems fine
 			};
 		}
-		this.stripe();
 		
-		if (!ignoreAuto) setTimeout("zkSel._calcSize('"+this.id+"')", 150); // Bug #1813722
+		
+		if (!isLater) {
+			setTimeout("zkSel._calcSize('"+this.id+"')", 150); // Bug #1813722
+			this.stripe();
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
-
+		} else {
+			if (this.headtbl && this.bodytbl && this.bodytbl.rows.length && this.cells.length) {
+				if (this.bodytbl.rows.length > 1)
+					zk.cpCellWidthByArray(this.headtbl.rows[0], this.cells);
+				else setTimeout("zkSel._calcSize('"+this.id+"')", 150);
+			}
+		}
 		this._render(150); //prolong a bit since calSize might not be ready
+	},
+	putCellQue: function (cell) {
+		this.cells.push(cell);
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
@@ -174,7 +186,7 @@ zk.Selectable.prototype = {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
-			this.foot = this.foottbl = this.fnSubmit = null;
+			this.foot = this.foottbl = this.fnSubmit = this.cells = null;
 			//in case: GC not works properly
 	},
 	/** Stripes the rows. */
@@ -1176,16 +1188,6 @@ zkLibox.init = function (cmp) {
 			zk.listen(meta.body, "keydown", zkLibox.bodyonkeydown);
 	}
 };
-zkLibox.childchg = function (cmp) {
-	var meta = zkau.getMeta(cmp);
-	if (meta) meta.init(getZKAttr(cmp, "autowidth") != "true");
-	else {
-		meta = new zk.Selectable(cmp);
-		if (meta.body)
-			zk.listen(meta.body, "keydown", zkLibox.bodyonkeydown);
-	}
-}; // Bug #1817627.
-
 /** Called when a listbox becomes visible because of its parent. */
 zkLibox.onVisi = zkLibox.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
@@ -1201,8 +1203,32 @@ zkLit.init = function (cmp) {
 	zk.listen(cmp, "keydown", zkLibox.onkeydown);
 	zk.listen(cmp, "mouseover", zkSel.onover);
 	zk.listen(cmp, "mouseout", zkSel.onout);
+	zkLit.stripe(cmp);
+};
+zkLit.cleanup = function (cmp) {
+	zkLit.stripe(cmp, true);
+};
+zkLit.stripe = function (cmp, isClean) {
+	var libox = $parentByType(cmp, "Libox");
+	var meta = zkau.getMeta(libox);
+	if (meta) {
+		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, true);
+		else zk.addInitLater(meta.fixedStripe, false, true);
+	}
 };
 zkLic = {}; //listcell or Treecell
+zkLic.init = function (cmp) {
+	var isTree = $type(cmp.parentNode) == "Trow";
+	var libox = $parentByType(cmp, isTree ? "Tree" : "Libox");
+	var meta = zkau.getMeta(libox);
+	if (meta) {
+		meta.putCellQue(cmp);
+		if (!meta.fixedSize)
+			meta.fixedSize = function () {meta.init(true);};	
+		zk.addInitLater(meta.fixedSize, false, true);
+	}
+};
 zkLic.setAttr = function (cmp, nm, val) {
 	if ("style" == nm) {
 		var cell = $e(cmp.id + "!cave");

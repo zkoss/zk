@@ -20,8 +20,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<tr id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
+<tr z.type="Grw" id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" varStatus="status" items="${self.children}">
-	<td id="${child.uuid}!chdextr"${u:getColAttrs(self, status.index)}><div id="${child.uuid}!cell" class="gc cell-inner">${z:redraw(child, null)}</div></td>
+	<td z.type="Gcl" id="${child.uuid}!chdextr"${u:getColAttrs(self, status.index)}><div id="${child.uuid}!cell" class="gc cell-inner">${z:redraw(child, null)}</div></td>
 	</c:forEach>
 </tr>

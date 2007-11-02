@@ -23,10 +23,11 @@ zk.Grid = Class.create();
 zk.Grid.prototype = {
 	initialize: function (comp) {
 		this.id = comp.id;
-		zkau.setMeta(comp, this);
+		zkau.setMeta(comp, this);		
+		this.cells = [];
 		this.init();
 	},
-	init: function (ignoreAuto) {
+	init: function (isLater) {
 		this.element = $e(this.id);
 		if (!this.element) return;
 
@@ -91,13 +92,23 @@ zk.Grid.prototype = {
 					//How long is enough is unknown, but 200 seems fine
 			};
 		} 
-		this.stripe();
 			
-		if (!ignoreAuto) setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722 
+		if (!isLater) {
+			setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722			
+			this.stripe(); 
 			//don't calc now because browser might size them later
 			//after the whole HTML page is processed
-
+		} else {
+			if (this.headtbl && this.bodytbl && this.bodytbl.rows.length && this.cells.length) {
+				if (this.bodytbl.rows.length > 1)
+					zk.cpCellWidthByArray(this.headtbl.rows[0], this.cells);
+				else setTimeout("zkGrid._calcSize('"+this.id+"')", 150);
+			}
+		}
 		this._render(150); //prolong a bit since calSize might not be ready
+	},
+	putCellQue: function (cell) {
+		this.cells.push(cell);
 	},
 	/* set the height. */
 	setHgh: function (hgh) {
@@ -150,7 +161,7 @@ zk.Grid.prototype = {
 		if (this.fnResize)
 			zk.rmOnResize(this.fnResize);
 		this.element = this.body = this.bodytbl = this.bodyrows
-			= this.head = this.headtbl = this.foot = this.foottbl = null;
+			= this.head = this.headtbl = this.foot = this.foottbl = this.cells = null;
 			//in case: GC not works properly
 	},
 
@@ -289,12 +300,13 @@ zkGrid.init = function (cmp) {
 	if (meta) meta.init();
 	else new zk.Grid(cmp);
 };
+/**
 zkGrid.childchg = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init(getZKAttr(cmp, "autowidth") != "true");
 	else new zk.Grid(cmp);
 }; // Bug #1817627.
-
+*/
 /** Called when a grid becomes visible because of its parent. */
 zkGrid.onVisi = zkGrid.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
@@ -340,7 +352,33 @@ zkGrid._renderNow = function (uuid) {
 	var meta = zkau.getMeta(uuid);
 	if (meta) meta._renderNow();
 };
-
+zkGrw = {}; //Row
+zkGrw.init = function (cmp) {
+	zkGrw.stripe(cmp);
+};
+zkGrw.cleanup = function (cmp) {
+	zkGrw.stripe(cmp, true);
+};
+zkGrw.stripe = function (cmp, isClean) {
+	var grid = $parentByType(cmp, "Grid");
+	var meta = zkau.getMeta(grid);
+	if (meta) {
+		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, true);
+		else zk.addInitLater(meta.fixedStripe, false, true);
+	}
+};
+zkGcl = {}; //cell
+zkGcl.init = function (cmp) {
+	var grid = $parentByType(cmp, "Grid");
+	var meta = zkau.getMeta(grid);
+	if (meta) {
+		meta.putCellQue(cmp);
+		if (!meta.fixedSize)
+			meta.fixedSize = function () {meta.init(true);};	
+		zk.addInitLater(meta.fixedSize, false, true);
+	}
+};
 zk.addModuleInit(function () {
 	//Column
 	//init it later because zul.js might not be loaded yet

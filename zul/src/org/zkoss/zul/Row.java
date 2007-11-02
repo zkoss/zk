@@ -292,7 +292,7 @@ public class Row extends XulElement {
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws IOException {
 		final StringBuffer sb = new StringBuffer(128)
-			.append("<td id=\"").append(child.getUuid())
+			.append("<td z.type=\"Gcl\" id=\"").append(child.getUuid())
 			.append("!chdextr\"");
 
 		final Grid grid = getGrid();

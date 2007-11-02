@@ -108,8 +108,8 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
 		var vert = getZKAttr(cmp, "vert");
 		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
 			if (tn == $tag(nd))
-				if (vert) nd.style.height = nd.offsetHeight + "px";
-				else nd.style.width = nd.offsetWidth + "px";
+				if (vert) nd.style.height = zk.revisedSize(nd, nd.offsetHeight, true) + "px";
+				else nd.style.width = zk.revisedSize(nd, nd.offsetWidth) + "px";
 	}
 };
 zkSplt._resize2 = function (cmp) {
