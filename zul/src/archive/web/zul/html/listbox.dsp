@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
 <c:if test="${!empty self.listhead}">
 	<div id="${self.uuid}!head" class="listbox-head">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 	<c:forEach var="head" items="${self.heads}">
 ${z:redraw(head, null)}
 	</c:forEach>
@@ -30,7 +30,7 @@ ${z:redraw(head, null)}
 	</div>
 </c:if>
 	<div id="${self.uuid}!body" class="listbox-body">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable">
 	<c:forEach var="item" items="${self.items}">
 ${z:redraw(item, null)}
 	</c:forEach>
@@ -38,7 +38,7 @@ ${z:redraw(item, null)}
 	</div>
 <c:if test="${!empty self.listfoot}">
 	<div id="${self.uuid}!foot" class="listbox-foot">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 ${z:redraw(self.listfoot, null)}
 	</table>
 	</div>

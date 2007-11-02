@@ -116,8 +116,11 @@ zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
 		}
 	}
 	zk.cpCellWidth(head, mate.bodyrows, mate);
+	
+	var table =  mate.headtbl.style.width;
+	wd = zk.revisedSize(head.cells[icol],wd) + "px";
 	zkau.send({uuid: cmp.id, cmd: "onColSize",
-		data: [icol, col.id, wd, keys]},
+		data: [icol, col.id, wd, keys, table]},
 		zkau.asapTimeout(cmp, "onColSize"));
 };
 zulHdr.cleanup = function (cmp) {

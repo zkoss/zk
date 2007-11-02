@@ -121,6 +121,7 @@ public class Grid extends XulElement {
 	private String _scOddRow = "odd";
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
+	private String _innerWidth = "100%";
 
 	public Grid() {
 		setSclass("grid");
@@ -445,6 +446,26 @@ public class Grid extends XulElement {
 		_preloadsz = sz;
 	}
 
+	/**
+	 * Sets the width of inner table of Grid.
+	 * @param innerWidth
+	 */
+	public void setInnerWidth(String innerWidth) {
+		if (innerWidth == null) innerWidth = "100%";
+		if (!_innerWidth.equals(innerWidth)) {
+			_innerWidth = innerWidth;
+			smartUpdate("z.innerwidth", _innerWidth);
+		}
+	}
+	
+	/**
+	 * Returns the width of inner table of Listbox.
+	 * Default: "100%"
+	 */
+	public String getInnerWidth() {
+		return _innerWidth;
+	}
+	
 	/** Synchronizes the grid to be consistent with the specified model.
 	 *
 	 * @param min the lower index that a range of invalidated rows

@@ -83,6 +83,7 @@ public class Tree extends XulElement {
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private transient boolean _noSmartUpdate;
+	private String _innerWidth = "100%";
 
 	public Tree() {
 		init();
@@ -219,6 +220,26 @@ public class Tree extends XulElement {
 		}
 	}
 
+	/**
+	 * Sets the width of inner table of Tree.
+	 * @param innerWidth
+	 */
+	public void setInnerWidth(String innerWidth) {
+		if (innerWidth == null) innerWidth = "100%";
+		if (!_innerWidth.equals(innerWidth)) {
+			_innerWidth = innerWidth;
+			smartUpdate("z.innerwidth", _innerWidth);
+		}
+	}
+	
+	/**
+	 * Returns the width of inner table of Listbox.
+	 * Default: "100%"
+	 */
+	public String getInnerWidth() {
+		return _innerWidth;
+	}
+	
 	/** Returns the seltype.
 	 * <p>Default: "single".
 	 */

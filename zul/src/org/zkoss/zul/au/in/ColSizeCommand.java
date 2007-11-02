@@ -31,8 +31,11 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zk.au.in.Commands;
 
+import org.zkoss.zul.Column;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listheader;
+import org.zkoss.zul.Treecol;
 import org.zkoss.zul.event.ColSizeEvent;
-import org.zkoss.zul.ext.Paginal;
 
 /**
  * Used only by {@link AuRequest} to implement the {@link ColSizeEvent}
@@ -51,7 +54,7 @@ public class ColSizeCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || data.length != 4)
+		if (data == null || data.length != 5)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
@@ -60,7 +63,12 @@ public class ColSizeCommand extends Command {
 		final Component col1 = desktop.getComponentByUuid(data[1]);
 
 		((Sizable)((ComponentCtrl)col1).getExtraCtrl()).setWidthByClient(data[2]);
-
+		if (col1 instanceof Listheader)
+			((Listheader) col1).getListbox().setInnerWidth(data[4]);
+		else if (col1 instanceof Column)
+			((Column) col1).getGrid().setInnerWidth(data[4]);
+		else if (col1 instanceof Treecol) 
+			((Treecol) col1).getTree().setInnerWidth(data[4]);
 		Events.postEvent(
 			new ColSizeEvent(getId(), comp, icol, col1,
 				Commands.parseKeys(data[3])));

@@ -132,6 +132,7 @@ public class Listbox extends XulElement {
 	private transient ListDataListener _dataListener;
 	private transient Collection _heads;
 	private int _hdcnt;
+	private String _innerWidth = "100%";
 	/** The name. */
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
@@ -247,6 +248,26 @@ public class Listbox extends XulElement {
 		}
 	}
 
+	/**
+	 * Sets the width of inner table of Listbox.
+	 * @param innerWidth
+	 */
+	public void setInnerWidth(String innerWidth) {
+		if (innerWidth == null) innerWidth = "100%";
+		if (!_innerWidth.equals(innerWidth)) {
+			_innerWidth = innerWidth;
+			smartUpdate("z.innerwidth", _innerWidth);
+		}
+	}
+	
+	/**
+	 * Returns the width of inner table of Listbox.
+	 * Default: "100%"
+	 */
+	public String getInnerWidth() {
+		return _innerWidth;
+	}
+	
 	/** Returns whether to grow and shrink vertical to fit their given space,
 	 * so called vertial flexibility.
 	 *

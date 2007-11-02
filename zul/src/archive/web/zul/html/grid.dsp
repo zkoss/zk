@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}" z.type="zul.grid.Grid"${self.outerAttrs}${self.innerAttrs}>
 <c:if test="${!empty self.columns}">
 	<div id="${self.uuid}!head" class="grid-head">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 	<c:forEach var="head" items="${self.heads}">
 ${z:redraw(head, null)}
 	</c:forEach>
@@ -30,13 +30,13 @@ ${z:redraw(head, null)}
 	</div>
 </c:if>
 	<div id="${self.uuid}!body" class="grid-body">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
 	${z:redraw(self.rows, null)}
 	</table>
 	</div>
 <c:if test="${!empty self.foot}">
 	<div id="${self.uuid}!foot" class="grid-foot">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 ${z:redraw(self.foot, null)}
 	</table>
 	</div>
