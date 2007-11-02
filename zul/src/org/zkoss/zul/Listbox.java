@@ -46,7 +46,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.Selectable;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -153,7 +152,6 @@ public class Listbox extends XulElement {
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
-	private boolean _autoWidth = true;
 	
 	public Listbox() {
 		setSclass("listbox");
@@ -329,9 +327,6 @@ public class Listbox extends XulElement {
 				smartUpdate("size", _rows > 0 ? Integer.toString(_rows): null);
 			} else {
 				smartUpdate("z.size", Integer.toString(_rows));
-				initAtClient();
-				//Don't use smartUpdate because client has to extra job
-				//besides maintaining HTML DOM
 			}
 		}
 	}
@@ -679,14 +674,6 @@ public class Listbox extends XulElement {
 		return item;
 	}
 
-	/** Re-initialize the listbox at the client (actually, re-calculate
-	 * the column width at the client).
-	 */
-	/*package*/ void initAtClient() {
-		if (!inSelectMold() && !inPagingMold())
-			smartUpdate("z.init", true);
-	}
-
 	//--Paging--//
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
@@ -944,7 +931,6 @@ public class Listbox extends XulElement {
 					if (oldjsel != _jsel && !inSelectMold())
 						smartUpdate("z.selId", getSelectedId());
 				}
-				initAtClient();
 				return true;
 			}
 			return false;
@@ -1052,7 +1038,6 @@ public class Listbox extends XulElement {
 					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 				}
 			}
-			initAtClient();
 			return true;
 		} else if (_paging == child) {
 			_paging = null;
@@ -1285,7 +1270,8 @@ public class Listbox extends XulElement {
 		final Renderer renderer = new Renderer();
 		try {
 			final int pgsz = inSelectMold() ? getItemCount():
-				inPagingMold() ? _pgi.getPageSize(): _rows;
+				inPagingMold() ? _pgi.getPageSize(): _rows > 0 ? _rows: 20;
+
 			int j = 0;
 			for (Iterator it = getItems().iterator(); j < pgsz && it.hasNext(); ++j)
 				renderer.render((Listitem)it.next());
@@ -1355,8 +1341,9 @@ public class Listbox extends XulElement {
 		if (!done) //CONTENTS_CHANGED
 			syncModel(min, max);
 
-		initAtClient();
-			//client have to send back for what have to reload
+		postOnInitRender();
+			//Bug 1823236: though fixed in JS, it improves performance
+			//to save one roundtrip
 	}
 
 	private static final ListitemRenderer getDefaultItemRenderer() {
@@ -1428,11 +1415,6 @@ public class Listbox extends XulElement {
 			}
 		}
 		private void doFinally() {
-			if (_rendered)
-				initAtClient();
-					//reason: after rendering, the column width might change
-					//Also: Mozilla remembers scrollTop when user's pressing
-					//RELOAD, it makes init more desirable.
 			if (_ctrled)
 				((RendererCtrl)_renderer).doFinally();
 		}
@@ -1516,38 +1498,6 @@ public class Listbox extends XulElement {
 			}
 		}
 	}
-	public void setHeight(String height) {
-		if (!Objects.equals(height, getHeight())) {
-			super.setHeight(height);
-			if (!inSelectMold()) initAtClient();
-		}
-	}
-	/**
-	 * Specifies whether the width of listbox will be re-sized automatically once 
-	 * any of its child components' properties is modified.
-	 * <br/>
-	 * However,this property will be ignored when the listbox is rendered at the first time.
-	 * 
-	 * Note:
-	 * If the width of child component in listbox is fixed, you should turn-off this function for better performance.
-	 * But, if the width of child components is dynamically, you should turn-on this function or the layout of listbox will be in a mess once
-	 * any of its child components' width exceeds the width of cell of listbox.
-	 * @param autoWidth 
-	 * @since 3.0.0
-	 */
-	public void setAutoWidth(boolean autoWidth) {
-		if (_autoWidth != autoWidth) {
-			_autoWidth = autoWidth;
-			smartUpdate("z.autowidth", _autoWidth);
-		}			
-	}
-	
-	/**
-	 * Returns whether auto culative width. 
-	 */
-	public boolean isAutoWidth(){
-		return _autoWidth;
-	}
 	
 	public String getOuterAttrs() {
 		final StringBuffer sb =
@@ -1582,7 +1532,6 @@ public class Listbox extends XulElement {
 				HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 		}
 
-		HTMLs.appendAttribute(sb, "z.autowidth", isAutoWidth());
 		appendAsapAttr(sb, Events.ON_SELECT);
 		return sb.toString();
 	}
@@ -1700,12 +1649,7 @@ public class Listbox extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Selectable, ChildChangedAware, Cropper, RenderOnDemand {
-		//ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return !inSelectMold();
-		}
-
+	implements Selectable, Cropper, RenderOnDemand {
 		//RenderOnDemand//
 		public void renderItems(Set items) {
 			int cnt = items.size();
