@@ -64,7 +64,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<column label="Right"/>
 		</columns>
 		<auxhead>
-			<auxheader label="Whole" span="2"/>
+			<auxheader label="Whole" colspan="2"/>
 		</auxhead>
 		<rows>
 			<row>
