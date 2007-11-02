@@ -326,7 +326,7 @@ zkLayoutRegion.cleanup = function (cmp) {
 		layout.removeRegion(getZKAttr(cmp, "pos"));
 	}
 	cmp.bodyEl = null;
-	zk.onResize(0, cmp);
+	if (layout) zk.onResize(0, layout.el);
 };
 zkLayoutRegion.setAttr = function (cmp, nm, val) {
 	cmp = $real(cmp);
@@ -518,7 +518,7 @@ zkLayoutRegionSplit._endDrag = function (split, event) {
 	real._width = real._height = false;
 	var layout = zk.Layout.getOwnerLayout(real);	
 	layout.render();
-	zk.onResize(0, cmp);	
+	zk.onResize(0, layout.el);
 	dg.drag.z_rootlyt = null;
 };
 /***/
@@ -591,7 +591,7 @@ zkLayoutRegionSplit.open = function (split, open, silent, enforce) {
 	if (!silent)
 		zkau.send({uuid: $uuid(split), cmd: "onOpen", data: [open]},
 			zkau.asapTimeout(real, "onOpen"));			
-	zk.onResize(0, cmp);
+	zk.onResize(0, layout.el);
 };
 zkLayoutRegionSplit._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
