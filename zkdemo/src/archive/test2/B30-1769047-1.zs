@@ -1,10 +1,10 @@
 public class Address {
 	private String _street = "Holulu";
 	private String _city = "LA";
-
-	public Address(String s, String c) {
-		_street = s;
-		_city = c;
+	
+	public Address(String st, String city) {
+		_street =  st;
+		_city = city;
 	}
 	
 	//accessor
