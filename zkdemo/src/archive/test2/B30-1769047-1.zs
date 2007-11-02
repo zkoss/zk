@@ -1,6 +1,11 @@
 public class Address {
 	private String _street = "Holulu";
 	private String _city = "LA";
+
+	public Address(String s, String c) {
+		_street = s;
+		_city = c;
+	}
 	
 	//accessor
 	public void setStreet(String f) {
