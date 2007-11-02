@@ -126,6 +126,13 @@ zulHdr.cleanup = function (cmp) {
 zulHdr.setAttr = function (cmp, nm, val) {
 	switch(nm) { // Bug #1822566 
 		case "style.width" :
+			var type = $type(cmp), mate;
+			if (type == "Col")
+				mate = $parentByType(cmp, "Grid");
+			else if (type == "Lhr")
+				mate = $parentByType(cmp, "Libox");
+			else if (type == "Tcol")
+				mate = $parentByType(cmp, "Tree");				
 		case "style.height" :		
 		case "style" :			
 			var head = cmp.parentNode;
@@ -146,7 +153,9 @@ zulHdr.setAttr = function (cmp, nm, val) {
 						zk.sumStyles(cmp, "lr", zk.paddings) + "px";
 				}
 				fake.cells[cmp.cellIndex].style.width = wd; 
-			}
+			}			
+			var meta = zkau.getMeta(mate);
+			if (meta) meta.init();
 			return true;
 	}
 	zkau.setAttr(cmp, nm, val);
