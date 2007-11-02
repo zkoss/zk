@@ -33,32 +33,11 @@ public class Columns extends HeadersElement {
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
 			throw new UiException("Unsupported parent for columns: "+parent);
-		final boolean changed = getParent() != parent;
 		super.setParent(parent);
-		if (changed && parent != null) ((Grid)parent).initAtClient();
 	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Column))
 			throw new UiException("Unsupported child for columns: "+child);
-		if (super.insertBefore(child, insertBefore)) {
-			final Component parent = getParent();
-			if (parent != null) parent.invalidate();
-				//FUTURE: optimize the invalidation to attributes of
-				//certain cells
-				//It implies initAtClient
-			return true;
-		}
-		return false;
-	}
-	public boolean removeChild(Component child) {
-		if (super.removeChild(child)) {
-			final Component parent = getParent();
-			if (parent != null) parent.invalidate();
-				//FUTURE: optimize the invalidation to attributes of
-				//certain cells
-				//It implies initAtClient
-			return true;
-		}
-		return false;
+		return super.insertBefore(child, insertBefore);
 	}
 }

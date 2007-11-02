@@ -38,7 +38,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.Selectable;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -84,7 +83,6 @@ public class Tree extends XulElement {
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private transient boolean _noSmartUpdate;
-	private boolean _autoWidth = true;
 
 	public Tree() {
 		init();
@@ -146,9 +144,6 @@ public class Tree extends XulElement {
 		if (_rows != rows) {
 			_rows = rows;
 			smartUpdate("z.size", Integer.toString(_rows));
-			initAtClient();
-				//Don't use smartUpdate because client has to extra job
-				//besides maintaining HTML DOM
 		}
 	}
 
@@ -237,32 +232,6 @@ public class Tree extends XulElement {
 		if ("single".equals(seltype)) setMultiple(false);
 		else if ("multiple".equals(seltype)) setMultiple(true);
 		else throw new WrongValueException("Unknown seltype: "+seltype);
-	}
-	/**
-	 * Specifies whether the width of tree will be re-sized automatically once 
-	 * any of its child components' properties is modified.
-	 * <br/>
-	 * However,this property will be ignored when the tree is rendered at the first time.
-	 * 
-	 * Note:
-	 * If the width of child component in tree is fixed, you should turn-off this function for better performance.
-	 * But, if the width of child components is dynamically, you should turn-on this function or the layout of tree will be in a mess once
-	 * any of its child components' width exceeds the width of cell of tree.
-	 * @param autoWidth 
-	 * @since 3.0.0
-	 */
-	public void setAutoWidth(boolean autoWidth) {
-		if (_autoWidth != autoWidth) {
-			_autoWidth = autoWidth;
-			smartUpdate("z.autowidth", _autoWidth);
-		}			
-	}
-	
-	/**
-	 * Returns whether auto culative width. 
-	 */
-	public boolean isAutoWidth(){
-		return _autoWidth;
 	}
 	/** Returns whether multiple selections are allowed.
 	 * <p>Default: false.
@@ -484,12 +453,6 @@ public class Tree extends XulElement {
 			((Component)it.next()).detach();
 	}
 
-	/** Re-init the tree at the client.
-	 */
-	/*package*/ void initAtClient() {
-		smartUpdate("z.init", true);
-	}
-
 	/** Returns the page size that is used by all {@link Treechildren}
 	 * to display a portion of their child {@link Treeitem},
 	 * or -1 if no limitation.
@@ -587,12 +550,6 @@ public class Tree extends XulElement {
 	}
 
 	//-- Component --//
-	public void setHeight(String height) {
-		if (!Objects.equals(height, getHeight())) {
-			super.setHeight(height);
-			initAtClient();
-		}
-	}
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
@@ -756,7 +713,6 @@ public class Tree extends XulElement {
 		HTMLs.appendAttribute(sb, "z.name", _name);
 		HTMLs.appendAttribute(sb, "z.size",  getRows());
 		HTMLs.appendAttribute(sb, "z.selId", getSelectedId());
-		HTMLs.appendAttribute(sb, "z.autowidth", isAutoWidth());
 		if (_multiple)
 			HTMLs.appendAttribute(sb, "z.multiple", true);
 		//if (_checkmark)
@@ -1148,11 +1104,6 @@ public class Tree extends XulElement {
 			}
 		}
 		private void doFinally() {
-			if (_rendered)
-				initAtClient();
-					//reason: after rendering, the column width might change
-					//Also: Mozilla remembers scrollTop when user's pressing
-					//RELOAD, it makes init more desirable.
 			if (_ctrled)
 				((RendererCtrl)_renderer).doFinally();
 		}
@@ -1363,7 +1314,7 @@ public class Tree extends XulElement {
 	 */
 	
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Selectable, ChildChangedAware {
+	implements Selectable {
 		//-- Selectable --//
 		public void selectItemsByClient(Set selItems) {
 			_noSmartUpdate = true;

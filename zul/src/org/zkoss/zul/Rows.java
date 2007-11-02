@@ -69,9 +69,7 @@ public class Rows extends XulElement {
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
 			throw new UiException("Unsupported parent for rows: "+parent);
-		final boolean changed = getParent() != parent;
 		super.setParent(parent);
-		if (changed && parent != null) ((Grid)parent).initAtClient();
 	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Row))
@@ -82,21 +80,15 @@ public class Rows extends XulElement {
 		super.onChildAdded(child);
 
 		final Grid grid = getGrid();
-		if (grid != null) {
-			grid.initAtClient();
-			if (grid.inPagingMold())
-				grid.getPaginal().setTotalSize(getChildren().size());
-		}
+		if (grid != null && grid.inPagingMold())
+			grid.getPaginal().setTotalSize(getChildren().size());
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 
 		final Grid grid = getGrid();
-		if (grid != null) {
-			grid.initAtClient();
-			if (grid.inPagingMold())
-				grid.getPaginal().setTotalSize(getChildren().size());
-		}
+		if (grid != null && grid.inPagingMold())
+			grid.getPaginal().setTotalSize(getChildren().size());
     }
 
 	//-- ComponentCtrl --//

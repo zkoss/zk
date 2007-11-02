@@ -35,7 +35,6 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -122,7 +121,6 @@ public class Grid extends XulElement {
 	private String _scOddRow = "odd";
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
-	private boolean _autoWidth = true;
 
 	public Grid() {
 		setSclass("grid");
@@ -196,13 +194,6 @@ public class Grid extends XulElement {
 			_align = align;
 			smartUpdate("align", _align);
 		}
-	}
-
-	/** Re-initialize the grid at the client (actually, re-calculate
-	 * the column width at the client).
-	 */
-	/*package*/ void initAtClient() {
-		smartUpdate("z.init", true);
 	}
 
 	//--Paging--//
@@ -373,7 +364,7 @@ public class Grid extends XulElement {
 
 			//Always syncModel because it is easier for user to enfore reload
 			syncModel(-1, -1); //create rows if necessary
-			Events.postEvent("onInitRender", this, null);
+			postOnInitRender();
 			//Since user might setModel and setRender separately or repeatedly,
 			//we don't handle it right now until the event processing phase
 			//such that we won't render the same set of data twice
@@ -425,32 +416,6 @@ public class Grid extends XulElement {
 			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));
 	}
 
-	/**
-	 * Specifies whether the width of grid will be re-sized automatically once 
-	 * any of its child components' properties is modified.
-	 * <br/>
-	 * However,this property will be ignored when the grid is rendered at the first time.
-	 * 
-	 * Note:
-	 * If the width of child component in grid is fixed, you should turn-off this function for better performance.
-	 * But, if the width of child components is dynamically, you should turn-on this function or the layout of grid will be in a mess once
-	 * any of its child components' width exceeds the width of cell of grid.
-	 * @param autoWidth 
-	 * @since 3.0.0
-	 */
-	public void setAutoWidth(boolean autoWidth) {
-		if (_autoWidth != autoWidth) {
-			_autoWidth = autoWidth;
-			smartUpdate("z.autowidth", _autoWidth);
-		}			
-	}
-	
-	/**
-	 * Returns whether auto culative width. 
-	 */
-	public boolean isAutoWidth(){
-		return _autoWidth;
-	}
 	/** Returns the number of rows to preload when receiving
 	 * the rendering request from the client.
 	 *
@@ -611,6 +576,9 @@ public class Grid extends XulElement {
 			renderer.doFinally();
 		}
 	}
+	private void postOnInitRender() {
+		Events.postEvent("onInitRender", this, null);
+	}
 
 	/** Handles when the list model's content changed.
 	 */
@@ -663,8 +631,7 @@ public class Grid extends XulElement {
 		if (!done) //CONTENTS_CHANGED
 			syncModel(min, max);
 
-		initAtClient();
-			//client have to send back for what have to reload
+		postOnInitRender(); //to improve performance
 	}
 
 	private static final RowRenderer getDefaultRowRenderer() {
@@ -740,11 +707,6 @@ public class Grid extends XulElement {
 			}
 		}
 		private void doFinally() {
-			if (_rendered)
-				initAtClient();
-					//reason: after rendering, the column width might change
-					//Also: Mozilla remembers scrollTop when user's pressing
-					//RELOAD, it makes init more desirable.
 			if (_ctrled)
 				((RendererCtrl)_renderer).doFinally();
 		}
@@ -860,7 +822,6 @@ public class Grid extends XulElement {
 			HTMLs.appendAttribute(sb, "align", _align);
 		if (_model != null)
 			HTMLs.appendAttribute(sb, "z.model", true);
-		HTMLs.appendAttribute(sb, "z.autowidth", isAutoWidth());
 		if (_scOddRow != null)
 			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 		return sb.toString();
@@ -971,7 +932,7 @@ public class Grid extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements ChildChangedAware, RenderOnDemand {
+	implements RenderOnDemand {
 		//RenderOnDemand//
 		public void renderItems(Set items) {
 			int cnt = items.size();
@@ -1010,11 +971,6 @@ public class Grid extends XulElement {
 			}
 
 			Grid.this.renderItems(items);
-		}
-
-		//ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return true;
 		}
 	}
 	/** An iterator used by _heads.
