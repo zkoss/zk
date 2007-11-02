@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Slider;
@@ -39,14 +37,13 @@ public class SliderSphere implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Slider self = (Slider)comp;
 		final String uuid = self.getUuid();
-		final Execution exec = Executions.getCurrent();
 		wh.write("<table id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(" z.type=\"zul.sld.Sld\" cellpadding=\"0\" cellspacing=\"0\">")
 			.writeln("<tr height=\"20\"><td class=\"slidersph-bkl\"></td>")
-			.write("<td class=\"slidersph-bk\"><img id=\"").write(uuid)
-			.write("!btn\" src=\"").write(exec.encodeURL("~./zul/img/slider/btnsph.gif"))
-			.write("\" title=\"").write(self.getCurpos()+"").writeln("\"/></td>")
+			.write("<td class=\"slidersph-bk\"><span id=\"").write(uuid)
+			.write("!btn\" class=\"slidersph-btn\" title=\"")
+			.write(self.getCurpos()).writeln("\"></span></td>")
 			.write("<td class=\"slidersph-bkr\"></td></tr>\n</table>");
 	}
 
