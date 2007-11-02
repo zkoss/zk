@@ -104,6 +104,7 @@ div.layout-container{
 						<treeitem id="michart" label="Chart" value="/userguide/misc/chart.zul"/>
 						<treeitem id="csa" label="Client side action" value="/userguide/misc/action.zul"/>
 						<treeitem id="anima" label="Animations" value="/userguide/misc/anima.zul"/>
+						<treeitem id="theme" label="Change Theme" value="/userguide/misc/changetheme.zul"/>
 						<treeitem id="captcha" label="Captcha" value="/userguide/misc/captcha.zul"/>
 						<treeitem id="mi1" label="Timer" value="/userguide/misc/timer.zul"/>
 						<treeitem id="miaudio" label="Audio" value="/userguide/misc/audio.zul" unless="${c:isGecko()}"/>
@@ -118,7 +119,6 @@ div.layout-container{
 						<treeitem id="mi6" label="Mixed with HTML elements" value="/userguide/misc/mixHtml.zul"/>
 						<treeitem id="mi7" label="Style sheets" value="/userguide/misc/styleSheet.zul"/>
 						<treeitem id="mi8" label="Localization" value="/userguide/misc/localization.zul"/>
-						<treeitem id="mi9" label="Change Theme" value="/userguide/misc/changetheme.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Database connection" value="/userguide/dbconnect/index.zul">

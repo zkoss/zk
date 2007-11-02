@@ -21,9 +21,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<vbox width="100%">
 		<html><![CDATA[
 			<h4>Change Theme</h4>
-			<p>You can change the font size of zkdemo by change the theme.</p>
-			<p>Note: To run this demo, you must enable cookie. 
-			(This is not a constraint of ZK, it is implementation issue.)</p>
+			<p>Change the theme to use a different font size.</p>
+			<ul>
+			<li>This demo uses the cookie to store the theme, so the cookie
+			must be enabled to run this demo.<br/>
+			(This is not a constraint of ZK but an implementation choice.)</li>
+			<li>The implementation varies from one application to another.
+			Refer to the Developer's Guide for more information.</li>
+			</ul>
 		]]></html>
 		
 		<groupbox mold="3d" width="100%">

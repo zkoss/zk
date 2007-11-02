@@ -47,6 +47,6 @@ public class ChangeThemeButton extends Button{
 		Radiogroup frg = (Radiogroup)getFellow("frg");
 		Execution exe = Executions.getCurrent();
 		FontSizeThemeProvider.setFondSizeCookie(exe,frg.getSelectedItem().getValue());
-		exe.sendRedirect("/userguide/index.zul?id=mi9");
+		exe.sendRedirect("/userguide?id=theme");
 	}
 }
