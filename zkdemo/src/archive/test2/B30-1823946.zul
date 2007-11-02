@@ -29,11 +29,12 @@ The update of list cell freeze IE.<separator/>
 </zscript>
 <button label="start timer" onClick="timer.start()"/>
 <button label="stop timer" onClick="timer.stop()"/>
-| <checkbox id="add" />Add |
+| <checkbox id="update" checked="true" />Update | <checkbox id="add" />Add |
 <checkbox id="remove"/>Remove (stop at last 3 rows)
 <timer id="timer" delay="1500" repeats="true" running="false">
 	<attribute name="onTimer"><![CDATA[
-		updateCell();
+		if (update.checked)
+			updateCell();
 		if(add.checked){
 			addRow();
 		}
@@ -42,7 +43,7 @@ The update of list cell freeze IE.<separator/>
 		}
 	]]></attribute>
 </timer>
-<listbox id="lb">
+<listbox id="lb" rows="30">
 	<listhead sizable="true">
 		<listheader label="1" />
 		<listheader label="2" />
