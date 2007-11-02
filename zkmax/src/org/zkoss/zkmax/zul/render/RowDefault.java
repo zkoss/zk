@@ -40,13 +40,13 @@ public class RowDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Row self = (Row) comp;
 		final String uuid = self.getUuid();
-		wh.write("<tr id=\"").write(uuid).write('"')
+		wh.write("<tr z.type=\"Grw\" id=\"").write(uuid).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>');
 
 		int i = 0;
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();i++) {
 			final Component child = (Component) it.next();
-			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
+			wh.write("<td z.type=\"Gcl\" id=\"").write(child.getUuid()).write("!chdextr\"")
 				.write(self.getChildAttrs(i)).write("><div id=\"").write(child.getUuid())
 				.write("!cell\" class=\"gc cell-inner\">");
 
