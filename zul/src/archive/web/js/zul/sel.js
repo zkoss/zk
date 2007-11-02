@@ -408,6 +408,14 @@ zk.Selectable.prototype = {
 	/** Process the setAttr command sent from the server. */
 	setAttr: function (nm, val) {
 		switch (nm) {
+			case "z.innerwidth":
+				var meta = zkau.getMeta(grid);
+				if (meta) {
+					if (meta.headtbl) meta.headtbl.style.width = val;
+					if (meta.bodytbl) meta.headtbl.style.width = val;
+					if (meta.foottbl) meta.headtbl.style.width = val;
+				}
+				return true;
 		case "select": //select by uuid
 			var row = $e(val);
 			this._selectOne(row, false);
@@ -767,14 +775,16 @@ zk.Selectable.prototype = {
 				}
 				zk.cpCellWidth(head, this.bodyrows, this);	
 				var fake = $e(head.id + "!fake");
-				if (fake) fake.parentNode.removeChild(fake);
-				var src = document.createElement("TR");
-				src.id = head.id + "!fake";
-				src.style.height = "0px";
-					//Note: we cannot use display="none" (offsetWidth won't be right)
-				for (var j = 0; j < head.cells.length; ++j)
-					src.appendChild(document.createElement("TD"));					
-				this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);						
+				if (!fake || fake.cells.length != head.cells.length) {
+					if (fake) fake.parentNode.removeChild(fake);
+					var src = document.createElement("TR");
+					src.id = head.id + "!fake";
+					src.style.height = "0px";
+						//Note: we cannot use display="none" (offsetWidth won't be right)
+					for (var j = 0; j < head.cells.length; ++j)
+						src.appendChild(document.createElement("TD"));					
+					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);						
+				}
 				var row = this.headtbl.rows[0];
 				var cells = row.cells;
 				for (var k =0, z = 0; k < cells.length; k++) {

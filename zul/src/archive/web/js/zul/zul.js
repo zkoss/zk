@@ -116,7 +116,29 @@ zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
 		}
 	}
 	zk.cpCellWidth(head, mate.bodyrows, mate);
-	
+	var fake = $e(head.id + "!fake");
+	if (!fake || fake.cells.length != head.cells.length) {
+		if (fake) fake.parentNode.removeChild(fake);
+		var src = document.createElement("TR");
+		src.id = head.id + "!fake";
+		src.style.height = "0px";
+			//Note: we cannot use display="none" (offsetWidth won't be right)
+		for (var j = 0; j < head.cells.length; ++j)
+			src.appendChild(document.createElement("TD"));					
+		mate.headtbl.rows[0].parentNode.insertBefore(src, mate.headtbl.rows[0]);						
+	}
+	var row = mate.headtbl.rows[0];
+	var cells = row.cells;
+	for (var k =0, z = 0; k < cells.length; k++) {
+		var s = cells[k], d = head.cells[k];
+		var w =  d.style.width;							
+		if (!w || w == "auto" || w.indexOf('%') > -1) {// Bug #1822564
+			d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
+			setZKAttr(d, "wd", "NaN"); // Bug #1823236
+		}
+		w = d.style.width;
+		s.style.width = $int(w) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
+	}
 	var table =  mate.headtbl.style.width;
 	wd = zk.revisedSize(head.cells[icol],wd) + "px";
 	zkau.send({uuid: cmp.id, cmd: "onColSize",
@@ -144,7 +166,11 @@ zulHdr.setAttr = function (cmp, nm, val) {
 			var cell = $e(cmp.id + "!cave");
 			var v = val;	
 			if (nm == "style") v = zk.getTextStyle(val, true, true);
-			if (v) zkau.setAttr(cell, nm, v);
+			if (v) {
+				if (nm == "style.width")
+					v = zk.revisedSize(cell, $int(v)) + "px";
+				zkau.setAttr(cell, nm, v);
+			}
 			zkau.setAttr(cmp, nm, val);
 			
 			if (nm == "style.width" && fake) {
