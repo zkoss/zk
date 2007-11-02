@@ -463,10 +463,11 @@ zk.getBuild = function (nm) {
  * <p>The function is removed from the list right before invoked,
  * so it won't be called twice (unless you call zk.addInit again).
  * @param front whether to add the function to the front of the list
+ * @param unique whether not to add if redundant. If true, fn is added
+ * only if fn was not added before.
  */
-zk.addInit = function (fn, front) {
-	if (front) zk._initfns.unshift(fn);
-	else zk._initfns.push(fn);
+zk.addInit = function (fn, front, unique) {
+	zk._addfn(zk._initfns, fn, front, unique);
 };
 /** Adds a function that will be invoked 25 milliseconds, after
  * all components are initialized.
@@ -480,11 +481,21 @@ zk.addInit = function (fn, front) {
  * so it won't be called twice (unless you call zk.addInitLater again).
  *
  * @param front whether to add the function to the front of the list
+ * @param unique whether not to add if redundant. If true, fn is added
+ * only if fn was not added before.
  * @since 3.0.0
  */
-zk.addInitLater = function (fn, front) {
-	if (front) zk._inLatfns.unshift(fn);
-	else zk._inLatfns.push(fn);
+zk.addInitLater = function (fn, front, unique) {
+	zk._addfn(zk._inLatfns, fn, front, unique);
+};
+zk._addfn = function (fns, fn, front, unique) {
+	if (unique)
+		for (var j = fns.length; j;)
+			if (fns[--j] == fn)
+				return;
+
+	if (front) fns.unshift(fn);
+	else fns.push(fn);
 };
 /** Adds a function for module initialization.
  * It is called after all javascript fies are loaded, and before
@@ -510,11 +521,14 @@ zk.addInitCmp = function (cmp) {
 /** Adds a function that will be invoked when the browser is resized
  * (window's resize).
  * <p>Unlike zk.addInit, the function won't be detached after invoked.
+ *
+ * @param front whether to add the function to the front of the list
+ * @param unique whether not to add if redundant. If true, fn is added
+ * only if fn was not added before.
  * @since 3.0.0
  */
-zk.addOnResize = function (fn, front) {
-	if (front) zk._reszfns.unshift(fn);
-	else zk._reszfns.push(fn);
+zk.addOnResize = function (fn, front, unique) {
+	zk._addfn(zk._reszfns, fn, front, unique);
 };
 /** Removes a function that was added by calling zk.addOnResize.
  * @since 3.0.0

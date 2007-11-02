@@ -139,6 +139,6 @@ public class AuResponse {
 	private static String trimOutput(String s) {
 		if (s == null) return null;
 		s = s.trim();
-		return s.length() <= 20 ?  s: s.substring(0, 20) + "...";
+		return s.length() <= 36 ?  s: s.substring(0, 36) + "...";
 	}
 }
