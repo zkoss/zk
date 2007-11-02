@@ -207,6 +207,7 @@ public class AuRequest {
 
 		new MoveCommand(Events.ON_MOVE, Command.IGNORE_OLD_EQUIV);
 		new SizeCommand(Events.ON_SIZE, Command.IGNORE_OLD_EQUIV);
+		new InnerWidthCommand("onInnerWidth", Command.IGNORE_OLD_EQUIV);
 
 		new MouseCommand(Events.ON_CLICK,
 			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);

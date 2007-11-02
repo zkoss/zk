@@ -1968,13 +1968,19 @@ zkau.cmd1 = {
 	invoke: function (uuid, cmp, func, arg0, arg1, arg2) {
 		zk.eval(cmp, func, null, arg0, arg1, arg2);
 	},
-	popup: function (uuid, cmp, x, y, ref) {
+	popup: function (uuid, cmp, mode, x, y) {
 		var type = $type(cmp);
 		if (type) {
-			cmp.style.position = "absolute";
-			zk.setVParent(cmp); //FF: Bug 1486840, IE: Bug 1766244
-			zkau._autopos(cmp, x || 0, y || 0);
-			zk.eval(cmp, "context", type, $e(ref));	
+			if (mode) {
+				if (mode == "1") { //ref
+				}
+				cmp.style.position = "absolute";
+				zk.setVParent(cmp); //FF: Bug 1486840, IE: Bug 1766244
+				zkau._autopos(cmp, x || 0, y || 0);
+				zk.eval(cmp, "context", type);
+			} else { //close
+				
+			}
 		}
 	}
 };
