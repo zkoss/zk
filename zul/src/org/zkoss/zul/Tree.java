@@ -38,6 +38,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.ext.client.InnerWidth;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -221,20 +222,32 @@ public class Tree extends XulElement {
 	}
 
 	/**
-	 * Sets the width of inner table of Tree.
-	 * @param innerWidth
+	 * Sets the inner width of this component.
+	 * The inner width is the width of the inner table.
+	 * By default, it is 100%. That is, it is the same as the width
+	 * of this component. However, it is changed when the user
+	 * is sizing the column's width.
+	 *
+	 * <p>Application developers rarely call this method, unless
+	 * they want to preserve the widths of sizable columns
+	 * changed by the user.
+	 * To preserve the widths, the developer have to store the widths of
+	 * all columns and the inner width ({@link #getInnerWidth}),
+	 * and then restore them when re-creating this component.
+	 *
+	 * @param innerWidth the inner width. If null, "100%" is assumed.
+	 * @since 3.0.0
 	 */
 	public void setInnerWidth(String innerWidth) {
-		if (innerWidth == null) innerWidth = "100%";
-		if (!_innerWidth.equals(innerWidth)) {
-			_innerWidth = innerWidth;
-			smartUpdate("z.innerwidth", _innerWidth);
-		}
+		_innerWidth = innerWidth == null ? "100%": innerWidth;
+			//no need to send back inner-width to the client
 	}
-	
 	/**
-	 * Returns the width of inner table of Listbox.
-	 * Default: "100%"
+	 * Returns the inner width of this component.
+	 * The inner width is the width of the inner table.
+	 * <p>Default: "100%"
+	 * @see #setInnerWidth
+	 * @since 3.0.0
 	 */
 	public String getInnerWidth() {
 		return _innerWidth;
@@ -1335,7 +1348,12 @@ public class Tree extends XulElement {
 	 */
 	
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Selectable {
+	implements InnerWidth, Selectable {
+		//InnerWidth//
+		public void setInnerWidthByClient(String width) {
+			setInnerWidth(width);
+		}
+
 		//-- Selectable --//
 		public void selectItemsByClient(Set selItems) {
 			_noSmartUpdate = true;

@@ -246,11 +246,9 @@ zk.Grid.prototype = {
 	 * @param cmp columns
 	 */
 	resizeCol: function (cmp, icol, col, wd, keys) {
-		var mate = this;
-		if (mate.bodyrows) {
-			zulHdr.resizeAll(mate,
-				cmp, icol, col, wd, keys);
-		}
+		var meta = this;
+		if (meta.bodyrows)
+			zulHdr.resizeAll(meta, cmp, icol, col, wd, keys);
 	},
 
 	/** Renders listitems that become visible by scrolling.

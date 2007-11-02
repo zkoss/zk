@@ -89,15 +89,17 @@ zulHdr.setSizable = function (cmp, sizable) {
 		}
 	}
 };
-/** Resize all rows. (Utilities used by derived). */
-zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
-	if(mate.paging) return;
-	mate.bodytbl.style.width = mate.headtbl.style.width;
+/** Resize all rows. (Utilities used by derived).
+ * @param meta the metainfo of the parent, such as listbox and grid
+ */
+zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
+	if(meta.paging) return;
+	meta.bodytbl.style.width = meta.headtbl.style.width;
 	wd = $int(wd);		
-	if (mate.foottbl) {
-		mate.foottbl.style.width = mate.headtbl.style.width;
-		if (mate.foottbl.rows.length) {
-			var cells = mate.foottbl.rows[0].cells;
+	if (meta.foottbl) {
+		meta.foottbl.style.width = meta.headtbl.style.width;
+		if (meta.foottbl.rows.length) {
+			var cells = meta.foottbl.rows[0].cells;
 			if (icol < cells.length) {
 				var rwd = zk.revisedSize(cells[icol], wd);
 				cells[icol].style.width = rwd + "px";
@@ -108,14 +110,15 @@ zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
 		}
 	}
 	var head;
-	for(var j =0; j < mate.headtbl.rows.length; j++) {
-		var type = $type(mate.headtbl.rows[j]);
+	for(var j =0; j < meta.headtbl.rows.length; j++) {
+		var type = $type(meta.headtbl.rows[j]);
 		if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
-			head = mate.headtbl.rows[j];
+			head = meta.headtbl.rows[j];
 			break;
 		}
 	}
-	zk.cpCellWidth(head, mate.bodyrows, mate);
+
+	zk.cpCellWidth(head, meta.bodyrows, meta);
 	var fake = $e(head.id + "!fake");
 	if (!fake || fake.cells.length != head.cells.length) {
 		if (fake) fake.parentNode.removeChild(fake);
@@ -125,9 +128,9 @@ zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
 			//Note: we cannot use display="none" (offsetWidth won't be right)
 		for (var j = 0; j < head.cells.length; ++j)
 			src.appendChild(document.createElement("TD"));					
-		mate.headtbl.rows[0].parentNode.insertBefore(src, mate.headtbl.rows[0]);						
+		meta.headtbl.rows[0].parentNode.insertBefore(src, meta.headtbl.rows[0]);						
 	}
-	var row = mate.headtbl.rows[0];
+	var row = meta.headtbl.rows[0];
 	var cells = row.cells;
 	for (var k =0, z = 0; k < cells.length; k++) {
 		var s = cells[k], d = head.cells[k];
@@ -139,11 +142,13 @@ zulHdr.resizeAll = function (mate, cmp, icol, col, wd, keys) {
 		w = d.style.width;
 		s.style.width = $int(w) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
 	}
-	var table =  mate.headtbl.style.width;
+
+	zkau.send({uuid: meta.id, cmd: "onInnerWidth",
+			data: [meta.headtbl.style.width]}, -1);
+
 	wd = zk.revisedSize(head.cells[icol],wd) + "px";
 	zkau.send({uuid: cmp.id, cmd: "onColSize",
-		data: [icol, col.id, wd, keys, table]},
-		zkau.asapTimeout(cmp, "onColSize"));
+		data: [icol, col.id, wd, keys]}, zkau.asapTimeout(cmp, "onColSize"));
 };
 zulHdr.cleanup = function (cmp) {
 	zulHdr.setSizable(cmp, false);

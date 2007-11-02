@@ -20,6 +20,8 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
+
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.ext.render.Floating;
@@ -45,7 +47,7 @@ public class Popup extends XulElement {
 	}
 
 	/**
-	 * Pop ups this component at the client.
+	 * Opens this popup to the specified location at the client.
 	 *
 	 * <p>In most cases, the popup is shown automatically when specified
 	 * in the tooltip, popup and context properties
@@ -54,16 +56,62 @@ public class Popup extends XulElement {
 	 * However, if you want to show it manually, you can invoke this
 	 * method directly.
 	 *
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
 	 * @since 3.0.0
 	 */
-	public void popup(String x, String y) {
+	public void open(String x, String y) {
 		response("popup", new AuPopup(this, x, y));
+	}
+	/**
+	 * Opens this popup to the specified location at the client.
+	 *
+	 * <p>In most cases, the popup is shown automatically when specified
+	 * in the tooltip, popup and context properties
+	 * ({@link XulElement#setTooltip}, {@link XulElement#setPopup},
+	 * and {@link XulElement#setContext}).
+	 * However, if you want to show it manually, you can invoke this
+	 * method directly.
+	 *
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
+	 * @since 3.0.0
+	 */
+	public void open(int x, int y) {
+		response("popup", new AuPopup(this, Integer.toString(x), Integer.toString(y)));
+	}
+	/**
+	 * Opens this popup right below the specified component at the cleint.
+	 * <p>In most cases, the popup is shown automatically when specified
+	 * in the tooltip, popup and context properties
+	 * ({@link XulElement#setTooltip}, {@link XulElement#setPopup},
+	 * and {@link XulElement#setContext}).
+	 * However, if you want to show it manually, you can invoke this
+	 * method directly.
+	 *
+	 * @param ref the reference component
+	 * @since 3.0.0
+	 */
+	public void open(Component ref) {
+		response("popup", new AuPopup(this, ref));
+	}
+	/**
+	 * Closes this popup at the client.
+	 *
+	 * <p>In most cases, the popup is closed automatically when the user
+	 * clicks outside of the popup.
+	 * @since 3.0.0
+	 */
+	public void close() {
+		response("popup", new AuPopup(this, false));
 	}
 
 	//super//
-	/** Not allowd. */
+	/** Not allowd.
+	 * Use {@link #open} to open, and {@link #close} to close.
+	 */
 	public boolean setVisible(boolean visible) {
-		throw new UnsupportedOperationException("You cannot make it visible manually");
+		throw new UnsupportedOperationException("Use open/close instead");
 	}
 	public String getOuterAttrs() {
 	//Note: don't generate z.type here because Menupopup's z.type diff

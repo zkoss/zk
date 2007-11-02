@@ -22,11 +22,12 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
 
 /**
- * A response to ask the client to pop up a component.
+ * A response to ask the client to open or to close a popup.
  *
  * <p>data[0]: the component UUID<br/>
- * data[1]: the x coordination<br/>
- * data[2]: the y coordination
+ * data[1]: what operation to do. 0: close, 1: open by ref, 2: open by (x,y)
+ * data[2]: the x coordination<br/>
+ * data[3]: the y coordination
  *
  * <p>Note: the first argument is always the component itself.
  * 
@@ -34,7 +35,7 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuPopup extends AuResponse {
-	/** Constructs an instance to pop up the specified component.
+	/** Constructs an instance to open the popup at specified location.
 	 * Note: the component must implement the zkType.context JavaScript function.
 	 *
 	 * @param comp the component that this script depends on.
@@ -43,6 +44,26 @@ public class AuPopup extends AuResponse {
 	 * @param y the y coordination
 	 */
 	public AuPopup(Component comp, String x, String y) {
-		super("popup", comp, new String[] {comp.getUuid(), x, y});
+		super("popup", comp, new String[] {comp.getUuid(), "2", x, y});
 	}
+	/** Constructs an instance to open the popup at specified location.
+	 * Note: the component must implement the zkType.context JavaScript function.
+	 *
+	 * @param comp the component that this script depends on.
+	 * It cannot be null.
+	 * @param ref the reference component
+	 */
+	public AuPopup(Component comp, Component ref) {
+		super("popup", comp, new String[] {comp.getUuid(), "1", ref.getUuid()});
+	}
+	/** Constructs an instance to close the popup.
+	 *
+	 * @param comp the component that this script depends on.
+	 * It cannot be null.
+	 * @param option ignored.
+	 */
+	public AuPopup(Component comp, boolean option) {
+		super("popup", comp, new String[] {comp.getUuid(), "0"});
+	}
+
 }

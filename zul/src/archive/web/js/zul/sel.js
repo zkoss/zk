@@ -955,38 +955,14 @@ zk.Selectable.prototype = {
 
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
-		// if (cleansz) this.cleanSize(); disabled by Jumper
 		if (!zk.isRealVisible(this.element)) return;
 		setTimeout("zkSel._calcSize('"+this.id+"')", 50);
-	},/** disabled by Jumper
-	cleanSize: function () {
-		if (this.paging) return; //nothing to adjust since single table
-
-		this.body.style.width = this.bodytbl.style.width = "";
-		if (this.headtbl) {
-			this.head.style.width = this.body.style.height = "";
-			if (this.headtbl.rows.length) {
-				var headrow = this.headtbl.rows[0];
-				for (var j = headrow.cells.length; --j >=0;)
-					headrow.cells[j].style.width = "";
-			}
-		}
-		if (this.foottbl) {
-			this.foot.style.width = this.body.style.height = "";
-			if (this.foottbl.rows.length) {
-				var footrow = this.foottbl.rows[0];
-				for (var j = footrow.cells.length; --j >=0;)
-					footrow.cells[j].style.width = "";
-			}
-		}
-	},*/
+	},
 	/** Resize the specified column. */
 	resizeCol: function (cmp, icol, col, wd, keys) {
-		var mate = this;
-		if (mate.bodyrows) {
-			zulHdr.resizeAll(mate,
-				cmp, icol, col, wd, keys);
-		}
+		var meta = this;
+		if (meta.bodyrows)
+			zulHdr.resizeAll(meta, cmp, icol, col, wd, keys);
 	},
 
 	/** Sels all items (don't notify server and change focus, because it is from server). */
