@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+changetheme.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Create by Dennis
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo">
+	<vbox width="100%">
+		<html><![CDATA[
+			<h4>Change Theme</h4>
+			<p>You can change the font size of zkdemo by change the theme.</p>
+			<p>Note: To run this demo, you must enable cookie. 
+			(This is not a constraint of ZK, it is implementation issue.)</p>
+		]]></html>
+		
+		<groupbox mold="3d" width="100%">
+			<caption label="Theme of Font Size"></caption>
+			<vbox>
+			<radiogroup id="frg">
+				<radio label="Small" value="sm" />
+				<radio label="Normal" value=""/>
+				<radio label="Large" value="lg"/>
+			</radiogroup>
+			<button id="ctBtn" label="Change &amp; reload page" use="org.zkoss.zkdemo.userguide.ChangeThemeButton"/>
+			</vbox>
+		</groupbox>
+		
+	</vbox>
+</window>

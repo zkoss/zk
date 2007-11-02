@@ -51,5 +51,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="Mixed with HTML elements" onClick="doSelect(&quot;mi6&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Style sheets" onClick="doSelect(&quot;mi7&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Localization" onClick="doSelect(&quot;mi8&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Change Theme" onClick="doSelect(&quot;mi9&quot;)"/></h:li>
 	</h:ul>
 </window>

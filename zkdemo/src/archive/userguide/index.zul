@@ -118,6 +118,7 @@ div.layout-container{
 						<treeitem id="mi6" label="Mixed with HTML elements" value="/userguide/misc/mixHtml.zul"/>
 						<treeitem id="mi7" label="Style sheets" value="/userguide/misc/styleSheet.zul"/>
 						<treeitem id="mi8" label="Localization" value="/userguide/misc/localization.zul"/>
+						<treeitem id="mi9" label="Change Theme" value="/userguide/misc/changetheme.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Database connection" value="/userguide/dbconnect/index.zul">
