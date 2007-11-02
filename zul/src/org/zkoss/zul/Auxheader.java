@@ -21,6 +21,8 @@ package org.zkoss.zul;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 
@@ -59,7 +61,10 @@ public class Auxheader extends HeaderElement {
 			throw new WrongValueException("Positive only");
 		if (_colspan != colspan) {
 			_colspan = colspan;
-			smartUpdate("colspan", Integer.toString(_colspan));
+			final Execution exec = Executions.getCurrent();
+			if (exec != null && exec.isExplorer())
+				invalidate();
+			else smartUpdate("colspan", Integer.toString(_colspan));
 		}
 	}
 
@@ -77,7 +82,10 @@ public class Auxheader extends HeaderElement {
 			throw new WrongValueException("Positive only");
 		if (_rowspan != rowspan) {
 			_rowspan = rowspan;
-			smartUpdate("rowspan", Integer.toString(_rowspan));
+			final Execution exec = Executions.getCurrent();
+			if (exec != null && exec.isExplorer())
+				invalidate();
+			else smartUpdate("rowspan", Integer.toString(_rowspan));
 		}
 	}
 
