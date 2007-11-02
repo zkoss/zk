@@ -1,0 +1,13 @@
+<window>
+	<div height="800px" width="800px" style="border:solid black 1px">
+		
+	</div>
+	<div align="right">
+	<label value="click me" popup="test"/>
+	</div>
+	<popup>
+	</popup>
+	<popup id="test" height="400px" width="700px">
+		<label value="test" />
+	</popup>
+</window>
