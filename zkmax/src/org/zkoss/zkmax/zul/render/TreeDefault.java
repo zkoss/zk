@@ -43,19 +43,19 @@ public class TreeDefault implements ComponentRenderer {
 
 		if(self.getTreecols() != null){
 			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"tree-head\">")
-				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
 				.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
 
 		wh.write("<div id=\"").write(self.getUuid()).write("!body\" class=\"tree-body\">")
-			.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+			 .write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
 			.writeln(self.getTreechildren())
 			.write("</table></div>");
 
 		if(self.getTreefoot() != null){
 			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"tree-foot\">")
-				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
 				.writeln(self.getTreefoot())
 				.write("</table></div>");
 		}

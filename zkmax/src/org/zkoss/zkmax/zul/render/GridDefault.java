@@ -42,19 +42,19 @@ public class GridDefault implements ComponentRenderer {
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		if(self.getColumns() != null){
 			wh.write("<div id=\"").write(uuid).write("!head\" class=\"grid-head\">")
-				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
 				.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
 
 		wh.write("<div id=\"").write(uuid).write("!body\" class=\"grid-body\">");
-		wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">")
+		wh.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">")
 			.writeln(self.getRows())
 			.write("</table></div>");
 
 		if(self.getFoot() != null){
 			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"grid-foot\">")
-				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"  style=\"table-layout:fixed\">")
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"  style=\"table-layout:fixed\">")
 				.writeln(self.getFoot())
 				.write("</table></div>");
 		}

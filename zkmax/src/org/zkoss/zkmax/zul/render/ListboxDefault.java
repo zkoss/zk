@@ -43,20 +43,20 @@ public class ListboxDefault implements ComponentRenderer {
 
 		if(self.getListhead() != null){
 			wh.write("<div id=\"").write(uuid).write("!head\" class=\"listbox-head\">")
-				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
 				.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
 
 		wh.write("<div id=\"").write(uuid).write("!body\" class=\"listbox-body\">")
-			.write("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"")
+			.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"")
 			.write(uuid).writeln("!cave\" class=\"listbox-btable\">")
 			.writeComponents(self.getItems())
 			.write("\n</table></div>");
 
 		if(self.getListfoot() != null){
 			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"listbox-foot\">")
-				.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
 				.writeln(self.getListfoot())
 				.write("</table></div>");
 		}
