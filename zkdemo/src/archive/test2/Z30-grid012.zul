@@ -3,7 +3,7 @@ The update of list cell freeze IE.<separator/>
 
 
 
-<window title="test Grid" width="99%" height="700px" contentStyle="overflow:auto;" border="normal">
+<window title="test Grid" height="500px" contentStyle="overflow:auto;width:800px;height:400px;position:relative" border="normal">
 	
 	<zscript><![CDATA[
 	
@@ -33,7 +33,7 @@ The update of list cell freeze IE.<separator/>
 			new Label("A8").setParent(item);
 			new Label("A9").setParent(item);
 			
-			lb.rows.getChildren().add(lb.rows.getChildren().size(),item);
+			lb.rows.getChildren().add(lb.rows.getChildren().size() - 1,item);
 		}
 	
 	
