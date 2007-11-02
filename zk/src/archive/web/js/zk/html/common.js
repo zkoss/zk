@@ -1427,9 +1427,9 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 							wd = d.style.width;
 							var zwd = getZKAttr(d, "wd"); // Bug #1823236
 							if (wd && (!zwd || (zwd != "NaN" && $int(zwd) != d.offsetWidth))) {
-								dstwds[z] = zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth; 
+								dstwds[z] = zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth; 
 							} else {
-								dstwds[z] = zk.ie && z == dst.cells.length -1 ? s.offsetWidth - 1 : s.offsetWidth;
+								dstwds[z] = zk.ie && z == dst.cells.length -1 ? s.offsetWidth - 2 : s.offsetWidth;
 								setZKAttr(d, "wd", dstwds[z]);
 								wd = "";
 							}
@@ -1485,11 +1485,11 @@ zk.cpCellWidthByArray = function (dst, srcrows) {
 			if (s.colSpan + z <= dst.cells.length) {				
 				for (var k = 0; k < s.colSpan; k++) {
 					var hd = dst.cells[z+k];
-					wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 1 : hd.offsetWidth; 												
+					wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 2 : hd.offsetWidth; 												
 				}
 			}
 		} else
-			wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 1 : d.offsetWidth;
+			wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
 		var uuid = $uuid(s);
 		var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
 		var rwd = zk.revisedSize(s, wd);
