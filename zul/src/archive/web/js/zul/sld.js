@@ -58,10 +58,6 @@ zk.Slider.prototype = {
 			zk.listen(this.form, "submit", this.fnSubmit);
 		}
 
-		if (zk.gecko && !this.button.complete) {
-			this.button.onload = function () {meta._fixPos();};
-				//fix gecko bug: mis-position if img is not ready yet
-		}
 		setTimeout("zkSld._fixPos('"+this.id+"')", 20);
 			//IE: sometimes we cannot fix the position immediately
 	},

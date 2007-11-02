@@ -1337,10 +1337,6 @@ public class Tree extends XulElement {
 				_noSmartUpdate = false;
 			}
 		}
-		//ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return true;
-		}
 	}
 	/** An iterator used by _heads.
 	 */

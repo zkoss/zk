@@ -336,19 +336,19 @@ span.tree-root-open, span.tree-tee-open, span.tree-last-open {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.tree-root-close, span.tree-tee-close, span.tree-last-close {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer {
 	width: 18px; min-height: 18px; height: 100%;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 
@@ -356,68 +356,68 @@ span.dottree-root-open {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/root-open.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-root-close {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/root-close.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-tee-open {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-open.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-tee-close {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-close.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-last-open {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last-open.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-last-close {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last-close.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-tee {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-vbar {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/vbar.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-last {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last.gif')});
 	background-repeat: no-repeat;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 span.dottree-spacer {
 	width: 18px; min-height: 18px; height: 100%;
-	vertical-align:top;
+	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 
@@ -684,6 +684,13 @@ td.groupbox-3d-shdr {
 }
 
 <%-- ZK slider --%>
+span.slider-btn {
+	background-image: url(${c:encodeURL('~./zul/img/slider/btn.gif')});
+	background-repeat: no-repeat;
+	width: 13px; height: 17px;
+	display:-moz-inline-box; vertical-align:top;
+	display:inline-block;	
+}
 td.slider-bk {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bk.gif')});
 }
@@ -696,6 +703,13 @@ td.slider-bkr {
 	width: 4px;
 }
 
+span.slidersph-btn {
+	background-image: url(${c:encodeURL('~./zul/img/slider/btnsph.gif')});
+	background-repeat: no-repeat;
+	width: 17px; height: 20px;
+	display:-moz-inline-box; vertical-align:top;
+	display:inline-block;	
+}
 td.slidersph-bk {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bksph.gif')});
 }
