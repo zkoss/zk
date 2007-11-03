@@ -78,6 +78,7 @@ ZK 3.0.0
   1823946: Listbox update make IE6 freezed
   1823921: Listbox crashed with complex Header
   1823357: auxHeader(IE)- Can not change rowspan dynamically
+  1824832: Errors in zul.xsd
   
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
