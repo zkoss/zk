@@ -327,8 +327,8 @@
 	<xs:complexType name="auxheaderType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
-		<xs:attribute name="colspan" type="xs:integer" user="optional" />
-		<xs:attribute name="rowspan" type="xs:integer" user="optional" />
+		<xs:attribute name="colspan" type="xs:integer" use="optional" />
+		<xs:attribute name="rowspan" type="xs:integer" use="optional" />
 	</xs:complexType>
 	<!-- bandbox -->
 	<xs:element name="bandbox" type="bandboxType" />
