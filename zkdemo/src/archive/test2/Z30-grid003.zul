@@ -15,12 +15,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
-<h:h3> Test "sortAscending" and "sortDescending"  </h:h3>
+<h:h3> Test Grid with paging</h:h3>
 <h:p>
 See if the sorted result printed in console is same as the data collection displayed in Browser.
 </h:p>
-<toolbarbutton label="B30-1823959.zul :: Grid sortAscending sortDescending Null Object error" 
-	href="B30-1823959.zul"/>
+<toolbarbutton label="B30-1823959.zul" href="B30-1823959.zul"/>
+<toolbarbutton label="B30-1824604.zul" href="B30-1824604.zul"/>
 	<separator/>
 	<zscript>
 		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel();
@@ -30,7 +30,9 @@ See if the sorted result printed in console is same as the data collection displ
 		dsc = new RowLabelComparator(false);
 	</zscript>
 	<vbox>
-		<grid mold="paging"  model="${strset}">
+		<button label="Resync Model" onClick="strset.invalidate()"/>
+		<button label="Invalidate" onClick="g.invalidate()"/>
+		<grid id="g" mold="paging" model="${strset}">
 			<columns sizable="true">
 				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"/>
 			</columns>
