@@ -40,7 +40,7 @@ zk.Selectable.prototype = {
 	initialize: function (cmp) {
 		this.id = cmp.id;
 		zkau.setMeta(cmp, this);		
-		this.cells = [];
+		this.qcells = [];
 		this.init();
 	},
 	init: function (isLater) {
@@ -137,17 +137,19 @@ zk.Selectable.prototype = {
 		if (!this.paging) {
 			//FF: a small fragment is shown
 			//IE: Bug 1775014
-			if (this.headtbl && this.headtbl.rows.length == 1) {
-				var headrow = this.headtbl.rows[0];
+			if (this.headtbl && this.headtbl.rows.length) {
 				var empty = true;
 				l_out:
-				for (var j = headrow.cells.length; --j>=0;) {
-					var cave = $e(headrow.cells[j].id + "!cave"); // Bug #1819037
-					for (var n = cave.firstChild; n; n = n.nextSibling)
-						if (!n.id || !n.id.endsWith("!hint")) {
-							empty = false;
-							break l_out;
-						}
+				for (var j = this.headtbl.rows.length; j;) {
+					var headrow = this.headtbl.rows[--j];
+					for (var k = headrow.cells.length; k;) {
+						var n = $e(headrow.cells[--k].id + "!cave"); // Bug #1819037
+						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
+							if (!n.id || !n.id.endsWith("!hint")) {
+								empty = false;
+								break l_out;
+							}
+					}
 				}
 				if (empty) this.head.style.height = "0px"; // Bug #1819037
 					//we have to hide if empty (otherwise, a small block is shown)
@@ -163,22 +165,24 @@ zk.Selectable.prototype = {
 		}
 		
 		
-		if (!isLater) {
+		if (isLater && this.qcells.length
+		&& this.headtbl && this.headtbl.rows.length
+		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
+			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
+		} else {
 			setTimeout("zkSel._calcSize('"+this.id+"')", 150); // Bug #1813722
 			this.stripe();
-			//don't calc now because browser might size them later
-			//after the whole HTML page is processed
-		} else {
-			if (this.headtbl && this.bodytbl && this.bodytbl.rows.length && this.cells.length) {
-				if (this.bodytbl.rows.length > 1)
-					zk.cpCellWidthByArray(this.headtbl.rows[0], this.cells);
-				else setTimeout("zkSel._calcSize('"+this.id+"')", 150);
-			}
 		}
-		this._render(150); //prolong a bit since calSize might not be ready
+		this.qcells.length = 0;
+		this._render(155); //prolong a bit since calSize might not be ready
 	},
 	putCellQue: function (cell) {
-		this.cells.push(cell);
+/** no need to check replication, since the server generates one for each
+		for (var j = this.qcells.length; j;)
+			if (this.qcells[--j] == cell)
+				return; //replicate
+*/
+		this.qcells.push(cell);
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
@@ -186,7 +190,7 @@ zk.Selectable.prototype = {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
-			this.foot = this.foottbl = this.fnSubmit = this.cells = null;
+			this.foot = this.foottbl = this.fnSubmit = this.qcells = null;
 			//in case: GC not works properly
 	},
 	/** Stripes the rows. */
@@ -781,7 +785,7 @@ zk.Selectable.prototype = {
 					src.id = head.id + "!fake";
 					src.style.height = "0px";
 						//Note: we cannot use display="none" (offsetWidth won't be right)
-					for (var j = 0; j < head.cells.length; ++j)
+					for (var j = head.cells.length; --j >= 0;)
 						src.appendChild(document.createElement("TD"));					
 					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);						
 				}
@@ -931,26 +935,6 @@ zk.Selectable.prototype = {
 	_vflexSize: function () {
 		return this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0)
 			- (this.foot ? this.foot.offsetHeight : 0); // Bug #1815882
-		/** disabled by Jumper 	
-		var diff = zk.pageHeight() - zk.innerHeight()
-				+ $int(Element.getStyle(document.body, "margin-top"))
-				+ $int(Element.getStyle(document.body, "margin-bottom"))
-				+ $int(Element.getStyle(document.body, "padding-top"))
-				+ $int(Element.getStyle(document.body, "padding-bottom"));
-		if (zk.ie) ++diff; //strange, but...
-
-		//check whether TD
-		if (diff > 0)
-			for (var n = this.element, p; p = $parent(n); n = p) {
-				if ($tag(p) == "TD") {
-					//whether other cells heigher than this
-					if (p.clientHeight - n.offsetHeight > 20) //to be precise we have to count margin instead of 20
-						diff = 0; //no need to shrink
-					break;
-				}
-			}
-		return this.body.offsetHeight - diff;
-		*/
 	},
 
 	/** Recalculate the size. */

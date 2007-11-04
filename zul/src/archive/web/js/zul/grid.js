@@ -24,7 +24,7 @@ zk.Grid.prototype = {
 	initialize: function (comp) {
 		this.id = comp.id;
 		zkau.setMeta(comp, this);		
-		this.cells = [];
+		this.qcells = [];
 		this.init();
 	},
 	init: function (isLater) {
@@ -68,17 +68,19 @@ zk.Grid.prototype = {
 		if (!this.paging) {
 			//FF: a small fragment is shown
 			//IE: Bug 1775014
-			if (this.headtbl && this.headtbl.rows.length == 1) {
-				var headrow = this.headtbl.rows[0];
+			if (this.headtbl && this.headtbl.rows.length) {
 				var empty = true;
 				l_out:
-				for (var j = headrow.cells.length; --j>=0;) {
-					var cave = $e(headrow.cells[j].id + "!cave"); // Bug #1819037
-					for (var n = cave.firstChild; n; n = n.nextSibling)
-						if (!n.id || !n.id.endsWith("!hint")) {
-							empty = false;
-							break l_out;
-						}
+				for (var j = this.headtbl.rows.length; j;) {
+					var headrow = this.headtbl.rows[--j];
+					for (var k = headrow.cells.length; k;) {
+						var n = $e(headrow.cells[--k].id + "!cave"); // Bug #1819037
+						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
+							if (!n.id || !n.id.endsWith("!hint")) {
+								empty = false;
+								break l_out;
+							}
+					}
 				}
 				if (empty) this.head.style.height = "0px"; // Bug #1819037
 					//we have to hide if empty (otherwise, a small block is shown)
@@ -92,23 +94,25 @@ zk.Grid.prototype = {
 					//How long is enough is unknown, but 200 seems fine
 			};
 		} 
-			
-		if (!isLater) {
+
+		if (isLater && this.qcells.length
+		&& this.headtbl && this.headtbl.rows.length
+		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
+			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
+		} else {
 			setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722			
 			this.stripe(); 
-			//don't calc now because browser might size them later
-			//after the whole HTML page is processed
-		} else {
-			if (this.headtbl && this.bodytbl && this.bodytbl.rows.length && this.cells.length) {
-				if (this.bodytbl.rows.length > 1)
-					zk.cpCellWidthByArray(this.headtbl.rows[0], this.cells);
-				else setTimeout("zkGrid._calcSize('"+this.id+"')", 150);
-			}
 		}
-		this._render(150); //prolong a bit since calSize might not be ready
+		this.qcells.length = 0;
+		this._render(155); //prolong a bit since calSize might not be ready
 	},
 	putCellQue: function (cell) {
-		this.cells.push(cell);
+/** no need to check replication, since the server generates one for each
+		for (var j = this.qcells.length; j;)
+			if (this.qcells[--j] == cell)
+				return; //redudant
+*/
+		this.qcells.push(cell);
 	},
 	/* set the height. */
 	setHgh: function (hgh) {
@@ -161,7 +165,7 @@ zk.Grid.prototype = {
 		if (this.fnResize)
 			zk.rmOnResize(this.fnResize);
 		this.element = this.body = this.bodytbl = this.bodyrows
-			= this.head = this.headtbl = this.foot = this.foottbl = this.cells = null;
+			= this.head = this.headtbl = this.foot = this.foottbl = this.qcells = null;
 			//in case: GC not works properly
 	},
 
@@ -212,8 +216,8 @@ zk.Grid.prototype = {
 					src.id = head.id + "!fake";
 					src.style.height = "0px";
 						//Note: we cannot use display="none" (offsetWidth won't be right)
-					for (var j = 0; j < head.cells.length; ++j)
-						src.appendChild(document.createElement("TD"));					
+					for (var j = head.cells.length; --j >= 0;)
+						src.appendChild(document.createElement("TD"));
 					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);			
 				}			
 				var row = this.headtbl.rows[0];
