@@ -154,11 +154,13 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 			response.setContentType(ctype);
 
 		if (download) {
-			String value = "attachment;";
+			String value = "attachment";
 			final String flnm = media.getName();
 			if (flnm != null && flnm.length() > 0)
-				value += "filename=\"" + flnm +'"';
-			response.setHeader("content-disposition", value);
+				value += ";filename=\"" + flnm +'"';
+			response.setHeader("Content-Disposition", value);
+			//response.setHeader("Content-Transfer-Encoding", "binary");
+			//response.setHeader("Accept-Ranges", "bytes");
 		}
 
 		if (!media.inMemory()) {

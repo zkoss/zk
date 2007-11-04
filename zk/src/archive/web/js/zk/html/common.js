@@ -1472,7 +1472,7 @@ Copies the width of each cell from the element's header.
  * @param {Array} srcrows each cell.
  * @since 3.0
  */
-zk.cpCellWidthByArray = function (dst, srcrows) {
+zk.cpCellArrayWidth = function (dst, srcrows) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length)
 		return;	
