@@ -1701,6 +1701,13 @@ zk.Float = Class.create();
 zk.Float.prototype = {
 	initialize: function () {
 	},
+	/** Closes this float if the specified ID is matched.
+	 * @return whether it is closed
+	 */
+	close: function (id) {
+		if (this._ftid == id)
+			this.closeFloats();
+	},
 	/** Closes (hides) all floats.
 	 * @param arguments a list of components that shall be closed
 	 */
@@ -1751,6 +1758,17 @@ zk.Floats.prototype = {
 	initialize: function () {
 		this._ftids = [];
 		this._aspps = {}; //(id, whether a float behaves like a popup)
+	},
+	/** Closes this float if the specified ID is matched.
+	 * @return whether it is closed
+	 */
+	close: function (id) {
+		for (var j = this._ftids.length; j;)
+			if (this._ftids[--j] == id) {
+				this.closeFloats();
+				return true;
+			}
+		return false;
 	},
 	/** Closes (hides) all floats.
 	 * @param arguments a list of components that shall be closed

@@ -1971,15 +1971,28 @@ zkau.cmd1 = {
 	popup: function (uuid, cmp, mode, x, y) {
 		var type = $type(cmp);
 		if (type) {
-			if (mode) {
+			if (mode == "0") { //close
+				for (var j = zkau.floats.length; --j >= 0;) {
+					var n = zkau.floats[j];
+					var f = n["close"];
+					if (f && f.apply(n, [cmp.id]))
+						return;
+				}
+				zkau.closeFloats();
+			} else {
+				var ref;
 				if (mode == "1") { //ref
+					ref = $e(x);
+					if (ref) {
+						var ofs = Position.cumulativeOffset($e(x));
+						x = ofs[0];
+						y = ofs[1] + zk.offsetHeight(ref);
+					}
 				}
 				cmp.style.position = "absolute";
 				zk.setVParent(cmp); //FF: Bug 1486840, IE: Bug 1766244
-				zkau._autopos(cmp, x || 0, y || 0);
-				zk.eval(cmp, "context", type);
-			} else { //close
-				
+				zkau._autopos(cmp, $int(x), $int(y));
+				zk.eval(cmp, "context", type, ref);
 			}
 		}
 	}
