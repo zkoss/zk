@@ -89,7 +89,8 @@ public class Popup extends XulElement {
 	 * However, if you want to show it manually, you can invoke this
 	 * method directly.
 	 *
-	 * @param ref the reference component
+	 * @param ref the reference component to position the popup.
+	 * It cannot be null.
 	 * @since 3.0.0
 	 */
 	public void open(Component ref) {

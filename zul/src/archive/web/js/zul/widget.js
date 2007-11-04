@@ -574,7 +574,6 @@ zkPop = {};
 
 /** Called by au.js's context menu. */
 zkPop.context = function (ctx, ref) {
-	
 	zk.show(ctx); //onVisiAt is called in zk.show
 	zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
 	zkau.hideCovered();

@@ -408,14 +408,11 @@ zk.Selectable.prototype = {
 	/** Process the setAttr command sent from the server. */
 	setAttr: function (nm, val) {
 		switch (nm) {
-			case "z.innerwidth":
-				var meta = zkau.getMeta(grid);
-				if (meta) {
-					if (meta.headtbl) meta.headtbl.style.width = val;
-					if (meta.bodytbl) meta.headtbl.style.width = val;
-					if (meta.foottbl) meta.headtbl.style.width = val;
-				}
-				return true;
+		case "z.innerwidth":
+			if (this.headtbl) this.headtbl.style.width = val;
+			if (this.bodytbl) this.headtbl.style.width = val;
+			if (this.foottbl) this.headtbl.style.width = val;
+			return true;
 		case "select": //select by uuid
 			var row = $e(val);
 			this._selectOne(row, false);
@@ -479,7 +476,10 @@ zk.Selectable.prototype = {
 		case "z.scOddRow":
 			zkau.setAttr(this.element, nm, val);
 			this.stripe();
-			break;
+			return true;
+		case "z.render":
+			this._render(0);
+			return true;
 		}
 		return false;
 	},
@@ -960,9 +960,8 @@ zk.Selectable.prototype = {
 	},
 	/** Resize the specified column. */
 	resizeCol: function (cmp, icol, col, wd, keys) {
-		var meta = this;
-		if (meta.bodyrows)
-			zulHdr.resizeAll(meta, cmp, icol, col, wd, keys);
+		if (this.bodyrows)
+			zulHdr.resizeAll(this, cmp, icol, col, wd, keys);
 	},
 
 	/** Sels all items (don't notify server and change focus, because it is from server). */
@@ -1159,9 +1158,9 @@ zkLibox.focus = function (cmp) {
 /** Process the setAttr cmd sent from the server, and returns whether to
  * continue the processing of this cmd
  */
-zkLibox.setAttr = function (cmp, name, value) {
+zkLibox.setAttr = function (cmp, nm, val) {
 	var meta = zkau.getMeta(cmp);
-	return meta && meta.setAttr(name, value);
+	return meta && meta.setAttr(nm, val);
 };
 
 /** Init (and re-init) a listbox. */

@@ -465,8 +465,11 @@ public class Grid extends XulElement {
 	 * @since 3.0.0
 	 */
 	public void setInnerWidth(String innerWidth) {
-		_innerWidth = innerWidth == null ? "100%": innerWidth;
-			//no need to send back inner-width to the client
+		if (innerWidth == null) innerWidth = "100%";
+		if (!_innerWidth.equals(innerWidth)) {
+			_innerWidth = innerWidth;
+			smartUpdate("z.innerWidth", innerWidth);
+		}
 	}
 	/**
 	 * Returns the inner width of this component.
@@ -597,11 +600,24 @@ public class Grid extends XulElement {
 	public void onInitRender() {
 		final Renderer renderer = new Renderer();
 		try {
-			final int pgsz = inPagingMold() ? _pgi.getPageSize(): 20;
+			int pgsz, ofs;
+			if (inPagingMold()) {
+				pgsz = _pgi.getPageSize();
+				ofs = _pgi.getActivePage() * pgsz;
+				final int cnt = _rows.getChildren().size();
+				if (ofs >= cnt) { //not possible; just in case
+					ofs = cnt - pgsz;
+					if (ofs < 0) ofs = 0;
+				}
+			} else {
+				pgsz = 20;
+				ofs = 0;
 				//we don't know # of visible rows, so a 'smart' guess
 				//It is OK since client will send back request if not enough
+			}
+
 			int j = 0;
-			for (Iterator it = _rows.getChildren().iterator();
+			for (Iterator it = _rows.getChildren().listIterator(ofs);
 			j < pgsz && it.hasNext(); ++j)
 				renderer.render((Row)it.next());
 		} catch (Throwable ex) {
@@ -612,6 +628,7 @@ public class Grid extends XulElement {
 	}
 	private void postOnInitRender() {
 		Events.postEvent("onInitRender", this, null);
+		smartUpdate("z.render", true);
 	}
 
 	/** Handles when the list model's content changed.
@@ -969,7 +986,7 @@ public class Grid extends XulElement {
 	implements InnerWidth, RenderOnDemand {
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
-			setInnerWidth(width);
+			_innerWidth = width == null ? "100%": width;
 		}
 
 		//RenderOnDemand//

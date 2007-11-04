@@ -246,9 +246,47 @@ zk.Grid.prototype = {
 	 * @param cmp columns
 	 */
 	resizeCol: function (cmp, icol, col, wd, keys) {
-		var meta = this;
-		if (meta.bodyrows)
-			zulHdr.resizeAll(meta, cmp, icol, col, wd, keys);
+		if (this.bodyrows)
+			zulHdr.resizeAll(this, cmp, icol, col, wd, keys);
+	},
+	/** set attribute.
+	 */
+	setAttr: function (nm, val) {
+		switch (nm) {
+		case "z.innerwidth":
+			if (this.headtbl) this.headtbl.style.width = val;
+			if (this.bodytbl) this.headtbl.style.width = val;
+			if (this.foottbl) this.headtbl.style.width = val;
+			return true;
+		case "style.height":
+			this.setHgh(val);
+			if (!this.paging) this.init();
+			return true;
+		case "style":
+		case "style.width":
+			zkau.setAttr(this.element, nm, val);
+			if (!this.paging) this.init();
+			return true;
+		case "z.scOddRow":
+			zkau.setAttr(this.element, nm, val);
+			this.stripe();
+			return true;
+		case "z.render":
+			this._render(0);
+			return true;
+		case "scrollTop":
+			if (!this.paging && this.body) {
+				this.body.scrollTop = val;
+				return true;
+			}
+			break;
+		case "scrollLeft":
+			if (!this.paging && this.body) {
+				this.body.scrollLeft = val;
+				return true;
+			}
+		}
+		return false;
 	},
 
 	/** Renders listitems that become visible by scrolling.
@@ -320,40 +358,8 @@ zkGrid.stripe = function (uuid) {
 
 /** Handles setAttr. */
 zkGrid.setAttr = function (grid, nm, val) {
-	if (nm == "z.innerwidth") {
-		var meta = zkau.getMeta(grid);
-		if (meta) {
-			if (meta.headtbl) meta.headtbl.style.width = val;
-			if (meta.bodytbl) meta.headtbl.style.width = val;
-			if (meta.foottbl) meta.headtbl.style.width = val;
-		}
-		return true;
-	} else if (nm == "style.height") {
-		var meta = zkau.getMeta(grid);
-		if (meta) {
-			meta.setHgh(val);
-			if (!meta.paging) meta.init();
-			return true;
-		}
-	} else if (nm == "style" || nm == "style.width") {
-		zkau.setAttr(grid, nm, val);
-		var meta = zkau.getMeta(grid);
-		if (meta && !meta.paging) meta.init();
-		return true;
-	} else if (nm == "z.scOddRow") {
-		zkau.setAttr(grid, nm, val);
-		zkGrid.stripe(grid.id);
-	} else if (!this.paging && this.body) {
-		if (nm == "scrollTop") {
-			this.body.scrollTop = val;
-			return true;
-		}
-		if (nm == "scrollLeft") {
-			this.body.scrollLeft = val;
-			return true;
-		}
-	}
-	return false;
+	var meta = zkau.getMeta(grid);
+	return meta && meta.setAttr(nm, val);
 };
 
 zkGrid._renderNow = function (uuid) {

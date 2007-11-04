@@ -239,8 +239,11 @@ public class Tree extends XulElement {
 	 * @since 3.0.0
 	 */
 	public void setInnerWidth(String innerWidth) {
-		_innerWidth = innerWidth == null ? "100%": innerWidth;
-			//no need to send back inner-width to the client
+		if (innerWidth == null) innerWidth = "100%";
+		if (!_innerWidth.equals(innerWidth)) {
+			_innerWidth = innerWidth;
+			smartUpdate("z.innerWidth", innerWidth);
+		}
 	}
 	/**
 	 * Returns the inner width of this component.
@@ -1351,7 +1354,7 @@ public class Tree extends XulElement {
 	implements InnerWidth, Selectable {
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
-			setInnerWidth(width);
+			_innerWidth = width == null ? "100%": width;
 		}
 
 		//-- Selectable --//
