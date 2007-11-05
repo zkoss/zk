@@ -49,9 +49,16 @@ public class BoxHorizontal implements ComponentRenderer{
 			final Component child = (Component)it.next();
 			wh.write("<td id=\"").write(child.getUuid()).write("!chdextr\"")
 				.write(self.getChildOuterAttrs(child))
-				.write(self.getChildInnerAttrs(child)).write(">");
-			wh.write(child);
-			wh.writeln("</td>");
+				.write(self.getChildInnerAttrs(child)).write(">")
+				.write(child)
+				.writeln("</td>");
+
+			if (child.getNextSibling() != null) {
+				final String spacing = self.getSpacing();
+				wh.write("<td style=\"width:")
+					.write(spacing != null ? spacing: "0")
+					.writeln("\"></td>");
+			}
 		}		
 		wh.write("</tr></table>");
 	}

@@ -43,12 +43,17 @@ public class BoxVertical implements ComponentRenderer {
 			.writeln(" cellpadding=\"0\" cellspacing=\"0\">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
-			wh.write("<tr id=\"").write(child.getUuid()).write("!chdextr\"");
-			wh.write(self.getChildOuterAttrs(child)).write(">\n<td");			
-			wh.write(self.getChildInnerAttrs(child));
-			wh.write(">");
-			wh.write(child);
-			wh.writeln("</td></tr>");
+			wh.write("<tr id=\"").write(child.getUuid()).write("!chdextr\"")
+				.write(self.getChildOuterAttrs(child)).write(">\n<td")	
+				.write(self.getChildInnerAttrs(child))
+				.write(">").write(child).writeln("</td></tr>");
+
+			if (child.getNextSibling() != null) {
+				final String spacing = self.getSpacing();
+				wh.write("<tr style=\"height:")
+					.write(spacing != null ? spacing: "0")
+					.writeln("\"><td></td></tr>");
+			}
 		}		
 		wh.write("</table>");
 	}
