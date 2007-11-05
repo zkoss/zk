@@ -16,7 +16,9 @@
 -->
 <vbox>
 	<label id="lab"/>
-	<grid width="500px">
+	<button label="invalidate" onClick="g.invalidate()"/>
+	<button label="alert" onClick='alert("Try")'/>
+	<grid id="g" width="500px">
 		<columns id="cs" sizable="true" onColSize='lab.value=new java.util.Date()+"col size change:"+event+",colindex:"+event.getColIndex()'>
 			<column label="AA" id="col1" onClick='alert("Click on column 1")'/>
 			<column label="BB" id="col2" onRightClick='alert("onRightClick on column 2")'/>
