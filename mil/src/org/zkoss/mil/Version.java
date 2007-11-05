@@ -29,5 +29,5 @@ package org.zkoss.mil;
 public class Version {
 	/** Returns the version UID.
 	 */
-	public static final String UID = "0.8.6";
+	public static final String UID = "0.8.7";
 }
