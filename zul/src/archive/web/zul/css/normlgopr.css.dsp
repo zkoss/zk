@@ -2,6 +2,10 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/normopr.css.dsp"/>
 
+td.slider-bkr, td.slider-bkl, td.slidersph-bkr, td.slidersph-bkl {
+	display: none; <%-- Bug 1825822 --%>
+}
+
 p, div, span, label, a, li, dt, dd, input, textarea, pre, body,
 button, input.button, input.file {
 	font-size: medium;
@@ -81,6 +85,7 @@ table.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
 tr.caldow td {
 	font-size: small;
 }
+
 <%-- override normopr font--%>
 input.button{
 	font-size: small; 

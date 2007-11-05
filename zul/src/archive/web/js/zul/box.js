@@ -55,11 +55,11 @@ zkSplt.init = function (cmp) {
 
 	var btn = $e(cmp.id + "!btn");
 	if (zk.ie) {
-		zk.listen(btn, "mouseover", function () {zk.addClass(btn, "splitter-button-visible")});
-	 	zk.listen(btn, "mouseout", function () {zk.rmClass(btn, "splitter-button-visible")});
+		zk.listen(btn, "mouseover", function () {zk.addClass(btn, "splitter-btn-visi")});
+	 	zk.listen(btn, "mouseout", function () {zk.rmClass(btn, "splitter-btn-visi")});
 	}
 	zk.listen(btn, "click", function () {		
-		zk.rmClass(btn, "splitter-button-visible");
+		zk.rmClass(btn, "splitter-btn-visi");
 		zkSplt.open(cmp, getZKAttr(cmp, "open") == "false");
 	});
 

@@ -157,7 +157,9 @@ td.rwt-wndcyan {
 div.modal_mask {
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
+	filter: alpha(opacity=40); <%-- IE --%>
 	opacity: .4;
+	hasLayout: -1;<%-- not a layout element in IE --%>
 	background-color: #e6edf9; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
 
@@ -958,8 +960,8 @@ tr.tab-lite-m, tr.groupbox-lite-m {
 }
 
 <%-- Splitter component --%>
-div.splitter-h, div.splitter-v, div.splitter-h-ns, div.splitter-v-ns, span.splitter-button-l, 
-	span.splitter-button-r, span.splitter-button-t ,span.splitter-button-b {
+div.splitter-h, div.splitter-v, div.splitter-h-ns, div.splitter-v-ns, span.splitter-btn-l, 
+	span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn-b {
     line-height:1px;
     font-size:1px;
 }
@@ -977,35 +979,35 @@ div.splitter-h-ns {
 div.splitter-v-ns {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
 }
-span.splitter-button-l:hover, span.splitter-button-r:hover, span.splitter-button-t:hover ,span.splitter-button-b:hover {
+span.splitter-btn-l:hover, span.splitter-btn-r:hover, span.splitter-btn-t:hover ,span.splitter-btn-b:hover {
 	opacity:1;
 }
 
-span.splitter-button-l, span.splitter-button-r, span.splitter-button-t ,span.splitter-button-b {
-	filter:alpha(opacity=50);  /* IE */
-	opacity:0.5;  /* Moz + FF */	
+span.splitter-btn-l, span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn-b {
+	filter:alpha(opacity=50);  <%-- IE --%>
+	opacity:0.5;  <%-- Moz + FF --%>	
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
 
-span.splitter-button-visible {
-	filter:alpha(opacity=100) !important;  /* IE */
+span.splitter-btn-visi {
+	filter:alpha(opacity=100) !important;  <%-- IE --%>
 }
-span.splitter-button-l {
+span.splitter-btn-l {
 	width: 6px; min-height: 50px; height: 50px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.png')});
 }
-span.splitter-button-r {
+span.splitter-btn-r {
 	width: 6px; min-height: 50px; height: 50px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.png')});
 }
-span.splitter-button-t {
+span.splitter-btn-t {
 	width: 50px; min-height: 6px; height: 6px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.png')});
 
 }
-span.splitter-button-b {
+span.splitter-btn-b {
 	width: 50px; min-height: 6px; height: 6px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.png')});
 }
@@ -1036,8 +1038,8 @@ span.splitter-os-button-l:hover, span.splitter-os-button-r:hover, span.splitter-
 }
 
 span.splitter-os-button-l, span.splitter-os-button-r, span.splitter-os-button-t ,span.splitter-os-button-b {
-	filter:alpha(opacity=50);  /* IE */
-	opacity:0.5;  /* Moz + FF */	
+	filter:alpha(opacity=50);  <%-- IE --%>
+	opacity:0.5;  <%-- Moz + FF --%>	
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
