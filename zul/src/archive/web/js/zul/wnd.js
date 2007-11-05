@@ -155,7 +155,13 @@ zkWnd.setAttr = function (cmp, nm, val) {
 	case "style.height":
 		zkau.setAttr(cmp, nm, val);
 		zkWnd._fixHgh(cmp);
+		if (nm == "style.height") {
+			zk.onResize(0, cmp);// Note: IE6 is broken, because its offsetHeight doesn't update.	
+		}
 		return true;
+	case "style.width":
+		zk.onResize(0, cmp);
+		return false;
 	}
 	return false;
 };
