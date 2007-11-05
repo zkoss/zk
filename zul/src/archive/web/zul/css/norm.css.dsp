@@ -289,6 +289,13 @@ div.gc {
 	padding: 2px; font-size: small; font-weight: normal; color: black;
 }
 
+td.hbox-sp {
+	width: 0.4em;
+}
+tr.vbox-sp {
+	height: 0.4em;
+}
+
 tr.item, tr.item a, tr.item a:visited {
 	font-size: small; font-weight: normal; color: black;
 	text-decoration: none;

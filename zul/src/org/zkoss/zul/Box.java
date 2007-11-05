@@ -40,7 +40,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Box extends XulElement {
-	private String _spacing = "0.5em";
+	private String _spacing;
 	private String _align = "start", _pack = "start";
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
@@ -105,15 +105,27 @@ public class Box extends XulElement {
 
 		setMold(orient);
 	}
-	/** Returns the spacing between adjacent children.
+	/** Returns the spacing between adjacent children, or null if the default
+	 * spacing is used.
 	 *
-	 * <p>Default: "0.5em".
+	 * <p>The default spacing depends on the definition of the style class
+	 * called "xxx-sp", where xxx is
+	 *
+	 * <ol>
+	 *  <li>{@link #getSclass} if it is not null.</li>
+	 *  <li>hbox if {@link #getSclass} is null and it is a horizontal box.</li>
+	 *  <li>vbox if {@link #getSclass} is null and it is a vertical box.</li>
+	 * </ol>
+	 *
+	 * <p>Default: null (means to use the default spacing).
 	 */
 	public String getSpacing() {
 		return _spacing;
 	}
 	/** Sets the spacing between adjacent children.
-	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em")
+	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em"),
+	 * or null to use the default spacing
+	 * @see #getSpacing
 	 */
 	public void setSpacing(String spacing) {
 		if (spacing != null && spacing.length() == 0) spacing = null;
@@ -346,7 +358,6 @@ public class Box extends XulElement {
 		final StringBuffer sb = new StringBuffer(64);
 
 		String stylesb = "";
-		HTMLs.appendAttribute(sb, "class", vert ? "vbox": "hbox");
 		final String align = toHalign(vert ? _align: _pack);
 		if (align != null && align.length() > 0) {
 			HTMLs.appendAttribute(sb, "align", align);

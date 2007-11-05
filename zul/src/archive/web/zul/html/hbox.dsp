@@ -22,9 +22,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <table id="${self.uuid}" z.type="zul.box.Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 <tr id="${self.uuid}!cave" ${self.caveAttrs}>
+<c:set var="scls" value="${self.sclass}"/>
+<c:set var="scls" value="hbox" if="${empty scls}"/>
+<c:set var="spstyle" value="width:${self.spacing}" unless="${empty self.spacing}"/>
 	<c:forEach var="child" items="${self.children}">
  <td id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td>
-<c:if test="${!empty child.nextSibling}"><td style="width:${empty self.spacing ? '0': self.spacing}"></td></c:if>
+<c:if test="${!empty child.nextSibling}">
+ <c:set var="spstyle1" value="display:none;${spstyle}" unless="${child.visible}"/>
+ <td id="${child.uuid}!chdextr2" class="${scls}-sp"${c:attr('style',spstyle1)}></td>
+</c:if>
 	</c:forEach>
 </tr>
 </table>
