@@ -26,7 +26,7 @@ import java.util.List;
  * Note: It assumes the content is immutable
  * 
  * @author Jeff
- * @since ZK 2.5
+ * @since ZK 3.0.0
  */
 public class SimpleTreeNode {
 

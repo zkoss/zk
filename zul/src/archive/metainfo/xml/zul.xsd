@@ -805,6 +805,7 @@
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+		<xs:attribute name="preloadSize" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- groupbox -->
 	<xs:element name="groupbox" type="groupboxType" />
@@ -1028,6 +1029,7 @@
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+		<xs:attribute name="preloadSize" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- listcell -->
 	<xs:element name="listcell" type="listcellType" />

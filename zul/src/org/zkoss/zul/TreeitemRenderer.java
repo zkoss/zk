@@ -22,7 +22,7 @@ package org.zkoss.zul;
  * the cells in a {@link Tree}.
  *
  * @author Jeff Liu
- * @since ZK 2.5
+ * @since ZK 3.0.0
  * @see TreeModel
  * @see Tree
  */

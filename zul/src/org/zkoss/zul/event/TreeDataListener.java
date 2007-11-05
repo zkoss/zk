@@ -23,7 +23,7 @@ package org.zkoss.zul.event;
  * {@link org.zkoss.zul.TreeModel} is changed.
  *
  * @author Jeff Liu
- * @since ZK 2.5
+ * @since ZK 3.0.0
  * @see org.zkoss.zul.TreeModel
  * @see TreeDataEvent
  */

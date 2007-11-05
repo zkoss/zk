@@ -23,7 +23,7 @@ package org.zkoss.zul;
  * Note: It assumes the content is immutable.
  *
  * @author Jeff Liu
- * @since ZK 2.5
+ * @since ZK 3.0.0
  */
 public class SimpleTreeModel extends AbstractTreeModel {
 	

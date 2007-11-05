@@ -92,7 +92,7 @@ import org.zkoss.zul.event.PagingEvent;
 	tr.odd td.gc {
 		background: white;
 	}
- * </code>m/pre>
+ * </code></pre>
  *
  * @author tomyeh
  * @see ListModel
