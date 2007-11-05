@@ -689,7 +689,7 @@ span.slider-btn {
 	background-repeat: no-repeat;
 	width: 13px; height: 17px;
 	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;	
+	display:inline-block;
 }
 td.slider-bk {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bk.gif')});
@@ -709,7 +709,7 @@ span.slidersph-btn {
 	background-repeat: no-repeat;
 	width: 17px; height: 20px;
 	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;	
+	display:inline-block;
 }
 td.slidersph-bk {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bksph.gif')});
@@ -986,7 +986,7 @@ span.splitter-button-l, span.splitter-button-r, span.splitter-button-t ,span.spl
 	opacity:0.5;  /* Moz + FF */	
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;	
+	display:inline-block;
 }
 
 span.splitter-button-visible {

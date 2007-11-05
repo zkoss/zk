@@ -123,6 +123,7 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 	} else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
 		if (btn) btn.style.display = val == "true" ? "": "none";
+		zkWgt.fixDropBtn(cmp);
 		return true;
 	} else if ("z.sel" == nm ) {
 		return zkTxbox.setAttr(cmp, nm, val);

@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/><%-- z.combo means an input with addition buttons --%>
-<span id="${self.uuid}"${self.outerAttrs} z.type="zul.cb.Cmbox" z.combo="true"><input id="${self.uuid}!real" autocomplete="off"${self.innerAttrs}/><span id="${self.uuid}!btn" class="rbtnbk"><img src="${c:encodeURL(self.image)}"${self.buttonVisible?'':' style="display:none"'}/></span><div id="${self.uuid}!pp" class="comboboxpp" style="display:none" tabindex="-1">
+<span id="${self.uuid}"${self.outerAttrs} z.type="zul.cb.Cmbox" z.combo="true"><input id="${self.uuid}!real" autocomplete="off"${self.innerAttrs}/><span id="${self.uuid}!btn" class="rbtnbk"${self.buttonVisible?'':' style="display:none"'}><img src="${c:encodeURL(self.image)}"/></span><div id="${self.uuid}!pp" class="comboboxpp" style="display:none" tabindex="-1">
  <table id="${self.uuid}!cave" cellpadding="0" cellspacing="0">
 	<c:forEach var="child" items="${self.children}">
   ${z:redraw(child, null)}
