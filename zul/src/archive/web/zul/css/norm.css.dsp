@@ -693,14 +693,15 @@ span.slider-btn {
 }
 td.slider-bk {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bk.gif')});
+	height: 17px;
 }
 td.slider-bkl {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bkl.gif')});
-	width: 4px;
+	width: 4px; height: 17px;
 }
 td.slider-bkr {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bkr.gif')});
-	width: 4px;
+	width: 4px; height: 17px;
 }
 
 span.slidersph-btn {
@@ -712,14 +713,15 @@ span.slidersph-btn {
 }
 td.slidersph-bk {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bksph.gif')});
+	height: 20px;
 }
 td.slidersph-bkl {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bklsph.gif')});
-	width: 4px;
+	width: 4px; height: 20px;
 }
 td.slidersph-bkr {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bkrsph.gif')});
-	width: 4px;
+	width: 4px; height: 20px;
 }
 
 <%-- ZK menu --%>

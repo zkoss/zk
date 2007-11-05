@@ -30,6 +30,19 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A slider.
  *
+ * <p>To customize the look, you can specify the style class with
+ * {@link #setSclass}. Then, the following style classes are generated
+ * to style the look. Assume that the style class is "slider"
+ * <ul>
+ * <li>slider-bk: the center background</li>
+ * <li>slider-bkl: the left background</li>
+ * <li>slider-bkr: the right background</li>
+ * <li>slider-btn: the bottom background</li>
+ * </ul>
+ *
+ * <p>If {@link #getSclass} is empty and {@link #getMold} is "default",
+ * "slider" is assumed. If {@link #getMold} is "sphere", "slidersph" is assumed.
+ *
  * @author tomyeh
  */
 public class Slider extends XulElement {
