@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+Purpose:
+	Defines methods and actions for DSP
+Description:
+	
+Histroy:
+	wed July 11 18:18:56     2007, Created by Ian Tsai
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+-->
+
+<taglib>
+	<description>
+	Core methods and tags for xml output in DSP
+	</description>
+	<function>
+		<name>output</name>
+		<function-class>org.zkoss.xml.XmlOutputFns</function-class>
+		<function-signature>
+	java.lang.String output()
+		</function-signature>
+		<description>
+			Output xml content...
+		</description>
+	</function>
+</taglib>

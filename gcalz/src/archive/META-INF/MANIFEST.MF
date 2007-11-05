@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: Google Calendar Timeline API
+Specification-Version: 0.8
+Specification-Vendor: Potix Corporation
+Implementation-Title: Google Calendar Timeline API
+Implementation-URL: http://www.zkoss.org/gcalz
+Implementation-Version: 0.8
+Implementation-Vendor: Ian Tsai
