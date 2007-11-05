@@ -267,7 +267,7 @@ div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-pag
 	background: window; border: 0; overflow: auto; width: 100%;
 }
 div.listbox-paging, div.grid-paging {
-	height: 100%;
+	height: 100%; overflow: hidden;
 }
 div.listbox-pgi, div.grid-pgi {
 	border-top: 1px solid #AAB;

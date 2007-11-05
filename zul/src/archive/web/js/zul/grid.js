@@ -225,10 +225,8 @@ zk.Grid.prototype = {
 				for (var k =0, z = 0; k < cells.length; k++) {
 					var s = cells[k], d = head.cells[k];
 					var wd =  d.style.width;							
-					if (!wd || wd == "auto" || wd.indexOf('%') > -1) {// Bug #1822564
+					if (!wd || wd == "auto" || wd.indexOf('%') > -1) // Bug #1822564
 						d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-						setZKAttr(d, "wd", "NaN"); // Bug #1823236
-					}
 					wd = d.style.width;
 					s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
 				} 						
@@ -257,7 +255,7 @@ zk.Grid.prototype = {
 	 */
 	setAttr: function (nm, val) {
 		switch (nm) {
-		case "z.innerwidth":
+		case "z.innerWidth":
 			if (this.headtbl) this.headtbl.style.width = val;
 			if (this.bodytbl) this.headtbl.style.width = val;
 			if (this.foottbl) this.headtbl.style.width = val;
