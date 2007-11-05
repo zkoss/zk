@@ -558,7 +558,7 @@ public class ZkFns {
 		else
 			appendJavaScriptArray(sb, "FMON", fmon);
 
-		//AM/PM available since ZK 2.5
+		//AM/PM available since ZK 3.0
 		df = new SimpleDateFormat("a", locale);
 		cal.set(Calendar.HOUR_OF_DAY, 3);
 		final String[] ampm = new String[2];

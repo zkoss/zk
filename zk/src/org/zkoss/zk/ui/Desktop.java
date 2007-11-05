@@ -112,7 +112,7 @@ public interface Desktop {
 	throws ComponentNotFoundException;
 	/** Returns the page of the specified ID, or null if no such page.
 	 *
-	 * @since 2.5.1
+	 * @since 2.4.1
 	 */
 	public Page getPageIfAny(String pageId);
 	/** Returns a readonly collection of all {@link Page} in this desktop.

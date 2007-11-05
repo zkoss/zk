@@ -124,7 +124,7 @@ public class ConfigParser {
 				parseDesktopConfig(config, el);
 				parseClientConfig(config, el); //backward compatible with 2.4
 
-			} else if ("client-config".equals(elnm)) { //since 2.5
+			} else if ("client-config".equals(elnm)) { //since 3.0.0
 			//client-config
 			//  disable-behind-modal
 			//  keep-across-visits
