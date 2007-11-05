@@ -37,14 +37,20 @@ public class SliderDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Slider self = (Slider)comp;
 		final String uuid = self.getUuid();
+
+		String scls = self.getSclass();
+		scls = scls != null && scls.length() != 0 ? scls + '-':
+			"sphere".equals(self.getMold()) ? "slidersph-": "slider-";
+
 		wh.write("<table id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(" z.type=\"zul.sld.Sld\" cellpadding=\"0\" cellspacing=\"0\" >")
-			.writeln("<tr height=\"17\"><td class=\"slider-bkl\"></td>")
-			.write("<td class=\"slider-bk\"><span id=\"").write(uuid)
-			.write("!btn\" class=\"slider-btn\" title=\"")
+			.write("<tr><td class=\"").write(scls).writeln("bkl\"></td>")
+			.write("<td class=\"").write(scls).write("bk\"><span id=\"").write(uuid)
+			.write("!btn\" class=\"").write(scls).write("btn\" title=\"")
 			.write(self.getCurpos()).writeln("\"></span></td>")
-			.write("<td class=\"slider-bkr\"></td></tr>\n</table>");
+			.write("<td class=\"").write(scls)
+			.write("bkr\"></td></tr>\n</table>");
 	}
 
 }
