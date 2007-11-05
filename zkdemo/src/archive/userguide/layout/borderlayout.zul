@@ -29,7 +29,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		]]></html>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
+			<window id="view" width="100%">
 			</window>
 		</groupbox>
 		<groupbox id="tryView" mold="3d" open="false" width="100%">
