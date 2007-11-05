@@ -80,6 +80,7 @@ ZK 3.0.0
   1823921: Listbox crashed with complex Header
   1823357: auxHeader(IE)- Can not change rowspan dynamically
   1824832: Errors in zul.xsd
+  1825821: LayoutRegion.setOpen(boolean); is failed on ZK Layout
   
 * Upgrade Notes:
   + The pageContext variable in EL expressions becomes an instance of
