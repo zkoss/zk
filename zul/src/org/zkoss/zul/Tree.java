@@ -937,6 +937,12 @@ public class Tree extends XulElement {
 			renderTree();
 		else{
 			Treeitem ti = (Treeitem)items.get(index);
+			/*
+			 * When content of treeitem is changed, the treeitem is rendered as 
+			 * unloaded item.
+			 * 2007/11/05 --- issue: Can not dynamically update content of treeitem from treemodel
+			 */
+			ti.setLoaded(false);
 			renderItem(ti,_model.getChild(node,index));
 			ti.setOpen(true);
 		}
