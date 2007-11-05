@@ -7,7 +7,16 @@
 	</div>
 	<popup>
 	</popup>
-	<popup id="test" height="400px" width="700px">
-		<label value="test" />
+	<popup id="test">
+		<div id="divBreakdown" align="right">
+			<grid width="300px">
+				<rows id="rowBreakdown">
+					<row><label value="A"/></row>
+					<row><label value="A"/></row>
+					<row><label value="A"/></row>
+					<row><label value="A"/></row>
+				</rows>
+			</grid>
+		</div>
 	</popup>
 </window>

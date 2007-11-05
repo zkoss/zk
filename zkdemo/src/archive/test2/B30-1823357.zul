@@ -6,7 +6,7 @@
 			<treecol label="C" />
 		</treecols>
 		<auxhead>
-			<auxheader id="Phi" label="Phi" rowspan="2" colspan="2" />
+			<auxheader id="Phi" label="Phi"  colspan="2" />
 		</auxhead>
 	</tree>
 	<button label="test" onClick="Phi.setColspan(3)" />

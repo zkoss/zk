@@ -1,7 +1,7 @@
 <window border="normal" width="800px" title="Case 1: hbox and splitter">
 		<hbox height="100px" width="800px">
 		cdacdacdacdacdaca
-		<splitter id="hsplitter" collapse="none"/>
+		<splitter id="hsplitter" collapse="after"/>
 		cdacdacdacdacacsdc
 		</hbox>
 		<label id="d" />
