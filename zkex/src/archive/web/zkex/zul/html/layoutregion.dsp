@@ -28,6 +28,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</div>
 	</div>
 	<c:if test="${self.position != 'center'}">
-	<div id="${self.uuid}!split" class="layout-split <c:if test="${self.position == 'north' || self.position == 'south'}">layout-split-v</c:if><c:if test="${self.position == 'west' || self.position == 'east'}">layout-split-h</c:if>"><span id="${self.uuid}!splitbtn" class="layout-split-button-<c:if test="${self.position == 'north'}">t</c:if><c:if test="${self.position == 'south'}">b</c:if><c:if test="${self.position == 'west'}">l</c:if><c:if test="${self.position == 'east'}">r</c:if>"></span></div>
+	<div id="${self.uuid}!split" class="layout-split <c:if test="${self.position == 'north' || self.position == 'south'}">layout-split-v</c:if><c:if test="${self.position == 'west' || self.position == 'east'}">layout-split-h</c:if>"><span id="${self.uuid}!splitbtn" class="layout-split-btn-<c:if test="${self.position == 'north'}">t</c:if><c:if test="${self.position == 'south'}">b</c:if><c:if test="${self.position == 'west'}">l</c:if><c:if test="${self.position == 'east'}">r</c:if>"></span></div>
 	</c:if>
 </div>

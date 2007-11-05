@@ -51,11 +51,11 @@ div.layout-split{
     z-index:12;
     background-color: #C4DCFB;
 }
-span.layout-split-button-l:hover, span.layout-split-button-r:hover, span.layout-split-button-t:hover ,span.layout-split-button-b:hover {
+span.layout-split-btn-l:hover, span.layout-split-btn-r:hover, span.layout-split-btn-t:hover ,span.layout-split-btn-b:hover {
 	opacity:1;
 }
 
-span.layout-split-button-l, span.layout-split-button-r, span.layout-split-button-t ,span.layout-split-button-b {
+span.layout-split-btn-l, span.layout-split-btn-r, span.layout-split-btn-t ,span.layout-split-btn-b {
 	filter:alpha(opacity=50);  /* IE */
 	opacity:0.5;  /* Moz + FF */	
 	background-repeat: no-repeat;
@@ -64,20 +64,20 @@ span.layout-split-button-l, span.layout-split-button-r, span.layout-split-button
     line-height:1px;
     font-size:1px;
 }
-span.layout-split-button-l {
+span.layout-split-btn-l {
 	width: 6px; min-height: 50px; height: 50px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.png')});
 }
-span.layout-split-button-r {
+span.layout-split-btn-r {
 	width: 6px; min-height: 50px; height: 50px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.png')});
 }
-span.layout-split-button-t {
+span.layout-split-btn-t {
 	width: 50px; min-height: 6px; height: 6px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.png')});
 
 }
-span.layout-split-button-b {
+span.layout-split-btn-b {
 	width: 50px; min-height: 5px; height: 6px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.png')});
 }
