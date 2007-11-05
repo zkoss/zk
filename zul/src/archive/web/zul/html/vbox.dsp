@@ -23,5 +23,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <table id="${self.uuid}" z.type="zul.box.Box"${self.outerAttrs}${self.innerAttrs} cellpadding="0" cellspacing="0">
 	<c:forEach var="child" items="${self.children}">
 	<tr id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}><td${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td></tr>
+<c:if test="${!empty child.nextSibling}"><tr style="height:${empty self.spacing ? '0': self.spacing}"><td></td></tr></c:if>
 	</c:forEach>
 </table>

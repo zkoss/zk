@@ -67,7 +67,6 @@ zkSplt.init = function (cmp) {
 	if (getZKAttr(cmp, "open") == "false")
 		zkSplt.open(cmp, false, true, true);
 
-	//zk.listen(window, "resize", drag.onResize);
 	zk.addOnResize(drag.onResize);	
 	zkSplt._resize2(cmp);
 
@@ -78,7 +77,6 @@ zkSplt.cleanup = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		zk.rmOnResize(drag.onResize);	
-		//zk.unlisten(window, "resize", drag.onResize);
 		delete zkSplt._drags[cmp.id];
 		drag.drag.destroy();
 	}
@@ -107,7 +105,7 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
 		var tn = $tag(nd);
 		var vert = getZKAttr(cmp, "vert");
 		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
-			if (tn == $tag(nd))
+			if (tn == $tag(nd) && nd.id)
 				if (vert) nd.style.height = zk.revisedSize(nd, nd.offsetHeight, true) + "px";
 				else nd.style.width = zk.revisedSize(nd, nd.offsetWidth) + "px";
 	}
@@ -137,8 +135,8 @@ zkSplt._ignoresizing = function (cmp, pointer) {
 		run.org = Position.cumulativeOffset(cmp);
 		var nd = $e(cmp.id + "!chdextr");
 		var tn = $tag(nd);
-		run.prev = zk.previousSibling(nd, tn);
-		run.next = zk.nextSibling(nd, tn);
+		run.prev = zkSplt._prev(nd, tn);
+		run.next = zkSplt._next(nd, tn);
 		run.box = $parentByType(nd, "Box");
 	}
 	return false;
@@ -258,8 +256,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	if (!colps || "none" == colps) return; //nothing to do
 
 	var vert = getZKAttr(cmp, "vert");
-	var sib = colps == "before" ?
-		zk.previousSibling(nd, tn): zk.nextSibling(nd, tn);
+	var sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
 	if (sib) zk.show(sib, open);
 	setZKAttr(cmp, "open", open ? "true": "false");
 
@@ -272,4 +269,13 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	if (!silent)
 		zkau.send({uuid: cmp.id, cmd: "onOpen", data: [open]},
 			zkau.asapTimeout(cmp, "onOpen"));
+};
+/** Returns the next 
+ * @param tn the tag name
+ */
+zkSplt._next = function (n, tn) {
+	return zk.nextSibling(zk.nextSibling(n, tn), tn);
+};
+zkSplt._prev = function (n, tn) {
+	return zk.previousSibling(zk.previousSibling(n, tn), tn);
 };

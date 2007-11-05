@@ -285,12 +285,6 @@ div.foot-cell-inner, div.cell-inner, div.head-cell-inner{
 	overflow:hidden; border: 0; margin: 0; padding: 0;
 }
 
-td.vbox {
-	margin: 0; padding-bottom: 0.4em;
-}
-td.hbox {
-	margin: 0; padding-right: 0.6em;
-}
 div.gc {
 	padding: 2px; font-size: small; font-weight: normal; color: black;
 }

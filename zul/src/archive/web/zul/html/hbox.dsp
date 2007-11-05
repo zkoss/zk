@@ -24,6 +24,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <tr id="${self.uuid}!cave" ${self.caveAttrs}>
 	<c:forEach var="child" items="${self.children}">
  <td id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td>
+<c:if test="${!empty child.nextSibling}"><td style="width:${empty self.spacing ? '0': self.spacing}"></td></c:if>
 	</c:forEach>
 </tr>
 </table>

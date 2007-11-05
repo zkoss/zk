@@ -40,7 +40,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Box extends XulElement {
-	private String _spacing;
+	private String _spacing = "0.5em";
 	private String _align = "start", _pack = "start";
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
@@ -105,13 +105,14 @@ public class Box extends XulElement {
 
 		setMold(orient);
 	}
-	/** Returns the spacing.
-	 * <p>Default: null (depending on CSS).
+	/** Returns the spacing between adjacent children.
+	 *
+	 * <p>Default: "0.5em".
 	 */
 	public String getSpacing() {
 		return _spacing;
 	}
-	/** Sets the spacing.
+	/** Sets the spacing between adjacent children.
 	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em")
 	 */
 	public void setSpacing(String spacing) {
@@ -380,15 +381,10 @@ public class Box extends XulElement {
 		if (wd != null && wd.indexOf("%") >= 0)
 			wd = null; //don't generate it at TD
 
-		if (_spacing != null || size != null || wd != null || floating || !visible) {
+		if (size != null || wd != null || floating || !visible) {
 			sb.append(" style=\"").append(stylesb);
 			if (!visible)
 				sb.append("display:none;");
-
-			if (_spacing != null)
-				sb.append("padding-")
-					.append(vert ? "bottom": "right")
-					.append(':').append(_spacing).append(';');
 
 			if (floating || size != null)
 				sb.append(vert ? "height": "width")
@@ -415,26 +411,16 @@ public class Box extends XulElement {
 	}
 
 	//-- Component --//
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		invalidate();
+	}
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		invalidate();
+	}
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws IOException {
-		if (isVertical()) {
-			final StringBuffer sb = new StringBuffer(32)
-				.append("<tr id=\"").append(child.getUuid())
-				.append("!chdextr\"")
-				.append(getChildOuterAttrs(child)).append("><td")
-				.append(getChildInnerAttrs(child)).append('>');
-			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
-			else out.insert(0, sb.toString());
-			out.append("</td></tr>");
-		} else {
-			final StringBuffer sb = new StringBuffer(32)
-				.append("<td id=\"").append(child.getUuid())
-				.append("!chdextr\"")
-				.append(getChildOuterAttrs(child))
-			 	.append(getChildInnerAttrs(child)).append('>');
-			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
-			else out.insert(0, sb.toString());
-			out.append("</td>");
-		}
+		throw new InternalError(); //impossible since we always invalidate
 	}
 }
