@@ -55,7 +55,7 @@ public class LayoutregionDefault implements ComponentRenderer {
 					|| self.getPosition().equals("east"))
 				wh.write("layout-split-h");
 			wh.write("\"><span id=\"").write(self.getUuid()).write(
-					"!splitbtn\" class=\"layout-split-button-");
+					"!splitbtn\" class=\"layout-split-btn-");
 			if (self.getPosition().equals("north"))
 				wh.write("t");
 			else if (self.getPosition().equals("south"))

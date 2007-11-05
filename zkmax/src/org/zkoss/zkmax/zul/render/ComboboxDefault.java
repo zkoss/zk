@@ -36,26 +36,28 @@ import org.zkoss.zul.Combobox;
  * @since 3.0.0
  */
 public class ComboboxDefault implements ComponentRenderer {
-
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Combobox self = (Combobox) comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
-		wh.write("<span id=\"").write(uuid).write("\"");
-		wh.write(self.getOuterAttrs());
-		wh.write(" z.type=\"zul.cb.Cmbox\" z.combo=\"true\"><input id=\"");
-		wh.write(uuid).write("!real\" autocomplete=\"off\"");
-		wh.write(self.getInnerAttrs()).write("/><span id=\"");
-		wh.write(uuid).write("!btn\" class=\"rbtnbk\"><img src=\"");
-		wh.write(exec.encodeURL(self.getImage())).write("\"");
+
+		wh.write("<span id=\"").write(uuid).write("\"")
+			.write(self.getOuterAttrs())
+			.write(" z.type=\"zul.cb.Cmbox\" z.combo=\"true\"><input id=\"")
+			.write(uuid).write("!real\" autocomplete=\"off\"")
+			.write(self.getInnerAttrs()).write("/><span id=\"")
+			.write(uuid).write("!btn\" class=\"rbtnbk\"");
+
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
-		wh.write("/></span><div id=\"").write(uuid);
-		wh.write("!pp\" class=\"comboboxpp\" style=\"display:none\" tabindex=\"-1\">");
-		wh.write("<table id=\"").write(uuid).write(
-				"!cave\" cellpadding=\"0\" cellspacing=\"0\">");
-		wh.writeChildren(self);
-		wh.write("</table></div></span>");
+
+		wh.write("><img src=\"")
+			.write(exec.encodeURL(self.getImage())).write("\"/></span><div id=\"").write(uuid)
+			.write("!pp\" class=\"comboboxpp\" style=\"display:none\" tabindex=\"-1\">")
+			.write("<table id=\"").write(uuid)
+			.write("!cave\" cellpadding=\"0\" cellspacing=\"0\">")
+			.writeChildren(self)
+			.write("</table></div></span>");
 	}
 }

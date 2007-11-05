@@ -41,18 +41,19 @@ public class BandboxDefault implements ComponentRenderer {
 		final Bandbox self = (Bandbox) comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
+
 		wh.write("<span id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs())
 			.write(" z.type=\"zul.cb.Bdbox\" z.combo=\"true\"><input id=\"")
-			.write(uuid).write("!real\"").write(self.getInnerAttrs())
-			.write(" /><span id=\"").write(uuid)
-			.write("!btn\" class=\"rbtnbk\"><img src=\"")
-			.write(exec.encodeURL(self.getImage())).write("\"");
+			.write(uuid).write("!real\" autocomplete=\"off\"")
+			.write(self.getInnerAttrs()).write("/><span id=\"")
+			.write(uuid).write("!btn\" class=\"rbtnbk\"");
 
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("/></span><div id=\"").write(uuid)
+		wh.write("><img src=\"")
+			.write(exec.encodeURL(self.getImage())).write("\"/></span><div id=\"").write(uuid)
 			.write("!pp\" class=\"bandboxpp\" style=\"display:none\" tabindex=\"-1\">")
 			.write(self.getDropdown())
 			.write("</div></span>");

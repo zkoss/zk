@@ -36,23 +36,24 @@ import org.zkoss.zul.Datebox;
  * @since 3.0.0
  */
 public class DateboxDefault implements ComponentRenderer {
-
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Datebox self = (Datebox) comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
 
-		wh.write("<span id=\"").write(uuid).write("\"");
-		wh.write(self.getOuterAttrs()).write(" z.type=\"zul.db.Dtbox\" z.combo=\"true\"><input id=\"");
-		wh.write(uuid).write("!real\" autocomplete=\"off\"");
-		wh.write(self.getInnerAttrs()).write("/><span id=\"");
-		wh.write(uuid).write("!btn\" class=\"rbtnbk\"><img src=\"");
-		wh.write(exec.encodeURL(self.getImage()));
-		wh.write("\"");
+		wh.write("<span id=\"").write(uuid).write("\"")
+			.write(self.getOuterAttrs())
+			.write(" z.type=\"zul.db.Dtbox\" z.combo=\"true\"><input id=\"")
+			.write(uuid).write("!real\" autocomplete=\"off\"")
+			.write(self.getInnerAttrs()).write("/><span id=\"")
+			.write(uuid).write("!btn\" class=\"rbtnbk\"");
+
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
-		wh.write("/></span><div id=\"").write(uuid);
-		wh.write("!pp\" class=\"dateboxpp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
+
+		wh.write("><img src=\"")
+			.write(exec.encodeURL(self.getImage())).write("\"/></span><div id=\"").write(uuid)
+			.write("!pp\" class=\"dateboxpp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
 	}
 }
