@@ -381,6 +381,9 @@ zkLayoutRegion.setAttr = function (cmp, nm, val) {
 		case "style.width" :
 			cmp.style["width"] = val;			
 			cmp._width = false;
+			return true;				
+		case "z.open" :		
+			zkLayoutRegionSplit.open(cmp.split, val == "true", true, true);
 			return true;
 	}
 	return false;
