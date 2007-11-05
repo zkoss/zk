@@ -84,7 +84,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 			fs = "sm";
 		}
 		Cookie cookie = new Cookie(_cookieName,fs);
-		cookie.setMaxAge(60*60*24*2);//store 2 days
+		cookie.setMaxAge(60*60*24*30);//store 30 days
 		String cp = exe.getContextPath();
 		cookie.setPath(cp);
 		((HttpServletResponse)exe.getNativeResponse()).addCookie(cookie);
