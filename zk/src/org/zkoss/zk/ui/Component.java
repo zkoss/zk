@@ -791,8 +791,10 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public void redraw(Writer out) throws IOException;
 
-	/** Called when a new-created child is drawn. It gives the parent
-	 * a chance to fine-tune the output.
+	/** Called when a new-created child is about to render.
+	 * It gives the parent a chance to fine-tune the output.
+	 * Note: it won't be called if the parent is rendered, too.
+	 * In other words, it is called only if the child is attached dynamically.
 	 *
 	 * <p>It is called in the redrawing phase by the kernel, so it is too late
 	 * to call {@link #invalidate()} or {@link #smartUpdate} in this method.
