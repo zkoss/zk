@@ -1934,16 +1934,22 @@ zk.hide = function (id, bHide) {
 zk._showExtr = function (n) {
 	if ("true" != getZKAttr(n, "float")) {
 		var ext = $e(n.id + "!chdextr");
-		if (ext && "true" == getZKAttr(ext, "coexist"))
+		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "";
+			ext = $e(n.id + "!chdextr2"); //hbox/vbox
+			if (ext) ext.style.display = "";
+		}
 	}
 };
 /** Hides the exterior. */
 zk._hideExtr = function (n) {
 	if ("true" != getZKAttr(n, "float")) {
 		var ext = $e(n.id + "!chdextr");
-		if (ext && "true" == getZKAttr(ext, "coexist"))
+		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "none";
+			ext = $e(n.id + "!chdextr2"); //hbox/vbox
+			if (ext) ext.style.display = "none";
+		}
 	}
 };
 
