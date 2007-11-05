@@ -271,9 +271,9 @@ zkTabs.fixWidth = function (uuid) {
 	var tabs = $e(uuid);
 	var align = getZKAttr(tabs,"align");
 	var tbl = zk.parentNode(zk.parentNode(ft, "TABLE"), "TABLE");
-	var tabs = zk.parentNode(tbl, "TABLE");
+	var tbox = zk.parentNode(tbl, "TABLE");
 		//Safari: THEAD's width and TD/TR's height is 0, so use TABLE instead
-	if (tabs) {
+	if (tbox) {
 		if ("TD" == $tag(lt)) { //horizontal
 			//let tab's width be re-calc
 			switch(align){
@@ -288,18 +288,24 @@ zkTabs.fixWidth = function (uuid) {
 			setTimeout(function () {
 				switch(align){
 					case 's':
-						var v = tabs.offsetWidth - tbl.offsetWidth +lt.offsetWidth;
+						var v1 = tbox.offsetWidth - tbl.offsetWidth; 
+						var v =  v1+lt.offsetWidth;
+						if(zk.gecko && v1==0){//BUG 1825812
+							var pt = zk.parentNode(lt, "TABLE");
+							var pd = zk.parentNode(pt, "TD");
+							v = pd.offsetWidth - pt.offsetWidth + lt.offsetWidth;
+						}
 						if (v < 0) v = 0;
 						lt.style.width = v + "px";
 						break;
 					case 'e':
-						var v = tabs.offsetWidth - tbl.offsetWidth +ft.offsetWidth;
+						var v = tbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth;
 						if (v < 0) v = 0;
 						ft.style.width = v + "px";
 						v2 = 0;
 						break;
 					case 'c':
-						var v = tabs.offsetWidth - tbl.offsetWidth +ft.offsetWidth+lt.offsetWidth;
+						var v = tbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth+lt.offsetWidth;
 						if (v < 0) v = 0;
 						var v1,v2;
 						v1 = Math.floor(v/2);
@@ -325,18 +331,18 @@ zkTabs.fixWidth = function (uuid) {
 				if (lt.cells && lt.cells.length) lt = lt.cells[0];
 				switch(align){
 					case 's':
-						var v = tabs.offsetHeight - tbl.offsetHeight +lt.offsetHeight;
+						var v = tbox.offsetHeight - tbl.offsetHeight +lt.offsetHeight;
 						if (v < 0) v = 0;
 						lt.style.height = v + "px";
 						break;
 					case 'e':
-						var v = tabs.offsetHeight - tbl.offsetHeight +ft.offsetHeight;
+						var v = tbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight;
 						if (v < 0) v = 0;
 						ft.style.height = v + "px";
 						v2 = 0;
 						break;
 					case 'c':
-						var v = tabs.offsetHeight - tbl.offsetHeight +ft.offsetHeight+lt.offsetHeight;
+						var v = tbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight+lt.offsetHeight;
 						if (v < 0) v = 0;
 						var v1,v2;
 						v1 = Math.floor(v/2);
