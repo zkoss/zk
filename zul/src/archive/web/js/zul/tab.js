@@ -260,7 +260,7 @@ zk.addOnResize(function () {
 });
 
 zkTabs._fixWdLater = function (uuid) {
-	setTimeout("zkTabs.fixWidth('"+uuid+"')", 30);
+	setTimeout("zkTabs.fixWidth('"+uuid+"')", zk.ie ? 150 : 30);
 };
 /** Fix the width of the last column in tabs. */
 zkTabs.fixWidth = function (uuid) {
