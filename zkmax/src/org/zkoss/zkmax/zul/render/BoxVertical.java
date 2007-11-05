@@ -37,7 +37,8 @@ public class BoxVertical implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Box self = (Box) comp;
 		final String uuid = self.getUuid();
-		
+		String spscls = null, spstyle = null;
+
 		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.box.Box\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(" cellpadding=\"0\" cellspacing=\"0\">");
@@ -49,10 +50,26 @@ public class BoxVertical implements ComponentRenderer {
 				.write(">").write(child).writeln("</td></tr>");
 
 			if (child.getNextSibling() != null) {
-				final String spacing = self.getSpacing();
-				wh.write("<tr style=\"height:")
-					.write(spacing != null ? spacing: "0")
-					.writeln("\"><td></td></tr>");
+				if (spscls == null) {
+					spscls = self.getSclass();
+					spscls = spscls == null || spscls.length() == 0 ? "vbox-sp": spscls + "-sp";
+					final String spacing = self.getSpacing();
+					if (spacing != null)
+						spstyle = "height:" + spacing;
+				}
+
+				wh.write("<tr id=\"").write(child.getUuid())
+					.write("!chdextr2\" class=\"").write(spscls).write("\"");
+
+				if (!child.isVisible()) {
+					wh.write(" style=\"display:none;");
+					if (spstyle != null) wh.write(spstyle);
+					wh.write("\"");
+				} else if (spstyle != null) {
+					wh.write(" style=\"").write(spstyle).write("\"");
+				}
+
+				wh.writeln("><td></td></tr>");
 			}
 		}		
 		wh.write("</table>");

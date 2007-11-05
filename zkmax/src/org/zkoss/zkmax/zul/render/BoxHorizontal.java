@@ -34,11 +34,11 @@ import org.zkoss.zul.Box;
  */
 
 public class BoxHorizontal implements ComponentRenderer{
-
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Box self = (Box) comp;
 		final String uuid = self.getUuid();		
+		String spscls = null, spstyle = null;
 
 		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.box.Box\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
@@ -54,10 +54,26 @@ public class BoxHorizontal implements ComponentRenderer{
 				.writeln("</td>");
 
 			if (child.getNextSibling() != null) {
-				final String spacing = self.getSpacing();
-				wh.write("<td style=\"width:")
-					.write(spacing != null ? spacing: "0")
-					.writeln("\"></td>");
+				if (spscls == null) {
+					spscls = self.getSclass();
+					spscls = spscls == null || spscls.length() == 0 ? "hbox-sp": spscls + "-sp";
+					final String spacing = self.getSpacing();
+					if (spacing != null)
+						spstyle = "width:" + spacing;
+				}
+
+				wh.write("<td id=\"").write(child.getUuid())
+					.write("!chdextr2\" class=\"").write(spscls).write("\"");
+
+				if (!child.isVisible()) {
+					wh.write(" style=\"display:none;");
+					if (spstyle != null) wh.write(spstyle);
+					wh.write("\"");
+				} else if (spstyle != null) {
+					wh.write(" style=\"").write(spstyle).write("\"");
+				}
+
+				wh.writeln("></td>");
 			}
 		}		
 		wh.write("</tr></table>");
