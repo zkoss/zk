@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <modelVersion>0.1.2</modelVersion>
+  <groupId>org.zkoss.zkflash</groupId>
+  <artifactId>timebox</artifactId>
+  <version>{version}</version>
+  <packaging>jar</packaging>
+  <name>The flash Component for ZK</name>
+  <url>http://www.zkoss.org</url>
+  <description>The flash Component for ZK 4.1.1 or later</description>
+  <licenses>
+    <license>
+      <name>GNU General Public License, Version 2.0</name>
+      <url>http://www.gnu.org/licenses/gpl.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>http://zkforge.svn.sourceforge.net/viewvc/zkforge/trunk/timebox</url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>org.zkoss.common</groupId>
+      <artifactId>zcommon</artifactId>
+      <version>4.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.zkoss.common</groupId>
+      <artifactId>zweb</artifactId>
+      <version>4.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.zkoss.zk</groupId>
+      <artifactId>zk</artifactId>
+      <version>4.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.zkoss.zk</groupId>
+      <artifactId>zul</artifactId>
+      <version>4.1.1</version>
+    </dependency>
+  </dependencies>
+</project> 
