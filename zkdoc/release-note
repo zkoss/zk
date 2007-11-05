@@ -83,6 +83,7 @@ ZK 3.0.0
   1825812: Tab of Tabbox is shrunk after operations, FF only
   1825821: LayoutRegion.setOpen(boolean); is failed on ZK Layout
   1718572: Popup windows alignment problems with table inside
+  1822575: Change window's height, component won't resize
   
   
 * Upgrade Notes:
