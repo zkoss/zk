@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry path="src" kind="src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="D:/home/henrichen/prj/zkforge/gmapsz/src"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
+	<classpathentry path="D:/home/henrichen/prj/zkforge/dist/lib/zweb.jar" kind="lib"/>
+	<classpathentry path="D:/home/henrichen/prj/zkforge/dist/lib/zcommon.jar" kind="lib"/>
+	<classpathentry path="D:/home/henrichen/prj/zkforge/dist/lib/zhtml.jar" kind="lib"/>
+	<classpathentry path="D:/home/henrichen/prj/zkforge/dist/lib/zk.jar" kind="lib"/>
+	<classpathentry path="D:/home/henrichen/prj/zkforge/dist/lib/zkplus.jar" kind="lib"/>
+	<classpathentry path="D:/home/henrichen/prj/zkforge/dist/lib/zul.jar" kind="lib"/>
+	<classpathentry path="bin" kind="output"/>
+</classpath>
