@@ -86,6 +86,7 @@ ZK 3.0.0
   1822575: Change window's height, component won't resize
   1824580: Listbox flickers when sorting with paging mold
   1820180: problem with resizing
+  1826517: A wrong calculation width when listhead is invisible
   
   
 * Upgrade Notes:
