@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk>
+<vbox>
+<hbox>
+<popup width="300px" id="help">
+Help is coming.
+</popup>
+<textbox id="t" visible="false"/>
+<label tooltip="help" value="Help" />
+</hbox>
+align
+<button label="toggle" onClick="t.visible = !t.visible"/>
+</vbox>
+</zk> 
