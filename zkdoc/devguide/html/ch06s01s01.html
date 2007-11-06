@@ -1,25 +1,0 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Elements Must Be Well-formed</title><link rel="stylesheet" href="devguide.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.0"><link rel="start" href="index.html" title="ZK Developer's Guide"><link rel="up" href="ch06s01.html" title="XML"><link rel="prev" href="ch06s01.html" title="XML"><link rel="next" href="ch06s01s02.html" title="Special Character Must Be Replaced"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Elements Must Be Well-formed</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06s01.html">Prev</a> </td><th width="60%" align="center">XML</th><td width="20%" align="right"> <a accesskey="n" href="ch06s01s02.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id474211"></a>Elements Must Be Well-formed</h3></div></div></div><p>First, each element must be closed. They are two ways to close an element as depicted below. They are equivalent.</p><div class="informaltable"><a name="id474222"></a><table border="1"><colgroup><col><col></colgroup><thead><tr><th>
-<p>Description</p>
-</th><th>
-<p>Code</p>
-</th></tr></thead><tbody><tr><td>
-<p>Close by an end tag:</p>
-</td><td>
-<pre class="programlisting">&lt;window&gt;&lt;/window&gt;</pre>
-</td></tr><tr><td>
-<p>Close without an end tag:</p>
-</td><td>
-<pre class="programlisting">&lt;window/&gt;</pre>
-</td></tr></tbody></table></div><p>Second, elements must be properly nested.</p><div class="informaltable"><a name="id474303"></a><table border="1"><colgroup><col><col></colgroup><thead><tr><th>
-<p>Result</p>
-</th><th>
-<p>Code</p>
-</th></tr></thead><tbody><tr><td>
-<p>Correct:</p>
-</td><td>
-<pre class="programlisting">&lt;window&gt; &lt;groupbox&gt; Hello World! &lt;/groupbox&gt;&lt;/window&gt;</pre>
-</td></tr><tr><td>
-<p>Wrong:</p>
-</td><td>
-<pre class="programlisting">&lt;window&gt; &lt;groupbox&gt; Hello World! &lt;/window&gt;&lt;/groupbox&gt;</pre>
-</td></tr></tbody></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06s01.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch06s01.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch06s01s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">XML </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Special Character Must Be Replaced</td></tr></table></div></body></html>

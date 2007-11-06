@@ -1,30 +1,0 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Error Handling When Loading Pages</title><link rel="stylesheet" href="devguide.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.0"><link rel="start" href="index.html" title="ZK Developer's Guide"><link rel="up" href="ch10s13.html" title="Error Handling"><link rel="prev" href="ch10s13.html" title="Error Handling"><link rel="next" href="ch10s13s02.html" title="Error Handing When Updating Pages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Error Handling When Loading Pages</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10s13.html">Prev</a> </td><th width="60%" align="center">Error Handling</th><td width="20%" align="right"> <a accesskey="n" href="ch10s13s02.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id492681"></a>Error Handling When Loading Pages</h3></div></div></div><p>If an un-caught exception is thrown when loading a ZUML page, it is handled directly by the Web server. In other words, its handling is no different from other pages, such as JSP.</p><p>By default, the Web server displays an error page showing the error message and stack trace.</p><p>
-</p><div><img src="images/100000000000038700000181C7DBF256.png"></div><p>You can customize the error handling by specifying the error page in WEB-INF/web.xml as follows. Refer to Java Servlet Specification for more details.</p><pre class="programlisting">&lt;!-- web.xml --&gt;&lt;error-page&gt;    &lt;exception-type&gt;java.lang.Throwable&lt;/exception-type&gt;        &lt;location&gt;/WEB-INF/sys/error.zul&lt;/location&gt;    &lt;/error-page&gt;</pre><p>Then, when an error occurs in loading a page, the Web server forwards the error page you specified, /error/error.zul. Upon forwarding, the Web server passes a set of request attributes to the error page to describe what happens. These attributes are as follows.</p><div class="informaltable"><a name="id492729"></a><table border="1"><colgroup><col><col></colgroup><thead><tr><th>
-<p>Request Attribute</p>
-</th><th>
-<p>Type</p>
-</th></tr></thead><tbody><tr><td>
-<p>javax.servlet.error.status_code</p>
-</td><td>
-<p>java.lang.Integer</p>
-</td></tr><tr><td>
-<p>javax.servlet.error.exception_type</p>
-</td><td>
-<p>java.lang.Class</p>
-</td></tr><tr><td>
-<p>javax.servlet.error.message</p>
-</td><td>
-<p>java.lang.String</p>
-</td></tr><tr><td>
-<p>javax.servlet.error.exception</p>
-</td><td>
-<p>java.lang.Throwable</p>
-</td></tr><tr><td>
-<p>javax.servlet.error.request_uri</p>
-</td><td>
-<p>java.lang.String</p>
-</td></tr><tr><td>
-<p>javax.servlet.error.servlet_name</p>
-</td><td>
-<p>java.lang.String</p>
-</td></tr></tbody></table></div><p>Then, in the error page, you can display your custom information by use of these attributes. For example,</p><pre class="programlisting">&lt;window title="Error ${requestScope['javax.servlet.error.status_code']}"&gt;    Cause: ${requestScope['javax.servlet.error.message']}    &lt;/window&gt;</pre><p>Tip: The error page can be any kind of servlets. In addition to ZUL, you can use JSP or whatever you preferred.</p><p>Tip: After forwarded, the error page is displayed as the main page, so you don't need to specify the modal or overlapped mode for the main window, if any.</p><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="id492902"></a>ZK Mobile Error Handling</h4></div></div></div><p>Servlet 2.x (web.xml) doesn't have the concept of device types. Thus, you have to forward to correct page if you want to support the Ajax browser and mobile devices at the same server. Here is an example:</p><pre class="programlisting">//error.zul&lt;zk&gt;    &lt;zscript&gt;        if (Executions.getCurrent().isMilDevice())            Executions.forward("error.mil");            &lt;/zscript&gt;        &lt;window&gt;        ....error message in ZUL        &lt;/window&gt;    &lt;/zk&gt;</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10s13.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch10s13.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch10s13s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Error Handling </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Error Handing When Updating Pages</td></tr></table></div></body></html>
