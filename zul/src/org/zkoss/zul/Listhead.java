@@ -42,6 +42,14 @@ public class Listhead extends HeadersElement {
 		return (Listbox)getParent();
 	}
 
+	public boolean setVisible(boolean visible) {
+		final boolean vis = super.setVisible(visible);
+		final Listbox listbox = getListbox();
+		if (listbox != null)
+			listbox.invalidate();
+		return vis;
+	}
+
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))

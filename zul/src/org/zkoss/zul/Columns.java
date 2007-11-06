@@ -29,12 +29,29 @@ import org.zkoss.zul.impl.HeadersElement;
  * @author tomyeh
  */
 public class Columns extends HeadersElement {
+
+	/** Returns the grid that it belongs to.
+	 * <p>It is the same as {@link #getParent}.
+	 */
+	public Grid getGrid() {
+		return (Grid)getParent();
+	}
+	
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
 			throw new UiException("Unsupported parent for columns: "+parent);
 		super.setParent(parent);
 	}
+
+	public boolean setVisible(boolean visible) {
+		final boolean vis = super.setVisible(visible);
+		final Grid grid = getGrid();
+		if (grid != null)
+			grid.invalidate();
+		return vis;
+	}
+	
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Column))
 			throw new UiException("Unsupported child for columns: "+child);

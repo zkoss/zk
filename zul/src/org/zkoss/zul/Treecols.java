@@ -36,6 +36,13 @@ public class Treecols extends HeadersElement {
 		return (Tree)getParent();
 	}
 
+	public boolean setVisible(boolean visible) {
+		final boolean vis = super.setVisible(visible);
+		final Tree tree = getTree();
+		if (tree != null)
+			tree.invalidate();
+		return vis;
+	}
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tree))
