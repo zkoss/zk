@@ -1,0 +1,59 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>CSA JavaScript Utilities</title><link rel="stylesheet" href="devguide.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.0"><link rel="start" href="index.html" title="ZK Developer's Guide"><link rel="up" href="ch07s19.html" title="Client Side Actions"><link rel="prev" href="ch07s19s02.html" title="The onshow and onhide Actions"><link rel="next" href="ch07s20.html" title="Events"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CSA JavaScript Utilities</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s19s02.html">Prev</a> </td><th width="60%" align="center">Client Side Actions</th><td width="20%" align="right"> <a accesskey="n" href="ch07s20.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id487042"></a>CSA JavaScript Utilities</h3></div></div></div><p>To simplify the CSA programming, ZK provides a few utilities objects that you can utilize.</p><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="id487052"></a>The action Object</h4></div></div></div><p>Basic utilities that can be applied to any object.</p><div class="informaltable"><a name="id487062"></a><table border="1"><colgroup><col><col></colgroup><thead><tr><th>
+<p>Function</p>
+</th><th>
+<p>Description</p>
+</th></tr></thead><tbody><tr><td>
+<p>action.show(cmp)</p>
+</td><td>
+<p>Make a component visible.</p>
+<p>cmp &#8211; the component. Use #{EL-expr} to identify it.</p>
+</td></tr><tr><td>
+<p>action.hide(cmp)</p>
+</td><td>
+<p>Make a component invisible.</p>
+<p>cmp &#8211; the component. Use #{EL-expr} to identify it.</p>
+</td></tr></tbody></table></div><p>Tip: For JavaScript programmers, it is common to manipulate style.display directly for visibility. However, it is not a good idea. Rather, use action.show and action.hide instead, since ZK Client Engine has to handle visual effects, bug workaround, and so on.</p></div><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="id487150"></a>The anima Object</h4></div></div></div><p>Animation-like visual effects. It is based on the <a class="ulink" href="http://wiki.script.aculo.us/scriptaculous/show/VisualEffects" target="_top">Effect</a> class provided by <a class="ulink" href="http://script.aculo.us/" target="_top">script.aculo.us</a>
+<a class="ulink" href="http://script.aculo.us/" target="_top">
+<sup>[<a name="id487176" href="#ftn.id487176" class="footnote">48</a>]</sup>
+</a>. The API is simplified. If you'd like more visual effects or controls, you can access <a class="ulink" href="http://wiki.script.aculo.us/scriptaculous/show/VisualEffects" target="_top">Effect</a> directly.</p><p>Note: <a class="ulink" href="http://wiki.script.aculo.us/scriptaculous/show/VisualEffects" target="_top">Effect</a> requires the component to be enclosed with the DIV tag. Not all ZUL components are implemented in this way. If you have any doubt, you can nest it with the div component as follows.</p><pre class="programlisting">&lt;window&gt;    &lt;div id="t" visible="false"        action="onshow: anima.slideDown(#{self}); onhide: anima.slideUp(#{self})"&gt;            &lt;div&gt;&lt;!-- the 2nd div is optional but sometimes it looks better with it --&gt;                    &lt;groupbox&gt;                            &lt;caption label="slide down"/&gt;                                Hi &lt;textbox/&gt;                            &lt;/groupbox&gt;                        When? &lt;datebox/&gt;                    &lt;/div&gt;            &lt;/div&gt;        &lt;button label="toggle" onClick="t.visible = !t.visible"/&gt;    &lt;/window&gt;</pre><p>Of course, you load other libraries that do not have this limitation.</p><div class="informaltable"><a name="id487237"></a><table border="1"><colgroup><col><col></colgroup><thead><tr><th>
+<p>Function</p>
+</th><th>
+<p>Description</p>
+</th></tr></thead><tbody><tr><td>
+<p>anima.appear(cmp)anima.appear(cmp, dur)</p>
+</td><td>
+<p>Make a component visible by increasing the opacity.</p>
+<p>cmp &#8211; the component. Use #{EL-expr} to identify it.</p>
+<p>dur &#8211; the duration in milliseconds. Default: 800.</p>
+</td></tr><tr><td>
+<p>anima.slideDown(cmp)anima.slideDown(cmp, dur)</p>
+</td><td>
+<p>Make a component visible with the slide-down effect.</p>
+<p>cmp &#8211; the component. Use #{EL-expr} to identify it.</p>
+<p>dur &#8211; the duration in milliseconds. Default: 400.</p>
+</td></tr><tr><td>
+<p>anima.slideUp(cmp)anima.slideUp(cmp, dur)</p>
+</td><td>
+<p>Make a component invisible with the slide-up effect.</p>
+<p>cmp &#8211; the component. Use #{EL-expr} to identify it.</p>
+<p>dur &#8211; the duration in milliseconds. Default: 400.</p>
+</td></tr><tr><td>
+<p>anima.fade(cmp)anima.fade(cmp, dur)</p>
+</td><td>
+<p>Make a component invisible by fading it out.</p>
+<p>cmp &#8211; the component. Use #{EL-expr} to identify it.</p>
+<p>dur &#8211; the duration in milliseconds. Default: 550.</p>
+</td></tr><tr><td>
+<p>anima.puff(cmp)anima.puff(cmp, dur)</p>
+</td><td>
+<p>Make a component invisible by puffing it out.</p>
+<p>cmp &#8211; the component. Use #{EL-expr} to identify it.</p>
+<p>dur &#8211; the duration in milliseconds. Default: 700.</p>
+</td></tr><tr><td>
+<p>anima.dropOut(cmp)anima.dropOut(cmp, dur)</p>
+</td><td>
+<p>Make a component invisible by fading and dropping it out.</p>
+<p>cmp &#8211; the component. Use #{EL-expr} to identify it.</p>
+<p>dur &#8211; the duration in milliseconds. Default: 700.</p>
+</td></tr></tbody></table></div><p>For example,</p><pre class="programlisting">&lt;window title="Animation Effects"&gt;    &lt;style&gt;        .ctl{                    border: 1pxoutset#777; background:#ddeecc;                                        margin: 2px;margin-right:10px;padding-left: 2px; padding-right: 2px;                            }        &lt;/style&gt;                &lt;labelvalue="Slide" sclass="ctl" action="onmouseover:anima.slideDown(#{t});onmouseout:anima.slideUp(#{t})"/&gt;                            &lt;labelvalue="Fade" sclass="ctl" action="onmouseover:anima.appear(#{t});onmouseout:anima.fade(#{t})"/&gt;                                &lt;labelvalue="Puff" sclass="ctl" action="onmouseover:anima.appear(#{t});onmouseout:anima.puff(#{t})"/&gt;                                            &lt;labelvalue="Drop Out"sclass="ctl" action="onmouseover:anima.appear(#{t});onmouseout:anima.dropOut(#{t})"/&gt;                                    &lt;div id="t"visible="false"&gt;                &lt;div&gt;                &lt;groupbox&gt;                        &lt;captionlabel="Dynamic Content"/&gt;                            Content to show and hide dynamically.                        &lt;datebox/&gt;                    &lt;/groupbox&gt;                    Description&lt;textbox/&gt;                    &lt;/div&gt;            &lt;/div&gt;    &lt;/window&gt;</pre></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id487176" href="#id487176" class="para">48</a>] </sup>
+<a class="ulink" href="http://script.aculo.us/" target="_top">http://script.aculo.us</a> provides easy-to-use, cross-browser user interface JavaScript libraries </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s19s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07s19.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s20.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">The onshow and onhide Actions </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Events</td></tr></table></div></body></html>

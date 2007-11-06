@@ -1,0 +1,30 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The position Property</title><link rel="stylesheet" href="devguide.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.0"><link rel="start" href="index.html" title="ZK Developer's Guide"><link rel="up" href="ch07s02.html" title="Windows"><link rel="prev" href="ch07s02s07.html" title="Overlapped, Popup, Modal, Highlighted and Embedded"><link rel="next" href="ch07s02s09.html" title="Common Dialogs"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">The position Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s02s07.html">Prev</a> </td><th width="60%" align="center">Windows</th><td width="20%" align="right"> <a accesskey="n" href="ch07s02s09.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id479904"></a>The position Property</h3></div></div></div><p>In addition to the left and top properties, you can control the position of an overlapped/popup/modal window by use of the position property. For example, the following code snippet positions the window to the right-bottom corner.</p><pre class="programlisting">&lt;window width="300px" mode="overlapped" position="right,bottom"&gt;...</pre><p>The value of the position property can be a combination of the following constants by separating them with comma (,).</p><div class="informaltable"><a name="id479930"></a><table border="1"><colgroup><col><col></colgroup><thead><tr><th>
+<p>Constant</p>
+</th><th>
+<p>Description</p>
+</th></tr></thead><tbody><tr><td>
+<p>center</p>
+</td><td>
+<p>Position the window at the center. If left or right is also specified, it means the vertical center. If top or bottom is also specified, it means the horizontal center. If none of left, right, top and bottom is specified, it means the center in both directions.</p>
+<p>Both the left and top property are ignored.</p>
+</td></tr><tr><td>
+<p>left</p>
+</td><td>
+<p>Position the window at the left edge.</p>
+<p>The left property is ignored.</p>
+</td></tr><tr><td>
+<p>right</p>
+</td><td>
+<p>Position the window at the right edge.</p>
+<p>The left property is ignored.</p>
+</td></tr><tr><td>
+<p>top</p>
+</td><td>
+<p>Position the window at the top.</p>
+<p>The top property is ignored.</p>
+</td></tr><tr><td>
+<p>bottom</p>
+</td><td>
+<p>Position the window at the bottom.</p>
+<p>The top property is ignored.</p>
+</td></tr></tbody></table></div><p>By default, its value is null. That is, the overlapped and popup window is positioned by the left and top properties, while the modal window is positioned at the center.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s02s07.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s02s09.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Overlapped, Popup, Modal, Highlighted and Embedded </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Common Dialogs</td></tr></table></div></body></html>

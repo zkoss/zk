@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>List and Tree Events</title><link rel="stylesheet" href="devguide.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.0"><link rel="start" href="index.html" title="ZK Developer's Guide"><link rel="up" href="ch07s20.html" title="Events"><link rel="prev" href="ch07s20s03.html" title="Input Events"><link rel="next" href="ch07s20s05.html" title="Slider and Scroll Events"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">List and Tree Events</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s20s03.html">Prev</a> </td><th width="60%" align="center">Events</th><td width="20%" align="right"> <a accesskey="n" href="ch07s20s05.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id488402"></a>List and Tree Events</h3></div></div></div><div class="informaltable"><a name="id488407"></a><table border="1"><colgroup><col><col><col></colgroup><thead><tr><th>
+<p>Event Name</p>
+</th><th>
+<p>Components</p>
+</th><th>
+<p>Description</p>
+</th></tr></thead><tbody><tr><td>
+<p>onSelect</p>
+</td><td>
+<p>listboxtabboxtabtree</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.SelectEvent</p>
+<p>Denotes user has selected one or multiple child components. For listbox, it is a set of listitem. For tree, it is a set of treeitem. For tabbox, it is a tab.</p>
+<p>Note: onSelect is sent to both tab and tabbox.</p>
+</td></tr><tr><td>
+<p>onOpen</p>
+</td><td>
+<p>north</p>
+<p>east</p>
+<p>west</p>
+<p>south</p>
+<p>groupbox treeitem combobox bandboxmenupopupwindow</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.OpenEvent</p>
+<p>Denotes user has opened or closed a component. Note: unlike onClose, this event is only a notification. The client sends this event after opening or closing the component.</p>
+<p>It is useful to implement load-on-demand by listening to the onOpen event, and creating components when the first time the component is opened.</p>
+</td></tr></tbody></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s20s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07s20.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s20s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Input Events </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Slider and Scroll Events</td></tr></table></div></body></html>

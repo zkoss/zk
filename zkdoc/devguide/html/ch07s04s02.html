@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>The size and border Properties</title><link rel="stylesheet" href="devguide.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.0"><link rel="start" href="index.html" title="ZK Developer's Guide"><link rel="up" href="ch07s04.html" title="The Layout Components"><link rel="prev" href="ch07s04s01.html" title="A Nested borderlayout Component"><link rel="next" href="ch07s04s03.html" title="The splittable and collapsible Properties"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">The <code class="code">size </code>
+<code class="code">and</code>
+<code class="code"> border </code>Properties</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s04s01.html">Prev</a> </td><th width="60%" align="center">The Layout Components</th><td width="20%" align="right"> <a accesskey="n" href="ch07s04s03.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id480506"></a>The <code class="code">size </code>
+<code class="code">and</code>
+<code class="code"> border </code>Properties</h3></div></div></div><p>You could specify the <code class="code">size</code> property of the following children components (<code class="code">north</code>,<code class="code">south</code>,<code class="code">east</code>,<code class="code">west</code>) to determine their sizes. However, the function of <code class="code">size</code> property depends on the type of children components (vertically or horizontally). For horizontal components (<code class="code">north</code>, and <code class="code">south</code>), the <code class="code">size</code> property determines their height. As for vertically components (<code class="code">east</code>, and <code class="code">west</code>), the <code class="code">size</code> property determines their width.</p><p>The <code class="code">border</code> property determines whether there exists border for these layout components, including all children components of <code class="code">borderlayout. </code>The following table specifies values of <code class="code">border</code> property.</p><div class="informaltable"><a name="id480592"></a><table border="1"><colgroup><col><col></colgroup><thead><tr><th>
+<p>Value</p>
+</th><th>
+<p>Description</p>
+</th></tr></thead><tbody><tr><td>
+<p>
+<code class="code">none</code> (default)</p>
+</td><td>
+<p>Without border</p>
+</td></tr><tr><td>
+<p>
+<code class="code">normal</code>
+</p>
+</td><td>
+<p>With border </p>
+</td></tr></tbody></table></div><p>Here is an example.</p><pre class="programlisting">&lt;borderlayout height="500px"&gt;<img src="images/1000000000000254000001FA76A65140.jpg" align="right">    &lt;north size="30%" border="normal"&gt;            The North            &lt;/north&gt;        &lt;east size="30%" border="normal"&gt;             The East            &lt;/east&gt;        &lt;center border="normal"&gt;            The Center            &lt;/center&gt;        &lt;west border="normal"&gt;            The West            &lt;/west&gt;        &lt;south border="normal"&gt;            The South            &lt;/south&gt;    &lt;/borderlayout&gt;</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s04s01.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s04s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">A Nested <code class="code">borderlayout</code> Component </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> The <code class="code">splittable</code> and <code class="code">collapsible</code> Properties</td></tr></table></div></body></html>

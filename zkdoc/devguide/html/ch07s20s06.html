@@ -1,0 +1,113 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Other Events</title><link rel="stylesheet" href="devguide.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.0"><link rel="start" href="index.html" title="ZK Developer's Guide"><link rel="up" href="ch07s20.html" title="Events"><link rel="prev" href="ch07s20s05.html" title="Slider and Scroll Events"><link rel="next" href="ch08.html" title="8. ZUML with the XHTML Component Set"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Other Events</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s20s05.html">Prev</a> </td><th width="60%" align="center">Events</th><td width="20%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id488647"></a>Other Events</h3></div></div></div><div class="informaltable"><a name="id488652"></a><table border="1"><colgroup><col><col><col></colgroup><thead><tr><th>
+<p>Event Name</p>
+</th><th>
+<p>Components</p>
+</th><th>
+<p>Description</p>
+</th></tr></thead><tbody><tr><td>
+<p>onCreate</p>
+</td><td>
+<p>all</p>
+</td><td>
+<p>Event: org.zkoss.ui.zk.ui.event.CreateEvent</p>
+<p>Denotes a component is created when rendering a ZUML page. Refer to the Component Lifecycle chapter.</p>
+</td></tr><tr><td>
+<p>onClose</p>
+</td><td>
+<p>windowtabfileupload</p>
+</td><td>
+<p>Event: org.zkoss.ui.zk.ui.event.Event</p>
+<p>Denotes the close button is pressed by a user, and the component shall detach itself.</p>
+</td></tr><tr><td>
+<p>onDrop</p>
+</td><td>
+<p>all</p>
+</td><td>
+<p>Event: org.zkoss.ui.zk.ui.event.DropEvent</p>
+<p>Denotes another component is dropped to the component that receives this event. Refer to the Drag and Drop section.</p>
+</td></tr><tr><td>
+<p>onCheck</p>
+</td><td>
+<p>checkboxradio radiogroup</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.CheckEvent</p>
+<p>Denotes the state of a component has been changed by the user.</p>
+<p>Note: onCheck is sent to both radio and radiogroup.</p>
+</td></tr><tr><td>
+<p>onMove</p>
+</td><td>
+<p>window</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.MoveEvent</p>
+<p>Denotes a component has been moved by the user.</p>
+</td></tr><tr><td>
+<p>onSize</p>
+</td><td>
+<p>window</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.SizeEvent</p>
+<p>Denotes a component has been resized by the user.</p>
+</td></tr><tr><td>
+<p>onZIndex</p>
+</td><td>
+<p>window</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.ZIndexEvent</p>
+<p>Denotes the z-index of a component has been changed by the user.</p>
+</td></tr><tr><td>
+<p>onTimer</p>
+</td><td>
+<p>timer</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.Event</p>
+<p>Denotes the timer you specified has triggered an event. To know which timer, invoke the getTarget method in the Event class.</p>
+</td></tr><tr><td>
+<p>onNotify</p>
+</td><td>
+<p>any</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.Event</p>
+<p>Denotes a application-dependent event. Its meaning depends on applications. Currently, no component will send this event.</p>
+</td></tr><tr><td>
+<p>onClientInfo</p>
+</td><td>
+<p>root</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.ClientInfoEvent</p>
+<p>Notifies a root component about the client's information, such as time zone and resolutions.</p>
+</td></tr><tr><td>
+<p>onPiggyback</p>
+</td><td>
+<p>root</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.Event</p>
+<p>Notifies a root component that the client has sent a request to the server. It is usually used to piggyback non-emergent UI updates to the client.</p>
+</td></tr><tr><td>
+<p>onBookmarkChanged</p>
+</td><td>
+<p>root</p>
+</td><td>
+<p>Event: org.zkoss.zk.ui.event.BookmarkEvent</p>
+<p>Notifies that the user pressed BACK, FORWARD or others that causes the bookmark changed.</p>
+</td></tr><tr><td>
+<p>onColSize</p>
+</td><td>
+<p>columns listhead treecols</p>
+</td><td>
+<p>Event: org.zkoss.zul.event.ColSizeEvent</p>
+<p>Notifies the parent of a group of headers that the widths of two of its children are changed by the user.</p>
+</td></tr><tr><td>
+<p>onPaging</p>
+</td><td>
+<p>gridlistboxpaging</p>
+</td><td>
+<p>Event: org.zkoss.zul.event.PagingEvent</p>
+<p>Notifies one of the pages of a multi-page component is selected by the user.</p>
+</td></tr><tr><td>
+<p>onUpload</p>
+</td><td>
+<p>fileupload</p>
+</td><td>
+<p>Event: org.zkoss.zul.event.UploadEvent</p>
+<p>Notifies that file(s) is uploaded, and the application can retrieve the uploaded files(s) by use of the getMedia or getMedias methods.</p>
+</td></tr></tbody></table></div><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="id489168"></a>The Event Flow of radio and radiogroup</h4></div></div></div><p>For developer's convenience, the onCheck event is sent to raido first and then to radiogroup<sup>[<a name="id489178" href="#ftn.id489178" class="footnote">49</a>]</sup>. Thus, you could add listener either to the radio group or to each radio button.</p><pre class="programlisting">&lt;radiogroup onCheck="fruit.value = self.selectedItem.label"&gt;    &lt;radio label="Apple"/&gt;        &lt;radio label="Orange"/&gt;    &lt;/radiogroup&gt;You have selected : &lt;label id="fruit"/&gt;</pre><p>The above sample has the same effect as follows.</p><pre class="programlisting">&lt;radiogroup&gt;    &lt;radio label="Apple" onCheck="fruit.value = self.label"/&gt;        &lt;radio label="Orange" onCheck="fruit.value = self.label"/&gt;    &lt;/radiogroup&gt;You have selected : &lt;label id="fruit"/&gt;</pre></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id489178" href="#id489178" class="para">49</a>] </sup>The internal implementation is done by adding a listener when a radio is added to a radiogroup.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s20s05.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07s20.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Slider and Scroll Events </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8. ZUML with the XHTML Component Set</td></tr></table></div></body></html>
