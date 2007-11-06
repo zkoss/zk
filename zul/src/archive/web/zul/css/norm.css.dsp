@@ -160,7 +160,7 @@ div.modal_mask {
 	filter: alpha(opacity=40); <%-- IE --%>
 	opacity: .4;
 	hasLayout: -1;<%-- not a layout element in IE --%>
-	background-color: #e6edf9; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
+	background: #e6edf9; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
 
 <%-- ZK separator --%>
@@ -179,8 +179,8 @@ div.vsep-bar {
 
 <%-- ZK toolbar and toolbarbutton --%>
 .toolbar {
-	padding: 1px; background: threedface; border: 1px solid;
-	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	padding: 1px; background: #e0eaf7; border: 1px solid;
+	border-color: #f8fbff #aca899 #aca899 #f8fbff;
 }
 .caption .toolbar, .caption .toolbarbutton {
 	background: none; border: 0;
@@ -189,11 +189,11 @@ div.vsep-bar {
 .toolbar a, .toolbar a:visited, .toolbar a:hover {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: x-small; font-weight: normal; color: black;
-	background: threedface; border: 1px solid threedface;
+	background: #e0eaf7; border: 1px solid #e0eaf7;
 	text-decoration: none;
 }
 .toolbar a:hover {
-	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	border-color: #f8fbff #aca899 #aca899 #f8fbff;
 }
 
 <%-- toolbar used in groupbox --%>
@@ -264,7 +264,7 @@ div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.
 }
 
 div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging {<%-- always used. --%>
-	background: window; border: 0; overflow: auto; width: 100%;
+	background: white; border: 0; overflow: auto; width: 100%;
 }
 div.listbox-paging, div.grid-paging {
 	height: 100%;
@@ -804,7 +804,10 @@ div.progressmeter {
 }
 
 div.paging, div.paging a {
-	font-size: x-small; color: #a30; font-weight: bold; background: window;
+	font-size: x-small; color: #a30; font-weight: bold;
+}
+div.paging {
+	background: white;
 }
 div.paging span {
 	font-size: x-small; color: #555; font-weight: normal;
@@ -823,11 +826,11 @@ div.dateboxpp {<%--hardcoded in DSP--%>
 }
 
 table.calendar {
-	background: window; border: 1px solid #7F9DB9;
+	background: white; border: 1px solid #7F9DB9;
 }
 table.calyear {
 	background: #eaf0f4; border: 1px solid;
-	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	border-color: #f8fbff #aca899 #aca899 #f8fbff;
 }
 table.calday {
 	border: 1px solid #ddd;
