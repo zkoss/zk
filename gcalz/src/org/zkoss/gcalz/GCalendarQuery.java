@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.google.gdata.client.calendar.CalendarService;
 import com.google.gdata.data.calendar.CalendarEntry;
-import com.google.gdata.data.calendar.CalendarEventEntry;
 import com.google.gdata.data.calendar.CalendarEventFeed;
 import com.google.gdata.util.ServiceException;
 
@@ -48,28 +47,20 @@ public class GCalendarQuery
     //RFC 3339 example: 2005-08-09T10:57:00-08:00
     public static final String START_MAX = "start-max=";
     public static final String START_MIN = "start-min=";
+
     
-    
-    public enum OrderBy{ lastmodified,starttime}
+
     public static String caseOrderBy(OrderBy o)
     {
-        switch(o)
-        {
-            case lastmodified:return "lastmodified";
-            case starttime: return "starttime";
-        }
-        return "starttime";
+        if(o==null)return OrderBy.starttime.toString();
+        return o.toString();
     }
     
-    public enum SortOrder{ ascending,descending}
+
     public static String caseSortOrder(SortOrder o)
     {
-        switch(o)
-        {
-            case ascending:return "a";
-            case descending: return "d";
-        }
-        return "starttime";
+        if(o==null)return SortOrder.descending.toString();
+        return o.toString();
     }
     
     public static final SimpleDateFormat RFC3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

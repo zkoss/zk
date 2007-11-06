@@ -144,7 +144,7 @@ public class MobileCalendarControl
                 end.add(Calendar.DAY_OF_YEAR,1);
                 query.setStartMin(new Date(start.getTimeInMillis()))
                     .setStartMax(new Date(end.getTimeInMillis()))
-                    .setOrderby(GCalendarQuery.OrderBy.starttime);
+                    .setOrderby(OrderBy.starttime);
             }};
     }
     
@@ -169,7 +169,7 @@ public class MobileCalendarControl
                 end.add(Calendar.DAY_OF_YEAR,days);
                 query.setStartMin(new Date(currentCalendar.getTimeInMillis()))
                 .setStartMax(new Date(end.getTimeInMillis()))
-                .setOrderby(GCalendarQuery.OrderBy.starttime);
+                .setOrderby(OrderBy.starttime);
             }
         };
         changeCurrentScheduleMode();
@@ -192,7 +192,7 @@ public class MobileCalendarControl
                 end.add(Calendar.DAY_OF_YEAR,7);
                 query.setStartMin(new Date(start.getTimeInMillis()))
                     .setStartMax(new Date(end.getTimeInMillis()))
-                    .setOrderby(GCalendarQuery.OrderBy.starttime);
+                    .setOrderby(OrderBy.starttime);
             }
         };
         changeCurrentScheduleMode();
@@ -207,7 +207,7 @@ public class MobileCalendarControl
                 query.clear();
                 query.setStartMin(start)
                     .setStartMax(end)
-                    .setOrderby(GCalendarQuery.OrderBy.starttime);
+                    .setOrderby(OrderBy.starttime);
             }
         };
         changeCurrentScheduleMode();
@@ -219,7 +219,7 @@ public class MobileCalendarControl
             public void modify(GCalendarQuery query)
             {
                 query.clear();
-                query.setOrderby(GCalendarQuery.OrderBy.starttime);
+                query.setOrderby(OrderBy.starttime);
             }
         };
         changeCurrentScheduleMode();

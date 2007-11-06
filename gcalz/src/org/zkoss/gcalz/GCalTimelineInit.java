@@ -55,7 +55,14 @@ public class GCalTimelineInit implements Initiator
     {
 
     }
-
+    /**
+     * get username & password from request to guery Google service.<br>
+     * if they are all exist, publish it as a MIT timeline Service.<br> 
+     * 
+     * @param user Google service's user, get it from request parameters by "user".
+     * @param password Google user's password,  get it from request parameters by "pwd".
+     * 
+     */
     public void doInit(Page page, Object[] args) throws Exception
     {
         //get user & password...
@@ -81,7 +88,6 @@ public class GCalTimelineInit implements Initiator
             e.printStackTrace();
         }
         String content = convert(entries);
-        //System.out.println("new Content: ["+user+password+"]");
         XmlOutputFns.doForward(content);
     }
     
@@ -102,7 +108,7 @@ public class GCalTimelineInit implements Initiator
             sbf.append("<event ");
             if(entry.getTimes().size()>0)
             {
-                When obj = entry.getTimes().get(0);
+                When obj = (When)entry.getTimes().get(0);
                 DateTime sdt = obj.getStartTime();
                 DateTime edt = obj.getEndTime();
                 sbf.append(" start=\""+format.format(new Date(sdt.getValue()))+" GMT\" ");

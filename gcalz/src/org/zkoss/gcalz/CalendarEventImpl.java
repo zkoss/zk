@@ -31,13 +31,16 @@ public class CalendarEventImpl implements  CalendarEvent
     String content ="";
     String id;
 
-    
+    /**
+     * 
+     * @param entry
+     */
     public CalendarEventImpl(CalendarEventEntry entry )
     {
     	this.entry = entry;
         if(entry.getTimes().size()>0)
         {
-            When obj = entry.getTimes().get(0);
+            When obj = (When)entry.getTimes().get(0);
             startDate = new Date(obj.getStartTime().getValue());
             if(obj.getEndTime()!=null)
                 endDate = new Date(obj.getEndTime().getValue());

@@ -71,7 +71,7 @@ public class GCalTimelineControl
             Date end = null;
             if(entry.getTimes().size()>0)
             {
-                When obj = entry.getTimes().get(0);
+                When obj = (When)entry.getTimes().get(0);
                 start = new Date(obj.getStartTime().getValue());
                 if(obj.getEndTime()!=null)
                     end = new Date(obj.getEndTime().getValue());
@@ -129,13 +129,17 @@ public class GCalTimelineControl
         }// think a method to handle Exception...
     }
 
+    /**
+     * clear the monitored Timeline model.
+     *
+     */
     public void clearTimelineModel()
     {
         dataModel.clear();
     }
 
     /**
-     * 
+     * get the monitored Timeline model.
      * @return
      */
     public ListModel getTimelineModel()
@@ -144,7 +148,7 @@ public class GCalTimelineControl
     }
 
     /**
-     * 
+     * get Future Icon's Url.
      * @return
      */
     public String getFutureIconUrl()
@@ -152,7 +156,7 @@ public class GCalTimelineControl
         return futureIconUrl;
     }
     /**
-     * 
+     * set Future Icon's Url.
      * @param futureIconUrl
      */
     public void setFutureIconUrl(String futureIconUrl)
@@ -160,7 +164,7 @@ public class GCalTimelineControl
         this.futureIconUrl=futureIconUrl;
     }
     /**
-     * 
+     * get Past Icon's Url.
      * @return
      */
     public String getPastIconUrl()
@@ -168,7 +172,7 @@ public class GCalTimelineControl
         return pastIconUrl;
     }
     /**
-     * 
+     * set Past Icon's Url.
      * @param pastIconUrl
      */
     public void setPastIconUrl(String pastIconUrl)
@@ -176,7 +180,7 @@ public class GCalTimelineControl
         this.pastIconUrl=pastIconUrl;
     }
     /**
-     * 
+     * get timeline Image Url
      * @return
      */
     public String getImageUrl()
@@ -184,7 +188,7 @@ public class GCalTimelineControl
         return imageUrl;
     }
     /**
-     * 
+     * set timeline Image Url
      * @param imageUrl
      */
     public void setImageUrl(String imageUrl)
@@ -192,7 +196,7 @@ public class GCalTimelineControl
         this.imageUrl=imageUrl;
     }
     /**
-     * 
+     * get timeline font color
      * @return
      */
     public String getColor()
@@ -200,7 +204,7 @@ public class GCalTimelineControl
         return color;
     }
     /**
-     * 
+     *  set timeline font color
      * @param color
      */
     public void setColor(String color)
@@ -208,13 +212,19 @@ public class GCalTimelineControl
         this.color=color;
     }
 
-
+    /**
+     * get timeline Working icon Url
+     * @return
+     */
     public String getWorkingIconUrl()
     {
         return workingIconUrl;
     }
 
-
+    /**
+     * set timeline Working icon Url
+     * @param workingIconUrl
+     */
     public void setWorkingIconUrl(String workingIconUrl)
     {
         this.workingIconUrl = workingIconUrl;
