@@ -1342,7 +1342,7 @@ zk.ncols = function (cells) {
  */
 zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 	if (dst == null || srcrows == null || !srcrows.length
-	|| !dst.cells.length || !zk.isRealVisible(mate.element))
+	|| !dst.cells.length || !zk.isRealVisible(dst))
 		return;	
 	//Note: With Opera, we cannot use table-layout=fixed and we have to assign
 	//the table width (test case: fixed-table-header.html)	
