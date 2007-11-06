@@ -334,23 +334,29 @@ if [ "$target" == "official" ]; then
 	mkdir -p /tmp/zk/doc
 
 	cd $maindir/zkdoc
-	for f in */ZK-devguide*.pdf */ZK-quickstart*.pdf ; do  
+	for f in */ZK-quickstart*.pdf ; do  
 		fn=${f%.pdf}
 		cp $f /tmp/zk/doc/${fn#**/}-$ver.pdf
 	done
 
 	cd /tmp/zk/doc
-	cp -rP $docdir/devref .
+	cp -rP $docdir/devref $docdir/devguide .
 	find -name .svn | xargs rm -rf
-	mv devref zk-devref-$ver
+
 	echo Output zk-devref-$ver.zip
+	mv devref zk-devref-$ver
 	zip -qr9 zk-devref-$ver.zip zk-devref-$ver
 	rm -rf zk-devref-$ver
+
+	echo Output zk-devguide-$ver.zip
+	mv devguide zk-devguide-$ver
+	zip -qr9 zk-devguide-$ver.zip zk-devguide-$ver
+	rm -rf zk-devguide-$ver
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm
 
 	cd $maindir
-	cp zkdoc/*/ZK-devguide*.pdf zkdoc/*/ZK-quickstart*.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
+	cp zkdoc/*/ZK-quickstart*.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
 
 	echo Ouput ${docnm}.zip
