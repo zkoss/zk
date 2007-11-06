@@ -87,6 +87,7 @@ ZK 3.0.0
   1824580: Listbox flickers when sorting with paging mold
   1820180: problem with resizing
   1826517: A wrong calculation width when listhead is invisible
+  1826101: Listbox size problem with paging mold
   
   
 * Upgrade Notes:
