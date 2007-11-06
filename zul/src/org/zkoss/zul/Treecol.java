@@ -52,12 +52,6 @@ public class Treecol extends HeaderElement {
 		final Component comp = getParent();
 		return comp != null ? (Tree)comp.getParent(): null;
 	}
-
-	public boolean setVisible(boolean visible) {
-		final boolean vis = super.setVisible(visible);
-		invalidateWhole();
-		return vis;
-	}
 	
 	/** Returns the maximal length of each item's label.
 	 */

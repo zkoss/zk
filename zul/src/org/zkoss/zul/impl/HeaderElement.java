@@ -78,6 +78,11 @@ abstract public class HeaderElement extends LabelImageElement {
 	}
 
 	//-- super --//
+	public boolean setVisible(boolean visible) {
+		final boolean vis = super.setVisible(visible);
+		invalidateWhole();
+		return vis;
+	}
 	public String getOuterAttrs() {
 		return super.getOuterAttrs() + getColAttrs();
 	}

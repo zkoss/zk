@@ -62,12 +62,6 @@ public class Column extends HeaderElement {
 		setImage(src);
 	}
 
-	public boolean setVisible(boolean visible) {
-		final boolean vis = super.setVisible(visible);
-		invalidateWhole();
-		return vis;
-	}
-	
 	/** Returns the grid that contains this column. */
 	public Grid getGrid() {
 		final Component parent = getParent();
