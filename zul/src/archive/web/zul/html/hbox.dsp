@@ -28,8 +28,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<c:forEach var="child" items="${self.children}">
  <td id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td>
 <c:if test="${!empty child.nextSibling}">
- <c:set var="spstyle1" value="display:none;${spstyle}" unless="${child.visible}"/>
- <td id="${child.uuid}!chdextr2" class="${scls}-sp"${c:attr('style',spstyle1)}></td>
+ <c:set var="s" value="display:none;${spstyle}" unless="${child.visible}"/>
+ <td id="${child.uuid}!chdextr2" class="${scls}-sp"${c:attr('style',empty s ? spstyle: s)}></td>
 </c:if>
 	</c:forEach>
 </tr>

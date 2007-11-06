@@ -105,7 +105,7 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
 		var tn = $tag(nd);
 		var vert = getZKAttr(cmp, "vert");
 		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
-			if (tn == $tag(nd) && nd.id)
+			if (tn == $tag(nd) && nd.id && !n.id.endsWith("!chdextr2"))
 				if (vert) nd.style.height = zk.revisedSize(nd, nd.offsetHeight, true) + "px";
 				else nd.style.width = zk.revisedSize(nd, nd.offsetWidth) + "px";
 	}

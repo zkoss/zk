@@ -290,10 +290,10 @@ div.gc {
 }
 
 td.hbox-sp {
-	width: 0.4em;
+	width: 0.3em; padding: 0; margin: 0;
 }
 tr.vbox-sp {
-	height: 0.4em;
+	height: 0.3em; padding: 0; margin: 0;
 }
 
 tr.item, tr.item a, tr.item a:visited {
