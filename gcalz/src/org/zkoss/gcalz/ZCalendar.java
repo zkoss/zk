@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * @author ian
  *
+ *
  */
 public interface ZCalendar 
 {
@@ -15,7 +16,7 @@ public interface ZCalendar
 	 * 
 	 * @return
 	 */
-	List<CalendarEvent> getEvents();
+	List getEvents();
 	/**
 	 * 
 	 * @return

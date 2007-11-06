@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/18 ¤U¤È 2:34:25, Created by Ian Tsai
+*	  2007/7/18 PM 2:34:25, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ import com.google.gdata.data.calendar.CalendarEntry;
  */
 public class MobileCalendarControl 
 {
-    private List<ZCalendar> schList;
+    private List schList;
     Profiling pro = new Profiling();
     private Date current;
     private CalendarService calendarService;
@@ -41,7 +42,7 @@ public class MobileCalendarControl
     private CalendarQueryModifer modifer;
     private Calendar currentCalendar;
     
-    private Map<String,ScheduleCollectionListener> listenerStorage;
+    private Map listenerStorage;
     private ScheduleCollectionListener delegateFire;
     
     /**
@@ -53,12 +54,12 @@ public class MobileCalendarControl
         current = date;
         currentCalendar = Calendar.getInstance();
         currentCalendar.setTimeInMillis(current.getTime());
-        listenerStorage = new HashMap<String, ScheduleCollectionListener>();
+        listenerStorage = new HashMap();
         delegateFire = new ScheduleCollectionListener(){
             public void update(ZCalendar sch)
             {
-                for(ScheduleCollectionListener fire:listenerStorage.values())
-                    fire.update(sch);
+                for( Iterator fire = listenerStorage.values().iterator();fire.hasNext();)
+                    ((ScheduleCollectionListener)fire.next()).update(sch);
             }
         };
         modifer = getDefultModifer();
@@ -77,10 +78,12 @@ public class MobileCalendarControl
         {
             if(ans = (calendarService = GCalUtil.createGCalService(username, password))!=null)
             {
-                schList = new ArrayList<ZCalendar>(8);
+                schList = new ArrayList(8);
                 pro.start("lookupMetaUserCalendars");
-                for(CalendarEntry gcal : GCalUtil.getMetaUserCalendars(calendarService))
+                CalendarEntry gcal;
+                for(Iterator it = GCalUtil.getMetaUserCalendars(calendarService).iterator();it.hasNext();)
                 {
+                	gcal = (CalendarEntry)it.next();
                     pro.start("new Schedule");
                     ZCalendarGImpl sch = null;
                     if(gcal!=null)schList.add(sch = new ZCalendarGImpl(
@@ -235,7 +238,7 @@ public class MobileCalendarControl
      * 
      * @return
      */
-    public List<ZCalendar> getSchedules()
+    public List getSchedules()
     {
         return schList;
     }

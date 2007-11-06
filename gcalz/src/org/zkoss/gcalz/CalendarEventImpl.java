@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/18 ¤U¤È 3:36:42, Created by Ian Tsai
+*	  2007/7/18 PM 3:36:42, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -75,7 +75,6 @@ public class CalendarEventImpl implements  CalendarEvent
 
 
 
-    @Override
     public int hashCode()
     {
         final int PRIME = 31;
@@ -84,7 +83,6 @@ public class CalendarEventImpl implements  CalendarEvent
         return result;
     }
 
-    @Override
     public boolean equals(Object obj)
     {
         if (this == obj)

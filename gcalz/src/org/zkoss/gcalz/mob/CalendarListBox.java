@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/19 ¤W¤È 9:51:19, Created by Ian Tsai
+*	  2007/7/19 PM 9:51:19, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -15,6 +15,7 @@ package org.zkoss.gcalz.mob;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.gcalz.Profiling;
@@ -36,7 +37,7 @@ public class CalendarListBox extends Listbox
     private static final long serialVersionUID = -311840486586481230L;
 
     Profiling pro = new Profiling();
-    private List<Listitem> listItemList = new ArrayList<Listitem>(10);
+    private List listItemList = new ArrayList(10);
     private String dateFormat = "yy/MM/dd HH:mm";
     private SimpleDateFormat formatter;
     MobileCalendarControl control;
@@ -51,9 +52,9 @@ public class CalendarListBox extends Listbox
         control = con;
         pro.start("setCalendars");
         if(formatter==null)formatter = new SimpleDateFormat(dateFormat);
-        
-        for(ZCalendar cal:con.getSchedules()) 
-        	createNewItem(cal).setParent(this);
+        for(Iterator it = con.getSchedules().iterator();it.hasNext();)
+        	createNewItem((ZCalendar)it.next()).setParent(this);
+        	
         if(con.getSchedules().size()>0)
         {
             this.setSelectedIndex(con.getSchedules().size()-1);
@@ -99,18 +100,16 @@ public class CalendarListBox extends Listbox
         pro.end();
     }
     
-    @Override
     public void setSelectedItem(Listitem item)
     {
         super.setSelectedItem(item);
     }
-    @Override
+    
     public boolean isMultiple()
     {
         return false;
     }
     
-    @Override
     public void setSelectedIndex(int jsel)
     {
         super.setSelectedIndex(jsel);

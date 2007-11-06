@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/19 ¤U¤È 6:15:10, Created by Ian Tsai
+*	  2007/7/19 AM 6:15:10, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -100,7 +100,7 @@ public class GCalendarQuery
      */
     public void clear()
     {
-        futureEvents = false;
+        futureEvents = new Boolean(false);
         singleEvents = null;
         orderby =null;
         sortOrder=null;
@@ -118,14 +118,13 @@ public class GCalendarQuery
      * @throws IOException
      * @throws ServiceException
      */
-    @SuppressWarnings("unchecked")
-    public List<CalendarEventEntry> invokeEventQuery(CalendarEntry calendar) 
+    public List invokeEventQuery(CalendarEntry calendar) 
     throws IOException, ServiceException
     {
         StringBuffer feedUri = new StringBuffer(GCalUtil.findCalEventsLinkHref(calendar));
-        Ref<String> flag = new Ref<String>(){
+        Ref flag = new Ref(){
         	int i;
-        	public String get()
+        	public Object get()
         	{
         		String ans = i++ < 1 ? "?":"&"; 
         		return ans;
@@ -216,7 +215,7 @@ public class GCalendarQuery
      */
     public boolean isSingleEvents()
     {
-        return singleEvents;
+        return singleEvents.booleanValue();
     }
     /**
      * 
@@ -225,7 +224,7 @@ public class GCalendarQuery
      */
     public GCalendarQuery setSingleEvents(boolean singleEvents)
     {
-        this.singleEvents = singleEvents;
+        this.singleEvents = new Boolean(singleEvents);
         return this;
     }
     /**

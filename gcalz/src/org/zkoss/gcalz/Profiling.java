@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/19 ¤U¤È 5:09:13, Created by Ian Tsai
+*	  2007/7/19 PM 5:09:13, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.

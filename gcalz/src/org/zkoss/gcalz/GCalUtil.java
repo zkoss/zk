@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/11 ¤U¤È 12:56:28, Created by Ian Tsai
+*	  2007/7/11 PM 12:56:28, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -15,6 +15,7 @@ package org.zkoss.gcalz;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.util.logging.Log;
@@ -48,8 +49,7 @@ public class GCalUtil
      * @throws IOException
      * @throws ServiceException
      */
-    @SuppressWarnings("unchecked")
-    public static List<CalendarEntry> getMetaUserCalendars(CalendarService service) 
+    public static List getMetaUserCalendars(CalendarService service) 
     throws IOException, ServiceException
     {
         return getEntries(METAFEED_URL, service, CalendarFeed.class);
@@ -62,8 +62,7 @@ public class GCalUtil
      * @throws IOException
      * @throws ServiceException
      */
-    @SuppressWarnings("unchecked")
-    public static List<CalendarEntry> getMetaUserCalendars(String username, String password) 
+    public static List getMetaUserCalendars(String username, String password) 
     throws IOException, ServiceException
     {
         return getMetaUserCalendars(createGCalService(username,password));
@@ -79,7 +78,7 @@ public class GCalUtil
      * @throws IOException
      * @throws ServiceException
      */
-    public static List<CalendarEventEntry> getQuickMainCalendarEvents(String username, String password) 
+    public static List getQuickMainCalendarEvents(String username, String password) 
     throws IOException, ServiceException
     {
         String que = "http://www.google.com/calendar/feeds/" + username + "/private/full";
@@ -93,7 +92,7 @@ public class GCalUtil
      * @throws IOException
      * @throws ServiceException
      */
-    public static List<CalendarEventEntry> getAllEvents(String targetCalUri, CalendarService service) 
+    public static List getAllEvents(String targetCalUri, CalendarService service) 
     throws IOException, ServiceException
     {
         return getEntries(targetCalUri, service, CalendarEventFeed.class);
@@ -107,7 +106,6 @@ public class GCalUtil
      * @throws IOException
      * @throws ServiceException
      */
-    @SuppressWarnings("unchecked")
     public static List
     getEntries(String feedUri, CalendarService service, Class clazz)
     throws IOException, ServiceException
@@ -125,7 +123,7 @@ public class GCalUtil
      * @return
      * @throws AuthenticationException 
      */
-    public static CalendarService createGCalService(String username,String password) 
+    public static CalendarService createGCalService(String username, String password) 
     throws AuthenticationException
     {
         CalendarService googleServ = new CalendarService("ZK-ZGDATA-0.1");
@@ -140,9 +138,13 @@ public class GCalUtil
      */
     public static String findCalEventsLinkHref(CalendarEntry cal)
     {
-        for(Link link:cal.getLinks())
-            if(link.getRel().equals("alternate"))
+    	Link link;
+        for(Iterator it = cal.getLinks().iterator();it.hasNext();)
+        {
+        	link = (Link) it.next();
+        	if(link.getRel().equals("alternate"))
                 return link.getHref();
+        }
         return null;
     }
 

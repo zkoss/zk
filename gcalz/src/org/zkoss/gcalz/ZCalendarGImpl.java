@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/18 ¤U¤È 3:00:20, Created by Ian Tsai
+*	  2007/7/18 PM 3:00:20, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -14,6 +14,7 @@
 package org.zkoss.gcalz;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class ZCalendarGImpl implements ZCalendar
 {
     private GCalendarQuery query;
     private CalendarEntry gcal;
-    private Ref<List<CalendarEvent>> all;
-    private Ref<Thread> thread;
+    private Ref all;
+    private Ref thread;
     private CalendarQueryModifer modifer;
     /**
      * 
@@ -49,10 +50,10 @@ public class ZCalendarGImpl implements ZCalendar
      * lazyloading technic 
      * @return
      */
-    public List<CalendarEvent> getEvents()
+    public List getEvents()
     {
         if(all==null)all = loadScheduleEvents();
-        return all.get();
+        return (List)all.get();
     }
     /**
      * 
@@ -67,7 +68,7 @@ public class ZCalendarGImpl implements ZCalendar
      */
     private void refresh()
     {
-        if(thread.get()!=null&&thread.get().isAlive())return;
+        if(thread.get()!=null&&((Thread)thread.get()).isAlive())return;
         all = loadScheduleEvents();
     }
 
@@ -76,26 +77,27 @@ public class ZCalendarGImpl implements ZCalendar
      * lazy load CalendarEventEntry for each Google Calendar's calendarEventEntries
      * @return
      */
-    private Ref<List<CalendarEvent>> loadScheduleEvents()
+    private Ref loadScheduleEvents()
     {
         if(modifer!=null)modifer.modify(query);
         // new lazyder...
-        LazyLoader<List<CalendarEvent>> lazyLoader = new LazyLoader<List<CalendarEvent>>();
+        LazyLoader lazyLoader = new LazyLoader();
         thread = lazyLoader.getLoadingThreadRef();
         return lazyLoader.doLoad(
-                new Ref<List<CalendarEvent>>(){
+                new Ref(){
                     /**
                      * Real Works to do Remote Communication 
                      */
-                    public List<CalendarEvent> get()
+                    public Object get()
                     {
-                        List<CalendarEvent> list = new LinkedList<CalendarEvent>();
+                        List list = new LinkedList();
                         try
                         {
                             CalendarEventImpl event = null;
-                            for(CalendarEventEntry entry : 
-                                query.invokeEventQuery(gcal))
+                            CalendarEventEntry entry ;
+                            for( Iterator it = query.invokeEventQuery(gcal).iterator();it.hasNext();)
                             {
+                            	entry = (CalendarEventEntry)it.next();
                                 try
                                 {
                                     event = new CalendarEventImpl(entry);
@@ -103,7 +105,6 @@ public class ZCalendarGImpl implements ZCalendar
                                 catch(Exception e){continue;}
                                 list.add(event);
                             }
-                            
                         } catch (IOException e)
                         {
                             e.printStackTrace();
@@ -126,13 +127,4 @@ public class ZCalendarGImpl implements ZCalendar
         this.modifer = modifer;
         refresh();
     }
-//    public GCalendarQuery getQuery()
-//    {
-//        return query;
-//    }
-//    public void setQuery(GCalendarQuery query)
-//    {
-//        this.query = query;
-//    }
-
 }//end of class

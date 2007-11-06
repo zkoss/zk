@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/11 ¤U¤È 1:09:37, Created by Ian Tsai
+*	  2007/7/11 PM 1:09:37, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -15,6 +15,7 @@ package org.zkoss.gcalz;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -93,9 +94,6 @@ public class GCalTimelineControl
         }
     };//end of Anonymous Inner Calss
 
-    
-
-
     /**
      * Load Google Calendar to userCalendarModel, any OccurEvent in userCalendarModel will cleared. 
      * @param user
@@ -109,8 +107,13 @@ public class GCalTimelineControl
         try
         {
             dataModel.clear();
-            for(CalendarEventEntry event : GCalUtil.getQuickMainCalendarEvents(user, password))
-                dataModel.add(occurEventConverter.convert(event));
+            CalendarEventEntry event;
+            for(Iterator it = GCalUtil.getQuickMainCalendarEvents(user, password).iterator();it.hasNext();)
+            {
+            	event = (CalendarEventEntry) it.next();
+                dataModel.add(occurEventConverter.convert(event));            	
+            }
+
         } 
         catch (AuthenticationException e)
         {

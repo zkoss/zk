@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/19 ¤U¤È 2:17:28, Created by Ian Tsai
+*	  2007/7/19 PM 2:17:28, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -16,6 +16,7 @@ package org.zkoss.gcalz.mob;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class EventListBox extends Listbox
     private String crossdayfutureicon ;
     private String crossdayworkingicon ;
     Profiling pro = new Profiling();
-    private List<Listitem> itemList = new LinkedList<Listitem>();
+    private List itemList = new LinkedList();
     MobileCalendarControl control;
     
     /**
@@ -76,13 +77,13 @@ public class EventListBox extends Listbox
             schedule = _schedule;
             if(schedule==null)return;
             Listitem item;
-            for(CalendarEvent event:schedule.getEvents())
+            for( Iterator event = schedule.getEvents().iterator();event.hasNext();)
             {
-                itemList.add(item = createNewItem(event));
+                itemList.add(item = createNewItem((CalendarEvent)event.next()));
                 item.setParent(this);
             }
             int size = schedule.getEvents().size();
-            if(size>0)this.setSelectedItem(itemList.get(0));
+            if(size>0)this.setSelectedItem((Listitem)itemList.get(0));
             if(getSelectedItem()!=null)
                 setLabel(getCurrentEventInfo((CalendarEvent) getSelectedItem().getValue()));
             else setLabel("Events(" +size+"):"+(size>0?"":"No Data"));
@@ -145,12 +146,12 @@ public class EventListBox extends Listbox
      * 
      *
      */
-    @SuppressWarnings("unchecked")
     public void removeAllListitems()
     {
         if(this.getChildren().size()>0)
         {
-            for(Listitem item:itemList)this.removeChild(item);
+            for( Iterator item = itemList.iterator();item.hasNext();)
+            	this.removeChild((Listitem)item.next());
         }
         itemList.clear();
     }

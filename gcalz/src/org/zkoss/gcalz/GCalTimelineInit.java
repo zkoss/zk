@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/7/11 ¤U¤È 6:20:35, Created by Ian Tsai
+*	  2007/7/11 PM 6:20:35, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -17,6 +17,7 @@ package org.zkoss.gcalz;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,7 +72,7 @@ public class GCalTimelineInit implements Initiator
      */
     private  void publish(String user, String password) throws IOException
     {
-        List<CalendarEventEntry> entries = null;
+        List entries = null;
         try
         {
             entries = GCalUtil.getQuickMainCalendarEvents(user, password);
@@ -89,13 +90,15 @@ public class GCalTimelineInit implements Initiator
      * @param entries
      * @return
      */
-    private  String convert(List<CalendarEventEntry> entries)
+    private  String convert(List entries)
     {
         SimpleDateFormat format  = new SimpleDateFormat("MM dd yyyy HH:mm:ss"); 
         StringBuffer sbf = new StringBuffer("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         sbf.append("<data>");
-        for(CalendarEventEntry entry : entries)
+        CalendarEventEntry entry;
+        for( Iterator it = entries.iterator();it.hasNext();)
         {
+        	entry = (CalendarEventEntry) it.next();
             sbf.append("<event ");
             if(entry.getTimes().size()>0)
             {
@@ -109,8 +112,7 @@ public class GCalTimelineInit implements Initiator
             sbf.append("title=\""+entry.getTitle().getPlainText()+"\" >");
             String content = GCalUtil.lookupEntryContent(entry);
             if(content!=null)sbf.append(content.replace("<","&lt;"));
-            sbf.append("</event>");
-            //System.out.println();
+            sbf.append("</event>");        	
         }
         sbf.append("</data>");
         return sbf.toString();

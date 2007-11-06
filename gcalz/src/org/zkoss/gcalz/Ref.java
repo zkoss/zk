@@ -6,7 +6,7 @@
 *	Description:
 *		
 *	History:
-*	  2007/5/24 ¤U¤È 2:57:00, Created by Ian Tsai
+*	  2007/5/24 PM 2:57:00, Created by Ian Tsai
 * 
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
@@ -18,14 +18,14 @@ package org.zkoss.gcalz;
  * @author Ian Tsai
  * @date 2007/5/24
  */
-public class Ref<T>
+public class Ref
 {
-    public T ref;
+    public Object ref;
     /**
      * 
      * @param object
      */
-    public Ref(T object)
+    public Ref(Object object)
     {
         ref = object;
     }
@@ -38,7 +38,7 @@ public class Ref<T>
      * 
      * @return
      */
-    public T get()
+    public Object get()
     {
         return ref;
     }
@@ -47,7 +47,7 @@ public class Ref<T>
      * 
      * @return
      */
-    public void set(T object)
+    public void set(Object object)
     {
         ref = object;
     }
