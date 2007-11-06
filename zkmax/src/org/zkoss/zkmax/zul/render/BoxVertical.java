@@ -37,6 +37,7 @@ public class BoxVertical implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Box self = (Box) comp;
 		final String uuid = self.getUuid();
+		final String spacing = self.getSpacing();
 		String spscls = null, spstyle = null;
 
 		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.box.Box\"")
@@ -53,7 +54,6 @@ public class BoxVertical implements ComponentRenderer {
 				if (spscls == null) {
 					spscls = self.getSclass();
 					spscls = spscls == null || spscls.length() == 0 ? "vbox-sp": spscls + "-sp";
-					final String spacing = self.getSpacing();
 					if (spacing != null)
 						spstyle = "height:" + spacing;
 				}
@@ -61,7 +61,8 @@ public class BoxVertical implements ComponentRenderer {
 				wh.write("<tr id=\"").write(child.getUuid())
 					.write("!chdextr2\" class=\"").write(spscls).write("\"");
 
-				if (!child.isVisible()) {
+				//note: we have to hide if spacing is 0 since IE7 shows some space
+				if (!child.isVisible() || "0".equals(spacing) || "0px".equals(spacing)) {
 					wh.write(" style=\"display:none;");
 					if (spstyle != null) wh.write(spstyle);
 					wh.write("\"");
