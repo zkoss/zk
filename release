@@ -258,6 +258,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		cd ..
 		rm zkmax.jar
+		rm ../src/zkmax-sources.jar
 
 		cd /tmp/zk
 
@@ -275,6 +276,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		cd ..
 		rm zml.jar
 		rm zkex.jar
+		rm ../src/zml-sources.jar
+		rm ../src/zkex-sources.jar
 
 		cd zkforge
 		rm gmapsz.jar
