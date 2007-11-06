@@ -1014,8 +1014,8 @@ span.splitter-btn-b {
 }
 
 <%-- Splitter OS component--%>
-div.splitter-os-h, div.splitter-os-v, div.splitter-os-h-ns, div.splitter-os-v-ns, span.splitter-os-button-l, 
-	span.splitter-os-button-r, span.splitter-os-button-t ,span.splitter-os-button-b {
+div.splitter-os-h, div.splitter-os-v, div.splitter-os-h-ns, div.splitter-os-v-ns, span.splitter-os-btn-l, 
+	span.splitter-os-btn-r, span.splitter-os-btn-t ,span.splitter-os-btn-b {
     line-height:1px;
     font-size:1px;
 }
@@ -1034,11 +1034,11 @@ div.splitter-os-h-ns {
 div.splitter-os-v-ns {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.gif')}");
 }
-span.splitter-os-button-l:hover, span.splitter-os-button-r:hover, span.splitter-os-button-t:hover ,span.splitter-os-button-b:hover {
+span.splitter-os-btn-l:hover, span.splitter-os-btn-r:hover, span.splitter-os-btn-t:hover ,span.splitter-os-btn-b:hover {
 	opacity:1;
 }
 
-span.splitter-os-button-l, span.splitter-os-button-r, span.splitter-os-button-t ,span.splitter-os-button-b {
+span.splitter-os-btn-l, span.splitter-os-btn-r, span.splitter-os-btn-t ,span.splitter-os-btn-b {
 	filter:alpha(opacity=50);  <%-- IE --%>
 	opacity:0.5;  <%-- Moz + FF --%>	
 	background-repeat: no-repeat;
@@ -1046,20 +1046,20 @@ span.splitter-os-button-l, span.splitter-os-button-r, span.splitter-os-button-t 
 	display:inline-block;
 }
 
-span.splitter-os-button-l {
+span.splitter-os-btn-l {
 	width: 8px; min-height: 50px; height: 50px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
 }
-span.splitter-os-button-r {
+span.splitter-os-btn-r {
 	width: 8px; min-height: 50px; height: 50px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.gif')});
 }
-span.splitter-os-button-t {
+span.splitter-os-btn-t {
 	width: 50px; min-height: 8px; height: 8px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.gif')});
 
 }
-span.splitter-os-button-b {
+span.splitter-os-btn-b {
 	width: 50px; min-height: 8px; height: 8px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
 }
