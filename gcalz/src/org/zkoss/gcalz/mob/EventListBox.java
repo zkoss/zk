@@ -23,7 +23,6 @@ import java.util.List;
 import org.zkoss.gcalz.CalendarEvent;
 import org.zkoss.gcalz.ZCalendar;
 import org.zkoss.gcalz.Profiling;
-import org.zkoss.gcalz.ScheduleCollectionListener;
 import org.zkoss.gcalz.ZCalendarGImpl;
 import org.zkoss.mil.Listbox;
 import org.zkoss.mil.Listitem;

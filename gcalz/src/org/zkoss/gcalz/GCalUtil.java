@@ -149,9 +149,9 @@ public class GCalUtil
     }
 
     /**
-     * 
+     * look up google CalendarEventEntry object's event content.
      * @param entry
-     * @return
+     * @return if content is null return "".
      */
     public static String lookupEntryContent(CalendarEventEntry entry)
     {

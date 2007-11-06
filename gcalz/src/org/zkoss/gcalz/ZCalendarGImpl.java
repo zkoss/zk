@@ -95,7 +95,7 @@ public class ZCalendarGImpl implements ZCalendar
                         {
                             CalendarEventImpl event = null;
                             CalendarEventEntry entry ;
-                            for( Iterator it = query.invokeEventQuery(gcal).iterator();it.hasNext();)
+                            for( Iterator it = query.invoke(gcal).iterator();it.hasNext();)
                             {
                             	entry = (CalendarEventEntry)it.next();
                                 try

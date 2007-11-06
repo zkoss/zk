@@ -50,7 +50,6 @@ public class CalendarEventImpl implements  CalendarEvent
         content = GCalUtil.lookupEntryContent(entry);
         id = entry.getId();
     }
-    
     public String getContent()
     {
         return content;
@@ -75,9 +74,9 @@ public class CalendarEventImpl implements  CalendarEvent
 		return entry;
 	}
 
-
-
-
+	/**
+	 * 
+	 */
     public int hashCode()
     {
         final int PRIME = 31;
@@ -85,7 +84,10 @@ public class CalendarEventImpl implements  CalendarEvent
         result = PRIME * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
-
+    
+    /**
+     * 
+     */
     public boolean equals(Object obj)
     {
         if (this == obj)
@@ -103,8 +105,6 @@ public class CalendarEventImpl implements  CalendarEvent
             return false;
         return true;
     }
-
-
 
 
 

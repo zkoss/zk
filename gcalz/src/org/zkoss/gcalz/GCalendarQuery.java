@@ -49,14 +49,22 @@ public class GCalendarQuery
     public static final String START_MIN = "start-min=";
 
     
-
+    /**
+     * 
+     * @param o
+     * @return
+     */
     public static String caseOrderBy(OrderBy o)
     {
         if(o==null)return OrderBy.starttime.toString();
         return o.toString();
     }
     
-
+    /**
+     * 
+     * @param o
+     * @return
+     */
     public static String caseSortOrder(SortOrder o)
     {
         if(o==null)return SortOrder.descending.toString();
@@ -87,7 +95,7 @@ public class GCalendarQuery
     }
     /**
      * 
-     *
+     *clear all state of this guery.
      */
     public void clear()
     {
@@ -103,13 +111,13 @@ public class GCalendarQuery
     
     
     /**
-     * 
+     * invoke this guery, get back the event list
      * @param cal
      * @return
      * @throws IOException
      * @throws ServiceException
      */
-    public List invokeEventQuery(CalendarEntry calendar) 
+    public List invoke(CalendarEntry calendar) 
     throws IOException, ServiceException
     {
         StringBuffer feedUri = new StringBuffer(GCalUtil.findCalEventsLinkHref(calendar));
@@ -147,7 +155,7 @@ public class GCalendarQuery
         return GCalUtil.getEntries(feedUri.toString(), gCalServ, CalendarEventFeed.class);
     }
     /**
-     * 
+     * get the calendar events orderby attribute. 
      * @return
      */
     public OrderBy getOrderby()
@@ -155,7 +163,7 @@ public class GCalendarQuery
         return orderby;
     }
     /**
-     * 
+     * set the calendar events orderby attribute.
      * @param orderby
      * @return
      */
@@ -165,7 +173,7 @@ public class GCalendarQuery
         return this;
     }
     /**
-     * 
+     * get Recurrence Expansion End
      * @return
      */
     public Date getRecurrenceExpansionEnd()
@@ -173,7 +181,7 @@ public class GCalendarQuery
         return recurrenceExpansionEnd;
     }
     /**
-     * 
+     * set Recurrence Expansion End
      * @param recurrenceExpansionEnd
      * @return
      */
@@ -183,7 +191,7 @@ public class GCalendarQuery
         return this;
     }
     /**
-     * 
+     * get Recurrence Expansion Start
      * @return
      */
     public Date getRecurrenceExpansionStart()
@@ -191,7 +199,7 @@ public class GCalendarQuery
         return recurrenceExpansionStart;
     }
     /**
-     * 
+     * set Recurrence Expansion Start
      * @param recurrenceExpansionStart
      * @return
      */
@@ -201,7 +209,7 @@ public class GCalendarQuery
         return this;
     }
     /**
-     * 
+     * the condition to get back the event that is not occurrence in the mean time.
      * @return
      */
     public boolean isSingleEvents()
@@ -209,7 +217,7 @@ public class GCalendarQuery
         return singleEvents.booleanValue();
     }
     /**
-     * 
+     * set the condition to get back the event that is not occurrence in the mean time.
      * @param singleEvents
      * @return
      */
@@ -219,7 +227,7 @@ public class GCalendarQuery
         return this;
     }
     /**
-     * 
+     * get the condition to sort the searching result.
      * @return
      */
     public SortOrder getSortOrder()
