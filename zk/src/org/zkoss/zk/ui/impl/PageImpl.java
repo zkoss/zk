@@ -812,15 +812,18 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				_cacheable != null ?  _cacheable.booleanValue():
 					_desktop.getDevice().isCacheable();
 			if (!cacheable) {
-				if (exec.isExplorer() && !exec.isExplorer7()) {
-					//bug: IE6 has limitation upon what are specified
-					execCtrl.setHeader("Cache-Control", "no-cache");
-					execCtrl.setHeader("Pragma", "no-cache"); // bug 1520444
-				} else  {
-					execCtrl.setHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0,post-check=0,pre-check=0"); // bug 1520444
-					execCtrl.setHeader("Pragma", "no-cache,no-store"); // bug 1520444
-				}
-				execCtrl.setDateHeader("Expires", 0);
+				//Bug 1520444
+				execCtrl.setHeader("Pragma", "no-cache"); // bug 1520444
+				execCtrl.addHeader("Cache-Control", "no-cache");
+				execCtrl.addHeader("Cache-Control", "no-store");
+				//execCtrl.addHeader("Cache-Control", "private");
+				//execCtrl.addHeader("Cache-Control", "max-age=0");
+				//execCtrl.addHeader("Cache-Control", "s-maxage=0");
+				//execCtrl.addHeader("Cache-Control", "must-revalidate");
+				//execCtrl.addHeader("Cache-Control", "proxy-revalidate");
+				//execCtrl.addHeader("Cache-Control", "post-check=0");
+				//execCtrl.addHeader("Cache-Control", "pre-check=0");
+				execCtrl.setHeader("Expires", "-1");
 			}
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
 				//Don't use include. Otherwise, headers will be gone.
