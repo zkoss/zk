@@ -822,7 +822,9 @@ zk.Selectable.prototype = {
 						d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
 					
 					wd = d.style.width;
-					s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
+					if (zk.isVisible(d))
+						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
+					else s.style.display = "none";
 				} 			
 			}
 			if (this.foottbl && this.foottbl.rows.length)

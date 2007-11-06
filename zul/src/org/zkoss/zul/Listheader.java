@@ -361,6 +361,12 @@ public class Listheader extends HeaderElement {
 		return sb.insert(0, attrs).toString();
 	}
 
+	public boolean setVisible(boolean visible) {
+		final boolean vis = super.setVisible(visible);
+		invalidateWhole();
+		return vis;
+	}
+
 	/** Invalidates the whole box. */
 	protected void invalidateWhole() {
 		final Listbox box = getListbox();
