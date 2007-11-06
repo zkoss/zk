@@ -11,7 +11,7 @@
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
 */
-package org.zkoss.gcalz;
+package org.zkoss.gcalz.timeline;
 
 import org.zkforge.timeline.data.OccurEvent;
 

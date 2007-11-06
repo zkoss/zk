@@ -11,14 +11,20 @@
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
 */
-package org.zkoss.gcalz;
+package org.zkoss.gcalz.mob;
+
+import org.zkoss.gcalz.ZCalendar;
+
 /**
  * @author Ian Tsai
  * @date 2007/7/23
  */
 public interface ScheduleCollectionListener
 {
-    
+    /**
+     * 
+     * @param sch
+     */
     void update(ZCalendar sch);
         
 }// end of interface

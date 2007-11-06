@@ -11,7 +11,7 @@
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
 */
-package org.zkoss.gcalz;
+package org.zkoss.gcalz.timeline;
 
 import java.io.IOException;
 import java.util.Date;
@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.zkforge.timeline.data.OccurEvent;
+import org.zkoss.gcalz.GCalUtil;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;

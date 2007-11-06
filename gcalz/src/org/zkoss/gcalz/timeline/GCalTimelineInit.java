@@ -11,7 +11,7 @@
 *
 * Copyright (C) Potix Corporation.  2006~2007 All Rights Reserved.
 */
-package org.zkoss.gcalz;
+package org.zkoss.gcalz.timeline;
 
 
 import java.io.IOException;
@@ -23,6 +23,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.gcalz.GCalUtil;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.xml.XmlOutputFns;
 import org.zkoss.zk.ui.Executions;
