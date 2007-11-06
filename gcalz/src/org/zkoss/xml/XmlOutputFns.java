@@ -20,7 +20,6 @@ import org.zkoss.zk.ui.Executions;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/11
  */
 public class XmlOutputFns
 {
@@ -40,8 +39,8 @@ public class XmlOutputFns
     
     /**
      * 
-     * @param xmlContent
-     * @throws IOException 
+     * @param xmlContent the content of this xml output. 
+     * @throws IOException if forward failed.
      */
     public static void doForward( String xmlContent) throws IOException
     {

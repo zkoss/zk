@@ -14,7 +14,6 @@
 package org.zkoss.gcalz;
 /**
  * @author Ian Tsai
- * @date 2007/7/19
  */
 public class LazyLoader
 {
@@ -61,7 +60,7 @@ public class LazyLoader
     }
     /**
      * get the thread that
-     * @return
+     * @return a {@link Ref} object point to a thread used by this lazyloader.
      */
     public Ref getLoadingThreadRef()
     {

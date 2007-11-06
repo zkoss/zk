@@ -18,18 +18,14 @@ public class OrderBy
 	{
 		return key;
 	}
-	/**
-	 * 
-	 */
+
 	public int hashCode() {
 		final int PRIME = 31;
 		int result = 1;
 		result = PRIME * result + ((key == null) ? 0 : key.hashCode());
 		return result;
 	}
-	/**
-	 * 
-	 */
+
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

@@ -14,6 +14,7 @@
 package org.zkoss.gcalz.mob;
 
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,17 +26,16 @@ import java.util.Map;
 
 import org.zkoss.gcalz.*;
 
+
 import com.google.gdata.client.calendar.CalendarService;
 import com.google.gdata.data.calendar.CalendarEntry;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/18
  */
 public class MobileCalendarControl 
 {
     private List schList;
-    Profiling pro = new Profiling();
     private Date current;
     private CalendarService calendarService;
     private ZCalendar currentSch;
@@ -47,7 +47,7 @@ public class MobileCalendarControl
     
     /**
      * 
-     * @param date
+     * @param date the date of current time.
      */
     public MobileCalendarControl(Date date)
     {
@@ -66,12 +66,11 @@ public class MobileCalendarControl
     }
     /**
      * initial CalendarService, look up Meta User Calendars.
-     * @param username
-     * @param password
+     * @param username Google user name.
+     * @param password Google user password.
      */
     public boolean init(String username, String password)
     {
-        pro.start("init");
         boolean ans = false;
         calendarService=null;
         try
@@ -79,17 +78,14 @@ public class MobileCalendarControl
             if(ans = (calendarService = GCalUtil.createGCalService(username, password))!=null)
             {
                 schList = new ArrayList(8);
-                pro.start("lookupMetaUserCalendars");
                 CalendarEntry gcal;
                 for(Iterator it = GCalUtil.getMetaUserCalendars(calendarService).iterator();it.hasNext();)
                 {
                 	gcal = (CalendarEntry)it.next();
-                    pro.start("new Schedule");
                     ZCalendarGImpl sch = null;
                     if(gcal!=null)schList.add(sch = new ZCalendarGImpl(
                             new GCalendarQuery(calendarService), gcal));
                     if(sch!=null)sch.setModifer(modifer);
-                    pro.start("lookupMetaUserCalendars");
                 }
             }
         }
@@ -97,12 +93,11 @@ public class MobileCalendarControl
         {
             e.printStackTrace();
         }
-        pro.end();
         return ans; 
     }
     /**
      * 
-     * @param sch
+     * @param sch change the current displayed Calendar.
      */
     public void changeCurrentSchedule(ZCalendar sch)
     {
@@ -147,13 +142,19 @@ public class MobileCalendarControl
                     .setOrderby(OrderBy.starttime);
             }};
     }
-    
+    /**
+     * 
+     * select Today's calendar event.
+     */
     public void choseCalModeToday()
     {
         modifer = getDefultModifer();
         changeCurrentScheduleMode();
     }
-
+    /**
+     * 
+     * @param days select Today's calendar event.
+     */
     public void choseCalModeNextDays(final int days)
     {
         modifer = new CalendarQueryModifer(){
@@ -174,7 +175,10 @@ public class MobileCalendarControl
         };
         changeCurrentScheduleMode();
     }
-
+    /**
+     * 
+     *
+     */
     public void choseCalModeThisWeek()
     {
         modifer = new CalendarQueryModifer(){
@@ -197,7 +201,11 @@ public class MobileCalendarControl
         };
         changeCurrentScheduleMode();
     }
-    
+    /**
+     * 
+     * @param start the start date 
+     * @param end the end date 
+     */
     public void choseCalModeManual(final Date start, final Date end)
     {
         modifer = new CalendarQueryModifer(){
@@ -212,6 +220,7 @@ public class MobileCalendarControl
         };
         changeCurrentScheduleMode();
     }
+
     public void choseCalModeAll()
     {
         modifer = new CalendarQueryModifer(){
@@ -224,42 +233,60 @@ public class MobileCalendarControl
         };
         changeCurrentScheduleMode();
     }
-    
+    /**
+     * 
+     * @param key the key of {@link ScheduleCollectionListener}
+     * @param value a {@link ScheduleCollectionListener}
+     */
     public void addListener(String key, ScheduleCollectionListener value)
     {
         this.listenerStorage.put(key, value);
     }
-    
+    /**
+     * 
+     * @param key the key of {@link ScheduleCollectionListener}
+     */
     public void removeListener(String key)
     {
         this.listenerStorage.remove(key);
     }
     /**
      * 
-     * @return
+     * @return the current Meta Calendar list
      */
     public List getSchedules()
     {
         return schList;
     }
-
+    /**
+     * 
+     * @return the current date.
+     */
     public Date getCurrent()
     {
         return current;
     }
-    
+    /**
+     * 
+     * @return thetitle of this control
+     */
     public String getTitle()
     {
         SimpleDateFormat form = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         return "Entered on: "+form.format(current);
     }
-    
-
+    /**
+     * 
+     * @param current the current date.
+     */
     public void setCurrent(Date current)
     {
         this.current = current;
     }
-    
+    /**
+     * 
+     * @return current display schedule.
+     */
     public ZCalendar getCurrentSchedule()
     {
         return currentSch;

@@ -15,12 +15,16 @@ package org.zkoss.gcalz;
 
 import java.util.Date;
 
+import org.zkoss.zk.ui.IdSpace;
+
 import com.google.gdata.data.calendar.CalendarEventEntry;
 import com.google.gdata.data.extensions.When;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/18
+ * 
+ * An implementation to wrap Google calendar Event.
+ * 
  */
 public class CalendarEventImpl implements  CalendarEvent
 {
@@ -33,7 +37,7 @@ public class CalendarEventImpl implements  CalendarEvent
 
     /**
      * 
-     * @param entry
+     * @param entry google's {@link CalendarEventEntry}.
      */
     public CalendarEventImpl(CalendarEventEntry entry )
     {
@@ -74,9 +78,7 @@ public class CalendarEventImpl implements  CalendarEvent
 		return entry;
 	}
 
-	/**
-	 * 
-	 */
+
     public int hashCode()
     {
         final int PRIME = 31;
@@ -84,10 +86,7 @@ public class CalendarEventImpl implements  CalendarEvent
         result = PRIME * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
-    
-    /**
-     * 
-     */
+
     public boolean equals(Object obj)
     {
         if (this == obj)

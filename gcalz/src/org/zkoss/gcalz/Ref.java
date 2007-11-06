@@ -16,14 +16,13 @@ package org.zkoss.gcalz;
  * 
  * an easy ref to object
  * @author Ian Tsai
- * @date 2007/5/24
  */
 public class Ref
 {
     public Object ref;
     /**
      * 
-     * @param object
+     * @param object the object this ref pointed
      */
     public Ref(Object object)
     {
@@ -36,7 +35,7 @@ public class Ref
     public Ref(){}
     /**
      * 
-     * @return
+     * @return the object this ref pointed
      */
     public Object get()
     {
@@ -45,7 +44,7 @@ public class Ref
     
     /**
      * 
-     * @return
+     * @param object the pointed Object
      */
     public void set(Object object)
     {

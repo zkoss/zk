@@ -19,7 +19,6 @@ import com.google.gdata.data.calendar.CalendarEventEntry;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/13
  */
 public interface OccurEventConverter
 {

@@ -25,7 +25,9 @@ import com.google.gdata.util.ServiceException;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/19
+ * A query Object used to define Google Calendar Event data access parameters.
+ * 
+ * 
  */
 public class GCalendarQuery
 {
@@ -51,8 +53,8 @@ public class GCalendarQuery
     
     /**
      * 
-     * @param o
-     * @return
+     * @param o see {@link OrderBy}
+     * @return a String to represent this {@link OrderBy} object's value. 
      */
     public static String caseOrderBy(OrderBy o)
     {
@@ -62,8 +64,8 @@ public class GCalendarQuery
     
     /**
      * 
-     * @param o
-     * @return
+     * @param o see{@link SortOrder}
+     * @return a String to represent this {@link SortOrder} object's value. 
      */
     public static String caseSortOrder(SortOrder o)
     {
@@ -87,7 +89,7 @@ public class GCalendarQuery
     private CalendarService gCalServ;
     /**
      * 
-     * @param _gCalServ
+     * @param _gCalServ a Google Calendar service.
      */
     public GCalendarQuery(CalendarService _gCalServ)
     {
@@ -112,10 +114,10 @@ public class GCalendarQuery
     
     /**
      * invoke this guery, get back the event list
-     * @param cal
-     * @return
-     * @throws IOException
-     * @throws ServiceException
+     * @param calendar a Google's {@link CalendarEntry} Object.
+     * @return the events of the event query result.
+     * @throws IOException while the IO is brocken.
+     * @throws ServiceException while the service is down.
      */
     public List invoke(CalendarEntry calendar) 
     throws IOException, ServiceException
@@ -156,7 +158,7 @@ public class GCalendarQuery
     }
     /**
      * get the calendar events orderby attribute. 
-     * @return
+     * @return calendar events orderby attribute
      */
     public OrderBy getOrderby()
     {
@@ -164,8 +166,8 @@ public class GCalendarQuery
     }
     /**
      * set the calendar events orderby attribute.
-     * @param orderby
-     * @return
+     * @param orderby calendar events orderby attribute
+     * @return this GCalendarQuery
      */
     public GCalendarQuery setOrderby(OrderBy orderby)
     {
@@ -174,7 +176,7 @@ public class GCalendarQuery
     }
     /**
      * get Recurrence Expansion End
-     * @return
+     * @return  Recurrence Expansion End
      */
     public Date getRecurrenceExpansionEnd()
     {
@@ -183,7 +185,7 @@ public class GCalendarQuery
     /**
      * set Recurrence Expansion End
      * @param recurrenceExpansionEnd
-     * @return
+     * @return this GCalendarQuery
      */
     public GCalendarQuery setRecurrenceExpansionEnd(Date recurrenceExpansionEnd)
     {
@@ -192,7 +194,7 @@ public class GCalendarQuery
     }
     /**
      * get Recurrence Expansion Start
-     * @return
+     * @return Recurrence Expansion Start
      */
     public Date getRecurrenceExpansionStart()
     {
@@ -200,8 +202,8 @@ public class GCalendarQuery
     }
     /**
      * set Recurrence Expansion Start
-     * @param recurrenceExpansionStart
-     * @return
+     * @param recurrenceExpansionStart 
+     * @return this GCalendarQuery
      */
     public GCalendarQuery setRecurrenceExpansionStart(Date recurrenceExpansionStart)
     {
@@ -210,7 +212,7 @@ public class GCalendarQuery
     }
     /**
      * the condition to get back the event that is not occurrence in the mean time.
-     * @return
+     * @return true if the query searchs single events, false otherwise. 
      */
     public boolean isSingleEvents()
     {
@@ -218,8 +220,8 @@ public class GCalendarQuery
     }
     /**
      * set the condition to get back the event that is not occurrence in the mean time.
-     * @param singleEvents
-     * @return
+     * @param singleEvents true if the query searchs single events, false otherwise.
+     * @return this GCalendarQuery
      */
     public GCalendarQuery setSingleEvents(boolean singleEvents)
     {
@@ -228,7 +230,7 @@ public class GCalendarQuery
     }
     /**
      * get the condition to sort the searching result.
-     * @return
+     * @return the SortOrder condition.
      */
     public SortOrder getSortOrder()
     {
@@ -236,8 +238,8 @@ public class GCalendarQuery
     }
     /**
      * 
-     * @param sortOrder
-     * @return
+     * @param sortOrder the SortOrder condition.
+     * @return this GCalendarQuery
      */
     public GCalendarQuery setSortOrder(SortOrder sortOrder)
     {
@@ -246,16 +248,15 @@ public class GCalendarQuery
     }
     /**
      * 
-     * @return
+     * @return max start date.
      */
     public Date getStartMax()
     {
         return startMax;
     }
     /**
-     * 
-     * @param startMax
-     * @return
+     * @param startMax set the condition max start date.
+     * @return this GCalendarQuery
      */
     public GCalendarQuery setStartMax(Date startMax)
     {
@@ -264,7 +265,7 @@ public class GCalendarQuery
     }
     /**
      * 
-     * @return
+     * @return  the condition of the minimum start date.
      */
     public Date getStartMin()
     {
@@ -272,8 +273,8 @@ public class GCalendarQuery
     }
     /**
      * 
-     * @param startMin
-     * @return
+     * @param startMin the condition of the minimum start date.
+     * @return this GCalendarQuery
      */
     public GCalendarQuery setStartMin(Date startMin)
     {

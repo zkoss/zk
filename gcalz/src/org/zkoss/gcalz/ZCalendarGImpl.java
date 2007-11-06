@@ -26,7 +26,6 @@ import com.google.gdata.util.ServiceException;
 /**
  * An Google CalendarEventEntry's Container 
  * @author Ian Tsai
- * @date 2007/7/18
  */
 public class ZCalendarGImpl implements ZCalendar
 {
@@ -37,9 +36,8 @@ public class ZCalendarGImpl implements ZCalendar
     private CalendarQueryModifer modifer;
     /**
      * 
-     * @param _manager
-     * @throws ServiceException 
-     * @throws IOException 
+     * @param _query a {@link GCalendarQuery}
+     * @param _gcal a {@link CalendarEntry}
      */
     public ZCalendarGImpl(GCalendarQuery _query, CalendarEntry _gcal) 
     {
@@ -47,8 +45,8 @@ public class ZCalendarGImpl implements ZCalendar
         query = _query;
     }
     /**
-     * lazyloading technic 
-     * @return
+     * lazyloading the target Events. 
+     * @return get a list of Calendar Event.
      */
     public List getEvents()
     {
@@ -57,25 +55,21 @@ public class ZCalendarGImpl implements ZCalendar
     }
     /**
      * 
-     * @return the schedule title.
+     * @return the event's title.
      */
     public String getTitle()
     {
         return gcal.getTitle().getPlainText();
     }
-    /**
-     * 
-     */
+
     private void refresh()
     {
         if(thread.get()!=null&&((Thread)thread.get()).isAlive())return;
         all = loadScheduleEvents();
     }
 
-    
-    /**
+    /*
      * lazy load CalendarEventEntry for each Google Calendar's calendarEventEntries
-     * @return
      */
     private Ref loadScheduleEvents()
     {

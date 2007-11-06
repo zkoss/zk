@@ -13,6 +13,7 @@
 */
 package org.zkoss.gcalz.mob;
 
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,15 +23,13 @@ import java.util.List;
 
 import org.zkoss.gcalz.CalendarEvent;
 import org.zkoss.gcalz.ZCalendar;
-import org.zkoss.gcalz.Profiling;
-import org.zkoss.gcalz.ZCalendarGImpl;
 import org.zkoss.mil.Listbox;
 import org.zkoss.mil.Listitem;
 import org.zkoss.zk.ui.event.SelectEvent;
 
+
 /**
  * @author Ian Tsai
- * @date 2007/7/19
  */
 public class EventListBox extends Listbox
 {
@@ -42,17 +41,16 @@ public class EventListBox extends Listbox
     private String crossdaypasticon ;
     private String crossdayfutureicon ;
     private String crossdayworkingicon ;
-    Profiling pro = new Profiling();
     private List itemList = new LinkedList();
     MobileCalendarControl control;
     
     /**
-     * 
-     * @param _control
+     * initialize this component. 
+     * @param ctrl a {@link MobileCalendarControl}
      */
-    public void initControl(MobileCalendarControl _control)
+    public void initControl(MobileCalendarControl ctrl)
     {
-        control = _control;
+        control = ctrl;
         control.addListener(this.toString(), 
         		new ScheduleCollectionListener(){
             public void update(ZCalendar sch)
@@ -65,11 +63,10 @@ public class EventListBox extends Listbox
     
     /**
      * 
-     * @param schedule
+     * @param _schedule a {@link ZCalendar}
      */
     public void loadSchedule(ZCalendar _schedule)
     {
-        pro.start("loadSchedule");
         try
         {
             removeAllListitems();
@@ -91,14 +88,13 @@ public class EventListBox extends Listbox
         {
             e.printStackTrace();
         }
-        pro.end();
     }
 
     private SimpleDateFormat dateFormatter;
     private String dateFormat = "HH:mm";
     /**
      * 
-     * @param sEvent
+     * @param sEvent a {@link SelectEvent}
      */
     public void onSelect(SelectEvent sEvent)
     {
@@ -111,8 +107,8 @@ public class EventListBox extends Listbox
     }
     /**
      * 
-     * @param event
-     * @return
+     * @param event a {@link CalendarEvent}
+     * @return Info about this {@link CalendarEvent}
      */
     private String getCurrentEventInfo(CalendarEvent event)
     {
@@ -154,10 +150,10 @@ public class EventListBox extends Listbox
         }
         itemList.clear();
     }
-    /**
+    /*
      * 
-     * @param event
-     * @return
+     * @param event {@link CalendarEvent}
+     * @return 
      */
     private Listitem createNewItem(CalendarEvent event)
     {
@@ -197,7 +193,7 @@ public class EventListBox extends Listbox
     public static final int FUTURE = 1;
     public static final int PAST = -1;
     public static final int WORKING = 0;
-    public int justify(CalendarEvent event, Date current)
+    private static int justify(CalendarEvent event, Date current)
     {
         if(event.getEndDate().before(current))return PAST;//past
         else if(event.getStartDate().after(current))return FUTURE;//future

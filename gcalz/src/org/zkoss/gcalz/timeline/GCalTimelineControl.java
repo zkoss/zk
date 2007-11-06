@@ -36,7 +36,6 @@ import com.google.gdata.util.ServiceException;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/11
  */
 public class GCalTimelineControl
 {
@@ -141,7 +140,7 @@ public class GCalTimelineControl
 
     /**
      * get the monitored Timeline model.
-     * @return
+     * @return the monitored Timeline model.
      */
     public ListModel getTimelineModel()
     {
@@ -150,7 +149,7 @@ public class GCalTimelineControl
 
     /**
      * get Future Icon's Url.
-     * @return
+     * @return Future Icon's Url.
      */
     public String getFutureIconUrl()
     {
@@ -158,7 +157,7 @@ public class GCalTimelineControl
     }
     /**
      * set Future Icon's Url.
-     * @param futureIconUrl
+     * @param futureIconUrl the Future Icon's Url.
      */
     public void setFutureIconUrl(String futureIconUrl)
     {
@@ -166,7 +165,7 @@ public class GCalTimelineControl
     }
     /**
      * get Past Icon's Url.
-     * @return
+     * @return the Past Icon's Url.
      */
     public String getPastIconUrl()
     {
@@ -174,7 +173,7 @@ public class GCalTimelineControl
     }
     /**
      * set Past Icon's Url.
-     * @param pastIconUrl
+     * @param pastIconUrl the past Icon's Url.
      */
     public void setPastIconUrl(String pastIconUrl)
     {
@@ -182,7 +181,7 @@ public class GCalTimelineControl
     }
     /**
      * get timeline Image Url
-     * @return
+     * @return The timeline Image Url
      */
     public String getImageUrl()
     {
@@ -190,7 +189,7 @@ public class GCalTimelineControl
     }
     /**
      * set timeline Image Url
-     * @param imageUrl
+     * @param imageUrl The timeline Image Url
      */
     public void setImageUrl(String imageUrl)
     {
@@ -198,7 +197,7 @@ public class GCalTimelineControl
     }
     /**
      * get timeline font color
-     * @return
+     * @return The timeline font color
      */
     public String getColor()
     {
@@ -206,7 +205,7 @@ public class GCalTimelineControl
     }
     /**
      *  set timeline font color
-     * @param color
+     * @param color The timeline font color
      */
     public void setColor(String color)
     {
@@ -215,7 +214,7 @@ public class GCalTimelineControl
 
     /**
      * get timeline Working icon Url
-     * @return
+     * @return The timeline Working icon Url
      */
     public String getWorkingIconUrl()
     {
@@ -224,7 +223,7 @@ public class GCalTimelineControl
 
     /**
      * set timeline Working icon Url
-     * @param workingIconUrl
+     * @param workingIconUrl The timeline Working icon Url
      */
     public void setWorkingIconUrl(String workingIconUrl)
     {

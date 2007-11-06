@@ -13,12 +13,12 @@
 */
 package org.zkoss.gcalz.mob;
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.zkoss.gcalz.Profiling;
 import org.zkoss.gcalz.ZCalendar;
 import org.zkoss.mil.Listbox;
 import org.zkoss.mil.Listitem;
@@ -27,51 +27,47 @@ import org.zkoss.zk.ui.event.SelectEvent;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/19
  */
 public class CalendarListBox extends Listbox
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = -311840486586481230L;
 
-    Profiling pro = new Profiling();
     private List listItemList = new ArrayList(10);
     private String dateFormat = "yy/MM/dd HH:mm";
     private SimpleDateFormat formatter;
     MobileCalendarControl control;
 
     /**
-     * 
-     * @param cals
+     * initialize this component. 
+     * @param ctrl a {@link MobileCalendarControl}
      */
-    public void initControl(final MobileCalendarControl con)
+    public void initControl(final MobileCalendarControl ctrl)
     {
-        if(con==null)return;
-        control = con;
-        pro.start("setCalendars");
+        if(ctrl==null)return;
+        control = ctrl;
         if(formatter==null)formatter = new SimpleDateFormat(dateFormat);
-        for(Iterator it = con.getSchedules().iterator();it.hasNext();)
+        for(Iterator it = ctrl.getSchedules().iterator();it.hasNext();)
         	createNewItem((ZCalendar)it.next()).setParent(this);
         	
-        if(con.getSchedules().size()>0)
+        if(ctrl.getSchedules().size()>0)
         {
-            this.setSelectedIndex(con.getSchedules().size()-1);
+            this.setSelectedIndex(ctrl.getSchedules().size()-1);
             ZCalendar sch = (ZCalendar) getSelectedItem().getValue();
-            con.changeCurrentSchedule(sch);
+            ctrl.changeCurrentSchedule(sch);
             this.setLabel(sch.getModifer()+":");
         }
-        pro.end();
     }
-    
+    /**
+     * 
+     * @param event while receiving a command from mobile.
+     */
     public void onCommand(CommandEvent event)
     {
     	ZCalendar sch = (ZCalendar) getSelectedItem().getValue();
         this.setLabel(sch.getModifer()+":");
         getSelectedItem().setLabel(sch.getTitle()+"("+sch.getEvents().size()+")");
     }
-    /**
+    /*
      * 
      * @param sch
      * @return
@@ -87,17 +83,15 @@ public class CalendarListBox extends Listbox
     }
     /**
      * 
-     * @param sEvent
+     * @param sEvent while selected this listbox's item. 
      */
     public void onSelect(SelectEvent sEvent)
     {
-        pro.start("onSelect");
         Listitem item = getSelectedItem();
         ZCalendar sch = (ZCalendar)item.getValue();
         control.changeCurrentSchedule(sch);
         item.setLabel(sch.getTitle()+"("+sch.getEvents().size()+")");
         this.setLabel(sch.getModifer()+":");
-        pro.end();
     }
     
     public void setSelectedItem(Listitem item)
@@ -114,12 +108,18 @@ public class CalendarListBox extends Listbox
     {
         super.setSelectedIndex(jsel);
     }
-
+    /**
+     * 
+     * @return the date format
+     */
     public String getDateFormat()
     {
         return dateFormat;
     }
-
+    /**
+     * 
+     * @param dateFormate the date format
+     */
     public void setDateFormat(String dateFormate)
     {
         this.dateFormat = dateFormate;

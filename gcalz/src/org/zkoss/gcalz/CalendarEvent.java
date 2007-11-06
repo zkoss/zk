@@ -12,28 +12,28 @@ import java.util.Date;
 public interface CalendarEvent 
 {
 	/**
-	 * The text content of the event.
-	 * @return
+	 * 
+	 * @return The text content of the event.
 	 */
 	String getContent();
 	/**
-	 * The title of the event.
-	 * @return
+	 * 
+	 * @return The title of the event.
 	 */
 	String getTitle();
 	/**
-	 * end date of this event.
-	 * @return
+	 * 
+	 * @return end date of this event.
 	 */
 	Date getEndDate() ;
 	/**
-	 * start date of this event.
-	 * @return
+	 * 
+	 * @return start date of this event.
 	 */
 	Date getStartDate();
 	/**
-	 * get native Calendar Object.
-	 * @return
+	 * 
+	 * @return native Calendar Object.
 	 */
 	Object getNative();
 	

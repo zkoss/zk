@@ -34,7 +34,6 @@ import com.google.gdata.util.ServiceException;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/11
  */
 public class GCalUtil
 {
@@ -44,10 +43,10 @@ public class GCalUtil
     
     /**
      * GET meta user calendars use defult URL "http://www.google.com/calendar/feeds/default".
-     * @param service
-     * @return
-     * @throws IOException
-     * @throws ServiceException
+     * @param service a Google Calendar service object.
+     * @return a list of meta Calendar entries
+     * @throws IOException throw if HTTP connection error
+     * @throws ServiceException if Service object has error.
      */
     public static List getMetaUserCalendars(CalendarService service) 
     throws IOException, ServiceException
@@ -57,10 +56,10 @@ public class GCalUtil
     /**
      * Use username + password to connect to Google Calendar Service and getback  user's calendars.
      * @param username the email address of your Google account
-     * @param Password
-     * @return
-     * @throws IOException
-     * @throws ServiceException
+     * @param password the password of your Google account
+     * @return a list of meta Calendar entries
+     * @throws IOException throw if HTTP connection error
+     * @throws ServiceException if Service object has error.
      */
     public static List getMetaUserCalendars(String username, String password) 
     throws IOException, ServiceException
@@ -73,10 +72,10 @@ public class GCalUtil
      * A fast method to GET event list from user's main calendar. <br>
      * Query URL is like this: "http://www.google.com/calendar/feeds/" + username + "/private/full"
      * @param username the email address of your Google account
-     * @param password
-     * @return
-     * @throws IOException
-     * @throws ServiceException
+     * @param password the password of your Google account
+     * @return a list of Calendar entry events.
+     * @throws IOException throw if HTTP connection error
+     * @throws ServiceException throw if Service object has error.
      */
     public static List getQuickMainCalendarEvents(String username, String password) 
     throws IOException, ServiceException
@@ -86,11 +85,11 @@ public class GCalUtil
     }
     /**
      * Use a calendar uri to query it's detail events.
-     * @param targetCalUri 
-     * @param service
-     * @return
-     * @throws IOException
-     * @throws ServiceException
+     * @param targetCalUri the target calendar url.
+     * @param service Google {@link CalendarService} Object.
+     * @return a list of {@link CalendarEventEntry}
+     * @throws IOException throws if HTTP connection error
+     * @throws ServiceException throws if Service object has error.
      */
     public static List getAllEvents(String targetCalUri, CalendarService service) 
     throws IOException, ServiceException
@@ -99,12 +98,12 @@ public class GCalUtil
     }
     /**
      * Generic type query in Google Base Data API
-     * @param feedUri
-     * @param service
-     * @param clazz
-     * @return
-     * @throws IOException
-     * @throws ServiceException
+     * @param feedUri the target calendar url.
+     * @param service  Google {@link CalendarService} Object.
+     * @param clazz Google Data Object's class.
+     * @return a list of entries represent Google data set.
+     * @throws IOException  throws if HTTP connection error
+     * @throws ServiceException throws if Service object has error.
      */
     public static List
     getEntries(String feedUri, CalendarService service, Class clazz)
@@ -118,10 +117,10 @@ public class GCalUtil
     
     /**
      * Use username & password to create an Authened Service to connect to Google server. 
-     * @param username the email address of your Google account
-     * @param password
-     * @return
-     * @throws AuthenticationException 
+     * @param username the email address of your Google account.
+     * @param password the password of your Google account.
+     * @return a {@link CalendarService} Object instance.
+     * @throws AuthenticationException  if authentication is failed.
      */
     public static CalendarService createGCalService(String username, String password) 
     throws AuthenticationException
@@ -133,8 +132,8 @@ public class GCalUtil
 
     /**
      * By profiling CalendarEntry Object
-     * @param links
-     * @return URL to get back this calendar's evnet details.
+     * @param cal A Google {@link CalendarEntry} reprensent a Clendar entry in your Google calendar.
+     * @return A URL to this calendar's evnet RSS Service. nuul if "alternate" can't be finded.
      */
     public static String findCalEventsLinkHref(CalendarEntry cal)
     {
@@ -150,7 +149,7 @@ public class GCalUtil
 
     /**
      * look up google CalendarEventEntry object's event content.
-     * @param entry
+     * @param entry a {@link CalendarEventEntry} Object.
      * @return if content is null return "".
      */
     public static String lookupEntryContent(CalendarEventEntry entry)

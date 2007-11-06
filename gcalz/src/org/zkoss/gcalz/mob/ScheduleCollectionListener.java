@@ -17,7 +17,6 @@ import org.zkoss.gcalz.ZCalendar;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/23
  */
 public interface ScheduleCollectionListener
 {

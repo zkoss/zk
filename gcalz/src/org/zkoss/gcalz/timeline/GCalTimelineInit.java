@@ -38,7 +38,6 @@ import com.google.gdata.util.ServiceException;
 
 /**
  * @author Ian Tsai
- * @date 2007/7/11
  */
 public class GCalTimelineInit implements Initiator
 {
@@ -57,11 +56,12 @@ public class GCalTimelineInit implements Initiator
 
     }
     /**
+     * 
      * get username & password from request to guery Google service.<br>
      * if they are all exist, publish it as a MIT timeline Service.<br> 
      * 
-     * @param user Google service's user, get it from request parameters by "user".
-     * @param password Google user's password,  get it from request parameters by "pwd".
+     *  user: Google service's user, get it from request parameters by "user".
+     *  password: Google user's password,  get it from request parameters by "pwd".
      * 
      */
     public void doInit(Page page, Object[] args) throws Exception
@@ -74,7 +74,7 @@ public class GCalTimelineInit implements Initiator
         if(user!=null && password!=null)publish(user, password);
         else XmlOutputFns.doForward("<?xml version=\"1.0\" encoding=\"UTF-8\"?><data></data>");
     }
-    /**
+    /*
      * 
      * @throws IOException
      */
@@ -92,7 +92,7 @@ public class GCalTimelineInit implements Initiator
         XmlOutputFns.doForward(content);
     }
     
-    /**
+    /*
      * 
      * @param entries
      * @return
