@@ -1,34 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
-<title/>
-<subtitle>Version 3.0.0 RC2</subtitle>
+<title>ZK Developer's Reference</title>
+<subtitle>Version 3.0</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
-<para>
-<graphic fileref="">2
-			
-		</graphic>
-</para>
-<para>SIMPLY RICH</para>
-<para>ZKTM</para>
-<para>The Developer's Reference</para>
-<para>Version 3.0.0</para>
-<para>November 2007</para>
-<para>Potix Corporation</para>
-<para>Revision 79</para>
-<para/>
-<para/>
-<para>Copyright © Potix Corporation. All rights reserved.</para>
-<para>The material in this document is for information only and is subject to change without notice. While reasonable efforts have been made to assure its accuracy, Potix Corporation assumes no liability resulting from errors or omissions in this document, or from the use of the information contained herein.</para>
-<para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
-<para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
-<para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
-<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para>
+
 <chapter>
 <title>1. Introduction</title>
 <para>Welcome to ZK, the simplest way to make Web applications rich.</para>
@@ -94,8 +75,7 @@
 <para>Similarly, you could use the following definition to use OK as the default label for all buttons specified in this page.</para>
 <programlisting>&lt;?component name="button" extend="true" label="OK"?&gt;&#13;</programlisting>
 <para>Notice that the properties won't be applied if a component is created manually (by zscript or by Java codes). If you still want them to be applied with the initialial properties, you could invoke the applyProperties method as follows.</para>
-<programlisting>&lt;zscript&gt;&#13;    Button btn = new Button();    &#13;    btn.applyProperties(); //apply the initial properties    &#13;</programlisting>
-<para>&lt;/zscript&gt;</para></sect3><sect3><title>class</title>
+<para>&lt;zscript&gt;Button btn = new Button();btn.applyProperties(); //apply the initial properties&lt;/zscript&gt;</para></sect3><sect3><title>class</title>
 <para>[Optional]</para>
 <para>Used to specify the class to instantiate an instance of such kind of components. Unlike other directives, the class can be defined with zscript.</para></sect3><sect3><title>extend</title>
 <para>[Optional]</para>
@@ -182,14 +162,13 @@
 </row></tbody></tgroup>
 </informaltable>
 <para>You can provide additional implementations by use of the class attribute, as described in the following section. The class must implement the org.zkoss.xel.ExpressionFactory interface. Or, you can specify the following content in metainfo/xel/config.xml.</para>
-<programlisting>                        &lt;config&gt;&lt;xel-config&gt;&lt;evaluator-name&gt;Super&lt;/evaluator-name&gt;&lt;!-- case insensitive --&gt;&lt;evaluator-class&gt;my.SuperEvaluator&lt;/evaluator-class&gt;&lt;/xel-config&gt;&lt;/config&gt;                        &#13;</programlisting></sect3><sect3><title>class</title>
+<programlisting>&lt;config&gt;&#13;    &lt;xel-config&gt;    &#13;        &lt;evaluator-name&gt;Super&lt;/evaluator-name&gt;&lt;!-- case insensitive --&gt;        &#13;        &lt;evaluator-class&gt;my.SuperEvaluator&lt;/evaluator-class&gt;        &#13;    &lt;/xel-config&gt;    &#13;&lt;/config&gt;&#13;</programlisting></sect3><sect3><title>class</title>
 <para>[Optional][Default: dependind on how xel-config is specified]</para>
 <para>The implementation used to evaluate the XEL expressions. In addition to the name attribute, you can specify the class directly. For example, you can use MVEL by specifying class as follows.</para>
 <programlisting>&lt;?evaluator class="org.zkoss.zkmax.xel.mvel.MVELFactory"?&gt;&#13;&lt;window id="w" title="MVEL Demo"&gt;&#13;    ${new org.zkoss.zul.Textbox().setParent(w)}    &#13;&lt;/window&gt;&#13;</programlisting></sect3><sect3><title>import</title>
 <para>[Optiona][Default: what are defined in taglib]</para>
 <para>Specifies a list of classes separated with comma to import for evaluating the expression in this page. For example, with MVEL:</para>
-<programlisting>&lt;?evaluator class="org.zkoss.zkmax.xel.mvel.MVELFactory"&#13;import="org.zkoss.zul.Datebox,org.zkoss.zul.Combobox"?&gt;&#13;&lt;window id="w" title="MVEL Demo"&gt;&#13;    ${new Datebox().setParent(w)}    &#13;</programlisting>
-<para>&lt;/window&gt;</para>
+<programlisting>&lt;?evaluator class="org.zkoss.zkmax.xel.mvel.MVELFactory"&#13;import="org.zkoss.zul.Datebox,org.zkoss.zul.Combobox"?&gt;&#13;&lt;window id="w" title="MVEL Demo"&gt;&#13;    ${new Datebox().setParent(w)}    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Notice that not all evaluators support the import of classes. For example, all EL-based the evaluators, including the system default one, don't support it. In other words, the import attribute is meaningless to them. Rather, you have to use the taglib directive to import functions.</para></sect3></sect2><sect2><title>The import Directive</title>
 <para>&lt;?import uri="..."?&gt;</para>
 <para>It imports the component definitions and initiators defined in another ZUML page. In other words, it imports the component and init directives from the specified page.</para>
@@ -316,7 +295,7 @@
 <para>It defines a XML attribute of the enclosing element. The content of the element is the attribute value, while the name attribute specifies the attribute name. It is useful if the value of an attribute is sophisticated, or the attribute is conditional.</para>
 <programlisting>&lt;button label="Hi"&gt;&#13;&lt;attribute name="onClick"&gt;alert("Hi")&lt;/attribute&gt;&#13;&lt;/button&gt;&#13;</programlisting>
 <para>It is equivalent to</para>
-<para>&lt;button label="Hi" onClick="alert(&amp;quot;Hi&amp;quot;)"/&gt;</para>
+<programlisting>&lt;button label="Hi" onClick="alert(&amp;quot;Hi&amp;quot;)"/&gt;&#13;</programlisting>
 <para>Another example:</para>
 <programlisting>&lt;button&gt;&#13;&lt;attribute name="label" if="${param.happy}"&gt;Hello World!&lt;/attribute&gt;&#13;&lt;/button&gt;&#13;</programlisting><sect3><title>name</title>
 <para>[Required]</para>
@@ -348,9 +327,7 @@
 <para>Specifies the condition not to evaluate this element. This element is ignored if the value specified to this attribute is evaluated to true.</para></sect3></sect2><sect2><title>The zk Element</title>
 <para>&lt;zk&gt;...&lt;/zk&gt;</para>
 <para>It is a special element used to aggregate other components. Unlike a real component (say, hbox or div), it is not part of the component tree being created. In other words, it doesn't represent any component. For example,</para>
-<programlisting>&lt;window&gt;&#13;    &lt;zk&gt;    &#13;                &lt;textbox/&gt;&lt;textbox/&gt;                &#13;</programlisting>
-<para>&lt;/zk&gt;</para>
-<para>&lt;/window&gt;</para>
+<para>&lt;window&gt;&lt;zk&gt;&lt;textbox/&gt;&lt;textbox/&gt;&lt;/zk&gt;&lt;/window&gt;</para>
 <para>is equivalent to</para>
 <programlisting>&lt;window&gt;&#13;        &lt;textbox/&gt;&lt;textbox/&gt;        &#13;&lt;/window&gt;&#13;</programlisting>
 <para>The main use is to represent multiple root elements in XML format.</para>
@@ -430,7 +407,7 @@
 <para>For each iteration, two variables, each and forEachStatus, are assigned automatically to let developers control how to evaluate the associated element.</para>
 <programlisting>&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;classes = new String[] {"College", "Graduate"};&#13;grades = new Object[] {&#13;new String[] {"Best", "Better"}, new String[] {"A++", "A+", "A"}&#13;};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="200px" forEach="${classes}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="${each}"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem label="${forEachStatus.previous.each}: ${each}"&#13;forEach="${grades[forEachStatus.index]}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/hbox&gt;&#13;</programlisting>
 <para>
-<graphic fileref="">2
+<graphic fileref="images/foreach-example.PNG">2
 			
 		</graphic>
 </para></sect2><sect2><title>The forEachBegin Attribute</title>
@@ -447,7 +424,7 @@
 <para>It is used to forward an event, that is targeting a specific component, to another component in another event name. It is called the forward condition.</para>
 <para>The original event is optional. If it is omitted, onClick is assumed. Similarly, the target ID is also optional. If omitted, the space owner is assumed.</para>
 <para>If you want to forward several events, you can specify these conditions in the forward attribute by separating them with the comma (,):</para>
-<para>&lt;textbox forward="onChanging=onUpdating, onChange=some.onUpdate"/&gt;</para></sect2><sect2><title>The fulfill Attribute</title>
+<programlisting>&lt;textbox forward="onChanging=onUpdating, onChange=some.onUpdate"/&gt;&#13;</programlisting></sect2><sect2><title>The fulfill Attribute</title>
 <para>fulfill="event-name"fulfill="target-id.event-name"fulfill="id1/id2/id3.event-name"fulfill="${el-expr}.event-name"</para>
 <para>It is used to specify when to create the child components. By default (i.e., fulfill is not specified), the child components are created right after its parent component, at the time the ZUML page is loaded.</para>
 <para>If you want to defer the creation of the child components, you can specify the condition with the fulfill attribute. The condition consists of the event name and, optionally, the target component's identifier or path. It means that the child elements won't be processed, until the event is received by, if specified, the target component. If the identifier is omitted, the same component is assumed.</para>
@@ -988,8 +965,7 @@
 </entry>
 <entry>
 <para>
-<code>org.zkoss.zk.ui.metainfo.</code>
-<code>ZScript</code>
+<code>org.zkoss.zk.ui.metainfo.ZScript</code>
 </para>
 </entry>
 </row>
@@ -1020,8 +996,7 @@
 <entry>
 <para>
 <code>org.zkoss.zk.ui</code>
-<code>.</code>
-<code>Component</code>
+<code>.Component</code>
 </para>
 </entry>
 </row>
@@ -1037,8 +1012,7 @@
 <entry>
 <para>
 <code>org.zkoss.zk.ui</code>
-<code>.</code>
-<code>Component</code>
+<code>.Component</code>
 </para>
 </entry>
 </row>
@@ -1113,8 +1087,7 @@
 </entry>
 <entry>
 <para>
-<code>org.zkoss.zk.ui.</code>
-<code>Component </code>
+<code>org.zkoss.zk.ui.Component </code>
 </para>
 </entry>
 </row>
@@ -1129,8 +1102,7 @@
 </entry>
 <entry>
 <para>
-<code>org.zkoss.zk.ui.</code>
-<code>Component </code>
+<code>org.zkoss.zk.ui.Component </code>
 </para>
 </entry>
 </row>
@@ -1145,8 +1117,7 @@
 </entry>
 <entry>
 <para>
-<code>org.zkoss.zk.ui.</code>
-<code>IdSpace </code>
+<code>org.zkoss.zk.ui.IdSpace </code>
 </para>
 </entry>
 </row>
@@ -1296,8 +1267,7 @@
 </entry>
 <entry>
 <para>
-<code>org.zkoss.zk.ui.</code>
-<code>WrongValueException </code>
+<code>org.zkoss.zk.ui.WrongValueException </code>
 </para>
 </entry>
 </row>
@@ -1588,7 +1558,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="FormatInputElement"><title>FormatInputElement</title>
+<para/></sect3></sect2><sect2 id="FormatInputElement"><title>FormatInputElement</title>
 <para>A skeletal implementation for an input box with format. . </para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.FormatInputElement</code>
@@ -2034,6 +2004,11 @@
 <code>org.zkoss.zk.ui.event.DropEvent</code>
 </link>
 </para>
+<para>
+<link linkend="DropEvent">
+<code/>
+</link>
+</para>
 <para>Description: Represents an event cause by user's dragging and dropping a component.</para>
 </entry>
 </row></tbody></tgroup>
@@ -2448,7 +2423,27 @@
 <entry>
 <para>0</para>
 </entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
 </row>
+</thead><tbody>
 <row>
 <entry>
 <para>
@@ -2791,7 +2786,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title>Methods</title>
+</informaltable></sect3><sect3><title/>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -2902,7 +2898,7 @@
 <row>
 <entry>
 <para>
-<code>OnOpen</code>
+<code>onOpen</code>
 </para>
 </entry>
 <entry>
@@ -3544,10 +3540,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/>
-<para>
-<link linkend="NumberInputElement"/>
-</para></sect3></sect2></sect1><sect1><title>Components</title><sect2 id="Audio"><title>Audio</title>
+<para/></sect3></sect2></sect1><sect1><title>Components</title><sect2 id="Audio"><title>Audio</title>
 <para>An <code>audio</code> component is used to play the audio at the browser. Like <code>image</code>, you could use the <code>src</code> property to specify an URL of an audio resource, or the <code>setContent</code> method to specify a dynamically generated audio.</para>
 <para>Depending on the browser and the <code>audio</code> plugin, developers might be able to control the play of an audio by the <code>play</code>, <code>stop</code> and <code>pause</code> methods. Currently, Internet Explorer with Media Player is capable of such controls.</para>
 <para>
@@ -3688,9 +3681,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable>
-<para/>
-<para/></sect3><sect3><title>Methods</title>
+</informaltable></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -3758,7 +3749,7 @@
 <para>void</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -3785,6 +3776,923 @@
 <entry>
 <para>
 <link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2 id="Auxhead"><title>Auxhead</title>
+<para>Used to define a collection of auxiliary headers (<code>Auxheader</code>).</para>
+<para>
+<graphic fileref="images/auxheader.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;grid&gt;&#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="H1'07" colspan="6"/&gt;        &#13;        &lt;auxheader label="H2'07" colspan="6"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="Q1" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q2" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q3" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q4" colspan="3"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;columns&gt;    &#13;        &lt;column label="Jan"/&gt;&lt;column label="Feb"/&gt;&lt;column label="Mar"/&gt;        &#13;        &lt;column label="Apr"/&gt;&lt;column label="May"/&gt;&lt;column label="Jun"/&gt;        &#13;        &lt;column label="Jul"/&gt;&lt;column label="Aug"/&gt;&lt;column label="Sep"/&gt;        &#13;        &lt;column label="Oct"/&gt;&lt;column label="Nov"/&gt;&lt;column label="Dec"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;        &lt;label value="1,000"/&gt;&lt;label value="1,100"/&gt;&lt;label value="1,200"/&gt;        &#13;        &lt;label value="1,300"/&gt;&lt;label value="1,400"/&gt;&lt;label value="1,500"/&gt;        &#13;        &lt;label value="1,600"/&gt;&lt;label value="1,700"/&gt;&lt;label value="1,800"/&gt;        &#13;        &lt;label value="1,900"/&gt;&lt;label value="2,000"/&gt;&lt;label value="2,100"/&gt;        &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;</programlisting>
+<para>&lt;/grid&gt;</para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Auxhead</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<code> </code>
+<link linkend="Auxheader">
+<code>Auxheader</code>
+</link>
+</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties</title>
+<para> *NONE</para>
+<para>Methods</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.impl.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Auxheader"><title>Auxheader</title>
+<para>An auxiliary header.</para>
+<para>
+<graphic fileref="images/auxheader.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;grid&gt;&#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="H1'07" colspan="6"/&gt;        &#13;        &lt;auxheader label="H2'07" colspan="6"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="Q1" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q2" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q3" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q4" colspan="3"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;columns&gt;    &#13;        &lt;column label="Jan"/&gt;&lt;column label="Feb"/&gt;&lt;column label="Mar"/&gt;        &#13;        &lt;column label="Apr"/&gt;&lt;column label="May"/&gt;&lt;column label="Jun"/&gt;        &#13;        &lt;column label="Jul"/&gt;&lt;column label="Aug"/&gt;&lt;column label="Sep"/&gt;        &#13;        &lt;column label="Oct"/&gt;&lt;column label="Nov"/&gt;&lt;column label="Dec"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;        &lt;label value="1,000"/&gt;&lt;label value="1,100"/&gt;&lt;label value="1,200"/&gt;        &#13;        &lt;label value="1,300"/&gt;&lt;label value="1,400"/&gt;&lt;label value="1,500"/&gt;        &#13;        &lt;label value="1,600"/&gt;&lt;label value="1,700"/&gt;&lt;label value="1,800"/&gt;        &#13;        &lt;label value="1,900"/&gt;&lt;label value="2,000"/&gt;&lt;label value="2,100"/&gt;        &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;</programlisting>
+<para>&lt;/grid&gt;</para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Auxheader</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<code> *NONE</code>
+</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties </title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>colspan</code>
+</para>
+</entry>
+<entry>
+<para>Sets the number of columns to span this header.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>rowspan</code>
+</para>
+</entry>
+<entry>
+<para>Sets the number of rows to span this header.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Methods</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>getOuterAttrs()</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>setParent(org.zkoss.zk.ui.Component parent)</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="HeaderElement">
+<code>org.zkoss.zul.impl.HeaderElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="LabelImageElement">
+<code>org.zkoss.zul.impl.LabelImageElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="LabelElement">
+<code>org.zkoss.zul.impl.LabelElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.impl.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+<code> </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect3></sect2><sect2 id="Bandbox"><title>Bandbox</title>
+<para>A <code>band</code>
+<code>box</code> is a special text box that embeds a customizable popup window (aka., a dropdown window). Like comboboxes, a <code>bandbox</code> consists of an input box and a popup window. The popup window is opened automatically, when users presses Alt+DOWN or clicks the <graphic fileref="images/bandbox-1.png">2
+			
+		</graphic> button.</para>
+<para>Unlike <code>comboboxes</code>, the popup window of a bandbox could be anything. It is designed to give developers the maximal flexibility. A typical use is to represent the popup window as a search dialog.</para>
+<programlisting>        &lt;bandboxid="bd"&gt;        <inlinegraphic fileref="images/bandbox-2.png" align="right"/>&#13;        &lt;bandpopup&gt;        &#13;                &lt;vbox&gt;                &#13;            &lt;hbox&gt;Search&lt;textbox/&gt;&lt;/hbox&gt;            &#13;            &lt;listboxwidth="200px"            &#13;            onSelect="bd.value=self.selectedItem.label;bd.closeDropdown();"&gt;            &#13;            &lt;listhead&gt;            &#13;                    &lt;listheaderlabel="Name"/&gt;                    &#13;                    &lt;listheaderlabel="Description"/&gt;                    &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="John"/&gt;                    &#13;                    &lt;listcelllabel="CEO"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Joe"/&gt;                    &#13;                    &lt;listcelllabel="Engineer"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Mary"/&gt;                    &#13;                    &lt;listcelllabel="Supervisor"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;        &lt;/listbox&gt;        &#13;        &lt;/vbox&gt;        &#13;        &lt;/bandpopup&gt;        &#13;    &lt;/bandbox&gt;    &#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Bandbox</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Bandpopup">Bandpopup</link>
+</para></sect3><sect3><title>Supported Events </title>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onOpen</code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="OpenEvent">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
+</link>
+</para>
+<para>
+<code>Denotes user has opened or closed a component. Note: unlike onClose, this event is only a notification. The client sends this event after opening or closing the component.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties </title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>autodrop</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to automatically drop the list if users is changing this text box.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>buttonVisible</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets whether the button (on the right of the textbox) is visible. </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>image</code>
+</para>
+</entry>
+<entry>
+<para>Sets the image URI that is displayed as the button to open Bandpopup.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>"~./zul/img/bandbtn.gif". </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>multiline</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether it is multiline. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>rows</code>
+</para>
+</entry>
+<entry>
+<para>Sets the rows. </para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>1</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>clone()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.Object</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>closeDropdown()</code>
+</para>
+</entry>
+<entry>
+<para>Closes the popup (getDropdown()).</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getDropdown()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the dropdown window belonging to this band box.</para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Bandpopup</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getInnerAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>Generates the Client-Side-Action attributes to the interior tag.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>Returns <code>west</code> componennt</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getRealStyleFlags()</code>
+</para>
+</entry>
+<entry>
+<para>Returns RS_NO_WIDTH|RS_NO_HEIGHT.</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component newChild, org.zkoss.zk.ui.Component refChild)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="InputElement">
+<code>org.zkoss.zul.InputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.imp.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2 id="Bandpopup"><title>Bandpopup</title>
+<para>The popup that belongs to a <code>Bandbox</code> instance.</para>
+<para>Developer usually listen to the <code>onOpen</code> event that is sent to <code>Bandbox</code> and then creates proper components as children of this component. </para>
+<programlisting>        &lt;bandboxid="bd"&gt;        <inlinegraphic fileref="images/bandbox-2.png" align="right"/>&#13;        &lt;bandpopup&gt;        &#13;                &lt;vbox&gt;                &#13;            &lt;hbox&gt;Search&lt;textbox/&gt;&lt;/hbox&gt;            &#13;            &lt;listboxwidth="200px"            &#13;            onSelect="bd.value=self.selectedItem.label;bd.closeDropdown();"&gt;            &#13;            &lt;listhead&gt;            &#13;                    &lt;listheaderlabel="Name"/&gt;                    &#13;                    &lt;listheaderlabel="Description"/&gt;                    &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="John"/&gt;                    &#13;                    &lt;listcelllabel="CEO"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Joe"/&gt;                    &#13;                    &lt;listcelllabel="Engineer"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Mary"/&gt;                    &#13;                    &lt;listcelllabel="Supervisor"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;        &lt;/listbox&gt;        &#13;        &lt;/vbox&gt;        &#13;        &lt;/bandpopup&gt;        &#13;    &lt;/bandbox&gt;    &#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Bandpopup</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Bandpopup">*NONE</link>
+</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>visible</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether this component is visible.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Methods</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="InputElement">
+<code>org.zkoss.zul.InputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.imp.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2 id="Calendar"><title>Calendar</title>
+<para>A calendar displays a 'flat' calendar and allows user to select a day from it.</para>
+<para>
+<graphic fileref="images/calendar.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;hbox&gt;&#13;    &lt;calendar id="cal" onChange="in.value = cal.value"/&gt;    &#13;    &lt;datebox id="in" onChange="cal.value = in.value"/&gt;    &#13;&lt;/hbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Calendar</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Bandpopup">*NONE</link>
+</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>compact</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to use a compact layout.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>name</code>
+</para>
+</entry>
+<entry>
+<para>Sets the name of this component.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>timeZone</code>
+</para>
+</entry>
+<entry>
+<para>Sets the time zone that this date box belongs to, or null if the default time zone is used.</para>
+</entry>
+<entry>
+<para>
+<code>java.util.TimeZone</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>D</code>
+<code>etermined by</code>
+<code> TimeZones.getCurrent() </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>value</code>
+</para>
+</entry>
+<entry>
+<para>Assigns a value to this component.</para>
+</entry>
+<entry>
+<para>
+<code>java.util.Date</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>today </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>visible</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether this component is visible.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs() </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.String </code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.imp.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -4538,6 +5446,483 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/></sect3></sect2><sect2 id="Captcha"><title>Captcha</title>
+<para>A <code>captcha</code> component can generate a special distortion image, also called a CAPTCHA (Completely Automated Public Turing test to tell Computers and Humans Apart) image. Developers could set <code>height </code>and <code>width </code>for dimension of captcha. By default, captcha render the image with a randomly generated text, and developers can set <code>value </code>to assign a purposive text.</para>
+<para>
+<graphic fileref="images/captcha.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;vbox&gt;&#13;&lt;captcha id="cpa" length="5" width="200px" height="50px"/&gt;&#13;&lt;/vbox&gt;&#13;</programlisting>
+<para/><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Captcha</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE </para></sect3><sect3><title>Supported Events</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onClick</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="MouseEvent">
+<code>org.zkoss.zk.ui.event.MouseEvent</code>
+</link>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes user has clicked the component.</code>
+</para>
+<para>
+<code>Use getX(), getY() method get coo</code>
+<code>rdinates.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>bgColor</code>
+</para>
+</entry>
+<entry>
+<para>Sets the background color of the chart. It must be <code>#RRGGBB</code> format (hexdecimal).</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>"#74979B"</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>exclude</code>
+</para>
+</entry>
+<entry>
+<para>Sets exclude characters that will not be generated. Note that only digit and character is used in generating text value. If you leave exclude <code>null, </code>the default exclude list will be applied; i.e., 0123456789IilOo (only character (no digits) are used except I, i, l, O(big O), o(small o))</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>"</code>
+<code>0123456789IOilo</code>
+<code>"</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>fontColor</code>
+</para>
+</entry>
+<entry>
+<para>Sets font color. It must in <code>#RRGGBB</code> format (hexdecimal).</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>#404040</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>height</code>
+</para>
+</entry>
+<entry>
+<para>Sets height of captcha, it colud be a px, pt or em value and it will transfer to px. </para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>50</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>length</code>
+</para>
+</entry>
+<entry>
+<para>Sets length of the autogenerated text value</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>5</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>noise</code>
+</para>
+</entry>
+<entry>
+<para>Sets the flag of noise generation</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>value</code>
+</para>
+</entry>
+<entry>
+<para>Sets the text value to be shown as the distortion captcha</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>Random Value</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>width</code>
+</para>
+</entry>
+<entry>
+<para>Set width of captcha, it colud be a px, pt or em value and it will transfer to px. </para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>200</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>addFont</code>
+</para>
+</entry>
+<entry>
+<para>Adds fonts into fonts list. </para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getBgRGB</code>
+</para>
+</entry>
+<entry>
+<para>Gets the background color in int</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getCaptchaEngine</code>
+</para>
+</entry>
+<entry>
+<para>Gets the captcha engine.</para>
+</entry>
+<entry>
+<para>
+<code>CaptchaEngine</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getDefaultFonts</code>
+</para>
+</entry>
+<entry>
+<para>Gets the default font list.</para>
+</entry>
+<entry>
+<para>
+<code>java.awt.Font[]</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getFont</code>
+</para>
+</entry>
+<entry>
+<para>Gets n-th Font</para>
+</entry>
+<entry>
+<para>
+<code>java.awt.Font</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getFontRGB</code>
+</para>
+</entry>
+<entry>
+<para>Gets the font color in int.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getFonts</code>
+</para>
+</entry>
+<entry>
+<para>Gets fonts list, default provide two fonts.</para>
+</entry>
+<entry>
+<para>
+<code>java.util.List</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getIntHeight</code>
+</para>
+</entry>
+<entry>
+<para>Gets the captcha int height in pixel; to be used by the derived subclass.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getIntWidth</code>
+</para>
+</entry>
+<entry>
+<para>Get the captcha int width in pixel; to be used by the derived subclass.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>newCaptchaEngine</code>
+</para>
+</entry>
+<entry>
+<para>Instantiates the default captcha engine.</para>
+</entry>
+<entry>
+<para>
+<code>CaptchaEngine</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>randomValue</code>
+</para>
+</entry>
+<entry>
+<para>Regenerates new captcha text value and redraw</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setEngine</code>
+</para>
+</entry>
+<entry>
+<para>Set the captcha engine instance or by a class name string.</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>smartDrawCaptcha</code>
+</para>
+</entry>
+<entry>
+<para>Marks a draw flag to inform that this Chart needs update.</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="Image">org.zkoss.zul.Image</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
 <para/></sect3></sect2><sect2 id="Caption"><title>Caption</title>
 <para>A header for a <code>Groupbox</code>. It may contain either a text label, using <code>LabelElement.setLabel(java.lang.String)</code>, or child elements for a more complex caption.</para>
 <para/>
@@ -4932,8 +6317,7 @@
 <para>void</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/>
-<para/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -4947,6 +6331,970 @@
 <entry>
 <para>
 <link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title>Chart</title>
+<para>A <code>chart</code> is used to show a set of data as a graph. It helps users to judge things with a snapshot. To use a chart component , developers must prepare a <code>ChartModel </code>and a <code>ChartEngine.</code> Developers also set proper chart type, and the threeD (3D) attribute to draw proper chart. The model and type must match to each other; or the result is unpredictable. The 3D chart is not supported on all chart type.</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Type</para>
+</entry>
+<entry>
+<para>Model</para>
+</entry>
+<entry>
+<para>3D</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>pie</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>PieModel</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>o</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>ring</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>PieModel</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>x</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>bar</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>CategoryModel</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>o</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>line</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>CategoryModel </code>or<code> XYModel</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>o</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>area</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>CategoryModel </code>or<code> XYModel</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>x</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>stacked_bar </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>CategoryModel</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>o</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>stacked_area </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>CategoryModel </code>or<code> XYModel</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>x</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>waterfall </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>CategoryModel</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>x</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>polar </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>XYModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>scatter </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>XYModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>time_series </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>XYModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>polar </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>XYModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>step_area </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>XYModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>step </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>XYModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>histogram </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>XYModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>candlestick </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>HiLoModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>hilow </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>HiLoModel</code>
+</para>
+</entry>
+<entry>
+<para>x</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>
+<code/>
+</para>
+<para>
+<graphic fileref="images/chart.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;vbox&gt;&#13;&lt;chart id="mychart" title="Pie Chart Demo" width="500" height="250" type="pie" threeD="true" fgAlpha="128"/&gt;&#13;&lt;zscript&gt;&#13;PieModel model = new MyPieModel();&#13;mychart.setModel(model);&#13;&lt;/zscript&gt;&#13;&lt;/vbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Chart</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE </para></sect3><sect3><title>Supported Events</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onClick</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="MouseEvent">
+<code>org.zkoss.zk.ui.event.MouseEvent</code>
+</link>
+</para>
+<para>
+<link linkend="MouseEvent">
+<code/>
+</link>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes user has clicked the component.</code>
+</para>
+<para>
+<code>Use getX(), getY() method to get coo</code>
+<code>rdinates.</code>
+</para>
+<para>
+<code>Use getArea() method to get the area component which user clicks on.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>bgAlpha</code>
+</para>
+</entry>
+<entry>
+<para>Sets the background alpha (transparency, 0 ~ 255).</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>255</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>bgColor</code>
+</para>
+</entry>
+<entry>
+<para>Sets the background color of the chart.It must be in <code>#RRGGBB</code> format (hexdecimal).</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>fgAlpha</code>
+</para>
+</entry>
+<entry>
+<para>Sets the foreground alpha (transparency, 0 ~ 255).</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>255</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>height</code>
+</para>
+</entry>
+<entry>
+<para>Sets height of chart, it must be a integer string</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>200</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>orient</code>
+</para>
+</entry>
+<entry>
+<para>Sets the chart orientation.</para>
+<para>Values: <code>vertical | horizontal </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>vertical</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>paneAlpha</code>
+</para>
+</entry>
+<entry>
+<para>Sets the pane alpha (transparency, 0 ~ 255).</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>255</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>panelColor</code>
+</para>
+</entry>
+<entry>
+<para>Sets the pane color of the chart.It must be <code>#RRGGBB</code> format (hexdecimal).</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>per</code>
+<code>iod</code>
+</para>
+</entry>
+<entry>
+<para>Sets the period used in Time Series Chart.</para>
+<para>Values : millisecond | second | minute | | hour | day | week | month | quarter | year</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>showLegend</code>
+</para>
+</entry>
+<entry>
+<para>Sets the flag of showing the chart's legend </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>showTooltiptext</code>
+</para>
+</entry>
+<entry>
+<para>Sets the flag of showing the chart's tool tip text</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>threeD</code>
+</para>
+</entry>
+<entry>
+<para>Sets true to show three dimensional graph (If a type of chart got no 3d peer, this is ignored).</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>title</code>
+</para>
+</entry>
+<entry>
+<para>Sets the chart's title.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>type</code>
+</para>
+</entry>
+<entry>
+<para>Set the chart's type </para>
+<para>Values: <code>pie | ring | bar | line | area | stacked_bar</code> | <code>stacked_</code>area | <code>waterfall | polar | scatter | time_series | polar | step_area</code> | <code>step | histogram | candlestick | hilow </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>width</code>
+</para>
+</entry>
+<entry>
+<para>Sets width of chart, it must be a integer string</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>400</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>xAxis</code>
+</para>
+</entry>
+<entry>
+<para>Sets the label in xAxis. </para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>yAxis</code>
+</para>
+</entry>
+<entry>
+<para>Sets the label in yAxis. </para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getAreaListener</code>
+</para>
+</entry>
+<entry>
+<para>Returns the renderer to render each area, or null if the default renderer is used.</para>
+</entry>
+<entry>
+<para>
+<code>ChartAreaListener</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getBgRGB</code>
+</para>
+</entry>
+<entry>
+<para>Get the background color in int array (0: red, 1: green, 2:blue).</para>
+</entry>
+<entry>
+<para>
+<code>int[]</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getEngine</code>
+</para>
+</entry>
+<entry>
+<para>Returns the implemetation chart engine.</para>
+</entry>
+<entry>
+<para>
+<code>ChartEngine</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getIntHeight</code>
+</para>
+</entry>
+<entry>
+<para>Get the chart int width in pixel</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getIntWidth</code>
+</para>
+</entry>
+<entry>
+<para>Get the chart int width in pixel</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getModel</code>
+</para>
+</entry>
+<entry>
+<para>Returns the chart model associated with this chart, or null if this chart is not associated with any chart data model</para>
+</entry>
+<entry>
+<para>
+<code>ChartModel</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getPaneRGB</code>
+</para>
+</entry>
+<entry>
+<para>Get the pane color in int array (0: red, 1: green, 2:blue).</para>
+</entry>
+<entry>
+<para>
+<code>int[]</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getTimeZone</code>
+</para>
+</entry>
+<entry>
+<para>Returns the time zone that this Time Series Chart belongs to, or null if the default time zone is used.</para>
+</entry>
+<entry>
+<para>
+<code>TimeZone</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>newChartEngine</code>
+</para>
+</entry>
+<entry>
+<para>Instantiates the default chart engine</para>
+</entry>
+<entry>
+<para>
+<code>ChartEngine</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setAreaListener</code>
+</para>
+</entry>
+<entry>
+<para>Sets the renderer which is used to render each area</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setEngine</code>
+</para>
+</entry>
+<entry>
+<para>Sets the chart engine</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setModel</code>
+</para>
+</entry>
+<entry>
+<para>Sets the chart model associated with this chart</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setTimeZone</code>
+</para>
+</entry>
+<entry>
+<para>Sets the time zone that this Time Series Chart belongs to, or null if the default time zone is used</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>smartDrawChart</code>
+</para>
+</entry>
+<entry>
+<para>mark a draw flag to inform that this Chart needs update</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="Imagemap">org.zkoss.zul.Imagemap</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="Image">org.zkoss.zul.Image</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
@@ -5820,7 +8168,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="Combobox"><title>Combobox</title>
+</informaltable></sect3></sect2><sect2 id="Combobox"><title>Combobox</title>
 <para>Components: <code>combobox</code> and <code>comboitem</code>.</para>
 <para>A <code>combobox</code> is a special text box that embeds a drop-down list. With <code>comboboxes</code>, users are allowed to select from a drop-down list, in addition to entering the text manually. </para>
 <para>
@@ -5832,7 +8180,8 @@
 <para>
 <code>org.zkoss.zul.Combobox</code>
 </para></sect3><sect3><title>Supported Child Components</title>
-<para>*Comboitem </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<para>
+<link linkend="Comboitem">Comboitem</link> </para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -6069,7 +8418,9 @@
 </para>
 </entry>
 <entry>
-<para>true</para>
+<para>
+<code>true</code>
+</para>
 </entry>
 </row>
 <row>
@@ -6132,7 +8483,9 @@
 </row>
 <row>
 <entry>
-<para>appendItem(java.lang.String)</para>
+<para>
+<code>appendItem(java.lang.String)</code>
+</para>
 </entry>
 <entry>
 <para>Appends an item. </para>
@@ -6146,7 +8499,9 @@
 </row>
 <row>
 <entry>
-<para>getInnerAttrs() </para>
+<para>
+<code>getInnerAttrs() </code>
+</para>
 </entry>
 <entry>
 <para>Generates the Client-Side-Action attributes to the interior tag. </para>
@@ -6160,7 +8515,9 @@
 </row>
 <row>
 <entry>
-<para>getItemAtIndex(int) </para>
+<para>
+<code>getItemAtIndex(int) </code>
+</para>
 </entry>
 <entry>
 <para>Returns the item at the specified index. </para>
@@ -6174,7 +8531,9 @@
 </row>
 <row>
 <entry>
-<para>getItemCount()</para>
+<para>
+<code>getItemCount()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the number of items.</para>
@@ -6187,7 +8546,9 @@
 </row>
 <row>
 <entry>
-<para>getItems()</para>
+<para>
+<code>getItems()</code>
+</para>
 </entry>
 <entry>
 <para>Returns a 'live' list of all org.zkoss.zul.Comboitem.</para>
@@ -6200,7 +8561,9 @@
 </row>
 <row>
 <entry>
-<para>getOuterAttrs()</para>
+<para>
+<code>getOuterAttrs()</code>
+</para>
 </entry>
 <entry>
 <para/>
@@ -6213,7 +8576,9 @@
 </row>
 <row>
 <entry>
-<para>getSelectedItem()</para>
+<para>
+<code>getSelectedItem()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the selected item, or null if no matched. </para>
@@ -6227,7 +8592,10 @@
 </row>
 <row>
 <entry>
-<para>insertBefore(org.zkoss.zk.ui.Component)</para>
+<para>
+<code>ins</code>
+<code>ertBefore(org.zkoss.zk.ui.Component)</code>
+</para>
 </entry>
 <entry>
 <para/>
@@ -6648,7 +9016,9 @@
 </row>
 <row>
 <entry>
-<para>OnChange</para>
+<para>
+<code>OnChange</code>
+</para>
 </entry>
 <entry>
 <para>
@@ -6670,7 +9040,9 @@
 </row>
 <row>
 <entry>
-<para>OnChanging</para>
+<para>
+<code>OnChanging</code>
+</para>
 </entry>
 <entry>
 <para>
@@ -6990,16 +9362,16 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Decimalbox"><title>Decimalbox</title>
-<para>An edit box for holding BigDecimal.</para>
+<para/></sect3></sect2><sect2 id="Doublebox"><title>Doublebox</title>
+<para>An edit box for holding an float point value (double).</para>
 <para>
-<graphic fileref="images/Decimalbox.png">2
+<graphic fileref="images/doublebox.png">2
 			
 		</graphic>
 </para>
-<programlisting>&lt;decimalbox format="#,##0.##" value="1000.123145678" /&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<programlisting>&lt;doublebox value="2.3"/&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zul.Decimalbox</code> </para></sect3><sect3><title>Supported Child Components</title>
+<code>org.zkoss.zul.Doublebox</code> </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE </para></sect3><sect3><title>Supported Events</title>
 <informaltable frame="all">
 <tgroup cols="2">
@@ -7165,33 +9537,11 @@
 <row>
 <entry>
 <para>
-<code>Scale</code>
+<code>value</code>
 </para>
 </entry>
 <entry>
-<para>the scale for the decimal number storing in this component, or AUTO (-1000000000) if the scale is decided automatically (based on what user has entered).</para>
-<para/>
-</entry>
-<entry>
-<para>
-<code>int</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>-1</code>
-<code>000000000</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>Value</code>
-</para>
-</entry>
-<entry>
-<para>the value (in <code>BigDecimal</code>), might be null unless a constraint stops it. </para>
+<para>the value (in <code>Double</code>), might be null unless a constraint stops it. </para>
 </entry>
 <entry>
 <para>
@@ -7225,7 +9575,7 @@
 <row>
 <entry>
 <para>
-<code>IntValue()</code>
+<code>intValue()</code>
 </para>
 </entry>
 <entry>
@@ -7295,6 +9645,15 @@
 <row>
 <entry>
 <para>
+<link linkend="NumberInputElement">
+<code>org.zkoss.zul.impl.NumberInputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
 <link linkend="FormatInputElement">
 <code>org.zkoss.zul.impl.FormatInputElement</code>
 </link>
@@ -7322,7 +9681,6 @@
 <row>
 <entry>
 <para>
-<code/>
 <link linkend="HtmlBasedComponent">
 <code>org.zkoss.zk.ui.HtmlBasedComponent</code>
 </link>
@@ -7333,7 +9691,6 @@
 <row>
 <entry>
 <para>
-<code/>
 <link linkend="AbstractComponent">
 <code>org.zkoss.zk.ui.AbstractComponent </code>
 </link>
@@ -7597,8 +9954,7 @@
 <para>void</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/>
-<para/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -7625,6 +9981,513 @@
 <entry>
 <para>
 <link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2 id="Flash"><title>Flash</title>
+<para>A generic flash component.</para>
+<para>
+<graphic fileref="images/flash.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;flash src="SWF/cc.milestones.121503.swf" height="320" width="620"&gt;&lt;/flash&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Flash</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para> *NONE</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>autoPlay</code>
+</para>
+</entry>
+<entry>
+<para>Sets wether the song Flash movie playing automatically</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>bgcolor</code>
+</para>
+</entry>
+<entry>
+<para>Sets the background color of Flash movie</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;empty string&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>loop</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether the Flash movie plays repeatly</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>true</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>src</code>
+</para>
+</entry>
+<entry>
+<para>Sets the source path of Flash movie and redraw the component</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;empty string&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>wode</code>
+</para>
+</entry>
+<entry>
+<para>Sets the Window Mode property of the Flash movie for transparency, layering, and positioning in the browser.</para>
+<para>values:</para>
+<itemizedlist>
+<listitem>
+<para>
+<code>window</code> - movie plays in its own rectangular window on a web page.</para>
+</listitem>
+<listitem>
+<para>
+<code>opaque</code> - the movie hides everything on the page behind it.</para>
+</listitem>
+<listitem>
+<para>
+<code>transparent</code> - the background of the HTML page shows through all transparent portions of the movie, this may slow animation performance.</para>
+</listitem>
+</itemizedlist>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>transparent</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Methods</para>
+<para>*NONE</para></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Footer"><title>Footer</title>
+<para>A column of the footer of a grid (<code>Grid</code>). Its parent must be <code>Foot</code>.</para>
+<para>Unlike <code>Column</code>, you could place any child in a grid footer. </para>
+<para>
+<graphic fileref="images/grid-2.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;grid&gt;&#13;    &lt;columns&gt;    &#13;        &lt;column label="Type"/&gt;        &#13;        &lt;column label="Content"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;            &lt;label value="File:"/&gt;            &#13;            &lt;textbox width="99%"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row&gt;        &#13;            &lt;label value="Type:"/&gt;            &#13;            &lt;hbox&gt;            &#13;                &lt;listbox rows="1" mold="select"&gt;                &#13;                    &lt;listitem label="Java Files,(*.java)"/&gt;                    &#13;                    &lt;listitem label="All Files,(*.*)"/&gt;                    &#13;                &lt;/listbox&gt;                &#13;                &lt;button label="Browse..."/&gt;                &#13;            &lt;/hbox&gt;            &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;    &lt;foot&gt;    &#13;        &lt;footer&gt;footer1&lt;/footer&gt;        &#13;        &lt;footer&gt;footer2&lt;/footer&gt;        &#13;    &lt;foot&gt;    &#13;&lt;/grid&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Footer</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para> *ALL</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>span</code>
+</para>
+</entry>
+<entry>
+<para>Sets wether the song Flash movie playing automatically</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>1</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Methods</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getColumn()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the column that is in the same column as this footer, or null if not available.</para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Column</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getColumnIndex()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the column index, starting from 0.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getGrid()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the grid that this belongs to.</para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Grid</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="LabelElement">
+<code>org.zkoss.zul.impl.LabelElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="LabelImageElement">
+<code>org.zkoss.zul.impl.LabelImageElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.impl.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Foot"><title>Foot</title>
+<para>Defines a set of footers (Footer) for a grid (Grid).</para>
+<para>
+<graphic fileref="images/grid-2.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;grid&gt;&#13;    &lt;columns&gt;    &#13;        &lt;column label="Type"/&gt;        &#13;        &lt;column label="Content"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;            &lt;label value="File:"/&gt;            &#13;            &lt;textbox width="99%"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row&gt;        &#13;            &lt;label value="Type:"/&gt;            &#13;            &lt;hbox&gt;            &#13;                &lt;listbox rows="1" mold="select"&gt;                &#13;                    &lt;listitem label="Java Files,(*.java)"/&gt;                    &#13;                    &lt;listitem label="All Files,(*.*)"/&gt;                    &#13;                &lt;/listbox&gt;                &#13;                &lt;button label="Browse..."/&gt;                &#13;            &lt;/hbox&gt;            &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;    &lt;foot&gt;    &#13;        &lt;footer&gt;footer1&lt;/footer&gt;        &#13;        &lt;footer&gt;footer2&lt;/footer&gt;        &#13;    &lt;foot&gt;    &#13;&lt;/grid&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Foot</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para> <link linkend="Footer">Footer</link>
+</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>value</code>
+</para>
+</entry>
+<entry>
+<para>Sets the current value of the progress meter. </para>
+</entry>
+<entry>
+<para>
+<code>java.langString</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Methods</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getGrid()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the grid that this belongs to.</para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Grid</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.impl.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -8731,8 +11594,7 @@
 </entry>
 <entry>
 <para>
-<code>Media</code>
-<code> </code>
+<code>Media </code>
 </para>
 </entry>
 <entry>
@@ -12241,7 +15103,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title>Menupopup</title>
+<para/></sect3></sect2><sect2 id="Menupopup"><title>Menupopup</title>
 <para>
 <code>A container used to display menus. It should be placed inside a Menu.</code>
 </para>
@@ -12641,8 +15503,7 @@
 <para>void</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/>
-<para/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -12656,6 +15517,273 @@
 <entry>
 <para>
 <link linkend="LayoutRegion">org.zkoss.zkex.zul.LayoutRegion </link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect3></sect2><sect2 id="Paging"><title>Paging</title>
+<para>A <code>paging</code> component is used to separate long content into multiple pages. For example, assume that you have 100 items and prefer to show 20 items at a time, then you can use the paging components as follows.</para>
+<para>Then, when a user clicks on the hyperlinks, the <code>onPaging </code>event is sent with an instance of <code>org.zkoss.zul.event.PagingEvent</code> to the paging component. To decide which portion of your 100 items are visible, you shall add a listener to the paging component.</para>
+<para>
+<graphic fileref="images/paging.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;vbox&gt;&#13;&lt;paging totalSize="100" pageSize="20"/&gt;&#13;&lt;/vbox&gt;&#13;</programlisting>
+<para/>
+<para>The <code>listbox </code>and <code>grid </code>component support the paging intrinsically, so you don't need to specify a paging component explicitly as above, unless you want to have different visual layout or to control multiple listbox and grid with one paging component.</para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Paging</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE </para></sect3><sect3><title>Supported Events</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onPaging</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="PagingEvent">
+<code>org.zkoss.zk.ui.event.PagingEvent</code>
+</link>
+</para>
+<para>
+<code>Description:</code>
+<code> </code>
+<code>Notifies one of the pages of a multi-page component is selected by the user.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>activePage</code>
+</para>
+</entry>
+<entry>
+<para>Sets the active page (starting from 0).</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>0</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>aut</code>
+<code>ohide</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to automatically hide this component if there is only one page available.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>det</code>
+<code>ailed</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to show the detailed info, such as <code>Paginal.getTotalSize()</code>.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>pageIncrement</code>
+</para>
+</entry>
+<entry>
+<para>Sets the number of page anchors shall appear at the client.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>10</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>pageSize</code>
+</para>
+</entry>
+<entry>
+<para>Sets the number of items per page.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>20</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>totalSize</code>
+</para>
+</entry>
+<entry>
+<para>Sets the total number of items.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>0</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getPageCount</code>
+</para>
+</entry>
+<entry>
+<para>Returns the number of pages</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getInnerTags</code>
+</para>
+</entry>
+<entry>
+<para>Returns the inner HTML tags of this component.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
 </para>
 </entry>
 </row>
@@ -12768,7 +15896,135 @@
 </para>
 </entry>
 </row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2 id="Progressmeter"><title>Progressmeter</title>
+<para>A progress meter is a bar that indicates how much of a task has been completed. The value property must be in the range between 0 and 100.</para>
+<para>
+<graphic fileref="images/progressmeter.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;progressmeter value="10"/&gt;    &#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Progressmeter</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para> *NONE</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>value</code>
+</para>
+</entry>
+<entry>
+<para>Sets the current value of the progress meter. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row></tbody></tgroup>
 </informaltable>
+<para>Methods</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the grid that this belongs to.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>isChildable()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.impl.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Radio"><title>Radio</title>
 <para>A <code>radio</code> button is a component that can be turned on and off. Radio buttons are grouped together in a group, called <code>radiogroup</code>. Only one radio button with the same group may be selected at a time.</para>
 <para>
@@ -13482,7 +16738,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -13675,35 +16931,25 @@
 <row>
 <entry>
 <para>
-<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent</link>
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable>
-<para/></sect3></sect2><sect2 id="Separator"><title>Separator</title>
-<para>A separator.</para>
-<para>A separator is used to insert a space between two components. There are several ways to</para>
-<para>customize the separator.</para>
-<para>1. By use of the orient property, you could specify a vertical separator or a horizontal</para>
-<para>separator. By default, it is a horizontal separator, which inserts a line break. On the</para>
-<para>other hand, a vertical separator inserts a white space. In addition, space is a variant</para>
-<para>of separator whose default orientation is vertical.</para>
-<para>2. By use of the bar property, you could control whether to show a horizontal or vertical</para>
-<para>line between component.</para>
-<para>3. By use of the spacing property, you could</para>
-<para>control the size of spacing. </para>
+</informaltable></sect3></sect2><sect2 id="Script"><title>Script</title>
+<para>The script component is used to specify the script codes running at the browser. Notice that, unlike zscript, the script codes are running at the browser. They are usually written in JavaScript which is supported by the most of browsers. The simplest format is as follows.</para>
 <para>
-<graphic fileref="images/Separator.png">2
+<graphic fileref="images/script.png">2
 			
 		</graphic>
 </para>
-<programlisting>line 1 by separator&#13;&lt;separator /&gt;&#13;line 2 by separator&#13;&lt;separator /&gt;&#13;line 3 by separator&#13;&lt;space bar="true" /&gt;&#13;another piece&#13;&lt;separator spacing="20px" /&gt;&#13;line 4 by separator&#13;&lt;space bar="true" spacing="20px" /&gt;&#13;another piece&#13;</programlisting><sect3><title>Class Name</title>
+<programlisting>&lt;zk&gt;&#13;&lt;window id="win" &gt;&#13;    &lt;button label="change color" onClick='Clients.evalJavaScript("myfunc()")'/&gt;    &#13;&lt;/window&gt;&#13;&lt;script type="text/javascript"&gt;&#13;function myfunc() {&#13;    $e("${win.uuid}").style.backgroundColor = "blue";    &#13;}&#13;&lt;/script&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
-<code>org.zkoss.zul.Separator</code> </para></sect3><sect3><title>Supported Child Components</title>
-<para>*NONE </para></sect3><sect3><title>Supported Events</title>
-<para>*NONE</para></sect3><sect3><title>Attributes</title>
+<code>org.zkoss.zul.Script</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para> *NONE</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties </title>
 <informaltable frame="all">
-<tgroup cols="4">
+<tgroup cols="3">
 <thead>
 <row>
 <entry>
@@ -13715,77 +16961,86 @@
 <entry>
 <para>Data Type</para>
 </entry>
-<entry>
-<para>Default Values</para>
-</entry>
 </row>
 </thead><tbody>
 <row>
 <entry>
 <para>
-<code>spacing</code>
+<code>charset</code>
 </para>
 </entry>
 <entry>
-<para>the spacing.</para>
-<para>Values: the spacing (<code>such as "0", "5px", "3pt" or "1em") </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>String</code>
-</para>
+<para>Sets whether the button (on the right of the textbox) is visible. </para>
 </entry>
 <entry>
 <para>
-<code>&lt;null&gt;</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<code>orient</code>
+<code>content</code>
 </para>
 </entry>
 <entry>
-<para>the orient. </para>
-<para>Values:<code>horizontal|vertical</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>String</code>
-</para>
+<para>Sets the content of the script element.</para>
 </entry>
 <entry>
 <para>
-<code>horizontal </code>
+<code>java.lang.String</code>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<code>bar</code>
+<code>defer</code>
 </para>
 </entry>
 <entry>
-<para>whether to display a visual bar as the separator. </para>
-<para>Values:true/false</para>
+<para>Sets whether to defer the execution of the script codes.</para>
 </entry>
 <entry>
 <para>
 <code>boolean</code>
 </para>
 </entry>
+</row>
+<row>
 <entry>
 <para>
-<code>false</code>
+<code>src</code>
+</para>
+</entry>
+<entry>
+<para>Sets the URI of the source that contains the script codes.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>type</code>
+</para>
+</entry>
+<entry>
+<para>Sets the type of this client script.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title>Methods</title>
+</informaltable>
+<para/>
+<para>Methods</para>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -13802,18 +17057,22 @@
 </row>
 </thead><tbody>
 <row>
+<entry><sect3><title>isChildable()</title></sect3></entry>
 <entry>
-<para>
-<code>isChildable()</code>
-</para>
+<para>Not childable.</para>
+<para>Value: false</para>
+</entry>
+<entry><sect3><title>boolean</title></sect3></entry>
+</row>
+<row>
+<entry>
+<para>redraw(java.io.Writer out)</para>
 </entry>
 <entry>
-<para>Default: not childable</para>
+<para/>
 </entry>
 <entry>
-<para>
-<code>boolean</code>
-</para>
+<para/>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title>Inherited From </title>
@@ -13829,25 +17088,6 @@
 <row>
 <entry>
 <para>
-<link linkend="XulElement">
-<code>org.zkoss.zul.impl.XulElement</code>
-</link>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<link linkend="HtmlBasedComponent">
-<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
-</link>
-<code> </code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
 <link linkend="AbstractComponent">
 <code>org.zkoss.zk.ui.AbstractComponent </code>
 </link>
@@ -13855,6 +17095,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Slider"><title>Slider</title>
 <para>A slider with slid and knob</para>
 <para>A slider is used to let user specifying a value by scrolling.</para>
@@ -14075,7 +17316,70 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="South"><title>South</title>
+</informaltable></sect3></sect2><sect2><title>Space</title>
+<para>Space is a <code>Separator</code> with the orient default to "horizontal".</para>
+<para>In other words, &lt;space&gt; is equivalent to <code>&lt;separator orient="horizontal"&gt;</code> </para>
+<para>
+<graphic fileref="images/space.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;zk&gt;&#13;    &lt;space bar="true"/&gt;    &#13;    &lt;space bar="true"/&gt;    &#13;    &lt;space bar="true"/&gt;    &#13;    &lt;space bar="true"/&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Space</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para> *NONE</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties</title></sect3><sect3><title>*NONE</title>
+<para>Methods</para>
+<para/>
+<para>*NONE</para></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="Separator">
+<code>org.zkoss.zul.Separator</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.impl.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2 id="South"><title>South</title>
 <para>This component is a south region. The default class of CSS is specified "layout-region-south".</para>
 <para/>
 <para>
@@ -14206,7 +17510,7 @@
 <para>void</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -14237,7 +17541,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title>Separator</title>
+<para/></sect3></sect2><sect2 id="Separator"><title>Separator</title>
 <para>
 <code>Space is a </code>
 <code>Separator</code>
@@ -16031,6 +19335,165 @@
 </para>
 </entry>
 </row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2><title>Timebox</title>
+<para>An edit box for holding a time (a java.util.Date Object , but only Hour &amp; Minute are used.</para>
+<para>
+<graphic fileref="images/timebox.png">2
+			
+		</graphic>
+</para>
+<para>&lt;window title="Simple" width="300px" border="normal"&gt;</para>
+<para>&lt;timebox id="tb0"/&gt;</para>
+<para>&lt;/window&gt;</para><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Timebox</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<code> *NONE</code>
+</para></sect3><sect3><title>Supported Events</title>
+<para> *NONE</para></sect3><sect3><title>Properties </title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>buttonVisible</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether the button (on the right of the textbox) is visible. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>image</code>
+</para>
+</entry>
+<entry>
+<para>Sets the URI of the button image.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>timeZone</code>
+</para>
+</entry>
+<entry>
+<para>Sets the time zone that this time box belongs to, or null if the default time zone is used.</para>
+</entry>
+<entry>
+<para>
+<code>java.util.TimeZone</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>value</code>
+</para>
+</entry>
+<entry>
+<para>Sets the value (in <code>Date</code>).</para>
+</entry>
+<entry>
+<para>
+<code>java.util.Date</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Methods</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry><sect3><title>getInnerAttrs()</title></sect3></entry>
+<entry>
+<para>Generates the Client-Side-Action attributes to the interior tag.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="InputElement">
+<code>org.zkoss.zul.impl.InputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link>
+<code> </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
 </informaltable>
 <para/></sect3></sect2><sect2 id="Timer"><title>Timer</title>
 <para>Timer is a special component that is invisible. It fires one or more org.zkoss.zk.ui.event.Event after a specified delay. </para>
@@ -16769,7 +20232,27 @@
 <code>false</code>
 </para>
 </entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
 </row>
+</thead><tbody>
 <row>
 <entry>
 <para>
@@ -19303,8 +22786,7 @@
 <para>void</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/>
-<para/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -20138,7 +23620,9 @@
 </row>
 <row>
 <entry>
-<para>getColumn1()</para>
+<para>
+<code>getColumn1()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the first column whose width is changed. </para>
@@ -20149,7 +23633,10 @@
 </row>
 <row>
 <entry>
-<para>getColumn2()</para>
+<para>
+<code>get</code>
+<code>Column2()</code>
+</para>
 </entry>
 <entry>
 <para>Returns the second column whose width is changed. </para>
@@ -20160,7 +23647,10 @@
 </row>
 <row>
 <entry>
-<para>getKeys()</para>
+<para>
+<code>get</code>
+<code>Keys()</code>
+</para>
 </entry>
 <entry>
 <para>Returns what keys were pressed when the column is resized, or 0 if none of them was pressed. </para>
@@ -20941,9 +24431,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/></sect3></sect2><sect2 id="PageSizeEvent"><title>PageSizeEvent</title>
-<para/>
-<para>Used to notify that the page size is changed (by the user), or by paginal (such as <code>Paging</code>).</para>
-<para/><sect3><title>Class Name</title>
+<para>Used to notify that the page size is changed (by the user), or by paginal (such as <code>Paging</code>).</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.event.PageSizeEvent</code>
 </para></sect3><sect3><title>Methods</title>
@@ -21089,8 +24577,7 @@
 <para>For components that might also support ScrollEvent with "<code>onScrolling</code>". It is used to notified the server that user is changing its content (changing is on progress and not finished).</para>
 <para>The components which are supported this event are: <link linkend="Slider">
 <code>org.zkoss.zul.Slider</code>
-</link>.</para>
-<para/><sect3><title>Class Name</title>
+</link>.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.ScrollEvent</code>
 </para></sect3><sect3><title>Methods</title>
@@ -21290,9 +24777,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3></sect2><sect2 id="SizeEvent"><title>SizeEvent</title>
-<para/>
 <para>Represents an event caused by a component being re-sized.</para>
-<para/>
 <para>Component Implementation Note: A sizable component must implement <code>Sizable</code> for the returned object of <code>ComponentCtrl.getExtraCtrl(). </code>
 </para><sect3><title>Class Name</title>
 <para>
@@ -21377,7 +24862,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="UploadEvent"><title>UploadEvent</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="UploadEvent"><title>UploadEvent</title>
 <para>Represents that user has uploaded one or several files from the client to the server.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.UploadEvent</code>
@@ -21451,8 +24937,7 @@
 <para>Represents an event caused by a component whose z-index is modified by the client. A z-indexed component must send ZindexEvent once the z-index of component is modifiable by the client. </para>
 <para>The components which are supported this event are: <link linkend="Window">
 <code>org.zkoss.zul.Window</code>
-</link>.</para>
-<para/><sect3><title>Class Name</title>
+</link>.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.ZIndexEvent</code>
 </para></sect3><sect3><title>Methods</title>
@@ -21492,7 +24977,7 @@
 <para/>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -21591,7 +25076,6 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/></sect3></sect2><sect2 id="Constraint"><title>Constraint</title>
-<para/>
 <para>A constraint.</para><sect3><title>Interface Name</title>
 <para>
 <code>org.zkoss.zul.Constraint</code>
@@ -21633,7 +25117,6 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="Constrained"><title>Constrained</title>
-<para/>
 <para>Decorates a component that its value is constrained by <link linkend="Constraint">
 <code>Constraint</code>
 </link>.</para><sect3><title>Interface Name</title>
@@ -21692,20 +25175,15 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="Fileupload"><title>Fileupload</title>
-<para/>
 <para>A fileupload dialog used to let user upload a file.The <code>fileupload</code> component is not a modal dialog. Rather, it is a component, so it is placed inline with other components.</para>
 <para>
 <graphic fileref="images/fileupload.png">2
 			
 		</graphic>
 </para>
-<programlisting>&lt;image id="img"/&gt;&#13;Upload your hot shot:&#13;</programlisting>
-<para>&lt;fileupload onUpload="img.setContent(event.media)"/&gt;</para><sect3><title>Class Name</title>
+<programlisting>&lt;image id="img"/&gt;&#13;Upload your hot shot:&#13;&lt;fileupload onUpload="img.setContent(event.media)"/&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Fileupload</code>
-</para>
-<para>
-<code/>
 </para></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
@@ -21767,7 +25245,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title>Methods</title>
+</informaltable></sect3><sect3><title/>
+<para/></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -21899,12 +25378,10 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/>
 <para/></sect3></sect2><sect2 id="ListitemRenderer"><title>ListitemRenderer</title>
-<para/>
 <para>Identifies components that can be used as "rubber stamps" to paint the cells in a <link linkend="Listbox">Listbox</link>.</para><sect3><title>Interface Name</title>
 <para>
-<code>org.zkoss.zul.Listitem</code>
+<code> org.zkoss.zul.Listitem</code>
 <code>Renderer</code>
 </para>
 <para>
@@ -21944,7 +25421,6 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="ListModel"><title>ListModel</title>
-<para/>
 <para>This interface defines the methods that components like <link linkend="Listbox">
 <code>Listbox</code>
 </link> and <link linkend="Grid">
@@ -22043,13 +25519,7 @@
 			
 		</graphic>
 </para>
-<para>&lt;window title="Messagebox demo" border="normal"&gt;</para>
-<para>&lt;button label="Question" width="100px"&gt;</para>
-<para>&lt;attribute name="onClick"&gt;{</para>
-<para>Messagebox.show("Question is pressed. Are you sure?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);</para>
-<para>}&lt;/attribute&gt;</para>
-<para>&lt;/button&gt;</para>
-<para>&lt;/window&gt;</para><sect3><title>Class Name</title>
+<programlisting>&lt;window title="Messagebox demo" border="normal"&gt;&#13;    &lt;button label="Question" width="100px"&gt;    &#13;        &lt;attribute name="onClick"&gt;{        &#13;            Messagebox.show("Question is pressed. Are you sure?", "Question",            &#13;            Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);            &#13;        }&lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Messagebox</code>
 </para></sect3><sect3><title>Properties</title>
@@ -22092,6 +25562,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title>Methods</title>
+<para/>
 <informaltable frame="all">
 <tgroup cols="3">
 <thead>
@@ -22192,9 +25663,6 @@
 <para>
 <code>org.zkoss.zul.</code>
 <code>RendererCtrl</code>
-</para>
-<para>
-<code/>
 </para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
@@ -22260,10 +25728,9 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="SimpleConstraint"><title>SimpleConstraint</title>
-<para/>
 <para>A simple constraint that you could build based the predefined constants.</para><sect3><title>Interface Name</title>
 <para>
-<code>org.zkoss.zul.SimpleConstraint</code>
+<code> org.zkoss.zul.SimpleConstraint</code>
 </para></sect3><sect3><title>Methods</title>
 <informaltable frame="all">
 <tgroup cols="3">
@@ -22285,9 +25752,7 @@
 <para>
 <code>getClientValidation()</code>
 </para>
-<para>
-<code/>
-</para>
+<para/>
 </entry>
 <entry>
 <para>Returns the function name in JavaScript or a Javascript code snippet used to validate the value at the client.</para>
@@ -22297,7 +25762,24 @@
 <code>String</code>
 </para>
 </entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
 </row>
+</thead><tbody>
 <row>
 <entry>
 <para>
@@ -22363,7 +25845,6 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="SimpleListModel"><title>SimpleListModel</title>
-<para/>
 <para>A simple implementation of <link linkend="ListModel">
 <code>ListModel</code>
 </link>.</para><sect3><title>Class Name</title>
@@ -22450,135 +25931,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/>
-<para>
-<link linkend="AbstractListModel"/>
-</para></sect3></sect2></sect1></chapter>
-<chapter>
-<title>5. The XHTML Components</title><sect1><title>Overview</title>
-<itemizedlist>
-<listitem>
-<para>All XHTML components are packed in the org.zkoss.zhtml package.</para>
-</listitem>
-<listitem>
-<para>The XML name space is http://www.w3.org/1999/xhtml</para>
-</listitem>
-<listitem>
-<para>The extensions include htm, html, xhtml and zhtml.</para>
-</listitem>
-<listitem>
-<para>The component names are case-insensitive. Developers could use any combination of lower or upper cases.</para>
-</listitem>
-</itemizedlist><sect2><title>URL and encodeURL</title>
-<para>A XHTML component generates attributes directly to native HTML tags. It means, unlike XUL, it doesn't prefix the servlet context path to attributes for specifying URL. For example, the following codes don't work (unless the servlet context is "").</para>
-<programlisting>&lt;img href="/my/good.png"/&gt;&#13;</programlisting>
-<para>Rather, you shall use the encodeURL function in EL expressions as follows.</para>
-<programlisting>&lt;?taglib uri="http://www.zkoss.org/dsp/web/core.dsp.tld" prefix="p"?&gt;&#13;...&#13;&lt;img href="${p:encodeURL('/my/good.png')}"/&gt;&#13;</programlisting>
-<para>In Java, you shall use the encodeURL method from org.zkoss.zk.ui.Execution.</para>
-<programlisting>&lt;img id="another"/&gt;&#13;&lt;zscript&gt;&#13;another.setDynamicAttribute("href",&#13;Executions.getCurrent().encodeURL("/my/good.png"));&#13;</programlisting>
-<para>&lt;/zscript&gt;</para>
-<para>Notice that XUL components and all ZK features that accept an URL will invoke the encodeURL method automatically<footnote>
-<para>The reason not to handle XHTML compoents is that we don't know which attribute requires URL.</para>
-</footnote>.</para></sect2><sect2><title>AbstractTag</title>
-<para>All XHTML components are derived from the org.zkoss.zhtml.impl.AbstractTag class.</para>
-<para>A XHTML component is a thin wrapper that encapsulates a native HTML tag. It is different from a XUL component or other none-native component in several ways.</para>
-<itemizedlist>
-<listitem>
-<para>By implementing the org.zkoss.zk.ui.ext.RawId interface, the universal identifier (getUuid) is the same as the identifier (getId).</para>
-</listitem>
-<listitem>
-<para>By implementing the org.zkoss.zk.ui.ext.DynamicAttributes interface, all XHTML components support arbitrary attributes. In other words, any attribute name is legal (as long as the targeted browser supports).</para>
-</listitem>
-</itemizedlist></sect2><sect2><title>Raw</title>
-<para>A special component, org.zkoss.zhtml.Raw, used to represent any component that is not declared in the following section (i.e., not in lang.xml). In other words, if any unrecognized component name is found, an instance of Raw is created, such that a proper HTML tag will be generated correspondingly. In other words, any component name is legal (as long as the targeted browser supports).</para>
-<programlisting>&lt;marquee align="top"&gt;...&lt;/marquee&gt;&#13;</programlisting>
-<para>It is equivalent to</para>
-<para>new Raw().setDynamicAttribute("align", "top");</para></sect2></sect1><sect1><title>Components</title><sect2><title>A</title>
-<para/></sect2><sect2><title>Abbr</title>
-<para/></sect2><sect2><title>Acronym</title>
-<para/></sect2><sect2><title>Address</title>
-<para/></sect2><sect2><title>Area</title>
-<para/></sect2><sect2><title>B</title>
-<para/></sect2><sect2><title>Base</title>
-<para/></sect2><sect2><title>Big</title>
-<para/></sect2><sect2><title>Blockquote</title>
-<para/></sect2><sect2><title>Body</title>
-<para/></sect2><sect2><title>Br</title>
-<para/></sect2><sect2><title>Button</title>
-<para/></sect2><sect2><title>Caption</title>
-<para/></sect2><sect2><title>Cite</title>
-<para/></sect2><sect2><title>Code</title>
-<para/></sect2><sect2><title>Collection</title>
-<para/></sect2><sect2><title>Colgroup</title>
-<para/></sect2><sect2><title>Dd</title>
-<para/></sect2><sect2><title>Del</title>
-<para/></sect2><sect2><title>Dfn</title>
-<para/></sect2><sect2><title>Dir</title>
-<para/></sect2><sect2><title>Div</title>
-<para/></sect2><sect2><title>Dl</title>
-<para/></sect2><sect2><title>Dt</title>
-<para/></sect2><sect2><title>Em</title>
-<para/></sect2><sect2><title>Embed</title>
-<para/></sect2><sect2><title>Fieldset</title>
-<para/></sect2><sect2><title>Font</title>
-<para/></sect2><sect2><title>Form</title>
-<para/></sect2><sect2><title>H1</title>
-<para/></sect2><sect2><title>H2</title>
-<para/></sect2><sect2><title>H3</title>
-<para/></sect2><sect2><title>H4</title>
-<para/></sect2><sect2><title>Head</title>
-<para/></sect2><sect2><title>Hr</title>
-<para/></sect2><sect2><title>Html</title>
-<para/></sect2><sect2><title>I</title>
-<para/></sect2><sect2><title>Iframe</title>
-<para/></sect2><sect2><title>Img</title>
-<para/></sect2><sect2><title>Input</title>
-<para/></sect2><sect2><title>Ins</title>
-<para/></sect2><sect2><title>Isindex</title>
-<para/></sect2><sect2><title>Kbd</title>
-<para/></sect2><sect2><title>Label</title>
-<para/></sect2><sect2><title>Legend</title>
-<para/></sect2><sect2><title>Li</title>
-<para/></sect2><sect2><title>Link</title>
-<para/></sect2><sect2><title>Map</title>
-<para/></sect2><sect2><title>
-<link linkend="Menu">Menu</link>
-</title>
-<link linkend="Menu">Menu</link>
-<para/></sect2><sect2><title>Meta</title>
-<para/></sect2><sect2><title>Nobr</title>
-<para/></sect2><sect2><title>Object</title>
-<para/></sect2><sect2><title>Ol</title>
-<para/></sect2><sect2><title>Optgroup</title>
-<para/></sect2><sect2><title>Option</title>
-<para/></sect2><sect2><title>P</title>
-<para/></sect2><sect2><title>Pre</title>
-<para/></sect2><sect2><title>Q</title>
-<para/></sect2><sect2><title>S</title>
-<para/></sect2><sect2><title>Sam</title>
-<para/></sect2><sect2><title>Script</title>
-<para/></sect2><sect2><title>Select</title>
-<para/></sect2><sect2><title>Small</title>
-<para/></sect2><sect2><title>Span</title>
-<para/></sect2><sect2><title>Strong</title>
-<para/></sect2><sect2><title>Style</title>
-<para/></sect2><sect2><title>Sub</title>
-<para/></sect2><sect2><title>Sup</title>
-<para/></sect2><sect2><title>Table</title>
-<para/></sect2><sect2><title>Tbody</title>
-<para/></sect2><sect2><title>Td</title>
-<para/></sect2><sect2><title>Text</title>
-<para/></sect2><sect2><title>Textarea</title>
-<para/></sect2><sect2><title>Tfoot</title>
-<para/></sect2><sect2><title>Th</title>
-<para/></sect2><sect2><title>Thead</title>
-<para/></sect2><sect2><title>Title</title>
-<para/></sect2><sect2><title>Tr</title>
-<para/></sect2><sect2><title>Tt</title>
-<para/></sect2><sect2><title>Ul</title>
-<para/></sect2><sect2><title>Var</title>
-<para/></sect2></sect1><sect1><title>Supplement Classes</title><sect2><title>Fileupload</title>
-<para/></sect2><sect2><title>Messagebox</title></sect2></sect1></chapter>
+<para/></sect3></sect2></sect1></chapter>
 <chapter>
 <title>Appendix A. WEB-INF/web.xml</title>
 <para>To add ZK a Web application, you have to add servlets, listeners and a optional filter to web.xml.</para><sect1><title>ZK Loader</title>
@@ -22734,14 +26087,11 @@
 <para>The root element must be &lt;zk&gt;. Then, you could specify any combination of the following element under the root element.</para><sect2><title>The richlet and richlet-mapping elements</title>
 <para>To declare a richlet, you have to add the richlet element to zk.xml. You could specify any number of richlet elements. Each of them must have two child elements, richlet-name and richlet-class, and might have any number of the init-param child elements.</para>
 <para>The class name specified in the richlet-class element must implement the org.zkoss.zk.ui.Richlet interface. The name and value specified in the init-param element can be retrieved when the init method of org.zkoss.zk.ui.Richlet is called.</para>
-<programlisting>&lt;richlet&gt;&#13;                                &lt;richlet-name&gt;Test&lt;/richlet-name&gt;&lt;richlet-class&gt;org.zkoss.zkdemo.TestRichlet&lt;/richlet-class&gt;&lt;init-param&gt;&lt;param-name&gt;any&lt;/param-name&gt;&lt;param-value&gt;any&lt;/param-value&gt;&lt;/init-param&gt;&lt;/richlet&gt;                                &#13;</programlisting>
+<programlisting>&lt;richlet&gt;&lt;richlet-name&gt;Test&lt;/richlet-name&gt;&lt;richlet-class&gt;org.zkoss.zkdemo.TestRichlet&lt;/richlet-class&gt;&lt;init-param&gt;&lt;param-name&gt;any&lt;/param-name&gt;&lt;param-value&gt;any&lt;/param-value&gt;&lt;/init-param&gt;&lt;/richlet&gt;                                &#13;</programlisting>
 <para>Once declaring a richlet, you can map it to any number of URL by use of richlet-mapping as depicted below.</para>
-<programlisting>&lt;richlet-mapping&gt;&#13;    &lt;richlet-name&gt;Test&lt;/richlet-name&gt;    &#13;    &lt;url-pattern&gt;/test&lt;/url-pattern&gt;    &#13;&lt;/richlet-mapping&gt;&#13;&lt;richlet-mapping&gt;&#13;    &lt;richlet-name&gt;Test&lt;/richlet-name&gt;    &#13;    &lt;url-pattern&gt;/some/more/*&lt;/url-pattern&gt;    &#13;&lt;/richlet-mapping&gt;&#13;</programlisting>
+<programlisting>&lt;richlet-mapping&gt;&lt;richlet-name&gt;Test&lt;/richlet-name&gt;&lt;url-pattern&gt;/test&lt;/url-pattern&gt;&lt;/richlet-mapping&gt;&lt;richlet-mapping&gt;&lt;richlet-name&gt;Test&lt;/richlet-name&gt;&lt;url-pattern&gt;/some/more/*&lt;/url-pattern&gt;&lt;/richlet-mapping&gt;                &#13;</programlisting>
 <para>The URL specified in the url-pattern element must start with /. If the URI ends with /*, then it is matched to all request with the same prefix. To retrieve the real request, you can check the value returned by the getRequestPath method of the current page.</para>
-<programlisting>public void service(Page page) {&#13;</programlisting>
-<para>if ("/some/more/hi".equals(page.getRequestPath()) {</para>
-<para>...</para>
-<para>}}</para></sect2><sect2><title>The listener Element</title>
+<programlisting>public void service(Page page) {&#13;    if ("/some/more/hi".equals(page.getRequestPath()) {    &#13;        ...        &#13;    }}    &#13;</programlisting></sect2><sect2><title>The listener Element</title>
 <para>To declare a listener, you have to add the listener element to zk.xml. You could specify any number of listener elements. Each of them could have two child elements, description and listener-class, where description is optional.</para>
 <programlisting>&lt;zk&gt;&#13;    &lt;listener&gt;    &#13;        &lt;listener-class&gt;my.MyInit&lt;/listener-class&gt;        &#13;&lt;/listener&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
 <para>The type of a listener depends on what interface it implements. For example, if a listener implements the org.zkoss.zk.ui.event.EventThreadInit interface, then it is used to listen when an event processing thread is initialized. A listener could implement multiple interfaces and it will be used whenever the corresponding interface is about to call.</para><sect3><title>The org.zkoss.zk.ui.event.EventThreadInit Interface</title>
@@ -22815,8 +26165,7 @@
 <para>By default, ZK's logger depends on how the Web server is configured. However, you could configure ZK to load and monitor i3-log.conf as described in the Logger section of the Beyond ZK chapter.</para>
 <programlisting>&lt;log&gt;&#13;    &lt;log-base&gt;org.zkoss&lt;/log-base&gt;    &#13;&lt;/log&gt;&#13;</programlisting>
 <para>If you want to use the same logging mechanism in your application, you could configure ZK to handle all loggers as follows.</para>
-<programlisting>&lt;log&gt;&#13;    &lt;log-base&gt;&lt;/log-base&gt;    &#13;</programlisting>
-<para>&lt;/log&gt;</para>
+<programlisting>&lt;log&gt;&#13;    &lt;log-base&gt;&lt;/log-base&gt;    &#13;&lt;/log&gt;&#13;</programlisting>
 <para>where an empty string means all packages, not just org.zkoss in the previous example.</para></sect2><sect2><title>The client-config Element</title>
 <para>It is used to customize the behavior of the ZK Client Engine. You might have multiple client-config elements in one zk.xml.</para>
 <programlisting>&lt;client-config&gt;&#13;    &lt;disable-behind-modal&gt;true&lt;/disable-behind-modal&gt;    &#13;    &lt;error-reload&gt;    &#13;        &lt;error-code&gt;301&lt;/error-code&gt;        &#13;        &lt;reload-uri&gt;&lt;/reload-uri&gt;        &#13;    &lt;/error-reload&gt;    &#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;    &lt;processing-prompt-delay&gt;900&lt;/processing-prompt-delay&gt;    &#13;    &lt;tooltip-delay&gt;800&lt;/tooltip-delay&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting><sect3><title>The disable-behind-modal Element</title>
@@ -22843,13 +26192,13 @@
 <para>[Default: 800]</para>
 <para>It specifies the time, in milliseconds, to wait before popping up the tooltip when the user moves the mouse pointer over particular UI components.</para></sect3></sect2><sect2><title>The desktop-config Element</title>
 <para>It is used to customize how ZK handles desktops. You might have multiple desktop-config elements in one zk.xml.</para>
-<programlisting>&lt;desktop-config&gt;&#13;    &lt;desktop-timeout&gt;3600&lt;/desktop-timeout&gt;    &#13;    &lt;disasble-default-theme&gt;xul/html&lt;/disable-default-theme&gt;    &#13;    &lt;file-check-period&gt;5&lt;/file-check-period&gt;    &#13;    &lt;theme-uri&gt;/my/blue**.css&lt;/theme-uri&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting><sect3><title>The desktop-timeout Element</title>
+<programlisting>&lt;desktop-config&gt;&#13;    &lt;desktop-timeout&gt;3600&lt;/desktop-timeout&gt;    &#13;    &lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;    &#13;    &lt;file-check-period&gt;5&lt;/file-check-period&gt;    &#13;    &lt;theme-uri&gt;/my/blue**.css&lt;/theme-uri&gt;    &#13;    &lt;theme-provider-class&gt;my.MyThemeProvider&lt;/theme-provider-class&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting><sect3><title>The desktop-timeout Element</title>
 <para>[Default: 3600]</para>
-<para>It specifies the time, in seconds, between client requests before a desktop is invalidated. A negative time indicates the desktop should never timeout.</para></sect3><sect3><title>The disable-default-theme Element</title>
+<para>It specifies the time, in seconds, between client requests before a desktop is invalidated. A negative time indicates the desktop should never timeout.</para></sect3><sect3><title>The disable-theme-uri Element</title>
 <para>[Default: none]</para>
-<para>It specifies the language name (aka., the component set) whose default theme shall be disabled. For example, the following statement disables the style sheet of the XUL component set (its language name is xul/html).</para>
-<programlisting>&lt;desktop-config&gt;&#13;    &lt;disable-default-theme&gt;xul/html&lt;/disable-default-theme&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting>
-<para>Notice that theme-uri adds additional style sheet files. It doesn't affect the default theme, unless disable-default-theme is specified.</para></sect3><sect3><title>The file-check-period Element</title>
+<para>It specifies what theme URI to be disabled. The theme URI shall be one of the default theme URI. For example, the following statement disables the generation of the default theme URI for the ZK XUL component set.</para>
+<programlisting>&lt;desktop-config&gt;&#13;    &lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting>
+<para>It is usually used with the theme-uri element to replace the default theme. Refer to the Themes section of the Internationalization chapter in the Developer's Guide for details.</para></sect3><sect3><title>The file-check-period Element</title>
 <para>[Default: 5]</para>
 <para>It specifies the time, in seconds, to wait before checking whether a file is modified.</para>
 <para>For better performance, ZK has employed a cache to store parsed ZUML file. The time specified here controls how often ZK checks whether a file is modified. The larger the number the better the performance. </para></sect3><sect3><title>The theme-uri Element</title>
@@ -22858,6 +26207,7 @@
 <para>Like other URI, it accepts "*" for loading browser and Locale dependent style sheet. Refer to the Browser and Locale Dependent URI section in the Internationalization chapter for details.</para>
 <para>You can specify any number of them-uri as follows.</para>
 <programlisting>&lt;desktop-config&gt;&#13;    &lt;theme-uri&gt;/my/blue**.css&lt;/theme-uri&gt;    &#13;    &lt;theme-uri&gt;/my/second.css&lt;/theme-uri&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting>
+<para>If you want to replace a default theme, you have to use theme-uri with disable-theme-uri. Refer to the Themes section of the Internationalization chapter in the Developer's Guide for details.</para>
 <para>Notice:</para>
 <orderedlist>
 <listitem>
@@ -22869,7 +26219,10 @@
 <listitem>
 <para>You could specify extra CSS files for individual ZUML pages by use of the style component. Refer to the ZUML with the XUL Component Set chapter.</para>
 </listitem>
-</orderedlist></sect3></sect2><sect2><title>The xel-config Element</title>
+</orderedlist></sect3><sect3><title>The theme-provider-class Element</title>
+<para>[Default: none]</para>
+<para>It specifies the class to provide the theme (aka., a style sheet file) URI dynamically. If you want to determine the theme based on the current user, cookie or locale. You can implement a class with the org.zkoss.zk.ui.util.ThemeProvider interface, and specify it with the theme-provider-class element. Then, an instance of the class will be created, and it is called each time a desktop is rendered to the client to determine the theme URI.</para>
+<para>Notice that the theme provider is called with all theme URIs that shall be generated (including what are specified in theme-uri and excluding what are specified in disable-theme-uri). And, only the return collection of URIs are actually generated. In other words, the theme provider has the highest priority.</para></sect3></sect2><sect2><title>The xel-config Element</title>
 <para>The allowed child elements include evaluator-class. At most one xel-config element is allowed for each zk.xml.</para>
 <programlisting>&lt;xel-config&gt;&#13;    &lt;evaluator-class&gt;my.MyExpressionFactory&lt;/evaluator-class&gt;    &#13;&lt;/xel-config&gt;&#13;</programlisting><sect3><title>The evaluator-class Element</title>
 <para>[Default: org.zkoss.xel.el.ELFactory]</para>
@@ -23043,10 +26396,7 @@
 <para>[Optional][Default: null]</para>
 <para>It specifies the target URI that will be used to redirect users to, when the desktop no longer exists – it is usually caused by session timeout. If this element is omitted, an error message will be shown up at the browser to alert users for what happens.</para>
 <para>To reload the same URI again, you can specify an empty content as follows.</para>
-<para>&lt;device-config&gt;</para>
-<para>&lt;device-type&gt;ajax&lt;/device-type&gt;</para>
-<para>&lt;timeout-uri&gt;&lt;/timeout-uri&gt;</para>
-<para>&lt;/device-config&gt;</para></sect3><sect3><title>The server-push-class Element</title>
+<programlisting>&lt;device-config&gt;&#13;    &lt;device-type&gt;ajax&lt;/device-type&gt;    &#13;    &lt;timeout-uri&gt;&lt;/timeout-uri&gt;    &#13;&lt;/device-config&gt;&#13;</programlisting></sect3><sect3><title>The server-push-class Element</title>
 <para>[Optional][Default: depends on device and what edition you use]</para>
 <para>It specifies which class used to implement the server-push feature. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.ServerPush interface.</para>
 <programlisting>&lt;device-config&gt;&#13;        &lt;device-type&gt;ajax&lt;/device-type&gt;&lt;server-push-class&gt;my.ServerPush&lt;/server-push-class&gt;        &#13;&lt;/device-config&gt;&#13;</programlisting></sect3><sect3><title>The unavailable-message Element</title>
@@ -23055,9 +26405,7 @@
 <programlisting>&lt;error-page&gt;&#13;    &lt;device-type&gt;[ajax|mil]&lt;/device-type&gt;    &#13;    &lt;exception-type&gt;ClassName&lt;/exception-type&gt;    &#13;    &lt;location&gt;the error page's URI&lt;/location&gt;    &#13;&lt;/error-page&gt;&#13;</programlisting>
 <para>It specifies an error page used when an un-caught exception is thrown in updating a ZUML page (e.g., in an event listener). Each page is associated with an exception type, aka, a class deriving from java.lang.Throwable. You can specify multiple error pages, each with a different exception type. When an error occurs, ZK searches the proper error page by examing the exception type one-by-one. If none is found, it shows, by default, an alert message at the client.</para>
 <para>The device-type element is optional. If omitted, ajax is assumed. If you want to specify an error page for mobile devices, it has to be mil.</para></sect2><sect2><title>The preference Element</title>
-<programlisting>&lt;preference&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;</programlisting>
-<para>&lt;value&gt;any value&lt;/value&gt;</para>
-<para>&lt;/preference&gt;</para>
+<programlisting>&lt;preference&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/preference&gt;&#13;</programlisting>
 <para>You can specify any number of preference with the preference element depicted above. The name and value are application specific and you can specify whatever value you like. To avoid name conflict, it is suggested to prefix the name with your domain name, such as com.poitx.some.another.</para>
 <para>The preferences can then be retrieved back by calling the getPreference method of the org.zkoss.zk.ui.util.Configuration class. Notice that each Web application has one configuration, which can be found by use of getConfiguration method of the org.zkoss.zk.ui.WebApp interface.</para>
 <programlisting>String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;    ...    &#13;}&#13;</programlisting></sect2></sect1></chapter>
