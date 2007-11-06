@@ -736,7 +736,31 @@ zk.Selectable.prototype = {
 	_calcSize: function () {
 		this._calcHgh();
 
-		if (this.paging) return; //nothing to adjust since single table
+		if (this.paging) {// Bug #1826101
+			if (this.bodytbl && this.bodytbl.rows.length) {
+				var head;
+				for (var j = 0; j < this.bodytbl.rows.length; j++) {
+					if ($type(this.bodytbl.rows[j]) == "Lhrs") {
+						head = this.bodytbl.rows[j];
+						break;
+					}
+				}
+				if (head) {
+					for (var j = 0; j < head.cells.length; j++) {
+						var d = head.cells[j];
+						var cave = $e(d.id + "!cave");
+						if (cave) {
+							var wd =  d.style.width;							
+							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
+								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";								
+							var w = $int(d.style.width);
+							cave.style.width = zk.revisedSize(cave, w) + "px";
+						}
+					}
+				}
+			}
+			return; //nothing to adjust since single table
+		}
 
 		//Bug 1553937: wrong sibling location
 		//Otherwise,

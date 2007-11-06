@@ -188,7 +188,31 @@ zk.Grid.prototype = {
 		this.updSize();
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 
-		if (this.paging) return; //nothing to adjust since single table
+		if (this.paging) { // Bug #1826101
+			if (this.bodytbl && this.bodytbl.rows.length) {
+				var head;
+				for (var j = 0; j < this.bodytbl.rows.length; j++) {
+					if ($type(this.bodytbl.rows[j]) == "Cols") {
+						head = this.bodytbl.rows[j];
+						break;
+					}
+				}
+				if (head) {
+					for (var j = 0; j < head.cells.length; j++) {
+						var d = head.cells[j];
+						var cave = $e(head.cells[j].id + "!cave");
+						if (cave) {
+							var wd =  d.style.width;							
+							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
+								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";								
+							var w = $int(d.style.width);
+							cave.style.width = zk.revisedSize(cave, w) + "px";
+						}
+					}
+				}
+			}
+			return; //nothing to adjust since single table
+		}
 
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt

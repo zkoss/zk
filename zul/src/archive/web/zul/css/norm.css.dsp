@@ -267,10 +267,10 @@ div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-pag
 	background: window; border: 0; overflow: auto; width: 100%;
 }
 div.listbox-paging, div.grid-paging {
-	height: 100%; overflow: hidden;
+	height: 100%;
 }
 div.listbox-pgi, div.grid-pgi {
-	border-top: 1px solid #AAB;
+	border-top: 1px solid #AAB; overflow: hidden;
 }
 div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	cursor: pointer; padding: 0 2px;
