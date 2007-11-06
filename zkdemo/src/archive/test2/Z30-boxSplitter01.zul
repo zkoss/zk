@@ -58,7 +58,7 @@
 	</window>
 	<window border="normal" title="Case 3: vbox in hbox and splitter">
 		<hbox spacing="0" width="100%">
-				<vbox height="200px">
+				<vbox width="100%" height="200px">
 					Column 1-1: The left-top box. To know whether a splitter
 					is collapsed, you can listen to the onOpen event.
 					<splitter id="vs" collapse="none"/>
@@ -90,7 +90,7 @@
 	</window>
 		<window border="normal" title="Case 4: hbox in vbox and splitter">
 		<vbox spacing="0" width="100%">
-				<hbox width="100%">
+				<hbox width="100%" height="100%">
 					cdacdacdacda
 					<splitter id="hs" collapse="after"/>
 					cdaccdacdacda
