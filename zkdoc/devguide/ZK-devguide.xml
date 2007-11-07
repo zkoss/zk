@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
-<title>ZK Developer's Guide</title>
-<subtitle>Version 3.0</subtitle>
+<title>The Developer's Guide</title>
+<subtitle>Version 3.0.0</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
@@ -24,7 +24,11 @@
 <para>Over a decade of evolution, Web applications evolved from static HTML pages, to Dynamic HTML pages, to applets and Flash, and, finally, to AJAX<footnote>
 <para>AJAX is coined by Jesse James Garrett in Ajax: A New Approach to Web Applications.</para>
 </footnote> technologies (Asynchronous JavaScript and XML). Illustrated by Google Maps and Suggest, AJAX breaths new life into Web applications by delivering the same level of interactivity and responsiveness as desktop applications. Unlike applets or Flash, AJAX is based the standard browser and JavaScript and no proprietary plugin is required.</para>
-<para>AJAX is a kind of new generation DHTML. Like DHTML, it heavily relies on JavaScript to listen events triggered by user's activity, and then manipulate visual representation of a page (aka. DOM) in the browser dynamically. Moreover, it takes a step further by enabling the communication with the server asynchronously without leaving or rendering the whole page again. It breaks the page-based model by introducing light-weight communication between clients and servers. With proper design, AJAX could bring rich components common to desktop applications to life in Web applications, and all of their content could be dynamically updated under the control of applications.</para>
+<para/>
+<para>
+<graphic fileref="images/200000C9000027E4000032FC924A1F58.jpg">2
+			
+		</graphic>AJAX is a kind of new generation DHTML. Like DHTML, it heavily relies on JavaScript to listen events triggered by user's activity, and then manipulate visual representation of a page (aka. DOM) in the browser dynamically. Moreover, it takes a step further by enabling the communication with the server asynchronously without leaving or rendering the whole page again. It breaks the page-based model by introducing light-weight communication between clients and servers. With proper design, AJAX could bring rich components common to desktop applications to life in Web applications, and all of their content could be dynamically updated under the control of applications.</para>
 <para>When providing the interactivity that users demand, AJAX adds more complexities and skill prerequisites to the already costly development of Web applications. Developers have to manipulate DOM in the browser and communicate with the server in incompatible and even buggy JavaScript API. For better interactivity, developers have to replicate subset of application data and business logic to the browser. It then increases the maintenance cost and the challenge to synchronized data in between.</para>
 <para>The bottom line is that ad hoc AJAX applications is no different from traditional Web applications regarding the way to process requests. Developers still have to fulfill the gap caused by the page-based and stateless model.</para></sect1><sect1><title>ZK: What It Is </title>
 <para>ZK is an event-driven, component-based framework to enable rich user interfaces for Web applications. ZK includes an AJAX-based event-driven engine, a rich set of XUL and XHTML components, and a markup language called ZUML (ZK User Interface Markup Language).</para>
@@ -1847,7 +1851,7 @@
 <para>Notice that getMedia and getMedias return null to indicate that no file is specified but the Upload button is pressed.</para></sect4><sect4><title>The onClose Event</title>
 <para>In addition to onUpload, the onClose event is sent to notify that either the Upload button or the Cancel button is pressed. By default, it simply invalidates the fileupload component, i.e., all fields are cleaned up and redrawn. If you listen to this event to have the custom behavior.</para></sect4></sect3><sect3><title>The File Download Dialog</title>
 <para>The org.zkoss.zul.Filedownload class provides a set of utilities to prompt a user for downloading a file from the server to the client. Unlike the iframe component that displays the file in the browser window, a file download dialog is shown at the browser if one of the save methods is called. Then, the user can specify the location in his local file system to save the file.</para>
-<programlisting>&lt;button label="Download download.html"&gt;<inlinegraphic fileref="images/10000000000002AF000001BB582C2DD7.png" align="right"/>&#13;    &lt;attribute name="onClick"&gt;{    &#13;                java.io.InputStream is = desktop.getWebApp().getResourceAsStream("/test/download.html");                &#13;    if (is != null)    &#13;Filedownload.save(is, "text/html", "download.html");&#13;    else    &#13;        alert("/test/download.html not found");        &#13;    }&lt;/attribute&gt;    &#13;&lt;/button&gt;&#13;&#13;</programlisting></sect3></sect2></sect1><sect1><title/></sect1><sect1><title>The Layout Components</title>
+<programlisting>&lt;button label="Download download.html"&gt;<inlinegraphic fileref="images/10000000000002AF000001BB582C2DD7.png" align="right"/>&#13;    &lt;attribute name="onClick"&gt;{    &#13;                java.io.InputStream is = desktop.getWebApp().getResourceAsStream("/test/download.html");                &#13;    if (is != null)    &#13;Filedownload.save(is, "text/html", "download.html");&#13;    else    &#13;        alert("/test/download.html not found");        &#13;    }&lt;/attribute&gt;    &#13;&lt;/button&gt;&#13;&#13;</programlisting></sect3></sect2></sect1><sect1><title>The Layout Components</title>
 <para>Components: <code>borderlayout</code>, <code>north</code>, <code>south</code>, <code>center</code>,<code>west</code>,<code>east</code>
 </para>
 <para>The layout component is a nested component. The parent component is <code>borderlayout</code>, and its children components include <code>north</code>, <code>south</code>, <code>center</code>, <code>west</code>, and <code>east</code>. The combination of children components of <code>borderlayout</code> is free. For example, if you want to divide the area into three regions (veritically), you could try the following combination,</para>
@@ -2780,7 +2784,7 @@
 <para>The real result depends on how your Web application is configured.</para>
 </footnote> to the browser, so the specified file must be accessible by the browser.</para>
 <programlisting>&lt;link rel="stylesheet" href="/css/mystyles.css"/&gt;&#13;</programlisting>
-<para>In other words, you cannot specify "/WEB-INF/xx" or "<xi:include href=".xml" xmlns:xi="http://www.w3.org/2001/XInclude" />".</para>
+<para>In other words, you cannot specify "/WEB-INF/xx" or "<link linkend="">C:/xx/yy</link>".</para>
 <para>Like other URI, it accepts "*" for loading browser and Locale dependent style sheet. Refer to the Browser and Locale Dependent URI section in the Internationalization chapter for details.</para></sect2><sect2><title>The script Component</title>
 <para>The script component is used to specify the script codes running at the browser. Notice that, unlike zscript, the script codes are running at the browser. They are usually written in JavaScript which is supported by the most of browsers. The simplest format is as follows.</para>
 <programlisting>&lt;script type="text/javascript"&gt;&#13;function myfunc() {&#13;    $e("${win.uuid}").style.backgroundColor = "blue";    &#13;}&#13;&lt;/script&gt;&#13;</programlisting>
