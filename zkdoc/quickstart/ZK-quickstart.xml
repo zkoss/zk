@@ -31,7 +31,7 @@
 </entry>
 <entry>
 <para>
-<ulink url="http://www.apache.org/dist/tomcat/tomcat-5/v5.5.20/bin/apache-tomcat-5.5.20.exe">Installer for Windows:</ulink>
+Installer for Windows:
 <ulink url="http://www.apache.org/dist/tomcat/tomcat-5/v5.5.20/bin/apache-tomcat-5.5.20.exe">apache-tomcat-5.5.20.exe</ulink>
 </para>
 <para>A list of all available versions:<ulink url="http://tomcat.apache.org/download-55.cgi">http://tomcat.apache.org/download-55.cgi</ulink>
@@ -120,7 +120,7 @@
 </row>
 <row>
 <entry>
-<para>zk-bin-prof-3.0.0.tar.gz</para>
+<para>zk-bin—prof-3.0.0.tar.gz</para>
 <para>zk-bin-prof-3.0.0.zip</para>
 </entry>
 <entry>
@@ -228,8 +228,8 @@
 </orderedlist>
 <para>Then, you can deploy your Web application, e.g., demo/bin/zkdemo.war, to Tomcat. It can be done by use of the Tomcat manager, or by copying it to $TOMCAT_HOME/webapps directly. If you prefer copying directly, you have to stop Tomcat first. After deployed, you can run your Web application by visiting the corresponding URL, e.g.,<ulink url="http://localhost/zkdemo/userguide"> </ulink>
 <ulink url="http://localhost/zkdemo/userguide">http://localhost:8080/zkdemo/userguide</ulink>
-<ulink url="http://localhost/zkdemo/userguide">,</ulink>
-<link linkend=""> depending on the configuration of your Web server. </link>
+<ulink url="http://localhost/zkdemo/userguide"></ulink>
+ ,depending on the configuration of your Web server.
 </para>
 <para>Install ZK on Jetty</para>
 <orderedlist>
@@ -254,15 +254,12 @@
 </orderedlist>
 <para>Then, you can deploy your Web application, e.g., demo/bin/zkdemo.war, to Jetty by copying it to $JETTY_HOME/webapps directly. After deployed, you can run your Web application by visiting the corresponding URL, e.g.,<ulink url="http://localhost/zkdemo/userguide"> </ulink>
 <ulink url="http://localhost/zkdemo/userguide">http://localhost:8080/zkdemo/userguide</ulink>
-<ulink url="http://localhost/zkdemo/userguide">,</ulink>
-<link linkend=""> depending on the configuration of your Web server.</link>
-</para></sect1><sect1><title>Working with MySQL<footnote>
+<ulink url="http://localhost/zkdemo/userguide">,</ulink> depending on the configuration of your Web server.</para></sect1><sect1><title>Working with MySQL<footnote>
 <para>
 <ulink url="http://mysql.com/">http://ww.mysql.com</ulink>
 </para>
 </footnote>
 </title>
-
 <para>To open the connection under zscript, you have to put MySQL JDBC driver (mysql-connector-*.jar) under the $TOMCAT_DIR/common/lib directory.</para></sect1></chapter>
 <chapter>
 <title>4. The Content of Binary Distribution</title>
