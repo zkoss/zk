@@ -138,6 +138,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		
 		if (_parenttag != null)_parenttag.addChildTag(this);
 		else _roottag.addChildTag(this);
+		_comp.getDefinition().applyProperties(_comp);
 	}
 	
 	/**
