@@ -129,19 +129,19 @@
 </xsl:template>
 
 <xsl:template match="text:p">
+<xsl:if test="ancestor-or-self::text:h">
 		<xsl:element name="para">
 			  <xsl:apply-templates/>
 		</xsl:element>
+</xsl:if>
 </xsl:template>
-
-
 
 <xsl:template match="/office:document">
 	<xsl:element name="book">
 		<xsl:attribute name="lang"><xsl:value-of select="/office:document/office:meta/dc:language"/>
 		</xsl:attribute>
-		<title></title>
-		<subtitle>Version 3.0.0 RC2</subtitle>
+		<title><xsl:value-of select="//text:p[@text:style-name='Document Title']"/></title>
+		<subtitle><xsl:value-of select="//text:p[@text:style-name='Document SubTitle']"/></subtitle>
 		<bookinfo>
 	 <copyright>
       <year>2007</year>
@@ -217,6 +217,7 @@
 <xsl:template match="office:font-decls">
 </xsl:template>
 
+<!--
 <xsl:template match="text:section">
 <xsl:choose>
 	<xsl:when test="@text:name='ArticleInfo'">
@@ -254,7 +255,7 @@
 
 </xsl:choose>
 </xsl:template>
-
+-->
 <xsl:template name="ArticleInfo">
 	<xsl:param name="level"/>
 	<xsl:variable name="author"><xsl:value-of select="concat('articleinfo.author_','', $level)"/></xsl:variable>
@@ -875,19 +876,21 @@
                 <xsl:apply-templates/>
             </xsl:element>
         </xsl:when>
+  <!--
 		<xsl:when test="not(contains(@xlink:href,'#'))">
 		 <xsl:text  disable-output-escaping="yes">&lt;xi:include href="</xsl:text><xsl:value-of select="substring-before(@xlink:href,'.xml')"/>
    <xsl:text  disable-output-escaping="yes">.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /&gt;</xsl:text>
 		 
-		 <!--
+		 
 			<xsl:element name="link">
 				<xsl:attribute name="linkend">
 					<xsl:value-of select="substring-before(@xlink:href,'.xml')"/>
 				</xsl:attribute>
 				<xsl:apply-templates/>
 			</xsl:element>
-			-->
+			
 		</xsl:when>
+		-->
 		<xsl:otherwise>
 		<xsl:variable name="linkvar" select="@xlink:href"/>
 			<xsl:element name="link">
@@ -920,7 +923,7 @@
 		</xsl:element>
 	</xsl:if>
 </xsl:template>
--->
+--> 
 <xsl:template match="text:p[@text:style-name='Code']">
 	<xsl:if test="not(preceding-sibling::*[1][self::text:p[@text:style-name='Code']])">
 			<xsl:element name="programlisting">
