@@ -1,4 +1,4 @@
-mesg.js "charset=utf-8"
+/* mesg.js "charset=utf-8"
 
 {{IS_NOTE
 	Purpose:
