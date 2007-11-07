@@ -24,8 +24,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<language-name>xul/html</language-name>
 
 	<version>
-		<version-class>org.zkoss.zkplus.databind.Version</version-class>
-		<version-uid>3.0.0</version-uid>
+		<version-class>org.zkoss.zkplus.Version</version-class>
+		<version-uid>3.0.1</version-uid>
 		<zk-version>2.4.0</zk-version><!-- or later -->
 	</version>
 
