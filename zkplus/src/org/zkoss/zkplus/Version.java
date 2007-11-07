@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package org.zkoss.zkplus.databind;
+package org.zkoss.zkplus;
 
 /**
  * The version of the ZK Plus utilities.
@@ -22,9 +22,10 @@ package org.zkoss.zkplus.databind;
  * and config.xml.
  * 
  * @author henrichen
+ * @since 3.0.1
  */
 public class Version {
 	/** Returns the version UID.
 	 */
-	public static final String UID = "3.0.0";
+	public static final String UID = "3.0.1";
 }
