@@ -569,6 +569,9 @@ public class Chart extends Imagemap {
 	 */
 	protected ChartEngine newChartEngine() throws UiException {
 		Object v = getAttribute("chart-engine");
+		if (v == null)
+			v = "org.zkoss.zkex.zul.impl.JFreeChartEngine";
+
 		try {
 			final Class cls;
 			if (v instanceof String) {
