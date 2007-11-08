@@ -60,9 +60,8 @@ public class PageRequestContext implements RequestContext {
 		return _pgctx.getServletContext();
 	}
 	public VariableResolver getVariableResolver() {
-		final javax.servlet.jsp.el.VariableResolver vr = _pgctx.getVariableResolver();
 		return new VariableResolver(){
-			javax.servlet.jsp.el.VariableResolver vr1 = vr;
+			javax.servlet.jsp.el.VariableResolver vr = _pgctx.getVariableResolver();
 			public Object resolveVariable(String arg0) throws XelException {
 				try {
 					return vr.resolveVariable(arg0);
@@ -72,4 +71,4 @@ public class PageRequestContext implements RequestContext {
 			}
 		};//end of class...
 	}
-}
+}//end of class...

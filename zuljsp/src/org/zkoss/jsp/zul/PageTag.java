@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.Page;
  */
 public class PageTag extends RootTag {
 	private String _style;
+	private String _id;
 
 	/** Returns the style.
 	 * Default: null (no style at all).
@@ -46,13 +47,28 @@ public class PageTag extends RootTag {
 	public void setStyle(String style) {
 		_style = style != null && style.length() > 0 ? style: null;
 	}
-
+	/**
+	 *  if not set before, ZK will generate one for this.
+	 * @return this page id.
+	 */
+	public String getId() {
+		return _id;
+	}
+	/**
+	 * if not set before, ZK will generate one for this.
+	 * @param id
+	 */
+	public void setId(String id) {
+		_id = id;
+	}
+	
 	/** Creates and returns the page.
 	 */
 	protected void init(Execution exec, Page page) {
 		super.init(exec, page);
-
+		page.setId(_id);
 		page.setStyle(_style);
 	}
+
 
 }
