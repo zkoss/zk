@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>A simple Capcha Demo</title>
+<title>A simple Auxheader Demo</title>
 </head>
 <body>
 <z:page zscriptLanguage="java"><%-- this is Jsp valid Comment, do not use XML comment. --%>
@@ -39,14 +39,21 @@
 					<z:auxheader label="A+B+C"  colspan="3"/>
 					<z:auxheader label="D"/>
 				</z:auxhead>
-				<c:forEach var="i" begin="1" end="6" step="1" varStatus="status">
+				<c:forEach var="i" begin="1" end="6" varStatus="iStatus">
 					<z:listitem>
-						<c:forEach var="j" begin="1" end="4" step="1" varStatus="status">
+						<c:forEach var="j" begin="1" end="4" step="1" varStatus="jStatus">
 							<z:listcell label="cell_${i}.${j}"/>
 						</c:forEach>
 					</z:listitem>
 				</c:forEach>
 			</z:listbox>
+			
+			<z:combobox> 
+		       <c:forEach var="i" begin="1" end="5" varStatus="status">
+		          <z:comboitem label="Hello JSTL ${i}"/>
+		       </c:forEach>   
+		    </z:combobox>
+			
 		</z:window>
 </z:page>
 </body>
