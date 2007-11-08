@@ -1,3 +1,8 @@
+ZK 3.0.1
+* Features:
+
+* Bugs:
+	1828044: When header is invisible, whole column should be disappeared
 	--------
 ZK 3.0.0
 * Features:
