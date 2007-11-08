@@ -106,7 +106,7 @@ public class Chart extends Imagemap {
 	private transient ChartDataListener _dataListener;
 	private transient EventListener _smartDrawChartListener; //the smartDrawListner
 
-	private String _type; //chart type (pie, ring, bar, line, xy, etc)
+	private String _type = "pie"; //chart type (pie, ring, bar, line, xy, etc)
 	private boolean _threeD; //whether a 3D chart
 	
 	//chart related attributes
@@ -139,8 +139,16 @@ public class Chart extends Imagemap {
 	//chart engine
 	private ChartEngine _engine; //chart engine. model and engine is related
 
+	public Chart() {
+		setWidth("500px");
+		setHeight("250px");
+	}
+
 	/**
 	 * Set the chart's type (Chart.PIE, Chart.BAR, Chart.LINE, etc.).
+	 *
+	 * <p>Default: pie.
+	 
 	 */
 	public void setType(String type) {
 		if (Objects.equals(_type, type)) {
@@ -569,6 +577,9 @@ public class Chart extends Imagemap {
 	 */
 	protected ChartEngine newChartEngine() throws UiException {
 		Object v = getAttribute("chart-engine");
+		if (v == null)
+			v = "org.zkoss.zkex.zul.impl.JFreeChartEngine";
+
 		try {
 			final Class cls;
 			if (v instanceof String) {
