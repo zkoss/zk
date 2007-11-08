@@ -59,14 +59,14 @@ public class MyWindow extends Window implements AfterCompose{
 		dump(sb,comp);
 		out.println(sb);
 		for(Iterator itor = comp.getChildren().iterator();itor.hasNext();)
-			recursivePrint((Component) itor.next(),out,level++);
+			recursivePrint((Component) itor.next(),out,level+1);
 	}
 	/**
 	 * 
 	 * @param sb
 	 * @param comp
 	 */
-	private void dump(StringBuffer sb, Component comp) 
+	private static void dump(StringBuffer sb, Component comp) 
 	{
 		String srClss=comp.getClass().toString();
 		srClss = srClss.substring(srClss.lastIndexOf(".")+1);

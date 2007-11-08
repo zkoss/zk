@@ -62,6 +62,16 @@
 					ZK Window Component Mode setting in zscript: <z:toolbarbutton href="./windowmode.jsp" label="Window Mode Demo"/>
 				</z:hbox>
 			</div>		
+			<div style="margin-top: 10px">
+				<z:hbox>
+					ZK Borderlayout component set from ZKEX: <z:toolbarbutton href="./borderlayout.jsp" label="Borderlayout Demo"/>
+				</z:hbox>
+			</div>	
+			<div style="margin-top: 10px">
+				<z:hbox>
+					ZK Auxheader Demo from ZKEX: <z:toolbarbutton href="./auxheader.jsp" label="Auxheader Demo"/>
+				</z:hbox>
+			</div>	
 			</z:vbox>
 		</z:window>		
 		

@@ -28,8 +28,9 @@ public class MyInit implements Initiator {
 	/* (non-Javadoc)
 	 * @see org.zkoss.zk.ui.util.Initiator#doCatch(java.lang.Throwable)
 	 */
-	public void doCatch(Throwable ex) {
+	public boolean doCatch(Throwable ex) {
 		// TODO Auto-generated method stub
+		return false;
 
 	}
 
