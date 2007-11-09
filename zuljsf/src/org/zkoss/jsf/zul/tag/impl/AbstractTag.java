@@ -148,7 +148,9 @@ abstract public class AbstractTag extends UIComponentBodyTag {
 		return null;//RENDERER_TYPE_PREFIX+_typeName;
 	}
 	
-	
+	/**
+	 * check should this tag skip the body content.
+	 */
 	protected boolean isSkipBody(){
 		return _isSkipBody;
 	}

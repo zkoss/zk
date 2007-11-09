@@ -1,4 +1,4 @@
-/* Include.java
+/* Center.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		2007/08/16  18:10:17 , Created by Dennis.Chen
+		Nov 7, 2007 12:48:27 AM     2007, Created by Dennis.Chen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -22,25 +22,20 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Include is a JSF component implementation for {@link org.zkoss.zul.Include}, 
+ * Window is a JSF component implementation for {@code org.zkoss.zkex.zul.Center}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
- * 
- * You can only include zul page 
- * 
- * For example:
- * <p>&lt;z:include src="/myWindow.zul" /&gt;
  * 
  * To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   
  * @author Dennis.Chen
  *
  */
-public class Include extends BranchComponent {
+public class Center extends BranchComponent {
 
 
 	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Include():use.newInstance());
+		return (Component) (use==null?new org.zkoss.zkex.zul.Center():use.newInstance());
 	}
 	
 	

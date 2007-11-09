@@ -26,6 +26,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.jsf.zul.Audio</component-class>
 	</component>
 	<component>
+		<component-type>org.zkoss.jsf.zul.Auxhead</component-type>
+		<component-class>org.zkoss.jsf.zul.Auxhead</component-class>
+	</component>
+	<component>
+		<component-type>org.zkoss.jsf.zul.Auxheader</component-type>
+		<component-class>org.zkoss.jsf.zul.Auxheader</component-class>
+	</component>
+	<component>
 		<component-type>org.zkoss.jsf.zul.Bandbox</component-type>
 		<component-class>org.zkoss.jsf.zul.Bandbox</component-class>
 	</component>
@@ -73,6 +81,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-type>org.zkoss.jsf.zul.Comboitem</component-type>
 		<component-class>org.zkoss.jsf.zul.Comboitem</component-class>
 	</component>
+	<component>
+		<component-type>org.zkoss.jsf.zul.CustomAttributes</component-type>
+		<component-class>org.zkoss.jsf.zul.CustomAttributes</component-class>
+	</component>
+
 	<component>
 		<component-type>org.zkoss.jsf.zul.Datebox</component-type>
 		<component-class>org.zkoss.jsf.zul.Datebox</component-class>
@@ -341,4 +354,31 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-type>org.zkoss.jsf.zul.ZScript</component-type>
 		<component-class>org.zkoss.jsf.zul.ZScript</component-class>
 	</component>
+
+	<!--zkex component-->
+	<component>
+		<component-type>org.zkoss.jsf.zul.Borderlayout</component-type>
+		<component-class>org.zkoss.jsf.zul.Borderlayout</component-class>
+	</component>
+	<component>
+		<component-type>org.zkoss.jsf.zul.Center</component-type>
+		<component-class>org.zkoss.jsf.zul.Center</component-class>
+	</component>
+	<component>
+		<component-type>org.zkoss.jsf.zul.East</component-type>
+		<component-class>org.zkoss.jsf.zul.East</component-class>
+	</component>
+	<component>
+		<component-type>org.zkoss.jsf.zul.North</component-type>
+		<component-class>org.zkoss.jsf.zul.North</component-class>
+	</component>
+	<component>
+		<component-type>org.zkoss.jsf.zul.South</component-type>
+		<component-class>org.zkoss.jsf.zul.South</component-class>
+	</component>
+	<component>
+		<component-type>org.zkoss.jsf.zul.West</component-type>
+		<component-class>org.zkoss.jsf.zul.West</component-class>
+	</component>
+
 </faces-config>

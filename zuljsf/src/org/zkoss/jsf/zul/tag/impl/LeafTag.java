@@ -45,11 +45,12 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 	 * Handle dynamic Attribute of this tag.
 	 */
 	protected Map _dynamicAttrMap = new LinkedHashMap();
+	protected Map _jsfcoreAttrMap = new LinkedHashMap();
 	
 	/**
 	 * Handle special namespace of attribute.
 	 */
-	protected Map _specialNS = new HashMap();
+	//protected Map _specialNS = new HashMap();
 	
 	private String _use;
 	private String _forward;
@@ -74,7 +75,6 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 	public void release() {
 		super.release();
 		_dynamicAttrMap = null;
-		_specialNS = null;
 		_use = null;
 		_forward = null;
 		
@@ -89,25 +89,27 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 	 */
 	public void setDynamicAttribute(String uri, String localName, Object value) 
 	throws JspException {
-		_dynamicAttrMap.put(localName, value);	
+		
 		if(uri==null || ZUL_JSF_NS.equals(uri)){
+			_dynamicAttrMap.put(localName, value);	
 			if("use".equals(localName)||"forward".equals(localName))
-				throw new JspException("please set use, forward as a attribute!!!");
+				//should not happen!!
+				throw new JspException("please set 'use', 'forward' as a static attribute!!!");
 			if("id".equals(localName)){
 				this.setId((String)value);
 			}
 			
 		}else if(uri==null || JSF_CORE_NS.equals(uri)){
+			_jsfcoreAttrMap.put(localName, value);	
 			if("id".equals(localName)){
-				throw new JspException("don't assign id with namespace http://java.sun.com/jsf/core, use it directly");
+				throw new JspException("don't assign id with namespace http://java.sun.com/jsf/core, assign it with zk namespance or empty namespace");
 			}else if("binding".equals(localName)){
 				this.setBinding((String)value);
 			}else if("rendered".equals(localName)){
 				this.setRendered((String)value);
 			}
-			_specialNS.put(localName, uri);
 		}else{
-			_specialNS.put(localName, uri);
+			//ignore others
 		}
 		
 	}
@@ -149,25 +151,20 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 			//process set value,
 			String prop = (String)entry.getKey();
 			Object value = _dynamicAttrMap.get(prop);
-			String ns = (String)_specialNS.get(prop);
-			/*ZK namespace*/
-			if(ns==null){
-				if(!(value instanceof String)) throw new RuntimeException("attribute '"+prop+"' must be String");
-				if(value!=null && isValueReference((String)value)){
-					if(prop.startsWith("on")){
-						throw new RuntimeException("can not set event listener to value binding!!!");
-					}
-					javax.faces.el.ValueBinding _vb = getFacesContext().getApplication().createValueBinding((String)value);
-					compAttMap.put(prop, _vb);
-				}else{
-					if(value==null){
-						log.debug("A null value is set to attribute '"+prop+"'");
-					}
-					compAttMap.put(prop, value);
+			/*Check ZK namespace*/
+			
+			if(!(value instanceof String)) throw new RuntimeException("attribute '"+prop+"' must be String");
+			if(value!=null && isValueReference((String)value)){
+				if(prop.startsWith("on")){
+					throw new RuntimeException("can not set event listener to value binding!!!");
 				}
+				javax.faces.el.ValueBinding _vb = getFacesContext().getApplication().createValueBinding((String)value);
+				compAttMap.put(prop, _vb);
 			}else{
-				//special NameSpace
-				//do nothing currently
+				if(value==null){
+					log.debug("A null value is set to attribute '"+prop+"'");
+				}
+				compAttMap.put(prop, value);
 			}
 		}
 		((LeafComponent)comp).setZULDynamicAttribute(compAttMap);

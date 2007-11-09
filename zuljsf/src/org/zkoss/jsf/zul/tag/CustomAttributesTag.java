@@ -1,4 +1,4 @@
-/* InitTag.java
+/* AttributeTag.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		2007/08/16  11:26:44 , Created by Dennis.Chen
+		Fri Jul 27 17:09:09     2007, Created by Dennis.Chen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -22,42 +22,31 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.DynamicAttributes;
 
-import org.zkoss.jsf.zul.impl.AbstractComponent;
-import org.zkoss.jsf.zul.impl.BaseInit;
+import org.zkoss.jsf.zul.impl.BaseCustomAttributes;
 import org.zkoss.jsf.zul.tag.impl.AbstractTag;
 
 
-public class InitTag extends AbstractTag implements DynamicAttributes{
-
+/**
+ * A JSF Tag class to handle the attribute element.
+ * @author Dennis.Chen
+ */
+public class CustomAttributesTag extends AbstractTag implements DynamicAttributes{
+	
 	/**
 	 * Handle dynamic Attribute of this tag.
 	 */
 	protected Map _dynamicAttrMap = new LinkedHashMap();
-	
-	private String _use;
-	
-	
-	/**
-	 * constructor. 
-	 */
-	public InitTag() {
-		super("Init");
+
+	public CustomAttributesTag() {
+		super("CustomAttributes");
 	}
 	
-	public void setUse(String use){
-        this._use = use;
-    }
-
-
 	public void release() {
 		super.release();
 		_dynamicAttrMap = null;
-		_use = null;
-		
 	}
 	/**
 	 *   Called when a tag declared to accept dynamic attributes is passed an 
@@ -69,19 +58,9 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	 */
 	public void setDynamicAttribute(String uri, String localName, Object value) 
 	throws JspException {
-			
 		if(uri==null || ZUL_JSF_NS.equals(uri)){
 			_dynamicAttrMap.put(localName, value);
-			if("use".equals(localName))
-				throw new JspException("please set use, forward as a attribute!!!");
-		}else if(uri==null || JSF_CORE_NS.equals(uri)){
-			if("binding".equals(localName)){
-				this.setBinding((String)value);
-			}else if("rendered".equals(localName)){
-				this.setRendered((String)value);
-			}
 		}
-		
 	}
 
 
@@ -90,23 +69,7 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	 */
 	protected void setProperties(UIComponent comp) {
 		super.setProperties(comp);
-		FacesContext context = ((AbstractComponent)comp).getFacesContext();
-		if(_use!=null ){
-			if(isValueReference(_use)){
-				javax.faces.el.ValueBinding _vb = getFacesContext().getApplication().createValueBinding(_use);
-				Object obj  = _vb.getValue(context);
-				if(obj!=null){
-					((BaseInit)comp).setUse(obj.toString());
-				}
-			}else{
-				((BaseInit)comp).setUse(_use);
-			}
-		}else{
-			throw new RuntimeException("Set use attribute for this initiator");
-		}
-		
-		((BaseInit)comp).setDynamicAttribute(_dynamicAttrMap);
+		((BaseCustomAttributes)comp).setDynamicAttribute(_dynamicAttrMap);
 	}
-	
-	
+
 }

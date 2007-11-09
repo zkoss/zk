@@ -565,10 +565,10 @@ abstract public class BranchInput extends BranchOutput implements
 	protected void afterZULComponentComposed(Component zulcomp) {
 		super.afterZULComponentComposed(zulcomp);
 		if (this instanceof ClientInputSupport) {
-			String name = ((ClientInputSupport) this).getInputAttributeName();
+			String att = ((ClientInputSupport) this).getInputAttributeName();
 			String value = ((ClientInputSupport) this).getInputAttributeValue();
 			try {
-				Fields.setField(zulcomp, name, value, true);
+				Fields.setField(zulcomp, att, value, true);
 			} catch (Exception x) {
 				throw new RuntimeException(x.getMessage(), x);
 			}

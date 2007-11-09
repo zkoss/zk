@@ -27,7 +27,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</description>
 
 	<!-- General Purpose -->
-	<tag><!--***** PageTag  *****-->
+	<!--***** PageTag  *****-->
+	<tag>
 		<description>
 	Define a page in a JSP tag.
 	It is responsible for handling the lifecycle for all nested ZK
@@ -70,7 +71,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<tag><!--***** ZScriptTag  *****-->
+	<!--***** ZScriptTag  *****-->
+	<tag>
 		<description>
 	Define Zscript Tag, let user can declaire zscript fragment.
 		</description>
@@ -94,7 +96,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<tag><!--***** AttributeTag  *****-->
+	<!--***** AttributeTag  *****-->
+	<tag>
 		<description>
 	Define Attribute Tag.
 		</description>
@@ -110,7 +113,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<tag><!--***** InitTag  *****-->
+	<!--***** InitTag  *****-->
+	<tag>
 		<description>
 	Define Init Tag.
 		</description>
@@ -127,11 +131,21 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<!--***** Custom-Attributes Tag  *****-->
+	<tag>
+		<description>
+	Define Custom-Attributes Tag.
+		</description>
+		<name>custom-attributes</name>
+		<tag-class>org.zkoss.jsf.zul.tag.CustomAttributesTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+	</tag>
 	<!-- ZK XUL Components -->
 	<!-- ZK XUL Area Components -->
 	<tag>
 		<description>
-	Define the Area comonent.
+	Define the Area component.
 		</description>
 		<name>area</name>
 		<tag-class>org.zkoss.jsf.zul.tag.AreaTag</tag-class>
@@ -165,7 +179,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Audio Components -->
 	<tag>
 		<description>
-	Define the Audio comonent.
+	Define the Audio component.
 		</description>
 		<name>audio</name>
 		<tag-class>org.zkoss.jsf.zul.tag.AudioTag</tag-class>
@@ -199,7 +213,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Bandbox Components -->
 	<tag>
 		<description>
-	Define the Bandbox comonent.
+	Define the Bandbox component.
 		</description>
 		<name>bandbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.BandboxTag</tag-class>
@@ -233,7 +247,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Bandpopup Components -->
 	<tag>
 		<description>
-	Define the Bandpopup comonent.
+	Define the Bandpopup component.
 		</description>
 		<name>bandpopup</name>
 		<tag-class>org.zkoss.jsf.zul.tag.BandpopupTag</tag-class>
@@ -267,7 +281,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Button Components -->
 	<tag>
 		<description>
-	Define the Button comonent.
+	Define the Button component.
 		</description>
 		<name>button</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ButtonTag</tag-class>
@@ -301,7 +315,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Calendar Components -->
 	<tag>
 		<description>
-	Define the Calendar comonent.
+	Define the Calendar component.
 		</description>
 		<name>calendar</name>
 		<tag-class>org.zkoss.jsf.zul.tag.CalendarTag</tag-class>
@@ -335,7 +349,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Captcha Components -->
 	<tag>
 		<description>
-	Define the Captcha comonent.
+	Define the Captcha component.
 		</description>
 		<name>captcha</name>
 		<tag-class>org.zkoss.jsf.zul.tag.CaptchaTag</tag-class>
@@ -369,7 +383,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Caption Components -->
 	<tag>
 		<description>
-	Define the Caption comonent.
+	Define the Caption component.
 		</description>
 		<name>caption</name>
 		<tag-class>org.zkoss.jsf.zul.tag.CaptionTag</tag-class>
@@ -403,7 +417,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Chart Components -->
 	<tag>
 		<description>
-	Define the Chart comonent.
+	Define the Chart component.
 		</description>
 		<name>chart</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ChartTag</tag-class>
@@ -437,7 +451,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Checkbox Components -->
 	<tag>
 		<description>
-	Define the Checkbox comonent.
+	Define the Checkbox component.
 		</description>
 		<name>checkbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.CheckboxTag</tag-class>
@@ -471,7 +485,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Column Components -->
 	<tag>
 		<description>
-	Define the Column comonent.
+	Define the Column component.
 		</description>
 		<name>column</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ColumnTag</tag-class>
@@ -505,7 +519,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Columns Components -->
 	<tag>
 		<description>
-	Define the Columns comonent.
+	Define the Columns component.
 		</description>
 		<name>columns</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ColumnsTag</tag-class>
@@ -539,7 +553,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Combobox Components -->
 	<tag>
 		<description>
-	Define the Combobox comonent.
+	Define the Combobox component.
 		</description>
 		<name>combobox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ComboboxTag</tag-class>
@@ -573,7 +587,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Comboitem Components -->
 	<tag>
 		<description>
-	Define the Comboitem comonent.
+	Define the Comboitem component.
 		</description>
 		<name>comboitem</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ComboitemTag</tag-class>
@@ -607,7 +621,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Datebox Components -->
 	<tag>
 		<description>
-	Define the Datebox comonent.
+	Define the Datebox component.
 		</description>
 		<name>datebox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.DateboxTag</tag-class>
@@ -641,7 +655,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Decimalbox Components -->
 	<tag>
 		<description>
-	Define the Decimalbox comonent.
+	Define the Decimalbox component.
 		</description>
 		<name>decimalbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.DecimalboxTag</tag-class>
@@ -675,7 +689,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Div Components -->
 	<tag>
 		<description>
-	Define the Div comonent.
+	Define the Div component.
 		</description>
 		<name>div</name>
 		<tag-class>org.zkoss.jsf.zul.tag.DivTag</tag-class>
@@ -709,7 +723,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Doublebox Components -->
 	<tag>
 		<description>
-	Define the Doublebox comonent.
+	Define the Doublebox component.
 		</description>
 		<name>doublebox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.DoubleboxTag</tag-class>
@@ -743,7 +757,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Filedownload Components -->
 	<tag>
 		<description>
-	Define the Filedownload comonent.
+	Define the Filedownload component.
 		</description>
 		<name>filedownload</name>
 		<tag-class>org.zkoss.jsf.zul.tag.FiledownloadTag</tag-class>
@@ -777,7 +791,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Fileupload Components -->
 	<tag>
 		<description>
-	Define the Fileupload comonent.
+	Define the Fileupload component.
 		</description>
 		<name>fileupload</name>
 		<tag-class>org.zkoss.jsf.zul.tag.FileuploadTag</tag-class>
@@ -811,7 +825,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Flash Components -->
 	<tag>
 		<description>
-	Define the Flash comonent.
+	Define the Flash component.
 		</description>
 		<name>flash</name>
 		<tag-class>org.zkoss.jsf.zul.tag.FlashTag</tag-class>
@@ -845,7 +859,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Foot Components -->
 	<tag>
 		<description>
-	Define the Foot comonent.
+	Define the Foot component.
 		</description>
 		<name>foot</name>
 		<tag-class>org.zkoss.jsf.zul.tag.FootTag</tag-class>
@@ -879,7 +893,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Footer Components -->
 	<tag>
 		<description>
-	Define the Footer comonent.
+	Define the Footer component.
 		</description>
 		<name>footer</name>
 		<tag-class>org.zkoss.jsf.zul.tag.FooterTag</tag-class>
@@ -913,7 +927,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Grid Components -->
 	<tag>
 		<description>
-	Define the Grid comonent.
+	Define the Grid component.
 		</description>
 		<name>grid</name>
 		<tag-class>org.zkoss.jsf.zul.tag.GridTag</tag-class>
@@ -947,7 +961,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Groupbox Components -->
 	<tag>
 		<description>
-	Define the Groupbox comonent.
+	Define the Groupbox component.
 		</description>
 		<name>groupbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.GroupboxTag</tag-class>
@@ -981,7 +995,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Hbox Components -->
 	<tag>
 		<description>
-	Define the Hbox comonent.
+	Define the Hbox component.
 		</description>
 		<name>hbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.HboxTag</tag-class>
@@ -1015,7 +1029,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Html Components -->
 	<tag>
 		<description>
-	Define the Html comonent.
+	Define the Html component.
 		</description>
 		<name>html</name>
 		<tag-class>org.zkoss.jsf.zul.tag.HtmlTag</tag-class>
@@ -1049,7 +1063,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Iframe Components -->
 	<tag>
 		<description>
-	Define the Iframe comonent.
+	Define the Iframe component.
 		</description>
 		<name>iframe</name>
 		<tag-class>org.zkoss.jsf.zul.tag.IframeTag</tag-class>
@@ -1083,7 +1097,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Image Components -->
 	<tag>
 		<description>
-	Define the Image comonent.
+	Define the Image component.
 		</description>
 		<name>image</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ImageTag</tag-class>
@@ -1117,7 +1131,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Imagemap Components -->
 	<tag>
 		<description>
-	Define the Imagemap comonent.
+	Define the Imagemap component.
 		</description>
 		<name>imagemap</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ImagemapTag</tag-class>
@@ -1151,7 +1165,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Intbox Components -->
 	<tag>
 		<description>
-	Define the Intbox comonent.
+	Define the Intbox component.
 		</description>
 		<name>intbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.IntboxTag</tag-class>
@@ -1185,7 +1199,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Include Components -->
 	<tag>
 		<description>
-	Define the Include comonent.
+	Define the Include component.
 		</description>
 		<name>include</name>
 		<tag-class>org.zkoss.jsf.zul.tag.IncludeTag</tag-class>
@@ -1219,7 +1233,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Label Components -->
 	<tag>
 		<description>
-	Define the Label comonent.
+	Define the Label component.
 		</description>
 		<name>label</name>
 		<tag-class>org.zkoss.jsf.zul.tag.LabelTag</tag-class>
@@ -1253,7 +1267,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Listbox Components -->
 	<tag>
 		<description>
-	Define the Listbox comonent.
+	Define the Listbox component.
 		</description>
 		<name>listbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ListboxTag</tag-class>
@@ -1287,7 +1301,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Listcell Components -->
 	<tag>
 		<description>
-	Define the Listcell comonent.
+	Define the Listcell component.
 		</description>
 		<name>listcell</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ListcellTag</tag-class>
@@ -1321,7 +1335,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Listfoot Components -->
 	<tag>
 		<description>
-	Define the Listfoot comonent.
+	Define the Listfoot component.
 		</description>
 		<name>listfoot</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ListfootTag</tag-class>
@@ -1355,7 +1369,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Listfooter Components -->
 	<tag>
 		<description>
-	Define the Listfooter comonent.
+	Define the Listfooter component.
 		</description>
 		<name>listfooter</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ListfooterTag</tag-class>
@@ -1389,7 +1403,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Listhead Components -->
 	<tag>
 		<description>
-	Define the Listhead comonent.
+	Define the Listhead component.
 		</description>
 		<name>listhead</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ListheadTag</tag-class>
@@ -1423,7 +1437,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Listheader Components -->
 	<tag>
 		<description>
-	Define the Listheader comonent.
+	Define the Listheader component.
 		</description>
 		<name>listheader</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ListheaderTag</tag-class>
@@ -1457,7 +1471,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Listitem Components -->
 	<tag>
 		<description>
-	Define the Listitem comonent.
+	Define the Listitem component.
 		</description>
 		<name>listitem</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ListitemTag</tag-class>
@@ -1491,7 +1505,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Menu Components -->
 	<tag>
 		<description>
-	Define the Menu comonent.
+	Define the Menu component.
 		</description>
 		<name>menu</name>
 		<tag-class>org.zkoss.jsf.zul.tag.MenuTag</tag-class>
@@ -1525,7 +1539,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Menubar Components -->
 	<tag>
 		<description>
-	Define the Menubar comonent.
+	Define the Menubar component.
 		</description>
 		<name>menubar</name>
 		<tag-class>org.zkoss.jsf.zul.tag.MenubarTag</tag-class>
@@ -1559,7 +1573,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Menuitem Components -->
 	<tag>
 		<description>
-	Define the Menuitem comonent.
+	Define the Menuitem component.
 		</description>
 		<name>menuitem</name>
 		<tag-class>org.zkoss.jsf.zul.tag.MenuitemTag</tag-class>
@@ -1593,7 +1607,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Menupopup Components -->
 	<tag>
 		<description>
-	Define the Menupopup comonent.
+	Define the Menupopup component.
 		</description>
 		<name>menupopup</name>
 		<tag-class>org.zkoss.jsf.zul.tag.MenupopupTag</tag-class>
@@ -1627,7 +1641,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Menuseparator Components -->
 	<tag>
 		<description>
-	Define the Menuseparator comonent.
+	Define the Menuseparator component.
 		</description>
 		<name>menuseparator</name>
 		<tag-class>org.zkoss.jsf.zul.tag.MenuseparatorTag</tag-class>
@@ -1661,7 +1675,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Messagebox Components -->
 	<tag>
 		<description>
-	Define the Messagebox comonent.
+	Define the Messagebox component.
 		</description>
 		<name>messagebox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.MessageboxTag</tag-class>
@@ -1695,7 +1709,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Paging Components -->
 	<tag>
 		<description>
-	Define the Paging comonent.
+	Define the Paging component.
 		</description>
 		<name>paging</name>
 		<tag-class>org.zkoss.jsf.zul.tag.PagingTag</tag-class>
@@ -1729,7 +1743,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Popup Components -->
 	<tag>
 		<description>
-	Define the Popup comonent.
+	Define the Popup component.
 		</description>
 		<name>popup</name>
 		<tag-class>org.zkoss.jsf.zul.tag.PopupTag</tag-class>
@@ -1763,7 +1777,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Progressmeter Components -->
 	<tag>
 		<description>
-	Define the Progressmeter comonent.
+	Define the Progressmeter component.
 		</description>
 		<name>progressmeter</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ProgressmeterTag</tag-class>
@@ -1797,7 +1811,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Radio Components -->
 	<tag>
 		<description>
-	Define the Radio comonent.
+	Define the Radio component.
 		</description>
 		<name>radio</name>
 		<tag-class>org.zkoss.jsf.zul.tag.RadioTag</tag-class>
@@ -1831,7 +1845,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Radiogroup Components -->
 	<tag>
 		<description>
-	Define the Radiogroup comonent.
+	Define the Radiogroup component.
 		</description>
 		<name>radiogroup</name>
 		<tag-class>org.zkoss.jsf.zul.tag.RadiogroupTag</tag-class>
@@ -1865,7 +1879,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Row Components -->
 	<tag>
 		<description>
-	Define the Row comonent.
+	Define the Row component.
 		</description>
 		<name>row</name>
 		<tag-class>org.zkoss.jsf.zul.tag.RowTag</tag-class>
@@ -1899,7 +1913,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Rows Components -->
 	<tag>
 		<description>
-	Define the Rows comonent.
+	Define the Rows component.
 		</description>
 		<name>rows</name>
 		<tag-class>org.zkoss.jsf.zul.tag.RowsTag</tag-class>
@@ -1933,7 +1947,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Separator Components -->
 	<tag>
 		<description>
-	Define the Separator comonent.
+	Define the Separator component.
 		</description>
 		<name>separator</name>
 		<tag-class>org.zkoss.jsf.zul.tag.SeparatorTag</tag-class>
@@ -1967,7 +1981,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Slider Components -->
 	<tag>
 		<description>
-	Define the Slider comonent.
+	Define the Slider component.
 		</description>
 		<name>slider</name>
 		<tag-class>org.zkoss.jsf.zul.tag.SliderTag</tag-class>
@@ -2001,7 +2015,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Splitter Components -->
 	<tag>
 		<description>
-	Define the Splitter comonent.
+	Define the Splitter component.
 		</description>
 		<name>splitter</name>
 		<tag-class>org.zkoss.jsf.zul.tag.SplitterTag</tag-class>
@@ -2035,7 +2049,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Style Components -->
 	<tag>
 		<description>
-	Define the Style comonent.
+	Define the Style component.
 		</description>
 		<name>style</name>
 		<tag-class>org.zkoss.jsf.zul.tag.StyleTag</tag-class>
@@ -2069,7 +2083,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Tab Components -->
 	<tag>
 		<description>
-	Define the Tab comonent.
+	Define the Tab component.
 		</description>
 		<name>tab</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TabTag</tag-class>
@@ -2103,7 +2117,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Tabbox Components -->
 	<tag>
 		<description>
-	Define the Tabbox comonent.
+	Define the Tabbox component.
 		</description>
 		<name>tabbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TabboxTag</tag-class>
@@ -2137,7 +2151,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Tabpanel Components -->
 	<tag>
 		<description>
-	Define the Tabpanel comonent.
+	Define the Tabpanel component.
 		</description>
 		<name>tabpanel</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TabpanelTag</tag-class>
@@ -2171,7 +2185,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Tabpanels Components -->
 	<tag>
 		<description>
-	Define the Tabpanels comonent.
+	Define the Tabpanels component.
 		</description>
 		<name>tabpanels</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TabpanelsTag</tag-class>
@@ -2205,7 +2219,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Tabs Components -->
 	<tag>
 		<description>
-	Define the Tabs comonent.
+	Define the Tabs component.
 		</description>
 		<name>tabs</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TabsTag</tag-class>
@@ -2239,7 +2253,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Textbox Components -->
 	<tag>
 		<description>
-	Define the Textbox comonent.
+	Define the Textbox component.
 		</description>
 		<name>textbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TextboxTag</tag-class>
@@ -2273,7 +2287,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Timebox Components -->
 	<tag>
 		<description>
-	Define the Timebox comonent.
+	Define the Timebox component.
 		</description>
 		<name>timebox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TimeboxTag</tag-class>
@@ -2307,7 +2321,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Timer Components -->
 	<tag>
 		<description>
-	Define the Timer comonent.
+	Define the Timer component.
 		</description>
 		<name>timer</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TimerTag</tag-class>
@@ -2341,7 +2355,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Toolbar Components -->
 	<tag>
 		<description>
-	Define the Toolbar comonent.
+	Define the Toolbar component.
 		</description>
 		<name>toolbar</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ToolbarTag</tag-class>
@@ -2375,7 +2389,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Toolbarbutton Components -->
 	<tag>
 		<description>
-	Define the Toolbarbutton comonent.
+	Define the Toolbarbutton component.
 		</description>
 		<name>toolbarbutton</name>
 		<tag-class>org.zkoss.jsf.zul.tag.ToolbarbuttonTag</tag-class>
@@ -2409,7 +2423,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Tree Components -->
 	<tag>
 		<description>
-	Define the Tree comonent.
+	Define the Tree component.
 		</description>
 		<name>tree</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreeTag</tag-class>
@@ -2443,7 +2457,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Treecell Components -->
 	<tag>
 		<description>
-	Define the Treecell comonent.
+	Define the Treecell component.
 		</description>
 		<name>treecell</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreecellTag</tag-class>
@@ -2477,7 +2491,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Treechildren Components -->
 	<tag>
 		<description>
-	Define the Treechildren comonent.
+	Define the Treechildren component.
 		</description>
 		<name>treechildren</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreechildrenTag</tag-class>
@@ -2511,7 +2525,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Treecol Components -->
 	<tag>
 		<description>
-	Define the Treecol comonent.
+	Define the Treecol component.
 		</description>
 		<name>treecol</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreecolTag</tag-class>
@@ -2545,7 +2559,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Treecols Components -->
 	<tag>
 		<description>
-	Define the Treecols comonent.
+	Define the Treecols component.
 		</description>
 		<name>treecols</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreecolsTag</tag-class>
@@ -2579,7 +2593,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Treefoot Components -->
 	<tag>
 		<description>
-	Define the Treefoot comonent.
+	Define the Treefoot component.
 		</description>
 		<name>treefoot</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreefootTag</tag-class>
@@ -2613,7 +2627,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Treefooter Components -->
 	<tag>
 		<description>
-	Define the Treefooter comonent.
+	Define the Treefooter component.
 		</description>
 		<name>treefooter</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreefooterTag</tag-class>
@@ -2647,7 +2661,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Treeitem Components -->
 	<tag>
 		<description>
-	Define the Treeitem comonent.
+	Define the Treeitem component.
 		</description>
 		<name>treeitem</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreeitemTag</tag-class>
@@ -2681,7 +2695,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Treerow Components -->
 	<tag>
 		<description>
-	Define the Treerow comonent.
+	Define the Treerow component.
 		</description>
 		<name>treerow</name>
 		<tag-class>org.zkoss.jsf.zul.tag.TreerowTag</tag-class>
@@ -2715,7 +2729,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Vbox Components -->
 	<tag>
 		<description>
-	Define the Vbox comonent.
+	Define the Vbox component.
 		</description>
 		<name>vbox</name>
 		<tag-class>org.zkoss.jsf.zul.tag.VboxTag</tag-class>
@@ -2749,7 +2763,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ZK XUL Window Components -->
 	<tag>
 		<description>
-	Define the Window comonent.
+	Define the Window component.
 		</description>
 		<name>window</name>
 		<tag-class>org.zkoss.jsf.zul.tag.WindowTag</tag-class>
@@ -2780,5 +2794,278 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<!-- Functions -->
+	<!-- ZK XUL Auxhead Components -->
+	<tag>
+		<description>
+	Define the Auxhead component.
+		</description>
+		<name>auxhead</name>
+		<tag-class>org.zkoss.jsf.zul.tag.AuxheadTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Auxhead.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK XUL Window Components -->
+	<tag>
+		<description>
+	Define the Auxheader component.
+		</description>
+		<name>auxheader</name>
+		<tag-class>org.zkoss.jsf.zul.tag.AuxheaderTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : Zul Component Auxheader.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK EX Borderlayout Components -->
+	<tag>
+		<description>
+	Define the Borderlayout component of ZKEX.
+		</description>
+		<name>borderlayout</name>
+		<tag-class>org.zkoss.jsf.zul.tag.BorderlayoutTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : ZKEX Component Borderlayout.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK EX Center Components -->
+	<tag>
+		<description>
+	Define the Center component of ZKEX.
+		</description>
+		<name>center</name>
+		<tag-class>org.zkoss.jsf.zul.tag.CenterTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : ZKEX Component Center.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK EX East Components -->
+	<tag>
+		<description>
+	Define the East component of ZKEX.
+		</description>
+		<name>east</name>
+		<tag-class>org.zkoss.jsf.zul.tag.EastTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : ZKEX Component East.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK EX North Components -->
+	<tag>
+		<description>
+	Define the North component of ZKEX.
+		</description>
+		<name>north</name>
+		<tag-class>org.zkoss.jsf.zul.tag.NorthTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : ZKEX Component North.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK EX South Components -->
+	<tag>
+		<description>
+	Define the South component of ZKEX.
+		</description>
+		<name>south</name>
+		<tag-class>org.zkoss.jsf.zul.tag.SouthTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : ZKEX Component South.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- ZK EX Borderlayout Components -->
+	<tag>
+		<description>
+	Define the West component of ZKEX.
+		</description>
+		<name>west</name>
+		<tag-class>org.zkoss.jsf.zul.tag.WestTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	Default : ZKEX Component West.
+			</description>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	
 </taglib>

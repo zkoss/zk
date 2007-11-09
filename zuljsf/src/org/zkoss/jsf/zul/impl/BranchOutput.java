@@ -149,7 +149,7 @@ abstract public class BranchOutput extends BranchComponent implements ValueHolde
 						Fields.setField(zulcomp,att,value,true);
 						return;
 					} catch (Exception x){
-						//when invalid, I ingore the exception and set to orginal value by getValue.
+						//when invalid, I ignore the exception and set to original value by getValue.
 					}
 				}
 				

@@ -25,6 +25,7 @@ import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 
 import org.zkoss.jsf.zul.impl.BaseCommand;
+import org.zkoss.jsf.zul.impl.BranchInput;
 
 /**
  * The skeletal class for implementing the generic JSF tags.
@@ -49,8 +50,8 @@ abstract public class CommandTag extends BranchTag {
 		super.setProperties(comp);
 		
 		//take care action
-		if (JSF_CORE_NS.equals(_specialNS.get("action"))) {
-			Object obj = _dynamicAttrMap.get("action");
+		
+			Object obj = _jsfcoreAttrMap.get("action");
 			if(obj!=null){
 				if(!(obj instanceof String)) throw new RuntimeException("attribute 'action' must be String");
 				if (isValueReference((String)obj)) {
@@ -60,9 +61,8 @@ abstract public class CommandTag extends BranchTag {
 	            	throw new javax.faces.FacesException("action must be a MethodBinding Expression:"+obj);
 	            }
 			}
-        }
-		if (JSF_CORE_NS.equals(_specialNS.get("actionListener"))) {
-			Object obj = _dynamicAttrMap.get("actionListener");
+        
+			obj = _jsfcoreAttrMap.get("actionListener");
 			if(obj!=null){
 				if(!(obj instanceof String)) throw new RuntimeException("attribute 'actionListener' must be String");
 				if (isValueReference((String)obj)) {
@@ -72,23 +72,21 @@ abstract public class CommandTag extends BranchTag {
 	            	throw new javax.faces.FacesException("actionListener must be a MethodBinding Expression:"+obj);
 	            }
 			}
-        }
 		
-		if(JSF_CORE_NS.equals(_specialNS.get("immediate"))){
-			Object obj = _dynamicAttrMap.get("immediate");
+			obj = _jsfcoreAttrMap.get("immediate");
 			if(obj!=null){
-				if(!(obj instanceof String)) throw new RuntimeException("attribute 'immediate' must be String");
-				if (isValueReference((String)obj)) {
+				if ((obj instanceof String) && isValueReference((String)obj)) {
 	                ValueBinding vb = getFacesContext().getApplication().createValueBinding((String)obj);
 	                ((BaseCommand)comp).setValueBinding("immediate", vb);
-	            } else {
+	            } else if(obj instanceof String){
 	                boolean immediate = new Boolean((String)obj).booleanValue();
 	                ((BaseCommand)comp).setImmediate(immediate);
-	            }
+	            } else if (obj instanceof Boolean) {
+					((BaseCommand) comp).setImmediate(((Boolean) obj).booleanValue());
+				} else{
+					throw new RuntimeException("attribute 'immediate' , unsupported type:"+obj.getClass());
+				}
 			}
 			
-		}
-		
-		
 	}
 }

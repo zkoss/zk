@@ -65,6 +65,9 @@ abstract public class LeafComponent extends AbstractComponent{
 	//original attribute of this ZULJSF component. 
 	private Map _compAttrMap;
 	
+	//attribute set by custom-attributes
+	private Map _compCustomAttributes;
+	
 	private String _use;
 	
 	private String _forward;
@@ -253,7 +256,8 @@ abstract public class LeafComponent extends AbstractComponent{
 		}else {
 			_rootcomp.addChildZULComponent(this);
 		}
-		
+		//apply definition
+		_zulcomp.getDefinition().applyProperties(_zulcomp);
 		
 	}
 	
@@ -276,7 +280,6 @@ abstract public class LeafComponent extends AbstractComponent{
 			throw new RuntimeException("newComponent() returns null");
 
 		//setup EventListener and zul attribute from component attribute;
-		//System.out.println("======>set attribute to "+this+":"+_compAttrMap);
 		if(_compAttrMap!=null){
 			Iterator iter = _compAttrMap.keySet().iterator();
 			while(iter.hasNext()){
@@ -372,6 +375,14 @@ abstract public class LeafComponent extends AbstractComponent{
 				Fields.setField(target, attnm, value, true);
 			}
 		}
+		
+		if(_compCustomAttributes!=null){
+			for(Iterator iter = _compCustomAttributes.keySet().iterator();iter.hasNext();){
+				String att = (String)iter.next();
+				Object value = _compCustomAttributes.get(att);
+				target.setAttribute(att, value);
+			}
+		}
 	}
 	
 	/**
@@ -456,6 +467,15 @@ abstract public class LeafComponent extends AbstractComponent{
      */
 	public void setZULDynamicAttribute(Map map) {
 		_compAttrMap = map;
+	}
+	
+	/**
+	 * set custom attributes of this ZULJSF Component,
+	 * This method is called by BaseCustomeAttribute only,
+	 * @param map
+	 */
+	/*package*/ void setZULCustomAttribute(Map map){
+		_compCustomAttributes = map;
 	}
 	
 	/**
