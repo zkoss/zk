@@ -1,8 +1,14 @@
+ZK Mobile 0.8.7
+
+Feature:
+  1827327  Make zkmob 0.8.7 works with ZK 3.0.0 Final
+  
+  --------
 ZK Mobile 0.8.6
 
 Feature:
   1768906: Provide GenericMobileRichlet for pure Java Mobile programming
-  1794604: Make zkmob 0.86 works with ZK 3.0
+  1794604: Make zkmob 0.86 works with ZK 3.0.0RC
   
 Bug:
   1756003 mil Listitem image not shown.
