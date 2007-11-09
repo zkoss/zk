@@ -30,7 +30,7 @@ div.layout-container{
 }
 </style>
 <borderlayout use="org.zkoss.zkdemo.userguide.MainLayout">
-	<west border="none" size="320px" splittable="true" minsize="300" maxsize="500" collapsible="true">
+	<west border="none" size="320px" splittable="true" minsize="150" maxsize="500" collapsible="true">
 		<tree id="toc" use="org.zkoss.zkdemo.userguide.LayoutTree" pageSize="-1" vflex="true" height="100%" width="100%">
 			<treecols>
 				<treecol image="/img/home.gif" label="ZK ${desktop.webApp.version} Live Demo"
