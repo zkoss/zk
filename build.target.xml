@@ -145,7 +145,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/zipjs"/>
-		<arg value="${dist.lib.ext.dir}/custom_rhino.jar"/>
+		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
 	</exec>

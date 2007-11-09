@@ -68,11 +68,8 @@ function zips
 
 				if [ ! -f "$dstfl" ] || [ "$f" -nt "$dstfl" ] ;  then
 					local cvt=false
-					if [ "${f%.js}" != "$f" ] && [ "$parent" != "lang" ] ; then
-						local utf="$(native2ascii $f | grep -l '\\u[0-9][0-9][0-9][0-9]')"
-						if [ "$utf" = "" ] ; then
-							cvt=true
-						fi
+					if [ "${f%.js}" != "$f" ] ; then
+						cvt=true
 					fi
 					if [ $cvt = true ] ; then
 						echo Compress $f
@@ -81,14 +78,14 @@ function zips
 						if [ "$f" = "prototype.js" ] ; then
 echo "//Prototype 1.5.0" > "$dstfl"
 echo "//(c) 2005-2007 Sam Stephenson" >> "$dstfl"
-							java -jar $jarfl -c "$f" >> "$dstfl" 2>&1
+							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
 						elif [ "$f" = "effects.js" ] || [ "$f" = "dragdrop.js" ] ; then
 echo "//script.aculo.us 1.7.0" > "$dstfl"
 echo "//(c) 2005-2006 Thomas Fuchs" >> "$dstfl"
 echo "//(c) 2005-2006 Sammi Williams" >> "$dstfl"
-							java -jar $jarfl -c "$f" >> "$dstfl" 2>&1
+							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
 						else
-							java -jar $jarfl -c "$f" > "$dstfl" 2>&1
+							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
 						fi
 
 						if [ $? != 0 ] ; then

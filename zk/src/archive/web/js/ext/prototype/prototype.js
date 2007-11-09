@@ -1553,10 +1553,9 @@ Selector.prototype = {
     return conditions.join(' && ');
   },
 
+// Tom M. Yeh, Potix: make it compressable with YUI compressor
   compileMatcher: function() {
-    this.match = new Function('element', 'if (!element.tagName) return false; \
-      element = $(element); \
-      return ' + this.buildMatchExpression());
+    this.match = new Function('element', 'if (!element.tagName) return false; element = $(element); return ' + this.buildMatchExpression());
   },
 
   findElements: function(scope) {
