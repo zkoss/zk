@@ -357,6 +357,9 @@ public class Captcha extends org.zkoss.zul.Image {
 	 */
 	protected CaptchaEngine newCaptchaEngine() throws UiException {
 		Object v = getAttribute("captcha-engine");
+		if (v == null)
+			v = "org.zkoss.zkex.zul.impl.JHLabsCaptchaEngine";
+
 		try {
 			final Class cls;
 			if (v instanceof String) {
