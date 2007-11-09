@@ -41,11 +41,11 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
+import org.zkoss.zk.ui.metainfo.impl.MultiComposer;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
@@ -236,14 +236,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 					}
 				}
 
-				if (o instanceof Object[]) {
-					final Object[] cs = (Object[])o;
-					switch (cs.length) {
-					case 0: return null;
-					case 1: o = cs[0]; break;
-					default: return new MultiComposer(cs);
-					}
-				}
+				if (o instanceof Object[])
+					return MultiComposer.getComposer((Object[])o);
 
 				if (o instanceof String)
 					o = Classes.newInstanceByThread(((String)o).trim());
@@ -714,57 +708,4 @@ implements Cloneable, Condition, java.io.Externalizable {
 		((List)_evalRefStack.get()).remove(0);
 	}
 	private static final ThreadLocal _evalRefStack = new ThreadLocal();
-
-	/** A composer to invoke a collection of other composers.
-	 */
-	private static class MultiComposer implements Composer, ComposerExt {
-		private final Composer[] _cs;
-		private MultiComposer(Object[] cs) throws Exception {
-			if (cs instanceof Composer[]) {
-				_cs = (Composer[])cs;
-			} else {
-				_cs = new Composer[cs.length];
-				for (int j = cs.length; --j >=0;) {
-					final Object o = cs[j];
-					_cs[j] = (Composer)(
-						o instanceof String ?
-							Classes.newInstanceByThread(((String)o).trim()):
-						o instanceof Class ?
-							((Class)o).newInstance(): (Composer)o);
-				}
-			}
-		}
-		public void doAfterCompose(Component comp) throws Exception {
-			for (int j = 0; j < _cs.length; ++j)
-				_cs[j].doAfterCompose(comp);
-		}
-		public ComponentInfo doBeforeCompose(Page page, Component parent,
-		ComponentInfo compInfo) {
-			for (int j = 0; j < _cs.length; ++j)
-				if (_cs[j] instanceof ComposerExt) {
-					compInfo = ((ComposerExt)_cs[j])
-						.doBeforeCompose(page, parent, compInfo);
-					if (compInfo == null)
-						return null;
-				}
-			return compInfo;
-		}
-		public void doBeforeComposeChildren(Component comp) throws Exception {
-			for (int j = 0; j < _cs.length; ++j)
-				if (_cs[j] instanceof ComposerExt)
-					((ComposerExt)_cs[j]).doBeforeComposeChildren(comp);
-		}
-		public boolean doCatch(Throwable ex) throws Exception {
-			for (int j = 0; j < _cs.length; ++j)
-				if (_cs[j] instanceof ComposerExt)
-					if (((ComposerExt)_cs[j]).doCatch(ex))
-						return true; //caught (eat it)
-			return false;
-		}
-		public void doFinally() throws Exception {
-			for (int j = 0; j < _cs.length; ++j)
-				if (_cs[j] instanceof ComposerExt)
-					((ComposerExt)_cs[j]).doFinally();
-		}
-	}
 }
