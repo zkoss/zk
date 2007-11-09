@@ -1367,6 +1367,11 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 		for (var j = 0, z = 0; j < cells.length; ++j) {
 			if (j < dst.cells.length) {
 				var s = cells[j], d = dst.cells[z];
+				if (!zk.isVisible(d)) { //Bug #1828044
+					s.style.display = "none";
+					z += s.colSpan; // header count
+					continue;
+				}
 				if (s.colSpan > 1) {
 					if (s.colSpan + z <= dst.cells.length) {
 						var unwd = [], total = 0, ttlOffset = 0;
