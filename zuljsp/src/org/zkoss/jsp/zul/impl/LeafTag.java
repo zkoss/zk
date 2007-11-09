@@ -124,7 +124,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		
 	}
 	
-	/** Creates and registers the component.
+	/** 
+	 * Creates and registers the component.
 	 * Called by {@link #doTag}.
 	 */
 	/*package*/ void initComponent() throws JspException {
