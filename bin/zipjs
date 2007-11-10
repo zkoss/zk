@@ -73,20 +73,18 @@ function zips
 					fi
 					if [ $cvt = true ] ; then
 						echo Compress $f
-#IMPROVE: the following codes to generate back the copyright are stupid:
-#we have to maintain it each time a new release is available
-						if [ "$f" = "prototype.js" ] ; then
-echo "//Prototype 1.5.0" > "$dstfl"
-echo "//(c) 2005-2007 Sam Stephenson" >> "$dstfl"
+#						if [ "$f" = "prototype.js" ] ; then
+#echo "//Prototype 1.5.0" > "$dstfl"
+#echo "//(c) 2005-2007 Sam Stephenson" >> "$dstfl"
+#							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
+#						elif [ "$f" = "effects.js" ] || [ "$f" = "dragdrop.js" ] ; then
+#echo "//script.aculo.us 1.7.0" > "$dstfl"
+#echo "//(c) 2005-2006 Thomas Fuchs" >> "$dstfl"
+#echo "//(c) 2005-2006 Sammi Williams" >> "$dstfl"
+#							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
+#						else
 							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
-						elif [ "$f" = "effects.js" ] || [ "$f" = "dragdrop.js" ] ; then
-echo "//script.aculo.us 1.7.0" > "$dstfl"
-echo "//(c) 2005-2006 Thomas Fuchs" >> "$dstfl"
-echo "//(c) 2005-2006 Sammi Williams" >> "$dstfl"
-							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
-						else
-							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
-						fi
+#						fi
 
 						if [ $? != 0 ] ; then
 							echo "Warning failed to compress, use copy instead: $f"
