@@ -223,7 +223,7 @@
 	
 	
 	<div>width</div>
-	<hbox widths="1000px" height="200px">
+	<hbox width="1000px" height="200px">
 		<div sclass="obj">100</div>
 		<div sclass="obj">300</div>
 		<div sclass="obj">600</div>
