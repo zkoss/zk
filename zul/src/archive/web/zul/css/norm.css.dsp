@@ -1066,3 +1066,8 @@ span.splitter-os-btn-b {
 	width: 50px; min-height: 8px; height: 8px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
 }
+
+<%-- Html component --%>
+span.html {
+	display: block;
+}
