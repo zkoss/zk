@@ -3,6 +3,7 @@ ZK 3.0.1
 
 * Bugs:
 	1828044: When header is invisible, whole column should be disappeared
+	1826938: Listbox Live Data
 	--------
 ZK 3.0.0
 * Features:
