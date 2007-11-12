@@ -18,6 +18,7 @@
 			  			alert("att1:"+ww.getAttribute("main.rich")+",att2:"+ww.getAttribute("very-simple"));
 			  		</z:attribute>
 			  	</z:button>
+			  	<h:commandButton id="submit" value="Submit" />		
 			</z:window>	
 		</z:page>
 	</h:form>

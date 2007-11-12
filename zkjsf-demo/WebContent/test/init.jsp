@@ -17,7 +17,7 @@
 			   Do Catch:<z:label id="doca"/><z:separator/>
 			   Do Finally:<z:label id="fina"/><z:separator/>
 			</z:window>
-			
+			<h:commandButton id="submit" value="Submit" />
 		</z:page>
 	</h:form>
 </f:view>

@@ -12,6 +12,7 @@
 			<z:window title="Grid Demo">
 				<z:captcha id="cpa" length="5" width="200px" height="50px"/>
 			</z:window>	
+			<h:commandButton id="submit" value="Submit" />
 		</z:page>
 	</h:form>
 	
