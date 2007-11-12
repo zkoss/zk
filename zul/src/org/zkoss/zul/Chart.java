@@ -106,7 +106,7 @@ public class Chart extends Imagemap {
 	private transient ChartDataListener _dataListener;
 	private transient EventListener _smartDrawChartListener; //the smartDrawListner
 
-	private String _type = "pie"; //chart type (pie, ring, bar, line, xy, etc)
+	private String _type = PIE; //chart type (pie, ring, bar, line, xy, etc)
 	private boolean _threeD; //whether a 3D chart
 	
 	//chart related attributes
