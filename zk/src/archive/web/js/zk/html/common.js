@@ -1474,7 +1474,7 @@ Copies the width of each cell from the element's header.
 zk.cpCellArrayWidth = function (dst, srcrows) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length)
-		return;	
+		return;
 	for (var j = 0, k = srcrows.length; j < k; j++) {
 		var s = srcrows.shift();
 		var z = s.cellIndex;
@@ -1487,8 +1487,10 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 					wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 2 : hd.offsetWidth; 												
 				}
 			}
-		} else
-			wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
+		} else {
+			if (zk.mozilla)	wd += $int(d.style.width); // Bug #1826938
+			else wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
+		}
 		var uuid = $uuid(s);
 		var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
 		var rwd = zk.revisedSize(s, wd);
