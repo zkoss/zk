@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.jsp.zul.impl;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,12 +33,12 @@ import javax.servlet.jsp.tagext.JspTag;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.reflect.Fields;
 
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.CreateEvent;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.metainfo.EventHandler;
@@ -45,6 +46,8 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zk.ui.util.ComposerExt;
 
 /**
  * The skeletal class used to implement the JSP tag for ZK components
@@ -55,14 +58,15 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
  *
  * @author tomyeh
  */
-abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
+abstract public class ComponentTag extends AbstractTag implements DynamicAttributes {
 	private Component _comp;
 	private RootTag _roottag;
 	private BranchTag _parenttag;
 	private Map _attrMap = new LinkedHashMap();
 	private Map _eventListenerMap = new LinkedHashMap();
     private String _use, _forward;
-
+    private Composer composer;
+    
 	/** Returns the page tag that this tag belongs to.
 	 */
 	public RootTag getRootTag() {
@@ -99,6 +103,9 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	 */
 	public void setParent(JspTag parent) {
 		super.setParent(parent);
+		if(parent instanceof RootTag)
+			((RootTag)parent).addRootComponent(this);
+		
 		final AbstractTag pt =
 		(AbstractTag)findAncestorWithClass(this, AbstractTag.class);
 		if (pt instanceof RootTag) { //root component tag
@@ -131,10 +138,40 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	/*package*/ void initComponent() throws JspException {
 		if(_roottag==null)
 			throw new IllegalStateException("Must be nested inside the page tag: "+this);
+		
+		composer = parseAppliedComposer( _attrMap.remove("apply"));
+		ComposerExt composerExt = 
+			composer instanceof ComposerExt ? (ComposerExt)composer: null;
+		
 		try {//TODO: use-class initial works...
+			//add composer to intercept creation...
+			//TODO: composerExt.doBeforeCompose(page, parentComponent, compInfo); 
 			_comp = newComponent(_use!=null ? Classes.forNameByThread(_use) : null);
+			if(composerExt!=null)
+				composerExt.doBeforeComposeChildren(_comp);
 		} catch (Exception e) {
+			try {
+				composerExt.doCatch(e);
+			} catch (Exception e1) {
+				StackTraceElement[] oriArr = e.getStackTrace();
+				StackTraceElement[] erArr = e1.getStackTrace();
+				StackTraceElement[] newErrArr = new StackTraceElement[oriArr.length+erArr.length];
+				System.arraycopy(newErrArr, 0, oriArr, 0, oriArr.length);
+				System.arraycopy(newErrArr, oriArr.length, erArr, 0, erArr.length);
+				e.setStackTrace(newErrArr);
+			}
 			throw new JspException(e);
+		}
+		finally
+		{
+			if(composerExt!=null)
+			{
+				try {
+					composerExt.doFinally();
+				} catch (Exception e) {
+					throw new JspException(e);
+				}	
+			}
 		}
 		
 		if (_parenttag != null)_parenttag.addChildTag(this);
@@ -199,22 +236,28 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	/*package*/ void writeComponentMark() throws IOException {
 		Utils.writeComponentMark(getJspContext().getOut(), _comp);
 	}
+
 	
 	/** after children creation do dynamic attributes setter work and registers event handler.
 	 * Called by {@link #doTag}.
 	 * @throws JspException 
 	 */
 	/*package*/void afterComposeComponent() throws JspException{
-			if (_comp instanceof AfterCompose)//safty check...
-				((AfterCompose)_comp).afterCompose();
-	
-		if (Events.isListened(_comp, Events.ON_CREATE, false))//send onCreate event...
-			Events.postEvent(
-				new CreateEvent(Events.ON_CREATE, _comp, Executions.getCurrent().getArg()));
+
 		
 		if (_comp == null)
 			throw new JspTagException("newComponent() returns null");
-	
+		
+		if (_comp instanceof AfterCompose)//safty check...
+			((AfterCompose)_comp).afterCompose();
+		if (composer != null){
+			try {
+				composer.doAfterCompose(_comp);
+			} catch (Exception e) {
+				throw new JspException(e);
+			}
+		}
+		
 		try {
 			evaluateDynaAttributes(_comp);
 		} catch (ModificationException e) {
@@ -222,9 +265,13 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 		} catch (NoSuchMethodException e) {
 			throw new JspException(e);
 		}
-
-		//process the forward condition
+		
+		//process the forward condition...
 		ComponentsCtrl.applyForward(_comp, _forward);
+		
+		if (Events.isListened(_comp, Events.ON_CREATE, false))//send onCreate event...
+			Events.postEvent(
+				new CreateEvent(Events.ON_CREATE, _comp, Executions.getCurrent().getArg()));
 
 		//add event handle ...		
 		for(Iterator itor = _eventListenerMap.entrySet().iterator();itor.hasNext();) {
@@ -303,4 +350,56 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes {
 	public void setForward(String forward) {
 		_forward = forward != null && forward.length() > 0 ? forward: null;
 	}
+	
+
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private static Composer parseAppliedComposer(Object o)
+	{
+		if(null==o)return null;
+		try {
+			if (o instanceof String) {
+				final String s = (String)o;
+				if (s.indexOf(',') >= 0)
+					o = CollectionsX.parse(null, s, ',');
+			}
+
+			if (o instanceof Collection) {
+				final Collection c = (Collection)o;
+				int sz = c.size();
+				switch (sz) {
+				case 0: return null;
+				case 1: o = c.iterator().next(); break;
+				default: o = c.toArray(new Object[sz]); break;
+				}
+			}
+
+			if (o instanceof Object[]) {
+				final Object[] cs = (Object[])o;
+				switch (cs.length) {
+				case 0: return null;
+				case 1: o = cs[0]; break;
+				default: return new MultiComposer(cs);
+				}
+			}
+
+			if (o instanceof String)
+				o = Classes.newInstanceByThread(((String)o).trim());
+			else if (o instanceof Class)
+				o = ((Class)o).newInstance();
+
+			if (o instanceof Composer)
+				return (Composer)o;
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+		return null;
+	}
+	
+	
+	
+	
 }
