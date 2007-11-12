@@ -6,7 +6,7 @@ Purpose:
 Description:
 	
 Histroy:
-	2007/11/09  09:59:21 , Created by tomyeh modified by Ian Tsai
+	2007/11/12  11:02:50 , Created by tomyeh modified by Ian Tsai
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
@@ -115,6 +115,42 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+	</tag>
+	<tag><!--***** Custom-AttributesTag  *****-->
+		<description>
+	Define Init Tag.
+		</description>
+		<name>custom-attributes</name>
+		<tag-class>org.zkoss.jsp.zul.CustomAttributesTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+	</tag>
+	<tag><!--***** MacroComponentTag  *****-->
+		<description>
+	Define Macro Definition Tag.
+		</description>
+		<name>macro-define</name>
+		<tag-class>org.zkoss.jsp.zul.MacroDefinitionTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+	</tag>
+	<tag><!--***** MacroComponentTag  *****-->
+		<description>
+	Define a MacroComponent Tag.
+		</description>
+		<name>macro</name>
+		<tag-class>org.zkoss.jsp.zul.MacroComponentTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+	</tag>
+	<tag><!--***** Custom-AttributesTag  *****-->
+		<description>
+	Define Init Tag.
+		</description>
+		<name>macro-component</name>
+		<tag-class>org.zkoss.jsp.zul.MacroComponentTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
 	</tag>
 	<tag><!--***** InitTag  *****-->
 		<description>

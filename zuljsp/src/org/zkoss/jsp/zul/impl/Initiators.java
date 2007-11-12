@@ -23,9 +23,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.zkoss.util.logging.Log;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
+import org.zkoss.zk.ui.util.InitiatorExt;
 
 /**
  *  A helper class used to handle {@link Initiator} in jsp.
@@ -71,9 +73,26 @@ public class Initiators{
 	 * @param page
 	 * @throws Exception
 	 */
-	public void doAfterCompose(Page page) throws Exception {
+	public void doAfterCompose(Page page, List compTags) throws Exception {
+		
+		Component[] comps = null;
+		if(compTags!=null){
+			Object[] tags = compTags.toArray();
+			comps = new Component[ tags.length];
+			ComponentTag tag;
+			for(int i=tags.length-1;i>=0;i--){
+				tag = (ComponentTag)tags[i];
+				comps[i] = tag.getComponent();
+			}
+		}
+		Initiator init;
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
-			((Initiator)((Object[])it.next())[0]).doAfterCompose(page);
+			init = (Initiator)((Object[])it.next())[0];
+			if (init instanceof InitiatorExt) {
+				if (comps == null) comps = new Component[0];
+				((InitiatorExt)init).doAfterCompose(page, comps);
+			} else 
+				init.doAfterCompose(page);
 		}
 	}
 	/** Invokes {@link Initiator#doCatch}.

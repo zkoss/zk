@@ -20,7 +20,9 @@ package org.zkoss.jsp.zul.impl;
 
 import java.io.StringWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -73,6 +75,7 @@ abstract public class RootTag extends AbstractTag {
 	private LanguageDefinition _langdef;
 	private Page _page;
 	private String _lang = "Java";
+	private List rootCompTags;
 
 	/**
 	 * protected Constractor. Constract a RootTag with
@@ -81,11 +84,18 @@ abstract public class RootTag extends AbstractTag {
 	 */
 	protected RootTag() {
 		_langdef = LanguageDefinition.lookup("xul/html");
+		rootCompTags = new ArrayList();
 	}
-
+	/**
+	 * 
+	 * @param comp
+	 */
+	/*pacckage*/void addRootComponent(AbstractTag comp){
+		rootCompTags.add(comp);
+	}
 	/** Adds a child tag.
 	 */
-	/*package*/ void addChildTag(LeafTag child) {
+	/*package*/ void addChildTag(ComponentTag child) {
 		child.getComponent().setPage(_page);
 	}
 	/** Returns the default scripting language.
@@ -171,7 +181,14 @@ abstract public class RootTag extends AbstractTag {
 
 			final UiFactory uf = wappc.getUiFactory();
 			final Richlet richlet = new MyRichlet();
+			// find all macro-definition from JspContext.
+			
+			// do Macro Component registration.
+			//richlet.getLanguageDefinition().addComponentDefinition(compdef);
+			
+			
 			_page = uf.newPage(ri, richlet, null);
+			//((PageCtrl)_page).destroy();
 			if(_lang!=null)_page.setZScriptLanguage(_lang);
 
 			final Execution exec = new ExecutionImpl(
@@ -193,6 +210,7 @@ abstract public class RootTag extends AbstractTag {
 	private class MyRichlet implements Richlet {
 		
 		public void init(RichletConfig config) {
+			config.getWebApp();
 		}
 		public void destroy() {
 		}
@@ -205,7 +223,7 @@ abstract public class RootTag extends AbstractTag {
 			try {
 				final StringWriter out = new StringWriter();
 				getJspBody().invoke(out);
-				if(inits!=null)inits.doAfterCompose(page);
+				if(inits!=null)inits.doAfterCompose(page, rootCompTags);
 				Utils.adjustChildren(
 					page, null, page.getRoots(), out.toString());
 			} catch (Exception ex) {

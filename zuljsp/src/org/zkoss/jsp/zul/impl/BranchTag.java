@@ -34,10 +34,10 @@ import org.zkoss.zk.ui.Component;
  *
  * @author tomyeh
  */
-abstract public class BranchTag extends LeafTag {
+abstract public class BranchTag extends ComponentTag {
 	/** Adds a child tag.
 	 */
-	/*package*/ void addChildTag(LeafTag child) {
+	/*package*/ void addChildTag(ComponentTag child) {
 		child.getComponent().setParent(getComponent());
 	}
 

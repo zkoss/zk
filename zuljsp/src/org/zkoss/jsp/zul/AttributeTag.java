@@ -19,7 +19,6 @@ import org.zkoss.jsp.zul.impl.BranchTag;
  */
 public class AttributeTag extends AbstractTag {
 	
-	
 	private BranchTag _parent;
 	private String _name;
 	
@@ -39,10 +38,10 @@ public class AttributeTag extends AbstractTag {
 	 */
 	public void setParent(JspTag parent) {
 		super.setParent(parent);
-		final AbstractTag pt =
-		(AbstractTag)findAncestorWithClass(this, AbstractTag.class);
-		if (pt instanceof BranchTag) {
-			_parent = (BranchTag)pt;
+//		final AbstractTag pt =
+//		(AbstractTag)findAncestorWithClass(this, AbstractTag.class);
+		if (parent instanceof BranchTag) {
+			_parent = (BranchTag)parent;
 		} else {
 			throw new IllegalStateException("Must be nested inside the page tag: "+this);
 		}
