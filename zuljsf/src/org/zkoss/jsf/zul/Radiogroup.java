@@ -86,7 +86,7 @@ import org.zkoss.zk.ui.Component;
  * </pre>
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 
- * To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
+ * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *    
  * @author Dennis.Chen
  * @see org.zkoss.zul.Radiogroup

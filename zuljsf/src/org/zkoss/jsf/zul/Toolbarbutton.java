@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.Component;
  * </code></pre>
  * 
  * 
- * To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
+ * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   
  * @author Dennis.Chen
  *

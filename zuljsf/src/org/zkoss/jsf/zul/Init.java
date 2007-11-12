@@ -41,7 +41,7 @@ import org.zkoss.zk.ui.util.Initiator;
  * in {@link Initiator#doCatch} and commit it in {@link Initiator#doFinally}
  * (if {@link Initiator#doCatch} is not called).
  * 
- * To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
+ * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   
  * @author Dennis.Chen
  *

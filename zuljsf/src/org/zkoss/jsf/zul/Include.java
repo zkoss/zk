@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.Component;
  * For example:
  * <p>&lt;z:include src="/myWindow.zul" /&gt;
  * 
- * To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
+ * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   
  * @author Dennis.Chen
  *

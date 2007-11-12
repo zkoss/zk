@@ -22,11 +22,11 @@ import org.zkoss.jsf.zul.impl.BaseCustomAttributes;
 
 
 /**
- * CustomeAttributes is a JSF component implementation for ZUL custom-attributes tag.
+ * CustomAttributes is a JSF component implementation for ZUL custom-attributes tag.
  * 
  * This component should be declared nested under other ZUL JSF Component.
  * 
- * To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
+ * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   
  * @author Dennis.Chen
  *

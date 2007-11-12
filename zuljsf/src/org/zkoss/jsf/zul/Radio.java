@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.Component;
  * To bind raido value to bean for user input, please use {@link Radiogroup}   
  * 
  * 
- * To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
+ * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   
  * @author Dennis.Chen
  *
