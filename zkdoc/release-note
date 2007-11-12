@@ -4,6 +4,7 @@ ZK 3.0.1
 * Bugs:
 	1828044: When header is invisible, whole column should be disappeared
 	1826938: Listbox Live Data
+	1829640: drag-n-drop does not work in Firefox
 	--------
 ZK 3.0.0
 * Features:
