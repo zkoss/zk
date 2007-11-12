@@ -67,6 +67,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>A non-XUL extension.
  *
+ * <p>Default {@link #getSclass}: html.
  * @author tomyeh
  */
 public class Html extends XulElement {
@@ -75,6 +76,7 @@ public class Html extends XulElement {
 	/** Contructs a {@link Html} component to embed HTML tags.
 	 */
 	public Html() {
+		setSclass("html");
 	}
 	/** Contructs a {@link Html} component to embed HTML tags
 	 * with the specified content.
