@@ -71,6 +71,7 @@ zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
 zk.ie7 = zk.agent.indexOf("msie 7") != -1;
 zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 zk.windows = zk.agent.indexOf("windows") != -1;
+zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
 //zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 
 /** Listen an event.
