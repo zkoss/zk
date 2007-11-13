@@ -33,6 +33,7 @@ import java.util.Iterator;
  * Convert Tabbox selected Tab to Tab label and vice versa.
  *
  * @author Henri
+ * @since 3.0.1
  */
 public class TabboxSelectedTabConverter implements TypeConverter {
   public Object coerceToUi(Object val, Component comp) { //load
