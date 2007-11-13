@@ -582,15 +582,16 @@ zk.onResize = function (timeout) {
 			timeout ? timeout: zk.ie && zk._reszcnt < 4 ? 200: 35);
 			//IE: we have to prolong since onresize might come too fast
 			//It is an experimental value. Not sure the real cause.
-	} else {
-		setTimeout(zk.onResize, 100);
-	}
+	} else setTimeout(zk.onResize, 100);
 };
 zk._onResize = function () {
 	if (--zk._reszcnt == 0) {
 		if (zk.loading)
 			return zk.onResize();
-
+		if (zk.ie && !zk.ie7 && !zk._tmResz) {
+			zk._tmResz = $now() + 800; 
+			return; // avoid IE6. It always fire onResize at first time.
+		}
 		if (zk.ie) zk._tmResz = $now() + 800;
 
 		for (var j = 0; j < zk._reszfns.length; ++j)
