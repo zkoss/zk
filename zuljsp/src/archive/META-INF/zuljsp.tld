@@ -6,7 +6,7 @@ Purpose:
 Description:
 	
 Histroy:
-	2007/11/13  11:35:25 , Created by tomyeh modified by Ian Tsai
+	2007/11/13  13:55:13 , Created by tomyeh modified by Ian Tsai
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
@@ -129,7 +129,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<description>
 	Define Macro Definition Tag.
 		</description>
-		<name>component-def</name>
+		<name>component</name>
 		<tag-class>org.zkoss.jsp.zul.ComponentDefinitionTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
@@ -198,13 +198,21 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<tag-class>org.zkoss.jsp.zul.impl.InstanceTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+		component delaration Name.
+			</description>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag><!--***** Custom-AttributesTag  *****-->
 		<description>
 	Define Init Tag.
 		</description>
-		<name>macro-component</name>
-		<tag-class>org.zkoss.jsp.zul.MacroComponentTag</tag-class>
+		<name>custom-attributes</name>
+		<tag-class>org.zkoss.jsp.zul.CustomAttributsTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 	</tag>

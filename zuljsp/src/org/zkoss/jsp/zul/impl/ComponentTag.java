@@ -25,9 +25,20 @@ public interface ComponentTag {
 	 * @return the component associated with this tag.
 	 */
 	Component getComponent();
+	
+	/**
+	 * 
+	 * @return the inline macro will return mulitple Components.
+	 */
+	Component[] getComponents();
 	/**
 	 * 
 	 * @param child Adds a child tag.
 	 */
 	void addChildTag(ComponentTag child);
+	/**
+	 * test if this tag's content is inlinemacro component. 
+	 *
+	 */
+	boolean isInlineMacro();
 }

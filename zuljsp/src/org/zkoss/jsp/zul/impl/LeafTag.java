@@ -37,6 +37,7 @@ import org.zkoss.util.CollectionsX;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.HtmlMacroComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Events;
@@ -197,10 +198,15 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 					helper.applyAnnotations(target, 
 							"self".equals(attnm) ? null: attnm, true);
 				}
+				else if(target.getDefinition().isMacro())
+					((HtmlMacroComponent)target).setDynamicProperty(attnm, value);
 				else Fields.setField(target, attnm, value, true);
 			}
+			else if(target.getDefinition().isMacro())
+				((HtmlMacroComponent)target).setDynamicProperty(attnm, value);
 			else Fields.setField(target, attnm, value, true);
 		}
+		
 	}
 	/**
 	 *   Called when a tag declared to accept dynamic attributes is passed an 
@@ -225,7 +231,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	 * Called by {@link #doTag}.
 	 */
 	/*package*/ void writeComponentMark() throws IOException {
-		Utils.writeComponentMark(getJspContext().getOut(), _comp);
+		if(!isInlineMacro())
+			Utils.writeComponentMark(getJspContext().getOut(), _comp);
 	}
 
 	
@@ -251,8 +258,6 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 			((AfterCompose)_comp).afterCompose();
 		
 		composeHandle.doAfterCompose(_comp);// Composer fire...
-		
-
 		
 		//process the forward condition...
 		ComponentsCtrl.applyForward(_comp, _forward);
@@ -338,5 +343,16 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	public void setForward(String forward) {
 		_forward = forward != null && forward.length() > 0 ? forward: null;
 	}
-	
+	/**
+	 * default Tag's Component is not an inline macro.
+	 */
+	public boolean isInlineMacro() {
+		return false;
+	}
+	/**
+	 *  a dummy method of {@link LeafTag#getComponent()}
+	 */
+	public Component[] getComponents() {
+		return new Component[]{_comp};
+	}
 }

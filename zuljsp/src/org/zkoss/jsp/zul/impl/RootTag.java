@@ -103,8 +103,11 @@ abstract public class RootTag extends AbstractTag {
 	}
 	/** Adds a child tag.
 	 */
-	/*package*/ void addChildTag(LeafTag child) {
-		child.getComponent().setPage(_page);
+	/*package*/ void addChildTag(ComponentTag child) {
+		if(child.isInlineMacro())
+			for(int i=0;i<child.getComponents().length;i++)
+				child.getComponents()[i].setPage(_page);
+		else child.getComponent().setPage(_page);
 	}
 	/** Returns the default scripting language.
 	 */

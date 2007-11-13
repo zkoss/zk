@@ -55,6 +55,7 @@ import org.zkoss.zk.ui.util.Initiator;
 public class InitTag extends AbstractTag implements DynamicAttributes{
 	private List _args = new LinkedList();
 	private Initiator _init ;
+	private String _zscript;
 	/**
 	 *   Called when a tag declared to accept dynamic attributes is passed an 
 	 *   attribute that is not declared in the Tag Library Descriptor.<br>
@@ -115,6 +116,24 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	public String getUse() {
 		return _init != null ? _init.getClass().getName(): null;
 	}
+
+	/**
+	 * 
+	 * @param zscript
+	 */
+	public void setZscript(String zscript) {
+		_zscript = zscript;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public String getZscript() {
+		return _zscript;
+	}
+
+
+	
 	
 
 }

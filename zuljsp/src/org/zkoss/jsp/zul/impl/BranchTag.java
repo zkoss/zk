@@ -38,7 +38,13 @@ abstract public class BranchTag extends LeafTag {
 	/** Adds a child tag.
 	 */
 	public void addChildTag(ComponentTag child) {
-		child.getComponent().setParent(getComponent());
+		if(child.isInlineMacro())
+		{
+			Component[] comps = child.getComponents();
+			for(int i=0;i<comps.length;i++)
+				comps[i].setParent(getComponent());
+		}
+		else child.getComponent().setParent(getComponent());
 	}
 
 
@@ -53,10 +59,21 @@ abstract public class BranchTag extends LeafTag {
 
 		final StringWriter out = new StringWriter();
 		if(getJspBody()!=null)getJspBody().invoke(out);
-		final Component comp = getComponent();
-		Utils.adjustChildren(
-			null, comp, comp.getChildren(), out.toString());
+		if(isInlineMacro())
+		{
+			Component[] comps = getComponents();
+			for(int i=0;i<comps.length;i++)
+				Utils.adjustChildren(
+						null, comps[i], comps[i].getChildren(), out.toString());
+		}
+		else
+		{
+			Component comp = getComponent();
+			Utils.adjustChildren(
+				null, comp, comp.getChildren(), out.toString());	
+		}
 		afterComposeComponent();// after Compose Component.
 		writeComponentMark(); //write a special mark
 	}
+	
 }
