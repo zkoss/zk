@@ -8,6 +8,7 @@ ZK 3.0.1
   1828702: InternalError when moving box's children
   1826872: IE6 100% CPU on Tree and Listbox
   1830311: Cannot display Japanese messages
+  1827727: multiple disable-theme-uri discarded
 
 	--------
 ZK 3.0.0
