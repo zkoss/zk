@@ -10,6 +10,8 @@ ZK 3.0.1
   1830311: Cannot display Japanese messages
   1827727: multiple disable-theme-uri discarded
   1830668: Nested Windows Do Not Display Properly in FF
+  1829811: data bind fails with radiogroup
+  1830960: data bind does not work with Tabbox
 
 	--------
 ZK 3.0.0
