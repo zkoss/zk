@@ -413,9 +413,13 @@ public class Box extends XulElement {
 	}
 
 	//-- Component --//
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		invalidate();
+	public boolean insertBefore(Component newChild, Component refChild) {
+		//Bug 1828702: onChildAdded not called if only moved
+		if (super.insertBefore(newChild, refChild)) {
+			invalidate();
+			return true;
+		}
+		return false;
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
