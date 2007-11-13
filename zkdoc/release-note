@@ -2,11 +2,12 @@ ZK 3.0.1
 * Features:
 
 * Bugs:
-	1828044: When header is invisible, whole column should be disappeared
-	1826938: Listbox Live Data
-	1829640: drag-n-drop does not work in Firefox
-	1828702: InternalError when moving box's children
-	1826872: IE6 100% CPU on Tree and Listbox
+  1828044: When header is invisible, whole column should be disappeared
+  1826938: Listbox Live Data
+  1829640: drag-n-drop does not work in Firefox
+  1828702: InternalError when moving box's children
+  1826872: IE6 100% CPU on Tree and Listbox
+  1830311: Cannot display Japanese messages
 
 	--------
 ZK 3.0.0
