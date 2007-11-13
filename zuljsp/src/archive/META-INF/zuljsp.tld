@@ -6,7 +6,7 @@ Purpose:
 Description:
 	
 Histroy:
-	2007/11/12  11:02:50 , Created by tomyeh modified by Ian Tsai
+	2007/11/13  11:35:25 , Created by tomyeh modified by Ian Tsai
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
@@ -125,21 +125,77 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 	</tag>
-	<tag><!--***** MacroComponentTag  *****-->
+	<tag><!--***** Component Definition Tag  *****-->
 		<description>
 	Define Macro Definition Tag.
 		</description>
-		<name>macro-define</name>
-		<tag-class>org.zkoss.jsp.zul.MacroDefinitionTag</tag-class>
+		<name>component-def</name>
+		<tag-class>org.zkoss.jsp.zul.ComponentDefinitionTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+		component delaration Name.
+			</description>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+		extends component class.
+			</description>
+			<name>extends</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+		used component class.
+			</description>
+			<name>useClass</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+		if this component is inline component.
+			</description>
+			<name>inline</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+		the destination of zul file.
+			</description>
+			<name>macroURI</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+		component delaration MoldURI.
+			</description>
+			<name>moldURI</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+		component mold Name.
+			</description>
+			<name>moldName</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
-	<tag><!--***** MacroComponentTag  *****-->
+	<tag><!--***** Component instance Tag  *****-->
 		<description>
 	Define a MacroComponent Tag.
 		</description>
-		<name>macro</name>
-		<tag-class>org.zkoss.jsp.zul.MacroComponentTag</tag-class>
+		<name>ui</name>
+		<tag-class>org.zkoss.jsp.zul.impl.InstanceTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 	</tag>

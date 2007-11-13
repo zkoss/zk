@@ -18,6 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.jsp.zul;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import org.zkoss.jsp.zul.impl.RootTag;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
@@ -66,6 +70,11 @@ public class PageTag extends RootTag {
 	 */
 	protected void init(Execution exec, Page page) {
 		super.init(exec, page);
+		// load page component definition
+		Map compDefs = (Map)getJspContext().getAttribute(Const.CONTEXT_KEY);
+		for(Iterator it = compDefs.values().iterator();it.hasNext();)
+			((ComponentDefinitionTag)it.next()).registComponentDefinition(page);
+		
 		page.setId(_id);
 		page.setStyle(_style);
 	}

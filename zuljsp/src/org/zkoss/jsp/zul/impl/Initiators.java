@@ -79,9 +79,9 @@ public class Initiators{
 		if(compTags!=null){
 			Object[] tags = compTags.toArray();
 			comps = new Component[ tags.length];
-			ComponentTag tag;
+			LeafTag tag;
 			for(int i=tags.length-1;i>=0;i--){
-				tag = (ComponentTag)tags[i];
+				tag = (LeafTag)tags[i];
 				comps[i] = tag.getComponent();
 			}
 		}

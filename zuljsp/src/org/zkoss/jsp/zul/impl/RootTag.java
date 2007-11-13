@@ -78,6 +78,14 @@ abstract public class RootTag extends AbstractTag {
 	private List rootCompTags;
 
 	/**
+	 * 
+	 * @return the current ZK {@link Page} of this jsp page.
+	 */
+	public Page getPage()
+	{
+		return _page;
+	}
+	/**
 	 * protected Constractor. Constract a RootTag with
 	 * LanguageDefinition =  "xul/html".
 	 *
@@ -95,7 +103,7 @@ abstract public class RootTag extends AbstractTag {
 	}
 	/** Adds a child tag.
 	 */
-	/*package*/ void addChildTag(ComponentTag child) {
+	/*package*/ void addChildTag(LeafTag child) {
 		child.getComponent().setPage(_page);
 	}
 	/** Returns the default scripting language.
@@ -181,14 +189,8 @@ abstract public class RootTag extends AbstractTag {
 
 			final UiFactory uf = wappc.getUiFactory();
 			final Richlet richlet = new MyRichlet();
-			// find all macro-definition from JspContext.
-			
-			// do Macro Component registration.
-			//richlet.getLanguageDefinition().addComponentDefinition(compdef);
-			
-			
 			_page = uf.newPage(ri, richlet, null);
-			//((PageCtrl)_page).destroy();
+			
 			if(_lang!=null)_page.setZScriptLanguage(_lang);
 
 			final Execution exec = new ExecutionImpl(
