@@ -5,6 +5,7 @@ ZK 3.0.1
 	1828044: When header is invisible, whole column should be disappeared
 	1826938: Listbox Live Data
 	1829640: drag-n-drop does not work in Firefox
+	1826872: IE6 100% CPU on Tree and Listbox
 	--------
 ZK 3.0.0
 * Features:
