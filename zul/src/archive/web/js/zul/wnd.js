@@ -42,7 +42,8 @@ zkWnd.init = function (cmp) {
 		//our js are unloaded. It causes JavaScript error though harmlessly
 		//This is a dirty fix (since onclick and others still fail but hardly happen)
 	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));
-	zkWnd._initMode(cmp);
+	
+	zk.addInitLater(function () {zkWnd._initMode(cmp);}, true);	//Bug #1830668 we have to invoke initMode later.
 };
 zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
