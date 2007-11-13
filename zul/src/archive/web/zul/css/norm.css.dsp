@@ -284,9 +284,11 @@ div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, tbody.list
 div.foot-cell-inner, div.cell-inner, div.head-cell-inner{
 	overflow:hidden; border: 0; margin: 0; padding: 0;
 }
-
+td.gc {
+	padding: 2px; 
+}
 div.gc {
-	padding: 2px; font-size: small; font-weight: normal; color: black;
+	font-size: small; font-weight: normal; color: black;
 }
 
 td.hbox-sp {

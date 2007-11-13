@@ -118,7 +118,7 @@ zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 		}
 	}
 
-	zk.cpCellWidth(head, meta.bodyrows, meta);
+	zk.cpCellWidth(head, meta.bodyrows, meta, false, false, icol);
 	var fake = $e(head.id + "!fake");
 	if (!fake || fake.cells.length != head.cells.length) {
 		if (fake) fake.parentNode.removeChild(fake);
