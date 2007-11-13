@@ -395,6 +395,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 				<attribute-value>org.zkoss.zkplus.databind.RadiogroupSelectedItemConverter</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selectedIndex</property-name>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onCheck</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<!--component>
 		<component-name>row</component-name>
@@ -448,10 +460,50 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<component-name>tab</component-name>
 		<extends>tab</extends>
 	</component-->
-	<!--component>
+	<component>
 		<component-name>tabbox</component-name>
 		<extends>tabbox</extends>
-	</component-->
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selectedTab</property-name>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>converter</attribute-name>
+				<attribute-value>org.zkoss.zkplus.databind.TabboxSelectedTabConverter</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selectedTabpanel</property-name>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selectedIndex</property-name>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<!--component>
 		<component-name>tabpanel</component-name>
 		<extends>tabpanel</extends>
