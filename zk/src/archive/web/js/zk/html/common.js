@@ -1337,10 +1337,11 @@ zk.ncols = function (cells) {
  * @param {Object} srcrows all rows from the source table. Don't pass just one row
  * @param {Object} mate a component gird or tree or listbox.
  * @param {Boolean} stripe whether renders the stripe.
- * @param {Boolean} again whether re-calculates the width of each cell for opera or safari
+ * @param {Boolean} again whether re-calculates the width of each cell for opera or safari.
+ * @param {Number} column index. It only copy the index column, if any.
  * @since 3.0.0
  */
-zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
+zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length || !zk.isRealVisible(dst))
 		return;	
@@ -1398,8 +1399,8 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 							if (amount < unwd.length * 20) {
 								amount = unwd.length * 20;
 								var rwd = zk.revisedSize(s, amount + total);
-								cell.style.width = zk.revisedSize(cell, rwd) + "px";
 								s.style.width = rwd + "px";
+								cell.style.width = s.style.width;
 							}
 							var each = Math.max(Math.floor((amount) / unwd.length), 0);
 							while (unwd.length)	{								
@@ -1418,42 +1419,47 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again) {
 						}	
 													
 						var rwd = zk.revisedSize(s, total);
-						cell.style.width = zk.revisedSize(cell, rwd); + "px";	
-						s.style.width = rwd + "px";		
+						s.style.width = rwd + "px";
+						cell.style.width = s.style.width;	
+								
 						if (!again && i == 0 && zk.ie) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 500);															
 					}					
 				} else {
-					if (!dstwds[z] || d.offsetWidth != s.offsetWidth || zk.ie || zk.safari) { 
-					// Note: we have to specify the width of each column for opera.
-						if (!dstwds[z]) {
-							var wd =  d.style.width;							
-							if (wd == "auto" || wd.indexOf('%') > -1) 
-								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-							wd = d.style.width;
-							dstwds[z] = wd ? (zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth) :
-								zk.ie && z == dst.cells.length-1 ? s.offsetWidth - 2 : s.offsetWidth;
+					if (index == null || index == z) {
+						if (zk.ie || !dstwds[z] || d.offsetWidth != s.offsetWidth || zk.safari) { 
+						// Note: we have to specify the width of each column for opera.
+							if (!dstwds[z]) {
+								var wd =  d.style.width;	
+								var cell = $e($uuid(d) + "!cave");				
+								if (wd == "auto" || wd.indexOf('%') > -1) 
+									d.style.width = zk.revisedSize(d, d.offsetWidth)+ "px";
+								wd = d.style.width;
+								dstwds[z] = wd ? (zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth) :
+									zk.ie && z == dst.cells.length-1 ? s.offsetWidth - 2 : s.offsetWidth;
+								
+								var w;
+								if (!wd) {
+									w =  zk.revisedSize(d, dstwds[z]); 
+									d.style.width = w + "px";
+								} else w = $int(wd);
+								
+								if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";
+								
+							} 
 							
-							var w;
-							if (!wd) {
-								w = zk.revisedSize(d, dstwds[z]);
-								d.style.width = w + "px";
-							} else w = $int(wd);
-							var cell = $e($uuid(d) + "!cave");
-							if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";
+							var uuid = $uuid(s);
+							var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
+							if (!cacheCss[2] || s.className != cacheCss[2].el.className || s.style.cssText)
+								cacheCss[2] = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
+				
+							var rwd = dstwds[z] - cacheCss[2].size;
+							if (rwd < 0) rwd = 0; // #Bugs 1817636
+							s.style.width = rwd + "px";
+							if (cell) cell.style.width = s.style.width;
 							
-						} 
-						
-						var uuid = $uuid(s);
-						var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
-						if (cell && (!cacheCss[j] || s.className != cacheCss[j][0].el.className || s.style.cssText != "")) {				
-							cacheCss[j] = [{el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)}, 
-								{el: cell, size : zk.sumStyles(cell, "lr", zk.borders) + zk.sumStyles(cell, "lr", zk.paddings)}];					
-						} 
-			
-						var rwd = dstwds[z] - cacheCss[j][0].size;
-						if (cell) cell.style.width = Math.max(rwd - cacheCss[j][1].size, 0) + "px"; // #Bugs 1817636
-						s.style.width = (rwd < 0 ? 0 : rwd) + "px";
+						}
 					}
+					if (index == z) break;
 				}
 				z += s.colSpan; // header count
 			}
@@ -1494,8 +1500,9 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 		var uuid = $uuid(s);
 		var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
 		var rwd = zk.revisedSize(s, wd);
-		if (cell) cell.style.width = zk.revisedSize(cell, rwd) + "px";
 		s.style.width = rwd + "px";
+		if (cell) cell.style.width = s.style.width;
+		
 	}
 };
 //Number//
