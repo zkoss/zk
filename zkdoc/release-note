@@ -9,6 +9,7 @@ ZK 3.0.1
   1826872: IE6 100% CPU on Tree and Listbox
   1830311: Cannot display Japanese messages
   1827727: multiple disable-theme-uri discarded
+  1830668: Nested Windows Do Not Display Properly in FF
 
 	--------
 ZK 3.0.0
