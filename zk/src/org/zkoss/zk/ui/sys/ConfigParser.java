@@ -282,17 +282,16 @@ public class ConfigParser {
 		for (Iterator it = conf.getElements("theme-uri").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
-			String uri = el.getText().trim();
+			final String uri = el.getText(true);
 			if (uri.length() != 0) config.addThemeURI(uri);
 		}
 
 		//disable-theme-uri
-		Element subel = conf.getElement("disable-theme-uri");
-		if (subel != null) {
-			String s = subel.getText(true);
-			if (s.length() == 0)
-				throw new UiException("disable-theme-uri cannot be empty, "+subel.getLocator());
-			config.addDisabledThemeURI(s);
+		for (Iterator it = conf.getElements("disable-theme-uri").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String uri = el.getText(true);
+			if (uri.length() != 0) config.addDisabledThemeURI(uri);
 		}
 
 		//theme-provider-class
@@ -346,7 +345,7 @@ public class ConfigParser {
 		for (Iterator it = conf.getElements("addon-uri").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
-			final String path = el.getText().trim();
+			final String path = el.getText(true);
 
 			final URL url = locator.getResource(path);
 			if (url == null)
