@@ -34,9 +34,10 @@ import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
 
 /**
  * 
- * Used to define a macro component.
+ * Used to define a ZK custom component in Jsp environment.<br>
+ * 
  * @author Ian Tsai
- * <macro-definition />
+ * 
  */
 public class ComponentDefinitionTag  extends AbstractTag implements DynamicAttributes
 {

@@ -22,19 +22,14 @@ public class ComposerHandler{
 	private ComposerExt composerExt;
 	/**
 	 * 
-	 * @param apply
+	 * @param apply could be String Collection or a {@link Composer}
 	 */
-	/* package*/ ComposerHandler(Object apply){
+	/*package*/ ComposerHandler(Object apply){
 		composer =  parseAppliedComposer( apply);
 		if(composer!=null)
 			composerExt = composer instanceof ComposerExt ? 
 				(ComposerExt)composer: null;
 	}
-	
-	/**
-	 * 
-	 * @return
-	 */
 	private static Composer parseAppliedComposer(Object o)
 	{
 		if(null==o)return null;
@@ -76,10 +71,20 @@ public class ComposerHandler{
 		}
 		return null;
 	}
+	
 	/**
-	 * 
-	 * @param comp
-	 * @throws JspException
+	 * Fire contained {@link ComposerExt}'s  {@link ComposerExt#doBeforeComposeChildren(Component)} method.
+	 * @param comp the component that should be composed.
+	 * @throws Exception if {@link ComposerExt#doBeforeComposeChildren(Component)} failed.
+	 */
+	public void doBeforeComposeChildren(Component comp) throws Exception {
+		if(composerExt!=null)
+			composerExt.doBeforeComposeChildren(comp);		
+	}
+	/**
+	 *  Fire contained {@link Composer}'s  {@link Composer#doAfterCompose(Component)} method.
+	 * @param comp the component that should be composed.
+	 * @throws JspException if {@link Composer#doAfterCompose(Component)} failed.
 	 */
 	public void doAfterCompose(Component comp) throws JspException {
 		try {
@@ -90,23 +95,15 @@ public class ComposerHandler{
 	}
 	/**
 	 * 
-	 * @param comp
-	 * @throws Exception
+	 * @param e the error that composer should handled 
+	 * @return true if {@link ComposerExt#doCatch(Throwable)} return's true, false otherwise. 
 	 */
-	public void doBeforeComposeChildren(Component comp) throws Exception {
-		if(composerExt!=null)
-			composerExt.doBeforeComposeChildren(comp);		
-	}
-	/**
-	 * 
-	 * @param e
-	 * @return
-	 * @throws JspException
-	 */
-	public boolean doCatch(Throwable e) throws JspException {
+	public boolean doCatch(Throwable e){
+		boolean flag = false;
 		try {
+			
 			if(composerExt!=null)
-				composerExt.doCatch(e);
+				flag = composerExt.doCatch(e);
 		} catch (Exception e1) {
 			StackTraceElement[] oriArr = e.getStackTrace();
 			StackTraceElement[] erArr = e1.getStackTrace();
@@ -115,11 +112,11 @@ public class ComposerHandler{
 			System.arraycopy(newErrArr, oriArr.length, erArr, 0, erArr.length);
 			e.setStackTrace(newErrArr);
 		}
-		return false;
+		return flag;		
 	}
 	/**
 	 * 
-	 * @throws JspException
+	 * @throws JspException if {@link ComposerExt#doFinally()} fail.
 	 */
 	public void doFinally() throws JspException {
 		if(composerExt!=null){
@@ -130,8 +127,5 @@ public class ComposerHandler{
 			}	
 		}
 	}
-//	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) {
-//	return null;
-//}
 	
 }//end of class...

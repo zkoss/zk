@@ -38,7 +38,7 @@ abstract public class BranchTag extends LeafTag {
 	/** Adds a child tag.
 	 */
 	public void addChildTag(ComponentTag child) {
-		if(child.isInlineMacro())
+		if(child.isInline())
 		{
 			Component[] comps = child.getComponents();
 			for(int i=0;i<comps.length;i++)
@@ -56,10 +56,9 @@ abstract public class BranchTag extends LeafTag {
 			return; //nothing to do
 
 		initComponent(); //creates and registers component
-
 		final StringWriter out = new StringWriter();
 		if(getJspBody()!=null)getJspBody().invoke(out);
-		if(isInlineMacro())
+		if(isInline())
 		{
 			Component[] comps = getComponents();
 			for(int i=0;i<comps.length;i++)

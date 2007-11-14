@@ -19,7 +19,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.jsp.zul.impl;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,22 +32,18 @@ import javax.servlet.jsp.tagext.JspTag;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.reflect.Fields;
 
-import org.zkoss.util.CollectionsX;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.HtmlMacroComponent;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.ComposerExt;
 
 /**
  * The skeletal class used to implement the JSP tag for ZK components
@@ -199,11 +194,11 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 							"self".equals(attnm) ? null: attnm, true);
 				}
 				else if(target.getDefinition().isMacro())
-					((HtmlMacroComponent)target).setDynamicProperty(attnm, value);
+					((DynamicPropertied)target).setDynamicProperty(attnm, value);
 				else Fields.setField(target, attnm, value, true);
 			}
 			else if(target.getDefinition().isMacro())
-				((HtmlMacroComponent)target).setDynamicProperty(attnm, value);
+				((DynamicPropertied)target).setDynamicProperty(attnm, value);
 			else Fields.setField(target, attnm, value, true);
 		}
 		
@@ -231,7 +226,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	 * Called by {@link #doTag}.
 	 */
 	/*package*/ void writeComponentMark() throws IOException {
-		if(!isInlineMacro())
+		if(!isInline())
 			Utils.writeComponentMark(getJspContext().getOut(), _comp);
 	}
 
@@ -240,7 +235,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	 * Called by {@link #doTag}.
 	 * @throws JspException 
 	 */
-	/*package*/void afterComposeComponent() throws JspException{
+	/*package*/ void afterComposeComponent() throws JspException{
 
 		
 		if (_comp == null)
@@ -346,7 +341,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	/**
 	 * default Tag's Component is not an inline macro.
 	 */
-	public boolean isInlineMacro() {
+	public boolean isInline() {
 		return false;
 	}
 	/**

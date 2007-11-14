@@ -37,8 +37,8 @@ public interface ComponentTag {
 	 */
 	void addChildTag(ComponentTag child);
 	/**
-	 * test if this tag's content is inlinemacro component. 
+	 * test if this tag's contain multiple inline prepared components. 
 	 *
 	 */
-	boolean isInlineMacro();
+	boolean isInline();
 }

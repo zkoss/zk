@@ -6,7 +6,7 @@ Purpose:
 Description:
 	
 Histroy:
-	2007/11/13  13:55:13 , Created by tomyeh modified by Ian Tsai
+	2007/11/14  11:22:50 , Created by tomyeh modified by Ian Tsai
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
@@ -118,7 +118,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</tag>
 	<tag><!--***** Custom-AttributesTag  *****-->
 		<description>
-	Define Init Tag.
+	Define Custom-AttributesTag.
 		</description>
 		<name>custom-attributes</name>
 		<tag-class>org.zkoss.jsp.zul.CustomAttributesTag</tag-class>
@@ -195,26 +195,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Define a MacroComponent Tag.
 		</description>
 		<name>ui</name>
-		<tag-class>org.zkoss.jsp.zul.impl.InstanceTag</tag-class>
+		<tag-class>org.zkoss.jsp.zul.impl.UiTag</tag-class>
 		<body-content>scriptless</body-content>
 		<dynamic-attributes>true</dynamic-attributes> 
 		<attribute>
 			<description>
 		component delaration Name.
 			</description>
-			<name>name</name>
+			<name>tag</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-	</tag>
-	<tag><!--***** Custom-AttributesTag  *****-->
-		<description>
-	Define Init Tag.
-		</description>
-		<name>custom-attributes</name>
-		<tag-class>org.zkoss.jsp.zul.CustomAttributsTag</tag-class>
-		<body-content>scriptless</body-content>
-		<dynamic-attributes>true</dynamic-attributes> 
 	</tag>
 	<tag><!--***** InitTag  *****-->
 		<description>
@@ -229,7 +220,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		Attribute Name.
 			</description>
 			<name>use</name>
-			<required>true</required>
+			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.Component;
  * @author ian
  *
  */
-public class CustomAttributsTag extends AbstractTag  implements DynamicAttributes  {
+public class CustomAttributesTag extends AbstractTag  implements DynamicAttributes  {
 
 	private BranchTag _parent;
 	private String _name;
