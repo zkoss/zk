@@ -64,12 +64,12 @@ div.layout-container{
 					<treechildren>
 						<treeitem id="l1" label="The box model" value="/userguide/layout/box.zul"/>
 						<treeitem id="lsplt" label="Splitters" value="/userguide/layout/splitter.zul"/>
+						<treeitem id="layout" label="Border layout" value="/userguide/layout/borderlayout.zul"/>
 						<treeitem id="l2" label="Tabboxes" value="/userguide/layout/tabbox.zul"/>
 						<treeitem id="l3" label="More tabboxes" value="/userguide/layout/moreTabbox.zul"/>
 						<treeitem id="l4" label="Groupbox" value="/userguide/layout/groupbox.zul"/>
 						<treeitem id="l5" label="More groupboxes" value="/userguide/layout/moreGroupbox.zul"/>
 						<treeitem id="l6" label="Grids" value="/userguide/layout/grid.zul"/>
-						<treeitem id="l7" label="BorderLayout" value="/userguide/layout/borderlayout.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Toolbar and Menus" value="/userguide/toolbar/index.zul">
