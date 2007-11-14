@@ -94,7 +94,7 @@ zkWnd.setAttr = function (cmp, nm, val) {
 
 		if (order == 1) { //with vparent
 			setZKAttr(cmp, "vvisi", visible ? 't': 'f');
-			visible = visible && zk.isRealVisible($parent(cmp));
+			visible = visible && zk.isRealVisible($parent($childExterior(cmp))); //Bug #1831534
 			zkau.setAttr(cmp, nm, visible ? "true": "false");
 			if (visible) zk.setVParent(cmp); //Bug 1816451
 		} else {
