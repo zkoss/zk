@@ -33,6 +33,10 @@ elif [ "$pkgnm"  = "JSFComps" ] ; then
 	prjnm=zuljsf
 	demoprjnm=zkjsf-demo
 	releasenote=zkjsf-release-note
+elif [ "$pkgnm"  = "Yui-Ext" ] ; then
+	prjnm=yuiextz
+	demoprjnm=yuiextz-demo
+	releasenote=yuiextz-release-note
 else
 	if [ "$pkgnm" != "" ] ; then
 		echo "Unknown package: $pkgnm"
@@ -41,11 +45,16 @@ else
 	echo "Usage:"
 	echo "  ./sub-release pkgnm [official | daily]"
 	echo
-	echo "pkgnm the package name. It is one of JspTags, JSFComps, Seam."
+	echo "pkgnm the package name. It is one of JspTags, JSFComps, Seam, Yui-Ext."
 	exit 1
 fi
 
-javadocdir=$(grep '^javadoc' build.setting.local)
+if [ -f build.setting.local ] ; then
+	setting=build.setting.local
+else
+	setting=build.setting
+fi
+javadocdir=$(grep '^javadoc' $setting)
 javadocdir=${javadocdir#javadoc=}
 if [ "$javadocdir" = "" ] ; then
 	echo javadoc must be specified in $setting
