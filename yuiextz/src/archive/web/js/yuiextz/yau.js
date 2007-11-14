@@ -206,7 +206,6 @@ Ext.extend(zkExt.form.DateField, Ext.form.DateField,{
                date : zk.formatDate(date,this.format);
     }
 });
-
 /**
  * Override the original ZK client engine.
  */
@@ -252,6 +251,7 @@ zkau.cmd1.setAttr = function (uuid, cmp, dt1, dt2) {
 		return true;
 	}
 };
+
 zkau.cmd1.rm = function (uuid, cmp) {   
 	 if (zkExt.isExt(cmp ,"ExtRow")) {
 		if (cmp) {
@@ -326,10 +326,12 @@ zkau.cmd1.outer = function (uuid, cmp, html) {
 		if (zkau.valid) zkau.valid.fixerrboxes();
 		return true;	
 	} else {		
-		var parent = $e($uuid(cmp.parentNode.id)); // bug #1792952
 		zkExt.oldCmd1.outer(uuid, cmp, html);
-		if (parent && $type(parent) == "ExtContentPanel") {
-			zkExt.BorderLayout.getLayout(parent).el.layout();
+		if (cmp) {//Bug #1803948
+			var parent = $e($uuid(cmp.parentNode.id)); // bug #1792952
+			if (parent && $type(parent) == "ExtContentPanel") {
+				zkExt.BorderLayout.getLayout(parent).el.layout();
+			}	
 		}
 		return true;
 	}
@@ -372,24 +374,6 @@ zkau.cmd1.addBfr = function (uuid, cmp, html) {
 };
 zkau.cmd1.addChd = function (uuid, cmp, html) {
 	if (zkExt.isExt(cmp, "ExtRows")) {
-		/*var n = $e(uuid + "!cave");
-		if (!n) {
-			n = getZKAttr(cmp, "cave");
-			if (n) n = $e(n);
-		}
-		if (n) { //as last child of n
-			zkau._insertAndInitBeforeEnd(n, html);
-			return true;
-		}
-
-		n = $e(uuid + "!child");
-		if (n) { //as previous sibling of n
-			var to = n.previousSibling;
-			zkExt.data.Store.add(uuid, n, html, zkExt.data.Store.ADD_BEFORE);
-			zkau._initSibs(n, to, false);
-			return true;
-		}
-*/
 		cmp = $real(cmp); //go into the real tag (e.g., tabpanel)
 		var lc = cmp.lastChild;
 		zkExt.data.Store.add(uuid, cmp, html, zkExt.data.Store.ADD);
@@ -409,7 +393,6 @@ zkau.cmd1.addChd = function (uuid, cmp, html) {
 		return true;
 	}
 };
-
 zkExt.tblCreateElements = function (html) {
 	var level;
 	html = html.trim(); //If not trim, Opera will create TextNode!
