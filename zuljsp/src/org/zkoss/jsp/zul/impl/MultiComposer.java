@@ -11,7 +11,7 @@ import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
 
 /**
- * @author ian
+ * @author Ian Tsai
  *
  */
 /*package*/class MultiComposer  implements Composer, ComposerExt {
