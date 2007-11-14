@@ -73,19 +73,7 @@ function zips
 					fi
 					if [ $cvt = true ] ; then
 						echo Compress $f
-#						if [ "$f" = "prototype.js" ] ; then
-#echo "//Prototype 1.5.0" > "$dstfl"
-#echo "//(c) 2005-2007 Sam Stephenson" >> "$dstfl"
-#							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
-#						elif [ "$f" = "effects.js" ] || [ "$f" = "dragdrop.js" ] ; then
-#echo "//script.aculo.us 1.7.0" > "$dstfl"
-#echo "//(c) 2005-2006 Thomas Fuchs" >> "$dstfl"
-#echo "//(c) 2005-2006 Sammi Williams" >> "$dstfl"
-#							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
-#						else
-							java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
-#						fi
-
+						java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
 						if [ $? != 0 ] ; then
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
