@@ -1,9 +1,25 @@
 	--------
+JSP Tags 1.1.0
+* Features:
+  1831546: Make JspTags support Macro & inline Macro component.
+  1831541: Make JspTags support custom component tag page definition
+  1831537: Make JspTags support ZK apply, composer feature
+  1831535: Make JspTags support InitiatorExt  
+  1819703: Make JspTags support borderlayout, north, auxhead and others
+  1804593: Make JspTags support Forward Property
+* Bugs:
+  1820771: Make ZK independent of JSP
+  
+* Upgrade Notes:
+
+	--------
 JSP Tags 0.9.0
 * Features:
   1491754: Provide JSP tags that wraps ZUL components, such that developers could use ZUL components directly in JSP pages.
-  
+
 * Bugs:
 
 * Upgrade Notes:
+
+
 
