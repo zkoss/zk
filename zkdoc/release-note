@@ -8,9 +8,11 @@ ZK 3.0.1
   1826872: IE6 100% CPU on Tree and Listbox
   1830311: Cannot display Japanese messages
   1827727: multiple disable-theme-uri discarded
+  1831131: maven version of zcommons-el has issues
   1830668: Nested Windows Do Not Display Properly in FF
   1829811: data bind fails with radiogroup
   1830960: data bind does not work with Tabbox
+  1826971: Console output 'experiment: creating class manager'
   1831534: Popup not working if poup window nested in vbox  
 
 	--------
