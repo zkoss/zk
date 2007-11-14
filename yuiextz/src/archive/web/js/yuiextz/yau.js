@@ -32,8 +32,16 @@ function $childContent(cmp) {
 	}
 	return null;
 };
+function $realParentByType(el, type) {
+	for (; el; el = $parent(el)) {
+		if (el.id.indexOf("!locked") > 0) el = $real(el);
+		if ($type(el) == type)
+			return el;
+	}
+	return null;
+};
 function $realMetaByType(el, type) {
-	el = $parentByType(el, type);
+	el = $realParentByType(el, type);//Bug #1803945
 	return el != null ? zkau.getMeta($real(el)): null;
 };
 function $replaceNestValue(n, v) {
@@ -310,7 +318,7 @@ zkau.cmd1.outer = function (uuid, cmp, html) {
 			var grid = $realMetaByType(cmp,"ExtGrid").grid;			
 			var ds = grid.getDataSource();
 			var cm = grid.getColumnModel();
-			var r =	ds.getById(cmpE.parentNode.id);
+			var r =	ds.getById($real(cmpE.parentNode).id);//Bug #1803945
 			for (var i = 0; i < cm.getColumnCount(); i++) {
 				var field = cm.getColumnId(i);
 				var n = r.cells[field];			
