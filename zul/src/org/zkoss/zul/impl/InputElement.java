@@ -161,13 +161,36 @@ implements Constrainted {
 	 * the user fixed the error by lowering down the value of the first one
 	 * Why? The second intbox got no idea to clear the error message
 	 * (since its content doesn't change).
+	 *
+	 * @param revalidateRequired whether to re-validate the current value
+	 * when {@link #getText} or others (such as {@link org.zkoss.zul.Intbox#getValue})
+	 * is called.
+	 * If false, the current value is assumed to be correct and
+	 * the following invocation to {@link #getText} or others (such as {@link org.zkoss.zul.Intbox#getValue})
+	 * won't check the value again.
+	 * Note: when an input element is constrcuted, the initial value
+	 * is assumed to be "not-validated-yet".
+	 * @since 3.0.1
 	 */
-	public void clearErrorMessage() {
+	public void clearErrorMessage(boolean revalidateRequired) {
 		if (_errmsg != null) {
 			_errmsg = null;
-			_valided = true;
 			Clients.closeErrorBox(this);
 		}
+		_valided = !revalidateRequired;
+	}
+	/** Clears the error message.
+	 * It is the same as clearErrorMessage(false). That is, the current
+	 * value is assumed to be correct. {@link #getText} or others (such as {@link org.zkoss.zul.Intbox#getValue})
+	 * won't re-validate it again.
+	 *
+	 * <p>The error message is cleared automatically, so you rarely need
+	 * to call this method.
+	 *
+	 * @see #clearErrorMessage(boolean)
+	 */
+	public void clearErrorMessage() {
+		clearErrorMessage(false);
 	}
 
 	/** Returns the value in the String format.
@@ -526,6 +549,13 @@ implements Constrainted {
 	 * is reserved for developer that really want to set an 'illegal'
 	 * value (such as an empty string to a textbox with no-empty contraint).
 	 *
+	 * <p>Note: since 3.0.1, the value will be re-validate again if
+	 * {@link #getText} or others (such as {@link org.zkoss.zul.Intbox#getValue})
+	 * is called. In other words, it is assumed that the specified value
+	 * is not validated yet -- the same state when this component is
+	 * created. If you want to avoid the re-valiation, you have to invoke
+	 * {@link #clearErrorMessage()}.
+	 *
 	 * <p>Like setValue, the result is returned back to the server
 	 * by calling {@link #getText}.
 	 *
@@ -533,7 +563,7 @@ implements Constrainted {
 	 */
 	public void setRawValue(Object value) {
 		if (_errmsg != null || !Objects.equals(_value, value)) {
-			clearErrorMessage();
+			clearErrorMessage(true);
 			_value = value;
 			smartUpdate("value", coerceToString(_value));
 		}
