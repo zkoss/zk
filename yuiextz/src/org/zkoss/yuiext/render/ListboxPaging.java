@@ -35,7 +35,7 @@ public class ListboxPaging implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
-		final Listbox self = (Listbox) comp;
+		final Listbox self = (Listbox)comp;
 		final String uuid = self.getUuid();
 		
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\"");
@@ -46,15 +46,15 @@ public class ListboxPaging implements ComponentRenderer {
 			.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
 
 		//header
-		wh.writeln("<tbody>").write(self.getListhead()).writeln("</tbody>");
+		wh.writeln("<tbody class=\"listbox-head\">").writeComponents(self.getHeads()).writeln("</tbody>");
 
 		//body
 		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">")
-			.write(self.getItems(), self.getVisibleBegin(), self.getVisibleEnd())
+			.writeComponents(self.getItems(), self.getVisibleBegin(), self.getVisibleEnd())
 			.writeln("</tbody>");
 
 		//Footer
-		wh.writeln("<tbody class=\"grid-foot\">").write(self.getListfoot())
+		wh.writeln("<tbody class=\"listbox-foot\">").write(self.getListfoot())
 			.write("</tbody>\n</table>");
 
 		//Paging

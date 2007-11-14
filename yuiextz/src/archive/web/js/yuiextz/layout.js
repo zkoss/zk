@@ -54,6 +54,7 @@ Ext.ContentPanel.prototype.setSize = function(width, height) { // bug #1792952
 		this.resizeEl = Ext.get(this.resizeEl.id);
 		if (this.autoScroll) {
        		this.resizeEl.setStyle("overflow", "auto");
+			this.resizeEl.setStyle("position", "relative");// Bug #1824411
     	}
         this.resizeEl.setSize(this.autoWidth ? "auto" : size.width, this.autoHeight ? "auto" : size.height);
         this.fireEvent('resize', this, size.width, size.height);
@@ -133,6 +134,7 @@ zkExt.BorderLayout.prototype = {
 		}
 		this._reset();
 		this.updating = false;
+		
 	},
 	clean: function () {
 		this.el = this.regions = this._regions = this.panels = this._panels = null;
@@ -268,7 +270,10 @@ zkExtBorderLayout.init = function (cmp) {
 		rootlayout.appendChild(old);
 	}
 	layout.el = new Ext.BorderLayout(cmp.id + "!real", layout.getRegions());
-	layout.render();
+	zk.addInitLater(function () {
+			layout.render();
+			zk.onVisiAt(cmp);
+		}, true);
 };
 zkExtBorderLayout.cleanup = function (cmp) {
 	if ($type(cmp.parentNode) == "ExtNestedPanel") {	
@@ -357,7 +362,13 @@ zkExtContentPanel.setAttr = function (cmp, name, value) {
 	switch (name) {
 		case "z.autoScroll" :
 			p.autoScroll = value == "true";
-			p.resizeEl.setStyle("overflow", value == "true" ? "auto" : "hidden");
+			if (value == "true") {
+				p.resizeEl.setStyle("overflow", "auto");
+				p.resizeEl.setStyle("position", "relative");// Bug #1824411
+			} else {
+				p.resizeEl.setStyle("overflow", "hidden");				
+				p.resizeEl.setStyle("position", "");
+			}
 			return true;
 		case "z.fitContainer" : 
 			p.fitContainer = value == "true";
