@@ -182,7 +182,7 @@ implements SerializableAware, HierachicalAware {
 		_ip = new bsh.Interpreter();
 		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
 
-		_bshns = new GlobalNS(_ip.getClassManager(), "global");
+		_bshns = new GlobalNS(null, _ip.getClassManager(), "global");
 		_ip.setNameSpace(_bshns);
 	}
 	public void destroy() {
@@ -235,7 +235,8 @@ implements SerializableAware, HierachicalAware {
 
 		//bind bshns and ns
 		Namespace p = ns.getParent();
-		NameSpace bshns = new NS(p != null ? prepareNS(p): null, ns);
+		NameSpace bshns = //Bug 1831534: we have to pass class manager
+			new NS(p != null ? prepareNS(p): null, _ip.getClassManager(), ns);
 		ns.setVariable(VAR_NS, new NSX(bshns), true);
 		return bshns;
 	}
@@ -245,12 +246,9 @@ implements SerializableAware, HierachicalAware {
 	private class GlobalNS extends NameSpace {
 		private boolean _inGet;
 
-		/** Don't call this method. */
-	    private GlobalNS(BshClassManager classManager, String name) {
-	    	super(classManager, name);
-	    }
-	    protected GlobalNS(NameSpace ns, String name) {
-	    	super(ns, name);
+	    protected GlobalNS(NameSpace parent, BshClassManager classManager,
+	    String name) {
+	    	super(parent, classManager, name);
 	    }
 
 		protected Object getFromNamespace(String name) {
@@ -296,8 +294,8 @@ implements SerializableAware, HierachicalAware {
 	private class NS extends GlobalNS {
 		private final Namespace _ns;
 
-		private NS(NameSpace parent, Namespace ns) {
-			super(parent, "ns" + System.identityHashCode(ns));
+		private NS(NameSpace parent, BshClassManager classManager, Namespace ns) {
+			super(parent, classManager, "ns" + System.identityHashCode(ns));
 			_ns = ns;
 			_ns.addChangeListener(new NSCListener(this));
 		}
