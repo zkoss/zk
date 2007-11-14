@@ -16,6 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 // Customization
 zk.load("yuiextz.yau!dsp");
+
 zk.addModuleInit(function () {
 Ext.LayoutRegion.prototype.initPanelAsTab = function(panel) {
 	var ti = this.tabs.addTab(panel.getEl().id, panel.getTitle(), null,
@@ -118,7 +119,9 @@ zkExt.BorderLayout.prototype = {
 					var l = this.getPanels(r)[j].getLayout();
 					if (l)l.endUpdate();
 				}catch(e) {}	// ignore the contentpanel.	
-				var region = this.el.getRegion(r);
+				var region = this.el.getRegion(r);				
+				if (region.autoScroll) region.bodyEl.setStyle("position", "relative"); //Bug #1819784
+				else region.bodyEl.setStyle("position", "");
 				region.id = rc.id;
 				region.on('expanded', this._expanded, r);	
 				region.on('slideshow', this._expanded, r);	
@@ -159,6 +162,8 @@ zkExt.BorderLayout.prototype = {
 					if (l)l.endUpdate();
 				}catch(e) {}		
 				var region = this.el.getRegion(r);
+				if (region.autoScroll) region.bodyEl.setStyle("position", "relative"); //Bug #1819784
+				else region.bodyEl.setStyle("position", "");
 				region.id = rc.id;
 				region.on('expanded', this._expanded, r);	
 				region.on('slideshow', this._expanded, r);	
@@ -270,8 +275,8 @@ zkExtBorderLayout.init = function (cmp) {
 		rootlayout.appendChild(old);
 	}
 	layout.el = new Ext.BorderLayout(cmp.id + "!real", layout.getRegions());
+	layout.render();
 	zk.addInitLater(function () {
-			layout.render();
 			zk.onVisiAt(cmp);
 		}, true);
 };
