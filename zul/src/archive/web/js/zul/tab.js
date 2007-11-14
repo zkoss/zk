@@ -249,7 +249,7 @@ zkTabs.init = function (cmp) {
 zkTabs.cleanup = function (cmp) {
 	zkTabs._tabs.remove(cmp.id);
 };
-zkTabs.onVisi = zkTabs.onSize = function (cmp) {
+zkTabs.onVisi = function (cmp) {
 	zkTabs.init(cmp);
 };
 

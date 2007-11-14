@@ -2007,6 +2007,8 @@ action.hide = function (id) {
  * structure.
  */
 anima = {}
+/** @since 3.0.1 */
+anima.count = 0;
 
 /** Make a component visible by increasing the opacity.
  * @param id component or its ID
@@ -2017,6 +2019,7 @@ anima.appear = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.appear");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
 			Effect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
@@ -2032,6 +2035,7 @@ anima.slideDown = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.slideDown");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
 			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi});
@@ -2048,6 +2052,7 @@ anima.slideUp = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.slideUp");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.SlideUp(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterHide});
@@ -2064,6 +2069,7 @@ anima.fade = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.fade");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.Fade(n, {duration:dur ? dur/1000: 0.55, afterFinish: anima._afterHide});
@@ -2079,6 +2085,7 @@ anima.puff = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.puff");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.Puff(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
@@ -2094,6 +2101,7 @@ anima.dropOut = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.dropOut");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.DropOut(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
@@ -2104,6 +2112,7 @@ anima.dropOut = function (id, dur) {
 anima._afterVisi = function (ef) {
 	var n = ef.element;
 	if (n) {
+		--anima.count;
 		rmZKAttr(n, "animating");
 		zk.onVisiAt(n);
 		zk._doAnique(n.id);
@@ -2113,6 +2122,7 @@ anima._afterHide = function (ef) {
 	var n = ef.element;
 	if (n) {
 		zk._hideExtr(n); //hide parent later
+		--anima.count;
 		rmZKAttr(n, "animating");
 		zk._doAnique(n.id);
 	}
@@ -2121,6 +2131,7 @@ anima._afterHide0 = function (ef) {
 	var n = ef.effects[0].element;
 	if (n) {
 		zk._hideExtr(n); //hide parent later
+		--anima.count;
 		rmZKAttr(n, "animating");
 		zk._doAnique(n.id);
 	}

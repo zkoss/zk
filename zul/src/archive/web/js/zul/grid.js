@@ -374,7 +374,7 @@ zkGrid.childchg = function (cmp) {
 }; // Bug #1817627.
 */
 /** Called when a grid becomes visible because of its parent. */
-zkGrid.onVisi = zkGrid.onSize = function (cmp) {
+zkGrid.onVisi = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };

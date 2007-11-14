@@ -22,10 +22,10 @@ package org.zkoss.zkplus;
  * and config.xml.
  * 
  * @author henrichen
- * @since 3.1.0
+ * @since 3.0.1
  */
 public class Version {
 	/** Returns the version UID.
 	 */
-	public static final String UID = "3.1.0";
+	public static final String UID = "3.0.1";
 }

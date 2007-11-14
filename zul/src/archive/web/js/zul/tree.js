@@ -167,7 +167,7 @@ zkTree.cleanup = function (cmp) {
 };
 
 /** Called when a tree becomes visible because of its parent. */
-zkTree.onVisi = zkTree.onSize = function (cmp) {
+zkTree.onVisi = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };

@@ -1187,7 +1187,7 @@ zkLibox.init = function (cmp) {
 	}
 };
 /** Called when a listbox becomes visible because of its parent. */
-zkLibox.onVisi = zkLibox.onSize = function (cmp) {
+zkLibox.onVisi = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };

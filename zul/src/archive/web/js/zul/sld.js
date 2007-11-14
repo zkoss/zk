@@ -195,7 +195,7 @@ zkSld.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-zkSld.onVisi = zkSld.onSize = zkSld._fixPos = function (cmp) {
+zkSld.onVisi = zkSld._fixPos = function (cmp) {
 	var meta = zkau.getMeta(cmp); //cmp or id both OK
 	if (meta) meta._fixPos();
 };

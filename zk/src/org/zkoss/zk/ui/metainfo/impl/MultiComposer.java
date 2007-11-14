@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.util.ComposerExt;
 /**
  * To proxy a collection of composer
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.0.1
  */
 public class MultiComposer implements Composer {
 	private final Composer[] _cs;

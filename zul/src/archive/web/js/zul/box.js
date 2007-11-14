@@ -93,7 +93,7 @@ zkSplt.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
+zkSplt.onVisi = zkSplt._resize = function (cmp) {
 	if (!zk.isRealVisible(cmp))return;
 	cmp = $e(cmp);
 	if (cmp) {
@@ -205,7 +205,6 @@ zkSplt._adjSplt = function (n, fd, diff) {
 		if (vert != (fd == "height")) {
 			var val = $int(n.style[fd]) + diff;
 			n.style[fd] = (val > 0 ? val: 0) + "px";
-			//No need to call zk.onSizeAt(n) since it is handled above
 		}
 	}
 	for (n = n.firstChild; n; n = n.nextSibling)

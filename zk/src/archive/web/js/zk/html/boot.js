@@ -60,7 +60,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "7q"; //increase this if we want the browser to reload JavaScript
+zk.build = "7r"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -586,13 +586,16 @@ zk.onResize = function (timeout) {
 };
 zk._onResize = function () {
 	if (--zk._reszcnt == 0) {
-		if (zk.loading)
-			return zk.onResize();
-		if (zk.ie && !zk.ie7 && !zk._tmResz) {
-			zk._tmResz = $now() + 800; 
-			return; // avoid IE6. It always fire onResize at first time.
+		if (zk.loading || anima.count) {
+			zk.onResize();
+			return;
 		}
-		if (zk.ie) zk._tmResz = $now() + 800;
+		if (zk.ie) {
+			var firstTime = !zk._tmResz;
+			zk._tmResz = $now() + 800; 
+			if (!zk.ie7 && firstTime)
+				return; //IE6: it fires an "extra" onResize in loading
+		}
 
 		for (var j = 0; j < zk._reszfns.length; ++j)
 			zk._reszfns[j]();
@@ -894,7 +897,6 @@ zk._evalInit = function () {
 				if (o) {
 					if (o["onVisi"]) zk._visicmps[n.id] = true;
 					if (o["onHide"]) zk._hidecmps[n.id] = true;
-					if (o["onSize"]) zk._sizecmps[n.id] = true;
 				}
 			}
 
@@ -975,7 +977,6 @@ zk._cleanupAt = function (n) {
 		zk.unlistenAll(n); //Bug 1741959: memory leaks
 		delete zk._visicmps[n.id];
 		delete zk._hidecmps[n.id];
-		delete zk._sizecmps[n.id];
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -1021,43 +1022,6 @@ zk.onHideAt = function (n) {
 		}
 	}
 }
-/** To notify a component that its size is changed.
- *  All descendants of n is invoked if onSize is declared.
- * Note: since onSize usually triggers another onSize, it handles them
- * asynchronously.
- */
-zk.onSizeAt = function (n) {
-	for (var nid in zk._sizecmps) {
-		var elm = $e(nid);
-		for (var e = elm; e; e = $parent(e)) {
-			if (e == n) { //elm is a child of n
-				if (!zk._tmOnSizeAt)
-					zk._tmOnSizeAt = setTimeout(zk._onSizeAt, 550);
-				zk._toOnSize[nid] = true;
-				break;
-			}
-			if (!$visible(e))
-				break;
-		}
-	}
-};
-zk._onSizeAt = function () {
-	delete zk._tmOnSizeAt;
-	var once;
-	for (var nid in zk._toOnSize) {
-		if (once) {
-			if (!zk._tmOnSizeAt)
-				zk._tmOnSizeAt = setTimeout(zk._onSizeAt, 0);
-			break; //only once
-		}
-		once = true;
-
-		delete zk._toOnSize[nid];
-
-		var elm = $e(nid);
-		if (elm) zk.eval(elm, "onSize");
-	}
-};
 
 //extra//
 /** Loads the specified style sheet (CSS).
@@ -1312,8 +1276,6 @@ zk._initcmps = []; //comps to init
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
 zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
-zk._sizecmps = {}; //a set of component's ID that requires zkType.onSize
-zk._toOnSize = {}; //a set of component's waiting to execute onSize
 
 function myload() {
 	var f = zk._onload;
