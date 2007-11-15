@@ -221,11 +221,11 @@ zkExt.BorderLayout.prototype = {
 				zkau.asapTimeout($e(uuid), "onOpen"));
 	}
 };
-zkExt.BorderLayout.getLayout = function (cmp) {
+zkExt.BorderLayout.getLayout = function (cmp, cleanup) {
 	var lcmp = getZKAttr(cmp,"lid");
 	lcmp = $e(lcmp);
 	var layout = zkau.getMeta(lcmp);
-	if (layout == null) {
+	if (layout == null && !cleanup) {
 		layout = new zkExt.BorderLayout(lcmp);
 	}
 	return layout;
@@ -307,7 +307,7 @@ zkExtContentPanel.init = function (cmp) {
 	layout.addPanel(getZKAttr(cmp.parentNode,"pos"),panel);
 };
 zkExtContentPanel.cleanup = function (cmp) {
-	var layout = zkExt.BorderLayout.getLayout(cmp);
+	var layout = zkExt.BorderLayout.getLayout(cmp, true);
 	var l = layout.el;
 	if (l) {
 		var r = l.getRegion(getZKAttr(cmp.parentNode,"pos"));
@@ -325,7 +325,7 @@ zkExtNestedPanel.init = function (cmp) {
 };
 zkExtNestedPanel.cleanup = function (cmp) {
 	if (cmp.innerlayout) {
-		var layout = zkExt.BorderLayout.getLayout(cmp);
+		var layout = zkExt.BorderLayout.getLayout(cmp, true);
 		var l = layout.el;
 		if (l) {
 			var r = l.getRegion(getZKAttr(cmp.parentNode,"pos"));
@@ -343,7 +343,7 @@ zkExtBorderLayoutRegion.init = function (cmp) {
 	layout.addRegion(getZKAttr(cmp,"pos"), config);
 };
 zkExtBorderLayoutRegion.cleanup = function (cmp) {
-	var layout = zkExt.BorderLayout.getLayout(cmp);
+	var layout = zkExt.BorderLayout.getLayout(cmp, true);
 	var l = layout.el;
 	if (l) {
 		var r = l.getRegion(getZKAttr(cmp,"pos"));
@@ -409,6 +409,8 @@ zkExtBorderLayoutRegion.setAttr = function (cmp, name, value) {
 			l.layout();
 			return true;
 		case "z.showPanel" :
+			var p = $e(value);
+			value = p.innerlayout ? p.innerlayout.id : p.id + "!cave";
 			r.showPanel(value);
 			return true;
 		case "z.resizeTo" :
@@ -485,6 +487,16 @@ zkExtBorderLayoutRegion.setAttr = function (cmp, name, value) {
 			return true;
 		case "z.useShim" :
 			if (r.split)	r.config.useShim = r.split.useShim = value == "true";
+			return true;			
+		case "z.unhidePanel" : 
+			var p = $e(value);
+			value = p.innerlayout ? p.innerlayout.id : p.id + "!cave";
+			r.unhidePanel(value);
+			return true;
+		case "z.hidePanel" :
+			var p = $e(value);
+			value = p.innerlayout ? p.innerlayout.id : p.id + "!cave";
+			r.hidePanel(value);
 			return true;			
 	}
 	return false;

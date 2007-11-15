@@ -24,6 +24,7 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.Maps;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -171,7 +172,8 @@ public abstract class LayoutBasedComponent extends AbstractComponent {
 					mn = mn.substring(3);
 					char[] buf = mn.toCharArray();
 					buf[0] = Character.toLowerCase(buf[0]);
-					final String val = (String) config.get(new String(buf));
+					final String conf = new String(buf);
+					final String val = (String) config.get(conf);
 					if (val != null) {
 						String multiVar = val.trim();
 						String[] multiple = null;
@@ -201,11 +203,14 @@ public abstract class LayoutBasedComponent extends AbstractComponent {
 										+ m.getName() + " , parameterType: "
 										+ multiVar, e);
 							} finally {
-								config.remove(m.getName());
+								config.remove(conf);
 							}
 						}
 					}
 				}
+			}
+			if (!config.isEmpty()) {
+				throw new UiException("Method "+Objects.toString(config.keySet().toArray())+" not found for "+this.getClass()); 
 			}
 		}
 	}

@@ -469,7 +469,7 @@ public abstract class LayoutRegion extends BasicLayoutRegion {
 		if (tabPosition == null
 				|| (!tabPosition.equals(TAB_POSITION_TOP) && !tabPosition
 						.equals(TAB_POSITION_BOTTOM)))
-			throw new UiException("Unsupported tabposition: " + tabPosition);
+			throw new UiException("Unsupported tabPosition: " + tabPosition);
 		if (!_tabPosition.equals(tabPosition)) {
 			_tabPosition = tabPosition;
 			invalidate();

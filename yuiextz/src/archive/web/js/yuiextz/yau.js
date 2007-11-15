@@ -335,6 +335,7 @@ zkau.cmd1.outer = function (uuid, cmp, html) {
 		return true;	
 	} else {		
 		zkExt.oldCmd1.outer(uuid, cmp, html);
+		cmp = $e(cmp.id);// restore cmp
 		if (cmp) {//Bug #1803948
 			var parent = $e($uuid(cmp.parentNode.id)); // bug #1792952
 			if (parent && $type(parent) == "ExtContentPanel") {
