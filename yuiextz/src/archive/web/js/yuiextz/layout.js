@@ -276,6 +276,7 @@ zkExtBorderLayout.init = function (cmp) {
 	}
 	layout.el = new Ext.BorderLayout(cmp.id + "!real", layout.getRegions());
 	layout.render();
+	layout.el.on('layout', function () {zk.onResize(0, cmp);}, layout.el);
 	zk.addInitLater(function () {
 			zk.onVisiAt(cmp);
 		}, true);
