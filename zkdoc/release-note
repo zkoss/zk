@@ -1,6 +1,7 @@
 	--------
 ZK 3.0.1
 * Features:
+  1829124: configure prefix to the URI on zkau browser resources
   1831559: A way to set a wrong value for textbox/Intbox...
 
 * Bugs:
