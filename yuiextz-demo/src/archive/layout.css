@@ -1,0 +1,55 @@
+.h2{
+	color:#EBDFB5;
+	cursor:default;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:24px;
+	line-height:27px;
+	margin:1px 0px 5px;
+	text-align:center;
+}
+
+.h1{
+	color:#EBDFB5;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:50px;
+	font-weight:bold;
+	padding:5px 0px 0px 30px;
+}
+.footer {
+	background:#2E464F none repeat scroll 0%;
+	color:#96A5AA;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:9px;
+	height:28px;
+	position:relative;
+	padding: 2px 0pt 0pt 10px;
+}
+.header {
+	background-image: url(img/headerbg.png); background-repeat: repeat-y;
+}
+.checked {
+	text-decoration:line-through;
+	color: #66A8AC;
+}
+.unchecked {
+	text-decoration : none;
+}
+.mailtitle{
+	background: url(img/subjectbg.gif) repeat-x;
+}
+.mailsubject{
+	font-size: 16px;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+}
+.mailfrom, .mailto, .mailsubject{
+	font-weight:bold;
+}
+.mailaddr{
+	font-style:italic;
+}
+.mailcontent{
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+}
+tr.row-border td{
+	border-bottom:1px solid #CCCCCC;
+}
