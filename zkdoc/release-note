@@ -21,6 +21,7 @@ ZK 3.0.1
   1831534: Popup not working if poup window nested in vbox
   1832214: Borderlayout : isOpen return true while collapse region
   1831540: Tabbox setSelectedIndex() should not fire onSelect event
+  1832359: A wrong height of grid&listbox when add header dynamically
 
 	--------
 ZK 3.0.0
