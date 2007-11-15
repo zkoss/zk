@@ -166,6 +166,7 @@ public class ConfigParser {
 				//(so we cannot load definitions now)
 			} else if ("system-config".equals(elnm)) {
 			//system-config
+			//	uri-prefix
 			//  disable-event-thread
 			//	max-spare-threads
 			//  max-suspended-threads
@@ -181,7 +182,10 @@ public class ConfigParser {
 			//	id-generator-class
 			//  web-app-class
 			//	method-cache-class
-				String s = el.getElementValue("disable-event-thread", true);
+				String s = el.getElementValue("uri-prefix", true);
+				if (s != null) config.setURIPrefix(s);
+
+				s = el.getElementValue("disable-event-thread", true);
 				if (s != null) config.enableEventThread("false".equals(s));
 
 				Integer v = parseInteger(el, "max-spare-threads", false);

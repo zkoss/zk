@@ -37,7 +37,7 @@ public class MultiComposer implements Composer {
 	/** Returns an instance of composer to represents the specified
 	 * array of composers, or null if no composer is specified.
 	 *
-	 * @param cs an array of Composer instances, or the name of the class,
+	 * @param ary an array of Composer instances, or the name of the class,
 	 * or the class that implements {@link Composer}.
 	 * @return a composer to represent cs, or null if cs is null or empty.
 	 */
