@@ -28,7 +28,6 @@ import org.zkoss.zkex.zul.West;
 public class MyWest extends West 
 {
 
-	@Override
 	public boolean insertBefore(Component child, Component insertBefore) 
 	{
 		System.out.println(MyWest.class+"::insertBefore() insertComponent="+child);

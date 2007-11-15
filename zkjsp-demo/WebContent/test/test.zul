@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page id="pg" title="ZK Test"?>
-<?taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" ?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <!--
 test.zul
 

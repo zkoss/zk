@@ -29,7 +29,9 @@
 				<z:auxhead>
 					<z:auxheader label="A+B" rowspan="2" colspan="2"/>
 					<z:auxheader label="C"/>
-					<z:auxheader label="DE" />
+					<z:auxheader>
+						<z:attribute name="label">DE</z:attribute>
+					</z:auxheader>
 				</z:auxhead>	
 				<z:auxhead>
 					<z:auxheader label="A"/>
