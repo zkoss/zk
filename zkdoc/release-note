@@ -19,7 +19,8 @@ ZK 3.0.1
   1826971: Console output 'experiment: creating class manager'
   1831534: Popup not working if poup window nested in vbox
   1830924: width property of label doesn't work
-  1832214: Borderlayout : isOpen return true while collapse region 
+  1832214: Borderlayout : isOpen return true while collapse region
+  1831540: Tabbox setSelectedIndex() should not fire onSelect event
 
 	--------
 ZK 3.0.0
