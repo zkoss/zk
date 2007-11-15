@@ -58,7 +58,7 @@ zkTab.onclick = function (evt) {
 	var tab = $parentByType(Event.element(evt), "Tab");
 	if(getZKAttr(tab, "disabled")=="true") return;//return when disabled
 	if (!zkTab._sliding(tab)) //Bug 1571408
-		zkTab.selTab(tab);
+		zkTab.selTab(tab, true);
 };
 
 /** Returns the selected tab by giving any tab as the reference point. */
@@ -110,19 +110,19 @@ zkTab._getSelTabFromTop = function (node, tabboxId) {
 };
 
 /** Selects the specified tab (and unselect the current tab). */
-zkTab.selTab = function (tab) {
+zkTab.selTab = function (tab, notify) {
 	tab = $e(tab);
 	if (!tab) return;
 
 	var old = zkTab._getSelTab(tab);
 	if (old != tab) {
 		if (old) zkTab._setTabSel(old, false);
-		zkTab._setTabSel(tab, true);
+		zkTab._setTabSel(tab, true, notify);
 	}
 };
 
 /** Selects o unselect the specified tab. */
-zkTab._setTabSel = function (tab, toSel) {
+zkTab._setTabSel = function (tab, toSel, notify) {
 	if ((getZKAttr(tab, "sel") == "true") == toSel)
 		return; //nothing changed
 
@@ -154,7 +154,7 @@ zkTab._setTabSel = function (tab, toSel) {
 			zkTabs.fixWidth(tabs.id);
 	}
 
-	if (toSel)
+	if (notify)
 		zkau.send({uuid: tab.id, cmd: "onSelect", data: [tab.id]},
 				zkau.asapTimeout(tab, "onSelect"));
 };
