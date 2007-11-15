@@ -66,6 +66,19 @@ zulHdr.init = function (cmp) {
 	zulHdr.setSizable(cmp, zulHdr.sizable(cmp));
 		//Note: IE6 failed to crop a column if it is draggable
 		//Thus we init only necessary (to avoid the IE6 bug)
+	var type = $type(cmp), mate;
+	if (type == "Col")
+		mate = $parentByType(cmp, "Grid");
+	else if (type == "Lhr")
+		mate = $parentByType(cmp, "Libox");
+	else if (type == "Tcol")
+		mate = $parentByType(cmp, "Tree");
+	var meta = zkau.getMeta(mate);
+	if (meta) {
+		if (!meta.fixedSize)
+			meta.fixedSize = function () {meta.init(true);};	
+		zk.addInitLater(meta.fixedSize, false, true);
+	}
 };
 zulHdr.sizable = function (cmp) {
 	return cmp.parentNode && getZKAttr(cmp.parentNode, "sizable") == "true";

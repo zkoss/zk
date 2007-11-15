@@ -152,7 +152,8 @@ zk.Selectable.prototype = {
 					}
 				}
 				if (empty) this.head.style.height = "0px"; // Bug #1819037
-					//we have to hide if empty (otherwise, a small block is shown)
+					//we have to hide if empty (otherwise, a small block is shown)					
+				else this.head.style.height = "";// Bug #1832359
 			}
 
 			this.body.onscroll = function () {
