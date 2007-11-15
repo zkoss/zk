@@ -17,7 +17,8 @@ ZK 3.0.1
   1829811: data bind fails with radiogroup
   1830960: data bind does not work with Tabbox
   1826971: Console output 'experiment: creating class manager'
-  1831534: Popup not working if poup window nested in vbox 
+  1831534: Popup not working if poup window nested in vbox
+  1830924: width property of label doesn't work
   1832214: Borderlayout : isOpen return true while collapse region 
 
 	--------
