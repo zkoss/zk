@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.Utils;
 /**
  * This class represents a region in a layout manager.
  * <p>
- * Events:<br/> onOpen.<br/>
+ * Events:<br/> onOpen, onSize.<br/>
  * 
  * The default class of CSS is specified "layout-region" and
  * "layout-region-normal". If the border specifies "none" or null or "0", the
@@ -339,6 +339,7 @@ public abstract class LayoutRegion extends XulElement {
 		final StringBuffer sb = new StringBuffer(80).append(super
 				.getOuterAttrs());
 		appendAsapAttr(sb, Events.ON_OPEN);
+		appendAsapAttr(sb, Events.ON_SIZE);
 		HTMLs.appendAttribute(sb, "z.cid", getChildren().isEmpty() ? "zk_n_a"
 				: ((Component) getChildren().get(0)).getUuid());
 		HTMLs.appendAttribute(sb, "z.pos", getPosition());

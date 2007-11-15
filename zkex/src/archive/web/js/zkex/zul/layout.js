@@ -509,7 +509,7 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 	}
 	return true;
 };
-zkLayoutRegionSplit._endDrag = function (split, event) {
+zkLayoutRegionSplit._endDrag = function (split, evt) {
 	var dg = zkLayoutRegionSplit._drags[split.id];
 	if (!dg) return;
 	var real = $real(split);
@@ -523,6 +523,15 @@ zkLayoutRegionSplit._endDrag = function (split, event) {
 	layout.render();
 	zk.onResize(0, layout.el);
 	dg.drag.z_rootlyt = null;
+	var keys = "";
+	if (evt) {
+		if (evt.altKey) keys += 'a';
+		if (evt.ctrlKey) keys += 'c';
+		if (evt.shiftKey) keys += 's';
+	}	
+	zkau.send({uuid: $uuid(real), cmd: "onSize",
+		data: [real.style.width, real.style.height, keys]},
+		zkau.asapTimeout(real, "onSize"));
 };
 /***/
 zkLayoutRegionSplit._snap = function (split, x, y) {
