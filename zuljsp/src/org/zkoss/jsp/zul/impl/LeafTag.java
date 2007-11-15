@@ -256,18 +256,19 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 		
 		//process the forward condition...
 		ComponentsCtrl.applyForward(_comp, _forward);
-		
-		if (Events.isListened(_comp, Events.ON_CREATE, false))//send onCreate event...
-			Events.postEvent(
-				new CreateEvent(Events.ON_CREATE, _comp, Executions.getCurrent().getArg()));
 
-		//add event handle ...		
+		//add & register event handle ...		
 		for(Iterator itor = _eventListenerMap.entrySet().iterator();itor.hasNext();) {
 			Map.Entry entry = (Map.Entry)itor.next();
 			final ZScript zscript = ZScript.parseContent((String)entry.getValue());
 			((ComponentCtrl)_comp).addEventHandler(
 					(String)entry.getKey(), new EventHandler(zscript,null));
 		}
+		
+		//fire onCreate event...
+		if (Events.isListened(_comp, Events.ON_CREATE, false))//send onCreate event...
+			Events.postEvent(
+				new CreateEvent(Events.ON_CREATE, _comp, Executions.getCurrent().getArg()));
 		
 	}
     /**

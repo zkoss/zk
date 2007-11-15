@@ -72,9 +72,12 @@ public class PageTag extends RootTag {
 		super.init(exec, page);
 		// load page component definition
 		Map compDefs = (Map)getJspContext().getAttribute(Const.CONTEXT_KEY);
-		for(Iterator it = compDefs.values().iterator();it.hasNext();)
-			((ComponentDefinitionTag)it.next()).registComponentDefinition(page);
-		
+		if(compDefs!=null)
+		{
+			for(Iterator it = compDefs.values().iterator();it.hasNext();)
+				((ComponentDefinitionTag)it.next()).registComponentDefinition(page);
+				
+		}
 		page.setId(_id);
 		page.setStyle(_style);
 	}
