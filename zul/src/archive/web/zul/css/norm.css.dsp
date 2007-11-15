@@ -37,6 +37,12 @@ a.gamma:hover {color: #000000; text-decoration: underline;}
 tr.gamma {background: #F4F4F4;}
 td.gamma {background: #F4F4F4;}
 
+<%-- General --%>
+.inline-box { <%-- used with label/checkbox and others to ensure the dimension --%>
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
+}
+
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {
