@@ -157,11 +157,8 @@ public class ComponentDefinitionTag  extends AbstractTag implements DynamicAttri
 		this.name = name;
 	}
 
-	public String getUseClass() {
-		return useClass;
-	}
 
-	public void setUseClass(String use) {
+	public void setClass(String use) {
 		this.useClass = use;
 	}
 

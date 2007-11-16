@@ -35,10 +35,12 @@ import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
@@ -92,7 +94,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	 * @return A zul Component
 	 * @throws Exception
 	 */
-	abstract protected Component newComponent(Class use)throws Exception;
+	abstract protected String getJspTagName();
 
 	//SimpleTagSupport//
 	/** Sets the parent tag.
@@ -141,8 +143,14 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 		
 		try {//TODO: use-class initial works...
 			//add composer to intercept creation...
-			//TODO: composerExt.doBeforeCompose(page, parentComponent, compInfo); 
-			_comp = newComponent(_use!=null ? Classes.forNameByThread(_use) : null);
+			//TODO: composerExt.doBeforeCompose(page, parentComponent, compInfo); tgname
+			
+			String tagName = getJspTagName();
+			Page page = this._roottag.getPage();
+			ComponentDefinition compdef = page.getComponentDefinition(tagName, true);
+			if(compdef==null)
+				throw new JspException("can't find this Component's definition:"+tagName);
+			_comp = (Component) compdef.resolveImplementationClass(page, getUse()).newInstance();
 			composeHandle.doBeforeComposeChildren(_comp);
 		} catch (Exception e) {
 			composeHandle.doCatch(e);
@@ -226,8 +234,13 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	 * Called by {@link #doTag}.
 	 */
 	/*package*/ void writeComponentMark() throws IOException {
-		if(!isInline())
-			Utils.writeComponentMark(getJspContext().getOut(), _comp);
+		if(isInline())
+		{
+			Component[] comps = getComponents();
+			for(int i=0;i<comps.length;i++)
+				Utils.writeComponentMark(getJspContext().getOut(),comps[i]);
+		}
+		else Utils.writeComponentMark(getJspContext().getOut(), _comp);
 	}
 
 	

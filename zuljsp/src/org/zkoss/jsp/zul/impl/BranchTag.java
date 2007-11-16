@@ -38,13 +38,14 @@ abstract public class BranchTag extends LeafTag {
 	/** Adds a child tag.
 	 */
 	public void addChildTag(ComponentTag child) {
+		Component parent = getComponent();
 		if(child.isInline())
 		{
 			Component[] comps = child.getComponents();
 			for(int i=0;i<comps.length;i++)
-				comps[i].setParent(getComponent());
+				comps[i].setParent(parent);
 		}
-		else child.getComponent().setParent(getComponent());
+		else child.getComponent().setParent(parent);
 	}
 
 

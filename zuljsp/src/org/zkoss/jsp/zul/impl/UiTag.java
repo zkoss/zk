@@ -37,7 +37,7 @@ public class UiTag extends BranchTag {
 	private ComponentDefinition _compDef;
 	private Component[] _comps;
 	
-	protected Component newComponent(Class use)throws Exception{
+	protected String getJspTagName(){
 		throw new UnsupportedOperationException(
 				"this method: Component newComponent(Class) is not supported in:"+this.getClass());
 	}
@@ -81,11 +81,14 @@ public class UiTag extends BranchTag {
 				
 				_compDef.evalProperties(props, page, parent);
 				props.putAll(_attrMap);
+				if(this.getUse()!=null)props.put("use", this.getUse());
 				_comps = parent.getDesktop().getExecution().
 					createComponents(_compDef.getMacroURI(), props);
 			}
 			else {// the tag hold only one component. 
-				if(useClass instanceof String)
+				if(super.getUse()!=null)
+					_comps = new Component []{_comp=(Component)Class.forName(getUse()).newInstance()};
+				else if(useClass instanceof String)
 					_comps = new Component []{_comp=_compDef.newInstance(page,useClass.toString())};
 				else
 				{
@@ -117,6 +120,7 @@ public class UiTag extends BranchTag {
 		if(_compDef.isInlineMacro()){// the comps are already initialized by ZK.  
 			if ( _comps==null)
 				throw new JspTagException("newComponent() returns null");
+			_parenttag.addChildTag(this);
 		}
 		else
 			super.afterComposeComponent();
