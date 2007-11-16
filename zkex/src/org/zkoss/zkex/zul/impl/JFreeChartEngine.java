@@ -179,6 +179,20 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		_type = chart.getType();
 		return _chartImpl;
 	}
+	
+	/**
+	* Developers with special needs can override this method to apply own rendering properties on the created JFreeChart. The
+	* original implementation of this method simply return false to tell the engine to apply its default rendering properties. Return true
+	* tells the engine NOT to apply its default rendering properties.
+	*
+	* @param jfchart the created JFreeChart
+	* @param chart the ZK chart component associated with this ChartEngine.
+	* @return true to tell this engine NOT to apply its default rendering properties; false to tell this engine TO apply its default rendering properties.
+	* @since 3.0.1
+	*/
+	protected boolean prepareJFreeChart(JFreeChart jfchart, Chart chart) {
+		return false; //request original engine to also do the setting.
+	}
 
 	//-- ChartEngine --//
 	public byte[] drawChart(Object data) {
@@ -186,24 +200,28 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		ChartImpl impl = getChartImpl(chart);
 
 		JFreeChart jfchart = impl.createChart(chart);
-		
-		Plot plot = (Plot) jfchart.getPlot();
-		float alpha = (float)(((float)chart.getFgAlpha()) / 255);
-		plot.setForegroundAlpha(alpha);
-		
-		alpha = (float)(((float)chart.getBgAlpha()) / 255);
-		plot.setBackgroundAlpha(alpha);
 
-		int[] bgRGB = chart.getBgRGB();
-		if (bgRGB != null) {
-			plot.setBackgroundPaint(new Color(bgRGB[0], bgRGB[1], bgRGB[2], chart.getBgAlpha()));
+		//feature#1814621 
+		//call prepareJFreeChart so developer can override it and do their own parameter settings
+		if (!prepareJFreeChart(jfchart, chart)) {
+			Plot plot = (Plot) jfchart.getPlot();
+			float alpha = (float)(((float)chart.getFgAlpha()) / 255);
+			plot.setForegroundAlpha(alpha);
+			
+			alpha = (float)(((float)chart.getBgAlpha()) / 255);
+			plot.setBackgroundAlpha(alpha);
+
+			int[] bgRGB = chart.getBgRGB();
+			if (bgRGB != null) {
+				plot.setBackgroundPaint(new Color(bgRGB[0], bgRGB[1], bgRGB[2], chart.getBgAlpha()));
+			}
+
+	        int[] paneRGB = chart.getPaneRGB();
+	        if (paneRGB != null) {
+	            jfchart.setBackgroundPaint(new Color(paneRGB[0], paneRGB[1], paneRGB[2], chart.getPaneAlpha()));
+	        }
 		}
-
-        int[] paneRGB = chart.getPaneRGB();
-        if (paneRGB != null) {
-            jfchart.setBackgroundPaint(new Color(paneRGB[0], paneRGB[1], paneRGB[2], chart.getPaneAlpha()));
-        }
-
+		
 		//callbacks for each area
 		ChartRenderingInfo jfinfo = new ChartRenderingInfo();
 		BufferedImage bi = jfchart.createBufferedImage(chart.getIntWidth(), chart.getIntHeight(), BufferedImage.TRANSLUCENT, jfinfo);
