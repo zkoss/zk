@@ -1,4 +1,5 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<?component name="username" inline="true" macroURI="/test/macro.zul" ?>
 <zk>	
 <groupbox mold="3d"  closable="false"> 
 		<caption label="this is a test!!!"/>
@@ -7,11 +8,12 @@
 			System.out.println(page.getId()+"'s file is: include1.zul" );
 			System.out.println(page.getId()+"'s current Page is:"+desktop );
 		</zscript>		
-		<button>
+		<button label="test">
 			<attribute name="onClick">
 				
 			</attribute>
 		</button>
+		<username label="Name of user:" text="this is a text!"/>
 		<textbox id="include1Text" />
 </groupbox>
 

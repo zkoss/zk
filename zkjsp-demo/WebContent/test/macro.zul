@@ -18,17 +18,26 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <grid id="mc_grid">
-<rows>
-	<row id="r">
-${empty arg.label ? 'Username': arg.label}
-${empty arg.text ? 'Username': arg.text}
-<textbox/>
-	</row>
-</rows>
-<zscript>
-int mcnt = 0;
-void addInMacro() {
-	new Label("more "+mcnt++).setParent(r);
-}
-</zscript>
+	<columns>
+		<column label="name"/>
+		<column label="value"/>
+	</columns>
+	<rows>
+		<row id="r">
+			${empty arg.label ? 'Username': arg.label}
+			${empty arg.text ? 'Username': arg.text}
+			<textbox/>
+		</row>
+		<row id="r2">
+			${empty arg.label ? 'Username': arg.label}
+			${empty arg.text ? 'Username': arg.text}
+			<textbox/>
+		</row>
+	</rows>
+	<zscript>
+	int mcnt = 0;
+	void addInMacro() {
+		new Label("more "+mcnt++).setParent(r);
+	}
+	</zscript>
 </grid>
