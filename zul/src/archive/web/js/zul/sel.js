@@ -32,6 +32,33 @@ if (!window.Selectable_effect) { //define it only if not customized
 			zk.addClass(row, zk.hasClass(row, "seld") ? "overseld": "overd");
 	};
 }
+var _zkselx = {};
+_zkselx.addAft = zkau.cmd1.addAft;
+zkau.cmd1.addAft = function (uuid, cmp, html) {
+	if (cmp) {
+		var isLit = html.indexOf("Lit") > -1;
+		if (isLit && $type(cmp) != "Lit") { // only first listitem.
+			var head = $parentByTag(cmp, "DIV");
+			var cave = $e($uuid(head) + "!cave");			
+			zk.insertHTMLBeforeEnd(cave.tBodies[0], html);
+			return true;
+		}
+	}
+	_zkselx.addAft(uuid, cmp, html);
+};
+_zkselx.addBfr = zkau.cmd1.addBfr;
+zkau.cmd1.addBfr = function (uuid, cmp, html) {
+	if (cmp) {
+		var isLit = html.indexOf("Lit") > -1;
+		if (isLit && $type(cmp) != "Lit") { // only first listitem.
+			var head = $parentByTag(cmp, "DIV");
+			var cave = $e($uuid(head) + "!cave");			
+			zk.insertHTMLBefore(cave.tBodies[0], html);
+			return true;
+		}
+	}
+	_zkselx.addBfr(uuid, cmp, html);
+};
 
 ////
 // Seletable //
