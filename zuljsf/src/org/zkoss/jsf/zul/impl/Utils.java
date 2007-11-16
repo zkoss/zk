@@ -21,6 +21,7 @@ package org.zkoss.jsf.zul.impl;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.List;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -49,7 +50,7 @@ import org.zkoss.zk.ui.Component;
 	 */
 	/*package*/ static void adjustChildren(Page page, AbstractComponent parent,
 	Collection children, String body) {
-
+		
 		Iterator it = new ArrayList(children).iterator();
 		
 		//component info for current JSFZUL component tree.
@@ -165,5 +166,44 @@ import org.zkoss.zk.ui.Component;
         }
         component.encodeEnd(context);
     }
+	
+	/**
+	 * Debug only method, please doen't use this method
+	 */
+	static public void outComponent(Component comp){
+		outComponent(comp,0);
+	}
+	
+	/**
+	 * Debug only method, please doen't use this method
+	 */
+	static public void outComponent(Collection children){
+		for(Iterator iter = children.iterator();iter.hasNext();){
+			Component kid = (Component)iter.next();
+			outComponent(kid,0);
+		}
+	}
+	
+	static private void outComponent(Component comp, int depth){
+		if(depth==0){
+			System.out.print("R:");
+		}
+		for(int i=0;i<depth;i++){
+			System.out.print("++++");
+		}
+		System.out.print(comp.toString());
+		if(comp instanceof Inline){
+			System.out.println("content of inline[");
+			System.out.println(((Inline)comp).getContent());
+			System.out.println("]end content of inline");
+		}
+		System.out.println();
+		
+		List children = comp.getChildren();
+		for(Iterator iter = children.iterator();iter.hasNext();){
+			Component kid = (Component)iter.next();
+			outComponent(kid,depth+1);
+		}
+	}
 
 }

@@ -43,7 +43,7 @@ public class PageTag extends RootTag {
 	 */
 	protected void setProperties(UIComponent comp) {
 		if(!(comp instanceof Page)){
-			throw new IllegalArgumentException("Not a Page");
+			throw new IllegalArgumentException("Not a Page:"+comp);
 		}
 		super.setProperties(comp);
 		if(_style!=null ){

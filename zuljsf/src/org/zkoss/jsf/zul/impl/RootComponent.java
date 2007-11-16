@@ -20,6 +20,7 @@ package org.zkoss.jsf.zul.impl;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -69,8 +70,17 @@ public class RootComponent extends AbstractComponent{
 	private org.zkoss.zk.ui.Page _page;
 	private String _lang = "Java";
 	private ComponentInfo _componentInfo;
+	private boolean _nested;
 	
-
+	
+	// these two field must follow the value of ZkFuns
+	/** Denotes whether style sheets are generated for this request. */
+	private static final String ATTR_LANG_CSS_GENED
+		= "javax.zkoss.zk.lang.css.generated";
+	/** Denotes whether JavaScripts are generated for this request. */
+	private static final String ATTR_LANG_JS_GENED
+		= "javax.zkoss.zk.lang.js.generated";
+	
 	/**
 	 * protected Constructor. Construct a RootTag with
 	 * LanguageDefinition =  "xul/html".
@@ -168,6 +178,8 @@ public class RootComponent extends AbstractComponent{
 					if(inits!=null)inits.doAfterCompose(page);
 					Utils.adjustChildren(
 							page, RootComponent.this, ci.getChildrenInfo(RootComponent.this), writer.toString()/*new String(bos.toString("UTF-8"))*/);
+					
+					
 					//a bug? if last child of page is inline, then Messagebox.show will cause error.
 					//so, add a unvisible label to work around this.
 					Label junk = new Label();
@@ -181,7 +193,9 @@ public class RootComponent extends AbstractComponent{
 					
 					
 				}else{
-					if(inits!=null)inits.doAfterCompose(page);
+					//bug #1832862 Content disappear in JSFComponent
+					Utils.adjustChildren(
+						page, RootComponent.this, new ArrayList(), getBodyContent());
 				}
 				setBodyContent(null);//clear it;
 			} catch (Exception ex) {
@@ -223,6 +237,25 @@ public class RootComponent extends AbstractComponent{
 	}
 
 
+	public void encodeBegin(FacesContext context) throws IOException {
+		final ExternalContext exc = context.getExternalContext();
+		final HttpServletRequest request =
+			(HttpServletRequest)exc.getRequest();
+		
+		final AbstractComponent ac =
+			(AbstractComponent)findAncestorWithClass(this, AbstractComponent.class);
+		
+		if(ac!=null){
+			_nested = true;
+		}else{
+			_nested = false;
+			//skip the other zul to generate js or css which is not controlled by this page,
+			//such as <jsp:include page="other.zul"/> in a page.
+			WebManager.setRequestLocal(request, ATTR_LANG_JS_GENED, Boolean.TRUE);
+			WebManager.setRequestLocal(request, ATTR_LANG_CSS_GENED, Boolean.TRUE);
+		}
+	}
+	
 	/**
 	 * Override Method, 
 	 * When encodeEnd in RootComponent, all it's children ZULJSF Component has encoded,
@@ -238,10 +271,7 @@ public class RootComponent extends AbstractComponent{
 		final Execution _exec;
 		final Richlet _richlet;
 		
-		final AbstractComponent ac =
-			(AbstractComponent)findAncestorWithClass(this, AbstractComponent.class);
-		if ((ac instanceof RootComponent) /*|| (pt instanceof BranchTag)*/)
-			throw new IOException("<page/> can not be placed inside of "+ac);
+		
 
 		final ExternalContext exc = context.getExternalContext();
 		final ServletContext svlctx = (ServletContext)exc.getContext();
@@ -250,12 +280,16 @@ public class RootComponent extends AbstractComponent{
 		final HttpServletResponse response =
 			(HttpServletResponse)exc.getResponse();
 		
-
-
 		final WebManager webman = WebManager.getWebManager(svlctx);
 		final Session sess = WebManager.getSession(svlctx, request);
+		
+		if(!_nested){
+			WebManager.setRequestLocal(request, ATTR_LANG_JS_GENED, null);
+			WebManager.setRequestLocal(request, ATTR_LANG_CSS_GENED, null);
+		}
+		
 
-		//TODO check this
+		//TODO check push
 		//RequestContexts.push(pgctx);
 		SessionsCtrl.setCurrent(sess);
 		try {
@@ -281,7 +315,6 @@ public class RootComponent extends AbstractComponent{
 				//Always use include; not forward
 			
 			init(_exec, _page); //initialize the page
-
 			_wappc.getUiEngine().execNewPage(_exec, _richlet, _page, context.getResponseWriter());
 		} finally {
 			SessionsCtrl.setCurrent(null);

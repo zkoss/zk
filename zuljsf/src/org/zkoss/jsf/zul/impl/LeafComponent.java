@@ -197,11 +197,12 @@ abstract public class LeafComponent extends AbstractComponent{
 		}
 	}
 	/**
-	 * Override Method, write a special mark denoting the component in this metohd 
+	 * Override Method, write a special mark denoting the component in this method 
 	 */
 	public void encodeEnd(FacesContext context) throws IOException {
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
+		ResponseWriter rw = context.getResponseWriter();
 		if(isSuppressed()){
 			//TODO implement it.
 			//throw new UnsupportedOperationException("don't put component inside a suppressed parent component "+this.getParent()+", This feature doen't implement yet");
@@ -212,9 +213,9 @@ abstract public class LeafComponent extends AbstractComponent{
 			}else{
 				_rootcomp.setBodyContent(_suppressedContent+writer.toString());
 			}*/
-			context.getResponseWriter().write(writer.toString());
+			rw.write(writer.toString());
 		}else{
-			writeComponentMark(context.getResponseWriter()); //write a special mark denoting the component
+			writeComponentMark(rw); //write a special mark denoting the component
 		}
 	}
 	

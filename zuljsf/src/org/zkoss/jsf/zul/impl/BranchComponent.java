@@ -20,6 +20,7 @@ package org.zkoss.jsf.zul.impl;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,7 +45,6 @@ abstract public class BranchComponent extends LeafComponent{
 	protected void loadZULTree(StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
-		
 		initComponent();
 		
 		//load children
@@ -55,13 +55,19 @@ abstract public class BranchComponent extends LeafComponent{
 				AbstractComponent kid = (AbstractComponent) kids.next();
 	            kid.loadZULTree(writer);
 	        }
-			
+			String bodyContent = getBodyContent();
 			Utils.adjustChildren(
-					null, this, ci.getChildrenInfo(this), getBodyContent());
+					null, this, ci.getChildrenInfo(this), bodyContent);
+		}else{
+			//bug #1832862 Content disappear in JSFComponent
+			Utils.adjustChildren(
+					null, this, new ArrayList(), getBodyContent());
 		}
-		
 		afterComposeComponent();// after Compose Component.
 		setBodyContent(null); //clear
+		
+		
+		
 	}
 	
 
