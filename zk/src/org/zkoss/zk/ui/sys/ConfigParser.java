@@ -30,6 +30,7 @@ import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.web.servlet.http.Encodes;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
@@ -166,7 +167,6 @@ public class ConfigParser {
 				//(so we cannot load definitions now)
 			} else if ("system-config".equals(elnm)) {
 			//system-config
-			//	uri-prefix
 			//  disable-event-thread
 			//	max-spare-threads
 			//  max-suspended-threads
@@ -182,10 +182,8 @@ public class ConfigParser {
 			//	id-generator-class
 			//  web-app-class
 			//	method-cache-class
-				String s = el.getElementValue("uri-prefix", true);
-				if (s != null) config.setURIPrefix(s);
-
-				s = el.getElementValue("disable-event-thread", true);
+			//	url-encoder-class
+				String s = el.getElementValue("disable-event-thread", true);
 				if (s != null) config.enableEventThread("false".equals(s));
 
 				Integer v = parseInteger(el, "max-spare-threads", false);
@@ -233,6 +231,10 @@ public class ConfigParser {
 				cls = parseClass(el, "method-cache-class", Cache.class);
 				if (cls != null)
 					ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());
+
+				cls = parseClass(el, "url-encoder-class", Encodes.URLEncoder.class);
+				if (cls != null)
+					Encodes.setURLEncoder((Encodes.URLEncoder)cls.newInstance());
 			} else if ("xel-config".equals(elnm)) {
 			//xel-config
 			//	evaluator-class
