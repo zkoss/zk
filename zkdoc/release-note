@@ -5,7 +5,8 @@ ZK 3.0.1
   1831559: A way to set a wrong value for textbox/Intbox...
   1832165: BorderLayout support onSize event
   1830924: A way to specify label's width easily
-
+  1814621: JFreeChartEngine - rendering customization
+  
 * Bugs:
   1828044: When header is invisible, whole column should be disappeared
   1826938: Listbox Live Data
