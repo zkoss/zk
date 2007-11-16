@@ -6,6 +6,7 @@ ZK 3.0.1
   1832165: BorderLayout support onSize event
   1830924: A way to specify label's width easily
   1814621: JFreeChartEngine - rendering customization
+  1830886: A way to make the listbox change its model less "drastic"
   
 * Bugs:
   1828044: When header is invisible, whole column should be disappeared
