@@ -251,8 +251,10 @@ zkButton.init = function (cmp) {
 zkTbtn = {}; //toolbarbutton
 zkTbtn.init = function (cmp) {
 	zk.listen(cmp, "click", function (evt) {
-		if ("javascript:;" == cmp.href) zkau.onclick(evt);
-		else {
+		if ("javascript:;" == cmp.href) {
+			zkau.onclick(evt);
+			Event.stop(evt);
+		} else {
 			var t = cmp.getAttribute("target");
 			if (cmp.href && !zk.isNewWindow(cmp.href, t))
 				zk.progress();
