@@ -1,7 +1,7 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.zkoss.org/jsp/zul" prefix="z" %>
-<z:component name="mywin" useClass="org.zkoss.jspdemo.MyWindow2" extends="window" border="normal"/>
+<z:component name="mywin" class="org.zkoss.jspdemo.MyWindow2" extends="window" border="normal"/>
 <z:component name="username" inline="true" macroURI="/username.zul"/>
  
 <html>
