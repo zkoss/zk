@@ -44,7 +44,8 @@ public class TreecolDefault implements ComponentRenderer {
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"head-cell-inner\">")
 			.write(self.getImgTag());
-		new Out(self.getLabel()).render(out);		
+		new Out(self.getLabel()).render(out);	
+		wh.writeChildren(self);
 		wh.writeln("</div></th>");
 	}
 }

@@ -46,6 +46,7 @@ public class ColumnDefault implements ComponentRenderer {
 		.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"head-cell-inner\">");
 		wh.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
+		wh.writeChildren(self);
 		wh.writeln("</div></th>");
 	}
 
