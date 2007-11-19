@@ -558,7 +558,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public String getId() {
 		if (_id == null)
-			_id = this instanceof RawId ? getUuid(): ComponentsCtrl.ANONYMOUS_ID;
+			_id = getUuid();
 		return _id;
 	}
 	public void setId(String id) {
