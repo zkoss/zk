@@ -79,15 +79,26 @@ import org.zkoss.zk.ui.Component;
 			if (txt.length() > 0) {
 				final Inline inl = new Inline(txt);
 				if (child != null) {
-					if (parent != null && parent instanceof LeafComponent)
-						((LeafComponent)parent).getZULComponent().insertBefore(inl, child.getZULComponent());
-					else
-						inl.setPageBefore(page, child.getZULComponent());
+					Component[] zulcomps = null;
+					if(child instanceof BaseUi){
+						zulcomps = ((BaseUi)child).getComponent();
+					}else{
+						zulcomps = new Component[]{child.getZULComponent()};
+					}
+					boolean ipage = (parent == null || !(parent instanceof BranchComponent));
+					for(int i=zulcomps.length;i>=0;i--){
+						if(ipage){
+							inl.setPageBefore(page, zulcomps[0]);
+						}else{
+							((BranchComponent)parent).getZULComponent().insertBefore(inl, zulcomps[0]);
+						}
+					}
 				} else {
-					if (parent != null && parent instanceof LeafComponent)
-						((LeafComponent)parent).getZULComponent().appendChild(inl);
-					else
+					if (parent != null && parent instanceof BranchComponent){
+						((BranchComponent)parent).getZULComponent().appendChild(inl);
+					}else{
 						inl.setPage(page);
+					}
 				}
 			}
 

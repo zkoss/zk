@@ -51,7 +51,6 @@ import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.ComposerExt;
 
 /**
  * The skeletal class used to implement the ZULJSF Component for ZK components
@@ -61,15 +60,26 @@ import org.zkoss.zk.ui.util.ComposerExt;
  */
 abstract public class LeafComponent extends AbstractComponent{
 
-	//ZUL Component for RenderPhase Only.
-	private Component _zulcomp;
+	/*
+	 * ZUL Component for RenderPhase Only.
+	 */
+	/*package*/ Component _zulcomp;
 	
-	//ZUL JSF component
-	private RootComponent _rootcomp;
-	private BranchComponent _parentcomp;
+	/*
+	 * Root ZUL JSF component of this ZUL JSF component
+	 */
+	/*package*/ RootComponent _rootcomp;
 	
-	//original attribute of this ZULJSF component. 
-	private Map _compAttrMap;
+	/*
+	 * Parent ZUL component of this ZUL JSF component
+	 */
+	/*package*/ BranchComponent _parentcomp;
+	
+	/*
+	 * original attribute of this ZULJSF component.
+	 * contains attribute and event (ex.onClick)
+	 */ 
+	protected Map _compAttrMap;
 	
 	//attribute set by custom-attributes
 	private Map _compCustomAttributes;
@@ -79,16 +89,13 @@ abstract public class LeafComponent extends AbstractComponent{
 	private String _forward;
 	
 	//if id attribute is seted, when we must set id to zul component. 
-	private boolean _idSet = false;
+	/*package*/ boolean _idSet = false;
 	
 	
-	//map for zul component attribute
-	private Map _zulAttrMap = new LinkedHashMap();
-	//map for zul component listener
-	private Map _eventListenerMap = new LinkedHashMap();
+
     
 
-	private ComposerHandler composer = null;
+	protected ComposerHandler composer = null;
 	
 	/** Returns the RootComponent that this Component belongs to.
 	 */
@@ -229,8 +236,10 @@ abstract public class LeafComponent extends AbstractComponent{
 	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
+		composer = new ComposerHandler(_compAttrMap.get("apply"));
 		initComponent(page);
 		afterComposeComponent();//finish compose the component
+		composer = null;
 		setBodyContent(null); //clear
 	}
 	
@@ -249,18 +258,17 @@ abstract public class LeafComponent extends AbstractComponent{
 			_zulcomp = null;
 		}
 		
-		composer = new ComposerHandler(_compAttrMap.get("apply")); 
-		
 		try {
-			
-			//TODO: composer.doBeforeCompose(page, parentComponent, compInfo);
-			
 			String compName = getComponentDefName();
 			ComponentDefinition compdef = page.getComponentDefinition(compName, true);
 			if(compdef ==null){
-				throw new Exception("Component not found :"+compName);
+				throw new RuntimeException("Component Definition not found :"+compName);
 			}
+			//TODO: composer.doBeforeCompose(page, parentComponent, compInfo);
 			_zulcomp = (Component) compdef.resolveImplementationClass(page, getUse()).newInstance();
+			//apply definition
+			_zulcomp.getDefinition().applyProperties(_zulcomp);
+			
 			composer.doBeforeComposeChildren(_zulcomp);
 		} catch (Exception e) {
 			try {
@@ -291,8 +299,7 @@ abstract public class LeafComponent extends AbstractComponent{
 		}else {
 			_rootcomp.addChildZULComponent(this);
 		}
-		//apply definition
-		_zulcomp.getDefinition().applyProperties(_zulcomp);
+		
 		
 	}
 	
@@ -313,6 +320,11 @@ abstract public class LeafComponent extends AbstractComponent{
 
 		if (_zulcomp == null)
 			throw new RuntimeException("no zul component be created.");
+		
+		//map for zul component attribute
+		Map zulAttrMap = new LinkedHashMap();
+		//map for zul component listener
+		Map eventListenerMap = new LinkedHashMap();
 
 		//setup EventListener and zul attribute from component attribute;
 		if(_compAttrMap!=null){
@@ -321,15 +333,15 @@ abstract public class LeafComponent extends AbstractComponent{
 				String localName = (String)iter.next();
 				Object value = _compAttrMap.get(localName);
 				if(localName.startsWith("on")){
-					_eventListenerMap.put(localName, value);
+					eventListenerMap.put(localName, value);
 				}else {
-					_zulAttrMap.put(localName, value);
+					zulAttrMap.put(localName, value);
 				}
 			}
 		}
 		
 		try {
-			evaluateDynaAttributes(_zulcomp);
+			evaluateDynaAttributes(_zulcomp,zulAttrMap);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -340,7 +352,7 @@ abstract public class LeafComponent extends AbstractComponent{
 		}
 		
 		//add event handle ...
-		for(Iterator itor = _eventListenerMap.entrySet().iterator();itor.hasNext();)
+		for(Iterator itor = eventListenerMap.entrySet().iterator();itor.hasNext();)
 		{
 			Map.Entry entry = (Map.Entry)itor.next();
 			final ZScript zscript = ZScript.parseContent((String)entry.getValue());
@@ -367,11 +379,8 @@ abstract public class LeafComponent extends AbstractComponent{
 				new CreateEvent(Events.ON_CREATE, _zulcomp, Executions.getCurrent().getArg()));
 		
 		
-		//process JSF attribute after dynamic attribute is assigend.
+		//process JSF attribute after dynamic attribute is assigned.
 		afterZULComponentComposed(_zulcomp);
-		
-		composer = null;
-		
 	}
 	
 	/**
@@ -382,18 +391,18 @@ abstract public class LeafComponent extends AbstractComponent{
 	 * @throws NoSuchMethodException 
 	 * @throws ModificationException 
 	 */
-	private void evaluateDynaAttributes(final Component target) 
+	private void evaluateDynaAttributes(final Component target,Map zulAttrMap) 
 	throws ModificationException, NoSuchMethodException{
 		
 		AnnotationHelper helper = null;
 		boolean hitann = false;
-		for(Iterator itor = _zulAttrMap.entrySet().iterator();itor.hasNext();)
+		for(Iterator itor = zulAttrMap.entrySet().iterator();itor.hasNext();)
 		{
 			
 			Map.Entry entry= (Entry) itor.next();
 			
 			String attnm = (String)entry.getKey();
-			Object value = _zulAttrMap.get(attnm);
+			Object value = zulAttrMap.get(attnm);
 			if(value instanceof ValueBinding){
 				value = ((ValueBinding)value).getValue(this.getFacesContext());
 			}
@@ -557,13 +566,14 @@ abstract public class LeafComponent extends AbstractComponent{
 	 * Override Method, save the state of this component.
 	 */
 	public Object saveState(FacesContext context) {
-		Object values[] = new Object[5];
+		Object values[] = new Object[6];
 		values[0] = super.saveState(context);
 		values[1] = _use;
 		Object m[] = saveAttachedMapState(context, _compAttrMap);
 		values[2] = m[0];
 		values[3] = m[1];
-		values[4] = _idSet?Boolean.TRUE:Boolean.FALSE; 
+		values[4] = _idSet?Boolean.TRUE:Boolean.FALSE;
+		values[5] = _forward;
 		return (values);
 
 	}
@@ -577,10 +587,11 @@ abstract public class LeafComponent extends AbstractComponent{
 		_use = (String)values[1];
 		_compAttrMap = (Map)restoreAttachedMapState(context,values[2],values[3]);
 		_idSet = ((Boolean)values[4]).booleanValue();
+		_forward = (String)values[5];
 	}
 	
 	/**
-	 * Override Method, remember the id is setted.
+	 * Override Method, remember the id is set.
 	 */
 	public void setId(String id) {
 		super.setId(id);
@@ -650,49 +661,5 @@ abstract public class LeafComponent extends AbstractComponent{
 		}
 		return null;
 	}
-	
-	
-	private static Composer parseAppliedComposer(Object o)
-	{
-		if(null==o)return null;
-		try {
-			if (o instanceof String) {
-				final String s = (String)o;
-				if (s.indexOf(',') >= 0)
-					o = CollectionsX.parse(null, s, ',');
-			}
-
-			if (o instanceof Collection) {
-				final Collection c = (Collection)o;
-				int sz = c.size();
-				switch (sz) {
-				case 0: return null;
-				case 1: o = c.iterator().next(); break;
-				default: o = c.toArray(new Object[sz]); break;
-				}
-			}
-
-			if (o instanceof Object[]) {
-				final Object[] cs = (Object[])o;
-				switch (cs.length) {
-				case 0: return null;
-				case 1: o = cs[0]; break;
-				default: return new MultiComposer(cs);
-				}
-			}
-
-			if (o instanceof String)
-				o = Classes.newInstanceByThread(((String)o).trim());
-			else if (o instanceof Class)
-				o = ((Class)o).newInstance();
-
-			if (o instanceof Composer)
-				return (Composer)o;
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex);
-		}
-		return null;
-	}
-	
 	
 }

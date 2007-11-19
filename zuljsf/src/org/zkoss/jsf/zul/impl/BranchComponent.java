@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.zkoss.zk.ui.Component;
+
 
 /**
  * The skeletal class used to implement the ZULJSF components
@@ -36,7 +38,14 @@ abstract public class BranchComponent extends LeafComponent{
 	/** Adds a child ZUL Component.
 	 */
 	/*package*/ void addChildZULComponent(LeafComponent child) {
-		child.getZULComponent().setParent(getZULComponent());
+		if(child instanceof BaseUi){
+			Component[] comps = ((BaseUi)child).getComponent();
+			for(int i=0;i<comps.length;i++){
+				comps[i].setParent(getZULComponent());
+			}
+		}else{
+			child.getZULComponent().setParent(getZULComponent());
+		}
 	}
 	
 	/**
@@ -45,6 +54,7 @@ abstract public class BranchComponent extends LeafComponent{
 	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
+		composer = new ComposerHandler(getAttributeValue("apply"));
 		initComponent(page);
 		
 		//load children
@@ -64,6 +74,7 @@ abstract public class BranchComponent extends LeafComponent{
 					null, this, new ArrayList(), getBodyContent());
 		}
 		afterComposeComponent();// after Compose Component.
+		composer = null;
 		setBodyContent(null); //clear
 		
 		

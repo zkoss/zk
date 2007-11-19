@@ -118,7 +118,7 @@ public class ComposerHandler{
 	 * 
 	 * @throws JspException if {@link ComposerExt#doFinally()} fail.
 	 */
-	public void doFinally() throws JspException {
+	public void doFinally() throws Exception {
 		if(composerExt!=null){
 			try {
 				composerExt.doFinally();

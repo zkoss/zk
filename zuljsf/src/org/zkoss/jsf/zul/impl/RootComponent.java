@@ -20,6 +20,7 @@ package org.zkoss.jsf.zul.impl;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,7 +94,15 @@ public class RootComponent extends AbstractComponent{
 	/** Adds a child ZUL Component.
 	 */
 	/*package*/ void addChildZULComponent(LeafComponent child) {
-		child.getZULComponent().setPage(_page);
+		if(child instanceof BaseUi){
+			Component[] comps = ((BaseUi)child).getComponent();
+			for(int i=0;i<comps.length;i++){
+				comps[i].setPage(_page);
+			}
+		}else{
+			child.getZULComponent().setPage(_page);
+		}
+		
 	}
 	/** Returns the default scripting language.
 	 */
@@ -168,9 +178,11 @@ public class RootComponent extends AbstractComponent{
 				//load children
 				ComponentInfo ci = getComponentInfo();
 				List children = ci.getChildrenInfo(RootComponent.this);
+				final String bodyContent = getBodyContent(); 
+				
 				if(children!=null){
 					StringWriter writer = new StringWriter();
-					writer.write(getBodyContent());
+					writer.write(bodyContent);
 					for (Iterator kids = children.iterator(); kids.hasNext(); ){
 						AbstractComponent kid = (AbstractComponent) kids.next();
 			            kid.loadZULTree(page,writer);
@@ -195,7 +207,7 @@ public class RootComponent extends AbstractComponent{
 				}else{
 					//bug #1832862 Content disappear in JSFComponent
 					Utils.adjustChildren(
-						page, RootComponent.this, new ArrayList(), getBodyContent());
+						page, RootComponent.this, new ArrayList(), bodyContent);
 				}
 				setBodyContent(null);//clear it;
 			} catch (Exception ex) {

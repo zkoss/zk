@@ -175,6 +175,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Audio Components -->
 	<tag>
@@ -206,6 +211,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Audio.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -243,6 +253,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Bandpopup Components -->
 	<tag>
@@ -274,6 +289,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Bandpopup.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -311,6 +331,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Calendar Components -->
 	<tag>
@@ -342,6 +367,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Calendar.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -379,6 +409,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Caption Components -->
 	<tag>
@@ -410,6 +445,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Caption.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -447,6 +487,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Checkbox Components -->
 	<tag>
@@ -478,6 +523,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Checkbox.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -515,6 +565,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Columns Components -->
 	<tag>
@@ -546,6 +601,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Columns.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -583,6 +643,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Comboitem Components -->
 	<tag>
@@ -614,6 +679,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Comboitem.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -651,6 +721,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Decimalbox Components -->
 	<tag>
@@ -682,6 +757,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Decimalbox.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -719,6 +799,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Doublebox Components -->
 	<tag>
@@ -750,6 +835,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Doublebox.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -787,6 +877,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Fileupload Components -->
 	<tag>
@@ -818,6 +913,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Fileupload.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -855,6 +955,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Foot Components -->
 	<tag>
@@ -886,6 +991,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Foot.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -923,6 +1033,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Grid Components -->
 	<tag>
@@ -954,6 +1069,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Grid.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -991,6 +1111,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Hbox Components -->
 	<tag>
@@ -1022,6 +1147,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Hbox.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1059,6 +1189,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Iframe Components -->
 	<tag>
@@ -1090,6 +1225,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Iframe.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1127,6 +1267,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Imagemap Components -->
 	<tag>
@@ -1158,6 +1303,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Imagemap.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1195,6 +1345,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Include Components -->
 	<tag>
@@ -1226,6 +1381,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Include.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1263,6 +1423,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Listbox Components -->
 	<tag>
@@ -1294,6 +1459,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Listbox.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1331,6 +1501,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Listfoot Components -->
 	<tag>
@@ -1362,6 +1537,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Listfoot.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1399,6 +1579,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Listhead Components -->
 	<tag>
@@ -1430,6 +1615,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Listhead.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1467,6 +1657,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Listitem Components -->
 	<tag>
@@ -1498,6 +1693,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Listitem.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1535,6 +1735,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Menubar Components -->
 	<tag>
@@ -1566,6 +1771,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Menubar.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1603,6 +1813,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Menupopup Components -->
 	<tag>
@@ -1634,6 +1849,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Menupopup.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1671,6 +1891,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Messagebox Components -->
 	<tag>
@@ -1702,6 +1927,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Messagebox.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1739,6 +1969,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Popup Components -->
 	<tag>
@@ -1770,6 +2005,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Popup.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1807,6 +2047,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Radio Components -->
 	<tag>
@@ -1838,6 +2083,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Radio.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1875,6 +2125,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Row Components -->
 	<tag>
@@ -1906,6 +2161,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Row.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1943,6 +2203,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Separator Components -->
 	<tag>
@@ -1974,6 +2239,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Separator.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2011,6 +2281,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Splitter Components -->
 	<tag>
@@ -2042,6 +2317,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Splitter.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2079,6 +2359,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Tab Components -->
 	<tag>
@@ -2110,6 +2395,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Tab.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2147,6 +2437,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Tabpanel Components -->
 	<tag>
@@ -2178,6 +2473,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Tabpanel.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2215,6 +2515,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Tabs Components -->
 	<tag>
@@ -2246,6 +2551,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Tabs.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2283,6 +2593,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Timebox Components -->
 	<tag>
@@ -2314,6 +2629,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Timebox.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2351,6 +2671,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Toolbar Components -->
 	<tag>
@@ -2382,6 +2707,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Toolbar.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2419,6 +2749,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Tree Components -->
 	<tag>
@@ -2450,6 +2785,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Tree.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2487,6 +2827,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Treechildren Components -->
 	<tag>
@@ -2518,6 +2863,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Treechildren.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2555,6 +2905,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Treecols Components -->
 	<tag>
@@ -2586,6 +2941,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Treecols.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2623,6 +2983,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Treefooter Components -->
 	<tag>
@@ -2654,6 +3019,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Treefooter.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2691,6 +3061,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Treerow Components -->
 	<tag>
@@ -2722,6 +3097,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Treerow.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2759,6 +3139,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Window Components -->
 	<tag>
@@ -2790,6 +3175,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Window.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2827,6 +3217,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK XUL Window Components -->
 	<tag>
@@ -2858,6 +3253,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : Zul Component Auxheader.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2895,6 +3295,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK EX Center Components -->
 	<tag>
@@ -2926,6 +3331,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : ZKEX Component Center.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -2963,6 +3373,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK EX North Components -->
 	<tag>
@@ -2994,6 +3409,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Default : ZKEX Component North.
 			</description>
 			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>forward</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -3031,6 +3451,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- ZK EX Borderlayout Components -->
 	<tag>
@@ -3065,7 +3490,50 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>forward</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	
+	<!--  special component -->
+	
+	<!-- ZK EX Borderlayout Components -->
+	<tag>
+		<description>
+	Define the ui Component
+		</description>
+		<name>ui</name>
+		<tag-class>org.zkoss.jsf.zul.tag.UiTag</tag-class>
+		<body-content>scriptless</body-content>
+		<dynamic-attributes>true</dynamic-attributes> 
+		<attribute>
+			<description>
+	If false, this tag is ignored. Default: true.
+			</description>
+			<name>if</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+	If true, this tag is ignored. Default: false.
+			</description>
+			<name>unless</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>use</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>tag</name>
+			<required>tag</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	
 </taglib>
