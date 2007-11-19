@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Quick Start Guide</title>
-<subtitle>Version 3.0.0</subtitle>
+<subtitle>3.0.0</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
@@ -246,7 +246,7 @@
 <para>Uncompress zk-bin-3.0.0.zip or zk-bin-3.0.0.tar.gz</para>
 </listitem>
 <listitem>
-<para>Copy dist/lib/*.jar, dist/zkforge/*.jar, and dist/lib/ext/*.jar to $JETTY_HOME/ext All libraries in dist/zkforge and most of libraries in dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
+<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to $JETTY_HOME/ext All libraries in dist/zkforge and most of libraries in dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
 </listitem>
 <listitem>
 <para>Re-start Jetty.</para>
