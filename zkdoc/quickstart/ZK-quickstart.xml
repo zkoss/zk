@@ -1,34 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
-<title/>
-<subtitle/>
+<title>The Quick Start Guide</title>
+<subtitle>Version 3.0.0</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
-<para>
-<graphic fileref="">2
-			
-		</graphic>
-</para>
-<para>SIMPLY RICH</para>
-<para>ZKTM</para>
-<para>The Quick Start Guide</para>
-<para>Version 3.0.0</para>
-<para>November 2007</para>
-<para>Potix Corporation</para>
-<para/>
-<para/>
-<para/>
-<para>Copyright © Potix Corporation. All rights reserved.</para>
-<para>The material in this document is for information only and is subject to change without notice. While reasonable efforts have been made to assure its accuracy, Potix Corporation assumes no liability resulting from errors or omissions in this document, or from the use of the information contained herein.</para>
-<para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
-<para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
-<para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
-<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para><chapter id="Before You Start"><title>Before You Start</title><sect1 id="New to the Servlet Container (aka., Java Web Server)"><title>New to the Servlet Container (aka., Java Web Server)</title>
+
+<chapter>
+<title>Before You Start</title><sect1><title>New to the Servlet Container (aka., Java Web Server)</title>
 <para>Before developing Web applications in Java (and running ZK demo in your machine), you have to install a Servlet container first. Apache Tomcat is one of the most popular Servlet containers. It is easy to install and use.</para>
 <informaltable frame="all">
 <tgroup cols="2">
@@ -65,7 +48,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect1><sect1 id="New to Java Language"><title>New to Java Language</title>
+</informaltable></sect1><sect1><title>New to Java Language</title>
 <para>You don't need to know Java to use ZK, since all rich user interface can be implemented in HTML-like markup language called ZUML. However, to complete a Web application, you or teammate need some basic knowledge about Java. Here are some good tutorial.</para>
 <informaltable frame="all">
 <tgroup cols="2">
@@ -105,12 +88,14 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect1><sect1 id="New to Java Integrated Development Environment (IDE)"><title>New to Java Integrated Development Environment (IDE)</title>
+</informaltable></sect1><sect1><title>New to Java Integrated Development Environment (IDE)</title>
 <para>Eclipse is one of the most popular Java IDEs. With IDE, it is easier to develop and debug your Web applications. Moreover, you can understand ZK better by debugging through ZK's source codes.</para>
 <para>The step-by-step setup guide can be found in one of our small talks:</para>
 <para>
 <ulink url="http://www.zkoss.org/smalltalks/eclipse/ek.html">http://www.zkoss.org/smalltalks/eclipse/ek.html</ulink>
-</para></sect1></chapter><chapter id="1. What to Download"><title>1. What to Download</title>
+</para></sect1></chapter>
+<chapter>
+<title>1. What to Download</title>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -179,7 +164,10 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></chapter><chapter id="2. Run the Demo"><title>2. Run the Demo</title>
+<para/>
+</chapter>
+<chapter>
+<title>2. Run the Demo</title>
 <para>The simplest way to test drive the power of ZK is to visit <ulink url="http://www.zkoss.org/zkdemo/userguide">http://www.zkoss.org/zkdemo/userguide</ulink>.</para>
 <para>If you want to run the demo in your local server, you can follow the following steps.</para>
 <orderedlist>
@@ -192,9 +180,12 @@
 <listitem>
 <para>After zkdemo-all.war is deployed you can visit it at, say, <ulink url="http://localhost:8080/zkdemo-all/userguide">http://localhost:8080/zkdemo-all/userguide</ulink>. The port number depends on how you installed your Web or application servers. Some application servers deploy only the EAR file. That is, you have to deploy zkdemos-all.ear instead.</para>
 </listitem>
-</orderedlist></chapter><chapter id="3. Installation"><title>3. Installation</title>
+</orderedlist>
+</chapter>
+<chapter>
+<title>3. Installation</title>
 <para>ZK consists of several libraries (the JAR files). There are two ways to install them. First, bundle them with your Web application. In other words, copy them to the WEB-INF/lib directory of your Web application. The benefit is that you can deploy your Web application to any Web server without configuring the Web server.</para>
-<para>Second, install them to your Web or application server. In other words, copy them to the shared directory of the Web or application server (for Tomcat, it is shared/lib). The benefit is that all Web applications can use ZK without bundled with any ZK library. </para><sect1 id="Alternative 1: Bundle ZK into Your Web Application"><title>Alternative 1: Bundle ZK into Your Web Application</title>
+<para>Second, install them to your Web or application server. In other words, copy them to the shared directory of the Web or application server (for Tomcat, it is shared/lib). The benefit is that all Web applications can use ZK without bundled with any ZK library. </para><sect1><title>Alternative 1: Bundle ZK into Your Web Application</title>
 <para>By copying ZK libraries to your Web application, you can deploy your Web application to any Web or application server without configuration.</para>
 <para>To bundle ZK libraries with the WAR file (the Web application)</para>
 <orderedlist>
@@ -202,7 +193,7 @@
 <para>Uncompress zk-bin-3.0.0.zip or zk-bin-3.0.0.tar.gz</para>
 </listitem>
 <listitem>
-<para>Copy dist/lib/*.jar, dist/zkforge/*.jar, and dist/lib/ext/*.jar to the /WEB-INF/lib directory in your Web application.All libraries in dist/zkforge and most of libraries in dist/lib/ext are optional. If you want to minimize the footprint of your Web application, refer to the next chapter for the description of these libraries.</para>
+<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to the /WEB-INF/lib directory in your Web application.All libraries in dist/lib/zkforge and most of libraries in dist/lib/ext are optional. If you want to minimize the footprint of your Web application, refer to the next chapter for the description of these libraries.</para>
 </listitem>
 </orderedlist>
 <para>To bundle ZK libraries with the EAR file (the Java EE application)</para>
@@ -211,9 +202,9 @@
 <para>Uncompress zk-bin-3.0.0.zip or zk-bin-3.0.0.tar.gz</para>
 </listitem>
 <listitem>
-<para>Copy dist/lib/*.jar, dist/zkforge/*.jar, and dist/lib/ext/*.jar to the root directory in your Java EE application.All libraries in dist/zkforge and most of libraries in dist/lib/ext are optional. If you want to minimize the footprint of your Java EE application, refer to the next chapter for the description of these libraries.</para>
+<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to the root directory in your Java EE application.All libraries in dist/lib/zkforge and most of libraries in dist/lib/ext are optional. If you want to minimize the footprint of your Java EE application, refer to the next chapter for the description of these libraries.</para>
 </listitem>
-</orderedlist></sect1><sect1 id="Alternative 2: Install ZK to Be Shared by All Web Applications"><title>Alternative 2: Install ZK to Be Shared by All Web Applications</title>
+</orderedlist></sect1><sect1><title>Alternative 2: Install ZK to Be Shared by All Web Applications</title>
 <para>The way to install ZK libraries to the shared directory varies from one Web server to another.</para>
 <para>Install ZK on Tomcat</para>
 <orderedlist>
@@ -227,9 +218,9 @@
 <para>Uncompress zk-bin-3.0.0.zip or zk-bin-3.0.0.tar.gz</para>
 </listitem>
 <listitem>
-<para>Copy dist/lib/*.jar, dist/zkforge/*.jar, and dist/lib/ext/*.jar to $TOMCAT_HOME<footnote>
+<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to $TOMCAT_HOME<footnote>
 <para>$TOMCAT_HOME is where you installed Tomcat.</para>
-</footnote>/shared/libAll libraries in dist/zkforge and most of libraries in dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
+</footnote>/shared/libAll libraries in dist/lib/zkforge and most of libraries in dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
 </listitem>
 <listitem>
 <para>Re-start Tomcat.</para>
@@ -263,7 +254,7 @@
 </orderedlist>
 <para>Then, you can deploy your Web application, e.g., demo/bin/zkdemo.war, to Jetty by copying it to $JETTY_HOME/webapps directly. After deployed, you can run your Web application by visiting the corresponding URL, e.g.,<ulink url="http://localhost/zkdemo/userguide"> </ulink>
 <ulink url="http://localhost/zkdemo/userguide">http://localhost:8080/zkdemo/userguide</ulink>
-<ulink url="http://localhost/zkdemo/userguide">,</ulink> depending on the configuration of your Web server.</para></sect1><sect1 id="Working with MySQL3http://ww.mysql.com"><title>Working with MySQL<footnote>
+<ulink url="http://localhost/zkdemo/userguide">,</ulink> depending on the configuration of your Web server.</para></sect1><sect1><title>Working with MySQL<footnote>
 <para>
 <ulink url="http://mysql.com/">http://ww.mysql.com</ulink>
 </para>
@@ -274,10 +265,12 @@
 <ulink url="http://mysql.com/">http://ww.mysql.com</ulink>
 </para>
 </footnote>
-<para>To open the connection under zscript, you have to put MySQL JDBC driver (mysql-connector-*.jar) under the $TOMCAT_DIR/common/lib directory.</para></sect1></chapter><chapter id="4. The Content of Binary Distribution"><title>4. The Content of Binary Distribution</title>
-<para>This chapter describes the content of zk-bin-3.0.0.zip.</para><sect1 id="/doc"><title>/doc</title>
-<para>This directory holds the documents including copyrights and release notes.</para></sect1><sect1 id="/dist/lib"><title>/dist/lib</title>
-<para>This directory holds the binary libraries required to run ZK.</para></sect1><sect1 id="/dist/lib/zkforge"><title>/dist/lib/zkforge</title>
+<para>To open the connection under zscript, you have to put MySQL JDBC driver (mysql-connector-*.jar) under the $TOMCAT_DIR/common/lib directory.</para></sect1></chapter>
+<chapter>
+<title>4. The Content of Binary Distribution</title>
+<para>This chapter describes the content of zk-bin-3.0.0.zip.</para><sect1><title>/doc</title>
+<para>This directory holds the documents including copyrights and release notes.</para></sect1><sect1><title>/dist/lib</title>
+<para>This directory holds the binary libraries required to run ZK.</para></sect1><sect1><title>/dist/lib/zkforge</title>
 <para>This directory holds the components from ZK Forge, such as FCKeditor and Dojo. It is optional depending on whether you need them.</para>
 <informaltable frame="all">
 <tgroup cols="2">
@@ -331,7 +324,7 @@
 <para>Required if you want to use ZK Timeline components.</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect1><sect1 id="/dist/lib/ext"><title>/dist/lib/ext</title>
+</informaltable></sect1><sect1><title>/dist/lib/ext</title>
 <para>This directory holds the external libraries required to run ZK. Since these libraries are common, you might have installed them in your container.</para>
 <para>Here are optional jar files. You can choose whether to copy depending on your requirements.</para>
 <informaltable frame="all">
@@ -434,17 +427,21 @@
 <para>[not available in the standard and professional edition]</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect1><sect1 id="/dist/src"><title>/dist/src</title>
-<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.0.0.tar.gz.</para></sect1><sect1 id="/dist/xsd"><title>/dist/xsd</title>
-<para>This directory holds the XSD files that might be useful to develop ZK applications.</para></sect1><sect1 id="/dist/WEB-INF"><title>/dist/WEB-INF</title>
-<para>This directory holds the TLD files. These TLD files are part of JAR files so they are loaded automatically. We put them here mainly for your reference only.</para></sect1></chapter><chapter id="5. The Content of Demo Distribution"><title>5. The Content of Demo Distribution</title>
-<para>This chapter describes the content of zk-demo-3.0.0.zip.</para><sect1 id="/"><title>/</title>
-<para>This directory holds the executable: zkdemo.war, zkdemo-all.war, zkdemos.ear and zkdemos-all.ear. Refer to the Installation chapter for details.</para></sect1><sect1 id="/zkdemo"><title>/zkdemo</title>
-<para>This directory holds the source codes of the live demo.</para></sect1><sect1 id="/MyApp"><title>/MyApp</title>
-<para>This directory holds an empty Web application which you can start your new Web application from.</para></sect1></chapter><chapter id="6. My First ZK Application"><title>6. My First ZK Application</title>
+</informaltable></sect1><sect1><title>/dist/src</title>
+<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.0.0.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
+<para>This directory holds the XSD files that might be useful to develop ZK applications.</para></sect1><sect1><title>/dist/WEB-INF</title>
+<para>This directory holds the TLD files. These TLD files are part of JAR files so they are loaded automatically. We put them here mainly for your reference only.</para></sect1></chapter>
+<chapter>
+<title>5. The Content of Demo Distribution</title>
+<para>This chapter describes the content of zk-demo-3.0.0.zip.</para><sect1><title>/</title>
+<para>This directory holds the executable: zkdemo.war, zkdemo-all.war, zkdemos.ear and zkdemos-all.ear. Refer to the Installation chapter for details.</para></sect1><sect1><title>/zkdemo</title>
+<para>This directory holds the source codes of the live demo.</para></sect1><sect1><title>/MyApp</title>
+<para>This directory holds an empty Web application which you can start your new Web application from.</para></sect1></chapter>
+<chapter>
+<title>6. My First ZK Application</title>
 <para>Prepare WEB-INF/web.xml</para>
 <para>Copy or merge the following content to the web.xml in the WEB-INF directory in your application. This step must be done once each time you created a new Web applications. Then, what you need to do is to copy files with .zul or .zhtml extension to the proper directories in your Web applications.</para>
-<programlisting>&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt; &#13;&#13;    &lt;!-- //// --&gt;    &#13;    &lt;!-- ZK --&gt;    &#13;    &lt;listener&gt;    &#13;        &lt;description&gt;Used to cleanup when a session is destroyed&lt;/description&gt;        &#13;        &lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt;        &#13;        &lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;        &#13;    &lt;/listener&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;ZK loader for evaluating ZK pages&lt;/description&gt;        &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;        &#13;&#13;        &lt;!-- Must. Specifies URI of the update engine        &#13;        (DHtmlUpdateServlet). --&gt;        &#13;        &lt;init-param&gt;        &#13;            &lt;param-name&gt;update-uri&lt;/param-name&gt;            &#13;            &lt;param-value&gt;/zkau&lt;/param-value&gt;            &#13;        &lt;/init-param&gt;        &#13;        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;&lt;!-- MUST --&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;        &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;!-- //// --&gt;    &#13;&#13;    &lt;!-- MIME mapping --&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;gif&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/gif&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;html&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;htm&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jad&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/vnd.sun.j2me.app-descriptor&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpeg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;js&lt;/extension&gt;        &#13;        &lt;mime-type&gt;application/x-javascript&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;png&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/png&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;txt&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/plain&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;xml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/xml&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zhtml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zul&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;&#13;    &lt;welcome-file-list&gt;    &#13;        &lt;welcome-file&gt;index.zul&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.zhtml&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;        &#13;    &lt;/welcome-file-list&gt;    &#13;&lt;/web-app&gt;&#13;</programlisting><sect1 id="My First Hello World"><title>My First Hello World</title>
+<programlisting>&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt; &#13;&#13;    &lt;!-- //// --&gt;    &#13;    &lt;!-- ZK --&gt;    &#13;    &lt;listener&gt;    &#13;        &lt;description&gt;Used to cleanup when a session is destroyed&lt;/description&gt;        &#13;        &lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt;        &#13;        &lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;        &#13;    &lt;/listener&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;ZK loader for evaluating ZK pages&lt;/description&gt;        &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;        &#13;&#13;        &lt;!-- Must. Specifies URI of the update engine        &#13;        (DHtmlUpdateServlet). --&gt;        &#13;        &lt;init-param&gt;        &#13;            &lt;param-name&gt;update-uri&lt;/param-name&gt;            &#13;            &lt;param-value&gt;/zkau&lt;/param-value&gt;            &#13;        &lt;/init-param&gt;        &#13;        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;&lt;!-- MUST --&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;        &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;!-- //// --&gt;    &#13;&#13;    &lt;!-- MIME mapping --&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;gif&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/gif&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;html&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;htm&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jad&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/vnd.sun.j2me.app-descriptor&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpeg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;js&lt;/extension&gt;        &#13;        &lt;mime-type&gt;application/x-javascript&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;png&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/png&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;txt&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/plain&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;xml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/xml&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zhtml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zul&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;&#13;    &lt;welcome-file-list&gt;    &#13;        &lt;welcome-file&gt;index.zul&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.zhtml&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;        &#13;    &lt;/welcome-file-list&gt;    &#13;&lt;/web-app&gt;&#13;</programlisting><sect1><title>My First Hello World</title>
 <para>Create a file called hello.zul with the following content. Then, you could use the browser to see the result, say http://localhost:8080/zkdemo/hello.zul.</para>
 <programlisting>&lt;window title="My First window" border="normal" width="200px"&gt;&#13;    Hello, World!    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Then, the result is depicted as follow.</para>
@@ -453,4 +450,5 @@
 			
 		</graphic>Notice that, though the content of hello.zul is very similar to XUL<footnote>
 <para>http://xul.sourceforge.net/mozilla.html</para>
-</footnote>, it is actually written in ZUML. ZK Loader parses it into a valid HTML page which can be interpreted correctly by a regular browser, such as Internet Explorer and Mozilla Firefox. Refer to the Developer's Guide for more details.</para></sect1></chapter></book>
+</footnote>, it is actually written in ZUML. ZK Loader parses it into a valid HTML page which can be interpreted correctly by a regular browser, such as Internet Explorer and Mozilla Firefox. Refer to the Developer's Guide for more details.</para></sect1></chapter>
+</book>
