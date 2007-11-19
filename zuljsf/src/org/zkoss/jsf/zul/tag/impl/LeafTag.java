@@ -89,7 +89,6 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 	 */
 	public void setDynamicAttribute(String uri, String localName, Object value) 
 	throws JspException {
-		
 		if(uri==null || ZUL_JSF_NS.equals(uri)){
 			_dynamicAttrMap.put(localName, value);	
 			if("use".equals(localName)||"forward".equals(localName))
@@ -153,8 +152,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 			Object value = _dynamicAttrMap.get(prop);
 			/*Check ZK namespace*/
 			
-			if(!(value instanceof String)) throw new RuntimeException("attribute '"+prop+"' must be String");
-			if(value!=null && isValueReference((String)value)){
+			//if(!(value instanceof String)) throw new RuntimeException("attribute '"+prop+"' must be String");
+			if(value!=null && value instanceof String && isValueReference((String)value)){
 				if(prop.startsWith("on")){
 					throw new RuntimeException("can not set event listener to value binding!!!");
 				}
