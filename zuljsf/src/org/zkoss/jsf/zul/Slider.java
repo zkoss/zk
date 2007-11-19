@@ -88,9 +88,4 @@ import org.zkoss.zk.ui.Component;
 public class Slider extends BaseSlider {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Slider():use.newInstance());
-	}
-	
-	
 }

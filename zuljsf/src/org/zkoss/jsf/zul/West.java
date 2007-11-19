@@ -33,10 +33,4 @@ import org.zkoss.zk.ui.Component;
  */
 public class West extends BranchComponent {
 
-
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zkex.zul.West():use.newInstance());
-	}
-	
-	
 }

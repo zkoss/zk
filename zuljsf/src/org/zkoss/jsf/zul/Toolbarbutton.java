@@ -60,12 +60,9 @@ import org.zkoss.zk.ui.Component;
 public class Toolbarbutton extends BaseCommand {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Toolbarbutton():use.newInstance());
-	}
 	
-	protected void loadZULTree(StringWriter writer) throws IOException {
-		super.loadZULTree(writer);
+	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException {
+		super.loadZULTree(page,writer);
 		if(hasListener()){
 			org.zkoss.zul.Toolbarbutton comp = (org.zkoss.zul.Toolbarbutton)getZULComponent();
 			FacesContext context = FacesContext.getCurrentInstance();

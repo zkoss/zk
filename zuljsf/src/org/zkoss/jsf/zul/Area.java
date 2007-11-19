@@ -32,11 +32,5 @@ import org.zkoss.zk.ui.Component;
  *
  */
 public class Area extends BranchComponent {
-
-
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Area():use.newInstance());
-	}
-	
 	
 }

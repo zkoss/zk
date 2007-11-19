@@ -129,7 +129,7 @@ public class AbstractComponent extends UIComponentBase {
 	 * It will go through all ZULJSF Component Tree to initial ZUL Component of corresponding ZULJSFComponent. 
 	 * <br/>Note: Do nothing in default implementation.
 	 */
-	protected void loadZULTree(StringWriter writer) throws IOException {
+	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException {
 		// do nothing
 		
 	}

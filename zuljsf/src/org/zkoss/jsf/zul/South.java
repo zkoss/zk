@@ -34,9 +34,4 @@ import org.zkoss.zk.ui.Component;
 public class South extends BranchComponent {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zkex.zul.South():use.newInstance());
-	}
-	
-	
 }

@@ -34,9 +34,4 @@ import org.zkoss.zk.ui.Component;
 public class Listheader extends BranchComponent {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Listheader():use.newInstance());
-	}
-	
-	
 }

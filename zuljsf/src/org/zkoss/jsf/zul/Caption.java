@@ -34,9 +34,5 @@ import org.zkoss.zk.ui.Component;
 public class Caption extends BranchComponent {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Caption():use.newInstance());
-	}
-	
 	
 }

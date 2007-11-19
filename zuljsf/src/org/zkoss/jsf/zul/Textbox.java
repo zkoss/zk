@@ -88,8 +88,4 @@ import org.zkoss.zk.ui.Component;
 public class Textbox extends BranchInput{
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Textbox():use.newInstance());
-	}
-
 }

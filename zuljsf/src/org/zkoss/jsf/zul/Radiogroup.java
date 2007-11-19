@@ -95,9 +95,5 @@ import org.zkoss.zk.ui.Component;
 public class Radiogroup extends BaseRadiogroup {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Radiogroup():use.newInstance());
-	}
-	
-	
+
 }

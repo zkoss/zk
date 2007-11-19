@@ -59,6 +59,7 @@ import org.zkoss.zk.ui.Component;
 		for (int j = 0, len = body != null ? body.length(): 0; j < len;) {
 			int k = body.indexOf(MARK_PREFIX, j);
 			String txt =  null;
+			String cid = null;
 			LeafComponent child = null;
 			if (k >= 0) {
 				int l = k + MARK_PREFIX.length();
@@ -67,7 +68,8 @@ import org.zkoss.zk.ui.Component;
 					k = -1;
 				} else {
 					txt = body.substring(j, k).trim();
-					child = matchNextLeafComponent(it,(AbstractComponent)cinfo.getRegistedComponent(body.substring(l, m)));
+					cid = body.substring(l, m);
+					child = matchNextLeafComponent(it,(AbstractComponent)cinfo.getRegistedComponent(cid));
 					k = m + MARK_POSTFIX.length();
 				}
 			}

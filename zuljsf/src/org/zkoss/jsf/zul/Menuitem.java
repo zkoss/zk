@@ -59,12 +59,9 @@ import org.zkoss.zk.ui.Component;
 public class Menuitem extends BaseCommand {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Menuitem():use.newInstance());
-	}
 	
-	protected void loadZULTree(StringWriter writer) throws IOException {
-		super.loadZULTree(writer);
+	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException {
+		super.loadZULTree(page,writer);
 		if(hasListener()){
 			org.zkoss.zul.Menuitem comp = (org.zkoss.zul.Menuitem)getZULComponent();
 			FacesContext context = FacesContext.getCurrentInstance();

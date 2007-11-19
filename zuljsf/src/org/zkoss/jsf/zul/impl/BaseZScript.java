@@ -40,7 +40,7 @@ public class BaseZScript extends AbstractComponent {
 	private BranchComponent _parentcomp;
 	
 
-	public void loadZULTree(StringWriter writer) throws IOException {
+	public void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException {
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
 		

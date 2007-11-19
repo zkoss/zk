@@ -34,9 +34,6 @@ import org.zkoss.zk.ui.Component;
 public class Flash extends BranchComponent {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Flash():use.newInstance());
-	}
-	
+
 	
 }

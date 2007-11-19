@@ -87,8 +87,5 @@ import org.zkoss.zk.ui.Component;
 public class Doublebox extends BaseDoublebox{
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Doublebox():use.newInstance());
-	}
 
 }

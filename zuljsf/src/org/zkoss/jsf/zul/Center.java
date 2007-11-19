@@ -34,9 +34,5 @@ import org.zkoss.zk.ui.Component;
 public class Center extends BranchComponent {
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zkex.zul.Center():use.newInstance());
-	}
-	
 	
 }

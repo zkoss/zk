@@ -173,7 +173,7 @@ public class RootComponent extends AbstractComponent{
 					writer.write(getBodyContent());
 					for (Iterator kids = children.iterator(); kids.hasNext(); ){
 						AbstractComponent kid = (AbstractComponent) kids.next();
-			            kid.loadZULTree(writer);
+			            kid.loadZULTree(page,writer);
 			        }
 					if(inits!=null)inits.doAfterCompose(page);
 					Utils.adjustChildren(

@@ -100,7 +100,4 @@ import org.zkoss.zk.ui.Component;
  */
 public class Listbox extends BaseListbox {
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use == null ? new org.zkoss.zul.Listbox() : use.newInstance());
-	}
 }

@@ -87,10 +87,5 @@ import org.zkoss.zk.ui.Component;
  */
 public class Calendar extends BaseCalendar {
 
-
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Calendar():use.newInstance());
-	}
-	
 	
 }

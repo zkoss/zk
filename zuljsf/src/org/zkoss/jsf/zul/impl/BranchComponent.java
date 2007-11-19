@@ -42,10 +42,10 @@ abstract public class BranchComponent extends LeafComponent{
 	/**
 	 * Call by RootComponent or BranchComponent to load zk stuff and all it's children
 	 */
-	protected void loadZULTree(StringWriter writer) throws IOException{
+	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
-		initComponent();
+		initComponent(page);
 		
 		//load children
 		ComponentInfo ci = getComponentInfo();
@@ -53,7 +53,7 @@ abstract public class BranchComponent extends LeafComponent{
 		if(children!=null){
 			for (Iterator kids = children.iterator(); kids.hasNext(); ){
 				AbstractComponent kid = (AbstractComponent) kids.next();
-	            kid.loadZULTree(writer);
+	            kid.loadZULTree(page,writer);
 	        }
 			String bodyContent = getBodyContent();
 			Utils.adjustChildren(

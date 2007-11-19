@@ -87,8 +87,4 @@ import org.zkoss.zk.ui.Component;
 public class Decimalbox extends BaseDecimalbox{
 
 
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Decimalbox():use.newInstance());
-	}
-
 }

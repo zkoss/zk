@@ -69,7 +69,7 @@ abstract public class AbstractTag extends UIComponentBodyTag {
 	 * @return SKIP_BODY or EVAL_BODY_BUFFERED
 	 */
 	protected int getDoStartValue() throws JspException {
-		//if _comp==null , that means it is submit, _comp will restore suprpressed in state.
+		//if _comp==null , that means it is submit, _comp will restore suppressed in state.
 		if(_comp!=null){
 			_comp.setSuppressed(isSuppressed());
 		}
@@ -88,7 +88,7 @@ abstract public class AbstractTag extends UIComponentBodyTag {
 
 
 	/**
-	 * Override method, Set properties of ZULJSF Component
+	 * Override method, set properties of ZULJSF Component
 	 */
 	protected void setProperties(UIComponent comp) {
 		if(!(comp instanceof AbstractComponent)){
@@ -156,13 +156,13 @@ abstract public class AbstractTag extends UIComponentBodyTag {
 	}
 	
 	/**
-	 * Set String of BodyContent into instance of ZULJSF Component which associated to this Tag. 
+	 * Override method, set String of BodyContent into instance of ZULJSF Component which associated to this Tag. 
 	 * @see org.zkoss.jsf.zul.impl.AbstractComponent
 	 */
     public int doAfterBody() throws JspException {
         if (!isSkipBody() && getBodyContent() != null) {
             String value = getBodyContent().getString();
-            //if is supressed, then component's bodycontent will set by children.
+            //if is suppressed, then component's bodycontent will set by children.
             if (value != null && !isSuppressed()) {
             	value = value.trim();
             	AbstractComponent comp = (AbstractComponent) getComponentInstance();

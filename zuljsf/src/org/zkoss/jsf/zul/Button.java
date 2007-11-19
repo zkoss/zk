@@ -59,13 +59,9 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Button extends BaseCommand {
 
-
-	protected Component newComponent(Class use) throws Exception {
-		return (Component) (use==null?new org.zkoss.zul.Button():use.newInstance());
-	}
 	
-	protected void loadZULTree(StringWriter writer) throws IOException {
-		super.loadZULTree(writer);
+	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException {
+		super.loadZULTree(page,writer);
 		if(hasListener()){
 			//add onclick action
 			org.zkoss.zul.Button comp = (org.zkoss.zul.Button)getZULComponent();

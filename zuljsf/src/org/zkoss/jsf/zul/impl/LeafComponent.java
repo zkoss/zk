@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
@@ -87,7 +88,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	private Map _eventListenerMap = new LinkedHashMap();
     
 
-	private Composer composer = null;
+	private ComposerHandler composer = null;
 	
 	/** Returns the RootComponent that this Component belongs to.
 	 */
@@ -103,16 +104,15 @@ abstract public class LeafComponent extends AbstractComponent{
 	
 
 	/**
-	 * Creates a ZUL Component that is associated with this ZULJSF Component,
-	 * and returns the new ZUL Component (never null).
-	 * The deriving class must implement this method to create
-	 * the proper component, initialize it and return it.
-	 *
-	 * @param use the use ZUL Component class  
-	 * @return A ZUL Component
-	 * @throws Exception
+	 * get the component definition name of this component<br/>
+	 * The default implementation change the class name to lower char and return<br/> 
+	 * @return a ZUL component name
 	 */
-	abstract protected Component newComponent(Class use)throws Exception;
+	protected String getComponentDefName(){
+		String name = getClass().getSimpleName();
+		return name.toLowerCase();
+	}
+	
 
 
 	/** 
@@ -226,10 +226,10 @@ abstract public class LeafComponent extends AbstractComponent{
 	/**
 	 * Call by RootComponent or BranchComponent to load zk stuff. 
 	 */
-	protected void loadZULTree(StringWriter writer) throws IOException{
+	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
-		initComponent();
+		initComponent(page);
 		afterComposeComponent();//finish compose the component
 		setBodyContent(null); //clear
 	}
@@ -238,7 +238,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	 * Create ZUL Component, and then associate it to it's Parent Component or Page Component
 	 * Called by {@link #loadZULTree}.
 	 */
-	/*package*/ void initComponent() {
+	/*package*/ void initComponent(org.zkoss.zk.ui.Page page) {
 		
 		if(_rootcomp==null)
 			throw new IllegalStateException("Must be nested inside the page component: "+this);
@@ -248,18 +248,23 @@ abstract public class LeafComponent extends AbstractComponent{
 			_zulcomp.detach();
 			_zulcomp = null;
 		}
-		composer = parseAppliedComposer( _compAttrMap.get("apply"));
-		ComposerExt composerExt = 
-			composer instanceof ComposerExt ? (ComposerExt)composer: null;
 		
-		try {//TODO: use-class initial works...
-			_zulcomp = newComponent(_use!=null ? Classes.forNameByThread(_use) : null);
-			if(composerExt!=null)
-				composerExt.doBeforeComposeChildren(_zulcomp);
+		composer = new ComposerHandler(_compAttrMap.get("apply")); 
+		
+		try {
+			
+			//TODO: composer.doBeforeCompose(page, parentComponent, compInfo);
+			
+			String compName = getComponentDefName();
+			ComponentDefinition compdef = page.getComponentDefinition(compName, true);
+			if(compdef ==null){
+				throw new Exception("Component not found :"+compName);
+			}
+			_zulcomp = (Component) compdef.resolveImplementationClass(page, getUse()).newInstance();
+			composer.doBeforeComposeChildren(_zulcomp);
 		} catch (Exception e) {
 			try {
-				if(composerExt!=null)
-					composerExt.doCatch(e);
+				composer.doCatch(e);
 			} catch (Exception e1) {
 				StackTraceElement[] oriArr = e.getStackTrace();
 				StackTraceElement[] erArr = e1.getStackTrace();
@@ -270,13 +275,11 @@ abstract public class LeafComponent extends AbstractComponent{
 			}
 			throw new RuntimeException(e);
 		} finally {
-			if(composerExt!=null){
-				try {
-					composerExt.doFinally();
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}	
-			}
+			try {
+				composer.doFinally();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}	
 		}
 		
 		if(_idSet){
@@ -309,7 +312,7 @@ abstract public class LeafComponent extends AbstractComponent{
 		
 
 		if (_zulcomp == null)
-			throw new RuntimeException("newComponent() returns null");
+			throw new RuntimeException("no zul component be created.");
 
 		//setup EventListener and zul attribute from component attribute;
 		if(_compAttrMap!=null){
@@ -428,7 +431,9 @@ abstract public class LeafComponent extends AbstractComponent{
 		}
 	}
 	
-	
+	/**
+	 * return the life cycle only dynamic attribute, these attribute should not set to component
+	 */
 	private boolean isZULLifeCycleAttribute(String attnm){
 		if("apply".equals(attnm)) return true;
 		return false;
