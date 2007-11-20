@@ -325,7 +325,7 @@
 	<!-- auxheader -->
 	<xs:element name="auxheader" type="auxheaderType" />
 	<xs:complexType name="auxheaderType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="colspan" type="xs:integer" use="optional" />
 		<xs:attribute name="rowspan" type="xs:integer" use="optional" />
@@ -503,7 +503,7 @@
 	<!-- column -->
 	<xs:element name="column" type="columnType" />
 	<xs:complexType name="columnType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="sortDirection" type="sortDirectionAttrType" use="optional" />
 		<xs:attribute name="sortAscending" type="javaClassType" use="optional" />
@@ -1070,7 +1070,7 @@
 	<!-- listheader -->
 	<xs:element name="listheader" type="listheaderType" />
 	<xs:complexType name="listheaderType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="sort" type="sortAttrType" use="optional" />
 		<xs:attribute name="sortDirection" type="sortDirectionAttrType" use="optional" />
@@ -1637,7 +1637,7 @@
 	<!-- treecol -->
 	<xs:element name="treecol" type="treecolType" />
 	<xs:complexType name="treecolType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="maxlength" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
