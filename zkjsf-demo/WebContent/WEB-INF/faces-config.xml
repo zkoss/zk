@@ -64,10 +64,27 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<managed-bean-class>org.zkoss.jsfdemo.CommandBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	
+	<!-- JEFF ADDED -->
+	<managed-bean>
+		<managed-bean-name>ActionBean</managed-bean-name>
+		<managed-bean-class>org.zkoss.jsfdemo.test2.ActionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>MyApplierBean</managed-bean-name>
+		<managed-bean-class>org.zkoss.jsfdemo.test2.MyApplierBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<!-- JEFF ADDED END -->
 	<converter>
 		<converter-id>dateConverter</converter-id>
 		<converter-class>org.zkoss.jsfdemo.DateConverter</converter-class>
 	</converter>
+	<!-- JEFF ADDED -->
+	<converter>
+		<converter-id>MyConverter</converter-id>
+		<converter-class>org.zkoss.jsfdemo.test2.MyConverter</converter-class>
+	</converter>
+	<!-- JEFF ADED END -->
 	
 </faces-config>
