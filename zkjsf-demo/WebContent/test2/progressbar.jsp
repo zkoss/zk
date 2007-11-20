@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>If Unless</title>
+<title>Insert title here</title>
 </head>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
@@ -14,14 +14,17 @@
 	<h:form>
 		<z:page>
 			<z:window>
-				<z:zscript>
-					boolean dis = false;
-				</z:zscript>
-				<z:label value="Vote 1" if="${dis}" /> 
-				<z:label value="Vote 2" unless="${dis}" />
+				<z:progressmeter f:value="#{ActionBean.value}" id="pm" value="20" />
+				<z:button label="0" onClick="pm.value = 0" />
+				<z:button label="50" onClick="pm.value = 50" />
+				<z:button label="100" onClick="pm.value = 100" />
+					<h:commandButton id="submit" action="#{ActionBean.doSubmit}" value="Submit" />
+					<h:messages></h:messages>
 			</z:window>
 		</z:page>
 	</h:form>
 </f:view>
+Progress meter:
+
 </body>
 </html>
