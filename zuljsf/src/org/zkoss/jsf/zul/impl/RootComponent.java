@@ -171,8 +171,22 @@ public class RootComponent extends AbstractComponent{
 		public void destroy() {
 		}
 		public void service(org.zkoss.zk.ui.Page page) {
-			Initiators inits   = 
-				(Initiators) getFacesContext().getExternalContext().getRequestMap().get(Initiators.class.getName());
+			
+			FacesContext context = getFacesContext();
+			if(context == null){
+				throw new UiException("FacesContext is null");
+			}
+			Map requestMap = (Map)context.getExternalContext().getRequestMap();
+			
+			//handle component definition
+			Map compDefs = (Map)requestMap.get(BaseComponentDefinition.class.getName());
+			if(compDefs!=null){
+				for(Iterator it = compDefs.values().iterator();it.hasNext();)
+					((BaseComponentDefinition)it.next()).registerComponentDefinition(page);
+			}
+			
+			//handle initiator
+			Initiators inits   = (Initiators) requestMap.get(Initiators.class.getName());
 			if(inits!=null)inits.doInit(page);
 			try {
 				//load children
@@ -193,7 +207,7 @@ public class RootComponent extends AbstractComponent{
 					
 					
 					//a bug? if last child of page is inline, then Messagebox.show will cause error.
-					//so, add a unvisible label to work around this.
+					//so, add a un-visible label to work around this.
 					Label junk = new Label();
 					junk.setVisible(false);
 					
@@ -250,6 +264,8 @@ public class RootComponent extends AbstractComponent{
 
 
 	public void encodeBegin(FacesContext context) throws IOException {
+		if (!isRendered() || !isEffective())
+			return; //nothing to do
 		final ExternalContext exc = context.getExternalContext();
 		final HttpServletRequest request =
 			(HttpServletRequest)exc.getRequest();

@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
@@ -128,6 +129,8 @@ abstract public class LeafComponent extends AbstractComponent{
 	 * This method is called by JSF implementation, deriving class rarely need to invoke this method.
 	 */
 	public void encodeBegin(FacesContext context) throws IOException{
+		if (!isRendered() || !isEffective())
+			return; //nothing to do
 		super.encodeBegin(context);
 		final AbstractComponent ac =
 		(AbstractComponent)findAncestorWithClass(this, AbstractComponent.class);
@@ -138,7 +141,7 @@ abstract public class LeafComponent extends AbstractComponent{
 			_parentcomp = (BranchComponent)ac;
 			_rootcomp = _parentcomp.getRootComponent();
 		} else {
-			throw new IllegalStateException("Must be nested inside the page component: "+this);
+			throw new IllegalStateException("Must be nested inside the page component or branch component: "+this);
 		}
 		
 		//keep component tree structure for ZULJSF Component
@@ -391,7 +394,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	 * @throws NoSuchMethodException 
 	 * @throws ModificationException 
 	 */
-	private void evaluateDynaAttributes(final Component target,Map zulAttrMap) 
+	protected void evaluateDynaAttributes(final Component target,Map zulAttrMap) 
 	throws ModificationException, NoSuchMethodException{
 		
 		AnnotationHelper helper = null;
@@ -427,7 +430,12 @@ abstract public class LeafComponent extends AbstractComponent{
 			}
 			
 			if(!hitann && !isZULLifeCycleAttribute(attnm)){
-				Fields.setField(target, attnm, value, true);
+				if(target instanceof DynamicPropertied){
+					System.out.println("set dynamic:"+attnm+","+value);
+					((DynamicPropertied)target).setDynamicProperty(attnm,value);
+				}else{
+					Fields.setField(target, attnm, value, true);
+				}
 			}
 		}
 		
@@ -544,7 +552,7 @@ abstract public class LeafComponent extends AbstractComponent{
 	/**
 	 * set the attribute(name) of this component to value, the difference between this method and {@link #setAttributeValue}
 	 * is this method directly replace the attribute whether the attribute associate to a ValueBinding.
-	 *  Note: set attribute after {@link #loadZULTree(StringWriter)} doesn't affect the ZUL Component which is associated to this component.
+	 *  Note: set attribute after {@link #loadZULTree(org.zkoss.zk.ui.Page, StringWriter)} doesn't affect the ZUL Component which is associated to this component.
 	 * @param name attribute name of component
 	 * @param value value of attribute
 	 */

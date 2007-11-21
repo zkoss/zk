@@ -33,7 +33,7 @@ public class UiTag extends BranchTag {
 	
 
 	public UiTag() {
-		super("MacroUi");
+		super("Ui");
 	}
 	private String _tag = null;
 	

@@ -380,9 +380,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-type>org.zkoss.jsf.zul.West</component-type>
 		<component-class>org.zkoss.jsf.zul.West</component-class>
 	</component>
+
+	<!-- special component -->
 	<component>
-		<component-type>org.zkoss.jsf.zul.MacroUi</component-type>
-		<component-class>org.zkoss.jsf.zul.MacroUi</component-class>
+		<component-type>org.zkoss.jsf.zul.Ui</component-type>
+		<component-class>org.zkoss.jsf.zul.Ui</component-class>
+	</component>
+	<component>
+		<component-type>org.zkoss.jsf.zul.ComponentDefinition</component-type>
+		<component-class>org.zkoss.jsf.zul.ComponentDefinition</component-class>
 	</component>
 
 </faces-config>

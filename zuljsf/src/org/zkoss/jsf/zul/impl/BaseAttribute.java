@@ -54,6 +54,8 @@ public class BaseAttribute extends AbstractComponent {
 	 * This method is called by JSF implementation, deriving class rarely need to invoke this method.
 	 */
 	public void encodeBegin(FacesContext context) throws IOException{
+		if (!isRendered() || !isEffective())
+			return; //nothing to do
 		super.encodeBegin(context);
 		final AbstractComponent ac =
 		(AbstractComponent)findAncestorWithClass(this, AbstractComponent.class);

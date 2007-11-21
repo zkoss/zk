@@ -46,13 +46,13 @@ abstract public class BaseInit extends AbstractComponent {
 	 * method
 	 */
 	public void encodeEnd(FacesContext context) throws IOException {
-		//
+		if (!isRendered() || !isEffective())
+			return; //nothing to do
+		Map requestMap = context.getExternalContext().getRequestMap();
 
-		Map reqm = context.getExternalContext().getRequestMap();
-
-		Initiators inits = (Initiators) reqm.get(Initiators.class.getName());
+		Initiators inits = (Initiators) requestMap.get(Initiators.class.getName());
 		if (inits == null)
-			reqm.put(Initiators.class.getName(), inits = new Initiators());
+			requestMap.put(Initiators.class.getName(), inits = new Initiators());
 
 		Initiator init;
 		try {

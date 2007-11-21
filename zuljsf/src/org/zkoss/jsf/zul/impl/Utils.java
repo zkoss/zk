@@ -86,12 +86,10 @@ import org.zkoss.zk.ui.Component;
 						zulcomps = new Component[]{child.getZULComponent()};
 					}
 					boolean ipage = (parent == null || !(parent instanceof BranchComponent));
-					for(int i=zulcomps.length;i>=0;i--){
-						if(ipage){
-							inl.setPageBefore(page, zulcomps[0]);
-						}else{
-							((BranchComponent)parent).getZULComponent().insertBefore(inl, zulcomps[0]);
-						}
+					if(ipage){
+						inl.setPageBefore(page, zulcomps[0]);
+					}else{
+						((BranchComponent)parent).getZULComponent().insertBefore(inl, zulcomps[0]);
 					}
 				} else {
 					if (parent != null && parent instanceof BranchComponent){

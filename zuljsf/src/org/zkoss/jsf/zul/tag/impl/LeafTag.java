@@ -18,7 +18,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.jsf.zul.tag.impl;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -93,7 +92,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 			_dynamicAttrMap.put(localName, value);	
 			if("use".equals(localName)||"forward".equals(localName))
 				//should not happen!!
-				throw new JspException("please set 'use', 'forward' as a static attribute!!!");
+				throw new JspException("'use', 'forward' must be set by static attribute!!!");
 			if("id".equals(localName)){
 				this.setId((String)value);
 			}

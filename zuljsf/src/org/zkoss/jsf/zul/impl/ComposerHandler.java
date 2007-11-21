@@ -101,7 +101,6 @@ public class ComposerHandler{
 	public boolean doCatch(Throwable e){
 		boolean flag = false;
 		try {
-			
 			if(composerExt!=null)
 				flag = composerExt.doCatch(e);
 		} catch (Exception e1) {

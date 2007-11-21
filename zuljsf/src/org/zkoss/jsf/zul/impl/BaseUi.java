@@ -1,4 +1,4 @@
-/* BaseZScript.java
+/* BaseUi.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Aug 8, 2007 5:48:27 PM     2007, Created by Dennis.Chen
+		2007/11/21    2007, Created by Dennis.Chen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -18,15 +18,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.jsf.zul.impl;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 
 /**
@@ -34,10 +31,17 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * @author Dennis.Chen
  */
-public class BaseUi extends LeafComponent {
+public class BaseUi extends BranchComponent {
 
 	private String _tag;
+
 	private ComponentDefinition _compDef;
+	
+	/**
+	 * Components of this component,
+	 * if the definition of _tag set to inline, then _comps is the created components base on macroURI
+	 * if desn't inline, then _comps is the created HtmlMacroComponent.
+	 */
 	private Component[] _comps;
 	
 	public void setTag(String tag){
@@ -76,31 +80,42 @@ public class BaseUi extends LeafComponent {
 			if(_compDef ==null){
 				throw new RuntimeException("Component Definition not found :"+_tag);
 			}
-			
-			Object useClass = _compDef.getImplementationClass();
+			final Object useClass = _compDef.getImplementationClass();
+			final String use = getUse();
 			
 			if (_compDef.isInlineMacro()) {// the tag holds multiple components.
 				final Map props = new HashMap();
-				Component parent = this.getParentComponent().getZULComponent();
-				props.put("includer", parent);
-				
-				_compDef.evalProperties(props, page, parent);
+				BranchComponent parent = this.getParentComponent();
+				Component comp = null; 
+				if(parent!=null){
+					comp = parent.getZULComponent();
+					props.put("includer", comp);
+				}else{
+					props.put("includer", page);
+				}
+				_compDef.evalProperties(props, page, comp);
 				props.putAll(_compAttrMap);
-				if(this.getUse()!=null)props.put("use", this.getUse());
-				_comps = parent.getDesktop().getExecution().
+				if(use!=null)props.put("use", this.getUse());
+				_comps = page.getDesktop().getExecution().
 					createComponents(_compDef.getMacroURI(), props);
 			}else {// the tag hold only one component. 
-				if(super.getUse()!=null){
-					_comps = new Component []{_zulcomp=(Component)Class.forName(getUse()).newInstance()};
-				}else if(useClass instanceof String){
-					_comps = new Component []{_zulcomp=_compDef.newInstance(page,useClass.toString())};
+				if(use!=null){
+					_zulcomp=(Component)Class.forName(use).newInstance();
+				}else if(useClass instanceof Class){
+					//Class clazz = (Class)useClass;
+					//_zulcomp=(Component)clazz.newInstance();
+					_zulcomp=_compDef.newInstance(page,((Class)useClass).getName());
 				}else{
-					Class clazz = (Class)useClass;
-					_comps = new Component []{_zulcomp=(Component)clazz.newInstance()};
+					_zulcomp=_compDef.newInstance(page,useClass.toString());
 				}
+				
+				if(_zulcomp instanceof org.zkoss.zk.ui.AbstractComponent){
+					((org.zkoss.zk.ui.AbstractComponent)_zulcomp).setComponentDefinition(_compDef);
+				}
+				
+				_comps = new Component []{_zulcomp};
 				composer.doBeforeComposeChildren(_zulcomp);
 				_zulcomp.getDefinition().applyProperties(_zulcomp);
-				
 			}
 		} catch (Exception e) {
 			if(!_compDef.isInlineMacro()){
@@ -133,6 +148,8 @@ public class BaseUi extends LeafComponent {
 	
 	void afterComposeComponent() {
 		if(!_compDef.isInlineMacro()){
+			//it is HtmlMacroComponent, so we need to call afterComposeComponent,
+			//but we must skip evaluateDynaAttributes in afterComposeComponent
 			super.afterComposeComponent();
 		}
 	}
