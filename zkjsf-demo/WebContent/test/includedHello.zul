@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="included window" border="normal" width="200px">
-	${empty arg.message ? 'Hello, World!': arg.message}
+<window title="included window in zul" border="normal" width="200px">
+	A message
+	<button onClick='alert("hello again")' label="hello"/>
 </window>

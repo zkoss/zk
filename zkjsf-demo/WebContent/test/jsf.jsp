@@ -11,6 +11,7 @@
 				<f:verbatim>Click Button</f:verbatim>
 				<h:commandButton id="commitBtn" value="Commit" />
 		</h:panelGrid>
+		<jsp:directive.include file="subjsf.jsp"/>
 	</h:form>
 </f:view>
 </body>

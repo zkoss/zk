@@ -1,6 +1,6 @@
 <HTML>
 <HEAD>
-<title>Test</title>
+<title>BUG</title>
 </HEAD>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
@@ -8,19 +8,16 @@
 <body>
 <f:view>
 	<h:form id="helloForm">
+		#1832982 Output is disordered when use jsp:include
 		<z:page>
-			<z:div>
-			A Inlucde Test,<br/>
-			1==A Simple JSP<br/>
-			<z:include src="/test/empty.jsp"/>
-			2==A ZUL<br/>
-			<z:include src="/test/includedHello.zul"/>
-			3==A SubJSF, it will miss the position. a bug? wait for me find out it.<br/>
-			<!--  -->
-			</z:div>
+		<z:window title="outter" border="normal">
+		outter Before <br/>
+		<!-- jsp:directive.include file="1832982-2.jsp"/-->
+		<jsp:include page="1832982-2.jsp" />
+		outter After<br/>
+		</z:window>
 		</z:page>
 	</h:form>
-	
 </f:view>
 </body>
 </HTML>

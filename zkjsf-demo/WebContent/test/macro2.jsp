@@ -8,16 +8,11 @@
 <body>
 <f:view>
 	<h:form id="helloForm">
+		<z:component name="mywindow" extends="window" title="MyWindow" />
+		<z:component name="mybox" macroURI="macro-mybox.zul" label1="Dennis" />
 		<z:page>
-			<z:div>
-			A Inlucde Test,<br/>
-			1==A Simple JSP<br/>
-			<z:include src="/test/empty.jsp"/>
-			2==A ZUL<br/>
-			<z:include src="/test/includedHello.zul"/>
-			3==A SubJSF, it will miss the position. a bug? wait for me find out it.<br/>
-			<!--  -->
-			</z:div>
+			<z:ui tag=""
+			
 		</z:page>
 	</h:form>
 	

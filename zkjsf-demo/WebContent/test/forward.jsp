@@ -9,18 +9,15 @@
 <f:view>
 	<h:form id="helloForm">
 		<z:page>
-			<z:div>
-			A Inlucde Test,<br/>
-			1==A Simple JSP<br/>
-			<z:include src="/test/empty.jsp"/>
-			2==A ZUL<br/>
-			<z:include src="/test/includedHello.zul"/>
-			3==A SubJSF, it will miss the position. a bug? wait for me find out it.<br/>
-			<!--  -->
-			</z:div>
+			<z:window title="Apply Check Window" use="org.zkoss.jsfdemo.test.ForwardWindow">
+				<z:textbox/>
+				<z:button label="onOK" forward="onOK"/>
+				<z:button label="onCancel" forward="onCancel"/>
+			</z:window>
+			<h:commandButton id="submit" value="Submit" />
 		</z:page>
+		
 	</h:form>
-	
 </f:view>
 </body>
 </HTML>

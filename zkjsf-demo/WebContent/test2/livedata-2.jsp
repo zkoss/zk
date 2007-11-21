@@ -9,6 +9,12 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://www.zkoss.org/jsf/zul" prefix="z"%>
+<%
+String[] data = org.zkoss.jsfdemo.test2.TestDataGenerator.generateNumerousStrings(60);
+System.out.println(data.length);
+org.zkoss.zul.ListModel strset = new org.zkoss.zul.SimpleListModel(data);
+request.setAttribute("strset",strset);
+%>
 <body>
 <f:view>
 	<h:form>

@@ -9,13 +9,18 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://www.zkoss.org/jsf/zul" prefix="z"%>
+<%
+	//the scope of EL is not same in ZUL,
+	//in ZK JSF, you cann't access zscript variable in JSP EL
+	request.setAttribute("dis",new Boolean(false));
+%>
 <body>
 <f:view>
 	<h:form>
 		<z:page>
 			<z:window>
 				<z:zscript>
-					boolean dis = false;
+					boolean dis = true;
 				</z:zscript>
 				<z:label value="Vote 1" if="${dis}" /> 
 				<z:label value="Vote 2" unless="${dis}" />

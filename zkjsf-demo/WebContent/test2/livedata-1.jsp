@@ -16,11 +16,13 @@
 			<z:window title="Live Data Demo" border="normal">
 			<z:zscript>
 			<![CDATA[
-				String[] data = new String[30];
-				for(int j=0; j &lt; data.length; ++j) {
-					data[j] = "option "+j;
+				void doIt(){
+					String[] data = new String[30];
+					for(int j=0; j &lt; data.length; ++j) {
+						data[j] = "option "+j;
+					}
+					ListModel strset = new SimpleListModel(data);
 				}
-				ListModel strset = new SimpleListModel(data);
 			]]></z:zscript>
 			<z:listbox id="list" width="200px" rows="10" model="${strset}">
 				<z:listhead>
