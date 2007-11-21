@@ -42,8 +42,12 @@ public interface Function {
 	public Class getReturnType();
 	/** Invokes this method with the specified arguments.
 	 *
+	 * @param obj the object the underlying method is invoked from.
+	 * It is always null if this function is invoked in an XEL expression.
+	 * It is reserved for more sophisticated expressions, such as
+	 * ZK Spreadsheet's expressions.
 	 * @param args the arguments used for the method call.
-	 * If null, Object[0] is assumed.
+	 * If null, an Object array with zero length is assumed.
 	 */
 	public Object invoke(Object obj, Object[] args) throws Exception;
 
