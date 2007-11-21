@@ -1,9 +1,15 @@
 ZK JSF Components 1.0.0
 * Features:
   1819702 : ZK JSF supports borderlayout, north, auxhead and others
+  1835683 : JSF:Support Custom Component Definition
+  1835684 : JSF:Support Macro Component
+  1835688 : JSF:Support Initiator
   
 * Bugs:
-    
+   
+  1832862 : Content disappear in JSFComponent   
+  1834391 : [JSF] Can not use forward attribute in button
+	
 * Upgrade Notes:
 
 

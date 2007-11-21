@@ -1,4 +1,13 @@
 	--------
+ZK Seam 0.8.1
+* Features:
+  1830231 : Upgrade zkSeam to follow ZK 3.0
+  
+* Bugs:
+  
+* Upgrade Notes:
+
+	--------
 ZK Seam 0.8.0
 * Features:
   Provide a mechanism to integrate ZK with Seam, Such that developer can use Seam's context and other convenient functions in ZK.
