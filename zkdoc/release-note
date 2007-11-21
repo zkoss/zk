@@ -25,6 +25,7 @@ ZK 3.0.1
   1832214: Borderlayout : isOpen return true while collapse region
   1831540: Tabbox setSelectedIndex() should not fire onSelect event
   1832359: A wrong height of grid&listbox when add header dynamically
+  1826753: Bandbox.setButtonVisible does not always work
 
 	--------
 ZK 3.0.0
