@@ -9,10 +9,12 @@
 <f:view>
 	<h:form id="helloForm">
 		<z:page>
-			<z:window title="Apply Check Window" use="org.zkoss.jsfdemo.test.ForwardWindow">
+			<z:window title="Apply Check Window" use="org.zkoss.jsfdemo.test.ForwardWindow" onFf='alert("FF")'>
 				<z:textbox/>
 				<z:button label="onOK" forward="onOK"/>
 				<z:button label="onCancel" forward="onCancel"/>
+				<z:button label="onFf" forward="onFf" onClick=""/>
+				<z:button label="onFf and Click" forward="onFf" onClick='alert("Bb")'/>
 			</z:window>
 			<h:commandButton id="submit" value="Submit" />
 		</z:page>

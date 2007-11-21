@@ -10,7 +10,9 @@
 	<h:form id="helloForm">
 		<z:page>
 			<z:button label="click me"/>
-			<z:ui tag="window" title="Macro Window" width="300px"/>
+			<z:ui tag="window" title="Macro Window" width="300px" border="normal">
+				<z:button label="inner" onClick='alert("inner")'/>
+			</z:ui>
 			<z:ui tag="button" label="click me 1" onClick="doClick()"/>
 			<z:window title="W" border="normal">
 			<z:ui tag="button" label="click me 2" onClick="doClick()"/>
