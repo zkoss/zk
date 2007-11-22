@@ -36,7 +36,7 @@ public class ListfootDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Listfoot self = (Listfoot)comp;
 		wh.write("<tr id=\"").write(self.getUuid()).write("\" ")
-		.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
+		.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(" z.type=\"zul.zul.Ftrs\">");
 		wh.writeChildren(self);
 		wh.writeln("</tr>");
 	}

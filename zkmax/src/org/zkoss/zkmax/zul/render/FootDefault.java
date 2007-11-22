@@ -40,7 +40,7 @@ public class FootDefault implements ComponentRenderer {
 		final Foot self = (Foot) comp;
 		final String uuid = self.getUuid();
 		wh.write("<tr id=\"").write(uuid).write("\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(" z.type=\"zul.zul.Ftrs\">");
 		wh.writeChildren(self);
 		wh.writeln("</tr>");
 	}
