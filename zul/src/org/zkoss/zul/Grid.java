@@ -21,6 +21,7 @@ package org.zkoss.zul;
 import java.util.Collection;
 import java.util.AbstractCollection;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Iterator;
@@ -497,7 +498,8 @@ public class Grid extends XulElement {
 				if (max >= newsz) max = newsz - 1;
 				if (min < 0) min = 0;
 
-				for (Iterator it = _rows.getChildren().listIterator(min);
+				//unloadRow() might detach and insert row into _rows, must make a copy for iterate.
+				for (Iterator it = new ArrayList(_rows.getChildren()).listIterator(min);
 				min <= max && it.hasNext(); ++min) {
 					final Row row = (Row)it.next();
 					if (row.isLoaded()) {

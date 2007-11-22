@@ -1226,7 +1226,8 @@ public class Listbox extends XulElement {
 				if (max >= newsz) max = newsz - 1;
 				if (min < 0) min = 0;
 
-				for (Iterator it = _items.listIterator(min);
+				//unloadItem() might detach item and add new item, _items must make a copy first
+				for (Iterator it = new ArrayList(_items).listIterator(min);
 				min <= max && it.hasNext(); ++min) {
 					final Listitem item = (Listitem)it.next();
 					if (item.isLoaded()) {
