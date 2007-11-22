@@ -29,6 +29,7 @@ ZK 3.0.1
   1836257: A wrong stripe when listitem is invisible
   1829640: drag-n-drop does not work in Firefox
   1826808: Drag and Drop performance
+  1826736: First column disappear when sort Listbox
 
 	--------
 ZK 3.0.0
