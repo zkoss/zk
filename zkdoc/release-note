@@ -4,6 +4,7 @@ ZK 2.4.2
 
 * Bugs:
   1830311: Cannot display Japanese messages
+  1835878: select / colapse of a Treeitem scrolls tree to right.
 
 	--------
 ZK 2.4.1
