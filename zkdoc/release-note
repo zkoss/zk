@@ -26,6 +26,9 @@ ZK 3.0.1
   1831540: Tabbox setSelectedIndex() should not fire onSelect event
   1832359: A wrong height of grid&listbox when add header dynamically
   1826753: Bandbox.setButtonVisible does not always work
+  1836257: A wrong stripe when listitem is invisible
+  1829640: drag-n-drop does not work in Firefox
+  1826808: Drag and Drop performance
 
 	--------
 ZK 3.0.0
