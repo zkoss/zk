@@ -605,7 +605,8 @@ zk.Selectable.prototype = {
 				el.innerHTML = " ";
 				el.onfocus = zkSel.cmonfocus;
 				el.onblur = zkSel.cmonblur;
-				row.cells[0].appendChild(el);
+				if (row.cells[0].childNodes.length) row.cells[0].insertBefore(el, row.cells[0].childNodes[0]); 
+				else row.cells[0].appendChild(el);
 			}
 		} else {
 			zk.remove(el);

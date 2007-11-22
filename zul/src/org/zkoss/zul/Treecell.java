@@ -142,16 +142,22 @@ public class Treecell extends LabelImageElement {
 			final Treeitem item = getTreeitem();
 			final Tree tree = getTree();
 			final StringBuffer sb = new StringBuffer(80);
-			if (tree != null && tree.isCheckmark()) {
-				sb.append("<input type=\"")
-					.append(tree.isMultiple() ? "checkbox": "radio")
-					.append('"');
-				if (item.isSelected())
-					sb.append(" checked=\"checked\"");
-
-				//NOTE: use Treerow's uuid! NOT Treeitem's!
-				sb.append(" id=\"").append(getParent().getUuid())
-					.append("!cm\" z.type=\"Tcfc\"/>");
+			if (tree != null) {
+				if (tree.isCheckmark()) {
+					sb.append("<input type=\"")
+						.append(tree.isMultiple() ? "checkbox": "radio")
+						.append('"');
+					if (item.isSelected())
+						sb.append(" checked=\"checked\"");
+	
+					//NOTE: use Treerow's uuid! NOT Treeitem's!
+					sb.append(" id=\"").append(getParent().getUuid())
+						.append("!cm\" z.type=\"Tcfc\"/>");
+				} else if (item.isFocusRequired()) {
+					//NOTE: use Treerow's uuid! NOT Treeitem's!
+					sb.append("<a href=\"javascript:;\" id=\"").append(getParent().getUuid())
+						.append("!sel\" z.type=\"Tcfc\">  </a>");
+				}
 			}
 
 			final Treeitem[] pitems = getTreeitems(item);
@@ -185,16 +191,7 @@ public class Treecell extends LabelImageElement {
 	 * is not first column. Called only by treecell.jsp.
 	 */
 	public String getColumnHtmlPostfix() {
-		final Treeitem item = getTreeitem();
-		final Tree tree = getTree();
-		if (tree != null && !tree.isCheckmark() && isFirstColumn()
-		&& item.isFocusRequired()) {
-			//NOTE: use Treerow's uuid! NOT Treeitem's!
-			return "<a href=\"javascript:;\" id=\"" + getParent().getUuid()
-				+ "!sel\" z.type=\"Tcfc\">  </a>";
-		} else { 
 			return null;
-		}
 	}
 	/** Returns whether this is the first column. */
 	private boolean isFirstColumn() {
