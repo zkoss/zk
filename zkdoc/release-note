@@ -1,4 +1,11 @@
 	--------
+ZK 2.4.2
+* Features:
+
+* Bugs:
+  1830311: Cannot display Japanese messages
+
+	--------
 ZK 2.4.1
 * Features:
   1735610: Translate messages to Catalan. Thank Xavier Covas O'Ryan (xcovas@conselldemallorca.net) for his contribution.
