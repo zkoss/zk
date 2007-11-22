@@ -702,7 +702,9 @@ zk.Selectable.prototype = {
 				el.innerHTML = " ";
 				el.onfocus = zkSel.cmonfocus;
 				el.onblur = zkSel.cmonblur;
-				$e(row.cells[0].id+ "!cave").appendChild(el);
+				var cave = $e(row.cells[0].id+ "!cave");
+				if (cave.childNodes.length) cave.insertBefore(el, cave.childNodes[0]); 
+				else cave.appendChild(el);
 			}
 		} else {
 			zk.remove(el);

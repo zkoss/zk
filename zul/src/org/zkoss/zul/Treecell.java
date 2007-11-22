@@ -141,18 +141,23 @@ public class Treecell extends LabelImageElement {
 			final Treeitem item = getTreeitem();
 			final Tree tree = getTree();
 			final StringBuffer sb = new StringBuffer(80);
-			if (tree != null && tree.isCheckmark()) {
-				sb.append("<input type=\"")
-					.append(tree.isMultiple() ? "checkbox": "radio")
-					.append('"');
-				if (item.isSelected())
-					sb.append(" checked=\"checked\"");
+			if (tree != null) {
+				if (tree.isCheckmark()) {
+					sb.append("<input type=\"")
+						.append(tree.isMultiple() ? "checkbox": "radio")
+						.append('"');
+					if (item.isSelected())
+						sb.append(" checked=\"checked\"");
 
-				//NOTE: use Treerow's uuid! NOT Treeitem's!
-				sb.append(" id=\"").append(getParent().getUuid())
-					.append("!cm\" z.type=\"Tcfc\"/>");
+					//NOTE: use Treerow's uuid! NOT Treeitem's!
+					sb.append(" id=\"").append(getParent().getUuid())
+						.append("!cm\" z.type=\"Tcfc\"/>");
+				} else if (item.isFocusRequired()) {
+					//NOTE: use Treerow's uuid! NOT Treeitem's!
+					sb.append("<a href=\"javascript:;\" id=\"").append(getParent().getUuid())
+						.append("!sel\" z.type=\"Tcfc\">  </a>");
+				}
 			}
-
 			String iconScls = null;
 			if (tree != null)
 				iconScls = tree.getIconSclass();
@@ -178,7 +183,7 @@ public class Treecell extends LabelImageElement {
 						isLastChild(item) ? LAST: TEE, false);
 			}
 			return sb.toString();
-		} else {
+		} else {			
 			//To make the tree's height more correct, we have to generate &nbsp;
 			//for empty cell. Otherwise, IE will make the height too small
 			final boolean empty = getImage() == null && getLabel().length() == 0
@@ -190,16 +195,7 @@ public class Treecell extends LabelImageElement {
 	 * is not first column. Called only by treecell.jsp.
 	 */
 	public String getColumnHtmlPostfix() {
-		final Treeitem item = getTreeitem();
-		final Tree tree = getTree();
-		if (tree != null && !tree.isCheckmark() && isFirstColumn()
-		&& item.isFocusRequired()) {
-			//NOTE: use Treerow's uuid! NOT Treeitem's!
-			return "<a href=\"javascript:;\" id=\"" + getParent().getUuid()
-				+ "!sel\" z.type=\"Tcfc\">  </a>";
-		} else { 
-			return null;
-		}
+		return null;
 	}
 	/** Returns whether this is the first column. */
 	private boolean isFirstColumn() {

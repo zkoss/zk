@@ -155,17 +155,21 @@ public class Listcell extends LabelImageElement {
 	public String getColumnHtmlPrefix() {
 		final Listitem item = getListitem();
 		final Listbox listbox = getListbox();
-		if (listbox != null && listbox.isCheckmark()
-		&& item.getFirstChild() == this) {
-			final StringBuffer sb = new StringBuffer(64)
-				.append("<input type=\"")
-				.append(listbox.isMultiple() ? "checkbox": "radio")
-				.append('"');
-			if (item.isSelected())
-				sb.append(" checked=\"checked\"");
+		if (listbox != null && item.getFirstChild() == this) {
+			final StringBuffer sb = new StringBuffer(64);
+			if (listbox.isCheckmark()) {
+				sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
+					.append('"');
+				if (item.isSelected())
+					sb.append(" checked=\"checked\"");
 
-			return sb.append(" id=\"").append(item.getUuid())
-				.append("!cm\" z.type=\"Lcfc\"/>").toString();
+				sb.append(" id=\"").append(item.getUuid())
+					.append("!cm\" z.type=\"Lcfc\"/>");
+			} else if (isFocusRequired(listbox, item)) {
+				sb.append("<a href=\"javascript:;\" id=\"").append(item.getUuid())
+					.append("!sel\" z.type=\"Lcfc\"> </a>");				
+			}
+			return sb.toString();
 		} else {
 			//To make the listbox's height more correct, we have to generate &nbsp;
 			//for empty cell. Otherwise, IE will make the height too small
@@ -178,16 +182,7 @@ public class Listcell extends LabelImageElement {
 	 * is not first column. Called only by listcell.jsp.
 	 */
 	public String getColumnHtmlPostfix() {
-		final Listitem item = getListitem();
-		final Listbox listbox = getListbox();
-		if (listbox != null && !listbox.isCheckmark()
-		&& item.getFirstChild() == this
-		&& isFocusRequired(listbox, item)) {
-			return "<a href=\"javascript:;\" id=\"" + item.getUuid()
-				+ "!sel\" z.type=\"Lcfc\"> </a>";
-		} else {
-			return null;
-		}
+		return null;
 	}
 	/** Returns whether this cell requires focus.
 	 */
