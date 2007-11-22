@@ -1,6 +1,8 @@
 	--------
 ZK 3.0.1
 * Features:
+  1836202: A generic composer to realize MVC approach more easily
+  1836198: A generic event listener which invokes corresponding method    
   1829124: configure prefix to the URI on zkau browser resources
   1831559: A way to set a wrong value for textbox/Intbox...
   1832165: BorderLayout support onSize event
