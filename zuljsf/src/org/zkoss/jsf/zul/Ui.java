@@ -19,8 +19,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.jsf.zul;
 
 import org.zkoss.jsf.zul.impl.BaseUi;
-import org.zkoss.jsf.zul.impl.BranchComponent;
-import org.zkoss.zk.ui.Component;
 
 /**
  * MacroUi is a JSF component implementation for macro component 
@@ -36,6 +34,10 @@ import org.zkoss.zk.ui.Component;
  * </code>
  * <p/>
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
+ * <p/>
+ * Note:  
+ * Ui doesn't support features such as ActionSource, ValueHolder, EditableValueHolder etc.
+ * You should not binding any JSF attribute(such as f:value, f:actionPerform etc.) on a Ui because it is only a template. 
  * 
  * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   

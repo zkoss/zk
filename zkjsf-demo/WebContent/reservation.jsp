@@ -1,7 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-
+<%
+	//prevent cache.
+	response.addHeader("Pragma","no-cache");
+	response.addHeader("Cache-Control","no-cache");
+	response.addHeader("Cache-Control","no-store");
+%>
 <HTML>
-
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 <TITLE>Reservation of Conference Room</TITLE>
