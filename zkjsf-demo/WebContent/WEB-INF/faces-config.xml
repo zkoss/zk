@@ -64,6 +64,30 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<managed-bean-class>org.zkoss.jsfdemo.CommandBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+
+
+
+	<!--bean for test-->
+	<managed-bean>
+		<managed-bean-name>testInputboxBean</managed-bean-name>
+		<managed-bean-class>org.zkoss.jsfdemo.test.InputboxBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>testListboxBean</managed-bean-name>
+		<managed-bean-class>org.zkoss.jsfdemo.test.ListboxBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>testTreeBean</managed-bean-name>
+		<managed-bean-class>org.zkoss.jsfdemo.test.TreeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>testCommandBean</managed-bean-name>
+		<managed-bean-class>org.zkoss.jsfdemo.test.CommandBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	<!-- JEFF ADDED -->
 	<managed-bean>
 		<managed-bean-name>ActionBean</managed-bean-name>
