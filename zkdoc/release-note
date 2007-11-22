@@ -34,6 +34,7 @@ ZK 3.0.1
   1826736: First column disappear when sort Listbox
   1835878: select / colapse of a Treeitem scrolls tree to right.
   1834900: Tree paging on Tree's Treechildren
+  1826700: Update content of treeitem from treemodel
 
 	--------
 ZK 3.0.0
