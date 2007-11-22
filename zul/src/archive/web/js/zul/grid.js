@@ -400,8 +400,44 @@ zkGrw = {}; //Row
 zkGrw.init = function (cmp) {
 	zkGrw.stripe(cmp);
 };
+zkGrw.initdrag = function (cmp) {
+	if (zk.gecko) {
+		zk.listen(cmp, "mouseover", zkGrw.ondragover);
+		zk.listen(cmp, "mouseout",  zkGrw.ondragout);	
+	}
+};
+zkGrw.cleandrag = function (cmp) {
+	if (zk.gecko) {
+		zk.unlisten(cmp, "mouseover", zkGrw.ondragover);
+		zk.unlisten(cmp, "mouseout",  zkGrw.ondragout);	
+	}
+};
+zkGrw.ondragover = function (evt) {
+	var target = Event.element(evt);
+	var tag = $tag(target);
+	if (tag != "INPUT" && tag != "TEXTAREA") {
+		var p = $parentByType(target, "Gcl");
+		if (p) $e($uuid(p) + "!cell").style.MozUserSelect = "none";
+	}
+};
+zkGrw.ondragout = function (evt) {
+	var target = Event.element(evt);
+	var p = $parentByType(target, "Gcl");
+	if (p) $e($uuid(p) + "!cell").style.MozUserSelect = "";	
+};
 zkGrw.cleanup = function (cmp) {
 	zkGrw.stripe(cmp, true);
+};
+zkGrw.setAttr = function (cmp, nm, val) {
+	if (nm == "visibility") { // Bug #1836257
+		var grid = $parentByType(cmp, "Grid");
+		var meta = zkau.getMeta(grid);
+		if (meta) {
+			if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
+			setTimeout(meta.fixedStripe, 0);
+		}
+	}
+	return false;
 };
 zkGrw.stripe = function (cmp, isClean) {
 	var grid = $parentByType(cmp, "Grid");

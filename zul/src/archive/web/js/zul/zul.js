@@ -53,8 +53,45 @@ zulHdrs.setAttr = function (cmp, nm, val) {
 	}
 	return true;
 };
+zulHdrs.ondragover = function (evt) {
+	var target = Event.element(evt);
+	var tag = $tag(target);
+	if (tag != "INPUT" && tag != "TEXTAREA") {
+		var el = target;
+		for (; el; el = $parent(el)) {
+		var type = $type(el);
+		if (type == "Lhr" || type == "Col" || type == "Tcol" || type == "Ftr")
+			break;
+		}
+		if (el) $e(el.id + "!cave").style.MozUserSelect = "none";
+	}
+};
+zulHdrs.ondragout = function (evt) {
+	var target = Event.element(evt);
+	var el = target;
+	for (; el; el = $parent(el)) {
+		var type = $type(el);
+		if (type == "Lhr" || type == "Col" || type == "Tcol" || type == "Ftr")
+			break;
+	}
+	if (el) $e(el.id + "!cave").style.MozUserSelect = "";
+};
+zulHdrs.initdrag = function (cmp) {
+	if (zk.gecko) {
+		zk.listen(cmp, "mouseover", zulHdrs.ondragover);
+		zk.listen(cmp, "mouseout",  zulHdrs.ondragout);	
+	}
+};
+zulHdrs.cleandrag = function (cmp) {
+	if (zk.gecko) {
+		zk.unlisten(cmp, "mouseover", zulHdrs.ondragover);
+		zk.unlisten(cmp, "mouseout",  zulHdrs.ondragout);	
+	}
+};
 zulHdr = {}; //listheader
 zulHdr._szs = {};
+zulHdr.initdrag = zulHdrs.initdrag;
+zulHdr.cleandrag = zulHdrs.cleandrag;
 zulHdr.init = function (cmp) {
 	zulHdr._show(cmp);
 	zk.listen(cmp, "click", function (evt) {zulHdr.onclick(evt, cmp);});
@@ -352,3 +389,9 @@ zulHdr._renCls = function (cmp, ext) {
 	if (ext) clsnm += '-' + ext;
 	if (clsnm != cmp.className) cmp.className = clsnm;
 };
+zkFtr = {};
+zkFtr.initdrag = zulHdrs.initdrag;
+zkFtr.cleandrag = zulHdrs.cleandrag;
+zkFtrs = {};
+zkFtrs.initdrag = zulHdrs.initdrag;
+zkFtrs.cleandrag = zulHdrs.cleandrag;

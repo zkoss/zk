@@ -1074,3 +1074,26 @@ span.splitter-os-btn-b {
 	width: 50px; min-height: 8px; height: 8px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
 }
+<%-- ZK Drag-Drop --%>
+span.drop-allow, span.drop-disallow {
+	background-repeat: no-repeat;
+	display:-moz-inline-box; vertical-align:top;
+	display:inline-block;
+	width: 16px; min-height: 16px; height: 16px;
+}
+span.drop-allow {
+	background-image: url(${c:encodeURL('~./zul/img/grid/drop-yes.gif')});
+}
+span.drop-disallow {
+	background-image: url(${c:encodeURL('~./zul/img/grid/drop-no.gif')});
+}
+div.drop-ghost {
+	border:1px solid #6593CF;
+}
+div.drop-content {
+	background-image: url(${c:encodeURL('~./zul/img/grid/drop-bg.gif')});	
+	width:120px;height:18px;
+	padding:2px;
+	font-size:13px;
+	font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+}
