@@ -128,7 +128,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 			var r = row.nextSibling;
 			if ($tag(r) == "TR") {
 				var pid = getZKAttr(r, "gpitem");
-				if (uuid != pid) return row; //not my child
+				if (!uuid || uuid != pid) return row; //not my child. Bug #1834900.
 
 				if (!silent)
 					r.style.display = toOpen ? "": "none";
