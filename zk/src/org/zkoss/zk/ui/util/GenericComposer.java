@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkforge.resort;
+package org.zkoss.zk.ui.util;
 
 import java.lang.reflect.Method;
 
