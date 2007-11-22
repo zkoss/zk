@@ -88,9 +88,9 @@ abstract public class BaseDatebox extends BranchInput {
 				_formater = new SimpleDateFormat();
 			}
 			if(_format==null){
-				_formater.applyLocalizedPattern("yyyy/MM/dd");
+				_formater.applyPattern("yyyy/MM/dd");
 			}else{
-				_formater.applyLocalizedPattern(_format);
+				_formater.applyPattern(_format);
 			}
 		}
 		/* (non-Javadoc)

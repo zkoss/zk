@@ -86,9 +86,9 @@ abstract public class BaseTimebox extends BranchInput {
 				_formater = new SimpleDateFormat();
 			}
 			if(_format==null){
-				_formater.applyLocalizedPattern("HH:mm");
+				_formater.applyPattern("HH:mm");
 			}else{
-				_formater.applyLocalizedPattern(_format);
+				_formater.applyPattern(_format);
 			}
 		}
 		/* (non-Javadoc)

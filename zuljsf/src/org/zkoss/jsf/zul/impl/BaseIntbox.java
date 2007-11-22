@@ -93,9 +93,9 @@ abstract public class BaseIntbox extends BranchInput {
 				_formater = new DecimalFormat();
 			}
 			if(_format==null){
-				_formater.applyLocalizedPattern("#0");
+				_formater.applyPattern("#0");
 			}else{
-				_formater.applyLocalizedPattern(_format);
+				_formater.applyPattern(_format);
 			}
 		}
 
