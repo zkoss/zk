@@ -357,7 +357,7 @@ zk.disableSelection(document.body); // Bug #1820433
     if(this.options.ghosting) {
 //Tom M. Yeh, Potix: ghosting is controllable
 var ghosting = true;
-if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, true);
+if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, true, event);
 if (ghosting) {
       this._clone = this.element.cloneNode(true);
 this.z_orgpos = this.element.style.position; //Tom M. Yeh, Potix: Bug 1514789
@@ -395,9 +395,8 @@ if (this.z_orgpos != 'absolute')
     Droppables.show(pointer, this.element);
 */
     Draggables.notify('onDrag', this, event);
-    
-    this.draw(pointer);
-    if(this.options.change) this.options.change(this, pointer); //Tom M Yeh, Potix: add pointer
+    this.draw(pointer, event);
+    if(this.options.change) this.options.change(this, pointer, event); //Tom M Yeh, Potix: add pointer
     
     if(this.options.scroll) {
       this.stopScrolling();
@@ -422,7 +421,7 @@ if (this.z_orgpos != 'absolute')
     
     // fix AppleWebKit rendering
     if(navigator.appVersion.indexOf('AppleWebKit')>0) window.scrollBy(0,0);
-    
+	
     Event.stop(event);
   },
   
@@ -453,7 +452,7 @@ this.element.style.position = this.z_orgpos;
 
 	var pointer = [Event.pointerX(event), Event.pointerY(event)]; //Tom M. Yeh, Potix: add pointer
     var revert = this.options.revert;
-    if(revert && typeof revert == 'function') revert = revert(this.element, pointer); //Tom M. Yeh, Potix: add pointer
+    if(revert && typeof revert == 'function') revert = revert(this.element, pointer, event); //Tom M. Yeh, Potix: add pointer
     
     var d = this.currentDelta();
     if(revert && this.options.reverteffect) {
@@ -468,7 +467,7 @@ this.element.style.position = this.z_orgpos;
 
     if(this.options.endeffect) 
       this.options.endeffect(this.element, event); //Tom M. Yeh, Potix: add event
-      
+      	
     Draggables.deactivate(this);
 /* Tom M. Yeh, Potix: remove unused codes
     Droppables.reset();
@@ -488,7 +487,7 @@ this.element.style.position = this.z_orgpos;
     Event.stop(event);
   },
   
-  draw: function(point) {
+  draw: function(point, event) {
     var pos = Position.cumulativeOffset(this.element);
     if(this.options.ghosting) {
       var r   = Position.realOffset(this.element);
@@ -528,7 +527,7 @@ if (this.z_scrl) {
     var style = this.element.style;
 //Tom M. Yeh, Potix: support function constraint
 if (typeof this.options.constraint == 'function') {
-	var np = this.options.constraint(this, p); //return null or [newx, newy]
+	var np = this.options.constraint(this, p, event); //return null or [newx, newy]
 	if (np) p = np;
 	style.left = p[0] + "px";
 	style.top  = p[1] + "px";

@@ -28,7 +28,7 @@ if (!window.Droppable_effect) { //define it only if not customized
 			zk.restoreStyle(e, "backgroundColor");
 		else {
 			zk.backupStyle(e, "backgroundColor");
-			e.style.backgroundColor = "#B8B8C0";
+			e.style.backgroundColor = "#80ADE7";			
 		}
 	};
 }
@@ -558,7 +558,6 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 
 	fn = zkau.cmd1[cmd];
 	if (fn) {
-//		zk.debug("cmd: "+cmd+", "+uuid+", "+dt1+", "+dt2);
 		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4);
 		return;
 	}
@@ -1459,14 +1458,17 @@ zkau.initdrag = function (n) {
 		starteffect: zkau.closeFloats,
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true,
+		constraint: zkau._constraint,
 		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag
 	});
+	zk.eval(n, "initdrag");
 };
 zkau.cleandrag = function (n) {
 	if (zkau._drags[n.id]) {
 		zkau._drags[n.id].destroy();
 		delete zkau._drags[n.id];
 	}
+	zk.eval(n, "cleandrag");
 };
 zkau.initdrop = function (n) {
 	zkau._drops.unshift(n); //last created, first matched
@@ -1478,18 +1480,31 @@ zkau.cleandrop = function (n) {
 zkau._ignoredrag = function (el, pointer) {
 	return zk.eval(el, "ignoredrag", null, pointer);
 };
-zkau._dragging = function (dg, pointer) {
-	var e = zkau._getDrop(dg.z_elorg || dg.element, pointer);
+zkau._dragging = function (dg, pointer, evt) {
+	var target = Event.element(evt);	
+	if (target == dg.zk_lastTarget) return;
+		
+	var e = zkau._getDrop(dg.z_elorg || dg.element, pointer, evt);
+	var flag = e && e == dg.zk_lastDrop;
 	if (!e || e != dg.zk_lastDrop) {
 		zkau._cleanLastDrop(dg);
-		if (e) {
+		if (e) {			
 			dg.zk_lastDrop = e;
 			Droppable_effect(e);
+			flag = true;
 		}
 	}
+	if (flag && dg.element._img) {
+		if (dg.element._img.className != "drop-allow")
+			dg.element._img.className = "drop-allow";
+	} else if (dg.element._img) {
+		if (dg.element._img.className != "drop-disallow")
+		dg.element._img.className = "drop-disallow";
+	}
+	dg.zk_lastTarget = target;
 };
-zkau._revertdrag = function (cmp, pointer) {
-	if (zkau._getDrop(cmp, pointer) == null)
+zkau._revertdrag = function (cmp, pointer, evt) {
+	if (zkau._getDrop(cmp, pointer, evt) == null)
 		return true;
 
 	//Note: we hve to revert when zkau._onRespReady called, since app might
@@ -1526,7 +1541,7 @@ if (zk.ie) {
 zkau._enddrag = function (cmp, evt) {
 	zkau._cleanLastDrop(zkau._drags[cmp.id]);
 	var pointer = [Event.pointerX(evt), Event.pointerY(evt)];
-	var e = zkau._getDrop(cmp, pointer);
+	var e = zkau._getDrop(cmp, pointer, evt);
 	if (e) {
 		var keys = "";
 		if (evt) {
@@ -1542,45 +1557,44 @@ zkau._enddrag = function (cmp, evt) {
 zkau._sendDrop = function (dragged, dropped, x, y, keys) {
 	zkau.send({uuid: dropped, cmd: "onDrop", data: [dragged, x, y, keys]});
 };
-zkau._getDrop = function (cmp, pointer) {
+zkau._getDrop = function (cmp, pointer, evt) {
 	var dragType = getZKAttr(cmp, "drag");
-	var found = null;
+	var el = Event.element(evt);
 	l_next:
-	for (var j = 0; j < zkau._drops.length; ++j) {
-		var e = zkau._drops[j];
-		if (e == cmp) continue; //dropping to itself not allowed
-
-		var dropTypes = getZKAttr(e, "drop");
-		if (dropTypes != "true") { //accept all
-			if (dragType == "true") continue; //anonymous drag type
-
-			for (var k = 0;;) {
-				var l = dropTypes.indexOf(',', k);
-				var s = l >= 0 ? dropTypes.substring(k, l): dropTypes.substring(k);
-				if (s.trim() == dragType) break; //found
-				if (l < 0) continue l_next;
-				k = l + 1;
+	for (; el; el = $parent(el)) {
+		if (el == cmp) return; //dropping to itself not allowed
+		var dropTypes = getZKAttr(el, "drop");	
+		if (dropTypes) {
+			if (dropTypes != "true") {
+				if (dragType == "true") continue; //anonymous drag type
+				for (var k = 0;;) {
+					var l = dropTypes.indexOf(',', k);
+					var s = l >= 0 ? dropTypes.substring(k, l): dropTypes.substring(k);
+					if (s.trim() == dragType) break; //found
+					if (l < 0) continue l_next;
+					k = l + 1;
+				}
 			}
+			return el; //found;
 		}
-
-		var cross = Position.withinScroll(e, pointer[0], pointer[1]);
-		if (!cross && (zk.gecko || zk.safari)) { //Bug 1789428 
-			var real = $real(e);
-			if (real != e)
-				cross = Position.withinScroll(real, pointer[0], pointer[1])
-		}
-		if (cross && (!found || found.style.zIndex < e.style.zIndex))
-			found = e;
 	}
-	return found;
+	return null;
 };
 zkau._cleanLastDrop = function (dg) {
-	if (dg && dg.zk_lastDrop) {
+	if (!dg) return;
+	if (dg.zk_lastDrop) {
 		Droppable_effect(dg.zk_lastDrop, true);
 		dg.zk_lastDrop = null;
 	}
+	dg.zk_lastTarget = null;
 };
-zkau._ghostdrag = function (dg, ghosting) {
+zkau._proxyXY = function (evt) {
+	return [Event.pointerX(evt) + 10, Event.pointerY(evt) + 10];
+};
+zkau._constraint = function (dg, p, evt) {
+	return zkau._proxyXY(evt);
+};
+zkau._ghostdrag = function (dg, ghosting, evt) {
 //Tom Yeh: 20060227: Use a 'fake' DIV if
 //1) FF cannot handle z-index well if listitem is dragged across two listboxes
 //2) Safari's ghosting position is wrong
@@ -1595,27 +1609,45 @@ zkau._ghostdrag = function (dg, ghosting) {
 	} else {
 		special = zk.zk_special;
 	}
-
 	if (ghosting) {
-		var ofs = zkau.beginGhostToDIV(dg);
+		zkau.beginGhostToDIV(dg);
+		var ofs = zkau._proxyXY(evt);		
 		if (special) {
+			var msg = "";
+			if (evt.rangeParent) 
+				msg = evt.rangeParent.nodeValue;
+			else {
+				var target = Event.element(evt);
+				if (target.id.indexOf("!cave") > 0)
+					msg = target.textContent || target.innerText;
+				else if (target.id.indexOf("!cell") > 0) {
+					var real = $real(target.id);
+					msg = real.textContent || real.innerText;
+				} else
+					msg = target.textContent || target.innerText;
+			}			
+			if (!msg) msg = "";
+			if (msg.length > 10) msg = msg.substring(0,10) + "...";
 			var el = dg.element;
-			document.body.insertAdjacentHTML("afterbegin",
-				'<div id="zk_ddghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-				+zk.offsetWidth(el)+'px;height:'+zk.offsetHeight(el)
-				+'px;border:1px dotted black"></div>');				
+			document.body.insertAdjacentHTML("beforeend",	
+				'<div id="zk_ddghost" class="drop-ghost" style="position:absolute;top:'
+				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="drop-content"><span id="zk_ddghost!img" class="drop-disallow"></span>&nbsp;'+msg+'</div></div>');				
 		}else {
 			var el  = dg.element.cloneNode(true);
 			el.id = "zk_ddghost";
 			el.style.position = "absolute";
-			el.style.top = ofs[1] + "px";
-			el.style.left = ofs[0] + "px";		
+			var xy = zkau._proxyXY(evt);
+			el.style.top = xy[1] + "px";
+			el.style.left = xy[0] + "px";
 			document.body.appendChild(el);
 		}
 		dg.element = $e("zk_ddghost");
+		if (special) dg.element._img = $e(dg.element.id + "!img");
+		document.body.style.cursor = "pointer";
 	} else {
+		dg.element._img = null;
 		zkau.endGhostToDIV(dg);
+		document.body.style.cursor = "";
 	}
 	return false	
 };
