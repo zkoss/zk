@@ -31,6 +31,7 @@ ZK 3.0.1
   1826808: Drag and Drop performance
   1826736: First column disappear when sort Listbox
   1835878: select / colapse of a Treeitem scrolls tree to right.
+  1834900: Tree paging on Tree's Treechildren
 
 	--------
 ZK 3.0.0
