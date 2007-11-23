@@ -28,6 +28,8 @@ import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Enumeration;
+import java.io.Writer;
+import java.io.IOException;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -37,12 +39,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.BodyContent;
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ExpressionEvaluator;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.ExpressionEvaluator;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.util.CollectionsX;
 import org.zkoss.el.impl.StringKeysMap;
@@ -61,7 +60,7 @@ public class RequestResolver implements VariableResolver {
 	private HttpSession _sess;
 	private Map _reqScope, _sessScope, _appScope;
 	/** A fake page context implementation. */
-	private PageContextImpl _pc;
+	private PageContext _pc;
 	/** cached cookies. */
 	private Map _cookies;
 
@@ -93,20 +92,20 @@ public class RequestResolver implements VariableResolver {
 		return _pc;
 	}
 	/** Returns the request. */
-    public ServletRequest getRequest() {
-    	return _request;
-    }
+	public ServletRequest getRequest() {
+		return _request;
+	}
 	/** Returns the response. */
-    public ServletResponse getResponse() {
-    	return _response;
-    }
+	public ServletResponse getResponse() {
+		return _response;
+	}
 	/** Returns the context. */
-    public ServletContext getServletContext() {
-    	return _ctx;
-    }
+	public ServletContext getServletContext() {
+		return _ctx;
+	}
 
 	//-- VariableResovler --//
-	public Object resolveVariable (String name) throws ELException {
+	public Object resolveVariable (String name) throws XelException {
 		if ("pageContext".equals(name)) {
 			return getPageContext();
 		} else if ("pageScope".equals(name)) {
@@ -324,125 +323,31 @@ public class RequestResolver implements VariableResolver {
 			throw new UnsupportedOperationException("readonly");
 		}
 	} //ParamMap
-	/** Fake page context implementation.
-	 * It is too costly to implement PageContext,
-	 * but only implement a subset that VariableResolver might need
-	 * (i.e., only getters are implemented).
-	 */
-	private class PageContextImpl extends PageContext {
-	    public Exception getException() {
-	    	return null;
-	    }
-	    public Object getPage() {
-	    	return null;
-	    }
-	    public ServletRequest getRequest() {
-	    	return _request;
-	    }
-	    public ServletResponse getResponse() {
-	    	return _response;
-	    }
-	    public ServletConfig getServletConfig() {
-	    	return null;
-	    }
-	    public ServletContext getServletContext() {
-	    	return _ctx;
-	    }
-	    public HttpSession getSession() {
-	    	return RequestResolver.this.getSession();
-	    }
+	/** An implemnetation of PageContext. */
+	private class PageContextImpl implements PageContext {
+		public ServletRequest getRequest() {
+			return _request;
+		}
+		public ServletResponse getResponse() {
+			return _response;
+		}
+		public ServletConfig getServletConfig() {
+			return null;
+		}
+		public ServletContext getServletContext() {
+			return _ctx;
+		}
+		public HttpSession getSession() {
+			return RequestResolver.this.getSession();
+		}
 		public VariableResolver getVariableResolver() {
 			return RequestResolver.this;
 		}
-		public ExpressionEvaluator getExpressionEvaluator() {
+		public Writer getOut() throws IOException {
+	    	throw new UnsupportedOperationException();
+	    }
+	    public ExpressionEvaluator getExpressionEvaluator() {
 	    	return new EvaluatorImpl();
-	    }
- 
-		public void forward(String relativeUrlPath) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void include(String relativeUrlPath) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void include(String relativeUrlPath, boolean flush) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void handlePageException(Exception e) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void handlePageException(Throwable e) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void initialize(Servlet servlet, ServletRequest request,
-		ServletResponse response, String errorPageURL, boolean needsSession,
-		int bufferSize, boolean autoFlush) {
-		}
-		public BodyContent pushBody() {
- 	    	throw new UnsupportedOperationException();
-	    }
-		public void release() {
-		}
-		public Object findAttribute(String name) {
-			return RequestResolver.this.findAttribute(name);
-	    }
-		public Object getAttribute(String name) {
-			return null;
-	    }
-		public Object getAttribute(String name, int scope) {
-			switch (scope) {
-			case PageContext.REQUEST_SCOPE:
-				return getRequestScope().get(name);
-			case PageContext.SESSION_SCOPE:
-				return getSessionScope().get(name);
-			case PageContext.APPLICATION_SCOPE:
-				return getApplicationScope().get(name);
-			default:
-				return null;
-			}
-	    }
-		public Enumeration getAttributeNamesInScope(int scope) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public int getAttributesScope(String name) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public JspWriter getOut() {
-	    	throw new UnsupportedOperationException();
-	    }
-		public JspWriter popBody() {
-	    	throw new UnsupportedOperationException();
-	    }
-		public JspWriter pushBody(java.io.Writer writer) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void removeAttribute(String name) {
-	    }
-		public void removeAttribute(String name, int scope) {
-			switch (scope) {
-			case PageContext.REQUEST_SCOPE:
-				getRequestScope().remove(name); return;
-			case PageContext.SESSION_SCOPE:
-				getSessionScope().remove(name); return;
-			case PageContext.APPLICATION_SCOPE:
-				getApplicationScope().remove(name); return;
-			}
-	    }
-		public void setAttribute(String name, Object value) {
-	    	throw new UnsupportedOperationException();
-	    }
-		public void setAttribute(String name, Object value, int scope) {
-			if (value == null) {
-				removeAttribute(name, scope);
-				return;
-			}
-			switch (scope) {
-			case PageContext.REQUEST_SCOPE:
-				getRequestScope().put(name, value); return;
-			case PageContext.SESSION_SCOPE:
-				getSessionScope().put(name, value); return;
-			case PageContext.APPLICATION_SCOPE:
-				getApplicationScope().put(name, value); return;
-			}
 	    }
 	}
 }

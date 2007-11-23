@@ -20,25 +20,25 @@ package org.zkoss.el;
 
 import java.util.Map;
 
-import javax.servlet.jsp.el.Expression;
-import javax.servlet.jsp.el.ExpressionEvaluator;
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.el.ELException;
-
-import org.apache.commons.el.ExpressionEvaluatorImpl;
+import org.zkforge.apache.commons.el.ExpressionEvaluatorImpl;
+import org.zkforge.apache.commons.el.ExpressionApi;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
+import org.zkoss.xel.Expression;
+import org.zkoss.xel.ExpressionEvaluator;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.XelException;
 
 /**
- * Our evaluator that implements ExpressionEvaluator.
+ * The evaluator that implements {@link ExpressionEvaluator}.
  * It encapsulates the expression evaluator come with the container.
  *
  * <p>To make it work, you have to specify the system property,
- * "org.zkoss.el.ExpressionEvaluator.class", with the proper class name.
- * If you don't specify one, "org.apache.commons.el.ExpressionEvaluatorImpl"
- * is assumed.
+ * "org.zkoss.xel.ExpressionEvaluator.class", with the proper class name.
+ * If you don't specify one, org.zkforge.apache.commons.el.ExpressionEvaluatorImpl
+ * (of zcommons-el) is assumed.
  *
  * @author tomyeh
  */
@@ -48,14 +48,14 @@ public class EvaluatorImpl extends ExpressionEvaluator {
 	public EvaluatorImpl() {
 		final String clsnm;
 		try {
-			clsnm =	System.getProperty("org.zkoss.el.ExpressionEvaluator.class", null);
+			clsnm =	System.getProperty("org.zkoss.xel.ExpressionEvaluator.class", null);
 		} catch (Throwable ex) { //permission might not be allowed
-			_eval = new ExpressionEvaluatorImpl();
+			_eval = new ZelEval();
 			return;
 		}
 
 		if (clsnm == null || clsnm.length() == 0) {
-			_eval = new ExpressionEvaluatorImpl();
+			_eval = new ZelEval();
 		} else {
 			try {
 				_eval = (ExpressionEvaluator)Classes.newInstanceByThread(clsnm);
@@ -66,11 +66,38 @@ public class EvaluatorImpl extends ExpressionEvaluator {
 	}
 	//-- ExpressionEvaluator --//
 	public Expression parseExpression(String expression,
-	Class expectedType, FunctionMapper fMapper) throws ELException {
+	Class expectedType, FunctionMapper fMapper) throws XelException {
 		return _eval.parseExpression(expression, expectedType, fMapper);
 	}
 	public Object evaluate(String expression, Class expectedType,
-	VariableResolver vResolver, FunctionMapper fMapper) throws ELException {
+	VariableResolver vResolver, FunctionMapper fMapper) throws XelException {
 		return _eval.evaluate(expression, expectedType, vResolver, fMapper);
+	}
+}
+/** Evaluator based on zcommons-el.
+ */
+/*package*/ class ZelEval extends ExpressionEvaluator {
+	private final ExpressionEvaluatorImpl _eval = new ExpressionEvaluatorImpl();
+
+	//-- ExpressionEvaluator --//
+	public Expression parseExpression(String expression,
+	Class expectedType, FunctionMapper fMapper) throws XelException {
+		return new Expr(_eval.parseExpression(expression, expectedType, fMapper));
+	}
+	public Object evaluate(String expression, Class expectedType,
+	VariableResolver vResolver, FunctionMapper fMapper) throws XelException {
+		return _eval.evaluate(expression, expectedType, vResolver, fMapper);
+	}
+	/** Expression based on zcommons-el.
+	 */
+	private static class Expr extends Expression {
+		private final ExpressionApi _expr;
+		Expr(ExpressionApi expr) {
+			_expr = expr;
+		}
+		public Object evaluate(VariableResolver vResolver)
+		throws XelException {
+			return _expr.evaluate(vResolver);
+		}
 	}
 }

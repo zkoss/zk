@@ -24,15 +24,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.MissingResourceException;
 import java.net.URL;
 import java.io.Serializable;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.reflect.SerializableMethod;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.IllegalSyntaxException;
@@ -45,6 +44,9 @@ import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.xel.Function;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.el.impl.MethodFunction;
 
 /**
  * Utilities for handling FunctionMapper.
@@ -159,7 +161,7 @@ public class FunctionMappers {
 	implements FunctionMapper, Serializable, Cloneable {
 	    private static final long serialVersionUID = 20060622L;
 
-		/** Map(String prefix, Map(name, SerializableMethod)). */
+		/** Map(String prefix, Map(name, MethodFunction)). */
 		private Map _mappers;
 
 		/** @param mappers Map(String prefix, Map(String name, Method method))
@@ -171,27 +173,29 @@ public class FunctionMappers {
 				final Map mtds = new HashMap((Map)me.getValue());
 					//Note: we have to make a copy since loadMethods shares
 					//the same cache
-				toSerializableMethod(mtds);
+				toMethodFunction(mtds);
 				me.setValue(mtds);
 			}
 		}
-		/** Converts a map of (any, Method) to (any, {@link SerializableMethod}).
+		/** Converts a map of (any, Method) to (any, {@link MethodFunction}).
 		 */
-		private static void toSerializableMethod(Map mtds) {
+		private static void toMethodFunction(Map mtds) {
 			for (Iterator it = mtds.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final Method mtd = (Method)me.getValue();
-				if (mtd != null) me.setValue(new SerializableMethod(mtd));
+				if (mtd != null) me.setValue(new MethodFunction(mtd));
 			}
 		}
 
 		//-- FunctionMapper --//
-		public Method resolveFunction(String prefix, String name) {
+		public Function resolveFunction(String prefix, String name) {
 			final Map mtds = (Map)_mappers.get(prefix);
-			if (mtds != null) {
-				SerializableMethod mtd = (SerializableMethod)mtds.get(name);
-				if (mtd != null) return mtd.getMethod();
-			}
+			return mtds != null ? (MethodFunction)mtds.get(name): null;
+		}
+		public Collection getClassNames() {
+			return Collections.EMPTY_LIST;
+		}
+		public Class resolveClass(String name) {
 			return null;
 		}
 
@@ -225,7 +229,13 @@ public class FunctionMappers {
 	implements FunctionMapper, Serializable {
 	    private static final long serialVersionUID = 20060622L;
 		//-- FunctionMapper --//
-		public Method resolveFunction(String prefix, String name) {
+		public Function resolveFunction(String prefix, String name) {
+			return null;
+		}
+		public Collection getClassNames() {
+			return Collections.EMPTY_LIST;
+		}
+		public Class resolveClass(String name) {
 			return null;
 		}
 	}

@@ -22,8 +22,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.AccessibleObject;
 
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.lang.Classes;
 
@@ -66,7 +66,7 @@ public class ObjectResolver implements VariableResolver {
 	}
 
 	//-- VariableResolver --//
-	public Object resolveVariable(String name) throws ELException {
+	public Object resolveVariable(String name) throws XelException {
 		if (_ref != null) {
 			final Class refcls = _ref.getClass();
 			AccessibleObject acs = null;
@@ -78,7 +78,7 @@ public class ObjectResolver implements VariableResolver {
 			} catch (NoSuchMethodException ex) {
 				//IGNORED
 			} catch (Exception ex) {
-				throw new ELException("Failed to invoke "+acs+" upon "+_ref);
+				throw new XelException("Failed to invoke "+acs+" upon "+_ref);
 			}
 		}
 		return _parent != null ? _parent.resolveVariable(name): null;

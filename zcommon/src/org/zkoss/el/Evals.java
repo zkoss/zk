@@ -18,10 +18,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.el;
 
-import javax.servlet.jsp.el.ExpressionEvaluator;
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.ExpressionEvaluator;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.lang.Classes;
 
@@ -43,7 +43,7 @@ public class Evals {
 	 */
 	public static Object evaluate(String expr, Class expectedType,
 	VariableResolver resolv, FunctionMapper funcs)
-	throws ELException {
+	throws XelException {
 		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0) {
 				if (expectedType == Object.class || expectedType == String.class)
 				return expr;

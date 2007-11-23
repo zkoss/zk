@@ -27,8 +27,7 @@ import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.VariableResolver;
-
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Maps;

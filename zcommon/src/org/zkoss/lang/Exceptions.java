@@ -66,10 +66,11 @@ public class Exceptions {
 					return ((org.xml.sax.SAXException)ex).getException();
 				} else if (ex instanceof javax.servlet.ServletException) {
 					return ((javax.servlet.ServletException)ex).getRootCause();
-				} else if (ex instanceof javax.servlet.jsp.el.ELException) {
-					return ((javax.servlet.jsp.el.ELException)ex).getRootCause();
-				} else if (ex instanceof javax.servlet.jsp.JspException) {
-					return ((javax.servlet.jsp.JspException)ex).getRootCause();
+//Remove the dependence on JSP
+//				} else if (ex instanceof javax.servlet.jsp.el.ELException) {
+//					return ((javax.servlet.jsp.el.ELException)ex).getRootCause();
+//				} else if (ex instanceof javax.servlet.jsp.JspException) {
+//					return ((javax.servlet.jsp.JspException)ex).getRootCause();
 				} else if (ex instanceof bsh.TargetError) {
 					return ((bsh.TargetError)ex).getTarget();
 				} else if (ex instanceof bsh.UtilTargetError) {
@@ -304,7 +305,7 @@ public class Exceptions {
 				} catch (Throwable e2) {
 					if (log.debugable()) log.debug("Ignored: unable to resolve " + ex.getClass());
 				}
-				try {
+/*				try {
 					if (ex instanceof javax.servlet.jsp.el.ELException) {
 						final Throwable t =
 							((javax.servlet.jsp.el.ELException)ex).getRootCause();
@@ -312,7 +313,7 @@ public class Exceptions {
 					}
 				} catch (Throwable e2) {
 					if (log.debugable()) log.debug("Ignored: unable to resolve " + ex.getClass());
-				}
+				}*/
 				return ex;
 			}
 			assert D.OFF || ex != null: "null cause";

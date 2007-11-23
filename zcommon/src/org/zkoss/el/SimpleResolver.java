@@ -20,8 +20,8 @@ package org.zkoss.el;
 
 import java.util.Map;
 
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelException;
 
 /**
  * A simple resolver that retrieve variable from a map.
@@ -60,7 +60,7 @@ public class SimpleResolver implements VariableResolver {
 	}
 
 	//-- VariableResolver --//
-	public Object resolveVariable(String name) throws ELException {
+	public Object resolveVariable(String name) throws XelException {
 		if (_vars != null) {
 			final Object o = _vars.get(name);
 			if (o != null)
