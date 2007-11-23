@@ -19,7 +19,15 @@ stamp=$(date +%Y-%m-%d)
 
 target=$1
 
-javadocdir=$(grep '^javadoc' build.setting.local)
+setting=build.setting.local
+if [ ! -f $setting ] ; then
+	setting=build.setting
+	if [ ! -f $setting ] ; then
+		echo $setting must be specified
+		exit 1
+	fi
+fi
+javadocdir=$(grep '^javadoc' $setting)
 javadocdir=${javadocdir#javadoc=}
 if [ "$javadocdir" = "" ] ; then
 	echo javadoc must be specified in $setting
@@ -37,7 +45,7 @@ if [ ! -d "$docdir" ] ; then
 	exit 1
 fi
 
-ver=$(grep '^version=' build.setting.local)
+ver=$(grep '^version=' $setting)
 ver=${ver#version=}
 
 #jar
