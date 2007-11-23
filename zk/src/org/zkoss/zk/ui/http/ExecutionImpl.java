@@ -220,8 +220,6 @@ public class ExecutionImpl extends AbstractExecution {
 			}
 
 			Servlets.include(_ctx, _request, bufresp, page, params, mode);
-				//we don't use PageContext.include because Servlets.include
-				//support ~xxx/ and other features.
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
@@ -248,8 +246,6 @@ public class ExecutionImpl extends AbstractExecution {
 			Servlets.forward(_ctx, _request,
 				HttpBufferedResponse.getInstance(_response, out),
 				page, params, mode);
-				//we don't use PageContext.forward because Servlets.forward
-				//support ~xxx/ and other features.
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
