@@ -4,20 +4,20 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 public class MyApplierBean {
-	private boolean doAfterCompose;
+	private boolean doAfterComposeFlag;
 	private boolean value;
 
-	public boolean isDoAfterCompose() {
-		return doAfterCompose;
+	public boolean isDoAfterComposeFlag() {
+		return doAfterComposeFlag;
 	}
 
-	public void setDoAfterCompose(boolean doAfterCompose) {
-		this.doAfterCompose = doAfterCompose;
+	public void setDoAfterComposeFlag(boolean doAfterCompose) {
+		this.doAfterComposeFlag = doAfterCompose;
 	}
 	
 	public String doSubmit(){
 		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null, new FacesMessage("doAfterCompose:"+doAfterCompose));
+		context.addMessage(null, new FacesMessage("doAfterCompose:"+doAfterComposeFlag));
 		context.addMessage(null, new FacesMessage("value:"+value));
 		return null;
 	}
