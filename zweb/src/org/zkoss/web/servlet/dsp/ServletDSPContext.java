@@ -26,9 +26,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.el.ExpressionEvaluator;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.ExpressionEvaluator;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.el.RequestResolver;

@@ -1,6 +1,5 @@
 ../dist/lib/zcommon.jar
+../dist/lib/zcommons-el.jar
 ../dist/lib/ext/servlet-api.jar
-../dist/lib/ext/jsp-api.jar
 ../dist/lib/ext/portlet-api.jar
-../dist/lib/ext/commons-el.jar
 ../dist/lib/ext/jasper-compiler.jar

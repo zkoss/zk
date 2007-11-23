@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import javax.servlet.jsp.el.FunctionMapper;
+import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;

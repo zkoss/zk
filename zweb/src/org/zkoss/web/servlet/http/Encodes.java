@@ -32,12 +32,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletContext;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.JspException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
+import org.zkoss.el.PageContext;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
@@ -402,12 +401,12 @@ public class Encodes {
 	 * @see #encodeURL(ServletContext, ServletRequest, ServletResponse, String)
 	 */
 	public static final String encodeURL(PageContext ctx, String uri)
-	throws JspException {
+	throws ServletException {
 		try {
 			return encodeURL0(ctx.getServletContext(),
 				ctx.getRequest(), ctx.getResponse(), uri);
 		} catch (Exception ex) {
-			throw new JspException("Unable to encode "+uri, ex);
+			throw new ServletException("Unable to encode "+uri, ex);
 		}
 	}
 

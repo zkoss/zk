@@ -19,13 +19,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.el;
 
 import java.io.Writer;
+import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ExpressionEvaluator;
+
+import org.zkoss.el.PageContext;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.ExpressionEvaluator;
 
 /**
  * An {@link ELContext} on top of {@link ELContext}.
@@ -38,7 +40,7 @@ public class PageELContext implements ELContext {
 	public PageELContext(PageContext pc) {
 		_pc = pc;
 	}
-	public Writer getOut() {
+	public Writer getOut() throws IOException {
 		return _pc.getOut();
 	}
 	public ServletRequest getRequest() {

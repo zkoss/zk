@@ -40,7 +40,6 @@ import javax.servlet.ServletException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
 
 import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.D;
@@ -58,6 +57,7 @@ import org.zkoss.util.resource.Locators;
 import org.zkoss.util.resource.PropertyBundle;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.el.PageContext;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.http.Encodes;
@@ -779,7 +779,7 @@ public class Servlets {
 	public static final boolean isELSupported() {
 		if (_elSupported == null) {
 			try {
-				if (javax.servlet.jsp.el.ExpressionEvaluator.class.getName() != null)
+				if (org.zkoss.xel.ExpressionEvaluator.class.getName() != null)
 					_elSupported = Boolean.TRUE;
 			} catch (Throwable ex) {
 				_elSupported = Boolean.FALSE;

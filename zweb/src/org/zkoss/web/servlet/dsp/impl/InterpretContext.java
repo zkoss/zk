@@ -19,7 +19,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.dsp.impl;
 
 import java.io.Writer;
-import javax.servlet.jsp.el.FunctionMapper;
+import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.web.servlet.dsp.*;
 import org.zkoss.web.servlet.dsp.action.Action;

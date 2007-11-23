@@ -16,8 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.util.resource;
 
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.util.resource.Labels;
 import org.zkoss.web.el.ELContexts;
@@ -32,7 +32,7 @@ import org.zkoss.web.el.ELContext;
 public class ServletLabelResovler implements VariableResolver {
 	public ServletLabelResovler() {
 	}
-	public Object resolveVariable(String name) throws ELException {
+	public Object resolveVariable(String name) throws XelException {
 		final Object o = Labels.getLabel(name);
 		if (o != null)
 			return o;

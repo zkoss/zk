@@ -22,8 +22,6 @@ import java.io.Writer;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -118,24 +116,6 @@ public class ServletFns {
 		return getCurrentContext().getResponse();
 	}
 		
-	/** Renders the JSP fragment from EL.
-	 *
-	 * @param jf the JSP fragment; never null.
-	 * @param out the ouput. If null, {@link ELContexts#getCurrent}'s getOut()
-	 * is assumed. If {@link ELContexts#getCurrent} is null, jf's out is used.
-	 */
-	public static void render(JspFragment jf, Writer out)
-	throws JspException, IOException {
-		if (out == null) {
-			//Note: we have to use out from the current context, because
-			//jf might belong to includer (not the page invoking this method)
-			//Eg, BorderTag pass getJspBody to the includee when invoke
-			//this method.
-			out = ELContexts.getCurrent().getOut();
-		}
-		jf.invoke(out);
-	}
-
 	/** Renders the DSP fragment from EL.
 	 *
 	 * @param ac the action context; never null.

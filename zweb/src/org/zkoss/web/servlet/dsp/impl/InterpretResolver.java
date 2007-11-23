@@ -22,8 +22,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.SystemException;
@@ -49,29 +49,25 @@ class InterpretResolver implements VariableResolver {
 		if (scope == ActionContext.PAGE_SCOPE)
 			return _attrs;
 
-		try {
-			Map attrs = null;
-			if (_parent != null) {
-				switch (scope) {
-				case ActionContext.REQUEST_SCOPE:
-					attrs = (Map)_parent.resolveVariable("requestScope");
-					break;
-				case ActionContext.SESSION_SCOPE:
-					attrs = (Map)_parent.resolveVariable("sessionScope");
-					break;
-				case ActionContext.APPLICATION_SCOPE:
-					attrs = (Map)_parent.resolveVariable("applicationScope");
-					break;
-				}
+		Map attrs = null;
+		if (_parent != null) {
+			switch (scope) {
+			case ActionContext.REQUEST_SCOPE:
+				attrs = (Map)_parent.resolveVariable("requestScope");
+				break;
+			case ActionContext.SESSION_SCOPE:
+				attrs = (Map)_parent.resolveVariable("sessionScope");
+				break;
+			case ActionContext.APPLICATION_SCOPE:
+				attrs = (Map)_parent.resolveVariable("applicationScope");
+				break;
 			}
-			return attrs != null ? attrs: Collections.EMPTY_MAP;
-		} catch (ELException ex) {
-			throw new SystemException(ex);
 		}
+		return attrs != null ? attrs: Collections.EMPTY_MAP;
 	}
 
 	//-- VariableResolver --//
-	public Object resolveVariable(String name) throws ELException {
+	public Object resolveVariable(String name) throws XelException {
 		if ("pageScope".equals(name))
 			return _attrs;
 		final Object o = _attrs.get(name);

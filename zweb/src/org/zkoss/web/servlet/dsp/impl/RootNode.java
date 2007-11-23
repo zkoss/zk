@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.FunctionMapper;
+import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.el.ELContexts;

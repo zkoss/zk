@@ -19,8 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.dsp;
 
 import java.io.Writer;
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.FunctionMapper;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.web.el.ELContext;

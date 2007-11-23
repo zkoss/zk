@@ -20,7 +20,7 @@ package org.zkoss.web.servlet.dsp.impl;
 
 import java.io.Writer;
 import java.io.IOException;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.ServletException;
@@ -46,7 +46,7 @@ class ELNode extends Node {
 				.evaluate(_expr, String.class, ic.resolver, ic.mapper);
 			if (result != null)
 				ic.dc.getOut().write(result);
-		} catch (ELException ex) {
+		} catch (XelException ex) {
 			log.realCause(ex);
 			throw new ServletException("Unable to evaluate an EL expression: "+_expr, ex);
 		}

@@ -25,10 +25,10 @@ import java.io.Writer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.jsp.PageContext;
 
 import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
+import org.zkoss.el.PageContext;
 
 /**
  * Utilities to access the JSP context.
@@ -57,8 +57,6 @@ public class ELContexts {
 	 *
 	 * <p>However, you rarely need to invoke this method directly.
 	 * <ol>
-	 * <li>If go thru JSP, it is done automatically
-	 * (by {@link org.zkoss.web.servlet.jsp.JspFactoryImpl}</li>
 	 * <li>If go thru DSP, it is done automatically
 	 * (by {@link org.zkoss.web.servlet.dsp.Interpreter}</li>
 	 * </ol>
@@ -88,7 +86,7 @@ public class ELContexts {
 	/** Pops the context out and use the previous one as the current context.
 	 *
 	 * <p>In most cases, you don't need to invoke this method, which is
-	 * done automatically (by {@link org.zkoss.web.servlet.jsp.JspFactoryImpl} if go thru JSP)
+	 * done automatically.
 	 *
 	 * @see #push
 	 */

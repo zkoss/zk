@@ -24,8 +24,8 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ExpressionEvaluator;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.ExpressionEvaluator;
 
 /**
  * Used to wrap the context for evaluate EL.

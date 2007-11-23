@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
