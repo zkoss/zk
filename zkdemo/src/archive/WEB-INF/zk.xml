@@ -212,6 +212,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</listener>
 	-->
 	
+	<!-- Configure the Hibernate configuration file name if not "hibernate.cfg.xml"
+	<preference>
+		<name>HibernateUtil.config</name>
+		<value></value>
+	</preference>
+	-->
+	
 	<!-- Configure the Hibernate "Open Session In View" Session Lifecycle
 	<listener>
 		<description>Hibernate "Open Session In View" Session Lifecycle</description>
