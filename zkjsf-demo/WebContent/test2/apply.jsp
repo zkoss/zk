@@ -19,7 +19,7 @@
 					<z:rows>
 						<z:row>
 							<z:div>
-							<z:checkbox id="dac" f:value="#{MyApplierBean.doAfterCompose}" /> 
+							<z:checkbox id="dac" f:value="#{MyApplierBean.doAfterComposeFlag}" /> 
 							doAfterCompose
 							</z:div>
 						</z:row>
