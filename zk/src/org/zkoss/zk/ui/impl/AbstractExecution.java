@@ -27,8 +27,8 @@ import java.util.Iterator;
 import java.io.Reader;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.idom.Document;
@@ -108,15 +108,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			return Classes.coerce(expectedType, expr);
 		}
 
-		try {
-			if (page == null) page = _curpage;
-			_exresolv.setSelf(self);
-			return getELContext().getExpressionEvaluator().evaluate(
-				expr, expectedType, _exresolv,
-				page != null ? page.getFunctionMapper(): null);
-		} catch (ELException ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		if (page == null) page = _curpage;
+		_exresolv.setSelf(self);
+		return getELContext().getExpressionEvaluator().evaluate(
+			expr, expectedType, _exresolv,
+			page != null ? page.getFunctionMapper(): null);
 	}
 
 	public void postEvent(Event evt) {

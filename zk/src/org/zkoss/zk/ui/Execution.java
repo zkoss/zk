@@ -24,7 +24,7 @@ import java.io.Writer;
 import java.io.IOException;
 import java.security.Principal;
 
-import javax.servlet.jsp.el.VariableResolver;
+import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;

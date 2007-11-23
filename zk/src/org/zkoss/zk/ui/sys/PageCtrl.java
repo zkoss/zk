@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.FunctionMapper;
+import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;

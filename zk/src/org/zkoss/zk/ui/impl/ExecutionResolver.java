@@ -20,8 +20,8 @@ package org.zkoss.zk.ui.impl;
 
 import java.util.Collections;
 
-import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.jsp.el.ELException;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
@@ -58,7 +58,7 @@ public class ExecutionResolver implements VariableResolver {
 	}
 
 	//-- VariableResolver --//
-	public Object resolveVariable(String name) throws ELException {
+	public Object resolveVariable(String name) throws XelException {
 		if (name == null || name.length() == 0) //just in case
 			return null;
 

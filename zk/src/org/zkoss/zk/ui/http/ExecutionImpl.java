@@ -31,11 +31,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.el.ELException;
 
 import org.zkoss.el.RequestResolver;
+import org.zkoss.el.PageContext;
 import org.zkoss.el.impl.AttributesMap;
+import org.zkoss.xel.XelException;
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.BufferedResponse;
@@ -80,13 +80,8 @@ public class ExecutionImpl extends AbstractExecution {
 		_request = request;
 		_response = response;
 
-		final PageContext pgctx;
-		try {
-			pgctx = (PageContext)
-				getVariableResolver().resolveVariable("pageContext");
-		} catch (ELException ex) {
-			throw new UiException(ex);
-		}
+		final PageContext pgctx = (PageContext)
+			getVariableResolver().resolveVariable("pageContext");
 		if (pgctx == null)
 			throw new UiException("Unable to resolve pageContext");
 		_elctx = new PageELContext(pgctx);
@@ -129,8 +124,6 @@ public class ExecutionImpl extends AbstractExecution {
 			Servlets.include(_ctx, _request,
 				BufferedResponse.getInstance(_response, out),
 				page, params, mode);
-				//we don't use PageContext.include because Servlets.include
-				//support ~xxx/ and other features.
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
@@ -150,8 +143,6 @@ public class ExecutionImpl extends AbstractExecution {
 			Servlets.forward(_ctx, _request,
 				BufferedResponse.getInstance(_response, out),
 				page, params, mode);
-				//we don't use PageContext.forward because Servlets.forward
-				//support ~xxx/ and other features.
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}

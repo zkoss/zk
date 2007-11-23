@@ -18,7 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
@@ -34,8 +33,6 @@ import java.util.Collections;
 import java.io.Writer;
 import java.io.IOException;
 
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
@@ -45,6 +42,9 @@ import org.zkoss.lang.Expectable;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
+import org.zkoss.xel.Function;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.XelException;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
@@ -435,13 +435,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	public Object getELVariable(String name) {
-		try {
-			final javax.servlet.jsp.el.VariableResolver resolv =
-				getExecution().getVariableResolver();
-			return resolv != null ? resolv.resolveVariable(name): null;
-		} catch (javax.servlet.jsp.el.ELException ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		final org.zkoss.xel.VariableResolver resolv =
+			getExecution().getVariableResolver();
+		return resolv != null ? resolv.resolveVariable(name): null;
 	}
 
 	/** Resolves the variable defined in variable resolvers.
@@ -1062,11 +1058,17 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 
 		//-- FunctionMapper --//
-		public Method resolveFunction(String prefix, String name) {
-			Method m = this.newm.resolveFunction(prefix, name);
+		public Function resolveFunction(String prefix, String name) {
+			Function m = this.newm.resolveFunction(prefix, name);
 			if (m == null)
 				m = this.oldm.resolveFunction(prefix, name);
 			return m;
+		}
+		public Collection getClassNames() {
+			return Collections.EMPTY_LIST;
+		}
+		public Class resolveClass(String name) throws XelException {
+			return null;
 		}
 	}
 

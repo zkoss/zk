@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.net.URL;
 
-import javax.servlet.jsp.el.ExpressionEvaluator;
+import org.zkoss.xel.ExpressionEvaluator;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.util.resource.Locator;
@@ -224,7 +224,7 @@ public class ConfigParser {
 			//el-config
 			//	evaluator-class
 				Class cls = parseClass(el, "evaluator-class", ExpressionEvaluator.class);
-				if (cls != null) System.setProperty("org.zkoss.el.ExpressionEvaluator.class", cls.getName());
+				if (cls != null) System.setProperty("org.zkoss.xel.ExpressionEvaluator.class", cls.getName());
 					//System-wide property; reason: used in zcommon.jar
 			} else if ("zscript-config".equals(elnm)) {
 			//zscript-config

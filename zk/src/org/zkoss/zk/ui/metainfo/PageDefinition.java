@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 
-import javax.servlet.jsp.el.FunctionMapper;
+import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;

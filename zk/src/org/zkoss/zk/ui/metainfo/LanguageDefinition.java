@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import javax.servlet.jsp.el.FunctionMapper;
+import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
@@ -268,16 +268,12 @@ public class LanguageDefinition {
 				if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0)
 					return expr;
 
-				try {
-					final ELContext jc = ELContexts.getCurrent();
-					return new EvaluatorImpl().evaluate(
-						expr, expectedType,
-						new ObjectResolver(
-							jc != null ? jc.getVariableResolver(): null, obj),
-						getFunctionMapper());
-				} catch (javax.servlet.jsp.el.ELException ex) {
-					throw UiException.Aide.wrap(ex);
-				}
+				final ELContext jc = ELContexts.getCurrent();
+				return new EvaluatorImpl().evaluate(
+					expr, expectedType,
+					new ObjectResolver(
+						jc != null ? jc.getVariableResolver(): null, obj),
+					getFunctionMapper());
 			}
 		};
 
