@@ -88,7 +88,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 	 */
 	public void setDynamicAttribute(String uri, String localName, Object value) 
 	throws JspException {
-		if(uri==null || ZUL_JSF_NS.equals(uri)){
+		String sca = checkSpeciaJSFCoreAttribute(localName);
+		if(sca==null && (uri==null  || ZUL_JSF_NS.equals(uri))){
 			_dynamicAttrMap.put(localName, value);	
 			if("use".equals(localName)||"forward".equals(localName))
 				//should not happen!!
@@ -97,8 +98,8 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes{
 				this.setId((String)value);
 			}
 			
-		}else if(uri==null || JSF_CORE_NS.equals(uri)){
-			_jsfcoreAttrMap.put(localName, value);	
+		}else if(sca!=null || JSF_CORE_NS.equals(uri)){
+			_jsfcoreAttrMap.put(sca!=null?sca:localName, value);	
 			if("id".equals(localName)){
 				throw new JspException("don't assign id with namespace http://java.sun.com/jsf/core, assign it with zk namespance or empty namespace");
 			}else if("binding".equals(localName)){

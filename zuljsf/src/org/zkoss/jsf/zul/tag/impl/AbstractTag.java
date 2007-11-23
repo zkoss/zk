@@ -45,6 +45,7 @@ abstract public class AbstractTag extends UIComponentBodyTag {
 	protected static String ZUL_JSF_NS = "http://www.zkoss.org/jsf/zul";
 	protected static String JSF_HTML_NS = "http://java.sun.com/jsf/html";
 	protected static String JSF_CORE_NS = "http://java.sun.com/jsf/core";
+	protected static String JSF_CORE_PREFIX = "f_";
 	
 	/**
 	 * constructor.
@@ -170,6 +171,19 @@ abstract public class AbstractTag extends UIComponentBodyTag {
             }
         }
         return (getDoAfterBodyValue());
+    }
+    
+    /**
+     * check if the name is a special jsf core attribute
+     * @param name
+     * @return
+     */
+    protected String checkSpeciaJSFCoreAttribute(String name){
+    	if(name==null) return name;
+    	if(name.startsWith(JSF_CORE_PREFIX)){
+    		return name.substring(JSF_CORE_PREFIX.length(),name.length());
+    	}
+    	return null;
     }
 
 }

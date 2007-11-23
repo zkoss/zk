@@ -51,7 +51,7 @@ abstract public class BranchInputTag extends BranchOutputTag implements DynamicA
 	protected void setProperties(UIComponent comp) {
 		super.setProperties(comp);
 
-		// take care immedate,require,validator,valuechange listener
+		// take care immediate,require,validator,valueChange listener
 		Object obj = _jsfcoreAttrMap.get("immediate");
 		if (obj != null) {
 			if ((obj instanceof String) && isValueReference((String) obj)) {
