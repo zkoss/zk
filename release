@@ -219,10 +219,13 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zkdemo/src/org/* /tmp/zk/$demonm/zkdemo/src/org
 	cp -rp MyApp/src/archive/* /tmp/zk/$demonm/MyApp/WebContent
 	cp zkdoc/COPYING zkdoc/release-note /tmp/zk/$demonm/doc
-	cp -rp dist/lib/zkdemos.ear dist/lib/zkdemo.war /tmp/zk/$demonm
+
+	cp dist/lib/zkdemo.war /tmp/zk/$demonm/zkdemo-min.war
 
 	if [ "$target" == "official" ] ; then
-		mv dist/lib/zkdemos-all.ear dist/lib/zkdemo-all.war /tmp/zk/$demonm
+		mv dist/lib/zkdemos.ear /tmp/zk/$demonm/zkdemos-min.ear
+		mv dist/lib/zkdemo-all.war /tmp/zk/$demonm/zkdemo.war
+		mv dist/lib/zkdemos-all.ear /tmp/zk/$demonm/zkdemos.ear
 	fi
 
 	cd /tmp/zk
