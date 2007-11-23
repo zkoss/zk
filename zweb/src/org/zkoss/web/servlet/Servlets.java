@@ -74,8 +74,6 @@ import org.zkoss.web.util.resource.ServletContextLocator;
 public class Servlets {
 	private static final Log log = Log.lookup(Servlets.class);
 
-	/** Whether EL is supported. */
-	private static Boolean _elSupported = null;
 	/** Utilities; no instantiation required. */
 	protected Servlets() {}
 
@@ -775,17 +773,10 @@ public class Servlets {
 	}
 
 	/** Returns whether EL is supported by the servlet container.
+	 * @deprecated As of release 2.4.2, it always returns true.
 	 */
 	public static final boolean isELSupported() {
-		if (_elSupported == null) {
-			try {
-				if (org.zkoss.xel.ExpressionEvaluator.class.getName() != null)
-					_elSupported = Boolean.TRUE;
-			} catch (Throwable ex) {
-				_elSupported = Boolean.FALSE;
-			}
-		}
-		return _elSupported.booleanValue();
+		return true;
 	}
 
 	/** Returns the file extension of the specified path, or null
