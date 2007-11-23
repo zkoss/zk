@@ -1,10 +1,17 @@
 	--------
 ZK 2.4.2
 * Features:
+  1820771: Make ZK independent of JSP
 
 * Bugs:
   1830311: Cannot display Japanese messages
   1835878: select / colapse of a Treeitem scrolls tree to right.
+
+* Upgrade Note:
+  + The pageContext variable in EL expressions becomes an instance of
+    org.zkoss.web.servlet.xel.PageContext
+  + The implementation of the expression evaluator must implement
+    org.zkoss.xel.ExpressionEvaluator instead of javax.servlet.jsp.el.ExpressionEvaluator.
 
 	--------
 ZK 2.4.1
