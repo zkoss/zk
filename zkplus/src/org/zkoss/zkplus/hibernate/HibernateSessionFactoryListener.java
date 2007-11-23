@@ -37,13 +37,20 @@ import org.hibernate.SessionFactory;
  *		&lt;listener-class>org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
+ * Since ZK 3.0.1, if your hibernate configuration file name is not the default "hibernate.cfg.xml", you can 
+ * specify it in WEB-INF/zk.xml. Just add following lines:
+ * <pre><code>
+ *	&lt;preference>
+ *	&lt;name>HibernateUtil.config&lt;/name>
+ *	&lt;value>YOUR-HIBERNATE-FILENAME&lt;/value>
+ * </code></pre>
  * </p>
  *
  * @author henrichen
  */
 public class HibernateSessionFactoryListener implements WebAppInit, WebAppCleanup {
-    public void init(WebApp wapp)  {
-        HibernateUtil.initSessionFactory();
+    public void init(WebApp app)  {
+        HibernateUtil.initSessionFactory(app);
     }
 
     public void cleanup(WebApp wapp) {
