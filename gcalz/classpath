@@ -7,5 +7,4 @@
 ../dist/lib/ext/gdata-base-1.0.jar
 ../dist/lib/ext/gdata-calendar-1.0.jar
 ../dist/lib/ext/servlet-api.jar
-../dist/lib/ext/jsp-api.jar
 ../dist/lib/timelinez.jar
