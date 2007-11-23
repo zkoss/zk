@@ -51,7 +51,6 @@ import org.zkoss.el.impl.AttributesMap;
  * Used to wrap a request to provide JSP-like evaluation.
  *
  * @author tomyeh
- * @see ServletContextResolver
  */
 public class RequestResolver implements VariableResolver {
 	private final ServletContext _ctx;
