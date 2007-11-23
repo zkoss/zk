@@ -1,27 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- 
-{{IS_NOTE
+	{{IS_NOTE
 	Purpose:
-		
+	
 	Description:
-		
+	
 	History:
-		2007/8/22 11:16:22 AM     2007, Created by Dennis.Chen
-}}IS_NOTE
-
-Copyright (C) 2007 Potix Corporation. All Rights Reserved.
-
-{{IS_RIGHT
+	2007/8/22 11:16:22 AM     2007, Created by Dennis.Chen
+	}}IS_NOTE
+	
+	Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+	
+	{{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
- -->
+	}}IS_RIGHT
+-->
 <!DOCTYPE faces-config PUBLIC
   "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
   "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 
 <faces-config>
-	
+
 	<navigation-rule>
 		<from-view-id>/reservation.jsp</from-view-id>
 		<navigation-case>
@@ -36,32 +36,73 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<to-view-id>/reservation.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<!-- JEFF ADDED -->
+	<navigation-rule>
+		<from-view-id>/test2/navigation.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/test2/navigation_success.jsp</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/test2/navigation.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>failed</from-outcome>
+			<to-view-id>/test2/navigation_failed.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/test2/navigation2.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/test2/navigation_success2.jsp</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/test2/navigation.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>failed</from-outcome>
+			<to-view-id>/test2/navigation_failed2.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!-- JEFF ADDED END -->
 
-	
-	
+
 	<managed-bean>
 		<managed-bean-name>ReservationBean</managed-bean-name>
-		<managed-bean-class>org.zkoss.jsfdemo.reservation.ReservationBean</managed-bean-class>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.reservation.ReservationBean
+		</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ValueBindingBean</managed-bean-name>
-		<managed-bean-class>org.zkoss.jsfdemo.ValueBindingBean</managed-bean-class>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.ValueBindingBean
+		</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ConverterBean</managed-bean-name>
-		<managed-bean-class>org.zkoss.jsfdemo.ConverterBean</managed-bean-class>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.ConverterBean
+		</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ValidatorBean</managed-bean-name>
-		<managed-bean-class>org.zkoss.jsfdemo.ValidatorBean</managed-bean-class>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.ValidatorBean
+		</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CommandBean</managed-bean-name>
-		<managed-bean-class>org.zkoss.jsfdemo.CommandBean</managed-bean-class>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.CommandBean
+		</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
@@ -91,24 +132,54 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- JEFF ADDED -->
 	<managed-bean>
 		<managed-bean-name>ActionBean</managed-bean-name>
-		<managed-bean-class>org.zkoss.jsfdemo.test2.ActionBean</managed-bean-class>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.test2.ActionBean
+		</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>MyApplierBean</managed-bean-name>
-		<managed-bean-class>org.zkoss.jsfdemo.test2.MyApplierBean</managed-bean-class>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.test2.MyApplierBean
+		</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>MyNavigator</managed-bean-name>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.test2.MyNavigator
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+		<managed-bean>
+		<managed-bean-name>MyNavigator2</managed-bean-name>
+		<managed-bean-class>
+			org.zkoss.jsfdemo.test2.MyNavigator
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<!-- JEFF ADDED END -->
 	<converter>
 		<converter-id>dateConverter</converter-id>
-		<converter-class>org.zkoss.jsfdemo.DateConverter</converter-class>
+		<converter-class>
+			org.zkoss.jsfdemo.DateConverter
+		</converter-class>
 	</converter>
 	<!-- JEFF ADDED -->
 	<converter>
 		<converter-id>MyConverter</converter-id>
-		<converter-class>org.zkoss.jsfdemo.test2.MyConverter</converter-class>
+		<converter-class>
+			org.zkoss.jsfdemo.test2.MyConverter
+		</converter-class>
 	</converter>
 	<!-- JEFF ADED END -->
-	
+	<!-- JEFF ADDED -->
+	<validator>
+		<validator-id>MyStringValidator</validator-id>
+		<validator-class>
+			org.zkoss.jsfdemo.test2.MyStringValidator
+		</validator-class>
+	</validator>
+	<!-- JEFF ADED END -->
+
 </faces-config>
