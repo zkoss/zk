@@ -1,6 +1,6 @@
 <HTML>
 <HEAD>
-<title>Validator Example</title>
+<title>Converter Example</title>
 </HEAD>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
@@ -9,16 +9,16 @@
 <f:view>
 	<h:form id="helloForm">
 		<z:page>
-			<z:window title="Validator Example" width="500px" border="normal">
-				--Validate input day must in weekend--<br/>
-				<z:datebox id="dbox" format="yyyy/MM/dd"
-					f:value="#{ValidatorBean.value}" 
-					f:validator="#{ValidatorBean.validateDate}"/>
+			<z:window title="Converter Example" width="500px" border="normal">
+				--Convert string to date--<br/>
+				<z:textbox id="tbox" f_value="#{ConverterBean.value}">
+					<f:converter converterId="dateConverter"/>
+				</z:textbox>
 				<h:message
 				style="color: red; font-style: oblique;"
-					for="dbox" />
+					for="tbox" />
 				<br/>
-				<h:commandButton id="submit" action="#{ValidatorBean.doSubmit}" value="Submit" />				
+				<h:commandButton id="submit" action="#{ConverterBean.doSubmit}" value="Submit" />				
 			</z:window>
 			<h:messages/>
 			<a href="../index.html">Back</a>

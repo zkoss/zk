@@ -36,6 +36,20 @@
 			<to-view-id>/reservation.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/reservation-sp.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>result</from-outcome>
+			<to-view-id>/reservationResult-sp.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/reservationResult-sp.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>back</from-outcome>
+			<to-view-id>/reservation-sp.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<!-- JEFF ADDED -->
 	<navigation-rule>
 		<from-view-id>/test2/navigation.jsp</from-view-id>

@@ -12,8 +12,8 @@
 			<z:window title="Validator Example" width="500px" border="normal">
 				--Validate input day must in weekend--<br/>
 				<z:datebox id="dbox" format="yyyy/MM/dd"
-					f:value="#{ValidatorBean.value}" 
-					f:validator="#{ValidatorBean.validateDate}"/>
+					f_value="#{ValidatorBean.value}" 
+					f_validator="#{ValidatorBean.validateDate}"/>
 				<h:message
 				style="color: red; font-style: oblique;"
 					for="dbox" />

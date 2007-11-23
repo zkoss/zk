@@ -10,11 +10,11 @@
 	<h:form id="helloForm">
 		<z:page>
 			<z:window title="ValueBinding Example" width="500px" border="normal">
-				<z:textbox id="tbox" f:value="#{ValueBindingBean.text}" /><br/>
-				<z:intbox id="ibox" f:value="#{ValueBindingBean.number}" /><br/>
-				<z:datebox id="dbox" format="yyyy/MM/dd" f:value="#{ValueBindingBean.date}" />
+				<z:textbox id="tbox" f_value="#{ValueBindingBean.text}" /><br/>
+				<z:intbox id="ibox" f_value="#{ValueBindingBean.number}" /><br/>
+				<z:datebox id="dbox" format="yyyy/MM/dd" f_value="#{ValueBindingBean.date}" />
 				<br/>
-				<z:listbox id="lbox" f:value="#{ValueBindingBean.selection}">
+				<z:listbox id="lbox" f_value="#{ValueBindingBean.selection}">
 					<z:listitem value="A" label="Item-A" />
 					<z:listitem value="B" label="Item-B" />
 					<z:listitem value="C" label="Item-C" />
