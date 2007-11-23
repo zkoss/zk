@@ -19,7 +19,15 @@ stamp=$(date +%Y-%m-%d)
 
 target=$1
 
-javadocdir=$(grep '^javadoc' build.setting.local)
+setting=build.setting.local
+if [ ! -f $setting ] ; then
+	setting=build.setting
+	if [ ! -f $setting ] ; then
+		echo $setting must be specified
+		exit 1
+	fi
+fi
+javadocdir=$(grep '^javadoc' $setting)
 javadocdir=${javadocdir#javadoc=}
 if [ "$javadocdir" = "" ] ; then
 	echo javadoc must be specified in $setting
@@ -27,7 +35,7 @@ if [ "$javadocdir" = "" ] ; then
 fi
 javadocdir=${javadocdir/\~/$HOME}
 
-ver=$(grep '^version=' build.setting.local)
+ver=$(grep '^version=' $setting)
 ver=${ver#version=}
 
 #jar
@@ -51,6 +59,9 @@ else
 	echo Default: daily
 	exit 1
 fi
+
+maindir="$(pwd)"
+echo "Working directory $maindir"
 
 rm -rf /tmp/zk
 
@@ -76,7 +87,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$srcnm/doc
 
 	echo Prepare ${srcnm}.tar.gz
-	cd $HOME/prj/zk1
+	cd $maindir
 	cp bin/* /tmp/zk/$srcnm/bin
 	cp build* /tmp/zk/$srcnm
 	cp -rp bin /tmp/zk/$srcnm
@@ -138,9 +149,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$prjnm/dist/src
 	mkdir -p /tmp/zk/$prjnm/doc
 
-	cd $HOME/prj/zk1
+	cd $maindir
 	mv -f /tmp/zk/*-sources.jar /tmp/zk/$prjnm/dist/src
-	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar dist/lib/ext/commons-el.jar /tmp/zk/$prjnm/dist/lib/ext
+	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar /tmp/zk/$prjnm/dist/lib/ext
 		#Fileupload
 	cp dist/lib/ext/bsh.jar /tmp/zk/$prjnm/dist/lib/ext
 		#BeanShell
@@ -155,7 +166,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/ext/Filters.jar /tmp/zk/$prjnm/dist/lib/ext
 		#captcha
 
-	cp dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$prjnm/dist/lib/
+	cp dist/lib/zcommons-el.jar dist/lib/zcommon.jar dist/lib/zweb.jar dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$prjnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$prjnm/dist/lib/zkforge
 
 	cp dist/lib/timelinez.jar dist/lib/ext/json_simple.jar /tmp/zk/$prjnm/dist/lib/zkforge
@@ -180,8 +191,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		function mvnrepo {
 			mkdir -p $1
 			mv /tmp/zk/$prjnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
-			sed -e "s/{version}/$ver/" $HOME/prj/zk1/$1/pom.xml > $1/pom.xml
-			cp $HOME/prj/zk1/dist/lib/$1.jar $1/$1-$ver.jar
+			sed -e "s/{version}/$ver/" $maindir/$1/pom.xml > $1/pom.xml
+			cp $maindir/dist/lib/$1.jar $1/$1-$ver.jar
 			jar cfM $1-$ver-bundle.jar -C $1 .
 		}
 		mkdir -p maven
@@ -212,7 +223,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$demonm/MyApp/WebContent
 	mkdir -p /tmp/zk/$demonm/doc
 
-	cd $HOME/prj/zk1
+	cd $maindir
 
 	cp -rp zkdemo/src/archive/* /tmp/zk/$demonm/zkdemo/WebContent
 	cp -rp zkdemo/codegen/archive/* /tmp/zk/$demonm/zkdemo/WebContent
@@ -241,14 +252,14 @@ fi
 if [ "$target" == "official" ]; then
 	mkdir -p /tmp/zk/doc
 
-	cd $HOME/prj/zk1/zkdoc
+	cd $maindir/zkdoc
 	for f in ZK-dev*.pdf ZK-quickstart.pdf ; do  
 		cp $f /tmp/zk/doc/${f%.pdf}-$ver.pdf
 	done
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm
 
-	cd $HOME/prj/zk1
+	cd $maindir
 	cp zkdoc/ZK-dev*.pdf zkdoc/ZK-quickstart.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
 
