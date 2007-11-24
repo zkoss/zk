@@ -1,4 +1,4 @@
-/* AbstractComposer.java
+/* GenericComposer.java
 
 {{IS_NOTE
 	Purpose:
@@ -21,7 +21,7 @@ package org.zkoss.zk.ui.util;
 import java.lang.reflect.Method;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.AbstractEventListener;
+import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.util.Composer;
 
 /**
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.util.Composer;
  *
  * <pre><code>
  * &lt;zscript>&lt;!-- both OK in zscript or a compiled Java class -->
- * public class MyComposer extends AbstractComposer {
+ * public class MyComposer extends GenericComposer {
  *    public void onOK() {
  *        //doOK!
  *        //...
@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.util.Composer;
  * @author robbiecheng
  * @since 3.0.1
  */
-abstract public class AbstractComposer extends AbstractEventListener implements Composer{
+abstract public class GenericComposer extends GenericEventListener implements Composer{
     
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
@@ -60,7 +60,7 @@ abstract public class AbstractComposer extends AbstractEventListener implements 
 	 * work.
 	 */
 	public void doAfterCompose(Component comp) throws Exception {
-		//bind this AbstractEventListener to the supervised component
+		//bind this GenericEventListener to the supervised component
 		bindComponent(comp);
 	}
 }
