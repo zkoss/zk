@@ -117,13 +117,12 @@ zk.Grid.prototype = {
 		this.qcells.push(cell);
 	},
 	/* set the height. */
-	setHgh: function (hgh) {
-		//note: we have to clean element.style.height. Otherwise, FF will
-		//overlap element with other elements
+	setHgh: function (hgh) {		
 		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
-			this.body.style.height = hgh;
-			this.element.style.height = "";	
-			this.element.setAttribute("zk_hgh", hgh);
+			var h =  this.element.offsetHeight - 2 - (!this.paging ? (this.head ? this.head.offsetHeight : 0)
+				- (this.foot ? this.foot.offsetHeight : 0) : 0); // Bug #1835369
+			if (h < 0) h = 0;
+			this.body.style.height = h + "px";
 			if (this.body.offsetHeight) {} // bug #1812001
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 			// and IE7 at initializing phase.
@@ -133,16 +132,11 @@ zk.Grid.prototype = {
 			//after grid become visible (due to opening an accordion tab)
 			this.body.style.height = "";
 			this.element.style.height = hgh;
-			this.element.removeAttribute("zk_hgh");
 		}
 	},
 	/* set the size*/
 	updSize: function () {
 		var hgh = this.element.style.height;
-		if (!hgh) {
-			hgh = this.element.getAttribute("zk_hgh");
-			if (!hgh) hgh = ""; //it might not be defined yet
-		}
 		this.setHgh(hgh);
 
 		//Bug 1553937: wrong sibling location
@@ -289,6 +283,9 @@ zk.Grid.prototype = {
 			if (this.foottbl) this.headtbl.style.width = val;
 			return true;
 		case "style.height":
+			this.element.style.height = val;
+			if (zk.ie && !zk.ie7 && this.body) this.body.style.height = val;
+			// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
 			this.setHgh(val);
 			if (!this.paging) this.init();
 			return true;
