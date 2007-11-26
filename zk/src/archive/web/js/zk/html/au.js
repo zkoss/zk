@@ -152,11 +152,12 @@ zkau.sendRemove = function (uuid) {
  */
 zkau._onRespReady = function () {
 	var que = zkau._respQue;
-	while (zkau._reqs.length) {
-		var req = zkau._reqs.shift();
+	var reqs = zkau._reqs;
+	while (reqs.length) {
+		var req = reqs.shift();
 		try {
 			if (req.readyState != 4) {
-				zkau._reqs.unshift(req);
+				reqs.unshift(req);
 				break; //we handle response sequentially
 			}
 
@@ -185,6 +186,14 @@ zkau._onRespReady = function () {
 				if (!zkau._ignorable && !zkau._unloading)
 					zk.error(mesg.FAILED_TO_RESPONSE+(req.statusText!="Unknown"?req.statusText:""));
 				zkau._cleanupOnFatal(zkau._ignorable);
+			}
+
+			//handle pending _sendNow
+			if (zkau._sendPending) {
+				zkau._sendPending = false;
+				var ds = zkau._dtids;
+				for (var j = ds.length; --j >= 0;)
+					setTimeout("zkau._sendNow('"+ds[j]+"')", 0);
 			}
 		} catch (e) {
 			//NOTE: if connection is off and req.status is accessed,
@@ -337,8 +346,14 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
+	var reqs = zkau._reqs;
+	for (var j = reqs.length; --j >= 0;)
+		if (reqs[j].readyState < 3 || (zk.ie && !zk.ie7)) {//not yet 'contact' with the server
+			zkau._sendPending = true;
+			return;
+		}
+
 	//bug 1721809: we cannot filter out ctl even if zk.processing
-	//or _inProcess
 
 	//decide implicit and ignorable
 	var implicit = true, ignorable = true;
@@ -377,35 +392,28 @@ zkau._sendNow = function (dtid) {
 	if (!content) return; //nothing to do
 
 	content = "dtid=" + dtid + content;
-	var req;
-	if (window.ActiveXObject) { //IE
-		req = new ActiveXObject("Microsoft.XMLHTTP");
-	} else if (window.XMLHttpRequest) { //None-IE
-		req = new XMLHttpRequest();
-	}
-
+	var req = zkau.ajaxRequest();
 	var msg;
-	if (req) {
+	try {
+		zkau._ignorable = ignorable && (zkau._ignorable || !reqs.length);
+		reqs.push(req);
+		req.onreadystatechange = zkau._onRespReady;
+
+		req.open("POST", zk_action, true);
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		req.send(content);
+
+		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
+		return; //success
+	} catch (e) {
 		try {
-			zkau._ignorable = ignorable && (zkau._ignorable || !zkau._reqs.length);
-
-			zkau._reqs.push(req);
-			req.onreadystatechange = zkau._onRespReady;
-
-			req.open("POST", zk_action, true);
-			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			req.send(content);
-
-			if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
-			return; //success
-		} catch (e) {
-			try {
-				if(typeof req.abort == "function") req.abort();
-			} catch (e2) {
-			}
-			msg = e.message;
+			if(typeof req.abort == "function") req.abort();
+		} catch (e2) {
 		}
+		msg = e.message;
 	}
+
+	//handle error
 	if (!ignorable && !zkau._unloading)
 		zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+(msg?"\n"+msg:""));
 	zkau._cleanupOnFatal(ignorable);
@@ -759,6 +767,19 @@ zkau.onimgout = function (evtel) {
 		el.src = zk.renType(el.src, "off");
 };
 
+/** Returns the Ajax request. */
+zkau.ajaxRequest = function () {
+	if (window.XMLHttpRequest) {
+		return new XMLHttpRequest();
+	} else {
+		try {
+			return new ActiveXObject('Msxml2.XMLHTTP');
+		} catch (e2) {
+			return new ActiveXObject('Microsoft.XMLHTTP');
+		}
+	}
+};
+
 /** Handles window.unload. */
 zkau._onUnload = function () {
 	zkau._unloading = true; //to disable error message
@@ -771,25 +792,15 @@ zkau._onUnload = function () {
 	//DHTML content 100% correctly)
 
 	if (!zk.opera && !zk.keepDesktop) {
-		var ds = zkau._dtids;
-		for (var j = 0; j < ds.length; ++j) {
-			var content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
-
-			var req;
-			if (window.ActiveXObject) { //IE
-				req = new ActiveXObject("Microsoft.XMLHTTP");
-			} else if (window.XMLHttpRequest) { //None-IE
-				req = new XMLHttpRequest();
+		try {
+			var ds = zkau._dtids;
+			for (var j = 0; j < ds.length; ++j) {
+				var req = zkau.ajaxRequest();
+				req.open("POST", zk_action, true);
+				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				req.send("dtid="+ds[j]+"&cmd.0=rmDesktop");
 			}
-
-			if (req) {
-				try {
-					req.open("POST", zk_action, true);
-					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-					req.send(content);
-				} catch (e) { //silent
-				}
-			}
+		} catch (e) { //silent
 		}
 	}
 
