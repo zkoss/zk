@@ -172,11 +172,12 @@ zkau.sendRemove = function (uuid) {
  */
 zkau._onRespReady = function () {
 	var que = zkau._respQue;
-	while (zkau._reqs.length) {
-		var req = zkau._reqs.shift();
+	var reqs = zkau._reqs;
+	while (reqs.length) {
+		var req = reqs.shift();
 		try {
 			if (req.readyState != 4) {
-				zkau._reqs.unshift(req);
+				reqs.unshift(req);
 				break; //we handle response sequentially
 			}
 
@@ -212,6 +213,12 @@ zkau._onRespReady = function () {
 						zk.error(mesg.FAILED_TO_RESPONSE+req.status+": "+(req.statusText!="Unknown"?req.statusText:""));
 					zkau._cleanupOnFatal(zkau._ignorable);
 				}
+			}
+			if (zkau._sendPending) {
+				zkau._sendPending = false;
+				var ds = zkau._dtids;
+				for (var j = ds.length; --j >= 0;)
+					setTimeout("zkau._sendNow('"+ds[j]+"')", 0);
 			}
 		} catch (e) {
 			//NOTE: if connection is off and req.status is accessed,
@@ -385,6 +392,13 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
+	var reqs = zkau._reqs;
+	for (var j = reqs.length; --j >= 0;)
+		if (reqs[j].readyState < 3) {//not yet 'contact' with the server
+			zkau._sendPending = true;
+			return;
+		}
+
 	//bug 1721809: we cannot filter out ctl even if zkau.processing
 
 	//decide implicit and ignorable
@@ -427,28 +441,27 @@ zkau._sendNow = function (dtid) {
 	var req = zkau.ajaxRequest();
 	zkau.sentTime = $now();
 	var msg;
-	if (req) {
+	try {
+		zkau._ignorable = ignorable && (zkau._ignorable || !reqs.length);
+		reqs.push(req);
+		req.onreadystatechange = zkau._onRespReady;
+
+		req.open("POST", zk_action, true);
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		if (zk.pfmeter) zkau._pfsend(req, dtid);
+		req.send(content);
+
+		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
+		return; //success
+	} catch (e) {
 		try {
-			zkau._ignorable = ignorable && (zkau._ignorable || !zkau._reqs.length);
-
-			zkau._reqs.push(req);
-			req.onreadystatechange = zkau._onRespReady;
-
-			req.open("POST", zk_action, true);
-			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-			if (zk.pfmeter) zkau._pfsend(req, dtid);
-			req.send(content);
-
-			if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
-			return; //success
-		} catch (e) {
-			try {
-				if(typeof req.abort == "function") req.abort();
-			} catch (e2) {
-			}
-			msg = e.message;
+			if(typeof req.abort == "function") req.abort();
+		} catch (e2) {
 		}
+		msg = e.message;
 	}
+
+	//handle error
 	if (!ignorable && !zkau._unloading)
 		zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+(msg?"\n"+msg:""));
 	zkau._cleanupOnFatal(ignorable);
