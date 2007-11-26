@@ -162,7 +162,7 @@
 				args.put("calbox",date);
 				args.put("timebox",time);
 				args.put("room",room.selectedItem.value);
-				Executions.createComponents("checkfree.zul",box,args).doModal();
+				Executions.createComponents("checkfree.zul",box,args).doHighlighted();
 			}
 		</z:zscript>
 		<z:vbox id="box" style="visible:none"/>

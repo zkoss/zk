@@ -50,7 +50,8 @@
 			<to-view-id>/reservation-sp.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<!-- JEFF ADDED -->
+
+	<!-- Navigation rule for testing -->
 	<navigation-rule>
 		<from-view-id>/test2/navigation.jsp</from-view-id>
 		<navigation-case>
@@ -81,7 +82,6 @@
 			<to-view-id>/test2/navigation_failed2.jsp</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<!-- JEFF ADDED END -->
 
 
 	<managed-bean>
@@ -143,7 +143,6 @@
 		<managed-bean-class>org.zkoss.jsfdemo.test.CommandBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<!-- JEFF ADDED -->
 	<managed-bean>
 		<managed-bean-name>ActionBean</managed-bean-name>
 		<managed-bean-class>
@@ -172,28 +171,29 @@
 		</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
-	<!-- JEFF ADDED END -->
+
 	<converter>
 		<converter-id>dateConverter</converter-id>
 		<converter-class>
 			org.zkoss.jsfdemo.DateConverter
 		</converter-class>
 	</converter>
-	<!-- JEFF ADDED -->
+
+
+	<!-- converter for test -->
 	<converter>
 		<converter-id>MyConverter</converter-id>
 		<converter-class>
 			org.zkoss.jsfdemo.test2.MyConverter
 		</converter-class>
 	</converter>
-	<!-- JEFF ADED END -->
-	<!-- JEFF ADDED -->
+
+	<!-- validator for test -->
 	<validator>
 		<validator-id>MyStringValidator</validator-id>
 		<validator-class>
 			org.zkoss.jsfdemo.test2.MyStringValidator
 		</validator-class>
 	</validator>
-	<!-- JEFF ADED END -->
 
 </faces-config>

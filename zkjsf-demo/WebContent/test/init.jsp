@@ -9,7 +9,7 @@
 <f:view>
 	<h:form id="helloForm">
 		<z:page>
-			<z:init use="org.zkoss.jsfdemo.test.TestInit" arg0="Dennis" arg1="Mary"/>
+			<z:init useClass="org.zkoss.jsfdemo.test.TestInit" arg0="Dennis" arg1="Mary"/>
 			<z:window title="Initial Check Window" id="ww">
 			   Arg0:<z:label id="arg0"/><z:separator/>
 			   Arg1:<z:label id="arg1"/><z:separator/>

@@ -1,14 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jsp:root version="1.2" 
-	xmlns:f="http://java.sun.com/jsf/core" 
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:jsp="http://java.sun.com/JSP/Page" 
-	xmlns:z="http://www.zkoss.org/jsf/zul"
-	>
 <HTML>
 <HEAD>
-<title>Simple Example</title>
+<title>Fileupload Example</title>
 </HEAD>
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+<%@ taglib uri="http://www.zkoss.org/jsf/zul" prefix="z"%>
 <body>
 <f:view>
 	<z:page>
@@ -34,4 +30,3 @@
 </f:view>
 </body>
 </HTML>
-</jsp:root>

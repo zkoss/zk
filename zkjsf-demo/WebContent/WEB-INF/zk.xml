@@ -16,22 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
  -->
 <zk>
-	
-	<!-- ThreadLocal for JSF -->
-	<listener>
-		<description>ThreadLocal Variables Synchronizer</description>
-		<listener-class>
-			org.zkoss.zkplus.util.ThreadLocalListener</listener-class>
-	</listener>
-	<preference>
-		<name>ThreadLocal</name>
-		<!--  for SUN RI -->
-		<!--<value>
-			javax.faces.context.FacesContext=instance;
-		</value> -->
-		<!--  for My faces  -->
-		<value>
-			javax.faces.context.FacesContext=_currentInstance;
-		</value>
-	</preference>
+	<system-config>	
+		<disable-event-thread/>
+	</system-config>
 </zk>

@@ -8,22 +8,20 @@
 <body>
 <f:view>
 	<z:page>
-		<z:window title="fileupload demo" border="normal">
+		<z:window title="click counter" border="normal">
+			<z:label id="lab"/>
+			<br/>
 		    <z:button label="Upload">
-			<z:attribute name="onClick">{
-			    Object media = Fileupload.get();
-			    if (media instanceof org.zkoss.image.Image) {
-				Image image = new Image();
-				image.setContent(media);
-				image.setParent(pics);
-			    } else if (media != null)
-				Messagebox.show("Not an image: "+media, "Error",
-				    Messagebox.OK, Messagebox.ERROR);
-			    }
-			</z:attribute>
+				<z:attribute name="onClick">
+				    lab.value = "Count:"+ (++count);
+				</z:attribute>
 		    </z:button>
 		    <z:vbox id="pics"/>
-		</z:window>		
+		    <z:zscript>
+		    	int count = 0;
+		    	lab.value = "Count:"+count;
+		    </z:zscript>
+		</z:window>
 		<a href="../index.html">Back</a>
 	</z:page>
 	
