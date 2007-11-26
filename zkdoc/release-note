@@ -11,6 +11,7 @@ ZK 3.0.1
   1830886: A way to make the listbox change its model less "drastic"
   1830278: HeaderElement with children
   1836417: HibernateSessionFactoryListener use different config name
+  1838456: A way to customize progressmeter's look with CSS
   
 * Bugs:
   1828044: When header is invisible, whole column should be disappeared
