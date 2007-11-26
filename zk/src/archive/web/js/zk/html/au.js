@@ -214,6 +214,8 @@ zkau._onRespReady = function () {
 					zkau._cleanupOnFatal(zkau._ignorable);
 				}
 			}
+
+			//handle pending _sendNow
 			if (zkau._sendPending) {
 				zkau._sendPending = false;
 				var ds = zkau._dtids;
@@ -394,7 +396,7 @@ zkau._sendNow = function (dtid) {
 
 	var reqs = zkau._reqs;
 	for (var j = reqs.length; --j >= 0;)
-		if (reqs[j].readyState < 3) {//not yet 'contact' with the server
+		if (reqs[j].readyState < 3 || (zk.ie && !zk.ie7)) {//not yet 'contact' with the server
 			zkau._sendPending = true;
 			return;
 		}
