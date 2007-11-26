@@ -1351,45 +1351,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<!-- ZK XUL Include Components -->
-	<tag>
-		<description>
-	Define the Include component.
-		</description>
-		<name>include</name>
-		<tag-class>org.zkoss.jsf.zul.tag.IncludeTag</tag-class>
-		<body-content>scriptless</body-content>
-		<dynamic-attributes>true</dynamic-attributes> 
-		<attribute>
-			<description>
-	If false, this tag is ignored. Default: true.
-			</description>
-			<name>if</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>
-	If true, this tag is ignored. Default: false.
-			</description>
-			<name>unless</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>
-	Default : Zul Component Include.
-			</description>
-			<name>use</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>forward</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
 	<!-- ZK XUL Label Components -->
 	<tag>
 		<description>

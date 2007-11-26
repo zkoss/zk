@@ -174,9 +174,7 @@ abstract public class AbstractTag extends UIComponentBodyTag {
     }
     
     /**
-     * check if the name is a special jsf core attribute
-     * @param name
-     * @return
+     * check if the name is a special jsf core attribute. The jsf core attribute name must start with 'f_' prefix
      */
     protected String checkSpeciaJSFCoreAttribute(String name){
     	if(name==null) return name;

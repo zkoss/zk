@@ -151,10 +151,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.jsf.zul.Imagemap</component-class>
 	</component>
 	<component>
-		<component-type>org.zkoss.jsf.zul.Include</component-type>
-		<component-class>org.zkoss.jsf.zul.Include</component-class>
-	</component>
-	<component>
 		<component-type>org.zkoss.jsf.zul.Init</component-type>
 		<component-class>org.zkoss.jsf.zul.Init</component-class>
 	</component>
