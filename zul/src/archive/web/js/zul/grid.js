@@ -118,7 +118,7 @@ zk.Grid.prototype = {
 	},
 	/* set the height. */
 	setHgh: function (hgh) {		
-		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
+		if (hgh && hgh != "auto") {
 			var h =  this.element.offsetHeight - 2 - (!this.paging ? (this.head ? this.head.offsetHeight : 0)
 				- (this.foot ? this.foot.offsetHeight : 0) : 0); // Bug #1835369
 			if (h < 0) h = 0;
