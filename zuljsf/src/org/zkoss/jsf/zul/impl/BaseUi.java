@@ -114,12 +114,12 @@ public class BaseUi extends BranchComponent {
 				}
 				
 				_comps = new Component []{_zulcomp};
-				composer.doBeforeComposeChildren(_zulcomp);
+				_composer.doBeforeComposeChildren(_zulcomp);
 				_zulcomp.getDefinition().applyProperties(_zulcomp);
 			}
 		} catch (Exception e) {
 			if(!_compDef.isInlineMacro()){
-				if(!composer.doCatch(e)){
+				if(!_composer.doCatch(e)){
 					throw new RuntimeException(e.getMessage(),e);						
 				}
 			}else{
@@ -128,7 +128,7 @@ public class BaseUi extends BranchComponent {
 		}finally{
 			if(!_compDef.isInlineMacro()){
 				try {
-					composer.doFinally();
+					_composer.doFinally();
 				} catch (Exception e) {
 					throw new RuntimeException(e.getMessage(),e);
 				}

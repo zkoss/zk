@@ -27,9 +27,7 @@ import org.zkoss.jsf.zul.impl.BaseCommand;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Menuitem is a JSF component implementation for {@link org.zkoss.zul.Menuitem}, 
- * 
- * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
+ * Menuitem is a JSF component implementation for {@link org.zkoss.zul.Menuitem}.
  * This class also implements {@link javax.faces.component.ActionSource}.
  * That means you can use action and actionListener features on this component.
  * <br/>
@@ -49,7 +47,15 @@ import org.zkoss.zk.ui.Component;
  * <pre><code>
  * &lt;z:menuitem id=&quot;menu&quot; label=&quot;submit&quot; f:actionListener=&quot;#{CommandBean.onActionPerform}&quot;/&gt;
  * </code></pre>
+ * <p/>
+ * In some application server which doesn't support attribute namespace you can use attribute prefix 'f_' to replace attribute namespace
+ * <br/>
+ * For example, 
+ * <pre>
+ * &lt;z:menuitem f_action=&quot;#{CommandBean.actionPerform}&quot;/&gt;
+ * </pre>
  * 
+ * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 
  * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   

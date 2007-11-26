@@ -50,8 +50,15 @@ import org.zkoss.zul.impl.XulElement;
  * <pre><code>
  * &lt;z:button id=&quot;btn&quot; label=&quot;submit&quot; f:actionListener=&quot;#{CommandBean.onActionPerform}&quot;/&gt;
  * </code></pre>
+ * <p/>
+ * In some application server which doesn't support attribute namespace you can use attribute prefix 'f_' to replace attribute namespace
+ * <br/>
+ * For example, 
+ * <pre>
+ * &lt;z:button f_action=&quot;#{CommandBean.actionPerform}&quot;/&gt;
+ * </pre>
  * 
- * 
+ * <p/>
  * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   
  * @author Dennis.Chen

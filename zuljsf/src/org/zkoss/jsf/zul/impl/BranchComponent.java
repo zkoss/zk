@@ -54,7 +54,7 @@ abstract public class BranchComponent extends LeafComponent{
 	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
-		composer = new ComposerHandler(getAttributeValue("apply"));
+		_composer = new ComposerHandler(getAttributeValue("apply"));
 		initComponent(page);
 		
 		//load children
@@ -74,7 +74,7 @@ abstract public class BranchComponent extends LeafComponent{
 					null, this, new ArrayList(), getBodyContent());
 		}
 		afterComposeComponent();// after Compose Component.
-		composer = null;
+		_composer = null;
 		setBodyContent(null); //clear
 		
 		

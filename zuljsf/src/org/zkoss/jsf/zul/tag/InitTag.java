@@ -38,7 +38,7 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	 */
 	protected Map _dynamicAttrMap = new LinkedHashMap();
 	
-	private String _use;
+	private String _useClass;
 	
 	
 	/**
@@ -48,15 +48,15 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 		super("Init");
 	}
 	
-	public void setUse(String use){
-        this._use = use;
+	public void setUseClass(String useClass){
+        this._useClass = useClass;
     }
 
 
 	public void release() {
 		super.release();
 		_dynamicAttrMap = null;
-		_use = null;
+		_useClass = null;
 		
 	}
 	/**
@@ -73,7 +73,7 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 		if(uri==null || ZUL_JSF_NS.equals(uri)){
 			_dynamicAttrMap.put(localName, value);
 			if("use".equals(localName))
-				throw new JspException("please set use, forward as a attribute!!!");
+				throw new JspException("please set use as a static attribute!!!");
 		}else if(uri==null || JSF_CORE_NS.equals(uri)){
 			if("binding".equals(localName)){
 				this.setBinding((String)value);
@@ -91,15 +91,15 @@ public class InitTag extends AbstractTag implements DynamicAttributes{
 	protected void setProperties(UIComponent comp) {
 		super.setProperties(comp);
 		FacesContext context = ((AbstractComponent)comp).getFacesContext();
-		if(_use!=null ){
-			if(isValueReference(_use)){
-				javax.faces.el.ValueBinding _vb = getFacesContext().getApplication().createValueBinding(_use);
+		if(_useClass!=null ){
+			if(isValueReference(_useClass)){
+				javax.faces.el.ValueBinding _vb = getFacesContext().getApplication().createValueBinding(_useClass);
 				Object obj  = _vb.getValue(context);
 				if(obj!=null){
-					((BaseInit)comp).setUse(obj.toString());
+					((BaseInit)comp).setUseClass(obj.toString());
 				}
 			}else{
-				((BaseInit)comp).setUse(_use);
+				((BaseInit)comp).setUseClass(_useClass);
 			}
 		}else{
 			throw new RuntimeException("Set use attribute for this initiator");

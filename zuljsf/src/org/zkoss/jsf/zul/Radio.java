@@ -23,13 +23,11 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * Radio is a JSF component implementation for {@link org.zkoss.zul.Radio}, 
- * 
- * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
- * 
+ * <p/>
  * Note : This component doen't implements ValueHolder, that means you can't bind it to a bean value for user input.
- * To bind raido value to bean for user input, please use {@link Radiogroup}   
- * 
- * 
+ * To bind raido value to bean for user input, please use {@link Radiogroup}
+ * <p/>   
+ * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   
  * @author Dennis.Chen

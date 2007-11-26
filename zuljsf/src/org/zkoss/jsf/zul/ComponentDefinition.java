@@ -23,7 +23,7 @@ import org.zkoss.jsf.zul.impl.BaseComponentDefinition;
 
 /**
  * ComponentDefinition is a JSF component that register the custom component definition to ZUL page.
- * 
+ * <p/>
  * Usage:<br/><code>
  * <br/>&lt;z:component name=&quot;mywindow&quot; extends=&quot;window&quot; useClass=&quot;org.zkoss.jsfdemo.test.ForwardWindow&quot; title=&quot;Forward Window&quot; /&gt;
  * <br/>&lt;z:component name=&quot;mybox&quot; macroURI=&quot;/test/macro-mybox.zul&quot; title=&quot;My Box&quot; /&gt;

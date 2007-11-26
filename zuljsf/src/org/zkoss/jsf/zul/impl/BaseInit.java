@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.util.Initiator;
 abstract public class BaseInit extends AbstractComponent {
 	private Map _compAttrMap;
 
-	private String _use;
+	private String _useClass;
 
 	/**
 	 * Override Method, write a special mark denoting the component in this
@@ -56,7 +56,7 @@ abstract public class BaseInit extends AbstractComponent {
 
 		Initiator init;
 		try {
-			init = (Initiator) Classes.forNameByThread(_use).newInstance();
+			init = (Initiator) Classes.forNameByThread(_useClass).newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(),e);
 		}
@@ -89,21 +89,21 @@ abstract public class BaseInit extends AbstractComponent {
 	 * @return the class name used to implement the ZUL Component, or null to
 	 *         use the default
 	 */
-	public String getUse() {
-		return _use;
+	public String getUseClass() {
+		return _useClass;
 	}
 
 	/**
 	 * Sets the class that implements {@link  Initiator}.
 	 * 
-	 * @param use
+	 * @param useClass
 	 *            a class name with derived class which is implements
 	 *            {@link Initiator}
 	 * @throws IllegalArgumentException
 	 *             if input class can't be found or is not implement Initiator
 	 */
-	public void setUse(String use) {
-		this._use = use;
+	public void setUseClass(String useClass) {
+		this._useClass = useClass;
 	}
 
 	/**
@@ -124,7 +124,7 @@ abstract public class BaseInit extends AbstractComponent {
 	public Object saveState(FacesContext context) {
 		Object values[] = new Object[4];
 		values[0] = super.saveState(context);
-		values[1] = _use;
+		values[1] = _useClass;
 		Object m[] = saveAttachedMapState(context, _compAttrMap);
 		values[2] = m[0];
 		values[3] = m[1];
@@ -138,7 +138,7 @@ abstract public class BaseInit extends AbstractComponent {
 	public void restoreState(FacesContext context, Object state) {
 		Object values[] = (Object[]) state;
 		super.restoreState(context, values[0]);
-		_use = (String) values[1];
+		_useClass = (String) values[1];
 		_compAttrMap = (Map) restoreAttachedMapState(context, values[2], values[3]);
 	}
 }

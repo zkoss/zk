@@ -24,7 +24,7 @@ import org.zkoss.jsf.zul.impl.BaseAttribute;
 /**
  * Attribute is a JSF component implementation for ZUL Attribute, 
  * 
- * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
+ * This component should be declared nested under other ZUl JSF Component.
  * 
  * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
  *   

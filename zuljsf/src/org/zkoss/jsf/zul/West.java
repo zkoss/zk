@@ -22,7 +22,7 @@ import org.zkoss.jsf.zul.impl.BranchComponent;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Window is a JSF component implementation for {@code org.zkoss.zkex.zul.West}, 
+ * West is a JSF component implementation for {@code org.zkoss.zkex.zul.West}, 
  * 
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 

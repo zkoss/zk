@@ -21,7 +21,6 @@ package org.zkoss.jsf.zul.impl;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,13 +33,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.lang.reflect.Fields;
-import org.zkoss.util.CollectionsX;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
@@ -51,7 +47,6 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.util.Composer;
 
 /**
  * The skeletal class used to implement the ZULJSF Component for ZK components
@@ -96,7 +91,7 @@ abstract public class LeafComponent extends AbstractComponent{
 
     
 
-	protected ComposerHandler composer = null;
+	protected ComposerHandler _composer = null;
 	
 	/** Returns the RootComponent that this Component belongs to.
 	 */
@@ -239,10 +234,10 @@ abstract public class LeafComponent extends AbstractComponent{
 	protected void loadZULTree(org.zkoss.zk.ui.Page page,StringWriter writer) throws IOException{
 		if (!isRendered() || !isEffective())
 			return; //nothing to do
-		composer = new ComposerHandler(_compAttrMap.get("apply"));
+		_composer = new ComposerHandler(_compAttrMap.get("apply"));
 		initComponent(page);
 		afterComposeComponent();//finish compose the component
-		composer = null;
+		_composer = null;
 		setBodyContent(null); //clear
 	}
 	
@@ -272,10 +267,10 @@ abstract public class LeafComponent extends AbstractComponent{
 			//apply definition
 			_zulcomp.getDefinition().applyProperties(_zulcomp);
 			
-			composer.doBeforeComposeChildren(_zulcomp);
+			_composer.doBeforeComposeChildren(_zulcomp);
 		} catch (Exception e) {
 			try {
-				composer.doCatch(e);
+				_composer.doCatch(e);
 			} catch (Exception e1) {
 				StackTraceElement[] oriArr = e.getStackTrace();
 				StackTraceElement[] erArr = e1.getStackTrace();
@@ -287,7 +282,7 @@ abstract public class LeafComponent extends AbstractComponent{
 			throw new RuntimeException(e);
 		} finally {
 			try {
-				composer.doFinally();
+				_composer.doFinally();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}	
@@ -367,9 +362,9 @@ abstract public class LeafComponent extends AbstractComponent{
 		if (_zulcomp instanceof AfterCompose)
 			((AfterCompose)_zulcomp).afterCompose();
 		
-		if (composer != null){
+		if (_composer != null){
 			try {
-				composer.doAfterCompose(_zulcomp);
+				_composer.doAfterCompose(_zulcomp);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

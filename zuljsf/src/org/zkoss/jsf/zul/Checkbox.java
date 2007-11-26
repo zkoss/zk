@@ -76,6 +76,16 @@ import org.zkoss.zk.ui.Component;
  * 	&lt;f:valueChangeListener type=&quot;your.ValueChangeListener&quot;/&gt;
  * &lt;/z:checkbox&gt
  * </pre>
+ * 
+ * <p/>
+ * In some application server which doesn't support attribute namespace you can use attribute prefix 'f_' to replace attribute namespace
+ * <br/>
+ * For example, 
+ * <pre>
+ * &lt;z:checkbox f_value=&quot;#{yourBean.value}&quot; /&gt;
+ * </pre>
+ * 
+ * <p/>
  * This component should be declared nested under {@link org.zkoss.jsf.zul.Page}.
  * 
  * <p/>To know more ZK component features you can refer to <a href="http://www.zkoss.org/">http://www.zkoss.org/</a>
