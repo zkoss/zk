@@ -424,13 +424,7 @@ zkau._sendNow = function (dtid) {
 	if (!content) return; //nothing to do
 
 	content = "dtid=" + dtid + content;
-	var req;
-	if (window.ActiveXObject) { //IE
-		req = new ActiveXObject("Microsoft.XMLHTTP");
-	} else if (window.XMLHttpRequest) { //None-IE
-		req = new XMLHttpRequest();
-	}
-
+	var req = zkau.ajaxRequest();
 	zkau.sentTime = $now();
 	var msg;
 	if (req) {
@@ -441,7 +435,7 @@ zkau._sendNow = function (dtid) {
 			req.onreadystatechange = zkau._onRespReady;
 
 			req.open("POST", zk_action, true);
-			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 			if (zk.pfmeter) zkau._pfsend(req, dtid);
 			req.send(content);
 
@@ -837,6 +831,19 @@ zkau.onimgout = function (evtel) {
 		el.src = zk.renType(el.src, "off");
 };
 
+/** Returns the Ajax request. */
+zkau.ajaxRequest = function () {
+	if (window.XMLHttpRequest) {
+		return new XMLHttpRequest();
+	} else {
+		try {
+			return new ActiveXObject('Msxml2.XMLHTTP');
+		} catch (e2) {
+			return new ActiveXObject('Microsoft.XMLHTTP');
+		}
+	}
+};
+
 /** Handles window.unload. */
 zkau._onUnload = function () {
 	zkau._unloading = true; //to disable error message
@@ -849,25 +856,15 @@ zkau._onUnload = function () {
 	//DHTML content 100% correctly)
 
 	if (!zk.opera && !zk.keepDesktop) {
-		var ds = zkau._dtids;
-		for (var j = 0; j < ds.length; ++j) {
-			var content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
-
-			var req;
-			if (window.ActiveXObject) { //IE
-				req = new ActiveXObject("Microsoft.XMLHTTP");
-			} else if (window.XMLHttpRequest) { //None-IE
-				req = new XMLHttpRequest();
+		try {
+			var ds = zkau._dtids;
+			for (var j = 0; j < ds.length; ++j) {
+				var req = zkau.ajaxRequest();
+				req.open("POST", zk_action, true);
+				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				req.send("dtid="+ds[j]+"&cmd.0=rmDesktop");
 			}
-
-			if (req) {
-				try {
-					req.open("POST", zk_action, true);
-					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-					req.send(content);
-				} catch (e) { //silent
-				}
-			}
+		} catch (e) { //silent
 		}
 	}
 
