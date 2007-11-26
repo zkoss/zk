@@ -118,7 +118,7 @@ zk.Grid.prototype = {
 	},
 	/* set the height. */
 	setHgh: function (hgh) {		
-		if (hgh && hgh != "auto") {
+		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
 			var h =  this.element.offsetHeight - 2 - (!this.paging ? (this.head ? this.head.offsetHeight : 0)
 				- (this.foot ? this.foot.offsetHeight : 0) : 0); // Bug #1835369
 			if (h < 0) h = 0;
@@ -285,7 +285,7 @@ zk.Grid.prototype = {
 		case "style.height":
 			this.element.style.height = val;
 			if (zk.ie && !zk.ie7 && this.body) this.body.style.height = val;
-			// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
+				// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
 			this.setHgh(val);
 			if (!this.paging) this.init();
 			return true;
