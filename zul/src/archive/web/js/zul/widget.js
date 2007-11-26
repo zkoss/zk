@@ -205,32 +205,25 @@ zkTxbox.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 }
+
 ////
-//intbox//
+//intbox/longbox/decimalbox/doublebox//
 zkInbox = {};
-zkInbox.init = zkTxbox.init;
-zkInbox.setAttr = zkTxbox.setAttr ;
-zkInbox.onHide = zkTxbox.onHide;
+zkLnbox = {};
+zkDcbox = {};
+zkDbbox = {};
+zkInbox.init = zkLnbox.init = zkDcbox.init = zkDbbox.init = zkTxbox.init;
+zkInbox.setAttr = zkLnbox.setAttr = zkDcbox.setAttr = zkDbbox.setAttr = zkTxbox.setAttr ;
+zkInbox.onHide = zkLnbox.onHide = zkDcbox.onHide = zkDbbox.onHide = zkTxbox.onHide;
 zkInbox.validate = function (cmp) {
 	return zkVld.onlyInt(cmp.id);
 };
-
-////
-//decimalbox//
-zkDcbox = {};
-zkDcbox.init = zkTxbox.init;
-zkDcbox.setAttr = zkTxbox.setAttr ;
-zkDcbox.onHide = zkTxbox.onHide;
+zkLnbox.validate = function (cmp) {
+	return zkVld.onlyLong(cmp.id);
+};
 zkDcbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
 };
-
-////
-//doublebox//
-zkDbbox = {};
-zkDbbox.init = zkTxbox.init;
-zkDbbox.setAttr = zkTxbox.setAttr ;
-zkDbbox.onHide = zkTxbox.onHide;
 zkDbbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
 };

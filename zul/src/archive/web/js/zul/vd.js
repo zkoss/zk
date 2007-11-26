@@ -97,7 +97,7 @@ zkVld.validate = function (id) {
 		throw ex;
 	}
 };
-zkVld.onlyInt = function (id) {
+zkVld.onlyInt = zkVld.onlyLong = function (id) {
 	return zkVld.onlyNum(id, true);
 };
 zkVld.onlyNum = function (id, noDot) {

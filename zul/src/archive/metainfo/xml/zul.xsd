@@ -253,6 +253,7 @@
 			<xs:element ref="intbox" />
 			<xs:element ref="label" />
 			<xs:element ref="listbox" />
+			<xs:element ref="longbox" />
 			<xs:element ref="menubar" />
 			<xs:element ref="menupopup" />
 			<xs:element ref="paging" />
@@ -911,6 +912,19 @@
 	<!-- intbox -->
 	<xs:element name="intbox" type="intboxType" />
 	<xs:complexType name="intboxType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attribute name="onChanging" type="xs:string" use="optional" />
+		<xs:attribute name="onFocus" type="xs:string" use="optional" />
+		<xs:attribute name="onBlur" type="xs:string" use="optional" />
+		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
+		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- longbox -->
+	<xs:element name="longbox" type="longboxType" />
+	<xs:complexType name="longboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
