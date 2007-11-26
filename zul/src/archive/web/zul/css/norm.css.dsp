@@ -810,6 +810,11 @@ div.errbox {
 div.progressmeter {
 	border: 1px inset; text-align: left;
 }
+span.progressmeter-img {
+	display:-moz-inline-box; display:inline-block;
+	background-image: url(${c:encodeURL('~./zk/img/prgmeter.gif')});
+	height: 10px;
+}
 
 div.paging, div.paging a {
 	font-size: x-small; color: #a30; font-weight: bold;

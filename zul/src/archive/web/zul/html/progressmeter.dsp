@@ -18,4 +18,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" z.type="zul.widget.PMeter"${self.outerAttrs}${self.innerAttrs}><img id="${self.uuid}!img" style="height:10px" src="${c:encodeURL('~./zk/img/prgmeter.gif')}"/></div>
+<div id="${self.uuid}" z.type="zul.widget.PMeter"${self.outerAttrs}${self.innerAttrs}><span id="${self.uuid}!img" class="${self.iconSclass}"></span></div>
