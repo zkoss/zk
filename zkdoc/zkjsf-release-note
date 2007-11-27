@@ -4,11 +4,13 @@ ZK JSF Components 1.0.0
   1835683 : JSF:Support Custom Component Definition
   1835684 : JSF:Support Macro Component
   1835688 : JSF:Support Initiator
+  1836820 : [JSF]Provide attribute prefix to replace attribute namesapce
   
 * Bugs:
    
   1832862 : Content disappear in JSFComponent   
   1834391 : [JSF] Can not use forward attribute in button
+  1836368 : [JSF]Datebox throws Exception in some location.
 	
 * Upgrade Notes:
 
