@@ -99,6 +99,26 @@ public interface ExecutionCtrl {
 	/** Sets the header of response.
 	 */
 	public void setHeader(String name, String value);
+	/** Sets a response header with the given name and date-value.
+	 * The date is specified in terms of milliseconds since the epoch.
+	 * This method allows response headers to have multiple values.
+	 * @since 2.4.2
+	 */
+	public void setDateHeader(String name, long value);
+	/** Adds a responseheader with the given name and value.
+	 *
+	 * @param value the additional header value If it contains octet string,
+	 * it should be encoded according to RFC 2047
+	 * (http://www.ietf.org/rfc/rfc2047.txt).
+	 * @since 2.4.2
+	 */
+	public void addHeader(String name, String value);
+	/** Adds a response header with the given name and date-value.
+	 * The date is specified in terms of milliseconds since the epoch.
+	 * This method allows response headers to have multiple values.
+	 * @since 2.4.2
+	 */
+	public void addDateHeader(String name, long value);
 
 	/** Returns the value of an attribute in the client request
 	 * (e.g., HTTP request) that creates this execution.

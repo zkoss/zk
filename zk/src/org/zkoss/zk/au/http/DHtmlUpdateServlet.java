@@ -165,10 +165,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
-		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0");
-		response.setHeader("Pragma", "no-cache,no-store");
-		response.setHeader("Expires", "-1");
-
 		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
 			final String scmd = request.getParameter("cmd.0");

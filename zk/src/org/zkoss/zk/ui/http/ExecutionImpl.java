@@ -246,6 +246,18 @@ public class ExecutionImpl extends AbstractExecution {
 		if (_response instanceof HttpServletResponse)
 			((HttpServletResponse)_response).setHeader(name, value);
 	}
+	public void setDateHeader(String name, long value) {
+		if (_response instanceof HttpServletResponse)
+			((HttpServletResponse)_response).setDateHeader(name, value);
+	}
+	public void addHeader(String name, String value) {
+		if (_response instanceof HttpServletResponse)
+			((HttpServletResponse)_response).addHeader(name, value);
+	}
+	public void addDateHeader(String name, long value) {
+		if (_response instanceof HttpServletResponse)
+			((HttpServletResponse)_response).addDateHeader(name, value);
+	}
 
 	public Object getRequestAttribute(String name) {
 		return _request.getAttribute(name);
