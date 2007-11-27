@@ -150,7 +150,7 @@ public class Listcell extends LabelImageElement {
 
 	//-- Internal use only --//
 	/** Returns the prefix of the first column (in HTML tags), null if this
-	 * is not first column. Called only by listcell.jsp.
+	 * is not first column. Called only by listcell.dsp.
 	 */
 	public String getColumnHtmlPrefix() {
 		final Listitem item = getListitem();
