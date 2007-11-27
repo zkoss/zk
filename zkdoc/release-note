@@ -4,9 +4,11 @@ ZK 2.4.2
   1820771: Make ZK independent of JSP
 
 * Bugs:
+  1839246: More reliable handling of Ajax requests
   1830311: Cannot display Japanese messages
   1835878: select / colapse of a Treeitem scrolls tree to right.
   1814298: Memory Leak in EventThread
+  1818500: IE Cache Problem.
 
 * Upgrade Note:
   + The pageContext variable in EL expressions becomes an instance of
