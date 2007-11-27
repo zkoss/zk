@@ -239,9 +239,11 @@ implements Cloneable, Condition, java.io.Externalizable {
 				if (o instanceof Object[])
 					return MultiComposer.getComposer((Object[])o);
 
-				if (o instanceof String)
-					o = Classes.newInstanceByThread(((String)o).trim());
-				else if (o instanceof Class)
+				if (o instanceof String) {
+					final String clsnm = ((String)o).trim();
+					o = page != null ? page.resolveClass(clsnm).newInstance():
+						Classes.newInstanceByThread(clsnm);
+				} else if (o instanceof Class)
 					o = ((Class)o).newInstance();
 
 				if (o instanceof Composer)

@@ -300,13 +300,29 @@ public interface Page extends IdSpace {
 	 * the thread class loader and the classes defined in the
 	 * loaded interpreters.
 	 *
-	 * <p>Note: it also looks for the class by use of the current thread's
-	 * class loader.
+	 * <p>Note: if not defined in the interpeter, it will also look for
+	 * the class by use of the current thread's class loader.
+	 * See {@link #resolveClass}.
 	 *
 	 * @return the class, or null if not found
 	 * @see #getLoadedInterpreters
 	 */
 	public Class getZScriptClass(String clsnm);
+	/** Resolves the class of the specified name.
+	 * It first looks at Classes and then all loaded interpreters
+	 * {@link #getLoadedInterpreters}.
+	 *
+	 * <p>It is similar to {@link #getZScriptClass}, except
+	 * <ol>
+	 * <li>It searches the current thread's class loader first,
+	 * and then, the loaded interpreters.</li>
+	 * <li>It throws ClassNotFoundException if not found</li>
+	 * </ol>
+	 *
+	 * @since 3.0.1
+	 * @see #getZScriptClass
+	 */
+	public Class resolveClass(String clsnm) throws ClassNotFoundException;
 
 	/** Returns the variable of the specified name by searching
 	 * the loaded interpreters.

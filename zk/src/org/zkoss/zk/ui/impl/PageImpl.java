@@ -364,6 +364,19 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			((Component)it.next()).detach();
 	}
 
+	public Class resolveClass(String clsnm) throws ClassNotFoundException {
+		try {
+			return Classes.forNameByThread(clsnm);
+		} catch (ClassNotFoundException ex) {
+			for (Iterator it = getLoadedInterpreters().iterator();
+			it.hasNext();) {
+				final Class c = ((Interpreter)it.next()).getClass(clsnm);
+				if (c != null)
+					return c;
+			}
+			throw ex;
+		}
+	}
 	public void setVariable(String name, Object val) {
 		_ns.setVariable(name, val, true);
 	}
