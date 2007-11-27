@@ -21,14 +21,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <style src="~./zul/css/ext.css.dsp"/>
-<style>
-div.layout-container{
-	background:white;
-}
-.sort{
-	position: none;
-}
-</style>
 <borderlayout use="org.zkoss.zkdemo.userguide.MainLayout">
 	<west border="none" size="320px" splittable="true" minsize="150" maxsize="500" collapsible="true">
 		<tree id="toc" use="org.zkoss.zkdemo.userguide.LayoutTree" pageSize="-1" vflex="true" height="100%" width="100%">
