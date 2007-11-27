@@ -1010,12 +1010,13 @@ zk.Selectable.prototype = {
 	},
 
 	/** Sels all items (don't notify server and change focus, because it is from server). */
-	_selectAll: function () {
+	_selectAll: function (notify) {
 		var rows = this.bodyrows;
 		for (var j = 0; j < rows.length; ++j)
 			this._changeSelect(rows[j], true);
 
 		this._setSelectedId(rows.length ? rows[0].id: null);
+		if (notify) this._sendSelect();
 	},
 
 	/** Notifies the server the selection is changed (callable only if multiple). */
@@ -1318,7 +1319,16 @@ zkLcfc.init = function (cmp) {
 	zk.listen(cmp, "focus", zkSel.cmonfocus);
 	zk.listen(cmp, "blur", zkSel.cmonblur);
 };
-
+zkLhfc = {}; //checkmark for listheader
+zkLhfc.init = function (cmp) {
+	zk.listen(cmp, "click", zkLhfc.onclick);
+};
+zkLhfc.onclick = function (evt) {
+	var cmp = zkau.evtel(evt);	
+	var meta = zkau.getMetaByType(cmp, "Libox");
+	if (meta)
+		cmp.checked ? meta._selectAll(true) : meta.select("");
+};
 zk.addModuleInit(function () {
 	//Listheader
 	//init it later because zul.js might not be loaded yet
