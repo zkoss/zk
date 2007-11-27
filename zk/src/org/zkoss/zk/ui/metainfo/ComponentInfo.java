@@ -237,7 +237,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 				}
 
 				if (o instanceof Object[])
-					return MultiComposer.getComposer((Object[])o);
+					return MultiComposer.getComposer(page, (Object[])o);
 
 				if (o instanceof String) {
 					final String clsnm = ((String)o).trim();

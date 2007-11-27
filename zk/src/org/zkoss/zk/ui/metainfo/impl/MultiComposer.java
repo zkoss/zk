@@ -37,22 +37,19 @@ public class MultiComposer implements Composer {
 	/** Returns an instance of composer to represents the specified
 	 * array of composers, or null if no composer is specified.
 	 *
+	 * @param page used to resolve the class if ary contains a class name.
+	 * Ignored if null.
 	 * @param ary an array of Composer instances, or the name of the class,
 	 * or the class that implements {@link Composer}.
 	 * @return a composer to represent cs, or null if cs is null or empty.
 	 */
-	public static Composer getComposer(Object[] ary) throws Exception{
+	public static Composer getComposer(Page page, Object[] ary)
+	throws Exception {
 		if (ary == null || ary.length == 0)
 			return null;
 
-		if (ary.length == 1) {
-			Object o = ary[0];
-			if (o instanceof String)
-				o = Classes.newInstanceByThread(((String)o).trim());
-			else if (o instanceof Class)
-				o = ((Class)o).newInstance();
-			return (Composer)o;
-		}
+		if (ary.length == 1)
+			return toComposer(page, ary[0]);
 
 		final Composer[] cs;
 		boolean ext = false;
@@ -66,18 +63,24 @@ public class MultiComposer implements Composer {
 		} else {
 			cs = new Composer[ary.length];
 			for (int j = ary.length; --j >=0;) {
-				final Object o = ary[j];
-				cs[j] = (Composer)(
-					o instanceof String ?
-						Classes.newInstanceByThread(((String)o).trim()):
-					o instanceof Class ?
-						((Class)o).newInstance(): (Composer)o);
+				cs[j] = toComposer(page, ary[j]);
 				ext = ext || (cs[j] instanceof ComposerExt);
 			}
 		}
 
 		if (ext) return new MultiComposerExt(cs);
 		return new MultiComposer(cs);
+	}
+	private static Composer toComposer(Page page, Object o)
+	throws Exception {
+		if (o instanceof String) {
+			final String clsnm = ((String)o).trim();
+			o = page != null ? page.resolveClass(clsnm).newInstance():
+				Classes.newInstanceByThread(clsnm);
+		} else if (o instanceof Class) {
+			o = ((Class)o).newInstance();
+		}
+		return (Composer)o;
 	}
 
 	/** The constructor.
