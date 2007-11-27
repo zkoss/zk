@@ -1246,7 +1246,7 @@ public class Configuration {
 	 *
 	 * <p>Default: 9000
 	 *
-	 * <p>There are many reasons an Ajax request doesn't be received by
+	 * <p>There are many reasons an Ajax request is not received by
 	 * the server. With the resending mechanism, ZK ensures the reliable
 	 * connection between the client and the server.
 	 *
