@@ -813,7 +813,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 					_desktop.getDevice().isCacheable();
 			if (!cacheable) {
 				//Bug 1520444
-				execCtrl.setHeader("Pragma", "no-cache"); // bug 1520444
+				execCtrl.setHeader("Pragma", "no-cache");
 				execCtrl.addHeader("Cache-Control", "no-cache");
 				execCtrl.addHeader("Cache-Control", "no-store");
 				//execCtrl.addHeader("Cache-Control", "private");
