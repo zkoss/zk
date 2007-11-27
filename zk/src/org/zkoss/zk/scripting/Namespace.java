@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.scripting;
 
 import java.util.Set;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -35,6 +36,17 @@ import org.zkoss.zk.ui.Component;
  * @see Interpreter
  */
 public interface Namespace {
+	/** Returns the component that owns this namespace, or null
+	 * if it is owned by a page, or not owned by any one.
+	 * @since 3.0.1
+	 */
+	public Component getOwner();
+	/** Returns the page that owns this namespace, or null if not owned
+	 * by any page.
+	 * @since 3.0.1
+	 */
+	public Page getOwnerPage();
+
 	/** Returns a set of variable names stored in this name space.
 	 * <p>Note: it doesn't include the parent's varaibles.
 	 */

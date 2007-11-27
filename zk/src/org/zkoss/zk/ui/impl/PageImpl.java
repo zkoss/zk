@@ -1168,6 +1168,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		private final Map _vars = new HashMap();
 
 		//Namespace//
+		public Component getOwner() {
+			return null;
+		}
+		public Page getOwnerPage() {
+			return PageImpl.this;
+		}
 		public Set getVariableNames() {
 			return _vars.keySet();
 		}

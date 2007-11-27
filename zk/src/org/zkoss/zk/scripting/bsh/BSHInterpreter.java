@@ -182,7 +182,7 @@ implements SerializableAware, HierachicalAware {
 		_ip = new bsh.Interpreter();
 		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
 
-		_bshns = new GlobalNS(null, _ip.getClassManager(), "global");
+		_bshns = new GlobalNS(_ip.getClassManager(), "global");
 		_ip.setNameSpace(_bshns);
 	}
 	public void destroy() {
@@ -240,20 +240,31 @@ implements SerializableAware, HierachicalAware {
 		ns.setVariable(VAR_NS, new NSX(bshns), true);
 		return bshns;
 	}
+	/** Prepares the namespace for detached components. */
+	private static NameSpace prepareDetachedNS(Namespace ns) {
+		NSX nsx = (NSX)ns.getVariable(VAR_NS, true);
+		if (nsx != null)
+			return nsx.ns;
+
+		//bind bshns and ns
+		Namespace p = ns.getParent();
+		NameSpace bshns = new NS(p != null ? prepareDetachedNS(p): null, null, ns);
+		ns.setVariable(VAR_NS, new NSX(bshns), true);
+		return bshns;
+	}
 
 	//supporting classes//
 	/** The global namespace. */
-	private class GlobalNS extends NameSpace {
+	private static abstract class AbstractNS extends NameSpace {
 		private boolean _inGet;
 
-	    protected GlobalNS(NameSpace parent, BshClassManager classManager,
+	    protected AbstractNS(NameSpace parent, BshClassManager classManager,
 	    String name) {
 	    	super(parent, classManager, name);
 	    }
 
-		protected Object getFromNamespace(String name) {
-			return BSHInterpreter.this.getFromNamespace(name);
-		}
+		/** Deriver has to override this method. */
+		abstract protected Object getFromNamespace(String name);
 
 		//super//
 		protected Variable getVariableImpl(String name, boolean recurse)
@@ -290,8 +301,18 @@ implements SerializableAware, HierachicalAware {
 	    	 //to speed up the formance
 	    }
 	}
+	/** The global NameSpace. */
+	private class GlobalNS extends AbstractNS {
+	    private GlobalNS(BshClassManager classManager,
+	    String name) {
+	    	super(null, classManager, name);
+	    }
+		protected Object getFromNamespace(String name) {
+			return BSHInterpreter.this.getFromNamespace(name);
+		}
+	}
 	/** The per-Namespace NameSpace. */
-	private class NS extends GlobalNS {
+	private static class NS extends AbstractNS {
 		private final Namespace _ns;
 
 		private NS(NameSpace parent, BshClassManager classManager, Namespace ns) {
@@ -300,14 +321,29 @@ implements SerializableAware, HierachicalAware {
 			_ns.addChangeListener(new NSCListener(this));
 		}
 
+		//super//
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
-			return BSHInterpreter.this.getFromNamespace(_ns, name);
+			final BSHInterpreter ip = getInterpreter();
+			return ip != null ? ip.getFromNamespace(_ns, name):
+				_ns.getVariable(name, false);
+		}
+		private BSHInterpreter getInterpreter() {
+			Page owner = _ns.getOwnerPage();
+			if (owner != null) {
+				for (Iterator it = owner.getLoadedInterpreters().iterator();
+				it.hasNext();) {
+					final Object ip = it.next();
+					if (ip instanceof BSHInterpreter)
+						return (BSHInterpreter)ip;
+				}
+			}
+			return null;
 		}
 	}
-	private class NSCListener implements NamespaceChangeListener {
-		private final NameSpace _bshns;
-		private NSCListener(NameSpace bshns) {
+	private static class NSCListener implements NamespaceChangeListener {
+		private final NS _bshns;
+		private NSCListener(NS bshns) {
 			_bshns = bshns;
 		}
 		public void onAdd(String name, Object value) {
@@ -315,10 +351,17 @@ implements SerializableAware, HierachicalAware {
 		public void onRemove(String name) {
 		}
 		public void onParentChanged(Namespace newparent) {
-			_bshns.setParent(
-				newparent != null ? prepareNS(newparent): null);
+			if (newparent != null) {
+				final BSHInterpreter ip = _bshns.getInterpreter();
+				_bshns.setParent(
+					ip != null ? ip.prepareNS(newparent):
+						prepareDetachedNS(newparent));
+				return;
+			}
+
+			_bshns.setParent(null);
 		}
-	};
+	}
 	/** Non-serializable namespace. It is used to prevent itself from
 	 * being serialized
 	 */
