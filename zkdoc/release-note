@@ -42,6 +42,8 @@ ZK 3.0.1
   1834900: Tree paging on Tree's Treechildren
   1835369: [IE Only] Grid floats outside Groupbox
   1838397: OutOfMemoryError if sendEvent called many times
+  1828404: Treeitem setOpen doesn't load children
+  1826700: Update content of treeitem from treemodel
 
 	--------
 ZK 3.0.0
