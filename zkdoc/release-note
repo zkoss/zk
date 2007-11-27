@@ -45,6 +45,7 @@ ZK 3.0.1
   1838852: exception reattaching window in new desktop
   1828404: Treeitem setOpen doesn't load children
   1826700: Update content of treeitem from treemodel
+  1839376: Composer cannot be defined using zscript
 
 	--------
 ZK 3.0.0
