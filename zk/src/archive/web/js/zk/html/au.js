@@ -153,8 +153,10 @@ zkau.sendRemove = function (uuid) {
  * to resend
  */
 zkau._areqTmout = function () {
+	//Note: we don't resend if readyState >= 3. Otherwise, the server
+	//will process the same request twice
 	var req = zkau._areq, reqInf = zkau._areqInf;
-	if (req && req.readyState != 4) {
+	if (req && req.readyState < 3) {
 		zkau._areq = zkau._areqInf = null;
 		try {
 			if(typeof req.abort == "function") req.abort();
