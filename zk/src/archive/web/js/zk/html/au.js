@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 if (!window.zkau) { //avoid eval twice
 zkau = {};
 
-zkau._reqs = []; //Ajax requests
 zkau._respQue = []; //responses in XML
 zkau._evts = {}; //(dtid, Array())
 zkau._js4resps = []; //JS to eval upon response
@@ -148,18 +147,13 @@ zkau.sendRemove = function (uuid) {
 	zkau.send({uuid: uuid, cmd: "remove", data: null}, 5);
 };
 
-/** Called when the response is received from zkau._reqs.
+/** Called when the response is received from zkau._areq.
  */
 zkau._onRespReady = function () {
-	var que = zkau._respQue;
-	var reqs = zkau._reqs;
-	while (reqs.length) {
-		var req = reqs.shift();
-		try {
-			if (req.readyState != 4) {
-				reqs.unshift(req);
-				break; //we handle response sequentially
-			}
+	try {
+		var req = zkau._areq;
+		if (req && req.readyState == 4) {
+			zkau._areq = null; //done
 
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
@@ -173,6 +167,7 @@ zkau._onRespReady = function () {
 					sid = null;
 
 				//locate whether to insert the response by use of sid
+				var que = zkau._respQue;
 				var ofs = que.length;
 				if (sid != null)
 					while (ofs > 0 && que[ofs - 1].sid != null
@@ -187,23 +182,29 @@ zkau._onRespReady = function () {
 					zk.error(mesg.FAILED_TO_RESPONSE+(req.statusText!="Unknown"?req.statusText:""));
 				zkau._cleanupOnFatal(zkau._ignorable);
 			}
-
-			//handle pending _sendNow
-			if (zkau._sendPending) {
-				zkau._sendPending = false;
-				var ds = zkau._dtids;
-				for (var j = ds.length; --j >= 0;)
-					setTimeout("zkau._sendNow('"+ds[j]+"')", 0);
-			}
-		} catch (e) {
-			//NOTE: if connection is off and req.status is accessed,
-			//Mozilla throws exception while IE returns a value
-			if (!zkau._ignorable && !zkau._unloading) {
-				var msg = e.message;
-				zk.error(mesg.FAILED_TO_RESPONSE+(msg.indexOf("NOT_AVAILABLE")<0?msg:""));
-			}
-			zkau._cleanupOnFatal(zkau._ignorable);
 		}
+	} catch (e) {
+		zkau._areq = null;
+		try {
+			if(req && typeof req.abort == "function") req.abort();
+		} catch (e2) {
+		}
+
+		//NOTE: if connection is off and req.status is accessed,
+		//Mozilla throws exception while IE returns a value
+		if (!zkau._ignorable && !zkau._unloading) {
+			var msg = e.message;
+			zk.error(mesg.FAILED_TO_RESPONSE+(msg.indexOf("NOT_AVAILABLE")<0?msg:""));
+		}
+		zkau._cleanupOnFatal(zkau._ignorable);
+	}
+
+	//handle pending _sendNow
+	if (zkau._sendPending && !zkau._areq) {
+		zkau._sendPending = false;
+		var ds = zkau._dtids;
+		for (var j = ds.length; --j >= 0;)
+			setTimeout("zkau._sendNow('"+ds[j]+"')", 0);
 	}
 
 	zkau._doQueResps();
@@ -253,7 +254,7 @@ zkau._checkProgress = function () {
 		zk.progressDone();
 };
 zkau._inProcess = function () {
-	return zkau._respQue.length || zkau._reqs.length;
+	return zkau._respQue.length || zkau._areq;
 };
 
 /** Returns the timeout of the specified event.
@@ -289,7 +290,7 @@ zkau.addOnSend = function (func) {
 zkau.removeOnSend = function (func) {
 	zkau._onsends.remove(func);
 };
-/** Sends a request to the client and queue it to zkau._reqs.
+/** Sends a request to the client
  * @param timout milliseconds.
  * If negative, it won't be sent until next non-negative event
  */
@@ -346,12 +347,10 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
-	var reqs = zkau._reqs;
-	for (var j = reqs.length; --j >= 0;)
-		if (reqs[j].readyState < 3 || (zk.ie && !zk.ie7)) {//not yet 'contact' with the server
-			zkau._sendPending = true;
-			return;
-		}
+	if (zkau._areq) { //send ajax request one by one
+		zkau._sendPending = true;
+		return;
+	}
 
 	//bug 1721809: we cannot filter out ctl even if zk.processing
 
@@ -366,6 +365,7 @@ zkau._sendNow = function (dtid) {
 			}
 		}
 	}
+	zkau._ignorable = ignorable;
 
 	//callback (fckez uses it to ensure its value is sent back correctly
 	for (var j = 0; j < zkau._onsends.length; ++j) {
@@ -392,13 +392,10 @@ zkau._sendNow = function (dtid) {
 	if (!content) return; //nothing to do
 
 	content = "dtid=" + dtid + content;
-	var req = zkau.ajaxRequest();
+	var req = zkau._areq = zkau.ajaxRequest();
 	var msg;
 	try {
-		zkau._ignorable = ignorable && (zkau._ignorable || !reqs.length);
-		reqs.push(req);
 		req.onreadystatechange = zkau._onRespReady;
-
 		req.open("POST", zk_action, true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		req.send(content);
@@ -513,10 +510,6 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 		return;
 	}
 	var cmp = $e(uuid);
-
-//	if (zkau.procX
-//	&& zkau.procX(cmd, uuid, cmp, datanum, dt1, dt2, dt3, dt4))
-//		return;
 
 	fn = zkau.cmd1[cmd];
 	if (fn) {
