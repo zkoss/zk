@@ -132,6 +132,7 @@ public class ConfigParser {
 			//  processing-prompt-delay
 			//	error-reload
 			//	tooltip-delay
+			//  resend-delay
 				parseClientConfig(config, el);
 
 			} else if ("session-config".equals(elnm)) {
@@ -323,6 +324,9 @@ public class ConfigParser {
 
 		v = parseInteger(conf, "tooltip-delay", true);
 		if (v != null) config.setTooltipDelay(v.intValue());
+
+		v = parseInteger(conf, "resend-delay", true);
+		if (v != null) config.setResendDelay(v.intValue());
 
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)

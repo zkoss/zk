@@ -505,7 +505,7 @@ zkau._sendNow = function (dtid) {
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		if (zk.pfmeter) zkau._pfsend(req, dtid);
 
-		zkau._areqInf = [setTimeout(zkau._areqTmout, 9100), reqes];
+		zkau._areqInf = [setTimeout(zkau._areqTmout, zk_resndto), reqes];
 		req.send(content);
 
 		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying

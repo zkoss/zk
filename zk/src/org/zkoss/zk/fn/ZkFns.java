@@ -166,13 +166,15 @@ public class ZkFns {
 			append(sb, (JavaScript)it.next());
 
 		sb.append("\n<script type=\"text/javascript\">\n")
-			.append("zk_action=\"").append(action)
+			.append("zk_ver='").append(wapp.getVersion())
+			.append("';\nzk_action=\"").append(action)
 			.append("\";\nzk_procto=")
 				.append(config.getProcessingPromptDelay())
 			.append(";\nzk_tipto=")
 				.append(config.getTooltipDelay())
-			.append(";\nzk_ver='").append(wapp.getVersion())
-			.append("';\n");
+			.append(";\nzk_resndto=")
+				.append(config.getResendDelay())
+			.append(";\n");
 
 		if (!config.isDisableBehindModalEnabled())
 			sb.append("zk.ndbModal=true;\n");
