@@ -20,6 +20,7 @@ if (!window.zkau) { //avoid eval twice
 zkau = {};
 
 zkau._respQue = []; //responses in XML
+zkau._areqTry = 0; //# of resend
 zkau._evts = {}; //(dtid, Array())
 zkau._js4resps = []; //JS to eval upon response
 zkau._metas = {}; //(id, meta)
@@ -181,6 +182,7 @@ zkau._onRespReady = function () {
 				//revert any pending when the first response is received
 
 			if (req.status == 200) {
+				zkau._areqTry = 0;
 				var sid = req.responseXML.getElementsByTagName("sid");
 				if (sid && sid.length) {
 					sid = $int(zk.getElementValue(sid[0]));
@@ -202,8 +204,12 @@ zkau._onRespReady = function () {
 			} else {
 				//handle MSIE's buggy HTTP status codes
 				switch (req.status) {
-				case 12002: // Server timeout
 				case 12029: // 12029 to 12031 correspond to dropped connections.
+					if (++zkau._areqTry > 3) {
+						zkau._areqTry = 0;
+						break; //the server is dead
+					}
+				case 12002: // Server timeout
 				case 12030:
 				case 12031:
 				case 12152: // Connection closed by server.
