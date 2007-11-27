@@ -14,6 +14,7 @@ ZK 3.0.1
   1830278: HeaderElement with children
   1836417: HibernateSessionFactoryListener use different config name
   1838456: A way to customize progressmeter's look with CSS
+  1797807: Listbox add Select All
   
 * Bugs:
   1839246: More reliable handling of Ajax requests
