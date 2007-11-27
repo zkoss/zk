@@ -6,6 +6,8 @@ ZK 2.4.2
 * Bugs:
   1830311: Cannot display Japanese messages
   1835878: select / colapse of a Treeitem scrolls tree to right.
+  1814298: Memory Leak in EventThread
+  1838397: OutOfMemoryError if sendEvent called many times
 
 * Upgrade Note:
   + The pageContext variable in EL expressions becomes an instance of
