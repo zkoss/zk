@@ -36,7 +36,7 @@ if (!window.Droppable_effect) { //define it only if not customized
 zkau = {};
 
 zkau._respQue = []; //responses in XML
-zkau._areqId = 0; //uniquely identifies a request (zkau._areq)
+zkau._areqTry = 0; //# of resend
 zkau._evts = {}; //(dtid, Array())
 zkau._js4resps = []; //JS to eval upon response
 zkau._metas = {}; //(id, meta)
@@ -172,21 +172,19 @@ zkau.sendRemove = function (uuid) {
 /** IE6 sometimes remains readyState==1 (reason unknown), and we have
  * to resend
  */
-zkau._areqTmout = function (id) {
-	var req = zkau._areq, reqes = zkau._areqes;
-	if (req && zkau._areqId == id && req.readyState != 4) {
-zk.debug("timeout:"+req.readyState+":"+id);
-		zkau._areq = zkau._areqes = null;
+zkau._areqTmout = function () {
+	var req = zkau._areq, reqInf = zkau._areqInf;
+	if (req && req.readyState != 4) {
+		zkau._areq = zkau._areqInf = null;
 		try {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
 
-		zkau._areqResend(reqes);
+		zkau._areqResend(reqInf[1]);
 	}
 };
 zkau._areqResend = function (es) {
-zk.debug("resend:"+es);
 	var timeout;
 	for (var j = es.length; --j >= 0;)
 		zkau.sendAhead(es[j], j ? timeout: 0);
@@ -195,15 +193,18 @@ zk.debug("resend:"+es);
  */
 zkau._onRespReady = function () {
 	try {
-		var req = zkau._areq, reqes = zkau._areqes;
+		var req = zkau._areq, reqInf = zkau._areqInf;
 		if (req && req.readyState == 4) {
-			zkau._areq = zkau._areqes = null; //done
+			zkau._areq = zkau._areqInf = null;
+			clearTimeout(reqInf[0]); //stop timer
+
 			if (zk.pfmeter) zkau._pfrecv(req);
 
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
 
 			if (req.status == 200) {
+				zkau._areqTry = 0;
 				var sid = req.responseXML.getElementsByTagName("sid");
 				if (sid && sid.length) {
 					sid = $int(zk.getElementValue(sid[0]));
@@ -224,17 +225,21 @@ zkau._onRespReady = function () {
 				else que.splice(ofs, 0, resp); //insert
 			} else {
 				//handle MSIE's buggy HTTP status codes
-				if (reqes)
-					switch (req.status) {
-					case 12029:
-					case 12030:
-					case 12031:
-					case 12152:
-					case 12159:
-zk.debug("resend by err:"+req.status);
-						zkau._areqResend(reqes);
-						return;
+				switch (req.status) {
+				case 12029: // 12029 to 12031 correspond to dropped connections.
+					if (++zkau._areqTry > 3) {
+						zkau._areqTry = 0;
+						break; //the server is dead
 					}
+				case 12002: // Server timeout
+				case 12030:
+				case 12031:
+				case 12152: // Connection closed by server.
+				case 12159:
+				case 13030:
+					zkau._areqResend(reqInf[1]);
+					return;
+				}
 
 				var eru = zk.eru['e' + req.status];
 				if (typeof eru == "string") {
@@ -247,7 +252,7 @@ zk.debug("resend by err:"+req.status);
 			}
 		}
 	} catch (e) {
-		zkau._areq = zkau._areqes = null;
+		zkau._areq = zkau._areqInf = null;
 		try {
 			if(req && typeof req.abort == "function") req.abort();
 		} catch (e2) {
@@ -262,7 +267,7 @@ zk.debug("resend by err:"+req.status);
 		zkau._cleanupOnFatal(zkau._ignorable);
 	}
 
-	//handle pending _sendNow
+	//handle pending ajax send
 	if (zkau._sendPending && !zkau._areq) {
 		zkau._sendPending = false;
 		var ds = zkau._dtids;
@@ -474,11 +479,11 @@ zkau._sendNow = function (dtid) {
 	}
 
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
-	zkau._areqes = []; //backup events
+	var reqes = []; //backup events
 	var content = "";
 	for (var j = 0; es.length; ++j) {
 		var evt = es.shift();
-		zkau._areqes.push(evt);
+		reqes.push(evt);
 		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+(evt.uuid?evt.uuid:'');
 		if (evt.data)
 			for (var k = 0; k < evt.data.length; ++k) {
@@ -500,7 +505,7 @@ zkau._sendNow = function (dtid) {
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		if (zk.pfmeter) zkau._pfsend(req, dtid);
 
-		setTimeout("zkau._areqTmout("+ ++zkau._areqId+")", 9100);
+		zkau._areqInf = [setTimeout(zkau._areqTmout, 9100), reqes];
 		req.send(content);
 
 		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
