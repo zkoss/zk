@@ -147,13 +147,35 @@ zkau.sendRemove = function (uuid) {
 	zkau.send({uuid: uuid, cmd: "remove", data: null}, 5);
 };
 
+////ajax timeout////
+/** IE6 sometimes remains readyState==1 (reason unknown), and we have
+ * to resend
+ */
+zkau._areqTmout = function () {
+	var req = zkau._areq, reqInf = zkau._areqInf;
+	if (req && req.readyState != 4) {
+		zkau._areq = zkau._areqInf = null;
+		try {
+			if(typeof req.abort == "function") req.abort();
+		} catch (e2) {
+		}
+
+		zkau._areqResend(reqInf[1]);
+	}
+};
+zkau._areqResend = function (es) {
+	var timeout;
+	for (var j = es.length; --j >= 0;)
+		zkau.sendAhead(es[j], j ? timeout: 0);
+};
 /** Called when the response is received from zkau._areq.
  */
 zkau._onRespReady = function () {
 	try {
-		var req = zkau._areq;
+		var req = zkau._areq, reqInf = zkau._areqInf;
 		if (req && req.readyState == 4) {
-			zkau._areq = null; //done
+			zkau._areq = zkau._areqInf = null;
+			clearTimeout(reqInf[0]); //stop timer
 
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
@@ -178,13 +200,26 @@ zkau._onRespReady = function () {
 				if (ofs == que.length) que.push(resp);
 				else que.splice(ofs, 0, resp); //insert
 			} else {
+				//handle MSIE's buggy HTTP status codes
+				switch (req.status) {
+				case 12002: // Server timeout
+				case 12029: // 12029 to 12031 correspond to dropped connections.
+				case 12030:
+				case 12031:
+				case 12152: // Connection closed by server.
+				case 12159:
+				case 13030:
+					zkau._areqResend(reqInf[1]);
+					return;
+				}
+
 				if (!zkau._ignorable && !zkau._unloading)
 					zk.error(mesg.FAILED_TO_RESPONSE+(req.statusText!="Unknown"?req.statusText:""));
 				zkau._cleanupOnFatal(zkau._ignorable);
 			}
 		}
 	} catch (e) {
-		zkau._areq = null;
+		zkau._areq = zkau._areqInf = null;
 		try {
 			if(req && typeof req.abort == "function") req.abort();
 		} catch (e2) {
@@ -199,12 +234,12 @@ zkau._onRespReady = function () {
 		zkau._cleanupOnFatal(zkau._ignorable);
 	}
 
-	//handle pending _sendNow
+	//handle pending ajax send
 	if (zkau._sendPending && !zkau._areq) {
 		zkau._sendPending = false;
 		var ds = zkau._dtids;
 		for (var j = ds.length; --j >= 0;)
-			setTimeout("zkau._sendNow('"+ds[j]+"')", 0);
+			zkau._send2(ds[j], 0);
 	}
 
 	zkau._doQueResps();
@@ -316,20 +351,32 @@ zkau._send = function (dtid, evt, timeout) {
 
 	zkau._events(dtid).push(evt);
 
-	if (!timeout) timeout = 0; //we don't send immediately (Bug 1593674)
-	if (timeout >= 0) setTimeout("zkau._sendNow('"+dtid+"')", timeout);
+	//Note: we don't send immediately (Bug 1593674)
+	//Note: Unlike sendAhead and _send2, if timeout is undefined,
+	//it is considered as 0.
+	zkau._send2(dtid, timeout ? timeout: 0);
+};
+/** @param timeout if undefined or negative, it won't be sent. */
+zkau._send2 = function (dtid, timeout) {
+	if (dtid && timeout >= 0) setTimeout("zkau._sendNow('"+dtid+"')", timeout);
 };
 /** Sends a request before any pending events.
- * Note: it doesn't cause any pending events (including evt) to be sent.
- * It is designed to be called in zkau.onSend
+ * @param timout milliseconds.
+ * If undefined or negative, it won't be sent until next non-negative event
+ * Note: Unlike zkau.send, it considered undefined as not sending now
+ * (reason: backward compatible)
  */
-zkau.sendAhead = function (evt) {
+zkau.sendAhead = function (evt, timeout) {
 	if (evt.uuid) {
-		zkau._events(zkau._dtid(evt.uuid)).unshift(evt);
+		var dtid;
+		zkau._events(dtid = zkau._dtid(evt.uuid)).unshift(evt);
+		zkau._send2(dtid, timeout);
 	} else {
 		var ds = zkau._dtids;
-		for (var j = ds.length; --j >= 0; ++j)
+		for (var j = ds.length; --j >= 0; ++j) {
 			zkau._events(ds[j]).unshift(evt);
+			zkau._send2(ds[j], timeout); //Spec: don't convert unefined to 0 for timeout
+		}
 	}
 };
 zkau._sendNow = function (dtid) {
@@ -352,7 +399,7 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
-	//bug 1721809: we cannot filter out ctl even if zk.processing
+	//bug 1721809: we cannot filter out ctl even if zkau.processing
 
 	//decide implicit and ignorable
 	var implicit = true, ignorable = true;
@@ -377,9 +424,11 @@ zkau._sendNow = function (dtid) {
 	}
 
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
+	var reqes = []; //backup events
 	var content = "";
 	for (var j = 0; es.length; ++j) {
 		var evt = es.shift();
+		reqes.push(evt);
 		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+evt.uuid;
 		if (evt.data)
 			for (var k = 0; k < evt.data.length; ++k) {
@@ -398,6 +447,8 @@ zkau._sendNow = function (dtid) {
 		req.onreadystatechange = zkau._onRespReady;
 		req.open("POST", zk_action, true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+
+		zkau._areqInf = [setTimeout(zkau._areqTmout, 9100), reqes];
 		req.send(content);
 
 		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
