@@ -42,6 +42,7 @@ public class ListheaderDefault implements ComponentRenderer {
 		  .write(self.getOuterAttrs()).write(self.getInnerAttrs())
 		  .write("><div id=\"").write(self.getUuid())
 		  .write("!cave\" class=\"head-cell-inner\">")
+		  .write(self.getColumnHtmlPrefix())
 		  .write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
 		wh.writeChildren(self).writeln("</div></th>");
