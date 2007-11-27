@@ -77,7 +77,7 @@ maindir="$(pwd)"
 echo "Working directory $maindir"
 
 #build *-all.war *-all.ear
-if [ "$target" == "official" ]  ; then
+if [ "$target" == "official" ] ; then
 	rm -rf dist/lib/zkdemo*.war dist/lib/zkdemos*.ear
 	cp -f zkdemo/war.libs.all zkdemo/war.libs
 	./build clean zkdemo zkdemos
@@ -162,10 +162,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mv *-sources.jar ..
 	cd ..
 	rm -rf src
-fi
 
-#Prepare the binary release
-if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	#Prepare the binary release
 	mkdir -p /tmp/zk/$binnm/dist/lib/ext
 	mkdir -p /tmp/zk/$binnm/dist/lib/zkforge
 	mkdir -p /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
@@ -199,11 +197,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
-
-#	if [ "$target" == "daily" ] ; then
-#		cp dist/lib/zuljsp.jar /tmp/zk/$binnm/dist/lib/zkforge
-#		cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
-#	fi
 
 	if [ -d dist/export/WEB-INF ] ; then
 		cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
@@ -307,8 +300,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	echo Output ${javadocnm}.zip
 	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zml zkex zkmax zkplus
 	mv ${javadocnm}.zip /tmp/zk
-fi
-if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+
 	mkdir -p /tmp/zk/$demonm/zkdemo/WebContent
 	mkdir -p /tmp/zk/$demonm/zkdemo/src/org
 	mkdir -p /tmp/zk/$demonm/MyApp/WebContent
@@ -327,7 +319,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	if [ "$target" == "official" ] ; then
 		mv dist/lib/zkdemos.ear /tmp/zk/$demonm/zkdemos-min.ear
 		mv dist/lib/zkdemo-all.war /tmp/zk/$demonm/zkdemo.war
-		mv dist/lib/zkdemos-all.ear /tmp/zk/$demonm/zkdemos.ear	fi
+		mv dist/lib/zkdemos-all.ear /tmp/zk/$demonm/zkdemos.ear
+	fi
 
 	cd /tmp/zk
 	find -name .svn | xargs rm -rf
