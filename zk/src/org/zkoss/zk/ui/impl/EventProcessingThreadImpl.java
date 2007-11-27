@@ -29,11 +29,14 @@ import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 
 /** Thread to handle events.
@@ -176,6 +179,10 @@ implements EventProcessingThread {
 			synchronized (_suspmutex) {
 				_suspended = true;
 
+				//Bug 1814298: need to call Execution.onDeactive
+				Execution exec = getExecution();
+				if (exec != null) ((ExecutionCtrl)exec).onDeactivate();
+
 				//let the main thread continue
 				synchronized (_evtmutex) {
 					_evtmutex.notify();
@@ -191,15 +198,24 @@ implements EventProcessingThread {
 		if (_ceased != null)
 			throw new InterruptedException(_ceased);
 
+		//being resumed
 		setup();
+		Execution exec = getExecution();
+		if (exec != null) ((ExecutionCtrl)exec).onActivate();
 
-		if (_evtThdResumes != null && !_evtThdResumes.isEmpty()) {
+		final List resumes = _evtThdResumes;
+		_evtThdResumes = null;
+		if (resumes != null && !resumes.isEmpty()) {
 			_proc.getDesktop().getWebApp().getConfiguration()
 				.invokeEventThreadResumes(
-					_evtThdResumes, getComponent(), getEvent(), null);
+					resumes, getComponent(), getEvent(), null);
 				//FUTURE: how to propogate errors to the client
 		}
-		_evtThdResumes = null;
+	}
+	private Execution getExecution() {
+		Execution exec = _proc.getDesktop().getExecution();
+		return exec != null ? exec: Executions.getCurrent();
+			//just in case that the execution is dead first
 	}
 	/** Resumes this thread and returns only if the execution (being suspended
 	 * by {@link #doSuspend}) completes.
@@ -331,7 +347,7 @@ implements EventProcessingThread {
 	synchronized private void setup() {
 		_proc.setup();
 	}
-	/** Cleanup for executionl. */
+	/** Cleanup for execution. */
 	synchronized private void cleanup() {
 		_proc.cleanup();
 		_proc = null;
@@ -356,12 +372,16 @@ implements EventProcessingThread {
 						_proc.getDesktop().getWebApp().getConfiguration();
 					boolean cleaned = false;
 					++_nBusyThd;
+					Execution exec = null;
 					try {
 //						if (log.finerable()) log.finer("Processing event: "+_proc);
 
 						Locales.setThreadLocal(_locale);
 						TimeZones.setThreadLocal(_timeZone);
+
 						setup();
+						exec = getExecution();
+						if (exec != null) ((ExecutionCtrl)exec).onActivate();
 
 						config.invokeEventThreadInits(
 							_evtThdInits, getComponent(), getEvent());
@@ -377,7 +397,9 @@ implements EventProcessingThread {
 						if (!cleaned) newEventThreadCleanups(config, _ex);
 
 //						if (log.finerable()) log.finer("Real processing is done: "+_proc);
+						if (exec != null) ((ExecutionCtrl)exec).onDeactivate();
 						cleanup();
+
 						Locales.setThreadLocal(_locale = null);
 						TimeZones.setThreadLocal(_timeZone = null);
 					}

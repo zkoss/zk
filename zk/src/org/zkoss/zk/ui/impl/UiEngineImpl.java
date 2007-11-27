@@ -162,7 +162,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public void desktopDestroyed(Desktop desktop) {
-		if (log.debugable()) log.debug("destroy "+desktop);
+//		if (log.debugable()) log.debug("destroy "+desktop);
 
 		final Configuration conf = _wapp.getConfiguration();
 		final Map map;
@@ -702,7 +702,7 @@ public class UiEngineImpl implements UiEngine {
 			log.realCauseBriefly(ex);
 		} else {
 			ex = t;
-			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
+//			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
 		}
 
 		if (ex instanceof WrongValueException) {
