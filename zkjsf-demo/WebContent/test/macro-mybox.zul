@@ -1,7 +1,0 @@
-<vbox>
-	<window title="${arg.title}">
-		${empty arg.message ? 'Hello, My Box!': arg.message}
-		<button label="${arg.label} "/>
-		<textbox value="${arg.includer.id}"/>
-	</window>
-</vbox>

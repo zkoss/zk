@@ -1,8 +1,0 @@
-../dist/lib/zul.jar
-../dist/lib/zkex.jar
-../dist/lib/zcommon.jar
-../dist/lib/zweb.jar
-../dist/lib/zk.jar
-../dist/lib/ext/servlet-api.jar
-../dist/lib/ext/jsp-api.jar
-../dist/lib/ext/myfaces-api-1.1.4.jar

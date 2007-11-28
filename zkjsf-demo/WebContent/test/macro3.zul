@@ -1,7 +1,0 @@
-<?component name="mybox" macroURI="/test/macro-mybox.zul" title="My Box Title"?>
-<?component name="mybox-inline" macroURI="/test/macroinline-mybox.zul" inline="true" title="My Box Inline Title 1" ?>
-<zk>
-	A:
-	<mybox tag="mybox" message="Hi 1" label="Click me 1"/>
-	B:
-</zk>
