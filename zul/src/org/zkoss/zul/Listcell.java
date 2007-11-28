@@ -165,18 +165,20 @@ public class Listcell extends LabelImageElement {
 
 				sb.append(" id=\"").append(item.getUuid())
 					.append("!cm\" z.type=\"Lcfc\"/>");
+				return sb.toString();
 			} else if (isFocusRequired(listbox, item)) {
 				sb.append("<a href=\"javascript:;\" id=\"").append(item.getUuid())
-					.append("!sel\" z.type=\"Lcfc\"> </a>");				
+					.append("!sel\" z.type=\"Lcfc\"> </a>");	
+				return sb.toString();
 			}
-			return sb.toString();
-		} else {
-			//To make the listbox's height more correct, we have to generate &nbsp;
-			//for empty cell. Otherwise, IE will make the height too small
-			final boolean empty = getImage() == null
-			&& getLabel().length() == 0 && getChildren().isEmpty();
-			return empty ? "&nbsp;": null;
 		}
+		
+		//To make the listbox's height more correct, we have to generate &nbsp;
+		//for empty cell. Otherwise, IE will make the height too small
+		final boolean empty = getImage() == null
+		&& getLabel().length() == 0 && getChildren().isEmpty();
+		return empty ? "&nbsp;": null;
+		
 	}
 	/** Returns the postfix of the first column (in HTML tags), null if this
 	 * is not first column. Called only by listcell.jsp.
