@@ -9,6 +9,7 @@ ZK 2.4.2
   1835878: select / colapse of a Treeitem scrolls tree to right.
   1814298: Memory Leak in EventThread
   1818500: IE Cache Problem.
+  1840101: Exception when sendRediect from a modal dialog
 
 * Upgrade Note:
   + The pageContext variable in EL expressions becomes an instance of
