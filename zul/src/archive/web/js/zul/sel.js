@@ -35,34 +35,25 @@ if (!window.Selectable_effect) { //define it only if not customized
 var _zkselx = {};
 _zkselx.addAft = zkau.cmd1.addAft;
 zkau.cmd1.addAft = function (uuid, cmp, html) {
-	if (cmp) {
-		var h = html.trim();
-		var isLit = h.indexOf("<tr") == 0 && h.indexOf("Lit") > 0;
-		if (isLit && $type(cmp) != "Lit") { // only first listitem.
-			var head = $parentByTag(cmp, "DIV");
-			var cave = $e($uuid(head) + "!cave");	
-			zk.insertHTMLBeforeEnd(cave.tBodies[0], html);
-			zkau._initSibs(cave.tBodies[0].firstChild, null, true);
-			return true;
-		}
-	}
+	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
 	_zkselx.addAft(uuid, cmp, html);
 };
 _zkselx.addBfr = zkau.cmd1.addBfr;
 zkau.cmd1.addBfr = function (uuid, cmp, html) {
-	if (cmp) {		
-		var h = html.trim();
-		var isLit = h.indexOf("<tr") == 0 && h.indexOf("Lit") > 0;
-		if (isLit && $type(cmp) != "Lit") { // only first listitem.
-			var head = $parentByTag(cmp, "DIV");
-			var cave = $e($uuid(head) + "!cave");
-			var to = cave.tBodies[0].previousSibling;		
-			zk.insertHTMLBefore(cave.tBodies[0], html);
-			zkau._initSibs(cave.tBodies[0].lastChild, to, false);
-			return true;
-		}
-	}
+	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
 	_zkselx.addBfr(uuid, cmp, html);
+};
+_zkselx._addChd = function (uuid, cmp, html) {
+	var h = html.trim();
+	var isLit = h.indexOf("<tr") == 0 && h.indexOf("Lit") > 0;
+	if (isLit && $type(cmp) != "Lit") { // only first listitem.
+		var head = $parentByTag(cmp, "DIV");
+		var cave = $e($uuid(head) + "!cave");	
+		zk.insertHTMLBeforeEnd(cave.tBodies[0], html);
+		zkau._initChildren(cave.tBodies[0]);
+		return true;
+	}
+	return false;
 };
 
 ////
