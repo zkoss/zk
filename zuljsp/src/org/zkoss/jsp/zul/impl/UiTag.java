@@ -12,6 +12,7 @@ import javax.servlet.jsp.JspTagException;
 import org.zkoss.jsp.zul.ComponentDefinitionTag;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 
 /**
@@ -86,15 +87,16 @@ public class UiTag extends BranchTag {
 					createComponents(_compDef.getMacroURI(), props);
 			}
 			else {// the tag hold only one component. 
+				String clazzName = null;
+				
 				if(super.getUse()!=null)
-					_comps = new Component []{_comp=(Component)Class.forName(getUse()).newInstance()};
+					clazzName = getUse();
 				else if(useClass instanceof String)
-					_comps = new Component []{_comp=_compDef.newInstance(page,useClass.toString())};
+					clazzName = (String)useClass;
 				else
-				{
-					Class clazz = (Class)useClass;
-					_comps = new Component []{_comp=(Component)clazz.newInstance()};
-				}
+					clazzName = ((Class)useClass).getName();
+
+				_comps = new Component []{_comp=_compDef.newInstance(page, clazzName)};
 				
 				composeHandle.doBeforeComposeChildren(_comp);
 				_comp.getDefinition().applyProperties(_comp);
