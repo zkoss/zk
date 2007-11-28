@@ -40,8 +40,9 @@ zkau.cmd1.addAft = function (uuid, cmp, html) {
 		var isLit = h.indexOf("<tr") == 0 && h.indexOf("Lit") > 0;
 		if (isLit && $type(cmp) != "Lit") { // only first listitem.
 			var head = $parentByTag(cmp, "DIV");
-			var cave = $e($uuid(head) + "!cave");			
+			var cave = $e($uuid(head) + "!cave");	
 			zk.insertHTMLBeforeEnd(cave.tBodies[0], html);
+			zkau._initSibs(cave.tBodies[0].firstChild, null, true);
 			return true;
 		}
 	}
@@ -54,8 +55,10 @@ zkau.cmd1.addBfr = function (uuid, cmp, html) {
 		var isLit = h.indexOf("<tr") == 0 && h.indexOf("Lit") > 0;
 		if (isLit && $type(cmp) != "Lit") { // only first listitem.
 			var head = $parentByTag(cmp, "DIV");
-			var cave = $e($uuid(head) + "!cave");			
+			var cave = $e($uuid(head) + "!cave");
+			var to = cave.tBodies[0].previousSibling;		
 			zk.insertHTMLBefore(cave.tBodies[0], html);
+			zkau._initSibs(cave.tBodies[0].lastChild, to, false);
 			return true;
 		}
 	}
