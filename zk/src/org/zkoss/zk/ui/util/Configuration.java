@@ -107,7 +107,7 @@ public class Configuration {
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
 		_sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay = 5000;
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay = 9000;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -1244,7 +1244,7 @@ public class Configuration {
 	/** Specifies the time, in milliseconds, before ZK Client Engine re-sends
 	 * the request to the server.
 	 *
-	 * <p>Default: 5000
+	 * <p>Default: 9000
 	 *
 	 * <p>There are many reasons an Ajax request is not received by
 	 * the server. With the resending mechanism, ZK ensures the reliable
