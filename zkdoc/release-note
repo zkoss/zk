@@ -48,6 +48,7 @@ ZK 3.0.1
   1839376: Composer cannot be defined using zscript
   1839959: Borderlayout should resize when onVisi is triggered
   1839634: ListModelSet not work well with HashSet
+  1840101:  Exception when sendRediect from a modal dialog
   
 	--------
 ZK 3.0.0
