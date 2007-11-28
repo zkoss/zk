@@ -103,14 +103,12 @@ public class UiTag extends BranchTag {
 				
 			}
 		} catch (Exception e) {
-			if(!_compDef.isInlineMacro())
-				composeHandle.doCatch(e);
+			composeHandle.doCatch(e);
 			throw new JspException(e);
 		}
 		finally
 		{
-			if(!_compDef.isInlineMacro())
-				composeHandle.doFinally();
+			composeHandle.doFinally();
 		}
 		//append this tag to parent or root.
 		if (_parenttag != null)_parenttag.addChildTag(this);
