@@ -64,15 +64,15 @@ public class UiTag extends BranchTag {
 		if(_roottag==null)
 			throw new IllegalStateException("Must be nested inside the page tag: "+this);	
 		
-		composeHandle = new ComposerHandler(_attrMap.remove("apply")); 
+		Page page = this._roottag.getPage();
+		_compDef = page.getComponentDefinition(_tag, true);
+		if(_compDef==null)
+			throw new JspException("can't find this Component's definition:"+_tag);
+
+		composeHandle = new ComposerHandler(_attrMap.remove("apply"));
 		try {//TODO: use-class initial works...
 			//add composer to intercept creation...
 			//TODO: composerExt.doBeforeCompose(page, parentComponent, compInfo); 
-			
-			Page page = this._roottag.getPage();
-			_compDef = page.getComponentDefinition(_tag, true);
-			if(_compDef==null)
-				throw new JspException("can't find this Component's definition:"+_tag);
 			Object useClass = _compDef.getImplementationClass();
 			
 			if (_compDef.isInlineMacro()) {// the tag holds multiple components.
@@ -103,12 +103,14 @@ public class UiTag extends BranchTag {
 				
 			}
 		} catch (Exception e) {
-			composeHandle.doCatch(e);
+			if(!_compDef.isInlineMacro())
+				composeHandle.doCatch(e);
 			throw new JspException(e);
 		}
 		finally
 		{
-			composeHandle.doFinally();
+			if(!_compDef.isInlineMacro())
+				composeHandle.doFinally();
 		}
 		//append this tag to parent or root.
 		if (_parenttag != null)_parenttag.addChildTag(this);

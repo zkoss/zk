@@ -16,7 +16,7 @@ import org.zkoss.zk.ui.util.ComposerExt;
  * @author Ian Tsai
  *
  */
-public class ComposerHandler{
+/*package*/ class ComposerHandler{
 	
 	private Composer composer;
 	private ComposerExt composerExt;
