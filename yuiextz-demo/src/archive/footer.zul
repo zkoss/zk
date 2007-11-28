@@ -1,7 +1,0 @@
-<zk>
-	<toolbarbutton
-		style="font-size: 9px; color: rgb(150, 165, 170); font-family: Verdana,Arial,Helvetica,sans-serif;"
-		label="Contact us" href="mailto:info@zkoss.org" />
-	<label
-		value="Copyright © 2005-2007 Potix Corporation. All rights reserved." />
-</zk>
