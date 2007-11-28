@@ -287,6 +287,10 @@ zkBorderLayout.init = function (cmp) {
 zkBorderLayout.childchg = function (cmp) {
 	zk.onResize(0, cmp);
 };
+zkBorderLayout.onVisi = function (cmp) {
+	var layout = zk.Layout.getOwnerLayout(cmp);
+	if (layout) layout.render();
+};
 zkBorderLayout.setAttr = function (cmp, nm, val) {
 	switch (nm) {
 		case "z.resize" :
