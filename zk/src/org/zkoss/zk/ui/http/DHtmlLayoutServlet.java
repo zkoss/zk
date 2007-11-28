@@ -42,6 +42,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -55,6 +56,7 @@ import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
@@ -126,15 +128,24 @@ public class DHtmlLayoutServlet extends HttpServlet {
 //		if (D.ON && log.finerable()) log.finer("Creates from "+path);
 
 		final Session sess = WebManager.getSession(getServletContext(), request);
-		final Object old = I18Ns.setup(sess, request, response,
-			sess.getWebApp().getConfiguration().getResponseCharset());
+		if (!SessionsCtrl.requestEnter(sess)) {
+			response.sendError(response.SC_SERVICE_UNAVAILABLE,
+				Messages.get(MZk.TOO_MANY_REQUESTS));
+			return;
+		}
 		try {
-			if (!process(sess, request, response, path, bRichlet))
-				handleError(sess, request, response, path, null);
-		} catch (Throwable ex) {
-			handleError(sess, request, response, path, ex);
+			final Object old = I18Ns.setup(sess, request, response,
+				sess.getWebApp().getConfiguration().getResponseCharset());
+			try {
+				if (!process(sess, request, response, path, bRichlet))
+					handleError(sess, request, response, path, null);
+			} catch (Throwable ex) {
+				handleError(sess, request, response, path, ex);
+			} finally {
+				I18Ns.cleanup(request, old);
+			}
 		} finally {
-			I18Ns.cleanup(request, old);
+			SessionsCtrl.requestExit(sess);
 		}
 	}
 	protected

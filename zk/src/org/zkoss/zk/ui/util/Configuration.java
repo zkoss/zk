@@ -104,8 +104,8 @@ public class Configuration {
 	private Set _disThemeURIs;
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls;
-	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
-		_sparThdMax = 100, _suspThdMax = -1,
+	private int _dtTimeout = 3600, _sessDktMax = 10, _sessReqMax = 5,
+		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
 		_promptDelay = 900, _tooltipDelay = 800, _resendDelay = 9000;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
@@ -1344,16 +1344,52 @@ public class Configuration {
 	 * <p>Defafult: 10.
 	 *
 	 * <p>A negative value indicates there is no limit.
+	 * @since 3.0.1
+	 */
+	public void setSessionMaxDesktops(int max) {
+		_sessDktMax = max;
+	}
+	/**
+	 * @deprecated As of release 3.0.1, replaced with {@link #setSessionMaxDesktops}.
 	 */
 	public void setMaxDesktops(int max) {
-		_dtMax = max;
+		setSessionMaxDesktops(max);
 	}
 	/** Returns the maximal allowed number of desktop per session.
 	 *
 	 * <p>A negative value indicates there is no limit.
+	 * @since 3.0.1
+	 */
+	public int getSessionMaxDesktops() {
+		return _sessDktMax;
+	}
+	/**
+	 * @deprecated As of release 3.0.1, replaced with {@link #getSessionMaxDesktops}.
 	 */
 	public int getMaxDesktops() {
-		return _dtMax;
+		return getSessionMaxDesktops();
+	}
+	/** Specifies the maximal allowed number of concurrent requests
+	 * per session.
+	 *
+	 * <p>Defafult: 5.
+	 *
+	 * <p>A negative value indicates there is no limit, but it is
+	 * not recommended due to the possibility of the DoS attacks.
+	 * @since 3.0.1
+	 */
+	public void setSessionMaxRequests(int max) {
+		_sessReqMax = max;
+	}
+	/** Returns the maximal allowed number of concurrent requests
+	 * per session.
+	 *
+	 * <p>A negative value indicates there is no limit, but it is
+	 * not recommended due to the possibility of the DoS attacks.
+	 * @since 3.0.1
+	 */
+	public int getSessionMaxRequests() {
+		return _sessReqMax;
 	}
 
 	/** Specifies the maximal allowed number of the spare pool for

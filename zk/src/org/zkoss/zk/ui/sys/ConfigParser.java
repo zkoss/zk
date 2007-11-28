@@ -139,13 +139,17 @@ public class ConfigParser {
 			//session-config
 			//	session-timeout
 			//	max-desktops-per-session
+			//  max-requests-per-session
 			//  timer-keep-alive
 			//	timeout-uri (deprecated)
 				Integer v = parseInteger(el, "session-timeout", false);
 				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
 
 				v = parseInteger(el, "max-desktops-per-session", false);
-				if (v != null) config.setMaxDesktops(v.intValue());
+				if (v != null) config.setSessionMaxDesktops(v.intValue());
+
+				v = parseInteger(el, "max-requests-per-session", false);
+				if (v != null) config.setSessionMaxRequests(v.intValue());
 
 				String s = el.getElementValue("timer-keep-alive", true);
 				if (s != null) config.setTimerKeepAlive("true".equals(s));

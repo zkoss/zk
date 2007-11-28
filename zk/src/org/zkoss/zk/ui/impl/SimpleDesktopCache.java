@@ -148,7 +148,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		private Cache(Configuration config) {
 			super(13);
 
-			int v = config.getMaxDesktops();
+			int v = config.getSessionMaxDesktops();
 			setMaxSize(v >= 0 ? v: Integer.MAX_VALUE / 2);
 
 			v = config.getDesktopMaxInactiveInterval();
