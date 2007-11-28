@@ -469,6 +469,9 @@ zk.addModuleInit(function () {
 
 	//Treecols
 	zkTcols = zulHdrs;
+	
+	zkTrow.initdrag = zkLit.initdrag;
+	zkTrow.cleandrag = zkLit.cleandrag;
 });
 
 //Upgrade AU Engine to handle treeitem and treechildren
