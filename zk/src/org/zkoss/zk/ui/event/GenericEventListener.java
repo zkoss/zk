@@ -73,7 +73,7 @@ abstract public class GenericEventListener implements EventListener {
 			if (mtd.getParameterTypes().length == 0)
 				mtd.invoke(this, null);
 			else
-				mtd.invoke(this, new Object[] {evt.getData()});
+				mtd.invoke(this, evt);
 		}
 	}
 	
