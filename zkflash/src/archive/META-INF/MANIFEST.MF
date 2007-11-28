@@ -1,8 +1,0 @@
-Manifest-Version: 0.0.1
-Specification-Title: My hello world
-Specification-Version: 0.0.1
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.test
-Implementation-URL: http://www.zkoss.org/
-Implementation-Version: 0.0.1
-Implementation-Vendor: Potix Corporation
