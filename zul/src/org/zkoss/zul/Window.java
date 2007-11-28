@@ -737,6 +737,13 @@ public class Window extends XulElement implements IdSpace {
 		final String scls = super.getSclass();
 		return scls != null ? scls: getMode();
 	}
+	public void setSclass(String sclass) {
+		if (sclass != null && sclass.length() == 0) sclass = null;
+		if (!Objects.equals(super.getSclass(), sclass)) {
+			super.setSclass(sclass);
+			invalidate();
+		}
+	}
 
 	//-- Component --//
 	public boolean insertBefore(Component child, Component insertBefore) {
