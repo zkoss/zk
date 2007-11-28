@@ -66,6 +66,8 @@ implements EventProcessingThread {
 	private List _evtThdSuspends;
 	/** Result of the result. */
 	private Throwable _ex;
+	/** Whether the execution is activated. */
+	private boolean _acted;
 
 	private static int _nThd, _nBusyThd;
 
@@ -179,9 +181,12 @@ implements EventProcessingThread {
 			synchronized (_suspmutex) {
 				_suspended = true;
 
-				//Bug 1814298: need to call Execution.onDeactive
+				//Bug 1814298: need to call Execution.onDeactivate
 				Execution exec = getExecution();
-				if (exec != null) ((ExecutionCtrl)exec).onDeactivate();
+				if (exec != null) {
+					((ExecutionCtrl)exec).onDeactivate();
+					_acted = false;
+				}
 
 				//let the main thread continue
 				synchronized (_evtmutex) {
@@ -201,7 +206,10 @@ implements EventProcessingThread {
 		//being resumed
 		setup();
 		Execution exec = getExecution();
-		if (exec != null) ((ExecutionCtrl)exec).onActivate();
+		if (exec != null) {
+			((ExecutionCtrl)exec).onActivate();
+			_acted = true;
+		}
 
 		final List resumes = _evtThdResumes;
 		_evtThdResumes = null;
@@ -381,7 +389,10 @@ implements EventProcessingThread {
 
 						setup();
 						exec = getExecution();
-						if (exec != null) ((ExecutionCtrl)exec).onActivate();
+						if (exec != null) {
+							((ExecutionCtrl)exec).onActivate();
+							_acted = true;
+						}
 
 						final boolean b = config.invokeEventThreadInits(
 							_evtThdInits, getComponent(), getEvent());
@@ -397,7 +408,8 @@ implements EventProcessingThread {
 						if (!cleaned) newEventThreadCleanups(config, _ex);
 
 //						if (log.finerable()) log.finer("Real processing is done: "+_proc);
-						if (exec != null) ((ExecutionCtrl)exec).onDeactivate();
+						if (exec != null && _acted) //_acted is false if suspended is killed
+							((ExecutionCtrl)exec).onDeactivate();
 						cleanup();
 
 						Locales.setThreadLocal(_locale = null);
