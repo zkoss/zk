@@ -6,7 +6,7 @@ Purpose:
 Description:
 	
 Histroy:
-	2007/11/16  12:25:57 , Created by tomyeh modified by Ian Tsai
+	2007/11/16  13:57:42 , Created by tomyeh modified by Ian Tsai
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
@@ -146,14 +146,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		extends component class.
 			</description>
 			<name>extends</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>
-		used component class.
-			</description>
-			<name>class</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>

@@ -114,7 +114,10 @@ public class ComponentDefinitionTag  extends AbstractTag implements DynamicAttri
 	 */
 	public void setDynamicAttribute(String uri, String attrName, Object value) 
 	throws JspException {
-		params.put(attrName, value);
+		if(attrName.equals("class"))
+			useClass = (String) value;
+		else 
+			params.put(attrName, value);
 	}
 
 	public String getExtends() {
@@ -157,10 +160,6 @@ public class ComponentDefinitionTag  extends AbstractTag implements DynamicAttri
 		this.name = name;
 	}
 
-
-	public void setClass(String use) {
-		this.useClass = use;
-	}
 
 	/** Whether a string is null or empty. */
 	private static boolean isEmpty(String s) {

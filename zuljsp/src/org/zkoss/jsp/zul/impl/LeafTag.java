@@ -85,14 +85,7 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 
 	//Deriving class must override//
 	/**
-	 * Creates a component that is associated with this tag,
-	 * and returns the new component (never null).
-	 * The deriving class must implement this method to create
-	 * the proper component, initialize it and return it.
-	 *
-	 * @param use the use component  
-	 * @return A zul Component
-	 * @throws Exception
+	 * The name of Jsp Tag. 
 	 */
 	abstract protected String getJspTagName();
 
@@ -123,7 +116,6 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	 */
 	public void doTag() throws JspException, IOException {
 		if (!isEffective())return; //nothing to do
-		
 		initComponent(); //creates and registers the component
 		afterComposeComponent();//finish compose the component
 		writeComponentMark(); //write a special mark denoting the component
@@ -137,7 +129,6 @@ abstract public class LeafTag extends AbstractTag implements DynamicAttributes, 
 	/*package*/ void initComponent() throws JspException {
 		if(_roottag==null)
 			throw new IllegalStateException("Must be nested inside the page tag: "+this);
-		
 		
 		composeHandle = new ComposerHandler(_attrMap.remove("apply")); 
 		
