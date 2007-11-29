@@ -17,6 +17,7 @@ ZK 3.0.1
   1797807: Listbox add Select All
   1840081: A way to restrict max concurrent request per-session
   1797701: Slider tooltip text customization
+  1642242: Display certain treeitem on screen (Autoscroll)
   
 * Bugs:
   1839246: More reliable handling of Ajax requests
