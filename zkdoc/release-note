@@ -16,6 +16,7 @@ ZK 3.0.1
   1838456: A way to customize progressmeter's look with CSS
   1797807: Listbox add Select All
   1840081: A way to restrict max concurrent request per-session
+  1797701: Slider tooltip text customization
   
 * Bugs:
   1839246: More reliable handling of Ajax requests
