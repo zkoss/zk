@@ -49,6 +49,7 @@ public class Slider extends XulElement {
 	private int _curpos, _maxpos = 100, _pginc = 10;
 	/** The name. */
 	private String _name;
+	private String _slidingtext = "{0}";
 
 	public Slider() {
 		setWidth("100px");
@@ -61,6 +62,28 @@ public class Slider extends XulElement {
 		setCurpos(curpos);
 	}
 
+	/**
+	 * Returns the sliding text.
+	 * <p>Default : "{0}"
+	 * @since 3.0.1
+	 */
+	public String getSlidingtext() {
+		return _slidingtext;
+	}
+	
+	/**
+	 * Sets the sliding text.
+	 * The syntax "{0}" will be replaced with the position at client side.
+	 * @since 3.0.1
+	 */
+	public void setSlidingtext(String slidingtext) {		
+		if (slidingtext == null || slidingtext.length() == 0)
+			slidingtext = "{0}";
+		if (!_slidingtext.equals(slidingtext)) {
+			_slidingtext = slidingtext;
+			smartUpdate("z.slidingtext", _slidingtext);
+		}
+	}
 	/** Returns the current position of the slider.
 	 *
 	 * <p>Default: 0.
@@ -168,7 +191,8 @@ public class Slider extends XulElement {
 		HTMLs.appendAttribute(sb, "z.curpos", _curpos);
 		HTMLs.appendAttribute(sb, "z.maxpos", _maxpos);
 		HTMLs.appendAttribute(sb, "z.pginc", _pginc);
-
+		HTMLs.appendAttribute(sb, "z.slidingtext", getSlidingtext());
+		
 		appendAsapAttr(sb, Events.ON_SCROLL);
 		appendAsapAttr(sb, Events.ON_SCROLLING);
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
