@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.ext.render.ChildChangedAware;
  *
  * <p>Default {@link #getSclass}: combobox.
  *
- * <p>Events: onOpen<br/>
+ * <p>Events: onOpen, onSelect<br/>
  * Developers can listen to the onOpen event and initializes it
  * when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen} is true, and/or
  * clean up if false.
@@ -216,11 +216,12 @@ public class Combobox extends Textbox {
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		final boolean aco = isAutocomplete(), adr = isAutodrop();
-		if (!isAsapRequired(Events.ON_OPEN) && !aco && !adr)
+		if (!isAsapRequired(Events.ON_OPEN) && !isAsapRequired(Events.ON_SELECT) && !aco && !adr)
 			return attrs;
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		appendAsapAttr(sb, Events.ON_OPEN);
+		appendAsapAttr(sb, Events.ON_SELECT);
 		if (aco) HTMLs.appendAttribute(sb, "z.aco", "true");
 		if (adr) HTMLs.appendAttribute(sb, "z.adr", "true");
 		return sb.toString();

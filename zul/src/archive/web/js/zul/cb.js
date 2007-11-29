@@ -71,8 +71,10 @@ zkCmit.onclick = function (evt) {
 		//Request 1537962: better responsive
 		var inp = zkCmbox.getInputByItem(item);
 		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
-
+		var uuid = $uuid(inp);
 		Event.stop(evt); //Bug 1597852 (cb might be a child of listitem)
+		zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id]},
+				zkau.asapTimeout($e(uuid), "onSelect"));
 	}
 };
 
