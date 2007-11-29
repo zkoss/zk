@@ -761,7 +761,7 @@ zk.Selectable.prototype = {
 	/** Calculates the size. */
 	_calcSize: function () {
 		this._calcHgh();
-
+		var preHgh = this.head ? this.head.offsetHeight : 0;
 		if (this.paging) {// Bug #1826101
 			if (this.bodytbl && this.bodytbl.rows.length) {
 				var head;
@@ -860,6 +860,8 @@ zk.Selectable.prototype = {
 			if (this.foottbl.rows.length)
 				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this); //assign foot's col width
 		}
+		if(this.head && preHgh !== this.head.offsetHeight) 
+			this._calcHgh(); // if head's height is changed, we need recalculate the height size again. Bug #1839960  
 	},
 	/** Returns the visible row at the specified index. */
 	_visiRowAt: function (index) {
