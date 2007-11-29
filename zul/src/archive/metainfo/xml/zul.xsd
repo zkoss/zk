@@ -1300,6 +1300,7 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="curpos" type="xs:string" use="optional" />
 		<xs:attribute name="maxpos" type="xs:string" use="optional" />
+		<xs:attribute name="slidingtext" type="xs:string" use="optional" />
 		<xs:attribute name="pageIncrement" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 
