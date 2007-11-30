@@ -183,7 +183,6 @@ zk.Grid.prototype = {
 	_calcSize: function () {
 		this.updSize();
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
-		var preHgh = this.head ? this.head.offsetHeight : 0;
 		if (this.paging) { // Bug #1826101
 			if (this.bodytbl && this.bodytbl.rows.length) {
 				var head;
@@ -259,9 +258,7 @@ zk.Grid.prototype = {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
 				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this); //assign foot's col width
-		}
-		if(this.head && preHgh !== this.head.offsetHeight) 
-			this.setHgh(this.element.style.height); // if head's height is changed, we need recalculate the height size again. Bug #1839960  
+		} 
 	},
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
