@@ -19,6 +19,7 @@ ZK 3.0.1
   1797701: Slider tooltip text customization
   1642242: Display certain treeitem on screen (Autoscroll)
   1601002: Added onSelect event to the Combobox component
+  1841480: HibernateSessionFactoryListner for web.xml
   
 * Bugs:
   1839246: More reliable handling of Ajax requests
