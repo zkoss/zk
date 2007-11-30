@@ -17,6 +17,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkplus.hibernate;
 
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.lang.JVMs;
@@ -54,6 +56,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
  * @author henrichen
  */
 public class HibernateUtil {
+	public static String CONFIG = "HibernateUtil.config";
 	private static final Log log = Log.lookup(HibernateUtil.class);
 	
 	private static SessionFactory _factory;
@@ -62,7 +65,7 @@ public class HibernateUtil {
 	 * Get the singleton hibernate Session Factory.
 	 */
 	public static SessionFactory getSessionFactory() {
-		return initSessionFactory(null);
+		return initSessionFactory((WebApp)null);
 	}
 	
 	/**
@@ -85,7 +88,7 @@ public class HibernateUtil {
 	 * @deprecated Use {@link #initSessionFactory(WebApp app)} instead.
 	 */
 	/* package */ static SessionFactory initSessionFactory() {
-		return initSessionFactory(null);
+		return initSessionFactory((WebApp)null);
 	}
 	 /**
 	 * Used in {@link HibernateSessionFactoryListener} to init
@@ -97,10 +100,25 @@ public class HibernateUtil {
 		if (_factory == null) {
 			//read hibernate.config preference
 			if (app == null) {
-				app = Executions.getCurrent().getDesktop().getWebApp();
+				final Execution exec = Executions.getCurrent();
+				if (exec != null) {
+					final Desktop desktop = exec.getDesktop();
+					if (desktop != null) {
+						app = desktop.getWebApp();
+					}
+				}
 			}
-			final org.zkoss.zk.ui.util.Configuration config = app.getConfiguration();
-			final String resource = config.getPreference("HibernateUtil.config", null);
+			String resource = null;
+			if (app != null) {
+				final org.zkoss.zk.ui.util.Configuration config = app.getConfiguration();
+				resource = config.getPreference(CONFIG, null);
+			}
+			return initSessionFactory(resource);
+		}
+		return _factory;
+	}
+	/*package*/ static SessionFactory initSessionFactory(String resource) {
+		if (_factory == null) {
 			try {
 			    // Create the SessionFactory per JavaVM version and allow JDK 1.4 compatibility
 				if (JVMs.isJava5()) {
