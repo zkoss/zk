@@ -20,6 +20,7 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
@@ -28,6 +29,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 
 /**
@@ -55,6 +57,7 @@ public class Combobox extends Textbox {
 	private static final String DEFAULT_IMAGE = "~./zul/img/combobtn.gif";
 	private String _img;
 	private boolean _autodrop, _autocomplete, _btnVisible = true;
+	private Comboitem _selectedItem;
 
 	public Combobox() {
 		setSclass("combobox");
@@ -181,26 +184,11 @@ public class Combobox extends Textbox {
 		return item;
 	}
 
-	/** Returns the selected item, or null if no matched.
-	 *
-	 * <p>By selected we mean the first {@link Comboitem} whose label
-	 * ({@link Comboitem#getLabel}) equals with {@link #getValue}.
-	 * It is usually used with {@link Comboitem#getValue}.
-	 *
-	 * <p>The combobox may contain any value, so there may be no match
-	 * at all.
-	 *
-	 * @see Comboitem#getValue
+	/** Returns the selected item.
 	 * @since 2.4.0
 	 */
 	public Comboitem getSelectedItem() {
-		final String value = getValue();
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
-			final Comboitem item = (Comboitem)it.next();
-			if (Objects.equals(value, item.getLabel()))
-				return item;
-		}
-		return null;
+		return _selectedItem;
 	}
 
 	//-- super --//
@@ -271,10 +259,15 @@ public class Combobox extends Textbox {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends Textbox.ExtraCtrl
-	implements ChildChangedAware {
+	implements ChildChangedAware, Selectable {
 		//ChildChangedAware//
 		public boolean isChildChangedAware() {
 			return true;
+		}
+
+		public void selectItemsByClient(Set selectedItems) {
+			if (selectedItems != null && selectedItems.size() > 0)
+				_selectedItem = (Comboitem)selectedItems.iterator().next();
 		}
 	}
 }

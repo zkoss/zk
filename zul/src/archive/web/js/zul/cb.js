@@ -73,8 +73,13 @@ zkCmit.onclick = function (evt) {
 		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
 		var uuid = $uuid(inp);
 		Event.stop(evt); //Bug 1597852 (cb might be a child of listitem)
-		zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id]},
-				zkau.asapTimeout($e(uuid), "onSelect"));
+		var cmp = $e(uuid);
+		var selId = getZKAttr(cmp, "selid");
+		if (selId != item.id) {
+			setZKAttr(cmp, "selid", item.id);
+			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id]},
+				zkau.asapTimeout($e(uuid), "onSelect"));			
+		}
 	}
 };
 
@@ -478,7 +483,16 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 			}
 			if (jfnd >= 0) found = rows[jfnd];
 		}
-		if (found) zkCmbox._selback(found);
+		if (found) {
+			zkCmbox._selback(found);
+			var cmp = $e(uuid);
+			var selId = getZKAttr(cmp, "selid");
+			if (selId != found.id) {
+				setZKAttr(cmp, "selid", found.id);
+				zkau.send({uuid: uuid, cmd: "onSelect", data: [found.id]},
+					zkau.asapTimeout(cmp, "onSelect"));
+			}
+		}
 	} else if (jfnd >= 0) {
 		found = rows[jfnd];
 	}
