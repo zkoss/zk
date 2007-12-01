@@ -761,19 +761,32 @@ public class DataBinder {
 			if (currentNode == null) {
 				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
-			try {
-				bean = Fields.get(bean, nodeid);
-			} catch (NoSuchMethodException ex) {
-				throw UiException.Aide.wrap(ex);
-			}
-			if (registerNode) {
-				registerBeanNode(bean, currentNode);
-			}
+			bean = fetchValue(bean, currentNode, nodeid, registerNode);
 		}
 
 		return bean;
 	}
 	
+	private Object fetchValue(Object bean, BindingNode node, String nodeid, boolean registerNode) {
+		if (bean != null) {
+			try {
+				bean = Fields.get(bean, nodeid);
+			} catch (NoSuchMethodException ex) {
+				//feature#1766905 Binding to Map
+				if (bean instanceof Map) {
+					bean = ((Map)bean).get(nodeid);
+				} else {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+		}
+		if (registerNode) {
+			registerBeanNode(bean, node);
+		}
+		return bean;
+	}
+	
+
 	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, 
 	String path, boolean autoConvert, Object rawval, List loadOnSaveInfos) {
 		Object orgVal = null;
@@ -822,32 +835,42 @@ public class DataBinder {
 				try {
 					bean = Fields.get(bean, beanid);
 				} catch (NoSuchMethodException ex) {
-					throw UiException.Aide.wrap(ex);
+					//feature#1766905 Binding to Map
+					if (bean instanceof Map) {
+						bean = ((Map)bean).get(beanid);
+					} else {
+						throw UiException.Aide.wrap(ex);
+					}
 				}
 			}
 			if (bean == null) {
 				return; //no bean to set value, skip
 			}
+			beanid = (String) it.next();
 			try {
-				beanid = (String) it.next();
 				orgVal = Fields.get(bean, beanid);
 				if(Objects.equals(orgVal, val)) {
 					return; //same value, no need to do anything
 				}
 				Fields.set(bean, beanid, val, autoConvert);
-				if (!isPrimitive(val) && !isPrimitive(orgVal)) { //val is a bean (null is not primitive)
-					currentNode = (BindingNode) currentNode.getKidNode(beanid);
-					if (currentNode == null) {
-						throw new UiException("Cannot find the specified databind bean expression:" + path);
-					}
-					nodes.add(currentNode);
-					bean = orgVal;
-					refChanged = true;
-				}
 			} catch (NoSuchMethodException ex) {
-				throw UiException.Aide.wrap(ex);
+				//feature#1766905 Binding to Map
+				if (bean instanceof Map) {
+					((Map)bean).put(beanid, val);
+				} else {
+					throw UiException.Aide.wrap(ex);
+				}
 			} catch (ModificationException ex) {
 				throw UiException.Aide.wrap(ex);
+			}
+			if (!isPrimitive(val) && !isPrimitive(orgVal)) { //val is a bean (null is not primitive)
+				currentNode = (BindingNode) currentNode.getKidNode(beanid);
+				if (currentNode == null) {
+					throw new UiException("Cannot find the specified databind bean expression:" + path);
+				}
+				nodes.add(currentNode);
+				bean = orgVal;
+				refChanged = true;
 			}
 		}
 		
@@ -1175,7 +1198,7 @@ public class DataBinder {
 			
 			for(final Iterator it = node.getKidNodes().iterator(); it.hasNext();) {
 				final BindingNode kidnode = (BindingNode) it.next();
-				final Object kidbean = fetchValue(bean, kidnode, kidnode.getNodeId());
+				final Object kidbean = fetchValue(bean, kidnode, kidnode.getNodeId(), true);
 				myLoadAllNodes(kidbean, kidnode, collectionComp, walkedNodes, savebinding, loadedBindings, true); //recursive
 			}
 			
@@ -1201,18 +1224,6 @@ public class DataBinder {
 			}
 		}
 	
-		private Object fetchValue(Object bean, BindingNode node, String nodeid) {
-			if (bean != null) {
-				try {
-					bean = Fields.get(bean, nodeid);
-				} catch (NoSuchMethodException ex) {
-					throw UiException.Aide.wrap(ex);
-				}
-			}
-			registerBeanNode(bean, node);
-			return bean;
-		}
-		
 		//return nearest collection item Component (i.e. Listitem)
 		private Component loadBindings(Object bean, BindingNode node, Component collectionComp, 
 		Binding savebinding, Set loadedBindings, boolean refChanged) {
