@@ -375,6 +375,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 				<attribute-value>self.onCheck</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selected</property-name>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onCheck</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<component>
 		<component-name>radiogroup</component-name>
