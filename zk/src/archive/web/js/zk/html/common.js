@@ -1221,7 +1221,10 @@ zk.go = function (url, overwrite, target) {
 		//return this page (and found the progress dlg remains on browse)
 		//
 		//Bug 1773575: with # and the same url, no redraw
-
+	if (bProgress && url) {
+		bProgress =	url.indexOf("://") < 0 && !url.startsWith("mailto:")
+			&& !url.startsWith("javascript:") && !url.startsWith("about:");
+	}
 	if (!url) {
 		if (bProgress) zk.progress(); //BACK button issue
 		window.location.reload();
@@ -1249,8 +1252,8 @@ zk.go = function (url, overwrite, target) {
 	} else {
 		if (bProgress) zk.progress();
 		window.location.href = url;
-		if (bProgress) zk.progressDone(); // Bug #1843032
 	}
+	if (bProgress) zk.progressDone(); // Bug #1843032
 };
 /** Tests whether a new window will be opened.
  */
