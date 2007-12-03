@@ -212,7 +212,30 @@ zkInbox = {};
 zkLnbox = {};
 zkDcbox = {};
 zkDbbox = {};
-zkInbox.init = zkLnbox.init = zkDcbox.init = zkDbbox.init = zkTxbox.init;
+zkInpEl = {};
+zkInpEl.baseChars = "+0123456789" + zk.MINUS + zk.PERCENT + zk.GROUPING;
+zkInpEl.ignoreKeys = function (evt, keys) {
+	var k = Event.keyCode(evt);
+    if(!zk.ie && (Event.isSpecialKey(evt) || k == 8 || k == 46)) return;
+    var c = Event.charCode(evt);
+    if(keys.indexOf(String.fromCharCode(c)) === -1){
+        Event.stop(evt);
+    }
+};
+zkInbox.init = zkLnbox.init = function (cmp) {	
+	zk.listen(cmp, "keypress", zkInbox.onkeypress);
+	zkTxbox.init(cmp);
+};
+zkInbox.onkeypress = function (evt) {
+	zkInpEl.ignoreKeys(evt, zkInpEl.baseChars);
+};
+zkDcbox.init = zkDbbox.init = function (cmp) {	
+	zk.listen(cmp, "keypress", zkDcbox.onkeypress);
+	zkTxbox.init(cmp);
+};
+zkDcbox.onkeypress = function (evt) {
+	zkInpEl.ignoreKeys(evt, zkInpEl.baseChars + zk.DECIMAL);
+};
 zkInbox.setAttr = zkLnbox.setAttr = zkDcbox.setAttr = zkDbbox.setAttr = zkTxbox.setAttr ;
 zkInbox.onHide = zkLnbox.onHide = zkDcbox.onHide = zkDbbox.onHide = zkTxbox.onHide;
 zkInbox.validate = function (cmp) {
