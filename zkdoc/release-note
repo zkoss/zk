@@ -61,7 +61,13 @@ ZK 3.0.1
   1840024: Component always returns the same id automatically
   1839960: Listbox rendering problems if wrapping occurs
   1843032: Infinite "Processing..." message during PRINT
-  
+
+* Upgrade Notes:
+  + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
+    Use org.zkoss.zk.au.http.AuWriter instead.
+  + The execUpdate methods of the org.zkoss.zk.ui.sys.UiEngine are changed.
+    Use org.zkoss.zk.au.http.AuWriter instead.
+
 	--------
 ZK 3.0.0
 * Features:
