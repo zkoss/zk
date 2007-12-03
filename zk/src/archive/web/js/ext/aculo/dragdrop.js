@@ -475,7 +475,7 @@ this.element.style.position = this.z_orgpos;
   },
   
   keyPress: function(event) {
-    if(event.keyCode!=27/*Tom M. Yeh, Potix:Event.KEY_ESC*/) return;
+    if(Event.keyCode(event)!=27/*Tom M. Yeh, Potix:Event.KEY_ESC*/) return;
     this.finishDrag(event, false);
     Event.stop(event);
   },
