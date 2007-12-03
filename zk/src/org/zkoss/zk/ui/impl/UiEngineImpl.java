@@ -661,12 +661,12 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Asynchronous updates --//
-	public void execUpdate(Execution exec, List requests, Writer out)
+	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException {
 		execUpdate(exec, requests, null, out);
 	}
 	public Collection execUpdate(Execution exec, List requests,
-	String reqId, Writer out) throws IOException {
+	String reqId, AuWriter out) throws IOException {
 		if (requests == null)
 			throw new IllegalArgumentException("null requests");
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
@@ -758,8 +758,8 @@ public class UiEngineImpl implements UiEngine {
 			else
 				doneReqIds = rque.clearRequestIds();
 
-			responseSequenceId(desktop, out);
-			response(responses, out);
+			out.writeSequenceId(desktop);
+			out.write(responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
@@ -1145,69 +1145,6 @@ public class UiEngineImpl implements UiEngine {
 			}
 			evtthd.ceaseSilently("Recycled");
 		}
-	}
-
-	//-- Generate output from a response --//
-	/** Output the next response sequence ID.
-	 */
-	private static void responseSequenceId(Desktop desktop, Writer out)
-	throws IOException {
-		out.write("\n<sid>");
-		out.write(Integer.toString(
-			((DesktopCtrl)desktop).getResponseSequence(true)));
-		out.write("</sid>");
-	}
-	public void response(AuResponse response, Writer out)
-	throws IOException {
-		out.write("\n<r><c>");
-		out.write(response.getCommand());
-		out.write("</c>");
-		final String[] data = response.getData();
-		if (data != null) {
-			for (int j = 0; j < data.length; ++j) {
-				out.write("\n<d>");
-				encodeXML(data[j], out);
-				out.write("</d>");
-			}
-		}
-		out.write("\n</r>");
-	}
-	public void response(List responses, Writer out)
-	throws IOException {
-		for (Iterator it = responses.iterator(); it.hasNext();)
-			response((AuResponse)it.next(), out);
-	}
-	private static void encodeXML(String data, Writer out)
-	throws IOException {
-		if (data == null || data.length() == 0)
-			return;
-
-		//20051208: Tom Yeh
-		//The following codes are tricky.
-		//Reason:
-		//1. nested CDATA is not allowed
-		//2. Firefox (1.0.7)'s XML parser cannot handle over 4096 chars
-		//	if CDATA is not used
-		int j = 0;
-		for (int k; (k = data.indexOf("]]>", j)) >= 0;) {
-			encodeByCData(data.substring(j, k), out);
-			out.write("]]&gt;");
-			j = k + 3;
-		}
-		encodeByCData(data.substring(j), out);
-	}
-	private static void encodeByCData(String data, Writer out)
-	throws IOException {
-		for (int j = data.length(); --j >= 0;) {
-			final char cc = data.charAt(j);
-			if (cc == '<' || cc == '>' || cc == '&') {
-				out.write("<![CDATA[");
-				out.write(data);
-				out.write("]]>");
-				return;
-			}
-		}
-		out.write(data);
 	}
 
 	public void activate(Execution exec) {

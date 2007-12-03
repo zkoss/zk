@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.AuWriter;
 
 /**
  * UI engine is reponsible to process requests from the client,
@@ -140,8 +141,9 @@ public interface UiEngine {
 	 * <p>Note: the output must be XML and UTF-8.
 	 *
 	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest}.
+	 * @since 3.0.1
 	 */
-	public void execUpdate(Execution exec, List requests, Writer out)
+	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException;
 	/** Executs an asynchronous update to a component (or page).
 	 * <p>Note: the output must be XML and UTF-8.
@@ -153,20 +155,10 @@ public interface UiEngine {
 	 * is not defined.
 	 * @return a list of request IDs that have been processed
 	 * completely.
-	 * @since 3.0.0
+	 * @since 3.0.1
 	 */
 	public Collection execUpdate(Execution exec, List requests,
-	String reqId, Writer out) throws IOException;
-	/** Generates the output for the specified the response.
-	 * <p>Note: the output must be XML and UTF-8.
-	 */
-	public void response(AuResponse response, Writer out)
-	throws IOException;
-	/** Generates the output of a list of responses.
-	 * <p>Note: the output must be XML and UTF-8.
-	 */
-	public void response(List responses, Writer out)
-	throws IOException;
+	String reqId, AuWriter out) throws IOException;
 
 	/** Executes the recovering.
 	 */

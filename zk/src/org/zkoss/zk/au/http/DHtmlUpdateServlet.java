@@ -61,11 +61,12 @@ import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.I18Ns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.AuWriter;
+import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.CommandNotFoundException;
 import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuSendRedirect;
-import org.zkoss.zk.au.Command;
-import org.zkoss.zk.au.CommandNotFoundException;
 import org.zkoss.zk.device.Devices;
 
 /**
@@ -169,7 +170,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//	+", SP="+request.getServletPath()+" and "+Https.getThisServletPath(request)
 			//	+", QS="+request.getQueryString()+" and "+Https.getThisQueryString(request)
 			//	+", params="+request.getParameterMap().keySet());
-			//responseError(uieng, response, "Illegal request: dtid is required");
+			//responseError(response, "Illegal request: dtid is required");
 			//Tom M. Yeh: 20060922: Unknown reason to get here but it is annoying
 			//to response it back to users
 			return;
@@ -182,7 +183,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				final StringWriter out = getXMLWriter();
+				final AuWriter out =
+					new HttpAuWriter().open(request, response, 0);
 
 				if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
 				&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
@@ -197,10 +199,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						resp = new AuObsolete(
 							dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
 					}
-					uieng.response(resp, out);
+					out.write(resp);
 				}
 
-				flushXMLWriter(request, response, out);
+				out.close(request, response);
 				return;
 			}
 		}
@@ -237,19 +239,20 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				}
 			}
 		} catch (CommandNotFoundException ex) {
-			responseError(uieng, request, response, Exceptions.getMessage(ex));
+			responseError(request, response, Exceptions.getMessage(ex));
 			return;
 		}
 
 		if (aureqs.isEmpty()) {
-			responseError(uieng, request, response, "Illegal request: cmd is required");
+			responseError(request, response, "Illegal request: cmd is required");
 			return;
 		}
 
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
-		final StringWriter out = getXMLWriter();
+		final AuWriter out = new HttpAuWriter()
+			.open(request, response, config.getResendDelay() / 2 - 1000);
 		final PerformanceMeter pfmeter = config.getPerformanceMeter();
 
 		final Execution exec = 
@@ -261,38 +264,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (reqIds != null && pfmeter != null)
 			meterComplete(pfmeter, response, reqIds, exec);
 
-		flushXMLWriter(request, response, out);
-	}
-
-	/** Returns the writer for output XML.
-	 * @param withrs whether to output <rs> first.
-	 */
-	private static StringWriter getXMLWriter() {
-		final StringWriter out = new StringWriter();
-		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n");
-		return out;
-	}
-	/** Flushes all content in out to the response.
-	 * Don't write the response thereafter.
-	 * @param withrs whether to output </rs> first.
-	 */
-	private static final
-	void flushXMLWriter(HttpServletRequest request,
-	HttpServletResponse response, StringWriter out)
-	throws IOException {
-		out.write("\n</rs>");
-
-		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		byte[] data = out.toString().getBytes("UTF-8");
-		if (data.length > 200) {
-			byte[] bs = Https.gzip(request, response, null, data);
-			if (bs != null) data = bs; //yes, browser support compress
-		}
-
-		response.setContentType("text/xml;charset=UTF-8");
-		response.setContentLength(data.length);
-		response.getOutputStream().write(data);
-		response.flushBuffer();
+		out.close(request, response);
 	}
 
 	/** Recovers the desktop if possible.
@@ -323,15 +295,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	/** Generates a response for an error message.
 	 */
-	private static
-	void responseError(UiEngine uieng, HttpServletRequest request,
+	private static void responseError(HttpServletRequest request,
 	HttpServletResponse response, String errmsg) throws IOException {
 		log.debug(errmsg);
 
 		//Don't use sendError because Browser cannot handle UTF-8
-		final StringWriter out = getXMLWriter();
-		uieng.response(new AuAlert(errmsg), out);
-		flushXMLWriter(request, response, out);
+		final AuWriter out = new HttpAuWriter().open(request, response, 0);
+		out.write(new AuAlert(errmsg));
+		out.close(request, response);
 	}
 
 	/** Handles the start of request.
