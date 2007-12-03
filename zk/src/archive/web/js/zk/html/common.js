@@ -1249,6 +1249,7 @@ zk.go = function (url, overwrite, target) {
 	} else {
 		if (bProgress) zk.progress();
 		window.location.href = url;
+		if (bProgress) zk.progressDone(); // Bug #1843032
 	}
 };
 /** Tests whether a new window will be opened.
