@@ -59,6 +59,7 @@ ZK 3.0.1
   1840003: Window's sclass property cannot be changed dynamically
   1840024: Component always returns the same id automatically
   1839960: Listbox rendering problems if wrapping occurs
+  1843032: Infinite "Processing..." message during PRINT
   
 	--------
 ZK 3.0.0
