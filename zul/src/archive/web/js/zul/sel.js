@@ -125,7 +125,7 @@ zk.Selectable.prototype = {
 						return true;
 
 					if (evt) {
-						switch (evt.keyCode) {
+						switch (Event.keyCode(evt)) {
 						case 33: //PgUp
 						case 34: //PgDn
 						case 38: //UP
@@ -240,7 +240,7 @@ zk.Selectable.prototype = {
 	// Otherwise, it cause scroll problem on IE:
 	// When user clicks on the scrollbar, it scrolls first and call onfocus,
 	// then it will scroll back to the focus because _focusToAnc is called
-		switch (evt.keyCode) {
+		switch (Event.keyCode(evt)) {
 		case 33: //PgUp
 		case 34: //PgDn
 		case 38: //UP
@@ -270,17 +270,17 @@ zk.Selectable.prototype = {
 			shift = false; //OK to 
 
 		var endless = false, step, lastrow;
-		switch (evt.keyCode) {
+		switch (Event.keyCode(evt)) {
 		case 33: //PgUp
 		case 34: //PgDn
 			step = this.realsize();
 			if (step == 0) step = 20;
-			if (evt.keyCode == 33)
+			if (Event.keyCode(evt) == 33)
 				step = -step;
 			break;
 		case 38: //UP
 		case 40: //DOWN
-			step = evt.keyCode == 40 ? 1: -1;
+			step = Event.keyCode(evt) == 40 ? 1: -1;
 			break;
 		case 32: //SPACE
 			if (this._isMultiple()) this.toggleSelect(row, !this._isSelected(row));
@@ -288,7 +288,7 @@ zk.Selectable.prototype = {
 			break;
 		case 36: //Home
 		case 35: //End
-			step = evt.keyCode == 35 ? 1: -1;
+			step = Event.keyCode(evt) == 35 ? 1: -1;
 			endless = true;
 			break;
 		case 37: //LEFT
@@ -321,7 +321,7 @@ zk.Selectable.prototype = {
 			else this.select(lastrow);
 		}
 
-		switch (evt.keyCode) {
+		switch (Event.keyCode(evt)) {
 		case 33: //PgUp
 		case 34: //PgDn
 		case 38: //UP

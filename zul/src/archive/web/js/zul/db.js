@@ -325,11 +325,11 @@ zkCal.onup = function (evt) {
 	return true;
 };
 zkCal.onkey = function (evt) {
-	if (!evt.altKey && evt.keyCode >= 37 && evt.keyCode <= 40) {
+	if (!evt.altKey && Event.keyCode(evt) >= 37 && Event.keyCode(evt) <= 40) {
 		var meta = zkau.getMeta($uuid(Event.element(evt)));
 		if (meta) {
-			ofs = evt.keyCode == 37 ? -1: evt.keyCode == 39 ? 1:
-				evt.keyCode == 38 ? -7: 7;
+			ofs = Event.keyCode(evt) == 37 ? -1: Event.keyCode(evt) == 39 ? 1:
+				Event.keyCode(evt) == 38 ? -7: 7;
 			meta.shift(ofs);
 			zk.focusDown(meta.element);
 			meta._changed = true;
@@ -449,14 +449,14 @@ zkDtbox.onkey = function (evt) {
 	if (!pp) return true;
 
 	var opened = $visible(pp);
-	if (evt.keyCode == 9) { //TAB; IE: close now to show covered SELECT
+	if (Event.keyCode(evt) == 9) { //TAB; IE: close now to show covered SELECT
 		if (opened) zkDtbox.close(pp);
 		return true; //don't eat
 	}
 
-	if (evt.keyCode == 38 || evt.keyCode == 40) {//UP/DN
+	if (Event.keyCode(evt) == 38 || Event.keyCode(evt) == 40) {//UP/DN
 		if (evt.altKey) {
-			if (evt.keyCode == 38) { //UP
+			if (Event.keyCode(evt) == 38) { //UP
 				if (opened) zkDtbox.close(pp);
 			} else {
 				if (!opened) zkDtbox.open(pp);
@@ -479,13 +479,13 @@ zkDtbox.onkey = function (evt) {
 		var meta = zkau.getMeta(uuid);
 		if (meta) {
 			//Request 1551019: better responsive
-			if (evt.keyCode == 13) { //ENTER
+			if (Event.keyCode(evt) == 13) { //ENTER
 				meta.onchange();
 				return true;
 			}
 
-			var ofs = evt.keyCode == 37 ? -1: evt.keyCode == 39 ? 1:
-				evt.keyCode == 38 ? -7: evt.keyCode == 40 ? 7: 0;
+			var ofs = Event.keyCode(evt) == 37 ? -1: Event.keyCode(evt) == 39 ? 1:
+				Event.keyCode(evt) == 38 ? -7: Event.keyCode(evt) == 40 ? 7: 0;
 			if (ofs) {
 				meta.shift(ofs);
 				inp.value = meta.getDateString();

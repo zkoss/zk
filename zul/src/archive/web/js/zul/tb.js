@@ -148,7 +148,7 @@ zkTmbox._inpkeydown= function(evt){
 	var cmp = $outer(Event.element(evt));
 	var sels = zkTmbox._selrange(cmp);	
 	cmp.lastPos = sels[0];
-	var code =evt.keyCode;
+	var code =Event.keyCode(evt);
 	switch(code){
 	case 48:case 96://0
 	case 49:case 97://1
