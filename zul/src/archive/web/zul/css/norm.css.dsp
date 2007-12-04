@@ -323,8 +323,14 @@ tr.odd td.gc, tr.odd {
 tr.seld, td.seld {
 	background: #b3c8e8; border: 1px solid #6f97d2;
 }
-tr.disd, td.disd, tr.disd div.cell-inner, td.disd div.cell-inner, tr.disd a, td.disd a {
+tr.disd, td.disd, tr.disd div.cell-inner, td.disd div.cell-inner, tr.disd a, td.disd a, 
+	a.disd {
 	color: #C5CACB !important;
+}
+a.disd:visited, a.disd:hover { 
+	text-decoration: none !important;
+	cursor: default !important;;
+	border-color: #E0EAF7 !important;
 }
 tr.overd, td.overd {<%-- item onmouseover --%>
 	background: #D3EFFA;

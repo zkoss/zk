@@ -266,18 +266,25 @@ zkButton.init = function (cmp) {
 };
 zkTbtn = {}; //toolbarbutton
 zkTbtn.init = function (cmp) {
-	zk.listen(cmp, "click", function (evt) {
-		if ("javascript:;" == cmp.href) {
-			zkau.onclick(evt);
-			Event.stop(evt);
-		} else {
-			var t = cmp.getAttribute("target");
-			if (cmp.href && !zk.isNewWindow(cmp.href, t))
-				zk.progress();
-		}
-	});
-	zk.listen(cmp, "focus", zkau.onfocus);
-	zk.listen(cmp, "blur", zkau.onblur);
+		zk.listen(cmp, "click", function (evt) {			
+			if (getZKAttr(cmp, "disd") == "true") {
+				Event.stop(evt);
+				return;
+			}
+			if ("javascript:;" == cmp.href) {
+				zkau.onclick(evt);
+				Event.stop(evt);
+			} else {
+				var t = cmp.getAttribute("target");
+				if (cmp.href && !zk.isNewWindow(cmp.href, t))
+					zk.progress();
+			}
+		});
+	
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "focus", zkau.onfocus);
+		zk.listen(cmp, "blur", zkau.onblur);
+	}
 };
 
 ////
