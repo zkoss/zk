@@ -20,6 +20,7 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
@@ -38,6 +39,7 @@ public class Comboitem extends LabelImageElement {
 	private String _desc = "";
 	private Object _value;
 	private String _content = "";
+	private boolean _disabled = false;
 
 	public Comboitem() {
 		setSclass("item");
@@ -52,6 +54,32 @@ public class Comboitem extends LabelImageElement {
 		setImage(image);
 	}
 
+	public String getSclass() {
+		String scls = super.getSclass();	
+		if (isDisabled())
+			return scls.length() > 0 ? scls + " disd": "disd";
+		return scls;
+	}
+	
+	/**
+	 * Sets whether it is disabled.
+	 * @since 3.0.1
+	 */
+	public void setDisabled(boolean disabled) {
+		if (_disabled != disabled) {
+			_disabled = disabled;
+			invalidate();
+		}
+	}
+	
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 3.0.1
+	 */
+	public boolean isDisabled() {
+		return _disabled;
+	}
+	
 	/** Returns the description (never null).
 	 * The description is used to provide extra information such that
 	 * users is easy to make a selection.
@@ -134,5 +162,12 @@ public class Comboitem extends LabelImageElement {
 	/** No child is allowed. */
 	public boolean isChildable() {
 		return false;
+	}
+	
+	public String getOuterAttrs() {
+		final StringBuffer sb =
+			new StringBuffer(60).append(super.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
+		return sb.toString();
 	}
 }

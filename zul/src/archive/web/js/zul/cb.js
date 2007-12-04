@@ -54,9 +54,11 @@ zkCmbox.init = function (cmp) {
 
 zkCmit = {};
 zkCmit.init = function (cmp) {
-	zk.listen(cmp, "click", zkCmit.onclick);
-	zk.listen(cmp, "mouseover", zkCmit.onover);
-	zk.listen(cmp, "mouseout", zkCmit.onout);
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "click", zkCmit.onclick);
+		zk.listen(cmp, "mouseover", zkCmit.onover);
+		zk.listen(cmp, "mouseout", zkCmit.onout);
+	}
 };
 /** When an item is clicked. */
 zkCmit.onclick = function (evt) {
@@ -467,7 +469,13 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 	var found;
 	if (selback) {
 		if (jfnd < 0) {
-			if (rows.length) found = rows[0];
+			if (rows.length) {
+				for (var i = 0; i < rows.length; i++) {
+					if (getZKAttr(rows[i], "disd") == "true") continue;
+					found = rows[i];
+					break;
+				}
+			}
 		} else {
 			if (exact) {
 				var b = document.selection;
@@ -475,9 +483,17 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 				|| (!b && inpval.length && inp.selectionStart == 0
 					&& inp.selectionEnd == inpval.length)) {
 					if (bUp) {
-						if (jfnd > 0) --jfnd;
+						for (var i = jfnd - 1; i >= 0 ; i--) {
+							if (getZKAttr(rows[i], "disd") == "true") continue;
+							jfnd = i;
+							break;
+						}
 					} else {
-						if (jfnd + 1 < rows.length) ++jfnd;
+						for (var i = jfnd + 1; i < rows.length ; i++) {
+							if (getZKAttr(rows[i], "disd") == "true") continue;
+							jfnd = i;
+							break;
+						}
 					}
 				}
 			}
