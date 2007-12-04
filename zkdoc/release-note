@@ -23,6 +23,8 @@ ZK 3.0.1
   1766905: DataBinder support binding to Map
   1842533: Add default-bind to Radio.selected
   1796049: Like Timebox, Intbox must support only integer
+  1780792: Disable checkmarks on some node of a tree
+  1474209: Listbox supports the disabled property
   
 * Bugs:
   1839246: More reliable handling of Ajax requests
