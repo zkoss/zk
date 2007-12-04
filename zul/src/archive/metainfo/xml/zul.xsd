@@ -354,6 +354,9 @@
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+		<xs:attribute name="onKeyDown" type="xs:string" use="optional" />
+		<xs:attribute name="onKeyUp" type="xs:string" use="optional" />
+		<xs:attribute name="onOK" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- bandpopup -->
 	<xs:element name="bandpopup" type="bandpopupType" />

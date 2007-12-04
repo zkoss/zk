@@ -30,7 +30,9 @@ zkTxbox.init = function (cmp) {
 	zk.listen(cmp, "select", zkTxbox.onselect);
 	if ($tag(cmp) == "TEXTAREA")
 		zk.listen(cmp, "keyup", zkTxbox.onkey);
-
+	else
+		zk.listen(cmp, "keyup", zkTxbox.onkeyup);
+	zk.listen(cmp, "keydown", zkTxbox.onkeydown);
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
 	if (getZKAttr($outer(cmp), "srvald")) {
@@ -146,6 +148,29 @@ zkTxbox.onkey = function (evt) {
 		&& inp.value.length > maxlen)
 			inp.value = inp.value.substring(0, maxlen);
 	}
+	zkTxbox.onkeyup(evt);
+};
+zkTxbox.onkeyup = function (evt) {
+	var inp = Event.element(evt);
+	var uuid = $uuid(inp);
+	var cmp = $e(uuid);	
+	if (zkau.asap(cmp, "onKeyUp"))
+		zkTxbox._send(evt, uuid, inp, cmp, "onKeyUp");
+};
+zkTxbox._send = function (evt, uuid, inp, cmp, evtnm, timeout) {
+	var sr = zk.getSelectionRange(inp);
+	zkau.send({uuid: uuid, cmd: evtnm,
+		data: [Event.keyCode(evt), evt.ctrlKey, evt.shiftKey, evt.altKey, sr[0]]}, 
+		timeout ? timeout : 100);
+};
+zkTxbox.onkeydown = function (evt) {
+	var inp = Event.element(evt);
+	var uuid = $uuid(inp);
+	var cmp = $e(uuid);
+	if (zkau.asap(cmp, "onKeyDown"))
+		zkTxbox._send(evt, uuid, inp, cmp, "onKeyDown");
+	if (Event.keyCode(evt) == 13 && zkau.asap(cmp, "onOK"))
+		zkTxbox._send(evt, uuid, inp, cmp, "onOK", 30);
 };
 zkTxbox.onfocus = function (evt) {
 	zkau.onfocus(evt);
