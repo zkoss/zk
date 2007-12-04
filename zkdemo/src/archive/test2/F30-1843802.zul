@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1843802.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec  4 11:05:05 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<combobox>
+	<comboitem label="Simple and Rich" disabled="true"/>
+	<comboitem label="Cool!"/>
+	<comboitem label="Thumbs Up!" disabled="true"/>
+	<comboitem label="ZK Best!"/>
+</combobox>
