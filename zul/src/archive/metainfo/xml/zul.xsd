@@ -1145,6 +1145,7 @@
 		<xs:attribute name="autocheck" type="xs:string" use="optional" />
 		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
+		<xs:attribute name="disabled" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- menupopup -->

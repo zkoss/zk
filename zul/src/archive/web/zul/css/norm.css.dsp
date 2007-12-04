@@ -323,7 +323,7 @@ tr.odd td.gc, tr.odd {
 tr.seld, td.seld {
 	background: #b3c8e8; border: 1px solid #6f97d2;
 }
-tr.disd, td.disd, tr.disd div.cell-inner, td.disd div.cell-inner {
+tr.disd, td.disd, tr.disd div.cell-inner, td.disd div.cell-inner, tr.disd a, td.disd a {
 	color: #C5CACB !important;
 }
 tr.overd, td.overd {<%-- item onmouseover --%>

@@ -20,6 +20,7 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -37,6 +38,7 @@ public class Menuitem extends LabelImageElement {
 	private String _value = "";
 	private String _href, _target;
 	private boolean _autocheck, _checked;
+	private boolean _disabled = false;
 
 	public Menuitem() {
 	}
@@ -46,6 +48,32 @@ public class Menuitem extends LabelImageElement {
 	public Menuitem(String label, String src) {
 		setLabel(label);
 		setImage(src);
+	}
+
+	public String getSclass() {
+		String scls = super.getSclass();	
+		if (isDisabled())
+			return scls != null && scls.length() > 0 ? scls + " disd": "disd";
+		return scls;
+	}
+	
+	/**
+	 * Sets whether it is disabled.
+	 * @since 3.0.1
+	 */
+	public void setDisabled(boolean disabled) {
+		if (_disabled != disabled) {
+			_disabled = disabled;
+			invalidate();
+		}
+	}
+	
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 3.0.1
+	 */
+	public boolean isDisabled() {
+		return _disabled;
 	}
 
 	/** Returns the value.
@@ -149,10 +177,11 @@ public class Menuitem extends LabelImageElement {
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		boolean topmost = isTopmost();
-		if (!topmost && !_autocheck) return attrs;
+		if (!topmost && !_autocheck && !_disabled) return attrs;
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		if (topmost) sb.append(" z.top=\"true\"");
+		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
 		if (_autocheck) {
 			sb.append(" z.autock=\"true\"");
 			if (_checked) sb.append(" z.checked=\"true\"");

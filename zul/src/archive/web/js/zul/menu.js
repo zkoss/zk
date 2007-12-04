@@ -181,15 +181,16 @@ zkMenubar = {};
 zkMenuit = {}; //menuitem
 zkMenusp = {}; //menuseparator
 
-zkMenuit.init = function (cmp) {
-	zk.listen(cmp, "click", zkMenuit.onclick);
-	zk.listen(cmp, "mouseover", zkMenu.onover);
-	zk.listen(cmp, "mouseout", zkMenu.onout);
-
-	if (getZKAttr(cmp, "top") != "true") { //non-topmost
-		var anc = $e(cmp.id + "!a");
-		zk.listen(anc, "focus", zkau.onfocus);
-		zk.listen(anc, "blur", zkau.onblur);
+zkMenuit.init = function (cmp) {	
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "click", zkMenuit.onclick);
+		zk.listen(cmp, "mouseover", zkMenu.onover);
+		zk.listen(cmp, "mouseout", zkMenu.onout);
+		if (getZKAttr(cmp, "top") != "true") { //non-topmost
+			var anc = $e(cmp.id + "!a");
+			zk.listen(anc, "focus", zkau.onfocus);
+			zk.listen(anc, "blur", zkau.onblur);		
+		}	
 	}
 };
 zkMenuit.onclick = function (evt) {
