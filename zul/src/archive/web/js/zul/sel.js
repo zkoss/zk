@@ -302,7 +302,7 @@ zk.Selectable.prototype = {
 		if (step) {
 			if (shift) this.toggleSelect(row, true);
 			for (; (row = step > 0 ? row.nextSibling: row.previousSibling) != null;) {
-				if ($tag(row) == "TR"  && this._isValid(row)) {
+				if ($tag(row) == "TR"  && this._isValid(row) && getZKAttr(row, "disd") != "true") {
 					if (shift) this.toggleSelect(row, true);
 
 					if ($visible(row)) {
@@ -696,7 +696,7 @@ zk.Selectable.prototype = {
 				el.innerHTML = " ";
 				el.onfocus = zkSel.cmonfocus;
 				el.onblur = zkSel.cmonblur;
-				var cave = $e(row.cells[0].id+ "!cave");
+				var cave = $e(row.cells[0].id+ "!cave") || row.cells[0];
 				if (cave.firstChild) cave.insertBefore(el, cave.firstChild); 
 				else cave.appendChild(el);
 			}
@@ -1079,7 +1079,7 @@ zk.Selectable.prototype = {
 	},
 	/** Returns whether the row is valid. */
 	_isValid: function (row) {
-		return row && !row.id.endsWith("!child");
+		return row && !row.id.endsWith("!child") && !row.id.endsWith("!ph") && !row.id.endsWith("!pt");
 	},
 
 	/** Called when the form enclosing it is submitting. */
@@ -1235,11 +1235,12 @@ zkLit = {}; //listitem
 zkLit.init = function (cmp) {
 	//zk.disableSelection(cmp);
 	//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
-
-	zk.listen(cmp, "click", zkLibox.onclick);
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "click", zkLibox.onclick);
+		zk.listen(cmp, "mouseover", zkSel.onover);
+		zk.listen(cmp, "mouseout", zkSel.onout);
+	}	
 	zk.listen(cmp, "keydown", zkLibox.onkeydown);
-	zk.listen(cmp, "mouseover", zkSel.onover);
-	zk.listen(cmp, "mouseout", zkSel.onout);
 	zkLit.stripe(cmp);
 };
 zkLit.setAttr = function (cmp, nm, val) {

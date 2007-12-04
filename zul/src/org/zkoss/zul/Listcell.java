@@ -160,7 +160,9 @@ public class Listcell extends LabelImageElement {
 			if (listbox.isCheckmark()) {
 				sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
 					.append('"');
-				if (item.isSelected())
+				if (item.isDisabled())
+					sb.append(" disabled=\"disabled\"");
+				else if (item.isSelected())
 					sb.append(" checked=\"checked\"");
 
 				sb.append(" id=\"").append(item.getUuid())

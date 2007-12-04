@@ -232,11 +232,12 @@ zkTrow.init = function (cmp) {
 	//zk.disableSelection(cmp);
 	//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
 
-	zk.listen(cmp, "click", zkTree.onclick);
 	zk.listen(cmp, "keydown", zkTree.onkeydown);
-	zk.listen(cmp, "mouseover", zkSel.onover);
-	zk.listen(cmp, "mouseout", zkSel.onout);
-
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "click", zkTree.onclick);
+		zk.listen(cmp, "mouseover", zkSel.onover);
+		zk.listen(cmp, "mouseout", zkSel.onout);
+	}
 	_zktrx.init(cmp, "ptch");
 	_zktrx.init(cmp, "pitem");
 

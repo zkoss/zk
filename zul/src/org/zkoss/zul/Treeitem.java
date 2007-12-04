@@ -48,6 +48,7 @@ public class Treeitem extends XulElement {
 	private Object _value;
 	private boolean _open = true;
 	private boolean _selected = false;
+	private boolean _disabled = false;
 	
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
@@ -64,6 +65,25 @@ public class Treeitem extends XulElement {
 		setValue(value);
 	}
 
+	/**
+	 * Sets whether it is disabled.
+	 * @since 3.0.1
+	 */
+	public void setDisabled(boolean disabled) {
+		if (_disabled != disabled) {
+			_disabled = disabled;
+			invalidate();
+		}
+	}
+	
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 3.0.1
+	 */
+	public boolean isDisabled() {
+		return _disabled;
+	}
+	
 	/**
 	 * Return true whether this tree item is loaded
 	 * @return true whether this tree item is loaded

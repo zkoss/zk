@@ -146,9 +146,10 @@ public class Treecell extends LabelImageElement {
 					sb.append("<input type=\"")
 						.append(tree.isMultiple() ? "checkbox": "radio")
 						.append('"');
-					if (item.isSelected())
-						sb.append(" checked=\"checked\"");
-
+					if (item.isDisabled())
+						sb.append(" disabled=\"disabled\"");
+					else if (item.isSelected())
+						sb.append(" checked=\"checked\"");					
 					//NOTE: use Treerow's uuid! NOT Treeitem's!
 					sb.append(" id=\"").append(getParent().getUuid())
 						.append("!cm\" z.type=\"Tcfc\"/>");

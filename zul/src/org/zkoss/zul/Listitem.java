@@ -124,11 +124,11 @@ public class Listitem extends XulElement {
 	 */
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
-			if (disabled && !inSelectMold())
-				throw new UnsupportedOperationException();
-
 			_disabled = disabled;
-			smartUpdate("disabled", _disabled);
+			if (inSelectMold())
+				smartUpdate("disabled", _disabled);
+			else
+				invalidate();
 		}
 	}
 	/** Returns whether it is selected.
@@ -251,8 +251,12 @@ public class Listitem extends XulElement {
 	 */
 	public String getSclass() {
 		String scls = super.getSclass();
-		if (scls == null) scls = "item";
-		return isSelected() ? scls.length() > 0 ? scls + " seld": "seld": scls;
+		if (scls == null) scls = "item";		
+		if (isDisabled())
+			return scls.length() > 0 ? scls + " disd": "disd";
+		else if (isSelected())
+			return scls.length() > 0 ? scls + " seld": "seld";		
+		return scls;
 	}
 
 	//-- Component --//
@@ -300,6 +304,7 @@ public class Listitem extends XulElement {
 				if (listbox.getModel() != null)
 					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
 			}
+			HTMLs.appendAttribute(sb, "z.disd", isDisabled());
 			if (isSelected())
 				HTMLs.appendAttribute(sb, "z.sel", "true");
 
