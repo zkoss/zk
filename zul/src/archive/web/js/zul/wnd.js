@@ -486,7 +486,7 @@ zkWnd._doModal = function (cmp, replace) {
 	var nModals = zkau._modals.length;
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
 	var zi = ++zkau.topZIndex; //mask also need another index
-	
+
 	if (zkWnd.shallVParent(cmp)) zk.setVParent(cmp);
 	zkWnd._center(cmp, zi, getZKAttr(cmp, "pos")); //called even if pos not defined
 		//show dialog first to have better response.
