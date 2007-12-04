@@ -53,6 +53,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.au.AuWriters;
 
 /**
  * Utilities to load language definitions.
@@ -270,6 +271,7 @@ public class DefinitionLoaders {
 	throws Exception {
 		parseZScriptConfig(el);
 		parseDeviceConfig(el);
+		parseSystemConfig(el);
 	}
 	private static void parseZScriptConfig(Element root) {
 		for (Iterator it = root.getElements("zscript-config").iterator();
@@ -284,6 +286,15 @@ public class DefinitionLoaders {
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			Devices.add(el);
+		}
+	}
+	private static void parseSystemConfig(Element root) throws Exception {
+		final Element el = root.getElement("system-config");
+		if (el != null) {
+			String s = el.getElementValue("au-writer-class", true);
+			if (s != null)
+				AuWriters.setImplementationClass(
+					s.length() == 0 ? null: Classes.forNameByThread(s));
 		}
 	}
 

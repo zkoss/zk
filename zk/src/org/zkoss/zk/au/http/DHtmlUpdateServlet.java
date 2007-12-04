@@ -62,6 +62,7 @@ import org.zkoss.zk.ui.http.I18Ns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
+import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zk.au.CommandNotFoundException;
 import org.zkoss.zk.au.out.AuObsolete;
@@ -184,7 +185,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 			if (desktop == null) {
 				final AuWriter out =
-					new HttpAuWriter().open(request, response, 0);
+					AuWriters.newInstance().open(request, response, 0);
 
 				if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
 				&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
@@ -251,8 +252,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
-		final AuWriter out = new HttpAuWriter()
-			.open(request, response, config.getResendDelay() / 2 - 1000);
+		final AuWriter out = AuWriters.newInstance()
+			.open(request, response, config.getResendDelay() / 2 - 500);
 		final PerformanceMeter pfmeter = config.getPerformanceMeter();
 
 		final Execution exec = 
@@ -300,7 +301,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		log.debug(errmsg);
 
 		//Don't use sendError because Browser cannot handle UTF-8
-		final AuWriter out = new HttpAuWriter().open(request, response, 0);
+		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
 		out.write(new AuAlert(errmsg));
 		out.close(request, response);
 	}

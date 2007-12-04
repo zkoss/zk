@@ -56,27 +56,29 @@ public class HttpAuWriter implements AuWriter{
 	 *
 	 * <p>This implementation doesn't support the timeout argument.
 	 */
-	public AuWriter open(HttpServletRequest request, HttpServletResponse response,
-	int timeout) throws IOException {
+	public AuWriter open(Object request, Object response, int timeout)
+	throws IOException {
 		_out = new StringWriter();
 		writeXMLHead();
 		return this;
 	}
-	public void close(HttpServletRequest request, HttpServletResponse response)
+	public void close(Object request, Object response)
 	throws IOException {
 		writeXMLTail();
 
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
+		final HttpServletRequest hreq = (HttpServletRequest)request;
+		final HttpServletResponse hres = (HttpServletResponse)response;
 		byte[] data = _out.toString().getBytes("UTF-8");
 		if (data.length > 200) {
-			byte[] bs = Https.gzip(request, response, null, data);
+			byte[] bs = Https.gzip(hreq, hres, null, data);
 			if (bs != null) data = bs; //yes, browser support compress
 		}
 
-		response.setContentType("text/xml;charset=UTF-8");
-		response.setContentLength(data.length);
-		response.getOutputStream().write(data);
-		response.flushBuffer();
+		hres.setContentType("text/xml;charset=UTF-8");
+		hres.setContentLength(data.length);
+		hres.getOutputStream().write(data);
+		hres.flushBuffer();
 	}
 
 	public void write(AuResponse response) throws IOException {

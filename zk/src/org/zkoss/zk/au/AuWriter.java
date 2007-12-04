@@ -21,9 +21,6 @@ package org.zkoss.zk.au;
 import java.util.Collection;
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.au.AuResponse;
 
@@ -33,22 +30,26 @@ import org.zkoss.zk.au.AuResponse;
  *
  * @author tomyeh
  * @since 3.0.1
- * @see org.zkoss.zk.ui.util.Configuration#setAuWriter
+ * @see AuWriters#setImplementationClass
  */
 public interface AuWriter {
 	/** Initializes the writer.
 	 *
+	 * @param request the request (HttpServletRequest if HTTP)
+	 * @param response the response (HttpServletResponse if HTTP)
 	 * @param timeout the elapsed time (milliseconds) before sending
 	 * a whitespace to the client to indicate the connection is alive.
 	 * Ignored if non-positive, or the implementation doesn't support
 	 * this feature.
 	 * @return this object
 	 */
-	public AuWriter open(HttpServletRequest request, HttpServletResponse response,
-	int timeout) throws IOException;
+	public AuWriter open(Object request, Object response, int timeout)
+	throws IOException;
 	/** Closes the writer and flush the result to client.
+	 * @param request the request (HttpServletRequest if HTTP)
+	 * @param response the response (HttpServletResponse if HTTP)
 	 */
-	public void close(HttpServletRequest request, HttpServletResponse response)
+	public void close(Object request, Object response)
 	throws IOException;
 	/** Flushes the bufferred output to the client.
 	 * It doesn't close the writer.

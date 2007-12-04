@@ -62,8 +62,14 @@ public class ConfigParser {
 			throw new IllegalArgumentException("null");
 		log.info("Parsing "+url);
 
-		final Element root = new SAXBuilder(false, false, true)
-			.build(url).getRootElement();
+		parse(new SAXBuilder(false, false, true).build(url).getRootElement(),
+			config, locator);
+	}
+	/** Parses zk.xml, specified by the root element.
+	 * @since 3.0.1
+	 */
+	public void parse(Element root, Configuration config, Locator locator)
+	throws Exception {
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
