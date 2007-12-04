@@ -1717,6 +1717,7 @@
 		<xs:attribute name="open" type="xs:string" use="optional" />
 		<xs:attribute name="selected" type="xs:string" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
+		<xs:attribute name="disabled" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- treerow -->
