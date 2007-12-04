@@ -28,6 +28,8 @@ ZK 3.0.1
   1843802: Comboitem supports the disabled property
   1656278: Menuitem enabled/disabled support
   1735287: Disable Toolbarbutton
+  1721273: Event Enachment
+  1632243: Add a getLine() function to textboxes
   
 * Bugs:
   1839246: More reliable handling of Ajax requests
