@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1656278.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec  4 12:05:33 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<menubar id="menubar">
+	<menu label="File">
+		<menupopup>
+			<menuitem label="New" autocheck="true" />
+			<menuitem label="Open" autocheck="true"
+				onClick="alert(self.label)" disabled="true" />
+			<menuitem label="Save" />
+			<menuseparator />
+			<menuitem label="Exit" />
+		</menupopup>
+	</menu>
+	<menu label="Help">
+		<menupopup>
+			<menuitem label="Index" />
+			<menu label="About">
+				<menupopup>
+					<menuitem disabled="ture" label="About ZK"
+						onClick="alert(self.label)" />
+					<menuitem label="About Potix" />
+				</menupopup>
+			</menu>
+		</menupopup>
+	</menu>
+</menubar>
