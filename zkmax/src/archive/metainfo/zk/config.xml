@@ -34,4 +34,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<language-name>Ruby</language-name>
 		<interpreter-class>org.zkoss.zkmax.scripting.jruby.JRubyInterpreter</interpreter-class>
 	</zscript-config>
+
+	<system-config>
+		<au-writer-class>org.zkoss.zkmax.au.http.SmartAuWriter</au-writer-class>
+	</system-config>
 </config>
