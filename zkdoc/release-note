@@ -25,6 +25,7 @@ ZK 3.0.1
   1796049: Like Timebox, Intbox must support only integer
   1780792: Disable checkmarks on some node of a tree
   1474209: Listbox supports the disabled property
+  1843802: Comboitem supports the disabled property
   
 * Bugs:
   1839246: More reliable handling of Ajax requests
