@@ -1231,7 +1231,7 @@ zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
 	var target = Event.element(evt);
 	var zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys;
-	var keycode = evt.keyCode, zkcode; //zkcode used to search z.ctkeys
+	var keycode = Event.keyCode(evt), zkcode; //zkcode used to search z.ctkeys
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = $tag(target);
@@ -1295,7 +1295,7 @@ zkau._onDocKeydown = function (evt) {
 				}
 
 				var req = {uuid: n.id, cmd: evtnm, ctl: true,
-					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey]};
+					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey, 0]};
 				if (zk.gecko && $tag(inp) == "SELECT" && $type(inp))
 					zkau.lateReq = req; //Bug 1756559:let SELECT to send (see sel.js)
 				else

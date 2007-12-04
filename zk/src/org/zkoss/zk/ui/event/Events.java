@@ -63,6 +63,14 @@ public class Events {
 	/** The onCtrlKey event (used with {@link KeyEvent}).
 	 */
 	public static final String ON_CTRL_KEY = "onCtrlKey";
+	/** The onKeyDown event (used with {@link KeyEvent}).
+	 * @since 3.0.1
+	 */
+	public static final String ON_KEY_DOWN = "onKeyDown";
+	/** The onKeyUp event (used with {@link KeyEvent}).
+	 * @since 3.0.1
+	 */
+	public static final String ON_KEY_UP = "onKeyUp";
 	/** The onChange event (used with {@link InputEvent}).
 	 */
 	public static final String ON_CHANGE = "onChange";
