@@ -29,12 +29,13 @@ import org.zkoss.zk.ui.Component;
 public class InputEvent extends Event {
 	private final String _val;
 	private final boolean _selbk;
+	private final int _start;
 
 	/** Constructs a input-relevant event.
 	 * @param val the new value
 	 */
 	public InputEvent(String name, Component target, String val) {
-		this(name, target, val, false);
+		this(name, target, val, false, 0);
 	}
 	/** Constructs an event for <code>onChanging</code>.
 	 *
@@ -42,10 +43,11 @@ public class InputEvent extends Event {
 	 * of items. Currently, only combobox might set it to true for the onChanging
 	 * event. See {@link #isChangingBySelectBack} for details.
 	 */
-	public InputEvent(String name, Component target, String val, boolean selbk) {
+	public InputEvent(String name, Component target, String val, boolean selbk, int start) {
 		super(name, target);
 		_val = val;
 		_selbk = selbk;
+		_start = start;
 	}
 	/** Returns the value that user input.
 	 */
@@ -66,5 +68,15 @@ public class InputEvent extends Event {
 	 */
 	public final boolean isChangingBySelectBack() {
 		return _selbk;
+	}
+
+	/**
+	 * Returns the start position of the cursor from the input element.
+	 * 
+	 * @return the start position >= 0
+	 * @since 3.0.1
+	 */
+	public int getStart() {
+		return _start;
 	}
 }

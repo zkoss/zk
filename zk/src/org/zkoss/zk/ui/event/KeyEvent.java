@@ -51,18 +51,17 @@ public class KeyEvent extends Event {
 	public static final int INSERT = 45;
 	public static final int DELETE = 46;
 
-	private final int _keyCode, _start;
+	private final int _keyCode;
 	private final boolean _ctrlKey, _shiftKey, _altKey;
 	/** Constructs a mouse relevant event.
 	 */
 	public KeyEvent(String name, Component target, int keyCode,
-	boolean ctrlKey, boolean shiftKey, boolean altKey, int start) {
+	boolean ctrlKey, boolean shiftKey, boolean altKey) {
 		super(name, target);
 		_keyCode = keyCode;
 		_ctrlKey = ctrlKey;
 		_shiftKey = shiftKey;
 		_altKey = altKey;
-		_start = start;
 	}
 	/** Returns the key code.
 	 */
@@ -83,15 +82,5 @@ public class KeyEvent extends Event {
 	 */
 	public final boolean isAltKey() {
 		return _altKey;
-	}
-
-	/**
-	 * Returns the start position of the cursor from the input element.
-	 * 
-	 * @return the start position >= 0
-	 * @since 3.0.1
-	 */
-	public int getStart() {
-		return _start;
 	}
 }

@@ -204,8 +204,6 @@ public class AuRequest {
 			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
 		new KeyCommand(Events.ON_OK,
 			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
-		new KeyCommand(Events.ON_KEY_DOWN, Command.IGNORE_OLD_EQUIV);
-		new KeyCommand(Events.ON_KEY_UP, Command.IGNORE_OLD_EQUIV);
 
 		new MoveCommand(Events.ON_MOVE, Command.IGNORE_OLD_EQUIV);
 		new SizeCommand(Events.ON_SIZE, Command.IGNORE_OLD_EQUIV);

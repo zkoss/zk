@@ -46,13 +46,13 @@ public class KeyCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || data.length != 5)
+		if (data == null || data.length != 4)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
 		final KeyEvent event = new KeyEvent(getId(), comp,
 			Integer.parseInt(data[0]), "true".equals(data[1]),
-			"true".equals(data[2]), "true".equals(data[3]), Integer.parseInt(data[4]));
+			"true".equals(data[2]), "true".equals(data[3]));
 		Events.postEvent(event);
 	}
 }
