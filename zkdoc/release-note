@@ -69,6 +69,7 @@ ZK 3.0.1
   1840024: Component always returns the same id automatically
   1839960: Listbox rendering problems if wrapping occurs
   1843032: Infinite "Processing..." message during PRINT
+  1844076: InputElement events not saving value
 
 * Upgrade Notes:
   + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
