@@ -30,8 +30,7 @@ zkTxbox.init = function (cmp) {
 	zk.listen(cmp, "select", zkTxbox.onselect);
 	if ($tag(cmp) == "TEXTAREA")
 		zk.listen(cmp, "keyup", zkTxbox.onkey);
-	else
-		zk.listen(cmp, "keyup", zkTxbox.onkeyup);
+		
 	zk.listen(cmp, "keydown", zkTxbox.onkeydown);
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
@@ -61,7 +60,11 @@ zkTxbox.onselect = function (evt) {
  */
 zkTxbox.onblur = function (evt) {
 	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
-
+	zkTxbox._scanStop(inp);
+	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
+	zkau.onblur(evt); //fire onBlur after onChange
+};
+zkTxbox._scanStop = function (inp) {	
 	//stop the scanning of onChaning first
 	var interval = zkTxbox._intervals[inp.id];
 	if (interval) {
@@ -72,9 +75,6 @@ zkTxbox.onblur = function (evt) {
 		inp.removeAttribute("zk_changing_last");
 		inp.removeAttribute("zk_changing_selbk");
 	}
-
-	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
-	zkau.onblur(evt); //fire onBlur after onChange
 };
 /** check any change.
  * @return false if failed (wrong data).
@@ -129,9 +129,10 @@ zkTxbox.onupdate = function (inp) {
 	var newval = inp.value;
 	if (newval != inp.defaultValue) { //changed
 		inp.defaultValue = newval;
-		var uuid = $uuid(inp);
+		var uuid = $uuid(inp);			
+		var sr = zk.getSelectionRange(inp);	
 		zkau.send({uuid: uuid, cmd: "onChange",
-			data: [newval]}, zkau.asapTimeout(uuid, "onChange", 100));
+			data: [newval, false, sr[0]]}, zkau.asapTimeout(uuid, "onChange", 100));
 	} else if (inp.getAttribute("zk_err")) {
 		inp.removeAttribute("zk_err");
 		zkau.send({uuid: $uuid(inp), cmd: "onError",
@@ -148,29 +149,18 @@ zkTxbox.onkey = function (evt) {
 		&& inp.value.length > maxlen)
 			inp.value = inp.value.substring(0, maxlen);
 	}
-	zkTxbox.onkeyup(evt);
-};
-zkTxbox.onkeyup = function (evt) {
-	var inp = Event.element(evt);
-	var uuid = $uuid(inp);
-	var cmp = $e(uuid);	
-	if (zkau.asap(cmp, "onKeyUp"))
-		zkTxbox._send(evt, uuid, inp, cmp, "onKeyUp");
-};
-zkTxbox._send = function (evt, uuid, inp, cmp, evtnm, timeout) {
-	var sr = zk.getSelectionRange(inp);
-	zkau.send({uuid: uuid, cmd: evtnm,
-		data: [Event.keyCode(evt), evt.ctrlKey, evt.shiftKey, evt.altKey, sr[0]]}, 
-		timeout ? timeout : 100);
 };
 zkTxbox.onkeydown = function (evt) {
 	var inp = Event.element(evt);
 	var uuid = $uuid(inp);
 	var cmp = $e(uuid);
-	if (zkau.asap(cmp, "onKeyDown"))
-		zkTxbox._send(evt, uuid, inp, cmp, "onKeyDown");
-	if (Event.keyCode(evt) == 13 && zkau.asap(cmp, "onOK"))
-		zkTxbox._send(evt, uuid, inp, cmp, "onOK", 30);
+	if (Event.keyCode(evt) == 13 && zkau.asap(cmp, "onOK")) {
+		zkTxbox._scanStop(inp);
+		zkTxbox.updateChange(inp, false);
+		zkau.send({uuid: uuid, cmd: "onOK",
+			data: [ 13, evt.ctrlKey, evt.shiftKey, evt.altKey]}, 
+			40);
+	}
 };
 zkTxbox.onfocus = function (evt) {
 	zkau.onfocus(evt);
@@ -191,9 +181,10 @@ zkTxbox._scanChanging = function (id) {
 	&& inp.getAttribute("zk_changing_last") != inp.value) {
 		inp.setAttribute("zk_changing_last", inp.value);
 		var selbk = inp.getAttribute("zk_changing_selbk");
-		inp.removeAttribute("zk_changing_selbk");
+		inp.removeAttribute("zk_changing_selbk");		
+		var sr = zk.getSelectionRange(inp);	
 		zkau.send({uuid: $uuid(id),
-			cmd: "onChanging", data: [inp.value, selbk == inp.value],
+			cmd: "onChanging", data: [inp.value, selbk == inp.value, sr[0]],
 			ignorable: true}, 100);
 	}
 };

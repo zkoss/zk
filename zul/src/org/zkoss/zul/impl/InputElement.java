@@ -46,9 +46,9 @@ import org.zkoss.zul.ext.Constrainted;
 
 /**
  * A skeletal implementation of an input box.
- * <p>Events: onChange, onChanging, onFocus, onBlur, onSelection, onKeyDown, onKeyUp, and onOK<br/>
+ * <p>Events: onChange, onChanging, onFocus, onBlur, onSelection, and onOK<br/>
  * @author tomyeh
- * @since 3.0.1 supports onKeyDown, onKeyUp, and onOK events.
+ * @since 3.0.1 supports onOK event.
  */
 abstract public class InputElement extends XulElement
 implements Constrainted {
@@ -469,8 +469,6 @@ implements Constrainted {
 		appendAsapAttr(sb, Events.ON_FOCUS);
 		appendAsapAttr(sb, Events.ON_BLUR);
 		appendAsapAttr(sb, Events.ON_SELECTION);
-		appendAsapAttr(sb, Events.ON_KEY_DOWN);
-		appendAsapAttr(sb, Events.ON_KEY_UP);
 		appendAsapAttr(sb, Events.ON_OK);
 
 		if (_constr != null) {
