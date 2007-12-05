@@ -71,10 +71,12 @@ public class SmartAuWriter extends HttpAuWriter {
 			_tmoutTask = null;
 			_res = null;
 			timeout = _timeout;
+			_timeout = false;
 		}
 
 		if (timeout) {
-			response.getOutputStream().write(_out.toString().getBytes("UTF-8"));
+			response.getOutputStream()
+				.write(_out.getBuffer().substring(HEADER.length()).getBytes("UTF-8"));
 			response.flushBuffer();
 		} else {
 			super.flush(request, response);
@@ -83,18 +85,21 @@ public class SmartAuWriter extends HttpAuWriter {
 
 	private class Task extends ScalableTimerTask {
 		public void exec() {
-			try {
-				synchronized (this) {
-					if (_tmoutTask != null) {
-						_res.getOutputStream()
-							.write(getXMLHeader().getBytes("UTF-8"));
-						_tmoutTask = null; //mark as done
-						_res = null; //clean up
-						_timeout = true;
-						_res.flushBuffer();
+			synchronized (this) {
+				if (_tmoutTask != null) {
+					//we have to write something to client to let the Ajax request
+					//advance XMLHttpRequest.readyState (to 3).
+					//Otherwise, the client may consider it as timeout and resend
+					try {
+						_res.getOutputStream().write(HEADER_BYTES);
+					} catch (IOException ex) { //ignore it
 					}
+
+					_tmoutTask = null; //mark as done
+					_res = null; //clean up
+					_timeout = true; //let flush know HEADER is sent
+					_res.flushBuffer();
 				}
-			} catch (IOException ex) { //ignore it
 			}
 		}
 	}
