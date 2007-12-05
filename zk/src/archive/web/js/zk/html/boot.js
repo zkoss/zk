@@ -464,11 +464,15 @@ zk.getBuild = function (nm) {
  * <p>The function is removed from the list right before invoked,
  * so it won't be called twice (unless you call zk.addInit again).
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  */
 zk.addInit = function (fn, front, unique) {
-	zk._addfn(zk._initfns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._initids[unique]) return;	
+		zk._initids[unique] = true;
+	}
+	zk._addfn(zk._initfns, fn, front);
 };
 /** Adds a function that will be invoked 25 milliseconds, after
  * all components are initialized.
@@ -482,19 +486,18 @@ zk.addInit = function (fn, front, unique) {
  * so it won't be called twice (unless you call zk.addInitLater again).
  *
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  * @since 3.0.0
  */
 zk.addInitLater = function (fn, front, unique) {
-	zk._addfn(zk._inLatfns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._inLatids[unique]) return;
+		zk._inLatids[unique] = true;
+	}
+	zk._addfn(zk._inLatfns, fn, front);
 };
-zk._addfn = function (fns, fn, front, unique) {
-	if (unique)
-		for (var j = fns.length; j;)
-			if (fns[--j] == fn)
-				return;
-
+zk._addfn = function (fns, fn, front) {
 	if (front) fns.unshift(fn);
 	else fns.push(fn);
 };
@@ -527,11 +530,15 @@ zk.addInitCmp = function (cmp) {
  * <p>The function is removed from the list right before invoked,
  * so it won't be called twice (unless you call zk.addInit again).
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  */
 zk.addCleanup = function (fn, front, unique) {
-	zk._addfn(zk._cufns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._cuids[unique]) return;	
+		zk._cuids[unique] = true;
+	}
+	zk._addfn(zk._cufns, fn, front);
 };
 /** Adds a function that will be invoked 25 milliseconds, after
  * all components are cleaned up.
@@ -541,12 +548,16 @@ zk.addCleanup = function (fn, front, unique) {
  * so it won't be called twice (unless you call zk.addInitLater again).
  *
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  * @since 3.0.0
  */
 zk.addCleanupLater = function (fn, front, unique) {
-	zk._addfn(zk._cuLatfns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._cuLatids[unique]) return;	
+		zk._cuLatids[unique] = true;
+	}
+	zk._addfn(zk._cuLatfns, fn, front);
 };
 
 /** Adds a function that will be invoked when the browser is resized
@@ -554,17 +565,25 @@ zk.addCleanupLater = function (fn, front, unique) {
  * <p>Unlike zk.addInit, the function won't be detached after invoked.
  *
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  * @since 3.0.0
  */
 zk.addOnResize = function (fn, front, unique) {
-	zk._addfn(zk._reszfns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._reszids[unique]) return;	
+		zk._reszids[unique] = true;
+	}
+	zk._addfn(zk._reszfns, fn, front);
 };
 /** Removes a function that was added by calling zk.addOnResize.
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * @since 3.0.0
  */
-zk.rmOnResize = function (fn) {
+zk.rmOnResize = function (fn, unique) {
+	if (typeof unique == "string") {
+		delete zk._reszids[unique];
+	}
 	zk._reszfns.remove(fn);
 };
 /** Invokes all functions added by zk.addOnResize.
@@ -910,6 +929,8 @@ zk._evalInit = function () {
 		while (!zk.loading && zk._initfns.length)
 			(zk._initfns.shift())();
 
+		if (!zk.loading && !zk._initfns.length) zk._initids = {};
+		
 		setTimeout(zk._initLater, 25);
 	} while (!zk.loading && (zk._initmods.length || zk._initcmps.length
 	|| zk._initfns.length));
@@ -918,6 +939,8 @@ zk._evalInit = function () {
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
 		(zk._inLatfns.shift())();
+	if (!zk.loading && !zk._inLatfns.length)
+		zk._inLatids = {};
 };
 
 /** Evaluate a method of the specified component.
@@ -958,11 +981,14 @@ zk.cleanupAt = function (n) {
 
 	while (zk._cufns.length)
 		(zk._cufns.shift())();
+		
+	zk._cuids = {};
 	setTimeout(zk._cleanLater, 25);
 };
 zk._cleanLater = function () {
 	while (zk._cuLatfns.length)
 		(zk._cuLatfns.shift())();
+	zk._cuLatids = {};
 };
 zk._cleanupAt = function (n) {
 	if (getZKAttr(n, "zid")) zkau.cleanzid(n);
@@ -1265,18 +1291,22 @@ zk.error = function (msg) {
 zk.loading = 0;
 zk._modules = {}; //Map(String nm, boolean loaded)
 zk._initfns = []; //used by addInit
+zk._initids = {};
 zk._inLatfns = []; //used by addInitLater
+zk._inLatids = {};
 zk._initmods = []; //used by addModuleInit
 zk._cufns = []; //used by addCleanup
+zk._cuids = {};
 zk._cuLatfns = []; //used by addCleanupLater
+zk._cuLatids = {};
 zk._reszfns = []; //used by addOnResize
+zk._reszids = {};
 zk._reszcnt = 0; //# of pending zk.onResize
 zk._bfunld = []; //used by addBeforeUnload
 zk._initcmps = []; //comps to init
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
 zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
-
 function myload() {
 	var f = zk._onload;
 	if (f) {

@@ -1348,7 +1348,7 @@ zk.ncols = function (cells) {
 zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length || !zk.isRealVisible(dst))
-		return;	
+		return;
 	//Note: With Opera, we cannot use table-layout=fixed and we have to assign
 	//the table width (test case: fixed-table-header.html)	
 	var hdtable = dst.parentNode.parentNode;
@@ -1359,8 +1359,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 		hdtable.style.tableLayout = "auto";
 		hdtable.style.width = "";
 	}
-	var found;
-	var scOdd = getZKAttr(mate.element, "scOddRow"), dstwds = [], cacheCss = [];
+	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null, dstwds = [], cacheCss = [];
 	for (var i = 0, even = true; i < srcrows.length; ++i) {
 		var row = srcrows[i];
 		if (stripe && scOdd && zk.isVisible(row)) {
@@ -1396,8 +1395,8 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 								ttlOffset += d.offsetWidth;
 							}							
 						}
-						var uuid = $uuid(s);
-						var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
+						
+						var cell = s.firstChild;
 						if (unwd.length) {
 							var amount = s.offsetWidth - total;
 							if (amount < unwd.length * 20) {
@@ -1414,7 +1413,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 									else each = amount;
 								var wd = zk.safari ? each  : zk.revisedSize(d, each);
 								d.style.width = wd + "px";								
-								var cave = $e($uuid(d) + "!cave");
+								var cave = d.firstChild;
 								if (cave) cave.style.width = zk.revisedSize(cave, wd) + "px";
 								dstwds[z+k] = d.offsetWidth;
 								total += dstwds[z+k];
@@ -1434,7 +1433,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 						// Note: we have to specify the width of each column for opera.
 							if (!dstwds[z]) {
 								var wd =  d.style.width;	
-								var cell = $e($uuid(d) + "!cave");				
+								var cell = d.firstChild;				
 								if (wd == "auto" || wd.indexOf('%') > -1) 
 									d.style.width = zk.revisedSize(d, d.offsetWidth)+ "px";
 								wd = d.style.width;
@@ -1451,8 +1450,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 								
 							} 
 							
-							var uuid = $uuid(s);
-							var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
+							var cell = s.firstChild;
 							if (!cacheCss[2] || s.className != cacheCss[2].el.className || s.style.cssText)
 								cacheCss[2] = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
 				
@@ -1501,8 +1499,7 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 			if (zk.mozilla)	wd += $int(d.style.width); // Bug #1826938
 			else wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
 		}
-		var uuid = $uuid(s);
-		var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
+		var cell = s.firstChild;
 		var rwd = zk.revisedSize(s, wd);
 		s.style.width = rwd + "px";
 		if (cell) cell.style.width = s.style.width;
