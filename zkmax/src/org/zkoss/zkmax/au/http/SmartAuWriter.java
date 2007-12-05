@@ -18,17 +18,84 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmax.au.http;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.zkoss.util.ScalableTimer;
+import org.zkoss.util.ScalableTimerTask;
+
+import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.http.HttpAuWriter;
 
 /**
  * A smart AU writer that will generate some output to client first if
  * the processing takes more than the time specified in the timeout argument
- * of {@link open}.
+ * of {@link #open}.
  *
  * @author tomyeh
  * @since 3.0.1
  */
 public class SmartAuWriter extends HttpAuWriter {
+	private static final ScalableTimer _timer = new ScalableTimer(20, 25);
+	private Task _tmoutTask;
+	/** The output stream. It is not null only if _tmoutTask is not null. */
+	private HttpServletResponse _res;
+	/** true if timeout happens. */
+	private boolean _timeout;
+
 	public SmartAuWriter() {
+	}
+
+	/** Opens the connection.
+	 * It starts a timer and generate some output to client first if
+	 * the processing take more than the time specified in the timeout argument.
+	 */
+	public AuWriter open(Object request, Object response, int timeout)
+	throws IOException {
+		if (timeout > 0) {
+			_res = (HttpServletResponse)response;
+			_timer.schedule(_tmoutTask = new Task(), timeout);
+		}
+		return super.open(request, response, timeout);
+	}
+	protected void flush(HttpServletRequest request, HttpServletResponse response)
+	throws IOException {
+		final boolean timeout;
+		final Task task = _tmoutTask;
+		if (task != null)
+			task.cancel();
+
+		synchronized (this) {
+			_tmoutTask = null;
+			_res = null;
+			timeout = _timeout;
+		}
+
+		if (timeout) {
+			response.getOutputStream().write(_out.toString().getBytes("UTF-8"));
+			response.flushBuffer();
+		} else {
+			super.flush(request, response);
+		}
+	}
+
+	private class Task extends ScalableTimerTask {
+		public void exec() {
+			try {
+				synchronized (this) {
+					if (_tmoutTask != null) {
+						_res.getOutputStream()
+							.write(getXMLHeader().getBytes("UTF-8"));
+						_tmoutTask = null; //mark as done
+						_res = null; //clean up
+						_timeout = true;
+						_res.flushBuffer();
+					}
+				}
+			} catch (IOException ex) { //ignore it
+			}
+		}
 	}
 }
