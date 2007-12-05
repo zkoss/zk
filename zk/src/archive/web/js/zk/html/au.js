@@ -172,9 +172,13 @@ zkau.sendRemove = function (uuid) {
 /** IE6 sometimes remains readyState==1 (reason unknown), and we have
  * to resend
  */
-zkau._areqTmout = function () {
+zkau._areqTmout = zk.safari ? zk.voidf: function () {
 	//Note: we don't resend if readyState >= 3. Otherwise, the server
 	//will process the same request twice
+
+	//Note: timeout has no function in Safari, since the server's sending
+	//output the client won't cause readyState to change.
+
 	var req = zkau._areq, reqInf = zkau._areqInf;
 	if (req && req.readyState < 3) {
 		zkau._areq = zkau._areqInf = null;
@@ -182,7 +186,6 @@ zkau._areqTmout = function () {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
-
 		zkau._areqResend(reqInf[1]);
 	}
 };
