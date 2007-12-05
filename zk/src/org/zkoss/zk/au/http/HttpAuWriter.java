@@ -1,4 +1,4 @@
-/* HttpHttpAuWriter.java
+﻿/* HttpAuWriter.java
 
 {{IS_NOTE
 	Purpose:
@@ -41,6 +41,12 @@ import org.zkoss.zk.au.AuWriter;
  * @since 3.0.1
  */
 public class HttpAuWriter implements AuWriter{
+	/** The first few characters of the output content. */
+	protected static final String OUTPUT_HEAD =
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n";
+	/** The first few bytes of the output header (byte[]). */
+	protected static final byte[] OUTPUT_HEAD_BYTES = OUTPUT_HEAD.getBytes("UTF-8");
+
 	/** The writer used to generate the output to.
 	 */
 	protected StringWriter _out;
@@ -61,7 +67,7 @@ public class HttpAuWriter implements AuWriter{
 		((HttpServletResponse)response).setContentType("text/xml;charset=UTF-8");
 
 		_out = new StringWriter();
-		_out.write("<rs>\n");
+		_out.write(OUTPUT_HEAD);
 		return this;
 	}
 	/** Closes the connection.
@@ -78,9 +84,7 @@ public class HttpAuWriter implements AuWriter{
 	protected void flush(HttpServletRequest request, HttpServletResponse response)
 	throws IOException {
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		final StringBuffer sb = _out.getBuffer();
-		sb.insert(0, getXMLHeader());
-		byte[] data = sb.toString().getBytes("UTF-8");
+		byte[] data = _out.toString().getBytes("UTF-8");
 		if (data.length > 200) {
 			byte[] bs = Https.gzip(request, response, null, data);
 			if (bs != null) data = bs; //yes, browser support compress
@@ -89,12 +93,6 @@ public class HttpAuWriter implements AuWriter{
 		response.setContentLength(data.length);
 		response.getOutputStream().write(data);
 		response.flushBuffer();
-	}
-	/** Returns the XML header. They must be the first few bytes of the
-	 * content.
-	 */
-	protected String getXMLHeader() {
-		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	}
 	public void write(AuResponse response) throws IOException {
 		_out.write("\n<r><c>");
