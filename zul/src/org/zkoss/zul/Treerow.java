@@ -150,6 +150,7 @@ public class Treerow extends XulElement {
 		HTMLs.appendAttribute(sb, "z.pitem", item.getUuid());
 		HTMLs.appendAttribute(sb, "z.sel", item.isSelected());
 		HTMLs.appendAttribute(sb, "z.disd", item.isDisabled());
+		HTMLs.appendAttribute(sb, "z.rid", tree.getUuid());
 		if (item.isContainer())
 			HTMLs.appendAttribute(sb, "z.open", item.isOpen());
 

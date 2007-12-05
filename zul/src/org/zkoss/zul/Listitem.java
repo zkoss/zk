@@ -310,6 +310,7 @@ public class Listitem extends XulElement {
 
 			final String clkattrs = getAllOnClickAttrs(false);
 			if (clkattrs != null) sb.append(clkattrs);
+			HTMLs.appendAttribute(sb, "z.rid", getListbox().getUuid());
 		}
 		return sb.toString();
 	}

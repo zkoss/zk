@@ -63,7 +63,7 @@ zulHdrs.ondragover = function (evt) {
 		if (type == "Lhr" || type == "Col" || type == "Tcol" || type == "Ftr")
 			break;
 		}
-		if (el) $e(el.id + "!cave").style.MozUserSelect = "none";
+		if (el) el.firstChild.style.MozUserSelect = "none";
 	}
 };
 zulHdrs.ondragout = function (evt) {
@@ -74,7 +74,7 @@ zulHdrs.ondragout = function (evt) {
 		if (type == "Lhr" || type == "Col" || type == "Tcol" || type == "Ftr")
 			break;
 	}
-	if (el) $e(el.id + "!cave").style.MozUserSelect = "";
+	if (el) el.firstChild.style.MozUserSelect = "";
 };
 zulHdrs.initdrag = function (cmp) {
 	if (zk.gecko) {
@@ -114,7 +114,7 @@ zulHdr.init = function (cmp) {
 	if (meta) {
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, true);
+		zk.addInitLater(meta.fixedSize, false, "Hdr");
 	}
 };
 zulHdr.sizable = function (cmp) {
@@ -153,7 +153,7 @@ zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 			if (icol < cells.length) {
 				var rwd = zk.revisedSize(cells[icol], wd);
 				cells[icol].style.width = rwd + "px";
-				var cell = $e($uuid(cells[icol]) + "!cave");
+				var cell = cells[icol].firstChild;
 				rwd = zk.revisedSize(cell, rwd);
 				cell.style.width = rwd + "px";		
 			}
@@ -218,7 +218,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 			var head = cmp.parentNode;
 			var fake = $e(head.id + "!fake");
 			
-			var cell = $e(cmp.id + "!cave");
+			var cell = cmp.firstChild;
 			var v = val;	
 			if (nm == "style") v = zk.getTextStyle(val, true, true);
 			if (v) {
@@ -323,8 +323,7 @@ zulHdr._endsizing = function (cmp, evt) {
 		var row = table.rows[0];
 		row.cells[cmp.cellIndex].style.width = $int(rwd) + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings) + "px";
 		cmp.style.width = rwd + "px";
-		var uuid = $uuid(cmp);
-		var cell = $e(uuid + "!cave");
+		var cell = cmp.firstChild;
 		cell.style.width = zk.revisedSize(cell, rwd) + "px";	
 		table.style.width = total + wd + "px";					
 		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cmp.cellIndex+",'"+wd+"','"+keys+"')", 0);		

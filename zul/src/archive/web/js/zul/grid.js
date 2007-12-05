@@ -74,7 +74,7 @@ zk.Grid.prototype = {
 				for (var j = this.headtbl.rows.length; j;) {
 					var headrow = this.headtbl.rows[--j];
 					for (var k = headrow.cells.length; k;) {
-						var n = $e(headrow.cells[--k].id + "!cave"); // Bug #1819037
+						var n = headrow.cells[--k].firstChild; // Bug #1819037
 						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
 							if (!n.id || !n.id.endsWith("!hint")) {
 								empty = false;
@@ -195,7 +195,7 @@ zk.Grid.prototype = {
 				if (head) {
 					for (var j = 0; j < head.cells.length; j++) {
 						var d = head.cells[j];
-						var cave = $e(head.cells[j].id + "!cave");
+						var cave = head.cells[j].firstChild;
 						if (cave) {
 							var wd =  d.style.width;							
 							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
@@ -413,21 +413,20 @@ zkGrw.ondragover = function (evt) {
 	var tag = $tag(target);
 	if (tag != "INPUT" && tag != "TEXTAREA") {
 		var p = $parentByType(target, "Gcl");
-		if (p) $e($uuid(p) + "!cell").style.MozUserSelect = "none";
+		if (p) p.firstChild.style.MozUserSelect = "none";
 	}
 };
 zkGrw.ondragout = function (evt) {
 	var target = Event.element(evt);
 	var p = $parentByType(target, "Gcl");
-	if (p) $e($uuid(p) + "!cell").style.MozUserSelect = "";	
+	if (p) p.firstChild.style.MozUserSelect = "";	
 };
 zkGrw.cleanup = function (cmp) {
 	zkGrw.stripe(cmp, true);
 };
 zkGrw.setAttr = function (cmp, nm, val) {
 	if (nm == "visibility") { // Bug #1836257
-		var grid = $parentByType(cmp, "Grid");
-		var meta = zkau.getMeta(grid);
+		var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 		if (meta) {
 			if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
 			setTimeout(meta.fixedStripe, 0);
@@ -435,24 +434,22 @@ zkGrw.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-zkGrw.stripe = function (cmp, isClean) {
-	var grid = $parentByType(cmp, "Grid");
-	var meta = zkau.getMeta(grid);
+zkGrw.stripe = function (cmp, isClean) {	
+	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
-		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, true);
-		else zk.addInitLater(meta.fixedStripe, false, true);
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Grw");
+		else zk.addInitLater(meta.fixedStripe, false, "Grw");
 	}
 };
 zkGcl = {}; //cell
 zkGcl.init = function (cmp) {
-	var grid = $parentByType(cmp, "Grid");
-	var meta = zkau.getMeta(grid);
+	var meta = zkau.getMeta(getZKAttr(cmp.parentNode, "rid"));
 	if (meta) {
 		meta.putCellQue(cmp);
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, true);
+		zk.addInitLater(meta.fixedSize, false, "Gcl");
 	}
 };
 zk.addModuleInit(function () {

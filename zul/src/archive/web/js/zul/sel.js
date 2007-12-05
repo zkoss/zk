@@ -166,7 +166,7 @@ zk.Selectable.prototype = {
 				for (var j = this.headtbl.rows.length; j;) {
 					var headrow = this.headtbl.rows[--j];
 					for (var k = headrow.cells.length; k;) {
-						var n = $e(headrow.cells[--k].id + "!cave"); // Bug #1819037
+						var n = headrow.cells[--k].firstChild; // Bug #1819037
 						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
 							if (!n.id || !n.id.endsWith("!hint")) {
 								empty = false;
@@ -221,7 +221,6 @@ zk.Selectable.prototype = {
 	stripe: function () {
 		var scOdd = getZKAttr(this.element, "scOddRow");
 		if (!scOdd || !this.bodyrows) return;
-
 		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
 			var row = this.bodyrows[j];
 			if ($visible(row)) {
@@ -696,7 +695,7 @@ zk.Selectable.prototype = {
 				el.innerHTML = " ";
 				el.onfocus = zkSel.cmonfocus;
 				el.onblur = zkSel.cmonblur;
-				var cave = $e(row.cells[0].id+ "!cave") || row.cells[0];
+				var cave = row.cells[0].firstChild || row.cells[0];
 				if (cave.firstChild) cave.insertBefore(el, cave.firstChild); 
 				else cave.appendChild(el);
 			}
@@ -773,7 +772,7 @@ zk.Selectable.prototype = {
 				if (head) {
 					for (var j = 0; j < head.cells.length; j++) {
 						var d = head.cells[j];
-						var cave = $e(d.id + "!cave");
+						var cave = d.firstChild;
 						if (cave) {
 							var wd =  d.style.width;							
 							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
@@ -1150,13 +1149,13 @@ zkSel.ondragover = function (evt) {
 	var tag = $tag(target);
 	if (tag != "INPUT" && tag != "TEXTAREA") {
 		var p = $parentByType(target, "Lic");
-		if (p) $e(p.id + "!cave").style.MozUserSelect = "none";
+		if (p) p.firstChild.style.MozUserSelect = "none";
 	}
 };
 zkSel.ondragout = function (evt) {
 	var target = Event.element(evt);
 	var p = $parentByType(target, "Lic");
-	if (p) $e(p.id + "!cave").style.MozUserSelect = "";	
+	if (p) p.firstChild.style.MozUserSelect = "";	
 };
 /** (!cm or !sel)'s onfocus. */
 zkSel.cmonfocus = function (evt) {
@@ -1245,8 +1244,7 @@ zkLit.init = function (cmp) {
 };
 zkLit.setAttr = function (cmp, nm, val) {
 	if (nm == "visibility") {// Bug #1836257
-		var libox = $parentByType(cmp, "Libox");
-		var meta = zkau.getMeta(libox);
+		var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 		if (meta) {
 			if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
 			setTimeout(meta.fixedStripe, 0);
@@ -1270,31 +1268,28 @@ zkLit.cleanup = function (cmp) {
 	zkLit.stripe(cmp, true);
 };
 zkLit.stripe = function (cmp, isClean) {
-	var libox = $parentByType(cmp, "Libox");
-	var meta = zkau.getMeta(libox);
+	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
-		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, true);
-		else zk.addInitLater(meta.fixedStripe, false, true);
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Lit");
+		else zk.addInitLater(meta.fixedStripe, false, "Lit");
 	}
 };
 zkLic = {}; //listcell or Treecell
 zkLic.init = function (cmp) {
-	var isTree = $type(cmp.parentNode) == "Trow";
-	var libox = $parentByType(cmp, isTree ? "Tree" : "Libox");
-	var meta = zkau.getMeta(libox);	
+	var meta = zkau.getMeta(getZKAttr(cmp.parentNode, "rid"));	
 	if (meta) {
 		meta.putCellQue(cmp);
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, true);
+		zk.addInitLater(meta.fixedSize, false, "Lic");
 	}
 };
 zkLic.initdrag = zkLit.initdrag;
 zkLic.cleandrag = zkLit.cleandrag;
 zkLic.setAttr = function (cmp, nm, val) {
 	if ("style" == nm) {
-		var cell = $e(cmp.id + "!cave");
+		var cell = cmp.firstChild;
 		var v = zk.getTextStyle(val);
 		if (v) zkau.setAttr(cell, nm, v);
 		zkau.setAttr(cmp, nm, val);

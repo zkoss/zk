@@ -258,7 +258,7 @@ zkTrow.setAttr = function (cmp, nm, val) {
 	if ("open" == nm) {
 		var toOpen = "true" == val;
 		if (toOpen != zkTree.isOpen(cmp)) {
-			var meta = zkau.getMeta($parentByType(cmp, "Tree"));
+			var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 			if (meta)
 				meta._openItem(cmp, null, toOpen);
 		}
@@ -287,8 +287,8 @@ zkTrow.open = function (n, open) {
 		var p = $e(n);
 		n = p ? p: $e(_zktrx.sib[n]);
 	}
-
-	var meta = zkau.getMeta($parentByType(n, "Tree"));
+	var tree = getZKAttr(cmp, "rid") || $parentByType(n, "Tree");
+	var meta = zkau.getMeta(tree);
 	if (meta)
 		meta._openItem(n, null, open != false);
 };

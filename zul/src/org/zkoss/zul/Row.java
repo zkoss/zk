@@ -243,6 +243,8 @@ public class Row extends XulElement {
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null)
 			sb.append(clkattrs);
+
+		HTMLs.appendAttribute(sb, "z.rid", getGrid().getUuid());
 		HTMLs.appendAttribute(sb, "align", _align);
 		HTMLs.appendAttribute(sb, "valign", _valign);
 		if (_nowrap)
