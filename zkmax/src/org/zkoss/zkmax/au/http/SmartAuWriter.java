@@ -76,7 +76,7 @@ public class SmartAuWriter extends HttpAuWriter {
 
 		if (timeout) {
 			response.getOutputStream()
-				.write(_out.getBuffer().substring(HEADER.length()).getBytes("UTF-8"));
+				.write(_out.getBuffer().substring(OUTPUT_HEAD.length()).getBytes("UTF-8"));
 			response.flushBuffer();
 		} else {
 			super.flush(request, response);
@@ -91,13 +91,13 @@ public class SmartAuWriter extends HttpAuWriter {
 					//advance XMLHttpRequest.readyState (to 3).
 					//Otherwise, the client may consider it as timeout and resend
 					try {
-						_res.getOutputStream().write(HEADER_BYTES);
+						_res.getOutputStream().write(OUTPUT_HEAD_BYTES);
 					} catch (IOException ex) { //ignore it
 					}
 
 					_tmoutTask = null; //mark as done
 					_res = null; //clean up
-					_timeout = true; //let flush know HEADER is sent
+					_timeout = true; //let flush know OUTPUT_HEAD is sent
 					_res.flushBuffer();
 				}
 			}
