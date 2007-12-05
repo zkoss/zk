@@ -767,9 +767,6 @@ public class UiEngineImpl implements UiEngine {
 
 			cleaned = true;
 			config.invokeExecutionCleanups(exec, null, errs);
-
-			out.flush();
-				//flush before deactivating to make sure it has been sent
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;

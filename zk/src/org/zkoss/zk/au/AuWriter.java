@@ -51,10 +51,6 @@ public interface AuWriter {
 	 */
 	public void close(Object request, Object response)
 	throws IOException;
-	/** Flushes the bufferred output to the client.
-	 * It doesn't close the writer.
-	 */
-	public void flush() throws IOException;
 
 	/** Generates the sequence ID of the specified desktop to the output.
 	 * @see org.zkoss.zk.ui.sys.DesktopCtrl#getResponseSequence

@@ -43,7 +43,7 @@ import org.zkoss.zk.au.AuWriter;
 public class HttpAuWriter implements AuWriter{
 	/** The writer used to generate the output to.
 	 */
-	protected Writer _out;
+	protected StringWriter _out;
 
 	public HttpAuWriter() {
 	}
@@ -52,35 +52,50 @@ public class HttpAuWriter implements AuWriter{
 	/** Opens the connection.
 	 *
 	 * <p>Default: it creates a StringWriter instance for {@link #_out}
-	 * and then invoke {@link #writeXMLHead} to generate the XML head.
+	 * and then generate the XML header.
 	 *
 	 * <p>This implementation doesn't support the timeout argument.
 	 */
 	public AuWriter open(Object request, Object response, int timeout)
 	throws IOException {
+		((HttpServletResponse)response).setContentType("text/xml;charset=UTF-8");
+
 		_out = new StringWriter();
-		writeXMLHead();
+		_out.write("<rs>\n");
 		return this;
 	}
+	/** Closes the connection.
+	 *
+	 */
 	public void close(Object request, Object response)
 	throws IOException {
-		writeXMLTail();
-
+		_out.write("\n</rs>");
+		flush((HttpServletRequest)request, (HttpServletResponse)response);
+	}
+	/** Flushes the bufferred output ({@link #_out}) to the client.
+	 * It is called by {@link #close}.
+	 */
+	protected void flush(HttpServletRequest request, HttpServletResponse response)
+	throws IOException {
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		final HttpServletRequest hreq = (HttpServletRequest)request;
-		final HttpServletResponse hres = (HttpServletResponse)response;
-		byte[] data = _out.toString().getBytes("UTF-8");
+		final StringBuffer sb = _out.getBuffer();
+		sb.insert(0, getXMLHeader());
+		byte[] data = sb.toString().getBytes("UTF-8");
 		if (data.length > 200) {
-			byte[] bs = Https.gzip(hreq, hres, null, data);
+			byte[] bs = Https.gzip(request, response, null, data);
 			if (bs != null) data = bs; //yes, browser support compress
 		}
 
-		hres.setContentType("text/xml;charset=UTF-8");
-		hres.setContentLength(data.length);
-		hres.getOutputStream().write(data);
-		hres.flushBuffer();
+		response.setContentLength(data.length);
+		response.getOutputStream().write(data);
+		response.flushBuffer();
 	}
-
+	/** Returns the XML header. They must be the first few bytes of the
+	 * content.
+	 */
+	protected String getXMLHeader() {
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	}
 	public void write(AuResponse response) throws IOException {
 		_out.write("\n<r><c>");
 		_out.write(response.getCommand());
@@ -105,25 +120,8 @@ public class HttpAuWriter implements AuWriter{
 			((DesktopCtrl)desktop).getResponseSequence(true)));
 		_out.write("</sid>");
 	}
-	/** Flushes the bufferred output to the client.
-	 * <p>Default: does nothing.
-	 */
-	public void flush() throws IOException {
-	}
 
 	//Utilities//
-	/** Writes the XML head (&lt;?xml ...?&gt;&lt;rs&gt;).
-	 * <p>Don't write anything before calling this method.
-	 */
-	protected void writeXMLHead() throws IOException {
-		_out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n");
-	}
-	/** Writes the XML tail (&lt;/rs&gt;).
-	 * Don't write anything else to the output if this method is called.
-	 */
-	protected void writeXMLTail() throws IOException {
-		_out.write("\n</rs>");
-	}
 	private static void encodeXML(String data, Writer out)
 	throws IOException {
 		if (data == null || data.length() == 0)
