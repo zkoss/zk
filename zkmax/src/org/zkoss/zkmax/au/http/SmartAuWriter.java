@@ -38,7 +38,10 @@ import org.zkoss.zk.au.http.HttpAuWriter;
  * @since 3.0.1
  */
 public class SmartAuWriter extends HttpAuWriter {
+	/** The first few bytes of the output header (byte[]). */
+	private static final byte[] OUTPUT_HEAD_BYTES = OUTPUT_HEAD.getBytes();
 	private static final ScalableTimer _timer = new ScalableTimer(20, 25);
+
 	private Task _tmoutTask;
 	/** The output stream. It is not null only if _tmoutTask is not null. */
 	private HttpServletResponse _res;
@@ -92,13 +95,12 @@ public class SmartAuWriter extends HttpAuWriter {
 					//Otherwise, the client may consider it as timeout and resend
 					try {
 						_res.getOutputStream().write(OUTPUT_HEAD_BYTES);
+						_res.flushBuffer();
 					} catch (IOException ex) { //ignore it
 					}
-
 					_tmoutTask = null; //mark as done
 					_res = null; //clean up
 					_timeout = true; //let flush know OUTPUT_HEAD is sent
-					_res.flushBuffer();
 				}
 			}
 		}
