@@ -114,6 +114,22 @@ public class WebManager {
 		_cwr.setCompress(new String[] {"js", "css"});
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
+		//Register resource processors for each extension
+		//FUTURE: Extendlet can be specified in zk.xml
+		//Note: getAll loads config.xml, which must be processed before zk.xml
+		ZumlExtendlet extlet = null;
+		for (Iterator it = LanguageDefinition.getAll().iterator();
+		it.hasNext();) {
+			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			final List exts = langdef.getExtensions();
+			if (!exts.isEmpty()) {
+				if (extlet == null)
+					extlet = new ZumlExtendlet();
+				_cwr.addExtendlet((String)exts.get(0), extlet);
+				//Add to the first extension only (the main one)
+			}
+		}
+
 		final Configuration config = new Configuration();
 		try {
 			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
@@ -138,21 +154,6 @@ public class WebManager {
 				} catch (Throwable ex) {
 					log.realCause(ex);
 				}
-			}
-		}
-
-		//Register resource processors for each extension
-		//FUTURE: Add more Extendlet from zk.xml
-		ZumlExtendlet extlet = null;
-		for (Iterator it = LanguageDefinition.getAll().iterator();
-		it.hasNext();) {
-			final LanguageDefinition langdef = (LanguageDefinition)it.next();
-			final List exts = langdef.getExtensions();
-			if (!exts.isEmpty()) {
-				if (extlet == null)
-					extlet = new ZumlExtendlet();
-				_cwr.addExtendlet((String)exts.get(0), extlet);
-				//Add to the first extension only (the main one)
 			}
 		}
 	}

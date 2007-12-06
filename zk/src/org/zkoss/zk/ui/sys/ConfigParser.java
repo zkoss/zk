@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.au.AuWriters;
 
 /**
  * Used to parse WEB-INF/zk.xml into {@link Configuration}.
@@ -61,7 +62,6 @@ public class ConfigParser {
 		if (url == null || config == null)
 			throw new IllegalArgumentException("null");
 		log.info("Parsing "+url);
-
 		parse(new SAXBuilder(false, false, true).build(url).getRootElement(),
 			config, locator);
 	}
@@ -194,6 +194,7 @@ public class ConfigParser {
 			//  web-app-class
 			//	method-cache-class
 			//	url-encoder-class
+			//	au-writer-class
 				String s = el.getElementValue("disable-event-thread", true);
 				if (s != null) config.enableEventThread("false".equals(s));
 
@@ -246,6 +247,11 @@ public class ConfigParser {
 				cls = parseClass(el, "url-encoder-class", Encodes.URLEncoder.class);
 				if (cls != null)
 					Encodes.setURLEncoder((Encodes.URLEncoder)cls.newInstance());
+
+				s = el.getElementValue("au-writer-class", true);
+				if (s != null)
+					AuWriters.setImplementationClass(
+						s.length() == 0 ? null: Classes.forNameByThread(s));
 			} else if ("xel-config".equals(elnm)) {
 			//xel-config
 			//	evaluator-class
@@ -383,7 +389,7 @@ public class ConfigParser {
 				final Class klass = Classes.forNameByThread(clsnm);
 				if (cls != null && !cls.isAssignableFrom(klass))
 					throw new UiException(clsnm+" must implement "+cls.getName()+", "+el.getLocator());
-				log.info("Using "+clsnm+" for "+cls);
+//				if (log.debuggable()) log.debug("Using "+clsnm+" for "+cls);
 				return klass;
 			} catch (Throwable ex) {
 				throw new UiException("Unable to load "+clsnm+", at "+el.getLocator());
