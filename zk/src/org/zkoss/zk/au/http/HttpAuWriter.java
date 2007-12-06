@@ -44,6 +44,9 @@ public class HttpAuWriter implements AuWriter{
 	/** The first few characters of the output content. */
 	protected static final String OUTPUT_HEAD =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	/** The content type of the output. */
+	protected static final String CONTENT_TYPE =
+		"text/xml;charset=UTF-8";
 
 	/** The writer used to generate the output to.
 	 */
@@ -62,8 +65,6 @@ public class HttpAuWriter implements AuWriter{
 	 */
 	public AuWriter open(Object request, Object response, int timeout)
 	throws IOException {
-		((HttpServletResponse)response).setContentType("text/xml;charset=UTF-8");
-
 		_out = new StringWriter();
 		_out.write(OUTPUT_HEAD);
 		_out.write("<rs>\n");
@@ -89,6 +90,7 @@ public class HttpAuWriter implements AuWriter{
 			if (bs != null) data = bs; //yes, browser support compress
 		}
 
+		response.setContentType(CONTENT_TYPE);
 		response.setContentLength(data.length);
 		response.getOutputStream().write(data);
 		response.flushBuffer();
