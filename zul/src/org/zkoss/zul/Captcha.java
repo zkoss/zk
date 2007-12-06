@@ -310,7 +310,7 @@ public class Captcha extends org.zkoss.zul.Image {
 	 * It creates an instance automatically.
 	 */
 	public void setEngine(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
 			setEngine((CaptchaEngine)Classes.newInstanceByThread(clsnm));

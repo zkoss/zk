@@ -1177,7 +1177,7 @@ public class Listbox extends XulElement {
 	 * It creates an instance automatically.
 	 */
 	public void setItemRenderer(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setItemRenderer((ListitemRenderer)Classes.newInstanceByThread(clsnm));

@@ -413,7 +413,7 @@ public class Grid extends XulElement {
 	 * It creates an instance automatically.
 	 */
 	public void setRowRenderer(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));

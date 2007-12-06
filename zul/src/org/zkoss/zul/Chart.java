@@ -544,7 +544,7 @@ public class Chart extends Imagemap {
 	 * It creates an instance automatically.
 	 */
 	public void setModel(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
 			setModel((ChartModel)Classes.newInstanceByThread(clsnm));
@@ -615,7 +615,7 @@ public class Chart extends Imagemap {
 	 * It creates an instance automatically.
 	 */
 	public void setEngine(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
 			setEngine((ChartEngine)Classes.newInstanceByThread(clsnm));
@@ -655,7 +655,7 @@ public class Chart extends Imagemap {
 	 * It creates an instance automatically.
 	 */
 	public void setAreaListener(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
 			setAreaListener((ChartAreaListener)Classes.newInstanceByThread(clsnm));
