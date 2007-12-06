@@ -551,23 +551,27 @@ zk.select = function (cmp) {
 		//IE throws exception when focus() in some cases
 };
 
-/** Returns the selection range of the specified control
+/** Returns the selection range of the specified control.
+ * Note: if the function occurs some error, it always return [0, 0];
  */
 zk.getSelectionRange = function(inp) {	
 	if (document.selection != null && inp.selectionStart == null) { //IE
-		var range = document.selection.createRange(); 
-		var rangetwo = inp.createTextRange(); 
-		var stored_range = ""; 
-		if(inp.type.toLowerCase() == "text"){
-			stored_range = rangetwo.duplicate();
-		}else{
-			 stored_range = range.duplicate(); 
-			 stored_range.moveToElementText(inp); 
+		try {
+			var range = document.selection.createRange(); 
+			var rangetwo = inp.createTextRange(); 
+			var stored_range = ""; 
+			if(inp.type.toLowerCase() == "text"){
+				stored_range = rangetwo.duplicate();
+			}else{
+				 stored_range = range.duplicate(); 
+				 stored_range.moveToElementText(inp); 
+			}
+			stored_range.setEndPoint('EndToEnd', range); 
+			var start = stored_range.text.length - range.text.length;			
+			return [start, start + range.text.length];
+		} catch (e) {
+			return [0, 0];
 		}
-		stored_range.setEndPoint('EndToEnd', range); 
-
-		var start = stored_range.text.length - range.text.length; 
-		return [start, start + range.text.length];
 	} else { //Gecko
 		return [inp.selectionStart, inp.selectionEnd];
 	}

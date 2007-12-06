@@ -72,7 +72,10 @@ public class InputEvent extends Event {
 
 	/**
 	 * Returns the start position of the cursor from the input element.
-	 * 
+	 * <p>Note: In IE browser, we cannot get the position of cursor because <code>onblur</code> 
+	 * event of Javascript is always fired before <code>onChange</code> is fired. 
+	 * To get the position of cursor, <code>onChanging</code> event is suggested
+	 *  since onblur event of Javascript will not be fired.</p>
 	 * @return the start position >= 0
 	 * @since 3.0.1
 	 */
