@@ -1,4 +1,4 @@
-﻿/* HttpAuWriter.java
+/* HttpAuWriter.java
 
 {{IS_NOTE
 	Purpose:
@@ -43,9 +43,7 @@ import org.zkoss.zk.au.AuWriter;
 public class HttpAuWriter implements AuWriter{
 	/** The first few characters of the output content. */
 	protected static final String OUTPUT_HEAD =
-		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n";
-	/** The first few bytes of the output header (byte[]). */
-	protected static final byte[] OUTPUT_HEAD_BYTES = OUTPUT_HEAD.getBytes("UTF-8");
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
 	/** The writer used to generate the output to.
 	 */
@@ -68,6 +66,7 @@ public class HttpAuWriter implements AuWriter{
 
 		_out = new StringWriter();
 		_out.write(OUTPUT_HEAD);
+		_out.write("<rs>\n");
 		return this;
 	}
 	/** Closes the connection.
