@@ -26,12 +26,6 @@ zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 zkWnd.init = function (cmp) {
 	zkWnd._fixHgh(cmp);
 	
-	//Bug #1840866
-	var mode = getZKAttr(cmp, "mode");
-	var v = cmp.style.display;
-	if (mode == "modal" || mode == "highlighted")
-		cmp.style.display = "none";
-		
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
@@ -47,9 +41,14 @@ zkWnd.init = function (cmp) {
 		//FF: at the moment of browsing to other URL, listen is still attached but
 		//our js are unloaded. It causes JavaScript error though harmlessly
 		//This is a dirty fix (since onclick and others still fail but hardly happen)
-	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));
+	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));	
 	
-	zk.addInitLater(function () {zkWnd._initMode(cmp, v);}, true);	//Bug #1830668 we have to invoke initMode later.
+	//Bug #1840866
+	var mode = getZKAttr(cmp, "mode");
+	if (mode == "modal" || mode == "highlighted")
+		zkWnd._initMode(cmp);
+	else 
+		zk.addInitLater(function () {zkWnd._initMode(cmp);}, true);	//Bug #1830668 we have to invoke initMode later.
 };
 zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
@@ -356,8 +355,7 @@ zkWnd._ghostsizing = function (dg, ghosting, pointer) {
 
 ////////
 // Handling Overlapped, Modal, Popup and Embedded //
-zkWnd._initMode = function (cmp, v) {
-	cmp.style.display = v; //Bug #1840866
+zkWnd._initMode = function (cmp) {
 	var mode = getZKAttr(cmp, "mode");
 	var replace = zkWnd._clean2[cmp.id] == mode;
 	if (replace) //replace with the same mode
