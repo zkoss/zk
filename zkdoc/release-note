@@ -75,6 +75,7 @@ ZK 3.0.1
   1845904: fileupload is not specified in zul.xsd
   1840866: Modal windows jumping
   1834891: IE does not fire the onCtrlKey event correctly
+  1843038: Fulfill doesn't support EL in apply property
 
 * Upgrade Notes:
   + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
