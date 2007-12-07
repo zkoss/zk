@@ -1993,6 +1993,7 @@ Object.extend(Event, {
     } else {
       event.returnValue = false;
       event.cancelBubble = true;
+	  event.keyCode = 0; //Jumper Chen, Potix: Bug #1834891
     }
   },
 /* Tom M. Yeh, Potix: remove unused codes
