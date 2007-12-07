@@ -217,8 +217,20 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 3.0.0
 	 */
 	public Composer getComposer(Page page) {
+		return getComposer(page, null);
+	}
+	/** Returns the composer for this info, or nuull if not available.
+	 * If comp is null, it is the same as {@link #getComposer(Page)}.
+	 * If comp is not null, it is used as the self variable.
+	 *
+	 * @see #getApply
+	 * @since 3.0.1
+	 */
+	public Composer getComposer(Page page, Component comp) {
 		if (_apply != null) {
-			Object o = _apply.getValue(_evalr.getEvaluator(), page);
+			Object o = comp != null ?
+				_apply.getValue(_evalr.getEvaluator(), comp):
+				_apply.getValue(_evalr.getEvaluator(), page);;
 			try {
 				if (o instanceof String) {
 					final String s = (String)o;
@@ -270,8 +282,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 *
 	 * @param apply the attribute which must be the class that implements
 	 * {@link org.zkoss.zk.ui.util.Composer}, an instance of it, or null.
-	 * El expressions are allowed, but self means the page (after all,
-	 * the component is not created yet).
+	 * El expressions are allowed, but self means the parent, if not null,
+	 * or page, if root, (after all, the component is not created yet).
 	 * @since 3.0.0
 	 */
 	public void setApply(String apply) {

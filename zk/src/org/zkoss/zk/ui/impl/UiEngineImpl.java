@@ -478,7 +478,7 @@ public class UiEngineImpl implements UiEngine {
 	private static Component execCreateChild0(
 	CreateInfo ci, Component parent, ComponentInfo childInfo)
 	throws IOException {
-		final Composer composer = childInfo.getComposer(ci.page);
+		final Composer composer = childInfo.getComposer(ci.page, parent);
 		final ComposerExt composerExt =
 			composer instanceof ComposerExt ? (ComposerExt)composer: null;
 		Component child = null;
