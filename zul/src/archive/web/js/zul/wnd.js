@@ -25,7 +25,8 @@ zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
 zkWnd.init = function (cmp) {
 	zkWnd._fixHgh(cmp);
-
+	var v = cmp.style.display; //Bug #1840866
+	cmp.style.display = "none";
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
@@ -43,7 +44,7 @@ zkWnd.init = function (cmp) {
 		//This is a dirty fix (since onclick and others still fail but hardly happen)
 	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));
 	
-	zk.addInitLater(function () {zkWnd._initMode(cmp);}, true);	//Bug #1830668 we have to invoke initMode later.
+	zk.addInitLater(function () {zkWnd._initMode(cmp, v);}, true);	//Bug #1830668 we have to invoke initMode later.
 };
 zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
@@ -350,7 +351,8 @@ zkWnd._ghostsizing = function (dg, ghosting, pointer) {
 
 ////////
 // Handling Overlapped, Modal, Popup and Embedded //
-zkWnd._initMode = function (cmp) {
+zkWnd._initMode = function (cmp, v) {
+	cmp.style.display = v; //Bug #1840866
 	var mode = getZKAttr(cmp, "mode");
 	var replace = zkWnd._clean2[cmp.id] == mode;
 	if (replace) //replace with the same mode
