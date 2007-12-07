@@ -19,8 +19,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
+
+import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.ui.UiException;
 
@@ -32,8 +34,8 @@ import org.zkoss.zul.event.ChartDataListener;
  *
  * @author henrichen
  */
-abstract public class AbstractChartModel implements ChartModel {
-	private final List _listeners = new ArrayList(3);
+abstract public class AbstractChartModel implements ChartModel, java.io.Serializable {
+	private transient List _listeners = new LinkedList();
 
 	/** Fires a {@link ChartDataEvent} for all registered listener
 	 * (thru {@link #addChartDataListener}.
@@ -54,5 +56,20 @@ abstract public class AbstractChartModel implements ChartModel {
 	}
 	public void removeChartDataListener(ChartDataListener l) {
 		_listeners.remove(l);
+	}
+	
+	//Serializable//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		Serializables.smartWrite(s, _listeners);
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		_listeners = new LinkedList();
+		Serializables.smartRead(s, _listeners);
 	}
 }
