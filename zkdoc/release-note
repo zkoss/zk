@@ -82,6 +82,8 @@ ZK 3.0.1
     Use org.zkoss.zk.au.http.AuWriter instead.
   + The execUpdate methods of the org.zkoss.zk.ui.sys.UiEngine are changed.
     Use org.zkoss.zk.au.http.AuWriter instead.
+  + The self variable in EL expressions of the apply attribute references
+    to the parent component, if any.
 
 	--------
 ZK 3.0.0
