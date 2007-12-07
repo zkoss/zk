@@ -25,8 +25,13 @@ zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
 zkWnd.init = function (cmp) {
 	zkWnd._fixHgh(cmp);
-	var v = cmp.style.display; //Bug #1840866
-	cmp.style.display = "none";
+	
+	//Bug #1840866
+	var mode = getZKAttr(cmp, "mode");
+	var v = cmp.style.display;
+	if (mode == "modal" || mode == "highlighted")
+		cmp.style.display = "none";
+		
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
