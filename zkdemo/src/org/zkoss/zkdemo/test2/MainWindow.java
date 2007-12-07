@@ -23,6 +23,8 @@ import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +49,7 @@ import org.zkoss.zul.Window;
 public class MainWindow extends Window{
 
 	ListModelList fileModel = new ListModelList();
+	Map relatedFileModel = new LinkedHashMap();
 	
 	static String[] skipList=new String[]{"index.zul"};
 	static String path = "/test2";
@@ -68,10 +71,11 @@ public class MainWindow extends Window{
 
 			public void onEvent(Event event) throws Exception {
 				int index = lb.getSelectedIndex();
+				String disFileStr = ((File)fileModel.get(index)).getName();
 				if(((Checkbox)getFellow("w1").getFellow("newb")).isChecked()){
-					Clients.evalJavaScript("newWindow(\""+((File)fileModel.get(index)).getName()+"\")");
+					Clients.evalJavaScript("newWindow(\""+disFileStr+"\")");
 				}else{
-					iframe.setSrc(path+"/"+((File)fileModel.get(index)).getName());
+					iframe.setSrc(path+"/"+disFileStr);
 				}
 			}});
 		getFellow("w1").addEventListener("onOK",new EventListener(){
@@ -97,7 +101,10 @@ public class MainWindow extends Window{
 		iframe.setSrc(src+"?tid="+(new Date()).getTime());
 		
 	}
-	
+	/**
+	 * use to update fileModel, while search condition is changed.
+	 *
+	 */
 	private void updateModel(){
 		fileModel.clear();
 		String r = getDesktop().getWebApp().getRealPath("/");
