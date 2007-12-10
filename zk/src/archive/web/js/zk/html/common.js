@@ -1844,7 +1844,10 @@ zk.History = Class.create();
 zk.History.prototype = {
 	initialize: function () {
 		this.curbk = "";
-		setInterval("zkau.history.checkBookmark()", 520);
+		zk.addModuleInit(function () { // Bug #1847708
+			zkau.history.checkBookmark(); // We don't need to wait for the first time.
+			setInterval("zkau.history.checkBookmark()", 520);
+		});
 			//Though IE use history.html, timer is still required 
 			//because user might specify URL directly
 	},
