@@ -10,6 +10,8 @@ ZK 2.4.2
   1814298: Memory Leak in EventThread
   1818500: IE Cache Problem.
   1840101: Exception when sendRediect from a modal dialog
+  1845026: adding draggable to tree breaks event processing order
+  1847708: OnBookmarkChanged doesn't send
 
 * Upgrade Note:
   + The pageContext variable in EL expressions becomes an instance of
