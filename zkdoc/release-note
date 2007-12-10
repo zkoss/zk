@@ -33,6 +33,7 @@ ZK 3.0.1
   1632243: Add a getLine() function to textboxes
   1845283: A way to customize the writer for the update engine
   1845942: JndiVariableResolver to Get Variable from JNDI Binding
+  1828245: Add function to drop combobox/bandbox progammatically
   1846042: AbstractChartModel shall be serializable
   
 * Bugs:
