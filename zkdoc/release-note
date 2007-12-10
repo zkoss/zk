@@ -36,6 +36,7 @@ ZK 3.0.1
   1846042: AbstractChartModel shall be serializable
   
 * Bugs:
+  1841816: Some error of Developer's Guide
   1839246: More reliable handling of Ajax requests
   1828044: When header is invisible, whole column should be disappeared
   1826938: Listbox Live Data
