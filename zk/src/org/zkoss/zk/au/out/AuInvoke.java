@@ -66,6 +66,22 @@ public class AuInvoke extends AuResponse {
 		super("invoke", comp,
 			new String[] {comp.getUuid(), function, arg});
 	}
+	/** Construct AuInvoke to call a client function with two arguments,
+	 * the component itself and arg.
+	 *
+	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
+	 * <code>zkType.function(comp, arg)</code>
+	 *
+	 * @param comp the component that this script depends on.
+	 * It cannot be null.
+	 * @param function the function name
+	 * @param arg the additional argument. "false" if false, "true" if true.
+	 * @since 3.0.1
+	 */
+	public AuInvoke(Component comp, String function, boolean arg) {
+		super("invoke", comp,
+			new String[] {comp.getUuid(), function, arg ? "true": "false"});
+	}
 	/** Construct AuInvoke to call a client function with three arguments,
 	 * the component itself, arg1 and arg2.
 	 *
