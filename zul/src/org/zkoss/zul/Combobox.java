@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
+import org.zkoss.zk.au.out.AuInvoke;
 
 /**
  * A combo box.
@@ -109,6 +110,22 @@ public class Combobox extends Textbox {
 			_autocomplete = autocomplete;
 			smartUpdate("z.aco", autocomplete);
 		}
+	}
+
+	/** Drops down the list of combo items ({@link Comboitem}.
+	 *
+	 * @since 3.0.1
+	 */
+	public void open() {
+		response("dropdn", new AuInvoke(this, "dropdn", true));
+	}
+	/** Closes the list of combo items ({@link Comboitem} if it was
+	 * dropped down.
+	 *
+	 * @since 3.0.1
+	 */
+	public void close() {
+		response("dropdn", new AuInvoke(this, "dropdn", false));
 	}
 
 	/** Returns whether the button (on the right of the textbox) is visible.

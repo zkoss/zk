@@ -266,6 +266,13 @@ zkCmbox.onbutton = function (cmp) {
 		else zkCmbox.close(pp, true);
 	}
 };
+zkCmbox.dropdn = function (cmp, dropdown) {
+	var pp = $e(cmp.id + "!pp");
+	if (pp) {
+		if ("true" == dropdown) zkCmbox.open(pp, true);
+		else zkCmbox.close(pp, true);
+	}
+};
 
 /** Marks an item as selected or un-selected. */
 zkCmbox._setsel = function (item, sel) {

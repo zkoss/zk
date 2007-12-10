@@ -506,6 +506,13 @@ zkDtbox.onbutton = function (cmp) {
 		else zkDtbox.close(pp, true);
 	}
 };
+zkDtbox.dropdn = function (cmp, dropdown) {
+	var pp = $e(cmp.id + "!pp");
+	if (pp) {
+		if ("true" == dropdown) zkDtbox.open(pp);
+		else zkDtbox.close(pp, true);
+	}
+};
 
 zkDtbox.open = function (pp) {
 	pp = $e(pp);

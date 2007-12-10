@@ -34,6 +34,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.au.out.AuInvoke;
 
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.impl.FormatInputElement;
@@ -195,6 +196,22 @@ public class Datebox extends FormatInputElement {
 	 */
 	public void setTimeZone(TimeZone tzone) {
 		_tzone = tzone;
+	}
+
+	/** Drops down the list of combo items ({@link Comboitem}.
+	 *
+	 * @since 3.0.1
+	 */
+	public void open() {
+		response("dropdn", new AuInvoke(this, "dropdn", true));
+	}
+	/** Closes the list of combo items ({@link Comboitem} if it was
+	 * dropped down.
+	 *
+	 * @since 3.0.1
+	 */
+	public void close() {
+		response("dropdn", new AuInvoke(this, "dropdn", false));
 	}
 
 	//-- super --//

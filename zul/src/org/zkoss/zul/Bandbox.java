@@ -129,6 +129,22 @@ public class Bandbox extends Textbox {
 		}
 	}
 
+	/** Drops down the list of combo items ({@link Comboitem}.
+	 *
+	 * @since 3.0.1
+	 */
+	public void open() {
+		response("dropdn", new AuInvoke(this, "dropdn", true));
+	}
+	/** Closes the list of combo items ({@link Comboitem} if it was
+	 * dropped down.
+	 *
+	 * @since 3.0.1
+	 */
+	public void close() {
+		response("dropdn", new AuInvoke(this, "dropdn", false));
+	}
+
 	//-- super --//
 	public void setMultiline(boolean multiline) {
 		if (multiline)
