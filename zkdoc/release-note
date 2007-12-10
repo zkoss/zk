@@ -80,6 +80,7 @@ ZK 3.0.1
   1843038: Fulfill doesn't support EL in apply property
   1833252: transient listeners in serializable result in NPE
   1845026: adding draggable to tree breaks event processing order
+  1847708: OnBookmarkChanged doesn't send
 
 * Upgrade Notes:
   + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
