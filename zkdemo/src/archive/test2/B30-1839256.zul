@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+t.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec  5 12:21:26     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<button label="Click and you shall see alert after 10 seconds">
+	<attribute name="onClick">
+	org.zkoss.lang.Threads.sleep(10000);
+	alert("Everything goes fine");
+	</attribute>
+</button>
