@@ -342,6 +342,10 @@ if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer))
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
       
       Draggables.activate(this);
+//Jumper Chen, Potix: Bug #1845026
+//We need to ensure that the onBlur event is fired before the onSelect event for consistent among four browsers. 
+	  if (zkau.currentFocus && Event.element(event) != zkau.currentFocus 
+	  	&& typeof zkau.currentFocus.blur == "function") zkau.currentFocus.blur();
       Event.stop(event);
 //Tom M. Yeh, Potix: mousedown is eaten above
 zkau.autoZIndex(src, false, true);
