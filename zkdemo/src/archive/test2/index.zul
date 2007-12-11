@@ -15,6 +15,23 @@ function newWindow(url){
 					<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();h1.setWidths(null);w2.setWidth("800px")'/>
 					<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
 					<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
+					<button label="tracker">
+						<attribute name="onClick"><![CDATA[
+							if (lb.getSelectedItem() != null) {
+								String label = lb.getSelectedItem().getLabel();
+								if (label != null) {								
+									String number = label.substring(label.indexOf("-") + 1, label.indexOf("."));
+									if (label.startsWith("F")) {									
+										Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
+									} else if (label.startsWith("B")){
+										Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
+									}									
+								}
+							} else {
+								alert("Please select a item!");
+							}
+						]]></attribute>
+					</button>
 				</caption>
 				<vbox>
 					<vbox>
