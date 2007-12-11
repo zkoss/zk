@@ -47,6 +47,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 		final Execution exec = Executions.getCurrent();
 		final Tabpanel self = (Tabpanel) comp;
 		final Tab tab = self.getLinkedTab();
+		if (tab == null) return; //generate nothing (Bug 1848377)
 		final Tabbox tabbox = self.getTabbox();
 		final String look = tabbox.getTabLook() + '-';
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
