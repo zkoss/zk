@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1735287.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 11 10:22:12 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Disable Toolbarbutton" border="normal" width="300px">
+	<caption>
+		<toolbarbutton disabled="true" label="button3"/>
+		<toolbarbutton label="button4"/>
+	</caption>
+	<toolbar>
+		<toolbarbutton disabled="true" label="button1"/>
+		<toolbarbutton label="button2"/>
+	</toolbar>
+</window>
