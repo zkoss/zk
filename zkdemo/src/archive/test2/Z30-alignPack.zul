@@ -72,7 +72,7 @@
 		<radio label="end" />
 	</radiogroup>
 	<intbox id="in"/>
-	<button label="setSpacing" onClick="hb2.setSpacing(in.getValue().toString())"/>
+	<button label="setSpacing" onClick='hb2.setSpacing(in.getValue().toString()+"px")'/>
 	<separator bar="true"/>
 	
 	<div>VBOX:</div>
@@ -127,7 +127,7 @@
 		<radio label="end" />
 	</radiogroup>
 	<intbox id="in2"/>
-	<button label="setSpacing" onClick="vb2.setSpacing(in2.getValue().toString())"/>
+	<button label="setSpacing" onClick='vb2.setSpacing(in2.getValue().toString()+"px")'/>
 	<separator bar="true"/>
 	<div>Hbox in Vbox</div>
 	<vbox id="v3" pack="center" align="center" height="270px" sclass="vbox"
