@@ -112,7 +112,18 @@ public class Combobox extends Textbox {
 		}
 	}
 
+	/** Drops down or closes the list of combo items ({@link Comboitem}.
+	 *
+	 * @since 3.0.1
+	 * @see #open
+	 * @see #close
+	 */
+	public void setOpen(boolean open) {
+		if (open) open();
+		else close();
+	}
 	/** Drops down the list of combo items ({@link Comboitem}.
+	 * It is the same as setOpen(true).
 	 *
 	 * @since 3.0.1
 	 */
@@ -121,6 +132,7 @@ public class Combobox extends Textbox {
 	}
 	/** Closes the list of combo items ({@link Comboitem} if it was
 	 * dropped down.
+	 * It is the same as setOpen(false).
 	 *
 	 * @since 3.0.1
 	 */

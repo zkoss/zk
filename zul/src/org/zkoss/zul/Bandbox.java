@@ -129,15 +129,26 @@ public class Bandbox extends Textbox {
 		}
 	}
 
-	/** Drops down the list of combo items ({@link Comboitem}.
+	/** Drops down or closes the child.
+	 *
+	 * @since 3.0.1
+	 * @see #open
+	 * @see #close
+	 */
+	public void setOpen(boolean open) {
+		if (open) open();
+		else close();
+	}
+	/** Drops down the child.
+	 * The same as setOpen(true).
 	 *
 	 * @since 3.0.1
 	 */
 	public void open() {
 		response("dropdn", new AuInvoke(this, "dropdn", true));
 	}
-	/** Closes the list of combo items ({@link Comboitem} if it was
-	 * dropped down.
+	/** Closes the child if it was dropped down.
+	 * The same as setOpen(false).
 	 *
 	 * @since 3.0.1
 	 */
