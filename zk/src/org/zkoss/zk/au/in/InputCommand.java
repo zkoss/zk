@@ -48,7 +48,7 @@ public class InputCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || data.length != 3)
+		if (data == null || (data.length != 1 && data.length != 3))
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
@@ -58,7 +58,10 @@ public class InputCommand extends Command {
 			if (xc instanceof Inputable)
 				((Inputable)xc).setTextByClient(newval);
 		}
-		Events.postEvent(new InputEvent(getId(), comp, newval,
+		if (data.length == 1)
+			Events.postEvent(new InputEvent(getId(), comp, newval,	false, 0));
+		else 
+			Events.postEvent(new InputEvent(getId(), comp, newval,
 				"true".equals(data[1]), Integer.parseInt(data[2])));
 	}
 }
