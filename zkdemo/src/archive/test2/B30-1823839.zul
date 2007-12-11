@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
 B30-1823839.zul
@@ -19,6 +19,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+<html><![CDATA[
+[ 1823839 ] iframe with PDF falid to draw while window sizable
+]]></html>
+
 <window title="PDF Demo" border="normal"
 width="500px" height="500px" sizable="true">
 <caption label="test in iframe">
