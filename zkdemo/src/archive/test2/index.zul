@@ -25,7 +25,9 @@ function newWindow(url){
 										Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
 									} else if (label.startsWith("B")){
 										Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
-									}									
+									} else {
+										alert("The file name does not start with 'F' or 'B'.");
+									}								
 								}
 							} else {
 								alert("Please select a item!");
