@@ -20,6 +20,7 @@ package org.zkoss.zkdemo.test2;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +29,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletContext;
+
+import org.zkoss.io.Files;
+import org.zkoss.web.fn.ServletFns;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.util.Clients;
@@ -59,6 +64,7 @@ public class MainWindow extends Window{
 	}
 	
 	Iframe iframe;
+	Textbox codeView;
 	Listbox lb;
 	public void onCreate(){
 		iframe = (Iframe)getFellow("w2").getFellow("ifr");
@@ -76,6 +82,13 @@ public class MainWindow extends Window{
 					Clients.evalJavaScript("newWindow(\""+disFileStr+"\")");
 				}else{
 					iframe.setSrc(path+"/"+disFileStr);
+					if(codeView!=null)
+					{
+						ServletContext context = ServletFns.getCurrentServletContext();
+						InputStream in = context.getResourceAsStream(path+"/"+disFileStr);
+						byte[] bytes = Files.readAll(in);
+						codeView.setValue( new String(bytes));
+					}
 				}
 			}});
 		getFellow("w1").addEventListener("onOK",new EventListener(){
@@ -167,5 +180,13 @@ public class MainWindow extends Window{
 			new Listcell(format.format(new Date(file.lastModified()))).setParent(item);
 		}
 
+	}
+
+	public Textbox getCodeView() {
+		return codeView;
+	}
+
+	public void setCodeView(Textbox codeView) {
+		this.codeView = codeView;
 	}
 }
