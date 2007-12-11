@@ -4,6 +4,8 @@ ZK 3.0.1
   1835773: Support longbox
   1836202: A generic composer to realize MVC approach more easily
   1836198: A generic event listener which invokes corresponding method    
+  1830278: HeaderElement with children
+  1797807: Listbox add Select All
   1839256: A way to control the timeout of the Ajax resend mechanism
   1843863: Able to Pass Arguments to Variable-Resolver Directive
   1829124: configure prefix to the URI on zkau browser resources
@@ -12,10 +14,8 @@ ZK 3.0.1
   1830924: A way to specify label's width easily
   1814621: JFreeChartEngine - rendering customization
   1830886: A way to make the listbox change its model less "drastic"
-  1830278: HeaderElement with children
   1836417: HibernateSessionFactoryListener use different config name
   1838456: A way to customize progressmeter's look with CSS
-  1797807: Listbox add Select All
   1840081: A way to restrict max concurrent request per-session
   1797701: Slider tooltip text customization
   1642242: Display certain treeitem on screen (Autoscroll)
