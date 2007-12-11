@@ -17,7 +17,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1780792 ] Disable checkmarks on some node of a tree</n:h2>
+	<n:ol>
+		<n:li>Select a item on the tree, than press the UP/Down key, and then you should not select the disabled item.</n:li>
+	</n:ol>
 	<groupbox width="400px" mold="3d">
 		<caption label="Treeitem Disabled" />
 		<tree id="tree" width="90%" multiple="true" checkmark="true">

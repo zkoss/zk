@@ -17,9 +17,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<combobox>
-	<comboitem label="Simple and Rich" disabled="true"/>
-	<comboitem label="Cool!"/>
-	<comboitem label="Thumbs Up!" disabled="true"/>
-	<comboitem label="ZK Best!"/>
-</combobox>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1843802 ] Comboitem supports the disabled property</n:h2>
+	<n:ol>
+		<n:li>You should not select the disabled item.</n:li>
+	</n:ol>
+	<combobox>
+		<comboitem label="Simple and Rich" disabled="true"/>
+		<comboitem label="Cool!"/>
+		<comboitem label="Thumbs Up!" disabled="true"/>
+		<comboitem label="ZK Best!"/>
+	</combobox>
+</zk>

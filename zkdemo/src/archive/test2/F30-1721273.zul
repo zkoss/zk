@@ -17,4 +17,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<textbox value="Support onOK event" onOK="alert(self.value);"/>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1721273 ] Event Enachment</n:h2>
+	<n:ol>
+		<n:li>Focus into the textbox, then you press the "Enter" key.</n:li>
+	</n:ol>
+	<textbox value="Support onOK event" onOK="alert(self.value);"/>
+</zk>

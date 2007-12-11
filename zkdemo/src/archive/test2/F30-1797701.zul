@@ -17,7 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1797701 ] Slider tooltip text customization</n:h2>
 	<slider id="sld" slidingtext="Here is a position : {0}"/>
 	<button label="change" onClick='sld.slidingtext = "Here is a position" '/>
 </zk>

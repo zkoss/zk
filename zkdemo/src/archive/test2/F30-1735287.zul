@@ -17,13 +17,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="Disable Toolbarbutton" border="normal" width="300px">
-	<caption>
-		<toolbarbutton disabled="true" label="button3"/>
-		<toolbarbutton label="button4"/>
-	</caption>
-	<toolbar>
-		<toolbarbutton disabled="true" label="button1"/>
-		<toolbarbutton label="button2"/>
-	</toolbar>
-</window>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1735287 ] Disable Toolbarbutton</n:h2>
+	<n:ol>
+		<n:li>Click the gray link, then you should not see any dialog.</n:li>
+	</n:ol>
+	<window title="Disable Toolbarbutton" border="normal" width="300px">
+		<caption>
+			<toolbarbutton disabled="true" label="button3" onClick='alert("You should not see this dialog!");'/>
+			<toolbarbutton label="button4"/>
+		</caption>
+		<toolbar>
+			<toolbarbutton disabled="true" label="button1" onClick='alert("You should not see this dialog!");'/>
+			<toolbarbutton label="button2"/>
+		</toolbar>
+	</window>
+</zk>
