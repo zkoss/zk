@@ -88,6 +88,8 @@ ZK 3.0.1
   1849088: New session is extra created when invalidate the session
   1848492: align and pack not work when VBOX in HOBX in FF
   1826606: A wrong calculation width when listheader is invisible
+  1823947: Listbox Up & Down Btn faild in Opera
+  1823278: Listbox selection upper bound index is -1
 
 * Upgrade Notes:
   + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
