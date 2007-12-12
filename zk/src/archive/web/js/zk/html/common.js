@@ -1338,7 +1338,26 @@ zk.ncols = function (cells) {
 	}
 	return cnt;
 };
-
+/**
+ * Retrieves the index of the object in the cells collection of a row.
+ * Note: The function fixed the problem of IE that the cell.cellIndex returns a wrong index 
+ * if there is a hidden cell in the table. So, the behavior is difference among others.
+ * @param {Object} cell
+ * @since 3.0.1
+ */
+zk.cellIndex = function (cell) {
+	var i = 0; 
+	if (zk.ie) {
+		var cells = cell.parentNode.cells;
+		for(var j = 0; j < cells.length; j++) {
+			if (cells[j] == cell) {
+				i = j;
+				break;
+			}
+		}
+	} else i = cell.cellIndex;
+	return i; 
+};
 /** Copies the width of each cell from one row to another.
  * It handles colspan of srcrows, but not dst's colspan, nor rowspan
  *
@@ -1484,7 +1503,7 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 		return;
 	for (var j = 0, k = srcrows.length; j < k; j++) {
 		var s = srcrows.shift();
-		var z = s.cellIndex;
+		var z = zk.cellIndex(s);
 		var d = dst.cells[z];
 		var wd = 0;
 		if (s.colSpan > 1) {
