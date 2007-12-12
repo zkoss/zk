@@ -12,6 +12,7 @@ ZK 2.4.2
   1840101: Exception when sendRediect from a modal dialog
   1845026: adding draggable to tree breaks event processing order
   1847708: OnBookmarkChanged doesn't send
+  1849076: NoSuchElementException in UiVisualizer
 
 * Upgrade Note:
   + The pageContext variable in EL expressions becomes an instance of

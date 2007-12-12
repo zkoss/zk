@@ -729,16 +729,18 @@ import org.zkoss.zk.au.*;
 
 		//all siblings are changed (and none of them is processed)
 		final Iterator it = before.iterator();
-		anchor = (Component)it.next();
-		responses.add(
-			parent != null ?
-				new AuAppendChild(parent, drawNew(anchor)):
-				new AuAppendChild(page, drawNew(anchor)));
+		if (it.hasNext()) {
+			anchor = (Component)it.next();
+			responses.add(
+				parent != null ?
+					new AuAppendChild(parent, drawNew(anchor)):
+					new AuAppendChild(page, drawNew(anchor)));
 
-		while (it.hasNext()) {
-			final Component comp = (Component)it.next();
-			responses.add(new AuInsertAfter(anchor, drawNew(comp)));
-			anchor = comp;
+			while (it.hasNext()) {
+				final Component comp = (Component)it.next();
+				responses.add(new AuInsertAfter(anchor, drawNew(comp)));
+				anchor = comp;
+			}
 		}
 	}
 	/** Removes redundant components (i.e., an descendant of another).
