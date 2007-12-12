@@ -58,6 +58,7 @@ public class MainWindow extends Window{
 	
 	static String[] skipList=new String[]{"index.zul"};
 	static String path = "/test2";
+	static String tempFile = "/test2/tempXYZ.zul";
 	
 	public MainWindow(){
 		fileModel = new ListModelList();
@@ -86,6 +87,7 @@ public class MainWindow extends Window{
 					{
 						ServletContext context = ServletFns.getCurrentServletContext();
 						InputStream in = context.getResourceAsStream(path+"/"+disFileStr);
+						
 						byte[] bytes = Files.readAll(in);
 						codeView.setValue( new String(bytes));
 					}
@@ -113,6 +115,20 @@ public class MainWindow extends Window{
 		String src = iframe.getSrc();
 		iframe.setSrc(src+"?tid="+(new Date()).getTime());
 		
+	}
+	
+	public void reloadCodeView()
+	{
+		
+		iframe.setSrc(tempFile+"?tid="+(new Date()).getTime());
+	}
+	
+	
+	private void saveToTemp(String zulContent)
+	{
+		ServletContext context = ServletFns.getCurrentServletContext();
+		File file  = new File(context.getRealPath(tempFile));
+//		Files.copy(file, new );
 	}
 	/**
 	 * use to update fileModel, while search condition is changed.
