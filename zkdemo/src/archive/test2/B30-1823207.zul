@@ -119,5 +119,15 @@ for(int i = 0; i < 20; i++)
 
 <button label="parentModel" onClick='alert(""+parentsList.getModel())'/>
 <button label="parents" onClick='alert(""+person.getParents())'/>
+<button label="Listitem.getItems()">
+	<attribute name="onClick"><![CDATA[
+		StringBuffer sb = new StringBuffer(124);
+		for(Iterator it = parentsList.getItems().iterator(); it.hasNext();) {
+			Listitem li = (Listitem) it.next();
+			sb.append(li.getValue()+",");
+		}
+		alert(sb.toString());
+	]]></attribute>
+</button>
 </window>
 </zk>
