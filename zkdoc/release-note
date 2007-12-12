@@ -84,6 +84,7 @@ ZK 3.0.1
   1847708: OnBookmarkChanged doesn't send
   1848307: Minor component resize issue
   1848377: (Accordion) NullPointerException when tab/tabpanels mismatch
+  1849076: NoSuchElementException in UiVisualizer
 
 * Upgrade Notes:
   + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
