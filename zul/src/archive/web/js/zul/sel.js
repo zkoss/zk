@@ -318,6 +318,7 @@ zk.Selectable.prototype = {
 		if (lastrow) {
 			if (ctrl) this.focus(lastrow);
 			else this.select(lastrow);
+			zk.scrollIntoView(this.body, lastrow); // Bug #1823947 and #1823278
 		}
 
 		switch (Event.keyCode(evt)) {
