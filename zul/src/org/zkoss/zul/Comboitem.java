@@ -61,6 +61,12 @@ public class Comboitem extends LabelImageElement {
 		return scls;
 	}
 	
+	public void setLabel(String label) {
+		super.setLabel(label);
+		final Combobox cb = (Combobox)getParent();
+		if (cb != null) cb.reIndex();
+	}
+	
 	/**
 	 * Sets whether it is disabled.
 	 * @since 3.0.1
@@ -155,8 +161,13 @@ public class Comboitem extends LabelImageElement {
 	//-- super --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Combobox))
-			throw new UiException("Comboitem's parent must be Combobox");
+			throw new UiException("Comboitem's parent must be Combobox");		
+		final Combobox cb = (Combobox)getParent();
+		boolean off = false;
+		if (parent == null && cb != null && cb.getSelectedItem() == this)
+			off = true;
 		super.setParent(parent);
+		if (off) cb.reIndex();
 	}
 
 	/** No child is allowed. */

@@ -58,7 +58,7 @@ public class Combobox extends Textbox {
 	private static final String DEFAULT_IMAGE = "~./zul/img/combobtn.gif";
 	private String _img;
 	private boolean _autodrop, _autocomplete, _btnVisible = true;
-	private Comboitem _selectedItem;
+	private int _selIdx;
 
 	public Combobox() {
 		setSclass("combobox");
@@ -208,8 +208,9 @@ public class Combobox extends Textbox {
 	 * @return the removed item.
 	 */
 	public Comboitem removeItemAt(int index) {
-		final Comboitem item = getItemAtIndex(index);
+		final Comboitem item = getItemAtIndex(index);		
 		removeChild(item);
+		if (_selIdx == index) reIndex();
 		return item;
 	}
 
@@ -217,7 +218,9 @@ public class Combobox extends Textbox {
 	 * @since 2.4.0
 	 */
 	public Comboitem getSelectedItem() {
-		return _selectedItem;
+		if (_selIdx > -1 && getItems().size() > _selIdx)
+			return getItemAtIndex(_selIdx);
+		else return null;
 	}
 
 	//-- super --//
@@ -279,7 +282,20 @@ public class Combobox extends Textbox {
 		super.onChildRemoved(child);
 		smartUpdate("repos", "true");
 	}
-
+	
+	/*package*/ final void reIndex() {
+		final String value = getValue();
+		final Comboitem ci = getSelectedItem();
+		if (ci == null || !Objects.equals(value, ci.getLabel())) {
+			int j = 0;
+			_selIdx = -1;
+			for (Iterator it = getChildren().iterator(); it.hasNext();j++) {
+				final Comboitem item = (Comboitem)it.next();
+				if (Objects.equals(value, item.getLabel()))
+					_selIdx = j;
+			}
+		}
+	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -294,9 +310,11 @@ public class Combobox extends Textbox {
 			return true;
 		}
 
-		public void selectItemsByClient(Set selectedItems) {
-			if (selectedItems != null && selectedItems.size() > 0)
-				_selectedItem = (Comboitem)selectedItems.iterator().next();
+		public void selectItemsByClient(Set selItems) {
+			if (selItems != null && selItems.size() > 0){
+				final Comboitem item = (Comboitem)selItems.iterator().next();
+				_selIdx = getChildren().indexOf(item);
+			} else _selIdx = -1;			
 		}
 	}
 }

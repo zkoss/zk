@@ -35,6 +35,38 @@ if (!window.Comboitem_effect) { //define it only if not customized
 
 ////
 zkCmbox = {};
+zk.addModuleInit(function () {
+zkCmbox.onblur = zkTxbox.onblur;
+zkTxbox.onblur = function (evt) {
+	var inp = zkau.evtel(evt);
+	var uuid = $uuid(inp);
+	var cmp = $e(uuid);
+	if (!zkTxbox._noonblur(inp) && $type(cmp) == "Cmbox") {
+		var inpval = inp.value.toLowerCase();
+		var pp2 = $e(uuid + "!cave");
+		var rows = pp2.rows;
+		var jfnd = -1;
+		for (var j = 0; j < rows.length; ++j) {			
+		var item = rows[j];
+			var txt = zkCmbox.getLabel(item).toLowerCase();
+			if (txt == inpval) {
+				jfnd = j;
+				break;
+			}
+		}
+		if (jfnd > -1) item = rows[j];
+		else item = {id: ""};
+			var selId = getZKAttr(cmp, "selid");
+			
+			if (selId != item.id) {
+				setZKAttr(cmp, "selid", item.id);
+				zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id]},
+					zkau.asapTimeout($e(uuid), "onSelect"));			
+			}		
+	}
+	zkCmbox.onblur(evt);
+};
+});
 zkCmbox.init = function (cmp) {
 	zkCmbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
@@ -69,12 +101,10 @@ zkCmit.onclick = function (evt) {
 		zkau.closeFloats($outer($parent(item)));
 			//including combobox, but excluding dropdown
 		zkCmit.onoutTo(item); //onmouseout might be sent (especiall we change parent)
-
+		
 		//Request 1537962: better responsive
-		var inp = zkCmbox.getInputByItem(item);
-		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
+		var inp = zkCmbox.getInputByItem(item);		
 		var uuid = $uuid(inp);
-		Event.stop(evt); //Bug 1597852 (cb might be a child of listitem)
 		var cmp = $e(uuid);
 		var selId = getZKAttr(cmp, "selid");
 		if (selId != item.id) {
@@ -82,6 +112,8 @@ zkCmit.onclick = function (evt) {
 			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id]},
 				zkau.asapTimeout($e(uuid), "onSelect"));			
 		}
+		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
+		Event.stop(evt); //Bug 1597852 (cb might be a child of listitem)
 	}
 };
 
