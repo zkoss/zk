@@ -236,7 +236,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 					wd = $int(val) + zk.sumStyles(cmp, "lr", zk.borders) + 
 						zk.sumStyles(cmp, "lr", zk.paddings) + "px";
 				}
-				fake.cells[cmp.cellIndex].style.width = wd; 
+				fake.cells[zk.cellIndex(cmp)].style.width = wd; 
 			}			
 			var meta = zkau.getMeta(mate);
 			if (meta) meta.init();
@@ -321,12 +321,13 @@ zulHdr._endsizing = function (cmp, evt) {
 		for (var k = 0; k < cells.length; ++k)
 			if (cells[k] != cmp) total += cells[k].offsetWidth;
 		var row = table.rows[0];
-		row.cells[cmp.cellIndex].style.width = $int(rwd) + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings) + "px";
+		var cidx = zk.cellIndex(cmp);
+		row.cells[cidx].style.width = $int(rwd) + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings) + "px";
 		cmp.style.width = rwd + "px";
 		var cell = cmp.firstChild;
 		cell.style.width = zk.revisedSize(cell, rwd) + "px";	
-		table.style.width = total + wd + "px";					
-		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cmp.cellIndex+",'"+wd+"','"+keys+"')", 0);		
+		table.style.width = total + wd + "px";		
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cidx+",'"+wd+"','"+keys+"')", 0);		
 	}
 };
 /* @param ghosting whether to create or remove the ghosting
