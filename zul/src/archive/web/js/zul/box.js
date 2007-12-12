@@ -220,6 +220,7 @@ zkSplt._fixsz = function (cmp) {
 		if (vert) {
 			var tr = parent.parentNode; //TR
 			cmp.style.height = tr.style.height = "8px";
+			cmp.style.width = "0px"; // clean width
 			cmp.style.width = parent.clientWidth + "px"; //all wd the same
 		} else {
 			cmp.style.width = parent.style.width = "8px";
@@ -230,6 +231,7 @@ zkSplt._fixsz = function (cmp) {
 					if (h > hgh) hgh = h;
 				}
 			}
+			cmp.style.height = "0px"; // clean height
 			cmp.style.height = hgh + "px";
 		}
 	}
