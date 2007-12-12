@@ -62,9 +62,15 @@ public class Comboitem extends LabelImageElement {
 	}
 	
 	public void setLabel(String label) {
-		super.setLabel(label);
-		final Combobox cb = (Combobox)getParent();
-		if (cb != null) cb.reIndex();
+		final String old = getLabel();
+		if (!Objects.equals(old, label)) {
+			final Combobox cb = (Combobox)getParent();
+			final boolean reIndex = cb != null && cb.getSelectedItem() == this;
+
+			super.setLabel(label);
+
+			if (reIndex) cb.reIndex();
+		}
 	}
 	
 	/**
@@ -162,12 +168,14 @@ public class Comboitem extends LabelImageElement {
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Combobox))
 			throw new UiException("Comboitem's parent must be Combobox");		
-		final Combobox cb = (Combobox)getParent();
-		boolean off = false;
-		if (parent == null && cb != null && cb.getSelectedItem() == this)
-			off = true;
+
+		final Combobox old = (Combobox)getParent();
+		final boolean reIndex =
+			parent != old && old != null && old.getSelectedItem() == this;
+
 		super.setParent(parent);
-		if (off) cb.reIndex();
+
+		if (reIndex) old.reIndex();
 	}
 
 	/** No child is allowed. */

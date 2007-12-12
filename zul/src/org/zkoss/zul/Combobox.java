@@ -58,7 +58,7 @@ public class Combobox extends Textbox {
 	private static final String DEFAULT_IMAGE = "~./zul/img/combobtn.gif";
 	private String _img;
 	private boolean _autodrop, _autocomplete, _btnVisible = true;
-	private int _selIdx;
+	private int _selIdx = -1;
 
 	public Combobox() {
 		setSclass("combobox");
@@ -208,9 +208,8 @@ public class Combobox extends Textbox {
 	 * @return the removed item.
 	 */
 	public Comboitem removeItemAt(int index) {
-		final Comboitem item = getItemAtIndex(index);		
+		final Comboitem item = getItemAtIndex(index);
 		removeChild(item);
-		if (_selIdx == index) reIndex();
 		return item;
 	}
 
@@ -218,9 +217,13 @@ public class Combobox extends Textbox {
 	 * @since 2.4.0
 	 */
 	public Comboitem getSelectedItem() {
-		if (_selIdx > -1 && getItems().size() > _selIdx)
-			return getItemAtIndex(_selIdx);
-		else return null;
+		if (_selIdx >= 0) {
+			if (getItems().size() > _selIdx)
+				return getItemAtIndex(_selIdx);
+			else
+				_selIdx = -1; //just in case
+		}
+		return null;
 	}
 
 	//-- super --//
@@ -296,6 +299,7 @@ public class Combobox extends Textbox {
 			}
 		}
 	}
+
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -311,7 +315,7 @@ public class Combobox extends Textbox {
 		}
 
 		public void selectItemsByClient(Set selItems) {
-			if (selItems != null && selItems.size() > 0){
+			if (selItems != null && !selItems.isEmpty()){
 				final Comboitem item = (Comboitem)selItems.iterator().next();
 				_selIdx = getChildren().indexOf(item);
 			} else _selIdx = -1;			
