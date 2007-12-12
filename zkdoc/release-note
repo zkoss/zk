@@ -85,6 +85,7 @@ ZK 3.0.1
   1848307: Minor component resize issue
   1848377: (Accordion) NullPointerException when tab/tabpanels mismatch
   1849076: NoSuchElementException in UiVisualizer
+  1849088: New session is extra created when invalidate the session
   1848492: align and pack not work when VBOX in HOBX in FF
 
 * Upgrade Notes:

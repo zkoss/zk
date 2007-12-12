@@ -120,17 +120,23 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		final Session sess = WebManager.getSession(_ctx, request);
+		final String pi = Https.getThisPathInfo(request);
+		//if (log.finerable()) log.finer("Path info: "+pi);
+
+		final boolean withpi = pi != null && pi.length() != 0;
+		final boolean bWebRes = withpi && pi.startsWith(ClassWebResource.PATH_PREFIX);
+		final Session sess = WebManager.getSession(_ctx, request, bWebRes);
+		if (sess == null)
+			return; //Bug 1849088: rmDesktop might be sent after invalidate
+
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
-			final String pi = Https.getThisPathInfo(request);
-			if (pi != null && pi.length() != 0) {
-				//if (log.finerable()) log.finer("Path info: "+pi);
-				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
-					getClassWebResource()
-						.service(request, response,
-							pi.substring(ClassWebResource.PATH_PREFIX.length()));
-				} else if (pi.startsWith("/upload")) {
+			if (bWebRes) {
+				getClassWebResource()
+					.service(request, response,
+						pi.substring(ClassWebResource.PATH_PREFIX.length()));
+			} else if (withpi) {
+				if (pi.startsWith("/upload")) {
 					Uploads.process(sess, _ctx, request, response);
 				} else if (pi.startsWith("/view")) {
 					DynaMedias.process(
@@ -138,10 +144,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				} else {
 					log.warning("Unknown path info: "+pi);
 				}
-				return;
+			} else {
+				process(sess, request, response);
 			}
-
-			process(sess, request, response);
 		} finally {
 			I18Ns.cleanup(request, old);
 		}

@@ -279,17 +279,26 @@ public class WebManager {
 		return (WebManager)ctx.getAttribute(ATTR_WEB_MANAGER);
 	}
 
-	/** Returns the session. */
+	/**  Returns the current session associated with this request,
+	 * or if the request does not have a session, creates one.
+	 */
 	public static final
 	Session getSession(ServletContext ctx, HttpServletRequest request) {
-		final HttpSession hsess = request.getSession();
-		final Session sess = getSession(hsess);
-		return sess != null ? sess:
-			newSession(getWebManager(ctx).getWebApp(),
-				hsess, request.getRemoteAddr(), request.getRemoteHost());
+		return getSession(ctx, request, request.getSession());
 	}
-	/** Returns the session.
+	/**Returns the current HttpSession  associated with this request or,
+	 * if there is no current session and create is true, returns a new session.
+	 *
+	 * @param create true to create a new session for this request if necessary;
+	 * false to return null  if there's no current session
+	 * @since 3.0.1
 	 */
+	public static final
+	Session getSession(ServletContext ctx, HttpServletRequest request,
+	boolean create) {
+		final HttpSession hsess = request.getSession(create);
+		return hsess != null ? getSession(ctx, request, hsess): null;
+	}
 	/*package*/ static final Session newSession(WebApp wapp,
 	HttpSession hsess, String remoteAddr, String remoteHost) {
 		if (D.ON && log.debugable()) log.debug("Creating a new sess for "+hsess);
@@ -304,6 +313,13 @@ public class WebManager {
 		final int v = config.getSessionMaxInactiveInterval();
 		if (v != 0) sess.setMaxInactiveInterval(v);
 		return sess;
+	}
+	private static final Session getSession(ServletContext ctx,
+	HttpServletRequest request, HttpSession hsess) {
+		final Session sess = getSession(hsess);
+		return sess != null ? sess:
+			newSession(getWebManager(ctx).getWebApp(),
+				hsess, request.getRemoteAddr(), request.getRemoteHost());
 	}
 	/** Returns the session of the specified HTTP session, or null if n/a. */
 	/*package*/ static final Session getSession(HttpSession hsess) {
