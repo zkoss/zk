@@ -58,7 +58,7 @@ public class Combobox extends Textbox {
 	private static final String DEFAULT_IMAGE = "~./zul/img/combobtn.gif";
 	private String _img;
 	private boolean _autodrop, _autocomplete, _btnVisible = true;
-	private int _selIdx = -1;
+	private transient Comboitem _selItem;
 
 	public Combobox() {
 		setSclass("combobox");
@@ -217,13 +217,7 @@ public class Combobox extends Textbox {
 	 * @since 2.4.0
 	 */
 	public Comboitem getSelectedItem() {
-		if (_selIdx >= 0) {
-			if (getItems().size() > _selIdx)
-				return getItemAtIndex(_selIdx);
-			else
-				_selIdx = -1; //just in case
-		}
-		return null;
+		return _selItem;
 	}
 
 	//-- super --//
@@ -290,16 +284,45 @@ public class Combobox extends Textbox {
 		final String value = getValue();
 		final Comboitem ci = getSelectedItem();
 		if (ci == null || !Objects.equals(value, ci.getLabel())) {
-			int j = 0;
-			_selIdx = -1;
-			for (Iterator it = getChildren().iterator(); it.hasNext();j++) {
+			_selItem = null;
+			for (Iterator it = getChildren().iterator(); it.hasNext();) {
 				final Comboitem item = (Comboitem)it.next();
-				if (Objects.equals(value, item.getLabel()))
-					_selIdx = j;
+				if (Objects.equals(value, item.getLabel())) {
+					_selItem = item;
+					break;
+				}					
 			}
 		}
 	}
-
+	
+	//Cloneable//
+	public Object clone() {
+		final Comboitem ci = getSelectedItem();
+		final int idx = ci != null ? getItems().indexOf(ci) : -1;
+		final Combobox clone = (Combobox)super.clone();
+		if (idx > -1 && clone.getItemCount() > idx)
+			clone._selItem = clone.getItemAtIndex(idx);
+		return clone;
+	}
+	
+	//	Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+		final Comboitem ci = getSelectedItem();
+		final int idx = ci != null ? getItems().indexOf(ci) : -1;
+		s.writeInt(idx);
+	}
+	
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		final int idx = s.readInt();
+		if (idx > -1 && getItemCount() > idx)
+			_selItem = getItemAtIndex(idx);
+	}
+	
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -316,9 +339,8 @@ public class Combobox extends Textbox {
 
 		public void selectItemsByClient(Set selItems) {
 			if (selItems != null && !selItems.isEmpty()){
-				final Comboitem item = (Comboitem)selItems.iterator().next();
-				_selIdx = getChildren().indexOf(item);
-			} else _selIdx = -1;			
+				_selItem = (Comboitem)selItems.iterator().next();
+			} else _selItem = null;			
 		}
 	}
 }
