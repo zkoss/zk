@@ -49,8 +49,15 @@ _zkselx._addChd = function (uuid, cmp, html) {
 	if (isLit && $type(cmp) != "Lit") { // only first listitem.
 		var head = $parentByTag(cmp, "DIV");
 		var cave = $e($uuid(head) + "!cave");	
-		zk.insertHTMLBeforeEnd(cave.tBodies[0], html);
-		zkau._initChildren(cave.tBodies[0]);
+		if (cave.tBodies[0].rows.length) {
+			var n = cave.tBodies[0].rows[0];
+			var to = n.previousSibling;
+			zk.insertHTMLBefore(n, html);
+			zkau._initSibs(n, to, false);
+		} else {
+			zk.insertHTMLBeforeEnd(cave.tBodies[0], html);			
+			zkau._initChildren(cave.tBodies[0]);
+		}
 		return true;
 	}
 	return false;
