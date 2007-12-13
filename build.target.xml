@@ -139,7 +139,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <!-- ===== -->
 <!-- BUILD -->
 <!-- ===== -->
-<target name="build.jar" depends="compile, copy.web.jar" if="build.jar.required">
+<target name="build.jar" depends="gentime, compile, copy.web.jar" if="build.jar.required">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
@@ -148,12 +148,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
-	</exec>
-
-	<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/gentime"/>
-		<arg value="-a"/>
-		<arg value="${codegen.dir}/${build.time}"/>
 	</exec>
 
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
@@ -199,8 +193,12 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<fileset dir="${src.export.dir}" includes="${import.libs}"/>
 	</copy>
 </target>
-
-
+<target name="gentime" depends="config" if="gentime.required">
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/gentime"/>
+		<arg value="${codegen.dir}/${gentime}"/>
+	</exec>
+</target>
 
 <target name="build.war" depends="compile" if="build.war.required">
 	<mkdir dir="${out.dir}"/>
