@@ -35,6 +35,7 @@ ZK 3.0.1
   1845942: JndiVariableResolver to Get Variable from JNDI Binding
   1828245: Add function to drop combobox/bandbox progammatically
   1846042: AbstractChartModel shall be serializable
+  1849768: Desktop shall not removed if zuml page included by, say, JSP
   
 * Bugs:
   1841816: Some error of Developer's Guide

@@ -27,10 +27,26 @@ public class Attributes {
 	 * It is an integer ranging from 0 to 99.
 	 */
 	public static final String UPLOAD_PERCENT = "zk_uploadPercent";
-	/** A desktop attribute indicated the number of bytes of the current
+	/** A desktop attribute to indicate the number of bytes of the current
 	 * file upload.
 	 * It is a non-negative long.
 	 */
 	public static final String UPLOAD_SIZE = "zk_uploadSize";
 
+	/** A request attribute to indicate whether "no-cache" header is
+	 * generated for the current desktop.
+	 * If no-cache is generated, ZK will remove a desktop as soon
+	 * as possible to save the use of memory.
+	 *
+	 * <p>This attribute is set if ZK loader sets Cache-Control=no-cache.
+	 * However, if a ZUML page is included by other servlet (such as
+	 * JSP and DSP), this attribute won't be set.
+	 * If you set Cache-Control manually, you might also set
+	 * this attribute to save the use of memroy.
+	 *
+	 * <pre><code>request.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);</code></pre>
+	 *
+	 * @since 3.0.1
+	 */
+	public static final String NO_CACHE = "zk_desktop_no_cache";
 }

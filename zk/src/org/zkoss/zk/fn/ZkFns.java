@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -179,15 +180,8 @@ public class ZkFns {
 		if (!config.isDisableBehindModalEnabled())
 			sb.append("zk.ndbModal=true;\n");
 
-		boolean cache = config.isKeepDesktopAcrossVisits();
-		if (!cache) {
-			final Page page = getFirstPage(desktop);
-			if (page != null) {
-				Boolean b = ((PageCtrl)page).getCacheable();
-				cache = b != null && b.booleanValue();
-			}
-		}
-		if (cache)
+		if (config.isKeepDesktopAcrossVisits()
+		|| request.getAttribute(Attributes.NO_CACHE) == null)
 			sb.append("zk.keepDesktop=true;\n");
 
 		if (config.getPerformanceMeter() != null)
@@ -229,12 +223,6 @@ public class ZkFns {
 			sb.append("<noscript>\n").append(uamsg).append("\n</noscript>\n");
 
 		return sb.toString();
-	}
-	/** Returns the first page of a desktop.
-	 */
-	private static Page getFirstPage(Desktop desktop) {
-		final Collection pgs = desktop.getPages();
-		return pgs.isEmpty() ? null: (Page)pgs.iterator().next();
 	}
 
 	private static void append(StringBuffer sb, JavaScript js) {

@@ -837,6 +837,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				//execCtrl.addHeader("Cache-Control", "post-check=0");
 				//execCtrl.addHeader("Cache-Control", "pre-check=0");
 				execCtrl.setHeader("Expires", "-1");
+
+				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
+				//so ZkFns.outLangJavaScripts generates zk.keepDesktop correctly
 			}
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
 				//Don't use include. Otherwise, headers will be gone.
