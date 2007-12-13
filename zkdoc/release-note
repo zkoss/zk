@@ -3,7 +3,12 @@ ZK 3.0.1
 * Features:
   1835773: Support longbox
   1836202: A generic composer to realize MVC approach more easily
-  1836198: A generic event listener which invokes corresponding method    
+  1836198: A generic event listener which invokes corresponding method
+  1838456: A way to customize progressmeter's look with CSS
+  1797701: Slider tooltip text customization
+  1766905: DataBinder support binding to Map
+  1845942: JndiVariableResolver to Get Variable from JNDI Binding    
+  1840081: A way to restrict max concurrent request per-session
   1830278: HeaderElement with children
   1797807: Listbox add Select All
   1839256: A way to control the timeout of the Ajax resend mechanism
@@ -14,14 +19,10 @@ ZK 3.0.1
   1830924: A way to specify label's width easily
   1814621: JFreeChartEngine - rendering customization
   1830886: A way to make the listbox change its model less "drastic"
-  1836417: HibernateSessionFactoryListener use different config name
-  1838456: A way to customize progressmeter's look with CSS
-  1840081: A way to restrict max concurrent request per-session
-  1797701: Slider tooltip text customization
+  1836417: HibernateSessionFactoryListener use different config name 
   1642242: Display certain treeitem on screen (Autoscroll)
   1601002: Added onSelect event to the Combobox component
-  1841480: HibernateSessionFactoryListner for web.xml
-  1766905: DataBinder support binding to Map
+  1841480: HibernateSessionFactoryListner for web.xml  
   1842533: Add default-bind to Radio.selected
   1796049: Like Timebox, Intbox must support only integer
   1780792: Disable checkmarks on some node of a tree
@@ -32,7 +33,6 @@ ZK 3.0.1
   1721273: Event Enachment
   1632243: Add a getLine() function to textboxes
   1845283: A way to customize the writer for the update engine
-  1845942: JndiVariableResolver to Get Variable from JNDI Binding
   1828245: Add function to drop combobox/bandbox progammatically
   1846042: AbstractChartModel shall be serializable
   1849768: Desktop shall not removed if zuml page included by, say, JSP
