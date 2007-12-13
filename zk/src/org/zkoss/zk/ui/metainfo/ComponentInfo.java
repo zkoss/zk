@@ -66,7 +66,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Note: it is NodeInfo's job to serialize _evalr. */
 	private transient EvaluatorRef _evalr;
 	private transient NodeInfo _parent; //it is restored by its parent
-	private ComponentDefinition _compdef;
+	private transient ComponentDefinition _compdef;
 	/** The implemetation class (use). */
 	private String _implcls;
 	/** A list of {@link Property}, or null if no property at all. */
@@ -650,7 +650,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 	throws java.io.IOException {
 		out.writeObject(_children);
 
-		out.writeObject(_compdef);
+		final LanguageDefinition langdef = _compdef.getLanguageDefinition();
+		if (langdef != null) {
+			out.writeObject(langdef.getName());
+			out.writeObject(_compdef.getName());
+		} else {
+			out.writeObject(_compdef);
+		}
+
 		out.writeObject(_implcls);
 		out.writeObject(_props);
 		out.writeObject(_evthds);
@@ -671,7 +678,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 				((ComponentInfo)o).setParentDirectly(this);
 		}
 
-		_compdef = (ComponentDefinition)in.readObject();
+		final Object v = in.readObject();
+		if (v instanceof String) {
+			final LanguageDefinition langdef = LanguageDefinition.lookup((String)v);
+			_compdef = langdef.getComponentDefinition((String)in.readObject());
+		} else {
+			_compdef = (ComponentDefinition)v;
+		}
+
 		_implcls = (String)in.readObject();
 		_props = (List)in.readObject();
 		_evthds = (EventHandlerMap)in.readObject();

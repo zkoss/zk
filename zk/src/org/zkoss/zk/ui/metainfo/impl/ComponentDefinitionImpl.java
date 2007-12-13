@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo.impl;
 
+import java.util.Iterator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -59,7 +60,7 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Either String or Class. */
 	private Object _implcls;
 	/** A map of molds (String name, ExValue moldURI). */
-	private Map _molds;
+	private transient Map _molds;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
@@ -426,6 +427,21 @@ implements ComponentDefinition, java.io.Serializable {
 		s.defaultWriteObject();
 
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
+
+		//write _molds
+		for (Iterator it = _molds.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			s.writeObject(me.getKey());
+			final Object o = me.getValue();
+			if ((o instanceof java.io.Serializable)
+			|| (o instanceof java.io.Externalizable)) {
+				s.writeObject(o);
+			} else {
+				assert o instanceof ComponentRenderer: "Unexpected "+o;
+				s.writeObject(o.getClass());
+			}
+		}
+		s.writeObject(null);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -434,6 +450,23 @@ implements ComponentDefinition, java.io.Serializable {
 		final String langnm = (String)s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
+
+		//read _molds
+		_molds = new HashMap(4);
+		for (;;) {
+			final Object nm = s.readObject();
+			if (nm == null) break; //no more
+
+			Object val = s.readObject();
+			if (val instanceof Class) {
+				try {
+					val = ((Class)val).newInstance();
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+			_molds.put(nm, val);
+		}
 	}
 
 	//Object//
@@ -449,6 +482,7 @@ implements ComponentDefinition, java.io.Serializable {
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
 		}
+
 		if (_annots != null)
 			compdef._annots = (AnnotationMap)_annots.clone();
 		if (_props != null)
