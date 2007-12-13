@@ -1,9 +1,9 @@
 	--------
 ZK 3.0.1
-* Features:
-  1835773: Support longbox
+* Features:  
   1836202: A generic composer to realize MVC approach more easily
   1836198: A generic event listener which invokes corresponding method
+  1835773: Support longbox
   1838456: A way to customize progressmeter's look with CSS
   1797701: Slider tooltip text customization
   1766905: DataBinder support binding to Map
