@@ -435,8 +435,8 @@ function invoke_ant
 		)
 		fi
 	else
-		btime=$(grep '^time=' format)
-		btime=${btime#time=}
+		gentime=$(grep '^time=' format)
+		gentime=${gentime#time=}
 
 		CLASSPATH="$DCP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
 		$doall -Dformat="$format" -Ddeploy="$deploy" \
@@ -452,7 +452,7 @@ function invoke_ant
 		-Ddebug=$this_dflag -Doptimize=$this_oflag ${nojc} \
 		-Dshare.javadoc.dir="$javadocdir" \
 		-Djavadoc.class.path="$DCP" -Dapp.name=$app $unziplist \
-		-Droot.context=$rootContext -Dbuild.time=$btime \
+		-Droot.context=$rootContext -Dgentime=$gentime \
 		$dfnList -buildfile ../build.xml $1
 	fi
 
