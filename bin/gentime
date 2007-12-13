@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#{{IS_NOTE
+#
+# Authors: Tom M. Yeh
+# Contributors:
+# Create Date: 2001/3/30 05:46PM
+# Purpose: Generate the current time
+# Description:
+#	The resolution is hour (so the same JAR file won't be re-zipped
+#	in the same hour if nothing changed).
+# History:
+#	
+#}}IS_NOTE
+#
+# Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 2.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+
+function showhelp
+{
+	echo "gentime - generate the current time (up to hour)"
+	echo "Copyright (C) 2007 Potix Corporation. All Rights Reserved."
+	echo
+	echo "Usage:"
+	echo "  gentme [-h] [-a] [dstfl]"
+	echo
+	echo "-a"
+	echo "    If specified and dstfl is omitted, nothing is generated."
+	echo
+	echo "dstfl"
+	echo "    The destination file. If omitted, the time is generated to stdout."
+	echo "    If the content of the destination file is the same, the file"
+	echo "    won't be changed."
+}
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
+	showhelp
+	exit 0
+fi
+auto=
+if [ "$1" = "-a" ] ; then
+	auto=true
+	shift
+fi
+
+stamp=$(date +%Y%m%d%H)
+
+if [ "$1" = "" ] ; then
+	if [ "$auto" = "" ] ; then
+		echo $stamp
+	fi
+	exit 0
+fi
+
+dstfl=$1
+if [ -f $dstfl ] && [ "$(cat $dstfl)" = "$stamp" ] ; then
+	exit 0
+fi
+
+dir=${dstfl%/*}
+mkdir -p $dir
+echo $stamp > $dstfl

@@ -150,6 +150,12 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
 	</exec>
 
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/gentime"/>
+		<arg value="-a"/>
+		<arg value="${codegen.dir}/${build.time}"/>
+	</exec>
+
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
 		<fileset dir="${src.archive.dir}" includes="**"
