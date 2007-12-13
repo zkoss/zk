@@ -146,17 +146,17 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	/** Holds desktops. */
 	private static class Cache extends CacheMap { //serializable
 		private Cache(Configuration config) {
-			super(13);
+			super(16);
 
 			int v = config.getSessionMaxDesktops();
-			setMaxSize(v >= 0 ? v: Integer.MAX_VALUE / 2);
+			setMaxSize(v >= 0 ? v: Integer.MAX_VALUE / 4);
 
 			v = config.getDesktopMaxInactiveInterval();
-			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE / 2);
+			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE / 4);
 		}
 		protected boolean shallExpunge() {
 			return super.shallExpunge()
-				|| sizeWithoutExpunge() > (getMaxSize() << 1);
+				|| sizeWithoutExpunge() > (getMaxSize() << 2);
 				//to minimize memory use, expunge even if no GC
 		}
 		protected int canExpunge(Value v) {

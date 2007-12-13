@@ -104,7 +104,7 @@ public class Configuration {
 	private Set _disThemeURIs;
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls;
-	private int _dtTimeout = 3600, _sessDktMax = 10, _sessReqMax = 5,
+	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
 		_promptDelay = 900, _tooltipDelay = 800, _resendDelay = 9000;
@@ -1341,7 +1341,7 @@ public class Configuration {
 	/** Specifies the maximal allowed number of desktop
 	 * per session.
 	 *
-	 * <p>Defafult: 10.
+	 * <p>Defafult: 15.
 	 *
 	 * <p>A negative value indicates there is no limit.
 	 * @since 3.0.1
