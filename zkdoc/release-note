@@ -36,7 +36,8 @@ ZK 3.0.1
   1828245: Add function to drop combobox/bandbox progammatically
   1846042: AbstractChartModel shall be serializable
   1849768: Desktop shall not removed if zuml page included by, say, JSP
-  
+  1849884: A way to retrieve the build identifier
+
 * Bugs:
   1841816: Some error of Developer's Guide
   1839246: More reliable handling of Ajax requests

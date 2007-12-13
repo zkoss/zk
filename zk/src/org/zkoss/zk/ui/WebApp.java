@@ -55,6 +55,13 @@ public interface WebApp extends Locator {
 	 * @see #getSubversion
 	 */
 	public String getVersion();
+	/** Returns the build identifier, such as 2007121316.
+	 *
+	 * <p>Each time ZK is built, a different build identifier is assigned.
+	 * @since 3.0.1
+	 */
+	public String getBuild();
+
 	/** Returns a portion of the version in an integer by specifying its index.
 	 * For example, getSubversion(0) returns the so-called major version
 	 * (2 in "2.4.0"), getSubversion(1) returns the so-called

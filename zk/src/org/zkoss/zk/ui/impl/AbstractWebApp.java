@@ -18,7 +18,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.io.InputStream;
+
 import org.zkoss.util.Utils;
+import org.zkoss.io.Files;
 
 import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.WebApp;
@@ -43,7 +46,7 @@ import org.zkoss.zk.ui.impl.UiEngineImpl;
  * @author tomyeh
  */
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
-	private String _appnm = "ZK";
+	private String _appnm = "ZK", _build;
 	private Configuration _config;
 	private UiEngine _engine;
 	private DesktopCacheProvider _provider;
@@ -72,6 +75,11 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 
 	public final String getVersion() {
 		return Version.RELEASE;
+	}
+	public final String getBuild() {
+		if (_build == null)
+			loadBuild();
+		return _build;
 	}
 	public int getSubversion(int portion) {
 		return Utils.getSubversion(getVersion(), portion);
@@ -191,5 +199,26 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	 */
 	public void sessionDidActivate(Session sess) {
 		_provider.sessionDidActivate(sess);
+	}
+
+	/** Loads the build identifier. */
+	synchronized private void loadBuild() {
+		if (_build == null) {
+			final String FILE = "/metainfo/zk/build";
+			InputStream is = Thread.currentThread()
+				.getContextClassLoader().getResourceAsStream(FILE);
+			if (is == null) {
+				is = AbstractWebApp.class.getResourceAsStream(FILE);
+				if (is == null) {
+					_build = "";
+					return; //done;
+				}
+			}
+			try {
+				_build = new String(Files.readAll(is));
+			} catch (Exception ex) {
+				_build = "error";
+			}
+		}
 	}
 }
