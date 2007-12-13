@@ -189,7 +189,7 @@ public class Combobox extends Textbox {
 	/** Returns the number of items.
 	 */
 	public int getItemCount() {
-		return getChildren().size();
+		return getItems().size();
 	}
 	/** Returns the item at the specified index.
 	 */
@@ -218,6 +218,12 @@ public class Combobox extends Textbox {
 	 */
 	public Comboitem getSelectedItem() {
 		return _selItem;
+	}
+	/** Returns the index of the selected item, or -1 if not selected.
+	 * @since 3.0.1
+	 */
+	public int getSelectedIndex() {
+		return _selItem != null ? getItems().indexOf(_selItem) : -1;
 	}
 
 	//-- super --//
@@ -282,10 +288,9 @@ public class Combobox extends Textbox {
 	
 	/*package*/ final void reIndex() {
 		final String value = getValue();
-		final Comboitem ci = getSelectedItem();
-		if (ci == null || !Objects.equals(value, ci.getLabel())) {
+		if (_selItem == null || !Objects.equals(value, _selItem.getLabel())) {
 			_selItem = null;
-			for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			for (Iterator it = getItems().iterator(); it.hasNext();) {
 				final Comboitem item = (Comboitem)it.next();
 				if (Objects.equals(value, item.getLabel())) {
 					_selItem = item;
@@ -297,11 +302,10 @@ public class Combobox extends Textbox {
 	
 	//Cloneable//
 	public Object clone() {
-		final Comboitem ci = getSelectedItem();
-		final int idx = ci != null ? getItems().indexOf(ci) : -1;
+		final int idx = getSelectedIndex();
 		final Combobox clone = (Combobox)super.clone();
-		if (idx > -1 && clone.getItemCount() > idx)
-			clone._selItem = clone.getItemAtIndex(idx);
+		clone._selItem = idx > -1 && clone.getItemCount() > idx ?
+			clone.getItemAtIndex(idx): null;
 		return clone;
 	}
 	
@@ -310,14 +314,14 @@ public class Combobox extends Textbox {
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
 		s.defaultWriteObject();
-		final Comboitem ci = getSelectedItem();
-		final int idx = ci != null ? getItems().indexOf(ci) : -1;
-		s.writeInt(idx);
+
+		s.writeInt(getSelectedIndex());
 	}
 	
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
+
 		final int idx = s.readInt();
 		if (idx > -1 && getItemCount() > idx)
 			_selItem = getItemAtIndex(idx);
@@ -338,9 +342,8 @@ public class Combobox extends Textbox {
 		}
 
 		public void selectItemsByClient(Set selItems) {
-			if (selItems != null && !selItems.isEmpty()){
-				_selItem = (Comboitem)selItems.iterator().next();
-			} else _selItem = null;			
+			_selItem = selItems != null && !selItems.isEmpty()?
+				(Comboitem)selItems.iterator().next(): null;
 		}
 	}
 }
