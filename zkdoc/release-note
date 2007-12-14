@@ -39,6 +39,7 @@ ZK 3.0.1
   1849884: A way to retrieve the build identifier
 
 * Bugs:
+	1844609: Failed if an event is processed too long
   1841816: Some error of Developer's Guide
   1839246: More reliable handling of Ajax requests
   1828044: When header is invisible, whole column should be disappeared
