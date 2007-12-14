@@ -96,6 +96,7 @@ ZK 3.0.1
   1848501: Splitter fail to go back to right position
   1849239: Listbox.InsertBefore() not correct if with listhead
   1849838: Components with fulfill failed to serialize
+  1850550: Popup doesn't work in Toolbarbutton
 
 * Upgrade Notes:
   + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
