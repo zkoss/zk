@@ -367,12 +367,7 @@ zkDtbox.init = function (cmp) {
 
 	var btn = $e(cmp.id + "!btn");
 	if (btn) {
-		zk.listen(btn, "click", function (evt) {
-			if (!inp.disabled && !zk.dragging) { 
-				zkDtbox.onbutton(cmp);
-				Event.stop(evt);
-			}
-			});
+		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
 		zkWgt.fixDropBtn(cmp);
 	}
 };

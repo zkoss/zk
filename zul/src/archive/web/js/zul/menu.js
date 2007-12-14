@@ -75,7 +75,6 @@ zkMenu.onclick = function (evt) {
 	var cmp = $outer(Event.element(evt));
 	if ("Menu" == $type(cmp)) { //note: Menuit also go thru this method
 		zkMenu.open(cmp, getZKAttr(cmp, "top") == "true");
-		Event.stop(evt);
 	}
 };
 
@@ -207,7 +206,6 @@ zkMenuit.onclick = function (evt) {
 			zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]}, -1);
 		}
 		zkau.send({uuid: uuid, cmd: "onClick", data: null, ctl: true});
-		Event.stop(evt);
 	} else {
 		var t = anc.getAttribute("target");
 		if (anc.href && !zk.isNewWindow(anc.href, t))

@@ -271,10 +271,7 @@ zkDbbox.validate = function (cmp) {
 // button //
 zkButton = {};
 zkButton.init = function (cmp) {
-	zk.listen(cmp, "click", function (evt) {
-			zkau.onclick(evt);
-			Event.stop(evt);
-		});
+	zk.listen(cmp, "click", zkau.onclick);
 	zk.listen(cmp, "dblclick", zkau.ondblclick);
 		//we have to handle here since _onDocDClick won't receive it
 	zk.listen(cmp, "focus", zkau.onfocus);
@@ -287,10 +284,8 @@ zkTbtn.init = function (cmp) {
 				Event.stop(evt);
 				return;
 			}
-			if ("javascript:;" == cmp.href) {
-				zkau.onclick(evt);
-				Event.stop(evt);
-			} else {
+			if ("javascript:;" == cmp.href) zkau.onclick(evt);
+			else {
 				var t = cmp.getAttribute("target");
 				if (cmp.href && !zk.isNewWindow(cmp.href, t))
 					zk.progress();
