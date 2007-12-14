@@ -37,9 +37,11 @@ ZK 3.0.1
   1846042: AbstractChartModel shall be serializable
   1849768: Desktop shall not removed if zuml page included by, say, JSP
   1849884: A way to retrieve the build identifier
+  1850585: Pass request to DesktopInit
+  1850584: Pass request to SessionInit
 
 * Bugs:
-	1844609: Failed if an event is processed too long
+  1844609: Failed if an event is processed too long
   1841816: Some error of Developer's Guide
   1839246: More reliable handling of Ajax requests
   1828044: When header is invisible, whole column should be disappeared
@@ -99,6 +101,14 @@ ZK 3.0.1
   1850550: Popup doesn't work in Toolbarbutton
 
 * Upgrade Notes:
+  + The signatures of the init methods of org.zkoss.zk.ui.util.DesktopInit
+    and SessionInit are changed.
+    However, it is backward compatible if you prefer not to re-compile your codes.
+  + The signatures of the newSession method of
+    org.zkoss.zk.ui.sys.UiFactory is changed.
+    However, it is backward compatible if you prefer not to re-compile your codes.
+  + The constructors of org.zkoss.zk.ui.http.SimpleSession, SerializableSession
+    and org.zkoss.zk.ui.impl.DesktopImpl are changed.
   + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
     Use org.zkoss.zk.au.http.AuWriter instead.
   + The execUpdate methods of the org.zkoss.zk.ui.sys.UiEngine are changed.
