@@ -147,8 +147,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * If null or empty is specified, it means not available.
 	 * @param deviceType the device type.
 	 * If null or empty is specified, "ajax" is assumed.
+	 * @since 3.0.1
 	 */
-	public DesktopImpl(WebApp wapp, String updateURI, String path, String deviceType) {
+	public DesktopImpl(WebApp wapp, String updateURI, String path,
+	String deviceType, Object request) {
 		if (updateURI == null || wapp == null)
 			throw new IllegalArgumentException("null");
 
@@ -188,7 +190,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					new StringBuffer(12).append("g"), dc.getNextKey()).toString();
 			updateUuidPrefix();
 
-			config.invokeDesktopInits(this); //it might throw exception
+			config.invokeDesktopInits(this, request); //it might throw exception
 
 			dc.addDesktop(this); //add to cache after invokeDesktopInits
 

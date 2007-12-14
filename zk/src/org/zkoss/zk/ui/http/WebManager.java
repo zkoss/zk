@@ -300,11 +300,11 @@ public class WebManager {
 		return hsess != null ? getSession(ctx, request, hsess): null;
 	}
 	/*package*/ static final Session newSession(WebApp wapp,
-	HttpSession hsess, String remoteAddr, String remoteHost) {
+	HttpSession hsess, Object request) {
 		if (D.ON && log.debugable()) log.debug("Creating a new sess for "+hsess);
 
 		final Session sess = ((WebAppCtrl)wapp).getUiFactory()
-			.newSession(wapp, hsess, remoteAddr, remoteHost);
+			.newSession(wapp, hsess, request);
 		hsess.setAttribute(ATTR_SESS, sess);
 
 		//Note: we set timeout here, because HttpSession might have been created
@@ -318,8 +318,7 @@ public class WebManager {
 	HttpServletRequest request, HttpSession hsess) {
 		final Session sess = getSession(hsess);
 		return sess != null ? sess:
-			newSession(getWebManager(ctx).getWebApp(),
-				hsess, request.getRemoteAddr(), request.getRemoteHost());
+			newSession(getWebManager(ctx).getWebApp(), hsess, request);
 	}
 	/** Returns the session of the specified HTTP session, or null if n/a. */
 	/*package*/ static final Session getSession(HttpSession hsess) {

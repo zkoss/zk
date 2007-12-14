@@ -164,8 +164,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			PortletHttpSession.getInstance(request.getPortletSession());
 		final Session sess = WebManager.getSession(hsess);
 		return sess != null ? sess:
-			WebManager.newSession(
-				getWebManager().getWebApp(), hsess, null, null);
+			WebManager.newSession(getWebManager().getWebApp(), hsess, request);
 	}
 	/** Process a portlet request.
 	 * @return false if the page is not found.

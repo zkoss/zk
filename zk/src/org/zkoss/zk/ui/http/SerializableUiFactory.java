@@ -32,9 +32,7 @@ import org.zkoss.zk.ui.impl.AbstractUiFactory;
  * @author tomyeh
  */
 public class SerializableUiFactory extends AbstractUiFactory {
-	public Session newSession(WebApp wapp, Object nativeSess,
-	String clientAddr, String clientHost) {
-		return new SerializableSession(
-			wapp, (HttpSession)nativeSess, clientAddr, clientHost);
+	public Session newSession(WebApp wapp, Object nativeSess, Object request) {
+		return new SerializableSession(wapp, (HttpSession)nativeSess, request);
 	}
 }

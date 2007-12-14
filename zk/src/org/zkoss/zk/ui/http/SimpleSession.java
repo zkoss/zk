@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.io.Externalizable;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.util.logging.Log;
@@ -79,10 +80,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * Note: No need to serialize attributes since it is done by Web server.
 	 */
 	private Map _attrs;
-	/** The client's IP addression. */
-	private String _clientAddr;
-	/** The client's host name. */
-	private String _clientHost;
+	private String _remoteAddr, _remoteHost, _serverName, _localAddr, _localName;
 	private DesktopCache _cache;
 	/** Next available component uuid. */
 	private int _nextUuid;
@@ -91,8 +89,14 @@ public class SimpleSession implements Session, SessionCtrl {
 	private long _tmLastReq = System.currentTimeMillis();
 	private boolean _invalid;
 
-	public SimpleSession(WebApp wapp, HttpSession hsess, String clientAddr,
-	String clientHost) {
+	/** Constructor.
+	 *
+	 * @param request the original request causing this session to be created.
+	 * If HTTP and servlet, it is javax.servlet.http.HttpServletRequest.
+	 * If portlet, it is javax.portlet.RenderRequest.
+	 * @since 3.0.1
+	 */
+	public SimpleSession(WebApp wapp, HttpSession hsess, Object request) {
 		if (wapp == null || hsess == null)
 			throw new IllegalArgumentException();
 
@@ -100,12 +104,20 @@ public class SimpleSession implements Session, SessionCtrl {
 
 		_wapp = wapp;
 		_hsess = hsess;
-		_clientAddr = clientAddr;
-		_clientHost = clientHost;
+
+		if (request instanceof ServletRequest) {
+			final ServletRequest req = (ServletRequest)request;
+			_remoteAddr = req.getRemoteAddr();
+			_remoteHost = req.getRemoteHost();
+			_serverName = req.getServerName();
+			_localAddr = req.getLocalAddr();
+			_localName = req.getLocalName();
+		}
+
 		init();
 
 		final Configuration config = getWebApp().getConfiguration();
-		config.invokeSessionInits(this); //it might throw exception
+		config.invokeSessionInits(this, request); //it might throw exception
 
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
@@ -210,11 +222,30 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 	}
 
-	public String getClientAddr() {
-		return _clientAddr;
+	public String getRemoteAddr() {
+		return _remoteAddr;
 	}
+	public String getRemoteHost() {
+		return _remoteHost;
+	}
+	public String getServerName() {
+		return _serverName;
+	}
+	public String getLocalName() {
+		return _localName;
+	}
+	public String getLocalAddr() {
+		return _localAddr;
+	}
+	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteAddr}.
+	 */
+	public String getClientAddr() {
+		return getRemoteAddr();
+	}
+	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
+	 */
 	public String getClientHost() {
-		return _clientHost;
+		return getRemoteHost();
 	}
 
 	public void invalidateNow() {
@@ -293,8 +324,12 @@ public class SimpleSession implements Session, SessionCtrl {
 	 */
 	protected void writeThis(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
-		s.writeObject(_clientAddr);
-		s.writeObject(_clientHost);
+		s.writeObject(_remoteAddr);
+		s.writeObject(_remoteHost);
+		s.writeObject(_serverName);
+		s.writeObject(_localAddr);
+		s.writeObject(_localName);
+
 		s.writeObject(_cache);
 		s.writeInt(_nextUuid);
 
@@ -317,8 +352,12 @@ public class SimpleSession implements Session, SessionCtrl {
 	throws java.io.IOException, ClassNotFoundException {
 		init();
 
-		_clientAddr = (String)s.readObject();
-		_clientHost = (String)s.readObject();
+		_remoteAddr = (String)s.readObject();
+		_remoteHost = (String)s.readObject();
+		_serverName = (String)s.readObject();
+		_localAddr = (String)s.readObject();
+		_localName = (String)s.readObject();
+
 		_cache = (DesktopCache)s.readObject();
 		_nextUuid = s.readInt();
 

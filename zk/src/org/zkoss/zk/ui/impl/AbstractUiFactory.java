@@ -76,7 +76,8 @@ abstract public class AbstractUiFactory implements UiFactory {
 				} 
 			}
 		}
-		return new DesktopImpl(ri.getWebApp(), updateURI, path, deviceType);
+		return new DesktopImpl(ri.getWebApp(), updateURI, path, deviceType,
+			ri.getNativeRequest());
 	}
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path) {
 		return new PageImpl(pagedef);

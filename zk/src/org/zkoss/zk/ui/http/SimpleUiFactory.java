@@ -31,8 +31,7 @@ import org.zkoss.zk.ui.impl.AbstractUiFactory;
  */
 public class SimpleUiFactory extends AbstractUiFactory {
 	public Session newSession(WebApp wapp, Object nativeSess,
-	String clientAddr, String clientHost) {
-		return new SimpleSession(
-			wapp, (HttpSession)nativeSess, clientAddr, clientHost);
+	Object request) {
+		return new SimpleSession(wapp, (HttpSession)nativeSess, request);
 	}
 }

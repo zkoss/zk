@@ -70,13 +70,49 @@ public interface Session {
 	 */
 	public WebApp getWebApp();
 
-	/** Returns the Internet Protocol (IP) address of the client that creates
-	 * this session. 
+	/** Returns the fully qualified name of the client or the last proxy
+	 * that sent the first request creating this session.
+	 * If the engine cannot or chooses not to resolve the hostname
+	 * (to improve performance), this method returns the dotted-string form of
+	 * the IP address.
+	 * @since 3.0.1
+	 */
+	public String getRemoteHost();
+	/**  Returns the Internet Protocol (IP) address of the client or last
+	 * proxy that sent the first request creating this session.
+	 * @since 3.0.1
+	 */
+	public String getRemoteAddr();
+	/** Returns the host name of the server to which the first request was sent
+	 * (and created this session).
+	 * It is the value of the part before ":" in the Host header value, if any,
+	 * or the resolved server name, or the server IP address.
+	 *
+	 * @see #getLocalName
+	 * @since 3.0.1
+	 */
+	public String getServerName();
+	/** Returns the host name of the Internet Protocol (IP) interface
+	 * on which the first request was received (and creates this session).
+	 *
+	 * <p>Note: it is the host name defined in the server. To retrieve the name
+	 * in URL, use {@link #getServerName}.
+	 *
+	 * @see #getServerName
+	 * @since 3.0.1
+	 */
+	public String getLocalName();
+	/** Returns the Internet Protocol (IP) address of the interface on which
+	 * the first request was received (and creates this session).
+	 * @since 3.0.1
+	 */
+	public String getLocalAddr();
+	/** 
+	 * @deprecated As of release 3.0.1, replaced by {@link #getRemoteAddr}.
 	 */
 	public String getClientAddr();
-	/** Returns the fully qualified name of the client that creates
-	 * this session. If the engine cannot or chooses not to resolve the
-	 * hostname, this method returns the dotted-string form of the IP address.
+	/** 
+	 * @deprecated As of release 3.0.1, replaced by {@link #getRemoteHost}.
 	 */
 	public String getClientHost();
 

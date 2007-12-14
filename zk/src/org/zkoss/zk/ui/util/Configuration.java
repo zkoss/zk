@@ -698,9 +698,12 @@ public class Configuration {
 	 * and then invoke {@link SessionInit#init}.
 	 *
 	 * @param sess the session that is created
+	 * @param request the original request. If HTTP, it is
+	 * javax.servlet.http.HttlServletRequest.
 	 * @exception UiException to prevent a session from being created
+	 * @since 3.0.1
 	 */
-	public void invokeSessionInits(Session sess)
+	public void invokeSessionInits(Session sess, Object request)
 	throws UiException {
 		if (_sessInits.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
@@ -709,7 +712,13 @@ public class Configuration {
 			for (Iterator it = _sessInits.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((SessionInit)klass.newInstance()).init(sess);
+					final SessionInit fn = (SessionInit)klass.newInstance();
+					try {
+						fn.init(sess, request);
+					} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
+						klass.getMethod("init", new Class[] {Session.class})
+						  	.invoke(fn, new Object[] {sess});
+					}
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 					//Don't intercept; to prevent the creation of a session
@@ -754,9 +763,12 @@ public class Configuration {
 	 * and then invoke {@link DesktopInit#init}.
 	 *
 	 * @param desktop the desktop that is created
+	 * @param request the original request. If HTTP, it is
+	 * javax.servlet.http.HttlServletRequest.
 	 * @exception UiException to prevent a desktop from being created
+	 * @since 3.0.1
 	 */
-	public void invokeDesktopInits(Desktop desktop)
+	public void invokeDesktopInits(Desktop desktop, Object request)
 	throws UiException {
 		if (_dtInits.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
@@ -765,7 +777,13 @@ public class Configuration {
 			for (Iterator it = _dtInits.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((DesktopInit)klass.newInstance()).init(desktop);
+					final DesktopInit fn = (DesktopInit)klass.newInstance();
+					try {
+						fn.init(desktop, request);
+					} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
+						klass.getMethod("init", new Class[] {Desktop.class})
+						  	.invoke(fn, new Object[] {desktop});
+					}
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 					//Don't intercept; to prevent the creation of a session
