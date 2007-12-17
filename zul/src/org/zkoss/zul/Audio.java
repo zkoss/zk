@@ -165,8 +165,7 @@ public class Audio extends XulElement {
 	}
 	private void updateSrc() {
 		invalidate();
-		//IE won't work if we only change the src attribute
-		//smartUpdate("src", getEncodedSrc());
+			//IE won't work if we only change the src attribute
 	}
 	/** Returns the content set by {@link #setContent}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.

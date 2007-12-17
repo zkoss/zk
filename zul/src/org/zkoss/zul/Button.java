@@ -118,7 +118,7 @@ public class Button extends LabelImageElement {
 			href = null;
 		if (!Objects.equals(_href, href)) {
 			_href = href;
-			smartUpdate("z.href", getEncodedHref());
+			smartUpdateDeferred("z.href", new EncodedHref()); //Bug 1850895
 		}
 	}
 
@@ -209,5 +209,11 @@ public class Button extends LabelImageElement {
 	 */
 	public boolean isChildable() {
 		return false;
+	}
+
+	private class EncodedHref implements org.zkoss.zk.ui.util.DeferredValue {
+		public String getValue() {
+			return getEncodedHref();
+		}
 	}
 }
