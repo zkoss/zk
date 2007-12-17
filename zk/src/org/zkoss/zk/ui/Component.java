@@ -26,6 +26,7 @@ import java.io.IOException;
 
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.au.AuResponse;
 
@@ -562,6 +563,22 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @param value the new value. If null, it means removing the property.
 	 */
 	public void smartUpdate(String attr, String value);
+	/** Smart-updates a property with a deferred value.
+	 * A deferred value is used to encapsulate a value that shall be retrieved
+	 * only in the rendering phase.
+	 * In other words, {@link DeferredValue#getValue} won't be called until
+	 * the rendering phase. On the other hand, this method is usually called
+	 * in the event processing phase.
+	 *
+	 * <p>For some old application servers (example, Webshpere 5.1),
+	 * {@link Execution#encodeURL} cannot be called in the event processing
+	 * thread. So, the developers have to use {@link DeferredValue}
+	 * or disable the use of the event processing thread
+	 * (by use of <code>disable-event-thread</code> in zk.xml).
+	 *
+	 * @since 2.4.2
+	 */
+	public void smartUpdateDeferred(String attr, DeferredValue value);
 	/** Causes a response (aka., a command) to be sent to the client.
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response

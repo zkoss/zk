@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
+import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -843,6 +844,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 	public void smartUpdate(String attr, String value) {
+		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
+	}
+	/** Smart-updates a property with a deferred value.
+	 * A deferred value is used to encapsulate a value that shall be retrieved
+	 * only in the rendering phase.
+	 *
+	 * @since 2.4.2
+	 */
+	public void smartUpdateDeferred(String attr, DeferredValue value) {
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
 	/** A special smart-update that update a value in int.

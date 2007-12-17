@@ -37,9 +37,9 @@ import org.zkoss.zk.ui.Page;
  * @author tomyeh
  */
 public class AuResponse {
-	private final String _cmd;
+	protected String _cmd;
 	private final Object _depends;
-	private final String[] _data;
+	protected String[] _data;
 
 	/** Constructs a component-independent response.
 	 */
@@ -97,12 +97,12 @@ public class AuResponse {
 
 	/** Returns the command of this response (never null).
 	 */
-	public final String getCommand() {
+	public String getCommand() {
 		return _cmd;
 	}
 	/** Returns the associated data of this response (might be null).
 	 */
-	public final String[] getData() {
+	public String[] getData() {
 		return _data;
 	}
 
@@ -122,6 +122,8 @@ public class AuResponse {
 		return this == o;
 	}
 	public String toString() {
+		//Don't call getCommand and getData since it causes
+		//AuSetDeferredAttribute to evaluate the deferred value
 		final StringBuffer sb =
 			new StringBuffer(60).append("[cmd=").append(_cmd);
 		if (_data != null && _data.length > 0) {

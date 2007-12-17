@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 
@@ -91,6 +92,14 @@ public interface UiEngine {
 	 * in the same execution with the same attr will override the previous one.
 	 */
 	public void addSmartUpdate(Component comp, String attr, String value);
+	/** Smart updates an attribute of a component with a deferred value.
+	 * A deferred value is used to encapsulate a value that shall be retrieved
+	 * only in the rendering phase.
+	 *
+	 * @since 2.4.2
+	 * @see Component#smartUpdateDeferred(String, DeferredValue)
+	 */
+	public void addSmartUpdate(Component comp, String attr, DeferredValue value);
 	/** Adds a response which will be sent to client at the end
 	 * of the execution.
 	 * Called when {@link Component#response} is called.
