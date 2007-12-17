@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
@@ -187,10 +188,30 @@ import org.zkoss.zk.au.out.*;
 	 * execution
 	 */
 	public void addSmartUpdate(Component comp, String attr, String value) {
+		final Map respmap = getAttrRespMap(comp, attr);
+		if (respmap != null)
+			respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
+	}
+	/** Smart updates an attribute of a component with a deferred value.
+	 * A deferred value is used to encapsulate a value that shall be retrieved
+	 * only in the rendering phase.
+	 *
+	 * @since 3.0.1
+	 * @see Component#smartUpdate(String, DeferredValue);
+	 */
+	public void addSmartUpdate(Component comp, String attr, DeferredValue value) {
+		final Map respmap = getAttrRespMap(comp, attr);
+		if (respmap != null)
+			respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
+	}
+	/** Returns the response map for the specified attribute, or null if
+	 * nothing to do.
+	 */
+	private Map getAttrRespMap(Component comp, String attr) {
 		final Page page = comp.getPage();
 		if (_recovering || page == null || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp))
-			return; //nothing to do
+			return null; //nothing to do
 		if (_ending) throw new IllegalStateException("ended");
 
 		checkDesktop(comp);
@@ -198,8 +219,9 @@ import org.zkoss.zk.au.out.*;
 		Map respmap = (Map)_smartUpdated.get(comp);
 		if (respmap == null)
 			_smartUpdated.put(comp, respmap = new HashMap());
-		respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
+		return respmap;
 	}
+
 	/** Called to update (redraw) a component, when a component is moved.
 	 * If a component's page or parent is changed, this method need to be
 	 * called only once for the top one.
@@ -860,6 +882,13 @@ import org.zkoss.zk.au.out.*;
 			_timed = timed;
 			if (value != null)
 				_response = new AuSetAttribute(comp, name, value);
+			else
+				_response = new AuRemoveAttribute(comp, name);
+		}
+		private TimedValue(int timed, Component comp, String name, DeferredValue value) {
+			_timed = timed;
+			if (value != null)
+				_response = new AuSetDeferredAttribute(comp, name, value);
 			else
 				_response = new AuRemoveAttribute(comp, name);
 		}
