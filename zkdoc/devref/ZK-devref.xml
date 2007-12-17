@@ -9,26 +9,7 @@
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
-<para>
-<graphic fileref="">2
-			
-		</graphic>
-</para>
-<para>SIMPLY RICH</para>
-<para>ZKTM</para>
-<para>The Developer's Reference</para>
-<para>Version 3.0.1</para>
-<para>December 2007</para>
-<para>Potix Corporation</para>
-<para>Revision 86</para>
-<para/>
-<para/>
-<para>Copyright © Potix Corporation. All rights reserved.</para>
-<para>The material in this document is for information only and is subject to change without notice. While reasonable efforts have been made to assure its accuracy, Potix Corporation assumes no liability resulting from errors or omissions in this document, or from the use of the information contained herein.</para>
-<para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
-<para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
-<para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
-<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para>
+
 <chapter>
 <title>1. Introduction</title>
 <para>Welcome to ZK, the simplest way to make Web applications rich.</para>
@@ -1580,7 +1561,9 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="FormatInputElement"><title>FormatInputElement</title>
+<para/>
+<para/>
+<para/></sect3></sect2><sect2 id="FormatInputElement"><title>FormatInputElement</title>
 <para>A skeletal implementation for an input box with format. . </para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.FormatInputElement</code>
@@ -1704,7 +1687,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="HeaderElement"><title>HeaderElement</title>
+<para/></sect3></sect2><sect2 id="HeaderElement"><title>HeaderElement</title>
 <para>A skeletal implementation for a header.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.HeaderElement</code>
@@ -1892,7 +1875,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="HeadersElement"><title>HeadersElement</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="HeadersElement"><title>HeadersElement</title>
 <para>A skeletal implementation for headers, the parent of a group of <code>HeaderElement</code>.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.HeadersElement</code>
@@ -1996,7 +1980,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="HtmlBasedComponent"><title>HtmlBasedComponent</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="HtmlBasedComponent"><title>HtmlBasedComponent</title>
 <para>A skeletal implementation for HTML based components. It simplifies to implement methods common to HTML based components.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.HtmlBasedComponent</code>
@@ -2382,7 +2367,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -2408,7 +2393,42 @@
 <para>
 <code>org.zkoss.zul.InputElement</code>
 </para></sect3><sect3><title>Supported Events</title>
-<para>*NONE</para></sect3><sect3><title>Properties</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Event Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onOK</code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="KeyEvent">org.zkoss.zk.ui.event.KeyEvent</link>
+</para>
+<para>
+<link linkend="DropEvent">
+<code>Denotes user has pressed the </code>
+</link>
+<link linkend="DropEvent">
+<code>ENTER</code>
+</link>
+<link linkend="DropEvent">
+<code> key.</code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -2899,7 +2919,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="LayoutRegion"><title>LayoutRegion</title>
+<para/></sect3></sect2><sect2 id="LayoutRegion"><title>LayoutRegion</title>
 <para>This class represents a region in a layout manager. </para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zkex.zul.LayoutRegion</code>
@@ -3801,7 +3821,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="Auxhead"><title>Auxhead</title>
+</informaltable></sect3></sect2><sect2 id="Auxhead"><title>Auxhead</title>
 <para>Used to define a collection of auxiliary headers (<code>Auxheader</code>).</para>
 <para>
 <graphic fileref="images/auxheader.png">2
@@ -3890,7 +3910,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Auxheader"><title>Auxheader</title>
+<para/></sect3></sect2><sect2 id="Auxheader"><title>Auxheader</title>
 <para>An auxiliary header.</para>
 <para>
 <graphic fileref="images/auxheader.png">2
@@ -4389,7 +4409,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Bandpopup"><title>Bandpopup</title>
+</informaltable></sect3></sect2><sect2 id="Bandpopup"><title>Bandpopup</title>
 <para>The popup that belongs to a <code>Bandbox</code> instance.</para>
 <para>Developer usually listen to the <code>onOpen</code> event that is sent to <code>Bandbox</code> and then creates proper components as children of this component. </para>
 <programlisting>        &lt;bandboxid="bd"&gt;        <inlinegraphic fileref="images/bandbox-2.png" align="right"/>&#13;        &lt;bandpopup&gt;        &#13;                &lt;vbox&gt;                &#13;            &lt;hbox&gt;Search&lt;textbox/&gt;&lt;/hbox&gt;            &#13;            &lt;listboxwidth="200px"            &#13;            onSelect="bd.value=self.selectedItem.label;bd.closeDropdown();"&gt;            &#13;            &lt;listhead&gt;            &#13;                    &lt;listheaderlabel="Name"/&gt;                    &#13;                    &lt;listheaderlabel="Description"/&gt;                    &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="John"/&gt;                    &#13;                    &lt;listcelllabel="CEO"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Joe"/&gt;                    &#13;                    &lt;listcelllabel="Engineer"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Mary"/&gt;                    &#13;                    &lt;listcelllabel="Supervisor"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;        &lt;/listbox&gt;        &#13;        &lt;/vbox&gt;        &#13;        &lt;/bandpopup&gt;        &#13;    &lt;/bandbox&gt;    &#13;</programlisting><sect3><title>Class Name</title>
@@ -4516,7 +4536,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Calendar"><title>Calendar</title>
+</informaltable></sect3></sect2><sect2 id="Calendar"><title>Calendar</title>
 <para>A calendar displays a 'flat' calendar and allows user to select a day from it.</para>
 <para>
 <graphic fileref="images/calendar.png">2
@@ -4717,7 +4737,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Borderlayout"><title>Borderlayout</title>
+</informaltable></sect3></sect2><sect2 id="Borderlayout"><title>Borderlayout</title>
 <para>The layout component is a nested component. The parent component is <code>borderlayout</code>, and its children components include north, south, center, west, and east. The combination of children components of <code>borderlayout</code> is free.</para>
 <para>
 <graphic fileref="images/layout.jpg">2
@@ -4856,7 +4876,7 @@
 <para/>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -5082,7 +5102,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -5422,7 +5442,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -5906,7 +5926,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -5944,7 +5964,8 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Caption"><title>Caption</title>
+<para/>
+<para/></sect3></sect2><sect2 id="Caption"><title>Caption</title>
 <para>A header for a <code>Groupbox</code>. It may contain either a text label, using <code>LabelElement.setLabel(java.lang.String)</code>, or child elements for a more complex caption.</para>
 <para/>
 <para>
@@ -6163,7 +6184,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -6207,7 +6228,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="Center"><title>Center</title>
+</informaltable></sect3></sect2><sect2 id="Center"><title>Center</title>
 <para>This component is a center region. The default class of CSS is specified "layout-region-center".</para>
 <para/>
 <para>
@@ -7286,7 +7307,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -7331,7 +7352,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Checkbox"><title>Checkbox</title>
+<para/></sect3></sect2><sect2 id="Checkbox"><title>Checkbox</title>
 <para>A checkbox.</para>
 <para>
 <graphic fileref="images/checkbox.png">2
@@ -7622,7 +7643,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -8001,7 +8022,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -8150,7 +8171,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -8187,7 +8208,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="Combobox"><title>Combobox</title>
+</informaltable></sect3></sect2><sect2 id="Combobox"><title>Combobox</title>
 <para>Components: <code>combobox</code> and <code>comboitem</code>.</para>
 <para>A <code>combobox</code> is a special text box that embeds a drop-down list. With <code>comboboxes</code>, users are allowed to select from a drop-down list, in addition to entering the text manually. </para>
 <para>
@@ -8355,6 +8376,24 @@
 <para>It is useful to implement load-on-demand by listening to</para>
 <para>the <code>onOpen</code> event, and creating components when the</para>
 <para>first time the component is opened.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onSelect</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="SelectEvent">
+<code>org.zkoss.zul.event.SelectEvent</code>
+</link>
+</para>
+<para>
+<code>Description:</code>
+<code> Represents an event cause by user's the list selection is changed at the client. </code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title>Properties</title>
@@ -8704,7 +8743,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -8748,7 +8787,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="Comboitem"><title>Comboitem</title>
+</informaltable></sect3></sect2><sect2 id="Comboitem"><title>Comboitem</title>
 <para>An item of a combo box.</para>
 <para>
 <graphic fileref="images/combobox.png">2
@@ -8872,7 +8911,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -9717,7 +9756,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2><title>Div</title>
+<para/></sect3></sect2><sect2><title>Div</title>
 <para>The same as <code>HTML DIV </code>tag.</para>
 <para>An extension. It has the same effect as<code> &lt;h:div xmlns:h="http://www.w3.org/1999/xhtml"&gt;</code>. Note: a Window without title and caption has the same visual effect as <code>Div</code>, but <code>Div</code> doesn't implement <code>IdSpace</code>. In other words, <code>Div</code> won't affect the uniqueness of identifiers. </para>
 <para>
@@ -9845,7 +9884,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="East"><title>East</title>
+</informaltable></sect3></sect2><sect2 id="East"><title>East</title>
 <para>This component is a east region. The default class of CSS is specified "layout-region-east".</para>
 <para/>
 <para>
@@ -10003,7 +10042,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Flash"><title>Flash</title>
+</informaltable></sect3></sect2><sect2 id="Flash"><title>Flash</title>
 <para>A generic flash component.</para>
 <para>
 <graphic fileref="images/flash.png">2
@@ -10367,7 +10406,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Foot"><title>Foot</title>
+<para/></sect3></sect2><sect2 id="Foot"><title>Foot</title>
 <para>Defines a set of footers (Footer) for a grid (Grid).</para>
 <para>
 <graphic fileref="images/grid-2.png">2
@@ -10511,7 +10550,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Grid"><title>Grid</title>
+<para/></sect3></sect2><sect2 id="Grid"><title>Grid</title>
 <para>Components: <code>grid, columns, column, rows and row.</code>
 </para>
 <para>A <code>grid</code> contains components that are aligned in rows like tables. Inside a <code>grid</code>, you declare two things, the <code>columns</code>, that define the header and <code>column</code> attributes, and the <code>rows</code>, that provide the content. To declare a set of rows, use the <code>rows</code> component, which should be a child element of <code>grid</code>. Inside that you should add <code>row</code> components, which are used for each <code>row</code>. Inside the <code>row</code> element, you should place the content that you want inside that <code>row</code>. Each child is a <code>column</code> of the specific <code>row</code>. Similarly, the <code>columns</code> are declared with the <code>columns</code> component, which should be placed as a child element of the <code>grid</code>. Unlike <code>row</code> is used to hold the content of each <code>row</code>, <code>column</code> declares the common attributes of each <code>column</code>, such as the width and alignment, and and optional headers, i.e., label and/or image. </para>
@@ -10994,7 +11033,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -11329,7 +11368,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -11518,7 +11557,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -11655,7 +11694,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -11785,7 +11824,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -11938,7 +11977,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -12493,7 +12532,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -12533,7 +12572,7 @@
 		</graphic>
 </para>
 <programlisting>&lt;window title="listbox demo" border="normal"&gt;&#13;        &lt;listbox id="box" width="250px"&gt;        &#13;            &lt;listhead sizable="true"&gt;            &#13;                &lt;listheader label="name" sort="auto"/&gt;                &#13;                &lt;listheader label="gender" sort="auto"/&gt;                &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Mary"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="John"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Jane"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Henry"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listfoot &gt;            &#13;                &lt;listfooter&gt;&lt;label value="This is footer1"/&gt;&lt;/listfooter&gt;                &#13;                &lt;listfooter&gt;&lt;label value="This is footer2"/&gt;&lt;/listfooter&gt;                &#13;            &lt;/listfoot&gt;            &#13;                &lt;/listbox&gt;                &#13;&lt;/window&gt;&#13;</programlisting>
-<para>Listbox has two molds: <code>default</code> and <code>select</code>. If the select mold is used, the HTML's SELECT tag is generated instead.</para><sect3><title/></sect3><sect3><title>Class Name</title>
+<para>Listbox has two molds: <code>default</code> and <code>select</code>. If the select mold is used, the HTML's SELECT tag is generated instead.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Listbox</code>
 </para></sect3><sect3><title>Supported Child Components</title>
@@ -13115,7 +13154,7 @@
 <para/>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -13365,7 +13404,7 @@
 <para/>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -13459,7 +13498,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -13650,7 +13689,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -13744,7 +13783,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -14131,7 +14170,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -14463,7 +14502,7 @@
 <para/>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -14493,7 +14532,303 @@
 </para>
 </entry>
 </row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2 id="Longbox"><title>Longbox</title>
+<para>A long<code>box</code> is used to let users input long data.</para>
+<para>
+<graphic fileref="images/longbox.jpg">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;window title="Longbox Demo" border="normal" width="200px"&gt;&#13;    long box:&lt;longbox/&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Longbox</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE </para></sect3><sect3><title>Supported Events</title>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Event Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onChange</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="InputEvent">
+<code>org.zkoss.zk.ui.event.InputEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes the content of an input component has been modified by the user.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onChanging</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="InputEvent">
+<code>org.zkoss.zk.ui.event.InputEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes that user is changing the content of an input component. Notice that the component's content (at the server) won't be changed until <code>onChange</code> is received. Thus, you have to invoke the <code>getValue </code>method in the <code>InputEvent </code>class to retrieve the temporary value.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onSelection</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="SelectionEvent">
+<code>org.zkoss.zk.ui.event.SelectionEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes that user is selecting a portion of the text of an input component. You can retrieve the start and end position of the selected text by use of the <code>getStart</code> and <code>getEnd</code> methods. </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onFocus</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes when a component gets the focus. Remember event listeners execute at the server, so the focus at the client might be changed when the event listener for <code>onFocus</code> got executed.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onBlur</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes when a component loses the focus. Remember event listeners execute at the server, so the focus at the client might be changed when the event listener for <code>onBlur </code>got executed.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onCreate</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="CreateEvent">
+<code>org.zkoss.ui.zk.ui.event.CreateEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes a component is created when rendering a ZUML page.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onDrop</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="DropEvent">
+<code>org.zkoss.ui.zk.ui.event.DropEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes another component is dropped to the component that receives this event.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>val</code>
+<code>ue</code>
+</para>
+</entry>
+<entry>
+<para>Sets the value. </para>
+</entry>
+<entry>
+<para>
+<code>Long</code>
+</para>
+</entry>
+</row></tbody></tgroup>
 </informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Values</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>intValue() </code>
+</para>
+</entry>
+<entry>
+<para>Returns the value in int. </para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>longValue() </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Returns the value in long. </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>long</code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="NumberInputElement">
+<code>org.zkoss.zul.NumberInputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="FormatInputElement">
+<code>org.zkoss.zul.FormatInputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="InputElement">
+<code>org.zkoss.zul.InputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.imp.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Menu"><title>Menu</title>
 <para>
 <code>An element, much like a button, that is placed on a menu bar. When the user clicks the menu element, the child </code>
@@ -15394,7 +15729,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="North"><title>North</title>
+</informaltable></sect3></sect2><sect2 id="North"><title>North</title>
 <para>This component is a north region. The default class of CSS is specified "layout-region-north".</para>
 <para/>
 <para>
@@ -15789,7 +16124,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -15820,7 +16155,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Popup"><title>Popup</title>
+<para/></sect3></sect2><sect2 id="Popup"><title>Popup</title>
 <para>
 <code>A container that is displayed as a popup. The popup window does not have any special frame. Popups can be displayed when an element is clicked by assigning the id of the popup to either the</code>
 <code> XulElement.setPopup(java.lang.String), XulElement.setContext(java.lang.String) or XulElement.setTooltip(java.lang.String) attribute of the element. </code>
@@ -15915,7 +16250,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="Progressmeter"><title>Progressmeter</title>
+</informaltable></sect3></sect2><sect2 id="Progressmeter"><title>Progressmeter</title>
 <para>A progress meter is a bar that indicates how much of a task has been completed. The value property must be in the range between 0 and 100.</para>
 <para>
 <graphic fileref="images/progressmeter.png">2
@@ -16924,7 +17259,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+</informaltable></sect3><sect3><title>Inherited From </title>
 <informaltable frame="all">
 <tgroup cols="1">
 <thead>
@@ -16954,7 +17289,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="Script"><title>Script</title>
+</informaltable></sect3></sect2><sect2 id="Script"><title>Script</title>
 <para>The script component is used to specify the script codes running at the browser. Notice that, unlike zscript, the script codes are running at the browser. They are usually written in JavaScript which is supported by the most of browsers. The simplest format is as follows.</para>
 <para>
 <graphic fileref="images/script.png">2
@@ -17335,7 +17670,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title>Space</title>
+</informaltable></sect3></sect2><sect2><title>Space</title>
 <para>Space is a <code>Separator</code> with the orient default to "horizontal".</para>
 <para>In other words, &lt;space&gt; is equivalent to <code>&lt;separator orient="horizontal"&gt;</code> </para>
 <para>
@@ -17398,7 +17733,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="South"><title>South</title>
+<para/></sect3></sect2><sect2 id="South"><title>South</title>
 <para>This component is a south region. The default class of CSS is specified "layout-region-south".</para>
 <para/>
 <para>
@@ -19354,7 +19689,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title>Timebox</title>
+</informaltable></sect3></sect2><sect2><title>Timebox</title>
 <para>An edit box for holding a time (a java.util.Date Object , but only Hour &amp; Minute are used.</para>
 <para>
 <graphic fileref="images/timebox.png">2
@@ -19514,7 +19849,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Timer"><title>Timer</title>
+<para/></sect3></sect2><sect2 id="Timer"><title>Timer</title>
 <para>Timer is a special component that is invisible. It fires one or more org.zkoss.zk.ui.event.Event after a specified delay. </para>
 <para/>
 <para>Notice that the timer won't fire any event until it is attached to a page. </para>
@@ -22674,7 +23009,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title/></sect2><sect2 id="West"><title>West</title>
+</informaltable></sect3></sect2><sect2 id="West"><title>West</title>
 <para>This component is a west region. The default class of CSS is specified "layout-region-west".</para>
 <para/>
 <para>
@@ -24376,7 +24711,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="OpenEvent"><title>OpenEvent</title>
+<para/></sect3></sect2><sect2 id="OpenEvent"><title>OpenEvent</title>
 <para>Represents an event cause by user's openning or closing something at the client.</para>
 <para>Note: it is a bit confusing but <code>Events.ON_CLOSE</code> is sent when user clicks a close button. It is a request to ask the server to close a window, a tab or others. If the server ignores the event, nothing will happen at the client. By default, the component is detached when receiving this event.</para>
 <para>On the other hand,<code> Events.ON_OPEN</code> (with <code>OpenEvent</code>) is a notification. It is sent to notify the server that the client has opened or closed something. And, the server can not prevent the client from opening or closing. </para>
@@ -24449,7 +24784,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="PageSizeEvent"><title>PageSizeEvent</title>
+<para/></sect3></sect2><sect2 id="PageSizeEvent"><title>PageSizeEvent</title>
 <para>Used to notify that the page size is changed (by the user), or by paginal (such as <code>Paging</code>).</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.event.PageSizeEvent</code>
@@ -24589,7 +24924,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="ScrollEvent"><title>ScrollEvent</title>
+<para/></sect3></sect2><sect2 id="ScrollEvent"><title>ScrollEvent</title>
 <para>Represents an event caused by that user is scrolling or has scrolled at the client. </para>
 <para>
 <code>ScrollEvent</code> will be sent wih name as "<code>onScroll</code>" after <code>setCurposByClient(int)</code> is called to notify application developers that it is called by user (rather than by codes).</para>
@@ -24711,7 +25046,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/></sect2><sect2 id="SelectionEvent"><title>SelectionEvent</title>
+<para/></sect3></sect2><sect2 id="SelectionEvent"><title>SelectionEvent</title>
 <para>Represents an event cause by user's the list selection is changed at the client.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.SelectionEvent</code>
@@ -25135,7 +25470,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="Constrained"><title>Constrained</title>
+</informaltable></sect3></sect2><sect2 id="Constrained"><title>Constrained</title>
 <para>Decorates a component that its value is constrained by <link linkend="Constraint">
 <code>Constraint</code>
 </link>.</para><sect3><title>Interface Name</title>
@@ -25193,7 +25528,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Fileupload"><title>Fileupload</title>
+</informaltable></sect3></sect2><sect2 id="Fileupload"><title>Fileupload</title>
 <para>A fileupload dialog used to let user upload a file.The <code>fileupload</code> component is not a modal dialog. Rather, it is a component, so it is placed inline with other components.</para>
 <para>
 <graphic fileref="images/fileupload.png">2
@@ -25440,7 +25775,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="ListModel"><title>ListModel</title>
+</informaltable></sect3></sect2><sect2 id="ListModel"><title>ListModel</title>
 <para>This interface defines the methods that components like <link linkend="Listbox">
 <code>Listbox</code>
 </link> and <link linkend="Grid">
@@ -25530,7 +25865,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Messagebox"><title>Messagebox</title>
+</informaltable></sect3></sect2><sect2 id="Messagebox"><title>Messagebox</title>
 <para/>
 <para>It provides a set of utilities to show message boxes.</para>
 <para>It is typically used to alert users when an error occurs, or to prompt user for an decision.</para>
@@ -25676,7 +26011,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="RendererCtrl"><title>RendererCtrl</title>
+</informaltable></sect3></sect2><sect2 id="RendererCtrl"><title>RendererCtrl</title>
 <para>This interface defines the methods components like Listbox use to notify the renderer for several circumstance.</para>
 <para>Though <code>ListitemRenderer.render(org.zkoss.zul.Listitem, java.lang.Object)</code> is called one item a timer, a request might have several items to render. And, if the renderer implements this interface, <code>doTry()</code> will be called before any rendering, and <code>doFinally() </code>will be called after all rendering. If any exception occurs, <code>doCatch(java.lang.Throwable)</code> will be called.</para>
 <para>A typical use is to start a transaction and use it for rendering all items from the same request. </para><sect3><title>Interface Name</title>
@@ -25747,7 +26082,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="SimpleConstraint"><title>SimpleConstraint</title>
+</informaltable></sect3></sect2><sect2 id="SimpleConstraint"><title>SimpleConstraint</title>
 <para>A simple constraint that you could build based the predefined constants.</para><sect3><title>Interface Name</title>
 <para>
 <code> org.zkoss.zul.SimpleConstraint</code>
@@ -25864,7 +26199,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="SimpleListModel"><title>SimpleListModel</title>
+</informaltable></sect3></sect2><sect2 id="SimpleListModel"><title>SimpleListModel</title>
 <para>A simple implementation of <link linkend="ListModel">
 <code>ListModel</code>
 </link>.</para><sect3><title>Class Name</title>
@@ -25952,6 +26287,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/></sect3></sect2></sect1></chapter>
+
 <chapter>
 <title>Appendix A. WEB-INF/web.xml</title>
 <para>To add ZK a Web application, you have to add servlets, listeners and a optional filter to web.xml.</para><sect1><title>ZK Loader</title>
