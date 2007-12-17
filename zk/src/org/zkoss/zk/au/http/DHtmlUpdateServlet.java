@@ -38,6 +38,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ClassWebResource;
@@ -123,19 +124,29 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final String pi = Https.getThisPathInfo(request);
 		//if (log.finerable()) log.finer("Path info: "+pi);
 
+		final Session sess = WebManager.getSession(_ctx, request, false);
 		final boolean withpi = pi != null && pi.length() != 0;
-		final boolean bWebRes = withpi && pi.startsWith(ClassWebResource.PATH_PREFIX);
-		final Session sess = WebManager.getSession(_ctx, request, bWebRes);
+		if (withpi && pi.startsWith(ClassWebResource.PATH_PREFIX)) {
+			final Object old = sess != null?
+				I18Ns.setup(sess, request, response, "UTF-8"):
+				Charsets.setup(request, response, "UTF-8");
+			try {
+				getClassWebResource()
+					.service(request, response,
+						pi.substring(ClassWebResource.PATH_PREFIX.length()));
+			} finally {
+				if (sess != null) I18Ns.cleanup(request, old);
+				else Charsets.cleanup(request, old);
+			}
+			return; //done
+		}
+
 		if (sess == null)
 			return; //Bug 1849088: rmDesktop might be sent after invalidate
 
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
-			if (bWebRes) {
-				getClassWebResource()
-					.service(request, response,
-						pi.substring(ClassWebResource.PATH_PREFIX.length()));
-			} else if (withpi) {
+			if (withpi) {
 				if (pi.startsWith("/upload")) {
 					Uploads.process(sess, _ctx, request, response);
 				} else if (pi.startsWith("/view")) {
