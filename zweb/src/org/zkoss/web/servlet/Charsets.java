@@ -65,7 +65,7 @@ public class Charsets {
 	 * try {
 	 *	  ....
 	 * } finally {
-	 *    cleanup(old);
+	 *    cleanup(request, old);
 	 * }
 	 *
 	 * <p>It is OK to call this method multiple time, since it is smart
