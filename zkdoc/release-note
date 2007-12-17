@@ -2,6 +2,7 @@
 ZK 2.4.2
 * Features:
   1820771: Make ZK independent of JSP
+  1852144: A way to delay eval of a property value to rendering phase
 
 * Bugs:
   1839246: More reliable handling of Ajax requests
@@ -13,6 +14,7 @@ ZK 2.4.2
   1845026: adding draggable to tree breaks event processing order
   1847708: OnBookmarkChanged doesn't send
   1849076: NoSuchElementException in UiVisualizer
+  1850895: encodeURL causes IllegalStateException with Websphere 5.1.1  
 
 * Upgrade Note:
   + The pageContext variable in EL expressions becomes an instance of
