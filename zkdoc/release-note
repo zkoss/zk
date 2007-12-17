@@ -39,6 +39,7 @@ ZK 3.0.1
   1849884: A way to retrieve the build identifier
   1850585: Pass request to DesktopInit
   1850584: Pass request to SessionInit
+  1852144: A way to delay eval of a property value to rendering phase
 
 * Bugs:
   1844609: Failed if an event is processed too long
@@ -99,6 +100,7 @@ ZK 3.0.1
   1849239: Listbox.InsertBefore() not correct if with listhead
   1849838: Components with fulfill failed to serialize
   1850550: Popup doesn't work in Toolbarbutton
+  1850895: encodeURL causes IllegalStateException with Websphere 5.1.1
 
 * Upgrade Notes:
   + The signatures of the init methods of org.zkoss.zk.ui.util.DesktopInit
