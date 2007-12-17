@@ -30,6 +30,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.xel.AttributesMap;
 
 import org.zkoss.zk.ui.WebApp;
@@ -110,8 +111,12 @@ public class SimpleSession implements Session, SessionCtrl {
 			_remoteAddr = req.getRemoteAddr();
 			_remoteHost = req.getRemoteHost();
 			_serverName = req.getServerName();
-			_localAddr = req.getLocalAddr();
-			_localName = req.getLocalName();
+			if (Servlets.isServlet24()) {
+				_localAddr = req.getLocalAddr();
+				_localName = req.getLocalName();
+			} else {
+				_localAddr = _localName = "";
+			}
 		}
 
 		init();
