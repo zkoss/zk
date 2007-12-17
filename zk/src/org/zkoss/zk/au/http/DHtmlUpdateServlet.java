@@ -102,6 +102,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected long getLastModified(HttpServletRequest request) {
 		final String pi = Https.getThisPathInfo(request);
 		if (pi != null && pi.startsWith(ClassWebResource.PATH_PREFIX)
+		&& pi.indexOf('*') < 0 //language independent
 		&& !Servlets.isIncluded(request)) {
 			//If a resource processor is registered for the extension,
 			//we assume the content is dynamic
