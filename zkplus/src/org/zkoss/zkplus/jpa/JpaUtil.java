@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.Sessions;
 /**
  * This class is used to create and hold open EntityManagerFactory objects within a Java EE environment.
  * @author Jeff
- * @since 3.1.0
+ * @since 3.0.1
  */
 public class JpaUtil {
 
