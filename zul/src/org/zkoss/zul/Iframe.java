@@ -129,7 +129,8 @@ public class Iframe extends XulElement {
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			if (_media == null) smartUpdate("src", getEncodedSrc());
+			if (_media == null)
+				smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 				//_src is meaningful only if _media is null
 		}
 	}
@@ -152,7 +153,7 @@ public class Iframe extends XulElement {
 		if (media != _media) {
 			_media = media;
 			if (_media != null) ++_medver; //enforce browser to reload
-			smartUpdate("src", getEncodedSrc());
+			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the content set by {@link #setContent}.
@@ -220,6 +221,12 @@ public class Iframe extends XulElement {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			return _media;
+		}
+	}
+
+	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+		public String getValue() {
+			return getEncodedSrc();
 		}
 	}
 }

@@ -147,7 +147,8 @@ public class Image extends XulElement {
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			if (_image == null) smartUpdate("src", getEncodedSrc());
+			if (_image == null)
+				smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 				//_src is meaningful only if _image is null
 		}
 	}
@@ -170,7 +171,7 @@ public class Image extends XulElement {
 		if (image != _image) {
 			_image = image;
 			if (_image != null) ++_imgver; //enforce browser to reload image
-			smartUpdate("src", getEncodedSrc());
+			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the content set by {@link #setContent}.
@@ -270,6 +271,12 @@ public class Image extends XulElement {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			return _image;
+		}
+	}
+
+	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+		public String getValue() {
+			return getEncodedSrc();
 		}
 	}
 }
