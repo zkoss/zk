@@ -4,6 +4,7 @@ ZK 3.0.2 Freshly
 
 * Bugs:
   1852313: 'offsetWidth' is null or not a number
+  1852895: Combo getSelectedItem()
   
 	--------
 ZK 3.0.1
