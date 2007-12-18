@@ -1,4 +1,11 @@
 	--------
+ZK 3.0.2
+* Features:
+
+* Bugs:
+  1852313: 'offsetWidth' is null or not a number
+  
+	--------
 ZK 3.0.1
 * Features:  
   1836202: A generic composer to realize MVC approach more easily
