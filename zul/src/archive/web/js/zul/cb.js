@@ -313,8 +313,8 @@ zkCmbox._setsel = function (item, sel) {
 
 /** Returns the text contained in the specified item. */
 zkCmbox.getLabel = function (item) {
-	return item && item.cells && item.cells.length > 1 ?
-		zk.getElementValue(item.cells[1]): ""; 
+	return item && item.cells && item.cells.length > 1 && item.cells[1].firstChild 
+		&& item.cells[1].firstChild.data ? item.cells[1].firstChild.data : ""; 
 };
 
 zkCmbox.open = function (pp, hilite) {
