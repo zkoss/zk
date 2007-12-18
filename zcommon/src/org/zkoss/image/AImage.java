@@ -84,7 +84,7 @@ public class AImage implements Image, java.io.Serializable {
 	/** Constructs an image with a file name.
 	 */
 	public AImage(String filename) throws IOException {
-		this(filename, new FileInputStream(filename));
+		this(new File(filename));
 	}
 	/** Constructs an image with a file.
 	 */
