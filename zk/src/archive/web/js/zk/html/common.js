@@ -1504,6 +1504,7 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 	for (var j = 0, k = srcrows.length; j < k; j++) {
 		var s = srcrows.shift();
 		var z = zk.cellIndex(s);
+		if (dst.cells.length <= z) continue; // Bug #1852313
 		var d = dst.cells[z];
 		var wd = 0;
 		if (s.colSpan > 1) {
