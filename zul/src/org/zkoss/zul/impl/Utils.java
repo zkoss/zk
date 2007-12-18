@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
+import org.zkoss.lang.Strings;
+
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
@@ -135,5 +139,32 @@ public class Utils {
 				sb.append(ary[j]);
 		}
 		return sb.toString();
+	}
+
+	/** Returns the encoded URL for the specified content, or empty
+	 * the component doesn't belong to any desktop.
+	 *
+	 * @since 3.0.2
+	 */
+	public static String getEncodedURI(AbstractComponent comp,
+	int version, String name, String format) {
+		final Desktop desktop = comp.getDesktop();
+		if (desktop == null) return ""; //no avail at client
+
+		final StringBuffer sb = new StringBuffer(64).append('/');
+		Strings.encode(sb, version);
+		if (name != null || format != null) {
+			sb.append('/');
+			boolean bExtRequired = true;
+			if (name != null && name.length() != 0) {
+				sb.append(name.replace('\\', '/'));
+				bExtRequired = name.lastIndexOf('.') < 0;
+			} else {
+				sb.append(comp.getId());
+			}
+			if (bExtRequired && format != null)
+				sb.append('.').append(format);
+		}
+		return desktop.getDynamicMediaURI(comp, sb.toString()); //already encoded
 	}
 }

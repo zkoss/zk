@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
 import org.zkoss.util.media.Media;
 import org.zkoss.image.Image;
 
@@ -140,26 +139,8 @@ public class LabelImageElement extends LabelElement {
 	 * <p>Used only for component template, not for application developers.
 	 */
 	private String getContentSrc() {
-		final Desktop desktop = getDesktop();
-		if (desktop == null) return ""; //no avail at client
-
-		final StringBuffer sb = new StringBuffer(64).append('/');
-		Strings.encode(sb, _imgver);
-		final String name = _image.getName();
-		final String format = _image.getFormat();
-		if (name != null || format != null) {
-			sb.append('/');
-			boolean bExtRequired = true;
-			if (name != null && name.length() != 0) {
-				sb.append(name);
-				bExtRequired = name.lastIndexOf('.') < 0;
-			} else {
-				sb.append(getId());
-			}
-			if (bExtRequired && format != null)
-				sb.append('.').append(format);
-		}
-		return desktop.getDynamicMediaURI(this, sb.toString()); //already encoded
+		return Utils.getEncodedURI(
+			this, _imgver, _image.getName(), _image.getFormat());
 	}
 
 	//-- ComponentCtrl --//

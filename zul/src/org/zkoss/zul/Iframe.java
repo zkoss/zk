@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
 import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
@@ -29,6 +28,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * Includes an inline frame.
@@ -168,26 +168,8 @@ public class Iframe extends XulElement {
 	 * Don't call this method unless _media is not null;
 	 */
 	private String getMediaSrc() {
-		final Desktop desktop = getDesktop();
-		if (desktop == null) return ""; //no avail at client
-
-		final StringBuffer sb = new StringBuffer(64).append('/');
-		Strings.encode(sb, _medver);
-		final String name = _media.getName();
-		final String format = _media.getFormat();
-		if (name != null || format != null) {
-			sb.append('/');
-			boolean bExtRequired = true;
-			if (name != null && name.length() != 0) {
-				sb.append(name);
-				bExtRequired = name.lastIndexOf('.') < 0;
-			} else {
-				sb.append(getId());
-			}
-			if (bExtRequired && format != null)
-				sb.append('.').append(format);
-		}
-		return desktop.getDynamicMediaURI(this, sb.toString()); //already encoded
+		return Utils.getEncodedURI(
+			this, _medver, _media.getName(), _media.getFormat());
 	}
 
 	//-- super --//
