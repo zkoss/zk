@@ -166,9 +166,7 @@ zkVld._errbox = function () {
 
 	cmp = $e(id);
 	if (cmp) {
-		var inp = $real(cmp);
-		cmp._vdOldStyle = {bgc:inp.style.backgroundColor};
-		inp.style.backgroundColor = "#FEF1E9";
+		zk.addClass($real(cmp), "text-invalid");
 	}
 
 	if (!zk.isRealVisible(cmp)) return; //don't show the erro box
@@ -234,9 +232,8 @@ zkVld.closeErrbox = function (box, remaingError) {
 
 	if (!remaingError) {
 		var cmp = $e(id);
-		if (cmp && cmp._vdOldStyle) {
-			$real(cmp).style.backgroundColor = cmp._vdOldStyle.bgc;
-			cmp._vdOldStyle = null;
+		if (cmp) {
+			zk.rmClass($real(cmp), "text-invalid");
 		}
 	}
 
