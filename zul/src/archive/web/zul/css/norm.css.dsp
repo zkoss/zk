@@ -9,6 +9,11 @@ button, input.button, input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
+input, textarea {
+	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	border: 1px solid #D1D7F4;
+	padding: 1px 3px;
+}
 body {
 	height:100%; margin: 0px; padding: 0px 5px;
 }
