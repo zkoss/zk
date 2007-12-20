@@ -357,7 +357,8 @@ elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm
 
 	cd $maindir
-	cp zkdoc/*/ZK-quickstart*.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
+	cp zkdoc/*/ZK-quickstart*.pdf zkdoc/dev*/*.odt /tmp/zk/$docnm
+	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
 
 	echo Ouput ${docnm}.zip
