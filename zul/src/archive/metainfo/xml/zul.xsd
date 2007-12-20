@@ -258,6 +258,7 @@
 			<xs:element ref="menupopup" />
 			<xs:element ref="paging" />
 			<xs:element ref="popup" />
+			<xs:element ref="radio" />
 			<xs:element ref="radiogroup" />
 			<xs:element ref="separator" />
 			<xs:element ref="slider" />
@@ -1254,10 +1255,7 @@
 	<!-- radiogroup -->
 	<xs:element name="radiogroup" type="radiogroupType" />
 	<xs:complexType name="radiogroupType">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="baseGroup" />
-			<xs:element ref="radio" />
-		</xs:choice>
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
