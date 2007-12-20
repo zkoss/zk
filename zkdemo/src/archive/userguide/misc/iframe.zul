@@ -33,7 +33,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
 <window title="ifram demo" border="normal">
-	Hello, World!
 	<iframe src="http://www.google.com" width="95%"/>
 </window>
 				]]></attribute>
