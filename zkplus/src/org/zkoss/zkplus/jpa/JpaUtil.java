@@ -42,7 +42,7 @@ public class JpaUtil {
 
 	private static final Log log = Log.lookup(JpaUtil.class);
 
-	public static final String CONFIG = "JPA.PersistenceUnitName";
+	public static final String CONFIG = "JpaUtil.PersistenceUnitName";
 
 	public static final String JPA_EMF_MAP = "org.zkoss.zkplus.jpa.EmfMap";
 
