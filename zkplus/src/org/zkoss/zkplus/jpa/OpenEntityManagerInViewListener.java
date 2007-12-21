@@ -49,7 +49,6 @@ public class OpenEntityManagerInViewListener implements ExecutionCleanup,
 			{
 				if (errs == null || errs.isEmpty()) {
 					log.debug("JPA: Committing the database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
-					System.out.println("JPA: Committing the database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
 					JpaUtil.getEntityManager().getTransaction().commit();
 				}else
 				{
@@ -59,7 +58,6 @@ public class OpenEntityManagerInViewListener implements ExecutionCleanup,
 			}finally{
 				if(JpaUtil.getEntityManager().isOpen()){
 					log.debug("JPA: close a database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
-					System.out.println("JPA: close a database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
 					JpaUtil.getEntityManager().close();
 				}else
 					log.debug("JPA: the database transaction is not open: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
@@ -72,7 +70,6 @@ public class OpenEntityManagerInViewListener implements ExecutionCleanup,
 		
 		if(parent==null){
 			log.debug("JPA: Starting a database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
-			System.out.println("JPA: Starting a database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
 			JpaUtil.getEntityManager().getTransaction().begin();
 		}
 	}

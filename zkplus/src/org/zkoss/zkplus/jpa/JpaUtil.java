@@ -186,8 +186,7 @@ public class JpaUtil {
 	 * created a new one and return Else, return the EntityManagerFactory
 	 * directly.
 	 */
-	/* package */static EntityManagerFactory initEntityManagerFactory(
-			String puName, Map priority) {
+	/* package */static EntityManagerFactory initEntityManagerFactory(String puName, Map priority) {
 		EntityManagerFactory emf;
 		if (priority == null) {
 			emf = (EntityManagerFactory) getEmfMap().get(puName);
@@ -206,8 +205,7 @@ public class JpaUtil {
 	 * If EntityManager with persistence name puName is not found in Map,
 	 * created a new one and return Else, return the EntityManager directly.
 	 */
-	/* package */static EntityManager initEntityManger(String puName,
-			Map priority) {
+	/* package */static EntityManager initEntityManger(String puName,Map priority) {
 		EntityManager em;
 		if (priority == null) {
 			em = (EntityManager) getEmMap().get(puName);
@@ -253,7 +251,6 @@ public class JpaUtil {
 			} else
 				emf = Persistence.createEntityManagerFactory(puName, priority);
 		} catch (Exception ex) {
-			System.out.println("Initial EntityManagerFactory creation failed. for persistence unit name: "+ puName + "==");
 			log.error("Initial EntityManagerFactory creation failed." + ex);
 			throw new ExceptionInInitializerError(ex);
 		}
