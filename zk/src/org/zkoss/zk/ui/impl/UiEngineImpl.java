@@ -758,8 +758,8 @@ public class UiEngineImpl implements UiEngine {
 				log.error(ex);
 			}
 
-			if (rque.endWithRequest())
-				responses.add(new AuEcho(desktop));
+			if (rque.endWithRequest()) //stop accept another request
+				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
 			else
 				doneReqIds = rque.clearRequestIds();
 

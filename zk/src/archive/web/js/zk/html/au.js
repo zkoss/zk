@@ -300,7 +300,11 @@ zkau._parseCmds = function (xml) {
 		cmds.push(cmd = {cmd: zk.getElementValue(cmd)});
 
 		switch (cmd.datanum = data ? data.length: 0) {
-		default: //5 or more
+		default: //7 or more
+			cmd.dt6 = zk.getElementValue(data[6]);
+		case 6:
+			cmd.dt5 = zk.getElementValue(data[5]);
+		case 5:
 			cmd.dt4 = zk.getElementValue(data[4]);
 		case 4:
 			cmd.dt3 = zk.getElementValue(data[3]);
@@ -597,7 +601,7 @@ zkau._doResps = function (cmds) {
 		var cmd = cmds.shift();
 		try {
 			zkau.process(cmd.cmd, cmd.datanum,
-				cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4);
+				cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4, cmd.dt5, cmd.dt6);
 		} catch (e) {
 			zk.error(mesg.FAILED_TO_PROCESS+cmd.cmd+"\n"+e.message+"\n"+cmd.dt0+"\n"+cmd.dt1);
 			throw e;
@@ -609,11 +613,11 @@ zkau._doResps = function (cmds) {
 };
 /** Process a command.
  */
-zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
+zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4, dt5, dt6) {
 	//I. process commands that dt0 is not UUID
 	var fn = zkau.cmd0[cmd];
 	if (fn) {
-		fn.call(zkau, dt0, dt1, dt2, dt3, dt4);
+		fn.call(zkau, dt0, dt1, dt2, dt3, dt4, dt5, dt6);
 		return;
 	}
 
@@ -627,7 +631,7 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 
 	fn = zkau.cmd1[cmd];
 	if (fn) {
-		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4);
+		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4, dt5, dt6);
 		return;
 	}
 
