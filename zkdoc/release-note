@@ -1,6 +1,7 @@
 	--------
 ZK 3.0.2 Freshly
 * Features:
+  1855653: Optimize Live Data with Listbox&Grid
   1853745: A way to customize input&textarea's invalid look with CSS
   1857363: A way to invoke event listener after updating client
 
@@ -10,6 +11,9 @@ ZK 3.0.2 Freshly
   1852895: Combo getSelectedItem()
   1853902: Radiogroup in schema does not allow content other then radio
   
+* Upgrade Notes:
+  + We improve the performance of Live Data threes times faster than ZK 3.0.0 and ZK 3.0.1
+from 7~8 sec to 1~2 sec.
 	--------
 ZK 3.0.1
 * Features:  
