@@ -86,6 +86,7 @@ zk.Selectable.prototype = {
 		//_headtbl might be null, while other must be NOT null
 		this.body = $e(this.id + "!body");
 		if (this.body) {
+			this.body.style.overflow = "";
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 			if (this.bodytbl) {
 				var bds = this.bodytbl.tBodies;
@@ -104,7 +105,7 @@ zk.Selectable.prototype = {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 
 			var bs = this.bodytbl.tBodies;
-			for (var j = 0; j < bs.length; ++j)
+			for (var j = 0, bl = bs.length; j < bl; ++j)
 				if (bs[j].id) {
 					this.bodyrows = bs[j].rows;
 					break;
@@ -195,14 +196,12 @@ zk.Selectable.prototype = {
 			};
 		}
 		
-		
 		if (isLater && this.qcells.length
 		&& this.headtbl && this.headtbl.rows.length
 		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
 			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
 		} else {
 			setTimeout("zkSel._calcSize('"+this.id+"')", 150); // Bug #1813722
-			this.stripe();
 		}
 		this.qcells.length = 0;
 		this._render(155); //prolong a bit since calSize might not be ready
@@ -221,14 +220,14 @@ zk.Selectable.prototype = {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
-			this.foot = this.foottbl = this.fnSubmit = this.qcells = null;
+			this.foot = this.foottbl = this.fnSubmit = this.qcells = this._focus = null;
 			//in case: GC not works properly
 	},
 	/** Stripes the rows. */
 	stripe: function () {
 		var scOdd = getZKAttr(this.element, "scOddRow");
 		if (!scOdd || !this.bodyrows) return;
-		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
+		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
 			if ($visible(row)) {
 				zk.addClass(row, scOdd, !even);
@@ -373,7 +372,6 @@ zk.Selectable.prototype = {
 		//not to change selection if dragging (selected or not)
 		if (zk.dragging /*&& this._isSelected(row)*/)
 			return;
-
 		if (checkmark) {
 			if (this._isMultiple()) {
 				this.toggleSelect(row, target.checked);
@@ -409,7 +407,6 @@ zk.Selectable.prototype = {
 
 			//since row might was selected, we always enfoce focus here
 			this._focusToAnc(row);
-
 			//if (evt) Event.stop(evt);
 			//No much reason to eat the event.
 			//Oppositely, it disabled popup (bug 1578659)
@@ -435,7 +432,7 @@ zk.Selectable.prototype = {
 
 	/** Re-setfocus to the anchor who shall be in focus. */
 	_refocus: function () {
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (this._isFocus(r)) this._focusToAnc(r);
 		}
@@ -470,7 +467,7 @@ zk.Selectable.prototype = {
 			}
 
 			var rows = this.bodyrows;
-			for (var j = 0; j < rows.length; ++j)
+			for (var j = 0, rl = rows.length; j < rl; ++j)
 				this._changeSelect(rows[j], sels[rows[j].id] == true);
 			return true;
 		case "z.vflex":
@@ -559,7 +556,7 @@ zk.Selectable.prototype = {
 		}
 
 		var focusfound = false, rowfound = false;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (focusfound) {
 				this._changeSelect(r, true);
@@ -608,6 +605,7 @@ zk.Selectable.prototype = {
 	 */
 	_selectOne: function (row, toFocus) {
 		row = $e(row);
+		
 		var selId = this._getSelectedId();
 
 		if (this._isMultiple()) {
@@ -635,7 +633,6 @@ zk.Selectable.prototype = {
 				if (row && toFocus) this._unsetFocusExcept(row);
 			}
 		}
-
 		//we always invoke _changeSelect to change focus
 		if (row) {
 			this._changeSelect(row, true);
@@ -674,7 +671,7 @@ zk.Selectable.prototype = {
 	/** Changes the focus status, and return whether it is changed. */
 	_setFocus: function (row, toFocus) {
 		if (!this._isValid(row)) return false;
-
+		this._focus = row;
 		var changed = this._isFocus(row) != toFocus;
 		if (changed) {
 			this._fixAnc(row, toFocus);
@@ -716,7 +713,7 @@ zk.Selectable.prototype = {
 	 */
 	_unsetSelectAllExcept: function (row) {
 		var changed = false;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (r != row && this._changeSelect(r, false))
 				changed = true;
@@ -727,13 +724,7 @@ zk.Selectable.prototype = {
 	 * is changed.
 	 */
 	_unsetFocusExcept: function (row) {
-		var changed = false;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
-			var r = this.bodyrows[j];
-			if (r != row && this._setFocus(r, false))
-				changed = true;
-		}
-		return changed;
+		return this._focus && this._focus != row ? this._setFocus(this._focus, false) : false;
 	},
 
 	/** Renders listitems that become visible by scrolling.
@@ -741,7 +732,7 @@ zk.Selectable.prototype = {
 	_render: function (timeout) {
 		setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
 	},
-	_renderNow: function () {
+	_renderNow: function () {		
 		var rows = this.bodyrows;
 		if (!rows || !rows.length || getZKAttr(this.element, "model") != "true") return;
 
@@ -749,7 +740,7 @@ zk.Selectable.prototype = {
 		//height might diff (due to different content)
 		var data = "";
 		var min = this.body.scrollTop, max = min + this.body.offsetHeight;
-		for (var j = 0; j < rows.length; ++j) {
+		for (var j = 0, rl = rows.length; j < rl; ++j) {
 			var r = rows[j];
 			if ($visible(r)) {
 				var top = zk.offsetTop(r);
@@ -766,21 +757,20 @@ zk.Selectable.prototype = {
 	},
 
 	/** Calculates the size. */
-	_calcSize: function () {
-		this._calcHgh();
+	_calcSize: function () {		
+		this._calcHgh();	
 		if (this.paging) {// Bug #1826101
 			if (this.bodytbl && this.bodytbl.rows.length) {
 				var head;
-				for (var j = 0; j < this.bodytbl.rows.length; j++) {
+				for (var j = 0, rl = this.bodytbl.rows.length; j < rl; j++) {
 					if ($type(this.bodytbl.rows[j]) == "Lhrs") {
 						head = this.bodytbl.rows[j];
 						break;
 					}
 				}
 				if (head) {
-					for (var j = 0; j < head.cells.length; j++) {
-						var d = head.cells[j];
-						var cave = d.firstChild;
+					for (var j = 0, hl = head.cells.length; j < hl; j++) {
+						var d = head.cells[j], cave = d.firstChild;
 						if (cave) {
 							var wd =  d.style.width;							
 							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
@@ -794,6 +784,7 @@ zk.Selectable.prototype = {
 			return; //nothing to adjust since single table
 		}
 
+		
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
 		//IE: element's width will be extended to fit body
@@ -819,17 +810,15 @@ zk.Selectable.prototype = {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			} else
-				this.bodytbl.style.width = "";
-
+				this.bodytbl.style.width = "";		
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
 			if (this.headtbl.rows.length) {
-				var head;
-				var j =0
-				for(; j < this.headtbl.rows.length; j++) {
-					var type = $type(this.headtbl.rows[j]);
+				var head, rows = this.headtbl.rows;
+				for(var j = 0, l = rows.length; j < l; j++) {
+					var type = $type(rows[j]);
 					if (type == "Lhrs" || type == "Tcols") {
-						head = this.headtbl.rows[j];
+						head = rows[j];
 						break;
 					}
 				}
@@ -843,13 +832,12 @@ zk.Selectable.prototype = {
 						//Note: we cannot use display="none" (offsetWidth won't be right)
 					for (var j = head.cells.length; --j >= 0;)
 						src.appendChild(document.createElement("TD"));					
-					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);						
+					rows[0].parentNode.insertBefore(src, rows[0]);						
 				}
-				var row = this.headtbl.rows[0];
-				var cells = row.cells;
-				for (var k =0, z = 0; k < cells.length; k++) {
-					var s = cells[k], d = head.cells[k];
-					var wd =  d.style.width;							
+				var row = rows[0], cells = row.cells, k = 0, l = cells.length;
+				
+				for (; k < l; k++) {
+					var s = cells[k], d = head.cells[k], wd = d.style.width;							
 					if (!wd || wd == "auto" || wd.indexOf('%') > -1) // Bug #1822564
 						d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
 					
@@ -857,7 +845,7 @@ zk.Selectable.prototype = {
 					if (zk.isVisible(d))
 						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
 					else s.style.display = "none";
-				} 			
+				}	
 			}
 			if (this.foottbl && this.foottbl.rows.length)
 				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
@@ -865,13 +853,13 @@ zk.Selectable.prototype = {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
 				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this); //assign foot's col width
-		} 
+		}
 	},
 	/** Returns the visible row at the specified index. */
 	_visiRowAt: function (index) {
 		if (index >= 0) {
 			var rows = this.bodyrows;
-			for (var j = 0; j < rows.length; ++j) {
+			for (var j = 0, rl = rows.length; j < rl; ++j) {
 				var r = rows[j];
 				if ($visible(r) && --index < 0)
 					return r;
@@ -880,19 +868,22 @@ zk.Selectable.prototype = {
 		return null;
 	},
 	_calcHgh: function () {
-		var rows = this.bodyrows;
-		var len = 0, lastVisiRow, firstVisiRow;
-		for (var j = 0; j < rows.length; ++j) { //tree might collapse some items
+		var rows = this.bodyrows;		
+		var hgh = this.element.style.height, isHgh = hgh && hgh != "auto" && hgh.indexOf('%') < 0,
+			len = 0, lastVisiRow, firstVisiRow, midVisiRow, vs = this.size();
+		for (var j = 0, rl = rows.length; j < rl; ++j) { //tree might collapse some items
 			var r = rows[j];
 			if ($visible(r)) {
-				if (!firstVisiRow) firstVisiRow = r;
-				lastVisiRow = r;
 				++len;
+				if (!firstVisiRow) firstVisiRow = r;
+				if (!isHgh && vs - 1 === j && vs <= len) { 
+					midVisiRow = r;
+					break;
+				}
+				lastVisiRow = r;
 			}
 		}
-
-		var hgh = this.element.style.height;
-		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
+		if (isHgh) {
 			hgh = $int(hgh);
 			if (hgh) {
 				hgh -= this._headHgh(0);
@@ -921,7 +912,8 @@ zk.Selectable.prototype = {
 				this.realsize(sz);
 				this.body.style.height = hgh + "px";
 				
-				if (this.body.offsetHeight) {} // bug #1812001
+				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+				if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
 				// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 				// and IE7 at initializing phase.
 				return; //done
@@ -956,8 +948,8 @@ zk.Selectable.prototype = {
 			if (!hgh) {
 				if (!len) hgh = this._headHgh(20) * sz;
 				else if (sz <= len) {
-					var r = this._visiRowAt(sz - 1);
-					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
+					//var r = this._visiRowAt(sz - 1); disabled by Jumper
+					hgh = zk.offsetTop(midVisiRow) + zk.offsetHeight(midVisiRow);
 				} else {
 					hgh = zk.offsetTop(lastVisiRow) + zk.offsetHeight(lastVisiRow);
 					hgh = Math.ceil((sz * hgh) / len);
@@ -967,7 +959,8 @@ zk.Selectable.prototype = {
 
 			this.body.style.height = hgh + "px";
 			
-			if (this.body.offsetHeight) {} // bug #1812001
+			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 			// and IE7 at initializing phase.
 		} else {
@@ -1012,7 +1005,7 @@ zk.Selectable.prototype = {
 	/** Sels all items (don't notify server and change focus, because it is from server). */
 	_selectAll: function (notify) {
 		var rows = this.bodyrows;
-		for (var j = 0; j < rows.length; ++j)
+		for (var j = 0, rl = rows.length; j < rl; ++j)
 			this._changeSelect(rows[j], true);
 
 		this._setSelectedId(rows.length ? rows[0].id: null);
@@ -1023,7 +1016,7 @@ zk.Selectable.prototype = {
 	_sendSelect: function () {
 		//To reduce # of bytes to send, we use a string instead of array.
 		var data = "";
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (this._isSelected(r))
 				data += "," + this.getItemUuid(r);
@@ -1051,7 +1044,7 @@ zk.Selectable.prototype = {
 	/** Fixes z.selId to the first selected item. */
 	_fixSelelectedId: function () {
 		var selId = null;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (this._isSelected(r)) {
 				selId = r.id;
@@ -1094,7 +1087,7 @@ zk.Selectable.prototype = {
 		var nm = getZKAttr(this.element, "name");
 		if (!nm || !this.form) return;
 
-		for (var j = 0; j < this.form.elements.length; ++j){
+		for (var j = 0, fl = this.form.elements.length; j < fl; ++j){
 			var el = this.form.elements[j];
 			if (getZKAttr(el, "hiddenBy") == this.id) {
 				zk.remove(el);
@@ -1102,7 +1095,7 @@ zk.Selectable.prototype = {
 			}
 		}
 
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (this._isSelected(r))
 				setZKAttr(
@@ -1363,7 +1356,7 @@ zkLisel.onchange = function (evtel) {
 		//To reduce # of bytes to send, we use a string instead of array.
 		data = "";
 		var opts = cmp.options;
-		for (var j = 0; j < opts.length; ++j) {
+		for (var j = 0, ol = opts.length; j < ol; ++j) {
 			var opt = opts[j];
 			if (opt.selected)
 				data += ","+opt.id;

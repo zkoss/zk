@@ -1317,7 +1317,7 @@ public class Listbox extends XulElement {
 					if (ofs < 0) ofs = 0;
 				}
 			} else {
-				pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows: 20;
+				pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows + 5 : 20;
 				ofs = 0;
 				//we don't know # of visible rows, so a 'smart' guess
 				//It is OK since client will send back request if not enough

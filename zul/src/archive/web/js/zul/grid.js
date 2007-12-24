@@ -48,7 +48,7 @@ zk.Grid.prototype = {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 
 			var bs = this.bodytbl.tBodies;
-			for (var j = 0; j < bs.length; ++j)
+			for (var j = 0, bl = bs.length; j < bl; ++j)
 				if (bs[j].id) {
 					this.bodyrows = bs[j].rows;
 					break;
@@ -102,8 +102,7 @@ zk.Grid.prototype = {
 		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
 			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
 		} else {
-			setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722			
-			this.stripe(); 
+			setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722		
 		}
 		this.qcells.length = 0;
 		this._render(155); //prolong a bit since calSize might not be ready
@@ -123,7 +122,9 @@ zk.Grid.prototype = {
 				- (this.foot ? this.foot.offsetHeight : 0) : 0); // Bug #1835369
 			if (h < 0) h = 0;
 			this.body.style.height = h + "px";
-			if (this.body.offsetHeight) {} // bug #1812001
+						
+			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 			// and IE7 at initializing phase.
 		} else {
@@ -170,7 +171,7 @@ zk.Grid.prototype = {
 		var scOdd = getZKAttr(this.element, "scOddRow");
 		if (!scOdd || !this.bodyrows) return;
 
-		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
+		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
 			if ($visible(row)) {
 				zk.addClass(row, scOdd, !even);
@@ -185,17 +186,16 @@ zk.Grid.prototype = {
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 		if (this.paging) { // Bug #1826101
 			if (this.bodytbl && this.bodytbl.rows.length) {
-				var head;
-				for (var j = 0; j < this.bodytbl.rows.length; j++) {
-					if ($type(this.bodytbl.rows[j]) == "Cols") {
-						head = this.bodytbl.rows[j];
+				var head, rows = this.bodytbl.rows;
+				for (var j = 0, bl = rows.length; j < bl; j++) {
+					if ($type(rows[j]) == "Cols") {
+						head = rows[j];
 						break;
 					}
 				}
 				if (head) {
-					for (var j = 0; j < head.cells.length; j++) {
-						var d = head.cells[j];
-						var cave = head.cells[j].firstChild;
+					for (var j = 0, hl = head.cells.length; j < hl; j++) {
+						var d = head.cells[j], cave = head.cells[j].firstChild;
 						if (cave) {
 							var wd =  d.style.width;							
 							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
@@ -220,11 +220,10 @@ zk.Grid.prototype = {
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + "px";
 			if (this.headtbl.rows.length) {
-				var head;
-				var j =0
-				for(; j < this.headtbl.rows.length; j++)
-					if ($type(this.headtbl.rows[j]) == "Cols") {
-						head = this.headtbl.rows[j];
+				var head, j =0, rows = this.headtbl.rows, hl = rows.length;
+				for(; j < hl; j++)
+					if ($type(rows[j]) == "Cols") {
+						head = rows[j];
 						break;
 					}
 				zk.cpCellWidth(head, this.bodyrows, this);	
@@ -237,11 +236,10 @@ zk.Grid.prototype = {
 						//Note: we cannot use display="none" (offsetWidth won't be right)
 					for (var j = head.cells.length; --j >= 0;)
 						src.appendChild(document.createElement("TD"));
-					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);			
-				}			
-				var row = this.headtbl.rows[0];
-				var cells = row.cells;
-				for (var k =0, z = 0; k < cells.length; k++) {
+					rows[0].parentNode.insertBefore(src, rows[0]);			
+				}		
+				var row = rows[0], cells = row.cells, k = 0, l = cells.length;				
+				for (; k < l; k++) {
 					var s = cells[k], d = head.cells[k];
 					var wd =  d.style.width;							
 					if (!wd || wd == "auto" || wd.indexOf('%') > -1) // Bug #1822564
@@ -328,7 +326,7 @@ zk.Grid.prototype = {
 		//height might diff (due to different content)
 		var data = "";
 		var min = this.body.scrollTop, max = min + this.body.offsetHeight;
-		for (var j = 0; j < rows.length; ++j) {
+		for (var j = 0, rl = rows.length; j < rl; ++j) {
 			var r = rows[j];
 			if ($visible(r)) {
 				var top = zk.offsetTop(r);

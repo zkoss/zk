@@ -490,7 +490,7 @@ if (zk.ie && !zk.ie7) {
 			if (img.title) html += ' title="'+img.title+'"';
 
 			//process zk_xxx
-			for (var attrs = img.attributes, j = 0; j < attrs.length; ++j) {
+			for (var attrs = img.attributes, j = 0, al = attrs.length; j < al; ++j) {
 				var attr = attrs.item(j);
 				if (attr.name.startsWith("z."))
 					html += ' '+attr.name+'="'+attr.value+'"';

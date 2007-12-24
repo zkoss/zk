@@ -29,7 +29,7 @@ ${z:redraw(head, null)}
 	</table>
 	</div>
 </c:if>
-	<div id="${self.uuid}!body" class="grid-body">
+	<div id="${self.uuid}!body" class="grid-body" <c:if test="${!empty self.height}">style="height:${self.height}"</c:if>>
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
 	${z:redraw(self.rows, null)}
 	</table>

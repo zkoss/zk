@@ -138,12 +138,6 @@ public class Listcell extends LabelImageElement {
 	}
 
 	//-- super --//
-	/** Returns the width which the same as {@link #getListheader}'s width.
-	 */
-	public String getWidth() {
-		final Listheader listheader = getListheader();
-		return listheader != null ? listheader.getWidth(): null;
-	}
 	public void setWidth(String width) {
 		throw new UnsupportedOperationException("Set listheader's width instead");
 	}

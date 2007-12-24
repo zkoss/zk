@@ -174,6 +174,11 @@ public class Row extends XulElement {
 		return j;
 	}
 
+	protected String getRealSclass() {
+		final String sclx = (String) getParent().getAttribute("Z_STRIPE");
+		return super.getRealSclass() + sclx != null ? sclx : "";
+	}
+	
 	/** Returns the HTML attributes for the child of the specified index.
 	 */
 	public String getChildAttrs(int index) {

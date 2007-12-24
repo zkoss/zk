@@ -18,9 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="zu" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <tbody id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" items="${self.children}" begin="${self.visibleBegin}" end="${self.visibleEnd}">
+	${zu:setStripeClass(child)}	
 	${z:redraw(child, null)}
 	</c:forEach>
 </tbody>

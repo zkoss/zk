@@ -46,7 +46,7 @@ zkTxbox.onblur = function (evt) {
 		var pp2 = $e(uuid + "!cave");
 		var rows = pp2.rows;
 		var jfnd = -1;
-		for (var j = 0; j < rows.length; ++j) {			
+		for (var j = 0, rl = rows.length; j < rl; ++j) {			
 		var item = rows[j];
 			var txt = zkCmbox.getLabel(item).toLowerCase();
 			if (txt == inpval) {
@@ -444,7 +444,7 @@ zkCmbox._autoselback = function (uuid) {
 	var rows = pp2.rows;
 	if (!rows) return;
 
-	for (var j = 0; j < rows.length; ++j) {
+	for (var j = rows.length; --j >= 0;) {
 		var item = rows[j];
 		if (item.getAttribute("zk_hilite") == "true")
 			zkCmbox._selback(item);
@@ -484,7 +484,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 
 	//Identify the best matched item
 	var jfnd = -1, exact = !inpval, old;
-	for (var j = 0; j < rows.length; ++j) {
+	for (var j = 0, rl = rows.length; j < rl; ++j) {
 		var item = rows[j];
 		if (!exact) {
 			var txt = zkCmbox.getLabel(item).toLowerCase();
@@ -509,7 +509,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 	if (selback) {
 		if (jfnd < 0) {
 			if (rows.length) {
-				for (var i = 0; i < rows.length; i++) {
+				for (var i = 0, rl = rows.length; i < rl; i++) {
 					if (getZKAttr(rows[i], "disd") == "true") continue;
 					found = rows[i];
 					break;
@@ -528,7 +528,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 							break;
 						}
 					} else {
-						for (var i = jfnd + 1; i < rows.length ; i++) {
+						for (var i = jfnd + 1, rl = rows.length; i < rl; i++) {
 							if (getZKAttr(rows[i], "disd") == "true") continue;
 							jfnd = i;
 							break;

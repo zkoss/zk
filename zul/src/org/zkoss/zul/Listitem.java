@@ -72,7 +72,11 @@ public class Listitem extends XulElement {
 		final Listbox listbox = getListbox();
 		return listbox != null && listbox.inSelectMold();
 	}
-
+	
+	protected String getRealSclass() {
+		final String sclx = (String) getListbox().getAttribute("Z_STRIPE");
+		return super.getRealSclass() + sclx != null ? sclx : "";
+	}
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of getParent().getMaxlength();
 	 * Thus, it works only if the listbox's mold is "select".

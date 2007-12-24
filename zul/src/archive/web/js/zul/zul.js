@@ -47,7 +47,7 @@ zulHdrs.setAttr = function (cmp, nm, val) {
 		var cells = cmp.cells;
 		if (cells) {
 			var sizable = val == "true";
-			for (var j = 0; j < cells.length; ++j)
+			for (var j = cells.length; --j >= 0;)
 				zulHdr.setSizable(cells[j], sizable);
 		}
 	}
@@ -159,11 +159,11 @@ zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 			}
 		}
 	}
-	var head;
-	for(var j =0; j < meta.headtbl.rows.length; j++) {
-		var type = $type(meta.headtbl.rows[j]);
+	var head, rows = meta.headtbl.rows;
+	for(var j =0, rl = rows.length; j < rl; j++) {
+		var type = $type(rows[j]);
 		if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
-			head = meta.headtbl.rows[j];
+			head = rows[j];
 			break;
 		}
 	}
@@ -176,15 +176,13 @@ zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 		src.id = head.id + "!fake";
 		src.style.height = "0px";
 			//Note: we cannot use display="none" (offsetWidth won't be right)
-		for (var j = 0; j < head.cells.length; ++j)
+		for (var j = head.cells.length; --j >= 0;)
 			src.appendChild(document.createElement("TD"));					
 		meta.headtbl.rows[0].parentNode.insertBefore(src, meta.headtbl.rows[0]);						
 	}
-	var row = meta.headtbl.rows[0];
-	var cells = row.cells;
-	for (var k =0, z = 0; k < cells.length; k++) {
-		var s = cells[k], d = head.cells[k];
-		var w =  d.style.width;							
+	var row = rows[0], cells = row.cells;
+	for (var k = 0, cl = cells.length; k < cl; ++k) {
+		var s = cells[k], d = head.cells[k], w =  d.style.width;							
 		if (!w || w == "auto" || w.indexOf('%') > -1) {// Bug #1822564
 			d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
 			setZKAttr(d, "wd", "NaN"); // Bug #1823236
@@ -309,7 +307,7 @@ zulHdr._endsizing = function (cmp, evt) {
 		var table = $parentByTag(cmp, "TABLE");
 		var head;
 		
-		for(var j =0; j < table.rows.length; j++) {
+		for(var j =0, rl = table.rows.length; j < rl; j++) {
 			var type = $type(table.rows[j]);
 			if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
 				head = table.rows[j];
@@ -318,7 +316,7 @@ zulHdr._endsizing = function (cmp, evt) {
 		}
 		var cells = head.cells;
 		var total = 0;
-		for (var k = 0; k < cells.length; ++k)
+		for (var k = cells.length; --k >= 0;)
 			if (cells[k] != cmp) total += cells[k].offsetWidth;
 		var row = table.rows[0];
 		var cidx = zk.cellIndex(cmp);

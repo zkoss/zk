@@ -226,7 +226,7 @@ zkSplt._fixsz = function (cmp) {
 			cmp.style.width = parent.style.width = "8px";
 			var hgh = parent.clientHeight;
 			if (zk.safari) { //safari: each cell has diff height and tr's hgh is 0
-				for (var cells = parent.parentNode.cells, j = 0; j < cells.length; ++j) {
+				for (var cells = parent.parentNode.cells, j = cells.length; --j >= 0;) {
 					var h = cells[j].clientHeight;
 					if (h > hgh) hgh = h;
 				}

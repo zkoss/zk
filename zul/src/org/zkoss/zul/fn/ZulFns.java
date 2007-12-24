@@ -17,6 +17,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.fn;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Box;
 
@@ -48,5 +50,24 @@ public class ZulFns {
 	 */
 	public static final String getBoxChildOuterAttrs(Component child) {
 		return ((Box)child.getParent()).getChildOuterAttrs(child);
+	}
+	
+	/**
+	 * Sets the stripe CSS for each row.
+	 */
+	public static final void setStripeClass(Component child) {
+		if (child.isVisible()) {
+			final Component parent = child.getParent();
+			final String odd = (String)parent.getAttribute("Z_STRIPE");
+			if (odd == null || !odd.equals("")) {
+				parent.setAttribute("Z_STRIPE", "");
+			} else {
+				if (parent instanceof Listbox)
+					parent.setAttribute("Z_STRIPE", ((Listbox)parent).getOddRowSclass());
+				else
+					parent.setAttribute("Z_STRIPE", ((Grid)parent.getParent()).getOddRowSclass());
+			}
+				
+		}
 	}
 }

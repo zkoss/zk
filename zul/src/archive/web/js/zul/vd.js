@@ -108,7 +108,7 @@ zkVld.onlyNum = function (id, noDot) {
 	if (fmt) fmt = getZKAttr(fmt, "fmt");
 	inp = $real(inp);
 	val = inp.value.trim();
-	for (var j=0,doted,numed,dashed,perted; j < val.length; ++j) {
+	for (var j=0,doted,numed,dashed,perted, vl = val.length; j < vl; ++j) {
 		var cc = val.charAt(j);
 		if (cc >= '0' && cc <= '9') {
 			numed = true;
@@ -309,9 +309,9 @@ zkVld.uncover = function (el) {
 		if (el) zkVld._uncover(box, el);
 		else if (!ctags.length) return;
 
-		for (var j = 0; j < ctags.length; ++j) {
+		for (var j = 0, cl = ctags.length; j < cl; ++j) {
 			var els = document.getElementsByTagName(ctags[j]);
-			for (var k = 0 ; k < els.length; k++)
+			for (var k = 0, elen = els.length; k < elen; k++)
 				if (zk.isRealVisible(els[k]))
 					zkVld._uncover(box, els[k], true);
 		}
