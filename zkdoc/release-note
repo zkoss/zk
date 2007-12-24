@@ -1,7 +1,8 @@
 	--------
 ZK 3.0.2 Freshly
 * Features:
-	1853745: A way to customize input&textarea's invalid look with CSS
+  1853745: A way to customize input&textarea's invalid look with CSS
+  1857363: A way to invoke event listener after updating client
 
 * Bugs:
   1852313: 'offsetWidth' is null or not a number
