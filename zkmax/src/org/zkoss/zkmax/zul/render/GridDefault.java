@@ -47,8 +47,9 @@ public class GridDefault implements ComponentRenderer {
 				.write("</table></div>");
 		}
 
-		wh.write("<div id=\"").write(uuid).write("!body\" class=\"grid-body\">");
-		wh.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">")
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"grid-body\"");
+		if (self.getHeight() != null) wh.write("style=\"height:").write(self.getHeight()).write("\"");
+		wh.write("><table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\">")
 			.writeln(self.getRows())
 			.write("</table></div>");
 

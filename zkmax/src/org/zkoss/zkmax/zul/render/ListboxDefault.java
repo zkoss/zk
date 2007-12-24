@@ -20,11 +20,13 @@ package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.fn.ZulFns;
 
 /**
  * {@link Listbox}'s default mold.
@@ -47,12 +49,16 @@ public class ListboxDefault implements ComponentRenderer {
 				.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
-
-		wh.write("<div id=\"").write(uuid).write("!body\" class=\"listbox-body\">")
-			.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"")
-			.write(uuid).writeln("!cave\" class=\"listbox-btable\">")
-			.writeComponents(self.getItems())
-			.write("\n</table></div>");
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"listbox-body\"");
+		if (self.getRows() > 1) wh.write(" style=\"overflow:hidden;height:").write(self.getRows() * 15).write("px\"");
+		wh.write("><table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"")
+			.write(uuid).writeln("!cave\" class=\"listbox-btable\">");
+		for (Iterator it = self.getItems().iterator(); it.hasNext();) {
+			final Component child = (Component) it.next();
+			ZulFns.setStripeClass(child);
+			child.redraw(out);
+		}
+		wh.write("\n</table></div>");
 
 		if(self.getListfoot() != null){
 			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"listbox-foot\">")
