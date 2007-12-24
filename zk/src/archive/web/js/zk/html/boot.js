@@ -616,7 +616,7 @@ zk._onResize = function () {
 				return; //IE6: it fires an "extra" onResize in loading
 		}
 
-		for (var j = 0; j < zk._reszfns.length; ++j)
+		for (var j = 0, rl = zk._reszfns.length; j < rl; ++j)
 			zk._reszfns[j]();
 	}
 };
@@ -645,7 +645,7 @@ zk.rmBeforeUnload = function (fn) {
  * @since 3.0.0
  */
 zk.beforeUnload = function () {
-	for (var j = 0; j < zk._bfunld.length; ++j) {
+	for (var j = 0, bl = zk._bfunld.length; j < bl; ++j) {
 		var s = zk._bfunld[j]();
 		if (s) return s;
 	}
@@ -752,7 +752,7 @@ zk._bld = function () {
 		zk.disableESC();
 
 		zk._ckload = setInterval(function () {
-			for (var j = 0; j < zk._ckfns.length; ++j)
+			for (var j = 0, cl = zk._ckfns.length; j < cl; ++j)
 				if (zk._ckfns[j]()) {
 					zk._ckfns.splice(j--, 1);
 					zk.ald();
@@ -1206,7 +1206,7 @@ zk.pause = function (millis) {
 zk.encodeXML = function (txt, multiline) {
 	var out = "";
 	if (txt)
-		for (var j = 0; j < txt.length; ++j) {
+		for (var j = 0, tl = txt.length; j < tl; ++j) {
 			var cc = txt.charAt(j);
 			switch (cc) {
 			case '<': out += "&lt;"; break;

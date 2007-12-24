@@ -26,15 +26,15 @@ String.prototype.endsWith = function (suffix) {
 	return this.substring(this.length-suffix.length) == suffix;
 };
 String.prototype.trim = function () {
-	var j = 0, k = this.length - 1;
-	while (j < this.length && this.charAt(j) <= ' ')
+	var j = 0, tl = this.length, k = tl - 1;
+	while (j < tl && this.charAt(j) <= ' ')
 		++j;
 	while (k >= j && this.charAt(k) <= ' ')
 		--k;
 	return j > k ? "": this.substring(j, k + 1);
 };
 String.prototype.skipWhitespaces = function (j) {
-	for (;j < this.length; ++j) {
+	for (var tl = this.length;j < tl; ++j) {
 		var cc = this.charAt(j);
 		if (cc != ' ' && cc != '\t' && cc != '\n' && cc != '\r')
 			break;
@@ -42,7 +42,7 @@ String.prototype.skipWhitespaces = function (j) {
 	return j;
 };
 String.prototype.nextWhitespace = function (j) {
-	for (;j < this.length; ++j) {
+	for (var tl = this.length;j < tl; ++j) {
 		var cc = this.charAt(j);
 		if (cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r')
 			break;
@@ -64,7 +64,7 @@ String.prototype.skipWhitespacesBackward = function (j) {
  * Returns false if not found.
  */
 Array.prototype.remove = function (o) {
-	for (var j = 0; j < this.length; ++j) {
+	for (var j = 0, tl = this.length; j < tl; ++j) {
 		if (o == this[j]) {
 			this.splice(j, 1);
 			return true;
@@ -75,7 +75,7 @@ Array.prototype.remove = function (o) {
 /** Returns whether the array contains the specified object.
  */
 Array.prototype.contains = function (o) {
-	for (var j = 0; j < this.length; ++j) {
+	for (var j = 0, tl = this.length; j < tl; ++j) {
 		if (o == this[j])
 			return true;
 	}
@@ -86,7 +86,7 @@ Array.prototype.contains = function (o) {
 //Form//
 function z_fmsubm(a, b, c) {
 	var fns = this._submfns;
-	for (var j = 0; j < (fns ? fns.length: 0); ++j)
+	for (var j = 0, fl = (fns ? fns.length: 0); j < fl; ++j)
 		fns[j].apply(this, arguments);
 	return this._ogsubm(a, b, c);
 		//If IE, we cannot use _ogsubm.apply. Reason unknown.
@@ -599,7 +599,7 @@ zk.insertHTMLBefore = function (el, html) {
 		case "TBODY": case "THEAD": case "TFOOT":
 			var ns = zk._tblCreateElements(html);
 			var p = el.parentNode;
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				p.insertBefore(ns[j], el);
 			return;
 		}
@@ -626,7 +626,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
 					el = bd[bd.length - 1];
 				}
 			}
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				el.appendChild(ns[j]);
 			return;
 		}
@@ -645,7 +645,7 @@ zk.insertHTMLAfter = function (el, html) {
 			var ns = zk._tblCreateElements(html);
 			var sib = el.nextSibling;
 			var p = el.parentNode;
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				if (sib != null) p.insertBefore(ns[j], sib);
 				else p.appendChild(ns[j]);
 			return;
@@ -676,7 +676,7 @@ zk.setInnerHTML = function (el, html) {
 			}
 			while (el.firstChild)
 				el.removeChild(el.firstChild);
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				el.appendChild(ns[j]);
 			return;
 		}
@@ -696,7 +696,7 @@ zk.setOuterHTML = function (el, html) {
 			var ns = zk._tblCreateElements(html);
 			var sib = el.nextSibling;
 			p.removeChild(el);
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				if (sib) p.insertBefore(ns[j], sib);
 				else p.appendChild(ns[j]);
 		} else {
@@ -778,7 +778,7 @@ zk.isAncestor = function (p, c, checkuuid) {
  * they are different part of the same component).
  */
 zk.isAncestorX = function (p, ary, checkuuid) {
-	for (var j = 0; j < ary.length; ++j)
+	for (var j = 0, al = ary.length; j < al; ++j)
 		if (zk.isAncestor(p, ary[j], checkuuid))
 			return true;
 	return false;
@@ -976,20 +976,20 @@ if (!zk._actg1) {
 
 /** Disables all active tags. */
 zk.disableAll = function (parent) {
-	for (var j = 0; j < zk._actg1.length; j++)
+	for (var j = 0, al1 = zk._actg1.length; j < al1; j++)
 		zk._dsball(parent, document.getElementsByTagName(zk._actg1[j]), true);
 
 	if (!zk.ndbModal) //not disable-behind-modal
-		for (var j = 0; j < zk._actg2.length; j++)
+		for (var j = 0, al2 = zk._actg2.length; j < al2; j++)
 			zk._dsball(parent, document.getElementsByTagName(zk._actg2[j]));
 };
 zk._dsball = function (parent, els, visibility) {
 	l_els:
-	for (var k = 0 ; k < els.length; k++) {
+	for (var k = 0, elen = els.length; k < elen; k++) {
 		var el = els[k];
 		if (zk.isAncestor(parent, el))
 			continue;
-		for(var m = 0; m < zk._disTags.length; ++m) {
+		for(var m = 0, dl = zk._disTags.length; m < dl; ++m) {
 			var info = zk._disTags[m];
 			if (info.element == el)
 				continue l_els;
@@ -1020,7 +1020,7 @@ zk._dsball = function (parent, els, visibility) {
  */
 zk.restoreDisabled = function (n) {
 	var skipped = [];
-	for (var bug1498895 = zk.ie; zk._disTags.length;) {
+	for (var bug1498895 = zk.ie, dlen = zk._disTags.length; dlen; --dlen) {
 		var info = zk._disTags.shift();
 		var el = info.element;
 		if (el && el.tagName) { //still exists
@@ -1069,24 +1069,26 @@ zk.restoreDisabled = function (n) {
  */
 zk.hideCovered = function (ary) {
 	if (!ary || ary.length == 0) {
-		while (zk._hidCvred.length) {
+		var hl = zk._hidCvred.length;
+		while (hl) {
 			var info = zk._hidCvred.shift();
 			if (info.element.style)
 				info.element.style.visibility = info.visibility;
+			--hl;
 		}
 		return;
 	}
 
 	var cts = zk._actg1;
-	for (var j = 0; j < cts.length; ++j) {
+	for (var j = 0, clen = cts.length; j < clen; ++j) {
 		var els = document.getElementsByTagName(cts[j]);
 		var ifr = "IFRAME" == cts[j];
 		loop_els:
-		for (var k = 0 ; k < els.length; k++) {
+		for (var k = 0, elen = els.length; k < elen; k++) {
 			var el = els[k];
 			if (!zk.isRealVisible(el)) continue;
 
-			for (var m = 0; m < ary.length; ++m) {
+			for (var m = 0, al = ary.length; m < al; ++m) {
 				if (zk.isAncestor(ary[m], el))
 					continue loop_els;
 			}
@@ -1095,7 +1097,7 @@ zk.hideCovered = function (ary) {
 			if (!ifr || getZKAttr(el, "autohide") == "true") {
 			//Note: z.autohide may be set dynamically,
 			//so consider it as not overlapped
-				for (var m = 0; m < ary.length; ++m) {
+				for (var m = 0, al = ary.length; m < al; ++m) {
 					if (zk.isOverlapped(ary[m], el)) {
 						overlapped = true;
 						break;
@@ -1104,7 +1106,7 @@ zk.hideCovered = function (ary) {
 			}
 
 			if (overlapped) {
-				for (var m = 0; m < zk._hidCvred.length; ++m) {
+				for (var m = 0, hl = zk._hidCvred.length; m < hl; ++m) {
 					if (el == zk._hidCvred[m].element)
 						continue loop_els;
 				}
@@ -1112,7 +1114,7 @@ zk.hideCovered = function (ary) {
 					.push({element: el, visibility: el.style.visibility});
 				el.style.visibility = "hidden";
 			} else {
-				for (var m = 0; m < zk._hidCvred.length; ++m) {
+				for (var m = 0, hl = zk._hidCvred.length; m < hl; ++m) {
 					if (el == zk._hidCvred[m].element) {
 						el.style.visibility = zk._hidCvred[m].visibility;
 						zk._hidCvred.splice(m, 1);
@@ -1330,7 +1332,7 @@ zk.newHidden = function (nm, val, parent) {
 zk.ncols = function (cells) {
 	var cnt = 0;
 	if (cells) {
-		for (var j = 0; j < cells.length; ++j) {
+		for (var j = 0, cl = cells.length; j < cl; ++j) {
 			var span = cells[j].colSpan;
 			if (span >= 1) cnt += span;
 			else ++cnt;
@@ -1349,7 +1351,7 @@ zk.cellIndex = function (cell) {
 	var i = 0; 
 	if (zk.ie) {
 		var cells = cell.parentNode.cells;
-		for(var j = 0; j < cells.length; j++) {
+		for(var j = 0, cl = cells.length; j < cl; j++) {
 			if (cells[j] == cell) {
 				i = j;
 				break;
@@ -1382,27 +1384,29 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 		hdtable.style.tableLayout = "auto";
 		hdtable.style.width = "";
 	}
-	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null, dstwds = [], cacheCss = [];
-	for (var i = 0, even = true; i < srcrows.length; ++i) {
-		var row = srcrows[i];
+	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null, dstwds = [], cacheCss;
+	for (var i = 0, even = true, l = srcrows.length, firstChild; i < l; ++i) {
+		var row = srcrows[i], cells = row.cells;		
+		if (!zk.isVisible(row)) continue;
+		if (!firstChild) firstChild = row;
+		if (getZKAttr(row, "loaded") == "false") continue;
 		if (stripe && scOdd && zk.isVisible(row)) {
 			zk.addClass(row, scOdd, !even);
 			even = !even;
 		}
 		if(!found && getZKAttr(row, "sel") == "true") found = row;
-		var cells = row.cells;
-		for (var j = 0, z = 0; j < cells.length; ++j) {
+		for (var j = 0, z = 0, le = cells.length ; j < le; ++j) {
 			if (j < dst.cells.length) {
-				var s = cells[j], d = dst.cells[z];
+				var s = cells[j], d = dst.cells[z], cs = s.colSpan;
 				if (!zk.isVisible(d)) { //Bug #1828044
 					s.style.display = "none";
-					z += s.colSpan; // header count
+					z += cs; // header count
 					continue;
 				}
-				if (s.colSpan > 1) {
-					if (s.colSpan + z <= dst.cells.length) {
+				if (cs > 1) {
+					if (cs + z <= dst.cells.length) {
 						var unwd = [], total = 0, ttlOffset = 0;
-						for (var k = 0; k < s.colSpan; k++) {
+						for (var k = 0; k < cs; k++) {
 							var d = dst.cells[z+k];
 							if (!dstwds[z+k]) {
 								var wd =  d.style.width;
@@ -1449,39 +1453,36 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 						cell.style.width = s.style.width;	
 								
 						if (!again && i == 0 && zk.ie) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 500);															
-					}					
-				} else {
+					}				
+				} else {			
 					if (index == null || index == z) {
 						if (!dstwds[z]) {
-							var wd =  d.style.width;	
-							var cell = d.firstChild;				
+							var wd =  d.style.width, cell = d.firstChild, w;				
 							if (wd == "auto" || wd.indexOf('%') > -1) 
 								d.style.width = zk.revisedSize(d, d.offsetWidth)+ "px";
 							wd = d.style.width;
 							dstwds[z] = wd ? (zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth) :
 								zk.ie && z == dst.cells.length-1 ? s.offsetWidth - 2 : s.offsetWidth;
 							
-							var w;
 							if (!wd) {
 								w =  zk.revisedSize(d, dstwds[z]); 
 								d.style.width = w + "px";
 							} else w = $int(wd);
-							
-							if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";							
-						} 
+							if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";	
+						}
 						
 						var cell = s.firstChild;
-						if (!cacheCss[2] || s.className != cacheCss[2].el.className || s.style.cssText)
-							cacheCss[2] = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
-			
-						var rwd = dstwds[z] - cacheCss[2].size;
-						if (rwd < 0) rwd = 0; // #Bugs 1817636
-						s.style.width = rwd + "px";
-						if (cell) cell.style.width = s.style.width;
+						if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
+							cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
+						var rwd = dstwds[z] - cacheCss.size;
+						rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
+						if (firstChild == row)
+							s.style.width = rwd;
+						if (cell) cell.style.width = rwd;
 					}
 					if (index == z) break;
-				}
-				z += s.colSpan; // header count
+				}				
+				z += cs; // header count
 			}
 		}		
 	}
@@ -1501,12 +1502,11 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length)
 		return;
-	for (var j = 0, k = srcrows.length; j < k; j++) {
+	for (var j = srcrows.length, cacheCss; --j >= 0;) {
 		var s = srcrows.shift();
 		var z = zk.cellIndex(s);
 		if (dst.cells.length <= z) continue; // Bug #1852313
-		var d = dst.cells[z];
-		var wd = 0;
+		var d = dst.cells[z], wd = 0, cell = s.firstChild;
 		if (s.colSpan > 1) {
 			if (s.colSpan + z <= dst.cells.length) {				
 				for (var k = 0; k < s.colSpan; k++) {
@@ -1517,12 +1517,14 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 		} else {
 			if (zk.mozilla)	wd += $int(d.style.width); // Bug #1826938
 			else wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
-		}
-		var cell = s.firstChild;
-		var rwd = zk.revisedSize(s, wd);
-		s.style.width = rwd + "px";
-		if (cell) cell.style.width = s.style.width;
-		
+		}		
+		if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
+			cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
+		var rwd = wd - cacheCss.size;
+		rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
+		if (!s.parentNode.rowIndex)
+			s.style.width = rwd;
+		if (cell) cell.style.width = rwd;
 	}
 };
 //Number//
@@ -1544,16 +1546,16 @@ zk.parseDate = function (txt, fmt, strict) {
 	var y = val.getFullYear(), m = val.getMonth(), d = val.getDate();
 
 	var ts = txt.split(/\W+/);
-	for (var i = 0, j = 0; j < fmt.length; ++j) {
+	for (var i = 0, j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
 		if (cc == 'y' || cc == 'M' || cc == 'd' || cc == 'E') {
 			var len = 1;
-			for (var k = j; ++k < fmt.length; ++len)
+			for (var k = j; ++k < fl; ++len)
 				if (fmt.charAt(k) != cc)
 					break;
 
 			var nosep; //no separator
-			if (k < fmt.length) {
+			if (k < fl) {
 				var c2 = fmt.charAt(k);
 				nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 			}
@@ -1626,11 +1628,11 @@ zk.formatDate = function (val, fmt) {
 	if (!fmt) fmt = "yyyy/MM/dd";
 
 	var txt = "";
-	for (var j = 0; j < fmt.length; ++j) {
+	for (var j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
 		if (cc == 'y' || cc == 'M' || cc == 'd' || cc == 'E') {
 			var len = 1;
-			for (var k = j; ++k < fmt.length; ++len)
+			for (var k = j; ++k < fl; ++len)
 				if (fmt.charAt(k) != cc)
 					break;
 
@@ -1828,7 +1830,7 @@ zk.Floats.prototype = {
 	/** Adds elements that we have to hide what they covers.
 	 */
 	addHideCovered: function (ary) {
-		for (var j = 0; j < this._ftids.length; ++j) {
+		for (var j = 0, fl = this._ftids.length; j < fl; ++j) {
 			var el = $e(this._ftids[j]);
 			if (el) ary.push(el);
 		}
@@ -2172,15 +2174,16 @@ zk._addAnique = function(id, funcnm) {
 zk._doAnique = function (id) {
 	var ary = zk._anique[id];
 	if (ary) {
-		var n = $e(id);
-		while (ary.length) {
+		var n = $e(id), al = ary.length;
+		while (al) {
 			if (getZKAttr(n, "animating"))
 				break;
 			var js = ary.shift();
 			eval(js+"('"+id+"')");
+			al--;
 		}
 			
-		if (!ary.length)
+		if (!al)
 			delete zk._anique[id];
 	}
 };

@@ -288,7 +288,7 @@ zkau._parseCmds = function (xml) {
 	if (!rs) return null;
 
 	var cmds = [];
-	for (var j = 0; j < rs.length; ++j) {
+	for (var j = 0, rl = rs.length; j < rl; ++j) {
 		var cmd = rs[j].getElementsByTagName("c")[0];
 		var data = rs[j].getElementsByTagName("d");
 
@@ -394,7 +394,7 @@ zkau.send = function (evt, timeout) {
 		zkau._send(evt.dtid, evt, timeout);
 	} else {
 		var ds = zkau._dtids;
-		for (var j = 0; j < ds.length; ++j)
+		for (var j = 0, dl = ds.length; j < dl; ++j)
 			zkau._send(ds[j], evt, timeout);
 	}
 };
@@ -479,7 +479,7 @@ zkau._sendNow = function (dtid) {
 	zkau._ignorable = ignorable;
 
 	//callback (fckez uses it to ensure its value is sent back correctly
-	for (var j = 0; j < zkau._onsends.length; ++j) {
+	for (var j = 0, ol = zkau._onsends.length; j < ol; ++j) {
 		try {
 			zkau._onsends[j](implicit); //it might add more events
 		} catch (e) {
@@ -490,12 +490,12 @@ zkau._sendNow = function (dtid) {
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
 	var reqes = []; //backup events
 	var content = "";
-	for (var j = 0; es.length; ++j) {
+	for (var j = 0, el = es.length; el; ++j, --el) {
 		var evt = es.shift();
 		reqes.push(evt);
 		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+(evt.uuid?evt.uuid:'');
 		if (evt.data)
-			for (var k = 0; k < evt.data.length; ++k) {
+			for (var k = 0, dl = evt.data.length; k < dl; ++k) {
 				var data = evt.data[k];
 				content += "&data."+j+"="
 					+ (data != null ? encodeURIComponent(data): 'zk_null~q');
@@ -706,7 +706,7 @@ zkau.setAttr = function (cmp, name, value) {
 		//maintain defaultChecked
 	} else if ("selectAll" == name && $tag(cmp) == "SELECT") {
 		value = "true" == value;
-		for (var j = 0; j < cmp.options.length; ++j)
+		for (var j = 0, ol = cmp.options.length; j < ol; ++j)
 			cmp.options[j].selected = value;
 	} else if ("style" == name) {
 		zk.setStyle(cmp, value);
@@ -937,7 +937,7 @@ zkau._onUnload = function () {
 	if (!zk.opera && !zk.keepDesktop) {
 		try {
 			var ds = zkau._dtids;
-			for (var j = 0; j < ds.length; ++j) {
+			for (var j = 0, dl = ds.length; j < dl; ++j) {
 				var req = zkau.ajaxRequest();
 				req.open("POST", zk_action, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -1415,15 +1415,15 @@ zkau._closeFloats = function (method, ancestors) {
 
 zkau.hideCovered = function() {
 	var ary = [];
-	for (var j = 0; j < zkau._popups.length; ++j) {
+	for (var j = 0, pl = zkau._popups.length; j < pl; ++j) {
 		var el = $e(zkau._popups[j]);
 		if ($visible(el)) ary.push(el);
 	}
 
-	for (var j = 0; j < zkau.floats.length; ++j)
+	for (var j = 0, fl = zkau.floats.length; j < fl; ++j)
 		zkau.floats[j].addHideCovered(ary);
 
-	for (var j = 0; j < zkau._overlaps.length; ++j) {
+	for (var j = 0, ol = zkau._overlaps.length; j < ol; ++j) {
 		var el = $e(zkau._overlaps[j]);
 		if ($visible(el)) ary.push(el);
 	}
