@@ -10,6 +10,7 @@ ZK 3.0.2 Freshly
   1854571: Two clicks to close Messagebox if it took long to process
   1852895: Combo getSelectedItem()
   1853902: Radiogroup in schema does not allow content other then radio
+  1852304: Menuitem popup="" does not stay up
   
 * Upgrade Notes:
   + We improve the performance of Live Data threes times faster than ZK 3.0.0 and ZK 3.0.1
