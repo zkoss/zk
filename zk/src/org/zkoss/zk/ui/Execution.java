@@ -159,7 +159,8 @@ public interface Execution  {
 	public VariableResolver getVariableResolver();
 
 	/** Queues an event to the current execution.
-	 * The event will be processed (as if it is sent from the client).
+	 * The event is placed at the end of the event queue.
+	 * It will be processed after all other events are processed.
 	 */
 	public void postEvent(Event evt);
 

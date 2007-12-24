@@ -2103,6 +2103,11 @@ zkau.cmd1 = {
 				zk.eval(cmp, "context", type, ref);
 			}
 		}
+	},
+	echo2: function (uuid, cmp, evtnm, data) {
+		zkau.send(
+			{uuid: uuid, cmd: "echo",
+				data: data != null ? [evtnm, data]: [evtnm], ignorable: true});
 	}
 };
 zkau.cmd1.cmd = zkau.cmd1.invoke; //backward compatibility (2.4.1 or before)
