@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-B30-1857166.zul
+B30-1857731.zul
 
 {{IS_NOTE
 	Purpose:
@@ -9,7 +9,7 @@ B30-1857166.zul
 	Description:
 		
 	History:
-		Mon Dec 24 18:15:56 TST 2007, Created by jumperchen
+		Tue Dec 25 11:00:59 TST 2007, Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -60,9 +60,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		Tab tab = new Tab();
 		tab.setLabel("Tab2");
 		tbsMain.appendChild(tab);
-		Listbox lb = new Listbox();
-		new Listitem("test").setParent(lb);
-		tabPanel.appendChild(lb);
+		
+		tabPanel.appendChild(new Label("Test"));
 		
 		tab.setSelected(true);
 	}
