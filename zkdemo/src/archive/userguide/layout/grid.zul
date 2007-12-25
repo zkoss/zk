@@ -65,7 +65,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<rows>
 			<row>
 				<label value="File:"/>
-				<textbox width="99%"/>
+				<textbox width="98%"/>
 			</row>
 			<row>
 				<label value="Type:"/>
@@ -79,7 +79,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			</row>
 			<row>
 				<label value="Options:"/>
-				<textbox rows="3" width="99%"/>
+				<textbox rows="3" width="98%"/>
 			</row>
 		</rows>
 	</grid>
