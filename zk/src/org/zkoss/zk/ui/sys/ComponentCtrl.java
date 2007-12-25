@@ -171,7 +171,8 @@ public interface ComponentCtrl {
 	public Object getExtraCtrl();
 
 	/** Notifies that an {@link WrongValueException} instance is thrown,
-	 * and {@link WrongValueException#getComponent} is this component.
+	 * and {@link WrongValueException#getComponent} is the component
+	 * causing the exception.
 	 * It is a callback and the component can store the error message,
 	 * show up the custom information, or even 'eat' the exception.
 	 *
