@@ -44,8 +44,8 @@ zkau.cmd1.addBfr = function (uuid, cmp, html) {
 	_zkselx.addBfr(uuid, cmp, html);
 };
 _zkselx._addChd = function (uuid, cmp, html) {
-	var h = html.trim();	
-	var isLit = h.indexOf("<tr") == 0 && h.indexOf("Lit") < h.indexOf(">");
+	var h = html.trim(), from = h.indexOf("Lit");
+	var isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">");
 	if (isLit && $type(cmp) != "Lit") { // only first listitem.
 		var head = $parentByTag(cmp, "DIV");
 		var cave = $e($uuid(head) + "!cave");	
