@@ -486,7 +486,10 @@ zkWnd._doModal = function (cmp, replace) {
 		zkWnd._float(cmp);
 		return;
 	}
-
+	if (!getZKAttr(cmp, "conshow")) {
+		setZKAttr(cmp, "conshow", "anima.grow($e('"+cmp.id+"'));");
+		cmp.style.display = "none";
+	}
 	//center component
 	var nModals = zkau._modals.length;
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
