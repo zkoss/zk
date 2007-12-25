@@ -4,6 +4,7 @@ ZK 3.0.2 Freshly
   1855653: Optimize Live Data with Listbox&Grid
   1853745: A way to customize input&textarea's invalid look with CSS
   1857363: A way to invoke event listener after updating client
+  1853791: JpaUtil and OpenEntityManagerInView
 
 * Bugs:
   1852313: 'offsetWidth' is null or not a number
