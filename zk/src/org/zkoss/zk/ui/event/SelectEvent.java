@@ -31,18 +31,32 @@ import org.zkoss.zk.ui.Component;
  */
 public class SelectEvent extends Event {
 	private final Set _selectedItems;
+	private final Component _ref;
 
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.
 	 */
-	public SelectEvent(String name, Component target, Set selectedItems) {
+	public SelectEvent(String name, Component target, Set selectedItems,
+			Component ref) {
 		super(name, target);
 		_selectedItems = selectedItems != null ?
 			selectedItems: Collections.EMPTY_SET;
+		_ref = ref;
 	}
 	/** Returns the selected items (never null).
 	 */
 	public final Set getSelectedItems() {
 		return _selectedItems;
 	}
+
+	/** Returns the reference item that is the component causing the onSelect 
+	 * event(select or deselect) to be fired.
+	 *
+	 * <p>It is null, if the onSelect event is not caused by listbox or tree or combobox.
+	 * Note: if not multiple, the {@link #getReference} is the same with the first item of {@link #getSelectedItems}.
+	 * @since 3.0.2
+	 */
+	public Component getReference() {
+		return _ref;
+	} 
 }
