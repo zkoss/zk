@@ -34,17 +34,28 @@ Constraint ctt = new MyConst();
 Constraint custom_ctt = new MyCustomConst();
 	]]></zscript>
 	<vbox>
+	Test of CustomConstraint
 		<hbox>
 	Enter a number at least 100:
 	<intbox id="i1" constraint="${custom_ctt}"/>
 	<label id="errmsg"/>
 		</hbox>
 		<hbox>
-	another number at least 100: <intbox constraint="${ctt}"/>
+	another number at least 100: <intbox id="i2" constraint="${ctt}"/>
 		</hbox>
 		<hbox>
 	any number: <intbox/>
 		</hbox>
-		<button label="Retrieve value" onClick="i1.getValue()"/>
+		<button label="Retrieve value" onClick="i1.getValue();i2.getValue()"/>
+
+	Test of between/and
+		<hbox>
+		A date between 2007/12/25 and 2007/12/03
+		<datebox constraint="between 20071225 and 20071203"/>
+		</hbox>
+		<hbox>
+		A date before 2007/12/25 (include)
+		<datebox constraint="before 20071225"/>
+		</hbox>
 	</vbox>
 </window>
