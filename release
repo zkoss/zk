@@ -116,7 +116,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd /tmp/zk/$srcnm
 	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug
 	rm -rf zml/debug zkex/debug zkmax/debug zkplus/debug
-	#find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
 	cd /tmp/zk
@@ -354,12 +353,16 @@ if [ "$target" == "official" ]; then
 	zip -qr9 zk-devguide-$ver.zip zk-devguide-$ver
 	rm -rf zk-devguide-$ver
 elif [ "$target" == "daily" ]; then
-	mkdir -p /tmp/zk/$docnm
+	mkdir -p /tmp/zk/$docnm/devguide
+	mkdir -p /tmp/zk/$docnm/devref
 
 	cd $maindir
-	cp zkdoc/*/ZK-quickstart*.pdf zkdoc/dev*/*.odt /tmp/zk/$docnm
+	cp zkdoc/*/ZK-quickstart*.pdf /tmp/zk/$docnm
+	cp -rp zkdoc/devguide/*.odt zkdoc/devguide/images /tmp/zk/$docnm/devguide
+	cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
+	find -name .svn | xargs rm -rf
 
 	echo Ouput ${docnm}.zip
 	zip -qr9 ${docnm}.zip $docnm
