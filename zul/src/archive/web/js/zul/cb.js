@@ -60,7 +60,7 @@ zkTxbox.onblur = function (evt) {
 			
 			if (selId != item.id) {
 				setZKAttr(cmp, "selid", item.id);
-				zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id]},
+				zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
 					zkau.asapTimeout($e(uuid), "onSelect"));			
 			}		
 	}
@@ -109,7 +109,7 @@ zkCmit.onclick = function (evt) {
 		var selId = getZKAttr(cmp, "selid");
 		if (selId != item.id) {
 			setZKAttr(cmp, "selid", item.id);
-			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id]},
+			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
 				zkau.asapTimeout($e(uuid), "onSelect"));			
 		}
 		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
@@ -544,7 +544,7 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 			var selId = getZKAttr(cmp, "selid");
 			if (selId != found.id) {
 				setZKAttr(cmp, "selid", found.id);
-				zkau.send({uuid: uuid, cmd: "onSelect", data: [found.id]},
+				zkau.send({uuid: uuid, cmd: "onSelect", data: [found.id, found.id]},
 					zkau.asapTimeout(cmp, "onSelect"));
 			}
 		}

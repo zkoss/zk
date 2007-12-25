@@ -524,7 +524,7 @@ zk.Selectable.prototype = {
 		if (this._selectOne(row, true)) {
 			//notify server
 			zkau.send({
-				uuid: this.id, cmd: "onSelect", data: [this.getItemUuid(row)]},
+				uuid: this.id, cmd: "onSelect", data: [this.getItemUuid(row), this.getItemUuid(row)]},
 				zkau.asapTimeout(this.element, "onSelect"));
 		}
 	},
@@ -544,7 +544,7 @@ zk.Selectable.prototype = {
 		}
 
 		//notify server
-		this._sendSelect();
+		this._sendSelect(row);
 	},
 	/** Selects a range from the last focus up to the specified one.
 	 * Callable only if multiple
@@ -579,7 +579,7 @@ zk.Selectable.prototype = {
 
 		this.focus(row);
 		this._fixSelelectedId();
-		this._sendSelect();
+		this._sendSelect(row);
 	},
 
 	/** Changes the specified row as focused. */
@@ -1009,11 +1009,11 @@ zk.Selectable.prototype = {
 			this._changeSelect(rows[j], true);
 
 		this._setSelectedId(rows.length ? rows[0].id: null);
-		if (notify) this._sendSelect();
+		if (notify) this._sendSelect(rows[0]);
 	},
 
 	/** Notifies the server the selection is changed (callable only if multiple). */
-	_sendSelect: function () {
+	_sendSelect: function (row) {
 		//To reduce # of bytes to send, we use a string instead of array.
 		var data = "";
 		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
@@ -1022,7 +1022,7 @@ zk.Selectable.prototype = {
 				data += "," + this.getItemUuid(r);
 		}
 		if (data) data = data.substring(1);
-		zkau.send({uuid: this.id, cmd: "onSelect", data: [data]},
+		zkau.send({uuid: this.id, cmd: "onSelect", data: [data, row ? this.getItemUuid(row) : ""]},
 				zkau.asapTimeout(this.element, "onSelect"));
 	},
 
@@ -1351,15 +1351,17 @@ zkLisel.init = function (cmp) {
 /** Handles onchange from select/list. */
 zkLisel.onchange = function (evtel) {
 	var cmp = zkau.evtel(evtel); //backward compatible with 2.4 or before
-	var data;
+	var data, reference;
 	if (cmp.multiple) {
 		//To reduce # of bytes to send, we use a string instead of array.
 		data = "";
 		var opts = cmp.options;
 		for (var j = 0, ol = opts.length; j < ol; ++j) {
 			var opt = opts[j];
-			if (opt.selected)
+			if (opt.selected) {
 				data += ","+opt.id;
+				if (!reference) reference = opt.id;
+			}
 		}
 		if (data) data = data.substring(1);
 		//Design consideration: we could use defaultSelected to minimize
@@ -1369,9 +1371,10 @@ zkLisel.onchange = function (evtel) {
 	} else {
 		var opt = cmp.options[cmp.selectedIndex];
 		data = opt.id;
+		reference = opt.id;
 	}
 	var uuid = $uuid(cmp);
-	zkau.send({uuid: uuid, cmd: "onSelect", data: [data]},
+	zkau.send({uuid: uuid, cmd: "onSelect", data: [data, reference]},
 			zkau.asapTimeout(uuid, "onSelect"));
 
 	//Bug 1756559: see au.js
