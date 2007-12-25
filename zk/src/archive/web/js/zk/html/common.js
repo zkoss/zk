@@ -2068,6 +2068,23 @@ anima.slideDown = function (id, dur) {
 		}
 	}
 };
+/** Make a component visible by growing up.
+ * @param id component or its ID
+ * @since 3.0.2
+ */
+anima.grow = function (id, dur) {
+	var n = $e(id);
+	if (n) {
+		if (getZKAttr(n, "animating")) {
+			zk._addAnique(n.id, "anima.grow");
+		} else {
+			++anima.count;
+			setZKAttr(n, "animating", "show");
+			zk._showExtr(n);  //parent visible first
+			Effect.Grow(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
+		}
+	}
+};
 /** Make a component invisible by sliding up.
  * @param id component or its ID
  */
@@ -2133,7 +2150,6 @@ anima.dropOut = function (id, dur) {
 		}
 	}
 };
-
 anima._afterVisi = function (ef) {
 	var n = ef.element;
 	if (n) {

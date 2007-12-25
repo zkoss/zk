@@ -779,7 +779,6 @@ Effect.Squish = function(element) {
   });
 }
 */
-/* Tom M. Yeh, Potix: remove unused codes
 Effect.Grow = function(element) {
   element = $(element);
   var options = Object.extend({
@@ -853,7 +852,6 @@ Effect.Grow = function(element) {
     }
   });
 }
-*/
 /* Tom M. Yeh, Potix: remove unused codes
 Effect.Shrink = function(element) {
   element = $(element);
