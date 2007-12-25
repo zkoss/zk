@@ -226,6 +226,9 @@ public class Datebox extends FormatInputElement {
 	}
 
 	//-- super --//
+	public void setConstraint(String constr) {
+		setConstraint(new SimpleDateConstraint(constr));
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
 			return null;
@@ -241,13 +244,6 @@ public class Datebox extends FormatInputElement {
 				new WrongValueException(this, MZul.DATE_REQUIRED,
 					new Object[] {value, fmt}));
 		}
-/*
-		if (date.compareTo(_min) < 0 || date.compareTo(_max) > 0)
-			throw showCustomError(
-				new WrongValueException(
-					MZul.DATE_OUT_OF_RANGE,
-					new Object[] {value, df.format(_min), df.format(_max), fmt}));
-*/
 		return date;
 	}
 	protected String coerceToString(Object value) {

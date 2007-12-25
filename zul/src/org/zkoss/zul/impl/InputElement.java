@@ -57,7 +57,7 @@ implements Constrainted {
 	/** The value. */
 	private Object _value;
 	/** Used by setTextByClient() to disable sending back the value */
-	private String _txtByClient;
+	private transient String _txtByClient;
 	/** The error message. Not null if users entered a wrong data (and
 	 * not correct it yet).
 	 */
@@ -70,6 +70,8 @@ implements Constrainted {
 	private boolean _disabled, _readonly;
 	/** Whether this input is validated (Feature 1461209). */
 	private boolean _valided;
+	/** Whether the validation is calused by {@link #isValid}. */
+	private transient boolean _checkOnly;
 
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
@@ -293,7 +295,7 @@ implements Constrainted {
 			final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
 			try {
 				constr.validate(this, value);
-				if (constr instanceof CustomConstraint) {
+				if (!_checkOnly && (constr instanceof CustomConstraint)) {
 					try {
 						((CustomConstraint)constr).showCustomError(this, null);
 						//not call thru showCustomError(Wrong...) for better performance
@@ -301,6 +303,10 @@ implements Constrainted {
 						log.realCauseBriefly(ex);
 					}
 				}
+			} catch (WrongValueException ex) {
+				if (!_checkOnly && (constr instanceof CustomConstraint))
+					((CustomConstraint)constr).showCustomError(this, ex);
+				throw ex;
 			} finally {
 				Namespaces.afterInterpret(backup, ns, true);
 			}
@@ -399,13 +405,12 @@ implements Constrainted {
 
 	//-- Constrainted --//
 	public void setConstraint(String constr) {
-		_constr = SimpleConstraint.getInstance(constr);
-		_valided = false;
-		invalidate(); //regenerate attributes
+		setConstraint(SimpleConstraint.getInstance(constr));
 	}
 	public void setConstraint(Constraint constr) {
-		if (_constr != constr) {
+		if (!Objects.equals(_constr, constr)) {
 			_constr = constr;
+			_valided = false;
 			invalidate();
 		}
 	}
@@ -581,10 +586,13 @@ implements Constrainted {
 			return false;
 
 		if (!_valided && _constr != null) {
+			_checkOnly = true;
 			try {
 				validate(_value);
 			} catch (Throwable ex) {
 				return false;
+			} finally {
+				_checkOnly = false;
 			}
 		}
 		return true;
