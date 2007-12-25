@@ -2063,25 +2063,38 @@ anima.slideDown = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
-			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi});
+			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi, y :0});
 				//duration must be less than 0.5 since other part assumes it
 		}
 	}
 };
-/** Make a component visible by growing up.
+/** Make a component visible by moving.
  * @param id component or its ID
+ * @param pos the move position. "top" means from 0 to the original top, 
+ *  "left" means from 0 to the original left.
  * @since 3.0.2
  */
-anima.grow = function (id, dur) {
+anima.moveBy = function (id, pos, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.grow");
+			zk._addAnique(n.id, "anima.moveBy");
 		} else {
 			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
-			Effect.Grow(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
+			if (!pos) pos = "topleft"
+			Effect.MoveBy(n, 0, 0, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterHide, afterSetup: function(effect) {
+				 if (pos.indexOf("left") > -1) {
+					 effect.options.x = effect.originalLeft;
+					 effect.originalLeft = 0;
+				 }
+				 if (pos.indexOf("top") > -1) {
+					 effect.options.y = effect.originalTop;
+					 effect.originalTop = 0;
+				 }
+     			 effect.element.makeClipping().show();
+    		}});
 		}
 	}
 };
