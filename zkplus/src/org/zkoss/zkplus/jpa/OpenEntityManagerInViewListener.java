@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.util.ExecutionInit;
  * </p>
  * 
  * @author Jeff
- * @since 3.1.0
+ * @since 3.0.2
  */
 public class OpenEntityManagerInViewListener implements ExecutionCleanup,
 		ExecutionInit {

@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.WebApp;
  * within a Java EE environment.
  * 
  * @author Jeff
- * @since 3.1.0
+ * @since 3.0.2
  */
 public class JpaUtil {
 
