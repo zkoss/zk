@@ -13,6 +13,7 @@ ZK 3.0.2 Freshly
   1853902: Radiogroup in schema does not allow content other then radio
   1852304: Menuitem popup="" does not stay up
   1857166: Error with tabbox + listbox filled in onCreate method
+  1857731: tabbox + listbox filled in onCreate + simple window
   
 * Upgrade Notes:
   + We improve the performance of Live Data threes times faster than ZK 3.0.0 and ZK 3.0.1
