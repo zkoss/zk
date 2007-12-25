@@ -1,7 +1,8 @@
 	--------
 ZK 3.0.2 Freshly
 * Features:
-  1855653: Optimize Live Data with Listbox&Grid
+  1854857: A way to specify a range for datebox's constraint
+  1855653: Optimize Live Data with Listbox and Grid
   1853745: A way to customize input&textarea's invalid look with CSS
   1857363: A way to invoke event listener after updating client
   1853791: JpaUtil and OpenEntityManagerInView
@@ -17,8 +18,8 @@ ZK 3.0.2 Freshly
   1857731: tabbox + listbox filled in onCreate + simple window
   
 * Upgrade Notes:
-  + We improve the performance of Live Data threes times faster than ZK 3.0.0 and ZK 3.0.1
-from 7~8 sec to 1~2 sec.
+  
+
 	--------
 ZK 3.0.1
 * Features:  
