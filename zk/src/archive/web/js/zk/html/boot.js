@@ -1053,12 +1053,16 @@ zk.onHideAt = function (n) {
 /** Loads the specified style sheet (CSS).
  * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
  * unless http:// or https:// is specified
+ * @param id the element's ID. Optional
+ * @param noUpdateURI whether to encode with zk.getUpdateURI.
+ * If not specified, false is assumed
  */
-zk.loadCSS = function (uri) {
+zk.loadCSS = function (uri, id, noUpdateURI) {
 	var e = document.createElement("LINK");
+	if (id) e.id = id;
 	e.rel = "stylesheet";
 	e.type = "text/css";
-	if (uri.indexOf("://") < 0) {
+	if (!noUpdateURI && uri.indexOf("://") < 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		uri = zk.getUpdateURI("/web" + uri);
 	}
