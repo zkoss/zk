@@ -265,9 +265,14 @@ public class Datebox extends FormatInputElement {
 
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		if (_lenient && !_compact) return attrs;
-
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
+		if (getConstraint() instanceof SimpleDateConstraint) {
+			final SimpleDateConstraint st = (SimpleDateConstraint)getConstraint();
+			if (st.getBeginDate() != null)
+				sb.append(" z.bd=\"").append(st.getBeginDate().getTime()).append("\"");
+			if (st.getEndDate() != null)
+				sb.append(" z.ed=\"").append(st.getEndDate().getTime()).append("\"");
+		}
 		if (!_lenient) sb.append(" z.lenient=\"false\"");
 		if (_compact) sb.append(" z.compact=\"true\"");
 		return sb.toString();
