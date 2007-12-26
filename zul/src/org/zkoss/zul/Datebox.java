@@ -269,10 +269,10 @@ public class Datebox extends FormatInputElement {
 			final SimpleDateConstraint st = (SimpleDateConstraint)getConstraint();
 			Date d = st.getBeginDate();
 			if (d != null)
-				sb.append(" z.bd=\"").append(d.getTime()).append("\"");
+				HTMLs.appendAttribute(sb, "z.bd", d.getTime()); 
 			d = st.getEndDate();
 			if (d != null)
-				sb.append(" z.ed=\"").append(d.getTime()).append("\"");
+				HTMLs.appendAttribute(sb, "z.ed", d.getTime()); 
 		}
 		if (!_lenient) sb.append(" z.lenient=\"false\"");
 		if (_compact) sb.append(" z.compact=\"true\"");
