@@ -628,11 +628,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-uri>class:org.zkoss.zkmax.zul.render.SplitterDefault</mold-uri>
 		</mold>
 	</component>
-	<!-- <component>
+	<component>
 		<component-name>style</component-name>
 		<extends>style</extends>
-		<text-as>content</text-as>
-	</component> -->
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.StyleDefault</mold-uri>
+		</mold>
+	</component>
 	<component>
 		<component-name>tab</component-name>
 		<extends>tab</extends>
