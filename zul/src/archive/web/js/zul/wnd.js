@@ -496,9 +496,12 @@ zkWnd._doModal = function (cmp, replace) {
 	var zi = ++zkau.topZIndex; //mask also need another index
 
 	if (zkWnd.shallVParent(cmp)) zk.setVParent(cmp);
-	zkWnd._center(cmp, zi, getZKAttr(cmp, "pos")); //called even if pos not defined
+	var pos = getZKAttr(cmp, "pos");
+	zkWnd._center(cmp, zi, pos); //called even if pos not defined
 		//show dialog first to have better response.
-
+	
+	if (!pos && $int(cmp.style.top) > 100) cmp.style.top = "100px";
+	
 	zkWnd._show(cmp); //unlike other mode, it must be visible
 
 	zkau.closeFloats(cmp);
