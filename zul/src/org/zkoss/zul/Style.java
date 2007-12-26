@@ -146,7 +146,7 @@ public class Style extends AbstractComponent {
 		final StringBuffer sb = new StringBuffer(64);
 		HTMLs.appendAttribute(sb, "z.src",
 			_src != null ? getDesktop().getExecution().encodeURL(_src):
-			Utils.getEncodedURI(this, _cntver, "css", "css"));
+			Utils.getDynamicMediaURI(this, _cntver, "css", "css"));
 		return sb.toString();
 	}
 

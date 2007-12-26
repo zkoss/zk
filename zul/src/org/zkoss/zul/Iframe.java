@@ -168,7 +168,7 @@ public class Iframe extends XulElement {
 	 * Don't call this method unless _media is not null;
 	 */
 	private String getMediaSrc() {
-		return Utils.getEncodedURI(
+		return Utils.getDynamicMediaURI(
 			this, _medver, _media.getName(), _media.getFormat());
 	}
 

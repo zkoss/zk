@@ -139,7 +139,7 @@ public class LabelImageElement extends LabelElement {
 	 * <p>Used only for component template, not for application developers.
 	 */
 	private String getContentSrc() {
-		return Utils.getEncodedURI(
+		return Utils.getDynamicMediaURI(
 			this, _imgver, _image.getName(), _image.getFormat());
 	}
 

@@ -179,7 +179,7 @@ public class Audio extends XulElement {
 	 * Don't call this method unless _audio is not null;
 	 */
 	private String getAudioSrc() {
-		return Utils.getEncodedURI(
+		return Utils.getDynamicMediaURI(
 			this, _audver, _audio.getName(), _audio.getFormat());
 	}
 

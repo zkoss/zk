@@ -141,12 +141,12 @@ public class Utils {
 		return sb.toString();
 	}
 
-	/** Returns the encoded URL for the specified content, or empty
+	/** Returns the encoded URL for the dynamic generated content, or empty
 	 * the component doesn't belong to any desktop.
 	 *
 	 * @since 3.0.2
 	 */
-	public static String getEncodedURI(AbstractComponent comp,
+	public static String getDynamicMediaURI(AbstractComponent comp,
 	int version, String name, String format) {
 		final Desktop desktop = comp.getDesktop();
 		if (desktop == null) return ""; //no avail at client
