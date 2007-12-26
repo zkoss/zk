@@ -171,12 +171,19 @@ td.rwt-wndcyan {
 div.modal_mask {
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
-	filter: alpha(opacity=40); <%-- IE --%>
-	opacity: .4;
+	filter: alpha(opacity=60); <%-- IE --%>
+	opacity: .6;
 	hasLayout: -1;<%-- not a layout element in IE --%>
 	background: #e6edf9; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
-
+div.z-loading {
+	position: absolute; z-index: 79000; background-color: #A8CAF8; 
+	white-space: nowrap; border: 1px solid #83B5F7; padding:3px;
+}
+div.z-loading-indicator {
+	color: #102B6D; border:1px solid #83B5F7; background-color: #FFF; 
+	white-space: nowrap; padding:6px;
+}
 <%-- ZK separator --%>
 div.hsep, div.hsep-bar {
 	display: block; width: 100%; padding: 0; margin: 2pt 0; font-size: 0;
