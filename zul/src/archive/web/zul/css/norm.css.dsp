@@ -245,7 +245,7 @@ div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-he
 }
 
 div.tree-head tr, div.listbox-head tr, div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
-	background-image: url(${c:encodeURL('~./zul/img/grid/v_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	overflow: hidden; border: 1px solid;
