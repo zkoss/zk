@@ -2,15 +2,16 @@
 ZK 3.0.2 Freshly
 * Features:
   1854857: A way to specify a range for datebox's constraint
+  1482341: Datebox supports a valid range of days
+  1485247: Datebox supports a valid range
   1855653: Optimize Live Data with Listbox and Grid
   1853745: A way to customize input&textarea's invalid look with CSS
   1857363: A way to invoke event listener after updating client
   1853791: JpaUtil and OpenEntityManagerInView
   1845408: Add getReference() in SelectEvent
-  1482341: Datebox supports a valid range of days
-  1485247: Datebox supports a valid range
 
 * Bugs:
+  1710925: The style component has no effect if added dynamically (IE)
   1852313: 'offsetWidth' is null or not a number
   1854571: Two clicks to close Messagebox if it took long to process
   1852895: Combo getSelectedItem()
