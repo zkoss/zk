@@ -129,7 +129,7 @@ public class Timer extends XulElement {
 	//-- Component --//
 	/** Not allowd. */
 	public boolean setVisible(boolean visible) {
-		throw new UnsupportedOperationException("Timer is always invisible");
+		throw new UnsupportedOperationException("timer is always invisible");
 	}
 	/** Not childable. */
 	public boolean isChildable() {

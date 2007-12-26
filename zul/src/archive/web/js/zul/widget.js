@@ -651,8 +651,19 @@ if (zk.gecko) { //Bug 1692495
 	};
 }
 
+//Style//
+var zkStyle = {};
+zkStyle.init = function (cmp) {
+	var src = getZKAttr(cmp, "src");
+	if (src) zk.loadCSS(src, cmp.id + "-", true);
+};
+zkStyle.cleanup = function (cmp) {
+	var css = $e(cmp.id + "-");
+	if (css) zk.remove(css);
+};
+
 //utilities//
-var zkWgt = {}
+var zkWgt = {};
 /** Fixes the button align with an input box, such as combobox, datebox.
  */
 zkWgt.fixDropBtn = function (cmp) {
