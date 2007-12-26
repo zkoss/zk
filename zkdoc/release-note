@@ -7,6 +7,8 @@ ZK 3.0.2 Freshly
   1857363: A way to invoke event listener after updating client
   1853791: JpaUtil and OpenEntityManagerInView
   1845408: Add getReference() in SelectEvent
+  1482341: Datebox supports a valid range of days
+  1485247: Datebox supports a valid range
 
 * Bugs:
   1852313: 'offsetWidth' is null or not a number
