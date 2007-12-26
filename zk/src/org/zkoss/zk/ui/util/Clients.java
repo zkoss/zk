@@ -134,4 +134,18 @@ public class Clients {
 	public static final void evalJavaScript(String javaScript) {
 		response(new AuScript(null, javaScript));
 	}
+
+	/** Asks the browser to show the busy message such that
+	 * the user knows the system is busy.
+	 *
+	 * <p>It is usually used with {@link org.zkoss.zk.ui.event.Events#echoEvent}
+	 * to prevent the user to click another buttons or components.
+	 *
+	 * @param msg the message to show. If null, the default message (processing)
+	 * is shown. It is ignored if the open argument is false.
+	 * @param open whether to open or to close the busy message.
+	 * @since 3.0.2
+	 */
+	public static final void showBusy(String msg, boolean show) {
+	}
 }
