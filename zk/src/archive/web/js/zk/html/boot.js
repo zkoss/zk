@@ -40,14 +40,14 @@ if (!window.Boot_progressbox) { //not customized
 		var mask = zk.loading && !zk._prgsOnce;
 		if (mask) {
 			zk._prgsOnce = true; //do it only once
-			html += ' class="modal_mask" style="display:block"><div'
+			html += '><div class="modal_mask" style="display:block"></div><div'
 		}
-
-		html += ' style="left:'+x+'px;top:'+y+'px;'
-		+'position:absolute;z-index:79000;background-color:#FFF0C8;'
-		+'white-space:nowrap;border:1px solid #77a;padding:6px;">'
-		+'<img alt="..." src="'+zk.getUpdateURI('/web/zk/img/progress.gif')+'"/> '
-		+msg+'</div>';
+		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
+		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
+		html += ' class="z-loading" style="left:'+x+';top:'+y+';">'
+		+'<div class="z-loading-indicator">'
+		+'<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
+		+msg+'</div></div>';
 
 		if (mask)
 			html += '</div>';
@@ -765,7 +765,7 @@ zk._bld = function () {
 				if (!n)
 					Boot_progressbox("zk_loadprog",
 						'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
-						zk.innerX() + 30, zk.innerY() + 50);
+						"45%", "40%");
 			}
 		}, 350);
 	}
@@ -1136,7 +1136,7 @@ zk.progressDone = function() {
 };
 /** Generates the progressing dialog. */
 zk._progress = function () {
-	if (zk.progressing) {
+	if (zk.progressing && !zk.loading) {
 		var n = $e("zk_prog");
 		if (!n) {
 			var msg;
