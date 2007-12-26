@@ -103,7 +103,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	private void fixConstraint() {
 		if ((_flags & NO_FUTURE) != 0 && _end == null)
 			_end = Dates.today();
-		else if ((_flags & NO_PAST) != 0 && _beg == null)
+		if ((_flags & NO_PAST) != 0 && _beg == null)
 			_beg = Dates.today();
 	}
 
