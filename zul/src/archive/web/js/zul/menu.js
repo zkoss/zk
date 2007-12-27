@@ -67,7 +67,8 @@ zkMenu._onout = function (cmp) {
 	var menubar = $parentByType(cmp, "Menubar");
 	if (menubar && getZKAttr(menubar, "autodrop") == "true") {
 		zkMenu._shallClose = true;
-		setTimeout("if (zkMenu._shallClose) zkau.closeFloats('"+menubar.id+"');", 500);
+		setTimeout("if (zkMenu._shallClose) zkau.closeFloatsOf('"+menubar.id+"');", 500);
+			//Bug 1852304: we use closeFloatsOf instead of closeFloats
 	}
 };
 zkMenu.onclick = function (evt) {
