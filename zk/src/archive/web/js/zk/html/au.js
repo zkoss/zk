@@ -1915,14 +1915,16 @@ zkau.cmd0 = { //no uuid at all
 		if (open == "true") {
 			var n = $e("zk_loadprog");
 			if (n) n.parentNode.removeChild(n);
-			n = $e("showBusy");
+			n = $e("zk_prog");
+			if (n) n.parentNode.removeChild(n);
+			n = $e("zk_showBusy");
 			if (!n) {
 				msg = msg == "" ? mesg.PLEASE_WAIT : msg;
-				Boot_progressbox("showBusy", msg,
+				Boot_progressbox("zk_showBusy", msg,
 					0, 0, true, true);
 			}
 		} else {
-			var n = $e("showBusy");
+			var n = $e("zk_showBusy");
 			if (n) n.parentNode.removeChild(n);
 		}
 	}

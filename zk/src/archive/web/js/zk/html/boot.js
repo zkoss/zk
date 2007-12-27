@@ -1155,7 +1155,9 @@ zk.progressDone = function() {
 /** Generates the progressing dialog. */
 zk._progress = function () {
 	if (zk.progressing && !zk.loading) {
-		var n = $e("zk_prog");
+		var n = $e("zk_showBusy");
+		if (n) return;
+		n = $e("zk_prog");
 		if (!n) {
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
