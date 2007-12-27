@@ -20,7 +20,8 @@ ZK 3.0.2 Freshly
   1852304: Menuitem popup="" does not stay up
   1857166: Error with tabbox + listbox filled in onCreate method
   1857731: tabbox + listbox filled in onCreate + simple window
-  
+  1858869: onOK in textbox fires onOK twice
+
 * Upgrade Notes:
   
 
