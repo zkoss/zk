@@ -1910,6 +1910,21 @@ zkau.cmd0 = { //no uuid at all
 	},
 	cfmClose: function (msg) {
 		zkau.confirmClose = msg;
+	},
+	showBusy: function (msg, open) {
+		if (open == "true") {
+			var n = $e("zk_loadprog");
+			if (n) n.parentNode.removeChild(n);
+			n = $e("showBusy");
+			if (!n) {
+				msg = msg == "" ? mesg.PLEASE_WAIT : msg;
+				Boot_progressbox("showBusy", msg,
+					0, 0, true, true);
+			}
+		} else {
+			var n = $e("showBusy");
+			if (n) n.parentNode.removeChild(n);
+		}
 	}
 };
 zkau.cmd1 = {

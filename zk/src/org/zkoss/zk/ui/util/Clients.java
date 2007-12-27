@@ -146,6 +146,7 @@ public class Clients {
 	 * @param open whether to open or to close the busy message.
 	 * @since 3.0.2
 	 */
-	public static final void showBusy(String msg, boolean show) {
+	public static final void showBusy(String msg, boolean open) {
+		response(new AuShowBusy(msg, open));
 	}
 }

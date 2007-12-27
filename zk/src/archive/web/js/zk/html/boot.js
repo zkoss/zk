@@ -29,22 +29,24 @@ if (!window.zk) { //avoid eval twice
  * @param msg the message
  * @param x the x-coordinate of the box
  * @param y the y-coordinate of the box
+ * @param mk sets whether show the modal_mark
+ * @param center sets whether center the loading bar
  */
 if (!window.Boot_progressbox) { //not customized
-	window.Boot_progressbox = function (id, msg, x, y) {
+	window.Boot_progressbox = function (id, msg, x, y, mk, center) {
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 
 		var html = '<div id="'+id+'"';
 
-		var mask = zk.loading && !zk._prgsOnce;
+		var mask = mk || zk.loading && !zk._prgsOnce;
 		if (mask) {
 			zk._prgsOnce = true; //do it only once
-			html += '><div class="modal_mask" style="display:block"></div><div'
+			html += ' ><div class="modal_mask" style="display:block"></div><div'
 		}
 		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
 		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
-		html += ' class="z-loading" style="left:'+x+';top:'+y+';">'
+		html += ' id="z-loading" class="z-loading" style="left:'+x+';top:'+y+';">'
 		+'<div class="z-loading-indicator">'
 		+'<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
 		+msg+'</div></div>';
@@ -53,6 +55,11 @@ if (!window.Boot_progressbox) { //not customized
 			html += '</div>';
 
 		zk._setOuterHTML(n, html);
+		if (center) {
+			var el = $e("z-loading");
+			el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + "px";
+			el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + "px";
+		}
 		return $e(id);
 	};
 }
