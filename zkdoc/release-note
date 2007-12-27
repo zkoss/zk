@@ -9,6 +9,7 @@ ZK 3.0.2 Freshly
   1857363: A way to invoke event listener after updating client
   1853791: JpaUtil and OpenEntityManagerInView
   1845408: Add getReference() in SelectEvent
+  1858762: A way to show the busy message from server.
 
 * Bugs:
   1710925: The style component has no effect if added dynamically (IE)
