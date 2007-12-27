@@ -107,12 +107,13 @@ zk.Cal.prototype = {
 		this.element = $e(this.id);
 		if (!this.element) return;
 
-		var val = this.input ? this.input.value: getZKAttr(this.element, "value");
+		var val = this.input ? this.input.value: getZKAttr(this.element, "value"),
+			bd = getZKAttr(this.element, "bd"),
+			ed = getZKAttr(this.element, "ed");
 		if (val) val = zk.parseDate(val, this.getFormat());
 		this.date = val ? val: this.today();
-		var bd = $int(getZKAttr(this.element, "bd")), ed = $int(getZKAttr(this.element, "ed"));
-		if (bd) this.begin = new Date(bd);
-		if (ed) this.end = new Date(ed);		
+		if (bd) this.begin = new Date($int(bd) * 1000);
+		if (ed) this.end = new Date($int(ed) * 1000);
 		this._output();
 	},
 	getFormat: function () {
