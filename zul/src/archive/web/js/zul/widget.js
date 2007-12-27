@@ -157,9 +157,7 @@ zkTxbox.onkeydown = function (evt) {
 	if (Event.keyCode(evt) == 13 && zkau.asap(cmp, "onOK")) {
 		zkTxbox._scanStop(inp);
 		zkTxbox.updateChange(inp, false);
-		zkau.send({uuid: uuid, cmd: "onOK",
-			data: [ 13, evt.ctrlKey, evt.shiftKey, evt.altKey]}, 
-			40);
+		//Bug 1858869: no need to send onOK here since zkau._onDocKeydown will do
 	}
 };
 zkTxbox.onfocus = function (evt) {
