@@ -880,20 +880,14 @@ zk._loadAndInit = function (inf) {
 		if (inf.nosibling) inf.nosibling = false;
 		else if (n.nextSibling) inf.stk.push(n.nextSibling);
 
-		zk._addChildInit(n, inf);
+		//Since 3.0.2, we introduce z.skipdsc to stop parsing the descendants.
+		//It improves the performance for the sophisticated component
+		//that want to initialize children in a custom way.
+		if (n.firstChild && !getZKAttr("skipdsc")) inf.stk.push(n.firstChild);
 	}
 
 	zk._evalInit();
 	zk._ready = true;
-};
-/** Adds the first child to inf for initialization.
- * @since 3.0.2
- */
-zk._addChildInit = function (n, inf) {
-	if (n.firstChild && !getZKAttr("skipdsc")) inf.stk.push(n.firstChild);
-		//Since 3.0.2, we introduce z.skipdsc to stop parsing the descendants.
-		//It improves the performance for the sophisticated component
-		//that want to initialize children in a custom way.
 };
 /** Fix bug 1635685 and 1612312 (IE/IE7 only):
  * IE invokes onbeforeunload if <a href="javascript;"> is clicked (sometimes)
