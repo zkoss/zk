@@ -53,7 +53,7 @@ public class SelectedItemConverter implements TypeConverter {
   				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
     				Set items = new HashSet();
     				items.add(item);
-    				Events.postEvent(new SelectEvent("onSelect", lbx, items));
+    				Events.postEvent(new SelectEvent("onSelect", lbx, items, item));
     			}    			
   				return item;
   			}
