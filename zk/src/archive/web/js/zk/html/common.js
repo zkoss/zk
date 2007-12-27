@@ -773,6 +773,15 @@ zk.isAncestorX = function (p, ary, checkuuid) {
 			return true;
 	return false;
 };
+/** Returns whether any of an array of elments is an ancestor of another.
+ * @since 3.0.2
+ */
+zk.isAncestorX1 = function (ary, c, checkuuid) {
+	for (var j = 0, al = ary.length; j < al; ++j)
+		if (zk.isAncestor(ary[j], c, checkuuid))
+			return true;
+	return false;
+};
 
 /** Returns the enclosing tag for the specified HTML codes.
  */
@@ -1728,24 +1737,29 @@ zk.Float.prototype = {
 		if (this._ftid == id)
 			this.closeFloats();
 	},
-	/** Closes (hides) all floats.
+	/** Closes (hides) all floats unless it is an ancestor of any of arguments.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloats: function () {
-		return this._closeFloats(false, arguments);
+		return this._closeFloats(false, zkau._shallCloseBut, arguments);
 	},
 	/** Closes all floats when a component is getting the focus.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloatsOnFocus: function () {
-		return this._closeFloats(true, arguments);
+		return this._closeFloats(true, zkau._shallCloseBut, arguments);
 	},
-	_closeFloats: function (onfocus, ancestors) {
+	/** Closes all floats if it belongs to any of arguments.
+	 * @since 3.0.2
+	 */
+	closeFloatsOf: function () {
+		return this._closeFloats(false, zkau._shallCloseOf, arguments);
+	},
+	_closeFloats: function (onfocus, shallClose, ancestors) {
 		if (this._ftid) {
 			var n = $e(this._ftid);
-			if ($visible(n)
-			&& getZKAttr(n, "animating") != "hide"
-			&& (!onfocus || !zk.isAncestorX(n, ancestors, true))) {
+			if ($visible(n) && getZKAttr(n, "animating") != "hide"
+			&& (!onfocus || shallClose(n, ancestors))) {
 				this._close(n);
 				this._ftid = null;
 				return true;
@@ -1790,26 +1804,31 @@ zk.Floats.prototype = {
 			}
 		return false;
 	},
-	/** Closes (hides) all floats.
+	/** Closes (hides) all floats unless it is an ancestor of any of arguments.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloats: function () {
-		return this._closeFloats(false, arguments);
+		return this._closeFloats(false, zkau._shallCloseBut, arguments);
 	},
 	/** Closes all floats when a component is getting the focus.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloatsOnFocus: function () {
-		return this._closeFloats(true, arguments);
+		return this._closeFloats(true, zkau._shallCloseBut, arguments);
 	},
-	_closeFloats: function (onfocus, ancestors) {
+	/** Closes all floats if it belongs to any of arguments.
+	 * @since 3.0.2
+	 */
+	closeFloatsOf: function () {
+		return this._closeFloats(false, zkau._shallCloseOf, arguments);
+	},
+	_closeFloats: function (onfocus, shallClose, ancestors) {
 		var closed;
 		for (var j = this._ftids.length; --j >= 0;) {
 			var id = this._ftids[j];
 			var n = $e(id);
-			if ($visible(n)
-			&& getZKAttr(n, "animating") != "hide"
-			&& ((!onfocus && !this._aspps[id]) || !zk.isAncestorX(n, ancestors, true))) {
+			if ($visible(n) && getZKAttr(n, "animating") != "hide"
+			&& ((!onfocus && !this._aspps[id]) || shallClose(n, ancestors))) {
 				this._ftids.splice(j, 1);
 				this._close(n);
 				closed = true;

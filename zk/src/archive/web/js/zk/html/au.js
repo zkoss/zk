@@ -1365,13 +1365,18 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
 
-/** Closes popups and floats.
- * Return false if nothing changed.
+/** Closes popups and floats except any of the specified components
+ * is an ancestor of popups and floats.
+ *
+ * Maybe it shall be named as closeFloatsBut, but we cannot due to backward
+ * compatible issues.
+ *
  * @param arguments a list of component (or its ID) to exclude if
  * a popup contains any of them
+ * @return false if nothing changed.
  */
 zkau.closeFloats = function () {
-	return zkau._closeFloats("closeFloats", arguments);
+	return zkau._closeFloats("closeFloats", zkau._shallCloseBut, arguments);
 };
 /** Similar to zkau.closeFloats, except it is called when a component
  * is getting the focus.
@@ -1379,17 +1384,30 @@ zkau.closeFloats = function () {
  * floats remains if it is an ancestor of aruments.
  */
 zkau.closeFloatsOnFocus = function () {
-	return zkau._closeFloats("closeFloatsOnFocus", arguments);
+	return zkau._closeFloats("closeFloatsOnFocus", zkau._shallCloseBut, arguments);
 };
-zkau._closeFloats = function (method, ancestors) {
+zkau._shallCloseBut = function (n, ancestors) {
+	return !zk.isAncestorX(n, ancestors, true);
+};
+/** Closes popups and floats if they belongs to any of the specified component.
+ * By belong we mean a component is a descendant of another.
+ * @return false if nothing changed.
+ * @since 3.0.2
+ */
+zkau.closeFloatsOf = function () {
+	return zkau._closeFloats("closeFloatsOf", zkau._shallCloseOf, arguments);
+};
+zkau._shallCloseOf = function (n, ancestors) {
+	return zk.isAncestorX1(ancestors, n, true);
+}
+zkau._closeFloats = function (method, shallClose, ancestors) {
 	var closed;
 	for (var j = zkau._popups.length; --j >=0;) {
 	//reverse order is important if popup contains another
 	//otherwise, IE seem have bug to handle them correctly
 		var n = $e(zkau._popups[j]);
-		if ($visible(n)
-		&& getZKAttr(n, "animating") != "hide"
-		&& !zk.isAncestorX(n, ancestors, true)) {
+		if ($visible(n) && getZKAttr(n, "animating") != "hide"
+		&& shallClose(n, ancestors)) {
 		//we avoid hiding twice we have to check animating
 			closed = true;
 			zk.unsetVParent(n);
@@ -1403,8 +1421,8 @@ zkau._closeFloats = function (method, ancestors) {
 
 	//floats: combobox, context menu...
 	for (var j = zkau.floats.length; --j >= 0;) {
-		var n = zkau.floats[j];
-		if (n[method].apply(n, ancestors))
+		var ft = zkau.floats[j];
+		if (ft[method].apply(ft, ancestors))
 			closed = true;
 	}
 
@@ -2097,13 +2115,7 @@ zkau.cmd1 = {
 		var type = $type(cmp);
 		if (type) {
 			if (mode == "0") { //close
-				for (var j = zkau.floats.length; --j >= 0;) {
-					var n = zkau.floats[j];
-					var f = n["close"];
-					if (f && f.apply(n, [cmp.id]))
-						return;
-				}
-				zkau.closeFloats();
+				zkau.closeFloatsOf(cmp);
 			} else {
 				var ref;
 				if (mode == "1") { //ref
