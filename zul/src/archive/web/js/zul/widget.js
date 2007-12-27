@@ -655,7 +655,7 @@ if (zk.gecko) { //Bug 1692495
 var zkStyle = {};
 zkStyle.init = function (cmp) {
 	var src = getZKAttr(cmp, "src");
-	if (src) zk.loadCSS(src, cmp.id + "-", true);
+	if (src) zk.loadCSSDirect(src, cmp.id + "-");
 };
 zkStyle.cleanup = function (cmp) {
 	var css = $e(cmp.id + "-");

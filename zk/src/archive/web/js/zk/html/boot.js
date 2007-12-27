@@ -29,8 +29,8 @@ if (!window.zk) { //avoid eval twice
  * @param msg the message
  * @param x the x-coordinate of the box
  * @param y the y-coordinate of the box
- * @param mk sets whether show the modal_mark
- * @param center sets whether center the loading bar
+ * @param mk sets whether show the modal_mark (since 3.0.2)
+ * @param center sets whether center the loading bar (since 3.0.2)
  */
 if (!window.Boot_progressbox) { //not customized
 	window.Boot_progressbox = function (id, msg, x, y, mk, center) {
@@ -1060,19 +1060,26 @@ zk.onHideAt = function (n) {
 /** Loads the specified style sheet (CSS).
  * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
  * unless http:// or https:// is specified
- * @param id the element's ID. Optional
- * @param noUpdateURI whether to encode with zk.getUpdateURI.
- * If not specified, false is assumed
  */
-zk.loadCSS = function (uri, id, noUpdateURI) {
+zk.loadCSS = function (uri) {
+	if (uri.indexOf("://") < 0) {
+		if (uri.charAt(0) != '/') uri = '/' + uri;
+		uri = zk.getUpdateURI("/web" + uri);
+	}
+	zk.loadCSSDirect(uri);
+};
+/**Loads the specified style sheet (CSS) without prefixing with /web.
+ *
+ * @param uri the URI. Note: it is assigned to the href attribute directly
+ * without prefix with /web
+ * @param id the identifier (the id attribute). Optional.
+ * @since 3.0.2
+ */
+zk.loadCSSDirect = function (uri, id) {
 	var e = document.createElement("LINK");
 	if (id) e.id = id;
 	e.rel = "stylesheet";
 	e.type = "text/css";
-	if (!noUpdateURI && uri.indexOf("://") < 0) {
-		if (uri.charAt(0) != '/') uri = '/' + uri;
-		uri = zk.getUpdateURI("/web" + uri);
-	}
 	e.href = uri;
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
