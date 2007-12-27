@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1858762.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 27 11:12:43 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<button label="show" >
+<attribute name="onClick">
+	Clients.showBusy("This loading bar will disappear after 5 sec.", true);
+	timer.start();
+</attribute>
+</button>
+<timer id="timer" delay="5000" repeats="true" running="false"
+		onTimer='Clients.showBusy(null, false);self.stop();'/>
+</zk>
