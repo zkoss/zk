@@ -407,8 +407,13 @@ zkau._send = function (dtid, evt, timeout) {
 
 		var t = $now();
 		if (zkau._ctli == evt.uuid && zkau._ctlc == evt.cmd //Bug 1797140
-		&& t - zkau._ctlt < 350)
+		&& t - zkau._ctlt < 390)
 			return; //to prevent key stroke are pressed twice (quickly)
+
+		//Note: it is still possible to queue two ctl with same uuid and cmd,
+		//if the first one was not sent yet and the second one is generated
+		//after 390ms.
+		//However, it is rare so no handle it
 
 		zkau._ctlt = t;
 		zkau._ctli = evt.uuid;
