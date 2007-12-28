@@ -51,6 +51,12 @@ function init() {
 	el = document.getElementById("file");
 	if (el) el.focus();
 }
+function onDocKeydown(evt) {
+	if (!evt) evt = window.event;
+	if (parent.Event.keyCode(evt) == 27)
+		cancelUpload();
+}
+parent.zk.listen(document, "keydown", onDocKeydown);
 // -->
 </script>
 </head>
