@@ -186,7 +186,7 @@ zkau._areqTmout = zk.safari ? zk.voidf: function () {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
-		zkau._areqResend(reqInf[1]);
+		zkau._areqResend(reqInf.reqes);
 	}
 };
 zkau._areqResend = function (es) {
@@ -201,14 +201,14 @@ zkau._onRespReady = function () {
 		var req = zkau._areq, reqInf = zkau._areqInf;
 		if (req && req.readyState == 4) {
 			zkau._areq = zkau._areqInf = null;
-			clearTimeout(reqInf[0]); //stop timer
+			clearTimeout(reqInf.tfn); //stop timer
 
 			if (zk.pfmeter) zkau._pfrecv(req);
 
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
 
-			if (req.status == 200) {
+			if (req.status == 200) { //correct
 				zkau._areqTry = 0;
 				var sid = req.responseXML.getElementsByTagName("sid");
 				if (sid && sid.length) {
@@ -242,7 +242,7 @@ zkau._onRespReady = function () {
 				case 12152: // Connection closed by server.
 				case 12159:
 				case 13030:
-					zkau._areqResend(reqInf[1]);
+					zkau._areqResend(reqInf.reqes);
 					return;
 				}
 
@@ -400,13 +400,18 @@ zkau.send = function (evt, timeout) {
 };
 zkau._send = function (dtid, evt, timeout) {
 	if (evt.ctl) {
+		//Don't send the same request if it is in processing
+		if (zkau._areqInf && zkau._areqInf.ctli == evt.uuid
+		&& zkau._areqInf.ctlc == evt.cmd)
+			return;
+
 		var t = $now();
-		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 450
-		&& (evt.cmd != "onDoubleClick" || zkau._ctlc != "onClick")) //Bug 1797140
+		if (zkau._ctli == evt.uuid && zkau._ctlc == evt.cmd //Bug 1797140
+		&& t - zkau._ctlt < 350)
 			return; //to prevent key stroke are pressed twice (quickly)
 
 		zkau._ctlt = t;
-		zkau._ctl = evt.uuid;
+		zkau._ctli = evt.uuid;
 		zkau._ctlc = evt.cmd;
 	}
 
@@ -466,14 +471,17 @@ zkau._sendNow = function (dtid) {
 	//bug 1721809: we cannot filter out ctl even if zkau.processing
 
 	//decide implicit and ignorable
-	var implicit = true, ignorable = true;
+	var implicit = true, ignorable = true, ctli, ctlc;
 	for (var j = es.length; --j >= 0;) {
-		if (!es[j].ignorable) { //ignorable implies implicit
+		var evt = es[j];
+		if (implicit && !evt.ignorable) { //ignorable implies implicit
 			ignorable = false;
-			if (!es[j].implicit) {
+			if (!evt.implicit)
 				implicit = false;
-				break;
-			}
+		}
+		if (evt.ctl && !ctli) {
+			ctli = evt.uuid;
+			ctlc = evt.cmd;
 		}
 	}
 	zkau._ignorable = ignorable;
@@ -514,7 +522,10 @@ zkau._sendNow = function (dtid) {
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		if (zk.pfmeter) zkau._pfsend(req, dtid);
 
-		zkau._areqInf = [setTimeout(zkau._areqTmout, zk_resndto), reqes];
+		zkau._areqInf = {
+			tfn: setTimeout(zkau._areqTmout, zk_resndto),
+			reqes: reqes, ctli: ctli, ctlc: ctlc
+		};
 		req.send(content);
 
 		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
@@ -1236,9 +1247,9 @@ zkau._parentByZKAttr = function (n, attr1, attr2) {
 /** Handles document.onkeydown. */
 zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	var zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys;
-	var keycode = Event.keyCode(evt), zkcode; //zkcode used to search z.ctkeys
+	var target = Event.element(evt),
+		zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys,
+		keycode = Event.keyCode(evt), zkcode; //zkcode used to search z.ctkeys
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = $tag(target);

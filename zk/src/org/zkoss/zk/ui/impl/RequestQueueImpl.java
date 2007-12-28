@@ -111,23 +111,14 @@ public class RequestQueueImpl implements RequestQueue {
 			}
 		}
 
-		//Case 2, CTRL_GROUP: drop new request if similar already exists
 		final Command cmd = request.getCommand();
 		final int flags = cmd.getFlags();
-		/* Since 3.0.1, CTRL_GROUP no longer useful because requests are sent
-		   one-by-one by the client
-		if ((flags & Command.CTRL_GROUP) != 0) {
-			for (Iterator it = _requests.iterator(); it.hasNext();) {
-				final AuRequest req2 = (AuRequest)it.next();
-				if ((req2.getCommand().getFlags() & Command.CTRL_GROUP) != 0) {
-//					if (D.ON && log.debugable()) log.debug("Eat request: "+req2);
-					return; //drop request
-				}
-			}
 
-		//case 3, IGNORE_OLD_EQUIV: drop existent request if they are the same
+		//Since 3.0.2, redudant CTRL_GROUP is removed at the client
+
+		//case 2, IGNORE_OLD_EQUIV: drop existent request if they are the same
 		//as the arrival.
-		} else*/ if ((flags & Command.IGNORE_OLD_EQUIV) != 0) {
+		if ((flags & Command.IGNORE_OLD_EQUIV) != 0) {
 			final String uuid = request.getComponentUuid();
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
@@ -139,7 +130,7 @@ public class RequestQueueImpl implements RequestQueue {
 				}
 			}
 
-		//Case 4, IGNORE_IMMEDIATE_OLD_EQUIV: drop existent if the immediate
+		//Case 3, IGNORE_IMMEDIATE_OLD_EQUIV: drop existent if the immediate
 		//following is the same
 		} else if ((flags & Command.IGNORE_IMMEDIATE_OLD_EQUIV) != 0) {
 			final int last = _requests.size() - 1;

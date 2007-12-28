@@ -11,6 +11,7 @@ ZK 3.0.2 Freshly
   1845408: Add getReference() in SelectEvent
   1858762: A way to show the busy message from server
   1859501: Close fileupload dialog if ESC is pressed
+  1859533: Prevent the same button clicked twice for long operation
 
 * Bugs:
   1710925: The style component has no effect if added dynamically (IE)
