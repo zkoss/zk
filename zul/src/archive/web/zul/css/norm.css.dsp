@@ -11,7 +11,7 @@ button, input.button, input.file {
 }
 input, textarea {
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
-	border: 1px solid #81B1DA;
+	border: 1px solid #7F9DB9;
 }
 .text-invalid {
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
@@ -256,7 +256,7 @@ div.tree-head tr, div.listbox-head tr, div.grid-head tr, tbody.grid-head tr, tbo
 }
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	overflow: hidden; border: 1px solid;
-	border-color: #DAE7F6 #7F9DB9 #7F9DB9 #DAE7F6;
+	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
@@ -299,7 +299,7 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 }
 
 div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, tbody.listbox-foot, div.tree-foot, tbody.tree-foot {<%-- always used --%>
-	background: #DAE7F6; border-top: 1px solid #7F9DB9;
+	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
 
 div.foot-cell-inner, div.cell-inner, div.head-cell-inner{
