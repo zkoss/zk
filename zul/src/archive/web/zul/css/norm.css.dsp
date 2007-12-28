@@ -15,7 +15,10 @@ button, input.button, input.file {
 }
 .text-invalid {
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
-	border: 1px solid #F999A7;
+	border: 1px solid #DD7870;
+}
+.readonly, .text-disd {
+	background: #ECEAE4;
 }
 body {
 	height:100%; margin: 0px; padding: 0px 5px;
@@ -339,7 +342,7 @@ tr.seld, td.seld {
 	background: #b3c8e8; border: 1px solid #6f97d2;
 }
 tr.disd, td.disd, tr.disd div.cell-inner, td.disd div.cell-inner, tr.disd a, td.disd a, 
-	a.disd {
+	a.disd, .text-disd {
 	color: #C5CACB !important;
 }
 a.disd:visited, a.disd:hover { 

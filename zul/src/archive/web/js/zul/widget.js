@@ -39,6 +39,8 @@ zkTxbox.init = function (cmp) {
 		cmp.defaultValue = old + "-";
 		if (old != cmp.value) cmp.value = old; //Bug 1490079
 	}
+	if (cmp.readOnly) zk.addClass(cmp, "readonly");
+	if (cmp.disabled) zk.addClass(cmp, "text-disd");
 };
 zkTxbox.onHide = function (cmp) {
 	var inp = $real(cmp);
@@ -216,7 +218,8 @@ zkTxbox.setAttr = function (cmp, nm, val) {
 			range.select();
 		}
 		return true;
-	}
+	} else if ("disabled" == nm || "readOnly" == nm)
+		zk[val == "true" ? "addClass" : "rmClass"](cmp, "disabled" == nm ? "text-disd" : "readonly");
 	return false;
 }
 
