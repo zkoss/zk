@@ -512,8 +512,12 @@ zk.focus = function (cmp) {
 			cmp.focus();
 		} catch (e) {
 			setTimeout(function() {
-				try {cmp.focus();} catch (e) {}
-			}, 30);
+				try {
+					cmp.focus();
+				} catch (e) {
+					setTimeout(function() {try {cmp.focus();} catch (e) {}}, 100);
+				}
+			}, 0);
 		}
 		//IE throws exception when focus in some cases
 };
