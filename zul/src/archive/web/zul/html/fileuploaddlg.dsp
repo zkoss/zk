@@ -48,8 +48,7 @@ function init() {
 	el.action = parent.zk.getUpdateURI(
 		"/upload?dtid=${param.dtid}&uuid=${param.uuid}");
 
-	el = document.getElementById("file");
-	if (el) el.focus();
+	parent.zk.focus(document.getElementById("file"));
 }
 function onDocKeydown(evt) {
 	if (!evt) evt = window.event;
