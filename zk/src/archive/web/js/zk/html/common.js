@@ -471,15 +471,13 @@ zk._focusDown = function (el, match, checkA) {
 	if (el.focus) {
 		var tn = $tag(el);
 		if (match.contains(tn)) {
-			try {el.focus();} catch (e) {}
-			//IE throws exception when focus in some cases
+			zk.focus(el);
 			return true;
 		}
 		if (checkA && tn == "A") {
 			for (var n = el; (n = $parent(n))/*yes, assign*/;) {
 				if (getZKAttr(n, "type")) {
-					try {el.focus();} catch (e) {}
-					//IE throws exception when focus in some cases
+					zk.focus(el);
 					return true;
 				}
 			}
@@ -515,7 +513,7 @@ zk.focus = function (cmp) {
 		} catch (e) {
 			setTimeout(function() {
 				try {cmp.focus();} catch (e) {}
-			}, 0);
+			}, 30);
 		}
 		//IE throws exception when focus in some cases
 };
