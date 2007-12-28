@@ -47,6 +47,8 @@ import org.zkoss.zul.ext.Constrainted;
 /**
  * A skeletal implementation of an input box.
  * <p>Events: onChange, onChanging, onFocus, onBlur, onSelection, and onOK<br/>
+ * 
+ * <p>Default {@link #getSclass}: text.
  * @author tomyeh
  * @since 3.0.1 supports onOK event.
  */
@@ -73,6 +75,9 @@ implements Constrainted {
 	/** Whether the validation is calused by {@link #isValid}. */
 	private transient boolean _checkOnly;
 
+	public InputElement(){
+		setSclass("text");
+	}
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
