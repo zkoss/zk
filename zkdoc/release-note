@@ -12,7 +12,12 @@ ZK 3.0.2 Freshly
   1858762: A way to show the busy message from server
   1859501: Close fileupload dialog if ESC is pressed
   1859533: Prevent the same button clicked twice for long operation
-
+  1856230: Gmaps Support more configuration
+  1856240: Gmaps support G_PHYSICAL_MAP
+  1856241: Gmaps support Gpolygon component
+  1856245: Gmaps support more controls
+  1856248: Gmaps support add and remove map type
+  
 * Bugs:
   1710925: The style component has no effect if added dynamically (IE)
   1852313: 'offsetWidth' is null or not a number
