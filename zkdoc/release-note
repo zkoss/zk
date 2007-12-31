@@ -24,6 +24,7 @@ ZK 3.0.2 Freshly
   1857731: tabbox + listbox filled in onCreate + simple window
   1858869: onOK in textbox fires onOK twice
   1859568: Change toolbarbutton href changes layout
+  1858838: closable window
 
 * Upgrade Notes:
   
