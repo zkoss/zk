@@ -230,6 +230,7 @@ zkau._onRespReady = function () {
 				else que.splice(ofs, 0, resp); //insert
 			} else {
 				//handle MSIE's buggy HTTP status codes
+				//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
 				switch (req.status) {
 				case 12029: // 12029 to 12031 correspond to dropped connections.
 					if (++zkau._areqTry > 3) {
@@ -237,7 +238,7 @@ zkau._onRespReady = function () {
 						break; //the server is dead
 					}
 				case 12002: // Server timeout
-				case 12030:
+				case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
 				case 12031:
 				case 12152: // Connection closed by server.
 				case 12159:

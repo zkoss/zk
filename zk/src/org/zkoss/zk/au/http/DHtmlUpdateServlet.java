@@ -142,8 +142,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return; //done
 		}
 
-		if (sess == null)
-			return; //Bug 1849088: rmDesktop might be sent after invalidate
+		if (sess == null) {
+			if (!withpi) {
+				//Bug 1849088: rmDesktop might be sent after invalidate
+				//Bug 1859776: need send response to client for redirect or others
+				final String dtid = request.getParameter("dtid");
+				if (dtid != null)
+					sessionTimeout(request, response,
+						dtid, request.getParameter("cmd.0"));
+			}
+			return;
+		}
 
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
@@ -201,26 +210,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				final AuWriter out =
-					AuWriters.newInstance().open(request, response, 0);
-
-				if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
-				&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
-					String uri = Devices.getTimeoutURI(
-						Servlets.isMilDevice(request) ? "mil": "ajax");
-					final AuResponse resp;
-					if (uri != null) {
-						if (uri.length() != 0)
-							uri = Encodes.encodeURL(_ctx, request, response, uri);
-						resp = new AuSendRedirect(uri, null);
-					} else {
-						resp = new AuObsolete(
-							dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
-					}
-					out.write(resp);
-				}
-
-				out.close(request, response);
+				sessionTimeout(request, response, dtid, scmd);
 				return;
 			}
 		}
@@ -281,6 +271,29 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		if (reqIds != null && pfmeter != null)
 			meterComplete(pfmeter, response, reqIds, exec);
+
+		out.close(request, response);
+	}
+	private void sessionTimeout(HttpServletRequest request,
+	HttpServletResponse response, String dtid, String scmd)
+	throws ServletException, IOException {
+		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
+
+		if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
+		&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
+			String uri = Devices.getTimeoutURI(
+				Servlets.isMilDevice(request) ? "mil": "ajax");
+			final AuResponse resp;
+			if (uri != null) {
+				if (uri.length() != 0)
+					uri = Encodes.encodeURL(_ctx, request, response, uri);
+				resp = new AuSendRedirect(uri, null);
+			} else {
+				resp = new AuObsolete(
+					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+			}
+			out.write(resp);
+		}
 
 		out.close(request, response);
 	}
