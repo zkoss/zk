@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1862036.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan  2 17:28:36 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<zscript>
+		String[] data = new String[30];
+		for(int j=0; j &lt; data.length; ++j) {
+			data[j] = "option "+j;
+		}
+		ListModel strset = new SimpleListModel(data);
+	</zscript>
+	<combobox id="list" width="200px" model="&#36;{strset}" />	
+</zk>
