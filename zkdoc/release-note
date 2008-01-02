@@ -1,6 +1,7 @@
 	--------
 ZK 3.0.2 Freshly
 * Features:
+  1862036: Combobox supports ListModel
   1854857: A way to specify a range for datebox's constraint
   1482341: Datebox supports a valid range of days
   1485247: Datebox supports a valid range
