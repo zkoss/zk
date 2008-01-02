@@ -99,21 +99,31 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	}
 	
 	/**
-	 * Returns the subset of list model data that the subset data is extract 
-	 * from combobox's list model data. It is ususally used for implmentation of
-	 * auto-complete. 
-	 * <p>Note : If the nRows is a negative number, the value of nRows is 10 by default.  
+	 * Returns the subset of the list model data that matches
+	 * the specified value.
+	 * It is ususally used for implmentation of auto-complete.
+	 *
+	 * <p>The implementation uses {@link #objectToString} to convert
+	 * the returned object of {@link #getElementAt} to the string.
+	 * And then, an element is considered as 'matched', if the string
+	 * starts with the specified value.
 	 * 
+	 * <p>Note: If the nRows is a negative number, 10 is assumed.
+	 *
+	 * @param value the value to retrieve the subset of the list model.
+	 * It is converted to a string first by use of {@link #objectToString}.
+	 * The, it is used to check if an element starts with (aka., prefix with)
+	 * this string.
 	 * @since 3.0.2
 	 */
 	public ListModel getSubModel(Object value, int nRows) {
 		final String idx = value == null ? "" : objectToString(value);
 		if (nRows < 0) nRows = 10;
 		final LinkedList data = new LinkedList();
-		for (int i = 0, j = _data.length; i < j; i++) {
+		for (int i = 0; i < _data.length; i++) {
 			if (idx.equals("") || _data[i].toString().startsWith(idx)) {
 				data.add(_data[i]);
-				if (data.size() == nRows)break;
+				if (--nRows <= 0) break; //done
 			}
 		}
 		return new SimpleListModel(data);
@@ -122,12 +132,15 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	/**
 	 * Returns the string from the value object. It is used to convert 
 	 * the object type to the string type for {@link #getSubModel(Object, int)}.
-	 * <p>If you need better control, you can override this method.
+	 *
+	 * <p>The implementation uses {@link Object#toString} to convert
+	 * the value to a string (and to an empty string if null).
+	 * If you need better control, you can override this method.
 	 * 
 	 * @param index the index object.
 	 * @since 3.0.2
 	 */
 	protected String objectToString(Object value) {
-		return value.toString();
+		return value != null ? value.toString(): "";
 	}
 }

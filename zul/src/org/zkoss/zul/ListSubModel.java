@@ -34,10 +34,11 @@ public interface ListSubModel{
 	 *
 	 * @param value the object is used to find that the content is consistent 
 	 * within list model data.
-	 * @param nRows the nRows is reserved for future use. By default, -1 is 
-	 * passed and it means the maximal allowed rows is decided by the 
-	 * implementation of ListSubmodel. It's a suggestion for developer to follow
-	 * it.
+	 * @param nRows the number of rows suggested to return (as the
+	 * returned ListModel instance). It's a suggestion for developer to
+	 * follow.
+	 * If nonpositive, it means the maximal allowed rows is decided by the 
+	 * implementation of ListSubmodel.
 	 */
 	public ListModel getSubModel(Object value, int nRows);
 }
