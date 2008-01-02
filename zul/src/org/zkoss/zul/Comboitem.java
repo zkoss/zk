@@ -23,6 +23,8 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -174,9 +176,19 @@ public class Comboitem extends LabelImageElement {
 			parent != old && old != null && old.getSelectedItem() == this;
 
 		super.setParent(parent);
-
-		if (reIndex) old.reIndex();
+		
+		if (reIndex) postOnReIndex(old);
 	}
+	
+	/** re-index later */
+	private void postOnReIndex(Combobox old) {
+		Events.postEvent("onReIndex", this, old);
+	}
+	
+	public void onReIndex (Event evt) {
+		final Combobox cb = (Combobox) evt.getData();
+		if (cb != null) cb.reIndex();
+	} 
 
 	/** No child is allowed. */
 	public boolean isChildable() {
