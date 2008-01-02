@@ -82,7 +82,6 @@ public class Combobox extends Textbox {
 	private ComboitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
 	private transient EventListener _eventListener;
-	private transient ListModel _subset;
 	
 	public Combobox() {
 		setSclass("combobox");
@@ -191,11 +190,11 @@ public class Combobox extends Textbox {
 	
 	/** Synchronizes the combobox to be consistent with the specified model.
 	 */
-	private void syncModel(String index) {
+	private ListModel syncModel(String index) {
 		ComboitemRenderer renderer = null;
-		_subset = _model instanceof ListSubModel ? 
+		final ListModel subset = _model instanceof ListSubModel ? 
 			((ListSubModel)_model).getSubModel(index, -1) : _model;
-		final int newsz = _subset.getSize();
+		final int newsz = subset.getSize();
 
 		if (!getItems().isEmpty()) getItems().clear();
 		
@@ -204,6 +203,7 @@ public class Combobox extends Textbox {
 				renderer = getRealRenderer();
 			newUnloadedItem(renderer).setParent(this);
 		}
+		return subset;
 	}
 	
 	/** Creates an new and unloaded listitem. */
@@ -225,12 +225,12 @@ public class Combobox extends Textbox {
 	 */
 	public void onInitRender(Event data) {
 		final Renderer renderer = new Renderer();
-		syncModel(data.getData() != null ? (String)data.getData() : getValue());
+		final ListModel subset = syncModel(data.getData() != null ? (String)data.getData() : getValue());
 		try {
-			int pgsz = _subset.getSize(), ofs = 0, j = 0;
+			int pgsz = subset.getSize(), ofs = 0, j = 0;
 			for (Iterator it = getItems().listIterator(ofs);
 			j < pgsz && it.hasNext(); ++j)
-				renderer.render((Comboitem)it.next());
+				renderer.render(subset, (Comboitem)it.next());
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -265,7 +265,7 @@ public class Combobox extends Textbox {
 		private Renderer() {
 			_renderer = getRealRenderer();
 		}
-		private void render(Comboitem item) throws Throwable {
+		private void render(ListModel subset, Comboitem item) throws Throwable {
 
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
@@ -273,7 +273,7 @@ public class Combobox extends Textbox {
 			}
 
 			try {
-				_renderer.render(item, _subset.getElementAt(getItems().indexOf(item)));
+				_renderer.render(item, subset.getElementAt(getItems().indexOf(item)));
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -298,7 +298,6 @@ public class Combobox extends Textbox {
 		private void doFinally() {
 			if (_ctrled)
 				((RendererCtrl)_renderer).doFinally();
-			_subset = null;
 		}
 	}
 	

@@ -24,7 +24,7 @@ package org.zkoss.zul;
  * the extract of the combobox.
  * 
  * @author jumperchen
- * 
+ * @since 3.0.2
  */
 public interface ListSubModel{
 	
@@ -39,6 +39,7 @@ public interface ListSubModel{
 	 * follow.
 	 * If nonpositive, it means the maximal allowed rows is decided by the 
 	 * implementation of ListSubmodel.
+	 * @since 3.0.2
 	 */
 	public ListModel getSubModel(Object value, int nRows);
 }
