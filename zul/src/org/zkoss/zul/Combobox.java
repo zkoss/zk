@@ -90,11 +90,14 @@ public class Combobox extends Textbox {
 		this();
 		setValue(value);
 	}
-
+	
 	//-- ListModel dependent codes --//
 	/** Returns the list model associated with this combobox, or null
 	 * if this combobox is not associated with any list data model.
+	 * <p> Note: for implementation of auto-complete, the result of {@link #getItemCount()} is a subset of model.
+	 * So, if the model implemented {@link ListSubModel} interface, you can't use the index of model to find the comboitem by {@link #getItemAtIndex(int)}.
 	 * @since 3.0.2
+	 * @see ListSubModel#getSubModel(Object, int)
 	 */
 	public ListModel getModel() {
 		return _model;
@@ -206,7 +209,7 @@ public class Combobox extends Textbox {
 		return subset;
 	}
 	
-	/** Creates an new and unloaded listitem. */
+	/** Creates an new and unloaded Comboitem. */
 	private final Comboitem newUnloadedItem(ComboitemRenderer renderer) {
 		Comboitem item = null;
 		if (renderer instanceof ComboitemRendererExt)
@@ -225,7 +228,8 @@ public class Combobox extends Textbox {
 	 */
 	public void onInitRender(Event data) {
 		final Renderer renderer = new Renderer();
-		final ListModel subset = syncModel(data.getData() != null ? (String)data.getData() : getValue());
+		final ListModel subset = syncModel(data.getData() != null ? 
+				(String)data.getData() : getValue());
 		try {
 			int pgsz = subset.getSize(), ofs = 0, j = 0;
 			for (Iterator it = getItems().listIterator(ofs);
