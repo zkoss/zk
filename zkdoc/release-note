@@ -19,6 +19,7 @@ ZK 3.0.2 Freshly
   1856241: Gmaps support Gpolygon component
   1856245: Gmaps support more controls
   1856248: Gmaps support add and remove map type
+  1392551: Add filter for combobox
   
 * Bugs:
   1710925: The style component has no effect if added dynamically (IE)
