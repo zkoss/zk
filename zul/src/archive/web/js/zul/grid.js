@@ -437,7 +437,7 @@ zkGrw.stripe = function (cmp, isClean) {
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
 		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Grw");
-		else zk.addInitLater(meta.fixedStripe, false, "Grw");
+		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Grw");
 	}
 };
 zkGcl = {}; //cell
@@ -447,7 +447,7 @@ zkGcl.init = function (cmp) {
 		meta.putCellQue(cmp);
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, "Gcl");
+		zk.addInitLater(meta.fixedSize, false, meta.id + "Gcl");
 	}
 };
 zk.addModuleInit(function () {

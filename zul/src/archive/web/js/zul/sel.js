@@ -1273,7 +1273,7 @@ zkLit.stripe = function (cmp, isClean) {
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
 		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Lit");
-		else zk.addInitLater(meta.fixedStripe, false, "Lit");
+		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Lit");
 	}
 };
 zkLic = {}; //listcell or Treecell
@@ -1283,7 +1283,7 @@ zkLic.init = function (cmp) {
 		meta.putCellQue(cmp);
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, "Lic");
+		zk.addInitLater(meta.fixedSize, false, meta.id + "Lic");
 	}
 };
 zkLic.initdrag = zkLit.initdrag;

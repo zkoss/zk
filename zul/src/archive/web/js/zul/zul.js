@@ -114,7 +114,7 @@ zulHdr.init = function (cmp) {
 	if (meta) {
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, "Hdr");
+		zk.addInitLater(meta.fixedSize, false, meta.id + "Hdr");
 	}
 };
 zulHdr.sizable = function (cmp) {
