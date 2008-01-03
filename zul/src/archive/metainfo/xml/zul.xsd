@@ -539,6 +539,8 @@
 		<xs:attribute name="buttonVisible" type="xs:string" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
 		<xs:attribute name="open" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
@@ -546,6 +548,7 @@
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
