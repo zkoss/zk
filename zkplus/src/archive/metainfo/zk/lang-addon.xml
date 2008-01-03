@@ -133,6 +133,34 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<extends>combobox</extends>
 		<annotation>
 			<annotation-name>default-bind</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>converter</attribute-name>
+				<attribute-value>org.zkoss.zkplus.databind.ListModelConverter</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selectedItem</property-name>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>load-when</attribute-name>
+				<attribute-value>self.onInitRender</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>save</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>converter</attribute-name>
+				<attribute-value>org.zkoss.zkplus.databind.SelectedComboitemConverter</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
 				<attribute-name>access</attribute-name>

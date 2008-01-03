@@ -29,6 +29,7 @@ import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.HierachicalAware;
 
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListModel;
@@ -553,6 +554,7 @@ public class DataBinder {
 	private void initCollectionItem(){
 		addCollectionItem(Listitem.class.getName(), new ListitemCollectionItem());
 		addCollectionItem(Row.class.getName(), new RowCollectionItem());
+		addCollectionItem(Comboitem.class.getName(), new ComboitemCollectionItem());
 	}
 	
 	/**
