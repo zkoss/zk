@@ -31,6 +31,8 @@ ZK 3.0.2 Freshly
   1858869: onOK in textbox fires onOK twice
   1859568: Change toolbarbutton href changes layout
   1858838: Close the closable window over the listbox(IE6 only)
+  1862830: Grid's border dispears
+  1862835: The width of row of Grid doesn't resize corretly
 
 * Upgrade Notes:
   
