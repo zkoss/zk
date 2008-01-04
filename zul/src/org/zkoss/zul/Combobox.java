@@ -121,8 +121,8 @@ public class Combobox extends Textbox {
 				initDataListener();
 				_model = model;
 				_model.addListDataListener(_dataListener);
-
-				addEventListener(Events.ON_CHANGING, _eventListener);
+				if (model instanceof ListSubModel)
+					addEventListener(Events.ON_CHANGING, _eventListener);
 			}
 
 			postOnInitRender(null);
@@ -134,7 +134,8 @@ public class Combobox extends Textbox {
 			//(to save a roundtrip)
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
-			removeEventListener(Events.ON_CHANGING, _eventListener);
+			if (_model instanceof ListSubModel)
+				removeEventListener(Events.ON_CHANGING, _eventListener);
 			_model = null;
 			if (!getItems().isEmpty()) getItems().clear();
 		}
@@ -150,9 +151,11 @@ public class Combobox extends Textbox {
 		if (_eventListener == null)
 			_eventListener = new EventListener() {
 				public void onEvent(Event event) throws Exception {
-					final InputEvent ie = (InputEvent)event;
-					if (!ie.isChangingBySelectBack())
-						postOnInitRender(ie.getValue());
+					if (getModel() instanceof ListSubModel) {
+						final InputEvent ie = (InputEvent)event;
+						if (!ie.isChangingBySelectBack())
+							postOnInitRender(ie.getValue());
+					}
 				}
 		};
 	}

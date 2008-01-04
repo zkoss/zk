@@ -112,7 +112,7 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 *
 	 * @param value the value to retrieve the subset of the list model.
 	 * It is converted to a string first by use of {@link #objectToString}.
-	 * The, it is used to check if an element starts with (aka., prefix with)
+	 * Then, it is used to check if an element starts with (aka., prefix with)
 	 * this string.
 	 * @since 3.0.2
 	 */
