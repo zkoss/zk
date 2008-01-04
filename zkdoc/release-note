@@ -22,6 +22,7 @@ ZK 3.0.2 Freshly
   1392551: Add filter for combobox
   
 * Bugs:
+  1859776: Not responsing if session timeout with IE6
   1710925: The style component has no effect if added dynamically (IE)
   1852313: 'offsetWidth' is null or not a number
   1854571: Two clicks to close Messagebox if it took long to process
