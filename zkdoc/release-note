@@ -36,6 +36,8 @@ ZK 3.0.2 Freshly
   1858838: Close the closable window over the listbox(IE6 only)
   1862830: Grid's border dispears
   1862835: The width of row of Grid doesn't resize corretly
+  1865584: Character Encoding error in Tomcat 4.1+ZK 3.0
+  1860825: MessageBox Question Button Cancelar
 
 * Upgrade Notes:
   
