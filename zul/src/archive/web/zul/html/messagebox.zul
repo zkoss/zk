@@ -29,19 +29,19 @@ use="org.zkoss.zul.impl.MessageboxDlg">
 	</hbox>
 	<separator bar="true"/>
 	<hbox style="margin-left:auto; margin-right:auto">
-	<button identity="${arg.OK}" width="45pt" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button id="btn1" identity="${arg.OK}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.OK}"/>
-	<button identity="${arg.CANCEL}" width="45pt" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.CANCEL}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.CANCEL}"/>
-	<button identity="${arg.YES}" width="45pt" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.YES}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.YES}"/>
-	<button identity="${arg.NO}" width="45pt" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.NO}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.NO}"/>
-	<button identity="${arg.RETRY}" width="45pt" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.RETRY}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.RETRY}"/>
-	<button identity="${arg.ABORT}" width="45pt" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.ABORT}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.ABORT}"/>
-	<button identity="${arg.IGNORE}" width="45pt" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.IGNORE}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.IGNORE}"/>
 	</hbox>
 </window>

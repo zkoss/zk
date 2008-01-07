@@ -5,7 +5,10 @@
 img	{
 	hspace: 0; vspace: 0
 }
-
+.messagebox-btn {
+	width: 47pt;
+	text-overflow: ellipsis;
+}
 div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
 	position:relative;
 	<%-- Bug 1712708:  we have to specify position:relative --%>

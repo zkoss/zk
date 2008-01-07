@@ -858,7 +858,10 @@ div.paging a, div.paging a:visited {
 div.paging a:hover {
 	background: #DAE8FF;
 }
-
+.messagebox-btn {
+	min-width: 45pt;
+	width: 100%;
+}
 <%--ZK datebox and calendar--%>
 div.dateboxpp {<%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 88000;
