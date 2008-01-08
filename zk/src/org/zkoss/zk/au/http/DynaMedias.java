@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -157,7 +158,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 			String value = "attachment";
 			final String flnm = media.getName();
 			if (flnm != null && flnm.length() > 0)
-				value += ";filename=\"" + flnm +'"';
+				value += ";filename=\"" + URLEncoder.encode(flnm, "UTF-8") +'"';
 			response.setHeader("Content-Disposition", value);
 			//response.setHeader("Content-Transfer-Encoding", "binary");
 			//response.setHeader("Accept-Ranges", "bytes");
