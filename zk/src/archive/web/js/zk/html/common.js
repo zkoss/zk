@@ -2079,6 +2079,30 @@ anima.slideDown = function (id, dur) {
 		}
 	}
 };
+/**
+ * Make a component visible by moving down.
+ * @param {Object} id
+ * @since 3.0.2
+ */
+anima.moveDown = function (id) {
+	anima.moveBy(id, 'top');
+};
+/**
+ * Make a component visible by moving left.
+ * @param {Object} id
+ * @since 3.0.2
+ */
+anima.moveLeft = function (id) {
+	anima.moveBy(id, 'left');
+};
+/**
+ * Make a component visible by moving diagonal.
+ * @param {Object} id
+ * @since 3.0.2
+ */
+anima.moveDiagonal = function (id) {
+	anima.moveBy(id);
+};
 /** Make a component visible by moving.
  * @param id component or its ID
  * @param pos the move position. "top" means from 0 to the original top, 
