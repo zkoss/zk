@@ -165,7 +165,12 @@ public class Window extends XulElement implements IdSpace {
 	 * 
 	 * <p>Default: null. In other words, if the property is null, it will refer to
 	 * the configuration of zk.xml to find the preference with 
-	 * "org.zkoss.zul.Window.defaultActionOnShow", if any. Otherwise, the animating 
+	 * "org.zkoss.zul.Window.defaultActionOnShow", if any. For example,
+	 * <pre>&lt;preference&gt;
+     *   &lt;name&gt;org.zkoss.zul.Window.defaultActionOnShow&lt;/name&gt;
+     *   &lt;value&gt;moveDown&lt;/value&gt;
+	 * &lt;/preference&gt;</pre>
+	 *  Otherwise, the animating 
 	 * effect is depended on component itself.</p>
 	 * <p>In JavaScript, the property will match the same function name with the
 	 * prefix "anima.". For example, if the property is "moveDown", the function name
