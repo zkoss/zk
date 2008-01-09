@@ -76,6 +76,7 @@ zkTxbox._scanStop = function (inp) {
 	if (inp.removeAttribute) {
 		inp.removeAttribute("zk_changing_last");
 		inp.removeAttribute("zk_changing_selbk");
+		inp.removeAttribute("zk_typeAhead");
 	}
 };
 /** check any change.
@@ -177,14 +178,15 @@ zkTxbox.onfocus = function (evt) {
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
 	var inp = $e(id);
+	var value = inp.getAttribute("zk_typeAhead") || inp.value;
 	if (inp && zkau.asap($outer(inp), "onChanging")
-	&& inp.getAttribute("zk_changing_last") != inp.value) {
-		inp.setAttribute("zk_changing_last", inp.value);
+	&& inp.getAttribute("zk_changing_last") != value) {
+		inp.setAttribute("zk_changing_last", value);
 		var selbk = inp.getAttribute("zk_changing_selbk");
 		inp.removeAttribute("zk_changing_selbk");		
-		var sr = zk.getSelectionRange(inp);	
+		var sr = zk.getSelectionRange(inp);
 		zkau.send({uuid: $uuid(id),
-			cmd: "onChanging", data: [inp.value, selbk == inp.value, sr[0]],
+			cmd: "onChanging", data: [value, selbk == value, sr[0]],
 			ignorable: true}, 100);
 	}
 };

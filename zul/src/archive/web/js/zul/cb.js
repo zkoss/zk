@@ -218,11 +218,12 @@ zkCmbox.ondown = function (evt) {
 	//IE: if NOT eat UP/DN here, it de-select the text
 	//IE: if we eat UP/DN here, onpress won't be sent
 	//IE: we have to handle UP/DN in onup (so the repeat feature is lost)
-	if (evt.keyCode == 38 || evt.keyCode == 40) { //UP and DN
+	var keycode = Event.keyCode(evt);
+	if (keycode == 38 || keycode == 40) { //UP and DN
 		Event.stop(evt);
 		return false;
 	}
-	if (evt.keyCode == 9) { //TAB; IE: close now so to show covered SELECT
+	if (keycode == 9) { //TAB; IE: close now so to show covered SELECT
 		var inp = Event.element(evt);
 		if (inp) {
 			var uuid = $uuid(inp.id);
@@ -236,19 +237,18 @@ zkCmbox.onkey = function (evt) {
 	var inp = Event.element(evt);
 	if (!inp) return true;
 
-	var uuid = $uuid(inp.id);
-	var cb = $e(uuid);
-	var pp = $e(uuid + "!pp");
+	var uuid = $uuid(inp.id), cb = $e(uuid), pp = $e(uuid + "!pp");
 	if (!pp) return true;
-
+	
+	var keycode = Event.keyCode(evt);
 	var opened = $visible(pp);
-	if (evt.keyCode == 9 || (zk.safari && evt.keyCode == 0)) { //TAB or SHIFT-TAB (safari)
+	if (keycode == 9 || (zk.safari && keycode == 0)) { //TAB or SHIFT-TAB (safari)
 		if (opened) zkCmbox.close(pp);
 		return true;
 	}
 
-	if (evt.altKey && (evt.keyCode == 38 || evt.keyCode == 40)) {//UP/DN
-		if (evt.keyCode == 38) { //UP
+	if (evt.altKey && (keycode == 38 || keycode == 40)) {//UP/DN
+		if (keycode == 38) { //UP
 			if (opened) zkCmbox.close(pp);
 		} else {
 			if (!opened) zkCmbox.open(pp, true);
@@ -262,28 +262,30 @@ zkCmbox.onkey = function (evt) {
 	}
 
 	//Request 1537962: better responsive
-	if (opened && evt.keyCode == 13) { //ENTER
+	if (opened && keycode == 13) { //ENTER
 		zkCmbox._autoselback(uuid); //Better usability(Bug 1633335): auto selback
 		zkTxbox.updateChange(inp, false); //fire onChange
 		return true;
 	}
 
-	if (evt.keyCode == 18 || evt.keyCode == 27 || evt.keyCode == 13
-	|| (evt.keyCode >= 112 && evt.keyCode <= 123)) //ALT, ESC, Enter, Fn
+	if (keycode == 18 || keycode == 27 || keycode == 13
+	|| (keycode >= 112 && keycode <= 123)) //ALT, ESC, Enter, Fn
 		return true; //ignore it (doc will handle it)
 
 	var bCombobox = $type(cb) == "Cmbox";
-	var selback = evt.keyCode == 38 || evt.keyCode == 40; //UP and DN
+	var selback = keycode == 38 || keycode == 40; //UP and DN
 	if (getZKAttr(cb, "adr") == "true" && !opened)
 		zkCmbox.open(pp, bCombobox && !selback);
 	else if (!bCombobox)
 		return true; //ignore
-	else if (!selback && opened)
-		setTimeout("zkCmbox._hilite('"+uuid+"')", 1); //IE: keydown
+	else if (!selback /*&& opened disabled by JumperChen 2008/01/09*/)
+		setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
+			(!evt.shiftKey && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
 
 	if (selback/* || getZKAttr(cb, "aco") == "true"*/) {
 		//Note: zkCmbox.open won't repos immediately, so we have to delay it
-		setTimeout("zkCmbox._hilite('"+uuid+"',true,"+(evt.keyCode == 38)+")", 3);
+		setTimeout("zkCmbox._hilite('"+uuid+"',true,"+(keycode == 38)+ ", " + 
+			(!evt.shiftKey && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode + ")", 3);
 		Event.stop(evt);
 		return false;
 	}
@@ -465,13 +467,13 @@ zkCmbox.getInputByItem = function (item) {
  * @param selback whether to select back (either UP or DN is pressed)
  * @param bUp whether UP is pressed
  */
-zkCmbox._hilite = function (uuid, selback, bUp) {
+zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	var inp = $e(uuid + "!real");
 	if (!inp) return;
 
 //	var aco = getZKAttr($e(uuid), "aco") == "true";
 	var pp = $e(uuid + "!pp");
-	if (!pp || (!selback && /*!aco &&*/ !$visible(pp))) return;
+	if (!pp /*|| (!selback && *//*!aco &&*//* !$visible(pp))*/) return;
 	var pp2 = $e(uuid + "!cave");
 	if (!pp2) return;
 	var rows = pp2.rows;
@@ -562,7 +564,30 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 			found.setAttribute("zk_hilite", "true");
 		}
 	}
-
+	
+	if (reminder) {
+		inp.setAttribute("zk_typeAhead", inp.value);
+		if (found) {
+			var c = zkCmbox.getLabel(found);
+			var start = inp.value.length, end = c.length;
+			inp.value = inp.value + (start < end ? c.substring(start) : "") ;
+			if (inp.setSelectionRange) {
+				inp.setSelectionRange(start, end);
+				inp.focus();
+			} else if (inp.createTextRange) {
+				var range = inp.createTextRange();
+				if(start != end){
+					range.moveEnd('character', end - range.text.length);
+					range.moveStart('character', start);
+				}else{
+					range.move('character', start);
+				}
+				range.select();
+			}
+		}
+	} else if (keycode && (keycode == 8 || keycode == 46))
+		inp.setAttribute("zk_typeAhead", inp.value);
+		
 	zk.scrollIntoView(pp, found); //make sure found is visible
 
 	pp.setAttribute("zk_ckval", inpval);
