@@ -80,7 +80,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Window extends XulElement implements IdSpace {
 	private static final Log log = Log.lookup(Window.class);
-
+	private static String _onshow = null;
 	private transient Caption _caption;
 
 	private String _border = "none";
@@ -160,6 +160,41 @@ public class Window extends XulElement implements IdSpace {
 		_mutex = new Object();
 	}
 
+	/**
+	 * Sets the action of window component to show the animating effect by default.
+	 * 
+	 * <p>Default: null. In other words, if the property is null, it will refer to
+	 * the configuration of zk.xml to find the preference with 
+	 * "org.zkoss.zul.Window.defaultActionOnShow", if any. Otherwise, the animating 
+	 * effect is depended on component itself.</p>
+	 * <p>In JavaScript, the property will match the same function name with the
+	 * prefix "anima.". For example, if the property is "moveDown", the function name
+	 * should be "anima.moveDown" accordingly.</p>
+	 * <p><strong>Node:</strong> The method is available in modal mode only. And if 
+	 * the onshow command of client-side action has been assigned on the 
+	 * component, its priority is higher than this method.<br/>
+	 * For example, 
+	 * <pre>action="onshow:anima.appear(#{self});"</pre>
+	 * </p>
+	 * 
+	 * @param onshow the function name in JavaScript. You could use the following
+	 * animations, e.g. "moveDown", "moveLeft", "moveDiagonal", "appear", 
+	 * "slideDown", and so forth.
+	 * @since 3.0.2
+	 */
+	public static void setDefaultActionOnShow(String onshow) {
+		if (!Objects.equals(_onshow, onshow))
+			_onshow = onshow;
+	}
+	
+	/**
+	 * Returns the animating name of function.
+	 * @since 3.0.2
+	 */
+	public static String getDefaultActionOnShow() {
+		return _onshow;
+	}
+	
 	/** Returns the caption of this window.
 	 */
 	public Caption getCaption() {
@@ -824,7 +859,12 @@ public class Window extends XulElement implements IdSpace {
 		if (clkattrs != null) sb.append(clkattrs);
 			//though widget.js handles onclick (if 3d), it is useful
 			//to support onClick for groupbox
-
+		final String aos = getDefaultActionOnShow() != null ? getDefaultActionOnShow() 
+				: getDesktop().getWebApp().getConfiguration()
+					.getPreference("org.zkoss.zul.Window.defaultActionOnShow", null);
+		 
+		HTMLs.appendAttribute(sb, "z.aos", aos != null && aos.length() == 0 ? 
+				"z_none" : aos);
 		if (_closable)
 			sb.append(" z.closable=\"true\"");
 		if (_sizable)

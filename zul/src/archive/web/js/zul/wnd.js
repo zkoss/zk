@@ -487,7 +487,9 @@ zkWnd._doModal = function (cmp, replace) {
 		return;
 	}
 	if (!getZKAttr(cmp, "conshow")) {
-		setZKAttr(cmp, "conshow", "anima.moveBy($e('"+cmp.id+"'), 'top');");
+		var onshow = getZKAttr(cmp, "aos") || "moveDown";
+		if (onshow != "z_none")
+			setZKAttr(cmp, "conshow", "anima." + onshow + "($e('"+cmp.id+"'));");
 		cmp.style.display = "none";
 	}
 	//center component
