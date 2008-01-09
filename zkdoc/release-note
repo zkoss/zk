@@ -42,8 +42,8 @@ ZK 3.0.2 Freshly
 
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
-    If you'd like the previous effect, you can use the method of 
-    setDefaultActionOnShow() to set the empty string ("") or use an easier way to
+    If you'd like the previous effect, you can use the setDefaultActionOnShow() 
+    method of window component to set the empty string ("") or use an easier way to
     define a preference name that a deployer can use to configure in WEB-INF/zk.xml.
     For example, 
     <preference>
