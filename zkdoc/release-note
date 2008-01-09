@@ -20,6 +20,7 @@ ZK 3.0.2 Freshly
   1856245: Gmaps support more controls
   1856248: Gmaps support add and remove map type
   1392551: Add filter for combobox
+  1867539: Combobox to support type-ahead
   
 * Bugs:
   1859776: Not responsing if session timeout with IE6
