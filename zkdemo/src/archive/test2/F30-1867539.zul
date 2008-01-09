@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1867539.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan  9 17:44:51 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	Combobox to support type-ahead
+	<combobox onChanging="msg.value = event.value">
+		<comboitem label="Simple and Rich" />
+		<comboitem label="Cool!" />
+		<comboitem label="Thumbs Up!" />
+	</combobox>
+	<label id="msg" />
+</zk>
