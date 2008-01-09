@@ -771,6 +771,12 @@ zk.Selectable.prototype = {
 				if (head) {
 					for (var j = 0, hl = head.cells.length; j < hl; j++) {
 						var d = head.cells[j], cave = d.firstChild;
+						if (!zk.isVisible(d)) { //Bug #1867370
+							for (var k = this.bodyrows.length; --k >=0;)
+								if (this.bodyrows[k].cells[j] != d) 
+									this.bodyrows[k].cells[j].style.display = "none";
+							continue;
+						}
 						if (cave) {
 							var wd =  d.style.width;							
 							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
