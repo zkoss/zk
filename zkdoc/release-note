@@ -41,7 +41,15 @@ ZK 3.0.2 Freshly
   1867370: If column hid, each cell should be hidden at paging mold
 
 * Upgrade Notes:
-  
+  + The animating effect of window component in modal mode is changed. 
+    If you'd like the previous effect, you can use the method of 
+    setDefaultActionOnShow() to set the empty string ("") or use an easier way to
+    define a preference name that a deployer can use to configure in WEB-INF/zk.xml.
+    For example, 
+    <preference>
+        <name>org.zkoss.zul.Window.defaultActionOnShow</name>
+        <value>moveDown</value>
+    </preference>
 
 	--------
 ZK 3.0.1
