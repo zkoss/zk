@@ -148,11 +148,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>load-when</attribute-name>
-				<attribute-value>self.onInitRender</attribute-value>
+				<attribute-value>self.onInitRenderLater</attribute-value>
 			</attribute>
 			<attribute>
 				<attribute-name>access</attribute-name>
-				<attribute-value>save</attribute-value>
+				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
 				<attribute-name>converter</attribute-name>
@@ -169,6 +169,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>save-when</attribute-name>
 				<attribute-value>self.onChange</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selectedIndex</property-name>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>load-when</attribute-name>
+				<attribute-value>self.onInitRenderLater</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
