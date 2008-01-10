@@ -1809,6 +1809,7 @@
 		<xs:attribute name="sizable" type="xs:string" use="optional" />
 		<xs:attribute name="position" type="xs:string" use="optional" />
 		<xs:attribute name="contentStyle" type="xs:string" use="optional" />
+		<xs:attribute name="defaultActionOnShow" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
