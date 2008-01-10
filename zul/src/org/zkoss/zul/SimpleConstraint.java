@@ -73,10 +73,15 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	private Pattern _regex;
 	private String _errmsg;
 
+	/** Constructs a constraint with flags.
+	 *
+	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
+	 * {@link #NO_ZERO}, and so on.
+	 */
 	public SimpleConstraint(int flags) {
 		this(flags, null, null);
 	}
-	/** Constraints a constraint.
+	/** Constructs a constraint with flags and an error message.
 	 *
 	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
 	 * {@link #NO_ZERO}, and so on.
@@ -203,7 +208,9 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		return 0;
 	}
 	/**
-	 * Returns the constraints' flag, say, a combination of {@link #NO_POSITIVE} and others.
+	 * Returns the constraint flags, i.e.,, a combination of
+	 * {@link #NO_POSITIVE}, {@link #NO_NEGATIVE}, {@link #STRICT} and others.
+	 *
 	 * @since 3.0.2
 	 */
 	public int getFlags() {

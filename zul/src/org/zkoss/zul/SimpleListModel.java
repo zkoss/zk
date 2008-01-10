@@ -137,7 +137,7 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 * the value to a string (and to an empty string if null).
 	 * If you need better control, you can override this method.
 	 * 
-	 * @param index the index object.
+	 * @param value the value object.
 	 * @since 3.0.2
 	 */
 	protected String objectToString(Object value) {
