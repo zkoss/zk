@@ -232,6 +232,7 @@ zk.Layout.prototype = {
 				bodyEl.style.overflow = "hidden";							
 				bodyEl.style.position = "";
 			}
+			zk.onVisiAt(bodyEl); // Bug #1862935
 		}
 	},
     ignoreResize : function(cmp, w, h) { 
