@@ -144,7 +144,26 @@ zkVld.noEmpty = function (id) {
 	var inp = $real($e(id));
 	return inp && !inp.value.trim() ? mesg.EMPTY_NOT_ALLOWED: null;
 };
-
+/**
+ * Validates the function of noEmpty and strict. 
+ * @param {Object} id
+ * @since 3.0.2
+ */
+zkVld.noEmptyAndStrict = function (id) {
+	var msg = zkVld.noEmpty(id);
+	if (msg) return msg;
+	return zkVld.strict(id);
+};
+/**
+ * Validates the strict value for combobox.
+ * @param {Object} id
+ * @since 3.0.2
+ */
+zkVld.strict = function (id) {
+	if(window.zkCmbox)
+		return window.zkCmbox.strict(id);
+	return null;
+};
 /** creates an error message box. */
 zkVld.errbox = function (id, html) {
 	id = $uuid(id);

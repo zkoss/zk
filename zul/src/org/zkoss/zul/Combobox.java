@@ -91,6 +91,20 @@ public class Combobox extends Textbox {
 		setValue(value);
 	}
 	
+	protected String coerceToString(Object value) {
+		final Constraint constr = getConstraint();
+		final String val = super.coerceToString(value);
+		if (val.length() > 0 && constr != null && 
+				constr instanceof SimpleConstraint && (((SimpleConstraint)constr)
+						.getFlags() & SimpleConstraint.STRICT) != 0) {
+			for (Iterator it = getItems().iterator(); it.hasNext();) {
+				final String label = ((Comboitem)it.next()).getLabel();
+				if(val.equalsIgnoreCase(label))
+					return label;
+			}
+		}
+		return val;
+	}
 	//-- ListModel dependent codes --//
 	/** Returns the list model associated with this combobox, or null
 	 * if this combobox is not associated with any list data model.
@@ -243,6 +257,7 @@ public class Combobox extends Textbox {
 		} finally {
 			renderer.doFinally();
 		}
+		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
 	}
 	
 	private void postOnInitRender(String idx) {
@@ -458,6 +473,31 @@ public class Combobox extends Textbox {
 	 */
 	public Comboitem getSelectedItem() {
 		return _selItem;
+	}
+	
+	/**  Deselects the currently selected items and selects the given item.
+	 * @since 3.0.2
+	 */
+	public void setSelectedItem(Comboitem item) {
+		setSelectedIndex(getItems().indexOf(item));
+	}
+	
+	/** Deselects the currently selected items and selects
+	 * the item with the given index.
+	 * @since 3.0.2
+	 */
+	public void setSelectedIndex(int jsel) {
+		if (jsel >= getItemCount())
+			throw new UiException("Out of bound: "+jsel+" while size="+getItemCount());
+		if (jsel < -1) 
+			jsel = -1;
+		if (jsel < 0) {
+			_selItem = null;
+			setValue("");
+		} else {
+			_selItem = getItemAtIndex(jsel);
+			setValue(_selItem.getLabel());
+		}
 	}
 	/** Returns the index of the selected item, or -1 if not selected.
 	 * @since 3.0.1

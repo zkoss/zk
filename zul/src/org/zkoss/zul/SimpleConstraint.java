@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.zkoss.lang.Classes;
@@ -53,6 +54,10 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * If not specified, empty usually means null.
 	 */
 	public static final int NO_EMPTY = 0x0100;
+	/**
+	 * The value must match inside the data from ListModel only.
+	 */
+	public static final int STRICT = 0x0200;
 	/** Date in the future is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_FUTURE = NO_POSITIVE;
@@ -62,7 +67,6 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	/** Today is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_TODAY = NO_ZERO;
-
 	/** The constraints. A combination of {@link #NO_POSITIVE} and others.
 	 */
 	protected int _flags;
@@ -192,9 +196,18 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			return NO_PAST;
 		else if (constraint.equals("no today"))
 			return NO_TODAY;
+		else if (constraint.equals("strict"))
+			return STRICT;
 		else if (constraint.length() > 0)
 			throw new UiException("Unknown constraint: "+constraint);
 		return 0;
+	}
+	/**
+	 * Returns the constraints' flag, say, a combination of {@link #NO_POSITIVE} and others.
+	 * @since 3.0.2
+	 */
+	public int getFlags() {
+		return _flags;
 	}
 
 	//-- Constraint --//
@@ -225,6 +238,14 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 				throw wrongValue(comp, MZul.EMPTY_NOT_ALLOWED);
 			if (_regex != null && !_regex.matcher(s != null ? s: "").matches())
 				throw wrongValue(comp, MZul.ILLEGAL_VALUE);
+			if ((_flags & STRICT) != 0) {
+				if (s.length() > 0 && comp instanceof Combobox) {
+					for (Iterator it = ((Combobox)comp).getItems().iterator(); it.hasNext();)
+						if(s.equalsIgnoreCase(((Comboitem)it.next()).getLabel()))
+							return;
+					throw wrongValue(comp, MZul.VALUE_NOT_MATCHED);
+				}
+			}
 		} else if (value instanceof Date) {
 			if ((_flags & (NO_FUTURE|NO_PAST|NO_TODAY)) == 0)
 				return;
@@ -287,13 +308,14 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	}
 	//ClientConstraint//
 	public String getClientValidation() {
-		return (_flags & NO_EMPTY) != 0 ? "zkVld.noEmpty": null;
+		return (_flags & NO_EMPTY) != 0 ? (_flags & STRICT) != 0 ? "zkVld.noEmptyAndStrict" 
+				: "zkVld.noEmpty": (_flags & STRICT) != 0 ? "zkVld.strict": null;
 			//FUTURE: support more validation in client
 	}
 	public String getErrorMessage(Component comp) {
 		return _errmsg;
 	}
 	public boolean isClientComplete() {
-		return (_flags == 0 || _flags == NO_EMPTY) && _regex == null;
+		return ((_flags & (NO_EMPTY|STRICT)) == 0) && _regex == null;
 	}
 }

@@ -83,7 +83,24 @@ zkCmbox.init = function (cmp) {
 		zkWgt.fixDropBtn(cmp);
 	}
 };
-
+zkCmbox.strict = function (id) {
+	var inp = $real($e(id));
+	if (inp && inp.value) {
+		var pp2 = $e(id + "!cave"), rows = pp2.rows;
+		if (pp2 && pp2.rows) {
+			for (var j = 0, rl = rows.length; j < rl; ++j) {
+				var item = rows[j];
+				var txt = zkCmbox.getLabel(item);
+				if (txt.toLowerCase() == inp.value.toLowerCase()) {
+					inp.value = txt;
+					return null; // found;
+				}
+			}
+		}
+		return mesg.VALUE_NOT_MATCHED; // not found;
+	}
+	return null; // unchecked
+};
 zkCmit = {};
 zkCmit.init = function (cmp) {
 	if (getZKAttr(cmp, "disd") != "true") {
@@ -569,8 +586,9 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 		inp.setAttribute("zk_typeAhead", inp.value);
 		if (found) {
 			var c = zkCmbox.getLabel(found);
-			var start = inp.value.length, end = c.length;
-			inp.value = inp.value + (start < end ? c.substring(start) : "") ;
+			var start = inp.value.length, end = c.length, strict = getZKAttr($e(uuid), "valid") || "";
+			inp.value = strict.toLowerCase().indexOf("strict") > -1 ? c :
+				inp.value + (start < end ? c.substring(start) : "") ;
 			if (inp.setSelectionRange) {
 				inp.setSelectionRange(start, end);
 				inp.focus();

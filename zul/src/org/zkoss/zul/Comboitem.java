@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
+
 import org.zkoss.lang.Objects;
 
 import org.zkoss.xml.HTMLs;
@@ -70,8 +72,16 @@ public class Comboitem extends LabelImageElement {
 			final boolean reIndex = cb != null && cb.getSelectedItem() == this;
 
 			super.setLabel(label);
-
-			if (reIndex) cb.reIndex();
+			
+			if (reIndex) {
+				final Constraint constr = cb.getConstraint();
+				if (constr != null && constr instanceof SimpleConstraint 
+						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
+					cb.setValue(label);
+				} else {
+					cb.reIndex();
+				}
+			}
 		}
 	}
 	
