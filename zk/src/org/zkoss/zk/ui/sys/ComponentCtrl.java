@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.sys;
 
 import java.util.List;
 import java.util.Collection;
+import java.util.Set;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
@@ -69,6 +70,12 @@ public interface ComponentCtrl {
 	 * @param evthds a map of event handler
 	 */
 	public void addSharedEventHandlerMap(EventHandlerMap evthds);
+	/** Returns a readonly collection of event names (String), or
+	 * an empty collection if no event name is registered.
+	 *
+	 * @since 3.0.2
+	 */
+	public Set getEventHandlerNames();
 
 	/** Returns the annotation associated with the component,
 	 * or null if not available.

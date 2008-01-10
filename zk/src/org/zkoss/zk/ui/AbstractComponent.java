@@ -1401,6 +1401,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				onListenerChanged(desktop, true);
 		}
 	}
+	public Set getEventHandlerNames() {
+		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
+	}
 	private void onListenerChanged(Desktop desktop, boolean listen) {
 		if (listen) {
 			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable

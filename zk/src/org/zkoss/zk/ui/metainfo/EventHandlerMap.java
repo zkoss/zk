@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.util.Set;
+import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
@@ -69,6 +71,13 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 			}
 		}
 		return null;
+	}
+	/** Returns a readonly collection of event names (String), or
+	 * an empty collection if no event name is registered.
+	 * @since 3.0.2
+	 */
+	public Set getEventNames() {
+		return _evthds != null ? _evthds.keySet(): Collections.EMPTY_SET;
 	}
 	/** Returns a readonly list of all event handlers associated
 	 * with the specified event name, or null if no handler is associated

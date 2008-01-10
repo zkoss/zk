@@ -380,7 +380,16 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_evthds = new EventHandlerMap();
 		_evthds.add(name, evthd);
 	}
-
+	/** Returns a readonly collection of event names (String),
+	 * or an empty collection if no event name is registered.
+	 *
+	 * <p>To add an event handler, use {@link #addEventHandler} instead.
+	 *
+	 * @since 3.0.2
+	 */
+	public Set getEventHandlerNames() {
+		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
+	}
 	/** Sets the effectiveness condition.
 	 */
 	public void setCondition(ConditionImpl cond) {
