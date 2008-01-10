@@ -35,6 +35,9 @@ import java.io.Writer;
 import java.io.IOException;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
@@ -55,8 +58,10 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.au.AuResponse;
 
@@ -279,15 +284,69 @@ public class ZkFns {
 
 		return sb.toString();
 	}
+	/** Returns HTML tags to include style sheets of the specified device
+	 * of the current application.
+	 *
+	 * <p>Unlike {@link #outLangStyleSheets}, it uses the current
+	 *  servlet context
+	 * to look for the style sheets. Thus, this method can be used even
+	 * if the current execution is not available ({@link Executions#getCurrent}
+	 * can be null).
+	 *
+	 * <p>In summary:<br/>
+	 * {@link #outLangStyleSheets} is used to design the component
+	 * templates, while {@link #outDeviceStyleSheets} is used by DSP/JSP
+	 * that does nothing with ZUML pages (i.e., not part of an execution).
+	 *
+	 * @param deviceType the device type, such as ajax.
+	 * It can not be null.
+	 * @since 3.0.2
+	 */
+	public static final String outDeviceStyleSheets(String deviceType) {
+		final ServletRequest request = ServletFns.getCurrentRequest();
+		if (WebManager.getRequestLocal(request, ATTR_LANG_CSS_GENED) != null)
+			return ""; //nothing to generate
+		if (deviceType == null)
+			throw new IllegalArgumentException();
+		WebManager.setRequestLocal(request, ATTR_LANG_CSS_GENED, Boolean.TRUE);
+
+		final StringBuffer sb = new StringBuffer(256);
+
+		final ServletContext svlctx = ServletFns.getCurrentServletContext();
+		final Configuration config =
+			WebManager.getWebManager(svlctx).getWebApp().getConfiguration();
+
+		Execution exec = ExecutionsCtrl.getCurrent();
+		final boolean fake = exec == null;
+		if (fake)//it shall be null, but, just in case,
+			ExecutionsCtrl.setCurrent(
+				exec = new ExecutionImpl(
+					svlctx, (HttpServletRequest)request,
+					(HttpServletResponse)ServletFns.getCurrentResponse(),
+					null, null));
+		try {
+			final List ss = getStyleSheets0(exec, config, deviceType);
+			for (Iterator it = ss.iterator(); it.hasNext();)
+				append(sb, (StyleSheet)it.next(), exec, null);
+			return sb.toString();
+		} finally {
+			if (fake)
+				ExecutionsCtrl.setCurrent(null);
+		}
+	}
+
 	/** Returns a list of {@link StyleSheet} that shall be generated
 	 * to the client for the specified execution.
 	 */
 	public static final List getStyleSheets(Execution exec) {
 		//Process all languages
 		final Desktop desktop = exec.getDesktop();
-		final Configuration config = desktop.getWebApp().getConfiguration();
+		return getStyleSheets0(exec, desktop.getWebApp().getConfiguration(),
+			desktop.getDeviceType());
+	}
+	private static final List getStyleSheets0(Execution exec,
+	Configuration config, String deviceType) {
 		final Set disabled = config.getDisabledThemeURIs();
-		final String deviceType = desktop.getDeviceType();
 		final List sses = new LinkedList(); //a list of StyleSheet
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
