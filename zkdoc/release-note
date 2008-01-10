@@ -41,6 +41,7 @@ ZK 3.0.2 Freshly
   1860825: MessageBox Question Button Cancelar
   1867370: If column hid, each cell should be hidden at paging mold
   1867591: iDOM's Element is not serializable
+  1862935: The height of window is not initiated to property value.
 
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
