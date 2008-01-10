@@ -32,6 +32,7 @@ mesg.INTEGER_REQUIRED = "Você deve especificar um inteiro, em vez de ";
 mesg.EMPTY_NOT_ALLOWED = "Em branco não permitido.\nMesmo somente espaços não são permitidos";
 mesg.GOTO_ERROR_FIELD = "Ir para o campo errado";
 mesg.PLEASE_WAIT = "Processando...";
+mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Tamanho do arquivo: ";
 mesg.KBYTES = "KB";

@@ -33,6 +33,7 @@ mesg.INTEGER_REQUIRED = "Vous devez spécifier un entier, plutôt que";
 mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous devez spécifier une valeur";
 mesg.GOTO_ERROR_FIELD = "Allez sur le mauvais champ";
 mesg.PLEASE_WAIT = "Chargement...";
+mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Taille du fichier: ";
 mesg.KBYTES = "KB";

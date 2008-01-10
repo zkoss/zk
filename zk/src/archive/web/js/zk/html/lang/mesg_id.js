@@ -32,6 +32,7 @@ mesg.INTEGER_REQUIRED = "Anda harus memberikan sebuah integer, bukan ";
 mesg.EMPTY_NOT_ALLOWED = "Kosong tidak di-ijin-kan.\nAnda tidak dapat memberikan apa-apa selain spasi, atau";
 mesg.GOTO_ERROR_FIELD = "Menuju field yang error";
 mesg.PLEASE_WAIT = "Diproses...";
+mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Ukuran File: ";
 mesg.KBYTES = "KB";
