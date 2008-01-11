@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1836002.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 11 12:24:30 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Grid Demo" border="normal" width="360px" height="100%">
+	<div height="100%" style="border:1px solid">Please re-size the browser window, the window component should re-size too.</div>
+</window>
