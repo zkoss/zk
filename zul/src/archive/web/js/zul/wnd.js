@@ -25,7 +25,8 @@ zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
 zkWnd.init = function (cmp) {
 	zkWnd._fixHgh(cmp);
-	
+	cmp.fnResize = function () {zkWnd._fixHgh(cmp)};
+	zk.addOnResize(cmp.fnResize);
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
@@ -53,6 +54,7 @@ zkWnd.init = function (cmp) {
 zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
 	zkWnd._cleanMode(cmp);
+	zk.rmOnResize(cmp.fnResize);
 };
 /** Fixed the content div's height. */
 zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
@@ -60,6 +62,7 @@ zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
 	if (hgh && hgh != "auto") {
 		var n = $e(cmp.id + "!cave");
 		if (n) {
+			n.style.height = "";
 			hgh = cmp.clientHeight;
 			for (var p = n, q; q = p.previousSibling;) {
 				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
