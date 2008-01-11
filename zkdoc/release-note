@@ -40,6 +40,7 @@ ZK 3.0.2 Freshly
   1867591: iDOM's Element is not serializable
   1862935: The height of window is not initiated to property value.
   1867534: zul css loaded in upload frame even if globally disabled
+  1868454: nested modal windows problem
 
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
