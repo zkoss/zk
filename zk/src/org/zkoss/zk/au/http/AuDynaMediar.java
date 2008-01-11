@@ -1,4 +1,4 @@
-/* DynaMedias.java
+/* AuDynaMediar.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,10 +6,10 @@
 	Description:
 		
 	History:
-		Mon Aug 14 12:48:56     2006, Created by tomyeh
+		Fri Jan 11 19:14:17     2008, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -62,31 +62,28 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 
 /**
- * The utility used to response the content for {@link DynamicMedia#getMedia}
+ * The AU processor used to response the content for {@link DynamicMedia#getMedia}
  * 
  * @author tomyeh
+ * @since 3.0.2
  */
-/*package*/ class DynaMedias {
-	private static final Log log = Log.lookup(DynaMedias.class);
-
-	private DynaMedias() {}
+public class AuDynaMediar implements AuProcessor {
+	private static final Log log = Log.lookup(AuDynaMediar.class);
 
 	/** Retrieves the response from {@link DynamicMedia#getMedia}.
 	 */
-	public static final void process(Session sess, ServletContext ctx,
+	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
 //		if (D.ON && log.debugable()) log.debug("View "+pi);
-
-		if (pi.length() == 0 || pi.charAt(0) != '/')
-			throw new ServletException("Wrong path info: "+pi);
-		int j = pi.indexOf('/', 1);
-		if (j < 0)
+		int j = pi.indexOf('/', 1) + 1;
+		int k = pi.indexOf('/', j);
+		if (j <= 0 || k <= 0)
 			throw new ServletException("Wrong path info: "+pi);
 
-		final String dtid = pi.substring(1, j);
-		final int k = pi.indexOf('/', ++j);
-		final String uuid = k >= 0 ? pi.substring(j, k): pi.substring(j);
+		final String dtid = pi.substring(j, k);
+		final int l = pi.indexOf('/', ++k);
+		final String uuid = l >= 0 ? pi.substring(k, l): pi.substring(k);
 
 		Media media;
 		boolean download = false;
@@ -114,7 +111,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 					final Object cc = ((ComponentCtrl)comp).getExtraCtrl();
 					if (!(cc instanceof DynamicMedia))
 						throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
-					media = ((DynamicMedia)cc).getMedia(k >= 0 ? pi.substring(k): "");
+					media = ((DynamicMedia)cc).getMedia(l >= 0 ? pi.substring(l): "");
 					if (media == null) {
 						response.sendError(response.SC_GONE, "Media not found in "+comp);
 						return;

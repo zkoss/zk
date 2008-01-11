@@ -1599,6 +1599,9 @@ public class Configuration {
 
 	/** Adds the definition of a richlet.
 	 *
+	 * <p>If there was a richlet associated with the same name, the
+	 * the old richlet will be replaced.
+	 *
 	 * @param name the richlet name
 	 * @param params the initial parameters, or null if no initial parameter at all.
 	 * Once called, the caller cannot access <code>params</code> any more.
@@ -1612,6 +1615,9 @@ public class Configuration {
 		return addRichlet0(name, richletClass, params);
 	}
 	/** Adds the definition of a richlet.
+	 *
+	 * <p>If there was a richlet associated with the same name, the
+	 * the old servlet will be replaced.
 	 *
 	 * @param name the richlet name
 	 * @param richletClassName the class name. The class will be loaded

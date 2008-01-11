@@ -1,4 +1,4 @@
-/* Uploads.java
+/* AuUploader.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,10 +6,10 @@
 	Description:
 		
 	History:
-		Mon Aug 14 12:46:31     2006, Created by tomyeh
+		Fri Jan 11 18:53:30     2008, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -63,16 +63,17 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 /**
  * The utility used to process file upload.
- *
+ * 
  * @author tomyeh
+ * @since 3.0.2
  */
-/*package*/ class Uploads {
-	private static final Log log = Log.lookup(Uploads.class);
+public class AuUploader implements AuProcessor {
+	private static final Log log = Log.lookup(AuUploader.class);
 
 	/** Processes a file uploaded from the client.
 	 */
-	public static void process(Session sess, ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response)
+	public void process(Session sess, ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response, String pathInfo)
 	throws ServletException, IOException {
 		final Map attrs = new HashMap();
 		String alert = null, uuid = null,

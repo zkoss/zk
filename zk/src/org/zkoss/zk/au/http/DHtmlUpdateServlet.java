@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Date;
 import java.io.StringWriter;
 import java.io.IOException;
@@ -34,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 
 import org.zkoss.mesg.Messages;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
@@ -78,9 +81,21 @@ import org.zkoss.zk.device.Devices;
  * including ajax (HTML+Ajax), mil (Mobile Interactive Language),
  * and others (see {@link Desktop#getDeviceType}.
  *
- * <p>Design decision: it is better to use independent servlets for
- * /web, /upload and /view. However, to simplify the configuration,
- * we choose not to.
+ * <p>Init parameters:
+ *
+ * <dl>
+ * <dt>processor0, processor1...</dt>
+ * <dd>It specifies an AU processor.
+ * The first processor must be specified with the name called processor0,
+ * second processor1 and so on.<br/>
+ * The syntax of the value is<br/>
+ * <code>/prefix=class</code>
+ * </dd>
+ * </dl>
+ *
+ * <p>By default: there are two processors are associated with
+ * "/upload" and "/view" (see {@link #addAuProcessor}.
+ * Also, "/web" is reserved. Don't associate to any AU processor.
  *
  * @author tomyeh
  */
@@ -89,13 +104,81 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	private ServletContext _ctx;
 	private long _lastModified;
+	/** (String name, AuProcessor). */
+	private Map _procs = new HashMap(4);
 
 	public void init(ServletConfig config) throws ServletException {
 		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
 		_ctx = config.getServletContext();
+
+		for (int j = 0;;) {
+			String param = config.getInitParameter("processor" + j++);
+			if (param == null) break;
+			final int k = param.indexOf('=');
+			if (k < 0) {
+				log.warning("Ignore init-param: illegal format, "+param);
+				continue;
+			}
+
+			final String prefix = param.substring(0, k).trim();
+			final String clsnm = param.substring(k + 1).trim();
+			try {
+				addAuProcessor(prefix,
+					(AuProcessor)Classes.newInstanceByThread(clsnm));
+			} catch (ClassNotFoundException ex) {
+				log.warning("Ignore init-param: class not found, "+clsnm);
+			} catch (ClassCastException ex) {
+				log.warning("Ignore: "+clsnm+" not implement "+AuProcessor.class);
+			} catch (Throwable ex) {
+				log.warning("Ignore init-param: failed to add an AU processor, "+param,
+					ex);
+			}
+		}
+
+		if (getAuProcessor("/upload") == null)
+			addAuProcessor("/upload", new AuUploader());
+		if (getAuProcessor("/view") == null)
+			addAuProcessor("/view", new AuDynaMediar());
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
+	}
+
+	/** Adds an AU processor and associates it with the specified prefix.
+	 *
+	 * <p>If there was an AU processor associated with the same name, the
+	 * the old AU processor will be replaced.
+	 *
+	 * @param prefix the prefix. It must start with "/", but it cannot be
+	 * "/" nor "/web" (which are reserved).
+	 * @param processor the AU processor (never null).
+	 * @return the previous AU processor associated with the specified prefix,
+	 * or null if the prefix was not associated before.
+	 * @since 3.0.2
+	 */
+	public AuProcessor addAuProcessor(String prefix, AuProcessor processor) {
+		if (prefix == null || !prefix.startsWith("/") || prefix.length() < 2
+		|| processor == null)
+			throw new IllegalArgumentException();
+		if (ClassWebResource.PATH_PREFIX.equalsIgnoreCase(prefix))
+			throw new IllegalArgumentException(
+				ClassWebResource.PATH_PREFIX + " is reserved");
+
+		//To avoid using synchronized in doGet(), we make a copy here
+		final AuProcessor old;
+		synchronized (this) {
+			final Map ps = new HashMap(_procs);
+			old = (AuProcessor)ps.put(prefix, processor);
+			_procs = ps;
+		}
+		return old;
+	}
+	/** Returns the AU processor associated with the specified prefix,
+	 * or null if no AU processor associated.
+	 * @since 3.0.2
+	 */
+	public AuProcessor getAuProcessor(String prefix) {
+		return (AuProcessor)_procs.get(prefix);
 	}
 
 	//-- super --//
@@ -157,14 +240,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
 			if (withpi) {
-				if (pi.startsWith("/upload")) {
-					Uploads.process(sess, _ctx, request, response);
-				} else if (pi.startsWith("/view")) {
-					DynaMedias.process(
-						sess, _ctx, request, response, pi.substring(5));
-				} else {
-					log.warning("Unknown path info: "+pi);
+				for (Iterator it = _procs.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					if (pi.startsWith((String)me.getKey())) {
+						((AuProcessor)me.getValue())
+							.process(sess, _ctx, request, response, pi);
+						return; //done
+					}
 				}
+				log.warning("Unknown path info: "+pi);
 			} else {
 				process(sess, request, response);
 			}

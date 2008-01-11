@@ -65,6 +65,16 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * including ajax (HTML+Ajax), mil (Mobile Interactive Language)
  * and others (see {@link Desktop#getDeviceType}.
  *
+ * <p>Init parameters:
+ *
+ * <dl>
+ * <dt>update-uri</dt>
+ * <dd>It specifies the URI which the ZK AU engine is mapped to.</dd>
+ * <dt>compress</dt>
+ * <dd>It specifies whether to compress the output if the browser supports the compression (Accept-Encoding) and this Servlet is not included by other Servlets.</dd>
+ * <dt>log-level</dt>
+ * <dd>It specifies the default log level for org.zkoss. If not specified, the system default (usually INFO) is used.</dd>
+ * </dl>
  * @author tomyeh
  */
 public class DHtmlLayoutServlet extends HttpServlet {
