@@ -18,6 +18,7 @@ ZK 3.0.2 Freshly
   1867539: Combobox to support type-ahead
   1796281: Improve Working with Combobox
   1598234: strict autocomplete in comboboxes
+  1836002: Window component to support re-size
   
 * Bugs:
   1859776: Not responsing if session timeout with IE6
