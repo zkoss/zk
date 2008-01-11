@@ -3,6 +3,11 @@ ZK 3.0.2 Freshly
 * Features:
   1862036: Combobox supports ListModel
   1764967: Combobox to support List binding
+  1392551: Add filter for combobox
+  1867539: Combobox to support type-ahead
+  1796281: Improve Working with Combobox
+  1598234: strict autocomplete in comboboxes
+  1867638: The fulfill attribute support multiple component
   1854857: A way to specify a range for datebox's constraint
   1482341: Datebox supports a valid range of days
   1485247: Datebox supports a valid range
@@ -14,10 +19,6 @@ ZK 3.0.2 Freshly
   1858762: A way to show the busy message from server
   1859501: Close fileupload dialog if ESC is pressed
   1859533: Prevent the same button clicked twice for long operation
-  1392551: Add filter for combobox
-  1867539: Combobox to support type-ahead
-  1796281: Improve Working with Combobox
-  1598234: strict autocomplete in comboboxes
   1836002: Window component to support re-size
   
 * Bugs:
