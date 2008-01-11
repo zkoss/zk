@@ -280,7 +280,13 @@ zkCmbox.onkey = function (evt) {
 
 	//Request 1537962: better responsive
 	if (opened && keycode == 13) { //ENTER
-		zkCmbox._autoselback(uuid); //Better usability(Bug 1633335): auto selback
+		var item = zkCmbox._autoselback(uuid); //Better usability(Bug 1633335): auto selback
+		var cmp = $e(uuid), selId = getZKAttr(cmp, "selid");
+		if (item && selId != item.id) {
+			setZKAttr(cmp, "selid", item.id);
+			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
+				zkau.asapTimeout($e(uuid), "onSelect"));			
+		}
 		zkTxbox.updateChange(inp, false); //fire onChange
 		return true;
 	}
@@ -465,8 +471,10 @@ zkCmbox._autoselback = function (uuid) {
 
 	for (var j = rows.length; --j >= 0;) {
 		var item = rows[j];
-		if (item.getAttribute("zk_hilite") == "true")
+		if (item.getAttribute("zk_hilite") == "true") {			
 			zkCmbox._selback(item);
+			return item;
+		}
 	}
 };
 
