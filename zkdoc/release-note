@@ -44,6 +44,7 @@ ZK 3.0.2 Freshly
   1867534: zul css loaded in upload frame even if globally disabled
   1868454: nested modal windows problem
   1869003: grid+databinding+HashSet defect when remove an item
+  1869062: onChange Combobox with ENTER choice
 
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
