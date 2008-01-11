@@ -183,6 +183,13 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 *
 	 * <p>Default: null.
 	 *
+	 * <p>There are several forms:<br/>
+	 * "eventName", "targetId.evetName", "id1/id2.evetName",
+	 * and "${elExpr}.eventName".
+	 * <p>Since 3.0.2, you can specify a list of fulfill conditions by
+	 * separating them with comma. For example:<br/>
+	 * "id1.event1, id2/id3.event2"
+	 *
 	 * <p>If not null, the child components specified in
 	 * {@link #getChildren} are created, when the event sepcified in
 	 * the fulfill condition is received at the first time.
@@ -201,9 +208,12 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * {@link #getChildren} are created, when the event sepcified in
 	 * the fulfill condition is received at the first time.
 	 *
-	 * @param fulfill the fulfill condition. There are several forms:
+	 * @param fulfill the fulfill condition. There are several forms:<br/>
 	 * "eventName", "targetId.evetName", "id1/id2.evetName",
-	 * and "${elExpr}.eventName"
+	 * and "${elExpr}.eventName".
+	 * <p>Since 3.0.2, you can specify a list of fulfill conditions by
+	 * separating them with comma. For example:<br/>
+	 * "id1.event1, id2/id3.event2"
 	 * @since 2.4.0
 	 */
 	public void setFulfill(String fulfill) {

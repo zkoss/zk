@@ -414,7 +414,7 @@ public class UiEngineImpl implements UiEngine {
 		if (parentInfo instanceof ComponentInfo) {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
 			final String fulfill = pi.getFulfill();
-			if (fulfill != null) { //defer the creation of children
+			if (fulfill != null && fulfill.length() > 0) { //defer the creation of children
 				new FulfillListener(fulfill, pi, parent);
 				return new Component[0];
 			}
@@ -1444,8 +1444,9 @@ public class UiEngineImpl implements UiEngine {
 	private static class FulfillListener
 	implements EventListener, Express, java.io.Serializable, Cloneable,
 	ComponentSerializationListener, ComponentCloneListener {
-		private transient String _evtnm;
-		private transient Component _target, _comp;
+		private transient String[] _evtnms;
+		private transient Component[] _targets;
+		private transient Component _comp;
 		private final ComponentInfo _compInfo;
 		private final String _fulfill;
 
@@ -1457,16 +1458,35 @@ public class UiEngineImpl implements UiEngine {
 
 			init();
 
-			_target.addEventListener(_evtnm, this);
+			for (int j = _targets.length; --j >= 0;)
+				_targets[j].addEventListener(_evtnms[j], this);
 		}
 		private void init() {
-			final Object[] result =
-				ComponentsCtrl.parseEventExpression(_comp, _fulfill, _comp, false);
-			_target = (Component)result[0];
-			_evtnm = (String)result[1];
+			final List results = new LinkedList();
+			for (int j = 0, len = _fulfill.length();;) {
+				int k = _fulfill.indexOf(',', j);
+				String sub =
+					(k >= 0 ? _fulfill.substring(j, k): _fulfill.substring(j)).trim();
+				if (sub.length() > 0)
+					results.add(ComponentsCtrl
+						.parseEventExpression(_comp, sub, _comp, false));
+
+				if (k < 0 || (j = k + 1) >= len) break;
+			}
+
+			int j = results.size();
+			_targets = new Component[j];
+			_evtnms = new String[j];
+			j = 0;
+			for (Iterator it = results.iterator(); it.hasNext(); ++j) {
+				final Object[] result = (Object[])it.next();
+				_targets[j] = (Component)result[0];
+				_evtnms[j] = (String)result[1];
+			}
 		}
 		public void onEvent(Event evt) throws Exception {
-			_target.removeEventListener(_evtnm, this); //one shot only
+			for (int j = _targets.length; --j >= 0;)
+				_targets[j].removeEventListener(_evtnms[j], this); //one shot only
 
 			final Execution exec = Executions.getCurrent();
 			execCreate0(
