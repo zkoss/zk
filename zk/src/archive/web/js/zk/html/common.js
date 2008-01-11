@@ -2128,7 +2128,7 @@ anima.moveBy = function (id, pos, dur) {
 					 effect.options.y = effect.originalTop;
 					 effect.originalTop = 0;
 				 }
-     			 effect.element.makeClipping().show();
+     			 effect.element.show();
     		}});
 		}
 	}
