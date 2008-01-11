@@ -2088,11 +2088,11 @@ anima.moveDown = function (id) {
 	anima.moveBy(id, 'top');
 };
 /**
- * Make a component visible by moving left.
+ * Make a component visible by moving right.
  * @param {Object} id
  * @since 3.0.2
  */
-anima.moveLeft = function (id) {
+anima.moveRight = function (id) {
 	anima.moveBy(id, 'left');
 };
 /**
