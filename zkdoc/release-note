@@ -19,6 +19,7 @@ ZK 3.0.2 Freshly
   1858762: A way to show the busy message from server
   1859501: Close fileupload dialog if ESC is pressed
   1859533: Prevent the same button clicked twice for long operation
+  1869053: A way to plugin a processor to DHtmlUpdateServlet
   1836002: Window component to support re-size
   
 * Bugs:
