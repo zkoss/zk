@@ -183,7 +183,7 @@ public class Window extends XulElement implements IdSpace {
 	 * </p>
 	 * 
 	 * @param onshow the function name in JavaScript. You could use the following
-	 * animations, e.g. "moveDown", "moveLeft", "moveDiagonal", "appear", 
+	 * animations, e.g. "moveDown", "moveRight", "moveDiagonal", "appear", 
 	 * "slideDown", and so forth.
 	 * @since 3.0.2
 	 */

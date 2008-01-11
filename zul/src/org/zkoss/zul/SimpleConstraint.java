@@ -208,7 +208,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		return 0;
 	}
 	/**
-	 * Returns the constraint flags, i.e.,, a combination of
+	 * Returns the constraint flags, i.e., a combination of
 	 * {@link #NO_POSITIVE}, {@link #NO_NEGATIVE}, {@link #STRICT} and others.
 	 *
 	 * @since 3.0.2
