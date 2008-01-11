@@ -79,10 +79,25 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  */
 public class DHtmlLayoutServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);
+	private static final String ATTR_LAYOUT_SERVLET
+		= "org.zkoss.zk.ui.http.LayoutServlet";
+
 	private ServletContext _ctx;
 	private WebManager _webman;
 	private boolean _compress = true;
 
+	/** Returns the layout servlet of the specified application, or
+	 * null if not loaded yet.
+	 * Note: if the layout servlet is not loaded, it returns null.
+	 * @since 3.0.2
+	 */
+	public static DHtmlLayoutServlet getLayoutServlet(WebApp wapp) {
+		return (DHtmlLayoutServlet)
+			((ServletContext)wapp.getNativeContext())
+				.getAttribute(ATTR_LAYOUT_SERVLET);
+	}
+
+	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
 		//super.init(config);
 			//Note callback super to avoid saving config
@@ -119,6 +134,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		}
 
 		_webman = new WebManager(_ctx, updateURI);
+
+		_ctx.setAttribute(ATTR_LAYOUT_SERVLET, this);
 	}
 	public void destroy() {
 		if (_webman != null) _webman.destroy();

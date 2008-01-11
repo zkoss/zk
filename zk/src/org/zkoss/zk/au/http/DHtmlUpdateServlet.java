@@ -101,13 +101,30 @@ import org.zkoss.zk.device.Devices;
  */
 public class DHtmlUpdateServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlUpdateServlet.class);
+	private static final String ATTR_UPDATE_SERVLET
+		= "org.zkoss.zk.au.http.UpdateServlet";
 
 	private ServletContext _ctx;
 	private long _lastModified;
 	/** (String name, AuProcessor). */
 	private Map _procs = new HashMap(4);
 
+	/** Returns the update servlet of the specified application, or
+	 * null if not loaded yet.
+	 * Note: if the update servlet is not loaded, it returns null.
+	 * @since 3.0.2
+	 */
+	public static DHtmlUpdateServlet getUpdateServlet(WebApp wapp) {
+		return (DHtmlUpdateServlet)
+			((ServletContext)wapp.getNativeContext())
+				.getAttribute(ATTR_UPDATE_SERVLET);
+	}
+
+	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
+		//super.init(config);
+			//Note callback super to avoid saving config
+
 		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
 		_ctx = config.getServletContext();
 
@@ -139,6 +156,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			addAuProcessor("/upload", new AuUploader());
 		if (getAuProcessor("/view") == null)
 			addAuProcessor("/view", new AuDynaMediar());
+
+		_ctx.setAttribute(ATTR_UPDATE_SERVLET, this);
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
@@ -164,7 +183,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			throw new IllegalArgumentException(
 				ClassWebResource.PATH_PREFIX + " is reserved");
 
-		//To avoid using synchronized in doGet(), we make a copy here
+		if (_procs.get(prefix) ==  processor) //speed up to avoid sync
+			return processor; //nothing changed
+
+		//To avoid using sync in doGet(), we make a copy here
 		final AuProcessor old;
 		synchronized (this) {
 			final Map ps = new HashMap(_procs);
