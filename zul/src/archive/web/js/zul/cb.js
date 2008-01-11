@@ -297,12 +297,12 @@ zkCmbox.onkey = function (evt) {
 		return true; //ignore
 	else if (!selback /*&& opened disabled by JumperChen 2008/01/09*/)
 		setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
-			(!evt.shiftKey && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
+			((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
 
 	if (selback/* || getZKAttr(cb, "aco") == "true"*/) {
 		//Note: zkCmbox.open won't repos immediately, so we have to delay it
 		setTimeout("zkCmbox._hilite('"+uuid+"',true,"+(keycode == 38)+ ", " + 
-			(!evt.shiftKey && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode + ")", 3);
+			((!evt.shiftKey || keycode != 16)  && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode + ")", 3);
 		Event.stop(evt);
 		return false;
 	}
