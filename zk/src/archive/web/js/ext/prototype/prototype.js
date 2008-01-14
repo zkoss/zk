@@ -1975,8 +1975,7 @@ Object.extend(Event, {
     return zk.safari ? (this.safariKeys[k] || k) : k;
   },
   isSpecialKey: function(evt) {
-  	if (evt.shiftKey) return false;
-    var k = this.keyCode(evt);
+    var k = evt.shiftKey ? evt.keyCode : this.keyCode(evt);
     return (evt.type == 'keypress' && evt.ctrlKey) || k == 9 || k == 13  || k == 40 || k == 27 ||
     (k == 16) || (k == 17) ||
     (k >= 18 && k <= 20) ||
