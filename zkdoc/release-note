@@ -22,6 +22,7 @@ ZK 3.0.2 Freshly
   1869053: A way to plugin a processor to DHtmlUpdateServlet
   1836002: Window component to support re-size
   1870974: Report component
+  1870980: A way to retrieve the native interpreter
   
 * Bugs:
   1859776: Not responsing if session timeout with IE6
