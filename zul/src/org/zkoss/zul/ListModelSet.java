@@ -150,7 +150,9 @@ implements ListModelExt, Set, java.io.Serializable {
 			//bug #1819318 Problem while using SortedSet with Databinding
 			//bug #1839634 Problem while using HashSet with Databinding
 			if (_set instanceof LinkedHashSet) {
-				final int i1 = _set.size();
+				//bug  1870996 Exception when use ListModelSet with SimpleListModelSharer
+				//java.lang.IndexOutOfBoundsException: 1, interval added index should be _set.size() - 1
+				final int i1 = _set.size() - 1;
 				fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
 			} else if (_set instanceof SortedSet) {
 				final int i1 = indexOf(o);

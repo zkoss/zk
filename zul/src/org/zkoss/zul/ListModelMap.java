@@ -194,7 +194,9 @@ implements ListModelExt, Map, java.io.Serializable {
 			//bug #1819318 Problem while using SortedSet with Databinding
 			//bug #1839634 Problem while using HashSet with Databinding
 			if (_map instanceof LinkedHashMap) {
-				final int i1 = _map.size();
+				//bug 1869614 Problem when switching from ListModelList to ListModelMap, 
+				//java.lang.IndexOutOfBoundsException: 1, interval added index should be _map.size() - 1
+				final int i1 = _map.size() - 1;
 				fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
 			} else if (_map instanceof SortedMap) {
 				final int i1 = indexOfKey(key);
