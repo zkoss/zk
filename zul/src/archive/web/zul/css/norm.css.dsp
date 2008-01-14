@@ -862,6 +862,14 @@ div.paging a:hover {
 	min-width: 45pt;
 	width: 100%;
 }
+<%-- ZK JavaScript debug box --%>
+div.debugbox {
+	border: 1px solid #77c;
+	position: absolute;
+	bottom: 0px;
+	width: 99%;
+	z-index: 88000;
+}
 <%--ZK datebox and calendar--%>
 div.dateboxpp {<%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 88000;
