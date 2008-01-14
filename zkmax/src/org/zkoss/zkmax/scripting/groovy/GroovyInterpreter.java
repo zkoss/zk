@@ -51,6 +51,16 @@ public class GroovyInterpreter extends GenericInterpreter {
 		return _global;
 	}
 
+	/** Returns the native interpreter, or null if it is not initialized
+	 * or destroyed.
+	 * From application's standpoint, it never returns null, and the returned
+	 * object must be an instance of {@link groovy.lang.GroovyShell}
+	 * @since 3.0.2
+	 */
+	public Object getNativeInterpreter() {
+		return _ip;
+	}
+
 	//GenericInterpreter//
 	protected void exec(String script) {
 		_ip.evaluate(script);

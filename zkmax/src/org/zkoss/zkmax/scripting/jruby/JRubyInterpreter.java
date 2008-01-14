@@ -44,6 +44,16 @@ import org.zkoss.zk.scripting.util.GenericInterpreter;
 public class JRubyInterpreter extends GenericInterpreter {
 	private Ruby _runtime;
 
+	/** Returns the native interpreter, or null if it is not initialized
+	 * or destroyed.
+	 * From application's standpoint, it never returns null, and the returned
+	 * object must be an instance of {@link org.jruby.Ruby}
+	 * @since 3.0.2
+	 */
+	public Object getNativeInterpreter() {
+		return _runtime;
+	}
+
 	//GenericInterpreter//
 	protected void exec(String script) {
 		_runtime.evalScript(script);
