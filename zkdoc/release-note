@@ -49,6 +49,8 @@ ZK 3.0.2 Freshly
   1869003: grid+databinding+HashSet defect when remove an item
   1869062: onChange Combobox with ENTER choice
   1870821: shift + tab doesn't go back to the previous input comp in FF
+  1870996: Exception when use ListModelSet with SimpleListModelSharer
+  1869614: Problem when switching from ListModelList to ListModelMap
 
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
