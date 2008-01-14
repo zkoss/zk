@@ -73,6 +73,25 @@ implements SerializableAware, HierachicalAware {
 	public BSHInterpreter() {
 	}
 
+	//Deriving to override//
+	/** Called when the top-level BeanShell namespace is created.
+	 * By default, it does nothing.
+	 *
+	 * <p>Note: to speed up the performance, this implementation
+	 * disabled {@link bsh.NameSpace#loadDefaultImports}.
+	 * It only imports the java.lang and java.util packages.
+	 * If you want the built command and import packages, you can override
+	 * this method. For example,
+	 * <pre><code>
+	 *protected void loadDefaultImports(NameSpace bshns) {
+	 *  bshns.importCommands("/bsh/commands");
+	 *}</code></pre>
+	 *
+	 * @since 3.0.2
+	 */
+    protected void loadDefaultImports(NameSpace bshns) {
+    }
+
 	//GenericInterpreter//
 	protected void exec(String script) {
 		try {
@@ -200,6 +219,16 @@ implements SerializableAware, HierachicalAware {
 		super.destroy();
 	}
 
+	/** Returns the native interpreter, or null if it is not initialized
+	 * or destroyed.
+	 * From application's standpoint, it never returns null, and the returned
+	 * object must be an instance of {@link bsh.Interpreter}
+	 * @since 3.0.2
+	 */
+	public Object getNativeInterpreter() {
+		return _ip;
+	}
+
 	public Class getClass(String clsnm) {
 		try {
 			return _bshns.getClass(clsnm);
@@ -310,6 +339,9 @@ implements SerializableAware, HierachicalAware {
 		protected Object getFromNamespace(String name) {
 			return BSHInterpreter.this.getFromNamespace(name);
 		}
+	    public void loadDefaultImports() {
+	    	BSHInterpreter.this.loadDefaultImports(this);
+	    }
 	}
 	/** The per-Namespace NameSpace. */
 	private static class NS extends AbstractNS {

@@ -48,6 +48,13 @@ public interface Interpreter {
 	 */
 	public String getLanguage();
 
+	/** Returns the native interpreter, or null if not available.
+	 * The native interpreter depends on the implementation of an interpreter.
+	 *
+	 * @since 3.0.2
+	 */
+	public Object getNativeInterpreter();
+
 	/** Evaluates the script against the specified namespace.
 	 *
 	 * <p>Implementation Note:
