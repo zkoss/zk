@@ -163,10 +163,12 @@ public class Parser {
 			} else if ("import".equals(target)) { //import
 				final Map params = pi.parseData();
 				final String src = (String)params.remove("src");
+				final String dirs = (String)params.remove("directives");
 				if (!params.isEmpty())
 					log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 				noELnorEmpty("src", src, pi);
-				imports.add(src);
+				noEL("directives", dirs, pi);
+				imports.add(new String[] {src, dirs});
 			} else {
 				pis.add(pi);
 			}
@@ -185,12 +187,13 @@ public class Parser {
 				new RequestInfoImpl(_wapp, null, null, null, _locator);
 			final UiFactory uf = ((WebAppCtrl)_wapp).getUiFactory();
 			for (Iterator it = imports.iterator(); it.hasNext();) {
-				final String path = (String)it.next();
+				final String[] imprt = (String[])it.next();
+				final String path = imprt[0], dirs = imprt[1];
 				try {
 					final PageDefinition pd = uf.getPageDefinition(ri, path);
 					if (pd == null)
 						throw new UiException("Import page not found: "+path);
-					pgdef.imports(pd);
+					pgdef.imports(pd, parseToArray(dirs));
 				} catch (PotentialDeadLockException ex) {
 					throw new UiException("Recursive import: "+path, ex);
 				}
@@ -213,6 +216,14 @@ public class Parser {
 		} catch (ClassNotFoundException ex) {
 			throw new ClassNotFoundException("Class not found: "+clsnm, ex);
 		}
+	}
+	/** Parses a list of string separated by comma, into a String array.
+	 */
+	private static String[] parseToArray(String s) {
+		if (s == null)
+			return null;
+		Collection ims = CollectionsX.parse(null, s, ',', false);
+		return (String[])ims.toArray(new String[ims.size()]);
 	}
 
 	//-- derive to override --//

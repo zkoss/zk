@@ -227,18 +227,71 @@ public class PageDefinition extends NodeInfo {
 		_path = path != null ? path: "";
 	}
 
-	/** Imports the component definitions from the specified definition.
+	/** Imports the specified directives from the specified page definition.
+	 *
+	 * @param pgdef the page definition to import from.
+	 * @param directives an array of the directive names to import.
+	 * If null, {"init", "component"} is assumed, i.e., only the init
+	 * directives and component definitions are imported.<br/>
+	 * Importable directives include "component", "init", "meta",
+	 * "taglib", "variable-resolver", and "xel-method".
+	 * If "*", all of them are imported.
+	 * Note: "meta" implies "link".
+	 * @since 3.0.2
 	 */
-	public void imports(PageDefinition pgdef) {
-		if (_initdefs != null)
+	public void imports(PageDefinition pgdef, String[] directives) {
+		if (pgdef._initdefs != null
+		&& (directives == null || contains(directives, "init")))
 			for (Iterator it = pgdef._initdefs.iterator(); it.hasNext();)
 				addInitiatorInfo((InitiatorInfo)it.next());
 
-		for (Iterator it = pgdef._compdefs.getNames().iterator();
-		it.hasNext();) {
-			final String name = (String)it.next();
-			addComponentDefinition(pgdef._compdefs.get(name));
+		if (directives == null || contains(directives, "component")) {
+			for (Iterator it = pgdef._compdefs.getNames().iterator();
+			it.hasNext();)
+				addComponentDefinition(pgdef._compdefs.get((String)it.next()));
 		}
+
+		if (pgdef._taglibs != null
+		&& directives != null && contains(directives, "taglib")) {
+			for (Iterator it = pgdef._taglibs.iterator(); it.hasNext();)
+				addTaglib((Taglib)it.next());
+		}
+
+		if (pgdef._resolvdefs != null
+		&& directives != null && contains(directives, "variable-resolver")) {
+			for (Iterator it = pgdef._resolvdefs.iterator(); it.hasNext();)
+				addVariableResolverInfo((VariableResolverInfo)it.next());
+		}
+
+		if (pgdef._xelmtds != null
+		&& directives != null && contains(directives, "xel-method")) {
+			for (Iterator it = pgdef._xelmtds.iterator(); it.hasNext();) {
+				final Object[] inf = (Object[])it.next();
+				addXelMethod((String)inf[0], (String)inf[1], (Function)inf[2]);
+			}
+		}
+
+		if (pgdef._headerdefs != null
+		&& directives != null && contains(directives, "meta")) {
+			for (Iterator it = pgdef._headerdefs.iterator(); it.hasNext();)
+				addHeaderInfo((HeaderInfo)it.next());
+		}
+	}
+	private static boolean contains(String[] dirs, String dir) {
+		for (int j = dirs.length; --j >= 0;)
+			if ("*".equals(dirs[j]) || dir.equalsIgnoreCase(dirs[j]))
+				return true;
+		return false;
+	}
+	/** Imports the init directives and component definitions from
+	 * the specified page definition.
+	 *
+	 * <p>It is the same as imports(pgdef, null).
+	 *
+	 * @since #imports(PageDefinition, String[])
+	 */
+	public void imports(PageDefinition pgdef) {
+		imports(pgdef, null);
 	}
 
 	/** Adds a defintion of {@link org.zkoss.zk.ui.util.Initiator}. */
