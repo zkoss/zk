@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul.impl;
 
+import org.zkoss.zul.Report;
+
 /**
  * Report engine is an engine that do the real report producing.
  *
@@ -31,7 +33,7 @@ public interface ReportEngine {
 	/**
 	 * Produce the report and show into pdf format as an byte array.
 	 * 
-	 * @param src the data used in producing a report; depends on implementation.
+	 * @param report the data used in producing a report; depends on implementation.
 	 */
-	byte[] produceReport(String src);
+	byte[] produceReport(Report report);
 }
