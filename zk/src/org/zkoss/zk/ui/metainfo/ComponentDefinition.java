@@ -209,6 +209,16 @@ public interface ComponentDefinition extends Cloneable {
 	 * @return the new component (never null)
 	 */
 	public Component newInstance(Page page, String clsnm);
+	/** Creates an component of this definition.
+	 * Refer to {@link #newInstance(Page, String)}. They are the same
+	 * except this method accepts the class directly,
+	 * while {@link #newInstance(Page, String)} invokes
+	 * {@link #resolveImplementationClass} to resolve the class first.
+	 *
+	 * @return the new component (never null)
+	 * @since 3.0.2
+	 */
+	public Component newInstance(Class cls);
 
 	/** Adds a mold based on an URI.
 	 *

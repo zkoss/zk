@@ -61,6 +61,8 @@ public class ExValue implements java.io.Serializable {
 	}
 
 	/** Returns the raw value.
+	 * The raw value is the value passed to the constructor.
+	 * That is, it might contain EL expressions.
 	 */
 	public final String getRawValue() {
 		return _value;

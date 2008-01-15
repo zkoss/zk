@@ -238,14 +238,20 @@ implements ComponentDefinition, java.io.Serializable {
 		_implcls = clsnm;
 	}
 	public Component newInstance(Page page, String clsnm) {
+		try {
+			return newInstance(resolveImplementationClass(page, clsnm));
+		} catch (ClassNotFoundException ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+	public Component newInstance(Class cls) {
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
 		final boolean bSet = !(curInfo instanceof ComponentInfo)
 			|| ((ComponentInfo)curInfo).getComponentDefinition() != this;
 		if (bSet) ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
-			comp = (Component)
-				resolveImplementationClass(page, clsnm).newInstance();
+			comp = (Component)cls.newInstance();
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {

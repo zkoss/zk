@@ -68,7 +68,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	private transient NodeInfo _parent; //it is restored by its parent
 	private transient ComponentDefinition _compdef;
 	/** The implemetation class (use). */
-	private String _implcls;
+	private ExValue _implcls;
 	/** A list of {@link Property}, or null if no property at all. */
 	private List _props;
 	/** A Map of event handler to handle events. */
@@ -230,9 +230,12 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return getComposer(page, null);
 	}
 	/** Returns the composer for this info, or nuull if not available.
+	 *
+	 * @param comp the component used as the self variable to resolve
+	 * EL expressions, if any.
+	 * Notice that UI engine uses the parent component for this argument.
 	 * If comp is null, it is the same as {@link #getComposer(Page)}.
 	 * If comp is not null, it is used as the self variable.
-	 *
 	 * @see #getApply
 	 * @since 3.0.1
 	 */
@@ -443,12 +446,13 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Returns the class name (String) that implements the component.
 	 */
 	public String getImplementationClass() {
-		return _implcls;
+		return _implcls != null ? _implcls.getRawValue(): null;
 	}
 	/** Sets the class name to implements the component.
 	 */
 	public void setImplementationClass(String clsnm) {
-		_implcls = clsnm;
+		_implcls = clsnm != null && clsnm.length() > 0 ?
+			new ExValue(clsnm, Object.class): null;
 	}
 
 	/** Creates an component based on this info (never null).
@@ -459,12 +463,17 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * Since the value of properties might depend on the component tree,
 	 * it is better to assign the component with a proper parent
 	 * before calling {@link #applyProperties}.
+	 *
+	 * @since 3.0.2
 	 */
-	public Component newInstance(Page page) {
+	public Component newInstance(Page page, Component parent) {
+		Object implcls = evalImplClass(page, parent);
 		ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
-			comp = _compdef.newInstance(page, _implcls);
+			comp = implcls instanceof Class ?
+				_compdef.newInstance((Class)implcls):
+				_compdef.newInstance(page, (String)implcls);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
@@ -474,6 +483,29 @@ implements Cloneable, Condition, java.io.Externalizable {
 			((DynamicTag)comp).setTag(_tag);
 		return comp;
 	}
+	/** Evaluates the implementation claas, and rerturn either a class (Class),
+	 * a class name (String), or null.
+	 */
+	private Object evalImplClass(Page page, Component parent) {
+		return _implcls == null ? null:
+			parent != null ?
+				_implcls.getValue(_evalr.getEvaluator(), parent):
+				_implcls.getValue(_evalr.getEvaluator(), page);
+	}
+	/** Creates an component based on this info (never null).
+	 * It is the same as newInstance(page, null).
+	 *
+	 * <p>If the implementation class ({@link #getImplementationClass})
+	 * doesn't have any EL expression, or its EL expresson doesn't
+	 * referece to the self variable, the result is the same.
+	 *
+	 * <p>This method is preserved for backward compatibility.
+	 * It is better to use {@link #newInstance(Page, Component)}.
+	 */
+	public Component newInstance(Page page) {
+		return newInstance(page, null);
+	}
+
 	/** Resolves and returns the class for the component represented
 	 * by this info (never null).
 	 *
@@ -488,11 +520,29 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * page ({@link Page#getLoadedInterpreters}).
 	 * Note: this method won't attach the component to the specified page.
 	 * @exception ClassNotFoundException if the class not found
+	 * @since 3.0.2
+	 */
+	public Class resolveImplementationClass(Page page, Component parent)
+	throws ClassNotFoundException {
+		Object implcls = evalImplClass(page, parent);
+		return implcls instanceof Class ? (Class)implcls:
+			_compdef.resolveImplementationClass(page, (String)implcls);
+	}
+	/** Resolves and returns the class for the component represented
+	 * by this info (never null).
+	 * It is the same as resolveImplementationClass(page, null).
+	 *
+	 * <p>If the implementation class ({@link #getImplementationClass})
+	 * doesn't have any EL expression, or its EL expresson doesn't
+	 * referece to the self variable, the result is the same.
+	 *
+	 * <p>This method is preserved for backward compatibility.
+	 * It is better to use {@link #resolveImplementationClass(Page, Component)}.
 	 * @since 3.0.0
 	 */
 	public Class resolveImplementationClass(Page page)
 	throws ClassNotFoundException {
-		return _compdef.resolveImplementationClass(page, _implcls);
+		return resolveImplementationClass(page, null);
 	}
 
 	/** Returns the annotation map defined in this info, or null
@@ -705,7 +755,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_compdef = (ComponentDefinition)v;
 		}
 
-		_implcls = (String)in.readObject();
+		_implcls = (ExValue)in.readObject();
 		_props = (List)in.readObject();
 		_evthds = (EventHandlerMap)in.readObject();
 		_annots = (AnnotationMap)in.readObject();

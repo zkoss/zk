@@ -367,6 +367,9 @@ public class ComponentsCtrl {
 		public Component newInstance(Page page, String clsnm) {
 			throw new UnsupportedOperationException();
 		}
+		public Component newInstance(Class cls) {
+			throw new UnsupportedOperationException();
+		}
 		public void addMold(String name, String moldURI) {
 			throw new UnsupportedOperationException();
 		}

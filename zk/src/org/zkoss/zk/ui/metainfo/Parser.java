@@ -668,11 +668,11 @@ public class Parser {
 					}
 
 					//process use first because addProperty needs it
-					final String use = el.getAttributeValue("use");
+					String use = el.getAttributeValue("use");
 					if (use != null) {
-						noEmpty("use", use, el);
-						noEL("use", use, el);
-						compInfo.setImplementationClass(use);
+						use = use.trim();
+						if (use.length() != 0)
+							compInfo.setImplementationClass(use);
 							//Resolve later since might defined in zscript
 					}
 				}

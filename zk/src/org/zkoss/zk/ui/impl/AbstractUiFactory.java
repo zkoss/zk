@@ -87,7 +87,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	public Component newComponent(Page page, Component parent,
 	ComponentInfo compInfo) {
-		final Component comp = compInfo.newInstance(page);
+		final Component comp = compInfo.newInstance(page, parent);
 
 		if (parent != null) comp.setParent(parent);
 		else comp.setPage(page);
