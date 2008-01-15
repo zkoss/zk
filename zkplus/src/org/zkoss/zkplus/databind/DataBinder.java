@@ -987,7 +987,7 @@ public class DataBinder {
 		//fetch the bean object
 		Object bean = null;
 		
-		//bug x
+		//bug#1871833: Data binder should read "self".
 		if ("self".equals(beanid)) {
 			return comp;
 		}
