@@ -56,7 +56,8 @@ ZK 3.0.2 Freshly
   1870996: Exception when use ListModelSet with SimpleListModelSharer
   1869614: Problem when switching from ListModelList to ListModelMap
   1871762: Failed to import init if the importing page has no init
-
+  1868228: bug in the zul.xsd
+  
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
     If you'd like the previous effect, you can use the setDefaultActionOnShow() 
