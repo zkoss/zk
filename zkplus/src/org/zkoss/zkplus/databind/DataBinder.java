@@ -986,6 +986,11 @@ public class DataBinder {
 	/*package*/ Object lookupBean(Component comp, String beanid) {
 		//fetch the bean object
 		Object bean = null;
+		
+		//bug x
+		if ("self".equals(beanid)) {
+			return comp;
+		}
 		if (isClone(comp)) {
 			bean = myLookupBean1(comp, beanid);
 			if (bean != NA) {
