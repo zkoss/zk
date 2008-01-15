@@ -878,12 +878,14 @@ zk._loadAndInit = function (inf) {
 
 		//if nosibling, don't process its sibling (only process children)
 		if (inf.nosibling) inf.nosibling = false;
-		else if (n.nextSibling) inf.stk.push(n.nextSibling);
+		else if (n.nextSibling && !getZKAttr(n, "skipsib"))
+			inf.stk.push(n.nextSibling);
 
 		//Since 3.0.2, we introduce z.skipdsc to stop parsing the descendants.
 		//It improves the performance for the sophisticated component
 		//that want to initialize children in a custom way.
-		if (n.firstChild && !getZKAttr(n, "skipdsc")) inf.stk.push(n.firstChild);
+		if (n.firstChild && !getZKAttr(n, "skipdsc"))
+			inf.stk.push(n.firstChild);
 	}
 
 	zk._evalInit();
