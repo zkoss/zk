@@ -53,6 +53,7 @@ ZK 3.0.2 Freshly
   1870821: shift + tab doesn't go back to the previous input comp in FF
   1870996: Exception when use ListModelSet with SimpleListModelSharer
   1869614: Problem when switching from ListModelList to ListModelMap
+  1871762: Failed to import init if the importing page has no init
 
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
