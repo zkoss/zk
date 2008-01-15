@@ -50,7 +50,9 @@ public class ListboxDefault implements ComponentRenderer {
 				.write("</table></div>");
 		}
 		wh.write("<div id=\"").write(uuid).write("!body\" class=\"listbox-body\"");
-		if (self.getRows() > 1) wh.write(" style=\"overflow:hidden;height:").write(self.getRows() * 15).write("px\"");
+		if (self.getHeight() != null) wh.write(" style=\"overflow:hidden;height:").write(self.getHeight()).write("\"");
+		else if (self.getRows() > 1) wh.write(" style=\"overflow:hidden;height:").write(self.getRows() * 15).write("px\"");
+		
 		wh.write("><table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"")
 			.write(uuid).writeln("!cave\" class=\"listbox-btable\">");
 		for (Iterator it = self.getItems().iterator(); it.hasNext();) {
