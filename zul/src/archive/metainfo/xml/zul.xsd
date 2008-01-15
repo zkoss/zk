@@ -866,7 +866,7 @@
 	</xs:complexType>
 	<!-- html -->
 	<xs:element name="html" type="htmlType" />
-	<xs:complexType name="htmlType">
+	<xs:complexType name="htmlType" mixed="true">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
@@ -1404,6 +1404,8 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="panelSpacing" type="xs:string" use="optional" />
 		<xs:attribute name="selectedIndex" type="xs:string" use="optional" />
+		<xs:attribute name="selectedTab" type="xs:string" use="optional" />
+		<xs:attribute name="selectedPanel" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
@@ -1939,9 +1941,19 @@
 		<xs:attribute name="attachEdge" type="xs:string" use="optional" />
 		<xs:attribute name="labelEdge" type="xs:string" use="optional" />
 	</xs:complexType>
+	<!-- gmapsGroup -->
+	<xs:group name="gmapsGroup">
+		<xs:choice>
+			<xs:group ref="baseGroup" />
+			<xs:element ref="gimage" />
+			<xs:element ref="gmarker" />
+			<xs:element ref="gpolyline" />
+			<xs:element ref="gpolygon" />
+		</xs:choice>
+	</xs:group>
 	<!-- ginfo -->
 	<xs:element name="ginfo" type="ginfoType" />
-	<xs:complexType name="ginfoType">
+	<xs:complexType name="ginfoType" mixed="true">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 		<xs:attribute name="open" type="xs:string" use="optional" />
@@ -1949,9 +1961,20 @@
 		<xs:attribute name="lat" type="xs:string" use="optional" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
 	</xs:complexType>
+	<!-- gimage -->
+	<xs:element name="gimage" type="gimageType" />
+	<xs:complexType name="gimageType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="swlng" type="xs:string" use="optional" />
+		<xs:attribute name="swlat" type="xs:string" use="optional" />
+		<xs:attribute name="nelng" type="xs:string" use="optional" />
+		<xs:attribute name="nelat" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+	</xs:complexType>
 	<!-- gmarker -->
 	<xs:element name="gmarker" type="gmarkerType" />
-	<xs:complexType name="gmarkerType">
+	<xs:complexType name="gmarkerType" mixed="true">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 		<xs:attribute name="open" type="xs:string" use="optional" />
@@ -1985,25 +2008,11 @@
 	<xs:element name="gmaps" type="gmapsType" />
 	<xs:complexType name="gmapsType">
 		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:element ref="ginfo" />
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:sequence minOccurs="0" maxOccurs="unbounded" >
-						<xs:element ref="gpolyline" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:sequence>
-				</xs:sequence>
-				<xs:sequence>
-					<xs:element ref="gmarker" />
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:sequence minOccurs="0" maxOccurs="unbounded" >
-						<xs:element ref="gpolyline" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:sequence>
-				</xs:sequence>
-			</xs:choice>
+			<xs:group ref="gmapsGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:sequence minOccurs="0" maxOccurs="1">
+				<xs:element ref="ginfo" />
+				<xs:group ref="gmapsGroup" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 		<xs:attribute name="lat" type="xs:string" use="optional" />
@@ -2020,6 +2029,21 @@
 		<xs:attribute name="onMapDoubleClick" type="xs:string" use="optional" />
 		<xs:attribute name="onMarkerDrop" type="xs:string" use="optional" />
 	</xs:complexType>
+	<!-- gpolygon -->
+	<xs:element name="gpolygon" type="gpolygonType" />
+	<xs:complexType name="gpolygonType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="points" type="xs:string" use="optional" />
+		<xs:attribute name="color" type="xs:string" use="optional" />
+		<xs:attribute name="weight" type="xs:string" use="optional" />
+		<xs:attribute name="opacity" type="xs:string" use="optional" />
+		<xs:attribute name="numLevels" type="xs:string" use="optional" />
+		<xs:attribute name="outline" type="xs:string" use="optional" />
+		<xs:attribute name="fill" type="xs:string" use="optional" />
+		<xs:attribute name="fillColor" type="xs:string" use="optional" />
+		<xs:attribute name="fillOpacity" type="xs:string" use="optional" />
+	</xs:complexType>
 	<!-- gpolyline -->
 	<xs:element name="gpolyline" type="gpolylineType" />
 	<xs:complexType name="gpolylineType">
@@ -2028,6 +2052,7 @@
 		<xs:attribute name="points" type="xs:string" use="optional" />
 		<xs:attribute name="color" type="xs:string" use="optional" />
 		<xs:attribute name="weight" type="xs:string" use="optional" />
+		<xs:attribute name="opacity" type="xs:string" use="optional" />
 		<xs:attribute name="numLevels" type="xs:string" use="optional" />
 	</xs:complexType>
 </xs:schema>
