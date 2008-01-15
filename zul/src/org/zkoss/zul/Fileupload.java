@@ -84,7 +84,9 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	}
 	/** Sets the maximal allowed number of files to upload.
 	 * <p>Default: 1.
-	 * <p>-1 indicates the allowed number of files should never limit. (since 3.0.2) </p>
+	 * @param maxnum the maximal allowed number (positive or -1).
+	 * Since 3.0.2, the value can be -1, which means no limitation at all and the end user can upload
+	 * any numbers he wants (since 3.0.2)
 	 * @exception WrongValueException if non-positive, or it exceeds 1000
 	 * @since 2.4.0
 	 */
