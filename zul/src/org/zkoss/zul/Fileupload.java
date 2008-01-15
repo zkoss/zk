@@ -84,11 +84,12 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	}
 	/** Sets the maximal allowed number of files to upload.
 	 * <p>Default: 1.
+	 * <p>-1 indicates the allowed number of files should never limit. (since 3.0.2) </p>
 	 * @exception WrongValueException if non-positive, or it exceeds 1000
 	 * @since 2.4.0
 	 */
 	public void setNumber(int maxnum) throws WrongValueException {
-		if (maxnum <= 0 || maxnum > 1000)
+		if ((maxnum != -1 && maxnum <= 0) || maxnum > 1000)
 			throw new WrongValueException(
 				maxnum <= 0 ? "Positive is required": "Number too big (maximal 1000)");
 		_maxnum = maxnum;

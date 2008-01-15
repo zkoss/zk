@@ -56,6 +56,30 @@ function onDocKeydown(evt) {
 	if (parent.Event.keyCode(evt) == 27)
 		cancelUpload();
 }
+function addUpload(img) {
+	img.src = parent.zk.rename(img.src, "delete");
+	img.onclick = function () {deleteUpload(img)};
+	
+	// due to the runtime error of IE, we cannot use the tr.innerHTML method.  
+	var table = parent.$parentByTag(img, "TABLE"), 
+		tr = table.insertRow(table.rows.length),
+		td = tr.insertCell(0);
+	td.innerHTML = table.rows.length;
+	td.align = "right";
+	tr.insertCell(1).innerHTML = '<input class="file" type="file" id="file" name="file"/>' +
+		'<img src="${c:encodeURL('~./zul/img/add.gif')}" onclick="addUpload(this);" />';
+	adjustHgh(table);
+}
+function deleteUpload(img) {
+	var table = parent.$parentByTag(img, "TABLE");
+	table.deleteRow(img.parentNode.parentNode.rowIndex);
+	for (var i = 0, j = table.rows.length; i < j; ++i)
+		table.rows[i].firstChild.innerHTML = i+1;
+	adjustHgh(table);
+}
+function adjustHgh(table) {
+	table.parentNode.style.height = table.rows.length > 3 ? "100px" : "";
+}
 parent.zk.listen(document, "keydown", onDocKeydown);
 // -->
 </script>
@@ -71,14 +95,19 @@ parent.zk.listen(document, "keydown", onDocKeydown);
 	--%>
 	<input type="hidden" name="native" value="${param.native}"/>
 
-	<table border="0" width="100%">
-<c:set var="maxcnt" value="${empty param.max ? 1: param.max}"/>
+	<div style="overflow-y:auto;overflow-x:hidden;width:100%;height:${param.max > 3 ? '100px' : ''};">
+	<table id="upload-list" border="0" width="100%">
+<c:set var="unlimited" value="${param.max == -1 ? true: false}"/>
+<c:set var="maxcnt" value="${empty param.max || unlimited ? 1: param.max}"/>
 <c:forEach var="cnt" begin="1" end="${maxcnt}">
 	<tr>
-		<td align="right"><c:if test="${maxcnt gt 2}">${cnt}</c:if></td>
-		<td><input class="file" type="file" id="file" name="file"/></td>
+		<td align="right"><c:if test="${unlimited || maxcnt gt 2}">${cnt}</c:if></td>
+		<td><input class="file" type="file" id="file" name="file"/><c:if test="${unlimited}"><img src="${c:encodeURL('~./zul/img/add.gif')}" onclick='addUpload(this);'"/></c:if></td>
 	</tr>
 </c:forEach>
+	</table>
+	</div>
+	<table border="0" width="100%">
 	<tr align="left">
 		<td colspan="2" style="border: outset 1px">
 		<input class="button" type="submit" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}" onclick="parent.zk.progress()"/>
