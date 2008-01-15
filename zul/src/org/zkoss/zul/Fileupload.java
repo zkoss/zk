@@ -282,7 +282,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
 		params.put("title", title == null ?
 			Messages.get(MZul.UPLOAD_TITLE): title);
-		params.put("max", new Integer(max <= 1 ? 1: max > 1000 ? 1000: max));
+		params.put("max", new Integer(max <= 1 && max != -1 ? 1: max > 1000 ? 1000: max));
 		params.put("native", Boolean.valueOf(alwaysNative));
 
 		final FileuploadDlg dlg = (FileuploadDlg)
