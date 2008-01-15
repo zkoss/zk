@@ -195,10 +195,11 @@ public class Treerow extends XulElement {
 	public boolean isVisible() {
 		if (!super.isVisible())
 			return false;
-
 		Component comp = getParent();
 		if (!(comp instanceof Treeitem))
 			return true;
+		if (!comp.isVisible()) return false;
+		
 		comp = comp.getParent();
 		return !(comp instanceof Treechildren)
 			|| ((Treechildren)comp).isVisible(); //recursive
