@@ -37,17 +37,20 @@ import org.zkoss.lang.Objects;
  * 
  * @see ReportEngine
  * @author gracelin
- *
+ * 
  */
 public class Report extends XulElement {
 	private static final long serialVersionUID = 1L;
 	private String _src;
 	private int _medver;
+	private Map _keyValue;
 
 	// chart engine
 	private ReportEngine _engine;
 
 	public Report() {
+		setHeight("100%");
+		setWidth("100%");
 	}
 
 	public Report(String src) {
@@ -63,10 +66,13 @@ public class Report extends XulElement {
 		return _src;
 	}
 
-	/**Sets the src.
-	 * <p>If src is changed, the whole component is invalidate.
+	/**
+	 * Sets the src.
+	 * <p>
+	 * If src is changed, the whole component is invalidate.
 	 * 
-	 * @param src the source URL. If null or empty, nothing is included.
+	 * @param src
+	 *            the source URL. If null or empty, nothing is included.
 	 */
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)
@@ -192,10 +198,20 @@ public class Report extends XulElement {
 
 		// prepare the AMedia
 		final InputStream mediais = new ByteArrayInputStream(re
-				.produceReport(_src));
+				.produceReport(this));
 		final AMedia amedia = new AMedia("FirstReport.pdf", "pdf",
 				"application/pdf", mediais);
 
 		return amedia;
+	}
+
+	public Map getKeyValue() {
+		return _keyValue;
+	}
+
+	public void setKeyValue(Map key_value) {
+		if (!Objects.equals(_keyValue, key_value)) {
+			_keyValue = key_value;
+		}
 	}
 }
