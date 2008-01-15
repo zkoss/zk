@@ -226,8 +226,8 @@ public class Listitem extends XulElement {
 			_loaded = loaded;
 
 			final Listbox listbox = getListbox();
-			if (listbox != null && listbox.getModel() != null)
-				smartUpdate("z.loaded", _loaded);
+			if (listbox != null && listbox.getModel() != null && !listbox.inPagingMold())
+				invalidate();
 		}
 	}
 	/** Returns whether the content of this item is loaded.
@@ -309,6 +309,10 @@ public class Listitem extends XulElement {
 					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
 			}
 			HTMLs.appendAttribute(sb, "z.disd", isDisabled());
+			if (getAttribute("UN_LOAD") != null) {
+				HTMLs.appendAttribute(sb, "z.skipsib", "true");
+				removeAttribute("UN_LOAD");
+			}
 			if (isSelected())
 				HTMLs.appendAttribute(sb, "z.sel", "true");
 

@@ -732,7 +732,7 @@ zk.Selectable.prototype = {
 	_render: function (timeout) {
 		setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
 	},
-	_renderNow: function () {		
+	_renderNow: function () {
 		var rows = this.bodyrows;
 		if (!rows || !rows.length || getZKAttr(this.element, "model") != "true") return;
 
@@ -748,6 +748,7 @@ zk.Selectable.prototype = {
 				if (top > max) break; //Bug 1822517: max might be 0
 				if (getZKAttr(r, "loaded") != "true")
 					data += "," + this.getItemUuid(r);
+				else if (getZKAttr(r, "inited") != "true") zk.initAt(r);
 			}
 		}
 		if (data) {
@@ -1239,6 +1240,7 @@ zkLibox.onVisi = function (cmp) {
 
 zkLit = {}; //listitem
 zkLit.init = function (cmp) {
+	setZKAttr(cmp, "inited", "true");
 	//zk.disableSelection(cmp);
 	//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
 	if (getZKAttr(cmp, "disd") != "true") {
