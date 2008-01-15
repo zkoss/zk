@@ -20,10 +20,12 @@ package org.zkoss.zkex.zul.impl;
 
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Map;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.zul.Report;
 import org.zkoss.zul.impl.ReportEngine;
 
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
@@ -35,22 +37,30 @@ import net.sf.jasperreports.engine.JasperRunManager;
  *
  */
 public class JasperReportEngine implements ReportEngine {
-	
+	private JRDataSource _dataSource;
+
+	public JasperReportEngine() {
+		super();
+	}
+
+	public JasperReportEngine(JRDataSource source) {
+		_dataSource = source;
+	}
+
 	//-- ReportEngine --//
-	public byte[] produceReport(String src) {
+	public byte[] produceReport(Report report) {
 		InputStream is = null;
 		// generate report pdf stream
 		is = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(src);
-
-		Map params = new HashMap();
-		// params.put("ReportTitle", "The First Jasper Report Ever");
-		// params.put("MaxOrderID", new Integer(10500));
+				.getResourceAsStream(report.getSrc());
 
 		byte[] buf = null;
 		try {
-			buf = JasperRunManager.runReportToPdf(is, params,
-					new JREmptyDataSource());
+			buf = JasperRunManager.runReportToPdf(is,
+					report.getKeyValue() == null ? new HashMap() : report
+							.getKeyValue(),
+					getDataSource() == null ? new JREmptyDataSource()
+							: getDataSource());
 
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
@@ -58,4 +68,15 @@ public class JasperReportEngine implements ReportEngine {
 		}
 		return buf;
 	}
+
+	public JRDataSource getDataSource() {
+		return _dataSource;
+	}
+
+	public void setDataSource(JRDataSource dataSource) {
+		if (!Objects.equals(_dataSource, dataSource)) {
+			_dataSource = dataSource;
+		}
+	}
+
 }
