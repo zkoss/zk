@@ -25,6 +25,7 @@ ZK 3.0.2 Freshly
   1870974: Report component
   1870980: A way to retrieve the native interpreter
   1840878: Multiple uploads limitations
+  1676304: import link, variable-resolver, taglib, xel-method and so on
   1869370: Missing elements in zul.xsd
   
 * Bugs:
