@@ -22,9 +22,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window title="${arg.title}" border="normal" width="360px" closable="true"
 use="org.zkoss.zul.impl.FileuploadDlg">
 	<label value="${arg.message}"/>
-	<variables hgh="${(arg.max>15?15:arg.max)*16+30}pt" if="${arg.max>3}"/>
 	<!-- Note: 100% becomes too big in IE6 -->
-	<iframe width="97%" height="${hgh}" style="border: 1px solid #aaa"
+	<iframe width="97%" style="border: 1px solid #aaa"
 	src="~./zul/html/fileuploaddlg.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;max=${arg.max}&amp;native=${arg.native}"/>
 		<!-- since arg.action might contain ;jsessionid=xx, so put it to the last one -->
 </window>
