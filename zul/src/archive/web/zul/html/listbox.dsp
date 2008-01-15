@@ -30,7 +30,9 @@ ${z:redraw(head, null)}
 	</table>
 	</div>
 </c:if>
-	<div id="${self.uuid}!body" class="listbox-body" <c:if test="${self.rows > 1}">style="overflow:hidden;height:${self.rows * 15}px"</c:if>>
+<c:set var="hgh" if="${self.rows > 1}" value="style=\"overflow:hidden;height:${self.rows * 15}px\""/>
+<c:set var="hgh" if="${!empty self.height}" value="style=\"overflow:hidden;height:${self.height}\""/>
+	<div id="${self.uuid}!body" class="listbox-body" ${hgh}>
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable">
 	<c:forEach var="item" items="${self.items}">
 ${zu:setStripeClass(item)}	

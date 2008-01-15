@@ -340,6 +340,7 @@ zk.Grid.prototype = {
 				if (top > max) break; //Bug 1822517
 				if (getZKAttr(r, "loaded") != "true")
 					data += "," + r.id;
+				else if (getZKAttr(r, "inited") != "true") zk.initAt(r);
 			}
 		}
 		if (data) {
@@ -398,6 +399,7 @@ zkGrid._renderNow = function (uuid) {
 };
 zkGrw = {}; //Row
 zkGrw.init = function (cmp) {
+	setZKAttr(cmp, "inited", "true");
 	zkGrw.stripe(cmp);
 };
 zkGrw.initdrag = function (cmp) {

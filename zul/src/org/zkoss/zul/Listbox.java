@@ -1327,9 +1327,8 @@ public class Listbox extends XulElement {
 			for (Iterator it = getItems().listIterator(ofs);
 			j < pgsz && it.hasNext(); ++j)
 				renderer.render((Listitem)it.next());
-			if (!inPagingMold()) {
+			if (!inPagingMold())
 				getItemAtIndex(pgsz).setAttribute("UN_LOAD", "");
-			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -1586,6 +1585,13 @@ public class Listbox extends XulElement {
 
 			if (_scOddRow != null)
 				HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
+			
+			if (getModel() != null) {
+				int index = getItemCount() - 1;
+				for(final ListIterator it = getItems().listIterator(getItemCount()); it.hasPrevious();--index)
+					if(((Listitem)it.previous()).isLoaded()) break;
+				HTMLs.appendAttribute(sb, "z.loadedIdx", index);
+			}
 		}
 
 		appendAsapAttr(sb, Events.ON_SELECT);

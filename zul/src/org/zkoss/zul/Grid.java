@@ -622,6 +622,9 @@ public class Grid extends XulElement {
 			for (Iterator it = _rows.getChildren().listIterator(ofs);
 			j < pgsz && it.hasNext(); ++j)
 				renderer.render((Row)it.next());
+
+			if (!inPagingMold())
+				((Row)getRows().getChildren().get(pgsz)).setAttribute("UN_LOAD", "");
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -873,8 +876,13 @@ public class Grid extends XulElement {
 			new StringBuffer(80).append(super.getOuterAttrs());
 		if (_align != null)
 			HTMLs.appendAttribute(sb, "align", _align);
-		if (_model != null)
+		if (_model != null) {
 			HTMLs.appendAttribute(sb, "z.model", true);
+			int index = getRows().getChildren().size() - 1;
+			for(final ListIterator it = getRows().getChildren().listIterator(index+1); it.hasPrevious();--index)
+				if(((Row)it.previous()).isLoaded()) break;
+			HTMLs.appendAttribute(sb, "z.loadedIdx", index);
+		}
 		if (_scOddRow != null)
 			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 		return sb.toString();
