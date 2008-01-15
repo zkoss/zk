@@ -1385,12 +1385,12 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 		hdtable.style.tableLayout = "auto";
 		hdtable.style.width = "";
 	}
-	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null, dstwds = [], cacheCss;
-	for (var i = 0, even = true, l = srcrows.length, firstChild; i < l; ++i) {
-		var row = srcrows[i], cells = row.cells;		
-		if (!zk.isVisible(row)) continue;
+	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null,
+		dstwds = [], cacheCss, loadIdx = $int(getZKAttr(mate.element, "loadedIdx"));
+	for (var i = 0, even = true, l = loadIdx ? loadIdx : srcrows.length, firstChild; i < l; ++i) {
+		var row = srcrows[i], cells = row.cells;
 		if (!firstChild) firstChild = row;
-		if (getZKAttr(row, "loaded") == "false") continue;
+		if (!zk.isVisible(row) || getZKAttr(row, "loaded") == "false") continue;		
 		if (stripe && scOdd && zk.isVisible(row)) {
 			zk.addClass(row, scOdd, !even);
 			even = !even;
@@ -1458,7 +1458,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 				} else {			
 					if (index == null || index == z) {
 						if (!dstwds[z]) {
-							var wd =  d.style.width, cell = d.firstChild, w;				
+							var wd = d.style.width, cell = d.firstChild, w;				
 							if (wd == "auto" || wd.indexOf('%') > -1) 
 								d.style.width = zk.revisedSize(d, d.offsetWidth)+ "px";
 							wd = d.style.width;
