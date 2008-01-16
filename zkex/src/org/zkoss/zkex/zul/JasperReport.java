@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Jan 16 14:37:13     2008, Created by gracelin
+		Wed Jan 16 14:37:13     2008, Created by gracelin
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
