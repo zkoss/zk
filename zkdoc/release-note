@@ -27,6 +27,7 @@ ZK 3.0.2 Freshly
   1840878: Multiple uploads limitations
   1676304: import link, variable-resolver, taglib, xel-method and so on
   1869370: Missing elements in zul.xsd
+  1872505: Provide a "parent" position for Window component
   
 * Bugs:
   1859776: Not responsing if session timeout with IE6
