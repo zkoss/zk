@@ -99,4 +99,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-uri>~./zkex/zul/html/layoutregion.dsp</mold-uri>
 		</mold>
 	</component>
+	<component>
+		<component-name>jasperreport</component-name>
+		<component-class>org.zkoss.zkex.zul.JasperReport</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/report.dsp</mold-uri>
+		</mold>
+	</component>
 </language-addon>
