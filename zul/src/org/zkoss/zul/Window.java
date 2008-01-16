@@ -677,6 +677,8 @@ public class Window extends XulElement implements IdSpace {
 	 * <dd>Position the window at the top edge. {@link #setTop} is ignored.</dd>
 	 * <dt>bottom</dt>
 	 * <dd>Position the window at the bottom edge. {@link #setTop} is ignored.</dd>
+	 * <dt>parent</dt>
+	 * <dd>Position the window relative to its parent depending on {@link #setTop} and {@link #setLeft}. (since 3.0.2)</dd>
 	 * </dl>
 	 * <p>For example, "left,center" means to position it at the center of
 	 * the left edge.

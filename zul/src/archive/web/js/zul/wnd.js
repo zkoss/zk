@@ -152,8 +152,27 @@ zkWnd.setAttr = function (cmp, nm, val) {
 		return true; //no need to store it
 
 	case "z.pos":
+		var pos = getZKAttr(cmp, "pos");
 		zkau.setAttr(cmp, nm, val);
 		if (val && !zkWnd._embedded(cmp)) {
+			if (pos == "parent" && val != pos) {
+				var left = cmp.style.left, top = cmp.style.top;
+				var xy = getZKAttr(cmp, "offset").split(",");
+				left = $int(left) - $int(xy[0]) + "px";
+				top = $int(top) - $int(xy[1]) + "px";
+				cmp.style.left = left;
+				cmp.style.top = top;
+				rmZKAttr(cmp, "offset");
+			} else if (val == "parent") {
+				var parent = zk.isVParent(cmp);
+				if (parent) {
+					var xy = zk.revisedOffset(parent),
+						left = $int(cmp.style.left), top = $int(cmp.style.top);
+					setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
+					cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
+					cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
+				}
+			}
 			zkWnd._center(cmp, null, val);
 			//if val is null, it means no change at all
 			zkau.hideCovered(); //Bug 1719826 
@@ -171,6 +190,20 @@ zkWnd.setAttr = function (cmp, nm, val) {
 	case "style.width":
 		zk.onResize(0, cmp);
 		return false;
+	case "style.top":
+	case "style.left":
+		if (!zkWnd._embedded(cmp) && getZKAttr(cmp, "pos") == "parent") {
+			var offset = getZKAttr(cmp, "offset");
+			if (offset) {
+				var xy = offset.split(",");
+				if (nm == "style.top") {
+					cmp.style.top = $int(xy[1]) + $int(val) + "px";
+				} else {
+					cmp.style.left = $int(xy[0]) + $int(val) + "px";
+				}
+				return true;
+			}
+		}
 	}
 	return false;
 };
@@ -441,6 +474,12 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 		var xy = zk.revisedOffset(cmp);
 		cmp.style.left = xy[0] + "px";
 		cmp.style.top = xy[1] + "px";
+	} else if (pos == "parent" && isV) {
+		var xy = zk.revisedOffset(cmp.parentNode),
+			left = $int(cmp.style.left), top = $int(cmp.style.top);
+		setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
+		cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
+		cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
 	}
 	if (isV) zk.setVParent(cmp);
 	
@@ -500,8 +539,17 @@ zkWnd._doModal = function (cmp, replace) {
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
 	var zi = ++zkau.topZIndex; //mask also need another index
 
-	if (zkWnd.shallVParent(cmp)) zk.setVParent(cmp);
 	var pos = getZKAttr(cmp, "pos");
+	if (zkWnd.shallVParent(cmp)) {
+		if (pos == "parent") {
+			var xy = zk.revisedOffset(cmp.parentNode),
+				left = $int(cmp.style.left), top = $int(cmp.style.top);
+			setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
+			cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
+			cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
+		}
+		zk.setVParent(cmp);
+	}
 	zkWnd._center(cmp, zi, pos); //called even if pos not defined
 		//show dialog first to have better response.
 	
@@ -618,6 +666,7 @@ zkWnd._posMask = function (mask) {
 };
 /** Makes a window in the center. */
 zkWnd._center = function (cmp, zi, pos) {
+	if (pos == "parent") return;
 	cmp.style.position = "absolute"; //just in case
 	zk.center(cmp, pos);
 	zkau.sendOnMove(cmp);
