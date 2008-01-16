@@ -1359,8 +1359,15 @@ zkau._inCtkeys = function (evt, zkcode, keys) {
 };
 
 zkau.sendOnMove = function (cmp, keys) {
+	var offset = getZKAttr(cmp, "offset");
+	var left = cmp.style.left, top = cmp.style.top;
+	if (offset && getZKAttr(cmp, "pos") == "parent") {
+		var xy = offset.split(",");
+		left = $int(left) - $int(xy[0]) + "px";
+		top = $int(top) - $int(xy[1]) + "px";
+	}
 	zkau.send({uuid: cmp.id, cmd: "onMove",
-		data: [cmp.style.left, cmp.style.top, keys ? keys: ""]},
+		data: [left, top, keys ? keys: ""]},
 		zkau.asapTimeout(cmp, "onMove"));
 };
 zkau.sendOnZIndex = function (cmp) {
