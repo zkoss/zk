@@ -33,6 +33,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
@@ -43,19 +44,19 @@ import org.zkoss.zul.impl.XulElement;
  * @author gracelin
  * @since 3.0.2
  */
-public class JasperReport extends XulElement {
+public class Jasperreport extends XulElement {
 	private static final long serialVersionUID = 1L;
 	private String _src;
 	private Map _parameters;
-	private JRDataSource _dataSource;
+	private JRDataSource _datasource;
 	private int _medver;
 
-	public JasperReport() {
+	public Jasperreport() {
 		setHeight("100%");
 		setWidth("100%");
 	}
 
-	public JasperReport(String src) {
+	public Jasperreport(String src) {
 		setSrc(src);
 	}
 
@@ -116,14 +117,15 @@ public class JasperReport extends XulElement {
 	public void setParameters(Map parameters) {
 		if (!Objects.equals(_parameters, parameters)) {
 			_parameters = parameters;
+			invalidate();
 		}
 	}
 
 	/**
 	 * Returns the JasperReports DataSource.
 	 */
-	public JRDataSource getDataSource() {
-		return _dataSource;
+	public JRDataSource getDatasource() {
+		return _datasource;
 	}
 
 	/**
@@ -131,9 +133,10 @@ public class JasperReport extends XulElement {
 	 * 
 	 * @param dataSource use to fill the report
 	 */
-	public void setDataSource(JRDataSource dataSource) {
-		if (!Objects.equals(_dataSource, dataSource)) {
-			_dataSource = dataSource;
+	public void setDatasource(JRDataSource dataSource) {
+		if (!Objects.equals(_datasource, dataSource)) {
+			_datasource = dataSource;
+			invalidate();
 		}
 	}
 
@@ -158,7 +161,7 @@ public class JasperReport extends XulElement {
 	 * If parameters are null, we will use an empty Map. 
 	 * If data source is null, use JREmptyDataSource.
 	 * 
-	 * @return A AMedia contains report¡¦s byte stream.
+	 * @return A AMedia contains report's byte stream.
 	 */
 	private AMedia doReport() {
 
@@ -170,11 +173,11 @@ public class JasperReport extends XulElement {
 
 			if (_parameters == null)
 				_parameters = new HashMap();
-			if (_dataSource == null)
-				_dataSource = new JREmptyDataSource();
+			if (_datasource == null)
+				_datasource = new JREmptyDataSource();
 
 			final byte[] buf = JasperRunManager.runReportToPdf(is, _parameters,
-					_dataSource);
+					_datasource);
 
 			// prepare the AMedia
 			final InputStream mediais = new ByteArrayInputStream(buf);
@@ -184,7 +187,7 @@ public class JasperReport extends XulElement {
 			return amedia;
 
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			throw new UiException(ex);
 		} finally {
 			if (is != null) {
 				try {
