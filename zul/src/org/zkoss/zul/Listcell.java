@@ -156,7 +156,7 @@ public class Listcell extends LabelImageElement {
 					.append('"');
 				if (item.isDisabled())
 					sb.append(" disabled=\"disabled\"");
-				else if (item.isSelected())
+				if (item.isSelected())
 					sb.append(" checked=\"checked\"");
 
 				sb.append(" id=\"").append(item.getUuid())

@@ -148,7 +148,7 @@ public class Treecell extends LabelImageElement {
 						.append('"');
 					if (item.isDisabled())
 						sb.append(" disabled=\"disabled\"");
-					else if (item.isSelected())
+					if (item.isSelected())
 						sb.append(" checked=\"checked\"");					
 					//NOTE: use Treerow's uuid! NOT Treeitem's!
 					sb.append(" id=\"").append(getParent().getUuid())
