@@ -269,7 +269,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		#Ouput ${stdnm}
 		cd $binnm/dist/lib/ext
-		rm -rf jcommon.jar jfreechart.jar Filters.jar
+		rm -rf jcommon.jar jfreechart.jar Filters.jar jasperreports.jar
 
 		cd ..
 		rm zml.jar
