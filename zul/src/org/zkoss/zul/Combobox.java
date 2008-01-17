@@ -476,6 +476,9 @@ public class Combobox extends Textbox {
 	}
 	
 	/**  Deselects the currently selected items and selects the given item.
+	 * <p>Note: if the label of comboitem has the same more than one, the first 
+	 * comboitem will be selected at client side, it is a limitation of {@link Combobox}
+	 * and it is different from {@link Listbox}.</p>
 	 * @since 3.0.2
 	 */
 	public void setSelectedItem(Comboitem item) {
@@ -484,6 +487,9 @@ public class Combobox extends Textbox {
 	
 	/** Deselects the currently selected items and selects
 	 * the item with the given index.
+	 * <p>Note: if the label of comboitem has the same more than one, the first 
+	 * comboitem will be selected at client side, it is a limitation of {@link Combobox}
+	 * and it is different from {@link Listbox}.</p>
 	 * @since 3.0.2
 	 */
 	public void setSelectedIndex(int jsel) {
