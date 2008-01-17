@@ -32,6 +32,7 @@ import net.sf.jasperreports.engine.JasperRunManager;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
+import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -39,13 +40,19 @@ import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- * The JasperReports component.
+ * The JasperReport component.
+ * It is used to generate a Jasper report into an inline frame.
  * 
+ * <p>Note: this component is serializable only if the data source
+ * ({@link #getDatasource}) is serializable.
+ *
  * @author gracelin
  * @since 3.0.2
  */
 public class Jasperreport extends XulElement {
-	private static final long serialVersionUID = 1L;
+	private static final Log log = Log.lookup(Jasperreport.class);
+	private static final long serialVersionUID = 20080117L;
+
 	private String _src;
 	private Map _parameters;
 	private JRDataSource _datasource;
@@ -61,7 +68,7 @@ public class Jasperreport extends XulElement {
 	}
 
 	/**
-	 * Returns the source.
+	 * Returns the source (jasper file).
 	 * 
 	 * @return src The compiled file (jasper file).
 	 */
@@ -70,7 +77,7 @@ public class Jasperreport extends XulElement {
 	}
 
 	/**
-	 * Sets the source.
+	 * Sets the source (jasper file).
 	 * <p>
 	 * If src is changed, the whole component is invalidate.
 	 * 
@@ -90,11 +97,11 @@ public class Jasperreport extends XulElement {
 	 * Returns the attributes for generating the HTML tags.
 	 */
 	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
+		final String attrs = super.getOuterAttrs();
 		if (_src == null)
-			return sb.toString();
+			return attrs;
 
+		final StringBuffer sb = new StringBuffer(80).append(attrs);
 		StringTokenizer st = new StringTokenizer(_src, ".");
 		HTMLs.appendAttribute(sb, "src", Utils.getDynamicMediaURI(this,
 				_medver++, st.nextToken(), "pdf"));
@@ -181,10 +188,8 @@ public class Jasperreport extends XulElement {
 
 			// prepare the AMedia
 			final InputStream mediais = new ByteArrayInputStream(buf);
-			final AMedia amedia = new AMedia("FirstReport.pdf", "pdf",
+			return new AMedia("report.pdf", "pdf",
 					"application/pdf", mediais);
-
-			return amedia;
 
 		} catch (Exception ex) {
 			throw new UiException(ex);
@@ -193,8 +198,7 @@ public class Jasperreport extends XulElement {
 				try {
 					is.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(e);
 				}
 			}
 		}
