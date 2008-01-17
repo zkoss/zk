@@ -1460,7 +1460,7 @@
 	<xs:element name="timer" type="timerType" />
 	<xs:complexType name="timerType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 		<xs:attribute name="delay" type="xs:string" use="optional" />
 		<xs:attribute name="repeats" type="xs:string" use="optional" />
 		<xs:attribute name="running" type="xs:string" use="optional" />
