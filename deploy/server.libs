@@ -19,6 +19,7 @@ commons-io.jar
 jfreechart.jar
 jcommon.jar
 Filters.jar
+jasperreports.jar
 bsh.jar
 js.jar
 groovy.jar
