@@ -190,6 +190,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#MVEL
 	cp dist/lib/ext/ognl.jar /tmp/zk/$binnm/dist/lib/ext
 		#OGNL
+	cp dist/lib/ext/jasperreports.jar /tmp/zk/$binnm/dist/lib/ext
+		#JasperReport
 
 	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
