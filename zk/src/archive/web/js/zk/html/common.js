@@ -1473,13 +1473,15 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 						}
 						
 						var cell = s.firstChild;
-						if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
-							cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
-						var rwd = dstwds[z] - cacheCss.size;
-						rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
-						if (firstChild == row)
-							s.style.width = rwd;
-						if (cell) cell.style.width = rwd;
+						if (cell.id) {
+							if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
+								cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
+							var rwd = dstwds[z] - cacheCss.size;
+							rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
+							if (firstChild == row)
+								s.style.width = rwd;
+							if (cell) cell.style.width = rwd;
+						}
 					}
 					if (index == z) break;
 				}				
@@ -1508,24 +1510,26 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 		var z = zk.cellIndex(s);
 		if (dst.cells.length <= z) continue; // Bug #1852313
 		var d = dst.cells[z], wd = 0, cell = s.firstChild;
-		if (s.colSpan > 1) {
-			if (s.colSpan + z <= dst.cells.length) {				
-				for (var k = 0; k < s.colSpan; k++) {
-					var hd = dst.cells[z+k];
-					wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 2 : hd.offsetWidth; 												
+		if (cell.id) {
+			if (s.colSpan > 1) {
+				if (s.colSpan + z <= dst.cells.length) {				
+					for (var k = 0; k < s.colSpan; k++) {
+						var hd = dst.cells[z+k];
+						wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 2 : hd.offsetWidth; 												
+					}
 				}
-			}
-		} else {
-			if (zk.mozilla)	wd += $int(d.style.width); // Bug #1826938
-			else wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
-		}		
-		if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
-			cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
-		var rwd = wd - cacheCss.size;
-		rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
-		if (!s.parentNode.rowIndex)
-			s.style.width = rwd;
-		if (cell) cell.style.width = rwd;
+			} else {
+				if (zk.mozilla)	wd += $int(d.style.width); // Bug #1826938
+				else wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
+			}		
+			if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
+				cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
+			var rwd = wd - cacheCss.size;
+			rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
+			if (!s.parentNode.rowIndex)
+				s.style.width = rwd;
+			if (cell) cell.style.width = rwd;
+		}
 	}
 };
 //Number//
