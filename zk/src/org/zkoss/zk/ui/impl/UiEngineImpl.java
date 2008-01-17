@@ -294,6 +294,7 @@ public class UiEngineImpl implements UiEngine {
 		execCtrl.setCurrentPageDefinition(pagedef);
 
 		final Configuration config = _wapp.getConfiguration();
+		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
@@ -361,7 +362,7 @@ public class UiEngineImpl implements UiEngine {
 			} while ((event = nextEvent(uv)) != null);
 
 			//Cycle 2a: Handle aborting reason
-			final AbortingReason abrn = uv.getAbortingReason();
+			abrn = uv.getAbortingReason();
 			if (abrn != null)
 				abrn.execute(); //always execute even if !isAborting
 
@@ -391,6 +392,13 @@ public class UiEngineImpl implements UiEngine {
 		} finally {
 			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
 				//CONSIDER: whether to pass cleanup's error to users
+			if (abrn != null) {
+				try {
+					abrn.finish();
+				} catch (Throwable t) {
+					log.warning(t);
+				}
+			}
 
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
@@ -693,6 +701,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		Collection doneReqIds = null; //request IDs that have been processed
+		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, null);
@@ -738,7 +747,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//Cycle 2a: Handle aborting reason
-			final AbortingReason abrn = uv.getAbortingReason();
+			abrn = uv.getAbortingReason();
 			if (abrn != null)
 				abrn.execute(); //always execute even if !isAborting
 
@@ -787,6 +796,14 @@ public class UiEngineImpl implements UiEngine {
 			}
 		} finally {
 			if (!cleaned) config.invokeExecutionCleanups(exec, null, null);
+
+			if (abrn != null) {
+				try {
+					abrn.finish();
+				} catch (Throwable t) {
+					log.warning(t);
+				}
+			}
 
 			doDeactivate(exec);
 

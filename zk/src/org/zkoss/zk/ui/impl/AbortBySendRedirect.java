@@ -54,4 +54,6 @@ public class AbortBySendRedirect implements AbortingReason {
 	public AuResponse getResponse() {
 		return new AuSendRedirect(_url, _target);
 	}
+	public void finish() {
+	}
 }

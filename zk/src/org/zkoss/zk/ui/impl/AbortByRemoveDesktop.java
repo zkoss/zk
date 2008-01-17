@@ -36,11 +36,14 @@ public class AbortByRemoveDesktop implements AbortingReason {
 		return true;
 	}
 	public void execute() {
-		final Desktop dt = Executions.getCurrent().getDesktop();
-		final WebAppCtrl wappc = (WebAppCtrl)dt.getWebApp();
-		wappc.getDesktopCache(dt.getSession()).removeDesktop(dt);
 	}
 	public AuResponse getResponse() {
 		return null;
+	}
+	public void finish() {
+		//Bug 1868371: we shall postpone the cleanup to the last step
+		final Desktop dt = Executions.getCurrent().getDesktop();
+		final WebAppCtrl wappc = (WebAppCtrl)dt.getWebApp();
+		wappc.getDesktopCache(dt.getSession()).removeDesktop(dt);
 	}
 }
