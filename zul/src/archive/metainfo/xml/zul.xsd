@@ -2055,4 +2055,13 @@
 		<xs:attribute name="opacity" type="xs:string" use="optional" />
 		<xs:attribute name="numLevels" type="xs:string" use="optional" />
 	</xs:complexType>
+	<!-- jasperreport -->
+	<xs:element name="jasperreport" type="jasperreportType" />
+	<xs:complexType name="jasperreportType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="parameters" type="xs:string" use="optional" />
+		<xs:attribute name="datasource" type="xs:string" use="optional" />
+	</xs:complexType>
 </xs:schema>
