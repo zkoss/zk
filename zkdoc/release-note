@@ -62,6 +62,7 @@ ZK 3.0.2 Freshly
   1871684: Treeitem Visible Issue
   1871833: Data binder should read "self".
   1873021: If listbox model size < rows broken in 2008-01-15 freshly
+  1868371: desktop already "half-destroyed" when ExecutionCleanup runs
   
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
