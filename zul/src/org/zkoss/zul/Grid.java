@@ -623,7 +623,7 @@ public class Grid extends XulElement {
 			j < pgsz && it.hasNext(); ++j)
 				renderer.render((Row)it.next());
 
-			if (!inPagingMold())
+			if (!inPagingMold() && getRows().getChildren().size() > pgsz)
 				((Row)getRows().getChildren().get(pgsz)).setAttribute("UN_LOAD", "");
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
