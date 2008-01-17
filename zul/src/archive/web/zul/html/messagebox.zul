@@ -23,9 +23,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 use="org.zkoss.zul.impl.MessageboxDlg">
 	<hbox>
 		<image src="${arg.icon}"/>
-		<label multiline="true" hyphen="true" maxlength="40">
-			<attribute name="value">${arg.message}</attribute>
-		</label>
+		<div style="word-break:break-all;overflow:auto;">
+			${arg.message}
+		</div>
 	</hbox>
 	<separator bar="true"/>
 	<hbox style="margin-left:auto; margin-right:auto">
