@@ -34,10 +34,11 @@ import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
+
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zul.impl.Utils;
-import org.zkoss.zul.impl.XulElement;
 
 /**
  * The JasperReport component.
@@ -49,7 +50,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author gracelin
  * @since 3.0.2
  */
-public class Jasperreport extends XulElement {
+public class Jasperreport extends HtmlBasedComponent {
 	private static final Log log = Log.lookup(Jasperreport.class);
 	private static final long serialVersionUID = 20080117L;
 
@@ -156,7 +157,8 @@ public class Jasperreport extends XulElement {
 	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
 	 * component developers.
 	 */
-	protected class ExtraCtrl implements DynamicMedia {
+	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl
+	implements DynamicMedia {
 		// -- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			return doReport();
