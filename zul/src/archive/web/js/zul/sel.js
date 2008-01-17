@@ -883,7 +883,7 @@ zk.Selectable.prototype = {
 			if ($visible(r)) {
 				++len;
 				if (!firstVisiRow) firstVisiRow = r;
-				if (!isHgh && vs - 1 === j && vs <= len) { 
+				if (!isHgh && vs - 1 === len) { 
 					midVisiRow = r;
 					break;
 				}
