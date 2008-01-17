@@ -414,6 +414,20 @@ public class DefinitionLoaders {
 			final String name =
 				IDOMs.getRequiredElementValue(el, "component-name");
 
+			Class cls = null;
+			{
+				String clsnm = el.getElementValue("component-class", true);
+				if (clsnm != null && clsnm.length() > 0) {
+					noEL("component-class", clsnm, el);
+					try {
+						cls = locateClass(clsnm);
+					} catch (Throwable ex) { //Feature 1873426
+						log.warning("Component "+name+" ignored. Reason: unable to load "+clsnm, ex);
+						continue;
+					}
+				}
+			}
+
 			final String macroURI = el.getElementValue("macro-uri", true);
 			final ComponentDefinitionImpl compdef;
 			if (macroURI != null && macroURI.length() != 0) {
@@ -424,12 +438,9 @@ public class DefinitionLoaders {
 					langdef.getMacroDefinition(
 						name, macroURI, "true".equals(inline), null);
 
-				final String clsnm = el.getElementValue("component-class", true);
-				if (clsnm != null && clsnm.length() > 0) {
-					noEL("component-class", clsnm, el);
-					compdef.setImplementationClass(locateClass(clsnm));
+				if (cls != null)
+					compdef.setImplementationClass(cls);
 						//resolve it now because it is part of lang-addon
-				}
 
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extends") != null) { //override
@@ -448,19 +459,14 @@ public class DefinitionLoaders {
 					langdef.addComponentDefinition(compdef);
 				}
 
-				final String clsnm = el.getElementValue("component-class", true);
-				if (clsnm != null && clsnm.length() > 0) {
-					noEL("component-class", clsnm, el);
-					compdef.setImplementationClass(locateClass(clsnm));
-				}
+				if (cls != null)
+					compdef.setImplementationClass(cls);
 			} else {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 
-				final String clsnm =
-					IDOMs.getRequiredElementValue(el, "component-class");
-				noEL("component-class", clsnm, el);
-				compdef = new ComponentDefinitionImpl(
-					langdef, null, name, locateClass(clsnm));
+				if (cls == null)
+					throw new UiException("component-class is required, "+el.getLocator());
+				compdef = new ComponentDefinitionImpl(langdef, null, name, cls);
 				langdef.addComponentDefinition(compdef);
 			}
 
