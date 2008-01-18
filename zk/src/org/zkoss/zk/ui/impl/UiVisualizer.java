@@ -104,6 +104,9 @@ import org.zkoss.zk.au.out.*;
 	private final boolean _recovering;
 	/** Whether it is ending, i.e., no further update is allowed. */
 	private boolean _ending;
+	/** Whether it is disabled, i.e., ignore any updates to the client.
+	 */
+	private boolean _disabled;
 
 	/**
 	 * Creates a root execution (without parent).
@@ -150,13 +153,16 @@ import org.zkoss.zk.au.out.*;
 	public boolean isRecovering() {
 		return _recovering;
 	}
+	public void disable() {
+		_disabled = true;
+	}
 
 	//-- update/redraw --//
 
 	/** Invalidates the whole page.
 	 */
 	public void addInvalidate(Page page) {
-		if (_recovering || page == null || !_exec.isAsyncUpdate(page))
+		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
 		if (_pgInvalid == null)
@@ -168,7 +174,7 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public void addInvalidate(Component comp) {
 		final Page page = comp.getPage();
-		if (_recovering || page == null || !_exec.isAsyncUpdate(page))
+		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 		if (_ending) throw new IllegalStateException("ended");
 
@@ -209,7 +215,7 @@ import org.zkoss.zk.au.out.*;
 	 */
 	private Map getAttrRespMap(Component comp, String attr) {
 		final Page page = comp.getPage();
-		if (_recovering || page == null || !_exec.isAsyncUpdate(page)
+		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp))
 			return null; //nothing to do
 		if (_ending) throw new IllegalStateException("ended");
@@ -231,7 +237,7 @@ import org.zkoss.zk.au.out.*;
 	 * @param newpg the page after moved
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
-		if (_recovering || (newpg == null && oldpg == null)
+		if (_recovering || _disabled || (newpg == null && oldpg == null)
 		|| (newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
 		|| (oldpg == null && !_exec.isAsyncUpdate(newpg))) //attach to loading pg
 			return; //to avoid redundant AuRemove
