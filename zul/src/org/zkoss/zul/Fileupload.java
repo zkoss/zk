@@ -84,16 +84,16 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	}
 	/** Sets the maximal allowed number of files to upload.
 	 * <p>Default: 1.
-	 * @param maxnum the maximal allowed number (positive or -1).
-	 * Since 3.0.2, the value can be -1, which means no limitation at all and the end user can upload
+	 * @param maxnum the maximal allowed number (positive or negative).
+	 * Since 3.0.2, the value can be negative, which means no limitation at all and the end user can upload
 	 * any numbers he wants (since 3.0.2)
 	 * @exception WrongValueException if non-positive, or it exceeds 1000
 	 * @since 2.4.0
 	 */
 	public void setNumber(int maxnum) throws WrongValueException {
-		if ((maxnum != -1 && maxnum <= 0) || maxnum > 1000)
+		if (maxnum < -1000 || maxnum == 0 || maxnum > 1000)
 			throw new WrongValueException(
-				maxnum <= 0 ? "Positive is required": "Number too big (maximal 1000)");
+				maxnum == 0 ? "Positive or Negative is required": "Number too big (maximal 1000)");
 		_maxnum = maxnum;
 	}
 	/** Returns whether to treat the uploaded file(s) as binary, i.e.,
@@ -282,7 +282,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
 		params.put("title", title == null ?
 			Messages.get(MZul.UPLOAD_TITLE): title);
-		params.put("max", new Integer(max <= 1 && max != -1 ? 1: max > 1000 ? 1000: max));
+		params.put("max", new Integer(max == 0 ? 1 : max > 1000 ? 1000: max < -1000 ? -1000 : max));
 		params.put("native", Boolean.valueOf(alwaysNative));
 
 		final FileuploadDlg dlg = (FileuploadDlg)

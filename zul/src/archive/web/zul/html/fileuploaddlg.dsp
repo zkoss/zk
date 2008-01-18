@@ -74,7 +74,7 @@ function deleteUpload(img) {
 	var table = parent.$parentByTag(img, "TABLE");
 	table.deleteRow(img.parentNode.parentNode.rowIndex);
 	for (var i = 0, j = table.rows.length; i < j; ++i)
-		table.rows[i].firstChild.innerHTML = i+1;
+		table.rows[i].cells[0].innerHTML = i+1;
 	adjustHgh(table);
 }
 function adjustHgh(table) {
@@ -97,12 +97,12 @@ parent.zk.listen(document, "keydown", onDocKeydown);
 
 	<div style="overflow-y:auto;overflow-x:hidden;width:100%;height:${param.max > 3 ? '100px' : ''};">
 	<table id="upload-list" border="0" width="100%">
-<c:set var="unlimited" value="${param.max == -1 ? true: false}"/>
-<c:set var="maxcnt" value="${empty param.max || unlimited ? 1: param.max}"/>
-<c:forEach var="cnt" begin="1" end="${maxcnt}">
+<c:set var="unlimited" value="${param.max < 0 ? true: false}"/>
+<c:set var="maxcnt" value="${empty param.max ? 1 : unlimited ? (param.max/-1) : param.max}"/>
+<c:forEach var="cnt" begin="1" end="${maxcnt}" varStatus="s">
 	<tr>
 		<td align="right"><c:if test="${unlimited || maxcnt gt 2}">${cnt}</c:if></td>
-		<td><input class="file" type="file" id="file" name="file"/><c:if test="${unlimited}"><img src="${c:encodeURL('~./zul/img/add.gif')}" onclick='addUpload(this);'"/></c:if></td>
+		<td><input class="file" type="file" id="file" name="file"/><c:if test="${unlimited && s.index == maxcnt}"><img src="${c:encodeURL('~./zul/img/add.gif')}" onclick='addUpload(this);'"/></c:if><c:if test="${unlimited && s.index < maxcnt}"><img src="${c:encodeURL('~./zul/img/delete.gif')}" onclick='deleteUpload(this);'"/></c:if></td>
 	</tr>
 </c:forEach>
 	</table>
