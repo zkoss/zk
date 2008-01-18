@@ -108,6 +108,24 @@ implements EventProcessingThread {
 	public final Component getComponent() {
 		return _proc.getComponent();
 	}
+	public void sendEvent(final Component comp, Event event)
+	throws Exception {
+//		if (log.finerable()) log.finer("Process sent event: "+event);
+		if (event == null || comp == null)
+			throw new IllegalArgumentException("Both comp and event must be specified");
+		if (!(Thread.currentThread() instanceof EventProcessingThreadImpl))
+			throw new IllegalStateException("Only callable when processing an event");
+
+		final EventProcessor oldproc = _proc;
+		_proc = new EventProcessor(_proc.getDesktop(), comp, event);
+		try {
+			setup();
+			process0();
+		} finally {
+			_proc = oldproc;
+			setup();
+		}
+	}
 
 	//extra utilities//
 	/** Stops the thread. Called only by {@link org.zkoss.zk.ui.sys.UiEngine}
@@ -457,27 +475,6 @@ implements EventProcessingThread {
 			//propogate back the first exception
 	}
 
-	/** Sends the specified component and event and processes the event
-	 * synchronously. Used to implements {@link org.zkoss.zk.ui.event.Events#sendEvent}.
-	 */
-	public void sendEvent(final Component comp, Event event)
-	throws Exception {
-//		if (log.finerable()) log.finer("Process sent event: "+event);
-		if (event == null || comp == null)
-			throw new IllegalArgumentException("Both comp and event must be specified");
-		if (!(Thread.currentThread() instanceof EventProcessingThreadImpl))
-			throw new IllegalStateException("Only callable when processing an event");
-
-		final EventProcessor oldproc = _proc;
-		_proc = new EventProcessor(_proc.getDesktop(), comp, event);
-		try {
-			setup();
-			process0();
-		} finally {
-			_proc = oldproc;
-			setup();
-		}
-	}
 	/** Processes the component and event.
 	 */
 	private void process0() throws Exception {

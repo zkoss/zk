@@ -33,7 +33,6 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
-import org.zkoss.zk.ui.impl.EventProcessingThreadImpl;
 import org.zkoss.zk.ui.impl.EventProcessor;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuEcho;
@@ -253,7 +252,7 @@ public class Events {
 			return; //done
 
 		final Thread thd = (Thread)Thread.currentThread();
-		if (!(thd instanceof EventProcessingThreadImpl)) {
+		if (!(thd instanceof EventProcessingThread)) {
 			if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
 				final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 				final Page page = execCtrl.getCurrentPage();
@@ -274,7 +273,7 @@ public class Events {
 		}
 
 		try {
-			((EventProcessingThreadImpl)thd).sendEvent(comp, event);
+			((EventProcessingThread)thd).sendEvent(comp, event);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}
