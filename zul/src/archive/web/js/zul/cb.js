@@ -45,11 +45,12 @@ zkTxbox.onblur = function (evt) {
 		var inpval = inp.value.toLowerCase();
 		var pp2 = $e(uuid + "!cave");
 		var rows = pp2.rows;
-		var jfnd = -1;
+		var jfnd = -1, strict = getZKAttr(cmp, "valid") || "";
+		strict = strict.toLowerCase().indexOf("strict") > -1;
 		for (var j = 0, rl = rows.length; j < rl; ++j) {			
 		var item = rows[j];
 			var txt = zkCmbox.getLabel(item).toLowerCase();
-			if (txt == inpval) {
+			if (zk.isVisible(item) && (!strict || getZKAttr(item, "disd") != "true") && txt == inpval) {
 				jfnd = j;
 				break;
 			}
@@ -90,6 +91,7 @@ zkCmbox.strict = function (id) {
 		if (pp2 && pp2.rows) {
 			for (var j = 0, rl = rows.length; j < rl; ++j) {
 				var item = rows[j];
+				if (!zk.isVisible(item) || getZKAttr(item, "disd") == "true") continue;
 				var txt = zkCmbox.getLabel(item);
 				if (txt.toLowerCase() == inp.value.toLowerCase()) {
 					inp.value = txt;
@@ -513,6 +515,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	var jfnd = -1, exact = !inpval, old;
 	for (var j = 0, rl = rows.length; j < rl; ++j) {
 		var item = rows[j];
+		if (!zk.isVisible(item)) continue;
 		if (!exact) {
 			var txt = zkCmbox.getLabel(item).toLowerCase();
 			if (txt == inpval) {
@@ -537,7 +540,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 		if (jfnd < 0) {
 			if (rows.length) {
 				for (var i = 0, rl = rows.length; i < rl; i++) {
-					if (getZKAttr(rows[i], "disd") == "true") continue;
+					if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
 					found = rows[i];
 					break;
 				}
@@ -550,13 +553,13 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 					&& inp.selectionEnd == inpval.length)) {
 					if (bUp) {
 						for (var i = jfnd - 1; i >= 0 ; i--) {
-							if (getZKAttr(rows[i], "disd") == "true") continue;
+							if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
 							jfnd = i;
 							break;
 						}
 					} else {
 						for (var i = jfnd + 1, rl = rows.length; i < rl; i++) {
-							if (getZKAttr(rows[i], "disd") == "true") continue;
+							if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
 							jfnd = i;
 							break;
 						}
@@ -576,7 +579,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 			}
 		}
 	} else if (jfnd >= 0) {
-		found = rows[jfnd];
+		found = getZKAttr(rows[jfnd], "disd") == "true" ? null : rows[jfnd];
 	}
 
 	if (old != found) {

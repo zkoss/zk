@@ -247,9 +247,11 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 				throw wrongValue(comp, MZul.ILLEGAL_VALUE);
 			if ((_flags & STRICT) != 0) {
 				if (s.length() > 0 && comp instanceof Combobox) {
-					for (Iterator it = ((Combobox)comp).getItems().iterator(); it.hasNext();)
-						if(s.equalsIgnoreCase(((Comboitem)it.next()).getLabel()))
+					for (Iterator it = ((Combobox)comp).getItems().iterator(); it.hasNext();) {
+						final Comboitem ci = (Comboitem)it.next();
+						if(!ci.isDisabled() && ci.isVisible() && s.equalsIgnoreCase(ci.getLabel()))
 							return;
+					}
 					throw wrongValue(comp, MZul.VALUE_NOT_MATCHED);
 				}
 			}
