@@ -38,5 +38,6 @@ public class DetachDesktopCleanup implements DesktopCleanup {
 		final Collection c = desktop.getPages();
 		if (c.size() > 0)
 		reuse = ((Page)c.iterator().next()).getFellow("reuse");
+		reuse.detach();
 	}
 }
