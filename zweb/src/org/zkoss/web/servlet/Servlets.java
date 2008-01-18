@@ -340,6 +340,22 @@ public class Servlets {
 			&& agt.indexOf("rmil") >= 0;
 	}
 
+	/** Returns the user-agent header, which indicates what the client is,
+	 * or an empty string if not available.
+	 *
+	 * <p>Note: it doesn't return null, so it is easy to test what
+	 * the client is with {@link String#indexOf}.
+	 *
+	 * @since 3.0.2
+	 */
+	public String getUserAgent(ServletRequest req) {
+		if (req instanceof HttpServletRequest) {
+			final String s = ((HttpServletRequest)req).getHeader("user-agent");
+			if (s != null) return s;
+		}
+		return "";
+	}
+
 	/**
 	 * Tests whether this page is included by another page.
 	 */
