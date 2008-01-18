@@ -228,9 +228,11 @@ zk.Layout.prototype = {
 			if (getZKAttr(cmp, "autoscl") == "true") { 
 	        	bodyEl.style.overflow = "auto";				
 				bodyEl.style.position = "relative";
-			} else {
+				setZKAttr(bodyEl, "autoscl", "true");
+			} else if (getZKAttr(bodyEl, "autoscl")) {
 				bodyEl.style.overflow = "hidden";							
 				bodyEl.style.position = "";
+				rmZKAttr(bodyEl, "autoscl");
 			}
 			zk.onVisiAt(bodyEl); // Bug #1862935
 		}
