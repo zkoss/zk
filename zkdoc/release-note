@@ -9,6 +9,7 @@ ZK 3.0.2 Freshly
   1598234: strict autocomplete in comboboxes
   1867638: The fulfill attribute support multiple component
   1854894: Allow EL expression in the use attr (consistent with apply)
+  1874335: Support the forward directive to forward to another page
   1854857: A way to specify a range for datebox's constraint
   1482341: Datebox supports a valid range of days
   1485247: Datebox supports a valid range
