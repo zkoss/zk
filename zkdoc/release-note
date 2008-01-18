@@ -65,6 +65,7 @@ ZK 3.0.2 Freshly
   1868371: desktop already "half-destroyed" when ExecutionCleanup runs
   1861715: hyphenation with Label objects not appropriate
   1829397: Timer repeatedly fired
+  1873669: org.zkoss.zk.ui.event.Events doesnt work with custom UiEngine
   1873950: nested modal windows positioning(IE only)
   
 * Upgrade Notes:
