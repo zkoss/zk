@@ -391,6 +391,12 @@ public class ExecutionImpl extends AbstractExecution {
 	public boolean isMilDevice() {
 		return Servlets.isMilDevice(_request);
 	}
+	public boolean isHilDevice() {
+		return Servlets.isHilDevice(_request);
+	}
+	public String getUserAgent() {
+		return Servlets.getUserAgent(_request);
+	}
 
 	public Object getNativeRequest() {
 		return _request;

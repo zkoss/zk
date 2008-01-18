@@ -755,6 +755,26 @@ public interface Execution  {
 	 * @since 2.4.1
 	 */
 	public boolean isMilDevice();
+	/** Returns whether the client is a mobile device supporting HIL
+	 * (Handset Interactive Language).
+	 *
+	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
+	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
+	 * return true.
+	 *
+	 * @since 3.0.2
+	 */
+	public boolean isHilDevice();
+
+	/** Returns the user-agent header, which indicates what the client is,
+	 * or an empty string if not available.
+	 *
+	 * <p>Note: it doesn't return null, so it is easy to test what
+	 * the client is with {@link String#indexOf}.
+	 *
+	 * @since 3.0.2
+	 */
+	public String getUserAgent();
 
 	/** Returns the native request, or null if not available.
 	 *
