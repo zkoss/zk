@@ -8,28 +8,18 @@ function newWindow(url){
 <h:form id="newform" target="_blank" method="post"/>
 
 <zscript>
-
 String defaultWidth="900px";
 String defaultHeight="800px";
 String shortHeight="520px";
-int intHeight = 350;
-
-String panelHeight= intHeight+"px";
-String panelWidth="100%";
-String halfWidth="45%";
-int rowz = intHeight / 20;
-
 </zscript>
 	<borderlayout id="main" use="org.zkoss.zkdemo.test2.MainLayout">
-	<center border="0" autoscroll="true">
-		<hbox width="100%" id="h1" height="100%">
-			<!-- ******************** Ctrl Panel ******************** -->
-			<window id="w1" width="355px" >
-				
+	<west size="355px" border="0" collapsible="true" maxsize="600" splittable="true" flex="true">
+	<!-- ******************** Ctrl Panel ******************** -->
+			<window id="w1">
 				<groupbox mold="3d" width="352px" >
 					<caption label="ZK Version:${desktop.webApp.version}">
-						<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();h1.setWidths("0px,");w2.setWidth("90%")'/>
-						<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();h1.setWidths(null);w2.setWidth("800px")'/>
+						<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();w2.setWidth("90%")'/>
+						<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();w2.setWidth("800px")'/>
 						<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
 						<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
 						<button label="tracker">
@@ -57,7 +47,13 @@ int rowz = intHeight / 20;
 								<checkbox id="reg"/>Regular Expression
 							</hbox>
 							<hbox>
-								<checkbox id="newb"/>Open in new Browser
+								<checkbox id="newb">
+									<attribute name="onCheck"><![CDATA[
+									if (lb.getSelectedItem() != null && self.checked) {
+										Clients.evalJavaScript("newWindow(\""+main.getFileName(lb.getSelectedIndex())+"\")");
+									}
+									]]></attribute>
+									</checkbox>Open in new Browser
 							</hbox>
 						</vbox>
 						
@@ -71,23 +67,21 @@ int rowz = intHeight / 20;
 							</attribute>
 						</listbox>
 					</vbox>
-				</groupbox>
-				
-				
+				</groupbox>				
 			</window>
 			
-			<!-- ******************** View Panel ******************** -->
-			<window id="w2" border="normal" height="${defaultHeight}" width="800px" >
-				<caption label="ZK TEST2"/>
-				<separator/>
-				<separator/>
-				<iframe  id="ifr" height="98%"  width="100%"/>
-			</window>
-			
-		</hbox>
+	</west>
+	<center border="0" autoscroll="true" flex="true">			
+		<!-- ******************** View Panel ******************** -->
+		<window id="w2" border="normal">
+			<caption label="ZK TEST2"/>
+			<separator/>
+			<separator/>
+			<iframe  id="ifr" height="98%"  width="100%"/>
+		</window>
 	</center>
 	<south id="leftPanel" border="0" collapsible="true" maxsize="600" 
-		splittable="true" open="false" size="40%">
+		splittable="true" open="false" size="300px">
 		<attribute name="onOpen">
 			if(event.isOpen())
 				w2.setHeight(shortHeight);
@@ -100,7 +94,7 @@ int rowz = intHeight / 20;
 				<button label="Save" onClick=" main.saveBack()"/>
 				<button label="Reload" onClick="main.reloadCodeView();"/>
 			</caption>
-			<textbox id="codeView" class="code" rows="${rowz}" width="100%">
+			<textbox id="codeView" class="code" rows="15" width="99%">
 				<attribute name="onCreate"><![CDATA[main.codeView=self;]]></attribute>
 				<attribute name="value"><![CDATA[]]></attribute>
 			</textbox>

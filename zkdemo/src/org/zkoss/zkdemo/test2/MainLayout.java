@@ -81,7 +81,7 @@ public class MainLayout extends Borderlayout {
 
 			public void onEvent(Event event) throws Exception {
 				int index = lb.getSelectedIndex();
-				String disFileStr = ((File)fileModel.get(index)).getName();
+				String disFileStr = getFileName(index);
 				
 				if(((Checkbox)getFellow("w1").getFellow("newb")).isChecked()){
 					Clients.evalJavaScript("newWindow(\""+disFileStr+"\")");
@@ -136,6 +136,11 @@ public class MainLayout extends Borderlayout {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	
+	public String getFileName(int index) {
+		return ((File)fileModel.get(index)).getName();
 	}
 	/**
 	 * 
