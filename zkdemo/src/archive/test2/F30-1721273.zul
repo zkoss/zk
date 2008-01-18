@@ -22,5 +22,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<n:ol>
 		<n:li>Focus into the textbox, then you press the "Enter" key.</n:li>
 	</n:ol>
-	<textbox value="Support onOK event" onOK="alert(self.value);"/>
+	<textbox value="Support onOK event 1" onOK="alert(self.value);"/>
+        <textbox value="Support onOK event 2" onOK="alert(self.value);"/>
 </zk>

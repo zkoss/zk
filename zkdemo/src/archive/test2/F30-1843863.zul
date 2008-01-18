@@ -18,7 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1843863 ]  Able to Pass Arguments to Variable-Resolver Directive</n:h2>
 <div>
 	You shall see this.
 	Also check the log (stdout).
 </div>
+</zk>

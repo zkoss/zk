@@ -17,6 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1872505]   Provide a "parent" position for Window component.</n:h2>
 <window border="none" style="border:1px solid black;">
 	If the property of InnerWindow's position is a "parent", the moved message will indicate the position of window inside its parent not "body" node.  
 	<separator bar="true"/>
@@ -61,4 +63,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<label style="color:red" id="msg1" value="Please move the NestedWindow..."/>
 	</vbox>
 </window>
+</zk>
 

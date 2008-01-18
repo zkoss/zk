@@ -26,10 +26,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<menu label="File">
 			<menupopup>
 				<menuitem label="New" autocheck="true" />
-				<menuitem label="Open" autocheck="true"
+				<menuitem label="Open" autocheck="true" id="open"
 					onClick="alert(self.label)" disabled="true" />
 				<menuitem label="Save" />
 				<menuseparator />
+                                <menuitem label="Disable Open" onClick="open.disabled=true"/>
+                                <menuitem label="Enable Open" onClick="open.disabled=false"/>
 				<menuitem label="Exit" />
 			</menupopup>
 		</menu>

@@ -18,9 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2> 1840878  	  Multiple uploads limitations</n:h2>
 	<fileupload number="-1">
 		<attribute name="onUpload">
-			alert(event.medias.length +"");
+			alert("total upload files:"+event.medias.length);
 		</attribute>
 	</fileupload>
 </zk>

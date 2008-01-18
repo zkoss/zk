@@ -17,7 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1858762 ]   A way to show the busy message from server.</n:h2>
 <button label="show" >
 <attribute name="onClick">
 	Clients.showBusy("This loading bar will disappear after 5 sec.", true);

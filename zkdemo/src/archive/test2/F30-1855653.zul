@@ -17,6 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1855653 ]    Optimize Live Data with Listbox &amp; Grid</n:h2>
 <window title="Live Data Demo - Listbox" border="normal">
 	<zscript>
 		List items = new org.zkoss.zkdemo.userguide.BigList(1000);
@@ -39,4 +41,4 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</listhead>
 	</listbox>
 </window>
-			
+</zk>			

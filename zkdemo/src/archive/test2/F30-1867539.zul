@@ -17,7 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1867539 ]   Combobox to support type-ahead.</n:h2>
 	Combobox to support type-ahead
 	<combobox onChanging="msg.value = event.value">
 		<comboitem label="Simple and Rich" />

@@ -17,7 +17,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1862036 ]    Combobox supports ListModel.</n:h2>
+<n:p>selected index is not depends on whole model, it depends on a modle's subset</n:p>
 	<zscript>
 		String[] data = new String[30];
 		for(int j=0; j &lt; data.length; ++j) {
@@ -25,5 +27,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		}
 		ListModel strset = new SimpleListModel(data);
 	</zscript>
+        <button label="selected index" onClick='alert("selectIndex:"+list.selectedIndex)'/>
 	<combobox id="list" width="200px" model="&#36;{strset}" />	
 </zk>

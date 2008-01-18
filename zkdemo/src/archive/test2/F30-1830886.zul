@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
 <h:h3> [ 1830886 ] A way to make the listbox change its model less "drastic"</h:h3>
+<h:p>check if the listbox grow it height and reduce back, then it is fail.</h:p>
 <window title="Live Data Demo" border="normal">
 	<zscript>
 		List data = new ArrayList();
