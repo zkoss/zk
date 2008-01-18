@@ -29,6 +29,12 @@ import org.zkoss.zk.ui.util.DesktopCleanup;
  * Detaches when desktop is cleaned up.
  * Used with B30-1753712.zul.
  *
+<pre><code>
+&lt;listener&gt;
+  &lt;listener-class&gt;org.zkoss.zkdemo.test2.DetachDesktopCleanup&lt;/listener-class&gt;
+&lt;/listener&gt;
+</pre></code>
+ *
  * @author tomyeh
  */
 public class DetachDesktopCleanup implements DesktopCleanup {
