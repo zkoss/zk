@@ -532,7 +532,6 @@ zkWnd._doModal = function (cmp, replace) {
 		var onshow = getZKAttr(cmp, "aos") || "moveDown";
 		if (onshow != "z_none")
 			setZKAttr(cmp, "conshow", "anima." + onshow + "($e('"+cmp.id+"'));");
-		cmp.style.display = "none";
 	}
 	//center component
 	var nModals = zkau._modals.length;
