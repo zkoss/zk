@@ -422,7 +422,7 @@ public class DefinitionLoaders {
 					try {
 						cls = locateClass(clsnm);
 					} catch (Throwable ex) { //Feature 1873426
-						log.warning("Component "+name+" ignored. Reason: unable to load "+clsnm, ex);
+						log.warningBriefly("Component "+name+" ignored. Reason: unable to load "+clsnm, ex);
 						continue;
 					}
 				}
