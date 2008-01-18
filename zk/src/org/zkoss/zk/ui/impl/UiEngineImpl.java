@@ -320,12 +320,19 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
-					final Component[] comps =
-						uv.isAborting() || exec.isVoided() ? null:
-							execCreate(
-							new CreateInfo(
+
+					final Component[] comps;
+					final String uri = pagedef.getForwardURI(page);
+					if (uri != null) {
+						comps = new Component[0];
+						exec.forward(uri);
+					} else {
+						comps = uv.isAborting() || exec.isVoided() ? null:
+							execCreate(new CreateInfo(
 								((WebAppCtrl)_wapp).getUiFactory(), exec, page),
 							pagedef, null);
+					}
+
 					inits.doAfterCompose(page, comps);
 				} catch(Throwable ex) {
 					if (!inits.doCatch(ex))
@@ -625,6 +632,8 @@ public class UiEngineImpl implements UiEngine {
 		//are used as long as components created by this method are alive
 		if (page != null)
 			pagedef.initXelContext(page);
+
+		//Note: the forward directives are ignore in this case
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {

@@ -145,11 +145,11 @@ public class VariableResolverInfo {
 		}
 
 		return (VariableResolver)(_args.length == 0 ? cls.newInstance():
-			Classes.newInstance(cls, getArguments(pgdef, page)));
+			Classes.newInstance(cls, resolveArguments(pgdef, page)));
 	}
 	/** Returns the arguments array (by evaluating EL if necessary).
 	 */
-	private Object[] getArguments(PageDefinition pgdef, Page page) {
+	private Object[] resolveArguments(PageDefinition pgdef, Page page) {
 		final Evaluator eval = pgdef.getEvaluator();
 		final Object[] args = new Object[_args.length];
 		for (int j = 0; j < args.length; ++j) //eval order is important

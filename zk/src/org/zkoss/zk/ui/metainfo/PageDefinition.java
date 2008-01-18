@@ -89,6 +89,8 @@ public class PageDefinition extends NodeInfo {
 	private List _resolvdefs;
 	/** List(HeaderInfo). */
 	private List _headerdefs;
+	/** List(ForwardInfo). */
+	private List _forwdefs;
 	/** Map(String name, ExValue value). */
 	private Map _rootAttrs;
 	private ExValue _contentType, _docType, _firstLine;
@@ -317,7 +319,7 @@ public class PageDefinition extends NodeInfo {
 			try {
 				final Initiator init = def.newInitiator(this, page);
 				if (init != null) {
-					init.doInit(page, def.getArguments(this, page));
+					init.doInit(page, def.resolveArguments(this, page));
 					inits.add(init);
 				}
 			} catch (Throwable ex) {
@@ -394,6 +396,33 @@ public class PageDefinition extends NodeInfo {
 		for (Iterator it = _headerdefs.iterator(); it.hasNext();)
 			sb.append(((HeaderInfo)it.next()).toHTML(this, page)).append('\n');
 		return sb.toString();
+	}
+	/** Adds a forward definition ({@link ForwardInfo}).
+	 */
+	public void addForwardInfo(ForwardInfo forward) {
+		if (forward == null)
+			throw new IllegalArgumentException("null");
+
+		if (_forwdefs == null)
+			_forwdefs = new LinkedList();
+		_forwdefs.add(forward);
+	}
+	/** Returns the URI to forward to, or null if not to foward.
+	 * It evaluates the forward definition (added by {@link #addForwardInfo})
+	 * one-by-one, if any, to see whether to foward.
+	 * Returns null if no forward definition, or no forward definition's
+	 * condition is satisfied.
+	 */
+	public String getForwardURI(Page page) {
+		if (_forwdefs == null)
+			return null;
+
+		for (Iterator it = _forwdefs.iterator(); it.hasNext();) {
+			final String uri = ((ForwardInfo)it.next()).resolveURI(this, page);
+			if (uri != null)
+				return uri;
+		}
+		return null;
 	}
 
 	/** Returns the content type (after evaluation),

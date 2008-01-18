@@ -140,8 +140,7 @@ public class Parser {
 	public PageDefinition parse(Document doc, String extension)
 	throws Exception {
 		//1. parse the page and import directive if any
-		final List pis = new LinkedList();
-		final List imports = new LinkedList();
+		final List pis = new LinkedList(), imports = new LinkedList();
 		String lang = null;
 		for (Iterator it = doc.getChildren().iterator(); it.hasNext();) {
 			final Object o = it.next();
@@ -285,6 +284,15 @@ public class Parser {
 				final Map.Entry me = (Map.Entry)it.next();
 				pgdef.setRootAttribute((String)me.getKey(), (String)me.getValue());
 			}
+		} else if ("forward".equals(target)) { //forward
+			final String uri = (String)params.remove("uri");
+			final String ifc = (String)params.remove("if");
+			final String unless = (String)params.remove("unless");
+			if (!params.isEmpty())
+				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+			noEmpty("uri", uri, pi);
+			pgdef.addForwardInfo(
+				new ForwardInfo(uri, ConditionImpl.getInstance(ifc, unless)));
 		} else if ("import".equals(target)) { //import
 			throw new UiException("The import directive can be used only at the top level, "+pi.getLocator());
 		} else {
