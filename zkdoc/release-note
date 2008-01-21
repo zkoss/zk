@@ -70,6 +70,7 @@ ZK 3.0.2 Freshly
   1873669: org.zkoss.zk.ui.event.Events doesnt work with custom UiEngine
   1873950: nested modal windows positioning(IE only)
   1874396: Audio and Firefox: Error
+  1876198: Error msg appears when load page (databind+CustomConstraint)
   
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
