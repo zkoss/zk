@@ -1534,6 +1534,9 @@ zkau.getSPushInfo = function (dtid) {
 //ID Space//
 /** Returns element of the specified zid. */
 zkau.getByZid = function (n, zid) {
+	if (zid.startsWith("uuid(") && zid.endsWith(')'))
+		return $e(zid.substring(5, zid.length - 1));
+
 	var oid = zkau._zidOwner(n);
 	var v = zkau._zidsp[oid];
 	if (v) {
