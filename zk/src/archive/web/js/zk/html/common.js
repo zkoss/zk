@@ -547,8 +547,8 @@ zk.select = function (cmp) {
  * Note: if the function occurs some error, it always return [0, 0];
  */
 zk.getSelectionRange = function(inp) {	
-	if (document.selection != null && inp.selectionStart == null) { //IE
-		try {
+	try {
+		if (document.selection != null && inp.selectionStart == null) { //IE		
 			var range = document.selection.createRange(); 
 			var rangetwo = inp.createTextRange(); 
 			var stored_range = ""; 
@@ -561,11 +561,11 @@ zk.getSelectionRange = function(inp) {
 			stored_range.setEndPoint('EndToEnd', range); 
 			var start = stored_range.text.length - range.text.length;			
 			return [start, start + range.text.length];
-		} catch (e) {
-			return [0, 0];
+		} else { //Gecko
+			return [inp.selectionStart, inp.selectionEnd];
 		}
-	} else { //Gecko
-		return [inp.selectionStart, inp.selectionEnd];
+	} catch (e) {
+		return [0, 0];
 	}
 }
 
