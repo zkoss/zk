@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import org.zkoss.zul.impl.InputElement;
+
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -246,7 +248,15 @@ public class Binding {
 			if (_converter != null) {
 				bean = _converter.coerceToUi(bean, comp);
 			}
-			Fields.set(comp, _attr, bean, _converter == null);
+			
+			//Bug #1876198 Error msg appears when load page (databind+CustomConstraint)
+			//catching WrongValueException no longer works, check special case and 
+			//use setRowValue() method directly
+			if ((comp instanceof InputElement) && "value".equals(_attr)) {
+				Fields.set(comp, "rawValue", bean, _converter == null);
+			} else {
+				Fields.set(comp, _attr, bean, _converter == null);
+			}
 		} catch (ClassCastException ex) {
 			throw UiException.Aide.wrap(ex);
 		} catch (NoSuchMethodException ex) {
@@ -264,7 +274,10 @@ public class Binding {
 			}
 		} catch (ModificationException ex) {
 			throw UiException.Aide.wrap(ex);
-		} catch (WrongValueException ex) {
+
+		//Bug #1876198 Error msg appears when load page (databind+CustomConstraint)
+		//catching WrongValueException no longer works, so mark it out
+		/*} catch (WrongValueException ex) {
 			//Bug #1615371, try to use setRawValue()
 			if ("value".equals(_attr)) {
 				try {
@@ -276,6 +289,7 @@ public class Binding {
 			} else {
 				throw ex;
 			}
+		*/
 		}
 	}
 
