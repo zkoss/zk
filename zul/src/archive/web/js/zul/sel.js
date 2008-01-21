@@ -876,25 +876,14 @@ zk.Selectable.prototype = {
 	},
 	_calcHgh: function () {
 		var rows = this.bodyrows;		
-		var hgh = this.element.style.height, isHgh = hgh && hgh != "auto" && hgh.indexOf('%') < 0,
-			len = 0, lastVisiRow, firstVisiRow, midVisiRow, vs = this.size();
-		for (var j = 0, rl = rows.length; j < rl; ++j) { //tree might collapse some items
-			var r = rows[j];
-			if ($visible(r)) {
-				if (!firstVisiRow) firstVisiRow = r;
-				if (!isHgh && vs - 1 === len) 
-					midVisiRow = r;
-				lastVisiRow = r;
-				++len;
-			}
-		}
+		var hgh = this.element.style.height, isHgh = hgh && hgh != "auto" && hgh.indexOf('%') < 0;
 		if (isHgh) {
 			hgh = $int(hgh);
 			if (hgh) {
 				hgh -= this._headHgh(0);
 				if (hgh < 20) hgh = 20;
 				var sz = 0;
-				for (var h, j = 0;; ++sz, ++j) {
+				for (var h, j = 0, len = rows.length;; ++sz, ++j) {
 					if (sz == len) {
 						sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
 						break;
@@ -925,9 +914,23 @@ zk.Selectable.prototype = {
 			}
 		}
 
+		var nVisiRows = 0, lastVisiRow, firstVisiRow, midVisiRow, nRows = this.size();
+		for (var j = 0, rl = rows.length; j < rl; ++j) { //tree might collapse some items
+			var r = rows[j];
+			if ($visible(r)) {
+				++nVisiRows;
+				if (!firstVisiRow) firstVisiRow = r;
+				if (nRows === nVisiRows) { 
+					midVisiRow = r;
+					break;
+				}
+				lastVisiRow = r;
+			}
+		}
+
 		hgh = 0;
-		var diff = 2/*experiment*/, sz = this.size();
-		if (!sz) {
+		var diff = 2/*experiment*/;
+		if (!nRows) {
 			if (getZKAttr(this.element, "vflex") == "true") {
 				hgh = this._vflexSize();
 				
@@ -940,24 +943,24 @@ zk.Selectable.prototype = {
 				var rowhgh = zk.offsetHeight(firstVisiRow);
 				if (!rowhgh) rowhgh = this._headHgh(20);
 
-				sz = Math.round((hgh - diff)/ rowhgh);
-				if (sz < 3) { //minimal 3 rows if auto-size
-					sz = 3;
+				nRows = Math.round((hgh - diff)/ rowhgh);
+				if (nRows < 3) { //minimal 3 rows if auto-size
+					nRows = 3;
 					hgh = rowhgh * 3 + diff;
 				}
 			}
-			this.realsize(sz);
+			this.realsize(nRows);
 		}
 
-		if (sz) {
+		if (nRows) {
 			if (!hgh) {
-				if (!len) hgh = this._headHgh(20) * sz;
-				else if (sz <= len) {
-					//var r = this._visiRowAt(sz - 1); disabled by Jumper
+				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
+				else if (nRows <= nVisiRows) {
+					//var r = this._visiRowAt(nRows - 1); disabled by Jumper
 					hgh = zk.offsetTop(midVisiRow) + zk.offsetHeight(midVisiRow);
 				} else {
 					hgh = zk.offsetTop(lastVisiRow) + zk.offsetHeight(lastVisiRow);
-					hgh = Math.ceil((sz * hgh) / len);
+					hgh = Math.ceil((nRows * hgh) / nVisiRows);
 				}
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
@@ -974,7 +977,7 @@ zk.Selectable.prototype = {
 			hgh = this.element.style.height;
 			if (zk.ie && (!hgh || hgh == "auto")
 			&& this.body.offsetWidth - this.body.clientWidth > 11) {
-				if (!len) this.body.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
+				if (!nVisiRows) this.body.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
 				else this.body.style.height =
 						(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
 			} else {
