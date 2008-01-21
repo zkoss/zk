@@ -891,7 +891,7 @@ zk.Selectable.prototype = {
 
 					//next visible row
 					var r;
-					for (;; ++j) {//no need to check length again
+					for (;j < rl; ++j) {//no need to check length again
 						r = rows[j];
 						if ($visible(r)) break;
 					}
