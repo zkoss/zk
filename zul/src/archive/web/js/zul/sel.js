@@ -883,8 +883,8 @@ zk.Selectable.prototype = {
 				hgh -= this._headHgh(0);
 				if (hgh < 20) hgh = 20;
 				var sz = 0;
-				for (var h, j = 0, len = rows.length;; ++sz, ++j) {
-					if (sz == len) {
+				for (var h, j = 0, rl = rows.length;; ++sz, ++j) {
+					if (sz == rl) {
 						sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
 						break;
 					}
@@ -914,15 +914,18 @@ zk.Selectable.prototype = {
 			}
 		}
 
-		var nVisiRows = 0, lastVisiRow, firstVisiRow, midVisiRow, nRows = this.size();
+		var nVisiRows = 0, nRows = this.size(), lastVisiRow, firstVisiRow, midVisiRow;
 		for (var j = 0, rl = rows.length; j < rl; ++j) { //tree might collapse some items
 			var r = rows[j];
 			if ($visible(r)) {
 				++nVisiRows;
 				if (!firstVisiRow) firstVisiRow = r;
-				if (nRows === nVisiRows) { 
+
+				if (nRows === nVisiRows) {
 					midVisiRow = r;
 					break;
+					//nVisiRows and lastVisiRow useful only if nRows is larger,
+					//so ok to break here
 				}
 				lastVisiRow = r;
 			}
