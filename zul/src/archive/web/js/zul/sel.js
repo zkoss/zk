@@ -881,13 +881,11 @@ zk.Selectable.prototype = {
 		for (var j = 0, rl = rows.length; j < rl; ++j) { //tree might collapse some items
 			var r = rows[j];
 			if ($visible(r)) {
-				++len;
 				if (!firstVisiRow) firstVisiRow = r;
-				if (!isHgh && vs - 1 === len) { 
+				if (!isHgh && vs - 1 === len) 
 					midVisiRow = r;
-					break;
-				}
 				lastVisiRow = r;
+				++len;
 			}
 		}
 		if (isHgh) {
