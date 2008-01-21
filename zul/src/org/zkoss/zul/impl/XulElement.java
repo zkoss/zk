@@ -27,13 +27,12 @@ import org.zkoss.lang.Strings;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.Command;
+import org.zkoss.zul.Popup;
 import org.zkoss.zul.au.in.ColSizeCommand;
 import org.zkoss.zul.au.in.PagingCommand;
 import org.zkoss.zul.au.in.PageSizeCommand;
@@ -62,7 +61,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	/** The action. */
 	private String _action;
 
-	/** Returns the ID of {@link org.zkoss.zul.Popup} that should appear
+	/** Returns the ID of the popup ({@link Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 *
 	 * <p>Default: null (no context menu).
@@ -70,13 +69,35 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public String getContext() {
 		return _ctx;
 	}
-	/** Sets the ID of {@link org.zkoss.zul.Popup} that should appear
+	/** Sets the ID of the popup ({@link Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 *
 	 * <p>An onOpen event is sent to the context menu if it is going to
 	 * appear. Therefore, developers can manipulate it dynamically
 	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
 	 * event.
+	 *
+	 * <p>Note: To simplify the use, it ignores the ID space when locating
+	 * the component at the client. In other words, it searches for the
+	 * first component with the specified ID, no matter it is in 
+	 * the same ID space or not.
+	 *
+	 * <p>(since 3.0.2) If there are two components with the same ID (of course, in
+	 * different ID spaces), you can specify the UUID with the following
+	 * format:<br/>
+	 * <code>uuid(comp_uuid)</code>
+	 *
+	 * <p>Example:<br/>
+	 * <pre><code>
+	 * &lt;label context="some"&gt;
+	 * &lt;label context="uuid(${some.uuid})"/&gt;
+	 * </code></pre>
+	 * Both reference a component whose ID is "some".
+	 * But, if there are several components with the same ID,
+	 * the first one can reference to any of them.
+	 * And, the second one reference to the component in the same ID space
+	 * (of the label component).
+	 * @see #setContext(Popup)
 	 */
 	public void setContext(String context) {
 		if (!Objects.equals(_ctx, context)) {
@@ -84,7 +105,18 @@ abstract public class XulElement extends HtmlBasedComponent {
 			smartUpdate("z.ctx", _ctx);
 		}
 	}
-	/** Returns the ID of {@link org.zkoss.zul.Popup} that should appear
+	/** Sets the UUID of the popup that should appear 
+	 * when the user right-clicks on the element (aka., context menu).
+	 *
+	 * <p>Note: it actually invokes
+	 * <code>setContext("uuid(" + popup.getUuid() + ")")</code>
+	 * @since 3.0.2
+	 * @see #setContext(String)
+	 */
+	public void setContext(Popup popup) {
+		setContext(popup != null ? "uuid(" + popup + ")": null);
+	}
+	/** Returns the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
 	 * <p>Default: null (no poppup).
@@ -92,13 +124,24 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public String getPopup() {
 		return _popup;
 	}
-	/** Sets the ID of {@link org.zkoss.zul.Popup} that should appear
+	/** Sets the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
 	 * <p>An onOpen event is sent to the popup menu if it is going to
 	 * appear. Therefore, developers can manipulate it dynamically
 	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
 	 * event.
+	 *
+	 * <p>Note: To simplify the use, it ignores the ID space when locating
+	 * the component at the client. In other words, it searches for the
+	 * first component with the specified ID, no matter it is in 
+	 * the same ID space or not.
+	 *
+	 * <p>(since 3.0.2) If there are two components with the same ID (of course, in
+	 * different ID spaces), you can specify the UUID with the following
+	 * format:<br/>
+	 * <code>uuid(comp_uuid)</code>
+	 * @see #setPopup(Popup)
 	 */
 	public void setPopup(String popup) {
 		if (!Objects.equals(_popup, popup)) {
@@ -106,7 +149,18 @@ abstract public class XulElement extends HtmlBasedComponent {
 			smartUpdate("z.pop", _popup);
 		}
 	}
-	/** Returns the ID of {@link org.zkoss.zul.Popup} that should be used
+	/** Sets the UUID of the popup that should appear
+	 * when the user clicks on the element.
+	 *
+	 * <p>Note: it actually invokes
+	 * <code>setPopup("uuid(" + popup.getUuid() + ")")</code>
+	 * @since 3.0.2
+	 * @see #setPopup(String)
+	 */
+	public void setPopup(Popup popup) {
+		setPopup(popup != null ? "uuid(" + popup + ")": null);
+	}
+	/** Returns the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 * The tooltip will automatically disappear when the mouse is moved.
 	 *
@@ -115,19 +169,41 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public String getTooltip() {
 		return _tooltip;
 	}
-	/** Sets the ID of {@link org.zkoss.zul.Popup} that should be used
+	/** Sets the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 *
 	 * <p>An onOpen event is sent to the tooltip if it is going to
 	 * appear. Therefore, developers can manipulate it dynamically
 	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
 	 * event.
+	 *
+	 * <p>Note: To simplify the use, it ignores the ID space when locating
+	 * the component at the client. In other words, it searches for the
+	 * first component with the specified ID, no matter it is in 
+	 * the same ID space or not.
+	 *
+	 * <p>(since 3.0.2) If there are two components with the same ID (of course, in
+	 * different ID spaces), you can specify the UUID with the following
+	 * format:<br/>
+	 * <code>uuid(comp_uuid)</code>
+	 * @see #setTooltip(Popup)
 	 */
 	public void setTooltip(String tooltip) {
 		if (!Objects.equals(_tooltip, tooltip)) {
 			_tooltip = tooltip;
 			smartUpdate("z.tip", _tooltip);
 		}
+	}
+	/** Sets the UUID of the popup that should be used
+	 * as a tooltip window when the mouse hovers over the element for a moment.
+	 *
+	 * <p>Note: it actually invokes
+	 * <code>setTooltip("uuid(" + popup.getUuid() + ")")</code>
+	 * @since 3.0.2
+	 * @see #setTooltip(String)
+	 */
+	public void setTooltip(Popup popup) {
+		setTooltip(popup != null ? "uuid(" + popup + ")": null);
 	}
 
 	/** Returns the client-side action (CSA).
