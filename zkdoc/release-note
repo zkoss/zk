@@ -30,6 +30,7 @@ ZK 3.0.2 Freshly
   1869370: Missing elements in zul.xsd
   1872505: Provide a "parent" position for Window component
   1873426: Don't stop loading lang.xml if class not found
+  1834408: Additional setter for context menu
   
 * Bugs:
   1859776: Not responsing if session timeout with IE6
