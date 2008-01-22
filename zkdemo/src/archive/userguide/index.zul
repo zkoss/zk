@@ -94,6 +94,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="mictxmnu" label="Context Menus" value="/userguide/misc/ctxmnu.zul"/>
 						<treeitem id="mitooltip" label="Tooltips and Popups" value="/userguide/misc/tooltip.zul"/>
 						<treeitem id="michart" label="Chart" value="/userguide/misc/chart.zul"/>
+						<treeitem id="mijasperreport" label="JasperReports" value="/userguide/misc/jasperreport.zul"/>
 						<treeitem id="csa" label="Client side action" value="/userguide/misc/action.zul"/>
 						<treeitem id="anima" label="Animations" value="/userguide/misc/anima.zul"/>
 						<treeitem id="theme" label="Change Theme" value="/userguide/misc/changetheme.zul"/>
