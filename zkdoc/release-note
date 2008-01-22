@@ -72,6 +72,8 @@ ZK 3.0.2 Freshly
   1874396: Audio and Firefox: Error
   1876198: Error msg appears when load page (databind+CustomConstraint)
   1876252: Listbox with the rows property doesn't appear very well
+  1876991: zkdemo positive Intbox constraint failure
+  1876988: Messagebox's button with wrong style in Opera
   
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
