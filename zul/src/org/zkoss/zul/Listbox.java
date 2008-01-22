@@ -1328,7 +1328,7 @@ public class Listbox extends XulElement {
 			j < pgsz && it.hasNext(); ++j)
 				renderer.render((Listitem)it.next());
 			if (!inPagingMold() && getItemCount() > pgsz)
-				getItemAtIndex(pgsz).setAttribute("UN_LOAD", "");
+				getItemAtIndex(pgsz).setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {

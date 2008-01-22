@@ -314,9 +314,9 @@ public class Listitem extends XulElement {
 					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
 			}
 			HTMLs.appendAttribute(sb, "z.disd", isDisabled());
-			if (getAttribute("UN_LOAD") != null) {
+			if (getAttribute(Attributes.SKIP_SIBLING) != null) {
 				HTMLs.appendAttribute(sb, "z.skipsib", "true");
-				removeAttribute("UN_LOAD");
+				removeAttribute(Attributes.SKIP_SIBLING);
 			}
 			if (isSelected())
 				HTMLs.appendAttribute(sb, "z.sel", "true");
