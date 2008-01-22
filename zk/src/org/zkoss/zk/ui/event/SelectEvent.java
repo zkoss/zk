@@ -36,6 +36,13 @@ public class SelectEvent extends Event {
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.
 	 */
+	public SelectEvent(String name, Component target, Set selectedItems) {
+		this(name, target, selectedItems, null);
+	}
+
+	/** Constructs a selection event.
+	 * @param selectedItems a set of items that shall be selected.
+	 */
 	public SelectEvent(String name, Component target, Set selectedItems,
 			Component ref) {
 		super(name, target);
