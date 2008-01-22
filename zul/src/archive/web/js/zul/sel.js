@@ -883,15 +883,12 @@ zk.Selectable.prototype = {
 				hgh -= this._headHgh(0);
 				if (hgh < 20) hgh = 20;
 				var sz = 0;
-				for (var h, j = 0, rl = rows.length;; ++sz, ++j) {
-					if (sz == rl) {
-						sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
-						break;
-					}
-
+				l_out:
+				for (var h, j = 0, rl = rows.length; j < rl; ++sz, ++j) {
 					//next visible row
 					var r;
-					for (;j < rl; ++j) {//no need to check length again
+					for (;; ++j) {//no need to check length again
+						if (j >= rl) break l_out;
 						r = rows[j];
 						if ($visible(r)) break;
 					}
@@ -902,6 +899,7 @@ zk.Selectable.prototype = {
 						break;
 					}
 				}
+				sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
 
 				this.realsize(sz);
 				this.body.style.height = hgh + "px";
