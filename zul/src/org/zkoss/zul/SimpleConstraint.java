@@ -325,6 +325,6 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		return _errmsg;
 	}
 	public boolean isClientComplete() {
-		return ((_flags & (NO_EMPTY|STRICT)) == 0) && _regex == null;
+		return (_flags == 0 || _flags == NO_EMPTY || _flags == STRICT) && _regex == null;
 	}
 }
