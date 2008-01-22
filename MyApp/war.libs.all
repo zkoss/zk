@@ -17,3 +17,6 @@ jfreechart.jar
 jcommon.jar
 Filters.jar
 jasperreports.jar
+commons-collections.jar
+commons-logging.jar
+itext.jar
