@@ -412,6 +412,17 @@ public class LanguageDefinition {
 			throw new DefinitionNotFoundException("Component definition not found: "+name);
 		return compdef;
 	}
+	/** Returns {@link ComponentDefinition} of the specified name, or null
+	 * if not found.
+	 * It is the same as {@link #getComponentDefinition}, except this method
+	 * won't throw any exception.
+	 *
+	 * @param name the name of the component definition.
+	 * @since 3.0.2
+	 */
+	public ComponentDefinition getComponentDefinitionIfAny(String name) {
+		return (ComponentDefinition)_compdefs.get(name);
+	}
 	/** Returns {@link ComponentDefinition} of the specified class.
 	 *
 	 * <p>Note: anonymous component definition won't be returned by

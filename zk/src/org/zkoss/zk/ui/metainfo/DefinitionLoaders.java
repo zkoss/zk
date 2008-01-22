@@ -422,7 +422,7 @@ public class DefinitionLoaders {
 					try {
 						cls = locateClass(clsnm);
 					} catch (Throwable ex) { //Feature 1873426
-						log.warningBriefly("Component "+name+" ignored. Reason: unable to load "+clsnm, ex);
+						log.warningBriefly("Component "+name+" ignored. Reason: unable to load "+clsnm+", "+el.getLocator(), ex);
 						continue;
 					}
 				}
@@ -447,7 +447,14 @@ public class DefinitionLoaders {
 				if (log.finerable()) log.finer("Override component definition: "+name);
 
 				final String extnm = el.getElementValue("extends", true);
-				final ComponentDefinition ref = langdef.getComponentDefinition(extnm);
+				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
+				if (ref == null) {
+					log.warning("Component "+name+" ignored. Reason: override a non-existent component, "+extnm+", "+el.getLocator());
+						//not throw exception since the derived component might be
+						//ignored due to class-not-found
+					continue;
+				}
+
 				if (ref.isMacro())
 					throw new UiException("Unable to extend from a macro component, "+el.getLocator());
 
