@@ -193,6 +193,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-name>box</component-name>
 		<component-class>org.zkoss.zul.Box</component-class>
 		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
+		</mold>
+		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
 		</mold>
@@ -366,6 +370,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-name>hbox</component-name>
 		<component-class>org.zkoss.zul.Hbox</component-class>
 		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
+		</mold>
+		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
 		</mold>
@@ -519,6 +527,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>menubar</component-name>
 		<component-class>org.zkoss.zul.Menubar</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/hmenubar.dsp</mold-uri>
+		</mold>
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>~./zul/html/hmenubar.dsp</mold-uri>
@@ -817,6 +829,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>vbox</component-name>
 		<component-class>org.zkoss.zul.Vbox</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
+		</mold>
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
