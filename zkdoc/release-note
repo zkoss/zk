@@ -76,6 +76,7 @@ ZK 3.0.2 Freshly
   1876988: Messagebox's button with wrong style in Opera
   1876292: Combobox initially returns old selectedItem after setValue
   1877059: Bug in removing tree's first-level treeitems
+  1877051: Positive intbox can't accept "+123" as value
   
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
