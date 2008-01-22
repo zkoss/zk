@@ -19,6 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -175,10 +178,25 @@ public class Jasperreport extends HtmlBasedComponent {
 	private AMedia doReport() {
 
 		InputStream is = null;
+		
 		try {
 			// generate report pdf stream
-			is = Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream(_src);
+
+			if (is == null) {// try to load by web context.
+				is = Executions.getCurrent().getDesktop().getWebApp()
+						.getResourceAsStream(_src);
+			}
+			if (is == null) {// try to load by class loader
+				is = Thread.currentThread().getContextClassLoader()
+						.getResourceAsStream(_src);
+			}
+			if (is == null) {// try to load by file
+				is = new FileInputStream(new File(_src));
+			}
+			if (is == null) {
+				throw new RuntimeException("resource for " + _src
+						+ " not found.");
+			}
 
 			if (_parameters == null)
 				_parameters = new HashMap();
@@ -193,6 +211,7 @@ public class Jasperreport extends HtmlBasedComponent {
 			return new AMedia("report.pdf", "pdf",
 					"application/pdf", mediais);
 
+			
 		} catch (Exception ex) {
 			throw new UiException(ex);
 		} finally {
