@@ -532,9 +532,8 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		}
 		
 		CategoryDataset dataset = info.getDataset();
-		int si = info.getSeries();
-		Comparable category = (Comparable) info.getCategory();
-		Comparable series = (Comparable) dataset.getRowKey(si);
+		Comparable category = info.getColumnKey();
+		Comparable series = info.getRowKey();
 		
 		area.setAttribute("series", series);
 		area.setAttribute("category", category);
