@@ -253,7 +253,6 @@ implements Constrainted {
 				//Reason: when user set a value to correct one and set
 				//to an illegal one, then click the button cause both events
 			}
-				//being sent back to the server.
 		} else if (_txtByClient != null) {
 			//value equals but formatted result might differ because
 			//our parse is more fault tolerant
@@ -261,6 +260,7 @@ implements Constrainted {
 			if (!Objects.equals(_txtByClient, fmtval)) {
 				_txtByClient = null; //only once
 				smartUpdate("value", fmtval);
+					//being sent back to the server.
 			}
 		} else if (errFound) {
 			smartUpdate("value", coerceToString(_value));
