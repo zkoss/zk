@@ -71,6 +71,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
   mychart.setModel(model);
 </zscript>
 </chart>
+<toolbarbutton label="More chart..." href="/test/chart.zul"/>
 </vbox>
 				]]></attribute>
 			</textbox>
