@@ -343,7 +343,7 @@ if [ "$target" == "official" ]; then
 	done
 
 	cd /tmp/zk/doc
-	cp -rP $docdir/devref $docdir/devguide .
+	cp -rP $docdir/devref $docdir/devguide $docdir/devref-single $docdir/devguide-single .
 	find -name .svn | xargs rm -rf
 
 	echo Output zk-devref-$ver.zip
@@ -354,6 +354,16 @@ if [ "$target" == "official" ]; then
 	echo Output zk-devguide-$ver.zip
 	mv devguide zk-devguide-$ver
 	zip -qr9 zk-devguide-$ver.zip zk-devguide-$ver
+	rm -rf zk-devguide-$ver
+
+	echo Output zk-devref-single-$ver.zip
+	mv devref-single zk-devref-single-$ver
+	zip -qr9 zk-devref-single-$ver.zip zk-devref-single-$ver
+	rm -rf zk-devref-$ver
+
+	echo Output zk-devguide-single-$ver.zip
+	mv devguide-single zk-devguide-single-$ver
+	zip -qr9 zk-devguide-single-$ver.zip zk-devguide-single-$ver
 	rm -rf zk-devguide-$ver
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm/devguide
