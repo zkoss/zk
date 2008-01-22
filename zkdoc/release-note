@@ -75,6 +75,7 @@ ZK 3.0.2 Freshly
   1876991: zkdemo positive Intbox constraint failure
   1876988: Messagebox's button with wrong style in Opera
   1876292: Combobox initially returns old selectedItem after setValue
+  1877059: Bug in removing tree's first-level treeitems
   
 * Upgrade Notes:
   + The animating effect of window component in modal mode is changed. 
