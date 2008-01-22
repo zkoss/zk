@@ -231,7 +231,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		
 		int j = 0;
 		String preUrl = null;
-		for(Iterator it=jfinfo.getEntityCollection().getEntities().iterator();it.hasNext();) {
+		for(Iterator it=jfinfo.getEntityCollection().iterator();it.hasNext();) {
 			ChartEntity ce = ( ChartEntity ) it.next();
 			final String url = ce.getURLText();
 
