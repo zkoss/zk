@@ -359,12 +359,12 @@ if [ "$target" == "official" ]; then
 	echo Output zk-devref-single-$ver.zip
 	mv devref-single zk-devref-single-$ver
 	zip -qr9 zk-devref-single-$ver.zip zk-devref-single-$ver
-	rm -rf zk-devref-$ver
+	rm -rf zk-devref-single-$ver
 
 	echo Output zk-devguide-single-$ver.zip
 	mv devguide-single zk-devguide-single-$ver
 	zip -qr9 zk-devguide-single-$ver.zip zk-devguide-single-$ver
-	rm -rf zk-devguide-$ver
+	rm -rf zk-devguide-single-$ver
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm/devguide
 	mkdir -p /tmp/zk/$docnm/devref
