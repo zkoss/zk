@@ -878,10 +878,12 @@ public class Grid extends XulElement {
 			HTMLs.appendAttribute(sb, "align", _align);
 		if (_model != null) {
 			HTMLs.appendAttribute(sb, "z.model", true);
-			int index = getRows().getChildren().size() - 1;
-			for(final ListIterator it = getRows().getChildren().listIterator(index+1); it.hasPrevious();--index)
+			final List rows = getRows().getChildren();
+			int index = rows.size();
+			for(final ListIterator it = rows.listIterator(index);
+			it.hasPrevious(); --index)
 				if(((Row)it.previous()).isLoaded()) break;
-			HTMLs.appendAttribute(sb, "z.loadedIdx", index);
+			HTMLs.appendAttribute(sb, "z.lastLoadIdx", index - 1);
 		}
 		if (_scOddRow != null)
 			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);

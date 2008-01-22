@@ -1587,10 +1587,12 @@ public class Listbox extends XulElement {
 				HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 			
 			if (getModel() != null) {
-				int index = getItemCount() - 1;
-				for(final ListIterator it = getItems().listIterator(getItemCount()); it.hasPrevious();--index)
-					if(((Listitem)it.previous()).isLoaded()) break;
-				HTMLs.appendAttribute(sb, "z.loadedIdx", index);
+				int index = getItemCount();
+				for(final ListIterator it = getItems().listIterator(index);
+				it.hasPrevious(); --index)
+					if(((Listitem)it.previous()).isLoaded())
+						break;
+				HTMLs.appendAttribute(sb, "z.lastLoadIdx", index - 1);
 			}
 		}
 
