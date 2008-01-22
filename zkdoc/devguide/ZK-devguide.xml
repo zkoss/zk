@@ -2,13 +2,14 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.0.1</subtitle>
+<subtitle>Version 3.0.2</subtitle>
 <bookinfo>
 <copyright>
-<year>2007</year>
+<year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
+
 <chapter>
 <title>1. Introduction</title>
 <para>Welcome to ZK, the simplest way to make Rich Web Applications.</para>
@@ -354,7 +355,7 @@
 <programlisting>page.getInterpreter("JavaScript").getVariable("some"); //interpreter for JavaScript&#13;page.getInterpreter(null).getVariable("some"); //interpreter for default language&#13;</programlisting></sect3></sect2></sect1><sect1><title>Events</title>
 <para>An event (org.zkoss.zk.ui.event.Event) is used to notify application what happens. Each type of event is represented by a distinct class. For example, org.zkoss.zk.ui.event.MouseEvent denotes a mouse activity, such as clicking.</para>
 <para>To response to an event, an application must register one or more event listeners to it. There are two ways to register an event listener. One is by specifying the onXxx attribute in the markup language. The other is by calling the addEventListener method for the component or the page you want to listen.</para>
-<para>In addition to event triggered by user's activity at the browser, an application could fire events by use of the sendEvent and postEvent methods from the org.zkoss.zk.ui.event.Events class.</para></sect1><sect1><title>Desktops and Event Processing</title>
+<para>In addition to event triggered by user's activity at the browser, an application could fire events by use of the sendEvent, postEvent and echoEvent methods from the org.zkoss.zk.ui.event.Events class.</para></sect1><sect1><title>Desktops and Event Processing</title>
 <para>As mentioned above, a desktop is a collection of pages for serving the same URL request. A desktop is also the scope that an event listener could access.</para>
 <para>When an event is fired, it is associate with a desktop. ZK separates events based on the associated desktops, and pipelines events into separated queues. Therefore, events for the same desktop are processed sequentially. On the other hand, events for different desktops are processed in parallel.</para>
 <para>An event listener is allowed to access any components of any pages of the desktop associated with the event. It is also allowed to moving components from one page to another as long as they are in the same desktop. On the other hand, it cannot access components belonging to other desktops.</para>
@@ -468,10 +469,15 @@
 </listitem>
 </orderedlist>
 <para>The org.zkoss.zk.ui.event.Express interface is a decorative interface used to alter the invocation priority of an event listener. Notice that it is meaningless if the event listener is added to pages, instead of components.</para></sect2><sect2><title>Abort the Invocation Sequence</title>
-<para>You could abort the calling sequence by calling the stopPropagation method in the org.zkoss.zk.ui.event.Event class. Once one of the event listeners invokes this method, all following event listeners are ignored.</para></sect2></sect1><sect1><title>Send and Post Events from an Event Listener</title>
+<para>You could abort the calling sequence by calling the stopPropagation method in the org.zkoss.zk.ui.event.Event class. Once one of the event listeners invokes this method, all following event listeners are ignored.</para></sect2></sect1><sect1><title>Send, Post and Echo Events from an Event Listener</title>
 <para>In addition to receiving events, an application could communicate among event listeners by posting or sending events to them.</para><sect2><title>Post Events</title>
-<para>By use of the postEvent method in the org.zkoss.zk.ui.event.Events class, an event listener could post an event to the end of the event queue. It returns immediately after placing the event into the queue. The event will be processed later after all events preceding it have been processed.</para></sect2><sect2><title>Send Events</title>
-<para>By use of the sendEvent method in the org.zkoss.zk.ui.event.Events class, an event listener could ask ZK to process the specified event immediately. It won't return until all event listeners of the specified event has been processed. The event is processed at the same thread.</para></sect2></sect1><sect1><title>Thread Model</title>
+<para>By use of the postEvent method in the org.zkoss.zk.ui.event.Events class, the application could post an event to the end of the event queue. This method returns immediately after placing the event into the queue. The event will be processed later after all events preceding it have been processed.</para></sect2><sect2><title>Send Events</title>
+<para>By use of the sendEvent method in the org.zkoss.zk.ui.event.Events class, the application could ask ZK to process the specified event immediately. This method won't return until all event listeners of the specified event has been processed. The event is processed at the same thread.</para></sect2><sect2><title>Echo Events</title>
+<para>By use of the echoEvent method in the org.zkoss.zk.ui.event.Events class, the application could ask the client to echo back the event for processing later. This method returned immediately after queuing the response asking the client to echo back the event.</para>
+<para>Notice that, unlike sendEvent and postEvent, the event won't be processed in the current execution. Rather, it is processed later after the client echoes back the event. In other words, the event is processed later after the client has updated its user interfaces. Thus, it is useful to prompt the user before starting a long operation.</para>
+<para>For example, you can open a highlighted window and then invoke echoEvent to do the long operation after the client shows the window (and echoes back the event).</para>
+<para>For example, we can use the org.zkoss.zk.ui.util.Clients.showBusy method to show the busy message such that the user knows the system is busy. So, the end user will see "Execute..." first and then, after two seconds, "Done." in the following example. If you use postEvent, the end user will see "Execute..." and "Done" at the same time after two seconds.</para>
+<programlisting>&lt;window id="w" title="Test echoEvent"&gt;&#13;    &lt;attribute name="onLater"&gt;    &#13;    Thread.sleep(2000);    &#13;    Clients.showBusy(null, false);    &#13;    new Label("Done.").setParent(w);    &#13;    &lt;/attribute&gt;    &#13;&#13;    &lt;button label="echo"&gt;    &#13;    &lt;attribute name="onClick"&gt;    &#13;    Clients.showBusy("Execute...", true);    &#13;    Events.echoEvent("onLater", w, null);    &#13;    &lt;/attribute&gt;    &#13;    &lt;/button&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect2></sect1><sect1><title>Thread Model</title>
 <para>For each desktop, events are processed sequentially, so thread model is simple. Like developing desktop applications, you don't need to worry about racing and multi-threading. All you need to do is to register an event listener and process the event when invoked.</para>
 <para>Tip: Each event listener executes in an independent thread called event processing thread, while the ZUML page is evaluated in the servlet thread.</para>
 <para>Tip: The use of the event processing thread can be disabled such that all events are processed in the Servlet threads. It has a little bit better performance and less integration issues. However, you can not suspend the execution. Refer to the Use the Servlet Thread to Process Events section in the Advanced Features chapter.</para><sect2><title>Suspend and Resume</title>
@@ -481,7 +487,10 @@
 <para>Their use is similar to the wait, notify and notifyAll methods of the java.lang.Object class. However, you cannot use the methods of java.lang.Object for suspending and resuming event listeners. Otherwise, all event processing will be stalled for the associated desktop.</para>
 <para>Notice that, unlike Java Object's wait and notify, whether to use the synchronized block to enclose Executions' wait and notify is optional. In the above case, we don't have to, because no racing condition is possible. However, if there is an racing condition, you can use the synchronized block as what you do with Java Object's wait and notify.</para>
 <programlisting>//Thread 1&#13;public void request() {&#13;    ...    &#13;    synchronized (mutex) {    &#13;        ...//start another thread        &#13;        Executions.wait(mutex); //wait for its completion        &#13;    }    &#13;}&#13;&#13;//Thread 2&#13;public void process() {&#13;    ... //process it asynchronously    &#13;    synchronized (mutex) {    &#13;        Executions.notify(mutex);        &#13;    }    &#13;}&#13;</programlisting></sect2><sect2><title>Long Operations</title>
-<para>Events for the same desktop are processed sequentially. In other words, an event handler will block any following handlers. The time blocking user's requests might not be acceptable, if an event handler takes too much time to execute. Like desktop applications, you have to create a working thread for long operations to minimize the blocking time. You have four options to commit this requirement, including server push, suspend and resume, timer, and piggyback.</para><sect3><title>Server Push</title>
+<para>Events for the same desktop are processed sequentially. In other words, an event handler will block any following handlers. Worse of all, the user, due to the limitation of HTTP, got no hint but the small processing dialog shown at the left-top corner on the browser.</para>
+<para>With the echo event and the showBusy method as described in the Echo Events section above, you can provide a more descriptive message and prevent the user from, say, clicking other buttons to slow down the performance further for long operations.</para>
+<para>However, blocking users from access might not be acceptable for your applications. To prevent the blocking, you have to, like desktop applications, process the long operation in another working thread. Then, report the processing status back the client continuously.</para>
+<para>With ZK, you have four options: server push, suspend and resume, timer, and piggyback.</para><sect3><title>Alternative 1: Server Push</title>
 <para>Server push is so-called reverse-Ajax which allows the server to send content to the client actively. With the help of server push, you could send or update the content to the client in the working thread when your pre-defined condition is satisfied. To use server push is simple,and it requires only three steps as follows, </para>
 <orderedlist>
 <listitem>
@@ -497,9 +506,9 @@
 </orderedlist>
 <para>Note: You need to install zkex.jar or zkmax.jar to have the server push, unless you have your own implementation of org.zkoss.zk.ui.sys.ServerPush.</para>
 <para>Let’s take a look at a real example below. If you want to update the number of client using server push, first of all, you have to enable server push for the desktop and then to invoke the thread as follows, </para>
-<programlisting>&#13;&lt;window title="Demo of Server Push"&gt;&#13;&lt;zscript&gt;&#13;    import test.WorkingThread;    &#13;    WorkingThread thread;    &#13;    void startServerpush(){    &#13;        //enable server push        &#13;        desktop.enableServerPush(true);        &#13;            //invoke working thread and passing required component as parameter            &#13;            thread= new WorkingThread(info);            &#13;        thread.start();        &#13;    }    &#13;    void stopServerpush(){    &#13;        //stop the thread        &#13;        thread.setDone();        &#13;        //disable server push        &#13;        desktop.enableServerPush(false);        &#13;    }    &#13;&lt;/zscript&gt;&#13;    &lt;vbox&gt;    &#13;        &lt;button label="Start Server Push" onClick="startServerpush()"/&gt;        &#13;        &lt;button label="Stop Server Push" onClick="stopServerpush()"/&gt;        &#13;    &lt;label id="info"/&gt;    &#13;    &lt;/vbox&gt;    &#13;&lt;/window&gt;&#13;&#13;</programlisting></sect3><sect3><title>Security Issue</title>
+<programlisting>&#13;&lt;window title="Demo of Server Push"&gt;&#13;&lt;zscript&gt;&#13;    import test.WorkingThread;    &#13;    WorkingThread thread;    &#13;    void startServerpush(){    &#13;        //enable server push        &#13;        desktop.enableServerPush(true);        &#13;            //invoke working thread and passing required component as parameter            &#13;            thread= new WorkingThread(info);            &#13;        thread.start();        &#13;    }    &#13;    void stopServerpush(){    &#13;        //stop the thread        &#13;        thread.setDone();        &#13;        //disable server push        &#13;        desktop.enableServerPush(false);        &#13;    }    &#13;&lt;/zscript&gt;&#13;    &lt;vbox&gt;    &#13;        &lt;button label="Start Server Push" onClick="startServerpush()"/&gt;        &#13;        &lt;button label="Stop Server Push" onClick="stopServerpush()"/&gt;        &#13;    &lt;label id="info"/&gt;    &#13;    &lt;/vbox&gt;    &#13;&lt;/window&gt;&#13;&#13;</programlisting><sect4><title>Security Issue</title>
 <para>One thing to notice is that the problem of synchronization which happens when a desktop is accessed by multiple threads at the same time Thus, before accessing the desktop, you have to invoke Executions.activate(Desktop desktop) to get full control of the desktop to avoid this problem, and then release the control of the desktop by invoking Executions.deactivate(Desktop desktop) after the thread finishing its job as follows,</para>
-<programlisting>    packagetest;    &#13;&#13;        publicclassWorkingThread extends Thread{        &#13;    private final Desktop _desktop;    &#13;    private final Label _info;    &#13;    private int _cnt;    &#13;    private boolean _ceased;    &#13;        publicWorkingThread(Label info){        &#13;        _desktop = info.getDesktop();        &#13;            _info= info;            &#13;                            }publicvoidrun(){try{                            &#13;                while(!_ceased){                &#13;                Threads.sleep(2000); //Update each two seconds                &#13;                Executions.activate(_desktop); //get full control of desktop                &#13;                    try{                    &#13;                    _info.setValue(Integer.toString(++_cnt));                    &#13;                                            }catch(RuntimeException ex){throw ex;                                            &#13;                    }catch(Error ex){                    &#13;                    throw ex;                    &#13;                }finally{                &#13;                        Executions.deactivate(_desktop);//release full control ofdesktop                        &#13;                }                &#13;            }            &#13;            }catch(InterruptedException ex){            &#13;            }            &#13;                }publicvoidsetDone(){                &#13;        _ceased = true;        &#13;    }}    &#13;</programlisting></sect3><sect3><title>Behind the Scene</title>
+<programlisting>    packagetest;    &#13;&#13;        publicclassWorkingThread extends Thread{        &#13;    private final Desktop _desktop;    &#13;    private final Label _info;    &#13;    private int _cnt;    &#13;    private boolean _ceased;    &#13;        publicWorkingThread(Label info){        &#13;        _desktop = info.getDesktop();        &#13;            _info= info;            &#13;                            }publicvoidrun(){try{                            &#13;                while(!_ceased){                &#13;                Threads.sleep(2000); //Update each two seconds                &#13;                Executions.activate(_desktop); //get full control of desktop                &#13;                    try{                    &#13;                    _info.setValue(Integer.toString(++_cnt));                    &#13;                                            }catch(RuntimeException ex){throw ex;                                            &#13;                    }catch(Error ex){                    &#13;                    throw ex;                    &#13;                }finally{                &#13;                    Executions.deactivate(_desktop);                    &#13;                        //release full control of desktop                        &#13;                }                &#13;            }            &#13;            }catch(InterruptedException ex){            &#13;            }            &#13;                }publicvoidsetDone(){                &#13;        _ceased = true;        &#13;    }}    &#13;</programlisting></sect4><sect4><title>Behind the Scene</title>
 <para>The mechanism of server push is implemented using client-polling technique which the client will query the server repetitively to invoke the working thread to do its job, and the frequency of query could be adjusted manually by invoking Executions.setDelay(int min, int max, int factor).</para>
 <itemizedlist>
 <listitem>
@@ -512,7 +521,7 @@
 <para>factor, The real delay is the processing time multiplies the delay factor.</para>
 </listitem>
 </itemizedlist>
-<para>Last, one thing to notice is that the frequency will be adjusted automatically depending on the loading of the server</para></sect3><sect3><title>Alternative 1: Thread Suspend and Resume</title>
+<para>Last, one thing to notice is that the frequency will be adjusted automatically depending on the loading of the server</para></sect4></sect3><sect3><title>Alternative 2: Thread Suspend and Resume</title>
 <para>With the help of server push, you don't have to take care about the problem of multi threads. However, if you would like to handle this job by yourself, you have to conform with the following rules due to the limitations of HTTP.</para>
 <itemizedlist>
 <listitem>
@@ -537,12 +546,12 @@
 <programlisting>&lt;window id="main" title="Working Thread"&gt;&#13;    &lt;button label="Start Working Thread"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;        timer.start();        &#13;        Label label = test.WorkingThread.asyncCreate(desktop);        &#13;        main.appendChild(label);        &#13;        timer.stop()        &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;    &lt;timer id="timer" running="false" delay="1000" repeats="true"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Notice that we have to use a timer to really resume the suspended the event listener (onClick). It looks odd, but it is a must due to the HTTP limitation: to keep Web page alive at the browser, we have to return the response when the event processing is suspended. Then, when the working thread completes its job and notifies the even listener, the HTTP request was already gone. Therefore, we need a way to 'piggyback' the result, which the timer is used for.</para>
 <para>More precisely, when the working thread notifies the event listener to resume, ZK only adds it to a waiting list. And, the listener is really resumed when another HTTP request arrives (in the above example, it is the onTimer event)</para>
-<para>In this simple example, we do nothing for the onTimer event. For a sophisticated application, you can use it to send back the progressing status.</para></sect4></sect3><sect3><title>Alternative 2: Timer (No Suspend/Resume)</title>
+<para>In this simple example, we do nothing for the onTimer event. For a sophisticated application, you can use it to send back the progressing status.</para></sect4></sect3><sect3><title>Alternative 3: Timer (No Suspend/Resume)</title>
 <para>It is possible to implement a long operation without suspend and resume. It is useful if the synchronization codes are going too complex to debug.</para>
 <para>The idea is simple. The working thread save the result in a temporary space, and then the onTimer event listener pops the result to the desktop.</para>
 <programlisting>//WorkingThread2&#13;package test;&#13;public class WorkingThread2 extends Thread {&#13;    private static int _cnt;    &#13;    private final Desktop _desktop;    &#13;    private final List _result;    &#13;        &#13;    public WorkingThread2(Desktop desktop, List result) {    &#13;        _desktop = desktop;        &#13;        _result = result;        &#13;    }    &#13;    public void run() {    &#13;        _result.add(new Label("Execute "+ ++_cnt));        &#13;    }    &#13;}&#13;</programlisting>
 <para>Then, you append the labels in the onTimer event listener.</para>
-<programlisting>&lt;window id="main" title="Working Thread2"&gt;&#13;    &lt;zscript&gt;    &#13;        int numPending = 0;        &#13;        List result = Collections.synchronizedList(new LinkedList());        &#13;    &lt;/zscript&gt;    &#13;    &lt;button label="Start Working Thread"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;            ++numPending;            &#13;            timer.start();            &#13;            new test.WorkingThread2(desktop, result).start();            &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;    &lt;timer id="timer" running="false" delay="1000" repeats="true"&gt;    &#13;        &lt;attribute name="onTimer"&gt;        &#13;            while (!result.isEmpty()) {            &#13;            main.appendChild(result.remove(0));            &#13;            --numPending;            &#13;            }            &#13;            if (numPending == 0) timer.stop();            &#13;        &lt;/attribute&gt;        &#13;    &lt;/timer&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect3><sect3><title>Alternative 3: Piggyback (No Suspend/Resume, No Timer)</title>
+<programlisting>&lt;window id="main" title="Working Thread2"&gt;&#13;    &lt;zscript&gt;    &#13;        int numPending = 0;        &#13;        List result = Collections.synchronizedList(new LinkedList());        &#13;    &lt;/zscript&gt;    &#13;    &lt;button label="Start Working Thread"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;            ++numPending;            &#13;            timer.start();            &#13;            new test.WorkingThread2(desktop, result).start();            &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;    &lt;timer id="timer" running="false" delay="1000" repeats="true"&gt;    &#13;        &lt;attribute name="onTimer"&gt;        &#13;            while (!result.isEmpty()) {            &#13;            main.appendChild(result.remove(0));            &#13;            --numPending;            &#13;            }            &#13;            if (numPending == 0) timer.stop();            &#13;        &lt;/attribute&gt;        &#13;    &lt;/timer&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect3><sect3><title>Alternative 4: Piggyback (No Suspend/Resume, No Timer)</title>
 <para>Instead of checking the results periodically, you can piggyback them to the client when the user, say, clicks a button or enters something.</para>
 <para>To piggyback, all you need to do is to register an event listener for the onPiggyback event to one of the root components. Then, the listener will be invoked each time ZK Update Engine has processed the events. For example, you can rewrite the codes as follows.</para>
 <programlisting>&lt;window id="main" title="Working Thread3" onPiggyback="checkResult()"&gt;&#13;    &lt;zscript&gt;    &#13;    List result = Collections.synchronizedList(new LinkedList());    &#13;&#13;    void checkResult() {    &#13;        while (!result.isEmpty())        &#13;            main.appendChild(result.remove(0));            &#13;    }    &#13;    &lt;/zscript&gt;    &#13;    &lt;button label="Start Working Thread"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;    timer.start();    &#13;    new test.WorkingThread2(desktop, result).start();    &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
@@ -1032,8 +1041,11 @@
 <para>Refer to <ulink url="http://zk1.sourceforge.net/smalltalks/springdao1/sdao1.html">Small Talk: </ulink>
 <ulink url="http://zk1.sourceforge.net/smalltalks/springdao1/sdao1.html">ZK with Spring DAO and JDBC, Part II</ulink> for more details.</para>
 <para>For more information about the attributes, refer to the Developer's Reference.</para></sect2><sect2><title>The import Directive</title>
-<para>&lt;?import uri="..."?&gt;</para>
-<para>It imports the component definitions and initiators defined in another ZUML page. In other words, it imports the component and init directives from the specified page. Notice that directives other than component and init are ignored to avoid any confusion.</para>
+<para>&lt;?import uri="..."?&gt;&lt;?import uri="..." directives="..."?&gt;</para>
+<para>It imports the directives, such as component definitions (&lt;?component?&gt;) and initiators (&lt;?init?&gt;), defined in another ZUML page.</para>
+<para>If the directives attribute is omitted, only the component and init directives are imported. If you want to import particular directives, you can specify a list of the names of the directives separated by comma. For example,</para>
+<programlisting>&lt;?import uri="/template/taglibs.zul" directives="taglib, xel-method"?&gt;&#13;</programlisting>
+<para>The directives that can be imported include component, init, meta, taglib, variable-resolver, and xel-method. If you want to import them all, specify * to the directives attribute. Notice that meta implies both the meta and link directives.</para>
 <para>A typical use is that you put a set of component definitions in one ZUML page, and then import it in other ZUML pages, such that they share the same set of component definitions, additional to the system default.</para>
 <programlisting>&lt;!-- special.zul: Common Definitions --&gt;&#13;&lt;?init zscript="/WEB-INF/macros/special.zs"?&gt;&#13;&lt;?component name="special" macroURI="/macros/special.zuml" class="Special"?&gt;&#13;&lt;?component name="another" macroURI="/WEB-INF/macros/another.zuml"?&gt;&#13;</programlisting>
 <para>where the Special class is assumed to be defined in /WEB-INF/macros/special.zs.</para>
@@ -1048,7 +1060,7 @@
 <para>In addition, you specify a Composer instance, or a collection of Composer instances by use of EL expressions.</para>
 <para>Note: the EL expressions are, if specified, evaluated before the component is instantiated. So you cannot reference to the component. Moreover, the self variable references to the parent component, if any, or the current page, if no parent component, in the EL expressions specified in this attribute.</para>
 <para>If you want more control such as handling the exception, you can also implement the org.zkoss.zk.util.ComposerExt interface. </para></sect2><sect2><title>The use Attribute</title>
-<para>use="a-class-name"</para>
+<para>use="a-class-name"use="${EL_returns_a_class_or_a_class_name}"</para>
 <para>It specifies a class to create a component instead of the default one. In the following example, MyWindow is used instead of the default class, org.zkoss.zul.Window.</para>
 <programlisting>&lt;window use="MyWindow"/&gt;&#13;</programlisting></sect2><sect2><title>The if Attribute</title>
 <para>if="${an-EL-expr}"</para>
@@ -1064,7 +1076,9 @@
 <para>forEachEnd="${an-EL-expr}"</para>
 <para>It is used with the forEach attribute to specify the index (starting from 0) the iteration shall ends at (inclusive). If not specified, the iterations ends at the last element.</para>
 <para>If forEachEnd is greater than or equals to the number of elements, the iteration ends at the last element.</para></sect2><sect2><title>The fulfill Attribute</title>
-<para>fulfill="event-name"fulfill="target-id.event-name"fulfill="id1/id2/id3.event-name"fulfill="${el-expr}.event-name"</para>
+<para>fulfill="event-expr"fulfill="event-expr1, event-expr2, event-expr3"</para>
+<para>where event-expr, event-expr1 and others are called event expressions. An event expression is used to identify a component. It can be one of the following formats:</para>
+<para>event-nametarget-id.event-nameid1/id2/id3.event-name${el-expr}.event-name</para>
 <para>It is used to specify when to create the child components. By default (i.e., fulfill is not specified), the child components are created right after its parent component, at the time the ZUML page is loaded.</para>
 <para>If you want to defer the creation of the child components, you can specify the condition with the fulfill attribute. The condition consists of the event name and, optionally, the target component's identifier or path. It means that the child elements won't be processed, until the event is received by, if specified, the target component. If the identifier is omitted, the same component is assumed.</para>
 <para>If an EL expression is specified, it must return a component, an identifier or a path.</para>
@@ -1216,9 +1230,9 @@
 <para>Declares the scripting language in either WEB-INF/zk.xml, or zk/config.xml.</para>
 </listitem>
 </orderedlist>
-<programlisting>&lt;zscript-config&gt;&#13;    &lt;zscript-language&gt;    &#13;        &lt;language-name&gt;SuperJava&lt;/language-name&gt;&lt;!-- case insensitive --!&gt;        &#13;</programlisting>
+<programlisting>&lt;zscript-config&gt;&#13;        &lt;language-name&gt;SuperJava&lt;/language-name&gt;&lt;!-- case insensitive --&gt;        &#13;</programlisting>
 <para>&lt;interpreter-class&gt;my.MySuperJavaInterpreter&lt;/interpreter-class&gt;</para>
-<programlisting>&lt;/zscript-language&gt;&#13;&lt;/zscript-config&gt;&#13;</programlisting>
+<programlisting>&lt;/zscript-config&gt;&#13;</programlisting>
 <para>Refer to the Developer's Reference for the details about WEB-INF/zk.xml. Refer to the Component Development Guide for the details about zk/config.xml.</para></sect3></sect2><sect2><title>The attribute Element</title>
 <para>It defines a XML attribute of the enclosing element. The content of the element is the attribute value, while the name attribute specifies the attribute name. It is useful if the value of an attribute is sophisticated, or the attribute is conditional.</para>
 <informaltable frame="all">
@@ -1636,7 +1650,22 @@
 <para>To support multilingual, you could use the l function as depicted in the Internationalization chapter.</para>
 </listitem>
 </itemizedlist>
-<programlisting>&lt;textbox constraint="/.+@.+\.[a-z]+/: ${c:l('err.email.required')}"/&gt;&#13;</programlisting></sect3><sect3><title>Custom Constraints</title>
+<programlisting>&lt;textbox constraint="/.+@.+\.[a-z]+/: ${c:l('err.email.required')}"/&gt;&#13;</programlisting></sect3><sect3><title>Constraints for Datebox</title>
+<para>In addition to the constraints described in the above section (such as no future and regular expressions), datebox supports a range of dates. For example,</para>
+<programlisting>&lt;datebox constraint="between 20071225 and 20071203"/&gt;&#13;&lt;datebox constraint="before 20071225"/&gt;&#13;&lt;datebox constraint="after 20071225"/&gt;&#13;</programlisting>
+<para>Notices</para>
+<orderedlist>
+<listitem>
+<para>The format of the date in the constraint is yyyMMdd. It is independent of the locale.</para>
+</listitem>
+<listitem>
+<para>The date specified in the constraint is included. For example, "before 20071225" includes December 25, 2007 and every days before it.</para>
+</listitem>
+<listitem>
+<para>The constraint is actually represented with an instance of the org.zkoss.zul.SimpleDateConstraint class. You can retrieve the parsed beginning and ending date with the getBeginDate and getEndDate methods.</para>
+</listitem>
+</orderedlist>
+<para>((SimpleDateConstraint)datebox.getConstraint()).getBeginDate();</para></sect3><sect3><title>Custom Constraints</title>
 <para>If you want more sophisticated constraint, you could specify an object which implements the org.zkoss.zul.Constraint interface.</para>
 <programlisting>&lt;window title="Custom Constraint"&gt;&#13;    &lt;zscript&gt;&lt;![CDATA[    &#13;Constraint ctt = new Constraint() {&#13;    public void validate(Component comp, Object value) throws WrongValueException {    &#13;        if (value =e= null || ((Integer)value).intValue() &lt; 100)        &#13;            throw new WrongValueException(comp, "At least 100 must be specified");            &#13;    }    &#13;}&#13;    ]]&gt;&lt;/zscript&gt;    &#13;    &lt;intbox constraint="${ctt}"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>You could implement your constraint into a Java class, say my.EmailValidator, then:</para>
@@ -3034,7 +3063,7 @@
 <para>onDoubleClick</para>
 </entry>
 <entry>
-<para>button caption checkbox column div groupbox image label listcell listfooter listheader listitem tab tabpanel toolbar treecell treecol treeitem window </para>
+<para>button caption checkbox column div groupbox image label listcell listfooter listheader listitem tab tabpanel toolbar treecell treecol treerow window </para>
 <para>Event: org.zkoss.zk.ui.event.MouseEvent</para>
 <para>Denotes user has double-clicked the component.</para>
 </entry>
