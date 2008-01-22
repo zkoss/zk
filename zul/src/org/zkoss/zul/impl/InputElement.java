@@ -238,6 +238,7 @@ implements Constrainted {
 		final Object val = coerceFromString(value);
 		validate(val);
 
+		final boolean errFound = _errmsg != null;
 		clearErrorMessage(); //no error at all
 
 		if (!Objects.equals(_value, val)) {
@@ -261,6 +262,9 @@ implements Constrainted {
 				_txtByClient = null; //only once
 				smartUpdate("value", fmtval);
 			}
+		} else if (errFound) {
+			smartUpdate("value", coerceToString(_value));
+				//Bug 1876292: make sure client see the updated value
 		}
 	}
 
