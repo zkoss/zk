@@ -185,17 +185,17 @@ public class Jasperreport extends HtmlBasedComponent {
 			if (is == null) {// try to load by web context.
 				is = Executions.getCurrent().getDesktop().getWebApp()
 						.getResourceAsStream(_src);
-			}
-			if (is == null) {// try to load by class loader
-				is = Thread.currentThread().getContextClassLoader()
-						.getResourceAsStream(_src);
-			}
-			if (is == null) {// try to load by file
-				is = new FileInputStream(new File(_src));
-			}
-			if (is == null) {
-				throw new RuntimeException("resource for " + _src
-						+ " not found.");
+				if (is == null) {// try to load by class loader
+					is = Thread.currentThread().getContextClassLoader()
+							.getResourceAsStream(_src);
+					if (is == null) {// try to load by file
+						File fl = new File(_src);
+						if (!fl.exists())
+							throw new RuntimeException("resource for " + _src + " not found.");
+
+						is = new FileInputStream(fl);
+					}
+				}
 			}
 
 			if (_parameters == null)
