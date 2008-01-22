@@ -390,6 +390,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>jasperreport</component-name>
+		<extends>jasperreport</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.JasperreportDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>label</component-name>
 		<extends>label</extends>
 		<text-as>value</text-as>
@@ -818,14 +826,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>			
 			<mold-uri>class:org.zkoss.zkmax.zul.render.WindowDefault</mold-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>jasperreport</component-name>
-		<extends>jasperreport</extends>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.JasperreportDefault</mold-uri>
 		</mold>
 	</component>
 </language-addon>
