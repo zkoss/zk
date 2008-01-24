@@ -172,7 +172,7 @@ public class DefinitionLoaders {
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
 					if (checkVersion(zkver, url, doc))
-						parseLang(doc, locator, false);
+						parseLang(doc, locator, url, false);
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+url);
 						//abort since it is hardly to work then
@@ -190,7 +190,7 @@ public class DefinitionLoaders {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				try {
 					if (checkVersion(zkver, res.url, res.document))
-						parseLang(res.document, locator, true);
+						parseLang(res.document, locator, res.url, true);
 				} catch (Exception ex) {
 					log.error("Failed to load addon", ex);
 					//keep running
@@ -225,7 +225,7 @@ public class DefinitionLoaders {
 	private static void loadAddon(Locator locator, URL url) {
 		try {
 			parseLang(
-				new SAXBuilder(false, false, true).build(url), locator, true);
+				new SAXBuilder(false, false, true).build(url), locator, url, true);
 		} catch (Exception ex) {
 			log.error("Failed to load addon: "+url, ex);
 			//keep running
@@ -298,7 +298,8 @@ public class DefinitionLoaders {
 		}
 	}
 
-	private static void parseLang(Document doc, Locator locator, boolean addon)
+	private static
+	void parseLang(Document doc, Locator locator, URL url, boolean addon)
 	throws Exception {
 		final Element root = doc.getRootElement();
 		final String lang = IDOMs.getRequiredElementValue(root, "language-name");
@@ -442,6 +443,7 @@ public class DefinitionLoaders {
 					compdef.setImplementationClass(cls);
 						//resolve it now because it is part of lang-addon
 
+				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extends") != null) { //override
 				if (log.finerable()) log.finer("Override component definition: "+name);
@@ -463,6 +465,7 @@ public class DefinitionLoaders {
 				} else {
 					compdef = (ComponentDefinitionImpl)
 						ref.clone(ref.getLanguageDefinition(), name);
+					compdef.setDeclarationURL(url);
 					langdef.addComponentDefinition(compdef);
 				}
 
@@ -474,6 +477,7 @@ public class DefinitionLoaders {
 				if (cls == null)
 					throw new UiException("component-class is required, "+el.getLocator());
 				compdef = new ComponentDefinitionImpl(langdef, null, name, cls);
+				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			}
 

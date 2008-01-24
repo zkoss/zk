@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Date;
+import java.net.URL;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
@@ -394,6 +395,9 @@ public class ComponentsCtrl {
 			return propmap != null ? propmap: new HashMap(3);
 		}
 		public AnnotationMap getAnnotationMap() {
+			return null;
+		}
+		public URL getDeclarationURL() {
 			return null;
 		}
 		public ComponentDefinition clone(LanguageDefinition langdef, String name) {

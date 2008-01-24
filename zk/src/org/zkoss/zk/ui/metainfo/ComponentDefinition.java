@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.util.Collection;
 import java.util.Map;
+import java.net.URL;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -291,6 +292,12 @@ public interface ComponentDefinition extends Cloneable {
 	 * if no annotation is ever defined.
 	 */
 	public AnnotationMap getAnnotationMap();
+
+	/** Returns the URL where this component definition is declared, or
+	 * null if not available.
+	 * @since 3.1.0
+	 */
+	public URL getDeclarationURL();
 
 	/** Clones this definition and assins with the specified language
 	 * definition and name.

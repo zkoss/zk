@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
+import java.net.URL;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.web.servlet.Servlets;
@@ -70,6 +71,7 @@ implements ComponentDefinition, java.io.Serializable {
 	/** the property name to which the text within the element will be assigned. */
 	private String _textAs;
 	private AnnotationMap _annots;
+	private URL _declURL;
 
 	/** Constructs a native component, i.e., a component implemented by
 	 * a Java class.
@@ -198,6 +200,15 @@ implements ComponentDefinition, java.io.Serializable {
 		_textAs = propnm != null && propnm.length() > 0 ? propnm: null;
 	}
 
+	/** Sets the URI where this definition is declared.
+	 *
+	 * @param uri the URI. If null, it means not available.
+	 * @since 3.1.0
+	 */
+	public void setDeclarationURL(URL url) {
+		_declURL = url;
+	}
+
 	//ComponentDefinition//
 	public LanguageDefinition getLanguageDefinition() {
 		return _langdef;
@@ -309,6 +320,10 @@ implements ComponentDefinition, java.io.Serializable {
 
 	public AnnotationMap getAnnotationMap() {
 		return _annots;
+	}
+
+	public URL getDeclarationURL() {
+		return _declURL;
 	}
 
 	public void addProperty(String name, String value) {
