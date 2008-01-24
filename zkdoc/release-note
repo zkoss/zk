@@ -1,5 +1,11 @@
 	--------
-ZK 3.0.2 Freshly
+ZK 3.1.0 Freshly
+* Features
+
+* Bugs
+
+	--------
+ZK 3.0.2
 * Features:
   1862036: Combobox supports ListModel
   1764967: Combobox to support List binding

@@ -24,7 +24,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<button label="Test" width="100px">
 	<attribute name="onClick">{
 	Thread.sleep(4000);
-	alert("See if you can close it in only clic");
+	alert("See if you can close it in only click");
 	}</attribute>
 	</button>
 </window>
