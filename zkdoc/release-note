@@ -2,6 +2,7 @@
 ZK 3.1.0 Freshly
 * Features
   1878682: Able to turn off the Ajax resend mechanism
+  1878785: Able to retrieve URL that a component is declared
 
 * Bugs
 
