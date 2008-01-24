@@ -287,8 +287,10 @@ zkTbtn.init = function (cmp) {
 				Event.stop(evt);
 				return;
 			}
-			if ("javascript:;" == cmp.href) zkau.onclick(evt);
-			else {
+
+			zkau.onclick(evt); //Bug 1878839: we shall always fire onClick
+
+			if ("javascript:;" != cmp.href) {
 				var t = cmp.getAttribute("target");
 				if (cmp.href && !zk.isNewWindow(cmp.href, t))
 					zk.progress();
