@@ -227,7 +227,7 @@ public class Listitem extends XulElement {
 
 			final Listbox listbox = getListbox();
 			if (listbox != null && listbox.getModel() != null)
-				if (listbox.inPagingMold())
+				if (listbox.inPagingMold() || !loaded)
 					smartUpdate("z.loaded", _loaded);
 				else if (loaded)
 					invalidate();

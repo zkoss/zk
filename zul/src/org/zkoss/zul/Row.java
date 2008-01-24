@@ -152,7 +152,7 @@ public class Row extends XulElement {
 
 			final Grid grid = getGrid();
 			if (grid != null && grid.getModel() != null)
-				if (grid.inPagingMold())
+				if (grid.inPagingMold() || !loaded)
 					smartUpdate("z.loaded", _loaded);
 				else if (loaded)
 					invalidate();
