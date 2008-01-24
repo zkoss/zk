@@ -32,6 +32,9 @@ abstract public class GenericDevice implements Device {
 	private Class _spushcls;
 
 	//Device//
+	public boolean isSupported(int func) {
+		return false;
+	}
 	public String getType() {
 		return _type;
 	}

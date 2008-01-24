@@ -1271,6 +1271,9 @@ public class Configuration {
 	 * <p>See also <a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1839246&group_id=152762&atid=785191">Bug 1839246</a>
 	 *
 	 * @since 3.0.1
+	 *
+	 * @param minisecs the timeout in milliseconds.
+	 * Since 3.1.0, you can specify a nonpositive number to disable the resend.
 	 */
 	public void setResendDelay(int minisecs) {
 		_resendDelay = minisecs;

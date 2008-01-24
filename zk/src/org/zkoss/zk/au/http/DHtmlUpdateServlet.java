@@ -73,6 +73,7 @@ import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuSendRedirect;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.device.Device;
 
 /**
  * Used to receive command from the server and send result back to client.
@@ -366,7 +367,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
 		final AuWriter out = AuWriters.newInstance()
-			.open(request, response, config.getResendDelay() / 2 - 500);
+			.open(request, response,
+				desktop.getDevice().isSupported(Device.RESEND) ?
+					config.getResendDelay() / 2 - 500: 0);
+				//Note: getResendDelay() might return nonpositive
 		final PerformanceMeter pfmeter = config.getPerformanceMeter();
 
 		final Execution exec = 

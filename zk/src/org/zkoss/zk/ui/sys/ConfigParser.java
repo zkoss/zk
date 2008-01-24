@@ -341,7 +341,7 @@ public class ConfigParser {
 		v = parseInteger(conf, "tooltip-delay", true);
 		if (v != null) config.setTooltipDelay(v.intValue());
 
-		v = parseInteger(conf, "resend-delay", true);
+		v = parseInteger(conf, "resend-delay", false);
 		if (v != null) config.setResendDelay(v.intValue());
 
 		String s = conf.getElementValue("keep-across-visits", true);

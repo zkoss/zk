@@ -25,7 +25,12 @@ package org.zkoss.zk.device;
  * @since 2.4.0
  */
 public class AjaxDevice extends GenericDevice {
-	/** Return false to indicate it is cacheable.
+	/** It supports {@link #RESEND}.
+	 */
+	public boolean isSupported(int func) {
+		return func == RESEND;
+	}
+	/** Return false to indicate it is not cacheable.
 	 */
 	public boolean isCacheable() {
 		return false;

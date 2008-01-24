@@ -169,10 +169,11 @@ zkau.sendRemove = function (uuid) {
 };
 
 ////ajax timeout////
+if (!zk.safari) {
 /** IE6 sometimes remains readyState==1 (reason unknown), and we have
  * to resend
  */
-zkau._areqTmout = zk.safari ? zk.voidf: function () {
+zkau._areqTmout = function () {
 	//Note: we don't resend if readyState >= 3. Otherwise, the server
 	//will process the same request twice
 
@@ -189,6 +190,7 @@ zkau._areqTmout = zk.safari ? zk.voidf: function () {
 		zkau._areqResend(reqInf.reqes);
 	}
 };
+}
 zkau._areqResend = function (es) {
 	var timeout;
 	for (var j = es.length; --j >= 0;)
@@ -201,7 +203,7 @@ zkau._onRespReady = function () {
 		var req = zkau._areq, reqInf = zkau._areqInf;
 		if (req && req.readyState == 4) {
 			zkau._areq = zkau._areqInf = null;
-			clearTimeout(reqInf.tfn); //stop timer
+			if (reqInf.tfn) clearTimeout(reqInf.tfn); //stop timer
 
 			if (zk.pfmeter) zkau._pfrecv(req);
 
@@ -529,9 +531,10 @@ zkau._sendNow = function (dtid) {
 		if (zk.pfmeter) zkau._pfsend(req, dtid);
 
 		zkau._areqInf = {
-			tfn: setTimeout(zkau._areqTmout, zk_resndto),
 			reqes: reqes, ctli: ctli, ctlc: ctlc
 		};
+		if (zk_resndto > 0 && !zk.safari)
+			zkau._areqInf.tfn = setTimeout(zkau._areqTmout, zk_resndto);
 		req.send(content);
 
 		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
