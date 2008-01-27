@@ -45,9 +45,9 @@ public class Groupbox3d implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
 
-		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.widget.Grbox\"")
+		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.widget.Grbox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.write(">\n<tr valign=\"top\"><td>");
+			.write(">");
 		String gcExtStyle;
 		if (caption != null) {
 			wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
@@ -100,6 +100,6 @@ public class Groupbox3d implements ComponentRenderer {
 			.write(exec.encodeURL("~./img/spacer.gif"))
 			.writeln("\"/></td>");
 		wh.write("<td class=\"").write(look).writeln("shdr\"></td>");
-		wh.write("</tr></table></td></tr>\n</table>");
+		wh.write("</tr></table></div>");
 	}
 }
