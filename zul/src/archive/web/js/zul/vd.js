@@ -168,10 +168,10 @@ zkVld.strict = function (id) {
 zkVld.errbox = function (id, html) {
 	id = $uuid(id);
 	var cmp = $e(id);
-	if (!cmp || !zk.isRealVisible(cmp)) return; //don't do it
-
-	zkVld._errInfo = {id: id, html: html};
-	setTimeout(zkVld._errbox, 5);
+	if (cmp && zk.isRealVisible(cmp)) {
+		zkVld._errInfo = {id: id, html: html};
+		setTimeout(zkVld._errbox, 5);
+	}
 	zkVld.validating = false;
 };
 zkVld._errbox = function () {
