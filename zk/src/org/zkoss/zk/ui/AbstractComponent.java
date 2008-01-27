@@ -1531,7 +1531,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public Object getExtraCtrl() {
 		if (_xtrl == null)
 			_xtrl = newExtraCtrl();
-				//3.1.0: create as late as possible so component has a chance
+				//3.0.3: create as late as possible so component has a chance
 				//to customize which object to instantiate
 		return _xtrl;
 	}

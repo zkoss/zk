@@ -40,14 +40,14 @@ public interface Device {
 	 * In other words, whether the client will resend the request if
 	 * the time specified in {@link org.zkoss.zk.ui.util.Configuration#getResendDelay}
 	 * expires.
-	 * @since 3.1.0
+	 * @since 3.0.3
 	 */
 	public static final int RESEND = 1;
 
 	/** Returns whether the specified function is supported.
 	 *
 	 * @param func the function. It can be one of {@link #RESEND}.
-	 * @since 3.1.0
+	 * @since 3.0.3
 	 */
 	public boolean isSupported(int func);
 

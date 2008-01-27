@@ -203,7 +203,7 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Sets the URI where this definition is declared.
 	 *
 	 * @param uri the URI. If null, it means not available.
-	 * @since 3.1.0
+	 * @since 3.0.3
 	 */
 	public void setDeclarationURL(URL url) {
 		_declURL = url;

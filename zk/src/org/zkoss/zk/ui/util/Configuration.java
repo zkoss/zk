@@ -1138,6 +1138,9 @@ public class Configuration {
 	 *
 	 * <p>Default: 3000.
 	 *
+	 * <p>Note: since 3.0.0, this setting has no effect on Ajax devices.
+	 * Ajax devices send the requests synchronously.
+	 *
 	 * @param time the maximal allowed time to process events.
 	 * It must be positive.
 	 */
@@ -1273,7 +1276,7 @@ public class Configuration {
 	 * @since 3.0.1
 	 *
 	 * @param minisecs the timeout in milliseconds.
-	 * Since 3.1.0, you can specify a nonpositive number to disable the resend.
+	 * Since 3.0.3, you can specify a nonpositive number to disable the resend.
 	 */
 	public void setResendDelay(int minisecs) {
 		_resendDelay = minisecs;

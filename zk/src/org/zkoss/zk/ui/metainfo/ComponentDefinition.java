@@ -295,7 +295,7 @@ public interface ComponentDefinition extends Cloneable {
 
 	/** Returns the URL where this component definition is declared, or
 	 * null if not available.
-	 * @since 3.1.0
+	 * @since 3.0.3
 	 */
 	public URL getDeclarationURL();
 
