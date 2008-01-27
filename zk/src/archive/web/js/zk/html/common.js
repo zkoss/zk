@@ -396,6 +396,23 @@ zk.position = function (el, ref, type) {
 	el.style.left = refofs[0] + "px"; el.style.top = refofs[1] + "px";
 };
 
+/** Returns the maximal allowed height of the specified element.
+ * In other words, it is the client height of the parent minus all sibling's.
+ * @since 3.0.3
+ */
+zk.getVflexHeight = function (el) {
+	hgh = el.parentNode.clientHeight;
+	for (var p = el, q; q = p.previousSibling;) {
+		if (q.offsetHeight && $visible(q)) hgh -= q.offsetHeight; //may undefined
+		p = q;
+	}
+	for (var p = el, q; q = p.nextSibling;) {
+		if (q.offsetHeight && $visible(q)) hgh -= q.offsetHeight; //may undefined
+		p = q;
+	}
+	return hgh;
+};
+
 /** Returns the style's coordination in [integer, integer].
  * Note: it ignores the unit and assumes px (so pt or others will be wrong)
  */
