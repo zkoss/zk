@@ -63,16 +63,7 @@ zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
 		var n = $e(cmp.id + "!cave");
 		if (n) {
 			n.style.height = "";
-			hgh = cmp.clientHeight;
-			for (var p = n, q; q = p.previousSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
-				p = q;
-			}
-			for (var p = n, q; q = p.nextSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
-				p = q;
-			}
-			zk.setOffsetHeight(n, hgh);
+			zk.setOffsetHeight(n, zk.getVflexHeight(n));
 		}
 	}
 };

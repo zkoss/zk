@@ -357,16 +357,8 @@ zkGrbox.init = zkGrbox._fixHgh = function (cmp) {
 	if (n) {
 		var hgh = cmp.style.height;
 		if (hgh && hgh != "auto") {
-			hgh = cmp.clientHeight;
-			for (var p = n, q; q = p.previousSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight;
-				p = q;
-			}
-			for (var p = n, q; q = p.nextSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight;
-				p = q;
-			}
-			zk.setOffsetHeight(n, hgh);
+			n.style.height = "";
+			zk.setOffsetHeight(n, zk.getVflexHeight(n.parentNode));
 		}
 
 		//if no border-bottom, hide the shadow

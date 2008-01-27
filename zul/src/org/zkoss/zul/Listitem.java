@@ -227,12 +227,12 @@ public class Listitem extends XulElement {
 
 			final Listbox listbox = getListbox();
 			if (listbox != null && listbox.getModel() != null)
-				if (listbox.inPagingMold() || !loaded)
-					smartUpdate("z.loaded", _loaded);
-				else if (loaded)
+				if (_loaded && !listbox.inPagingMold())
 					invalidate();
 					//reason: the client doesn't init (for better performance)
 					//i.e., z.skipsib is specified for unloaded items
+				else
+					smartUpdate("z.loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this item is loaded.

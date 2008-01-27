@@ -152,12 +152,12 @@ public class Row extends XulElement {
 
 			final Grid grid = getGrid();
 			if (grid != null && grid.getModel() != null)
-				if (grid.inPagingMold() || !loaded)
-					smartUpdate("z.loaded", _loaded);
-				else if (loaded)
+				if (_loaded && !grid.inPagingMold())
 					invalidate();
 					//reason: the client doesn't init (for better performance)
 					//i.e., z.skipsib is specified for unloaded items
+				else
+					smartUpdate("z.loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this row is loaded; used if
