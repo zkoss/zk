@@ -34,6 +34,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
 
+import java.lang.reflect.Method;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
@@ -253,7 +254,13 @@ public class Binding {
 			//catching WrongValueException no longer works, check special case and 
 			//use setRowValue() method directly
 			if ((comp instanceof InputElement) && "value".equals(_attr)) {
-				Fields.set(comp, "rawValue", bean, _converter == null);
+				Object value = bean;
+				try { //Bug 1879389
+					final Method m = comp.getClass().getMethod("getValue", null);
+					value = Classes.coerce(m.getReturnType(), bean);
+				} catch (NoSuchMethodException ex) { //ignore it
+				}
+				Fields.set(comp, "rawValue", value, _converter == null);
 			} else {
 				Fields.set(comp, _attr, bean, _converter == null);
 			}
