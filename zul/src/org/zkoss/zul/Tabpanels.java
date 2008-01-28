@@ -26,13 +26,22 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A collection of tab panels.
  *
- * <p>Default {@link #getSclass}: tabpanels.
+ * <p>Default {@link #getSclass}:
+ * <table border="1" cellspacing="0">
+ * <tr>
+ * <td>sclass</td><td>tabbox's mold</td>
+ * <td>tabbox's orient {@link Tabbox#getOrient}</td>
+ * </tr>
+ * <tr><td>tabpanels</td><td>default</td><td>horizontal</td></tr>
+ * <tr><td>tabpanels-<em>something</em></td><td><em>something</em></td><td>horizontal</td></tr>
+ * <tr><td>vtabpanels</td><td>default</td><td>vertical</td></tr>
+ * <tr><td>vtabpanels-<em>something</em></td><td><em>something</em></td><td>vertical</td></tr>
+ * </table>
  *
  * @author tomyeh
  */
 public class Tabpanels extends XulElement {
 	public Tabpanels() {
-		setSclass("tabpanels");
 	}
 
 	/** Returns the tabbox owns this component.
@@ -52,5 +61,33 @@ public class Tabpanels extends XulElement {
 		if (!(child instanceof Tabpanel))
 			throw new UiException("Unsupported child for tabpanels: "+child);
 		return super.insertBefore(child, insertBefore);
+	}
+	/** Returns the style class.
+	 *
+	 * <p>The default style class, i.e., the style class is not defined (i.e.,
+	 * {@link #setSclass} is not called or called with null or empty):
+	 * <table border="1" cellspacing="0">
+	 * <tr>
+	 * <td>sclass</td><td>tabbox's mold</td>
+	 * <td>tabbox's orient {@link Tabbox#getOrient}</td>
+	 * </tr>
+	 * <tr><td>tabpanels</td><td>default</td><td>horizontal</td></tr>
+	 * <tr><td>tabpanels-<em>something</em></td><td><em>something</em></td><td>horizontal</td></tr>
+	 * <tr><td>vtabpanels</td><td>default</td><td>vertical</td></tr>
+	 * <tr><td>vtabpanels-<em>something</em></td><td><em>something</em></td><td>vertical</td></tr>
+	 * </table>
+	 *
+	 * <p>Note: prior to 3.0.3, the default style class is always "tabpanels".
+	 */
+	public String getSclass() {
+		final String scls = super.getSclass();
+		if (scls != null) return scls;
+
+		final Tabbox tabbox = getTabbox();
+		final boolean vert = tabbox != null && tabbox.isVertical();
+		final String mold = tabbox != null ? tabbox.getMold(): null;
+		return mold == null || "default".equals(mold) ?
+			vert ? "vtabpanels": "tabpanels":
+			(vert ? "vtabpanels-": "tabpanels-")+mold;
 	}
 }

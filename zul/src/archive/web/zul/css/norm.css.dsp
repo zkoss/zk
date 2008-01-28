@@ -49,7 +49,7 @@ tr.gamma {background: #F4F4F4;}
 td.gamma {background: #F4F4F4;}
 
 <%-- General --%>
-.inline-box { <%-- used with label/checkbox and others to ensure the dimension --%>
+.inline-block { <%-- used with label/checkbox and others to ensure the dimension --%>
 	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
 	display:inline-block;
 }
@@ -510,11 +510,11 @@ span.dottree-spacer {
 div.gc-default {<%-- content of 3d groupbox --%>
 	border: 1px solid #5C6C7C; padding: 5px;
 }
-tr.tabpanel td.tabpanel-hr, div.tabpanel-accordion {<%-- horz, accd --%>
+div.tabpanel, div.tabpanel-accordion {<%-- horz, accd: tabpanel --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
-td.tabpanels {<%-- vert --%>
+td.vtabpanels {<%-- vert tabpanels --%>
 	border-top: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
@@ -866,8 +866,8 @@ div.paging a:hover {
 }
 <%-- ZK JavaScript debug box --%>
 div.debugbox {
-	border: 1px solid #77c;	position: absolute;	bottom: 0px; width: 99%;
-	z-index: 88000;
+	border: 1px solid #77c;	position: absolute;	bottom: 0px; right: 0px;
+	width: 60%; z-index: 99000; background: white;
 }
 <%--ZK datebox and calendar--%>
 div.dateboxpp {<%--hardcoded in DSP--%>

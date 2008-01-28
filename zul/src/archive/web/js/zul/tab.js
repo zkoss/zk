@@ -66,15 +66,15 @@ zkTab._getSelTab = function (tab) {
 	var tabboxId = getZKAttr(tab, "box");
 	if (tabboxId) {
 		var tabbox = $e(tabboxId);
-		if (getZKAttr(tabbox, "accd") == "true")
+		if (zk.isAccord(tabbox))
 			return zkTab._getSelTabFromTop(tabbox, tabboxId);
 	}
 
 	//non-accordion: we can use sibling directly
-	for (var node = tab; (node = node.nextSibling) != null;)
+	for (var node = tab; node = node.nextSibling;)
 		if (getZKAttr(node, "sel") == "true")
 			return node;
-	for (var node = tab; (node = node.previousSibling) != null;)
+	for (var node = tab; node = node.previousSibling;)
 		if (getZKAttr(node, "sel") == "true")
 			return node;
 };
@@ -84,15 +84,15 @@ zkTab._sliding = function (tab) {
 	if (!tabboxId) return false;
 
 	var tabbox = $e(tabboxId);
-	if (getZKAttr(tabbox, "accd") != "true")
+	if (!zk.isAccord(tabbox))
 		return false;
 
 	//accordion: we must go to panel firs, and then browse its sibling
 	var panel = $e(getZKAttr(tab, "panel"));
-	for (var node = panel; (node = node.nextSibling) != null;)
+	for (var node = panel; node = node.nextSibling;)
 		if (getZKAttr($real(node), "animating"))
 			return true;
-	for (var node = panel; (node = node.previousSibling) != null;)
+	for (var node = panel; node = node.previousSibling;)
 		if (getZKAttr($real(node), "animating"))
 			return true;
 	return false;
@@ -102,7 +102,7 @@ zkTab._getSelTabFromTop = function (node, tabboxId) {
 	if ($type(node) == "Tab" && getZKAttr(node, "box") == tabboxId)
 		return getZKAttr(node, "sel") == "true" ? node: null;
 
-	for (var node = node.firstChild; node != null; node = node.nextSibling) {
+	for (var node = node.firstChild; node; node = node.nextSibling) {
 		var n = zkTab._getSelTabFromTop(node, tabboxId);
 		if (n) return n;
 	}
@@ -139,7 +139,7 @@ zkTab._setTabSel = function (tab, toSel, notify) {
 
 	var tabbox = getZKAttr(tab, "box");
 	if (tabbox) tabbox = $e(tabbox);
-	var accd = tabbox && getZKAttr(tabbox, "accd") == "true";
+	var accd = tabbox && zk.isAccord(tabbox);
 	var panel = $e(getZKAttr(tab, "panel"));
 	if (panel)
 		if (accd) {
@@ -253,6 +253,13 @@ zkTabs.onVisi = function (cmp) {
 	zkTabs.init(cmp);
 };
 
+/** Returns whether the tabbox is accordion.
+ * @since 3.0.3
+ */
+zk.isAccord = function (tabbox) {
+	return getZKAttr(tabbox, "accd") == "true";
+};
+
 zk.addOnResize(function () {
 	var tabs = zkTabs._tabs;
 	for (var j = tabs.length; --j >=0;)
@@ -267,92 +274,117 @@ zkTabs.fixWidth = function (uuid) {
 	var ft = $e(uuid + "!first");
 	var lt = $e(uuid + "!last");
 	if (!ft || !lt) return;
-	
+
 	var tabs = $e(uuid);
+	var tbox = $parentByType(tabs, "Tabbox");
+	if (!tbox) return;
+
 	var align = getZKAttr(tabs,"align");
 	var tbl = zk.parentNode(zk.parentNode(ft, "TABLE"), "TABLE");
-	var tbox = zk.parentNode(tbl, "TABLE");
-		//Safari: THEAD's width and TD/TR's height is 0, so use TABLE instead
-	if (tbox) {
-		if ("TD" == $tag(lt)) { //horizontal
-			//let tab's width be re-calc
-			switch(align){
-				case 's'://start
-					lt.style.width = "1px";
-					break;
-				case 'e'://end
-				case 'c'://center
-					ft.style.width = ft.offsetWidth+"px";
-					break;
+		//Safari: THEAD's width and TD/TR's height are 0, so use TABLE instead
+
+	if (getZKAttr(tbox, "orient") != "v") { //horizontal tabbox
+		//fix tabpanels's height if tabbox's height is specified
+		//Ignore accordion since its height is controlled by each tabpanel
+		var hgh = tbox.style.height;
+		if (hgh && hgh != "auto" && !zk.isAccord(tbox)){
+			var panels = tabs;
+			while ((panels = panels.nextSibling) && !panels.id)
+				;
+
+			if (panels) {
+				//clean the height (to force recalc)
+				for (var n = panels.firstChild; n; n = n.nextSibling)
+					if (n.id && $visible(n)) {
+						n.style.height = "";
+						break;
+					}
+
+				hgh = zk.getVflexHeight(panels);
+				for (var n = panels.firstChild; n; n = n.nextSibling)
+					if (n.id)
+						zk.setOffsetHeight(n, hgh);
 			}
-			setTimeout(function () {
-				switch(align){
-					case 's':
-						var v1 = tbox.offsetWidth - tbl.offsetWidth; 
-						var v =  v1+lt.offsetWidth;
-						if(zk.gecko && v1==0){//BUG 1825812
-							var pt = zk.parentNode(lt, "TABLE");
-							var pd = zk.parentNode(pt, "TD");
-							v = pd.offsetWidth - pt.offsetWidth + lt.offsetWidth;
-						}
-						if (v < 0) v = 0;
-						lt.style.width = v + "px";
-						break;
-					case 'e':
-						var v = tbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth;
-						if (v < 0) v = 0;
-						ft.style.width = v + "px";
-						v2 = 0;
-						break;
-					case 'c':
-						var v = tbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth+lt.offsetWidth;
-						if (v < 0) v = 0;
-						var v1,v2;
-						v1 = Math.floor(v/2);
-						v2 = v-v1;
-						ft.style.width = v1 + "px";
-						lt.style.width = v2 + "px";
-						break;
-				}
-			}, 30);
-		} else { //vertical
-			//let tab's width be re-calc
-			switch(align){
-				case 's':
-					lt.style.height = "1px";
-					break;
-				case 'c':
-				case 'm':
-					ft.style.height = ft.offsetHeight+"px";
-					break;
-			}
-			setTimeout(function () {
-				if (ft.cells && ft.cells.length) ft = ft.cells[0];
-				if (lt.cells && lt.cells.length) lt = lt.cells[0];
-				switch(align){
-					case 's':
-						var v = tbox.offsetHeight - tbl.offsetHeight +lt.offsetHeight;
-						if (v < 0) v = 0;
-						lt.style.height = v + "px";
-						break;
-					case 'e':
-						var v = tbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight;
-						if (v < 0) v = 0;
-						ft.style.height = v + "px";
-						v2 = 0;
-						break;
-					case 'c':
-						var v = tbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight+lt.offsetHeight;
-						if (v < 0) v = 0;
-						var v1,v2;
-						v1 = Math.floor(v/2);
-						v2 = v-v1;
-						ft.style.height = v1 + "px";
-						lt.style.height = v2 + "px";
-						break;
-				}
-			}, 30);
 		}
+
+		//let tab's width be re-calc
+		switch(align){
+		default://start
+			lt.style.width = "1px";
+			break;
+		case 'e'://end
+		case 'c'://center
+			ft.style.width = ft.offsetWidth+"px";
+			break;
+		}
+		setTimeout(function () {
+			switch(align){
+			default:
+				var v1 = tbox.offsetWidth - tbl.offsetWidth; 
+				var v =  v1+lt.offsetWidth;
+				if(zk.gecko && v1==0){//BUG 1825812
+					var pt = zk.parentNode(lt, "TABLE");
+					var pd = zk.parentNode(pt, "TD");
+					v = pd.offsetWidth - pt.offsetWidth + lt.offsetWidth;
+				}
+				if (v < 0) v = 0;
+				lt.style.width = v + "px";
+				break;
+			case 'e':
+				var v = tbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth;
+				if (v < 0) v = 0;
+				ft.style.width = v + "px";
+				v2 = 0;
+				break;
+			case 'c':
+				var v = tbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth+lt.offsetWidth;
+				if (v < 0) v = 0;
+				var v1,v2;
+				v1 = Math.floor(v/2);
+				v2 = v-v1;
+				ft.style.width = v1 + "px";
+				lt.style.width = v2 + "px";
+				break;
+			}
+		}, 30);
+		return;
 	}
+
+	//vertical tabbox
+	switch(align){
+	default:
+		lt.style.height = "1px";
+		break;
+	case 'c':
+	case 'm':
+		ft.style.height = ft.offsetHeight+"px";
+		break;
+	}
+	setTimeout(function () {
+		if (ft.cells && ft.cells.length) ft = ft.cells[0];
+		if (lt.cells && lt.cells.length) lt = lt.cells[0];
+		switch(align){
+		default:
+			var v = tbox.offsetHeight - tbl.offsetHeight +lt.offsetHeight;
+			if (v < 0) v = 0;
+			lt.style.height = v + "px";
+			break;
+		case 'e':
+			var v = tbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight;
+			if (v < 0) v = 0;
+			ft.style.height = v + "px";
+			v2 = 0;
+			break;
+		case 'c':
+			var v = tbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight+lt.offsetHeight;
+			if (v < 0) v = 0;
+			var v1,v2;
+			v1 = Math.floor(v/2);
+			v2 = v-v1;
+			ft.style.height = v1 + "px";
+			lt.style.height = v2 + "px";
+			break;
+		}
+	}, 30);
 };
 

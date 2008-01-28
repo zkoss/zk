@@ -20,8 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="look" value="${self.tabbox.tabLook}-"/>
-<thead id="${self.uuid}" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
-<tr><td>
+<div id="${self.uuid}" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr valign="bottom">
 
@@ -48,5 +47,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </table></td>
 	</tr>
 </table>
-</td></tr>
-</thead>
+</div>
