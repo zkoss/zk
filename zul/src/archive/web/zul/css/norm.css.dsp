@@ -521,6 +521,9 @@ td.vtabpanels {<%-- vert tabpanels --%>
 div.vtabpanel {<%-- vert tabpanel --%>
 	padding: 5px;
 }
+table.vtabsi {<%--remove it if you prefer to use the minimal width--%>
+	width: 100%;
+}
 
 td.tab-3d-first1 {
 	background-image: url(${c:encodeURL('~./zul/img/tab/3d-first1.gif')});
