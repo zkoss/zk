@@ -516,7 +516,10 @@ div.tabpanel, div.tabpanel-accordion {<%-- horz, accd: tabpanel --%>
 }
 td.vtabpanels {<%-- vert tabpanels --%>
 	border-top: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
-	border-bottom: 1px solid #5C6C7C; padding: 5px;
+	border-bottom: 1px solid #5C6C7C;
+}
+div.vtabpanel {<%-- vert tabpanel --%>
+	padding: 5px;
 }
 
 td.tab-3d-first1 {

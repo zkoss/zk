@@ -276,36 +276,15 @@ zkTabs.fixWidth = function (uuid) {
 	if (!ft || !lt) return;
 
 	var tabs = $e(uuid);
-	var tbox = $parentByType(tabs, "Tabbox");
-	if (!tbox) return;
+	var tabbox = $parentByType(tabs, "Tabbox");
+	if (!tabbox) return;
 
 	var align = getZKAttr(tabs,"align");
 	var tbl = zk.parentNode(zk.parentNode(ft, "TABLE"), "TABLE");
 		//Safari: THEAD's width and TD/TR's height are 0, so use TABLE instead
 
-	if (getZKAttr(tbox, "orient") != "v") { //horizontal tabbox
-		//fix tabpanels's height if tabbox's height is specified
-		//Ignore accordion since its height is controlled by each tabpanel
-		var hgh = tbox.style.height;
-		if (hgh && hgh != "auto" && !zk.isAccord(tbox)){
-			var panels = tabs;
-			while ((panels = panels.nextSibling) && !panels.id)
-				;
-
-			if (panels) {
-				//clean the height (to force recalc)
-				for (var n = panels.firstChild; n; n = n.nextSibling)
-					if (n.id && $visible(n)) {
-						n.style.height = "";
-						break;
-					}
-
-				hgh = zk.getVflexHeight(panels);
-				for (var n = panels.firstChild; n; n = n.nextSibling)
-					if (n.id)
-						zk.setOffsetHeight(n, hgh);
-			}
-		}
+	if (getZKAttr(tabbox, "orient") != "v") { //horizontal tabbox
+		zkTabs._fixHgh(tabbox, tabs);
 
 		//let tab's width be re-calc
 		switch(align){
@@ -320,7 +299,7 @@ zkTabs.fixWidth = function (uuid) {
 		setTimeout(function () {
 			switch(align){
 			default:
-				var v1 = tbox.offsetWidth - tbl.offsetWidth; 
+				var v1 = tabbox.offsetWidth - tbl.offsetWidth; 
 				var v =  v1+lt.offsetWidth;
 				if(zk.gecko && v1==0){//BUG 1825812
 					var pt = zk.parentNode(lt, "TABLE");
@@ -331,13 +310,13 @@ zkTabs.fixWidth = function (uuid) {
 				lt.style.width = v + "px";
 				break;
 			case 'e':
-				var v = tbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth;
+				var v = tabbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth;
 				if (v < 0) v = 0;
 				ft.style.width = v + "px";
 				v2 = 0;
 				break;
 			case 'c':
-				var v = tbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth+lt.offsetWidth;
+				var v = tabbox.offsetWidth - tbl.offsetWidth +ft.offsetWidth+lt.offsetWidth;
 				if (v < 0) v = 0;
 				var v1,v2;
 				v1 = Math.floor(v/2);
@@ -365,18 +344,18 @@ zkTabs.fixWidth = function (uuid) {
 		if (lt.cells && lt.cells.length) lt = lt.cells[0];
 		switch(align){
 		default:
-			var v = tbox.offsetHeight - tbl.offsetHeight +lt.offsetHeight;
+			var v = tabbox.offsetHeight - tbl.offsetHeight +lt.offsetHeight;
 			if (v < 0) v = 0;
 			lt.style.height = v + "px";
 			break;
 		case 'e':
-			var v = tbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight;
+			var v = tabbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight;
 			if (v < 0) v = 0;
 			ft.style.height = v + "px";
 			v2 = 0;
 			break;
 		case 'c':
-			var v = tbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight+lt.offsetHeight;
+			var v = tabbox.offsetHeight - tbl.offsetHeight +ft.offsetHeight+lt.offsetHeight;
 			if (v < 0) v = 0;
 			var v1,v2;
 			v1 = Math.floor(v/2);
@@ -387,4 +366,31 @@ zkTabs.fixWidth = function (uuid) {
 		}
 	}, 30);
 };
+/** Fixes tabpanel's height if necessary.
+ */
+zkTabs._fixHgh = function (tabbox, tabs) {
+	//fix tabpanels's height if tabbox's height is specified
+	//Ignore accordion since its height is controlled by each tabpanel
 
+	var hgh = tabbox.style.height;
+	if ((vert || (hgh && hgh != "auto")) && !zk.isAccord(tabbox)){
+		var panels = tabs;
+		while ((panels = panels.nextSibling) && !panels.id)
+			;
+
+		if (panels) {
+			//clean the height (to force recalc)
+			for (var n = panels.firstChild; n; n = n.nextSibling)
+				if (n.id && $visible(n)) {
+					n.style.height = "";
+					break;
+				}
+
+			hgh = zk.getVflexHeight(panels);
+
+			for (var n = panels.firstChild; n; n = n.nextSibling)
+				if (n.id)
+					zk.setOffsetHeight(n, hgh);
+		}
+	}
+};
