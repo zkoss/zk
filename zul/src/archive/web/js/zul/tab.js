@@ -373,7 +373,7 @@ zkTabs._fixHgh = function (tabbox, tabs) {
 	//Ignore accordion since its height is controlled by each tabpanel
 
 	var hgh = tabbox.style.height;
-	if ((vert || (hgh && hgh != "auto")) && !zk.isAccord(tabbox)){
+	if (hgh && hgh != "auto" && !zk.isAccord(tabbox)){
 		var panels = tabs;
 		while ((panels = panels.nextSibling) && !panels.id)
 			;
