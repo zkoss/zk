@@ -18,6 +18,7 @@ ZK 3.0.3 Freshly
   1879511: onChange doesn't trigger when focus changed (Combo/Bandbox)
   1879506: Tabbox is displayed incorrectly if height is specified
   1880950: Half of window is shown after a higher window is hidden
+  1881042: ZK shall not depend on commons-fileupload
 
 	--------
 ZK 3.0.2
