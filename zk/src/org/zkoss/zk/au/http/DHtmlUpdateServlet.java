@@ -157,7 +157,19 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				addAuProcessor("/upload", new AuUploader());
 			} catch (Throwable ex) {
-				log.warningBriefly("Failed to configure fileupload. Make sure commons-fileupload.jar is installed.", ex);
+				final String msg =
+					" Make sure commons-fileupload.jar is installed.";
+				log.warningBriefly("Failed to configure fileupload."+msg, ex);
+
+				//still add /upload to generate exception when fileupload is used
+				addAuProcessor("/upload",
+					new AuProcessor() {
+						public void process(Session sess, ServletContext ctx,
+						HttpServletRequest request, HttpServletResponse response, String pi)
+						throws ServletException, IOException {
+							throw new ServletException("Failed to upload."+msg);
+						}
+					});
 			}
 		}
 
