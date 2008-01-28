@@ -433,7 +433,8 @@ function $visible(el) {
 
 /** Converts to an integer. It handles null and "07" */
 function $int(v, b) {
-	return v ? parseInt(v, b || 10): 0;
+	v = v ? parseInt(v, b || 10): 0;
+	return isNaN(v) ? 0: v;
 };
 
 /** Returns the ZK attribute of the specified name.
