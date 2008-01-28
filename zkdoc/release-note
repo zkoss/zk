@@ -10,6 +10,8 @@ ZK 3.0.3 Freshly
   1879389: Coerce problem databind Integer with textbox
   1878840: Listbox with live data don't render in the onSort event
   1878839: Toolbarbutton doesn't fire onClick if href is specified
+  1879404: Textbox onChange event is not fired (IE only)
+  1879221: Grid and listbox column resizing errors
 
 	--------
 ZK 3.0.2
