@@ -36,6 +36,7 @@ span.dottree-root-open, span.dottree-root-close, span.dottree-tee-open, span.dot
 span.dottree-last-open, span.dottree-last-close, span.dottree-tee, span.dottree-vbar, span.dottree-last, span.dottree-spacer {
 	height: 18px;
 }
+
 <%-- Append New --%>
 option {
 	font-family: Verdana, Tahoma, Arial, serif;
