@@ -12,6 +12,9 @@ ZK 3.0.3 Freshly
   1878839: Toolbarbutton doesn't fire onClick if href is specified
   1879404: Textbox onChange event is not fired (IE only)
   1879221: Grid and listbox column resizing errors
+  1877702: onSelect event of combobox isn't fired in one situation
+  1879487: The odd onSelect event is fired in Combobox
+  1879511: onChange doesn't trigger when focus changed (Combo/Bandbox)
 
 	--------
 ZK 3.0.2
