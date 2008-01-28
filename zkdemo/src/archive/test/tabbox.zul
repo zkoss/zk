@@ -20,7 +20,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window>
 	<tabbox id="tb" width="400px">
-		<tabs width="100px">
+		<tabs>
 			<tab id="tab0" label="Tab 1"/>
 			<tab label="Tab 2"/>
 		</tabs>

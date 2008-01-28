@@ -41,14 +41,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<tabpanels>
 		<tabpanel>
 <tabbox orient="vertical">
-<tabs>
+<tabs width="30px">
 <tab label="A"/>
 <tab label="B"/>
 <tab label="C"/>
 <tab label="D"/>
 <tab label="E"/>
 </tabs>
-<tabpanels width="300px">
+<tabpanels>
 <tabpanel>This is panel A</tabpanel>
 <tabpanel>This is panel B</tabpanel>
 <tabpanel>This is panel C</tabpanel>
