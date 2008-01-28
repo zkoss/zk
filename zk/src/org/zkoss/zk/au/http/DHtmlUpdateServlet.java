@@ -153,8 +153,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 		}
 
-		if (getAuProcessor("/upload") == null)
-			addAuProcessor("/upload", new AuUploader());
+		if (getAuProcessor("/upload") == null) {
+			try {
+				addAuProcessor("/upload", new AuUploader());
+			} catch (Throwable ex) {
+				log.warningBriefly("Failed to configure fileupload. Make sure commons-fileupload.jar is installed.", ex);
+			}
+		}
+
 		if (getAuProcessor("/view") == null)
 			addAuProcessor("/view", new AuDynaMediar());
 
