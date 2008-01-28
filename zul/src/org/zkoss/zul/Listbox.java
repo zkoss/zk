@@ -1592,7 +1592,7 @@ public class Listbox extends XulElement {
 				it.hasPrevious(); --index)
 					if(((Listitem)it.previous()).isLoaded())
 						break;
-				HTMLs.appendAttribute(sb, "z.lastLoadIdx", index - 1);
+				HTMLs.appendAttribute(sb, "z.lastLoadIdx", index);
 			}
 		}
 

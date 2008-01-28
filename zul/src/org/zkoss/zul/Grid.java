@@ -884,7 +884,7 @@ public class Grid extends XulElement {
 			for(final ListIterator it = rows.listIterator(index);
 			it.hasPrevious(); --index)
 				if(((Row)it.previous()).isLoaded()) break;
-			HTMLs.appendAttribute(sb, "z.lastLoadIdx", index - 1);
+			HTMLs.appendAttribute(sb, "z.lastLoadIdx", index);
 		}
 		if (_scOddRow != null)
 			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);

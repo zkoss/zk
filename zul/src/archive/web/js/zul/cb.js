@@ -187,9 +187,15 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 		return true;
 	} else if ("z.sel" == nm ) {
 		return zkTxbox.setAttr(cmp, nm, val);
+	} else if ("value" == nm) {
+		var selid = getZKAttr(cmp, "selid");
+		if (selid) {
+			var txt = zkCmbox.getLabel($e(selid)) || "";
+			if (txt.toLowerCase() != val.toLowerCase())
+				rmZKAttr(cmp, "selid");
+		}
 	}
-	zkau.setAttr(cmp, nm, val);
-	return true;
+	return false;
 };
 zkCmbox.rmAttr = function (cmp, nm) {
 	if ("style" == nm) {
@@ -461,6 +467,9 @@ zkCmbox._selback = function (item) {
 		inp.setAttribute("zk_changing_selbk", txt); //used with onChanging (widget.js)
 		zk.asyncFocus(inp.id);
 		zk.asyncSelect(inp.id);
+		var uuid = $uuid(inp);
+		var pp = $e(uuid + "!pp");
+		if (pp) pp.setAttribute("zk_ckval", txt);
 	}
 };
 /** Selects back the current hilited item, if any. */
