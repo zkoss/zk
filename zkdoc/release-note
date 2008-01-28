@@ -4,6 +4,7 @@ ZK 3.0.3 Freshly
   1878682: Able to turn off the Ajax resend mechanism
   1878785: Able to retrieve URL that a component is declared
   1879464: Use div instead of table as the outer tag of groupbox 3d
+  1879495: Use div instead of table to implement tabpanel
 
 * Bugs
   1878852: Toolbarbutton href and onClick
@@ -15,6 +16,7 @@ ZK 3.0.3 Freshly
   1877702: onSelect event of combobox isn't fired in one situation
   1879487: The odd onSelect event is fired in Combobox
   1879511: onChange doesn't trigger when focus changed (Combo/Bandbox)
+  1879506: Tabbox is displayed incorrectly if height is specified
 
 	--------
 ZK 3.0.2
