@@ -520,7 +520,7 @@ zkWnd._doModal = function (cmp, replace) {
 		return;
 	}
 	if (!getZKAttr(cmp, "conshow")) {
-		var onshow = getZKAttr(cmp, "aos") || "moveDown";
+		var onshow = getZKAttr(cmp, "aos") || "appear";
 		if (onshow != "z_none")
 			setZKAttr(cmp, "conshow", "anima." + onshow + "($e('"+cmp.id+"'));");
 	}
@@ -543,8 +543,17 @@ zkWnd._doModal = function (cmp, replace) {
 	zkWnd._center(cmp, zi, pos); //called even if pos not defined
 		//show dialog first to have better response.
 	
-	if (!pos && $int(cmp.style.top) > 100) cmp.style.top = "100px";
-	
+	if (!pos) {
+		var top = $int(cmp.style.top), y = zk.innerY();
+		if (y) {
+			var y1 = top - y;
+			if (y1 > 100) {
+				cmp.style.top = top - (y1 - 100) + "px";
+			}
+		} else if (top > 100){
+			cmp.style.top = "100px";
+		}
+	}
 	zkWnd._show(cmp); //unlike other mode, it must be visible
 
 	zkau.closeFloats(cmp);
