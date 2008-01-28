@@ -50,9 +50,9 @@ public class TabsDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);		
 		final String look = tabbox.getTabLook() + '-';
 
-		wh.write("<thead id=\"").write(self.getUuid()).write("\" z.type=\"zul.tab.Tabs\"")
+		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tab.Tabs\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>')
-			.writeln("<tr><td><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+			.writeln("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
 			.write("<tr valign=\"bottom\">");
 		
 		/* prefix column */
@@ -71,6 +71,6 @@ public class TabsDefault implements ComponentRenderer {
 			.write("<tr><td class=\"").write(look).write("last1\" id=\"")
 			.write(self.getUuid()).writeln("!last\"></td>")
 			.write("<td class=\"").write(look).writeln("last2\"></td>")
-			.writeln("</tr></table></td></tr></table></td></tr></thead>");
+			.writeln("</tr></table></td></tr></table></div>");
 	}
 }

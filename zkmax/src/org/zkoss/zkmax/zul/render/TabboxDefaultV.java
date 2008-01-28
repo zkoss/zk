@@ -40,15 +40,14 @@ public class TabboxDefaultV implements ComponentRenderer {
 		final Tabbox self = (Tabbox) comp;
 		final Tabs tabs = self.getTabs();
 
-		wh.write("<table id=\"").write(self.getUuid()).write("\"")
+		wh.write("<div id=\"").write(self.getUuid()).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.write(" z.tabs=\"").write(tabs == null ? null : tabs.getUuid())
-			.writeln("\" z.type=\"zul.tab.Tabbox\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");		
+			.writeln(" z.type=\"zul.tab.Tabbox\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
 
 		wh.write("<tr valign=\"top\">")
 			.write(tabs)
 			.write(self.getTabpanels())
 			.writeln("</tr>")
-			.write("</table>");
+			.write("</table></div>");
 	}
 }
