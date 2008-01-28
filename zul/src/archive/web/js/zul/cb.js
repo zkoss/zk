@@ -43,27 +43,29 @@ zkTxbox.onblur = function (evt) {
 	var cmp = $e(uuid);
 	if (!zkTxbox._noonblur(inp) && $type(cmp) == "Cmbox") {
 		var inpval = inp.value.toLowerCase();
-		var pp2 = $e(uuid + "!cave");
-		var rows = pp2.rows;
-		var jfnd = -1, strict = getZKAttr(cmp, "valid") || "";
-		strict = strict.toLowerCase().indexOf("strict") > -1;
-		for (var j = 0, rl = rows.length; j < rl; ++j) {			
-		var item = rows[j];
-			var txt = zkCmbox.getLabel(item).toLowerCase();
-			if (zk.isVisible(item) && (!strict || getZKAttr(item, "disd") != "true") && txt == inpval) {
-				jfnd = j;
-				break;
+		if (inpval.length > 0) {
+			var pp2 = $e(uuid + "!cave");
+			var rows = pp2.rows;
+			var jfnd = -1, strict = getZKAttr(cmp, "valid") || "";
+			strict = strict.toLowerCase().indexOf("strict") > -1;
+			for (var j = 0, rl = rows.length; j < rl; ++j) {			
+			var item = rows[j];
+				var txt = zkCmbox.getLabel(item).toLowerCase();
+				if (zk.isVisible(item) && (!strict || getZKAttr(item, "disd") != "true") && txt == inpval) {
+					jfnd = j;
+					break;
+				}
 			}
-		}
-		if (jfnd > -1) item = rows[j];
-		else item = {id: ""};
-			var selId = getZKAttr(cmp, "selid");
-			
-			if (selId != item.id) {
-				setZKAttr(cmp, "selid", item.id);
-				zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
-					zkau.asapTimeout($e(uuid), "onSelect"));			
-			}		
+			if (jfnd > -1) item = rows[j];
+			else item = {id: ""};
+				var selId = getZKAttr(cmp, "selid");
+				
+				if (selId != item.id) {
+					setZKAttr(cmp, "selid", item.id);
+					zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
+						zkau.asapTimeout($e(uuid), "onSelect"));			
+				}
+		}	
 	}
 	zkCmbox.onblur(evt);
 };
@@ -467,9 +469,6 @@ zkCmbox._selback = function (item) {
 		inp.setAttribute("zk_changing_selbk", txt); //used with onChanging (widget.js)
 		zk.asyncFocus(inp.id);
 		zk.asyncSelect(inp.id);
-		var uuid = $uuid(inp);
-		var pp = $e(uuid + "!pp");
-		if (pp) pp.setAttribute("zk_ckval", txt);
 	}
 };
 /** Selects back the current hilited item, if any. */
@@ -599,6 +598,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 		if (found) {
 			zkCmbox._setsel(found, true);
 			found.setAttribute("zk_hilite", "true");
+			inpval = zkCmbox.getLabel(found);
 		}
 	}
 	
@@ -627,7 +627,6 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 		inp.setAttribute("zk_typeAhead", inp.value);
 		
 	zk.scrollIntoView(pp, found); //make sure found is visible
-
 	pp.setAttribute("zk_ckval", inpval);
 };
 
@@ -652,6 +651,8 @@ zkCmbox.close = function (pp, focus) {
 	var cb = $outer(pp);
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: cb.id, cmd: "onOpen", data: [false]});
+	zkTxbox.close($real(cb)); 
+		// Bug #1879511: we must check the current focus whether to trigger the onChange event.
 };
 
 zk.FloatCombo = Class.create();
