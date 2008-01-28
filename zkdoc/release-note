@@ -17,6 +17,7 @@ ZK 3.0.3 Freshly
   1879487: The odd onSelect event is fired in Combobox
   1879511: onChange doesn't trigger when focus changed (Combo/Bandbox)
   1879506: Tabbox is displayed incorrectly if height is specified
+  1880950: Half of window is shown after a higher window is hidden
 
 	--------
 ZK 3.0.2
