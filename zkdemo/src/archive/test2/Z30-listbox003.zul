@@ -6,7 +6,7 @@
 		<listheader label="account" width="25%" /> 
 		<listheader label="name" width="25%" /> 
 		<listheader label="email" width="25%" /> 
-		<listheader label="edit" width="35%" /> 
+		<listheader label="edit" /> 
 	</listhead>
 	<listitem> 
 		<listcell label="davidwu" /> 
