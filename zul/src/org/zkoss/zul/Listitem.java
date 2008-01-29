@@ -74,7 +74,7 @@ public class Listitem extends XulElement {
 	}
 	
 	protected String getRealSclass() {
-		final String sclx = (String) getListbox().getAttribute("Z_STRIPE");
+		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
 		return super.getRealSclass() + (sclx != null ? " " + sclx : "") ;
 	}
 	/** Returns the maximal length of each item's label.

@@ -180,7 +180,7 @@ public class Row extends XulElement {
 	}
 
 	protected String getRealSclass() {
-		final String sclx = (String) getParent().getAttribute("Z_STRIPE");
+		final String sclx = (String) getParent().getAttribute(Attributes.STRIPE_STATE);
 		return super.getRealSclass() + (sclx != null ? " " + sclx : "");
 	}
 	

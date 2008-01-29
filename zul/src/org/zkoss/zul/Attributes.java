@@ -24,8 +24,12 @@ package org.zkoss.zul;
  * @author tomyeh
  * @since 3.0.2
  */
-/*package*/ class Attributes {
+public class Attributes {
 	/** Indicates the component being render shall generate z.skipsib.
 	 */
-	/*package*/ static final String SKIP_SIBLING = "org.zkoss.zul.SkipSibling";
+	public static final String SKIP_SIBLING = "org.zkoss.zul.SkipSibling";
+	/** It is used to check the striping state of Gird or Listbox.
+	 * @since 3.0.3
+	 */
+	public static final String STRIPE_STATE = "org.zkoss.zul.StripeState";
 }

@@ -30,6 +30,7 @@ ${z:redraw(head, null)}
 	</tbody>
 
 	<tbody id="${self.uuid}!cave">
+${zu:resetStripeClass(self)}
 	<c:forEach var="item" items="${self.items}" begin="${self.visibleBegin}" end="${self.visibleEnd}">
 ${zu:setStripeClass(item)}	
 ${z:redraw(item, null)}

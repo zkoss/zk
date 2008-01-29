@@ -34,6 +34,7 @@ ${z:redraw(head, null)}
 <c:set var="hgh" if="${!empty self.height}" value="style=\"overflow:hidden;height:${self.height}\""/>
 	<div id="${self.uuid}!body" class="listbox-body" ${hgh}>
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable">
+${zu:resetStripeClass(self)}
 	<c:forEach var="item" items="${self.items}">
 ${zu:setStripeClass(item)}	
 ${z:redraw(item, null)}
