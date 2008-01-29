@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1881557.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 29 14:06:08     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+1. Clicks textbox (to gain focus), 2. Clicks other place (to lose focus),
+and then you shall see nothing happen.
+It is wrong, if a messagebox is shown
+
+	<textbox onChange='alert("1");' constraint="no negative,no zero"/>
+</window>
