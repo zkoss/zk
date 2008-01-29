@@ -28,7 +28,7 @@ import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.ext.client.Inputable;
+import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
@@ -165,11 +165,16 @@ public class Calendar extends XulElement {
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Inputable {
-		//-- Inputable --//
-		public void setTextByClient(String value) throws WrongValueException {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements InputableX {
+		//-- InputableX --//
+		public boolean setTextByClient(String value) throws WrongValueException {
 			try {
-				_value = getDateFormat().parse(value);
+				final Date newval = getDateFormat().parse(value);
+				if (!Objects.equals(_value, newval)) {
+					_value = newval;
+					return true;
+				}
+				return false;
 			} catch (ParseException ex) {
 				throw new InternalError(value);
 			}

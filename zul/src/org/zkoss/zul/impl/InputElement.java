@@ -30,7 +30,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.ext.client.Inputable;
+import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zk.ui.ext.client.Errorable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
@@ -585,6 +585,19 @@ implements Constrainted {
 			smartUpdate("value", coerceToString(_value));
 		}
 	}
+	/** Sets the value directly.
+	 * Note: Unlike {@link #setRawValue} (nor setValue), this method
+	 * assigns the value directly without clearing error message or
+	 * synchronizing with the client.
+	 *
+	 * <p>It is usually used only the constructor.
+	 * Though it is also OK to use {@link #setRawValue} in the constructor,
+	 * this method has better performance.
+	 * @since 3.0.3
+	 */
+	protected void setValueDirectly(Object value) {
+		_value = value;
+	}
 
 	/** Returns the current content of this input is correct.
 	 * If the content is not correct, next call to the getvalue method will
@@ -702,12 +715,14 @@ implements Constrainted {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Inputable, Errorable {
-		//-- Inputable --//
-		public void setTextByClient(String value) throws WrongValueException {
+	implements InputableX, Errorable {
+		//-- InputableX --//
+		public boolean setTextByClient(String value) throws WrongValueException {
 			_txtByClient = value;
 			try {
-				setText(value);
+				final Object oldval = _value;
+				setText(value); //always since it might have func even not change
+				return oldval != _value; //test if modifed
 			} catch (WrongValueException ex) {
 				_errmsg = ex.getMessage();
 					//we have to 'remember' the error, so next call to getValue
