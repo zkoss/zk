@@ -61,10 +61,7 @@ zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
 	var hgh = cmp.style.height;
 	if (hgh && hgh != "auto") {
 		var n = $e(cmp.id + "!cave");
-		if (n) {
-			n.style.height = "";
-			zk.setOffsetHeight(n, zk.getVflexHeight(n));
-		}
+		if (n) zk.setOffsetHeight(n, zk.getVflexHeight(n));
 	}
 };
 zkWnd._embedded = function (cmp) {
