@@ -26,10 +26,12 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.lang.reflect.Method;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.WaitLock;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionFactory;
@@ -396,9 +398,10 @@ public class Configuration {
 					if (!fn.init(comp, evt))
 						return false; //ignore the event
 				} catch (AbstractMethodError ex) { //backward compatible prior to 3.0
-					fn.getClass().getMethod(
-						"init", new Class[] {Component.class, Event.class})
-					  .invoke(fn, new Object[] {comp, evt});
+					final Method m = fn.getClass().getMethod(
+						"init", new Class[] {Component.class, Event.class});
+					Fields.setAccessible(m, true);
+					m.invoke(fn, new Object[] {comp, evt});
 				}
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
@@ -716,8 +719,10 @@ public class Configuration {
 					try {
 						fn.init(sess, request);
 					} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
-						klass.getMethod("init", new Class[] {Session.class})
-						  	.invoke(fn, new Object[] {sess});
+						final Method m =
+							klass.getMethod("init", new Class[] {Session.class});
+						Fields.setAccessible(m, true);
+						m.invoke(fn, new Object[] {sess});
 					}
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
@@ -781,8 +786,10 @@ public class Configuration {
 					try {
 						fn.init(desktop, request);
 					} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
-						klass.getMethod("init", new Class[] {Desktop.class})
-						  	.invoke(fn, new Object[] {desktop});
+						final Method m =
+							klass.getMethod("init", new Class[] {Desktop.class});
+						Fields.setAccessible(m, true);
+						m.invoke(fn, new Object[] {desktop});
 					}
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
