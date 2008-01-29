@@ -834,7 +834,7 @@ public class Window extends XulElement implements IdSpace {
 		if (!visible && _mode == MODAL) {
 			leaveModal();
 			invalidate();
-		} else if (inOverlapped() || inPopup())
+		} else if ( _mode != EMBEDDED)
 			smartUpdate("z.visible", visible);
 		return super.setVisible(visible);
 	}
@@ -850,7 +850,7 @@ public class Window extends XulElement implements IdSpace {
 	}
 	protected String getRealStyle() {
 		final String style = super.getRealStyle();
-		return _mode != EMBEDDED ? "position:absolute;display:none;" + style: style;
+		return _mode != EMBEDDED ? (isVisible() ? "position:absolute;display:none;" : "position:absolute;") + style: style;
 			//If no absolute, Opera ignores left and top
 	}
 	
@@ -873,8 +873,6 @@ public class Window extends XulElement implements IdSpace {
 		final String aos = getDefaultActionOnShow() != null ? getDefaultActionOnShow() 
 				: getDesktop().getWebApp().getConfiguration()
 					.getPreference("org.zkoss.zul.Window.defaultActionOnShow", null);
-		if (inOverlapped() || inPopup())
-			HTMLs.appendAttribute(sb, "z.visible", isVisible());
 		
 		HTMLs.appendAttribute(sb, "z.aos", aos != null && aos.length() == 0 ? 
 				"z_none" : aos);
@@ -887,6 +885,7 @@ public class Window extends XulElement implements IdSpace {
 			if (_pos != null)
 				HTMLs.appendAttribute(sb, "z.pos", _pos);
 			HTMLs.appendAttribute(sb, "z.mode", getMode());
+			HTMLs.appendAttribute(sb, "z.visible", isVisible());
 		}
 
 		HTMLs.appendAttribute(sb, "z.ctkeys", _ctkeys);

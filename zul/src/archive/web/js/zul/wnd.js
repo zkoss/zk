@@ -24,6 +24,10 @@ zkWnd._clean2 = {}; //Map(id, mode): to be cleanup the modal effect
 zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
 zkWnd.init = function (cmp) {
+	if (getZKAttr(cmp, "visible") == "true") {
+		zk._showExtr(cmp);
+		cmp.style.display = "";
+	}
 	zkWnd._fixHgh(cmp);
 	cmp.fnResize = function () {zkWnd._fixHgh(cmp)};
 	zk.addOnResize(cmp.fnResize);
