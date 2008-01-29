@@ -457,7 +457,6 @@ zk.toStyleOffset = function (el, x, y) {
 	var ofs1 = Position.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
 	ofs1 = [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
-zk.debug(x + ", ofs1 : "+ ofs1[0] + ", ofs2 : "+ ofs2[0]);
 	el.style.left = oldx;
 	el.style.top = oldy;
 	return ofs1;
