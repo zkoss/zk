@@ -849,7 +849,7 @@ public class Window extends XulElement implements IdSpace {
 	}
 	protected String getRealStyle() {
 		final String style = super.getRealStyle();
-		return _mode != EMBEDDED ? "position:absolute;" + style: style;
+		return _mode != EMBEDDED ? "position:absolute;display:none;" + style: style;
 			//If no absolute, Opera ignores left and top
 	}
 	public String getOuterAttrs() {
