@@ -372,10 +372,8 @@ zkGrbox.init = zkGrbox._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (n) {
 		var hgh = cmp.style.height;
-		if (hgh && hgh != "auto") {
-			n.style.height = "";
+		if (hgh && hgh != "auto")
 			zk.setOffsetHeight(n, zk.getVflexHeight(n.parentNode));
-		}
 
 		//if no border-bottom, hide the shadow
 		var sdw = $e(cmp.id + "!sdw");

@@ -318,7 +318,7 @@ public class Tabbox extends XulElement {
 		if (isVertical())
 			HTMLs.appendAttribute(sb, "z.orient", "v");
 		if (_tabs != null && !inAccordionMold())
-			HTMLs.appendAttribute(sb, "tabs", _tabs.getUuid());
+			HTMLs.appendAttribute(sb, "z.tabs", _tabs.getUuid());
 		return sb.toString();
 	}
 

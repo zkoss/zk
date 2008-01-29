@@ -25,11 +25,10 @@ zkTabbox.setAttr = function (cmp, name, value) {
 	case "style":
 	case "style.width":
 	case "style.height":
+		zkau.setAttr(cmp, name, value);
 		var uuid = getZKAttr(cmp, "tabs");
-		if (uuid) {
-			zkau.setAttr(cmp, name, value);
+		if (uuid)
 			zkTabs.fixWidth(uuid);
-		}
 		return true;
 	}
 	return false;
@@ -379,13 +378,6 @@ zkTabs._fixHgh = function (tabbox, tabs) {
 			;
 
 		if (panels) {
-			//clean the height (to force recalc)
-			for (var n = panels.firstChild; n; n = n.nextSibling)
-				if (n.id && $visible(n)) {
-					n.style.height = "";
-					break;
-				}
-
 			hgh = zk.getVflexHeight(panels);
 
 			for (var n = panels.firstChild; n; n = n.nextSibling)
