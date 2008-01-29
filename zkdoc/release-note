@@ -20,6 +20,8 @@ ZK 3.0.3 Freshly
   1879506: Tabbox is displayed incorrectly if height is specified
   1880950: Half of window is shown after a higher window is hidden
   1881042: ZK shall not depend on commons-fileupload
+  1881267: modal window containing grid/listbox weirdness (IE only)
+  1881550: Error Stripe with Grid and Listbox in Modal Mode
 
 	--------
 ZK 3.0.2
