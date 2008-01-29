@@ -1382,7 +1382,7 @@ zkau.sendOnSize = function (cmp, keys) {
 		data: [cmp.style.width, cmp.style.height, keys]},
 		zkau.asapTimeout(cmp, "onSize"));
 	zk.onResize(0, cmp);
-	if (zk.ie && !zk.ie7) setTimeout(function () {zk.onResize(0, cmp);}, 800);
+	if (zk.ie6Only) setTimeout(function () {zk.onResize(0, cmp);}, 800);
 	// If the vflex component in the window component, the offsetHeight of the specific component is wrong at the same time on IE6.
 	// Thus, we have to invoke the zk.onResize function again.
 };

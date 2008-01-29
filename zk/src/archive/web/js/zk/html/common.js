@@ -402,6 +402,15 @@ zk.position = function (el, ref, type) {
  */
 zk.getVflexHeight = function (el) {
 	hgh = el.parentNode.clientHeight;
+	if (zk.ie6Only) { //IE6's clientHeight is wrong
+		var ref = el.parentNode;
+		var h = ref.style.height;
+		if (h && h.endsWith("px")) {
+			h = zk.revisedSize(ref, $int(h), true);
+			if (h && h < hgh) hgh = h;
+		}
+	}
+
 	for (var p = el, q; q = p.previousSibling;) {
 		if (q.offsetHeight && $visible(q)) hgh -= q.offsetHeight; //may undefined
 		p = q;
@@ -981,7 +990,7 @@ zk.rename = function (url, name) {
 if (!zk._actg1) {
 	zk._actg1 = ["IFRAME"/*,"APPLET"*/]; //comment out APPLET for better performance
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
-	if (zk.ie && !zk.ie7) { //ie7 solves the z-order issue of SELECT
+	if (zk.ie6Only) { //ie7 solves the z-order issue of SELECT
 		zk._actg1.unshift("SELECT"); //change visibility is required
 	} else
 		zk._actg2.unshift("SELECT");
