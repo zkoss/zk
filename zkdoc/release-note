@@ -22,6 +22,7 @@ ZK 3.0.3 Freshly
   1881042: ZK shall not depend on commons-fileupload
   1881267: modal window containing grid/listbox weirdness (IE only)
   1881550: Error Stripe with Grid and Listbox in Modal Mode
+  1881557: onChange shouldn't be triggered when user click in and out
 
 	--------
 ZK 3.0.2
