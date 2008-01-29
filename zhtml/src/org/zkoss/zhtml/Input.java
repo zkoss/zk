@@ -20,8 +20,10 @@ package org.zkoss.zhtml;
 
 import java.lang.Object; //since we have org.zkoss.zhtml.Object
 
+import org.zkoss.lang.Objects;
+
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.Inputable;
+import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
@@ -36,6 +38,7 @@ public class Input extends AbstractTag {
 	}
 	protected Input(String tagnm) {
 		super(tagnm);
+		setValue("");
 	}
 
 	/** Returns the value of this input.
@@ -51,10 +54,14 @@ public class Input extends AbstractTag {
 
 	//-- super --//
 	public Object newExtraCtrl() {
-		return new Inputable() {
-			//-- Inputable --//
-			public void setTextByClient(String value) throws WrongValueException {
-				setValue(value);
+		return new InputableX() {
+			//-- InputableX --//
+			public boolean setTextByClient(String value) throws WrongValueException {
+				if (!Objects.equals(value, getValue())) {
+					setValue(value);
+					return true;
+				}
+				return false;
 			}
 		};
 	}
