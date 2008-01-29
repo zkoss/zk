@@ -55,6 +55,7 @@ public class ListboxPaging implements ComponentRenderer {
 		final int from = self.getVisibleBegin(), to = self.getVisibleEnd();
 		if (from < self.getItems().size()) {
 			ListIterator it = self.getItems().listIterator(from);
+			ZulFns.resetStripeClass(self);
 			for (int cnt = to - from + 1; it.hasNext() && --cnt >= 0;) {
 				final Component child = (Component) it.next();
 				ZulFns.setStripeClass(child);

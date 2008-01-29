@@ -55,6 +55,7 @@ public class ListboxDefault implements ComponentRenderer {
 		
 		wh.write("><table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"")
 			.write(uuid).writeln("!cave\" class=\"listbox-btable\">");
+		ZulFns.resetStripeClass(self);
 		for (Iterator it = self.getItems().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();
 			ZulFns.setStripeClass(child);
