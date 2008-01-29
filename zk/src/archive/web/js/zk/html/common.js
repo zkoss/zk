@@ -319,8 +319,13 @@ zk.center = function (el, flags) {
 
 	if (x < left) x = left;
 	if (y < top) y = top;
-
-	var ofs = zk.toStyleOffset(el, x, y);
+	
+	// Bug #1868454 : we have to reset the style of display for IE. 
+	var dis = el.style.display;
+	if (zk.ie && dis) el.style.display = "";
+	var ofs = zk.toStyleOffset(el, x, y);	
+	if (zk.ie && dis) el.style.display = dis;
+	
 	if (!skipx) el.style.left = ofs[0] + "px";
 	if (!skipy) el.style.top =  ofs[1] + "px";
 };
@@ -452,7 +457,7 @@ zk.toStyleOffset = function (el, x, y) {
 	var ofs1 = Position.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
 	ofs1 = [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
-
+zk.debug(x + ", ofs1 : "+ ofs1[0] + ", ofs2 : "+ ofs2[0]);
 	el.style.left = oldx;
 	el.style.top = oldy;
 	return ofs1;
