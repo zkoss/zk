@@ -17,7 +17,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+
 <window title="listbox demo" border="normal">
+[ 1836257 ] A wrong stripe when listitem is invisible
+
 		<listbox width="250px">
 			<listhead sizable="true">
 				<listheader label="name" sort="auto"/>

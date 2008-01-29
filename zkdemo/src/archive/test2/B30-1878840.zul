@@ -26,12 +26,12 @@ List items = new org.zkoss.zkdemo.userguide.BigList(100);
 ListModel strset = new ListModelList(items);
 ListitemRenderer render = new ListitemRenderer() {
 public void render(Listitem item, Object data) {
-new Listcell("col - " + item.getIndex()).setParent(item);
-new Listcell("col - " + item.getIndex()).setParent(item);
-new Listcell("col - " + item.getIndex()).setParent(item);
-new Listcell("col - " + item.getIndex()).setParent(item);
-new Listcell("col - " + item.getIndex()).setParent(item);
-new Listcell("col - " + item.getIndex()).setParent(item);
+new Listcell("col - " + data).setParent(item);
+new Listcell("col - " + data).setParent(item);
+new Listcell("col - " + data).setParent(item);
+new Listcell("col - " + data).setParent(item);
+new Listcell("col - " + data).setParent(item);
+new Listcell("col - " + data).setParent(item);
 }
 };
 </zscript>

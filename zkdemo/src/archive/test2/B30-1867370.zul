@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
+[ 1867370 ] If column hid, each cell should be hidden at paging mold
+
 	<grid id="grid" mold="paging" pageSize="2">
 		<columns sizable="true">
 			<column label="Type" />

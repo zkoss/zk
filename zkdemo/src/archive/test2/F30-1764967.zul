@@ -50,7 +50,12 @@ public class Order {
     }   
     selected = null;
   </zscript>
-  <n:h5>Combobox to support List binding</n:h5>
+  <n:h2>[1764967] Combobox to support List binding</n:h2>
+	<n:ol>
+		<n:li>Combobox should has multiple entries.</n:li>
+		<n:li>Select an entry from combobox, and databinding Load-on-Save mechanism should triggered.</n:li>
+	</n:ol>
+
   <combobox model="@{orders}" selectedItem="@{selected}">
        <comboitem self="@{each=order}" label="@{order.orderName}" value="@{order.orderNumber}"/>
    </combobox>
