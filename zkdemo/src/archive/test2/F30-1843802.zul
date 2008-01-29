@@ -23,7 +23,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<n:li>You should not select the disabled item.</n:li>
 	</n:ol>
         <button label="show selected" onClick='alert("Selected index:"+cb1.getSelectedIndex())'/>
-	<combobox id="cb1">
+	<combobox id="cb1" constraint="strict">
 		<comboitem label="Simple and Rich" disabled="true"/>
 		<comboitem label="Cool!"/>
 		<comboitem label="Thumbs Up!" disabled="true"/>
