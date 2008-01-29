@@ -242,7 +242,11 @@ zk.revisedSize = function (el, size, isHgh) {
 zk.revisedOffset = function (el, ofs) {
 	if(!ofs) {
 		if (el.getBoundingClientRect){ // IE
+			var visible = zk.isVisible(el);
+			var dis = el.style.display;
+			if (!visible) el.style.display = "";
 			var b = el.getBoundingClientRect();
+			if (!visible) el.style.display = dis;
 			return [b.left + zk.innerX() - 3 , b.top + zk.innerY() - 3];
 		}
 		ofs = Position.cumulativeOffset(el);
