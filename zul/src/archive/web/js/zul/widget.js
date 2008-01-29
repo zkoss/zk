@@ -471,7 +471,7 @@ zkCapt._parentGrbox = function (p) {
 // Image//
 zkImg = {};
 
-if (zk.ie && !zk.ie7) {
+if (zk.ie6Only) {
 	//Request 1522329: PNG with alpha color in IE
 	//To simplify the implementation, Image.java invalidates instead of smartUpdate
 	zkImg.init = function (cmp) {
@@ -532,7 +532,7 @@ zkMap.init = function (cmp) {
 		null, zk.safari ? "width:0;height:0;display:inline": "display:none");
 		//creates a hidden frame. However, in safari, we cannot use invisible frame
 		//otherwise, safari will open a new window
-	if (zk.ie && !zk.ie7) {
+	if (zk.ie6Only) {
 		var img = $real(cmp);
 		return zkImg._fixpng(img);
 	}

@@ -287,7 +287,7 @@ zk.Grid.prototype = {
 			return true;
 		case "style.height":
 			this.element.style.height = val;
-			if (zk.ie && !zk.ie7 && this.body) this.body.style.height = val;
+			if (zk.ie6Only && this.body) this.body.style.height = val;
 				// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
 			this.setHgh(val);
 			if (!this.paging) this.init();
