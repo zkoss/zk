@@ -2097,8 +2097,6 @@ if (!window.opera || element.tagName == 'BODY' || (tagName != "TR" && tagName !=
   },
 
   cumulativeOffset: function(element) {
-  	var ele = element, visible = zk.isVisible(ele), dis = ele.style.display;
-	if (!visible) ele.style.display = "";
     var valueT = 0, valueL = 0, operaBug = false, el = element.parentNode;
 //Jumper Chen, Poitx: fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute.	
 	if (zk.gecko) {
@@ -2134,7 +2132,6 @@ if (Element.getStyle(element, "position") == 'fixed') {
       element = zk.gecko && element != document.body ? Position.offsetParent(element): element.offsetParent;
 }
     } while (element);
-	if (!visible) ele.style.display = dis;
     return [valueL, valueT];
   },
 
