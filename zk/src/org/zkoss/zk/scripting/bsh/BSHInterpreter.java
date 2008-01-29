@@ -32,6 +32,7 @@ import bsh.EvalError;
 import bsh.UtilEvalError;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.Function;
 
 import org.zkoss.zk.ui.Page;
@@ -434,7 +435,7 @@ implements SerializableAware, HierachicalAware {
 				try {
 					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
 					acs = f.isAccessible();
-					f.setAccessible(true);
+					Fields.setAccessible(f, true);
 					final Object old = f.get(mtds[j]);
 					try {
 						f.set(mtds[j], null);				
@@ -447,7 +448,7 @@ implements SerializableAware, HierachicalAware {
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 				} finally {
-					if (f != null) f.setAccessible(acs);
+					if (f != null) Fields.setAccessible(f, acs);
 				}
 			}
 		}
@@ -459,7 +460,7 @@ implements SerializableAware, HierachicalAware {
 		try {
 			f = Classes.getAnyField(NameSpace.class, "importedClasses");
 			acs = f.isAccessible();
-			f.setAccessible(true);
+			Fields.setAccessible(f, true);
 			final Map clses = (Map)f.get(_bshns);
 			if (clses != null)
 				for (Iterator it = clses.values().iterator(); it.hasNext();) {
@@ -472,7 +473,7 @@ implements SerializableAware, HierachicalAware {
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (f != null) f.setAccessible(acs);
+			if (f != null) Fields.setAccessible(f, acs);
 		}
 		s.writeObject(null); //denote end-of-cls
 
@@ -482,7 +483,7 @@ implements SerializableAware, HierachicalAware {
 		try {
 			f = Classes.getAnyField(NameSpace.class, "importedPackages");
 			acs = f.isAccessible();
-			f.setAccessible(true);
+			Fields.setAccessible(f, true);
 			final Collection pkgs = (Collection)f.get(_bshns);
 			if (pkgs != null)
 				for (Iterator it = pkgs.iterator(); it.hasNext();) {
@@ -496,7 +497,7 @@ implements SerializableAware, HierachicalAware {
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (f != null) f.setAccessible(acs);
+			if (f != null) Fields.setAccessible(f, acs);
 		}
 		s.writeObject(null); //denote end-of-cls
 	}
@@ -520,12 +521,12 @@ implements SerializableAware, HierachicalAware {
 				try {
 					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
 					acs = f.isAccessible();
-					f.setAccessible(true);
+					Fields.setAccessible(f, true);
 					f.set(mtd, _bshns);				
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 				} finally {
-					if (f != null) f.setAccessible(acs);
+					if (f != null) Fields.setAccessible(f, acs);
 				}
 
 				_bshns.setMethod(mtd.getName(), mtd);

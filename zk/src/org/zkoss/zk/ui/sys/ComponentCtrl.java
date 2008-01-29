@@ -173,7 +173,7 @@ public interface ComponentCtrl {
 	 * implements one or several interfaces in the org.zkoss.zk.ui.ext.render
 	 * and org.zkoss.zk.ui.ext.client packages.
 	 * For example, {@link org.zkoss.zk.ui.ext.render.Cropper}
-	 * and {@link org.zkoss.zk.ui.ext.client.Inputable}.
+	 * and {@link org.zkoss.zk.ui.ext.client.InputableX}.
 	 */
 	public Object getExtraCtrl();
 

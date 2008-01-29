@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.ext.client.Inputable;
+import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
@@ -55,9 +56,14 @@ public class InputCommand extends Command {
 		final String newval = data[0];
 		if (getId().equals(Events.ON_CHANGE)) {
 			final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
-			if (xc instanceof Inputable)
+			if (xc instanceof InputableX) {
+				if (!((InputableX)xc).setTextByClient(newval))
+					return; //Bug 1881557: don't post event
+			} else if (xc instanceof Inputable) {
 				((Inputable)xc).setTextByClient(newval);
+			}
 		}
+
 		if (data.length == 1)
 			Events.postEvent(new InputEvent(getId(), comp, newval,	false, 0));
 		else 

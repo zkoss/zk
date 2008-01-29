@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.Component;
  * Represents an event cause by user's input something at the client.
  * 
  * @author tomyeh
+ * @see org.zkoss.zk.ui.ext.client.InputableX
  * @see org.zkoss.zk.ui.ext.client.Inputable
  */
 public class InputEvent extends Event {
