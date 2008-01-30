@@ -5,7 +5,6 @@ ZK 3.0.3 Freshly
   1878785: Able to retrieve URL that a component is declared
   1879464: Use div instead of table as the outer tag of groupbox 3d
   1879495: Use div instead of table to implement tabpanel
-  1881573: Window's hight can be reduced (IE6 only)
 
 * Bugs
   1878852: Toolbarbutton href and onClick
@@ -26,6 +25,7 @@ ZK 3.0.3 Freshly
   1881190: Modal window shows 2 or 3 times if doModal takes a long time
   1882320: setSelectionRange() won't work
   1882323: Left & Right key doesn't work in intbox-Win Safari only
+  1881573: Window's hight can be reduced (IE6 only)
 
 	--------
 ZK 3.0.2
