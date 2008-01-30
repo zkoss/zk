@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>setSelectionRange won't work at following case due to the smartupdate</n:p>
+	<n:p>setSelectionRange won't work at following case due to the smartupdate. If you see the text is selected from 1 to 2, it is correct.</n:p>
 	<window id="win">
 		<zscript>
 		Textbox textboxTest = new Textbox();
