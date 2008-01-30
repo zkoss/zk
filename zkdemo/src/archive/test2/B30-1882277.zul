@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1882277.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 30 12:11:43     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<borderlayout height="500px">
+<north size="50%" border="true">
+<borderlayout>
+<west size="25%" border="true" flex="true">
+[Safari only]
+Click "Tab 1" and then "Tab 2", and then the scrollbar disappeared
+(which is incorrect).
+<tabbox width="400px" mold="accordion">
+	<tabs>
+		<tab label="Tab 1"/>
+		<tab label="Tab 2" selected="true"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel height="100px" style="background:yellow">This
+		is panel 1</tabpanel>
+		<tabpanel height="100px"
+		style="background:blue;overflow:auto">This is panel 2
+		<div height="200px">---</div>The second panel
+		</tabpanel>
+	</tabpanels>
+</tabbox>
+
+</west>
+<center border="none" flex="true"/>
+<east size="50%" border="true" flex="true"/>
+</borderlayout>
+</north>
+<center border="true"/>
+</borderlayout>

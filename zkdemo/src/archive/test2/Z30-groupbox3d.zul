@@ -62,7 +62,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<tabbox width="400px" mold="accordion">
 		<tabs>
 			<tab label="Tab 1"/>
-			<tab label="Tab 2"/>
+			<tab label="Tab 2" selected="true"/>
 		</tabs>
 		<tabpanels>
 			<tabpanel height="100px" style="background:yellow">This is panel 1</tabpanel>
