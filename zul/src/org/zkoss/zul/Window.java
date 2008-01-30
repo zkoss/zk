@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
@@ -850,8 +851,12 @@ public class Window extends XulElement implements IdSpace {
 	}
 	protected String getRealStyle() {
 		final String style = super.getRealStyle();
-		return _mode != EMBEDDED ? (isVisible() ? "position:absolute;display:none;" : "position:absolute;") + style: style;
+		return _mode != EMBEDDED ? 
+			isVisible() ? "position:absolute;display:none;" : "position:absolute;" + style: style;
 			//If no absolute, Opera ignores left and top
+			//
+			//If not embedded we always generate display:none to have
+			//better visual effect (the client will turn it on in zkWnd.init)
 	}
 	
 	public String getOuterAttrs() {
@@ -925,7 +930,7 @@ public class Window extends XulElement implements IdSpace {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable {
+	implements MultiBranch, Openable, Floating {
 		//-- MultiBranch --//
 		public boolean inDifferentBranch(Component child) {
 			return child instanceof Caption; //in different branch
@@ -933,6 +938,10 @@ public class Window extends XulElement implements IdSpace {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			setVisible(open);
+		}
+		//Floating//
+		public boolean isFloating() {
+			return _mode != EMBEDDED;
 		}
 	}
 }
