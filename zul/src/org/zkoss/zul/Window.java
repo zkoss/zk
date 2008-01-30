@@ -878,9 +878,8 @@ public class Window extends XulElement implements IdSpace {
 		final String aos = getDefaultActionOnShow() != null ? getDefaultActionOnShow() 
 				: getDesktop().getWebApp().getConfiguration()
 					.getPreference("org.zkoss.zul.Window.defaultActionOnShow", null);
-		
-		HTMLs.appendAttribute(sb, "z.aos", aos != null && aos.length() == 0 ? 
-				"z_none" : aos);
+		if (aos != null)
+			HTMLs.appendAttribute(sb, "z.aos", aos.length() == 0 ?  "z_none" : aos);
 		if (_closable)
 			sb.append(" z.closable=\"true\"");
 		if (_sizable)
