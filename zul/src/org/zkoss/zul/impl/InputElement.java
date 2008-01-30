@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zk.ui.ext.client.Errorable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
@@ -666,7 +667,7 @@ implements Constrainted {
 	 */
 	public void setSelectionRange(int start, int end) {
 		if (start <= end)
-			smartUpdate("z.sel", start + "," + end);
+			response("setAttr", new AuSetAttribute(this, "z.sel", start + "," + end));
 	}
 
 	/** Checks whether user entered a wrong value (and not correct it yet).
