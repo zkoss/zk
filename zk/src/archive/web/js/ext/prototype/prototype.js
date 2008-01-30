@@ -1976,7 +1976,8 @@ Object.extend(Event, {
   },
   isSpecialKey: function(evt) {
     var k = evt.shiftKey ? evt.keyCode : this.keyCode(evt);
-    return (evt.type == 'keypress' && evt.ctrlKey) || k == 9 || k == 13  || k == 40 || k == 27 ||
+    return (evt.type == 'keypress' && evt.ctrlKey) || k == 0 || k == 9 || 
+	k == 13 || k == 40 || k == 27 ||
     (k == 16) || (k == 17) ||
     (k >= 18 && k <= 20) ||
     (k >= 33 && k <= 35) ||
