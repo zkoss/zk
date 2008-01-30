@@ -24,7 +24,6 @@ ZK 3.0.3 Freshly
   1881550: Error Stripe with Grid and Listbox in Modal Mode
   1881557: onChange shouldn't be triggered when user click in and out
   1881190: Modal window shows 2 or 3 times if doModal takes a long time
-  1882325: [Opera] Close window will move to left side first
   1882320: setSelectionRange() won't work
   1882323: Left & Right key doesn't work in intbox-Win Safari only
 
