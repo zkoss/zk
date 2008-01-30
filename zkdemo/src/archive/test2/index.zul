@@ -17,7 +17,19 @@ String shortHeight="520px";
 	<!-- ******************** Ctrl Panel ******************** -->
 			<window id="w1">
 				<groupbox mold="3d" width="352px" >
-					<caption label="ZK Version:${desktop.webApp.version}">
+					<caption label="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}"/>
+					<vbox>
+						<vbox>
+							File Name Filter:<textbox id="fnf" value="Z30"/>
+							<checkbox id="reg" label="Regular Expression"/>
+							<checkbox id="newb" label="Open in new Browser">
+								<attribute name="onCheck"><![CDATA[
+								if (lb.getSelectedItem() != null && self.checked) {
+									Clients.evalJavaScript("newWindow(\""+main.getFileName(lb.getSelectedIndex())+"\")");
+								}
+								]]></attribute>
+							</checkbox>
+					<hbox>
 						<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();w2.setWidth("90%")'/>
 						<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();w2.setWidth("800px")'/>
 						<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
@@ -39,22 +51,7 @@ String shortHeight="520px";
 								}
 							]]></attribute>
 						</button>
-					</caption>
-					<vbox>
-						<vbox>
-							File Name Filter:<textbox id="fnf" value="Z30"/>
-							<hbox>
-								<checkbox id="reg"/>Regular Expression
-							</hbox>
-							<hbox>
-								<checkbox id="newb">
-									<attribute name="onCheck"><![CDATA[
-									if (lb.getSelectedItem() != null && self.checked) {
-										Clients.evalJavaScript("newWindow(\""+main.getFileName(lb.getSelectedIndex())+"\")");
-									}
-									]]></attribute>
-									</checkbox>Open in new Browser
-							</hbox>
+					</hbox>
 						</vbox>
 						
 						<listbox id="lb" mold="paging" pageSize="20" width="330px">
