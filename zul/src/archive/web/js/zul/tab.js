@@ -115,13 +115,14 @@ zkTab.selTab = function (tab, notify) {
 
 	var old = zkTab._getSelTab(tab);
 	if (old != tab) {
-		if (old) zkTab._setTabSel(old, false);
-		zkTab._setTabSel(tab, true, notify);
+		if (old) zkTab._setTabSel(old, false, false, notify);
+		zkTab._setTabSel(tab, true, notify, notify);
+			//!notify is sent from the server, so no animation
 	}
 };
 
 /** Selects o unselect the specified tab. */
-zkTab._setTabSel = function (tab, toSel, notify) {
+zkTab._setTabSel = function (tab, toSel, notify, animation) {
 	if ((getZKAttr(tab, "sel") == "true") == toSel)
 		return; //nothing changed
 
@@ -141,11 +142,11 @@ zkTab._setTabSel = function (tab, toSel, notify) {
 	var accd = tabbox && zk.isAccord(tabbox);
 	var panel = $e(getZKAttr(tab, "panel"));
 	if (panel)
-		if (accd) {
+		if (accd && animation) {
 			if (toSel) anima.slideDown($real(panel));
 			else anima.slideUp($real(panel));
 		} else
-			zk.show(panel, toSel);
+			zk.show(accd ? $real(panel): panel, toSel);
 
 	if (!accd) {
 		var tabs = $parentByType(tab, "Tabs");
