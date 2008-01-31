@@ -182,7 +182,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	}
 
 	/**
-	 * Returns the output file type
+	 * Returns the output file type.
 	 * @since 3.0.3
 	 */
 	public String getType() {
@@ -190,7 +190,9 @@ public class Jasperreport extends HtmlBasedComponent {
 	}
 
 	/**
-	 * Sets the output file type
+	 * Sets the output file type. 
+	 * Allowed type: pdf, xml, html, rtf, xls, jxl, csv, odt 
+	 * Both HTML and Excel work now
 	 * 
 	 * @param type type of output file. If type is null, assign it a default value "pdf".
 	 * @since 3.0.3
