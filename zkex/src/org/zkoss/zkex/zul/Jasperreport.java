@@ -65,7 +65,7 @@ import org.zkoss.zul.impl.Utils;
  * is serializable.
  * 
  * @author gracelin
- * @since 3.0.3
+ * @since 3.0.2
  */
 public class Jasperreport extends HtmlBasedComponent {
 	private static final Log log = Log.lookup(Jasperreport.class);
@@ -183,6 +183,7 @@ public class Jasperreport extends HtmlBasedComponent {
 
 	/**
 	 * Returns the output file type
+	 * @since 3.0.3
 	 */
 	public String getType() {
 		return _type;
@@ -192,6 +193,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	 * Sets the output file type
 	 * 
 	 * @param type type of output file. If type is null, assign it a default value "pdf".
+	 * @since 3.0.3
 	 */
 	public void setType(String type) {
 		if (type == null) type = "pdf";
