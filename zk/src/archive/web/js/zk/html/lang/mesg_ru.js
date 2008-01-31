@@ -24,4 +24,4 @@ mesg.KBYTES="KB";
 mesg.CANCEL="Отмена";
 mesg.FAILED_TO_LOAD="Не удалось загрузить ";
 mesg.FAILED_TO_LOAD_DETAIL="Возможно, проблема с подключением к сети. Перезагрузите страницу и попробуйте снова.";
-mesg.CAUSE="Причина: "
+mesg.CAUSE="Причина: ";
