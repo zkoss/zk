@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
@@ -176,6 +177,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_def = lookupDefinition(exec, getClass());
 			if (_def != null)
 				addSharedAnnotationMap(_def.getAnnotationMap());
+			else if (this instanceof Macro)
+				throw new DefinitionNotFoundException(
+					"Component definition not found for the macro "+this.getClass()
+					+". Current page definition: "
+					+(exec != null ? ""+((ExecutionCtrl)exec).getCurrentPageDefinition(): "n/a")
+					+". Current page: "
+					+(exec != null ? ""+((ExecutionCtrl)exec).getCurrentPage(): "n/a"));
 			else
 				_def = ComponentsCtrl.DUMMY;
 		}

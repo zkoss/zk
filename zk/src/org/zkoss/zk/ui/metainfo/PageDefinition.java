@@ -733,6 +733,8 @@ public class PageDefinition extends NodeInfo {
 
 	//Object//
 	public String toString() {
-		return "[PageDefinition:"+(_id != null ? _id: _title)+']';
+		return "[PageDefinition: "
+			+(_id != null ? _id: _title != null ? _title: ""+System.identityHashCode(this))
+			+", path="+_path+']';
 	}
 }

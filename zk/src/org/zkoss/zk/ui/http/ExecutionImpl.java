@@ -316,6 +316,9 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public PageDefinition getPageDefinition(String uri) {
+		if (uri == null || uri.length() == 0)
+			throw new IllegalArgumentException("uri not specified: "+uri);
+
 		//Note: we have to go thru UiFactory (so user can override it)
 		uri = toAbsoluteURI(uri, false);
 		final PageDefinition pagedef = ((WebAppCtrl)getDesktop().getWebApp()).
