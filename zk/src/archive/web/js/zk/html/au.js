@@ -1989,7 +1989,7 @@ zkau.cmd1 = {
 
 			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
 			else alert(dt1);
-		} else {
+		} else if (!uuid) {
 			alert(dt1);
 		}
 	},
