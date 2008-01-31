@@ -190,7 +190,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#MVEL
 	cp dist/lib/ext/ognl.jar /tmp/zk/$binnm/dist/lib/ext
 		#OGNL
-	cp dist/lib/ext/jasperreports.jar dist/lib/ext/itext.jar dist/lib/ext/jxl.jar dist/lib/ext/commons-collections.jar dist/lib/ext/commons-logging.jar /tmp/zk/$binnm/dist/lib/ext
+	cp dist/lib/ext/jasperreports.jar dist/lib/ext/itext.jar dist/lib/ext/jxl.jar dist/lib/ext/poi.jar dist/lib/ext/commons-collections.jar dist/lib/ext/commons-logging.jar /tmp/zk/$binnm/dist/lib/ext
 		#JasperReport
 
 	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zk/$binnm/dist/lib/
@@ -270,7 +270,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#Ouput ${stdnm}
 		cd $binnm/dist/lib/ext
 		rm -rf jcommon.jar jfreechart.jar Filters.jar
-		rm -rf jasperreports.jar itext.jar jxl.jar commons-collections.jar commons-logging.jar
+		rm -rf jasperreports.jar itext.jar jxl.jar poi.jar commons-collections.jar commons-logging.jar
 
 		cd ..
 		rm zml.jar
