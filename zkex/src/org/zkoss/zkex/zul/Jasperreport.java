@@ -390,7 +390,7 @@ public class Jasperreport extends HtmlBasedComponent {
 				try {
 					is.close();
 				} catch (IOException e) {
-					log.warning("Error ignore", e);
+					log.warningBriefly("Ignored: unable to write", e);
 				}
 			}
 		}
