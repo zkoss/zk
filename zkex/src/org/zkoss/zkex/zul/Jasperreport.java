@@ -198,9 +198,9 @@ public class Jasperreport extends HtmlBasedComponent {
 	 * <dt>rtf</dt>
 	 * <dd>The RTF format (Rich Text Format).</dd>
 	 * <dt>xls</dt>
-	 * <dd>The Microsoft Excel format generated with <a href="http://jexcelapi.sourceforge.net/">JExcelApi</a>.</dd>
-	 * <dt>jxl</dt>
 	 * <dd>The Microsoft Excel format generated with <a href="http://poi.apache.org">Apache POI</a>.</dd>
+	 * <dt>jxl</dt>
+	 * <dd>The Microsoft Excel format generated with <a href="http://jexcelapi.sourceforge.net/">JExcelApi</a>.</dd>
 	 * <dt>csv</dt>
 	 * <dd>The CSV format (Comma-Separated Values)</dd>
 	 * <dt>odt</dt>
