@@ -191,8 +191,21 @@ public class Jasperreport extends HtmlBasedComponent {
 
 	/**
 	 * Sets the output file type. 
-	 * Allowed type: pdf, xml, html, rtf, xls, jxl, csv, odt 
-	 * Both HTML and Excel work now
+	 * Allowed type: pdf, xml, html, rtf, xls, jxl, csv and odt.
+	 * <dl>
+	 * <dt>pdf</dt>
+	 * <dd>The PDF format.</dd>
+	 * <dt>rtf</dt>
+	 * <dd>The RTF format (Rich Text Format).</dd>
+	 * <dt>xls</dt>
+	 * <dd>The Microsoft Excel format generated with <a href="http://jexcelapi.sourceforge.net/">JExcelApi</a>.</dd>
+	 * <dt>jxl</dt>
+	 * <dd>The Microsoft Excel format generated with <a href="http://poi.apache.org">Apache POI</a>.</dd>
+	 * <dt>csv</dt>
+	 * <dd>The CSV format (Comma-Separated Values)</dd>
+	 * <dt>odt</dt>
+	 * <dd>The OpenOffice Writer format</dd>
+	 * </dl>
 	 * 
 	 * @param type type of output file. If type is null, assign it a default value "pdf".
 	 * @since 3.0.3
