@@ -210,15 +210,14 @@ public class Jasperreport extends HtmlBasedComponent {
 			int indexOfImg = pathInfo.lastIndexOf(IMAGE_DIR);
 
 			// path has IMAGE_DIR, it may be a image.
-			if (indexOfImg > 0) {
+			if (indexOfImg >= 0) {
 				String imageName = pathInfo.substring(indexOfImg
 						+ IMAGE_DIR.length());
 				
 				// response file path has ".", it's not a image file
-				if (imageName.indexOf(".") > -1) {
-					return doReport();
+				if (imageName.indexOf(".") < 0) {
+					return getImage(imageName);
 				}
-				return getImage(imageName);
 			}
 			
 			return doReport();
@@ -261,7 +260,7 @@ public class Jasperreport extends HtmlBasedComponent {
 			if (_datasource == null)
 				_datasource = new JREmptyDataSource();
 			if (_type == null)
-				_type = new String("pdf");
+				_type = "pdf";
 
 			// fill the report
 			JasperPrint jasperPrint = JasperFillManager.fillReport(is,
@@ -391,7 +390,7 @@ public class Jasperreport extends HtmlBasedComponent {
 				try {
 					is.close();
 				} catch (IOException e) {
-					log.error(e);
+					log.warning("Error ignore", e);
 				}
 			}
 		}
