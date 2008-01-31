@@ -26,6 +26,7 @@ ZK 3.0.3 Freshly
   1882320: setSelectionRange() won't work
   1882323: Left & Right key doesn't work in intbox-Win Safari only
   1881573: Window's hight can be reduced (IE6 only)
+  1882802: Disabled components after being enabled look like disabled
 
 	--------
 ZK 3.0.2
