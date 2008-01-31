@@ -7,6 +7,7 @@ ZK 3.0.3 Freshly
   1878785: Able to retrieve URL that a component is declared
   1879464: Use div instead of table as the outer tag of groupbox 3d
   1879495: Use div instead of table to implement tabpanel
+  1883401: Adding the support of HTML and Excel format for jasperreport
 
 * Bugs
   1878852: Toolbarbutton href and onClick
