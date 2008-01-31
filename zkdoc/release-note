@@ -1,6 +1,8 @@
 	--------
 ZK 3.0.3 Freshly
 * Features
+  1883329: Translate messages to Ukrainian. Thank Denis Yarkovoy for his contribution.
+  1883328: Translate messages to Russian. Thank Denis Yarkovoy for his contribution.
   1878682: Able to turn off the Ajax resend mechanism
   1878785: Able to retrieve URL that a component is declared
   1879464: Use div instead of table as the outer tag of groupbox 3d
