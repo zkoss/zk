@@ -384,7 +384,7 @@ public class Jasperreport extends HtmlBasedComponent {
 			}
 
 		} catch (Exception ex) {
-			throw new UiException(ex);
+			throw UiException.Aide.wrap(ex);
 		} finally {
 			if (is != null) {
 				try {
