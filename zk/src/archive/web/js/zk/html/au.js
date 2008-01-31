@@ -1989,7 +1989,7 @@ zkau.cmd1 = {
 
 			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
 			else alert(dt1);
-		} else if (!uuid) {
+		} else if (!uuid) { //keep silent if component (of uuid) not exist (being detaced)
 			alert(dt1);
 		}
 	},
