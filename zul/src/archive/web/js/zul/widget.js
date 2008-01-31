@@ -23,7 +23,19 @@ zk.load("zul.vd");
 zkTxbox = {};
 zkau.textbox = zkTxbox; //zkau depends on it
 zkTxbox._intervals = {};
-
+_zktxb = {
+	au : {
+		setAttr : zkau.setAttr
+	}
+};
+zkau.setAttr = function (cmp, nm, val) {
+	if ("disabled" == nm || "readOnly" == nm) {
+		var inp = $real(cmp), type = inp.type ? inp.type.toUpperCase() : "";
+		if (type == "TEXT" || type == "TEXTAREA")
+			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? "text-disd" : "readonly");
+	}
+	return _zktxb.au.setAttr(cmp, nm, val);
+};
 zkTxbox.init = function (cmp) {
 	zk.listen(cmp, "focus", zkTxbox.onfocus);
 	zk.listen(cmp, "blur", zkTxbox.onblur);
@@ -236,10 +248,9 @@ zkTxbox.setAttr = function (cmp, nm, val) {
 			range.select();
 		}
 		return true;
-	} else if ("disabled" == nm || "readOnly" == nm)
-		zk[val == "true" ? "addClass" : "rmClass"](cmp, "disabled" == nm ? "text-disd" : "readonly");
+	}
 	return false;
-}
+};
 
 ////
 //intbox/longbox/decimalbox/doublebox//
