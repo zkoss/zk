@@ -84,7 +84,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	private Map _parameters;
 	private JRDataSource _datasource;
 	private int _medver;
-	private String _type;
+	private String _type = "pdf";
 	private JRExporter exporter;
 	private static final String IMAGE_DIR = "img/";
 
@@ -134,10 +134,9 @@ public class Jasperreport extends HtmlBasedComponent {
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
 		StringTokenizer st = new StringTokenizer(_src, ".");
-		HTMLs
-				.appendAttribute(sb, "src", Utils.getDynamicMediaURI(this,
-						_medver++, st.nextToken(), _type.equals("jxl") ? "xls"
-								: _type));
+		HTMLs.appendAttribute(sb, "src", Utils.getDynamicMediaURI(this,
+			_medver++, st.nextToken(),
+			_type.equals("jxl") ? "xls": _type));
 
 		return sb.toString();
 	}
@@ -187,6 +186,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	}
 
 	public void setType(String type) {
+		if (type == null) type = "pdf";
 		if (!Objects.equals(_type, type)) {
 			_type = type;
 			invalidate();
@@ -259,8 +259,6 @@ public class Jasperreport extends HtmlBasedComponent {
 				_parameters = new HashMap();
 			if (_datasource == null)
 				_datasource = new JREmptyDataSource();
-			if (_type == null)
-				_type = "pdf";
 
 			// fill the report
 			JasperPrint jasperPrint = JasperFillManager.fillReport(is,
