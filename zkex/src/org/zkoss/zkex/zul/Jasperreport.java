@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zkex.zul;
 
-import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,7 +29,20 @@ import java.util.StringTokenizer;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JExcelApiExporter;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.JRHtmlExporter;
+import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRRtfExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.export.JRXmlExporter;
+import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.media.AMedia;
@@ -44,12 +57,13 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zul.impl.Utils;
 
 /**
- * The JasperReport component.
- * It is used to generate a Jasper report into an inline frame.
+ * The JasperReport component. It is used to generate a Jasper report into an
+ * inline frame.
  * 
- * <p>Note: this component is serializable only if the data source
- * ({@link #getDatasource}) is serializable.
- *
+ * <p>
+ * Note: this component is serializable only if the data source ({@link #getDatasource})
+ * is serializable.
+ * 
  * @author gracelin
  * @since 3.0.2
  */
@@ -57,10 +71,22 @@ public class Jasperreport extends HtmlBasedComponent {
 	private static final Log log = Log.lookup(Jasperreport.class);
 	private static final long serialVersionUID = 20080117L;
 
+	private static final String TASK_PDF = "pdf";
+	private static final String TASK_XML = "xml";
+	private static final String TASK_HTML = "html";
+	private static final String TASK_RTF = "rtf";
+	private static final String TASK_XLS = "xls";
+	private static final String TASK_JXL = "jxl";
+	private static final String TASK_CSV = "csv";
+	private static final String TASK_ODT = "odt";
+
 	private String _src;
 	private Map _parameters;
 	private JRDataSource _datasource;
 	private int _medver;
+	private String _type;
+	private JRExporter exporter;
+	private static final String IMAGE_DIR = "img/";
 
 	public Jasperreport() {
 		setHeight("100%");
@@ -86,7 +112,8 @@ public class Jasperreport extends HtmlBasedComponent {
 	 * If src is changed, the whole component is invalidate.
 	 * 
 	 * @param src
-	 *            The compiled file (jasper file). If null or empty, nothing is included.
+	 *            The compiled file (jasper file). If null or empty, nothing is
+	 *            included.
 	 */
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)
@@ -107,8 +134,10 @@ public class Jasperreport extends HtmlBasedComponent {
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
 		StringTokenizer st = new StringTokenizer(_src, ".");
-		HTMLs.appendAttribute(sb, "src", Utils.getDynamicMediaURI(this,
-				_medver++, st.nextToken(), "pdf"));
+		HTMLs
+				.appendAttribute(sb, "src", Utils.getDynamicMediaURI(this,
+						_medver++, st.nextToken(), _type.equals("jxl") ? "xls"
+								: _type));
 
 		return sb.toString();
 	}
@@ -123,7 +152,8 @@ public class Jasperreport extends HtmlBasedComponent {
 	/**
 	 * Sets the JasperReports Parameters.
 	 * 
-	 * @param parameters use to fill the report
+	 * @param parameters
+	 *            use to fill the report
 	 */
 	public void setParameters(Map parameters) {
 		if (!Objects.equals(_parameters, parameters)) {
@@ -142,11 +172,23 @@ public class Jasperreport extends HtmlBasedComponent {
 	/**
 	 * Sets the JasperReports DataSource.
 	 * 
-	 * @param dataSource use to fill the report
+	 * @param dataSource
+	 *            use to fill the report
 	 */
 	public void setDatasource(JRDataSource dataSource) {
 		if (!Objects.equals(_datasource, dataSource)) {
 			_datasource = dataSource;
+			invalidate();
+		}
+	}
+
+	public String getType() {
+		return _type;
+	}
+
+	public void setType(String type) {
+		if (!Objects.equals(_type, type)) {
+			_type = type;
 			invalidate();
 		}
 	}
@@ -160,28 +202,42 @@ public class Jasperreport extends HtmlBasedComponent {
 	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
 	 * component developers.
 	 */
-	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl
-	implements DynamicMedia {
+	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl implements
+			DynamicMedia {
 		// -- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
+
+			int indexOfImg = pathInfo.lastIndexOf(IMAGE_DIR);
+
+			// path has IMAGE_DIR, it may be a image.
+			if (indexOfImg > 0) {
+				String imageName = pathInfo.substring(indexOfImg
+						+ IMAGE_DIR.length());
+				
+				// response file path has ".", it's not a image file
+				if (imageName.indexOf(".") > -1) {
+					return doReport();
+				}
+				return getImage(imageName);
+			}
+			
 			return doReport();
 		}
 	}
 
 	/**
-	 * Use the Parameters & Data sourse to produce report.
-	 * If parameters are null, we will use an empty Map. 
-	 * If data source is null, use JREmptyDataSource.
+	 * Use the Parameters & Data sourse to produce report. If parameters are
+	 * null, we will use an empty Map. If data source is null, use
+	 * JREmptyDataSource.
 	 * 
 	 * @return A AMedia contains report's byte stream.
 	 */
 	private AMedia doReport() {
 
 		InputStream is = null;
-		
-		try {
-			// generate report pdf stream
 
+		try {
+			// get template file
 			if (is == null) {// try to load by web context.
 				is = Executions.getCurrent().getDesktop().getWebApp()
 						.getResourceAsStream(_src);
@@ -191,27 +247,143 @@ public class Jasperreport extends HtmlBasedComponent {
 					if (is == null) {// try to load by file
 						File fl = new File(_src);
 						if (!fl.exists())
-							throw new RuntimeException("resource for " + _src + " not found.");
+							throw new RuntimeException("resource for " + _src
+									+ " not found.");
 
 						is = new FileInputStream(fl);
 					}
 				}
 			}
 
+			// Default value
 			if (_parameters == null)
 				_parameters = new HashMap();
 			if (_datasource == null)
 				_datasource = new JREmptyDataSource();
+			if (_type == null)
+				_type = new String("pdf");
 
-			final byte[] buf = JasperRunManager.runReportToPdf(is, _parameters,
-					_datasource);
+			// fill the report
+			JasperPrint jasperPrint = JasperFillManager.fillReport(is,
+					_parameters, _datasource);
 
-			// prepare the AMedia
-			final InputStream mediais = new ByteArrayInputStream(buf);
-			return new AMedia("report.pdf", "pdf",
-					"application/pdf", mediais);
 
-			
+			// export one type of report
+			if (TASK_PDF.equals(_type)) {
+				
+				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+				
+				exporter = new JRPdfExporter();
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+				exporter.exportReport();
+				
+				arrayOutputStream.close();
+				return new AMedia("report.pdf", "pdf", "application/pdf",
+						arrayOutputStream.toByteArray());
+				
+			} else if (TASK_XML.equals(_type)) {
+				
+				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+				
+				exporter = new JRXmlExporter();
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+				exporter.exportReport();
+				
+				arrayOutputStream.close();
+				return new AMedia("report.xml", "xml", "text/xml", arrayOutputStream.toByteArray());
+				
+			} else if (TASK_HTML.equals(_type)) {
+				
+				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+				
+				exporter = new JRHtmlExporter();				
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+				
+				// set IMAGES_MAP parameter to prepare get backward IMAGE_MAP parameter
+				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, new HashMap());
+				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, IMAGE_DIR);
+				exporter.exportReport();
+				
+				arrayOutputStream.close();
+
+				return new AMedia("report.html", "html", "text/html",
+						arrayOutputStream.toByteArray());
+
+			} else if (TASK_RTF.equals(_type)) {
+				
+				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+
+				exporter = new JRRtfExporter();
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+				exporter.exportReport();
+
+				arrayOutputStream.close();
+				return new AMedia("report.rtf", "rtf", "application/rtf",
+						arrayOutputStream.toByteArray());
+
+			} else if (TASK_XLS.equals(_type)) {
+
+				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+
+				exporter = new JRXlsExporter();
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,	Boolean.TRUE);
+				exporter.exportReport();
+
+				arrayOutputStream.close();
+				return new AMedia("report.xls", "xls",
+						"application/vnd.ms-excel", arrayOutputStream.toByteArray());
+
+			} else if (TASK_JXL.equals(_type)) {
+
+				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+
+				exporter = new JExcelApiExporter();
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+						Boolean.TRUE);
+				exporter.exportReport();
+
+				arrayOutputStream.close();
+				return new AMedia("report.xls", "xls",
+						"application/vnd.ms-excel", arrayOutputStream.toByteArray());
+				
+			} else if (TASK_CSV.equals(_type)) {
+
+				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+
+				exporter = new JRCsvExporter();
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+				exporter.exportReport();
+
+				arrayOutputStream.close();
+				return new AMedia("report.csv", "csv", "text/csv", arrayOutputStream.toByteArray());
+				
+			} else if (TASK_ODT.equals(_type)) {
+
+				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+
+				exporter = new JROdtExporter();
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+				exporter.exportReport();
+
+				arrayOutputStream.close();
+				return new AMedia("report.odt", "odt",
+						"application/vnd.oasis.opendocument.text", arrayOutputStream.toByteArray());
+
+			} else {
+				throw new UiException("Type: " + _type
+						+ " is not supported in JasperReports.");
+			}
+
 		} catch (Exception ex) {
 			throw new UiException(ex);
 		} finally {
@@ -223,5 +395,14 @@ public class Jasperreport extends HtmlBasedComponent {
 				}
 			}
 		}
+	}
+
+	private AMedia getImage(String imageName) {
+		Map imageMap = (Map) exporter
+				.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+		
+		byte[] imageBytes = (byte[]) imageMap.get(imageName);
+
+		return new AMedia(imageName, "", "image/gif", imageBytes);
 	}
 }
