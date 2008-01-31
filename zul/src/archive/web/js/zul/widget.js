@@ -23,10 +23,8 @@ zk.load("zul.vd");
 zkTxbox = {};
 zkau.textbox = zkTxbox; //zkau depends on it
 zkTxbox._intervals = {};
-_zktxb = {
-	au : {
-		setAttr : zkau.setAttr
-	}
+_zktbau = {
+	setAttr: zkau.setAttr
 };
 zkau.setAttr = function (cmp, nm, val) {
 	if ("disabled" == nm || "readOnly" == nm) {
@@ -34,7 +32,7 @@ zkau.setAttr = function (cmp, nm, val) {
 		if (type == "TEXT" || type == "TEXTAREA")
 			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? "text-disd" : "readonly");
 	}
-	return _zktxb.au.setAttr(cmp, nm, val);
+	return _zktbau.setAttr(cmp, nm, val);
 };
 zkTxbox.init = function (cmp) {
 	zk.listen(cmp, "focus", zkTxbox.onfocus);
