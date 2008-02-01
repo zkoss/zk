@@ -35,6 +35,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<jasperreport id="report" />
 	
 	<zscript><![CDATA[
+		import org.zkoss.zkdemo.userguide.CustomDataSource;
+		
 		void showReport() {
 			//Preparing parameters
 			Map parameters = new HashMap();
