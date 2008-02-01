@@ -49,6 +49,7 @@ if (!window.Validate_errorbox) { //not customized
 ////
 zkVld = {};
 if (!zkVld._ebs) zkVld._ebs = [];
+if (!zkVld._cbs) zkVld._cbs = [];
 zkau.valid = zkVld; //zkau depends on it
 
 /** Validates the specified component and returns the error msg. */
@@ -183,6 +184,8 @@ zkVld._errbox = function () {
 	var boxid = id + "!errb";
 	zkVld.closeErrbox(boxid);
 
+	if (zkVld._cbs.contains(boxid)) return; //don't show the error box if it will close.
+	
 	cmp = $e(id);
 	if (cmp) {
 		zk.addClass($real(cmp), "text-invalid");
@@ -192,7 +195,7 @@ zkVld._errbox = function () {
 
 	if (getZKAttr(cmp, "srvald") == "custom")
 		return; //don't show the default error box if custom
-
+	
 	var box = Validate_errorbox(id, boxid, html);
 	if (!box) {
 		alert(html);
@@ -237,8 +240,11 @@ zkVld._errbox = function () {
 		zindex: box.style.zIndex, effecting: zkVld._fiximg,
 		starteffect: zk.voidf, endeffect: zkVld._fiximg});
 };
-/** box is the box element or the component's ID. */
-zkVld.closeErrbox = function (box, remaingError) {
+/** box is the box element or the component's ID. 
+ * 
+ * @param {Object} coerce it is used to close the error box coercively. (@since 3.0.3)
+ */
+zkVld.closeErrbox = function (box, remaingError, coerce) {
 	var boxid, id;
 	if (typeof box == "string") {
 		id = $uuid(box);
@@ -260,9 +266,11 @@ zkVld.closeErrbox = function (box, remaingError) {
 		zul.cleanMovable(box.id);
 		box.parentNode.removeChild(box);
 		zkVld._ebs.remove(box.id);
-	} else if (boxid) {
+	} else if (boxid && coerce) {
+		zkVld._cbs.push(boxid);
+		setTimeout(function () {zkVld._cbs.remove(boxid);zkVld._ebs.remove(boxid);}, 5);
+	} else if (boxid)
 		zkVld._ebs.remove(boxid);
-	}
 };
 /** Closes the errob only without clean up the error. */
 zkVld._ebclose = function (el) {
