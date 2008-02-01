@@ -41,9 +41,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			//Preparing parameters
 			Map parameters = new HashMap();
 			parameters.put("ReportTitle", "Address Report");
-			parameters.put("DataFile", "CustomDataSource.java");
+			parameters.put("DataFile", "CustomDataSource from java");
 			
-			report.setSrc("DataSourceReport.jasper");
+			report.setSrc("/userguide/misc/jasperreport.jasper");
 			report.setParameters(parameters);
 			report.setDatasource(new CustomDataSource());
 			report.setType((String) format.getSelectedItem().getValue());
