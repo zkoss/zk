@@ -51,6 +51,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -263,8 +264,9 @@ public class Jasperreport extends HtmlBasedComponent {
 		try {
 			// get template file
 			if (is == null) {// try to load by web context.
-				is = Executions.getCurrent().getDesktop().getWebApp()
-						.getResourceAsStream(_src);
+				final Execution exec = Executions.getCurrent();
+				is = exec.getDesktop().getWebApp()
+						.getResourceAsStream(exec.toAbsoluteURI(_src, false));
 				if (is == null) {// try to load by class loader
 					is = Thread.currentThread().getContextClassLoader()
 							.getResourceAsStream(_src);
