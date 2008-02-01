@@ -38,4 +38,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<system-config>
 		<au-writer-class>org.zkoss.zkmax.au.http.SmartAuWriter</au-writer-class>
 	</system-config>
+	<client-config>
+		<resend-delay>9000</resend-delay><!-- because SmartAuWriter is used -->
+	</client-config>
 </config>
