@@ -138,7 +138,7 @@ public class Configuration {
 			final Integer v = Integer.getInteger(Attributes.RESEND_DELAY);
 			if (v != null) return v.intValue();
 		} catch (Throwable t) {
-			log.warning("Failed to parse "+System.getProperty(Attributes.RESEND_DELAY));
+			log.warning("Failed to parse "+Attributes.RESEND_DELAY+"="+System.getProperty(Attributes.RESEND_DELAY));
 		}
 		return -1; //disabled
 	}
