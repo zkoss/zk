@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Reference</title>
-<subtitle>Version 3.0.2</subtitle>
+<subtitle>Version 3.0.3</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
@@ -10,12 +10,6 @@
 </copyright>
 </bookinfo>
 
-<para>Copyright © Potix Corporation. All rights reserved.</para>
-<para>The material in this document is for information only and is subject to change without notice. While reasonable efforts have been made to assure its accuracy, Potix Corporation assumes no liability resulting from errors or omissions in this document, or from the use of the information contained herein.</para>
-<para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
-<para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
-<para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
-<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para>
 <chapter>
 <title>1. Introduction</title>
 <para>Welcome to ZK, the simplest way to make Web applications rich.</para>
@@ -26635,8 +26629,11 @@
 <programlisting>&lt;client-config&gt;&#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting></sect3><sect3><title>The processing-prompt-delay Element</title>
 <para>[Default: 900]</para>
 <para>It specifies the time, in milliseconds, to wait before prompting the user with a dialog indicating that the request is in processing.</para></sect3><sect3><title>The resend-delay Element</title>
-<para>[Default: 9000]</para>
-<para>It specifies the time, in milliseconds, to wait before resending the AU requests to the server. There are many reasons an AU request is not received by the server. For example, the server may drop the connection if it is over loaded. To ensure the reliability, ZK will resend the request if the specified delay expires.</para></sect3><sect3><title>The tooltip-delay Element</title>
+<para>[Default: 9000 if Enterprise Edition<footnote>
+<para>More precisely, 9000 if zkmax.jar is installed.</para>
+</footnote>, -1 otherwise]</para>
+<para>It specifies the time, in milliseconds, to wait before resending the AU requests to the server. There are many reasons an AU request is not received by the server. For example, the server may drop the connection if it is overloaded. To ensure the reliability, ZK will abort the previous request and then resend the request, if the specified delay expires.</para>
+<para>Since 3.0.3, you can specify a non-positive number to disable the resend mechanism.</para></sect3><sect3><title>The tooltip-delay Element</title>
 <para>[Default: 800]</para>
 <para>It specifies the time, in milliseconds, to wait before popping up the tooltip when the user moves the mouse pointer over particular UI components.</para></sect3></sect2><sect2><title>The desktop-config Element</title>
 <para>It is used to customize how ZK handles desktops. You might have multiple desktop-config elements in one zk.xml.</para>
@@ -26778,7 +26775,8 @@
 <para>[Default: 5120]</para>
 <para>It specifies the maximal allowed size, in kilobytes, to upload a file from the client. A negative value indicates there is no limit.</para></sect3><sect3><title>The max-process-time Element</title>
 <para>[Default: 3000]</para>
-<para>It specifies the maximal allowed time to process events, in milliseconds. It must be positive. ZK will keep processing the requests sent from the client until all requests are processed, or the maximal allowed time expires.</para></sect3><sect3><title>The response-charset Element</title>
+<para>It specifies the maximal allowed time to process events, in milliseconds. It must be positive. ZK will keep processing the requests sent from the client until all requests are processed, or the maximal allowed time expires.</para>
+<para>Note: Since 3.0.1, this setting has no obvious effect on Ajax devices. Ajax devices send the requests synchronously.</para></sect3><sect3><title>The response-charset Element</title>
 <para>[Default: UTF-8]</para>
 <para>It specifies the charset for the rendering result of a ZUML page. In other words, it is used to load the ZUML page by the ZK Loader (i.e., DHtmlLayoutServlet).</para>
 <para>If you want to use the container's default value, you can specify an empty string as follows.</para>
