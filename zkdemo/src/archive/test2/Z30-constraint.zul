@@ -40,12 +40,12 @@ Constraint custom_ctt = new MyCustomConst();
 		shall cause an error box even no input below
 		</hbox>
 		<hbox>
-	Enter a number at least 100:
+	Enter a number at least 100 (customize look):
 	<intbox id="i1" constraint="${custom_ctt}"/>
 	<label id="errmsg"/>
 		</hbox>
 		<hbox>
-	another number at least 100: <intbox id="i2" constraint="${ctt}"/>
+	another number at least 100 (standard look): <intbox id="i2" constraint="${ctt}"/>
 		</hbox>
 		<hbox>
 	any number: <intbox/>
