@@ -2,14 +2,13 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.0.2</subtitle>
+<subtitle>Version 3.0.3</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
-
 <chapter>
 <title>1. Introduction</title>
 <para>Welcome to ZK, the simplest way to make Rich Web Applications.</para>
