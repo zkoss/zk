@@ -329,7 +329,8 @@ public class ConfigParser {
 
 		//file-check-period
 		v = parseInteger(conf, "file-check-period", true);
-		if (v != null) System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
+		if (v != null)
+			System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
 			//System-wide property
 
 	}
@@ -383,6 +384,8 @@ public class ConfigParser {
 	/** Parse a class, if specified, whether it implements cls.
 	 */
 	private static Class parseClass(Element el, String elnm, Class cls) {
+		//Note: we throw exception rather than warning to make sure
+		//the developer correct it
 		final String clsnm = el.getElementValue(elnm, true);
 		if (clsnm != null && clsnm.length() != 0) {
 			try {
@@ -401,6 +404,8 @@ public class ConfigParser {
 	/** Configures an integer. */
 	private static Integer parseInteger(Element el, String subnm,
 	boolean positiveOnly) throws UiException {
+		//Note: we throw exception rather than warning to make sure
+		//the developer correct it
 		String val = el.getElementValue(subnm, true);
 		if (val != null && val.length() > 0) {
 			try { 

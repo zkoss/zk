@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.device.Devices;
 
 /**
@@ -109,7 +110,7 @@ public class Configuration {
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay = 9000;
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -130,6 +131,16 @@ public class Configuration {
 		_errURIs.put(new Integer(302), "");
 		_errURIs.put(new Integer(401), "");
 		_errURIs.put(new Integer(403), "");
+		_resendDelay = getInitResendDelay();
+	}
+	private static int getInitResendDelay() {
+		try {
+			final Integer v = Integer.getInteger(Attributes.RESEND_DELAY);
+			if (v != null) return v.intValue();
+		} catch (Throwable t) {
+			log.warning("Failed to parse "+System.getProperty(Attributes.RESEND_DELAY));
+		}
+		return -1; //disabled
 	}
 
 	/** Returns the Web application that this configuration belongs to,
@@ -1272,7 +1283,9 @@ public class Configuration {
 	/** Specifies the time, in milliseconds, before ZK Client Engine re-sends
 	 * the request to the server.
 	 *
-	 * <p>Default: 9000
+	 * <p>Default: -1 (i.e., disabled).
+	 * However, if zkmax.jar was installed (or with ZK 3.0.1 and 3.0.2),
+	 * the default is 9000.
 	 *
 	 * <p>There are many reasons an Ajax request is not received by
 	 * the server. With the resending mechanism, ZK ensures the reliable

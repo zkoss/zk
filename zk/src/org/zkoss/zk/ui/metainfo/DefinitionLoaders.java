@@ -51,6 +51,7 @@ import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.au.AuWriters;
@@ -272,6 +273,7 @@ public class DefinitionLoaders {
 		parseZScriptConfig(el);
 		parseDeviceConfig(el);
 		parseSystemConfig(el);
+		parseClientConfig(el);
 	}
 	private static void parseZScriptConfig(Element root) {
 		for (Iterator it = root.getElements("zscript-config").iterator();
@@ -295,6 +297,14 @@ public class DefinitionLoaders {
 			if (s != null)
 				AuWriters.setImplementationClass(
 					s.length() == 0 ? null: Classes.forNameByThread(s));
+		}
+	}
+	private static void parseClientConfig(Element root) throws Exception {
+		final Element el = root.getElement("client-config");
+		if (el != null) {
+			Integer v = parseInteger(el, "resend-delay", false);
+			if (v != null)
+				System.setProperty(Attributes.RESEND_DELAY, v.toString());
 		}
 	}
 
@@ -631,6 +641,24 @@ public class DefinitionLoaders {
 			else
 				compdef.addAnnotation(prop, annotName, annotAttrs);
 		}
+	}
+	/** Configures an integer. */
+	private static Integer parseInteger(Element el, String subnm,
+	boolean positiveOnly) throws UiException {
+		//Warning instead of exception since config.xml is embedded in jar, so
+		//better not to stop the process
+		String val = el.getElementValue(subnm, true);
+		if (val != null && val.length() > 0) {
+			try { 
+				final int v = Integer.parseInt(val);
+				if (!positiveOnly || v > 0)
+					return new Integer(v);
+				log.warning("Ignored: the "+subnm+" element must be a positive number, not "+val+", at "+el.getLocator());
+			} catch (NumberFormatException ex) { //eat
+				log.warning("Ignored: the "+subnm+" element must be a number, not "+val+", at "+el.getLocator());
+			}
+		}
+		return null;
 	}
 
 	private static class Addon {

@@ -49,4 +49,12 @@ public class Attributes {
 	 * @since 3.0.1
 	 */
 	public static final String NO_CACHE = "zk_desktop_no_cache";
+
+	/** A system property to indicate the default resend delay
+	 * (an integer in milliseconds).
+	 * If specified, {@link org.zkoss.zk.ui.util.Configuration#getResendDelay}
+	 * will use it as the default. Otherwise, -1 is assumed.
+	 * @since 3.0.3
+	 */
+	public static final String RESEND_DELAY = "org.zkoss.zk.au.resendDelay";
 }
