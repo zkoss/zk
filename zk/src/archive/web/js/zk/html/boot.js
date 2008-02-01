@@ -1255,7 +1255,12 @@ zk.encodeXML = function (txt, multiline) {
 
 //-- debug --//
 /** Generates a message for debugging. */
-zk.message = function (msg) {
+zk.message = function () {
+	var msg = "", a = arguments;
+	if (a.length > 1) {
+		for (var i = 0, len = a.length; i < len; i++)
+			msg += "[" + a[i] + "] ";
+	} else msg = arguments[0];
 	zk._msg = zk._msg ? zk._msg + msg: msg;
 	zk._msg +=  '\n';
 	setTimeout(zk._domsg, 600);
