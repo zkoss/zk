@@ -264,7 +264,7 @@ public interface Execution  {
 	 *
 	 * @param skipInclude whether not to convert to an absolute URI if
 	 * the current page is included by another page.
-	 * When use the include directive, skipInclude shall be true.
+	 * If you are not sure, you might specify false.
 	 */
 	public String toAbsoluteURI(String uri, boolean skipInclude);
 
