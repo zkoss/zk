@@ -2134,13 +2134,7 @@ zkau.cmd1 = {
 	},
 	closeErrbox: function (uuid, cmp) {
 		if (zkau.valid)
-			setTimeout(function () {zkau.valid.closeErrbox(uuid)}, 5);
-				// TODO : We should remove the timeout in zkVld.errbox(), because 
-				// this way is not a good solution.
-				// Bug #1883262: When the error message is fired and the 
-				// closeErrbox() is also invoked at the same time. We have to 
-				// use a timeout to avoid this conflict. Because zkVld.errbox() 
-				// was using a timeout to invoke its function.
+			zkau.valid.closeErrbox(uuid, false, true);
 	},
 	submit: function (uuid, cmp) {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
