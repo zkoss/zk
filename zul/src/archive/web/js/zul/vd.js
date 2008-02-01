@@ -48,8 +48,8 @@ if (!window.Validate_errorbox) { //not customized
 
 ////
 zkVld = {};
-if (!zkVld._ebs) zkVld._ebs = [];
-if (!zkVld._cbs) zkVld._cbs = [];
+if (!zkVld._ebs) zkVld._ebs = []; //a list of id of errbox to show
+if (!zkVld._cbs) zkVld._cbs = []; //a list of id of errbox that shall not shown
 zkau.valid = zkVld; //zkau depends on it
 
 /** Validates the specified component and returns the error msg. */
@@ -266,11 +266,12 @@ zkVld.closeErrbox = function (box, remaingError, coerce) {
 		zul.cleanMovable(box.id);
 		box.parentNode.removeChild(box);
 		zkVld._ebs.remove(box.id);
-	} else if (boxid && coerce) {
-		zkVld._cbs.push(boxid);
-		setTimeout(function () {zkVld._cbs.remove(boxid);zkVld._ebs.remove(boxid);}, 5);
 	} else if (boxid)
-		zkVld._ebs.remove(boxid);
+		if (coerce) {
+			zkVld._cbs.push(boxid);
+			setTimeout(function () {zkVld._cbs.remove(boxid);zkVld._ebs.remove(boxid);}, 5);
+		} else
+			zkVld._ebs.remove(boxid);
 };
 /** Closes the errob only without clean up the error. */
 zkVld._ebclose = function (el) {
