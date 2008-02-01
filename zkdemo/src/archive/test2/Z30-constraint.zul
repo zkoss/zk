@@ -36,6 +36,10 @@ Constraint custom_ctt = new MyCustomConst();
 	<vbox>
 	Test of CustomConstraint
 		<hbox>
+		<button label="Retrieve value" onClick="i1.getValue();i2.getValue()"/>
+		shall cause an error box even no input below
+		</hbox>
+		<hbox>
 	Enter a number at least 100:
 	<intbox id="i1" constraint="${custom_ctt}"/>
 	<label id="errmsg"/>
@@ -46,7 +50,6 @@ Constraint custom_ctt = new MyCustomConst();
 		<hbox>
 	any number: <intbox/>
 		</hbox>
-		<button label="Retrieve value" onClick="i1.getValue();i2.getValue()"/>
 
 	Test of between/and
 		<hbox>
