@@ -68,11 +68,15 @@ public class ResourceCache extends CacheMap {
 		_checkPeriod = getInitCheckPeriod();
 	}
 	private static int getInitCheckPeriod() {
-		final Integer v =
-			Integer.getInteger("org.zkoss.util.resource.checkPeriod");
-		if (v != null) {
-			final int i = v.intValue();
-			if (i > 0) return i * 1000;
+		final String ATTR = "org.zkoss.util.resource.checkPeriod";
+		try {
+			final Integer v = Integer.getInteger(ATTR);
+			if (v != null) {
+				final int i = v.intValue();
+				if (i > 0) return i * 1000;
+			}
+		} catch (Throwable t) {
+			log.warning("Failed to parse "+System.getProperty(ATTR));
 		}
 		return 5000; //5 secs
 	}
