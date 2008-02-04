@@ -226,7 +226,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	/**
 	 * Returns the output file locale.
 	 * 
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Locale getLocale() {
 		return _locale;
@@ -235,7 +235,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	/**
 	 * Sets the output file locale. Default locale used ZK default.
 	 * 
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public void setLocale(Locale locale) {
 		if (locale == null)
