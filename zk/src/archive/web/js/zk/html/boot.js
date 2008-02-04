@@ -828,8 +828,8 @@ zk._loadAndInit = function (inf) {
 	//We cannot use recursive algorithm because it might take too much time
 	//to execute and browser will alert users for aborting!
 	for (var j = 0; inf.stk.length;) {
-		if (++j > 3000) {
-			setTimeout(function() {zk._loadAndInit(inf);}, 0);
+		if (++j > 1000) {
+			setTimeout(function() {zk._loadAndInit(inf);}, 10);
 			return; //let browser breath
 		}
 
@@ -934,9 +934,9 @@ zk._evalInit = function () {
 				}
 			}
 
-			if (++j > 3000 || zk.loading) {
+			if (zk.loading || ++j > 1000) {
 				if (!zk.loading)
-					setTimeout(zk._evalInit, 0); //let browser breath
+					setTimeout(zk._evalInit, 10); //let browser breath
 				return;
 			}
 		}

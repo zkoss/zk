@@ -565,9 +565,8 @@ zkau._evalOnResponse = function () {
 
 /** Process the responses queued in zkau._respQue. */
 zkau._doQueResps = function () {
-	var ex;
-	var que = zkau._respQue;
-	for (var j = 0; que.length;) {
+	var ex, que = zkau._respQue, breath = $now() + 6000;
+	while (que.length) {
 		if (zk.loading) {
 			zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
 			break; //wait until the loading is done
@@ -602,8 +601,8 @@ zkau._doQueResps = function () {
 			if (!ex) ex = e;
 		}
 
-		if (!ex && ++j > 300) {
-			setTimeout(zkau._doQueResps, 0); //let browser breath
+		if (!ex && $now() > breath) {
+			setTimeout(zkau._doQueResps, 10); //let browser breath
 			return;
 		}
 	}
