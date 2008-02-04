@@ -233,7 +233,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	}
 
 	/**
-	 * Sets the output file locale.
+	 * Sets the output file locale. Default locale used ZK default.
 	 * 
 	 * @since 3.0.3
 	 */
@@ -313,11 +313,10 @@ public class Jasperreport extends HtmlBasedComponent {
 				_parameters = new HashMap();
 			if (_datasource == null)
 				_datasource = new JREmptyDataSource();
-			
-			if (_locale != null) {
-				_parameters.put(JRParameter.REPORT_LOCALE, _locale);
-			}
 
+			_parameters.put(JRParameter.REPORT_LOCALE,
+					_locale != null ? _locale : Locales.getCurrent());
+			
 			// fill the report
 			JasperPrint jasperPrint = JasperFillManager.fillReport(is,
 					_parameters, _datasource);
