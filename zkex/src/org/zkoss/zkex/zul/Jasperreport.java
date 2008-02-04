@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -31,6 +32,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
@@ -45,6 +47,7 @@ import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.Locales;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
@@ -88,6 +91,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	private String _type = "pdf";
 	private JRExporter exporter;
 	private static final String IMAGE_DIR = "img/";
+	private Locale _locale; // i18n
 
 	public Jasperreport() {
 		setHeight("100%");
@@ -219,6 +223,29 @@ public class Jasperreport extends HtmlBasedComponent {
 		}
 	}
 
+	/**
+	 * Returns the output file locale.
+	 * 
+	 * @since 3.0.3
+	 */
+	public Locale getLocale() {
+		return _locale;
+	}
+
+	/**
+	 * Sets the output file locale.
+	 * 
+	 * @since 3.0.3
+	 */
+	public void setLocale(Locale locale) {
+		if (locale == null)
+			locale = Locales.getCurrent();
+		if (!Objects.equals(_locale, locale)) {
+			_locale = locale;
+			invalidate();
+		}
+	}
+
 	// -- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -286,6 +313,10 @@ public class Jasperreport extends HtmlBasedComponent {
 				_parameters = new HashMap();
 			if (_datasource == null)
 				_datasource = new JREmptyDataSource();
+			
+			if (_locale != null) {
+				_parameters.put(JRParameter.REPORT_LOCALE, _locale);
+			}
 
 			// fill the report
 			JasperPrint jasperPrint = JasperFillManager.fillReport(is,
