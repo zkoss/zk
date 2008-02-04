@@ -225,6 +225,26 @@ public class Jasperreport extends HtmlBasedComponent {
 
 	/**
 	 * Returns the output file locale.
+	 *
+	 * <p>Default: null (means the ZK default, {@link Locales#getCurrent})).</p>
+	 *
+	 * <table border="1">
+	 * <tr>
+	 * <td>{@link #getLocale}</td>
+	 * <td>{@link #getParameters} with a value<br/>
+	 * associated with JRParameter.REPORT_LOCALE</td>
+	 * <td>What is used</td>
+	 * </tr>
+	 * <tr>
+	 * <td>X</td><td>ignored</td><td>X</td>
+	 * </tr>
+	 * <tr>
+	 * <td>null</td><td>Y</td><td>Y</td>
+	 * </tr>
+	 * <tr>
+	 * <td>null</td><td>null</td><td>{@link Locales#getCurrent}</td>
+	 * </tr>
+	 * </table>
 	 * 
 	 * @since 3.1.0
 	 */
@@ -233,13 +253,14 @@ public class Jasperreport extends HtmlBasedComponent {
 	}
 
 	/**
-	 * Sets the output file locale. Default locale used ZK default.
-	 * 
+	 * Sets the output file locale.
+	 *
+	 * @param locale the locale. If null, the ZK default is used
+	 * ({@link Locales#getCurrent}).
+	 * @see #getLocale
 	 * @since 3.1.0
 	 */
 	public void setLocale(Locale locale) {
-		if (locale == null)
-			locale = Locales.getCurrent();
 		if (!Objects.equals(_locale, locale)) {
 			_locale = locale;
 			invalidate();
@@ -309,17 +330,16 @@ public class Jasperreport extends HtmlBasedComponent {
 			}
 
 			// Default value
-			if (_parameters == null)
-				_parameters = new HashMap();
-			if (_datasource == null)
-				_datasource = new JREmptyDataSource();
+			final Map params = _parameters != null ? _parameters: new HashMap();
+			if (_locale != null)
+				params.put(JRParameter.REPORT_LOCALE, _locale);
+			else if (!params.containsKey(JRParameter.REPORT_LOCALE))
+				params.put(JRParameter.REPORT_LOCALE, Locales.getCurrent());
 
-			_parameters.put(JRParameter.REPORT_LOCALE,
-					_locale != null ? _locale : Locales.getCurrent());
-			
 			// fill the report
 			JasperPrint jasperPrint = JasperFillManager.fillReport(is,
-					_parameters, _datasource);
+					params,
+					_datasource != null ? _datasource: new JREmptyDataSource());
 
 
 			// export one type of report
