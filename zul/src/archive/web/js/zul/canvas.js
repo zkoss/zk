@@ -145,6 +145,9 @@ zk.addModuleInit(function () {
 		
 	};	//clear
 	
+	/**
+	*	Return an array of args
+	*/
 	function getValArr(value){
 		var ary = new Array();
 		var i,c;
@@ -152,18 +155,17 @@ zk.addModuleInit(function () {
 		for (i = 0, c = 0;c < 6; c = c + 1) {
 			var k = value.indexOf(',', i);
 			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-						
-			var v = parseFloat(val);
-				
-			if(isNaN(v)){	//string
+					
+			if(isTxtStr(val)){		//text string, not a number
 				if( val == 'true'){
 					ary.push(true);
 				}else if(val == 'false'){
 					ary.push(false);
+				}else{
+					ary.push(val);
 				}					
-				ary.push(val);
 			}else{
-				ary.push(v);
+				ary.push(parseFloat(val));
 			}
 			
 			if(k < 0){
@@ -174,6 +176,22 @@ zk.addModuleInit(function () {
 		}
 		
 		return ary;		
+	}
+	
+	/**
+	*	Return true if the string is text(not number). 
+	*/
+	function isTxtStr(str){
+		/*
+		*	Simply check the last char, if "not-a-num(NaN)" then return true
+		*/		
+		var istxt = false;
+		var lastChr = str.charAt(str.length-1);
+		var t = parseFloat(lastChr);
+		if(isNaN(t)){
+			istxt = true;
+		}
+		return istxt;
 	}
 	
 /*	zkCanvas.setAttr = function (elm, name, value) {
