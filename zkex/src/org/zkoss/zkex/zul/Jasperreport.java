@@ -281,15 +281,10 @@ public class Jasperreport extends HtmlBasedComponent {
 				}
 			}
 
-			// Default value
-			if (_parameters == null)
-				_parameters = new HashMap();
-			if (_datasource == null)
-				_datasource = new JREmptyDataSource();
-
 			// fill the report
 			JasperPrint jasperPrint = JasperFillManager.fillReport(is,
-					_parameters, _datasource);
+				_parameters != null ? _parameters: new HashMap(),
+				_datasource != null ? _datasource: new JREmptyDataSource());
 
 
 			// export one type of report
