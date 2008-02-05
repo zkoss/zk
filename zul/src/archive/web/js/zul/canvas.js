@@ -8,9 +8,9 @@ if (zk.ie){
 
 zk.addModuleInit(function () {
 
-	zkDrawCanvas = {};
+	zkCanvas = {};
 	
-	zkDrawCanvas.init = function (cmp) {
+	zkCanvas.init = function (cmp) {
 		/*
 		*	Fire an event to trigger Excanvas's replacement of canvas under IE
 		*/
@@ -23,381 +23,99 @@ zk.addModuleInit(function () {
 		*	a canvas tag will be replaced by 3rd party library,
 		*	so regain the object from DOM Tree by object's ID.
 		*/
-		if(!zkDrawCanvas.ctx){	
+		if(!zkCanvas.ctx){	
 		
-			zkDrawCanvas.ctx = 
-				document.getElementById(cmp.id).getContext('2d');
+			zkCanvas.ctx = 
+				$e(cmp.id).getContext('2d');
 		} 	
 	};	//init
 	
-	zkDrawCanvas.cleanup = function (cmp) {
+/*	zkCanvas.cleanup = function (cmp) {
 	
-	};	//cleanup
+	};*/	//cleanup
 	
 	/*
 	*	Fill Style
 	*/
-	zkDrawCanvas.fillStyle = function (cmp, value){
-		var r,g,b,a;
-		for (var i = 0, c = 0;c < 4; c = c + 1) {
-			var k = value.indexOf(',', i);
-			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-			
-			switch(c){
-				case 0:
-				{
-					r=parseInt(val);
-					break;
-				}
-				case 1:
-				{
-					g=parseInt(val);
-					break;
-				}
-				case 2:
-				{
-					b=parseInt(val);
-					break;
-				}
-				case 3:
-				{
-					a=parseFloat(val);
-					break;
-				}
-			}
-			
-			i = k + 1;
-		}
-		 		
-		zkDrawCanvas.ctx.fillStyle="rgba("+r+","+g+","+
-											b+","+a+")";
+	zkCanvas.fillStyle = function (cmp, value){		
+		var ary = getValArr(value);		 		
+		zkCanvas.ctx.fillStyle="rgba("+ary[0]+","+ary[1]+","+
+											ary[2]+","+ary[3]+")";
 	};	//fillStyle
 	
 	/*
 	*	Stroke Style
 	*/
-	zkDrawCanvas.strokeStyle = function (cmp, value){
-		var r,g,b,a;
-		for (var i = 0, c = 0;c < 4; c = c + 1) {
-			var k = value.indexOf(',', i);
-			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-			
-			switch(c){
-				case 0:
-				{
-					r=parseInt(val);
-					break;
-				}
-				case 1:
-				{
-					g=parseInt(val);
-					break;
-				}
-				case 2:
-				{
-					b=parseInt(val);
-					break;
-				}
-				case 3:
-				{
-					a=parseFloat(val);
-					break;
-				}
-			}
-			
-			i = k + 1;
-		}
-		
-		zkDrawCanvas.ctx.strokeStyle="rgba("+r+","+g+","+
-											b+","+a+")";				
+	zkCanvas.strokeStyle = function (cmp, value){
+		var ary = getValArr(value);		 		
+		zkCanvas.ctx.strokeStyle="rgba("+ary[0]+","+ary[1]+","+
+											ary[2]+","+ary[3]+")";			
 	};	//strokeStyle
 	
 	/*
 	*	Fill Rectangle
 	*/
-	zkDrawCanvas.fillRect = function (cmp, value){
-		var x1,y1,width,height;
-		for (var i = 0, c = 0;c < 4; c = c + 1) {
-					var k = value.indexOf(',', i);
-					var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-					
-					switch(c){
-						case 0:
-						{
-							x1=parseInt(val);
-							break;
-						}
-						case 1:
-						{
-							y1=parseInt(val);
-							break;
-						}
-						case 2:
-						{
-							width =  parseInt(val);
-							break;
-						}
-						case 3:
-						{
-							height = parseInt(val);
-							break;
-						}
-					}
-					
-					i = k + 1;
-				}
-				
-				zkDrawCanvas.ctx.fillRect(x1,y1,width,height);
+	zkCanvas.fillRect = function (cmp, value){
+		var ary = getValArr(value);		 						
+		zkCanvas.ctx.fillRect(ary[0],ary[1],ary[2],ary[3]);
 	};	//fillRect
 	
 	/*
 	*	Stroke Rectangle
 	*/
-	zkDrawCanvas.strokeRect = function (cmp, value){
-		var x1,y1,width,height;
-		for (var i = 0, c = 0;c < 4; c = c + 1) {
-			var k = value.indexOf(',', i);
-			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-				
-			switch(c){
-				case 0:
-				{
-					x1=parseInt(val);
-					break;
-				}
-				case 1:
-				{
-					y1=parseInt(val);
-					break;
-				}
-				case 2:
-				{
-					width=parseInt(val);
-					break;
-				}
-				case 3:
-				{
-					height=parseInt(val);
-					break;
-				}
-			}
-					
-			i = k + 1;
-		}
-				
-		zkDrawCanvas.ctx.strokeRect(x1,y1,width,height);
+	zkCanvas.strokeRect = function (cmp, value){
+		var ary = getValArr(value);		 						
+		zkCanvas.ctx.strokeRect(ary[0],ary[1],ary[2],ary[3]);
 	};	//strokeRect
 	
 	/*
 	*	Draw Line
 	*/
-	zkDrawCanvas.drawLine = function (cmp, value){
-		var x1,y1,x2,y2;
-		for (var i = 0, c = 0;c < 4; c = c + 1) {
-			var k = value.indexOf(',', i);
-			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-					
-			switch(c){
-				case 0:
-				{
-					x1=parseInt(val);
-					break;
-				}
-				case 1:
-				{
-					y1=parseInt(val);
-					break;
-				}
-				case 2:
-				{
-					x2=parseInt(val);
-					break;
-				}
-				case 3:
-				{
-					y2=parseInt(val);
-					break;
-				}
-			}
-			
-			i = k + 1;
-		}
-				
-		zkDrawCanvas.ctx.beginPath();
-		zkDrawCanvas.ctx.moveTo(x1,y1);
-		zkDrawCanvas.ctx.lineTo(x2,y2);
-		zkDrawCanvas.ctx.stroke();
-		
+	zkCanvas.drawLine = function (cmp, value){
+		var ary = getValArr(value);		 					
+		zkCanvas.ctx.beginPath();
+		zkCanvas.ctx.moveTo(ary[0],ary[1]);
+		zkCanvas.ctx.lineTo(ary[2],ary[3]);
+		zkCanvas.ctx.stroke();		
 	};	//drawLine
 	
 	/*
 	*	Fill Arc
 	*/
-	zkDrawCanvas.fillArc = function (cmp, value){
-		var x,y,radius,startAngle,endAngle, anticlockwise;
-		for (var i = 0, c = 0;c < 6; c = c + 1) {
-			var k = value.indexOf(',', i);
-			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-			
-			switch(c){
-				case 0:
-				{
-					x=parseInt(val);
-					break;
-				}
-				case 1:
-				{
-					y=parseInt(val);
-					break;
-				}
-				case 2:
-				{
-					radius=parseFloat(val);
-					break;
-				}
-				case 3:
-				{
-					startAngle=parseFloat(val);
-					break;
-				}
-				case 4:
-				{
-					endAngle=parseFloat(val);
-					break;
-				}
-				case 5:
-				{
-					if(val == 'true'){
-						anticlockwise = true;
-					}else{
-						anticlockwise = false;
-					}
-					break;
-				}
-			}
-			
-			i = k + 1;
-		}
-	
-		zkDrawCanvas.ctx.beginPath();
-		zkDrawCanvas.ctx.arc(x,y,radius,startAngle,endAngle, anticlockwise);
-		zkDrawCanvas.ctx.fill();
-		
+	zkCanvas.fillArc = function (cmp, value){
+		var ary = getValArr(value);
+		zkCanvas.ctx.beginPath();	
+		zkCanvas.ctx.arc(ary[0],ary[1],ary[2],ary[3],ary[4], ary[5]);
+		zkCanvas.ctx.fill();		
 	};	//fillArc
 	
 	/*
 	*	Stroke Arc
 	*/
-	zkDrawCanvas.strokeArc = function (cmp, value){
-		var x,y,radius,startAngle,endAngle, anticlockwise;
-		for (var i = 0, c = 0;c < 6; c = c + 1) {
-			var k = value.indexOf(',', i);
-			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-			
-			switch(c){
-				case 0:
-				{
-					x=parseInt(val);
-					break;
-				}
-				case 1:
-				{
-					y=parseInt(val);
-					break;
-				}
-				case 2:
-				{
-					radius=parseFloat(val);
-					break;
-				}
-				case 3:
-				{
-					startAngle=parseFloat(val);
-					break;
-				}
-				case 4:
-				{
-					endAngle=parseFloat(val);
-					break;
-				}
-				case 5:
-				{
-					if(val == 'true'){
-						anticlockwise = true;
-					}else{
-						anticlockwise = false;
-					}
-					break;
-				}
-			}
-			
-			i = k + 1;
-		}
-						
-		zkDrawCanvas.ctx.beginPath();
-		zkDrawCanvas.ctx.arc(x,y,radius,startAngle,endAngle, anticlockwise);
-		zkDrawCanvas.ctx.stroke();
-		
+	zkCanvas.strokeArc = function (cmp, value){
+		var ary = getValArr(value);
+		zkCanvas.ctx.beginPath();
+		zkCanvas.ctx.arc(ary[0],ary[1],ary[2],ary[3],ary[4], ary[5]);
+		zkCanvas.ctx.stroke();		
 	};	//strokeArc
 	
 	/*
 	*	Draw Image
 	*/
-	zkDrawCanvas.drawImage = function (cmp, value){
-		var imgPath,x,y,width,height,sizeAsgn=false;
-		for (var i = 0, c = 0;c < 5; c = c + 1) {
-			var k = value.indexOf(',', i);
-			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-						
-			switch(c){
-				case 0:
-				{
-					imgPath=val;
-					break;
-				}
-				case 1:
-				{
-					x=parseInt(val);
-					break;
-				}
-				case 2:
-				{
-					y =  parseInt(val);
-					break;
-				}
-				case 3:
-				{
-					sizeAsgn = true;		//size is assigned			
-					width =  parseInt(val);					
-					break;
-				}
-				case 4:
-				{
-					height =  parseInt(val);
-					break;
-				}
-			}
-			
-			if(k <= 0){
-				break;				//image size not assigned
-			}else{
-				i = k + 1;
-			}			
-		}
-		
+	zkCanvas.drawImage = function (cmp, value){
+		var ary = getValArr(value);
+		var sizeAsgn = (ary.length == 4) ;		
 		var img = new Image();
-		img.src = imgPath;
-
+		img.src = ary[0];
 		/*
-		*	When finished loading a pic,
-		*	"onLoad" event will be triggered.
+		*	When finished loading a pic, "onLoad" event will be triggered.
 		*	However, Opera excepts, so draw it directly. 
 		*/
 		img.onload  = function() {
 			if(sizeAsgn){
-				zkDrawCanvas.ctx.drawImage(img,x,y,width,height);
+				zkCanvas.ctx.drawImage(img,ary[1],ary[2],ary[3],ary[4]);
 			}else{
-				zkDrawCanvas.ctx.drawImage(img,x,y);
+				zkCanvas.ctx.drawImage(img,ary[1],ary[2]);
 			}
 		};
 		/**
@@ -407,25 +125,54 @@ zk.addModuleInit(function () {
 		*/
 		if(zk.ie && (img.readyState == "complete")){	
 			if(sizeAsgn){
-				zkDrawCanvas.ctx.drawImage(img,x,y,width,height);
+				zkCanvas.ctx.drawImage(img,ary[0],ary[1],ary[2],ary[3]);
 			}else{
-				zkDrawCanvas.ctx.drawImage(img,x,y);
+				zkCanvas.ctx.drawImage(img,ary[0],ary[1]);
 			}			
 		}else if(zk.opera){	//draw directly
 			if(sizeAsgn){
-				zkDrawCanvas.ctx.drawImage(img,x,y,width,height);
-			}else{			
-				zkDrawCanvas.ctx.drawImage(img,x,y);
+				zkCanvas.ctx.drawImage(img,ary[0],ary[1],ary[2],ary[3]);
+			}else{
+				zkCanvas.ctx.drawImage(img,ary[0],ary[1]);
 			}
 		}
 		
 	};	//drawIMage
 	
-	zkDrawCanvas.setAttr = function (elm, name, value) {
+	zkCanvas.clear = function(){
+		
+	};	//clear
+	
+	function getValArr(value){
+		var ary = new Array();
+		var i,c;
+				
+		for (i = 0, c = 0;c < 6; c = c + 1) {
+			var k = value.indexOf(',', i);
+			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
+			
+			if( val == 'true'){
+				ary.push(true);
+			}else if(val == 'false'){
+				ary.push(false);
+			}else{
+				ary.push(parseFloat(val));
+			}			
+			
+			if(k <= 0){
+				break;		//last arg
+			}else{
+				i = k + 1;
+			}
+		}
+		
+		return ary;		
+	}
+	
+/*	zkCanvas.setAttr = function (elm, name, value) {
 
     	return false;
 
-	};//	setAttr
-
+	};*///	setAttr
 	
 });	// addModuleInit
