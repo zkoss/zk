@@ -32,37 +32,11 @@ import org.zkoss.zk.au.out.AuInvoke;
 public class Canvas extends HtmlBasedComponent{
 		
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Default fill style (background) is "White".
-	 */
-	private static int _defaultFillStyleR = 255,
-						_defaultFillStyleG = 255,
-						_defaultFillStyleB = 255;
 	
-	/**
-	 * Default fill style is "Black".
-	 */
-	private static int _fillStyleR=0,
-						_fillStyleG=0,
-						_fillStyleB=0;
+	private int _fillStyleR, _fillStyleG, _fillStyleB,
+				_strokeStyleR, _strokeStyleG, _strokeStyleB;
 	
-	/**
-	 * Default stroke style is "Black".
-	 */
-	private static int _strokeStyleR=0,
-						_strokeStyleG=0,
-						_strokeStyleB=0;
-	
-	private static double _fillStyleAlpha = 1.0,
-							_strokeStyleAlpha = 1.0;
-	
-	/**
-	 * If width and height of the canvas is not assigned
-	 * in zul file, they are assigned 300px and 150px.
-	 */
-	private static int _defaultWidth = 300,
-						_defaultHeight = 150;
+	private double _fillStyleAlpha,	_strokeStyleAlpha;
 	
 	/**
 	 * Set the filled-in color, the alpha value will be set to 1.
@@ -70,18 +44,8 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param g	Green Color, 1-255.
 	 * @param b	Blue Color, 1-255.
 	 */
-	public void setFillStyleRGB(int r,int g,int b){
-		
-		_fillStyleR=r;
-		_fillStyleG=g;
-		_fillStyleB=b;
-		_fillStyleAlpha=1.0;
-				
-		response(null, new AuInvoke(this, "fillStyle", 
-											_fillStyleR+","+
-											_fillStyleG+","+
-											_fillStyleB+","+
-											_fillStyleAlpha));
+	public void setFillStyle(int r,int g,int b){		
+		setFillStyle(r,g,b,1.0);
 	}
 	
 	/**
@@ -91,18 +55,17 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param b	Blue Color, 1-255.
 	 * @param a	Alpha Value, 0-1.
 	 */
-	public void setFillStyleRGBA(int r,int g,int b, double a){
+	public void setFillStyle(int r,int g,int b, double a){
 		
 		_fillStyleR=r;
 		_fillStyleG=g;
 		_fillStyleB=b;
 		_fillStyleAlpha=a;
 				
-		response(null, new AuInvoke(this, "fillStyle", 
-											_fillStyleR+","+
-											_fillStyleG+","+
-											_fillStyleB+","+
-											_fillStyleAlpha));
+		response("fillStyle",_fillStyleR+","+
+								_fillStyleG+","+
+								_fillStyleB+","+
+								_fillStyleAlpha);
 	}
 
 	/**
@@ -111,18 +74,8 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param g	Green Color, 1-255.
 	 * @param b	Blue Color, 1-255.
 	 */
-	public void setStrokeStyleRGB(int r,int g,int b){
-		
-		_strokeStyleR=r;
-		_strokeStyleG=g;
-		_strokeStyleB=b;
-		_strokeStyleAlpha=1.0;
-			
-		response(null, new AuInvoke(this, "strokeStyle", 
-											_strokeStyleR+","+
-											_strokeStyleG+","+
-											_strokeStyleB+","+
-											_strokeStyleAlpha));
+	public void setStrokeStyle(int r,int g,int b){
+		setStrokeStyle(r,b,g,1.0);
 	}
 
 	/**
@@ -132,18 +85,17 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param b	Blue Color, 1-255.
 	 * @param a	Alpha Value, 0-1.
 	 */
-	public void setStrokeStyleRGBA(int r,int g,int b, double a){
+	public void setStrokeStyle(int r,int g,int b, double a){
 		
 		_strokeStyleR=r;
 		_strokeStyleG=g;
 		_strokeStyleB=b;
 		_strokeStyleAlpha=a;
 		
-		response(null, new AuInvoke(this, "strokeStyle", 
-											_strokeStyleR+","+
-											_strokeStyleG+","+
-											_strokeStyleB+","+
-											_strokeStyleAlpha));
+		response("strokeStyle",_strokeStyleR+","+
+								_strokeStyleG+","+
+								_strokeStyleB+","+
+								_strokeStyleAlpha);
 	}
 	
 	
@@ -154,11 +106,8 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param width Width of the rectangle.
 	 * @param height Height of the rectangle.
 	 */
-	public void fillRect(int x,int y,int width,int height){
-		
-		response(null, 
-				new AuInvoke(this, "fillRect", x+","+y+","+width+","+height));
-		
+	public void fillRect(int x,int y,int width,int height){		
+		response("fillRect", x+","+y+","+width+","+height);		
 	}
 	
 	/**
@@ -169,9 +118,7 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param height Height of the rectangle.
 	 */
 	public void strokeRect(int x,int y,int width,int height){
-		response(null, 
-				new AuInvoke(this, "strokeRect", x+","+y+","+width+","+height));
-		
+		response("strokeRect", x+","+y+","+width+","+height);		
 	}
 	
 	/**
@@ -181,11 +128,8 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param x2 Position in X-axis of the right-down point. 
 	 * @param y2 Position in Y-axis of the right-down point. 
 	 */
-	public void drawLine(int x1,int y1,int x2,int y2){
-		
-		response(null, 
-				new AuInvoke(this, "drawLine", x1+","+y1+","+x2+","+y2));		
-		
+	public void drawLine(int x1,int y1,int x2,int y2){		
+		response("drawLine", x1+","+y1+","+x2+","+y2);			
 	}
 	
 	/**
@@ -218,8 +162,7 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param anticlockwise True if drawing in anti-clockwise orientation.
 	 */
 	public void fillArc(int x,int y,int radius,double startAngle, double endAngle, boolean anticlockwise){
-		response(null, 
-				new AuInvoke(this, "fillArc", x+","+y+","+radius+","+startAngle+","+endAngle+","+anticlockwise));
+		response("fillArc", x+","+y+","+radius+","+startAngle+","+endAngle+","+anticlockwise);
 	}
 	
 	/**
@@ -232,8 +175,7 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param anticlockwise True if drawing in anti-clockwise orientation.
 	 */
 	public void strokeArc(int x,int y,int radius,double startAngle, double endAngle, boolean anticlockwise){
-		response(null, 
-				new AuInvoke(this, "strokeArc", x+","+y+","+radius+","+startAngle+","+endAngle+","+anticlockwise));
+		response("strokeArc", x+","+y+","+radius+","+startAngle+","+endAngle+","+anticlockwise);
 	}
 	
 	/**
@@ -243,10 +185,7 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param y Position in Y-axis of the center point of the image.
 	 */
 	public void drawImage(String imgPath, int x, int y){
-		
-		response(null, 
-				new AuInvoke(this, "drawImage", imgPath+","+x+","+y));
-		
+		response("drawImage", imgPath+","+x+","+y);		
 	}
 	
 	/**
@@ -257,96 +196,18 @@ public class Canvas extends HtmlBasedComponent{
 	 * @param width Width of the image.
 	 * @param height Height of the image.
 	 */
-	public void drawImage(String imgPath, int x, int y, int width, int height){
-		
-		response(null, 
-				new AuInvoke(this, "drawImage", imgPath+","+x+","+y+","+width+","+height));
-		
+	public void drawImage(String imgPath, int x, int y, int width, int height){		
+		response("drawImage", imgPath+","+x+","+y+","+width+","+height);		
 	}
 	
 	/**
 	 * Clear the canvas and fill in with white color.
 	 */
-	public void clear(){
-		
-		//set fill style
-		this.setFillStyleRGB(_defaultFillStyleR,
-							_defaultFillStyleG,
-							_defaultFillStyleB);
-		
-		int _width = _getWidth()
-			,_height = _getHeight();
-		
-		if(super.getWidth() == null){
-			
-			_width = _defaultWidth;
-			_height = _defaultHeight;
-			
-		}
-		
-		//draw a rectangle to clear the canvas
-		this.fillRect(0,0,_width,_height);
-		
-		//restore fill style
-		this.setFillStyleRGBA(_fillStyleR,
-							_fillStyleG,
-							_fillStyleB,
-							_fillStyleAlpha);
+	public void clear(){		
+		response("clear", "");
 	}
 	
-	/**
-	 * Get the width of the canvas, if not specified in zul file, the default value is 300.
-	 * @return Width of the canvas.
-	 */
-	private int _getWidth(){
-		int _width = _defaultWidth;
-		String _tmpWidth;
-		
-		try{
-			if((_tmpWidth = super.getWidth()) != null){
-				_width=Integer.parseInt(_myComp(_tmpWidth));
-			}
-		}catch(Exception e){
-			return _width;
-		}
-		
-		return _width;
+	private void response(String function,String arg){
+		super.response(null, new AuInvoke(this, function, arg));
 	}
-	
-	/**
-	 * Get the height of the canvas, if not specified in zul file, the default value is 150.
-	 * @return Height of the canvas.
-	 */
-	private int _getHeight(){
-		int _height = _defaultHeight;
-		String _tmpHeight;
-		
-		try{
-			if((_tmpHeight = super.getWidth()) != null){
-				_height=Integer.parseInt(_myComp(_tmpHeight));
-			}
-		}catch(Exception e){
-			return _height;
-		}
-				
-		return _height;
-	}
-	
-	/**
-	 * Remove "px" of the width or height value.
-	 * @param str Width or height value.
-	 * @return Width or height value without "px".
-	 */
-	private String _myComp(String str){
-		
-		String _outStr = str;
-
-		if(str.endsWith("px")){
-			int i = str.lastIndexOf("px");
-			_outStr = str.substring(0,i); 
-		}
-		
-		return _outStr;
-	}
-
 }
