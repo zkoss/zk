@@ -125,15 +125,15 @@ zk.addModuleInit(function () {
 		*/
 		if(zk.ie && (img.readyState == "complete")){	
 			if(sizeAsgn){
-				zkCanvas.ctx.drawImage(img,ary[0],ary[1],ary[2],ary[3]);
+				zkCanvas.ctx.drawImage(img,ary[1],ary[2],ary[3],ary[4]);
 			}else{
-				zkCanvas.ctx.drawImage(img,ary[0],ary[1]);
+				zkCanvas.ctx.drawImage(img,ary[1],ary[2]);
 			}			
 		}else if(zk.opera){	//draw directly
 			if(sizeAsgn){
-				zkCanvas.ctx.drawImage(img,ary[0],ary[1],ary[2],ary[3]);
+				zkCanvas.ctx.drawImage(img,ary[1],ary[2],ary[3],ary[4]);
 			}else{
-				zkCanvas.ctx.drawImage(img,ary[0],ary[1]);
+				zkCanvas.ctx.drawImage(img,ary[1],ary[2]);
 			}
 		}
 		
