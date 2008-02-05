@@ -5,7 +5,7 @@
 if (zk.ie){
 	zk.load("ext.excanvas");
 }
-
+ 
 zk.addModuleInit(function () {
 
 	zkCanvas = {};
@@ -104,7 +104,8 @@ zk.addModuleInit(function () {
 	*/
 	zkCanvas.drawImage = function (cmp, value){
 		var ary = getValArr(value);
-		var sizeAsgn = (ary.length == 4) ;		
+		
+		var sizeAsgn = (ary.length == 5) ;	
 		var img = new Image();
 		img.src = ary[0];
 		/*
@@ -115,6 +116,7 @@ zk.addModuleInit(function () {
 			if(sizeAsgn){
 				zkCanvas.ctx.drawImage(img,ary[1],ary[2],ary[3],ary[4]);
 			}else{
+			
 				zkCanvas.ctx.drawImage(img,ary[1],ary[2]);
 			}
 		};
@@ -150,16 +152,21 @@ zk.addModuleInit(function () {
 		for (i = 0, c = 0;c < 6; c = c + 1) {
 			var k = value.indexOf(',', i);
 			var val = (k >= 0 ? value.substring(i, k): value.substring(i)).trim();
-			
-			if( val == 'true'){
-				ary.push(true);
-			}else if(val == 'false'){
-				ary.push(false);
+						
+			var v = parseFloat(val);
+				
+			if(isNaN(v)){	//string
+				if( val == 'true'){
+					ary.push(true);
+				}else if(val == 'false'){
+					ary.push(false);
+				}					
+				ary.push(val);
 			}else{
-				ary.push(parseFloat(val));
-			}			
+				ary.push(v);
+			}
 			
-			if(k <= 0){
+			if(k < 0){
 				break;		//last arg
 			}else{
 				i = k + 1;
