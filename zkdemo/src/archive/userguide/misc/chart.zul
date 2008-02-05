@@ -51,8 +51,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <checkbox label="3D Chart" checked="true" onCheck="mychart.setThreeD(self.isChecked())"/>
 <chart id="mychart" title="Pie Chart Demo" width="500" height="250" type="pie" threeD="true" fgAlpha="128">
 <attribute name="onClick">
-  Area area = self.getFellow(event.getArea());
-  alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
+  String areaid = event.getArea();
+  if (areaid != null) {
+    Area area = self.getFellow(areaid);
+    alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
+  }
 </attribute>
 <zscript>
   void update(int rowIndex) {
@@ -68,6 +71,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
   mychart.setModel(model);
 </zscript>
 </chart>
+<toolbarbutton label="More chart..." href="/test/chart.zul"/>
 </vbox>
 				]]></attribute>
 			</textbox>

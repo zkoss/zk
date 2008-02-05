@@ -1,8 +1,9 @@
 <zk>
-	<button label="Set window to 50%">
-		<attribute name="onClick">win.setHeight("50%");</attribute>
+Change window's height, component won't resize
+	<button label="Set window to 30%">
+		<attribute name="onClick">win.setHeight("30%");</attribute>
 	</button>
-	<window title = "Win" id="win" height="100%" width="90%">
+	<window title = "Win" id="win" height="100%" width="90%" border="normal">
 		<button label="invalidate" onClick="tree2.invalidate()"/>
 		<tree id="tree2" vflex="true">
 			<treecols sizable="true">

@@ -76,7 +76,8 @@ abstract public class AbstractUiFactory implements UiFactory {
 				} 
 			}
 		}
-		return new DesktopImpl(ri.getWebApp(), updateURI, path, deviceType);
+		return new DesktopImpl(ri.getWebApp(), updateURI, path, deviceType,
+			ri.getNativeRequest());
 	}
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path) {
 		return new PageImpl(pagedef);
@@ -86,7 +87,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	public Component newComponent(Page page, Component parent,
 	ComponentInfo compInfo) {
-		final Component comp = compInfo.newInstance(page);
+		final Component comp = compInfo.newInstance(page, parent);
 
 		if (parent != null) comp.setParent(parent);
 		else comp.setPage(page);

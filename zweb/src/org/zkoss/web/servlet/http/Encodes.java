@@ -51,6 +51,11 @@ import org.zkoss.web.util.resource.ExtendletContext;
 public class Encodes {
 	private static final Log log = Log.lookup(Encodes.class);
 
+	protected Encodes() {} //prevent from instantiation
+
+	/** The URL encoder. */
+	private static URLEncoder _urlEncoder;
+
 	/** Encodes a string to HTTP URI compliant by use of
 	 * {@link Charsets#getURICharset}.
 	 *
@@ -116,7 +121,7 @@ public class Encodes {
 	throws UnsupportedEncodingException {
 		return encodeURI0(s, URI_UNSAFE);
 	}
-	/** Does the HTTP encoding for a URI query parameter.
+	/** Does the HTTP encoding for an URI query parameter.
 	 * For example, '/' is translated to '%2F'.
 	 * Both name and value must be encoded seperately. Example,
 	 * <code>encodeURIComponent(name) + '=' + encodeURIComponent(value)</code>.
@@ -353,7 +358,7 @@ public class Encodes {
 		return sb;
 	}
 
-	/** Encodes a URL.
+	/** Encodes an URL.
 	 * It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
 	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
@@ -376,9 +381,22 @@ public class Encodes {
 	 * {@link #encodeURIComponent} or {@link #addToQueryString(StringBuffer,Map)}
 	 * to encode the query parameters.
 	 *
+	 * <h3>The URL Prefix and Encoder</h3>
+	 *
+	 * <p>In a sophisticated environment, e.g.,
+	 * <a href="http://en.wikipedia.org/wiki/Reverse_proxy">Reverse Proxy</a>,
+	 * the encoded URL might have to be prefixed with some special prefix.
+	 * To do that, you can implement {@link URLEncoder}, and then
+	 * specify it with {@link #setURLEncoder}.
+	 * When {@link #encodeURL} encodes an URL, it will check
+	 * any URL encoder is defined (by {@link #setURLEncoder}.
+	 * If any, it will invoke {@link URLEncoder#encodeURL} with
+	 * the encoded URL to give it the last chance to post-process it, such
+	 * as inserting a special prefix.
+	 *
 	 * @param request the request; never null
 	 * @param response the response; never null
-	 * @param uri it must be empty or starts with "/". It might contain
+	 * @param uri it must be null, empty or starts with "/". It might contain
 	 * "*" for current browser code and Locale.
 	 * @param ctx the servlet context; used only if "*" is contained in uri
 	 * @exception IndexOutOfBoundException if uri is empty
@@ -389,7 +407,10 @@ public class Encodes {
 	ServletRequest request, ServletResponse response, String uri)
 	throws ServletException {
 		try {
-			return encodeURL0(ctx, request, response, uri);
+			final String url = encodeURL0(ctx, request, response, uri);
+			return _urlEncoder != null ?
+				_urlEncoder.encodeURL(ctx, request, response, url):
+				url;
 		} catch (Exception ex) {
 			log.realCause(ex);
 			throw new ServletException("Unable to encode "+uri, ex);
@@ -472,5 +493,52 @@ public class Encodes {
 		if (response instanceof HttpServletResponse)
 			uri = ((HttpServletResponse)response).encodeURL(uri);
 		return uri;
+	}
+
+	/** Sets the URI encoder.
+	 *
+	 * <p>Default: null
+	 *
+	 * <p>The URI encoder is used to post process the encoded URL
+	 * returned by {@link #encodeURL}.
+	 *
+	 * <p>When {@link #encodeURL} encodes an URL, it will check
+	 * any URL encoder is defined (by {@link #setURLEncoder}.
+	 * If any, it will invoke {@link URLEncoder#encodeURL} with
+	 * the encoded URL to give it the last chance to 'manipulate' it.
+	 *
+	 * @since 3.0.1
+	 * @see #encodeURL
+	 */
+	public static void setURLEncoder(URLEncoder encoder) {
+		_urlEncoder = encoder;
+	}
+	/** Returns the URI encoder, or null if no uri encoder.
+	 * @since 3.0.1
+	 * @see #setURLEncoder
+	 * @see #encodeURL
+	 */
+	public static URLEncoder getURLEncoder() {
+		return _urlEncoder;
+	}
+	/** The URL encoder used to post-process the encoded URL of
+	 * {@link Encodes#encodeURL} before returning.
+	 *
+	 * <p>When {@link Encodes#encodeURL} encodes an URL, it will check
+	 * any URL encoder is defined (by {@link #setURLEncoder}.
+	 * If any, it will invoke {@link #encodeURL} with
+	 * the encoded URL to give it the last chance to 'manipulate' it.
+	 *
+	 * @since 3.0.1
+	 * @see #setURLEncoder
+	 * @see Encodes#encodeURL
+	 */
+	public static interface URLEncoder {
+		/** Returns the encoded URL.
+		 * @param uri it must be null, empty, starts with "/", or
+		 * starts with "xxx:" (e.g., "http://", "javascript:"
+		 */
+		public String encodeURL(ServletContext ctx,
+		ServletRequest request, ServletResponse response, String uri);
 	}
 }

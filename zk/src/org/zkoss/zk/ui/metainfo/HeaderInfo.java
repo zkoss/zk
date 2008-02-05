@@ -35,6 +35,8 @@ import org.zkoss.zk.xel.Evaluator;
  * For example, the link and meta directives represent &lt;link&gt;
  * and &lt;meta&gt; HTML tags, respectively.
  *
+ * <p>It is not serializable.
+ *
  * @author tomyeh
  */
 public class HeaderInfo {

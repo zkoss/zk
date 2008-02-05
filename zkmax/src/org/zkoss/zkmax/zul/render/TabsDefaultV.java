@@ -42,7 +42,7 @@ public class TabsDefaultV implements ComponentRenderer {
 		wh.write("<td id=\"").write(self.getUuid())
 			.write("\" align=\"right\" z.type=\"zul.tab.Tabs\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>')
-			.writeln("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");
+			.writeln("<table class=\"vtabsi\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 		
 		/* prefix row */
 		wh.writeln("<tr><td align=\"right\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")

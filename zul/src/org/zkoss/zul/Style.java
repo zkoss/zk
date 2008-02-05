@@ -19,16 +19,24 @@ package org.zkoss.zul;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.media.Media;
+import org.zkoss.util.media.AMedia;
+import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
+
+import org.zkoss.zul.impl.Utils;
 
 /**
  * The style component used to specify CSS styles for the owner desktop.
  *
  * <p>Note: a style component can appear anywhere in a ZUML page, but it
  * affects all components in the same desktop.
+ *
+ * <p>Note: unlike HTML STYLE, this component can be added and removed
+ * dynamically and the rules will be attached and detached accordingly.
  *
  * <p>There are three formats when used in a ZUML page:
  *
@@ -55,18 +63,25 @@ import org.zkoss.zk.ui.UiException;
  *&lt;/style&gt;
  * </code></pre>
  *
+ * <p>Note: if the src and content properties are both set,
+ * the content property is ignored.
+ *
  * @author tomyeh
  */
 public class Style extends AbstractComponent {
 	private String _src;
 	private String _content;
+	/** Count the version of {@link #_content}. */
+	private int _cntver;
 
 	public Style() {
+		super.setVisible(false);
 	}
 	/**
 	 * @param src the URI of an external style sheet.
 	 */
 	public Style(String src) {
+		this();
 		setSrc(src);
 	}
 
@@ -98,8 +113,9 @@ public class Style extends AbstractComponent {
 	}
 
 	/** Returns the content of the style element.
-	 * By content we mean the CSS that will be enclosed
-	 * by the HTML STYLE element.
+	 * By content we mean the CSS rules that will be sent to the client.
+	 * Note: if {@link #setSrc} is called with a non-empty value,
+	 * this method is ignored, i.e., {@link #getSrc} has the higher priority.
 	 *
 	 * <p>Default: null.
 	 *
@@ -109,8 +125,7 @@ public class Style extends AbstractComponent {
 		return _content;
 	}
 	/** Sets the content of the style element.
-	 * By content we mean the CSS that will be enclosed
-	 * by the HTML STYLE element.
+	 * By content we mean the CSS rules that will be sent to the client.
 	 *
 	 * @since 3.0.0
 	 */
@@ -120,51 +135,42 @@ public class Style extends AbstractComponent {
 
 		if (!Objects.equals(_content, content)) {
 			_content = content;
+			++_cntver;
 			invalidate();
 		}
 	}
 
+	/** Returns the attributes for generating the HTML tags.
+	 */
+	public String getOuterAttrs() {
+		final StringBuffer sb = new StringBuffer(64);
+		HTMLs.appendAttribute(sb, "z.src",
+			_src != null ? getDesktop().getExecution().encodeURL(_src):
+			Utils.getDynamicMediaURI(this, _cntver, "css", "css"));
+		return sb.toString();
+	}
+
 	//Component//
+	/** Not allowd. */
+	public boolean setVisible(boolean visible) {
+		throw new UnsupportedOperationException("style is always invisible");
+	}
 	/** Not childable. */
 	public boolean isChildable() {
 		return false;
 	}
-	public void redraw(java.io.Writer out) throws java.io.IOException {
-		final boolean ie = Executions.getCurrent().isExplorer();
-		if (ie) {
-			//IE: unable to look back LINK or STYLE with ID
-			out.write("<div id=\"");
-			out.write(getUuid());
-			out.write("\">");
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl implements DynamicMedia {
+		//-- DynamicMedia --//
+		public Media getMedia(String pathInfo) {
+			return new AMedia("css", "css", "text/css;charset=UTF-8", _content);
 		}
-
-		if (_src != null) {
-			out.write("\n<link rel=\"stylesheet\" type=\"text/css\" href=\"");
-			out.write(getDesktop().getExecution().encodeURL(_src));
-			if (!ie) {
-				out.write("\" id=\"");
-				out.write(getUuid());
-			}
-			out.write("\"/>");
-		} else {
-			out.write("\n<style type=\"text/css\"");
-			if (!ie) {
-				out.write(" id=\"");
-				out.write(getUuid());
-				out.write('"');
-			}
-			out.write(">\n");
-
-			final String content = getContent();
-			if (content != null) {
-				out.write(content);
-				out.write('\n');
-			}
-
-			out.write("</style>");
-		}
-
-		if (ie)
-			out.write("</div>\n");
 	}
 }

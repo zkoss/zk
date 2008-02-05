@@ -40,6 +40,12 @@ public interface DesktopInit {
 	 * <p>Note: you can access the execution by calling
 	 * {@link Desktop#getExecution} or
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
+	 *
+	 * @param desktop the desktop being created and initialized
+	 * @param request the request caused the desktop being created.
+	 * If HTTP and servlet, it is javax.servlet.http.HttpServletRequest.
+	 * If portlet, it is javax.portlet.RenderRequest.
+	 * @since 3.0.1
 	 */
-	public void init(Desktop desktop) throws Exception;
+	public void init(Desktop desktop,  Object request) throws Exception;
 }

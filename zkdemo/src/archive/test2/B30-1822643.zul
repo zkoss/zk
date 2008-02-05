@@ -1,4 +1,8 @@
 <zk>
+When current page is last page, call setPageSize method.
+Notice: This only happens when the change pageSize is larger than current
+pageSize
+
 	<button label="Set PageSize">
 			<attribute name="onClick">
 				tree.setPageSize(10);

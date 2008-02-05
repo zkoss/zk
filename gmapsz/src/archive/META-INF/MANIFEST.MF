@@ -1,8 +1,0 @@
-Manifest-Version: 2.0
-Specification-Title: GoogleMap Components for ZK
-Specification-Version: 2.0
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.gmapsz
-Implementation-URL: http://www.zkoss.org/gmapsz
-Implementation-Version: 2.0
-Implementation-Vendor: Potix Corporation

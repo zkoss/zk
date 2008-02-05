@@ -1,9 +1,0 @@
-	--------
-ZK Seam 0.8.0
-* Features:
-  Provide a mechanism to integrate ZK with Seam, Such that developer can use Seam's context and other convenient functions in ZK.
-  
-* Bugs:
-  
-* Upgrade Notes:
-	

@@ -158,6 +158,8 @@ abstract public class NumberInputElement extends FormatInputElement {
 			} else if (cc == '(') {
 				minus = true;
 				ignore = true;
+			} else if (cc == '+') {
+				ignore = true;
 			}
 
 			//We don't add if cc shall be ignored (not alphanum but in fmt)

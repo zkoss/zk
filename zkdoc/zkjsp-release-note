@@ -1,9 +1,0 @@
-	--------
-JSP Tags 0.9.0
-* Features:
-  1491754: Provide JSP tags that wraps ZUL components, such that developers could use ZUL components directly in JSP pages.
-  
-* Bugs:
-
-* Upgrade Notes:
-

@@ -936,15 +936,26 @@ public class Tree extends XulElement {
 		if(parent instanceof Tree)
 			renderTree();
 		else{
-			Treeitem ti = (Treeitem)items.get(index);
 			/*
-			 * When content of treeitem is changed, the treeitem is rendered as 
-			 * unloaded item.
-			 * 2007/11/05 --- issue: Can not dynamically update content of treeitem from treemodel
+			 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
+			 * When I update a children node data of the TreeModel , and fire a 
+			 * CONTENTS_CHANGED event, it will throw a IndexOutOfBoundsException , If a 
+			 * node doesn't open yet or not load yet.
+			 * 
+			 * if parent is loaded, change content. 
+			 * else do nothing
 			 */
-			ti.setLoaded(false);
-			renderItem(ti,_model.getChild(node,index));
-			ti.setOpen(true);
+			if(items.size()>0){
+				Treeitem ti = (Treeitem)items.get(index);
+				/*
+				 * When content of treeitem is changed, the treeitem is rendered as 
+				 * unloaded item.
+				 * 2007/11/05 --- issue: Can not dynamically update content of treeitem from treemodel
+				 */
+				ti.setLoaded(false);
+				renderItem(ti,_model.getChild(node,index));
+				ti.setOpen(true);
+			}
 		}
 	}
 	

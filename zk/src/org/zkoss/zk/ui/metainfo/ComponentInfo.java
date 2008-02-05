@@ -41,11 +41,11 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
+import org.zkoss.zk.ui.metainfo.impl.MultiComposer;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
@@ -66,9 +66,9 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Note: it is NodeInfo's job to serialize _evalr. */
 	private transient EvaluatorRef _evalr;
 	private transient NodeInfo _parent; //it is restored by its parent
-	private ComponentDefinition _compdef;
+	private transient ComponentDefinition _compdef;
 	/** The implemetation class (use). */
-	private String _implcls;
+	private ExValue _implcls;
 	/** A list of {@link Property}, or null if no property at all. */
 	private List _props;
 	/** A Map of event handler to handle events. */
@@ -183,6 +183,13 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 *
 	 * <p>Default: null.
 	 *
+	 * <p>There are several forms:<br/>
+	 * "eventName", "targetId.evetName", "id1/id2.evetName",
+	 * and "${elExpr}.eventName".
+	 * <p>Since 3.0.2, you can specify a list of fulfill conditions by
+	 * separating them with comma. For example:<br/>
+	 * "id1.event1, id2/id3.event2"
+	 *
 	 * <p>If not null, the child components specified in
 	 * {@link #getChildren} are created, when the event sepcified in
 	 * the fulfill condition is received at the first time.
@@ -201,9 +208,12 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * {@link #getChildren} are created, when the event sepcified in
 	 * the fulfill condition is received at the first time.
 	 *
-	 * @param fulfill the fulfill condition. There are several forms:
+	 * @param fulfill the fulfill condition. There are several forms:<br/>
 	 * "eventName", "targetId.evetName", "id1/id2.evetName",
-	 * and "${elExpr}.eventName"
+	 * and "${elExpr}.eventName".
+	 * <p>Since 3.0.2, you can specify a list of fulfill conditions by
+	 * separating them with comma. For example:<br/>
+	 * "id1.event1, id2/id3.event2"
 	 * @since 2.4.0
 	 */
 	public void setFulfill(String fulfill) {
@@ -217,8 +227,23 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 3.0.0
 	 */
 	public Composer getComposer(Page page) {
+		return getComposer(page, null);
+	}
+	/** Returns the composer for this info, or nuull if not available.
+	 *
+	 * @param comp the component used as the self variable to resolve
+	 * EL expressions, if any.
+	 * Notice that UI engine uses the parent component for this argument.
+	 * If comp is null, it is the same as {@link #getComposer(Page)}.
+	 * If comp is not null, it is used as the self variable.
+	 * @see #getApply
+	 * @since 3.0.1
+	 */
+	public Composer getComposer(Page page, Component comp) {
 		if (_apply != null) {
-			Object o = _apply.getValue(_evalr.getEvaluator(), page);
+			Object o = comp != null ?
+				_apply.getValue(_evalr.getEvaluator(), comp):
+				_apply.getValue(_evalr.getEvaluator(), page);;
 			try {
 				if (o instanceof String) {
 					final String s = (String)o;
@@ -236,18 +261,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 					}
 				}
 
-				if (o instanceof Object[]) {
-					final Object[] cs = (Object[])o;
-					switch (cs.length) {
-					case 0: return null;
-					case 1: o = cs[0]; break;
-					default: return new MultiComposer(cs);
-					}
-				}
+				if (o instanceof Object[])
+					return MultiComposer.getComposer(page, (Object[])o);
 
-				if (o instanceof String)
-					o = Classes.newInstanceByThread(((String)o).trim());
-				else if (o instanceof Class)
+				if (o instanceof String) {
+					final String clsnm = ((String)o).trim();
+					o = page != null ? page.resolveClass(clsnm).newInstance():
+						Classes.newInstanceByThread(clsnm);
+				} else if (o instanceof Class)
 					o = ((Class)o).newInstance();
 
 				if (o instanceof Composer)
@@ -274,8 +295,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 *
 	 * @param apply the attribute which must be the class that implements
 	 * {@link org.zkoss.zk.ui.util.Composer}, an instance of it, or null.
-	 * El expressions are allowed, but self means the page (after all,
-	 * the component is not created yet).
+	 * El expressions are allowed, but self means the parent, if not null,
+	 * or page, if root, (after all, the component is not created yet).
 	 * @since 3.0.0
 	 */
 	public void setApply(String apply) {
@@ -372,7 +393,16 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_evthds = new EventHandlerMap();
 		_evthds.add(name, evthd);
 	}
-
+	/** Returns a readonly collection of event names (String),
+	 * or an empty collection if no event name is registered.
+	 *
+	 * <p>To add an event handler, use {@link #addEventHandler} instead.
+	 *
+	 * @since 3.0.2
+	 */
+	public Set getEventHandlerNames() {
+		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
+	}
 	/** Sets the effectiveness condition.
 	 */
 	public void setCondition(ConditionImpl cond) {
@@ -416,12 +446,13 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Returns the class name (String) that implements the component.
 	 */
 	public String getImplementationClass() {
-		return _implcls;
+		return _implcls != null ? _implcls.getRawValue(): null;
 	}
 	/** Sets the class name to implements the component.
 	 */
 	public void setImplementationClass(String clsnm) {
-		_implcls = clsnm;
+		_implcls = clsnm != null && clsnm.length() > 0 ?
+			new ExValue(clsnm, Object.class): null;
 	}
 
 	/** Creates an component based on this info (never null).
@@ -432,12 +463,17 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * Since the value of properties might depend on the component tree,
 	 * it is better to assign the component with a proper parent
 	 * before calling {@link #applyProperties}.
+	 *
+	 * @since 3.0.2
 	 */
-	public Component newInstance(Page page) {
+	public Component newInstance(Page page, Component parent) {
+		Object implcls = evalImplClass(page, parent);
 		ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
-			comp = _compdef.newInstance(page, _implcls);
+			comp = implcls instanceof Class ?
+				_compdef.newInstance((Class)implcls):
+				_compdef.newInstance(page, (String)implcls);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
@@ -447,6 +483,29 @@ implements Cloneable, Condition, java.io.Externalizable {
 			((DynamicTag)comp).setTag(_tag);
 		return comp;
 	}
+	/** Evaluates the implementation claas, and rerturn either a class (Class),
+	 * a class name (String), or null.
+	 */
+	private Object evalImplClass(Page page, Component parent) {
+		return _implcls == null ? null:
+			parent != null ?
+				_implcls.getValue(_evalr.getEvaluator(), parent):
+				_implcls.getValue(_evalr.getEvaluator(), page);
+	}
+	/** Creates an component based on this info (never null).
+	 * It is the same as newInstance(page, null).
+	 *
+	 * <p>If the implementation class ({@link #getImplementationClass})
+	 * doesn't have any EL expression, or its EL expresson doesn't
+	 * referece to the self variable, the result is the same.
+	 *
+	 * <p>This method is preserved for backward compatibility.
+	 * It is better to use {@link #newInstance(Page, Component)}.
+	 */
+	public Component newInstance(Page page) {
+		return newInstance(page, null);
+	}
+
 	/** Resolves and returns the class for the component represented
 	 * by this info (never null).
 	 *
@@ -461,11 +520,29 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * page ({@link Page#getLoadedInterpreters}).
 	 * Note: this method won't attach the component to the specified page.
 	 * @exception ClassNotFoundException if the class not found
+	 * @since 3.0.2
+	 */
+	public Class resolveImplementationClass(Page page, Component parent)
+	throws ClassNotFoundException {
+		Object implcls = evalImplClass(page, parent);
+		return implcls instanceof Class ? (Class)implcls:
+			_compdef.resolveImplementationClass(page, (String)implcls);
+	}
+	/** Resolves and returns the class for the component represented
+	 * by this info (never null).
+	 * It is the same as resolveImplementationClass(page, null).
+	 *
+	 * <p>If the implementation class ({@link #getImplementationClass})
+	 * doesn't have any EL expression, or its EL expresson doesn't
+	 * referece to the self variable, the result is the same.
+	 *
+	 * <p>This method is preserved for backward compatibility.
+	 * It is better to use {@link #resolveImplementationClass(Page, Component)}.
 	 * @since 3.0.0
 	 */
 	public Class resolveImplementationClass(Page page)
 	throws ClassNotFoundException {
-		return _compdef.resolveImplementationClass(page, _implcls);
+		return resolveImplementationClass(page, null);
 	}
 
 	/** Returns the annotation map defined in this info, or null
@@ -642,7 +719,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 	throws java.io.IOException {
 		out.writeObject(_children);
 
-		out.writeObject(_compdef);
+		final LanguageDefinition langdef = _compdef.getLanguageDefinition();
+		if (langdef != null) {
+			out.writeObject(langdef.getName());
+			out.writeObject(_compdef.getName());
+		} else {
+			out.writeObject(_compdef);
+		}
+
 		out.writeObject(_implcls);
 		out.writeObject(_props);
 		out.writeObject(_evthds);
@@ -663,8 +747,15 @@ implements Cloneable, Condition, java.io.Externalizable {
 				((ComponentInfo)o).setParentDirectly(this);
 		}
 
-		_compdef = (ComponentDefinition)in.readObject();
-		_implcls = (String)in.readObject();
+		final Object v = in.readObject();
+		if (v instanceof String) {
+			final LanguageDefinition langdef = LanguageDefinition.lookup((String)v);
+			_compdef = langdef.getComponentDefinition((String)in.readObject());
+		} else {
+			_compdef = (ComponentDefinition)v;
+		}
+
+		_implcls = (ExValue)in.readObject();
 		_props = (List)in.readObject();
 		_evthds = (EventHandlerMap)in.readObject();
 		_annots = (AnnotationMap)in.readObject();
@@ -714,57 +805,4 @@ implements Cloneable, Condition, java.io.Externalizable {
 		((List)_evalRefStack.get()).remove(0);
 	}
 	private static final ThreadLocal _evalRefStack = new ThreadLocal();
-
-	/** A composer to invoke a collection of other composers.
-	 */
-	private static class MultiComposer implements Composer, ComposerExt {
-		private final Composer[] _cs;
-		private MultiComposer(Object[] cs) throws Exception {
-			if (cs instanceof Composer[]) {
-				_cs = (Composer[])cs;
-			} else {
-				_cs = new Composer[cs.length];
-				for (int j = cs.length; --j >=0;) {
-					final Object o = cs[j];
-					_cs[j] = (Composer)(
-						o instanceof String ?
-							Classes.newInstanceByThread(((String)o).trim()):
-						o instanceof Class ?
-							((Class)o).newInstance(): (Composer)o);
-				}
-			}
-		}
-		public void doAfterCompose(Component comp) throws Exception {
-			for (int j = 0; j < _cs.length; ++j)
-				_cs[j].doAfterCompose(comp);
-		}
-		public ComponentInfo doBeforeCompose(Page page, Component parent,
-		ComponentInfo compInfo) {
-			for (int j = 0; j < _cs.length; ++j)
-				if (_cs[j] instanceof ComposerExt) {
-					compInfo = ((ComposerExt)_cs[j])
-						.doBeforeCompose(page, parent, compInfo);
-					if (compInfo == null)
-						return null;
-				}
-			return compInfo;
-		}
-		public void doBeforeComposeChildren(Component comp) throws Exception {
-			for (int j = 0; j < _cs.length; ++j)
-				if (_cs[j] instanceof ComposerExt)
-					((ComposerExt)_cs[j]).doBeforeComposeChildren(comp);
-		}
-		public boolean doCatch(Throwable ex) throws Exception {
-			for (int j = 0; j < _cs.length; ++j)
-				if (_cs[j] instanceof ComposerExt)
-					if (((ComposerExt)_cs[j]).doCatch(ex))
-						return true; //caught (eat it)
-			return false;
-		}
-		public void doFinally() throws Exception {
-			for (int j = 0; j < _cs.length; ++j)
-				if (_cs[j] instanceof ComposerExt)
-					((ComposerExt)_cs[j]).doFinally();
-		}
-	}
 }

@@ -1553,10 +1553,9 @@ Selector.prototype = {
     return conditions.join(' && ');
   },
 
+// Tom M. Yeh, Potix: make it compressable with YUI compressor
   compileMatcher: function() {
-    this.match = new Function('element', 'if (!element.tagName) return false; \
-      element = $(element); \
-      return ' + this.buildMatchExpression());
+    this.match = new Function('element', 'if (!element.tagName) return false; element = $(element); return ' + this.buildMatchExpression());
   },
 
   findElements: function(scope) {
@@ -1955,7 +1954,38 @@ Object.extend(Event, {
     return event.pageY || (event.clientY +
       (document.documentElement.scrollTop || document.body.scrollTop));
   },
+/* Jumper Chen, Potix: add the code of event more controllable.*/
+  safariKeys: {
+    63234 : 37, // left
+    63232 : 38, // up
+    63235 : 39, // right
+    63233 : 40, // down
+    63276 : 33, // page up
+    63277 : 34, // page down
+    63272 : 46, // delete
+    63273 : 36, // home
+    63275 : 35  // end
+  },
+  charCode: function(evt) {
+  	return evt.charCode || evt.keyCode;
+  },
 
+  keyCode: function(evt) {
+    var k = evt.keyCode || evt.charCode;
+    return zk.safari ? (this.safariKeys[k] || k) : k;
+  },
+  isSpecialKey: function(evt) {
+    var k = evt.shiftKey ? evt.keyCode : this.keyCode(evt);
+    return (evt.type == 'keypress' && evt.ctrlKey) || k == 0 || k == 9 || 
+	k == 13 || k == 40 || k == 27 ||
+    (k == 16) || (k == 17) ||
+    (k >= 18 && k <= 20) ||
+    (k >= 33 && k <= 35) ||
+    (k >= 36 && k <= 39) ||
+    (k == 44 && k == 45);
+  },
+/* Jumper Chen, Potix*/  
+  
   stop: function(event) {
     if (event.preventDefault) {
       event.preventDefault();
@@ -1963,9 +1993,9 @@ Object.extend(Event, {
     } else {
       event.returnValue = false;
       event.cancelBubble = true;
+	  event.keyCode = 0; //Jumper Chen, Potix: Bug #1834891
     }
   },
-
 /* Tom M. Yeh, Potix: remove unused codes
   // find the first node with the given tagName, starting from the
   // node the event was triggered on; traverses the DOM upwards

@@ -59,6 +59,20 @@ public class Progressmeter extends XulElement {
 		return _val;
 	}
 
+	/** Returns the style class of the SPAN tag that representing
+	 * the progress status.
+	 *
+	 * <p>It is equivalent to "pmc-img", where pmc is assumed to be
+	 * the return value of {@link #getSclass}.
+	 * If {@link #getSclass} returns null, "progressmeter-img" is assumed.
+	 *
+	 * @since 3.0.1
+	 */
+	public String getIconSclass() {
+		final String scls = getSclass();
+		return scls != null && scls.length() > 0 ? scls + "-img": "progressmeter-img";
+	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =

@@ -69,6 +69,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</function-signature>
 		<description>
 	Returns HTML tags to include all style sheets used by all languages.
+	Note: it cannot be called without current execution. In other words,
+	it is used to design component templates.
+		</description>
+	</function>
+	<function>
+		<name>outDeviceStyleSheets</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outDeviceStyleSheets(java.lang.String deviceType)
+		</function-signature>
+		<description>
+	Returns HTML tags to include all style sheets used by the specified device.
+	Note: unlike outLangStyleSheets, it can be called without current execution.
 		</description>
 	</function>
 

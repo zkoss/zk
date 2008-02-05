@@ -22,6 +22,7 @@ import org.zkoss.lang.Objects;
 
 import java.util.Set;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -146,16 +147,28 @@ implements ListModelExt, Set, java.io.Serializable {
  		if (!_set.contains(o)) {
 			boolean ret = _set.add(o);
 			//After add, the position can change if not LinkedHashSet
-			//bug #1819318  Problem while using SortedSet with Databinding
-			final int i1 = _set instanceof LinkedHashSet ? _set.size() : indexOf(o);
-			fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
+			//bug #1819318 Problem while using SortedSet with Databinding
+			//bug #1839634 Problem while using HashSet with Databinding
+			if (_set instanceof LinkedHashSet) {
+				//bug  1870996 Exception when use ListModelSet with SimpleListModelSharer
+				//java.lang.IndexOutOfBoundsException: 1, interval added index should be _set.size() - 1
+				final int i1 = _set.size() - 1;
+				fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
+			} else if (_set instanceof SortedSet) {
+				final int i1 = indexOf(o);
+				fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
+			} else {//bug #1839634, HashSet, not sure the iteration sequence 
+					//of the HashSet, must resync
+				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+			}
 			return ret;
 		}
 		return false;
 	}
 
 	/**
-	 * This implementation optimized on the LinkedHashSet(which guaratee the sequence of the added item). 
+	 * This implementation optimized on the LinkedHashSet(which 
+	 * guaratee the sequence of the added item). 
 	 * Other implementation needs one more linier search.
 	 */
 	public boolean addAll(Collection c) {
@@ -175,15 +188,11 @@ implements ListModelExt, Set, java.io.Serializable {
 				return true;
 			}
 			return false;
-		} else { //bug #1819318  Problem while using SortedSet with Databinding
-			boolean everTrue = false;
-			for(final Iterator it = c.iterator(); it.hasNext();) {
-				Object o = it.next();
-				if (!everTrue) {
-					everTrue = add(o);
-				}
-			}
-			return everTrue;
+		} else {//bug #1819318 Problem while using SortedSet with Databinding
+				//bug #1839634 Problem while using HashSet with Databinding
+			final boolean ret = _set.addAll(c);
+			fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+			return ret;
 		}
 	}
 	
@@ -231,21 +240,33 @@ implements ListModelExt, Set, java.io.Serializable {
 				return _current;
 			}
 			public void remove() {
-				final int index = indexOf(_current);
-				_it.remove();
-				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+				//bug #1819318 Problem while using SortedSet with Databinding
+				if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
+					final int index = indexOf(_current);
+					_it.remove();
+					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+				} else { //bug #1839634 Problem while using HashSet with Databinding
+					_it.remove();
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+				}
 			}
 		};
 	}
 	
 	public boolean remove(Object o) {
+		boolean ret = false;
 		if (_set.contains(o)) {
-			final int index = indexOf(o);
-			boolean ret = _set.remove(o);
-			fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
-			return ret;
+			//bug #1819318 Problem while using SortedSet with Databinding
+			if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
+				final int index = indexOf(o);
+				ret = _set.remove(o);
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+			} else { //bug #1839634 Problem while using HashSet with Databinding
+				ret = _set.remove(o);
+				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+			}
 		}
-		return false;
+		return ret;
 	}
 	/** Returns the index of the specified object, or -1 if not found.
 	 */
@@ -263,14 +284,32 @@ implements ListModelExt, Set, java.io.Serializable {
 			clear();
 			return true;
 		}
-		return removePartial(c, true);
+		//bug #1819318 Problem while using SortedSet with Databinding
+		if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
+			return removePartial(c, true);
+		} else { //bug #1839634 Problem while using HashSet with Databinding
+			final boolean ret = _set.removeAll(c);
+			if (ret) {
+				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+			}
+			return ret;
+		}
 	}
 
 	public boolean retainAll(Collection c) {
 		if (_set == c || this == c) { //special case
 			return false;
 		}
-		return removePartial(c, false);
+		//bug #1819318 Problem while using SortedSet with Databinding
+		if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
+			return removePartial(c, false);
+		} else { //bug #1839634 Problem while using HashSet with Databinding
+			final boolean ret = _set.retainAll(c);
+			if (ret) {
+				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+			}
+			return ret;
+		}
 	}
 	
 	private boolean removePartial(Collection c, boolean isRemove) {

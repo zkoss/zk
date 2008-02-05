@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1797701.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 29 14:55:25 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1797701 ] Slider tooltip text customization</n:h2>
+	<slider id="sld" slidingtext="Here is a position : {0}"/>
+	<button label="change" onClick='sld.slidingtext = "Here is a position" '/>
+</zk>

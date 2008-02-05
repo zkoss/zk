@@ -138,56 +138,49 @@ public class Listcell extends LabelImageElement {
 	}
 
 	//-- super --//
-	/** Returns the width which the same as {@link #getListheader}'s width.
-	 */
-	public String getWidth() {
-		final Listheader listheader = getListheader();
-		return listheader != null ? listheader.getWidth(): null;
-	}
 	public void setWidth(String width) {
 		throw new UnsupportedOperationException("Set listheader's width instead");
 	}
 
 	//-- Internal use only --//
 	/** Returns the prefix of the first column (in HTML tags), null if this
-	 * is not first column. Called only by listcell.jsp.
+	 * is not first column. Called only by listcell.dsp.
 	 */
 	public String getColumnHtmlPrefix() {
 		final Listitem item = getListitem();
 		final Listbox listbox = getListbox();
-		if (listbox != null && listbox.isCheckmark()
-		&& item.getFirstChild() == this) {
-			final StringBuffer sb = new StringBuffer(64)
-				.append("<input type=\"")
-				.append(listbox.isMultiple() ? "checkbox": "radio")
-				.append('"');
-			if (item.isSelected())
-				sb.append(" checked=\"checked\"");
+		if (listbox != null && item.getFirstChild() == this) {
+			final StringBuffer sb = new StringBuffer(64);
+			if (listbox.isCheckmark()) {
+				sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
+					.append('"');
+				if (item.isDisabled())
+					sb.append(" disabled=\"disabled\"");
+				if (item.isSelected())
+					sb.append(" checked=\"checked\"");
 
-			return sb.append(" id=\"").append(item.getUuid())
-				.append("!cm\" z.type=\"Lcfc\"/>").toString();
-		} else {
-			//To make the listbox's height more correct, we have to generate &nbsp;
-			//for empty cell. Otherwise, IE will make the height too small
-			final boolean empty = getImage() == null
-			&& getLabel().length() == 0 && getChildren().isEmpty();
-			return empty ? "&nbsp;": null;
+				sb.append(" id=\"").append(item.getUuid())
+					.append("!cm\" z.type=\"Lcfc\"/>");
+				return sb.toString();
+			} else if (isFocusRequired(listbox, item)) {
+				sb.append("<a href=\"javascript:;\" id=\"").append(item.getUuid())
+					.append("!sel\" z.type=\"Lcfc\"> </a>");	
+				return sb.toString();
+			}
 		}
+		
+		//To make the listbox's height more correct, we have to generate &nbsp;
+		//for empty cell. Otherwise, IE will make the height too small
+		final boolean empty = getImage() == null
+		&& getLabel().length() == 0 && getChildren().isEmpty();
+		return empty ? "&nbsp;": null;
+		
 	}
 	/** Returns the postfix of the first column (in HTML tags), null if this
 	 * is not first column. Called only by listcell.jsp.
 	 */
 	public String getColumnHtmlPostfix() {
-		final Listitem item = getListitem();
-		final Listbox listbox = getListbox();
-		if (listbox != null && !listbox.isCheckmark()
-		&& item.getFirstChild() == this
-		&& isFocusRequired(listbox, item)) {
-			return "<a href=\"javascript:;\" id=\"" + item.getUuid()
-				+ "!sel\" z.type=\"Lcfc\"> </a>";
-		} else {
-			return null;
-		}
+		return null;
 	}
 	/** Returns whether this cell requires focus.
 	 */

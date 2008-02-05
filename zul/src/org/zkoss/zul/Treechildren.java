@@ -312,6 +312,8 @@ public class Treechildren extends XulElement implements Pageable {
 				//no client at the item when user removes the last one
 				//Server: generate rm and outer in this case
 				}
+			} else if (getParent() instanceof Tree) {
+				smartUpdatePaging(); //Bug 1877059
 			}
 		}
 	}

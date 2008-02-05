@@ -139,13 +139,13 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <!-- ===== -->
 <!-- BUILD -->
 <!-- ===== -->
-<target name="build.jar" depends="compile, copy.web.jar" if="build.jar.required">
+<target name="build.jar" depends="gentime, compile, copy.web.jar" if="build.jar.required">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/zipjs"/>
-		<arg value="${dist.lib.ext.dir}/custom_rhino.jar"/>
+		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
 	</exec>
@@ -193,8 +193,12 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<fileset dir="${src.export.dir}" includes="${import.libs}"/>
 	</copy>
 </target>
-
-
+<target name="gentime" depends="config" if="gentime.required">
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/gentime"/>
+		<arg value="${codegen.dir}/${gentime}"/>
+	</exec>
+</target>
 
 <target name="build.war" depends="compile" if="build.war.required">
 	<mkdir dir="${out.dir}"/>
@@ -295,7 +299,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	 windowtitle="${project.name} ${project.version} API"
 	 doctitle="${project.name} ${project.version} API"
 	 additionalparam="-breakiterator -source ${source.version}"
-	 bottom="Copyright &amp;copy; 2005-2007 Potix Corporation. All Rights Reserved.">
+	 bottom="Copyright &amp;copy; 2005-2008 Potix Corporation. All Rights Reserved.">
 		<classpath>
 			<pathelement path="${javadoc.class.path}"/>
 		</classpath>

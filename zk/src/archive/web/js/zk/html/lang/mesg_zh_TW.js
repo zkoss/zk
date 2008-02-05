@@ -32,6 +32,7 @@ mesg.INTEGER_REQUIRED = "只能輸入整數，而不是 ";
 mesg.EMPTY_NOT_ALLOWED = "不能空白，也不能只含空白字元";
 mesg.GOTO_ERROR_FIELD = "回錯誤欄";
 mesg.PLEASE_WAIT = "處理中…";
+mesg.VALUE_NOT_MATCHED = "你必需指定一個在下拉選單裡的值。";
 
 mesg.FILE_SIZE = "檔案大小：";
 mesg.KBYTES = "KB";

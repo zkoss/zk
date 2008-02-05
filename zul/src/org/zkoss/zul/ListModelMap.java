@@ -24,6 +24,7 @@ import org.zkoss.lang.Objects;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Comparator;
@@ -180,7 +181,7 @@ implements ListModelExt, Map, java.io.Serializable {
 	public Object put(Object key, Object o) {
 		final Object ret;
 		if (_map.containsKey(key)) {
-			if(Objects.equals(o, _map.get(key))) {
+			if (Objects.equals(o, _map.get(key))) {
 				return o; //nothing changed
 			}
 			int index = indexOfKey(key);
@@ -188,9 +189,22 @@ implements ListModelExt, Map, java.io.Serializable {
 			fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 		} else {
 			ret = _map.put(key, o);
-			//bug #1819318  Problem while using SortedSet with Databinding
-			final int i1 = _map instanceof LinkedHashMap ? _map.size() : indexOfKey(key);
-			fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
+			
+			//After put, the position can change if not LinkedHashMap
+			//bug #1819318 Problem while using SortedSet with Databinding
+			//bug #1839634 Problem while using HashSet with Databinding
+			if (_map instanceof LinkedHashMap) {
+				//bug 1869614 Problem when switching from ListModelList to ListModelMap, 
+				//java.lang.IndexOutOfBoundsException: 1, interval added index should be _map.size() - 1
+				final int i1 = _map.size() - 1;
+				fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
+			} else if (_map instanceof SortedMap) {
+				final int i1 = indexOfKey(key);
+				fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
+			} else {//bug #1839634, HashMap, not sure the iteration sequence 
+					//of the HashMap, must resync
+				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+			}
 		}
 		return ret;
 	}
@@ -254,20 +268,24 @@ implements ListModelExt, Map, java.io.Serializable {
 				fireEvent(ListDataEvent.INTERVAL_ADDED, sz, sz + len - 1);
 			}
 		} else { //bug #1819318  Problem while using SortedSet with Databinding
-			for(Iterator it = c.entrySet().iterator(); it.hasNext();) {
-				final Entry entry = (Entry) it.next();
-				final Object key = entry.getKey();
-				final Object val = entry.getValue();
-				put(key, val);
-			}
+				//bug #1839634 Problem while using HashSet with Databinding
+			_map.putAll(c);
+			fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 		}
 	}
 
 	public Object remove(Object key) {
 		if (_map.containsKey(key)) {
-			int index = indexOfKey(key);
-			Object ret = _map.remove(key);
-			fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+			//bug #1819318 Problem while using SortedSet with Databinding
+			Object ret = null;
+			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+				int index = indexOfKey(key);
+				ret = _map.remove(key);
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+			} else { //bug #1839634 Problem while using HashSet with Databinding
+				ret = _map.remove(key);
+				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+			}
 			return ret;
 		}
 		return null;
@@ -350,8 +368,14 @@ implements ListModelExt, Map, java.io.Serializable {
 		
 		public void remove() {
 			if (_index >= 0) {
+				//bug #1819318 Problem while using SortedSet with Databinding
 				_it.remove();
-				fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
+				if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+					fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
+				} else {
+					//bug #1839634 Problem while using HashSet with Databinding
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+				}
 			}
 		}
 	}
@@ -374,9 +398,18 @@ implements ListModelExt, Map, java.io.Serializable {
 		}
 			
 		public boolean remove(Object o) {
-			int index = indexOf(o);
-			boolean ret = _set.remove(o);
-			fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+			boolean ret = false;
+			if (_set.contains(o)) {
+				//bug #1819318 Problem while using SortedSet with Databinding
+				if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+					final int index = indexOf(o);
+					ret = _set.remove(o);
+					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+				} else { //bug #1839634 Problem while using HashSet with Databinding
+					ret = _set.remove(o);
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+				}
+			}
 			return ret;
 		}
 		protected int indexOf(Object o) {
@@ -388,14 +421,33 @@ implements ListModelExt, Map, java.io.Serializable {
 				clear();
 				return true;
 			}
-			return removePartial(_set, c, true);
+
+			//bug #1819318 Problem while using SortedSet with Databinding
+			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+				return removePartial(_set, c, true);
+			} else { //bug #1839634 Problem while using HashSet with Databinding
+				final boolean ret = _set.removeAll(c);
+				if (ret) {
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+				}
+				return ret;
+			}
 		}
 	
 		public boolean retainAll(Collection c) {
 			if (_set == c || this == c) { //special case
 				return false;
 			}
-			return removePartial(_set, c, false);
+			//bug #1819318 Problem while using SortedSet with Databinding
+			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+				return removePartial(_set, c, false);
+			} else { //bug #1839634 Problem while using HashSet with Databinding
+				final boolean ret = _set.retainAll(c);
+				if (ret) {
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+				}
+				return ret;
+			}
 		}
 		
 		public Iterator iterator() {
@@ -487,12 +539,21 @@ implements ListModelExt, Map, java.io.Serializable {
 		}
 		
 		public boolean remove(Object o) {
-			int index = indexOfAndRemove(o);
-			if (index < 0) {
-				return false;
+			//bug #1819318 Problem while using SortedSet with Databinding
+			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+				int index = indexOfAndRemove(o);
+				if (index < 0) {
+					return false;
+				}
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+				return true;
+			} else {
+				final boolean ret = _inner.remove(o);
+				if (ret) {
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+				}
+				return ret;
 			}
-			fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
-			return true;
 		}
 
 		public boolean removeAll(Collection c) {
@@ -500,14 +561,32 @@ implements ListModelExt, Map, java.io.Serializable {
 				clear();
 				return true;
 			}
-			return removePartial(_inner, c, true);
+			//bug #1819318 Problem while using SortedSet with Databinding
+			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+				return removePartial(_inner, c, true);
+			} else { //bug #1839634 Problem while using HashSet with Databinding
+				final boolean ret = _inner.removeAll(c);
+				if (ret) {
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+				}
+				return ret;
+			}
 		}
 		
 		public boolean retainAll(Collection c) {
 			if (_inner == c || this == c) { //special case
 				return false;
 			}
-			return removePartial(_inner, c, false);
+			//bug #1819318 Problem while using SortedSet with Databinding
+			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+				return removePartial(_inner, c, false);
+			} else { //bug #1839634 Problem while using HashSet with Databinding
+				final boolean ret = _inner.retainAll(c);
+				if (ret) {
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+				}
+				return ret;
+			}
 		}
 		
 		public Iterator iterator() {

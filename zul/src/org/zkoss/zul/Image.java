@@ -19,7 +19,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
 import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
@@ -29,6 +28,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * An image.
@@ -147,7 +147,8 @@ public class Image extends XulElement {
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			if (_image == null) smartUpdate("src", getEncodedSrc());
+			if (_image == null)
+				smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 				//_src is meaningful only if _image is null
 		}
 	}
@@ -170,7 +171,7 @@ public class Image extends XulElement {
 		if (image != _image) {
 			_image = image;
 			if (_image != null) ++_imgver; //enforce browser to reload image
-			smartUpdate("src", getEncodedSrc());
+			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the content set by {@link #setContent}.
@@ -187,26 +188,8 @@ public class Image extends XulElement {
 	 * <p>Used only for component template, not for application developers.
 	 */
 	private String getContentSrc() {
-		final Desktop desktop = getDesktop();
-		if (desktop == null) return ""; //no avail at client
-
-		final StringBuffer sb = new StringBuffer(64).append('/');
-		Strings.encode(sb, _imgver);
-		final String name = _image.getName();
-		final String format = _image.getFormat();
-		if (name != null || format != null) {
-			sb.append('/');
-			boolean bExtRequired = true;
-			if (name != null && name.length() != 0) {
-				sb.append(name);
-				bExtRequired = name.lastIndexOf('.') < 0;
-			} else {
-				sb.append(getId());
-			}
-			if (bExtRequired && format != null)
-				sb.append('.').append(format);
-		}
-		return desktop.getDynamicMediaURI(this, sb.toString()); //already encoded
+		return Utils.getDynamicMediaURI(
+			this, _imgver, _image.getName(), _image.getFormat());
 	}
 
 	//-- super --//
@@ -270,6 +253,12 @@ public class Image extends XulElement {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			return _image;
+		}
+	}
+
+	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+		public String getValue() {
+			return getEncodedSrc();
 		}
 	}
 }

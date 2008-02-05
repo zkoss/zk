@@ -32,6 +32,36 @@ if (!window.Selectable_effect) { //define it only if not customized
 			zk.addClass(row, zk.hasClass(row, "seld") ? "overseld": "overd");
 	};
 }
+var _zkselx = {};
+_zkselx.addAft = zkau.cmd1.addAft;
+zkau.cmd1.addAft = function (uuid, cmp, html) {
+	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
+	_zkselx.addAft(uuid, cmp, html);
+};
+_zkselx.addBfr = zkau.cmd1.addBfr;
+zkau.cmd1.addBfr = function (uuid, cmp, html) {
+	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
+	_zkselx.addBfr(uuid, cmp, html);
+};
+_zkselx._addChd = function (uuid, cmp, html) {
+	var h = html.trim(), from = h.indexOf("Lit");
+	var isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">");
+	if (isLit && $type(cmp) != "Lit") { // only first listitem.
+		var head = $parentByTag(cmp, "DIV");
+		var cave = $e($uuid(head) + "!cave");	
+		if (cave.tBodies[0].rows.length) {
+			var n = cave.tBodies[0].rows[0];
+			var to = n.previousSibling;
+			zk.insertHTMLBefore(n, html);
+			zkau._initSibs(n, to, false);
+		} else {
+			zk.insertHTMLBeforeEnd(cave.tBodies[0], html);			
+			zkau._initChildren(cave.tBodies[0]);
+		}
+		return true;
+	}
+	return false;
+};
 
 ////
 // Seletable //
@@ -56,6 +86,7 @@ zk.Selectable.prototype = {
 		//_headtbl might be null, while other must be NOT null
 		this.body = $e(this.id + "!body");
 		if (this.body) {
+			this.body.style.overflow = "";
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 			if (this.bodytbl) {
 				var bds = this.bodytbl.tBodies;
@@ -74,7 +105,7 @@ zk.Selectable.prototype = {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 
 			var bs = this.bodytbl.tBodies;
-			for (var j = 0; j < bs.length; ++j)
+			for (var j = 0, bl = bs.length; j < bl; ++j)
 				if (bs[j].id) {
 					this.bodyrows = bs[j].rows;
 					break;
@@ -102,7 +133,7 @@ zk.Selectable.prototype = {
 						return true;
 
 					if (evt) {
-						switch (evt.keyCode) {
+						switch (Event.keyCode(evt)) {
 						case 33: //PgUp
 						case 34: //PgDn
 						case 38: //UP
@@ -143,7 +174,7 @@ zk.Selectable.prototype = {
 				for (var j = this.headtbl.rows.length; j;) {
 					var headrow = this.headtbl.rows[--j];
 					for (var k = headrow.cells.length; k;) {
-						var n = $e(headrow.cells[--k].id + "!cave"); // Bug #1819037
+						var n = headrow.cells[--k].firstChild; // Bug #1819037
 						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
 							if (!n.id || !n.id.endsWith("!hint")) {
 								empty = false;
@@ -152,7 +183,8 @@ zk.Selectable.prototype = {
 					}
 				}
 				if (empty) this.head.style.height = "0px"; // Bug #1819037
-					//we have to hide if empty (otherwise, a small block is shown)
+					//we have to hide if empty (otherwise, a small block is shown)					
+				else this.head.style.height = "";// Bug #1832359
 			}
 
 			this.body.onscroll = function () {
@@ -164,14 +196,12 @@ zk.Selectable.prototype = {
 			};
 		}
 		
-		
 		if (isLater && this.qcells.length
 		&& this.headtbl && this.headtbl.rows.length
 		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
 			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
 		} else {
 			setTimeout("zkSel._calcSize('"+this.id+"')", 150); // Bug #1813722
-			this.stripe();
 		}
 		this.qcells.length = 0;
 		this._render(155); //prolong a bit since calSize might not be ready
@@ -190,15 +220,14 @@ zk.Selectable.prototype = {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
-			this.foot = this.foottbl = this.fnSubmit = this.qcells = null;
+			this.foot = this.foottbl = this.fnSubmit = this.qcells = this._focus = null;
 			//in case: GC not works properly
 	},
 	/** Stripes the rows. */
 	stripe: function () {
 		var scOdd = getZKAttr(this.element, "scOddRow");
 		if (!scOdd || !this.bodyrows) return;
-
-		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
+		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
 			if ($visible(row)) {
 				zk.addClass(row, scOdd, !even);
@@ -216,7 +245,7 @@ zk.Selectable.prototype = {
 	// Otherwise, it cause scroll problem on IE:
 	// When user clicks on the scrollbar, it scrolls first and call onfocus,
 	// then it will scroll back to the focus because _focusToAnc is called
-		switch (evt.keyCode) {
+		switch (Event.keyCode(evt)) {
 		case 33: //PgUp
 		case 34: //PgDn
 		case 38: //UP
@@ -246,17 +275,17 @@ zk.Selectable.prototype = {
 			shift = false; //OK to 
 
 		var endless = false, step, lastrow;
-		switch (evt.keyCode) {
+		switch (Event.keyCode(evt)) {
 		case 33: //PgUp
 		case 34: //PgDn
 			step = this.realsize();
 			if (step == 0) step = 20;
-			if (evt.keyCode == 33)
+			if (Event.keyCode(evt) == 33)
 				step = -step;
 			break;
 		case 38: //UP
 		case 40: //DOWN
-			step = evt.keyCode == 40 ? 1: -1;
+			step = Event.keyCode(evt) == 40 ? 1: -1;
 			break;
 		case 32: //SPACE
 			if (this._isMultiple()) this.toggleSelect(row, !this._isSelected(row));
@@ -264,7 +293,7 @@ zk.Selectable.prototype = {
 			break;
 		case 36: //Home
 		case 35: //End
-			step = evt.keyCode == 35 ? 1: -1;
+			step = Event.keyCode(evt) == 35 ? 1: -1;
 			endless = true;
 			break;
 		case 37: //LEFT
@@ -278,7 +307,7 @@ zk.Selectable.prototype = {
 		if (step) {
 			if (shift) this.toggleSelect(row, true);
 			for (; (row = step > 0 ? row.nextSibling: row.previousSibling) != null;) {
-				if ($tag(row) == "TR"  && this._isValid(row)) {
+				if ($tag(row) == "TR"  && this._isValid(row) && getZKAttr(row, "disd") != "true") {
 					if (shift) this.toggleSelect(row, true);
 
 					if ($visible(row)) {
@@ -295,9 +324,10 @@ zk.Selectable.prototype = {
 		if (lastrow) {
 			if (ctrl) this.focus(lastrow);
 			else this.select(lastrow);
+			zk.scrollIntoView(this.body, lastrow); // Bug #1823947 and #1823278
 		}
 
-		switch (evt.keyCode) {
+		switch (Event.keyCode(evt)) {
 		case 33: //PgUp
 		case 34: //PgDn
 		case 38: //UP
@@ -342,7 +372,6 @@ zk.Selectable.prototype = {
 		//not to change selection if dragging (selected or not)
 		if (zk.dragging /*&& this._isSelected(row)*/)
 			return;
-
 		if (checkmark) {
 			if (this._isMultiple()) {
 				this.toggleSelect(row, target.checked);
@@ -378,7 +407,6 @@ zk.Selectable.prototype = {
 
 			//since row might was selected, we always enfoce focus here
 			this._focusToAnc(row);
-
 			//if (evt) Event.stop(evt);
 			//No much reason to eat the event.
 			//Oppositely, it disabled popup (bug 1578659)
@@ -404,7 +432,7 @@ zk.Selectable.prototype = {
 
 	/** Re-setfocus to the anchor who shall be in focus. */
 	_refocus: function () {
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (this._isFocus(r)) this._focusToAnc(r);
 		}
@@ -439,7 +467,7 @@ zk.Selectable.prototype = {
 			}
 
 			var rows = this.bodyrows;
-			for (var j = 0; j < rows.length; ++j)
+			for (var j = 0, rl = rows.length; j < rl; ++j)
 				this._changeSelect(rows[j], sels[rows[j].id] == true);
 			return true;
 		case "z.vflex":
@@ -496,7 +524,7 @@ zk.Selectable.prototype = {
 		if (this._selectOne(row, true)) {
 			//notify server
 			zkau.send({
-				uuid: this.id, cmd: "onSelect", data: [this.getItemUuid(row)]},
+				uuid: this.id, cmd: "onSelect", data: [this.getItemUuid(row), this.getItemUuid(row)]},
 				zkau.asapTimeout(this.element, "onSelect"));
 		}
 	},
@@ -516,7 +544,7 @@ zk.Selectable.prototype = {
 		}
 
 		//notify server
-		this._sendSelect();
+		this._sendSelect(row);
 	},
 	/** Selects a range from the last focus up to the specified one.
 	 * Callable only if multiple
@@ -528,7 +556,7 @@ zk.Selectable.prototype = {
 		}
 
 		var focusfound = false, rowfound = false;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (focusfound) {
 				this._changeSelect(r, true);
@@ -551,7 +579,7 @@ zk.Selectable.prototype = {
 
 		this.focus(row);
 		this._fixSelelectedId();
-		this._sendSelect();
+		this._sendSelect(row);
 	},
 
 	/** Changes the specified row as focused. */
@@ -577,6 +605,7 @@ zk.Selectable.prototype = {
 	 */
 	_selectOne: function (row, toFocus) {
 		row = $e(row);
+		
 		var selId = this._getSelectedId();
 
 		if (this._isMultiple()) {
@@ -604,7 +633,6 @@ zk.Selectable.prototype = {
 				if (row && toFocus) this._unsetFocusExcept(row);
 			}
 		}
-
 		//we always invoke _changeSelect to change focus
 		if (row) {
 			this._changeSelect(row, true);
@@ -643,7 +671,7 @@ zk.Selectable.prototype = {
 	/** Changes the focus status, and return whether it is changed. */
 	_setFocus: function (row, toFocus) {
 		if (!this._isValid(row)) return false;
-
+		this._focus = row;
 		var changed = this._isFocus(row) != toFocus;
 		if (changed) {
 			this._fixAnc(row, toFocus);
@@ -672,7 +700,9 @@ zk.Selectable.prototype = {
 				el.innerHTML = " ";
 				el.onfocus = zkSel.cmonfocus;
 				el.onblur = zkSel.cmonblur;
-				$e(row.cells[0].id+ "!cave").appendChild(el);
+				var cave = row.cells[0].firstChild || row.cells[0];
+				if (cave.firstChild) cave.insertBefore(el, cave.firstChild); 
+				else cave.appendChild(el);
 			}
 		} else {
 			zk.remove(el);
@@ -683,7 +713,7 @@ zk.Selectable.prototype = {
 	 */
 	_unsetSelectAllExcept: function (row) {
 		var changed = false;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (r != row && this._changeSelect(r, false))
 				changed = true;
@@ -694,13 +724,7 @@ zk.Selectable.prototype = {
 	 * is changed.
 	 */
 	_unsetFocusExcept: function (row) {
-		var changed = false;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
-			var r = this.bodyrows[j];
-			if (r != row && this._setFocus(r, false))
-				changed = true;
-		}
-		return changed;
+		return this._focus && this._focus != row ? this._setFocus(this._focus, false) : false;
 	},
 
 	/** Renders listitems that become visible by scrolling.
@@ -716,7 +740,7 @@ zk.Selectable.prototype = {
 		//height might diff (due to different content)
 		var data = "";
 		var min = this.body.scrollTop, max = min + this.body.offsetHeight;
-		for (var j = 0; j < rows.length; ++j) {
+		for (var j = 0, rl = rows.length; j < rl; ++j) {
 			var r = rows[j];
 			if ($visible(r)) {
 				var top = zk.offsetTop(r);
@@ -724,6 +748,7 @@ zk.Selectable.prototype = {
 				if (top > max) break; //Bug 1822517: max might be 0
 				if (getZKAttr(r, "loaded") != "true")
 					data += "," + this.getItemUuid(r);
+				else if (getZKAttr(r, "inited") != "true") zk.initAt(r);
 			}
 		}
 		if (data) {
@@ -733,22 +758,26 @@ zk.Selectable.prototype = {
 	},
 
 	/** Calculates the size. */
-	_calcSize: function () {
-		this._calcHgh();
-
+	_calcSize: function () {		
+		this._calcHgh();	
 		if (this.paging) {// Bug #1826101
 			if (this.bodytbl && this.bodytbl.rows.length) {
 				var head;
-				for (var j = 0; j < this.bodytbl.rows.length; j++) {
+				for (var j = 0, rl = this.bodytbl.rows.length; j < rl; j++) {
 					if ($type(this.bodytbl.rows[j]) == "Lhrs") {
 						head = this.bodytbl.rows[j];
 						break;
 					}
 				}
 				if (head) {
-					for (var j = 0; j < head.cells.length; j++) {
-						var d = head.cells[j];
-						var cave = $e(d.id + "!cave");
+					for (var j = 0, hl = head.cells.length; j < hl; j++) {
+						var d = head.cells[j], cave = d.firstChild;
+						if (!zk.isVisible(d)) { //Bug #1867370
+							for (var k = this.bodyrows.length; --k >=0;)
+								if (this.bodyrows[k].cells[j] != d) 
+									this.bodyrows[k].cells[j].style.display = "none";
+							continue;
+						}
 						if (cave) {
 							var wd =  d.style.width;							
 							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
@@ -762,6 +791,7 @@ zk.Selectable.prototype = {
 			return; //nothing to adjust since single table
 		}
 
+		
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
 		//IE: element's width will be extended to fit body
@@ -787,17 +817,15 @@ zk.Selectable.prototype = {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			} else
-				this.bodytbl.style.width = "";
-
+				this.bodytbl.style.width = "";		
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
 			if (this.headtbl.rows.length) {
-				var head;
-				var j =0
-				for(; j < this.headtbl.rows.length; j++) {
-					var type = $type(this.headtbl.rows[j]);
+				var head, rows = this.headtbl.rows;
+				for(var j = 0, l = rows.length; j < l; j++) {
+					var type = $type(rows[j]);
 					if (type == "Lhrs" || type == "Tcols") {
-						head = this.headtbl.rows[j];
+						head = rows[j];
 						break;
 					}
 				}
@@ -811,13 +839,12 @@ zk.Selectable.prototype = {
 						//Note: we cannot use display="none" (offsetWidth won't be right)
 					for (var j = head.cells.length; --j >= 0;)
 						src.appendChild(document.createElement("TD"));					
-					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);						
+					rows[0].parentNode.insertBefore(src, rows[0]);						
 				}
-				var row = this.headtbl.rows[0];
-				var cells = row.cells;
-				for (var k =0, z = 0; k < cells.length; k++) {
-					var s = cells[k], d = head.cells[k];
-					var wd =  d.style.width;							
+				var row = rows[0], cells = row.cells, k = 0, l = cells.length;
+				
+				for (; k < l; k++) {
+					var s = cells[k], d = head.cells[k], wd = d.style.width;							
 					if (!wd || wd == "auto" || wd.indexOf('%') > -1) // Bug #1822564
 						d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
 					
@@ -825,7 +852,7 @@ zk.Selectable.prototype = {
 					if (zk.isVisible(d))
 						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
 					else s.style.display = "none";
-				} 			
+				}	
 			}
 			if (this.foottbl && this.foottbl.rows.length)
 				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
@@ -839,7 +866,7 @@ zk.Selectable.prototype = {
 	_visiRowAt: function (index) {
 		if (index >= 0) {
 			var rows = this.bodyrows;
-			for (var j = 0; j < rows.length; ++j) {
+			for (var j = 0, rl = rows.length; j < rl; ++j) {
 				var r = rows[j];
 				if ($visible(r) && --index < 0)
 					return r;
@@ -848,33 +875,20 @@ zk.Selectable.prototype = {
 		return null;
 	},
 	_calcHgh: function () {
-		var rows = this.bodyrows;
-		var len = 0, lastVisiRow, firstVisiRow;
-		for (var j = 0; j < rows.length; ++j) { //tree might collapse some items
-			var r = rows[j];
-			if ($visible(r)) {
-				if (!firstVisiRow) firstVisiRow = r;
-				lastVisiRow = r;
-				++len;
-			}
-		}
-
-		var hgh = this.element.style.height;
-		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
+		var rows = this.bodyrows;		
+		var hgh = this.element.style.height, isHgh = hgh && hgh != "auto" && hgh.indexOf('%') < 0;
+		if (isHgh) {
 			hgh = $int(hgh);
 			if (hgh) {
 				hgh -= this._headHgh(0);
 				if (hgh < 20) hgh = 20;
 				var sz = 0;
-				for (var h, j = 0;; ++sz, ++j) {
-					if (sz == len) {
-						sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
-						break;
-					}
-
+				l_out:
+				for (var h, j = 0, rl = rows.length; j < rl; ++sz, ++j) {
 					//next visible row
 					var r;
 					for (;; ++j) {//no need to check length again
+						if (j >= rl) break l_out;
 						r = rows[j];
 						if ($visible(r)) break;
 					}
@@ -885,20 +899,39 @@ zk.Selectable.prototype = {
 						break;
 					}
 				}
+				sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
 
 				this.realsize(sz);
 				this.body.style.height = hgh + "px";
 				
-				if (this.body.offsetHeight) {} // bug #1812001
+				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+				if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
 				// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 				// and IE7 at initializing phase.
 				return; //done
 			}
 		}
 
+		var nVisiRows = 0, nRows = this.size(), lastVisiRow, firstVisiRow, midVisiRow;
+		for (var j = 0, rl = rows.length; j < rl; ++j) { //tree might collapse some items
+			var r = rows[j];
+			if ($visible(r)) {
+				++nVisiRows;
+				if (!firstVisiRow) firstVisiRow = r;
+
+				if (nRows === nVisiRows) {
+					midVisiRow = r;
+					break;
+					//nVisiRows and lastVisiRow useful only if nRows is larger,
+					//so ok to break here
+				}
+				lastVisiRow = r;
+			}
+		}
+
 		hgh = 0;
-		var diff = 2/*experiment*/, sz = this.size();
-		if (!sz) {
+		var diff = 2/*experiment*/;
+		if (!nRows) {
 			if (getZKAttr(this.element, "vflex") == "true") {
 				hgh = this._vflexSize();
 				
@@ -911,31 +944,32 @@ zk.Selectable.prototype = {
 				var rowhgh = zk.offsetHeight(firstVisiRow);
 				if (!rowhgh) rowhgh = this._headHgh(20);
 
-				sz = Math.round((hgh - diff)/ rowhgh);
-				if (sz < 3) { //minimal 3 rows if auto-size
-					sz = 3;
+				nRows = Math.round((hgh - diff)/ rowhgh);
+				if (nRows < 3) { //minimal 3 rows if auto-size
+					nRows = 3;
 					hgh = rowhgh * 3 + diff;
 				}
 			}
-			this.realsize(sz);
+			this.realsize(nRows);
 		}
 
-		if (sz) {
+		if (nRows) {
 			if (!hgh) {
-				if (!len) hgh = this._headHgh(20) * sz;
-				else if (sz <= len) {
-					var r = this._visiRowAt(sz - 1);
-					hgh = zk.offsetTop(r) + zk.offsetHeight(r);
+				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
+				else if (nRows <= nVisiRows) {
+					//var r = this._visiRowAt(nRows - 1); disabled by Jumper
+					hgh = zk.offsetTop(midVisiRow) + zk.offsetHeight(midVisiRow);
 				} else {
 					hgh = zk.offsetTop(lastVisiRow) + zk.offsetHeight(lastVisiRow);
-					hgh = Math.ceil((sz * hgh) / len);
+					hgh = Math.ceil((nRows * hgh) / nVisiRows);
 				}
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
 
 			this.body.style.height = hgh + "px";
 			
-			if (this.body.offsetHeight) {} // bug #1812001
+			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 			// and IE7 at initializing phase.
 		} else {
@@ -944,7 +978,7 @@ zk.Selectable.prototype = {
 			hgh = this.element.style.height;
 			if (zk.ie && (!hgh || hgh == "auto")
 			&& this.body.offsetWidth - this.body.clientWidth > 11) {
-				if (!len) this.body.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
+				if (!nVisiRows) this.body.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
 				else this.body.style.height =
 						(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
 			} else {
@@ -978,25 +1012,26 @@ zk.Selectable.prototype = {
 	},
 
 	/** Sels all items (don't notify server and change focus, because it is from server). */
-	_selectAll: function () {
+	_selectAll: function (notify) {
 		var rows = this.bodyrows;
-		for (var j = 0; j < rows.length; ++j)
+		for (var j = 0, rl = rows.length; j < rl; ++j)
 			this._changeSelect(rows[j], true);
 
 		this._setSelectedId(rows.length ? rows[0].id: null);
+		if (notify) this._sendSelect(rows[0]);
 	},
 
 	/** Notifies the server the selection is changed (callable only if multiple). */
-	_sendSelect: function () {
+	_sendSelect: function (row) {
 		//To reduce # of bytes to send, we use a string instead of array.
 		var data = "";
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (this._isSelected(r))
 				data += "," + this.getItemUuid(r);
 		}
 		if (data) data = data.substring(1);
-		zkau.send({uuid: this.id, cmd: "onSelect", data: [data]},
+		zkau.send({uuid: this.id, cmd: "onSelect", data: [data, row ? this.getItemUuid(row) : ""]},
 				zkau.asapTimeout(this.element, "onSelect"));
 	},
 
@@ -1018,7 +1053,7 @@ zk.Selectable.prototype = {
 	/** Fixes z.selId to the first selected item. */
 	_fixSelelectedId: function () {
 		var selId = null;
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (this._isSelected(r)) {
 				selId = r.id;
@@ -1053,7 +1088,7 @@ zk.Selectable.prototype = {
 	},
 	/** Returns whether the row is valid. */
 	_isValid: function (row) {
-		return row && !row.id.endsWith("!child");
+		return row && !row.id.endsWith("!child") && !row.id.endsWith("!ph") && !row.id.endsWith("!pt");
 	},
 
 	/** Called when the form enclosing it is submitting. */
@@ -1061,7 +1096,7 @@ zk.Selectable.prototype = {
 		var nm = getZKAttr(this.element, "name");
 		if (!nm || !this.form) return;
 
-		for (var j = 0; j < this.form.elements.length; ++j){
+		for (var j = 0, fl = this.form.elements.length; j < fl; ++j){
 			var el = this.form.elements[j];
 			if (getZKAttr(el, "hiddenBy") == this.id) {
 				zk.remove(el);
@@ -1069,7 +1104,7 @@ zk.Selectable.prototype = {
 			}
 		}
 
-		for (var j = 0; j < this.bodyrows.length; ++j) {
+		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
 			if (this._isSelected(r))
 				setZKAttr(
@@ -1118,6 +1153,19 @@ zkSel.onout = function (evt) {
 };
 zkSel.onoutTo = function (row) {
 	if (row) Selectable_effect(row, true);
+};
+zkSel.ondragover = function (evt) {
+	var target = Event.element(evt);
+	var tag = $tag(target);
+	if (tag != "INPUT" && tag != "TEXTAREA") {
+		var p = $parentByType(target, "Lic");
+		if (p) p.firstChild.style.MozUserSelect = "none";
+	}
+};
+zkSel.ondragout = function (evt) {
+	var target = Event.element(evt);
+	var p = $parentByType(target, "Lic");
+	if (p) p.firstChild.style.MozUserSelect = "";	
 };
 /** (!cm or !sel)'s onfocus. */
 zkSel.cmonfocus = function (evt) {
@@ -1187,49 +1235,72 @@ zkLibox.init = function (cmp) {
 	}
 };
 /** Called when a listbox becomes visible because of its parent. */
-zkLibox.onVisi = zkLibox.onSize = function (cmp) {
+zkLibox.onVisi = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };
 
 zkLit = {}; //listitem
 zkLit.init = function (cmp) {
+	setZKAttr(cmp, "inited", "true");
 	//zk.disableSelection(cmp);
 	//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
-
-	zk.listen(cmp, "click", zkLibox.onclick);
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "click", zkLibox.onclick);
+		zk.listen(cmp, "mouseover", zkSel.onover);
+		zk.listen(cmp, "mouseout", zkSel.onout);
+	}	
 	zk.listen(cmp, "keydown", zkLibox.onkeydown);
-	zk.listen(cmp, "mouseover", zkSel.onover);
-	zk.listen(cmp, "mouseout", zkSel.onout);
 	zkLit.stripe(cmp);
+};
+zkLit.setAttr = function (cmp, nm, val) {
+	if (nm == "visibility") {// Bug #1836257
+		var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
+		if (meta) {
+			if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
+			setTimeout(meta.fixedStripe, 0);
+		}
+	}
+	return false;
+};
+zkLit.initdrag = function (cmp) {
+	if (zk.gecko) {
+		zk.listen(cmp, "mouseover", zkSel.ondragover);
+		zk.listen(cmp, "mouseout",  zkSel.ondragout);	
+	}
+};
+zkLit.cleandrag = function (cmp) {
+	if (zk.gecko) {
+		zk.unlisten(cmp, "mouseover", zkSel.ondragover);
+		zk.unlisten(cmp, "mouseout",  zkSel.ondragout);	
+	}
 };
 zkLit.cleanup = function (cmp) {
 	zkLit.stripe(cmp, true);
 };
 zkLit.stripe = function (cmp, isClean) {
-	var libox = $parentByType(cmp, "Libox");
-	var meta = zkau.getMeta(libox);
+	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
-		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, true);
-		else zk.addInitLater(meta.fixedStripe, false, true);
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Lit");
+		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Lit");
 	}
 };
 zkLic = {}; //listcell or Treecell
 zkLic.init = function (cmp) {
-	var isTree = $type(cmp.parentNode) == "Trow";
-	var libox = $parentByType(cmp, isTree ? "Tree" : "Libox");
-	var meta = zkau.getMeta(libox);
+	var meta = zkau.getMeta(getZKAttr(cmp.parentNode, "rid"));	
 	if (meta) {
 		meta.putCellQue(cmp);
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, true);
+		zk.addInitLater(meta.fixedSize, false, meta.id + "Lic");
 	}
 };
+zkLic.initdrag = zkLit.initdrag;
+zkLic.cleandrag = zkLit.cleandrag;
 zkLic.setAttr = function (cmp, nm, val) {
 	if ("style" == nm) {
-		var cell = $e(cmp.id + "!cave");
+		var cell = cmp.firstChild;
 		var v = zk.getTextStyle(val);
 		if (v) zkau.setAttr(cell, nm, v);
 		zkau.setAttr(cmp, nm, val);
@@ -1248,7 +1319,16 @@ zkLcfc.init = function (cmp) {
 	zk.listen(cmp, "focus", zkSel.cmonfocus);
 	zk.listen(cmp, "blur", zkSel.cmonblur);
 };
-
+zkLhfc = {}; //checkmark for listheader
+zkLhfc.init = function (cmp) {
+	zk.listen(cmp, "click", zkLhfc.onclick);
+};
+zkLhfc.onclick = function (evt) {
+	var cmp = zkau.evtel(evt);	
+	var meta = zkau.getMetaByType(cmp, "Libox");
+	if (meta)
+		cmp.checked ? meta._selectAll(true) : meta.select("");
+};
 zk.addModuleInit(function () {
 	//Listheader
 	//init it later because zul.js might not be loaded yet
@@ -1281,15 +1361,17 @@ zkLisel.init = function (cmp) {
 /** Handles onchange from select/list. */
 zkLisel.onchange = function (evtel) {
 	var cmp = zkau.evtel(evtel); //backward compatible with 2.4 or before
-	var data;
+	var data, reference;
 	if (cmp.multiple) {
 		//To reduce # of bytes to send, we use a string instead of array.
 		data = "";
 		var opts = cmp.options;
-		for (var j = 0; j < opts.length; ++j) {
+		for (var j = 0, ol = opts.length; j < ol; ++j) {
 			var opt = opts[j];
-			if (opt.selected)
+			if (opt.selected) {
 				data += ","+opt.id;
+				if (!reference) reference = opt.id;
+			}
 		}
 		if (data) data = data.substring(1);
 		//Design consideration: we could use defaultSelected to minimize
@@ -1299,9 +1381,10 @@ zkLisel.onchange = function (evtel) {
 	} else {
 		var opt = cmp.options[cmp.selectedIndex];
 		data = opt.id;
+		reference = opt.id;
 	}
 	var uuid = $uuid(cmp);
-	zkau.send({uuid: uuid, cmd: "onSelect", data: [data]},
+	zkau.send({uuid: uuid, cmd: "onSelect", data: [data, reference]},
 			zkau.asapTimeout(uuid, "onSelect"));
 
 	//Bug 1756559: see au.js

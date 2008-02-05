@@ -5,13 +5,20 @@
 img	{
 	hspace: 0; vspace: 0
 }
-
+.messagebox-btn {
+	width: 47pt;
+	text-overflow: ellipsis;
+}
 div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
 	position:relative;
 	<%-- Bug 1712708:  we have to specify position:relative --%>
 }
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	text-overflow: ellipsis;
+}
+div.head-cell-inner {
+	white-space: nowrap;
+	<%-- Bug #1839960  --%>
 }
 div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging {<%-- always used. --%>
 	position: relative;
@@ -29,6 +36,7 @@ span.dottree-root-open, span.dottree-root-close, span.dottree-tee-open, span.dot
 span.dottree-last-open, span.dottree-last-close, span.dottree-tee, span.dottree-vbar, span.dottree-last, span.dottree-spacer {
 	height: 18px;
 }
+
 <%-- Append New --%>
 option {
 	font-family: Verdana, Tahoma, Arial, serif;

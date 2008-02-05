@@ -152,7 +152,12 @@ public class Row extends XulElement {
 
 			final Grid grid = getGrid();
 			if (grid != null && grid.getModel() != null)
-				smartUpdate("z.loaded", _loaded);
+				if (_loaded && !grid.inPagingMold())
+					invalidate();
+					//reason: the client doesn't init (for better performance)
+					//i.e., z.skipsib is specified for unloaded items
+				else
+					smartUpdate("z.loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this row is loaded; used if
@@ -174,6 +179,11 @@ public class Row extends XulElement {
 		return j;
 	}
 
+	protected String getRealSclass() {
+		final String sclx = (String) getParent().getAttribute(Attributes.STRIPE_STATE);
+		return super.getRealSclass() + (sclx != null ? " " + sclx : "");
+	}
+	
 	/** Returns the HTML attributes for the child of the specified index.
 	 */
 	public String getChildAttrs(int index) {
@@ -243,14 +253,21 @@ public class Row extends XulElement {
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null)
 			sb.append(clkattrs);
+
+		HTMLs.appendAttribute(sb, "z.rid", getGrid().getUuid());
 		HTMLs.appendAttribute(sb, "align", _align);
 		HTMLs.appendAttribute(sb, "valign", _valign);
 		if (_nowrap)
 			HTMLs.appendAttribute(sb, "nowrap", "nowrap");
 
 		final Grid grid = getGrid();
-		if (grid != null && grid.getModel() != null)
+		if (grid != null && grid.getModel() != null) {
 			HTMLs.appendAttribute(sb, "z.loaded", _loaded);
+			if (getAttribute(Attributes.SKIP_SIBLING) != null) {
+				HTMLs.appendAttribute(sb, "z.skipsib", "true");
+				removeAttribute(Attributes.SKIP_SIBLING);
+			}
+		}
 		return sb.toString();
 	}
 	public void setStyle(String style) {

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry excluding="**/.svn/|**/Thumbs.db|archive/|archive/|archive/" path="src" kind="src"/>
-	<classpathentry path="src/archive" kind="src"/>
-	<classpathentry path="J2MELIB" kind="con"/>
-	<classpathentry path="build" kind="output"/>
-</classpath>

@@ -15,5 +15,11 @@ Enter URL fragment (hash):
 <button href="B30-1773575.zul" label="B30-1773575.zul" />
 <button href="B30-1773575.zul#12345" label="B30-1773575.zul#12345" />
 </vbox>
+<zscript>
+setHash(){
+desktop.setBookmark(tb.value);
+hash.setValue(desktop.getBookmark());
+}
+</zscript>
 </window>
 </zk>

@@ -34,6 +34,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.au.out.AuInvoke;
 
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.impl.FormatInputElement;
@@ -197,7 +198,37 @@ public class Datebox extends FormatInputElement {
 		_tzone = tzone;
 	}
 
+	/** Drops down or closes the calendar to select a date.
+	 *
+	 * @since 3.0.1
+	 * @see #open
+	 * @see #close
+	 */
+	public void setOpen(boolean open) {
+		if (open) open();
+		else close();
+	}
+	/** Drops down the calendar to select a date.
+	 * The same as setOpen(true).
+	 *
+	 * @since 3.0.1
+	 */
+	public void open() {
+		response("dropdn", new AuInvoke(this, "dropdn", true));
+	}
+	/** Closes the calendar if it was dropped down.
+	 * The same as setOpen(false).
+	 *
+	 * @since 3.0.1
+	 */
+	public void close() {
+		response("dropdn", new AuInvoke(this, "dropdn", false));
+	}
+
 	//-- super --//
+	public void setConstraint(String constr) {
+		setConstraint(new SimpleDateConstraint(constr));
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
 			return null;
@@ -213,13 +244,6 @@ public class Datebox extends FormatInputElement {
 				new WrongValueException(this, MZul.DATE_REQUIRED,
 					new Object[] {value, fmt}));
 		}
-/*
-		if (date.compareTo(_min) < 0 || date.compareTo(_max) > 0)
-			throw showCustomError(
-				new WrongValueException(
-					MZul.DATE_OUT_OF_RANGE,
-					new Object[] {value, df.format(_min), df.format(_max), fmt}));
-*/
 		return date;
 	}
 	protected String coerceToString(Object value) {
@@ -240,10 +264,16 @@ public class Datebox extends FormatInputElement {
 	}
 
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if (_lenient && !_compact) return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
+		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
+		if (getConstraint() instanceof SimpleDateConstraint) {
+			final SimpleDateConstraint st = (SimpleDateConstraint)getConstraint();
+			Date d = st.getBeginDate();
+			if (d != null)
+				HTMLs.appendAttribute(sb, "z.bd", d.getTime() / 1000); 
+			d = st.getEndDate();
+			if (d != null)
+				HTMLs.appendAttribute(sb, "z.ed", d.getTime() / 1000);
+		}
 		if (!_lenient) sb.append(" z.lenient=\"false\"");
 		if (_compact) sb.append(" z.compact=\"true\"");
 		return sb.toString();

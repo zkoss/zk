@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
 import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
@@ -31,6 +30,7 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.au.out.AuInvoke;
 
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * An audio clip.
@@ -165,8 +165,7 @@ public class Audio extends XulElement {
 	}
 	private void updateSrc() {
 		invalidate();
-		//IE won't work if we only change the src attribute
-		//smartUpdate("src", getEncodedSrc());
+			//IE won't work if we only change the src attribute
 	}
 	/** Returns the content set by {@link #setContent}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
@@ -180,26 +179,8 @@ public class Audio extends XulElement {
 	 * Don't call this method unless _audio is not null;
 	 */
 	private String getAudioSrc() {
-		final Desktop desktop = getDesktop();
-		if (desktop == null) return ""; //no avail at client
-
-		final StringBuffer sb = new StringBuffer(64).append('/');
-		Strings.encode(sb, _audver);
-		final String name = _audio.getName();
-		final String format = _audio.getFormat();
-		if (name != null || format != null) {
-			sb.append('/');
-			boolean bExtRequired = true;
-			if (name != null && name.length() != 0) {
-				sb.append(name);
-				bExtRequired = name.lastIndexOf('.') < 0;
-			} else {
-				sb.append(getId());
-			}
-			if (bExtRequired && format != null)
-				sb.append('.').append(format);
-		}
-		return desktop.getDynamicMediaURI(this, sb.toString()); //already encoded
+		return Utils.getDynamicMediaURI(
+			this, _audver, _audio.getName(), _audio.getFormat());
 	}
 
 	//-- super --//

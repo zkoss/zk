@@ -46,6 +46,16 @@ public class RhinoInterpreter extends GenericInterpreter {
 		return _global;
 	}
 
+	/** Returns the native interpreter, or null if it is not initialized
+	 * or destroyed.
+	 * From application's standpoint, it never returns null, and the returned
+	 * object must be an instance of {@link org.mozilla.javascript.Scriptable}
+	 * @since 3.0.2
+	 */
+	public Object getNativeInterpreter() {
+		return _global;
+	}
+
 	//GenericInterpreter//
 	protected void exec(String script) {
 		Context.getCurrentContext()

@@ -34,6 +34,15 @@ import org.zkoss.util.ModificationException;
  * @author tomyeh
  */
 public class Fields {
+	/** Changes the accessibility without throwing any exception.
+	 * @since 3.0.3
+	 */
+	public static final void setAccessible(AccessibleObject f, boolean accessible) {
+		try {
+			f.setAccessible(accessible);
+		} catch (Throwable t) {
+		}
+	}
 	/** Returnst the value of the specfied field of the object.
 	 *
 	 * <p>If getField(obj, "a.b.c") is called and obj.getA() or

@@ -15,7 +15,6 @@
 			
 			for(int i=1;i<=20;i++)
 			{
-				
 				list.add(new String[] {"name"+i, i%2==1?"Male":"Female",""+i,"addr"+i});
 			}
 			
@@ -34,6 +33,22 @@
 				<listheader label="Age" sort="auto" width="25%" align="center" image="/img/cubfirs.gif"/>
 				<listheader label="Description" width="25%" sort="auto" image="/img/home.gif"/>
 			</listhead>
+			<auxhead>
+				<auxheader label="All Header" style="font-weight:bold; color:red;" align="center" colspan="4"/>
+			</auxhead>
+			<auxhead>
+				<auxheader label="A+B" rowspan="2" colspan="2"/>
+				<auxheader label="C"/>
+				<auxheader label="DE" />
+			</auxhead>	
+			<auxhead>
+				<auxheader label="A"/>
+				<auxheader label="B+C+D"/>
+			</auxhead>
+			<auxhead>
+				<auxheader label="A+B+C"  colspan="3"/>
+				<auxheader label="D"/>
+			</auxhead>
 			<listitem forEach="${list}">
 				<listcell label="${each[0]}"/>
 				<listcell label="${each[1]}"/>

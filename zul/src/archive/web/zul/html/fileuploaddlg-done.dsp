@@ -26,7 +26,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Upload Result</title>
-<link rel="stylesheet" type="text/css" href="${c:encodeURL('~./zul/css/norm**.css.dsp')}"/>
+${z:outDeviceStyleSheets('ajax')}
 <%-- We cannot use ${z:outLangStyleSheets()} since Executions.getCurrent()
 	is not available for this page.
  --%>

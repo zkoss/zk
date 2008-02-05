@@ -39,6 +39,9 @@ public interface AbortingReason {
 	 * the responses to the client, while {@link #getResponse} is called
 	 * when generating the responses.
 	 *
+	 * <p>The calling sequence: {@link #execute}, {@link #getResponse},
+	 * and then {@link #finish}.
+	 *
 	 * @since 3.0.0
 	 * @see #getResponse
 	 */
@@ -62,4 +65,15 @@ public interface AbortingReason {
 	 * @see #execute
 	 */
 	public AuResponse getResponse();
+	/** Called after all processing is done, and just before deactivating
+	 * the execution.
+	 *
+	 * <p>Note: it is always called even if {@link #isAborting} returns false.
+	 *
+	 * <p>The calling sequence: {@link #execute}, {@link #getResponse},
+	 * and then {@link #finish}.
+	 *
+	 * @since 3.0.2
+	 */
+	public void finish();
 }

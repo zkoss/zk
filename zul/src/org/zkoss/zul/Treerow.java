@@ -76,8 +76,13 @@ public class Treerow extends XulElement {
 		String scls = super.getSclass();
 		if (scls == null) scls = "item";
 		final Treeitem ti = getTreeitem();
-		return ti != null && ti.isSelected() ?
-			scls.length() > 0 ? scls + " seld": "seld": scls;
+		if (ti != null) {
+			if (ti.isDisabled())
+				return scls.length() > 0 ? scls + " disd": "disd";
+			else if (ti.isSelected())
+				return scls.length() > 0 ? scls + " seld": "seld";
+		}
+		return scls;
 	}
 
 	/** Alwasys throws UnsupportedOperationException since developers shall
@@ -144,6 +149,8 @@ public class Treerow extends XulElement {
 			HTMLs.appendAttribute(sb, "z.value",  Objects.toString(item.getValue()));
 		HTMLs.appendAttribute(sb, "z.pitem", item.getUuid());
 		HTMLs.appendAttribute(sb, "z.sel", item.isSelected());
+		HTMLs.appendAttribute(sb, "z.disd", item.isDisabled());
+		HTMLs.appendAttribute(sb, "z.rid", tree.getUuid());
 		if (item.isContainer())
 			HTMLs.appendAttribute(sb, "z.open", item.isOpen());
 
@@ -188,10 +195,11 @@ public class Treerow extends XulElement {
 	public boolean isVisible() {
 		if (!super.isVisible())
 			return false;
-
 		Component comp = getParent();
 		if (!(comp instanceof Treeitem))
 			return true;
+		if (!comp.isVisible()) return false;
+		
 		comp = comp.getParent();
 		return !(comp instanceof Treechildren)
 			|| ((Treechildren)comp).isVisible(); //recursive

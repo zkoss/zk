@@ -47,9 +47,9 @@ public class TabpanelsDefault implements ComponentRenderer {
 
 		final SmartWriter wh = new SmartWriter(out);
 
-		wh.write("<tbody id=\"").write(self.getUuid()).write("\"")
+		wh.write("<div id=\"").write(self.getUuid()).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
 			.writeChildren(self)
-			.writeln("</tbody>");
+			.writeln("</div>");
 	}
 }

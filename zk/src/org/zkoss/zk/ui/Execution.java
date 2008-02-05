@@ -159,7 +159,8 @@ public interface Execution  {
 	public VariableResolver getVariableResolver();
 
 	/** Queues an event to the current execution.
-	 * The event will be processed (as if it is sent from the client).
+	 * The event is placed at the end of the event queue.
+	 * It will be processed after all other events are processed.
 	 */
 	public void postEvent(Event evt);
 
@@ -263,7 +264,7 @@ public interface Execution  {
 	 *
 	 * @param skipInclude whether not to convert to an absolute URI if
 	 * the current page is included by another page.
-	 * When use the include directive, skipInclude shall be true.
+	 * If you are not sure, you might specify false.
 	 */
 	public String toAbsoluteURI(String uri, boolean skipInclude);
 
@@ -300,6 +301,9 @@ public interface Execution  {
 	 * If the engine cannot or chooses not to resolve the hostname
 	 * (to improve performance), this method returns the dotted-string form of
 	 * the IP address.
+	 */
+	public String getRemoteHost();
+	/** @deprecated As of release 3.0.1, replaced by {@link #getRemoteHost}.
 	 */
 	public String getRemoteName();
 	/**  Returns the Internet Protocol (IP) address of the client or last
@@ -751,6 +755,26 @@ public interface Execution  {
 	 * @since 2.4.1
 	 */
 	public boolean isMilDevice();
+	/** Returns whether the client is a mobile device supporting HIL
+	 * (Handset Interactive Language).
+	 *
+	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
+	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
+	 * return true.
+	 *
+	 * @since 3.0.2
+	 */
+	public boolean isHilDevice();
+
+	/** Returns the user-agent header, which indicates what the client is,
+	 * or an empty string if not available.
+	 *
+	 * <p>Note: it doesn't return null, so it is easy to test what
+	 * the client is with {@link String#indexOf}.
+	 *
+	 * @since 3.0.2
+	 */
+	public String getUserAgent();
 
 	/** Returns the native request, or null if not available.
 	 *

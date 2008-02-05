@@ -47,11 +47,12 @@ public class TabpanelAccordion implements ComponentRenderer {
 		final Execution exec = Executions.getCurrent();
 		final Tabpanel self = (Tabpanel) comp;
 		final Tab tab = self.getLinkedTab();
+		if (tab == null) return; //generate nothing (Bug 1848377)
 		final Tabbox tabbox = self.getTabbox();
 		final String look = tabbox.getTabLook() + '-';
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
 		
-		wh.write("<tr id=\"").write(self.getUuid()).write("\"><td>");
+		wh.write("<div id=\"").write(self.getUuid()).write("\">");
 		wh.write("<table id=\"").write(tab.getUuid()).write("\"")
 			.write(tab.getOuterAttrs()).write(tab.getInnerAttrs())
 			.write(" z.sel=\"").write(tab.isSelected()).write("\" z.type=\"zul.tab.Tab\" z.box=\"")
@@ -98,6 +99,6 @@ public class TabpanelAccordion implements ComponentRenderer {
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write("><div id=\"").write(self.getUuid()).write("!cave\">")
 			.writeChildren(self)
-			.writeln("</div></div></td></tr>");
+			.writeln("</div></div></div>");
 	}
 }

@@ -48,7 +48,8 @@ if (!window.Validate_errorbox) { //not customized
 
 ////
 zkVld = {};
-if (!zkVld._ebs) zkVld._ebs = [];
+if (!zkVld._ebs) zkVld._ebs = []; //a list of id of errbox to show
+if (!zkVld._cbs) zkVld._cbs = []; //a list of id of errbox that shall not shown
 zkau.valid = zkVld; //zkau depends on it
 
 /** Validates the specified component and returns the error msg. */
@@ -97,7 +98,7 @@ zkVld.validate = function (id) {
 		throw ex;
 	}
 };
-zkVld.onlyInt = function (id) {
+zkVld.onlyInt = zkVld.onlyLong = function (id) {
 	return zkVld.onlyNum(id, true);
 };
 zkVld.onlyNum = function (id, noDot) {
@@ -108,7 +109,7 @@ zkVld.onlyNum = function (id, noDot) {
 	if (fmt) fmt = getZKAttr(fmt, "fmt");
 	inp = $real(inp);
 	val = inp.value.trim();
-	for (var j=0,doted,numed,dashed,perted; j < val.length; ++j) {
+	for (var j=0,doted,numed,dashed,perted, vl = val.length; j < vl; ++j) {
 		var cc = val.charAt(j);
 		if (cc >= '0' && cc <= '9') {
 			numed = true;
@@ -144,15 +145,34 @@ zkVld.noEmpty = function (id) {
 	var inp = $real($e(id));
 	return inp && !inp.value.trim() ? mesg.EMPTY_NOT_ALLOWED: null;
 };
-
+/**
+ * Validates the function of noEmpty and strict. 
+ * @param {Object} id
+ * @since 3.0.2
+ */
+zkVld.noEmptyAndStrict = function (id) {
+	var msg = zkVld.noEmpty(id);
+	if (msg) return msg;
+	return zkVld.strict(id);
+};
+/**
+ * Validates the strict value for combobox.
+ * @param {Object} id
+ * @since 3.0.2
+ */
+zkVld.strict = function (id) {
+	if(window.zkCmbox)
+		return window.zkCmbox.strict(id);
+	return null;
+};
 /** creates an error message box. */
 zkVld.errbox = function (id, html) {
 	id = $uuid(id);
 	var cmp = $e(id);
-	if (!cmp || !zk.isRealVisible(cmp)) return; //don't do it
-
-	zkVld._errInfo = {id: id, html: html};
-	setTimeout(zkVld._errbox, 5);
+	if (cmp && zk.isRealVisible(cmp)) {
+		zkVld._errInfo = {id: id, html: html};
+		setTimeout(zkVld._errbox, 5);
+	}
 	zkVld.validating = false;
 };
 zkVld._errbox = function () {
@@ -164,18 +184,18 @@ zkVld._errbox = function () {
 	var boxid = id + "!errb";
 	zkVld.closeErrbox(boxid);
 
+	if (zkVld._cbs.contains(boxid)) return; //don't show the error box if it will close.
+	
 	cmp = $e(id);
 	if (cmp) {
-		var inp = $real(cmp);
-		cmp._vdOldStyle = {bgc:inp.style.backgroundColor};
-		inp.style.backgroundColor = "#FEF1E9";
+		zk.addClass($real(cmp), "text-invalid");
 	}
 
 	if (!zk.isRealVisible(cmp)) return; //don't show the erro box
 
 	if (getZKAttr(cmp, "srvald") == "custom")
 		return; //don't show the default error box if custom
-
+	
 	var box = Validate_errorbox(id, boxid, html);
 	if (!box) {
 		alert(html);
@@ -220,8 +240,11 @@ zkVld._errbox = function () {
 		zindex: box.style.zIndex, effecting: zkVld._fiximg,
 		starteffect: zk.voidf, endeffect: zkVld._fiximg});
 };
-/** box is the box element or the component's ID. */
-zkVld.closeErrbox = function (box, remaingError) {
+/** box is the box element or the component's ID. 
+ * 
+ * @param {Object} coerce it is used to close the error box coercively. (@since 3.0.3)
+ */
+zkVld.closeErrbox = function (box, remaingError, coerce) {
 	var boxid, id;
 	if (typeof box == "string") {
 		id = $uuid(box);
@@ -234,9 +257,8 @@ zkVld.closeErrbox = function (box, remaingError) {
 
 	if (!remaingError) {
 		var cmp = $e(id);
-		if (cmp && cmp._vdOldStyle) {
-			$real(cmp).style.backgroundColor = cmp._vdOldStyle.bgc;
-			cmp._vdOldStyle = null;
+		if (cmp) {
+			zk.rmClass($real(cmp), "text-invalid");
 		}
 	}
 
@@ -244,9 +266,12 @@ zkVld.closeErrbox = function (box, remaingError) {
 		zul.cleanMovable(box.id);
 		box.parentNode.removeChild(box);
 		zkVld._ebs.remove(box.id);
-	} else if (boxid) {
-		zkVld._ebs.remove(boxid);
-	}
+	} else if (boxid)
+		if (coerce) {
+			zkVld._cbs.push(boxid);
+			setTimeout(function () {zkVld._cbs.remove(boxid);zkVld._ebs.remove(boxid);}, 5);
+		} else
+			zkVld._ebs.remove(boxid);
 };
 /** Closes the errob only without clean up the error. */
 zkVld._ebclose = function (el) {
@@ -312,9 +337,9 @@ zkVld.uncover = function (el) {
 		if (el) zkVld._uncover(box, el);
 		else if (!ctags.length) return;
 
-		for (var j = 0; j < ctags.length; ++j) {
+		for (var j = 0, cl = ctags.length; j < cl; ++j) {
 			var els = document.getElementsByTagName(ctags[j]);
-			for (var k = 0 ; k < els.length; k++)
+			for (var k = 0, elen = els.length; k < elen; k++)
 				if (zk.isRealVisible(els[k]))
 					zkVld._uncover(box, els[k], true);
 		}

@@ -32,6 +32,7 @@ mesg.INTEGER_REQUIRED = "Legyen szíves beírni egy egész számot, és nem ";
 mesg.EMPTY_NOT_ALLOWED = "Egy üres beadás nem létezik";
 mesg.GOTO_ERROR_FIELD = "Menyen a hibás bejegyzéshez";
 mesg.PLEASE_WAIT = "Feldolgozás...";
+mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Fajl mérete: ";
 mesg.KBYTES = "KB";

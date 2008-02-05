@@ -207,8 +207,8 @@ public class NativeInfo extends ComponentInfo {
 	}
 
 	//super//
-	public Component newInstance(Page page) {
-		final Component comp = super.newInstance(page);
+	public Component newInstance(Page page, Component parent) {
+		final Component comp = super.newInstance(page, parent);
 
 		if (_dns != null) {
 			final Native nc = (Native)comp;

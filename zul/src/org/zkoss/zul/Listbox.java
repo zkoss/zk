@@ -920,9 +920,9 @@ public class Listbox extends XulElement {
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
 			if (super.insertBefore(newChild, refChild)) {
-				final List children = getChildren();
+				/**	final List children = getChildren(); //Feature #1830886
 				if (_hdcnt > 0 && children.get(_hdcnt) == newChild)
-					invalidate();
+					invalidate();*/
 				//we place listhead/auxhead and treeitem at different div, so
 				//this case requires invalidate (because we use insert-after)
 
@@ -1177,7 +1177,7 @@ public class Listbox extends XulElement {
 	 * It creates an instance automatically.
 	 */
 	public void setItemRenderer(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setItemRenderer((ListitemRenderer)Classes.newInstanceByThread(clsnm));
@@ -1226,7 +1226,8 @@ public class Listbox extends XulElement {
 				if (max >= newsz) max = newsz - 1;
 				if (min < 0) min = 0;
 
-				for (Iterator it = _items.listIterator(min);
+				//unloadItem() might detach item and add new item, _items must make a copy first
+				for (Iterator it = new ArrayList(_items).listIterator(min);
 				min <= max && it.hasNext(); ++min) {
 					final Listitem item = (Listitem)it.next();
 					if (item.isLoaded()) {
@@ -1316,7 +1317,7 @@ public class Listbox extends XulElement {
 					if (ofs < 0) ofs = 0;
 				}
 			} else {
-				pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows: 20;
+				pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows + 5 : 20;
 				ofs = 0;
 				//we don't know # of visible rows, so a 'smart' guess
 				//It is OK since client will send back request if not enough
@@ -1326,6 +1327,8 @@ public class Listbox extends XulElement {
 			for (Iterator it = getItems().listIterator(ofs);
 			j < pgsz && it.hasNext(); ++j)
 				renderer.render((Listitem)it.next());
+			if (!inPagingMold() && getItemCount() > pgsz)
+				getItemAtIndex(pgsz).setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -1582,6 +1585,15 @@ public class Listbox extends XulElement {
 
 			if (_scOddRow != null)
 				HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
+			
+			if (getModel() != null) {
+				int index = getItemCount();
+				for(final ListIterator it = getItems().listIterator(index);
+				it.hasPrevious(); --index)
+					if(((Listitem)it.previous()).isLoaded())
+						break;
+				HTMLs.appendAttribute(sb, "z.lastLoadIdx", index);
+			}
 		}
 
 		appendAsapAttr(sb, Events.ON_SELECT);

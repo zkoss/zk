@@ -56,8 +56,8 @@ span.layout-split-btn-l:hover, span.layout-split-btn-r:hover, span.layout-split-
 }
 
 span.layout-split-btn-l, span.layout-split-btn-r, span.layout-split-btn-t ,span.layout-split-btn-b {
-	filter:alpha(opacity=50);  /* IE */
-	opacity:0.5;  /* Moz + FF */	
+	filter:alpha(opacity=50);  <%-- IE --%>
+	opacity:0.5;  <%-- Moz + FF --%>
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;	

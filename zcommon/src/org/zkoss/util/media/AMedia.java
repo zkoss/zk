@@ -63,8 +63,9 @@ public class AMedia implements Media {
 	 * <p>It tries to construct format and ctype from each other or name.
 	 *
 	 * @param name the name (usually filename); might be null.
-	 * @param format the format; might be null.
-	 * @param ctype the content type; might be null.
+	 * @param format the format; might be null. Example: "html" and "xml"
+	 * @param ctype the content type; might be null. Example: "text/html"
+	 * and "text/xml;charset=UTF-8".
 	 * @param data the binary data; never null
 	 */
 	public AMedia(String name, String format, String ctype, byte[] data) {

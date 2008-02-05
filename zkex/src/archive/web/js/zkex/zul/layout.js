@@ -228,10 +228,13 @@ zk.Layout.prototype = {
 			if (getZKAttr(cmp, "autoscl") == "true") { 
 	        	bodyEl.style.overflow = "auto";				
 				bodyEl.style.position = "relative";
-			} else {
+				setZKAttr(bodyEl, "autoscl", "true");
+			} else if (getZKAttr(bodyEl, "autoscl")) {
 				bodyEl.style.overflow = "hidden";							
 				bodyEl.style.position = "";
+				rmZKAttr(bodyEl, "autoscl");
 			}
+			zk.onVisiAt(bodyEl); // Bug #1862935
 		}
 	},
     ignoreResize : function(cmp, w, h) { 
@@ -286,6 +289,10 @@ zkBorderLayout.init = function (cmp) {
 };
 zkBorderLayout.childchg = function (cmp) {
 	zk.onResize(0, cmp);
+};
+zkBorderLayout.onVisi = function (cmp) {
+	var layout = zk.Layout.getOwnerLayout(cmp);
+	if (layout) layout.render();
 };
 zkBorderLayout.setAttr = function (cmp, nm, val) {
 	switch (nm) {
@@ -509,7 +516,7 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 	}
 	return true;
 };
-zkLayoutRegionSplit._endDrag = function (split, event) {
+zkLayoutRegionSplit._endDrag = function (split, evt) {
 	var dg = zkLayoutRegionSplit._drags[split.id];
 	if (!dg) return;
 	var real = $real(split);
@@ -523,6 +530,15 @@ zkLayoutRegionSplit._endDrag = function (split, event) {
 	layout.render();
 	zk.onResize(0, layout.el);
 	dg.drag.z_rootlyt = null;
+	var keys = "";
+	if (evt) {
+		if (evt.altKey) keys += 'a';
+		if (evt.ctrlKey) keys += 'c';
+		if (evt.shiftKey) keys += 's';
+	}	
+	zkau.send({uuid: $uuid(real), cmd: "onSize",
+		data: [real.style.width, real.style.height, keys]},
+		zkau.asapTimeout(real, "onSize"));
 };
 /***/
 zkLayoutRegionSplit._snap = function (split, x, y) {

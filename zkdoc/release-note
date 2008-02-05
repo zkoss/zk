@@ -1,8 +1,177 @@
-ZK 3.0.1
+	--------
+ZK 3.0.3
+* Features
+  1883329: Translate messages to Ukrainian. Thank Denis Yarkovoy for his contribution.
+  1883328: Translate messages to Russian. Thank Denis Yarkovoy for his contribution.
+  1878682: Able to turn off the Ajax resend mechanism
+  1884101: Disable the Ajax resend mechanism if zkmax not installed
+  1878785: Able to retrieve URL that a component is declared
+  1879464: Use div instead of table as the outer tag of groupbox 3d
+  1879495: Use div instead of table to implement tabpanel
+  1883401: Adding the support of HTML and Excel format for jasperreport
+
+* Bugs
+  1878852: Toolbarbutton href and onClick
+  1879389: Coerce problem databind Integer with textbox
+  1878840: Listbox with live data don't render in the onSort event
+  1878839: Toolbarbutton doesn't fire onClick if href is specified
+  1879404: Textbox onChange event is not fired (IE only)
+  1879221: Grid and listbox column resizing errors
+  1877702: onSelect event of combobox isn't fired in one situation
+  1879487: The odd onSelect event is fired in Combobox
+  1879511: onChange doesn't trigger when focus changed (Combo/Bandbox)
+  1879506: Tabbox is displayed incorrectly if height is specified
+  1880950: Half of window is shown after a higher window is hidden
+  1881042: ZK shall not depend on commons-fileupload
+  1881267: modal window containing grid/listbox weirdness (IE only)
+  1881550: Error Stripe with Grid and Listbox in Modal Mode
+  1881557: onChange shouldn't be triggered when user click in and out
+  1881190: Modal window shows 2 or 3 times if doModal takes a long time
+  1882320: setSelectionRange() won't work
+  1882323: Left & Right key doesn't work in intbox-Win Safari only
+  1881573: Window's hight can be reduced (IE6 only)
+  1882802: Disabled components after being enabled look like disabled
+  1883262: clearErrorMessage() is failed
+  1884112: When Updating TreeModel, throws a IndexOutOfBoundsException
+
+	--------
+ZK 3.0.2
 * Features:
+  1862036: Combobox supports ListModel
+  1764967: Combobox to support List binding
+  1392551: Add filter for combobox
+  1867539: Combobox to support type-ahead
+  1796281: Improve Working with Combobox
+  1598234: strict autocomplete in comboboxes
+  1867638: The fulfill attribute support multiple component
+  1854894: Allow EL expression in the use attr (consistent with apply)
+  1874335: Support the forward directive to forward to another page
+  1854857: A way to specify a range for datebox's constraint
+  1482341: Datebox supports a valid range of days
+  1485247: Datebox supports a valid range
+  1855653: Optimize Live Data with Listbox and Grid
+  1853745: A way to customize input&textarea's invalid look with CSS
+  1857363: A way to invoke event listener after updating client
+  1853791: JpaUtil and OpenEntityManagerInView
+  1845408: Add getReference() in SelectEvent
+  1858762: A way to show the busy message from server
+  1859501: Close fileupload dialog if ESC is pressed
+  1859533: Prevent the same button clicked twice for long operation
+  1869053: A way to plugin a processor to DHtmlUpdateServlet
+  1836002: Window component to support re-size
+  1870974: JasperReports component
+  1870980: A way to retrieve the native interpreter
+  1840878: Multiple uploads limitations
+  1676304: import link, variable-resolver, taglib, xel-method and so on
+  1869370: Missing elements in zul.xsd
+  1872505: Provide a "parent" position for Window component
+  1873426: Don't stop loading lang.xml if class not found
+  1834408: Additional setter for context menu
+  
+* Bugs:
+  1859776: Not responsing if session timeout with IE6
+  1710925: The style component has no effect if added dynamically (IE)
+  1852313: 'offsetWidth' is null or not a number
+  1854571: Two clicks to close Messagebox if it took long to process
+  1852895: Combo getSelectedItem()
+  1853902: Radiogroup in schema does not allow content other then radio
+  1852304: Menuitem popup="" does not stay up
+  1857166: Error with tabbox + listbox filled in onCreate method
+  1857731: tabbox + listbox filled in onCreate + simple window
+  1858869: onOK in textbox fires onOK twice
+  1859568: Change toolbarbutton href changes layout
+  1858838: Close the closable window over the listbox(IE6 only)
+  1862830: Grid's border dispears
+  1862835: The width of row of Grid doesn't resize corretly
+  1865584: Character Encoding error in Tomcat 4.1+ZK 3.0
+  1860825: MessageBox Question Button Cancelar
+  1867370: If column hid, each cell should be hidden at paging mold
+  1867591: iDOM's Element is not serializable
+  1862935: The height of window is not initiated to property value.
+  1867534: zul css loaded in upload frame even if globally disabled
+  1868454: nested modal windows problem
+  1869003: grid+databinding+HashSet defect when remove an item
+  1869062: onChange Combobox with ENTER choice
+  1870821: shift + tab doesn't go back to the previous input comp in FF
+  1870996: Exception when use ListModelSet with SimpleListModelSharer
+  1869614: Problem when switching from ListModelList to ListModelMap
+  1871762: Failed to import init if the importing page has no init
+  1868228: bug in the zul.xsd
+  1871684: Treeitem Visible Issue
+  1871833: Data binder should read "self".
+  1873021: If listbox model size < rows broken in 2008-01-15 freshly
+  1868371: desktop already "half-destroyed" when ExecutionCleanup runs
+  1861715: hyphenation with Label objects not appropriate
+  1829397: Timer repeatedly fired
+  1873669: org.zkoss.zk.ui.event.Events doesnt work with custom UiEngine
+  1873950: nested modal windows positioning(IE only)
+  1874396: Audio and Firefox: Error
+  1876198: Error msg appears when load page (databind+CustomConstraint)
+  1876252: Listbox with the rows property doesn't appear very well
+  1876991: zkdemo positive Intbox constraint failure
+  1876988: Messagebox's button with wrong style in Opera
+  1876292: Combobox initially returns old selectedItem after setValue
+  1877059: Bug in removing tree's first-level treeitems
+  1877051: Positive intbox can't accept "+123" as value
+  
+* Upgrade Notes:
+  + The animating effect of window component in modal mode is changed. 
+    If you'd like the previous effect, you can use the setDefaultActionOnShow() 
+    method of window component to set the empty string ("") or use an easier way to
+    define a preference name that a deployer can use to configure in WEB-INF/zk.xml.
+    For example, 
+    <preference>
+        <name>org.zkoss.zul.Window.defaultActionOnShow</name>
+        <value>moveDown</value>
+    </preference>
+
+	--------
+ZK 3.0.1
+* Features:  
+  1836202: A generic composer to realize MVC approach more easily
+  1836198: A generic event listener which invokes corresponding method
+  1835773: Support longbox
+  1838456: A way to customize progressmeter's look with CSS
+  1797701: Slider tooltip text customization
+  1766905: DataBinder support binding to Map
+  1845942: JndiVariableResolver to Get Variable from JNDI Binding    
+  1840081: A way to restrict max concurrent request per-session
+  1830278: HeaderElement with children
+  1797807: Listbox add Select All
+  1839256: A way to control the timeout of the Ajax resend mechanism
+  1843863: Able to Pass Arguments to Variable-Resolver Directive
+  1829124: configure prefix to the URI on zkau browser resources
   1831559: A way to set a wrong value for textbox/Intbox...
+  1832165: BorderLayout support onSize event
+  1830924: A way to specify label's width easily
+  1814621: JFreeChartEngine - rendering customization
+  1830886: A way to make the listbox change its model less "drastic"
+  1836417: HibernateSessionFactoryListener use different config name 
+  1642242: Display certain treeitem on screen (Autoscroll)
+  1601002: Added onSelect event to the Combobox component
+  1841480: HibernateSessionFactoryListner for web.xml  
+  1842533: Add default-bind to Radio.selected
+  1796049: Like Timebox, Intbox must support only integer
+  1780792: Disable checkmarks on some node of a tree
+  1474209: Listbox supports the disabled property
+  1843802: Comboitem supports the disabled property
+  1656278: Menuitem enabled/disabled support
+  1735287: Disable Toolbarbutton
+  1721273: Event Enachment
+  1632243: Add a getLine() function to textboxes
+  1845283: A way to customize the writer for the update engine
+  1828245: Add function to drop combobox/bandbox progammatically
+  1846042: AbstractChartModel shall be serializable
+  1849768: Desktop shall not removed if zuml page included by, say, JSP
+  1849884: A way to retrieve the build identifier
+  1850585: Pass request to DesktopInit
+  1850584: Pass request to SessionInit
+  1852144: A way to delay eval of a property value to rendering phase
 
 * Bugs:
+  1844609: Failed if an event is processed too long
+  1841816: Some error of Developer's Guide
+  1839246: More reliable handling of Ajax requests
   1828044: When header is invisible, whole column should be disappeared
   1826938: Listbox Live Data
   1828702: InternalError when moving box's children
@@ -14,7 +183,67 @@ ZK 3.0.1
   1829811: data bind fails with radiogroup
   1830960: data bind does not work with Tabbox
   1826971: Console output 'experiment: creating class manager'
-  1831534: Popup not working if poup window nested in vbox  
+  1831534: Popup not working if poup window nested in vbox
+  1832214: Borderlayout : isOpen return true while collapse region
+  1831540: Tabbox setSelectedIndex() should not fire onSelect event
+  1832359: A wrong height of grid&listbox when add header dynamically
+  1826753: Bandbox.setButtonVisible does not always work
+  1836257: A wrong stripe when listitem is invisible
+  1829640: drag-n-drop does not work in Firefox
+  1826808: Drag and Drop performance
+  1826736: First column disappear when sort Listbox
+  1835878: select / colapse of a Treeitem scrolls tree to right.
+  1834900: Tree paging on Tree's Treechildren
+  1835369: [IE Only] Grid floats outside Groupbox
+  1838397: OutOfMemoryError if sendEvent called many times
+  1838852: exception reattaching window in new desktop
+  1828404: Treeitem setOpen doesn't load children
+  1826700: Update content of treeitem from treemodel
+  1839376: Composer cannot be defined using zscript
+  1839959: Borderlayout should resize when onVisi is triggered
+  1839634: ListModelSet not work well with HashSet
+  1840101: Exception when sendRediect from a modal dialog
+  1840003: Window's sclass property cannot be changed dynamically
+  1840024: Component always returns the same id automatically
+  1839960: Listbox rendering problems if wrapping occurs
+  1843032: Infinite "Processing..." message during PRINT
+  1844076: InputElement events not saving value
+  1845904: fileupload is not specified in zul.xsd
+  1840866: Modal windows jumping
+  1834891: IE does not fire the onCtrlKey event correctly
+  1843038: Fulfill doesn't support EL in apply property
+  1833252: transient listeners in serializable result in NPE
+  1845026: adding draggable to tree breaks event processing order
+  1847708: OnBookmarkChanged doesn't send
+  1848307: Minor component resize issue
+  1848377: (Accordion) NullPointerException when tab/tabpanels mismatch
+  1849076: NoSuchElementException in UiVisualizer
+  1849088: New session is extra created when invalidate the session
+  1848492: align and pack not work when VBOX in HOBX in FF
+  1826606: A wrong calculation width when listheader is invisible
+  1823947: Listbox Up & Down Btn faild in Opera
+  1823278: Listbox selection upper bound index is -1
+  1848501: Splitter fail to go back to right position
+  1849239: Listbox.InsertBefore() not correct if with listhead
+  1849838: Components with fulfill failed to serialize
+  1850550: Popup doesn't work in Toolbarbutton
+  1850895: encodeURL causes IllegalStateException with Websphere 5.1.1
+
+* Upgrade Notes:
+  + The signatures of the init methods of org.zkoss.zk.ui.util.DesktopInit
+    and SessionInit are changed.
+    However, it is backward compatible if you prefer not to re-compile your codes.
+  + The signatures of the newSession method of
+    org.zkoss.zk.ui.sys.UiFactory is changed.
+    However, it is backward compatible if you prefer not to re-compile your codes.
+  + The constructors of org.zkoss.zk.ui.http.SimpleSession, SerializableSession
+    and org.zkoss.zk.ui.impl.DesktopImpl are changed.
+  + The response methods of the org.zkoss.zk.ui.sys.UiEngine are removed.
+    Use org.zkoss.zk.au.http.AuWriter instead.
+  + The execUpdate methods of the org.zkoss.zk.ui.sys.UiEngine are changed.
+    Use org.zkoss.zk.au.http.AuWriter instead.
+  + The self variable in EL expressions of the apply attribute references
+    to the parent component, if any.
 
 	--------
 ZK 3.0.0

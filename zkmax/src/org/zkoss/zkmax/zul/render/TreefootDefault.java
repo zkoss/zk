@@ -39,7 +39,7 @@ public class TreefootDefault implements ComponentRenderer {
 		final Treefoot self = (Treefoot) comp;
 		
 		wh.write("<tr id=\"").write(self.getUuid()).write('"')
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>')
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(" z.type=\"zul.zul.Ftrs\">")
 			.writeChildren(self)
 			.writeln("</tr>");
 	}

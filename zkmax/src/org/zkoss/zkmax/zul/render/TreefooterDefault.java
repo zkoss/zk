@@ -43,7 +43,7 @@ public class TreefooterDefault implements ComponentRenderer {
 		
 		wh.write("<td id=\"").write(self.getUuid()).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"foot-cell-inner\">")
+			.write(" z.type=\"zul.zul.Ftr\"><div id=\"").write(self.getUuid()).write("!cave\" class=\"foot-cell-inner\">")
 			.write(self.getImgTag());
 
 		new Out(self.getLabel()).render(out);

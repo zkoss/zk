@@ -41,6 +41,7 @@ public class Toolbarbutton extends LabelImageElement {
 	private String _orient = "horizontal", _dir = "normal";
 	private String _href, _target;
 	private int _tabindex = -1;
+	private boolean _disabled = false;
 
 	public Toolbarbutton() {
 	}
@@ -50,6 +51,32 @@ public class Toolbarbutton extends LabelImageElement {
 	public Toolbarbutton(String label, String image) {
 		setLabel(label);
 		setImage(image);
+	}
+
+	public String getSclass() {
+		String scls = super.getSclass();	
+		if (isDisabled())
+			return scls != null && scls.length() > 0 ? scls + " disd": "disd";
+		return scls;
+	}
+	
+	/**
+	 * Sets whether it is disabled.
+	 * @since 3.0.1
+	 */
+	public void setDisabled(boolean disabled) {
+		if (_disabled != disabled) {
+			_disabled = disabled;
+			invalidate();
+		}
+	}
+	
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 3.0.1
+	 */
+	public boolean isDisabled() {
+		return _disabled;
 	}
 
 	/** Returns the direction.
@@ -164,6 +191,7 @@ public class Toolbarbutton extends LabelImageElement {
 				.append('"');
 				//When hyper to other page, we always show progress dlg
 		}
+		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
 		HTMLs.appendAttribute(sb, "target", _target);
 
 		if (_tabindex >= 0)

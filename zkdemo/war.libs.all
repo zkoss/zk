@@ -7,7 +7,6 @@ zml.jar
 zkex.jar
 zkmax.jar
 zkplus.jar
-zuljsp.jar
 fckez.jar
 dojoz.jar
 gmapsz.jar
@@ -19,3 +18,9 @@ commons-io.jar
 jfreechart.jar
 jcommon.jar
 Filters.jar
+jasperreports.jar
+commons-collections.jar
+commons-logging.jar
+itext.jar
+jxl.jar
+poi.jar

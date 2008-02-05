@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="zu" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
 <c:if test="${!empty self.listhead}">
@@ -29,9 +30,13 @@ ${z:redraw(head, null)}
 	</table>
 	</div>
 </c:if>
-	<div id="${self.uuid}!body" class="listbox-body">
+<c:set var="hgh" if="${self.rows > 1}" value="style=\"overflow:hidden;height:${self.rows * 15}px\""/>
+<c:set var="hgh" if="${!empty self.height}" value="style=\"overflow:hidden;height:${self.height}\""/>
+	<div id="${self.uuid}!body" class="listbox-body" ${hgh}>
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable">
+${zu:resetStripeClass(self)}
 	<c:forEach var="item" items="${self.items}">
+${zu:setStripeClass(item)}	
 ${z:redraw(item, null)}
 	</c:forEach>
 	</table>

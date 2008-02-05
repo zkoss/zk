@@ -27,7 +27,11 @@ zkAudio.play = function (id) {
 		try { //Note: we cannot do "if (cmp.play)" in IE
 			cmp.play();
 		} catch (e) {
-			alert(msgzul.NO_AUDIO_SUPPORT);
+			try {
+				cmp.Play(); //Firefox
+			} catch (e) {
+				alert(msgzul.NO_AUDIO_SUPPORT);
+			}
 		}
 	}
 };
@@ -38,7 +42,11 @@ zkAudio.stop = function (id) {
 		try { //Note: we cannot do "if (cmp.stop)" in IE
 			cmp.stop();
 		} catch (e) {
-			alert(msgzul.NO_AUDIO_SUPPORT);
+			try {
+				cmp.Stop();
+			} catch (e) {
+				alert(msgzul.NO_AUDIO_SUPPORT);
+			}
 		}
 	}
 };

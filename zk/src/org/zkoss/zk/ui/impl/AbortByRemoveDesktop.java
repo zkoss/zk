@@ -17,8 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.AbortingReason;
 import org.zkoss.zk.au.AuResponse;
 
@@ -36,11 +38,19 @@ public class AbortByRemoveDesktop implements AbortingReason {
 		return true;
 	}
 	public void execute() {
-		final Desktop dt = Executions.getCurrent().getDesktop();
-		final WebAppCtrl wappc = (WebAppCtrl)dt.getWebApp();
-		wappc.getDesktopCache(dt.getSession()).removeDesktop(dt);
 	}
 	public AuResponse getResponse() {
 		return null;
+	}
+	public void finish() {
+		final Execution exec = Executions.getCurrent();
+
+		//Bug 1753712: disable visualizer since responses were gen.
+		((ExecutionCtrl)exec).getVisualizer().disable();
+
+		//Bug 1868371: we shall postpone the cleanup to the last step
+		final Desktop dt = exec.getDesktop();
+		final WebAppCtrl wappc = (WebAppCtrl)dt.getWebApp();
+		wappc.getDesktopCache(dt.getSession()).removeDesktop(dt);
 	}
 }

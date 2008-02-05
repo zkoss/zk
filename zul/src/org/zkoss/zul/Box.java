@@ -26,7 +26,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.ext.render.Floating;
@@ -357,11 +356,9 @@ public class Box extends XulElement {
 		final boolean vert = isVertical();
 		final StringBuffer sb = new StringBuffer(64);
 
-		String stylesb = "";
 		final String align = toHalign(vert ? _align: _pack);
 		if (align != null && align.length() > 0) {
 			HTMLs.appendAttribute(sb, "align", align);
-			stylesb = "text-align:"+align+';';
 		}
 
 		String size = null;
@@ -386,7 +383,7 @@ public class Box extends XulElement {
 			//if vert, visible is handled by getChildOutAttrs
 
 		if (size != null || floating || !visible) {
-			sb.append(" style=\"").append(stylesb);
+			sb.append(" style=\"");
 			if (!visible)
 				sb.append("display:none;");
 
@@ -395,8 +392,6 @@ public class Box extends XulElement {
 					.append(':').append(floating ? "0": size);
 
 			sb.append('"');
-		} else if (stylesb.length() > 0) {
-			sb.append(" style=\"").append(stylesb).append('"');
 		}
 		return sb.toString();
 	}

@@ -114,6 +114,22 @@ public class WebManager {
 		_cwr.setCompress(new String[] {"js", "css"});
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
+		//Register resource processors for each extension
+		//FUTURE: Extendlet can be specified in zk.xml
+		//Note: getAll loads config.xml, which must be processed before zk.xml
+		ZumlExtendlet extlet = null;
+		for (Iterator it = LanguageDefinition.getAll().iterator();
+		it.hasNext();) {
+			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			final List exts = langdef.getExtensions();
+			if (!exts.isEmpty()) {
+				if (extlet == null)
+					extlet = new ZumlExtendlet();
+				_cwr.addExtendlet((String)exts.get(0), extlet);
+				//Add to the first extension only (the main one)
+			}
+		}
+
 		final Configuration config = new Configuration();
 		try {
 			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
@@ -138,21 +154,6 @@ public class WebManager {
 				} catch (Throwable ex) {
 					log.realCause(ex);
 				}
-			}
-		}
-
-		//Register resource processors for each extension
-		//FUTURE: Add more Extendlet from zk.xml
-		ZumlExtendlet extlet = null;
-		for (Iterator it = LanguageDefinition.getAll().iterator();
-		it.hasNext();) {
-			final LanguageDefinition langdef = (LanguageDefinition)it.next();
-			final List exts = langdef.getExtensions();
-			if (!exts.isEmpty()) {
-				if (extlet == null)
-					extlet = new ZumlExtendlet();
-				_cwr.addExtendlet((String)exts.get(0), extlet);
-				//Add to the first extension only (the main one)
 			}
 		}
 	}
@@ -278,23 +279,32 @@ public class WebManager {
 		return (WebManager)ctx.getAttribute(ATTR_WEB_MANAGER);
 	}
 
-	/** Returns the session. */
+	/**  Returns the current session associated with this request,
+	 * or if the request does not have a session, creates one.
+	 */
 	public static final
 	Session getSession(ServletContext ctx, HttpServletRequest request) {
-		final HttpSession hsess = request.getSession();
-		final Session sess = getSession(hsess);
-		return sess != null ? sess:
-			newSession(getWebManager(ctx).getWebApp(),
-				hsess, request.getRemoteAddr(), request.getRemoteHost());
+		return getSession(ctx, request, request.getSession());
 	}
-	/** Returns the session.
+	/**Returns the current HttpSession  associated with this request or,
+	 * if there is no current session and create is true, returns a new session.
+	 *
+	 * @param create true to create a new session for this request if necessary;
+	 * false to return null  if there's no current session
+	 * @since 3.0.1
 	 */
+	public static final
+	Session getSession(ServletContext ctx, HttpServletRequest request,
+	boolean create) {
+		final HttpSession hsess = request.getSession(create);
+		return hsess != null ? getSession(ctx, request, hsess): null;
+	}
 	/*package*/ static final Session newSession(WebApp wapp,
-	HttpSession hsess, String remoteAddr, String remoteHost) {
+	HttpSession hsess, Object request) {
 		if (D.ON && log.debugable()) log.debug("Creating a new sess for "+hsess);
 
 		final Session sess = ((WebAppCtrl)wapp).getUiFactory()
-			.newSession(wapp, hsess, remoteAddr, remoteHost);
+			.newSession(wapp, hsess, request);
 		hsess.setAttribute(ATTR_SESS, sess);
 
 		//Note: we set timeout here, because HttpSession might have been created
@@ -303,6 +313,12 @@ public class WebManager {
 		final int v = config.getSessionMaxInactiveInterval();
 		if (v != 0) sess.setMaxInactiveInterval(v);
 		return sess;
+	}
+	private static final Session getSession(ServletContext ctx,
+	HttpServletRequest request, HttpSession hsess) {
+		final Session sess = getSession(hsess);
+		return sess != null ? sess:
+			newSession(getWebManager(ctx).getWebApp(), hsess, request);
 	}
 	/** Returns the session of the specified HTTP session, or null if n/a. */
 	/*package*/ static final Session getSession(HttpSession hsess) {

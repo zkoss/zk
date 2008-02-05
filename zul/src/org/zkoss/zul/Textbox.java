@@ -38,6 +38,7 @@ public class Textbox extends InputElement {
 	private boolean _multiline;
 
 	public Textbox() {
+		setValueDirectly("");
 	}
 	public Textbox(String value) throws WrongValueException {
 		setValue(value);

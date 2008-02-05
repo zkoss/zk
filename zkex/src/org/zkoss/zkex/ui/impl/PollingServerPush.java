@@ -41,6 +41,7 @@ import org.zkoss.zk.au.out.AuScript;
  * A server-push implementation that is based on client-polling.
  *
  * @author tomyeh
+ * @since 3.0.0
  */
 public class PollingServerPush implements ServerPush {
 	private static final Log log = Log.lookup(PollingServerPush.class);

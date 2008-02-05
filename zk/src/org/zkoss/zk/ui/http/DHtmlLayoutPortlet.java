@@ -140,13 +140,19 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		}
 
 		final Session sess = getSession(request);
+		if (!SessionsCtrl.requestEnter(sess)) {
+			handleError(sess, request, response, path, null,
+				Messages.get(MZk.TOO_MANY_REQUESTS));
+			return;
+		}
 		SessionsCtrl.setCurrent(sess);
 		try {
 			if (!process(sess, request, response, path, bRichlet))
-				handleError(sess, request, response, path, null);
+				handleError(sess, request, response, path, null, null);
 		} catch (Throwable ex) {
-			handleError(sess, request, response, path, ex);
+			handleError(sess, request, response, path, ex, null);
 		} finally {
+			SessionsCtrl.requestExit(sess);
 			SessionsCtrl.setCurrent(null);
 		}
 	}
@@ -158,8 +164,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			PortletHttpSession.getInstance(request.getPortletSession());
 		final Session sess = WebManager.getSession(hsess);
 		return sess != null ? sess:
-			WebManager.newSession(
-				getWebManager().getWebApp(), hsess, null, null);
+			WebManager.newSession(getWebManager().getWebApp(), hsess, request);
 	}
 	/** Process a portlet request.
 	 * @return false if the page is not found.
@@ -233,9 +238,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	 * is not found.
 	 */
 	private void handleError(Session sess, RenderRequest request,
-	RenderResponse response, String path, Throwable err)
+	RenderResponse response, String path, Throwable err, String msg)
 	throws PortletException, IOException {
-		final String msg;
 		if (err != null) {
 		//Bug 1714094: we have to handle err, because Web container
 		//didn't allow developer to intercept errors caused by inclusion
@@ -256,13 +260,15 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 				}
 			}
 
-			msg = Messages.get(MZk.PAGE_FAILED,
-				new Object[] {path, Exceptions.getMessage(err),
-					Exceptions.formatStackTrace(null, err, null, 6)});
+			if (msg == null)
+				msg = Messages.get(MZk.PAGE_FAILED,
+					new Object[] {path, Exceptions.getMessage(err),
+						Exceptions.formatStackTrace(null, err, null, 6)});
 		} else {
-			msg = path != null ?
-				Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path}):
-				Messages.get(MZk.PORTLET_PAGE_REQUIRED);
+			if (msg == null)
+				msg = path != null ?
+					Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path}):
+					Messages.get(MZk.PORTLET_PAGE_REQUIRED);
 		}
 
 		final Map attrs = new HashMap();

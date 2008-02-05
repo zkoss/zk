@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.zkoss.lang.Classes;
@@ -53,6 +54,10 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * If not specified, empty usually means null.
 	 */
 	public static final int NO_EMPTY = 0x0100;
+	/**
+	 * The value must match inside the data from ListModel only.
+	 */
+	public static final int STRICT = 0x0200;
 	/** Date in the future is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_FUTURE = NO_POSITIVE;
@@ -62,16 +67,24 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	/** Today is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_TODAY = NO_ZERO;
+	/** The constraints. A combination of {@link #NO_POSITIVE} and others.
+	 */
+	protected int _flags;
+	private Pattern _regex;
+	private String _errmsg;
 
-	private final int _flags;
-	private final Pattern _regex;
-	private final String _errmsg;
-
+	/** Constructs a constraint with flags.
+	 *
+	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
+	 * {@link #NO_ZERO}, and so on.
+	 */
 	public SimpleConstraint(int flags) {
 		this(flags, null, null);
 	}
-	/** Constraints a constraint.
+	/** Constructs a constraint with flags and an error message.
 	 *
+	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
+	 * {@link #NO_ZERO}, and so on.
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 */
 	public SimpleConstraint(int flags, String errmsg) {
@@ -87,6 +100,8 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	}
 	/** Constructs a constraint combining regular expression.
 	 *
+	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
+	 * {@link #NO_ZERO}, and so on.
 	 * @param regex ignored if null or empty
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 */
@@ -96,22 +111,20 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			null: Pattern.compile(regex);
 		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
 	}
-
-	/** Parses flags from a string to an integer representing a combination
-	 * of {@link #NO_POSITIVE} and other NO_xxx flags.
+	/** Constructs a constraint with a list of constraints separated by comma.
 	 *
-	 * @param flags a list of constraint separated by comma.
+	 * @param constraint a list of constraints separated by comma.
 	 * Example: no positive, no zero
+	 * @since 3.0.2
 	 */
-	public static final SimpleConstraint getInstance(String flags) {
-		int iflags = 0;
+	public SimpleConstraint(String constraint) {
 		String regex = null, errmsg = null;
 		l_out:
-		for (int j = 0, k = 0, len = flags.length(); k >= 0; j = k + 1) {
+		for (int j = 0, k = 0, len = constraint.length(); k >= 0; j = k + 1) {
 			for (;; ++j) {
 				if (j >= len) break l_out; //done
 
-				char cc = flags.charAt(j);
+				char cc = constraint.charAt(j);
 				switch (cc) {
 				case '/':
 					for (k = ++j;; ++k) { //look for ending /
@@ -120,14 +133,14 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 							break;
 						}
 
-						cc = flags.charAt(k);
+						cc = constraint.charAt(k);
 						if (cc == '/') break; //ending / found
 						if (cc == '\\') ++k; //skip one
 					}
-					regex = k >= 0 ? flags.substring(j, k): flags.substring(j);
+					regex = k >= 0 ? constraint.substring(j, k): constraint.substring(j);
 					continue l_out;
 				case ':':
-					errmsg = flags.substring(j + 1).trim();
+					errmsg = constraint.substring(j + 1).trim();
 					break l_out; //done
 				}
 				if (!Character.isWhitespace(cc))
@@ -137,37 +150,71 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			String s;
 			for (k = j;; ++k) {
 				if (k >= len) {
-					s = flags.substring(j);
+					s = constraint.substring(j);
 					k = -1;
 					break;
 				}
-				final char cc = flags.charAt(k);
+				final char cc = constraint.charAt(k);
 				if (cc == ',' || cc == ':' || cc == ';' || cc == '/') {
-					s = flags.substring(j, k);
+					s = constraint.substring(j, k);
 					if (cc == ':' || cc == '/') --k;
 					break;
 				}
 			}
-			s = s.trim().toLowerCase();
-			if (s.equals("no positive"))
-				iflags |= NO_POSITIVE;
-			else if (s.equals("no negative"))
-				iflags |= NO_NEGATIVE;
-			else if (s.equals("no zero"))
-				iflags |= NO_ZERO;
-			else if (s.equals("no empty"))
-				iflags |= NO_EMPTY;
-			else if (s.equals("no future"))
-				iflags |= NO_FUTURE;
-			else if (s.equals("no past"))
-				iflags |= NO_PAST;
-			else if (s.equals("no today"))
-				iflags |= NO_TODAY;
-			else if (s.length() > 0)
-				throw new UiException("Unknown constraint: "+s);
+
+			_flags |= parseConstraint(s.trim().toLowerCase());
 		}
 
-		return new SimpleConstraint(iflags, regex, errmsg);
+		_regex = regex == null || regex.length() == 0 ?
+			null: Pattern.compile(regex);
+		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
+	}
+
+	/** Parses a list of constraints from a string to an integer
+	 * representing a combination of {@link #NO_POSITIVE} and other flags.
+	 *
+	 * @param constraint a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 */
+	public static final SimpleConstraint getInstance(String constraint) {
+		return new SimpleConstraint(constraint);
+	}
+	/** Parses a constraint into an integer value.
+	 * For example, "no positive" is parsed to {@link #NO_POSITIVE}.
+	 *
+	 * <p>Deriving classes might override this to provide more constraints.
+	 *
+	 * @since 3.0.2
+	 */
+	protected int parseConstraint(String constraint) throws UiException {
+		if (constraint.equals("no positive"))
+			return NO_POSITIVE;
+		else if (constraint.equals("no negative"))
+			return NO_NEGATIVE;
+		else if (constraint.equals("no zero"))
+			return NO_ZERO;
+		else if (constraint.equals("no empty"))
+			return NO_EMPTY;
+		else if (constraint.equals("no future"))
+			return NO_FUTURE;
+		else if (constraint.equals("no past"))
+			return NO_PAST;
+		else if (constraint.equals("no today"))
+			return NO_TODAY;
+		else if (constraint.equals("strict"))
+			return STRICT;
+		else if (constraint.length() > 0)
+			throw new UiException("Unknown constraint: "+constraint);
+		return 0;
+	}
+	/**
+	 * Returns the constraint flags, i.e., a combination of
+	 * {@link #NO_POSITIVE}, {@link #NO_NEGATIVE}, {@link #STRICT} and others.
+	 *
+	 * @since 3.0.2
+	 */
+	public int getFlags() {
+		return _flags;
 	}
 
 	//-- Constraint --//
@@ -198,6 +245,16 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 				throw wrongValue(comp, MZul.EMPTY_NOT_ALLOWED);
 			if (_regex != null && !_regex.matcher(s != null ? s: "").matches())
 				throw wrongValue(comp, MZul.ILLEGAL_VALUE);
+			if ((_flags & STRICT) != 0) {
+				if (s.length() > 0 && comp instanceof Combobox) {
+					for (Iterator it = ((Combobox)comp).getItems().iterator(); it.hasNext();) {
+						final Comboitem ci = (Comboitem)it.next();
+						if(!ci.isDisabled() && ci.isVisible() && s.equalsIgnoreCase(ci.getLabel()))
+							return;
+					}
+					throw wrongValue(comp, MZul.VALUE_NOT_MATCHED);
+				}
+			}
 		} else if (value instanceof Date) {
 			if ((_flags & (NO_FUTURE|NO_PAST|NO_TODAY)) == 0)
 				return;
@@ -260,13 +317,14 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	}
 	//ClientConstraint//
 	public String getClientValidation() {
-		return (_flags & NO_EMPTY) != 0 ? "zkVld.noEmpty": null;
+		return (_flags & NO_EMPTY) != 0 ? (_flags & STRICT) != 0 ? "zkVld.noEmptyAndStrict" 
+				: "zkVld.noEmpty": (_flags & STRICT) != 0 ? "zkVld.strict": null;
 			//FUTURE: support more validation in client
 	}
 	public String getErrorMessage(Component comp) {
 		return _errmsg;
 	}
 	public boolean isClientComplete() {
-		return (_flags == 0 || _flags == NO_EMPTY) && _regex == null;
+		return (_flags == 0 || _flags == NO_EMPTY || _flags == STRICT) && _regex == null;
 	}
 }

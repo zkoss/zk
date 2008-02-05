@@ -18,4 +18,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<embed id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} mastersound z.type="zul.audio.Audio"/>
+<embed id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} mastersound z.type="zul.audio.Audio" enablejavascript="true"/>

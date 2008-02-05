@@ -21,8 +21,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zkmax.Version</version-class>
-		<version-uid>3.0.1</version-uid>
-		<zk-version>3.0.1</zk-version><!-- or later -->
+		<version-uid>3.0.3</version-uid>
+		<zk-version>3.0.3</zk-version><!-- or later -->
 	</version>
 
 	<!-- Interpreters -->
@@ -390,6 +390,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>jasperreport</component-name>
+		<extends>jasperreport</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.JasperreportDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>label</component-name>
 		<extends>label</extends>
 		<text-as>value</text-as>
@@ -460,6 +468,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ListitemDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>longbox</component-name>
+		<extends>longbox</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.LongboxDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -620,11 +636,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-uri>class:org.zkoss.zkmax.zul.render.SplitterDefault</mold-uri>
 		</mold>
 	</component>
-	<!-- <component>
+	<component>
 		<component-name>style</component-name>
 		<extends>style</extends>
-		<text-as>content</text-as>
-	</component> -->
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.StyleDefault</mold-uri>
+		</mold>
+	</component>
 	<component>
 		<component-name>tab</component-name>
 		<extends>tab</extends>

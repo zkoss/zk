@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.ext.client.Inputable;
+import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.Command;
@@ -48,17 +49,25 @@ public class InputCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || (data.length != 1 && data.length != 2))
+		if (data == null || (data.length != 1 && data.length != 3))
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
 		final String newval = data[0];
 		if (getId().equals(Events.ON_CHANGE)) {
 			final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
-			if (xc instanceof Inputable)
+			if (xc instanceof InputableX) {
+				if (!((InputableX)xc).setTextByClient(newval))
+					return; //Bug 1881557: don't post event
+			} else if (xc instanceof Inputable) {
 				((Inputable)xc).setTextByClient(newval);
+			}
 		}
-		Events.postEvent(new InputEvent(getId(), comp, newval,
-			data.length == 2 && "true".equals(data[1])));
+
+		if (data.length == 1)
+			Events.postEvent(new InputEvent(getId(), comp, newval,	false, 0));
+		else 
+			Events.postEvent(new InputEvent(getId(), comp, newval,
+				"true".equals(data[1]), Integer.parseInt(data[2])));
 	}
 }

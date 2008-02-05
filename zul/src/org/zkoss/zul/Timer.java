@@ -21,7 +21,7 @@ package org.zkoss.zul;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 
 /**
  * Fires one or more {@link org.zkoss.zk.ui.event.Event} after
@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Timer extends XulElement {
+public class Timer extends HtmlBasedComponent {
 	private int _delay;
 	private boolean _repeats, _running = true;
 
@@ -129,10 +129,25 @@ public class Timer extends XulElement {
 	//-- Component --//
 	/** Not allowd. */
 	public boolean setVisible(boolean visible) {
-		throw new UnsupportedOperationException("Timer is always invisible");
+		throw new UnsupportedOperationException("timer is always invisible");
 	}
 	/** Not childable. */
 	public boolean isChildable() {
 		return false;
+	}
+
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl
+	implements org.zkoss.zk.ui.ext.client.Timer {
+		//Timer//
+		public void onTimer() {
+			if (!_repeats) stop(); //Bug 1829397
+		}
 	}
 }

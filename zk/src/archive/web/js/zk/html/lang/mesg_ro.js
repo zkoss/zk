@@ -32,6 +32,7 @@ mesg.INTEGER_REQUIRED = "Trebuie să specificaţi un număr întreg, în loc de 
 mesg.EMPTY_NOT_ALLOWED = "Valoarea vidă nu este permisă.\nDeasemenea, nu puteţi specifica numai spaţii";
 mesg.GOTO_ERROR_FIELD = "Selectaţi câmpul greşit";
 mesg.PLEASE_WAIT = "Se procesează...";
+mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Dimensiune fişier: ";
 mesg.KBYTES = "KB";

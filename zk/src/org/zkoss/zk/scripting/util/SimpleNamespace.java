@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.scripting.Namespace;
 
@@ -65,6 +66,12 @@ public class SimpleNamespace extends AbstractNamespace {
 	}
 
 	//Namespace//
+	public Component getOwner() {
+		return _owner;
+	}
+	public Page getOwnerPage() {
+		return _owner != null ? _owner.getPage(): null;
+	}
 	public Set getVariableNames() {
 		return _vars.keySet();
 	}

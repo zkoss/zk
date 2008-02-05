@@ -25,8 +25,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zkex.Version</version-class>
-		<version-uid>3.0.1</version-uid>
-		<zk-version>3.0.1</zk-version><!-- or later -->
+		<version-uid>3.0.3</version-uid>
+		<zk-version>3.0.3</zk-version><!-- or later -->
 	</version>
 
 	<zscript language="Java">
@@ -73,6 +73,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>jasperreport</component-name>
+		<component-class>org.zkoss.zkex.zul.Jasperreport</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/jasperreport.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>

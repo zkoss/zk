@@ -70,7 +70,7 @@ function showhelp
 }
 
 #-- check options
-if [ "$1" = "--help" ] ; then
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
 	showhelp
 	exit 0
 fi

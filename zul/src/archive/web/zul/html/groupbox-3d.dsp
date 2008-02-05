@@ -20,9 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="look" value="${self.captionLook}-"/>
-<table id="${self.uuid}" z.type="zul.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
-<tr valign="top">
-	<td>
+<div id="${self.uuid}" z.type="zul.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
 <c:if test="${!empty self.caption}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
@@ -56,6 +54,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  <td class="${c:cat(look,'shdr')}"></td>
 </tr>
 </table>
-	</td>
-</tr>
-</table>
+</div>

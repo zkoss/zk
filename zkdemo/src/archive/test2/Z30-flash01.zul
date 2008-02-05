@@ -35,7 +35,7 @@
 
 </zscript>
 	<hbox>
-	    <odeo id="odeo" skinColor="black" songUrl="Emergence - Michael David Crawford.mp3" autoPlay="true"  ></odeo>
+	    <odeo id="odeo" skinColor="black" songUrl="../mp3/Emergence - Michael David Crawford.mp3" autoPlay="true"  ></odeo>
 	   	<checkbox id="chk_hide" onCheck="hideOrNot()" label="Hide player" ></checkbox>
    	</hbox>
    	<separator bar="true"/>
@@ -54,7 +54,6 @@
    	<separator bar="true"/>
 		<listbox onSelect="playSong()" id="songList">
 		<listitem label ="Michael David Crawford - Emergence" value ="Emergence - Michael David Crawford.mp3" selected ="true" ></listitem>
-		<listitem label ="DJ Spooky - Rebirth of a Nation 1" value ="rebirth_excerpt1.mp3" ></listitem>
 	</listbox>
 	<vbox>
 	<label value="Notice: all mp3 files are licensed under a Creative Commons License " ></label>
@@ -101,14 +100,13 @@
 	
 </zscript>
 	<hbox>
-	    <xspfPlayer songUrl="mp3/Emergence - Michael David Crawford.mp3" id="xspf" visible="true" autoPlay="false" ></xspfPlayer>
+	    <xspfPlayer songUrl="../mp3/Emergence - Michael David Crawford.mp3" id="xspf" visible="true" autoPlay="false" ></xspfPlayer>
 	   	<checkbox id="chk_hide" onCheck="hideOrNot()" label="Hide player" ></checkbox>
 	   	<button label ="Stop" onClick="xspf.stop()"    />
    	</hbox>
    	
    	<listbox onSelect="playSong()" id="songList">
 		<listitem label ="Michael David Crawford - Emergence" value ="Emergence - Michael David Crawford.mp3" selected ="true" ></listitem>
-		<listitem label ="DJ Spooky - Rebirth of a Nation 1" value ="rebirth_excerpt1.mp3" ></listitem>
 	</listbox>
 </window>
 </zk>

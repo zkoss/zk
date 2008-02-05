@@ -179,8 +179,11 @@ public class AuRequest {
 		new ClientInfoCommand(Events.ON_CLIENT_INFO, Command.IGNORE_OLD_EQUIV);
 		new UpdateResultCommand("updateResult", 0);
 		new DropCommand(Events.ON_DROP, 0);
+
 		new DummyCommand("dummy",
 			Command.IGNORABLE|Command.IGNORE_OLD_EQUIV|Command.SKIP_IF_EVER_ERROR);
+		new EchoCommand("echo", Command.SKIP_IF_EVER_ERROR);
+
 		new ErrorCommand(Events.ON_ERROR, Command.IGNORE_OLD_EQUIV);
 
 		new GenericCommand(Events.ON_BLUR, Command.IGNORE_OLD_EQUIV);
@@ -189,7 +192,7 @@ public class AuRequest {
 		new GenericCommand(Events.ON_NOTIFY, 0);
 		new GenericCommand(Events.ON_SORT,
 			Command.SKIP_IF_EVER_ERROR|Command.IGNORE_OLD_EQUIV);
-		new GenericCommand(Events.ON_TIMER, Command.IGNORE_OLD_EQUIV);
+		new TimerCommand(Events.ON_TIMER, Command.IGNORE_OLD_EQUIV);
 		new GenericCommand(Events.ON_USER, 0);
 
 		new GetUploadInfoCommand("getUploadInfo", Command.IGNORABLE);

@@ -106,7 +106,8 @@ zk.Slider.prototype = {
 		var pos = this._realpos();
 		if (pos != this.slidepos) {
 			this.slidepos = pos;
-			if (this.slidetip) this.slidetip.innerHTML = pos;
+			if (this.slidetip)
+				this.slidetip.innerHTML = getZKAttr(this.element, "slidingtext").replace(/\{0\}/g, pos);
 			if (zkau.asap(this.element, "onScrolling"))
 				zkau.send({uuid: this.element.id, 
 					cmd: "onScrolling", data: [pos], ignorable: true},
@@ -192,10 +193,13 @@ zkSld.setAttr = function (cmp, nm, val) {
 		var meta = zkau.getMeta(cmp);
 		if (meta) meta._fixPos();
 		return true;
+	} else if ("z.slidingtext" == nm) {
+		setZKAttr(cmp, "slidingtext", val);
+		return true;
 	}
 	return false;
 };
-zkSld.onVisi = zkSld.onSize = zkSld._fixPos = function (cmp) {
+zkSld.onVisi = zkSld._fixPos = function (cmp) {
 	var meta = zkau.getMeta(cmp); //cmp or id both OK
 	if (meta) meta._fixPos();
 };

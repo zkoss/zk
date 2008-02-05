@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
 localization.zul
@@ -40,7 +40,7 @@ password=Password
 <p>In i3-label_ja_JP.properties (for Japanese), developers might define:</p>
 
 <pre><code>
-username=ユーザー名称
+username=ユーザー名
 password=パスワード
 </code></pre>
 

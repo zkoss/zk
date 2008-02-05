@@ -46,7 +46,8 @@ import org.zkoss.zk.ui.sys.SessionsCtrl;
  * @author tomyeh
  */
 public class I18Ns {
-	private static final Log log = Log.lookup(I18Ns.class);
+//	private static final Log log = Log.lookup(I18Ns.class);
+	private static final String ATTR_SETUP = "org.zkoss.zk.ui.http.charset.setup";
 
 	/** Sets up the internationalization attributes, inclluding locale
 	 * and time zone.
@@ -57,7 +58,7 @@ public class I18Ns {
 	public static final Object setup(Session sess,
 	ServletRequest request, ServletResponse response, String charset) {
 		final Object[] old;
-		if (Charsets.hasSetup(request)) {
+		if (request.getAttribute(ATTR_SETUP) != null) { //has been setup
 			old = null;
 		} else {
 			//Invoke the request interceptors
@@ -69,6 +70,7 @@ public class I18Ns {
 			final Object otz = TimeZones.setThreadLocal(
 				(TimeZone)sess.getAttribute(Attributes.PREFERRED_TIME_ZONE));
 
+			request.setAttribute(ATTR_SETUP, Boolean.TRUE); //mark as setup
 			old = new Object[] {ol, otz};
 		}
 
@@ -80,9 +82,11 @@ public class I18Ns {
 	 * @param old which must be the value returned by setup.
 	 */
 	public static final void cleanup(ServletRequest request, Object old) {
-		SessionsCtrl.setCurrent(null);
-
 		if (old != null) {
+			request.removeAttribute(ATTR_SETUP);
+
+			SessionsCtrl.setCurrent(null);
+
 			final Object[] op = (Object[])old;
 			TimeZones.setThreadLocal((TimeZone)op[1]);
 			Charsets.cleanup(request, op[0]);

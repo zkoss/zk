@@ -87,9 +87,4 @@ abstract public class HeaderElement extends LabelImageElement {
 		return super.getOuterAttrs() + getColAttrs();
 	}
 
-	//-- Component --//
-	/** Children are not allowed. */
-	public boolean isChildable() {
-		return false;
-	}
 }

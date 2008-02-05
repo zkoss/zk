@@ -26,8 +26,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</columns>
 		<rows>
 			<row>
-				<label value="Column1" />
-				<label value="Column2" />
+				<label value="Row1" />
+				<label value="Row2" />
 			</row>
 
 		</rows>

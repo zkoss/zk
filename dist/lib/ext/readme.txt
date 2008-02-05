@@ -1,8 +1,5 @@
 Readme dist/lib/ext
 
-
-JSP 2.1 Required Files
----
-el-api.jar
-jasper-el.jar
-jasper.jar
+------
+seasar
+s2-framework-2.4.16.jar

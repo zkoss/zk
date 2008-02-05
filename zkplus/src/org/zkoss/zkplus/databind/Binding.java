@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import org.zkoss.zul.impl.InputElement;
+
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -32,6 +34,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
 
+import java.lang.reflect.Method;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
@@ -246,7 +249,21 @@ public class Binding {
 			if (_converter != null) {
 				bean = _converter.coerceToUi(bean, comp);
 			}
-			Fields.set(comp, _attr, bean, _converter == null);
+			
+			//Bug #1876198 Error msg appears when load page (databind+CustomConstraint)
+			//catching WrongValueException no longer works, check special case and 
+			//use setRowValue() method directly
+			if ((comp instanceof InputElement) && "value".equals(_attr)) {
+				Object value = bean;
+				try { //Bug 1879389
+					final Method m = comp.getClass().getMethod("getValue", null);
+					value = Classes.coerce(m.getReturnType(), bean);
+				} catch (NoSuchMethodException ex) { //ignore it
+				}
+				Fields.set(comp, "rawValue", value, _converter == null);
+			} else {
+				Fields.set(comp, _attr, bean, _converter == null);
+			}
 		} catch (ClassCastException ex) {
 			throw UiException.Aide.wrap(ex);
 		} catch (NoSuchMethodException ex) {
@@ -264,7 +281,10 @@ public class Binding {
 			}
 		} catch (ModificationException ex) {
 			throw UiException.Aide.wrap(ex);
-		} catch (WrongValueException ex) {
+
+		//Bug #1876198 Error msg appears when load page (databind+CustomConstraint)
+		//catching WrongValueException no longer works, so mark it out
+		/*} catch (WrongValueException ex) {
 			//Bug #1615371, try to use setRawValue()
 			if ("value".equals(_attr)) {
 				try {
@@ -276,6 +296,7 @@ public class Binding {
 			} else {
 				throw ex;
 			}
+		*/
 		}
 	}
 

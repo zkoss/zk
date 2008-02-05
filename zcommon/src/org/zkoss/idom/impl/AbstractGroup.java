@@ -57,7 +57,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	 * If any deriving class don't contain this helper map, they should
 	 * apply the basic sequential search.
 	 */
-	private ElementMap _elemMap;
+	private transient ElementMap _elemMap;
 
 	/** Constructor.
 	 */
@@ -101,6 +101,9 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			if (bClearModified)
 				v.clearModified(false);
 		}
+
+		if (group._children instanceof ChildArray)
+			((ChildArray)group._children).afterClone();
 
 		group._modified = preserveModified && _modified;
 		return group;
@@ -324,12 +327,22 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		return newChild;
 	}
 
+	//-- Serializable --//
+	//NOTE: they must be declared as private
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		if (_children instanceof ChildArray)
+			((ChildArray)_children).afterUnmarshal();
+	}
+
 	//-- ElementMap
 	/** Stores a 'cached' map of child elements to speed up the access.
 	 */
 	protected static class ElementMap {
 		/** the map of (String elemName, List of Elements). */
-		protected final Map _map = new LinkedHashMap();
+		private final Map _map = new LinkedHashMap();
 		
 		protected ElementMap() {
 		}
@@ -412,6 +425,24 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	protected class ChildArray extends CheckableTreeArray {
 		protected ChildArray() {
 			_elemMap = new ElementMap();
+		}
+
+		/** Called after unmarshalling back the AbstractGroup instance
+		 * that owns this object.
+		 */
+		private void afterUnmarshal() {
+			_elemMap = new ElementMap();
+
+			for (Iterator it = this.iterator(); it.hasNext();) {
+				final Object o = it.next();
+				if (o instanceof Element)
+					_elemMap.put((Element)o, null);
+			}
+		}
+		/** Called after cloning the AbstractGroup instance that owns this object.
+		 */
+		private void afterClone() {
+			afterUnmarshal();
 		}
 
 		//-- CheckableTreeArray --//

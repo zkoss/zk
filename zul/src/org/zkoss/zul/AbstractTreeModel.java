@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.zkoss.io.Serializables;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.TreeDataEvent;
@@ -114,5 +116,18 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 		_listeners.remove(l);
 	}
 	
+	//Serializable//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
 
+		Serializables.smartWrite(s, _listeners);
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		_listeners = new LinkedList();
+		Serializables.smartRead(s, _listeners);
+	}
 }

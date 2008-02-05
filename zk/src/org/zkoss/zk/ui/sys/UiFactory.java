@@ -49,14 +49,14 @@ public interface UiFactory {
 
 	/** Creates an instance of {@link Session}.
 	 *
+	 * @param wapp the web application
 	 * @param nativeSess the native session depending on the Web server.
 	 * If HTTP is used, it is javax.servlet.http.HttpSession.
-	 * @param wapp the web application
-	 * @param clientAddr the client's IP address, or null if not available.
-	 * @param clientHost the client's host name, or null if not available.
+	 * @param request the original request. If HTTP, it is
+	 * javax.servlet.http.HttlServletRequest.
+	 * @since 3.0.1
 	 */
-	public Session newSession(WebApp wapp, Object nativeSess,
-	String clientAddr, String clientHost);
+	public Session newSession(WebApp wapp, Object nativeSess, Object request);
 
 	/** Tests whether the specified request is a richlet.
 	 *

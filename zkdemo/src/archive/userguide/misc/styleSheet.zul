@@ -45,9 +45,16 @@ td.mine {
 			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
-<window title="1st window" border="normal" width="200px" style="background-color: lightyellow">
-	Hello, World!
-</window>
+<zk>
+	<vbox>
+		<radiogroup onCheck='msg.style = "color:white;background:" + self.selectedItem.label;'>
+			<radio label="Blue" checked="true"/>
+			<radio label="Black"/>
+			<radio label="Brown"/>
+		</radiogroup>
+		<label id="msg" value="Hello, World" style="color:white;background:blue"/>
+	</vbox>
+</zk>
 				]]></attribute>
 			</textbox>
 		</groupbox>

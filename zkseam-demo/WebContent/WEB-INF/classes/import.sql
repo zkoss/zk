@@ -1,5 +1,0 @@
-insert into extperson (id, name, comment, age, email) values (null, 'Dennis Chen', 'It is great', 32, 'x0@zkoss.org')
-insert into extperson (id, name, comment, age, email) values (null, 'Jumper Chen', 'YuiEx Cool', 32, 'x1@zkoss.org')
-insert into extperson (id, name, comment, age, email) values (null, 'Jeff Liu', 'Give me power', 32, 'x2@zkoss.org')
-insert into extperson (id, name, comment, age, email) values (null, 'Robbie Cheng', 'Cool~~', 32, 'x3@zkoss.org')
-insert into extperson (id, name, comment, age, email) values (null, 'Guest Uu', 'Waa', 24, 'guest@unknow.com')

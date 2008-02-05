@@ -61,7 +61,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</combobox>
 	<separator bar="true"/>
 	Auto-complete:
-	<combobox id="combo" autodrop="true" use="org.zkoss.zkdemo.userguide.AutoComplete"/>
+	<combobox id="combo" autodrop="true" use="org.zkoss.zkdemo.userguide.SimpleAutoComplete"/>
 	<hbox>
 	<checkbox checked="true" onCheck="combo.autodrop = self.checked" label="auto drop popup when typing"/>
 	<checkbox checked="true" onCheck="combo.buttonVisible = self.checked" label="button visible"/>

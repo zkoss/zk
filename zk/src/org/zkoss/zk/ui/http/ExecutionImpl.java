@@ -220,8 +220,6 @@ public class ExecutionImpl extends AbstractExecution {
 			}
 
 			Servlets.include(_ctx, _request, bufresp, page, params, mode);
-				//we don't use PageContext.include because Servlets.include
-				//support ~xxx/ and other features.
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
@@ -248,8 +246,6 @@ public class ExecutionImpl extends AbstractExecution {
 			Servlets.forward(_ctx, _request,
 				HttpBufferedResponse.getInstance(_response, out),
 				page, params, mode);
-				//we don't use PageContext.forward because Servlets.forward
-				//support ~xxx/ and other features.
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
@@ -289,8 +285,13 @@ public class ExecutionImpl extends AbstractExecution {
 	public String getRemoteUser() {
 		return _request.getRemoteUser();
 	}
-	public String getRemoteName() {
+	public String getRemoteHost() {
 		return _request.getRemoteHost();
+	}
+	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
+	 */
+	public String getRemoteName() {
+		return getRemoteHost();
 	}
 	public String getRemoteAddr() {
 		return _request.getRemoteAddr();
@@ -315,6 +316,9 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public PageDefinition getPageDefinition(String uri) {
+		if (uri == null || uri.length() == 0)
+			throw new IllegalArgumentException("uri not specified: "+uri);
+
 		//Note: we have to go thru UiFactory (so user can override it)
 		uri = toAbsoluteURI(uri, false);
 		final PageDefinition pagedef = ((WebAppCtrl)getDesktop().getWebApp()).
@@ -389,6 +393,12 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public boolean isMilDevice() {
 		return Servlets.isMilDevice(_request);
+	}
+	public boolean isHilDevice() {
+		return Servlets.isHilDevice(_request);
+	}
+	public String getUserAgent() {
+		return Servlets.getUserAgent(_request);
 	}
 
 	public Object getNativeRequest() {

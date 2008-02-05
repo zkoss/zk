@@ -24,8 +24,14 @@ zkWnd._clean2 = {}; //Map(id, mode): to be cleanup the modal effect
 zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
 zkWnd.init = function (cmp) {
-	zkWnd._fixHgh(cmp);
+	if (getZKAttr(cmp, "visible") == "true")
+		cmp.style.display = "";
+			//turn it on since Window.getRealStyle turn it off to
+			//have the better effect if the window contains a lot of items
 
+	zkWnd._fixHgh(cmp);
+	cmp.fnResize = function () {zkWnd._fixHgh(cmp)};
+	zk.addOnResize(cmp.fnResize);
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
@@ -41,31 +47,26 @@ zkWnd.init = function (cmp) {
 		//FF: at the moment of browsing to other URL, listen is still attached but
 		//our js are unloaded. It causes JavaScript error though harmlessly
 		//This is a dirty fix (since onclick and others still fail but hardly happen)
-	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));
+	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));	
 	
-	zk.addInitLater(function () {zkWnd._initMode(cmp);}, true);	//Bug #1830668 we have to invoke initMode later.
+	//Bug #1840866
+	var mode = getZKAttr(cmp, "mode");
+	if (mode == "modal" || mode == "highlighted")
+		zkWnd._initMode(cmp);
+	else 
+		zk.addInitLater(function () {zkWnd._initMode(cmp);}, true);	//Bug #1830668 we have to invoke initMode later.
 };
 zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
 	zkWnd._cleanMode(cmp);
+	zk.rmOnResize(cmp.fnResize);
 };
 /** Fixed the content div's height. */
 zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
 	var hgh = cmp.style.height;
 	if (hgh && hgh != "auto") {
 		var n = $e(cmp.id + "!cave");
-		if (n) {
-			hgh = cmp.clientHeight;
-			for (var p = n, q; q = p.previousSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
-				p = q;
-			}
-			for (var p = n, q; q = p.nextSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight; //may undefined
-				p = q;
-			}
-			zk.setOffsetHeight(n, hgh);
-		}
+		if (n) zk.setOffsetHeight(n, zk.getVflexHeight(n));
 	}
 };
 zkWnd._embedded = function (cmp) {
@@ -144,8 +145,27 @@ zkWnd.setAttr = function (cmp, nm, val) {
 		return true; //no need to store it
 
 	case "z.pos":
+		var pos = getZKAttr(cmp, "pos");
 		zkau.setAttr(cmp, nm, val);
 		if (val && !zkWnd._embedded(cmp)) {
+			if (pos == "parent" && val != pos) {
+				var left = cmp.style.left, top = cmp.style.top;
+				var xy = getZKAttr(cmp, "offset").split(",");
+				left = $int(left) - $int(xy[0]) + "px";
+				top = $int(top) - $int(xy[1]) + "px";
+				cmp.style.left = left;
+				cmp.style.top = top;
+				rmZKAttr(cmp, "offset");
+			} else if (val == "parent") {
+				var parent = zk.isVParent(cmp);
+				if (parent) {
+					var xy = zk.revisedOffset(parent),
+						left = $int(cmp.style.left), top = $int(cmp.style.top);
+					setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
+					cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
+					cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
+				}
+			}
 			zkWnd._center(cmp, null, val);
 			//if val is null, it means no change at all
 			zkau.hideCovered(); //Bug 1719826 
@@ -163,6 +183,20 @@ zkWnd.setAttr = function (cmp, nm, val) {
 	case "style.width":
 		zk.onResize(0, cmp);
 		return false;
+	case "style.top":
+	case "style.left":
+		if (!zkWnd._embedded(cmp) && getZKAttr(cmp, "pos") == "parent") {
+			var offset = getZKAttr(cmp, "offset");
+			if (offset) {
+				var xy = offset.split(",");
+				if (nm == "style.top") {
+					cmp.style.top = $int(xy[1]) + $int(val) + "px";
+				} else {
+					cmp.style.left = $int(xy[0]) + $int(val) + "px";
+				}
+				return true;
+			}
+		}
 	}
 	return false;
 };
@@ -433,6 +467,12 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 		var xy = zk.revisedOffset(cmp);
 		cmp.style.left = xy[0] + "px";
 		cmp.style.top = xy[1] + "px";
+	} else if (pos == "parent" && isV) {
+		var xy = zk.revisedOffset(cmp.parentNode),
+			left = $int(cmp.style.left), top = $int(cmp.style.top);
+		setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
+		cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
+		cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
 	}
 	if (isV) zk.setVParent(cmp);
 	
@@ -451,7 +491,8 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 	storage.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 
-	if ($visible(cmp)) //it happens when closing a modal (becomes overlap)
+	// Bug #1881190 : we need to use this variable to check whether it is visible really.
+	if (getZKAttr(cmp, "visible") == "true") //it happens when closing a modal (becomes overlap)
 		zkWnd._show(cmp);
 
 	zk.asyncFocusDown(cmp.id);
@@ -481,16 +522,41 @@ zkWnd._doModal = function (cmp, replace) {
 		zkWnd._float(cmp);
 		return;
 	}
-
+	if (!getZKAttr(cmp, "conshow")) {
+		var onshow = getZKAttr(cmp, "aos") || "appear";
+		if (onshow != "z_none")
+			setZKAttr(cmp, "conshow", "anima." + onshow + "($e('"+cmp.id+"'));");
+	}
 	//center component
 	var nModals = zkau._modals.length;
 	zkau.fixZIndex(cmp, true); //let fixZIndex reset topZIndex if possible
 	var zi = ++zkau.topZIndex; //mask also need another index
-	
-	if (zkWnd.shallVParent(cmp)) zk.setVParent(cmp);
-	zkWnd._center(cmp, zi, getZKAttr(cmp, "pos")); //called even if pos not defined
-		//show dialog first to have better response.
 
+	var pos = getZKAttr(cmp, "pos");
+	if (zkWnd.shallVParent(cmp)) {
+		if (pos == "parent") {
+			var xy = zk.revisedOffset(cmp.parentNode),
+				left = $int(cmp.style.left), top = $int(cmp.style.top);
+			setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
+			cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
+			cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
+		}
+		zk.setVParent(cmp);
+	}
+	zkWnd._center(cmp, zi, pos); //called even if pos not defined
+		//show dialog first to have better response.
+	
+	if (!pos) {
+		var top = $int(cmp.style.top), y = zk.innerY();
+		if (y) {
+			var y1 = top - y;
+			if (y1 > 100) {
+				cmp.style.top = top - (y1 - 100) + "px";
+			}
+		} else if (top > 100){
+			cmp.style.top = "100px";
+		}
+	}
 	zkWnd._show(cmp); //unlike other mode, it must be visible
 
 	zkau.closeFloats(cmp);
@@ -602,6 +668,7 @@ zkWnd._posMask = function (mask) {
 };
 /** Makes a window in the center. */
 zkWnd._center = function (cmp, zi, pos) {
+	if (pos == "parent") return;
 	cmp.style.position = "absolute"; //just in case
 	zk.center(cmp, pos);
 	zkau.sendOnMove(cmp);

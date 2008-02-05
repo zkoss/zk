@@ -48,7 +48,7 @@ zk.Grid.prototype = {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 
 			var bs = this.bodytbl.tBodies;
-			for (var j = 0; j < bs.length; ++j)
+			for (var j = 0, bl = bs.length; j < bl; ++j)
 				if (bs[j].id) {
 					this.bodyrows = bs[j].rows;
 					break;
@@ -74,7 +74,7 @@ zk.Grid.prototype = {
 				for (var j = this.headtbl.rows.length; j;) {
 					var headrow = this.headtbl.rows[--j];
 					for (var k = headrow.cells.length; k;) {
-						var n = $e(headrow.cells[--k].id + "!cave"); // Bug #1819037
+						var n = headrow.cells[--k].firstChild; // Bug #1819037
 						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
 							if (!n.id || !n.id.endsWith("!hint")) {
 								empty = false;
@@ -83,7 +83,9 @@ zk.Grid.prototype = {
 					}
 				}
 				if (empty) this.head.style.height = "0px"; // Bug #1819037
-					//we have to hide if empty (otherwise, a small block is shown)
+				//we have to hide if empty (otherwise, a small block is shown)
+				else this.head.style.height = "";// Bug #1832359
+					
 			}
 
 			this.body.onscroll = function () {
@@ -100,8 +102,7 @@ zk.Grid.prototype = {
 		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
 			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
 		} else {
-			setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722			
-			this.stripe(); 
+			setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722		
 		}
 		this.qcells.length = 0;
 		this._render(155); //prolong a bit since calSize might not be ready
@@ -115,14 +116,15 @@ zk.Grid.prototype = {
 		this.qcells.push(cell);
 	},
 	/* set the height. */
-	setHgh: function (hgh) {
-		//note: we have to clean element.style.height. Otherwise, FF will
-		//overlap element with other elements
+	setHgh: function (hgh) {		
 		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
-			this.body.style.height = hgh;
-			this.element.style.height = "";	
-			this.element.setAttribute("zk_hgh", hgh);
-			if (this.body.offsetHeight) {} // bug #1812001
+			var h =  this.element.offsetHeight - 2 - (!this.paging ? (this.head ? this.head.offsetHeight : 0)
+				- (this.foot ? this.foot.offsetHeight : 0) : 0); // Bug #1835369
+			if (h < 0) h = 0;
+			this.body.style.height = h + "px";
+						
+			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 			// and IE7 at initializing phase.
 		} else {
@@ -131,16 +133,11 @@ zk.Grid.prototype = {
 			//after grid become visible (due to opening an accordion tab)
 			this.body.style.height = "";
 			this.element.style.height = hgh;
-			this.element.removeAttribute("zk_hgh");
 		}
 	},
 	/* set the size*/
 	updSize: function () {
 		var hgh = this.element.style.height;
-		if (!hgh) {
-			hgh = this.element.getAttribute("zk_hgh");
-			if (!hgh) hgh = ""; //it might not be defined yet
-		}
 		this.setHgh(hgh);
 
 		//Bug 1553937: wrong sibling location
@@ -174,7 +171,7 @@ zk.Grid.prototype = {
 		var scOdd = getZKAttr(this.element, "scOddRow");
 		if (!scOdd || !this.bodyrows) return;
 
-		for (var j = 0, even = true; j < this.bodyrows.length; ++j) {
+		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
 			if ($visible(row)) {
 				zk.addClass(row, scOdd, !even);
@@ -187,20 +184,24 @@ zk.Grid.prototype = {
 	_calcSize: function () {
 		this.updSize();
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
-
 		if (this.paging) { // Bug #1826101
 			if (this.bodytbl && this.bodytbl.rows.length) {
-				var head;
-				for (var j = 0; j < this.bodytbl.rows.length; j++) {
-					if ($type(this.bodytbl.rows[j]) == "Cols") {
-						head = this.bodytbl.rows[j];
+				var head, rows = this.bodytbl.rows;
+				for (var j = 0, bl = rows.length; j < bl; j++) {
+					if ($type(rows[j]) == "Cols") {
+						head = rows[j];
 						break;
 					}
 				}
 				if (head) {
-					for (var j = 0; j < head.cells.length; j++) {
-						var d = head.cells[j];
-						var cave = $e(head.cells[j].id + "!cave");
+					for (var j = 0, hl = head.cells.length; j < hl; j++) {
+						var d = head.cells[j], cave = d.firstChild;
+						if (!zk.isVisible(d)) { //Bug #1867370
+							for (var k = this.bodyrows.length; --k >=0;)
+								if (this.bodyrows[k].cells[j] != d) 
+									this.bodyrows[k].cells[j].style.display = "none";
+							continue;
+						}
 						if (cave) {
 							var wd =  d.style.width;							
 							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
@@ -225,11 +226,10 @@ zk.Grid.prototype = {
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + "px";
 			if (this.headtbl.rows.length) {
-				var head;
-				var j =0
-				for(; j < this.headtbl.rows.length; j++)
-					if ($type(this.headtbl.rows[j]) == "Cols") {
-						head = this.headtbl.rows[j];
+				var head, j =0, rows = this.headtbl.rows, hl = rows.length;
+				for(; j < hl; j++)
+					if ($type(rows[j]) == "Cols") {
+						head = rows[j];
 						break;
 					}
 				zk.cpCellWidth(head, this.bodyrows, this);	
@@ -242,11 +242,10 @@ zk.Grid.prototype = {
 						//Note: we cannot use display="none" (offsetWidth won't be right)
 					for (var j = head.cells.length; --j >= 0;)
 						src.appendChild(document.createElement("TD"));
-					this.headtbl.rows[0].parentNode.insertBefore(src, this.headtbl.rows[0]);			
-				}			
-				var row = this.headtbl.rows[0];
-				var cells = row.cells;
-				for (var k =0, z = 0; k < cells.length; k++) {
+					rows[0].parentNode.insertBefore(src, rows[0]);			
+				}		
+				var row = rows[0], cells = row.cells, k = 0, l = cells.length;				
+				for (; k < l; k++) {
 					var s = cells[k], d = head.cells[k];
 					var wd =  d.style.width;							
 					if (!wd || wd == "auto" || wd.indexOf('%') > -1) // Bug #1822564
@@ -263,7 +262,7 @@ zk.Grid.prototype = {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
 				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this); //assign foot's col width
-		}
+		} 
 	},
 	/** Recalculate the size. */
 	recalcSize: function (cleansz) {
@@ -287,6 +286,9 @@ zk.Grid.prototype = {
 			if (this.foottbl) this.headtbl.style.width = val;
 			return true;
 		case "style.height":
+			this.element.style.height = val;
+			if (zk.ie6Only && this.body) this.body.style.height = val;
+				// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
 			this.setHgh(val);
 			if (!this.paging) this.init();
 			return true;
@@ -330,7 +332,7 @@ zk.Grid.prototype = {
 		//height might diff (due to different content)
 		var data = "";
 		var min = this.body.scrollTop, max = min + this.body.offsetHeight;
-		for (var j = 0; j < rows.length; ++j) {
+		for (var j = 0, rl = rows.length; j < rl; ++j) {
 			var r = rows[j];
 			if ($visible(r)) {
 				var top = zk.offsetTop(r);
@@ -338,6 +340,7 @@ zk.Grid.prototype = {
 				if (top > max) break; //Bug 1822517
 				if (getZKAttr(r, "loaded") != "true")
 					data += "," + r.id;
+				else if (getZKAttr(r, "inited") != "true") zk.initAt(r);
 			}
 		}
 		if (data) {
@@ -374,7 +377,7 @@ zkGrid.childchg = function (cmp) {
 }; // Bug #1817627.
 */
 /** Called when a grid becomes visible because of its parent. */
-zkGrid.onVisi = zkGrid.onSize = function (cmp) {
+zkGrid.onVisi = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };
@@ -396,29 +399,63 @@ zkGrid._renderNow = function (uuid) {
 };
 zkGrw = {}; //Row
 zkGrw.init = function (cmp) {
+	setZKAttr(cmp, "inited", "true");
 	zkGrw.stripe(cmp);
+};
+zkGrw.initdrag = function (cmp) {
+	if (zk.gecko) {
+		zk.listen(cmp, "mouseover", zkGrw.ondragover);
+		zk.listen(cmp, "mouseout",  zkGrw.ondragout);	
+	}
+};
+zkGrw.cleandrag = function (cmp) {
+	if (zk.gecko) {
+		zk.unlisten(cmp, "mouseover", zkGrw.ondragover);
+		zk.unlisten(cmp, "mouseout",  zkGrw.ondragout);	
+	}
+};
+zkGrw.ondragover = function (evt) {
+	var target = Event.element(evt);
+	var tag = $tag(target);
+	if (tag != "INPUT" && tag != "TEXTAREA") {
+		var p = $parentByType(target, "Gcl");
+		if (p) p.firstChild.style.MozUserSelect = "none";
+	}
+};
+zkGrw.ondragout = function (evt) {
+	var target = Event.element(evt);
+	var p = $parentByType(target, "Gcl");
+	if (p) p.firstChild.style.MozUserSelect = "";	
 };
 zkGrw.cleanup = function (cmp) {
 	zkGrw.stripe(cmp, true);
 };
-zkGrw.stripe = function (cmp, isClean) {
-	var grid = $parentByType(cmp, "Grid");
-	var meta = zkau.getMeta(grid);
+zkGrw.setAttr = function (cmp, nm, val) {
+	if (nm == "visibility") { // Bug #1836257
+		var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
+		if (meta) {
+			if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
+			setTimeout(meta.fixedStripe, 0);
+		}
+	}
+	return false;
+};
+zkGrw.stripe = function (cmp, isClean) {	
+	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
-		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, true);
-		else zk.addInitLater(meta.fixedStripe, false, true);
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Grw");
+		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Grw");
 	}
 };
 zkGcl = {}; //cell
 zkGcl.init = function (cmp) {
-	var grid = $parentByType(cmp, "Grid");
-	var meta = zkau.getMeta(grid);
+	var meta = zkau.getMeta(getZKAttr(cmp.parentNode, "rid"));
 	if (meta) {
 		meta.putCellQue(cmp);
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, true);
+		zk.addInitLater(meta.fixedSize, false, meta.id + "Gcl");
 	}
 };
 zk.addModuleInit(function () {

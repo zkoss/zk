@@ -26,10 +26,12 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.lang.reflect.Method;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.WaitLock;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionFactory;
@@ -56,6 +58,7 @@ import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.device.Devices;
 
 /**
@@ -104,10 +107,10 @@ public class Configuration {
 	private Set _disThemeURIs;
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls;
-	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
-		_sparThdMax = 100, _suspThdMax = -1,
+	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
+		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800;
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -128,6 +131,16 @@ public class Configuration {
 		_errURIs.put(new Integer(302), "");
 		_errURIs.put(new Integer(401), "");
 		_errURIs.put(new Integer(403), "");
+		_resendDelay = getInitResendDelay();
+	}
+	private static int getInitResendDelay() {
+		try {
+			final Integer v = Integer.getInteger(Attributes.RESEND_DELAY);
+			if (v != null) return v.intValue();
+		} catch (Throwable t) {
+			log.warning("Failed to parse "+Attributes.RESEND_DELAY+"="+System.getProperty(Attributes.RESEND_DELAY));
+		}
+		return -1; //disabled
 	}
 
 	/** Returns the Web application that this configuration belongs to,
@@ -396,9 +409,10 @@ public class Configuration {
 					if (!fn.init(comp, evt))
 						return false; //ignore the event
 				} catch (AbstractMethodError ex) { //backward compatible prior to 3.0
-					fn.getClass().getMethod(
-						"init", new Class[] {Component.class, Event.class})
-					  .invoke(fn, new Object[] {comp, evt});
+					final Method m = fn.getClass().getMethod(
+						"init", new Class[] {Component.class, Event.class});
+					Fields.setAccessible(m, true);
+					m.invoke(fn, new Object[] {comp, evt});
 				}
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
@@ -698,9 +712,12 @@ public class Configuration {
 	 * and then invoke {@link SessionInit#init}.
 	 *
 	 * @param sess the session that is created
+	 * @param request the original request. If HTTP, it is
+	 * javax.servlet.http.HttlServletRequest.
 	 * @exception UiException to prevent a session from being created
+	 * @since 3.0.1
 	 */
-	public void invokeSessionInits(Session sess)
+	public void invokeSessionInits(Session sess, Object request)
 	throws UiException {
 		if (_sessInits.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
@@ -709,7 +726,15 @@ public class Configuration {
 			for (Iterator it = _sessInits.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((SessionInit)klass.newInstance()).init(sess);
+					final SessionInit fn = (SessionInit)klass.newInstance();
+					try {
+						fn.init(sess, request);
+					} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
+						final Method m =
+							klass.getMethod("init", new Class[] {Session.class});
+						Fields.setAccessible(m, true);
+						m.invoke(fn, new Object[] {sess});
+					}
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 					//Don't intercept; to prevent the creation of a session
@@ -754,9 +779,12 @@ public class Configuration {
 	 * and then invoke {@link DesktopInit#init}.
 	 *
 	 * @param desktop the desktop that is created
+	 * @param request the original request. If HTTP, it is
+	 * javax.servlet.http.HttlServletRequest.
 	 * @exception UiException to prevent a desktop from being created
+	 * @since 3.0.1
 	 */
-	public void invokeDesktopInits(Desktop desktop)
+	public void invokeDesktopInits(Desktop desktop, Object request)
 	throws UiException {
 		if (_dtInits.isEmpty()) return;
 			//it is OK to test LinkedList.isEmpty without synchronized
@@ -765,7 +793,15 @@ public class Configuration {
 			for (Iterator it = _dtInits.iterator(); it.hasNext();) {
 				final Class klass = (Class)it.next();
 				try {
-					((DesktopInit)klass.newInstance()).init(desktop);
+					final DesktopInit fn = (DesktopInit)klass.newInstance();
+					try {
+						fn.init(desktop, request);
+					} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
+						final Method m =
+							klass.getMethod("init", new Class[] {Desktop.class});
+						Fields.setAccessible(m, true);
+						m.invoke(fn, new Object[] {desktop});
+					}
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 					//Don't intercept; to prevent the creation of a session
@@ -1120,6 +1156,9 @@ public class Configuration {
 	 *
 	 * <p>Default: 3000.
 	 *
+	 * <p>Note: since 3.0.0, this setting has no effect on Ajax devices.
+	 * Ajax devices send the requests synchronously.
+	 *
 	 * @param time the maximal allowed time to process events.
 	 * It must be positive.
 	 */
@@ -1241,6 +1280,34 @@ public class Configuration {
 	public int getTooltipDelay() {
 		return _tooltipDelay;
 	}
+	/** Specifies the time, in milliseconds, before ZK Client Engine re-sends
+	 * the request to the server.
+	 *
+	 * <p>Default: -1 (i.e., disabled).
+	 * However, if zkmax.jar was installed (or with ZK 3.0.1 and 3.0.2),
+	 * the default is 9000.
+	 *
+	 * <p>There are many reasons an Ajax request is not received by
+	 * the server. With the resending mechanism, ZK ensures the reliable
+	 * connection between the client and the server.
+	 *
+	 * <p>See also <a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1839246&group_id=152762&atid=785191">Bug 1839246</a>
+	 *
+	 * @since 3.0.1
+	 *
+	 * @param minisecs the timeout in milliseconds.
+	 * Since 3.0.3, you can specify a nonpositive number to disable the resend.
+	 */
+	public void setResendDelay(int minisecs) {
+		_resendDelay = minisecs;
+	}
+	/** Returns the time, in milliseconds, before ZK Client Engine re-sends
+	 * the request to the server.
+	 * @since 3.0.1
+	 */
+	public int getResendDelay() {
+		return _resendDelay;
+	}
 	/** Adds the URI to redirect to, when ZK Client Engine receives
 	 * an error.
 	 *
@@ -1318,19 +1385,55 @@ public class Configuration {
 	/** Specifies the maximal allowed number of desktop
 	 * per session.
 	 *
-	 * <p>Defafult: 10.
+	 * <p>Defafult: 15.
 	 *
 	 * <p>A negative value indicates there is no limit.
+	 * @since 3.0.1
+	 */
+	public void setSessionMaxDesktops(int max) {
+		_sessDktMax = max;
+	}
+	/**
+	 * @deprecated As of release 3.0.1, replaced with {@link #setSessionMaxDesktops}.
 	 */
 	public void setMaxDesktops(int max) {
-		_dtMax = max;
+		setSessionMaxDesktops(max);
 	}
 	/** Returns the maximal allowed number of desktop per session.
 	 *
 	 * <p>A negative value indicates there is no limit.
+	 * @since 3.0.1
+	 */
+	public int getSessionMaxDesktops() {
+		return _sessDktMax;
+	}
+	/**
+	 * @deprecated As of release 3.0.1, replaced with {@link #getSessionMaxDesktops}.
 	 */
 	public int getMaxDesktops() {
-		return _dtMax;
+		return getSessionMaxDesktops();
+	}
+	/** Specifies the maximal allowed number of concurrent requests
+	 * per session.
+	 *
+	 * <p>Defafult: 5.
+	 *
+	 * <p>A negative value indicates there is no limit, but it is
+	 * not recommended due to the possibility of the DoS attacks.
+	 * @since 3.0.1
+	 */
+	public void setSessionMaxRequests(int max) {
+		_sessReqMax = max;
+	}
+	/** Returns the maximal allowed number of concurrent requests
+	 * per session.
+	 *
+	 * <p>A negative value indicates there is no limit, but it is
+	 * not recommended due to the possibility of the DoS attacks.
+	 * @since 3.0.1
+	 */
+	public int getSessionMaxRequests() {
+		return _sessReqMax;
 	}
 
 	/** Specifies the maximal allowed number of the spare pool for
@@ -1522,6 +1625,9 @@ public class Configuration {
 
 	/** Adds the definition of a richlet.
 	 *
+	 * <p>If there was a richlet associated with the same name, the
+	 * the old richlet will be replaced.
+	 *
 	 * @param name the richlet name
 	 * @param params the initial parameters, or null if no initial parameter at all.
 	 * Once called, the caller cannot access <code>params</code> any more.
@@ -1535,6 +1641,9 @@ public class Configuration {
 		return addRichlet0(name, richletClass, params);
 	}
 	/** Adds the definition of a richlet.
+	 *
+	 * <p>If there was a richlet associated with the same name, the
+	 * the old servlet will be replaced.
 	 *
 	 * @param name the richlet name
 	 * @param richletClassName the class name. The class will be loaded
@@ -1901,5 +2010,5 @@ public class Configuration {
 			this.type = type;
 			this.location = location;
 		}
-	};
+	}
 }

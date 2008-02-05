@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1869062.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 11 17:27:58 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>Please type the "c" word into combobox and then press the ENTER on the keyboard, it should not be shown any error.</n:p>
+	<window title="Combobox demo" border="normal">
+		Combobox:
+		<combobox
+			onChange="msg.value = self.getSelectedItem().getLabel()"
+			autodrop="true">
+			<comboitem label="Simple and Rich" />
+			<comboitem label="Cool!" />
+			<comboitem label="Thumbs Up!" />
+		</combobox>
+		<label id="msg" />
+	</window>
+</zk>

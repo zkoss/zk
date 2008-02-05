@@ -35,6 +35,41 @@ if (!window.Comboitem_effect) { //define it only if not customized
 
 ////
 zkCmbox = {};
+zk.addModuleInit(function () {
+zkCmbox.onblur = zkTxbox.onblur;
+zkTxbox.onblur = function (evt) {
+	var inp = zkau.evtel(evt);
+	var uuid = $uuid(inp);
+	var cmp = $e(uuid);
+	if (!zkTxbox._noonblur(inp) && $type(cmp) == "Cmbox") {
+		var inpval = inp.value.toLowerCase();
+		if (inpval.length > 0) {
+			var pp2 = $e(uuid + "!cave");
+			var rows = pp2.rows;
+			var jfnd = -1, strict = getZKAttr(cmp, "valid") || "";
+			strict = strict.toLowerCase().indexOf("strict") > -1;
+			for (var j = 0, rl = rows.length; j < rl; ++j) {			
+			var item = rows[j];
+				var txt = zkCmbox.getLabel(item).toLowerCase();
+				if (zk.isVisible(item) && (!strict || getZKAttr(item, "disd") != "true") && txt == inpval) {
+					jfnd = j;
+					break;
+				}
+			}
+			if (jfnd > -1) item = rows[j];
+			else item = {id: ""};
+				var selId = getZKAttr(cmp, "selid");
+				
+				if (selId != item.id) {
+					setZKAttr(cmp, "selid", item.id);
+					zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
+						zkau.asapTimeout($e(uuid), "onSelect"));			
+				}
+		}	
+	}
+	zkCmbox.onblur(evt);
+};
+});
 zkCmbox.init = function (cmp) {
 	zkCmbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
@@ -51,12 +86,32 @@ zkCmbox.init = function (cmp) {
 		zkWgt.fixDropBtn(cmp);
 	}
 };
-
+zkCmbox.strict = function (id) {
+	var inp = $real($e(id));
+	if (inp && inp.value) {
+		var pp2 = $e(id + "!cave"), rows = pp2.rows;
+		if (pp2 && pp2.rows) {
+			for (var j = 0, rl = rows.length; j < rl; ++j) {
+				var item = rows[j];
+				if (!zk.isVisible(item) || getZKAttr(item, "disd") == "true") continue;
+				var txt = zkCmbox.getLabel(item);
+				if (txt.toLowerCase() == inp.value.toLowerCase()) {
+					inp.value = txt;
+					return null; // found;
+				}
+			}
+		}
+		return mesg.VALUE_NOT_MATCHED; // not found;
+	}
+	return null; // unchecked
+};
 zkCmit = {};
 zkCmit.init = function (cmp) {
-	zk.listen(cmp, "click", zkCmit.onclick);
-	zk.listen(cmp, "mouseover", zkCmit.onover);
-	zk.listen(cmp, "mouseout", zkCmit.onout);
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "click", zkCmit.onclick);
+		zk.listen(cmp, "mouseover", zkCmit.onover);
+		zk.listen(cmp, "mouseout", zkCmit.onout);
+	}
 };
 /** When an item is clicked. */
 zkCmit.onclick = function (evt) {
@@ -67,11 +122,18 @@ zkCmit.onclick = function (evt) {
 		zkau.closeFloats($outer($parent(item)));
 			//including combobox, but excluding dropdown
 		zkCmit.onoutTo(item); //onmouseout might be sent (especiall we change parent)
-
+		
 		//Request 1537962: better responsive
-		var inp = zkCmbox.getInputByItem(item);
+		var inp = zkCmbox.getInputByItem(item);		
+		var uuid = $uuid(inp);
+		var cmp = $e(uuid);
+		var selId = getZKAttr(cmp, "selid");
+		if (selId != item.id) {
+			setZKAttr(cmp, "selid", item.id);
+			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
+				zkau.asapTimeout($e(uuid), "onSelect"));			
+		}
 		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
-
 		Event.stop(evt); //Bug 1597852 (cb might be a child of listitem)
 	}
 };
@@ -127,9 +189,15 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 		return true;
 	} else if ("z.sel" == nm ) {
 		return zkTxbox.setAttr(cmp, nm, val);
+	} else if ("value" == nm) {
+		var selid = getZKAttr(cmp, "selid");
+		if (selid) {
+			var txt = zkCmbox.getLabel($e(selid)) || "";
+			if (txt.toLowerCase() != val.toLowerCase())
+				rmZKAttr(cmp, "selid");
+		}
 	}
-	zkau.setAttr(cmp, nm, val);
-	return true;
+	return false;
 };
 zkCmbox.rmAttr = function (cmp, nm) {
 	if ("style" == nm) {
@@ -177,11 +245,12 @@ zkCmbox.ondown = function (evt) {
 	//IE: if NOT eat UP/DN here, it de-select the text
 	//IE: if we eat UP/DN here, onpress won't be sent
 	//IE: we have to handle UP/DN in onup (so the repeat feature is lost)
-	if (evt.keyCode == 38 || evt.keyCode == 40) { //UP and DN
+	var keycode = Event.keyCode(evt);
+	if (keycode == 38 || keycode == 40) { //UP and DN
 		Event.stop(evt);
 		return false;
 	}
-	if (evt.keyCode == 9) { //TAB; IE: close now so to show covered SELECT
+	if (keycode == 9) { //TAB; IE: close now so to show covered SELECT
 		var inp = Event.element(evt);
 		if (inp) {
 			var uuid = $uuid(inp.id);
@@ -195,19 +264,18 @@ zkCmbox.onkey = function (evt) {
 	var inp = Event.element(evt);
 	if (!inp) return true;
 
-	var uuid = $uuid(inp.id);
-	var cb = $e(uuid);
-	var pp = $e(uuid + "!pp");
+	var uuid = $uuid(inp.id), cb = $e(uuid), pp = $e(uuid + "!pp");
 	if (!pp) return true;
-
+	
+	var keycode = Event.keyCode(evt);
 	var opened = $visible(pp);
-	if (evt.keyCode == 9 || (zk.safari && evt.keyCode == 0)) { //TAB or SHIFT-TAB (safari)
+	if (keycode == 9 || (zk.safari && keycode == 0)) { //TAB or SHIFT-TAB (safari)
 		if (opened) zkCmbox.close(pp);
 		return true;
 	}
 
-	if (evt.altKey && (evt.keyCode == 38 || evt.keyCode == 40)) {//UP/DN
-		if (evt.keyCode == 38) { //UP
+	if (evt.altKey && (keycode == 38 || keycode == 40)) {//UP/DN
+		if (keycode == 38) { //UP
 			if (opened) zkCmbox.close(pp);
 		} else {
 			if (!opened) zkCmbox.open(pp, true);
@@ -221,28 +289,36 @@ zkCmbox.onkey = function (evt) {
 	}
 
 	//Request 1537962: better responsive
-	if (opened && evt.keyCode == 13) { //ENTER
-		zkCmbox._autoselback(uuid); //Better usability(Bug 1633335): auto selback
+	if (opened && keycode == 13) { //ENTER
+		var item = zkCmbox._autoselback(uuid); //Better usability(Bug 1633335): auto selback
+		var cmp = $e(uuid), selId = getZKAttr(cmp, "selid");
+		if (item && selId != item.id) {
+			setZKAttr(cmp, "selid", item.id);
+			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
+				zkau.asapTimeout($e(uuid), "onSelect"));			
+		}
 		zkTxbox.updateChange(inp, false); //fire onChange
 		return true;
 	}
 
-	if (evt.keyCode == 18 || evt.keyCode == 27 || evt.keyCode == 13
-	|| (evt.keyCode >= 112 && evt.keyCode <= 123)) //ALT, ESC, Enter, Fn
+	if (keycode == 18 || keycode == 27 || keycode == 13
+	|| (keycode >= 112 && keycode <= 123)) //ALT, ESC, Enter, Fn
 		return true; //ignore it (doc will handle it)
 
 	var bCombobox = $type(cb) == "Cmbox";
-	var selback = evt.keyCode == 38 || evt.keyCode == 40; //UP and DN
+	var selback = keycode == 38 || keycode == 40; //UP and DN
 	if (getZKAttr(cb, "adr") == "true" && !opened)
 		zkCmbox.open(pp, bCombobox && !selback);
 	else if (!bCombobox)
 		return true; //ignore
-	else if (!selback && opened)
-		setTimeout("zkCmbox._hilite('"+uuid+"')", 1); //IE: keydown
+	else if (!selback /*&& opened disabled by JumperChen 2008/01/09*/)
+		setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
+			((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
 
 	if (selback/* || getZKAttr(cb, "aco") == "true"*/) {
 		//Note: zkCmbox.open won't repos immediately, so we have to delay it
-		setTimeout("zkCmbox._hilite('"+uuid+"',true,"+(evt.keyCode == 38)+")", 3);
+		setTimeout("zkCmbox._hilite('"+uuid+"',true,"+(keycode == 38)+ ", " + 
+			((!evt.shiftKey || keycode != 16)  && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode + ")", 3);
 		Event.stop(evt);
 		return false;
 	}
@@ -257,6 +333,13 @@ zkCmbox.onbutton = function (cmp) {
 		else zkCmbox.close(pp, true);
 	}
 };
+zkCmbox.dropdn = function (cmp, dropdown) {
+	var pp = $e(cmp.id + "!pp");
+	if (pp) {
+		if ("true" == dropdown) zkCmbox.open(pp, true);
+		else zkCmbox.close(pp, true);
+	}
+};
 
 /** Marks an item as selected or un-selected. */
 zkCmbox._setsel = function (item, sel) {
@@ -265,8 +348,8 @@ zkCmbox._setsel = function (item, sel) {
 
 /** Returns the text contained in the specified item. */
 zkCmbox.getLabel = function (item) {
-	return item && item.cells && item.cells.length > 1 ?
-		zk.getElementValue(item.cells[1]): ""; 
+	return item && item.cells && item.cells.length > 1 && item.cells[1].firstChild 
+		&& item.cells[1].firstChild.data ? item.cells[1].firstChild.data : ""; 
 };
 
 zkCmbox.open = function (pp, hilite) {
@@ -396,10 +479,12 @@ zkCmbox._autoselback = function (uuid) {
 	var rows = pp2.rows;
 	if (!rows) return;
 
-	for (var j = 0; j < rows.length; ++j) {
+	for (var j = rows.length; --j >= 0;) {
 		var item = rows[j];
-		if (item.getAttribute("zk_hilite") == "true")
+		if (item.getAttribute("zk_hilite") == "true") {			
 			zkCmbox._selback(item);
+			return item;
+		}
 	}
 };
 
@@ -417,13 +502,13 @@ zkCmbox.getInputByItem = function (item) {
  * @param selback whether to select back (either UP or DN is pressed)
  * @param bUp whether UP is pressed
  */
-zkCmbox._hilite = function (uuid, selback, bUp) {
+zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	var inp = $e(uuid + "!real");
 	if (!inp) return;
 
 //	var aco = getZKAttr($e(uuid), "aco") == "true";
 	var pp = $e(uuid + "!pp");
-	if (!pp || (!selback && /*!aco &&*/ !$visible(pp))) return;
+	if (!pp /*|| (!selback && *//*!aco &&*//* !$visible(pp))*/) return;
 	var pp2 = $e(uuid + "!cave");
 	if (!pp2) return;
 	var rows = pp2.rows;
@@ -436,8 +521,9 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 
 	//Identify the best matched item
 	var jfnd = -1, exact = !inpval, old;
-	for (var j = 0; j < rows.length; ++j) {
+	for (var j = 0, rl = rows.length; j < rl; ++j) {
 		var item = rows[j];
+		if (!zk.isVisible(item)) continue;
 		if (!exact) {
 			var txt = zkCmbox.getLabel(item).toLowerCase();
 			if (txt == inpval) {
@@ -460,7 +546,13 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 	var found;
 	if (selback) {
 		if (jfnd < 0) {
-			if (rows.length) found = rows[0];
+			if (rows.length) {
+				for (var i = 0, rl = rows.length; i < rl; i++) {
+					if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
+					found = rows[i];
+					break;
+				}
+			}
 		} else {
 			if (exact) {
 				var b = document.selection;
@@ -468,17 +560,34 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 				|| (!b && inpval.length && inp.selectionStart == 0
 					&& inp.selectionEnd == inpval.length)) {
 					if (bUp) {
-						if (jfnd > 0) --jfnd;
+						for (var i = jfnd - 1; i >= 0 ; i--) {
+							if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
+							jfnd = i;
+							break;
+						}
 					} else {
-						if (jfnd + 1 < rows.length) ++jfnd;
+						for (var i = jfnd + 1, rl = rows.length; i < rl; i++) {
+							if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
+							jfnd = i;
+							break;
+						}
 					}
 				}
 			}
 			if (jfnd >= 0) found = rows[jfnd];
 		}
-		if (found) zkCmbox._selback(found);
+		if (found) {
+			zkCmbox._selback(found);
+			var cmp = $e(uuid);
+			var selId = getZKAttr(cmp, "selid");
+			if (selId != found.id) {
+				setZKAttr(cmp, "selid", found.id);
+				zkau.send({uuid: uuid, cmd: "onSelect", data: [found.id, found.id]},
+					zkau.asapTimeout(cmp, "onSelect"));
+			}
+		}
 	} else if (jfnd >= 0) {
-		found = rows[jfnd];
+		found = getZKAttr(rows[jfnd], "disd") == "true" ? null : rows[jfnd];
 	}
 
 	if (old != found) {
@@ -489,11 +598,35 @@ zkCmbox._hilite = function (uuid, selback, bUp) {
 		if (found) {
 			zkCmbox._setsel(found, true);
 			found.setAttribute("zk_hilite", "true");
+			inpval = zkCmbox.getLabel(found);
 		}
 	}
-
+	
+	if (reminder) {
+		inp.setAttribute("zk_typeAhead", inp.value);
+		if (found) {
+			var c = zkCmbox.getLabel(found);
+			var start = inp.value.length, end = c.length, strict = getZKAttr($e(uuid), "valid") || "";
+			inp.value = strict.toLowerCase().indexOf("strict") > -1 ? c :
+				inp.value + (start < end ? c.substring(start) : "") ;
+			if (inp.setSelectionRange) {
+				inp.setSelectionRange(start, end);
+				inp.focus();
+			} else if (inp.createTextRange) {
+				var range = inp.createTextRange();
+				if(start != end){
+					range.moveEnd('character', end - range.text.length);
+					range.moveStart('character', start);
+				}else{
+					range.move('character', start);
+				}
+				range.select();
+			}
+		}
+	} else if (keycode && (keycode == 8 || keycode == 46))
+		inp.setAttribute("zk_typeAhead", inp.value);
+		
 	zk.scrollIntoView(pp, found); //make sure found is visible
-
 	pp.setAttribute("zk_ckval", inpval);
 };
 
@@ -518,6 +651,8 @@ zkCmbox.close = function (pp, focus) {
 	var cb = $outer(pp);
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: cb.id, cmd: "onOpen", data: [false]});
+	zkTxbox.close($real(cb)); 
+		// Bug #1879511: we must check the current focus whether to trigger the onChange event.
 };
 
 zk.FloatCombo = Class.create();

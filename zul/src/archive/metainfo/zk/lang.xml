@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zul.Version</version-class>
-		<version-uid>3.0.1</version-uid>
+		<version-uid>3.0.3</version-uid>
 	</version>
 
 	<!-- Note: JavaScript that are listed here will be loaded no matter
@@ -192,6 +192,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>box</component-name>
 		<component-class>org.zkoss.zul.Box</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
+		</mold>
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
@@ -366,6 +370,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-name>hbox</component-name>
 		<component-class>org.zkoss.zul.Hbox</component-class>
 		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
+		</mold>
+		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
 		</mold>
@@ -501,6 +509,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>longbox</component-name>
+		<component-class>org.zkoss.zul.Longbox</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/longbox.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>menu</component-name>
 		<component-class>org.zkoss.zul.Menu</component-class>
 		<mold>
@@ -511,6 +527,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>menubar</component-name>
 		<component-class>org.zkoss.zul.Menubar</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/hmenubar.dsp</mold-uri>
+		</mold>
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>~./zul/html/hmenubar.dsp</mold-uri>
@@ -645,6 +665,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-name>style</component-name>
 		<component-class>org.zkoss.zul.Style</component-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/style.dsp</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>tab</component-name>
@@ -805,6 +829,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>vbox</component-name>
 		<component-class>org.zkoss.zul.Vbox</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
+		</mold>
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>~./zul/html/hbox.dsp</mold-uri>

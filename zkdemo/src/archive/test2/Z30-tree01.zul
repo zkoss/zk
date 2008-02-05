@@ -1,6 +1,6 @@
 <window title="Win" id="win">
-	<button onClick="win.doModal()" />
-	<button onClick="win.doEmbedded()" />
+	<button label="doModal" onClick="win.doModal()" />
+	<button label="doEmbed" onClick="win.doEmbedded()" />
 	Case 1. Nested header
 	<tree id="tree2" width="240px">
 		<treecols>

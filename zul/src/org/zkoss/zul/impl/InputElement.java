@@ -30,10 +30,11 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.ext.client.Inputable;
+import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zk.ui.ext.client.Errorable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
@@ -46,7 +47,11 @@ import org.zkoss.zul.ext.Constrainted;
 
 /**
  * A skeletal implementation of an input box.
+ * <p>Events: onChange, onChanging, onFocus, onBlur, onSelection, and onOK<br/>
+ * 
+ * <p>Default {@link #getSclass}: text.
  * @author tomyeh
+ * @since 3.0.1 supports onOK event.
  */
 abstract public class InputElement extends XulElement
 implements Constrainted {
@@ -55,7 +60,7 @@ implements Constrainted {
 	/** The value. */
 	private Object _value;
 	/** Used by setTextByClient() to disable sending back the value */
-	private String _txtByClient;
+	private transient String _txtByClient;
 	/** The error message. Not null if users entered a wrong data (and
 	 * not correct it yet).
 	 */
@@ -68,7 +73,12 @@ implements Constrainted {
 	private boolean _disabled, _readonly;
 	/** Whether this input is validated (Feature 1461209). */
 	private boolean _valided;
+	/** Whether the validation is calused by {@link #isValid}. */
+	private transient boolean _checkOnly;
 
+	public InputElement(){
+		setSclass("text");
+	}
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
@@ -229,6 +239,7 @@ implements Constrainted {
 		final Object val = coerceFromString(value);
 		validate(val);
 
+		final boolean errFound = _errmsg != null;
 		clearErrorMessage(); //no error at all
 
 		if (!Objects.equals(_value, val)) {
@@ -243,7 +254,6 @@ implements Constrainted {
 				//Reason: when user set a value to correct one and set
 				//to an illegal one, then click the button cause both events
 			}
-				//being sent back to the server.
 		} else if (_txtByClient != null) {
 			//value equals but formatted result might differ because
 			//our parse is more fault tolerant
@@ -251,7 +261,11 @@ implements Constrainted {
 			if (!Objects.equals(_txtByClient, fmtval)) {
 				_txtByClient = null; //only once
 				smartUpdate("value", fmtval);
+					//being sent back to the server.
 			}
+		} else if (errFound) {
+			smartUpdate("value", coerceToString(_value));
+				//Bug 1876292: make sure client see the updated value
 		}
 	}
 
@@ -291,7 +305,7 @@ implements Constrainted {
 			final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
 			try {
 				constr.validate(this, value);
-				if (constr instanceof CustomConstraint) {
+				if (!_checkOnly && (constr instanceof CustomConstraint)) {
 					try {
 						((CustomConstraint)constr).showCustomError(this, null);
 						//not call thru showCustomError(Wrong...) for better performance
@@ -299,6 +313,10 @@ implements Constrainted {
 						log.realCauseBriefly(ex);
 					}
 				}
+			} catch (WrongValueException ex) {
+				if (!_checkOnly && (constr instanceof CustomConstraint))
+					((CustomConstraint)constr).showCustomError(this, ex);
+				throw ex;
 			} finally {
 				Namespaces.afterInterpret(backup, ns, true);
 			}
@@ -397,13 +415,12 @@ implements Constrainted {
 
 	//-- Constrainted --//
 	public void setConstraint(String constr) {
-		_constr = SimpleConstraint.getInstance(constr);
-		_valided = false;
-		invalidate(); //regenerate attributes
+		setConstraint(SimpleConstraint.getInstance(constr));
 	}
 	public void setConstraint(Constraint constr) {
-		if (_constr != constr) {
+		if (!Objects.equals(_constr, constr)) {
 			_constr = constr;
+			_valided = false;
 			invalidate();
 		}
 	}
@@ -467,6 +484,7 @@ implements Constrainted {
 		appendAsapAttr(sb, Events.ON_FOCUS);
 		appendAsapAttr(sb, Events.ON_BLUR);
 		appendAsapAttr(sb, Events.ON_SELECTION);
+		appendAsapAttr(sb, Events.ON_OK);
 
 		if (_constr != null) {
 			String serverValid = null;
@@ -568,6 +586,19 @@ implements Constrainted {
 			smartUpdate("value", coerceToString(_value));
 		}
 	}
+	/** Sets the value directly.
+	 * Note: Unlike {@link #setRawValue} (nor setValue), this method
+	 * assigns the value directly without clearing error message or
+	 * synchronizing with the client.
+	 *
+	 * <p>It is usually used only the constructor.
+	 * Though it is also OK to use {@link #setRawValue} in the constructor,
+	 * this method has better performance.
+	 * @since 3.0.3
+	 */
+	protected void setValueDirectly(Object value) {
+		_value = value;
+	}
 
 	/** Returns the current content of this input is correct.
 	 * If the content is not correct, next call to the getvalue method will
@@ -578,10 +609,13 @@ implements Constrainted {
 			return false;
 
 		if (!_valided && _constr != null) {
+			_checkOnly = true;
 			try {
 				validate(_value);
 			} catch (Throwable ex) {
 				return false;
+			} finally {
+				_checkOnly = false;
 			}
 		}
 		return true;
@@ -633,7 +667,7 @@ implements Constrainted {
 	 */
 	public void setSelectionRange(int start, int end) {
 		if (start <= end)
-			smartUpdate("z.sel", start + "," + end);
+			response("setAttr", new AuSetAttribute(this, "z.sel", start + "," + end));
 	}
 
 	/** Checks whether user entered a wrong value (and not correct it yet).
@@ -682,12 +716,14 @@ implements Constrainted {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Inputable, Errorable {
-		//-- Inputable --//
-		public void setTextByClient(String value) throws WrongValueException {
+	implements InputableX, Errorable {
+		//-- InputableX --//
+		public boolean setTextByClient(String value) throws WrongValueException {
 			_txtByClient = value;
 			try {
-				setText(value);
+				final Object oldval = _value;
+				setText(value); //always since it might have func even not change
+				return oldval != _value; //test if modifed
 			} catch (WrongValueException ex) {
 				_errmsg = ex.getMessage();
 					//we have to 'remember' the error, so next call to getValue

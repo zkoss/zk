@@ -21,7 +21,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="look" value="${self.tabbox.tabLook}-"/>
 <td id="${self.uuid}" align="right" z.type="zul.tab.Tabs"${self.outerAttrs}${self.innerAttrs}>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<table class="vtabsi" border="0" cellpadding="0" cellspacing="0">
 
 <%-- prefix row  --%>
 <tr>

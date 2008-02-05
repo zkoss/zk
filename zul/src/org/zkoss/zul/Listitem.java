@@ -72,7 +72,11 @@ public class Listitem extends XulElement {
 		final Listbox listbox = getListbox();
 		return listbox != null && listbox.inSelectMold();
 	}
-
+	
+	protected String getRealSclass() {
+		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
+		return super.getRealSclass() + (sclx != null ? " " + sclx : "") ;
+	}
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of getParent().getMaxlength();
 	 * Thus, it works only if the listbox's mold is "select".
@@ -124,11 +128,11 @@ public class Listitem extends XulElement {
 	 */
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
-			if (disabled && !inSelectMold())
-				throw new UnsupportedOperationException();
-
 			_disabled = disabled;
-			smartUpdate("disabled", _disabled);
+			if (inSelectMold())
+				smartUpdate("disabled", _disabled);
+			else
+				invalidate();
 		}
 	}
 	/** Returns whether it is selected.
@@ -223,7 +227,12 @@ public class Listitem extends XulElement {
 
 			final Listbox listbox = getListbox();
 			if (listbox != null && listbox.getModel() != null)
-				smartUpdate("z.loaded", _loaded);
+				if (_loaded && !listbox.inPagingMold())
+					invalidate();
+					//reason: the client doesn't init (for better performance)
+					//i.e., z.skipsib is specified for unloaded items
+				else
+					smartUpdate("z.loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this item is loaded.
@@ -251,8 +260,12 @@ public class Listitem extends XulElement {
 	 */
 	public String getSclass() {
 		String scls = super.getSclass();
-		if (scls == null) scls = "item";
-		return isSelected() ? scls.length() > 0 ? scls + " seld": "seld": scls;
+		if (scls == null) scls = "item";		
+		if (isDisabled())
+			return scls.length() > 0 ? scls + " disd": "disd";
+		else if (isSelected())
+			return scls.length() > 0 ? scls + " seld": "seld";		
+		return scls;
 	}
 
 	//-- Component --//
@@ -300,11 +313,17 @@ public class Listitem extends XulElement {
 				if (listbox.getModel() != null)
 					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
 			}
+			HTMLs.appendAttribute(sb, "z.disd", isDisabled());
+			if (getAttribute(Attributes.SKIP_SIBLING) != null) {
+				HTMLs.appendAttribute(sb, "z.skipsib", "true");
+				removeAttribute(Attributes.SKIP_SIBLING);
+			}
 			if (isSelected())
 				HTMLs.appendAttribute(sb, "z.sel", "true");
 
 			final String clkattrs = getAllOnClickAttrs(false);
 			if (clkattrs != null) sb.append(clkattrs);
+			HTMLs.appendAttribute(sb, "z.rid", getListbox().getUuid());
 		}
 		return sb.toString();
 	}

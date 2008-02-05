@@ -349,7 +349,7 @@ public class Listheader extends HeaderElement {
 		final StringBuffer sb = new StringBuffer(80);
 		if (_sortAsc != null) sb.append(" z.asc=\"true\"");
 		if (_sortDsc != null) sb.append(" z.dsc=\"true\"");
-
+		
 		if (!"natural".equals(_sortDir))
 			HTMLs.appendAttribute(sb, "z.sort", _sortDir);
 
@@ -361,6 +361,25 @@ public class Listheader extends HeaderElement {
 		return sb.insert(0, attrs).toString();
 	}
 
+
+	//-- Internal use only --//
+	/** Returns the prefix of the first column (in HTML tags), null if this
+	 * is not first column. Called only by listheader.dsp.
+	 * @since 3.0.1
+	 */
+	public String getColumnHtmlPrefix() {
+		final Listbox listbox = getListbox();
+		if (listbox != null && getParent().getFirstChild() == this 
+				&& listbox.isCheckmark() && listbox.isMultiple()) {
+			final StringBuffer sb = new StringBuffer(64);
+				sb.append("<input type=\"checkbox\"");
+				sb.append(" id=\"").append(getUuid())
+					.append("!cm\" z.type=\"Lhfc\"/>");
+			return sb.toString();
+		}
+		return null;
+	}
+	
 	/** Invalidates the whole box. */
 	protected void invalidateWhole() {
 		final Listbox box = getListbox();

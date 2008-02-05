@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page id="userGuide" title="ZK Live Demo"?>
-<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 
 <!--
 index.zul
@@ -21,14 +20,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <style src="~./zul/css/ext.css.dsp"/>
-<style>
-div.layout-container{
-	background:white;
-}
-.sort{
-	position: none;
-}
-</style>
 <borderlayout use="org.zkoss.zkdemo.userguide.MainLayout">
 	<west border="none" size="320px" splittable="true" minsize="150" maxsize="500" collapsible="true">
 		<tree id="toc" use="org.zkoss.zkdemo.userguide.LayoutTree" pageSize="-1" vflex="true" height="100%" width="100%">
@@ -68,7 +59,6 @@ div.layout-container{
 						<treeitem id="l2" label="Tabboxes" value="/userguide/layout/tabbox.zul"/>
 						<treeitem id="l3" label="More tabboxes" value="/userguide/layout/moreTabbox.zul"/>
 						<treeitem id="l4" label="Groupbox" value="/userguide/layout/groupbox.zul"/>
-						<treeitem id="l5" label="More groupboxes" value="/userguide/layout/moreGroupbox.zul"/>
 						<treeitem id="l6" label="Grids" value="/userguide/layout/grid.zul"/>
 					</treechildren>
 				</treeitem>
@@ -102,12 +92,13 @@ div.layout-container{
 						<treeitem id="mictxmnu" label="Context Menus" value="/userguide/misc/ctxmnu.zul"/>
 						<treeitem id="mitooltip" label="Tooltips and Popups" value="/userguide/misc/tooltip.zul"/>
 						<treeitem id="michart" label="Chart" value="/userguide/misc/chart.zul"/>
+						<treeitem id="mijasperreport" label="JasperReports" value="/userguide/misc/jasperreport.zul"/>
 						<treeitem id="csa" label="Client side action" value="/userguide/misc/action.zul"/>
 						<treeitem id="anima" label="Animations" value="/userguide/misc/anima.zul"/>
 						<treeitem id="theme" label="Change Theme" value="/userguide/misc/changetheme.zul"/>
 						<treeitem id="captcha" label="Captcha" value="/userguide/misc/captcha.zul"/>
 						<treeitem id="mi1" label="Timer" value="/userguide/misc/timer.zul"/>
-						<treeitem id="miaudio" label="Audio" value="/userguide/misc/audio.zul" unless="${c:isGecko()}"/>
+						<treeitem id="miaudio" label="Audio" value="/userguide/misc/audio.zul"/>
 							<!-- disable it since there is a bug between FF2 and quick time
 							See: http://www.librarything.com/talktopic.php?topic=13113
 							-->

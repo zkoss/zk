@@ -33,7 +33,7 @@ import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
- * A initiator node on the ZUML page.
+ * The init directive in the ZUML page.
  *
  * <p>Note: we resolve the class by use fo Classes.forNameByThread.
  * In other words, it doesn't support the class defined in zscript.
@@ -173,13 +173,19 @@ public class InitiatorInfo {
 		}
 		return (Initiator)cls.newInstance();
 	}
-	/** Returns the arguments array (by evaluating EL if necessary).
+	/** Returns the arguments array (and evaluates EL if necessary).
+	 * @since 3.0.2
 	 */
-	public Object[] getArguments(PageDefinition pgdef, Page page) {
+	public Object[] resolveArguments(PageDefinition pgdef, Page page) {
 		final Evaluator eval = pgdef.getEvaluator();
 		final Object[] args = new Object[_args.length];
 		for (int j = 0; j < args.length; ++j) //eval order is important
 			args[j] = _args[j].getValue(eval, page);
 		return args;
+	}
+	/** @deprecated As of release 3.0.0, replaced by {@link #resolveArguments}.
+	 */
+	public Object[] getArguments(PageDefinition pgdef, Page page) {
+		return resolveArguments(pgdef, page);
 	}
 }

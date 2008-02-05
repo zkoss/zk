@@ -30,6 +30,7 @@ import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.web.servlet.http.Encodes;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
@@ -39,6 +40,7 @@ import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.au.AuWriters;
 
 /**
  * Used to parse WEB-INF/zk.xml into {@link Configuration}.
@@ -60,9 +62,14 @@ public class ConfigParser {
 		if (url == null || config == null)
 			throw new IllegalArgumentException("null");
 		log.info("Parsing "+url);
-
-		final Element root = new SAXBuilder(false, false, true)
-			.build(url).getRootElement();
+		parse(new SAXBuilder(false, false, true).build(url).getRootElement(),
+			config, locator);
+	}
+	/** Parses zk.xml, specified by the root element.
+	 * @since 3.0.1
+	 */
+	public void parse(Element root, Configuration config, Locator locator)
+	throws Exception {
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
@@ -131,19 +138,24 @@ public class ConfigParser {
 			//  processing-prompt-delay
 			//	error-reload
 			//	tooltip-delay
+			//  resend-delay
 				parseClientConfig(config, el);
 
 			} else if ("session-config".equals(elnm)) {
 			//session-config
 			//	session-timeout
 			//	max-desktops-per-session
+			//  max-requests-per-session
 			//  timer-keep-alive
 			//	timeout-uri (deprecated)
 				Integer v = parseInteger(el, "session-timeout", false);
 				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
 
 				v = parseInteger(el, "max-desktops-per-session", false);
-				if (v != null) config.setMaxDesktops(v.intValue());
+				if (v != null) config.setSessionMaxDesktops(v.intValue());
+
+				v = parseInteger(el, "max-requests-per-session", false);
+				if (v != null) config.setSessionMaxRequests(v.intValue());
 
 				String s = el.getElementValue("timer-keep-alive", true);
 				if (s != null) config.setTimerKeepAlive("true".equals(s));
@@ -181,6 +193,8 @@ public class ConfigParser {
 			//	id-generator-class
 			//  web-app-class
 			//	method-cache-class
+			//	url-encoder-class
+			//	au-writer-class
 				String s = el.getElementValue("disable-event-thread", true);
 				if (s != null) config.enableEventThread("false".equals(s));
 
@@ -229,6 +243,15 @@ public class ConfigParser {
 				cls = parseClass(el, "method-cache-class", Cache.class);
 				if (cls != null)
 					ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());
+
+				cls = parseClass(el, "url-encoder-class", Encodes.URLEncoder.class);
+				if (cls != null)
+					Encodes.setURLEncoder((Encodes.URLEncoder)cls.newInstance());
+
+				s = el.getElementValue("au-writer-class", true);
+				if (s != null)
+					AuWriters.setImplementationClass(
+						s.length() == 0 ? null: Classes.forNameByThread(s));
 			} else if ("xel-config".equals(elnm)) {
 			//xel-config
 			//	evaluator-class
@@ -306,7 +329,8 @@ public class ConfigParser {
 
 		//file-check-period
 		v = parseInteger(conf, "file-check-period", true);
-		if (v != null) System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
+		if (v != null)
+			System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
 			//System-wide property
 
 	}
@@ -317,6 +341,9 @@ public class ConfigParser {
 
 		v = parseInteger(conf, "tooltip-delay", true);
 		if (v != null) config.setTooltipDelay(v.intValue());
+
+		v = parseInteger(conf, "resend-delay", false);
+		if (v != null) config.setResendDelay(v.intValue());
 
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)
@@ -357,13 +384,15 @@ public class ConfigParser {
 	/** Parse a class, if specified, whether it implements cls.
 	 */
 	private static Class parseClass(Element el, String elnm, Class cls) {
+		//Note: we throw exception rather than warning to make sure
+		//the developer correct it
 		final String clsnm = el.getElementValue(elnm, true);
 		if (clsnm != null && clsnm.length() != 0) {
 			try {
 				final Class klass = Classes.forNameByThread(clsnm);
 				if (cls != null && !cls.isAssignableFrom(klass))
 					throw new UiException(clsnm+" must implement "+cls.getName()+", "+el.getLocator());
-				log.info("Using "+clsnm+" for "+cls);
+//				if (log.debuggable()) log.debug("Using "+clsnm+" for "+cls);
 				return klass;
 			} catch (Throwable ex) {
 				throw new UiException("Unable to load "+clsnm+", at "+el.getLocator());
@@ -375,6 +404,8 @@ public class ConfigParser {
 	/** Configures an integer. */
 	private static Integer parseInteger(Element el, String subnm,
 	boolean positiveOnly) throws UiException {
+		//Note: we throw exception rather than warning to make sure
+		//the developer correct it
 		String val = el.getElementValue(subnm, true);
 		if (val != null && val.length() > 0) {
 			try { 

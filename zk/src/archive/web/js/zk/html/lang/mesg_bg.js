@@ -32,6 +32,7 @@ mesg.INTEGER_REQUIRED = "Изберете по-голямо целочислен
 mesg.EMPTY_NOT_ALLOWED = "Не може да е празно или само интервали.";
 mesg.GOTO_ERROR_FIELD = "Ползване на грешно поле";
 mesg.PLEASE_WAIT = "Зарежда се...";
+mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Размер на файла: ";
 mesg.KBYTES = "KB";

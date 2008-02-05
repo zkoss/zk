@@ -3,7 +3,6 @@
 ../dist/lib/zk.jar
 ../dist/lib/zul.jar
 ../dist/lib/ext/bsh.jar
-../dist/lib/ext/commons-logging.jar
 ../dist/lib/ext/servlet-api.jar
 ../dist/lib/ext/spring.jar
 ../dist/lib/ext/hibernate3.jar
@@ -11,4 +10,4 @@
 ../dist/lib/ext/ejb3-persistence.jar
 ../dist/lib/ext/jta.jar
 ../dist/lib/ext/acegi-security.jar
-../dist/lib/ext/s2-framework-2.4.16.jar
+../dist/lib/ext/s2-framework.jar

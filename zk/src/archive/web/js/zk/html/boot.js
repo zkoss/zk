@@ -29,30 +29,37 @@ if (!window.zk) { //avoid eval twice
  * @param msg the message
  * @param x the x-coordinate of the box
  * @param y the y-coordinate of the box
+ * @param mk sets whether show the modal_mark (since 3.0.2)
+ * @param center sets whether center the loading bar (since 3.0.2)
  */
 if (!window.Boot_progressbox) { //not customized
-	window.Boot_progressbox = function (id, msg, x, y) {
+	window.Boot_progressbox = function (id, msg, x, y, mk, center) {
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 
 		var html = '<div id="'+id+'"';
 
-		var mask = zk.loading && !zk._prgsOnce;
+		var mask = mk || zk.loading && !zk._prgsOnce;
 		if (mask) {
 			zk._prgsOnce = true; //do it only once
-			html += ' class="modal_mask" style="display:block"><div'
+			html += ' ><div class="modal_mask" style="display:block"></div><div'
 		}
-
-		html += ' style="left:'+x+'px;top:'+y+'px;'
-		+'position:absolute;z-index:79000;background-color:#FFF0C8;'
-		+'white-space:nowrap;border:1px solid #77a;padding:6px;">'
-		+'<img alt="..." src="'+zk.getUpdateURI('/web/zk/img/progress.gif')+'"/> '
-		+msg+'</div>';
+		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
+		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
+		html += ' id="z-loading" class="z-loading" style="left:'+x+';top:'+y+';">'
+		+'<div class="z-loading-indicator">'
+		+'<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
+		+msg+'</div></div>';
 
 		if (mask)
 			html += '</div>';
 
 		zk._setOuterHTML(n, html);
+		if (center) {
+			var el = $e("z-loading");
+			el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + "px";
+			el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + "px";
+		}
 		return $e(id);
 	};
 }
@@ -60,7 +67,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "7r"; //increase this if we want the browser to reload JavaScript
+zk.build = "8p"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 
 /** Browser info. */
@@ -68,7 +75,8 @@ zk.agent = navigator.userAgent.toLowerCase();
 zk.safari = zk.agent.indexOf("safari") != -1;
 zk.opera = zk.agent.indexOf("opera") != -1;
 zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
-zk.ie7 = zk.agent.indexOf("msie 7") != -1;
+zk.ie7 = zk.agent.indexOf("msie 7") != -1; //ie7 or later
+zk.ie6Only =  zk.ie && !zk.ie7;
 zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 zk.windows = zk.agent.indexOf("windows") != -1;
 zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
@@ -426,7 +434,8 @@ function $visible(el) {
 
 /** Converts to an integer. It handles null and "07" */
 function $int(v, b) {
-	return v ? parseInt(v, b || 10): 0;
+	v = v ? parseInt(v, b || 10): 0;
+	return isNaN(v) ? 0: v;
 };
 
 /** Returns the ZK attribute of the specified name.
@@ -464,11 +473,15 @@ zk.getBuild = function (nm) {
  * <p>The function is removed from the list right before invoked,
  * so it won't be called twice (unless you call zk.addInit again).
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  */
 zk.addInit = function (fn, front, unique) {
-	zk._addfn(zk._initfns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._initids[unique]) return;	
+		zk._initids[unique] = true;
+	}
+	zk._addfn(zk._initfns, fn, front);
 };
 /** Adds a function that will be invoked 25 milliseconds, after
  * all components are initialized.
@@ -482,19 +495,18 @@ zk.addInit = function (fn, front, unique) {
  * so it won't be called twice (unless you call zk.addInitLater again).
  *
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  * @since 3.0.0
  */
 zk.addInitLater = function (fn, front, unique) {
-	zk._addfn(zk._inLatfns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._inLatids[unique]) return;
+		zk._inLatids[unique] = true;
+	}
+	zk._addfn(zk._inLatfns, fn, front);
 };
-zk._addfn = function (fns, fn, front, unique) {
-	if (unique)
-		for (var j = fns.length; j;)
-			if (fns[--j] == fn)
-				return;
-
+zk._addfn = function (fns, fn, front) {
 	if (front) fns.unshift(fn);
 	else fns.push(fn);
 };
@@ -527,11 +539,15 @@ zk.addInitCmp = function (cmp) {
  * <p>The function is removed from the list right before invoked,
  * so it won't be called twice (unless you call zk.addInit again).
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  */
 zk.addCleanup = function (fn, front, unique) {
-	zk._addfn(zk._cufns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._cuids[unique]) return;	
+		zk._cuids[unique] = true;
+	}
+	zk._addfn(zk._cufns, fn, front);
 };
 /** Adds a function that will be invoked 25 milliseconds, after
  * all components are cleaned up.
@@ -541,12 +557,16 @@ zk.addCleanup = function (fn, front, unique) {
  * so it won't be called twice (unless you call zk.addInitLater again).
  *
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  * @since 3.0.0
  */
 zk.addCleanupLater = function (fn, front, unique) {
-	zk._addfn(zk._cuLatfns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._cuLatids[unique]) return;	
+		zk._cuLatids[unique] = true;
+	}
+	zk._addfn(zk._cuLatfns, fn, front);
 };
 
 /** Adds a function that will be invoked when the browser is resized
@@ -554,17 +574,25 @@ zk.addCleanupLater = function (fn, front, unique) {
  * <p>Unlike zk.addInit, the function won't be detached after invoked.
  *
  * @param front whether to add the function to the front of the list
- * @param unique whether not to add if redundant. If true, fn is added
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * only if fn was not added before.
  * @since 3.0.0
  */
 zk.addOnResize = function (fn, front, unique) {
-	zk._addfn(zk._reszfns, fn, front, unique);
+	if (typeof unique == "string") {
+		if(zk._reszids[unique]) return;	
+		zk._reszids[unique] = true;
+	}
+	zk._addfn(zk._reszfns, fn, front);
 };
 /** Removes a function that was added by calling zk.addOnResize.
+ * @param {String} unique whether not to add if redundant. If any, fn is added
  * @since 3.0.0
  */
-zk.rmOnResize = function (fn) {
+zk.rmOnResize = function (fn, unique) {
+	if (typeof unique == "string") {
+		delete zk._reszids[unique];
+	}
 	zk._reszfns.remove(fn);
 };
 /** Invokes all functions added by zk.addOnResize.
@@ -586,15 +614,18 @@ zk.onResize = function (timeout) {
 };
 zk._onResize = function () {
 	if (--zk._reszcnt == 0) {
-		if (zk.loading)
-			return zk.onResize();
-		if (zk.ie && !zk.ie7 && !zk._tmResz) {
-			zk._tmResz = $now() + 800; 
-			return; // avoid IE6. It always fire onResize at first time.
+		if (zk.loading || anima.count) {
+			zk.onResize();
+			return;
 		}
-		if (zk.ie) zk._tmResz = $now() + 800;
+		if (zk.ie) {
+			var firstTime = !zk._tmResz;
+			zk._tmResz = $now() + 800; 
+			if (!zk.ie7 && firstTime)
+				return; //IE6: it fires an "extra" onResize in loading
+		}
 
-		for (var j = 0; j < zk._reszfns.length; ++j)
+		for (var j = 0, rl = zk._reszfns.length; j < rl; ++j)
 			zk._reszfns[j]();
 	}
 };
@@ -623,7 +654,7 @@ zk.rmBeforeUnload = function (fn) {
  * @since 3.0.0
  */
 zk.beforeUnload = function () {
-	for (var j = 0; j < zk._bfunld.length; ++j) {
+	for (var j = 0, bl = zk._bfunld.length; j < bl; ++j) {
 		var s = zk._bfunld[j]();
 		if (s) return s;
 	}
@@ -730,7 +761,7 @@ zk._bld = function () {
 		zk.disableESC();
 
 		zk._ckload = setInterval(function () {
-			for (var j = 0; j < zk._ckfns.length; ++j)
+			for (var j = 0, cl = zk._ckfns.length; j < cl; ++j)
 				if (zk._ckfns[j]()) {
 					zk._ckfns.splice(j--, 1);
 					zk.ald();
@@ -743,7 +774,7 @@ zk._bld = function () {
 				if (!n)
 					Boot_progressbox("zk_loadprog",
 						'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
-						zk.innerX() + 30, zk.innerY() + 50);
+						"45%", "40%");
 			}
 		}, 350);
 	}
@@ -849,8 +880,14 @@ zk._loadAndInit = function (inf) {
 
 		//if nosibling, don't process its sibling (only process children)
 		if (inf.nosibling) inf.nosibling = false;
-		else if (n.nextSibling) inf.stk.push(n.nextSibling);
-		if (n.firstChild) inf.stk.push(n.firstChild);
+		else if (n.nextSibling && !getZKAttr(n, "skipsib"))
+			inf.stk.push(n.nextSibling);
+
+		//Since 3.0.2, we introduce z.skipdsc to stop parsing the descendants.
+		//It improves the performance for the sophisticated component
+		//that want to initialize children in a custom way.
+		if (n.firstChild && !getZKAttr(n, "skipdsc"))
+			inf.stk.push(n.firstChild);
 	}
 
 	zk._evalInit();
@@ -894,7 +931,6 @@ zk._evalInit = function () {
 				if (o) {
 					if (o["onVisi"]) zk._visicmps[n.id] = true;
 					if (o["onHide"]) zk._hidecmps[n.id] = true;
-					if (o["onSize"]) zk._sizecmps[n.id] = true;
 				}
 			}
 
@@ -908,6 +944,8 @@ zk._evalInit = function () {
 		while (!zk.loading && zk._initfns.length)
 			(zk._initfns.shift())();
 
+		if (!zk.loading && !zk._initfns.length) zk._initids = {};
+		
 		setTimeout(zk._initLater, 25);
 	} while (!zk.loading && (zk._initmods.length || zk._initcmps.length
 	|| zk._initfns.length));
@@ -916,6 +954,8 @@ zk._evalInit = function () {
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
 		(zk._inLatfns.shift())();
+	if (!zk.loading && !zk._inLatfns.length)
+		zk._inLatids = {};
 };
 
 /** Evaluate a method of the specified component.
@@ -956,11 +996,14 @@ zk.cleanupAt = function (n) {
 
 	while (zk._cufns.length)
 		(zk._cufns.shift())();
+		
+	zk._cuids = {};
 	setTimeout(zk._cleanLater, 25);
 };
 zk._cleanLater = function () {
 	while (zk._cuLatfns.length)
 		(zk._cuLatfns.shift())();
+	zk._cuLatids = {};
 };
 zk._cleanupAt = function (n) {
 	if (getZKAttr(n, "zid")) zkau.cleanzid(n);
@@ -975,7 +1018,6 @@ zk._cleanupAt = function (n) {
 		zk.unlistenAll(n); //Bug 1741959: memory leaks
 		delete zk._visicmps[n.id];
 		delete zk._hidecmps[n.id];
-		delete zk._sizecmps[n.id];
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -1021,43 +1063,6 @@ zk.onHideAt = function (n) {
 		}
 	}
 }
-/** To notify a component that its size is changed.
- *  All descendants of n is invoked if onSize is declared.
- * Note: since onSize usually triggers another onSize, it handles them
- * asynchronously.
- */
-zk.onSizeAt = function (n) {
-	for (var nid in zk._sizecmps) {
-		var elm = $e(nid);
-		for (var e = elm; e; e = $parent(e)) {
-			if (e == n) { //elm is a child of n
-				if (!zk._tmOnSizeAt)
-					zk._tmOnSizeAt = setTimeout(zk._onSizeAt, 550);
-				zk._toOnSize[nid] = true;
-				break;
-			}
-			if (!$visible(e))
-				break;
-		}
-	}
-};
-zk._onSizeAt = function () {
-	delete zk._tmOnSizeAt;
-	var once;
-	for (var nid in zk._toOnSize) {
-		if (once) {
-			if (!zk._tmOnSizeAt)
-				zk._tmOnSizeAt = setTimeout(zk._onSizeAt, 0);
-			break; //only once
-		}
-		once = true;
-
-		delete zk._toOnSize[nid];
-
-		var elm = $e(nid);
-		if (elm) zk.eval(elm, "onSize");
-	}
-};
 
 //extra//
 /** Loads the specified style sheet (CSS).
@@ -1065,13 +1070,24 @@ zk._onSizeAt = function () {
  * unless http:// or https:// is specified
  */
 zk.loadCSS = function (uri) {
-	var e = document.createElement("LINK");
-	e.rel = "stylesheet";
-	e.type = "text/css";
 	if (uri.indexOf("://") < 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		uri = zk.getUpdateURI("/web" + uri);
 	}
+	zk.loadCSSDirect(uri);
+};
+/**Loads the specified style sheet (CSS) without prefixing with /web.
+ *
+ * @param uri the URI. Note: it is assigned to the href attribute directly
+ * without prefix with /web
+ * @param id the identifier (the id attribute). Optional.
+ * @since 3.0.2
+ */
+zk.loadCSSDirect = function (uri, id) {
+	var e = document.createElement("LINK");
+	if (id) e.id = id;
+	e.rel = "stylesheet";
+	e.type = "text/css";
 	e.href = uri;
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
@@ -1142,8 +1158,10 @@ zk.progressDone = function() {
 };
 /** Generates the progressing dialog. */
 zk._progress = function () {
-	if (zk.progressing) {
-		var n = $e("zk_prog");
+	if (zk.progressing && !zk.loading) {
+		var n = $e("zk_showBusy");
+		if (n) return;
+		n = $e("zk_prog");
 		if (!n) {
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
@@ -1216,7 +1234,7 @@ zk.pause = function (millis) {
 zk.encodeXML = function (txt, multiline) {
 	var out = "";
 	if (txt)
-		for (var j = 0; j < txt.length; ++j) {
+		for (var j = 0, tl = txt.length; j < tl; ++j) {
 			var cc = txt.charAt(j);
 			switch (cc) {
 			case '<': out += "&lt;"; break;
@@ -1237,7 +1255,12 @@ zk.encodeXML = function (txt, multiline) {
 
 //-- debug --//
 /** Generates a message for debugging. */
-zk.message = function (msg) {
+zk.message = function () {
+	var msg = "", a = arguments;
+	if (a.length > 1) {
+		for (var i = 0, len = a.length; i < len; i++)
+			msg += "[" + a[i] + "] ";
+	} else msg = arguments[0];
 	zk._msg = zk._msg ? zk._msg + msg: msg;
 	zk._msg +=  '\n';
 	setTimeout(zk._domsg, 600);
@@ -1250,11 +1273,11 @@ zk._domsg = function () {
 			console = document.createElement("DIV");
 			document.body.appendChild(console);
 			var html =
- '<div style="border:1px solid #77c">'
+ '<div class="debugbox">'
 +'<table cellpadding="0" cellspacing="0" width="100%"><tr>'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button><br/>'
 +'<button onclick="$e(\'zk_msg\').value = \'\'">clear</button></td>'
-+'<td><textarea id="zk_msg" style="width:100%" rows="3"></textarea></td></tr></table></div>';
++'<td><textarea id="zk_msg" style="width:99%" rows="3"></textarea></td></tr></table></div>';
 			zk._setOuterHTML(console, html);
 			console = $e("zk_msg");
 		}
@@ -1301,20 +1324,22 @@ zk.error = function (msg) {
 zk.loading = 0;
 zk._modules = {}; //Map(String nm, boolean loaded)
 zk._initfns = []; //used by addInit
+zk._initids = {};
 zk._inLatfns = []; //used by addInitLater
+zk._inLatids = {};
 zk._initmods = []; //used by addModuleInit
 zk._cufns = []; //used by addCleanup
+zk._cuids = {};
 zk._cuLatfns = []; //used by addCleanupLater
+zk._cuLatids = {};
 zk._reszfns = []; //used by addOnResize
+zk._reszids = {};
 zk._reszcnt = 0; //# of pending zk.onResize
 zk._bfunld = []; //used by addBeforeUnload
 zk._initcmps = []; //comps to init
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
 zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
-zk._sizecmps = {}; //a set of component's ID that requires zkType.onSize
-zk._toOnSize = {}; //a set of component's waiting to execute onSize
-
 function myload() {
 	var f = zk._onload;
 	if (f) {

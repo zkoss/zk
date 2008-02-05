@@ -342,6 +342,10 @@ if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer))
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
       
       Draggables.activate(this);
+//Jumper Chen, Potix: Bug #1845026
+//We need to ensure that the onBlur event is fired before the onSelect event for consistent among four browsers. 
+	  if (zkau.currentFocus && Event.element(event) != zkau.currentFocus 
+	  	&& typeof zkau.currentFocus.blur == "function") zkau.currentFocus.blur();
       Event.stop(event);
 //Tom M. Yeh, Potix: mousedown is eaten above
 zkau.autoZIndex(src, false, true);
@@ -357,7 +361,7 @@ zk.disableSelection(document.body); // Bug #1820433
     if(this.options.ghosting) {
 //Tom M. Yeh, Potix: ghosting is controllable
 var ghosting = true;
-if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, true);
+if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, true, event);
 if (ghosting) {
       this._clone = this.element.cloneNode(true);
 this.z_orgpos = this.element.style.position; //Tom M. Yeh, Potix: Bug 1514789
@@ -395,9 +399,8 @@ if (this.z_orgpos != 'absolute')
     Droppables.show(pointer, this.element);
 */
     Draggables.notify('onDrag', this, event);
-    
-    this.draw(pointer);
-    if(this.options.change) this.options.change(this, pointer); //Tom M Yeh, Potix: add pointer
+    this.draw(pointer, event);
+    if(this.options.change) this.options.change(this, pointer, event); //Tom M Yeh, Potix: add pointer
     
     if(this.options.scroll) {
       this.stopScrolling();
@@ -422,7 +425,7 @@ if (this.z_orgpos != 'absolute')
     
     // fix AppleWebKit rendering
     if(navigator.appVersion.indexOf('AppleWebKit')>0) window.scrollBy(0,0);
-    
+	
     Event.stop(event);
   },
   
@@ -453,7 +456,7 @@ this.element.style.position = this.z_orgpos;
 
 	var pointer = [Event.pointerX(event), Event.pointerY(event)]; //Tom M. Yeh, Potix: add pointer
     var revert = this.options.revert;
-    if(revert && typeof revert == 'function') revert = revert(this.element, pointer); //Tom M. Yeh, Potix: add pointer
+    if(revert && typeof revert == 'function') revert = revert(this.element, pointer, event); //Tom M. Yeh, Potix: add pointer
     
     var d = this.currentDelta();
     if(revert && this.options.reverteffect) {
@@ -468,7 +471,7 @@ this.element.style.position = this.z_orgpos;
 
     if(this.options.endeffect) 
       this.options.endeffect(this.element, event); //Tom M. Yeh, Potix: add event
-      
+      	
     Draggables.deactivate(this);
 /* Tom M. Yeh, Potix: remove unused codes
     Droppables.reset();
@@ -476,7 +479,7 @@ this.element.style.position = this.z_orgpos;
   },
   
   keyPress: function(event) {
-    if(event.keyCode!=27/*Tom M. Yeh, Potix:Event.KEY_ESC*/) return;
+    if(Event.keyCode(event)!=27/*Tom M. Yeh, Potix:Event.KEY_ESC*/) return;
     this.finishDrag(event, false);
     Event.stop(event);
   },
@@ -488,7 +491,7 @@ this.element.style.position = this.z_orgpos;
     Event.stop(event);
   },
   
-  draw: function(point) {
+  draw: function(point, event) {
     var pos = Position.cumulativeOffset(this.element);
     if(this.options.ghosting) {
       var r   = Position.realOffset(this.element);
@@ -528,7 +531,7 @@ if (this.z_scrl) {
     var style = this.element.style;
 //Tom M. Yeh, Potix: support function constraint
 if (typeof this.options.constraint == 'function') {
-	var np = this.options.constraint(this, p); //return null or [newx, newy]
+	var np = this.options.constraint(this, p, event); //return null or [newx, newy]
 	if (np) p = np;
 	style.left = p[0] + "px";
 	style.top  = p[1] + "px";

@@ -51,4 +51,12 @@ public interface EventProcessingThread {
 	/** Returns the component being processed by this thread, or null if idle.
 	 */
 	public Component getComponent();
+
+	/** Sends the specified component and event and processes the event
+	 * synchronously.
+	 * Used to implements {@link org.zkoss.zk.ui.event.Events#sendEvent}.
+	 * @since 3.0.2
+	 */
+	public void sendEvent(Component comp, Event event)
+	throws Exception;
 }

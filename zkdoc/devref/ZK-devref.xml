@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
-<title>ZK Developer's Reference</title>
-<subtitle>Version 3.0</subtitle>
+<title>The Developer's Reference</title>
+<subtitle>Version 3.0.3</subtitle>
 <bookinfo>
 <copyright>
-<year>2007</year>
+<year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
@@ -168,10 +168,29 @@
 <programlisting>&lt;?evaluator class="org.zkoss.zkmax.xel.mvel.MVELFactory"?&gt;&#13;&lt;window id="w" title="MVEL Demo"&gt;&#13;    ${new org.zkoss.zul.Textbox().setParent(w)}    &#13;&lt;/window&gt;&#13;</programlisting></sect3><sect3><title>import</title>
 <para>[Optiona][Default: what are defined in taglib]</para>
 <para>Specifies a list of classes separated with comma to import for evaluating the expression in this page. For example, with MVEL:</para>
-<programlisting>&lt;?evaluator class="org.zkoss.zkmax.xel.mvel.MVELFactory"&#13;import="org.zkoss.zul.Datebox,org.zkoss.zul.Combobox"?&gt;&#13;&lt;window id="w" title="MVEL Demo"&gt;&#13;    ${new Datebox().setParent(w)}    &#13;&lt;/window&gt;&#13;</programlisting>
-<para>Notice that not all evaluators support the import of classes. For example, all EL-based the evaluators, including the system default one, don't support it. In other words, the import attribute is meaningless to them. Rather, you have to use the taglib directive to import functions.</para></sect3></sect2><sect2><title>The import Directive</title>
-<para>&lt;?import uri="..."?&gt;</para>
-<para>It imports the component definitions and initiators defined in another ZUML page. In other words, it imports the component and init directives from the specified page.</para>
+<programlisting>&lt;?evaluator class="org.zkoss.zkmax.xel.mvel.MVELFactory"&#13;import="org.zkoss.zul.Datebox,org.zkoss.zul.Combobox"?&gt;&#13;&lt;window id="w" title="MVEL Demo"&gt;&#13;    ${new Datebox().setParent(w)}    &#13;</programlisting>
+<para>&lt;/window&gt;</para>
+<para>Notice that not all evaluators support the import of classes. For example, all EL-based the evaluators, including the system default one, don't support it. In other words, the import attribute is meaningless to them. Rather, you have to use the taglib directive to import functions.</para></sect3></sect2><sect2><title>The forward Directive</title>
+<para>&lt;?forward uri="..." [if="..."] [unless="..."]?&gt;</para>
+<para>It specifies the URI to forward the request to, and the condition to decide whether to forward. If the condition is satisfied or not specified, this page won't be rendered, and the request is, instead, forwarded to the URI specified in the uri attribute.</para>
+<para>Notes</para>
+<itemizedlist>
+<listitem>
+<para>Even if the forward is effective (i.e., ZK forwards the request to the specified URI), the initiators specified in the init directives will be called.</para>
+</listitem>
+<listitem>
+<para>The createComponents method of the Execution interface ignores the forward directives. In other words, the forward directives are evaluated only if the ZUML page is loaded directly.</para>
+</listitem>
+</itemizedlist><sect3><title>uri</title>
+<para>[required][EL expressions allowed]</para>
+<para>The URI of the page/servlet to forward to. It may be another ZUML page, a JSP page or any servlet.</para>
+<para>If an EL expression is specified and it is evaluated to an empty string, it is considered as no forwarding at all.</para></sect3><sect3><title>if</title>
+<para>[Optional][Default: true][EL expressions allowed]</para>
+<para>The condition to forward to the specified URI. If both if and unless are omitted, this page won't be evaluated and ZK always forwards the request to the specified URI.</para></sect3><sect3><title>unless</title>
+<para>[Optional][Default: false][EL expressions allowed]</para>
+<para>The condition not to forward to the specified URI. If both if and unless are omitted, this page won't be evaluated and ZK always forwards the request to the specified URI.</para></sect3></sect2><sect2><title>The import Directive</title>
+<para>&lt;?import uri="..."?&gt;&lt;?import uri="..." directives="..."?&gt;</para>
+<para>It imports the directives, such as component definitions (&lt;?component?&gt;) and initiators (&lt;?init?&gt;), defined in another ZUML page.</para>
 <para>A typical use is that you put a set of component definitions in one ZUML page, and then import it in other ZUML pages, such that they share the same set of component definitions, additional to the system default.</para>
 <programlisting>&lt;!-- special.zul: Common Definitions --&gt;&#13;&lt;?init zscript="/WEB-INF/macros/special.zs"?&gt;&#13;&lt;?component name="special" macroURI="/WEB-INF/macros/special.zuml" class="Special"?&gt;&#13;&lt;?component name="another" macroURI="/WEB-INF/macros/another.zuml"?&gt;&#13;</programlisting>
 <para>where the Special class is assumed to be defined in /WEB-INF/macros/special.zs.</para>
@@ -183,14 +202,18 @@
 <para>Unlike other directives, the import directives must be at the topmost level, i.e., at the the same level as the root element.</para>
 </listitem>
 <listitem>
-<para>The imported component definitions in the imported page are also imported. For example, if A imports B and B imports C, then A imports both C and B component definitions. If there is a name conflict, A overrides B, while B overrides C.</para>
+<para>The imported directives in the imported page are also imported. For example, if A imports B and B imports C, then A imports both C and B component definitions. If there is a name conflict, A overrides B, while B overrides C.</para>
 </listitem>
 <listitem>
-<para>Once the component definitions is imported, it won't be changed until the page is change, no matter the imported page is changed or not.</para>
+<para>Once the directives are imported, they won't be changed until the importing page is change, no matter the imported page is changed or not.</para>
 </listitem>
 </itemizedlist><sect3><title>uri</title>
 <para>[Required]</para>
-<para>The URI of a ZUML page which the component definitions will be imported from.</para></sect3></sect2><sect2><title>The init Directive</title>
+<para>The URI of a ZUML page which the component definitions will be imported from.</para></sect3><sect3><title>directives</title>
+<para>[Optional]</para>
+<para>If the directives attribute is omitted, only the component and init directives are imported. If you want to import particular directives, you can specify a list of the names of the directives separated by comma. For example,</para>
+<programlisting>&lt;?import uri="/template/taglibs.zul" directives="taglib, xel-method"?&gt;&#13;</programlisting>
+<para>The directives that can be imported include component, init, meta, taglib, variable-resolver, and xel-method. If you want to import them all, specify * to the directives attribute. Notice that meta implies both the meta and link directives.</para></sect3></sect2><sect2><title>The init Directive</title>
 <para>&lt;?init class="..." [arg0="..."] [arg1="..."] [arg2="..."] [arg3="..."]?&gt;</para>
 <para>&lt;?init zscript="..." [arg0="..."] [arg1="..."] [arg2="..."] [arg3="..."]?&gt;</para>
 <para>There are two formats. The first format is to specify a class that is used to do the application-specific initialization. The second format is to specify a zscript file to do the application-specific initialization.</para>
@@ -268,14 +291,16 @@
 <para>A URL of the taglib file. Unlike other URL and URI, it doesn't interpret ~ or * specially. And, the page and the taglib files it references must be in the same Web application.</para></sect3><sect3><title>prefix</title>
 <para>[Required]</para>
 <para>A prefix used to identify functions defined in this taglib file. The prefix could be any non-empty string.</para></sect3></sect2><sect2><title>The variable-resolver Directive</title>
-<para>&lt;?variable-resolver class="..."?&gt;</para>
+<para>&lt;?variable-resolver class="..."  [arg0="..."] [arg1="..."] [arg2="..."] [arg3="..."]?&gt;</para>
 <para>Specifies the variable resolver that will be used by the zscript interpreter to resolve unknown variables. The specified class must implement the org.zkoss.zk.scripting.VariableResolver interface.</para>
 <para>You can specify multiple variable resolvers with multiple variable-resolver directives. The later declared one has higher priority.</para>
 <para>Notice that the variable-resolver directives are evaluated before the init directives, so the zscript codes referenced by the init directives are affected by the variable resolver.</para>
 <para>The following is an example when using ZK with the Spring framework. It resolves Java Beans declared in the Spring framework, such that you access them directly.</para>
 <programlisting>&lt;?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?&gt;&#13;</programlisting><sect3><title>class</title>
 <para>[Optional]</para>
-<para>A class name that must implement the org.zkoss.zk.scripting.VariableResolver interface. Unlike the init directive, the class name cannot be the class that is defined in zscript codes.</para></sect3></sect2><sect2><title>The xel-method Directive</title>
+<para>A class name that must implement the org.zkoss.zk.scripting.VariableResolver interface. Unlike the init directive, the class name cannot be the class that is defined in zscript codes.</para></sect3><sect3><title>arg0, arg1...</title>
+<para>[Optional]</para>
+<para>You could specify any number of arguments. If specified, arg0 will be passed as the first argument of the constructor, arg1 as the second argument, and so on. Of course, the implementation must have a compatible constructor. If no argument is specified, the default constructor is assumed.</para></sect3></sect2><sect2><title>The xel-method Directive</title>
 <para>&lt;?xel-method prefix="..." name="..." class="..."signature="..."?&gt;</para>
 <para>Specifies a method that shall be imported by the EL evaluator. For example,</para>
 <programlisting>&lt;?xel-method prefix="c" name="forName"class="java.lang.Class"signature="java.lang.Class forName(java.lang.String)"?&gt;&lt;textbox value="${c:forName('java.util.List')}"/&gt;        &#13;</programlisting><sect3><title>prefix</title>
@@ -400,7 +425,7 @@
 <para>It specifies a class, a collection of classes that are used to initialize the component. The class must implement the org.zkoss.zk.util.Composer interface. And then, you can do the initialization in the doAfterCompose method, since it is called after the component and all its children are instantiated.</para>
 <programlisting>&lt;window apply="MyComposer"/&gt;&#13;</programlisting>
 <para>In addition, you specify a Composer instance, or a collection of Composer instances by use of EL expressions.</para>
-<para>Note: the EL expressions are, if specified, evaluated before the component is instantiated. So you cannot reference to the component. Moreover, the self variable references to the current page in the EL expressions specified in this attribute.</para>
+<para>Note: the EL expressions are, if specified, evaluated before the component is instantiated. So you cannot reference to the component. Moreover, the self variable references to the parent component, if any, or the current page, if it is the root component, in the EL expressions specified in this attribute.</para>
 <para>If you want more control such as handling the exception, you can also implement the org.zkoss.zk.util.ComposerExt interface. </para></sect2><sect2><title>The forEach Attribute</title>
 <para>forEach="${an-EL-expr}"</para>
 <para>It specifies a collection of objects, such that the associated element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored, and the element is evaluated only once. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para>
@@ -424,7 +449,7 @@
 <para>It is used to forward an event, that is targeting a specific component, to another component in another event name. It is called the forward condition.</para>
 <para>The original event is optional. If it is omitted, onClick is assumed. Similarly, the target ID is also optional. If omitted, the space owner is assumed.</para>
 <para>If you want to forward several events, you can specify these conditions in the forward attribute by separating them with the comma (,):</para>
-<programlisting>&lt;textbox forward="onChanging=onUpdating, onChange=some.onUpdate"/&gt;&#13;</programlisting></sect2><sect2><title>The fulfill Attribute</title>
+<para>&lt;textbox forward="onChanging=onUpdating, onChange=some.onUpdate"/&gt;</para></sect2><sect2><title>The fulfill Attribute</title>
 <para>fulfill="event-name"fulfill="target-id.event-name"fulfill="id1/id2/id3.event-name"fulfill="${el-expr}.event-name"</para>
 <para>It is used to specify when to create the child components. By default (i.e., fulfill is not specified), the child components are created right after its parent component, at the time the ZUML page is loaded.</para>
 <para>If you want to defer the creation of the child components, you can specify the condition with the fulfill attribute. The condition consists of the event name and, optionally, the target component's identifier or path. It means that the child elements won't be processed, until the event is received by, if specified, the target component. If the identifier is omitted, the same component is assumed.</para>
@@ -433,7 +458,7 @@
 <para>It specified the condition to evaluate the associated element. In other words, the associated element and all its child elements are ignored, if the condition is evaluated to false.</para></sect2><sect2><title>The unless Attribute</title>
 <para>unless="${an-EL-expr}"</para>
 <para>It specified the condition not to evaluate the associated element. In other words, the associated element and all its child elements are ignored, if the condition is evaluated to true.</para></sect2><sect2><title>The use Attribute</title>
-<para>forEachEnd="a-class-name"</para>
+<para>use="a-class-name"use="${EL_returns_a_class_or_a_class_name}"</para>
 <para>It specifies a class to create a component instead of the default one. In the following example, MyWindow is used instead of the default class, org.zkoss.zul.html.Window.</para>
 <programlisting>&lt;window use="MyWindow"/&gt;&#13;</programlisting></sect2></sect1></chapter>
 <chapter>
@@ -1558,6 +1583,8 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
+<para/>
+<para/>
 <para/></sect3></sect2><sect2 id="FormatInputElement"><title>FormatInputElement</title>
 <para>A skeletal implementation for an input box with format. . </para><sect3><title>Class Name</title>
 <para>
@@ -1682,6 +1709,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="HeaderElement"><title>HeaderElement</title>
 <para>A skeletal implementation for a header.</para><sect3><title>Class Name</title>
 <para>
@@ -1870,7 +1898,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="HeadersElement"><title>HeadersElement</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="HeadersElement"><title>HeadersElement</title>
 <para>A skeletal implementation for headers, the parent of a group of <code>HeaderElement</code>.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.impl.HeadersElement</code>
@@ -1974,7 +2003,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="HtmlBasedComponent"><title>HtmlBasedComponent</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="HtmlBasedComponent"><title>HtmlBasedComponent</title>
 <para>A skeletal implementation for HTML based components. It simplifies to implement methods common to HTML based components.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.HtmlBasedComponent</code>
@@ -2386,7 +2416,42 @@
 <para>
 <code>org.zkoss.zul.InputElement</code>
 </para></sect3><sect3><title>Supported Events</title>
-<para>*NONE</para></sect3><sect3><title>Properties</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Event Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onOK</code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="KeyEvent">org.zkoss.zk.ui.event.KeyEvent</link>
+</para>
+<para>
+<link linkend="DropEvent">
+<code>Denotes user has pressed the </code>
+</link>
+<link linkend="DropEvent">
+<code>ENTER</code>
+</link>
+<link linkend="DropEvent">
+<code> key.</code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -2877,6 +2942,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="LayoutRegion"><title>LayoutRegion</title>
 <para>This class represents a region in a layout manager. </para><sect3><title>Class Name</title>
 <para>
@@ -3220,7 +3286,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="NumberInputElement"><title>NumberInputElement</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="NumberInputElement"><title>NumberInputElement</title>
 <para>A skeletal implementation for number-type input box. </para>
 <para/><sect3><title>Class Name</title>
 <para>
@@ -3779,7 +3846,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Auxhead"><title>Auxhead</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Auxhead"><title>Auxhead</title>
 <para>Used to define a collection of auxiliary headers (<code>Auxheader</code>).</para>
 <para>
 <graphic fileref="images/auxheader.png">2
@@ -3868,6 +3936,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Auxheader"><title>Auxheader</title>
 <para>An auxiliary header.</para>
 <para>
@@ -4367,7 +4436,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Bandpopup"><title>Bandpopup</title>
+</informaltable></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Bandpopup"><title>Bandpopup</title>
 <para>The popup that belongs to a <code>Bandbox</code> instance.</para>
 <para>Developer usually listen to the <code>onOpen</code> event that is sent to <code>Bandbox</code> and then creates proper components as children of this component. </para>
 <programlisting>        &lt;bandboxid="bd"&gt;        <inlinegraphic fileref="images/bandbox-2.png" align="right"/>&#13;        &lt;bandpopup&gt;        &#13;                &lt;vbox&gt;                &#13;            &lt;hbox&gt;Search&lt;textbox/&gt;&lt;/hbox&gt;            &#13;            &lt;listboxwidth="200px"            &#13;            onSelect="bd.value=self.selectedItem.label;bd.closeDropdown();"&gt;            &#13;            &lt;listhead&gt;            &#13;                    &lt;listheaderlabel="Name"/&gt;                    &#13;                    &lt;listheaderlabel="Description"/&gt;                    &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="John"/&gt;                    &#13;                    &lt;listcelllabel="CEO"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Joe"/&gt;                    &#13;                    &lt;listcelllabel="Engineer"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Mary"/&gt;                    &#13;                    &lt;listcelllabel="Supervisor"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;        &lt;/listbox&gt;        &#13;        &lt;/vbox&gt;        &#13;        &lt;/bandpopup&gt;        &#13;    &lt;/bandbox&gt;    &#13;</programlisting><sect3><title>Class Name</title>
@@ -4494,7 +4564,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Calendar"><title>Calendar</title>
+</informaltable></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Calendar"><title>Calendar</title>
 <para>A calendar displays a 'flat' calendar and allows user to select a day from it.</para>
 <para>
 <graphic fileref="images/calendar.png">2
@@ -4583,8 +4654,7 @@
 </entry>
 <entry>
 <para>
-<code>D</code>
-<code>etermined by</code>
+<code>Determined by</code>
 <code> TimeZones.getCurrent() </code>
 </para>
 </entry>
@@ -4696,7 +4766,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Borderlayout"><title>Borderlayout</title>
+</informaltable></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Borderlayout"><title>Borderlayout</title>
 <para>The layout component is a nested component. The parent component is <code>borderlayout</code>, and its children components include north, south, center, west, and east. The combination of children components of <code>borderlayout</code> is free.</para>
 <para>
 <graphic fileref="images/layout.jpg">2
@@ -5270,7 +5341,7 @@
 <row>
 <entry>
 <para>
-<code>disable</code>
+<code>disabled</code>
 </para>
 </entry>
 <entry>
@@ -5923,6 +5994,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Caption"><title>Caption</title>
 <para>A header for a <code>Groupbox</code>. It may contain either a text label, using <code>LabelElement.setLabel(java.lang.String)</code>, or child elements for a more complex caption.</para>
 <para/>
@@ -6186,7 +6258,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Center"><title>Center</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Center"><title>Center</title>
 <para>This component is a center region. The default class of CSS is specified "layout-region-center".</para>
 <para/>
 <para>
@@ -6228,9 +6301,7 @@
 </para>
 <para>
 <code>Description: </code>
-<code>When a layout is collapsed or opened by a user, the </code>
-<code>onOpen</code>
-<code> event is sent to the application.</code>
+<code>When a layout is collapsed or opened by a user, the onOpen event is sent to the application.</code>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -7312,6 +7383,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Checkbox"><title>Checkbox</title>
 <para>A checkbox.</para>
 <para>
@@ -8168,7 +8240,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Combobox"><title>Combobox</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Combobox"><title>Combobox</title>
 <para>Components: <code>combobox</code> and <code>comboitem</code>.</para>
 <para>A <code>combobox</code> is a special text box that embeds a drop-down list. With <code>comboboxes</code>, users are allowed to select from a drop-down list, in addition to entering the text manually. </para>
 <para>
@@ -8336,6 +8409,24 @@
 <para>It is useful to implement load-on-demand by listening to</para>
 <para>the <code>onOpen</code> event, and creating components when the</para>
 <para>first time the component is opened.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onSelect</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="SelectEvent">
+<code>org.zkoss.zul.event.SelectEvent</code>
+</link>
+</para>
+<para>
+<code>Description:</code>
+<code> Represents an event cause by user's the list selection is changed at the client. </code>
+</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title>Properties</title>
@@ -8729,7 +8820,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Comboitem"><title>Comboitem</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Comboitem"><title>Comboitem</title>
 <para>An item of a combo box.</para>
 <para>
 <graphic fileref="images/combobox.png">2
@@ -9240,7 +9332,7 @@
 </entry>
 <entry>
 <para>
-<code>Java.text.Dateformat</code>
+<code>java.text.Dateformat</code>
 </para>
 </entry>
 </row>
@@ -9271,7 +9363,7 @@
 </entry>
 <entry>
 <para>
-<code>Int</code>
+<code>int</code>
 </para>
 </entry>
 </row>
@@ -9698,7 +9790,8 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title>Div</title>
+<para/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2><title>Div</title>
 <para>The same as <code>HTML DIV </code>tag.</para>
 <para>An extension. It has the same effect as<code> &lt;h:div xmlns:h="http://www.w3.org/1999/xhtml"&gt;</code>. Note: a Window without title and caption has the same visual effect as <code>Div</code>, but <code>Div</code> doesn't implement <code>IdSpace</code>. In other words, <code>Div</code> won't affect the uniqueness of identifiers. </para>
 <para>
@@ -9826,7 +9919,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="East"><title>East</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="East"><title>East</title>
 <para>This component is a east region. The default class of CSS is specified "layout-region-east".</para>
 <para/>
 <para>
@@ -9984,7 +10078,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Flash"><title>Flash</title>
+</informaltable></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Flash"><title>Flash</title>
 <para>A generic flash component.</para>
 <para>
 <graphic fileref="images/flash.png">2
@@ -10348,6 +10443,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Foot"><title>Foot</title>
 <para>Defines a set of footers (Footer) for a grid (Grid).</para>
 <para>
@@ -10492,6 +10588,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Grid"><title>Grid</title>
 <para>Components: <code>grid, columns, column, rows and row.</code>
 </para>
@@ -13185,7 +13282,7 @@
 </entry>
 <entry>
 <para>
-<code>Java.lang.Object</code>
+<code>java.lang.Object</code>
 </para>
 </entry>
 </row>
@@ -13329,7 +13426,7 @@
 </entry>
 <entry>
 <para>
-<code>Org.zkoss.zul.ListHeader</code>
+<code>org.zkoss.zul.ListHeader</code>
 </para>
 </entry>
 </row>
@@ -13612,7 +13709,7 @@
 </entry>
 <entry>
 <para>
-<code>Org.zkoss.zul.Listfoot</code>
+<code>org.zkoss.zul.Listfoot</code>
 </para>
 </entry>
 </row>
@@ -13627,7 +13724,7 @@
 </entry>
 <entry>
 <para>
-<code>Org.zkoss.zul.ListHeader</code>
+<code>org.zkoss.zul.ListHeader</code>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -14262,7 +14359,7 @@
 </entry>
 <entry>
 <para>
-<code>Java.lang.Object</code>
+<code>java.lang.Object</code>
 </para>
 </entry>
 <entry>
@@ -14475,6 +14572,303 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/></sect3></sect2><sect2 id="Longbox"><title>Longbox</title>
+<para>A long<code>box</code> is used to let users input long data.</para>
+<para>
+<graphic fileref="images/longbox.jpg">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;window title="Longbox Demo" border="normal" width="200px"&gt;&#13;    long box:&lt;longbox/&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Longbox</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE </para></sect3><sect3><title>Supported Events</title>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Event Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onChange</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="InputEvent">
+<code>org.zkoss.zk.ui.event.InputEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes the content of an input component has been modified by the user.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onChanging</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="InputEvent">
+<code>org.zkoss.zk.ui.event.InputEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes that user is changing the content of an input component. Notice that the component's content (at the server) won't be changed until <code>onChange</code> is received. Thus, you have to invoke the <code>getValue </code>method in the <code>InputEvent </code>class to retrieve the temporary value.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onSelection</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="SelectionEvent">
+<code>org.zkoss.zk.ui.event.SelectionEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes that user is selecting a portion of the text of an input component. You can retrieve the start and end position of the selected text by use of the <code>getStart</code> and <code>getEnd</code> methods. </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onFocus</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes when a component gets the focus. Remember event listeners execute at the server, so the focus at the client might be changed when the event listener for <code>onFocus</code> got executed.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onBlur</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes when a component loses the focus. Remember event listeners execute at the server, so the focus at the client might be changed when the event listener for <code>onBlur </code>got executed.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onCreate</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="CreateEvent">
+<code>org.zkoss.ui.zk.ui.event.CreateEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes a component is created when rendering a ZUML page.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onDrop</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="DropEvent">
+<code>org.zkoss.ui.zk.ui.event.DropEvent</code>
+</link>
+</para>
+<para>Description: </para>
+<para>Denotes another component is dropped to the component that receives this event.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>val</code>
+<code>ue</code>
+</para>
+</entry>
+<entry>
+<para>Sets the value. </para>
+</entry>
+<entry>
+<para>
+<code>Long</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Values</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>intValue() </code>
+</para>
+</entry>
+<entry>
+<para>Returns the value in int. </para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>longValue() </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Returns the value in long. </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>long</code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="NumberInputElement">
+<code>org.zkoss.zul.NumberInputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="FormatInputElement">
+<code>org.zkoss.zul.FormatInputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="InputElement">
+<code>org.zkoss.zul.InputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.imp.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="Menu"><title>Menu</title>
 <para>
 <code>An element, much like a button, that is placed on a menu bar. When the user clicks the menu element, the child </code>
@@ -15375,7 +15769,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="North"><title>North</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="North"><title>North</title>
 <para>This component is a north region. The default class of CSS is specified "layout-region-north".</para>
 <para/>
 <para>
@@ -15801,7 +16196,8 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Popup"><title>Popup</title>
+<para/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Popup"><title>Popup</title>
 <para>
 <code>A container that is displayed as a popup. The popup window does not have any special frame. Popups can be displayed when an element is clicked by assigning the id of the popup to either the</code>
 <code> XulElement.setPopup(java.lang.String), XulElement.setContext(java.lang.String) or XulElement.setTooltip(java.lang.String) attribute of the element. </code>
@@ -15896,7 +16292,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Progressmeter"><title>Progressmeter</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Progressmeter"><title>Progressmeter</title>
 <para>A progress meter is a bar that indicates how much of a task has been completed. The value property must be in the range between 0 and 100.</para>
 <para>
 <graphic fileref="images/progressmeter.png">2
@@ -16935,7 +17332,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="Script"><title>Script</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Script"><title>Script</title>
 <para>The script component is used to specify the script codes running at the browser. Notice that, unlike zscript, the script codes are running at the browser. They are usually written in JavaScript which is supported by the most of browsers. The simplest format is as follows.</para>
 <para>
 <graphic fileref="images/script.png">2
@@ -17198,7 +17596,7 @@
 </entry>
 <entry>
 <para>
-<code>Int</code>
+<code>int</code>
 </para>
 </entry>
 <entry>
@@ -17218,7 +17616,7 @@
 </entry>
 <entry>
 <para>
-<code>Int</code>
+<code>int</code>
 </para>
 </entry>
 <entry>
@@ -17238,7 +17636,7 @@
 </entry>
 <entry>
 <para>
-<code>Int</code>
+<code>int</code>
 </para>
 </entry>
 <entry>
@@ -17316,7 +17714,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title>Space</title>
+</informaltable>
+<para/></sect3></sect2><sect2><title>Space</title>
 <para>Space is a <code>Separator</code> with the orient default to "horizontal".</para>
 <para>In other words, &lt;space&gt; is equivalent to <code>&lt;separator orient="horizontal"&gt;</code> </para>
 <para>
@@ -17379,6 +17778,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="South"><title>South</title>
 <para>This component is a south region. The default class of CSS is specified "layout-region-south".</para>
 <para/>
@@ -19335,7 +19735,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title>Timebox</title>
+</informaltable>
+<para/></sect3></sect2><sect2><title>Timebox</title>
 <para>An edit box for holding a time (a java.util.Date Object , but only Hour &amp; Minute are used.</para>
 <para>
 <graphic fileref="images/timebox.png">2
@@ -19495,7 +19896,8 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Timer"><title>Timer</title>
+<para/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Timer"><title>Timer</title>
 <para>Timer is a special component that is invisible. It fires one or more org.zkoss.zk.ui.event.Event after a specified delay. </para>
 <para/>
 <para>Notice that the timer won't fire any event until it is attached to a page. </para>
@@ -22655,7 +23057,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2 id="West"><title>West</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="West"><title>West</title>
 <para>This component is a west region. The default class of CSS is specified "layout-region-west".</para>
 <para/>
 <para>
@@ -23924,7 +24327,7 @@
 </entry>
 <entry>
 <para>
-<code>Java.lang.String</code>
+<code>java.lang.String</code>
 </para>
 </entry>
 </row>
@@ -24357,7 +24760,8 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="OpenEvent"><title>OpenEvent</title>
+<para/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="OpenEvent"><title>OpenEvent</title>
 <para>Represents an event cause by user's openning or closing something at the client.</para>
 <para>Note: it is a bit confusing but <code>Events.ON_CLOSE</code> is sent when user clicks a close button. It is a request to ask the server to close a window, a tab or others. If the server ignores the event, nothing will happen at the client. By default, the component is detached when receiving this event.</para>
 <para>On the other hand,<code> Events.ON_OPEN</code> (with <code>OpenEvent</code>) is a notification. It is sent to notify the server that the client has opened or closed something. And, the server can not prevent the client from opening or closing. </para>
@@ -24570,6 +24974,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
+<para/>
 <para/></sect3></sect2><sect2 id="ScrollEvent"><title>ScrollEvent</title>
 <para>Represents an event caused by that user is scrolling or has scrolled at the client. </para>
 <para>
@@ -25116,7 +25521,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="Constrained"><title>Constrained</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="Constrained"><title>Constrained</title>
 <para>Decorates a component that its value is constrained by <link linkend="Constraint">
 <code>Constraint</code>
 </link>.</para><sect3><title>Interface Name</title>
@@ -25174,14 +25580,16 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="Fileupload"><title>Fileupload</title>
+</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Fileupload"><title>Fileupload</title>
 <para>A fileupload dialog used to let user upload a file.The <code>fileupload</code> component is not a modal dialog. Rather, it is a component, so it is placed inline with other components.</para>
 <para>
 <graphic fileref="images/fileupload.png">2
 			
 		</graphic>
 </para>
-<programlisting>&lt;image id="img"/&gt;&#13;Upload your hot shot:&#13;&lt;fileupload onUpload="img.setContent(event.media)"/&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<programlisting>&lt;image id="img"/&gt;&#13;Upload your hot shot:&#13;</programlisting>
+<para>&lt;fileupload onUpload="img.setContent(event.media)"/&gt;</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Fileupload</code>
 </para></sect3><sect3><title>Properties</title>
@@ -25420,7 +25828,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="ListModel"><title>ListModel</title>
+</informaltable>
+<para/></sect3></sect2><sect2 id="ListModel"><title>ListModel</title>
 <para>This interface defines the methods that components like <link linkend="Listbox">
 <code>Listbox</code>
 </link> and <link linkend="Grid">
@@ -25510,7 +25919,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="Messagebox"><title>Messagebox</title>
+</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Messagebox"><title>Messagebox</title>
 <para/>
 <para>It provides a set of utilities to show message boxes.</para>
 <para>It is typically used to alert users when an error occurs, or to prompt user for an decision.</para>
@@ -25656,7 +26066,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="RendererCtrl"><title>RendererCtrl</title>
+</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="RendererCtrl"><title>RendererCtrl</title>
 <para>This interface defines the methods components like Listbox use to notify the renderer for several circumstance.</para>
 <para>Though <code>ListitemRenderer.render(org.zkoss.zul.Listitem, java.lang.Object)</code> is called one item a timer, a request might have several items to render. And, if the renderer implements this interface, <code>doTry()</code> will be called before any rendering, and <code>doFinally() </code>will be called after all rendering. If any exception occurs, <code>doCatch(java.lang.Throwable)</code> will be called.</para>
 <para>A typical use is to start a transaction and use it for rendering all items from the same request. </para><sect3><title>Interface Name</title>
@@ -25727,7 +26138,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="SimpleConstraint"><title>SimpleConstraint</title>
+</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="SimpleConstraint"><title>SimpleConstraint</title>
 <para>A simple constraint that you could build based the predefined constants.</para><sect3><title>Interface Name</title>
 <para>
 <code> org.zkoss.zul.SimpleConstraint</code>
@@ -25844,7 +26256,8 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title/></sect3></sect2><sect2 id="SimpleListModel"><title>SimpleListModel</title>
+</informaltable></sect3><sect3><title/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="SimpleListModel"><title>SimpleListModel</title>
 <para>A simple implementation of <link linkend="ListModel">
 <code>ListModel</code>
 </link>.</para><sect3><title>Class Name</title>
@@ -25985,7 +26398,34 @@
 </informaltable></sect2></sect1><sect1><title>ZK AU Engine</title>
 <para>[Required] Class: org.zkoss.zk.au.http.DHtmlUpdateServlet</para>
 <para>DHtmlUpdateServlet is a servlet that handles AJAX requests asynchronously and automatically.</para>
-<para>Notice that the URL pattern mapped to this engine must be consistent with the update-uri parameter of the ZK Loader.</para></sect1><sect1><title>ZK Session Cleaner</title>
+<para>Notice that the URL pattern mapped to this engine must be consistent with the update-uri parameter of the ZK Loader.</para><sect2><title>The Initial Parameters</title>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>init-param</para>
+</entry>
+<entry>
+<para>Descriptions</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>processor0processor1processor2...</para>
+</entry>
+<entry>
+<para>[Optional]</para>
+<para>It specifies an AU processor. The first processor must be specified with the name called processor0, second processor1 and so on.</para>
+<para>The syntax of the value is</para>
+<programlisting>/prefix=class&#13;</programlisting>
+<para>For example,</para>
+<programlisting>        &lt;init-param&gt;&lt;param-name&gt;processor0&lt;/param-name&gt;&lt;param-value&gt;/upload=com.super.MyUploader&lt;/param-value&gt;&lt;/init-param&gt;        &#13;        &lt;init-param&gt;&lt;param-name&gt;processor1&lt;/param-name&gt;&lt;param-value&gt;/extra=com.super.MyExtra&lt;/param-value&gt;&lt;/init-param&gt;        &#13;</programlisting>
+<para>The class must implement the org.zkoss.zk.au.http.AuProcessor interface.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect2></sect1><sect1><title>ZK Session Cleaner</title>
 <para>[Required] Class: org.zkoss.zk.ui.http.HttpSessionListener</para>
 <para>HttpSessionListener is a listener used to clean up memory when a HTTP session is destroyed.</para></sect1><sect1><title>ZK Filter</title>
 <para>[Optional] Class: org.zkoss.zk.ui.http.DHtmlLayoutFilter</para>
@@ -26168,7 +26608,7 @@
 <programlisting>&lt;log&gt;&#13;    &lt;log-base&gt;&lt;/log-base&gt;    &#13;&lt;/log&gt;&#13;</programlisting>
 <para>where an empty string means all packages, not just org.zkoss in the previous example.</para></sect2><sect2><title>The client-config Element</title>
 <para>It is used to customize the behavior of the ZK Client Engine. You might have multiple client-config elements in one zk.xml.</para>
-<programlisting>&lt;client-config&gt;&#13;    &lt;disable-behind-modal&gt;true&lt;/disable-behind-modal&gt;    &#13;    &lt;error-reload&gt;    &#13;        &lt;error-code&gt;301&lt;/error-code&gt;        &#13;        &lt;reload-uri&gt;&lt;/reload-uri&gt;        &#13;    &lt;/error-reload&gt;    &#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;    &lt;processing-prompt-delay&gt;900&lt;/processing-prompt-delay&gt;    &#13;    &lt;tooltip-delay&gt;800&lt;/tooltip-delay&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting><sect3><title>The disable-behind-modal Element</title>
+<programlisting>&lt;client-config&gt;&#13;    &lt;disable-behind-modal&gt;true&lt;/disable-behind-modal&gt;    &#13;    &lt;error-reload&gt;    &#13;        &lt;error-code&gt;301&lt;/error-code&gt;        &#13;        &lt;reload-uri&gt;&lt;/reload-uri&gt;        &#13;    &lt;/error-reload&gt;    &#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;    &lt;processing-prompt-delay&gt;900&lt;/processing-prompt-delay&gt;    &#13;    &lt;tooltip-delay&gt;800&lt;/tooltip-delay&gt;    &#13;    &lt;resend-delay&gt;9000&lt;/resend-delay&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting><sect3><title>The disable-behind-modal Element</title>
 <para>[Default: true]</para>
 <para>When a modal window is opened, all components that don't belong to the modal window are disabled. However, if the page is very big, the performance may not be acceptable (depending on the JavaScript interpreter of the browsers). If opening up a modal window is too slow for you, you can turn off this feature. The side effect is that a user may use TAB to move the focus to a component that shall be disabled.</para></sect3><sect3><title>The error-reload Element</title>
 <para>[Default: reload if 301, 402 or 403; show an error message, otherwise]</para>
@@ -26188,7 +26628,12 @@
 </footnote>.</para>
 <programlisting>&lt;client-config&gt;&#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting></sect3><sect3><title>The processing-prompt-delay Element</title>
 <para>[Default: 900]</para>
-<para>It specifies the time, in milliseconds, to wait before prompting the user with a dialog indicating that the request is in processing.</para></sect3><sect3><title>The tooltip-delay Element</title>
+<para>It specifies the time, in milliseconds, to wait before prompting the user with a dialog indicating that the request is in processing.</para></sect3><sect3><title>The resend-delay Element</title>
+<para>[Default: 9000 if Enterprise Edition<footnote>
+<para>More precisely, 9000 if zkmax.jar is installed.</para>
+</footnote>, -1 otherwise]</para>
+<para>It specifies the time, in milliseconds, to wait before resending the AU requests to the server. There are many reasons an AU request is not received by the server. For example, the server may drop the connection if it is overloaded. To ensure the reliability, ZK will abort the previous request and then resend the request, if the specified delay expires.</para>
+<para>Since 3.0.3, you can specify a non-positive number to disable the resend mechanism.</para></sect3><sect3><title>The tooltip-delay Element</title>
 <para>[Default: 800]</para>
 <para>It specifies the time, in milliseconds, to wait before popping up the tooltip when the user moves the mouse pointer over particular UI components.</para></sect3></sect2><sect2><title>The desktop-config Element</title>
 <para>It is used to customize how ZK handles desktops. You might have multiple desktop-config elements in one zk.xml.</para>
@@ -26251,7 +26696,7 @@
 <para>It specifies the URI of language add-on definitions. To specify more than one URIs, you have to define them with multiple addon-uri.</para>
 <para>A language addon is used to add new components and override the definitions of existent components. Refer to the Component Development Guide.</para></sect3></sect2><sect2><title>The session-config Element</title>
 <para>The allowed child elements include session-timeout and max-desktops-per-session. You might have multiple session-config elements in one zk.xml.</para>
-<programlisting>&lt;session-config&gt;&#13;    &lt;session-timeout&gt;1800&lt;/session-timeout&gt;    &#13;    &lt;timer-keep-alive&gt;false&lt;/timer-keep-alive&gt;    &#13;    &lt;max-desktops-per-session&gt;10&lt;/max-desktops-per-session&gt;    &#13;&lt;/session-config&gt;&#13;</programlisting><sect3><title>The session-timeout Element</title>
+<programlisting>&lt;session-config&gt;&#13;    &lt;session-timeout&gt;1800&lt;/session-timeout&gt;    &#13;    &lt;timer-keep-alive&gt;false&lt;/timer-keep-alive&gt;    &#13;    &lt;max-desktops-per-session&gt;15&lt;/max-desktops-per-session&gt;    &#13;    &lt;max-requests-per-session&gt;5&lt;/max-requests-per-session&gt;    &#13;&lt;/session-config&gt;&#13;</programlisting><sect3><title>The session-timeout Element</title>
 <para>[Default: 0 (depending on the Web server)]</para>
 <para>It specifies the time, in seconds, between client requests before a session is invalidated. A negative time indicates the session should never timeout. The default zero means to use the system default (which is usually specified in web.xml).</para></sect3><sect3><title>The timer-keep-alive Element</title>
 <para>[Default: false]</para>
@@ -26259,11 +26704,18 @@
 <para>A session is considered as timeout (and then invalidated), if it doesn't receive any client request in the specified timeout interval (see the session-timeout element above).</para>
 <para>By setting this option to true, the onTimer event, just like any other events, will reset the session timeout counter (and then keep the session alive until timeout). Notice that, if this option is false and the timer is shorter than the session timeout, the session won't be expired.</para>
 <para>By default, this option is false. It means the onTimer event is ignored when handling the session timeout. In other words, the session will expire if no other event is received before timeout.</para></sect3><sect3><title>The max-desktops-per-session Element</title>
-<para>[Default: 10]</para>
+<para>[Default: 15]</para>
 <para>It specifies the maximal allowed number of desktops per session. A desktop represents a HTML page for a browser. In other words, this number controls the number of concurrent browser windows allowed per session.</para>
-<para>Note: If you use org.zkoss.zk.ui.impl.GlobalDesktopCacheProvider, then you have to make this number much larger since it means the maximal allowed number of deskoper per system.</para></sect3></sect2><sect2><title>The system-config Element</title>
+<para>A negative number means no limitation at all.</para>
+<para>Note: If you use org.zkoss.zk.ui.impl.GlobalDesktopCacheProvider, then you have to make this number much larger since it means the maximal allowed number of deskoper per system.</para></sect3><sect3><title>The max-requests-per-session Element</title>
+<para>[Default: 5]</para>
+<para>It specifies the maximal allowed number of concurrent requests per session. Each time an user types an URL at the browser, it creates a request and the request ends after the response is sent to the browser. In other words, this number controls how many concurrent requests the same user can send.</para>
+<para>A negative number means no limitation at all, but it is not recommended due to the possibility of the denial-of-service (DoS) attacks.</para></sect3></sect2><sect2><title>The system-config Element</title>
 <para>You might have multiple system-config elements in one zk.xml.</para>
-<programlisting>&lt;system-config&gt;&#13;    &lt;cache-provider-class&gt;my.CacheProvider&lt;/cache-provider-class&gt;    &#13;    &lt;disable-event-thread/&gt;    &#13;    &lt;engine-class&gt;my.UiEngine&lt;/engine-class&gt;    &#13;&lt;failover-manager-class&gt;my.FailoverManager&lt;/failover-manager-class&gt;&#13;    &lt;id-generator-class&gt;my.IdGenerator&lt;/id-generator-class&gt;    &#13;    &lt;max-spare-threads&gt;100&lt;/max-spare-threads&gt;    &#13;    &lt;max-suspended-threads&gt;100&lt;/max-suspended-threads&gt;    &#13;&lt;max-upload-size&gt;5120&lt;/max-upload-size&gt;&#13;    &lt;max-process-time&gt;3000&lt;/max-process-time&gt;    &#13;    &lt;response-charset&gt;UTF-8&lt;/response-charset&gt;    &#13;    &lt;upload-charset&gt;UTF-8&lt;/upload-charset&gt;    &#13;    &lt;upload-charset-finder-class&gt;my.CharsetFinder&lt;/upload-charset-finder-class&gt;    &#13;    &lt;ui-factory-class&gt;my.UiFactory&lt;/ui-factory-class&gt;    &#13;    &lt;web-app-class&gt;my.WebApp&lt;/web-app-class&gt;    &#13;&lt;/system-config&gt;&#13;</programlisting><sect3><title>The cache-provider-class Element</title>
+<programlisting>&lt;system-config&gt;&#13;    &lt;au-writer-class&gt;my.AuWriter&lt;/au-writer-class&gt;    &#13;    &lt;cache-provider-class&gt;my.CacheProvider&lt;/cache-provider-class&gt;    &#13;    &lt;disable-event-thread/&gt;    &#13;    &lt;engine-class&gt;my.UiEngine&lt;/engine-class&gt;    &#13;&lt;failover-manager-class&gt;my.FailoverManager&lt;/failover-manager-class&gt;&#13;    &lt;id-generator-class&gt;my.IdGenerator&lt;/id-generator-class&gt;    &#13;    &lt;max-spare-threads&gt;100&lt;/max-spare-threads&gt;    &#13;    &lt;max-suspended-threads&gt;100&lt;/max-suspended-threads&gt;    &#13;&lt;max-upload-size&gt;5120&lt;/max-upload-size&gt;&#13;    &lt;max-process-time&gt;3000&lt;/max-process-time&gt;    &#13;    &lt;response-charset&gt;UTF-8&lt;/response-charset&gt;    &#13;    &lt;upload-charset&gt;UTF-8&lt;/upload-charset&gt;    &#13;    &lt;upload-charset-finder-class&gt;my.CharsetFinder&lt;/upload-charset-finder-class&gt;    &#13;    &lt;ui-factory-class&gt;my.UiFactory&lt;/ui-factory-class&gt;    &#13;    &lt;url-encoder-class&gt;my.URLEncoder&lt;/url-encoder-class&gt;    &#13;    &lt;web-app-class&gt;my.WebApp&lt;/web-app-class&gt;    &#13;&lt;/system-config&gt;&#13;</programlisting><sect3><title>The au-writer-class Element</title>
+<para>[Default: org.zkoss.zk.au.http.HttpAuWriter for standard and professional editions, or org.zkoss.zkmax.au.http.SmartAuWriter for enterprise edition]</para>
+<para>It specifies which class used to implement the AU writer. The AU writer is used to generate the output and send it to the client. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.au.AuWriter interface.</para>
+<para>There are two built-in implementations, HttpAuWriter and SmartAuWriter. The former one send the output the client after the requests are processed completely. On the other hand, the later one will send a partial output first if the processing is taking too long (half of the value specified in the resend-delay element). By sending the partial output, the client will know the server is still alive.</para></sect3><sect3><title>The cache-provider-class Element</title>
 <para>[Default: org.zkoss.zk.ui.impl.SessionDesktopCacheProvider]</para>
 <para>It specifies which class used to implement the desktop cache. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.DesktopCacheProvider interface.</para>
 <para>One instance of the cache provider is created and shared for each Web application, so you have to synchronize the access properly.</para>
@@ -26323,7 +26775,8 @@
 <para>[Default: 5120]</para>
 <para>It specifies the maximal allowed size, in kilobytes, to upload a file from the client. A negative value indicates there is no limit.</para></sect3><sect3><title>The max-process-time Element</title>
 <para>[Default: 3000]</para>
-<para>It specifies the maximal allowed time to process events, in milliseconds. It must be positive. ZK will keep processing the requests sent from the client until all requests are processed, or the maximal allowed time expires.</para></sect3><sect3><title>The response-charset Element</title>
+<para>It specifies the maximal allowed time to process events, in milliseconds. It must be positive. ZK will keep processing the requests sent from the client until all requests are processed, or the maximal allowed time expires.</para>
+<para>Note: Since 3.0.1, this setting has no obvious effect on Ajax devices. Ajax devices send the requests synchronously.</para></sect3><sect3><title>The response-charset Element</title>
 <para>[Default: UTF-8]</para>
 <para>It specifies the charset for the rendering result of a ZUML page. In other words, it is used to load the ZUML page by the ZK Loader (i.e., DHtmlLayoutServlet).</para>
 <para>If you want to use the container's default value, you can specify an empty string as follows.</para>
@@ -26371,7 +26824,14 @@
 <para>The sessions generated by this factory is serializable. If you want to store sessions when the Web server is shutdown and restore them after it started, you can specify this implementation.</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title>The web-app-class Element</title>
+</informaltable></sect3><sect3><title>The url-encoder-class Element</title>
+<para>[Default: none]</para>
+<para>It specifies the URL encoder to post-process the URL before sending to the client. By default, the URI generated is in the following format. Sometimes<footnote>
+<para>For example, the session ID is appended if the browser disabled the cookie.</para>
+</footnote> it is appended with the session ID.</para>
+<programlisting>/context-path/related-uri&#13;/zkdemo/zkau/web/img/spacer.gif&#13;</programlisting>
+<para>In a sophisticated environment, you might want to modify a bit. Then, you can implement the org.zkoss.web.servlet.http.Encodes.URLEncoder interface, and specify it with the url-encoder-class element.</para>
+<para>Notice that, unlike most other configuration, the url-encoder-class element affects all applications that share the same ZK libraries.</para></sect3><sect3><title>The web-app-class Element</title>
 <para>[Default: org.zkoss.zk.ui.http.SimpleWebApp]</para>
 <para>It specifies which class used to implement the Web application. The class must have a default constructor (without any argument), and implement both the org.zkoss.zk.ui.WebApp and org.zkoss.zk.ui.sys.WebAppCtrl interfaces. Instead of implementing from scratch, you can extend it from the org.zkoss.zk.ui.impl.AbstractWebApp or org.zkoss.zk.ui.http.SimpleWebApp classes.</para></sect3></sect2><sect2><title>The zscript-config Element</title>
 <para>It configures the interpreters to interpret the zscript codes. The allowed child element is language-name and interpreter-class. You might have multiple zscript-config elements in one zk.xml.</para>

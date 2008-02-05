@@ -128,7 +128,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 			var r = row.nextSibling;
 			if ($tag(r) == "TR") {
 				var pid = getZKAttr(r, "gpitem");
-				if (uuid != pid) return row; //not my child
+				if (!uuid || uuid != pid) return row; //not my child. Bug #1834900.
 
 				if (!silent)
 					r.style.display = toOpen ? "": "none";
@@ -167,7 +167,7 @@ zkTree.cleanup = function (cmp) {
 };
 
 /** Called when a tree becomes visible because of its parent. */
-zkTree.onVisi = zkTree.onSize = function (cmp) {
+zkTree.onVisi = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta.init();
 };
@@ -232,11 +232,12 @@ zkTrow.init = function (cmp) {
 	//zk.disableSelection(cmp);
 	//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
 
-	zk.listen(cmp, "click", zkTree.onclick);
 	zk.listen(cmp, "keydown", zkTree.onkeydown);
-	zk.listen(cmp, "mouseover", zkSel.onover);
-	zk.listen(cmp, "mouseout", zkSel.onout);
-
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "click", zkTree.onclick);
+		zk.listen(cmp, "mouseover", zkSel.onover);
+		zk.listen(cmp, "mouseout", zkSel.onout);
+	}
 	_zktrx.init(cmp, "ptch");
 	_zktrx.init(cmp, "pitem");
 
@@ -257,7 +258,7 @@ zkTrow.setAttr = function (cmp, nm, val) {
 	if ("open" == nm) {
 		var toOpen = "true" == val;
 		if (toOpen != zkTree.isOpen(cmp)) {
-			var meta = zkau.getMeta($parentByType(cmp, "Tree"));
+			var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 			if (meta)
 				meta._openItem(cmp, null, toOpen);
 		}
@@ -286,8 +287,8 @@ zkTrow.open = function (n, open) {
 		var p = $e(n);
 		n = p ? p: $e(_zktrx.sib[n]);
 	}
-
-	var meta = zkau.getMeta($parentByType(n, "Tree"));
+	var tree = getZKAttr(cmp, "rid") || $parentByType(n, "Tree");
+	var meta = zkau.getMeta(tree);
 	if (meta)
 		meta._openItem(n, null, open != false);
 };
@@ -469,6 +470,9 @@ zk.addModuleInit(function () {
 
 	//Treecols
 	zkTcols = zulHdrs;
+	
+	zkTrow.initdrag = zkLit.initdrag;
+	zkTrow.cleandrag = zkLit.cleandrag;
 });
 
 //Upgrade AU Engine to handle treeitem and treechildren

@@ -338,8 +338,20 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		expunge();
 		return _map.isEmpty();
 	}
+	/** Returns whether it is empty without trying to expunge first.
+	 * @since 3.0.1
+	 */
+	public boolean isEmptyWithoutExpunge() {
+		return _map.isEmpty();
+	}
 	public int size() {
 		expunge();
+		return _map.size();
+	}
+	/** Returns the size without trying to expunge first.
+	 * @since 3.0.1
+	 */
+	public int sizeWithoutExpunge() {
 		return _map.size();
 	}
 	public void clear() {

@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo.impl;
 
+import java.util.Iterator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
+import java.net.URL;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.web.servlet.Servlets;
@@ -59,7 +61,7 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Either String or Class. */
 	private Object _implcls;
 	/** A map of molds (String name, ExValue moldURI). */
-	private Map _molds;
+	private transient Map _molds;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
@@ -69,6 +71,7 @@ implements ComponentDefinition, java.io.Serializable {
 	/** the property name to which the text within the element will be assigned. */
 	private String _textAs;
 	private AnnotationMap _annots;
+	private URL _declURL;
 
 	/** Constructs a native component, i.e., a component implemented by
 	 * a Java class.
@@ -197,6 +200,15 @@ implements ComponentDefinition, java.io.Serializable {
 		_textAs = propnm != null && propnm.length() > 0 ? propnm: null;
 	}
 
+	/** Sets the URI where this definition is declared.
+	 *
+	 * @param url the URL. If null, it means not available.
+	 * @since 3.0.3
+	 */
+	public void setDeclarationURL(URL url) {
+		_declURL = url;
+	}
+
 	//ComponentDefinition//
 	public LanguageDefinition getLanguageDefinition() {
 		return _langdef;
@@ -237,14 +249,20 @@ implements ComponentDefinition, java.io.Serializable {
 		_implcls = clsnm;
 	}
 	public Component newInstance(Page page, String clsnm) {
+		try {
+			return newInstance(resolveImplementationClass(page, clsnm));
+		} catch (ClassNotFoundException ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+	public Component newInstance(Class cls) {
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
 		final boolean bSet = !(curInfo instanceof ComponentInfo)
 			|| ((ComponentInfo)curInfo).getComponentDefinition() != this;
 		if (bSet) ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
-			comp = (Component)
-				resolveImplementationClass(page, clsnm).newInstance();
+			comp = (Component)cls.newInstance();
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
@@ -302,6 +320,10 @@ implements ComponentDefinition, java.io.Serializable {
 
 	public AnnotationMap getAnnotationMap() {
 		return _annots;
+	}
+
+	public URL getDeclarationURL() {
+		return _declURL;
 	}
 
 	public void addProperty(String name, String value) {
@@ -426,6 +448,21 @@ implements ComponentDefinition, java.io.Serializable {
 		s.defaultWriteObject();
 
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
+
+		//write _molds
+		for (Iterator it = _molds.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			s.writeObject(me.getKey());
+			final Object o = me.getValue();
+			if ((o instanceof java.io.Serializable)
+			|| (o instanceof java.io.Externalizable)) {
+				s.writeObject(o);
+			} else {
+				assert o instanceof ComponentRenderer: "Unexpected "+o;
+				s.writeObject(o.getClass());
+			}
+		}
+		s.writeObject(null);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -434,6 +471,23 @@ implements ComponentDefinition, java.io.Serializable {
 		final String langnm = (String)s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
+
+		//read _molds
+		_molds = new HashMap(4);
+		for (;;) {
+			final Object nm = s.readObject();
+			if (nm == null) break; //no more
+
+			Object val = s.readObject();
+			if (val instanceof Class) {
+				try {
+					val = ((Class)val).newInstance();
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+			_molds.put(nm, val);
+		}
 	}
 
 	//Object//
@@ -449,6 +503,7 @@ implements ComponentDefinition, java.io.Serializable {
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
 		}
+
 		if (_annots != null)
 			compdef._annots = (AnnotationMap)_annots.clone();
 		if (_props != null)

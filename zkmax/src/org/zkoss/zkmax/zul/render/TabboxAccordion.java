@@ -39,10 +39,10 @@ public class TabboxAccordion implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tabbox self = (Tabbox) comp;
-		wh.write("<table id=\"").write(self.getUuid()).write("\"")
+		wh.write("<div id=\"").write(self.getUuid()).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.writeln(" z.accd=\"true\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+			.writeln(" z.accd=\"true\">")
 			.writeln(self.getTabpanels())
-			.write("</table>");
+			.write("</div>");
 	}
 }

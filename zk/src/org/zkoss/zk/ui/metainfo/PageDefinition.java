@@ -89,6 +89,8 @@ public class PageDefinition extends NodeInfo {
 	private List _resolvdefs;
 	/** List(HeaderInfo). */
 	private List _headerdefs;
+	/** List(ForwardInfo). */
+	private List _forwdefs;
 	/** Map(String name, ExValue value). */
 	private Map _rootAttrs;
 	private ExValue _contentType, _docType, _firstLine;
@@ -227,18 +229,71 @@ public class PageDefinition extends NodeInfo {
 		_path = path != null ? path: "";
 	}
 
-	/** Imports the component definitions from the specified definition.
+	/** Imports the specified directives from the specified page definition.
+	 *
+	 * @param pgdef the page definition to import from.
+	 * @param directives an array of the directive names to import.
+	 * If null, {"init", "component"} is assumed, i.e., only the init
+	 * directives and component definitions are imported.<br/>
+	 * Importable directives include "component", "init", "meta",
+	 * "taglib", "variable-resolver", and "xel-method".
+	 * If "*", all of them are imported.
+	 * Note: "meta" implies "link".
+	 * @since 3.0.2
 	 */
-	public void imports(PageDefinition pgdef) {
-		if (_initdefs != null)
+	public void imports(PageDefinition pgdef, String[] directives) {
+		if (pgdef._initdefs != null
+		&& (directives == null || contains(directives, "init")))
 			for (Iterator it = pgdef._initdefs.iterator(); it.hasNext();)
 				addInitiatorInfo((InitiatorInfo)it.next());
 
-		for (Iterator it = pgdef._compdefs.getNames().iterator();
-		it.hasNext();) {
-			final String name = (String)it.next();
-			addComponentDefinition(pgdef._compdefs.get(name));
+		if (directives == null || contains(directives, "component")) {
+			for (Iterator it = pgdef._compdefs.getNames().iterator();
+			it.hasNext();)
+				addComponentDefinition(pgdef._compdefs.get((String)it.next()));
 		}
+
+		if (pgdef._taglibs != null
+		&& directives != null && contains(directives, "taglib")) {
+			for (Iterator it = pgdef._taglibs.iterator(); it.hasNext();)
+				addTaglib((Taglib)it.next());
+		}
+
+		if (pgdef._resolvdefs != null
+		&& directives != null && contains(directives, "variable-resolver")) {
+			for (Iterator it = pgdef._resolvdefs.iterator(); it.hasNext();)
+				addVariableResolverInfo((VariableResolverInfo)it.next());
+		}
+
+		if (pgdef._xelmtds != null
+		&& directives != null && contains(directives, "xel-method")) {
+			for (Iterator it = pgdef._xelmtds.iterator(); it.hasNext();) {
+				final Object[] inf = (Object[])it.next();
+				addXelMethod((String)inf[0], (String)inf[1], (Function)inf[2]);
+			}
+		}
+
+		if (pgdef._headerdefs != null
+		&& directives != null && contains(directives, "meta")) {
+			for (Iterator it = pgdef._headerdefs.iterator(); it.hasNext();)
+				addHeaderInfo((HeaderInfo)it.next());
+		}
+	}
+	private static boolean contains(String[] dirs, String dir) {
+		for (int j = dirs.length; --j >= 0;)
+			if ("*".equals(dirs[j]) || dir.equalsIgnoreCase(dirs[j]))
+				return true;
+		return false;
+	}
+	/** Imports the init directives and component definitions from
+	 * the specified page definition.
+	 *
+	 * <p>It is the same as imports(pgdef, null).
+	 *
+	 * @since #imports(PageDefinition, String[])
+	 */
+	public void imports(PageDefinition pgdef) {
+		imports(pgdef, null);
 	}
 
 	/** Adds a defintion of {@link org.zkoss.zk.ui.util.Initiator}. */
@@ -264,7 +319,7 @@ public class PageDefinition extends NodeInfo {
 			try {
 				final Initiator init = def.newInitiator(this, page);
 				if (init != null) {
-					init.doInit(page, def.getArguments(this, page));
+					init.doInit(page, def.resolveArguments(this, page));
 					inits.add(init);
 				}
 			} catch (Throwable ex) {
@@ -341,6 +396,33 @@ public class PageDefinition extends NodeInfo {
 		for (Iterator it = _headerdefs.iterator(); it.hasNext();)
 			sb.append(((HeaderInfo)it.next()).toHTML(this, page)).append('\n');
 		return sb.toString();
+	}
+	/** Adds a forward definition ({@link ForwardInfo}).
+	 */
+	public void addForwardInfo(ForwardInfo forward) {
+		if (forward == null)
+			throw new IllegalArgumentException("null");
+
+		if (_forwdefs == null)
+			_forwdefs = new LinkedList();
+		_forwdefs.add(forward);
+	}
+	/** Returns the URI to forward to, or null if not to foward.
+	 * It evaluates the forward definition (added by {@link #addForwardInfo})
+	 * one-by-one, if any, to see whether to foward.
+	 * Returns null if no forward definition, or no forward definition's
+	 * condition is satisfied.
+	 */
+	public String getForwardURI(Page page) {
+		if (_forwdefs == null)
+			return null;
+
+		for (Iterator it = _forwdefs.iterator(); it.hasNext();) {
+			final String uri = ((ForwardInfo)it.next()).resolveURI(this, page);
+			if (uri != null)
+				return uri;
+		}
+		return null;
 	}
 
 	/** Returns the content type (after evaluation),
@@ -651,6 +733,8 @@ public class PageDefinition extends NodeInfo {
 
 	//Object//
 	public String toString() {
-		return "[PageDefinition:"+(_id != null ? _id: _title)+']';
+		return "[PageDefinition: "
+			+(_id != null ? _id: _title != null ? _title: ""+System.identityHashCode(this))
+			+", path="+_path+']';
 	}
 }

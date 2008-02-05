@@ -106,7 +106,7 @@ public class Chart extends Imagemap {
 	private transient ChartDataListener _dataListener;
 	private transient EventListener _smartDrawChartListener; //the smartDrawListner
 
-	private String _type = "pie"; //chart type (pie, ring, bar, line, xy, etc)
+	private String _type = PIE; //chart type (pie, ring, bar, line, xy, etc)
 	private boolean _threeD; //whether a 3D chart
 	
 	//chart related attributes
@@ -544,7 +544,7 @@ public class Chart extends Imagemap {
 	 * It creates an instance automatically.
 	 */
 	public void setModel(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
 			setModel((ChartModel)Classes.newInstanceByThread(clsnm));
@@ -615,7 +615,7 @@ public class Chart extends Imagemap {
 	 * It creates an instance automatically.
 	 */
 	public void setEngine(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
 			setEngine((ChartEngine)Classes.newInstanceByThread(clsnm));
@@ -655,7 +655,7 @@ public class Chart extends Imagemap {
 	 * It creates an instance automatically.
 	 */
 	public void setAreaListener(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
 			setAreaListener((ChartAreaListener)Classes.newInstanceByThread(clsnm));

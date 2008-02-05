@@ -20,11 +20,13 @@ package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ListIterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.fn.ZulFns;
 
 /**
  * {@link Listbox}'s paging mold.
@@ -49,9 +51,18 @@ public class ListboxPaging implements ComponentRenderer {
 		wh.writeln("<tbody class=\"listbox-head\">").writeComponents(self.getHeads()).writeln("</tbody>");
 
 		//body
-		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">")
-			.writeComponents(self.getItems(), self.getVisibleBegin(), self.getVisibleEnd())
-			.writeln("</tbody>");
+		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">");
+		final int from = self.getVisibleBegin(), to = self.getVisibleEnd();
+		if (from < self.getItems().size()) {
+			ListIterator it = self.getItems().listIterator(from);
+			ZulFns.resetStripeClass(self);
+			for (int cnt = to - from + 1; it.hasNext() && --cnt >= 0;) {
+				final Component child = (Component) it.next();
+				ZulFns.setStripeClass(child);
+				child.redraw(out);
+			}
+		}
+		wh.writeln("</tbody>");
 
 		//Footer
 		wh.writeln("<tbody class=\"listbox-foot\">").write(self.getListfoot())

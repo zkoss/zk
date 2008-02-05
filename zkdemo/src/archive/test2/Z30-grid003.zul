@@ -30,11 +30,12 @@ See if the sorted result printed in console is same as the data collection displ
 		dsc = new RowLabelComparator(false);
 	</zscript>
 	<vbox>
-		<button label="Resync Model" onClick="strset.invalidate()"/>
-		<button label="Invalidate" onClick="g.invalidate()"/>
+		<button label="Invalidate Model" onClick="strset.invalidate()"/>
+		<button label="Invalidate Grid" onClick="g.invalidate()"/>
 		<grid id="g" mold="paging" model="${strset}">
 			<columns sizable="true">
-				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"/>
+				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"
+				 sortDirection="ascending"/>
 			</columns>
 		</grid>
 	</vbox>

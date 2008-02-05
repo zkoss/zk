@@ -28,15 +28,15 @@ if (!window.Droppable_effect) { //define it only if not customized
 			zk.restoreStyle(e, "backgroundColor");
 		else {
 			zk.backupStyle(e, "backgroundColor");
-			e.style.backgroundColor = "#B8B8C0";
+			e.style.backgroundColor = "#80ADE7";			
 		}
 	};
 }
 
 zkau = {};
 
-zkau._reqs = []; //Ajax requests
 zkau._respQue = []; //responses in XML
+zkau._areqTry = 0; //# of resend
 zkau._evts = {}; //(dtid, Array())
 zkau._js4resps = []; //JS to eval upon response
 zkau._metas = {}; //(id, meta)
@@ -168,24 +168,50 @@ zkau.sendRemove = function (uuid) {
 	zkau.send({uuid: uuid, cmd: "remove", data: null}, 5);
 };
 
-/** Called when the response is received from zkau._reqs.
+////ajax timeout////
+if (!zk.safari) {
+/** IE6 sometimes remains readyState==1 (reason unknown), and we have
+ * to resend
+ */
+zkau._areqTmout = function () {
+	//Note: we don't resend if readyState >= 3. Otherwise, the server
+	//will process the same request twice
+
+	//Note: timeout has no function in Safari, since the server's sending
+	//output the client won't cause readyState to change.
+
+	var req = zkau._areq, reqInf = zkau._areqInf;
+	if (req && req.readyState < 3) {
+		zkau._areq = zkau._areqInf = null;
+		try {
+			if(typeof req.abort == "function") req.abort();
+		} catch (e2) {
+		}
+		zkau._areqResend(reqInf.reqes);
+	}
+};
+}
+zkau._areqResend = function (es) {
+	var timeout;
+	for (var j = es.length; --j >= 0;)
+		zkau.sendAhead(es[j], j ? timeout: 0);
+};
+/** Called when the response is received from zkau._areq.
  */
 zkau._onRespReady = function () {
-	var que = zkau._respQue;
-	while (zkau._reqs.length) {
-		var req = zkau._reqs.shift();
-		try {
-			if (req.readyState != 4) {
-				zkau._reqs.unshift(req);
-				break; //we handle response sequentially
-			}
+	try {
+		var req = zkau._areq, reqInf = zkau._areqInf;
+		if (req && req.readyState == 4) {
+			zkau._areq = zkau._areqInf = null;
+			if (reqInf.tfn) clearTimeout(reqInf.tfn); //stop timer
 
 			if (zk.pfmeter) zkau._pfrecv(req);
 
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
 
-			if (req.status == 200) {
+			if (req.status == 200) { //correct
+				zkau._areqTry = 0;
 				var sid = req.responseXML.getElementsByTagName("sid");
 				if (sid && sid.length) {
 					sid = $int(zk.getElementValue(sid[0]));
@@ -194,6 +220,7 @@ zkau._onRespReady = function () {
 					sid = null;
 
 				//locate whether to insert the response by use of sid
+				var que = zkau._respQue;
 				var ofs = que.length;
 				if (sid != null)
 					while (ofs > 0 && que[ofs - 1].sid != null
@@ -204,6 +231,24 @@ zkau._onRespReady = function () {
 				if (ofs == que.length) que.push(resp);
 				else que.splice(ofs, 0, resp); //insert
 			} else {
+				//handle MSIE's buggy HTTP status codes
+				//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
+				switch (req.status) {
+				case 12029: // 12029 to 12031 correspond to dropped connections.
+					if (++zkau._areqTry > 3) {
+						zkau._areqTry = 0;
+						break; //the server is dead
+					}
+				case 12002: // Server timeout
+				case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
+				case 12031:
+				case 12152: // Connection closed by server.
+				case 12159:
+				case 13030:
+					zkau._areqResend(reqInf.reqes);
+					return;
+				}
+
 				var eru = zk.eru['e' + req.status];
 				if (typeof eru == "string") {
 					zk.go(eru);
@@ -213,15 +258,29 @@ zkau._onRespReady = function () {
 					zkau._cleanupOnFatal(zkau._ignorable);
 				}
 			}
-		} catch (e) {
-			//NOTE: if connection is off and req.status is accessed,
-			//Mozilla throws exception while IE returns a value
-			if (!zkau._ignorable && !zkau._unloading) {
-				var msg = e.message;
-				zk.error(mesg.FAILED_TO_RESPONSE+(msg.indexOf("NOT_AVAILABLE")<0?msg:""));
-			}
-			zkau._cleanupOnFatal(zkau._ignorable);
 		}
+	} catch (e) {
+		zkau._areq = zkau._areqInf = null;
+		try {
+			if(req && typeof req.abort == "function") req.abort();
+		} catch (e2) {
+		}
+
+		//NOTE: if connection is off and req.status is accessed,
+		//Mozilla throws exception while IE returns a value
+		if (!zkau._ignorable && !zkau._unloading) {
+			var msg = e.message;
+			zk.error(mesg.FAILED_TO_RESPONSE+(msg.indexOf("NOT_AVAILABLE")<0?msg:""));
+		}
+		zkau._cleanupOnFatal(zkau._ignorable);
+	}
+
+	//handle pending ajax send
+	if (zkau._sendPending && !zkau._areq) {
+		zkau._sendPending = false;
+		var ds = zkau._dtids;
+		for (var j = ds.length; --j >= 0;)
+			zkau._send2(ds[j], 0);
 	}
 
 	zkau._doQueResps();
@@ -232,7 +291,7 @@ zkau._parseCmds = function (xml) {
 	if (!rs) return null;
 
 	var cmds = [];
-	for (var j = 0; j < rs.length; ++j) {
+	for (var j = 0, rl = rs.length; j < rl; ++j) {
 		var cmd = rs[j].getElementsByTagName("c")[0];
 		var data = rs[j].getElementsByTagName("d");
 
@@ -244,7 +303,11 @@ zkau._parseCmds = function (xml) {
 		cmds.push(cmd = {cmd: zk.getElementValue(cmd)});
 
 		switch (cmd.datanum = data ? data.length: 0) {
-		default: //5 or more
+		default: //7 or more
+			cmd.dt6 = zk.getElementValue(data[6]);
+		case 6:
+			cmd.dt5 = zk.getElementValue(data[5]);
+		case 5:
 			cmd.dt4 = zk.getElementValue(data[4]);
 		case 4:
 			cmd.dt3 = zk.getElementValue(data[3]);
@@ -279,7 +342,7 @@ zkau._checkProgress = function () {
  * @since 3.0.0
  */
 zkau.processing = function () {
-	return zkau._respQue.length || zkau._reqs.length;
+	return zkau._respQue.length || zkau._areq;
 };
 
 /** Returns the timeout of the specified event.
@@ -321,7 +384,7 @@ zkau.removeOnSend = function (func) {
 zkau.events = function (uuid) {
 	return zkau._events(zkau.dtid(uuid));
 };
-/** Sends a request to the client and queue it to zkau._reqs.
+/** Sends a request to the client
  * @param timout milliseconds.
  * If negative, it won't be sent until next non-negative event
  */
@@ -334,41 +397,64 @@ zkau.send = function (evt, timeout) {
 		zkau._send(evt.dtid, evt, timeout);
 	} else {
 		var ds = zkau._dtids;
-		for (var j = 0; j < ds.length; ++j)
+		for (var j = 0, dl = ds.length; j < dl; ++j)
 			zkau._send(ds[j], evt, timeout);
 	}
 };
 zkau._send = function (dtid, evt, timeout) {
 	if (evt.ctl) {
+		//Don't send the same request if it is in processing
+		if (zkau._areqInf && zkau._areqInf.ctli == evt.uuid
+		&& zkau._areqInf.ctlc == evt.cmd)
+			return;
+
 		var t = $now();
-		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 450
-		&& (evt.cmd != "onDoubleClick" || zkau._ctlc != "onClick")) //Bug 1797140
+		if (zkau._ctli == evt.uuid && zkau._ctlc == evt.cmd //Bug 1797140
+		&& t - zkau._ctlt < 390)
 			return; //to prevent key stroke are pressed twice (quickly)
 
+		//Note: it is still possible to queue two ctl with same uuid and cmd,
+		//if the first one was not sent yet and the second one is generated
+		//after 390ms.
+		//However, it is rare so no handle it
+
 		zkau._ctlt = t;
-		zkau._ctl = evt.uuid;
+		zkau._ctli = evt.uuid;
 		zkau._ctlc = evt.cmd;
 	}
 
 	zkau._events(dtid).push(evt);
 
-	if (!timeout) timeout = 0; //we don't send immediately (Bug 1593674)
-	if (timeout >= 0) setTimeout("zkau._sendNow('"+dtid+"')", timeout);
+	//Note: we don't send immediately (Bug 1593674)
+	//Note: Unlike sendAhead and _send2, if timeout is undefined,
+	//it is considered as 0.
+	zkau._send2(dtid, timeout ? timeout: 0);
+};
+/** @param timeout if undefined or negative, it won't be sent. */
+zkau._send2 = function (dtid, timeout) {
+	if (dtid && timeout >= 0) setTimeout("zkau._sendNow('"+dtid+"')", timeout);
 };
 /** Sends a request before any pending events.
- * Note: it doesn't cause any pending events (including evt) to be sent.
- * It is designed to be called in zkau.onSend
+ * @param timout milliseconds.
+ * If undefined or negative, it won't be sent until next non-negative event
+ * Note: Unlike zkau.send, it considered undefined as not sending now
+ * (reason: backward compatible)
  */
-zkau.sendAhead = function (evt) {
+zkau.sendAhead = function (evt, timeout) {
+	var dtid;
 	if (evt.uuid) {
-		zkau._events(zkau.dtid(evt.uuid)).unshift(evt);
+		zkau._events(dtid = zkau.dtid(evt.uuid)).unshift(evt);
 	} else if (evt.dtid) {
-		zkau._events(evt.dtid).unshift(evt);
+		zkau._events(dtid = evt.dtid).unshift(evt);
 	} else {
 		var ds = zkau._dtids;
-		for (var j = ds.length; --j >= 0; ++j)
+		for (var j = ds.length; --j >= 0; ++j) {
 			zkau._events(ds[j]).unshift(evt);
+			zkau._send2(ds[j], timeout); //Spec: don't convert unefined to 0 for timeout
+		}
+		return;
 	}
+	zkau._send2(dtid, timeout);
 };
 zkau._sendNow = function (dtid) {
 	var es = zkau._events(dtid);
@@ -385,22 +471,31 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
+	if (zkau._areq) { //send ajax request one by one
+		zkau._sendPending = true;
+		return;
+	}
+
 	//bug 1721809: we cannot filter out ctl even if zkau.processing
 
 	//decide implicit and ignorable
-	var implicit = true, ignorable = true;
+	var implicit = true, ignorable = true, ctli, ctlc;
 	for (var j = es.length; --j >= 0;) {
-		if (!es[j].ignorable) { //ignorable implies implicit
+		var evt = es[j];
+		if (implicit && !evt.ignorable) { //ignorable implies implicit
 			ignorable = false;
-			if (!es[j].implicit) {
+			if (!evt.implicit)
 				implicit = false;
-				break;
-			}
+		}
+		if (evt.ctl && !ctli) {
+			ctli = evt.uuid;
+			ctlc = evt.cmd;
 		}
 	}
+	zkau._ignorable = ignorable;
 
 	//callback (fckez uses it to ensure its value is sent back correctly
-	for (var j = 0; j < zkau._onsends.length; ++j) {
+	for (var j = 0, ol = zkau._onsends.length; j < ol; ++j) {
 		try {
 			zkau._onsends[j](implicit); //it might add more events
 		} catch (e) {
@@ -409,12 +504,14 @@ zkau._sendNow = function (dtid) {
 	}
 
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
+	var reqes = []; //backup events
 	var content = "";
-	for (var j = 0; es.length; ++j) {
+	for (var j = 0, el = es.length; el; ++j, --el) {
 		var evt = es.shift();
+		reqes.push(evt);
 		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+(evt.uuid?evt.uuid:'');
 		if (evt.data)
-			for (var k = 0; k < evt.data.length; ++k) {
+			for (var k = 0, dl = evt.data.length; k < dl; ++k) {
 				var data = evt.data[k];
 				content += "&data."+j+"="
 					+ (data != null ? encodeURIComponent(data): 'zk_null~q');
@@ -424,37 +521,33 @@ zkau._sendNow = function (dtid) {
 	if (!content) return; //nothing to do
 
 	content = "dtid=" + dtid + content;
-	var req;
-	if (window.ActiveXObject) { //IE
-		req = new ActiveXObject("Microsoft.XMLHTTP");
-	} else if (window.XMLHttpRequest) { //None-IE
-		req = new XMLHttpRequest();
-	}
-
-	zkau.sentTime = $now();
+	var req = zkau._areq = zkau.ajaxRequest();
+	zkau.sentTime = $now(); //used by server-push (zkex)
 	var msg;
-	if (req) {
+	try {
+		req.onreadystatechange = zkau._onRespReady;
+		req.open("POST", zk_action, true);
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		if (zk.pfmeter) zkau._pfsend(req, dtid);
+
+		zkau._areqInf = {
+			reqes: reqes, ctli: ctli, ctlc: ctlc
+		};
+		if (zk_resndto > 0 && !zk.safari)
+			zkau._areqInf.tfn = setTimeout(zkau._areqTmout, zk_resndto);
+		req.send(content);
+
+		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
+		return; //success
+	} catch (e) {
 		try {
-			zkau._ignorable = ignorable && (zkau._ignorable || !zkau._reqs.length);
-
-			zkau._reqs.push(req);
-			req.onreadystatechange = zkau._onRespReady;
-
-			req.open("POST", zk_action, true);
-			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			if (zk.pfmeter) zkau._pfsend(req, dtid);
-			req.send(content);
-
-			if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
-			return; //success
-		} catch (e) {
-			try {
-				if(typeof req.abort == "function") req.abort();
-			} catch (e2) {
-			}
-			msg = e.message;
+			if(typeof req.abort == "function") req.abort();
+		} catch (e2) {
 		}
+		msg = e.message;
 	}
+
+	//handle error
 	if (!ignorable && !zkau._unloading)
 		zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+(msg?"\n"+msg:""));
 	zkau._cleanupOnFatal(ignorable);
@@ -528,7 +621,7 @@ zkau._doResps = function (cmds) {
 		var cmd = cmds.shift();
 		try {
 			zkau.process(cmd.cmd, cmd.datanum,
-				cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4);
+				cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4, cmd.dt5, cmd.dt6);
 		} catch (e) {
 			zk.error(mesg.FAILED_TO_PROCESS+cmd.cmd+"\n"+e.message+"\n"+cmd.dt0+"\n"+cmd.dt1);
 			throw e;
@@ -540,11 +633,11 @@ zkau._doResps = function (cmds) {
 };
 /** Process a command.
  */
-zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
+zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4, dt5, dt6) {
 	//I. process commands that dt0 is not UUID
 	var fn = zkau.cmd0[cmd];
 	if (fn) {
-		fn.call(zkau, dt0, dt1, dt2, dt3, dt4);
+		fn.call(zkau, dt0, dt1, dt2, dt3, dt4, dt5, dt6);
 		return;
 	}
 
@@ -558,8 +651,7 @@ zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4) {
 
 	fn = zkau.cmd1[cmd];
 	if (fn) {
-//		zk.debug("cmd: "+cmd+", "+uuid+", "+dt1+", "+dt2);
-		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4);
+		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4, dt5, dt6);
 		return;
 	}
 
@@ -634,7 +726,7 @@ zkau.setAttr = function (cmp, name, value) {
 		//maintain defaultChecked
 	} else if ("selectAll" == name && $tag(cmp) == "SELECT") {
 		value = "true" == value;
-		for (var j = 0; j < cmp.options.length; ++j)
+		for (var j = 0, ol = cmp.options.length; j < ol; ++j)
 			cmp.options[j].selected = value;
 	} else if ("style" == name) {
 		zk.setStyle(cmp, value);
@@ -838,6 +930,19 @@ zkau.onimgout = function (evtel) {
 		el.src = zk.renType(el.src, "off");
 };
 
+/** Returns the Ajax request. */
+zkau.ajaxRequest = function () {
+	if (window.XMLHttpRequest) {
+		return new XMLHttpRequest();
+	} else {
+		try {
+			return new ActiveXObject('Msxml2.XMLHTTP');
+		} catch (e2) {
+			return new ActiveXObject('Microsoft.XMLHTTP');
+		}
+	}
+};
+
 /** Handles window.unload. */
 zkau._onUnload = function () {
 	zkau._unloading = true; //to disable error message
@@ -850,25 +955,15 @@ zkau._onUnload = function () {
 	//DHTML content 100% correctly)
 
 	if (!zk.opera && !zk.keepDesktop) {
-		var ds = zkau._dtids;
-		for (var j = 0; j < ds.length; ++j) {
-			var content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
-
-			var req;
-			if (window.ActiveXObject) { //IE
-				req = new ActiveXObject("Microsoft.XMLHTTP");
-			} else if (window.XMLHttpRequest) { //None-IE
-				req = new XMLHttpRequest();
+		try {
+			var ds = zkau._dtids;
+			for (var j = 0, dl = ds.length; j < dl; ++j) {
+				var req = zkau.ajaxRequest();
+				req.open("POST", zk_action, true);
+				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				req.send("dtid="+ds[j]+"&cmd.0=rmDesktop");
 			}
-
-			if (req) {
-				try {
-					req.open("POST", zk_action, true);
-					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-					req.send(content);
-				} catch (e) { //silent
-				}
-			}
+		} catch (e) { //silent
 		}
 	}
 
@@ -1161,9 +1256,9 @@ zkau._parentByZKAttr = function (n, attr1, attr2) {
 /** Handles document.onkeydown. */
 zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	var zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys;
-	var keycode = evt.keyCode, zkcode; //zkcode used to search z.ctkeys
+	var target = Event.element(evt),
+		zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys,
+		keycode = Event.keyCode(evt), zkcode; //zkcode used to search z.ctkeys
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = $tag(target);
@@ -1267,8 +1362,15 @@ zkau._inCtkeys = function (evt, zkcode, keys) {
 };
 
 zkau.sendOnMove = function (cmp, keys) {
+	var offset = getZKAttr(cmp, "offset");
+	var left = cmp.style.left, top = cmp.style.top;
+	if (offset && getZKAttr(cmp, "pos") == "parent") {
+		var xy = offset.split(",");
+		left = $int(left) - $int(xy[0]) + "px";
+		top = $int(top) - $int(xy[1]) + "px";
+	}
 	zkau.send({uuid: cmp.id, cmd: "onMove",
-		data: [cmp.style.left, cmp.style.top, keys ? keys: ""]},
+		data: [left, top, keys ? keys: ""]},
 		zkau.asapTimeout(cmp, "onMove"));
 };
 zkau.sendOnZIndex = function (cmp) {
@@ -1280,7 +1382,7 @@ zkau.sendOnSize = function (cmp, keys) {
 		data: [cmp.style.width, cmp.style.height, keys]},
 		zkau.asapTimeout(cmp, "onSize"));
 	zk.onResize(0, cmp);
-	if (zk.ie && !zk.ie7) setTimeout(function () {zk.onResize(0, cmp);}, 800);
+	if (zk.ie6Only) setTimeout(function () {zk.onResize(0, cmp);}, 800);
 	// If the vflex component in the window component, the offsetHeight of the specific component is wrong at the same time on IE6.
 	// Thus, we have to invoke the zk.onResize function again.
 };
@@ -1290,13 +1392,18 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
 
-/** Closes popups and floats.
- * Return false if nothing changed.
+/** Closes popups and floats except any of the specified components
+ * is an ancestor of popups and floats.
+ *
+ * Maybe it shall be named as closeFloatsBut, but we cannot due to backward
+ * compatible issues.
+ *
  * @param arguments a list of component (or its ID) to exclude if
  * a popup contains any of them
+ * @return false if nothing changed.
  */
 zkau.closeFloats = function () {
-	return zkau._closeFloats("closeFloats", arguments);
+	return zkau._closeFloats("closeFloats", zkau._shallCloseBut, arguments);
 };
 /** Similar to zkau.closeFloats, except it is called when a component
  * is getting the focus.
@@ -1304,17 +1411,30 @@ zkau.closeFloats = function () {
  * floats remains if it is an ancestor of aruments.
  */
 zkau.closeFloatsOnFocus = function () {
-	return zkau._closeFloats("closeFloatsOnFocus", arguments);
+	return zkau._closeFloats("closeFloatsOnFocus", zkau._shallCloseBut, arguments);
 };
-zkau._closeFloats = function (method, ancestors) {
+zkau._shallCloseBut = function (n, ancestors) {
+	return !zk.isAncestorX(n, ancestors, true);
+};
+/** Closes popups and floats if they belongs to any of the specified component.
+ * By belong we mean a component is a descendant of another.
+ * @return false if nothing changed.
+ * @since 3.0.2
+ */
+zkau.closeFloatsOf = function () {
+	return zkau._closeFloats("closeFloatsOf", zkau._shallCloseOf, arguments);
+};
+zkau._shallCloseOf = function (n, ancestors) {
+	return zk.isAncestorX1(ancestors, n, true);
+}
+zkau._closeFloats = function (method, shallClose, ancestors) {
 	var closed;
 	for (var j = zkau._popups.length; --j >=0;) {
 	//reverse order is important if popup contains another
 	//otherwise, IE seem have bug to handle them correctly
 		var n = $e(zkau._popups[j]);
-		if ($visible(n)
-		&& getZKAttr(n, "animating") != "hide"
-		&& !zk.isAncestorX(n, ancestors, true)) {
+		if ($visible(n) && getZKAttr(n, "animating") != "hide"
+		&& shallClose(n, ancestors)) {
 		//we avoid hiding twice we have to check animating
 			closed = true;
 			zk.unsetVParent(n);
@@ -1328,8 +1448,8 @@ zkau._closeFloats = function (method, ancestors) {
 
 	//floats: combobox, context menu...
 	for (var j = zkau.floats.length; --j >= 0;) {
-		var n = zkau.floats[j];
-		if (n[method].apply(n, ancestors))
+		var ft = zkau.floats[j];
+		if (ft[method].apply(ft, ancestors))
 			closed = true;
 	}
 
@@ -1340,15 +1460,15 @@ zkau._closeFloats = function (method, ancestors) {
 
 zkau.hideCovered = function() {
 	var ary = [];
-	for (var j = 0; j < zkau._popups.length; ++j) {
+	for (var j = 0, pl = zkau._popups.length; j < pl; ++j) {
 		var el = $e(zkau._popups[j]);
 		if ($visible(el)) ary.push(el);
 	}
 
-	for (var j = 0; j < zkau.floats.length; ++j)
+	for (var j = 0, fl = zkau.floats.length; j < fl; ++j)
 		zkau.floats[j].addHideCovered(ary);
 
-	for (var j = 0; j < zkau._overlaps.length; ++j) {
+	for (var j = 0, ol = zkau._overlaps.length; j < ol; ++j) {
 		var el = $e(zkau._overlaps[j]);
 		if ($visible(el)) ary.push(el);
 	}
@@ -1417,6 +1537,9 @@ zkau.getSPushInfo = function (dtid) {
 //ID Space//
 /** Returns element of the specified zid. */
 zkau.getByZid = function (n, zid) {
+	if (zid.startsWith("uuid(") && zid.endsWith(')'))
+		return $e(zid.substring(5, zid.length - 1));
+
 	var oid = zkau._zidOwner(n);
 	var v = zkau._zidsp[oid];
 	if (v) {
@@ -1459,14 +1582,17 @@ zkau.initdrag = function (n) {
 		starteffect: zkau.closeFloats,
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true,
+		constraint: zkau._constraint,
 		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag
 	});
+	zk.eval(n, "initdrag");
 };
 zkau.cleandrag = function (n) {
 	if (zkau._drags[n.id]) {
 		zkau._drags[n.id].destroy();
 		delete zkau._drags[n.id];
 	}
+	zk.eval(n, "cleandrag");
 };
 zkau.initdrop = function (n) {
 	zkau._drops.unshift(n); //last created, first matched
@@ -1478,18 +1604,31 @@ zkau.cleandrop = function (n) {
 zkau._ignoredrag = function (el, pointer) {
 	return zk.eval(el, "ignoredrag", null, pointer);
 };
-zkau._dragging = function (dg, pointer) {
-	var e = zkau._getDrop(dg.z_elorg || dg.element, pointer);
+zkau._dragging = function (dg, pointer, evt) {
+	var target = Event.element(evt);	
+	if (target == dg.zk_lastTarget) return;
+		
+	var e = zkau._getDrop(dg.z_elorg || dg.element, pointer, evt);
+	var flag = e && e == dg.zk_lastDrop;
 	if (!e || e != dg.zk_lastDrop) {
 		zkau._cleanLastDrop(dg);
-		if (e) {
+		if (e) {			
 			dg.zk_lastDrop = e;
 			Droppable_effect(e);
+			flag = true;
 		}
 	}
+	if (flag && dg.element._img) {
+		if (dg.element._img.className != "drop-allow")
+			dg.element._img.className = "drop-allow";
+	} else if (dg.element._img) {
+		if (dg.element._img.className != "drop-disallow")
+		dg.element._img.className = "drop-disallow";
+	}
+	dg.zk_lastTarget = target;
 };
-zkau._revertdrag = function (cmp, pointer) {
-	if (zkau._getDrop(cmp, pointer) == null)
+zkau._revertdrag = function (cmp, pointer, evt) {
+	if (zkau._getDrop(cmp, pointer, evt) == null)
 		return true;
 
 	//Note: we hve to revert when zkau._onRespReady called, since app might
@@ -1526,7 +1665,7 @@ if (zk.ie) {
 zkau._enddrag = function (cmp, evt) {
 	zkau._cleanLastDrop(zkau._drags[cmp.id]);
 	var pointer = [Event.pointerX(evt), Event.pointerY(evt)];
-	var e = zkau._getDrop(cmp, pointer);
+	var e = zkau._getDrop(cmp, pointer, evt);
 	if (e) {
 		var keys = "";
 		if (evt) {
@@ -1542,45 +1681,44 @@ zkau._enddrag = function (cmp, evt) {
 zkau._sendDrop = function (dragged, dropped, x, y, keys) {
 	zkau.send({uuid: dropped, cmd: "onDrop", data: [dragged, x, y, keys]});
 };
-zkau._getDrop = function (cmp, pointer) {
+zkau._getDrop = function (cmp, pointer, evt) {
 	var dragType = getZKAttr(cmp, "drag");
-	var found = null;
+	var el = Event.element(evt);
 	l_next:
-	for (var j = 0; j < zkau._drops.length; ++j) {
-		var e = zkau._drops[j];
-		if (e == cmp) continue; //dropping to itself not allowed
-
-		var dropTypes = getZKAttr(e, "drop");
-		if (dropTypes != "true") { //accept all
-			if (dragType == "true") continue; //anonymous drag type
-
-			for (var k = 0;;) {
-				var l = dropTypes.indexOf(',', k);
-				var s = l >= 0 ? dropTypes.substring(k, l): dropTypes.substring(k);
-				if (s.trim() == dragType) break; //found
-				if (l < 0) continue l_next;
-				k = l + 1;
+	for (; el; el = $parent(el)) {
+		if (el == cmp) return; //dropping to itself not allowed
+		var dropTypes = getZKAttr(el, "drop");	
+		if (dropTypes) {
+			if (dropTypes != "true") {
+				if (dragType == "true") continue; //anonymous drag type
+				for (var k = 0;;) {
+					var l = dropTypes.indexOf(',', k);
+					var s = l >= 0 ? dropTypes.substring(k, l): dropTypes.substring(k);
+					if (s.trim() == dragType) break; //found
+					if (l < 0) continue l_next;
+					k = l + 1;
+				}
 			}
+			return el; //found;
 		}
-
-		var cross = Position.withinScroll(e, pointer[0], pointer[1]);
-		if (!cross && (zk.gecko || zk.safari)) { //Bug 1789428 
-			var real = $real(e);
-			if (real != e)
-				cross = Position.withinScroll(real, pointer[0], pointer[1])
-		}
-		if (cross && (!found || found.style.zIndex < e.style.zIndex))
-			found = e;
 	}
-	return found;
+	return null;
 };
 zkau._cleanLastDrop = function (dg) {
-	if (dg && dg.zk_lastDrop) {
+	if (!dg) return;
+	if (dg.zk_lastDrop) {
 		Droppable_effect(dg.zk_lastDrop, true);
 		dg.zk_lastDrop = null;
 	}
+	dg.zk_lastTarget = null;
 };
-zkau._ghostdrag = function (dg, ghosting) {
+zkau._proxyXY = function (evt) {
+	return [Event.pointerX(evt) + 10, Event.pointerY(evt) + 10];
+};
+zkau._constraint = function (dg, p, evt) {
+	return zkau._proxyXY(evt);
+};
+zkau._ghostdrag = function (dg, ghosting, evt) {
 //Tom Yeh: 20060227: Use a 'fake' DIV if
 //1) FF cannot handle z-index well if listitem is dragged across two listboxes
 //2) Safari's ghosting position is wrong
@@ -1595,27 +1733,45 @@ zkau._ghostdrag = function (dg, ghosting) {
 	} else {
 		special = zk.zk_special;
 	}
-
 	if (ghosting) {
-		var ofs = zkau.beginGhostToDIV(dg);
+		zkau.beginGhostToDIV(dg);
+		var ofs = zkau._proxyXY(evt);		
 		if (special) {
+			var msg = "";
+			if (evt.rangeParent) 
+				msg = evt.rangeParent.nodeValue;
+			else {
+				var target = Event.element(evt);
+				if (target.id.indexOf("!cave") > 0)
+					msg = target.textContent || target.innerText;
+				else if (target.id.indexOf("!cell") > 0) {
+					var real = $real(target.id);
+					msg = real.textContent || real.innerText;
+				} else
+					msg = target.textContent || target.innerText;
+			}			
+			if (!msg) msg = "";
+			if (msg.length > 10) msg = msg.substring(0,10) + "...";
 			var el = dg.element;
-			document.body.insertAdjacentHTML("afterbegin",
-				'<div id="zk_ddghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-				+zk.offsetWidth(el)+'px;height:'+zk.offsetHeight(el)
-				+'px;border:1px dotted black"></div>');				
+			document.body.insertAdjacentHTML("beforeend",	
+				'<div id="zk_ddghost" class="drop-ghost" style="position:absolute;top:'
+				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="drop-content"><span id="zk_ddghost!img" class="drop-disallow"></span>&nbsp;'+msg+'</div></div>');				
 		}else {
 			var el  = dg.element.cloneNode(true);
 			el.id = "zk_ddghost";
 			el.style.position = "absolute";
-			el.style.top = ofs[1] + "px";
-			el.style.left = ofs[0] + "px";		
+			var xy = zkau._proxyXY(evt);
+			el.style.top = xy[1] + "px";
+			el.style.left = xy[0] + "px";
 			document.body.appendChild(el);
 		}
 		dg.element = $e("zk_ddghost");
+		if (special) dg.element._img = $e(dg.element.id + "!img");
+		document.body.style.cursor = "pointer";
 	} else {
+		dg.element._img = null;
 		zkau.endGhostToDIV(dg);
+		document.body.style.cursor = "";
 	}
 	return false	
 };
@@ -1802,6 +1958,23 @@ zkau.cmd0 = { //no uuid at all
 	},
 	cfmClose: function (msg) {
 		zkau.confirmClose = msg;
+	},
+	showBusy: function (msg, open) {
+		if (open == "true") {
+			var n = $e("zk_loadprog");
+			if (n) n.parentNode.removeChild(n);
+			n = $e("zk_prog");
+			if (n) n.parentNode.removeChild(n);
+			n = $e("zk_showBusy");
+			if (!n) {
+				msg = msg == "" ? mesg.PLEASE_WAIT : msg;
+				Boot_progressbox("zk_showBusy", msg,
+					0, 0, true, true);
+			}
+		} else {
+			var n = $e("zk_showBusy");
+			if (n) n.parentNode.removeChild(n);
+		}
 	}
 };
 zkau.cmd1 = {
@@ -1816,7 +1989,7 @@ zkau.cmd1 = {
 
 			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
 			else alert(dt1);
-		} else {
+		} else if (!uuid) { //keep silent if component (of uuid) not exist (being detaced)
 			alert(dt1);
 		}
 	},
@@ -1946,6 +2119,7 @@ zkau.cmd1 = {
 			zk.cleanupAt(cmp);
 			cmp = $childExterior(cmp);
 			zk.remove(cmp);
+			zkau.hideCovered(); // Bug #1858838
 		}
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
@@ -1960,7 +2134,7 @@ zkau.cmd1 = {
 	},
 	closeErrbox: function (uuid, cmp) {
 		if (zkau.valid)
-			zkau.valid.closeErrbox(uuid);
+			zkau.valid.closeErrbox(uuid, false, true);
 	},
 	submit: function (uuid, cmp) {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
@@ -1972,13 +2146,7 @@ zkau.cmd1 = {
 		var type = $type(cmp);
 		if (type) {
 			if (mode == "0") { //close
-				for (var j = zkau.floats.length; --j >= 0;) {
-					var n = zkau.floats[j];
-					var f = n["close"];
-					if (f && f.apply(n, [cmp.id]))
-						return;
-				}
-				zkau.closeFloats();
+				zkau.closeFloatsOf(cmp);
 			} else {
 				var ref;
 				if (mode == "1") { //ref
@@ -1995,6 +2163,11 @@ zkau.cmd1 = {
 				zk.eval(cmp, "context", type, ref);
 			}
 		}
+	},
+	echo2: function (uuid, cmp, evtnm, data) {
+		zkau.send(
+			{uuid: uuid, cmd: "echo",
+				data: data != null ? [evtnm, data]: [evtnm], ignorable: true});
 	}
 };
 zkau.cmd1.cmd = zkau.cmd1.invoke; //backward compatibility (2.4.1 or before)

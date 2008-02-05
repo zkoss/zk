@@ -1,5 +1,0 @@
-<?init zscript="abc.zs"?>
-<window>
-	abc.zs doesn't exist and it shall show up a more readable message
-	<zscript src="def.zs"/>
-</window>

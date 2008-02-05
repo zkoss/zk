@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
@@ -80,7 +81,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Window extends XulElement implements IdSpace {
 	private static final Log log = Log.lookup(Window.class);
-
+	private static String _onshow = null;
 	private transient Caption _caption;
 
 	private String _border = "none";
@@ -160,6 +161,46 @@ public class Window extends XulElement implements IdSpace {
 		_mutex = new Object();
 	}
 
+	/**
+	 * Sets the action of window component to show the animating effect by default.
+	 * 
+	 * <p>Default: null. In other words, if the property is null, it will refer to
+	 * the configuration of zk.xml to find the preference with 
+	 * "org.zkoss.zul.Window.defaultActionOnShow", if any. For example,
+	 * <pre>&lt;preference&gt;
+     *   &lt;name&gt;org.zkoss.zul.Window.defaultActionOnShow&lt;/name&gt;
+     *   &lt;value&gt;moveDown&lt;/value&gt;
+	 * &lt;/preference&gt;</pre>
+	 *  Otherwise, the animating 
+	 * effect is depended on component itself.</p>
+	 * <p>In JavaScript, the property will match the same function name with the
+	 * prefix "anima.". For example, if the property is "moveDown", the function name
+	 * should be "anima.moveDown" accordingly.</p>
+	 * <p><strong>Node:</strong> The method is available in modal mode only. And if 
+	 * the onshow command of client-side action has been assigned on the 
+	 * component, its priority is higher than this method.<br/>
+	 * For example, 
+	 * <pre>action="onshow:anima.appear(#{self});"</pre>
+	 * </p>
+	 * 
+	 * @param onshow the function name in JavaScript. You could use the following
+	 * animations, e.g. "moveDown", "moveRight", "moveDiagonal", "appear", 
+	 * "slideDown", and so forth.
+	 * @since 3.0.2
+	 */
+	public static void setDefaultActionOnShow(String onshow) {
+		if (!Objects.equals(_onshow, onshow))
+			_onshow = onshow;
+	}
+	
+	/**
+	 * Returns the animating name of function.
+	 * @since 3.0.2
+	 */
+	public static String getDefaultActionOnShow() {
+		return _onshow;
+	}
+	
 	/** Returns the caption of this window.
 	 */
 	public Caption getCaption() {
@@ -637,6 +678,10 @@ public class Window extends XulElement implements IdSpace {
 	 * <dd>Position the window at the top edge. {@link #setTop} is ignored.</dd>
 	 * <dt>bottom</dt>
 	 * <dd>Position the window at the bottom edge. {@link #setTop} is ignored.</dd>
+	 * <dt>parent</dt>
+	 * <dd>Position the window relative to its parent.
+	 * That is, the left and top ({@link #getTop} and {@link #getLeft})
+	 * is an offset to his parent's let-top corner. (since 3.0.2)</dd>
 	 * </dl>
 	 * <p>For example, "left,center" means to position it at the center of
 	 * the left edge.
@@ -737,6 +782,13 @@ public class Window extends XulElement implements IdSpace {
 		final String scls = super.getSclass();
 		return scls != null ? scls: getMode();
 	}
+	public void setSclass(String sclass) {
+		if (sclass != null && sclass.length() == 0) sclass = null;
+		if (!Objects.equals(super.getSclass(), sclass)) {
+			super.setSclass(sclass);
+			invalidate();
+		}
+	}
 
 	//-- Component --//
 	public boolean insertBefore(Component child, Component insertBefore) {
@@ -783,7 +835,8 @@ public class Window extends XulElement implements IdSpace {
 		if (!visible && _mode == MODAL) {
 			leaveModal();
 			invalidate();
-		}
+		} else if ( _mode != EMBEDDED)
+			smartUpdate("z.visible", visible);
 		return super.setVisible(visible);
 	}
 
@@ -798,9 +851,14 @@ public class Window extends XulElement implements IdSpace {
 	}
 	protected String getRealStyle() {
 		final String style = super.getRealStyle();
-		return _mode != EMBEDDED ? "position:absolute;" + style: style;
+		return _mode != EMBEDDED ? 
+			(isVisible() ? "position:absolute;display:none;" : "position:absolute;") + style: style;
 			//If no absolute, Opera ignores left and top
+			//
+			//If not embedded we always generate display:none to have
+			//better visual effect (the client will turn it on in zkWnd.init)
 	}
+	
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
@@ -817,7 +875,11 @@ public class Window extends XulElement implements IdSpace {
 		if (clkattrs != null) sb.append(clkattrs);
 			//though widget.js handles onclick (if 3d), it is useful
 			//to support onClick for groupbox
-
+		final String aos = getDefaultActionOnShow() != null ? getDefaultActionOnShow() 
+				: getDesktop().getWebApp().getConfiguration()
+					.getPreference("org.zkoss.zul.Window.defaultActionOnShow", null);
+		if (aos != null)
+			HTMLs.appendAttribute(sb, "z.aos", aos.length() == 0 ?  "z_none" : aos);
 		if (_closable)
 			sb.append(" z.closable=\"true\"");
 		if (_sizable)
@@ -827,6 +889,7 @@ public class Window extends XulElement implements IdSpace {
 			if (_pos != null)
 				HTMLs.appendAttribute(sb, "z.pos", _pos);
 			HTMLs.appendAttribute(sb, "z.mode", getMode());
+			HTMLs.appendAttribute(sb, "z.visible", isVisible());
 		}
 
 		HTMLs.appendAttribute(sb, "z.ctkeys", _ctkeys);
@@ -866,7 +929,7 @@ public class Window extends XulElement implements IdSpace {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable {
+	implements MultiBranch, Openable, Floating {
 		//-- MultiBranch --//
 		public boolean inDifferentBranch(Component child) {
 			return child instanceof Caption; //in different branch
@@ -874,6 +937,10 @@ public class Window extends XulElement implements IdSpace {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			setVisible(open);
+		}
+		//Floating//
+		public boolean isFloating() {
+			return _mode != EMBEDDED;
 		}
 	}
 }

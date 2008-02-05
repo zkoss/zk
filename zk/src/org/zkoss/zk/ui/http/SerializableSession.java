@@ -34,9 +34,15 @@ public class SerializableSession extends SimpleSession
 implements HttpSessionActivationListener, java.io.Serializable {
     private static final long serialVersionUID = 20060706L;
 
-	public SerializableSession(WebApp wapp, HttpSession hsess,
-	String clientAddr, String clientHost) {
-		super(wapp, hsess, clientAddr, clientHost);
+	/** Constructor.
+	 *
+	 * @param request the original request causing this session to be created.
+	 * If HTTP and servlet, it is javax.servlet.http.HttpServletRequest.
+	 * If portlet, it is javax.portlet.RenderRequest.
+	 * @since 3.0.1
+	 */
+	public SerializableSession(WebApp wapp, HttpSession hsess, Object request) {
+		super(wapp, hsess, request);
 	}
 
 	//-- HttpSessionActivationListener --//

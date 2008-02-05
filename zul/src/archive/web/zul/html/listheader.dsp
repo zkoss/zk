@@ -17,5 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<th id="${self.uuid}" z.type="Lhr"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave" class="head-cell-inner">${self.imgTag}<c:out value="${self.label}"/></div></th>
+<th id="${self.uuid}" z.type="Lhr"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave" class="head-cell-inner">${self.columnHtmlPrefix}${self.imgTag}<c:out value="${self.label}"/><c:forEach var="child" items="${self.children}">
+	${z:redraw(child, null)}
+	</c:forEach></div></th>

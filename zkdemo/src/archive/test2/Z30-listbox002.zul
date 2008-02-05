@@ -70,7 +70,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Auxhead ah = new Auxhead();
 		Auxheader ahr = new Auxheader("New aux");
 		ahr.setParent(ah);
-		ahr.setSpan(2);
+		ahr.setColspan(2);
 		src.insertBefore(ah, lh);
 		}</attribute>
 	</button>

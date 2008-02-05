@@ -24,17 +24,19 @@ import org.zkoss.zk.ui.Component;
  * Represents an event cause by user's input something at the client.
  * 
  * @author tomyeh
+ * @see org.zkoss.zk.ui.ext.client.InputableX
  * @see org.zkoss.zk.ui.ext.client.Inputable
  */
 public class InputEvent extends Event {
 	private final String _val;
 	private final boolean _selbk;
+	private final int _start;
 
 	/** Constructs a input-relevant event.
 	 * @param val the new value
 	 */
 	public InputEvent(String name, Component target, String val) {
-		this(name, target, val, false);
+		this(name, target, val, false, 0);
 	}
 	/** Constructs an event for <code>onChanging</code>.
 	 *
@@ -42,10 +44,11 @@ public class InputEvent extends Event {
 	 * of items. Currently, only combobox might set it to true for the onChanging
 	 * event. See {@link #isChangingBySelectBack} for details.
 	 */
-	public InputEvent(String name, Component target, String val, boolean selbk) {
+	public InputEvent(String name, Component target, String val, boolean selbk, int start) {
 		super(name, target);
 		_val = val;
 		_selbk = selbk;
+		_start = start;
 	}
 	/** Returns the value that user input.
 	 */
@@ -66,5 +69,18 @@ public class InputEvent extends Event {
 	 */
 	public final boolean isChangingBySelectBack() {
 		return _selbk;
+	}
+
+	/**
+	 * Returns the start position of the cursor from the input element.
+	 * <p>Note: In IE browser, we cannot get the position of cursor because <code>onblur</code> 
+	 * event of Javascript is always fired before <code>onChange</code> is fired. 
+	 * To get the position of cursor, <code>onChanging</code> event is suggested
+	 *  since onblur event of Javascript will not be fired.</p>
+	 * @return the start position >= 0
+	 * @since 3.0.1
+	 */
+	public int getStart() {
+		return _start;
 	}
 }

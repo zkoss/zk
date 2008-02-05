@@ -23,14 +23,25 @@ zk.load("zul.vd");
 zkTxbox = {};
 zkau.textbox = zkTxbox; //zkau depends on it
 zkTxbox._intervals = {};
-
+_zktbau = {
+	setAttr: zkau.setAttr
+};
+zkau.setAttr = function (cmp, nm, val) {
+	if ("disabled" == nm || "readOnly" == nm) {
+		var inp = $real(cmp), type = inp.type ? inp.type.toUpperCase() : "";
+		if (type == "TEXT" || type == "TEXTAREA")
+			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? "text-disd" : "readonly");
+	}
+	return _zktbau.setAttr(cmp, nm, val);
+};
 zkTxbox.init = function (cmp) {
 	zk.listen(cmp, "focus", zkTxbox.onfocus);
 	zk.listen(cmp, "blur", zkTxbox.onblur);
 	zk.listen(cmp, "select", zkTxbox.onselect);
 	if ($tag(cmp) == "TEXTAREA")
 		zk.listen(cmp, "keyup", zkTxbox.onkey);
-
+		
+	zk.listen(cmp, "keydown", zkTxbox.onkeydown);
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
 	if (getZKAttr($outer(cmp), "srvald")) {
@@ -38,6 +49,8 @@ zkTxbox.init = function (cmp) {
 		cmp.defaultValue = old + "-";
 		if (old != cmp.value) cmp.value = old; //Bug 1490079
 	}
+	if (cmp.readOnly) zk.addClass(cmp, "readonly");
+	if (cmp.disabled) zk.addClass(cmp, "text-disd");
 };
 zkTxbox.onHide = function (cmp) {
 	var inp = $real(cmp);
@@ -59,7 +72,11 @@ zkTxbox.onselect = function (evt) {
  */
 zkTxbox.onblur = function (evt) {
 	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
-
+	zkTxbox._scanStop(inp);
+	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
+	zkau.onblur(evt); //fire onBlur after onChange
+};
+zkTxbox._scanStop = function (inp) {	
 	//stop the scanning of onChaning first
 	var interval = zkTxbox._intervals[inp.id];
 	if (interval) {
@@ -69,10 +86,8 @@ zkTxbox.onblur = function (evt) {
 	if (inp.removeAttribute) {
 		inp.removeAttribute("zk_changing_last");
 		inp.removeAttribute("zk_changing_selbk");
+		inp.removeAttribute("zk_typeAhead");
 	}
-
-	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
-	zkau.onblur(evt); //fire onBlur after onChange
 };
 /** check any change.
  * @return false if failed (wrong data).
@@ -97,7 +112,23 @@ zkTxbox.updateChange = function (inp, noonblur) {
 	if (!noonblur) zkTxbox.onupdate(inp);
 	return true;
 };
-
+/**
+ * Tests whether to do onblur, if inp currentFocus is not in the same
+ * component. This method is used to check when the popup of component is closing.
+ * @param {Object} inp
+ * @since 3.0.3
+ */
+zkTxbox.close = function (inp) {
+	if (!zkTxbox._noonblur(inp)) {
+		if (zk.ie){
+			inp.fireEvent('onblur');
+		} else {
+			var evt = document.createEvent('HTMLEvents');
+			evt.initEvent('blur', false, false);
+			inp.dispatchEvent(evt);
+		}
+	}
+};
 /** Tests whether NOT to do onblur (if inp currentFocus are in the same
  * component).
  */
@@ -127,9 +158,10 @@ zkTxbox.onupdate = function (inp) {
 	var newval = inp.value;
 	if (newval != inp.defaultValue) { //changed
 		inp.defaultValue = newval;
-		var uuid = $uuid(inp);
+		var uuid = $uuid(inp);			
+		var sr = zk.getSelectionRange(inp);	
 		zkau.send({uuid: uuid, cmd: "onChange",
-			data: [newval]}, zkau.asapTimeout(uuid, "onChange", 100));
+			data: [newval, false, sr[0]]}, zkau.asapTimeout(uuid, "onChange", 150));
 	} else if (inp.getAttribute("zk_err")) {
 		inp.removeAttribute("zk_err");
 		zkau.send({uuid: $uuid(inp), cmd: "onError",
@@ -147,6 +179,16 @@ zkTxbox.onkey = function (evt) {
 			inp.value = inp.value.substring(0, maxlen);
 	}
 };
+zkTxbox.onkeydown = function (evt) {
+	var inp = Event.element(evt);
+	var uuid = $uuid(inp);
+	var cmp = $e(uuid);
+	if (Event.keyCode(evt) == 13 && zkau.asap(cmp, "onOK")) {
+		zkTxbox._scanStop(inp);
+		zkTxbox.updateChange(inp, false);
+		//Bug 1858869: no need to send onOK here since zkau._onDocKeydown will do
+	}
+};
 zkTxbox.onfocus = function (evt) {
 	zkau.onfocus(evt);
 
@@ -162,13 +204,15 @@ zkTxbox.onfocus = function (evt) {
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
 	var inp = $e(id);
+	var value = inp.getAttribute("zk_typeAhead") || inp.value;
 	if (inp && zkau.asap($outer(inp), "onChanging")
-	&& inp.getAttribute("zk_changing_last") != inp.value) {
-		inp.setAttribute("zk_changing_last", inp.value);
+	&& inp.getAttribute("zk_changing_last") != value) {
+		inp.setAttribute("zk_changing_last", value);
 		var selbk = inp.getAttribute("zk_changing_selbk");
-		inp.removeAttribute("zk_changing_selbk");
+		inp.removeAttribute("zk_changing_selbk");		
+		var sr = zk.getSelectionRange(inp);
 		zkau.send({uuid: $uuid(id),
-			cmd: "onChanging", data: [inp.value, selbk == inp.value],
+			cmd: "onChanging", data: [value, selbk == value, sr[0]],
 			ignorable: true}, 100);
 	}
 };
@@ -204,33 +248,49 @@ zkTxbox.setAttr = function (cmp, nm, val) {
 		return true;
 	}
 	return false;
-}
+};
+
 ////
-//intbox//
+//intbox/longbox/decimalbox/doublebox//
 zkInbox = {};
-zkInbox.init = zkTxbox.init;
-zkInbox.setAttr = zkTxbox.setAttr ;
-zkInbox.onHide = zkTxbox.onHide;
+zkLnbox = {};
+zkDcbox = {};
+zkDbbox = {};
+zkInpEl = {};
+zkInpEl.baseChars = "+0123456789" + zk.MINUS + zk.PERCENT + zk.GROUPING;
+zkInpEl.ignoreKeys = function (evt, keys) {
+	var k = Event.keyCode(evt);
+    if(!zk.ie && (Event.isSpecialKey(evt) || k == 8 || k == 46)) return;
+    var c = Event.charCode(evt);
+    if(keys.indexOf(String.fromCharCode(c)) === -1){
+        Event.stop(evt);
+    }
+};
+zkInbox.init = zkLnbox.init = function (cmp) {	
+	zk.listen(cmp, "keypress", zkInbox.onkeypress);
+	zkTxbox.init(cmp);
+};
+zkInbox.onkeypress = function (evt) {
+	zkInpEl.ignoreKeys(evt, zkInpEl.baseChars);
+};
+zkDcbox.init = zkDbbox.init = function (cmp) {	
+	zk.listen(cmp, "keypress", zkDcbox.onkeypress);
+	zkTxbox.init(cmp);
+};
+zkDcbox.onkeypress = function (evt) {
+	zkInpEl.ignoreKeys(evt, zkInpEl.baseChars + zk.DECIMAL);
+};
+zkInbox.setAttr = zkLnbox.setAttr = zkDcbox.setAttr = zkDbbox.setAttr = zkTxbox.setAttr ;
+zkInbox.onHide = zkLnbox.onHide = zkDcbox.onHide = zkDbbox.onHide = zkTxbox.onHide;
 zkInbox.validate = function (cmp) {
 	return zkVld.onlyInt(cmp.id);
 };
-
-////
-//decimalbox//
-zkDcbox = {};
-zkDcbox.init = zkTxbox.init;
-zkDcbox.setAttr = zkTxbox.setAttr ;
-zkDcbox.onHide = zkTxbox.onHide;
+zkLnbox.validate = function (cmp) {
+	return zkVld.onlyLong(cmp.id);
+};
 zkDcbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
 };
-
-////
-//doublebox//
-zkDbbox = {};
-zkDbbox.init = zkTxbox.init;
-zkDbbox.setAttr = zkTxbox.setAttr ;
-zkDbbox.onHide = zkTxbox.onHide;
 zkDbbox.validate = function (cmp) {
 	return zkVld.onlyNum(cmp.id);
 };
@@ -245,19 +305,27 @@ zkButton.init = function (cmp) {
 	zk.listen(cmp, "focus", zkau.onfocus);
 	zk.listen(cmp, "blur", zkau.onblur);
 };
-
 zkTbtn = {}; //toolbarbutton
 zkTbtn.init = function (cmp) {
-	zk.listen(cmp, "click", function (evt) {
-		if ("javascript:;" == cmp.href) zkau.onclick(evt);
-		else {
-			var t = cmp.getAttribute("target");
-			if (cmp.href && !zk.isNewWindow(cmp.href, t))
-				zk.progress();
-		}
-	});
-	zk.listen(cmp, "focus", zkau.onfocus);
-	zk.listen(cmp, "blur", zkau.onblur);
+		zk.listen(cmp, "click", function (evt) {			
+			if (getZKAttr(cmp, "disd") == "true") {
+				Event.stop(evt);
+				return;
+			}
+
+			zkau.onclick(evt); //Bug 1878839: we shall always fire onClick
+
+			if ("javascript:;" != cmp.href) {
+				var t = cmp.getAttribute("target");
+				if (cmp.href && !zk.isNewWindow(cmp.href, t))
+					zk.progress();
+			}
+		});
+	
+	if (getZKAttr(cmp, "disd") != "true") {
+		zk.listen(cmp, "focus", zkau.onfocus);
+		zk.listen(cmp, "blur", zkau.onblur);
+	}
 };
 
 ////
@@ -313,18 +381,8 @@ zkGrbox.init = zkGrbox._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (n) {
 		var hgh = cmp.style.height;
-		if (hgh && hgh != "auto") {
-			hgh = cmp.clientHeight;
-			for (var p = n, q; q = p.previousSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight;
-				p = q;
-			}
-			for (var p = n, q; q = p.nextSibling;) {
-				if (q.offsetHeight) hgh -= q.offsetHeight;
-				p = q;
-			}
-			zk.setOffsetHeight(n, hgh);
-		}
+		if (hgh && hgh != "auto")
+			zk.setOffsetHeight(n, zk.getVflexHeight(n.parentNode));
 
 		//if no border-bottom, hide the shadow
 		var sdw = $e(cmp.id + "!sdw");
@@ -422,7 +480,7 @@ zkCapt._parentGrbox = function (p) {
 // Image//
 zkImg = {};
 
-if (zk.ie && !zk.ie7) {
+if (zk.ie6Only) {
 	//Request 1522329: PNG with alpha color in IE
 	//To simplify the implementation, Image.java invalidates instead of smartUpdate
 	zkImg.init = function (cmp) {
@@ -452,7 +510,7 @@ if (zk.ie && !zk.ie7) {
 			if (img.title) html += ' title="'+img.title+'"';
 
 			//process zk_xxx
-			for (var attrs = img.attributes, j = 0; j < attrs.length; ++j) {
+			for (var attrs = img.attributes, j = 0, al = attrs.length; j < al; ++j) {
 				var attr = attrs.item(j);
 				if (attr.name.startsWith("z."))
 					html += ' '+attr.name+'="'+attr.value+'"';
@@ -483,7 +541,7 @@ zkMap.init = function (cmp) {
 		null, zk.safari ? "width:0;height:0;display:inline": "display:none");
 		//creates a hidden frame. However, in safari, we cannot use invisible frame
 		//otherwise, safari will open a new window
-	if (zk.ie && !zk.ie7) {
+	if (zk.ie6Only) {
 		var img = $real(cmp);
 		return zkImg._fixpng(img);
 	}
@@ -613,8 +671,19 @@ if (zk.gecko) { //Bug 1692495
 	};
 }
 
+//Style//
+var zkStyle = {};
+zkStyle.init = function (cmp) {
+	var src = getZKAttr(cmp, "src");
+	if (src) zk.loadCSSDirect(src, cmp.id + "-");
+};
+zkStyle.cleanup = function (cmp) {
+	var css = $e(cmp.id + "-");
+	if (css) zk.remove(css);
+};
+
 //utilities//
-var zkWgt = {}
+var zkWgt = {};
 /** Fixes the button align with an input box, such as combobox, datebox.
  */
 zkWgt.fixDropBtn = function (cmp) {

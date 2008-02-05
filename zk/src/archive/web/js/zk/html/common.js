@@ -26,15 +26,15 @@ String.prototype.endsWith = function (suffix) {
 	return this.substring(this.length-suffix.length) == suffix;
 };
 String.prototype.trim = function () {
-	var j = 0, k = this.length - 1;
-	while (j < this.length && this.charAt(j) <= ' ')
+	var j = 0, tl = this.length, k = tl - 1;
+	while (j < tl && this.charAt(j) <= ' ')
 		++j;
 	while (k >= j && this.charAt(k) <= ' ')
 		--k;
 	return j > k ? "": this.substring(j, k + 1);
 };
 String.prototype.skipWhitespaces = function (j) {
-	for (;j < this.length; ++j) {
+	for (var tl = this.length;j < tl; ++j) {
 		var cc = this.charAt(j);
 		if (cc != ' ' && cc != '\t' && cc != '\n' && cc != '\r')
 			break;
@@ -42,29 +42,19 @@ String.prototype.skipWhitespaces = function (j) {
 	return j;
 };
 String.prototype.nextWhitespace = function (j) {
-	for (;j < this.length; ++j) {
+	for (var tl = this.length;j < tl; ++j) {
 		var cc = this.charAt(j);
 		if (cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r')
 			break;
 	}
 	return j;
 };
-/** Tom Yeh 20070630: Remove unused codes
-String.prototype.skipWhitespacesBackward = function (j) {
-	for (;j >= 0; --j) {
-		var cc = this.charAt(j);
-		if (cc != ' ' && cc != '\t' && cc != '\n' && cc != '\r')
-			break;
-	}
-	return j;
-};
-*/
 
 /** Removes the specified object from the array if any.
  * Returns false if not found.
  */
 Array.prototype.remove = function (o) {
-	for (var j = 0; j < this.length; ++j) {
+	for (var j = 0, tl = this.length; j < tl; ++j) {
 		if (o == this[j]) {
 			this.splice(j, 1);
 			return true;
@@ -75,7 +65,7 @@ Array.prototype.remove = function (o) {
 /** Returns whether the array contains the specified object.
  */
 Array.prototype.contains = function (o) {
-	for (var j = 0; j < this.length; ++j) {
+	for (var j = 0, tl = this.length; j < tl; ++j) {
 		if (o == this[j])
 			return true;
 	}
@@ -86,7 +76,7 @@ Array.prototype.contains = function (o) {
 //Form//
 function z_fmsubm(a, b, c) {
 	var fns = this._submfns;
-	for (var j = 0; j < (fns ? fns.length: 0); ++j)
+	for (var j = 0, fl = (fns ? fns.length: 0); j < fl; ++j)
 		fns[j].apply(this, arguments);
 	return this._ogsubm(a, b, c);
 		//If IE, we cannot use _ogsubm.apply. Reason unknown.
@@ -329,8 +319,9 @@ zk.center = function (el, flags) {
 
 	if (x < left) x = left;
 	if (y < top) y = top;
-
-	var ofs = zk.toStyleOffset(el, x, y);
+	
+	var ofs = zk.toStyleOffset(el, x, y);	
+	
 	if (!skipx) el.style.left = ofs[0] + "px";
 	if (!skipy) el.style.top =  ofs[1] + "px";
 };
@@ -406,6 +397,32 @@ zk.position = function (el, ref, type) {
 	el.style.left = refofs[0] + "px"; el.style.top = refofs[1] + "px";
 };
 
+/** Returns the maximal allowed height of the specified element.
+ * In other words, it is the client height of the parent minus all sibling's.
+ * @since 3.0.3
+ */
+zk.getVflexHeight = function (el) {
+	hgh = el.parentNode.clientHeight;
+	if (zk.ie6Only) { //IE6's clientHeight is wrong
+		var ref = el.parentNode;
+		var h = ref.style.height;
+		if (h && h.endsWith("px")) {
+			h = zk.revisedSize(ref, $int(h), true);
+			if (h && h < hgh) hgh = h;
+		}
+	}
+
+	for (var p = el, q; q = p.previousSibling;) {
+		if (q.offsetHeight && $visible(q)) hgh -= q.offsetHeight; //may undefined
+		p = q;
+	}
+	for (var p = el, q; q = p.nextSibling;) {
+		if (q.offsetHeight && $visible(q)) hgh -= q.offsetHeight; //may undefined
+		p = q;
+	}
+	return hgh;
+};
+
 /** Returns the style's coordination in [integer, integer].
  * Note: it ignores the unit and assumes px (so pt or others will be wrong)
  */
@@ -436,7 +453,6 @@ zk.toStyleOffset = function (el, x, y) {
 	var ofs1 = Position.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
 	ofs1 = [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
-
 	el.style.left = oldx;
 	el.style.top = oldy;
 	return ofs1;
@@ -481,15 +497,13 @@ zk._focusDown = function (el, match, checkA) {
 	if (el.focus) {
 		var tn = $tag(el);
 		if (match.contains(tn)) {
-			try {el.focus();} catch (e) {}
-			//IE throws exception when focus in some cases
+			zk.focus(el);
 			return true;
 		}
 		if (checkA && tn == "A") {
 			for (var n = el; (n = $parent(n))/*yes, assign*/;) {
 				if (getZKAttr(n, "type")) {
-					try {el.focus();} catch (e) {}
-					//IE throws exception when focus in some cases
+					zk.focus(el);
 					return true;
 				}
 			}
@@ -524,7 +538,11 @@ zk.focus = function (cmp) {
 			cmp.focus();
 		} catch (e) {
 			setTimeout(function() {
-				try {cmp.focus();} catch (e) {}
+				try {
+					cmp.focus();
+				} catch (e) {
+					setTimeout(function() {try {cmp.focus();} catch (e) {}}, 100);
+				}
 			}, 0);
 		}
 		//IE throws exception when focus in some cases
@@ -551,25 +569,29 @@ zk.select = function (cmp) {
 		//IE throws exception when focus() in some cases
 };
 
-/** Returns the selection range of the specified control
+/** Returns the selection range of the specified control.
+ * Note: if the function occurs some error, it always return [0, 0];
  */
 zk.getSelectionRange = function(inp) {	
-	if (document.selection != null && inp.selectionStart == null) { //IE
-		var range = document.selection.createRange(); 
-		var rangetwo = inp.createTextRange(); 
-		var stored_range = ""; 
-		if(inp.type.toLowerCase() == "text"){
-			stored_range = rangetwo.duplicate();
-		}else{
-			 stored_range = range.duplicate(); 
-			 stored_range.moveToElementText(inp); 
+	try {
+		if (document.selection != null && inp.selectionStart == null) { //IE		
+			var range = document.selection.createRange(); 
+			var rangetwo = inp.createTextRange(); 
+			var stored_range = ""; 
+			if(inp.type.toLowerCase() == "text"){
+				stored_range = rangetwo.duplicate();
+			}else{
+				 stored_range = range.duplicate(); 
+				 stored_range.moveToElementText(inp); 
+			}
+			stored_range.setEndPoint('EndToEnd', range); 
+			var start = stored_range.text.length - range.text.length;			
+			return [start, start + range.text.length];
+		} else { //Gecko
+			return [inp.selectionStart, inp.selectionEnd];
 		}
-		stored_range.setEndPoint('EndToEnd', range); 
-
-		var start = stored_range.text.length - range.text.length; 
-		return [start, start + range.text.length];
-	} else { //Gecko
-		return [inp.selectionStart, inp.selectionEnd];
+	} catch (e) {
+		return [0, 0];
 	}
 }
 
@@ -595,7 +617,7 @@ zk.insertHTMLBefore = function (el, html) {
 		case "TBODY": case "THEAD": case "TFOOT":
 			var ns = zk._tblCreateElements(html);
 			var p = el.parentNode;
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				p.insertBefore(ns[j], el);
 			return;
 		}
@@ -622,7 +644,7 @@ zk.insertHTMLBeforeEnd = function (el, html) {
 					el = bd[bd.length - 1];
 				}
 			}
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				el.appendChild(ns[j]);
 			return;
 		}
@@ -641,7 +663,7 @@ zk.insertHTMLAfter = function (el, html) {
 			var ns = zk._tblCreateElements(html);
 			var sib = el.nextSibling;
 			var p = el.parentNode;
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				if (sib != null) p.insertBefore(ns[j], sib);
 				else p.appendChild(ns[j]);
 			return;
@@ -672,7 +694,7 @@ zk.setInnerHTML = function (el, html) {
 			}
 			while (el.firstChild)
 				el.removeChild(el.firstChild);
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				el.appendChild(ns[j]);
 			return;
 		}
@@ -692,7 +714,7 @@ zk.setOuterHTML = function (el, html) {
 			var ns = zk._tblCreateElements(html);
 			var sib = el.nextSibling;
 			p.removeChild(el);
-			for (var j = 0; j < ns.length; ++j)
+			for (var j = 0, nl = ns.length; j < nl; ++j)
 				if (sib) p.insertBefore(ns[j], sib);
 				else p.appendChild(ns[j]);
 		} else {
@@ -774,8 +796,17 @@ zk.isAncestor = function (p, c, checkuuid) {
  * they are different part of the same component).
  */
 zk.isAncestorX = function (p, ary, checkuuid) {
-	for (var j = 0; j < ary.length; ++j)
+	for (var j = 0, al = ary.length; j < al; ++j)
 		if (zk.isAncestor(p, ary[j], checkuuid))
+			return true;
+	return false;
+};
+/** Returns whether any of an array of elments is an ancestor of another.
+ * @since 3.0.2
+ */
+zk.isAncestorX1 = function (ary, c, checkuuid) {
+	for (var j = 0, al = ary.length; j < al; ++j)
+		if (zk.isAncestor(ary[j], c, checkuuid))
 			return true;
 	return false;
 };
@@ -959,7 +990,7 @@ zk.rename = function (url, name) {
 if (!zk._actg1) {
 	zk._actg1 = ["IFRAME"/*,"APPLET"*/]; //comment out APPLET for better performance
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
-	if (zk.ie && !zk.ie7) { //ie7 solves the z-order issue of SELECT
+	if (zk.ie6Only) { //ie7 solves the z-order issue of SELECT
 		zk._actg1.unshift("SELECT"); //change visibility is required
 	} else
 		zk._actg2.unshift("SELECT");
@@ -972,20 +1003,20 @@ if (!zk._actg1) {
 
 /** Disables all active tags. */
 zk.disableAll = function (parent) {
-	for (var j = 0; j < zk._actg1.length; j++)
+	for (var j = 0, al1 = zk._actg1.length; j < al1; j++)
 		zk._dsball(parent, document.getElementsByTagName(zk._actg1[j]), true);
 
 	if (!zk.ndbModal) //not disable-behind-modal
-		for (var j = 0; j < zk._actg2.length; j++)
+		for (var j = 0, al2 = zk._actg2.length; j < al2; j++)
 			zk._dsball(parent, document.getElementsByTagName(zk._actg2[j]));
 };
 zk._dsball = function (parent, els, visibility) {
 	l_els:
-	for (var k = 0 ; k < els.length; k++) {
+	for (var k = 0, elen = els.length; k < elen; k++) {
 		var el = els[k];
 		if (zk.isAncestor(parent, el))
 			continue;
-		for(var m = 0; m < zk._disTags.length; ++m) {
+		for(var m = 0, dl = zk._disTags.length; m < dl; ++m) {
 			var info = zk._disTags[m];
 			if (info.element == el)
 				continue l_els;
@@ -1016,7 +1047,7 @@ zk._dsball = function (parent, els, visibility) {
  */
 zk.restoreDisabled = function (n) {
 	var skipped = [];
-	for (var bug1498895 = zk.ie; zk._disTags.length;) {
+	for (var bug1498895 = zk.ie, dlen = zk._disTags.length; dlen; --dlen) {
 		var info = zk._disTags.shift();
 		var el = info.element;
 		if (el && el.tagName) { //still exists
@@ -1065,24 +1096,26 @@ zk.restoreDisabled = function (n) {
  */
 zk.hideCovered = function (ary) {
 	if (!ary || ary.length == 0) {
-		while (zk._hidCvred.length) {
+		var hl = zk._hidCvred.length;
+		while (hl) {
 			var info = zk._hidCvred.shift();
 			if (info.element.style)
 				info.element.style.visibility = info.visibility;
+			--hl;
 		}
 		return;
 	}
 
 	var cts = zk._actg1;
-	for (var j = 0; j < cts.length; ++j) {
+	for (var j = 0, clen = cts.length; j < clen; ++j) {
 		var els = document.getElementsByTagName(cts[j]);
 		var ifr = "IFRAME" == cts[j];
 		loop_els:
-		for (var k = 0 ; k < els.length; k++) {
+		for (var k = 0, elen = els.length; k < elen; k++) {
 			var el = els[k];
 			if (!zk.isRealVisible(el)) continue;
 
-			for (var m = 0; m < ary.length; ++m) {
+			for (var m = 0, al = ary.length; m < al; ++m) {
 				if (zk.isAncestor(ary[m], el))
 					continue loop_els;
 			}
@@ -1091,7 +1124,7 @@ zk.hideCovered = function (ary) {
 			if (!ifr || getZKAttr(el, "autohide") == "true") {
 			//Note: z.autohide may be set dynamically,
 			//so consider it as not overlapped
-				for (var m = 0; m < ary.length; ++m) {
+				for (var m = 0, al = ary.length; m < al; ++m) {
 					if (zk.isOverlapped(ary[m], el)) {
 						overlapped = true;
 						break;
@@ -1100,7 +1133,7 @@ zk.hideCovered = function (ary) {
 			}
 
 			if (overlapped) {
-				for (var m = 0; m < zk._hidCvred.length; ++m) {
+				for (var m = 0, hl = zk._hidCvred.length; m < hl; ++m) {
 					if (el == zk._hidCvred[m].element)
 						continue loop_els;
 				}
@@ -1108,7 +1141,7 @@ zk.hideCovered = function (ary) {
 					.push({element: el, visibility: el.style.visibility});
 				el.style.visibility = "hidden";
 			} else {
-				for (var m = 0; m < zk._hidCvred.length; ++m) {
+				for (var m = 0, hl = zk._hidCvred.length; m < hl; ++m) {
 					if (el == zk._hidCvred[m].element) {
 						el.style.visibility = zk._hidCvred[m].visibility;
 						zk._hidCvred.splice(m, 1);
@@ -1221,7 +1254,10 @@ zk.go = function (url, overwrite, target) {
 		//return this page (and found the progress dlg remains on browse)
 		//
 		//Bug 1773575: with # and the same url, no redraw
-
+	if (bProgress && url) {
+		bProgress =	url.indexOf("://") < 0 && !url.startsWith("mailto:")
+			&& !url.startsWith("javascript:") && !url.startsWith("about:");
+	}
 	if (!url) {
 		if (bProgress) zk.progress(); //BACK button issue
 		window.location.reload();
@@ -1250,6 +1286,7 @@ zk.go = function (url, overwrite, target) {
 		if (bProgress) zk.progress();
 		window.location.href = url;
 	}
+	if (bProgress) zk.progressDone(); // Bug #1843032
 };
 /** Tests whether a new window will be opened.
  */
@@ -1322,7 +1359,7 @@ zk.newHidden = function (nm, val, parent) {
 zk.ncols = function (cells) {
 	var cnt = 0;
 	if (cells) {
-		for (var j = 0; j < cells.length; ++j) {
+		for (var j = 0, cl = cells.length; j < cl; ++j) {
 			var span = cells[j].colSpan;
 			if (span >= 1) cnt += span;
 			else ++cnt;
@@ -1330,7 +1367,26 @@ zk.ncols = function (cells) {
 	}
 	return cnt;
 };
-
+/**
+ * Retrieves the index of the object in the cells collection of a row.
+ * Note: The function fixed the problem of IE that the cell.cellIndex returns a wrong index 
+ * if there is a hidden cell in the table. So, the behavior is difference among others.
+ * @param {Object} cell
+ * @since 3.0.1
+ */
+zk.cellIndex = function (cell) {
+	var i = 0; 
+	if (zk.ie) {
+		var cells = cell.parentNode.cells;
+		for(var j = 0, cl = cells.length; j < cl; j++) {
+			if (cells[j] == cell) {
+				i = j;
+				break;
+			}
+		}
+	} else i = cell.cellIndex;
+	return i; 
+};
 /** Copies the width of each cell from one row to another.
  * It handles colspan of srcrows, but not dst's colspan, nor rowspan
  *
@@ -1344,7 +1400,7 @@ zk.ncols = function (cells) {
 zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length || !zk.isRealVisible(dst))
-		return;	
+		return;
 	//Note: With Opera, we cannot use table-layout=fixed and we have to assign
 	//the table width (test case: fixed-table-header.html)	
 	var hdtable = dst.parentNode.parentNode;
@@ -1355,28 +1411,29 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 		hdtable.style.tableLayout = "auto";
 		hdtable.style.width = "";
 	}
-	var found;
-	var scOdd = getZKAttr(mate.element, "scOddRow"), dstwds = [], cacheCss = [];
-	for (var i = 0, even = true; i < srcrows.length; ++i) {
-		var row = srcrows[i];
+	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null,
+		dstwds = [], cacheCss, loadIdx = getZKAttr(mate.element, "lastLoadIdx");
+	for (var i = 0, even = true, ln = loadIdx ? $int(loadIdx) : srcrows.length, firstChild; i < ln; ++i) {
+		var row = srcrows[i], cells = row.cells;
+		if (!firstChild) firstChild = row;
+		if (!zk.isVisible(row) || getZKAttr(row, "loaded") == "false") continue;		
 		if (stripe && scOdd && zk.isVisible(row)) {
 			zk.addClass(row, scOdd, !even);
 			even = !even;
 		}
 		if(!found && getZKAttr(row, "sel") == "true") found = row;
-		var cells = row.cells;
-		for (var j = 0, z = 0; j < cells.length; ++j) {
+		for (var j = 0, z = 0, le = cells.length ; j < le; ++j) {
 			if (j < dst.cells.length) {
-				var s = cells[j], d = dst.cells[z];
+				var s = cells[j], d = dst.cells[z], cs = s.colSpan;
 				if (!zk.isVisible(d)) { //Bug #1828044
 					s.style.display = "none";
-					z += s.colSpan; // header count
+					z += cs; // header count
 					continue;
 				}
-				if (s.colSpan > 1) {
-					if (s.colSpan + z <= dst.cells.length) {
+				if (cs > 1) {
+					if (cs + z <= dst.cells.length) {
 						var unwd = [], total = 0, ttlOffset = 0;
-						for (var k = 0; k < s.colSpan; k++) {
+						for (var k = 0; k < cs; k++) {
 							var d = dst.cells[z+k];
 							if (!dstwds[z+k]) {
 								var wd =  d.style.width;
@@ -1392,8 +1449,8 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 								ttlOffset += d.offsetWidth;
 							}							
 						}
-						var uuid = $uuid(s);
-						var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
+						
+						var cell = s.firstChild;
 						if (unwd.length) {
 							var amount = s.offsetWidth - total;
 							if (amount < unwd.length * 20) {
@@ -1410,7 +1467,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 									else each = amount;
 								var wd = zk.safari ? each  : zk.revisedSize(d, each);
 								d.style.width = wd + "px";								
-								var cave = $e($uuid(d) + "!cave");
+								var cave = d.firstChild;
 								if (cave) cave.style.width = zk.revisedSize(cave, wd) + "px";
 								dstwds[z+k] = d.offsetWidth;
 								total += dstwds[z+k];
@@ -1423,45 +1480,38 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 						cell.style.width = s.style.width;	
 								
 						if (!again && i == 0 && zk.ie) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 500);															
-					}					
-				} else {
+					}				
+				} else {			
 					if (index == null || index == z) {
-						if (zk.ie || !dstwds[z] || d.offsetWidth != s.offsetWidth || zk.safari) { 
-						// Note: we have to specify the width of each column for opera.
-							if (!dstwds[z]) {
-								var wd =  d.style.width;	
-								var cell = $e($uuid(d) + "!cave");				
-								if (wd == "auto" || wd.indexOf('%') > -1) 
-									d.style.width = zk.revisedSize(d, d.offsetWidth)+ "px";
-								wd = d.style.width;
-								dstwds[z] = wd ? (zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth) :
-									zk.ie && z == dst.cells.length-1 ? s.offsetWidth - 2 : s.offsetWidth;
-								
-								var w;
-								if (!wd) {
-									w =  zk.revisedSize(d, dstwds[z]); 
-									d.style.width = w + "px";
-								} else w = $int(wd);
-								
-								if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";
-								
-							} 
+						if (!dstwds[z]) {
+							var wd = d.style.width, cell = d.firstChild, w;				
+							if (wd == "auto" || wd.indexOf('%') > -1) 
+								d.style.width = zk.revisedSize(d, d.offsetWidth)+ "px";
+							wd = d.style.width;
+							dstwds[z] = wd ? (zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth) :
+								zk.ie && z == dst.cells.length-1 ? s.offsetWidth - 2 : s.offsetWidth;
 							
-							var uuid = $uuid(s);
-							var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
-							if (!cacheCss[2] || s.className != cacheCss[2].el.className || s.style.cssText)
-								cacheCss[2] = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
-				
-							var rwd = dstwds[z] - cacheCss[2].size;
-							if (rwd < 0) rwd = 0; // #Bugs 1817636
-							s.style.width = rwd + "px";
-							if (cell) cell.style.width = s.style.width;
-							
+							if (!wd) {
+								w =  zk.revisedSize(d, dstwds[z]); 
+								d.style.width = w + "px";
+							} else w = $int(wd);
+							if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";	
+						}
+						
+						var cell = s.firstChild;
+						if (cell.id) {
+							if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
+								cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
+							var rwd = dstwds[z] - cacheCss.size;
+							rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
+							if (firstChild == row)
+								s.style.width = rwd;
+							if (cell) cell.style.width = rwd;
 						}
 					}
 					if (index == z) break;
-				}
-				z += s.colSpan; // header count
+				}				
+				z += cs; // header count
 			}
 		}		
 	}
@@ -1481,28 +1531,31 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length)
 		return;
-	for (var j = 0, k = srcrows.length; j < k; j++) {
+	for (var j = srcrows.length, cacheCss; --j >= 0;) {
 		var s = srcrows.shift();
-		var z = s.cellIndex;
-		var d = dst.cells[z];
-		var wd = 0;
-		if (s.colSpan > 1) {
-			if (s.colSpan + z <= dst.cells.length) {				
-				for (var k = 0; k < s.colSpan; k++) {
-					var hd = dst.cells[z+k];
-					wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 2 : hd.offsetWidth; 												
+		var z = zk.cellIndex(s);
+		if (dst.cells.length <= z) continue; // Bug #1852313
+		var d = dst.cells[z], wd = 0, cell = s.firstChild;
+		if (cell.id) {
+			if (s.colSpan > 1) {
+				if (s.colSpan + z <= dst.cells.length) {				
+					for (var k = 0; k < s.colSpan; k++) {
+						var hd = dst.cells[z+k];
+						wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 2 : hd.offsetWidth; 												
+					}
 				}
-			}
-		} else {
-			if (zk.mozilla)	wd += $int(d.style.width); // Bug #1826938
-			else wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
+			} else {
+				if (zk.mozilla)	wd += $int(d.style.width); // Bug #1826938
+				else wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
+			}		
+			if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
+				cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
+			var rwd = wd - cacheCss.size;
+			rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
+			if (!s.parentNode.rowIndex)
+				s.style.width = rwd;
+			if (cell) cell.style.width = rwd;
 		}
-		var uuid = $uuid(s);
-		var cell = $e(uuid + "!cell") || $e(uuid + "!cave");
-		var rwd = zk.revisedSize(s, wd);
-		s.style.width = rwd + "px";
-		if (cell) cell.style.width = s.style.width;
-		
 	}
 };
 //Number//
@@ -1524,16 +1577,16 @@ zk.parseDate = function (txt, fmt, strict) {
 	var y = val.getFullYear(), m = val.getMonth(), d = val.getDate();
 
 	var ts = txt.split(/\W+/);
-	for (var i = 0, j = 0; j < fmt.length; ++j) {
+	for (var i = 0, j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
 		if (cc == 'y' || cc == 'M' || cc == 'd' || cc == 'E') {
 			var len = 1;
-			for (var k = j; ++k < fmt.length; ++len)
+			for (var k = j; ++k < fl; ++len)
 				if (fmt.charAt(k) != cc)
 					break;
 
 			var nosep; //no separator
-			if (k < fmt.length) {
+			if (k < fl) {
 				var c2 = fmt.charAt(k);
 				nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 			}
@@ -1606,11 +1659,11 @@ zk.formatDate = function (val, fmt) {
 	if (!fmt) fmt = "yyyy/MM/dd";
 
 	var txt = "";
-	for (var j = 0; j < fmt.length; ++j) {
+	for (var j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
 		if (cc == 'y' || cc == 'M' || cc == 'd' || cc == 'E') {
 			var len = 1;
-			for (var k = j; ++k < fmt.length; ++len)
+			for (var k = j; ++k < fl; ++len)
 				if (fmt.charAt(k) != cc)
 					break;
 
@@ -1716,24 +1769,29 @@ zk.Float.prototype = {
 		if (this._ftid == id)
 			this.closeFloats();
 	},
-	/** Closes (hides) all floats.
+	/** Closes (hides) all floats unless it is an ancestor of any of arguments.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloats: function () {
-		return this._closeFloats(false, arguments);
+		return this._closeFloats(false, zkau._shallCloseBut, arguments);
 	},
 	/** Closes all floats when a component is getting the focus.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloatsOnFocus: function () {
-		return this._closeFloats(true, arguments);
+		return this._closeFloats(true, zkau._shallCloseBut, arguments);
 	},
-	_closeFloats: function (onfocus, ancestors) {
+	/** Closes all floats if it belongs to any of arguments.
+	 * @since 3.0.2
+	 */
+	closeFloatsOf: function () {
+		return this._closeFloats(false, zkau._shallCloseOf, arguments);
+	},
+	_closeFloats: function (onfocus, shallClose, ancestors) {
 		if (this._ftid) {
 			var n = $e(this._ftid);
-			if ($visible(n)
-			&& getZKAttr(n, "animating") != "hide"
-			&& (!onfocus || !zk.isAncestorX(n, ancestors, true))) {
+			if ($visible(n) && getZKAttr(n, "animating") != "hide"
+			&& (!onfocus || shallClose(n, ancestors))) {
 				this._close(n);
 				this._ftid = null;
 				return true;
@@ -1778,26 +1836,31 @@ zk.Floats.prototype = {
 			}
 		return false;
 	},
-	/** Closes (hides) all floats.
+	/** Closes (hides) all floats unless it is an ancestor of any of arguments.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloats: function () {
-		return this._closeFloats(false, arguments);
+		return this._closeFloats(false, zkau._shallCloseBut, arguments);
 	},
 	/** Closes all floats when a component is getting the focus.
 	 * @param arguments a list of components that shall be closed
 	 */
 	closeFloatsOnFocus: function () {
-		return this._closeFloats(true, arguments);
+		return this._closeFloats(true, zkau._shallCloseBut, arguments);
 	},
-	_closeFloats: function (onfocus, ancestors) {
+	/** Closes all floats if it belongs to any of arguments.
+	 * @since 3.0.2
+	 */
+	closeFloatsOf: function () {
+		return this._closeFloats(false, zkau._shallCloseOf, arguments);
+	},
+	_closeFloats: function (onfocus, shallClose, ancestors) {
 		var closed;
 		for (var j = this._ftids.length; --j >= 0;) {
 			var id = this._ftids[j];
 			var n = $e(id);
-			if ($visible(n)
-			&& getZKAttr(n, "animating") != "hide"
-			&& ((!onfocus && !this._aspps[id]) || !zk.isAncestorX(n, ancestors, true))) {
+			if ($visible(n) && getZKAttr(n, "animating") != "hide"
+			&& ((!onfocus && !this._aspps[id]) || shallClose(n, ancestors))) {
 				this._ftids.splice(j, 1);
 				this._close(n);
 				closed = true;
@@ -1808,7 +1871,7 @@ zk.Floats.prototype = {
 	/** Adds elements that we have to hide what they covers.
 	 */
 	addHideCovered: function (ary) {
-		for (var j = 0; j < this._ftids.length; ++j) {
+		for (var j = 0, fl = this._ftids.length; j < fl; ++j) {
 			var el = $e(this._ftids[j]);
 			if (el) ary.push(el);
 		}
@@ -1839,7 +1902,10 @@ zk.History = Class.create();
 zk.History.prototype = {
 	initialize: function () {
 		this.curbk = "";
-		setInterval("zkau.history.checkBookmark()", 520);
+		zk.addModuleInit(function () { // Bug #1847708
+			zkau.history.checkBookmark(); // We don't need to wait for the first time.
+			setInterval("zkau.history.checkBookmark()", 520);
+		});
 			//Though IE use history.html, timer is still required 
 			//because user might specify URL directly
 	},
@@ -2007,6 +2073,8 @@ action.hide = function (id) {
  * structure.
  */
 anima = {}
+/** @since 3.0.1 */
+anima.count = 0;
 
 /** Make a component visible by increasing the opacity.
  * @param id component or its ID
@@ -2017,6 +2085,7 @@ anima.appear = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.appear");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
 			Effect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
@@ -2032,10 +2101,65 @@ anima.slideDown = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.slideDown");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
-			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi});
+			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi, y :0});
 				//duration must be less than 0.5 since other part assumes it
+		}
+	}
+};
+/**
+ * Make a component visible by moving down.
+ * @param {Object} id
+ * @since 3.0.2
+ */
+anima.moveDown = function (id) {
+	anima.moveBy(id, 'top');
+};
+/**
+ * Make a component visible by moving right.
+ * @param {Object} id
+ * @since 3.0.2
+ */
+anima.moveRight = function (id) {
+	anima.moveBy(id, 'left');
+};
+/**
+ * Make a component visible by moving diagonal.
+ * @param {Object} id
+ * @since 3.0.2
+ */
+anima.moveDiagonal = function (id) {
+	anima.moveBy(id);
+};
+/** Make a component visible by moving.
+ * @param id component or its ID
+ * @param pos the move position. "top" means from 0 to the original top, 
+ *  "left" means from 0 to the original left.
+ * @since 3.0.2
+ */
+anima.moveBy = function (id, pos, dur) {
+	var n = $e(id);
+	if (n) {
+		if (getZKAttr(n, "animating")) {
+			zk._addAnique(n.id, "anima.moveBy");
+		} else {
+			++anima.count;
+			setZKAttr(n, "animating", "show");
+			zk._showExtr(n);  //parent visible first
+			if (!pos) pos = "topleft"
+			Effect.MoveBy(n, 0, 0, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterHide, afterSetup: function(effect) {
+				 if (pos.indexOf("left") > -1) {
+					 effect.options.x = effect.originalLeft;
+					 effect.originalLeft = 0;
+				 }
+				 if (pos.indexOf("top") > -1) {
+					 effect.options.y = effect.originalTop;
+					 effect.originalTop = 0;
+				 }
+     			 effect.element.show();
+    		}});
 		}
 	}
 };
@@ -2048,6 +2172,7 @@ anima.slideUp = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.slideUp");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.SlideUp(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterHide});
@@ -2064,6 +2189,7 @@ anima.fade = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.fade");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.Fade(n, {duration:dur ? dur/1000: 0.55, afterFinish: anima._afterHide});
@@ -2079,6 +2205,7 @@ anima.puff = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.puff");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.Puff(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
@@ -2094,16 +2221,17 @@ anima.dropOut = function (id, dur) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "anima.dropOut");
 		} else {
+			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
 			Effect.DropOut(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
 		}
 	}
 };
-
 anima._afterVisi = function (ef) {
 	var n = ef.element;
 	if (n) {
+		--anima.count;
 		rmZKAttr(n, "animating");
 		zk.onVisiAt(n);
 		zk._doAnique(n.id);
@@ -2113,6 +2241,7 @@ anima._afterHide = function (ef) {
 	var n = ef.element;
 	if (n) {
 		zk._hideExtr(n); //hide parent later
+		--anima.count;
 		rmZKAttr(n, "animating");
 		zk._doAnique(n.id);
 	}
@@ -2121,6 +2250,7 @@ anima._afterHide0 = function (ef) {
 	var n = ef.effects[0].element;
 	if (n) {
 		zk._hideExtr(n); //hide parent later
+		--anima.count;
 		rmZKAttr(n, "animating");
 		zk._doAnique(n.id);
 	}
@@ -2138,15 +2268,16 @@ zk._addAnique = function(id, funcnm) {
 zk._doAnique = function (id) {
 	var ary = zk._anique[id];
 	if (ary) {
-		var n = $e(id);
-		while (ary.length) {
+		var n = $e(id), al = ary.length;
+		while (al) {
 			if (getZKAttr(n, "animating"))
 				break;
 			var js = ary.shift();
 			eval(js+"('"+id+"')");
+			al--;
 		}
 			
-		if (!ary.length)
+		if (!al)
 			delete zk._anique[id];
 	}
 };

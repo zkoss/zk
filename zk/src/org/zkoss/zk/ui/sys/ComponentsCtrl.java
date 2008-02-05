@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Date;
+import java.net.URL;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
@@ -367,6 +368,9 @@ public class ComponentsCtrl {
 		public Component newInstance(Page page, String clsnm) {
 			throw new UnsupportedOperationException();
 		}
+		public Component newInstance(Class cls) {
+			throw new UnsupportedOperationException();
+		}
 		public void addMold(String name, String moldURI) {
 			throw new UnsupportedOperationException();
 		}
@@ -391,6 +395,9 @@ public class ComponentsCtrl {
 			return propmap != null ? propmap: new HashMap(3);
 		}
 		public AnnotationMap getAnnotationMap() {
+			return null;
+		}
+		public URL getDeclarationURL() {
 			return null;
 		}
 		public ComponentDefinition clone(LanguageDefinition langdef, String name) {

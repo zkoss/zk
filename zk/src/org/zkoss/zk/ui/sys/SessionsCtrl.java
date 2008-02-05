@@ -40,4 +40,42 @@ public class SessionsCtrl extends Sessions {
 	public static final SessionCtrl getCurrentCtrl() {
 		return (SessionCtrl)getCurrent();
 	}
+
+	/** Called when a servlet/portlet starts to serve a request.
+	 * It checks whether the number of concurrent requests per session
+	 * exceeds the number specified in
+	 * {@link org.zkoss.zk.ui.util.Configuration#getSessionMaxRequests}.
+	 * If exceeded, false is returned, and the servlet/portlet shall stop
+	 * processing and return an error code back the client.
+	 *
+	 * <p>If not exceeded, true is returned, and the servlet/portlet
+	 * can continue the processing and it shall invoke {@link #requestExit}
+	 * in the finally clause.
+	 *
+	 * @since 3.0.1
+	 */
+	public static boolean requestEnter(Session sess) {
+		final Integer v = (Integer)sess.getAttribute(ATTR_REQUEST_COUNT);
+		final int i = v != null ? v.intValue() + 1: 1;
+		final int max = sess.getWebApp().getConfiguration().getSessionMaxRequests();
+		if (max < 0 || i <= max) {
+			sess.setAttribute(ATTR_REQUEST_COUNT, new Integer(i));
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Called when a servlet/portlet completes the service of a request.
+	 * This method must be called if {@link #requestEnter} is called
+	 * and returns true. This method shall not be called, otherwise.
+	 *
+	 * @since 3.0.1
+	 */
+	public static void requestExit(Session sess) {
+		final Integer v = (Integer)sess.getAttribute(ATTR_REQUEST_COUNT);
+		final int i = v != null ? v.intValue() - 1: 0;
+		sess.setAttribute(ATTR_REQUEST_COUNT, new Integer(i >= 0 ? i: 0));
+	}
+	private static final String ATTR_REQUEST_COUNT
+		= "org.zkoss.zk.ui.sys.RequestCount";
 }

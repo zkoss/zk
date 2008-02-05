@@ -46,12 +46,14 @@ import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
+import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -175,6 +177,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_def = lookupDefinition(exec, getClass());
 			if (_def != null)
 				addSharedAnnotationMap(_def.getAnnotationMap());
+			else if ((this instanceof Macro)
+			&& System.getProperty("org.zkoss.zk.MacroNoDefinitionAllowed") == null)
+				//3.0.3: check addition prop to allow user to maintain backward compatibility
+				throw new DefinitionNotFoundException(
+					"Component definition not found for the macro "+this.getClass()
+					+". Current page definition: "
+					+(exec != null ? ""+((ExecutionCtrl)exec).getCurrentPageDefinition(): "n/a")
+					+". Current page: "
+					+(exec != null ? ""+((ExecutionCtrl)exec).getCurrentPage(): "n/a"));
 			else
 				_def = ComponentsCtrl.DUMMY;
 		}
@@ -224,7 +235,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @param cloning whether this method is called by clone()
 	 */
 	private void init(boolean cloning) {
-		_xtrl = newExtraCtrl();
 		_apiChildren = new AbstractSequentialList() {
 			public int size() {
 				return _nChild;
@@ -558,7 +568,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public String getId() {
 		if (_id == null)
-			_id = this instanceof RawId ? getUuid(): ComponentsCtrl.ANONYMOUS_ID;
+			_id = getUuid();
 		return _id;
 	}
 	public void setId(String id) {
@@ -1025,6 +1035,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void smartUpdate(String attr, String value) {
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
+	/** Smart-updates a property with a deferred value.
+	 * A deferred value is used to encapsulate a value that shall be retrieved
+	 * only in the rendering phase.
+	 *
+	 * @since 3.0.1
+	 */
+	public void smartUpdateDeferred(String attr, DeferredValue value) {
+		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
+	}
 	/** A special smart-update that update a value in int.
 	 * <p>It will invoke {@link #smartUpdate(String,String)} to update
 	 * the attribute eventually.
@@ -1391,6 +1410,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				onListenerChanged(desktop, true);
 		}
 	}
+	public Set getEventHandlerNames() {
+		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
+	}
 	private void onListenerChanged(Desktop desktop, boolean listen) {
 		if (listen) {
 			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
@@ -1517,6 +1539,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @see ComponentCtrl#getExtraCtrl
 	 */
 	public Object getExtraCtrl() {
+		if (_xtrl == null)
+			_xtrl = newExtraCtrl();
+				//3.0.3: create as late as possible so component has a chance
+				//to customize which object to instantiate
 		return _xtrl;
 	}
 	/** Used by {@link #getExtraCtrl} to create a client control.

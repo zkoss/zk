@@ -16,6 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.hibernate;
 
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.lang.JVMs;
 
@@ -37,12 +41,22 @@ import org.hibernate.cfg.AnnotationConfiguration;
  *  &lt;/session-factory>
  * </code><pre>
  *
+ * <p>Since ZK 3.0.1, if your hibernate configuration file name is not the default "hibernate.cfg.xml", you can 
+ * specify it in WEB-INF/zk.xml. Just add following lines:
+ * <pre><code>
+ *	&lt;preference>
+ *	&lt;name>HibernateUtil.config&lt;/name>
+ *	&lt;value>YOUR-HIBERNATE-FILENAME&lt;/value>
+ * </code></pre>
+ * </p>
+ 
  * <p> Also notice that the zkplus.jar must be put under application's WEB-INF/lib because
  * the SessionFactory is stored as a class static member.
  *
  * @author henrichen
  */
 public class HibernateUtil {
+	public static String CONFIG = "HibernateUtil.config";
 	private static final Log log = Log.lookup(HibernateUtil.class);
 	
 	private static SessionFactory _factory;
@@ -51,7 +65,7 @@ public class HibernateUtil {
 	 * Get the singleton hibernate Session Factory.
 	 */
 	public static SessionFactory getSessionFactory() {
-		return initSessionFactory();
+		return initSessionFactory((WebApp)null);
 	}
 	
 	/**
@@ -71,16 +85,48 @@ public class HibernateUtil {
 	/**
 	 * Used in {@link HibernateSessionFactoryListener} to init
 	 * Hibernate SessionFactory.
+	 * @deprecated Use {@link #initSessionFactory(WebApp app)} instead.
 	 */
 	/* package */ static SessionFactory initSessionFactory() {
+		return initSessionFactory((WebApp)null);
+	}
+	 /**
+	 * Used in {@link HibernateSessionFactoryListener} to init
+	 * Hibernate SessionFactory.
+	 * @param app web applicaton, given null will try to get it from current Execution.
+	 * @since 3.0.1
+	 */
+	/* package */ static SessionFactory initSessionFactory(WebApp app) {
+		if (_factory == null) {
+			//read hibernate.config preference
+			if (app == null) {
+				final Execution exec = Executions.getCurrent();
+				if (exec != null) {
+					final Desktop desktop = exec.getDesktop();
+					if (desktop != null) {
+						app = desktop.getWebApp();
+					}
+				}
+			}
+			String resource = null;
+			if (app != null) {
+				final org.zkoss.zk.ui.util.Configuration config = app.getConfiguration();
+				resource = config.getPreference(CONFIG, null);
+			}
+			return initSessionFactory(resource);
+		}
+		return _factory;
+	}
+	/*package*/ static SessionFactory initSessionFactory(String resource) {
 		if (_factory == null) {
 			try {
 			    // Create the SessionFactory per JavaVM version and allow JDK 1.4 compatibility
-					if (JVMs.isJava5()) {
-				    _factory = java5Factory();
-				  } else {
-				  	_factory = java4Factory();
-				  }
+				if (JVMs.isJava5()) {
+				    _factory = java5Factory(resource);
+				} else {
+				  	_factory = java4Factory(resource);
+				}
+				log.info("Hibernate configuration file loaded: "+ (resource == null ? "hibernate.cfg.xml" : resource));
 			} catch (Throwable ex) {
 			    // Make sure you log the exception, as it might be swallowed
 			    log.error("Initial SessionFactory creation failed." + ex);
@@ -93,11 +139,15 @@ public class HibernateUtil {
 	//We have to put the instantiation of AnnotationConfiguration
 	//in a separate method. Otherwise, it will be loaded even if
 	//isJava5 is false
-	/*private*/ static SessionFactory java5Factory() {
-		return new AnnotationConfiguration().configure().buildSessionFactory();
+	/*private*/ static SessionFactory java5Factory(String resource) {
+		return resource == null ? 
+			new AnnotationConfiguration().configure().buildSessionFactory() :
+			new AnnotationConfiguration().configure(resource).buildSessionFactory();
 	}  
-	/*private */ static SessionFactory java4Factory() {
-		return new Configuration().configure().buildSessionFactory();
+	/*private */ static SessionFactory java4Factory(String resource) {
+		return resource == null ?
+			new Configuration().configure().buildSessionFactory() :
+			new Configuration().configure(resource).buildSessionFactory();
 	}
 
 	/**

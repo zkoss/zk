@@ -54,8 +54,8 @@ public class Classes {
 	private static final Log log = Log.lookup(Classes.class);
 
 	/**
-	 * Creates and intializes a new instance of the specified class with
-	 * the specified arguments.
+	 * Instantiates a new instance of the specified class with
+	 * the specified arguments and argument types.
 	 *
 	 * <p>Note only public constructors are searched.
 	 *
@@ -74,17 +74,57 @@ public class Classes {
 	public static final
 	Object newInstance(Class cls, Class[] argTypes, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
-	InvocationTargetException {
-	 	Constructor contr = cls.getConstructor(argTypes);
-	 	try {
-	 		return contr.newInstance(args);
-	 	} catch (IllegalAccessException ex) {
-	 		throw SystemException.Aide.wrap(ex);
-	 	}
+	InvocationTargetException, IllegalAccessException {
+ 		return cls.getConstructor(argTypes).newInstance(args);
+	}
+	/**
+	 * Instantiates a new instance of the specified class with the
+	 * specified argument.
+	 *
+	 * <p>It searches all contructor for the first one that matches
+	 * the specified arguments.
+	 * @since 3.0.1
+	 */
+	public static final
+	Object newInstance(Class cls, Object[] args)
+	throws NoSuchMethodException, InstantiationException,
+	InvocationTargetException, IllegalAccessException {
+		if (args == null || args.length == 0)
+			return cls.newInstance();
+
+		final Constructor[] cs = cls.getConstructors();
+		for (int j = 0; j < cs.length; ++j) {
+			final Class[] types = cs[j].getParameterTypes();
+			if (types.length == args.length) {
+				for (int k = args.length;;) {
+					if (--k < 0)
+						return cs[j].newInstance(args);
+
+					final Object arg = args[k];
+					final Class type = types[k];
+					if (arg == null)
+						if (type.isPrimitive()) break; //mismatch
+						else continue; //match
+
+					if (type.isInstance(arg)) continue; //match
+					if (!type.isPrimitive()
+					|| !Primitives.toWrapper(type).isInstance(arg))
+						break; //mismatch
+				}
+			}
+		}
+
+		final StringBuffer sb = new StringBuffer(80)
+			.append("No contructor compatible with ");
+		for (int j = 0; j < args.length; ++j)
+			sb.append(j != 0 ? ", ": "[")
+				.append(args[j] != null ? args[j].getClass().getName(): null);
+		throw new NoSuchMethodException(
+			sb.append("] in ").append(cls.getName()).toString());
 	}
 
 	/**
-	 * Creates and initializes a new instance of the specified class name
+	 * Instantiates a new instance of the specified class name
 	 * with the specified arguments.
 	 *
 	 * <p>It uses Class.forName to get the class.
@@ -105,7 +145,7 @@ public class Classes {
 	public static final Object
 	newInstance(String clsName, Class[] argTypes, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
-	InvocationTargetException, ClassNotFoundException {
+	InvocationTargetException, ClassNotFoundException, IllegalAccessException {
 	 	return newInstance(Class.forName(clsName), argTypes, args);
 	}
 	/**
@@ -130,7 +170,7 @@ public class Classes {
 	public static final Object
 	newInstanceByThread(String clsName, Class[] argTypes, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
-	InvocationTargetException, ClassNotFoundException {
+	InvocationTargetException, ClassNotFoundException, IllegalAccessException {
 	 	return newInstance(forNameByThread(clsName), argTypes, args);
 	}
 	/**
@@ -139,7 +179,7 @@ public class Classes {
 	 */
 	public static final Object newInstanceByThread(String clsName)
 	throws NoSuchMethodException, InstantiationException,
-	InvocationTargetException, ClassNotFoundException {
+	InvocationTargetException, ClassNotFoundException, IllegalAccessException {
 		return newInstance(forNameByThread(clsName), null, null);
 	}
 	/**

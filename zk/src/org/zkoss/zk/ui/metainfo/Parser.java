@@ -140,8 +140,7 @@ public class Parser {
 	public PageDefinition parse(Document doc, String extension)
 	throws Exception {
 		//1. parse the page and import directive if any
-		final List pis = new LinkedList();
-		final List imports = new LinkedList();
+		final List pis = new LinkedList(), imports = new LinkedList();
 		String lang = null;
 		for (Iterator it = doc.getChildren().iterator(); it.hasNext();) {
 			final Object o = it.next();
@@ -163,10 +162,12 @@ public class Parser {
 			} else if ("import".equals(target)) { //import
 				final Map params = pi.parseData();
 				final String src = (String)params.remove("src");
+				final String dirs = (String)params.remove("directives");
 				if (!params.isEmpty())
 					log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 				noELnorEmpty("src", src, pi);
-				imports.add(src);
+				noEL("directives", dirs, pi);
+				imports.add(new String[] {src, dirs});
 			} else {
 				pis.add(pi);
 			}
@@ -185,12 +186,13 @@ public class Parser {
 				new RequestInfoImpl(_wapp, null, null, null, _locator);
 			final UiFactory uf = ((WebAppCtrl)_wapp).getUiFactory();
 			for (Iterator it = imports.iterator(); it.hasNext();) {
-				final String path = (String)it.next();
+				final String[] imprt = (String[])it.next();
+				final String path = imprt[0], dirs = imprt[1];
 				try {
 					final PageDefinition pd = uf.getPageDefinition(ri, path);
 					if (pd == null)
 						throw new UiException("Import page not found: "+path);
-					pgdef.imports(pd);
+					pgdef.imports(pd, parseToArray(dirs));
 				} catch (PotentialDeadLockException ex) {
 					throw new UiException("Recursive import: "+path, ex);
 				}
@@ -214,6 +216,14 @@ public class Parser {
 			throw new ClassNotFoundException("Class not found: "+clsnm, ex);
 		}
 	}
+	/** Parses a list of string separated by comma, into a String array.
+	 */
+	private static String[] parseToArray(String s) {
+		if (s == null)
+			return null;
+		Collection ims = CollectionsX.parse(null, s, ',', false);
+		return (String[])ims.toArray(new String[ims.size()]);
+	}
 
 	//-- derive to override --//
 	/** returns locator for locating resources. */
@@ -235,13 +245,21 @@ public class Parser {
 			final String clsnm = (String)params.remove("class");
 			if (isEmpty(clsnm))
 				throw new UiException("The class attribute is required, "+pi.getLocator());
+
+			final List args = new LinkedList();
+			for (int j = 0;; ++j) {
+				final String arg = (String)params.remove("arg" + j);
+				if (arg == null) break;
+				args.add(arg);
+			}
+
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 
 			pgdef.addVariableResolverInfo(
 				clsnm.indexOf("${") >= 0 ? //class supports EL
-					new VariableResolverInfo(clsnm):
-					new VariableResolverInfo(locateClass(clsnm)));
+					new VariableResolverInfo(clsnm, args):
+					new VariableResolverInfo(locateClass(clsnm), args));
 		} else if ("component".equals(target)) { //declare a component
 			parseComponentDirective(pgdef, pi, params);
 		} else if ("taglib".equals(target)) {
@@ -266,6 +284,15 @@ public class Parser {
 				final Map.Entry me = (Map.Entry)it.next();
 				pgdef.setRootAttribute((String)me.getKey(), (String)me.getValue());
 			}
+		} else if ("forward".equals(target)) { //forward
+			final String uri = (String)params.remove("uri");
+			final String ifc = (String)params.remove("if");
+			final String unless = (String)params.remove("unless");
+			if (!params.isEmpty())
+				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+			noEmpty("uri", uri, pi);
+			pgdef.addForwardInfo(
+				new ForwardInfo(uri, ConditionImpl.getInstance(ifc, unless)));
 		} else if ("import".equals(target)) { //import
 			throw new UiException("The import directive can be used only at the top level, "+pi.getLocator());
 		} else {
@@ -660,11 +687,11 @@ public class Parser {
 					}
 
 					//process use first because addProperty needs it
-					final String use = el.getAttributeValue("use");
+					String use = el.getAttributeValue("use");
 					if (use != null) {
-						noEmpty("use", use, el);
-						noEL("use", use, el);
-						compInfo.setImplementationClass(use);
+						use = use.trim();
+						if (use.length() != 0)
+							compInfo.setImplementationClass(use);
 							//Resolve later since might defined in zscript
 					}
 				}

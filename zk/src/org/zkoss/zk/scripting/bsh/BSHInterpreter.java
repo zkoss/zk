@@ -32,6 +32,7 @@ import bsh.EvalError;
 import bsh.UtilEvalError;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.Function;
 
 import org.zkoss.zk.ui.Page;
@@ -72,6 +73,25 @@ implements SerializableAware, HierachicalAware {
 
 	public BSHInterpreter() {
 	}
+
+	//Deriving to override//
+	/** Called when the top-level BeanShell namespace is created.
+	 * By default, it does nothing.
+	 *
+	 * <p>Note: to speed up the performance, this implementation
+	 * disabled {@link bsh.NameSpace#loadDefaultImports}.
+	 * It only imports the java.lang and java.util packages.
+	 * If you want the built command and import packages, you can override
+	 * this method. For example,
+	 * <pre><code>
+	 *protected void loadDefaultImports(NameSpace bshns) {
+	 *  bshns.importCommands("/bsh/commands");
+	 *}</code></pre>
+	 *
+	 * @since 3.0.2
+	 */
+    protected void loadDefaultImports(NameSpace bshns) {
+    }
 
 	//GenericInterpreter//
 	protected void exec(String script) {
@@ -182,7 +202,7 @@ implements SerializableAware, HierachicalAware {
 		_ip = new bsh.Interpreter();
 		_ip.setClassLoader(Thread.currentThread().getContextClassLoader());
 
-		_bshns = new GlobalNS(null, _ip.getClassManager(), "global");
+		_bshns = new GlobalNS(_ip.getClassManager(), "global");
 		_ip.setNameSpace(_bshns);
 	}
 	public void destroy() {
@@ -198,6 +218,16 @@ implements SerializableAware, HierachicalAware {
 		_ip = null;
 		_bshns = null;
 		super.destroy();
+	}
+
+	/** Returns the native interpreter, or null if it is not initialized
+	 * or destroyed.
+	 * From application's standpoint, it never returns null, and the returned
+	 * object must be an instance of {@link bsh.Interpreter}
+	 * @since 3.0.2
+	 */
+	public Object getNativeInterpreter() {
+		return _ip;
 	}
 
 	public Class getClass(String clsnm) {
@@ -240,20 +270,31 @@ implements SerializableAware, HierachicalAware {
 		ns.setVariable(VAR_NS, new NSX(bshns), true);
 		return bshns;
 	}
+	/** Prepares the namespace for detached components. */
+	private static NameSpace prepareDetachedNS(Namespace ns) {
+		NSX nsx = (NSX)ns.getVariable(VAR_NS, true);
+		if (nsx != null)
+			return nsx.ns;
+
+		//bind bshns and ns
+		Namespace p = ns.getParent();
+		NameSpace bshns = new NS(p != null ? prepareDetachedNS(p): null, null, ns);
+		ns.setVariable(VAR_NS, new NSX(bshns), true);
+		return bshns;
+	}
 
 	//supporting classes//
 	/** The global namespace. */
-	private class GlobalNS extends NameSpace {
+	private static abstract class AbstractNS extends NameSpace {
 		private boolean _inGet;
 
-	    protected GlobalNS(NameSpace parent, BshClassManager classManager,
+	    protected AbstractNS(NameSpace parent, BshClassManager classManager,
 	    String name) {
 	    	super(parent, classManager, name);
 	    }
 
-		protected Object getFromNamespace(String name) {
-			return BSHInterpreter.this.getFromNamespace(name);
-		}
+		/** Deriver has to override this method. */
+		abstract protected Object getFromNamespace(String name);
 
 		//super//
 		protected Variable getVariableImpl(String name, boolean recurse)
@@ -290,8 +331,21 @@ implements SerializableAware, HierachicalAware {
 	    	 //to speed up the formance
 	    }
 	}
+	/** The global NameSpace. */
+	private class GlobalNS extends AbstractNS {
+	    private GlobalNS(BshClassManager classManager,
+	    String name) {
+	    	super(null, classManager, name);
+	    }
+		protected Object getFromNamespace(String name) {
+			return BSHInterpreter.this.getFromNamespace(name);
+		}
+	    public void loadDefaultImports() {
+	    	BSHInterpreter.this.loadDefaultImports(this);
+	    }
+	}
 	/** The per-Namespace NameSpace. */
-	private class NS extends GlobalNS {
+	private static class NS extends AbstractNS {
 		private final Namespace _ns;
 
 		private NS(NameSpace parent, BshClassManager classManager, Namespace ns) {
@@ -300,14 +354,29 @@ implements SerializableAware, HierachicalAware {
 			_ns.addChangeListener(new NSCListener(this));
 		}
 
+		//super//
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
-			return BSHInterpreter.this.getFromNamespace(_ns, name);
+			final BSHInterpreter ip = getInterpreter();
+			return ip != null ? ip.getFromNamespace(_ns, name):
+				_ns.getVariable(name, false);
+		}
+		private BSHInterpreter getInterpreter() {
+			Page owner = _ns.getOwnerPage();
+			if (owner != null) {
+				for (Iterator it = owner.getLoadedInterpreters().iterator();
+				it.hasNext();) {
+					final Object ip = it.next();
+					if (ip instanceof BSHInterpreter)
+						return (BSHInterpreter)ip;
+				}
+			}
+			return null;
 		}
 	}
-	private class NSCListener implements NamespaceChangeListener {
-		private final NameSpace _bshns;
-		private NSCListener(NameSpace bshns) {
+	private static class NSCListener implements NamespaceChangeListener {
+		private final NS _bshns;
+		private NSCListener(NS bshns) {
 			_bshns = bshns;
 		}
 		public void onAdd(String name, Object value) {
@@ -315,10 +384,17 @@ implements SerializableAware, HierachicalAware {
 		public void onRemove(String name) {
 		}
 		public void onParentChanged(Namespace newparent) {
-			_bshns.setParent(
-				newparent != null ? prepareNS(newparent): null);
+			if (newparent != null) {
+				final BSHInterpreter ip = _bshns.getInterpreter();
+				_bshns.setParent(
+					ip != null ? ip.prepareNS(newparent):
+						prepareDetachedNS(newparent));
+				return;
+			}
+
+			_bshns.setParent(null);
 		}
-	};
+	}
 	/** Non-serializable namespace. It is used to prevent itself from
 	 * being serialized
 	 */
@@ -359,7 +435,7 @@ implements SerializableAware, HierachicalAware {
 				try {
 					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
 					acs = f.isAccessible();
-					f.setAccessible(true);
+					Fields.setAccessible(f, true);
 					final Object old = f.get(mtds[j]);
 					try {
 						f.set(mtds[j], null);				
@@ -372,7 +448,7 @@ implements SerializableAware, HierachicalAware {
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 				} finally {
-					if (f != null) f.setAccessible(acs);
+					if (f != null) Fields.setAccessible(f, acs);
 				}
 			}
 		}
@@ -384,7 +460,7 @@ implements SerializableAware, HierachicalAware {
 		try {
 			f = Classes.getAnyField(NameSpace.class, "importedClasses");
 			acs = f.isAccessible();
-			f.setAccessible(true);
+			Fields.setAccessible(f, true);
 			final Map clses = (Map)f.get(_bshns);
 			if (clses != null)
 				for (Iterator it = clses.values().iterator(); it.hasNext();) {
@@ -397,7 +473,7 @@ implements SerializableAware, HierachicalAware {
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (f != null) f.setAccessible(acs);
+			if (f != null) Fields.setAccessible(f, acs);
 		}
 		s.writeObject(null); //denote end-of-cls
 
@@ -407,7 +483,7 @@ implements SerializableAware, HierachicalAware {
 		try {
 			f = Classes.getAnyField(NameSpace.class, "importedPackages");
 			acs = f.isAccessible();
-			f.setAccessible(true);
+			Fields.setAccessible(f, true);
 			final Collection pkgs = (Collection)f.get(_bshns);
 			if (pkgs != null)
 				for (Iterator it = pkgs.iterator(); it.hasNext();) {
@@ -421,7 +497,7 @@ implements SerializableAware, HierachicalAware {
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (f != null) f.setAccessible(acs);
+			if (f != null) Fields.setAccessible(f, acs);
 		}
 		s.writeObject(null); //denote end-of-cls
 	}
@@ -445,12 +521,12 @@ implements SerializableAware, HierachicalAware {
 				try {
 					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
 					acs = f.isAccessible();
-					f.setAccessible(true);
+					Fields.setAccessible(f, true);
 					f.set(mtd, _bshns);				
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 				} finally {
-					if (f != null) f.setAccessible(acs);
+					if (f != null) Fields.setAccessible(f, acs);
 				}
 
 				_bshns.setMethod(mtd.getName(), mtd);

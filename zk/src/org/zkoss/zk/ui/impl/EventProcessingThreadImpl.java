@@ -29,11 +29,14 @@ import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 
 /** Thread to handle events.
@@ -63,6 +66,8 @@ implements EventProcessingThread {
 	private List _evtThdSuspends;
 	/** Result of the result. */
 	private Throwable _ex;
+	/** Whether the execution is activated. */
+	private boolean _acted;
 
 	private static int _nThd, _nBusyThd;
 
@@ -102,6 +107,24 @@ implements EventProcessingThread {
 	}
 	public final Component getComponent() {
 		return _proc.getComponent();
+	}
+	public void sendEvent(final Component comp, Event event)
+	throws Exception {
+//		if (log.finerable()) log.finer("Process sent event: "+event);
+		if (event == null || comp == null)
+			throw new IllegalArgumentException("Both comp and event must be specified");
+		if (!(Thread.currentThread() instanceof EventProcessingThreadImpl))
+			throw new IllegalStateException("Only callable when processing an event");
+
+		final EventProcessor oldproc = _proc;
+		_proc = new EventProcessor(_proc.getDesktop(), comp, event);
+		try {
+			setup();
+			process0();
+		} finally {
+			_proc = oldproc;
+			setup();
+		}
 	}
 
 	//extra utilities//
@@ -175,7 +198,13 @@ implements EventProcessingThread {
 		try {
 			synchronized (_suspmutex) {
 				_suspended = true;
-				cleanup(false); //Bug 1814298: need to call Execution.onDeactive
+
+				//Bug 1814298: need to call Execution.onDeactivate
+				Execution exec = getExecution();
+				if (exec != null) {
+					((ExecutionCtrl)exec).onDeactivate();
+					_acted = false;
+				}
 
 				//let the main thread continue
 				synchronized (_evtmutex) {
@@ -192,7 +221,13 @@ implements EventProcessingThread {
 		if (_ceased != null)
 			throw new InterruptedException(_ceased);
 
+		//being resumed
 		setup();
+		Execution exec = getExecution();
+		if (exec != null) {
+			((ExecutionCtrl)exec).onActivate();
+			_acted = true;
+		}
 
 		final List resumes = _evtThdResumes;
 		_evtThdResumes = null;
@@ -202,6 +237,11 @@ implements EventProcessingThread {
 					resumes, getComponent(), getEvent());
 				//FUTURE: how to propogate errors to the client
 		}
+	}
+	private Execution getExecution() {
+		Execution exec = _proc.getDesktop().getExecution();
+		return exec != null ? exec: Executions.getCurrent();
+			//just in case that the execution is dead first
 	}
 	/** Resumes this thread and returns only if the execution (being suspended
 	 * by {@link #doSuspend}) completes.
@@ -333,13 +373,10 @@ implements EventProcessingThread {
 	synchronized private void setup() {
 		_proc.setup();
 	}
-	/** Cleanup for execution.
-	 * @param end whether it is done (or suspended)
-	 */
-	synchronized private void cleanup(boolean end) {
+	/** Cleanup for execution. */
+	synchronized private void cleanup() {
 		_proc.cleanup();
-		if (end)
-			_proc = null;
+		_proc = null;
 	}
 	private void checkError() {
 		if (_ex != null) { //failed to process
@@ -361,12 +398,19 @@ implements EventProcessingThread {
 						_proc.getDesktop().getWebApp().getConfiguration();
 					boolean cleaned = false;
 					++_nBusyThd;
+					Execution exec = null;
 					try {
 //						if (log.finerable()) log.finer("Processing event: "+_proc);
 
 						Locales.setThreadLocal(_locale);
 						TimeZones.setThreadLocal(_timeZone);
+
 						setup();
+						exec = getExecution();
+						if (exec != null) {
+							((ExecutionCtrl)exec).onActivate();
+							_acted = true;
+						}
 
 						final boolean b = config.invokeEventThreadInits(
 							_evtThdInits, getComponent(), getEvent());
@@ -382,7 +426,10 @@ implements EventProcessingThread {
 						if (!cleaned) newEventThreadCleanups(config, _ex);
 
 //						if (log.finerable()) log.finer("Real processing is done: "+_proc);
-						cleanup(true);
+						if (exec != null && _acted) //_acted is false if suspended is killed
+							((ExecutionCtrl)exec).onDeactivate();
+						cleanup();
+
 						Locales.setThreadLocal(_locale = null);
 						TimeZones.setThreadLocal(_timeZone = null);
 					}
@@ -428,27 +475,6 @@ implements EventProcessingThread {
 			//propogate back the first exception
 	}
 
-	/** Sends the specified component and event and processes the event
-	 * synchronously. Used to implements {@link org.zkoss.zk.ui.event.Events#sendEvent}.
-	 */
-	public void sendEvent(final Component comp, Event event)
-	throws Exception {
-//		if (log.finerable()) log.finer("Process sent event: "+event);
-		if (event == null || comp == null)
-			throw new IllegalArgumentException("Both comp and event must be specified");
-		if (!(Thread.currentThread() instanceof EventProcessingThreadImpl))
-			throw new IllegalStateException("Only callable when processing an event");
-
-		final EventProcessor oldproc = _proc;
-		_proc = new EventProcessor(_proc.getDesktop(), comp, event);
-		try {
-			setup();
-			process0();
-		} finally {
-			_proc = oldproc;
-			setup();
-		}
-	}
 	/** Processes the component and event.
 	 */
 	private void process0() throws Exception {

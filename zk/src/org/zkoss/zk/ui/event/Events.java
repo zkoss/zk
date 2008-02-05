@@ -33,9 +33,10 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
-import org.zkoss.zk.ui.impl.EventProcessingThreadImpl;
 import org.zkoss.zk.ui.impl.EventProcessor;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.out.AuEcho;
+import org.zkoss.zk.ui.util.Clients;
 
 /**
  * Utilities to handle events.
@@ -251,7 +252,7 @@ public class Events {
 			return; //done
 
 		final Thread thd = (Thread)Thread.currentThread();
-		if (!(thd instanceof EventProcessingThreadImpl)) {
+		if (!(thd instanceof EventProcessingThread)) {
 			if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
 				final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 				final Page page = execCtrl.getCurrentPage();
@@ -272,7 +273,7 @@ public class Events {
 		}
 
 		try {
-			((EventProcessingThreadImpl)thd).sendEvent(comp, event);
+			((EventProcessingThread)thd).sendEvent(comp, event);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -286,9 +287,16 @@ public class Events {
 	}
 
 	/** Posts an event.
+	 * The event is placed at the end of the event queue.
+	 * It will be processed after all other events are processed.
+	 *
+	 * <p>On the other hand, the event sent by {@link #sendEvent} is processed
+	 * immediately without posting it to the queue.
 	 *
 	 * <p>Note: if the target of an event is not attached to
 	 * the page yet, the event is ignored silently.
+	 * @see #sendEvent
+	 * @see #echoEvent
 	 */
 	public static final void postEvent(Event event) {
 		Executions.getCurrent().postEvent(event);
@@ -299,5 +307,31 @@ public class Events {
 		if (name == null || name.length() == 0 || target == null)
 			throw new IllegalArgumentException("null");
 		postEvent(new Event(name, target, data));
+	}
+
+	/** Echos an event.
+	 * By echo we mean the event is fired after the client receives the AU
+	 * responses and then echoes back.
+	 * In others, the event won't be execute in the current execution.
+	 * Rather, it executes after the client receives the AU responses
+	 * and then echoes back the event back.
+	 *
+	 * <p>It is usually if you want to prompt the user before doing a long
+	 * operartion. A typical case is to open a hightlighted window to
+	 * prevent the user from clicking any button before the operation gets done.
+	 *
+	 * @since 3.0.2
+	 * @see #sendEvent
+	 * @see #echoEvent
+	 * @param name the event name, such as onSomething
+	 * @param target the component to receive the event (never null).
+	 * @param data the extra information, or null if not available.
+	 * It will become {@link Event#getData}.
+	 */
+	public static final void echoEvent(String name, Component target, String data) {
+		if (name == null || name.length() == 0 || target == null)
+			throw new IllegalArgumentException();
+
+		Clients.response(new AuEcho(target, name, data));
 	}
 }

@@ -6,3 +6,4 @@
 ../dist/lib/zkex.jar
 ../dist/lib/ext/hibernate3.jar
 ../dist/lib/ext/servlet-api.jar
+../dist/lib/ext/jasperreports.jar

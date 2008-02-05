@@ -39,10 +39,24 @@ public class HTMLs {
 			sb.append(' ').append(name).append("=\"")
 				.append(XMLs.encodeAttribute(val)).append('"');
 	}
-	/** Appends an attribute to the string buffer for HTML/XML (name="val").
+	/** Appends an attribute with a int value to the string buffer for HTML/XML (name="val").
 	 */
 	public static final
 	void appendAttribute(StringBuffer sb, String name, int val) {
+		sb.append(' ').append(name).append("=\"").append(val).append('"');
+	}
+	/** Appends an attribute with a long value to the string buffer for HTML/XML (name="val").
+	 * @since 3.0.2
+	 */
+	public static final
+	void appendAttribute(StringBuffer sb, String name, long val) {
+		sb.append(' ').append(name).append("=\"").append(val).append('"');
+	}
+	/** Appends an attribute with a short value to the string buffer for HTML/XML (name="val").
+	 * @since 3.0.2
+	 */
+	public static final
+	void appendAttribute(StringBuffer sb, String name, short val) {
 		sb.append(' ').append(name).append("=\"").append(val).append('"');
 	}
 	/** Appends an attribute to the string buffer for HTML/XML (name="val").

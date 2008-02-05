@@ -19,7 +19,15 @@ stamp=$(date +%Y-%m-%d)
 
 target=$1
 
-javadocdir=$(grep '^javadoc' build.setting.local)
+setting=build.setting.local
+if [ ! -f $setting ] ; then
+	setting=build.setting
+	if [ ! -f $setting ] ; then
+		echo $setting must be specified
+		exit 1
+	fi
+fi
+javadocdir=$(grep '^javadoc' $setting)
 javadocdir=${javadocdir#javadoc=}
 if [ "$javadocdir" = "" ] ; then
 	echo javadoc must be specified in $setting
@@ -37,7 +45,7 @@ if [ ! -d "$docdir" ] ; then
 	exit 1
 fi
 
-ver=$(grep '^version=' build.setting.local)
+ver=$(grep '^version=' $setting)
 ver=${ver#version=}
 
 #jar
@@ -69,7 +77,7 @@ maindir="$(pwd)"
 echo "Working directory $maindir"
 
 #build *-all.war *-all.ear
-if [ "$target" == "official" ]  ; then
+if [ "$target" == "official" ] ; then
 	rm -rf dist/lib/zkdemo*.war dist/lib/zkdemos*.ear
 	cp -f zkdemo/war.libs.all zkdemo/war.libs
 	./build clean zkdemo zkdemos
@@ -108,7 +116,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd /tmp/zk/$srcnm
 	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug
 	rm -rf zml/debug zkex/debug zkmax/debug zkplus/debug
-	#find -name CVS | xargs rm -rf
 	find -name .svn | xargs rm -rf
 
 	cd /tmp/zk
@@ -154,10 +161,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mv *-sources.jar ..
 	cd ..
 	rm -rf src
-fi
 
-#Prepare the binary release
-if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	#Prepare the binary release
 	mkdir -p /tmp/zk/$binnm/dist/lib/ext
 	mkdir -p /tmp/zk/$binnm/dist/lib/zkforge
 	mkdir -p /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
@@ -167,10 +172,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cd $maindir
 	mv -f /tmp/zk/*-sources.jar /tmp/zk/$binnm/dist/src
-	#cp dist/lib/ext/commons-el.jar /tmp/zk/$binnm/dist/lib/ext
-		#Apache JSP 2.0 EL
-	#cp dist/lib/ext/el-api.jar dist/lib/ext/jasper-el.jar /tmp/zk/$binnm/dist/lib/ext
-		#Apache JSP 2.1 EL
 	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar /tmp/zk/$binnm/dist/lib/ext
 		#Fileupload
 	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$binnm/dist/lib/ext
@@ -189,17 +190,14 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#MVEL
 	cp dist/lib/ext/ognl.jar /tmp/zk/$binnm/dist/lib/ext
 		#OGNL
+	cp dist/lib/ext/jasperreports.jar dist/lib/ext/itext.jar dist/lib/ext/jxl.jar dist/lib/ext/poi.jar dist/lib/ext/commons-collections.jar dist/lib/ext/commons-logging.jar /tmp/zk/$binnm/dist/lib/ext
+		#JasperReport
 
 	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
-
-#	if [ "$target" == "daily" ] ; then
-#		cp dist/lib/zuljsp.jar /tmp/zk/$binnm/dist/lib/zkforge
-#		cp -rp zuljsp/src/archive/META-INF/*.tld /tmp/zk/$binnm/dist/WEB-INF/tld/jsp/zul
-#	fi
 
 	if [ -d dist/export/WEB-INF ] ; then
 		cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
@@ -272,6 +270,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#Ouput ${stdnm}
 		cd $binnm/dist/lib/ext
 		rm -rf jcommon.jar jfreechart.jar Filters.jar
+		rm -rf jasperreports.jar itext.jar jxl.jar poi.jar commons-collections.jar commons-logging.jar
 
 		cd ..
 		rm zml.jar
@@ -303,8 +302,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	echo Output ${javadocnm}.zip
 	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zml zkex zkmax zkplus
 	mv ${javadocnm}.zip /tmp/zk
-fi
-if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+
 	mkdir -p /tmp/zk/$demonm/zkdemo/WebContent
 	mkdir -p /tmp/zk/$demonm/zkdemo/src/org
 	mkdir -p /tmp/zk/$demonm/MyApp/WebContent
@@ -317,11 +315,13 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zkdemo/src/org/* /tmp/zk/$demonm/zkdemo/src/org
 	cp -rp MyApp/src/archive/* /tmp/zk/$demonm/MyApp/WebContent
 	cp zkdoc/COPYING zkdoc/release-note /tmp/zk/$demonm/doc
-	cp -rp dist/lib/zkdemo.war /tmp/zk/$demonm
+
+	cp dist/lib/zkdemo.war /tmp/zk/$demonm/zkdemo-min.war
 
 	if [ "$target" == "official" ] ; then
-		cp -rp dist/lib/zkdemo.war /tmp/zk/$demonm
-		mv dist/lib/zkdemos.ear dist/lib/zkdemos-all.ear dist/lib/zkdemo-all.war /tmp/zk/$demonm
+		mv dist/lib/zkdemos.ear /tmp/zk/$demonm/zkdemos-min.ear
+		mv dist/lib/zkdemo-all.war /tmp/zk/$demonm/zkdemo.war
+		mv dist/lib/zkdemos-all.ear /tmp/zk/$demonm/zkdemos.ear
 	fi
 
 	cd /tmp/zk
@@ -343,7 +343,7 @@ if [ "$target" == "official" ]; then
 	done
 
 	cd /tmp/zk/doc
-	cp -rP $docdir/devref $docdir/devguide .
+	cp -rP $docdir/devref $docdir/devguide $docdir/devref-single $docdir/devguide-single .
 	find -name .svn | xargs rm -rf
 
 	echo Output zk-devref-$ver.zip
@@ -355,12 +355,27 @@ if [ "$target" == "official" ]; then
 	mv devguide zk-devguide-$ver
 	zip -qr9 zk-devguide-$ver.zip zk-devguide-$ver
 	rm -rf zk-devguide-$ver
+
+	echo Output zk-devref-single-$ver.zip
+	mv devref-single zk-devref-single-$ver
+	zip -qr9 zk-devref-single-$ver.zip zk-devref-single-$ver
+	rm -rf zk-devref-single-$ver
+
+	echo Output zk-devguide-single-$ver.zip
+	mv devguide-single zk-devguide-single-$ver
+	zip -qr9 zk-devguide-single-$ver.zip zk-devguide-single-$ver
+	rm -rf zk-devguide-single-$ver
 elif [ "$target" == "daily" ]; then
-	mkdir -p /tmp/zk/$docnm
+	mkdir -p /tmp/zk/$docnm/devguide
+	mkdir -p /tmp/zk/$docnm/devref
 
 	cd $maindir
-	cp zkdoc/*/ZK-quickstart*.pdf zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
+	cp zkdoc/*/ZK-quickstart*.pdf /tmp/zk/$docnm
+	cp -rp zkdoc/devguide/*.odt zkdoc/devguide/images /tmp/zk/$docnm/devguide
+	cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
+	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
+	find -name .svn | xargs rm -rf
 
 	echo Ouput ${docnm}.zip
 	zip -qr9 ${docnm}.zip $docnm

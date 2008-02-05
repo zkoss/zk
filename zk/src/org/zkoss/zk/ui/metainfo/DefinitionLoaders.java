@@ -51,8 +51,10 @@ import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.au.AuWriters;
 
 /**
  * Utilities to load language definitions.
@@ -171,7 +173,7 @@ public class DefinitionLoaders {
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
 					if (checkVersion(zkver, url, doc))
-						parseLang(doc, locator, false);
+						parseLang(doc, locator, url, false);
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+url);
 						//abort since it is hardly to work then
@@ -189,7 +191,7 @@ public class DefinitionLoaders {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				try {
 					if (checkVersion(zkver, res.url, res.document))
-						parseLang(res.document, locator, true);
+						parseLang(res.document, locator, res.url, true);
 				} catch (Exception ex) {
 					log.error("Failed to load addon", ex);
 					//keep running
@@ -224,7 +226,7 @@ public class DefinitionLoaders {
 	private static void loadAddon(Locator locator, URL url) {
 		try {
 			parseLang(
-				new SAXBuilder(false, false, true).build(url), locator, true);
+				new SAXBuilder(false, false, true).build(url), locator, url, true);
 		} catch (Exception ex) {
 			log.error("Failed to load addon: "+url, ex);
 			//keep running
@@ -270,6 +272,8 @@ public class DefinitionLoaders {
 	throws Exception {
 		parseZScriptConfig(el);
 		parseDeviceConfig(el);
+		parseSystemConfig(el);
+		parseClientConfig(el);
 	}
 	private static void parseZScriptConfig(Element root) {
 		for (Iterator it = root.getElements("zscript-config").iterator();
@@ -286,8 +290,26 @@ public class DefinitionLoaders {
 			Devices.add(el);
 		}
 	}
+	private static void parseSystemConfig(Element root) throws Exception {
+		final Element el = root.getElement("system-config");
+		if (el != null) {
+			String s = el.getElementValue("au-writer-class", true);
+			if (s != null)
+				AuWriters.setImplementationClass(
+					s.length() == 0 ? null: Classes.forNameByThread(s));
+		}
+	}
+	private static void parseClientConfig(Element root) throws Exception {
+		final Element el = root.getElement("client-config");
+		if (el != null) {
+			Integer v = parseInteger(el, "resend-delay", false);
+			if (v != null)
+				System.setProperty(Attributes.RESEND_DELAY, v.toString());
+		}
+	}
 
-	private static void parseLang(Document doc, Locator locator, boolean addon)
+	private static
+	void parseLang(Document doc, Locator locator, URL url, boolean addon)
 	throws Exception {
 		final Element root = doc.getRootElement();
 		final String lang = IDOMs.getRequiredElementValue(root, "language-name");
@@ -403,6 +425,20 @@ public class DefinitionLoaders {
 			final String name =
 				IDOMs.getRequiredElementValue(el, "component-name");
 
+			Class cls = null;
+			{
+				String clsnm = el.getElementValue("component-class", true);
+				if (clsnm != null && clsnm.length() > 0) {
+					noEL("component-class", clsnm, el);
+					try {
+						cls = locateClass(clsnm);
+					} catch (Throwable ex) { //Feature 1873426
+						log.warningBriefly("Component "+name+" ignored. Reason: unable to load "+clsnm+".\n"+el.getLocator(), ex);
+						continue;
+					}
+				}
+			}
+
 			final String macroURI = el.getElementValue("macro-uri", true);
 			final ComponentDefinitionImpl compdef;
 			if (macroURI != null && macroURI.length() != 0) {
@@ -413,19 +449,24 @@ public class DefinitionLoaders {
 					langdef.getMacroDefinition(
 						name, macroURI, "true".equals(inline), null);
 
-				final String clsnm = el.getElementValue("component-class", true);
-				if (clsnm != null && clsnm.length() > 0) {
-					noEL("component-class", clsnm, el);
-					compdef.setImplementationClass(locateClass(clsnm));
+				if (cls != null)
+					compdef.setImplementationClass(cls);
 						//resolve it now because it is part of lang-addon
-				}
 
+				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extends") != null) { //override
 				if (log.finerable()) log.finer("Override component definition: "+name);
 
 				final String extnm = el.getElementValue("extends", true);
-				final ComponentDefinition ref = langdef.getComponentDefinition(extnm);
+				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
+				if (ref == null) {
+					log.warning("Component "+name+" ignored. Reason: override a non-existent component "+extnm+".\n"+el.getLocator());
+						//not throw exception since the derived component might be
+						//ignored due to class-not-found
+					continue;
+				}
+
 				if (ref.isMacro())
 					throw new UiException("Unable to extend from a macro component, "+el.getLocator());
 
@@ -434,22 +475,19 @@ public class DefinitionLoaders {
 				} else {
 					compdef = (ComponentDefinitionImpl)
 						ref.clone(ref.getLanguageDefinition(), name);
+					compdef.setDeclarationURL(url);
 					langdef.addComponentDefinition(compdef);
 				}
 
-				final String clsnm = el.getElementValue("component-class", true);
-				if (clsnm != null && clsnm.length() > 0) {
-					noEL("component-class", clsnm, el);
-					compdef.setImplementationClass(locateClass(clsnm));
-				}
+				if (cls != null)
+					compdef.setImplementationClass(cls);
 			} else {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 
-				final String clsnm =
-					IDOMs.getRequiredElementValue(el, "component-class");
-				noEL("component-class", clsnm, el);
-				compdef = new ComponentDefinitionImpl(
-					langdef, null, name, locateClass(clsnm));
+				if (cls == null)
+					throw new UiException("component-class is required, "+el.getLocator());
+				compdef = new ComponentDefinitionImpl(langdef, null, name, cls);
+				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			}
 
@@ -603,6 +641,24 @@ public class DefinitionLoaders {
 			else
 				compdef.addAnnotation(prop, annotName, annotAttrs);
 		}
+	}
+	/** Configures an integer. */
+	private static Integer parseInteger(Element el, String subnm,
+	boolean positiveOnly) throws UiException {
+		//Warning instead of exception since config.xml is embedded in jar, so
+		//better not to stop the process
+		String val = el.getElementValue(subnm, true);
+		if (val != null && val.length() > 0) {
+			try { 
+				final int v = Integer.parseInt(val);
+				if (!positiveOnly || v > 0)
+					return new Integer(v);
+				log.warning("Ignored: the "+subnm+" element must be a positive number, not "+val+", at "+el.getLocator());
+			} catch (NumberFormatException ex) { //eat
+				log.warning("Ignored: the "+subnm+" element must be a number, not "+val+", at "+el.getLocator());
+			}
+		}
+		return null;
 	}
 
 	private static class Addon {

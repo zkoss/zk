@@ -24,6 +24,11 @@ import org.zkoss.zk.ui.WrongValueException;
  * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl},
  * if a component allows users to change its content from the client.
  *
+ * <p>Note: For components supporting only ZK 3.0.3 or later,
+ * it is suggested to implement {@link InputableX} instead of
+ * this interface, since it has more control about whether to send
+ * the onChange event.
+ *
  * <p>{@link org.zkoss.zk.ui.event.InputEvent} will be sent wih name as "onChange" after
  * {@link #setTextByClient} is called
  * to notify application developers that it is called by user
@@ -37,6 +42,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * similar feature.
  *
  * @author tomyeh
+ * @see InputableX
  * @see org.zkoss.zk.ui.event.InputEvent
  */
 public interface Inputable {

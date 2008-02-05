@@ -1,8 +1,0 @@
-Manifest-Version: 0.6.1
-Specification-Title: Yuiext Components for ZK
-Specification-Version: 0.6.1
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.yuiext
-Implementation-URL: http://www.zkoss.org/yuiext
-Implementation-Version: 0.6.1
-Implementation-Vendor: Potix Corporation

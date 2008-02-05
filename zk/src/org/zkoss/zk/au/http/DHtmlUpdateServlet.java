@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Date;
 import java.io.StringWriter;
 import java.io.IOException;
@@ -34,10 +36,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 
 import org.zkoss.mesg.Messages;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ClassWebResource;
@@ -61,12 +65,15 @@ import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.I18Ns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.AuWriter;
+import org.zkoss.zk.au.AuWriters;
+import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.CommandNotFoundException;
 import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuSendRedirect;
-import org.zkoss.zk.au.Command;
-import org.zkoss.zk.au.CommandNotFoundException;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.device.Device;
 
 /**
  * Used to receive command from the server and send result back to client.
@@ -75,30 +82,151 @@ import org.zkoss.zk.device.Devices;
  * including ajax (HTML+Ajax), mil (Mobile Interactive Language),
  * and others (see {@link Desktop#getDeviceType}.
  *
- * <p>Design decision: it is better to use independent servlets for
- * /web, /upload and /view. However, to simplify the configuration,
- * we choose not to.
+ * <p>Init parameters:
+ *
+ * <dl>
+ * <dt>processor0, processor1...</dt>
+ * <dd>It specifies an AU processor.
+ * The first processor must be specified with the name called processor0,
+ * second processor1 and so on.<br/>
+ * The syntax of the value is<br/>
+ * <code>/prefix=class</code>
+ * </dd>
+ * </dl>
+ *
+ * <p>By default: there are two processors are associated with
+ * "/upload" and "/view" (see {@link #addAuProcessor}.
+ * Also, "/web" is reserved. Don't associate to any AU processor.
  *
  * @author tomyeh
  */
 public class DHtmlUpdateServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlUpdateServlet.class);
+	private static final String ATTR_UPDATE_SERVLET
+		= "org.zkoss.zk.au.http.UpdateServlet";
 
 	private ServletContext _ctx;
 	private long _lastModified;
+	/** (String name, AuProcessor). */
+	private Map _procs = new HashMap(4);
 
+	/** Returns the update servlet of the specified application, or
+	 * null if not loaded yet.
+	 * Note: if the update servlet is not loaded, it returns null.
+	 * @since 3.0.2
+	 */
+	public static DHtmlUpdateServlet getUpdateServlet(WebApp wapp) {
+		return (DHtmlUpdateServlet)
+			((ServletContext)wapp.getNativeContext())
+				.getAttribute(ATTR_UPDATE_SERVLET);
+	}
+
+	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
+		//super.init(config);
+			//Note callback super to avoid saving config
+
 		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
 		_ctx = config.getServletContext();
+
+		for (int j = 0;;) {
+			String param = config.getInitParameter("processor" + j++);
+			if (param == null) break;
+			final int k = param.indexOf('=');
+			if (k < 0) {
+				log.warning("Ignore init-param: illegal format, "+param);
+				continue;
+			}
+
+			final String prefix = param.substring(0, k).trim();
+			final String clsnm = param.substring(k + 1).trim();
+			try {
+				addAuProcessor(prefix,
+					(AuProcessor)Classes.newInstanceByThread(clsnm));
+			} catch (ClassNotFoundException ex) {
+				log.warning("Ignore init-param: class not found, "+clsnm);
+			} catch (ClassCastException ex) {
+				log.warning("Ignore: "+clsnm+" not implement "+AuProcessor.class);
+			} catch (Throwable ex) {
+				log.warning("Ignore init-param: failed to add an AU processor, "+param,
+					ex);
+			}
+		}
+
+		if (getAuProcessor("/upload") == null) {
+			try {
+				addAuProcessor("/upload", new AuUploader());
+			} catch (Throwable ex) {
+				final String msg =
+					" Make sure commons-fileupload.jar is installed.";
+				log.warningBriefly("Failed to configure fileupload."+msg, ex);
+
+				//still add /upload to generate exception when fileupload is used
+				addAuProcessor("/upload",
+					new AuProcessor() {
+						public void process(Session sess, ServletContext ctx,
+						HttpServletRequest request, HttpServletResponse response, String pi)
+						throws ServletException, IOException {
+							throw new ServletException("Failed to upload."+msg);
+						}
+					});
+			}
+		}
+
+		if (getAuProcessor("/view") == null)
+			addAuProcessor("/view", new AuDynaMediar());
+
+		_ctx.setAttribute(ATTR_UPDATE_SERVLET, this);
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
+	}
+
+	/** Adds an AU processor and associates it with the specified prefix.
+	 *
+	 * <p>If there was an AU processor associated with the same name, the
+	 * the old AU processor will be replaced.
+	 *
+	 * @param prefix the prefix. It must start with "/", but it cannot be
+	 * "/" nor "/web" (which are reserved).
+	 * @param processor the AU processor (never null).
+	 * @return the previous AU processor associated with the specified prefix,
+	 * or null if the prefix was not associated before.
+	 * @since 3.0.2
+	 */
+	public AuProcessor addAuProcessor(String prefix, AuProcessor processor) {
+		if (prefix == null || !prefix.startsWith("/") || prefix.length() < 2
+		|| processor == null)
+			throw new IllegalArgumentException();
+		if (ClassWebResource.PATH_PREFIX.equalsIgnoreCase(prefix))
+			throw new IllegalArgumentException(
+				ClassWebResource.PATH_PREFIX + " is reserved");
+
+		if (_procs.get(prefix) ==  processor) //speed up to avoid sync
+			return processor; //nothing changed
+
+		//To avoid using sync in doGet(), we make a copy here
+		final AuProcessor old;
+		synchronized (this) {
+			final Map ps = new HashMap(_procs);
+			old = (AuProcessor)ps.put(prefix, processor);
+			_procs = ps;
+		}
+		return old;
+	}
+	/** Returns the AU processor associated with the specified prefix,
+	 * or null if no AU processor associated.
+	 * @since 3.0.2
+	 */
+	public AuProcessor getAuProcessor(String prefix) {
+		return (AuProcessor)_procs.get(prefix);
 	}
 
 	//-- super --//
 	protected long getLastModified(HttpServletRequest request) {
 		final String pi = Https.getThisPathInfo(request);
 		if (pi != null && pi.startsWith(ClassWebResource.PATH_PREFIX)
+		&& pi.indexOf('*') < 0 //language independent
 		&& !Servlets.isIncluded(request)) {
 			//If a resource processor is registered for the extension,
 			//we assume the content is dynamic
@@ -118,28 +246,53 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		final Session sess = WebManager.getSession(_ctx, request);
+		final String pi = Https.getThisPathInfo(request);
+		//if (log.finerable()) log.finer("Path info: "+pi);
+
+		final Session sess = WebManager.getSession(_ctx, request, false);
+		final boolean withpi = pi != null && pi.length() != 0;
+		if (withpi && pi.startsWith(ClassWebResource.PATH_PREFIX)) {
+			final Object old = sess != null?
+				I18Ns.setup(sess, request, response, "UTF-8"):
+				Charsets.setup(request, response, "UTF-8");
+			try {
+				getClassWebResource()
+					.service(request, response,
+						pi.substring(ClassWebResource.PATH_PREFIX.length()));
+			} finally {
+				if (sess != null) I18Ns.cleanup(request, old);
+				else Charsets.cleanup(request, old);
+			}
+			return; //done
+		}
+
+		if (sess == null) {
+			if (!withpi) {
+				//Bug 1849088: rmDesktop might be sent after invalidate
+				//Bug 1859776: need send response to client for redirect or others
+				final String dtid = request.getParameter("dtid");
+				if (dtid != null)
+					sessionTimeout(request, response,
+						dtid, request.getParameter("cmd.0"));
+			}
+			return;
+		}
+
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
-			final String pi = Https.getThisPathInfo(request);
-			if (pi != null && pi.length() != 0) {
-				//if (log.finerable()) log.finer("Path info: "+pi);
-				if (pi.startsWith(ClassWebResource.PATH_PREFIX)) {
-					getClassWebResource()
-						.service(request, response,
-							pi.substring(ClassWebResource.PATH_PREFIX.length()));
-				} else if (pi.startsWith("/upload")) {
-					Uploads.process(sess, _ctx, request, response);
-				} else if (pi.startsWith("/view")) {
-					DynaMedias.process(
-						sess, _ctx, request, response, pi.substring(5));
-				} else {
-					log.warning("Unknown path info: "+pi);
+			if (withpi) {
+				for (Iterator it = _procs.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					if (pi.startsWith((String)me.getKey())) {
+						((AuProcessor)me.getValue())
+							.process(sess, _ctx, request, response, pi);
+						return; //done
+					}
 				}
-				return;
+				log.warning("Unknown path info: "+pi);
+			} else {
+				process(sess, request, response);
 			}
-
-			process(sess, request, response);
 		} finally {
 			I18Ns.cleanup(request, old);
 		}
@@ -169,7 +322,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//	+", SP="+request.getServletPath()+" and "+Https.getThisServletPath(request)
 			//	+", QS="+request.getQueryString()+" and "+Https.getThisQueryString(request)
 			//	+", params="+request.getParameterMap().keySet());
-			//responseError(uieng, response, "Illegal request: dtid is required");
+			//responseError(response, "Illegal request: dtid is required");
 			//Tom M. Yeh: 20060922: Unknown reason to get here but it is annoying
 			//to response it back to users
 			return;
@@ -182,25 +335,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				final StringWriter out = getXMLWriter();
-
-				if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
-				&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
-					String uri = Devices.getTimeoutURI(
-						Servlets.isMilDevice(request) ? "mil": "ajax");
-					final AuResponse resp;
-					if (uri != null) {
-						if (uri.length() != 0)
-							uri = Encodes.encodeURL(_ctx, request, response, uri);
-						resp = new AuSendRedirect(uri, null);
-					} else {
-						resp = new AuObsolete(
-							dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
-					}
-					uieng.response(resp, out);
-				}
-
-				flushXMLWriter(request, response, out);
+				sessionTimeout(request, response, dtid, scmd);
 				return;
 			}
 		}
@@ -237,19 +372,23 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				}
 			}
 		} catch (CommandNotFoundException ex) {
-			responseError(uieng, request, response, Exceptions.getMessage(ex));
+			responseError(request, response, Exceptions.getMessage(ex));
 			return;
 		}
 
 		if (aureqs.isEmpty()) {
-			responseError(uieng, request, response, "Illegal request: cmd is required");
+			responseError(request, response, "Illegal request: cmd is required");
 			return;
 		}
 
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
-		final StringWriter out = getXMLWriter();
+		final AuWriter out = AuWriters.newInstance()
+			.open(request, response,
+				desktop.getDevice().isSupported(Device.RESEND) ?
+					config.getResendDelay() / 2 - 500: 0);
+				//Note: getResendDelay() might return nonpositive
 		final PerformanceMeter pfmeter = config.getPerformanceMeter();
 
 		final Execution exec = 
@@ -261,38 +400,30 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (reqIds != null && pfmeter != null)
 			meterComplete(pfmeter, response, reqIds, exec);
 
-		flushXMLWriter(request, response, out);
+		out.close(request, response);
 	}
+	private void sessionTimeout(HttpServletRequest request,
+	HttpServletResponse response, String dtid, String scmd)
+	throws ServletException, IOException {
+		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
 
-	/** Returns the writer for output XML.
-	 * @param withrs whether to output <rs> first.
-	 */
-	private static StringWriter getXMLWriter() {
-		final StringWriter out = new StringWriter();
-		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n");
-		return out;
-	}
-	/** Flushes all content in out to the response.
-	 * Don't write the response thereafter.
-	 * @param withrs whether to output </rs> first.
-	 */
-	private static final
-	void flushXMLWriter(HttpServletRequest request,
-	HttpServletResponse response, StringWriter out)
-	throws IOException {
-		out.write("\n</rs>");
-
-		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		byte[] data = out.toString().getBytes("UTF-8");
-		if (data.length > 200) {
-			byte[] bs = Https.gzip(request, response, null, data);
-			if (bs != null) data = bs; //yes, browser support compress
+		if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
+		&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
+			String uri = Devices.getTimeoutURI(
+				Servlets.isMilDevice(request) ? "mil": "ajax");
+			final AuResponse resp;
+			if (uri != null) {
+				if (uri.length() != 0)
+					uri = Encodes.encodeURL(_ctx, request, response, uri);
+				resp = new AuSendRedirect(uri, null);
+			} else {
+				resp = new AuObsolete(
+					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+			}
+			out.write(resp);
 		}
 
-		response.setContentType("text/xml;charset=UTF-8");
-		response.setContentLength(data.length);
-		response.getOutputStream().write(data);
-		response.flushBuffer();
+		out.close(request, response);
 	}
 
 	/** Recovers the desktop if possible.
@@ -323,15 +454,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	/** Generates a response for an error message.
 	 */
-	private static
-	void responseError(UiEngine uieng, HttpServletRequest request,
+	private static void responseError(HttpServletRequest request,
 	HttpServletResponse response, String errmsg) throws IOException {
 		log.debug(errmsg);
 
 		//Don't use sendError because Browser cannot handle UTF-8
-		final StringWriter out = getXMLWriter();
-		uieng.response(new AuAlert(errmsg), out);
-		flushXMLWriter(request, response, out);
+		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
+		out.write(new AuAlert(errmsg));
+		out.close(request, response);
 	}
 
 	/** Handles the start of request.

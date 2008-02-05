@@ -11,3 +11,7 @@ option {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: xx-small; font-weight: normal;
 }
+
+.messagebox-btn {
+	width: 47pt;
+}

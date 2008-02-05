@@ -364,6 +364,19 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			((Component)it.next()).detach();
 	}
 
+	public Class resolveClass(String clsnm) throws ClassNotFoundException {
+		try {
+			return Classes.forNameByThread(clsnm);
+		} catch (ClassNotFoundException ex) {
+			for (Iterator it = getLoadedInterpreters().iterator();
+			it.hasNext();) {
+				final Class c = ((Interpreter)it.next()).getClass(clsnm);
+				if (c != null)
+					return c;
+			}
+			throw ex;
+		}
+	}
 	public void setVariable(String name, Object val) {
 		_ns.setVariable(name, val, true);
 	}
@@ -813,7 +826,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 					_desktop.getDevice().isCacheable();
 			if (!cacheable) {
 				//Bug 1520444
-				execCtrl.setHeader("Pragma", "no-cache"); // bug 1520444
+				execCtrl.setHeader("Pragma", "no-cache");
 				execCtrl.addHeader("Cache-Control", "no-cache");
 				execCtrl.addHeader("Cache-Control", "no-store");
 				//execCtrl.addHeader("Cache-Control", "private");
@@ -824,6 +837,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				//execCtrl.addHeader("Cache-Control", "post-check=0");
 				//execCtrl.addHeader("Cache-Control", "pre-check=0");
 				execCtrl.setHeader("Expires", "-1");
+
+				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
+				//so ZkFns.outLangJavaScripts generates zk.keepDesktop correctly
 			}
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
 				//Don't use include. Otherwise, headers will be gone.
@@ -1168,6 +1184,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		private final Map _vars = new HashMap();
 
 		//Namespace//
+		public Component getOwner() {
+			return null;
+		}
+		public Page getOwnerPage() {
+			return PageImpl.this;
+		}
 		public Set getVariableNames() {
 			return _vars.keySet();
 		}

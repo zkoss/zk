@@ -18,10 +18,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
+
 import org.zkoss.lang.Objects;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -38,6 +43,7 @@ public class Comboitem extends LabelImageElement {
 	private String _desc = "";
 	private Object _value;
 	private String _content = "";
+	private boolean _disabled = false;
 
 	public Comboitem() {
 		setSclass("item");
@@ -52,6 +58,52 @@ public class Comboitem extends LabelImageElement {
 		setImage(image);
 	}
 
+	public String getSclass() {
+		String scls = super.getSclass();	
+		if (isDisabled())
+			return scls.length() > 0 ? scls + " disd": "disd";
+		return scls;
+	}
+	
+	public void setLabel(String label) {
+		final String old = getLabel();
+		if (!Objects.equals(old, label)) {
+			final Combobox cb = (Combobox)getParent();
+			final boolean reIndex = cb != null && cb.getSelectedItem() == this;
+
+			super.setLabel(label);
+			
+			if (reIndex) {
+				final Constraint constr = cb.getConstraint();
+				if (constr != null && constr instanceof SimpleConstraint 
+						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
+					cb.setValue(label);
+				} else {
+					cb.reIndex();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Sets whether it is disabled.
+	 * @since 3.0.1
+	 */
+	public void setDisabled(boolean disabled) {
+		if (_disabled != disabled) {
+			_disabled = disabled;
+			invalidate();
+		}
+	}
+	
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 3.0.1
+	 */
+	public boolean isDisabled() {
+		return _disabled;
+	}
+	
 	/** Returns the description (never null).
 	 * The description is used to provide extra information such that
 	 * users is easy to make a selection.
@@ -127,12 +179,36 @@ public class Comboitem extends LabelImageElement {
 	//-- super --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Combobox))
-			throw new UiException("Comboitem's parent must be Combobox");
+			throw new UiException("Comboitem's parent must be Combobox");		
+
+		final Combobox old = (Combobox)getParent();
+		final boolean reIndex =
+			parent != old && old != null && old.getSelectedItem() == this;
+
 		super.setParent(parent);
+		
+		if (reIndex) postOnReIndex(old);
 	}
+	
+	/** re-index later */
+	private void postOnReIndex(Combobox old) {
+		Events.postEvent("onReIndex", this, old);
+	}
+	
+	public void onReIndex (Event evt) {
+		final Combobox cb = (Combobox) evt.getData();
+		if (cb != null) cb.reIndex();
+	} 
 
 	/** No child is allowed. */
 	public boolean isChildable() {
 		return false;
+	}
+	
+	public String getOuterAttrs() {
+		final StringBuffer sb =
+			new StringBuffer(60).append(super.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
+		return sb.toString();
 	}
 }

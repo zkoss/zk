@@ -31,6 +31,8 @@ import org.zkoss.zul.event.ListDataEvent;
 public class FakeListModel extends AbstractListModel implements ListModelExt {
 	
 	private int _size;
+	private boolean _asc = true;
+
 	public FakeListModel() {
 		this(10000);
 	}
@@ -39,8 +41,9 @@ public class FakeListModel extends AbstractListModel implements ListModelExt {
 	}
 
 	// ListModelExt
-	public void sort(Comparator arg0, boolean arg1) {
+	public void sort(Comparator cmpr, boolean asc) {
 //		System.out.println("==================SORT DATA================");
+		_asc = asc;
 		invalidate();
 	}
 	public void invalidate() {
@@ -48,8 +51,8 @@ public class FakeListModel extends AbstractListModel implements ListModelExt {
 	}
 
 	//AbstractListModel
-	public Object getElementAt(int arg0) {
-		String value = "Element At :"+arg0;
+	public Object getElementAt(int v) {
+		String value = "V"+(_asc ? v: _size - v);
 //		System.out.println(value);
 		return value;
 	}

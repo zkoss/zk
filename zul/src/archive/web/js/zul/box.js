@@ -93,7 +93,7 @@ zkSplt.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-zkSplt.onVisi = zkSplt.onSize = zkSplt._resize = function (cmp) {
+zkSplt.onVisi = zkSplt._resize = function (cmp) {
 	if (!zk.isRealVisible(cmp))return;
 	cmp = $e(cmp);
 	if (cmp) {
@@ -205,7 +205,6 @@ zkSplt._adjSplt = function (n, fd, diff) {
 		if (vert != (fd == "height")) {
 			var val = $int(n.style[fd]) + diff;
 			n.style[fd] = (val > 0 ? val: 0) + "px";
-			//No need to call zk.onSizeAt(n) since it is handled above
 		}
 	}
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -221,16 +220,18 @@ zkSplt._fixsz = function (cmp) {
 		if (vert) {
 			var tr = parent.parentNode; //TR
 			cmp.style.height = tr.style.height = "8px";
+			cmp.style.width = "0px"; // clean width
 			cmp.style.width = parent.clientWidth + "px"; //all wd the same
 		} else {
 			cmp.style.width = parent.style.width = "8px";
 			var hgh = parent.clientHeight;
 			if (zk.safari) { //safari: each cell has diff height and tr's hgh is 0
-				for (var cells = parent.parentNode.cells, j = 0; j < cells.length; ++j) {
+				for (var cells = parent.parentNode.cells, j = cells.length; --j >= 0;) {
 					var h = cells[j].clientHeight;
 					if (h > hgh) hgh = h;
 				}
 			}
+			cmp.style.height = "0px"; // clean height
 			cmp.style.height = hgh + "px";
 		}
 	}

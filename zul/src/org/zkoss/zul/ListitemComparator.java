@@ -219,26 +219,26 @@ public class ListitemComparator implements Comparator {
 
 	//Comparator//
 	public int compare(Object o1, Object o2) {
-		if (_index < 0 && _header != null) //decide the index
-			_index = _header.getColumnIndex();
+		final int index =
+			_index < 0 && _header != null ? _header.getColumnIndex(): _index;
 
 		Object v1, v2;
 		if (o1 instanceof Listitem) { //not live data
 			final Listitem li1 = (Listitem)o1, li2 = (Listitem)o2;
-			if (_index < 0) {
+			if (index < 0) {
 				v1 = handleCase((Comparable)li1.getValue());
 				v2 = handleCase((Comparable)li2.getValue());
 			} else {
 				List lcs1 = li1.getChildren();
-				if (_index >= lcs1.size()) v1 = null;
+				if (index >= lcs1.size()) v1 = null;
 				else {
-					final Listcell lc = (Listcell)lcs1.get(_index);
+					final Listcell lc = (Listcell)lcs1.get(index);
 					v1 = handleCase(_byval ? lc.getValue(): lc.getLabel());
 				}
 				List lcs2 = li2.getChildren();
-				if (_index >= lcs2.size()) v2 = null;
+				if (index >= lcs2.size()) v2 = null;
 				else {
-					final Listcell lc = (Listcell)lcs2.get(_index);
+					final Listcell lc = (Listcell)lcs2.get(index);
 					v2 = handleCase(_byval ? lc.getValue(): lc.getLabel());
 				}
 			}
@@ -273,6 +273,6 @@ public class ListitemComparator implements Comparator {
 		return _index ^ (_asc ? 1: 5) ^ (_igcase ? 9: 3);
 	}
 	public String toString() {
-		return "[Compare "+(_index < 0 ? "value": _index+"-th column")+']';
+		return "[Comparator "+_index+"-th col, asc:"+_asc+']';
 	}
 }

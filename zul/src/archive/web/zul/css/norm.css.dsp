@@ -9,6 +9,17 @@ button, input.button, input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
+.text {
+	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	border: 1px solid #7F9DB9;
+}
+.text-invalid {
+	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	border: 1px solid #DD7870;
+}
+.readonly, .text-disd {
+	background: #ECEAE4;
+}
 body {
 	height:100%; margin: 0px; padding: 0px 5px;
 }
@@ -36,6 +47,12 @@ a.gamma {color: #000000; text-decoration: none;}
 a.gamma:hover {color: #000000; text-decoration: underline;}
 tr.gamma {background: #F4F4F4;}
 td.gamma {background: #F4F4F4;}
+
+<%-- General --%>
+.inline-block { <%-- used with label/checkbox and others to ensure the dimension --%>
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
+}
 
 <%-- ZK --%>
 <%-- groupbox caption --%>
@@ -157,12 +174,19 @@ td.rwt-wndcyan {
 div.modal_mask {
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;
-	filter: alpha(opacity=40); <%-- IE --%>
-	opacity: .4;
+	filter: alpha(opacity=60); <%-- IE --%>
+	opacity: .6;
 	hasLayout: -1;<%-- not a layout element in IE --%>
 	background: #e6edf9; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
-
+div.z-loading {
+	position: absolute; z-index: 79000; background-color: #A8CAF8; 
+	white-space: nowrap; border: 1px solid #83B5F7; padding:3px;
+}
+div.z-loading-indicator {
+	color: #102B6D; border:1px solid #83B5F7; background-color: #FFF; 
+	white-space: nowrap; padding:6px;
+}
 <%-- ZK separator --%>
 div.hsep, div.hsep-bar {
 	display: block; width: 100%; padding: 0; margin: 2pt 0; font-size: 0;
@@ -231,11 +255,11 @@ div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-he
 }
 
 div.tree-head tr, div.listbox-head tr, div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
-	background-image: url(${c:encodeURL('~./zul/img/grid/v_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
 	overflow: hidden; border: 1px solid;
-	border-color: #DAE7F6 #7F9DB9 #7F9DB9 #DAE7F6;
+	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
@@ -278,7 +302,7 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 }
 
 div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, tbody.listbox-foot, div.tree-foot, tbody.tree-foot {<%-- always used --%>
-	background: #DAE7F6; border-top: 1px solid #7F9DB9;
+	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
 
 div.foot-cell-inner, div.cell-inner, div.head-cell-inner{
@@ -316,6 +340,15 @@ tr.odd td.gc, tr.odd {
 }
 tr.seld, td.seld {
 	background: #b3c8e8; border: 1px solid #6f97d2;
+}
+tr.disd, td.disd, tr.disd div.cell-inner, td.disd div.cell-inner, tr.disd a, td.disd a, 
+	a.disd, .text-disd {
+	color: #C5CACB !important;
+}
+a.disd:visited, a.disd:hover { 
+	text-decoration: none !important;
+	cursor: default !important;;
+	border-color: #E0EAF7 !important;
 }
 tr.overd, td.overd {<%-- item onmouseover --%>
 	background: #D3EFFA;
@@ -477,13 +510,19 @@ span.dottree-spacer {
 div.gc-default {<%-- content of 3d groupbox --%>
 	border: 1px solid #5C6C7C; padding: 5px;
 }
-tr.tabpanel td.tabpanel-hr, div.tabpanel-accordion {<%-- horz, accd --%>
+div.tabpanel, div.tabpanel-accordion {<%-- horz, accd: tabpanel --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
-td.tabpanels {<%-- vert --%>
+td.vtabpanels {<%-- vert tabpanels --%>
 	border-top: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
-	border-bottom: 1px solid #5C6C7C; padding: 5px;
+	border-bottom: 1px solid #5C6C7C;
+}
+div.vtabpanel {<%-- vert tabpanel --%>
+	padding: 5px;
+}
+table.vtabsi {<%--remove it if you prefer to use the minimal width--%>
+	width: 100%;
 }
 
 td.tab-3d-first1 {
@@ -804,6 +843,11 @@ div.errbox {
 div.progressmeter {
 	border: 1px inset; text-align: left;
 }
+span.progressmeter-img {
+	display:-moz-inline-box; display:inline-block;
+	background-image: url(${c:encodeURL('~./zk/img/prgmeter.gif')});
+	height: 10px;
+}
 
 div.paging, div.paging a {
 	font-size: x-small; color: #a30; font-weight: bold;
@@ -820,7 +864,17 @@ div.paging a, div.paging a:visited {
 div.paging a:hover {
 	background: #DAE8FF;
 }
-
+.messagebox {
+	word-break: break-all; overflow:auto;
+}
+.messagebox-btn {
+	min-width: 45pt; width: 100%;
+}
+<%-- ZK JavaScript debug box --%>
+div.debugbox {
+	border: 1px solid #77c;	position: absolute;	bottom: 0px; right: 0px;
+	width: 60%; z-index: 99000; background: white;
+}
 <%--ZK datebox and calendar--%>
 div.dateboxpp {<%--hardcoded in DSP--%>
 	display: block; position: absolute; z-index: 88000;
@@ -1067,4 +1121,27 @@ span.splitter-os-btn-t {
 span.splitter-os-btn-b {
 	width: 50px; min-height: 8px; height: 8px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
+}
+<%-- ZK Drag-Drop --%>
+span.drop-allow, span.drop-disallow {
+	background-repeat: no-repeat;
+	display:-moz-inline-box; vertical-align:top;
+	display:inline-block;
+	width: 16px; min-height: 16px; height: 16px;
+}
+span.drop-allow {
+	background-image: url(${c:encodeURL('~./zul/img/grid/drop-yes.gif')});
+}
+span.drop-disallow {
+	background-image: url(${c:encodeURL('~./zul/img/grid/drop-no.gif')});
+}
+div.drop-ghost {
+	border:1px solid #6593CF;
+}
+div.drop-content {
+	background-image: url(${c:encodeURL('~./zul/img/grid/drop-bg.gif')});	
+	width:120px;height:18px;
+	padding:2px;
+	font-size:13px;
+	font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }

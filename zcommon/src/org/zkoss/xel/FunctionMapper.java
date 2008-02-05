@@ -50,7 +50,7 @@ public interface FunctionMapper {
 	 * function mapper.
 	 */
 	public Collection getClassNames();
-	/** Resolves a class with the specified logic name, or null
+	/** Resolves a class with the specified logic name,
 	 * or null if not found.
 	 *
 	 * <p>Note: not all EL evaluator support {@link #resolveClass}.

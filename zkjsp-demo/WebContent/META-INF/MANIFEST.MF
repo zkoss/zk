@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: ZK JSP DEMO
-Specification-Version: 0.9.0
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.zkdemo
-Implementation-URL: http://www.zkoss.org/
-Implementation-Version: 0.9.0
-Implementation-Vendor: Potix Corporation

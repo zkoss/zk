@@ -231,6 +231,11 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
 	}
+	public void addSmartUpdate(Component comp, String attr, DeferredValue value) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
+	}
 	public void addResponse(String key, AuResponse response) {
 		getCurrentVisualizer().addResponse(key, response);
 	}
@@ -289,6 +294,7 @@ public class UiEngineImpl implements UiEngine {
 		execCtrl.setCurrentPageDefinition(pagedef);
 
 		final Configuration config = _wapp.getConfiguration();
+		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
@@ -314,12 +320,19 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
-					final Component[] comps =
-						uv.isAborting() || exec.isVoided() ? null:
-							execCreate(
-							new CreateInfo(
+
+					final Component[] comps;
+					final String uri = pagedef.getForwardURI(page);
+					if (uri != null) {
+						comps = new Component[0];
+						exec.forward(uri);
+					} else {
+						comps = uv.isAborting() || exec.isVoided() ? null:
+							execCreate(new CreateInfo(
 								((WebAppCtrl)_wapp).getUiFactory(), exec, page),
 							pagedef, null);
+					}
+
 					inits.doAfterCompose(page, comps);
 				} catch(Throwable ex) {
 					if (!inits.doCatch(ex))
@@ -356,7 +369,7 @@ public class UiEngineImpl implements UiEngine {
 			} while ((event = nextEvent(uv)) != null);
 
 			//Cycle 2a: Handle aborting reason
-			final AbortingReason abrn = uv.getAbortingReason();
+			abrn = uv.getAbortingReason();
 			if (abrn != null)
 				abrn.execute(); //always execute even if !isAborting
 
@@ -386,6 +399,13 @@ public class UiEngineImpl implements UiEngine {
 		} finally {
 			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
 				//CONSIDER: whether to pass cleanup's error to users
+			if (abrn != null) {
+				try {
+					abrn.finish();
+				} catch (Throwable t) {
+					log.warning(t);
+				}
+			}
 
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
@@ -409,7 +429,7 @@ public class UiEngineImpl implements UiEngine {
 		if (parentInfo instanceof ComponentInfo) {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
 			final String fulfill = pi.getFulfill();
-			if (fulfill != null) { //defer the creation of children
+			if (fulfill != null && fulfill.length() > 0) { //defer the creation of children
 				new FulfillListener(fulfill, pi, parent);
 				return new Component[0];
 			}
@@ -478,7 +498,7 @@ public class UiEngineImpl implements UiEngine {
 	private static Component execCreateChild0(
 	CreateInfo ci, Component parent, ComponentInfo childInfo)
 	throws IOException {
-		final Composer composer = childInfo.getComposer(ci.page);
+		final Composer composer = childInfo.getComposer(ci.page, parent);
 		final ComposerExt composerExt =
 			composer instanceof ComposerExt ? (ComposerExt)composer: null;
 		Component child = null;
@@ -613,6 +633,8 @@ public class UiEngineImpl implements UiEngine {
 		if (page != null)
 			pagedef.initXelContext(page);
 
+		//Note: the forward directives are ignore in this case
+
 		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
 			final Component[] comps = execCreate(
@@ -661,12 +683,12 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Asynchronous updates --//
-	public void execUpdate(Execution exec, List requests, Writer out)
+	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException {
 		execUpdate(exec, requests, null, out);
 	}
 	public Collection execUpdate(Execution exec, List requests,
-	String reqId, Writer out) throws IOException {
+	String reqId, AuWriter out) throws IOException {
 		if (requests == null)
 			throw new IllegalArgumentException("null requests");
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
@@ -688,6 +710,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		Collection doneReqIds = null; //request IDs that have been processed
+		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, null);
@@ -733,7 +756,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//Cycle 2a: Handle aborting reason
-			final AbortingReason abrn = uv.getAbortingReason();
+			abrn = uv.getAbortingReason();
 			if (abrn != null)
 				abrn.execute(); //always execute even if !isAborting
 
@@ -753,13 +776,13 @@ public class UiEngineImpl implements UiEngine {
 				log.error(ex);
 			}
 
-			if (rque.endWithRequest())
-				responses.add(new AuEcho(desktop));
+			if (rque.endWithRequest()) //stop accept another request
+				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
 			else
 				doneReqIds = rque.clearRequestIds();
 
-			responseSequenceId(desktop, out);
-			response(responses, out);
+			out.writeSequenceId(desktop);
+			out.write(responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
@@ -767,9 +790,6 @@ public class UiEngineImpl implements UiEngine {
 
 			cleaned = true;
 			config.invokeExecutionCleanups(exec, null, errs);
-
-			out.flush();
-				//flush before deactivating to make sure it has been sent
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
@@ -785,6 +805,14 @@ public class UiEngineImpl implements UiEngine {
 			}
 		} finally {
 			if (!cleaned) config.invokeExecutionCleanups(exec, null, null);
+
+			if (abrn != null) {
+				try {
+					abrn.finish();
+				} catch (Throwable t) {
+					log.warning(t);
+				}
+			}
 
 			doDeactivate(exec);
 
@@ -1147,69 +1175,6 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 
-	//-- Generate output from a response --//
-	/** Output the next response sequence ID.
-	 */
-	private static void responseSequenceId(Desktop desktop, Writer out)
-	throws IOException {
-		out.write("\n<sid>");
-		out.write(Integer.toString(
-			((DesktopCtrl)desktop).getResponseSequence(true)));
-		out.write("</sid>");
-	}
-	public void response(AuResponse response, Writer out)
-	throws IOException {
-		out.write("\n<r><c>");
-		out.write(response.getCommand());
-		out.write("</c>");
-		final String[] data = response.getData();
-		if (data != null) {
-			for (int j = 0; j < data.length; ++j) {
-				out.write("\n<d>");
-				encodeXML(data[j], out);
-				out.write("</d>");
-			}
-		}
-		out.write("\n</r>");
-	}
-	public void response(List responses, Writer out)
-	throws IOException {
-		for (Iterator it = responses.iterator(); it.hasNext();)
-			response((AuResponse)it.next(), out);
-	}
-	private static void encodeXML(String data, Writer out)
-	throws IOException {
-		if (data == null || data.length() == 0)
-			return;
-
-		//20051208: Tom Yeh
-		//The following codes are tricky.
-		//Reason:
-		//1. nested CDATA is not allowed
-		//2. Firefox (1.0.7)'s XML parser cannot handle over 4096 chars
-		//	if CDATA is not used
-		int j = 0;
-		for (int k; (k = data.indexOf("]]>", j)) >= 0;) {
-			encodeByCData(data.substring(j, k), out);
-			out.write("]]&gt;");
-			j = k + 3;
-		}
-		encodeByCData(data.substring(j), out);
-	}
-	private static void encodeByCData(String data, Writer out)
-	throws IOException {
-		for (int j = data.length(); --j >= 0;) {
-			final char cc = data.charAt(j);
-			if (cc == '<' || cc == '>' || cc == '&') {
-				out.write("<![CDATA[");
-				out.write(data);
-				out.write("]]>");
-				return;
-			}
-		}
-		out.write(data);
-	}
-
 	public void activate(Execution exec) {
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
@@ -1505,8 +1470,9 @@ public class UiEngineImpl implements UiEngine {
 	private static class FulfillListener
 	implements EventListener, Express, java.io.Serializable, Cloneable,
 	ComponentSerializationListener, ComponentCloneListener {
-		private transient String _evtnm;
-		private transient Component _target, _comp;
+		private transient String[] _evtnms;
+		private transient Component[] _targets;
+		private transient Component _comp;
 		private final ComponentInfo _compInfo;
 		private final String _fulfill;
 
@@ -1518,16 +1484,35 @@ public class UiEngineImpl implements UiEngine {
 
 			init();
 
-			_target.addEventListener(_evtnm, this);
+			for (int j = _targets.length; --j >= 0;)
+				_targets[j].addEventListener(_evtnms[j], this);
 		}
 		private void init() {
-			final Object[] result =
-				ComponentsCtrl.parseEventExpression(_comp, _fulfill, _comp, false);
-			_target = (Component)result[0];
-			_evtnm = (String)result[1];
+			final List results = new LinkedList();
+			for (int j = 0, len = _fulfill.length();;) {
+				int k = _fulfill.indexOf(',', j);
+				String sub =
+					(k >= 0 ? _fulfill.substring(j, k): _fulfill.substring(j)).trim();
+				if (sub.length() > 0)
+					results.add(ComponentsCtrl
+						.parseEventExpression(_comp, sub, _comp, false));
+
+				if (k < 0 || (j = k + 1) >= len) break;
+			}
+
+			int j = results.size();
+			_targets = new Component[j];
+			_evtnms = new String[j];
+			j = 0;
+			for (Iterator it = results.iterator(); it.hasNext(); ++j) {
+				final Object[] result = (Object[])it.next();
+				_targets[j] = (Component)result[0];
+				_evtnms[j] = (String)result[1];
+			}
 		}
 		public void onEvent(Event evt) throws Exception {
-			_target.removeEventListener(_evtnm, this); //one shot only
+			for (int j = _targets.length; --j >= 0;)
+				_targets[j].removeEventListener(_evtnms[j], this); //one shot only
 
 			final Execution exec = Executions.getCurrent();
 			execCreate0(

@@ -101,6 +101,12 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 			</or>
 		</condition>
 
+		<condition property="gentime.required">
+			<not>
+				<equals arg1="${gentime}" arg2=""/>
+			</not>
+		</condition>
+
 		<!-- deploy -->
 		<condition property="deploy.lib.required">
 			<equals arg1="${deploy}" arg2="lib"/>

@@ -107,9 +107,13 @@ zk.Cal.prototype = {
 		this.element = $e(this.id);
 		if (!this.element) return;
 
-		var val = this.input ? this.input.value: getZKAttr(this.element, "value");
+		var val = this.input ? this.input.value: getZKAttr(this.element, "value"),
+			bd = getZKAttr(this.element, "bd"),
+			ed = getZKAttr(this.element, "ed");
 		if (val) val = zk.parseDate(val, this.getFormat());
 		this.date = val ? val: this.today();
+		if (bd) this.begin = new Date($int(bd) * 1000);
+		if (ed) this.end = new Date($int(ed) * 1000);
 		this._output();
 	},
 	getFormat: function () {
@@ -148,18 +152,29 @@ zk.Cal.prototype = {
 				else {
 					if (k == 0) el.style.display = "";
 					var cell = el.cells[k];
+					var monofs = cur <= 0 ? -1: cur <= last ? 0: 1;
 					cell.style.textDecoration = "";
 					cell.setAttribute("zk_day", v);
-					cell.setAttribute("zk_monofs",
-						cur <= 0 ? -1: cur <= last ? 0: 1);
-					this._outcell(cell, cur == d);
+					cell.setAttribute("zk_monofs", monofs);
+					this._outcell(cell, cur == d, this._invalidate(new Date(y, m + monofs, v)));
 				}
 			}
 		}
 	},
-	_outcell: function (cell, sel) {
+	_invalidate: function (now) {
+		var valid = false;
+		if (this.begin || this.end) {
+			if(this.begin && (now - this.begin)/(1000*60*60*24) < 0) {
+				valid = true;	
+			} else if(this.end && (this.end - now)/(1000*60*60*24) < 0) {
+				valid = true;	
+			}
+		}
+		return valid;
+	},
+	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
-		cell.className = sel ? "seld": "";
+		cell.className = !disd ? sel ? "seld": "" : sel ? "seld disd": "disd";
 		var d = cell.getAttribute("zk_day");
 		zk.setInnerHTML(cell,
 			!sel || this.popup ? d:
@@ -173,7 +188,9 @@ zk.Cal.prototype = {
 		var d = zk.getIntAttr(cell, "zk_day");
 		if (cell.className != "seld") { //!selected
 			var monofs = zk.getIntAttr(cell, "zk_monofs");
-			this.date = new Date(y, m + monofs, d);
+			var now = new Date(y, m + monofs, d);
+			if (this._invalidate(now)) return;
+			this.date = now;
 			if (!this.popup) {
 				if (monofs != 0) this._output();
 				else {
@@ -325,11 +342,11 @@ zkCal.onup = function (evt) {
 	return true;
 };
 zkCal.onkey = function (evt) {
-	if (!evt.altKey && evt.keyCode >= 37 && evt.keyCode <= 40) {
+	if (!evt.altKey && Event.keyCode(evt) >= 37 && Event.keyCode(evt) <= 40) {
 		var meta = zkau.getMeta($uuid(Event.element(evt)));
 		if (meta) {
-			ofs = evt.keyCode == 37 ? -1: evt.keyCode == 39 ? 1:
-				evt.keyCode == 38 ? -7: 7;
+			ofs = Event.keyCode(evt) == 37 ? -1: Event.keyCode(evt) == 39 ? 1:
+				Event.keyCode(evt) == 38 ? -7: 7;
 			meta.shift(ofs);
 			zk.focusDown(meta.element);
 			meta._changed = true;
@@ -347,7 +364,9 @@ zkCal.onblur = function (evt) {
 };
 
 zkCal.onover = function (evt) {
-	Event.element(evt).style.textDecoration = "underline";
+	var el = Event.element(evt);
+	if (el.className.indexOf("disd") == -1)
+		el.style.textDecoration = "underline";
 };
 zkCal.onout = function (evt) {
 	Event.element(evt).style.textDecoration = "";
@@ -444,14 +463,14 @@ zkDtbox.onkey = function (evt) {
 	if (!pp) return true;
 
 	var opened = $visible(pp);
-	if (evt.keyCode == 9) { //TAB; IE: close now to show covered SELECT
+	if (Event.keyCode(evt) == 9) { //TAB; IE: close now to show covered SELECT
 		if (opened) zkDtbox.close(pp);
 		return true; //don't eat
 	}
 
-	if (evt.keyCode == 38 || evt.keyCode == 40) {//UP/DN
+	if (Event.keyCode(evt) == 38 || Event.keyCode(evt) == 40) {//UP/DN
 		if (evt.altKey) {
-			if (evt.keyCode == 38) { //UP
+			if (Event.keyCode(evt) == 38) { //UP
 				if (opened) zkDtbox.close(pp);
 			} else {
 				if (!opened) zkDtbox.open(pp);
@@ -474,13 +493,13 @@ zkDtbox.onkey = function (evt) {
 		var meta = zkau.getMeta(uuid);
 		if (meta) {
 			//Request 1551019: better responsive
-			if (evt.keyCode == 13) { //ENTER
+			if (Event.keyCode(evt) == 13) { //ENTER
 				meta.onchange();
 				return true;
 			}
 
-			var ofs = evt.keyCode == 37 ? -1: evt.keyCode == 39 ? 1:
-				evt.keyCode == 38 ? -7: evt.keyCode == 40 ? 7: 0;
+			var ofs = Event.keyCode(evt) == 37 ? -1: Event.keyCode(evt) == 39 ? 1:
+				Event.keyCode(evt) == 38 ? -7: Event.keyCode(evt) == 40 ? 7: 0;
 			if (ofs) {
 				meta.shift(ofs);
 				inp.value = meta.getDateString();
@@ -498,6 +517,13 @@ zkDtbox.onbutton = function (cmp) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) {
 		if (!$visible(pp)) zkDtbox.open(pp);
+		else zkDtbox.close(pp, true);
+	}
+};
+zkDtbox.dropdn = function (cmp, dropdown) {
+	var pp = $e(cmp.id + "!pp");
+	if (pp) {
+		if ("true" == dropdown) zkDtbox.open(pp);
 		else zkDtbox.close(pp, true);
 	}
 };

@@ -185,6 +185,18 @@ public class Tabbox extends XulElement {
 			invalidate();
 		}
 	}
+	/** Returns whether it is a horizontal tabbox.
+	 * @since 3.0.3
+	 */
+	public boolean isHorizontal() {
+		return "horizontal".equals(getOrient());
+	}
+	/** Returns whether it is a vertical tabbox.
+	 * @since 3.0.3
+	 */
+	public boolean isVertical() {
+		return "vertical".equals(getOrient());
+	}
 
 	/** Returns the look of the {@link Tab} and {@link Tabbox}.
 	 * It is, in fact, a portion of the style class that are used to
@@ -303,7 +315,10 @@ public class Tabbox extends XulElement {
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 			//no z.dbclk/z.lfclk since it is covered by both Tab and Tabpanel
 
-		//HTMLs.appendAttribute(sb, "z.orient", _orient);
+		if (isVertical())
+			HTMLs.appendAttribute(sb, "z.orient", "v");
+		if (_tabs != null && !inAccordionMold())
+			HTMLs.appendAttribute(sb, "z.tabs", _tabs.getUuid());
 		return sb.toString();
 	}
 

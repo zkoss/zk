@@ -60,4 +60,24 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	when it is placed inside of hbox/vbox.
 		</description>
 	</function>
+	<function>
+		<name>setStripeClass</name>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
+		<function-signature>
+	void setStripeClass(org.zkoss.zk.ui.Component)
+		</function-signature>
+		<description>
+	Sets the stripe CSS for each row.
+		</description>
+	</function>
+	<function>
+		<name>resetStripeClass</name>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
+		<function-signature>
+	void resetStripeClass(org.zkoss.zk.ui.Component)
+		</function-signature>
+		<description>
+	Resets the stripe CSS for each row.
+		</description>
+	</function>
 </taglib>

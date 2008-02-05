@@ -47,14 +47,51 @@ zulHdrs.setAttr = function (cmp, nm, val) {
 		var cells = cmp.cells;
 		if (cells) {
 			var sizable = val == "true";
-			for (var j = 0; j < cells.length; ++j)
+			for (var j = cells.length; --j >= 0;)
 				zulHdr.setSizable(cells[j], sizable);
 		}
 	}
 	return true;
 };
+zulHdrs.ondragover = function (evt) {
+	var target = Event.element(evt);
+	var tag = $tag(target);
+	if (tag != "INPUT" && tag != "TEXTAREA") {
+		var el = target;
+		for (; el; el = $parent(el)) {
+		var type = $type(el);
+		if (type == "Lhr" || type == "Col" || type == "Tcol" || type == "Ftr")
+			break;
+		}
+		if (el) el.firstChild.style.MozUserSelect = "none";
+	}
+};
+zulHdrs.ondragout = function (evt) {
+	var target = Event.element(evt);
+	var el = target;
+	for (; el; el = $parent(el)) {
+		var type = $type(el);
+		if (type == "Lhr" || type == "Col" || type == "Tcol" || type == "Ftr")
+			break;
+	}
+	if (el) el.firstChild.style.MozUserSelect = "";
+};
+zulHdrs.initdrag = function (cmp) {
+	if (zk.gecko) {
+		zk.listen(cmp, "mouseover", zulHdrs.ondragover);
+		zk.listen(cmp, "mouseout",  zulHdrs.ondragout);	
+	}
+};
+zulHdrs.cleandrag = function (cmp) {
+	if (zk.gecko) {
+		zk.unlisten(cmp, "mouseover", zulHdrs.ondragover);
+		zk.unlisten(cmp, "mouseout",  zulHdrs.ondragout);	
+	}
+};
 zulHdr = {}; //listheader
 zulHdr._szs = {};
+zulHdr.initdrag = zulHdrs.initdrag;
+zulHdr.cleandrag = zulHdrs.cleandrag;
 zulHdr.init = function (cmp) {
 	zulHdr._show(cmp);
 	zk.listen(cmp, "click", function (evt) {zulHdr.onclick(evt, cmp);});
@@ -66,6 +103,19 @@ zulHdr.init = function (cmp) {
 	zulHdr.setSizable(cmp, zulHdr.sizable(cmp));
 		//Note: IE6 failed to crop a column if it is draggable
 		//Thus we init only necessary (to avoid the IE6 bug)
+	var type = $type(cmp), mate;
+	if (type == "Col")
+		mate = $parentByType(cmp, "Grid");
+	else if (type == "Lhr")
+		mate = $parentByType(cmp, "Libox");
+	else if (type == "Tcol")
+		mate = $parentByType(cmp, "Tree");
+	var meta = zkau.getMeta(mate);
+	if (meta) {
+		if (!meta.fixedSize)
+			meta.fixedSize = function () {meta.init(true);};	
+		zk.addInitLater(meta.fixedSize, false, meta.id + "Hdr");
+	}
 };
 zulHdr.sizable = function (cmp) {
 	return cmp.parentNode && getZKAttr(cmp.parentNode, "sizable") == "true";
@@ -103,17 +153,17 @@ zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 			if (icol < cells.length) {
 				var rwd = zk.revisedSize(cells[icol], wd);
 				cells[icol].style.width = rwd + "px";
-				var cell = $e($uuid(cells[icol]) + "!cave");
+				var cell = cells[icol].firstChild;
 				rwd = zk.revisedSize(cell, rwd);
 				cell.style.width = rwd + "px";		
 			}
 		}
 	}
-	var head;
-	for(var j =0; j < meta.headtbl.rows.length; j++) {
-		var type = $type(meta.headtbl.rows[j]);
+	var head, rows = meta.headtbl.rows;
+	for(var j =0, rl = rows.length; j < rl; j++) {
+		var type = $type(rows[j]);
 		if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
-			head = meta.headtbl.rows[j];
+			head = rows[j];
 			break;
 		}
 	}
@@ -126,15 +176,13 @@ zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 		src.id = head.id + "!fake";
 		src.style.height = "0px";
 			//Note: we cannot use display="none" (offsetWidth won't be right)
-		for (var j = 0; j < head.cells.length; ++j)
+		for (var j = head.cells.length; --j >= 0;)
 			src.appendChild(document.createElement("TD"));					
 		meta.headtbl.rows[0].parentNode.insertBefore(src, meta.headtbl.rows[0]);						
 	}
-	var row = meta.headtbl.rows[0];
-	var cells = row.cells;
-	for (var k =0, z = 0; k < cells.length; k++) {
-		var s = cells[k], d = head.cells[k];
-		var w =  d.style.width;							
+	var row = rows[0], cells = row.cells;
+	for (var k = 0, cl = cells.length; k < cl; ++k) {
+		var s = cells[k], d = head.cells[k], w =  d.style.width;							
 		if (!w || w == "auto" || w.indexOf('%') > -1) {// Bug #1822564
 			d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
 			setZKAttr(d, "wd", "NaN"); // Bug #1823236
@@ -168,7 +216,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 			var head = cmp.parentNode;
 			var fake = $e(head.id + "!fake");
 			
-			var cell = $e(cmp.id + "!cave");
+			var cell = cmp.firstChild;
 			var v = val;	
 			if (nm == "style") v = zk.getTextStyle(val, true, true);
 			if (v) {
@@ -186,7 +234,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 					wd = $int(val) + zk.sumStyles(cmp, "lr", zk.borders) + 
 						zk.sumStyles(cmp, "lr", zk.paddings) + "px";
 				}
-				fake.cells[cmp.cellIndex].style.width = wd; 
+				fake.cells[zk.cellIndex(cmp)].style.width = wd; 
 			}			
 			var meta = zkau.getMeta(mate);
 			if (meta) meta.init();
@@ -198,7 +246,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 };
 
 zulHdr.onclick = function (evt, cmp) {
-	if (!zk.dragging && zulHdr._sortable(cmp) && zkau.insamepos(evt))
+	if (!zk.dragging && $uuid(Event.element(evt)) == cmp.id && zulHdr._sortable(cmp) && zkau.insamepos(evt))
 		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
 };
 zulHdr.onmove = function (evt, cmp) {
@@ -259,7 +307,7 @@ zulHdr._endsizing = function (cmp, evt) {
 		var table = $parentByTag(cmp, "TABLE");
 		var head;
 		
-		for(var j =0; j < table.rows.length; j++) {
+		for(var j =0, rl = table.rows.length; j < rl; j++) {
 			var type = $type(table.rows[j]);
 			if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
 				head = table.rows[j];
@@ -268,16 +316,16 @@ zulHdr._endsizing = function (cmp, evt) {
 		}
 		var cells = head.cells;
 		var total = 0;
-		for (var k = 0; k < cells.length; ++k)
+		for (var k = cells.length; --k >= 0;)
 			if (cells[k] != cmp) total += cells[k].offsetWidth;
 		var row = table.rows[0];
-		row.cells[cmp.cellIndex].style.width = $int(rwd) + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings) + "px";
+		var cidx = zk.cellIndex(cmp);
+		row.cells[cidx].style.width = $int(rwd) + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings) + "px";
 		cmp.style.width = rwd + "px";
-		var uuid = $uuid(cmp);
-		var cell = $e(uuid + "!cave");
+		var cell = cmp.firstChild;
 		cell.style.width = zk.revisedSize(cell, rwd) + "px";	
-		table.style.width = total + wd + "px";					
-		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cmp.cellIndex+",'"+wd+"','"+keys+"')", 0);		
+		table.style.width = total + wd + "px";		
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cidx+",'"+wd+"','"+keys+"')", 0);		
 	}
 };
 /* @param ghosting whether to create or remove the ghosting
@@ -339,3 +387,9 @@ zulHdr._renCls = function (cmp, ext) {
 	if (ext) clsnm += '-' + ext;
 	if (clsnm != cmp.className) cmp.className = clsnm;
 };
+zkFtr = {};
+zkFtr.initdrag = zulHdrs.initdrag;
+zkFtr.cleandrag = zulHdrs.cleandrag;
+zkFtrs = {};
+zkFtrs.initdrag = zulHdrs.initdrag;
+zkFtrs.cleandrag = zulHdrs.cleandrag;

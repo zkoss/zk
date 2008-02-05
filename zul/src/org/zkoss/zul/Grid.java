@@ -21,6 +21,7 @@ package org.zkoss.zul;
 import java.util.Collection;
 import java.util.AbstractCollection;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Iterator;
@@ -412,7 +413,7 @@ public class Grid extends XulElement {
 	 * It creates an instance automatically.
 	 */
 	public void setRowRenderer(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException,
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 	InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));
@@ -497,7 +498,8 @@ public class Grid extends XulElement {
 				if (max >= newsz) max = newsz - 1;
 				if (min < 0) min = 0;
 
-				for (Iterator it = _rows.getChildren().listIterator(min);
+				//unloadRow() might detach and insert row into _rows, must make a copy for iterate.
+				for (Iterator it = new ArrayList(_rows.getChildren()).listIterator(min);
 				min <= max && it.hasNext(); ++min) {
 					final Row row = (Row)it.next();
 					if (row.isLoaded()) {
@@ -620,6 +622,10 @@ public class Grid extends XulElement {
 			for (Iterator it = _rows.getChildren().listIterator(ofs);
 			j < pgsz && it.hasNext(); ++j)
 				renderer.render((Row)it.next());
+
+			if (!inPagingMold() && getRows().getChildren().size() > pgsz)
+				((Row)getRows().getChildren().get(pgsz))
+					.setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -871,8 +877,15 @@ public class Grid extends XulElement {
 			new StringBuffer(80).append(super.getOuterAttrs());
 		if (_align != null)
 			HTMLs.appendAttribute(sb, "align", _align);
-		if (_model != null)
+		if (_model != null) {
 			HTMLs.appendAttribute(sb, "z.model", true);
+			final List rows = getRows().getChildren();
+			int index = rows.size();
+			for(final ListIterator it = rows.listIterator(index);
+			it.hasPrevious(); --index)
+				if(((Row)it.previous()).isLoaded()) break;
+			HTMLs.appendAttribute(sb, "z.lastLoadIdx", index);
+		}
 		if (_scOddRow != null)
 			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
 		return sb.toString();

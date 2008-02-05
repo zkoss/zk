@@ -79,4 +79,9 @@ public class ListDataEvent {
 	public int getIndex1() {
 		return _index1;
 	}
+
+	//Object//
+	public String toString() {
+		return "[Event type=" + _type +", index="+_index0+", "+_index1+']';
+	}
 }

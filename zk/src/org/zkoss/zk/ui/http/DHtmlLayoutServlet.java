@@ -42,6 +42,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -55,6 +56,7 @@ import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
@@ -63,14 +65,39 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * including ajax (HTML+Ajax), mil (Mobile Interactive Language)
  * and others (see {@link Desktop#getDeviceType}.
  *
+ * <p>Init parameters:
+ *
+ * <dl>
+ * <dt>update-uri</dt>
+ * <dd>It specifies the URI which the ZK AU engine is mapped to.</dd>
+ * <dt>compress</dt>
+ * <dd>It specifies whether to compress the output if the browser supports the compression (Accept-Encoding) and this Servlet is not included by other Servlets.</dd>
+ * <dt>log-level</dt>
+ * <dd>It specifies the default log level for org.zkoss. If not specified, the system default (usually INFO) is used.</dd>
+ * </dl>
  * @author tomyeh
  */
 public class DHtmlLayoutServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);
+	private static final String ATTR_LAYOUT_SERVLET
+		= "org.zkoss.zk.ui.http.LayoutServlet";
+
 	private ServletContext _ctx;
 	private WebManager _webman;
 	private boolean _compress = true;
 
+	/** Returns the layout servlet of the specified application, or
+	 * null if not loaded yet.
+	 * Note: if the layout servlet is not loaded, it returns null.
+	 * @since 3.0.2
+	 */
+	public static DHtmlLayoutServlet getLayoutServlet(WebApp wapp) {
+		return (DHtmlLayoutServlet)
+			((ServletContext)wapp.getNativeContext())
+				.getAttribute(ATTR_LAYOUT_SERVLET);
+	}
+
+	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
 		//super.init(config);
 			//Note callback super to avoid saving config
@@ -107,6 +134,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		}
 
 		_webman = new WebManager(_ctx, updateURI);
+
+		_ctx.setAttribute(ATTR_LAYOUT_SERVLET, this);
 	}
 	public void destroy() {
 		if (_webman != null) _webman.destroy();
@@ -126,15 +155,24 @@ public class DHtmlLayoutServlet extends HttpServlet {
 //		if (D.ON && log.finerable()) log.finer("Creates from "+path);
 
 		final Session sess = WebManager.getSession(getServletContext(), request);
-		final Object old = I18Ns.setup(sess, request, response,
-			sess.getWebApp().getConfiguration().getResponseCharset());
+		if (!SessionsCtrl.requestEnter(sess)) {
+			response.sendError(response.SC_SERVICE_UNAVAILABLE,
+				Messages.get(MZk.TOO_MANY_REQUESTS));
+			return;
+		}
 		try {
-			if (!process(sess, request, response, path, bRichlet))
-				handleError(sess, request, response, path, null);
-		} catch (Throwable ex) {
-			handleError(sess, request, response, path, ex);
+			final Object old = I18Ns.setup(sess, request, response,
+				sess.getWebApp().getConfiguration().getResponseCharset());
+			try {
+				if (!process(sess, request, response, path, bRichlet))
+					handleError(sess, request, response, path, null);
+			} catch (Throwable ex) {
+				handleError(sess, request, response, path, ex);
+			} finally {
+				I18Ns.cleanup(request, old);
+			}
 		} finally {
-			I18Ns.cleanup(request, old);
+			SessionsCtrl.requestExit(sess);
 		}
 	}
 	protected

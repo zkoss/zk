@@ -335,9 +335,44 @@ public class Servlets {
 		if (agt == null)
 			return false;
 
+		//ZK Mobile/1.0 (RMIL)
 		agt = agt.toLowerCase();
-		return agt.indexOf("zk") >= 0 && agt.indexOf("mobile") >= 0
-			&& agt.indexOf("rmil") >= 0;
+		return agt.indexOf("zk") >= 0 && agt.indexOf("rmil") >= 0;
+	}
+	/** Returns whether the client is a mobile device supporting HIL
+	 * (Handset Interactive Language).
+	 *
+	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
+	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
+	 * return true.
+	 *
+	 * @since 3.0.2
+	 */
+	public static final boolean isHilDevice(ServletRequest req) {
+		String agt = req instanceof HttpServletRequest ?
+			((HttpServletRequest)req).getHeader("user-agent"): null;
+		if (agt == null)
+			return false;
+
+		//ZK Mobile for Android 1.0 (RMIL; RHIL)
+		agt = agt.toLowerCase();
+		return agt.indexOf("zk") >= 0 && agt.indexOf("rhil") >= 0;
+	}
+
+	/** Returns the user-agent header, which indicates what the client is,
+	 * or an empty string if not available.
+	 *
+	 * <p>Note: it doesn't return null, so it is easy to test what
+	 * the client is with {@link String#indexOf}.
+	 *
+	 * @since 3.0.2
+	 */
+	public static final String getUserAgent(ServletRequest req) {
+		if (req instanceof HttpServletRequest) {
+			final String s = ((HttpServletRequest)req).getHeader("user-agent");
+			if (s != null) return s;
+		}
+		return "";
 	}
 
 	/**
