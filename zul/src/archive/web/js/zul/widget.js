@@ -161,7 +161,7 @@ zkTxbox.onupdate = function (inp) {
 		var uuid = $uuid(inp);			
 		var sr = zk.getSelectionRange(inp);	
 		zkau.send({uuid: uuid, cmd: "onChange",
-			data: [newval, false, sr[0]]}, zkau.asapTimeout(uuid, "onChange", 150));
+			data: [newval, false, sr[0]]}, zkau.asapTimeout(uuid, "onChange", zk.delayTime_onChange ? zk.delayTime_onChange : 150));
 	} else if (inp.getAttribute("zk_err")) {
 		inp.removeAttribute("zk_err");
 		zkau.send({uuid: $uuid(inp), cmd: "onError",
