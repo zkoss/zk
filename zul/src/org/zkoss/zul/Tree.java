@@ -860,20 +860,25 @@ public class Tree extends XulElement {
 		/* 
 		 * Loop through indexes array
 		 * if INTERVAL_REMOVED, from end to beginning
+		 * 
+		 * 2008/02/12 --- issue: [ 1884112 ] 
+		 * When getChildByNode returns null, do nothing
 		 */
-		switch (event.getType()) {
-		case TreeDataEvent.INTERVAL_ADDED:
-			for(int i=indexFrom;i<=indexTo;i++)
-				onTreeDataInsert(parent,data,i);
-			break;
-		case TreeDataEvent.INTERVAL_REMOVED:
-			for(int i=indexTo;i>=indexFrom;i--)
-				onTreeDataRemoved(parent,data,i);
-			break;
-		case TreeDataEvent.CONTENTS_CHANGED:
-			for(int i=indexFrom;i<=indexTo;i++)
-				onTreeDataContentChanged(parent,data,i);
-			break;
+		if(parent != null){
+			switch (event.getType()) {
+			case TreeDataEvent.INTERVAL_ADDED:
+				for(int i=indexFrom;i<=indexTo;i++)
+					onTreeDataInsert(parent,data,i);
+				break;
+			case TreeDataEvent.INTERVAL_REMOVED:
+				for(int i=indexTo;i>=indexFrom;i--)
+					onTreeDataRemoved(parent,data,i);
+				break;
+			case TreeDataEvent.CONTENTS_CHANGED:
+				for(int i=indexFrom;i<=indexTo;i++)
+					onTreeDataContentChanged(parent,data,i);
+				break;
+			}
 		}
 			
 	}
@@ -963,7 +968,8 @@ public class Tree extends XulElement {
 	 * Return the Tree or Treeitem component by a given associated node in model.<br>
 	 * This implmentation calls {@link TreeModel#getPath} method to locate assoicated
 	 * Treeitem (or Tree) via path. You can override this method to speed up 
-	 * performance if possible.
+	 * performance if possible. 
+	 * Return null, if the Tree or Treeitem is not yet rendered.
 	 * @since 3.0.0
 	 */
 	protected Component getChildByNode(Object node){
@@ -973,9 +979,17 @@ public class Tree extends XulElement {
 		if(path == null || path.length == 0)
 			return this;
 		else{
-			Treeitem ti = (Treeitem)this.getTreechildren().getChildren().get(path[0]);
+			Treeitem ti = null;
 			for(int i=1; i<path.length; i++){
-				ti = (Treeitem) ti.getTreechildren().getChildren().get(path[i]);
+				List children =  ti.getTreechildren().getChildren();
+				/*
+				 * If the children are not rendered yet, return null
+				 */
+				if(children.size()>path[i]&&0<=path[i]){
+					ti = (Treeitem) children.get(path[i]);
+				}else{
+					return null;
+				}
 			}
 			return ti;
 		}
