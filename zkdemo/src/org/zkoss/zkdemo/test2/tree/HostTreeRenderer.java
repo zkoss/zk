@@ -28,7 +28,7 @@ import org.zkoss.zul.Treerow;
  * @author Dennis.Chen
  *
  */
-public class HostIconTreeRenderer implements TreeitemRenderer {
+public class HostTreeRenderer implements TreeitemRenderer {
 
 
 	public void render(Treeitem treeitem, Object data) throws Exception {
@@ -40,28 +40,12 @@ public class HostIconTreeRenderer implements TreeitemRenderer {
 			row = treeitem.getTreerow(); 
 			row.getChildren().clear();
 		}
-		if(data instanceof HostTreeModel.FakeRoot){
-			treeitem.getTreerow().appendChild(new Treecell(((HostTreeModel.FakeRoot)data).getName()));
-		}else if(data instanceof HostTreeModel.FakeGroup){
+		if(data instanceof HostTreeModel.FakeGroup){
 			treeitem.getTreerow().appendChild(new Treecell(((HostTreeModel.FakeGroup)data).getName()));
 		}else if(data instanceof HostTreeModel.FakeHost){
-			HostTreeModel.FakeHost host = ((HostTreeModel.FakeHost)data);
-			Treecell cell = new Treecell(host.getName());
-			cell.setImage("/img/add.gif");
-			cell.setId(host.getId());
-			treeitem.getTreerow().appendChild(cell);
+			treeitem.getTreerow().appendChild(new Treecell(((HostTreeModel.FakeHost)data).getName()));
 		}else if(data instanceof HostTreeModel.FakeProcess){
-			HostTreeModel.FakeProcess process = ((HostTreeModel.FakeProcess)data);
-			Treecell cell = new Treecell(process.getName());
-			if(process.getType().equals("A")){
-				cell.setImage("/img/caldrbtn.gif");
-			}else if(process.getType().equals("B")){
-				cell.setImage("/img/bandbtn.gif");
-			}else if(process.getType().equals("C")){
-				cell.setImage("/img/upload.gif");
-			}
-			cell.setId(process.getId());
-			treeitem.getTreerow().appendChild(cell);
+			treeitem.getTreerow().appendChild(new Treecell(((HostTreeModel.FakeProcess)data).getName()));
 		}
 		
 		treeitem.setOpen(false);// set open false to show correct icon.
