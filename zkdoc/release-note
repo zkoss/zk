@@ -6,6 +6,7 @@ ZK 3.0.4 Freshly
 
 * Bugs
   1886040: The ISO code for Ukrainian shall be uk, not ua
+  1884111: IE7 performance (very slow - eg SEVEN secs to redraw)
 
 	--------
 ZK 3.0.3
