@@ -246,7 +246,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	 * </tr>
 	 * </table>
 	 * 
-	 * @since 3.1.0
+	 * @since 3.0.4
 	 */
 	public Locale getLocale() {
 		return _locale;
@@ -258,7 +258,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	 * @param locale the locale. If null, the ZK default is used
 	 * ({@link Locales#getCurrent}).
 	 * @see #getLocale
-	 * @since 3.1.0
+	 * @since 3.0.4
 	 */
 	public void setLocale(Locale locale) {
 		if (!Objects.equals(_locale, locale)) {
