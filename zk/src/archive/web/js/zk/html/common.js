@@ -1068,7 +1068,9 @@ zk.restoreDisabled = function (n) {
 				el.style.visibility = what;
 
 			//Workaround IE: Bug 1498895
-			if (bug1498895) {
+			/**if (bug1498895) { disable by the bug #1884111, 
+			 // because we had the new concept that restores the previous focus, 
+			 // we don't need to find which input element needs to be focused.
 				var tn = $tag(el);
 				if ((tn == "INPUT" && (el.type == "text" || el.type == "password"))
 				||  tn == "TEXTAREA"){
@@ -1084,7 +1086,7 @@ zk.restoreDisabled = function (n) {
 					} catch (e) {
 					}
 				}
-			}
+			}*/
 		}
 	}
 	zk._disTags = skipped;
