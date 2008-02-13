@@ -101,6 +101,7 @@ public class DumbFailoverManager implements FailoverManager {
 				public String getDocType() {return ((PageCtrl)killed).getDocType();} //if unknown, just pass null
 				public String getFirstLine() {return ((PageCtrl)killed).getFirstLine();} //if unknown, just pass null
 				public Boolean getCacheable() {return ((PageCtrl)killed).getCacheable();} //if unknown, just pass null
+				public Class getExpressionFactoryClass() {return page.getExpressionFactoryClass();}
 			});
 			//optional: copy killed's attrs to page
 
