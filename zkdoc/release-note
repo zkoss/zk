@@ -12,6 +12,7 @@ ZK 3.0.4 Freshly
   1888104: constraint error message appears behind popup
   1886342: Listbox drag closes popup
   1886352: Trailing space on Menuitem does nothing
+  1886788: Grid rows not follow columns's widths
 
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
