@@ -709,7 +709,7 @@ public class Grid extends XulElement {
 	}
 
 	/** Used to render row if _model is specified. */
-	private class Renderer implements java.io.Serializable {
+	private class Renderer {
 		private final RowRenderer _renderer;
 		private boolean _rendered, _ctrled;
 
