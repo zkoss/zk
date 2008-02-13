@@ -12,7 +12,7 @@ import org.zkoss.zk.ui.Page;
  * Python Interpreter
  * 
  * @author gracelin
- * @since 3.1.0
+ * @since 3.0.4
  */
 public class JythonInterpreter extends GenericInterpreter {
 	PythonInterpreter _interpreter;
@@ -20,7 +20,6 @@ public class JythonInterpreter extends GenericInterpreter {
 	public JythonInterpreter() {
 	}
 
-	@Override
 	public void init(Page owner, String zslang) {
 		super.init(owner, zslang);
 
@@ -28,29 +27,24 @@ public class JythonInterpreter extends GenericInterpreter {
 		_interpreter = new PythonInterpreter(new Variables());
 	}
 
-	@Override
 	protected void exec(String script) {
 		_interpreter.exec(script);
 	}
 
-	@Override
 	public void destroy() {
 		_interpreter.cleanup();
 		_interpreter = null;
 		super.destroy();
 	}
 
-	@Override
 	protected Object get(String name) {
 		return _interpreter.get(name, Object.class);
 	}
 
-	@Override
 	protected void set(String name, Object value) {
 		_interpreter.set(name, value);
 	}
 
-	@Override
 	protected void unset(String name) {
 		_interpreter.set(name, Py.None);
 	}
@@ -58,7 +52,7 @@ public class JythonInterpreter extends GenericInterpreter {
 	/** Returns the native interpreter, or null if it is not initialized
 	 * or destroyed.
 	 * 
-	 * @since 3.1.0
+	 * @since 3.0.4
 	 */
 	public Object getNativeInterpreter() {
 		return _interpreter;
@@ -72,7 +66,6 @@ public class JythonInterpreter extends GenericInterpreter {
 			super();
 		}
 
-		@Override
 		public synchronized PyObject __finditem__(String key) {
 			PyObject pyo = super.__finditem__(key);
 
