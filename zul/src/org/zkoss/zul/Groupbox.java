@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Groupbox extends XulElement {
-	private Caption _caption;
+	private transient Caption _caption;
 	/** The style used for the content block. */
 	private String _cntStyle;
 	/** The style class used for the content block. */
