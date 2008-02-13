@@ -829,8 +829,11 @@ zk.Selectable.prototype = {
 						break;
 					}
 				}
-				zk.cpCellWidth(head, this.bodyrows, this);	
-				var fake = $e(head.id + "!fake");
+				var fake = $e(head.id + "!fake"), recalc = true;
+				if (!fake && !head.rowIndex) {
+					zk.cpCellWidth(head, this.bodyrows, this);
+					recalc = false;
+				}
 				if (!fake || fake.cells.length != head.cells.length) {
 					if (fake) fake.parentNode.removeChild(fake);
 					var src = document.createElement("TR");
@@ -852,7 +855,8 @@ zk.Selectable.prototype = {
 					if (zk.isVisible(d))
 						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
 					else s.style.display = "none";
-				}	
+				}
+				if (recalc) zk.cpCellWidth(head, this.bodyrows, this); // But #1886788 recalculate width.
 			}
 			if (this.foottbl && this.foottbl.rows.length)
 				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
