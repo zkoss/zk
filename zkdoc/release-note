@@ -9,6 +9,16 @@ ZK 3.0.4 Freshly
   1884111: IE7 performance (very slow - eg SEVEN secs to redraw)
   1887688: xel-config in zk.xml has no effect
 
+* Upgrade Notes:
+  + <disable-behind-modal> is default to false.
+    It improves the performance when opening a modal window.
+    However, the user might be able to change the focus a component
+    behind the modal window by pressing TAB. If it is not acceptable to you,
+    specify the following in zk.xml.
+	<client-config>
+		<disable-behind-modal>true</disable-behind-modal>
+	<client-config>
+
 	--------
 ZK 3.0.3
 * Features
