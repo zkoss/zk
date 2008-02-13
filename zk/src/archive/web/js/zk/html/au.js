@@ -1578,11 +1578,11 @@ zkau._zidOwner = function (n) {
 //Drag & Drop//
 zkau.initdrag = function (n) {
 	zkau._drags[n.id] = new Draggable(n, {
-		starteffect: zkau.closeFloats,
+		starteffect: zk.voidf, // bug #1886342: we cannot use the zkau.closeFloats function in this situation.
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true,
 		constraint: zkau._constraint,
-		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag
+		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag, zindex: 88800
 	});
 	zk.eval(n, "initdrag");
 };
