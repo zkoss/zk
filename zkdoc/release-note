@@ -5,6 +5,7 @@ ZK 3.0.4 Freshly
   1886032: Add the support of I18N for jasperreport
 
 * Bugs
+  1892396; Component.clone() failed: it shall clean up _xtrl
   1886040: The ISO code for Ukrainian shall be uk, not ua
   1884111: IE7 performance (very slow - eg SEVEN secs to redraw)
   1887688: xel-config in zk.xml has no effect
