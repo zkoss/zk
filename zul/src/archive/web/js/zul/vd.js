@@ -205,7 +205,7 @@ zkVld._errbox = function () {
 	zkVld._ebs.push(boxid);
 
 	if (!zkVld._cnt) zkVld._cnt = 0;
-	box.style.zIndex = 70000 + zkVld._cnt++;
+	box.style.zIndex = $int(Element.getStyle(box ,"z-index")) + (++zkVld._cnt);
 	if (cmp) {
 		var ofs = zk.revisedOffset(cmp), wd = cmp.offsetWidth,
 			hgh = cmp.offsetHeight, atTop;
