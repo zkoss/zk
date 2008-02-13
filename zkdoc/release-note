@@ -14,6 +14,8 @@ ZK 3.0.4 Freshly
   1886352: Trailing space on Menuitem does nothing
   1886788: Grid rows not follow columns's widths
   1892464: Clone groupbox is wrong
+  1892446: Bug in Datalistener When Clone Tree
+  1892484: Tree serialize bug
 
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
