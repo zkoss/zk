@@ -3,6 +3,7 @@ ZK 3.0.4 Freshly
 * Features
   1886684: Translate messages to Czech. Thank Pavel Mica for his contribution.
   1886032: Add the support of I18N for jasperreport
+  1892573: Add Jython Interpreter
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
