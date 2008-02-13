@@ -1006,7 +1006,7 @@ zk.disableAll = function (parent) {
 	for (var j = 0, al1 = zk._actg1.length; j < al1; j++)
 		zk._dsball(parent, document.getElementsByTagName(zk._actg1[j]), true);
 
-	if (!zk.ndbModal) //not disable-behind-modal
+	if (zk.dbModal) //not disable-behind-modal
 		for (var j = 0, al2 = zk._actg2.length; j < al2; j++)
 			zk._dsball(parent, document.getElementsByTagName(zk._actg2[j]));
 };

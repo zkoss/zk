@@ -182,8 +182,8 @@ public class ZkFns {
 				.append(config.getResendDelay())
 			.append(";\n");
 
-		if (!config.isDisableBehindModalEnabled())
-			sb.append("zk.ndbModal=true;\n");
+		if (config.isDisableBehindModalEnabled())
+			sb.append("zk.dbModal=true;\n");
 
 		if (config.isKeepDesktopAcrossVisits()
 		|| request.getAttribute(Attributes.NO_CACHE) == null)

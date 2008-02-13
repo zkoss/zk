@@ -120,7 +120,7 @@ public class Configuration {
 	/** keep-across-visits. */
 	private boolean _keepDesktop;
 	/** Whether to disable components that don't belong to the modal window. */
-	private boolean _disableBehindModal = true;
+	private boolean _disableBehindModal;
 	/** Whether to keep the session alive when receiving onTimer.
 	 */
 	private boolean _timerKeepAlive;
@@ -1510,7 +1510,7 @@ public class Configuration {
 	/** Returns whether to disable the components that don't belong to
 	 * the active modal window.
 	 *
-	 * <p>Default: true.
+	 * <p>Default: false (ZK 3.0.3 or earlier, the default is true).
 	 * @since 2.4.1
 	 */
 	public boolean isDisableBehindModalEnabled() {
@@ -1519,7 +1519,6 @@ public class Configuration {
 	/** Sets whether to disable the components that don't belong to
 	 * the active modal window.
 	 *
-	 * <p>Default: true.
 	 * @since 2.4.1
 	 */
 	public void enableDisableBehindModal(boolean enable) {
