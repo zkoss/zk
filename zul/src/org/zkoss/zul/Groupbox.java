@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
+
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Component;
@@ -250,5 +252,32 @@ public class Groupbox extends XulElement {
 		public void setOpenByClient(boolean open) {
 			_open = open;
 		}
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Groupbox clone = (Groupbox)super.clone();
+
+		if (_caption != null) clone.afterUnmarshal();
+		return clone;
+	}
+	/** @param cnt # of children that need special handling (used for optimization).
+	 * -1 means process all of them
+	 */
+	private void afterUnmarshal() {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Caption) {
+				_caption = (Caption)child;
+				break; //done
+			}
+		}
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		afterUnmarshal();
 	}
 }
