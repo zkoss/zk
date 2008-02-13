@@ -17,7 +17,8 @@ ZK 3.0.4 Freshly
   1892464: Clone/serialize groupbox is wrong
   1892446: Bug in Datalistener When Clone Tree
   1892484: Tree serialize bug
-
+  1888911: databind with grid in grid fail when no _var in inner grid
+  
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
     It improves the performance when opening a modal window.
