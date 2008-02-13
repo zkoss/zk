@@ -866,21 +866,33 @@ public class Tree extends XulElement {
 		 * When getChildByNode returns null, do nothing
 		 */
 		if(parent != null){
-			int indexFrom = event.getIndexFrom();
-			int indexTo = event.getIndexTo();
-			switch (event.getType()) {
-			case TreeDataEvent.INTERVAL_ADDED:
-				for(int i=indexFrom;i<=indexTo;i++)
-					onTreeDataInsert(parent,node,i);
-				break;
-			case TreeDataEvent.INTERVAL_REMOVED:
-				for(int i=indexTo;i>=indexFrom;i--)
-					onTreeDataRemoved(parent,node,i);
-				break;
-			case TreeDataEvent.CONTENTS_CHANGED:
-				for(int i=indexFrom;i<=indexTo;i++)
-					onTreeDataContentChanged(parent,node,i);
-				break;
+			boolean needUpdate=true;
+			/*
+			 * If treeitem is rendered and loaded, update UI 
+			 * else don't need to
+			 * 
+			 * parent could be Tree. In this case, update UI
+			 */
+			if(parent instanceof Treeitem){
+				needUpdate = ((Treeitem)parent).isLoaded();
+			}
+			if(needUpdate){
+				int indexFrom = event.getIndexFrom();
+				int indexTo = event.getIndexTo();
+				switch (event.getType()) {
+				case TreeDataEvent.INTERVAL_ADDED:
+					for(int i=indexFrom;i<=indexTo;i++)
+						onTreeDataInsert(parent,node,i);
+					break;
+				case TreeDataEvent.INTERVAL_REMOVED:
+					for(int i=indexTo;i>=indexFrom;i--)
+						onTreeDataRemoved(parent,node,i);
+					break;
+				case TreeDataEvent.CONTENTS_CHANGED:
+					for(int i=indexFrom;i<=indexTo;i++)
+						onTreeDataContentChanged(parent,node,i);
+					break;
+				}
 			}
 		}
 			
