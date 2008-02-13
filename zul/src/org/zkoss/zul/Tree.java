@@ -850,13 +850,12 @@ public class Tree extends XulElement {
 	
 	/*
 	 * Handles when the tree model's content changed 
+	 * <p>Author: jeffliu
 	 */
 	private void onTreeDataChange(TreeDataEvent event){	
-		//if the treepaht is empty, render tree's treechildren
+		//if the treeparent is empty, render tree's treechildren
 		Object data = event.getParent();
 		Component parent = getChildByNode(data);
-		int indexFrom = event.getIndexFrom();
-		int indexTo = event.getIndexTo();
 		/* 
 		 * Loop through indexes array
 		 * if INTERVAL_REMOVED, from end to beginning
@@ -865,6 +864,8 @@ public class Tree extends XulElement {
 		 * When getChildByNode returns null, do nothing
 		 */
 		if(parent != null){
+			int indexFrom = event.getIndexFrom();
+			int indexTo = event.getIndexTo();
 			switch (event.getType()) {
 			case TreeDataEvent.INTERVAL_ADDED:
 				for(int i=indexFrom;i<=indexTo;i++)
@@ -970,6 +971,7 @@ public class Tree extends XulElement {
 	 * Treeitem (or Tree) via path. You can override this method to speed up 
 	 * performance if possible. 
 	 * Return null, if the Tree or Treeitem is not yet rendered.
+	 * <p>Author: jeffliu
 	 * @since 3.0.0
 	 */
 	protected Component getChildByNode(Object node){
@@ -1003,6 +1005,7 @@ public class Tree extends XulElement {
 	
 	/*
 	 * Initial Tree data listener
+	 * <p>Author: jeffliu
 	 */
 	private void initDataListener() {
 		if (_dataListener == null)
@@ -1017,6 +1020,7 @@ public class Tree extends XulElement {
 	
 	/** Sets the tree model associated with this tree. 
 	 *
+	 * <p>Author: jeffliu
 	 * @param model the tree model to associate, or null to dis-associate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
@@ -1031,6 +1035,7 @@ public class Tree extends XulElement {
 	//--TreeModel dependent codes--//
 	/** Returns the list model associated with this tree, or null
 	 * if this tree is not associated with any tree data model.
+	 * <p>Author: jeffliu
 	 * @return the list model associated with this tree
 	 * @since 3.0.0
 	 */
@@ -1039,6 +1044,7 @@ public class Tree extends XulElement {
 	}
 	
 	/** Synchronizes the tree to be consistent with the specified model.
+	 * <p>Author: jeffliu
 	 */
 	private void syncModel() throws Exception{
 		if (_renderer == null)
@@ -1053,6 +1059,7 @@ public class Tree extends XulElement {
 	 * If you want it to re-render, you could assign the same model again 
 	 * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
 	 *
+	 * <p>Author: jeffliu
 	 * @param renderer the renderer, or null to use the default.
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.0
