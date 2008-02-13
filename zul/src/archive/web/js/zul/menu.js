@@ -197,7 +197,8 @@ zkMenuit.init = function (cmp) {
 };
 zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
-	var cmp = $parentByType(Event.element(evt), "Menuit");
+	var el = Event.element(evt);
+	var cmp = $parentByType(el, "Menuit");
 	zkMenu._onout(cmp); //Bug 1822720
 
 	var anc = $e(cmp.id + "!a");
@@ -211,8 +212,12 @@ zkMenuit.onclick = function (evt) {
 		zkau.send({uuid: uuid, cmd: "onClick", data: null, ctl: true});
 	} else {
 		var t = anc.getAttribute("target");
-		if (anc.href && !zk.isNewWindow(anc.href, t))
+		var overwrite = false;
+		if (anc.href && !zk.isNewWindow(anc.href, t)) {
 			zk.progress();
+			overwrite = true;
+		}
+		if (el.id != anc.id) zk.go(anc.href, overwrite, t); // Bug #1886352
 		//Note: we cannot eat onclick. or, <a> won't work
 	}
 	zkau.closeFloats(cmp); //bug 1711822: fire onClick first
