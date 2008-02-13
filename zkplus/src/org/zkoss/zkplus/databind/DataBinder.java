@@ -65,6 +65,7 @@ public class DataBinder {
 	public static final String TEMPLATEMAP = "zkplus.databind.TEMPLATEMAP"; // template -> clone
 	public static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
 	private static final String OWNER = "zkplus.databind.OWNER"; //the collection owner of the template component
+	private static final String IAMOWNER = "zkplus.databind.IAMOWNER"; //I am the collection owner
 	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
 
@@ -339,6 +340,12 @@ public class DataBinder {
 		}
 		return false;
 	}		
+
+	/** Internal Use Only. Whether a collection owner component. (e.g. Grid, Listbox)
+	 */
+	/*package*/ boolean isCollectionOwner(Component owner) {
+		return owner.getAttribute(IAMOWNER) != null;
+	}
 	
 	/** Whether use the default binding configuration.
 	 */
@@ -523,7 +530,10 @@ public class DataBinder {
 				
 				//_var special case; meaning a template component
 				if (attrMap.containsKey("_var")) {
-					setupTemplateComponent(comp, getComponentCollectionOwner(comp)); //setup as template components
+					final Component owner = getComponentCollectionOwner(comp);
+					//bug#1888911 databind and Grid in Grid not work when no _var in inner Grid
+					owner.setAttribute(IAMOWNER, Boolean.TRUE);
+					setupTemplateComponent(comp, owner); //setup as template components
 					String varname = ((Binding)attrMap.get("_var")).getExpression();
 					varnameSet.add(varname);
 					comp.setAttribute(VARNAME, varname);

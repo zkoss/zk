@@ -62,7 +62,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		//link this template map to parent templatemap (Grid in Grid)
 		Map parenttemplatemap = (Map) grid.getAttribute(_binder.TEMPLATEMAP);
 		if (parenttemplatemap != null) {
-				templatemap.put(_binder.TEMPLATEMAP, parenttemplatemap);
+			templatemap.put(_binder.TEMPLATEMAP, parenttemplatemap);
 		}
 		//kept clone kids somewhere to avoid create too many components in browser
 		final List kids = new ArrayList(clone.getChildren());
@@ -110,9 +110,14 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 			clone.setAttribute(_binder.TEMPLATE, template);
 		}
 		
-		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, no need to process
+		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
+		//no need to process down since BindingRowRenderer of the under Grid
+		//owner will do its own linkTemplates()
 		if (template instanceof Grid || template instanceof Listbox) {
-			return;
+			//bug#1888911 databind and Grid in Grid not work when no _var in inner Grid
+			if (_binder.isCollectionOwner(template)) {
+				return;
+			}
 		}
 		
 		final Iterator itt = template.getChildren().iterator();

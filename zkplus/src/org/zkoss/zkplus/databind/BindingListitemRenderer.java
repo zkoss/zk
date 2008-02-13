@@ -113,11 +113,16 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 			clone.setAttribute(_binder.TEMPLATE, template);
 		}
 		
-		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, no need to process
+		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
+		//no need to process down since BindingRowRenderer of the under Grid
+		//owner will do its own linkTemplates()
 		if (template instanceof Grid || template instanceof Listbox) {
-			return;
+			//bug#1888911 databind and Grid in Grid not work when no _var in inner Grid
+			if (_binder.isCollectionOwner(template)) {
+				return;
+			}
 		}
-		
+
 		final Iterator itt = template.getChildren().iterator();
 		final Iterator itc = clone.getChildren().iterator();
 		while (itt.hasNext()) {
