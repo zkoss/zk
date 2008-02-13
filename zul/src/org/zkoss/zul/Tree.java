@@ -1099,25 +1099,35 @@ public class Tree extends XulElement {
 	 * Notice: _model.getRoot() is mapped to Tree, not first Treeitem
 	 */
 	private void renderTree(){
-		if(_treechildren != null)
-			_treechildren =null;
-		Treechildren children = new Treechildren();
-		children.setParent(this);
+		if(_treechildren == null) {
+			Treechildren children = new Treechildren();
+			children.setParent(this);
+		} else {
+			_treechildren.getChildren().clear();
+		}
+	
 		Object node = _model.getRoot();
 		int childCount = _model.getChildCount(node);
-		for(int i=0; i< childCount;i++ ){
-			renderTreeChild(node,i);
+		final Renderer renderer = new Renderer();
+		try {
+			for(int i=0; i< childCount;i++ ){
+				renderTreeChild(renderer, node, i);
+			}
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
 		}
-	}
+}
 	
 	/*
 	 * Helper method for renderTree
 	 */
-	private void renderTreeChild(Object node,int index){
+	private void renderTreeChild(Renderer renderer, Object node,int index){
 		Treeitem ti = new Treeitem();
 		Object data = _model.getChild(node, index);
 		try {
-			getRealRenderer().render(ti, data);
+			renderer.render(ti, data);
 		} catch (Throwable ex) {
 			try {
 				ti.setLabel(Exceptions.getMessage(ex));
@@ -1165,7 +1175,7 @@ public class Tree extends XulElement {
 			_renderer = getRealRenderer();
 		}
 		
-		private void render(Treeitem item) throws Throwable {
+		private void render(Treeitem item, Object node) throws Throwable {
 			if (!item.isOpen())
 				return; //nothing to do
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
@@ -1174,7 +1184,6 @@ public class Tree extends XulElement {
 			}
 			
 			try {
-				Object node = getAssociatedNode(item, Tree.this);
 				_renderer.render(item, node);
 			} catch (Throwable ex) {
 				try {
@@ -1215,92 +1224,96 @@ public class Tree extends XulElement {
 	 * @see #renderItems
 	 * @since 3.0.0
 	 */
-	public void renderItem(Treeitem item){
-		if(_model ==null) return;
-		final Renderer renderer = new Renderer();
-		try {
-			renderItem(item,getAssociatedNode(item,this));
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
-		}	
+	public void renderItem(Treeitem item) {
+		if(_model != null) {
+			final Renderer renderer = new Renderer();
+			try {
+				renderItem0(renderer, item);
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
+		}
 	}
 	
-	/** Renders the specified {@link Treeitem} with data if not loaded yet,
+	/** Renders the specified {@link Treeitem} if not loaded yet,
 	 * with {@link #getTreeitemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 *
-	 *<p>Note: Since the corresponding data is given,
+	 *<p>Note: Since the corresponding node is given,
 	 * This method has better performance than 
 	 * renderItem(Treeitem item) due to not searching for its 
-	 * corresponding data. 
+	 * corresponding node.
+	 *
 	 * @see #renderItems
 	 * @since 3.0.0
-	 * 
-	 * 
 	 */
-	public void renderItem(Treeitem item, Object data){
-		if(_model ==null) return;
-		final Renderer renderer = new Renderer();
-		try {
-			dfRenderItem(data,item);
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
+	public void renderItem(Treeitem item, Object node) {
+		if(_model != null) {
+			final Renderer renderer = new Renderer();
+			try {
+				renderItem0(renderer, item, node);
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
 		}
 	}
-	
-	/**
-	 * Render the treetiem with given node and its children
-	 */
-	private void  dfRenderItem(Object node, Treeitem item) throws Exception
-	{
-		//if treeitem is not loaded, load it
-		if(!item.isLoaded()) {
-			Treechildren children = null;
-			
-			if(item.getTreechildren()!=null){
-				children = item.getTreechildren();
-				/* 
-				 * When the treeitem is rendered after 1st time, dropped all
-				 * the descending treeitems first.
-				*/
-				if(children.getItemCount()>0)
-					children.getChildren().clear();
-			}else{
-				children = new Treechildren();
-				getRealRenderer().render(item, node);
-			}
-			/*
-			 * After modified the node in tree model, if node is leaf, 
-			 * its treechildren is needed to be dropped.
-			 */
-			if(_model.isLeaf(node)){
-				getRealRenderer().render(item, node);
-				if(item.getTreechildren()!=null)
-					item.getTreechildren().detach();
-			}else{
-				/*
-				 * render children of item
-				 */
-				for(int i=0; i< _model.getChildCount(node);i++ ){
-					Treeitem ti = new Treeitem();
-					Object data = _model.getChild(node, i);
-					getRealRenderer().render(ti, data);
-					if(!_model.isLeaf(data)){	
-						Treechildren ch = new Treechildren();
-						ch.setParent(ti);
-					}
-					ti.setParent(children);
-				}
-				children.setParent(item);
-			}
-			//After the treeitem is loaded with data, set treeitem to be loaded
-			item.setLoaded(true);
+	/** Note: it doesn't call render doCatch/doFinally */
+	private void renderItem0(Renderer renderer, Treeitem item)
+	throws Throwable {
+		renderItem0(renderer, item, getAssociatedNode(item,this));
+	}	
+	/** Note: it doesn't call render doCatch/doFinally */
+	private void renderItem0(Renderer renderer, Treeitem item, Object node)
+	throws Throwable {
+		if(item.isLoaded())
+			return;
+
+		Treechildren children = null;
+		
+		if(item.getTreechildren()!=null){
+			children = item.getTreechildren();
+			/* 
+			 * When the treeitem is rendered after 1st time, dropped all
+			 * the descending treeitems first.
+			*/
+			if(children.getItemCount()>0)
+				children.getChildren().clear();
+		}else{
+			children = new Treechildren();
+			renderer.render(item, node);
 		}
+		/*
+		 * After modified the node in tree model, if node is leaf, 
+		 * its treechildren is needed to be dropped.
+		 */
+		if(_model.isLeaf(node)){
+			renderer.render(item, node);
+			if(item.getTreechildren()!=null)
+				item.getTreechildren().detach();
+		}else{
+			/*
+			 * render children of item
+			 */
+			for(int i=0; i< _model.getChildCount(node);i++ ){
+				Treeitem ti = new Treeitem();
+				Object data = _model.getChild(node, i);
+				renderer.render(ti, data);
+				if(!_model.isLeaf(data)){	
+					Treechildren ch = new Treechildren();
+					ch.setParent(ti);
+				}
+				ti.setParent(children);
+			}
+			children.setParent(item);
+		}
+
+		//After the treeitem is loaded with data, set treeitem to be loaded
+		item.setLoaded(true);
 	}
 	
 	/** Renders the specified {@link Treeitem}s with data if not loaded yet,
@@ -1320,9 +1333,7 @@ public class Tree extends XulElement {
 		final Renderer renderer = new Renderer();
 		try {
 			for (Iterator it = items.iterator(); it.hasNext();){
-				Treeitem item = (Treeitem)it.next();
-				Object data = getAssociatedNode(item,this);
-				dfRenderItem(data,item);
+				renderItem0(renderer, (Treeitem)it.next());
 			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
