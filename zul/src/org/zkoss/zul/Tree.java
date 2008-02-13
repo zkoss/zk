@@ -785,7 +785,10 @@ public class Tree extends XulElement {
 		if (_treefoot != null) ++cnt;
 		if (_treechildren != null) ++cnt;
 		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
-
+		if(clone._model != null){
+			clone._dataListener = null;
+			clone.initDataListener();
+		}
 		return clone;
 	}
 	/** @param cnt # of children that need special handling (used for optimization).
@@ -831,6 +834,8 @@ public class Tree extends XulElement {
 		init();
 
 		afterUnmarshal(-1, -1);
+		
+		if (_model != null) initDataListener();
 	}
 
 	//-- ComponentCtrl --//
@@ -1027,9 +1032,23 @@ public class Tree extends XulElement {
 	 * @since 3.0.0
 	 */
 	public void setModel(TreeModel model) throws Exception{
-		_model = model;
-		syncModel();
-		initDataListener();
+		if (model != null) {
+			if (_model != model) {
+				if (_model != null) {
+					_model.removeTreeDataListener(_dataListener);
+				} else {
+					getItems().clear();
+				}
+
+				_model = model;
+				initDataListener();
+			}
+			syncModel();
+		} else if (_model != null) {
+			_model.removeTreeDataListener(_dataListener);
+			_model = null;
+			getItems().clear();
+		}
 	}
 	
 	//--TreeModel dependent codes--//
@@ -1047,8 +1066,6 @@ public class Tree extends XulElement {
 	 * <p>Author: jeffliu
 	 */
 	private void syncModel() throws Exception{
-		if (_renderer == null)
-			_renderer = getRealRenderer();
 		renderTree();
 	}
 	
@@ -1100,7 +1117,7 @@ public class Tree extends XulElement {
 		Treeitem ti = new Treeitem();
 		Object data = _model.getChild(node, index);
 		try {
-			_renderer.render(ti, data);
+			getRealRenderer().render(ti, data);
 		} catch (Throwable ex) {
 			try {
 				ti.setLabel(Exceptions.getMessage(ex));
@@ -1255,14 +1272,14 @@ public class Tree extends XulElement {
 					children.getChildren().clear();
 			}else{
 				children = new Treechildren();
-				_renderer.render(item, node);
+				getRealRenderer().render(item, node);
 			}
 			/*
 			 * After modified the node in tree model, if node is leaf, 
 			 * its treechildren is needed to be dropped.
 			 */
 			if(_model.isLeaf(node)){
-				_renderer.render(item, node);
+				getRealRenderer().render(item, node);
 				if(item.getTreechildren()!=null)
 					item.getTreechildren().detach();
 			}else{
@@ -1272,7 +1289,7 @@ public class Tree extends XulElement {
 				for(int i=0; i< _model.getChildCount(node);i++ ){
 					Treeitem ti = new Treeitem();
 					Object data = _model.getChild(node, i);
-					_renderer.render(ti, data);
+					getRealRenderer().render(ti, data);
 					if(!_model.isLeaf(data)){	
 						Treechildren ch = new Treechildren();
 						ch.setParent(ti);
