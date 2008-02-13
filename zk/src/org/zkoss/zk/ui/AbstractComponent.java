@@ -1714,6 +1714,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//1. make it not belonging to any page
 		clone._page = null;
 		clone._parent = null;
+		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
 		//1a. clone attributes
 		clone._attrs = new HashMap(4);
