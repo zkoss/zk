@@ -846,7 +846,7 @@ public class Tree extends XulElement {
 	
 	private TreeitemRenderer _renderer;
 	
-	private TreeDataListener _dataListener;
+	private transient TreeDataListener _dataListener;
 	
 	/*
 	 * Handles when the tree model's content changed 
