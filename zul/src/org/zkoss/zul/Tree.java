@@ -865,37 +865,25 @@ public class Tree extends XulElement {
 		 * 2008/02/12 --- issue: [ 1884112 ] 
 		 * When getChildByNode returns null, do nothing
 		 */
-		if(parent != null){
-			boolean needUpdate=true;
-			/*
-			 * If treeitem is rendered and loaded, update UI 
-			 * else don't need to
-			 * 
-			 * parent could be Tree. In this case, update UI
-			 */
-			if(parent instanceof Treeitem){
-				needUpdate = ((Treeitem)parent).isLoaded();
+		if(parent != null &&
+		(!(parent instanceof Treeitem) || ((Treeitem)parent).isLoaded()){
+			int indexFrom = event.getIndexFrom();
+			int indexTo = event.getIndexTo();
+			switch (event.getType()) {
+			case TreeDataEvent.INTERVAL_ADDED:
+				for(int i=indexFrom;i<=indexTo;i++)
+					onTreeDataInsert(parent,node,i);
+				break;
+			case TreeDataEvent.INTERVAL_REMOVED:
+				for(int i=indexTo;i>=indexFrom;i--)
+					onTreeDataRemoved(parent,node,i);
+				break;
+			case TreeDataEvent.CONTENTS_CHANGED:
+				for(int i=indexFrom;i<=indexTo;i++)
+					onTreeDataContentChanged(parent,node,i);
+				break;
 			}
-			if(needUpdate){
-				int indexFrom = event.getIndexFrom();
-				int indexTo = event.getIndexTo();
-				switch (event.getType()) {
-				case TreeDataEvent.INTERVAL_ADDED:
-					for(int i=indexFrom;i<=indexTo;i++)
-						onTreeDataInsert(parent,node,i);
-					break;
-				case TreeDataEvent.INTERVAL_REMOVED:
-					for(int i=indexTo;i>=indexFrom;i--)
-						onTreeDataRemoved(parent,node,i);
-					break;
-				case TreeDataEvent.CONTENTS_CHANGED:
-					for(int i=indexFrom;i<=indexTo;i++)
-						onTreeDataContentChanged(parent,node,i);
-					break;
-				}
-			}
-		}
-			
+		}			
 	}
 	
 	private Treechildren getParentTreechildren(Object parent){
@@ -1378,6 +1366,7 @@ public class Tree extends XulElement {
 	/**
 	 * Load treeitems through path <b>path</b>
 	 * <br>Note: By using this method, all treeitems in path will be rendered
+	 * and opened ({@link Treeitem#setOpen}).
 	 * @param path - an int[] path, see {@link TreeModel#getPath} 
 	 * @return the treeitem from tree by given path
 	 * @since 3.0.0
