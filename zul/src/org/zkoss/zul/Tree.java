@@ -65,6 +65,8 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Tree extends XulElement {	
+	private static final Log log = Log.lookup(Tree.class);
+
 	private transient Treecols _treecols;
 	private transient Treefoot _treefoot;
 	private transient Treechildren _treechildren;
@@ -85,6 +87,11 @@ public class Tree extends XulElement {
 	/** disable smartUpdate; usually caused by the client. */
 	private transient boolean _noSmartUpdate;
 	private String _innerWidth = "100%";
+
+	private TreeModel _model;
+	private TreeitemRenderer _renderer;	
+	private transient TreeDataListener _dataListener;
+	
 
 	public Tree() {
 		init();
@@ -843,24 +850,14 @@ public class Tree extends XulElement {
 		return new ExtraCtrl();
 	}
 	
-	// TODO AREA JEFF ADDED
-	
-	private static final Log log = Log.lookup(Tree.class);
-	
-	private TreeModel _model;
-	
-	private TreeitemRenderer _renderer;
-	
-	private transient TreeDataListener _dataListener;
-	
 	/*
 	 * Handles when the tree model's content changed 
 	 * <p>Author: jeffliu
 	 */
 	private void onTreeDataChange(TreeDataEvent event){	
 		//if the treeparent is empty, render tree's treechildren
-		Object data = event.getParent();
-		Component parent = getChildByNode(data);
+		Object node = event.getParent();
+		Component parent = getChildByNode(node);
 		/* 
 		 * Loop through indexes array
 		 * if INTERVAL_REMOVED, from end to beginning
@@ -874,15 +871,15 @@ public class Tree extends XulElement {
 			switch (event.getType()) {
 			case TreeDataEvent.INTERVAL_ADDED:
 				for(int i=indexFrom;i<=indexTo;i++)
-					onTreeDataInsert(parent,data,i);
+					onTreeDataInsert(parent,node,i);
 				break;
 			case TreeDataEvent.INTERVAL_REMOVED:
 				for(int i=indexTo;i>=indexFrom;i--)
-					onTreeDataRemoved(parent,data,i);
+					onTreeDataRemoved(parent,node,i);
 				break;
 			case TreeDataEvent.CONTENTS_CHANGED:
 				for(int i=indexFrom;i<=indexTo;i++)
-					onTreeDataContentChanged(parent,data,i);
+					onTreeDataContentChanged(parent,node,i);
 				break;
 			}
 		}
@@ -1126,9 +1123,9 @@ public class Tree extends XulElement {
 	private void renderTreeChild(Renderer renderer, Object node,int index)
 	throws Throwable {
 		Treeitem ti = new Treeitem();
-		Object data = _model.getChild(node, index);
-		renderer.render(ti, data);
-		if(!_model.isLeaf(data)){	
+		Object childNode = _model.getChild(node, index);
+		renderer.render(ti, childNode);
+		if(!_model.isLeaf(childNode)){	
 			Treechildren ch = new Treechildren();
 			ch.setParent(ti);
 		}
@@ -1139,8 +1136,8 @@ public class Tree extends XulElement {
 		return _defRend;
 	}
 	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
-		public void render(Treeitem ti, Object data){
-			Treecell tc = new Treecell(data.toString());
+		public void render(Treeitem ti, Object node){
+			Treecell tc = new Treecell(Objects.toString(node));
 			Treerow tr = null;
 			if(ti.getTreerow()==null){
 				tr = new Treerow();
@@ -1293,9 +1290,9 @@ public class Tree extends XulElement {
 			 */
 			for(int i=0; i< _model.getChildCount(node);i++ ){
 				Treeitem ti = new Treeitem();
-				Object data = _model.getChild(node, i);
-				renderer.render(ti, data);
-				if(!_model.isLeaf(data)){	
+				Object childNode = _model.getChild(node, i);
+				renderer.render(ti, childNode);
+				if(!_model.isLeaf(childNode)){	
 					Treechildren ch = new Treechildren();
 					ch.setParent(ti);
 				}
@@ -1304,11 +1301,11 @@ public class Tree extends XulElement {
 			children.setParent(item);
 		}
 
-		//After the treeitem is loaded with data, set treeitem to be loaded
+		//After the treeitem is loaded, set treeitem to be loaded
 		item.setLoaded(true);
 	}
 	
-	/** Renders the specified {@link Treeitem}s with data if not loaded yet,
+	/** Renders the specified {@link Treeitem} if not loaded yet,
 	 * with {@link #getTreeitemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
