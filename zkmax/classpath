@@ -12,4 +12,5 @@
 ../dist/lib/ext/js.jar
 ../dist/lib/ext/groovy.jar
 ../dist/lib/ext/jruby.jar
+../dist/lib/ext/jython.jar
 ../dist/lib/ext/jsp-api.jar
