@@ -910,9 +910,6 @@ public class Tree extends XulElement {
 			ch.insertBefore(newTi, (Treeitem)siblings.get(index));
 		}
 		ch.setParent(parent);
-		//if parent is Treeitem, setOpen
-		if(parent instanceof Treeitem)
-			((Treeitem)parent).setOpen(true);
 	}
 		
 	/*
@@ -925,9 +922,6 @@ public class Tree extends XulElement {
 		}else{
 			getParentTreechildren(parent).detach();
 		}
-		//if parent is Treeitem, setOpen
-		if(parent instanceof Treeitem)
-			((Treeitem)parent).setOpen(true);
 	}
 	
 	/*
