@@ -1165,8 +1165,7 @@ public class Tree extends XulElement {
 		}
 		
 		private void render(Treeitem item, Object node) throws Throwable {
-			if (!item.isOpen())
-				return; //nothing to do
+			
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
@@ -1183,8 +1182,6 @@ public class Tree extends XulElement {
 				item.setOpen(true);
 				throw ex;
 			}
-
-			item.setOpen(true);
 			_rendered = true;
 		}
 		
