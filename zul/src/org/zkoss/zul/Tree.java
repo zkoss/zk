@@ -979,9 +979,15 @@ public class Tree extends XulElement {
 		if(path == null || path.length == 0)
 			return this;
 		else{
+			
 			Treeitem ti = null;
-			for(int i=1; i<path.length; i++){
-				List children =  ti.getTreechildren().getChildren();
+			List children =null;
+			for(int i=0; i<path.length; i++){
+				if(i==0){
+					children = this.getTreechildren().getChildren(); 
+				}else{
+					children = ti.getTreechildren().getChildren();
+				}
 				/*
 				 * If the children are not rendered yet, return null
 				 */
