@@ -1123,19 +1123,11 @@ public class Tree extends XulElement {
 	/*
 	 * Helper method for renderTree
 	 */
-	private void renderTreeChild(Renderer renderer, Object node,int index){
+	private void renderTreeChild(Renderer renderer, Object node,int index)
+	throws Throwable {
 		Treeitem ti = new Treeitem();
 		Object data = _model.getChild(node, index);
-		try {
-			renderer.render(ti, data);
-		} catch (Throwable ex) {
-			try {
-				ti.setLabel(Exceptions.getMessage(ex));
-			} catch (Throwable t) {
-				log.error(t);
-			}
-			ti.setOpen(true);
-		}
+		renderer.render(ti, data);
 		if(!_model.isLeaf(data)){	
 			Treechildren ch = new Treechildren();
 			ch.setParent(ti);
