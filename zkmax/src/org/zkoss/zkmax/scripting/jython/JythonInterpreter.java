@@ -9,7 +9,7 @@ import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.ui.Page;
 
 /**
- * Python Interpreter
+ * The Python interpreter based on <a href="www.jython.org">jython</a>
  * 
  * @author gracelin
  * @since 3.0.4
@@ -20,6 +20,7 @@ public class JythonInterpreter extends GenericInterpreter {
 	public JythonInterpreter() {
 	}
 
+	//super//
 	public void init(Page owner, String zslang) {
 		super.init(owner, zslang);
 
@@ -49,19 +50,13 @@ public class JythonInterpreter extends GenericInterpreter {
 		_interpreter.set(name, Py.None);
 	}
 
-	/** Returns the native interpreter, or null if it is not initialized
-	 * or destroyed.
-	 * 
-	 * @since 3.0.4
-	 */
 	public Object getNativeInterpreter() {
 		return _interpreter;
 	}
 
+	//helper classes//
 	/** The global scope. */
 	private class Variables extends PyStringMap {
-		private static final long serialVersionUID = 20080213L;
-
 		public Variables() {
 			super();
 		}
