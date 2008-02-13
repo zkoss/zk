@@ -84,4 +84,15 @@ public interface PageConfig {
 	 * to use the device default.
 	 */
 	public Boolean getCacheable();
+	/** Returns the implementation of the expression factory that
+	 * is used by this page, or null if
+	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * is used.
+	 *
+	 * <p>The returned class must implement
+	 * {@link org.zkoss.xel.ExpressionFactory}.
+	 *
+	 * @since 3.0.4
+	 */
+	public Class getExpressionFactoryClass();
 }

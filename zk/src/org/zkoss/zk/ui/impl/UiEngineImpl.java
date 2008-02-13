@@ -353,6 +353,7 @@ public class UiEngineImpl implements UiEngine {
 					public String getDocType() {return null;}
 					public String getFirstLine() {return null;}
 					public Boolean getCacheable() {return null;}
+					public Class getExpressionFactoryClass() {return null;}
 				});
 				richlet.service(page);
 			}

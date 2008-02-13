@@ -43,6 +43,7 @@ import org.zkoss.lang.Expectable;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
+import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
@@ -149,6 +150,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private String _rootAttrs = "";
 	private String _contentType, _docType, _firstLine;
 	private Boolean _cacheable;
+	/** The expression factory (ExpressionFactory).*/
+	private Class _expfcls;
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map _ips;
 	private transient NS _ns;
@@ -608,6 +611,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			}
 		}
 
+		Class cls = config.getExpressionFactoryClass();
+		if (cls != null)
+			setExpressionFactoryClass(cls);
+
 		String s = config.getHeaders();
 		if (s != null) _headers = s;
 		s = config.getRootAttributes();
@@ -1008,6 +1015,14 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		} catch (DefinitionNotFoundException ex) {
 		}
 		return null;
+	}
+	public Class getExpressionFactoryClass() {
+		return _expfcls;
+	}
+	public void setExpressionFactoryClass(Class expfcls) {
+		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
+			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
+		_expfcls = expfcls;
 	}
 
 	//-- Serializable --//

@@ -723,6 +723,7 @@ public class PageDefinition extends NodeInfo {
 					return PageDefinition.this.getFirstLine(page);
 				}
 				public Boolean getCacheable() {return _cacheable;}
+				public Class getExpressionFactoryClass() {return _expfcls;}
 			});
 	}
 

@@ -520,6 +520,29 @@ public interface Page extends IdSpace {
 	public void setZScriptLanguage(String zslang)
 	throws InterpreterNotFoundException;
 
+	/** Returns the implementation of the expression factory that
+	 * is used by this page, or null if
+	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * is used.
+	 *
+	 * <p>Default: null.
+	 *
+	 * @see #setExpressionFactoryClass
+	 * @since 3.0.4
+	 */
+	public Class getExpressionFactoryClass();
+	/** Sets the implementation of the expression factory that
+	 * is used by this page.
+	 *
+	 * @param expfcls the class that implements
+	 * {@link org.zkoss.xel.ExpressionFactory},
+	 * If null, {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * is used.
+	 * @see #getExpressionFactoryClass
+	 * @since 3.0.4
+	 */
+	public void setExpressionFactoryClass(Class expfcls);
+
 	//metainfo//
 	/** Returns the function mapper for resolving XEL functions, or null if
 	 * not available.
