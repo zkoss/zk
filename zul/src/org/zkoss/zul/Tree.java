@@ -866,7 +866,7 @@ public class Tree extends XulElement {
 		 * When getChildByNode returns null, do nothing
 		 */
 		if(parent != null &&
-		(!(parent instanceof Treeitem) || ((Treeitem)parent).isLoaded()){
+		(!(parent instanceof Treeitem) || ((Treeitem)parent).isLoaded())){
 			int indexFrom = event.getIndexFrom();
 			int indexTo = event.getIndexTo();
 			switch (event.getType()) {
