@@ -899,7 +899,7 @@ public class Tree extends XulElement {
 		/* 	Find the sibling to insertBefore;
 		 * 	if there is no sibling or new item is inserted at end.
 		 */
-		Treeitem newTi = new Treeitem();
+		Treeitem newTi = newUnloadedItem();
 		Treechildren ch= getParentTreechildren(parent);
 		renderItem(newTi,_model.getChild(node,index));
 		List siblings = ch.getChildren();
@@ -962,7 +962,6 @@ public class Tree extends XulElement {
 				 */
 				ti.setLoaded(false);
 				renderItem(ti,_model.getChild(node,index));
-				ti.setOpen(true);
 			}
 		}
 	}
@@ -1122,7 +1121,7 @@ public class Tree extends XulElement {
 	 */
 	private void renderTreeChild(Renderer renderer, Object node,int index)
 	throws Throwable {
-		Treeitem ti = new Treeitem();
+		Treeitem ti = newUnloadedItem();
 		Object childNode = _model.getChild(node, index);
 		renderer.render(ti, childNode);
 		if(!_model.isLeaf(childNode)){	
@@ -1130,6 +1129,11 @@ public class Tree extends XulElement {
 			ch.setParent(ti);
 		}
 		ti.setParent(_treechildren);
+	}
+	private Treeitem newUnloadedItem() {
+		Treeitem ti = new Treeitem();
+		ti.setOpen(false);
+		return ti;
 	}
 	
 	private static final TreeitemRenderer getDefaultItemRenderer() {
@@ -1147,7 +1151,6 @@ public class Tree extends XulElement {
 				tr.getChildren().clear();
 			}		
 			tc.setParent(tr);
-			ti.setOpen(false);
 		}
 	};
 	/** Returns the renderer used to render items.
@@ -1165,7 +1168,6 @@ public class Tree extends XulElement {
 		}
 		
 		private void render(Treeitem item, Object node) throws Throwable {
-			
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
@@ -1179,7 +1181,6 @@ public class Tree extends XulElement {
 				} catch (Throwable t) {
 					log.error(t);
 				}
-				item.setOpen(true);
 				throw ex;
 			}
 			_rendered = true;
@@ -1286,7 +1287,7 @@ public class Tree extends XulElement {
 			 * render children of item
 			 */
 			for(int i=0; i< _model.getChildCount(node);i++ ){
-				Treeitem ti = new Treeitem();
+				Treeitem ti = newUnloadedItem();
 				Object childNode = _model.getChild(node, i);
 				renderer.render(ti, childNode);
 				if(!_model.isLeaf(childNode)){	

@@ -47,13 +47,13 @@ public class Treeitem extends XulElement {
 	private transient Treechildren _treechildren;
 	private Object _value;
 	private boolean _open = true;
-	private boolean _selected = false;
-	private boolean _disabled = false;
+	private boolean _selected;
+	private boolean _disabled;
 	
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
 	 */
-	private boolean _loaded = false;
+	private boolean _loaded;
 	
 	public Treeitem() {
 	}
@@ -85,8 +85,8 @@ public class Treeitem extends XulElement {
 	}
 	
 	/**
-	 * Return true whether this tree item is loaded
-	 * @return true whether this tree item is loaded
+	 * Return true whether all children of this tree item, if any, is loaded
+	 * @return true whether all children of this tree item is loaded
 	 * @since 3.0.0
 	 */
 	public boolean isLoaded(){
@@ -94,10 +94,10 @@ public class Treeitem extends XulElement {
 	}
 	
 	/**
-	 * Sets whether this tree item is loaded.
+	 * Sets whether all children of this tree item, if any, is loaded.
 	 * @since 3.0.0
 	 */
-	public void setLoaded(boolean loaded){
+	/*package*/ void setLoaded(boolean loaded){
 		_loaded = loaded;
 	}
 	
