@@ -829,10 +829,10 @@ zk.Selectable.prototype = {
 						break;
 					}
 				}
-				var fake = $e(head.id + "!fake"), recalc = true;
+				var fake = $e(head.id + "!fake"), cellCopied;
 				if (!fake && !head.rowIndex) {
 					zk.cpCellWidth(head, this.bodyrows, this);
-					recalc = false;
+					cellCopied = true;
 				}
 				if (!fake || fake.cells.length != head.cells.length) {
 					if (fake) fake.parentNode.removeChild(fake);
@@ -856,7 +856,7 @@ zk.Selectable.prototype = {
 						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
 					else s.style.display = "none";
 				}
-				if (recalc) zk.cpCellWidth(head, this.bodyrows, this); // But #1886788 recalculate width.
+				if (!cellCopied) zk.cpCellWidth(head, this.bodyrows, this); // But #1886788 recalculate width.
 			}
 			if (this.foottbl && this.foottbl.rows.length)
 				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
