@@ -279,7 +279,7 @@ public class Datebox extends FormatInputElement {
 		return sb.toString();
 	}
 	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs() + " class=\"text\"";
+		final String attrs = super.getInnerAttrs();
 		final String style = getInnerStyle();
 		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
 	}
