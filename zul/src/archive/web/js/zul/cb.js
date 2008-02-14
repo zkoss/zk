@@ -75,7 +75,6 @@ zkCmbox.init = function (cmp) {
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
 
 	var inp = $real(cmp);
-	inp.className = cmp.className + "-inp";
 	zkTxbox.init(inp);
 	zk.listen(inp, "keydown", zkCmbox.onkey);
 	zk.listen(inp, "click", function () {if (inp.readOnly && !zk.dragging) zkCmbox.onbutton(cmp);});

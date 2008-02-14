@@ -380,7 +380,6 @@ zkDtbox.init = function (cmp) {
 	zkDtbox.onHide = zkTxbox.onHide; //widget.js is ready now
 
 	var inp = $real(cmp);
-	inp.className = cmp.className + "-inp";
 	zkTxbox.init(inp);
 	zk.listen(inp, zk.ie ? "keydown": "keypress", zkDtbox.onkey);
 		//IE: use keydown. otherwise, it causes the window to scroll
