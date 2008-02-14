@@ -46,6 +46,7 @@ public class DateboxDefault implements ComponentRenderer {
 			.write(self.getOuterAttrs())
 			.write(" z.type=\"zul.db.Dtbox\" z.combo=\"true\"><input id=\"")
 			.write(uuid).write("!real\" autocomplete=\"off\"")
+			.write(" class=\"").write(self.getSclass()).write("-inp\")
 			.write(self.getInnerAttrs()).write("/><span id=\"")
 			.write(uuid).write("!btn\" class=\"rbtnbk\"");
 
@@ -54,6 +55,6 @@ public class DateboxDefault implements ComponentRenderer {
 
 		wh.write("><img src=\"")
 			.write(exec.encodeURL(self.getImage())).write("\"/></span><div id=\"").write(uuid)
-			.write("!pp\" class=\"dateboxpp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
+			.write("!pp\" class=\"").write(self.getSclass()).write("pp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
 	}
 }
