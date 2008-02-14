@@ -46,7 +46,7 @@ public class DateboxDefault implements ComponentRenderer {
 			.write(self.getOuterAttrs())
 			.write(" z.type=\"zul.db.Dtbox\" z.combo=\"true\"><input id=\"")
 			.write(uuid).write("!real\" autocomplete=\"off\"")
-			.write(" class=\"").write(self.getSclass()).write("-inp\")
+			.write(" class=\"").write(self.getSclass()).write("inp\"")
 			.write(self.getInnerAttrs()).write("/><span id=\"")
 			.write(uuid).write("!btn\" class=\"rbtnbk\"");
 
