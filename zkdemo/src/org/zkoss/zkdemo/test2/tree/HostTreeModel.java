@@ -77,7 +77,7 @@ public class HostTreeModel extends AbstractTreeModel{
 	public void removeProcessType(int groupindex,int hostindex,int processindex,String type){
 		FakeGroup group = (FakeGroup)fakeRoot.getChild(groupindex);
 		FakeHost host = (FakeHost)group.getChild(hostindex);
-		FakeProcess process = (FakeProcess)host.getChild(processindex);
+		FakeProcess process = (FakeProcess)host.removeChild(processindex);
 		process.type = type;	
 		this.fireEvent(host,processindex, processindex, TreeDataEvent.INTERVAL_REMOVED);
 
@@ -190,6 +190,9 @@ public class HostTreeModel extends AbstractTreeModel{
 		
 		public Object getChild(int index) {
 			return processes.get(index);
+		}
+		public Object removeChild(int index) {
+			return processes.remove(index);
 		}
 
 		public int getChildCount() {
