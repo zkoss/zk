@@ -64,7 +64,26 @@ public class Treeitem extends XulElement {
 		setLabel(label);
 		setValue(value);
 	}
-
+	
+	/**
+	 * Unload the tree item
+	 * <p>To load the tree item, with 
+	 * {@link Tree#renderItem(Treeitem)}, {@link Tree#renderItem(Treeitem, Object)}, or {@link Tree#renderItems(java.util.Set)}
+	 * 
+	 * @since 3.0.4
+	 */
+	public void unload(){
+		if(isLoaded()){
+			//Clean its children
+			if(getTreechildren() != null)
+				getTreechildren().getChildren().clear();
+			//Set the load status to unloaded
+			setLoaded(false);
+			//Change the "+/-" sign icon
+			setOpen(false);
+		}
+	}
+	
 	/**
 	 * Sets whether it is disabled.
 	 * @since 3.0.1

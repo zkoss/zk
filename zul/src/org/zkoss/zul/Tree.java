@@ -1201,7 +1201,7 @@ public class Tree extends XulElement {
 	 * with {@link #getTreeitemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
-	 *
+	 * <p>To unload treeitem, with {@link Treeitem#unload()}.
 	 * @see #renderItems
 	 * @since 3.0.0
 	 */
@@ -1227,7 +1227,7 @@ public class Tree extends XulElement {
 	 * This method has better performance than 
 	 * renderItem(Treeitem item) due to not searching for its 
 	 * corresponding node.
-	 *
+	 * <p>To unload treeitem, with {@link Treeitem#unload()}.
 	 * @see #renderItems
 	 * @since 3.0.0
 	 */
@@ -1301,7 +1301,7 @@ public class Tree extends XulElement {
 	 * with {@link #getTreeitemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
-	 *
+	 * <p>To unload treeitem, with {@link Treeitem#unload()}.
 	 * @see #renderItem
 	 * @since 3.0.0
 	 */
