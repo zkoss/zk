@@ -836,7 +836,7 @@ public class UiEngineImpl implements UiEngine {
 		final Throwable err = ex;
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
-			log.realCauseBriefly(ex);
+			log.realCause(ex);
 		} else {
 			ex = t;
 			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
