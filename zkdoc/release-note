@@ -19,6 +19,7 @@ ZK 3.0.4 Freshly
   1892446: Bug in Datalistener When Clone Tree
   1892484: Tree serialize bug
   1888911: databind with grid in grid fail when no _var in inner grid
+  1893247: Not unique in the new ID space when Grid in Grid
   
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
