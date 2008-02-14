@@ -885,11 +885,16 @@ public class Tree extends XulElement {
 			}
 		}			
 	}
-	
-	private Treechildren getParentTreechildren(Object parent){
-		final Treechildren ch = (parent instanceof Tree) ?
+
+	/** @param parent either a Tree or Treeitem instance. */
+	private static Treechildren treechildrenOf(Component parent){
+		Treechildren tc = (parent instanceof Tree) ?
 			((Tree)parent).getTreechildren() : ((Treeitem)parent).getTreechildren();
-		return (ch != null) ? ch : new Treechildren();
+		if (tc == null) {
+			tc = new Treechildren();
+			tc.setParent(parent);
+		}
+		return tc;
 	}
 	
 	/*
@@ -900,27 +905,28 @@ public class Tree extends XulElement {
 		 * 	if there is no sibling or new item is inserted at end.
 		 */
 		Treeitem newTi = newUnloadedItem();
-		Treechildren ch= getParentTreechildren(parent);
-		renderItem(newTi,_model.getChild(node,index));
-		List siblings = ch.getChildren();
+		Treechildren tc= treechildrenOf(parent);
+		List siblings = tc.getChildren();
 		//if there is no sibling or new item is inserted at end.
 		if(siblings.size()==0 || index == siblings.size() ){
-			ch.insertBefore(newTi, null);
+			tc.insertBefore(newTi, null);
 		}else{
-			ch.insertBefore(newTi, (Treeitem)siblings.get(index));
+			tc.insertBefore(newTi, (Treeitem)siblings.get(index));
 		}
-		ch.setParent(parent);
+
+		renderItem(newTi,_model.getChild(node,index));
 	}
 		
 	/*
 	 * Handle event that child is removed
 	 */
 	private void onTreeDataRemoved(Component parent,Object node, int index){
-		List items = getParentTreechildren(parent).getChildren();		
+		final Treechildren tc = treechildrenOf(parent);
+		final List items = tc.getChildren();		
 		if(items.size()>1){
 			((Treeitem)items.get(index)).detach();
 		}else{
-			getParentTreechildren(parent).detach();
+			tc.detach();
 		}
 	}
 	
@@ -928,8 +934,8 @@ public class Tree extends XulElement {
 	 * Handle event that child's content is changed
 	 */
 	private void onTreeDataContentChanged(Component parent,Object node, int index){
-		List items = getParentTreechildren(parent).getChildren();		
-	
+		List items = treechildrenOf(parent).getChildren();		
+
 		/* 
 		 * find the associated tree compoent(parent)
 		 * notice:
@@ -1097,12 +1103,9 @@ public class Tree extends XulElement {
 		}
 	
 		Object node = _model.getRoot();
-		int childCount = _model.getChildCount(node);
 		final Renderer renderer = new Renderer();
 		try {
-			for(int i=0; i< childCount;i++ ){
-				renderTreeChild(renderer, node, i);
-			}
+			renderChildren(renderer, _treechildren, node);
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -1111,18 +1114,20 @@ public class Tree extends XulElement {
 }
 	
 	/*
-	 * Helper method for renderTree
+	 * Renders the direct children for the specifed parent
 	 */
-	private void renderTreeChild(Renderer renderer, Object node,int index)
-	throws Throwable {
-		Treeitem ti = newUnloadedItem();
-		Object childNode = _model.getChild(node, index);
-		renderer.render(ti, childNode);
-		if(!_model.isLeaf(childNode)){	
-			Treechildren ch = new Treechildren();
-			ch.setParent(ti);
+	private void renderChildren(Renderer renderer, Treechildren parent,
+	Object node) throws Throwable {
+		for(int i = 0; i < _model.getChildCount(node); i++) {
+			Treeitem ti = newUnloadedItem();
+			ti.setParent(parent);
+			Object childNode = _model.getChild(node, i);
+			renderer.render(ti, childNode);
+			if(!_model.isLeaf(childNode)){	
+				Treechildren tc = new Treechildren();
+				tc.setParent(ti);
+			}
 		}
-		ti.setParent(_treechildren);
 	}
 	private Treeitem newUnloadedItem() {
 		Treeitem ti = new Treeitem();
@@ -1197,11 +1202,11 @@ public class Tree extends XulElement {
 		}
 	}
 	
-	/** Renders the specified {@link Treeitem} if not loaded yet,
+	/** Renders the specified {@link Treeitem}, if not loaded yet,
 	 * with {@link #getTreeitemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
-	 * <p>To unload treeitem, with {@link Treeitem#unload()}.
+	 * <p>To unload treeitem, use {@link Treeitem#unload()}.
 	 * @see #renderItems
 	 * @since 3.0.0
 	 */
@@ -1218,7 +1223,7 @@ public class Tree extends XulElement {
 		}
 	}
 	
-	/** Renders the specified {@link Treeitem} if not loaded yet,
+	/** Renders the specified {@link Treeitem}, if not loaded yet,
 	 * with {@link #getTreeitemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
@@ -1227,7 +1232,7 @@ public class Tree extends XulElement {
 	 * This method has better performance than 
 	 * renderItem(Treeitem item) due to not searching for its 
 	 * corresponding node.
-	 * <p>To unload treeitem, with {@link Treeitem#unload()}.
+	 * <p>To unload treeitem, use {@link Treeitem#unload()}.
 	 * @see #renderItems
 	 * @since 3.0.0
 	 */
@@ -1251,46 +1256,29 @@ public class Tree extends XulElement {
 	/** Note: it doesn't call render doCatch/doFinally */
 	private void renderItem0(Renderer renderer, Treeitem item, Object node)
 	throws Throwable {
-		if(item.isLoaded())
+		if(item.isLoaded()) //all direct children are loaded
 			return;
 
-		Treechildren children = null;
-		
-		if(item.getTreechildren()!=null){
-			children = item.getTreechildren();
-			/* 
-			 * When the treeitem is rendered after 1st time, dropped all
-			 * the descending treeitems first.
-			*/
-			if(children.getItemCount()>0)
-				children.getChildren().clear();
-		}else{
-			children = new Treechildren();
-			renderer.render(item, node);
-		}
 		/*
 		 * After modified the node in tree model, if node is leaf, 
 		 * its treechildren is needed to be dropped.
 		 */
+		Treechildren tc = item.getTreechildren();
 		if(_model.isLeaf(node)){
-			renderer.render(item, node);
-			if(item.getTreechildren()!=null)
-				item.getTreechildren().detach();
+			if(tc != null)
+				tc.detach(); //just in case
+
+			//no children to render
+			//Note item already renderred, so no need:
+			//renderer.render(item, node);
 		}else{
-			/*
-			 * render children of item
-			 */
-			for(int i=0; i< _model.getChildCount(node);i++ ){
-				Treeitem ti = newUnloadedItem();
-				Object childNode = _model.getChild(node, i);
-				renderer.render(ti, childNode);
-				if(!_model.isLeaf(childNode)){	
-					Treechildren ch = new Treechildren();
-					ch.setParent(ti);
-				}
-				ti.setParent(children);
+			if (tc != null) tc.getChildren().clear(); //just in case
+			else {
+				tc = new Treechildren();
+				tc.setParent(item);
 			}
-			children.setParent(item);
+
+			renderChildren(renderer, tc, node);
 		}
 
 		//After the treeitem is loaded, set treeitem to be loaded
