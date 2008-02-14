@@ -25,7 +25,6 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.Treeitem;
 
-import tree.HostTreeModel.FakeHost;
 
 /**
  * @author Dennis.Chen
