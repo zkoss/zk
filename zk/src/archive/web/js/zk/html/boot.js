@@ -43,22 +43,21 @@ if (!window.Boot_progressbox) { //not customized
 		if (mask) {
 			zk._prgsOnce = true; //do it only once
 			html += ' ><div class="modal_mask" style="display:block"></div><div'
-		}
+		} else html += "><div";
 		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
 		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
 		html += ' id="z-loading" class="z-loading" style="left:'+x+';top:'+y+';">'
 		+'<div class="z-loading-indicator">'
 		+'<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
-		+msg+'</div></div>';
-
-		if (mask)
-			html += '</div>';
+		+msg+'</div></div></div>';
 
 		zk._setOuterHTML(n, html);
 		if (center) {
 			var el = $e("z-loading");
-			el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + "px";
-			el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + "px";
+			if (el) {
+				el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + "px";
+				el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + "px";
+			}
 		}
 		return $e(id);
 	};
