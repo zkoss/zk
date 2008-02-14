@@ -9,7 +9,7 @@ button, input.button, input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
-.text, .combobox-inp, .datebox-inp, .bandbox-inp {
+.text, .comboboxinp, .dateboxinp, .bandboxinp {<%--sclass + "inp"--%>
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
@@ -819,7 +819,7 @@ span.rbtnbk {<%-- button at the right edge --%>
 	background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); background-repeat: no-repeat;
 	border: 1px solid #7f9db9; border-left: none;
 }
-div.comboboxpp, div.bandboxpp {<%--hardcoded in DSP--%>
+div.comboboxpp, div.bandboxpp {<%--sclass + "pp"--%>
 	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid black; padding: 2px;
 	font-size: x-small;
