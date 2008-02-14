@@ -60,11 +60,11 @@ public class HostIconTreeRenderer implements TreeitemRenderer {
 			}else if(process.getType().equals("C")){
 				cell.setImage("/img/upload.gif");
 			}
-			cell.setId(process.getId());
+			//cell.setId(process.getId());
 			treeitem.getTreerow().appendChild(cell);
 		}
 		
-		treeitem.setOpen(false);// set open false to show correct icon.
+		//treeitem.setOpen(false);// set open false to show correct icon.
 	}
 
 }

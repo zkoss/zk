@@ -68,7 +68,7 @@ public class HostTreeOpenCtrlRenderer2 implements TreeitemRenderer {
 			treeitem.getTreerow().appendChild(cell);
 		}
 		
-		treeitem.setOpen(false);// set open false to show correct icon.
+		//treeitem.setOpen(false);// set open false to show correct icon.
 	}
 
 }

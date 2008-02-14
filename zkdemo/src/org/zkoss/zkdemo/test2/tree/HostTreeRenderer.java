@@ -48,7 +48,7 @@ public class HostTreeRenderer implements TreeitemRenderer {
 			treeitem.getTreerow().appendChild(new Treecell(((HostTreeModel.FakeProcess)data).getName()));
 		}
 		
-		treeitem.setOpen(false);// set open false to show correct icon.
+		//treeitem.setOpen(false);
 	}
 
 }

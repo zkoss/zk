@@ -12,9 +12,9 @@
 		
 	</zscript>
 		
-		<tree id="tree" treeitemRenderer="${renderer}" model="${model}"  >
+		<tree treeitemRenderer="${renderer}" model="${model}"  >
 		</tree>
-		<button label="add model process icon" onClick='model.addProcessType(0,0,10,"C")' />
+		<button label="add model process icon" onClick='model.addProcessType(0,0,3,"C")' />
 		<button label="remove add process icon" onClick='model.removeProcessType(0,0,0,"C")' />
 		<button label="update remove process icon" onClick='model.updateProcessType(0,0,0,"C")' />
 	</window>

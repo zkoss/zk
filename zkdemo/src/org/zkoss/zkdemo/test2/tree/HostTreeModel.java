@@ -63,13 +63,14 @@ public class HostTreeModel extends AbstractTreeModel{
 		process.name ="AAAAA";		
 		this.fireEvent(host,processindex, processindex, TreeDataEvent.CONTENTS_CHANGED);
 	}
-	
+
+	private static int _cnt;
 	public void addProcessType(int groupindex,int hostindex,int processindex,String type){
 		FakeGroup group = (FakeGroup)fakeRoot.getChild(groupindex);
 		FakeHost host = (FakeHost)group.getChild(hostindex);
-		String id = "p1000_10000";
+		String id = "p1000_10000_" + ++_cnt;
 		FakeProcess process = new FakeProcess(id, id, type);
-		host.addProcess(process);
+		host.addProcess(processindex, process);
 		this.fireEvent(host,processindex, processindex, TreeDataEvent.INTERVAL_ADDED);
 	}
 	
@@ -201,6 +202,9 @@ public class HostTreeModel extends AbstractTreeModel{
 		
 		public void addProcess(FakeProcess fp){
 			processes.add(fp);
+		}
+		public void addProcess(int j, FakeProcess fp){
+			processes.add(j, fp);
 		}
 	}
 	
