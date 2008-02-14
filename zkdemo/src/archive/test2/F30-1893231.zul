@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<zk>
+	<window title="auto-closed tree" border="normal">
+	1.Click on Group0. 
+	2.Click on host-0, host-0 should be loaded with items.
+	3.Click on host-1, host-0 should be unloaded and host-1 is loaded. 
+	<zscript>
+	
+		import org.zkoss.zkdemo.test2.tree.*;
+		HostTreeModel model = new HostTreeModel();
+		HostTreeOpenCtrlRenderer2 renderer = new HostTreeOpenCtrlRenderer2();
+	</zscript>
+		<tree id="tree" treeitemRenderer="${renderer}" model="${model}"  >
+		</tree>
+	</window>
+</zk>
