@@ -936,34 +936,18 @@ public class Tree extends XulElement {
 	private void onTreeDataContentChanged(Component parent,Object node, int index){
 		List items = treechildrenOf(parent).getChildren();		
 
-		/* 
-		 * find the associated tree compoent(parent)
-		 * notice:
-		 * if parent is root
+		/*
+		 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
+		 * When I update a children node data of the TreeModel , and fire a 
+		 * CONTENTS_CHANGED event, it will throw a IndexOutOfBoundsException , If a 
+		 * node doesn't open yet or not load yet.
+		 * 
+		 * if parent is loaded, change content. 
+		 * else do nothing
 		 */
-		//if(parent instanceof Tree)
-		//	renderTree();
-		//else{
-			/*
-			 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
-			 * When I update a children node data of the TreeModel , and fire a 
-			 * CONTENTS_CHANGED event, it will throw a IndexOutOfBoundsException , If a 
-			 * node doesn't open yet or not load yet.
-			 * 
-			 * if parent is loaded, change content. 
-			 * else do nothing
-			 */
-			if(items.size()>0){
-				Treeitem ti = (Treeitem)items.get(index);
-				/*
-				 * When content of treeitem is changed, the treeitem is rendered as 
-				 * unloaded item.
-				 * 2007/11/05 --- issue: Can not dynamically update content of treeitem from treemodel
-				 */
-				final Renderer renderer = new Renderer();
-				renderChangedItem(ti,_model.getChild(node,index));
-			}
-		//}
+		if(!items.isEmpty())
+			renderChangedItem(
+				(Treeitem)items.get(index), _model.getChild(node,index));
 	}
 	
 	/**
@@ -1256,8 +1240,9 @@ public class Tree extends XulElement {
 	/** Note: it doesn't call render doCatch/doFinally */
 	private void renderItem0(Renderer renderer, Treeitem item, Object node)
 	throws Throwable {
-			if(item.isLoaded()) //all direct children are loaded
-				return;
+		if(item.isLoaded()) //all direct children are loaded
+			return;
+
 		/*
 		 * After modified the node in tree model, if node is leaf, 
 		 * its treechildren is needed to be dropped.
@@ -1268,7 +1253,7 @@ public class Tree extends XulElement {
 				tc.detach(); //just in case
 
 			//no children to render
-			//but, if the node is leaf, need to render itself
+			//Note item already renderred, so no need:
 			//renderer.render(item, node);
 		}else{
 			if (tc != null) tc.getChildren().clear(); //just in case
@@ -1288,23 +1273,20 @@ public class Tree extends XulElement {
 		 * its treechildren is needed to be dropped.
 		 */
 		if(_model != null) {
+			Treechildren tc = item.getTreechildren();
+			if(_model.isLeaf(node)){
+				if(tc != null)
+					tc.detach(); //just in case
+			}else{
+				if (tc == null) {
+					tc = new Treechildren();
+					tc.setParent(item);
+				}
+			}
+
 			final Renderer renderer = new Renderer();
 			try {
-				Treechildren tc = item.getTreechildren();
-				if(_model.isLeaf(node)){
-					if(tc != null)
-						tc.detach(); //just in case
-		
-					//no children to render
-					//but, if the node is leaf, need to render itself
-					renderer.render(item, node);
-				}else{
-					if (tc == null) {
-						tc = new Treechildren();
-						tc.setParent(item);
-					}
-					renderer.render(item, node);
-				}
+				renderer.render(item, node); //re-render
 			} catch (Throwable ex) {
 				renderer.doCatch(ex);
 			} finally {
