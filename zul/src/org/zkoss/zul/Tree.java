@@ -914,7 +914,6 @@ public class Tree extends XulElement {
 			tc.insertBefore(newTi, (Treeitem)siblings.get(index));
 		}
 
-		//renderItem(newTi,_model.getChild(node,index));
 		renderChangedItem(newTi,_model.getChild(node,index));
 	}
 		
