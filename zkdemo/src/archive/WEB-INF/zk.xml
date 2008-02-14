@@ -157,15 +157,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</error-reload>
 	</client-config>
 	-->
-	<!-- Uncomment the following if you want to disable all elements
+	<!-- Comment the following if you don't want to disable all elements
 		behind the modal window.
 		By default, it is false and the performance is better
 		but the user might be able to move focus an element behind
 		the modal window by pressing TAB
+	-->
 	<client-config>
 		<disable-behind-modal>true</disable-behind-modal>
 	</client-config>
-	-->
 
 	<!-- Uncomment the following to customize the client-polling-based
 		server push.
