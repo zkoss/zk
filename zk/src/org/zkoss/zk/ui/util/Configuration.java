@@ -163,8 +163,8 @@ public class Configuration {
 	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
-	 * {@link URIInterceptor}, {@link RequestInterceptor}, {@link EventInterceptor}
-	 * interfaces.
+	 * {@link URIInterceptor}, {@link RequestInterceptor},
+	 * and/or {@link EventInterceptor} interfaces.
 	 */
 	public void addListener(Class klass) throws Exception {
 		boolean added = false;
