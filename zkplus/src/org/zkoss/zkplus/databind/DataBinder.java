@@ -341,12 +341,6 @@ public class DataBinder {
 		return false;
 	}		
 
-	/** Internal Use Only. Whether a collection owner component. (e.g. Grid, Listbox)
-	 */
-	/*package*/ boolean isCollectionOwner(Component owner) {
-		return owner.getAttribute(IAMOWNER) != null;
-	}
-	
 	/** Whether use the default binding configuration.
 	 */
 	public boolean isDefaultConfig(){
@@ -706,6 +700,11 @@ public class DataBinder {
 		}
 	}
 
+	//whether a collection owner component. (e.g. Grid, Listbox with _var)
+	/*package*/ static boolean isCollectionOwner(Component owner) {
+		return owner.getAttribute(IAMOWNER) != null;
+	}
+	
 	//whether a component is a binding template rather than a real component
 	/* package */ static boolean isTemplate(Component comp) {
 		return comp.getAttribute(OWNER) != null;
@@ -717,6 +716,11 @@ public class DataBinder {
 		return comp != null && (comp.getAttribute(TEMPLATE) instanceof Component);
 	}
 	
+	//Returns template component of a given clone component
+	/* package */ static Component getComponent(Component clone) {
+		return (Component) clone.getAttribute(TEMPLATE);
+	}
+
 	//whether has template owner (collection in collection)
 	/* package */ static boolean hasTemplateOwner(Component comp) {
 		//bug #1813055  Multiple listboxes with same selectedItem causes NPE
