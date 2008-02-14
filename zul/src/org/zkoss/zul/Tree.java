@@ -914,7 +914,8 @@ public class Tree extends XulElement {
 			tc.insertBefore(newTi, (Treeitem)siblings.get(index));
 		}
 
-		renderItem(newTi,_model.getChild(node,index));
+		//renderItem(newTi,_model.getChild(node,index));
+		renderChangedItem(newTi,_model.getChild(node,index));
 	}
 		
 	/*
@@ -941,9 +942,9 @@ public class Tree extends XulElement {
 		 * notice:
 		 * if parent is root
 		 */
-		if(parent instanceof Tree)
-			renderTree();
-		else{
+		//if(parent instanceof Tree)
+		//	renderTree();
+		//else{
 			/*
 			 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
 			 * When I update a children node data of the TreeModel , and fire a 
@@ -960,10 +961,10 @@ public class Tree extends XulElement {
 				 * unloaded item.
 				 * 2007/11/05 --- issue: Can not dynamically update content of treeitem from treemodel
 				 */
-				ti.setLoaded(false);
-				renderItem(ti,_model.getChild(node,index));
+				final Renderer renderer = new Renderer();
+				renderChangedItem(ti,_model.getChild(node,index));
 			}
-		}
+		//}
 	}
 	
 	/**
@@ -1256,9 +1257,8 @@ public class Tree extends XulElement {
 	/** Note: it doesn't call render doCatch/doFinally */
 	private void renderItem0(Renderer renderer, Treeitem item, Object node)
 	throws Throwable {
-		if(item.isLoaded()) //all direct children are loaded
-			return;
-
+			if(item.isLoaded()) //all direct children are loaded
+				return;
 		/*
 		 * After modified the node in tree model, if node is leaf, 
 		 * its treechildren is needed to be dropped.
@@ -1269,7 +1269,7 @@ public class Tree extends XulElement {
 				tc.detach(); //just in case
 
 			//no children to render
-			//Note item already renderred, so no need:
+			//but, if the node is leaf, need to render itself
 			//renderer.render(item, node);
 		}else{
 			if (tc != null) tc.getChildren().clear(); //just in case
@@ -1280,11 +1280,40 @@ public class Tree extends XulElement {
 
 			renderChildren(renderer, tc, node);
 		}
-
-		//After the treeitem is loaded, set treeitem to be loaded
 		item.setLoaded(true);
 	}
 	
+	private void renderChangedItem(Treeitem item, Object node){
+		/*
+		 * After modified the node in tree model, if node is leaf, 
+		 * its treechildren is needed to be dropped.
+		 */
+		if(_model != null) {
+			final Renderer renderer = new Renderer();
+			try {
+				Treechildren tc = item.getTreechildren();
+				if(_model.isLeaf(node)){
+					if(tc != null)
+						tc.detach(); //just in case
+		
+					//no children to render
+					//but, if the node is leaf, need to render itself
+					renderer.render(item, node);
+				}else{
+					if (tc == null) {
+						tc = new Treechildren();
+						tc.setParent(item);
+					}
+					renderer.render(item, node);
+				}
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
+		}
+	}
+
 	/** Renders the specified {@link Treeitem} if not loaded yet,
 	 * with {@link #getTreeitemRenderer}.
 	 *
