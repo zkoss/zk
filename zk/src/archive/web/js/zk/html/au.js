@@ -883,6 +883,30 @@ if (!zkau._popups) {
 	zkau._modals = []; //uuid (used zul.js or other modal)
 }
 
+/** Returns the current modal window, or null.
+ * @since 3.0.4
+ */
+zkau.currentModal = function () {
+	var modals = zkau._modals;
+	return modals.length ? modals[modals.length - 1]: null;
+};
+/** Checks if we can move focus to the specified element.
+ * If it is not in the current modal, false is returned and
+ * focus is moved back to the current modal.
+ *
+ * @param checkOnly if true, the focus won't be changed.
+ * @since 3.0.4
+ */
+zkau.canFocus = function (el, checkOnly) {
+	var modal = zkau.currentModal();
+	if (modal && !zk.isAncestor(modal, el)) {
+		if (!checkOnly)
+			zk.asyncFocusDown(modal);
+		return false;
+	}
+	return true;
+};
+
 //-- utilities --//
 /** Returns the element of the specified element.
  * It is the same as Event.elemet(evt), but
@@ -897,6 +921,8 @@ zkau.evtel = function (evtel) {
 
 zkau.onfocus = function (evtel) { //accept both evt and cmp
 	var el = zkau.evtel(evtel);
+	if (!zkau.canFocus(el)) return;
+
 	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
 	zkau.closeFloatsOnFocus(el);
 	if (zkau.valid) zkau.valid.uncover(el);
@@ -988,14 +1014,15 @@ zkau._onBfUnload = function () {
 zkau._onDocMousedown = function (evt) {
 	if (!evt) evt = window.event;
 
+	var el = Event.element(evt);
+	if (!zkau.canFocus(el)) return;
+
 	zkau._savepos(evt);
 
-	var node = Event.element(evt);
-	zkau.currentFocus = node;
+	zkau.currentFocus = el;
 
-	zkau.closeFloatsOnFocus(node);
-
-	zkau.autoZIndex(node);
+	zkau.closeFloatsOnFocus(el);
+	zkau.autoZIndex(el);
 };
 /** Handles the left click. */
 zkau._onDocLClick = function (evt) {
@@ -2124,6 +2151,8 @@ zkau.cmd1 = {
 	},
 	focus: function (uuid, cmp) {
 		if (!zk.eval(cmp, "focus")) {
+			if (!zkau.canFocus(cmp, true)) return;
+
 			zkau.autoZIndex(cmp); //some, say, window, not listen to onfocus
 			cmp = $real(cmp); //focus goes to inner tag
 			zk.asyncFocus(cmp.id, 10);
