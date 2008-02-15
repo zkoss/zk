@@ -1,0 +1,1234 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book lang="en-US">
+<title>ZK Style Guide</title>
+<subtitle>Version 3.0.4</subtitle>
+<bookinfo>
+<copyright>
+<year>2008</year>
+<holder>Potix Corporation. All rights reserved.</holder>
+</copyright>
+</bookinfo>
+<chapter>
+<title>1. XUL Components</title><sect1><title>Bandbox</title>
+<para>
+<graphic fileref="images/bandbox.jpg">2
+			
+		</graphic>Bandbox is composed of two parts, an input box and a popup.</para><sect2><title>Input Box</title>
+<para>
+<graphic fileref="images/bandbox-span.jpg">2
+			
+		</graphic>
+</para>
+<para/>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>span.bandbox</code>
+</para>
+</entry>
+<entry>
+<para>The outline of combbox</para>
+</entry>
+<entry>
+<para>
+<code>border: 0; </code>
+</para>
+<para>
+<code>padding: 0; </code>
+</para>
+<para>
+<code>margin: 0; </code>
+</para>
+<para>
+<code>white-space: nowrap;</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect2><sect2><title>Popup</title>
+<para>
+<graphic fileref="images/bandbox-pp.jpg">2
+			
+		</graphic>
+</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>div.bandboxpp</code>
+</para>
+</entry>
+<entry>
+<para>Popup of bandbox</para>
+</entry>
+<entry>
+<para>
+<code>display: block; </code>
+</para>
+<para>
+<code>position: absolute; </code>
+</para>
+<para>
+<code>z-index: 88000;</code>
+</para>
+<para>
+<code>background: white; </code>
+</para>
+<para>
+<code>border: 1px solid black; </code>
+</para>
+<para>
+<code>padding: 2px;</code>
+</para>
+<para>
+<code>font-size: x-small;</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><title>Customize the Background</title>
+<para>The way to customize the background color of popup is to change the background attribute of div.comboboxpp.</para>
+<para>
+<graphic fileref="images/bandbox-pp-green.jpg">2
+			
+		</graphic>
+</para>
+<programlisting>div.bandboxpp{&#13;    background: #EEF3E2;    &#13;}&#13;&#13;</programlisting>
+<para/>
+<para/></sect3></sect2></sect1><sect1><title>Calendar</title>
+<para>
+<graphic fileref="images/calendar.gif">2
+			
+		</graphic>
+</para>
+<para>Calender is stuck by Javascript.</para>
+<para>
+<graphic fileref="images/calendar-seld.gif">2
+			
+		</graphic>
+<graphic fileref="images/calendar-dow.gif">2
+			
+		</graphic>
+</para>
+<para>
+<graphic fileref="images/calendar-year.gif">2
+			
+		</graphic>
+<graphic fileref="images/calendar-day.gif">2
+			
+		</graphic>
+</para>
+<para>
+<graphic fileref="images/calendar-month.gif">2
+			
+		</graphic>
+</para>
+<para/>
+<para/>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>table.calendar</code>
+</para>
+</entry>
+<entry>
+<para>The outline of calendar</para>
+</entry>
+<entry>
+<para>
+<code>background: white; border: 1px solid #7F9DB9;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>table.calyear</code>
+</para>
+</entry>
+<entry>
+<para>The outline of elect year</para>
+</entry>
+<entry>
+<para>background: #eaf0f4; border: 1px solid;</para>
+<para>border-color: #f8fbff #aca899 #aca899 #f8fbff;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>table.calday</code>
+</para>
+</entry>
+<entry>
+<para>The outline of elect day</para>
+</entry>
+<entry>
+<para>border: 1px solid #ddd;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>table.calmon</code>
+</para>
+</entry>
+<entry>
+<para>The outline of month</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>table.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited</code>
+</para>
+</entry>
+<entry>
+<para>The outline of elect month</para>
+</entry>
+<entry>
+<para>font-size: x-small; color: #35254F; text-align: center;</para>
+<para>cursor: pointer; text-decoration: none;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>tr.calday td a:hover</para>
+</entry>
+<entry>
+<para>The outline of hover day</para>
+</entry>
+<entry>
+<para>text-decoration: underline;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>tr.calday td</para>
+</entry>
+<entry>
+<para>The row outline of elect day</para>
+</entry>
+<entry>
+<para>padding: 1px 3px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>tr.caldow td</para>
+</entry>
+<entry>
+<para>The row outline of day of work</para>
+</entry>
+<entry>
+<para>font-size: x-small; color: #333; font-weight: bold;</para>
+<para>padding: 1px 2px; background: #e8e8f0; text-align: center;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>table.calmon td.seld, tr.calday td.seld</para>
+</entry>
+<entry>
+<para>The outline of selected day</para>
+</entry>
+<entry>
+<para>background: #bbd1ed; border: 1px solid #aac6e9;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>table.calmon td.dis, tr.calday td.dis</para>
+</entry>
+<entry>
+<para>The outline of disabled day</para>
+</entry>
+<entry>
+<para>color: #888;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><sect3><title>Customize the background of Calendar</title>
+<para>The way to customize the background of Calendar is change color as follows.</para>
+<para>
+<graphic fileref="images/custom-calendar.gif">2
+			
+		</graphic>
+</para>
+<para>table.calyear {</para>
+<programlisting>    background: #F8AAFF; border: 1px solid;    &#13;</programlisting>
+<para>}</para>
+<para/></sect3></sect3></sect1><sect1><title>Combobox</title>
+<para>
+<graphic fileref="images/combobox.jpg">2
+			
+		</graphic>Combobox is composed of two parts, an input box and a popup.</para><sect2><title>Input Box</title>
+<para>
+<graphic fileref="images/combobox-input.jpg">2
+			
+		</graphic>
+</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>span.combobox</code>
+</para>
+</entry>
+<entry>
+<para>The outline of combbox</para>
+</entry>
+<entry>
+<para>
+<code>border: 0; </code>
+</para>
+<para>
+<code>padding: 0; </code>
+</para>
+<para>
+<code>margin: 0; </code>
+</para>
+<para>
+<code>white-space: nowrap;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>span.rbtnbk</code>
+</para>
+</entry>
+<entry>
+<para>Button at the right edge</para>
+</entry>
+<entry>
+<para>
+<code>background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); </code>
+</para>
+<para>
+<code>background-repeat: no-repeat;</code>
+</para>
+<para>
+<code>border: 1px solid #7f9db9; </code>
+</para>
+<para>
+<code>border-left: none;</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><title>Customize the Button</title>
+<para>The way to customize the button of combobox is to change the image as follows.</para>
+<para>
+<graphic fileref="images/combobox-btn.jpg">2
+			
+		</graphic> </para>
+<programlisting>span.rbtnbk{&#13;    background-image: url(/zkdemo/green.jpg);    &#13;}&#13;</programlisting></sect3></sect2><sect2><title>Popup</title>
+<para>
+<graphic fileref="images/combobox-with-pp.jpg">2
+			
+		</graphic>
+</para>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>div.comboboxpp</code>
+</para>
+</entry>
+<entry>
+<para>Popup of combobox</para>
+</entry>
+<entry>
+<para>
+<code>display: block; </code>
+</para>
+<para>
+<code>position: absolute; </code>
+</para>
+<para>
+<code>z-index: 88000;</code>
+</para>
+<para>
+<code>background: white; </code>
+</para>
+<para>
+<code>border: 1px solid black; </code>
+</para>
+<para>
+<code>padding: 2px;</code>
+</para>
+<para>
+<code>font-size: x-small;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.comboboxpp td</code>
+</para>
+</entry>
+<entry>
+<para>Label in the popup</para>
+</entry>
+<entry>
+<para>
+<code>white-space: nowrap; </code>
+</para>
+<para>
+<code>font-size: x-small;</code>
+</para>
+<para>
+<code>cursor: pointer;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.comboboxpp td span</code>
+</para>
+</entry>
+<entry>
+<para>Descriptions in the popup</para>
+</entry>
+<entry>
+<para>
+<code>color: #888;</code>
+</para>
+<para>
+<code>font-size: xx-small; </code>
+</para>
+<para>
+<code>padding-left: 6px;</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><title>Customize the Background</title>
+<para>The way to customize the background color of popup is to change the background attribute of div.comboboxpp.</para>
+<para>
+<graphic fileref="images/comboboxpp.jpg">2
+			
+		</graphic>
+</para>
+<programlisting>div.comboboxpp{&#13;    background: #EEF3E2;    &#13;}&#13;</programlisting>
+<para/></sect3></sect2></sect1><sect1><title>Intbox</title>
+<para>
+<graphic fileref="images/intbox.gif">2
+			
+		</graphic>Intbox is an input box.</para><sect2><title>Input Box</title>
+<para>
+<graphic fileref="images/intbox-des.gif">2
+			
+		</graphic>
+</para></sect2><sect2><title>Input Box with Constraint</title>
+<para>
+<graphic fileref="images/intbox-constraint-des.gif">2
+			
+		</graphic>
+</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.text</code>
+</para>
+</entry>
+<entry>
+<para>The outline of intbox</para>
+</entry>
+<entry>
+<para>
+<code>background: #FFF url(</code>
+<code>${c:encodeURL('~./zul/img/grid/text-bg.gif')}</code>
+<code>) repeat-x 0 0;</code>
+</para>
+<para>
+<code>repeat-x scroll 0pt;</code>
+</para>
+<para>border:1px solid #7F9DB9;</para>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.</code>
+<code>text-invalid</code>
+<code> </code>
+</para>
+</entry>
+<entry>
+<para>The outline of intbox</para>
+</entry>
+<entry>
+<para>background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;</para>
+<para>border: 1px solid #DD7870;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><title>Customize the background of Intbox</title>
+<para>The way to customize the background of Intbox is change color as follows.</para>
+<para>
+<graphic fileref="images/custom-intbox.gif">2
+			
+		</graphic>
+</para>
+<programlisting>.text{&#13;    background: gray;    &#13;}&#13;</programlisting></sect3><sect3><title>Customize the constraint of Intbox</title>
+<para>The way to customize the border of Intbox is change color as follows.</para>
+<para>
+<graphic fileref="images/custom-intbox-constraint.gif">2
+			
+		</graphic>
+</para>
+<programlisting>.text-invalid{&#13;    border: 1px solid black;    &#13;</programlisting>
+<para>}</para>
+<para/></sect3></sect2></sect1><sect1><title/></sect1><sect1><title>Tabbox – Horizontal </title>
+<para>
+<graphic fileref="images/tabbox-hor.png">2
+			
+		</graphic>
+</para>
+<para>The style of horizontal tabbox include 4 parts, style of panel, tabs corner, selected tab and non-selected tab.</para><sect2><title>Panel</title>
+<para>
+<graphic fileref="images/tabbox-hor-body.png">2
+			
+		</graphic>
+</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.</code>
+<code>tabpanel</code>
+</para>
+</entry>
+<entry>
+<para>the border of panel of tabbox</para>
+</entry>
+<entry>
+<para>
+<code>border-bottom:1px solid #5C6C7C;</code>
+</para>
+<para>border-left:1px solid #5C6C7C;</para>
+<para>border-right:1px solid #5C6C7C;</para>
+<para>padding:5px;</para>
+<para>
+<code/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect2><sect2><title>Tabs Corner</title>
+<para/>
+<para>
+<graphic fileref="images/tabbox-hor-corner.png">2
+			
+		</graphic>
+</para>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.tab-3d-first1 </code>
+</para>
+</entry>
+<entry>
+<para>The left corner</para>
+</entry>
+<entry>
+<para>
+<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-first1.gif);</code>
+</para>
+<para>height:3px;</para>
+<para>width:1px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-first2 </para>
+</entry>
+<entry>
+<para>The line of left corner</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-first2.gif);</para>
+<para>height:3px;</para>
+<para>width:3px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-last1 </para>
+</entry>
+<entry>
+<para>The line of right corner</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-last1.gif);</para>
+<para>height:3px;</para>
+<para>width:3px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-last2 </para>
+</entry>
+<entry>
+<para>The right corner</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-last2.gif);</para>
+<para>height:3px;</para>
+<para>width:1px;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect2><sect2><title>Selected Tab</title>
+<para>
+<graphic fileref="images/tabbox-hor-tab-sel.png">2
+			
+		</graphic>
+</para>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.</code>
+<code>tab-3d-tl-sel </code>
+</para>
+</entry>
+<entry>
+<para>Top-left corner of a selected tab</para>
+</entry>
+<entry>
+<para>
+<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tl-sel.gif);</code>
+</para>
+<para>height:5px;</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-tm-sel </para>
+</entry>
+<entry>
+<para>Top-middle line of a selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tm-sel.gif);</para>
+<para>height:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-tr-sel </para>
+</entry>
+<entry>
+<para>Top-right corner of a selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tr-sel.gif);</para>
+<para>height:5px;</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-ml-sel </para>
+</entry>
+<entry>
+<para>Middle-left of a selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-ml-sel.gif);</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-mm-sel </para>
+</entry>
+<entry>
+<para>Middle-middle of a selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-mm-sel.gif);</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-mr-sel </para>
+</entry>
+<entry>
+<para>Middle-right of a selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-mr-sel.gif);</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-bl-sel </para>
+</entry>
+<entry>
+<para>bottom-left of a selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-bl-sel.gif);</para>
+<para>height:3px;</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-bm-sel </para>
+</entry>
+<entry>
+<para>bottom-middle of a selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-bm-sel.gif);</para>
+<para>height:3px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-br-sel </para>
+</entry>
+<entry>
+<para>bottom-right of a selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-br-sel.gif);</para>
+<para>height:3px;</para>
+<para>width:5px;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect2><sect2><title>Non-Selected Tab</title>
+<para>
+<graphic fileref="images/tabbox-hor-tab-dissel.png">2
+			
+		</graphic>
+</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.</code>
+<code>tab-3d-tl-uns </code>
+</para>
+</entry>
+<entry>
+<para>Top-left corner of a non-selected tab</para>
+</entry>
+<entry>
+<para>
+<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tl-uns.gif);</code>
+</para>
+<para>height:5px;</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-tm-<code>uns</code> </para>
+</entry>
+<entry>
+<para>Top-middle line of a non-selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tm-uns.gif);</para>
+<para>height:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-tr-<code>uns</code> </para>
+</entry>
+<entry>
+<para>Top-right corner of a non-selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tr-uns.gif);</para>
+<para>height:5px;</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-ml-<code>uns</code> </para>
+</entry>
+<entry>
+<para>Middle-left of a non-selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-ml-uns.gif);</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-mm-uns </para>
+</entry>
+<entry>
+<para>Middle-middle of a non-selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-mm-uns.gif);</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-mr-uns</para>
+</entry>
+<entry>
+<para>Middle-right of a non-selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-mr-uns.gif);</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-bl-uns</para>
+</entry>
+<entry>
+<para>bottom-left of a non-selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-bl-uns.gif);</para>
+<para>height:3px;</para>
+<para>width:5px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-bm-uns</para>
+</entry>
+<entry>
+<para>bottom-middle of a non-selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-bm-uns.gif);</para>
+<para>height:3px;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.tab-3d-br-uns</para>
+</entry>
+<entry>
+<para>bottom-right of a non-selected tab</para>
+</entry>
+<entry>
+<para>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-br-uns.gif);</para>
+<para>height:3px;</para>
+<para>width:5px;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><title>Customize the panel style</title>
+<para>
+<graphic fileref="images/tabbox-hor-body-1.png">2
+			
+		</graphic>
+</para>
+<para>The way to customize the background and border of Tabbox is declaring the style as follows.</para>
+<programlisting>.tabpanel{&#13;background-color:#BBFFBB;&#13;border-bottom:4px solid #5C6C7C;&#13;border-right:3px solid #5C6C7C;&#13;}&#13;</programlisting></sect3><sect3><title/></sect3><sect3><title/></sect3></sect2></sect1><sect1><title>Timebox</title>
+<para>
+<graphic fileref="images/timeBox-jeff.png">2
+			
+		</graphic>Timebox is composed of 2 span, an input box and an image.</para><sect2><title>Input Box</title>
+<para>
+<graphic fileref="images/timeBox-des-Jeff.png">2
+			
+		</graphic>
+</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.text</code>
+</para>
+</entry>
+<entry>
+<para>The outline of timebox</para>
+</entry>
+<entry>
+<para>
+<code>background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;</code>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>border: 1px solid #7F9DB9;</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>span.rbtnbk</code>
+</para>
+</entry>
+<entry>
+<para>Button at the right edge</para>
+</entry>
+<entry>
+<para>
+<code>background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); </code>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>background-repeat: no-repeat;</code>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>border: 1px solid #7f9db9; </code>
+</para>
+<para>
+<code/>
+</para>
+<para>
+<code>border-left: none;</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><title>Customize the Button</title>
+<para>The way to customize the button of combobox is to disable the image and change color as follows.</para>
+<para>
+<graphic fileref="images/custom_timeBox-jeff.png">2
+			
+		</graphic> </para>
+<programlisting>span.rbtnbk{&#13;    background-image:url();    &#13;    background-color:pink;    &#13;</programlisting>
+<para>}</para>
+<para/></sect3></sect2></sect1><sect1><title>Toolbar with Toolbarbutton</title>
+<para>
+<graphic fileref="images/toolbar-norz.png">2
+			
+		</graphic>Toolbar with Toolbarbutton is composed of two parts, anchor tags and a div.</para><sect2><title>Toolbar with Toolbarbutton</title>
+<para>
+<graphic fileref="images/toolbar-desc.png">2
+			
+		</graphic>
+</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.toolbar</code>
+</para>
+</entry>
+<entry>
+<para>The toolbar</para>
+</entry>
+<entry>
+<para>
+<code>padding: 1px; </code>
+</para>
+<para>
+<code>background: #e0eaf7; border: 1px solid;</code>
+</para>
+<para>
+<code>border-color: #f8fbff #aca899 #aca899 #f8fbff;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>.toolbar a</code>
+</para>
+</entry>
+<entry>
+<para>The toolbar buttons</para>
+</entry>
+<entry>
+<para>
+<code>font-family: Tahoma, Arial, Helvetica, sans-serif;</code>
+</para>
+<para>
+<code>font-size: x-small; </code>
+</para>
+<para>
+<code>font-weight: normal; </code>
+</para>
+<para>
+<code>color: black;</code>
+</para>
+<para>
+<code>background: #e0eaf7; </code>
+</para>
+<para>
+<code>border: 1px solid #e0eaf7;</code>
+</para>
+<para>
+<code>text-decoration: none;</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><title>Customize Toolbar with ToolbarButton</title>
+<para>The way to customize the toolbar with toolbarbutton, changing background and font colors when hover over text.</para>
+<para>Normal:</para>
+<para>
+<graphic fileref="images/toolbarbutton.png">2
+			
+		</graphic>  Hover:</para>
+<para>
+<graphic fileref="images/toolbarbutton-hover.png">2
+			
+		</graphic>
+</para>
+<para/>
+<programlisting>&#13;.toolbar{&#13;    background:red none repeat scroll 0% 50%;    &#13;}&#13;.toolbar a{&#13;    background:blue;    &#13;    border:blue;    &#13;    color:white;    &#13;}&#13;.toolbar a:hover{&#13;    background:white;    &#13;    border:white;    &#13;    color:blue;    &#13;}&#13;</programlisting></sect3></sect2><sect2><title/></sect2></sect1><sect1><title>Toolbarbutton in Caption</title>
+<para>
+<graphic fileref="images/toolbarbutton-caption-desc.png">2
+			
+		</graphic>Toolbarbutton in window caption is composed of two parts, anchor tags and a div.</para><sect2><title>Toolbarbutton in Caption</title>
+<para>
+<graphic fileref="images/toolbarbutton-caption-desc2.png">2
+			
+		</graphic>
+</para>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>CSS Definition</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>td.mwt-embedded a,</code>
+</para>
+<para>
+<code>td.mwt-embedded a:visited, td.mwt-embedded a:hover </code>
+</para>
+</entry>
+<entry>
+<para>toolbar used in embedded window</para>
+</entry>
+<entry>
+<para>
+<code>color: #222222;</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/><sect3><title>Customize ToolbarButton in Caption</title>
+<para>The way to customize the toolbarbutton in Caption, changing background and font colors when hover over text.</para>
+<para>Normal:</para>
+<para>
+<graphic fileref="images/toolbarbutton-caption-custom.png">2
+			
+		</graphic> Hover:</para>
+<para>
+<graphic fileref="images/toolbarbutton-caption-custom-hover.png">2
+			
+		</graphic>
+</para>
+<para/>
+<para>td.mwt-embedded a</para>
+<para>{</para>
+<para>color:red;</para>
+<para>background: yellow;</para>
+<para>padding: 2px;</para>
+<para>}</para>
+<para>td.mwt-embedded a:hover</para>
+<para>{</para>
+<para>color:green;</para>
+<para>background: blue;</para>
+<para>padding: 2px;</para>
+<para>}</para>
+<para/></sect3></sect2><sect2><title/></sect2></sect1></chapter>
+</book>
