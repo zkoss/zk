@@ -883,10 +883,10 @@ if (!zkau._popups) {
 	zkau._modals = []; //uuid (used zul.js or other modal)
 }
 
-/** Returns the current modal window, or null.
+/** Returns the current modal window's ID, or null.
  * @since 3.0.4
  */
-zkau.currentModal = function () {
+zkau.currentModalId = function () {
 	var modals = zkau._modals;
 	return modals.length ? modals[modals.length - 1]: null;
 };
@@ -898,10 +898,18 @@ zkau.currentModal = function () {
  * @since 3.0.4
  */
 zkau.canFocus = function (el, checkOnly) {
-	var modal = zkau.currentModal();
-	if (modal && !zk.isAncestor(modal, el)) {
-		if (!checkOnly)
-			zk.asyncFocusDown(modal);
+	var modalId = zkau.currentModalId();
+	if (modalId && !zk.isAncestor(modalId, el)) {
+		if (!checkOnly) {
+			//Note: we cannot change focus to SPAN/DIV, but they might
+			//gain focus (such as selecting a piece of text)
+			var cf = zkau.currentFocus, cftn = $tag(cf);
+			if (cf && cf.id && cftn != "SPAN" && cftn != "DIV"
+			&& zk.isAncestor(modalId, cf.id))
+				zk.asyncFocus(cf.id);
+			else
+				zk.asyncFocusDown(modalId);
+		}
 		return false;
 	}
 	return true;
