@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1894193.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Feb 15 10:34:53     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="First" width="200px" border="normal" mode="modal">
+	<vbox>
+	This the first window.
+	<textbox/>
+	<button label="Click me first"
+		onClick='Messagebox.show("Press TAB to see if you can change focus to the first window", "Ready", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION)'/>
+	</vbox>
+</window>
