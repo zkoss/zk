@@ -1351,8 +1351,7 @@ public class Tree extends XulElement {
 	 * @return the node from tree by given path
 	 * @since 3.0.0
 	 */
-	private Object getNodeByPath(List path, Object root)
-	{
+	private Object getNodeByPath(List path, Object root) {
 		Object node = root;
 		int pathSize = path.size()-1;
 		for(int i=pathSize; i >= 0; i--){
