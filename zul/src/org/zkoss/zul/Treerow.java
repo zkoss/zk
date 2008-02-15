@@ -174,7 +174,7 @@ public class Treerow extends XulElement {
 			}
 		}
 
-		if (tree.getModel() != null)
+		if (tree != null && tree.getModel() != null && !item.isLoaded())
 			sb.append(" z.lod=\"t\""); //lod=Load-on-Demand
 		appendAsapAttr(sb, Events.ON_OPEN);
 		
