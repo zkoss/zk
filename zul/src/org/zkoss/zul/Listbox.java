@@ -1417,14 +1417,14 @@ public class Listbox extends XulElement {
 	}
 
 	/** Used to render listitem if _model is specified. */
-	private class Renderer {
+	/*package*/ class Renderer { //use package for easy to call (if override)
 		private final ListitemRenderer _renderer;
 		private boolean _rendered, _ctrled;
 
-		private Renderer() {
+		/*package*/ Renderer() {
 			_renderer = getRealRenderer();
 		}
-		private void render(Listitem item) throws Throwable {
+		/*package*/ void render(Listitem item) throws Throwable {
 			if (item.isLoaded())
 				return; //nothing to do
 
@@ -1458,7 +1458,7 @@ public class Listbox extends XulElement {
 			item.setLoaded(true);
 			_rendered = true;
 		}
-		private void doCatch(Throwable ex) {
+		/*package*/ void doCatch(Throwable ex) {
 			if (_ctrled) {
 				try {
 					((RendererCtrl)_renderer).doCatch(ex);
@@ -1469,7 +1469,7 @@ public class Listbox extends XulElement {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
-		private void doFinally() {
+		/*package*/ void doFinally() {
 			if (_ctrled)
 				((RendererCtrl)_renderer).doFinally();
 		}
