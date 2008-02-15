@@ -117,7 +117,11 @@ public class Treeitem extends XulElement {
 	 * @since 3.0.0
 	 */
 	/*package*/ void setLoaded(boolean loaded){
-		_loaded = loaded;
+		if (_loaded != loaded) {
+			_loaded = loaded;
+			if (_treerow != null)
+				_treerow.smartUpdate("z.lod", _loaded ? "": "t");
+		}
 	}
 	
 	/**
@@ -497,12 +501,12 @@ public class Treeitem extends XulElement {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			_open = open;
-			/*
-			 * Load Treeitem.
-			 * SetOpen will trigger this function.
-			 */
-			if(getTree() != null)
-				getTree().renderItem(Treeitem.this);
+
+			if (_open) {
+				final Tree tree = getTree();
+				if (tree != null && tree.getModel() != null)
+					tree.renderItem(Treeitem.this);
+			}
 		}
 	}
 }

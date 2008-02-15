@@ -116,7 +116,8 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 
 		zkau.send({uuid: getZKAttr(row, "pitem"),
 			cmd: "onOpen", data: [toOpen]},
-			zkau.asapTimeout(row, "onOpen"));
+			toOpen && getZKAttr(row, "lod") ? 38: //load-on-demand
+				zkau.asapTimeout(row, "onOpen"));
 			//always send since the client has to update Openable
 	},
 	/** Shows or hides all children
