@@ -1382,7 +1382,6 @@ public class Tree extends XulElement {
 			if(path[i] <0 || path[i] > children.size())
 				return null;
 			ti = (Treeitem) children.get(path[i]);
-			renderItem(ti);
 			if(i<path.length-1) 
 				ti.setOpen(true);
 			if(ti.getTreechildren()!=null){

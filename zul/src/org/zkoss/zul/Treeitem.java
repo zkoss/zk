@@ -198,6 +198,13 @@ public class Treeitem extends XulElement {
 			//initialized before creating child components (for ZK pages)
 			if (_treerow != null)
 				_treerow.smartUpdate("open", _open);
+			//If the item is open, its tree has model and not rendered, render the item
+			if(_open){
+				Tree tree = getTree();
+				if(tree != null && tree.getModel() !=null){
+					tree.renderItem(this);
+				}
+			}
 		}
 	}
 	/** Returns whether this item is selected.
