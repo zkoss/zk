@@ -1167,7 +1167,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Appends an attribute for the specified event name, say, onChange,
 	 * if a non-deferrable listener is registered.
 	 * The format of the generated attribute is as follows:
-	 * <code>onChange="true"</code>.
+	 * <code>z.onChange="true"</code>.
 	 *
 	 * <p>This method is moved from {@link HtmlBasedComponent} to
 	 * {@link AbstractComponent} since 3.0.0.
@@ -1179,10 +1179,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * returns false, null is returned.
 	 * If the caller passed non-null sb, the returned value must be the same
 	 * as sb (so it usually ignores the returned value).
+	 * @see #appendAsapAttr(StringBuffer sb, String, boolean)
 	 * @since 3.0.0
 	 */
 	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm) {
-		if (isAsapRequired(evtnm)) {
+		return appendAsapAttr(sb, evtnm, false);
+	}
+	/** Appends an attribute for the specified event name, say, onChange,
+	 * if a non-deferrable listener is registered or enforce is true.
+	 * The format of the generated attribute is as follows:
+	 * <code>z.onChange="true"</code>.
+	 *
+	 * <p>appendAsapAttr(sb, evtnm) is the same as
+	 * appendAsapAttr(sb, evtnm, false).
+	 *
+	 * @param enforce whether to append the event attribute even if
+	 * {@link #isAsapRequired} returns false.
+	 * If enforce is false, this method is the same as
+	 * {@link #appendAsapAttr(StringBuffer, String)}
+	 * @since 3.0.4
+	 */
+	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm,
+	boolean enforce) {
+		if (enforce || isAsapRequired(evtnm)) {
 			if (sb == null) sb = new StringBuffer(80);
 			HTMLs.appendAttribute(sb, getAttrOfEvent(evtnm), true);
 		}
