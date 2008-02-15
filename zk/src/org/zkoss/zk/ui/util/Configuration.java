@@ -394,7 +394,7 @@ public class Configuration {
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
 	 * @exception UiException to prevent a thread from being processed
-	 * if {@link EventThreadInit#prepare} throws an exception
+	 * if {@link EventThreadInit#init} throws an exception
 	 * @return false if you want to ignore the event, i.e., not to proceed
 	 * any event processing for the specified event (evt).
 	 */
