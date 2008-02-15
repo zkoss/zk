@@ -20,13 +20,16 @@ ZK 3.0.4 Freshly
   1892484: Tree serialize bug
   1888911: databind with grid in grid fail when no _var in inner grid
   1893247: Not unique in the new ID space when Grid in Grid
+  1894193: hidden modal might become on top w/o disable-behind-modal
   
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
     It improves the performance when opening a modal window.
-    However, the user might be able to change the focus a component
-    behind the modal window by pressing TAB. If it is not acceptable to you,
-    specify the following in zk.xml.
+    If your page contains an element that is not a ZK component
+    (such as HTML INPUT rather than textbox), the user might be able to
+    change the focus to it by pressing TAB even if it is covered by a modal
+    window.
+    If it is not acceptable to you, specify the following in zk.xml.
 	<client-config>
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
