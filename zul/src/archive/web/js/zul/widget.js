@@ -362,9 +362,16 @@ zkRadio.rmAttr = zkCkbox.rmAttr;
 /** Handles onclick for checkbox and radio. */
 zkCkbox.onclick = function (cmp) {
 	var newval = cmp.checked;
+	var isRadio = cmp.type == "radio";
 	//20060426: if radio, we cannot detect whether a radio is unchecked
 	//by the browser -- so always zk.send
-	if (cmp.type == "radio" || newval != cmp.defaultChecked) { //changed
+	if (isRadio || newval != cmp.defaultChecked) { //changed
+		// bug #1893575 : we have to clean all of the radio at the same group.
+		if (isRadio) {
+			var nms = document.getElementsByName(cmp.name);
+			for (var i = nms.length; --i >= 0;)
+				nms[i].defaultChecked = false;
+		}
 		cmp.defaultChecked = newval;
 		var uuid = $uuid(cmp);
 		zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]},
