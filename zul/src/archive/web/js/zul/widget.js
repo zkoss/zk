@@ -190,11 +190,10 @@ zkTxbox.onkeydown = function (evt) {
 	}
 };
 zkTxbox.onfocus = function (evt) {
-	zkau.onfocus(evt);
-
-	//handling onChanging
 	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
-	if (inp && inp.id && zkau.asap($outer(inp), "onChanging")) {
+	if (zkau.onfocus0(evt)
+	&& inp && inp.id && zkau.asap($outer(inp), "onChanging")) {
+		//handling onChanging
 		inp.setAttribute("zk_changing_last", inp.value);
 		if (!zkTxbox._intervals[inp.id])
 			zkTxbox._intervals[inp.id] =

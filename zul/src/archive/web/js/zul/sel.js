@@ -434,7 +434,10 @@ zk.Selectable.prototype = {
 	_refocus: function () {
 		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
-			if (this._isFocus(r)) this._focusToAnc(r);
+			if (this._isFocus(r)) {
+				this._focusToAnc(r);
+				return;
+			}
 		}
 	},
 	/** Process the setAttr command sent from the server. */
@@ -584,18 +587,20 @@ zk.Selectable.prototype = {
 
 	/** Changes the specified row as focused. */
 	focus: function (row) {
-		this._unsetFocusExcept(row);
-		this._setFocus(row, true);
+		if (zkau.canFocus(row, true)) {
+			this._unsetFocusExcept(row);
+			this._setFocus(row, true);
+		}
 	},
 	/** Sets focus to the specified row if it has the anchor. */
 	_focusToAnc: function (row) {
-		if (!row) return;
-
-		var uuid = typeof row == 'string' ? row: row.id;
-		var el = $e(uuid + "!cm");
-		if (!el) el = $e(uuid + "!sel");
-		if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
-			zk.asyncFocus(el.id);
+		if (row && zkau.canFocus(row, true)) {
+			var uuid = typeof row == 'string' ? row: row.id;
+			var el = $e(uuid + "!cm");
+			if (!el) el = $e(uuid + "!sel");
+			if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
+				zk.asyncFocus(el.id);
+		}
 	},
 
 	/** Selects one and deselect others, and return whehter any changes.
@@ -1136,7 +1141,8 @@ zkSel._renderNow = function (uuid) {
 };
 zkSel._shallIgnoreEvent = function (el) {
 	var tn = $tag(el);
-	return !el || ((tn == "INPUT" && !el.id.endsWith("!cm"))
+	return !el || !zkau.canFocus(el)
+	|| ((tn == "INPUT" && !el.id.endsWith("!cm"))
 	|| tn == "TEXTAREA" || tn == "BUTTON" || tn == "SELECT" || tn == "OPTION");
 };
 
@@ -1173,8 +1179,10 @@ zkSel.ondragout = function (evt) {
 };
 /** (!cm or !sel)'s onfocus. */
 zkSel.cmonfocus = function (evt) {
-	if (!evt) evt = window.event;
-	zkSel.cmonfocusTo($parentByTag(Event.element(evt), "TR"));
+	if (zkau.onfocus0(evt)) {
+		if (!evt) evt = window.event;
+		zkSel.cmonfocusTo($parentByTag(Event.element(evt), "TR"));
+	}
 };
 /** (!cm or !sel)'s onblur. */
 zkSel.cmonblur = function (evt) {
