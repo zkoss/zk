@@ -1381,9 +1381,24 @@ public class Tree extends XulElement {
 		for(int i=0; i<path.length; i++){
 			if(path[i] <0 || path[i] > children.size())
 				return null;
+			Treeitem parentTi = ti;
 			ti = (Treeitem) children.get(path[i]);
+			
 			if(i<path.length-1) 
 				ti.setOpen(true);
+			else if(i==path.length-1){
+				//active page
+				Treechildren ch = parentTi.getTreechildren();
+				int pgSize = ch.getPageSize();
+				/*
+				 * pgSize is -1 if no limitation.
+				 */
+				if(pgSize >0){
+					ch.setActivePage(path[i]/pgSize);
+				}
+			}
+			
+			
 			if(ti.getTreechildren()!=null){
 				children = ti.getTreechildren().getChildren();
 			}else{
