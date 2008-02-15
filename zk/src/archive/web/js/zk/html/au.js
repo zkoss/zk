@@ -920,8 +920,16 @@ zkau.evtel = function (evtel) {
 };
 
 zkau.onfocus = function (evtel) { //accept both evt and cmp
+	zkau.onfocus0(evtel);
+};
+/** When a component implements its own onfocus, it shall call back this
+ * method and ignore the event if this method returns false.
+ * Like zkau.onfocus except returns false if it shall be ignored.
+ * @since 3.0.4
+ */
+zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
 	var el = zkau.evtel(evtel);
-	if (!zkau.canFocus(el)) return;
+	if (!zkau.canFocus(el)) return false;
 
 	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
 	zkau.closeFloatsOnFocus(el);
@@ -930,8 +938,9 @@ zkau.onfocus = function (evtel) { //accept both evt and cmp
 	zkau.autoZIndex(el);
 
 	var cmp = $outer(el);
-	if (zkau.asap(cmp, "onFocus"))
+	if (!silent && zkau.asap(cmp, "onFocus"))
 		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 100);
+	return true;
 };
 zkau.onblur = function (evtel) {
 	var el = zkau.evtel(evtel);
