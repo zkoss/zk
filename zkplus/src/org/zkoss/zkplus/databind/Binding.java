@@ -479,6 +479,7 @@ public class Binding {
 			Events.sendEvent(new Event("onBindingValidate", target));
 			
 			//saveAttribute for each binding
+			Component loadOnSaveProxy = null;
 			Component dataTarget = null;
 			final List loadOnSaveInfos = new ArrayList(tmplist.size());
 			for(final Iterator it = tmplist.iterator();it.hasNext();) {
@@ -488,12 +489,22 @@ public class Binding {
 				final Object[] vals = bi.getAttributeValues();
 				final DataBinder binder = binding.getBinder();
 				binding.saveAttributeValue(dataTarget, vals, loadOnSaveInfos);
+				if (loadOnSaveProxy == null && dataTarget.isListenerAvailable("onLoadOnSave", true)) {
+					loadOnSaveProxy = dataTarget;
+				}
 			}
 			
-			//do loadOnSave (use last dataTarget as proxy
-			if (dataTarget != null) {
-				Events.postEvent(new Event("onLoadOnSave", dataTarget, loadOnSaveInfos));
+			//bug #1895856 : data binding LoadOnSave works only on the last save-when component
+			//do loadOnSave
+			//if (dataTarget != null) {
+			//		Events.postEvent(new Event("onLoadOnSave", dataTarget, loadOnSaveInfos));
+			//	}
+			
+			// (use first working dataTarget as proxy)
+			if (loadOnSaveProxy != null) {
+				Events.postEvent(new Event("onLoadOnSave", loadOnSaveProxy, loadOnSaveInfos));
 			}
+			
 		}
 	}
 
