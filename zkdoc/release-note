@@ -23,6 +23,8 @@ ZK 3.0.4 Freshly
   1894193: hidden modal might become on top w/o disable-behind-modal
   1893575: Radio all checked after modal messagebox appears
   1895856: databind LoadOnSave work only on the last save-when componen
+  1895804: Borderlayout cannot resize properly inside a Window when...
+  1894208: BorderLayout can not drag
   
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
