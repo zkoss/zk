@@ -22,6 +22,7 @@ ZK 3.0.4 Freshly
   1893247: Not unique in the new ID space when Grid in Grid
   1894193: hidden modal might become on top w/o disable-behind-modal
   1893575: Radio all checked after modal messagebox appears
+  1895856: databind LoadOnSave work only on the last save-when componen
   
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
