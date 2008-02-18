@@ -1415,7 +1415,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 	}
 	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null,
 		dstwds = [], cacheCss, loadIdx = getZKAttr(mate.element, "lastLoadIdx");
-	for (var i = 0, even = true, ln = loadIdx ? $int(loadIdx) : srcrows.length, firstChild; i < ln; ++i) {
+	for (var i = 0, even = true, ln = loadIdx ? $int(loadIdx) || srcrows.length : srcrows.length, firstChild; i < ln; ++i) {
 		var row = srcrows[i], cells = row.cells;
 		if (!firstChild) firstChild = row;
 		if (!zk.isVisible(row) || getZKAttr(row, "loaded") == "false") continue;		
