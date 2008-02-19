@@ -1415,6 +1415,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 	}
 	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null,
 		dstwds = [], cacheCss, loadIdx = getZKAttr(mate.element, "lastLoadIdx");
+	if (index != null) loadIdx = 0; // Bug #1895907: we cannot optimize in the resizing case.	
 	for (var i = 0, even = true, ln = $int(loadIdx) || srcrows.length, firstChild; i < ln; ++i) {
 		var row = srcrows[i], cells = row.cells;
 		if (!firstChild) firstChild = row;
