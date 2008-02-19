@@ -27,6 +27,7 @@ ZK 3.0.4 Freshly
   1895804: Borderlayout cannot resize properly inside a Window when...
   1894208: BorderLayout can not drag
   1894885: Grid alignment problem again
+  1896725: Clients.showBusy() should disable some active tags (IE6)
   
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
