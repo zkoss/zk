@@ -44,8 +44,15 @@ public class ListboxPaging implements ComponentRenderer {
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
 		wh.write("<div id=\"").write(uuid)
-			.write("!paging\" class=\"listbox-paging\">")
-			.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
+			.write("!paging\" class=\"listbox-paging\">");
+		
+		if (self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
+			wh.write("<div id=\"").write(uuid)
+				.write("!pgit\" class=\"listbox-pgi\">")
+				.write(self.getPaging())
+				.write("</div>");
+		}
+		wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
 
 		//header
 		wh.writeln("<tbody class=\"listbox-head\">").writeComponents(self.getHeads()).writeln("</tbody>");
@@ -69,9 +76,12 @@ public class ListboxPaging implements ComponentRenderer {
 			.write("</tbody>\n</table>");
 
 		//Paging
-		wh.write("<div id=\"").write(uuid)
-			.write("!pgi\" class=\"listbox-pgi\">")
-			.write(self.getPaging())
-			.write("</div></div></div>");
+		if (self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
+			wh.write("<div id=\"").write(uuid)
+				.write("!pgib\" class=\"listbox-pgi\">")
+				.write(self.getPaging())
+				.write("</div>");
+		}
+		wh.write("</div></div>");
 	}
 }
