@@ -5,6 +5,7 @@ ZK 3.0.4 Freshly
   1886032: Add the support of I18N for jasperreport
   1892573: Add Jython Interpreter
   1893245: The shading of Combo/Bandbox should be the same with textbox
+  1896600: A way to specify how the paging places in Grid/Listbox
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
