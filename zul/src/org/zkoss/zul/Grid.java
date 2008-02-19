@@ -36,6 +36,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
 import org.zkoss.zk.ui.event.Event;
@@ -108,6 +109,7 @@ public class Grid extends XulElement {
 	private transient Foot _foot;
 	private transient Collection _heads;
 	private String _align;
+	private String _pagingPosition = "bottom";
 	private ListModel _model;
 	private RowRenderer _renderer;
 	private transient ListDataListener _dataListener;
@@ -200,6 +202,31 @@ public class Grid extends XulElement {
 	}
 
 	//--Paging--//
+	/**
+	 * Sets how to position the paging of grid at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
+	 * "top", or "both".
+	 * @since 3.0.4
+	 */
+	public void setPagingPosition(String pagingPosition) {
+		if (pagingPosition == null || (!pagingPosition.equals("top") &&
+			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
+			throw new WrongValueException("Unsupported position : "+pagingPosition);
+		if(!Objects.equals(_pagingPosition, pagingPosition)){
+			_pagingPosition = pagingPosition;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns how to position the paging of grid at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @since 3.0.4
+	 */
+	public String getPagingPosition() {
+		return _pagingPosition;
+	}
+	
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
@@ -291,8 +318,8 @@ public class Grid extends XulElement {
 				renderer.doFinally();
 			}
 		}
-
-		if (_rows != null) _rows.invalidate();
+		if (getPagingPosition().equals("both")) invalidate(); // just in case.
+		else if (_rows != null) _rows.invalidate();
 	}
 			};
 		pgi.addEventListener("onPagingImpl", _pgImpListener);

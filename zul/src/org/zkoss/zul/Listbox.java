@@ -134,6 +134,7 @@ public class Listbox extends XulElement {
 	private transient Collection _heads;
 	private int _hdcnt;
 	private String _innerWidth = "100%";
+	private String _pagingPosition = "bottom";
 	/** The name. */
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
@@ -712,6 +713,30 @@ public class Listbox extends XulElement {
 	}
 
 	//--Paging--//
+	/**
+	 * Sets how to position the paging of listbox at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
+	 * "top", or "both".
+	 * @since 3.0.4
+	 */
+	public void setPagingPosition(String pagingPosition) {
+		if (pagingPosition == null || (!pagingPosition.equals("top") &&
+			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
+			throw new WrongValueException("Unsupported position : "+pagingPosition);
+		if(!Objects.equals(_pagingPosition, pagingPosition)){
+			_pagingPosition = pagingPosition;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns how to position the paging of listbox at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @since 3.0.4
+	 */
+	public String getPagingPosition() {
+		return _pagingPosition;
+	}
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *

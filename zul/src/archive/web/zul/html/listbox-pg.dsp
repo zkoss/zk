@@ -22,6 +22,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
 	<div id="${self.uuid}!paging" class="listbox-paging">
+	<c:if test="${self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
+	<div id="${self.uuid}!pgit" class="listbox-pgi">
+	${z:redraw(self.paging, null)}
+	</div>
+	</c:if>
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="listbox-btable">
 	<tbody class="listbox-head">
 	<c:forEach var="head" items="${self.heads}">
@@ -41,8 +46,10 @@ ${z:redraw(item, null)}
 ${z:redraw(self.listfoot, null)}
 	</tbody>
 	</table>
-	<div id="${self.uuid}!pgi" class="listbox-pgi">
+	<c:if test="${self.pagingPosition == 'bottom' || self.pagingPosition == 'both'}">
+	<div id="${self.uuid}!pgib" class="listbox-pgi">
 	${z:redraw(self.paging, null)}
 	</div>
+	</c:if>
 	</div>
 </div>

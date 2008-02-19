@@ -21,6 +21,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.grid.Grid"${self.outerAttrs}${self.innerAttrs}>
 	<div id="${self.uuid}!paging" class="grid-paging">
+	<c:if test="${self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
+	<div id="${self.uuid}!pgit" class="grid-pgi">
+	${z:redraw(self.paging, null)}
+	</div>
+	</c:if>
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
 	<tbody class="grid-head">
 	<c:forEach var="head" items="${self.heads}">
@@ -32,8 +37,10 @@ ${z:redraw(self.rows, null)}
 ${z:redraw(self.foot, null)}
 	</tbody>
 	</table>
-	<div id="${self.uuid}!pgi" class="grid-pgi">
+	<c:if test="${self.pagingPosition == 'bottom' || self.pagingPosition == 'both'}">
+	<div id="${self.uuid}!pgib" class="grid-pgi">
 	${z:redraw(self.paging, null)}
 	</div>
+	</c:if>
 	</div>
 </div>
