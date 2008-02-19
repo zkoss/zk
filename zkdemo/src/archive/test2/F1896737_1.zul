@@ -21,6 +21,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<zscript><![CDATA[
 		Thread.sleep(5000);
 	]]></zscript>
-	Include One Page Again.
+	Page included. We are going to include the second page...
 	<include progressing="true" src="./F1896737_2.zul"/>
 </zk>
