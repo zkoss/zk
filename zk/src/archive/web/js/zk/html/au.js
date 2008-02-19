@@ -2013,11 +2013,16 @@ zkau.cmd0 = { //no uuid at all
 				msg = msg == "" ? mesg.PLEASE_WAIT : msg;
 				Boot_progressbox("zk_showBusy", msg,
 					0, 0, true, true);
+				zk.disableAll();
 			}
 		} else {
-			var n = $e("zk_showBusy");
-			if (n) n.parentNode.removeChild(n);
+			zkau.cmd0.closeBusy();
 		}
+	},
+	closeBusy: function () {
+		var n = $e("zk_showBusy");
+		if (n) n.parentNode.removeChild(n);
+		zk.restoreDisabled();
 	}
 };
 zkau.cmd1 = {
