@@ -2016,13 +2016,12 @@ zkau.cmd0 = { //no uuid at all
 				zk.disableAll();
 			}
 		} else {
-			zkau.cmd0.closeBusy();
+			var n = $e("zk_showBusy");
+			if (n) {
+				n.parentNode.removeChild(n);
+				zk.restoreDisabled();
+			}
 		}
-	},
-	closeBusy: function () {
-		var n = $e("zk_showBusy");
-		if (n) n.parentNode.removeChild(n);
-		zk.restoreDisabled();
 	}
 };
 zkau.cmd1 = {
