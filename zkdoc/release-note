@@ -32,6 +32,7 @@ ZK 3.0.4 Freshly
   1895907: Listbox column resizing fails upon live data
   1896588: Slow responding, hide some hidden cmps in complex page (IE)
   1896749: Problems with onClinck on charts & IE
+  1897500: Unable to compile ZK sources under Solaris or Mac
   
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
