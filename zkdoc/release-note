@@ -33,6 +33,7 @@ ZK 3.0.4 Freshly
   1896588: Slow responding, hide some hidden cmps in complex page (IE)
   1896749: Problems with onClinck on charts & IE
   1897500: Unable to compile ZK sources under Solaris or Mac
+  1890221: Tree item is not updated if not a leaf
   
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
