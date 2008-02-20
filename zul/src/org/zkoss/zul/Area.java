@@ -116,7 +116,7 @@ public class Area extends AbstractComponent {
 	 */
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64)
-			.append(" href=\"javascript:zkArea.onclick('")
+			.append(" onclick=\"javascript:zkArea.onclick('")
 			.append(getUuid()).append("')\"");
 		HTMLs.appendAttribute(sb, "shape", _shape);
 		HTMLs.appendAttribute(sb, "coords", _coords);
