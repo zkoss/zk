@@ -704,7 +704,9 @@ zkau.setAttr = function (cmp, name, value) {
 	cmp = zkau._attr(cmp, name);
 
 	if ("visibility" == name) {
-		zk.show(cmp, "true" == value);
+		// Bug #1896588: if cmp has hidden, just hides it directly.(Save performance in IE)
+		if("true" == value || zk.isRealVisible(cmp)) zk.show(cmp, "true" == value);
+		else cmp.style.display = "none";
 	} else if ("value" == name) {
 		if (value != cmp.value) {
 			cmp.value = value;
