@@ -33,12 +33,38 @@ import org.zkoss.zk.au.out.*;
  * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
 public class Clients {
-	/** Sends an AU response ({@link AuResponse})to the client.
+	/** Sends an AU response ({@link AuResponse})to the client
+	 * with response's command ({@link AuResponse#getCommand}) as the key.
+	 *
+	 * <p>Since response's command is used as the key, so the second
+	 * invocation of this method with a response that has the same command
+	 * will override the previous one. For example, the first one will be
+	 * ignored since both have the same command.
+	 * <pre><code>
+	 *	response(new AuShowBusy("this will have no effect", true));
+	 *	response(new AuShowBusy(null, false));</code></pre>
+	 *
+	 * <p>If this is an issue, use {@link #response(String, AuResponse)}
+	 * instead.
+	 *
 	 * @since 3.0.0
 	 */
 	public static final void response(AuResponse response) {
 		Executions.getCurrent()
 			.addAuResponse(response.getCommand(), response);
+	}
+	/** Sends an AU response ({@link AuResponse}) to the client
+	 * with the specified key.
+	 *
+	 * @param key could be anything. The second invocation of this method
+	 * in the same execution with the same key will override the previous one.
+	 * In other words, the previous one will be dropped.
+	 * If null is specified, the response is simply appended to the end
+	 * without overriding any previous one.
+	 * @since 3.0.4
+	 */
+	public static final void response(String key, AuResponse response) {
+		Executions.getCurrent().addAuResponse(key, response);
 	}
 
 	/** Asks the browser to confirm users whether to close the browser window.

@@ -2005,8 +2005,15 @@ zkau.cmd0 = { //no uuid at all
 		zkau.confirmClose = msg;
 	},
 	showBusy: function (msg, open) {
+		//close first (since users might want close and show diff message)
+		var n = $e("zk_showBusy");
+		if (n) {
+			n.parentNode.removeChild(n);
+			zk.restoreDisabled();
+		}
+
 		if (open == "true") {
-			var n = $e("zk_loadprog");
+			n = $e("zk_loadprog");
 			if (n) n.parentNode.removeChild(n);
 			n = $e("zk_prog");
 			if (n) n.parentNode.removeChild(n);
@@ -2016,12 +2023,6 @@ zkau.cmd0 = { //no uuid at all
 				Boot_progressbox("zk_showBusy", msg,
 					0, 0, true, true);
 				zk.disableAll();
-			}
-		} else {
-			var n = $e("zk_showBusy");
-			if (n) {
-				n.parentNode.removeChild(n);
-				zk.restoreDisabled();
 			}
 		}
 	}
