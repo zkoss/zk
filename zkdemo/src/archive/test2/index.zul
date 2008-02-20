@@ -32,7 +32,7 @@ String shortHeight="520px";
 					<hbox>
 						<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();w2.setWidth("90%")'/>
 						<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();w2.setWidth("800px")'/>
-						<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
+						<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("");w2.getFellow("caption").label = "ZK TEST2"'/>
 						<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
 						<button label="tracker">
 							<attribute name="onClick"><![CDATA[
@@ -61,6 +61,7 @@ String shortHeight="520px";
 							</listhead>
 							<attribute name="onSelect">
 								codeViewPanel.title=main.getCurrentRealFile().getAbsolutePath();
+								((Caption)w2.getFellow("caption")).label = "ZK TEST2 : File-Name [" + main.getFileName(lb.getSelectedIndex()) + "]";
 							</attribute>
 						</listbox>
 					</vbox>
@@ -71,7 +72,7 @@ String shortHeight="520px";
 	<center border="0" autoscroll="true" flex="true">			
 		<!-- ******************** View Panel ******************** -->
 		<window id="w2" border="normal">
-			<caption label="ZK TEST2"/>
+			<caption id="caption" label="ZK TEST2"/>
 			<separator/>
 			<separator/>
 			<iframe  id="ifr" height="98%"  width="100%"/>
