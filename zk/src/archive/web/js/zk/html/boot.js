@@ -858,8 +858,8 @@ zk._loadAndInit = function (inf) {
 			}
 		} else if (zk.ie) {
 			switch ($tag(n)) {
-			case "A":
-				//Bug 1635685 and 1612312
+			case "A": //Bug 1635685 and 1612312
+			case "AREA": //Bug 1896749
 				if (n.href.indexOf("javascript:") >= 0)
 					zk.listen(n, "click", zk._ieFixBfUnload);
 				break;
