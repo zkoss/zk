@@ -102,7 +102,7 @@ fi
 cnfpath=$1
 codegendir=$2
 
-which gawk
+which gawk > /dev/nul
 if [ $? = 0 ] ; then
 	awkpg=gawk
 else
