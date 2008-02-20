@@ -102,6 +102,13 @@ fi
 cnfpath=$1
 codegendir=$2
 
+which gawk
+if [ $? = 0 ] ; then
+	awkpg=gawk
+else
+	awkpg=awk
+fi
+
 #-- check directory structure
 if [ ! -d $cnfpath ] ; then
 	echo "Error: $cnfpath is not a directory" 1>&2
@@ -140,7 +147,7 @@ for fn in $cnfpath/*$flext ; do
 
 			mkdir -p $pkgpath
 			args="-f $awkfn -v pkgnm=$pkgnm -v clsnm=$clsnm -vmsgnm=$msgnm -vusernm=$USER"
-			awk $args -v "when=$(date)" "$fn" > "$dstfn"
+			$awkpg $args -v "when=$(date)" "$fn" > "$dstfn"
 		fi
 	fi
 done
