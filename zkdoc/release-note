@@ -48,7 +48,7 @@ ZK 3.0.4 Freshly
 	<client-config>
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
-
+  + Rename the CSS name from "inline-box" to "inline-block".
 	--------
 ZK 3.0.3
 * Features
