@@ -29,7 +29,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:if test="${!empty child.nextSibling}">
 	<c:set var="s" value="display:none;${spstyle}"
 			if="${!child.visible || '0' == self.spacing || '0px' == self.spacing}"/>
-	<tr id="${child.uuid}!chdextr2" class="${scls}-sp"${c:attr('style',empty s ? spstyle: s)}><td></td></tr>
+	<tr id="${child.uuid}!chdextr2" class="${scls}-sp"${c:attr('style',empty s ? spstyle: s)}><td><img src="${c:encodeURL('~./img/spacer.gif')}"/></td></tr>
 </c:if>
 	</c:forEach>
 </table>
