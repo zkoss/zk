@@ -37,13 +37,9 @@ zul.cleanMovable = function (id) {
 };
 zul.getMetaByHeader = function (cmp) {
 	var type = $type(cmp);
-	if (type == "Col")
-		return zkau.getMetaByType(cmp, "Grid");
-	else if (type == "Lhr")
-		return zkau.getMetaByType(cmp, "Libox");
-	else if (type == "Tcol")
-		return zkau.getMetaByType(cmp, "Tree");
-	return null;
+	return type == "Col" ? zkau.getMetaByType(cmp, "Grid"):
+		type == "Lhr" ? zkau.getMetaByType(cmp, "Libox"):
+		type == "Tcol" ? zkau.getMetaByType(cmp, "Tree"): null;
 };
 /////////
 // Headers
@@ -221,17 +217,18 @@ zulHdr.setAttr = function (cmp, nm, val) {
 			}
 			zkau.setAttr(cmp, nm, val);
 			
-			if (nm == "style.width" && fake) {
-				var wd;
-				if (!val || val == "auto" || val.indexOf('%') >= 0) {
-					wd = cmp.offsetWidth + "px";
-				} else {
-					wd = $int(val) + zk.sumStyles(cmp, "lr", zk.borders) + 
-						zk.sumStyles(cmp, "lr", zk.paddings) + "px";
-				}
-				fake.cells[zk.cellIndex(cmp)].style.width = wd; 
-			}		
-			if ("style.width" == nm) {	
+			if (nm == "style.width") {
+				if (fake) {
+					var wd;
+					if (!val || val == "auto" || val.indexOf('%') >= 0) {
+						wd = cmp.offsetWidth + "px";
+					} else {
+						wd = $int(val) + zk.sumStyles(cmp, "lr", zk.borders) + 
+							zk.sumStyles(cmp, "lr", zk.paddings) + "px";
+					}
+					fake.cells[zk.cellIndex(cmp)].style.width = wd; 
+				}		
+
 				var meta = zul.getMetaByHeader(cmp);
 				if (meta) meta.init();
 			}
