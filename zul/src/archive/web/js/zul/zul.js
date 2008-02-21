@@ -35,7 +35,16 @@ zul.cleanMovable = function (id) {
 		delete zul._movs[id];
 	}
 };
-
+zul.getMetaByHeader = function (cmp) {
+	var type = $type(cmp);
+	if (type == "Col")
+		return zkau.getMetaByType(cmp, "Grid");
+	else if (type == "Lhr")
+		return zkau.getMetaByType(cmp, "Libox");
+	else if (type == "Tcol")
+		return zkau.getMetaByType(cmp, "Tree");
+	return null;
+};
 /////////
 // Headers
 //For sortable header, e.g., Column and Listheader (TH or TD is assumed)
@@ -103,14 +112,7 @@ zulHdr.init = function (cmp) {
 	zulHdr.setSizable(cmp, zulHdr.sizable(cmp));
 		//Note: IE6 failed to crop a column if it is draggable
 		//Thus we init only necessary (to avoid the IE6 bug)
-	var type = $type(cmp), mate;
-	if (type == "Col")
-		mate = $parentByType(cmp, "Grid");
-	else if (type == "Lhr")
-		mate = $parentByType(cmp, "Libox");
-	else if (type == "Tcol")
-		mate = $parentByType(cmp, "Tree");
-	var meta = zkau.getMeta(mate);
+	var meta = zul.getMetaByHeader(cmp);
 	if (meta) {
 		if (!meta.fixedSize)
 			meta.fixedSize = function () {meta.init(true);};	
@@ -203,14 +205,7 @@ zulHdr.cleanup = function (cmp) {
 };
 zulHdr.setAttr = function (cmp, nm, val) {
 	switch(nm) { // Bug #1822566 
-		case "style.width" :
-			var type = $type(cmp), mate;
-			if (type == "Col")
-				mate = $parentByType(cmp, "Grid");
-			else if (type == "Lhr")
-				mate = $parentByType(cmp, "Libox");
-			else if (type == "Tcol")
-				mate = $parentByType(cmp, "Tree");				
+		case "style.width" :			
 		case "style.height" :		
 		case "style" :			
 			var head = cmp.parentNode;
@@ -235,9 +230,11 @@ zulHdr.setAttr = function (cmp, nm, val) {
 						zk.sumStyles(cmp, "lr", zk.paddings) + "px";
 				}
 				fake.cells[zk.cellIndex(cmp)].style.width = wd; 
-			}			
-			var meta = zkau.getMeta(mate);
-			if (meta) meta.init();
+			}		
+			if ("style.width" == nm) {	
+				var meta = zul.getMetaByHeader(cmp);
+				if (meta) meta.init();
+			}
 			return true;
 	}
 	zkau.setAttr(cmp, nm, val);
