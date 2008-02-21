@@ -36,6 +36,7 @@ ZK 3.0.4 Freshly
   1897500: Unable to compile ZK sources under Solaris or Mac
   1890221: Tree item is not updated if not a leaf
   1898094: Textbox failed to get focus if it is in a popup/modal/ovrlap
+  1899003: Unable to specify border to hbox/vbox (IE only)
 
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
