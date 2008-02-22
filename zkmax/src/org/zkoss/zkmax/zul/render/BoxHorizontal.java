@@ -24,7 +24,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
@@ -38,7 +37,6 @@ import org.zkoss.zul.Box;
 public class BoxHorizontal implements ComponentRenderer{
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
-		final Execution exec = Executions.getCurrent();
 		final Box self = (Box) comp;
 		final String uuid = self.getUuid();		
 		String spscls = null, spstyle = null;
@@ -76,9 +74,11 @@ public class BoxHorizontal implements ComponentRenderer{
 					wh.write(" style=\"").write(spstyle).write("\"");
 				}
 
-				wh.write("><img src=\"")
-					.write(exec.encodeURL("~./img/spacer.gif"))
-					.writeln("\"/></td>");
+				wh.write(">");
+				if (Executions.getCurrent().isExplorer())
+					wh.write("<img style=\"width:0;height:0\"/>");
+					//Bug 1899003: we must have something to show border (IE)
+				wh.writeln("</td>");
 			}
 		}		
 		wh.write("</tr></table>");
