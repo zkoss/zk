@@ -1,0 +1,16 @@
+Checkbox
+
+A Checkbox.
+
+
+
+CSS Definition
+Description
+Default Values
+input
+The outline of checkbox
+font-family: Verdana, Tahoma, Arial, serif;
+font-size: small; font-weight: normal;
+
+
+
