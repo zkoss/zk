@@ -102,8 +102,8 @@ fi
 cnfpath=$1
 codegendir=$2
 
-which gawk > /dev/nul
-if [ $? = 0 ] ; then
+fn=$(which gawk)
+if [ -f "$fn" ] ; then
 	awkpg=gawk
 else
 	awkpg=awk
