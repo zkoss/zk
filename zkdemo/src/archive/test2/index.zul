@@ -13,7 +13,7 @@ String defaultHeight="800px";
 String shortHeight="520px";
 </zscript>
 	<borderlayout id="main" use="org.zkoss.zkdemo.test2.MainLayout">
-	<west size="355px" border="0" collapsible="true" maxsize="600" splittable="true" flex="true">
+	<west size="355px" border="0" collapsible="true" maxsize="600" splittable="true" flex="true" autoscroll="true">
 	<!-- ******************** Ctrl Panel ******************** -->
 			<window id="w1">
 				<groupbox mold="3d" width="352px" >
