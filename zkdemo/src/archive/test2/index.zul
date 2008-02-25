@@ -54,7 +54,7 @@ String shortHeight="520px";
 					</hbox>
 						</vbox>
 						
-						<listbox id="lb" mold="paging" pageSize="20" width="330px">
+						<listbox id="lb" mold="paging" pageSize="20" width="330px" pagingPosition="both">
 							<listhead>
 								<listheader label="Name" width="50%"/>
 								<listheader label="Date" width="50%"/>
