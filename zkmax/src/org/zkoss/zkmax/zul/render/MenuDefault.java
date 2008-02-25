@@ -51,14 +51,14 @@ public class MenuDefault implements ComponentRenderer {
 		}else{
 			wh.write("<tr id=\"").write(uuid).write("\" z.type=\"zul.menu.Menu\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-				.write(">\n<td class=\"menu1\"></td>\n<td align=\"left\"><a href=\"javascript:;\" id=\"")
+				.write(">\n<td class=\"menu3ar\" align=\"left\"><a href=\"javascript:;\" id=\"")
 				.write(uuid).write("!a\">").write(self.getImgTag());
 
 			new Out(self.getLabel()).render(out);
 
 			wh.write("</a>")
 				.write(self.getMenupopup())
-				.write("</td>\n<td class=\"menu3ar\"></td></tr>");
+				.write("</td>\n</tr>");
 		}
 
 	}
