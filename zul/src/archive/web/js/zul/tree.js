@@ -296,7 +296,7 @@ zkTrow.open = function (n, open) {
 
 /** Called when _onDocCtxMnu is called. */
 zkTrow.onrtclk = function (cmp) {
-	var meta = zkau.getMetaByType(cmp, "Tree");
+	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta && !meta._isSelected(cmp)) meta.doclick(null, cmp);
 };
 /* Paginate.
@@ -463,7 +463,7 @@ zk.addModuleInit(function () {
 
 	/** Resize the column. */
 	zkTcol.resize = function (col1, icol, wd1, keys) {
-		var meta = zkau.getMeta($parentByType(col1, "Tree"));
+		var meta = zkau.getMeta(getZKAttr(col1.parentNode, "rid"));
 		if (meta)
 			meta.resizeCol(
 				$parentByType(col1, "Tcols"), icol, col1, wd1, keys);

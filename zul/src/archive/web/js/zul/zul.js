@@ -36,10 +36,7 @@ zul.cleanMovable = function (id) {
 	}
 };
 zul.getMetaByHeader = function (cmp) {
-	var type = $type(cmp);
-	return type == "Col" ? zkau.getMetaByType(cmp, "Grid"):
-		type == "Lhr" ? zkau.getMetaByType(cmp, "Libox"):
-		type == "Tcol" ? zkau.getMetaByType(cmp, "Tree"): null;
+	return zkau.getMeta(getZKAttr(cmp.parentNode, "rid"));
 };
 /////////
 // Headers
@@ -230,7 +227,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 				}		
 
 				var meta = zul.getMetaByHeader(cmp);
-				if (meta) meta.init();
+				if (meta) meta._recalcSize();
 			}
 			return true;
 	}
@@ -330,11 +327,10 @@ zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 		var of = zk.revisedOffset(el);
 		var ofs = zkau.beginGhostToDIV(dg);
 		ofs[1] = of[1];
-		var head = $parentByTag(dg.element, "DIV");		
 		ofs[0] += zk.offsetWidth(dg.element);
 		document.body.insertAdjacentHTML("afterbegin",
 			'<div id="zk_ddghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk.offsetHeight(head.parentNode)
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk.offsetHeight(el.parentNode.parentNode)
 			+'px;background:darkgray"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
 					+'"/></div>');
 		dg.element = $e("zk_ddghost");

@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -49,7 +50,12 @@ public class Listhead extends HeadersElement {
 			listbox.invalidate();
 		return vis;
 	}
-
+	public String getOuterAttrs() {
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
+			HTMLs.appendAttribute(sb, "z.rid", getListbox().getUuid());
+		return sb.toString();
+	}
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))

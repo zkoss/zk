@@ -102,7 +102,7 @@ zk.Grid.prototype = {
 		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
 			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
 		} else {
-			setTimeout("zkGrid._calcSize('"+this.id+"')", 150); // Bug #1813722		
+			zk.addInitLater(function () {meta._calcSize();}, true);		
 		}
 		this.qcells.length = 0;
 		this._render(155); //prolong a bit since calSize might not be ready
@@ -295,12 +295,12 @@ zk.Grid.prototype = {
 			if (zk.ie6Only && this.body) this.body.style.height = val;
 				// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
 			this.setHgh(val);
-			if (!this.paging) this.init();
+			if (!this.paging) this._recalcSize();
 			return true;
 		case "style":
 		case "style.width":
 			zkau.setAttr(this.element, nm, val);
-			if (!this.paging) this.init();
+			if (!this.paging) this._recalcSize();
 			return true;
 		case "z.scOddRow":
 			zkau.setAttr(this.element, nm, val);
@@ -352,6 +352,12 @@ zk.Grid.prototype = {
 			data = data.substring(1);
 			zkau.send({uuid: this.id, cmd: "onRender", data: [data]}, 0);
 		}
+	},
+	_recalcSize: function () {
+		if (zk.isRealVisible(this.element)) {
+			this._calcSize();// Bug #1813722
+			this._render(155);
+		}
 	}
 };
 
@@ -384,7 +390,7 @@ zkGrid.childchg = function (cmp) {
 /** Called when a grid becomes visible because of its parent. */
 zkGrid.onVisi = function (cmp) {
 	var meta = zkau.getMeta(cmp);
-	if (meta) meta.init();
+	if (meta) meta._recalcSize();
 };
 
 zkGrid.stripe = function (uuid) {
@@ -471,7 +477,7 @@ zk.addModuleInit(function () {
 
 	/** Resize the column. */
 	zkCol.resize = function (col1, icol, wd1, keys) {
-		var grid = $parentByType(col1, "Grid");
+		var grid = getZKAttr(col1.parentNode, "rid");
 		if (grid) {
 			var meta = zkau.getMeta(grid);
 			if (meta)
