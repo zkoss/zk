@@ -268,22 +268,25 @@ div.head-cell-inner {
 	font-size: small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
 
-div.listbox-head th.sort div.head-cell-inner, div.grid-head th.sort div.head-cell-inner, div.listbox-paging th.sort div.head-cell-inner, div.grid-paging th.sort div.head-cell-inner{
+div.listbox-head th.sort div.head-cell-inner, div.grid-head th.sort div.head-cell-inner, 
+	div.listbox-paging th.sort div.head-cell-inner, div.grid-paging th.sort div.head-cell-inner {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
-	background-position: right;
+	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-div.listbox-head th.sort-asc div.head-cell-inner, div.grid-head th.sort-asc div.head-cell-inner, div.listbox-paging th.sort-asc div.head-cell-inner, div.grid-paging th.sort-asc div.head-cell-inner{
+div.listbox-head th.sort-asc div.head-cell-inner, div.grid-head th.sort-asc div.head-cell-inner, 
+	div.listbox-paging th.sort-asc div.head-cell-inner, div.grid-paging th.sort-asc div.head-cell-inner {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
-	background-position: right;
+	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.head-cell-inner, div.listbox-paging th.sort-dsc div.head-cell-inner, div.grid-paging th.sort-dsc div.head-cell-inner{
+div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.head-cell-inner,
+	div.listbox-paging th.sort-dsc div.head-cell-inner, div.grid-paging th.sort-dsc div.head-cell-inner {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
-	background-position: right;
+	background-position: 99% center;
 	background-repeat: no-repeat;
 }
 
@@ -301,7 +304,8 @@ div.tree-body td, div.listbox-body td, div.listbox-paging td {
 	font-size: small; font-weight: normal;
 }
 
-div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, tbody.listbox-foot, div.tree-foot, tbody.tree-foot {<%-- always used --%>
+div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, 
+	div.tree-foot, tbody.tree-foot {<%-- always used --%>
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
 
@@ -797,22 +801,18 @@ td.menusp {
 	background-image: url(${c:encodeURL('~./zul/img/menu/sep.gif')});
 	background-repeat: no-repeat;
 }
-td.menu1, td.menu1ck, td.menu3ar{<%-- menuitem normal (unchecked) --%>
-	width: 11px; height: 13px;
-	padding: 0px 12px;
-}
-td.menu1 a, td.menu1ck a, td.menu3ar a{
-	white-space: nowrap;
+td.menu1 {<%-- menuitem normal (unchecked) --%>
+	width: 11px;
 }
 td.menu1ck {<%-- menuitem checked --%>
+	width: 11px; height: 13px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/checked.gif')});
 	background-repeat: no-repeat;
-	background-position: left center;
 }
 td.menu3ar {<%-- menuitem arrow --%>
+	width: 9px; height: 13px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
 	background-repeat: no-repeat;
-	background-position: right center;
 }
 
 <%-- Combobox and Datebox --%>
