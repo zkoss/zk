@@ -55,10 +55,11 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Include extends XulElement {
 	private static final Log log = Log.lookup(Include.class);
-	private boolean _progressing = false;
-	private boolean _inprogress = false;
 	protected String _src;
 	private boolean _localized;
+	private boolean _progressing;
+	/** 0: not yet handled, 1: wait for echoEvent, 2: done. */
+	private byte _progressStatus;
 
 	public Include() {
 	}
@@ -76,8 +77,10 @@ public class Include extends XulElement {
 	 * @since 3.0.4
 	 */
 	public void setProgressing(boolean progressing) {
-		if (_progressing != progressing)
+		if (_progressing != progressing) {
 			_progressing = progressing;
+			checkProgressing();
+		}
 	}
 	/**
 	 * Returns whether to show the {@link MZul#PLEASE_WAIT} message before a long operation.
@@ -88,23 +91,12 @@ public class Include extends XulElement {
 		return _progressing;
 	}
 	/**
-	 * Component developer only.
+	 * Internal use only.
 	 *@since 3.0.4
 	 */
 	public void onEchoInclude() {
 		Clients.showBusy(null , false);
-		invalidate();
-	}
-	/**
-	 * Component developer only.
-	 *@since 3.0.4
-	 */
-	public void onIncludeLater() {
-		if(_progressing) {
-			_inprogress = true;
-			Clients.showBusy(Messages.get(MZul.PLEASE_WAIT), true);
-			Events.echoEvent("onEchoInclude", this, null);
-		} else _inprogress = false;
+		super.invalidate();
 	}
 	/** Returns the src.
 	 * <p>Default: null.
@@ -113,23 +105,23 @@ public class Include extends XulElement {
 		return _src;
 	}
 	/** Sets the src.
+	 *
 	 * <p>If src is changed, the whole component is invalidate.
 	 * Thus, you want to smart-update, you have to override this method.
 	 *
-	 * @param src the source URL. If null or empty, nothing is included.
+	 * @param src the source URI. If null or empty, nothing is included.
+	 * You can specify the source URI with the query string and they
+	 * will become param ({@link Execution#getParameter}).
+	 * For example, if "/a.zul?b=c" is specified, you can access
+	 * the parameter with ${b} in a.zul.
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		if (src != null && src.length() == 0) src = null;
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			postOnIncludeLater();
 			invalidate();
 		}
-	}
-	
-	private void postOnIncludeLater() {
-		Events.postEvent("onIncludeLater", this, null);
 	}
 	
 	/** Returns whether the source depends on the current Locale.
@@ -151,6 +143,22 @@ public class Include extends XulElement {
 	}
 
 	//-- Component --//
+	public void invalidate() {
+		super.invalidate();
+
+		if (_progressStatus >= 2) _progressStatus = 0;
+		checkProgressing();
+	}
+	/** Checks if _progressingg is defined.
+	 */
+	private void checkProgressing() {
+		if(_progressing && _progressStatus == 0) {
+			_progressStatus = 1;
+			Clients.showBusy(Messages.get(MZul.PLEASE_WAIT), true);
+			Events.echoEvent("onEchoInclude", this, null);
+		}
+	}
+
 	/** Default: not childable.
 	 */
 	public boolean isChildable() {
@@ -167,8 +175,8 @@ public class Include extends XulElement {
 			out.write(getOuterAttrs());
 			out.write(getInnerAttrs());
 			out.write(">\n");
-			if (_inprogress) {
-				_inprogress = false;
+			if (_progressStatus == 1) {
+				_progressStatus = 2;
 			} else if (_src != null && _src.length() > 0) {
 				include(out);
 			}
@@ -182,7 +190,7 @@ public class Include extends XulElement {
 		final Execution exec = desktop.getExecution();
 		final String src = exec.toAbsoluteURI(_src, false);
 		try {
-			exec.include(out, src, null, 0);
+			exec.include(out, src, null, Execution.PASS_THRU_ATTR);
 		} catch (Throwable err) {
 		//though DHtmlLayoutServlet handles exception, we still have to
 		//handle it because src might not be ZUML
