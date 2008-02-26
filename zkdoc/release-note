@@ -9,7 +9,6 @@ ZK 3.0.4 Freshly
   1896600: A way to specify how the paging places in Grid/Listbox
   1896737: An easy way to let user know include a long operation page
   1898072: Clients.response shall be able NOT to overwrite prev
-  1901211: Simplify the outline of Menu component with single TD
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
