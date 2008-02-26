@@ -852,10 +852,10 @@ public class Window extends XulElement implements IdSpace {
 	protected String getRealStyle() {
 		final String style = super.getRealStyle();
 		return _mode != EMBEDDED ? 
-			(isVisible() ? "position:absolute;display:none;" : "position:absolute;") + style: style;
+			(isVisible() ? "position:absolute;visibility:hidden;" : "position:absolute;") + style: style;
 			//If no absolute, Opera ignores left and top
 			//
-			//If not embedded we always generate display:none to have
+			//If not embedded we always generate visibility:hidden to have
 			//better visual effect (the client will turn it on in zkWnd.init)
 	}
 	

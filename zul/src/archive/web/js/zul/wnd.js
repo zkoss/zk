@@ -25,7 +25,7 @@ zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
 zkWnd.init = function (cmp) {
 	if (getZKAttr(cmp, "visible") == "true")
-		cmp.style.display = "";
+		cmp.style.visibility = "visible";
 			//turn it on since Window.getRealStyle turn it off to
 			//have the better effect if the window contains a lot of items
 
@@ -505,8 +505,7 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 	storage.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 
-	// Bug #1881190 : we need to use this variable to check whether it is visible really.
-	if (getZKAttr(cmp, "visible") == "true") //it happens when closing a modal (becomes overlap)
+	if (zk.isVisible(cmp)) //it happens when closing a modal (becomes overlap)
 		zkWnd._show(cmp);
 
 	//zk.asyncFocusDown(cmp.id, 45); //don't exceed 50 (see au's focus command)
