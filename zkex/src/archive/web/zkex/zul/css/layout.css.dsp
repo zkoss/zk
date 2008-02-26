@@ -7,6 +7,7 @@ div.layout-container {
 	background-color:#C4DCFB;
 	border:0 none;
 	position: relative;
+	visibility: hidden;
 }
 div.layout-region {
     position:absolute;

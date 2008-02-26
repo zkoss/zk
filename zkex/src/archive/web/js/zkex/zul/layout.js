@@ -68,7 +68,8 @@ zk.Layout.prototype = {
 		}
 		return ambit;
 	},
-	render: function () {
+	render: function (isInit) {
+		this.isInit = isInit;
 		if (!zk.isRealVisible(this.el)) return;
 		var width = this.el.offsetWidth, height = this.el.offsetHeight;
 		var cW = width, cH = height, cY = 0, cX = 0;
@@ -159,6 +160,7 @@ zk.Layout.prototype = {
 			};			
 			this._resize(c, ambit);
 		}
+		this.el.style.visibility = "visible";
 	},
 	_paserMargin: function (val) {
 		var ms = val.split(",");
@@ -233,7 +235,7 @@ zk.Layout.prototype = {
 				bodyEl.style.position = "";
 				rmZKAttr(bodyEl, "autoscl");
 			}
-			zk.onVisiAt(bodyEl); // Bug #1862935
+			if (!this.isInit) zk.onVisiAt(bodyEl); // Bug #1862935
 		}
 	},
 	ignoreResize : function(cmp, w, h) { 
@@ -283,7 +285,7 @@ zkBorderLayout = {};
 zkLayoutRegion = {};
 zkBorderLayout.init = function (cmp) {
 	var layout = zk.Layout.getOwnerLayout(cmp);
-	zk.addInitLater(function () {layout.render();}, true);	
+	zk.addInitLater(function () {layout.render(true);}, true);	
 	zk.addOnResize(layout.fnResize, true);	
 };
 zkBorderLayout.childchg = function (cmp) {
