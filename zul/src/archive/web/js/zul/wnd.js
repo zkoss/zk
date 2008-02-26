@@ -32,6 +32,7 @@ zkWnd.init = function (cmp) {
 	zkWnd._fixHgh(cmp);
 	cmp.fnResize = function () {zkWnd._fixHgh(cmp)};
 	zk.addOnResize(cmp.fnResize);
+	zk.addInitLater(cmp.fnResize, true); // Bug #1862935
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
