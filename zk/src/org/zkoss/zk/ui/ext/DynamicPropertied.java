@@ -29,13 +29,13 @@ import org.zkoss.zk.ui.WrongValueException;
  * @author tomyeh
  */
 public interface DynamicPropertied {
-	/** Returns whether a dynamic attribute is allowed.
+	/** Returns whether a dynamic property is defined.
 	 */
 	public boolean hasDynamicProperty(String name);
 	/** Returns the property value of the specified name.
 	 */
 	public Object getDynamicProperty(String name);
-	/** Sets an attribute with a value.
+	/** Sets a property with the specified name and value.
 	 *
 	 * <p>If a component supports only String-type values, it could
 	 * use org.zkoss.lang.Objects.toString() to convert the value
