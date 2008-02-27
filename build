@@ -61,12 +61,6 @@ else
 	fi
 fi
 
-zipjs=$(grep '^zipjs=' $setting)
-zipjs=${zipjs#zipjs=}
-if [ "$zipjs" = "false" ] ; then
-	zipjs=
-fi
-
 jboss_profile=$(grep '^jboss.deploy' $setting)
 jboss_profile=${jboss_profile#jboss.deploy=}
 if [ "$jboss_profile" != "" ] ; then
@@ -383,10 +377,9 @@ function invoke_ant
 				fi
 			fi
 		fi
-		if [ "$zipjs" != "" ] ; then
-			zipjslist=$(grep '^zipjs=' deploy)
-			zipjslist=${zipjslist#zipjs=}
-		fi
+
+		zipjslist=$(grep '^zipjs=' deploy)
+		zipjslist=${zipjslist#zipjs=}
 	else
 		deploy=unknown
 	fi

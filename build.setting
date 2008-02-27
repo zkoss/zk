@@ -1,6 +1,5 @@
 D.ON=true
 javadoc=~/prj/javadoc
-zipjs=true
 unzip=true
 debug=true
 optimize=true
