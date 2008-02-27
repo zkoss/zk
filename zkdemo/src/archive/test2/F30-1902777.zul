@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1902777.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb 27 14:09:05     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<zscript>int i = 23;</zscript>
+	Test of the include
+	<include src="F30-1902777-1.zul?query=query-value"
+		arg0="arg0-value" arg1="${i}"/>
+</window>
