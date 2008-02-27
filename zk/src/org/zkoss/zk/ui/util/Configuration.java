@@ -1881,8 +1881,8 @@ public class Configuration {
 	 *
 	 * <p>If true is specified, it will try to load the original
 	 * Java (i.e., uncompressed) file instead of the compressed one.
-	 * For example, if {@link #service} is called to load abc.js,
-	 * and {@link #isDebugJS}, then {@link #service} will try
+	 * For example, if {@link org.zkoss.web.util.resource.ClassWebResource#service} is called to load abc.js,
+	 * and {@link #isDebugJS}, then {@link org.zkoss.web.util.resource.ClassWebResource#service} will try
 	 * to load abc-org.js first. If not found, it load ab.js insted.
 	 *
 	 * <p>If {@link #isDebugJS} is false (default),
