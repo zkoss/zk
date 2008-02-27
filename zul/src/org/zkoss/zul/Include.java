@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
 import java.io.IOException;
@@ -38,6 +40,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
@@ -51,11 +54,33 @@ import org.zkoss.zul.mesg.MZul;
  * added to the current desktop when this element is added to
  * the current desktop.
  *
+ * <p>There are two ways to pass parameters to the included page.
+ * First, you can use the query string:
+ * <pre><code><include src="/WEB-INF/mypage?arg=something"></code></pre>
+ *
+ * <p>Second, since ZK 3.0.4,
+ * you can use {@link #setDynamicProperty}, or, in ZUL,
+ * <pre><code><include src="/WEB-INF/mypage" arg="something"/></code></pre>
+ *
+ * <p>With the query string, you can pass only the String values.
+ * and the parameter can be accessed by {@link Execution#getParameter}
+ * or javax.servlet.ServletRequest's getParameter.
+ * Or, you can access it with the param variable in EL expressions.
+ *
+ * <p>On the other hand, the dynamic properties ({@link #setDynamicProperty})
+ * are passed to the included page thru the request's attributes.
+ * You can pass any type of objects you want.
+ * In the included page, you can access them by use of
+ * {@link Execution#getAttribute} or javax.servlet.ServletRequest's
+ * getAttribute. Or, you can access with the requestScope variable
+ * in EL expressions.
+ *
  * @author tomyeh
  */
-public class Include extends XulElement {
+public class Include extends XulElement implements DynamicPropertied {
 	private static final Log log = Log.lookup(Include.class);
-	protected String _src;
+	private String _src;
+	private Map _dynams;
 	private boolean _localized;
 	private boolean _progressing;
 	/** 0: not yet handled, 1: wait for echoEvent, 2: done. */
@@ -111,9 +136,11 @@ public class Include extends XulElement {
 	 *
 	 * @param src the source URI. If null or empty, nothing is included.
 	 * You can specify the source URI with the query string and they
-	 * will become param ({@link Execution#getParameter}).
+	 * will become a parameter that can be accessed by use
+	 * of {@link Execution#getParameter} or javax.servlet.ServletRequest's getParameter.
 	 * For example, if "/a.zul?b=c" is specified, you can access
-	 * the parameter with ${b} in a.zul.
+	 * the parameter with ${param.b} in a.zul.
+	 * @see #setDynamicProperty
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		if (src != null && src.length() == 0) src = null;
@@ -140,6 +167,36 @@ public class Include extends XulElement {
 			_localized = localized;
 			invalidate();
 		}
+	}
+
+	//DynamicPropertied//
+	/** Returns whether a dynamic property is defined.
+	 */
+	public boolean hasDynamicProperty(String name) {
+		return _dynams != null && _dynams.containsKey(name);
+	}
+	/** Returns the parameter associated with the specified name,
+	 * or null if not found.
+	 *
+	 * @since 3.0.4
+	 * @see #setDynamicProperty
+	 */
+	public Object getDynamicProperty(String name) {
+		return _dynams != null ? _dynams.get(name): null;
+	}
+	/** Adds a dynamic property that will be passed to the included page
+	 * via the request's attribute.
+	 *
+	 * <p>For example, if setDynamicProperty("abc", new Integer(4)) is called,
+	 * then the included page can retrived the abc property
+	 * by use of <code>${reqestScope.abc}</code>
+	 *
+	 * @since 3.0.4
+	 */
+	public void setDynamicProperty(String name, Object value) {
+		if (_dynams == null)
+			_dynams = new HashMap();
+		_dynams.put(name, value);
 	}
 
 	//-- Component --//
@@ -189,8 +246,9 @@ public class Include extends XulElement {
 		final Desktop desktop = getDesktop();
 		final Execution exec = desktop.getExecution();
 		final String src = exec.toAbsoluteURI(_src, false);
+		final Map old = setupDynams(exec);
 		try {
-			exec.include(out, src, null, Execution.PASS_THRU_ATTR);
+			exec.include(out, src, null, 0);
 		} catch (Throwable err) {
 		//though DHtmlLayoutServlet handles exception, we still have to
 		//handle it because src might not be ZUML
@@ -219,6 +277,32 @@ public class Include extends XulElement {
 			attrs.put(Attributes.ALERT, msg);
 			exec.include(out,
 				"~./html/alert.dsp", attrs, Execution.PASS_THRU_ATTR);
+		} finally {
+			restoreDynams(exec, old);
 		}
+	}
+	private Map setupDynams(Execution exec) {
+		if (_dynams == null || _dynams.isEmpty())
+			return null;
+
+		final Map old = new HashMap();
+		for (Iterator it = _dynams.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String nm = (String)me.getKey();
+			final Object val = me.getValue();
+			old.put(nm, exec.getAttribute(nm));
+			exec.setAttribute(nm, val);
+		}
+		return old;
+	}
+	private static void restoreDynams(Execution exec, Map old) {
+		if (old != null)
+			for (Iterator it = old.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String nm = (String)me.getKey();
+				final Object val = me.getValue();
+				if (val != null) exec.setAttribute(nm, val);
+				else exec.removeAttribute(nm);
+			}
 	}
 }
