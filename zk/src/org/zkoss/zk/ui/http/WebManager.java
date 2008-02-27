@@ -143,6 +143,9 @@ public class WebManager {
 		//create a WebApp instance
 		_wapp = newWebApp(config);
 		((WebAppCtrl)_wapp).init(_ctx, config);
+		_cwr.setDebugJS(config.isDebugJS());
+			//Note: when ConfigParser ran, WebApp is not assigned to
+			//Configuration yet (so we have to setDebugJS here)
 
 		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
@@ -272,6 +275,12 @@ public class WebManager {
 		if (webman == null)
 			throw new UiException("The Web manager not found. Make sure <load-on-startup> is specified for "+DHtmlLayoutServlet.class.getName());
 		return webman;
+	}
+	/** Returns the Web manager of the specified {@link WebApp}.
+	 * @since 3.0.4
+	 */
+	public static final WebManager getWebManager(WebApp wapp) {
+		return getWebManager((ServletContext)wapp.getNativeContext());
 	}
 	/** Returns the Web manager, or null if not found.
 	 */

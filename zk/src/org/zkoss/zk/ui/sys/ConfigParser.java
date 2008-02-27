@@ -139,6 +139,7 @@ public class ConfigParser {
 			//	error-reload
 			//	tooltip-delay
 			//  resend-delay
+			//  debug-js
 				parseClientConfig(config, el);
 
 			} else if ("session-config".equals(elnm)) {
@@ -351,6 +352,9 @@ public class ConfigParser {
 
 		s = conf.getElementValue("disable-behind-modal", true);
 		if (s != null) config.enableDisableBehindModal(!"false".equals(s));
+
+		s = conf.getElementValue("debug-js", true);
+		if (s != null) config.setDebugJS(!"false".equals(s));
 
 		//error-reload
 		for (Iterator it = conf.getElements("error-reload").iterator();

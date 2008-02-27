@@ -124,6 +124,8 @@ public class Configuration {
 	/** Whether to keep the session alive when receiving onTimer.
 	 */
 	private boolean _timerKeepAlive;
+	/** Whether to debug JavaScript. */
+	private boolean _debugJS;
 
 	/** Contructor.
 	 */
@@ -1861,6 +1863,44 @@ public class Configuration {
 	 */
 	public boolean isTimerKeepAlive() {
 		return _timerKeepAlive;
+	}
+
+	/** Returns whether to debug JavaScript files.
+	 * If true, it means the original (i.e., uncompressed) JavaScript files
+	 * shall be loaded instead of the compressed JavaScript files.
+	 *
+	 * @since 3.0.4
+	 * @see #setDebugJS
+	 */
+	public boolean isDebugJS() {
+		return _debugJS;
+	}
+	/**Sets whether to debug JavaScript files.
+	 *
+	 * <p>Default: false.
+	 *
+	 * <p>If true is specified, it will try to load the original
+	 * Java (i.e., uncompressed) file instead of the compressed one.
+	 * For example, if {@link #service} is called to load abc.js,
+	 * and {@link #isDebugJS}, then {@link #service} will try
+	 * to load abc-org.js first. If not found, it load ab.js insted.
+	 *
+	 * <p>If {@link #isDebugJS} is false (default),
+	 * abc.js is always loaded.
+	 *
+	 * @param debug whether to debug JavaScript files.
+	 * If true, the original JavaScript files shall be
+	 * loaded instead of the compressed files.
+	 * @since 3.0.4
+	 */
+	public void setDebugJS(boolean debug) {
+		_debugJS = debug;
+
+		//FUTURE: The following codes assume the existence of WebManager
+		//but theorectically ZK doesn't assume it
+		if (_wapp != null)
+			org.zkoss.zk.ui.http.WebManager
+				.getWebManager(_wapp).getClassWebResource().setDebugJS(debug);
 	}
 
 	/** Sets the implementation of the expression factory that shall
