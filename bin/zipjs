@@ -80,11 +80,14 @@ function zips
 						if [ $? != 0 ] ; then
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
+						else
+							cp -p ./"$f" $dst/${f%.js}-org.js
+								#always make a copy so we can use them if we want to debug them
 						fi
 					fi
 					if [ $cvt = false ] ; then
 						echo copy $f
-						cp -p ./$f $dst
+						cp -p ./"$f" $dst
 							#$f might starts with -
 						if [ $? != 0 ] ; then
 							echo "Failed:"
