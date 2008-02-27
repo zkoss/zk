@@ -290,8 +290,11 @@ public class Include extends XulElement implements DynamicPropertied {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String nm = (String)me.getKey();
 			final Object val = me.getValue();
+
 			old.put(nm, exec.getAttribute(nm));
-			exec.setAttribute(nm, val);
+
+			if (val != null) exec.setAttribute(nm, val);
+			else exec.removeAttribute(nm);
 		}
 		return old;
 	}
@@ -301,6 +304,7 @@ public class Include extends XulElement implements DynamicPropertied {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String nm = (String)me.getKey();
 				final Object val = me.getValue();
+
 				if (val != null) exec.setAttribute(nm, val);
 				else exec.removeAttribute(nm);
 			}
