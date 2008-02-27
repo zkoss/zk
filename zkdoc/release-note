@@ -39,6 +39,7 @@ ZK 3.0.4 Freshly
   1898094: Textbox failed to get focus if it is in a popup/modal/ovrlap
   1899003: Unable to specify border to hbox/vbox (IE only)
   1899482: Treeitem.setOpen() workaround not working
+  1902693: SmartAuWriter.Task synchronized wrong object
 
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
@@ -52,6 +53,7 @@ ZK 3.0.4 Freshly
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
   + Rename the CSS name from "inline-box" to "inline-block".
+
 	--------
 ZK 3.0.3
 * Features
