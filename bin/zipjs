@@ -76,7 +76,7 @@ function zips
 						if [ "$TERM" = "cygwin" ] ; then
 							dstfl=$(cygpath -wa $dstfl)
 						fi
-						java -jar $jarfl --charset UTF-8 --line-break 0 "$f" -o "$dstfl" 2>&1
+						java -jar $jarfl --charset UTF-8 "$f" -o "$dstfl" 2>&1
 						if [ $? != 0 ] ; then
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
