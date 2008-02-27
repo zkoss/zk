@@ -43,6 +43,7 @@ public class Listhead extends HeadersElement {
 		return (Listbox)getParent();
 	}
 
+	//super//
 	public boolean setVisible(boolean visible) {
 		final boolean vis = super.setVisible(visible);
 		final Listbox listbox = getListbox();
@@ -53,10 +54,12 @@ public class Listhead extends HeadersElement {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
-			HTMLs.appendAttribute(sb, "z.rid", getListbox().getUuid());
+		final Listbox listbox = getListbox();
+		if (listbox != null)
+			HTMLs.appendAttribute(sb, "z.rid", listbox.getUuid());
 		return sb.toString();
 	}
-	//-- Component --//
+
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))
 			throw new UiException("Wrong parent: "+parent);

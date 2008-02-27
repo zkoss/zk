@@ -47,7 +47,9 @@ public class Columns extends HeadersElement {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
-			HTMLs.appendAttribute(sb, "z.rid", getGrid().getUuid());
+		final Grid grid = getGrid();
+		if (grid != null)
+			HTMLs.appendAttribute(sb, "z.rid", grid.getUuid());
 		return sb.toString();
 	}
 	public boolean setVisible(boolean visible) {

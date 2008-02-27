@@ -37,6 +37,7 @@ public class Treecols extends HeadersElement {
 		return (Tree)getParent();
 	}
 
+	//super//
 	public boolean setVisible(boolean visible) {
 		final boolean vis = super.setVisible(visible);
 		final Tree tree = getTree();
@@ -47,10 +48,12 @@ public class Treecols extends HeadersElement {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
-			HTMLs.appendAttribute(sb, "z.rid", getTree().getUuid());
+		final Tree tree = getTree();
+		if (tree != null)
+			HTMLs.appendAttribute(sb, "z.rid", tree.getUuid());
 		return sb.toString();
 	}
-	//-- Component --//
+
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tree))
 			throw new UiException("Wrong parent: "+parent);
