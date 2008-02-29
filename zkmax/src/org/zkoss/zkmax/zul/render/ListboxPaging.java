@@ -52,10 +52,12 @@ public class ListboxPaging implements ComponentRenderer {
 				.write(self.getPaging())
 				.write("</div>");
 		}
-		wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\">");
+		wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\"");
+		if (self.getListhead() != null)
+			wh.write(" style=\"table-layout:fixed\"");
 
 		//header
-		wh.writeln("<tbody class=\"listbox-head\">").writeComponents(self.getHeads()).writeln("</tbody>");
+		wh.writeln("><tbody class=\"listbox-head\">").writeComponents(self.getHeads()).writeln("</tbody>");
 
 		//body
 		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">");
