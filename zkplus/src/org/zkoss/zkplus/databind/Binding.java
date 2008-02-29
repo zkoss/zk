@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import org.zkoss.zul.ListModel;
 import org.zkoss.zul.impl.InputElement;
 
 import org.zkoss.zk.ui.Path;
@@ -466,12 +467,26 @@ public class Binding {
 				final Component dt = bi.getComponent();
 				final Binding binding = bi.getBinding();
 				final DataBinder binder = binding.getBinder();
-				final Component dataTarget = binder.isTemplate(dt) ? 
-					binder.lookupClone(event.getTarget(), dt) : dt;
-				final Object[] vals = binding.getAttributeValues(dataTarget);
+				final Component dataTarget = DataBinder.isTemplate(dt) ? 
+					DataBinder.lookupClone(target, dt) : dt;
+				//bug# 1904389: NullPointerException if save-when in collection binding
+				//event.getTarget() might not inside the collection item (i.e. row, listitem, etc.)
+				//then binder.lookupClone() will return null dataTarget.
 				if (dataTarget != null) {
+					final Object[] vals = binding.getAttributeValues(dataTarget);
 					tmplist.add(new BindingInfo(binding, dataTarget, vals));
 					Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget, target, binding, vals[0]));
+				} else {
+					//bi.getComponent a template and a null dataTarget, meaning all collection items has to
+					//be handled. Search the owner to iterate all cloned items.
+					final List clones = scanClones(binder, dt);
+					for (final Iterator itc = clones.iterator(); itc.hasNext();) {
+						final Component dataTarget1 = (Component)itc.next();
+						final Object[] vals = binding.getAttributeValues(dataTarget1);
+						tmplist.add(new BindingInfo(binding, dataTarget1, vals));
+						Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget1, target, binding, vals[0]));
+					}
+					
 				}
 			}
 			
@@ -487,7 +502,6 @@ public class Binding {
 				dataTarget = bi.getComponent();
 				final Binding binding = bi.getBinding();
 				final Object[] vals = bi.getAttributeValues();
-				final DataBinder binder = binding.getBinder();
 				binding.saveAttributeValue(dataTarget, vals, loadOnSaveInfos);
 				if (loadOnSaveProxy == null && dataTarget.isListenerAvailable("onLoadOnSave", true)) {
 					loadOnSaveProxy = dataTarget;
@@ -505,6 +519,40 @@ public class Binding {
 				Events.postEvent(new Event("onLoadOnSave", loadOnSaveProxy, loadOnSaveInfos));
 			}
 			
+		}
+		
+		//scan up the component hierarchy until the real owner is found and collect all cloned components.
+		private List scanClones(DataBinder binder, Component comp) {
+			if (DataBinder.isTemplate(comp)) {
+				final List owners = scanClones(binder, binder.getCollectionOwner(comp)); //recursive
+				final List kidowners = new ArrayList(1024);
+				for (final Iterator it = owners.iterator(); it.hasNext();) {
+					final Component owner = (Component) it.next();
+					final CollectionItem decor = binder.getCollectionItemByOwner(owner);
+					//backward compatible, CollectionItemEx.getItems() is faster
+					if (decor instanceof CollectionItemEx) {
+						final CollectionItemEx decorex = (CollectionItemEx) decor;
+						for (final Iterator iti = decorex.getItems(owner).iterator(); iti.hasNext();) {
+							final Component item = (Component) iti.next();
+							kidowners.add(DataBinder.lookupClone(item, comp));
+						}
+					} else {
+						try {
+							for (int j = 0; true; ++j) { //iterate until out of bound
+								final Component item = decor.getComponentAtIndexByOwner(owner, j);
+								kidowners.add(DataBinder.lookupClone(item, comp));
+							}
+						} catch (IndexOutOfBoundsException ex) {
+							//ignore, iterate until out of bound
+						}
+					}
+				}
+				return kidowners;
+			} else {
+				final List owners = new ArrayList(1);
+				owners.add(comp);
+				return owners;
+			}
 		}
 	}
 

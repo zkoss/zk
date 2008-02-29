@@ -18,13 +18,15 @@
  */
 package org.zkoss.zkplus.databind;
 
+import java.util.List;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 
-/* package */class ListitemCollectionItem implements CollectionItem {
+/* package */class ListitemCollectionItem implements CollectionItemEx {
 
 	public Component getComponentCollectionOwner(Component comp) {
 		if (comp instanceof Listitem) {
@@ -63,6 +65,16 @@ import org.zkoss.zul.Listitem;
 			if (lbx.getItemRenderer() == null) {
 				lbx.setItemRenderer(new BindingListitemRenderer(li, binder));
 			}
+		}
+	}
+
+	public List getItems(Component comp) {
+		if (comp instanceof Listbox) {
+			final Listbox listbox = (Listbox) comp;
+			return listbox.getItems();
+		} else {
+			throw new UiException(
+					"Unsupported type for ListitemCollectionItem: " + comp);
 		}
 	}
 

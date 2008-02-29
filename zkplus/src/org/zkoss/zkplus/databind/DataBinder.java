@@ -30,6 +30,8 @@ import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.HierachicalAware;
 
 import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListModel;
@@ -586,6 +588,26 @@ public class DataBinder {
 			name = Listitem.class.getName();
 		} else if (comp instanceof Row) {
 			name = Row.class.getName();
+		} else if (comp instanceof Comboitem) {
+			name = Comboitem.class.getName();
+		}
+		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
+		if(decorName != null){
+			return decorName;
+		}else{
+			throw new UiException("Cannot find associated CollectionItem:"+comp);
+		}		
+	}
+	//Get CollectionItem per the given owner.
+	//@since 3.0.4 
+	/*package*/ CollectionItem getCollectionItemByOwner(Component comp) {
+		String name = comp.getClass().getName();
+		if (comp instanceof Listbox) {
+			name = Listitem.class.getName();
+		} else if (comp instanceof Grid) {
+			name = Row.class.getName();
+		} else if (comp instanceof Comboitem) {
+			name = Comboitem.class.getName();
 		}
 		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
 		if(decorName != null){
@@ -595,7 +617,7 @@ public class DataBinder {
 		}		
 	}
 	//get Collection owner of a given collection item.
-	private Component getCollectionOwner(Component comp) {
+	/*package*/ Component getCollectionOwner(Component comp) {
 		if (isTemplate(comp)) {
 			return (Component) comp.getAttribute(OWNER);
 		}

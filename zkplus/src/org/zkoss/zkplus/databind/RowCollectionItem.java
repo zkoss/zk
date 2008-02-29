@@ -18,22 +18,18 @@
  */
 package org.zkoss.zkplus.databind;
 
+import java.util.List;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Row;
 
-/* package */class RowCollectionItem implements CollectionItem {
+/* package */class RowCollectionItem implements CollectionItemEx {
 
 	public Component getComponentAtIndexByOwner(Component comp, int index) {
-		if (comp instanceof Grid) {
-			final Grid grid = (Grid) comp;
-			return (Component) grid.getRows().getChildren().get(index);
-		} else {
-			throw new UiException("Unsupported type for RowCollectionItem: "
-					+ comp);
-		}
+		return (Component) getItems(comp).get(index);
 	}
 
 	public Component getComponentCollectionOwner(Component comp) {
@@ -63,6 +59,16 @@ import org.zkoss.zul.Row;
 			if (grid.getRowRenderer() == null) {
 				grid.setRowRenderer(new BindingRowRenderer(row, binder));
 			}
+		}
+	}
+	
+	public List getItems(Component comp) {
+		if (comp instanceof Grid) {
+			final Grid grid = (Grid) comp;
+			return grid.getRows().getChildren();
+		} else {
+			throw new UiException("Unsupported type for RowCollectionItem: "
+					+ comp);
 		}
 	}
 }

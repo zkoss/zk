@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import java.util.List;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Combobox;
@@ -28,7 +30,7 @@ import org.zkoss.zul.ListModel;
  * @author jumperchen
  * @since 3.0.2
  */
-/* package */ class ComboitemCollectionItem implements CollectionItem {
+/* package */ class ComboitemCollectionItem implements CollectionItemEx {
 
 	public Component getComponentCollectionOwner(Component comp) {
 		if (comp instanceof Comboitem) {
@@ -70,4 +72,13 @@ import org.zkoss.zul.ListModel;
 		}
 	}
 
+	public List getItems(Component comp) {
+		if (comp instanceof Combobox) {
+			final Combobox cbbox = (Combobox) comp;
+			return cbbox.getItems();
+		} else {
+			throw new UiException(
+					"Unsupported type for ComboitemCollectionItem: " + comp);
+		}
+	}
 }
