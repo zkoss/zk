@@ -1389,6 +1389,96 @@ zk.cellIndex = function (cell) {
 	} else i = cell.cellIndex;
 	return i; 
 };
+
+
+/** Returns the number of columns (considering colSpan)
+ */
+zk.ncols = function (cells) {
+	var cnt = 0;
+	if (cells) {
+		for (var j = 0; j < cells.length; ++j) {
+			var span = cells[j].colSpan;
+			if (span >= 1) cnt += span;
+			else ++cnt;
+		}
+	}
+	return cnt;
+};
+
+/** Copies the width of each cell from one row to another.
+ * It handles colspan of srcrows, but not dst's colspan, nor rowspan
+ *
+ * @param srcrows all rows from the source table. Don't pass just one row
+ * because a row might not have all cells.
+ */
+zk.cpCellWidth = function (dst, srcrows, mate) {
+	if (dst == null || srcrows == null || !srcrows.length
+	|| !dst.cells || !dst.cells.length)
+		return;
+
+	var ncols = dst.cells.length; //TODO: handle colspan for dst: ncols = zk.ncols(dst.cells);
+	var src, maxnc = 0, loadIdx = getZKAttr(mate.element, "lastLoadIdx");
+	for (var j = 0, len = $int(loadIdx) || srcrows.length; j < len; ++j) {
+		var row = srcrows[j];
+		if (!zk.isVisible(row) || getZKAttr(row, "loaded") == "false") continue;
+		var cells = row.cells;
+		var nc = zk.ncols(cells);
+		var valid = cells.length == nc && $visible(row);
+			//skip with colspan and invisible
+		if (valid && nc >= ncols) {
+			maxnc = ncols;
+			src = row;
+			break;
+		}
+		if (nc > maxnc) {
+			src = valid ? row: null;
+			maxnc = nc;
+		} else if (nc == maxnc && !src && valid) {
+			src = row;
+		}
+	}
+	if (!maxnc) return;
+
+	var fakeRow = !src;
+	if (fakeRow) { //the longest row containing colspan
+		src = document.createElement("TR");
+		src.style.height = "0px";
+			//Note: we cannot use display="none" (offsetWidth won't be right)
+		for (var j = 0; j < maxnc; ++j)
+			src.appendChild(document.createElement("TD"));
+		srcrows[0].parentNode.appendChild(src);
+	}
+
+	//we have to clean up first, since, in FF, if dst contains %
+	//the copy might not be correct
+	for (var j = maxnc; --j >=0;)
+		dst.cells[j].style.width = "";
+
+	var sum = 0;
+	for (var j = maxnc, z = 0; --j >= 0;) {
+		var d = dst.cells[j], s = src.cells[j];
+		if (zk.opera) {
+			sum += s.offsetWidth;
+			d.style.width = zk.revisedSize(s, s.offsetWidth);
+		} else {
+			d.style.width = s.offsetWidth + "px";
+			if (maxnc > 1) { //don't handle single cell case (bug 1729739)
+				var v = s.offsetWidth - d.offsetWidth;
+				if (v != 0) {
+					v += s.offsetWidth;
+					if (v < 0) v = 0;
+					d.style.width = v + "px";
+				}
+			}
+		}
+	}
+
+	if (zk.opera && getZKAttr(mate.element, "fixed") != "true")
+		dst.parentNode.parentNode.style.width = sum + "px";
+
+	if (fakeRow)
+		src.parentNode.removeChild(src);
+};
 /** Copies the width of each cell from one row to another.
  * It handles colspan of srcrows, but not dst's colspan, nor rowspan
  *
@@ -1399,6 +1489,7 @@ zk.cellIndex = function (cell) {
  * @param {Number} column index. It only copy the index column, if any.
  * @since 3.0.0
  */
+/**
 zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length || !zk.isRealVisible(dst))
@@ -1522,6 +1613,7 @@ zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
 	if (!again && (zk.safari || zk.opera)) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 5);	
 	// Note :we have to re-calculate the width of cell column for safari.
 };
+*/
 /**
 Copies the width of each cell from the element's header.
  * It handles colspan of srcrows.
@@ -1529,7 +1621,7 @@ Copies the width of each cell from the element's header.
  * @param {Array} dst the element's header. 
  * @param {Array} srcrows each cell.
  * @since 3.0
- */
+ *//**
 zk.cpCellArrayWidth = function (dst, srcrows) {
 	if (dst == null || srcrows == null || !srcrows.length
 	|| !dst.cells.length)
@@ -1560,7 +1652,7 @@ zk.cpCellArrayWidth = function (dst, srcrows) {
 			if (cell) cell.style.width = rwd;
 		}
 	}
-};
+};*/
 //Number//
 /** digits specifies at least the number of digits must be ouput. */
 zk.formatFixed = function (val, digits) {
