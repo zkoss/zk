@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
-<?page title="bindingValidation Test"?> 
+<?page title="bindingValidation Test"?>
+<zk>
+<html><![CDATA[
+1. Press the "submit" button. You should not see any change on the screen.<br/>
+2. The server console should show following four lines:<br/>
+validationForGrid called:CA<br/>
+validationForGrid called:TX<br/>
+validationForGrid called:WA<br/>
+onClick() called<br/>
+<br/>
+3.If you see NullPointerException, it is a bug.<br/>
+]]></html> 
 <window xmlns:a="http://www.zkoss.org/2005/zk/annotation" style="margin: 0 auto" title="bindingValidation Test"> 
  
 <zscript><![CDATA[ 
@@ -61,3 +72,4 @@ public void validationForEntry(Event ev) {
 </button> 
  
 </window> 
+</zk>
