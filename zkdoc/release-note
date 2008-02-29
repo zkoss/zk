@@ -1,6 +1,7 @@
 	--------
 ZK 3.0.4 Freshly
 * Features
+  1904532: Grid/Listbox/Tree support the fixed layout concept
   1902777: A way to pass Object to included page with include comp
   1898211: An option to use uncompress javascript codes
   1886684: Translate messages to Czech. Thank Pavel Mica for his contribution.
@@ -43,6 +44,7 @@ ZK 3.0.4 Freshly
   1899482: Treeitem.setOpen() workaround not working
   1902693: SmartAuWriter.Task synchronized wrong object
   1904389: NullPointerException if save-when in collection binding
+  1901423: Incorrect alignment of listboxes and grids
 
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
@@ -56,6 +58,35 @@ ZK 3.0.4 Freshly
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
   + Rename the CSS name from "inline-box" to "inline-block".
+  + Note that, the width of header excludes its style by default (like ZK 2.4.1 version).
+		If you want the width of header includes its style like ZK 3.0.3 version,
+		please specify the follow CSS in your CSS file.
+<!-- The following CSS just overrides the original header CSS -->
+tr.hidfakerz th {
+	overflow: hidden; border: 1px solid;
+	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
+	white-space: nowrap; padding: 2px;
+	font-size: small; font-weight: normal;
+}
+tr.hidfakerz th.sort div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent
+url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+tr.hidfakerz th.sort-asc div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+tr.hidfakerz th.sort-dsc div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
 
 	--------
 ZK 3.0.3
