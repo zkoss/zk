@@ -27,7 +27,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	${z:redraw(self.paging, null)}
 	</div>
 	</c:if>
-	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="listbox-btable">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="listbox-btable" <c:if test="${!empty self.listhead}">style="table-layout:fixed"</c:if>>
 	<tbody class="listbox-head">
 	<c:forEach var="head" items="${self.heads}">
 ${z:redraw(head, null)}

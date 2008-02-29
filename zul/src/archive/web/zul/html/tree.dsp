@@ -23,6 +23,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:if test="${!empty self.treecols}">
 	<div id="${self.uuid}!head" class="tree-head">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+		<c:if test="${!empty self.treecols}">
+		<tbody style="visibility:hidden;height:0px">
+			<tr id="${self.treecols.uuid}!hdfaker" class="hidfakerz">
+			<c:forEach var="child" items="${self.treecols.children}">
+					<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
+						<div style="overflow:hidden"></div>
+					</th>
+			</c:forEach>
+			</tr>
+		</tbody>
+		</c:if>
 	<c:forEach var="head" items="${self.heads}">
 ${z:redraw(head, null)}
 	</c:forEach>
@@ -30,13 +41,35 @@ ${z:redraw(head, null)}
 	</div>
 </c:if>
 	<div id="${self.uuid}!body" class="tree-body">
-	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" <c:if test="${self.fixedLayout}">style="table-layout:fixed"</c:if>>
+		<c:if test="${!empty self.treecols}">
+		<tbody style="visibility:hidden;height:0px">
+			<tr id="${self.treecols.uuid}!bdfaker" class="hidfakerz">
+			<c:forEach var="child" items="${self.treecols.children}">
+					<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
+						<div style="overflow:hidden"></div>
+					</th>
+			</c:forEach>
+			</tr>
+		</tbody>
+		</c:if>
 ${z:redraw(self.treechildren, null)}
 	</table>
 	</div>
 <c:if test="${!empty self.treefoot}">
 	<div id="${self.uuid}!foot" class="tree-foot">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+		<c:if test="${!empty self.treecols}">
+		<tbody style="visibility:hidden;height:0px">
+			<tr id="${self.treecols.uuid}!ftfaker" class="hidfakerz">
+			<c:forEach var="child" items="${self.treecols.children}">
+					<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
+						<div style="overflow:hidden"></div>
+					</th>
+			</c:forEach>
+			</tr>
+		</tbody>
+		</c:if>
 ${z:redraw(self.treefoot, null)}
 	</table>
 	</div>

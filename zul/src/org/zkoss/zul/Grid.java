@@ -126,6 +126,7 @@ public class Grid extends XulElement {
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
+	private boolean _fixedLayout = true;
 
 	public Grid() {
 		setSclass("grid");
@@ -145,7 +146,33 @@ public class Grid extends XulElement {
 			}
 		};
 	}
-
+	
+	/**
+	 * Sets the outline of grid whether is fixed layout.
+	 * If true, the outline of grid will be depended on browser. It means, we don't 
+	 * calculate the width of each cell. Otherwise, the outline will count on the content of body.
+	 * In other words, the outline of grid is like ZK 2.4.1 version that the header's width is only for reference.
+	 * 
+	 * <p> You can also specify the "fixed-layout" attribute of component in lang-addon.xml directly, it's a top priority. 
+	 * @since 3.0.4
+	 */
+	public void setFixedLayout(boolean fixedLayout) {
+		if(_fixedLayout != fixedLayout) {
+			_fixedLayout = fixedLayout;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns the outline of grid whether is fixed layout.
+	 * <p>Default: true.
+	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
+	 * @since 3.0.4
+	 */
+	public boolean isFixedLayout() {
+		final String s = (String) getAttribute("fixed-layout");
+		return s != null ? Boolean.parseBoolean(s) : _fixedLayout;
+	}
+	
 	/** Returns the rows.
 	 */
 	public Rows getRows() {
@@ -915,6 +942,7 @@ public class Grid extends XulElement {
 		}
 		if (_scOddRow != null)
 			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
+		HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
 		return sb.toString();
 	}
 

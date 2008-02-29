@@ -59,6 +59,13 @@ public class Listcell extends LabelImageElement {
 	public Listitem getListitem() {
 		return (Listitem)getParent();
 	}
+	
+	protected String getRealStyle() {
+		final Listheader h = getListheader();
+		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
+				"display:none;" : super.getRealStyle();
+	}
+	
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
 	 */

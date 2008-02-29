@@ -155,6 +155,7 @@ public class Listbox extends XulElement {
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
+	private boolean _fixedLayout = true;
 	
 	public Listbox() {
 		setSclass("listbox");
@@ -204,6 +205,31 @@ public class Listbox extends XulElement {
 		_model.addListDataListener(_dataListener);
 	}
 
+	/**
+	 * Sets the outline of grid whether is fixed layout.
+	 * If true, the outline of grid will be depended on browser. It means, we don't 
+	 * calculate the width of each cell. Otherwise, the outline will count on the content of body.
+	 * In other words, the outline of grid is like ZK 2.4.1 version that the header's width is only for reference.
+	 * 
+	 * <p> You can also specify the "fixed-layout" attribute of component in lang-addon.xml directly, it's a top priority. 
+	 * @since 3.0.4
+	 */
+	public void setFixedLayout(boolean fixedLayout) {
+		if(_fixedLayout != fixedLayout) {
+			_fixedLayout = fixedLayout;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns the outline of grid whether is fixed layout.
+	 * <p>Default: true.
+	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
+	 * @since 3.0.4
+	 */
+	public boolean isFixedLayout() {
+		final String s = (String) getAttribute("fixed-layout");
+		return s != null ? Boolean.parseBoolean(s) : _fixedLayout;
+	}
 	/** Returns {@link Listhead} belonging to this listbox, or null
 	 * if no list headers at all.
 	 */
@@ -1619,6 +1645,7 @@ public class Listbox extends XulElement {
 						break;
 				HTMLs.appendAttribute(sb, "z.lastLoadIdx", index);
 			}
+			HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
 		}
 
 		appendAsapAttr(sb, Events.ON_SELECT);

@@ -49,14 +49,14 @@ _zkselx._addChd = function (uuid, cmp, html) {
 	if (isLit && $type(cmp) != "Lit") { // only first listitem.
 		var head = $parentByTag(cmp, "DIV");
 		var cave = $e($uuid(head) + "!cave");	
-		if (cave.tBodies[0].rows.length) {
-			var n = cave.tBodies[0].rows[0];
+		if (cave.tBodies[1].rows.length) {
+			var n = cave.tBodies[1].rows[0];
 			var to = n.previousSibling;
 			zk.insertHTMLBefore(n, html);
 			zkau._initSibs(n, to, false);
 		} else {
-			zk.insertHTMLBeforeEnd(cave.tBodies[0], html);			
-			zkau._initChildren(cave.tBodies[0]);
+			zk.insertHTMLBeforeEnd(cave.tBodies[1], html);			
+			zkau._initChildren(cave.tBodies[1]);
 		}
 		return true;
 	}
@@ -73,7 +73,7 @@ zk.Selectable.prototype = {
 		this.qcells = [];
 		this.init();
 	},
-	init: function (isLater) {
+	init: function () {
 		this.element = $e(this.id);
 		if (!this.element) return;
 		if (getZKAttr(this.element, "vflex") == "true") {
@@ -88,17 +88,24 @@ zk.Selectable.prototype = {
 		if (this.body) {
 			this.body.style.overflow = "";
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-			if (this.bodytbl) {
-				var bds = this.bodytbl.tBodies;
-				if (!bds || !bds.length)
-					this.bodytbl.appendChild(document.createElement("TBODY"));
-				this.bodyrows = bds[0].rows;
-			}
-
+			
 			this.head = $e(this.id + "!head");
-			if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
 			this.foot = $e(this.id + "!foot");
 			if (this.foot) this.foottbl = zk.firstChild(this.foot, "TABLE", true);
+			if (this.head) {
+				this.headtbl = zk.firstChild(this.head, "TABLE", true);
+				this.headrows = this.headtbl.tBodies[1].rows;
+				this.hdfaker = this.headtbl.tBodies[0].rows[0]; // head's faker
+				this.bdfaker = this.bodytbl.tBodies[0].rows[0]; // body's faker
+				if (this.foot) this.ftfaker = this.foottbl.tBodies[0].rows[0]; // foot's faker
+			}
+			
+			if (this.bodytbl) {
+				var bds = this.bodytbl.tBodies;
+				if (!bds || !bds.length|| (this.head && bds.length < 2))
+					this.bodytbl.appendChild(document.createElement("TBODY"));
+				this.bodyrows = bds[this.head ? 1 : 0].rows;
+			}
 		} else {
 			this.paging = true;
 			this.body = $e(this.id + "!paging");
@@ -168,11 +175,11 @@ zk.Selectable.prototype = {
 		if (!this.paging) {
 			//FF: a small fragment is shown
 			//IE: Bug 1775014
-			if (this.headtbl && this.headtbl.rows.length) {
+			if (this.headtbl && this.headrows.length) {
 				var empty = true;
 				l_out:
-				for (var j = this.headtbl.rows.length; j;) {
-					var headrow = this.headtbl.rows[--j];
+				for (var j = this.headrows.length; j;) {
+					var headrow = this.headrows[--j];
 					for (var k = headrow.cells.length; k;) {
 						var n = headrow.cells[--k].firstChild; // Bug #1819037
 						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
@@ -196,23 +203,8 @@ zk.Selectable.prototype = {
 			};
 		}
 		
-		if (isLater && this.qcells.length
-		&& this.headtbl && this.headtbl.rows.length
-		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
-			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
-		} else {
-			zk.addInitLater(function () {meta._calcSize();}, true);	
-		}
-		this.qcells.length = 0;
+		zk.addInitLater(function () {meta._calcSize();}, true);
 		this._render(155); //prolong a bit since calSize might not be ready
-	},
-	putCellQue: function (cell) {
-/** no need to check replication, since the server generates one for each
-		for (var j = this.qcells.length; j;)
-			if (this.qcells[--j] == cell)
-				return; //replicate
-*/
-		this.qcells.push(cell);
 	},
 	cleanup: function ()  {
 		if (this.fnResize)
@@ -220,7 +212,7 @@ zk.Selectable.prototype = {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
-			this.foot = this.foottbl = this.fnSubmit = this.qcells = this._focus = null;
+			this.foot = this.foottbl = this.fnSubmit = this._focus = null;
 			//in case: GC not works properly
 	},
 	/** Stripes the rows. */
@@ -763,32 +755,25 @@ zk.Selectable.prototype = {
 	},
 
 	/** Calculates the size. */
-	_calcSize: function () {		
+	_calcSize: function () {
 		this._calcHgh();	
 		if (this.paging) {// Bug #1826101
-			if (this.bodytbl && this.bodytbl.rows.length) {
+			if (this.bodyrows && this.bodyrows.length) {
 				var head;
-				for (var j = 0, rl = this.bodytbl.rows.length; j < rl; j++) {
-					if ($type(this.bodytbl.rows[j]) == "Lhrs") {
-						head = this.bodytbl.rows[j];
+				for (var j = 0, rl = this.bodyrows.length; j < rl; j++) {
+					if ($type(this.bodyrows[j]) == "Lhrs") {
+						head = this.bodyrows[j];
 						break;
 					}
 				}
 				if (head) {
 					for (var j = 0, hl = head.cells.length; j < hl; j++) {
-						var d = head.cells[j], cave = d.firstChild;
+						var d = head.cells[j];
 						if (!zk.isVisible(d)) { //Bug #1867370
 							for (var k = this.bodyrows.length; --k >=0;)
 								if (this.bodyrows[k].cells[j] != d) 
 									this.bodyrows[k].cells[j].style.display = "none";
 							continue;
-						}
-						if (cave) {
-							var wd =  d.style.width;							
-							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
-								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";								
-							var w = $int(d.style.width);
-							cave.style.width = zk.revisedSize(cave, w) + "px";
 						}
 					}
 				}
@@ -821,50 +806,12 @@ zk.Selectable.prototype = {
 			if (tblwd && this.body.offsetWidth - tblwd > 11) {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
-			} else
-				this.bodytbl.style.width = "";		
+			}
+			
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
-			if (this.headtbl.rows.length) {
-				var head, rows = this.headtbl.rows;
-				for(var j = 0, l = rows.length; j < l; j++) {
-					var type = $type(rows[j]);
-					if (type == "Lhrs" || type == "Tcols") {
-						head = rows[j];
-						break;
-					}
-				}
-				var fake = $e(head.id + "!fake"), cellCopied;
-				if (!fake && !head.rowIndex) {
-					zk.cpCellWidth(head, this.bodyrows, this);
-					cellCopied = true;
-				}
-				if (!fake || fake.cells.length != head.cells.length) {
-					if (fake) fake.parentNode.removeChild(fake);
-					var src = document.createElement("TR");
-					src.id = head.id + "!fake";
-					src.style.height = "0px";
-						//Note: we cannot use display="none" (offsetWidth won't be right)
-					for (var j = head.cells.length; --j >= 0;)
-						src.appendChild(document.createElement("TD"));					
-					rows[0].parentNode.insertBefore(src, rows[0]);						
-				}
-				var row = rows[0], cells = row.cells, k = 0, l = cells.length;
-				
-				for (; k < l; k++) {
-					var s = cells[k], d = head.cells[k], wd = d.style.width;							
-					if (!wd || wd == "auto" || wd.indexOf('%') > -1) // Bug #1822564
-						d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-					
-					wd = d.style.width;
-					if (zk.isVisible(d))
-						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
-					else s.style.display = "none";
-				}
-				if (!cellCopied) zk.cpCellWidth(head, this.bodyrows, this); // But #1886788 recalculate width.
-			}
-			if (this.foottbl && this.foottbl.rows.length)
-				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
+			if (getZKAttr(this.element, "fixed") != "true")
+				zul.adjustHeadWidth(this.hdfaker, this.bdfaker, this.ftfaker, this.bodyrows);
 		} else if (this.foottbl) {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
@@ -972,7 +919,6 @@ zk.Selectable.prototype = {
 			if (!hgh) {
 				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
 				else if (nRows <= nVisiRows) {
-					//var r = this._visiRowAt(nRows - 1); disabled by Jumper
 					hgh = zk.offsetTop(midVisiRow) + zk.offsetHeight(midVisiRow);
 				} else {
 					hgh = zk.offsetTop(lastVisiRow) + zk.offsetHeight(lastVisiRow);
@@ -1003,8 +949,7 @@ zk.Selectable.prototype = {
 	},
 	/* Height of the head row. If now header, defval is returned. */
 	_headHgh: function (defVal) {
-		var n = this.headtbl;
-		n = n && n.rows.length ? n.rows[0]: null;
+		var n = this.headrows && this.headrows.length ? this.headrows[0]: null;
 		var hgh = n ? zk.offsetHeight($real(n)): 0; // Bug #1823218 
 		return hgh ? hgh: defVal;
 	},
@@ -1305,15 +1250,6 @@ zkLit.stripe = function (cmp, isClean) {
 	}
 };
 zkLic = {}; //listcell or Treecell
-zkLic.init = function (cmp) {
-	var meta = zkau.getMeta(getZKAttr(cmp.parentNode, "rid"));	
-	if (meta) {
-		meta.putCellQue(cmp);
-		if (!meta.fixedSize)
-			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, meta.id + "Lic");
-	}
-};
 zkLic.initdrag = zkLit.initdrag;
 zkLic.cleandrag = zkLit.cleandrag;
 zkLic.setAttr = function (cmp, nm, val) {

@@ -160,7 +160,7 @@ zkTree.init = function (cmp) {
 
 	//we have re-paginate since treechild might be invalidated
 	if (meta.bodytbl)
-		zkTrow._pgnt(cmp, meta.bodytbl.rows);
+		zkTrow._pgnt(cmp, meta.bodyrows);
 };
 
 zkTree.cleanup = function (cmp) {
@@ -210,7 +210,7 @@ zkTree.setAttr = function (cmp, nm, val) {
 		if ("z.pgInfo" == nm) {
 			zkTrow._setPgInfo(cmp, val);
 			if (meta.bodytbl)
-				zkTrow._pgnt(cmp, meta.bodytbl.rows);
+				zkTrow._pgnt(cmp, meta.bodyrows);
 			return true;
 		}
 		return meta.setAttr(nm, val);

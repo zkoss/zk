@@ -70,6 +70,13 @@ public class Treecell extends LabelImageElement {
 				return (Tree)n;
 		return null;
 	}
+	
+	protected String getRealStyle() {
+		final Treecol h = getTreecol();
+		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
+				"display:none;" : super.getRealStyle();
+	}
+	
 	/** Returns the tree col associated with this cell, or null if not available.
 	 */
 	public Treecol getTreecol() {

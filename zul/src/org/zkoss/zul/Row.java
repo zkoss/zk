@@ -198,7 +198,7 @@ public class Row extends XulElement {
 			}
 		}
 
-		String colattrs = null, wd = null, hgh = null;
+		String colattrs = null, visible = null, hgh = null;
 		final Grid grid = getGrid();
 		if (grid != null) {
 			final Columns cols = grid.getColumns();
@@ -210,6 +210,7 @@ public class Row extends XulElement {
 					//if (span == 1) wd = col.getWidth();
 						//Bug 1633982: don't generate width if span > 1
 						//Side effect: the width might not be the same as specified
+					visible = col.isVisible() ? "" : "display:none";
 					hgh = col.getHeight();
 				}
 			}
@@ -223,9 +224,8 @@ public class Row extends XulElement {
 			_rsflags = 0;
 		}
 
-		if (wd != null || hgh != null) {
-			final StringBuffer sb = new StringBuffer(80).append(style);
-			//HTMLs.appendStyle(sb, "width", wd);		
+		if (visible != null || hgh != null) {
+			final StringBuffer sb = new StringBuffer(80).append(style).append(visible);
 			HTMLs.appendStyle(sb, "height", hgh);
 			style = sb.toString();
 		}

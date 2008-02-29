@@ -250,46 +250,48 @@ div.listbox, div.tree, div.grid {<%-- depends sclass --%>
 	background: #DAE7F6; border: 1px solid #7F9DB9;
 }
 div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-head tr,
-	div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
+	div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr, div.tree-foot, 
+	div.listbox-foot, div.grid-foot {<%-- always used. --%>
 	border: 0; overflow: hidden; width: 100%;
 }
 
 div.tree-head tr, div.listbox-head tr, div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
-div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
+div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th
+	<%-- ,tr.hidfakerz th // Header's width excluds its style by default--%> {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
-
-div.head-cell-inner {
-	font-size: small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
-}
-
 div.listbox-head th.sort div.head-cell-inner, div.grid-head th.sort div.head-cell-inner, 
-	div.listbox-paging th.sort div.head-cell-inner, div.grid-paging th.sort div.head-cell-inner {
+	div.listbox-paging th.sort div.head-cell-inner, div.grid-paging th.sort div.head-cell-inner
+	<%-- ,tr.hidfakerz th.sort div // Header's width excluds its style by default--%> {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
 div.listbox-head th.sort-asc div.head-cell-inner, div.grid-head th.sort-asc div.head-cell-inner, 
-	div.listbox-paging th.sort-asc div.head-cell-inner, div.grid-paging th.sort-asc div.head-cell-inner {
+	div.listbox-paging th.sort-asc div.head-cell-inner, div.grid-paging th.sort-asc div.head-cell-inner
+	<%-- ,tr.hidfakerz th.sort-asc div // Header's width excluds its style by default--%> {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
 div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.head-cell-inner,
-	div.listbox-paging th.sort-dsc div.head-cell-inner, div.grid-paging th.sort-dsc div.head-cell-inner {
+	div.listbox-paging th.sort-dsc div.head-cell-inner, div.grid-paging th.sort-dsc div.head-cell-inner
+	<%-- ,tr.hidfakerz th.sort-dsc div // Header's width excluds its style by default--%> {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-
+div.head-cell-inner {
+	font-size: small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+}
 div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging {<%-- always used. --%>
 	background: white; border: 0; overflow: auto; width: 100%;
 }
@@ -299,9 +301,9 @@ div.listbox-paging, div.grid-paging {
 div.listbox-pgi, div.grid-pgi {
 	border-top: 1px solid #AAB; overflow: hidden;
 }
-div.tree-body td, div.listbox-body td, div.listbox-paging td {
+div.tree-body td, div.listbox-body td, div.listbox-paging td, div.tree-foot td, div.listbox-foot td {
 	cursor: pointer; padding: 0 2px;
-	font-size: small; font-weight: normal;
+	font-size: small; font-weight: normal; overflow: hidden; 
 }
 
 div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, 
@@ -310,10 +312,18 @@ div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot,
 }
 
 div.foot-cell-inner, div.cell-inner, div.head-cell-inner{
-	overflow:hidden; border: 0; margin: 0; padding: 0;
+	border: 0; margin: 0; padding: 0;
+}
+<%-- faker uses only for grid/listbox/tree --%>
+tr.hidfakerz, tr.hidfakerz th, tr.hidfakerz div {
+	border-top: 0 !important; border-bottom: 0 !important; margin-top: 0 !important;
+	margin-bottom: 0 !important; padding-top: 0 !important;	padding-bottom: 0 !important;
+	height: 0px !important; <%-- these above css cannot be overrided--%>
+	border-left: 0; border-right: 0; margin-left: 0; margin-right: 0; padding-left: 0;
+	padding-right: 0;
 }
 td.gc {
-	padding: 2px; 
+	padding: 2px; overflow: hidden; 
 }
 div.gc {
 	font-size: small; font-weight: normal; color: black;
@@ -1149,3 +1159,28 @@ div.drop-content {
 	font-size:13px;
 	font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
+<%-- // Header's width includs its style
+tr.hidfakerz th {
+	overflow: hidden; border: 1px solid;
+	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
+	white-space: nowrap; padding: 2px;
+	font-size: small; font-weight: normal;
+}
+tr.hidfakerz th.sort div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+tr.hidfakerz th.sort-asc div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+tr.hidfakerz th.sort-dsc div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}--%>

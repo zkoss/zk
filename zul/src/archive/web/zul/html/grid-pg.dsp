@@ -26,7 +26,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	${z:redraw(self.paging, null)}
 	</div>
 	</c:if>
-	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="grid-btable">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="grid-btable" <c:if test="${!empty self.columns}">style="table-layout:fixed"</c:if>>
 	<tbody class="grid-head">
 	<c:forEach var="head" items="${self.heads}">
 ${z:redraw(head, null)}
