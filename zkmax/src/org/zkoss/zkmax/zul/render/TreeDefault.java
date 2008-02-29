@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treecol;
 
 /**
  * {@link Tree}'s default mold.
@@ -47,10 +48,10 @@ public class TreeDefault implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols.getUuid()).wirte("!hdfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!hdfaker\" class=\"hidfakerz\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
-					final Component child = (Component) it.next();
+					final Treecol child = (Treecol) it.next();
 					wh.write("<th id=\"").write(child.getUuid()).write("!hdfaker\"").write(child.getOuterAttrs())
 					.write("><div style=\"overflow:hidden\"></div></th>");
 				}
@@ -68,10 +69,10 @@ public class TreeDefault implements ComponentRenderer {
 		
 		if(self.getTreecols() != null) {
 			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-				.write("<tr id=\"").write(self.getTreecols.getUuid()).wirte("!bdfaker\" class=\"hidfakerz\">");
+				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"hidfakerz\">");
 				
 			for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component) it.next();
+				final Treecol child = (Treecol) it.next();
 				wh.write("<th id=\"").write(child.getUuid()).write("!bdfaker\"").write(child.getOuterAttrs())
 				.write("><div style=\"overflow:hidden\"></div></th>");
 			}
@@ -85,10 +86,10 @@ public class TreeDefault implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols.getUuid()).wirte("!ftfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"hidfakerz\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
-					final Component child = (Component) it.next();
+					final Treecol child = (Treecol) it.next();
 					wh.write("<th id=\"").write(child.getUuid()).write("!ftfaker\"").write(child.getOuterAttrs())
 					.write("><div style=\"overflow:hidden\"></div></th>");
 				}

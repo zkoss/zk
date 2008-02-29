@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listheader;
 import org.zkoss.zul.fn.ZulFns;
 
 /**
@@ -48,10 +49,10 @@ public class ListboxDefault implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getListhead() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getListhead.getUuid()).wirte("!hdfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!hdfaker\" class=\"hidfakerz\">");
 					
 				for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
-					final Component child = (Component) it.next();
+					final Listheader child = (Listheader) it.next();
 					wh.write("<th id=\"").write(child.getUuid()).write("!hdfaker\"").write(child.getOuterAttrs())
 					.write("><div style=\"overflow:hidden\"></div></th>");
 				}
@@ -72,10 +73,10 @@ public class ListboxDefault implements ComponentRenderer {
 		
 		if(self.getListhead() != null) {
 			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-				.write("<tr id=\"").write(self.getListhead.getUuid()).wirte("!bdfaker\" class=\"hidfakerz\">");
+				.write("<tr id=\"").write(self.getListhead().getUuid()).write("!bdfaker\" class=\"hidfakerz\">");
 				
 			for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component) it.next();
+				final Listheader child = (Listheader) it.next();
 				wh.write("<th id=\"").write(child.getUuid()).write("!bdfaker\"").write(child.getOuterAttrs())
 				.write("><div style=\"overflow:hidden\"></div></th>");
 			}
@@ -94,10 +95,10 @@ public class ListboxDefault implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getListhead() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getListhead.getUuid()).wirte("!ftfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!ftfaker\" class=\"hidfakerz\">");
 					
 				for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
-					final Component child = (Component) it.next();
+					final Listheader child = (Listheader) it.next();
 					wh.write("<th id=\"").write(child.getUuid()).write("!ftfaker\"").write(child.getOuterAttrs())
 					.write("><div style=\"overflow:hidden\"></div></th>");
 				}
