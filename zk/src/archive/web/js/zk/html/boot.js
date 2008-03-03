@@ -1276,7 +1276,7 @@ zk._domsg = function () {
 +'<table cellpadding="0" cellspacing="0" width="100%"><tr>'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button><br/>'
 +'<button onclick="$e(\'zk_msg\').value = \'\'">clear</button></td>'
-+'<td><textarea id="zk_msg" style="width:99%" rows="3"></textarea></td></tr></table></div>';
++'<td><textarea id="zk_msg" style="width:99%" rows="10"></textarea></td></tr></table></div>';
 			zk._setOuterHTML(console, html);
 			console = $e("zk_msg");
 		}
