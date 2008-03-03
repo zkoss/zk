@@ -52,10 +52,11 @@ zkWnd.init = function (cmp) {
 	
 	//Bug #1840866
 	zkWnd._initMode(cmp);
-		// Bug #1830668 we have to invoke initMode later. 
 		// But, for a Sun's bug, we need to invoke initMode directly to prevent 
-		// that the outline of page is gone. However, the #1830668 bug seems to 
-		// disappear in ZK 3.0.4 version.
+		// that the outline of page is gone.
+		// Note: we fixed bug #1830668 bug by using addInitLater to invoke
+		// _initMode later, but, with ZK 3.0.4, the problem is already resolved
+		// without using addInitLater
 };
 zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
