@@ -456,9 +456,11 @@ zkLayoutRegionSplit._fixbtn = function (split) {
 		split.splitbtn.style.display = "";
 	}
 };
-zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
+zkLayoutRegionSplit._ignoresizing = function (split, pointer, event) {
 	var dg = zkLayoutRegionSplit._drags[split.id];
 	if (dg) {
+		var el = Event.element(event);
+		if (!el || !el.id || !el.id.endsWith("!split")) return true;
 		var real = $real(split);
 		if (real && getZKAttr(real, "open") == "true" && getZKAttr(real, "splt") == "true") {			
 			var maxs = $int(getZKAttr(real, "maxs")) || 2000;
