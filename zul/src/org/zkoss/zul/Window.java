@@ -422,11 +422,13 @@ public class Window extends XulElement implements IdSpace {
 	/** Sets the mode to overlapped, popup, modal, embedded or highlighted.
 	 *
 	 * <p>Notice: {@link Events#ON_MODAL} is posted if you specify
-	 * "modal" to this method and in a thread other than an event
-	 * listener ({@link Events#inEventListener}).
-	 * In other words, if this method is called with modal and
-	 * <em>not</em> in any event listener, the mode won't be changed
-	 * immediately (until {@link Events#ON_MODAL} is processed later).
+	 * "modal" to this method.
+	 * Unlike {@link #doModal}, {@link Events#ON_MODAL} is posted, so
+	 * the window will become modal later (since 3.0.4).
+	 * In other words, setMode("modal") never suspends the execution
+	 * of the current thread. On the other hand, {@link #doModal} will
+	 * suspends the execution if executed in an event listener, or
+	 * throws an exception if <em>not</em> executed in an event listener.
 	 *
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped", "popup", "modal", "highlighted".
@@ -442,7 +444,8 @@ public class Window extends XulElement implements IdSpace {
 		if ("popup".equals(name)) doPopup();
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
-		else if ("modal".equals(name)) doModal();
+		else if ("modal".equals(name))
+			Events.postEvent(Events.ON_MODAL, this, null);
 		else if ("highlighted".equals(name)) doHighlighted();
 		else throw new WrongValueException("Uknown mode: "+name);
 	}
@@ -455,7 +458,9 @@ public class Window extends XulElement implements IdSpace {
 		case POPUP: doPopup(); break;
 		case OVERLAPPED: doOverlapped(); break;
 		case EMBEDDED: doEmbedded(); break;
-		case MODAL: doModal(); break;
+		case MODAL:
+			Events.postEvent(Events.ON_MODAL, this, null);
+			break;
 		case HIGHLIGHTED: doHighlighted(); break;
 		default:
 			throw new WrongValueException("Unknown mode: "+mode);
@@ -493,20 +498,25 @@ public class Window extends XulElement implements IdSpace {
 	 * It will automatically center the window (ignoring {@link #getLeft} and
 	 * {@link #getTop}).
 	 *
-	 * <p>Notice: {@link Events#ON_MODAL} is posted if you specify
-	 * "modal" to this method and in a thread other than an event
-	 * listener ({@link Events#inEventListener}).
-	 * In other words, if this method is called with modal and
-	 * <em>not</em> in any event listener, the mode won't be changed
-	 * immediately (until {@link Events#ON_MODAL} is processed later).
+	 * <p>Notice: though both setMode("modal") and doModal() both
+	 * causes the window to become modal, they are a bit different.
+	 * doModal causes the event listener to suspend immediately,
+	 * while setMode("modal") posts an event ({@link Events#ON_MODAL}).
+	 * That is, {@link #setMode} won't suspend the execution immediately,
+	 * but {@link #doModal} will.
+	 * {@link #doModal} can be called only in an event listener,
+	 * while {@link #setMode} can be called anytime.
 	 *
-	 * @exception SuspendNotAllowedException if there are too many suspended
-	 * processing thread than the deployer allows.
+	 * @exception SuspendNotAllowedException if
+	 * 1) not in an event listener;<br/>
+	 * 2) the event thread is disabled.<br/>
+	 * 3) there are too many suspended processing thread than the deployer allows.
 	 * By default, there is no limit of # of suspended threads.
 	 * @exception InterruptedException thrown if the desktop or
 	 * the Web application is being destroyed, or
 	 * {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}.
 	 * To tell the difference, check the getMessage method of InterruptedException.
+	 * @since 3.0.4
 	 */
 	public void doModal()
 	throws InterruptedException, SuspendNotAllowedException {
@@ -520,10 +530,8 @@ public class Window extends XulElement implements IdSpace {
 		checkOverlappable(MODAL);
 
 		if (_mode != MODAL) {
-			if (!Events.inEventListener()) {
-				Events.postEvent(Events.ON_MODAL, this, null);
-				return; //done
-			}
+			if (!Events.inEventListener())
+				throw new SuspendNotAllowedException("doModal must be called in an event listener");
 
 			int oldmode = _mode;
 			boolean oldvisi = isVisible();
