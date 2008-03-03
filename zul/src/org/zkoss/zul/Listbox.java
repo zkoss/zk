@@ -791,7 +791,7 @@ public class Listbox extends XulElement {
 	public void setPaginal(Paginal pgi) {
 		if (!Objects.equals(pgi, _pgi)) {
 			final Paginal old = _pgi;
-			_pgi = pgi;
+			_pgi = pgi; //assign before detach paging, since removeChild assumes it
 
 			if (inPagingMold()) {
 				if (old != null) removePagingListener(old);
@@ -1098,6 +1098,10 @@ public class Listbox extends XulElement {
 		return refChild;
 	}
 	public boolean removeChild(Component child) {
+		if (_paging == child && _pgi == child && inPagingMold())
+			throw new IllegalStateException("The paging component cannot be removed manually. It is removed automatically when changing the mold");
+				//Feature 1906110: prevent developers from removing it accidently
+
 		if (!super.removeChild(child))
 			return false;
 
@@ -1590,6 +1594,8 @@ public class Listbox extends XulElement {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
 			super.setMold(mold);
+				//we have to change model before detaching paging,
+				//since removeChild assumes it
 
 			if ("paging".equals(old)) { //change from paging
 				if (_paging != null) {
