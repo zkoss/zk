@@ -15,6 +15,7 @@ ZK 3.0.4 Freshly
   1899699: Wrong column size in listbox
   1905999: Messagebox: a way to listen what button is clicked
   1906110: Listbox: prevent paging component removed in paging mold
+  1906138: A way to specify whether the item is checkable(Listbox/Tree)
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
@@ -52,11 +53,7 @@ ZK 3.0.4 Freshly
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
     It improves the performance when opening a modal window.
-    If your page contains an element that is not a ZK component
-    (such as HTML INPUT rather than textbox), the user might be able to
-    change the focus to it by pressing TAB even if it is covered by a modal
-    window.
-    If it is not acceptable to you, specify the following in zk.xml.
+    If you prefer it to true, specify the following in zk.xml.
 	<client-config>
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
