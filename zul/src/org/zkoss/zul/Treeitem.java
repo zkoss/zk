@@ -49,6 +49,7 @@ public class Treeitem extends XulElement {
 	private boolean _open = true;
 	private boolean _selected;
 	private boolean _disabled;
+	private boolean _checkable = true;;
 	
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
@@ -63,6 +64,24 @@ public class Treeitem extends XulElement {
 	public Treeitem(String label, Object value) {
 		setLabel(label);
 		setValue(value);
+	}
+
+	/** Returns whether it is checkable.
+	 * <p>Default: true.
+	 * @since 3.0.4
+	 */
+	public boolean isCheckable() {
+		return _checkable;
+	}
+	/** Sets whether it is checkable.
+	 * <p>Default: true.
+	 * @since 3.0.4
+	 */
+	public void setCheckable(boolean checkable) {
+		if (_checkable != checkable) {
+			_checkable = checkable;
+			invalidate();
+		}
 	}
 	
 	/**

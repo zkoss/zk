@@ -159,21 +159,24 @@ public class Listcell extends LabelImageElement {
 		if (listbox != null && item.getFirstChild() == this) {
 			final StringBuffer sb = new StringBuffer(64);
 			if (listbox.isCheckmark()) {
-				sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
-					.append('"');
-				if (item.isDisabled())
-					sb.append(" disabled=\"disabled\"");
-				if (item.isSelected())
-					sb.append(" checked=\"checked\"");
-
-				sb.append(" id=\"").append(item.getUuid())
-					.append("!cm\" z.type=\"Lcfc\"/>");
-				return sb.toString();
+				if (item.isCheckable()) {
+					sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
+						.append('"');
+					if (item.isDisabled())
+						sb.append(" disabled=\"disabled\"");
+					if (item.isSelected())
+						sb.append(" checked=\"checked\"");
+	
+					sb.append(" id=\"").append(item.getUuid())
+						.append("!cm\" z.type=\"Lcfc\"/>");
+				} else {
+					sb.append("<span class=\"checkmark-spacer\"></span>");
+				}
 			} else if (isFocusRequired(listbox, item)) {
 				sb.append("<a href=\"javascript:;\" id=\"").append(item.getUuid())
-					.append("!sel\" z.type=\"Lcfc\"> </a>");	
-				return sb.toString();
+					.append("!sel\" z.type=\"Lcfc\"> </a>");
 			}
+			return sb.toString();
 		}
 		
 		//To make the listbox's height more correct, we have to generate &nbsp;

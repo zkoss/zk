@@ -398,7 +398,7 @@ span.tree-root-close, span.tree-tee-close, span.tree-last-close {
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
-span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer {
+span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer, span.checkmark-spacer {
 	width: 18px; min-height: 18px; height: 100%;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
