@@ -215,7 +215,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 				}
 			}
 			try {
-				_build = new String(Files.readAll(is));
+				_build = new String(Files.readAll(is)).trim();
 			} catch (Exception ex) {
 				_build = "error";
 			}

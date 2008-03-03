@@ -173,7 +173,8 @@ public class ZkFns {
 
 		sb.append("\n<script type=\"text/javascript\">\n")
 			.append("zk_ver='").append(wapp.getVersion())
-			.append("';\nzk_action=\"").append(action)
+			.append("';//").append(wapp.getBuild())
+			.append("\nzk_action=\"").append(action)
 			.append("\";\nzk_procto=")
 				.append(config.getProcessingPromptDelay())
 			.append(";\nzk_tipto=")
