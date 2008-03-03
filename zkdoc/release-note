@@ -49,6 +49,7 @@ ZK 3.0.4 Freshly
   1902693: SmartAuWriter.Task synchronized wrong object
   1904389: NullPointerException if save-when in collection binding
   1901423: Incorrect alignment of listboxes and grids
+  1902533: BorderLayout should not splittable when click on split btn.
 
 * Upgrade Notes:
   + <disable-behind-modal> is default to false.
