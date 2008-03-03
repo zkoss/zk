@@ -3,6 +3,7 @@ ZK 3.0.4 Freshly
 * Features
   1904532: Grid/Listbox/Tree support the fixed layout concept
   1902777: A way to pass Object to included page with include comp
+  1894194: Window.setMode("modal") shall not suspend even in listener
   1898211: An option to use uncompress javascript codes
   1886684: Translate messages to Czech. Thank Pavel Mica for his contribution.
   1899307: Translate messages to Dutch. Thank Wido Jansen, Netherlands for his contribution.
@@ -59,6 +60,9 @@ ZK 3.0.4 Freshly
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
   + Rename the CSS name from "inline-box" to "inline-block".
+  + Window.setMode("modal") never suspends the execution even if called
+    in an event thread. On the other hand, doModal() throws an exception
+    if not called in an event thread.
   + Note that, the width of header excludes its style by default (like ZK 2.4.1 version).
 		If you want the width of header includes its style like ZK 3.0.3 version,
 		please specify the follow CSS in your CSS file.
