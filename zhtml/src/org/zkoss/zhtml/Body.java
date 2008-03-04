@@ -68,7 +68,7 @@ public class Body extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		final String zktags = Head.outZKHtmlTags(),
+		final String zktags = Head.outZKHtmlTags(getDesktop()),
 			zkresp = outZKResponses();
 		if (zktags != null || zkresp != null) {
 			final int j = buf.lastIndexOf("</body>");
