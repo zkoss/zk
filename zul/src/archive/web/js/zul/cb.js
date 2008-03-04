@@ -79,7 +79,18 @@ zkCmbox.init = function (cmp) {
 	zk.listen(inp, "keydown", zkCmbox.onkey);
 	zk.listen(inp, "click", function () {if (inp.readOnly && !zk.dragging) zkCmbox.onbutton(cmp);});
 		//To mimic SELECT, it drops down if readOnly
-
+	
+	var pp = $e(cmp.id + "!pp");
+	if (pp) // Bug #1879511
+		zk.listen(pp, "click", function (evt) {
+			var uuid = $uuid(pp);
+			var inp = $real(pp);
+			zkau.closeFloats($e(uuid));
+			if (inp) {
+				zk.asyncFocus(inp.id);
+				Event.stop(evt);
+			}
+		});
 	var btn = $e(cmp.id + "!btn");
 	if (btn) {
 		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
@@ -651,8 +662,6 @@ zkCmbox.close = function (pp, focus) {
 	var cb = $outer(pp);
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: cb.id, cmd: "onOpen", data: [false]});
-	zkTxbox.close($real(cb)); 
-		// Bug #1879511: we must check the current focus whether to trigger the onChange event.
 };
 
 zk.FloatCombo = Class.create();

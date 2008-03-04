@@ -112,23 +112,6 @@ zkTxbox.updateChange = function (inp, noonblur) {
 	if (!noonblur) zkTxbox.onupdate(inp);
 	return true;
 };
-/**
- * Tests whether to do onblur, if inp currentFocus is not in the same
- * component. This method is used to check when the popup of component is closing.
- * @param {Object} inp
- * @since 3.0.3
- */
-zkTxbox.close = function (inp) {
-	if (!zkTxbox._noonblur(inp)) {
-		if (zk.ie){
-			inp.fireEvent('onblur');
-		} else {
-			var evt = document.createEvent('HTMLEvents');
-			evt.initEvent('blur', false, false);
-			inp.dispatchEvent(evt);
-		}
-	}
-};
 /** Tests whether NOT to do onblur (if inp currentFocus are in the same
  * component).
  */
