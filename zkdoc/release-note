@@ -3,6 +3,7 @@ ZK 3.0.4 Freshly
 * Features
   1904532: Grid/Listbox/Tree support the fixed layout concept
   1902777: A way to pass Object to included page with include comp
+  1906138: A way to specify whether the item is checkable(Listbox/Tree)
   1894194: Window.setMode("modal") shall not suspend even in listener
   1898211: An option to use uncompress javascript codes
   1886684: Translate messages to Czech. Thank Pavel Mica for his contribution.
@@ -16,7 +17,6 @@ ZK 3.0.4 Freshly
   1899699: Wrong column size in listbox
   1905999: Messagebox: a way to listen what button is clicked
   1906110: Listbox: prevent paging component removed in paging mold
-  1906138: A way to specify whether the item is checkable(Listbox/Tree)
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
@@ -53,19 +53,21 @@ ZK 3.0.4 Freshly
   1902533: BorderLayout should not splittable when click on split btn.
 
 * Upgrade Notes:
+  + Window.setMode("modal") never suspends the execution even if called
+    in an event thread. On the other hand, doModal() throws an exception
+    if not called in an event thread.
   + <disable-behind-modal> is default to false.
     It improves the performance when opening a modal window.
     If you prefer it to true, specify the following in zk.xml.
 	<client-config>
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
-  + Rename the CSS name from "inline-box" to "inline-block".
-  + Window.setMode("modal") never suspends the execution even if called
-    in an event thread. On the other hand, doModal() throws an exception
-    if not called in an event thread.
-  + Note that, the width of header excludes its style by default (like ZK 2.4.1 version).
-		If you want the width of header includes its style like ZK 3.0.3 version,
-		please specify the follow CSS in your CSS file.
+  + The CSS name called "inline-box" is renamed to "inline-block"
+  + By default, the width of header of listbox/grid/tree includes
+    the padding and margins defined in the style sheet (like ZK 2.4.1).
+	If you want the width of header to exclude the padding and margins
+	defined in the style (like ZK 3.0.3),
+	please specify the follow CSS definitions in your CSS file.
 tr.hidfakerz th {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
