@@ -915,7 +915,7 @@ zk._evalInit = function () {
 
 		//Note: if loading, zk._doLoad will execute zk._evalInit after finish
 		for (var j = 0; zk._initcmps.length && !zk.loading;) {
-			var n = zk._initcmps.pop(); //reverse-order
+			var n = zk._initcmps.pop(); //reverse-order (child first)
 
 			var m = zk.eval(n, "init");
 			if (m) n = m; //it might be transformed
@@ -928,8 +928,11 @@ zk._evalInit = function () {
 			if (type) {
 				var o = window["zk" + type];
 				if (o) {
-					if (o["onVisi"]) zk._visicmps[n.id] = true;
-					if (o["onHide"]) zk._hidecmps[n.id] = true;
+					//We put child in front of parent (by use of push)
+					//note: init is called child child-first, but
+					//onVisi/onHide is called parent-first
+					if (o["onVisi"]) zk._visicmps.push(n.id); //child in front
+					if (o["onHide"]) zk._hidecmps.push(n.id); //child in front
 				}
 			}
 
@@ -1015,8 +1018,8 @@ zk._cleanupAt = function (n) {
 		zk.eval(n, "cleanup", type);
 		zkau.cleanupMeta(n); //note: it is called only if type is defined
 		zk.unlistenAll(n); //Bug 1741959: memory leaks
-		delete zk._visicmps[n.id];
-		delete zk._hidecmps[n.id];
+		zk._visicmps.remove(n.id);
+		zk._hidecmps.remove(n.id);
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -1027,8 +1030,8 @@ zk._cleanupAt = function (n) {
  * becomes visible. All descendants of n is invoked if onVisi is declared.
  */
 zk.onVisiAt = function (n) {
-	for (var nid in zk._visicmps) {
-		var elm = $e(nid);
+	for (var elms = zk._visicmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
 			if (e == n) { //elm is a child of n
 				zk.eval(elm, "onVisi");
@@ -1050,8 +1053,8 @@ zk.onHideAt = function (n) {
 		try {f.blur();} catch (e) {}
 	}
 
-	for (var nid in zk._hidecmps) {
-		var elm = $e(nid);
+	for (var elms = zk._hidecmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
 			if (e == n) { //elm is a child of n
 				zk.eval(elm, "onHide");
@@ -1337,8 +1340,8 @@ zk._reszcnt = 0; //# of pending zk.onResize
 zk._bfunld = []; //used by addBeforeUnload
 zk._initcmps = []; //comps to init
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
-zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
-zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
+zk._visicmps = []; //an array of component's ID that requires zkType.onVisi; the child is in front of the parent
+zk._hidecmps = []; //an array of component's ID that requires zkType.onHide; the child is in front of the parent
 function myload() {
 	var f = zk._onload;
 	if (f) {
