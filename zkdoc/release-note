@@ -51,6 +51,7 @@ ZK 3.0.4 Freshly
   1904389: NullPointerException if save-when in collection binding
   1901423: Incorrect alignment of listboxes and grids
   1902533: BorderLayout should not splittable when click on split btn.
+  1899068: HTML tags are miss placed when used in zhtml and zul pages
   1904094: Combobox onChanging stops when selecting with Return key
 
 * Upgrade Notes:
