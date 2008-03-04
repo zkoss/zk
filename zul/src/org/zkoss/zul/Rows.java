@@ -49,8 +49,11 @@ public class Rows extends XulElement {
 	 */
 	public int getVisibleBegin() {
 		final Grid grid = getGrid();
-		if (grid == null || !grid.inPagingMold())
+		if (grid == null)
 			return 0;
+		if (grid.inSpecialMold())
+			return grid.getDrawerEngine().getRenderBegin();
+		if (!grid.inPagingMold()) return 0;
 		final Paginal pgi = grid.getPaginal();
 		return pgi.getActivePage() * pgi.getPageSize();
 	}
@@ -59,8 +62,11 @@ public class Rows extends XulElement {
 	 */
 	public int getVisibleEnd() {
 		final Grid grid = getGrid();
-		if (grid == null || !grid.inPagingMold())
+		if (grid == null)
 			return Integer.MAX_VALUE;
+		if (grid.inSpecialMold())
+			return grid.getDrawerEngine().getRenderEnd();
+		if (!grid.inPagingMold()) return Integer.MAX_VALUE;
 		final Paginal pgi = grid.getPaginal();
 		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
 	}
@@ -102,11 +108,15 @@ public class Rows extends XulElement {
 		//--Cropper--//
 		public boolean isCropper() {
 			final Grid grid = getGrid();
-			return grid != null && grid.inPagingMold();
+			return grid != null && (grid.inSpecialMold() || grid.inPagingMold());
 		}
 		public Set getAvailableAtClient() {
 			final Grid grid = getGrid();
-			if (grid == null || !grid.inPagingMold())
+			if (grid == null)
+				return null;
+			if (grid.inSpecialMold())
+				return grid.getDrawerEngine().getAvailableAtClient();
+			if(!grid.inPagingMold())
 				return null;
 
 			final Set avail = new HashSet(37);

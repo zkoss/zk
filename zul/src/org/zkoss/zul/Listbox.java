@@ -40,6 +40,8 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.in.GenericCommand;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -134,6 +136,11 @@ public class Listbox extends XulElement {
 	private transient Collection _heads;
 	private int _hdcnt;
 	private String _innerWidth = "100%";
+	/** ROD mold use only*/
+	private String _innerHeight = null,
+	_innerTop = "height:0px;display:none", _innerBottom = "height:0px;display:none";
+	private transient ListboxDrawerEngine _engine;
+	
 	private String _pagingPosition = "bottom";
 	/** The name. */
 	private String _name;
@@ -250,13 +257,71 @@ public class Listbox extends XulElement {
 	public Collection getHeads() {
 		return _heads;
 	}
-
+	/** ROD mold use only.
+	 */
+	/*package*/ final boolean inSpecialMold() {
+		final String mold = (String) getAttribute("special-mold-name");
+		return mold != null && getMold().equals(mold);
+	}
+	
 	/** Returns whether the HTML's select tag is used.
 	 */
 	/*package*/ final boolean inSelectMold() {
 		return "select".equals(getMold());
 	}
-
+	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerHeight(String innerHeight) {
+		if (innerHeight == null) innerHeight = "100%";
+		if (!Objects.equals(_innerHeight, innerHeight)) {
+			_innerHeight = innerHeight;
+		}
+	}
+	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerHeight() {
+		return _innerHeight;
+	}	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerTop(String innerTop) {
+		if (innerTop == null) innerTop = "height:0px;display:none";
+		if (!Objects.equals(_innerTop, innerTop)) {
+			_innerTop = innerTop;
+		}
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerTop() {
+		return _innerTop;
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerBottom(String innerBottom) {
+		if (innerBottom == null) innerBottom = "height:0px;display:none";
+		if (!Objects.equals(_innerBottom, innerBottom)) {
+			_innerBottom = innerBottom;
+		}
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerBottom() {
+		return _innerBottom;
+	}
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.
 	 * <p>Default: false.
@@ -899,6 +964,8 @@ public class Listbox extends XulElement {
 	 * <p>Used only for component development, not for application developers.
 	 */
 	public int getVisibleBegin() {
+		if (inSpecialMold())
+			return _engine.getRenderBegin();
 		if (!inPagingMold())
 			return 0;
 		final Paginal pgi = getPaginal();
@@ -908,6 +975,8 @@ public class Listbox extends XulElement {
 	 * <p>Used only for component development, not for application developers.
 	 */
 	public int getVisibleEnd() {
+		if (inSpecialMold())
+			return _engine.getRenderEnd();
 		if (!inPagingMold())
 			return Integer.MAX_VALUE;
 		final Paginal pgi = getPaginal();
@@ -1245,11 +1314,13 @@ public class Listbox extends XulElement {
 	 *
 	 * <p>It is used only if live data ({@link #setModel} and
 	 * not paging ({@link #getPaging}.
-	 *
+	 * 
+	 * <p>Note: if the "pre-load-size" attribute of component is specified, it's prior to the original value.(@since 3.0.4)
 	 * @since 2.4.1
 	 */
 	public int getPreloadSize() {
-		return _preloadsz;
+		final String size = (String) getAttribute("pre-load-size");
+		return size != null ? Integer.parseInt(size) : _preloadsz;
 	}
 	/** Sets the number of items to preload when receiving
 	 * the rendering request from the client.
@@ -1360,34 +1431,38 @@ public class Listbox extends XulElement {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
 	public void onInitRender() {
-		final Renderer renderer = new Renderer();
-		try {
-			int pgsz, ofs;
-			if (inPagingMold()) {
-				pgsz = _pgi.getPageSize();
-				ofs = _pgi.getActivePage() * pgsz;
-				final int cnt = getItemCount();
-				if (ofs >= cnt) { //not possible; just in case
-					ofs = cnt - pgsz;
-					if (ofs < 0) ofs = 0;
+		if (inSpecialMold()) {
+			_engine.onInitRender();
+		} else {
+			final Renderer renderer = new Renderer();
+			try {
+				int pgsz, ofs;
+				if (inPagingMold()) {
+					pgsz = _pgi.getPageSize();
+					ofs = _pgi.getActivePage() * pgsz;
+					final int cnt = getItemCount();
+					if (ofs >= cnt) { //not possible; just in case
+						ofs = cnt - pgsz;
+						if (ofs < 0) ofs = 0;
+					}
+				} else {
+					pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows + 5 : 20;
+					ofs = 0;
+					//we don't know # of visible rows, so a 'smart' guess
+					//It is OK since client will send back request if not enough
 				}
-			} else {
-				pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows + 5 : 20;
-				ofs = 0;
-				//we don't know # of visible rows, so a 'smart' guess
-				//It is OK since client will send back request if not enough
+	
+				int j = 0;
+				for (Iterator it = getItems().listIterator(ofs);
+				j < pgsz && it.hasNext(); ++j)
+					renderer.render((Listitem)it.next());
+				if (!inPagingMold() && getItemCount() > pgsz)
+					getItemAtIndex(pgsz).setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
 			}
-
-			int j = 0;
-			for (Iterator it = getItems().listIterator(ofs);
-			j < pgsz && it.hasNext(); ++j)
-				renderer.render((Listitem)it.next());
-			if (!inPagingMold() && getItemCount() > pgsz)
-				getItemAtIndex(pgsz).setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
 		}
 	}
 	private void postOnInitRender() {
@@ -1607,6 +1682,8 @@ public class Listbox extends XulElement {
 			} else if (inPagingMold()) { //change to paging
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
+			} else if (inSpecialMold() && _engine == null) {
+				_engine = new ListboxDrawerEngine(this);
 			}
 		}
 	}
@@ -1649,9 +1726,18 @@ public class Listbox extends XulElement {
 				it.hasPrevious(); --index)
 					if(((Listitem)it.previous()).isLoaded())
 						break;
-				HTMLs.appendAttribute(sb, "z.lastLoadIdx", index);
+				
+				HTMLs.appendAttribute(sb, "z.lastLoadIdx", !inSpecialMold() || 
+						getItemCount() <= _engine.getVisibleAmount() ? index : _engine.getVisibleAmount());
 			}
 			HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
+			if (inSpecialMold()) {
+				HTMLs.appendAttribute(sb, "z.cnt",  getItemCount());
+				HTMLs.appendAttribute(sb, "z.cur",  _engine.getCurpos());
+				HTMLs.appendAttribute(sb, "z.amt",  _engine.getVisibleAmount());
+				HTMLs.appendAttribute(sb, "z.isrod",  true);
+				HTMLs.appendAttribute(sb, "z.preload",  getPreloadSize());
+			}
 		}
 
 		appendAsapAttr(sb, Events.ON_SELECT);
@@ -1820,9 +1906,11 @@ public class Listbox extends XulElement {
 
 		//--Cropper--//
 		public boolean isCropper() {
-			return inPagingMold();
+			return inSpecialMold() || inPagingMold();
 		}
 		public Set getAvailableAtClient() {
+			if (inSpecialMold())
+				return _engine.getAvailableAtClient();
 			if (!inPagingMold())
 				return null;
 
@@ -1898,5 +1986,8 @@ public class Listbox extends XulElement {
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
+	}
+	static {
+		new GenericCommand("onRenderAtScroll", Command.IGNORE_OLD_EQUIV);
 	}
 }
