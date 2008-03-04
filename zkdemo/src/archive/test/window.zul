@@ -34,8 +34,10 @@ Title and closable
 	<caption label="caption"/>
 	Caption only
 </window>
-<window closable="true" border="normal">
+<window closable="true" border="normal" height="200px">
 	<caption label="caption"/>
-	Caption and closable
+	Caption, closable and height = 200px
+	<window title="abc" border="normal" height="50px">
+	</window>
 </window>
 </zk>
