@@ -6,7 +6,7 @@ BEGIN {
 	printf "// DO NOT MODIFY IT MANUALLY. All modifications will be lost.\n"
 	printf "//\n"
 	printf "// %s, %s\n", usernm, when
-	printf "// Copyright(C) 2001 Potix Corporation. All Rights Reserved.\n\n"
+	printf "// Copyright(C) 2001-2008 Potix Corporation. All Rights Reserved.\n\n"
 	printf "package %s;\n", pkgnm
 	printf "\npublic interface %s extends org.zkoss.mesg.MessageConst {\n", clsnm
 	printf "\tstatic final int MESSAGE_ID = Aide.register(%s.class, \"%s\");\n", clsnm, msgnm
