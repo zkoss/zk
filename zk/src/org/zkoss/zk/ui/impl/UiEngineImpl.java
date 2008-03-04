@@ -1410,7 +1410,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else if (meta instanceof TextInfo) {
 				final String s = ((TextInfo)meta).getValue(comp);
-				((Native)comp).getHelper().appendText(sb, s);
+				((Native)comp).getHelper().appendText(comp, sb, s);
 			} else {
 				execNonComponent(ci, comp, meta);
 			}
@@ -1421,7 +1421,7 @@ public class UiEngineImpl implements UiEngine {
 	private static final void getNativeFirstHalf(CreateInfo ci,
 	StringBuffer sb, Component comp, NativeInfo childInfo) {
 		((Native)comp).getHelper()
-			.getFirstHalf(sb, childInfo.getTag(),
+			.getFirstHalf(comp, sb, childInfo.getTag(),
 				evalProperties(comp, childInfo.getProperties()),
 				childInfo.getDeclaredNamespaces());
 
@@ -1445,7 +1445,7 @@ public class UiEngineImpl implements UiEngine {
 		if (!epikids.isEmpty())
 			getNativeContent(ci, sb, comp, epikids);
 
-		((Native)comp).getHelper().getSecondHalf(sb, childInfo.getTag());
+		((Native)comp).getHelper().getSecondHalf(comp, sb, childInfo.getTag());
 	}
 	/** Returns a map of properties, (String name, String value).
 	 */
