@@ -23,10 +23,8 @@ import java.io.StringWriter;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.fn.ZkFns;
+import org.zkoss.zk.ui.impl.HTMLHelpers;
 import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
@@ -68,35 +66,14 @@ public class Body extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		final String zktags = Head.outZKHtmlTags(getDesktop()),
-			zkresp = outZKResponses();
-		if (zktags != null || zkresp != null) {
+		final String zktags = HTMLHelpers.outZKHtmlTags(getDesktop());
+		if (zktags != null) {
 			final int j = buf.lastIndexOf("</body>");
-			if (j >= 0) {
-				if (zkresp != null) buf.insert(j, zkresp);
-				if (zktags != null) buf.insert(j, zktags);
-			} else {
-				if (zktags != null) buf.append(zktags);
-				if (zkresp != null) buf.append(zkresp);
-			}
+			if (j >= 0) buf.insert(j, zktags);
+			else buf.append(zktags);
 		}
 	
 		out.write(buf.toString());
 		out.write('\n');
-	}
-	private static String outZKResponses() {
-		final Execution exec = Executions.getCurrent();
-		final String ATTR_RESPONSES = "zk_argResponses";
-		final Collection responses = (Collection)exec.getAttribute(ATTR_RESPONSES);
-		if (responses == null || responses.isEmpty())
-			return null;
-
-		final StringBuffer sb = new StringBuffer(256)
-			.append("\n<script type=\"text/javascript\">\n")
-			.append(ZkFns.outResponseJavaScripts(responses))
-			.append("\n</script>\n");
-
-		exec.removeAttribute(ATTR_RESPONSES); //turn off page.dsp's generation
-		return sb.toString();
 	}
 }
