@@ -22,9 +22,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 xmlns:h="http://www.w3.org/1999/xhtml"
 xmlns:z="http://www.zkoss.org/2005/zul"
 xmlns:zk="http://www.zkoss.org/2005/zk">
-	<h:head>
+	<head>
 	<title>ZHTML Demo</title>
-	</h:head>
+	</head>
 	<body>
 	<zk:zscript>
 	System.out.println(" Hello zscript ");

@@ -41,7 +41,8 @@
 	</iframe>
 
 	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
-	<z:datebox/>
+	<z:datebox id="db"/>
+	<zscript>db.focus();</zscript>
 
 	<center>
 	center something
