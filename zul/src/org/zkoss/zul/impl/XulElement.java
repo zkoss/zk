@@ -116,7 +116,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setContext(String)
 	 */
 	public void setContext(Popup popup) {
-		setContext(popup != null ? "uuid(" + popup + ")": null);
+		setContext(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 	/** Returns the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
@@ -160,7 +160,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setPopup(String)
 	 */
 	public void setPopup(Popup popup) {
-		setPopup(popup != null ? "uuid(" + popup + ")": null);
+		setPopup(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 	/** Returns the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
@@ -205,7 +205,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setTooltip(String)
 	 */
 	public void setTooltip(Popup popup) {
-		setTooltip(popup != null ? "uuid(" + popup + ")": null);
+		setTooltip(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 
 	/** Returns the client-side action (CSA).
