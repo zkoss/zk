@@ -26,12 +26,9 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 	<title>ZHTML Demo</title>
 	</head>
 	<body>
-	<zk:zscript>
-	System.out.println(" Hello zscript ");
-	</zk:zscript>
 	<z:borderlayout>
 	<z:north>
-	<z:label>North Label</z:label>
+	<z:label>Click browser's [View | Page Source] to see if LINK/SCRIPT is placed inside HEAD.</z:label>
 	</z:north>
 	<z:south>
 	<z:label value="South Label"></z:label>
