@@ -1248,10 +1248,43 @@ zkau._onResize = function () {
 		//since IE keeps sending onresize when dragging the browser border,
 		//we reduce # of packs sent to the server by use of timeout
 		zkau._cInfoPend = true;
-		setTimeout(zkau._doClientInfo, 100);
+		setTimeout(zkau._doClientInfo, 150);
 	}
-	zk.onResize(); //invoke functions added by zk.addOnResize
+
+	zkau._onResize1();
+}
+zkau._onResize1 = function () {
+	if (zk.booting)
+		return; //IE6: it sometimes fires an "extra" onResize in loading
+
+	//Tom Yeh: 20051230:
+	//In certain case, IE will keep sending onresize (because
+	//grid/listbox may adjust size, which causes IE to send onresize again)
+	//To avoid this endless loop, we ignore onresize a whilf if _reszfn
+	//is called
+	if (!zkau._tmResz || $now() > zkau._tmResz) {
+		++zkau._reszcnt;
+		setTimeout(zkau._onResize2, zk.ie && zkau._reszcnt < 5 ? 200: 35);
+			//IE keeps sending onresize when dragging the browser's border,
+			//so we have to filter (most of) them out
+
+	} else setTimeout(zkau._onResize1, 200);
 };
+zkau._onResize2 = function () {
+	if (!--zkau._reszcnt) {
+		if (zk.loading || anima.count) {
+			zkau._onResize1();
+			return;
+		}
+
+		if (zk.ie) zkau._tmResz = $now() + 1500;
+			//IE keeps sending onresize when dragging the browser's border,
+			//so we have to filter (most of) them out
+
+		zk.onSizeAt();
+	}
+};
+zkau._reszcnt = 0;
 
 /** send clientInfo to the server ontimeout. */
 zkau._doClientInfo = function () {
@@ -1426,10 +1459,10 @@ zkau.sendOnSize = function (cmp, keys) {
 	zkau.send({uuid: cmp.id, cmd: "onSize",
 		data: [cmp.style.width, cmp.style.height, keys]},
 		zkau.asapTimeout(cmp, "onSize"));
-	zk.onResize(0, cmp);
-	if (zk.ie6Only) setTimeout(function () {zk.onResize(0, cmp);}, 800);
+
+	setTimeout(function () {zk.onSizeAt(cmp);}, zk.ie6Only ? 800: 0);
 	// If the vflex component in the window component, the offsetHeight of the specific component is wrong at the same time on IE6.
-	// Thus, we have to invoke the zk.onResize function again.
+	// Thus, we have to invoke the zk.onSizeAt function again.
 };
 zkau.sendOnClose = function (uuid, closeFloats) {
 	var el = $e(uuid);

@@ -68,6 +68,7 @@ if (!window.Boot_progressbox) { //not customized
 zk = {};
 zk.build = "8v"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
+zk.booting = true; //denote ZK is booting
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();
@@ -568,67 +569,6 @@ zk.addCleanupLater = function (fn, front, unique) {
 	zk._addfn(zk._cuLatfns, fn, front);
 };
 
-/** Adds a function that will be invoked when the browser is resized
- * (window's resize).
- * <p>Unlike zk.addInit, the function won't be detached after invoked.
- *
- * @param front whether to add the function to the front of the list
- * @param {String} unique whether not to add if redundant. If any, fn is added
- * only if fn was not added before.
- * @since 3.0.0
- */
-zk.addOnResize = function (fn, front, unique) {
-	if (typeof unique == "string") {
-		if(zk._reszids[unique]) return;	
-		zk._reszids[unique] = true;
-	}
-	zk._addfn(zk._reszfns, fn, front);
-};
-/** Removes a function that was added by calling zk.addOnResize.
- * @param {String} unique whether not to add if redundant. If any, fn is added
- * @since 3.0.0
- */
-zk.rmOnResize = function (fn, unique) {
-	if (typeof unique == "string") {
-		delete zk._reszids[unique];
-	}
-	zk._reszfns.remove(fn);
-};
-/** Invokes all functions added by zk.addOnResize.
- * @since 3.0.0
- */
-zk.onResize = function (timeout) {
-	//Tom Yeh: 20051230:
-	//In certain case, IE will keep sending onresize (because
-	//grid/listbox may adjust size, which causes IE to send onresize again)
-	//To avoid this endless loop, we ignore onresize a whilf if _reszfn
-	//is called
-	if (!zk._tmResz || $now() > zk._tmResz) {
-		++zk._reszcnt;
-		setTimeout(zk._onResize,
-			timeout ? timeout: zk.ie && zk._reszcnt < 4 ? 200: 35);
-			//IE: we have to prolong since onresize might come too fast
-			//It is an experimental value. Not sure the real cause.
-	} else setTimeout(zk.onResize, 100);
-};
-zk._onResize = function () {
-	if (--zk._reszcnt == 0) {
-		if (zk.loading || anima.count) {
-			zk.onResize();
-			return;
-		}
-		if (zk.ie) {
-			var firstTime = !zk._tmResz;
-			zk._tmResz = $now() + 800; 
-			if (!zk.ie7 && firstTime)
-				return; //IE6: it fires an "extra" onResize in loading
-		}
-
-		for (var j = 0, rl = zk._reszfns.length; j < rl; ++j)
-			zk._reszfns[j]();
-	}
-};
-
 /** Adds a function that will be invoked before the browser is unloading
  * the page.
  * If the function returns a string, then the whole execution will stop
@@ -816,6 +756,7 @@ zk.initAt = function (node) {
 
 	var stk = [];
 	stk.push(node);
+	zk._initszcmps.push(node);
 	zk._loadAndInit({stk: stk, nosibling: true});
 };
 
@@ -931,8 +872,9 @@ zk._evalInit = function () {
 					//We put child in front of parent (by use of push)
 					//note: init is called child child-first, but
 					//onVisi/onHide is called parent-first
-					if (o["onVisi"]) zk._visicmps.push(n.id); //child in front
-					if (o["onHide"]) zk._hidecmps.push(n.id); //child in front
+					if (o["onVisi"]) zk._tvisicmps.push(n.id); //child-first
+					if (o["onHide"]) zk._thidecmps.push(n.id); //child-first
+					if (o["onSize"]) zk._tsizecmps.push(n.id); //child-first
 				}
 			}
 
@@ -946,9 +888,22 @@ zk._evalInit = function () {
 		while (!zk.loading && zk._initfns.length)
 			(zk._initfns.shift())();
 
-		if (!zk.loading && !zk._initfns.length) zk._initids = {};
-		
-		setTimeout(zk._initLater, 25);
+		if (!zk.loading && !zk._initfns.length) {
+			zk._initids = {}; //cleanup
+
+			//put _tsizecmps at the head of _sizecmps and keep child-first
+			for (var es = zk._tvisicmps; es.length;)
+				zk._visicmps.unshift(es.pop());
+			for (var es = zk._thidecmps; es.length;)
+				zk._hidecmps.unshift(es.pop());
+			for (var es = zk._tsizecmps; es.length;)
+				zk._sizecmps.unshift(es.pop());
+
+			while (zk._initszcmps.length)
+				zk.onSizeAt(zk._initszcmps.shift());
+
+			setTimeout(zk._initLater, 25);
+		}
 	} while (!zk.loading && (zk._initmods.length || zk._initcmps.length
 	|| zk._initfns.length));
 	//Bug 1815074: _initfns might cause _initmods to be added
@@ -1020,6 +975,7 @@ zk._cleanupAt = function (n) {
 		zk.unlistenAll(n); //Bug 1741959: memory leaks
 		zk._visicmps.remove(n.id);
 		zk._hidecmps.remove(n.id);
+		zk._sizecmps.remove(n.id);
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -1028,22 +984,30 @@ zk._cleanupAt = function (n) {
 
 /** To notify a component that it becomes visible because one its ancestors
  * becomes visible. All descendants of n is invoked if onVisi is declared.
+ * The invocation of onVisi is parent-first (and then child).
+ *@param n the topmost element that has become visible.
+ * Note: n has become visible when this method is called.
+ * If null, all elements will be handled
  */
 zk.onVisiAt = function (n) {
 	for (var elms = zk._visicmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
-			if (e == n) { //elm is a child of n
+			if (!$visible(e))
+				break;
+			if (e == n || !n) { //elm is a child of n
 				zk.eval(elm, "onVisi");
 				break;
 			}
-			if (!$visible(e))
-				break;
 		}
 	}
 };
 /** To notify a component that it becomes invisible because one its ancestors
  * becomes invisible. All descendants of n is invoked if onHide is declared.
+ * The invocation of onHide is parent-first (and then child).
+ *@param n the topmost element that will become invisible.
+ * Note: n is still visible when this method is called.
+ * If null, all elements will be handled.
  */
 zk.onHideAt = function (n) {
 	//Bug 1526542: we have to blur if we want to hide a focused control in gecko and IE
@@ -1056,15 +1020,35 @@ zk.onHideAt = function (n) {
 	for (var elms = zk._hidecmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
-			if (e == n) { //elm is a child of n
+			if (!$visible(e)) //yes, ignore hidden ones
+				break;
+			if (e == n || !n) { //elm is a child of n
 				zk.eval(elm, "onHide");
 				break;
 			}
-			if (!$visible(e)) //yes, ignore hidden ones
-				break;
 		}
 	}
-}
+};
+/** To notify a component that its parent's size is changed.
+ * All descendants of n is invoked if onSize is declared.
+ * The invocation of onSize is parent-first (and then child).
+ * @param n the topmost element whose size is changed.
+ * If null, the browser's size is changed and all elements will be handled.
+ * @since 3.0.4
+ */
+zk.onSizeAt = function (n) {
+	for (var elms = zk._sizecmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
+		for (var e = elm; e; e = $parent(e)) {
+			if (!$visible(e))
+				break;
+			if (!n || e == n) { //elm is a child of n
+				zk.eval(elm, "onSize");
+				break;
+			}
+		}
+	}
+};
 
 //extra//
 /** Loads the specified style sheet (CSS).
@@ -1334,14 +1318,14 @@ zk._cufns = []; //used by addCleanup
 zk._cuids = {};
 zk._cuLatfns = []; //used by addCleanupLater
 zk._cuLatids = {};
-zk._reszfns = []; //used by addOnResize
-zk._reszids = {};
-zk._reszcnt = 0; //# of pending zk.onResize
 zk._bfunld = []; //used by addBeforeUnload
 zk._initcmps = []; //comps to init
+zk._initszcmps = []; //comps that requires onSizeAt to be called in _evalInit
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = []; //an array of component's ID that requires zkType.onVisi; the child is in front of the parent
 zk._hidecmps = []; //an array of component's ID that requires zkType.onHide; the child is in front of the parent
+zk._sizecmps = []; //an array of component's ID that requires zkType.onSize; the child is in front of the parent
+zk._tsizecmps = [], zk._tvisicmps = [], zk._thidecmps = []; //temporary array
 function myload() {
 	var f = zk._onload;
 	if (f) {
@@ -1353,7 +1337,8 @@ zk._onload = function () {
 	//It is possible to move javascript defined in zul's language.xml
 	//However, IE has bug to order JavaScript properly if zk._load is used
 	zk.progress(600);
-	zk.addInit(zk.progressDone);
+	zk.addInitLater(zk.progressDone);
+	zk.addInitLater(function() {zk.booting = false;});
 	zk.initAt(document.body);
 };
 
