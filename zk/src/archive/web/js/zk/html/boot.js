@@ -66,7 +66,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "8v"; //increase this if we want the browser to reload JavaScript
+zk.build = "8w"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 zk.booting = true; //denote ZK is booting
 
