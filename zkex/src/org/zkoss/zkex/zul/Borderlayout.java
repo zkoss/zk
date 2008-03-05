@@ -165,23 +165,7 @@ public class Borderlayout extends HtmlBasedComponent {
 						+ this);
 			_center = (Center) child;
 		}
+		smartUpdate("z.chchg", true);
 		return super.insertBefore(child, insertBefore);
-	}
-
-	// -- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-
-	/**
-	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
-	 * component developers.
-	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements
-			ChildChangedAware {
-
-		public boolean isChildChangedAware() {
-			return true;
-		}
 	}
 }
