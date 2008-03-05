@@ -415,6 +415,7 @@ public class Grid extends XulElement {
 		if (innerHeight == null) innerHeight = "100%";
 		if (!Objects.equals(_innerHeight, innerHeight)) {
 			_innerHeight = innerHeight;
+			smartUpdate("z.innerHeight", _innerHeight);
 		}
 	}
 	
@@ -433,6 +434,7 @@ public class Grid extends XulElement {
 		if (innerTop == null) innerTop = "height:0px;display:none";
 		if (!Objects.equals(_innerTop, innerTop)) {
 			_innerTop = innerTop;
+			smartUpdate("z.innerTop", _innerTop);
 		}
 	}
 	/**
@@ -450,6 +452,7 @@ public class Grid extends XulElement {
 		if (innerBottom == null) innerBottom = "height:0px;display:none";
 		if (!Objects.equals(_innerBottom, innerBottom)) {
 			_innerBottom = innerBottom;
+			smartUpdate("z.innerBottom", _innerBottom);
 		}
 	}
 	/**
@@ -1214,8 +1217,5 @@ public class Grid extends XulElement {
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
-	}
-	static {
-		new GenericCommand("onRenderAtScroll", Command.IGNORE_OLD_EQUIV);
 	}
 }

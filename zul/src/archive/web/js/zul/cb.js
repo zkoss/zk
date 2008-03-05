@@ -71,7 +71,7 @@ zkTxbox.onblur = function (evt) {
 };
 });
 zkCmbox.init = function (cmp) {
-	zkCmbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
+	zkCmbox.onVisi = zkCmbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
 
 	var inp = $real(cmp);
@@ -82,19 +82,22 @@ zkCmbox.init = function (cmp) {
 	
 	var pp = $e(cmp.id + "!pp");
 	if (pp) // Bug #1879511
-		zk.listen(pp, "click", function (evt) {
-			var uuid = $uuid(pp);
-			var inp = $real(pp);
-			zkau.closeFloats($e(uuid));
-			if (inp) {
-				zk.asyncFocus(inp.id);
-				Event.stop(evt);
-			}
-		});
+		zk.listen(pp, "click", zkCmbox.closepp);
+		
 	var btn = $e(cmp.id + "!btn");
 	if (btn) {
 		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
-		zkWgt.fixDropBtn(cmp);
+	}
+};
+zkCmbox.closepp = function (evt) {
+	if (!evt) evt = window.event;
+	var pp = Event.element(evt);
+	var uuid = $uuid(pp);
+	var inp = $real(pp);
+	zkau.closeFloats($e(uuid));
+	if (inp) {
+		zk.asyncFocus(inp.id);
+		Event.stop(evt);
 	}
 };
 zkCmbox.strict = function (id) {

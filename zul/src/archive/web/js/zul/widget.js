@@ -364,7 +364,7 @@ zkCkbox.onclick = function (cmp) {
 zkGrbox = {};
 zkCapt = {};
 
-zkGrbox.init = zkGrbox._fixHgh = function (cmp) {
+zkGrbox.onSize = zkGrbox._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (n) {
 		var hgh = cmp.style.height;
@@ -470,7 +470,7 @@ zkImg = {};
 if (zk.ie6Only) {
 	//Request 1522329: PNG with alpha color in IE
 	//To simplify the implementation, Image.java invalidates instead of smartUpdate
-	zkImg.init = function (cmp) {
+	zkImg.onSize = function (cmp) {
 		return zkImg._fixpng(cmp);
 	};
 	zkImg._fixpng = function (img) {
@@ -528,6 +528,8 @@ zkMap.init = function (cmp) {
 		null, zk.safari ? "width:0;height:0;display:inline": "display:none");
 		//creates a hidden frame. However, in safari, we cannot use invisible frame
 		//otherwise, safari will open a new window
+};
+zkMap.onSize = function (cmp) {
 	if (zk.ie6Only) {
 		var img = $real(cmp);
 		return zkImg._fixpng(img);
@@ -674,10 +676,9 @@ var zkWgt = {};
 /** Fixes the button align with an input box, such as combobox, datebox.
  */
 zkWgt.fixDropBtn = function (cmp) {
-	//Bug 1752477: we have to delay it for sophisticated layout in IE
+	//For new initial phase, we don't need to delay the function for IE. (Bug 1752477) 
 	var cmp = $e(cmp);
-	if (cmp)
-		setTimeout("zkWgt._fixdbtn($e('" + cmp.id +"'))", 66);
+	if (cmp) zkWgt._fixdbtn(cmp);
 };
 zkWgt._fixdbtn = function (cmp) {
 	cmp = $e(cmp);
@@ -688,7 +689,7 @@ zkWgt._fixdbtn = function (cmp) {
 	//note: isRealVisible handles null argument
 	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
 		if (!inp.offsetHeight || !btn.offsetHeight) {
-			zkWgt.fixDropBtn(cmp);
+			setTimeout("zkWgt._fixdbtn($e('" + cmp.id +"'))", 66);
 			return;
 		}
 

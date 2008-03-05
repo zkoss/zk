@@ -66,9 +66,6 @@ zk.Grid.prototype = {
 		var meta = this; //the nested function only see local var
 		if (!this.paging && !this._inited) {
 			this._inited = true;
-
-			this.fnResize = function () {meta.recalcSize(true);};
-			zk.addOnResize(this.fnResize);
 		}
 
 		if (!this.paging) {
@@ -101,10 +98,7 @@ zk.Grid.prototype = {
 					//Moz has a bug to send the request out if we don't wait long enough
 					//How long is enough is unknown, but 200 seems fine
 			};
-		} 
-		
-		zk.addInitLater(function () {meta._calcSize();}, true);
-		this._render(155); //prolong a bit since calSize might not be ready
+		}
 	},
 	/* set the height. */
 	setHgh: function (hgh) {		
@@ -152,8 +146,6 @@ zk.Grid.prototype = {
 		}
 	},
 	cleanup: function ()  {
-		if (this.fnResize)
-			zk.rmOnResize(this.fnResize);
 		this.element = this.body = this.bodytbl = this.bodyrows
 			= this.head = this.headtbl = this.foot = this.foottbl = null;
 			//in case: GC not works properly
@@ -219,11 +211,6 @@ zk.Grid.prototype = {
 				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this); //assign foot's col width
 		}
 	},
-	/** Recalculate the size. */
-	recalcSize: function (cleansz) {
-		if (!zk.isRealVisible(this.element)) return;
-		setTimeout("zkGrid._calcSize('"+this.id+"')", 20);
-	},
 	/** Resize the specified column.
 	 * @param cmp columns
 	 */
@@ -277,7 +264,8 @@ zk.Grid.prototype = {
 	/** Renders listitems that become visible by scrolling.
 	 */
 	_render: function (timeout) {
-		setTimeout("zkGrid._renderNow('"+this.id+"')", timeout);
+		if(!this.paging)
+			setTimeout("zkGrid._renderNow('"+this.id+"')", timeout);
 	},
 	_renderNow: function () {
 		var rows = this.bodyrows;
@@ -314,16 +302,6 @@ zk.Grid.prototype = {
 ////
 // Grid //
 zkGrid = {};
-
-zkGrid._init = function (uuid) {
-	var meta = zkau.getMeta(uuid);
-	if (meta) meta._init();
-};
-zkGrid._calcSize = function (uuid) {
-	var meta = zkau.getMeta(uuid);
-	if (meta) meta._calcSize();
-};
-
 /** Init (and re-init) a grid. */
 zkGrid.init = function (cmp) {
 	var meta = zkau.getMeta(cmp);
@@ -331,7 +309,7 @@ zkGrid.init = function (cmp) {
 	else new zk.Grid(cmp);
 };
 /** Called when a grid becomes visible because of its parent. */
-zkGrid.onVisi = function (cmp) {
+zkGrid.onVisi = zkGrid.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta._recalcSize();
 };

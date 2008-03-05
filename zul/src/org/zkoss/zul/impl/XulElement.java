@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.in.GenericCommand;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.au.in.ColSizeCommand;
 import org.zkoss.zul.au.in.PagingCommand;
@@ -50,6 +51,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 			//Don't use Command.IGNORE_OLD_EQUIV since users might drag diff borders
 		new PagingCommand(ZulEvents.ON_PAGING, Command.SKIP_IF_EVER_ERROR);
 		new PageSizeCommand(ZulEvents.ON_PAGE_SIZE, Command.SKIP_IF_EVER_ERROR);
+		new GenericCommand("onRenderAtScroll", Command.IGNORE_OLD_EQUIV);
 	}
 
 	/** The popup ID that will be shown when click. */

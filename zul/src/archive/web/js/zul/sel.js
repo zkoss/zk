@@ -158,11 +158,6 @@ zk.Selectable.prototype = {
 				};
 			}
 
-			if (!this.paging) {
-				this.fnResize = function () {meta.recalcSize(true);};
-				zk.addOnResize(this.fnResize);
-			}
-
 			this.form = zk.formOf(this.element);
 			if (this.form) {
 				this.fnSubmit = function () {
@@ -203,12 +198,8 @@ zk.Selectable.prototype = {
 			};
 		}
 		
-		zk.addInitLater(function () {meta._calcSize();}, true);
-		this._render(155); //prolong a bit since calSize might not be ready
 	},
 	cleanup: function ()  {
-		if (this.fnResize)
-			zk.rmOnResize(this.fnResize);
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
@@ -477,7 +468,7 @@ zk.Selectable.prototype = {
 		}
 		case "z.size":
 			zkau.setAttr(this.element, nm, val);
-			this.recalcSize(true);
+			this._recalcSize();
 			return true;
 		case "style":
 		case "style.width":
@@ -727,7 +718,8 @@ zk.Selectable.prototype = {
 	/** Renders listitems that become visible by scrolling.
 	 */
 	_render: function (timeout) {
-		setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
+		if(!this.paging)
+			setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
 	},
 	_renderNow: function () {
 		var rows = this.bodyrows;
@@ -958,12 +950,6 @@ zk.Selectable.prototype = {
 	_vflexSize: function () {
 		return this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0)
 			- (this.foot ? this.foot.offsetHeight : 0); // Bug #1815882
-	},
-
-	/** Recalculate the size. */
-	recalcSize: function (cleansz) {
-		if (!zk.isRealVisible(this.element)) return;
-		setTimeout("zkSel._calcSize('"+this.id+"')", 50);
 	},
 	/** Resize the specified column. */
 	resizeCol: function (cmp, icol, col, wd, keys) {
@@ -1198,7 +1184,7 @@ zkLibox.init = function (cmp) {
 	}
 };
 /** Called when a listbox becomes visible because of its parent. */
-zkLibox.onVisi = function (cmp) {
+zkLibox.onVisi = zkLibox.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta._recalcSize();
 };

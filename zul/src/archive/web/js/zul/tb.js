@@ -23,7 +23,7 @@ zkTmbox = {
 };
 
 zkTmbox.init = function (cmp) {
-	zkTmbox.onVisi = zkWgt.fixDropBtn; 
+	zkTmbox.onVisi = zkTmbox.onSize = zkWgt.fixDropBtn; 
 	zkTmbox.onHide = zkTxbox.onHide; 	
 
 	zkTxbox.init($real(cmp));
@@ -55,8 +55,6 @@ zkTmbox.init = function (cmp) {
 		zk.listen(btn, "mousedown", zkTmbox._btnDown);
 		zk.listen(btn, "mouseup", zkTmbox._btnUp);
 		zk.listen(btn, "mouseout", zkTmbox._btnOut);
-
-		zkWgt.fixDropBtn(cmp);
 	}
 	
 	if(inp.value){

@@ -24,11 +24,6 @@ zkWnd._clean2 = {}; //Map(id, mode): to be cleanup the modal effect
 zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
 zkWnd.init = function (cmp) {
-	if (getZKAttr(cmp, "visible") == "true")
-		cmp.style.visibility = "visible";
-			//turn it on since Window.getRealStyle turn it off to
-			//have the better effect if the window contains a lot of items
-
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
@@ -186,12 +181,11 @@ zkWnd.setAttr = function (cmp, nm, val) {
 	case "style.height":
 		zkau.setAttr(cmp, nm, val);
 		zkWnd._fixHgh(cmp);
-		if (nm == "style.height") {
-			zk.onResize(0, cmp);// Note: IE6 is broken, because its offsetHeight doesn't update.	
-		}
+		if (nm == "style.height")
+			zk.onSizeAt(cmp); // Note: IE6 is broken, because its offsetHeight doesn't update.
 		return true;
 	case "style.width":
-		zk.onResize(0, cmp);
+		zk.onSizeAt(cmp);
 		return false;
 	case "style.top":
 	case "style.left":
@@ -448,6 +442,11 @@ zkWnd._cleanMode2 = function (uuid, replace) {
 zkWnd._show = function (cmp) {
 	if (getZKAttr(cmp, "conshow")) //enforce the anima effect, if any
 		cmp.style.display = "none";
+		
+	if (getZKAttr(cmp, "visible") == "true")
+		cmp.style.visibility = "visible";
+			//turn it on since Window.getRealStyle turn it off to
+			//have the better effect if the window contains a lot of items
 	zk.show(cmp);
 };
 

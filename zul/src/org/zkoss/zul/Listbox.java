@@ -1987,7 +1987,4 @@ public class Listbox extends XulElement {
 			throw new UnsupportedOperationException();
 		}
 	}
-	static {
-		new GenericCommand("onRenderAtScroll", Command.IGNORE_OLD_EQUIV);
-	}
 }

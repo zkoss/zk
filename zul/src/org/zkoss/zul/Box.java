@@ -36,6 +36,7 @@ import org.zkoss.zul.impl.Utils;
 /**
  * A box.
  *
+ * <p>Default {@link #getSclass}: box.
  * @author tomyeh
  */
 public class Box extends XulElement {
@@ -54,6 +55,7 @@ public class Box extends XulElement {
 	 */
 	public Box(String orient) {
 		setOrient(orient);
+		setSclass("box");
 	}
 	/** Constructor a box by assigning an array of children.
 	 *
@@ -393,6 +395,13 @@ public class Box extends XulElement {
 
 			sb.append('"');
 		}
+		return sb.toString();
+	}
+	public String getOuterAttrs() {
+		if (!"vertical".equals(getOrient())) return super.getOuterAttrs();
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
+			HTMLs.appendAttribute(sb, "z.vert", "true");
 		return sb.toString();
 	}
 	/** Returns the attributes used by the 'cave' element (never null).

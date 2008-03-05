@@ -23,7 +23,6 @@ button, input.button, input.file {
 body {
 	height:100%; margin: 0px; padding: 0px 5px;
 }
-
 <%-- don't set option in mozilla. or, its height too small --%>
 legend {
 	font-family: Tahoma, Arial, serif;
@@ -328,14 +327,18 @@ td.gc {
 div.gc {
 	font-size: small; font-weight: normal; color: black;
 }
-
+table.box {
+	table-layout: fixed;
+}
 td.hbox-sp {
 	width: 0.3em; padding: 0; margin: 0;
 }
 tr.vbox-sp {
 	height: 0.3em; padding: 0; margin: 0;
 }
-
+td.hbox, td.vbox {
+	overflow: hidden;
+}
 tr.item, tr.item a, tr.item a:visited {
 	font-size: small; font-weight: normal; color: black;
 	text-decoration: none;

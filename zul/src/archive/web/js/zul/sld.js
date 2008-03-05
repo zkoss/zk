@@ -57,9 +57,6 @@ zk.Slider.prototype = {
 			};
 			zk.listen(this.form, "submit", this.fnSubmit);
 		}
-
-		setTimeout("zkSld._fixPos('"+this.id+"')", 20);
-			//IE: sometimes we cannot fix the position immediately
 	},
 	/** (x, y) is in the style's coordination (use zk.toStyleOffset to convert).
 	 */
@@ -199,7 +196,7 @@ zkSld.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-zkSld.onVisi = zkSld._fixPos = function (cmp) {
+zkSld.onVisi = zkSld.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp); //cmp or id both OK
 	if (meta) meta._fixPos();
 };

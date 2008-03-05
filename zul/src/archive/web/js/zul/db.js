@@ -376,7 +376,7 @@ zkCal.onout = function (evt) {
 zkDtbox = {};
 
 zkDtbox.init = function (cmp) {
-	zkDtbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
+	zkDtbox.onVisi = zkDtbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
 	zkDtbox.onHide = zkTxbox.onHide; //widget.js is ready now
 
 	var inp = $real(cmp);
@@ -385,10 +385,8 @@ zkDtbox.init = function (cmp) {
 		//IE: use keydown. otherwise, it causes the window to scroll
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn) {
+	if (btn)
 		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
-		zkWgt.fixDropBtn(cmp);
-	}
 };
 
 zkDtbox.validate = function (cmp) {

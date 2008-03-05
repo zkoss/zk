@@ -37,7 +37,25 @@ zkBox.rmAttr = function (cmp, nm) {
 	}
 	return false;
 };
-
+zkBox.onVisi = zkBox.onSize = function (cmp) {
+	if (zk.opera && cmp.style.width) cmp.style.tableLayout = "auto"; 
+	var vert = getZKAttr(cmp, "vert") == "true";
+	var nd = vert ? cmp.rows : cmp.rows[0].cells;
+	var total = vert ? cmp.offsetHeight : cmp.offsetWidth;
+	for (var i = nd.length; --i >= 0;)
+		if (nd[i].id && zk.isVisible(nd[i])) {
+			var d = nd[i];
+			if (vert) {
+				if(!d.id.endsWith("!chdextr2"))
+					d.style.height = zk.revisedSize(d, i == 0 ? total : d.offsetHeight, true) + "px";
+				total -= d.offsetHeight;
+			} else {
+				if(!d.id.endsWith("!chdextr2"))
+					d.style.width = zk.revisedSize(d, i == 0 ? total : d.offsetWidth) + "px";
+				total -= d.offsetWidth;
+			}
+		}
+};
 ////
 zkSplt = {};
 
@@ -49,8 +67,8 @@ zkSplt.init = function (cmp) {
 		vert: vert,
 		drag: new Draggable(cmp, {
 			constraint: vert ? "vertical": "horizontal", ignoredrag: zkSplt._ignoresizing,
-			snap: snap, endeffect: zkSplt._endDrag}),
-			onResize: function () {zkSplt._resize2(cmp);}
+			ghosting: zkSplt._ghostsizing,
+			snap: snap, endeffect: zkSplt._endDrag})
 	};
 
 	var btn = $e(cmp.id + "!btn");
@@ -65,18 +83,28 @@ zkSplt.init = function (cmp) {
 
 	zkSplt._fixbtn(cmp);
 	if (getZKAttr(cmp, "open") == "false")
-		zkSplt.open(cmp, false, true, true);
-
-	zk.addOnResize(drag.onResize);	
-	zkSplt._resize2(cmp);
+		zkSplt._closeAtInit(cmp);
 
 	cmp.style.cursor = getZKAttr(cmp, "open") == "false" ? "default" : vert ? "s-resize": "e-resize";
 	btn.style.cursor = "pointer";
 };
+zkSplt._ghostsizing = function (dg, ghosting, pointer) {
+	if (ghosting) {
+		var pointer = zkau.beginGhostToDIV(dg);	
+		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
+			+pointer[1]+'px;left:'+pointer[0]+'px;width:'
+			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
+			+'px;"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
+					+'"/></div>';
+		document.body.insertAdjacentHTML("afterbegin", html);
+		dg.element = $e("zk_ddghost");
+	} else {		
+		zkau.endGhostToDIV(dg);
+	}
+};
 zkSplt.cleanup = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
-		zk.rmOnResize(drag.onResize);	
 		delete zkSplt._drags[cmp.id];
 		drag.drag.destroy();
 	}
@@ -93,26 +121,6 @@ zkSplt.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-zkSplt.onVisi = zkSplt._resize = function (cmp) {
-	if (!zk.isRealVisible(cmp))return;
-	cmp = $e(cmp);
-	if (cmp) {
-		zkSplt._fixsz(cmp);
-
-		//we have to convert auto-adjust to fix-width, or table
-		//will affect the sliding
-		var nd = $e(cmp.id + "!chdextr");
-		var tn = $tag(nd);
-		var vert = getZKAttr(cmp, "vert");
-		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
-			if (tn == $tag(nd) && nd.id && !nd.id.endsWith("!chdextr2"))
-				if (vert) nd.style.height = zk.revisedSize(nd, nd.offsetHeight, true) + "px";
-				else nd.style.width = zk.revisedSize(nd, nd.offsetWidth) + "px";
-	}
-};
-zkSplt._resize2 = function (cmp) {
-	setTimeout("zkSplt._resize('" + cmp.id + "')", 120);
-};
 zkSplt._fixbtn = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
 	var colps = getZKAttr(cmp, "colps");
@@ -127,17 +135,19 @@ zkSplt._fixbtn = function (cmp) {
 		btn.style.display = "";
 	}
 };
-zkSplt._ignoresizing = function (cmp, pointer) {
+zkSplt._ignoresizing = function (cmp, pointer, event) {
 	if (getZKAttr(cmp, "open") == "false") return true;
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
+		var el = Event.element(event);
+		if (!el || !el.id || $type(el) != "Splt") return true;
 		var run = drag.run = {};
 		run.org = Position.cumulativeOffset(cmp);
 		var nd = $e(cmp.id + "!chdextr");
 		var tn = $tag(nd);
 		run.prev = zkSplt._prev(nd, tn);
 		run.next = zkSplt._next(nd, tn);
-		run.box = $parentByType(nd, "Box");
+		run.z_offset = Position.cumulativeOffset(cmp);
 	}
 	return false;
 };
@@ -145,73 +155,55 @@ zkSplt._endDrag = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		var run = drag.run;
-		var ofs = Position.cumulativeOffset(cmp);
-		if (drag.vert) {
-			var diff = ofs[1] - run.org[1];
-			if (run.next) zkSplt._adj(run.next, "height", -diff);
-			if (run.prev) zkSplt._adj(run.prev, "height", diff);
-		} else {
-			var diff = ofs[0] - run.org[0];
-			if (run.next) zkSplt._adj(run.next, "width", -diff);
-			if (run.prev) zkSplt._adj(run.prev, "width", diff);
+		var diff = run.z_point[drag.vert ? 1 : 0];
+		var fd = drag.vert ? "height" : "width";
+		if (run.next) {
+			var s = $int(run.next.style[fd]);
+			s -= diff;
+			if (s < 0) s = 0;
+			run.next.style[fd] = s + "px";
 		}
-		run.org = ofs;
-
-		zkSplt._fixszAll();
-			//fix all splitter's size because table might be with %
-			drag.run = null;//free memory
+		if (run.prev) {
+			var s = $int(run.prev.style[fd]);
+			s += diff;
+			if (s < 0) s = 0;
+			run.prev.style[fd] = s + "px";
+		}
+	
+		if (run.next) zk.onSizeAt(run.next);
+		if (run.prev) zk.onSizeAt(run.prev);
+		zkSplt._fixsz(cmp);
+		
+		//fix all splitter's size because table might be with %
+		drag.run = null;//free memory
 	}
-	cmp.style.left = cmp.style.top = "";
-	//reset since table might adjust width later
-
 };
 zkSplt._snap = function (cmp, x, y) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		var run = drag.run;
-		var ofs = Position.cumulativeOffset(run.box);
-		ofs = zk.toStyleOffset(cmp, ofs[0], ofs[1]);
 		if (drag.vert) {
-			if (y <= ofs[1]) {
-				y = ofs[1];
+			if (y <= run.z_offset[1] - run.prev.offsetHeight) {
+				y = run.z_offset[1] - run.prev.offsetHeight;
 			} else {
-				var max = ofs[1] + run.box.clientHeight - cmp.offsetHeight;
+				var max = run.z_offset[1] + run.next.offsetHeight - cmp.offsetHeight;
 				if (y > max) y = max;
 			}
 		} else {
-			if (x <= ofs[0]) {
-				x = ofs[0];
+			if (x <= run.z_offset[0] - run.prev.offsetWidth) {
+				x = run.z_offset[0] - run.prev.offsetWidth;
 			} else {
-				var max = ofs[0] + run.box.clientWidth - cmp.offsetWidth;
+				var max = run.z_offset[0] + run.next.offsetWidth - cmp.offsetWidth;
 				if (x > max) x = max;
 			}
 		}
+		run.z_point = [x - run.z_offset[0], y - run.z_offset[1]];
 	}
 	return [x, y];
 };
-zkSplt._adj = function (n, fd, diff) {
-	zkSplt._adjSplt(n, fd, diff);
-	if (n) {
-		var val = $int(n.style[fd]) + diff;
-		n.style[fd] = (val > 0 ? val: 0) + "px";
-
-		zk.onResize(0, n);  //notify descendants
-	}
-};
-/** Adjusts the width of the splitter in the opposite dir. */
-zkSplt._adjSplt = function (n, fd, diff) {
-	if ($type(n) == "Splt") {
-		var vert = getZKAttr(n, "vert") != null;
-		if (vert != (fd == "height")) {
-			var val = $int(n.style[fd]) + diff;
-			n.style[fd] = (val > 0 ? val: 0) + "px";
-		}
-	}
-	for (n = n.firstChild; n; n = n.nextSibling)
-		zkSplt._adjSplt(n, fd, diff);
-};
 /** Fixes the height (wd) of the specified splitter. */
-zkSplt._fixsz = function (cmp) {
+zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
+	if (!zk.isRealVisible(cmp))return;
 	var vert = getZKAttr(cmp, "vert");
 	var parent = cmp.parentNode;
 	if (parent) {
@@ -240,29 +232,64 @@ zkSplt._fixsz = function (cmp) {
 	if (vert) btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
 	else btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
 };
-zkSplt._fixszAll = function () {
-	for (var id in zkSplt._drags) {
-		var cmp = $e(id);
-		if (cmp) zkSplt._fixsz(cmp);
-	}
+/**
+ * For best performance, this function doesn't need to compute anything.
+ */
+zkSplt._closeAtInit = function (cmp) {
+	var nd = $e(cmp.id + "!chdextr"), tn = $tag(nd), colps = getZKAttr(cmp, "colps");
+	if (!colps || "none" == colps) return; //nothing to do
+	var vert = getZKAttr(cmp, "vert"), sib = colps == "before" ? 
+		zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
+	sib.style.display = "none"; 
+	if (!cmp._precls)cmp._precls = cmp.className;	
+	zk.addClass(cmp, cmp._precls + "-ns");
 };
-
 zkSplt.open = function (cmp, open, silent, enforce) {
 	var nd = $e(cmp.id + "!chdextr");
 	var tn = $tag(nd);
 	if (!enforce && (getZKAttr(cmp, "open") != "false") == open)
 		return; //nothing changed
 
-	var colps = getZKAttr(cmp, "colps")
+	var colps = getZKAttr(cmp, "colps");
 	if (!colps || "none" == colps) return; //nothing to do
 
 	var vert = getZKAttr(cmp, "vert");
-	var sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
-	if (sib) zk.show(sib, open);
+	var prev = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
+	var next = colps == "before" ? zkSplt._next(nd, tn) : zkSplt._prev(nd, tn);
+	
+	if (prev) {
+		if (!prev.style[vert ? "height" : "width"])	next.style[vert ? "height" : "width"] = "";
+		zk.show(prev, open);
+	}
+
+	if (vert) {
+		var height = $int(prev.style.height) || (prev.offsetHeight > 0 && zk.revisedSize(prev, prev.offsetHeight, true));
+		if (height < 0) height = 0;
+		if (!prev.style.height) {
+			prev.style.height = height + "px";
+			next.style.height = zk.revisedSize(next, next.offsetHeight, true) + "px";
+		} else {
+			if (open) next.style.height = Math.max($int(next.style.height) - height, 0) + "px";
+			else next.style.height = $int(next.style.height) + height + "px";
+		}
+	 } else {
+	 	var width = $int(prev.style.width) || (prev.offsetWidth > 0 && zk.revisedSize(prev, prev.offsetWidth, true));
+		if (width < 0) width = 0;
+		if (!prev.style.width) {
+			prev.style.width = width + "px";
+			next.style.width = zk.revisedSize(next, next.offsetWidth) + "px";
+		} else {
+		 	if (open) next.style.width = Math.max($int(next.style.width) - width, 0) + "px";  
+			else next.style.width = $int(next.style.width) + width + "px";
+		}  
+	}
+	zk.onSizeAt(next);
+	
 	setZKAttr(cmp, "open", open ? "true": "false");
 
 	zkSplt._fixbtn(cmp);
-	zkSplt._fixszAll();
+	zkSplt._fixsz(cmp);
+	
 	cmp.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
 	if (!cmp._precls)cmp._precls = cmp.className;	
 	if (open) zk.rmClass(cmp, cmp._precls + "-ns");

@@ -172,11 +172,12 @@ public class Listcell extends LabelImageElement {
 				} else {
 					sb.append("<span class=\"checkmark-spacer\"></span>");
 				}
+				return sb.toString();
 			} else if (isFocusRequired(listbox, item)) {
 				sb.append("<a href=\"javascript:;\" id=\"").append(item.getUuid())
 					.append("!sel\" z.type=\"Lcfc\"> </a>");
+				return sb.toString();
 			}
-			return sb.toString();
 		}
 		
 		//To make the listbox's height more correct, we have to generate &nbsp;
