@@ -94,9 +94,8 @@ public interface Native extends NonFellow {
 		 * @param namespaces a list of {@link org.zkoss.idom.Namespace}
 		 * to be generated, or null if not.
 		 * Note: EL expressions is not allowed
-		 * @since 3.0.4
 		 */
-		public void getFirstHalf(Component comp, StringBuffer sb, String tag,
+		public void getFirstHalf(StringBuffer sb, String tag,
 		Map props, Collection namespaces);
 		/** Appends the first half of the device-dependent content
 		 * for the specified tag and properties, and appends it to
@@ -107,14 +106,12 @@ public interface Native extends NonFellow {
 		 *
 		 * @param sb the string buffer to append the result (never null)
 		 * @param tag the tag name (never null)
-		 * @since 3.0.4
 		 */
-		public void getSecondHalf(Component comp, StringBuffer sb, String tag);
+		public void getSecondHalf(StringBuffer sb, String tag);
 		/** Appends the text.
 		 *
 		 * @param text the text content to append
-		 * @since 3.0.4
 		 */
-		public void appendText(Component comp, StringBuffer sb, String text);
+		public void appendText(StringBuffer sb, String text);
 	}
 }

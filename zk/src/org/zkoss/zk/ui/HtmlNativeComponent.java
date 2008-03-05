@@ -37,7 +37,6 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.impl.NativeHelpers;
-import org.zkoss.zk.ui.impl.HTMLHelpers;
 
 /**
  * A comonent used to represent XML elements that are associated
@@ -135,17 +134,70 @@ implements DynamicTag, Native {
 		final StringBuffer sb = new StringBuffer(128);
 		final Helper helper = getHelper();
 			//don't use _helper directly, since the derive might override it
-		helper.getFirstHalf(this, sb, _tag, _props, _dns);
-		sb.append(_prolog); //no encoding
-		out.write(sb.toString());
-		sb.setLength(0);
 
+		//first half
+		helper.getFirstHalf(sb, _tag, _props, _dns);
+		write(out, sb);
+
+		//prolog
+		sb.append(_prolog); //no encoding
+		final String tn = _tag != null ? _tag.toLowerCase(): "";
+		if ("html".equals(tn) || "body".equals(tn)) {//</head> might be part of _prolog
+			final int j = indexOfHead(sb);
+			if (j >= 0) {
+				final String zktags = NativeHelpers.outZKHtmlTags();
+				if (zktags != null)
+					sb.insert(j, zktags);
+			}
+		}
+		write(out, sb);
+
+		//children
 		for (Iterator it = getChildren().iterator(); it.hasNext();)
 			((Component)it.next()).redraw(out);
 
+		//epilog
 		sb.append(_epilog);
-		helper.getSecondHalf(this, sb, _tag);
+		write(out, sb);
+
+		//second half
+		helper.getSecondHalf(sb, _tag);
+		if ("html".equals(tn) || "body".equals(tn) || "head".equals(tn)) {
+			final int j = sb.indexOf("</" + _tag);
+			if (j >= 0) {
+				final String zktags = NativeHelpers.outZKHtmlTags();
+				if (zktags != null)
+					sb.insert(j, zktags);
+			}
+		}
 		out.write(sb.toString());
+	}
+	/** Writes the content of stringbuffer to the writer.
+	 * After written, stringbuffer is reset.
+	 */
+	private static void write(Writer out, StringBuffer sb)
+	throws java.io.IOException {
+		out.write(sb.toString());
+		sb.setLength(0);
+	}
+	/** Search </head> case-insensitive. */
+	private static int indexOfHead(StringBuffer sb) {
+		for (int j = 0, len = sb.length(); (j = sb.indexOf("</", j)) >= 0;) {
+			final int k = j;
+			if (j + 7 > len) break; //not found
+
+			char cc = sb.charAt(j += 2);
+			if (cc != 'h' && cc != 'H') continue;
+			cc = sb.charAt(++j);
+			if (cc != 'e' && cc != 'E') continue;
+			cc = sb.charAt(++j);
+			if (cc != 'a' && cc != 'A') continue;
+			cc = sb.charAt(++j);
+			if (cc != 'd' && cc != 'D') continue;
+			if (sb.charAt(++j) == '>')
+				return k;
+		}
+		return -1;
 	}
 
 	//DynamicTag//
@@ -188,7 +240,7 @@ implements DynamicTag, Native {
 				nc.setPrologContent(text);
 			return nc;
 		}
-		public void getFirstHalf(Component comp, StringBuffer sb, String tag,
+		public void getFirstHalf(StringBuffer sb, String tag,
 		Map props, Collection namespaces) {
 			if (tag != null)
 				sb.append('<').append(tag);
@@ -205,18 +257,11 @@ implements DynamicTag, Native {
 					sb.append('\n'); //make it more readable
 			}
 		}
-		public void getSecondHalf(Component comp, StringBuffer sb, String tag) {
+		public void getSecondHalf(StringBuffer sb, String tag) {
 			if (tag != null) {
 				final String tn = tag.toLowerCase();
 				if (HTMLs.isOrphanTag(tn))
 					return;
-
-				if ("html".equals(tn) || "head".equals(tn)
-				|| "body".equals(tn)) {
-					final String zktags = HTMLHelpers.outZKHtmlTags(comp.getDesktop());
-					if (zktags != null)
-						sb.append(zktags);
-				}
 
 				sb.append("</").append(tag).append('>');
 
@@ -224,7 +269,7 @@ implements DynamicTag, Native {
 					sb.append('\n'); //make it more readable
 			}
 		}
-		public void appendText(Component comp, StringBuffer sb, String text) {
+		public void appendText(StringBuffer sb, String text) {
 			XMLs.encodeText(sb, text);
 		}
 	}
