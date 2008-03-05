@@ -130,7 +130,7 @@ public class Path {
 				if (path.charAt(1) == '/') { //starts with //
 					k = path.indexOf('/', 2);
 					if (k < 0)
-						return null; //page only
+						return null; //page is not component
 
 					final String nm = path.substring(2, k);
 					is = desktop.getPageIfAny(nm);
