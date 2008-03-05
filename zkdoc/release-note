@@ -57,7 +57,8 @@ ZK 3.0.4 Freshly
   1906898: Some characters paralyze client engine to update
   1899749: Progressmeter: Rendering issues
   1900653: unexpected result with Path.getComponent
-  1903077: JavaDoc Error: ComponentInfo.applyProperties omit custom-attributes
+  1903077: JavaDoc Error: ComponentInfo.applyProperties() omits custom-attributes
+  1903399: XulElement.setContext(Popup) doesn't work
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
