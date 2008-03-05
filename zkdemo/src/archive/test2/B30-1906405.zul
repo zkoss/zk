@@ -18,6 +18,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <div>
+Right click the image and the context menu shall show up. Further, the tooltip
+shall never show in this case.
+On the other hand, if the context menu is not shown, the tooltip shall
+show if the mouse point is on top of the image for a while.
 <zscript>contacts = new String[] {"Monday"};</zscript>
 <zk forEach="${contacts }">
 <window context="popup_${each}" tooltip="tooltip_${each}">
@@ -36,6 +40,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 	<menupopup id="popup_${each}">
 		<menu label="File">
+			<menupopup>
+			<menuitem label="Open" onClick="alert(&quot;Not Yet&quot;)"/>
+			</menupopup>
 		</menu>
 	</menupopup>
 </window>
