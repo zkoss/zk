@@ -101,7 +101,6 @@ public class SmartAuWriter extends HttpAuWriter {
 					//advance XMLHttpRequest.readyState (to 3).
 					//Otherwise, the client may consider it as timeout and resend
 					try {
-						_res.setContentType(CONTENT_TYPE);
 						_res.getOutputStream().write(OUTPUT_HEAD_BYTES);
 						_timeout = true; //let flush() know OUTPUT_HEAD is sent
 						_res.flushBuffer();
