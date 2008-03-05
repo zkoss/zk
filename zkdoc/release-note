@@ -56,6 +56,7 @@ ZK 3.0.4 Freshly
   1907640: Long operation failed to update browser with Glassfish v1
   1906898: Some characters paralyze client engine to update
   1899749: Progressmeter: Rendering issues
+  1900653: unexpected result with Path.getComponent
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
