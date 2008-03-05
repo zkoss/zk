@@ -24,7 +24,7 @@ import java.io.StringWriter;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.impl.HTMLHelpers;
+import org.zkoss.zk.ui.impl.NativeHelpers;
 import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
@@ -66,7 +66,7 @@ public class Body extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		final String zktags = HTMLHelpers.outZKHtmlTags(getDesktop());
+		final String zktags = NativeHelpers.outZKHtmlTags();
 		if (zktags != null) {
 			final int j = buf.lastIndexOf("</body>");
 			if (j >= 0) buf.insert(j, zktags);
