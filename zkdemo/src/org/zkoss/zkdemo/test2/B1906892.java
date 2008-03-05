@@ -24,5 +24,8 @@ package org.zkoss.zkdemo.test2;
  * @author tomyeh
  */
 public class B1906892 {
-	public static final char C05 = (char)5;
+	public static final String CDATA_BEGIN = "!<[CDATA[";
+	public static final String CDATA_END = "]]>";
+	public static final String Cx5 = "C" + (char)5;
+	public static final String CxD = "C" + (char)0xd;
 }
