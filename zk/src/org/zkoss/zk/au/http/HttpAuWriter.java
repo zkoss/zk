@@ -45,8 +45,7 @@ public class HttpAuWriter implements AuWriter{
 	protected static final String OUTPUT_HEAD =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	/** The content type of the output. */
-	protected static final String CONTENT_TYPE =
-		"text/xml;charset=UTF-8";
+	private static final String CONTENT_TYPE = "text/xml;charset=UTF-8";
 
 	/** The writer used to generate the output to.
 	 */
@@ -65,6 +64,10 @@ public class HttpAuWriter implements AuWriter{
 	 */
 	public AuWriter open(Object request, Object response, int timeout)
 	throws IOException {
+		((HttpServletResponse)response).setContentType(CONTENT_TYPE);
+			//Bug 1907640: with Glassfish v1, we cannot change content type
+			//in another thread, so we have to do it here
+
 		_out = new StringWriter();
 		_out.write(OUTPUT_HEAD);
 		_out.write("<rs>\n");
@@ -90,7 +93,6 @@ public class HttpAuWriter implements AuWriter{
 			if (bs != null) data = bs; //yes, browser support compress
 		}
 
-		response.setContentType(CONTENT_TYPE);
 		response.setContentLength(data.length);
 		response.getOutputStream().write(data);
 		response.flushBuffer();
