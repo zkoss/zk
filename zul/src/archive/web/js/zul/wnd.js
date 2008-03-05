@@ -29,10 +29,6 @@ zkWnd.init = function (cmp) {
 			//turn it on since Window.getRealStyle turn it off to
 			//have the better effect if the window contains a lot of items
 
-	zkWnd._fixHgh(cmp);
-	cmp.fnResize = function () {zkWnd._fixHgh(cmp)};
-	zk.addOnResize(cmp.fnResize);
-	zk.addInitLater(cmp.fnResize, true); // Bug #1862935
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
@@ -61,10 +57,9 @@ zkWnd.init = function (cmp) {
 zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
 	zkWnd._cleanMode(cmp);
-	zk.rmOnResize(cmp.fnResize);
 };
 /** Fixed the content div's height. */
-zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
+zkWnd.onVisi = zkWnd.onSize = zkWnd._fixHgh = function (cmp) {
 	var hgh = cmp.style.height;
 	var cave = $e(cmp.id + "!cave");
 	
