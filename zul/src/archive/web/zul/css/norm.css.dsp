@@ -327,17 +327,11 @@ td.gc {
 div.gc {
 	font-size: small; font-weight: normal; color: black;
 }
-table.box {
-	table-layout: fixed;
-}
 td.hbox-sp {
 	width: 0.3em; padding: 0; margin: 0;
 }
 tr.vbox-sp {
 	height: 0.3em; padding: 0; margin: 0;
-}
-td.hbox, td.vbox {
-	overflow: hidden;
 }
 tr.item, tr.item a, tr.item a:visited {
 	font-size: small; font-weight: normal; color: black;

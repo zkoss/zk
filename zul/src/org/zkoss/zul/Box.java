@@ -36,7 +36,6 @@ import org.zkoss.zul.impl.Utils;
 /**
  * A box.
  *
- * <p>Default {@link #getSclass}: box.
  * @author tomyeh
  */
 public class Box extends XulElement {
@@ -55,7 +54,6 @@ public class Box extends XulElement {
 	 */
 	public Box(String orient) {
 		setOrient(orient);
-		setSclass("box");
 	}
 	/** Constructor a box by assigning an array of children.
 	 *

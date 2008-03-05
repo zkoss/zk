@@ -37,7 +37,7 @@ zkBox.rmAttr = function (cmp, nm) {
 	}
 	return false;
 };
-zkBox.onVisi = zkBox.onSize = function (cmp) {
+/**zkBox.onVisi = zkBox.onSize = function (cmp) {
 	if (zk.opera && cmp.style.width) cmp.style.tableLayout = "auto"; 
 	var vert = getZKAttr(cmp, "vert") == "true";
 	var nd = vert ? cmp.rows : cmp.rows[0].cells;
@@ -55,7 +55,7 @@ zkBox.onVisi = zkBox.onSize = function (cmp) {
 				total -= d.offsetWidth;
 			}
 		}
-};
+};*/
 ////
 zkSplt = {};
 
@@ -263,7 +263,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	}
 
 	if (vert) {
-		var height = $int(prev.style.height) || (prev.offsetHeight > 0 && zk.revisedSize(prev, prev.offsetHeight, true));
+		var height = $int(prev.style.height) || zk.revisedSize(prev, prev.offsetHeight, true);
 		if (height < 0) height = 0;
 		if (!prev.style.height) {
 			prev.style.height = height + "px";
@@ -273,7 +273,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 			else next.style.height = $int(next.style.height) + height + "px";
 		}
 	 } else {
-	 	var width = $int(prev.style.width) || (prev.offsetWidth > 0 && zk.revisedSize(prev, prev.offsetWidth, true));
+	 	var width = $int(prev.style.width) || zk.revisedSize(prev, prev.offsetWidth);
 		if (width < 0) width = 0;
 		if (!prev.style.width) {
 			prev.style.width = width + "px";

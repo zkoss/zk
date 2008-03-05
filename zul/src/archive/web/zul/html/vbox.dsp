@@ -25,7 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="scls" value="vbox" if="${empty scls}"/>
 <c:set var="spstyle" value="height:${self.spacing}" unless="${empty self.spacing}"/>
 	<c:forEach var="child" items="${self.children}">
-	<tr id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}><td class="vbox"${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td></tr>
+	<tr id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}><td${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td></tr>
 <c:if test="${!empty child.nextSibling}">
 	<c:set var="s" value="display:none;${spstyle}"
 			if="${!child.visible || '0' == self.spacing || '0px' == self.spacing}"/>
