@@ -53,6 +53,7 @@ ZK 3.0.4 Freshly
   1902533: BorderLayout should not splittable when click on split btn.
   1899068: HTML tags are miss placed when used in zhtml and zul pages
   1904094: Combobox onChanging stops when selecting with Return key
+  1907640: Long operation failed to update browser with Glassfish v1
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
