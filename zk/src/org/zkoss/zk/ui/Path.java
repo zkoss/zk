@@ -125,7 +125,7 @@ public class Path {
 				if (path.charAt(1) == '/') { //starts with //
 					k = path.indexOf('/', 2);
 					if (k < 0)
-						return getFirstRoot(page); //the first root assumed
+						return null; //page only
 
 					final String nm = path.substring(2, k);
 					is = desktop.getPageIfAny(nm);
@@ -187,7 +187,7 @@ public class Path {
 			slash = curslash;
 		}
 
-		if (sb.length() > 1 && slash)//remove ending slash except "/"
+		if (sb.length() > 1 && slash) //remove ending slash except "/"
 			sb.setLength(sb.length() - 1);
 
 		//remove ./
