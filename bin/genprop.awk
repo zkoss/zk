@@ -13,19 +13,19 @@ BEGIN {
 	key = ""
 }
 
-END {
-	printf  "}\n"
-}
-
-$1=="#-" {
+$1 == "#-" {
 	key = $2
 }
 
-key!="" && NF>=2 && /^[1-9a-f]/ {
+key != "" && NF >= 2 && /^[1-9a-f]/ {
 	printf "\tstatic final int %s = 0x%s + MESSAGE_ID;\n", key, $1
 	key = ""
 }
 
 /^0/ {
 	printf "error: the hexadecimal (%s) must starts at 1000 and in lower case", $1
+}
+
+END {
+	printf  "}\n"
 }
