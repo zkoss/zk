@@ -592,7 +592,7 @@ zkMap._toofast = function () {
 
 //progressmeter//
 zkPMeter = {};
-zkPMeter.init = function (cmp) {
+zkPMeter.onSize = zkPMeter.onVisi = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
 		var val = $int(getZKAttr(cmp, "value"));
@@ -601,8 +601,8 @@ zkPMeter.init = function (cmp) {
 };
 zkPMeter.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
-	if ("z.value" == nm)
-		zkPMeter.init(cmp);
+	if ("z.value" == nm || "style.width" == nm)
+		zkPMeter.onSize(cmp);
 	return true;
 }
 
