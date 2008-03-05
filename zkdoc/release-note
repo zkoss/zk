@@ -55,6 +55,7 @@ ZK 3.0.4 Freshly
   1904094: Combobox onChanging stops when selecting with Return key
   1907640: Long operation failed to update browser with Glassfish v1
   1906898: Some characters paralyze client engine to update
+  1899749: Progressmeter: Rendering issues
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
