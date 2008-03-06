@@ -65,6 +65,7 @@ ZK 3.0.4 Freshly
   1908466: Fileupload bugs: cancel and temporarily out-of-service
   1908569: wrong update-uri for some servers, such as pluto, and Ofbiz
   1907673: Impossible to use setCtrlKeys("#del")
+  1908188: Popup.open(x,y) error if popup has onOpen eventlistener
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
