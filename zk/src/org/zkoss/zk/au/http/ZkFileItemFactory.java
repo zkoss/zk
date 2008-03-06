@@ -25,6 +25,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
@@ -42,8 +43,8 @@ import org.zkoss.zk.ui.impl.Attributes;
 
 	private final Desktop _desktop;
 	/** The total length (content length). */
-	private final long _cbtotal;
-	/** # of bytes being received x 100. */
+	private long _cbtotal;
+	/** # of bytes being received. */
 	private long _cbrcv;
 
 	/*package*/ ZkFileItemFactory(Desktop desktop, HttpServletRequest request) {
@@ -66,11 +67,11 @@ import org.zkoss.zk.ui.impl.Attributes;
 		_desktop.setAttribute(Attributes.UPLOAD_SIZE, new Long(_cbtotal));
 	}
 
-	/*package*/ void onProgress(int diff) {
+	/*package*/ void onProgress(long cbRead) {
 		int percent = 0;
 		if (_cbtotal > 0) {
-			_cbrcv += diff * 100;
-			percent = (int)(_cbrcv / _cbtotal);
+			_cbrcv = cbRead;
+			percent = (int)(_cbrcv * 100 / _cbtotal);
 		}
 
 		_desktop.setAttribute(Attributes.UPLOAD_PERCENT, new Integer(percent));
@@ -81,7 +82,6 @@ import org.zkoss.zk.ui.impl.Attributes;
 	boolean isFormField, String fileName) {
 		return new ZkFileItem(fieldName, contentType, isFormField, fileName,
 			getSizeThreshold(), getRepository());
-
 	}
 
 	//-- helper classes --//
@@ -102,41 +102,13 @@ import org.zkoss.zk.ui.impl.Attributes;
 			final String charset = super.getCharSet();
 			return charset != null ? charset: "UTF-8";
 		}
-		public OutputStream getOutputStream() throws IOException {
-			final OutputStream out = super.getOutputStream();
-			if(isFormField()) return out;
-			return new ZkOutputStream(out);
-		}
 	}
 
-	/** The output stream.
-	 */
-	/*package*/ class ZkOutputStream extends OutputStream {
-		private final OutputStream _out;
-		/*package*/ ZkOutputStream(OutputStream out) {
-			_out = out;
-		}
-
-		public void close() throws IOException {
-			_out.close();
-		}
-		public void flush() throws IOException {
-			_out.flush();
-		}
-
-		public void write(byte[] bytes, int offset, int len) throws IOException {
-			_out.write(bytes, offset, len);
-			onProgress(len);
-		}
-
-		public void write(byte[] bytes) throws IOException {
-			_out.write(bytes);
-			onProgress(bytes.length);
-		}
-
-		public void write(int b) throws IOException {
-			_out.write(b);
-			onProgress(1);
-		}
-	}	
+	/*package*/ class ProgressCallback implements ProgressListener {
+	    public void update(long pBytesRead, long pContentLength, int pItems) {
+	    	onProgress(pBytesRead);
+	    	if (pContentLength >= 0)
+	    		_cbtotal = pContentLength;
+	    }
+	}
 }

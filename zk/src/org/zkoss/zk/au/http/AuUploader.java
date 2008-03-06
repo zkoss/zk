@@ -258,8 +258,11 @@ public class AuUploader implements AuProcessor {
 	Desktop desktop)
 	throws FileUploadException {
 		final Map params = new HashMap();
-		final ServletFileUpload sfu =
-			new ServletFileUpload(new ZkFileItemFactory(desktop, request));
+		final ZkFileItemFactory fty = new ZkFileItemFactory(desktop, request);
+		final ServletFileUpload sfu = new ServletFileUpload(fty);
+
+		sfu.setProgressListener(fty.new ProgressCallback());
+
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		final int maxsz = conf.getMaxUploadSize();
 		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);

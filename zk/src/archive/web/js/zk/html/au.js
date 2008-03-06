@@ -1455,12 +1455,13 @@ zkau.sendOnMove = function (cmp, keys) {
 		top = $int(top) - $int(xy[1]) + "px";
 	}
 	zkau.send({uuid: cmp.id, cmd: "onMove",
-		data: [left, top, keys ? keys: ""]},
+		data: [left, top, keys ? keys: ""], ignorable: true}, //yes, ignorable since it is implicit for modal window
 		zkau.asapTimeout(cmp, "onMove"));
 };
 zkau.sendOnZIndex = function (cmp) {
 	zkau.send({uuid: cmp.id, cmd: "onZIndex",
-		data: [cmp.style.zIndex]}, zkau.asapTimeout(cmp, "onZIndex"));
+		data: [cmp.style.zIndex], ignorable: true}, //yes, ignorable since it is implicit for modal window
+		zkau.asapTimeout(cmp, "onZIndex"));
 };
 zkau.sendOnSize = function (cmp, keys) {
 	zkau.send({uuid: cmp.id, cmd: "onSize",
@@ -1936,8 +1937,8 @@ zkau.beginUpload = function (wndid) {
 	zkau.endUpload();
 	zkau._upldWndId = wndid;
 	zkau._tmupload = setInterval(function () {
-		zkau.send({dtid: zkau.dtid(wndid), cmd: "getUploadInfo", data: null});
-	}, 660);
+		zkau.send({dtid: zkau.dtid(wndid), cmd: "getUploadInfo", data: null, ignorable: true});
+	}, 1000);
 };
 zkau.updateUploadInfo = function (p, cb) {
 	if (cb <= 0) zkau.endUpload();
