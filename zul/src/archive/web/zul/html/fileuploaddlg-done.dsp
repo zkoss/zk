@@ -20,7 +20,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/web/html" prefix="h" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -33,9 +32,7 @@ ${z:outDeviceStyleSheets('ajax')}
 </head>
 <body>
  <c:if test="${!empty arg.alert}">
-	<h:box color="red">
-	<pre><c:out value="${arg.alert}"/></pre>
- 	</h:box>
+	<div style="border: 1px solid red;background: white"><c:out value="${arg.alert}"/></div>
 	<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="closeUpload()"/>
  </c:if>
 </body>
