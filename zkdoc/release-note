@@ -62,6 +62,7 @@ ZK 3.0.4 Freshly
   1903399: XulElement.setContext(Popup) doesn't work
   1906405: tooltip interferes with contex (context wont stay up)
   1908466: Fileupload bugs: cancel and temporarily out-of-service
+  1908569: wrong update-uri for some servers, such as pluto, and Ofbiz
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
