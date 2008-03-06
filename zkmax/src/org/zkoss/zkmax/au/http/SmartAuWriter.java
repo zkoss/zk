@@ -44,7 +44,7 @@ public class SmartAuWriter extends HttpAuWriter {
 
 	/** The first few bytes of the output header (byte[]). */
 	private static final byte[] OUTPUT_HEAD_BYTES = OUTPUT_HEAD.getBytes();
-	private static final ScalableTimer _timer = new ScalableTimer(20, 25);
+	private static ScalableTimer _timer;
 
 	private Task _tmoutTask;
 	/** The output stream. It is not null only if _tmoutTask is not null. */
@@ -53,8 +53,19 @@ public class SmartAuWriter extends HttpAuWriter {
 	private boolean _timeout;
 
 	public SmartAuWriter() {
+		if (_timer == null)
+			_timer = newTimer();
 	}
 
+	/** Creates an instance of {@lik ScalableTimer}.
+	 * <p>By default, it creates a scalable timer that will use at most
+	 * 50 real timers (i.e., new ScalableTimer(50, 25)).
+	 * If you want to change it, you can override this method.
+	 * @since 3.0.4
+	 */
+	protected ScalableTimer newTimer() {
+		return new ScalableTimer(50, 25);
+	}
 	/** Opens the connection.
 	 * It starts a timer and generate some output to client first if
 	 * the processing take more than the time specified in the timeout argument.
