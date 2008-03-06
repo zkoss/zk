@@ -81,7 +81,7 @@ function zips
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
 						else
-							cp -p ./"$f" $dst/${f%.js}-org.js
+							cp -p ./"$f" $dst/${f%.js}.org.js
 								#always make a copy so we can use them if we want to debug them
 						fi
 					fi
