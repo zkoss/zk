@@ -37,8 +37,8 @@ zkBox.rmAttr = function (cmp, nm) {
 	}
 	return false;
 };
-/**zkBox.onVisi = zkBox.onSize = function (cmp) {
-	if (zk.opera && cmp.style.width) cmp.style.tableLayout = "auto"; 
+zkBox.onVisi = zkBox.onSize = function (cmp) {
+	if (!getZKAttr(cmp, "hasSplt")) return;
 	var vert = getZKAttr(cmp, "vert") == "true";
 	var nd = vert ? cmp.rows : cmp.rows[0].cells;
 	var total = vert ? cmp.offsetHeight : cmp.offsetWidth;
@@ -55,7 +55,7 @@ zkBox.rmAttr = function (cmp, nm) {
 				total -= d.offsetWidth;
 			}
 		}
-};*/
+};
 ////
 zkSplt = {};
 

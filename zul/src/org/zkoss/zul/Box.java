@@ -396,9 +396,14 @@ public class Box extends XulElement {
 		return sb.toString();
 	}
 	public String getOuterAttrs() {
-		if (!"vertical".equals(getOrient())) return super.getOuterAttrs();
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
+		for (Iterator it = getChildren().iterator(); it.hasNext();)
+			if (it.next() instanceof Splitter) {
+				HTMLs.appendAttribute(sb, "z.hasSplt", true);
+				break;
+			}
+		if ("vertical".equals(getOrient())) 
 			HTMLs.appendAttribute(sb, "z.vert", "true");
 		return sb.toString();
 	}
