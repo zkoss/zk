@@ -105,6 +105,7 @@ public class ScalableTimer {
 	}
 
 	private ScalableTimerInfo getInfo(ScalableTimerTask task) {
+		//No sync to select a proper ti since it is ok to race
 		ScalableTimerInfo ti = null;
 		for (int j = _tis.length; --j >= 0;) {
 			if (_tis[j].count < _threshold) {
