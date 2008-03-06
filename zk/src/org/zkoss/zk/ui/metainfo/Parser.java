@@ -377,6 +377,8 @@ public class Parser {
 			} else if ("xml".equals(nm)) {
 				noEmpty("xml", val, pi);
 				pgdef.setFirstLine("<?xml " + val + "?>");
+			} else if ("complete".equals(nm)) {
+				pgdef.setComplete("true".equals(val));
 			} else {
 				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
 			}

@@ -98,6 +98,7 @@ public class PageDefinition extends NodeInfo {
 	private Class _expfcls;
 	private final ComponentDefinitionMap _compdefs;
 	private Boolean _cacheable;
+	private boolean _complete;
 
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
@@ -506,6 +507,36 @@ public class PageDefinition extends NodeInfo {
 		_cacheable = cacheable;
 	}
 
+	/** Returns if the page is a complete page.
+	 * By complete we mean the page has everything that the client expects.
+	 * For example, for HTML output, the page will generate
+	 * the HTML, HEAD and BODY tags.
+	 *
+	 * <p>By default (false), we assume a page is complete if and only if
+	 * it is <em>not</em> included by other page.
+	 *
+	 * <p>If you have a page that has a complete HTML page and
+	 * it is included by other page, you have to specify the complete flag
+	 * to be true.
+	 * @since 3.0.4
+	 */
+	public boolean isComplete() {
+		return _complete;
+	}
+	/** Sets if the page is a complete page.
+	 * <p>Default: false. It means a page is complete if and only if it
+	 * is <em>not</em> included by other page.
+	 *
+	 * @param complete whether the page is complete.
+	 * If true, this page is assumed to be complete no matter it is included
+	 * or not. If false, this page is assumed to be complete if it is
+	 * not included by other page.
+	 * @see #isComplete
+	 * @since 3.0.4
+	 */
+	public void setComplete(boolean complete) {
+		_complete = complete;
+	}
 	/** Adds a root attribute.
 	 * The previous attributee of the same will be replaced.
 	 *
@@ -725,6 +756,7 @@ public class PageDefinition extends NodeInfo {
 				public Boolean getCacheable() {return _cacheable;}
 				public Class getExpressionFactoryClass() {return _expfcls;}
 			});
+		page.setComplete(_complete);
 	}
 
 	//NodeInfo//

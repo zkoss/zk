@@ -157,6 +157,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private transient NS _ns;
 	/** A list of {@link VariableResolver}. */
 	private transient List _resolvers;
+	private boolean _complete;
 
 	/** Constructs a page by giving the page definition.
 	 *
@@ -570,6 +571,13 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return (Component)_fellows.get(compId);
 	}
 
+	public boolean isComplete() {
+		return _complete;
+	}
+	public void setComplete(boolean complete) {
+		_complete = complete;
+	}
+
 	//-- PageCtrl --//
 	public void init(PageConfig config) {
 		if (_desktop != null)
@@ -811,7 +819,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final boolean bIncluded = asyncUpdate || exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
 		final String uri = (String)
-			(bIncluded ? _pgURI: _dkURI)
+			(bIncluded && !_complete ? _pgURI: _dkURI)
 				.getValue(_langdef.getEvaluator(), this);
 				//desktop and page URI is defined in language
 
