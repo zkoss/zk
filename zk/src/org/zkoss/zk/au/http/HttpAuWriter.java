@@ -94,6 +94,9 @@ public class HttpAuWriter implements AuWriter{
 			if (bs != null) data = bs; //yes, browser support compress
 		}
 
+		response.setContentType(CONTENT_TYPE);
+			//we have to set content-type again. otherwise, tomcat might
+			//fail to preserve what is set in open()
 		response.setContentLength(data.length);
 		response.getOutputStream().write(data);
 		response.flushBuffer();
