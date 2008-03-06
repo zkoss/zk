@@ -249,7 +249,7 @@ public class ClassWebResource {
 	 * Java (i.e., uncompressed) file instead of the compressed one.
 	 * For example, if {@link #service} is called to load abc.js,
 	 * and {@link #isDebugJS}, then {@link #service} will try
-	 * to load abc-org.js first. If not found, it load ab.js insted.
+	 * to load abc.org.js first. If not found, it load ab.js insted.
 	 *
 	 * <p>If {@link #isDebugJS} is false (default),
 	 * abc.js is always loaded.
@@ -327,7 +327,7 @@ public class ClassWebResource {
 
 		if (_debugJS && pi.endsWith(".js")) {
 			final String orgpi = Servlets.locate(_ctx, request,
-				pi.substring(0, pi.length() - 3) + "-org.js",
+				pi.substring(0, pi.length() - 3) + ".org.js",
 				_cwc.getLocator());
 			is = getResourceAsStream(orgpi);
 			if (is != null) pi = orgpi;
