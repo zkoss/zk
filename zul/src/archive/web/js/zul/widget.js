@@ -471,7 +471,8 @@ zkImg = {};
 if (zk.ie6Only) {
 	//Request 1522329: PNG with alpha color in IE
 	//To simplify the implementation, Image.java invalidates instead of smartUpdate
-	zkImg.onSize = function (cmp) {
+	zkImg.init = function (cmp) {
+		// this function should be invoked faster than zkau.initdrag(), otherwise its drag-drop will fail.
 		return zkImg._fixpng(cmp);
 	};
 	zkImg._fixpng = function (img) {
