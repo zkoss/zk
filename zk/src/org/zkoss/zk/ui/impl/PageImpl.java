@@ -619,22 +619,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			}
 		}
 
-		Class cls = config.getExpressionFactoryClass();
-		if (cls != null)
-			setExpressionFactoryClass(cls);
-
 		String s = config.getHeaders();
 		if (s != null) _headers = s;
-		s = config.getRootAttributes();
-		if (s != null) _rootAttrs = s;
-		s = config.getContentType();
-		if (s != null) _contentType = s;
-		s = config.getDocType();
-		if (s != null) _docType = s;
-		s = config.getFirstLine();
-		if (s != null) _firstLine = s;
-		Boolean b = config.getCacheable();
-		if (b != null) _cacheable = b;
 
 		if (_title.length() == 0) {
 			s = config.getTitle();
@@ -719,7 +705,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return _rootAttrs;
 	}
 	public void setRootAttributes(String rootAttrs) {
-		_rootAttrs = rootAttrs;
+		_rootAttrs = rootAttrs != null ? rootAttrs: "";
 	}
 	public String getContentType() {
 		return _contentType;

@@ -348,12 +348,6 @@ public class UiEngineImpl implements UiEngine {
 					public String getTitle() {return null;}
 					public String getStyle() {return null;}
 					public String getHeaders() {return null;}
-					public String getRootAttributes() {return null;}
-					public String getContentType() {return null;}
-					public String getDocType() {return null;}
-					public String getFirstLine() {return null;}
-					public Boolean getCacheable() {return null;}
-					public Class getExpressionFactoryClass() {return null;}
 				});
 				richlet.service(page);
 			}

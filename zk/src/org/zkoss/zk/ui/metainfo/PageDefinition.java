@@ -731,7 +731,8 @@ public class PageDefinition extends NodeInfo {
 	 * It setup the identifier and title, and adds it to desktop.
 	 */
 	public void init(final Page page, final boolean evalHeaders) {
-		((PageCtrl)page).init(
+		final PageCtrl pageCtrl = (PageCtrl)page;
+		pageCtrl.init(
 			new PageConfig() {
 				public String getId() {return _id;}
 				public String getUuid() {return null;}
@@ -741,21 +742,22 @@ public class PageDefinition extends NodeInfo {
 					return evalHeaders ?
 						PageDefinition.this.getHeaders(page): "";
 				}
-				public String getRootAttributes() {
-					return PageDefinition.this.getRootAttributes(page);
-				}
-				public String getContentType() {
-					return PageDefinition.this.getContentType(page);
-				}
-				public String getDocType() {
-					return PageDefinition.this.getDocType(page);
-				}
-				public String getFirstLine() {
-					return PageDefinition.this.getFirstLine(page);
-				}
-				public Boolean getCacheable() {return _cacheable;}
-				public Class getExpressionFactoryClass() {return _expfcls;}
 			});
+
+		String s = getRootAttributes(page);
+		if (s != null) pageCtrl.setRootAttributes(s);
+
+		s = getContentType(page);
+		if (s != null) pageCtrl.setContentType(s);
+
+		s = getDocType(page);
+		if (s != null) pageCtrl.setDocType(s);
+
+		s = getFirstLine(page);
+		if (s != null) pageCtrl.setFirstLine(s);
+
+		if (_cacheable != null) pageCtrl.setCacheable(_cacheable);
+		if (_expfcls != null) page.setExpressionFactoryClass(_expfcls);
 		page.setComplete(_complete);
 	}
 

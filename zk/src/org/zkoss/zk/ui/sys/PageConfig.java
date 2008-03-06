@@ -60,39 +60,4 @@ public interface PageConfig {
 	 * @see PageCtrl#getHeaders
 	 */
 	public String getHeaders();
-	/** Returns the content that will be generated as the attributes
-	 * of the root element, or null if no special attribute is required.
-	 * <p>For HTML, the root element is the HTML element.
-	 * @see PageCtrl#getRootAttributes
-	 */
-	public String getRootAttributes();
-	/** Returns the content type, or null to use the device default.
-	 */
-	public String getContentType();
-	/** Returns the doc type (&lt;!DOCTYPE&gt;),
-	 * or null to use the device default.
-	 */
-	public String getDocType();
-	/** Returns the first line to be generated to the output,
-	 * or null if nothing to generate.
-	 *
-	 * <p>For XML devices, it is usually the xml processing instruction:<br/>
-	 * <code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-	 */
-	public String getFirstLine();
-	/** Returns if the client can cache the rendered result, or null
-	 * to use the device default.
-	 */
-	public Boolean getCacheable();
-	/** Returns the implementation of the expression factory that
-	 * is used by this page, or null if
-	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
-	 * is used.
-	 *
-	 * <p>The returned class must implement
-	 * {@link org.zkoss.xel.ExpressionFactory}.
-	 *
-	 * @since 3.0.4
-	 */
-	public Class getExpressionFactoryClass();
 }
