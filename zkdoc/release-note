@@ -4,6 +4,7 @@ ZK 3.0.4 Freshly
   1904532: Grid/Listbox/Tree support the fixed layout concept
   1902777: A way to pass Object to included page with include comp
   1906138: A way to specify whether the item is checkable(Listbox/Tree)
+  1908430: A way to catch SizeLimitExceededException in Fileupload
   1894194: Window.setMode("modal") shall not suspend even in listener
   1898211: An option to use uncompress javascript codes
   1886684: Translate messages to Czech. Thank Pavel Mica for his contribution.
