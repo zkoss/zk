@@ -47,8 +47,6 @@ public class SmartAuWriter extends HttpAuWriter {
 	private static ScalableTimer _timer;
 
 	private Task _tmoutTask;
-	/** The output stream. It is not null only if _tmoutTask is not null. */
-	private HttpServletResponse _res;
 	/** true if timeout happens. */
 	private boolean _timeout;
 
@@ -72,10 +70,9 @@ public class SmartAuWriter extends HttpAuWriter {
 	 */
 	public AuWriter open(Object request, Object response, int timeout)
 	throws IOException {
-		if (timeout > 0) {
-			_res = (HttpServletResponse)response;
-			_timer.schedule(_tmoutTask = new Task(), timeout);
-		}
+		if (timeout > 0)
+			_timer.schedule(
+				_tmoutTask = new Task((HttpServletResponse)response), timeout);
 		return super.open(request, response, timeout);
 	}
 	protected void flush(HttpServletRequest request, HttpServletResponse response)
@@ -87,7 +84,6 @@ public class SmartAuWriter extends HttpAuWriter {
 		final boolean timeout;
 		synchronized (this) {
 			_tmoutTask = null;
-			_res = null;
 			timeout = _timeout;
 			_timeout = false;
 		}
@@ -105,6 +101,12 @@ public class SmartAuWriter extends HttpAuWriter {
 	}
 
 	private class Task extends ScalableTimerTask {
+		/** The output stream. It is not null only if _tmoutTask is not null. */
+		private final HttpServletResponse _res;
+
+		private Task(HttpServletResponse response) {
+			_res = response;
+		}
 		public void exec() {
 			synchronized (SmartAuWriter.this) {
 				if (_tmoutTask != null) {
@@ -119,7 +121,6 @@ public class SmartAuWriter extends HttpAuWriter {
 						log.warning("Ignored: failed to send the head\n"+Exceptions.getMessage(ex));
 					}
 					_tmoutTask = null; //mark as done
-					_res = null; //clean up
 				}
 			}
 		}
