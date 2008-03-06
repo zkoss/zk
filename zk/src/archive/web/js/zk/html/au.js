@@ -746,7 +746,7 @@ zkau.setAttr = function (cmp, name, value) {
 			cmp.style[name] = value;
 
 			if ("width" == name && (!value || value.indexOf('%') < 0) //don't handle width with %
-			&& "true" != getZKAttr(cmp, "float")) {
+			&& !getZKAttr(cmp, "float")) {
 				var ext = $e(cmp.id + "!chdextr");
 				if (ext && $tag(ext) == "TD" && ext.colSpan == 1)
 					ext.style.width = value;
@@ -1212,7 +1212,7 @@ zkau._onDocMouseover = function (evt) {
 					x: Event.pointerX(evt) + 1, y: Event.pointerY(evt) + 2
 					 //Bug 1572286: position tooltip with some offset to allow
 				};
-				if (open) zkau._openTip(cmp.id);
+				if (open) zkau._openTip(cmp.id, true);
 				else setTimeout("zkau._openTip('"+cmp.id+"')", zk_tipto);
 			}
 			return; //done
@@ -1294,17 +1294,22 @@ zkau._doClientInfo = function () {
 	}
 };
 
-zkau._openTip = function (cmpId) {
+zkau._openTip = function (cmpId, enforce) {
+	if (!zkau._tipz || (zkau._tipz.open && !enforce))
+		return;
+
+	//Bug 1906405: prevent tip if any float is opened
+ 	if (!enforce && zkau.anyFloat())
+		zkau._tipz = null;
+ 	else if (!cmpId || cmpId == zkau._tipz.cmpId) {
 	//We have to filter out non-matched cmpId because user might move
 	//from one component to another
-	if (zkau._tipz && !zkau._tipz.open
-	 && (!cmpId || cmpId == zkau._tipz.cmpId)) {
 		var tip = $e(zkau._tipz.tipId);
 		zkau.closeFloats(tip, $e(cmpId));
 		if (tip) {
 			var cmp = $e(cmpId);
 			zkau._tipz.open = true;
-			
+
 			tip.style.position = "absolute";
 			zk.setVParent(tip); //FF: Bug 1486840, IE: Bug 1766244
 			zkau._autopos(tip, zkau._tipz.x, zkau._tipz.y);
@@ -1327,6 +1332,8 @@ zkau._parentByZKAttr = function (n, attr1, attr2) {
 	for (; n; n = $parent(n)) {
 		if (attr1 && getZKAttr(n, attr1)) return n;
 		if (attr2 && getZKAttr(n, attr2)) return n;
+		if (getZKAttr(n, "float")) break;
+			//tooltip/popup/context might be inside the component
 	}
 	return null;
 };
@@ -1470,6 +1477,16 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
 };
 
+/** Test if any float is opened.
+ * @since 3.0.4
+ */
+zkau.anyFloat = function () {
+	for (var fts = zkau.floats, j = fts.length; --j >= 0;)
+		if (!fts[j].empty())
+			return true;
+	return false;
+};
+
 /** Closes popups and floats except any of the specified components
  * is an ancestor of popups and floats.
  *
@@ -1525,8 +1542,8 @@ zkau._closeFloats = function (method, shallClose, ancestors) {
 	}
 
 	//floats: combobox, context menu...
-	for (var j = zkau.floats.length; --j >= 0;) {
-		var ft = zkau.floats[j];
+	for (var fts = zkau.floats, j = fts.length; --j >= 0;) {
+		var ft = fts[j];
 		if (ft[method].apply(ft, ancestors))
 			closed = true;
 	}

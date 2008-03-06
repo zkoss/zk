@@ -1857,6 +1857,10 @@ zk.Float = Class.create();
 zk.Float.prototype = {
 	initialize: function () {
 	},
+	/** returns true if no float at all. */
+	empty: function () {
+		return !this._ftid;
+	},
 	/** Closes this float if the specified ID is matched.
 	 * @return whether it is closed
 	 */
@@ -1919,6 +1923,10 @@ zk.Floats.prototype = {
 	initialize: function () {
 		this._ftids = [];
 		this._aspps = {}; //(id, whether a float behaves like a popup)
+	},
+	/** returns true if no float at all. */
+	empty: function () {
+		return !this._ftids.length;
 	},
 	/** Closes this float if the specified ID is matched.
 	 * @return whether it is closed
@@ -2107,7 +2115,7 @@ zk.hide = function (id, bHide) {
 };
 /** Shows the exterior. */
 zk._showExtr = function (n) {
-	if ("true" != getZKAttr(n, "float")) {
+	if (!getZKAttr(n, "float")) {
 		var ext = $e(n.id + "!chdextr");
 		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "";
@@ -2118,7 +2126,7 @@ zk._showExtr = function (n) {
 };
 /** Hides the exterior. */
 zk._hideExtr = function (n) {
-	if ("true" != getZKAttr(n, "float")) {
+	if (!getZKAttr(n, "float")) {
 		var ext = $e(n.id + "!chdextr");
 		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "none";
