@@ -17,13 +17,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk>
+[Safari only]
+Click "Tab 1" and then "Tab 2", and then the scrollbar disappeared
+(which is incorrect).
 <borderlayout height="500px">
 <north size="50%" border="true">
 <borderlayout>
 <west size="25%" border="true" flex="true">
-[Safari only]
-Click "Tab 1" and then "Tab 2", and then the scrollbar disappeared
-(which is incorrect).
 <tabbox width="400px" mold="accordion">
 	<tabs>
 		<tab label="Tab 1"/>
@@ -46,3 +47,4 @@ Click "Tab 1" and then "Tab 2", and then the scrollbar disappeared
 </north>
 <center border="true"/>
 </borderlayout>
+</zk>
