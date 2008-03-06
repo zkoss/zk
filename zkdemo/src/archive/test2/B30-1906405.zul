@@ -24,8 +24,8 @@ On the other hand, if the context menu is not shown, the tooltip shall
 show if the mouse point is on top of the image for a while.
 <zscript>contacts = new String[] {"Monday"};</zscript>
 <zk forEach="${contacts }">
-<window context="popup_${each}" tooltip="tooltip_${each}">
-	<vbox>
+<window>
+	<vbox context="popup_${each}" tooltip="tooltip_${each}">
 	<image src="/img/sun.jpg" />
 	<label value="${each}"/>
 	</vbox>
