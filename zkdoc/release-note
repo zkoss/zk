@@ -18,6 +18,7 @@ ZK 3.0.4 Freshly
   1899699: Wrong column size in listbox
   1905999: Messagebox: a way to listen what button is clicked
   1906110: Listbox: prevent paging component removed in paging mold
+  1908529: A way to specify an include page generates complete HTML pg
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
