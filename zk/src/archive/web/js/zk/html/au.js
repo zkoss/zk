@@ -1367,7 +1367,7 @@ zkau._onDocKeydown = function (evt) {
 	case 18: //Alt
 		return true;
 	case 44: //Ins
-	case 45: //Del
+	case 46: //Del
 		zkcode = keycode == 44 ? 'I': 'J';
 		break;
 	default:
