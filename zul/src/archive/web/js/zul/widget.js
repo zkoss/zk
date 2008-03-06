@@ -628,7 +628,8 @@ zkPop.context = function (ctx, ref) {
 	zkau.hideCovered();
 
 	if (zkau.asap(ctx, "onOpen"))
-		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
+		zkau.send({uuid: ctx.id, cmd: "onOpen",
+			data: ref ? [true, ref.id]: [true]});
 };
 zkPop.close = function (ctx) {
 	zkPop._pop.removeFloatId(ctx.id);

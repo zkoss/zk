@@ -237,6 +237,7 @@ zkMpop.context = function (ctx, ref) {
 		zkMenu._open(ctx, true);
 
 		if (zkau.asap(ctx, "onOpen"))
-			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
+			zkau.send({uuid: ctx.id, cmd: "onOpen",
+				data: ref ? [true, ref.id]: [true]});
 	}
 };
