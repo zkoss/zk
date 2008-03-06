@@ -66,7 +66,7 @@ import org.zkoss.zk.ui.impl.Attributes;
 		_desktop.setAttribute(Attributes.UPLOAD_SIZE, new Long(_cbtotal));
 	}
 
-	/*packageg*/ void onProgress(int diff) {
+	/*package*/ void onProgress(int diff) {
 		int percent = 0;
 		if (_cbtotal > 0) {
 			_cbrcv += diff * 100;
