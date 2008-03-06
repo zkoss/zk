@@ -113,8 +113,7 @@ public class AuUploader implements AuProcessor {
 			if (ex instanceof ComponentNotFoundException) {
 				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
 			} else {
-				log.realCauseBriefly("Failed to upload", ex);
-				alert = Exceptions.getMessage(ex);
+				alert = handleError(ex);
 			}
 		}
 
@@ -124,6 +123,33 @@ public class AuUploader implements AuProcessor {
 
 		Servlets.forward(ctx, request, response,
 			nextURI, attrs, Servlets.PASS_THRU_ATTR);
+	}
+	/** Handles the exception that was thrown when uploading files,
+	 * and returns the error message.
+	 * When uploading file(s) causes an exception, this method will be
+	 * called to generate the proper error message.
+	 *
+	 * <p>By default, it logs the error and then use {@link Exceptions#getMessage}
+	 * to retrieve the error message.
+	 *
+	 * <p>If you prefer not to log or to generate the custom error message,
+	 * you can extend this class and override this method.
+	 * Then, specify it in web.xml as follows.
+<code><pre>&lt;servlet&gt;
+  &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;processor0&lt;/param-name&gt;
+    &lt;param-value&gt;/upload=com.my.MyUploader&lt;/param-value&gt;
+  &lt;/init-param&gt;
+...</pre></code>
+	 * 
+	 * @param ex the exception.
+	 * Typical exceptions include org.apache.commons.fileupload .FileUploadBase.SizeLimitExceededException
+	 * @since 3.0.4
+	 */
+	protected String handleError(Throwable ex) {
+		log.realCauseBriefly("Failed to upload", ex);
+		return Exceptions.getMessage(ex);
 	}
 
 	/** Process fileitems named file0, file1 and so on.
