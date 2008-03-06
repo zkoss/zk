@@ -59,6 +59,7 @@ ZK 3.0.4 Freshly
   1900653: unexpected result with Path.getComponent
   1903077: JavaDoc Error: ComponentInfo.applyProperties() omits custom-attributes
   1903399: XulElement.setContext(Popup) doesn't work
+  1906405: tooltip interferes with contex (context wont stay up)
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
