@@ -24,13 +24,13 @@ class="B1899353"?>
 public class B1899353 extends HtmlMacroComponent{
 }
 </zscript>
-<window title="My First window" border="normal">
+<window title="Test" border="normal">
 	<attribute name="onCreate">
 		B1899353 b = new B1899353();
 		b.afterCompose();
 		b.setParent(test1);
 	</attribute>
-	Hello, World!
+	If you see this page, the bug is fixed.
 	<vbox id="test1"/>
 </window>
 </zk>
