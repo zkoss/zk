@@ -99,7 +99,7 @@ public class Iframe extends XulElement {
 	
 	/**
 	 * Define scroll bars
-	 * @param scrolling "yes" or "no" or "auto", "auto" by default
+	 * @param scrolling "true", "false", "yes" or "no" or "auto", "auto" by default
 	 * If null, "auto" is assumed.
 	 * @since 3.0.4
 	 */
@@ -284,7 +284,9 @@ public class Iframe extends XulElement {
 		HTMLs.appendAttribute(sb, "marginheight",  _marginheight);
 		HTMLs.appendAttribute(sb, "marginwidth",  _marginwidth);
 		if (!"auto".equals(_scrolling))
-			HTMLs.appendAttribute(sb, "scrolling",  _scrolling);
+			HTMLs.appendAttribute(sb, "scrolling", 
+				"true".equals(_scrolling) ? "yes":
+				"false".equals(_scrolling) ? "no": _scrolling);
 		if (_autohide)
 			HTMLs.appendAttribute(sb, "z.autohide", _autohide);
 		return sb.toString();
