@@ -467,8 +467,11 @@ for target in $targetList ; do
 	fi
 done
 end=`date +%s`
-buildTime=$(( $end - $start ))
-buildTimeMM=$(( $buildTime / 60 ))
-buildTimeSS=$(( $buildTime % 60 ))
-echo ""
-echo "Total build process time: ${buildTimeMM} min ${buildTimeSS} sec."
+if [ "$end" != "%s" ] ; then
+	buildTime=$(( $end - $start ))
+	buildTimeMM=$(( $buildTime / 60 ))
+	buildTimeSS=$(( $buildTime % 60 ))
+	echo ""
+	echo "Total build process time: ${buildTimeMM} min ${buildTimeSS} sec."
+fi
+
