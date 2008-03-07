@@ -43,7 +43,7 @@ public class Iframe extends XulElement {
 	/** Count the version of {@link #_media}. */
 	private int _medver;
 	/** Whether to hide when a popup or dropdown is placed on top of it. */
-	private boolean _autohide, _frameborder;
+	private boolean _autohide;
 
 	public Iframe() {
 	}
@@ -113,27 +113,6 @@ public class Iframe extends XulElement {
 	 */
 	public String getScrolling() {
 		return _scrolling;
-	}
-	
-	/**
-	 * Specifies whether or not to display a frame border.
-	 * <p>Default: false
-	 * @since 3.0.4
-	 */
-	public void setFrameborder(boolean frameborder) {
-		if (_frameborder != frameborder){
-			_frameborder = frameborder;
-			invalidate();
-		} 
-	}
-	
-	/**
-	 * Returns whether or not to display a frame border
-	 * <p>Default: false
-	 * @since 3.0.4
-	 */
-	public boolean isFrameborder() {
-		return _frameborder;
 	}
 	
 	/**
@@ -296,7 +275,6 @@ public class Iframe extends XulElement {
 		HTMLs.appendAttribute(sb, "marginheight",  _marginheight);
 		HTMLs.appendAttribute(sb, "marginwidth",  _marginwidth);
 		HTMLs.appendAttribute(sb, "scrolling",  _scrolling);
-		HTMLs.appendAttribute(sb, "frameborder",  _frameborder ? "1" : "0");
 		if (_autohide)
 			HTMLs.appendAttribute(sb, "z.autohide", _autohide);
 		return sb.toString();
