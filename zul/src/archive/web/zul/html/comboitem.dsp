@@ -19,5 +19,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <tr id="${self.uuid}" z.type="Cmit"${self.outerAttrs}${self.innerAttrs}>
-<td>${self.imgTag}</td><td><c:out value="${self.label}"/><c:if test="${!empty self.description}"><br/><span><c:out value="${self.description}"/></span></c:if>${self.content}</td>
+<td>${self.imgTag}</td><td><c:out value="${self.label}"/><c:if test="${!empty self.description}"><br/><span><c:out value="${self.description}"/></span></c:if><c:if test="${!empty self.content}"><span>${self.content}</span></c:if></td>
 </tr><%-- No space between td, because cb.js depends on it --%>
