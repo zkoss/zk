@@ -33,6 +33,10 @@ import org.zkoss.zul.impl.Utils;
 /**
  * Includes an inline frame.
  *
+ * <p>Unlike HTML iframe, this component doesn't have the frameborder
+ * property. Rather, use the CSS style to customize the border (like
+ * any other components).
+ *
  * @author tomyeh
  */
 public class Iframe extends XulElement {
@@ -96,10 +100,11 @@ public class Iframe extends XulElement {
 	/**
 	 * Define scroll bars
 	 * @param scrolling "yes" or "no" or "auto", "auto" by default
+	 * If null, "auto" is assumed.
 	 * @since 3.0.4
 	 */
 	public void setScrolling(String scrolling) {
-		if (scrolling == null) scrolling = "";
+		if (scrolling == null) scrolling = "auto";
 		if (!scrolling.equals(_scrolling)) {
 			_scrolling = scrolling;
 			invalidate();
@@ -267,14 +272,19 @@ public class Iframe extends XulElement {
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
+			new StringBuffer(64).append(super.getOuterAttrs())
+			.append(" frameborder=\"0\"");
+			//frameborder is default to 0
+			//User has to use style to customize the border
+
 		HTMLs.appendAttribute(sb, "align",  _align);
 		HTMLs.appendAttribute(sb, "name",  _name);
 		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
 		HTMLs.appendAttribute(sb, "longdesc",  getEncodedLongdesc());
 		HTMLs.appendAttribute(sb, "marginheight",  _marginheight);
 		HTMLs.appendAttribute(sb, "marginwidth",  _marginwidth);
-		HTMLs.appendAttribute(sb, "scrolling",  _scrolling);
+		if (!"auto".equals(_scrolling))
+			HTMLs.appendAttribute(sb, "scrolling",  _scrolling);
 		if (_autohide)
 			HTMLs.appendAttribute(sb, "z.autohide", _autohide);
 		return sb.toString();
