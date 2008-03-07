@@ -19,6 +19,8 @@ ZK 3.0.4 Freshly
   1905999: Messagebox: a way to listen what button is clicked
   1906110: Listbox: prevent paging component removed in paging mold
   1908529: A way to specify an include page generates complete HTML pg
+  1909250: A way to specify the component with long word wrapping
+  1909254: Enhance Iframe control like default Iframe tag
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
