@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml">
+	<binding id="wordwrap" applyauthorstyles="false">
+		<implementation>
+			<constructor>
+				//<![CDATA[			
+				var elem = this;
+				elem.addEventListener('overflow',
+					function() {
+						var exp = /<&#8203;\/*[&#8203;_\s="'\w]+>/g;
+						var h = elem.innerHTML;
+						for(var i = elem.childNodes.length; --i >=0;) {
+							if(elem.childNodes[i].nodeType != Node.TEXT_NODE || 
+								!elem.childNodes[i].nodeValue.trim().length)
+								continue;
+								
+							var txt = elem.childNodes[i].nodeValue, chars = txt.split(''),
+								newTxt = chars.join('&#8203;') + '&#8203;';					
+							newTxt = newTxt.replace(exp, reconstructTag);
+							h = h.replace(txt, newTxt);
+						}
+						elem.innerHTML = h;
+					},false);
+					
+					function reconstructTag(tag)	{
+						return tag.replace(/&#8203;/g, '');
+					}
+				//]]>
+			</constructor>
+		</implementation>
+	</binding>
+</bindings>
