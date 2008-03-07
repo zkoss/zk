@@ -75,7 +75,9 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
 	exit 0
 fi
 
-if [ -f /usr/bin/nawk ] ; then
+if [ -f /usr/bin/gawk ] ; then
+	awkpg=/usr/bin/gawk
+elif [ -f /usr/bin/nawk ] ; then
 	awkpg=/usr/bin/nawk
 else
 	fn=$(which nawk)
