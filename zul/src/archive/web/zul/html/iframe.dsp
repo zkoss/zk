@@ -18,5 +18,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<iframe id="${self.uuid}" z.type="zul.widget.Ifr" frameborder="0"${self.outerAttrs}${self.innerAttrs}>
+<iframe id="${self.uuid}" z.type="zul.widget.Ifr" ${self.outerAttrs}${self.innerAttrs}>
 </iframe>

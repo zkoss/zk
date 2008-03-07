@@ -37,13 +37,13 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Iframe extends XulElement {
 	private String _align, _name;
-	private String _src;
+	private String _src, _marginheight = "", _marginwidth = "", _scrolling = "auto", _longdesc;
 	/** The media. If not null, _src is generated automatically. */
 	private Media _media; 
 	/** Count the version of {@link #_media}. */
 	private int _medver;
 	/** Whether to hide when a popup or dropdown is placed on top of it. */
-	private boolean _autohide;
+	private boolean _autohide, _frameborder;
 
 	public Iframe() {
 	}
@@ -51,6 +51,119 @@ public class Iframe extends XulElement {
 		setSrc(src);
 	}
 
+	/**
+	 * Defines the top and bottom margins of the iframe
+	 * @param marginheight pixels only.
+	 * @since 3.0.4
+	 */
+	public void setMarginheight(String marginheight) {
+		if (marginheight == null) marginheight = "";
+		if (!marginheight.equals(_marginheight)) {
+			_marginheight = marginheight;
+			invalidate();
+		}
+	}
+	
+	/**
+	 * Returns the top and bottom margins of the iframe.
+	 * @since 3.0.4
+	 */
+	public String getMarginheight() {
+		return _marginheight;
+	}	
+	
+	/**
+	 * Defines the left and right margins of the iframe
+	 * @param marginwidth pixels only.
+	 * @since 3.0.4
+	 */
+	public void setMarginwidth(String marginwidth) {
+		if (marginwidth == null) marginwidth = "";
+		if (!marginwidth.equals(_marginwidth)) {
+			_marginwidth = marginwidth;
+			invalidate();
+		}
+	}
+	
+	/**
+	 * Returns the left and right margins of the iframe.
+	 * @since 3.0.4
+	 */
+	public String getMarginwidth() {
+		return _marginwidth;
+	}
+	
+	/**
+	 * Define scroll bars
+	 * @param scrolling "yes" or "no" or "auto", "auto" by default
+	 * @since 3.0.4
+	 */
+	public void setScrolling(String scrolling) {
+		if (scrolling == null) scrolling = "";
+		if (!scrolling.equals(_scrolling)) {
+			_scrolling = scrolling;
+			invalidate();
+		}
+	}
+	
+	/**
+	 * Return the scroll bars.
+	 * <p>Defalut: "auto"
+	 * @since 3.0.4
+	 */
+	public String getScrolling() {
+		return _scrolling;
+	}
+	
+	/**
+	 * Specifies whether or not to display a frame border.
+	 * <p>Default: false
+	 * @since 3.0.4
+	 */
+	public void setFrameborder(boolean frameborder) {
+		if (_frameborder != frameborder){
+			_frameborder = frameborder;
+			invalidate();
+		} 
+	}
+	
+	/**
+	 * Returns whether or not to display a frame border
+	 * <p>Default: false
+	 * @since 3.0.4
+	 */
+	public boolean isFrameborder() {
+		return _frameborder;
+	}
+	
+	/**
+	 * Sets a URL to a long description of the frame contents
+	 * @since 3.0.4
+	 */
+	public void setLongdesc(String longdesc) {
+		if (longdesc != null && longdesc.length() == 0)
+			longdesc = null;
+
+		if (!Objects.equals(_longdesc, longdesc)) {
+			_longdesc = longdesc;
+			smartUpdate("longdesc", getEncodedLongdesc());
+		}
+	}
+	
+	/**
+	 * Returns a URL to a long description of the frame contents
+	 * @since 3.0.4
+	 */
+	public String getLongdesc() {
+		return _longdesc;
+	}
+	
+	private String getEncodedLongdesc() {
+		final Desktop dt = getDesktop();
+		return dt != null ? dt.getExecution().encodeURL(
+				_longdesc != null ? _longdesc: "~./img/spacer.gif"):  "";
+	}
+	
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
 	 */
@@ -179,6 +292,11 @@ public class Iframe extends XulElement {
 		HTMLs.appendAttribute(sb, "align",  _align);
 		HTMLs.appendAttribute(sb, "name",  _name);
 		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
+		HTMLs.appendAttribute(sb, "longdesc",  getEncodedLongdesc());
+		HTMLs.appendAttribute(sb, "marginheight",  _marginheight);
+		HTMLs.appendAttribute(sb, "marginwidth",  _marginwidth);
+		HTMLs.appendAttribute(sb, "scrolling",  _scrolling);
+		HTMLs.appendAttribute(sb, "frameborder",  _frameborder ? "1" : "0");
 		if (_autohide)
 			HTMLs.appendAttribute(sb, "z.autohide", _autohide);
 		return sb.toString();
