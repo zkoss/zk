@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1909254.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar  7 12:21:16 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="ifram demo" border="normal">
+	<iframe id="ife" frameborder="true" scrolling="auto"
+		src="http://www.google.com" width="95%" />
+	<vbox>
+		<button label="has Scroll bar" onClick='ife.scrolling= "yes"' />
+		<button label="Not Scroll bar" onClick='ife.scrolling= "no"' />
+		<button label="has frameborder" onClick='ife.frameborder= true' />
+		<button label="Not frameborder"
+			onClick='ife.frameborder= false' />
+		<button label="has marginheight"
+			onClick='ife.marginheight= "50px"' />
+		<button label="Not marginheight" onClick='ife.marginheight= ""' />
+		<button label="has marginwidth"
+			onClick='ife.marginwidth= "50px"' />
+		<button label="Not marginwidth" onClick='ife.marginwidth= ""' />
+
+	</vbox>
+</window>
+
