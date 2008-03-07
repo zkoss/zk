@@ -20,6 +20,7 @@ ZK 3.0.4 Freshly
   1908529: A way to specify an include page generates complete HTML pg
   1909250: A way to specify the component with long word wrapping
   1909254: Enhance Iframe control like default Iframe tag
+  1908524: Comboitem: don't break before content to be more flexible
   1898649: The shading of Timebox should be the same with textbox
 
 * Bugs
@@ -81,6 +82,10 @@ ZK 3.0.4 Freshly
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
   + The CSS name called "inline-box" is renamed to "inline-block"
+  + There is no line break before the content of a comboitem if
+    it doesn't have the description. It is more flexible to customize
+    the look (such as in single line). To be backward-compatible,
+    specify the content to be "<br/>old content"
   + By default, the width of header of listbox/grid/tree includes
     the padding and margins defined in the style sheet (like ZK 2.4.1).
 	If you want the width of header to exclude the padding and margins
