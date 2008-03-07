@@ -15,12 +15,12 @@ ZK 3.0.4 Freshly
   1896600: A way to specify how the paging places in Grid/Listbox
   1896737: An easy way to let user know include a long operation page
   1898072: Clients.response shall be able NOT to overwrite prev
-  1899699: Wrong column size in listbox
   1905999: Messagebox: a way to listen what button is clicked
   1906110: Listbox: prevent paging component removed in paging mold
   1908529: A way to specify an include page generates complete HTML pg
   1909250: A way to specify the component with long word wrapping
   1909254: Enhance Iframe control like default Iframe tag
+  1898649: The shading of Timebox should be the same with textbox
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
@@ -68,6 +68,7 @@ ZK 3.0.4 Freshly
   1908569: wrong update-uri for some servers, such as pluto, and Ofbiz
   1907673: Impossible to use setCtrlKeys("#del")
   1908188: Popup.open(x,y) error if popup has onOpen eventlistener
+  1899699: Wrong column size in listbox
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
