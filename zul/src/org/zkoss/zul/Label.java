@@ -79,6 +79,11 @@ public class Label extends XulElement {
 	 * <dt>maxlength=0</dt>
 	 * <dd>hyphen has no effect</dd>
 	 * </dl>
+	 *
+	 * <p>Since 3.0.4, you can set the style class (@{link #setSclass})
+	 * to "word-wrap" to wrap a long word instead of using the hyphen
+	 * and maxlength property. However, word-wrap is not applicable to
+	 * Opera (it works fine with FF, IE and Safari).
 	 */
 	public int getMaxlength() {
 		return _maxlength;
@@ -143,7 +148,12 @@ public class Label extends XulElement {
 			invalidate();
 		}
 	}
-	/** Returns whether to hyphen a long word if maxlength is specified.
+	/** Returns whether to hyphenate a long word if maxlength is specified.
+	 *
+	 * <p>Since 3.0.4, you can set the style class (@{link #setSclass})
+	 * to "word-wrap" to wrap a long word instead of using the hyphen
+	 * and maxlength property. However, word-wrap is not applicable to
+	 * Opera (it works fine with FF, IE and Safari).
 	 *
 	 * <p>See {@link #getMaxlength} for the relationship among pre, hyphen and
 	 * maxlength.
