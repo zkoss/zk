@@ -46,7 +46,7 @@ if (!window.Boot_progressbox) { //not customized
 		} else html += "><div";
 		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
 		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
-		html += ' id="z-loading" style="visibility: hidden;" class="z-loading" style="left:'+x+';top:'+y+';">'
+		html += ' id="z-loading" class="z-loading" style="left:'+x+';top:'+y+';visibility: hidden;">'
 		+'<div class="z-loading-indicator">'
 		+'<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
 		+msg+'</div></div></div>';
