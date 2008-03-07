@@ -43,6 +43,7 @@ public class TimeboxDefault implements ComponentRenderer {
 		wh.write("<span id=\"").write(self.getUuid()).write('"')
 			.write(self.getOuterAttrs()).write(" z.type=\"zul.tb.Tmbox\" z.combo=\"true\">")
 			.write("<input id=\"").write(self.getUuid()).write("!real\" autocomplete=\"off\"")
+			.write(" class=\"").write(self.getSclass()).write("inp\"")
 			.write(self.getInnerAttrs()).write("/>")
 			.write("<span id=\"").write(self.getUuid()).write("!btn\" class=\"rbtnbk\">")
 			.write("<img src=\"").write(exec.encodeURL(self.getImage())).write("\"");
