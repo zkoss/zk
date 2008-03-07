@@ -18,4 +18,4 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/><%-- z.combo means an input with addition buttons --%>
-<span id="${self.uuid}"${self.outerAttrs} z.type="zul.tb.Tmbox" z.combo="true"><input id="${self.uuid}!real" autocomplete="off"${self.innerAttrs}/><span id="${self.uuid}!btn" class="rbtnbk"><img src="${c:encodeURL(self.image)}"${self.buttonVisible?'':' style="display:none"'}/></span></span>
+<span id="${self.uuid}"${self.outerAttrs} z.type="zul.tb.Tmbox" z.combo="true"><input id="${self.uuid}!real" class="${self.sclass}inp" autocomplete="off"${self.innerAttrs}/><span id="${self.uuid}!btn" class="rbtnbk"><img src="${c:encodeURL(self.image)}"${self.buttonVisible?'':' style="display:none"'}/></span></span>

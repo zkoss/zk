@@ -36,7 +36,7 @@ import org.zkoss.zul.mesg.MZul;
 /**
  * An edit box for holding a time (a java.util.Date Object , but only Hour & Minute are used.
  *
- * <p>Default {@link #getSclass}: datebox.
+ * <p>Default {@link #getSclass}: timebox.
  *
  * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
  * 
@@ -59,6 +59,7 @@ public class Timebox extends InputElement {
 	public Timebox() {
 		setCols(5);
 		setMaxlength(5);
+		setSclass("timebox");
 	}
 	public Timebox(Date date) throws WrongValueException {
 		this();

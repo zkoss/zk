@@ -9,7 +9,7 @@ button, input.button, input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
-.text, .comboboxinp, .dateboxinp, .bandboxinp {<%--sclass + "inp"--%>
+.text, .comboboxinp, .dateboxinp, .bandboxinp, .timeboxinp {<%--sclass + "inp"--%>
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
