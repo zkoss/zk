@@ -36,7 +36,7 @@ public class IframeDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Iframe self = (Iframe)comp;
-		wh.write("<iframe id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Ifr\" frameborder=\"0\"");
+		wh.write("<iframe id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Ifr\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.writeln("</iframe>");
 	}
