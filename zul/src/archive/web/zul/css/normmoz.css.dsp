@@ -5,5 +5,11 @@
 span.rbtnbk {<%-- button at the right edge --%>
 	margin: 0; padding: 0;
 }
-
+.word-wrap, .word-wrap div.cell-inner, .word-wrap div.foot-cell-inner, .word-wrap div.head-cell-inner {
+	overflow: hidden;
+	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
+}
+span.word-wrap {<%-- label use only --%>
+	display: block;
+}
 <%-- Append New --%>

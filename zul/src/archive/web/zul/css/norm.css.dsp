@@ -52,7 +52,9 @@ td.gamma {background: #F4F4F4;}
 	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
 	display:inline-block;
 }
-
+.word-wrap, .word-wrap div.cell-inner, .word-wrap div.foot-cell-inner, .word-wrap div.head-cell-inner {
+	word-wrap: break-word;
+}
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {
