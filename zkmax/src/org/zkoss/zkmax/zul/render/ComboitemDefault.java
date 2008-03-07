@@ -47,13 +47,12 @@ public class ComboitemDefault implements ComponentRenderer {
 			.write("<td>").write(self.getImgTag()).write("</td>\n<td>");
 
 		new Out(self.getLabel()).render(out);
-		if (!Strings.isBlank(self.getDescription())
-				|| !Strings.isBlank(self.getContent())) {
+		if (!Strings.isBlank(self.getDescription())) {
 			wh.write("<br/>\n<span>");
 			new Out(self.getDescription()).render(out);
-			wh.write("</span>").write(self.getContent());
+			wh.write("</span>");
 		}
-		wh.writeln("</td></tr>");
+		wh.write(self.getContent()).writeln("</td></tr>");
 	}
 
 }
