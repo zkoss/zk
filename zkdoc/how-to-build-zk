@@ -2,7 +2,9 @@ How to Build ZK
 
 * Install Ant 1.6.2 or above.
 
-* Install Cygwin 1.90 or above, if Windows is used.
+* Install Cygwin 1.90 or above if you are using Windows.
+
+* Install nawk or gawk if you are using Solaris, BSD and Mac.
 
 * Install Java 6 SDK or above
   ZK's target JVM is 1.4, but the compiler must be Java 6.
