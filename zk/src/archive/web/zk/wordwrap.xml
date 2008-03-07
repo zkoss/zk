@@ -3,23 +3,23 @@
 	<binding id="wordwrap" applyauthorstyles="false">
 		<implementation>
 			<constructor>
-				//<![CDATA[			
+				//<![CDATA[		
 				var elem = this;
 				elem.addEventListener('overflow',
 					function() {
 						var exp = /<&#8203;\/*[&#8203;_\s="'\w]+>/g;
-						var h = elem.innerHTML;
+						var node = document.createElement("DIV");
 						for(var i = elem.childNodes.length; --i >=0;) {
 							if(elem.childNodes[i].nodeType != Node.TEXT_NODE || 
 								!elem.childNodes[i].nodeValue.trim().length)
 								continue;
-								
+							node.innerHTML = ""; //clear
 							var txt = elem.childNodes[i].nodeValue, chars = txt.split(''),
-								newTxt = chars.join('&#8203;') + '&#8203;';					
-							newTxt = newTxt.replace(exp, reconstructTag);
-							h = h.replace(txt, newTxt);
+								newTxt = chars.join('&#8203;') + '&#8203;';
+							node.innerHTML = newTxt.replace(exp, reconstructTag);
+							elem.childNodes[i].nodeValue = node.textContent;;
 						}
-						elem.innerHTML = h;
+						node = null;
 					},false);
 					
 					function reconstructTag(tag)	{
