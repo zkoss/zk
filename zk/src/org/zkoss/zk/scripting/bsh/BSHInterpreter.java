@@ -266,7 +266,9 @@ implements SerializableAware, HierachicalAware {
 		//bind bshns and ns
 		Namespace p = ns.getParent();
 		NameSpace bshns = //Bug 1831534: we have to pass class manager
-			new NS(p != null ? prepareNS(p): null, _ip.getClassManager(), ns);
+			new NS(p != null ? prepareNS(p): _bshns, _ip.getClassManager(), ns);
+				//Bug 1899353: we have to use _bshns instead of null
+				//Reason: unknown
 		ns.setVariable(VAR_NS, new NSX(bshns), true);
 		return bshns;
 	}
