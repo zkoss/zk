@@ -181,16 +181,20 @@ public class Label extends XulElement {
 		final Component p = getParent();
 		return p == null || !isVisible() 
 			|| !isRawLabel(p) || !Components.isAutoId(getId())
-			|| getContext() != null || getTooltip() != null
-			|| getTooltiptext() != null || getPopup() != null
-			|| getAction() != null
-			|| getDraggable() != null || getDroppable() != null
-			|| getStyle() != null || getSclass() != null
-			|| getLeft() != null || getTop() != null
-			|| getWidth() != null || getHeight() != null
 			|| isAsapRequired(Events.ON_CLICK)
+			|| !isEmpty(getStyle()) || !isEmpty(getSclass())
+			|| !isEmpty(getContext()) || !isEmpty(getTooltip())
+			|| !isEmpty(getTooltiptext()) || !isEmpty(getPopup())
+			|| !"false".equals(getDraggable())
+			|| !"false".equals(getDroppable())
 			|| isAsapRequired(Events.ON_RIGHT_CLICK)
+			|| !isEmpty(getAction())
+			|| !isEmpty(getLeft()) || !isEmpty(getTop())
+			|| !isEmpty(getWidth()) || !isEmpty(getHeight())
 			|| isAsapRequired(Events.ON_DOUBLE_CLICK);
+	}
+	private static boolean isEmpty(String s) {
+		return s == null || s.length() == 0;
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =
