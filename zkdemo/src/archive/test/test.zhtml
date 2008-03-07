@@ -47,5 +47,9 @@
 	<center>
 	center something
 	</center>
+
+	<div>
+	<z:label value="This shall not have &lt;span&gt;"/>
+	</div>
 </body>
 </html>
