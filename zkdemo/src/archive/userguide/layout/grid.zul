@@ -57,7 +57,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Comparator asc = new RowLabelComparator(true),
 		dsc = new RowLabelComparator(false);
 	</zscript>
-	<grid fixedLayout="false">
+	<grid>
 		<columns sizable="true">
 			<column label="Type" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}"/>
 			<column label="Content"/>
