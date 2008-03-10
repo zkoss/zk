@@ -22,6 +22,7 @@ ZK 3.0.4 Freshly
   1909254: Enhance Iframe control like default Iframe tag
   1908524: Comboitem: don't break before content to be more flexible
   1898649: The shading of Timebox should be the same with textbox
+  1909434: JasperReports: set exporter parameters
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
