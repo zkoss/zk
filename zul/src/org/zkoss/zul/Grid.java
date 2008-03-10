@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -132,7 +133,7 @@ public class Grid extends XulElement {
 	private String _innerHeight = null,
 	_innerTop = "height:0px;display:none", _innerBottom = "height:0px;display:none";
 	private transient GridDrawerEngine _engine;
-	private boolean _fixedLayout = true;
+	private boolean _fixedLayout;
 
 	public Grid() {
 		setSclass("grid");
@@ -170,7 +171,7 @@ public class Grid extends XulElement {
 	}
 	/**
 	 * Returns the outline of grid whether is fixed layout.
-	 * <p>Default: true.
+	 * <p>Default: false.
 	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
 	 * @since 3.0.4
 	 */
@@ -1146,7 +1147,11 @@ public class Grid extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, RenderOnDemand {
+	implements InnerWidth, RenderOnDemand, ChildChangedAware {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return !isFixedLayout();
+		}
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;

@@ -39,6 +39,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -91,7 +92,7 @@ public class Tree extends XulElement {
 	private TreeModel _model;
 	private TreeitemRenderer _renderer;	
 	private transient TreeDataListener _dataListener;
-	private boolean _fixedLayout = true;
+	private boolean _fixedLayout;
 	
 
 	public Tree() {
@@ -130,7 +131,7 @@ public class Tree extends XulElement {
 	}
 	/**
 	 * Returns the outline of grid whether is fixed layout.
-	 * <p>Default: true.
+	 * <p>Default: false.
 	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
 	 * @since 3.0.4
 	 */
@@ -1451,7 +1452,11 @@ public class Tree extends XulElement {
 	 */
 	
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, Selectable {
+	implements InnerWidth, Selectable, ChildChangedAware {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return !isFixedLayout();
+		}
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;

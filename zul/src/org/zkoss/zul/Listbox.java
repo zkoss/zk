@@ -49,6 +49,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -162,7 +163,7 @@ public class Listbox extends XulElement {
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
-	private boolean _fixedLayout = true;
+	private boolean _fixedLayout;
 	
 	public Listbox() {
 		setSclass("listbox");
@@ -229,7 +230,7 @@ public class Listbox extends XulElement {
 	}
 	/**
 	 * Returns the outline of grid whether is fixed layout.
-	 * <p>Default: true.
+	 * <p>Default: false.
 	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
 	 * @since 3.0.4
 	 */
@@ -1857,7 +1858,11 @@ public class Listbox extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, Selectable, Cropper, RenderOnDemand {
+	implements InnerWidth, Selectable, Cropper, RenderOnDemand, ChildChangedAware {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return !inSelectMold() && !isFixedLayout();
+		}
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;

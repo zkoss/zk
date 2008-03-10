@@ -51,16 +51,14 @@ zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 	for (var i = bdfaker.cells.length; --i >= 0;) {
 		if (!zk.isVisible(hdfaker.cells[i])) continue;
 		
-		if (bdfaker.cells[i].offsetWidth !== hdfaker.cells[i].offsetWidth) {
-			bdfaker.cells[i].style.width = zk.revisedSize(bdfaker.cells[i], bdfaker.cells[i].offsetWidth) + "px";
-			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-			if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-			var cpwd = including ? zk.revisedSize(head.cells[i], $int(hdfaker.cells[i].style.width)) :
-				$int(hdfaker.cells[i].style.width);
-			head.cells[i].style.width = cpwd + "px";
-			var cell = head.cells[i].firstChild;
-			cell.style.width = zk.revisedSize(cell, cpwd) + "px";
-		}
+		bdfaker.cells[i].style.width = zk.revisedSize(bdfaker.cells[i], bdfaker.cells[i].offsetWidth) + "px";
+		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+		if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+		var cpwd = including ? zk.revisedSize(head.cells[i], $int(hdfaker.cells[i].style.width)) :
+			$int(hdfaker.cells[i].style.width);
+		head.cells[i].style.width = cpwd + "px";
+		var cell = head.cells[i].firstChild;
+		cell.style.width = zk.revisedSize(cell, cpwd) + "px";
 	}
 };
 zul.getRealHeader = function (rows) {
