@@ -336,12 +336,8 @@ public class Jasperreport extends HtmlBasedComponent {
 			if (_parameters==null)
 				params = new HashMap();
 			else {
-				if (_parameters.containsKey("exportParameter")) {
-					exportPara = (Map) _parameters.get("exportParameter");
-					params = _parameters;
-					params.remove("exportParameter");
-				}else
-					params = _parameters;
+				params = _parameters;
+				exportPara = (Map) params.remove("exportParameter");			
 			}
 			
 			if (_locale != null)
