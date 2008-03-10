@@ -330,7 +330,20 @@ public class Jasperreport extends HtmlBasedComponent {
 			}
 
 			// Default value
-			final Map params = _parameters != null ? _parameters: new HashMap();
+			final Map params;
+			Map exportPara = null; // the exporter parameters which user set
+			
+			if (_parameters==null)
+				params = new HashMap();
+			else {
+				if (_parameters.containsKey("exportParameter")) {
+					exportPara = (Map) _parameters.get("exportParameter");
+					params = _parameters;
+					params.remove("exportParameter");
+				}else
+					params = _parameters;
+			}
+			
 			if (_locale != null)
 				params.put(JRParameter.REPORT_LOCALE, _locale);
 			else if (!params.containsKey(JRParameter.REPORT_LOCALE))
@@ -348,6 +361,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 				
 				exporter = new JRPdfExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
@@ -361,6 +376,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 				
 				exporter = new JRXmlExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
@@ -372,7 +389,9 @@ public class Jasperreport extends HtmlBasedComponent {
 				
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 				
-				exporter = new JRHtmlExporter();				
+				exporter = new JRHtmlExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				
@@ -391,6 +410,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JRRtfExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
@@ -404,9 +425,11 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JRXlsExporter();
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,	Boolean.TRUE);
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
-				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,	Boolean.TRUE);
 				exporter.exportReport();
 
 				arrayOutputStream.close();
@@ -418,10 +441,11 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JExcelApiExporter();
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,	Boolean.TRUE);
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
-				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-						Boolean.TRUE);
 				exporter.exportReport();
 
 				arrayOutputStream.close();
@@ -433,6 +457,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JRCsvExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
@@ -445,6 +471,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JROdtExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
