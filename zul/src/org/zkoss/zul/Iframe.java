@@ -130,7 +130,7 @@ public class Iframe extends XulElement {
 
 		if (!Objects.equals(_longdesc, longdesc)) {
 			_longdesc = longdesc;
-			smartUpdate("longdesc", getEncodedLongdesc());
+			invalidate();
 		}
 	}
 	
@@ -280,7 +280,8 @@ public class Iframe extends XulElement {
 		HTMLs.appendAttribute(sb, "align",  _align);
 		HTMLs.appendAttribute(sb, "name",  _name);
 		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
-		HTMLs.appendAttribute(sb, "longdesc",  getEncodedLongdesc());
+		if (getLongdesc() != null) 
+			HTMLs.appendAttribute(sb, "longdesc",  getEncodedLongdesc());
 		HTMLs.appendAttribute(sb, "marginheight",  _marginheight);
 		HTMLs.appendAttribute(sb, "marginwidth",  _marginwidth);
 		if (!"auto".equals(_scrolling))
