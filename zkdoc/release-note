@@ -72,6 +72,7 @@ ZK 3.0.4 Freshly
   1908188: Popup.open(x,y) error if popup has onOpen eventlistener
   1899699: Wrong column size in listbox
   1899353: zscript throw exception with import statement.
+  1906311: TreeModel Problem
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
