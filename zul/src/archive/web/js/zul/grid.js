@@ -224,8 +224,8 @@ zk.Grid.prototype = {
 		switch (nm) {
 		case "z.innerWidth":
 			if (this.headtbl) this.headtbl.style.width = val;
-			if (this.bodytbl) this.headtbl.style.width = val;
-			if (this.foottbl) this.headtbl.style.width = val;
+			if (this.bodytbl) this.bodytbl.style.width = val;
+			if (this.foottbl) this.foottbl.style.width = val;
 			return true;
 		case "style.height":
 			this.element.style.height = val;
