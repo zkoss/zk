@@ -20,12 +20,14 @@ package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.ListIterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listheader;
 import org.zkoss.zul.fn.ZulFns;
 
 /**
@@ -52,30 +54,70 @@ public class ListboxPaging implements ComponentRenderer {
 				.write(self.getPaging())
 				.write("</div>");
 		}
-		wh.writeln("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"listbox-btable\"");
-		if (self.getListhead() != null)
-			wh.write(" style=\"table-layout:fixed\"");
-
-		//header
-		wh.writeln("><tbody class=\"listbox-head\">").writeComponents(self.getHeads()).writeln("</tbody>");
-
-		//body
-		wh.write("<tbody id=\"").write(uuid).writeln("!cave\">");
-		final int from = self.getVisibleBegin(), to = self.getVisibleEnd();
-		if (from < self.getItems().size()) {
-			ListIterator it = self.getItems().listIterator(from);
-			ZulFns.resetStripeClass(self);
-			for (int cnt = to - from + 1; it.hasNext() && --cnt >= 0;) {
-				final Component child = (Component) it.next();
-				ZulFns.setStripeClass(child);
-				child.redraw(out);
+		
+		if(self.getListhead() != null){
+			wh.write("<div id=\"").write(uuid).write("!head\" class=\"listbox-head\">")
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
+			if(self.getListhead() != null) {
+				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
+					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!hdfaker\" class=\"hidfakerz\">");
+					
+				for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
+					final Listheader child = (Listheader) it.next();
+					wh.write("<th id=\"").write(child.getUuid()).write("!hdfaker\"").write(child.getOuterAttrs())
+					.write("><div style=\"overflow:hidden\"></div></th>");
+				}
+				wh.write("</tr></tbody>");
 			}
+			wh.writeComponents(self.getHeads())
+				.write("</table></div>");
 		}
-		wh.writeln("</tbody>");
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"listbox-body\"");
+		if (self.getHeight() != null) wh.write(" style=\"overflow:hidden;height:").write(self.getHeight()).write("\"");
+		else if (self.getRows() > 1) wh.write(" style=\"overflow:hidden;height:").write(self.getRows() * 15).write("px\"");
+		
+		wh.write("><table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" id=\"")
+			.write(uuid).writeln("!cave\" class=\"listbox-btable\"");
+		if (self.isFixedLayout())
+			wh.write(" style=\"table-layout:fixed\"");
+		wh.write(">");
+		
+		if(self.getListhead() != null) {
+			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
+				.write("<tr id=\"").write(self.getListhead().getUuid()).write("!bdfaker\" class=\"hidfakerz\">");
+				
+			for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
+				final Listheader child = (Listheader) it.next();
+				wh.write("<th id=\"").write(child.getUuid()).write("!bdfaker\"").write(child.getOuterAttrs())
+				.write("><div style=\"overflow:hidden\"></div></th>");
+			}
+			wh.write("</tr></tbody>");
+		}
+		ZulFns.resetStripeClass(self);
+		for (Iterator it = self.getItems().iterator(); it.hasNext();) {
+			final Component child = (Component) it.next();
+			ZulFns.setStripeClass(child);
+			child.redraw(out);
+		}
+		wh.write("\n</table></div>");
 
-		//Footer
-		wh.writeln("<tbody class=\"listbox-foot\">").write(self.getListfoot())
-			.write("</tbody>\n</table>");
+		if(self.getListfoot() != null){
+			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"listbox-foot\">")
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
+			if(self.getListhead() != null) {
+				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
+					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!ftfaker\" class=\"hidfakerz\">");
+					
+				for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
+					final Listheader child = (Listheader) it.next();
+					wh.write("<th id=\"").write(child.getUuid()).write("!ftfaker\"").write(child.getOuterAttrs())
+					.write("><div style=\"overflow:hidden\"></div></th>");
+				}
+				wh.write("</tr></tbody>");
+			}
+			wh.writeln(self.getListfoot())
+				.write("</table></div>");
+		}
 
 		//Paging
 		if (self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
