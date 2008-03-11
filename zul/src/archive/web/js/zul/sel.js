@@ -85,6 +85,7 @@ zk.Selectable.prototype = {
 		}
 		//_headtbl might be null, while other must be NOT null
 		this.body = $e(this.id + "!body");
+		this.paging = $e(this.id + "!paging") != null;
 		if (this.body) {
 			this.body.style.overflow = "";
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
@@ -106,19 +107,7 @@ zk.Selectable.prototype = {
 					this.bodytbl.appendChild(document.createElement("TBODY"));
 				this.bodyrows = bds[this.head ? 1 : 0].rows;
 			}
-		} else {
-			this.paging = true;
-			this.body = $e(this.id + "!paging");
-			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-
-			var bs = this.bodytbl.tBodies;
-			for (var j = 0, bl = bs.length; j < bl; ++j)
-				if (bs[j].id) {
-					this.bodyrows = bs[j].rows;
-					break;
-				}
 		}
-
 		if (!zk.isRealVisible(this.element)) return;
 
 		if (!this.bodyrows) {
@@ -167,36 +156,35 @@ zk.Selectable.prototype = {
 			}
 		}
 
-		if (!this.paging) {
-			//FF: a small fragment is shown
-			//IE: Bug 1775014
-			if (this.headtbl && this.headrows.length) {
-				var empty = true;
-				l_out:
-				for (var j = this.headrows.length; j;) {
-					var headrow = this.headrows[--j];
-					for (var k = headrow.cells.length; k;) {
-						var n = headrow.cells[--k].firstChild; // Bug #1819037
-						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
-							if (!n.id || !n.id.endsWith("!hint")) {
-								empty = false;
-								break l_out;
-							}
-					}
+		
+		//FF: a small fragment is shown
+		//IE: Bug 1775014
+		if (this.headtbl && this.headrows.length) {
+			var empty = true;
+			l_out:
+			for (var j = this.headrows.length; j;) {
+				var headrow = this.headrows[--j];
+				for (var k = headrow.cells.length; k;) {
+					var n = headrow.cells[--k].firstChild; // Bug #1819037
+					for (n = n ? n.firstChild: n; n; n = n.nextSibling)
+						if (!n.id || !n.id.endsWith("!hint")) {
+							empty = false;
+							break l_out;
+						}
 				}
-				if (empty) this.head.style.height = "0px"; // Bug #1819037
-					//we have to hide if empty (otherwise, a small block is shown)					
-				else this.head.style.height = "";// Bug #1832359
 			}
-
-			this.body.onscroll = function () {
-				if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
-				if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
-				meta._render(zk.gecko ? 200: 60);
-					//Moz has a bug to send the request out if we don't wait long enough
-					//How long is enough is unknown, but 200 seems fine
-			};
+			if (empty) this.head.style.height = "0px"; // Bug #1819037
+				//we have to hide if empty (otherwise, a small block is shown)					
+			else this.head.style.height = "";// Bug #1832359
 		}
+
+		this.body.onscroll = function () {
+			if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
+			if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
+			if (!meta.paging) meta._render(zk.gecko ? 200: 60);
+				//Moz has a bug to send the request out if we don't wait long enough
+				//How long is enough is unknown, but 200 seems fine
+		};
 		
 	},
 	cleanup: function ()  {
@@ -474,19 +462,16 @@ zk.Selectable.prototype = {
 		case "style.width":
 		case "style.height":
 			zkau.setAttr(this.element, nm, val);
-			if (!this.paging) {
-				this._recalcSize();
-				return true;
-			}
-			break;
+			this._recalcSize();
+			return true;
 		case "scrollTop":
-			if (!this.paging && this.body) {
+			if (this.body) {
 				this.body.scrollTop = val;
 				return true;
 			}
 			break;
 		case "scrollLeft":
-			if (!this.paging && this.body) {
+			if (this.body) {
 				this.body.scrollLeft = val;
 				return true;
 			}
@@ -749,30 +734,6 @@ zk.Selectable.prototype = {
 	/** Calculates the size. */
 	_calcSize: function () {
 		this._calcHgh();	
-		if (this.paging) {// Bug #1826101
-			if (this.bodyrows && this.bodyrows.length) {
-				var head;
-				for (var j = 0, rl = this.bodyrows.length; j < rl; j++) {
-					if ($type(this.bodyrows[j]) == "Lhrs") {
-						head = this.bodyrows[j];
-						break;
-					}
-				}
-				if (head) {
-					for (var j = 0, hl = head.cells.length; j < hl; j++) {
-						var d = head.cells[j];
-						if (!zk.isVisible(d)) { //Bug #1867370
-							for (var k = this.bodyrows.length; --k >=0;)
-								if (this.bodyrows[k].cells[j] != d) 
-									this.bodyrows[k].cells[j].style.display = "none";
-							continue;
-						}
-					}
-				}
-			}
-			return; //nothing to adjust since single table
-		}
-
 		
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
@@ -942,7 +903,12 @@ zk.Selectable.prototype = {
 	/* Height of the head row. If now header, defval is returned. */
 	_headHgh: function (defVal) {
 		var n = this.headrows && this.headrows.length ? this.headrows[0]: null;
-		var hgh = n ? zk.offsetHeight($real(n)): 0; // Bug #1823218 
+		var hgh = n ? zk.offsetHeight($real(n)): 0; // Bug #1823218
+		if (this.paging) {
+			var pgit = $e(this.id + "!pgit"), pgib = $e(this.id + "!pgib");
+			if (pgit) hgh += pgit.offsetHeight;
+			if (pgib) hgh += pgib.offsetHeight;
+		} 
 		return hgh ? hgh: defVal;
 	},
 	/** Returns the size for vflex

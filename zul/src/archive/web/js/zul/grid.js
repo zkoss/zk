@@ -31,6 +31,7 @@ zk.Grid.prototype = {
 		if (!this.element) return;
 
 		this.body = $e(this.id + "!body");
+		this.paging = $e(this.id + "!paging") != null;
 		if (this.body) {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 			
@@ -48,63 +49,52 @@ zk.Grid.prototype = {
 			if (this.bodytbl.tBodies && this.bodytbl.tBodies[this.head ? 1 : 0])
 				this.bodyrows = this.bodytbl.tBodies[this.head ? 1 : 0].rows;
 				//Note: bodyrows is null in FF if no rows, so no err msg
-		} else {
-			this.paging = true;
-			this.body = $e(this.id + "!paging");
-			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-
-			var bs = this.bodytbl.tBodies;
-			for (var j = 0, bl = bs.length; j < bl; ++j)
-				if (bs[j].id) {
-					this.bodyrows = bs[j].rows;
-					break;
-				}
 		}
 
 		if (!zk.isRealVisible(this.element)) return;
 
 		var meta = this; //the nested function only see local var
-		if (!this.paging && !this._inited) {
-			this._inited = true;
-		}
 
-		if (!this.paging) {
-			//FF: a small fragment is shown
-			//IE: Bug 1775014
-			if (this.headtbl && this.headrows.length) {
-				var empty = true;
-				l_out:
-				for (var j = this.headrows.length; j;) {
-					var headrow = this.headrows[--j];
-					for (var k = headrow.cells.length; k;) {
-						var n = headrow.cells[--k].firstChild; // Bug #1819037
-						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
-							if (!n.id || !n.id.endsWith("!hint")) {
-								empty = false;
-								break l_out;
-							}
-					}
+		//FF: a small fragment is shown
+		//IE: Bug 1775014
+		if (this.headtbl && this.headrows.length) {
+			var empty = true;
+			l_out:
+			for (var j = this.headrows.length; j;) {
+				var headrow = this.headrows[--j];
+				for (var k = headrow.cells.length; k;) {
+					var n = headrow.cells[--k].firstChild; // Bug #1819037
+					for (n = n ? n.firstChild: n; n; n = n.nextSibling)
+						if (!n.id || !n.id.endsWith("!hint")) {
+							empty = false;
+							break l_out;
+						}
 				}
-				if (empty) this.head.style.height = "0px"; // Bug #1819037
-				//we have to hide if empty (otherwise, a small block is shown)
-				else this.head.style.height = "";// Bug #1832359
-					
 			}
-
-			this.body.onscroll = function () {
-				if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
-				if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
-				meta._render(zk.gecko ? 200: 60);
-					//Moz has a bug to send the request out if we don't wait long enough
-					//How long is enough is unknown, but 200 seems fine
-			};
+			if (empty) this.head.style.height = "0px"; // Bug #1819037
+			//we have to hide if empty (otherwise, a small block is shown)
+			else this.head.style.height = "";// Bug #1832359
+				
 		}
+
+		this.body.onscroll = function () {
+			if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
+			if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
+			if (!meta.paging) meta._render(zk.gecko ? 200: 60);
+				//Moz has a bug to send the request out if we don't wait long enough
+				//How long is enough is unknown, but 200 seems fine
+		};
 	},
 	/* set the height. */
 	setHgh: function (hgh) {		
 		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
-			var h =  this.element.offsetHeight - 2 - (!this.paging ? (this.head ? this.head.offsetHeight : 0)
-				- (this.foot ? this.foot.offsetHeight : 0) : 0); // Bug #1835369
+			var h =  this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0)
+				- (this.foot ? this.foot.offsetHeight : 0); // Bug #1835369
+			if (this.paging) {
+				var pgit = $e(this.id + "!pgit"), pgib = $e(this.id + "!pgib");
+				if (pgit) h -= pgit.offsetHeight;
+				if (pgib) h -= pgib.offsetHeight;
+			}
 			if (h < 0) h = 0;
 			this.body.style.height = h + "px";
 						
@@ -129,20 +119,19 @@ zk.Grid.prototype = {
 		//Otherwise,
 		//IE: element's width will be extended to fit body
 		//FF and IE: sometime a horizontal scrollbar appear (though it shalln't)
-		if (!this.paging) { //note: we don't solve this bug for paging yet
-			var wd = this.element.style.width;
-			if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-				if (zk.ie6Only) this.element.style.overflow = "hidden";
-				wd = zk.revisedSize(this.element, this.element.offsetWidth) - (wd == "100%" ? 2 : 0);
-				if (wd < 0) wd = 0;
-				if (wd) wd += "px";
-				if (zk.ie6Only) this.element.style.overflow = "";
-			}
-			if (wd) {
-				this.body.style.width = wd;
-				if (this.head) this.head.style.width = wd;
-				if (this.foot) this.foot.style.width = wd;
-			}
+		//note: we don't solve this bug for paging yet
+		var wd = this.element.style.width;
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			if (zk.ie6Only) this.element.style.overflow = "hidden";
+			wd = zk.revisedSize(this.element, this.element.offsetWidth) - (wd == "100%" ? 2 : 0);
+			if (wd < 0) wd = 0;
+			if (wd) wd += "px";
+			if (zk.ie6Only) this.element.style.overflow = "";
+		}
+		if (wd) {
+			this.body.style.width = wd;
+			if (this.head) this.head.style.width = wd;
+			if (this.foot) this.foot.style.width = wd;
 		}
 	},
 	cleanup: function ()  {
@@ -169,31 +158,6 @@ zk.Grid.prototype = {
 	_calcSize: function () {
 		this.updSize();
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
-
-		if (this.paging) { // Bug #1826101
-			if (this.bodyrows && this.bodyrows.length) {
-				var head;
-				for (var j = 0, rl = this.bodyrows.length; j < rl; j++) {
-					if ($type(this.bodyrows[j]) == "Cols") {
-						head = this.bodyrows[j];
-						break;
-					}
-				}
-				if (head) {
-					for (var j = 0, hl = head.cells.length; j < hl; j++) {
-						var d = head.cells[j];
-						if (!zk.isVisible(d)) { //Bug #1867370
-							for (var k = this.bodyrows.length; --k >=0;)
-								if (this.bodyrows[k].cells[j] != d) 
-									this.bodyrows[k].cells[j].style.display = "none";
-							continue;
-						}
-					}
-				}
-			}
-			return; //nothing to adjust since single table
-		}
-
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
 			if (tblwd && this.body.offsetWidth - tblwd > 11) { //scrollbar
@@ -232,12 +196,12 @@ zk.Grid.prototype = {
 			if (zk.ie6Only && this.body) this.body.style.height = val;
 				// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
 			this.setHgh(val);
-			if (!this.paging) this._recalcSize();
+			this._recalcSize();
 			return true;
 		case "style":
 		case "style.width":
 			zkau.setAttr(this.element, nm, val);
-			if (!this.paging) this._recalcSize();
+			this._recalcSize();
 			return true;
 		case "z.scOddRow":
 			zkau.setAttr(this.element, nm, val);
@@ -247,13 +211,13 @@ zk.Grid.prototype = {
 			this._render(0);
 			return true;
 		case "scrollTop":
-			if (!this.paging && this.body) {
+			if (this.body) {
 				this.body.scrollTop = val;
 				return true;
 			}
 			break;
 		case "scrollLeft":
-			if (!this.paging && this.body) {
+			if (this.body) {
 				this.body.scrollLeft = val;
 				return true;
 			}

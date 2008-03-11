@@ -254,12 +254,12 @@ div.listbox, div.tree, div.grid {<%-- depends sclass --%>
 	background: #DAE7F6; border: 1px solid #7F9DB9;
 }
 div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-head tr,
-	div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr, div.tree-foot, 
+	div.grid-head tr, div.tree-foot, 
 	div.listbox-foot, div.grid-foot {<%-- always used. --%>
 	border: 0; overflow: hidden; width: 100%;
 }
 
-div.tree-head tr, div.listbox-head tr, div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
+div.tree-head tr, div.listbox-head tr, div.grid-head tr {<%-- always used. --%>
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
 div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th
@@ -305,13 +305,15 @@ div.listbox-paging, div.grid-paging {
 div.listbox-pgi, div.grid-pgi {
 	border-top: 1px solid #AAB; overflow: hidden;
 }
+div.listbox-pgi-t, div.grid-pgi-t {
+	border-bottom: 1px solid #AAB; overflow: hidden;
+}
 div.tree-body td, div.listbox-body td, div.listbox-paging td, div.tree-foot td, div.listbox-foot td {
 	cursor: pointer; padding: 0 2px;
 	font-size: small; font-weight: normal; overflow: hidden; 
 }
 
-div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, 
-	div.tree-foot, tbody.tree-foot {<%-- always used --%>
+div.listbox-foot, div.grid-foot, div.tree-foot{<%-- always used --%>
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
 
