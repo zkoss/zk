@@ -20,6 +20,10 @@ div.head-cell-inner {
 	white-space: nowrap;
 	<%-- Bug #1839960  --%>
 }
+div.cell-inner {
+	position: relative; width: 100%;
+	<%-- Bug #1825896  --%>
+}
 div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging {<%-- always used. --%>
 	position: relative;
 	<%-- Bug 1766244: we have to specify position:relative with overflow:auto --%>
