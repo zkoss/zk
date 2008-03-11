@@ -55,6 +55,9 @@ td.gamma {background: #F4F4F4;}
 .word-wrap, .word-wrap div.cell-inner, .word-wrap div.foot-cell-inner, .word-wrap div.head-cell-inner {
 	word-wrap: break-word;
 }
+.overflow-hidden {
+	overflow: hidden;
+}
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {
@@ -314,6 +317,9 @@ div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot,
 
 div.foot-cell-inner, div.cell-inner, div.head-cell-inner{
 	border: 0; margin: 0; padding: 0;
+}
+div.foot-cell-inner, div.head-cell-inner{
+	overflow: hidden;
 }
 <%-- faker uses only for grid/listbox/tree --%>
 tr.hidfakerz, tr.hidfakerz th, tr.hidfakerz div {
@@ -808,7 +814,7 @@ div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.
 td.menusp {
 	height: 7px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/sep.gif')});
-	background-repeat: no-repeat;
+	background-repeat: repeat-x;
 }
 td.menu1 {<%-- menuitem normal (unchecked) --%>
 	width: 11px;
