@@ -1035,6 +1035,10 @@ public class Tree extends XulElement {
 	
 	/** Sets the tree model associated with this tree. 
 	 *
+	 * <p>Note: changing a render will not cause the tree to re-render.
+	 * If you want it to re-render, you could assign the same model again 
+	 * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
+	 * 
 	 * <p>Author: jeffliu
 	 * @param model the tree model to associate, or null to dis-associate
 	 * any previous model.
