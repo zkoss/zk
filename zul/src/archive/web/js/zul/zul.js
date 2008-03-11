@@ -173,19 +173,8 @@ zulHdr.setSizable = function (cmp, sizable) {
 zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 	var iw;
 	if(!meta.paging) {
-		meta.bodytbl.style.width = meta.headtbl.style.width;
-		
-		var isFixed = getZKAttr(meta.element, "fixed") == "true";
-		if (meta.foottbl) {
-			meta.foottbl.style.width = meta.headtbl.style.width;
-			meta.ftfaker.cells[icol].style.width = meta.hdfaker.cells[icol].style.width;
-		}
-		if (meta.bodytbl) {
-			meta.bodytbl.style.width = meta.headtbl.style.width;
-			meta.bdfaker.cells[icol].style.width = meta.hdfaker.cells[icol].style.width;
-		}
-		
-		if(!isFixed) zul.adjustHeadWidth(meta.hdfaker, meta.bdfaker, meta.ftfaker, meta.bodyrows);
+		if(getZKAttr(meta.element, "fixed") != "true") 
+			zul.adjustHeadWidth(meta.hdfaker, meta.bdfaker, meta.ftfaker, meta.bodyrows);
 		iw = meta.headtbl.style.width;
 	} else iw = meta.bodytbl.style.width;
 	zkau.send({uuid: meta.id, cmd: "onInnerWidth",
@@ -300,12 +289,31 @@ zulHdr._endsizing = function (cmp, evt) {
 		for (var k = cells.length; --k >= 0;)
 			if (k !== cidx) total += cells[k].offsetWidth;
 
+		// For Opera, the code of adjusting width must be in front of the adjusting table.
+		// Otherwise, the whole layout in Opera always shows wrong.
+		if(!meta.paging) {
+			if (meta.foottbl) {
+				meta.ftfaker.cells[cidx].style.width = wd + "px";
+			}
+			if (meta.bodytbl) {
+				meta.bdfaker.cells[cidx].style.width = wd + "px";
+			}
+		}
+		
 		head.cells[cidx].style.width = wd + "px";
-
 		cmp.style.width = rwd + "px";
 		var cell = cmp.firstChild;
 		cell.style.width = zk.revisedSize(cell, rwd) + "px";
+		
 		table.style.width = total + wd + "px";		
+		if(!meta.paging) {	
+			if (meta.foottbl) {
+				meta.foottbl.style.width = table.style.width;	
+			}
+			if (meta.bodytbl) {
+				meta.bodytbl.style.width = table.style.width;	
+			}
+		}
 		if (evt) {
 			if (evt.altKey) keys += 'a';
 			if (evt.ctrlKey) keys += 'c';
