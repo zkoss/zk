@@ -73,6 +73,9 @@ ZK 3.0.4 Freshly
   1899699: Wrong column size in listbox
   1899353: zscript throw exception with import statement.
   1906311: TreeModel Problem
+  1911567: Listbox header shows onlyone listhead
+  1911129: Menupopup Separator looks odd
+  1825896: Databox's btn will not be covered when col resize to samller
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
