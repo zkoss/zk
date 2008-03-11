@@ -23,6 +23,7 @@ ZK 3.0.4 Freshly
   1908524: Comboitem: don't break before content to be more flexible
   1898649: The shading of Timebox should be the same with textbox
   1909434: JasperReports: set exporter parameters
+  1911773: Grid/Listbox support scrollbar in Paging Mold
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
@@ -76,6 +77,7 @@ ZK 3.0.4 Freshly
   1911567: Listbox header shows onlyone listhead
   1911129: Menupopup Separator looks odd
   1825896: Databox's btn will not be covered when col resize to samller
+  1911642: onColSize event isn't fired in Paging mold
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
