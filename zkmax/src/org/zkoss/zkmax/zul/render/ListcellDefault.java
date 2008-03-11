@@ -43,7 +43,10 @@ public class ListcellDefault implements ComponentRenderer {
 		wh.write("<td z.type=\"Lic\" id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write("><div id=\"").write(self.getUuid()).write("!cave\"")
-			.write(self.getLabelAttrs()).write(" class=\"cell-inner\">");
+			.write(self.getLabelAttrs()).write(" class=\"cell-inner ");
+			if (self.getListbox().isFixedLayout())
+				wh.write("overflow-hidden");
+			wh.write("\">");
 		wh.write(self.getColumnHtmlPrefix()).write(self.getImgTag());
 		new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);
 		wh.writeChildren(self);
