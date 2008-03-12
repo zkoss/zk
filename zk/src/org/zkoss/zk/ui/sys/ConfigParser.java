@@ -297,6 +297,10 @@ public class ConfigParser {
 				final String nm = IDOMs.getRequiredElementValue(el, "name");
 				final String val = IDOMs.getRequiredElementValue(el, "value");
 				config.setPreference(nm, val);
+			} else if ("system-property".equals(elnm)) {
+				final String nm = IDOMs.getRequiredElementValue(el, "name");
+				final String val = IDOMs.getRequiredElementValue(el, "value");
+				System.setProperty(nm, val);
 			} else {
 				throw new UiException("Unknown element: "+elnm+", at "+el.getLocator());
 			}
