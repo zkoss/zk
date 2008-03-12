@@ -387,6 +387,10 @@ zkDtbox.init = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
 	if (btn)
 		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
+
+	var pp = $e(cmp.id + "!pp");
+	if (pp) // Bug #1912363
+		zk.listen(pp, "click", zkDtbox.closepp);
 };
 
 zkDtbox.validate = function (cmp) {
@@ -598,6 +602,18 @@ zkDtbox.close = function (pp, focus) {
 
 	if (focus)
 		zk.asyncFocus(uuid + "!real");
+};
+zkDtbox.closepp = function (evt) {
+	if (!evt) evt = window.event;
+	var pp = Event.element(evt);
+	for (; pp; pp = pp.parentNode) {
+		if (pp.id) {
+			if (pp.id.endsWith("!pp"))
+				zkDtbox.close(pp, true);
+			return; //done
+		}
+		if (pp.onclick) return;
+	}
 };
 
 zk.FloatDatebox = Class.create();
