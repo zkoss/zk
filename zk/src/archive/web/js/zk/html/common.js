@@ -2063,6 +2063,14 @@ zk.remove = function (n) {
 	if (n) Element.remove(n);
 };
 
+/** An event listener that does nothing but stop event propogation.
+ * @since 3.0.4
+ */
+zk.doEventStop = function (evt) {
+	if (!evt) evt = window.event;
+	Event.stop(evt);
+};
+
 ////
 //show & hide
 /** The lowest level to make a component visible/invisible.
