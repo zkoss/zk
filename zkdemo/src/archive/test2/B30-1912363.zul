@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1912363.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 12 10:55:30     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<html><![CDATA[
+<ol>
+<li>Type in anything, say "mm"</li>
+<li>Click the dropdown button</li>
+<li>Click Thu to have the focus on poup</li>
+<li>Click anywhere other than datebox to close the popup</li>
+</ol>
+
+Then, the error message shall show up, but it doesn't
+]]></html>
+
+<datebox/>
+</window>
