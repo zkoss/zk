@@ -42,7 +42,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</listitem>
 	<listitem>
 	<listcell label="Jane"/>
-	<listcell label="FEMALE"/>
+	<listcell>
+	<datebox/>
+	</listcell>
 	</listitem>
 	<listitem>
 	<listcell label="Henry"/>
