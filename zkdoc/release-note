@@ -78,6 +78,7 @@ ZK 3.0.4 Freshly
   1911129: Menupopup Separator looks odd
   1825896: Databox's btn will not be covered when col resize to samller
   1911642: onColSize event isn't fired in Paging mold
+  1912363: Datebox doesn't fire error msg if clicks on Thu of dropdown
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
