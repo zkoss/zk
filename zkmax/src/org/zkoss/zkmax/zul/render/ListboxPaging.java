@@ -50,7 +50,7 @@ public class ListboxPaging implements ComponentRenderer {
 		
 		if (self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
-				.write("!pgit\" class=\"listbox-pgi\">")
+				.write("!pgit\" class=\"listbox-pgi-t\">")
 				.write(self.getPaging())
 				.write("</div>");
 		}

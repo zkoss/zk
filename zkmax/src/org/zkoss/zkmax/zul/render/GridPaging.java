@@ -45,7 +45,7 @@ public class GridPaging implements ComponentRenderer {
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<div id=\"").write(uuid).write("!paging\" class=\"grid-paging\">");
 		if (self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
-			wh.write("<div id=\"").write(uuid).write("!pgit\" class=\"grid-pgi\">")
+			wh.write("<div id=\"").write(uuid).write("!pgit\" class=\"grid-pgi-t\">")
 				.write(self.getPaging())
 				.write("</div>");
 		}
