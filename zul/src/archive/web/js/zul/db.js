@@ -156,21 +156,14 @@ zk.Cal.prototype = {
 					cell.style.textDecoration = "";
 					cell.setAttribute("zk_day", v);
 					cell.setAttribute("zk_monofs", monofs);
-					this._outcell(cell, cur == d, this._invalidate(new Date(y, m + monofs, v)));
+					this._outcell(cell, cur == d, this._invalid(new Date(y, m + monofs, v)));
 				}
 			}
 		}
 	},
-	_invalidate: function (now) {
-		var valid = false;
-		if (this.begin || this.end) {
-			if(this.begin && (now - this.begin)/(1000*60*60*24) < 0) {
-				valid = true;	
-			} else if(this.end && (this.end - now)/(1000*60*60*24) < 0) {
-				valid = true;	
-			}
-		}
-		return valid;
+	_invalid: function (now) {
+		return (this.begin && (now - this.begin)/86400000/*1000*60*60*24*/ < 0)
+			|| (this.end && (this.end - now)/86400000 < 0);
 	},
 	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
@@ -186,10 +179,17 @@ zk.Cal.prototype = {
 	_ondayclk: function (cell) {
 		var y = this.date.getFullYear(), m = this.date.getMonth();
 		var d = zk.getIntAttr(cell, "zk_day");
-		if (cell.className != "seld") { //!selected
+		if (!zkCal._seled(cell)) { //!selected
 			var monofs = zk.getIntAttr(cell, "zk_monofs");
 			var now = new Date(y, m + monofs, d);
-			if (this._invalidate(now)) return;
+			if (this._invalid(now)) {
+				if (this.popup) {
+					var pp = $e(this.id + "!pp");
+					if (pp) // Bug #1912363
+						zkDtbox.close(pp, true);
+				}
+				return;
+			}
 			this.date = now;
 			if (!this.popup) {
 				if (monofs != 0) this._output();
@@ -202,7 +202,7 @@ zk.Cal.prototype = {
 		this._onupdate(true);
 	},
 	_onmonclk: function (cell) {
-		if (cell.className != "seld") { //!selected
+		if (!zkCal._seled(cell)) { //!selected
 			var y = this.date.getFullYear(), d = this.date.getDate();
 			this.date = new Date(y, zk.getIntAttr(cell, "zk_mon"), d);
 			this._output();
@@ -370,6 +370,10 @@ zkCal.onover = function (evt) {
 };
 zkCal.onout = function (evt) {
 	Event.element(evt).style.textDecoration = "";
+};
+/** Returns if a cell is selected. */
+zkCal._seled = function (cell) {
+	return cell.className.indexOf("seld") >= 0;
 };
 
 //Datebox//
