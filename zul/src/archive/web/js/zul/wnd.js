@@ -391,8 +391,11 @@ zkWnd._ghostsizing = function (dg, ghosting, pointer) {
 zkWnd._initMode = function (cmp) {
 	var mode = getZKAttr(cmp, "mode");
 	var replace = zkWnd._clean2[cmp.id] == mode;
-	if (replace) //replace with the same mode
+	if (replace) {//replace with the same mode
 		delete zkWnd._clean2[cmp.id]; //and _doXxx will handle it
+		if (getZKAttr(cmp, "visible") == "true")
+			cmp.style.visibility = "visible";
+	}
 	else if (zkWnd._clean2[cmp.id])
 		zkWnd._cleanMode2(cmp.id, true); //replace with a new mode
 	switch (mode) {
