@@ -34,9 +34,9 @@ zkau.setAttr = function (cmp, nm, val) {
 	}
 	return _zktbau.setAttr(cmp, nm, val);
 };
-zkTxbox.init = function (cmp) {
-	zk.listen(cmp, "focus", zkTxbox.onfocus);
-	zk.listen(cmp, "blur", zkTxbox.onblur);
+zkTxbox.init = function (cmp, onfocus, onblur) {
+	zk.listen(cmp, "focus", onfocus ? onfocus: zkTxbox.onfocus);
+	zk.listen(cmp, "blur", onblur ? onblur: zkTxbox.onblur);
 	zk.listen(cmp, "select", zkTxbox.onselect);
 	if ($tag(cmp) == "TEXTAREA")
 		zk.listen(cmp, "keyup", zkTxbox.onkey);

@@ -390,7 +390,7 @@ zkDtbox.init = function (cmp) {
 
 	var btn = $e(cmp.id + "!btn");
 	if (btn)
-		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
+		zk.listen(btn, "click", function (evt) {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp, evt);});
 
 	var pp = $e(cmp.id + "!pp");
 	if (pp) // Bug #1912363
@@ -519,11 +519,14 @@ zkDtbox.onkey = function (evt) {
 };
 
 /* Whn the button is clicked on button. */
-zkDtbox.onbutton = function (cmp) {
+zkDtbox.onbutton = function (cmp, evt) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) {
 		if (!$visible(pp)) zkDtbox.open(pp);
 		else zkDtbox.close(pp, true);
+
+		if (!evt) evt = window.event; //Bug 1911864
+		Event.stop(evt);
 	}
 };
 zkDtbox.dropdn = function (cmp, dropdown) {

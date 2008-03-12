@@ -35,9 +35,7 @@ if (!window.Comboitem_effect) { //define it only if not customized
 
 ////
 zkCmbox = {};
-zk.addModuleInit(function () {
-zkCmbox.onblur = zkTxbox.onblur;
-zkTxbox.onblur = function (evt) {
+zkCmbox.onblur = function (evt) {
 	var inp = zkau.evtel(evt);
 	var uuid = $uuid(inp);
 	var cmp = $e(uuid);
@@ -67,38 +65,25 @@ zkTxbox.onblur = function (evt) {
 				}
 		}	
 	}
-	zkCmbox.onblur(evt);
+	zkTxbox.onblur(evt);
 };
-});
 zkCmbox.init = function (cmp) {
 	zkCmbox.onVisi = zkCmbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
 
 	var inp = $real(cmp);
-	zkTxbox.init(inp);
+	zkTxbox.init(inp, null, zkCmbox.onblur);
 	zk.listen(inp, "keydown", zkCmbox.onkey);
-	zk.listen(inp, "click", function () {if (inp.readOnly && !zk.dragging) zkCmbox.onbutton(cmp);});
+	zk.listen(inp, "click", function (evt) {if (inp.readOnly && !zk.dragging) zkCmbox.onbutton(cmp, evt);});
 		//To mimic SELECT, it drops down if readOnly
-	
+
 	var pp = $e(cmp.id + "!pp");
 	if (pp) // Bug #1879511
 		zk.listen(pp, "click", zkCmbox.closepp);
 		
 	var btn = $e(cmp.id + "!btn");
-	if (btn) {
-		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
-	}
-};
-zkCmbox.closepp = function (evt) {
-	if (!evt) evt = window.event;
-	var pp = Event.element(evt);
-	var uuid = $uuid(pp);
-	var inp = $real(pp);
-	zkau.closeFloats($e(uuid));
-	if (inp) {
-		zk.asyncFocus(inp.id);
-		Event.stop(evt);
-	}
+	if (btn)
+		zk.listen(btn, "click", function (evt) {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp, evt);});
 };
 zkCmbox.strict = function (id) {
 	var inp = $real($e(id));
@@ -340,11 +325,14 @@ zkCmbox.onkey = function (evt) {
 };
 
 /* Whn the button is clicked on button. */
-zkCmbox.onbutton = function (cmp) {
+zkCmbox.onbutton = function (cmp, evt) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) {
 		if (!$visible(pp)) zkCmbox.open(pp, true);
 		else zkCmbox.close(pp, true);
+
+		if (!evt) evt = window.event; //Bug 1911864
+		Event.stop(evt);
 	}
 };
 zkCmbox.dropdn = function (cmp, dropdown) {
@@ -665,6 +653,18 @@ zkCmbox.close = function (pp, focus) {
 	var cb = $outer(pp);
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: cb.id, cmd: "onOpen", data: [false]});
+};
+zkCmbox.closepp = function (evt) {
+	if (!evt) evt = window.event;
+	var pp = Event.element(evt);
+	for (; pp; pp = pp.parentNode) {
+		if (pp.id) {
+			if (pp.id.endsWith("!pp"))
+				zkCmbox.close(pp, true);
+			return; //done
+		}
+		if (pp.onclick) return;
+	}
 };
 
 zk.FloatCombo = Class.create();
