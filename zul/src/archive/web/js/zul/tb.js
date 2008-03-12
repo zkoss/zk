@@ -54,6 +54,7 @@ zkTmbox.init = function (cmp) {
 	if(btn){
 		zk.listen(btn, "mousedown", zkTmbox._btnDown);
 		zk.listen(btn, "mouseup", zkTmbox._btnUp);
+		zk.listen(btn, "click", zk.doEventStop); //prevent listitem being selected
 		zk.listen(btn, "mouseout", zkTmbox._btnOut);
 	}
 	
