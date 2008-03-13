@@ -49,7 +49,7 @@ public class RepeatableMedia implements Media {
 	}
 
 	/**
-	 * @see {@link Media#getReaderData()}
+	 * @see Media#getReaderData()
 	 */
 	public Reader getReaderData() {
 		return _media.getReaderData();
@@ -57,8 +57,8 @@ public class RepeatableMedia implements Media {
 
 	/**
 	 * Returs the repeatable input stream, if the original input stream is not null.
-	 * @see {@link Media#getStreamData()}
-	 * @see {@link RepeatableInputStream#getInstance(InputStream)}
+	 * @see Media#getStreamData()
+	 * @see RepeatableInputStream#getInstance(InputStream)
 	 */
 	public InputStream getStreamData() {
 		if (_isdata == null) {
@@ -70,49 +70,49 @@ public class RepeatableMedia implements Media {
 	}
 	
 	/**
-	 * @see {@link Media#getByteData()}
+	 * @see Media#getByteData()
 	 */
 	public byte[] getByteData() {
 		return _media.getByteData();
 	}
 
 	/**
-	 * @see {@link Media#getContentType()}
+	 * @see Media#getContentType()
 	 */
 	public String getContentType() {
 		return _media.getContentType();
 	}
 
 	/**
-	 * @see {@link Media#getFormat()}
+	 * @see Media#getFormat()
 	 */
 	public String getFormat() {
 		return _media.getFormat();
 	}
 
 	/**
-	 * @see {@link Media#getName()}
+	 * @see Media#getName()
 	 */
 	public String getName() {
 		return _media.getName();
 	}
 
 	/**
-	 * @see {@link Media#getStringData()}
+	 * @see Media#getStringData()
 	 */
 	public String getStringData() {
 		return _media.getStringData();
 	}
 
 	/**
-	 * @see {@link Media#inMemory()}
+	 * @see Media#inMemory()
 	 */
 	public boolean inMemory() {
 		return _media.inMemory();
 	}
 
 	/**
-	 * @see {@link Media#isBinary()}
+	 * @see Media#isBinary()
 	 */
 	public boolean isBinary() {
 		return _media.isBinary();
