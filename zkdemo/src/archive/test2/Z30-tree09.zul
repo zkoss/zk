@@ -4,7 +4,7 @@
 	<window title="dynamic tree" border="normal" id="win">
 	<zscript>
 	
-		import tree.*;
+		import org.zkoss.zkdemo.test2.tree.*;
 		
 		
 		HostTreeModel model = new HostTreeModel();
