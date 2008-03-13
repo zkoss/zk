@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.media.RepeatableMedia;
 import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
@@ -248,7 +249,7 @@ public class Iframe extends XulElement {
 	 */
 	public void setContent(Media media) {
 		if (media != _media) {
-			_media = media;
+			_media = RepeatableMedia.getInstance(media);
 			if (_media != null) ++_medver; //enforce browser to reload
 			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
