@@ -22,18 +22,20 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 
 /**
  * {@link RepeatableInputStream} adds functionality to another input stream,
  * the ability to read repeatedly.
+ * Unlike other input stream, {@link RepeatableInputStream} re-opened
+ * the buffered input stream, when {@link #close} is called.
+ * In other words, the buffered input stream is never closed until
+ * it is GC-ed.
  *
  * <p>If the content size of the given input stream is smaller than
  * the value specified in the system property called
@@ -141,26 +143,6 @@ public class RepeatableInputStream extends InputStream {
 			_f = null;
 		}
 	}
-	private void closeOutputStream() {
-		if (_out != null) {
-			try {
-				_out.close();
-			} catch (Throwable ex) {
-				log.warning("Ignored: failed to close the buffer.\nCause: "+ex.getMessage());
-				disableBuffering();
-				return;
-			}
-
-			if (_f == null)
-				_in = new ByteArrayInputStream(
-					((ByteArrayOutputStream)_out).toByteArray());
-				//we don't initilize _in if _f is not null
-				//to reduce memory use (after all, read might not be called)
-			_out = null;
-			_org.close();
-			_org = null;
-		}
-	}
 
 	public int read() throws IOException {
 		if (_org != null) {
@@ -169,28 +151,49 @@ public class RepeatableInputStream extends InputStream {
 				if (i >= 0) {
 					final OutputStream out = getOutputStream();
 					if (out != null) out.write(i);
-					++_cntsz;
-				} else {
-					closeOutputStream();
+					_cntsz += i;
 				}
 			return i;
 		} else {
 			if (_in == null)
 				_in = new FileInputStream(_f); //_f must be non-null
 
-			final int i = _in.read();
-			if (i < 0)
-				if (_f != null) {
-					_in.close();
-					_in = null;
-				} else {
-					_in.reset();
-				}
-			return i;
+			return _in.read();
 		}
 	}
 
 	public void close() throws IOException {
+		_cntsz = 0;
+		if (_org != null) {
+			_org.close();
+
+			if (_out != null) {
+				try {
+					_out.close();
+				} catch (Throwable ex) {
+					log.warning("Ignored: failed to close the buffer.\nCause: "+ex.getMessage());
+					disableBuffering();
+					return;
+				}
+				if (_f == null)
+					_in = new ByteArrayInputStream(
+						((ByteArrayOutputStream)_out).toByteArray());
+					//we don't initilize _in if _f is not null
+					//to reduce memory use (after all, read might not be called)
+				_out = null;
+				_org = null;
+			}
+		} else if (_in != null) {
+			if (_f != null) {
+				_in.close();
+				_in = null;
+			} else {
+				_in.reset();
+			}
+		}
+	}
+
+	protected void finalize() throws Throwable {
 		disableBuffering();
 		if (_org != null)
 			_org.close();
@@ -198,10 +201,6 @@ public class RepeatableInputStream extends InputStream {
 			_in.close();
 			_in = null;
 		}
-	}
-
-	protected void finalize() throws Throwable {
-		close();
 		super.finalize();
 	}
 
