@@ -82,6 +82,7 @@ ZK 3.0.4 Freshly
   1912363: Datebox doesn't fire error msg if clicks on Thu of dropdown
   1912421: Overlapped window disappears when invalidate() is invoked
   1913246: Listbox paging mold is failed with zkmax.jar(Freshly only)
+  1896797: iframe and pdf on FF
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
