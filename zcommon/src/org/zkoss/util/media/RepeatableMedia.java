@@ -41,7 +41,8 @@ public class RepeatableMedia implements Media {
 	 * Returns a repeatable media with a repeatable input stream, if media is not null.
 	 */
 	public static Media getInstance(Media media) {
-		if (media != null && !(media instanceof RepeatableMedia)) {
+		if (media != null && !media.inMemory()
+		&& !(media instanceof RepeatableMedia)) {
 			return new RepeatableMedia(media);
 		}
 		return media;
