@@ -249,7 +249,7 @@ public class Iframe extends XulElement {
 	 */
 	public void setContent(Media media) {
 		if (media != _media) {
-			_media = RepeatableMedia.getInstance(media);
+			_media = media;// DOTO: RepeatableMedia.getInstance(media);
 			if (_media != null) ++_medver; //enforce browser to reload
 			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
