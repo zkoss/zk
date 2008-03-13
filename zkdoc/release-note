@@ -82,7 +82,6 @@ ZK 3.0.4 Freshly
   1912363: Datebox doesn't fire error msg if clicks on Thu of dropdown
   1912421: Overlapped window disappears when invalidate() is invoked
   1913246: Listbox paging mold is failed with zkmax.jar(Freshly only)
-  1896797: iframe and pdf on FF
   1913290: Cast Exception when TimeSeries casts Integer to String
 
 * Upgrade Notes:
