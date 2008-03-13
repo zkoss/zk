@@ -29,48 +29,54 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.zkoss.lang.Strings;
+import org.zkoss.util.logging.Log;
 
 /**
- * This class is used to wrap the input stream in a repeatable input stream,
- * which can reread the input stream. There are two options that can allow the
- * repeatable input stream caching in a memory or in a template file system.
+ * {@link RepeatableInputStream} adds functionality to another input stream,
+ * the ability to read repeatedly.
+ *
+ * <p>If the content size of the given input stream is smaller than
+ * the value specified in the system property called
+ * "org.zkoss.io.memoryLimitSize", the content will be buffered in
+ * the memory. If the size exceeds, the content will be buffered in
+ * a temporary file. By default, it is 512KB.
+ * Note: the maximal value is {@link Integer#MAX_VALUE}
+ *
+ * <p>If the content size of the given input stream is larger than
+ * the value specified in the system property called
+ * "org.zkoss.io.bufferLimitSize", the content won't be buffered,
+ * and it means the read is not repeatable. By default, it is 20MB.
+ * Note: the maximal value is {@link Integer#MAX_VALUE}
  * 
  * @author jumperchen
  * @since 3.0.4
  */
 public class RepeatableInputStream extends InputStream {
-	private InputStream _is;
+	private static final Log log = Log.lookup(RepeatableInputStream.class);
+
+	private InputStream _org;
 	private OutputStream _out;
 	private InputStream _in;
-	private boolean _close, _native;
 	private File _f;
-	/**
-	 * Sets the system property with "org.zkoss.io.beffer_limit_size".
-	 * The maximum limit of bytes that can be read before the mark position becomes invalid.
-	 * It is only used caching in memory.
-	 * <p>Default: 10240000
+	/** The content size. It is meaningful only if !_nobuf.
+	 * Note: int is enough (since long makes no sense for buffering)
 	 */
-	public static String BEFFER_LIMIT_SIZE = System.getProperty("org.zkoss.io.beffer_limit_size");
-	/** 
-	 * Sets the system property with "org.zkoss.io.max_allow-size".
-	 * The maximum limit of bytes that can be cached in memory. Otherwise, the 
-	 * repeatable input stream should be chached in file system.
-	 * <p>Default: 512000
-	 */
-	public static String MAX_ALLOW_SIZE = System.getProperty("org.zkoss.io.max_allow-size");
-	/**
-	 * Template file directory.
-	 */
-	public static String TEMP_FILE_DIR = "ZK";
-
+	private int _cntsz;
+	private final int _bufmaxsz, _memmaxsz;
+	private boolean _nobuf;
 
 	private RepeatableInputStream(InputStream is) {
-		_is = is;
+		_org = is;
+		_bufmaxsz = getIntProp("org.zkoss.io.bufferLimitSize", 20 * 1024 * 1024);
+		_memmaxsz = getIntProp("org.zkoss.io.memoryLimitSize", 512 * 1024);
 	}
 
 	/**
 	 * Returns a repeatable media with a repeatable input stream, if media is
 	 * not null.
+	 *
+	 * <p>Use this method instead of instantiating {@link RepeatableInputStream}
+	 * with the constructor.
 	 */
 	public static InputStream getInstance(InputStream is) {
 		if (is != null && !(is instanceof RepeatableInputStream)) {
@@ -79,81 +85,123 @@ public class RepeatableInputStream extends InputStream {
 		return is;
 	}
 
-	/**
-	 * Returns whether to treat the InputStream as binary.
-	 * <p>
-	 * Default: true.
-	 */
-	public boolean isNative() {
-		return _native;
+	private static int getIntProp(String name, int defVal) {
+		String val = null;
+		try {
+			val = System.getProperty(name);
+			if (val != null)
+				return Integer.parseInt(val);
+		} catch (Throwable ex) { //ignore
+			log.warning("Ignored: illegal number, "+val+", for "+name);
+		}
+		return defVal;
 	}
 
-	/**
-	 * Sets whether to treat the InputStream as binary.
-	 */
-	public void setNative(boolean alwaysNative) {
-		_native = alwaysNative;
-	}
+	private OutputStream getOutputStream() throws IOException {
+		if (_out == null)
+			return _nobuf ? null: (_out = new ByteArrayOutputStream());
+				//it is possible _membufsz <= 0, but OK to use memory first
 
-	private void initOutputstream() throws IOException {
-		final String p = System.getProperty("org.zkoss.io.max_allow-size");
-		final int maxsize = !Strings.isBlank(p) ? Integer.parseInt(p) : 512000;
-		if (_is.available() > maxsize)
-			setNative(false);
-		if (isNative()) {
-			_out = new ByteArrayOutputStream();
-		} else {
-			final File f = new File(System.getProperty("java.io.tmpdir")
-					+ TEMP_FILE_DIR);
-			if (!f.isDirectory())
-				f.mkdir();
-			_f = File.createTempFile("zk.io", ".zk.io", f);
-			_out = new FileOutputStream(_f);
+		if (_cntsz >= _bufmaxsz) { //too large to buffer
+			disableBuffering();
+			return null;
+		}
+
+		if (_f == null && _cntsz >= _memmaxsz) { //memory to file
+			try {
+				final File f =
+					new File(System.getProperty("java.io.tmpdir"), "zk");
+				if (!f.isDirectory())
+					f.mkdir();
+				_f = File.createTempFile("zk.io", ".zk.io", f);
+				final byte[] bs = ((ByteArrayOutputStream)_out).toByteArray();
+				_out = new FileOutputStream(_f);
+				_out.write(bs);
+			} catch (Throwable ex) {
+				log.warning("Ingored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
+				disableBuffering();
+			}
+		}
+		return _out;
+	}
+	private void disableBuffering() {
+		_nobuf = true;
+		if (_out != null) {
+			try {
+				_out.close();
+			} catch (Throwable ex) { //ignore
+			}
+			_out = null;
+		}
+		if (_f != null) {
+			try {
+				_f.delete();
+			} catch (Throwable ex) { //ignore
+			}
+			_f = null;
+		}
+	}
+	private void closeOutputStream() {
+		if (_out != null) {
+			try {
+				_out.close();
+			} catch (Throwable ex) {
+				log.warning("Ignored: failed to close the buffer.\nCause: "+ex.getMessage());
+				disableBuffering();
+				return;
+			}
+
+			if (_f == null)
+				_in = new ByteArrayInputStream(
+					((ByteArrayOutputStream)_out).toByteArray());
+				//we don't initilize _in if _f is not null
+				//to reduce memory use (after all, read might not be called)
+			_out = null;
+			_org.close();
+			_org = null;
 		}
 	}
 
 	public int read() throws IOException {
-		if (!_close) {
-			final int i = _is.read();
-			if (_out == null) initOutputstream();
-			_out.write(i);
+		if (_org != null) {
+			final int i = _org.read();
+			if (!_nobuf)
+				if (i >= 0) {
+					final OutputStream out = getOutputStream();
+					if (out != null) out.write(i);
+					++_cntsz;
+				} else {
+					closeOutputStream();
+				}
 			return i;
 		} else {
-			if (!isNative() && _in == null) initInputStream();
-			return _in.read();
-		}
-	}
+			if (_in == null)
+				_in = new FileInputStream(_f); //_f must be non-null
 
-	private void initInputStream() throws FileNotFoundException {
-		if (isNative()) {
-			_in = new ByteArrayInputStream(((ByteArrayOutputStream) _out)
-					.toByteArray());
-			_in.mark(BEFFER_LIMIT_SIZE == null ? 10240000 : Integer
-					.parseInt(BEFFER_LIMIT_SIZE));
-		} else {
-			_in = new FileInputStream(_f);
+			final int i = _in.read();
+			if (i < 0)
+				if (_f != null) {
+					_in.close();
+					_in = null;
+				} else {
+					_in.reset();
+				}
+			return i;
 		}
 	}
 
 	public void close() throws IOException {
-		if (!_close) {
-			_close = true;
-			_is.close();
-			_out.close();
-			_out = null;
-		} else {
-			if (isNative())
-				_in.reset();
-			else {
-				_in.close();
-				_in = null;
-			}
+		disableBuffering();
+		if (_org != null)
+			_org.close();
+		if (_in != null) {
+			_in.close();
+			_in = null;
 		}
 	}
 
 	protected void finalize() throws Throwable {
-		if (_f != null)
-			_f.delete();
+		close();
 		super.finalize();
 	}
 
