@@ -20,7 +20,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:h2>[ 1656278 ] Menuitem enabled/disabled support</n:h2>
 	<n:ol>
-		<n:li>click "File" then you will see the "Open" item to be disabled.</n:li>
+		<n:li>click "File" then you will see the "Open" item to be disabled and cannot be clicked</n:li>
+                <n:li>Try to enable it and click on it, it should show alert message</n:li>
 	</n:ol>
 	<menubar id="menubar">
 		<menu label="File">

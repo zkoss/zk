@@ -26,9 +26,11 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 	<title>ZHTML Demo</title>
 	</head>
 	<body>
+        <h2>you must open this test in new browser</h2>
+<p>Click browser's [View | Page Source] to see if LINK/SCRIPT is placed inside HEAD.</p>
 	<z:borderlayout>
 	<z:north>
-	<z:label>Click browser's [View | Page Source] to see if LINK/SCRIPT is placed inside HEAD.</z:label>
+	<z:label>north</z:label>
 	</z:north>
 	<z:south>
 	<z:label value="South Label"></z:label>

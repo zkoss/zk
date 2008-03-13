@@ -19,6 +19,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 <n:h2>[ 1855653 ]    Optimize Live Data with Listbox &amp; Grid</n:h2>
+	<n:ol>
+		<n:li>the showing and updating(scroll down) speed should be acceptable </n:li>
+	</n:ol>
 <window title="Live Data Demo - Listbox" border="normal">
 	<zscript>
 		List items = new org.zkoss.zkdemo.userguide.BigList(1000);

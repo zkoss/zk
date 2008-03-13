@@ -23,5 +23,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <div>
 	You shall see this.
 	Also check the log (stdout).
+<n:br/>
+        (Oops~ the server is on the remote side, maybe we should find a better way to test this feature!!!)
 </div>
 </zk>

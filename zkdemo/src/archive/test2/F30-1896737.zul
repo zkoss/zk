@@ -17,6 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>Showing progessing when loading a zul by include component</n:h2>
 <window id="w">
 	<button label="Go Test Include">
 		<attribute name="onClick">
@@ -25,3 +27,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</button>
 </window>
+
+</zk>
