@@ -467,7 +467,7 @@ for target in $targetList ; do
 	fi
 done
 end=`date +%s`
-if [ "$end" != "%s" ] ; then
+if [ "${end%s}" = "${end}" ] ; then
 	buildTime=$(( $end - $start ))
 	buildTimeMM=$(( $buildTime / 60 ))
 	buildTimeSS=$(( $buildTime % 60 ))
