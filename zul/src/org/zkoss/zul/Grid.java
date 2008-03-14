@@ -376,18 +376,38 @@ public class Grid extends XulElement {
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 */
 	public int getPageSize() {
-		if (_pgi == null)
-			throw new IllegalStateException("Available only the paging mold");
-		return _pgi.getPageSize();
+		return pgi().getPageSize();
 	}
 	/** Sets the page size, aka., the number rows per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 */
-	public void setPageSize(int pgsz) {
+	public void setPageSize(int pgsz) throws WrongValueException {
+		pgi().setPageSize(pgsz);
+	}
+	/** Returns the number of pages.
+	 * Note: there is at least one page even no item at all.
+	 * @since 3.0.4
+	 */
+	public int getPageCount() {
+		return pgi().getPageCount();
+	}
+	/** Returns the active page (starting from 0).
+	 * @since 3.0.4
+	 */
+	public int getActivePage() {
+		return pgi().getActivePage();
+	}
+	/** Sets the active page (starting from 0).
+	 * @since 3.0.4
+	 */
+	public void setActivePage(int pg) throws WrongValueException {
+		pgi().setActivePage(pg);
+	}
+	private Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
-		_pgi.setPageSize(pgsz);
+		return _pgi;
 	}
 
 	/** Returns whether this grid is in the paging mold.

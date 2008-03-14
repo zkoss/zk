@@ -108,8 +108,14 @@ public class Rows extends XulElement {
 		//--Cropper--//
 		public boolean isCropper() {
 			final Grid grid = getGrid();
-			return grid != null && (grid.inSpecialMold() || grid.inPagingMold());
-		}
+			return grid != null &&
+				((grid.inPagingMold()
+					&& grid.getPageSize() <= getChildren().size())
+				|| grid.inSpecialMold());
+				//Single page is considered as not a cropper.
+				//isCropper is called after a component is removed, so
+				//we have to test >= rather than >
+	}
 		public Set getAvailableAtClient() {
 			final Grid grid = getGrid();
 			if (grid == null)
