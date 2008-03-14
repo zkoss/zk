@@ -2254,7 +2254,8 @@ anima.moveBy = function (id, pos, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.moveBy");
+			zk._addAnique(n.id, "anima." + (pos == "top" ? "moveDown" : pos == "left" ? 
+				"moveRight" : "moveBy"));
 		} else {
 			++anima.count;
 			setZKAttr(n, "animating", "show");
