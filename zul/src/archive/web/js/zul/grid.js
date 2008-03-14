@@ -31,7 +31,7 @@ zk.Grid.prototype = {
 		if (!this.element) return;
 
 		this.body = $e(this.id + "!body");
-		this.paging = $e(this.id + "!paging") != null;
+		this.paging = getZKAttr(this.element, "pg") != null;
 		if (this.body) {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
 			

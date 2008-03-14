@@ -33,13 +33,13 @@ td.lwt-wndcyan, td.mwt-wndcyan, td.rwt-wndcyan {
 .toolbar a, .toolbar a:visited, .toolbar a:hover {
 	font-size: xx-small;
 }
-div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
+div.tree-head th, div.listbox-head th, div.grid-head th {
 	font-size: x-small;
 }
 div.head-cell-inner {
 	font-size: x-small;
 }
-div.tree-body td, div.listbox-body td, div.listbox-paging td {
+div.tree-body td, div.listbox-body td {
 	font-size: x-small;
 }
 div.gc {

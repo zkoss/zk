@@ -13,7 +13,7 @@ div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
 	position:relative;
 	<%-- Bug 1712708:  we have to specify position:relative --%>
 }
-div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
+div.tree-head th, div.listbox-head th, div.grid-head th {
 	text-overflow: ellipsis;
 }
 div.head-cell-inner {
@@ -24,7 +24,7 @@ div.cell-inner {
 	position: relative; width: 100%;
 	<%-- Bug #1825896  --%>
 }
-div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging {<%-- always used. --%>
+div.tree-body, div.listbox-body, div.grid-body {<%-- always used. --%>
 	position: relative;
 	<%-- Bug 1766244: we have to specify position:relative with overflow:auto --%>
 }
