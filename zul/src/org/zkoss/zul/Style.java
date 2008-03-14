@@ -36,8 +36,8 @@ import org.zkoss.zul.impl.Utils;
  * <p>Note: a style component can appear anywhere in a ZUML page, but it
  * affects all components in the same desktop.
  *
- * <p>Note: If {@link #isDynamic} is false, the HTML STYLE tag is generated
- * to represent this component.
+ * <p>Note: If {@link #isDynamic} is false, the HTML STYLE
+ * or LINK tag is generated to represent this component.
  * Due to IE's limitation, there is no effect if
  * the style component is added or removed dynamically
  * and if {@link #isDynamic} is false.
@@ -111,7 +111,7 @@ public class Style extends AbstractComponent {
 	
 	/**
 	 * Returns whether to load an external Style Sheet dynamically.
-	 * If false, a HTML STYLE tag is generated to represent 
+	 * If false, a HTML STYLE or LINK tag is generated to represent 
 	 * the content or the src.
 	 *
 	 * <p>Due to IE's limitation, there is no effect if
@@ -120,7 +120,7 @@ public class Style extends AbstractComponent {
 	 *
 	 * <p>If {@link #isDynamic} is true, this component can be added and removed
 	 * dynamically and the rules will be attached and detached accordingly.
-	 * Note: in this case, the link is generated when this component
+	 * Note: in this case, the HTML LINK tag is generated when this component
 	 * is initialized at the client, so the style will be loaded to
 	 * the client after all components are initialized.
 	 *
