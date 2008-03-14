@@ -6,8 +6,8 @@ Bug1612312.zul
 {{IS_NOTE
 	Purpose:
 		
-	Description:
-		
+	Description:    [ 1612312 ] Listbox conflict with Clients.confirmClose (IE and IE7 only)
+
 	History:
 		Tue Dec 12 15:51:30     2006, Created by tomyeh
 }}IS_NOTE
