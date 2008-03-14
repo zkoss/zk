@@ -25,6 +25,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	Style s = new Style();
 	s.setContent("body {background: yellow}");
 	s.setId("style");
+	s.setDynamic(true);
 	s.setParent(w);
 		}</attribute>
 	</button>
