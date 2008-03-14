@@ -24,6 +24,7 @@ import org.zkoss.util.media.AMedia;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
@@ -71,6 +72,7 @@ import org.zkoss.zul.impl.Utils;
 public class Style extends AbstractComponent {
 	private String _src;
 	private String _content;
+	private boolean _dynamic;
 	/** Count the version of {@link #_content}. */
 	private int _cntver;
 
@@ -83,6 +85,28 @@ public class Style extends AbstractComponent {
 	public Style(String src) {
 		this();
 		setSrc(src);
+	}
+	
+	/**
+	 * Sets whether link an external Style Sheet dynamically.
+	 * If false, the content or the src is embedded into the HTML page.
+	 * <p>Default: false.
+	 * @since 3.0.4 
+	 */
+	public void setDynamic(boolean dynamic) {
+		if (_dynamic != dynamic) {
+			_dynamic = dynamic;
+			invalidate();
+		}
+	}
+	
+	/**
+	 * Returns whether link an external Style Sheet dynamically.
+	 * <p>Default: false.
+	 * @since 3.0.4
+	 */
+	public boolean isDynamic() {
+		return _dynamic;
 	}
 
 	/** Returns the URI of an external style sheet.
@@ -172,5 +196,47 @@ public class Style extends AbstractComponent {
 		public Media getMedia(String pathInfo) {
 			return new AMedia("css", "css", "text/css;charset=UTF-8", _content);
 		}
+	}
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		if (isDynamic()) {
+			super.redraw(out);
+			return;	
+		}
+		final boolean ie = Executions.getCurrent().isExplorer();
+		if (ie) {
+			//IE: unable to look back LINK or STYLE with ID
+			out.write("<div id=\"");
+			out.write(getUuid());
+			out.write("\">");
+		}
+
+		if (_src != null) {
+			out.write("\n<link rel=\"stylesheet\" type=\"text/css\" href=\"");
+			out.write(getDesktop().getExecution().encodeURL(_src));
+			if (!ie) {
+				out.write("\" id=\"");
+				out.write(getUuid());
+			}
+			out.write("\"/>");
+		} else {
+			out.write("\n<style type=\"text/css\"");
+			if (!ie) {
+				out.write(" id=\"");
+				out.write(getUuid());
+				out.write('"');
+			}
+			out.write(">\n");
+
+			final String content = getContent();
+			if (content != null) {
+				out.write(content);
+				out.write('\n');
+			}
+
+			out.write("</style>");
+		}
+
+		if (ie)
+			out.write("</div>\n");
 	}
 }
