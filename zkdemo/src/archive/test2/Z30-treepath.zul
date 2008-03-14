@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<zk xmlns="http://www.zkoss.org/2005/zul">
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="http://www.zkoss.org/2005/zk/native">
     
     <window title="Dynamically Change by Model">
         <zscript><![CDATA[
@@ -102,10 +102,10 @@
             <tree model="${stm}" id="tree" width="700PX">
             </tree>
             <hbox>           
-                <button label='renderByPath A2' onClick='renderByPath(a2)' />
-                <button label='renderByPath B0-0' onClick='renderByPath(b00)' />
-                <button label='renderByPath A2-1' onClick='renderByPath(a21)' />
-                <intbox id="ib"/><button label='test active Page' onClick='testActivePage()' />
+                <button label='open A2' onClick='renderByPath(a2)' />
+                <button label='open B0-0' onClick='renderByPath(b00)' />
+                <button label='open A2-1' onClick='renderByPath(a21)' />
+                <intbox id="ib"/><button label='open active Page by index of tree item of Root2' onClick='testActivePage()' />
            </hbox>
         </vbox>
     </window>

@@ -42,8 +42,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<label value="Item A.3"/><label value="Item A.4"/>
 			<label value="Item A.5"/><label value="Item A.6"/>
 		</row>
-		<row spans="1,0">
-			<label value="(1,0)"/><label value="Item X"/>
+		<row spans="1,5">
+			<label value="(1,)"/><label value="Item X"/>
 		</row>
 	</rows>
 </grid>

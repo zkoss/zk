@@ -261,7 +261,7 @@
 			</attribute>
 		</button>
 		<textbox id="newV"/>
-		<button label="run">
+		<button label="replace 1-3">
 			<attribute name="onClick">
 				Treechildren tc = (Treechildren)item.getTreechildren();
 				List l = tc.getChildren();
