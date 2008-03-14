@@ -25,6 +25,7 @@ ZK 3.0.4 Freshly
   1898649: The shading of Timebox should be the same with textbox
   1909434: JasperReports: set exporter parameters
   1911773: Grid/Listbox support scrollbar in Paging Mold
+  1914087: AMedia accepts File directly
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
