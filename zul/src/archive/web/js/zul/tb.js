@@ -144,8 +144,12 @@ zkTmbox._inpclick= function(evt){
 };
 zkTmbox._inpkeydown= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var sels = zkTmbox._selrange(cmp);	
+	var inp = Event.element(evt),
+		cmp = $outer(inp),
+		sels = zkTmbox._selrange(cmp);
+	if (inp.disabled || inp.readOnly)
+		return;
+
 	cmp.lastPos = sels[0];
 	var code =Event.keyCode(evt);
 	switch(code){

@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.InputElement;
 import org.zkoss.zul.mesg.MZul;
 
 /**
- * An edit box for holding a time (a java.util.Date Object , but only Hour & Minute are used.
+ * An input box for holding a time (a java.util.Date Object , but only Hour & Minute are used.
  *
  * <p>Default {@link #getSclass}: timebox.
  *
@@ -47,6 +47,12 @@ import org.zkoss.zul.mesg.MZul;
  *  <li>down : decrease time digit depend on the position on the inner text box.
  * 	<li>delete : clear the time to empty (null)
  * </lu>
+ *
+ * <p>Like {@link Combobox} and {@link Datebox},
+ * the value of a read-only time box ({@link #isReadonly}) can be changed
+ * by clicking the up or down button (though users cannot type anything
+ * in the input box).
+ *
  * @author Dennis Chen
  * @since 3.0.0
  */
