@@ -154,7 +154,7 @@ public class AMedia implements Media {
 	 * the correct reader.
 	 */
 	public AMedia(String name, String format, String ctype, File data,
-	boolean binary) {
+	boolean binary) throws java.io.FileNotFoundException {
 		if (data == null)
 			throw new IllegalArgumentException("data");
 		if (binary)

@@ -119,7 +119,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
  	 * @see #getInstance(String)
 	 */
 	public static InputStream getInstance(File file)
-	throws IOException {
+	throws FileNotFoundException {
 		if (file == null)
 			throw new IllegalArgumentException("null");
 		if (!file.exists())
@@ -141,7 +141,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 	 * @see #getInstance(File)
 	 */
 	public static InputStream getInstance(String filename)
-	throws IOException {
+	throws FileNotFoundException {
 		return getInstance(new File(filename));
 	}
 

@@ -117,7 +117,7 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * @see #getInstance(String)
 	 */
 	public static Reader getInstance(File file)
-	throws IOException {
+	throws FileNotFoundException {
 		if (file == null)
 			throw new IllegalArgumentException("null");
 		if (!file.exists())
@@ -141,7 +141,7 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * @see #getInstance(File)
 	 */
 	public static Reader getInstance(String filename)
-	throws IOException {
+	throws FileNotFoundException {
 		return getInstance(new File(filename));
 	}
 
