@@ -42,10 +42,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<hbox>Assign one: 
 			<textbox>
 				<attribute name="onChange">
-				if (Strings.isBlank(self.value))
-					alert("captcha must specify text value");
-				else{
-				cpa.value = self.value; val.value=cpa.value;}
+				cpa.setValue(self.value);
+				val.setValue(cpa.value);
 				</attribute>
 			</textbox>
 		</hbox>
