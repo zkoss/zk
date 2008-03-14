@@ -383,7 +383,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
 			final Comparable series = (Comparable) it.next();
 			final org.jfree.data.time.TimeSeries tser = 
-				new org.jfree.data.time.TimeSeries(Objects.toString(series), pclass);
+				new org.jfree.data.time.TimeSeries(series, pclass);
 			final int size = model.getDataCount(series);
 			for(int j = 0; j < size; ++j) {
 				final RegularTimePeriod period = RegularTimePeriod.createInstance(
