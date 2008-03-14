@@ -90,6 +90,7 @@ ZK 3.0.4 Freshly
   1914109: IE&Sa, scrollbar problem when set height of a paging listbox
   1914113: Empty space in listbox with ZK3.0.4
   1914104: IE6: When resize browser, the inner window doesn't resize
+  1914184: Error massage:Failed to invoke zkGrid.onSize
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
