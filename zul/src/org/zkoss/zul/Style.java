@@ -36,8 +36,17 @@ import org.zkoss.zul.impl.Utils;
  * <p>Note: a style component can appear anywhere in a ZUML page, but it
  * affects all components in the same desktop.
  *
- * <p>Note: unlike HTML STYLE, this component can be added and removed
+ * <p>Note: If {@link #isDynamic} is false, the HTML STYLE tag is generated
+ * to represent this component.
+ * Due to IE's limitation, there is no effect if
+ * the style component is added or removed dynamically
+ * and if {@link #isDynamic} is false.
+ *
+ * <p>If {@link #isDynamic} is true, this component can be added and removed
  * dynamically and the rules will be attached and detached accordingly.
+ * Note: in this case, the link is generated when this component
+ * is initialized at the client, so the style will be loaded to
+ * the client after all components are initialized.
  *
  * <p>There are three formats when used in a ZUML page:
  *
@@ -88,10 +97,10 @@ public class Style extends AbstractComponent {
 	}
 	
 	/**
-	 * Sets whether link an external Style Sheet dynamically.
-	 * If false, the content or the src is embedded into the HTML page.
+	 * Sets whether to load an external Style Sheet dynamically.
 	 * <p>Default: false.
 	 * @since 3.0.4 
+	 * @see #isDynamic
 	 */
 	public void setDynamic(boolean dynamic) {
 		if (_dynamic != dynamic) {
@@ -101,7 +110,20 @@ public class Style extends AbstractComponent {
 	}
 	
 	/**
-	 * Returns whether link an external Style Sheet dynamically.
+	 * Returns whether to load an external Style Sheet dynamically.
+	 * If false, a HTML STYLE tag is generated to represent 
+	 * the content or the src.
+	 *
+	 * <p>Due to IE's limitation, there is no effect if
+	 * the style component is added or removed dynamically
+	 * and if {@link #isDynamic} is false.
+	 *
+	 * <p>If {@link #isDynamic} is true, this component can be added and removed
+	 * dynamically and the rules will be attached and detached accordingly.
+	 * Note: in this case, the link is generated when this component
+	 * is initialized at the client, so the style will be loaded to
+	 * the client after all components are initialized.
+	 *
 	 * <p>Default: false.
 	 * @since 3.0.4
 	 */
