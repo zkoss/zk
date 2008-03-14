@@ -82,9 +82,9 @@ public class RepeatableInputStream extends InputStream {
 	 */
 	public static InputStream getInstance(InputStream is) {
 		if (is instanceof ByteArrayInputStream)
-			return new RepeatableByteInputStream((ByteArrayInputStream)is);
+			return new ResetableInputStream(is);
 		else if (is != null && !(is instanceof RepeatableInputStream)
-		&& !(is instanceof RepeatableByteInputStream))
+		&& !(is instanceof ResetableInputStream))
 			return new RepeatableInputStream(is);
 		return is;
 	}
@@ -153,7 +153,7 @@ public class RepeatableInputStream extends InputStream {
 				if (i >= 0) {
 					final OutputStream out = getOutputStream();
 					if (out != null) out.write(i);
-					_cntsz += i;
+					++_cntsz;
 				}
 			return i;
 		} else {
@@ -197,6 +197,7 @@ public class RepeatableInputStream extends InputStream {
 		}
 	}
 
+	//Object//
 	protected void finalize() throws Throwable {
 		disableBuffering();
 		if (_org != null)
@@ -208,18 +209,24 @@ public class RepeatableInputStream extends InputStream {
 		super.finalize();
 	}
 }
-/*package*/ class RepeatableByteInputStream extends InputStream {
-	private final ByteArrayInputStream _org;
-	RepeatableByteInputStream(ByteArrayInputStream bais) {
+/*package*/ class ResetableInputStream extends InputStream {
+	private final InputStream _org;
+	ResetableInputStream(InputStream bais) {
 		_org = bais;
 	}
+
 	public int read() throws IOException {
 		return _org.read();
 	}
 	/** Closes the current access and re-open the buffer input stream.
 	 */
 	public void close() throws IOException {
-		_org.close();
 		_org.reset();
+	}
+
+	//Object//
+	protected void finalize() throws Throwable {
+		_org.close();
+		super.finalize();
 	}
 }
