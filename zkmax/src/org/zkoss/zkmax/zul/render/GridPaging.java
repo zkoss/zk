@@ -41,9 +41,9 @@ public class GridPaging implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Grid self = (Grid) comp;
 		final String uuid = self.getUuid();
-		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.grid.Grid\"");
+		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.grid.Grid\" z.pg=\"t\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<div id=\"").write(uuid).write("!paging\" class=\"grid-paging\">");
+
 		if (self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid).write("!pgit\" class=\"grid-pgi-t\">")
 				.write(self.getPaging())
@@ -110,6 +110,6 @@ public class GridPaging implements ComponentRenderer {
 				.write(self.getPaging())
 				.write("</div>");
 		}
-		wh.write("</div></div>");
+		wh.write("</div>");
 	}
 }

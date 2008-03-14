@@ -42,11 +42,8 @@ public class ListboxPaging implements ComponentRenderer {
 		final Listbox self = (Listbox)comp;
 		final String uuid = self.getUuid();
 		
-		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\"");
+		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\" z.pg=\"t\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		
-		wh.write("<div id=\"").write(uuid)
-			.write("!paging\" class=\"listbox-paging\">");
 		
 		if (self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
@@ -130,6 +127,6 @@ public class ListboxPaging implements ComponentRenderer {
 				.write(self.getPaging())
 				.write("</div>");
 		}
-		wh.write("</div></div>");
+		wh.write("</div>");
 	}
 }
