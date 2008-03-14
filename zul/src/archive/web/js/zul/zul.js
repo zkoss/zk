@@ -40,13 +40,24 @@ zul.getMetaByHeader = function (cmp) {
 };
 zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 	if (hdfaker == null || bdfaker == null || !hdfaker.cells.length
-	|| !bdfaker.cells.length || !zk.isRealVisible(hdfaker) || !rows.length) return;
+	|| !bdfaker.cells.length || !zk.isRealVisible(hdfaker) || !rows || !rows.length) return;
 	
 	var hdtable = hdfaker.parentNode.parentNode, head = zul.getRealHeader(hdtable.tBodies[1].rows);
 	if (!head) return; 
 	if (zk.opera && !hdtable.style.width)
 		hdtable.style.tableLayout = "auto";
 	var including = zk.revisedSize(head.cells[0], 100) !== zk.revisedSize(hdfaker.cells[0], 100);
+	
+	// Bug #1886788 the size of these table must be specified a fixed size.
+	var total = 0;
+	for (var k = head.cells.length; --k >= 0;)
+		total += head.cells[k].offsetWidth;
+	
+	hdtable.style.width = total + "px";	
+	var bdtable = $parentByTag(bdfaker, "TABLE");
+	if (bdtable) bdtable.style.width = hdtable.style.width;
+	var fttable = $parentByTag(ftfaker, "TABLE");
+	if (fttable) bdtable.style.width = hdtable.style.width;
 	
 	for (var i = bdfaker.cells.length; --i >= 0;) {
 		if (!zk.isVisible(hdfaker.cells[i])) continue;
@@ -60,16 +71,16 @@ zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 		var cell = head.cells[i].firstChild;
 		cell.style.width = zk.revisedSize(cell, cpwd) + "px";
 	}
-	// Bug #1886788 the size of these table must be specified a fixed size.
-	var total = 0;
-	for (var k = head.cells.length; --k >= 0;)
-		total += head.cells[k].offsetWidth;
 	
-	hdtable.style.width = total + "px";	
-	var bdtable = $parentByTag(bdfaker, "TABLE");
-	if (bdtable) bdtable.style.width = hdtable.style.width;
-	var fttable = $parentByTag(ftfaker, "TABLE");
-	if (fttable) bdtable.style.width = hdtable.style.width;
+	// in some case, the total width of this table may be changed.
+	var total1 = 0;
+	for (var k = head.cells.length; --k >= 0;)
+		total1 += head.cells[k].offsetWidth;
+	if (total != total1) {
+		hdtable.style.width = total1 + "px";	
+		if (bdtable) bdtable.style.width = hdtable.style.width;
+		if (fttable) bdtable.style.width = hdtable.style.width;
+	}
 };
 zul.getRealHeader = function (rows) {
 	for(var j =0, rl = rows.length; j < rl; j++) {

@@ -97,11 +97,6 @@ zk.Grid.prototype = {
 			}
 			if (h < 0) h = 0;
 			this.body.style.height = h + "px";
-						
-			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
-			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
-			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
-			// and IE7 at initializing phase.
 		} else {
 			//Bug 1556099: it is strange if we ever check the value of
 			//body.offsetWidth. The grid's body's height is 0 if init called
@@ -122,11 +117,15 @@ zk.Grid.prototype = {
 		//note: we don't solve this bug for paging yet
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			if (zk.ie6Only) this.element.style.overflow = "hidden";
-			wd = zk.revisedSize(this.element, this.element.offsetWidth) - (wd == "100%" ? 2 : 0);
+			var of;
+			if (zk.ie6Only) {
+				of = this.element.style.overflow;
+				this.element.style.overflow = "hidden";
+			}
+			wd = zk.revisedSize(this.element, this.element.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
-			if (zk.ie6Only) this.element.style.overflow = "";
+			if (zk.ie6Only) this.element.style.overflow = of;
 		}
 		if (wd) {
 			this.body.style.width = wd;

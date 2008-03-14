@@ -744,9 +744,15 @@ zk.Selectable.prototype = {
 		//is sometime too big
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = zk.revisedSize(this.element, this.element.offsetWidth) - (wd == "100%" ? 2 : 0);
+			var of;
+			if (zk.ie6Only) {
+				of = this.element.style.overflow;
+				this.element.style.overflow = "hidden";
+			}
+			wd = zk.revisedSize(this.element, this.element.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
+			if (zk.ie6Only) this.element.style.overflow = of;
 		}
 		if (wd) {
 			this.body.style.width = wd;
@@ -818,11 +824,6 @@ zk.Selectable.prototype = {
 
 				this.realsize(sz);
 				this.body.style.height = hgh + "px";
-				
-				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
-				if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
-				// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
-				// and IE7 at initializing phase.
 				return; //done
 			}
 		}
@@ -881,11 +882,6 @@ zk.Selectable.prototype = {
 			}
 
 			this.body.style.height = hgh + "px";
-			
-			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
-			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
-			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
-			// and IE7 at initializing phase.
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height
@@ -914,6 +910,13 @@ zk.Selectable.prototype = {
 	/** Returns the size for vflex
 	 */
 	_vflexSize: function () {
+		if (zk.ie6Only) { 
+			// ie6 must reset the height of the element,
+			// otherwise its offsetHeight might be wrong.
+			var hgh = this.element.style.height;
+			this.element.style.height = "";
+			this.element.style.height = hgh;
+		}
 		return this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0)
 			- (this.foot ? this.foot.offsetHeight : 0); // Bug #1815882
 	},

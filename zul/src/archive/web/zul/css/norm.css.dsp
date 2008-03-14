@@ -251,7 +251,7 @@ td.lwt-embedded, td.mwt-embedded, td.rwt-embedded {
 
 <%-- ZK tree, listbox, grid --%>
 div.listbox, div.tree, div.grid {<%-- depends sclass --%>
-	background: #DAE7F6; border: 1px solid #7F9DB9;
+	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden;
 }
 div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-head tr,
 	div.grid-head tr, div.tree-foot, 
