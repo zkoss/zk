@@ -146,48 +146,52 @@ public class AuDynaMediar implements AuProcessor {
 			return;
 		}
 
-		//reading an image and send it back to client
-		final String ctype = media.getContentType();
-		if (ctype != null)
-			response.setContentType(ctype);
+		final byte[] data;
+		synchronized (media) { //Bug 1896797: media might be access concurr.
+			//reading an image and send it back to client
+			final String ctype = media.getContentType();
+			if (ctype != null)
+				response.setContentType(ctype);
 
-		if (download) {
-			String value = "attachment";
-			final String flnm = media.getName();
-			if (flnm != null && flnm.length() > 0)
-				value += ";filename=\"" + URLEncoder.encode(flnm, "UTF-8") +'"';
-			response.setHeader("Content-Disposition", value);
-			//response.setHeader("Content-Transfer-Encoding", "binary");
-			//response.setHeader("Accept-Ranges", "bytes");
-		}
-
-		if (!media.inMemory()) {
-			if (media.isBinary()) {
-				final ServletOutputStream out = response.getOutputStream();
-				final InputStream in = media.getStreamData();
-				try {
-					Files.copy(out, in);
-				} finally {
-					in.close();
-				}
-				out.flush();
-			} else {
-				final Writer out = response.getWriter();
-				final Reader in = media.getReaderData();
-				try {
-					Files.copy(out, in);
-				} finally {
-					in.close();
-				}
-				out.flush();
+			if (download) {
+				String value = "attachment";
+				final String flnm = media.getName();
+				if (flnm != null && flnm.length() > 0)
+					value += ";filename=\"" + URLEncoder.encode(flnm, "UTF-8") +'"';
+				response.setHeader("Content-Disposition", value);
+				//response.setHeader("Content-Transfer-Encoding", "binary");
+				//response.setHeader("Accept-Ranges", "bytes");
 			}
-			return; //done;
+
+			if (!media.inMemory()) {
+				if (media.isBinary()) {
+					final ServletOutputStream out = response.getOutputStream();
+					final InputStream in = media.getStreamData();
+					try {
+						Files.copy(out, in);
+					} finally {
+						in.close();
+					}
+					out.flush();
+				} else {
+					final Writer out = response.getWriter();
+					final Reader in = media.getReaderData();
+					try {
+						Files.copy(out, in);
+					} finally {
+						in.close();
+					}
+					out.flush();
+				}
+				return; //done;
+			}
+
+			data = media.isBinary() ? media.getByteData():
+				media.getStringData().getBytes("UTF-8");
 		}
 
-		final ServletOutputStream out = response.getOutputStream();
-		final byte[] data = media.isBinary() ? media.getByteData():
-			media.getStringData().getBytes("UTF-8");
 		response.setContentLength(data.length);
+		final ServletOutputStream out = response.getOutputStream();
 		out.write(data);
 		out.flush();
 		//FUTURE: support last-modified
