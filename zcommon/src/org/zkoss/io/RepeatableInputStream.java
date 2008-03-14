@@ -51,10 +51,14 @@ import org.zkoss.util.logging.Log;
  * Note: the maximal value is {@link Integer#MAX_VALUE}
  * 
  * @author jumperchen
+ * @author tomyeh
  * @since 3.0.4
  */
 public class RepeatableInputStream extends InputStream {
 	private static final Log log = Log.lookup(RepeatableInputStream.class);
+
+	/*package*/ static final String BUFFER_LIMIT_SIZE = "org.zkoss.io.bufferLimitSize";
+	/*package*/ static final String MEMORY_LIMIT_SIZE = "org.zkoss.io.memoryLimitSize";
 
 	private InputStream _org;
 	private OutputStream _out;
@@ -69,13 +73,16 @@ public class RepeatableInputStream extends InputStream {
 
 	private RepeatableInputStream(InputStream is) {
 		_org = is;
-		_bufmaxsz = getIntProp("org.zkoss.io.bufferLimitSize", 20 * 1024 * 1024);
-		_memmaxsz = getIntProp("org.zkoss.io.memoryLimitSize", 512 * 1024);
+		_bufmaxsz = getIntProp(BUFFER_LIMIT_SIZE, 20 * 1024 * 1024);
+		_memmaxsz = getIntProp(MEMORY_LIMIT_SIZE, 512 * 1024);
 	}
 
 	/**
-	 * Returns a repeatable media with a repeatable input stream, if media is
-	 * not null.
+	 * Returns an input stream that can be read repeatedly, or null if the
+	 * given input stream is null.
+	 * Note: the returned input stream encapsulates the given input stream, rd
+	 * (aka., the buffered input stream) to adds the functionality to
+	 * re-opens the input stream once {@link #close} is called.
 	 *
 	 * <p>Use this method instead of instantiating {@link RepeatableInputStream}
 	 * with the constructor.
@@ -89,7 +96,7 @@ public class RepeatableInputStream extends InputStream {
 		return is;
 	}
 
-	private static int getIntProp(String name, int defVal) {
+	/*package*/ static int getIntProp(String name, int defVal) {
 		String val = null;
 		try {
 			val = System.getProperty(name);
@@ -148,14 +155,14 @@ public class RepeatableInputStream extends InputStream {
 
 	public int read() throws IOException {
 		if (_org != null) {
-			final int i = _org.read();
+			final int b = _org.read();
 			if (!_nobuf)
-				if (i >= 0) {
+				if (b >= 0) {
 					final OutputStream out = getOutputStream();
-					if (out != null) out.write(i);
+					if (out != null) out.write(b);
 					++_cntsz;
 				}
-			return i;
+			return b;
 		} else {
 			if (_in == null)
 				_in = new FileInputStream(_f); //_f must be non-null
@@ -164,7 +171,7 @@ public class RepeatableInputStream extends InputStream {
 		}
 	}
 
-	/** Closes the current access and re-open the buffer input stream.
+	/** Closes the current access and re-open the buffered input stream.
 	 */
 	public void close() throws IOException {
 		_cntsz = 0;
@@ -218,7 +225,7 @@ public class RepeatableInputStream extends InputStream {
 	public int read() throws IOException {
 		return _org.read();
 	}
-	/** Closes the current access and re-open the buffer input stream.
+	/** Closes the current access and re-open the buffered input stream.
 	 */
 	public void close() throws IOException {
 		_org.reset();

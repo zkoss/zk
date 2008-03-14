@@ -22,29 +22,44 @@ import java.io.InputStream;
 import java.io.Reader;
 
 import org.zkoss.io.RepeatableInputStream;
+import org.zkoss.io.RepeatableReader;
 
 /**
- * This class is used to wrap the media in a repeatable media, which can reread the 
- * media more than once.
+ * {@link RepeatableMedia} adds functionality to another media,
+ * the ability to read repeatedly.
+ * Unlike other media, {@link RepeatableMedia} uses
+ * {@link RepeatableInputStream}, if binary, or {@link RepeatableReader}
+ * to make {@link #getStreamData} and {@link #getReaderData} to
+ * be able to re-open when {@link InputStream#close} 
+ * or {@link Reader#close} is called.
+ * In other words, the buffered input stream of the give media
+ * is never closed until it is GC-ed.
+ * 
  * @author jumperchen
+ * @author tomyeh
  * @since 3.0.4
  */
 public class RepeatableMedia implements Media {
-	private Media _media;
+	private final Media _media;
 	private InputStream _isdata;
+	private Reader _rddata;
 	
 	private RepeatableMedia(Media media){
 		_media = media;
+		if (_media.isBinary())
+			_isdata  = RepeatableInputStream.getInstance(_media.getStreamData());
+		else
+			_rddata = RepeatableReader.getInstance(_media.getReaderData());
 	}
 	
 	/** 
-	 * Returns a repeatable media with a repeatable input stream, if media is not null.
+	 * Returns a repeatable media with a repeatable input stream or
+	 * reader, or null if the given media is null.
 	 */
 	public static Media getInstance(Media media) {
 		if (media != null && !media.inMemory()
-		&& !(media instanceof RepeatableMedia)) {
+		&& !(media instanceof RepeatableMedia))
 			return new RepeatableMedia(media);
-		}
 		return media;
 	}
 
@@ -52,7 +67,7 @@ public class RepeatableMedia implements Media {
 	 * @see Media#getReaderData()
 	 */
 	public Reader getReaderData() {
-		return _media.getReaderData();
+		return _rddata;
 	}
 
 	/**
@@ -61,11 +76,6 @@ public class RepeatableMedia implements Media {
 	 * @see RepeatableInputStream#getInstance(InputStream)
 	 */
 	public InputStream getStreamData() {
-		if (_isdata == null) {
-			_isdata = _media.getStreamData() instanceof RepeatableInputStream ?
-						_media.getStreamData() : 
-						RepeatableInputStream.getInstance(_media.getStreamData());
-		}
 		return _isdata;
 	}
 	
