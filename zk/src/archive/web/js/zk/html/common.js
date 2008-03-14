@@ -1455,7 +1455,7 @@ zk.cpCellWidth = function (dst, srcrows, mate) {
 		dst.cells[j].style.width = "";
 
 	var sum = 0;
-	for (var j = maxnc, z = 0; --j >= 0;) {
+	for (var j = maxnc; --j >= 0;) {
 		var d = dst.cells[j], s = src.cells[j];
 		if (zk.opera) {
 			sum += s.offsetWidth;
