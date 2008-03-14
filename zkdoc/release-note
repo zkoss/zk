@@ -85,6 +85,8 @@ ZK 3.0.4 Freshly
   1913246: Listbox paging mold is failed with zkmax.jar(Freshly only)
   1913290: Cast Exception when TimeSeries casts Integer to String
   1896797: iframe and pdf on FF
+  1886788: Grid rows not follow columns's widths
+  1914078: zkdemo animation unexpected behavior
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
