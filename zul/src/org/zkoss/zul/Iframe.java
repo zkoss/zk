@@ -24,8 +24,6 @@ import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 import org.zkoss.zul.impl.XulElement;
@@ -42,7 +40,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Iframe extends XulElement {
 	private String _align, _name;
-	private String _src, _marginheight = "", _marginwidth = "", _scrolling = "auto", _longdesc;
+	private String _src, _scrolling = "auto";
 	/** The media. If not null, _src is generated automatically. */
 	private Media _media; 
 	/** Count the version of {@link #_media}. */
@@ -54,48 +52,6 @@ public class Iframe extends XulElement {
 	}
 	public Iframe(String src) {
 		setSrc(src);
-	}
-
-	/**
-	 * Defines the top and bottom margins of the iframe
-	 * @param marginheight pixels only.
-	 * @since 3.0.4
-	 */
-	public void setMarginheight(String marginheight) {
-		if (marginheight == null) marginheight = "";
-		if (!marginheight.equals(_marginheight)) {
-			_marginheight = marginheight;
-			invalidate();
-		}
-	}
-	
-	/**
-	 * Returns the top and bottom margins of the iframe.
-	 * @since 3.0.4
-	 */
-	public String getMarginheight() {
-		return _marginheight;
-	}	
-	
-	/**
-	 * Defines the left and right margins of the iframe
-	 * @param marginwidth pixels only.
-	 * @since 3.0.4
-	 */
-	public void setMarginwidth(String marginwidth) {
-		if (marginwidth == null) marginwidth = "";
-		if (!marginwidth.equals(_marginwidth)) {
-			_marginwidth = marginwidth;
-			invalidate();
-		}
-	}
-	
-	/**
-	 * Returns the left and right margins of the iframe.
-	 * @since 3.0.4
-	 */
-	public String getMarginwidth() {
-		return _marginwidth;
 	}
 	
 	/**
@@ -119,34 +75,6 @@ public class Iframe extends XulElement {
 	 */
 	public String getScrolling() {
 		return _scrolling;
-	}
-	
-	/**
-	 * Sets a URL to a long description of the frame contents
-	 * @since 3.0.4
-	 */
-	public void setLongdesc(String longdesc) {
-		if (longdesc != null && longdesc.length() == 0)
-			longdesc = null;
-
-		if (!Objects.equals(_longdesc, longdesc)) {
-			_longdesc = longdesc;
-			invalidate();
-		}
-	}
-	
-	/**
-	 * Returns a URL to a long description of the frame contents
-	 * @since 3.0.4
-	 */
-	public String getLongdesc() {
-		return _longdesc;
-	}
-	
-	private String getEncodedLongdesc() {
-		final Desktop dt = getDesktop();
-		return dt != null ? dt.getExecution().encodeURL(
-				_longdesc != null ? _longdesc: "~./img/spacer.gif"):  "";
 	}
 	
 	/** Returns the alignment.
@@ -283,10 +211,6 @@ public class Iframe extends XulElement {
 		HTMLs.appendAttribute(sb, "align",  _align);
 		HTMLs.appendAttribute(sb, "name",  _name);
 		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
-		if (getLongdesc() != null) 
-			HTMLs.appendAttribute(sb, "longdesc",  getEncodedLongdesc());
-		HTMLs.appendAttribute(sb, "marginheight",  _marginheight);
-		HTMLs.appendAttribute(sb, "marginwidth",  _marginwidth);
 		if (!"auto".equals(_scrolling))
 			HTMLs.appendAttribute(sb, "scrolling", 
 				"true".equals(_scrolling) ? "yes":
