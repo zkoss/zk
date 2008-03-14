@@ -18,10 +18,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <div>
-Right click the image and the context menu shall show up. Further, the tooltip
-shall never show in this case.
-On the other hand, if the context menu is not shown, the tooltip shall
-show if the mouse point is on top of the image for a while.
+<html><![CDATA[
+1. Move mouse point  on top of the image for a while, then  the tooltip shall show ! <br />
+2. Right click the image and the context menu shall show up. (the tooltip shall never show)<br />
+]]></html> 
 <zscript>contacts = new String[] {"Monday"};</zscript>
 <zk forEach="${contacts }">
 <window>

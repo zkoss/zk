@@ -17,10 +17,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:ol>
+		<n:li>1. Clicks textbox (to gain focus), </n:li>
+		<n:li>2. Clicks other place (to lose focus),and then you shall see nothing happen.</n:li>
+		<n:li>It is wrong, if a messagebox is shown</n:li>
+</n:ol>
 <window>
-1. Clicks textbox (to gain focus), 2. Clicks other place (to lose focus),
-and then you shall see nothing happen.
-It is wrong, if a messagebox is shown
-
 	<textbox onChange='alert("1");' constraint="no negative,no zero"/>
 </window>
+</zk>

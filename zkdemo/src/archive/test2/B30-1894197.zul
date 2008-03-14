@@ -3,6 +3,7 @@
 <zk xmlns="http://www.zkoss.org/2005/zul">
     
     <window title="Dynamically Change by Model">
+     Click button setOpen shall render the treeitem .
         <zscript><![CDATA[
         class MySimpleTreeNode extends SimpleTreeNode {
                 private String myData = null;

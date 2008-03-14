@@ -21,11 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 [Safari only]
 Click "Tab 1" and then "Tab 2", and then the scrollbar disappeared
 (which is incorrect).
-<borderlayout height="500px">
-<north size="50%" border="true">
-<borderlayout>
-<west size="25%" border="true" flex="true">
-<tabbox width="400px" mold="accordion">
+<tabbox width="300px" mold="accordion">
 	<tabs>
 		<tab label="Tab 1"/>
 		<tab label="Tab 2" selected="true"/>
@@ -40,11 +36,4 @@ Click "Tab 1" and then "Tab 2", and then the scrollbar disappeared
 	</tabpanels>
 </tabbox>
 
-</west>
-<center border="none" flex="true"/>
-<east size="50%" border="true" flex="true"/>
-</borderlayout>
-</north>
-<center border="true"/>
-</borderlayout>
 </zk>
