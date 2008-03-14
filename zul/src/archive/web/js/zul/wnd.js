@@ -71,7 +71,12 @@ zkWnd.onVisi = zkWnd.onSize = zkWnd._fixHgh = function (cmp) {
 	}
 	if (hgh && hgh != "auto") {
 		var n = $e(cmp.id + "!cave");
-		if (n) zk.setOffsetHeight(n, zk.getVflexHeight(n));
+		if (n) 
+			if (zk.ie6Only && hgh.indexOf("%") >= 0) n.style.height = "100%";
+			else zk.setOffsetHeight(n, zk.getVflexHeight(n));
+			 //Bug 1914104: we have to use % for particular case with IE6
+			 //but we cannot use % everywhere. Otherwise, it introduced
+			 //unnecessary vertical bar
 	}
 };
 zkWnd._embedded = function (cmp) {
