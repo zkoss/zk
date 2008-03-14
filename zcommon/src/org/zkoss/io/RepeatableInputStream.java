@@ -26,16 +26,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.FileNotFoundException;
 
 import org.zkoss.util.logging.Log;
 
 /**
  * {@link RepeatableInputStream} adds functionality to another input stream,
  * the ability to read repeatedly.
- * Unlike other input stream, {@link RepeatableInputStream} re-opened
- * the buffered input stream, when {@link #close} is called.
- * In other words, the buffered input stream is never closed until
- * it is GC-ed.
+ * By repeatable-read we meaen, after {@link #close}, the next invocation of
+ * {@link #read} will re-open the input stream.
+ *
+ * <p>{@link RepeatableInputStream} actually creates a temporary space
+ * to buffer the content, so it can be re-opened again after closed.
+ * Notice that the temporary space (aka., the buffered input stream)
+ * is never closed until garbage-collected.
  *
  * <p>If the content size of the given input stream is smaller than
  * the value specified in the system property called
@@ -54,7 +58,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  * @since 3.0.4
  */
-public class RepeatableInputStream extends InputStream {
+public class RepeatableInputStream extends InputStream implements Repeatable {
 	private static final Log log = Log.lookup(RepeatableInputStream.class);
 
 	/*package*/ static final String BUFFER_LIMIT_SIZE = "org.zkoss.io.bufferLimitSize";
@@ -84,16 +88,61 @@ public class RepeatableInputStream extends InputStream {
 	 * (aka., the buffered input stream) to adds the functionality to
 	 * re-opens the input stream once {@link #close} is called.
 	 *
+	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * invocation of {@link #read} will re-open the input stream.
+	 *
 	 * <p>Use this method instead of instantiating {@link RepeatableInputStream}
 	 * with the constructor.
+	 *
+	 * @see #getInstance(File)
 	 */
 	public static InputStream getInstance(InputStream is) {
 		if (is instanceof ByteArrayInputStream)
 			return new ResetableInputStream(is);
-		else if (is != null && !(is instanceof RepeatableInputStream)
-		&& !(is instanceof ResetableInputStream))
+		else if (is != null && !(is instanceof Repeatable))
 			return new RepeatableInputStream(is);
 		return is;
+	}
+	/**
+	 * Returns an input stream on top of a file that can be read repeatedly.
+	 * Note: it assumes the file is binary (rather than text).
+	 *
+	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * invocation of {@link #read} will re-open the input stream.
+	 *
+	 * <p>Note: it is effecient since we don't have to buffer the
+	 * content of the file to make it repeatable-read.
+	 *
+	 * @exception IllegalArgumentException if file is null.
+	 * @exception FileNotFoundException if file not found
+	 * @see #getInstance(InputStream)
+ 	 * @see #getInstance(String)
+	 */
+	public static InputStream getInstance(File file)
+	throws IOException {
+		if (file == null)
+			throw new IllegalArgumentException("null");
+		if (!file.exists())
+			throw new FileNotFoundException(file.toString());
+		return new RepeatableFileInputStream(file);
+	}
+	/**
+	 * Returns an input stream on top of a file that can be read repeatedly.
+	 * Note: it assumes the file is binary (rather than text).
+	 *
+	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * invocation of {@link #read} will re-open the input stream.
+	 *
+	 * <p>Note: it is effecient since we don't have to buffer the
+	 * content of the file to make it repeatable-read.
+	 *
+	 * @exception IllegalArgumentException if file is null.
+	 * @see #getInstance(InputStream)
+	 * @see #getInstance(File)
+	 */
+	public static InputStream getInstance(String filename)
+	throws IOException {
+		return getInstance(new File(filename));
 	}
 
 	/*package*/ static int getIntProp(String name, int defVal) {
@@ -171,7 +220,8 @@ public class RepeatableInputStream extends InputStream {
 		}
 	}
 
-	/** Closes the current access and re-open the buffered input stream.
+	/** Closes the current access, and the next call of {@link #close}
+	 * re-opens the buffered input stream.
 	 */
 	public void close() throws IOException {
 		_cntsz = 0;
@@ -216,7 +266,8 @@ public class RepeatableInputStream extends InputStream {
 		super.finalize();
 	}
 }
-/*package*/ class ResetableInputStream extends InputStream {
+/*package*/ class ResetableInputStream extends InputStream
+implements Repeatable {
 	private final InputStream _org;
 	ResetableInputStream(InputStream bais) {
 		_org = bais;
@@ -225,7 +276,8 @@ public class RepeatableInputStream extends InputStream {
 	public int read() throws IOException {
 		return _org.read();
 	}
-	/** Closes the current access and re-open the buffered input stream.
+	/** Closes the current access, and the next call of {@link #read}
+	 * re-opens the buffered input stream.
 	 */
 	public void close() throws IOException {
 		_org.reset();
@@ -234,6 +286,36 @@ public class RepeatableInputStream extends InputStream {
 	//Object//
 	protected void finalize() throws Throwable {
 		_org.close();
+		super.finalize();
+	}
+}
+/*package*/ class RepeatableFileInputStream extends InputStream
+implements Repeatable {
+	private final File _file;
+	private InputStream _in;
+
+	RepeatableFileInputStream(File file) {
+		_file = file;
+	}
+
+	public int read() throws IOException {
+		if (_in == null)
+			_in = new FileInputStream(_file);
+		return _in.read();
+	}
+	/** Closes the current access, and the next call of {@link #read}
+	 * re-opens the buffered input stream.
+	 */
+	public void close() throws IOException {
+		if (_in != null) {
+			_in.close();
+			_in = null;
+		}
+	}
+
+	//Object//
+	protected void finalize() throws Throwable {
+		close();
 		super.finalize();
 	}
 }

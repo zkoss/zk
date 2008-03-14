@@ -44,12 +44,13 @@ public class RepeatableMedia implements Media {
 	private InputStream _isdata;
 	private Reader _rddata;
 	
-	private RepeatableMedia(Media media){
+	private RepeatableMedia(Media media, InputStream data){
 		_media = media;
-		if (_media.isBinary())
-			_isdata  = RepeatableInputStream.getInstance(_media.getStreamData());
-		else
-			_rddata = RepeatableReader.getInstance(_media.getReaderData());
+		_isdata  = data;
+	}
+	private RepeatableMedia(Media media, Reader data){
+		_media = media;
+		_rddata = data;
 	}
 	
 	/** 
@@ -58,8 +59,19 @@ public class RepeatableMedia implements Media {
 	 */
 	public static Media getInstance(Media media) {
 		if (media != null && !media.inMemory()
-		&& !(media instanceof RepeatableMedia))
-			return new RepeatableMedia(media);
+		&& !(media instanceof RepeatableMedia)) {
+			if (media.isBinary()) {
+				final InputStream data = media.getStreamData(),
+					after  = RepeatableInputStream.getInstance(data);
+				if (data != after)
+					return new RepeatableMedia(media, after);
+			} else {
+				final Reader data = media.getReaderData(),
+					after = RepeatableReader.getInstance(data);
+				if (data != after)
+					return new RepeatableMedia(media, after);
+			}
+		}
 		return media;
 	}
 
