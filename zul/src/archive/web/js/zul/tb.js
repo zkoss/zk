@@ -192,7 +192,7 @@ zkTmbox._btnDown= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt)),
 		inp = $real(cmp);
-	if(inp.disabled) return;
+	if(inp.disabled || zk.dragging) return;
 
 	var btn = $e(cmp.id + "!btn"),
 		ofs = Position.cumulativeOffset(btn);
@@ -208,7 +208,7 @@ zkTmbox._btnUp= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
-	if(inp.disabled) return;
+	if(inp.disabled || zk.dragging) return;
 
 	zkTmbox._stopAutoIncProc(cmp);
 	zkTmbox._markPositionSel(cmp);
@@ -218,7 +218,7 @@ zkTmbox._btnOut= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
-	if(inp.disabled) return;
+	if(inp.disabled || zk.dragging) return;
 
 	zkTmbox._stopAutoIncProc(cmp);
 };
