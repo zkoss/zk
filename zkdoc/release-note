@@ -91,6 +91,7 @@ ZK 3.0.4 Freshly
   1914113: Empty space in listbox with ZK3.0.4
   1914104: IE6: When resize browser, the inner window doesn't resize
   1914184: Error massage:Failed to invoke zkGrid.onSize
+  1914230: Invalid value send to server without validation
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
