@@ -36,16 +36,16 @@ if (!window.Comboitem_effect) { //define it only if not customized
 ////
 zkCmbox = {};
 zkCmbox.onblur = function (evt) {
-	var inp = zkau.evtel(evt);
-	var uuid = $uuid(inp);
-	var cmp = $e(uuid);
+	var inp = zkau.evtel(evt),
+		uuid = $uuid(inp),
+		cmp = $e(uuid);
 	if (!zkTxbox._noonblur(inp) && $type(cmp) == "Cmbox") {
 		var inpval = inp.value.toLowerCase();
 		if (inpval.length > 0) {
-			var pp2 = $e(uuid + "!cave");
-			var rows = pp2.rows;
-			var jfnd = -1, strict = getZKAttr(cmp, "valid") || "";
-			strict = strict.toLowerCase().indexOf("strict") > -1;
+			var pp2 = $e(uuid + "!cave"),
+				rows = pp2.rows, jfnd = -1,
+				strict = (getZKAttr(cmp, "valid") || "")
+					.toLowerCase().indexOf("strict") >= 0;
 			for (var j = 0, rl = rows.length; j < rl; ++j) {			
 			var item = rows[j];
 				var txt = zkCmbox.getLabel(item).toLowerCase();
@@ -54,15 +54,14 @@ zkCmbox.onblur = function (evt) {
 					break;
 				}
 			}
-			if (jfnd > -1) item = rows[j];
+			if (jfnd >= 0) item = rows[j];
 			else item = {id: ""};
-				var selId = getZKAttr(cmp, "selid");
-				
-				if (selId != item.id) {
-					setZKAttr(cmp, "selid", item.id);
-					zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
-						zkau.asapTimeout($e(uuid), "onSelect"));			
-				}
+
+			if ((jfnd >= 0 || !strict) && getZKAttr(cmp, "selid") != item.id) {
+				setZKAttr(cmp, "selid", item.id);
+				zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
+					zkau.asapTimeout(cmp, "onSelect"));
+			}
 		}	
 	}
 	zkTxbox.onblur(evt);
