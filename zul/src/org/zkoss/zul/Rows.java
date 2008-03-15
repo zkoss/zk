@@ -117,13 +117,12 @@ public class Rows extends XulElement {
 				//we have to test >= rather than >
 	}
 		public Set getAvailableAtClient() {
-			final Grid grid = getGrid();
-			if (grid == null)
+			if (!isCropper())
 				return null;
+
+			final Grid grid = getGrid();
 			if (grid.inSpecialMold())
 				return grid.getDrawerEngine().getAvailableAtClient();
-			if(!grid.inPagingMold())
-				return null;
 
 			final Set avail = new HashSet(37);
 			final Paginal pgi = grid.getPaginal();

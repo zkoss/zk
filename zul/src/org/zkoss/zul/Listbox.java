@@ -1938,8 +1938,10 @@ public class Listbox extends XulElement {
 				//we have to test >= rather than >
 		}
 		public Set getAvailableAtClient() {
-			if (!inPagingMold())
-				return inSpecialMold() ? _engine.getAvailableAtClient(): null;
+			if (!isCropper())
+				return null;
+			if (inSpecialMold())
+				return _engine.getAvailableAtClient();
 
 			final Set avail = new HashSet(37);
 			avail.addAll(_heads);
