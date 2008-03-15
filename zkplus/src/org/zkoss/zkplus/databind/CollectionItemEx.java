@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * This interface is an enhanced version of the original
- * {@linke CollectionItem} interface that 
+ * {@link CollectionItem} interface that 
  * provides a way that will speed up the processing under some 
  * collection in collection condition.
  * 
