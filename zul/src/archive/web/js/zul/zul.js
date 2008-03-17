@@ -44,25 +44,39 @@ zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 	
 	var hdtable = hdfaker.parentNode.parentNode, head = zul.getRealHeader(hdtable.tBodies[1].rows);
 	if (!head) return; 
-	if (zk.opera && !hdtable.style.width)
-		hdtable.style.tableLayout = "auto";
+	if (zk.opera) {
+		if (!hdtable.style.width) {
+			var has;
+			for(var i = hdfaker.cells.length; --i >=0;)
+				if (hdfaker.cells[i].style.width && hdfaker.cells[i].style.width.indexOf("%") < 0) {
+					has = true; 
+					break;
+				}
+			if (!has) hdtable.style.tableLayout = "auto";
+		} else hdtable.style.tableLayout = "fixed";
+	} 
 	var including = zk.revisedSize(head.cells[0], 100) !== zk.revisedSize(hdfaker.cells[0], 100);
 	
 	// Bug #1886788 the size of these table must be specified a fixed size.
-	var total = 0;
-	for (var k = head.cells.length; --k >= 0;)
-		total += head.cells[k].offsetWidth;
-	
+	var bdtable = $parentByTag(bdfaker, "TABLE"),
+		total = hdtable.offsetWidth, 
+		fttable = $parentByTag(ftfaker, "TABLE"), 
+		tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
+		
+	if (total == bdtable.parentNode.offsetWidth && 
+		bdtable.parentNode.offsetWidth > tblwd && bdtable.parentNode.offsetWidth - tblwd < 20)
+		total = tblwd;
+		
+	var count = total;
 	hdtable.style.width = total + "px";	
-	var bdtable = $parentByTag(bdfaker, "TABLE");
+	
 	if (bdtable) bdtable.style.width = hdtable.style.width;
-	var fttable = $parentByTag(ftfaker, "TABLE");
 	if (fttable) bdtable.style.width = hdtable.style.width;
 	
 	for (var i = bdfaker.cells.length; --i >= 0;) {
 		if (!zk.isVisible(hdfaker.cells[i])) continue;
-		
-		bdfaker.cells[i].style.width = zk.revisedSize(bdfaker.cells[i], bdfaker.cells[i].offsetWidth) + "px";
+		var wd = i != 0 ? bdfaker.cells[i].offsetWidth : count;
+		bdfaker.cells[i].style.width = zk.revisedSize(bdfaker.cells[i], wd) + "px";
 		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 		if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 		var cpwd = including ? zk.revisedSize(head.cells[i], $int(hdfaker.cells[i].style.width)) :
@@ -70,14 +84,18 @@ zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 		head.cells[i].style.width = cpwd + "px";
 		var cell = head.cells[i].firstChild;
 		cell.style.width = zk.revisedSize(cell, cpwd) + "px";
+		count -= wd;
 	}
 	
 	// in some case, the total width of this table may be changed.
-	var total1 = 0;
-	for (var k = head.cells.length; --k >= 0;)
-		total1 += head.cells[k].offsetWidth;
-	if (total != total1) {
-		hdtable.style.width = total1 + "px";	
+	if (total != hdtable.offsetWidth) {
+		total = hdtable.offsetWidth;
+		tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
+		if (total == bdtable.parentNode.offsetWidth && 
+			bdtable.parentNode.offsetWidth > tblwd && bdtable.parentNode.offsetWidth - tblwd < 20)
+			total = tblwd;
+			
+		hdtable.style.width = total + "px";	
 		if (bdtable) bdtable.style.width = hdtable.style.width;
 		if (fttable) bdtable.style.width = hdtable.style.width;
 	}
@@ -309,7 +327,12 @@ zulHdr._endsizing = function (cmp, evt) {
 		if (meta.foottbl) {
 			meta.ftfaker.cells[cidx].style.width = wd + "px";
 		}
+		var fixed;
 		if (meta.bodytbl) {
+			if (zk.opera && !meta.bodytbl.style.tableLayout) {
+				fixed = "auto";
+				meta.bodytbl.style.tableLayout = "fixed";
+			}
 			meta.bdfaker.cells[cidx].style.width = wd + "px";
 		}
 		
@@ -330,6 +353,7 @@ zulHdr._endsizing = function (cmp, evt) {
 			if (evt.ctrlKey) keys += 'c';
 			if (evt.shiftKey) keys += 's';
 		}
+		if (zk.opera && fixed) meta.bodytbl.style.tableLayout = fixed;
 		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cidx+",'"+wd+"','"+keys+"')", 0);
 	}
 };
