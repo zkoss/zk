@@ -53,13 +53,13 @@ zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 					break;
 				}
 			if (!has) hdtable.style.tableLayout = "auto";
-		} else hdtable.style.tableLayout = "fixed";
+		}
 	} 
 	var including = zk.revisedSize(head.cells[0], 100) !== zk.revisedSize(hdfaker.cells[0], 100);
 	
 	// Bug #1886788 the size of these table must be specified a fixed size.
 	var bdtable = $parentByTag(bdfaker, "TABLE"),
-		total = hdtable.offsetWidth, 
+		total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth), 
 		fttable = $parentByTag(ftfaker, "TABLE"), 
 		tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
 		
