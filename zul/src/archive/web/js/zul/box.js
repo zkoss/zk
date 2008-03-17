@@ -37,8 +37,9 @@ zkBox.rmAttr = function (cmp, nm) {
 	}
 	return false;
 };
-zkBox.onVisi = zkBox.onSize = function (cmp) {
+zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
 	if (!getZKAttr(cmp, "hasSplt")) return;
+
 	var vert = getZKAttr(cmp, "vert") == "true";
 	var nd = vert ? cmp.rows : cmp.rows[0].cells;
 	var total = vert ? cmp.offsetHeight : cmp.offsetWidth;
@@ -254,11 +255,19 @@ zkSplt._fixKidSplts = function (n) {
 zkSplt._closeAtInit = function (cmp) {
 	var nd = $e(cmp.id + "!chdextr"), tn = $tag(nd), colps = getZKAttr(cmp, "colps");
 	if (!colps || "none" == colps) return; //nothing to do
+
 	var vert = getZKAttr(cmp, "vert"), sib = colps == "before" ? 
 		zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
-	sib.style.display = "none"; 
-	if (!cmp._precls)cmp._precls = cmp.className;	
-	zk.addClass(cmp, cmp._precls + "-ns");
+	sib.style.display = "none";
+	zkSplt._updcls(cmp);
+};
+zkSplt._updcls = function (cmp, open) {
+	var nm = cmp.className, j = nm.indexOf("-ns");
+	if (open) {
+		if (j >= 0) cmp.className = nm.substring(0, j);
+	} else {
+		if (j < 0) cmp.className = nm + "-ns";
+	}
 };
 zkSplt.open = function (cmp, open, silent, enforce) {
 	var nd = $e(cmp.id + "!chdextr");
@@ -269,47 +278,21 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	var colps = getZKAttr(cmp, "colps");
 	if (!colps || "none" == colps) return; //nothing to do
 
-	var vert = getZKAttr(cmp, "vert");
-	var prev = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
-	var next = colps == "before" ? zkSplt._next(nd, tn) : zkSplt._prev(nd, tn);
-	
-	if (prev) {
-		if (!prev.style[vert ? "height" : "width"])	next.style[vert ? "height" : "width"] = "";
-		zk.show(prev, open);
-	}
+	var vert = getZKAttr(cmp, "vert"),
+		sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
+	if (sib) zk.show(sib, open);
+		//it will call zk.onVisi(sib) or zk.onHide(sib)
 
-	if (vert) {
-		var height = $int(prev.style.height) || zk.revisedSize(prev, prev.offsetHeight, true);
-		if (height < 0) height = 0;
-		if (!prev.style.height) {
-			prev.style.height = height + "px";
-			next.style.height = zk.revisedSize(next, next.offsetHeight, true) + "px";
-		} else {
-			if (open) next.style.height = Math.max($int(next.style.height) - height, 0) + "px";
-			else next.style.height = $int(next.style.height) + height + "px";
-		}
-	 } else {
-	 	var width = $int(prev.style.width) || zk.revisedSize(prev, prev.offsetWidth);
-		if (width < 0) width = 0;
-		if (!prev.style.width) {
-			prev.style.width = width + "px";
-			next.style.width = zk.revisedSize(next, next.offsetWidth) + "px";
-		} else {
-		 	if (open) next.style.width = Math.max($int(next.style.width) - width, 0) + "px";  
-			else next.style.width = $int(next.style.width) + width + "px";
-		}  
-	}
-	zk.onSizeAt(next);
-	
+	sib = colps == "before" ? zkSplt._next(nd, tn): zkSplt._prev(nd, tn);
+	if (sib) zk.onSizeAt(sib);	
+
 	setZKAttr(cmp, "open", open ? "true": "false");
 
 	zkSplt._fixbtn(cmp);
 	zkSplt._fixszAll(cmp);
 	
 	cmp.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
-	if (!cmp._precls)cmp._precls = cmp.className;	
-	if (open) zk.rmClass(cmp, cmp._precls + "-ns");
-	else zk.addClass(cmp, cmp._precls + "-ns");
+	zkSplt._updcls(cmp, open);
 	if (!silent)
 		zkau.send({uuid: cmp.id, cmd: "onOpen", data: [open]},
 			zkau.asapTimeout(cmp, "onOpen"));
