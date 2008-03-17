@@ -346,8 +346,8 @@ tr.item a:hover {
 }
 
 tr.grid td.gc {
-	background: white; border-bottom: none; border-left: 1px solid white;
-	border-right: 1px solid #CCC; border-top: 1px solid #DDD;
+	background: white; border-top: none; border-left: 1px solid white;
+	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
 
 tr.odd td.gc, tr.odd {
