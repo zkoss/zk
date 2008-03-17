@@ -9,6 +9,11 @@ img	{
 	width: 47pt;
 	text-overflow: ellipsis;
 }
+<c:if test="${c:isExplorer() && !c:isExplorer7()}">
+div.listbox, div.tree, div.grid {
+	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
+}
+</c:if>
 div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
 	position:relative;
 	<%-- Bug 1712708:  we have to specify position:relative --%>
