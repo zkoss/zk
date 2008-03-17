@@ -94,6 +94,7 @@ ZK 3.0.4 Freshly
   1914230: Invalid value send to server without validation
   1916473: Vbox witth height and splitter not collapse correct if resiz
   1916287: Bottom border of rows is disappeared
+  1914215: Words are outside of Listitem when append a tab(IE6 only)
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
