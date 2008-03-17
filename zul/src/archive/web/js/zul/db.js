@@ -225,14 +225,14 @@ zk.Cal.prototype = {
 	},
 	setDate: function (val) {
 		if (val != this.date) {
-			var old = this.date;
-			if (old.getFullYear() != val.getFullYear()
-			|| old.getMonth() != val.getMonth()) {
+			var old = this.date,
+				year = val.getFullYear(), mon = val.getMonth();
+			if (old.getFullYear() != year || old.getMonth() != mon) {
 				this.date = val;
 				this._output();
 			} else {
 				this.date = val;
-				this._outcell(this.curcell, false);
+				this._outcell(this.curcell, false, this._invalid(val));
 	
 				var d = val.getDate();
 				for (var j = 0; j < 6; ++j) {
@@ -241,7 +241,8 @@ zk.Cal.prototype = {
 						var cell = el.cells[k];
 						if (zk.getIntAttr(cell, "zk_monofs") == 0
 						&& zk.getIntAttr(cell, "zk_day") == d) {
-							this._outcell(cell, true);
+							this._outcell(cell, true,
+								this._invalid(new Date(year, mon, d)));
 							break;
 						}
 					}
