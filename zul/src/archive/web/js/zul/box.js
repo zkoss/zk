@@ -172,7 +172,7 @@ zkSplt._endDrag = function (cmp) {
 	
 		if (run.next) zk.onSizeAt(run.next);
 		if (run.prev) zk.onSizeAt(run.prev);
-		zkSplt._fixsz(cmp);
+		zkSplt._fixszAll(cmp);
 		
 		//fix all splitter's size because table might be with %
 		drag.run = null;//free memory
@@ -204,6 +204,7 @@ zkSplt._snap = function (cmp, x, y) {
 /** Fixes the height (wd) of the specified splitter. */
 zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 	if (!zk.isRealVisible(cmp))return;
+
 	var vert = getZKAttr(cmp, "vert");
 	var parent = cmp.parentNode;
 	if (parent) {
@@ -212,7 +213,7 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 		if (vert) {
 			var tr = parent.parentNode; //TR
 			cmp.style.height = tr.style.height = "8px";
-			cmp.style.width = "0px"; // clean width
+			cmp.style.width = ""; // clean width
 			cmp.style.width = parent.clientWidth + "px"; //all wd the same
 		} else {
 			cmp.style.width = parent.style.width = "8px";
@@ -231,6 +232,21 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
 	if (vert) btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
 	else btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
+};
+/** Fixes the height (width) of all related splitter. */
+zkSplt._fixszAll = function (cmp) {
+	//1. find the topmost box
+	var box;
+	for (var p = cmp; p = p.parentNode;) //no need to use $parent
+		if ($type(p) == "Box") box = p;
+
+	if (box) zkSplt._fixKidSplts(box);
+	else zkSplt._fixsz(cmp);
+};
+zkSplt._fixKidSplts = function (n) {
+	if ($type(n) == "Splt") zkSplt._fixsz(n);
+	for (n = n.firstChild; n; n = n.nextSibling)
+		zkSplt._fixKidSplts(n);
 };
 /**
  * For best performance, this function doesn't need to compute anything.
@@ -288,7 +304,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	setZKAttr(cmp, "open", open ? "true": "false");
 
 	zkSplt._fixbtn(cmp);
-	zkSplt._fixsz(cmp);
+	zkSplt._fixszAll(cmp);
 	
 	cmp.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
 	if (!cmp._precls)cmp._precls = cmp.className;	

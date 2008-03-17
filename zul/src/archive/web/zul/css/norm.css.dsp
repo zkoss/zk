@@ -1039,8 +1039,7 @@ tr.tab-lite-m, tr.groupbox-lite-m {
 <%-- Splitter component --%>
 div.splitter-h, div.splitter-v, div.splitter-h-ns, div.splitter-v-ns, span.splitter-btn-l, 
 	span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn-b {
-    line-height:1px;
-    font-size:1px;
+    line-height:1px; font-size:0;
 }
 div.splitter-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
@@ -1063,9 +1062,8 @@ span.splitter-btn-l:hover, span.splitter-btn-r:hover, span.splitter-btn-t:hover 
 span.splitter-btn-l, span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn-b {
 	filter:alpha(opacity=50);  <%-- IE --%>
 	opacity:0.5;  <%-- Moz + FF --%>	
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
+	background-repeat: no-repeat; vertical-align:top;
+	display:-moz-inline-box; display:inline-block; font-size:0;
 }
 
 span.splitter-btn-visi {
@@ -1117,9 +1115,8 @@ span.splitter-os-btn-l:hover, span.splitter-os-btn-r:hover, span.splitter-os-btn
 span.splitter-os-btn-l, span.splitter-os-btn-r, span.splitter-os-btn-t ,span.splitter-os-btn-b {
 	filter:alpha(opacity=50);  <%-- IE --%>
 	opacity:0.5;  <%-- Moz + FF --%>	
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
+	background-repeat: no-repeat; vertical-align:top;
+	display:-moz-inline-box; display:inline-block; font-size: 0;
 }
 
 span.splitter-os-btn-l {
