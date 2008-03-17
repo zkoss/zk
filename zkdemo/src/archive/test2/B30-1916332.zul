@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B30-1916332.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 17 16:46:32 TST 2008, Created by ivancheng
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window border="normal" width="800px" title="Case 1: hbox and splitter">
+<hbox height="100px" width="800px">
+cdacdacdacdacdaca
+<splitter id="hsplitter" collapse="none"/>
+cdacdacdacdacacsdc
+</hbox>
+</window>
+
+<window border="normal" title="Case 2: vbox and splitter">
+<vbox height="100px" width="100%">
+cdacdacda
+<splitter id="vsplitter" collapse="none"/>
+cdacdacda
+</vbox>
+</window>
