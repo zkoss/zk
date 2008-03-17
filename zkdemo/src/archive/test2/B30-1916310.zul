@@ -23,7 +23,22 @@ Opera: it is hard to drag the splitter<br/>
 Safari: the height is not correct (it shall be 100px)
 ]]></html>
 
-<hbox height="100px" width="800px">
+Case 1:
+<hbox spacing="0" width="100%">
+	<vbox spacing="0" height="200px">
+		Column 1-1: The left-top box. To know whether a splitter
+		is collapsed, you can listen to the onOpen event.
+		<splitter collapse="after"/>
+		Column 1-2: You can enforce to open or collapse programming
+		by calling setOpen method.
+	</vbox>
+	<splitter collapse="before"/>
+	Column 2: Whether a splitter allows users to open or collapse
+	depending on the collapse attribue.
+</hbox>
+
+Case 2:
+<hbox height="100px" width="100%">
 cdacdacdacdacdaca
 <splitter id="hsplitter" collapse="none"/>
 cdacdacdacdacacsdc
