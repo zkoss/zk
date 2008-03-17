@@ -245,7 +245,21 @@ zkSplt._fixszAll = function (cmp) {
 	else zkSplt._fixsz(cmp);
 };
 zkSplt._fixKidSplts = function (n) {
-	if ($type(n) == "Splt") zkSplt._fixsz(n);
+	if (!$visible(n)) return;
+
+	var type = $type(n);
+	if (type == "Splt") zkSplt._fixsz(n);
+	else if (type == "Box") {
+		var p = n.parentNode;
+		if ($tag(p) == "TD") {
+			var vert = getZKAttr(n, "vert") == "true",
+				nm = vert ? "height": "width",
+				sz = vert ? p.clientHeight: p.clientWidth;
+			if (n.style[nm] && sz)
+				n.style[nm] = sz + "px";
+		}
+	}
+
 	for (n = n.firstChild; n; n = n.nextSibling)
 		zkSplt._fixKidSplts(n);
 };
