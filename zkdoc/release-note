@@ -96,6 +96,7 @@ ZK 3.0.4 Freshly
   1916287: Bottom border of rows is disappeared
   1914215: Words are outside of Listitem when append a tab(IE6 only)
   1914103: IE : Column Size error after drag column, when in borderlayo
+  1914054: Open tree node were overleap other component(IE6 only)
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
