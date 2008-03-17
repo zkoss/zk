@@ -601,6 +601,7 @@ zkPMeter = {};
 zkPMeter.onSize = zkPMeter.onVisi = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
+		if (zk.ie6Only) img.style.width = ""; //Bug 1899749
 		var val = $int(getZKAttr(cmp, "value"));
 		img.style.width = Math.round((cmp.clientWidth * val) / 100) + "px";
 	}

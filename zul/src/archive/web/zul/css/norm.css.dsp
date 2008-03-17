@@ -856,12 +856,14 @@ div.errbox {
 }
 
 div.progressmeter {
-	border: 1px inset; text-align: left;
+	border-top: 1px solid #666; border-left: 1px solid #666;
+	border-bottom: 1px solid #bbb; border-right: 1px solid #bbb;
+	text-align: left;
 }
 span.progressmeter-img {
 	display:-moz-inline-box; display:inline-block;
 	background-image: url(${c:encodeURL('~./zk/img/prgmeter.gif')});
-	height: 10px;
+	height: 10px; font-size:0;
 }
 
 div.paging, div.paging a {
