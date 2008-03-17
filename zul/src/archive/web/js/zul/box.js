@@ -40,7 +40,7 @@ zkBox.rmAttr = function (cmp, nm) {
 zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
 	if (!getZKAttr(cmp, "hasSplt")) return;
 
-	var vert = getZKAttr(cmp, "vert") == "true";
+	var vert = getZKAttr(cmp, "vert");
 	var nd = vert ? cmp.rows : cmp.rows[0].cells;
 	var total = vert ? cmp.offsetHeight : cmp.offsetWidth;
 	for (var i = nd.length; --i >= 0;)
@@ -155,9 +155,15 @@ zkSplt._ignoresizing = function (cmp, pointer, event) {
 zkSplt._endDrag = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
-		var run = drag.run;
-		var diff = run.z_point[drag.vert ? 1 : 0];
-		var fd = drag.vert ? "height" : "width";
+		var fl = zkSplt._fixLayout(cmp);
+
+		var run = drag.run,
+			diff = run.z_point[drag.vert ? 1 : 0],
+			fd = drag.vert ? "height" : "width";
+
+		zkSplt._cleanszDown(run.next);
+		zkSplt._cleanszDown(run.prev);
+
 		if (run.next) {
 			var s = $int(run.next.style[fd]);
 			s -= diff;
@@ -170,11 +176,16 @@ zkSplt._endDrag = function (cmp) {
 			if (s < 0) s = 0;
 			run.prev.style[fd] = s + "px";
 		}
-	
+
 		if (run.next) zk.onSizeAt(run.next);
 		if (run.prev) zk.onSizeAt(run.prev);
+
+		zkSplt._unfixLayout(fl);
+			//Stange (not know the cause yet): we have to put it
+			//befor _fixszAll and after onSizeAt
+
 		zkSplt._fixszAll(cmp);
-		
+
 		//fix all splitter's size because table might be with %
 		drag.run = null;//free memory
 	}
@@ -239,7 +250,8 @@ zkSplt._fixszAll = function (cmp) {
 	//1. find the topmost box
 	var box;
 	for (var p = cmp; p = p.parentNode;) //no need to use $parent
-		if ($type(p) == "Box") box = p;
+		if ($type(p) == "Box")
+			box = p; //continue to the topmost one
 
 	if (box) zkSplt._fixKidSplts(box);
 	else zkSplt._fixsz(cmp);
@@ -252,7 +264,7 @@ zkSplt._fixKidSplts = function (n) {
 	else if (type == "Box") {
 		var p = n.parentNode;
 		if ($tag(p) == "TD") {
-			var vert = getZKAttr(n, "vert") == "true",
+			var vert = getZKAttr(n, "vert"),
 				nm = vert ? "height": "width",
 				sz = vert ? p.clientHeight: p.clientWidth;
 			if (n.style[nm] && sz)
@@ -263,6 +275,34 @@ zkSplt._fixKidSplts = function (n) {
 	for (n = n.firstChild; n; n = n.nextSibling)
 		zkSplt._fixKidSplts(n);
 };
+
+/** Clean up splitter's width. */
+zkSplt._cleanszDown = zk.gecko ? function (n) { //Only gecko needs it
+	if (!$visible(n)) return;
+
+	if ($type(n) == "Splt")
+		n.style[getZKAttr(n, "vert") ? "width": "height"] = "";
+
+	for (n = n.firstChild; n; n = n.nextSibling)
+		zkSplt._cleanszDown(n);
+}: zk.voidf;
+
+/** Use fix table layout */
+if (zk.opera) { //only opera needs it
+	zkSplt._fixLayout = function (cmp) {
+		var box = $parentByType(cmp, "Box");
+		if (box.style.tableLayout != "fixed") {
+			var fl = [box, box.style.tableLayout];
+			box.style.tableLayout = "fixed";
+			return fl;
+		}
+	};
+	zkSplt._unfixLayout = function (fl) {
+		if (fl) fl[0].style.tableLayout = fl[1];
+	};
+} else
+	zkSplt._fixLayout = zkSplt._unfixLayout = zk.voidf;
+
 /**
  * For best performance, this function doesn't need to compute anything.
  */
