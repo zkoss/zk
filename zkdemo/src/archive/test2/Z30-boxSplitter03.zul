@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z30-boxSplitter03.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 17 13:00:03     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<hbox spacing="0" width="100%">
+	<vbox height="200px" spacing="0">
+		Column 1-1: The left-top box. To know whether a splitter
+		is collapsed, you can listen to the onOpen event.
+		<splitter id="s1" collapse="after"/>
+		<div>
+		Column 1-2: You can enforce to open or collapse programming
+		by calling setOpen method.
+		<checkbox label="collapse" checked="${s1.open}" onCheck="s1.open = !s1.open"/>
+		</div>
+	</vbox>
+	<splitter id="s2" collapse="before"/>
+	<div>
+		Column 2: Whether a splitter allows users to open or collapse
+		depending on the collapse attribue.
+		<checkbox label="collapse" checked="${s2.open}" onCheck="s2.open = !s2.open"/>
+	</div>
+</hbox>
