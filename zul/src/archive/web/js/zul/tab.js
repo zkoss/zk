@@ -123,9 +123,15 @@ zkTab.selTab = function (tab, notify) {
 
 /** Selects o unselect the specified tab. */
 zkTab._setTabSel = function (tab, toSel, notify, animation) {
-	if ((getZKAttr(tab, "sel") == "true") == toSel)
+	if ((getZKAttr(tab, "sel") == "true") == toSel) {
+		var panel = $e(getZKAttr(tab, "panel"));
+		if (zk.ie6Only && panel) { 
+			// Bug #1914215: In IE6, we need to re-display the layout.
+			panel.style.visibility = "hidden";
+			panel.style.visibility = "";
+		}
 		return; //nothing changed
-
+	}
 	setZKAttr(tab, "sel", toSel ? "true": "false");
 	if (toSel) {
 		tab.className = tab.className + "sel";
