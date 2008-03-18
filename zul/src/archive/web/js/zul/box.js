@@ -47,8 +47,11 @@ zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
 		if (nd[i].id && zk.isVisible(nd[i])) {
 			var d = nd[i];
 			if (vert) {
-				if(!d.id.endsWith("!chdextr2"))
+				if(!d.id.endsWith("!chdextr2")) { //TR
 					d.style.height = zk.revisedSize(d, i == 0 ? total : d.offsetHeight, true) + "px";
+					if (d.cells.length) d.cells[0].style.height = "";
+						//clear TD's hgh (since we change only TR height if vert)
+				}
 				total -= d.offsetHeight;
 			} else {
 				if(!d.id.endsWith("!chdextr2"))
@@ -251,11 +254,11 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 				parent.style.backgroundPosition = "top right";
 			}
 
-			cmp.style.height = "0px"; // clean height
+			cmp.style.height = ""; // clean height
 			cmp.style.height =
 				(zk.safari ? parent.parentNode.clientHeight: parent.clientHeight)+"px";
 				//Bug 1916332: TR's clientHeight is correct (not TD's) in Safari
-			btn.style.marginTop = ((zk.offsetHeight(cmp) - btn.offsetHeight) / 2)+"px";
+			btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
 		}
 	}
 };
