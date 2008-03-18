@@ -19,14 +19,23 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <html><![CDATA[
+<h3>Case 1:</h3>
 <ol>
 <li>Make the browser about half of the screen width.</li>
 <li>Then, maximize the browser (window)</li>
 </ol>
 You shall see the horizontal splitter covers the entire left side
 (from left to the left edge of the vertical splitter).
-<p>Note: both hbox and vbox are specified with width=100%
+<p>Note: both hbox and vbox are specified with width=100%</p>
+
+<h4>Case 2:</h4>
+<ol>
+<li>Click the button of the horizontal splitter (collapse).</li>
+</ol>
+Then the position of the horizontal splitter shall be at the bottom of
+the vertical splitter.
 ]]></html>
+<separator bar="true"/>
 <hbox spacing="0" width="100%">
 	<vbox height="200px" spacing="0" width="100%">
 		Column 1-1: The left-top box. To know whether a splitter
