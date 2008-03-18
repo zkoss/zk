@@ -1977,8 +1977,9 @@ zk._hideExtr = function (n) {
 action = {};
 
 /** Makes a component visible.
+ * @param noVisiAt whether not to call onVisiAt
  */
-action.show = function (id) {
+action.show = function (id, noVisiAt) {
 	var n = $e(id);
 	if (n)
 		if (getZKAttr(n, "animating")) {
@@ -1986,19 +1987,20 @@ action.show = function (id) {
 		} else {
 			zk._showExtr(n);  //parent visible first
 			n.style.display = "";
-			zk.onVisiAt(n); //callback later
+			if (!noVisiAt) zk.onVisiAt(n); //callback later
 		}
 };
 
 /** Makes a component invisible.
+ * @param noHideAt whether not to call onHideAt
  */
-action.hide = function (id) {
+action.hide = function (id, noHideAt) {
 	var n = $e(id);
 	if (n)
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "zk.hide");
 		} else {
-			zk.onHideAt(n); //callback first
+			if (noHideAt) zk.onHideAt(n); //callback first
 			n.style.display = "none";
 			zk._hideExtr(n); //hide parent later
 		}
