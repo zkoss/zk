@@ -103,6 +103,7 @@ ZK 3.0.4 Freshly
   1480834: Visible listbox resizing
   1546655: Progress window doesn't follow scrolling
   1917982: Splitter cannot change the height if heights is specified
+  1917905: Vertical splitter cannot be moved (Safari only)
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
