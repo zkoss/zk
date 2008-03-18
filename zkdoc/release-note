@@ -98,6 +98,7 @@ ZK 3.0.4 Freshly
   1914103: IE : Column Size error after drag column, when in borderlayo
   1914054: Open tree node were overleap other component(IE6 only)
   1917875: The splitter's wd not correct if maximize the browser
+  1917901: Splitter's vertical position is higher if collopsing it
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
