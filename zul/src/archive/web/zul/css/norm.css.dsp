@@ -1052,11 +1052,11 @@ tr.splitter-v td {
 }
 div.splitter-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
-    background-position: top right; font-size:0;
+    background-position: center left; font-size:0;
 }
 div.splitter-v {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
-    background-position: bottom left; font-size:0;
+    background-position: top center; font-size:0;
 }
 div.splitter-h-ns, div.splitter-v-ns {
     font-size:0;
