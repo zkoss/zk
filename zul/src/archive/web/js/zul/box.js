@@ -251,17 +251,11 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 				parent.style.backgroundPosition = "top right";
 			}
 
-			var hgh = parent.clientHeight;
-			if (zk.safari) { //safari: each cell has diff height and tr's hgh is 0
-				for (var cells = parent.parentNode.cells, j = cells.length; --j >= 0;) {
-					var h = cells[j].clientHeight;
-					if (h > hgh) hgh = h;
-				}
-			}
 			cmp.style.height = "0px"; // clean height
-			cmp.style.height = hgh + "px";
-
-			btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
+			cmp.style.height =
+				(zk.safari ? parent.parentNode.clientHeight: parent.clientHeight)+"px";
+				//Bug 1916332: TR's clientHeight is correct (not TD's) in Safari
+			btn.style.marginTop = ((zk.offsetHeight(cmp) - btn.offsetHeight) / 2)+"px";
 		}
 	}
 };
