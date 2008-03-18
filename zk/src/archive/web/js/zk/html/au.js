@@ -1281,6 +1281,7 @@ zkau._onResize2 = function () {
 			//IE keeps sending onresize when dragging the browser's border,
 			//so we have to filter (most of) them out
 
+		zk.beforeSizeAt();
 		zk.onSizeAt();
 	}
 };
@@ -1468,7 +1469,8 @@ zkau.sendOnSize = function (cmp, keys) {
 		data: [cmp.style.width, cmp.style.height, keys]},
 		zkau.asapTimeout(cmp, "onSize"));
 
-	setTimeout(function () {zk.onSizeAt(cmp);}, zk.ie6Only ? 800: 0);
+	setTimeout(function () {zk.beforeSizeAt(cmp); zk.onSizeAt(cmp);},
+		zk.ie6Only ? 800: 0);
 	// If the vflex component in the window component, the offsetHeight of the specific component is wrong at the same time on IE6.
 	// Thus, we have to invoke the zk.onSizeAt function again.
 };

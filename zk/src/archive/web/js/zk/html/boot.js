@@ -877,6 +877,7 @@ zk._evalInit = function () {
 					if (o["onVisi"]) zk._tvisicmps.push(n.id); //child-first
 					if (o["onHide"]) zk._thidecmps.push(n.id); //child-first
 					if (o["onSize"]) zk._tsizecmps.push(n.id); //child-first
+					if (o["beforeSize"]) zk._tbfszcmps.push(n.id); //child-first
 				}
 			}
 
@@ -900,9 +901,14 @@ zk._evalInit = function () {
 				zk._hidecmps.unshift(es.pop());
 			for (var es = zk._tsizecmps; es.length;)
 				zk._sizecmps.unshift(es.pop());
+			for (var es = zk._tbfszcmps; es.length;)
+				zk._bfszcmps.unshift(es.pop());
 
-			while (zk._initszcmps.length)
-				zk.onSizeAt(zk._initszcmps.shift());
+			while (zk._initszcmps.length) {
+				var n = zk._initszcmps.shift();
+				zk.beforeSizeAt(n);
+				zk.onSizeAt(n);
+			}
 
 			setTimeout(zk._initLater, 25);
 		}
@@ -978,6 +984,7 @@ zk._cleanupAt = function (n) {
 		zk._visicmps.remove(n.id);
 		zk._hidecmps.remove(n.id);
 		zk._sizecmps.remove(n.id);
+		zk._bfszcmps.remove(n.id);
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -1046,6 +1053,33 @@ zk.onSizeAt = function (n) {
 				break;
 			if (!n || e == n) { //elm is a child of n
 				zk.eval(elm, "onSize");
+				break;
+			}
+		}
+	}
+};
+/** To notify a component that its parent's size WILL be changed.
+ * All descendants of n is invoked if beforeSize is declared.
+ * The invocation of beforeSize is parent-first (and then child).
+ *
+ * <p>The typical use is: call beforeSizeAt first, adjust the width/height
+ * and then call onSizeAt.
+ *
+ * <p>The component usually cleans up in zkXxx.beforeSize, if necessary, and
+ * does the sizing in zkXxx.onSize, if necessary.
+ *
+ * @param n the topmost element whose size is changed.
+ * If null, the browser's size is changed and all elements will be handled.
+ * @since 3.0.4
+ */
+zk.beforeSizeAt = function (n) {
+	for (var elms = zk._bfszcmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
+		for (var e = elm; e; e = $parent(e)) {
+			if (!$visible(e))
+				break;
+			if (!n || e == n) { //elm is a child of n
+				zk.eval(elm, "beforeSize");
 				break;
 			}
 		}
@@ -1327,7 +1361,8 @@ zk._ckfns = []; //functions called to check whether a module is loaded (zk._load
 zk._visicmps = []; //an array of component's ID that requires zkType.onVisi; the child is in front of the parent
 zk._hidecmps = []; //an array of component's ID that requires zkType.onHide; the child is in front of the parent
 zk._sizecmps = []; //an array of component's ID that requires zkType.onSize; the child is in front of the parent
-zk._tsizecmps = [], zk._tvisicmps = [], zk._thidecmps = []; //temporary array
+zk._bfszcmps = []; //an array of component's ID that requires zkType.beforeSize; the child is in front of the parent
+zk._tsizecmps = [], zk._tbfszcmps = [], zk._tvisicmps = [], zk._thidecmps = []; //temporary array
 function myload() {
 	var f = zk._onload;
 	if (f) {
