@@ -232,8 +232,8 @@ zkTmbox._btnOut= function(evt){
 zkTmbox._selrange = function (cmp){
 	var sel = zk.getSelectionRange($real(cmp));	
 	if(sel[0]>sel[1]){
-		var t = sel[2];
-		sel[1] = s1;
+		var t = sel[1];
+		sel[1] = sel[0];
 		sel[0] = t;
 	}
 	return sel;
@@ -264,12 +264,7 @@ zkTmbox.onDown=function(cmp){
 
 //check selection Position on minute or hour.
 zkTmbox._checkPosition=function(cmp){
-	var pos = cmp.lastPos;
-	if(pos<=2){
-		return zkTmbox.POS_HOUR
-	}else{
-		return zkTmbox.POS_MIN;
-	}
+	return cmp.lastPos <= 2 ? zkTmbox.POS_HOUR : zkTmbox.POS_MIN;
 };
 
 zkTmbox._markPositionSel=function (cmp){
