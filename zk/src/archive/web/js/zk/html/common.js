@@ -1953,7 +1953,7 @@ zk._showExtr = function (n) {
 		var ext = $e(n.id + "!chdextr");
 		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "";
-			ext = $e(n.id + "!chdextr2"); //hbox/vbox
+			ext = $e(n.id + "!chdextr2"); //hbox/vbox's space
 			if (ext) ext.style.display = "";
 		}
 	}
@@ -1964,7 +1964,7 @@ zk._hideExtr = function (n) {
 		var ext = $e(n.id + "!chdextr");
 		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "none";
-			ext = $e(n.id + "!chdextr2"); //hbox/vbox
+			ext = $e(n.id + "!chdextr2"); //hbox/vbox's space
 			if (ext) ext.style.display = "none";
 		}
 	}
