@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <html><![CDATA[
-<h3>Case 1: (Bug 1917875)</h3>
+<p><b>Case 1: (Bug 1917875)</b></p>
 <ol>
 <li>Make the browser about half of the screen width.</li>
 <li>Then, maximize the browser (window)</li>
@@ -28,16 +28,21 @@ You shall see the horizontal splitter covers the entire left side
 (from left to the left edge of the vertical splitter).
 <p>Note: both hbox and vbox are specified with width=100%</p>
 
-<h4>Case 2: (Bug 1917901)</h4>
+<p><b>Case 2: (Bug 1917901)</b></p>
 <ol>
 <li>Click the button of the horizontal splitter (collapse).</li>
 </ol>
 Then the position of the horizontal splitter shall be at the bottom of
 the vertical splitter.
+<p><b>Case 3: (Bug 1917982)</b></p>
+<ol>
+<li>Drag the horizontal splitter up to shrink Column 1-1</li>
+</ol>
+Column 1-1 shall become smaller while the whole height is the same.
 ]]></html>
 <separator bar="true"/>
-<hbox spacing="0" width="100%" height="200px">
-	<vbox spacing="0" width="100%" height="100%">
+<hbox spacing="0" width="100%" height="300px">
+	<vbox spacing="0" width="100%" height="100%" heights="200px">
 		Column 1-1: The left-top box. To know whether a splitter
 		is collapsed, you can listen to the onOpen event.
 		<splitter id="s1" collapse="after"/>
