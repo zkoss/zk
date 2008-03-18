@@ -39,6 +39,7 @@ the vertical splitter.
 <li>Drag the horizontal splitter up to shrink Column 1-1</li>
 </ol>
 Column 1-1 shall become smaller while the whole height is the same.
+Note: Case 3 failed in Safari (Bug 1917905).
 ]]></html>
 <separator bar="true"/>
 <hbox spacing="0" width="100%" height="300px">
