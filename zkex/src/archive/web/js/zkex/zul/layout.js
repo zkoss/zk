@@ -234,7 +234,10 @@ zk.Layout.prototype = {
 				bodyEl.style.position = "";
 				rmZKAttr(bodyEl, "autoscl");
 			}
-			if (!this.isOnSize) zk.onSizeAt(bodyEl); // Bug #1862935
+			if (!this.isOnSize) {
+				zk.beforeSizeAt(bodyEl);
+				zk.onSizeAt(bodyEl); // Bug #1862935
+			}
 		}
 	},
 	ignoreResize : function(cmp, w, h) { 
@@ -328,7 +331,10 @@ zkLayoutRegion.cleanup = function (cmp) {
 		layout.removeRegion(getZKAttr(cmp, "pos"));
 	}
 	cmp.bodyEl = null;
-	if (layout) zk.onSizeAt(layout.el);
+	if (layout) {
+		zk.beforeSizeAt(layout.el);
+		zk.onSizeAt(layout.el);
+	}
 };
 zkLayoutRegion.setAttr = function (cmp, nm, val) {
 	cmp = $real(cmp);
