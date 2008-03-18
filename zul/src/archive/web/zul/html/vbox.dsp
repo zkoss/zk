@@ -28,7 +28,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<tr id="${child.uuid}!chdextr"${u:getBoxChildOuterAttrs(child)}><td${u:getBoxChildInnerAttrs(child)}>${z:redraw(child, null)}</td></tr>
 <c:if test="${!empty child.nextSibling}">
 	<c:set var="s" value="display:none;${spstyle}"
-			if="${!child.visible || '0' == self.spacing || '0px' == self.spacing}"/>
+		if="${!child.visible || '0' == self.spacing || '0px' == self.spacing}"/>
 	<tr id="${child.uuid}!chdextr2" class="${scls}-sp"${c:attr('style',empty s ? spstyle: s)}><td><c:if test="${c:isExplorer()}"><img style="width:0;height:0"/></c:if></td></tr>
 </c:if>
 	</c:forEach>

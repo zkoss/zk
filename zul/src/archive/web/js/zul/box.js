@@ -40,32 +40,37 @@ zkBox.rmAttr = function (cmp, nm) {
 zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
 	if (!getZKAttr(cmp, "hasSplt")) return;
 
-	//Note: we have to assign width/height at beginning.
+	//Note: we have to assign width/height fisrt
 	//Otherwise, the first time dragging the splitter won't be moved
-	//as expected (since the width/height)
-	var vert = getZKAttr(cmp, "vert");
-	var nd = vert ? cmp.rows : cmp.rows[0].cells;
-	var total = vert ? cmp.offsetHeight : cmp.offsetWidth;
-	for (var i = nd.length; --i >= 0;)
-		if (nd[i].id && zk.isVisible(nd[i])) {
-			var d = nd[i];
+	//as expected (since style.width/height might be "")
+
+	var vert = getZKAttr(cmp, "vert"),
+		nd = vert ? cmp.rows : cmp.rows[0].cells,
+		total = vert ? cmp.offsetHeight : cmp.offsetWidth;
+
+	for (var i = nd.length; --i >= 0;) {
+		var d = nd[i];
+		if ($visible(d))
 			if (vert) {
-				if(!d.id.endsWith("!chdextr2")) { //TR
+				var diff = d.offsetHeight;
+				if(d.id && getZKAttr(d, "coexist")) { //TR
 					//Bug 1917905: we have to manipulate height of TD in Safari
 					if (d.cells.length) {
 						var c = d.cells[0];
-						c.style.height = zk.revisedSize(c, i == 0 ? total : c.offsetHeight, true) + "px";
+						c.style.height = zk.revisedSize(c, i ? diff: total, true) + "px";
 					}
 					d.style.height = ""; //just-in-case
 				}
-				total -= d.offsetHeight;
+				total -= diff;
 			} else {
-				if(!d.id.endsWith("!chdextr2"))
-					d.style.width = zk.revisedSize(d, i == 0 ? total : d.offsetWidth) + "px";
-				total -= d.offsetWidth;
+				var diff = d.offsetWidth;
+				if(d.id && getZKAttr(d, "coexist")) //TD
+					d.style.width = zk.revisedSize(d, i ? diff: total) + "px";
+				total -= diff;
 			}
-		}
+	}
 };
+
 ////
 zkSplt = {};
 
@@ -179,6 +184,7 @@ zkSplt._endDrag = function (cmp) {
 			diff = run.z_point[0];
 			fd = "width";
 		}
+		if (!diff) return; //nothing to do
 
 		if (run.next) zk.beforeSizeAt(run.next);
 		if (run.prev) zk.beforeSizeAt(run.prev);
@@ -336,9 +342,8 @@ zkSplt._closeAtInit = function (cmp) {
 	var nd = $e(cmp.id + "!chdextr"), tn = $tag(nd), colps = getZKAttr(cmp, "colps");
 	if (!colps || "none" == colps) return; //nothing to do
 
-	var vert = getZKAttr(cmp, "vert"), sib = colps == "before" ? 
-		zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
-	sib.style.display = "none";
+	var sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
+	action.hide(sib, true);
 	zkSplt._updcls(cmp);
 };
 zkSplt._updcls = function (cmp, open) {
@@ -360,8 +365,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 
 	var vert = getZKAttr(cmp, "vert"),
 		sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
-	if (sib) zk.show(sib, open);
-		//it will call zk.onVisi(sib) or zk.onHide(sib)
+	if (sib) zk.show(sib, open); //it will call zk.onVisi(sib) or zk.onHide(sib)
 
 	sib = colps == "before" ? zkSplt._next(nd, tn): zkSplt._prev(nd, tn);
 	if (sib) zk.onSizeAt(sib);	
