@@ -40,6 +40,9 @@ zkBox.rmAttr = function (cmp, nm) {
 zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
 	if (!getZKAttr(cmp, "hasSplt")) return;
 
+	//Note: we have to assign width/height at beginning.
+	//Otherwise, the first time dragging the splitter won't be moved
+	//as expected (since the width/height)
 	var vert = getZKAttr(cmp, "vert");
 	var nd = vert ? cmp.rows : cmp.rows[0].cells;
 	var total = vert ? cmp.offsetHeight : cmp.offsetWidth;
@@ -48,9 +51,12 @@ zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
 			var d = nd[i];
 			if (vert) {
 				if(!d.id.endsWith("!chdextr2")) { //TR
-					d.style.height = zk.revisedSize(d, i == 0 ? total : d.offsetHeight, true) + "px";
-					if (d.cells.length) d.cells[0].style.height = "";
-						//clear TD's hgh (since we change only TR height if vert)
+					//Bug 1917905: we have to manipulate height of TD in Safari
+					if (d.cells.length) {
+						var c = d.cells[0];
+						c.style.height = zk.revisedSize(c, i == 0 ? total : c.offsetHeight, true) + "px";
+					}
+					d.style.height = ""; //just-in-case
 				}
 				total -= d.offsetHeight;
 			} else {
@@ -160,9 +166,19 @@ zkSplt._endDrag = function (cmp) {
 	if (drag) {
 		var fl = zkSplt._fixLayout(cmp);
 
-		var run = drag.run,
-			diff = run.z_point[drag.vert ? 1 : 0],
-			fd = drag.vert ? "height" : "width";
+		var run = drag.run, diff, fd;
+
+		if (drag.vert) {
+			diff = run.z_point[1];
+			fd = "height";
+
+			//We adjust height of TD if vert
+			if (run.next && run.next.cells.length) run.next = run.next.cells[0];
+			if (run.prev && run.prev.cells.length) run.prev = run.prev.cells[0];
+		} else {
+			diff = run.z_point[0];
+			fd = "width";
+		}
 
 		if (run.next) zk.beforeSizeAt(run.next);
 		if (run.prev) zk.beforeSizeAt(run.prev);
