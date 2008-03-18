@@ -102,6 +102,7 @@ ZK 3.0.4 Freshly
   1916332: Specifying the height of hbox has no function (Safari only)
   1480834: Visible listbox resizing
   1546655: Progress window doesn't follow scrolling
+  1917982: Splitter cannot change the height if heights is specified
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
