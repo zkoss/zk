@@ -82,7 +82,7 @@ zk.addInit(function () {
 	zk.listen(document, "contextmenu", zkau._onDocCtxMnu);
 	zk.listen(document, "click", zkau._onDocLClick);
 	zk.listen(document, "dblclick", zkau._onDocDClick);
-
+	zk.listen(window, "scroll", zkau._onDocScroll);
 	zk.listen(window, "resize", zkau._onResize);
 
 	zkau._oldUnload = window.onunload;
@@ -91,7 +91,28 @@ zk.addInit(function () {
 	zkau._oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = zkau._onBfUnload;
 });
-
+zkau._onDocScroll = function () {
+	var ix = zk.innerX(), iy = zk.innerY();
+	zkau._fixOffset($e("zk_mask"), ix, iy);
+	zkau._fixOffset($e("zk_loading"), ix, iy);
+	zkau._fixOffset($e("zk_loadprog"), ix, iy);
+	zkau._fixOffset($e("zk_prog"), ix, iy);
+	zkau._fixOffset($e("zk_prog"), ix, iy);
+	var d = $e("zk_debugbox");
+	if (d) {
+		d.style.top = iy + zk.innerHeight() - d.offsetHeight - 20 + "px";
+		d.style.left = ix + zk.innerWidth() - d.offsetWidth - 20 + "px";
+	}
+};
+zkau._fixOffset = function (el, x, y) {
+	if (!el) return;
+	var ix = $int(getZKAttr(el, "x")), iy = $int(getZKAttr(el, "y"));
+	var top = $int(el.style.top) + (y - iy), left = $int(el.style.left) + (x - ix);
+	el.style.top = top + "px";
+	el.style.left = left + "px";
+	setZKAttr(el, "x", x);
+	setZKAttr(el, "y", y);
+};
 /** Handles onclick for button-type.
  */
 zkau.onclick = function (evt) {

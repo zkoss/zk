@@ -40,24 +40,28 @@ if (!window.Boot_progressbox) { //not customized
 		var html = '<div id="'+id+'"';
 
 		var mask = mk || zk.loading && !zk._prgsOnce;
+		var ix = zk.innerX(), iy = zk.innerY();
 		if (mask) {
 			zk._prgsOnce = true; //do it only once
-			html += ' ><div class="modal_mask" style="display:block"></div><div'
+			html += '><div id="zk_mask" class="modal_mask" style="display:block;left:'+ ix + 'px;top:' + iy +	
+				'px;" z.x="' + ix + '" z.y="' + iy + '"></div><div';
 		} else html += "><div";
 		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
 		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
-		html += ' id="z-loading" class="z-loading" style="left:'+x+';top:'+y+';visibility: hidden;">'
-		+'<div class="z-loading-indicator">'
+		html += ' id="zk_loading" class="z-loading" style="left:'+x+';top:'+y+';visibility: hidden;"'
+		+' z.x="' + ix + '" z.y="' + iy + '"><div class="z-loading-indicator">'
 		+'<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
 		+msg+'</div></div></div>';
 
 		zk._setOuterHTML(n, html);
 		
-		var el = $e("z-loading");
+		var el = $e("zk_loading");
 		if (center) {
 			if (el) {
-				el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + "px";
-				el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + "px";
+				el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + ix + "px";
+				el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + iy + "px";
+				setZKAttr(el, "x", ix);
+				setZKAttr(el, "y", iy);
 			}
 		}
 		el.style.visibility = "visible";
@@ -1294,14 +1298,17 @@ zk._domsg = function () {
 		if (!console) {
 			console = document.createElement("DIV");
 			document.body.appendChild(console);
-			var html =
- '<div class="debugbox">'
+			var html = '<div id="zk_debugbox" class="debugbox" style="visibility:hidden">'
 +'<table cellpadding="0" cellspacing="0" width="100%"><tr>'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button><br/>'
 +'<button onclick="$e(\'zk_msg\').value = \'\'">clear</button></td>'
 +'<td><textarea id="zk_msg" style="width:99%" rows="10"></textarea></td></tr></table></div>';
 			zk._setOuterHTML(console, html);
 			console = $e("zk_msg");
+			var d = $e("zk_debugbox");
+			d.style.top = zk.innerY() + zk.innerHeight() - d.offsetHeight - 20 + "px";
+			d.style.left = zk.innerX() + zk.innerWidth() - d.offsetWidth - 20 + "px";
+			d.style.visibility = "visible";
 		}
 		console.value = console.value + zk._msg + '\n';
 		zk._msg = null;
