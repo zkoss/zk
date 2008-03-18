@@ -1040,20 +1040,25 @@ tr.tab-lite-m, tr.groupbox-lite-m {
 span.splitter-btn-l, span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn-b {
     font-size:0;
 }
+td.splitter-h {
+    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h-ns.png')}");
+    background-repeat: repeat-y; max-width: 8px;
+    background-position: top right;
+}
+tr.splitter-v td {
+    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
+    background-repeat: repeat-x; max-height: 8px;
+    background-position: bottom left;
+}
 div.splitter-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
-    background-position: left; font-size:0;
+    background-position: top right; font-size:0;
 }
 div.splitter-v {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
-    background-position: top; font-size:0;
+    background-position: bottom left; font-size:0;
 }
-div.splitter-h-ns {
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h-ns.png')}");
-    font-size:0; 
-}
-div.splitter-v-ns {
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
+div.splitter-h-ns, div.splitter-v-ns {
     font-size:0;
 }
 span.splitter-btn-l:hover, span.splitter-btn-r:hover, span.splitter-btn-t:hover ,span.splitter-btn-b:hover {
@@ -1092,21 +1097,17 @@ span.splitter-btn-b {
 span.splitter-os-btn-l, span.splitter-os-btn-r, span.splitter-os-btn-t ,span.splitter-os-btn-b {
     font-size:0;
 }
-div.splitter-os-h {
+td.splitter-os-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.gif')}");
-    background-position: left; font-size:0;
+    background-repeat: repeat-y; max-width: 8px;
+    background-position: top right;
 }
-div.splitter-os-v {
+tr.splitter-os-v td {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.gif')}");
-    background-position: top; font-size:0;
+    background-repeat: repeat-x; max-height: 8px;
+    background-position: bottom left;
 }
-
-div.splitter-os-h-ns {
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.gif')}");
-    font-size:0;
-}
-div.splitter-os-v-ns {
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.gif')}");
+div.splitter-os-h, div.splitter-os-v, div.splitter-os-h-ns, div.splitter-os-v-ns {
     font-size:0;
 }
 span.splitter-os-btn-l:hover, span.splitter-os-btn-r:hover, span.splitter-os-btn-t:hover ,span.splitter-os-btn-b:hover {

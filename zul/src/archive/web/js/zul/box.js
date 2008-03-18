@@ -217,18 +217,40 @@ zkSplt._snap = function (cmp, x, y) {
 zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 	if (!zk.isRealVisible(cmp))return;
 
-	var vert = getZKAttr(cmp, "vert");
 	var parent = cmp.parentNode;
 	if (parent) {
 		//Note: when window resize, it might adjust splitter's wd (hgh)
 		//if box's width is nn%. So we have to reset it to 8px
-		if (vert) {
-			var tr = parent.parentNode; //TR
-			cmp.style.height = tr.style.height = "8px";
+		var btn = $e(cmp.id + "!btn"),
+			bfcolps = "before" == getZKAttr(cmp, "colps");
+		if (getZKAttr(cmp, "vert")) {
+			cmp.style.height = parent.parentNode.style.height = "8px";
+
+			//Note: the real wd/hgh might be bigger than 8px (since the width
+			//of total content is smaller than box's width)
+			//We 'cheat' by align to top or bottom depending on z.colps
+			if (bfcolps) {
+				parent.vAlign = "top";
+				parent.style.backgroundPosition = "top left";
+			} else {
+				parent.vAlign = "bottom";
+				parent.style.backgroundPosition = "bottom left";
+			}
+
 			cmp.style.width = ""; // clean width
 			cmp.style.width = parent.clientWidth + "px"; //all wd the same
+
+			btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
 		} else {
 			cmp.style.width = parent.style.width = "8px";
+			if (bfcolps) {
+				parent.align = "left";
+				parent.style.backgroundPosition = "top left";
+			} else {
+				parent.align = "right";
+				parent.style.backgroundPosition = "top right";
+			}
+
 			var hgh = parent.clientHeight;
 			if (zk.safari) { //safari: each cell has diff height and tr's hgh is 0
 				for (var cells = parent.parentNode.cells, j = cells.length; --j >= 0;) {
@@ -238,12 +260,10 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 			}
 			cmp.style.height = "0px"; // clean height
 			cmp.style.height = hgh + "px";
+
+			btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
 		}
 	}
-
-	var btn = $e(cmp.id + "!btn");
-	if (vert) btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
-	else btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
 };
 zkSplt.beforeSize = function (cmp) {
 	cmp.style[getZKAttr(cmp, "vert") ? "width": "height"] = "";
