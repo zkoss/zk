@@ -889,7 +889,7 @@ div.paging a:hover {
 }
 <%-- ZK JavaScript debug box --%>
 div.debugbox {
-	border: 1px solid #77c;	position: absolute;	bottom: 0px; right: 0px;
+	border: 1px solid #77c;	position: absolute;
 	width: 60%; z-index: 99000; background: white;
 }
 <%--ZK datebox and calendar--%>
