@@ -33,6 +33,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<id-generator-class>org.zkoss.zkdemo.test.ViewIdGenerator</id-generator-class>
 	</system-config>
 
+	<!-- Used to test Bug 1870974. -->
+	<listener>
+		<listener-class>org.zkoss.zkdemo.test2.DetachDesktopCleanup</listener-class>
+	</listener>
+
 	<!-- Used to test Bug 1881921. And visit any page, say, zkdemo/hello.zul -->
 	<listener>
 		<listener-class>org.zkoss.zkdemo.test2.B1881921</listener-class>
