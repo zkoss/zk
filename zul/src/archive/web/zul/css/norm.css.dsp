@@ -193,7 +193,7 @@ div.z-loading-indicator {
 }
 <%-- ZK separator --%>
 div.hsep, div.hsep-bar {
-	height: 8px; overflow: hidden;
+	height: 7px; overflow: hidden;
 }
 span.vsep, span.vsep-bar {
 	display:-moz-inline-box; display: inline-block;
