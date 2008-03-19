@@ -263,28 +263,31 @@ div.tree-head tr, div.listbox-head tr, div.grid-head tr {<%-- always used. --%>
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
 div.tree-head th, div.listbox-head th, div.grid-head th
-	<%-- ,tr.hidfakerz th // Header's width excluds its style by default--%> {
+	<%-- ,tr.listbox-fake th ,tr.tree-fake th ,tr.grid-fake th// Header's width excluds its style by default--%> {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
 div.listbox-head th.sort div.head-cell-inner, div.grid-head th.sort div.head-cell-inner
-	<%-- ,tr.hidfakerz th.sort div // Header's width excluds its style by default--%> {
+	<%-- ,tr.listbox-fake th.sort div ,tr.tree-fake th.sort div ,tr.grid-fake th.sort div 
+	// Header's width excluds its style by default--%> {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
 div.listbox-head th.sort-asc div.head-cell-inner, div.grid-head th.sort-asc div.head-cell-inner
-	<%-- ,tr.hidfakerz th.sort-asc div // Header's width excluds its style by default--%> {
+	<%-- ,tr.listbox-fake th.sort-asc div ,tr.tree-fake th.sort-asc div ,tr.grid-fake th.sort-asc div 
+	// Header's width excluds its style by default--%> {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
 div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.head-cell-inner
-	<%-- ,tr.hidfakerz th.sort-dsc div // Header's width excluds its style by default--%> {
+	<%-- ,tr.listbox-fake th.sort-dsc div ,tr.tree-fake th.sort-dsc div ,tr.grid-fake th.sort-dsc div 
+	// Header's width excluds its style by default--%> {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 	background-position: 99% center;
@@ -318,7 +321,8 @@ div.foot-cell-inner, div.head-cell-inner{
 	overflow: hidden;
 }
 <%-- faker uses only for grid/listbox/tree --%>
-tr.hidfakerz, tr.hidfakerz th, tr.hidfakerz div {
+tr.listbox-fake, tr.listbox-fake th, tr.listbox-fake div, tr.tree-fake, tr.tree-fake th, tr.tree-fake div,
+	tr.grid-fake, tr.grid-fake th, tr.grid-fake div {
 	border-top: 0 !important; border-bottom: 0 !important; margin-top: 0 !important;
 	margin-bottom: 0 !important; padding-top: 0 !important;	padding-bottom: 0 !important;
 	height: 0px !important; <%-- these above css cannot be overrided--%>
@@ -1168,25 +1172,25 @@ div.drop-content {
 	font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
 <%-- // Header's width includs its style
-tr.hidfakerz th {
+tr.listbox-fake th, tr.tree-fake th, tr.grid-fake th {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
-tr.hidfakerz th.sort div {
+tr.listbox-fake th.sort div, tr.tree-fake th.sort div, tr.grid-fake th.sort div{
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-tr.hidfakerz th.sort-asc div {
+tr.listbox-fake th.sort-asc div, tr.tree-fake th.sort-asc div, tr.grid-fake th.sort-asc div {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-tr.hidfakerz th.sort-dsc div {
+tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.sort-dsc div {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 	background-position: 99% center;

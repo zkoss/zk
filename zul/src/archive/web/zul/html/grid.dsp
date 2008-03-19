@@ -25,7 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 		<c:if test="${!empty self.columns}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.columns.uuid}!hdfaker" class="hidfakerz">
+			<tr id="${self.columns.uuid}!hdfaker" class="grid-fake">
 			<c:forEach var="child" items="${self.columns.children}">
 					<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
 						<div style="overflow:hidden"></div>
@@ -44,7 +44,7 @@ ${z:redraw(head, null)}
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="grid-btable" <c:if test="${self.fixedLayout}">style="table-layout:fixed"</c:if>>
 		<c:if test="${!empty self.columns}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.columns.uuid}!bdfaker" class="hidfakerz">
+			<tr id="${self.columns.uuid}!bdfaker" class="grid-fake">
 			<c:forEach var="child" items="${self.columns.children}">
 					<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
 						<div style="overflow:hidden"></div>
@@ -61,7 +61,7 @@ ${z:redraw(head, null)}
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 		<c:if test="${!empty self.columns}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.columns.uuid}!ftfaker" class="hidfakerz">
+			<tr id="${self.columns.uuid}!ftfaker" class="grid-fake">
 			<c:forEach var="child" items="${self.columns.children}">
 					<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
 						<div style="overflow:hidden"></div>
