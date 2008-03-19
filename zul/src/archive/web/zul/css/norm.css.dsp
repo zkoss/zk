@@ -197,7 +197,7 @@ div.hsep, div.hsep-bar {
 }
 span.vsep, span.vsep-bar {
 	display:-moz-inline-box; display: inline-block;
-	width: 9px; overflow: hidden;
+	width: 7px; overflow: hidden;
 }
 div.hsep-bar {
 	background-image: url(${c:encodeURL('~./img/dot.gif')});
