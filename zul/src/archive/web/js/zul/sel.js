@@ -108,7 +108,6 @@ zk.Selectable.prototype = {
 				this.bodyrows = bds[this.head ? 1 : 0].rows;
 			}
 		}
-		if (!zk.isRealVisible(this.element)) return;
 
 		if (!this.bodyrows) {
 			alert(mesg.INVALID_STRUCTURE + this.id);

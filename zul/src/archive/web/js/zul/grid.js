@@ -51,8 +51,6 @@ zk.Grid.prototype = {
 				//Note: bodyrows is null in FF if no rows, so no err msg
 		}
 
-		if (!zk.isRealVisible(this.element)) return;
-
 		var meta = this; //the nested function only see local var
 
 		//FF: a small fragment is shown
