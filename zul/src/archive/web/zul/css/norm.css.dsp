@@ -193,16 +193,19 @@ div.z-loading-indicator {
 }
 <%-- ZK separator --%>
 div.hsep, div.hsep-bar {
-	display: block; width: 100%; padding: 0; margin: 2pt 0; font-size: 0;
+	height: 6px; overflow: hidden;
 }
-div.vsep, div.vsep-bar {
-	display: inline; margin: 0 1pt; padding: 0;
+span.vsep, span.vsep-bar {
+	display:-moz-inline-box; display: inline-block;
+	width: 6px; overflow: hidden;
 }
 div.hsep-bar {
-	border-top: 1px solid #888;
+	background-image: url(${c:encodeURL('~./img/dot.gif')});
+	background-position: center left; background-repeat: repeat-x;
 }
-div.vsep-bar {
-	border-left: 1px solid #666; margin-left: 2pt;
+span.vsep-bar {
+	background-image: url(${c:encodeURL('~./img/dot.gif')});
+	background-position: top center; background-repeat: repeat-y;
 }
 
 <%-- ZK toolbar and toolbarbutton --%>

@@ -58,9 +58,22 @@ public class Separator extends XulElement {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			smartUpdate("class", getSclass());
+			invalidate();
 		}
 	}
+	/** Returns whether it is a horizontal separator.
+	 * @since 3.0.4
+	 */
+	public boolean isHorizontal() {
+		return "horizontal".equals(getOrient());
+	}
+	/** Returns whether it is a vertical separator.
+	 * @since 3.0.4
+	 */
+	public boolean isVertical() {
+		return "vertical".equals(getOrient());
+	}
+
 	/** Returns whether to display a visual bar as the separator.
 	 * <p>Default: false
 	 */
@@ -92,20 +105,16 @@ public class Separator extends XulElement {
 			smartUpdate("style", getRealStyle());
 		}
 	}
-	protected String getRealStyle() {
-		final String style = super.getRealStyle();
-		if (_spacing == null)
-			return style;
-
-		final StringBuffer sb = new StringBuffer(64).append("margin:");
-		if ("vertical".equals(_orient))
-			sb.append("0 ").append(_spacing);
-		else
-			sb.append(_spacing).append(" 0");
-		return sb.append(';').append(style).toString();
-	}
 
 	//-- super --//
+	public String getWidth() {
+		final String wd = super.getWidth();
+		return isHorizontal() || (wd != null && wd.length() > 0) ? wd: _spacing;
+	}
+	public String getHeight() {
+		final String hgh = super.getHeight();
+		return isVertical() || (hgh != null && hgh.length() > 0) ? hgh: _spacing;
+	}
 	/** Returns the style class.
 	 * If the style class is not defined ({@link #setSclass} is not called
 	 * or called with null or empty), it returns the style class based
