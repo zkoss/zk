@@ -5,6 +5,8 @@
            xmlns:a="http://www.zkoss.org/2005/zk/annotation"
            xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd "
            border="normal" width="100%">
+1. Select a value from one of the listboxes. 
+2. If no NullPointerException, it is right.
     <zk:zscript>
     	import org.zkoss.zkdemo.test.MyBean;
     	

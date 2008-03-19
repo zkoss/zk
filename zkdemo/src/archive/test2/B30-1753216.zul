@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
+If no error occur, it is right.
 <tree>
 	<treechildren>
 		<treeitem id="ti0" selected="true" onOpen="onOpen(event, 4)" open="false">

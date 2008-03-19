@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
+When the header is invisible, the whole column should be disappeared.
+
 	<grid>
 		<columns id="cols">
 			<column id="col1" label="Column1" width="20%"

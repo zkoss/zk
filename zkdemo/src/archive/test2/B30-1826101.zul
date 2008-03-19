@@ -17,7 +17,18 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+
+<zk>
+<window>
+
+Listbox with mold = paging:
+1) does not have bottom scroller when columns do not fit in the container;
+2) does not allow to set the size of columns smaller than contents in
+IE6.0. 
+
+</window>
 <window title="listbox demo" border="normal" width="80px">
+
 	<listbox width="100%" mold="paging">
 		<listhead sizable="true">
 			<listheader width="200px" label="name" sort="auto" />
@@ -41,3 +52,4 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</listitem>
 	</listbox>
 </window>
+</zk>
