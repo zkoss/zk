@@ -1042,24 +1042,27 @@ span.splitter-btn-l, span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn
 }
 td.splitter-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h-ns.png')}");
-    background-repeat: repeat-y; max-width: 8px;
+    background-repeat: repeat-y; max-width: 8px; width: 8px;
     background-position: top right;
 }
 tr.splitter-v td {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
-    background-repeat: repeat-x; max-height: 8px;
+    background-repeat: repeat-x; max-height: 8px; height: 8px;
     background-position: bottom left;
 }
 div.splitter-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
-    background-position: center left; font-size:0;
+    background-position: center left; font-size:0; max-width: 8px; width: 8px;
 }
 div.splitter-v {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
-    background-position: top center; font-size:0;
+    background-position: top center; font-size:0; max-height: 8px; height: 8px;
 }
-div.splitter-h-ns, div.splitter-v-ns {
-    font-size:0;
+div.splitter-h-ns {
+    font-size:0; max-width: 8px; width: 8px;
+}
+div.splitter-v-ns {
+    font-size:0; max-height: 8px; height: 8px;
 }
 span.splitter-btn-l:hover, span.splitter-btn-r:hover, span.splitter-btn-t:hover ,span.splitter-btn-b:hover {
 	opacity:1;
@@ -1099,16 +1102,19 @@ span.splitter-os-btn-l, span.splitter-os-btn-r, span.splitter-os-btn-t ,span.spl
 }
 td.splitter-os-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.gif')}");
-    background-repeat: repeat-y; max-width: 8px;
+    background-repeat: repeat-y; max-width: 8px; width: 8px;
     background-position: top right;
 }
 tr.splitter-os-v td {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.gif')}");
-    background-repeat: repeat-x; max-height: 8px;
+    background-repeat: repeat-x; max-height: 8px; height: 8px;
     background-position: bottom left;
 }
-div.splitter-os-h, div.splitter-os-v, div.splitter-os-h-ns, div.splitter-os-v-ns {
-    font-size:0;
+div.splitter-os-h, div.splitter-os-h-ns {
+    font-size:0; max-width: 8px; width: 8px;
+}
+div.splitter-os-v, div.splitter-os-v-ns {
+    font-size:0; max-height: 8px; height: 8px;
 }
 span.splitter-os-btn-l:hover, span.splitter-os-btn-r:hover, span.splitter-os-btn-t:hover ,span.splitter-os-btn-b:hover {
 	opacity:1;

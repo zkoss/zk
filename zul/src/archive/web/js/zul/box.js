@@ -244,13 +244,10 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 
 	var parent = cmp.parentNode;
 	if (parent) {
-		//Note: when window resize, it might adjust splitter's wd (hgh)
-		//if box's width is nn%. So we have to reset it to 8px
 		var btn = $e(cmp.id + "!btn"),
 			bfcolps = "before" == getZKAttr(cmp, "colps");
 		if (getZKAttr(cmp, "vert")) {
-			cmp.style.height = parent.parentNode.style.height = "8px";
-
+			//Note: when the browser resizes, it might adjust splitter's wd/hgh
 			//Note: the real wd/hgh might be bigger than 8px (since the width
 			//of total content is smaller than box's width)
 			//We 'cheat' by align to top or bottom depending on z.colps
@@ -267,7 +264,6 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 
 			btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
 		} else {
-			cmp.style.width = parent.style.width = "8px";
 			if (bfcolps) {
 				parent.align = "left";
 				parent.style.backgroundPosition = "top left";
