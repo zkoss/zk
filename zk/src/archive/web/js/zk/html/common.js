@@ -1569,10 +1569,34 @@ zk.parseDate = function (txt, fmt, strict) {
 	}
 
 	var dt = new Date(y, m, d);
-	if (strict && (dt.getFullYear() != y
-	|| dt.getMonth() != m || dt.getDate() != d))
-		return null; //failed
+	if (strict) {
+		if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d)
+			return null; //failed
+
+		txt = txt.trim();
+		txt = zk._ckDate(zk.SDOW, txt);
+		txt = zk._ckDate(zk.S2DOW, txt);
+		txt = zk._ckDate(zk.FDOW, txt);
+		txt = zk._ckDate(zk.SMON, txt);
+		txt = zk._ckDate(zk.S2MON, txt);
+		txt = zk._ckDate(zk.FMON, txt);
+		txt = zk._ckDate(zk.APM, txt);
+		for (var j = txt.length; --j >= 0;) {
+			var cc = txt.charAt(j);
+			if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
+				return null; //failed
+		}
+	}
 	return dt;
+};
+zk._ckDate = function (ary, txt) {
+	if (txt.length)
+		for (var j = ary.length; --j >= 0;) {
+			var k = txt.indexOf(ary[j]);
+			if (k >= 0)
+				txt = txt.substring(0, k) + txt.substring(k + ary[j].length);
+		}
+	return txt;
 };
 
 /** Generates a formated string for the specified Date object. */
