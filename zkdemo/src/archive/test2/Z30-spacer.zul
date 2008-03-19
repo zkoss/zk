@@ -22,8 +22,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<separator/>
 	line 2 by separator
 	<separator/>
-	line 3 by separator with bar<space bar="true"/>another piece separator with 20px
-	<separator spacing="20px"/>
+	line 3 by separator with bar<space bar="true"/>another piece separator with 20px and bar
+	<separator bar="true" spacing="20px"/>
 	line 4 by separator with bar and 20px spacing<space bar="true" spacing="20px"/>another piece separator with 0
 	<separator spacing="0"/>
 	line 5 by separator with bar and 1px spacing<space bar="true" spacing="1px"/>another piece separator with 6px
