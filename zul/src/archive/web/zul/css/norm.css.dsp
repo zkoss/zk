@@ -193,11 +193,11 @@ div.z-loading-indicator {
 }
 <%-- ZK separator --%>
 div.hsep, div.hsep-bar {
-	height: 9px; overflow: hidden;
+	height: 10px; overflow: hidden;
 }
 span.vsep, span.vsep-bar {
 	display:-moz-inline-box; display: inline-block;
-	width: 7px; overflow: hidden;
+	width: 8px; overflow: hidden;
 }
 div.hsep-bar {
 	background-image: url(${c:encodeURL('~./img/dot.gif')});
