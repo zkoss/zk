@@ -1630,19 +1630,22 @@ zk.formatDate = function (val, fmt) {
 				else txt += zk.FDOW[val.getDay()];
 				break;
 			case 'D':
-				txt += zk.dayOfYear(val);
+				txt += zk.dayInYear(val);
 				break;
 			case 'd':
-				txt += zk.dayOfMonth(val);
+				txt += zk.dayInMonth(val);
 				break;
 			case 'w':
-				txt += zk.weekOfYear(val);
+				txt += zk.weekInYear(val);
 				break;
 			case 'W':
-				txt += zk.weekOfMonth(val);
+				txt += zk.weekInMonth(val);
 				break;
 			case 'G':
 				txt += "AD";
+				break;
+			case 'F':
+				txt += zk.dayOfWeekInMonth(val);
 				break;
 			default:
 				txt += '1';
@@ -1660,25 +1663,29 @@ zk.formatDate = function (val, fmt) {
 zk.ms2day = function (t) {
 	return Math.round(t / 86400000);
 };
-/** Day of the year (starting at 1). */
-zk.dayOfYear = function (d, ref) {
+/** Day in year (starting at 1). */
+zk.dayInYear = function (d, ref) {
 	if (!ref) ref = new Date(d.getFullYear(), 0, 1);
 	return 1 + zk.ms2day(d - ref);
 };
-/** Day of the month (starting at 1). */
-zk.dayOfMonth = function (d) {
-	return zk.dayOfYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+/** Day in month (starting at 1). */
+zk.dayInMonth = function (d) {
+	return zk.dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
 };
-/** Week of the year (starting at 1). */
-zk.weekOfYear = function (d, ref) {
+/** Week in year (starting at 1). */
+zk.weekInYear = function (d, ref) {
 	if (!ref) ref = new Date(d.getFullYear(), 0, 1);
 	var wday = ref.getDay();
 	if (wday == 7) wday = 0;
 	return 1 + Math.floor((zk.ms2day(d - ref) + wday) / 7);
 };
-/** Day of the month (starting at 1). */
-zk.weekOfMonth = function (d) {
-	return zk.weekOfYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+/** Week in month (starting at 1). */
+zk.weekInMonth = function (d) {
+	return zk.weekInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+};
+/** Day of week in month. */
+zk.dayOfWeekInMonth = function (d) {
+	return 1 + Math.floor(zk.ms2day(d - new Date(d.getFullYear(), d.getMonth(), 1)) / 7);
 };
 
 /** Returns an integer of the attribute of the specified element. */
