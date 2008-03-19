@@ -85,16 +85,16 @@ public class MainLayout extends Borderlayout {
 				
 				if(((Checkbox)getFellow("w1").getFellow("newb")).isChecked()){
 					Clients.evalJavaScript("newWindow(\""+disFileStr+"\")");
-				}else{
-					iframe.setSrc(path+"/"+disFileStr);
-					if(codeView!=null)
-					{
-						ServletContext context = ServletFns.getCurrentServletContext();
-						InputStream in = context.getResourceAsStream(path+"/"+disFileStr);
-						
-						byte[] bytes = Files.readAll(in);
-						codeView.setValue( new String(bytes));
-					}
+				}
+				
+				iframe.setSrc(path+"/"+disFileStr);
+				if(codeView!=null)
+				{
+					ServletContext context = ServletFns.getCurrentServletContext();
+					InputStream in = context.getResourceAsStream(path+"/"+disFileStr);
+					
+					byte[] bytes = Files.readAll(in);
+					codeView.setValue( new String(bytes));
 				}
 			}});
 		getFellow("w1").addEventListener("onOK",new EventListener(){
