@@ -19,8 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window border="normal" width="800px" title="Case 1: hbox and splitter">
 <html><![CDATA[
-Opera: it is hard to drag the splitter (fixed)<br/>
-Safari: the height is not correct (it shall be 100px) (not fixed yet)
+Bug 1: Opera: it is hard to drag the splitter<br/>
+Bug 2: Safari: the height is not correct (it shall be 100px)
 ]]></html>
 
 Case 1:

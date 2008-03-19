@@ -27,7 +27,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 You shall see the horizontal splitter covers the entire left side
 (from left to the left edge of the vertical splitter).
 <p>Note: both hbox and vbox are specified with width=100%</p>
-Note: Case 1 failed in Opera.
 <p><b>Case 2: (Bug 1917901)</b></p>
 <ol>
 <li>Click the button of the horizontal splitter (collapse).</li>
