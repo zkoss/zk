@@ -1500,7 +1500,7 @@ zk.parseDate = function (txt, fmt, strict) {
 	var ts = txt.split(/\W+/);
 	for (var i = 0, j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
-		if (cc == 'y' || cc == 'M' || cc == 'd' || cc == 'E') {
+		if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
 			var len = 1;
 			for (var k = j; ++k < fl; ++len)
 				if (fmt.charAt(k) != cc)
@@ -1562,7 +1562,7 @@ zk.parseDate = function (txt, fmt, strict) {
 				d = $int(token);
 				if (isNaN(d)) return null; //failed
 				break;
-			//case 'E': ignored
+			//default: ignored
 			}
 			j = k - 1;
 		}
@@ -1606,7 +1606,7 @@ zk.formatDate = function (val, fmt) {
 	var txt = "";
 	for (var j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
-		if (cc == 'y' || cc == 'M' || cc == 'd' || cc == 'E') {
+		if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
 			var len = 1;
 			for (var k = j; ++k < fl; ++len)
 				if (fmt.charAt(k) != cc)
@@ -1625,9 +1625,29 @@ zk.formatDate = function (val, fmt) {
 			case 'd':
 				txt += zk.formatFixed(val.getDate(), len);
 				break;
-			default://case 'E':
+			case 'E':
 				if (len <= 3) txt += zk.SDOW[val.getDay()];
 				else txt += zk.FDOW[val.getDay()];
+				break;
+			case 'D':
+				txt += zk.dayOfYear(val);
+				break;
+			case 'd':
+				txt += zk.dayOfMonth(val);
+				break;
+			case 'w':
+				txt += zk.weekOfYear(val);
+				break;
+			case 'W':
+				txt += zk.weekOfMonth(val);
+				break;
+			case 'G':
+				txt += "AD";
+				break;
+			default:
+				txt += '1';
+					//fake; SimpleDateFormat.parse might ignore it
+					//However, it must be an error if we don't generate a digit
 			}
 			j = k - 1;
 		} else {
@@ -1635,6 +1655,30 @@ zk.formatDate = function (val, fmt) {
 		}
 	}
 	return txt;
+};
+/** Converts milli-second to day. */
+zk.ms2day = function (t) {
+	return Math.round(t / 86400000);
+};
+/** Day of the year (starting at 1). */
+zk.dayOfYear = function (d, ref) {
+	if (!ref) ref = new Date(d.getFullYear(), 0, 1);
+	return 1 + zk.ms2day(d - ref);
+};
+/** Day of the month (starting at 1). */
+zk.dayOfMonth = function (d) {
+	return zk.dayOfYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+};
+/** Week of the year (starting at 1). */
+zk.weekOfYear = function (d, ref) {
+	if (!ref) ref = new Date(d.getFullYear(), 0, 1);
+	var wday = ref.getDay();
+	if (wday == 7) wday = 0;
+	return 1 + Math.floor((zk.ms2day(d - ref) + wday) / 7);
+};
+/** Day of the month (starting at 1). */
+zk.weekOfMonth = function (d) {
+	return zk.weekOfYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
 };
 
 /** Returns an integer of the attribute of the specified element. */
