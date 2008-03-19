@@ -177,6 +177,68 @@ public class Datebox extends FormatInputElement {
 		setRawValue(value);
 	}
 
+	/** Sets the date format.
+<p>The following pattern letters are defined:
+<table border=0 cellspacing=3 cellpadding=0>
+
+     <tr bgcolor="#ccccff">
+         <th align=left>Letter
+         <th align=left>Date or Time Component
+         <th align=left>Presentation
+         <th align=left>Examples
+     <tr>
+         <td><code>G</code>
+         <td>Era designator
+         <td><a href="#text">Text</a>
+         <td><code>AD</code>
+
+     <tr bgcolor="#eeeeff">
+         <td><code>y</code>
+         <td>Year
+         <td><a href="#year">Year</a>
+         <td><code>1996</code>; <code>96</code>
+     <tr>
+         <td><code>M</code>
+
+         <td>Month in year
+         <td><a href="#month">Month</a>
+         <td><code>July</code>; <code>Jul</code>; <code>07</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>w</code>
+         <td>Week in year (starting at 1)
+         <td><a href="#number">Number</a>
+
+         <td><code>27</code>
+     <tr>
+         <td><code>W</code>
+         <td>Week in month (starting at 1)
+         <td><a href="#number">Number</a>
+         <td><code>2</code>
+     <tr bgcolor="#eeeeff">
+
+         <td><code>D</code>
+         <td>Day in year (starting at 1)
+         <td><a href="#number">Number</a>
+         <td><code>189</code>
+     <tr>
+         <td><code>d</code>
+         <td>Day in month (starting at 1)
+         <td><a href="#number">Number</a>
+
+         <td><code>10</code>
+     <tr bgcolor="#eeeeff">
+         <td><code>F</code>
+         <td>Day of week in month
+         <td><a href="#number">Number</a>
+         <td><code>2</code>
+     <tr>
+
+         <td><code>E</code>
+         <td>Day in week
+         <td><a href="#text">Text</a>
+         <td><code>Tuesday</code>; <code>Tue</code>
+ </table>
+ 	 */
 	public void setFormat(String format) throws WrongValueException {
 		if (format == null || format.length() == 0)
 			format = getDefaultFormat();
