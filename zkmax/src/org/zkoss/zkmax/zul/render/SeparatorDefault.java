@@ -36,9 +36,11 @@ public class SeparatorDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Separator self = (Separator)comp;
-		wh.write("<div id=\"").write(self.getUuid()).write("\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
-		wh.write(">&nbsp;</div>");
+		final String tagnm = self.isVertical() ? "span": "div";
+		wh.write('<').write(tagnm)
+			.write(" id=\"").write(self.getUuid()).write("\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write(">&nbsp;</").write(tagnm).write('>');
 	}
 
 }
