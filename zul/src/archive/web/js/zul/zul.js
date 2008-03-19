@@ -46,13 +46,15 @@ zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 	if (!head) return; 
 	if (zk.opera) {
 		if (!hdtable.style.width) {
-			var has;
-			for(var i = hdfaker.cells.length; --i >=0;)
-				if (hdfaker.cells[i].style.width && hdfaker.cells[i].style.width.indexOf("%") < 0) {
-					has = true; 
+			var isFixed = true, tt = hdtable.parentNode.offsetWidth;
+			for(var i = hdfaker.cells.length; --i >=0;) {
+				if (!hdfaker.cells[i].style.width || hdfaker.cells[i].style.width.indexOf("%") >= 0) {
+					isFixed = false; 
 					break;
 				}
-			if (!has) hdtable.style.tableLayout = "auto";
+				tt -= $int(hdfaker.cells[i].style.width);
+			}
+			if (!isFixed || tt >= 0) hdtable.style.tableLayout = "auto";
 		}
 	} 
 	var including = zk.revisedSize(head.cells[0], 100) !== zk.revisedSize(hdfaker.cells[0], 100);
@@ -254,12 +256,18 @@ zulHdr.setAttr = function (cmp, nm, val) {
 			if (nm == "style.width") {
 				var hdfaker = $e(cmp.id + "!hdfaker"), bdfaker = $e(cmp.id + "!bdfaker"),
 					ftfaker = $e(cmp.id + "!ftfaker");
-				if (hdfaker)
+				if (hdfaker) {
 					hdfaker.style.width = val;
-				if (bdfaker)
+					meta.headtbl.style.width = "";
+				}
+				if (bdfaker) {
 					bdfaker.style.width = val;
-				if (ftfaker)
+					meta.bodytbl.style.width = "";
+				}
+				if (ftfaker) {
 					ftfaker.style.width = val;
+					meta.foottbl.style.width = "";
+				}
 					 
 				if (meta) meta._recalcSize();
 			}
