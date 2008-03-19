@@ -62,8 +62,17 @@ public class BoxVertical implements ComponentRenderer {
 				wh.write("<tr id=\"").write(child.getUuid())
 					.write("!chdextr2\" class=\"").write(spscls).write("\"");
 
-				//note: we have to hide if spacing is 0 since IE7 shows some space
-				if (!child.isVisible() || "0".equals(spacing) || "0px".equals(spacing)) {
+				//note: we have to hide if spacing is 0
+				//since IE7 shows some space
+				boolean chvisible = child.isVisible();
+				if (chvisible) {
+					int splen = spacing != null ? spacing.length(): 0;
+					if (splen > 0 && spacing.charAt(0) == '0') {
+						char cc = splen > 1 ? spacing.charAt(1): (char)0;
+						chvisible = cc >= '0' && cc <= '9';
+					}
+				}
+				if (!chvisible) {
 					wh.write(" style=\"display:none;");
 					if (spstyle != null) wh.write(spstyle);
 					wh.write("\"");
