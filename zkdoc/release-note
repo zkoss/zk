@@ -106,6 +106,7 @@ ZK 3.0.4 Freshly
   1917905: Vertical splitter cannot be moved (Safari only)
   1918018: Some incorrectness of russian localization
   1918796: Grid header appear and should not
+  1896291: [IE6 ONLY] fileupload does not always recognize content-type
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
