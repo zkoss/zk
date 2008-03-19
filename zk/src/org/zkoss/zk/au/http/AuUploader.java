@@ -45,6 +45,7 @@ import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
+import org.zkoss.util.media.ContentTypes;
 import org.zkoss.image.AImage;
 import org.zkoss.sound.AAudio;
 
@@ -191,8 +192,17 @@ public class AuUploader implements AuProcessor {
 			}
 		}
 
-		final String ctype = fi.getContentType(),
+		String ctype = fi.getContentType(),
 			ctypelc = ctype != null ? ctype.toLowerCase(): null;
+		if (name != null && "application/octet-stream".equals(ctypelc)) { //Bug 1896291: IE limit
+			final int j = name.lastIndexOf('.');
+			if (j >= 0) {
+				String s = ContentTypes.getContentType(name.substring(j + 1));
+				if (s != null)
+					ctypelc = ctype = s;
+			}
+		}
+
 		if (!alwaysNative && ctypelc != null) {
 			if (ctypelc.startsWith("image/")) {
 				try {
