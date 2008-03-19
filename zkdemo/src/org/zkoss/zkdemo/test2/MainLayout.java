@@ -180,7 +180,7 @@ public class MainLayout extends Borderlayout {
 	 * use to update fileModel, while search condition is changed.
 	 *
 	 */
-	private void updateModel(){
+	public void updateModel(){
 		fileModel.clear();
 		String r = getDesktop().getWebApp().getRealPath("/");
 		File test2 = new File(r,path);
@@ -214,6 +214,7 @@ public class MainLayout extends Borderlayout {
 			for(int i=0;i<skipList.length;i++){
 				if(name.equals(skipList[i])) return false;
 			}
+			final String n = name;
 			if(name.endsWith(".zul")){
 				name = name.substring(0,name.length()-4);
 			}else if(name.endsWith(".zhtml")){
@@ -224,10 +225,10 @@ public class MainLayout extends Borderlayout {
 			}
 			
 			if(reg){
-				Matcher matcher = pattern.matcher(name);
+				Matcher matcher = pattern.matcher(n);
 				return matcher.matches();
 			}else{
-				return name.toUpperCase().indexOf(str.toUpperCase())>=0;
+				return n.toUpperCase().indexOf(str.toUpperCase())>=0;
 			}
 		}
 		

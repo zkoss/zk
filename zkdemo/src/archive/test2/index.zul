@@ -1,8 +1,7 @@
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
 <h:script>
 function newWindow(url){
-	document.forms["newform"].action = url;
-	document.forms["newform"].submit();
+	zk.go(url, 0, "_zktest2");
 }
 </h:script>
 <h:form id="newform" target="_blank" method="post"/>
@@ -30,8 +29,8 @@ String shortHeight="520px";
 								]]></attribute>
 							</checkbox>
 					<hbox>
-						<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();w2.setWidth("90%")'/>
-						<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();w2.setWidth("800px")'/>
+						<!-- <button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();w2.setWidth("90%")'/>
+						<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();w2.setWidth("800px")'/> -->
 						<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("");w2.getFellow("caption").label = "ZK TEST2"'/>
 						<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
 						<button label="tracker">
@@ -51,6 +50,13 @@ String shortHeight="520px";
 								}
 							]]></attribute>
 						</button>
+					</hbox>
+					<hbox>
+						<radiogroup id="radio" onCheck="fnf.value = self.selectedItem.label;main.updateModel();">
+							<radio label="F30"/>
+							<radio label="Z30"/>
+							<radio label="B30"/>
+						</radiogroup>
 					</hbox>
 						</vbox>
 						
