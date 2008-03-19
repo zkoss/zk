@@ -109,6 +109,7 @@ ZK 3.0.4 Freshly
   1918796: Grid header appear and should not
   1896291: [IE6 ONLY] fileupload does not always recognize content-type
   1877111: Non-lenient datebox with wrong fmt not throw exception
+  1526742: Rendering of <space> on IE is bad
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
