@@ -54,7 +54,7 @@ public class GridPaging implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!hdfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!hdfaker\" class=\"grid-fake\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();
@@ -75,7 +75,7 @@ public class GridPaging implements ComponentRenderer {
 		wh.write(">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!bdfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!bdfaker\" class=\"grid-fake\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();
@@ -92,7 +92,7 @@ public class GridPaging implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"  style=\"table-layout:fixed\">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!ftfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!ftfaker\" class=\"grid-fake\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();

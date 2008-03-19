@@ -48,7 +48,7 @@ public class TreeDefault implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!hdfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!hdfaker\" class=\"tree-fake\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 					final Treecol child = (Treecol) it.next();
@@ -69,7 +69,7 @@ public class TreeDefault implements ComponentRenderer {
 		
 		if(self.getTreecols() != null) {
 			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"hidfakerz\">");
+				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"tree-fake\">");
 				
 			for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 				final Treecol child = (Treecol) it.next();
@@ -86,7 +86,7 @@ public class TreeDefault implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"tree-fake\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 					final Treecol child = (Treecol) it.next();

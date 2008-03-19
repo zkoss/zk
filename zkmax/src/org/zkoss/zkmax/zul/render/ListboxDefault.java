@@ -49,7 +49,7 @@ public class ListboxDefault implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getListhead() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!hdfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!hdfaker\" class=\"listbox-fake\">");
 					
 				for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
 					final Listheader child = (Listheader) it.next();
@@ -73,7 +73,7 @@ public class ListboxDefault implements ComponentRenderer {
 		
 		if(self.getListhead() != null) {
 			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-				.write("<tr id=\"").write(self.getListhead().getUuid()).write("!bdfaker\" class=\"hidfakerz\">");
+				.write("<tr id=\"").write(self.getListhead().getUuid()).write("!bdfaker\" class=\"listbox-fake\">");
 				
 			for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
 				final Listheader child = (Listheader) it.next();
@@ -95,7 +95,7 @@ public class ListboxDefault implements ComponentRenderer {
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getListhead() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!ftfaker\" class=\"hidfakerz\">");
+					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!ftfaker\" class=\"listbox-fake\">");
 					
 				for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
 					final Listheader child = (Listheader) it.next();
