@@ -176,10 +176,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<mime-type>text/html</mime-type>
 	</mime-mapping>
 	<mime-mapping>
-		<extension>jad</extension>
-		<mime-type>text/vnd.sun.j2me.app-descriptor</mime-type>
-	</mime-mapping>
-	<mime-mapping>
 		<extension>jnlp</extension>
 		<mime-type>application/x-java-jnlp-file</mime-type>
 	</mime-mapping>
