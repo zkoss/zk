@@ -180,6 +180,8 @@ public class Datebox extends FormatInputElement {
 	public void setFormat(String format) throws WrongValueException {
 		if (format == null || format.length() == 0)
 			format = getDefaultFormat();
+		else
+			getDateFormat(format); //make sure the format is correct
 		super.setFormat(format);
 	}
 
