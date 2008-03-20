@@ -110,12 +110,15 @@ if (zk.ie) {
 // More zk utilities (defined also in boot.js) //
 
 /**
- * Invalidates the component to re-initialize the all node tree.
+ * Redraws the all node tree.
  * @param {Object} cmp
  * @since 3.0.4
  */
-zk.invalidate = function (cmp) {
-	if (cmp) zkau.cmd1.outer($uuid(cmp), cmp, zk.getOuterHTML(cmp));
+zk.redraw = function (cmp) {
+	if (cmp) {
+		cmp = $outer(cmp);
+		zkau.cmd1.outer(cmp.id, cmp, zk.getOuterHTML(cmp));
+	}
 };
 /**
  * Returns the outerHTML of the element.
