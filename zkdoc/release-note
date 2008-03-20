@@ -111,6 +111,7 @@ ZK 3.0.4 Freshly
   1877111: Non-lenient datebox with wrong fmt not throw exception
   1526742: Rendering of <space> on IE is bad
   1920541: Resize the popup window, it should not disappear
+  1920630: The bottom border of Listbox is gone. (IE7 only)
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
