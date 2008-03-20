@@ -30,10 +30,12 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
@@ -1133,10 +1135,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((ComponentRenderer)mold)
 				.render(this, out != null ? out: ZkFns.getCurrentOut());
 		} else {
+			final StringBuffer buf = out instanceof StringWriter ?
+				((StringWriter)out).getBuffer(): null;
+			final int index = buf != null ? buf.length(): 0;
+
 			final Map attrs = new HashMap(2);
 			attrs.put("self", this);
 			getExecution()
 				.include(out, (String)mold, attrs, Execution.PASS_THRU_ATTR);
+
+			//Trim the output to have smaller outputer and to avoid
+			//whitespace around the separator and space components
+			if (buf != null)
+				Strings.trim(buf, index);
 		}
 	}
 	/* Default: does nothing.
