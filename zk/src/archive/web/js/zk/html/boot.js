@@ -72,7 +72,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "9h"; //increase this if we want the browser to reload JavaScript
+zk.build = "9i"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 zk.booting = true; //denote ZK is booting
 
