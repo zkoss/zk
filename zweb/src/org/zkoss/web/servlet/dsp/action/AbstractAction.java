@@ -19,7 +19,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.dsp.action;
 
 import java.util.Map;
+import java.io.StringWriter;
+import java.io.IOException;
 
+import org.zkoss.lang.Strings;
 import org.zkoss.xml.XMLs;
 
 /**
@@ -147,5 +150,37 @@ abstract public class AbstractAction implements Action {
 		if (val != NULL_INT)
 			sb.append(' ').append(attrName).append("=\"")
 				.append(Integer.toString(val)).append('"');
+	}
+
+	//package-level utilities//
+	/** Returns the output for rendering fragment, or null if
+	 * trim is false.
+	 *
+	 * <p>The return value is passed to {@link #renderFragment}
+	 * directly.
+	 */
+	/*package*/ static
+	StringWriter getFragmentOut(ActionContext ac, boolean trim)
+	throws IOException {
+		return trim && !(ac.getOut() instanceof StringWriter) ?
+			new StringWriter(): null;
+	}
+	/** Invokes ac.renderFragment() and trim the output if trim is true.
+	 *
+	 * @param out the return value of {@link #getFragmentOut}.
+	 */
+	/*package*/ static
+	void renderFragment(ActionContext ac, StringWriter out, boolean trim)
+	throws javax.servlet.ServletException, IOException {
+		if (trim) {
+			final StringBuffer buf =
+				(out != null ? out: (StringWriter)ac.getOut()).getBuffer();
+				//ac.getOut must be StringWriter if out is null and trim
+			final int index = buf.length();
+			ac.renderFragment(out);
+			Strings.trim(buf, index);
+		} else {
+			ac.renderFragment(out);
+		}
 	}
 }

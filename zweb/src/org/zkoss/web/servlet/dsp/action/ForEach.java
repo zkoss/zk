@@ -27,7 +27,6 @@ import java.util.Enumeration;
 import java.io.StringWriter;
 import java.io.IOException;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.web.mesg.MWeb;
 import org.zkoss.web.servlet.ServletException;
 
@@ -176,31 +175,31 @@ public class ForEach extends AbstractAction {
 
 	private void renderWith(ActionContext ac, Status st)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j <= _end; ++j) {
 			final Object val = new Integer(j);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, ListIterator it)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++j) {
 			final Object val = it.next();
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, Iterator it)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 
 		for (int j = 0; ++j <= _beg && it.hasNext();) //skip
 			it.next();
@@ -209,14 +208,14 @@ public class ForEach extends AbstractAction {
 			final Object val = it.next();
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, Enumeration enm)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 
 		for (int j = 0; ++j <= _beg && enm.hasMoreElements();) //skip
 			enm.nextElement();
@@ -225,103 +224,103 @@ public class ForEach extends AbstractAction {
 			final Object val = enm.nextElement();
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, Object[] ary)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = ary[j];
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, int[] ary)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Integer(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, short[] ary)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Short(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, long[] ary)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Long(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, char[] ary)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Character(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, byte[] ary)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Byte(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, float[] ary)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Float(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, double[] ary)
 	throws javax.servlet.ServletException, IOException {
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Double(ary[j]);
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(j, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
@@ -330,14 +329,14 @@ public class ForEach extends AbstractAction {
 	throws javax.servlet.ServletException, IOException {
 		final StringBuffer sb = new StringBuffer();
 		int idx = 0;
-		final StringWriter out = getFragmentOut(ac);
+		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg, len = txt.length(); j < len && j <= _end; ++j) {
 			char cc = txt.charAt(j);
 			if (cc == ',') {
 				final Object val = sb.toString();
 				if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 				if (st != null) st.update(idx++, val);
-				renderFragment(ac, out);
+				renderFragment(ac, out, _trim);
 				sb.setLength(0);
 			} else if (cc == '\\' && j + 1 < len) {
 				cc = txt.charAt(j + 1);
@@ -354,31 +353,10 @@ public class ForEach extends AbstractAction {
 			final Object val = sb.toString();
 			if (_var != null) ac.setAttribute(_var, val, ac.PAGE_SCOPE);
 			if (st != null) st.update(idx++, val);
-			renderFragment(ac, out);
+			renderFragment(ac, out, _trim);
 		}
 		if (out != null)
 			ac.getOut().write(out.toString());
-	}
-	private void renderFragment(ActionContext ac, StringWriter out)
-	throws javax.servlet.ServletException, IOException {
-		if (_trim) {
-			final StringBuffer buf =
-				(out != null ? out: (StringWriter)ac.getOut()).getBuffer();
-				//ac.getOut must be StringWriter if out is null and _trim
-			final int index = buf.length();
-			ac.renderFragment(out);
-			Strings.trim(buf, index);
-		} else {
-			ac.renderFragment(out);
-		}
-	}
-	/** Returns the output for rendering fragment, or null if
-	 * _trim is false.
-	 */
-	private StringWriter getFragmentOut(ActionContext ac)
-	throws IOException {
-		return _trim && !(ac.getOut() instanceof StringWriter) ?
-			new StringWriter(): null;
 	}
 
 	//-- Object --//

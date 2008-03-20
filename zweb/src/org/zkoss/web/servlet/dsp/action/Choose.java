@@ -46,13 +46,10 @@ public class Choose extends AbstractAction {
 	public void render(ActionContext ac, boolean nested)
 	throws javax.servlet.ServletException, IOException {
 		if (nested && isEffective()) {
-			if (_trim) {
-				final StringWriter sw = new StringWriter();
-				ac.renderFragment(sw);
-				ac.getOut().write(sw.toString().trim());
-			} else {
-				ac.renderFragment(null);
-			}
+			final StringWriter out = getFragmentOut(ac, _trim);
+			renderFragment(ac, out, _trim);
+			if (out != null)
+				ac.getOut().write(out.toString());
 		}
 	}
 
