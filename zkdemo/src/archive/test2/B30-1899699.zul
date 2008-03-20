@@ -27,7 +27,7 @@ border="normal"
 width="100%"
 height="250">
 
-<zk:label value="Ciao"></zk:label>
+<zk:label value="Check column size in listbox is correct"></zk:label>
 
 <zk:listbox id="vociPreventivoList"
 rows="10"

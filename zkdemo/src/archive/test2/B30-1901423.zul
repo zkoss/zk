@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<window title="listbox demo" border="normal">
+           Click two Align button  and check alignment of listboxes and grids 
 	<vbox>
 	<div>
 	<listbox id="practice" width="250px">

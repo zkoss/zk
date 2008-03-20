@@ -54,17 +54,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<button label="setHeight 200px" onClick='g1.setHeight("200px")'/>
 			<button label="setHeight 600px" onClick='g1.setHeight("600px")'/>
 			<button label="setHeight null" onClick='g1.setHeight(null)'/>
-			<button label="setColumnWidth1" onClick='col1.setWidth("20px")'/>
-			<button label="setColumnWidth2" onClick='col1.setWidth("100px")'/>
-			<button label="setColumnWidth3" onClick='col1.setWidth("200px")'/>
-			<button label="setColumnWidth4" onClick='col2.setWidth("20px")'/>
-			<button label="setColumnWidth5" onClick='col2.setWidth("100px")'/>
-			<button label="setColumnWidth6" onClick='col3.setWidth("20px")'/>
-			<button label="setColumnWidth7" onClick='col3.setWidth("100px")'/>
+			<button label="setColumnWidth20px" onClick='col1.setWidth("20px")'/>
+			<button label="setColumnWidth100px" onClick='col1.setWidth("100px")'/>
+			<button label="setColumnWidth200px" onClick='col1.setWidth("200px")'/>
+			<button label="setColumnWidth20px" onClick='col2.setWidth("20px")'/>
+			<button label="setColumnWidth100px" onClick='col2.setWidth("100px")'/>
+			<button label="setColumnWidth20px" onClick='col3.setWidth("20px")'/>
+			<button label="setColumnWidth100px" onClick='col3.setWidth("100px")'/>
 			<button label="setSizable" onClick="cols.setSizable(true)"/>
 			<button label="setSizable false" onClick="cols.setSizable(false)"/>
 		</div>
-		<grid id="g1" width="400px">
+		<grid id="g1" width="400px" fixedLayout="true">
 			<columns id="cols">
 				<column label="Type 50px" id="col1" align="center" width="50px"/>
 				<column label="Content" id="col2" align="right"/>

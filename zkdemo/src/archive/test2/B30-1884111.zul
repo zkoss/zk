@@ -18,6 +18,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>
+<n:ol>
+<n:li>
+Click on "Please Click Me"
+</n:li>
+<n:li>
+Click on "Ok" in the modal window
+</n:li>
+<n:li>
+Modal Window disappears
+</n:li>
+<n:li>
+If the modal window disappears in 7 seconds, it is correct
+</n:li>
+</n:ol>
+</n:p>
 <window id="form" width="750px" height="490px" border="normal"
 	contentStyle="background:#D3DBF4;">
 	<tabbox width="400px">

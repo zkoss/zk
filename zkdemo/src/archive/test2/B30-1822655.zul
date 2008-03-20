@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window > 
+<html><![CDATA[
+In IE,
+Grid 1's column and row doesn't align follow the spans, but it will fix when I resize the column.<br/>
+Grid 2's 3rd column(with right alignment) is disappeared.<br/>
+<br/>
+In FF,<br/>
+Grid 2's column and row doesn't align.<br/>
+<br/>
+]]></html>
 Grid 1
 <grid height="100px">
 	<columns sizable="true" >

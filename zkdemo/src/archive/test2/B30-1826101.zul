@@ -29,7 +29,7 @@ IE6.0.
 </window>
 <window title="listbox demo" border="normal" width="80px">
 
-	<listbox width="100%" mold="paging">
+	<listbox width="95%" mold="paging">
 		<listhead sizable="true">
 			<listheader width="200px" label="name" sort="auto" />
 			<listheader width="200px" label="gender" sort="auto" />

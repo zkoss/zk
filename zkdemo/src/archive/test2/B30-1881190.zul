@@ -23,6 +23,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<n:p>To reproduce this case you can click on the 'show' button (the window shows two times at different positions: at left side, then hides and then appears in the middle of page), then on 'close' and again on 'show' (appears three times at center, at the left side and at center again)</n:p>
 
+        <n:p>It will run for long time.</n:p>
 	<button label="show">
 		<attribute name="onClick">{ mywin.doModal(); }</attribute>
 	</button>

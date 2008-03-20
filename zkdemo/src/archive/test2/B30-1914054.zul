@@ -66,8 +66,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<treeitem label="Item 3" />
 			</treechildren>
 		</tree>
-
-		<button label="Replace" onClick="replace();" />
 	</vbox>
 	<tree>
 

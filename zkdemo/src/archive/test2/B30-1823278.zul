@@ -4,9 +4,8 @@
 	<h:pre>
 1.scroll listbox
 
-2.use keyboard Up button to upper entries.
+2.If can use keyboard Up button to upper entries, it is correct(It moves scrollbar in Safari)
 
-3. current Listitem will be -1.
 	</h:pre>
 <zscript><![CDATA[
 	import java.util.ArrayList;

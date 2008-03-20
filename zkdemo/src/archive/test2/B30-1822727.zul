@@ -1,4 +1,20 @@
 <window title="listbox checkmark demo" border="normal">
+<html><![CDATA[
+The selection of listbox is not correct when use toggle multiple.<br/>
+reproducible step.<br/>
+1.select Henry and Dennis<br/>
+2.click toogle multiple ,<br/>
+3.click toogle multiple again.<br/>
+4.disselect Jane, Henry.<br/>
+5.click invalidate.<br/>
+<br/>
+you will see Henry is still selected.<br/>
+<br/>
+it also happen when you select Mary,John,Jane at step 1, and disselect
+Jane,John in step 4.<br/>
+
+<br/>
+]]></html>
 	<button label="Toggle multiple" onClick="box.multiple = !box.multiple"/>
 	<button label="Invalidate" onClick="box.invalidate()"/>
 	<separator bar="true"/>

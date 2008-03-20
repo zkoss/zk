@@ -17,6 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk>
+<label value="It only show to 1927 on FireFox, not a bug." style="font-weight:bold"/>
 <window title="Test the 'No Response' message">
 It takes long to initialize.
 However, the browser shall not show the "have stopped responding" message.
@@ -32,3 +34,4 @@ However, the browser shall not show the "have stopped responding" message.
 		</listitem>
 	</listbox>
 </window>
+</zk>

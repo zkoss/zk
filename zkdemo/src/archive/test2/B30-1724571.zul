@@ -1,4 +1,4 @@
-<window title="My First Window" border="normal" width="500px">
+<window title="My First Window" border="normal" width="800px">
 <vbox>
 <textbox id="box" constraint="no empty:Fail validation!!" />
 <button onClick="box.getValue()" label="Validate by get (it shall fail if error is not cleaned up)"/>

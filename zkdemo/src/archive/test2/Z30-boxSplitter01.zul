@@ -46,7 +46,7 @@
 		</radiogroup>
 	</window>
 	<window border="normal" width="800px" title="Case 2-1: vbox and splitters">
-		<vbox height="100px" width="800px">
+		<vbox height="100px" width="100%">
 		cdacdacdacdacdaca
 		<splitter collapse="none"/>
 		cdacdacdacdacacsdc

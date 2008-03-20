@@ -90,11 +90,11 @@
             <tree model="${stm}" id="tree" width="700PX">
             </tree>
             <hbox>           
+                <button label='renderByPath Root' onClick='renderByPath(r)' />
+                <button label='renderByPath A' onClick='renderByPath(a)' />
                 <button label='renderByPath A2' onClick='renderByPath(a2)' />
-                <button label='renderByPath B0-0' onClick='renderByPath(b00)' />
                 <button label='renderByPath A2-1' onClick='renderByPath(a21)' />
-                 <button label='renderByPath Root' onClick='renderByPath(r)' />
-                   <button label='renderByPath A' onClick='renderByPath(a)' />
+                <button label='renderByPath B0-0' onClick='renderByPath(b00)' />
            </hbox>
         </vbox>
     </window>

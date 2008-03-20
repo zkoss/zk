@@ -2,7 +2,7 @@
 <?page title="ZKD Debug Page"
 style="height:100%;width:100%;margin:0;padding:0;"?>  
 <zk>
-
+The header cells' size should rendered correctly. 
 	<window id="winTest"
 							top="15px"
 							left="15px"

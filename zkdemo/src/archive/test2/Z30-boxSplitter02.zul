@@ -1,7 +1,7 @@
 <zk>
 	<window border="normal" height="500px" width="500px">
 		<hbox sclass="b" id="hb" pack="start" align="start"
-			height="400px" width="500px">
+			height="400px" width="100%">
 			<textbox height="30px" width="30px" />
 			<splitter />
 			<textbox height="30px" width="30px" />

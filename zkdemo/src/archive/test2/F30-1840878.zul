@@ -25,8 +25,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<n:li>maximun uploaded file will set back to 1</n:li>
 	</n:ol>
 	<fileupload number="-1">
-		<attribute name="onUpload">
-			alert("total upload files:"+event.medias.length);
-		</attribute>
+             <attribute name="onUpload">
+		if (event.medias != null)
+		alert("total upload files:"+event.medias.length);
+	</attribute>
 	</fileupload>
 </zk>

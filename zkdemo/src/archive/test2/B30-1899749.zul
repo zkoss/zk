@@ -45,6 +45,6 @@ Case 2: With IE6,
 	<button label="width 100">
 		<attribute name="onClick">pm.setWidth("100px")</attribute>
 	</button>
-	<button label="show" onClick="sp.setVisible(true)"/>
 	<button label="hide" onClick="sp.setVisible(false)"/>
+	<button label="show" onClick="sp.setVisible(true)"/>
 </window>

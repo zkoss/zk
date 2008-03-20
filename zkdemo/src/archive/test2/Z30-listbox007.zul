@@ -1,5 +1,6 @@
 <zk>
-
+        Won,t fixed: The content of auxheader "A+B" is cut to half.(Safari only)
+        <separator/>
 	<toolbarbutton label="B30-1823354.zul :: Listbox's content is fixed while vflex = true"  href="B30-1823354.zul"/>
 	<separator/>
 	<toolbarbutton label="B30-1823921.zul :: Listbox crashed with complex Header"  href="B30-1823921.zul"/>
