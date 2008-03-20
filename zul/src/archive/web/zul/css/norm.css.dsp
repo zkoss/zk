@@ -195,6 +195,7 @@ div.z-loading-indicator {
 <%-- ZK separator --%>
 <c:choose>
 	<c:when test="${empty c:getProperty('org.zkoss.zul.Separator.spaceWithMargin')}">
+	<%-- 3.0.4 and later --%>
 div.hsep, div.hsep-bar {
 	height: 7px; overflow: hidden;
 }
