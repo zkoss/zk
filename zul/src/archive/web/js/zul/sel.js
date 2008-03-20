@@ -696,9 +696,17 @@ zk.Selectable.prototype = {
 	 * is changed.
 	 */
 	_unsetFocusExcept: function (row) {
-		return this._focus && this._focus != row ? this._setFocus(this._focus, false) : false;
+		return this._focus && this._focus != row ? this._setFocus(this._focus, false) : this._clearDirtyFocus(row);
 	},
-
+	/**
+	 * The dirty focus might be created from sever side, if any.
+	 */
+	_clearDirtyFocus: function (row) {
+		if (!this._focus && this.bodyrows && this.bodyrows[0] != row) {
+			zk.remove($e(this.bodyrows[0].id + "!sel"));
+		}
+		return false
+	},
 	/** Renders listitems that become visible by scrolling.
 	 */
 	_render: function (timeout) {
