@@ -109,6 +109,26 @@ if (zk.ie) {
 //////
 // More zk utilities (defined also in boot.js) //
 
+/**
+ * Invalidates the component to re-initialize the all node tree.
+ * @param {Object} cmp
+ * @since 3.0.4
+ */
+zk.invalidate = function (cmp) {
+	if (cmp) zkau.cmd1.outer($uuid(cmp), cmp, zk.getOuterHTML(cmp));
+};
+/**
+ * Returns the outerHTML of the element.
+ * @param {Object} cmp
+ * @since 3.0.4
+ */
+zk.getOuterHTML = function (cmp) {
+	if (cmp.outerHTML) return cmp.outerHTML;
+	var div = document.createElement("DIV");
+	var clone = cmp.cloneNode(true);
+	div.appendChild(clone);
+	return div.innerHTML;
+}
 /** Returns whether it is part of the class name
  * of the specified element.
  */
