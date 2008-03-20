@@ -152,7 +152,7 @@ public class Separator extends XulElement {
 	 * Define it only if you want to apply the 3.0.3-compatible behavior.
 	 * @since 3.0.4
 	 */
-	public boolean isSpaceWithMargin() {
+	public boolean isSpaceWithMargin() { //it cannot be static since EL uses it
 		if (_spmargin == null) {
 			final String s = System.getProperty("org.zkoss.zul.Separator.spaceWithMargin");
 			_spmargin = Boolean.valueOf(s != null && s.length() > 0);
