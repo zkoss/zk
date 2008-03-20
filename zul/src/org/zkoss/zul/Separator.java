@@ -21,6 +21,8 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
 
@@ -99,7 +101,10 @@ public class Separator extends XulElement {
 	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em")
 	 */
 	public void setSpacing(String spacing) {
-		if (spacing != null && spacing.length() == 0) spacing = null;
+		if (spacing != null)
+			if (spacing.length() == 0) spacing = null;
+			else spacing = spacing.trim(); //getRealStyle depends on it
+
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
 			smartUpdate("style", getRealStyle());
@@ -110,25 +115,51 @@ public class Separator extends XulElement {
 	public String getWidth() {
 		final String wd = super.getWidth();
 		return isHorizontal() || (wd != null && wd.length() > 0)
-			|| isSpaceWithMargin() ? wd: _spacing;
+			|| isPercentInFF() || isSpaceWithMargin() ? wd: _spacing;
 	}
 	public String getHeight() {
 		final String hgh = super.getHeight();
 		return isVertical() || (hgh != null && hgh.length() > 0)
-			|| isSpaceWithMargin() ? hgh: _spacing;
+			|| isPercentInFF() || isSpaceWithMargin() ? hgh: _spacing;
 	}
 	protected String getRealStyle() {
 		final String style = super.getRealStyle();
-		if (!isSpaceWithMargin() || _spacing == null)
+		final String spacing =
+			isSpaceWithMargin() ? _spacing: splitPercentInFF();
+		if (spacing == null)
 			return style;
 
 		//3.0.3-compatibility
 		final StringBuffer sb = new StringBuffer(64).append("margin:");
 		if ("vertical".equals(_orient))
-			sb.append("0 ").append(_spacing);
+			sb.append("0 ").append(spacing);
 		else
-			sb.append(_spacing).append(" 0");
+			sb.append(spacing).append(" 0");
 		return sb.append(';').append(style).toString();
+	}
+	/** Bug 1526742: FF ignores the width if % is specified.
+	 * In this case we have to use margin instead.
+	 */
+	private boolean isPercentInFF() {
+		if (_spacing != null && _spacing.endsWith("%")) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null && exec.isGecko();
+		}
+		return false;
+	}
+	/** Bug 1526742: split % to half (20% -> 10%), if % and FF.
+	 */
+	private String splitPercentInFF() {
+		if (isPercentInFF()) {
+			try {
+				int v = Integer.parseInt(
+					_spacing.substring(0, _spacing.length() - 1).trim());
+				if (v > 0)
+					return v > 1 ? (v / 2) + "%": "1%";
+			} catch (Throwable ex) { //ignore if not recognizable
+			}
+		}
+		return null;
 	}
 
 	/** Returns the style class.
