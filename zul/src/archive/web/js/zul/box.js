@@ -40,12 +40,27 @@ zkBox.rmAttr = function (cmp, nm) {
 zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
 	if (!getZKAttr(cmp, "hasSplt")) return;
 
+	var vert = getZKAttr(cmp, "vert");
+
+	//Bug 1916473: with IE, we have make the whole table to fit the table
+	//since IE won't fit it even if height 100% is specified
+	if (zk.ie) {
+		var p = cmp.parentNode;
+		if ($tag(p) == "TD") {
+			var nm = vert ? "height": "width",
+				sz = vert ? p.clientHeight: p.clientWidth;
+			if ((cmp.style[nm] == "100%" || getZKAttr(cmp, "box100")) && sz) {
+				cmp.style[nm] = sz + "px";
+				setZKAttr(cmp, "box100", "true");
+			}
+		}
+	}
+
 	//Note: we have to assign width/height fisrt
 	//Otherwise, the first time dragging the splitter won't be moved
 	//as expected (since style.width/height might be "")
 
-	var vert = getZKAttr(cmp, "vert"),
-		nd = vert ? cmp.rows : cmp.rows[0].cells,
+	var nd = vert ? cmp.rows : cmp.rows[0].cells,
 		total = vert ? cmp.offsetHeight : cmp.offsetWidth;
 
 	for (var i = nd.length; --i >= 0;) {
@@ -261,7 +276,6 @@ zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
 
 			cmp.style.width = ""; // clean width
 			cmp.style.width = parent.clientWidth + "px"; //all wd the same
-
 			btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
 		} else {
 			if (bfcolps) {
@@ -298,18 +312,7 @@ zkSplt._fixszAll = function (cmp) {
 zkSplt._fixKidSplts = function (n) {
 	if (!$visible(n)) return;
 
-	var type = $type(n);
-	if (type == "Splt") zkSplt._fixsz(n);
-	else if (type == "Box") {
-		var p = n.parentNode;
-		if ($tag(p) == "TD") {
-			var vert = getZKAttr(n, "vert"),
-				nm = vert ? "height": "width",
-				sz = vert ? p.clientHeight: p.clientWidth;
-			if (n.style[nm] && sz)
-				n.style[nm] = sz + "px";
-		}
-	}
+	if ($type(n) == "Splt") zkSplt._fixsz(n);
 
 	for (n = n.firstChild; n; n = n.nextSibling)
 		zkSplt._fixKidSplts(n);
@@ -364,15 +367,16 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	if (sib) zk.show(sib, open); //it will call zk.onVisi(sib) or zk.onHide(sib)
 
 	sib = colps == "before" ? zkSplt._next(nd, tn): zkSplt._prev(nd, tn);
-	if (sib) zk.onSizeAt(sib);	
+	if (sib) zk.onSizeAt(sib);
 
 	setZKAttr(cmp, "open", open ? "true": "false");
 
-	zkSplt._fixbtn(cmp);
-	zkSplt._fixszAll(cmp);
-	
 	cmp.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
 	zkSplt._updcls(cmp, open);
+
+	zkSplt._fixbtn(cmp);
+	zkSplt._fixszAll(cmp);
+
 	if (!silent)
 		zkau.send({uuid: cmp.id, cmd: "onOpen", data: [open]},
 			zkau.asapTimeout(cmp, "onOpen"));
