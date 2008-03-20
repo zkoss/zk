@@ -22,8 +22,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 [IE6 only] To reproduce
 
 <ol>
-<li>Click on the vertical bar.</li>
-<li>The vertical bar moved to the end of right side</li>
+<li>Click the collapse button on the splitter.</li>
+<li>The splitter moved to the end of right side</li>
 <li>If the dark blue bar doesn't overlap the light blue bar, it is a bug
 (see attachement)</li>
 </ol>
