@@ -143,13 +143,17 @@ public class Separator extends XulElement {
 			isBar() ?"vsep-bar":"vsep": isBar() ?"hsep-bar":"hsep";
 	}
 
-	/** Returns whether to use margin for spacing.
-	 * By default, it is false to indicate the width and height
-	 * will be used to control the spacing ({@link #getSpacing}.
+	/** Returns whether to use margins for spacing.
+	 * <p>Default: false since 3.0.4.
+	 * It indicates the width and height instead of margins
+	 * will be used to control the spacing ({@link #getSpacing}).
 	 *
-	 * <p>It is true if the sytem property called "org.zkoss.zul.Separator.spaceWithMargin"
-	 * is defined.
-	 * Define it only if you want to apply the 3.0.3-compatible behavior.
+	 * <p>If you want to use margins instead of width/height
+	 * like 3.0.3 or ealier did, you can specify the sytem property
+	 * called "org.zkoss.zul.Separator.spaceWithMargin" with a non-empty
+	 * value.
+	 * In other words, define it only if you want to apply
+	 * the 3.0.3-compatible behavior.
 	 * @since 3.0.4
 	 */
 	public boolean isSpaceWithMargin() { //it cannot be static since EL uses it
