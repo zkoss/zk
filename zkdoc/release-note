@@ -133,10 +133,18 @@ ZK 3.0.4 Freshly
     specify the content to be "<br/>old content"
 
   + The spacing of separator and space is implemented by use of width
-    and height. If you prefer to use the old way (by use of margin),
+    and height. If you prefer to use margins like 3.0.3 or earlier did,
     specify the following in zk.xml
    	<system-property>
 		<name>org.zkoss.zul.Separator.spaceWithMargin</name>
+		<value>true</value>
+	</system-property>
+
+  + The leading and trailing whitespaces of labels are preserved.
+    If you prefer to trim like 3.0.3 or earlier did,
+    specify the following in zk.xml
+   	<system-property>
+		<name>org.zkoss.zk.ui.parser.trimLabel</name>
 		<value>true</value>
 	</system-property>
 
