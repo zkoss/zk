@@ -388,8 +388,7 @@ if (this.z_orgpos != 'absolute')
     }
     
     Draggables.notify('onStart', this, event);
-        
-    if(this.options.starteffect) this.options.starteffect(this.element);
+    if(this.options.starteffect) this.options.starteffect(this.element, this.handle);
   },
   
   updateDrag: function(event, pointer) {
