@@ -109,12 +109,28 @@ public class Separator extends XulElement {
 	//-- super --//
 	public String getWidth() {
 		final String wd = super.getWidth();
-		return isHorizontal() || (wd != null && wd.length() > 0) ? wd: _spacing;
+		return isHorizontal() || (wd != null && wd.length() > 0)
+			|| isSpaceWithMargin() ? wd: _spacing;
 	}
 	public String getHeight() {
 		final String hgh = super.getHeight();
-		return isVertical() || (hgh != null && hgh.length() > 0) ? hgh: _spacing;
+		return isVertical() || (hgh != null && hgh.length() > 0)
+			|| isSpaceWithMargin() ? hgh: _spacing;
 	}
+	protected String getRealStyle() {
+		final String style = super.getRealStyle();
+		if (!isSpaceWithMargin() || _spacing == null)
+			return style;
+
+		//3.0.3-compatibility
+		final StringBuffer sb = new StringBuffer(64).append("margin:");
+		if ("vertical".equals(_orient))
+			sb.append("0 ").append(_spacing);
+		else
+			sb.append(_spacing).append(" 0");
+		return sb.append(';').append(style).toString();
+	}
+
 	/** Returns the style class.
 	 * If the style class is not defined ({@link #setSclass} is not called
 	 * or called with null or empty), it returns the style class based
@@ -126,6 +142,24 @@ public class Separator extends XulElement {
 		return "vertical".equals(getOrient()) ?
 			isBar() ?"vsep-bar":"vsep": isBar() ?"hsep-bar":"hsep";
 	}
+
+	/** Returns whether to use margin for spacing.
+	 * By default, it is false to indicate the width and height
+	 * will be used to control the spacing ({@link #getSpacing}.
+	 *
+	 * <p>It is true if the sytem property called "org.zkoss.zul.Separator.spaceWithMargin"
+	 * is defined.
+	 * Define it only if you want to apply the 3.0.3-compatible behavior.
+	 * @since 3.0.4
+	 */
+	public boolean isSpaceWithMargin() {
+		if (_spmargin == null) {
+			final String s = System.getProperty("org.zkoss.zul.Separator.spaceWithMargin");
+			_spmargin = Boolean.valueOf(s != null && s.length() > 0);
+		}
+		return _spmargin.booleanValue();
+	}
+	private static Boolean _spmargin;
 
 	//-- Component --//
 	/** Default: not childable.

@@ -57,6 +57,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </c:choose>
 <c:set var="wcExtStyle" value="${c:cat(wcExtStyle, self.contentStyle)}"/>
 <div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style',wcExtStyle)}>
-<c:forEach var="child" items="${self.children}"><c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if></c:forEach>
+	<c:forEach var="child" items="${self.children}">
+		<c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
+	</c:forEach>
 </div><%-- we don't generate shadow here since it looks odd when on top of modal mask --%>
 </div>

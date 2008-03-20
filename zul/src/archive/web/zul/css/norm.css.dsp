@@ -191,7 +191,10 @@ div.z-loading-indicator {
 	color: #102B6D; border:1px solid #83B5F7; background-color: #FFF; 
 	white-space: nowrap; padding:6px;
 }
+
 <%-- ZK separator --%>
+<c:choose>
+	<c:when test="${empty c:getProperty('org.zkoss.zul.Separator.spaceWithMargin')}">
 div.hsep, div.hsep-bar {
 	height: 7px; overflow: hidden;
 }
@@ -207,6 +210,23 @@ span.vsep-bar {
 	background-image: url(${c:encodeURL('~./img/dot.gif')});
 	background-position: top center; background-repeat: repeat-y;
 }
+	</c:when>
+	<c:otherwise>
+	<%-- backward compatible with 3.0.3 and earlier --%>
+div.hsep, div.hsep-bar {
+	display: block; width: 100%; padding: 0; margin: 2pt 0; font-size: 0;
+}
+div.vsep, div.vsep-bar {
+	display: inline; margin: 0 1pt; padding: 0;
+}
+div.hsep-bar {
+	border-top: 1px solid #888;
+}
+div.vsep-bar {
+	border-left: 1px solid #666; margin-left: 2pt;
+}
+	</c:otherwise>
+</c:choose>
 
 <%-- ZK toolbar and toolbarbutton --%>
 .toolbar {
