@@ -898,7 +898,8 @@ zk.Selectable.prototype = {
 	/* Height of the head row. If now header, defval is returned. */
 	_headHgh: function (defVal) {
 		var n = this.headrows && this.headrows.length ? this.headrows[0]: null;
-		var hgh = n ? zk.offsetHeight($real(n)): 0; // Bug #1823218
+		var hgh = n ? (zk.offsetHeight($real(n)) + (zk.ie7 ? 1 : 0)) : 0; // Bug #1823218
+			// Bug #1920630: IE7 needs minus 1px.
 		if (this.paging) {
 			var pgit = $e(this.id + "!pgit"), pgib = $e(this.id + "!pgib");
 			if (pgit) hgh += pgit.offsetHeight;
