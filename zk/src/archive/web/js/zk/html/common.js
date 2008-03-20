@@ -111,7 +111,6 @@ if (zk.ie) {
 
 /**
  * Redraws the all node tree.
- * @param {Object} cmp
  * @since 3.0.4
  */
 zk.redraw = function (cmp) {
@@ -122,7 +121,6 @@ zk.redraw = function (cmp) {
 };
 /**
  * Returns the outerHTML of the element.
- * @param {Object} cmp
  * @since 3.0.4
  */
 zk.getOuterHTML = function (cmp) {
