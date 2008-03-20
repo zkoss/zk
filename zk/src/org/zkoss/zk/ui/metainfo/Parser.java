@@ -585,7 +585,7 @@ public class Parser {
 						if (textAs != null) {
 							parentInfo.addProperty(textAs, trimLabel, null);
 						} else {
-							if (!parentlang.isRawLabel())
+							if (isTrimLabel() && !parentlang.isRawLabel())
 								label = trimLabel;
 							parentlang.newLabelInfo(parentInfo, label);
 						}
@@ -594,6 +594,22 @@ public class Parser {
 			}
 		}
 	}
+	/** Returns whether to trim the leading and trailing whitespaces 
+	 * of labels.
+	 * <p>Default: false since 3.0.4.
+	 *
+	 * <p>If you want to trim like 3.0.4 and ealier did, you can specify
+	 * the system property called "org.zkoss.zk.ui.parser.trimLabel"
+	 * with a non-empty value.
+	 */
+	private static boolean isTrimLabel() {
+		if (_trimLabel == null) {
+			final String s = System.getProperty("org.zkoss.zk.ui.parser.trimLabel");
+			_trimLabel = Boolean.valueOf(s != null && s.length() > 0);
+		}
+		return _trimLabel.booleanValue();
+	}
+	private static Boolean _trimLabel;
 
 	private static final
 	LanguageDefinition getLanguageDefinition(NodeInfo node) {
