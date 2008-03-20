@@ -115,42 +115,54 @@ ZK 3.0.4 Freshly
   + Window.setMode("modal") never suspends the execution even if called
     in an event thread. On the other hand, doModal() throws an exception
     if not called in an event thread.
+
   + <disable-behind-modal> is default to false.
     It improves the performance when opening a modal window.
     If you prefer it to true, specify the following in zk.xml.
 	<client-config>
 		<disable-behind-modal>true</disable-behind-modal>
 	<client-config>
+
   + The CSS name called "inline-box" is renamed to "inline-block"
+
   + There is no line break before the content of a comboitem if
     it doesn't have the description. It is more flexible to customize
     the look (such as in single line). To be backward-compatible,
     specify the content to be "<br/>old content"
+
+  + The spacing of separator and space is implemented by use of width
+    and height. If you prefer to use the old way (by use of margin),
+    specify the following in zk.xml
+   	<system-property>
+		<name>org.zkoss.zul.Separator.spaceWithMargin</name>
+		<value>true</value>
+	</system-property>
+
   + By default, the width of header of listbox/grid/tree includes
     the padding and margins defined in the style sheet (like ZK 2.4.1).
 	If you want the width of header to exclude the padding and margins
 	defined in the style (like ZK 3.0.3),
 	please specify the follow CSS definitions in your CSS file.
-tr.hidfakerz th {
+tr.listbox-fake th {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
-tr.hidfakerz th.sort div {
+tr.listbox-fake th.sort div {
 	cursor: pointer; padding-right: 9px;
 	background:transparent
 url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-tr.hidfakerz th.sort-asc div {
+tr.listbox-fake th.sort-asc div {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-tr.hidfakerz th.sort-dsc div {
+tr.listbox-fake th.sort-dsc div {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 	background-position: 99% center;
