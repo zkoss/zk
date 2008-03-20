@@ -25,9 +25,12 @@ div.head-cell-inner {
 	white-space: nowrap;
 	<%-- Bug #1839960  --%>
 }
-div.cell-inner {
-	position: relative; width: 100%;
+div.foot-cell-inner, div.cell-inner, div.head-cell-inner {
+	position: relative;
 	<%-- Bug #1825896  --%>
+}
+div.cell-inner {
+	width: 100%;
 }
 div.tree-body, div.listbox-body, div.grid-body {<%-- always used. --%>
 	position: relative;
