@@ -110,6 +110,7 @@ ZK 3.0.4 Freshly
   1896291: [IE6 ONLY] fileupload does not always recognize content-type
   1877111: Non-lenient datebox with wrong fmt not throw exception
   1526742: Rendering of <space> on IE is bad
+  1920541: Resize the popup window, it should not disappear
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
@@ -143,26 +144,25 @@ ZK 3.0.4 Freshly
 	If you want the width of header to exclude the padding and margins
 	defined in the style (like ZK 3.0.3),
 	please specify the follow CSS definitions in your CSS file.
-tr.listbox-fake th {
+tr.listbox-fake th, tr.tree-fake th, tr.grid-fake th {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
-tr.listbox-fake th.sort div {
+tr.listbox-fake th.sort div, tr.tree-fake th.sort div, tr.grid-fake th.sort div{
 	cursor: pointer; padding-right: 9px;
-	background:transparent
-url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-tr.listbox-fake th.sort-asc div {
+tr.listbox-fake th.sort-asc div, tr.tree-fake th.sort-asc div, tr.grid-fake th.sort-asc div {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-tr.listbox-fake th.sort-dsc div {
+tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.sort-dsc div {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 	background-position: 99% center;
