@@ -36,7 +36,7 @@ by dragging list items around.</p>
 				<attribute name="value"><![CDATA[
 <window title="Reorder by Drag-and-Drop" border="normal">
 	Unique Visitors of ZK:
-	<listbox id="src" multiple="true" width="300px">
+	<listbox multiple="true" width="300px">
 		<listhead>
 			<listheader label="Country/Area"/>
 			<listheader align="right" label="Visits"/>
