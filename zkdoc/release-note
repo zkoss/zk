@@ -93,7 +93,7 @@ ZK 3.0.4 Freshly
   1914104: IE6: When resize browser, the inner window doesn't resize
   1914184: Error massage:Failed to invoke zkGrid.onSize
   1914230: Invalid value send to server without validation
-  1916473: Vbox witth height and splitter not collapse correct if resiz
+  1916473: Vbox with height and splitter not collapse correct if resiz
   1916287: Bottom border of rows is disappeared
   1914215: Words are outside of Listitem when append a tab(IE6 only)
   1914103: IE : Column Size error after drag column, when in borderlayo
@@ -113,6 +113,7 @@ ZK 3.0.4 Freshly
   1920541: Resize the popup window, it should not disappear
   1920630: The bottom border of Listbox is gone. (IE7 only)
   1911621: Shift Multiple Select in Listbox and Tree
+  1920674: [IE6 Only] Splitter render eror if closed
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
