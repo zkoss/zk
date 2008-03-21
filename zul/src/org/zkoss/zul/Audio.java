@@ -192,6 +192,7 @@ public class Audio extends XulElement {
 		HTMLs.appendAttribute(sb, "loop",  _loop);
 		HTMLs.appendAttribute(sb, "align",  _align);
 		HTMLs.appendAttribute(sb, "border",  _border);
+		sb.append(" z.autohide=\"true\"");
 		return sb.toString();
 	}
 

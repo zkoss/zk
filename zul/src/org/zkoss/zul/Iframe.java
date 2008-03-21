@@ -133,7 +133,7 @@ public class Iframe extends XulElement {
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
 			_autohide = autohide;
-			smartUpdate("z.autohide", "true");
+			smartUpdate("z.autohide", _autohide ? "true": null);
 		}
 	}
 
