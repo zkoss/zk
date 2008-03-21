@@ -114,6 +114,7 @@ ZK 3.0.4 Freshly
   1920630: The bottom border of Listbox is gone. (IE7 only)
   1911621: Shift Multiple Select in Listbox and Tree
   1920674: [IE6 Only] Splitter render eror if closed
+  1858489: Include annotation markup in zul XSD
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
