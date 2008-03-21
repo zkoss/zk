@@ -13,8 +13,11 @@ public class JasperreportDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Jasperreport self = (Jasperreport) comp;
-		wh.write("<iframe id=\"").write(self.getUuid()).write("\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-		wh.writeln("</iframe>");
+		wh.write("<iframe id=\"").write(self.getUuid())
+			.write("\" z.type=\"zul.widget.Ifr\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.writeln(">\n</iframe>");
+			//z.type same as iframe, because it, like iframe, might contain
+			//xml, pdf... and we got a few browser bugs to workaround
 	}
 }
