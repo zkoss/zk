@@ -18,5 +18,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<iframe id="${self.uuid}"${self.outerAttrs} >
-</iframe>
+<iframe id="${self.uuid}" z.type="zul.widget.Ifr"${self.outerAttrs}${self.innerAttrs}>
+</iframe><%-- z.type same as iframe due to xml, pdf... --%>
