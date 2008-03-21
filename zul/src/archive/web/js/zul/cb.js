@@ -547,32 +547,23 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	var found;
 	if (selback) {
 		if (jfnd < 0) {
-			if (rows.length) {
-				for (var i = 0, rl = rows.length; i < rl; i++) {
-					if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
-					found = rows[i];
-					break;
-				}
-			}
+			if (rows.length) found = rows[zkCmbox._next(rows, 0)];
 		} else {
 			if (exact) {
 				var b = document.selection;
 				if ((b && "Text" == b.type && document.selection.createRange().text.toLowerCase() == inpval)
 				|| (!b && inpval.length && inp.selectionStart == 0
-					&& inp.selectionEnd == inpval.length)) {
-					if (bUp) {
-						for (var i = jfnd - 1; i >= 0 ; i--) {
-							if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
-							jfnd = i;
-							break;
-						}
-					} else {
-						for (var i = jfnd + 1, rl = rows.length; i < rl; i++) {
-							if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
-							jfnd = i;
-							break;
-						}
-					}
+					&& inp.selectionEnd == inpval.length))
+						jfnd = zkCmbox[bUp ? "_prev" : "_next"](rows, jfnd, true);
+			} else {
+				if (bUp) {
+					jfnd = zkCmbox._prev(rows, jfnd);
+					if (zkCmbox.isDisabled(rows[jfnd]))
+						jfnd = zkCmbox._next(rows, jfnd);
+				} else {
+					jfnd = zkCmbox._next(rows, jfnd);
+					if (zkCmbox.isDisabled(rows[jfnd]))
+						jfnd = zkCmbox._prev(rows, jfnd);
 				}
 			}
 			if (jfnd >= 0) found = rows[jfnd];
@@ -630,7 +621,24 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	zk.scrollIntoView(pp, found); //make sure found is visible
 	pp.setAttribute("zk_ckval", inpval);
 };
-
+zkCmbox._prev = function (rows, index, including) {
+	for (var i = index - (including ? 1 : 0); i >= 0 ; i--)
+		if (!zkCmbox.isDisabled(rows[i])) return i;
+	return index;
+};
+zkCmbox._next = function (rows, index, including) {
+	for (var i = index + (including ? 1 : 0), rl = rows.length; i < rl; i++)
+		if (!zkCmbox.isDisabled(rows[i])) return i;
+	return index;
+};
+/**
+ * Returns whether the item is disabled.
+ * @param {Object} n
+ * @since 3.0.4
+ */
+zkCmbox.isDisabled = function (n) {
+	return !n || !zk.isVisible(n) || getZKAttr(n, "disd") == "true";
+};
 /** Called from the server to close the popup based on combobox, not popup.
  */
 zkCmbox.cbclose = function (cb) {
