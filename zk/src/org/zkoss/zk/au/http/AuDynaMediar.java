@@ -169,6 +169,9 @@ public class AuDynaMediar implements AuProcessor {
 					final InputStream in = media.getStreamData();
 					try {
 						Files.copy(out, in);
+					} catch (IOException ex) {
+						logWarning(pi, ex);
+						throw ex;
 					} finally {
 						in.close();
 					}
@@ -178,6 +181,9 @@ public class AuDynaMediar implements AuProcessor {
 					final Reader in = media.getReaderData();
 					try {
 						Files.copy(out, in);
+					} catch (IOException ex) {
+						logWarning(pi, ex);
+						throw ex;
 					} finally {
 						in.close();
 					}
@@ -195,5 +201,8 @@ public class AuDynaMediar implements AuProcessor {
 		out.write(data);
 		out.flush();
 		//FUTURE: support last-modified
+	}
+	private static void logWarning(String pi, Throwable ex) {
+		log.warning("Ignored: failed to send the content of "+pi+"\nCause: "+Exceptions.getMessage(ex));
 	}
 }
