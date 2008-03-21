@@ -881,6 +881,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (refChild != null && refChild.getParent() != this)
 			refChild = null;
 
+		if (newChild == refChild)
+			return false; //nothing changed (Listbox and other assumes this)
+
 		final AbstractComponent nc = (AbstractComponent)newChild;
 		final boolean moved = nc._parent == this; //moved in the same parent
 		if (moved) {
