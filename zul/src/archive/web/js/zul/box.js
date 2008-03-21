@@ -91,8 +91,17 @@ zkSplt = {};
 
 zkSplt._drags = {};
 zkSplt.init = function (cmp) {
+	var vert = getZKAttr(cmp, "vert"),
+		p = cmp.parentNode;
+	if (p) {
+	//Only Splitter invalidated if sclass is changed, so we have to
+	//change chdextr (see Bug 1921830)
+		if (vert) p = p.parentNode; //TR
+		if (p && p.id.endsWith("!chdextr"))
+			p.className = cmp.className;
+	}
+
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
-	var vert = getZKAttr(cmp, "vert");
 	var drag = zkSplt._drags[cmp.id] = {
 		vert: vert,
 		drag: new Draggable(cmp, {

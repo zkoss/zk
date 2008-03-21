@@ -129,6 +129,13 @@ public class Splitter extends XulElement {
 	}
 
 	//super//
+	public void setSclass(String sclass) {
+		if (sclass != null && sclass.length() == 0) sclass = null;
+		if (!Objects.equals(getSclass(), sclass)) {
+			super.setSclass(sclass);
+			invalidate(); //redraw since there are several sub-sclass
+		}
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
