@@ -1046,7 +1046,8 @@ zk._dsball = function (parent, els, visibility) {
 		var what;
 		var tn = $tag(el);
 		if (visibility) { //_actg1
-			if (tn == "IFRAME" && getZKAttr(el, "autohide") != "true")
+			if ((tn == "IFRAME" || tn == "EMBED")
+			&& getZKAttr(el, "autohide") != "true")
 				continue; //handle only autohide iframe
 
 			what = el.style.visibility;
