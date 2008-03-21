@@ -363,11 +363,20 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	if (!colps || "none" == colps) return; //nothing to do
 
 	var vert = getZKAttr(cmp, "vert"),
-		sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
-	if (sib) zk.show(sib, open); //it will call zk.onVisi(sib) or zk.onHide(sib)
+		sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn),
+		fd = vert ? "height": "width", diff;
+	if (sib) {
+		zk.show(sib, open); //it will call zk.onVisi(sib) or zk.onHide(sib)
+		diff = $int(sib.style[fd]);
+	}
 
 	sib = colps == "before" ? zkSplt._next(nd, tn): zkSplt._prev(nd, tn);
-	if (sib) zk.onSizeAt(sib);
+	if (sib) {
+		diff = $int(sib.style[fd]) + (open ? -diff: diff);
+		if (diff < 0) diff = 0;
+		sib.style[fd] = diff + "px";
+		zk.onSizeAt(sib);
+	}
 
 	setZKAttr(cmp, "open", open ? "true": "false");
 
