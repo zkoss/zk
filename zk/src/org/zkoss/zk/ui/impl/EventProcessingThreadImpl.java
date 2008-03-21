@@ -485,6 +485,6 @@ implements EventProcessingThread {
 
 	//-- Object --//
 	public String toString() {
-		return "[proc="+_proc+", ceased="+_ceased+']';
+		return "[" +getName()+": "+_proc+", ceased="+_ceased+']';
 	}
 }
