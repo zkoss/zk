@@ -170,7 +170,17 @@ public class AuDynaMediar implements AuProcessor {
 					try {
 						Files.copy(out, in);
 					} catch (IOException ex) {
-						logWarning(pi, ex);
+						//browser might close the connection
+						//and reread (test case: B30-1896797.zul)
+						//so, read it completely, since 2nd read counts on it
+						if (in instanceof org.zkoss.io.Repeatable) {
+							try {
+								final byte[] buf = new byte[1024*8];
+								for (int v; (v = in.read(buf)) >= 0;)
+									;
+							} catch (Throwable t) { //ignore it
+							}
+						}
 						throw ex;
 					} finally {
 						in.close();
@@ -182,7 +192,16 @@ public class AuDynaMediar implements AuProcessor {
 					try {
 						Files.copy(out, in);
 					} catch (IOException ex) {
-						logWarning(pi, ex);
+						//browser might close the connection and reread
+						//so, read it completely, since 2nd read counts on it
+						if (in instanceof org.zkoss.io.Repeatable) {
+							try {
+								final char[] buf = new char[1024*4];
+								for (int v; (v = in.read(buf)) >= 0;)
+									;
+							} catch (Throwable t) { //ignore it
+							}
+						}
 						throw ex;
 					} finally {
 						in.close();
@@ -201,8 +220,5 @@ public class AuDynaMediar implements AuProcessor {
 		out.write(data);
 		out.flush();
 		//FUTURE: support last-modified
-	}
-	private static void logWarning(String pi, Throwable ex) {
-		log.warning("Ignored: failed to send the content of "+pi+"\nCause: "+Exceptions.getMessage(ex));
 	}
 }
