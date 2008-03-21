@@ -116,6 +116,7 @@ ZK 3.0.4 Freshly
   1921830: Splitter unable to change sclass dynamically
   1858489: Include annotation markup in zul XSD
   1920751: Comboitem's disable property could be broken
+  1920879: Audio bug(FF, SA, OP)
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
