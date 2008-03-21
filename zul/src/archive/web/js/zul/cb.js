@@ -558,11 +558,11 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 			} else {
 				if (bUp) {
 					jfnd = zkCmbox._prev(rows, jfnd);
-					if (zkCmbox.isDisabled(rows[jfnd]))
+					if (zkCmbox.disabled(rows[jfnd]))
 						jfnd = zkCmbox._next(rows, jfnd);
 				} else {
 					jfnd = zkCmbox._next(rows, jfnd);
-					if (zkCmbox.isDisabled(rows[jfnd]))
+					if (zkCmbox.disabled(rows[jfnd]))
 						jfnd = zkCmbox._prev(rows, jfnd);
 				}
 			}
@@ -623,20 +623,19 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 };
 zkCmbox._prev = function (rows, index, including) {
 	for (var i = index - (including ? 1 : 0); i >= 0 ; i--)
-		if (!zkCmbox.isDisabled(rows[i])) return i;
+		if (!zkCmbox.disabled(rows[i])) return i;
 	return index;
 };
 zkCmbox._next = function (rows, index, including) {
 	for (var i = index + (including ? 1 : 0), rl = rows.length; i < rl; i++)
-		if (!zkCmbox.isDisabled(rows[i])) return i;
+		if (!zkCmbox.disabled(rows[i])) return i;
 	return index;
 };
 /**
  * Returns whether the item is disabled.
- * @param {Object} n
  * @since 3.0.4
  */
-zkCmbox.isDisabled = function (n) {
+zkCmbox.disabled = function (n) {
 	return !n || !zk.isVisible(n) || getZKAttr(n, "disd") == "true";
 };
 /** Called from the server to close the popup based on combobox, not popup.
