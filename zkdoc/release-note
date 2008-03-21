@@ -119,6 +119,7 @@ ZK 3.0.4 Freshly
   1920751: Comboitem's disable property could be broken
   1920879: Audio bug(FF, SA, OP)
   1882325: [Opera] Close window will move to left side first
+  1920877: Fileupload bug in Safari(PC)
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
