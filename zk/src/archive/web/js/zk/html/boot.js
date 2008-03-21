@@ -393,9 +393,12 @@ zk.unsetVParent = function (n) {
 };
 /** unsetVParent if it is a child of the specified node, n.
  * 	Note: including itself.
+ * @param hide to avoid some annoying effect you can specify whether
+ * to hide before unsetting the parent. Note: since it is hidden,
+ * x.style.display will be changed -- use this option with a lot of cares
  * @since 3.0.0
  */
-zk.unsetChildVParent = function (n) {
+zk.unsetChildVParent = function (n, hide) {
 	var bo = [];
 	for (var id in zk._vpts)
 		if (zk.isAncestor(n, id))
@@ -403,6 +406,7 @@ zk.unsetChildVParent = function (n) {
 
 	for (var j = bo.length; --j >= 0;) {
 		n = $e(bo[j]);
+		if (hide) n.style.display = "none";
 		zk.unsetVParent(n);
 	}
 	return bo;

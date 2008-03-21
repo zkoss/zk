@@ -2173,7 +2173,7 @@ zkau.cmd1 = {
 			zkau.rmAttr(cmp, dt1);
 	},
 	outer: function (uuid, cmp, html) {
-		zk.unsetChildVParent(cmp);
+		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
 
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
@@ -2238,7 +2238,7 @@ zkau.cmd1 = {
 		//NOTE: it is possible the server asking removing a non-exist cmp
 		//so keep silent if not found
 		if (cmp) {
-			zk.unsetChildVParent(cmp);
+			zk.unsetChildVParent(cmp, true); //OK to hide since it will be removed
 
 			zk.cleanupAt(cmp);
 			cmp = $childExterior(cmp);
