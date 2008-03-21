@@ -38,7 +38,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<listcell label="18" />
 				<listcell label="A young lady." />
 			</listitem>
-			<listitem id="li" checkable="false">
+			<listitem id="li" checkable="false" disabled="true">
 				<listcell label="Mary2" />
 				<listcell label="FEMALE" />
 				<listcell label="18" />
@@ -58,7 +58,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</listitem>
 		</listbox>
 		<button label="change listitem"
-			onClick='li.checkable = !li.checkable' />
+			onClick='li.checkable = !li.checkable; li.disabled = !li.disabled' />
 	</window>
 	<window title="Tree" border="normal">
 		<tree id="tree" width="90%" multiple="true" checkmark="true">
@@ -73,7 +73,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						<treecell label="Item 1 description" />
 					</treerow>
 				</treeitem>
-				<treeitem id="ti" checkable="false">
+				<treeitem id="ti" checkable="false" disabled = "true">
 					<treerow>
 						<treecell label="Item 1" />
 						<treecell label="Item 1 description" />
@@ -97,6 +97,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</treechildren>
 		</tree>
 		<button label="change treeitem"
-			onClick='ti.checkable = !ti.checkable' />
+			onClick='ti.checkable = !ti.checkable; ti.disabled = !ti.disabled' />
 	</window>
 </zk>
