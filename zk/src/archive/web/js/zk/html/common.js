@@ -1009,7 +1009,7 @@ zk.rename = function (url, name) {
 
 //-- special routines --//
 if (!zk._actg1) {
-	zk._actg1 = ["IFRAME"/*,"APPLET"*/]; //comment out APPLET for better performance
+	zk._actg1 = ["IFRAME","EMBED"/*,"APPLET"*/]; //comment out APPLET for better performance
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
 	if (zk.ie6Only) { //ie7 solves the z-order issue of SELECT
 		zk._actg1.unshift("SELECT"); //change visibility is required
