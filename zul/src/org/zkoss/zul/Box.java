@@ -329,12 +329,10 @@ public class Box extends XulElement {
 	public String getChildOuterAttrs(Component child) {
 		final StringBuffer sb = new StringBuffer(64);
 		final boolean vert = isVertical();
-		if (child instanceof Splitter) {
-			final String scls = ((Splitter)child).getSclass();
+		if (child instanceof Splitter)
 			return sb.append(" class=\"")
-				.append(scls != null ? scls: "splitter")
-				.append('-').append(vert ? 'v': 'h').append('"').toString();
-		}
+				.append(((Splitter)child).getRealSclass())
+				.append('"').toString();
 		
 		sb.append(" z.coexist=\"true\"");
 			//coexist: the visibility of exterior is the same as child.

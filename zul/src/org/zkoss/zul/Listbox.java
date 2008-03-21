@@ -1061,12 +1061,6 @@ public class Listbox extends XulElement {
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
 			if (super.insertBefore(newChild, refChild)) {
-				/**	final List children = getChildren(); //Feature #1830886
-				if (_hdcnt > 0 && children.get(_hdcnt) == newChild)
-					invalidate();*/
-				//we place listhead/auxhead and treeitem at different div, so
-				//this case requires invalidate (because we use insert-after)
-
 				//Maintain _items
 				final int
 					jto = refChild instanceof Listitem ?
