@@ -115,15 +115,9 @@ zk.Grid.prototype = {
 		//note: we don't solve this bug for paging yet
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			var of;
-			if (zk.ie6Only) {
-				of = this.element.style.overflow;
-				this.element.style.overflow = "hidden";
-			}
 			wd = zk.revisedSize(this.element, this.element.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
-			if (zk.ie6Only) this.element.style.overflow = of;
 		}
 		if (wd) {
 			this.body.style.width = wd;
@@ -131,7 +125,15 @@ zk.Grid.prototype = {
 			if (this.foot) this.foot.style.width = wd;
 		}
 	},
-	cleanup: function ()  {
+	_beforeSize: function () {
+		var wd = this.element.style.width;
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			if (this.body) this.body.style.width = "";
+			if (this.head) this.head.style.width = "";
+			if (this.foot) this.foot.style.width = "";
+		}
+	},
+	cleanup: function () {
 		this.element = this.body = this.bodytbl = this.bodyrows
 			= this.head = this.headtbl = this.foot = this.foottbl = null;
 			//in case: GC not works properly
@@ -274,7 +276,10 @@ zkGrid.childchg = zkGrid.onVisi = zkGrid.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta._recalcSize();
 };
-
+zkGrid.beforeSize = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta._beforeSize();
+};
 zkGrid.stripe = function (uuid) {
 	var meta = zkau.getMeta(uuid);
 	if (meta) meta.stripe();

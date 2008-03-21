@@ -750,15 +750,9 @@ zk.Selectable.prototype = {
 		//is sometime too big
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			var of;
-			if (zk.ie6Only) {
-				of = this.element.style.overflow;
-				this.element.style.overflow = "hidden";
-			}
 			wd = zk.revisedSize(this.element, this.element.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
-			if (zk.ie6Only) this.element.style.overflow = of;
 		}
 		if (wd) {
 			this.body.style.width = wd;
@@ -781,6 +775,14 @@ zk.Selectable.prototype = {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
 				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this); //assign foot's col width
+		}
+	},
+	_beforeSize: function () {
+		var wd = this.element.style.width;
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			if (this.body) this.body.style.width = "";
+			if (this.head) this.head.style.width = "";
+			if (this.foot) this.foot.style.width = "";
 		}
 	},
 	_recalcSize: function () {
@@ -1164,7 +1166,10 @@ zkLibox.childchg = zkLibox.onVisi = zkLibox.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta._recalcSize();
 };
-
+zkLibox.beforeSize = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta._beforeSize();
+};
 zkLit = {}; //listitem
 zkLit.init = function (cmp) {
 	setZKAttr(cmp, "inited", "true");

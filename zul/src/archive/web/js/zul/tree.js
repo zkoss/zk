@@ -172,7 +172,10 @@ zkTree.childchg = zkTree.onVisi = zkTree.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta._recalcSize();
 };
-
+zkTree.beforeSize = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta._beforeSize();
+};
 /** Called when the body got a key stroke. */
 zkTree.bodyonkeydown = function (evt) {
 	if (!evt) evt = window.event;
