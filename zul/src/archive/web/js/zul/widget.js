@@ -657,9 +657,14 @@ if (!zkPop._pop)
 	zkau.floats.push(zkPop._pop = new zk.Popup()); //hook to zkau.js
 
 //iframe//
-if (zk.gecko) { //Bug 1692495
-	zkIfr = {}
+zkIfr = {}
 
+if (zk.ie7) {
+	zkIfr.init = function (cmp) {
+	//Bug 1896797: setVParent (for overlapped) cause IE7 malfunction, so reload
+		cmp.src = cmp.src;
+	};
+} else if (zk.gecko) { //Bug 1692495
 	zkIfr.onVisi = function (cmp) {
 		if (cmp.src.indexOf(".xml") >= 0)
 			cmp.src = cmp.src; //strange workaround: reload xml

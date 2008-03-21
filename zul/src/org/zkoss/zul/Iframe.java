@@ -208,9 +208,10 @@ public class Iframe extends XulElement {
 			//frameborder is default to 0
 			//User has to use style to customize the border
 
-		HTMLs.appendAttribute(sb, "align",  _align);
-		HTMLs.appendAttribute(sb, "name",  _name);
-		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
+		HTMLs.appendAttribute(sb, "align", _align);
+		HTMLs.appendAttribute(sb, "name", _name);
+		HTMLs.appendAttribute(sb, "src", getEncodedSrc());
+
 		if (!"auto".equals(_scrolling))
 			HTMLs.appendAttribute(sb, "scrolling", 
 				"true".equals(_scrolling) ? "yes":
