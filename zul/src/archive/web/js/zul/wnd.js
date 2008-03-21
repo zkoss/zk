@@ -707,12 +707,22 @@ zkWnd._float = function (cmp) {
 		if (handle) {
 			cmp.style.position = "absolute"; //just in case
 			zul.initMovable(cmp, {
-				handle: handle, starteffect: zkau.closeFloats,
+				handle: handle, starteffect: zkWnd._startMove,
 				change: zkau.hideCovered,
 				endeffect: zkWnd._onWndMove});
 			//we don't use options.change because it is called too frequently
 		}
 	}
+};
+/**
+ * For bug #1568393: we have to change the percetage to the pixel.
+ */
+zkWnd._startMove = function (cmp, handle) {
+	if(cmp.style.top && cmp.style.top.indexOf("%") >= 0)
+		 cmp.style.top = cmp.offsetTop + "px";
+	if(cmp.style.left && cmp.style.left.indexOf("%") >= 0)
+		 cmp.style.left = cmp.offsetLeft + "px";
+	zkau.closeFloats(cmp, handle);
 };
 /** Makes a window un-movable. */
 zkWnd._stick = function (cmp) {
