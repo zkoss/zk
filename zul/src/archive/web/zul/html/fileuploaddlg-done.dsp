@@ -49,7 +49,7 @@ ${z:outDeviceStyleSheets('ajax')}
 		parent.setTimeout("zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}')", 0);
 	}
 	function closeUpload() {
-		parent.setTimeout("zkau.sendOnClose('${arg.uuid}')", 0);
+		parent.setTimeout("zkau.sendOnClose('${arg.uuid}')", 50);<%-- Bug 1920877: cannot use 0 since it might execute before sendUpdateResult --%>
 	}
 	<c:if test="${!empty arg.contentId}">doUpdate(); closeUpload();</c:if>
 	<c:if test="${empty arg.contentId and empty arg.alert}">closeUpload();</c:if>
