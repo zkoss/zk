@@ -17,7 +17,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk>
+When Using the Slider in ZK-demo 3.0
+RC2, the layout will become strange
+when click "Groupbox with Slider" bar under IE6, IE7.
 <groupbox mold="3d" >
 	<caption label="Groupbox with Slider"/>
 	<slider/>
 </groupbox>
+</zk>

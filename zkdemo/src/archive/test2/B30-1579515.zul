@@ -17,8 +17,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk>
+1. Right click on the blue line
+<separator/>
+2. Show "Save" menu, it is right.
 <window context="menu" border="normal" contentStyle="background-color:blue">
 	<menupopup id="menu">
 		<menu label="Save"/>
 	</menupopup> 
 </window>
+</zk>

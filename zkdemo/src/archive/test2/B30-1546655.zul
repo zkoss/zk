@@ -23,7 +23,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
   Thread.sleep(5000);
   Clients.showBusy(null, false);
   </attribute>
-Please scroll down to click the button, then the loading indication and the showBusy message should move properly according to the scroll bar.
+1. Open new browser.
+<separator/>
+2. Please scroll down to click the button, then the loading indication and the showBusy message should move properly according to the scroll bar.
 </div>
 <button label="Click Me">
 	<attribute name="onClick">

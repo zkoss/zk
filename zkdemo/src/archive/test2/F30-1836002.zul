@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 
-<window title="Grid Demo" border="normal" width="360px" height="100%">
+<window title="Grid Demo" border="normal" width="360px" height="90%">
 	<div height="100%" style="border:1px solid">
 <n:h3> [ 1836002 ] Window component to support re-size</n:h3>
 	<n:ol>

@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="w" title="Test of the style component">
-	Bug 1710925: you shall se the background color changed when
+	Bug 1710925: you shall see the background color changed when
 	pressing the buttons in order.
 	<button label="1. change background to yellow">
 		<attribute name="onClick">{
