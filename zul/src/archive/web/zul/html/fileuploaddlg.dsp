@@ -79,6 +79,7 @@ function deleteUpload(img) {
 }
 function adjustHgh(table) {
 	table.parentNode.style.height = table.rows.length > 3 ? "100px" : "";
+	if (parent.zk.opera) table.parentNode.style.overflow = "auto";
 }
 parent.zk.listen(document, "keydown", onDocKeydown);
 // -->
