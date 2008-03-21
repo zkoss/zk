@@ -1070,7 +1070,8 @@ public class Listbox extends XulElement {
 						//jto < 0: use jfrom
 						//otherwise: use min(jfrom, jto)
 				if (fixFrom < 0) newItem.setIndexDirectly(_items.size() - 1);
-				else fixItemIndices(fixFrom);
+				else fixItemIndices(fixFrom,
+					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1);
 
 				//Maintain selected
 				final int newIndex = newItem.getIndex();
@@ -1199,7 +1200,7 @@ public class Listbox extends XulElement {
 			final Listitem item = (Listitem)child;
 			final int index = item.getIndex();
 			item.setIndexDirectly(-1); //mark
-			fixItemIndices(index);
+			fixItemIndices(index, -1);
 
 			//Maintain selected
 			if (item.isSelected()) {
@@ -1239,9 +1240,13 @@ public class Listbox extends XulElement {
 		}
 		_jsel = -1;
 	}
-	/** Fix Childitem._index since j-th item. */
-	private void fixItemIndices(int j) {
-		for (Iterator it = _items.listIterator(j); it.hasNext(); ++j)
+	/** Fix Childitem._index since j-th item.
+	 * @param j the start index (inclusion)
+	 * @param to the end index (inclusion). If -1, up to the end.
+	 */
+	private void fixItemIndices(int j, int to) {
+		for (Iterator it = _items.listIterator(j);
+		it.hasNext() && (to < 0 || j <= to); ++j)
 			((Listitem)it.next()).setIndexDirectly(j);
 	}
 
