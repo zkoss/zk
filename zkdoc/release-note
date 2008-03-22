@@ -122,6 +122,7 @@ ZK 3.0.4 Freshly
   1920745: Opera's multiple upload is shown in wrong z-order
   1568393: Overlapping Window: Top/Left Position with percentage
   1896797: iframe and pdf in overlapped wnd (FF and IE7)
+  1922930: Closing upload dlg doesn't close the progress dlg
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
