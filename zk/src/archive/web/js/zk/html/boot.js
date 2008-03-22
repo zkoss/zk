@@ -72,7 +72,6 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "9k"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
 zk.booting = true; //denote ZK is booting
 
@@ -473,7 +472,7 @@ function rmZKAttr(el, nm) {
 /** Returns the version of the specified module name.
  */
 zk.getBuild = function (nm) {
-	return zk.mods[nm] || zk.build;
+	return zk.mods[nm] || zk.build || "0";
 };
 
 /** Adds a function that will be invoked after all components are
@@ -1153,7 +1152,7 @@ zk.getUpdateURI = function (uri, ignoreSessId, modver) {
 
 	if (uri.charAt(0) != '/') uri = '/' + uri;
 	if (modver && uri.length >= 5 && uri.substring(0, 5) == "/web/")
-		uri = "/web/_zver" + modver + uri.substring(4);
+		uri = "/web/_zv" + modver + uri.substring(4);
 
 	var j = zk_action.lastIndexOf(';'), k = zk_action.lastIndexOf('?');
 	if (j < 0 && k < 0) return zk_action + uri;
