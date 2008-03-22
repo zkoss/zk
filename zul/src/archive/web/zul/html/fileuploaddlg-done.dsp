@@ -33,7 +33,7 @@ ${z:outDeviceStyleSheets('ajax')}
 <body>
  <c:if test="${!empty arg.alert}">
 	<div style="border: 1px solid red;background: white"><c:out value="${arg.alert}"/></div>
-	<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="closeUpload()"/>
+	<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="exec(cmdClose)"/>
  </c:if>
 </body>
 <script type="text/javascript">
@@ -45,14 +45,22 @@ ${z:outDeviceStyleSheets('ajax')}
 	if we try to insert some elements (some kind of NullPointerException
 	"Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIXMLHttpRequest.open]"
 --%>
-	function doUpdate() {
-		parent.setTimeout("zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}')", 0);
+	var cmdUpdate = "zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}');";
+	var cmdClose = "zkau.sendOnClose('${arg.uuid}');";
+
+	<%-- exec at the parent's scope --%>
+	function exec(cmd) {
+		parent.setTimeout(cmd, 0);
 	}
-	function closeUpload() {
-		parent.setTimeout("zkau.sendOnClose('${arg.uuid}')", 50);<%-- Bug 1920877: cannot use 0 since it might execute before sendUpdateResult --%>
-	}
-	<c:if test="${!empty arg.contentId}">doUpdate(); closeUpload();</c:if>
-	<c:if test="${empty arg.contentId and empty arg.alert}">closeUpload();</c:if>
+	<c:if test="${!empty arg.contentId}">
+		exec(cmdUpdate + cmdClose);
+		<%-- Bug 1920877: do not use two timer to do cmdUpdate and
+			cmdClose separately, since Safari might do cmdClose first!!
+		--%>
+	</c:if>
+	<c:if test="${empty arg.contentId and empty arg.alert}">
+		exec(cmdClose);
+	</c:if>
 // -->
 </script>
 </html>
