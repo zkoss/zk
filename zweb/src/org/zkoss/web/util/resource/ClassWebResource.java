@@ -271,10 +271,10 @@ public class ClassWebResource {
 	HttpServletResponse response, String pi)
 	throws ServletException, IOException {
 		//A trick used to enforce browser to load new version JavaScript
-		//How it work: client engine prefix URI with /_zver123, where
+		//How it work: client engine prefix URI with /_zv123, where
 		//123 is the build version that changes once reload is required
 		//Then, the server eliminate such prefix before locating resource
-		final String ZVER = "/_zver";
+		final String ZVER = "/_zv";
 		if (pi.startsWith(ZVER)) {
 			final int j = pi.indexOf('/', ZVER.length());
 			if (j >= 0) pi = pi.substring(j);
