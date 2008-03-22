@@ -371,7 +371,6 @@ zk.setVParent = function (n) {
 /**
  * Returns whether the element has a virtual parent.
  * @since 3.0.0
- * @param {Object} or {String} n
  */
 zk.isVParent = function (n) {
 	return zk._vpts[n && n.id ? n.id: n];
