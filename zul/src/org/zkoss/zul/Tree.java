@@ -347,9 +347,10 @@ public class Tree extends XulElement {
 			if (pgsz > 0 && tc.getChildren().size() > pgsz) {
 				int j = 0;
 				for (Iterator it = tc.getChildren().iterator(); it.hasNext(); ++j)
-					if (it.next() == item)
+					if (it.next() == item) {
+						tc.setActivePage(j /pgsz);
 						break;
-				tc.setActivePage(j /pgsz);
+					}
 			}
 		}
 	}
