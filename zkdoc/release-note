@@ -25,7 +25,7 @@ ZK 3.0.4 Freshly
   1911773: Grid/Listbox support scrollbar in Paging Mold
   1914087: AMedia accepts File directly
   1919308: Datebox supports more date format
-  1919456: "change page" when setSelectedIndex()
+  1919456: Change the active page when setSelectedIndex called
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
