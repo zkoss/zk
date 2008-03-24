@@ -62,9 +62,24 @@ public class Listheader extends HeaderElement {
 	public Listheader(String label) {
 		setLabel(label);
 	}
+	/* Constructs a list header with label and image.
+	 *
+	 * @param src the URI of the image. Ignored if null or empty.
+	 */
 	public Listheader(String label, String src) {
 		setLabel(label);
 		setImage(src);
+	}
+	/* Constructs a list header with label, image and width.
+	 *
+	 * @param src the URI of the image. Ignored if null or empty.
+	 * @param width the width of the column. Ignored if null or empty.
+	 * @since 3.0.4
+	 */
+	public Listheader(String label, String src, String width) {
+		setLabel(label);
+		setImage(src);
+		setWidth(width);
 	}
 
 	/** Returns the listbox that this belongs to.
