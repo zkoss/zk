@@ -179,7 +179,7 @@
 			</listhead>
 		</listbox>
 		<button label="Delete Selected" onClick="Event.delSelected(userList,model)"/>
-		ID: <textbox id="itemId" /> NAME: <textbox id="itemName" />
+		ID: <intbox id="itemId" /> NAME: <textbox id="itemName" />
 		<button label="Add" onClick="Event.add(userList,model,itemId.getText(),itemName.getText())"/>
 		<button label="Redraw" onClick="userList.invalidate()"/>	
 	</window>

@@ -25,7 +25,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	};
 	
 	</zscript>
+<<<<<<< .mine
+	Column set Width doesn't work correctly. If it doesn't work, try fixedLayout="true".
+=======
 	Column set Width doesn't work correctly. If it doesn't work, try use fixexLayout="true".
+>>>>>>> .r7345
 	<vbox>
 		<div width="500px">
 			<button label="setColumnWidth1" onClick='col1.setWidth("20px")'/>
