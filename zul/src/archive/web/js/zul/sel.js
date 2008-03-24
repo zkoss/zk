@@ -939,8 +939,8 @@ zk.Selectable.prototype = {
 	_selectAll: function (notify) {
 		var rows = this.bodyrows;
 		for (var j = 0, rl = rows.length; j < rl; ++j)
-			this._changeSelect(rows[j], true);
-
+			if (getZKAttr(rows[j], "disd") != "true")
+				this._changeSelect(rows[j], true);
 		this._setSelectedId(rows.length ? rows[0].id: null);
 		if (notify) this._sendSelect(rows[0]);
 	},

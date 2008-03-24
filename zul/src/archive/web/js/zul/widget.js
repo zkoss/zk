@@ -659,7 +659,7 @@ if (!zkPop._pop)
 //iframe//
 zkIfr = {}
 
-if (zk.ie7) {
+if (zk.ie) {
 	zkIfr.init = function (cmp) {
 	//Bug 1896797: setVParent (for overlapped) cause IE7 malfunction, so reload
 	//1. it is OK if under AU (so only booting)
