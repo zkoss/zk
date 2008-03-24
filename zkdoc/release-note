@@ -26,6 +26,7 @@ ZK 3.0.4 Freshly
   1914087: AMedia accepts File directly
   1919308: Datebox supports more date format
   1919456: Change the active page when setSelectedIndex called
+  1914207: Add width to Listheader/Treecol/Column constructors
 
 * Bugs
   1892396; Component.clone() failed: it shall clean up _xtrl
