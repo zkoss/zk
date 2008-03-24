@@ -19,7 +19,7 @@ String shortHeight="520px";
 					<caption label="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}"/>
 					<vbox>
 						<vbox>
-							File Name Filter:<textbox id="fnf" value="Z30"/>
+							File Name Filter:<textbox id="fnf"/>
 							<checkbox id="reg" label="Regular Expression"/>
 							<checkbox id="newb" label="Open in new Browser">
 								<attribute name="onCheck"><![CDATA[
@@ -58,6 +58,13 @@ String shortHeight="520px";
 							<radio label="B30"/>
 						</radiogroup>
 					</hbox>
+					<separator bar="true"/>
+					
+					Filter File Name By Tag:
+					<hbox>
+						<textbox id="fnt"/><button label="Show Uncategorized" onClick="main.showUncategorized();"/>
+					</hbox> 
+					For Example: [A,H,Grid]
 						</vbox>
 						
 						<listbox id="lb" mold="paging" pageSize="20" width="330px" pagingPosition="both">
