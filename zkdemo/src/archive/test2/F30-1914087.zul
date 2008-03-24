@@ -21,7 +21,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<n:p>It is correct, if you can see the pdf file.</n:p>
 	<window id="w2" title="Test PDF" closable="true" mode="overlapped">
 		Created by AMedia(File)
-             <button label="IE7 Please click me" onClick="if_test.invalidate();"/>
 		<iframe id="if_test" width="80%" height="500px">
 			<zscript>
 				import javax.servlet.ServletContext;
