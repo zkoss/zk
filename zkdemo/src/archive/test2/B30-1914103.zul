@@ -29,7 +29,6 @@ panel, the column will resize to a wrong width .</h:p>
 <auxheader colspan="2">
 <label id="span">ss</label>
 <textbox onChange='span.value = self.value' />
-<datebox />
 ssss
 </auxheader>
 </auxhead>
@@ -67,6 +66,7 @@ onClick="alert(self.label)" />
 </menubar>
 <button label="lable" onClick='alert("button")' />
 <datebox />
+
 </listheader>
 <listheader>
 <listbox rows="1" mold="select">
@@ -74,6 +74,7 @@ onClick="alert(self.label)" />
 <listitem label="option2" />
 <listitem label="option3" />
 </listbox>
+<datebox />
 </listheader>
 </listhead>
 <listitem>
