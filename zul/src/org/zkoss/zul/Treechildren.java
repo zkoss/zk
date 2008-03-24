@@ -222,6 +222,7 @@ public class Treechildren extends XulElement implements Pageable {
 	 *
 	 * @exception WrongValueException if no such page
 	 * @since 2.4.1
+	 * @see Tree#setActivePage
 	 */
 	public void setActivePage(int pg) throws WrongValueException {
 		final int pgcnt = getPageCount();

@@ -331,6 +331,29 @@ public class Tree extends XulElement {
 			else smartUpdate("z.multiple", _multiple);
 		}
 	}
+
+	/** Sets the active page in which the specified item is.
+	 * The active page will become the page that contains the specified item.
+	 *
+	 * @param item the item to show. If the item is null or doesn't belong
+	 * to the same tree, nothing happens.
+	 * @since 3.0.4
+	 * @see Treechildren#setActivePage
+	 */
+	public void setActivePage(Treeitem item) {
+		if (item != null && item.getTree() == this) {
+			final Treechildren tc = (Treechildren)item.getParent();
+			final int pgsz = tc.getPageSize();
+			if (pgsz > 0 && tc.getChildren().size() > pgsz) {
+				int j = 0;
+				for (Iterator it = tc.getChildren().iterator(); it.hasNext(); ++j)
+					if (it.next() == item)
+						break;
+				tc.setActivePage(j /pgsz);
+			}
+		}
+	}
+
 	/** Returns the ID of the selected item (it is stored as the z.selId
 	 * attribute of the tree).
 	 */
@@ -385,6 +408,8 @@ public class Tree extends XulElement {
 				if (tr != null)
 					smartUpdate("select", tr.getUuid());
 			}
+
+			setActivePage(item);
 		}
 	}
 	/** Selects the given item, without deselecting any other items

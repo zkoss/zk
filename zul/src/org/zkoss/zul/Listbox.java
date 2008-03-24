@@ -971,6 +971,7 @@ public class Listbox extends XulElement {
 	}
 	/** Sets the active page (starting from 0).
 	 * @since 3.0.4
+	 * @see #setActivePage(Listitem)
 	 */
 	public void setActivePage(int pg) throws WrongValueException {
 		pgi().setActivePage(pg);
@@ -982,10 +983,12 @@ public class Listbox extends XulElement {
 	}
 
 	/** Sets the active page in which the specified item is.
+	 * The active page will become the page that contains the specified item.
 	 *
 	 * @param item the item to show. If the item is null or doesn't belong
 	 * to this listbox, nothing happens.
 	 * @since 3.0.4
+	 * @see #setActivePage(int)
 	 */
 	public void setActivePage(Listitem item) {
 		if (item != null && item.getParent() == this) {
