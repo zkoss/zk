@@ -981,6 +981,20 @@ public class Listbox extends XulElement {
 		return _pgi;
 	}
 
+	/** Sets the active page in which the specified item is.
+	 *
+	 * @param item the item to show. If the item is null or doesn't belong
+	 * to this listbox, nothing happens.
+	 * @since 3.0.4
+	 */
+	public void setActivePage(Listitem item) {
+		if (item != null && item.getParent() == this) {
+			final int pg = item.getIndex() / getPageSize();
+			if (pg != getActivePage())
+				setActivePage(pg);
+		}	
+	}
+
 	/** Returns whether this listbox is in the paging mold.
 	 */
 	/*package*/ boolean inPagingMold() {
