@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<vbox>
-		1.In IE only, Resize the column of datebox as small as possible, and you will not see the button of datebox.
+		1.In IE only, Resize the column of datebox as small as possible, and you should not see the button of datebox.
 		<grid id="g1" width="400px" fixedLayout="true">
 			<columns id="cols" sizable="true">
 				<column label="A" id="col1" align="center" width="50px"/>
