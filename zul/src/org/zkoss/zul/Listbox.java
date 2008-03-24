@@ -624,6 +624,12 @@ public class Listbox extends XulElement {
 				//On the other hand, it is OK with select-mold since
 				//it invalidates if items are added or removed
 		}
+
+		if (_jsel >= 0 && inPagingMold()) {
+			final int pg = _jsel / getPageSize();
+			if (pg != getActivePage())
+				setActivePage(pg);
+		}
 	}
 
 	/**  Deselects all of the currently selected items and selects
