@@ -494,7 +494,9 @@ zk.isOffsetOverlapped = function (ofs1, dim1, ofs2, dim2) {
 	return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1;
 };
 
-/** Whether an element is really visible. */
+/** Whether an element is really visible.
+ * @param {Boolean} strict if true, it also checks the visibility property.(since 3.0.4)
+ */
 zk.isRealVisible = function (e, strict) {
 	if (!e) return false;
 	do {

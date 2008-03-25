@@ -435,6 +435,7 @@ function $parentByTag(el, tagName) {
 /** Returns whether an element is visible.
  * Returns false if none-existence.
  * Returns true if no style.
+ * @param {Boolean} strict if true, it also checks the visibility property.(since 3.0.4)
  */
 function $visible(el, strict) {
 	return el && (!el.style || (el.style.display != "none" && (!strict || el.style.visibility != "hidden")));
