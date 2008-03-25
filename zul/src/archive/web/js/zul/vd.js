@@ -340,7 +340,7 @@ zkVld.uncover = function (el) {
 		for (var j = 0, cl = ctags.length; j < cl; ++j) {
 			var els = document.getElementsByTagName(ctags[j]);
 			for (var k = 0, elen = els.length; k < elen; k++)
-				if (zk.shallHideDisabled(els[k]) && zk.isRealVisible(els[k]))
+				if (zk.shallHideDisabled(els[k]) && zk.isRealVisible(els[k], true))
 					zkVld._uncover(box, els[k], true);
 		}
 	}
