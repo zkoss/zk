@@ -40,6 +40,7 @@ import javax.servlet.ServletContext;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -47,8 +48,10 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkex.zul.Borderlayout;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Iframe;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
@@ -211,7 +214,7 @@ public class MainLayout extends Borderlayout {
 		final boolean reg = ((Checkbox) getFellow("w1").getFellow("reg")).isChecked();
 		fileModel.addAll(Arrays.asList(test2.listFiles(new MyFilenameFilter(pattern, reg))));
 	}
-	public void export() throws SuspendNotAllowedException, InterruptedException {
+	public void exportFileName() throws SuspendNotAllowedException, InterruptedException {
 		if(fileModel.isEmpty()) return;
 		final StringBuffer sb = new StringBuffer();
 		for(Iterator it = fileModel.iterator();it.hasNext();)
@@ -227,6 +230,58 @@ public class MainLayout extends Borderlayout {
 		t.setRows(20);
 		t.setParent(w);
 		t.setValue(sb.toString());
+		w.doModal();
+	}
+	public void importFileName() throws SuspendNotAllowedException, InterruptedException {
+		final Window w = new Window();
+		w.setTitle("Import File Name");
+		w.setWidth("300px");
+		w.setClosable(true);
+		w.setPage(this.getPage());
+		final Textbox t = new Textbox();
+		t.setWidth("98%");
+		t.setMultiline(true);
+		t.setRows(20);
+		t.setParent(w);
+		t.setConstraint("no empty");
+		final Button ok = new Button("OK");
+		final Button cancel = new Button("Cancel");
+		ok.setParent(w);
+		ok.addEventListener(Events.ON_CLICK,
+				new EventListener() {
+			public void onEvent(Event e) throws Exception {
+				String val = t.getValue();
+				String[] vals = val.trim().split("\n");
+				final StringBuffer sb = new StringBuffer();
+				fileModel.clear();
+				final String r = getDesktop().getWebApp().getRealPath("/");
+				final File test2 = new File(r, PATH);
+				final File[] files = test2.listFiles(new MyFilenameFilter("", false));
+				for(int j = 0; j < vals.length; j++) {
+					boolean exist = false;
+					for (int i = 0; i < files.length; i++) {
+						if (vals[j].trim().equalsIgnoreCase(files[i].getName())) {
+							fileModel.add(files[i]);
+							exist = true;
+							break;
+						}
+					}
+					if (!exist) sb.append(vals[j].trim()).append("\n");
+				}
+				if (sb.toString().trim().length() > 0) t.setValue("Failed File Name:\n" + sb.toString());
+				w.insertBefore(new Label(" \nsuccess : [" + fileModel.size() + "] failed : [" + (vals.length - fileModel.size())+ "]"),
+						(Component)w.getChildren().get(0));
+				ok.detach();
+				cancel.detach();
+			}
+		});
+		cancel.setParent(w);
+		cancel.addEventListener(Events.ON_CLICK,
+				new EventListener() {
+			public void onEvent(Event e) throws Exception {
+				w.detach();
+			}
+		});
 		w.doModal();
 	}
 	public void updateModelByTag() {
