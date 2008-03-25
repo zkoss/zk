@@ -226,7 +226,7 @@ public class MainLayout extends Borderlayout {
 				boolean m = false;
 				for (int k = 0; k < vals.length; k++) {
 					if (ptns[j].trim().length() > 1 && vals[k].trim().length() > 1) {
-						if (vals[k].trim().indexOf(ptns[j].trim()) > -1) {
+						if (vals[k].trim().toLowerCase().indexOf(ptns[j].trim().toLowerCase()) > -1) {
 							m = true;
 							break;
 						}
