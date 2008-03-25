@@ -125,6 +125,7 @@ ZK 3.0.4 Freshly
   1922930: Closing upload dlg doesn't close the progress dlg
   1893245: The shading of Combo/Bandbox should be the same with textbox
   1898649: The shading of Timebox should be the same with textbox
+  1924924: Key "insert" does not work
 
 * Upgrade Notes:
   + Window.setMode("modal") never suspends the execution even if called
