@@ -1,14 +1,33 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
-<title>ZK QuickStart Guide</title>
-<subtitle>3.0.3</subtitle>
+<title>クイックスタートガイド</title>
+<subtitle>Version 3.0.4</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
+<para>
+<graphic fileref="">2
+			
+		</graphic>
+</para>
+<para>SIMPLY RICH</para>
+<para>ZKTM</para>
+<para/>
+<para>March 2008</para>
+<para>Potix Corporation</para>
+<para/>
+<para/>
+<para/>
+<para>Copyright © Potix Corporation. All rights reserved.</para>
+<para>The material in this document is for information only and is subject to change without notice. While reasonable efforts have been made to assure its accuracy, Potix Corporation assumes no liability resulting from errors or omissions in this document, or from the use of the information contained herein.</para>
+<para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
+<para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
+<para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
+<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para>
 <chapter>
 <title>はじめに</title><sect1><title>サーブレットコンテナ (Java Web Server)のご紹介</title>
 <para>Javaでウェブアプリケーションを開発するにはサーブレットコンテナをインストールしなければなりません。Apache Tomcatは最も普及しているサーブレットコンテナの一つです。Tomcatをインストールする方法はとても簡単です。</para>
@@ -112,11 +131,11 @@
 <para>
 <code>zk-bin-</code>
 <code>std</code>
-<code>-3.0.3</code>
+<code>-3.0.4</code>
 <code>.tar.gz　</code>
 <code>zk-</code>
 <code>bin-std-</code>
-<code>3.0.3</code>
+<code>3.0.4</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -130,11 +149,11 @@
 <para>
 <code>zk-bin-</code>
 <code>prof</code>
-<code>-3.0.3</code>
+<code>-3.0.4</code>
 <code>.tar.gz　</code>
 <code>zk-</code>
 <code>bin-prof-</code>
-<code>3.0.3</code>
+<code>3.0.4</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -146,9 +165,9 @@
 <row>
 <entry>
 <para>
-<code>zk-bin-3.0.3</code>
+<code>zk-bin-3.0.4</code>
 <code>.tar.gz</code>
-<code>zk-bin-3.0.3</code>
+<code>zk-bin-3.0.4</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -161,7 +180,7 @@
 <entry>
 <para>
 <code>Zk-demo-</code>
-<code>3.0.3</code>
+<code>3.0.4</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -174,7 +193,7 @@
 <entry>
 <para>
 <code>Zk-</code>
-<code>javadoc-3.0.3.</code>
+<code>javadoc-3.0.4.</code>
 <code>zip</code>
 </para>
 </entry>
@@ -186,7 +205,7 @@
 <entry>
 <para>
 <code>Zk-</code>
-<code>src-3.0.3.</code>
+<code>src-3.0.4.</code>
 <code>tar.gz</code>
 </para>
 </entry>
@@ -212,7 +231,7 @@
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">orge.net</ulink>
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309"> から次のファイルをダウンロードします： </ulink>
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">
-<code>zk-demo-3.0.3.zip</code>
+<code>zk-demo-3.0.4.zip</code>
 </ulink>
 </para>
 </listitem>
@@ -249,8 +268,8 @@
 <para>
 <code>zk-</code>
 <code>bin-</code>
-<code>3.0.3</code>
-<code>.zip</code> または<code> zk-bin-3.0.3</code>
+<code>3.0.4</code>
+<code>.zip</code> または<code> zk-bin-3.0.4</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -267,8 +286,8 @@
 <orderedlist>
 <listitem>
 <para>
-<code>zk-bin-3.0.3</code>
-<code>.zip</code> か <code>zk-bin-3.0.3</code>
+<code>zk-bin-3.0.4</code>
+<code>.zip</code> か <code>zk-bin-3.0.4</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -293,8 +312,8 @@
 </listitem>
 <listitem>
 <para>
-<code>zk-bin-3.0.3</code>
-<code>.zip </code>もしくは <code>zk-bin-3.0.3</code>
+<code>zk-bin-3.0.4</code>
+<code>.zip </code>もしくは <code>zk-bin-3.0.4</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -318,6 +337,8 @@
 <para>上記手順に従ってライブラリーのコピーが完了したら、ウェブアプリケーション(<code>demo/bin/zkdemo-min.war</code>) をTomcatにデプロイしましょう。Tomcatマネジャーを利用してデプロイするか、ファイルを <code>$TOMCAT_HOME/webapps</code> にコピーします。 ファイルをコピーする場合、Tomcatを一旦停止しなければなりません。デプロイが完了したら<ulink url="http://localhost/zkdemo/userguide">
 <code>http://localhost:8080/zkdemo/userguide</code>
 </ulink>より結果を確認できます。なお、上記のパスはウェブサーバの設定により異なります。</para>
+<para>補足：Tomcat 6.x は、デフォルトでは、 shared/lib にあるクラスを読み込ません。読み込ませるには conf/catalina.properties ファイルで以下を指定します：</para>
+<para>shared.loader=${catalina.base}/shared/lib/*.jar</para>
 <para>ZKをJettyにインストール</para>
 <orderedlist>
 <listitem>
@@ -333,8 +354,8 @@
 </listitem>
 <listitem>
 <para>
-<code>zk-bin-3.0.3</code>
-<code>.zip</code> もしくは <code>zk-bin-3.0.3</code>
+<code>zk-bin-3.0.4</code>
+<code>.zip</code> もしくは <code>zk-bin-3.0.4</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -364,7 +385,7 @@
 <code>$TOMCAT_DIR/common/lib</code>に置かなければなりません。</para></sect1></chapter>
 <chapter>
 <title>4. ZKパッケージ</title>
-<para>この章は<code>zk-bin-3.0.3</code>
+<para>この章は<code>zk-bin-3.0.4</code>
 <code>.zip</code>について説明します。</para><sect1><title>/doc</title>
 <para>コピーライト・リリースノート等ドキュメントはこのフォルダに入っています。</para></sect1><sect1><title>/dist/lib</title>
 <para>ZKを実行するのに必要なライブラリーはこのフォルダにあります。</para></sect1><sect1><title>/dist/lib/zkforge</title>
@@ -449,7 +470,7 @@
 </entry>
 <entry>
 <para>これらのファイルでアップロード機能を実現する場合に使う</para>
-<para>Version: Commons Fileupload 1.2 and Commons IO 1.3.1</para>
+<para>Version: Commons Fileupload 1.2.1 and Commons IO 1.3.1</para>
 </entry>
 </row>
 <row>
@@ -520,8 +541,20 @@
 </para>
 </entry>
 <entry>
-<para>Ruby (<ulink url="http://jruby.codehaus.org/">JRuby</ulink>)でスクリプトを作成する場合に使う</para>
+<para>Ruby (<ulink url="http://jruby.codehaus.org/">JRuby</ulink>) でスクリプトを作成する場合に使う</para>
 <para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.0.1 (jruby-complete)</para>
+<para>[スタンダード版・Pro版には入っておりません]</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>jython.jar</code>
+</para>
+</entry>
+<entry>
+<para>Python (<ulink url="http://www.jython.org/">Jython</ulink>) でスクリプトを作成する場合に使う</para>
+<para>Version: <ulink url="http://www.jython.org/">Jython</ulink> 2.2.1</para>
 <para>[スタンダード版・Pro版には入っておりません]</para>
 </entry>
 </row>
@@ -564,13 +597,13 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/src</title>
-<para>Eclipse等IDEをデバッグするに使うソースコードはJARファイルの形で保存されています。これらのファイルからバイナリライブラリーを編集することはできません。編集する場合は<code>zk-src-3.0.3</code>
+<para>Eclipse等IDEをデバッグするに使うソースコードはJARファイルの形で保存されています。これらのファイルからバイナリライブラリーを編集することはできません。編集する場合は<code>zk-src-3.0.4</code>
 <code>.tar.gz</code>をダウンロードし、解凍してください。</para></sect1><sect1><title>/dist/xsd</title>
 <para>ZKアプリケーションを開発する際便利なXSDファイルはこちらです。</para></sect1><sect1><title>/dist/WEB-INF</title>
 <para>ZKアプリケーションを開発する際便利なTLDファイルはこのフォルダに入っています。</para></sect1></chapter>
 <chapter>
 <title>5. デモパッケージ</title>
-<para>この章はzk-demo-3.0.3.zipについて説明します。</para><sect1><title>/</title>
+<para>この章はzk-demo-3.0.4.zipについて説明します。</para><sect1><title>/</title>
 <para>
 <code>zkdemo.war</code>
 <code>、</code>
@@ -585,7 +618,7 @@
 <title>6. 初めてのZKアプリ</title>
 <para>WEB-INF/web.xmlを用意しましょう</para>
 <para>まずは以下の内容をWEB-INFの下にある<code>web.xml</code>にコピーしましょう。新しいアプリケーションを開発するたびに必ずこれを実行しなければなりません。次にZUL・ZHTMLファイルを適当なディレクトリーにコピーします。</para>
-<programlisting>&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt; &#13;&#13;    &lt;!-- //// --&gt;    &#13;    &lt;!-- ZK --&gt;    &#13;    &lt;listener&gt;    &#13;        &lt;description&gt;Used to cleanup when a session is destroyed&lt;/description&gt;        &#13;        &lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt;        &#13;        &lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;        &#13;    &lt;/listener&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;ZK loader for evaluating ZK pages&lt;/description&gt;        &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;        &#13;&#13;        &lt;!-- Must. Specifies URI of the update engine        &#13;        (DHtmlUpdateServlet). --&gt;        &#13;        &lt;init-param&gt;        &#13;            &lt;param-name&gt;update-uri&lt;/param-name&gt;            &#13;            &lt;param-value&gt;/zkau&lt;/param-value&gt;            &#13;        &lt;/init-param&gt;        &#13;        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;&lt;!-- MUST --&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;        &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;!-- //// --&gt;    &#13;&#13;    &lt;!-- MIME mapping --&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;gif&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/gif&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;html&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;htm&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jad&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/vnd.sun.j2me.app-descriptor&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpeg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;js&lt;/extension&gt;        &#13;        &lt;mime-type&gt;application/x-javascript&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;png&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/png&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;txt&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/plain&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;xml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/xml&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zhtml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zul&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;&#13;    &lt;welcome-file-list&gt;    &#13;        &lt;welcome-file&gt;index.zul&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.zhtml&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;        &#13;    &lt;/welcome-file-list&gt;    &#13;</programlisting>
+<programlisting>&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt; &#13;&#13;    &lt;!-- //// --&gt;    &#13;    &lt;!-- ZK --&gt;    &#13;    &lt;listener&gt;    &#13;        &lt;description&gt;Listener for cleanup when a session is destroyed&lt;/description&gt;        &#13;        &lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;        &#13;    &lt;/listener&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;ZK loader for evaluating ZK pages&lt;/description&gt;        &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;        &#13;&#13;        &lt;!-- Must. Specifies URI of the update engine        &#13;        (DHtmlUpdateServlet). --&gt;        &#13;        &lt;init-param&gt;        &#13;            &lt;param-name&gt;update-uri&lt;/param-name&gt;            &#13;            &lt;param-value&gt;/zkau&lt;/param-value&gt;            &#13;        &lt;/init-param&gt;        &#13;        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;&lt;!-- MUST --&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;        &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;!-- //// --&gt;    &#13;&#13;    &lt;!-- MIME mapping --&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;gif&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/gif&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;html&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;htm&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jad&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/vnd.sun.j2me.app-descriptor&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpeg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;js&lt;/extension&gt;        &#13;        &lt;mime-type&gt;application/x-javascript&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;png&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/png&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;txt&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/plain&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;xml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/xml&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zhtml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zul&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;&#13;    &lt;welcome-file-list&gt;    &#13;        &lt;welcome-file&gt;index.zul&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.zhtml&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;        &#13;    &lt;/welcome-file-list&gt;    &#13;</programlisting>
 <para>
 <code>&lt;/web-app&gt;</code>
 </para><sect1><title>初めての Hello World</title>

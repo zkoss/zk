@@ -1,15 +1,32 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Reference</title>
-<subtitle>Version 3.0.3</subtitle>
+<subtitle>Version 3.0.4</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
-
+<para>
+<graphic fileref="">2
+			
+		</graphic>
+</para>
+<para>SIMPLY RICH</para>
+<para>ZKTM</para>
+<para>March 2008</para>
+<para>Potix Corporation</para>
+<para>Revision 96</para>
+<para/>
+<para/>
+<para>Copyright © Potix Corporation. All rights reserved.</para>
+<para>The material in this document is for information only and is subject to change without notice. While reasonable efforts have been made to assure its accuracy, Potix Corporation assumes no liability resulting from errors or omissions in this document, or from the use of the information contained herein.</para>
+<para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
+<para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
+<para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
+<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para>
 <chapter>
 <title>1. Introduction</title>
 <para>Welcome to ZK, the simplest way to make Web applications rich.</para>
@@ -233,11 +250,20 @@
 <para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
 <para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or servlets. Also, they are ignored if the page is a zhtml file.</para>
 <programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>The page Directive</title>
-<para>&lt;?page [id="..."] [title="..."] [style="..."] [cacheable="false|true"] [language="xul/html"] [zscriptLanguage="Java"] [contentType="text/html;charset=UTF-8"] [docType="tag PUBLIC &amp;quot;doctype name&amp;quot; &amp;quot;doctype UI&amp;quot;"] [xml="version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;"]?&gt;</para>
-<para>It specifies how a page shall be handled.</para><sect3><title>cacheable</title>
+<para>&lt;?page [id="..."] [title="..."] [style="..."] [cacheable="false|true"] [language="xul/html"] [zscriptLanguage="Java"] [contentType="text/html;charset=UTF-8"] [docType="tag PUBLIC &amp;quot;doctype name&amp;quot; &amp;quot;doctype UI&amp;quot;"] [xml="version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;"] [complete="true|false"]?&gt;</para>
+<para>It specifies how a page shall be handled. The id and title arguments are the two most important ones.</para><sect3><title>cacheable</title>
 <para>[Optional][Default: false if Ajax devices, true if XML and MIL devices]</para>
 <para>It specifies whether the client can cache the output.</para>
-<para>Note: Browsers, such as Firefox and IE, don't handle the cache of DHTML correctly, so it is not safe to specify cacheable with true for Ajax devices.</para></sect3><sect3><title>contentType</title>
+<para>Note: Browsers, such as Firefox and IE, don't handle the cache of DHTML correctly, so it is not safe to specify cacheable with true for Ajax devices.</para></sect3><sect3><title>complete</title>
+<para>[Optional][Default: false]</para>
+<para>It specifies that this page is a complete page. By complete we mean the page has everything that the client expects. For example, if the client is a HTML browser, then a complete page will generate all necessary HTML tags, such as &lt;html&gt;, &lt;head&gt; and &lt;body&gt;.</para>
+<para>By default (false), a ZK page is assumed to be complete if and only if it is not included by other page. In other words, if a ZK page is included by other page, ZK will generate &lt;div&gt; (if the client is a HTML browser) to enclose the output of the (incomplete) ZK page.</para>
+<para>If you have a ZK page that contains a complete HTML page and is included by other page, you have to specify true for this option. For example, the includer is nothing but including another page:</para>
+<programlisting>//includer.jsp&#13;&lt;jsp:include page="includee.zhtml"/&gt;&#13;</programlisting>
+<para>And, the included page contains a complete HTML page:</para>
+<programlisting>&lt;?page complete="true"?&gt;&#13;    &lt;html xmlns="http://www.zkoss.org/2005/zk/native"&gt;&lt;head&gt;    &#13;        &lt;title&gt;My Title&lt;/tile&gt;        &#13;    &lt;/head&gt;    &#13;    &lt;body&gt;    &#13;        My Content        &#13;</programlisting>
+<para>&lt;/body&gt;</para>
+<para>&lt;/html&gt;</para></sect3><sect3><title>contentType</title>
 <para>[Optional][Default: depends on the device]</para>
 <para>It specifies the content type. If not specified, it depends on the device. For Ajax devices, it is text/html;charset=UTF-8. For XML and MIL devices, it is text/xml;charset=UTF-8.</para>
 <para>Application developers rarely need to change it, unless for XML devices.</para></sect3><sect3><title>docType</title>
@@ -292,13 +318,13 @@
 <para>[Required]</para>
 <para>A prefix used to identify functions defined in this taglib file. The prefix could be any non-empty string.</para></sect3></sect2><sect2><title>The variable-resolver Directive</title>
 <para>&lt;?variable-resolver class="..."  [arg0="..."] [arg1="..."] [arg2="..."] [arg3="..."]?&gt;</para>
-<para>Specifies the variable resolver that will be used by the zscript interpreter to resolve unknown variables. The specified class must implement the org.zkoss.zk.scripting.VariableResolver interface.</para>
+<para>Specifies the variable resolver that will be used by the zscript interpreter to resolve unknown variables. The specified class must implement the org.zkoss.xel.VariableResolver interface.</para>
 <para>You can specify multiple variable resolvers with multiple variable-resolver directives. The later declared one has higher priority.</para>
 <para>Notice that the variable-resolver directives are evaluated before the init directives, so the zscript codes referenced by the init directives are affected by the variable resolver.</para>
 <para>The following is an example when using ZK with the Spring framework. It resolves Java Beans declared in the Spring framework, such that you access them directly.</para>
 <programlisting>&lt;?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?&gt;&#13;</programlisting><sect3><title>class</title>
 <para>[Optional]</para>
-<para>A class name that must implement the org.zkoss.zk.scripting.VariableResolver interface. Unlike the init directive, the class name cannot be the class that is defined in zscript codes.</para></sect3><sect3><title>arg0, arg1...</title>
+<para>A class name that must implement the org.zkoss.xel.VariableResolver interface. Unlike the init directive, the class name cannot be the class that is defined in zscript codes.</para></sect3><sect3><title>arg0, arg1...</title>
 <para>[Optional]</para>
 <para>You could specify any number of arguments. If specified, arg0 will be passed as the first argument of the constructor, arg1 as the second argument, and so on. Of course, the implementation must have a compatible constructor. If no argument is specified, the default constructor is assumed.</para></sect3></sect2><sect2><title>The xel-method Directive</title>
 <para>&lt;?xel-method prefix="..." name="..." class="..."signature="..."?&gt;</para>
@@ -12056,11 +12082,19 @@
 </informaltable>
 <para/></sect3></sect2><sect2 id="Include"><title>Include</title>
 <para>The <code>include</code> component is used to include the output generated by another servlet. The servlet could be anything including JSF, JSP and even another ZUML page.</para>
-<programlisting>&lt;window title="include demo" border="normal" width="300px"&gt;&#13;    Hello, World!    &#13;    &lt;include src="/userguide/misc/includedHello.zul"/&gt;    &#13;    &lt;include src="/html/frag.html"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
+<programlisting>&lt;window title="include demo" border="normal" width="300px"&gt;&#13;    Hello, World!    &#13;    &lt;include src="/userguide/misc/includedHello.zul"/&gt;    &#13;    &lt;include src="/html/frag.html?some=any"/&gt;    &#13;    &lt;include src="mypage" argument="${anyValue}" other="${anotherValue}"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Like all other properties, you could dynamically change the <code>src</code> attribute to include the output from a different servlet at the run time.</para>
 <para>If the included output is another ZUML, developers are allowed to access components in the included page as if they are part of the containing page.</para>
 <para>If the <code>include</code> component is used to include a ZUML page, the included page will become part of the desktop. However, the included page is not visible until the request is processed completely. In other words, it is visible only in the following events, triggered by user or timer.</para>
-<para>The reason is that the include component includes a page as late as the Rendering phase. On the other hand, zscript takes place at the Component Creation phase, and onCreate takes place at the Event Processing Phase. They both execute before the inclusion.</para><sect3><title>Class Name</title>
+<para>The reason is that the include component includes a page as late as the Rendering phase. On the other hand, zscript takes place at the Component Creation phase, and onCreate takes place at the Event Processing Phase. They both execute before the inclusion.</para><sect3><title>Pass Values to the Included Page</title>
+<para>There are two ways to pass values to the included page. First, you can pass them with the query string.</para>
+<programlisting>&lt;include src="mypage?some=something"/&gt;&#13;</programlisting>
+<para>Then, in the included page, you can access them with the getParameter method of the Execution interface or the ServletRequest interface. In EL expressions (of the included page), you can use the param variable to access them. However, you can only pass String-typed values with the query string.</para>
+<programlisting>${param.some}&#13;</programlisting>
+<para>Alternatively, we can pass any kind of values with the so-called dynamic properties by use of the setDynamicProperty method or, in ZUL, a dynamic property as follows:</para>
+<programlisting>&lt;include src="mypage" some="something" another="${expr}"/&gt;&#13;</programlisting>
+<para>With the dynamic properties, you can pass non-String-typed values. In the included page, you can access them with the getAttribute method of the Execution interface or the ServletRequest interface. In EL expressions (of the included page), you can use the requestScope variable to access them.</para>
+<programlisting>${requestScope.some}&#13;</programlisting></sect3><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Include</code>
 </para></sect3><sect3><title>Supported Child Components</title>
@@ -26346,6 +26380,130 @@
 </informaltable>
 <para/></sect3></sect2></sect1></chapter>
 <chapter>
+<title>5. The XHTML Components</title><sect1><title>Overview</title>
+<itemizedlist>
+<listitem>
+<para>All XHTML components are packed in the org.zkoss.zhtml package.</para>
+</listitem>
+<listitem>
+<para>The XML name space is http://www.w3.org/1999/xhtml</para>
+</listitem>
+<listitem>
+<para>The extensions include htm, html, xhtml and zhtml.</para>
+</listitem>
+<listitem>
+<para>The component names are case-insensitive. Developers could use any combination of lower or upper cases.</para>
+</listitem>
+</itemizedlist><sect2><title>URL and encodeURL</title>
+<para>A XHTML component generates attributes directly to native HTML tags. It means, unlike XUL, it doesn't prefix the servlet context path to attributes for specifying URL. For example, the following codes don't work (unless the servlet context is "").</para>
+<programlisting>&lt;img href="/my/good.png"/&gt;&#13;</programlisting>
+<para>Rather, you shall use the encodeURL function in EL expressions as follows.</para>
+<programlisting>&lt;?taglib uri="http://www.zkoss.org/dsp/web/core.dsp.tld" prefix="p"?&gt;&#13;...&#13;&lt;img href="${p:encodeURL('/my/good.png')}"/&gt;&#13;</programlisting>
+<para>In Java, you shall use the encodeURL method from org.zkoss.zk.ui.Execution.</para>
+<programlisting>&lt;img id="another"/&gt;&#13;&lt;zscript&gt;&#13;another.setDynamicAttribute("href",&#13;Executions.getCurrent().encodeURL("/my/good.png"));&#13;&lt;/zscript&gt;&#13;</programlisting>
+<para>Notice that XUL components and all ZK features that accept an URL will invoke the encodeURL method automatically<footnote>
+<para>The reason not to handle XHTML compoents is that we don't know which attribute requires URL.</para>
+</footnote>.</para></sect2><sect2><title>AbstractTag</title>
+<para>All XHTML components are derived from the org.zkoss.zhtml.impl.AbstractTag class.</para>
+<para>A XHTML component is a thin wrapper that encapsulates a native HTML tag. It is different from a XUL component or other none-native component in several ways.</para>
+<itemizedlist>
+<listitem>
+<para>By implementing the org.zkoss.zk.ui.ext.RawId interface, the universal identifier (getUuid) is the same as the identifier (getId).</para>
+</listitem>
+<listitem>
+<para>By implementing the org.zkoss.zk.ui.ext.DynamicAttributes interface, all XHTML components support arbitrary attributes. In other words, any attribute name is legal (as long as the targeted browser supports).</para>
+</listitem>
+</itemizedlist></sect2><sect2><title>Raw</title>
+<para>A special component, org.zkoss.zhtml.Raw, used to represent any component that is not declared in the following section (i.e., not in lang.xml). In other words, if any unrecognized component name is found, an instance of Raw is created, such that a proper HTML tag will be generated correspondingly. In other words, any component name is legal (as long as the targeted browser supports).</para>
+<programlisting>&lt;marquee align="top"&gt;...&lt;/marquee&gt;&#13;</programlisting>
+<para>It is equivalent to</para>
+<programlisting>new Raw().setDynamicAttribute("align", "top");&#13;</programlisting></sect2></sect1><sect1><title>Components</title><sect2><title>A</title>
+<para/></sect2><sect2><title>Abbr</title>
+<para/></sect2><sect2><title>Acronym</title>
+<para/></sect2><sect2><title>Address</title>
+<para/></sect2><sect2><title>Area</title>
+<para/></sect2><sect2><title>B</title>
+<para/></sect2><sect2><title>Base</title>
+<para/></sect2><sect2><title>Big</title>
+<para/></sect2><sect2><title>Blockquote</title>
+<para/></sect2><sect2><title>Body</title>
+<para/></sect2><sect2><title>Br</title>
+<para/></sect2><sect2><title>Button</title>
+<para/></sect2><sect2><title>Caption</title>
+<para/></sect2><sect2><title>Cite</title>
+<para/></sect2><sect2><title>Code</title>
+<para/></sect2><sect2><title>Collection</title>
+<para/></sect2><sect2><title>Colgroup</title>
+<para/></sect2><sect2><title>Dd</title>
+<para/></sect2><sect2><title>Del</title>
+<para/></sect2><sect2><title>Dfn</title>
+<para/></sect2><sect2><title>Dir</title>
+<para/></sect2><sect2><title>Div</title>
+<para/></sect2><sect2><title>Dl</title>
+<para/></sect2><sect2><title>Dt</title>
+<para/></sect2><sect2><title>Em</title>
+<para/></sect2><sect2><title>Embed</title>
+<para/></sect2><sect2><title>Fieldset</title>
+<para/></sect2><sect2><title>Font</title>
+<para/></sect2><sect2><title>Form</title>
+<para/></sect2><sect2><title>H1</title>
+<para/></sect2><sect2><title>H2</title>
+<para/></sect2><sect2><title>H3</title>
+<para/></sect2><sect2><title>H4</title>
+<para/></sect2><sect2><title>Head</title>
+<para/></sect2><sect2><title>Hr</title>
+<para/></sect2><sect2><title>Html</title>
+<para/></sect2><sect2><title>I</title>
+<para/></sect2><sect2><title>Iframe</title>
+<para/></sect2><sect2><title>Img</title>
+<para/></sect2><sect2><title>Input</title>
+<para/></sect2><sect2><title>Ins</title>
+<para/></sect2><sect2><title>Isindex</title>
+<para/></sect2><sect2><title>Kbd</title>
+<para/></sect2><sect2><title>Label</title>
+<para/></sect2><sect2><title>Legend</title>
+<para/></sect2><sect2><title>Li</title>
+<para/></sect2><sect2><title>Link</title>
+<para/></sect2><sect2><title>Map</title>
+<para/></sect2><sect2><title>
+<link linkend="Menu">Menu</link>
+</title>
+<link linkend="Menu">Menu</link>
+<para/></sect2><sect2><title>Meta</title>
+<para/></sect2><sect2><title>Nobr</title>
+<para/></sect2><sect2><title>Object</title>
+<para/></sect2><sect2><title>Ol</title>
+<para/></sect2><sect2><title>Optgroup</title>
+<para/></sect2><sect2><title>Option</title>
+<para/></sect2><sect2><title>P</title>
+<para/></sect2><sect2><title>Pre</title>
+<para/></sect2><sect2><title>Q</title>
+<para/></sect2><sect2><title>S</title>
+<para/></sect2><sect2><title>Sam</title>
+<para/></sect2><sect2><title>Script</title>
+<para/></sect2><sect2><title>Select</title>
+<para/></sect2><sect2><title>Small</title>
+<para/></sect2><sect2><title>Span</title>
+<para/></sect2><sect2><title>Strong</title>
+<para/></sect2><sect2><title>Style</title>
+<para/></sect2><sect2><title>Sub</title>
+<para/></sect2><sect2><title>Sup</title>
+<para/></sect2><sect2><title>Table</title>
+<para/></sect2><sect2><title>Tbody</title>
+<para/></sect2><sect2><title>Td</title>
+<para/></sect2><sect2><title>Text</title>
+<para/></sect2><sect2><title>Textarea</title>
+<para/></sect2><sect2><title>Tfoot</title>
+<para/></sect2><sect2><title>Th</title>
+<para/></sect2><sect2><title>Thead</title>
+<para/></sect2><sect2><title>Title</title>
+<para/></sect2><sect2><title>Tr</title>
+<para/></sect2><sect2><title>Tt</title>
+<para/></sect2><sect2><title>Ul</title>
+<para/></sect2><sect2><title>Var</title>
+<para/></sect2></sect1><sect1><title>Supplement Classes</title><sect2><title>Fileupload</title>
+<para/></sect2><sect2><title>Messagebox</title></sect2></sect1></chapter>
+<chapter>
 <title>Appendix A. WEB-INF/web.xml</title>
 <para>To add ZK a Web application, you have to add servlets, listeners and a optional filter to web.xml.</para><sect1><title>ZK Loader</title>
 <para>[Required] Class: org.zkoss.zk.ui.http.DHtmlLayoutServlet</para>
@@ -26496,7 +26654,7 @@
 </entry>
 <entry>
 <para>[Optional][Default: UTF-8]</para>
-<para>It specifies the default charset for the output of this filter.</para>
+<para>It specifies the default charset for the output of the DSP interpreter.</para>
 <para>If an empty string is specified as follows, the container's default is used. In other words, the setCharacterEncoding method of javax.servlet.ServletResponse is not called.</para>
 </entry>
 </row>
@@ -26520,7 +26678,7 @@
 </row></tbody></tgroup>
 </informaltable></sect2><sect2><title>How to Specify in web.xml</title>
 <programlisting>&lt;servlet&gt;&#13;    &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;    &#13;    &lt;servlet-class&gt;org.zkoss.web.servlet.dsp.InterpreterServlet&lt;/servlet-class&gt;    &#13;&lt;/servlet&gt;&#13;</programlisting></sect2></sect1><sect1><title>Sample of web.xml</title>
-<programlisting>&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt; &#13;&#13;    &lt;!-- //// --&gt;    &#13;    &lt;!-- ZK --&gt;    &#13;    &lt;listener&gt;    &#13;        &lt;description&gt;Used to cleanup when a session is destroyed&lt;/description&gt;        &#13;        &lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt;        &#13;        &lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;        &#13;    &lt;/listener&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;ZK loader for evaluating ZUML pages&lt;/description&gt;        &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;        &#13;&#13;        &lt;!-- Must. Specifies URI of the update engine (DHtmlUpdateServlet).        &#13;        It must be the same as &lt;url-pattern&gt; for the update engine.        &#13;        --&gt;        &#13;        &lt;init-param&gt;        &#13;            &lt;param-name&gt;update-uri&lt;/param-name&gt;            &#13;            &lt;param-value&gt;/zkau&lt;/param-value&gt;            &#13;        &lt;/init-param&gt;        &#13;        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;&lt;!-- MUST --&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;        &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;!-- //// --&gt;    &#13;&#13;    &lt;!-- MIME mapping --&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;gif&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/gif&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;html&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;htm&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;                            &lt;mime-mapping&gt;&lt;extension&gt;jad&lt;/extension&gt;&lt;mime-type&gt;text/vnd.sun.j2me.app-descriptor&lt;/mime-type&gt;&lt;/mime-mapping&gt;&lt;mime-mapping&gt;                            &#13;        &lt;extension&gt;jpeg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;js&lt;/extension&gt;        &#13;        &lt;mime-type&gt;application/x-javascript&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;png&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/png&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;txt&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/plain&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;xml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/xml&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zhtml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zul&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;&#13;    &lt;welcome-file-list&gt;    &#13;        &lt;welcome-file&gt;index.zul&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.zhtml&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;        &#13;    &lt;/welcome-file-list&gt;    &#13;&lt;/web-app&gt;&#13;</programlisting></sect1></chapter>
+<programlisting>&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt; &#13;&#13;    &lt;!-- //// --&gt;    &#13;    &lt;!-- ZK --&gt;    &#13;    &lt;listener&gt;    &#13;        &lt;description&gt;ZK listener for cleanup when a session is destroyed&lt;/description&gt;        &#13;        &lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;        &#13;    &lt;/listener&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;ZK loader for evaluating ZUML pages&lt;/description&gt;        &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;        &#13;&#13;        &lt;!-- Must. Specifies URI of the update engine (DHtmlUpdateServlet).        &#13;        It must be the same as &lt;url-pattern&gt; for the update engine.        &#13;        --&gt;        &#13;        &lt;init-param&gt;        &#13;            &lt;param-name&gt;update-uri&lt;/param-name&gt;            &#13;            &lt;param-value&gt;/zkau&lt;/param-value&gt;            &#13;        &lt;/init-param&gt;        &#13;        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;&lt;!-- MUST --&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;        &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;!-- //// --&gt;    &#13;&#13;    &lt;!-- MIME mapping --&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;gif&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/gif&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;html&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;htm&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;                            &lt;mime-mapping&gt;&lt;extension&gt;jad&lt;/extension&gt;&lt;mime-type&gt;text/vnd.sun.j2me.app-descriptor&lt;/mime-type&gt;&lt;/mime-mapping&gt;&lt;mime-mapping&gt;                            &#13;        &lt;extension&gt;jpeg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;js&lt;/extension&gt;        &#13;        &lt;mime-type&gt;application/x-javascript&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;png&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/png&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;txt&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/plain&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;xml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/xml&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zhtml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zul&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;&#13;    &lt;welcome-file-list&gt;    &#13;        &lt;welcome-file&gt;index.zul&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.zhtml&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;        &#13;    &lt;/welcome-file-list&gt;    &#13;&lt;/web-app&gt;&#13;</programlisting></sect1></chapter>
 <chapter>
 <title>Appendix B. WEB-INF/zk.xml</title>
 <para>WEB-INF/zk.xml is the configuration descriptor of ZK. This file optional. If you need to configure ZK differently from the default, you could provide a file called zk.xml under the WEB-INF directory.</para><sect1><title>Overview</title>
@@ -26608,9 +26766,14 @@
 <programlisting>&lt;log&gt;&#13;    &lt;log-base&gt;&lt;/log-base&gt;    &#13;&lt;/log&gt;&#13;</programlisting>
 <para>where an empty string means all packages, not just org.zkoss in the previous example.</para></sect2><sect2><title>The client-config Element</title>
 <para>It is used to customize the behavior of the ZK Client Engine. You might have multiple client-config elements in one zk.xml.</para>
-<programlisting>&lt;client-config&gt;&#13;    &lt;disable-behind-modal&gt;true&lt;/disable-behind-modal&gt;    &#13;    &lt;error-reload&gt;    &#13;        &lt;error-code&gt;301&lt;/error-code&gt;        &#13;        &lt;reload-uri&gt;&lt;/reload-uri&gt;        &#13;    &lt;/error-reload&gt;    &#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;    &lt;processing-prompt-delay&gt;900&lt;/processing-prompt-delay&gt;    &#13;    &lt;tooltip-delay&gt;800&lt;/tooltip-delay&gt;    &#13;    &lt;resend-delay&gt;9000&lt;/resend-delay&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting><sect3><title>The disable-behind-modal Element</title>
-<para>[Default: true]</para>
-<para>When a modal window is opened, all components that don't belong to the modal window are disabled. However, if the page is very big, the performance may not be acceptable (depending on the JavaScript interpreter of the browsers). If opening up a modal window is too slow for you, you can turn off this feature. The side effect is that a user may use TAB to move the focus to a component that shall be disabled.</para></sect3><sect3><title>The error-reload Element</title>
+<programlisting>&lt;client-config&gt;&#13;    &lt;debug-js&gt;false&lt;/debug-js&gt;    &#13;    &lt;disable-behind-modal&gt;false&lt;/disable-behind-modal&gt;    &#13;    &lt;error-reload&gt;    &#13;        &lt;error-code&gt;301&lt;/error-code&gt;        &#13;        &lt;reload-uri&gt;&lt;/reload-uri&gt;        &#13;    &lt;/error-reload&gt;    &#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;    &lt;processing-prompt-delay&gt;900&lt;/processing-prompt-delay&gt;    &#13;    &lt;tooltip-delay&gt;800&lt;/tooltip-delay&gt;    &#13;    &lt;resend-delay&gt;9000&lt;/resend-delay&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting><sect3><title>The debug-js Element</title>
+<para>[Default: false]</para>
+<para>It specifies whether to debug JavaScript files. By default, it is false and the compressed version of JavaScript files will be loaded. They are hard to read and debug, though the footprint is much smaller.</para>
+<para>To debug JavaScript files, you can specify it to true. Then, the original uncompressed JavaScript files will be loaded instead.</para></sect3><sect3><title>The disable-behind-modal Element</title>
+<para>[Default: false]</para>
+<para>It specifies whether to disable all elements behind the modal window at the browser. If disabled, the performance is better. </para>
+<para>Tip: This option can be considered as obsolete since 3.0.4. The user is almost impossible to change focus to an element behind the modal window, without disabling them.</para>
+<para>Note: in ZK 3.0.3 and earlier, the option is default to true.</para></sect3><sect3><title>The error-reload Element</title>
 <para>[Default: reload if 301, 402 or 403; show an error message, otherwise]</para>
 <para>It specifies what URI to redirect the browser to. For example, if you prefer to redirect to the login page, say, login.zul, you can specify the following in zk.xml:</para>
 <programlisting>&lt;error-reload&gt;&#13;    &lt;error-code&gt;301&lt;/error-code&gt;    &#13;    &lt;reload-uri&gt;/login.zul&lt;/reload-uri&gt;    &#13;&lt;/error-reload&gt;&#13;&lt;error-reload&gt;&#13;    &lt;error-code&gt;402&lt;/error-code&gt;    &#13;    &lt;reload-uri&gt;/login.zul&lt;/reload-uri&gt;    &#13;&lt;/error-reload&gt;&#13;&lt;error-reload&gt;&#13;    &lt;error-code&gt;403&lt;/error-code&gt;    &#13;    &lt;reload-uri&gt;/login.zul&lt;/reload-uri&gt;    &#13;&lt;/error-reload&gt;&#13;</programlisting>
@@ -26866,7 +27029,11 @@
 <para>It specifies an error page used when an un-caught exception is thrown in updating a ZUML page (e.g., in an event listener). Each page is associated with an exception type, aka, a class deriving from java.lang.Throwable. You can specify multiple error pages, each with a different exception type. When an error occurs, ZK searches the proper error page by examing the exception type one-by-one. If none is found, it shows, by default, an alert message at the client.</para>
 <para>The device-type element is optional. If omitted, ajax is assumed. If you want to specify an error page for mobile devices, it has to be mil.</para></sect2><sect2><title>The preference Element</title>
 <programlisting>&lt;preference&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/preference&gt;&#13;</programlisting>
-<para>You can specify any number of preference with the preference element depicted above. The name and value are application specific and you can specify whatever value you like. To avoid name conflict, it is suggested to prefix the name with your domain name, such as com.poitx.some.another.</para>
+<para>You can specify any number of preferences with the preference element depicted above. The name and value are application specific and you can specify whatever value you like. To avoid name conflict, it is suggested to prefix the name with your domain name, such as com.poitx.some.another.</para>
 <para>The preferences can then be retrieved back by calling the getPreference method of the org.zkoss.zk.ui.util.Configuration class. Notice that each Web application has one configuration, which can be found by use of getConfiguration method of the org.zkoss.zk.ui.WebApp interface.</para>
-<programlisting>String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;    ...    &#13;}&#13;</programlisting></sect2></sect1></chapter>
+<programlisting>String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;    ...    &#13;}&#13;</programlisting></sect2><sect2><title>The system-property Element</title>
+<programlisting>&lt;system-property&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/system-property&gt;&#13;</programlisting>
+<para>You can specify any number of system properties with the system-property element. The above example is equivalent to</para>
+<programlisting>System.setProperty("any name", "any value");&#13;</programlisting>
+<para/></sect2></sect1></chapter>
 </book>
