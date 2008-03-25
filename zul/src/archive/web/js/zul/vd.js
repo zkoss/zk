@@ -169,7 +169,7 @@ zkVld.strict = function (id) {
 zkVld.errbox = function (id, html) {
 	id = $uuid(id);
 	var cmp = $e(id);
-	if (cmp && zk.isRealVisible(cmp)) {
+	if (cmp && zk.isRealVisible(cmp, true)) {
 		zkVld._errInfo = {id: id, html: html};
 		setTimeout(zkVld._errbox, 5);
 	}
@@ -191,7 +191,7 @@ zkVld._errbox = function () {
 		zk.addClass($real(cmp), "text-invalid");
 	}
 
-	if (!zk.isRealVisible(cmp)) return; //don't show the erro box
+	if (!zk.isRealVisible(cmp, true)) return; //don't show the erro box
 
 	if (getZKAttr(cmp, "srvald") == "custom")
 		return; //don't show the default error box if custom
