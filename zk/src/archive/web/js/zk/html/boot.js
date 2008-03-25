@@ -477,7 +477,9 @@ zk.getBuild = function (nm) {
 
 /** Adds a function that will be invoked after all components are
  * initialized.
- * <p>Note: it is called after all components are initialized.
+ * <p>Note: it is called after all components are initialized
+ * (init, beforeSize and onSize),
+ * so it might be better to be called as addAfterInit
  * <p>The function is removed from the list right before invoked,
  * so it won't be called twice (unless you call zk.addInit again).
  * @param front whether to add the function to the front of the list
@@ -493,8 +495,9 @@ zk.addInit = function (fn, front, unique) {
 };
 /** Adds a function that will be invoked 25 milliseconds, after
  * all components are initialized.
- * Like zk.addInit, the function is called after all components are
- * initialized. However, the function added by addInitLater is invoked
+ * <p>Like zk.addInit, the function is called after all components are
+ * initialized, so it might be better to be called as addAfterInitLater.
+ * However, the function added by addInitLater is invoked
  * with a timer that is called 25 milliseconds.
  * Thus, it is designed to add functions that cannot be called
  * immediately after initialization (zkType.init).
@@ -522,15 +525,15 @@ zk._addfn = function (fns, fn, front) {
  * It is called after all javascript fies are loaded, and before
  * initializing the components.
  *
- * <p>In other words, ZK invokes functions added by zk.addModuleInit,
+ * <p>In other words, ZK invokes functions added by zk.addBeforeInit,
  * then initializes all components, and finally invokes functions added
  * by zk.addInit.
  *
  * <p>The function is removed from the list right before invoked,
- * so it won't be called twice (unless you call zk.addModuleInit again).
+ * so it won't be called twice (unless you call zk.addBeforeInit again).
  */
-zk.addModuleInit = function (fn) {
-	zk._initmods.push(fn);
+zk.addBeforeInit = zk.addModuleInit = function (fn) { //addModuleInit is for backward compatible to 3.0.3 and earlier
+	zk._bfinits.push(fn);
 };
 /** Adds a component that must be initialized after
  * all modules are loaded and initialized.
@@ -614,7 +617,7 @@ zk.beforeUnload = function () {
  */
 zk.invoke = function (nm, fn) {
 	if (!zk._modules[nm]) zk.load(nm, fn);
-	else if (zk.loading) zk.addModuleInit(fn);
+	else if (zk.loading) zk.addBeforeInit(fn);
 	else fn();
 };
 
@@ -625,7 +628,7 @@ zk.invoke = function (nm, fn) {
  *
  * @param nm the module name if no / is specified, or filename if / is
  * specified, or URL if :// is specified.
- * @param initfn the function that will be added to zk.addModuleInit
+ * @param initfn the function that will be added to zk.addBeforeInit
  * @param ckfn used ONLY if URL (i.e., xxx://) is used as nm,
  * and the file being loaded doesn't invoke zk.ald().
  * @param modver the version of the module, or null to use zk.getBuild(nm)
@@ -638,7 +641,7 @@ zk.load = function (nm, initfn, ckfn, modver) {
 
 	if (!zk._modules[nm]) {
 		zk._modules[nm] = true;
-		if (initfn) zk.addModuleInit(initfn);
+		if (initfn) zk.addBeforeInit(initfn);
 		zk._load(nm, modver);
 		if (ckfn) zk._ckfns.push(ckfn);
 	}
@@ -859,8 +862,8 @@ if (zk.ie) {
 /** Initial components and init functions. */
 zk._evalInit = function () {
 	do {
-		while (!zk.loading && zk._initmods.length)
-			(zk._initmods.shift())();
+		while (!zk.loading && zk._bfinits.length)
+			(zk._bfinits.shift())();
 
 		//Note: if loading, zk._doLoad will execute zk._evalInit after finish
 		for (var j = 0; zk._initcmps.length && !zk.loading;) {
@@ -894,12 +897,7 @@ zk._evalInit = function () {
 			}
 		}
 
-		while (!zk.loading && zk._initfns.length)
-			(zk._initfns.shift())();
-
-		if (!zk.loading && !zk._initfns.length) {
-			zk._initids = {}; //cleanup
-
+		if (!zk.loading) {
 			//put _tsizecmps at the head of _sizecmps and keep child-first
 			for (var es = zk._tvisicmps; es.length;)
 				zk._visicmps.unshift(es.pop());
@@ -914,13 +912,21 @@ zk._evalInit = function () {
 				var n = zk._initszcmps.shift();
 				zk.beforeSizeAt(n);
 				zk.onSizeAt(n);
+					//Note: beforeSize and onSize cannot call zk.load!!
 			}
+		}
+
+		while (!zk.loading && zk._initfns.length)
+			(zk._initfns.shift())();
+
+		if (!zk.loading && !zk._initfns.length) {
+			zk._initids = {}; //cleanup
 
 			setTimeout(zk._initLater, 25);
 		}
-	} while (!zk.loading && (zk._initmods.length || zk._initcmps.length
-	|| zk._initfns.length));
-	//Bug 1815074: _initfns might cause _initmods to be added
+	} while (!zk.loading && (zk._bfinits.length || zk._initcmps.length
+	|| zk._initszcmps.length || zk._initfns.length));
+	//Bug 1815074: _initfns might cause _bfinits to be added
 };
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
@@ -1359,7 +1365,7 @@ zk._initfns = []; //used by addInit
 zk._initids = {};
 zk._inLatfns = []; //used by addInitLater
 zk._inLatids = {};
-zk._initmods = []; //used by addModuleInit
+zk._bfinits = []; //used by addBeforeInit
 zk._cufns = []; //used by addCleanup
 zk._cuids = {};
 zk._cuLatfns = []; //used by addCleanupLater
