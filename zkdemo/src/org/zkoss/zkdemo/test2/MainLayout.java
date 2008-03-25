@@ -40,6 +40,7 @@ import javax.servlet.ServletContext;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
+import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -54,6 +55,7 @@ import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Window;
 
 /**
  * @author Ian Tsai
@@ -209,7 +211,24 @@ public class MainLayout extends Borderlayout {
 		final boolean reg = ((Checkbox) getFellow("w1").getFellow("reg")).isChecked();
 		fileModel.addAll(Arrays.asList(test2.listFiles(new MyFilenameFilter(pattern, reg))));
 	}
-
+	public void export() throws SuspendNotAllowedException, InterruptedException {
+		if(fileModel.isEmpty()) return;
+		final StringBuffer sb = new StringBuffer();
+		for(Iterator it = fileModel.iterator();it.hasNext();)
+			sb.append(((File)it.next()).getName()).append("\n");
+		Window w = new Window();
+		w.setTitle("Export File Name - ["+ fileModel.size() +"]");
+		w.setWidth("300px");
+		w.setClosable(true);
+		w.setPage(this.getPage());
+		Textbox t = new Textbox();
+		t.setWidth("98%");
+		t.setMultiline(true);
+		t.setRows(20);
+		t.setParent(w);
+		t.setValue(sb.toString());
+		w.doModal();
+	}
 	public void updateModelByTag() {
 		fileModel.clear();
 		final String r = getDesktop().getWebApp().getRealPath("/");
