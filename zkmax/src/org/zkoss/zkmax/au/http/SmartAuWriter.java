@@ -55,7 +55,7 @@ public class SmartAuWriter extends HttpAuWriter {
 			_timer = newTimer();
 	}
 
-	/** Creates an instance of {@lik ScalableTimer}.
+	/** Creates an instance of {@link ScalableTimer}.
 	 * <p>By default, it creates a scalable timer that will use at most
 	 * 50 real timers (i.e., new ScalableTimer(50, 25)).
 	 * If you want to change it, you can override this method.
