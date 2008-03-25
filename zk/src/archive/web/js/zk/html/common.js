@@ -495,10 +495,10 @@ zk.isOffsetOverlapped = function (ofs1, dim1, ofs2, dim2) {
 };
 
 /** Whether an element is really visible. */
-zk.isRealVisible = function (e) {
+zk.isRealVisible = function (e, strict) {
 	if (!e) return false;
 	do {
-		if (!$visible(e)) return false;
+		if (!$visible(e, strict)) return false;
 		//note: document is the top parent and has NO style
 	} while (e = $parent(e)); //yes, assign
 	return true;

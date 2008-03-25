@@ -436,8 +436,8 @@ function $parentByTag(el, tagName) {
  * Returns false if none-existence.
  * Returns true if no style.
  */
-function $visible(el) {
-	return el && (!el.style || el.style.display != "none");
+function $visible(el, strict) {
+	return el && (!el.style || (el.style.display != "none" && (!strict || el.style.visibility != "hidden")));
 }
 
 /** Converts to an integer. It handles null and "07" */
