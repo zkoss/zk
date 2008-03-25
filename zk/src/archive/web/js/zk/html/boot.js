@@ -953,6 +953,7 @@ zk.eval = function (n, fn, type, a0, a1, a2, a3, a4, a5, a6, a7) {
 					return f(n,a0,a1,a2,a3,a4,a5,a6,a7);
 				} catch (ex) {
 					zk.error("Failed to invoke zk"+type+"."+fn+"\n"+ex.message);
+					if (zk.debugJS) throw ex;
 				}
 			}
 		}
@@ -1193,7 +1194,7 @@ zk._progress = function () {
 		if (!n) {
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
-				//when the first boot, mesg is not ready
+				//when the first boot, mesg might not be ready
 
 			Boot_progressbox("zk_prog", msg, zk.innerX(), zk.innerY());
 			zk.progressPrompted = true;

@@ -183,6 +183,8 @@ public class ZkFns {
 				.append(config.getResendDelay())
 			.append(";\n");
 
+		if (config.isDebugJS())
+			sb.append("zk.debugJS=true;\n");
 		if (config.isDisableBehindModalEnabled())
 			sb.append("zk.dbModal=true;\n");
 
