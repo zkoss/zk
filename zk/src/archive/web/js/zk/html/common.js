@@ -1144,7 +1144,7 @@ zk.hideCovered = function (ary) {
 		loop_els:
 		for (var k = 0, elen = els.length; k < elen; k++) {
 			var el = els[k];
-			if (!zk.isRealVisible(el)) continue;
+			if (!zk.isRealVisible(el, true)) continue;
 
 			for (var m = 0, al = ary.length; m < al; ++m) {
 				if (zk.isAncestor(ary[m], el))
