@@ -20,6 +20,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <window id="w" title="Test of the style component">
 	Bug 1710925: you shall see the background color changed when
 	pressing the buttons in order.
+        <separator/>
+        The 3rd botton work slow in IE6, IE7 and doesn't work in SA, it won't fixed.
+        <separator/>
 	<button label="1. change background to yellow">
 		<attribute name="onClick">{
 	Style s = new Style();
