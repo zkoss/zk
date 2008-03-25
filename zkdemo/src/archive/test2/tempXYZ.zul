@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
+F30-1656278.zul
+
 {{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Create By Dennis
+		Tue Dec  4 12:05:33 TST 2007, Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -14,34 +17,36 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
-	<zscript>
-	void addRow1(){
-		Row row = new Row();
-		row.setParent(rows);
-		new Label("Label x").setParent(row);
-		new Textbox().setParent(row);
-		new Datebox().setParent(row);
-	};
-	
-	</zscript>
-	Column set Width doesn't work correctly. If it doesn't work, try fixedLayout="true".
-	<vbox>
-		<div width="500px">
-			<button label="setColumnWidth1" onClick='col1.setWidth("20px")'/>
-			<button label="setColumnWidth2" onClick='col1.setWidth("100px")'/>
-			<button label="setColumnWidth3" onClick='col1.setWidth("200px")'/>
-		</div>
-		<grid id="g1" width="400px">
-			<columns id="cols">
-				<column label="Type 50px" id="col1"  align="center" width="50px"/>
-				<column label="Content" id="col2" align="right"/>
-				<column label="AA-BB" id="col3"/>
-			</columns>
-			<rows id="rows">
-			<row><textbox/><textbox/><textbox/>
-			</row>
-			</rows>
-		</grid>
-	</vbox>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1656278 ] Menuitem enabled/disabled support</n:h2>
+	<n:ol>
+		<n:li>click "File" then you will see the "Open" item to be disabled and cannot be clicked</n:li>
+                <n:li>Try to enable it and click on it, it should show alert message</n:li>
+	</n:ol>
+	<menubar id="menubar">
+		<menu label="File">
+			<menupopup>
+				<menuitem label="New" autocheck="true" />
+				<menuitem label="Open" autocheck="true" id="open"
+					onClick="alert(self.label)" disabled="false" />
+				<menuitem label="Save" />
+				<menuseparator />
+                                <menuitem label="Disable Open" onClick="open.disabled=true"/>
+                                <menuitem label="Enable Open" onClick="open.disabled=false"/>
+				<menuitem label="Exit" />
+			</menupopup>
+		</menu>
+		<menu label="Help">
+			<menupopup>
+				<menuitem label="Index" />
+				<menu label="About">
+					<menupopup>
+						<menuitem disabled="ture" label="About ZK"
+							onClick="alert(self.label)" />
+						<menuitem label="About Potix" />
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+	</menubar>
 </zk>
