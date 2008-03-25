@@ -339,9 +339,12 @@ zkVld.uncover = function (el) {
 
 		for (var j = 0, cl = ctags.length; j < cl; ++j) {
 			var els = document.getElementsByTagName(ctags[j]);
-			for (var k = 0, elen = els.length; k < elen; k++)
+			for (var k = 0, elen = els.length; k < elen; k++) {
+				if (getZKAttr(els[k], "autohide") == "true" && (ctags[j] == "IFRAME" || ctags[j] == "EMBED"))
+					continue;
 				if (zk.isRealVisible(els[k]))
 					zkVld._uncover(box, els[k], true);
+			}
 		}
 	}
 };
