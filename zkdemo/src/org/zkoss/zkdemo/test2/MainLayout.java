@@ -67,11 +67,11 @@ public class MainLayout extends Borderlayout {
 
 	final static String INDEX = "index.zul";
 	final static String CONFIG = "config.properties";
-	final static String[] skipList = new String[] { INDEX, CONFIG };
-	final static String path = "/test2";
-	final static String tempFile = "/test2/tempXYZ.zul";
+	final static String TEMP_FILE = "tempXYZ.zul";
+	final static String[] SKIP_LIST = new String[] { INDEX, CONFIG, TEMP_FILE};
+	final static String PATH = "/test2/";
 	
-	static Properties prop;
+	private Properties prop;
 
 	public MainLayout() {
 		fileModel = new ListModelList();
@@ -85,8 +85,7 @@ public class MainLayout extends Borderlayout {
 		try {
 			ServletContext context = ServletFns.getCurrentServletContext();
 			prop = new Properties();
-			prop.load(new FileInputStream(new File(context.getRealPath(path
-					+ "/" + CONFIG))));
+			prop.load(new FileInputStream(new File(context.getRealPath(PATH + CONFIG))));
 		} catch (IOException ex) {
 			log.warning("Ingored: failed to load a properties file, \nCause: "
 					+ ex.getMessage());
@@ -107,12 +106,11 @@ public class MainLayout extends Borderlayout {
 					Clients.evalJavaScript("newWindow(\"" + disFileStr + "\")");
 				}
 
-				iframe.setSrc(path + "/" + disFileStr);
+				iframe.setSrc(PATH + disFileStr);
 				if (codeView != null) {
 					ServletContext context = ServletFns
 							.getCurrentServletContext();
-					InputStream in = context.getResourceAsStream(path + "/"
-							+ disFileStr);
+					InputStream in = context.getResourceAsStream(PATH + disFileStr);
 
 					byte[] bytes = Files.readAll(in);
 					codeView.setValue(new String(bytes));
@@ -167,7 +165,7 @@ public class MainLayout extends Borderlayout {
 		if (codeView != null) {
 			try {
 				saveToTemp(codeView.getValue());
-				iframe.setSrc(tempFile + "?tid=" + (new Date()).getTime());
+				iframe.setSrc(PATH + TEMP_FILE + "?tid=" + (new Date()).getTime());
 			} catch (WrongValueException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -191,14 +189,13 @@ public class MainLayout extends Borderlayout {
 
 	private void saveToTemp(String zulContent) throws IOException {
 		ServletContext context = ServletFns.getCurrentServletContext();
-		File file = new File(context.getRealPath(tempFile));
+		File file = new File(context.getRealPath(PATH + TEMP_FILE));
 		Files.copy(file, new ByteArrayInputStream(zulContent.getBytes()));
 	}
 
 	public File getCurrentRealFile() {
 		int index = lb.getSelectedIndex();
-		String disFileStr = path + "/"
-				+ ((File) fileModel.get(index)).getName();
+		String disFileStr = PATH + ((File) fileModel.get(index)).getName();
 		ServletContext context = ServletFns.getCurrentServletContext();
 		return new File(context.getRealPath(disFileStr));
 	}
@@ -206,7 +203,7 @@ public class MainLayout extends Borderlayout {
 	public void updateModel() {
 		fileModel.clear();
 		final String r = getDesktop().getWebApp().getRealPath("/");
-		final File test2 = new File(r, path);
+		final File test2 = new File(r, PATH);
 		final String pattern = ((Textbox) getFellow("w1").getFellow("fnf"))
 				.getValue();
 		final boolean reg = ((Checkbox) getFellow("w1").getFellow("reg")).isChecked();
@@ -216,7 +213,7 @@ public class MainLayout extends Borderlayout {
 	public void updateModelByTag() {
 		fileModel.clear();
 		final String r = getDesktop().getWebApp().getRealPath("/");
-		final File test2 = new File(r, path);
+		final File test2 = new File(r, PATH);
 		final String pattern = ((Textbox) getFellow("w1").getFellow("fnt"))
 				.getValue();
 		final String[] ptns = pattern.split(",");
@@ -227,11 +224,17 @@ public class MainLayout extends Borderlayout {
 			boolean match = true;
 			for (int j = 0; j < ptns.length; j++) {
 				boolean m = false;
-				for (int k = 0; k < vals.length; k++)
-					if (ptns[j].trim().equalsIgnoreCase(vals[k].trim())) {
+				for (int k = 0; k < vals.length; k++) {
+					if (ptns[j].trim().length() > 1 && vals[k].trim().length() > 1) {
+						if (vals[k].trim().indexOf(ptns[j].trim()) > -1) {
+							m = true;
+							break;
+						}
+					} else if (ptns[j].trim().equalsIgnoreCase(vals[k].trim())) {
 						m = true;
 						break;
 					}
+				}
 				if (!m) {
 					match = false;
 					break;
@@ -255,11 +258,13 @@ public class MainLayout extends Borderlayout {
 	public void showUncategorized() {
 		fileModel.clear();
 		final String r = getDesktop().getWebApp().getRealPath("/");
-		final File test2 = new File(r, path);
+		final File test2 = new File(r, PATH);
 		final File[] files = test2.listFiles(new MyFilenameFilter("", false));
 		for (int j = 0; j < files.length; j++) {
-			if(!prop.containsKey(files[j].getName()))
+			if(!prop.containsKey(files[j].getName())) {
+				System.out.println(files[j].getName());
 				fileModel.add(files[j]);
+			}
 		}
 		
 	}
@@ -281,19 +286,18 @@ public class MainLayout extends Borderlayout {
 		}
 
 		public boolean accept(File dir, String name) {
-			for (int i = 0; i < skipList.length; i++)
-				if (name.equals(skipList[i]))
+			for (int i = 0; i < SKIP_LIST.length; i++)
+				if (name.equals(SKIP_LIST[i]))
 					return false;
 
-			if (name.endsWith(".zul")) {
+			if (name.endsWith(".zul") || name.endsWith(".jsp"))
 				name = name.substring(0, name.length() - 4);
-			} else if (name.endsWith(".zhtml")) {
-				name = name.substring(0, name.length() - 5);
-			} else if (name.endsWith(".jsp")) {
-				name = name.substring(0, name.length() - 4);
-			} else {
+			else if (name.endsWith(".zhtml"))
+				name = name.substring(0, name.length() - 6);
+			else return false;
+			
+			if(!name.matches("[a-zA-z0-9]*-[a-zA-z0-9-]*"))
 				return false;
-			}
 
 			if (reg) {
 				Matcher matcher = pattern.matcher(name);
