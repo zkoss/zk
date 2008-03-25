@@ -1250,7 +1250,7 @@ zkLhfc.onclick = function (evt) {
 	if (meta)
 		cmp.checked ? meta._selectAll(true) : meta.select("");
 };
-zk.addModuleInit(function () {
+zk.addBeforeInit(function () {
 	//Listheader
 	//init it later because zul.js might not be loaded yet
 	zkLhr = {}

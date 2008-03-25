@@ -458,7 +458,7 @@ zkTcop.init = function (cmp) {
 	zk.listen(cmp, "click", zkTree.ontoggle);
 };
 
-zk.addModuleInit(function () {
+zk.addBeforeInit(function () {
 	//Treecol
 	//init it later because zul.js might not be loaded yet
 	zkTcol = {}

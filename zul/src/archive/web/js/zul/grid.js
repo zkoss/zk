@@ -347,7 +347,7 @@ zkGrw.stripe = function (cmp, isClean) {
 	}
 };
 zkGcl = {}; //cell
-zk.addModuleInit(function () {
+zk.addBeforeInit(function () {
 	//Column
 	//init it later because zul.js might not be loaded yet
 	zkCol = {}
