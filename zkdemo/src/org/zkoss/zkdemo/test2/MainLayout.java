@@ -334,12 +334,9 @@ public class MainLayout extends Borderlayout {
 		final String r = getDesktop().getWebApp().getRealPath("/");
 		final File test2 = new File(r, PATH);
 		final File[] files = test2.listFiles(new MyFilenameFilter("", false));
-		for (int j = 0; j < files.length; j++) {
-			if(!prop.containsKey(files[j].getName())) {
-				System.out.println(files[j].getName());
+		for (int j = 0; j < files.length; j++)
+			if(!prop.containsKey(files[j].getName()))
 				fileModel.add(files[j]);
-			}
-		}
 		
 	}
 
