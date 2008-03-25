@@ -294,10 +294,16 @@ public class ClassWebResource {
 				log.warning("Unknown path info: "+pi);
 			}
 
-			final int len = jsextra.length();
+			int len = jsextra.length();
 			if (len == 0) jsextra = null;
 			else {
-				final char cc = jsextra.charAt(len - 1);
+				char cc = jsextra.charAt(0);
+				if (cc != ';') {
+					jsextra = ';' + jsextra; //just in case
+					++len;
+				}
+
+				cc = jsextra.charAt(len - 1);
 				if (cc != ';') {
 					if (cc != ')') jsextra += "()";
 					jsextra += ';';
