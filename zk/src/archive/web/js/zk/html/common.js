@@ -1930,7 +1930,7 @@ zk.History = Class.create();
 zk.History.prototype = {
 	initialize: function () {
 		this.curbk = "";
-		zk.addModuleInit(function () { // Bug #1847708
+		zk.addBeforeInit(function () { // Bug #1847708
 			zkau.history.checkBookmark(); // We don't need to wait for the first time.
 			setInterval("zkau.history.checkBookmark()", 520);
 		});
