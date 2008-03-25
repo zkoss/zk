@@ -1390,7 +1390,7 @@ zkau._onDocKeydown = function (evt) {
 		return true;
 	case 45: //Ins
 	case 46: //Del
-		zkcode = keycode == 44 ? 'I': 'J';
+		zkcode = keycode == 45 ? 'I': 'J';
 		break;
 	default:
 		if (keycode >= 33 && keycode <= 40) { //PgUp, PgDn, End, Home, L, U, R, D
