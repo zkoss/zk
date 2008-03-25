@@ -1046,12 +1046,10 @@ zk._dsball = function (parent, els, visibility) {
 		var what;
 		var tn = $tag(el);
 		if (visibility) { //_actg1
-			if ((tn == "IFRAME" || tn == "EMBED")
-			&& getZKAttr(el, "autohide") != "true")
-				continue; //handle only autohide iframe
-
-			what = el.style.visibility;
-			el.style.visibility = "hidden";
+			if (zk.shallHideDisabled(el)) {
+				what = el.style.visibility;
+				el.style.visibility = "hidden";
+			}
 		} else if (zk.gecko && tn == "A") {
 //Firefox doesn't support the disable of A
 			what = "h:" + zkau.getStamp(el, "tabIndex") + ":" +
@@ -1063,6 +1061,14 @@ zk._dsball = function (parent, els, visibility) {
 		}
 		zk._disTags.push({element: el, what: what});
 	}
+};
+/** Whether an element belonging to zk._disTags shall be handled.
+ * @since 3.0.4
+ */
+zk.shallHideDisabled = function (el) {
+	var tn = $tag(el);
+	return (tn != "IFRAME" && tn != "EMBED")
+		|| getZKAttr(el, "autohide") == "true";
 };
 /** Restores tags being disabled by previous disableAll. If el is not null,
  * only el's children are enabled
@@ -1133,7 +1139,6 @@ zk.hideCovered = function (ary) {
 	var cts = zk._actg1;
 	for (var j = 0, clen = cts.length; j < clen; ++j) {
 		var els = document.getElementsByTagName(cts[j]);
-		var ifr = "IFRAME" == cts[j];
 		loop_els:
 		for (var k = 0, elen = els.length; k < elen; k++) {
 			var el = els[k];
@@ -1145,16 +1150,13 @@ zk.hideCovered = function (ary) {
 			}
 
 			var overlapped = false;
-			if (!ifr || getZKAttr(el, "autohide") == "true") {
-			//Note: z.autohide may be set dynamically,
-			//so consider it as not overlapped
+			if (zk.shallHideDisabled(el))
 				for (var m = 0, al = ary.length; m < al; ++m) {
 					if (zk.isOverlapped(ary[m], el)) {
 						overlapped = true;
 						break;
 					}
 				}
-			}
 
 			if (overlapped) {
 				for (var m = 0, hl = zk._hidCvred.length; m < hl; ++m) {
