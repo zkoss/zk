@@ -276,15 +276,35 @@ public interface Desktop {
 	 */
 	public boolean isServerPushEnabled();
 
-	/** Adds an event interceptor to this desktop.
-	 * <p>Note: if the interceptor is added twice, it will be invoked
-	 * twice when an event occurs.
-	 * @since 3.0.0
+	/** @deprecated As of release 3.1.0, replaced by {@link #addListener}.
 	 */
 	public void addEventInterceptor(EventInterceptor ei);
-	/** Removes an event interceptor from this desktop.
-	 * @return whether the interceptor is removed successfully.
-	 * @since 3.0.0
+	/** @deprecated As of release 3.1.0, replaced by {@link #removeListener}.
 	 */
 	public boolean removeEventInterceptor(EventInterceptor ei);
+
+	/** Adds a listener.
+	 *
+	 * <p>Note: if the listener is added twice, it will be invoked
+	 * twice when a corresponding event occurs.
+	 *
+	 * @param listener the listener. It cannot be null.
+	 * It must be an instance that implements
+	 * {@link org.zkoss.zk.ui.util.DesktopCleanup},
+	 * {@link org.zkoss.zk.ui.util.ExecutionInit},
+	 * {@link org.zkoss.zk.ui.util.ExecutionCleanup},
+	 * and/or {@link EventInterceptor}.<br/>
+	 * Note: {@link org.zkoss.zk.ui.event.EventThreadInit},
+	 * {@link org.zkoss.zk.ui.event.EventThreadCleanup},
+	 * {@link org.zkoss.zk.ui.event.EventThreadSuspend} and
+	 * {@link org.zkoss.zk.ui.event.EventThreadResume} are not supported.
+	 * @exception IllegalArgumentException if not a valid listener.
+	 * @since 3.1.0
+	 */
+	public void addListener(Object listener);
+	/** Removes a listener
+	 * @return whether the listener is removed successfully.
+	 * @since 3.1.0
+	 */
+	public boolean removeListener(Object listener);
 }

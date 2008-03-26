@@ -20,6 +20,8 @@ package org.zkoss.zk.ui.impl;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -45,6 +47,9 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.DesktopCleanup;
+import org.zkoss.zk.ui.util.ExecutionCleanup;
+import org.zkoss.zk.ui.util.ExecutionInit;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
@@ -132,6 +137,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private ServerPush _spush;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
+	private transient List _dtCleans, _execInits, _execCleans;
 
 	private static final int MAX_RESPONSE_SEQUENCE = 1024;
 	/** The response sequence ID. */
@@ -567,7 +573,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		s.defaultWriteObject();
 
 		willSerialize(_attrs.values());
-		Serializables.smartWrite(s, _attrs);
+		Serializables.smartWrite(s, _attrs);		
+		willSerialize(_dtCleans);
+		Serializables.smartWrite(s, _dtCleans);
+		willSerialize(_execInits);
+		Serializables.smartWrite(s, _execInits);
+		willSerialize(_execCleans);
+		Serializables.smartWrite(s, _execCleans);
 	}
 	private void willSerialize(Collection c) {
 		if (c != null)
@@ -592,6 +604,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		Serializables.smartRead(s, _attrs);
 		didDeserialize(_attrs.values());
+		_dtCleans = (List)Serializables.smartRead(s, _dtCleans);
+		didDeserialize(_dtCleans);
+		_execInits = (List)Serializables.smartRead(s, _execInits);
+		didDeserialize(_execInits);
+		_execCleans = (List)Serializables.smartRead(s, _execCleans);
 	}
 	private void didDeserialize(Collection c) {
 		if (c != null)
@@ -608,11 +625,74 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			addAllComponents((Component)it.next());
 	}
 
-	public void addEventInterceptor(EventInterceptor ei) {
-		_eis.addEventInterceptor(ei);
+
+	public void addListener(Object listener) {
+		boolean added = false;
+		if (listener instanceof EventInterceptor) {
+			_eis.addEventInterceptor((EventInterceptor)listener);
+			added = true;
+		}
+
+		if (listener instanceof DesktopCleanup) {
+			_dtCleans = addListener0(_dtCleans, listener);
+			added = true;
+		}
+
+		if (listener instanceof ExecutionInit) {
+			_execInits = addListener0(_execInits, listener);
+			added = true;
+		}
+		if (listener instanceof ExecutionCleanup) {
+			_execCleans = addListener0(_execCleans, listener);
+			added = true;
+		}
+
+		if (!added)
+			throw new IllegalArgumentException("Unknown listener: "+listener);
 	}
+	private List addListener0(List list, Object listener) {
+		if (list == null)
+			list = new LinkedList();
+		list.add(listener);
+		return list;
+	}
+	public boolean removeListener(Object listener) {
+		boolean found = false;
+		if (listener instanceof EventInterceptor
+		&& _eis.removeEventInterceptor((EventInterceptor)listener))
+			found = true;
+
+		if (listener instanceof DesktopCleanup
+		&& removeListener0(_dtCleans, listener))
+			found = true;
+
+		if (listener instanceof ExecutionInit
+		&& removeListener0(_execInits, listener))
+			found = true;
+		if (listener instanceof ExecutionCleanup
+		&& removeListener0(_execCleans, listener))
+			found = true;
+		return found;
+	}
+	private boolean removeListener0(List list, Object listener) {
+		if (list != null)
+			for (Iterator it = list.iterator(); it.hasNext();) {
+				if (it.next() == listener) { //yes, use == (rather equals)
+					it.remove();
+					return true;
+				}
+			}
+		return false;
+	}
+	/** @deprecated As of release 3.1.0, replaced by {@link #addListener}.
+	 */
+	public void addEventInterceptor(EventInterceptor ei) {
+		addListener(ei);
+	}
+	/** @deprecated As of release 3.1.0, replaced by {@link #removeListener}.
+	 */
 	public boolean removeEventInterceptor(EventInterceptor ei) {
-		return _eis.removeEventInterceptor(ei);
+		return removeListener(ei);
 	}
 	public Event beforeSendEvent(Event event) {
 		event = _eis.beforeSendEvent(event);
@@ -636,7 +716,47 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_eis.afterProcessEvent(event);
 		_wapp.getConfiguration().afterProcessEvent(event);
 	}
+	
+	public void invokeDesktopCleanups() {
+		if (_dtCleans != null) {
+			for (Iterator it = _dtCleans.iterator(); it.hasNext();) {
+				final DesktopCleanup listener = (DesktopCleanup)it.next();
+				try {
+					listener.cleanup(this);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+listener, ex);
+				}
+			}
+		}
+	}
 
+	public void invokeExecutionInits(Execution exec, Execution parent)
+	throws UiException {
+		if (_execInits != null) {
+			for (Iterator it = _execInits.iterator(); it.hasNext();) {
+				try {
+					((ExecutionInit)it.next()).init(exec, parent);
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+					//Don't intercept; to prevent the creation of a session
+				}
+			}
+		}
+	}
+	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs) {
+		if (_execCleans != null) {
+			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
+				final ExecutionCleanup listener = (ExecutionCleanup)it.next();
+				try {
+					listener.cleanup(exec, parent, errs);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+listener, ex);
+					if (errs != null) errs.add(ex);
+				}
+			}
+		}
+	}
+	
 	//Server Push//
 	public boolean enableServerPush(boolean enable) {
 		final boolean old = _spush != null;

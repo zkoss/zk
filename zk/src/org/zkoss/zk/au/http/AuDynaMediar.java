@@ -92,6 +92,7 @@ public class AuDynaMediar implements AuProcessor {
 			final WebAppCtrl wappc = (WebAppCtrl)wapp;
 			final UiEngine uieng = wappc.getUiEngine();
 			final Desktop desktop = wappc.getDesktopCache(sess).getDesktop(dtid);
+			final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 
 			final Execution oldexec = Executions.getCurrent();
 			final Execution exec = new ExecutionImpl(
@@ -102,8 +103,9 @@ public class AuDynaMediar implements AuProcessor {
 			boolean err = false;
 			try {
 				config.invokeExecutionInits(exec, oldexec);
+				desktopCtrl.invokeExecutionInits(exec, oldexec);
 
-				media = ((DesktopCtrl)desktop).getDownloadMedia(uuid, true);
+				media = desktopCtrl.getDownloadMedia(uuid, true);
 				if (media != null) {
 					download = true; //yes, it is for download
 				} else {
@@ -122,6 +124,7 @@ public class AuDynaMediar implements AuProcessor {
 
 				final List errs = new LinkedList();
 				errs.add(ex);
+				desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 				config.invokeExecutionCleanups(exec, oldexec, errs);
 
 				final StringBuffer errmsg = new StringBuffer(100);
@@ -137,7 +140,10 @@ public class AuDynaMediar implements AuProcessor {
 				response.sendError(response.SC_GONE, "Failed to load the media."+errmsg);
 				return;
 			} finally {
-				if (!err) config.invokeExecutionCleanups(exec, oldexec, null);
+				if (!err) {
+					desktopCtrl.invokeExecutionCleanups(exec, oldexec, null);
+					config.invokeExecutionCleanups(exec, oldexec, null);
+				}
 				uieng.deactivate(exec);
 			}
 		} catch (ComponentNotFoundException ex) {

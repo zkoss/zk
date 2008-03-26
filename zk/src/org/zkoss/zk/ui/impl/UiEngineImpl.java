@@ -271,6 +271,7 @@ public class UiEngineImpl implements UiEngine {
 		//Update the device type first. If this is the second page and not
 		//belonging to the same device type, an exception is thrown
 		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final LanguageDefinition langdef = //default page
 			pagedef != null ? pagedef.getLanguageDefinition():
 			richlet != null ? richlet.getLanguageDefinition(): null;
@@ -298,6 +299,7 @@ public class UiEngineImpl implements UiEngine {
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
+			desktopCtrl.invokeExecutionInits(exec, oldexec);
 
 			if (olduv != null) {
 				final Component owner = olduv.getOwner();
@@ -383,6 +385,7 @@ public class UiEngineImpl implements UiEngine {
 			cleaned = true;
 			final List errs = new LinkedList();
 			errs.add(ex);
+			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
 				//CONSIDER: whether to pass cleanup's error to users
 
@@ -392,7 +395,11 @@ public class UiEngineImpl implements UiEngine {
 				throw UiException.Aide.wrap(ex);
 			}
 		} finally {
-			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
+			if (!cleaned) {
+				desktopCtrl.invokeExecutionCleanups(exec, oldexec, null);
+				config.invokeExecutionCleanups(exec, oldexec, null);
+					//CONSIDER: whether to pass cleanup's error to users
+			}
 				//CONSIDER: whether to pass cleanup's error to users
 			if (abrn != null) {
 				try {
@@ -694,6 +701,7 @@ public class UiEngineImpl implements UiEngine {
 			return null; //done (request is added to the exec currently activated)
 
 		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
@@ -709,7 +717,9 @@ public class UiEngineImpl implements UiEngine {
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, null);
-			final RequestQueue rque = ((DesktopCtrl)desktop).getRequestQueue();
+			desktopCtrl.invokeExecutionInits(exec, null);
+
+			final RequestQueue rque = desktopCtrl.getRequestQueue();
 			if (reqId != null) rque.addRequestId(reqId);
 
 			final List errs = new LinkedList();
@@ -784,12 +794,14 @@ public class UiEngineImpl implements UiEngine {
 //				else log.debug("Responses: "+responses.subList(0, 5)+"...");
 
 			cleaned = true;
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
 			config.invokeExecutionCleanups(exec, null, errs);
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
 				final List errs = new LinkedList();
 				errs.add(ex);
+				desktopCtrl.invokeExecutionCleanups(exec, null, errs);
 				config.invokeExecutionCleanups(exec, null, errs);
 				ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
 			}
@@ -799,7 +811,10 @@ public class UiEngineImpl implements UiEngine {
 				throw UiException.Aide.wrap(ex);
 			}
 		} finally {
-			if (!cleaned) config.invokeExecutionCleanups(exec, null, null);
+			if (!cleaned) {
+				desktopCtrl.invokeExecutionCleanups(exec, null, null);
+				config.invokeExecutionCleanups(exec, null, null);
+			}
 
 			if (abrn != null) {
 				try {
