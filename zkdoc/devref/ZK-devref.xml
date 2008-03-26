@@ -18,7 +18,7 @@
 <para>ZKTM</para>
 <para>March 2008</para>
 <para>Potix Corporation</para>
-<para>Revision 96</para>
+<para>Revision 97</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -4957,7 +4957,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/></sect3></sect2><sect2 id="Box"><title>Box</title>
-<para>The box model of XUL is used to divide a portion of the display into a series of boxes. Components inside of a box will orient themselves horizontally or vertically. By combining a series of boxes and separators, you can control the layout of the visual representation.</para>
+<para>The box model of XUL is used to divide a portion of the display into a series of boxes. Components inside of a box will orient themselves horizontally or vertically. By combining a series of boxes and separators, you can control the layout of the visual presentation.</para>
 <para>A box can lay out its children in one of two orientations, either horizontally or vertically. A horizontal box lines up its components horizontally and a vertical box orients its components vertically. You can think of a box as one row or one column from an HTML table.</para>
 <para/>
 <para>
