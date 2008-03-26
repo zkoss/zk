@@ -360,21 +360,24 @@ public class MainLayout extends Borderlayout {
 			for (int i = 0; i < SKIP_LIST.length; i++)
 				if (name.equals(SKIP_LIST[i]))
 					return false;
-
+			final String n = name; 
 			if (name.endsWith(".zul") || name.endsWith(".jsp"))
 				name = name.substring(0, name.length() - 4);
 			else if (name.endsWith(".zhtml"))
 				name = name.substring(0, name.length() - 6);
-			else return false;
+			else if (!n.equalsIgnoreCase(str))
+				return false; // unsupported file type
 			
-			if(!name.matches("[a-zA-z0-9]*-[a-zA-z0-9-]*"))
-				return false;
-
+			if (n.equalsIgnoreCase(str))
+				return true;
+			else if(!name.matches("[a-zA-z0-9]*-[a-zA-z0-9-]*"))
+				return false; // unsupported file pattern
+			
 			if (reg) {
-				Matcher matcher = pattern.matcher(name);
+				Matcher matcher = pattern.matcher(n);
 				return matcher.matches();
 			} else {
-				return name.toUpperCase().indexOf(str.toUpperCase()) >= 0;
+				return n.toUpperCase().indexOf(str.toUpperCase()) >= 0;
 			}
 		}
 
