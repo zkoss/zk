@@ -62,7 +62,7 @@ public class MenuitemDefault implements ComponentRenderer {
 			  .write("<td class=\"menu1");
 			if(self.isChecked())
 				wh.write("ck");
-			wh.write("\"></td>\n<td align=\"left\"><a href=\"");
+			wh.write("\" align=\"left\"><a href=\"");
 			if(Strings.isBlank(self.getHref()))
 				wh.write("javascript:;");
 			else
@@ -70,7 +70,7 @@ public class MenuitemDefault implements ComponentRenderer {
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" id=\"").write(uuid).write("!a\">").write(self.getImgTag());
 			new Out(self.getLabel()).render(out);
-			wh.writeln("</a></td>\n<td width=\"9px\"></td></tr>");
+			wh.writeln("</a></td>\n</tr>");
 		}
 	}
 }
