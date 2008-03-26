@@ -2000,8 +2000,9 @@ zk.doEventStop = function (evt) {
 
 ////
 //show & hide
-/** The lowest level to make a component visible/invisible.
- * CSA shall not call this method.
+/** Shows the specified element with the effect specified in conshow,
+ * if any. It will call action.show if no effect is specified.
+ * CSA shall not call this method. Rather, call action.show instead.
  */
 zk.show = function (id, bShow) {
 	if (bShow == false) {
@@ -2024,8 +2025,9 @@ zk.show = function (id, bShow) {
 		}
 	}
 };
-/** The lowest level to make a component invisible/visible.
- * CSA shall not call this method.
+/** Hides the specified element with the effect specified in conhide,
+ * if any. It will call action.hide if no effect is specified.
+ * CSA shall not call this method. Rather, call action.hide instead.
  */
 zk.hide = function (id, bHide) {
 	if (bHide == false) {
@@ -2088,7 +2090,8 @@ action.show = function (id, noVisiAt) {
 		} else {
 			zk._showExtr(n);  //parent visible first
 			n.style.display = "";
-			if (!noVisiAt) zk.onVisiAt(n); //callback later
+			if (!noVisiAt && zk.isRealVisible(n)) zk.onVisiAt(n); //callback later
+				//Bug 1896588: don't do onVisiAt if not visible
 		}
 };
 
@@ -2101,7 +2104,8 @@ action.hide = function (id, noHideAt) {
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "zk.hide");
 		} else {
-			if (noHideAt) zk.onHideAt(n); //callback first
+			if (!noHideAt && zk.isRealVisible(n)) zk.onHideAt(n); //callback first
+				//Bug 1896588: don't do onHideAt if not visible
 			n.style.display = "none";
 			zk._hideExtr(n); //hide parent later
 		}
