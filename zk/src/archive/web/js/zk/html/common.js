@@ -568,7 +568,7 @@ zk.focus = function (cmp) {
 				}
 			}, 0);
 		}
-		//IE throws exception when focus in some cases
+		//IE throws exception if failed to focus in some cases
 };
 
 /** Select the text of the element, and do it timeout later. */

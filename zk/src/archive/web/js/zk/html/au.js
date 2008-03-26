@@ -2252,7 +2252,7 @@ zkau.cmd1 = {
 
 			zkau.autoZIndex(cmp); //some, say, window, not listen to onfocus
 			cmp = $real(cmp); //focus goes to inner tag
-			zk.asyncFocus(cmp.id, 50);
+			zk.asyncFocus(cmp.id, 60);
 				//delay it since some comp, e.g., endModal, uses timer
 				//to do the multiple-step operation
 		}
