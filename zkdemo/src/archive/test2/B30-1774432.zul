@@ -1,4 +1,19 @@
 <window>
+<html><![CDATA[
+To reproduce the bug:
+<ol>
+<li>Select "Item 2"</li>
+<li>Click remove</li>
+<li>Click append</li>
+<li>"Item 3" is appended</li>
+<li>Click append</li>
+<li>"Item 4" is appended</li>
+<li>Click append</li>
+</ol>
+Error Message:
+"Failed to invoke zkTree.setAttr
+el has no properties". And, it shall not appear.
+]]></html>
 <tree id="t" pageSize="3">
 	<treechildren>
 				<treeitem>

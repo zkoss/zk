@@ -21,6 +21,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<n:h2>[ 1843802 ] Comboitem supports the disabled property</n:h2>
 	<n:ol>
 		<n:li>You should not select the disabled item.</n:li>
+		<n:li>Even you key the value of disabled item, you still can not selected on it, try typing "Simple and Rich" and you will get a error.</n:li>
 	</n:ol>
         <button label="show selected" onClick='alert("Selected index:"+cb1.getSelectedIndex())'/>
 	<combobox id="cb1" constraint="strict">

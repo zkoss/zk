@@ -47,13 +47,14 @@ public class Treeitem extends XulElement {
 	private transient Treechildren _treechildren;
 	private Object _value;
 	private boolean _open = true;
-	private boolean _selected = false;
-	private boolean _disabled = false;
+	private boolean _selected;
+	private boolean _disabled;
+	private boolean _checkable = true;;
 	
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
 	 */
-	private boolean _loaded = false;
+	private boolean _loaded;
 	
 	public Treeitem() {
 	}
@@ -65,6 +66,43 @@ public class Treeitem extends XulElement {
 		setValue(value);
 	}
 
+	/** Returns whether it is checkable.
+	 * <p>Default: true.
+	 * @since 3.0.4
+	 */
+	public boolean isCheckable() {
+		return _checkable;
+	}
+	/** Sets whether it is checkable.
+	 * <p>Default: true.
+	 * @since 3.0.4
+	 */
+	public void setCheckable(boolean checkable) {
+		if (_checkable != checkable) {
+			_checkable = checkable;
+			invalidate();
+		}
+	}
+	
+	/**
+	 * Unload the tree item
+	 * <p>To load the tree item, with 
+	 * {@link Tree#renderItem(Treeitem)}, {@link Tree#renderItem(Treeitem, Object)}, or {@link Tree#renderItems(java.util.Set)}
+	 * 
+	 * @since 3.0.4
+	 */
+	public void unload(){
+		if(isLoaded()){
+			//Clean its children
+			if(getTreechildren() != null)
+				getTreechildren().getChildren().clear();
+			//Set the load status to unloaded
+			setLoaded(false);
+			//Change the "+/-" sign icon
+			setOpen(false);
+		}
+	}
+	
 	/**
 	 * Sets whether it is disabled.
 	 * @since 3.0.1
@@ -85,8 +123,8 @@ public class Treeitem extends XulElement {
 	}
 	
 	/**
-	 * Return true whether this tree item is loaded
-	 * @return true whether this tree item is loaded
+	 * Return true whether all children of this tree item, if any, is loaded
+	 * @return true whether all children of this tree item is loaded
 	 * @since 3.0.0
 	 */
 	public boolean isLoaded(){
@@ -94,11 +132,15 @@ public class Treeitem extends XulElement {
 	}
 	
 	/**
-	 * Sets whether this tree item is loaded.
+	 * Sets whether all children of this tree item, if any, is loaded.
 	 * @since 3.0.0
 	 */
-	public void setLoaded(boolean loaded){
-		_loaded = loaded;
+	/*package*/ void setLoaded(boolean loaded){
+		if (_loaded != loaded) {
+			_loaded = loaded;
+			if (_treerow != null)
+				_treerow.smartUpdate("z.lod", _loaded ? "": "t");
+		}
 	}
 	
 	/**
@@ -175,6 +217,13 @@ public class Treeitem extends XulElement {
 			//initialized before creating child components (for ZK pages)
 			if (_treerow != null)
 				_treerow.smartUpdate("open", _open);
+			//If the item is open, its tree has model and not rendered, render the item
+			if(_open){
+				Tree tree = getTree();
+				if(tree != null && tree.getModel() !=null){
+					tree.renderItem(this);
+				}
+			}
 		}
 	}
 	/** Returns whether this item is selected.
@@ -478,12 +527,12 @@ public class Treeitem extends XulElement {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			_open = open;
-			/*
-			 * Load Treeitem.
-			 * SetOpen will trigger this function.
-			 */
-			if(getTree() != null)
-				getTree().renderItem(Treeitem.this);
+
+			if (_open) {
+				final Tree tree = getTree();
+				if (tree != null && tree.getModel() != null)
+					tree.renderItem(Treeitem.this);
+			}
 		}
 	}
 }

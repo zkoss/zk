@@ -20,11 +20,13 @@ package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treecol;
 
 /**
  * {@link Tree}'s default mold.
@@ -43,20 +45,57 @@ public class TreeDefault implements ComponentRenderer {
 
 		if(self.getTreecols() != null){
 			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"tree-head\">")
-				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
-				.writeComponents(self.getHeads())
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
+			if(self.getTreecols() != null) {
+				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!hdfaker\" class=\"tree-fake\">");
+					
+				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
+					final Treecol child = (Treecol) it.next();
+					wh.write("<th id=\"").write(child.getUuid()).write("!hdfaker\"").write(child.getOuterAttrs())
+					.write("><div style=\"overflow:hidden\"></div></th>");
+				}
+				wh.write("</tr></tbody>");
+			}
+			wh.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
 
 		wh.write("<div id=\"").write(self.getUuid()).write("!body\" class=\"tree-body\">")
-			 .write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
-			.writeln(self.getTreechildren())
+			 .write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"");
+		if (self.isFixedLayout())
+			wh.write(" style=\"table-layout:fixed\"");
+		wh.write(">");
+		
+		if(self.getTreecols() != null) {
+			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
+				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"tree-fake\">");
+				
+			for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
+				final Treecol child = (Treecol) it.next();
+				wh.write("<th id=\"").write(child.getUuid()).write("!bdfaker\"").write(child.getOuterAttrs())
+				.write("><div style=\"overflow:hidden\"></div></th>");
+			}
+			wh.write("</tr></tbody>");
+		}
+		wh.writeln(self.getTreechildren())
 			.write("</table></div>");
 
 		if(self.getTreefoot() != null){
 			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"tree-foot\">")
-				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">")
-				.writeln(self.getTreefoot())
+				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
+			if(self.getTreecols() != null) {
+				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"tree-fake\">");
+					
+				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
+					final Treecol child = (Treecol) it.next();
+					wh.write("<th id=\"").write(child.getUuid()).write("!ftfaker\"").write(child.getOuterAttrs())
+					.write("><div style=\"overflow:hidden\"></div></th>");
+				}
+				wh.write("</tr></tbody>");
+			}
+			wh.writeln(self.getTreefoot())
 				.write("</table></div>");
 		}
 		wh.write("</div>");

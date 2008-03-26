@@ -45,6 +45,7 @@ import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
+import org.zkoss.util.media.ContentTypes;
 import org.zkoss.image.AImage;
 import org.zkoss.sound.AAudio;
 
@@ -113,8 +114,7 @@ public class AuUploader implements AuProcessor {
 			if (ex instanceof ComponentNotFoundException) {
 				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
 			} else {
-				log.realCauseBriefly("Failed to upload", ex);
-				alert = Exceptions.getMessage(ex);
+				alert = handleError(ex);
 			}
 		}
 
@@ -124,6 +124,33 @@ public class AuUploader implements AuProcessor {
 
 		Servlets.forward(ctx, request, response,
 			nextURI, attrs, Servlets.PASS_THRU_ATTR);
+	}
+	/** Handles the exception that was thrown when uploading files,
+	 * and returns the error message.
+	 * When uploading file(s) causes an exception, this method will be
+	 * called to generate the proper error message.
+	 *
+	 * <p>By default, it logs the error and then use {@link Exceptions#getMessage}
+	 * to retrieve the error message.
+	 *
+	 * <p>If you prefer not to log or to generate the custom error message,
+	 * you can extend this class and override this method.
+	 * Then, specify it in web.xml as follows.
+<code><pre>&lt;servlet&gt;
+  &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;processor0&lt;/param-name&gt;
+    &lt;param-value&gt;/upload=com.my.MyUploader&lt;/param-value&gt;
+  &lt;/init-param&gt;
+...</pre></code>
+	 * 
+	 * @param ex the exception.
+	 * Typical exceptions include org.apache.commons.fileupload .FileUploadBase.SizeLimitExceededException
+	 * @since 3.0.4
+	 */
+	protected String handleError(Throwable ex) {
+		log.realCauseBriefly("Failed to upload", ex);
+		return Exceptions.getMessage(ex);
 	}
 
 	/** Process fileitems named file0, file1 and so on.
@@ -165,8 +192,17 @@ public class AuUploader implements AuProcessor {
 			}
 		}
 
-		final String ctype = fi.getContentType(),
+		String ctype = fi.getContentType(),
 			ctypelc = ctype != null ? ctype.toLowerCase(): null;
+		if (name != null && "application/octet-stream".equals(ctypelc)) { //Bug 1896291: IE limit
+			final int j = name.lastIndexOf('.');
+			if (j >= 0) {
+				String s = ContentTypes.getContentType(name.substring(j + 1));
+				if (s != null)
+					ctypelc = ctype = s;
+			}
+		}
+
 		if (!alwaysNative && ctypelc != null) {
 			if (ctypelc.startsWith("image/")) {
 				try {
@@ -232,8 +268,11 @@ public class AuUploader implements AuProcessor {
 	Desktop desktop)
 	throws FileUploadException {
 		final Map params = new HashMap();
-		final ServletFileUpload sfu =
-			new ServletFileUpload(new ZkFileItemFactory(desktop, request));
+		final ZkFileItemFactory fty = new ZkFileItemFactory(desktop, request);
+		final ServletFileUpload sfu = new ServletFileUpload(fty);
+
+		sfu.setProgressListener(fty.new ProgressCallback());
+
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		final int maxsz = conf.getMaxUploadSize();
 		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);

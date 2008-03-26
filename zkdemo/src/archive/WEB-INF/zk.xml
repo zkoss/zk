@@ -12,6 +12,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+	<!-- Turn on if you want to debug JavaScript.
+		Once turned on, the uncompressed JavaScript files will be loaded.
+	<client-config>
+		<debug-js>true</debug-js>
+	</client-config>
+	-->
 	<!--
 	<log>
 		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
@@ -72,16 +78,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<cache-provider-class>org.zkoss.zk.ui.sys.GlobalDesktopCacheProvider</cache-provider-class>
 	</system-config>
 	-->
-	<!-- Turn on to test FailoverManager with an useless failover manager
-	<system-config>
-		<failover-manager-class>org.zkoss.zkdemo.test.DumbFailoverManager</failover-manager-class>
-	</system-config>
-	-->
-	<!-- Turn on to test the status when IdGenerator is called
-	<system-config>
-		<id-generator-class>org.zkoss.zkdemo.test.ViewIdGenerator</id-generator-class>
-	</system-config>
-	-->
 
 	<!-- Optional -->
 	<!-- You can define any number of richlets as follows.
@@ -119,16 +115,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<description>[Optional] Mointor the statistic</description>
 		<listener-class>org.zkoss.zk.ui.util.Statistic</listener-class>
 	</listener>
-	<!-- Uncomment the following to test the performance meter
-	<listener>
-		<listener-class>org.zkoss.zkdemo.test.PerformanceMeter</listener-class>
-	</listener>
-	-->
-	<!-- Uncomment to test if EventThreadInit throws an exception
-	<listener>
-		<listener-class>org.zkoss.zkdemo.test.NPEEventThreadInit</listener-class>
-	</listener>
-	-->
 
 	<!-- Configure the error page
 	<error-page>
@@ -177,6 +163,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</error-reload>
 	</client-config>
 	-->
+
 	<!-- Uncomment the following to customize the client-polling-based
 		server push.
 		Note: the unit of PollingServerPush.delay.min and max is second.

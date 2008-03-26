@@ -91,8 +91,8 @@ public class Filedownload {
 		save(new AMedia(flnm, null, contentType, content), flnm);
 	}
 	/** Open a download dialog to save the specified content at the client
-	 * with the suggested file name.
-	 *
+	 * with the suggested file name.<br/>
+	 * Note: You don't need to close the content (a InputStream), it will be closed automatically after download. 
 	 * @param content the content
 	 * @param contentType the content type (aka., mine type),
 	 * e.g., application/pdf
@@ -103,8 +103,8 @@ public class Filedownload {
 		save(new AMedia(flnm, null, contentType, content), flnm);
 	}
 	/** Open a download dialog to save the specified content at the client
-	 * with the suggested file name.
-	 *
+	 * with the suggested file name.<br/>
+	 * Note: You don't need to close the content (a Reader), it will be closed automatically after download.
 	 * @param content the content
 	 * @param contentType the content type (aka., mine type),
 	 * e.g., application/pdf

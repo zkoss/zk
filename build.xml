@@ -138,8 +138,10 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		</condition>
 
 		<!-- deploy tomcat -->
+		<available file="${tomcat.home}" property="tomcat.exist"/>
 		<condition property="deploy.tomcat.required">
 			<and>
+				<isset property="tomcat.exist"/>
 				<isset property="deploy.server.required"/>
 				<equals arg1="${format}" arg2="deploy"/>
 			</and>

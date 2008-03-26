@@ -3,20 +3,19 @@
 <zk>
 	<window title="dynamic tree" border="normal" id="win">
 	<zscript>
+	
 		import org.zkoss.zkdemo.test2.tree.*;
+		
 		
 		HostTreeModel model = new HostTreeModel();
 		HostIconTreeRenderer renderer = new HostIconTreeRenderer();
 		
-		void changeIcon(String id){
-			Treecell cell = win.getFellow(id);
-			cell.setImage("/img/delete.gif");
-		}
-		
 	</zscript>
-		Click the button, if no message pops up, it is correct
-		<tree id="tree" treeitemRenderer="${renderer}" model="${model}"  >
+		
+		<tree treeitemRenderer="${renderer}" model="${model}"  >
 		</tree>
-		<button label="update model process icon" onClick='model.updateProcessType(0,0,"C")' />
+		<button label="add process icon at 0/0/3" onClick='model.addProcessType(0,0,3,"C")' />
+		<button label="remove process icon at 0/0/0" onClick='model.removeProcessType(0,0,0,"C")' />
+		<button label="update process icon at 0/0/0" onClick='model.updateProcessType(0,0,0,"C")' />
 	</window>
 </zk>

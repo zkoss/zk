@@ -36,16 +36,13 @@ public class LabelDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Label self = (Label)comp;
-		final boolean idRequired = self.isIdRequired();
-		if (idRequired) {
-			wh.write("<span id=\"").write(self.getUuid()).write("\"");
-			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
-			wh.write(">");
-		}
+
+		wh.write("<span id=\"").write(self.getUuid()).write("\"");
+		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
+		wh.write(">");
 
 		wh.write(self.getEncodedText());
 
-		if (idRequired)
-			wh.write("</span>");
+		wh.write("</span>");
 	}
 }

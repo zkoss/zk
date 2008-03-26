@@ -169,7 +169,7 @@ zkVld.strict = function (id) {
 zkVld.errbox = function (id, html) {
 	id = $uuid(id);
 	var cmp = $e(id);
-	if (cmp && zk.isRealVisible(cmp)) {
+	if (cmp && zk.isRealVisible(cmp, true)) {
 		zkVld._errInfo = {id: id, html: html};
 		setTimeout(zkVld._errbox, 5);
 	}
@@ -191,7 +191,7 @@ zkVld._errbox = function () {
 		zk.addClass($real(cmp), "text-invalid");
 	}
 
-	if (!zk.isRealVisible(cmp)) return; //don't show the erro box
+	if (!zk.isRealVisible(cmp, true)) return; //don't show the erro box
 
 	if (getZKAttr(cmp, "srvald") == "custom")
 		return; //don't show the default error box if custom
@@ -205,7 +205,7 @@ zkVld._errbox = function () {
 	zkVld._ebs.push(boxid);
 
 	if (!zkVld._cnt) zkVld._cnt = 0;
-	box.style.zIndex = 70000 + zkVld._cnt++;
+	box.style.zIndex = $int(Element.getStyle(box ,"z-index")) + (++zkVld._cnt);
 	if (cmp) {
 		var ofs = zk.revisedOffset(cmp), wd = cmp.offsetWidth,
 			hgh = cmp.offsetHeight, atTop;
@@ -340,7 +340,7 @@ zkVld.uncover = function (el) {
 		for (var j = 0, cl = ctags.length; j < cl; ++j) {
 			var els = document.getElementsByTagName(ctags[j]);
 			for (var k = 0, elen = els.length; k < elen; k++)
-				if (zk.isRealVisible(els[k]))
+				if (zk.shallHideDisabled(els[k]) && zk.isRealVisible(els[k], true))
 					zkVld._uncover(box, els[k], true);
 		}
 	}

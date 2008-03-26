@@ -1,5 +1,5 @@
 <window title="constraints depends on two component" border="normal">
-	Bug 1701986
+	Bug 1701986: The error msgbox should disappear when error is corrected.
 	<zscript>
 		<![CDATA[
 Constraint ctt = new Constraint() {

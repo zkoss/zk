@@ -33,4 +33,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
 		}</attribute>
 	</button>
+
+And the following must be arg1 (if included by include.zul): ${requestScope.abc}
 </window>

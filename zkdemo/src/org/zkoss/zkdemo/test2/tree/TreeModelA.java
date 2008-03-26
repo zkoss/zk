@@ -41,6 +41,7 @@ public class TreeModelA extends AbstractTreeModel{
 		super(root);
 	}
 	
+	
 	//-- TreeModel --//
 	public int getChildCount(Object parent) {
 		if(isLeaf(parent))

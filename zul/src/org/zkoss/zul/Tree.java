@@ -39,6 +39,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -65,6 +66,8 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Tree extends XulElement {	
+	private static final Log log = Log.lookup(Tree.class);
+
 	private transient Treecols _treecols;
 	private transient Treefoot _treefoot;
 	private transient Treechildren _treechildren;
@@ -86,6 +89,12 @@ public class Tree extends XulElement {
 	private transient boolean _noSmartUpdate;
 	private String _innerWidth = "100%";
 
+	private TreeModel _model;
+	private TreeitemRenderer _renderer;	
+	private transient TreeDataListener _dataListener;
+	private boolean _fixedLayout;
+	
+
 	public Tree() {
 		init();
 		setSclass("tree");
@@ -105,6 +114,32 @@ public class Tree extends XulElement {
 		};
 	}
 
+	/**
+	 * Sets the outline of grid whether is fixed layout.
+	 * If true, the outline of grid will be depended on browser. It means, we don't 
+	 * calculate the width of each cell. Otherwise, the outline will count on the content of body.
+	 * In other words, the outline of grid is like ZK 2.4.1 version that the header's width is only for reference.
+	 * 
+	 * <p> You can also specify the "fixed-layout" attribute of component in lang-addon.xml directly, it's a top priority. 
+	 * @since 3.0.4
+	 */
+	public void setFixedLayout(boolean fixedLayout) {
+		if(_fixedLayout != fixedLayout) {
+			_fixedLayout = fixedLayout;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns the outline of grid whether is fixed layout.
+	 * <p>Default: false.
+	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
+	 * @since 3.0.4
+	 */
+	public boolean isFixedLayout() {
+		final String s = (String) getAttribute("fixed-layout");
+		return s != null ? Boolean.parseBoolean(s) : _fixedLayout;
+	}
+	
 	/** Returns the treecols that this tree owns (might null).
 	 */
 	public Treecols getTreecols() {
@@ -296,6 +331,30 @@ public class Tree extends XulElement {
 			else smartUpdate("z.multiple", _multiple);
 		}
 	}
+
+	/** Sets the active page in which the specified item is.
+	 * The active page will become the page that contains the specified item.
+	 *
+	 * @param item the item to show. If the item is null or doesn't belong
+	 * to the same tree, nothing happens.
+	 * @since 3.0.4
+	 * @see Treechildren#setActivePage
+	 */
+	public void setActivePage(Treeitem item) {
+		if (item != null && item.getTree() == this) {
+			final Treechildren tc = (Treechildren)item.getParent();
+			final int pgsz = tc.getPageSize();
+			if (pgsz > 0 && tc.getChildren().size() > pgsz) {
+				int j = 0;
+				for (Iterator it = tc.getChildren().iterator(); it.hasNext(); ++j)
+					if (it.next() == item) {
+						tc.setActivePage(j /pgsz);
+						break;
+					}
+			}
+		}
+	}
+
 	/** Returns the ID of the selected item (it is stored as the z.selId
 	 * attribute of the tree).
 	 */
@@ -350,6 +409,8 @@ public class Tree extends XulElement {
 				if (tr != null)
 					smartUpdate("select", tr.getUuid());
 			}
+
+			setActivePage(item);
 		}
 	}
 	/** Selects the given item, without deselecting any other items
@@ -770,6 +831,8 @@ public class Tree extends XulElement {
 				HTMLs.appendAttribute(sb, "z.pgsz", tc.getPageSize());
 			}
 		}
+
+		HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
 		return sb.toString();
 	}
 
@@ -785,7 +848,10 @@ public class Tree extends XulElement {
 		if (_treefoot != null) ++cnt;
 		if (_treechildren != null) ++cnt;
 		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
-
+		if(clone._model != null){
+			clone._dataListener = null;
+			clone.initDataListener();
+		}
 		return clone;
 	}
 	/** @param cnt # of children that need special handling (used for optimization).
@@ -831,6 +897,8 @@ public class Tree extends XulElement {
 		init();
 
 		afterUnmarshal(-1, -1);
+		
+		if (_model != null) initDataListener();
 	}
 
 	//-- ComponentCtrl --//
@@ -838,50 +906,51 @@ public class Tree extends XulElement {
 		return new ExtraCtrl();
 	}
 	
-	// TODO AREA JEFF ADDED
-	
-	private static final Log log = Log.lookup(Tree.class);
-	
-	private TreeModel _model;
-	
-	private TreeitemRenderer _renderer;
-	
-	private TreeDataListener _dataListener;
-	
 	/*
 	 * Handles when the tree model's content changed 
+	 * <p>Author: jeffliu
 	 */
 	private void onTreeDataChange(TreeDataEvent event){	
-		//if the treepaht is empty, render tree's treechildren
-		Object data = event.getParent();
-		Component parent = getChildByNode(data);
-		int indexFrom = event.getIndexFrom();
-		int indexTo = event.getIndexTo();
+		//if the treeparent is empty, render tree's treechildren
+		Object node = event.getParent();
+		Component parent = getChildByNode(node);
 		/* 
 		 * Loop through indexes array
 		 * if INTERVAL_REMOVED, from end to beginning
+		 * 
+		 * 2008/02/12 --- issue: [ 1884112 ] 
+		 * When getChildByNode returns null, do nothing
 		 */
-		switch (event.getType()) {
-		case TreeDataEvent.INTERVAL_ADDED:
-			for(int i=indexFrom;i<=indexTo;i++)
-				onTreeDataInsert(parent,data,i);
-			break;
-		case TreeDataEvent.INTERVAL_REMOVED:
-			for(int i=indexTo;i>=indexFrom;i--)
-				onTreeDataRemoved(parent,data,i);
-			break;
-		case TreeDataEvent.CONTENTS_CHANGED:
-			for(int i=indexFrom;i<=indexTo;i++)
-				onTreeDataContentChanged(parent,data,i);
-			break;
-		}
-			
+		if(parent != null &&
+		(!(parent instanceof Treeitem) || ((Treeitem)parent).isLoaded())){
+			int indexFrom = event.getIndexFrom();
+			int indexTo = event.getIndexTo();
+			switch (event.getType()) {
+			case TreeDataEvent.INTERVAL_ADDED:
+				for(int i=indexFrom;i<=indexTo;i++)
+					onTreeDataInsert(parent,node,i);
+				break;
+			case TreeDataEvent.INTERVAL_REMOVED:
+				for(int i=indexTo;i>=indexFrom;i--)
+					onTreeDataRemoved(parent,node,i);
+				break;
+			case TreeDataEvent.CONTENTS_CHANGED:
+				for(int i=indexFrom;i<=indexTo;i++)
+					onTreeDataContentChanged(parent,node,i);
+				break;
+			}
+		}			
 	}
-	
-	private Treechildren getParentTreechildren(Object parent){
-		final Treechildren ch = (parent instanceof Tree) ?
+
+	/** @param parent either a Tree or Treeitem instance. */
+	private static Treechildren treechildrenOf(Component parent){
+		Treechildren tc = (parent instanceof Tree) ?
 			((Tree)parent).getTreechildren() : ((Treeitem)parent).getTreechildren();
-		return (ch != null) ? ch : new Treechildren();
+		if (tc == null) {
+			tc = new Treechildren();
+			tc.setParent(parent);
+		}
+		return tc;
 	}
 	
 	/*
@@ -891,79 +960,59 @@ public class Tree extends XulElement {
 		/* 	Find the sibling to insertBefore;
 		 * 	if there is no sibling or new item is inserted at end.
 		 */
-		Treeitem newTi = new Treeitem();
-		Treechildren ch= getParentTreechildren(parent);
-		renderItem(newTi,_model.getChild(node,index));
-		List siblings = ch.getChildren();
+		Treeitem newTi = newUnloadedItem();
+		Treechildren tc= treechildrenOf(parent);
+		List siblings = tc.getChildren();
 		//if there is no sibling or new item is inserted at end.
 		if(siblings.size()==0 || index == siblings.size() ){
-			ch.insertBefore(newTi, null);
+			tc.insertBefore(newTi, null);
 		}else{
-			ch.insertBefore(newTi, (Treeitem)siblings.get(index));
+			tc.insertBefore(newTi, (Treeitem)siblings.get(index));
 		}
-		ch.setParent(parent);
-		//if parent is Treeitem, setOpen
-		if(parent instanceof Treeitem)
-			((Treeitem)parent).setOpen(true);
+
+		renderChangedItem(newTi,_model.getChild(node,index));
 	}
 		
 	/*
 	 * Handle event that child is removed
 	 */
 	private void onTreeDataRemoved(Component parent,Object node, int index){
-		List items = getParentTreechildren(parent).getChildren();		
+		final Treechildren tc = treechildrenOf(parent);
+		final List items = tc.getChildren();		
 		if(items.size()>1){
 			((Treeitem)items.get(index)).detach();
 		}else{
-			getParentTreechildren(parent).detach();
+			tc.detach();
 		}
-		//if parent is Treeitem, setOpen
-		if(parent instanceof Treeitem)
-			((Treeitem)parent).setOpen(true);
 	}
 	
 	/*
 	 * Handle event that child's content is changed
 	 */
 	private void onTreeDataContentChanged(Component parent,Object node, int index){
-		List items = getParentTreechildren(parent).getChildren();		
-	
-		/* 
-		 * find the associated tree compoent(parent)
-		 * notice:
-		 * if parent is root
+		List items = treechildrenOf(parent).getChildren();		
+
+		/*
+		 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
+		 * When I update a children node data of the TreeModel , and fire a 
+		 * CONTENTS_CHANGED event, it will throw a IndexOutOfBoundsException , If a 
+		 * node doesn't open yet or not load yet.
+		 * 
+		 * if parent is loaded, change content. 
+		 * else do nothing
 		 */
-		if(parent instanceof Tree)
-			renderTree();
-		else{
-			/*
-			 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
-			 * When I update a children node data of the TreeModel , and fire a 
-			 * CONTENTS_CHANGED event, it will throw a IndexOutOfBoundsException , If a 
-			 * node doesn't open yet or not load yet.
-			 * 
-			 * if parent is loaded, change content. 
-			 * else do nothing
-			 */
-			if(items.size()>0){
-				Treeitem ti = (Treeitem)items.get(index);
-				/*
-				 * When content of treeitem is changed, the treeitem is rendered as 
-				 * unloaded item.
-				 * 2007/11/05 --- issue: Can not dynamically update content of treeitem from treemodel
-				 */
-				ti.setLoaded(false);
-				renderItem(ti,_model.getChild(node,index));
-				ti.setOpen(true);
-			}
-		}
+		if(!items.isEmpty())
+			renderChangedItem(
+				(Treeitem)items.get(index), _model.getChild(node,index));
 	}
 	
 	/**
 	 * Return the Tree or Treeitem component by a given associated node in model.<br>
 	 * This implmentation calls {@link TreeModel#getPath} method to locate assoicated
 	 * Treeitem (or Tree) via path. You can override this method to speed up 
-	 * performance if possible.
+	 * performance if possible. 
+	 * Return null, if the Tree or Treeitem is not yet rendered.
+	 * <p>Author: jeffliu
 	 * @since 3.0.0
 	 */
 	protected Component getChildByNode(Object node){
@@ -973,9 +1022,23 @@ public class Tree extends XulElement {
 		if(path == null || path.length == 0)
 			return this;
 		else{
-			Treeitem ti = (Treeitem)this.getTreechildren().getChildren().get(path[0]);
-			for(int i=1; i<path.length; i++){
-				ti = (Treeitem) ti.getTreechildren().getChildren().get(path[i]);
+			
+			Treeitem ti = null;
+			List children =null;
+			for(int i=0; i<path.length; i++){
+				if(i==0){
+					children = this.getTreechildren().getChildren(); 
+				}else{
+					children = ti.getTreechildren().getChildren();
+				}
+				/*
+				 * If the children are not rendered yet, return null
+				 */
+				if(children.size()>path[i]&&0<=path[i]){
+					ti = (Treeitem) children.get(path[i]);
+				}else{
+					return null;
+				}
 			}
 			return ti;
 		}
@@ -983,6 +1046,7 @@ public class Tree extends XulElement {
 	
 	/*
 	 * Initial Tree data listener
+	 * <p>Author: jeffliu
 	 */
 	private void initDataListener() {
 		if (_dataListener == null)
@@ -997,20 +1061,40 @@ public class Tree extends XulElement {
 	
 	/** Sets the tree model associated with this tree. 
 	 *
+	 * <p>Note: changing a render will not cause the tree to re-render.
+	 * If you want it to re-render, you could assign the same model again 
+	 * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
+	 * 
+	 * <p>Author: jeffliu
 	 * @param model the tree model to associate, or null to dis-associate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.0
 	 */
 	public void setModel(TreeModel model) throws Exception{
-		_model = model;
-		syncModel();
-		initDataListener();
+		if (model != null) {
+			if (_model != model) {
+				if (_model != null) {
+					_model.removeTreeDataListener(_dataListener);
+				} else {
+					getItems().clear();
+				}
+
+				_model = model;
+				initDataListener();
+			}
+			syncModel();
+		} else if (_model != null) {
+			_model.removeTreeDataListener(_dataListener);
+			_model = null;
+			getItems().clear();
+		}
 	}
 	
 	//--TreeModel dependent codes--//
 	/** Returns the list model associated with this tree, or null
 	 * if this tree is not associated with any tree data model.
+	 * <p>Author: jeffliu
 	 * @return the list model associated with this tree
 	 * @since 3.0.0
 	 */
@@ -1019,10 +1103,9 @@ public class Tree extends XulElement {
 	}
 	
 	/** Synchronizes the tree to be consistent with the specified model.
+	 * <p>Author: jeffliu
 	 */
 	private void syncModel() throws Exception{
-		if (_renderer == null)
-			_renderer = getRealRenderer();
 		renderTree();
 	}
 	
@@ -1033,6 +1116,7 @@ public class Tree extends XulElement {
 	 * If you want it to re-render, you could assign the same model again 
 	 * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
 	 *
+	 * <p>Author: jeffliu
 	 * @param renderer the renderer, or null to use the default.
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.0
@@ -1055,46 +1139,52 @@ public class Tree extends XulElement {
 	 * Notice: _model.getRoot() is mapped to Tree, not first Treeitem
 	 */
 	private void renderTree(){
-		if(_treechildren != null)
-			_treechildren =null;
-		Treechildren children = new Treechildren();
-		children.setParent(this);
-		Object node = _model.getRoot();
-		int childCount = _model.getChildCount(node);
-		for(int i=0; i< childCount;i++ ){
-			renderTreeChild(node,i);
+		if(_treechildren == null) {
+			Treechildren children = new Treechildren();
+			children.setParent(this);
+		} else {
+			_treechildren.getChildren().clear();
 		}
-	}
+	
+		Object node = _model.getRoot();
+		final Renderer renderer = new Renderer();
+		try {
+			renderChildren(renderer, _treechildren, node);
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+}
 	
 	/*
-	 * Helper method for renderTree
+	 * Renders the direct children for the specifed parent
 	 */
-	private void renderTreeChild(Object node,int index){
-		Treeitem ti = new Treeitem();
-		Object data = _model.getChild(node, index);
-		try {
-			_renderer.render(ti, data);
-		} catch (Throwable ex) {
-			try {
-				ti.setLabel(Exceptions.getMessage(ex));
-			} catch (Throwable t) {
-				log.error(t);
+	private void renderChildren(Renderer renderer, Treechildren parent,
+	Object node) throws Throwable {
+		for(int i = 0; i < _model.getChildCount(node); i++) {
+			Treeitem ti = newUnloadedItem();
+			ti.setParent(parent);
+			Object childNode = _model.getChild(node, i);
+			renderer.render(ti, childNode);
+			if(!_model.isLeaf(childNode)){	
+				Treechildren tc = new Treechildren();
+				tc.setParent(ti);
 			}
-			ti.setOpen(true);
 		}
-		if(!_model.isLeaf(data)){	
-			Treechildren ch = new Treechildren();
-			ch.setParent(ti);
-		}
-		ti.setParent(_treechildren);
+	}
+	private Treeitem newUnloadedItem() {
+		Treeitem ti = new Treeitem();
+		ti.setOpen(false);
+		return ti;
 	}
 	
 	private static final TreeitemRenderer getDefaultItemRenderer() {
 		return _defRend;
 	}
 	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
-		public void render(Treeitem ti, Object data){
-			Treecell tc = new Treecell(data.toString());
+		public void render(Treeitem ti, Object node){
+			Treecell tc = new Treecell(Objects.toString(node));
 			Treerow tr = null;
 			if(ti.getTreerow()==null){
 				tr = new Treerow();
@@ -1104,7 +1194,6 @@ public class Tree extends XulElement {
 				tr.getChildren().clear();
 			}		
 			tc.setParent(tr);
-			ti.setOpen(false);
 		}
 	};
 	/** Returns the renderer used to render items.
@@ -1121,16 +1210,13 @@ public class Tree extends XulElement {
 			_renderer = getRealRenderer();
 		}
 		
-		private void render(Treeitem item) throws Throwable {
-			if (!item.isOpen())
-				return; //nothing to do
+		private void render(Treeitem item, Object node) throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
 			}
 			
 			try {
-				Object node = getAssociatedNode(item, Tree.this);
 				_renderer.render(item, node);
 			} catch (Throwable ex) {
 				try {
@@ -1138,11 +1224,8 @@ public class Tree extends XulElement {
 				} catch (Throwable t) {
 					log.error(t);
 				}
-				item.setOpen(true);
 				throw ex;
 			}
-
-			item.setOpen(true);
 			_rendered = true;
 		}
 		
@@ -1163,107 +1246,120 @@ public class Tree extends XulElement {
 		}
 	}
 	
+	/** Renders the specified {@link Treeitem}, if not loaded yet,
+	 * with {@link #getTreeitemRenderer}.
+	 *
+	 * <p>It does nothing if {@link #getModel} returns null.
+	 * <p>To unload treeitem, use {@link Treeitem#unload()}.
+	 * @see #renderItems
+	 * @since 3.0.0
+	 */
+	public void renderItem(Treeitem item) {
+		if(_model != null) {
+			final Renderer renderer = new Renderer();
+			try {
+				renderItem0(renderer, item);
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
+		}
+	}
+	
+	/** Renders the specified {@link Treeitem}, if not loaded yet,
+	 * with {@link #getTreeitemRenderer}.
+	 *
+	 * <p>It does nothing if {@link #getModel} returns null.
+	 *
+	 *<p>Note: Since the corresponding node is given,
+	 * This method has better performance than 
+	 * renderItem(Treeitem item) due to not searching for its 
+	 * corresponding node.
+	 * <p>To unload treeitem, use {@link Treeitem#unload()}.
+	 * @see #renderItems
+	 * @since 3.0.0
+	 */
+	public void renderItem(Treeitem item, Object node) {
+		if(_model != null) {
+			final Renderer renderer = new Renderer();
+			try {
+				renderItem0(renderer, item, node);
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
+		}
+	}
+	/** Note: it doesn't call render doCatch/doFinally */
+	private void renderItem0(Renderer renderer, Treeitem item)
+	throws Throwable {
+		renderItem0(renderer, item, getAssociatedNode(item,this));
+	}	
+	/** Note: it doesn't call render doCatch/doFinally */
+	private void renderItem0(Renderer renderer, Treeitem item, Object node)
+	throws Throwable {
+		if(item.isLoaded()) //all direct children are loaded
+			return;
+
+		/*
+		 * After modified the node in tree model, if node is leaf, 
+		 * its treechildren is needed to be dropped.
+		 */
+		Treechildren tc = item.getTreechildren();
+		if(_model.isLeaf(node)){
+			if(tc != null)
+				tc.detach(); //just in case
+
+			//no children to render
+			//Note item already renderred, so no need:
+			//renderer.render(item, node);
+		}else{
+			if (tc != null) tc.getChildren().clear(); //just in case
+			else {
+				tc = new Treechildren();
+				tc.setParent(item);
+			}
+
+			renderChildren(renderer, tc, node);
+		}
+		item.setLoaded(true);
+	}
+	
+	private void renderChangedItem(Treeitem item, Object node){
+		/*
+		 * After modified the node in tree model, if node is leaf, 
+		 * its treechildren is needed to be dropped.
+		 */
+		if(_model != null) {
+			Treechildren tc = item.getTreechildren();
+			if(_model.isLeaf(node)){
+				if(tc != null)
+					tc.detach(); //just in case
+			}else{
+				if (tc == null) {
+					tc = new Treechildren();
+					tc.setParent(item);
+				}
+			}
+
+			final Renderer renderer = new Renderer();
+			try {
+				renderer.render(item, node); //re-render
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
+			}
+		}
+	}
+
 	/** Renders the specified {@link Treeitem} if not loaded yet,
 	 * with {@link #getTreeitemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
-	 *
-	 * @see #renderItems
-	 * @since 3.0.0
-	 */
-	public void renderItem(Treeitem item){
-		if(_model ==null) return;
-		final Renderer renderer = new Renderer();
-		try {
-			renderItem(item,getAssociatedNode(item,this));
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
-		}	
-	}
-	
-	/** Renders the specified {@link Treeitem} with data if not loaded yet,
-	 * with {@link #getTreeitemRenderer}.
-	 *
-	 * <p>It does nothing if {@link #getModel} returns null.
-	 *
-	 *<p>Note: Since the corresponding data is given,
-	 * This method has better performance than 
-	 * renderItem(Treeitem item) due to not searching for its 
-	 * corresponding data. 
-	 * @see #renderItems
-	 * @since 3.0.0
-	 * 
-	 * 
-	 */
-	public void renderItem(Treeitem item, Object data){
-		if(_model ==null) return;
-		final Renderer renderer = new Renderer();
-		try {
-			dfRenderItem(data,item);
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
-		}
-	}
-	
-	/**
-	 * Render the treetiem with given node and its children
-	 */
-	private void  dfRenderItem(Object node, Treeitem item) throws Exception
-	{
-		//if treeitem is not loaded, load it
-		if(!item.isLoaded()) {
-			Treechildren children = null;
-			
-			if(item.getTreechildren()!=null){
-				children = item.getTreechildren();
-				/* 
-				 * When the treeitem is rendered after 1st time, dropped all
-				 * the descending treeitems first.
-				*/
-				if(children.getItemCount()>0)
-					children.getChildren().clear();
-			}else{
-				children = new Treechildren();
-				_renderer.render(item, node);
-			}
-			/*
-			 * After modified the node in tree model, if node is leaf, 
-			 * its treechildren is needed to be dropped.
-			 */
-			if(_model.isLeaf(node)){
-				_renderer.render(item, node);
-				if(item.getTreechildren()!=null)
-					item.getTreechildren().detach();
-			}else{
-				/*
-				 * render children of item
-				 */
-				for(int i=0; i< _model.getChildCount(node);i++ ){
-					Treeitem ti = new Treeitem();
-					Object data = _model.getChild(node, i);
-					_renderer.render(ti, data);
-					if(!_model.isLeaf(data)){	
-						Treechildren ch = new Treechildren();
-						ch.setParent(ti);
-					}
-					ti.setParent(children);
-				}
-				children.setParent(item);
-			}
-			//After the treeitem is loaded with data, set treeitem to be loaded
-			item.setLoaded(true);
-		}
-	}
-	
-	/** Renders the specified {@link Treeitem}s with data if not loaded yet,
-	 * with {@link #getTreeitemRenderer}.
-	 *
-	 * <p>It does nothing if {@link #getModel} returns null.
-	 *
+	 * <p>To unload treeitem, with {@link Treeitem#unload()}.
 	 * @see #renderItem
 	 * @since 3.0.0
 	 */
@@ -1276,9 +1372,7 @@ public class Tree extends XulElement {
 		final Renderer renderer = new Renderer();
 		try {
 			for (Iterator it = items.iterator(); it.hasNext();){
-				Treeitem item = (Treeitem)it.next();
-				Object data = getAssociatedNode(item,this);
-				dfRenderItem(data,item);
+				renderItem0(renderer, (Treeitem)it.next());
 			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
@@ -1317,8 +1411,7 @@ public class Tree extends XulElement {
 	 * @return the node from tree by given path
 	 * @since 3.0.0
 	 */
-	private Object getNodeByPath(List path, Object root)
-	{
+	private Object getNodeByPath(List path, Object root) {
 		Object node = root;
 		int pathSize = path.size()-1;
 		for(int i=pathSize; i >= 0; i--){
@@ -1330,6 +1423,7 @@ public class Tree extends XulElement {
 	/**
 	 * Load treeitems through path <b>path</b>
 	 * <br>Note: By using this method, all treeitems in path will be rendered
+	 * and opened ({@link Treeitem#setOpen}).
 	 * @param path - an int[] path, see {@link TreeModel#getPath} 
 	 * @return the treeitem from tree by given path
 	 * @since 3.0.0
@@ -1346,10 +1440,30 @@ public class Tree extends XulElement {
 		for(int i=0; i<path.length; i++){
 			if(path[i] <0 || path[i] > children.size())
 				return null;
+			Treeitem parentTi = ti;
+			
 			ti = (Treeitem) children.get(path[i]);
-			renderItem(ti);
+			
 			if(i<path.length-1) 
 				ti.setOpen(true);
+			else if(i==path.length-1){
+				//active page
+				//if parentTi is null, parentTi is Tree.
+				Treechildren ch = null;
+				if(parentTi ==null)
+					ch = this.getTreechildren();
+				else
+					ch = parentTi.getTreechildren();
+				int pgSize = ch.getPageSize();
+				/*
+				 * pgSize is -1 if no limitation.
+				 */
+				if(pgSize >0){
+					ch.setActivePage(path[i]/pgSize);
+				}
+			}
+			
+			
 			if(ti.getTreechildren()!=null){
 				children = ti.getTreechildren().getChildren();
 			}else{
@@ -1368,7 +1482,11 @@ public class Tree extends XulElement {
 	 */
 	
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, Selectable {
+	implements InnerWidth, Selectable, ChildChangedAware {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return !isFixedLayout();
+		}
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;

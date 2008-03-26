@@ -24,14 +24,6 @@ zkWnd._clean2 = {}; //Map(id, mode): to be cleanup the modal effect
 zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
 zkWnd.init = function (cmp) {
-	if (getZKAttr(cmp, "visible") == "true")
-		cmp.style.display = "";
-			//turn it on since Window.getRealStyle turn it off to
-			//have the better effect if the window contains a lot of items
-
-	zkWnd._fixHgh(cmp);
-	cmp.fnResize = function () {zkWnd._fixHgh(cmp)};
-	zk.addOnResize(cmp.fnResize);
 	var btn = $e(cmp.id + "!close");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
@@ -50,23 +42,42 @@ zkWnd.init = function (cmp) {
 	zkWnd.setSizable(cmp, zkWnd.sizable(cmp));	
 	
 	//Bug #1840866
-	var mode = getZKAttr(cmp, "mode");
-	if (mode == "modal" || mode == "highlighted")
-		zkWnd._initMode(cmp);
-	else 
-		zk.addInitLater(function () {zkWnd._initMode(cmp);}, true);	//Bug #1830668 we have to invoke initMode later.
+	zkWnd._initMode(cmp);
+		// But, for a Sun's bug, we need to invoke initMode directly to prevent 
+		// that the outline of page is gone.
+		// Note: we fixed bug #1830668 bug by using addInitLater to invoke
+		// _initMode later, but, with ZK 3.0.4, the problem is already resolved
+		// without using addInitLater
 };
 zkWnd.cleanup = function (cmp) {
 	zkWnd.setSizable(cmp, false);
 	zkWnd._cleanMode(cmp);
-	zk.rmOnResize(cmp.fnResize);
 };
 /** Fixed the content div's height. */
-zkWnd.onVisi = zkWnd._fixHgh = function (cmp) {
+zkWnd.onVisi = zkWnd.onSize = zkWnd._fixHgh = function (cmp) {
 	var hgh = cmp.style.height;
+	var cave = $e(cmp.id + "!cave");
+	
+	// But #1895804 if the child is a borderlayout component, we don't need to recompute the height. 
+	if(cave && cave.firstChild) {
+		var el = cave.firstChild;
+		while (el && el.nodeType != 1) {
+			el = el.nextSibling;
+		}
+		if (el && $type(el) == "BorderLayout") {
+			cave.style.height = "100%";
+			return;
+		}
+	}
 	if (hgh && hgh != "auto") {
 		var n = $e(cmp.id + "!cave");
-		if (n) zk.setOffsetHeight(n, zk.getVflexHeight(n));
+		if (n) {
+			if (zk.ie6Only) n.style.height = ""; //Bug 1914104
+			zk.setOffsetHeight(n, zk.getVflexHeight(n));
+			 //Bug 1914104: we have to clean up for particular case with IE6
+			 //but we cannot use % everywhere. Otherwise, it introduced
+			 //unnecessary vertical bar
+		}
 	}
 };
 zkWnd._embedded = function (cmp) {
@@ -176,12 +187,11 @@ zkWnd.setAttr = function (cmp, nm, val) {
 	case "style.height":
 		zkau.setAttr(cmp, nm, val);
 		zkWnd._fixHgh(cmp);
-		if (nm == "style.height") {
-			zk.onResize(0, cmp);// Note: IE6 is broken, because its offsetHeight doesn't update.	
-		}
+		if (nm == "style.height")
+			zk.onSizeAt(cmp); // Note: IE6 is broken, because its offsetHeight doesn't update.
 		return true;
 	case "style.width":
-		zk.onResize(0, cmp);
+		zk.onSizeAt(cmp);
 		return false;
 	case "style.top":
 	case "style.left":
@@ -387,8 +397,11 @@ zkWnd._ghostsizing = function (dg, ghosting, pointer) {
 zkWnd._initMode = function (cmp) {
 	var mode = getZKAttr(cmp, "mode");
 	var replace = zkWnd._clean2[cmp.id] == mode;
-	if (replace) //replace with the same mode
+	if (replace) {//replace with the same mode
 		delete zkWnd._clean2[cmp.id]; //and _doXxx will handle it
+		if (getZKAttr(cmp, "visible") == "true")
+			cmp.style.visibility = "visible";
+	}
 	else if (zkWnd._clean2[cmp.id])
 		zkWnd._cleanMode2(cmp.id, true); //replace with a new mode
 	switch (mode) {
@@ -438,6 +451,11 @@ zkWnd._cleanMode2 = function (uuid, replace) {
 zkWnd._show = function (cmp) {
 	if (getZKAttr(cmp, "conshow")) //enforce the anima effect, if any
 		cmp.style.display = "none";
+		
+	if (getZKAttr(cmp, "visible") == "true")
+		cmp.style.visibility = "visible";
+			//turn it on since Window.getRealStyle turn it off to
+			//have the better effect if the window contains a lot of items
 	zk.show(cmp);
 };
 
@@ -491,11 +509,11 @@ zkWnd._doOverpop = function (cmp, storage, replace) {
 	storage.push(cmp.id); //store ID because it might cease before endPopup
 	zkau.hideCovered();
 
-	// Bug #1881190 : we need to use this variable to check whether it is visible really.
-	if (getZKAttr(cmp, "visible") == "true") //it happens when closing a modal (becomes overlap)
+	if (zk.isVisible(cmp)) //it happens when closing a modal (becomes overlap)
 		zkWnd._show(cmp);
 
-	zk.asyncFocusDown(cmp.id);
+	//zk.asyncFocusDown(cmp.id, 45); //don't exceed 50 (see au's focus command)
+	//20080215 Tom: don't change focus if overlapped (more reasonable spec)
 };
 zkWnd._endOverpop = function (uuid, storage, replace) {
 	storage.remove(uuid);		
@@ -597,7 +615,7 @@ zkWnd._doModal = function (cmp, replace) {
 	}
 
 	zkWnd._float(cmp);
-	zk.asyncFocusDown(cmp.id);
+	zk.asyncFocusDown(cmp.id, 45); //don't exceed 50 (see au's focus command)
 
 	zkWnd._modal2[cmp.id] = true;
 	setTimeout("zkWnd._doModal2('"+cmp.id+"')", 5); //process it later for better responsive
@@ -639,13 +657,13 @@ zkWnd._endModal = function (uuid, replace) {
 		var last = $e(lastid);
 		if (last) {
 			zk.restoreDisabled(last);
-			if (!prevfocusId && !zk.inAsyncFocus) zk.asyncFocusDown(lastid, 2);
+			if (!prevfocusId && !zk.inAsyncFocus) zk.asyncFocusDown(lastid, 20);
 		}
 	}
 
 	if (!replace && cmp) zkWnd._stick(cmp);
 
-	if (prevfocusId && !zk.inAsyncFocus) zk.asyncFocus(prevfocusId, 2);
+	if (prevfocusId && !zk.inAsyncFocus) zk.asyncFocus(prevfocusId, 20);
 };
 
 /** Handles onsize to re-position mask. */
@@ -689,12 +707,22 @@ zkWnd._float = function (cmp) {
 		if (handle) {
 			cmp.style.position = "absolute"; //just in case
 			zul.initMovable(cmp, {
-				handle: handle, starteffect: zkau.closeFloats,
+				handle: handle, starteffect: zkWnd._startMove,
 				change: zkau.hideCovered,
 				endeffect: zkWnd._onWndMove});
 			//we don't use options.change because it is called too frequently
 		}
 	}
+};
+/**
+ * For bug #1568393: we have to change the percetage to the pixel.
+ */
+zkWnd._startMove = function (cmp, handle) {
+	if(cmp.style.top && cmp.style.top.indexOf("%") >= 0)
+		 cmp.style.top = cmp.offsetTop + "px";
+	if(cmp.style.left && cmp.style.left.indexOf("%") >= 0)
+		 cmp.style.left = cmp.offsetLeft + "px";
+	zkau.closeFloats(cmp, handle);
 };
 /** Makes a window un-movable. */
 zkWnd._stick = function (cmp) {

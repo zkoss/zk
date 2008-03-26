@@ -520,6 +520,57 @@ public interface Page extends IdSpace {
 	public void setZScriptLanguage(String zslang)
 	throws InterpreterNotFoundException;
 
+	/** Returns the implementation of the expression factory that
+	 * is used by this page, or null if
+	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * is used.
+	 *
+	 * <p>Default: null.
+	 *
+	 * @see #setExpressionFactoryClass
+	 * @since 3.0.4
+	 */
+	public Class getExpressionFactoryClass();
+	/** Sets the implementation of the expression factory that
+	 * is used by this page.
+	 *
+	 * @param expfcls the class that implements
+	 * {@link org.zkoss.xel.ExpressionFactory},
+	 * If null, {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * is used.
+	 * @see #getExpressionFactoryClass
+	 * @since 3.0.4
+	 */
+	public void setExpressionFactoryClass(Class expfcls);
+
+	/** Returns if this page is a complete page.
+	 * By complete we mean the page has everything that the client expects.
+	 * For example, for HTML browsers, the page will generate
+	 * the HTML, HEAD and BODY tags.
+	 *
+	 * <p>Default: false. It means that we assume a page is complete
+	 * if and only if it is <em>not</em> included by other page.
+	 *
+	 * <p>If you have a page that has a complete HTML page and
+	 * it is included by other page, you have to specify the complete flag
+	 * to be true.
+	 * @since 3.0.4
+	 */
+	public boolean isComplete();
+	/** Sets if the page is a complete page.
+	 *
+	 * <p>Default: false. It means a page is complete if and only if it
+	 * is <em>not</em> included by other page.
+	 *
+	 * @param complete whether the page is complete.
+	 * If true, this page is assumed to be complete no matter it is included
+	 * or not. If false, this page is assumed to be complete if it is
+	 * not included by other page.
+	 * @see #isComplete
+	 * @since 3.0.4
+	 */
+	public void setComplete(boolean complete);
+
 	//metainfo//
 	/** Returns the function mapper for resolving XEL functions, or null if
 	 * not available.

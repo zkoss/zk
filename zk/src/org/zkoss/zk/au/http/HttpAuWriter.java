@@ -27,6 +27,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.zkoss.idom.Verifier;
 import org.zkoss.web.servlet.http.Https;
 
 import org.zkoss.zk.ui.Desktop;
@@ -45,8 +46,7 @@ public class HttpAuWriter implements AuWriter{
 	protected static final String OUTPUT_HEAD =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	/** The content type of the output. */
-	protected static final String CONTENT_TYPE =
-		"text/xml;charset=UTF-8";
+	private static final String CONTENT_TYPE = "text/xml;charset=UTF-8";
 
 	/** The writer used to generate the output to.
 	 */
@@ -65,6 +65,10 @@ public class HttpAuWriter implements AuWriter{
 	 */
 	public AuWriter open(Object request, Object response, int timeout)
 	throws IOException {
+		((HttpServletResponse)response).setContentType(CONTENT_TYPE);
+			//Bug 1907640: with Glassfish v1, we cannot change content type
+			//in another thread, so we have to do it here
+
 		_out = new StringWriter();
 		_out.write(OUTPUT_HEAD);
 		_out.write("<rs>\n");
@@ -91,6 +95,8 @@ public class HttpAuWriter implements AuWriter{
 		}
 
 		response.setContentType(CONTENT_TYPE);
+			//we have to set content-type again. otherwise, tomcat might
+			//fail to preserve what is set in open()
 		response.setContentLength(data.length);
 		response.getOutputStream().write(data);
 		response.flushBuffer();
@@ -129,20 +135,48 @@ public class HttpAuWriter implements AuWriter{
 		//20051208: Tom Yeh
 		//The following codes are tricky.
 		//Reason:
-		//1. nested CDATA is not allowed
-		//2. Firefox (1.0.7)'s XML parser cannot handle over 4096 chars
+		//1. Nested CDATA is not allowed
+		//2. Illegal character must be encoded
+		//3. Firefox (1.0.7)'s XML parser cannot handle over 4096 chars
 		//	if CDATA is not used
-		int j = 0;
-		for (int k; (k = data.indexOf("]]>", j)) >= 0;) {
-			encodeByCData(data.substring(j, k), out);
-			out.write("]]&gt;");
-			j = k + 3;
+		int k = 0, len = data.length();
+		for (int j = 0; j < len;) {
+			final char cc = data.charAt(j);
+			if (cc == ']') {
+				if (j + 2 < len && data.charAt(j + 1) == ']'
+				&& data.charAt(j + 2) == '>') { //]]>
+					encodeByCData(data.substring(k, j + 2), out);
+					out.write("&gt;");
+					k = j += 3;
+					continue;
+				}
+			} else if (!Verifier.isXMLCharacter(cc)) {
+				encodeByCData(data.substring(k, j), out);
+				out.write('?');
+					//No way to represent illegal character (&#xn not allowed, either)
+					//FUTURE: consider to use a special escape sequence
+					//and restore it at the client. But, it slows down
+					//the performance and might not be worth
+				k = ++j;
+				continue;
+			}
+			++j;
 		}
-		encodeByCData(data.substring(j), out);
+
+		if (k < len)
+			encodeByCData(data.substring(k), out);
 	}
 	private static void encodeByCData(String data, Writer out)
 	throws IOException {
-		for (int j = data.length(); --j >= 0;) {
+		int j = data.length();
+		if (j > 100) { //Not to scan if it is long
+			out.write("<![CDATA[");
+			out.write(data);
+			out.write("]]>");
+			return;
+		}
+
+		while (--j >= 0) {
 			final char cc = data.charAt(j);
 			if (cc == '<' || cc == '>' || cc == '&') {
 				out.write("<![CDATA[");

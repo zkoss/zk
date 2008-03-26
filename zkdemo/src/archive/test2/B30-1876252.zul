@@ -23,6 +23,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<listitem label="Rows=1" />
 	</listbox>
 	<listbox rows="2">
-		<listitem label="Rows=1" />
+		<listitem label="Rows=2" />
 	</listbox>
 </zk>

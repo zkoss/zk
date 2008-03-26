@@ -33,8 +33,8 @@ When the splitter is dragged, the sibling elements of the splitter are resized.<
 			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
 				<attribute name="value"><![CDATA[
-<hbox spacing="0" width="100%">
-	<vbox height="200px">
+<hbox spacing="0" width="100%" height="200px">
+	<vbox spacing="0" width="100%" height="100%" heights="100px">
 		Column 1-1: The left-top box. To know whether a splitter
 		is collapsed, you can listen to the onOpen event.
 		<splitter collapse="after"/>

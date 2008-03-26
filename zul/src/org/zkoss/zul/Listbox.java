@@ -40,6 +40,8 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.in.GenericCommand;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -47,6 +49,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -134,6 +137,12 @@ public class Listbox extends XulElement {
 	private transient Collection _heads;
 	private int _hdcnt;
 	private String _innerWidth = "100%";
+	/** ROD mold use only*/
+	private String _innerHeight = null,
+	_innerTop = "height:0px;display:none", _innerBottom = "height:0px;display:none";
+	private transient ListboxDrawerEngine _engine;
+	
+	private String _pagingPosition = "bottom";
 	/** The name. */
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
@@ -154,6 +163,7 @@ public class Listbox extends XulElement {
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
+	private boolean _fixedLayout;
 	
 	public Listbox() {
 		setSclass("listbox");
@@ -203,6 +213,31 @@ public class Listbox extends XulElement {
 		_model.addListDataListener(_dataListener);
 	}
 
+	/**
+	 * Sets the outline of grid whether is fixed layout.
+	 * If true, the outline of grid will be depended on browser. It means, we don't 
+	 * calculate the width of each cell. Otherwise, the outline will count on the content of body.
+	 * In other words, the outline of grid is like ZK 2.4.1 version that the header's width is only for reference.
+	 * 
+	 * <p> You can also specify the "fixed-layout" attribute of component in lang-addon.xml directly, it's a top priority. 
+	 * @since 3.0.4
+	 */
+	public void setFixedLayout(boolean fixedLayout) {
+		if(_fixedLayout != fixedLayout) {
+			_fixedLayout = fixedLayout;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns the outline of grid whether is fixed layout.
+	 * <p>Default: false.
+	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
+	 * @since 3.0.4
+	 */
+	public boolean isFixedLayout() {
+		final String s = (String) getAttribute("fixed-layout");
+		return s != null ? Boolean.parseBoolean(s) : _fixedLayout;
+	}
 	/** Returns {@link Listhead} belonging to this listbox, or null
 	 * if no list headers at all.
 	 */
@@ -223,13 +258,71 @@ public class Listbox extends XulElement {
 	public Collection getHeads() {
 		return _heads;
 	}
-
+	/** ROD mold use only.
+	 */
+	/*package*/ final boolean inSpecialMold() {
+		final String mold = (String) getAttribute("special-mold-name");
+		return mold != null && getMold().equals(mold);
+	}
+	
 	/** Returns whether the HTML's select tag is used.
 	 */
 	/*package*/ final boolean inSelectMold() {
 		return "select".equals(getMold());
 	}
-
+	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerHeight(String innerHeight) {
+		if (innerHeight == null) innerHeight = "100%";
+		if (!Objects.equals(_innerHeight, innerHeight)) {
+			_innerHeight = innerHeight;
+		}
+	}
+	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerHeight() {
+		return _innerHeight;
+	}	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerTop(String innerTop) {
+		if (innerTop == null) innerTop = "height:0px;display:none";
+		if (!Objects.equals(_innerTop, innerTop)) {
+			_innerTop = innerTop;
+		}
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerTop() {
+		return _innerTop;
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerBottom(String innerBottom) {
+		if (innerBottom == null) innerBottom = "height:0px;display:none";
+		if (!Objects.equals(_innerBottom, innerBottom)) {
+			_innerBottom = innerBottom;
+		}
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerBottom() {
+		return _innerBottom;
+	}
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.
 	 * <p>Default: false.
@@ -531,6 +624,12 @@ public class Listbox extends XulElement {
 				//On the other hand, it is OK with select-mold since
 				//it invalidates if items are added or removed
 		}
+
+		if (_jsel >= 0 && inPagingMold()) {
+			final int pg = _jsel / getPageSize();
+			if (pg != getActivePage())
+				setActivePage(pg);
+		}
 	}
 
 	/**  Deselects all of the currently selected items and selects
@@ -712,6 +811,30 @@ public class Listbox extends XulElement {
 	}
 
 	//--Paging--//
+	/**
+	 * Sets how to position the paging of listbox at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
+	 * "top", or "both".
+	 * @since 3.0.4
+	 */
+	public void setPagingPosition(String pagingPosition) {
+		if (pagingPosition == null || (!pagingPosition.equals("top") &&
+			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
+			throw new WrongValueException("Unsupported position : "+pagingPosition);
+		if(!Objects.equals(_pagingPosition, pagingPosition)){
+			_pagingPosition = pagingPosition;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns how to position the paging of listbox at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @since 3.0.4
+	 */
+	public String getPagingPosition() {
+		return _pagingPosition;
+	}
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
@@ -740,7 +863,7 @@ public class Listbox extends XulElement {
 	public void setPaginal(Paginal pgi) {
 		if (!Objects.equals(pgi, _pgi)) {
 			final Paginal old = _pgi;
-			_pgi = pgi;
+			_pgi = pgi; //assign before detach paging, since removeChild assumes it
 
 			if (inPagingMold()) {
 				if (old != null) removePagingListener(old);
@@ -824,18 +947,55 @@ public class Listbox extends XulElement {
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 */
 	public int getPageSize() {
-		if (_pgi == null)
-			throw new IllegalStateException("Available only the paging mold");
-		return _pgi.getPageSize();
+		return pgi().getPageSize();
 	}
 	/** Sets the page size, aka., the number items per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 */
-	public void setPageSize(int pgsz) {
+	public void setPageSize(int pgsz) throws WrongValueException {
+		pgi().setPageSize(pgsz);
+	}
+	/** Returns the number of pages.
+	 * Note: there is at least one page even no item at all.
+	 * @since 3.0.4
+	 */
+	public int getPageCount() {
+		return pgi().getPageCount();
+	}
+	/** Returns the active page (starting from 0).
+	 * @since 3.0.4
+	 */
+	public int getActivePage() {
+		return pgi().getActivePage();
+	}
+	/** Sets the active page (starting from 0).
+	 * @since 3.0.4
+	 * @see #setActivePage(Listitem)
+	 */
+	public void setActivePage(int pg) throws WrongValueException {
+		pgi().setActivePage(pg);
+	}
+	private Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
-		_pgi.setPageSize(pgsz);
+		return _pgi;
+	}
+
+	/** Sets the active page in which the specified item is.
+	 * The active page will become the page that contains the specified item.
+	 *
+	 * @param item the item to show. If the item is null or doesn't belong
+	 * to this listbox, nothing happens.
+	 * @since 3.0.4
+	 * @see #setActivePage(int)
+	 */
+	public void setActivePage(Listitem item) {
+		if (item != null && item.getParent() == this) {
+			final int pg = item.getIndex() / getPageSize();
+			if (pg != getActivePage())
+				setActivePage(pg);
+		}	
 	}
 
 	/** Returns whether this listbox is in the paging mold.
@@ -848,6 +1008,8 @@ public class Listbox extends XulElement {
 	 * <p>Used only for component development, not for application developers.
 	 */
 	public int getVisibleBegin() {
+		if (inSpecialMold())
+			return _engine.getRenderBegin();
 		if (!inPagingMold())
 			return 0;
 		final Paginal pgi = getPaginal();
@@ -857,6 +1019,8 @@ public class Listbox extends XulElement {
 	 * <p>Used only for component development, not for application developers.
 	 */
 	public int getVisibleEnd() {
+		if (inSpecialMold())
+			return _engine.getRenderEnd();
 		if (!inPagingMold())
 			return Integer.MAX_VALUE;
 		final Paginal pgi = getPaginal();
@@ -920,12 +1084,6 @@ public class Listbox extends XulElement {
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
 			if (super.insertBefore(newChild, refChild)) {
-				/**	final List children = getChildren(); //Feature #1830886
-				if (_hdcnt > 0 && children.get(_hdcnt) == newChild)
-					invalidate();*/
-				//we place listhead/auxhead and treeitem at different div, so
-				//this case requires invalidate (because we use insert-after)
-
 				//Maintain _items
 				final int
 					jto = refChild instanceof Listitem ?
@@ -935,7 +1093,8 @@ public class Listbox extends XulElement {
 						//jto < 0: use jfrom
 						//otherwise: use min(jfrom, jto)
 				if (fixFrom < 0) newItem.setIndexDirectly(_items.size() - 1);
-				else fixItemIndices(fixFrom);
+				else fixItemIndices(fixFrom,
+					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1);
 
 				//Maintain selected
 				final int newIndex = newItem.getIndex();
@@ -1047,6 +1206,10 @@ public class Listbox extends XulElement {
 		return refChild;
 	}
 	public boolean removeChild(Component child) {
+		if (_paging == child && _pgi == child && inPagingMold())
+			throw new IllegalStateException("The paging component cannot be removed manually. It is removed automatically when changing the mold");
+				//Feature 1906110: prevent developers from removing it accidently
+
 		if (!super.removeChild(child))
 			return false;
 
@@ -1060,7 +1223,7 @@ public class Listbox extends XulElement {
 			final Listitem item = (Listitem)child;
 			final int index = item.getIndex();
 			item.setIndexDirectly(-1); //mark
-			fixItemIndices(index);
+			fixItemIndices(index, -1);
 
 			//Maintain selected
 			if (item.isSelected()) {
@@ -1100,9 +1263,13 @@ public class Listbox extends XulElement {
 		}
 		_jsel = -1;
 	}
-	/** Fix Childitem._index since j-th item. */
-	private void fixItemIndices(int j) {
-		for (Iterator it = _items.listIterator(j); it.hasNext(); ++j)
+	/** Fix Childitem._index since j-th item.
+	 * @param j the start index (inclusion)
+	 * @param to the end index (inclusion). If -1, up to the end.
+	 */
+	private void fixItemIndices(int j, int to) {
+		for (Iterator it = _items.listIterator(j);
+		it.hasNext() && (to < 0 || j <= to); ++j)
 			((Listitem)it.next()).setIndexDirectly(j);
 	}
 
@@ -1190,11 +1357,13 @@ public class Listbox extends XulElement {
 	 *
 	 * <p>It is used only if live data ({@link #setModel} and
 	 * not paging ({@link #getPaging}.
-	 *
+	 * 
+	 * <p>Note: if the "pre-load-size" attribute of component is specified, it's prior to the original value.(@since 3.0.4)
 	 * @since 2.4.1
 	 */
 	public int getPreloadSize() {
-		return _preloadsz;
+		final String size = (String) getAttribute("pre-load-size");
+		return size != null ? Integer.parseInt(size) : _preloadsz;
 	}
 	/** Sets the number of items to preload when receiving
 	 * the rendering request from the client.
@@ -1305,34 +1474,38 @@ public class Listbox extends XulElement {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
 	public void onInitRender() {
-		final Renderer renderer = new Renderer();
-		try {
-			int pgsz, ofs;
-			if (inPagingMold()) {
-				pgsz = _pgi.getPageSize();
-				ofs = _pgi.getActivePage() * pgsz;
-				final int cnt = getItemCount();
-				if (ofs >= cnt) { //not possible; just in case
-					ofs = cnt - pgsz;
-					if (ofs < 0) ofs = 0;
+		if (inSpecialMold()) {
+			_engine.onInitRender();
+		} else {
+			final Renderer renderer = new Renderer();
+			try {
+				int pgsz, ofs;
+				if (inPagingMold()) {
+					pgsz = _pgi.getPageSize();
+					ofs = _pgi.getActivePage() * pgsz;
+					final int cnt = getItemCount();
+					if (ofs >= cnt) { //not possible; just in case
+						ofs = cnt - pgsz;
+						if (ofs < 0) ofs = 0;
+					}
+				} else {
+					pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows + 5 : 20;
+					ofs = 0;
+					//we don't know # of visible rows, so a 'smart' guess
+					//It is OK since client will send back request if not enough
 				}
-			} else {
-				pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows + 5 : 20;
-				ofs = 0;
-				//we don't know # of visible rows, so a 'smart' guess
-				//It is OK since client will send back request if not enough
+	
+				int j = 0;
+				for (Iterator it = getItems().listIterator(ofs);
+				j < pgsz && it.hasNext(); ++j)
+					renderer.render((Listitem)it.next());
+				if (!inPagingMold() && getItemCount() > pgsz)
+					getItemAtIndex(pgsz).setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
 			}
-
-			int j = 0;
-			for (Iterator it = getItems().listIterator(ofs);
-			j < pgsz && it.hasNext(); ++j)
-				renderer.render((Listitem)it.next());
-			if (!inPagingMold() && getItemCount() > pgsz)
-				getItemAtIndex(pgsz).setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
 		}
 	}
 	private void postOnInitRender() {
@@ -1417,14 +1590,14 @@ public class Listbox extends XulElement {
 	}
 
 	/** Used to render listitem if _model is specified. */
-	private class Renderer implements java.io.Serializable {
+	/*package*/ class Renderer { //use package for easy to call (if override)
 		private final ListitemRenderer _renderer;
 		private boolean _rendered, _ctrled;
 
-		private Renderer() {
+		/*package*/ Renderer() {
 			_renderer = getRealRenderer();
 		}
-		private void render(Listitem item) throws Throwable {
+		/*package*/ void render(Listitem item) throws Throwable {
 			if (item.isLoaded())
 				return; //nothing to do
 
@@ -1458,7 +1631,7 @@ public class Listbox extends XulElement {
 			item.setLoaded(true);
 			_rendered = true;
 		}
-		private void doCatch(Throwable ex) {
+		/*package*/ void doCatch(Throwable ex) {
 			if (_ctrled) {
 				try {
 					((RendererCtrl)_renderer).doCatch(ex);
@@ -1469,7 +1642,7 @@ public class Listbox extends XulElement {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
-		private void doFinally() {
+		/*package*/ void doFinally() {
 			if (_ctrled)
 				((RendererCtrl)_renderer).doFinally();
 		}
@@ -1539,6 +1712,8 @@ public class Listbox extends XulElement {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
 			super.setMold(mold);
+				//we have to change model before detaching paging,
+				//since removeChild assumes it
 
 			if ("paging".equals(old)) { //change from paging
 				if (_paging != null) {
@@ -1550,6 +1725,8 @@ public class Listbox extends XulElement {
 			} else if (inPagingMold()) { //change to paging
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
+			} else if (inSpecialMold() && _engine == null) {
+				_engine = new ListboxDrawerEngine(this);
 			}
 		}
 	}
@@ -1592,7 +1769,17 @@ public class Listbox extends XulElement {
 				it.hasPrevious(); --index)
 					if(((Listitem)it.previous()).isLoaded())
 						break;
-				HTMLs.appendAttribute(sb, "z.lastLoadIdx", index);
+				
+				HTMLs.appendAttribute(sb, "z.lastLoadIdx", !inSpecialMold() || 
+						getItemCount() <= _engine.getVisibleAmount() ? index : _engine.getVisibleAmount());
+			}
+			HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
+			if (inSpecialMold()) {
+				HTMLs.appendAttribute(sb, "z.cnt",  getItemCount());
+				HTMLs.appendAttribute(sb, "z.cur",  _engine.getCurpos());
+				HTMLs.appendAttribute(sb, "z.amt",  _engine.getVisibleAmount());
+				HTMLs.appendAttribute(sb, "z.isrod",  true);
+				HTMLs.appendAttribute(sb, "z.preload",  getPreloadSize());
 			}
 		}
 
@@ -1713,7 +1900,11 @@ public class Listbox extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, Selectable, Cropper, RenderOnDemand {
+	implements InnerWidth, Selectable, Cropper, RenderOnDemand, ChildChangedAware {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return !inSelectMold() && !isFixedLayout();
+		}
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;
@@ -1762,11 +1953,17 @@ public class Listbox extends XulElement {
 
 		//--Cropper--//
 		public boolean isCropper() {
-			return inPagingMold();
+			return (inPagingMold() && getPageSize() <= getItemCount())
+				|| inSpecialMold();
+				//Single page is considered as not a cropper.
+				//isCropper is called after a component is removed, so
+				//we have to test >= rather than >
 		}
 		public Set getAvailableAtClient() {
-			if (!inPagingMold())
+			if (!isCropper())
 				return null;
+			if (inSpecialMold())
+				return _engine.getAvailableAtClient();
 
 			final Set avail = new HashSet(37);
 			avail.addAll(_heads);

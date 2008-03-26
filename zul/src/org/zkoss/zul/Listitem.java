@@ -44,7 +44,7 @@ public class Listitem extends XulElement {
 	private Object _value;
 	/** The index in the parent (only for implementation purpose). */
 	private int _index = -1; //no parent at begining
-	private boolean _selected, _disabled;
+	private boolean _selected, _disabled, _checkable = true;
 	/** whether the content of this item is loaded; used if
 	 * the listbox owning this item is using a list model.
 	 */
@@ -77,6 +77,25 @@ public class Listitem extends XulElement {
 		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
 		return super.getRealSclass() + (sclx != null ? " " + sclx : "") ;
 	}
+
+	/** Returns whether it is checkable.
+	 * <p>Default: true.
+	 * @since 3.0.4
+	 */
+	public boolean isCheckable() {
+		return _checkable;
+	}
+	/** Sets whether it is checkable.
+	 * <p>Default: true.
+	 * @since 3.0.4
+	 */
+	public void setCheckable(boolean checkable) {
+		if (_checkable != checkable) {
+			_checkable = checkable;
+			invalidate();
+		}
+	}
+	
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of getParent().getMaxlength();
 	 * Thus, it works only if the listbox's mold is "select".

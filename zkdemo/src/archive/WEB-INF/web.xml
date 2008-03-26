@@ -36,8 +36,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<!-- //// -->
 	<!-- ZK -->
 	<listener>
-		<description>Used to cleanup when a session is destroyed</description>
-		<display-name>ZK Session Cleaner</display-name>
+		<description>ZK listener for cleanup when a session is destroyed</description>
 		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
 	</listener>
 	<servlet>
@@ -175,10 +174,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<mime-mapping>
 		<extension>html</extension>
 		<mime-type>text/html</mime-type>
-	</mime-mapping>
-	<mime-mapping>
-		<extension>jad</extension>
-		<mime-type>text/vnd.sun.j2me.app-descriptor</mime-type>
 	</mime-mapping>
 	<mime-mapping>
 		<extension>jnlp</extension>

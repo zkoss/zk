@@ -17,9 +17,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zscript>
-String msg = "The long word should be shown into a scroll bar (FF and Opera only).-- LongWordLongWord" +
-	"LongWordLongWordLongWordLongWordLongWordLongWordLongWordLongWordLongWord" +
-	"LongWordLongWordLongWord. And other browsers should be broken.";
-alert(msg);
-</zscript>
+<button label="Click Me">
+	<attribute name="onClick">
+	String msg = "The long word should be shown into a scroll bar (FF and Opera only).-- LongWordLongWord" +
+		"LongWordLongWordLongWordLongWordLongWordLongWordLongWordLongWordLongWord" +
+		"LongWordLongWordLongWord. And other browsers should be broken.";
+	alert(msg);
+	</attribute>
+</button>

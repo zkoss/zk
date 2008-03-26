@@ -59,6 +59,13 @@ public class Listcell extends LabelImageElement {
 	public Listitem getListitem() {
 		return (Listitem)getParent();
 	}
+	
+	protected String getRealStyle() {
+		final Listheader h = getListheader();
+		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
+				"display:none;" : super.getRealStyle();
+	}
+	
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
 	 */
@@ -152,19 +159,23 @@ public class Listcell extends LabelImageElement {
 		if (listbox != null && item.getFirstChild() == this) {
 			final StringBuffer sb = new StringBuffer(64);
 			if (listbox.isCheckmark()) {
-				sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
-					.append('"');
-				if (item.isDisabled())
-					sb.append(" disabled=\"disabled\"");
-				if (item.isSelected())
-					sb.append(" checked=\"checked\"");
-
-				sb.append(" id=\"").append(item.getUuid())
-					.append("!cm\" z.type=\"Lcfc\"/>");
+				if (item.isCheckable()) {
+					sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
+						.append('"');
+					if (item.isDisabled())
+						sb.append(" disabled=\"disabled\"");
+					if (item.isSelected())
+						sb.append(" checked=\"checked\"");
+	
+					sb.append(" id=\"").append(item.getUuid())
+						.append("!cm\" z.type=\"Lcfc\"/>");
+				} else {
+					sb.append("<span class=\"checkmark-spacer\"></span>");
+				}
 				return sb.toString();
 			} else if (isFocusRequired(listbox, item)) {
 				sb.append("<a href=\"javascript:;\" id=\"").append(item.getUuid())
-					.append("!sel\" z.type=\"Lcfc\"> </a>");	
+					.append("!sel\" z.type=\"Lcfc\"> </a>");
 				return sb.toString();
 			}
 		}

@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.in.GenericCommand;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.au.in.ColSizeCommand;
 import org.zkoss.zul.au.in.PagingCommand;
@@ -50,6 +51,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 			//Don't use Command.IGNORE_OLD_EQUIV since users might drag diff borders
 		new PagingCommand(ZulEvents.ON_PAGING, Command.SKIP_IF_EVER_ERROR);
 		new PageSizeCommand(ZulEvents.ON_PAGE_SIZE, Command.SKIP_IF_EVER_ERROR);
+		new GenericCommand("onRenderAtScroll", Command.IGNORE_OLD_EQUIV);
 	}
 
 	/** The popup ID that will be shown when click. */
@@ -114,7 +116,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setContext(String)
 	 */
 	public void setContext(Popup popup) {
-		setContext(popup != null ? "uuid(" + popup + ")": null);
+		setContext(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 	/** Returns the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
@@ -158,7 +160,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setPopup(String)
 	 */
 	public void setPopup(Popup popup) {
-		setPopup(popup != null ? "uuid(" + popup + ")": null);
+		setPopup(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 	/** Returns the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
@@ -203,7 +205,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setTooltip(String)
 	 */
 	public void setTooltip(Popup popup) {
-		setTooltip(popup != null ? "uuid(" + popup + ")": null);
+		setTooltip(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 
 	/** Returns the client-side action (CSA).

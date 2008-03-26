@@ -190,6 +190,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 
+	<function>
+		<name>getProperty</name>
+		<function-class>java.lang.System</function-class>
+		<function-signature>java.lang.String getProperty(java.lang.String)</function-signature>
+		<description>
+	Returns the system property.
+		</description>
+	</function>
+
 	<!--                  -->
 	<!-- String Utilities -->
 	<!--                  -->

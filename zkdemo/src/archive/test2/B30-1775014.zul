@@ -3,6 +3,10 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 
 <window title="Tasks" border="normal" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
+A data bound grid consisting of a progress bar and a label appears to
+suffer from sizing issues upon refresh. The refresh is taking place via a
+timer every second. This problem does not happen in Firefox 2.
+
 	<zscript><![CDATA[						
     					public class Task {
     						int progress = 0;
@@ -37,10 +41,10 @@
 	<hbox width="100%" widths="20%,80%">
 		<div />
 		<a:bind model="tasks" />
-		<grid id="grid">
+		<grid id="grid" fixedLayout="true">
 			<columns>
-				<column />
-				<column />
+				<column width="35%"/>
+				<column width="65%"/>
 			</columns>
 			<rows>
 				<a:bind _var="task" />

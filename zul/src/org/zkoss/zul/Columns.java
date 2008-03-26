@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.HeadersElement;
@@ -43,7 +44,14 @@ public class Columns extends HeadersElement {
 			throw new UiException("Unsupported parent for columns: "+parent);
 		super.setParent(parent);
 	}
-
+	public String getOuterAttrs() {
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
+		final Grid grid = getGrid();
+		if (grid != null)
+			HTMLs.appendAttribute(sb, "z.rid", grid.getUuid());
+		return sb.toString();
+	}
 	public boolean setVisible(boolean visible) {
 		final boolean vis = super.setVisible(visible);
 		final Grid grid = getGrid();

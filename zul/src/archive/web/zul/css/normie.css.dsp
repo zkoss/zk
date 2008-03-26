@@ -9,18 +9,30 @@ img	{
 	width: 47pt;
 	text-overflow: ellipsis;
 }
+<c:if test="${c:isExplorer() && !c:isExplorer7()}">
+div.listbox, div.tree, div.grid {
+	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
+}
+</c:if>
 div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
 	position:relative;
 	<%-- Bug 1712708:  we have to specify position:relative --%>
 }
-div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
+div.tree-head th, div.listbox-head th, div.grid-head th {
 	text-overflow: ellipsis;
 }
 div.head-cell-inner {
 	white-space: nowrap;
 	<%-- Bug #1839960  --%>
 }
-div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging {<%-- always used. --%>
+div.foot-cell-inner, div.cell-inner, div.head-cell-inner {
+	position: relative;
+	<%-- Bug #1825896  --%>
+}
+div.cell-inner {
+	width: 100%;
+}
+div.tree-body, div.listbox-body, div.grid-body {<%-- always used. --%>
 	position: relative;
 	<%-- Bug 1766244: we have to specify position:relative with overflow:auto --%>
 }

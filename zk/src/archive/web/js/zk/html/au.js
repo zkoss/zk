@@ -82,7 +82,7 @@ zk.addInit(function () {
 	zk.listen(document, "contextmenu", zkau._onDocCtxMnu);
 	zk.listen(document, "click", zkau._onDocLClick);
 	zk.listen(document, "dblclick", zkau._onDocDClick);
-
+	zk.listen(window, "scroll", zkau._onDocScroll);
 	zk.listen(window, "resize", zkau._onResize);
 
 	zkau._oldUnload = window.onunload;
@@ -91,7 +91,28 @@ zk.addInit(function () {
 	zkau._oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = zkau._onBfUnload;
 });
-
+zkau._onDocScroll = function () {
+	var ix = zk.innerX(), iy = zk.innerY();
+	zkau._fixOffset($e("zk_mask"), ix, iy);
+	zkau._fixOffset($e("zk_loading"), ix, iy);
+	zkau._fixOffset($e("zk_loadprog"), ix, iy);
+	zkau._fixOffset($e("zk_prog"), ix, iy);
+	zkau._fixOffset($e("zk_prog"), ix, iy);
+	var d = $e("zk_debugbox");
+	if (d) {
+		d.style.top = iy + zk.innerHeight() - d.offsetHeight - 20 + "px";
+		d.style.left = ix + zk.innerWidth() - d.offsetWidth - 20 + "px";
+	}
+};
+zkau._fixOffset = function (el, x, y) {
+	if (!el) return;
+	var ix = $int(getZKAttr(el, "x")), iy = $int(getZKAttr(el, "y"));
+	var top = $int(el.style.top) + (y - iy), left = $int(el.style.left) + (x - ix);
+	el.style.top = top + "px";
+	el.style.left = left + "px";
+	setZKAttr(el, "x", x);
+	setZKAttr(el, "y", y);
+};
 /** Handles onclick for button-type.
  */
 zkau.onclick = function (evt) {
@@ -565,9 +586,8 @@ zkau._evalOnResponse = function () {
 
 /** Process the responses queued in zkau._respQue. */
 zkau._doQueResps = function () {
-	var ex;
-	var que = zkau._respQue;
-	for (var j = 0; que.length;) {
+	var ex, que = zkau._respQue, breath = $now() + 6000;
+	while (que.length) {
 		if (zk.loading) {
 			zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
 			break; //wait until the loading is done
@@ -602,8 +622,8 @@ zkau._doQueResps = function () {
 			if (!ex) ex = e;
 		}
 
-		if (!ex && ++j > 300) {
-			setTimeout(zkau._doQueResps, 0); //let browser breath
+		if (!ex && $now() > breath) {
+			setTimeout(zkau._doQueResps, 10); //let browser breath
 			return;
 		}
 	}
@@ -705,7 +725,8 @@ zkau.setAttr = function (cmp, name, value) {
 	cmp = zkau._attr(cmp, name);
 
 	if ("visibility" == name) {
-		zk.show(cmp, "true" == value);
+		//Bug 1896588: if cmp invisible, just don't do animation (performance in IE)
+		(zk.isRealVisible(cmp, true) ? zk: action).show(cmp, "true" == value);
 	} else if ("value" == name) {
 		if (value != cmp.value) {
 			cmp.value = value;
@@ -745,7 +766,7 @@ zkau.setAttr = function (cmp, name, value) {
 			cmp.style[name] = value;
 
 			if ("width" == name && (!value || value.indexOf('%') < 0) //don't handle width with %
-			&& "true" != getZKAttr(cmp, "float")) {
+			&& !getZKAttr(cmp, "float")) {
 				var ext = $e(cmp.id + "!chdextr");
 				if (ext && $tag(ext) == "TD" && ext.colSpan == 1)
 					ext.style.width = value;
@@ -884,6 +905,38 @@ if (!zkau._popups) {
 	zkau._modals = []; //uuid (used zul.js or other modal)
 }
 
+/** Returns the current modal window's ID, or null.
+ * @since 3.0.4
+ */
+zkau.currentModalId = function () {
+	var modals = zkau._modals;
+	return modals.length ? modals[modals.length - 1]: null;
+};
+/** Checks if we can move focus to the specified element.
+ * If it is not in the current modal, false is returned and
+ * focus is moved back to the current modal.
+ *
+ * @param checkOnly if true, the focus won't be changed.
+ * @since 3.0.4
+ */
+zkau.canFocus = function (el, checkOnly) {
+	var modalId = zkau.currentModalId();
+	if (modalId && !zk.isAncestor(modalId, el)) {
+		if (!checkOnly) {
+			//Note: we cannot change focus to SPAN/DIV, but they might
+			//gain focus (such as selecting a piece of text)
+			var cf = zkau.currentFocus, cftn = $tag(cf);
+			if (cf && cf.id && cftn != "SPAN" && cftn != "DIV"
+			&& zk.isAncestor(modalId, cf.id))
+				zk.asyncFocus(cf.id);
+			else
+				zk.asyncFocusDown(modalId);
+		}
+		return false;
+	}
+	return true;
+};
+
 //-- utilities --//
 /** Returns the element of the specified element.
  * It is the same as Event.elemet(evt), but
@@ -897,7 +950,17 @@ zkau.evtel = function (evtel) {
 };
 
 zkau.onfocus = function (evtel) { //accept both evt and cmp
+	zkau.onfocus0(evtel);
+};
+/** When a component implements its own onfocus, it shall call back this
+ * method and ignore the event if this method returns false.
+ * Like zkau.onfocus except returns false if it shall be ignored.
+ * @since 3.0.4
+ */
+zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
 	var el = zkau.evtel(evtel);
+	if (!zkau.canFocus(el)) return false;
+
 	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
 	zkau.closeFloatsOnFocus(el);
 	if (zkau.valid) zkau.valid.uncover(el);
@@ -905,8 +968,9 @@ zkau.onfocus = function (evtel) { //accept both evt and cmp
 	zkau.autoZIndex(el);
 
 	var cmp = $outer(el);
-	if (zkau.asap(cmp, "onFocus"))
+	if (!silent && zkau.asap(cmp, "onFocus"))
 		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 100);
+	return true;
 };
 zkau.onblur = function (evtel) {
 	var el = zkau.evtel(evtel);
@@ -989,14 +1053,15 @@ zkau._onBfUnload = function () {
 zkau._onDocMousedown = function (evt) {
 	if (!evt) evt = window.event;
 
+	var el = Event.element(evt);
+	if (!zkau.canFocus(el)) return;
+
 	zkau._savepos(evt);
 
-	var node = Event.element(evt);
-	zkau.currentFocus = node;
+	zkau.currentFocus = el;
 
-	zkau.closeFloatsOnFocus(node);
-
-	zkau.autoZIndex(node);
+	zkau.closeFloatsOnFocus(el);
+	zkau.autoZIndex(el);
 };
 /** Handles the left click. */
 zkau._onDocLClick = function (evt) {
@@ -1167,7 +1232,7 @@ zkau._onDocMouseover = function (evt) {
 					x: Event.pointerX(evt) + 1, y: Event.pointerY(evt) + 2
 					 //Bug 1572286: position tooltip with some offset to allow
 				};
-				if (open) zkau._openTip(cmp.id);
+				if (open) zkau._openTip(cmp.id, true);
 				else setTimeout("zkau._openTip('"+cmp.id+"')", zk_tipto);
 			}
 			return; //done
@@ -1203,10 +1268,44 @@ zkau._onResize = function () {
 		//since IE keeps sending onresize when dragging the browser border,
 		//we reduce # of packs sent to the server by use of timeout
 		zkau._cInfoPend = true;
-		setTimeout(zkau._doClientInfo, 100);
+		setTimeout(zkau._doClientInfo, 150);
 	}
-	zk.onResize(); //invoke functions added by zk.addOnResize
+
+	zkau._onResize1();
+}
+zkau._onResize1 = function () {
+	if (zk.booting)
+		return; //IE6: it sometimes fires an "extra" onResize in loading
+
+	//Tom Yeh: 20051230:
+	//In certain case, IE will keep sending onresize (because
+	//grid/listbox may adjust size, which causes IE to send onresize again)
+	//To avoid this endless loop, we ignore onresize a whilf if _reszfn
+	//is called
+	if (!zkau._tmResz || $now() > zkau._tmResz) {
+		++zkau._reszcnt;
+		setTimeout(zkau._onResize2, zk.ie && zkau._reszcnt < 5 ? 200: 35);
+			//IE keeps sending onresize when dragging the browser's border,
+			//so we have to filter (most of) them out
+
+	} else setTimeout(zkau._onResize1, 200);
 };
+zkau._onResize2 = function () {
+	if (!--zkau._reszcnt) {
+		if (zk.loading || anima.count) {
+			zkau._onResize1();
+			return;
+		}
+
+		if (zk.ie) zkau._tmResz = $now() + 1500;
+			//IE keeps sending onresize when dragging the browser's border,
+			//so we have to filter (most of) them out
+
+		zk.beforeSizeAt();
+		zk.onSizeAt();
+	}
+};
+zkau._reszcnt = 0;
 
 /** send clientInfo to the server ontimeout. */
 zkau._doClientInfo = function () {
@@ -1216,17 +1315,22 @@ zkau._doClientInfo = function () {
 	}
 };
 
-zkau._openTip = function (cmpId) {
+zkau._openTip = function (cmpId, enforce) {
+	if (!zkau._tipz || (zkau._tipz.open && !enforce))
+		return;
+
+	//Bug 1906405: prevent tip if any float is opened
+ 	if (!enforce && zkau.anyFloat())
+		zkau._tipz = null;
+ 	else if (!cmpId || cmpId == zkau._tipz.cmpId) {
 	//We have to filter out non-matched cmpId because user might move
 	//from one component to another
-	if (zkau._tipz && !zkau._tipz.open
-	 && (!cmpId || cmpId == zkau._tipz.cmpId)) {
 		var tip = $e(zkau._tipz.tipId);
 		zkau.closeFloats(tip, $e(cmpId));
 		if (tip) {
 			var cmp = $e(cmpId);
 			zkau._tipz.open = true;
-			
+
 			tip.style.position = "absolute";
 			zk.setVParent(tip); //FF: Bug 1486840, IE: Bug 1766244
 			zkau._autopos(tip, zkau._tipz.x, zkau._tipz.y);
@@ -1249,6 +1353,8 @@ zkau._parentByZKAttr = function (n, attr1, attr2) {
 	for (; n; n = $parent(n)) {
 		if (attr1 && getZKAttr(n, attr1)) return n;
 		if (attr2 && getZKAttr(n, attr2)) return n;
+		if (getZKAttr(n, "float")) break;
+			//tooltip/popup/context might be inside the component
 	}
 	return null;
 };
@@ -1281,9 +1387,9 @@ zkau._onDocKeydown = function (evt) {
 	case 17: //Ctrl
 	case 18: //Alt
 		return true;
-	case 44: //Ins
-	case 45: //Del
-		zkcode = keycode == 44 ? 'I': 'J';
+	case 45: //Ins
+	case 46: //Del
+		zkcode = keycode == 45 ? 'I': 'J';
 		break;
 	default:
 		if (keycode >= 33 && keycode <= 40) { //PgUp, PgDn, End, Home, L, U, R, D
@@ -1370,26 +1476,38 @@ zkau.sendOnMove = function (cmp, keys) {
 		top = $int(top) - $int(xy[1]) + "px";
 	}
 	zkau.send({uuid: cmp.id, cmd: "onMove",
-		data: [left, top, keys ? keys: ""]},
+		data: [left, top, keys ? keys: ""], ignorable: true}, //yes, ignorable since it is implicit for modal window
 		zkau.asapTimeout(cmp, "onMove"));
 };
 zkau.sendOnZIndex = function (cmp) {
 	zkau.send({uuid: cmp.id, cmd: "onZIndex",
-		data: [cmp.style.zIndex]}, zkau.asapTimeout(cmp, "onZIndex"));
+		data: [cmp.style.zIndex], ignorable: true}, //yes, ignorable since it is implicit for modal window
+		zkau.asapTimeout(cmp, "onZIndex"));
 };
 zkau.sendOnSize = function (cmp, keys) {
 	zkau.send({uuid: cmp.id, cmd: "onSize",
 		data: [cmp.style.width, cmp.style.height, keys]},
 		zkau.asapTimeout(cmp, "onSize"));
-	zk.onResize(0, cmp);
-	if (zk.ie6Only) setTimeout(function () {zk.onResize(0, cmp);}, 800);
+
+	setTimeout(function () {zk.beforeSizeAt(cmp); zk.onSizeAt(cmp);},
+		zk.ie6Only ? 800: 0);
 	// If the vflex component in the window component, the offsetHeight of the specific component is wrong at the same time on IE6.
-	// Thus, we have to invoke the zk.onResize function again.
+	// Thus, we have to invoke the zk.onSizeAt function again.
 };
 zkau.sendOnClose = function (uuid, closeFloats) {
 	var el = $e(uuid);
 	if (closeFloats) zkau.closeFloats(el);
 	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
+};
+
+/** Test if any float is opened.
+ * @since 3.0.4
+ */
+zkau.anyFloat = function () {
+	for (var fts = zkau.floats, j = fts.length; --j >= 0;)
+		if (!fts[j].empty())
+			return true;
+	return false;
 };
 
 /** Closes popups and floats except any of the specified components
@@ -1447,8 +1565,8 @@ zkau._closeFloats = function (method, shallClose, ancestors) {
 	}
 
 	//floats: combobox, context menu...
-	for (var j = zkau.floats.length; --j >= 0;) {
-		var ft = zkau.floats[j];
+	for (var fts = zkau.floats, j = fts.length; --j >= 0;) {
+		var ft = fts[j];
 		if (ft[method].apply(ft, ancestors))
 			closed = true;
 	}
@@ -1579,11 +1697,11 @@ zkau._zidOwner = function (n) {
 //Drag & Drop//
 zkau.initdrag = function (n) {
 	zkau._drags[n.id] = new Draggable(n, {
-		starteffect: zkau.closeFloats,
+		starteffect: zk.voidf, // bug #1886342: we cannot use the zkau.closeFloats function in this situation.
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true,
 		constraint: zkau._constraint,
-		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag
+		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag, zindex: 88800
 	});
 	zk.eval(n, "initdrag");
 };
@@ -1841,8 +1959,8 @@ zkau.beginUpload = function (wndid) {
 	zkau.endUpload();
 	zkau._upldWndId = wndid;
 	zkau._tmupload = setInterval(function () {
-		zkau.send({dtid: zkau.dtid(wndid), cmd: "getUploadInfo", data: null});
-	}, 660);
+		zkau.send({dtid: zkau.dtid(wndid), cmd: "getUploadInfo", data: null, ignorable: true});
+	}, 1000);
 };
 zkau.updateUploadInfo = function (p, cb) {
 	if (cb <= 0) zkau.endUpload();
@@ -1960,8 +2078,15 @@ zkau.cmd0 = { //no uuid at all
 		zkau.confirmClose = msg;
 	},
 	showBusy: function (msg, open) {
+		//close first (since users might want close and show diff message)
+		var n = $e("zk_showBusy");
+		if (n) {
+			n.parentNode.removeChild(n);
+			zk.restoreDisabled();
+		}
+
 		if (open == "true") {
-			var n = $e("zk_loadprog");
+			n = $e("zk_loadprog");
 			if (n) n.parentNode.removeChild(n);
 			n = $e("zk_prog");
 			if (n) n.parentNode.removeChild(n);
@@ -1970,10 +2095,8 @@ zkau.cmd0 = { //no uuid at all
 				msg = msg == "" ? mesg.PLEASE_WAIT : msg;
 				Boot_progressbox("zk_showBusy", msg,
 					0, 0, true, true);
+				zk.disableAll();
 			}
-		} else {
-			var n = $e("zk_showBusy");
-			if (n) n.parentNode.removeChild(n);
 		}
 	}
 };
@@ -2049,7 +2172,7 @@ zkau.cmd1 = {
 			zkau.rmAttr(cmp, dt1);
 	},
 	outer: function (uuid, cmp, html) {
-		zk.unsetChildVParent(cmp);
+		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
 
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
@@ -2114,7 +2237,7 @@ zkau.cmd1 = {
 		//NOTE: it is possible the server asking removing a non-exist cmp
 		//so keep silent if not found
 		if (cmp) {
-			zk.unsetChildVParent(cmp);
+			zk.unsetChildVParent(cmp, true); //OK to hide since it will be removed
 
 			zk.cleanupAt(cmp);
 			cmp = $childExterior(cmp);
@@ -2125,9 +2248,11 @@ zkau.cmd1 = {
 	},
 	focus: function (uuid, cmp) {
 		if (!zk.eval(cmp, "focus")) {
+			if (!zkau.canFocus(cmp, true)) return;
+
 			zkau.autoZIndex(cmp); //some, say, window, not listen to onfocus
 			cmp = $real(cmp); //focus goes to inner tag
-			zk.asyncFocus(cmp.id, 10);
+			zk.asyncFocus(cmp.id, 60);
 				//delay it since some comp, e.g., endModal, uses timer
 				//to do the multiple-step operation
 		}

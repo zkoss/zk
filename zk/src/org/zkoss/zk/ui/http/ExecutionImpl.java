@@ -156,6 +156,9 @@ public class ExecutionImpl extends AbstractExecution {
 			}
 		}
 
+		if (page != null && expfcls == null)
+			expfcls = page.getExpressionFactoryClass();
+
 		if (_eval == null || _eval.page != page
 		|| _eval.getExpressionFactoryClass() != expfcls)
 			_eval = new MyEval(page, expfcls);

@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>[ 1598234 ] strict autocomplete in comboboxes</n:p>
+        <n:p>When typing a text which not in comboitem, it will display a error message</n:p>
 	<combobox onChanging="msg.value = event.value" constraint="strict">
 		<comboitem label="Simple and Rich" />
 		<comboitem label="Cool!" />

@@ -1,4 +1,11 @@
 <zk>
+1. if the popup window is overlapped, then it could be
+click ok button of the Messagebox.
+<separator/>
+2. if the popup window is popup, then clicking anywhere
+within the Messagebox should not make the Messagebox and the
+popup window disappear.(change code to test)
+<separator/>
 <zscript>
 
 void popup(){

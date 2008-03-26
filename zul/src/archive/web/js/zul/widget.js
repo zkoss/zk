@@ -34,9 +34,9 @@ zkau.setAttr = function (cmp, nm, val) {
 	}
 	return _zktbau.setAttr(cmp, nm, val);
 };
-zkTxbox.init = function (cmp) {
-	zk.listen(cmp, "focus", zkTxbox.onfocus);
-	zk.listen(cmp, "blur", zkTxbox.onblur);
+zkTxbox.init = function (cmp, onfocus, onblur) {
+	zk.listen(cmp, "focus", onfocus ? onfocus: zkTxbox.onfocus);
+	zk.listen(cmp, "blur", onblur ? onblur: zkTxbox.onblur);
 	zk.listen(cmp, "select", zkTxbox.onselect);
 	if ($tag(cmp) == "TEXTAREA")
 		zk.listen(cmp, "keyup", zkTxbox.onkey);
@@ -112,23 +112,6 @@ zkTxbox.updateChange = function (inp, noonblur) {
 	if (!noonblur) zkTxbox.onupdate(inp);
 	return true;
 };
-/**
- * Tests whether to do onblur, if inp currentFocus is not in the same
- * component. This method is used to check when the popup of component is closing.
- * @param {Object} inp
- * @since 3.0.3
- */
-zkTxbox.close = function (inp) {
-	if (!zkTxbox._noonblur(inp)) {
-		if (zk.ie){
-			inp.fireEvent('onblur');
-		} else {
-			var evt = document.createEvent('HTMLEvents');
-			evt.initEvent('blur', false, false);
-			inp.dispatchEvent(evt);
-		}
-	}
-};
 /** Tests whether NOT to do onblur (if inp currentFocus are in the same
  * component).
  */
@@ -161,7 +144,7 @@ zkTxbox.onupdate = function (inp) {
 		var uuid = $uuid(inp);			
 		var sr = zk.getSelectionRange(inp);	
 		zkau.send({uuid: uuid, cmd: "onChange",
-			data: [newval, false, sr[0]]}, zkau.asapTimeout(uuid, "onChange", 150));
+			data: [newval, false, sr[0]]}, zkau.asapTimeout(uuid, "onChange", zk.delayTime_onChange ? zk.delayTime_onChange : 150));
 	} else if (inp.getAttribute("zk_err")) {
 		inp.removeAttribute("zk_err");
 		zkau.send({uuid: $uuid(inp), cmd: "onError",
@@ -190,11 +173,10 @@ zkTxbox.onkeydown = function (evt) {
 	}
 };
 zkTxbox.onfocus = function (evt) {
-	zkau.onfocus(evt);
-
-	//handling onChanging
 	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
-	if (inp && inp.id && zkau.asap($outer(inp), "onChanging")) {
+	if (zkau.onfocus0(evt)
+	&& inp && inp.id && zkau.asap($outer(inp), "onChanging")) {
+		//handling onChanging
 		inp.setAttribute("zk_changing_last", inp.value);
 		if (!zkTxbox._intervals[inp.id])
 			zkTxbox._intervals[inp.id] =
@@ -362,9 +344,14 @@ zkRadio.rmAttr = zkCkbox.rmAttr;
 /** Handles onclick for checkbox and radio. */
 zkCkbox.onclick = function (cmp) {
 	var newval = cmp.checked;
-	//20060426: if radio, we cannot detect whether a radio is unchecked
-	//by the browser -- so always zk.send
-	if (cmp.type == "radio" || newval != cmp.defaultChecked) { //changed
+	if (newval != cmp.defaultChecked) { //changed
+		// bug #1893575 : we have to clean all of the radio at the same group.
+		// in addition we can filter unnecessary onCheck with defaultChecked
+		if (cmp.type == "radio") {
+			var nms = document.getElementsByName(cmp.name);
+			for (var i = nms.length; --i >= 0;)
+				nms[i].defaultChecked = false;
+		}
 		cmp.defaultChecked = newval;
 		var uuid = $uuid(cmp);
 		zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]},
@@ -377,12 +364,14 @@ zkCkbox.onclick = function (cmp) {
 zkGrbox = {};
 zkCapt = {};
 
-zkGrbox.init = zkGrbox._fixHgh = function (cmp) {
+zkGrbox.onSize = zkGrbox._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (n) {
 		var hgh = cmp.style.height;
-		if (hgh && hgh != "auto")
+		if (hgh && hgh != "auto") {
+			if (zk.ie6Only) n.style.height = "";
 			zk.setOffsetHeight(n, zk.getVflexHeight(n.parentNode));
+		}
 
 		//if no border-bottom, hide the shadow
 		var sdw = $e(cmp.id + "!sdw");
@@ -438,15 +427,16 @@ zkGrbox.onclick = function (evt, uuid) {
 
 		cmp = $e(uuid + "!slide");
 		if (cmp)
-			zkGrbox.open(uuid, !$visible(cmp));
+			zkGrbox.open(uuid, !$visible(cmp), false, true);
 	}
 };
-zkGrbox.open = function (gb, open, silent) {
+zkGrbox.open = function (gb, open, silent, ignorable) {
 	var gb = $e(gb);
 	if (gb) {
 		var panel = $e(gb.id + "!slide");
 		if (panel && open != $visible(panel)
-		&& !panel.getAttribute("zk_visible")) {
+		&& !panel.getAttribute("zk_visible")
+		&& (!ignorable || !getZKAttr(panel, "animating"))) {
 			if (open) anima.slideDown(panel);
 			else anima.slideUp(panel);
 
@@ -484,6 +474,7 @@ if (zk.ie6Only) {
 	//Request 1522329: PNG with alpha color in IE
 	//To simplify the implementation, Image.java invalidates instead of smartUpdate
 	zkImg.init = function (cmp) {
+		// this function should be invoked faster than zkau.initdrag(), otherwise its drag-drop will fail.
 		return zkImg._fixpng(cmp);
 	};
 	zkImg._fixpng = function (img) {
@@ -541,6 +532,8 @@ zkMap.init = function (cmp) {
 		null, zk.safari ? "width:0;height:0;display:inline": "display:none");
 		//creates a hidden frame. However, in safari, we cannot use invisible frame
 		//otherwise, safari will open a new window
+};
+zkMap.onSize = function (cmp) {
 	if (zk.ie6Only) {
 		var img = $real(cmp);
 		return zkImg._fixpng(img);
@@ -605,17 +598,18 @@ zkMap._toofast = function () {
 
 //progressmeter//
 zkPMeter = {};
-zkPMeter.init = function (cmp) {
+zkPMeter.onSize = zkPMeter.onVisi = function (cmp) {
 	var img = $e(cmp.id + "!img");
 	if (img) {
+		if (zk.ie6Only) img.style.width = ""; //Bug 1899749
 		var val = $int(getZKAttr(cmp, "value"));
 		img.style.width = Math.round((cmp.clientWidth * val) / 100) + "px";
 	}
 };
 zkPMeter.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
-	if ("z.value" == nm)
-		zkPMeter.init(cmp);
+	if ("z.value" == nm || "style.width" == nm)
+		zkPMeter.onSize(cmp);
 	return true;
 }
 
@@ -637,7 +631,8 @@ zkPop.context = function (ctx, ref) {
 	zkau.hideCovered();
 
 	if (zkau.asap(ctx, "onOpen"))
-		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [true, ref.id]});
+		zkau.send({uuid: ctx.id, cmd: "onOpen",
+			data: ref ? [true, ref.id]: [true]});
 };
 zkPop.close = function (ctx) {
 	zkPop._pop.removeFloatId(ctx.id);
@@ -662,9 +657,16 @@ if (!zkPop._pop)
 	zkau.floats.push(zkPop._pop = new zk.Popup()); //hook to zkau.js
 
 //iframe//
-if (zk.gecko) { //Bug 1692495
-	zkIfr = {}
+zkIfr = {}
 
+if (zk.ie) {
+	zkIfr.init = function (cmp) {
+	//Bug 1896797: setVParent (for overlapped) cause IE7 malfunction, so reload
+	//1. it is OK if under AU (so only booting)
+	//2. no 2nd load so the performance not hurt
+		if (zk.booting) cmp.src = cmp.src;
+	};
+} else if (zk.gecko) { //Bug 1692495
 	zkIfr.onVisi = function (cmp) {
 		if (cmp.src.indexOf(".xml") >= 0)
 			cmp.src = cmp.src; //strange workaround: reload xml
@@ -687,10 +689,9 @@ var zkWgt = {};
 /** Fixes the button align with an input box, such as combobox, datebox.
  */
 zkWgt.fixDropBtn = function (cmp) {
-	//Bug 1752477: we have to delay it for sophisticated layout in IE
+	//For new initial phase, we don't need to delay the function for IE. (Bug 1752477) 
 	var cmp = $e(cmp);
-	if (cmp)
-		setTimeout("zkWgt._fixdbtn($e('" + cmp.id +"'))", 66);
+	if (cmp) zkWgt._fixdbtn(cmp);
 };
 zkWgt._fixdbtn = function (cmp) {
 	cmp = $e(cmp);
@@ -701,7 +702,7 @@ zkWgt._fixdbtn = function (cmp) {
 	//note: isRealVisible handles null argument
 	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
 		if (!inp.offsetHeight || !btn.offsetHeight) {
-			zkWgt.fixDropBtn(cmp);
+			setTimeout("zkWgt._fixdbtn($e('" + cmp.id +"'))", 66);
 			return;
 		}
 

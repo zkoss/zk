@@ -1,9 +1,196 @@
 	--------
 ZK 3.0.4 Freshly
 * Features
+  1904532: Grid/Listbox/Tree support the fixed layout concept
+  1902777: A way to pass Object to included page with include comp
+  1906138: A way to specify whether the item is checkable(Listbox/Tree)
+  1908430: A way to catch SizeLimitExceededException in Fileupload
+  1894194: Window.setMode("modal") shall not suspend even in listener
+  1898211: An option to use uncompress javascript codes
+  1912487: A way to set system properties in zk.xml
+  1886684: Translate messages to Czech. Thank Pavel Mica for his contribution.
+  1899307: Translate messages to Dutch. Thank Wido Jansen, Netherlands for his contribution.
+  1886032: Add the support of I18N for jasperreport
+  1892573: Add Jython Interpreter
+  1896600: A way to specify how the paging places in Grid/Listbox
+  1896737: An easy way to let user know include a long operation page
+  1898072: Clients.response shall be able NOT to overwrite prev
+  1905999: Messagebox: a way to listen what button is clicked
+  1906110: Listbox: prevent paging component removed in paging mold
+  1908529: A way to specify an include page generates complete HTML pg
+  1909250: A way to specify the component with long word wrapping
+  1909254: Enhance Iframe control like default Iframe tag
+  1908524: Comboitem: don't break before content to be more flexible
+  1909434: JasperReports: set exporter parameters
+  1911773: Grid/Listbox support scrollbar in Paging Mold
+  1914087: AMedia accepts File directly
+  1919308: Datebox supports more date format
+  1919456: Change the active page when setSelectedIndex called
+  1914207: Add width to Listheader/Treecol/Column constructors
 
 * Bugs
+  1892396; Component.clone() failed: it shall clean up _xtrl
   1886040: The ISO code for Ukrainian shall be uk, not ua
+  1884111: IE7 performance (very slow - eg SEVEN secs to redraw)
+  1887688: xel-config in zk.xml has no effect
+  1888104: constraint error message appears behind popup
+  1886342: Listbox drag closes popup
+  1886352: Trailing space on Menuitem does nothing
+  1886788: Grid rows not follow columns's widths
+  1892464: Clone/serialize groupbox is wrong
+  1892446: Bug in Datalistener When Clone Tree
+  1892484: Tree serialize bug
+  1888911: databind with grid in grid fail when no _var in inner grid
+  1893247: Not unique in the new ID space when Grid in Grid
+  1894193: hidden modal might become on top w/o disable-behind-modal
+  1893575: Radio all checked after modal messagebox appears
+  1895856: databind LoadOnSave work only on the last save-when componen
+  1895804: Borderlayout cannot resize properly inside a Window when...
+  1894208: BorderLayout can not drag
+  1894885: Grid alignment problem again
+  1896725: Clients.showBusy() should disable some active tags (IE6)
+  1895907: Listbox column resizing fails upon live data
+  1896588: Slow responding, hide some hidden cmps in complex page (IE)
+  1896749: Problems with onClinck on charts & IE
+  1897500: Unable to compile ZK sources under Solaris or Mac
+  1890221: Tree item is not updated if not a leaf
+  1898094: Textbox failed to get focus if it is in a popup/modal/ovrlap
+  1899003: Unable to specify border to hbox/vbox (IE only)
+  1899482: Treeitem.setOpen() workaround not working
+  1902693: SmartAuWriter.Task synchronized wrong object
+  1904389: NullPointerException if save-when in collection binding
+  1901423: Incorrect alignment of listboxes and grids
+  1902533: BorderLayout should not splittable when click on split btn.
+  1899068: HTML tags are miss placed when used in zhtml and zul pages
+  1904094: Combobox onChanging stops when selecting with Return key
+  1907640: Long operation failed to update browser with Glassfish v1
+  1906898: Some characters paralyze client engine to update
+  1899749: Progressmeter: Rendering issues
+  1900653: unexpected result with Path.getComponent
+  1903077: JavaDoc Error: ComponentInfo.applyProperties() omits custom-attributes
+  1903399: XulElement.setContext(Popup) doesn't work
+  1906405: tooltip interferes with contex (context wont stay up)
+  1908466: Fileupload bugs: cancel and temporarily out-of-service
+  1908569: wrong update-uri for some servers, such as pluto, and Ofbiz
+  1907673: Impossible to use setCtrlKeys("#del")
+  1908188: Popup.open(x,y) error if popup has onOpen eventlistener
+  1899699: Wrong column size in listbox
+  1899353: zscript throw exception with import statement.
+  1906311: TreeModel Problem
+  1911567: Listbox header shows onlyone listhead
+  1911129: Menupopup Separator looks odd
+  1825896: Databox's btn will not be covered when col resize to samller
+  1911642: onColSize event isn't fired in Paging mold
+  1912363: Datebox doesn't fire error msg if clicks on Thu of dropdown
+  1912421: Overlapped window disappears when invalidate() is invoked
+  1913246: Listbox paging mold is failed with zkmax.jar(Freshly only)
+  1913290: Cast Exception when TimeSeries casts Integer to String
+  1886788: Grid rows not follow columns's widths
+  1914078: zkdemo animation unexpected behavior
+  1914109: IE&Sa, scrollbar problem when set height of a paging listbox
+  1914113: Empty space in listbox with ZK3.0.4
+  1914104: IE6: When resize browser, the inner window doesn't resize
+  1914184: Error massage:Failed to invoke zkGrid.onSize
+  1914230: Invalid value send to server without validation
+  1916473: Vbox with height and splitter not collapse correct if resiz
+  1916287: Bottom border of rows is disappeared
+  1914215: Words are outside of Listitem when append a tab(IE6 only)
+  1914103: IE : Column Size error after drag column, when in borderlayo
+  1914054: Open tree node were overleap other component(IE6 only)
+  1917875: The splitter's wd not correct if maximize the browser
+  1917901: Splitter's vertical position is higher if collopsing it
+  1916332: Specifying the height of hbox has no function (Safari only)
+  1480834: Visible listbox resizing
+  1546655: Progress window doesn't follow scrolling
+  1917982: Splitter cannot change the height if heights is specified
+  1917905: Vertical splitter cannot be moved (Safari only)
+  1918018: Some incorrectness of russian localization
+  1918796: Grid header appear and should not
+  1896291: [IE6 ONLY] fileupload does not always recognize content-type
+  1877111: Non-lenient datebox with wrong fmt not throw exception
+  1526742: Rendering of <space> on IE is bad
+  1920541: Resize the popup window, it should not disappear
+  1920630: The bottom border of Listbox is gone. (IE7 only)
+  1911621: Shift Multiple Select in Listbox and Tree
+  1921830: Splitter unable to change sclass dynamically
+  1858489: Include annotation markup in zul XSD
+  1921891: insertBefore the same listitem cause ClassCastException
+  1920751: Comboitem's disable property could be broken
+  1920879: Audio bug(FF, SA, OP)
+  1882325: [Opera] Close window will move to left side first
+  1920877: Fileupload bug in Safari(PC)
+  1920745: Opera's multiple upload is shown in wrong z-order
+  1568393: Overlapping Window: Top/Left Position with percentage
+  1896797: iframe and pdf in overlapped wnd (FF and IE7)
+  1922930: Closing upload dlg doesn't close the progress dlg
+  1893245: The shading of Combo/Bandbox should be the same with textbox
+  1898649: The shading of Timebox should be the same with textbox
+  1924924: Key "insert" does not work
+
+* Upgrade Notes:
+  + Window.setMode("modal") never suspends the execution even if called
+    in an event thread. On the other hand, doModal() throws an exception
+    if not called in an event thread.
+
+  + <disable-behind-modal> is default to false.
+    It improves the performance when opening a modal window.
+    If you prefer it to true, specify the following in zk.xml.
+	<client-config>
+		<disable-behind-modal>true</disable-behind-modal>
+	<client-config>
+
+  + The CSS name called "inline-box" is renamed to "inline-block"
+
+  + There is no line break before the content of a comboitem if
+    it doesn't have the description. It is more flexible to customize
+    the look (such as in single line). To be backward-compatible,
+    specify the content to be "<br/>old content"
+
+  + The spacing of separator and space is implemented by use of width
+    and height. If you prefer to use margins like 3.0.3 or earlier did,
+    specify the following in zk.xml
+   	<system-property>
+		<name>org.zkoss.zul.Separator.spaceWithMargin</name>
+		<value>true</value>
+	</system-property>
+
+  + The leading and trailing whitespaces of labels are preserved.
+    If you prefer to trim like 3.0.3 or earlier did,
+    specify the following in zk.xml
+   	<system-property>
+		<name>org.zkoss.zk.ui.parser.trimLabel</name>
+		<value>true</value>
+	</system-property>
+
+  + By default, the width of header of listbox/grid/tree includes
+    the padding and margins defined in the style sheet (like ZK 2.4.1).
+	If you want the width of header to exclude the padding and margins
+	defined in the style (like ZK 3.0.3),
+	please specify the follow CSS definitions in your CSS file.
+tr.listbox-fake th, tr.tree-fake th, tr.grid-fake th {
+	overflow: hidden; border: 1px solid;
+	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
+	white-space: nowrap; padding: 2px;
+	font-size: small; font-weight: normal;
+}
+tr.listbox-fake th.sort div, tr.tree-fake th.sort div, tr.grid-fake th.sort div{
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+tr.listbox-fake th.sort-asc div, tr.tree-fake th.sort-asc div, tr.grid-fake th.sort-asc div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.sort-dsc div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
 
 	--------
 ZK 3.0.3

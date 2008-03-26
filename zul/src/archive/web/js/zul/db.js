@@ -156,21 +156,14 @@ zk.Cal.prototype = {
 					cell.style.textDecoration = "";
 					cell.setAttribute("zk_day", v);
 					cell.setAttribute("zk_monofs", monofs);
-					this._outcell(cell, cur == d, this._invalidate(new Date(y, m + monofs, v)));
+					this._outcell(cell, cur == d, this._invalid(new Date(y, m + monofs, v)));
 				}
 			}
 		}
 	},
-	_invalidate: function (now) {
-		var valid = false;
-		if (this.begin || this.end) {
-			if(this.begin && (now - this.begin)/(1000*60*60*24) < 0) {
-				valid = true;	
-			} else if(this.end && (this.end - now)/(1000*60*60*24) < 0) {
-				valid = true;	
-			}
-		}
-		return valid;
+	_invalid: function (now) {
+		return (this.begin && (now - this.begin)/86400000/*1000*60*60*24*/ < 0)
+			|| (this.end && (this.end - now)/86400000 < 0);
 	},
 	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
@@ -186,10 +179,17 @@ zk.Cal.prototype = {
 	_ondayclk: function (cell) {
 		var y = this.date.getFullYear(), m = this.date.getMonth();
 		var d = zk.getIntAttr(cell, "zk_day");
-		if (cell.className != "seld") { //!selected
+		if (!zkCal._seled(cell)) { //!selected
 			var monofs = zk.getIntAttr(cell, "zk_monofs");
 			var now = new Date(y, m + monofs, d);
-			if (this._invalidate(now)) return;
+			if (this._invalid(now)) {
+				if (this.popup) {
+					var pp = $e(this.id + "!pp");
+					if (pp) // Bug #1912363
+						zkDtbox.close(pp, true);
+				}
+				return;
+			}
 			this.date = now;
 			if (!this.popup) {
 				if (monofs != 0) this._output();
@@ -202,7 +202,7 @@ zk.Cal.prototype = {
 		this._onupdate(true);
 	},
 	_onmonclk: function (cell) {
-		if (cell.className != "seld") { //!selected
+		if (!zkCal._seled(cell)) { //!selected
 			var y = this.date.getFullYear(), d = this.date.getDate();
 			this.date = new Date(y, zk.getIntAttr(cell, "zk_mon"), d);
 			this._output();
@@ -225,14 +225,14 @@ zk.Cal.prototype = {
 	},
 	setDate: function (val) {
 		if (val != this.date) {
-			var old = this.date;
-			if (old.getFullYear() != val.getFullYear()
-			|| old.getMonth() != val.getMonth()) {
+			var old = this.date,
+				year = val.getFullYear(), mon = val.getMonth();
+			if (old.getFullYear() != year || old.getMonth() != mon) {
 				this.date = val;
 				this._output();
 			} else {
 				this.date = val;
-				this._outcell(this.curcell, false);
+				this._outcell(this.curcell, false, this._invalid(val));
 	
 				var d = val.getDate();
 				for (var j = 0; j < 6; ++j) {
@@ -241,7 +241,8 @@ zk.Cal.prototype = {
 						var cell = el.cells[k];
 						if (zk.getIntAttr(cell, "zk_monofs") == 0
 						&& zk.getIntAttr(cell, "zk_day") == d) {
-							this._outcell(cell, true);
+							this._outcell(cell, true,
+								this._invalid(new Date(year, mon, d)));
 							break;
 						}
 					}
@@ -371,12 +372,16 @@ zkCal.onover = function (evt) {
 zkCal.onout = function (evt) {
 	Event.element(evt).style.textDecoration = "";
 };
+/** Returns if a cell is selected. */
+zkCal._seled = function (cell) {
+	return cell.className.indexOf("seld") >= 0;
+};
 
 //Datebox//
 zkDtbox = {};
 
 zkDtbox.init = function (cmp) {
-	zkDtbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
+	zkDtbox.onVisi = zkDtbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
 	zkDtbox.onHide = zkTxbox.onHide; //widget.js is ready now
 
 	var inp = $real(cmp);
@@ -385,10 +390,12 @@ zkDtbox.init = function (cmp) {
 		//IE: use keydown. otherwise, it causes the window to scroll
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn) {
-		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp);});
-		zkWgt.fixDropBtn(cmp);
-	}
+	if (btn)
+		zk.listen(btn, "click", function (evt) {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp, evt);});
+
+	var pp = $e(cmp.id + "!pp");
+	if (pp) // Bug #1912363
+		zk.listen(pp, "click", zkDtbox.closepp);
 };
 
 zkDtbox.validate = function (cmp) {
@@ -513,11 +520,14 @@ zkDtbox.onkey = function (evt) {
 };
 
 /* Whn the button is clicked on button. */
-zkDtbox.onbutton = function (cmp) {
+zkDtbox.onbutton = function (cmp, evt) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) {
 		if (!$visible(pp)) zkDtbox.open(pp);
 		else zkDtbox.close(pp, true);
+
+		if (!evt) evt = window.event; //Bug 1911864
+		Event.stop(evt);
 	}
 };
 zkDtbox.dropdn = function (cmp, dropdown) {
@@ -600,6 +610,18 @@ zkDtbox.close = function (pp, focus) {
 
 	if (focus)
 		zk.asyncFocus(uuid + "!real");
+};
+zkDtbox.closepp = function (evt) {
+	if (!evt) evt = window.event;
+	var pp = Event.element(evt);
+	for (; pp; pp = pp.parentNode) {
+		if (pp.id) {
+			if (pp.id.endsWith("!pp"))
+				zkDtbox.close(pp, true);
+			return; //done
+		}
+		if (pp.onclick) return;
+	}
 };
 
 zk.FloatDatebox = Class.create();

@@ -163,6 +163,9 @@
 	</zscript>
 
 	<window id="mainWindow" width="800px">
+1. when delete item (row) from e.g. page 1, numbers of rows in that page shouldn't decrease by one.
+<separator/>
+2. when delete second item on that page(page one) items from page 2 shouldn't disappear.
 		<listbox
 			style="margin-bottom: 10px"
 			mold="paging"
@@ -176,7 +179,7 @@
 			</listhead>
 		</listbox>
 		<button label="Delete Selected" onClick="Event.delSelected(userList,model)"/>
-		ID: <textbox id="itemId" /> NAME: <textbox id="itemName" />
+		ID: <intbox id="itemId" /> NAME: <textbox id="itemName" />
 		<button label="Add" onClick="Event.add(userList,model,itemId.getText(),itemName.getText())"/>
 		<button label="Redraw" onClick="userList.invalidate()"/>	
 	</window>

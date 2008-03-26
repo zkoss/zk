@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -31,6 +32,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
@@ -45,6 +47,7 @@ import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.Locales;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
@@ -88,6 +91,7 @@ public class Jasperreport extends HtmlBasedComponent {
 	private String _type = "pdf";
 	private JRExporter exporter;
 	private static final String IMAGE_DIR = "img/";
+	private Locale _locale; // i18n
 
 	public Jasperreport() {
 		setHeight("100%");
@@ -219,6 +223,50 @@ public class Jasperreport extends HtmlBasedComponent {
 		}
 	}
 
+	/**
+	 * Returns the output file locale.
+	 *
+	 * <p>Default: null (means the ZK default, {@link Locales#getCurrent})).</p>
+	 *
+	 * <table border="1">
+	 * <tr>
+	 * <td>{@link #getLocale}</td>
+	 * <td>{@link #getParameters} with a value<br/>
+	 * associated with JRParameter.REPORT_LOCALE</td>
+	 * <td>What is used</td>
+	 * </tr>
+	 * <tr>
+	 * <td>X</td><td>ignored</td><td>X</td>
+	 * </tr>
+	 * <tr>
+	 * <td>null</td><td>Y</td><td>Y</td>
+	 * </tr>
+	 * <tr>
+	 * <td>null</td><td>null</td><td>{@link Locales#getCurrent}</td>
+	 * </tr>
+	 * </table>
+	 * 
+	 * @since 3.0.4
+	 */
+	public Locale getLocale() {
+		return _locale;
+	}
+
+	/**
+	 * Sets the output file locale.
+	 *
+	 * @param locale the locale. If null, the ZK default is used
+	 * ({@link Locales#getCurrent}).
+	 * @see #getLocale
+	 * @since 3.0.4
+	 */
+	public void setLocale(Locale locale) {
+		if (!Objects.equals(_locale, locale)) {
+			_locale = locale;
+			invalidate();
+		}
+	}
+
 	// -- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -281,10 +329,26 @@ public class Jasperreport extends HtmlBasedComponent {
 				}
 			}
 
+			// Default value
+			final Map params;
+			Map exportPara = null; // the exporter parameters which user set
+			
+			if (_parameters==null)
+				params = new HashMap();
+			else {
+				params = _parameters;
+				exportPara = (Map) params.remove("exportParameter");			
+			}
+			
+			if (_locale != null)
+				params.put(JRParameter.REPORT_LOCALE, _locale);
+			else if (!params.containsKey(JRParameter.REPORT_LOCALE))
+				params.put(JRParameter.REPORT_LOCALE, Locales.getCurrent());
+
 			// fill the report
 			JasperPrint jasperPrint = JasperFillManager.fillReport(is,
-				_parameters != null ? _parameters: new HashMap(),
-				_datasource != null ? _datasource: new JREmptyDataSource());
+					params,
+					_datasource != null ? _datasource: new JREmptyDataSource());
 
 
 			// export one type of report
@@ -293,6 +357,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 				
 				exporter = new JRPdfExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
@@ -306,6 +372,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 				
 				exporter = new JRXmlExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
@@ -317,7 +385,9 @@ public class Jasperreport extends HtmlBasedComponent {
 				
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 				
-				exporter = new JRHtmlExporter();				
+				exporter = new JRHtmlExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				
@@ -336,6 +406,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JRRtfExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
@@ -349,9 +421,11 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JRXlsExporter();
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,	Boolean.TRUE);
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
-				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,	Boolean.TRUE);
 				exporter.exportReport();
 
 				arrayOutputStream.close();
@@ -363,10 +437,11 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JExcelApiExporter();
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,	Boolean.TRUE);
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
-				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-						Boolean.TRUE);
 				exporter.exportReport();
 
 				arrayOutputStream.close();
@@ -378,6 +453,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JRCsvExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
@@ -390,6 +467,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
 				exporter = new JROdtExporter();
+				if (exportPara != null)
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();

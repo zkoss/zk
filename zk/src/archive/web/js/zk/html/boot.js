@@ -40,26 +40,31 @@ if (!window.Boot_progressbox) { //not customized
 		var html = '<div id="'+id+'"';
 
 		var mask = mk || zk.loading && !zk._prgsOnce;
+		var ix = zk.innerX(), iy = zk.innerY();
 		if (mask) {
 			zk._prgsOnce = true; //do it only once
-			html += ' ><div class="modal_mask" style="display:block"></div><div'
-		}
+			html += '><div id="zk_mask" class="modal_mask" style="display:block;left:'+ ix + 'px;top:' + iy +	
+				'px;" z.x="' + ix + '" z.y="' + iy + '"></div><div';
+		} else html += "><div";
 		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
 		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
-		html += ' id="z-loading" class="z-loading" style="left:'+x+';top:'+y+';">'
-		+'<div class="z-loading-indicator">'
+		html += ' id="zk_loading" class="z-loading" style="left:'+x+';top:'+y+';visibility: hidden;"'
+		+' z.x="' + ix + '" z.y="' + iy + '"><div class="z-loading-indicator">'
 		+'<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
-		+msg+'</div></div>';
-
-		if (mask)
-			html += '</div>';
+		+msg+'</div></div></div>';
 
 		zk._setOuterHTML(n, html);
+		
+		var el = $e("zk_loading");
 		if (center) {
-			var el = $e("z-loading");
-			el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + "px";
-			el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + "px";
+			if (el) {
+				el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + ix + "px";
+				el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + iy + "px";
+				setZKAttr(el, "x", ix);
+				setZKAttr(el, "y", iy);
+			}
 		}
+		el.style.visibility = "visible";
 		return $e(id);
 	};
 }
@@ -67,8 +72,8 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "8p"; //increase this if we want the browser to reload JavaScript
 zk.voidf = Prototype.emptyFunction;
+zk.booting = true; //denote ZK is booting
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();
@@ -365,7 +370,6 @@ zk.setVParent = function (n) {
 /**
  * Returns whether the element has a virtual parent.
  * @since 3.0.0
- * @param {Object} or {String} n
  */
 zk.isVParent = function (n) {
 	return zk._vpts[n && n.id ? n.id: n];
@@ -387,9 +391,12 @@ zk.unsetVParent = function (n) {
 };
 /** unsetVParent if it is a child of the specified node, n.
  * 	Note: including itself.
+ * @param hide to avoid some annoying effect you can specify whether
+ * to hide before unsetting the parent. Note: since it is hidden,
+ * x.style.display will be changed -- use this option with a lot of cares
  * @since 3.0.0
  */
-zk.unsetChildVParent = function (n) {
+zk.unsetChildVParent = function (n, hide) {
 	var bo = [];
 	for (var id in zk._vpts)
 		if (zk.isAncestor(n, id))
@@ -397,6 +404,7 @@ zk.unsetChildVParent = function (n) {
 
 	for (var j = bo.length; --j >= 0;) {
 		n = $e(bo[j]);
+		if (hide) n.style.display = "none";
 		zk.unsetVParent(n);
 	}
 	return bo;
@@ -427,9 +435,10 @@ function $parentByTag(el, tagName) {
 /** Returns whether an element is visible.
  * Returns false if none-existence.
  * Returns true if no style.
+ * @param {Boolean} strict if true, it also checks the visibility property.(since 3.0.4)
  */
-function $visible(el) {
-	return el && (!el.style || el.style.display != "none");
+function $visible(el, strict) {
+	return el && (!el.style || (el.style.display != "none" && (!strict || el.style.visibility != "hidden")));
 }
 
 /** Converts to an integer. It handles null and "07" */
@@ -464,12 +473,14 @@ function rmZKAttr(el, nm) {
 /** Returns the version of the specified module name.
  */
 zk.getBuild = function (nm) {
-	return zk.mods[nm] || zk.build;
+	return zk.mods[nm] || zk.build || "0";
 };
 
 /** Adds a function that will be invoked after all components are
  * initialized.
- * <p>Note: it is called after all components are initialized.
+ * <p>Note: it is called after all components are initialized
+ * (init, beforeSize and onSize),
+ * so it might be better to be called as addAfterInit
  * <p>The function is removed from the list right before invoked,
  * so it won't be called twice (unless you call zk.addInit again).
  * @param front whether to add the function to the front of the list
@@ -485,8 +496,9 @@ zk.addInit = function (fn, front, unique) {
 };
 /** Adds a function that will be invoked 25 milliseconds, after
  * all components are initialized.
- * Like zk.addInit, the function is called after all components are
- * initialized. However, the function added by addInitLater is invoked
+ * <p>Like zk.addInit, the function is called after all components are
+ * initialized, so it might be better to be called as addAfterInitLater.
+ * However, the function added by addInitLater is invoked
  * with a timer that is called 25 milliseconds.
  * Thus, it is designed to add functions that cannot be called
  * immediately after initialization (zkType.init).
@@ -514,15 +526,15 @@ zk._addfn = function (fns, fn, front) {
  * It is called after all javascript fies are loaded, and before
  * initializing the components.
  *
- * <p>In other words, ZK invokes functions added by zk.addModuleInit,
+ * <p>In other words, ZK invokes functions added by zk.addBeforeInit,
  * then initializes all components, and finally invokes functions added
  * by zk.addInit.
  *
  * <p>The function is removed from the list right before invoked,
- * so it won't be called twice (unless you call zk.addModuleInit again).
+ * so it won't be called twice (unless you call zk.addBeforeInit again).
  */
-zk.addModuleInit = function (fn) {
-	zk._initmods.push(fn);
+zk.addBeforeInit = zk.addModuleInit = function (fn) { //addModuleInit is for backward compatible to 3.0.3 and earlier
+	zk._bfinits.push(fn);
 };
 /** Adds a component that must be initialized after
  * all modules are loaded and initialized.
@@ -569,67 +581,6 @@ zk.addCleanupLater = function (fn, front, unique) {
 	zk._addfn(zk._cuLatfns, fn, front);
 };
 
-/** Adds a function that will be invoked when the browser is resized
- * (window's resize).
- * <p>Unlike zk.addInit, the function won't be detached after invoked.
- *
- * @param front whether to add the function to the front of the list
- * @param {String} unique whether not to add if redundant. If any, fn is added
- * only if fn was not added before.
- * @since 3.0.0
- */
-zk.addOnResize = function (fn, front, unique) {
-	if (typeof unique == "string") {
-		if(zk._reszids[unique]) return;	
-		zk._reszids[unique] = true;
-	}
-	zk._addfn(zk._reszfns, fn, front);
-};
-/** Removes a function that was added by calling zk.addOnResize.
- * @param {String} unique whether not to add if redundant. If any, fn is added
- * @since 3.0.0
- */
-zk.rmOnResize = function (fn, unique) {
-	if (typeof unique == "string") {
-		delete zk._reszids[unique];
-	}
-	zk._reszfns.remove(fn);
-};
-/** Invokes all functions added by zk.addOnResize.
- * @since 3.0.0
- */
-zk.onResize = function (timeout) {
-	//Tom Yeh: 20051230:
-	//In certain case, IE will keep sending onresize (because
-	//grid/listbox may adjust size, which causes IE to send onresize again)
-	//To avoid this endless loop, we ignore onresize a whilf if _reszfn
-	//is called
-	if (!zk._tmResz || $now() > zk._tmResz) {
-		++zk._reszcnt;
-		setTimeout(zk._onResize,
-			timeout ? timeout: zk.ie && zk._reszcnt < 4 ? 200: 35);
-			//IE: we have to prolong since onresize might come too fast
-			//It is an experimental value. Not sure the real cause.
-	} else setTimeout(zk.onResize, 100);
-};
-zk._onResize = function () {
-	if (--zk._reszcnt == 0) {
-		if (zk.loading || anima.count) {
-			zk.onResize();
-			return;
-		}
-		if (zk.ie) {
-			var firstTime = !zk._tmResz;
-			zk._tmResz = $now() + 800; 
-			if (!zk.ie7 && firstTime)
-				return; //IE6: it fires an "extra" onResize in loading
-		}
-
-		for (var j = 0, rl = zk._reszfns.length; j < rl; ++j)
-			zk._reszfns[j]();
-	}
-};
-
 /** Adds a function that will be invoked before the browser is unloading
  * the page.
  * If the function returns a string, then the whole execution will stop
@@ -667,7 +618,7 @@ zk.beforeUnload = function () {
  */
 zk.invoke = function (nm, fn) {
 	if (!zk._modules[nm]) zk.load(nm, fn);
-	else if (zk.loading) zk.addModuleInit(fn);
+	else if (zk.loading) zk.addBeforeInit(fn);
 	else fn();
 };
 
@@ -678,7 +629,7 @@ zk.invoke = function (nm, fn) {
  *
  * @param nm the module name if no / is specified, or filename if / is
  * specified, or URL if :// is specified.
- * @param initfn the function that will be added to zk.addModuleInit
+ * @param initfn the function that will be added to zk.addBeforeInit
  * @param ckfn used ONLY if URL (i.e., xxx://) is used as nm,
  * and the file being loaded doesn't invoke zk.ald().
  * @param modver the version of the module, or null to use zk.getBuild(nm)
@@ -691,7 +642,7 @@ zk.load = function (nm, initfn, ckfn, modver) {
 
 	if (!zk._modules[nm]) {
 		zk._modules[nm] = true;
-		if (initfn) zk.addModuleInit(initfn);
+		if (initfn) zk.addBeforeInit(initfn);
 		zk._load(nm, modver);
 		if (ckfn) zk._ckfns.push(ckfn);
 	}
@@ -817,6 +768,7 @@ zk.initAt = function (node) {
 
 	var stk = [];
 	stk.push(node);
+	zk._initszcmps.push(node);
 	zk._loadAndInit({stk: stk, nosibling: true});
 };
 
@@ -828,8 +780,8 @@ zk._loadAndInit = function (inf) {
 	//We cannot use recursive algorithm because it might take too much time
 	//to execute and browser will alert users for aborting!
 	for (var j = 0; inf.stk.length;) {
-		if (++j > 3000) {
-			setTimeout(function() {zk._loadAndInit(inf);}, 0);
+		if (++j > 1000) {
+			setTimeout(function() {zk._loadAndInit(inf);}, 10);
 			return; //let browser breath
 		}
 
@@ -859,8 +811,8 @@ zk._loadAndInit = function (inf) {
 			}
 		} else if (zk.ie) {
 			switch ($tag(n)) {
-			case "A":
-				//Bug 1635685 and 1612312
+			case "A": //Bug 1635685 and 1612312
+			case "AREA": //Bug 1896749
 				if (n.href.indexOf("javascript:") >= 0)
 					zk.listen(n, "click", zk._ieFixBfUnload);
 				break;
@@ -911,12 +863,12 @@ if (zk.ie) {
 /** Initial components and init functions. */
 zk._evalInit = function () {
 	do {
-		while (!zk.loading && zk._initmods.length)
-			(zk._initmods.shift())();
+		while (!zk.loading && zk._bfinits.length)
+			(zk._bfinits.shift())();
 
 		//Note: if loading, zk._doLoad will execute zk._evalInit after finish
 		for (var j = 0; zk._initcmps.length && !zk.loading;) {
-			var n = zk._initcmps.pop(); //reverse-order
+			var n = zk._initcmps.pop(); //reverse-order (child first)
 
 			var m = zk.eval(n, "init");
 			if (m) n = m; //it might be transformed
@@ -929,27 +881,53 @@ zk._evalInit = function () {
 			if (type) {
 				var o = window["zk" + type];
 				if (o) {
-					if (o["onVisi"]) zk._visicmps[n.id] = true;
-					if (o["onHide"]) zk._hidecmps[n.id] = true;
+					//We put child in front of parent (by use of push)
+					//note: init is called child child-first, but
+					//onVisi/onHide is called parent-first
+					if (o["onVisi"]) zk._tvisicmps.push(n.id); //child-first
+					if (o["onHide"]) zk._thidecmps.push(n.id); //child-first
+					if (o["onSize"]) zk._tsizecmps.push(n.id); //child-first
+					if (o["beforeSize"]) zk._tbfszcmps.push(n.id); //child-first
 				}
 			}
 
-			if (++j > 3000 || zk.loading) {
+			if (zk.loading || ++j > 1000) {
 				if (!zk.loading)
-					setTimeout(zk._evalInit, 0); //let browser breath
+					setTimeout(zk._evalInit, 10); //let browser breath
 				return;
+			}
+		}
+
+		if (!zk.loading) {
+			//put _tsizecmps at the head of _sizecmps and keep child-first
+			for (var es = zk._tvisicmps; es.length;)
+				zk._visicmps.unshift(es.pop());
+			for (var es = zk._thidecmps; es.length;)
+				zk._hidecmps.unshift(es.pop());
+			for (var es = zk._tsizecmps; es.length;)
+				zk._sizecmps.unshift(es.pop());
+			for (var es = zk._tbfszcmps; es.length;)
+				zk._bfszcmps.unshift(es.pop());
+
+			while (zk._initszcmps.length) {
+				var n = zk._initszcmps.shift();
+				zk.beforeSizeAt(n);
+				zk.onSizeAt(n);
+					//Note: beforeSize and onSize cannot call zk.load!!
 			}
 		}
 
 		while (!zk.loading && zk._initfns.length)
 			(zk._initfns.shift())();
 
-		if (!zk.loading && !zk._initfns.length) zk._initids = {};
-		
-		setTimeout(zk._initLater, 25);
-	} while (!zk.loading && (zk._initmods.length || zk._initcmps.length
-	|| zk._initfns.length));
-	//Bug 1815074: _initfns might cause _initmods to be added
+		if (!zk.loading && !zk._initfns.length) {
+			zk._initids = {}; //cleanup
+
+			setTimeout(zk._initLater, 25);
+		}
+	} while (!zk.loading && (zk._bfinits.length || zk._initcmps.length
+	|| zk._initszcmps.length || zk._initfns.length));
+	//Bug 1815074: _initfns might cause _bfinits to be added
 };
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
@@ -982,6 +960,7 @@ zk.eval = function (n, fn, type, a0, a1, a2, a3, a4, a5, a6, a7) {
 					return f(n,a0,a1,a2,a3,a4,a5,a6,a7);
 				} catch (ex) {
 					zk.error("Failed to invoke zk"+type+"."+fn+"\n"+ex.message);
+					if (zk.debugJS) throw ex;
 				}
 			}
 		}
@@ -1016,8 +995,10 @@ zk._cleanupAt = function (n) {
 		zk.eval(n, "cleanup", type);
 		zkau.cleanupMeta(n); //note: it is called only if type is defined
 		zk.unlistenAll(n); //Bug 1741959: memory leaks
-		delete zk._visicmps[n.id];
-		delete zk._hidecmps[n.id];
+		zk._visicmps.remove(n.id);
+		zk._hidecmps.remove(n.id);
+		zk._sizecmps.remove(n.id);
+		zk._bfszcmps.remove(n.id);
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -1026,22 +1007,30 @@ zk._cleanupAt = function (n) {
 
 /** To notify a component that it becomes visible because one its ancestors
  * becomes visible. All descendants of n is invoked if onVisi is declared.
+ * The invocation of onVisi is parent-first (and then child).
+ *@param n the topmost element that has become visible.
+ * Note: n has become visible when this method is called.
+ * If null, all elements will be handled
  */
 zk.onVisiAt = function (n) {
-	for (var nid in zk._visicmps) {
-		var elm = $e(nid);
+	for (var elms = zk._visicmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
-			if (e == n) { //elm is a child of n
+			if (!$visible(e))
+				break;
+			if (e == n || !n) { //elm is a child of n
 				zk.eval(elm, "onVisi");
 				break;
 			}
-			if (!$visible(e))
-				break;
 		}
 	}
 };
 /** To notify a component that it becomes invisible because one its ancestors
  * becomes invisible. All descendants of n is invoked if onHide is declared.
+ * The invocation of onHide is parent-first (and then child).
+ *@param n the topmost element that will become invisible.
+ * Note: n is still visible when this method is called.
+ * If null, all elements will be handled.
  */
 zk.onHideAt = function (n) {
 	//Bug 1526542: we have to blur if we want to hide a focused control in gecko and IE
@@ -1051,18 +1040,65 @@ zk.onHideAt = function (n) {
 		try {f.blur();} catch (e) {}
 	}
 
-	for (var nid in zk._hidecmps) {
-		var elm = $e(nid);
+	for (var elms = zk._hidecmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
-			if (e == n) { //elm is a child of n
+			if (!$visible(e)) //yes, ignore hidden ones
+				break;
+			if (e == n || !n) { //elm is a child of n
 				zk.eval(elm, "onHide");
 				break;
 			}
-			if (!$visible(e)) //yes, ignore hidden ones
-				break;
 		}
 	}
-}
+};
+/** To notify a component that its parent's size is changed.
+ * All descendants of n is invoked if onSize is declared.
+ * The invocation of onSize is parent-first (and then child).
+ * @param n the topmost element whose size is changed.
+ * If null, the browser's size is changed and all elements will be handled.
+ * @since 3.0.4
+ */
+zk.onSizeAt = function (n) {
+	for (var elms = zk._sizecmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
+		for (var e = elm; e; e = $parent(e)) {
+			if (!$visible(e))
+				break;
+			if (!n || e == n) { //elm is a child of n
+				zk.eval(elm, "onSize");
+				break;
+			}
+		}
+	}
+};
+/** To notify a component that its parent's size WILL be changed.
+ * All descendants of n is invoked if beforeSize is declared.
+ * The invocation of beforeSize is parent-first (and then child).
+ *
+ * <p>The typical use is: call beforeSizeAt first, adjust the width/height
+ * and then call onSizeAt.
+ *
+ * <p>The component usually cleans up in zkXxx.beforeSize, if necessary, and
+ * does the sizing in zkXxx.onSize, if necessary.
+ *
+ * @param n the topmost element whose size is changed.
+ * If null, the browser's size is changed and all elements will be handled.
+ * @since 3.0.4
+ */
+zk.beforeSizeAt = function (n) {
+	for (var elms = zk._bfszcmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
+		for (var e = elm; e; e = $parent(e)) {
+			if (!$visible(e))
+				break;
+			if (!n || e == n) { //elm is a child of n
+				zk.eval(elm, "beforeSize");
+				break;
+			}
+		}
+	}
+};
 
 //extra//
 /** Loads the specified style sheet (CSS).
@@ -1124,7 +1160,7 @@ zk.getUpdateURI = function (uri, ignoreSessId, modver) {
 
 	if (uri.charAt(0) != '/') uri = '/' + uri;
 	if (modver && uri.length >= 5 && uri.substring(0, 5) == "/web/")
-		uri = "/web/_zver" + modver + uri.substring(4);
+		uri = "/web/_zv" + modver + uri.substring(4);
 
 	var j = zk_action.lastIndexOf(';'), k = zk_action.lastIndexOf('?');
 	if (j < 0 && k < 0) return zk_action + uri;
@@ -1165,7 +1201,7 @@ zk._progress = function () {
 		if (!n) {
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
-				//when the first boot, mesg is not ready
+				//when the first boot, mesg might not be ready
 
 			Boot_progressbox("zk_prog", msg, zk.innerX(), zk.innerY());
 			zk.progressPrompted = true;
@@ -1272,14 +1308,17 @@ zk._domsg = function () {
 		if (!console) {
 			console = document.createElement("DIV");
 			document.body.appendChild(console);
-			var html =
- '<div class="debugbox">'
+			var html = '<div id="zk_debugbox" class="debugbox" style="visibility:hidden">'
 +'<table cellpadding="0" cellspacing="0" width="100%"><tr>'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button><br/>'
 +'<button onclick="$e(\'zk_msg\').value = \'\'">clear</button></td>'
-+'<td><textarea id="zk_msg" style="width:99%" rows="3"></textarea></td></tr></table></div>';
++'<td><textarea id="zk_msg" style="width:99%" rows="10"></textarea></td></tr></table></div>';
 			zk._setOuterHTML(console, html);
 			console = $e("zk_msg");
+			var d = $e("zk_debugbox");
+			d.style.top = zk.innerY() + zk.innerHeight() - d.offsetHeight - 20 + "px";
+			d.style.left = zk.innerX() + zk.innerWidth() - d.offsetWidth - 20 + "px";
+			d.style.visibility = "visible";
 		}
 		console.value = console.value + zk._msg + '\n';
 		zk._msg = null;
@@ -1327,19 +1366,20 @@ zk._initfns = []; //used by addInit
 zk._initids = {};
 zk._inLatfns = []; //used by addInitLater
 zk._inLatids = {};
-zk._initmods = []; //used by addModuleInit
+zk._bfinits = []; //used by addBeforeInit
 zk._cufns = []; //used by addCleanup
 zk._cuids = {};
 zk._cuLatfns = []; //used by addCleanupLater
 zk._cuLatids = {};
-zk._reszfns = []; //used by addOnResize
-zk._reszids = {};
-zk._reszcnt = 0; //# of pending zk.onResize
 zk._bfunld = []; //used by addBeforeUnload
 zk._initcmps = []; //comps to init
+zk._initszcmps = []; //comps that requires onSizeAt to be called in _evalInit
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
-zk._visicmps = {}; //a set of component's ID that requires zkType.onVisi
-zk._hidecmps = {}; //a set of component's ID that requires zkType.onHide
+zk._visicmps = []; //an array of component's ID that requires zkType.onVisi; the child is in front of the parent
+zk._hidecmps = []; //an array of component's ID that requires zkType.onHide; the child is in front of the parent
+zk._sizecmps = []; //an array of component's ID that requires zkType.onSize; the child is in front of the parent
+zk._bfszcmps = []; //an array of component's ID that requires zkType.beforeSize; the child is in front of the parent
+zk._tsizecmps = [], zk._tbfszcmps = [], zk._tvisicmps = [], zk._thidecmps = []; //temporary array
 function myload() {
 	var f = zk._onload;
 	if (f) {
@@ -1351,7 +1391,8 @@ zk._onload = function () {
 	//It is possible to move javascript defined in zul's language.xml
 	//However, IE has bug to order JavaScript properly if zk._load is used
 	zk.progress(600);
-	zk.addInit(zk.progressDone);
+	zk.addInitLater(zk.progressDone);
+	zk.addInitLater(function() {zk.booting = false;});
 	zk.initAt(document.body);
 };
 

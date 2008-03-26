@@ -98,6 +98,7 @@ public class PageDefinition extends NodeInfo {
 	private Class _expfcls;
 	private final ComponentDefinitionMap _compdefs;
 	private Boolean _cacheable;
+	private boolean _complete;
 
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
@@ -506,6 +507,36 @@ public class PageDefinition extends NodeInfo {
 		_cacheable = cacheable;
 	}
 
+	/** Returns if the page is a complete page.
+	 * By complete we mean the page has everything that the client expects.
+	 * For example, for HTML output, the page will generate
+	 * the HTML, HEAD and BODY tags.
+	 *
+	 * <p>By default (false), we assume a page is complete if and only if
+	 * it is <em>not</em> included by other page.
+	 *
+	 * <p>If you have a page that has a complete HTML page and
+	 * it is included by other page, you have to specify the complete flag
+	 * to be true.
+	 * @since 3.0.4
+	 */
+	public boolean isComplete() {
+		return _complete;
+	}
+	/** Sets if the page is a complete page.
+	 * <p>Default: false. It means a page is complete if and only if it
+	 * is <em>not</em> included by other page.
+	 *
+	 * @param complete whether the page is complete.
+	 * If true, this page is assumed to be complete no matter it is included
+	 * or not. If false, this page is assumed to be complete if it is
+	 * not included by other page.
+	 * @see #isComplete
+	 * @since 3.0.4
+	 */
+	public void setComplete(boolean complete) {
+		_complete = complete;
+	}
 	/** Adds a root attribute.
 	 * The previous attributee of the same will be replaced.
 	 *
@@ -700,7 +731,8 @@ public class PageDefinition extends NodeInfo {
 	 * It setup the identifier and title, and adds it to desktop.
 	 */
 	public void init(final Page page, final boolean evalHeaders) {
-		((PageCtrl)page).init(
+		final PageCtrl pageCtrl = (PageCtrl)page;
+		pageCtrl.init(
 			new PageConfig() {
 				public String getId() {return _id;}
 				public String getUuid() {return null;}
@@ -710,20 +742,23 @@ public class PageDefinition extends NodeInfo {
 					return evalHeaders ?
 						PageDefinition.this.getHeaders(page): "";
 				}
-				public String getRootAttributes() {
-					return PageDefinition.this.getRootAttributes(page);
-				}
-				public String getContentType() {
-					return PageDefinition.this.getContentType(page);
-				}
-				public String getDocType() {
-					return PageDefinition.this.getDocType(page);
-				}
-				public String getFirstLine() {
-					return PageDefinition.this.getFirstLine(page);
-				}
-				public Boolean getCacheable() {return _cacheable;}
 			});
+
+		String s = getRootAttributes(page);
+		if (s != null) pageCtrl.setRootAttributes(s);
+
+		s = getContentType(page);
+		if (s != null) pageCtrl.setContentType(s);
+
+		s = getDocType(page);
+		if (s != null) pageCtrl.setDocType(s);
+
+		s = getFirstLine(page);
+		if (s != null) pageCtrl.setFirstLine(s);
+
+		if (_cacheable != null) pageCtrl.setCacheable(_cacheable);
+		if (_expfcls != null) page.setExpressionFactoryClass(_expfcls);
+		page.setComplete(_complete);
 	}
 
 	//NodeInfo//

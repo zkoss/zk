@@ -49,6 +49,45 @@ public class Strings {
 	public static final boolean isBlank(String s) {
 		return s == null || s.trim().length() == 0;
 	}
+	/** Trims the string buffer by removing the leading and trailing
+	 * whitespaces.
+	 * Note: unlike String.trim(), you can specify the index of
+	 * the first character to start trimming.
+	 *
+	 * <p>Like String.trim(), a whitespace is a character that has
+	 * a code not great than <code>'&#92;u0020'</code> (the space character)
+	 *
+	 * @param buf the string buffer to trim the leading and trailing.
+	 * @param index the index of the first character to trim 
+	 * (i.e., consider as the leading character).
+	 * If 0, it starts from the beginning.
+	 * @return the same string buffer
+	 * @since 3.0.4
+	 */
+	public static final StringBuffer trim(StringBuffer buf,
+	int index) {
+		for (int k = index, len = buf.length();; ++index) {
+			if (index >= len) {
+				buf.delete(k, len);
+				break; //done
+			}
+
+			char cc = buf.charAt(index);
+			if (cc > ' ') { //same as String.trim()
+				buf.delete(k, index);
+
+				for (len = index = buf.length(); --index > k;) {
+					cc = buf.charAt(index);
+					if (cc > ' ') { //same as String.trim()
+						buf.delete(index + 1, len);
+						break;
+					}
+				}
+				break; //done
+			}
+		}
+		return buf;
+	}
 	/** Returns an encoded string buffer, faster and shorter than
 	 * Integer.toHexString. It uses numbers and lower-case leters only.
 	 * Thus it is a valid variable name if prefix with an alphabet.

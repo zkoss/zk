@@ -186,6 +186,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#Groovy
 	cp dist/lib/ext/jruby.jar /tmp/zk/$binnm/dist/lib/ext
 		#Ruby (jruby)
+	cp dist/lib/ext/jython.jar /tmp/zk/$binnm/dist/lib/ext
+		#Python (jython)
 	cp dist/lib/ext/mvel.jar /tmp/zk/$binnm/dist/lib/ext
 		#MVEL
 	cp dist/lib/ext/ognl.jar /tmp/zk/$binnm/dist/lib/ext
@@ -252,7 +254,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	if [ "$target" == "official" ] ; then
 		#Ouput ${profnm}
 		cd $binnm/dist/lib/ext
-		rm -rf js.jar groovy.jar jruby.jar mvel.jar ognl.jar
+		rm -rf js.jar groovy.jar jruby.jar jython.jar mvel.jar ognl.jar
 
 		cd ..
 		rm zkmax.jar

@@ -116,7 +116,8 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 
 		zkau.send({uuid: getZKAttr(row, "pitem"),
 			cmd: "onOpen", data: [toOpen]},
-			zkau.asapTimeout(row, "onOpen"));
+			toOpen && getZKAttr(row, "lod") ? 38: //load-on-demand
+				zkau.asapTimeout(row, "onOpen"));
 			//always send since the client has to update Openable
 	},
 	/** Shows or hides all children
@@ -159,7 +160,7 @@ zkTree.init = function (cmp) {
 
 	//we have re-paginate since treechild might be invalidated
 	if (meta.bodytbl)
-		zkTrow._pgnt(cmp, meta.bodytbl.rows);
+		zkTrow._pgnt(cmp, meta.bodyrows);
 };
 
 zkTree.cleanup = function (cmp) {
@@ -167,11 +168,14 @@ zkTree.cleanup = function (cmp) {
 };
 
 /** Called when a tree becomes visible because of its parent. */
-zkTree.onVisi = function (cmp) {
+zkTree.childchg = zkTree.onVisi = zkTree.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
-	if (meta) meta.init();
+	if (meta) meta._recalcSize();
 };
-
+zkTree.beforeSize = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta._beforeSize();
+};
 /** Called when the body got a key stroke. */
 zkTree.bodyonkeydown = function (evt) {
 	if (!evt) evt = window.event;
@@ -209,7 +213,7 @@ zkTree.setAttr = function (cmp, nm, val) {
 		if ("z.pgInfo" == nm) {
 			zkTrow._setPgInfo(cmp, val);
 			if (meta.bodytbl)
-				zkTrow._pgnt(cmp, meta.bodytbl.rows);
+				zkTrow._pgnt(cmp, meta.bodyrows);
 			return true;
 		}
 		return meta.setAttr(nm, val);
@@ -295,7 +299,7 @@ zkTrow.open = function (n, open) {
 
 /** Called when _onDocCtxMnu is called. */
 zkTrow.onrtclk = function (cmp) {
-	var meta = zkau.getMetaByType(cmp, "Tree");
+	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta && !meta._isSelected(cmp)) meta.doclick(null, cmp);
 };
 /* Paginate.
@@ -454,7 +458,7 @@ zkTcop.init = function (cmp) {
 	zk.listen(cmp, "click", zkTree.ontoggle);
 };
 
-zk.addModuleInit(function () {
+zk.addBeforeInit(function () {
 	//Treecol
 	//init it later because zul.js might not be loaded yet
 	zkTcol = {}
@@ -462,7 +466,7 @@ zk.addModuleInit(function () {
 
 	/** Resize the column. */
 	zkTcol.resize = function (col1, icol, wd1, keys) {
-		var meta = zkau.getMeta($parentByType(col1, "Tree"));
+		var meta = zkau.getMeta(getZKAttr(col1.parentNode, "rid"));
 		if (meta)
 			meta.resizeCol(
 				$parentByType(col1, "Tcols"), icol, col1, wd1, keys);

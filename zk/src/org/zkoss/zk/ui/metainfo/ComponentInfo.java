@@ -552,10 +552,16 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _annots;
 	}
 
-	/** Applies the event handlers, annotations, properties and
-	 * custom attributes to the specified component.
+	/** Applies the event handlers and properties to the specified component.
 	 *
 	 * <p>It also invokes {@link ComponentDefinition#applyProperties}.
+	 *
+	 * <p>Note: custom attributes are not part of {@link ComponentInfo},
+	 * so they won't be applied here.
+	 *
+	 * <p>Note: annotations are applied to the component when a component
+	 * is created. So, this method doesn't and need not to copy them.
+	 * See also {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}.
 	 *
 	 * @since 3.0.0
 	 */

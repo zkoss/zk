@@ -1,8 +1,8 @@
+<?page title="ZK Test2 Platform"?>
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
 <h:script>
 function newWindow(url){
-	document.forms["newform"].action = url;
-	document.forms["newform"].submit();
+	zk.go(url, 0, "_zktest2");
 }
 </h:script>
 <h:form id="newform" target="_blank" method="post"/>
@@ -13,54 +13,83 @@ String defaultHeight="800px";
 String shortHeight="520px";
 </zscript>
 	<borderlayout id="main" use="org.zkoss.zkdemo.test2.MainLayout">
-	<west size="355px" border="0" collapsible="true" maxsize="600" splittable="true" flex="true">
+	<west size="355px" border="0" collapsible="true" maxsize="600" splittable="true" flex="true" autoscroll="true">
 	<!-- ******************** Ctrl Panel ******************** -->
 			<window id="w1">
 				<groupbox mold="3d" width="352px" >
 					<caption label="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}"/>
 					<vbox>
-						<vbox>
-							File Name Filter:<textbox id="fnf" value="Z30"/>
-							<checkbox id="reg" label="Regular Expression"/>
-							<checkbox id="newb" label="Open in new Browser">
-								<attribute name="onCheck"><![CDATA[
-								if (lb.getSelectedItem() != null && self.checked) {
-									Clients.evalJavaScript("newWindow(\""+main.getFileName(lb.getSelectedIndex())+"\")");
-								}
-								]]></attribute>
-							</checkbox>
-					<hbox>
-						<button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();w2.setWidth("90%")'/>
-						<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();w2.setWidth("800px")'/>
-						<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("")'/>
-						<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
-						<button label="tracker">
-							<attribute name="onClick"><![CDATA[
-								if (lb.getSelectedItem() != null) {
-									String label = lb.getSelectedItem().getLabel();
-									if (label != null) {								
-										String number = label.substring(label.indexOf("-") + 1, label.indexOf("."));
-										if (label.startsWith("F")) {									
-											Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
-										} else if (label.startsWith("B")){
-											Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
-										}									
-									}
-								} else {
-									alert("Please select a item!");
-								}
-							]]></attribute>
-						</button>
-					</hbox>
-						</vbox>
-						
-						<listbox id="lb" mold="paging" pageSize="20" width="330px">
+						<tabbox mold="accordion">				
+							<tabs>
+								<tab label="Normal"/>
+								<tab label="Advance"/>
+							</tabs>
+							<tabpanels>
+								<tabpanel>
+									<vbox>
+										File Name Filter:<textbox id="fnf"/>
+										<checkbox id="reg" label="Regular Expression"/>
+										<checkbox id="newb" label="Open in new Browser">
+											<attribute name="onCheck"><![CDATA[
+											if (lb.getSelectedItem() != null && self.checked) {
+												Clients.evalJavaScript("newWindow(\""+main.getFileName(lb.getSelectedIndex())+"\")");
+											}
+											]]></attribute>
+										</checkbox>
+										<hbox>
+											<!-- <button label="overlap" onClick='w1.setTitle("Float");w1.doOverlapped();w2.setWidth("90%")'/>
+											<button label="embed" onClick='w1.setTitle("");w1.doEmbedded();w2.setWidth("800px")'/> -->
+											<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("w2").getFellow("ifr").setSrc("");w2.getFellow("caption").label = "ZK TEST2"'/>
+											<button label="reload" onClick='main.getFellow("w2").getFellow("ifr").invalidate()'/>
+											<button label="tracker">
+			<attribute name="onClick"><![CDATA[
+				if (lb.getSelectedItem() != null) {
+					String label = lb.getSelectedItem().getLabel();
+					if (label != null) {								
+						String number = label.substring(label.indexOf("-") + 1, label.indexOf("."));
+						if (label.startsWith("F")) {									
+							Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
+						} else if (label.startsWith("B")){
+							Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
+						}									
+					}
+				} else {
+					alert("Please select a item!");
+				}
+			]]></attribute>
+											</button>
+										</hbox>
+										<hbox>
+											<radiogroup id="radio" onCheck="fnf.value = self.selectedItem.label;main.updateModel();">
+												<radio label="F30"/>
+												<radio label="Z30"/>
+												<radio label="B30"/>
+											</radiogroup>
+										</hbox>
+									</vbox>
+								</tabpanel>
+								<tabpanel>
+									<vbox>
+									Filter File Name By Tag:
+									<textbox id="fnt"/>
+									<button label="Show Uncategorized" onClick="main.showUncategorized();"/> 
+									For Example: [A,H,Grid]
+									</vbox>
+								</tabpanel>
+							</tabpanels>
+						</tabbox>
+						<hbox>
+							<button label="Export File Name" onClick="main.exportFileName();"/>
+							<button label="Import File Name" onClick="main.importFileName();"/>
+						</hbox>
+						<listbox id="lb" mold="paging" pageSize="20" width="330px" pagingPosition="both">
 							<listhead>
 								<listheader label="Name" width="50%"/>
 								<listheader label="Date" width="50%"/>
 							</listhead>
 							<attribute name="onSelect">
 								codeViewPanel.title=main.getCurrentRealFile().getAbsolutePath();
+								((Caption)w2.getFellow("caption")).label = "ZK TEST2 : File-Name [" + main.getFileName(lb.getSelectedIndex()) + "]";
 							</attribute>
 						</listbox>
 					</vbox>
@@ -71,10 +100,10 @@ String shortHeight="520px";
 	<center border="0" autoscroll="true" flex="true">			
 		<!-- ******************** View Panel ******************** -->
 		<window id="w2" border="normal">
-			<caption label="ZK TEST2"/>
+			<caption id="caption" label="ZK TEST2"/>
 			<separator/>
 			<separator/>
-			<iframe  id="ifr" height="98%"  width="100%"/>
+			<iframe id="ifr" height="98%" width="100%" autohide="true"/>
 		</window>
 	</center>
 	<south id="leftPanel" border="0" collapsible="true" maxsize="600" 

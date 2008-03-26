@@ -725,6 +725,9 @@ public interface Execution  {
 	 *
 	 * @param key could be anything. The second invocation of this method
 	 * in the same execution with the same key will override the previous one.
+	 * In other words, the previous one will be dropped.
+	 * If null is specified, the response is simply appended to the end
+	 * without overriding any previous one.
 	 */
 	public void addAuResponse(String key, AuResponse resposne);
 

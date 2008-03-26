@@ -69,6 +69,11 @@ import org.zkoss.zul.event.ListDataListener;
  * a non-deferrable event listener is registered
  * (see {@link org.zkoss.zk.ui.event.Deferrable}).
  * 
+ * <p>Like {@link Datebox},
+ * the value of a read-only comobobox ({@link #isReadonly}) can be changed
+ * by dropping down the list and selecting an combo item
+ * (though users cannot type anything in the input box).
+ *
  * @author tomyeh
  * @see Comboitem
  */

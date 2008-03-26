@@ -72,6 +72,8 @@ public class ClassWebResource {
 	private String[] _compressExts;
 	/** Map(String ext, Extendlet). */
 	private final Map _extlets = new HashMap(5);
+	/** Whether to debug JavaScript files. */
+	private boolean _debugJS;
 
 	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
@@ -219,7 +221,7 @@ public class ClassWebResource {
 	public void setCompress(String[] exts) {
 		_compressExts = exts != null && exts.length > 0 ? exts: null;
 	}
-	/**Returns  the extension that shall be compressed if the browser
+	/**Returns the extension that shall be compressed if the browser
 	 * supports the compression encoding (accept-encoding).
 	 *
 	 * <p>Default: null (no compression at all).
@@ -227,6 +229,38 @@ public class ClassWebResource {
 	 */
 	public String[] getCompress() {
 		return _compressExts;
+	}
+
+	/** Returns whether to debug JavaScript files.
+	 * If true, it means the original (i.e., uncompressed) JavaScript files
+	 * shall be loaded instead of compressed JavaScript files.
+	 *
+	 * @since 3.0.4
+	 * @see #setDebugJS
+	 */
+	public boolean isDebugJS() {
+		return _debugJS;
+	}
+	/**Sets whether to debug JavaScript files.
+	 *
+	 * <p>Default: false.
+	 *
+	 * <p>If true is specified, it will try to load the original
+	 * Java (i.e., uncompressed) file instead of the compressed one.
+	 * For example, if {@link #service} is called to load abc.js,
+	 * and {@link #isDebugJS}, then {@link #service} will try
+	 * to load abc.org.js first. If not found, it load ab.js insted.
+	 *
+	 * <p>If {@link #isDebugJS} is false (default),
+	 * abc.js is always loaded.
+	 *
+	 * @param debug whether to debug JavaScript files.
+	 * If true, the original JavaScript files shall be
+	 * loaded instead of the compressed files.
+	 * @since 3.0.4
+	 */
+	public void setDebugJS(boolean debug) {
+		_debugJS = debug;
 	}
 
 	//-- Work with ClassWebContext --//
@@ -237,10 +271,10 @@ public class ClassWebResource {
 	HttpServletResponse response, String pi)
 	throws ServletException, IOException {
 		//A trick used to enforce browser to load new version JavaScript
-		//How it work: client engine prefix URI with /_zver123, where
+		//How it work: client engine prefix URI with /_zv123, where
 		//123 is the build version that changes once reload is required
 		//Then, the server eliminate such prefix before locating resource
-		final String ZVER = "/_zver";
+		final String ZVER = "/_zv";
 		if (pi.startsWith(ZVER)) {
 			final int j = pi.indexOf('/', ZVER.length());
 			if (j >= 0) pi = pi.substring(j);
@@ -260,10 +294,16 @@ public class ClassWebResource {
 				log.warning("Unknown path info: "+pi);
 			}
 
-			final int len = jsextra.length();
+			int len = jsextra.length();
 			if (len == 0) jsextra = null;
 			else {
-				final char cc = jsextra.charAt(len - 1);
+				char cc = jsextra.charAt(0);
+				if (cc != ';') {
+					jsextra = ';' + jsextra; //just in case
+					++len;
+				}
+
+				cc = jsextra.charAt(len - 1);
 				if (cc != ';') {
 					if (cc != ')') jsextra += "()";
 					jsextra += ';';
@@ -289,8 +329,21 @@ public class ClassWebResource {
 		}
 
 		byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
-		pi = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
-		final InputStream is = getResourceAsStream(pi);
+		InputStream is = null;
+
+		if (_debugJS && pi.endsWith(".js")) {
+			final String orgpi = Servlets.locate(_ctx, request,
+				pi.substring(0, pi.length() - 3) + ".org.js",
+				_cwc.getLocator());
+			is = getResourceAsStream(orgpi);
+			if (is != null) pi = orgpi;
+		}
+
+		if (is == null) {
+			pi = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
+			is = getResourceAsStream(pi);
+		}
+
 		byte[] data;
 		if (is == null) {
 			if ("js".equals(ext)) {

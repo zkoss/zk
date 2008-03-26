@@ -20,7 +20,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/web/html" prefix="h" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -33,10 +32,8 @@ ${z:outDeviceStyleSheets('ajax')}
 </head>
 <body>
  <c:if test="${!empty arg.alert}">
-	<h:box color="red">
-	<pre><c:out value="${arg.alert}"/></pre>
- 	</h:box>
-	<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="closeUpload()"/>
+	<div style="border: 1px solid red;background: white"><c:out value="${arg.alert}"/></div>
+	<input type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="exec(cmdClose)"/>
  </c:if>
 </body>
 <script type="text/javascript">
@@ -48,14 +45,22 @@ ${z:outDeviceStyleSheets('ajax')}
 	if we try to insert some elements (some kind of NullPointerException
 	"Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIXMLHttpRequest.open]"
 --%>
-	function doUpdate() {
-		parent.setTimeout("zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}')", 0);
+	var cmdUpdate = "zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}');";
+	var cmdClose = "zkau.sendOnClose('${arg.uuid}');";
+
+	<%-- exec at the parent's scope --%>
+	function exec(cmd) {
+		parent.setTimeout(cmd, 0);
 	}
-	function closeUpload() {
-		parent.setTimeout("zkau.sendOnClose('${arg.uuid}')", 0);
-	}
-	<c:if test="${!empty arg.contentId}">doUpdate(); closeUpload();</c:if>
-	<c:if test="${empty arg.contentId and empty arg.alert}">closeUpload();</c:if>
+	<c:if test="${!empty arg.contentId}">
+		exec(cmdUpdate + cmdClose);
+		<%-- Bug 1920877: do not use two timer to do cmdUpdate and
+			cmdClose separately, since Safari might do cmdClose first!!
+		--%>
+	</c:if>
+	<c:if test="${empty arg.contentId and empty arg.alert}">
+		exec(cmdClose);
+	</c:if>
 // -->
 </script>
 </html>

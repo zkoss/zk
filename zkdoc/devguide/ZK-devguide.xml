@@ -1,14 +1,33 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.0.3</subtitle>
+<subtitle>Version 3.0.4</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
+<para>
+<graphic fileref="images/2000009A000011C5000007882B1A34C6.jpg">2
+			
+		</graphic>
+</para>
+<para/>
+<para>SIMPLY RICH</para>
+<para>ZKTM</para>
+<para>March 2008</para>
+<para>Potix Corporation</para>
+<para>Revision 209</para>
+<para/>
+<para/>
+<para>Copyright © Potix Corporation. All rights reserved.</para>
+<para>The material in this document is for information only and is subject to change without notice. While reasonable efforts have been made to assure its accuracy, Potix Corporation assumes no liability resulting from errors or omissions in this document, or from the use of the information contained herein.</para>
+<para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
+<para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
+<para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
+<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para>
 <chapter>
 <title>1. Introduction</title>
 <para>Welcome to ZK, the simplest way to make Rich Web Applications.</para>
@@ -27,7 +46,7 @@
 <para>
 <graphic fileref="images/200000C9000027E4000032FC924A1F58.jpg">2
 			
-		</graphic>AJAX is a kind of new generation DHTML. Like DHTML, it heavily relies on JavaScript to listen to events triggered by user's activity, and then manipulate visual representation of a page (aka. DOM) in the browser dynamically. Moreover, it takes a step further by enabling communication with the server asynchronously without leaving or rendering the whole page again. It breaks the page-based model by introducing light-weight communication between clients and servers. With proper design AJAX could bring rich components, common to desktop applications, to life in Web applications allowing dynamic updates and more control over the application.</para>
+		</graphic>AJAX is a kind of new generation DHTML. Like DHTML, it heavily relies on JavaScript to listen to events triggered by user's activity, and then manipulate visual presentation of a page (aka. DOM) in the browser dynamically. Moreover, it takes a step further by enabling communication with the server asynchronously without leaving or rendering the whole page again. It breaks the page-based model by introducing light-weight communication between clients and servers. With proper design AJAX could bring rich components, common to desktop applications, to life in Web applications allowing dynamic updates and more control over the application.</para>
 <para>When providing the interactivity that users demand, AJAX adds more complexities and skill prerequisites to the already costly development of Web applications. Developers have to manipulate DOM in the browser and communicate with the server via incompatible and even buggy JavaScript APIs. For better interactivity developers have to replicate application data and business logic in the browser, increasing maintenance costs and the challenge of synchronizing data between the server and the client.</para>
 <para>The bottom line is that ad hoc AJAX applications are no different from traditional Web applications in regards to the way processes are requested. Developers still have to fill the gap caused by the page-based and stateless model.</para></sect1><sect1><title>ZK: What It Is </title>
 <para>ZK is an event-driven, component-based framework to enable rich user interfaces for Web applications. ZK includes an AJAX-based event-driven engine, a rich set of XUL and XHTML components and a markup language called ZUML (ZK User Interface Markup Language).</para>
@@ -216,7 +235,9 @@
 <title>3. The Basics</title>
 <para>This chapter describes the basics of ZK. It uses XUL to illustrate ZK features, but it is usually applicable to other markup languages that ZK supports.</para><sect1><title>Architecture Overview</title>
 <para>ZK includes an AJAX-based mechanism to automate interactivity, a rich set of XUL-based components to enrich usability, and a markup language to simplify development.</para>
-<para>The AJAX-based mechanism consists of three parts as depicted below: ZK loader, ZK AU Engine and ZK Client Engine.</para>
+<para>The AJAX-based mechanism consists of three parts as depicted below: ZK loader, ZK AU Engine<footnote>
+<para>Also known as ZK Update Engine.</para>
+</footnote> and ZK Client Engine.</para>
 <para>
 <graphic fileref="images/2000011400003FE500002350FCFBD1DA.jpg">2
 			
@@ -253,7 +274,7 @@
 <para>These ZK responses are actually commands to instruct Client Engine how to update the DOM tree accordingly.</para>
 </listitem>
 </orderedlist></sect2></sect1><sect1><title>Components, Pages and Desktops</title><sect2><title>Components</title>
-<para>A component is an UI object, such as a label, a button and a tree. It defines the visual representation and behaviors of a particular user interface. By manipulating them, developers control how to represent an application visually in the client.</para>
+<para>A component is an UI object, such as a label, a button and a tree. It defines the visual presentation and behaviors of a particular user interface. By manipulating them, developers control how to represent an application visually in the client.</para>
 <para>A component must implement the org.zkoss.zk.ui.Component interface.</para></sect2><sect2><title>Pages</title>
 <para>A page (org.zkoss.zk.ui.Page) is a collection of components. A page confines components belonging to it, such that they will be displayed in a certain portion of the browser. A page is automatically created when ZK loader interprets a ZUML page.</para><sect3><title>Page Title</title>
 <para>Each page could have a title that will be displayed as part of the browser's window caption. Refer to the Processing Instructions section in the ZK User Interface Markup Language chapter for details.</para>
@@ -266,9 +287,9 @@
 <para>Notice that both pages and desktops are created and remove implicitly. There are no API to create or remove them. A page is create each time ZUML loads a page. A page is removed when ZK finds it is no longer referenced. A desktop is created when the first ZUML page is loaded. A desktop is removed if too many desktops are created for the specific session.</para>
 <para>The createComponents method in the org.zkoss.zk.ui.Executions class creates only components, not page, even though it loads a ZUML file (aka., page).</para></sect3></sect2><sect2><title>Forest of Trees of Components</title>
 <para>A component has at most one parent. A component might have multiple children. Some components accept only certain types of components as children. Some must be a child of certain type of components. Some don't allow any child at all. For example, Listbox in XUL accepts Listcols and Listitem only. Refer to Javadoc or XUL tutorials for details.</para>
-<para>A component without any parent is called a root component. A page might have multiple root components, which could be retrieved by the getRoots method.</para></sect2><sect2><title>Component: a Visual Representation and a Java Object</title>
+<para>A component without any parent is called a root component. A page might have multiple root components, which could be retrieved by the getRoots method.</para></sect2><sect2><title>Component: a Visual Presentation and a Java Object</title>
 <para>Besides being a Java object in the server, a component has a visual part<footnote>
-<para>If the client is a browser, the visual representation is a DOM element or a set of DOM elements.</para>
+<para>If the client is a browser, the visual presentation is a DOM element or a set of DOM elements.</para>
 </footnote> in the browser, if and only if it belongs to a page. When a component is attached to a page, its visual part is created<footnote>
 <para>The visual part is created, updated and removed automatically. Application developers rarely need to notice its existence. Rather, they manipulate the object part in the server.</para>
 </footnote>. When a component is detached from a page, its visual part is removed.</para>
@@ -280,7 +301,7 @@
 <para>UUID is used by components and Client Engine to manipulate DOM at the browser and to communicate with the server. More precisely, the id attribute of a DOM element at the client is UUID.</para>
 <para>UUID is generated automatically when a component is created. It is immutable, except the identifiers of components for representing HTML tags.</para>
 <para>HTML relevant components handle UUID different from other set of components: UUID is the same as ID. If you change ID of a HTML relevant component, UUID will be changed accordingly. Therefore, old JavaScript codes and servlets will remain to work without any modification.</para></sect2></sect1><sect1><title>The ID Space</title>
-<para>It is common to decompose a visual representation into several ZUML pages. For example, a page for displaying a purchase order, and a modal dialog for entering the payment term. If all components are uniquely identifiable in the same desktop, developers have to maintain the uniqueness of all identifiers for all pages that might created to the same desktop.</para>
+<para>It is common to decompose a visual presentation into several ZUML pages. For example, a page for displaying a purchase order, and a modal dialog for entering the payment term. If all components are uniquely identifiable in the same desktop, developers have to maintain the uniqueness of all identifiers for all pages that might created to the same desktop.</para>
 <para>The concept of ID spaces is then introduced to resolved this issue. An ID space is a subset of components of a desktop. The uniqueness is guaranteed only in the scope of an ID space.</para>
 <para>The simplest form of an ID space is a window (org.zkoss.zul.Window). All descendant components of a window (including the window itself) forms an independent ID space. Thus, you could use a window as the topmost component of each page, such that developers need to maintain the uniqueness of each page separately.</para>
 <para>More generally, any component could form an ID space as long as it implements the org.zkoss.zk.ui.IdSpace interface. Page also implements the IdSpace interface, so it is also a space owner.</para>
@@ -362,7 +383,7 @@
 <para>When a component is created in an event listener, it is assigned automatically to the associated desktop of the event being processed. This assignment happens even if the component is not attached to a page. It means that any component you created in an event listener can be used in the same desktop that the listener is handling.</para>
 <para>When a component is created in a thread other than any event listener, it doesn't belong to any desktop. In this case, you could attach to any desktop you want as long as the attachment occurs in a proper event listener. Of course, once the component is attached to a desktop, it belongs to the desktop forever.</para>
 <para>For most applications, it is rarely necessary to create components in a thread other than event listeners. However, if you have a long operation, you might want to execute it in a background thread. Then, you could prepare the component tree at the background and then add it to a desktop when a proper event is received. Refer to the Long Operations section in the Event Listening and Processing chapter.</para></sect2></sect1><sect1><title>ZUML and XML Namespaces</title>
-<para>The ZK User Interface Markup Language (ZUML) is a XML-based language used by developers to describe the visual representation. ZUML is aimed to separate the dependency of the set of components to use. In other words, different set of components<footnote>
+<para>The ZK User Interface Markup Language (ZUML) is a XML-based language used by developers to describe the visual presentation. ZUML is aimed to separate the dependency of the set of components to use. In other words, different set of components<footnote>
 <para>Also known as tags. There is one-to-one mapping between components and tags.</para>
 </footnote>, such as XUL and XHTML, could be used simultaneously in the same ZUML page. Different markup languages could be added transparently. If two or more set of components are used in the same page, developers have to use the XML namespaces to distinguish them. Refer to the Component Sets and XML Namespaces section in the ZK User Interface Markup Language chapter if you want to mix multiple component sets, say XUL and XHTML, in the same page.</para>
 <para>Tip: Using XML namespaces in ZUML is optional. You need it only if you want to mix two or more.</para></sect1></chapter>
@@ -415,7 +436,7 @@
 <para>Then, it posts corresponding events to the queue.</para></sect2><sect2><title>The Event Processing Phase</title>
 <para>This phase is the same as the Event Processing Phase in the Component Creation Phase. It processes events one-by-one in an independent thread.</para></sect2><sect2><title>The Rendering Phase</title>
 <para>After all events are processed, ZK renders affected components, generates corresponding ZK responses, and sends these responses back to the client. Then, Client Engine updates the DOM tree at the browser based on the responses.</para>
-<para>Whether to redraw the whole visual representation of a component or to update an attribute at the browser all depend on the implementation of components. It is the job of component developers to balance between interactivity and simplicity.</para></sect2></sect1><sect1><title>The Molds</title>
+<para>Whether to redraw the whole visual presentation of a component or to update an attribute at the browser all depend on the implementation of components. It is the job of component developers to balance between interactivity and simplicity.</para></sect2></sect1><sect1><title>The Molds</title>
 <para>A component could have different appearance even at the same page. The concept is called mold (aka., template). Developers could dynamically change the mold by use of the setMold method in the Component interface. All components support a mold called default, which is the default value. Some components might have support two or more molds For example, tabbox supports both default and accordion molds.</para>
 <programlisting>&lt;tabbox&gt;&lt;!-- if not specified, the default mold is assumed. --&gt;&#13;    &lt;tabs&gt;    <inlinegraphic fileref="images/10000000000000A100000085680109CC.png" align="right"/>&#13;        &lt;tab label="Default"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;        &#13;        &lt;tabbox mold="accordion"&gt;        &#13;            &lt;tabs&gt;            &#13;                &lt;tab label="First Accordion"/&gt;                &#13;                &lt;tab label="Second Accordion"/&gt;                &#13;            &lt;/tabs&gt;            &#13;            &lt;tabpanels&gt;            &#13;                &lt;tabpanel&gt;The first panel.&lt;/tabpanel&gt;                &#13;                &lt;tabpanel&gt;The second panel.&lt;/tabpanel&gt;                &#13;            &lt;/tabpanels&gt;            &#13;        &lt;/tabbox&gt;        &#13;        &lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;</programlisting></sect1><sect1><title>Component Garbage Collection</title>
 <para>Unlike many component-based GUI, ZK has no destroy or close method for components. Like W3C DOM, a component is removed from the browser as soon as it is detached from the page. It is shown as soon as it is attached to the page.</para>
@@ -435,6 +456,8 @@
 <programlisting>public class MyWindow extends org.zkoss.zul.Window {&#13;    public void onOK() { //add an event listener    &#13;        ...//handles the onOK event (sent when ENTER is pressed)        &#13;    }    &#13;}&#13;</programlisting>
 <para>If you want to retrieve more information about the event, you could declare as follows.</para>
 <programlisting>public void onOK(org.zkoss.zk.ui.event.KeyEvent event) {...}&#13;</programlisting>
+<para>or</para>
+<programlisting>public void onOK(org.zkoss.zk.ui.event.Event event) {...}&#13;</programlisting>
 <para>Different events might be associated with different event objects. Refer to Append C for more details.</para></sect2><sect2><title>Add and Remove Event Listeners Dynamically</title>
 <para>Developers could use the addEventListener and removeEventListener methods of the org.zkoss.zk.ui.Component interface to dynamically add or remove an event listener. As illustrated below, the event listener to be added dynamically must implement the org.zkoss.zk.ui.event.EventListener interface.</para>
 <programlisting>void init(Component comp) {&#13;    ...    &#13;    comp.addEventListener("onClick", new MyListener());    &#13;    ...    &#13;}&#13;class MyListener implements org.zkoss.zk.ui.event.EventListener {&#13;    public void onEvent(Event event) throws UiException {    &#13;        ...//processing the event        &#13;    }    &#13;}&#13;</programlisting></sect2><sect2><title>Deferrable Event Listeners</title>
@@ -1033,7 +1056,7 @@
 <para>If you choose the second format, the zscript file is evaluated and the arguments (arg0, arg1,...) will be passed as a variable called args whose type is Object[].</para>
 <para>For more information, refer to the Developer's Reference.</para></sect2><sect2><title>The variable-resolver Directive</title>
 <para>&lt;?variable-resolver class="..."?&gt;</para>
-<para>Specifies the variable resolver that will be used by the zscript interpreter to resolve unknown variables. The specified class must implement the org.zkoss.zk.scripting.VariableResolver interface.</para>
+<para>Specifies the variable resolver that will be used by the zscript interpreter to resolve unknown variables. The specified class must implement the org.zkoss.xel.VariableResolver interface.</para>
 <para>You can specify multiple variable resolvers with multiple variable-resolver directives. The later declared one has higher priority.</para>
 <para>The following is an example when using ZK with the Spring framework. It resolves Java Beans declared in the Spring framework, such that you access them directly.</para>
 <programlisting>&lt;?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?&gt;&#13;</programlisting>
@@ -1668,7 +1691,7 @@
 <para>If you want more sophisticated constraint, you could specify an object which implements the org.zkoss.zul.Constraint interface.</para>
 <programlisting>&lt;window title="Custom Constraint"&gt;&#13;    &lt;zscript&gt;&lt;![CDATA[    &#13;Constraint ctt = new Constraint() {&#13;    public void validate(Component comp, Object value) throws WrongValueException {    &#13;        if (value =e= null || ((Integer)value).intValue() &lt; 100)        &#13;            throw new WrongValueException(comp, "At least 100 must be specified");            &#13;    }    &#13;}&#13;    ]]&gt;&lt;/zscript&gt;    &#13;    &lt;intbox constraint="${ctt}"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>You could implement your constraint into a Java class, say my.EmailValidator, then:</para>
-<programlisting>&lt;?taglib uri="http://www.zkoss.org/dsp/web/core.dsp.tld" prefix="c"?&gt;&#13;&lt;textbox constraint="${c:new('my.EmailValidator')}"/&gt;&#13;</programlisting><sect4><title>org.zkoss.zk.ui.WrongValueException</title>
+<programlisting>&lt;?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?&gt;&#13;&lt;textbox constraint="${c:new('my.EmailValidator')}"/&gt;&#13;</programlisting><sect4><title>org.zkoss.zk.ui.WrongValueException</title>
 <para>In the above example, we use org.zkoss.zk.ui.WrongValueException to denote an error. As depicted, you have to specify the first argument with the component that causes the error, and then the second argument with the error message.</para>
 <para>You could throw this exception anytime, such as when an onChange event is received as follows.</para>
 <programlisting>&lt;textbox&gt;<inlinegraphic fileref="images/100000000000010500000030B13C47C7.png" align="right"/>&#13;    &lt;attribute name="onChange"&gt;    &#13;        if (!self.value.equals("good")) {        &#13;            self.value = "try again";            &#13;            throw new WrongValueException(self, "Not a good answer!");            &#13;        }        &#13;    &lt;/attribute&gt;    &#13;&lt;/textbox&gt;&#13;</programlisting></sect4><sect4><title>Custom Way to Display the Error Messages</title>
@@ -1941,7 +1964,7 @@
 <para>To know whether a layout is collapsed, you can check the value of the open property (i.e., the isOpen method). To open or collapse programmingly, you can set the value of the open property (i.e., the setOpen method).</para></sect2><sect2><title>The onOpen Event</title>
 <para>When a layout is collapsed or opened by a user, the onOpen event is sent to the application.</para></sect2></sect1><sect1><title>The Box Model</title>
 <para>Components: vbox, hbox and box.</para>
-<para>The box model of XUL is used to divide a portion of the display into a series of boxes. Components inside of a box will orient themselves horizontally or vertically. By combining a series of boxes and separators, you can control the layout of the visual representation.</para>
+<para>The box model of XUL is used to divide a portion of the display into a series of boxes. Components inside of a box will orient themselves horizontally or vertically. By combining a series of boxes and separators, you can control the layout of the visual presentation.</para>
 <para>A box can lay out its children in one of two orientations, either horizontally or vertically. A horizontal box lines up its components horizontally and a vertical box orients its components vertically. You can think of a box as one row or one column from an HTML table.</para>
 <para>Some examples are shown as follows.</para>
 <programlisting>&lt;zk&gt;<inlinegraphic fileref="images/10000000000000A700000055120D8AF5.png" align="right"/>&#13;    &lt;vbox&gt;    &#13;        &lt;button label="Button 1"/&gt;        &#13;        &lt;button label="Button 2"/&gt;        &#13;    &lt;/vbox&gt;    &#13;    &lt;hbox&gt;    &#13;        &lt;button label="Button 3"/&gt;        &#13;        &lt;button label="Button 4"/&gt;        &#13;    &lt;/hbox&gt;    &#13;&lt;/zk&gt;&#13;</programlisting>
@@ -2402,7 +2425,7 @@
 <para>When a user requests the list box to sort, the list box will invoke the sort method of ListModelExt to sort the data. In other words, the sorting is done by the list model, rather than the list box.</para>
 <para>After sorted, the list model shall notify the list box by invoking the onChange method of the org.zkoss.zul.event.ListDataListener instances that are registered to the list box (by the addListDataListener method). In most cases, all data are usually changed, so the list model usually sends the following event:</para>
 <programlisting>new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, -1, -1)&#13;</programlisting>
-<para>Note: the implementation of ListModel and ListModelExt is independent of the visual representation. In other words, it can be used with grids, list boxes and any other components supporting ListModel.</para>
+<para>Note: the implementation of ListModel and ListModelExt is independent of the visual presentation. In other words, it can be used with grids, list boxes and any other components supporting ListModel.</para>
 <para>In other words, to have the maximal flexibility, you shall not assume the component to used. Rather, use ListDataEvent to communicate with.</para></sect3></sect2><sect2><title>List Boxes Contain Buttons</title>
 <para>In theory, a list cell could contain any other components, as depicted below.</para>
 <programlisting>&lt;listbox width="250px"&gt;<inlinegraphic fileref="images/1000000000000101000000597E6A0365.png" align="right"/>&#13;    &lt;listhead&gt;    &#13;        &lt;listheader label="Population"/&gt;        &#13;        &lt;listheader label="Percentage"/&gt;        &#13;    &lt;/listhead&gt;    &#13;    &lt;listitem value="A"&gt;    &#13;        &lt;listcell&gt;&lt;textbox value="A. Graduate"/&gt;&lt;/listcell&gt;        &#13;        &lt;listcell label="20%"/&gt;        &#13;    &lt;/listitem&gt;    &#13;    &lt;listitem value="B"&gt;    &#13;        &lt;listcell&gt;&lt;checkbox label="B. College"/&gt;&lt;/listcell&gt;        &#13;        &lt;listcell&gt;&lt;button label="23%"/&gt;&lt;/listcell&gt;        &#13;    &lt;/listitem&gt;    &#13;    &lt;listitem value="C"&gt;    &#13;        &lt;listcell label="C. High School"/&gt;        &#13;        &lt;listcell&gt;&lt;textbox cols="8" value="40%"/&gt;&lt;/listcell&gt;        &#13;    &lt;/listitem&gt;    &#13;&lt;/listbox&gt;&#13;</programlisting>
@@ -2783,7 +2806,7 @@
 <para>For example, if you want to output the SVG tags directly to the client, you can specify native:native:http://www.w3.org/2000/svg as follows.</para>
 <programlisting>&lt;window&gt;&#13;    &lt;svg width="100%" height="100%" version="1.1"    &#13;xmlns="native:http://www.w3.org/2000/svg"&gt;&#13;        &lt;ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/&gt;        &#13;    &lt;/svg&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Then, the client will receive the following:</para>
-<programlisting>&lt;div id="z_lx_0c" z.type="zul.wnd.Wnd"&gt;44The real HTML output of window depends on its implementation. Here is only a simplified version.&#13;    &lt;svg width="100%" height="100%" version="1.1"    &#13;xmlns="http://www.w3.org/2000/svg"&gt;&#13;        &lt;ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/&gt;        &#13;    &lt;/svg&gt;    &#13;&lt;/div&gt;&#13;</programlisting></sect3></sect2><sect2><title>The XHTML Namespace, <ulink url="http://www/">http://www.</ulink>w3.org/1999/xhtml</title>
+<programlisting>&lt;div id="z_lx_0c" z.type="zul.wnd.Wnd"&gt;45The real HTML output of window depends on its implementation. Here is only a simplified version.&#13;    &lt;svg width="100%" height="100%" version="1.1"    &#13;xmlns="http://www.w3.org/2000/svg"&gt;&#13;        &lt;ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/&gt;        &#13;    &lt;/svg&gt;    &#13;&lt;/div&gt;&#13;</programlisting></sect3></sect2><sect2><title>The XHTML Namespace, <ulink url="http://www/">http://www.</ulink>w3.org/1999/xhtml</title>
 <ulink url="http://www/">http://www.</ulink>
 <para>The XHTML namespace represents the XHTML component set, just like the ZUL namespace (<ulink url="http://www/">http://www.</ulink>zkoss.org/2005/zul) represents the ZUL component set. Thus, a XML element specified with the XHTML namespace simply denotes a component that shall be created based on the component definition from the XHTML component set. For example, the statement blow specifies a component that shall be created as an instance of the component definition called ul, and ul belongs to the XHTML component set:</para>
 <programlisting>&lt;h:ul xmlns:h="http://www.w3.org/1999/xhtml"&gt;&#13;</programlisting>
@@ -2795,7 +2818,15 @@
 <para>The include component is used to include the output generated by another servlet. The servlet could be anything including JSF, JSP and even another ZUML page.</para>
 <programlisting>&lt;window title="include demo" border="normal" width="300px"&gt;&#13;    Hello, World!    &#13;    &lt;include src="/userguide/misc/includedHello.zul"/&gt;    &#13;    &lt;include src="/html/frag.html"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Like all other properties, you could dynamically change the src attribute to include the output from a different servlet at the run time.</para>
-<para>If the included output is another ZUML, developers are allowed to access components in the included page as if they are part of the containing page.</para><sect3><title>Including ZUML Pages</title>
+<para>If the included output is another ZUML, developers are allowed to access components in the included page as if they are part of the containing page.</para><sect3><title>Pass Values to the Included Page</title>
+<para>There are two ways to pass values to the included page. First, you can pass them with the query string.</para>
+<programlisting>&lt;include src="mypage?some=something"/&gt;&#13;</programlisting>
+<para>Then, in the included page, you can access them with the getParameter method of the Execution interface or the ServletRequest interface. In EL expressions (of the included page), you can use the param variable to access them. However, you can only pass String-typed values with the query string.</para>
+<programlisting>${param.some}&#13;</programlisting>
+<para>Alternatively, we can pass any kind of values with the so-called dynamic properties by use of the setDynamicProperty method or, in ZUL, a dynamic property as follows:</para>
+<programlisting>&lt;include src="mypage" some="something" another="${expr}"/&gt;&#13;</programlisting>
+<para>With the dynamic properties, you can pass non-String-typed values. In the included page, you can access them with the getAttribute method of the Execution interface or the ServletRequest interface. In EL expressions (of the included page), you can use the requestScope variable to access them.</para>
+<programlisting>${requestScope.some}&#13;</programlisting></sect3><sect3><title>Including ZUML Pages</title>
 <para>If the include component is used to include a ZUML page, the included page will become part of the desktop. However, the included page is not visible until the request is processed completely. In other words, it is visible only in the following events, triggered by user or timer.</para>
 <para>The reason is that the include component includes a page as late as the Rendering phase<footnote>
 <para>Refer to the Component Lifecycle chapter for more details.</para>
@@ -3935,7 +3966,8 @@
 <para>The org.zkoss.zk.ui.Path class is, like java.io.File, provided to simplify the manipulation of component paths. Thus, the following statement is equivalent to the above example.</para>
 <programlisting>Path.getComponent("/A/B/C"); //assume the current page is P&#13;Path.getComponent("//P/A/B/C");&#13;</programlisting>
 <para>In addition to static methods, you could instantiate a Path instance.</para>
-<programlisting>Path parent = new Path("//P/A");&#13;new Path(parent, "B/C").getComponent();&#13;</programlisting></sect2></sect1><sect1><title>Sorting</title>
+<programlisting>Path parent = new Path("//P/A");&#13;new Path(parent, "B/C").getComponent();&#13;</programlisting>
+<para>Tip: Path.getComponent("//xyz") always returns null, since the identifier following // is the page's ID. And, page is not component.</para></sect2></sect1><sect1><title>Sorting</title>
 <para>The list returned from the getChildren method of the org.zkoss.zk.ui.Component interface is live. So is the getItems method of the org.zkoss.zul.Listbox interface and others. In other words, you can manipulate it content directly. For example, the following statements are equivalent:</para>
 <programlisting>comp.getChildren().remove(0);&#13;((Component)comp.getChildren().get(0)).setParent(null);&#13;</programlisting>
 <para>However, you cannot use the sort method of the java.util.Collections class to sort them. The reason is subtle: the list of children automatically removes a child from the original position, when you add it to another position. For example, the following statement actually moves the second child in front of the first child.</para>
@@ -4331,7 +4363,28 @@
 <para>The message boxes returns immediately so it always returns Messagebox.OK. Thus, it is meaningless to show buttons other than the OK button. For example, the if clause in the following example is never true.</para>
 <programlisting>if (Messagebox.show("Delete?", "Prompt", Messagebox.YES|Messagebox.NO,&#13;</programlisting>
 <para>Messagebox.QUESTION) == Messagebox.YES) {</para>
-<programlisting>this_never_executes();&#13;}&#13;</programlisting></sect2><sect2><title>File Upload</title>
+<programlisting>this_never_executes();&#13;}&#13;</programlisting>
+<para>Rather, you have to provide an event listener as follows.</para>
+<programlisting>Messagebox.show("Delete?", "Prompt", Messagebox.YES|Messagebox.NO,&#13;</programlisting>
+<para>Messagebox.QUESTION,</para>
+<para>new EventListener() {</para>
+<para>public void onEvent(Event evt) {</para>
+<para>switch (((Integer)evt.getData()).intValue()) {</para>
+<para>case Messagebox.YES: doYes(); break; //the Yes button is pressed</para>
+<para>case Messagebox.NO: doNo(); break; //the No button is pressed</para>
+<para>}</para>
+<para>}}</para>
+<para>);</para>
+<para>The event listener you provided is invoked when the user clicks one of the buttons. Then, you can identify which button is clicked by examining the data (Event's getData). The data is an integer whose value is the button's identifier, such as Messagebox.YES.</para>
+<para>Alternatively, you can examine the event name:</para>
+<para>public void onEvent(Event evt) {</para>
+<para>if ("onYes".equals(evt.getName())) {</para>
+<para>doYes(); //the Yes button is pressed</para>
+<para>} else if ("onNo".equals(evt.getName())) {</para>
+<para>doNo(); //the No button is pressed</para>
+<para>}</para>
+<para>}</para>
+<para>Note: The event name for the OK button is onOK, not onOk.</para></sect2><sect2><title>File Upload</title>
 <para>The file upload dialog is no longer applicable. Rather, you shall use the fileupload component instead. The fileupload component is not a modal dialog. Rather, it is placed inline with other components. Refer to the fileupload Component section for more information.</para>
 <programlisting>&lt;fileupload onUpload="handle(event)"/&gt;&#13;</programlisting></sect2></sect1><sect1><title>Use the Native Namespace instead of the XHTML Namespace</title>
 <para>As described in the Work with HTML Tags section of the ZUML with the XUL Component Set chapter, ZK creates a ZK component for each XML element specified with the XHTML namespace. In other words, ZK has to maintain their states at the server. Since the number of HTML tags are usually large, the performance will be improved dramatically if you use the Native namespace instead.</para>
@@ -4348,10 +4401,7 @@
 <programlisting>&lt;tabbox&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Preload" selected="true"/&gt;        &#13;        &lt;tab id="tab2" label="OnDemand"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;        &#13;    This panel is pre-loaded since no fulfill specified    &#13;        &lt;/tabpanel&gt;        &#13;        &lt;tabpanel fulfill="tab2.onSelect"&gt;        &#13;    This panel is loaded only tab2 receives the onSelect event    &#13;        &lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;</programlisting></sect1><sect1><title>Use Live Data and Paging for Large List Boxes</title>
 <para>Sending out a list box with a lot of items to the client is expensive. In addition, the JavaScript engine of the browser is not good for initializing a list box with a lot of items. A better solution is to use the live data, i.e., by assigning a list model to it. Then, the list items are sent to the client only if they become visible.</para>
 <para>The performance will be improved more if you also use the paging mold.</para>
-<para>Refer to the List Boxes section in the ZUML with the XUL Component Set chapter for more details.</para></sect1><sect1><title>If It Takes Too Long to Open a Modal Window</title>
-<para>When a modal window is opened, all components that do not belong to the modal window are disabled. However, if the page is very big, the performance may not be acceptable (depending on the JavaScript interpreter of the browsers and the speed of the client computer). If opening up a modal window is too slow for you, you can turn off this feature as follows.</para>
-<programlisting>&lt;client-config&gt;&#13;    &lt;disable-behind-modal&gt;false&lt;/disable-behind-modal&gt;&lt;!-- default: true --&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting>
-<para>The side effect is that a user may use the TAB or shift-TAB key to move the focus to a component that shall be disabled. Notice that, no matter this feature is turned on or not, the user is always prevented from clicking any component that doesn't belong to the modal window.</para></sect1><sect1><title>Use ZK JSP Tags or ZK JSF Components instead of ZK Filter</title>
+<para>Refer to the List Boxes section in the ZUML with the XUL Component Set chapter for more details.</para></sect1><sect1><title>Use ZK JSP Tags or ZK JSF Components instead of ZK Filter</title>
 <para>The ZK filter actually maps each HTML tag to the corresponding XHTML components. As described in the previous section, it consumes more memory than necessary since ZK has to maintain the states of all ZK components (including XUL and XHTML components).</para>
 <para>ZK JSP tags are introduced to eliminate the need of the ZK filter for JSP pages. With ZK JSP tags, a ZUL component is created for each ZK JSP tag. All other HTML tags are encapsulated as a special component.</para>
 <programlisting>&lt;!-- a JSP page --&gt;&#13;&lt;z:page&gt;&#13;    &lt;table&gt;    &#13;        &lt;tr&gt;        &#13;            &lt;td&gt;Name&lt;/td&gt;            &#13;            &lt;td&gt;&lt;z:textbox/&gt;&lt;/td&gt;            &#13;        &lt;/tr&gt;        &#13;    &lt;/table&gt;    &#13;&lt;/z:page&gt;&#13;</programlisting>

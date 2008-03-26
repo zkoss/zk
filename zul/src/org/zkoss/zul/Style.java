@@ -24,6 +24,7 @@ import org.zkoss.util.media.AMedia;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
@@ -35,8 +36,17 @@ import org.zkoss.zul.impl.Utils;
  * <p>Note: a style component can appear anywhere in a ZUML page, but it
  * affects all components in the same desktop.
  *
- * <p>Note: unlike HTML STYLE, this component can be added and removed
+ * <p>Note: If {@link #isDynamic} is false, the HTML STYLE
+ * or LINK tag is generated to represent this component.
+ * Due to IE's limitation, there is no effect if
+ * the style component is added or removed dynamically
+ * and if {@link #isDynamic} is false.
+ *
+ * <p>If {@link #isDynamic} is true, this component can be added and removed
  * dynamically and the rules will be attached and detached accordingly.
+ * Note: in this case, the link is generated when this component
+ * is initialized at the client, so the style will be loaded to
+ * the client after all components are initialized.
  *
  * <p>There are three formats when used in a ZUML page:
  *
@@ -71,6 +81,7 @@ import org.zkoss.zul.impl.Utils;
 public class Style extends AbstractComponent {
 	private String _src;
 	private String _content;
+	private boolean _dynamic;
 	/** Count the version of {@link #_content}. */
 	private int _cntver;
 
@@ -83,6 +94,41 @@ public class Style extends AbstractComponent {
 	public Style(String src) {
 		this();
 		setSrc(src);
+	}
+	
+	/**
+	 * Sets whether to load an external Style Sheet dynamically.
+	 * <p>Default: false.
+	 * @since 3.0.4 
+	 * @see #isDynamic
+	 */
+	public void setDynamic(boolean dynamic) {
+		if (_dynamic != dynamic) {
+			_dynamic = dynamic;
+			invalidate();
+		}
+	}
+	
+	/**
+	 * Returns whether to load an external Style Sheet dynamically.
+	 * If false, a HTML STYLE or LINK tag is generated to represent 
+	 * the content or the src.
+	 *
+	 * <p>Due to IE's limitation, there is no effect if
+	 * the style component is added or removed dynamically
+	 * and if {@link #isDynamic} is false.
+	 *
+	 * <p>If {@link #isDynamic} is true, this component can be added and removed
+	 * dynamically and the rules will be attached and detached accordingly.
+	 * Note: in this case, the HTML LINK tag is generated when this component
+	 * is initialized at the client, so the style will be loaded to
+	 * the client after all components are initialized.
+	 *
+	 * <p>Default: false.
+	 * @since 3.0.4
+	 */
+	public boolean isDynamic() {
+		return _dynamic;
 	}
 
 	/** Returns the URI of an external style sheet.
@@ -172,5 +218,47 @@ public class Style extends AbstractComponent {
 		public Media getMedia(String pathInfo) {
 			return new AMedia("css", "css", "text/css;charset=UTF-8", _content);
 		}
+	}
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		if (isDynamic()) {
+			super.redraw(out);
+			return;	
+		}
+		final boolean ie = Executions.getCurrent().isExplorer();
+		if (ie) {
+			//IE: unable to look back LINK or STYLE with ID
+			out.write("<div id=\"");
+			out.write(getUuid());
+			out.write("\">");
+		}
+
+		if (_src != null) {
+			out.write("\n<link rel=\"stylesheet\" type=\"text/css\" href=\"");
+			out.write(getDesktop().getExecution().encodeURL(_src));
+			if (!ie) {
+				out.write("\" id=\"");
+				out.write(getUuid());
+			}
+			out.write("\"/>");
+		} else {
+			out.write("\n<style type=\"text/css\"");
+			if (!ie) {
+				out.write(" id=\"");
+				out.write(getUuid());
+				out.write('"');
+			}
+			out.write(">\n");
+
+			final String content = getContent();
+			if (content != null) {
+				out.write(content);
+				out.write('\n');
+			}
+
+			out.write("</style>");
+		}
+
+		if (ie)
+			out.write("</div>\n");
 	}
 }

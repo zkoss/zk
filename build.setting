@@ -1,9 +1,8 @@
 D.ON=true
 javadoc=~/prj/javadoc
-zipjs=true
 unzip=true
 debug=true
 optimize=true
-jboss.deploy=default/deploy
-start.service=Apache Tomcat
-version=3.0.4-FL
+#jboss.deploy=default/deploy
+#start.service=Apache Tomcat
+version=3.0.4

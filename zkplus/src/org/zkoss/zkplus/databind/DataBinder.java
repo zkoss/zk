@@ -30,6 +30,8 @@ import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.HierachicalAware;
 
 import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListModel;
@@ -65,6 +67,7 @@ public class DataBinder {
 	public static final String TEMPLATEMAP = "zkplus.databind.TEMPLATEMAP"; // template -> clone
 	public static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
 	private static final String OWNER = "zkplus.databind.OWNER"; //the collection owner of the template component
+	private static final String IAMOWNER = "zkplus.databind.IAMOWNER"; //I am the collection owner
 	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
 
@@ -339,7 +342,7 @@ public class DataBinder {
 		}
 		return false;
 	}		
-	
+
 	/** Whether use the default binding configuration.
 	 */
 	public boolean isDefaultConfig(){
@@ -523,7 +526,10 @@ public class DataBinder {
 				
 				//_var special case; meaning a template component
 				if (attrMap.containsKey("_var")) {
-					setupTemplateComponent(comp, getComponentCollectionOwner(comp)); //setup as template components
+					final Component owner = getComponentCollectionOwner(comp);
+					//bug#1888911 databind and Grid in Grid not work when no _var in inner Grid
+					owner.setAttribute(IAMOWNER, Boolean.TRUE);
+					setupTemplateComponent(comp, owner); //setup as template components
 					String varname = ((Binding)attrMap.get("_var")).getExpression();
 					varnameSet.add(varname);
 					comp.setAttribute(VARNAME, varname);
@@ -582,6 +588,26 @@ public class DataBinder {
 			name = Listitem.class.getName();
 		} else if (comp instanceof Row) {
 			name = Row.class.getName();
+		} else if (comp instanceof Comboitem) {
+			name = Comboitem.class.getName();
+		}
+		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
+		if(decorName != null){
+			return decorName;
+		}else{
+			throw new UiException("Cannot find associated CollectionItem:"+comp);
+		}		
+	}
+	//Get CollectionItem per the given owner.
+	//@since 3.0.4 
+	/*package*/ CollectionItem getCollectionItemByOwner(Component comp) {
+		String name = comp.getClass().getName();
+		if (comp instanceof Listbox) {
+			name = Listitem.class.getName();
+		} else if (comp instanceof Grid) {
+			name = Row.class.getName();
+		} else if (comp instanceof Comboitem) {
+			name = Comboitem.class.getName();
 		}
 		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
 		if(decorName != null){
@@ -591,7 +617,7 @@ public class DataBinder {
 		}		
 	}
 	//get Collection owner of a given collection item.
-	private Component getCollectionOwner(Component comp) {
+	/*package*/ Component getCollectionOwner(Component comp) {
 		if (isTemplate(comp)) {
 			return (Component) comp.getAttribute(OWNER);
 		}
@@ -696,6 +722,11 @@ public class DataBinder {
 		}
 	}
 
+	//whether a collection owner component. (e.g. Grid, Listbox with _var)
+	/*package*/ static boolean isCollectionOwner(Component owner) {
+		return owner.getAttribute(IAMOWNER) != null;
+	}
+	
 	//whether a component is a binding template rather than a real component
 	/* package */ static boolean isTemplate(Component comp) {
 		return comp.getAttribute(OWNER) != null;
@@ -707,6 +738,11 @@ public class DataBinder {
 		return comp != null && (comp.getAttribute(TEMPLATE) instanceof Component);
 	}
 	
+	//Returns template component of a given clone component
+	/* package */ static Component getComponent(Component clone) {
+		return (Component) clone.getAttribute(TEMPLATE);
+	}
+
 	//whether has template owner (collection in collection)
 	/* package */ static boolean hasTemplateOwner(Component comp) {
 		//bug #1813055  Multiple listboxes with same selectedItem causes NPE

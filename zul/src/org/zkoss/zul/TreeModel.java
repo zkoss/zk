@@ -19,10 +19,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.TreeDataListener;
+import org.zkoss.zul.event.TreeDataEvent;
 
 /**
  * This interface defines the methods that component like {@link Tree}
  * use to get the content of items.
+  *
+ * <p>Note: changing a render will not cause the tree to re-render.
+ * If you want it to re-render, you could assign the same model again 
+ * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
+ *
  * @author Jeff Liu
  * @since ZK 3.0.0
  *

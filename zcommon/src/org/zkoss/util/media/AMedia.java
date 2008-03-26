@@ -18,6 +18,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.media;
 
+import java.io.File;
 import java.io.Reader;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -25,6 +26,8 @@ import java.io.ByteArrayInputStream;
 
 import org.zkoss.io.NullInputStream;
 import org.zkoss.io.NullReader;
+import org.zkoss.io.RepeatableInputStream;
+import org.zkoss.io.RepeatableReader;
 
 /**
  * A media object holding content such PDF, HTML, DOC or XLS content.
@@ -70,7 +73,7 @@ public class AMedia implements Media {
 	 */
 	public AMedia(String name, String format, String ctype, byte[] data) {
 		if (data == null)
-			throw new NullPointerException("data");
+			throw new IllegalArgumentException("data");
 		_bindata = data;
 		setup(name, format, ctype);
 	}
@@ -85,7 +88,7 @@ public class AMedia implements Media {
 	 */
 	public AMedia(String name, String format, String ctype, String data) {
 		if (data == null)
-			throw new NullPointerException("data");
+			throw new IllegalArgumentException("data");
 		_strdata = data;
 		setup(name, format, ctype);
 	}
@@ -106,7 +109,7 @@ public class AMedia implements Media {
 	 */
 	public AMedia(String name, String format, String ctype, InputStream data) {
 		if (data == null)
-			throw new NullPointerException("data");
+			throw new IllegalArgumentException("data");
 		_isdata = data;
 		setup(name, format, ctype);
 	}
@@ -125,10 +128,42 @@ public class AMedia implements Media {
 	 */
 	public AMedia(String name, String format, String ctype, Reader data) {
 		if (data == null)
-			throw new NullPointerException("data");
+			throw new IllegalArgumentException("data");
 		_rddata = data;
 		setup(name, format, ctype);
 	}
+	/** Construct with name, format, content type and a file.
+	 *
+	 * <p>Unlike others, it uses the so-called repetable input
+	 * stream or reader (depending on binary or not) to represent the file,
+	 * so the input stream ({@link #getStreamData})
+	 * or the reader ({@link #getReaderData}) will be re-opened
+	 * in the next invocation of {@link InputStream#read}
+	 * after {@link InputStream#close} is called.
+	 * See also {@link RepeatableInputStream} and {@link RepeatableReader}.
+	 *
+	 * <p>It tries to construct format and ctype from each other or name.
+	 *
+	 * @param name the name (usually filename); might be null.
+	 * @param format the format; might be null.
+	 * @param ctype the content type; might be null.
+	 * @param data the string data; never null
+	 * If the reader is created dyanmically each tiime {@link #getReaderData}
+	 * is called, you shall pass {@link #DYNAMIC_READER}
+	 * as the data argument. Then, override {@link #getReaderData} to return
+	 * the correct reader.
+	 */
+	public AMedia(String name, String format, String ctype, File data,
+	boolean binary) throws java.io.FileNotFoundException {
+		if (data == null)
+			throw new IllegalArgumentException("data");
+		if (binary)
+			_isdata = RepeatableInputStream.getInstance(data);
+		else
+			_rddata = RepeatableReader.getInstance(data);
+		setup(name, format, ctype);
+	}
+
 	/** Sets up the format and content type.
 	 * It assumes one of them is not null.
 	 */

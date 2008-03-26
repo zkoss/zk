@@ -20,7 +20,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:h2>[ 1780792 ] Disable checkmarks on some node of a tree</n:h2>
 	<n:ol>
-		<n:li>Select a item on the tree, than press the UP/Down key, and then you should not select the disabled item.</n:li>
+		<n:li>Select a item on the tree/listbox, then press the UP/Down key, and then you should not select the disabled item.</n:li>
+		<n:li>you cannot select the disabled item on tree/listbox.</n:li>
+		<n:li>try hidding the checkmark. the disable behavior for previous steps should not change </n:li>
 	</n:ol>
 	<groupbox width="400px" mold="3d">
 		<caption label="Treeitem Disabled" />
@@ -120,7 +122,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<groupbox width="400px" mold="3d">
 		<caption label="Listitem Disabled" />
 
-		<listbox id="list">
+		<listbox id="list" checkmark="true" multiple="true">
 			<listitem id="li" label="option1" disabled="true" />
 			<listitem label="option2" disabled="true" />
 			<listitem label="option3" />
@@ -130,8 +132,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		onClick='tr.disabled = !tr.disabled' />
 	<button label="change listitem disabled"
 		onClick='li.disabled = !li.disabled' />
-	<button label="listbox checkmark"
-		onClick='list.checkmark = !list.checkmark' />
-	<button label="listbox multiple"
-		onClick='list.multiple = !list.multiple' />
+	<button label="tree/listbox checkmark"
+		onClick='list.checkmark = !list.checkmark;tree.checkmark = !tree.checkmark' />
+	<button label="tree/listbox multiple"
+		onClick='list.multiple = !list.multiple;tree.multiple = !tree.multiple' />
 </zk>

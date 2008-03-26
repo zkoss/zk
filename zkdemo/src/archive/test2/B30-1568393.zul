@@ -18,6 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Test" id="root">
+1. keep on clicking on the title-bar of the overlapped-window(not on the "close_button")
+<separator/>
+2. sometimes the window jumps to the upper right corner without dragging it.(If not, it is right)
 <zscript><![CDATA[
 public class ContentPanel extends Window implements EventListener{
 	private Caption top;

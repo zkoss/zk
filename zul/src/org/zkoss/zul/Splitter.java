@@ -121,14 +121,20 @@ public class Splitter extends XulElement {
 		}
 	}
 	
-	protected String getRealSclass() {	
-		if ("vertical".equals(getOrient()))
-			return super.getRealSclass() + "-v";
-		else
-			return super.getRealSclass() + "-h";
+	protected String getRealSclass() {
+		String s = super.getRealSclass();
+		if (s == null) s = "";
+		return "vertical".equals(getOrient()) ? s + "-v": s + "-h";
 	}
 
 	//super//
+	public void setSclass(String sclass) {
+		if (sclass != null && sclass.length() == 0) sclass = null;
+		if (!Objects.equals(getSclass(), sclass)) {
+			super.setSclass(sclass);
+			invalidate(); //redraw since there are several sub-sclass
+		}
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());

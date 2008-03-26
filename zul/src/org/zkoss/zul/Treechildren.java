@@ -222,6 +222,7 @@ public class Treechildren extends XulElement implements Pageable {
 	 *
 	 * @exception WrongValueException if no such page
 	 * @since 2.4.1
+	 * @see Tree#setActivePage
 	 */
 	public void setActivePage(int pg) throws WrongValueException {
 		final int pgcnt = getPageCount();
@@ -359,11 +360,15 @@ public class Treechildren extends XulElement implements Pageable {
 	implements Cropper {
 		//--Cropper--//
 		public boolean isCropper() {
-			return getPageSize() > 0;
+			final int pgsz = getPageSize();
+			return pgsz > 0 && getChildren().size() >= pgsz;
+				//Single page is considered as not a cropper.
+				//It is called after a component is removed, so
+				//we have to test >= rather than >
 		}
 		public Set getAvailableAtClient() {
-			int pgsz = getPageSize(), sz = getChildren().size();
-			if (pgsz <= 0 || sz <= pgsz)
+			int pgsz = getPageSize();
+			if (pgsz <= 0 || getChildren().size() <= pgsz)
 				return null;
 
 			final Set avail = new HashSet(37);

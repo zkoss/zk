@@ -230,7 +230,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 	/** Returns the identifier of a draggable type of objects, or "false"
-	 * if not draggable (never null or empty).
+	 * if not draggable (never null nor empty).
 	 */
 	public final String getDraggable() {
 		return _draggable != null ? _draggable: "false";
@@ -264,7 +264,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 	/** Returns the identifier of a droppable type of objects, or "false"
-	 * if not droppable (never null or empty).
+	 * if not droppable (never null nor empty).
 	 */
 	public final String getDroppable() {
 		return _droppable != null ? _droppable: "false";

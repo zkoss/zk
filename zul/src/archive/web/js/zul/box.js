@@ -37,20 +37,77 @@ zkBox.rmAttr = function (cmp, nm) {
 	}
 	return false;
 };
+zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
+	if (!getZKAttr(cmp, "hasSplt")) return;
+
+	var vert = getZKAttr(cmp, "vert");
+
+	//Bug 1916473: with IE, we have make the whole table to fit the table
+	//since IE won't fit it even if height 100% is specified
+	if (zk.ie) {
+		var p = cmp.parentNode;
+		if ($tag(p) == "TD") {
+			var nm = vert ? "height": "width",
+				sz = vert ? p.clientHeight: p.clientWidth;
+			if ((cmp.style[nm] == "100%" || getZKAttr(cmp, "box100")) && sz) {
+				cmp.style[nm] = sz + "px";
+				setZKAttr(cmp, "box100", "true");
+			}
+		}
+	}
+
+	//Note: we have to assign width/height fisrt
+	//Otherwise, the first time dragging the splitter won't be moved
+	//as expected (since style.width/height might be "")
+
+	var nd = vert ? cmp.rows : cmp.rows[0].cells,
+		total = vert ? cmp.offsetHeight : cmp.offsetWidth;
+
+	for (var i = nd.length; --i >= 0;) {
+		var d = nd[i];
+		if ($visible(d))
+			if (vert) {
+				var diff = d.offsetHeight;
+				if(d.id && getZKAttr(d, "coexist")) { //TR
+					//Bug 1917905: we have to manipulate height of TD in Safari
+					if (d.cells.length) {
+						var c = d.cells[0];
+						c.style.height = zk.revisedSize(c, i ? diff: total, true) + "px";
+					}
+					d.style.height = ""; //just-in-case
+				}
+				total -= diff;
+			} else {
+				var diff = d.offsetWidth;
+				if(d.id && getZKAttr(d, "coexist")) //TD
+					d.style.width = zk.revisedSize(d, i ? diff: total) + "px";
+				total -= diff;
+			}
+	}
+};
 
 ////
 zkSplt = {};
 
 zkSplt._drags = {};
 zkSplt.init = function (cmp) {
+	var vert = getZKAttr(cmp, "vert"),
+		p = cmp.parentNode;
+	if (p) {
+	//Only Splitter invalidated if sclass is changed, so we have to
+	//change chdextr (see Bug 1921830)
+		if (vert) p = p.parentNode; //TR
+		if (p && p.id.endsWith("!chdextr"))
+			p.className = cmp.className;
+	}
+
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
-	var vert = getZKAttr(cmp, "vert");
 	var drag = zkSplt._drags[cmp.id] = {
 		vert: vert,
 		drag: new Draggable(cmp, {
 			constraint: vert ? "vertical": "horizontal", ignoredrag: zkSplt._ignoresizing,
-			snap: snap, endeffect: zkSplt._endDrag}),
-			onResize: function () {zkSplt._resize2(cmp);}
+			ghosting: zkSplt._ghostsizing,
+			snap: snap, endeffect: zkSplt._endDrag})
 	};
 
 	var btn = $e(cmp.id + "!btn");
@@ -65,18 +122,28 @@ zkSplt.init = function (cmp) {
 
 	zkSplt._fixbtn(cmp);
 	if (getZKAttr(cmp, "open") == "false")
-		zkSplt.open(cmp, false, true, true);
-
-	zk.addOnResize(drag.onResize);	
-	zkSplt._resize2(cmp);
+		zkSplt._closeAtInit(cmp);
 
 	cmp.style.cursor = getZKAttr(cmp, "open") == "false" ? "default" : vert ? "s-resize": "e-resize";
 	btn.style.cursor = "pointer";
 };
+zkSplt._ghostsizing = function (dg, ghosting, pointer) {
+	if (ghosting) {
+		var pointer = zkau.beginGhostToDIV(dg);	
+		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
+			+pointer[1]+'px;left:'+pointer[0]+'px;width:'
+			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
+			+'px;"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
+					+'"/></div>';
+		document.body.insertAdjacentHTML("afterbegin", html);
+		dg.element = $e("zk_ddghost");
+	} else {		
+		zkau.endGhostToDIV(dg);
+	}
+};
 zkSplt.cleanup = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
-		zk.rmOnResize(drag.onResize);	
 		delete zkSplt._drags[cmp.id];
 		drag.drag.destroy();
 	}
@@ -93,26 +160,6 @@ zkSplt.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-zkSplt.onVisi = zkSplt._resize = function (cmp) {
-	if (!zk.isRealVisible(cmp))return;
-	cmp = $e(cmp);
-	if (cmp) {
-		zkSplt._fixsz(cmp);
-
-		//we have to convert auto-adjust to fix-width, or table
-		//will affect the sliding
-		var nd = $e(cmp.id + "!chdextr");
-		var tn = $tag(nd);
-		var vert = getZKAttr(cmp, "vert");
-		for (nd = nd.parentNode.firstChild; nd; nd = nd.nextSibling)
-			if (tn == $tag(nd) && nd.id && !nd.id.endsWith("!chdextr2"))
-				if (vert) nd.style.height = zk.revisedSize(nd, nd.offsetHeight, true) + "px";
-				else nd.style.width = zk.revisedSize(nd, nd.offsetWidth) + "px";
-	}
-};
-zkSplt._resize2 = function (cmp) {
-	setTimeout("zkSplt._resize('" + cmp.id + "')", 120);
-};
 zkSplt._fixbtn = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
 	var colps = getZKAttr(cmp, "colps");
@@ -127,146 +174,227 @@ zkSplt._fixbtn = function (cmp) {
 		btn.style.display = "";
 	}
 };
-zkSplt._ignoresizing = function (cmp, pointer) {
+zkSplt._ignoresizing = function (cmp, pointer, event) {
 	if (getZKAttr(cmp, "open") == "false") return true;
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
+		var el = Event.element(event);
+		if (!el || !el.id || $type(el) != "Splt") return true;
 		var run = drag.run = {};
 		run.org = Position.cumulativeOffset(cmp);
 		var nd = $e(cmp.id + "!chdextr");
 		var tn = $tag(nd);
 		run.prev = zkSplt._prev(nd, tn);
 		run.next = zkSplt._next(nd, tn);
-		run.box = $parentByType(nd, "Box");
+		run.z_offset = Position.cumulativeOffset(cmp);
 	}
 	return false;
 };
 zkSplt._endDrag = function (cmp) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
-		var run = drag.run;
-		var ofs = Position.cumulativeOffset(cmp);
+		var fl = zkSplt._fixLayout(cmp);
+
+		var run = drag.run, diff, fd;
+
 		if (drag.vert) {
-			var diff = ofs[1] - run.org[1];
-			if (run.next) zkSplt._adj(run.next, "height", -diff);
-			if (run.prev) zkSplt._adj(run.prev, "height", diff);
+			diff = run.z_point[1];
+			fd = "height";
+
+			//We adjust height of TD if vert
+			if (run.next && run.next.cells.length) run.next = run.next.cells[0];
+			if (run.prev && run.prev.cells.length) run.prev = run.prev.cells[0];
 		} else {
-			var diff = ofs[0] - run.org[0];
-			if (run.next) zkSplt._adj(run.next, "width", -diff);
-			if (run.prev) zkSplt._adj(run.prev, "width", diff);
+			diff = run.z_point[0];
+			fd = "width";
 		}
-		run.org = ofs;
+		if (!diff) return; //nothing to do
 
-		zkSplt._fixszAll();
-			//fix all splitter's size because table might be with %
-			drag.run = null;//free memory
+		if (run.next) zk.beforeSizeAt(run.next);
+		if (run.prev) zk.beforeSizeAt(run.prev);
+		
+		if (run.next) {
+			var s = $int(run.next.style[fd]);
+			s -= diff;
+			if (s < 0) s = 0;
+			run.next.style[fd] = s + "px";
+		}
+		if (run.prev) {
+			var s = $int(run.prev.style[fd]);
+			s += diff;
+			if (s < 0) s = 0;
+			run.prev.style[fd] = s + "px";
+		}
+
+		if (run.next) zk.onSizeAt(run.next);
+		if (run.prev) zk.onSizeAt(run.prev);
+
+		zkSplt._unfixLayout(fl);
+			//Stange (not know the cause yet): we have to put it
+			//befor _fixszAll and after onSizeAt
+
+		zkSplt._fixszAll(cmp);
+
+		//fix all splitter's size because table might be with %
+		drag.run = null;//free memory
 	}
-	cmp.style.left = cmp.style.top = "";
-	//reset since table might adjust width later
-
 };
 zkSplt._snap = function (cmp, x, y) {
 	var drag = zkSplt._drags[cmp.id];
 	if (drag) {
 		var run = drag.run;
-		var ofs = Position.cumulativeOffset(run.box);
-		ofs = zk.toStyleOffset(cmp, ofs[0], ofs[1]);
 		if (drag.vert) {
-			if (y <= ofs[1]) {
-				y = ofs[1];
+			if (y <= run.z_offset[1] - run.prev.offsetHeight) {
+				y = run.z_offset[1] - run.prev.offsetHeight;
 			} else {
-				var max = ofs[1] + run.box.clientHeight - cmp.offsetHeight;
+				var max = run.z_offset[1] + run.next.offsetHeight - cmp.offsetHeight;
 				if (y > max) y = max;
 			}
 		} else {
-			if (x <= ofs[0]) {
-				x = ofs[0];
+			if (x <= run.z_offset[0] - run.prev.offsetWidth) {
+				x = run.z_offset[0] - run.prev.offsetWidth;
 			} else {
-				var max = ofs[0] + run.box.clientWidth - cmp.offsetWidth;
+				var max = run.z_offset[0] + run.next.offsetWidth - cmp.offsetWidth;
 				if (x > max) x = max;
 			}
 		}
+		run.z_point = [x - run.z_offset[0], y - run.z_offset[1]];
 	}
 	return [x, y];
 };
-zkSplt._adj = function (n, fd, diff) {
-	zkSplt._adjSplt(n, fd, diff);
-	if (n) {
-		var val = $int(n.style[fd]) + diff;
-		n.style[fd] = (val > 0 ? val: 0) + "px";
-
-		zk.onResize(0, n);  //notify descendants
-	}
-};
-/** Adjusts the width of the splitter in the opposite dir. */
-zkSplt._adjSplt = function (n, fd, diff) {
-	if ($type(n) == "Splt") {
-		var vert = getZKAttr(n, "vert") != null;
-		if (vert != (fd == "height")) {
-			var val = $int(n.style[fd]) + diff;
-			n.style[fd] = (val > 0 ? val: 0) + "px";
-		}
-	}
-	for (n = n.firstChild; n; n = n.nextSibling)
-		zkSplt._adjSplt(n, fd, diff);
-};
 /** Fixes the height (wd) of the specified splitter. */
-zkSplt._fixsz = function (cmp) {
-	var vert = getZKAttr(cmp, "vert");
+zkSplt.onVisi = zkSplt.onSize = zkSplt._fixsz = function (cmp) {
+	if (!zk.isRealVisible(cmp))return;
+
 	var parent = cmp.parentNode;
 	if (parent) {
-		//Note: when window resize, it might adjust splitter's wd (hgh)
-		//if box's width is nn%. So we have to reset it to 8px
-		if (vert) {
-			var tr = parent.parentNode; //TR
-			cmp.style.height = tr.style.height = "8px";
-			cmp.style.width = "0px"; // clean width
-			cmp.style.width = parent.clientWidth + "px"; //all wd the same
-		} else {
-			cmp.style.width = parent.style.width = "8px";
-			var hgh = parent.clientHeight;
-			if (zk.safari) { //safari: each cell has diff height and tr's hgh is 0
-				for (var cells = parent.parentNode.cells, j = cells.length; --j >= 0;) {
-					var h = cells[j].clientHeight;
-					if (h > hgh) hgh = h;
-				}
+		var btn = $e(cmp.id + "!btn"),
+			bfcolps = "before" == getZKAttr(cmp, "colps");
+		if (getZKAttr(cmp, "vert")) {
+			//Note: when the browser resizes, it might adjust splitter's wd/hgh
+			//Note: the real wd/hgh might be bigger than 8px (since the width
+			//of total content is smaller than box's width)
+			//We 'cheat' by align to top or bottom depending on z.colps
+			if (bfcolps) {
+				parent.vAlign = "top";
+				parent.style.backgroundPosition = "top left";
+			} else {
+				parent.vAlign = "bottom";
+				parent.style.backgroundPosition = "bottom left";
 			}
-			cmp.style.height = "0px"; // clean height
-			cmp.style.height = hgh + "px";
+
+			cmp.style.width = ""; // clean width
+			cmp.style.width = parent.clientWidth + "px"; //all wd the same
+			btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
+		} else {
+			if (bfcolps) {
+				parent.align = "left";
+				parent.style.backgroundPosition = "top left";
+			} else {
+				parent.align = "right";
+				parent.style.backgroundPosition = "top right";
+			}
+
+			cmp.style.height = ""; // clean height
+			cmp.style.height =
+				(zk.safari ? parent.parentNode.clientHeight: parent.clientHeight)+"px";
+				//Bug 1916332: TR's clientHeight is correct (not TD's) in Safari
+			btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
 		}
 	}
-
-	var btn = $e(cmp.id + "!btn");
-	if (vert) btn.style.marginLeft = ((cmp.offsetWidth - btn.offsetWidth) / 2)+"px";
-	else btn.style.marginTop = ((cmp.offsetHeight - btn.offsetHeight) / 2)+"px";
 };
-zkSplt._fixszAll = function () {
-	for (var id in zkSplt._drags) {
-		var cmp = $e(id);
-		if (cmp) zkSplt._fixsz(cmp);
+zkSplt.beforeSize = function (cmp) {
+	cmp.style[getZKAttr(cmp, "vert") ? "width": "height"] = "";
+};
+
+/** Fixes the height (width) of all related splitter. */
+zkSplt._fixszAll = function (cmp) {
+	//1. find the topmost box
+	var box;
+	for (var p = cmp; p = p.parentNode;) //no need to use $parent
+		if ($type(p) == "Box")
+			box = p; //continue to the topmost one
+
+	if (box) zkSplt._fixKidSplts(box);
+	else zkSplt._fixsz(cmp);
+};
+zkSplt._fixKidSplts = function (n) {
+	if (!$visible(n)) return;
+
+	if ($type(n) == "Splt") zkSplt._fixsz(n);
+
+	for (n = n.firstChild; n; n = n.nextSibling)
+		zkSplt._fixKidSplts(n);
+};
+
+/** Use fix table layout */
+if (zk.opera) { //only opera needs it
+	zkSplt._fixLayout = function (cmp) {
+		var box = $parentByType(cmp, "Box");
+		if (box.style.tableLayout != "fixed") {
+			var fl = [box, box.style.tableLayout];
+			box.style.tableLayout = "fixed";
+			return fl;
+		}
+	};
+	zkSplt._unfixLayout = function (fl) {
+		if (fl) fl[0].style.tableLayout = fl[1];
+	};
+} else
+	zkSplt._fixLayout = zkSplt._unfixLayout = zk.voidf;
+
+/**
+ * For best performance, this function doesn't need to compute anything.
+ */
+zkSplt._closeAtInit = function (cmp) {
+	var nd = $e(cmp.id + "!chdextr"), tn = $tag(nd), colps = getZKAttr(cmp, "colps");
+	if (!colps || "none" == colps) return; //nothing to do
+
+	var sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
+	action.hide(sib, true);
+	zkSplt._updcls(cmp);
+};
+zkSplt._updcls = function (cmp, open) {
+	var nm = cmp.className, j = nm.indexOf("-ns");
+	if (open) {
+		if (j >= 0) cmp.className = nm.substring(0, j);
+	} else {
+		if (j < 0) cmp.className = nm + "-ns";
 	}
 };
-
 zkSplt.open = function (cmp, open, silent, enforce) {
 	var nd = $e(cmp.id + "!chdextr");
 	var tn = $tag(nd);
 	if (!enforce && (getZKAttr(cmp, "open") != "false") == open)
 		return; //nothing changed
 
-	var colps = getZKAttr(cmp, "colps")
+	var colps = getZKAttr(cmp, "colps");
 	if (!colps || "none" == colps) return; //nothing to do
 
-	var vert = getZKAttr(cmp, "vert");
-	var sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
-	if (sib) zk.show(sib, open);
+	var vert = getZKAttr(cmp, "vert"),
+		sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn),
+		fd = vert ? "height": "width", diff;
+	if (sib) {
+		zk.show(sib, open); //it will call zk.onVisi(sib) or zk.onHide(sib)
+		diff = $int(sib.style[fd]);
+	}
+
+	sib = colps == "before" ? zkSplt._next(nd, tn): zkSplt._prev(nd, tn);
+	if (sib) {
+		diff = $int(sib.style[fd]) + (open ? -diff: diff);
+		if (diff < 0) diff = 0;
+		sib.style[fd] = diff + "px";
+		zk.onSizeAt(sib);
+	}
+
 	setZKAttr(cmp, "open", open ? "true": "false");
 
-	zkSplt._fixbtn(cmp);
-	zkSplt._fixszAll();
 	cmp.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
-	if (!cmp._precls)cmp._precls = cmp.className;	
-	if (open) zk.rmClass(cmp, cmp._precls + "-ns");
-	else zk.addClass(cmp, cmp._precls + "-ns");
+	zkSplt._updcls(cmp, open);
+
+	zkSplt._fixbtn(cmp);
+	zkSplt._fixszAll(cmp);
+
 	if (!silent)
 		zkau.send({uuid: cmp.id, cmd: "onOpen", data: [open]},
 			zkau.asapTimeout(cmp, "onOpen"));

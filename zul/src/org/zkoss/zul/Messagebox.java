@@ -26,6 +26,7 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.EventListener;
 
 import org.zkoss.zul.impl.MessageboxDlg;
 
@@ -82,11 +83,58 @@ public class Messagebox {
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
 	 */
 	public static final
 	int show(String message, String title, int buttons, String icon)
 	throws InterruptedException {
-		return show(message, title, buttons, icon, 0);
+		return show(message, title, buttons, icon, 0, null);
+	}
+	/** Shows a message box and returns what button is pressed.
+	 *
+	 * @param title the title. If null, {@link WebApp#getAppName} is used.
+	 * @param buttons a combination of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
+	 * @param icon one of predefined images: {@link #QUESTION},
+	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any URI of
+	 * an image.
+	 * @param listener the event listener which is invoked when a button
+	 * is clicked. Ignored if null.
+	 * It is useful if the event processing thread is disabled
+	 * ({@link org.zkoss.zk.ui.util.Configuration#enableEventThread}).
+	 * If the event processing thread is disable, this method always
+	 * return {@link #OK}. To know which button is pressed, you have to pass an
+	 * event listener. Then, when the user clicks a button, the event
+	 * listener is invoked. You can identify which button is clicked
+	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
+	 * in the following table. Alternatively, you can examine the value
+	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
+	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * and so on.
+	 * <table border="1">
+	 *<tr><td>Button Name</td><td>Event Name</td></tr>
+	 *<tr><td>OK</td><td>onOK</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel</td></tr>
+	 *<tr><td>Yes</td><td>onYes</td></tr>
+	 *<tr><td>No</td><td>onNo</td></tr>
+	 *<tr><td>Retry</td><td>onRetry</td></tr>
+	 *<tr><td>Abort</td><td>onAbort</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *</table>
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
+	 * @since 3.0.4
+	 */
+	public static final
+	int show(String message, String title, int buttons, String icon,
+	EventListener listener)
+	throws InterruptedException {
+		return show(message, title, buttons, icon, 0, listener);
 	}
 	/** Shows a message box and returns what button is pressed.
 	 *
@@ -104,10 +152,61 @@ public class Messagebox {
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
 	public static final
 	int show(String message, String title, int buttons, String icon, int focus)
+	throws InterruptedException {
+		return show(message, title, buttons, icon, focus, null);
+	}
+	/** Shows a message box and returns what button is pressed.
+	 *
+	 * @param title the title. If null, {@link WebApp#getAppName} is used.
+	 * @param buttons a combination of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
+	 * @param icon one of predefined images: {@link #QUESTION},
+	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any URI of
+	 * an image.
+	 * @param focus one of button to have to focus. If 0, the first button
+	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}.
+	 * @param listener the event listener which is invoked when a button
+	 * is clicked. Ignored if null.
+	 * It is useful if the event processing thread is disabled
+	 * ({@link org.zkoss.zk.ui.util.Configuration#enableEventThread}).
+	 * If the event processing thread is disable, this method always
+	 * return {@link #OK}. To know which button is pressed, you have to pass an
+	 * event listener. Then, when the user clicks a button, the event
+	 * listener is invoked. You can identify which button is clicked
+	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
+	 * in the following table. Alternatively, you can examine the value
+	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
+	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * and so on.
+	 * <table border="1">
+	 *<tr><td>Button</td><td>Event Name</td></tr>
+	 *<tr><td>OK</td><td>onOK</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel</td></tr>
+	 *<tr><td>Yes</td><td>onYes</td></tr>
+	 *<tr><td>No</td><td>onNo</td></tr>
+	 *<tr><td>Retry</td><td>onRetry</td></tr>
+	 *<tr><td>Abort</td><td>onAbort</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *</table>
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
+	 * @since 3.0.4
+	 */
+	public static final
+	int show(String message, String title, int buttons, String icon,
+	int focus, EventListener listener)
 	throws InterruptedException {
 		final Map params = new HashMap();
 		params.put("message", message);
@@ -134,6 +233,7 @@ public class Messagebox {
 		final MessageboxDlg dlg = (MessageboxDlg)
 			Executions.createComponents(_templ, null, params);
 		dlg.setButtons(buttons);
+		dlg.setEventListener(listener);
 		if (focus > 0) dlg.setFocus(focus);
 
 		if (dlg.getDesktop().getWebApp().getConfiguration().isEventThreadEnabled()) {
@@ -156,19 +256,24 @@ public class Messagebox {
 	 */
 	public static final int show(String message)
 	throws InterruptedException {
-		return show(message, null, OK, INFORMATION, 0);
+		return show(message, null, OK, INFORMATION, 0, null);
 	}
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
 	 * @param titleCode the message code for the title. If non-positive,
 	 * the default title is used.
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
 	 */
 	public static final
 	int show(int messageCode, Object[] args, int titleCode, int buttons,
 	String icon)
 	throws InterruptedException {
-		return show(messageCode, args, titleCode, buttons, icon, 0);
+		return show(messageCode, args, titleCode, buttons, icon, 0, null);
 	}
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
@@ -179,25 +284,18 @@ public class Messagebox {
 	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}.
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
 	public static final
 	int show(int messageCode, Object[] args, int titleCode, int buttons,
 	String icon, int focus)
 	throws InterruptedException {
-		return show(Messages.get(messageCode, args),
-			titleCode > 0 ? Messages.get(titleCode): null, buttons, icon, focus);
-	}
-	/** Shows a message box by specifying a message code, and returns what
-	 * button is pressed.
-	 *
-	 * @param titleCode the message code for the title. If non-positive,
-	 * the default title is used.
-	 */
-	public static final
-	int show(int messageCode, Object arg, int titleCode, int buttons, String icon)
-	throws InterruptedException {
-		return show(messageCode, arg, titleCode, buttons, icon, 0);
+		return show(messageCode, args, titleCode, buttons, icon, focus, null);
 	}
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
@@ -208,14 +306,128 @@ public class Messagebox {
 	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}.
+	 * @param listener the event listener which is invoked when a button
+	 * is clicked. Ignored if null.
+	 * It is useful if the event processing thread is disabled
+	 * ({@link org.zkoss.zk.ui.util.Configuration#enableEventThread}).
+	 * If the event processing thread is disable, this method always
+	 * return {@link #OK}. To know which button is pressed, you have to pass an
+	 * event listener. Then, when the user clicks a button, the event
+	 * listener is invoked. You can identify which button is clicked
+	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
+	 * in the following table. Alternatively, you can examine the value
+	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
+	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * and so on.
+	 * <table border="1">
+	 *<tr><td>Button</td><td>Event Name</td></tr>
+	 *<tr><td>OK</td><td>onOK</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel</td></tr>
+	 *<tr><td>Yes</td><td>onYes</td></tr>
+	 *<tr><td>No</td><td>onNo</td></tr>
+	 *<tr><td>Retry</td><td>onRetry</td></tr>
+	 *<tr><td>Abort</td><td>onAbort</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *</table>
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
+	 * @since 3.0.4
+	 */
+	public static final
+	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	String icon, int focus, EventListener listener)
+	throws InterruptedException {
+		return show(Messages.get(messageCode, args),
+			titleCode > 0 ? Messages.get(titleCode): null, buttons,
+			icon, focus, listener);
+	}
+	/** Shows a message box by specifying a message code, and returns what
+	 * button is pressed.
+	 *
+	 * @param titleCode the message code for the title. If non-positive,
+	 * the default title is used.
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
+	 */
+	public static final
+	int show(int messageCode, Object arg, int titleCode, int buttons, String icon)
+	throws InterruptedException {
+		return show(messageCode, arg, titleCode, buttons, icon, 0, null);
+	}
+	/** Shows a message box by specifying a message code, and returns what
+	 * button is pressed.
+	 *
+	 * @param titleCode the message code for the title. If non-positive,
+	 * the default title is used.
+	 * @param focus one of button to have to focus. If 0, the first button
+	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}.
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
 	public static final
 	int show(int messageCode, Object arg, int titleCode, int buttons,
 	String icon, int focus)
 	throws InterruptedException {
+		return show(messageCode, arg, titleCode, buttons, icon, focus, null);
+	}
+	/** Shows a message box by specifying a message code, and returns what
+	 * button is pressed.
+	 *
+	 * @param titleCode the message code for the title. If non-positive,
+	 * the default title is used.
+	 * @param focus one of button to have to focus. If 0, the first button
+	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}.
+	 * @param listener the event listener which is invoked when a button
+	 * is clicked. Ignored if null.
+	 * It is useful if the event processing thread is disabled
+	 * ({@link org.zkoss.zk.ui.util.Configuration#enableEventThread}).
+	 * If the event processing thread is disable, this method always
+	 * return {@link #OK}. To know which button is pressed, you have to pass an
+	 * event listener. Then, when the user clicks a button, the event
+	 * listener is invoked. You can identify which button is clicked
+	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
+	 * in the following table. Alternatively, you can examine the value
+	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
+	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * and so on.
+	 * <table border="1">
+	 *<tr><td>Button</td><td>Event Name</td></tr>
+	 *<tr><td>OK</td><td>onOK</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel</td></tr>
+	 *<tr><td>Yes</td><td>onYes</td></tr>
+	 *<tr><td>No</td><td>onNo</td></tr>
+	 *<tr><td>Retry</td><td>onRetry</td></tr>
+	 *<tr><td>Abort</td><td>onAbort</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *</table>
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
+	 * @since 3.0.4
+	 */
+	public static final
+	int show(int messageCode, Object arg, int titleCode, int buttons,
+	String icon, int focus, EventListener listener)
+	throws InterruptedException {
 		return show(Messages.get(messageCode, arg),
-			titleCode > 0 ? Messages.get(titleCode): null, buttons, icon, focus);
+			titleCode > 0 ? Messages.get(titleCode): null, buttons,
+			icon, focus, listener);
 	}
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
@@ -240,10 +452,57 @@ public class Messagebox {
 	 * @since 3.0.0
 	 */
 	public static final
-	int show(int messageCode, int titleCode, int buttons, String icon, int focus)
+	int show(int messageCode, int titleCode, int buttons, String icon,
+	int focus)
+	throws InterruptedException {
+		return show(messageCode, titleCode, buttons, icon, focus, null);
+	}
+	/** Shows a message box by specifying a message code, and returns what
+	 * button is pressed.
+	 *
+	 * @param titleCode the message code for the title. If non-positive,
+	 * the default title is used.
+	 * @param focus one of button to have to focus. If 0, the first button
+	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}.
+	 * @param listener the event listener which is invoked when a button
+	 * is clicked. Ignored if null.
+	 * It is useful if the event processing thread is disabled
+	 * ({@link org.zkoss.zk.ui.util.Configuration#enableEventThread}).
+	 * If the event processing thread is disable, this method always
+	 * return {@link #OK}. To know which button is pressed, you have to pass an
+	 * event listener. Then, when the user clicks a button, the event
+	 * listener is invoked. You can identify which button is clicked
+	 * by examining the event name ({@link org.zkoss.zk.ui.event.Event#getName}) as shown
+	 * in the following table. Alternatively, you can examine the value
+	 * of {@link org.zkoss.zk.ui.event.Event#getData}, which must be an
+	 * integer represetinng the button, such as {@link #OK}, {@link #YES}
+	 * and so on.
+	 * <table border="1">
+	 *<tr><td>Button</td><td>Event Name</td></tr>
+	 *<tr><td>OK</td><td>onOK</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel</td></tr>
+	 *<tr><td>Yes</td><td>onYes</td></tr>
+	 *<tr><td>No</td><td>onNo</td></tr>
+	 *<tr><td>Retry</td><td>onRetry</td></tr>
+	 *<tr><td>Abort</td><td>onAbort</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *</table>
+	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
+	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
+	 * and {@link #IGNORE}).
+	 * Note: if the event processing thread is disable, it always
+	 * returns {@link #OK}.
+	 * @since 3.0.4
+	 */
+	public static final
+	int show(int messageCode, int titleCode, int buttons, String icon,
+	int focus, EventListener listener)
 	throws InterruptedException {
 		return show(Messages.get(messageCode),
-			titleCode > 0 ? Messages.get(titleCode): null, buttons, icon, focus);
+			titleCode > 0 ? Messages.get(titleCode): null, buttons,
+			icon, focus, listener);
 	}
 
 	/** Sets the template used to create the message dialog.

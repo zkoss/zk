@@ -348,11 +348,6 @@ public class UiEngineImpl implements UiEngine {
 					public String getTitle() {return null;}
 					public String getStyle() {return null;}
 					public String getHeaders() {return null;}
-					public String getRootAttributes() {return null;}
-					public String getContentType() {return null;}
-					public String getDocType() {return null;}
-					public String getFirstLine() {return null;}
-					public Boolean getCacheable() {return null;}
 				});
 				richlet.service(page);
 			}
@@ -835,7 +830,7 @@ public class UiEngineImpl implements UiEngine {
 		final Throwable err = ex;
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
-			log.realCauseBriefly(ex);
+			log.realCause(ex);
 		} else {
 			ex = t;
 			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));

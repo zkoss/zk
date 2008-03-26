@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
+<?page title="bindingValidation Test"?>
+<zk>
+<html><![CDATA[
+1. Press the "submit" button. You should not see any change on the screen.<br/>
+2. The server console should show following four lines:<br/>
+validationForGrid called:CA<br/>
+validationForGrid called:TX<br/>
+validationForGrid called:WA<br/>
+onClick() called<br/>
+<br/>
+3.If you see NullPointerException, it is a bug.<br/>
+]]></html> 
+<window xmlns:a="http://www.zkoss.org/2005/zk/annotation" style="margin: 0 auto" title="bindingValidation Test"> 
+ 
+<zscript><![CDATA[ 
+public class User{  
+	public String state;  
+ 
+	public String getState() { 
+		return(state); 
+	} 
+ 
+	public void setState(String st) { 
+		state = st; 
+	} 
+}  
+ 
+List list = new LinkedList(); 
+u = new User(); 
+u.state="CA";  
+list.add(u);  
+u = new User(); 
+u.state="TX";  
+list.add(u);  
+u = new User(); 
+u.state="WA";  
+list.add(u);  
+ 
+u = new User(); 
+u.state="ENTRY";  
+ 
+public void validationForGrid(Event ev) {  
+	System.out.println("validationForGrid called:"+ ev.getValue());  
+}  
+ 
+public void validationForEntry(Event ev) {  
+	System.out.println("validationForEntry called");  
+}  
+ 
+]]></zscript>  
+<grid id="griid" width="415px" model="@{list}"> 
+	<columns>  
+		<column label="State" align="center" width="60px"/>  
+	</columns>  
+	<rows> 
+		<row self="@{each=item}" align="center">
+			<textbox value="@{item.state, save-when='submit.onClick'}" onBindingSave="validationForGrid(event)"/>
+		</row> 
+	</rows> 
+</grid> 
+<textbox value="@{u.state}" onBindingSave="validationForEntry(event)"/>  
+ 
+<button id="submit" label="submit"> 
+<attribute name="onBindingValidation"> 
+	System.out.println("onBindingValidation(): called"); 
+</attribute> 
+<attribute name="onClick"> 
+	System.out.println("onClick() called"); 
+</attribute> 
+</button> 
+ 
+</window> 
+</zk>

@@ -35,19 +35,17 @@ if (!window.Comboitem_effect) { //define it only if not customized
 
 ////
 zkCmbox = {};
-zk.addModuleInit(function () {
-zkCmbox.onblur = zkTxbox.onblur;
-zkTxbox.onblur = function (evt) {
-	var inp = zkau.evtel(evt);
-	var uuid = $uuid(inp);
-	var cmp = $e(uuid);
+zkCmbox.onblur = function (evt) {
+	var inp = zkau.evtel(evt),
+		uuid = $uuid(inp),
+		cmp = $e(uuid);
 	if (!zkTxbox._noonblur(inp) && $type(cmp) == "Cmbox") {
 		var inpval = inp.value.toLowerCase();
 		if (inpval.length > 0) {
-			var pp2 = $e(uuid + "!cave");
-			var rows = pp2.rows;
-			var jfnd = -1, strict = getZKAttr(cmp, "valid") || "";
-			strict = strict.toLowerCase().indexOf("strict") > -1;
+			var pp2 = $e(uuid + "!cave"),
+				rows = pp2.rows, jfnd = -1,
+				strict = (getZKAttr(cmp, "valid") || "")
+					.toLowerCase().indexOf("strict") >= 0;
 			for (var j = 0, rl = rows.length; j < rl; ++j) {			
 			var item = rows[j];
 				var txt = zkCmbox.getLabel(item).toLowerCase();
@@ -56,35 +54,35 @@ zkTxbox.onblur = function (evt) {
 					break;
 				}
 			}
-			if (jfnd > -1) item = rows[j];
+			if (jfnd >= 0) item = rows[j];
 			else item = {id: ""};
-				var selId = getZKAttr(cmp, "selid");
-				
-				if (selId != item.id) {
-					setZKAttr(cmp, "selid", item.id);
-					zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
-						zkau.asapTimeout($e(uuid), "onSelect"));			
-				}
+
+			if ((jfnd >= 0 || !strict) && getZKAttr(cmp, "selid") != item.id) {
+				setZKAttr(cmp, "selid", item.id);
+				zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
+					zkau.asapTimeout(cmp, "onSelect"));
+			}
 		}	
 	}
-	zkCmbox.onblur(evt);
+	zkTxbox.onblur(evt);
 };
-});
 zkCmbox.init = function (cmp) {
-	zkCmbox.onVisi = zkWgt.fixDropBtn; //widget.js is ready now
+	zkCmbox.onVisi = zkCmbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
 
 	var inp = $real(cmp);
-	zkTxbox.init(inp);
+	zkTxbox.init(inp, null, zkCmbox.onblur);
 	zk.listen(inp, "keydown", zkCmbox.onkey);
-	zk.listen(inp, "click", function () {if (inp.readOnly && !zk.dragging) zkCmbox.onbutton(cmp);});
+	zk.listen(inp, "click", function (evt) {if (inp.readOnly && !zk.dragging) zkCmbox.onbutton(cmp, evt);});
 		//To mimic SELECT, it drops down if readOnly
 
+	var pp = $e(cmp.id + "!pp");
+	if (pp) // Bug #1879511
+		zk.listen(pp, "click", zkCmbox.closepp);
+		
 	var btn = $e(cmp.id + "!btn");
-	if (btn) {
-		zk.listen(btn, "click", function () {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp);});
-		zkWgt.fixDropBtn(cmp);
-	}
+	if (btn)
+		zk.listen(btn, "click", function (evt) {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp, evt);});
 };
 zkCmbox.strict = function (id) {
 	var inp = $real($e(id));
@@ -326,11 +324,14 @@ zkCmbox.onkey = function (evt) {
 };
 
 /* Whn the button is clicked on button. */
-zkCmbox.onbutton = function (cmp) {
+zkCmbox.onbutton = function (cmp, evt) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) {
 		if (!$visible(pp)) zkCmbox.open(pp, true);
 		else zkCmbox.close(pp, true);
+
+		if (!evt) evt = window.event; //Bug 1911864
+		Event.stop(evt);
 	}
 };
 zkCmbox.dropdn = function (cmp, dropdown) {
@@ -546,32 +547,23 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	var found;
 	if (selback) {
 		if (jfnd < 0) {
-			if (rows.length) {
-				for (var i = 0, rl = rows.length; i < rl; i++) {
-					if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
-					found = rows[i];
-					break;
-				}
-			}
+			if (rows.length) found = rows[zkCmbox._next(rows, 0)];
 		} else {
 			if (exact) {
 				var b = document.selection;
 				if ((b && "Text" == b.type && document.selection.createRange().text.toLowerCase() == inpval)
 				|| (!b && inpval.length && inp.selectionStart == 0
-					&& inp.selectionEnd == inpval.length)) {
-					if (bUp) {
-						for (var i = jfnd - 1; i >= 0 ; i--) {
-							if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
-							jfnd = i;
-							break;
-						}
-					} else {
-						for (var i = jfnd + 1, rl = rows.length; i < rl; i++) {
-							if (!zk.isVisible(rows[i]) || getZKAttr(rows[i], "disd") == "true") continue;
-							jfnd = i;
-							break;
-						}
-					}
+					&& inp.selectionEnd == inpval.length))
+						jfnd = zkCmbox[bUp ? "_prev" : "_next"](rows, jfnd, true);
+			} else {
+				if (bUp) {
+					jfnd = zkCmbox._prev(rows, jfnd);
+					if (zkCmbox.disabled(rows[jfnd]))
+						jfnd = zkCmbox._next(rows, jfnd);
+				} else {
+					jfnd = zkCmbox._next(rows, jfnd);
+					if (zkCmbox.disabled(rows[jfnd]))
+						jfnd = zkCmbox._prev(rows, jfnd);
 				}
 			}
 			if (jfnd >= 0) found = rows[jfnd];
@@ -629,7 +621,23 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	zk.scrollIntoView(pp, found); //make sure found is visible
 	pp.setAttribute("zk_ckval", inpval);
 };
-
+zkCmbox._prev = function (rows, index, including) {
+	for (var i = index - (including ? 1 : 0); i >= 0 ; i--)
+		if (!zkCmbox.disabled(rows[i])) return i;
+	return index;
+};
+zkCmbox._next = function (rows, index, including) {
+	for (var i = index + (including ? 1 : 0), rl = rows.length; i < rl; i++)
+		if (!zkCmbox.disabled(rows[i])) return i;
+	return index;
+};
+/**
+ * Returns whether the item is disabled.
+ * @since 3.0.4
+ */
+zkCmbox.disabled = function (n) {
+	return !n || !zk.isVisible(n) || getZKAttr(n, "disd") == "true";
+};
 /** Called from the server to close the popup based on combobox, not popup.
  */
 zkCmbox.cbclose = function (cb) {
@@ -651,8 +659,18 @@ zkCmbox.close = function (pp, focus) {
 	var cb = $outer(pp);
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: cb.id, cmd: "onOpen", data: [false]});
-	zkTxbox.close($real(cb)); 
-		// Bug #1879511: we must check the current focus whether to trigger the onChange event.
+};
+zkCmbox.closepp = function (evt) {
+	if (!evt) evt = window.event;
+	var pp = Event.element(evt);
+	for (; pp; pp = pp.parentNode) {
+		if (pp.id) {
+			if (pp.id.endsWith("!pp"))
+				zkCmbox.close(pp, true);
+			return; //done
+		}
+		if (pp.onclick) return;
+	}
 };
 
 zk.FloatCombo = Class.create();

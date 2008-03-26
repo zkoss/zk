@@ -9,7 +9,7 @@ button, input.button, input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
-.text {
+.text, .comboboxinp, .dateboxinp, .bandboxinp, .timeboxinp {<%--sclass + "inp"--%>
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
@@ -23,7 +23,6 @@ button, input.button, input.file {
 body {
 	height:100%; margin: 0px; padding: 0px 5px;
 }
-
 <%-- don't set option in mozilla. or, its height too small --%>
 legend {
 	font-family: Tahoma, Arial, serif;
@@ -53,7 +52,12 @@ td.gamma {background: #F4F4F4;}
 	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
 	display:inline-block;
 }
-
+.word-wrap, .word-wrap div.cell-inner, .word-wrap div.foot-cell-inner, .word-wrap div.head-cell-inner {
+	word-wrap: break-word;
+}
+.overflow-hidden {
+	overflow: hidden;
+}
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {
@@ -187,7 +191,29 @@ div.z-loading-indicator {
 	color: #102B6D; border:1px solid #83B5F7; background-color: #FFF; 
 	white-space: nowrap; padding:6px;
 }
+
 <%-- ZK separator --%>
+<c:choose>
+	<c:when test="${empty c:getProperty('org.zkoss.zul.Separator.spaceWithMargin')}">
+	<%-- 3.0.4 and later --%>
+div.hsep, div.hsep-bar {
+	height: 7px; overflow: hidden;
+}
+span.vsep, span.vsep-bar {
+	display:-moz-inline-box; display: inline-block;
+	width: 10px; overflow: hidden;
+}
+div.hsep-bar {
+	background-image: url(${c:encodeURL('~./img/dot.gif')});
+	background-position: center left; background-repeat: repeat-x;
+}
+span.vsep-bar {
+	background-image: url(${c:encodeURL('~./img/dot.gif')});
+	background-position: top center; background-repeat: repeat-y;
+}
+	</c:when>
+	<c:otherwise>
+	<%-- backward compatible with 3.0.3 and earlier --%>
 div.hsep, div.hsep-bar {
 	display: block; width: 100%; padding: 0; margin: 2pt 0; font-size: 0;
 }
@@ -200,6 +226,8 @@ div.hsep-bar {
 div.vsep-bar {
 	border-left: 1px solid #666; margin-left: 2pt;
 }
+	</c:otherwise>
+</c:choose>
 
 <%-- ZK toolbar and toolbarbutton --%>
 .toolbar {
@@ -247,81 +275,96 @@ td.lwt-embedded, td.mwt-embedded, td.rwt-embedded {
 
 <%-- ZK tree, listbox, grid --%>
 div.listbox, div.tree, div.grid {<%-- depends sclass --%>
-	background: #DAE7F6; border: 1px solid #7F9DB9;
+	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden;
 }
 div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-head tr,
-	div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
+	div.grid-head tr, div.tree-foot, 
+	div.listbox-foot, div.grid-foot {<%-- always used. --%>
 	border: 0; overflow: hidden; width: 100%;
 }
 
-div.tree-head tr, div.listbox-head tr, div.grid-head tr, tbody.grid-head tr, tbody.listbox-head tr {<%-- always used. --%>
+div.tree-head tr, div.listbox-head tr, div.grid-head tr {<%-- always used. --%>
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
-div.tree-head th, div.listbox-head th, div.grid-head th, div.listbox-paging th, div.grid-paging th {
+div.tree-head th, div.listbox-head th, div.grid-head th
+	<%-- ,tr.listbox-fake th ,tr.tree-fake th ,tr.grid-fake th// Header's width excluds its style by default--%> {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: small; font-weight: normal;
 }
-
+div.listbox-head th.sort div.head-cell-inner, div.grid-head th.sort div.head-cell-inner
+	<%-- ,tr.listbox-fake th.sort div ,tr.tree-fake th.sort div ,tr.grid-fake th.sort div 
+	// Header's width excluds its style by default--%> {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+div.listbox-head th.sort-asc div.head-cell-inner, div.grid-head th.sort-asc div.head-cell-inner
+	<%-- ,tr.listbox-fake th.sort-asc div ,tr.tree-fake th.sort-asc div ,tr.grid-fake th.sort-asc div 
+	// Header's width excluds its style by default--%> {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.head-cell-inner
+	<%-- ,tr.listbox-fake th.sort-dsc div ,tr.tree-fake th.sort-dsc div ,tr.grid-fake th.sort-dsc div 
+	// Header's width excluds its style by default--%> {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
 div.head-cell-inner {
 	font-size: small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
-
-div.listbox-head th.sort div.head-cell-inner, div.grid-head th.sort div.head-cell-inner, div.listbox-paging th.sort div.head-cell-inner, div.grid-paging th.sort div.head-cell-inner{
-	cursor: pointer; padding-right: 9px;
-	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
-	background-position: right;
-	background-repeat: no-repeat;
-}
-div.listbox-head th.sort-asc div.head-cell-inner, div.grid-head th.sort-asc div.head-cell-inner, div.listbox-paging th.sort-asc div.head-cell-inner, div.grid-paging th.sort-asc div.head-cell-inner{
-	cursor: pointer; padding-right: 9px;
-	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
-	background-position: right;
-	background-repeat: no-repeat;
-}
-div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.head-cell-inner, div.listbox-paging th.sort-dsc div.head-cell-inner, div.grid-paging th.sort-dsc div.head-cell-inner{
-	cursor: pointer; padding-right: 9px;
-	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
-	background-position: right;
-	background-repeat: no-repeat;
-}
-
-div.tree-body, div.listbox-body, div.grid-body, div.listbox-paging, div.grid-paging {<%-- always used. --%>
+div.tree-body, div.listbox-body, div.grid-body {<%-- always used. --%>
 	background: white; border: 0; overflow: auto; width: 100%;
-}
-div.listbox-paging, div.grid-paging {
-	height: 100%;
 }
 div.listbox-pgi, div.grid-pgi {
 	border-top: 1px solid #AAB; overflow: hidden;
 }
-div.tree-body td, div.listbox-body td, div.listbox-paging td {
+div.listbox-pgi-t, div.grid-pgi-t {
+	border-bottom: 1px solid #AAB; overflow: hidden;
+}
+div.tree-body td, div.listbox-body td, div.tree-foot td, div.listbox-foot td {
 	cursor: pointer; padding: 0 2px;
-	font-size: small; font-weight: normal;
+	font-size: small; font-weight: normal; overflow: hidden; 
 }
 
-div.listbox-foot, tbody.listbox-foot, div.grid-foot, tbody.grid-foot, tbody.listbox-foot, div.tree-foot, tbody.tree-foot {<%-- always used --%>
+div.listbox-foot, div.grid-foot, div.tree-foot{<%-- always used --%>
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
 
 div.foot-cell-inner, div.cell-inner, div.head-cell-inner{
-	overflow:hidden; border: 0; margin: 0; padding: 0;
+	border: 0; margin: 0; padding: 0;
+}
+div.foot-cell-inner, div.head-cell-inner{
+	overflow: hidden;
+}
+<%-- faker uses only for grid/listbox/tree --%>
+tr.listbox-fake, tr.listbox-fake th, tr.listbox-fake div, tr.tree-fake, tr.tree-fake th, tr.tree-fake div,
+	tr.grid-fake, tr.grid-fake th, tr.grid-fake div {
+	border-top: 0 !important; border-bottom: 0 !important; margin-top: 0 !important;
+	margin-bottom: 0 !important; padding-top: 0 !important;	padding-bottom: 0 !important;
+	height: 0px !important; <%-- these above css cannot be overrided--%>
+	border-left: 0; border-right: 0; margin-left: 0; margin-right: 0; padding-left: 0;
+	padding-right: 0;
 }
 td.gc {
-	padding: 2px; 
+	padding: 2px; overflow: hidden; 
 }
 div.gc {
 	font-size: small; font-weight: normal; color: black;
 }
-
 td.hbox-sp {
 	width: 0.3em; padding: 0; margin: 0;
 }
 tr.vbox-sp {
 	height: 0.3em; padding: 0; margin: 0;
 }
-
 tr.item, tr.item a, tr.item a:visited {
 	font-size: small; font-weight: normal; color: black;
 	text-decoration: none;
@@ -331,8 +374,8 @@ tr.item a:hover {
 }
 
 tr.grid td.gc {
-	background: white; border-bottom: none; border-left: 1px solid white;
-	border-right: 1px solid #CCC; border-top: 1px solid #DDD;
+	background: white; border-top: none; border-left: 1px solid white;
+	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
 
 tr.odd td.gc, tr.odd {
@@ -384,7 +427,7 @@ span.tree-root-close, span.tree-tee-close, span.tree-last-close {
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
-span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer {
+span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer, span.checkmark-spacer {
 	width: 18px; min-height: 18px; height: 100%;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
@@ -795,7 +838,7 @@ div.menubar a, div.menubar a:visited, div.menubar a:hover, div.menupopup a, div.
 td.menusp {
 	height: 7px;
 	background-image: url(${c:encodeURL('~./zul/img/menu/sep.gif')});
-	background-repeat: no-repeat;
+	background-repeat: repeat-x;
 }
 td.menu1 {<%-- menuitem normal (unchecked) --%>
 	width: 11px;
@@ -819,7 +862,7 @@ span.rbtnbk {<%-- button at the right edge --%>
 	background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); background-repeat: no-repeat;
 	border: 1px solid #7f9db9; border-left: none;
 }
-div.comboboxpp, div.bandboxpp {<%--hardcoded in DSP--%>
+div.comboboxpp, div.bandboxpp {<%--sclass + "pp"--%>
 	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid black; padding: 2px;
 	font-size: x-small;
@@ -841,12 +884,14 @@ div.errbox {
 }
 
 div.progressmeter {
-	border: 1px inset; text-align: left;
+	border-top: 1px solid #666; border-left: 1px solid #666;
+	border-bottom: 1px solid #bbb; border-right: 1px solid #bbb;
+	text-align: left;
 }
 span.progressmeter-img {
 	display:-moz-inline-box; display:inline-block;
 	background-image: url(${c:encodeURL('~./zk/img/prgmeter.gif')});
-	height: 10px;
+	height: 10px; font-size:0;
 }
 
 div.paging, div.paging a {
@@ -872,7 +917,7 @@ div.paging a:hover {
 }
 <%-- ZK JavaScript debug box --%>
 div.debugbox {
-	border: 1px solid #77c;	position: absolute;	bottom: 0px; right: 0px;
+	border: 1px solid #77c;	position: absolute;
 	width: 60%; z-index: 99000; background: white;
 }
 <%--ZK datebox and calendar--%>
@@ -1020,24 +1065,32 @@ tr.tab-lite-m, tr.groupbox-lite-m {
 }
 
 <%-- Splitter component --%>
-div.splitter-h, div.splitter-v, div.splitter-h-ns, div.splitter-v-ns, span.splitter-btn-l, 
-	span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn-b {
-    line-height:1px;
-    font-size:1px;
+span.splitter-btn-l, span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn-b {
+    font-size:0;
+}
+td.splitter-h {
+    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h-ns.png')}");
+    background-repeat: repeat-y; max-width: 8px; width: 8px;
+    background-position: top right;
+}
+tr.splitter-v td {
+    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
+    background-repeat: repeat-x; max-height: 8px; height: 8px;
+    background-position: bottom left;
 }
 div.splitter-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
-    background-position: left;
+    background-position: center left; font-size:0; max-width: 8px; width: 8px;
 }
 div.splitter-v {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
-    background-position: top;
+    background-position: top center; font-size:0; max-height: 8px; height: 8px;
 }
 div.splitter-h-ns {
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h-ns.png')}");
+    font-size:0; max-width: 8px; width: 8px;
 }
 div.splitter-v-ns {
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
+    font-size:0; max-height: 8px; height: 8px;
 }
 span.splitter-btn-l:hover, span.splitter-btn-r:hover, span.splitter-btn-t:hover ,span.splitter-btn-b:hover {
 	opacity:1;
@@ -1046,9 +1099,8 @@ span.splitter-btn-l:hover, span.splitter-btn-r:hover, span.splitter-btn-t:hover 
 span.splitter-btn-l, span.splitter-btn-r, span.splitter-btn-t ,span.splitter-btn-b {
 	filter:alpha(opacity=50);  <%-- IE --%>
 	opacity:0.5;  <%-- Moz + FF --%>	
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
+	background-repeat: no-repeat; vertical-align:top;
+	display:-moz-inline-box; display:inline-block; font-size:0;
 }
 
 span.splitter-btn-visi {
@@ -1072,26 +1124,25 @@ span.splitter-btn-b {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.png')});
 }
 
-<%-- Splitter OS component--%>
-div.splitter-os-h, div.splitter-os-v, div.splitter-os-h-ns, div.splitter-os-v-ns, span.splitter-os-btn-l, 
-	span.splitter-os-btn-r, span.splitter-os-btn-t ,span.splitter-os-btn-b {
-    line-height:1px;
-    font-size:1px;
+<%-- Splitter - OS look-and-feel --%>
+span.splitter-os-btn-l, span.splitter-os-btn-r, span.splitter-os-btn-t ,span.splitter-os-btn-b {
+    font-size:0;
 }
-div.splitter-os-h {
+td.splitter-os-h {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.gif')}");
-    background-position: left;
+    background-repeat: repeat-y; max-width: 8px; width: 8px;
+    background-position: top right;
 }
-div.splitter-os-v {
+tr.splitter-os-v td {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.gif')}");
-    background-position: top;
+    background-repeat: repeat-x; max-height: 8px; height: 8px;
+    background-position: bottom left;
 }
-
-div.splitter-os-h-ns {
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.gif')}");
+div.splitter-os-h, div.splitter-os-h-ns {
+    font-size:0; max-width: 8px; width: 8px;
 }
-div.splitter-os-v-ns {
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.gif')}");
+div.splitter-os-v, div.splitter-os-v-ns {
+    font-size:0; max-height: 8px; height: 8px;
 }
 span.splitter-os-btn-l:hover, span.splitter-os-btn-r:hover, span.splitter-os-btn-t:hover ,span.splitter-os-btn-b:hover {
 	opacity:1;
@@ -1100,9 +1151,8 @@ span.splitter-os-btn-l:hover, span.splitter-os-btn-r:hover, span.splitter-os-btn
 span.splitter-os-btn-l, span.splitter-os-btn-r, span.splitter-os-btn-t ,span.splitter-os-btn-b {
 	filter:alpha(opacity=50);  <%-- IE --%>
 	opacity:0.5;  <%-- Moz + FF --%>	
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
+	background-repeat: no-repeat; vertical-align:top;
+	display:-moz-inline-box; display:inline-block; font-size: 0;
 }
 
 span.splitter-os-btn-l {
@@ -1145,3 +1195,28 @@ div.drop-content {
 	font-size:13px;
 	font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
+<%-- // Header's width includs its style
+tr.listbox-fake th, tr.tree-fake th, tr.grid-fake th {
+	overflow: hidden; border: 1px solid;
+	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
+	white-space: nowrap; padding: 2px;
+	font-size: small; font-weight: normal;
+}
+tr.listbox-fake th.sort div, tr.tree-fake th.sort div, tr.grid-fake th.sort div{
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+tr.listbox-fake th.sort-asc div, tr.tree-fake th.sort-asc div, tr.grid-fake th.sort-asc div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}
+tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.sort-dsc div {
+	cursor: pointer; padding-right: 9px;
+	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
+	background-position: 99% center;
+	background-repeat: no-repeat;
+}--%>

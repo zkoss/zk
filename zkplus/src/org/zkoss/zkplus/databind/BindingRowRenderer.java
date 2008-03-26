@@ -62,7 +62,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		//link this template map to parent templatemap (Grid in Grid)
 		Map parenttemplatemap = (Map) grid.getAttribute(_binder.TEMPLATEMAP);
 		if (parenttemplatemap != null) {
-				templatemap.put(_binder.TEMPLATEMAP, parenttemplatemap);
+			templatemap.put(_binder.TEMPLATEMAP, parenttemplatemap);
 		}
 		//kept clone kids somewhere to avoid create too many components in browser
 		final List kids = new ArrayList(clone.getChildren());
@@ -110,8 +110,11 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 			clone.setAttribute(_binder.TEMPLATE, template);
 		}
 		
-		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, no need to process
-		if (template instanceof Grid || template instanceof Listbox) {
+		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
+		//no need to process down since BindingRowRenderer of the under Grid
+		//owner will do its own linkTemplates()
+		//bug#1888911 databind and Grid in Grid not work when no _var in inner Grid
+		if (DataBinder.isCollectionOwner(template)) {
 			return;
 		}
 		
@@ -129,8 +132,12 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		//bug #1813271: Data binding generates duplicate ids in grids/listboxes
 		clone.setId("@" + clone.getUuid() + x++); //init id to @uuid to avoid duplicate id issue
 
-		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, no need to process
-		if (clone instanceof Grid || clone instanceof Listbox) {
+		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
+		//no need to process down since BindingRowRenderer of the under Grid
+		//owner will do its own setupCloneIds()
+		//bug#1893247: Not unique in the new ID space when Grid in Grid
+		final Component template = DataBinder.getComponent(clone); 
+		if (template != null && DataBinder.isCollectionOwner(template)) {
 			return;
 		}
 		

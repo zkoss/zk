@@ -82,6 +82,8 @@ public class Expressions {
 	 * or instantiate.
 	 */
 	public static final ExpressionFactory newExpressionFactory(Class expfcls) {
+		if (expfcls == null)
+			expfcls = _expfcls;
 		if (expfcls != null) {
 			try {
 				return (ExpressionFactory)expfcls.newInstance();

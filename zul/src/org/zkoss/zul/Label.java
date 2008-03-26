@@ -79,6 +79,11 @@ public class Label extends XulElement {
 	 * <dt>maxlength=0</dt>
 	 * <dd>hyphen has no effect</dd>
 	 * </dl>
+	 *
+	 * <p>Since 3.0.4, you can set the style class (@{link #setSclass})
+	 * to "word-wrap" to wrap a long word instead of using the hyphen
+	 * and maxlength property. However, word-wrap is not applicable to
+	 * Opera (it works fine with FF, IE and Safari).
 	 */
 	public int getMaxlength() {
 		return _maxlength;
@@ -143,7 +148,12 @@ public class Label extends XulElement {
 			invalidate();
 		}
 	}
-	/** Returns whether to hyphen a long word if maxlength is specified.
+	/** Returns whether to hyphenate a long word if maxlength is specified.
+	 *
+	 * <p>Since 3.0.4, you can set the style class (@{link #setSclass})
+	 * to "word-wrap" to wrap a long word instead of using the hyphen
+	 * and maxlength property. However, word-wrap is not applicable to
+	 * Opera (it works fine with FF, IE and Safari).
 	 *
 	 * <p>See {@link #getMaxlength} for the relationship among pre, hyphen and
 	 * maxlength.
@@ -171,16 +181,20 @@ public class Label extends XulElement {
 		final Component p = getParent();
 		return p == null || !isVisible() 
 			|| !isRawLabel(p) || !Components.isAutoId(getId())
-			|| getContext() != null || getTooltip() != null
-			|| getTooltiptext() != null || getPopup() != null
-			|| getAction() != null
-			|| getDraggable() != null || getDroppable() != null
-			|| getStyle() != null || getSclass() != null
-			|| getLeft() != null || getTop() != null
-			|| getWidth() != null || getHeight() != null
 			|| isAsapRequired(Events.ON_CLICK)
+			|| !isEmpty(getStyle()) || !isEmpty(getSclass())
+			|| !isEmpty(getContext()) || !isEmpty(getTooltip())
+			|| !isEmpty(getTooltiptext()) || !isEmpty(getPopup())
+			|| !"false".equals(getDraggable())
+			|| !"false".equals(getDroppable())
 			|| isAsapRequired(Events.ON_RIGHT_CLICK)
+			|| !isEmpty(getAction())
+			|| !isEmpty(getLeft()) || !isEmpty(getTop())
+			|| !isEmpty(getWidth()) || !isEmpty(getHeight())
 			|| isAsapRequired(Events.ON_DOUBLE_CLICK);
+	}
+	private static boolean isEmpty(String s) {
+		return s == null || s.length() == 0;
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =
@@ -303,6 +317,11 @@ public class Label extends XulElement {
 	public void invalidate() {
 		if (isIdRequired()) super.invalidate();
 		else getParent().invalidate();
+	}
+	public void redraw(Writer out) throws IOException {
+		if (isIdRequired()) super.redraw(out);
+		else out.write(getEncodedText());
+			//no processing; direct output if not ZUL
 	}
 	/** No child is allowed.
 	 */

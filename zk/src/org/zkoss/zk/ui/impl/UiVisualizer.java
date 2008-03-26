@@ -256,7 +256,8 @@ import org.zkoss.zk.au.out.*;
 				if (oldparent != null) {
 					final Object xc = ((ComponentCtrl)oldparent).getExtraCtrl();
 					if ((xc instanceof Cropper) && ((Cropper)xc).isCropper())
-						_invalidated.add(oldparent);
+						oldparent.invalidate();
+						//Bug 1914130: Treechildren.invalidate triggles others
 				}
 			}
 			_attached.remove(comp);

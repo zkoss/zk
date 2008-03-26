@@ -29,5 +29,6 @@ bsh.jar
 js.jar
 groovy.jar
 jruby.jar
+jython.jar
 mvel.jar
 ognl.jar

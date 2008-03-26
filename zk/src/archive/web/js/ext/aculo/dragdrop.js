@@ -334,7 +334,7 @@ for (var n = src; n && n != this.element; n = n.parentNode)
 
       var pointer = [Event.pointerX(event), Event.pointerY(event)];
 //Tom M. Yeh, Potix: give the element a chance to ignore dragging
-if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer))
+if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer, event))
 	return;
 //Tom M. Yeh, Potix: disable selection
 //zk.disableSelection(document.body); // Bug #1820433
@@ -388,8 +388,7 @@ if (this.z_orgpos != 'absolute')
     }
     
     Draggables.notify('onStart', this, event);
-        
-    if(this.options.starteffect) this.options.starteffect(this.element);
+    if(this.options.starteffect) this.options.starteffect(this.element, this.handle);
   },
   
   updateDrag: function(event, pointer) {

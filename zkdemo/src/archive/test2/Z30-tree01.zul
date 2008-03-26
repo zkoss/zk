@@ -94,7 +94,8 @@
 			tree2.setWidth(w.getValue()+"px");
 		</attribute>
 	</button>
-	<intbox id="w" />
+	<intbox id="w" constraint="no empty"/>
+             <separator/>
 	<button label="expand A">
 		<attribute name="onClick">
 			tcola.setWidth("400px");

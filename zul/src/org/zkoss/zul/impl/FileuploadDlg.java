@@ -24,6 +24,7 @@ import java.util.Iterator;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.client.Updatable;
+import org.zkoss.zk.au.out.AuScript;
 import org.zkoss.zul.Window;
 
 /**
@@ -43,6 +44,10 @@ public class FileuploadDlg extends Window {
 	}
 
 	public void onCancel() {
+		onClose();
+	}
+	public void onClose() {
+		response("endUpload", new AuScript(null, "zkau.endUpload()"));
 		detach();
 	}
 

@@ -46,6 +46,7 @@ public class ComboboxDefault implements ComponentRenderer {
 			.write(self.getOuterAttrs())
 			.write(" z.type=\"zul.cb.Cmbox\" z.combo=\"true\"><input id=\"")
 			.write(uuid).write("!real\" autocomplete=\"off\"")
+			.write(" class=\"").write(self.getSclass()).write("inp\"")
 			.write(self.getInnerAttrs()).write("/><span id=\"")
 			.write(uuid).write("!btn\" class=\"rbtnbk\"");
 
@@ -54,7 +55,7 @@ public class ComboboxDefault implements ComponentRenderer {
 
 		wh.write("><img src=\"")
 			.write(exec.encodeURL(self.getImage())).write("\"/></span><div id=\"").write(uuid)
-			.write("!pp\" class=\"comboboxpp\" style=\"display:none\" tabindex=\"-1\">")
+			.write("!pp\" class=\"").write(self.getSclass()).write("pp\" style=\"display:none\" tabindex=\"-1\">")
 			.write("<table id=\"").write(uuid)
 			.write("!cave\" cellpadding=\"0\" cellspacing=\"0\">")
 			.writeChildren(self)

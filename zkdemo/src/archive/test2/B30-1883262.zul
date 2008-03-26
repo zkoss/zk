@@ -18,8 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<window id="win">
-	Please focus in and out the input element, you should not see any error dialog. 
+<n:p>1.Please focus in and out the input element, you should not see any error dialog.</n:p>
+<n:p>2.The textbox shall disappear.</n:p>
+
+	<window id="win">	 
 	<zscript><![CDATA[
 Constraint ctt = new Constraint() {
 	public void validate(Component comp, Object value) throws WrongValueException { 

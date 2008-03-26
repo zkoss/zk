@@ -34,10 +34,14 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.in.GenericCommand;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -108,6 +112,7 @@ public class Grid extends XulElement {
 	private transient Foot _foot;
 	private transient Collection _heads;
 	private String _align;
+	private String _pagingPosition = "bottom";
 	private ListModel _model;
 	private RowRenderer _renderer;
 	private transient ListDataListener _dataListener;
@@ -124,6 +129,11 @@ public class Grid extends XulElement {
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
+	/** ROD mold use only*/
+	private String _innerHeight = null,
+	_innerTop = "height:0px;display:none", _innerBottom = "height:0px;display:none";
+	private transient GridDrawerEngine _engine;
+	private boolean _fixedLayout;
 
 	public Grid() {
 		setSclass("grid");
@@ -143,7 +153,33 @@ public class Grid extends XulElement {
 			}
 		};
 	}
-
+	
+	/**
+	 * Sets the outline of grid whether is fixed layout.
+	 * If true, the outline of grid will be depended on browser. It means, we don't 
+	 * calculate the width of each cell. Otherwise, the outline will count on the content of body.
+	 * In other words, the outline of grid is like ZK 2.4.1 version that the header's width is only for reference.
+	 * 
+	 * <p> You can also specify the "fixed-layout" attribute of component in lang-addon.xml directly, it's a top priority. 
+	 * @since 3.0.4
+	 */
+	public void setFixedLayout(boolean fixedLayout) {
+		if(_fixedLayout != fixedLayout) {
+			_fixedLayout = fixedLayout;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns the outline of grid whether is fixed layout.
+	 * <p>Default: false.
+	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
+	 * @since 3.0.4
+	 */
+	public boolean isFixedLayout() {
+		final String s = (String) getAttribute("fixed-layout");
+		return s != null ? Boolean.parseBoolean(s) : _fixedLayout;
+	}
+	
 	/** Returns the rows.
 	 */
 	public Rows getRows() {
@@ -200,6 +236,31 @@ public class Grid extends XulElement {
 	}
 
 	//--Paging--//
+	/**
+	 * Sets how to position the paging of grid at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
+	 * "top", or "both".
+	 * @since 3.0.4
+	 */
+	public void setPagingPosition(String pagingPosition) {
+		if (pagingPosition == null || (!pagingPosition.equals("top") &&
+			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
+			throw new WrongValueException("Unsupported position : "+pagingPosition);
+		if(!Objects.equals(_pagingPosition, pagingPosition)){
+			_pagingPosition = pagingPosition;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns how to position the paging of grid at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @since 3.0.4
+	 */
+	public String getPagingPosition() {
+		return _pagingPosition;
+	}
+	
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
@@ -228,7 +289,7 @@ public class Grid extends XulElement {
 	public void setPaginal(Paginal pgi) {
 		if (!Objects.equals(pgi, _pgi)) {
 			final Paginal old = _pgi;
-			_pgi = pgi;
+			_pgi = pgi; //assign before detach paging, since removeChild assumes it
 
 			if (inPagingMold()) {
 				if (old != null) removePagingListener(old);
@@ -291,8 +352,8 @@ public class Grid extends XulElement {
 				renderer.doFinally();
 			}
 		}
-
-		if (_rows != null) _rows.invalidate();
+		if (getPagingPosition().equals("both")) invalidate(); // just in case.
+		else if (_rows != null) _rows.invalidate();
 	}
 			};
 		pgi.addEventListener("onPagingImpl", _pgImpListener);
@@ -315,18 +376,38 @@ public class Grid extends XulElement {
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 */
 	public int getPageSize() {
-		if (_pgi == null)
-			throw new IllegalStateException("Available only the paging mold");
-		return _pgi.getPageSize();
+		return pgi().getPageSize();
 	}
 	/** Sets the page size, aka., the number rows per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
 	 */
-	public void setPageSize(int pgsz) {
+	public void setPageSize(int pgsz) throws WrongValueException {
+		pgi().setPageSize(pgsz);
+	}
+	/** Returns the number of pages.
+	 * Note: there is at least one page even no item at all.
+	 * @since 3.0.4
+	 */
+	public int getPageCount() {
+		return pgi().getPageCount();
+	}
+	/** Returns the active page (starting from 0).
+	 * @since 3.0.4
+	 */
+	public int getActivePage() {
+		return pgi().getActivePage();
+	}
+	/** Sets the active page (starting from 0).
+	 * @since 3.0.4
+	 */
+	public void setActivePage(int pg) throws WrongValueException {
+		pgi().setActivePage(pg);
+	}
+	private Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
-		_pgi.setPageSize(pgsz);
+		return _pgi;
 	}
 
 	/** Returns whether this grid is in the paging mold.
@@ -335,6 +416,73 @@ public class Grid extends XulElement {
 		return "paging".equals(getMold());
 	}
 
+	/** ROD mold use only.
+	 */
+	/*package*/ final boolean inSpecialMold() {
+		final String mold = (String) getAttribute("special-mold-name");
+		return mold != null && getMold().equals(mold);
+	}
+	/** ROD mold use only.
+	 */
+	/*package*/ final GridDrawerEngine getDrawerEngine() {
+		return _engine;
+	}
+	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerHeight(String innerHeight) {
+		if (innerHeight == null) innerHeight = "100%";
+		if (!Objects.equals(_innerHeight, innerHeight)) {
+			_innerHeight = innerHeight;
+			smartUpdate("z.innerHeight", _innerHeight);
+		}
+	}
+	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerHeight() {
+		return _innerHeight;
+	}	
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerTop(String innerTop) {
+		if (innerTop == null) innerTop = "height:0px;display:none";
+		if (!Objects.equals(_innerTop, innerTop)) {
+			_innerTop = innerTop;
+			smartUpdate("z.innerTop", _innerTop);
+		}
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerTop() {
+		return _innerTop;
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public void setInnerBottom(String innerBottom) {
+		if (innerBottom == null) innerBottom = "height:0px;display:none";
+		if (!Objects.equals(_innerBottom, innerBottom)) {
+			_innerBottom = innerBottom;
+			smartUpdate("z.innerBottom", _innerBottom);
+		}
+	}
+	/**
+	 *Internal use only.
+	 *@since 3.0.4
+	 */
+	public String getInnerBottom() {
+		return _innerBottom;
+	}
 	//-- ListModel dependent codes --//
 	/** Returns the list model associated with this grid, or null
 	 * if this grid is not associated with any list data model.
@@ -427,10 +575,12 @@ public class Grid extends XulElement {
 	 * <p>It is used only if live data ({@link #setModel} and
 	 * not paging ({@link #getPaging}.
 	 *
+	 * <p>Note: if the "pre-load-size" attribute of component is specified, it's prior to the original value.(@since 3.0.4)
 	 * @since 2.4.1
 	 */
 	public int getPreloadSize() {
-		return _preloadsz;
+		final String size = (String) getAttribute("pre-load-size");
+		return size != null ? Integer.parseInt(size) : _preloadsz;
 	}
 	/** Sets the number of rows to preload when receiving
 	 * the rendering request from the client.
@@ -600,36 +750,40 @@ public class Grid extends XulElement {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
 	public void onInitRender() {
-		final Renderer renderer = new Renderer();
-		try {
-			int pgsz, ofs;
-			if (inPagingMold()) {
-				pgsz = _pgi.getPageSize();
-				ofs = _pgi.getActivePage() * pgsz;
-				final int cnt = _rows.getChildren().size();
-				if (ofs >= cnt) { //not possible; just in case
-					ofs = cnt - pgsz;
-					if (ofs < 0) ofs = 0;
+		if (inSpecialMold()) {
+			_engine.onInitRender();
+		} else {
+			final Renderer renderer = new Renderer();
+			try {
+				int pgsz, ofs;
+				if (inPagingMold()) {
+					pgsz = _pgi.getPageSize();
+					ofs = _pgi.getActivePage() * pgsz;
+					final int cnt = _rows.getChildren().size();
+					if (ofs >= cnt) { //not possible; just in case
+						ofs = cnt - pgsz;
+						if (ofs < 0) ofs = 0;
+					}
+				} else {
+					pgsz = 20;
+					ofs = 0;
+					//we don't know # of visible rows, so a 'smart' guess
+					//It is OK since client will send back request if not enough
 				}
-			} else {
-				pgsz = 20;
-				ofs = 0;
-				//we don't know # of visible rows, so a 'smart' guess
-				//It is OK since client will send back request if not enough
+	
+				int j = 0;
+				for (Iterator it = _rows.getChildren().listIterator(ofs);
+				j < pgsz && it.hasNext(); ++j)
+					renderer.render((Row)it.next());
+	
+				if (!inPagingMold() && getRows().getChildren().size() > pgsz)
+					((Row)getRows().getChildren().get(pgsz))
+						.setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
 			}
-
-			int j = 0;
-			for (Iterator it = _rows.getChildren().listIterator(ofs);
-			j < pgsz && it.hasNext(); ++j)
-				renderer.render((Row)it.next());
-
-			if (!inPagingMold() && getRows().getChildren().size() > pgsz)
-				((Row)getRows().getChildren().get(pgsz))
-					.setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
 		}
 	}
 	private void postOnInitRender() {
@@ -709,14 +863,14 @@ public class Grid extends XulElement {
 	}
 
 	/** Used to render row if _model is specified. */
-	private class Renderer implements java.io.Serializable {
+	/*package*/ class Renderer {
 		private final RowRenderer _renderer;
 		private boolean _rendered, _ctrled;
 
-		private Renderer() {
+		/*package*/ Renderer() {
 			_renderer = getRealRenderer();
 		}
-		private void render(Row row) throws Throwable {
+		/*package*/ void render(Row row) throws Throwable {
 			if (row.isLoaded())
 				return; //nothing to do
 
@@ -752,7 +906,7 @@ public class Grid extends XulElement {
 			row.setLoaded(true);
 			_rendered = true;
 		}
-		private void doCatch(Throwable ex) {
+		/*package*/ void doCatch(Throwable ex) {
 			if (_ctrled) {
 				try {
 					((RendererCtrl)_renderer).doCatch(ex);
@@ -763,7 +917,7 @@ public class Grid extends XulElement {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
-		private void doFinally() {
+		/*package*/ void doFinally() {
 			if (_ctrled)
 				((RendererCtrl)_renderer).doFinally();
 		}
@@ -858,6 +1012,8 @@ public class Grid extends XulElement {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
 			super.setMold(mold);
+				//we have to change model before detaching paging,
+				//since removeChild assumes it
 
 			if ("paging".equals(old)) { //change from paging
 				if (_paging != null) {
@@ -869,6 +1025,8 @@ public class Grid extends XulElement {
 			} else if (inPagingMold()) { //change to paging
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
+			} else if (inSpecialMold() && _engine == null) {
+				_engine = new GridDrawerEngine(this);
 			}
 		}
 	}
@@ -884,10 +1042,19 @@ public class Grid extends XulElement {
 			for(final ListIterator it = rows.listIterator(index);
 			it.hasPrevious(); --index)
 				if(((Row)it.previous()).isLoaded()) break;
-			HTMLs.appendAttribute(sb, "z.lastLoadIdx", index);
+			HTMLs.appendAttribute(sb, "z.lastLoadIdx", !inSpecialMold() || 
+					rows.size() <= _engine.getVisibleAmount() ? index : _engine.getVisibleAmount());
 		}
 		if (_scOddRow != null)
 			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
+		HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
+		if (inSpecialMold()) {
+			HTMLs.appendAttribute(sb, "z.cnt",  getRows().getChildren().size());
+			HTMLs.appendAttribute(sb, "z.cur",  _engine.getCurpos());
+			HTMLs.appendAttribute(sb, "z.amt",  _engine.getVisibleAmount());
+			HTMLs.appendAttribute(sb, "z.isrod",  true);
+			HTMLs.appendAttribute(sb, "z.preload",  getPreloadSize());
+		}
 		return sb.toString();
 	}
 
@@ -926,6 +1093,10 @@ public class Grid extends XulElement {
 		return false;
 	}
 	public boolean removeChild(Component child) {
+		if (_paging == child && _pgi == child && inPagingMold())
+			throw new IllegalStateException("The paging component cannot be removed manually. It is removed automatically when changing the mold");
+				//Feature 1906110: prevent developers from removing it accidently
+
 		if (!super.removeChild(child))
 			return false;
 
@@ -996,7 +1167,11 @@ public class Grid extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, RenderOnDemand {
+	implements InnerWidth, RenderOnDemand, ChildChangedAware {
+		//ChildChangedAware//
+		public boolean isChildChangedAware() {
+			return !isFixedLayout();
+		}
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;

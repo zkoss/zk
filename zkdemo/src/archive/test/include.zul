@@ -29,7 +29,8 @@ This includes another page.
 	</button>
 	<button label="Change to upload.zul">
 		<attribute name="onClick">
-		embed.getFellow("inc").setSrc("upload.zul?pageId=UpdDemo&amp;style=border:1px%20solid%20red");
+		Include inc = embed.getFellow("inc");
+		inc.setSrc("upload.zul?pageId=UpdDemo&amp;style=border:1px%20solid%20red");
 		</attribute>
 	</button>
 	<button label="Change to grid.zul">
@@ -55,5 +56,7 @@ This includes another page.
 And, it includes '~./html/alert.dsp'
 	<include src="~./html/alert.dsp"/>
 And, it includes '~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message'
+Note: title and message has no effect since fileuploaddlg uses arg
+while parameters in the query string are part of param
 	<include src="~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message"/>
 </window>

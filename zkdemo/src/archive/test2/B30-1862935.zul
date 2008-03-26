@@ -21,6 +21,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <window width="100%" height="100%">
 [ 1862935 ] The height of window is not initiated to property value.
 Being inside of borderlayout, the height of window is not initiated to property value. 
+If see the black block, it is correct
 <borderlayout>
 <west id="westborder" size="27%" maxsize="350" minsize="265"
 splittable="true" collapsible="true" flex="true">

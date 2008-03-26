@@ -1,4 +1,11 @@
 <zk>
+<html><![CDATA[
+In IE, if model size is zero (start from zero or after clear)
+then when add new one in to model, the listbox will miss the onRender au
+event which should send to server,
+but it is work in FF.<br/>
+<br/>
+]]></html>
 <button label="add" onClick="add()" />
 <listbox id="lb"/>
 <zscript>

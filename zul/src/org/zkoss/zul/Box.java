@@ -327,12 +327,14 @@ public class Box extends XulElement {
 	 * It is used only for the vertical layout.
 	 */
 	public String getChildOuterAttrs(Component child) {
+		final StringBuffer sb = new StringBuffer(64);
 		final boolean vert = isVertical();
 		if (child instanceof Splitter)
-			return (vert ? " height": " width") + "=\"8px\"";
+			return sb.append(" class=\"")
+				.append(((Splitter)child).getRealSclass())
+				.append('"').toString();
 		
-		final StringBuffer sb =
-			new StringBuffer(64).append(" z.coexist=\"true\"");
+		sb.append(" z.coexist=\"true\"");
 			//coexist: the visibility of exterior is the same as child.
 
 		//Note: visible is handled in getChildInnerAttrs if horizontal layout
@@ -393,6 +395,18 @@ public class Box extends XulElement {
 
 			sb.append('"');
 		}
+		return sb.toString();
+	}
+	public String getOuterAttrs() {
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
+		for (Iterator it = getChildren().iterator(); it.hasNext();)
+			if (it.next() instanceof Splitter) {
+				HTMLs.appendAttribute(sb, "z.hasSplt", true);
+				break;
+			}
+		if ("vertical".equals(getOrient())) 
+			HTMLs.appendAttribute(sb, "z.vert", "true");
 		return sb.toString();
 	}
 	/** Returns the attributes used by the 'cave' element (never null).

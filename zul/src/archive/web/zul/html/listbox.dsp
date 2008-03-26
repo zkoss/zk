@@ -24,6 +24,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:if test="${!empty self.listhead}">
 	<div id="${self.uuid}!head" class="listbox-head">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+		<c:if test="${!empty self.listhead}">
+		<tbody style="visibility:hidden;height:0px">
+			<tr id="${self.listhead.uuid}!hdfaker" class="listbox-fake">
+			<c:forEach var="child" items="${self.listhead.children}">
+					<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
+						<div style="overflow:hidden"></div>
+					</th>
+			</c:forEach>
+			</tr>
+		</tbody>
+		</c:if>
 	<c:forEach var="head" items="${self.heads}">
 ${z:redraw(head, null)}
 	</c:forEach>
@@ -33,7 +44,18 @@ ${z:redraw(head, null)}
 <c:set var="hgh" if="${self.rows > 1}" value="style=\"overflow:hidden;height:${self.rows * 15}px\""/>
 <c:set var="hgh" if="${!empty self.height}" value="style=\"overflow:hidden;height:${self.height}\""/>
 	<div id="${self.uuid}!body" class="listbox-body" ${hgh}>
-	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable">
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable" <c:if test="${self.fixedLayout}">style="table-layout:fixed"</c:if>>
+		<c:if test="${!empty self.listhead}">
+		<tbody style="visibility:hidden;height:0px">
+			<tr id="${self.listhead.uuid}!bdfaker" class="listbox-fake">
+			<c:forEach var="child" items="${self.listhead.children}">
+					<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
+						<div style="overflow:hidden"></div>
+					</th>
+			</c:forEach>
+			</tr>
+		</tbody>
+		</c:if>
 ${zu:resetStripeClass(self)}
 	<c:forEach var="item" items="${self.items}">
 ${zu:setStripeClass(item)}	
@@ -44,6 +66,17 @@ ${z:redraw(item, null)}
 <c:if test="${!empty self.listfoot}">
 	<div id="${self.uuid}!foot" class="listbox-foot">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
+	<c:if test="${!empty self.listhead}">
+		<tbody style="visibility:hidden;height:0px">
+			<tr id="${self.listhead.uuid}!ftfaker" class="listbox-fake">
+			<c:forEach var="child" items="${self.listhead.children}">
+					<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
+						<div style="overflow:hidden"></div>
+					</th>
+			</c:forEach>
+			</tr>
+		</tbody>
+	</c:if>
 ${z:redraw(self.listfoot, null)}
 	</table>
 	</div>

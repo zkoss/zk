@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
@@ -61,8 +62,17 @@ public class BoxVertical implements ComponentRenderer {
 				wh.write("<tr id=\"").write(child.getUuid())
 					.write("!chdextr2\" class=\"").write(spscls).write("\"");
 
-				//note: we have to hide if spacing is 0 since IE7 shows some space
-				if (!child.isVisible() || "0".equals(spacing) || "0px".equals(spacing)) {
+				//note: we have to hide if spacing is 0
+				//since IE7 shows some space
+				boolean chvisible = child.isVisible();
+				if (chvisible) {
+					int splen = spacing != null ? spacing.length(): 0;
+					if (splen > 0 && spacing.charAt(0) == '0') {
+						char cc = splen > 1 ? spacing.charAt(1): (char)0;
+						chvisible = cc >= '0' && cc <= '9';
+					}
+				}
+				if (!chvisible) {
 					wh.write(" style=\"display:none;");
 					if (spstyle != null) wh.write(spstyle);
 					wh.write("\"");
@@ -70,7 +80,11 @@ public class BoxVertical implements ComponentRenderer {
 					wh.write(" style=\"").write(spstyle).write("\"");
 				}
 
-				wh.writeln("><td></td></tr>");
+				wh.write("><td>");
+				if (Executions.getCurrent().isExplorer())
+					wh.write("<img style=\"width:0;height:0\"/>");
+					//Bug 1899003: we must have something to show border (IE)
+				wh.writeln("</td></tr>");
 			}
 		}		
 		wh.write("</table>");

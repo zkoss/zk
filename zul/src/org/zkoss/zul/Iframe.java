@@ -19,12 +19,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.media.RepeatableMedia;
 import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 import org.zkoss.zul.impl.XulElement;
@@ -33,11 +32,15 @@ import org.zkoss.zul.impl.Utils;
 /**
  * Includes an inline frame.
  *
+ * <p>Unlike HTML iframe, this component doesn't have the frameborder
+ * property. Rather, use the CSS style to customize the border (like
+ * any other components).
+ *
  * @author tomyeh
  */
 public class Iframe extends XulElement {
 	private String _align, _name;
-	private String _src;
+	private String _src, _scrolling = "auto";
 	/** The media. If not null, _src is generated automatically. */
 	private Media _media; 
 	/** Count the version of {@link #_media}. */
@@ -50,7 +53,30 @@ public class Iframe extends XulElement {
 	public Iframe(String src) {
 		setSrc(src);
 	}
-
+	
+	/**
+	 * Define scroll bars
+	 * @param scrolling "true", "false", "yes" or "no" or "auto", "auto" by default
+	 * If null, "auto" is assumed.
+	 * @since 3.0.4
+	 */
+	public void setScrolling(String scrolling) {
+		if (scrolling == null) scrolling = "auto";
+		if (!scrolling.equals(_scrolling)) {
+			_scrolling = scrolling;
+			invalidate();
+		}
+	}
+	
+	/**
+	 * Return the scroll bars.
+	 * <p>Defalut: "auto"
+	 * @since 3.0.4
+	 */
+	public String getScrolling() {
+		return _scrolling;
+	}
+	
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
 	 */
@@ -107,7 +133,7 @@ public class Iframe extends XulElement {
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
 			_autohide = autohide;
-			smartUpdate("z.autohide", "true");
+			smartUpdate("z.autohide", _autohide ? "true": null);
 		}
 	}
 
@@ -151,7 +177,9 @@ public class Iframe extends XulElement {
 	 */
 	public void setContent(Media media) {
 		if (media != _media) {
-			_media = media;
+			_media = RepeatableMedia.getInstance(media);
+				//Use RepeatableMedia since it might be reloaded
+				//if the component is invalidated or overlapped wnd (Bug 1896797)
 			if (_media != null) ++_medver; //enforce browser to reload
 			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
@@ -175,10 +203,19 @@ public class Iframe extends XulElement {
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "align",  _align);
-		HTMLs.appendAttribute(sb, "name",  _name);
-		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
+			new StringBuffer(64).append(super.getOuterAttrs())
+			.append(" frameborder=\"0\"");
+			//frameborder is default to 0
+			//User has to use style to customize the border
+
+		HTMLs.appendAttribute(sb, "align", _align);
+		HTMLs.appendAttribute(sb, "name", _name);
+		HTMLs.appendAttribute(sb, "src", getEncodedSrc());
+
+		if (!"auto".equals(_scrolling))
+			HTMLs.appendAttribute(sb, "scrolling", 
+				"true".equals(_scrolling) ? "yes":
+				"false".equals(_scrolling) ? "no": _scrolling);
 		if (_autohide)
 			HTMLs.appendAttribute(sb, "z.autohide", _autohide);
 		return sb.toString();

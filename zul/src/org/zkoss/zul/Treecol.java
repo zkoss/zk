@@ -41,9 +41,25 @@ public class Treecol extends HeaderElement {
 	public Treecol(String label) {
 		setLabel(label);
 	}
+	/* Constructs a tree header with label and image.
+	 *
+	 * @param lable the label. No label if null or empty.
+	 * @param src the URI of the image. Ignored if null or empty.
+	 */
 	public Treecol(String label, String src) {
 		setLabel(label);
 		setSrc(src);
+	}
+	/* Constructs a tree header with label, image and width.
+	 *
+	 * @param src the URI of the image. Ignored if null or empty.
+	 * @param width the width of the column. Ignored if null or empty.
+	 * @since 3.0.4
+	 */
+	public Treecol(String label, String src, String width) {
+		setLabel(label);
+		setSrc(src);
+		setWidth(width);
 	}
 
 	/** Returns the tree that it belongs to.

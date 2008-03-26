@@ -42,7 +42,7 @@ function submitUpload() {
 	parent.zkau.beginUpload(wndid);
 }
 function cancelUpload() {
-	parent.setTimeout("zk.focus(window); zkau.sendOnClose('${param.uuid}');", 100);
+	parent.setTimeout("zkau.endUpload();zkau.sendOnClose('${param.uuid}');", 100);
 }
 function init() {
 	var el = document.getElementById("form");
@@ -79,6 +79,7 @@ function deleteUpload(img) {
 }
 function adjustHgh(table) {
 	table.parentNode.style.height = table.rows.length > 3 ? "100px" : "";
+	if (parent.zk.opera) table.parentNode.style.overflow = "auto";
 }
 parent.zk.listen(document, "keydown", onDocKeydown);
 // -->

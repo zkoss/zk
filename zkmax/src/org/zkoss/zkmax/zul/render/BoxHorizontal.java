@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
@@ -38,6 +39,7 @@ public class BoxHorizontal implements ComponentRenderer{
 		final SmartWriter wh = new SmartWriter(out);
 		final Box self = (Box) comp;
 		final String uuid = self.getUuid();		
+		final String spacing = self.getSpacing();
 		String spscls = null, spstyle = null;
 
 		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.box.Box\"")
@@ -57,7 +59,6 @@ public class BoxHorizontal implements ComponentRenderer{
 				if (spscls == null) {
 					spscls = self.getSclass();
 					spscls = spscls == null || spscls.length() == 0 ? "hbox-sp": spscls + "-sp";
-					final String spacing = self.getSpacing();
 					if (spacing != null)
 						spstyle = "width:" + spacing;
 				}
@@ -65,7 +66,17 @@ public class BoxHorizontal implements ComponentRenderer{
 				wh.write("<td id=\"").write(child.getUuid())
 					.write("!chdextr2\" class=\"").write(spscls).write("\"");
 
-				if (!child.isVisible()) {
+				//note: we have to hide if spacing is 0
+				//since Opera will scale it up if maximized
+				boolean chvisible = child.isVisible();
+				if (chvisible) {
+					int splen = spacing != null ? spacing.length(): 0;
+					if (splen > 0 && spacing.charAt(0) == '0') {
+						char cc = splen > 1 ? spacing.charAt(1): (char)0;
+						chvisible = cc >= '0' && cc <= '9';
+					}
+				}
+				if (!chvisible) {
 					wh.write(" style=\"display:none;");
 					if (spstyle != null) wh.write(spstyle);
 					wh.write("\"");
@@ -73,7 +84,11 @@ public class BoxHorizontal implements ComponentRenderer{
 					wh.write(" style=\"").write(spstyle).write("\"");
 				}
 
-				wh.writeln("></td>");
+				wh.write(">");
+				if (Executions.getCurrent().isExplorer())
+					wh.write("<img style=\"width:0;height:0\"/>");
+					//Bug 1899003: we must have something to show border (IE)
+				wh.writeln("</td>");
 			}
 		}		
 		wh.write("</tr></table>");

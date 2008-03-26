@@ -139,6 +139,7 @@ public class ConfigParser {
 			//	error-reload
 			//	tooltip-delay
 			//  resend-delay
+			//  debug-js
 				parseClientConfig(config, el);
 
 			} else if ("session-config".equals(elnm)) {
@@ -196,7 +197,11 @@ public class ConfigParser {
 			//	url-encoder-class
 			//	au-writer-class
 				String s = el.getElementValue("disable-event-thread", true);
-				if (s != null) config.enableEventThread("false".equals(s));
+				if (s != null) {
+					final boolean enable = "false".equals(s);
+					if (!enable) log.info("The event processing thread is disabled");
+					config.enableEventThread(enable);
+				}
 
 				Integer v = parseInteger(el, "max-spare-threads", false);
 				if (v != null) config.setMaxSpareThreads(v.intValue());
@@ -292,6 +297,10 @@ public class ConfigParser {
 				final String nm = IDOMs.getRequiredElementValue(el, "name");
 				final String val = IDOMs.getRequiredElementValue(el, "value");
 				config.setPreference(nm, val);
+			} else if ("system-property".equals(elnm)) {
+				final String nm = IDOMs.getRequiredElementValue(el, "name");
+				final String val = IDOMs.getRequiredElementValue(el, "value");
+				System.setProperty(nm, val);
 			} else {
 				throw new UiException("Unknown element: "+elnm+", at "+el.getLocator());
 			}
@@ -351,6 +360,9 @@ public class ConfigParser {
 
 		s = conf.getElementValue("disable-behind-modal", true);
 		if (s != null) config.enableDisableBehindModal(!"false".equals(s));
+
+		s = conf.getElementValue("debug-js", true);
+		if (s != null) config.setDebugJS(!"false".equals(s));
 
 		//error-reload
 		for (Iterator it = conf.getElements("error-reload").iterator();

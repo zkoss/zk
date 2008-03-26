@@ -128,7 +128,7 @@
 			<textbox id="h"/>
 			<button label="set">
 				<attribute name="onClick">
-					tree.setHeight(h.getValue());
+					tree.setHeight(h.getValue() + "px");
 				</attribute>
 			</button>
 		</hbox>

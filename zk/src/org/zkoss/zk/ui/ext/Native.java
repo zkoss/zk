@@ -70,7 +70,9 @@ public interface Native extends NonFellow {
 	public Helper getHelper();
 
 	/** The helper to generate the output for the native component.
-	 * It usually depends on the client (i.e., {@link org.zkoss.zk.ui.Desktop#getDevice}.
+	 * The implementation usually depends on the client (i.e., {@link org.zkoss.zk.ui.Desktop#getDevice}.
+	 * <p>Application developers shall not count on this interface. It is
+	 * used only for implementing a native component.
 	 */
 	public interface Helper {
 		/** Creates a native component with the specified content.
@@ -93,8 +95,8 @@ public interface Native extends NonFellow {
 		 * to be generated, or null if not.
 		 * Note: EL expressions is not allowed
 		 */
-		public void getFirstHalf(StringBuffer sb, String tag, Map props,
-		Collection namespaces);
+		public void getFirstHalf(StringBuffer sb, String tag,
+		Map props, Collection namespaces);
 		/** Appends the first half of the device-dependent content
 		 * for the specified tag and properties, and appends it to
 		 * the specified string buffer.

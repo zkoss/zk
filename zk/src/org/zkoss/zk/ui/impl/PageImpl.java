@@ -43,6 +43,7 @@ import org.zkoss.lang.Expectable;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
+import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
@@ -149,11 +150,14 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private String _rootAttrs = "";
 	private String _contentType, _docType, _firstLine;
 	private Boolean _cacheable;
+	/** The expression factory (ExpressionFactory).*/
+	private Class _expfcls;
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map _ips;
 	private transient NS _ns;
 	/** A list of {@link VariableResolver}. */
 	private transient List _resolvers;
+	private boolean _complete;
 
 	/** Constructs a page by giving the page definition.
 	 *
@@ -567,6 +571,13 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return (Component)_fellows.get(compId);
 	}
 
+	public boolean isComplete() {
+		return _complete;
+	}
+	public void setComplete(boolean complete) {
+		_complete = complete;
+	}
+
 	//-- PageCtrl --//
 	public void init(PageConfig config) {
 		if (_desktop != null)
@@ -610,16 +621,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		String s = config.getHeaders();
 		if (s != null) _headers = s;
-		s = config.getRootAttributes();
-		if (s != null) _rootAttrs = s;
-		s = config.getContentType();
-		if (s != null) _contentType = s;
-		s = config.getDocType();
-		if (s != null) _docType = s;
-		s = config.getFirstLine();
-		if (s != null) _firstLine = s;
-		Boolean b = config.getCacheable();
-		if (b != null) _cacheable = b;
 
 		if (_title.length() == 0) {
 			s = config.getTitle();
@@ -704,7 +705,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return _rootAttrs;
 	}
 	public void setRootAttributes(String rootAttrs) {
-		_rootAttrs = rootAttrs;
+		_rootAttrs = rootAttrs != null ? rootAttrs: "";
 	}
 	public String getContentType() {
 		return _contentType;
@@ -804,7 +805,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final boolean bIncluded = asyncUpdate || exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
 		final String uri = (String)
-			(bIncluded ? _pgURI: _dkURI)
+			(bIncluded && !_complete ? _pgURI: _dkURI)
 				.getValue(_langdef.getEvaluator(), this);
 				//desktop and page URI is defined in language
 
@@ -1008,6 +1009,14 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		} catch (DefinitionNotFoundException ex) {
 		}
 		return null;
+	}
+	public Class getExpressionFactoryClass() {
+		return _expfcls;
+	}
+	public void setExpressionFactoryClass(Class expfcls) {
+		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
+			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
+		_expfcls = expfcls;
 	}
 
 	//-- Serializable --//

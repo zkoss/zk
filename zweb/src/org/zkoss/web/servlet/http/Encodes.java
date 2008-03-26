@@ -480,6 +480,12 @@ public class Encodes {
 			String ctxpath = ((HttpServletRequest)request).getContextPath();
 			if (ctxpath.length() > 0 && ctxpath.charAt(0) != '/')
 				ctxpath = '/' + ctxpath;
+
+			//Some Web server's ctxpath is "/"
+			final int last = ctxpath.length() - 1;
+			if (last >= 0 && ctxpath.charAt(last) == '/')
+				ctxpath = ctxpath.substring(0, last);
+
 			uri = ctxpath + uri;
 		}
 
@@ -535,10 +541,10 @@ public class Encodes {
 	 */
 	public static interface URLEncoder {
 		/** Returns the encoded URL.
-		 * @param uri it must be null, empty, starts with "/", or
+		 * @param url it must be null, empty, starts with "/", or
 		 * starts with "xxx:" (e.g., "http://", "javascript:"
 		 */
 		public String encodeURL(ServletContext ctx,
-		ServletRequest request, ServletResponse response, String uri);
+		ServletRequest request, ServletResponse response, String url);
 	}
 }

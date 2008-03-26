@@ -70,6 +70,13 @@ public class Treecell extends LabelImageElement {
 				return (Tree)n;
 		return null;
 	}
+	
+	protected String getRealStyle() {
+		final Treecol h = getTreecol();
+		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
+				"display:none;" : super.getRealStyle();
+	}
+	
 	/** Returns the tree col associated with this cell, or null if not available.
 	 */
 	public Treecol getTreecol() {
@@ -143,16 +150,20 @@ public class Treecell extends LabelImageElement {
 			final StringBuffer sb = new StringBuffer(80);
 			if (tree != null) {
 				if (tree.isCheckmark()) {
-					sb.append("<input type=\"")
-						.append(tree.isMultiple() ? "checkbox": "radio")
-						.append('"');
-					if (item.isDisabled())
-						sb.append(" disabled=\"disabled\"");
-					if (item.isSelected())
-						sb.append(" checked=\"checked\"");					
-					//NOTE: use Treerow's uuid! NOT Treeitem's!
-					sb.append(" id=\"").append(getParent().getUuid())
-						.append("!cm\" z.type=\"Tcfc\"/>");
+					if(item.isCheckable()) {
+						sb.append("<input type=\"")
+							.append(tree.isMultiple() ? "checkbox": "radio")
+							.append('"');
+						if (item.isDisabled())
+							sb.append(" disabled=\"disabled\"");
+						if (item.isSelected())
+							sb.append(" checked=\"checked\"");					
+						//NOTE: use Treerow's uuid! NOT Treeitem's!
+						sb.append(" id=\"").append(getParent().getUuid())
+							.append("!cm\" z.type=\"Tcfc\"/>");
+					} else {
+						sb.append("<span class=\"checkmark-spacer\" z.fc=\"t\"></span>");
+					}
 				} else if (item.isFocusRequired()) {
 					//NOTE: use Treerow's uuid! NOT Treeitem's!
 					sb.append("<a href=\"javascript:;\" id=\"").append(getParent().getUuid())

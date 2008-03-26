@@ -75,6 +75,24 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
 	exit 0
 fi
 
+if [ -f /usr/bin/gawk ] ; then
+	awkpg=/usr/bin/gawk
+elif [ -f /usr/bin/nawk ] ; then
+	awkpg=/usr/bin/nawk
+else
+	fn=$(which nawk)
+	if [ -f "$fn" ] ; then
+		awkpg=nawk
+	else
+		fn=$(which gawk)
+		if [ -f "$fn" ] ; then
+			awkpg=gawk
+		else
+			awkpg=awk
+		fi
+	fi
+fi
+
 awkpath=$0
 force=0
 flext=.properties
@@ -140,7 +158,7 @@ for fn in $cnfpath/*$flext ; do
 
 			mkdir -p $pkgpath
 			args="-f $awkfn -v pkgnm=$pkgnm -v clsnm=$clsnm -vmsgnm=$msgnm -vusernm=$USER"
-			awk $args -v "when=$(date)" "$fn" > "$dstfn"
+			$awkpg $args -v "when=$(date)" "$fn" > "$dstfn"
 		fi
 	fi
 done

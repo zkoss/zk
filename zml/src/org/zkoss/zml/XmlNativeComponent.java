@@ -61,8 +61,8 @@ public class XmlNativeComponent extends HtmlNativeComponent {
 				nc.setPrologContent(text);
 			return nc;
 		}
-		public void getFirstHalf(StringBuffer sb, String tag, Map props,
-		Collection namespaces) {
+		public void getFirstHalf(StringBuffer sb, String tag,
+		Map props, Collection namespaces) {
 			if (tag != null)
 				sb.append('<').append(tag);
 

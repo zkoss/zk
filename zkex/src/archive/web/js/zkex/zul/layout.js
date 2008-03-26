@@ -22,8 +22,7 @@ zk.Layout.prototype = {
 		this.id = cmp.id;			
 		this.el = cmp;
 		zkau.setMeta(cmp, this);
-		var meta = this; //the nested function only see local var
-		this.fnResize = function () {meta.render();};		
+		var meta = this; //the nested function only see local var		
 		this._regions = {};		
 	},
 	addRegion: function (region, ambit) {
@@ -55,23 +54,24 @@ zk.Layout.prototype = {
 					break;
 				case "south":
 					ambit.height += cmp.split.offsetHeight;
-        			ambit.y -= cmp.split.offsetHeight;
+					ambit.y -= cmp.split.offsetHeight;
 					break;
 				case "west": 
 					ambit.width += cmp.split.offsetWidth;
 					break;
 				case "east":
 					ambit.width += cmp.split.offsetWidth;
-        			ambit.x -= cmp.split.offsetWidth;
+					ambit.x -= cmp.split.offsetWidth;
 					break;
 			}
 		}
 		return ambit;
 	},
-	render: function () {
+	render: function (isOnSize) {
+		this.isOnSize = isOnSize;
 		if (!zk.isRealVisible(this.el)) return;
 		var width = this.el.offsetWidth, height = this.el.offsetHeight;
-        var cW = width, cH = height, cY = 0, cX = 0;
+		var cW = width, cH = height, cY = 0, cX = 0;
 		var n = this.getRegion("north"), s = this.getRegion("south"), 
 			w = this.getRegion("west"), e = this.getRegion("east"), 
 			c = this.getRegion("center");
@@ -79,86 +79,87 @@ zk.Layout.prototype = {
 			var ambit = this._getAmbit(n, "north");
 			var margin = this._paserMargin(getZKAttr(n, "mars") || "0,0,0,0");
 			ambit.width = width - (margin.left + margin.right);
-            ambit.x = margin.left;
-            ambit.y = margin.top;
-            cY = ambit.height + ambit.y + margin.bottom;
-            cH -= cY;
+			ambit.x = margin.left;
+			ambit.y = margin.top;
+			cY = ambit.height + ambit.y + margin.bottom;
+			cH -= cY;
 			ambit = this._resizeSplit(n, ambit, "north");
 			this._resize(n, ambit);
 		} else if (n) {
 			var ambit = this._getAmbit(n.split);			
-            ambit.width = width ;
-            ambit.x = ambit.y = 0;
+			ambit.width = width ;
+			ambit.x = ambit.y = 0;
 			cY = ambit.height + ambit.y;
-            cH -= cY;
+			cH -= cY;
 			this._resizeSplit(n, ambit, "north");
 		}
 		if (s && zk.isRealVisible(s)) {
-           	var ambit = this._getAmbit(s, "south");			
+			var ambit = this._getAmbit(s, "south");			
 			var margin = this._paserMargin(getZKAttr(s, "mars") || "0,0,0,0");
-            ambit.width = width - (margin.left + margin.right);
-            ambit.x = margin.left;
-            var total = (ambit.height + margin.top + margin.bottom);
-            ambit.y = height - total + margin.top;
-            cH -= total;
+			ambit.width = width - (margin.left + margin.right);
+			ambit.x = margin.left;
+			var total = (ambit.height + margin.top + margin.bottom);
+			ambit.y = height - total + margin.top;
+			cH -= total;
 			ambit = this._resizeSplit(s, ambit, "south");
-            this._resize(s, ambit);
-        } else if (s) {
+			this._resize(s, ambit);
+		} else if (s) {
 			var ambit = this._getAmbit(s.split);			
-            ambit.width = width ;
-            ambit.x = 0;
-            ambit.y = height - ambit.height;	
-            cH -= ambit.height;
+			ambit.width = width ;
+			ambit.x = 0;
+			ambit.y = height - ambit.height;	
+			cH -= ambit.height;
 			this._resizeSplit(s, ambit, "south");
 		}
 		if (w && zk.isRealVisible(w)) {
-            var ambit = this._getAmbit(w, "west");			
+			var ambit = this._getAmbit(w, "west");			
 			var margin = this._paserMargin(getZKAttr(w, "mars") || "0,0,0,0");
-            ambit.height = cH - (margin.top + margin.bottom);
-            ambit.x = margin.left;
-            ambit.y = cY + margin.top;
-            var total = (ambit.width + margin.left + margin.right);
-            cX += total;
-            cW -= total;	
+			ambit.height = cH - (margin.top + margin.bottom);
+			ambit.x = margin.left;
+			ambit.y = cY + margin.top;
+			var total = (ambit.width + margin.left + margin.right);
+			cX += total;
+			cW -= total;	
 			ambit = this._resizeSplit(w, ambit, "west");		
-            this._resize(w, ambit);
-        } else if (w) {
+			this._resize(w, ambit);
+		} else if (w) {
 			var ambit = this._getAmbit(w.split);			
-            ambit.height = cH ;
-            ambit.x = 0;
-            ambit.y = cY;	
-            cX += ambit.width;
-            cW -= ambit.width;
+			ambit.height = cH ;
+			ambit.x = 0;
+			ambit.y = cY;	
+			cX += ambit.width;
+			cW -= ambit.width;
 			this._resizeSplit(w, ambit, "west");
 		}
 		if (e && zk.isRealVisible(e)) {
-           	var ambit = this._getAmbit(e, "east");
+			var ambit = this._getAmbit(e, "east");
 			var margin = this._paserMargin(getZKAttr(e, "mars") || "0,0,0,0");
-            ambit.height = cH - (margin.top + margin.bottom);
-            var total = (ambit.width + margin.left + margin.right);
-            ambit.x = width - total + margin.left;
-            ambit.y = cY + margin.top;
-            cW -= total;
+			ambit.height = cH - (margin.top + margin.bottom);
+			var total = (ambit.width + margin.left + margin.right);
+			ambit.x = width - total + margin.left;
+			ambit.y = cY + margin.top;
+			cW -= total;
 			ambit = this._resizeSplit(e, ambit, "east");
-            this._resize(e, ambit);
-        } else if (e) {
+			this._resize(e, ambit);
+		} else if (e) {
 			var ambit = this._getAmbit(e.split);			
-            ambit.height = cH ;
-            ambit.x = width - ambit.width;
-            ambit.y = cY;	
-            cW -= ambit.width;								
+			ambit.height = cH ;
+			ambit.x = width - ambit.width;
+			ambit.y = cY;	
+			cW -= ambit.width;								
 			this._resizeSplit(e, ambit, "east");
 		} 
 		if (c) {
-            var margin = this._paserMargin(getZKAttr(c, "mars") || "0,0,0,0");
-            var ambit = {
-                x: cX + margin.left,
-                y: cY + margin.top,
-                width: cW - (margin.left + margin.right),
-                height: cH - (margin.top + margin.bottom)
-            };			
-            this._resize(c, ambit);
-        }
+			var margin = this._paserMargin(getZKAttr(c, "mars") || "0,0,0,0");
+			var ambit = {
+				x: cX + margin.left,
+				y: cY + margin.top,
+				width: cW - (margin.left + margin.right),
+				height: cH - (margin.top + margin.bottom)
+			};			
+			this._resize(c, ambit);
+		}
+		this.el.style.visibility = "visible";
 	},
 	_paserMargin: function (val) {
 		var ms = val.split(",");
@@ -166,47 +167,46 @@ zk.Layout.prototype = {
 	},
 	_resize: function (cmp, ambit) {
 		cmp.style.left = ambit.x + "px";
-        cmp.style.top = ambit.y + "px";		
+		cmp.style.top = ambit.y + "px";		
 		this._resizeBody(cmp, ambit);		
 	},
 	_resizeSplit: function (cmp, ambit, region) {	
 		if (region == "north" || region == "south") cmp.split.splitbtn.style.marginLeft = ((ambit.width - cmp.split.splitbtn.offsetWidth) / 2)+"px";
 		else cmp.split.splitbtn.style.marginTop = ((ambit.height - cmp.split.splitbtn.offsetHeight) / 2)+"px";
-		
 		var sAmbit = this._getAmbit(cmp.split);
 		switch(region){
 			case "north":
 				ambit.height -= sAmbit.height;
-	          	cmp.split.style.left = ambit.x + "px";
+			  	cmp.split.style.left = ambit.x + "px";
 				cmp.split.style.top = (ambit.y + ambit.height) + "px";
-				cmp.split.style.width = ambit.width + "px";
+				cmp.split.style.width = (ambit.width < 0 ? 0 : ambit.width) + "px";
 				break;
-			case "south":		           
+			case "south":
 				ambit.height -= sAmbit.height;
-	            ambit.y += sAmbit.height;
+				ambit.y += sAmbit.height;
 				cmp.split.style.left = ambit.x + "px";
-				cmp.split.style.top = (ambit.y - sAmbit.height) + "px";		            
-				cmp.split.style.width = ambit.width + "px";
+				cmp.split.style.top = (ambit.y - sAmbit.height) + "px";
+				cmp.split.style.width = (ambit.width < 0 ? 0 : ambit.width) + "px";
 				break;
 			case "west":
-	            ambit.width -= sAmbit.width;
+				ambit.width -= sAmbit.width;
 				cmp.split.style.left = (ambit.x + ambit.width) + "px";
-				cmp.split.style.top = ambit.y + "px";		       
-				cmp.split.style.height = ambit.height + "px";
+				cmp.split.style.top = ambit.y + "px";
+				cmp.split.style.height = (ambit.height < 0 ? 0 : ambit.height) + "px";
 				break;
 			case "east":
 				ambit.width -= sAmbit.width;
 				cmp.split.style.left = ambit.x + "px";
-				cmp.split.style.top = ambit.y + "px";		       
-				cmp.split.style.height = ambit.height + "px";
-	            ambit.x += sAmbit.width;
+				cmp.split.style.top = ambit.y + "px";
+				cmp.split.style.height = (ambit.height < 0 ? 0 : ambit.height) + "px";
+				ambit.x += sAmbit.width;
 				break;					
 		}
 		return ambit;
 	},
 	_resizeBody: function (cmp, ambit) {		
 		ambit.width = Math.max(0, ambit.width);
-        ambit.height = Math.max(0, ambit.height);
+		ambit.height = Math.max(0, ambit.height);
 		var bodyEl;		
 		var cid = getZKAttr(cmp, "cid");
 		if (getZKAttr(cmp, "flex") == "true" && cid != "zk_n_a") {
@@ -215,18 +215,18 @@ zk.Layout.prototype = {
 			bodyEl = $e($uuid(cmp) + "!cave");			
 		} 	
 		cmp.bodyEl = bodyEl;
-		if (!this.ignoreResize(bodyEl, ambit.width, ambit.height)) {     
+		if (!this.ignoreResize(bodyEl, ambit.width, ambit.height)) {
 			ambit.width = zk.revisedSize(cmp, ambit.width);
 			cmp.style.width = ambit.width + "px";	   			
-        	ambit.width = zk.revisedSize(bodyEl, ambit.width);
+			ambit.width = zk.revisedSize(bodyEl, ambit.width);
 			bodyEl.style.width = ambit.width + "px";
-	        
+			
 			ambit.height = zk.revisedSize(cmp, ambit.height, true);
 			cmp.style.height = ambit.height + "px";
-            ambit.height = zk.revisedSize(bodyEl, ambit.height, true);
+			ambit.height = zk.revisedSize(bodyEl, ambit.height, true);
 			bodyEl.style.height = ambit.height + "px";
 			if (getZKAttr(cmp, "autoscl") == "true") { 
-	        	bodyEl.style.overflow = "auto";				
+				bodyEl.style.overflow = "auto";				
 				bodyEl.style.position = "relative";
 				setZKAttr(bodyEl, "autoscl", "true");
 			} else if (getZKAttr(bodyEl, "autoscl")) {
@@ -234,20 +234,22 @@ zk.Layout.prototype = {
 				bodyEl.style.position = "";
 				rmZKAttr(bodyEl, "autoscl");
 			}
-			zk.onVisiAt(bodyEl); // Bug #1862935
+			if (!this.isOnSize) {
+				zk.beforeSizeAt(bodyEl);
+				zk.onSizeAt(bodyEl); // Bug #1862935
+			}
 		}
 	},
-    ignoreResize : function(cmp, w, h) { 
-        if (cmp._lastSize && cmp._lastSize.width == w && cmp._lastSize.height == h) {
-        	return true;
-        } else {
-        	cmp._lastSize = {width: w, height: h};
-        	return false;
-        }
-    },
+	ignoreResize : function(cmp, w, h) { 
+		if (cmp._lastSize && cmp._lastSize.width == w && cmp._lastSize.height == h) {
+			return true;
+		} else {
+			cmp._lastSize = {width: w, height: h};
+			return false;
+		}
+	},
 	cleanup: function ()  {
 		this.el = this._regions = null;
-		zk.rmOnResize(this.fnResize);
 	}
 };
 zk.Layout.getOwnerLayout = function (cmp, cleanup) {
@@ -273,26 +275,22 @@ zk.Layout.cumulativeOffset = function (element, rootelemnt) {
 			valueL += zk.innerX() + element.offsetLeft;
 			break;
 		} else {
-		    valueT += element.offsetTop  || 0;
+			valueT += element.offsetTop  || 0;
 			valueL += element.offsetLeft || 0;			
-		    element = zk.gecko && element != document.body ? Position.offsetParent(element): element.offsetParent;
+			element = zk.gecko && element != document.body ? Position.offsetParent(element): element.offsetParent;
 		}
 	} while (element);
 	return [valueL, valueT];
 };
 zkBorderLayout = {};
 zkLayoutRegion = {};
-zkBorderLayout.init = function (cmp) {
-	var layout = zk.Layout.getOwnerLayout(cmp);
-	zk.addInitLater(function () {layout.render();}, true);	
-	zk.addOnResize(layout.fnResize, true);	
-};
 zkBorderLayout.childchg = function (cmp) {
-	zk.onResize(0, cmp);
-};
-zkBorderLayout.onVisi = function (cmp) {
 	var layout = zk.Layout.getOwnerLayout(cmp);
 	if (layout) layout.render();
+};
+zkBorderLayout.onVisi = zkBorderLayout.onSize = function (cmp) {
+	var layout = zk.Layout.getOwnerLayout(cmp);
+	if (layout) layout.render(true);
 };
 zkBorderLayout.setAttr = function (cmp, nm, val) {
 	switch (nm) {
@@ -333,7 +331,10 @@ zkLayoutRegion.cleanup = function (cmp) {
 		layout.removeRegion(getZKAttr(cmp, "pos"));
 	}
 	cmp.bodyEl = null;
-	if (layout) zk.onResize(0, layout.el);
+	if (layout) {
+		zk.beforeSizeAt(layout.el);
+		zk.onSizeAt(layout.el);
+	}
 };
 zkLayoutRegion.setAttr = function (cmp, nm, val) {
 	cmp = $real(cmp);
@@ -355,7 +356,7 @@ zkLayoutRegion.setAttr = function (cmp, nm, val) {
 		case "z.autoscl" :
 			setZKAttr(cmp, "autoscl", val);
 			if (val == "true") { 
-	        	cmp.bodyEl.style.overflow = "auto";				
+				cmp.bodyEl.style.overflow = "auto";				
 				cmp.bodyEl.style.position = "relative";
 			} else {
 				cmp.bodyEl.style.overflow = "hidden";							
@@ -455,16 +456,18 @@ zkLayoutRegionSplit._fixbtn = function (split) {
 		split.splitbtn.style.display = "";
 	}
 };
-zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
+zkLayoutRegionSplit._ignoresizing = function (split, pointer, event) {
 	var dg = zkLayoutRegionSplit._drags[split.id];
 	if (dg) {
+		var el = Event.element(event);
+		if (!el || !el.id || !el.id.endsWith("!split")) return true;
 		var real = $real(split);
 		if (real && getZKAttr(real, "open") == "true" && getZKAttr(real, "splt") == "true") {			
 			var maxs = $int(getZKAttr(real, "maxs")) || 2000;
 			var mins = $int(getZKAttr(real, "mins")) || 0;	
 			var ol = zk.Layout.getOwnerLayout(real);
 			var mars = ol._paserMargin(getZKAttr(real, "mars") || "0,0,0,0");
-		    var lr = zk.sumStyles(real, "lr", zk.borders) + 
+			var lr = zk.sumStyles(real, "lr", zk.borders) + 
 				zk.sumStyles(real, "lr", zk.paddings) + 
 				(split.pos == "west" ? mars.left : mars.right);
 			var tb = zk.sumStyles(real, "tb", zk.borders) + 
@@ -474,35 +477,35 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer) {
 			switch (split.pos) {
 				case "north":	
 				case "south":
-				  var uuid = $e($uuid(real));
-					var nbor = split.pos == "north" ? zk.nextSibling(uuid, "DIV") : zk.previousSibling(uuid, "DIV");
-					if (nbor) {
-				  	var rr =$real(nbor);
-				  	var pos = getZKAttr(rr, "pos");
-				    if (pos == "center") {
-				    	maxs = Math.min(maxs, (real.offsetHeight + rr.offsetHeight)- min);
-				    } else {
-				    	maxs = Math.min(maxs, ol.el.offsetHeight - rr.offsetHeight - rr.split.offsetHeight - split.offsetHeight - min); 
-				    }
-				  } else {
-				  	maxs = ol.el.offsetHeight - split.offsetHeight;
-				  }
-				  break;				
+					var uuid = $e($uuid(real));
+					var rr = split.pos == "north" ? ol.getRegion("center") || ol.getRegion("south")
+ 						: ol.getRegion("center") || ol.getRegion("north");
+					if (rr) {
+						var pos = getZKAttr(rr, "pos");
+						if (pos == "center") {
+							maxs = Math.min(maxs, (real.offsetHeight + rr.offsetHeight)- min);
+						} else {
+							maxs = Math.min(maxs, ol.el.offsetHeight - rr.offsetHeight - rr.split.offsetHeight - split.offsetHeight - min); 
+						}
+					} else {
+						maxs = ol.el.offsetHeight - split.offsetHeight;
+					}
+					break;				
 				case "west":				
 				case "east":
 					var uuid = $e($uuid(real));
-					var nbor = split.pos == "west" ? zk.nextSibling(uuid, "DIV") : zk.previousSibling(uuid, "DIV");
-					if (nbor) {
-				  	var rr =$real(nbor);
-				  	var pos = getZKAttr(rr, "pos");
-				    if (pos == "center") {
-				    	maxs = Math.min(maxs, (real.offsetWidth + rr.offsetWidth)- min);
-				    } else {
-				    	maxs = Math.min(maxs, ol.el.offsetWidth - rr.offsetWidth - rr.split.offsetWidth - split.offsetWidth - min); 
-				    }
-				  } else {
-				  	maxs = ol.el.offsetWidth - split.offsetWidth;
-				  }
+					var rr = split.pos == "west" ? ol.getRegion("center") || ol.getRegion("east")
+ 						: ol.getRegion("center") || ol.getRegion("west");
+					if (rr) {
+						var pos = getZKAttr(rr, "pos");
+						if (pos == "center") {
+							maxs = Math.min(maxs, (real.offsetWidth + rr.offsetWidth)- min);
+						} else {
+							maxs = Math.min(maxs, ol.el.offsetWidth - rr.offsetWidth - rr.split.offsetWidth - split.offsetWidth - min); 
+						}
+					} else {
+						maxs = ol.el.offsetWidth - split.offsetWidth;
+					}
 					break;						
 			}
 			var ofs = Position.cumulativeOffset(real);
@@ -528,7 +531,6 @@ zkLayoutRegionSplit._endDrag = function (split, evt) {
 	real._width = real._height = false;
 	var layout = zk.Layout.getOwnerLayout(real);	
 	layout.render();
-	zk.onResize(0, layout.el);
 	dg.drag.z_rootlyt = null;
 	var keys = "";
 	if (evt) {
@@ -609,8 +611,7 @@ zkLayoutRegionSplit.open = function (split, open, silent, enforce) {
 	layout.render();
 	if (!silent)
 		zkau.send({uuid: $uuid(split), cmd: "onOpen", data: [open]},
-			zkau.asapTimeout(real, "onOpen"));			
-	zk.onResize(0, layout.el);
+			zkau.asapTimeout(real, "onOpen"));	
 };
 zkLayoutRegionSplit._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {

@@ -21,6 +21,8 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
 
@@ -58,9 +60,22 @@ public class Separator extends XulElement {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			smartUpdate("class", getSclass());
+			invalidate();
 		}
 	}
+	/** Returns whether it is a horizontal separator.
+	 * @since 3.0.4
+	 */
+	public boolean isHorizontal() {
+		return "horizontal".equals(getOrient());
+	}
+	/** Returns whether it is a vertical separator.
+	 * @since 3.0.4
+	 */
+	public boolean isVertical() {
+		return "vertical".equals(getOrient());
+	}
+
 	/** Returns whether to display a visual bar as the separator.
 	 * <p>Default: false
 	 */
@@ -86,26 +101,67 @@ public class Separator extends XulElement {
 	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em")
 	 */
 	public void setSpacing(String spacing) {
-		if (spacing != null && spacing.length() == 0) spacing = null;
+		if (spacing != null)
+			if (spacing.length() == 0) spacing = null;
+			else spacing = spacing.trim(); //getRealStyle depends on it
+
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
 			smartUpdate("style", getRealStyle());
 		}
 	}
-	protected String getRealStyle() {
-		final String style = super.getRealStyle();
-		if (_spacing == null)
-			return style;
-
-		final StringBuffer sb = new StringBuffer(64).append("margin:");
-		if ("vertical".equals(_orient))
-			sb.append("0 ").append(_spacing);
-		else
-			sb.append(_spacing).append(" 0");
-		return sb.append(';').append(style).toString();
-	}
 
 	//-- super --//
+	public String getWidth() {
+		final String wd = super.getWidth();
+		return isHorizontal() || (wd != null && wd.length() > 0)
+			|| isPercentInFF() || isSpaceWithMargin() ? wd: _spacing;
+	}
+	public String getHeight() {
+		final String hgh = super.getHeight();
+		return isVertical() || (hgh != null && hgh.length() > 0)
+			|| isPercentInFF() || isSpaceWithMargin() ? hgh: _spacing;
+	}
+	protected String getRealStyle() {
+		final String style = super.getRealStyle();
+		final String spacing =
+			isSpaceWithMargin() ? _spacing: splitPercentInFF();
+		if (spacing == null)
+			return style;
+
+		//3.0.3-compatibility
+		final StringBuffer sb = new StringBuffer(64).append("margin:");
+		if ("vertical".equals(_orient))
+			sb.append("0 ").append(spacing);
+		else
+			sb.append(spacing).append(" 0");
+		return sb.append(';').append(style).toString();
+	}
+	/** Bug 1526742: FF ignores the width if % is specified.
+	 * In this case we have to use margin instead.
+	 */
+	private boolean isPercentInFF() {
+		if (_spacing != null && _spacing.endsWith("%")) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null && exec.isGecko();
+		}
+		return false;
+	}
+	/** Bug 1526742: split % to half (20% -> 10%), if % and FF.
+	 */
+	private String splitPercentInFF() {
+		if (isPercentInFF()) {
+			try {
+				int v = Integer.parseInt(
+					_spacing.substring(0, _spacing.length() - 1).trim());
+				if (v > 0)
+					return v > 1 ? (v / 2) + "%": "1%";
+			} catch (Throwable ex) { //ignore if not recognizable
+			}
+		}
+		return null;
+	}
+
 	/** Returns the style class.
 	 * If the style class is not defined ({@link #setSclass} is not called
 	 * or called with null or empty), it returns the style class based
@@ -117,6 +173,28 @@ public class Separator extends XulElement {
 		return "vertical".equals(getOrient()) ?
 			isBar() ?"vsep-bar":"vsep": isBar() ?"hsep-bar":"hsep";
 	}
+
+	/** Returns whether to use margins for spacing.
+	 * <p>Default: false since 3.0.4.
+	 * It indicates the width and height instead of margins
+	 * will be used to control the spacing ({@link #getSpacing}).
+	 *
+	 * <p>If you want to use margins instead of width/height
+	 * like 3.0.3 or ealier did, you can specify the sytem property
+	 * called "org.zkoss.zul.Separator.spaceWithMargin" with a non-empty
+	 * value.
+	 * In other words, define it only if you want to apply
+	 * the 3.0.3-compatible behavior.
+	 * @since 3.0.4
+	 */
+	public boolean isSpaceWithMargin() { //it cannot be static since EL uses it
+		if (_spmargin == null) {
+			final String s = System.getProperty("org.zkoss.zul.Separator.spaceWithMargin");
+			_spmargin = Boolean.valueOf(s != null && s.length() > 0);
+		}
+		return _spmargin.booleanValue();
+	}
+	private static Boolean _spmargin;
 
 	//-- Component --//
 	/** Default: not childable.

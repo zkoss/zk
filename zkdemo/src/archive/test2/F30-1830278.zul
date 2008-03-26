@@ -17,8 +17,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:h="http://www.w3.org/1999/xhtml" xmlns:n="http://www.zkoss.org/2005/zk/native">
 <h:h3> [ 1830278 ] HeaderElement with children</h:h3>
+	<n:ol>
+		<n:li>You should see auxhader and column header can contain many other zk components.</n:li>
+		<n:li>The component behavior in header should works correctly.</n:li>
+	</n:ol>
 <borderlayout>
 	<west size="33%" splittable="true">
 		<listbox width="400px">

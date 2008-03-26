@@ -47,13 +47,20 @@ public class ComboitemDefault implements ComponentRenderer {
 			.write("<td>").write(self.getImgTag()).write("</td>\n<td>");
 
 		new Out(self.getLabel()).render(out);
-		if (!Strings.isBlank(self.getDescription())
-				|| !Strings.isBlank(self.getContent())) {
+
+		String s = self.getDescription();
+		if (!Strings.isBlank(s)) {
 			wh.write("<br/>\n<span>");
-			new Out(self.getDescription()).render(out);
-			wh.write("</span>").write(self.getContent());
+			new Out(s).render(out);
+			wh.write("</span>");
 		}
+
+		s = self.getContent();
+		if (!Strings.isBlank(s))
+			wh.write("<span>").write(s).write("</span>");
+			//1. don't use Out to encode since content might contain HTML tags
+			//2. Feature 1908524: no <br/>
+
 		wh.writeln("</td></tr>");
 	}
-
 }

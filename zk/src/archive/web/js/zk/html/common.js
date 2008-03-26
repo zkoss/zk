@@ -109,6 +109,27 @@ if (zk.ie) {
 //////
 // More zk utilities (defined also in boot.js) //
 
+/**
+ * Redraws the all node tree.
+ * @since 3.0.4
+ */
+zk.redraw = function (cmp) {
+	if (cmp) {
+		cmp = $outer(cmp);
+		zkau.cmd1.outer(cmp.id, cmp, zk.getOuterHTML(cmp));
+	}
+};
+/**
+ * Returns the outerHTML of the element.
+ * @since 3.0.4
+ */
+zk.getOuterHTML = function (cmp) {
+	if (cmp.outerHTML) return cmp.outerHTML;
+	var div = document.createElement("DIV");
+	var clone = cmp.cloneNode(true);
+	div.appendChild(clone);
+	return div.innerHTML;
+}
 /** Returns whether it is part of the class name
  * of the specified element.
  */
@@ -473,11 +494,13 @@ zk.isOffsetOverlapped = function (ofs1, dim1, ofs2, dim2) {
 	return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1;
 };
 
-/** Whether an element is really visible. */
-zk.isRealVisible = function (e) {
+/** Whether an element is really visible.
+ * @param {Boolean} strict if true, it also checks the visibility property.(since 3.0.4)
+ */
+zk.isRealVisible = function (e, strict) {
 	if (!e) return false;
 	do {
-		if (!$visible(e)) return false;
+		if (!$visible(e, strict)) return false;
 		//note: document is the top parent and has NO style
 	} while (e = $parent(e)); //yes, assign
 	return true;
@@ -545,7 +568,7 @@ zk.focus = function (cmp) {
 				}
 			}, 0);
 		}
-		//IE throws exception when focus in some cases
+		//IE throws exception if failed to focus in some cases
 };
 
 /** Select the text of the element, and do it timeout later. */
@@ -988,7 +1011,7 @@ zk.rename = function (url, name) {
 
 //-- special routines --//
 if (!zk._actg1) {
-	zk._actg1 = ["IFRAME"/*,"APPLET"*/]; //comment out APPLET for better performance
+	zk._actg1 = ["IFRAME","EMBED"/*,"APPLET"*/]; //comment out APPLET for better performance
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
 	if (zk.ie6Only) { //ie7 solves the z-order issue of SELECT
 		zk._actg1.unshift("SELECT"); //change visibility is required
@@ -1006,7 +1029,7 @@ zk.disableAll = function (parent) {
 	for (var j = 0, al1 = zk._actg1.length; j < al1; j++)
 		zk._dsball(parent, document.getElementsByTagName(zk._actg1[j]), true);
 
-	if (!zk.ndbModal) //not disable-behind-modal
+	if (zk.dbModal) //not disable-behind-modal
 		for (var j = 0, al2 = zk._actg2.length; j < al2; j++)
 			zk._dsball(parent, document.getElementsByTagName(zk._actg2[j]));
 };
@@ -1025,11 +1048,10 @@ zk._dsball = function (parent, els, visibility) {
 		var what;
 		var tn = $tag(el);
 		if (visibility) { //_actg1
-			if (tn == "IFRAME" && getZKAttr(el, "autohide") != "true")
-				continue; //handle only autohide iframe
-
-			what = el.style.visibility;
-			el.style.visibility = "hidden";
+			if (zk.shallHideDisabled(el)) {
+				what = el.style.visibility;
+				el.style.visibility = "hidden";
+			}
 		} else if (zk.gecko && tn == "A") {
 //Firefox doesn't support the disable of A
 			what = "h:" + zkau.getStamp(el, "tabIndex") + ":" +
@@ -1041,6 +1063,14 @@ zk._dsball = function (parent, els, visibility) {
 		}
 		zk._disTags.push({element: el, what: what});
 	}
+};
+/** Whether an element belonging to zk._disTags shall be handled.
+ * @since 3.0.4
+ */
+zk.shallHideDisabled = function (el) {
+	var tn = $tag(el);
+	return (tn != "IFRAME" && tn != "EMBED")
+		|| getZKAttr(el, "autohide") == "true";
 };
 /** Restores tags being disabled by previous disableAll. If el is not null,
  * only el's children are enabled
@@ -1068,7 +1098,9 @@ zk.restoreDisabled = function (n) {
 				el.style.visibility = what;
 
 			//Workaround IE: Bug 1498895
-			if (bug1498895) {
+			/**if (bug1498895) { disable by the bug #1884111, 
+			 // because we had the new concept that restores the previous focus, 
+			 // we don't need to find which input element needs to be focused.
 				var tn = $tag(el);
 				if ((tn == "INPUT" && (el.type == "text" || el.type == "password"))
 				||  tn == "TEXTAREA"){
@@ -1084,7 +1116,7 @@ zk.restoreDisabled = function (n) {
 					} catch (e) {
 					}
 				}
-			}
+			}*/
 		}
 	}
 	zk._disTags = skipped;
@@ -1109,11 +1141,10 @@ zk.hideCovered = function (ary) {
 	var cts = zk._actg1;
 	for (var j = 0, clen = cts.length; j < clen; ++j) {
 		var els = document.getElementsByTagName(cts[j]);
-		var ifr = "IFRAME" == cts[j];
 		loop_els:
 		for (var k = 0, elen = els.length; k < elen; k++) {
 			var el = els[k];
-			if (!zk.isRealVisible(el)) continue;
+			if (!zk.isRealVisible(el, true)) continue;
 
 			for (var m = 0, al = ary.length; m < al; ++m) {
 				if (zk.isAncestor(ary[m], el))
@@ -1121,16 +1152,13 @@ zk.hideCovered = function (ary) {
 			}
 
 			var overlapped = false;
-			if (!ifr || getZKAttr(el, "autohide") == "true") {
-			//Note: z.autohide may be set dynamically,
-			//so consider it as not overlapped
+			if (zk.shallHideDisabled(el))
 				for (var m = 0, al = ary.length; m < al; ++m) {
 					if (zk.isOverlapped(ary[m], el)) {
 						overlapped = true;
 						break;
 					}
 				}
-			}
 
 			if (overlapped) {
 				for (var m = 0, hl = zk._hidCvred.length; m < hl; ++m) {
@@ -1387,176 +1415,95 @@ zk.cellIndex = function (cell) {
 	} else i = cell.cellIndex;
 	return i; 
 };
+
+
+/** Returns the number of columns (considering colSpan)
+ */
+zk.ncols = function (cells) {
+	var cnt = 0;
+	if (cells) {
+		for (var j = 0; j < cells.length; ++j) {
+			var span = cells[j].colSpan;
+			if (span >= 1) cnt += span;
+			else ++cnt;
+		}
+	}
+	return cnt;
+};
+
 /** Copies the width of each cell from one row to another.
  * It handles colspan of srcrows, but not dst's colspan, nor rowspan
  *
- * @param {Object} srcrows all rows from the source table. Don't pass just one row
- * @param {Object} mate a component gird or tree or listbox.
- * @param {Boolean} stripe whether renders the stripe.
- * @param {Boolean} again whether re-calculates the width of each cell for opera or safari.
- * @param {Number} column index. It only copy the index column, if any.
- * @since 3.0.0
+ * @param srcrows all rows from the source table. Don't pass just one row
+ * because a row might not have all cells.
  */
-zk.cpCellWidth = function (dst, srcrows, mate, stripe, again, index) {
+zk.cpCellWidth = function (dst, srcrows, mate) {
 	if (dst == null || srcrows == null || !srcrows.length
-	|| !dst.cells.length || !zk.isRealVisible(dst))
+	|| !dst.cells || !dst.cells.length)
 		return;
-	//Note: With Opera, we cannot use table-layout=fixed and we have to assign
-	//the table width (test case: fixed-table-header.html)	
-	var hdtable = dst.parentNode.parentNode;
-	if (hdtable.style.width) {
-		var bdtable = srcrows[0].parentNode.parentNode;
-		bdtable.style.width = hdtable.style.width;		
-	} else if (zk.opera && hdtable) {
-		hdtable.style.tableLayout = "auto";
-		hdtable.style.width = "";
-	}
-	var found, scOdd = stripe ? getZKAttr(mate.element, "scOddRow") : null,
-		dstwds = [], cacheCss, loadIdx = getZKAttr(mate.element, "lastLoadIdx");
-	for (var i = 0, even = true, ln = loadIdx ? $int(loadIdx) : srcrows.length, firstChild; i < ln; ++i) {
-		var row = srcrows[i], cells = row.cells;
-		if (!firstChild) firstChild = row;
-		if (!zk.isVisible(row) || getZKAttr(row, "loaded") == "false") continue;		
-		if (stripe && scOdd && zk.isVisible(row)) {
-			zk.addClass(row, scOdd, !even);
-			even = !even;
+
+	var ncols = dst.cells.length; //TODO: handle colspan for dst: ncols = zk.ncols(dst.cells);
+	var src, maxnc = 0, loadIdx = getZKAttr(mate.element, "lastLoadIdx");
+	for (var j = 0, len = $int(loadIdx) || srcrows.length; j < len; ++j) {
+		var row = srcrows[j];
+		if (!zk.isVisible(row) || getZKAttr(row, "loaded") == "false") continue;
+		var cells = row.cells;
+		var nc = zk.ncols(cells);
+		var valid = cells.length == nc && $visible(row);
+			//skip with colspan and invisible
+		if (valid && nc >= ncols) {
+			maxnc = ncols;
+			src = row;
+			break;
 		}
-		if(!found && getZKAttr(row, "sel") == "true") found = row;
-		for (var j = 0, z = 0, le = cells.length ; j < le; ++j) {
-			if (j < dst.cells.length) {
-				var s = cells[j], d = dst.cells[z], cs = s.colSpan;
-				if (!zk.isVisible(d)) { //Bug #1828044
-					s.style.display = "none";
-					z += cs; // header count
-					continue;
+		if (nc > maxnc) {
+			src = valid ? row: null;
+			maxnc = nc;
+		} else if (nc == maxnc && !src && valid) {
+			src = row;
+		}
+	}
+	if (!maxnc) return;
+
+	var fakeRow = !src;
+	if (fakeRow) { //the longest row containing colspan
+		src = document.createElement("TR");
+		src.style.height = "0px";
+			//Note: we cannot use display="none" (offsetWidth won't be right)
+		for (var j = 0; j < maxnc; ++j)
+			src.appendChild(document.createElement("TD"));
+		srcrows[0].parentNode.appendChild(src);
+	}
+
+	//we have to clean up first, since, in FF, if dst contains %
+	//the copy might not be correct
+	for (var j = maxnc; --j >=0;)
+		dst.cells[j].style.width = "";
+
+	var sum = 0;
+	for (var j = maxnc; --j >= 0;) {
+		var d = dst.cells[j], s = src.cells[j];
+		if (zk.opera) {
+			sum += s.offsetWidth;
+			d.style.width = zk.revisedSize(s, s.offsetWidth);
+		} else {
+			d.style.width = s.offsetWidth + "px";
+			if (maxnc > 1) { //don't handle single cell case (bug 1729739)
+				var v = s.offsetWidth - d.offsetWidth;
+				if (v != 0) {
+					v += s.offsetWidth;
+					if (v < 0) v = 0;
+					d.style.width = v + "px";
 				}
-				if (cs > 1) {
-					if (cs + z <= dst.cells.length) {
-						var unwd = [], total = 0, ttlOffset = 0;
-						for (var k = 0; k < cs; k++) {
-							var d = dst.cells[z+k];
-							if (!dstwds[z+k]) {
-								var wd =  d.style.width;
-								if (wd) {
-									if (wd == "auto" || wd.indexOf('%') > -1) 
-										d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-									dstwds[z+k] = d.offsetWidth;
-									total += dstwds[z+k];
-									ttlOffset += d.offsetWidth;		
-								} else unwd.push([d, k]);
-							} else {
-								total += dstwds[z+k];
-								ttlOffset += d.offsetWidth;
-							}							
-						}
-						
-						var cell = s.firstChild;
-						if (unwd.length) {
-							var amount = s.offsetWidth - total;
-							if (amount < unwd.length * 20) {
-								amount = unwd.length * 20;
-								var rwd = zk.revisedSize(s, amount + total);
-								s.style.width = rwd + "px";
-								cell.style.width = s.style.width;
-							}
-							var each = Math.max(Math.floor((amount) / unwd.length), 0);
-							while (unwd.length)	{								
-								var data = unwd.shift();
-								var d = data[0], k = data[1];
-								if (unwd.length) amount -= each;
-									else each = amount;
-								var wd = zk.safari ? each  : zk.revisedSize(d, each);
-								d.style.width = wd + "px";								
-								var cave = d.firstChild;
-								if (cave) cave.style.width = zk.revisedSize(cave, wd) + "px";
-								dstwds[z+k] = d.offsetWidth;
-								total += dstwds[z+k];
-								ttlOffset += d.offsetWidth;
-							} 
-						}	
-													
-						var rwd = zk.revisedSize(s, total);
-						s.style.width = rwd + "px";
-						cell.style.width = s.style.width;	
-								
-						if (!again && i == 0 && zk.ie) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 500);															
-					}				
-				} else {			
-					if (index == null || index == z) {
-						if (!dstwds[z]) {
-							var wd = d.style.width, cell = d.firstChild, w;				
-							if (wd == "auto" || wd.indexOf('%') > -1) 
-								d.style.width = zk.revisedSize(d, d.offsetWidth)+ "px";
-							wd = d.style.width;
-							dstwds[z] = wd ? (zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth) :
-								zk.ie && z == dst.cells.length-1 ? s.offsetWidth - 2 : s.offsetWidth;
-							
-							if (!wd) {
-								w =  zk.revisedSize(d, dstwds[z]); 
-								d.style.width = w + "px";
-							} else w = $int(wd);
-							if (cell) cell.style.width = zk.revisedSize(cell, w) + "px";	
-						}
-						
-						var cell = s.firstChild;
-						if (cell.id) {
-							if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
-								cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
-							var rwd = dstwds[z] - cacheCss.size;
-							rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
-							if (firstChild == row)
-								s.style.width = rwd;
-							if (cell) cell.style.width = rwd;
-						}
-					}
-					if (index == z) break;
-				}				
-				z += cs; // header count
 			}
-		}		
-	}
-	if (found) zk.scrollIntoView(mate.body, found);
-	if (!again && (zk.safari || zk.opera)) setTimeout(function (){zk.cpCellWidth(dst, srcrows, mate, false, true)}, 5);	
-	// Note :we have to re-calculate the width of cell column for safari.
-};
-/**
-Copies the width of each cell from the element's header.
- * It handles colspan of srcrows.
- *
- * @param {Array} dst the element's header. 
- * @param {Array} srcrows each cell.
- * @since 3.0
- */
-zk.cpCellArrayWidth = function (dst, srcrows) {
-	if (dst == null || srcrows == null || !srcrows.length
-	|| !dst.cells.length)
-		return;
-	for (var j = srcrows.length, cacheCss; --j >= 0;) {
-		var s = srcrows.shift();
-		var z = zk.cellIndex(s);
-		if (dst.cells.length <= z) continue; // Bug #1852313
-		var d = dst.cells[z], wd = 0, cell = s.firstChild;
-		if (cell.id) {
-			if (s.colSpan > 1) {
-				if (s.colSpan + z <= dst.cells.length) {				
-					for (var k = 0; k < s.colSpan; k++) {
-						var hd = dst.cells[z+k];
-						wd += zk.ie && z+k == dst.cells.length -1 ? hd.offsetWidth - 2 : hd.offsetWidth; 												
-					}
-				}
-			} else {
-				if (zk.mozilla)	wd += $int(d.style.width); // Bug #1826938
-				else wd += zk.ie && z == dst.cells.length -1 ? d.offsetWidth - 2 : d.offsetWidth;
-			}		
-			if (!cacheCss || s.className != cacheCss.el.className || s.style.cssText)
-				cacheCss = {el: s , size : zk.sumStyles(s, "lr", zk.borders) + zk.sumStyles(s, "lr", zk.paddings)};
-			var rwd = wd - cacheCss.size;
-			rwd = (rwd < 0 ? 0 : rwd ) +"px";// #Bugs 1817636
-			if (!s.parentNode.rowIndex)
-				s.style.width = rwd;
-			if (cell) cell.style.width = rwd;
 		}
 	}
+
+	if (zk.opera && getZKAttr(mate.element, "fixed") != "true")
+		dst.parentNode.parentNode.style.width = sum + "px";
+
+	if (fakeRow)
+		src.parentNode.removeChild(src);
 };
 //Number//
 /** digits specifies at least the number of digits must be ouput. */
@@ -1579,7 +1526,7 @@ zk.parseDate = function (txt, fmt, strict) {
 	var ts = txt.split(/\W+/);
 	for (var i = 0, j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
-		if (cc == 'y' || cc == 'M' || cc == 'd' || cc == 'E') {
+		if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
 			var len = 1;
 			for (var k = j; ++k < fl; ++len)
 				if (fmt.charAt(k) != cc)
@@ -1641,17 +1588,41 @@ zk.parseDate = function (txt, fmt, strict) {
 				d = $int(token);
 				if (isNaN(d)) return null; //failed
 				break;
-			//case 'E': ignored
+			//default: ignored
 			}
 			j = k - 1;
 		}
 	}
 
 	var dt = new Date(y, m, d);
-	if (strict && (dt.getFullYear() != y
-	|| dt.getMonth() != m || dt.getDate() != d))
-		return null; //failed
+	if (strict) {
+		if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d)
+			return null; //failed
+
+		txt = txt.trim();
+		txt = zk._ckDate(zk.SDOW, txt);
+		txt = zk._ckDate(zk.S2DOW, txt);
+		txt = zk._ckDate(zk.FDOW, txt);
+		txt = zk._ckDate(zk.SMON, txt);
+		txt = zk._ckDate(zk.S2MON, txt);
+		txt = zk._ckDate(zk.FMON, txt);
+		txt = zk._ckDate(zk.APM, txt);
+		for (var j = txt.length; --j >= 0;) {
+			var cc = txt.charAt(j);
+			if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
+				return null; //failed
+		}
+	}
 	return dt;
+};
+zk._ckDate = function (ary, txt) {
+	if (txt.length)
+		for (var j = ary.length; --j >= 0;) {
+			var k = txt.indexOf(ary[j]);
+			if (k >= 0)
+				txt = txt.substring(0, k) + txt.substring(k + ary[j].length);
+		}
+	return txt;
 };
 
 /** Generates a formated string for the specified Date object. */
@@ -1661,7 +1632,7 @@ zk.formatDate = function (val, fmt) {
 	var txt = "";
 	for (var j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
-		if (cc == 'y' || cc == 'M' || cc == 'd' || cc == 'E') {
+		if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
 			var len = 1;
 			for (var k = j; ++k < fl; ++len)
 				if (fmt.charAt(k) != cc)
@@ -1680,9 +1651,32 @@ zk.formatDate = function (val, fmt) {
 			case 'd':
 				txt += zk.formatFixed(val.getDate(), len);
 				break;
-			default://case 'E':
+			case 'E':
 				if (len <= 3) txt += zk.SDOW[val.getDay()];
 				else txt += zk.FDOW[val.getDay()];
+				break;
+			case 'D':
+				txt += zk.dayInYear(val);
+				break;
+			case 'd':
+				txt += zk.dayInMonth(val);
+				break;
+			case 'w':
+				txt += zk.weekInYear(val);
+				break;
+			case 'W':
+				txt += zk.weekInMonth(val);
+				break;
+			case 'G':
+				txt += "AD";
+				break;
+			case 'F':
+				txt += zk.dayOfWeekInMonth(val);
+				break;
+			default:
+				txt += '1';
+					//fake; SimpleDateFormat.parse might ignore it
+					//However, it must be an error if we don't generate a digit
 			}
 			j = k - 1;
 		} else {
@@ -1690,6 +1684,34 @@ zk.formatDate = function (val, fmt) {
 		}
 	}
 	return txt;
+};
+/** Converts milli-second to day. */
+zk.ms2day = function (t) {
+	return Math.round(t / 86400000);
+};
+/** Day in year (starting at 1). */
+zk.dayInYear = function (d, ref) {
+	if (!ref) ref = new Date(d.getFullYear(), 0, 1);
+	return 1 + zk.ms2day(d - ref);
+};
+/** Day in month (starting at 1). */
+zk.dayInMonth = function (d) {
+	return zk.dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+};
+/** Week in year (starting at 1). */
+zk.weekInYear = function (d, ref) {
+	if (!ref) ref = new Date(d.getFullYear(), 0, 1);
+	var wday = ref.getDay();
+	if (wday == 7) wday = 0;
+	return 1 + Math.floor((zk.ms2day(d - ref) + wday) / 7);
+};
+/** Week in month (starting at 1). */
+zk.weekInMonth = function (d) {
+	return zk.weekInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+};
+/** Day of week in month. */
+zk.dayOfWeekInMonth = function (d) {
+	return 1 + Math.floor(zk.ms2day(d - new Date(d.getFullYear(), d.getMonth(), 1)) / 7);
 };
 
 /** Returns an integer of the attribute of the specified element. */
@@ -1762,6 +1784,10 @@ zk.Float = Class.create();
 zk.Float.prototype = {
 	initialize: function () {
 	},
+	/** returns true if no float at all. */
+	empty: function () {
+		return !this._ftid;
+	},
 	/** Closes this float if the specified ID is matched.
 	 * @return whether it is closed
 	 */
@@ -1824,6 +1850,10 @@ zk.Floats.prototype = {
 	initialize: function () {
 		this._ftids = [];
 		this._aspps = {}; //(id, whether a float behaves like a popup)
+	},
+	/** returns true if no float at all. */
+	empty: function () {
+		return !this._ftids.length;
 	},
 	/** Closes this float if the specified ID is matched.
 	 * @return whether it is closed
@@ -1902,7 +1932,7 @@ zk.History = Class.create();
 zk.History.prototype = {
 	initialize: function () {
 		this.curbk = "";
-		zk.addModuleInit(function () { // Bug #1847708
+		zk.addBeforeInit(function () { // Bug #1847708
 			zkau.history.checkBookmark(); // We don't need to wait for the first time.
 			setInterval("zkau.history.checkBookmark()", 520);
 		});
@@ -1960,10 +1990,19 @@ zk.remove = function (n) {
 	if (n) Element.remove(n);
 };
 
+/** An event listener that does nothing but stop event propogation.
+ * @since 3.0.4
+ */
+zk.doEventStop = function (evt) {
+	if (!evt) evt = window.event;
+	Event.stop(evt);
+};
+
 ////
 //show & hide
-/** The lowest level to make a component visible/invisible.
- * CSA shall not call this method.
+/** Shows the specified element with the effect specified in conshow,
+ * if any. It will call action.show if no effect is specified.
+ * CSA shall not call this method. Rather, call action.show instead.
  */
 zk.show = function (id, bShow) {
 	if (bShow == false) {
@@ -1986,8 +2025,9 @@ zk.show = function (id, bShow) {
 		}
 	}
 };
-/** The lowest level to make a component invisible/visible.
- * CSA shall not call this method.
+/** Hides the specified element with the effect specified in conhide,
+ * if any. It will call action.hide if no effect is specified.
+ * CSA shall not call this method. Rather, call action.hide instead.
  */
 zk.hide = function (id, bHide) {
 	if (bHide == false) {
@@ -2012,22 +2052,22 @@ zk.hide = function (id, bHide) {
 };
 /** Shows the exterior. */
 zk._showExtr = function (n) {
-	if ("true" != getZKAttr(n, "float")) {
+	if (!getZKAttr(n, "float")) {
 		var ext = $e(n.id + "!chdextr");
 		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "";
-			ext = $e(n.id + "!chdextr2"); //hbox/vbox
+			ext = $e(n.id + "!chdextr2"); //hbox/vbox's space
 			if (ext) ext.style.display = "";
 		}
 	}
 };
 /** Hides the exterior. */
 zk._hideExtr = function (n) {
-	if ("true" != getZKAttr(n, "float")) {
+	if (!getZKAttr(n, "float")) {
 		var ext = $e(n.id + "!chdextr");
 		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "none";
-			ext = $e(n.id + "!chdextr2"); //hbox/vbox
+			ext = $e(n.id + "!chdextr2"); //hbox/vbox's space
 			if (ext) ext.style.display = "none";
 		}
 	}
@@ -2040,8 +2080,9 @@ zk._hideExtr = function (n) {
 action = {};
 
 /** Makes a component visible.
+ * @param noVisiAt whether not to call onVisiAt
  */
-action.show = function (id) {
+action.show = function (id, noVisiAt) {
 	var n = $e(id);
 	if (n)
 		if (getZKAttr(n, "animating")) {
@@ -2049,19 +2090,22 @@ action.show = function (id) {
 		} else {
 			zk._showExtr(n);  //parent visible first
 			n.style.display = "";
-			zk.onVisiAt(n); //callback later
+			if (!noVisiAt && zk.isRealVisible(n)) zk.onVisiAt(n); //callback later
+				//Bug 1896588: don't do onVisiAt if not visible
 		}
 };
 
 /** Makes a component invisible.
+ * @param noHideAt whether not to call onHideAt
  */
-action.hide = function (id) {
+action.hide = function (id, noHideAt) {
 	var n = $e(id);
 	if (n)
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "zk.hide");
 		} else {
-			zk.onHideAt(n); //callback first
+			if (!noHideAt && zk.isRealVisible(n)) zk.onHideAt(n); //callback first
+				//Bug 1896588: don't do onHideAt if not visible
 			n.style.display = "none";
 			zk._hideExtr(n); //hide parent later
 		}
@@ -2143,7 +2187,8 @@ anima.moveBy = function (id, pos, dur) {
 	var n = $e(id);
 	if (n) {
 		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.moveBy");
+			zk._addAnique(n.id, "anima." + (pos == "top" ? "moveDown" : pos == "left" ? 
+				"moveRight" : "moveBy"));
 		} else {
 			++anima.count;
 			setZKAttr(n, "animating", "show");

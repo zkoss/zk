@@ -277,6 +277,8 @@ public interface Desktop {
 	public boolean isServerPushEnabled();
 
 	/** Adds an event interceptor to this desktop.
+	 * <p>Note: if the interceptor is added twice, it will be invoked
+	 * twice when an event occurs.
 	 * @since 3.0.0
 	 */
 	public void addEventInterceptor(EventInterceptor ei);

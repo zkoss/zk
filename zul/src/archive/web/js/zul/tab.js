@@ -244,13 +244,12 @@ zkTabs._tabs = []; //all available tabs
 
 zkTabs.init = function (cmp) {
 	zkTabs._tabs.push(cmp.id); //used by onResize
-	zkTabs._fixWdLater(cmp.id);
 };
 zkTabs.cleanup = function (cmp) {
 	zkTabs._tabs.remove(cmp.id);
 };
-zkTabs.onVisi = function (cmp) {
-	zkTabs.init(cmp);
+zkTabs.onVisi = zkTabs.onSize = function (cmp) {
+	zkTabs.fixWidth(cmp.id);
 };
 
 /** Returns whether the tabbox is accordion.
@@ -260,15 +259,6 @@ zk.isAccord = function (tabbox) {
 	return getZKAttr(tabbox, "accd") == "true";
 };
 
-zk.addOnResize(function () {
-	var tabs = zkTabs._tabs;
-	for (var j = tabs.length; --j >=0;)
-		zkTabs._fixWdLater(tabs[j]); //FF: we have to fire later (wd not correct yet)
-});
-
-zkTabs._fixWdLater = function (uuid) {
-	setTimeout("zkTabs.fixWidth('"+uuid+"')", zk.ie ? 150 : 30);
-};
 /** Fix the width of the last column in tabs. */
 zkTabs.fixWidth = function (uuid) {
 	var ft = $e(uuid + "!first");

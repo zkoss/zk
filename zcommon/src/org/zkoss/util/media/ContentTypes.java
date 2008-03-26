@@ -39,9 +39,9 @@ public class ContentTypes {
 	private static final Log log = Log.lookup(ContentTypes.class);
 
 	/** A map of (String format, String contentType). */
-	private static final Map _fmt2ct = new HashMap(17);
+	private static final Map _fmt2ct = new HashMap(80);
 	/** A map of (String contentType, String format). */
-	private static final Map _ct2fmt = new HashMap(17);
+	private static final Map _ct2fmt = new HashMap(80);
 
 	protected ContentTypes() {} //prevent from initializing
 

@@ -42,27 +42,33 @@ public class HostIconTreeRenderer implements TreeitemRenderer {
 		}
 		if(data instanceof HostTreeModel.FakeRoot){
 			treeitem.getTreerow().appendChild(new Treecell(((HostTreeModel.FakeRoot)data).getName()));
+		}else if(data instanceof HostTreeModel.FakeGroup){
+			treeitem.getTreerow().appendChild(new Treecell(((HostTreeModel.FakeGroup)data).getName()));
 		}else if(data instanceof HostTreeModel.FakeHost){
 			HostTreeModel.FakeHost host = ((HostTreeModel.FakeHost)data);
 			Treecell cell = new Treecell(host.getName());
-			cell.setImage("/img/add.gif");
+			//cell.setImage("/img/add.gif");
 			cell.setId(host.getId());
 			treeitem.getTreerow().appendChild(cell);
 		}else if(data instanceof HostTreeModel.FakeProcess){
 			HostTreeModel.FakeProcess process = ((HostTreeModel.FakeProcess)data);
-			Treecell cell = new Treecell(process.getName());
-			if(process.getType().equals("A")){
-				cell.setImage("/img/caldrbtn.gif");
-			}else if(process.getType().equals("B")){
-				cell.setImage("/img/bandbtn.gif");
-			}else if(process.getType().equals("C")){
-				cell.setImage("/img/upload.gif");
-			}
-			cell.setId(process.getId());
+			Treecell cell = new Treecell();
+			Label fakelabel = new Label();
+			fakelabel.setValue(process.getName());
+			fakelabel.setContext("editPopup");
+			fakelabel.setParent(cell);
+//			if(process.getType().equals("A")){
+//				cell.setImage("/img/caldrbtn.gif");
+//			}else if(process.getType().equals("B")){
+//				cell.setImage("/img/bandbtn.gif");
+//			}else if(process.getType().equals("C")){
+//				cell.setImage("/img/upload.gif");
+//			}
+			//cell.setId(process.getId());
 			treeitem.getTreerow().appendChild(cell);
 		}
 		
-		treeitem.setOpen(false);// set open false to show correct icon.
+		//treeitem.setOpen(false);// set open false to show correct icon.
 	}
 
 }

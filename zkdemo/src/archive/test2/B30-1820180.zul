@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window id="root" border="normal" >
+<html><![CDATA[
+
+1. When resizing the page by dragging the right bottom corner of browser window or by
+clicking the maximum/minimum buttons, the "display area" ( enclosed by the
+border) of the panels should resize to fit the browser window size. <br/>
+2. Instead the area resizes in a random pattern, by clicking the maximum/minimum buttons a few times, the
+left pane should not occupy the whole page, leaving no space to the right pane. <br/>
+]]></html>
+
 <hbox >
 
 <tabbox style="width:100%">

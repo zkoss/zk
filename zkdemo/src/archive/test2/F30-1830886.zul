@@ -17,10 +17,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:h="http://www.w3.org/1999/xhtml" xmlns:n="http://www.zkoss.org/2005/zk/native">
 <h:h3> [ 1830886 ] A way to make the listbox change its model less "drastic"</h:h3>
-<h:p>check if the listbox grow it height and reduce back, then it is fail.</h:p>
-<window title="Live Data Demo" border="normal">
+	<n:ol>
+		<n:li>scroll down the listbox, and select a item.</n:li>
+		<n:li>click button, check if the listbox grow it height and reduce back, then it is fail.</n:li>
+	</n:ol>
+<window title="Live Data Demo" border="normal" xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<zscript>
 		List data = new ArrayList();
 		for(int j=0; j &lt; 30; ++j) {

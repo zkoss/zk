@@ -49,8 +49,11 @@ public class Rows extends XulElement {
 	 */
 	public int getVisibleBegin() {
 		final Grid grid = getGrid();
-		if (grid == null || !grid.inPagingMold())
+		if (grid == null)
 			return 0;
+		if (grid.inSpecialMold())
+			return grid.getDrawerEngine().getRenderBegin();
+		if (!grid.inPagingMold()) return 0;
 		final Paginal pgi = grid.getPaginal();
 		return pgi.getActivePage() * pgi.getPageSize();
 	}
@@ -59,8 +62,11 @@ public class Rows extends XulElement {
 	 */
 	public int getVisibleEnd() {
 		final Grid grid = getGrid();
-		if (grid == null || !grid.inPagingMold())
+		if (grid == null)
 			return Integer.MAX_VALUE;
+		if (grid.inSpecialMold())
+			return grid.getDrawerEngine().getRenderEnd();
+		if (!grid.inPagingMold()) return Integer.MAX_VALUE;
 		final Paginal pgi = grid.getPaginal();
 		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
 	}
@@ -102,12 +108,21 @@ public class Rows extends XulElement {
 		//--Cropper--//
 		public boolean isCropper() {
 			final Grid grid = getGrid();
-			return grid != null && grid.inPagingMold();
-		}
+			return grid != null &&
+				((grid.inPagingMold()
+					&& grid.getPageSize() <= getChildren().size())
+				|| grid.inSpecialMold());
+				//Single page is considered as not a cropper.
+				//isCropper is called after a component is removed, so
+				//we have to test >= rather than >
+	}
 		public Set getAvailableAtClient() {
-			final Grid grid = getGrid();
-			if (grid == null || !grid.inPagingMold())
+			if (!isCropper())
 				return null;
+
+			final Grid grid = getGrid();
+			if (grid.inSpecialMold())
+				return grid.getDrawerEngine().getAvailableAtClient();
 
 			final Set avail = new HashSet(37);
 			final Paginal pgi = grid.getPaginal();

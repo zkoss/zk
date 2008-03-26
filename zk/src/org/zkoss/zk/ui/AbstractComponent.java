@@ -30,10 +30,12 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
@@ -879,6 +881,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (refChild != null && refChild.getParent() != this)
 			refChild = null;
 
+		if (newChild == refChild)
+			return false; //nothing changed (Listbox and other assumes this)
+
 		final AbstractComponent nc = (AbstractComponent)newChild;
 		final boolean moved = nc._parent == this; //moved in the same parent
 		if (moved) {
@@ -1133,10 +1138,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((ComponentRenderer)mold)
 				.render(this, out != null ? out: ZkFns.getCurrentOut());
 		} else {
+			final StringBuffer buf = out instanceof StringWriter ?
+				((StringWriter)out).getBuffer(): null;
+			final int index = buf != null ? buf.length(): 0;
+
 			final Map attrs = new HashMap(2);
 			attrs.put("self", this);
 			getExecution()
 				.include(out, (String)mold, attrs, Execution.PASS_THRU_ATTR);
+
+			//Trim the output to have smaller outputer and to avoid
+			//whitespace around the separator and space components
+			if (buf != null)
+				Strings.trim(buf, index);
 		}
 	}
 	/* Default: does nothing.
@@ -1167,7 +1181,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Appends an attribute for the specified event name, say, onChange,
 	 * if a non-deferrable listener is registered.
 	 * The format of the generated attribute is as follows:
-	 * <code>onChange="true"</code>.
+	 * <code>z.onChange="true"</code>.
 	 *
 	 * <p>This method is moved from {@link HtmlBasedComponent} to
 	 * {@link AbstractComponent} since 3.0.0.
@@ -1179,10 +1193,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * returns false, null is returned.
 	 * If the caller passed non-null sb, the returned value must be the same
 	 * as sb (so it usually ignores the returned value).
+	 * @see #appendAsapAttr(StringBuffer sb, String, boolean)
 	 * @since 3.0.0
 	 */
 	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm) {
-		if (isAsapRequired(evtnm)) {
+		return appendAsapAttr(sb, evtnm, false);
+	}
+	/** Appends an attribute for the specified event name, say, onChange,
+	 * if a non-deferrable listener is registered or enforce is true.
+	 * The format of the generated attribute is as follows:
+	 * <code>z.onChange="true"</code>.
+	 *
+	 * <p>appendAsapAttr(sb, evtnm) is the same as
+	 * appendAsapAttr(sb, evtnm, false).
+	 *
+	 * @param enforce whether to append the event attribute even if
+	 * {@link #isAsapRequired} returns false.
+	 * If enforce is false, this method is the same as
+	 * {@link #appendAsapAttr(StringBuffer, String)}
+	 * @since 3.0.4
+	 */
+	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm,
+	boolean enforce) {
+		if (enforce || isAsapRequired(evtnm)) {
 			if (sb == null) sb = new StringBuffer(80);
 			HTMLs.appendAttribute(sb, getAttrOfEvent(evtnm), true);
 		}
@@ -1714,6 +1747,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//1. make it not belonging to any page
 		clone._page = null;
 		clone._parent = null;
+		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
 		//1a. clone attributes
 		clone._attrs = new HashMap(4);

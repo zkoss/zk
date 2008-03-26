@@ -31,29 +31,35 @@ import java.util.Map.Entry;
 import java.util.Iterator;
 
 /**
- * <p>The DataBinder that reads ZUML annotations to create binding info. The ZUML page must declare the 
- * XML namespace, xmlns:a="http://www.zkoss.org/2005/zk/annotation", to use the ZUML annotations. 
- * The annotation is declared before each Component or specified directly on the Component attributes. 
- * For example, the following annotation associates the 
+ * <p>The DataBinder that reads ZUML annotations to create binding info.</p>
+ * <p>You have two ways to annotate ZK components. For ZK data binding, you can use &lt;a:bind> annotation expression 
+ * or @{...} annotaion expression.</p>
+ * <p>To use &lt;a:bind> annotation expression, in the ZUML page you must declare the XML namespace,
+ * xmlns:a="http://www.zkoss.org/2005/zk/annotation" first. Then declare &lt;a:bind> before component to make the annotation.</p>
+ * <p>However, since ZK 2.4, you can choose to annotate directly on the component attribute with intuitive @{...} expression.</p>
+ *
+ * <p>For example, the following annotation associates the 
  * attibute "value" of the component "textbox" to the bean's value "person.address.city".</p>
+ * <p>&lt;a:bind> way:</p>
  * <pre>
  * &lt;a:bind value="person.address.city"/>
  * &lt;textbox/>
  * </pre>
- * <p>Or since ZK 2.4 you can annotate directly on the attribute "value" of the component "textbox" like this.</p>
+ * <p>@{...} way:</p>
  * <pre>
  * &lt;textbox value="@{person.address.city}"/>
  * </pre>
  * <p>The @{...} pattern tells the ZUML parser that this is for annotation.</p>
  *
- * <p>The AnnotateDataBinder knows "a:bind" annotation only. The complete format is like this if you declared it 
- * before the Component.
+ * <p>You can put more metainfo inside the &lt;a:bind> or @{...} so this DataBinder knows what to do. The complete format 
+ * is like this:</p>
+ * <p>&lt;a:bind> way:</p> 
  * <pre>
  * &lt;a:bind attrY="bean's value;[tag:expression]..."/>
  * &lt;componentX/>
  * </pre>
  *
- * <p>You can also specify directly on the Component attribute, the complete format is like this:
+ * <p>@{...} way:</p>
  * <pre>
  * &lt;componentX attrY="@{bean's value,[tag='expression']...}"/>
  * </pre>
@@ -62,7 +68,7 @@ import java.util.Iterator;
  * in the form of beanid.field1.field2... You can either call {@link DataBinder#bindBean} to bind the beanid to a
  * real bean object or you can neglect it and this DataBinder would try to find it from the variables map via
  * ({@link org.zkoss.zk.ui.Component#getVariable} method. That is, all those variables defined in zscript are 
- * accessible by this DataBinder. Note that you can choose either two formats of annotaion as your will and you 
+ * accessible by this DataBinder. Note that you can choose either two formats of annotations as your will and you 
  * can even hybrid them together though it is generaly not a good practice.</p>
  *
  * <p>The tag:expression or tag='expression' is a generic form to bind more metainfo to the attrY of the componentX. 
@@ -74,7 +80,7 @@ import java.util.Iterator;
  * For example, the following code snip tells DataBinder that the attribute "value" of Label "fullName" will load 
  * from "person.fullName" when the Textbox "firstName" or "lastName" fire "onChange" event.
  *
- * <p>Declare in front of the Component:</p>
+ * <p>The &lt;a:bind> way that declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName"/>
  * &lt;textbox id="firstname"/>
@@ -85,7 +91,7 @@ import java.util.Iterator;
  * &lt;a:bind value="person.fullName; load-when:firstname.onChange; load-when:lastname.onChange"/>
  * &lt;label id="fullname"/>
  * </pre>
- * <p>Or specify directly on the Component's attribute:</p>
+ * <p>Or the @{...} way that specify directly on the Component's attribute:</p>
  * <pre>
  * &lt;textbox id="firstname" value="@{person.firstName}"/>
  * &lt;textbox id="lastname" value="@{person.lastName}"/>
@@ -96,17 +102,17 @@ import java.util.Iterator;
  * <li>save-when. You can specify the events concerned when to save the attribute of the component into the bean.
  * Since ZK version 3.0.0, you can specify multiple events in save-when tag (i.e. before ZK 3.0.0, you can specify only
  * one event). The events specified, if fired, will trigger
- * this DataBinder to save the attribute of the component into bean. For example, the following code snip tells 
+ * this DataBinder to save the attribute of the component into the specified bean. For example, the following code snip tells 
  * DataBinder that the attribute "value" of Textbox "firstName" will 
  * save into "person.firstName" when the Textbox itself fire "onChange" event.
  *
- * <p>Declare in front of the Component:</p>
+ * <p>The &lt;a:bind> way that declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName; save-when:self.onChange"/>
  * &lt;textbox id="firstName"/>
  * </pre>
  *
- * <p>Or specify directly on the Component's attribute:</p>
+ * <p>Or the @{...} way that specify directly on the Component's attribute:</p>
  * <pre>
  * &lt;textbox id="firstName" value="@{person.firstName, save-when='self.onChange'}"/>
  * </pre>
@@ -115,12 +121,12 @@ import java.util.Iterator;
  * depends on the natural charactieric of the component's attribute as defined in lang-addon.xml. For example, 
  * the save-when of Label.value is default to none while that of Textbox.value is default to self.onChange. 
  * That is, the following example is the same as the above one.</p>
- * <p>Declare in front of the Component:</p>
+ * <p>The &lt;a:bind> way that declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName"/>
  * &lt;textbox id="firstName"/>
  * </pre>
- * <p>Or specifies directly on the Component's attribute:</p>
+ * <p>Or the @{...} way that specify directly on the Component's attribute:</p>
  * <pre>
  * &lt;textbox id="firstName" value="@{person.firstName}"/>
  * </pre>
@@ -146,10 +152,11 @@ import java.util.Iterator;
  * </pre>
  * </li>
  *
- * <p>Since 3.0.0, DataBinder supports validation phase before saving attribute content into bean property when 
- * triggered by the specified event in save-when tag. It will fire onBindingSave event to the data-binding component and
- * then fire onBindingValidate to the triggering component before really saving component attribute contents into bean's 
- * property. So application developers get the chance to handle the value validatiion before saving. In the following example
+ * <p>Since 3.0.0, DataBinder supports validation phase before doing a save. Note that a DataBinder "save" is triggered by
+ * a component event as specified on the "save-when" tag. Before doing a save, it first fires an onBindingSave event to each 
+ * data-binding component and then it fires an onBindingValidate event to the event triggering component before really saving 
+ * component attribute contents into bean's 
+ * property. So application developers get the chance to handle the value validation before saving. In the following example
  * when end user click the "savebtn" button, an "onBindingSave" is first fired to "firtName" and "lastName" textboxes and 
  * then an "onBindingValidate" is fired to "savebtn" button. Application developers can register proper event handlers to do 
  * what they want to do.</p>
@@ -175,13 +182,13 @@ import java.util.Iterator;
  * is default to "both" access mode. For example, the following code snips tells DataBinder that Textbox "firstName" 
  * would allowing doing save into bean only not the other way.
  *
- * <p>Declare in front of the Component:</p>
+ * <p>The &lt;a:bind> way that declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName;access:save;"/>
  * &lt;textbox id="firstName"/>
  * </pre>
  *
- * <p>Or specify directly on the Component's attribute:</p>
+ * <p>Or the @{...} way that specify directly on the Component's attribute:</p>
  * <pre>
  * &lt;textbox id="firstName" value="@{person.firstName, access='save'}"/>
  * </pre>

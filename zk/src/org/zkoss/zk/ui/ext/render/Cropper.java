@@ -35,8 +35,12 @@ import java.util.Set;
 public interface Cropper {
 	/** Returns whether it is a cropper, i.e., cropping is applied.
 	 *
-	 * <p>If {@link #isCropper} returns false, {@link #getAvailableAtClient} must return null.
-	 * In other words, the result of returning false is the same as not declaring
+	 * <p>Note: this method is called when an child is detached, so
+	 * you have to count one more for the total number of children.
+	 * Example &lt;= must be used, not &lt;:<br/>
+	 * <code>getChildCount() &lt;= getPageSize()</code>
+	 *
+	 * <p>The result of returning false is the same as not declaring
 	 * with {@link Cropper}.
 	 */
 	public boolean isCropper();

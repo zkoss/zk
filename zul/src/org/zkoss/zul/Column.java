@@ -57,9 +57,26 @@ public class Column extends HeaderElement {
 	public Column(String label) {
 		setLabel(label);
 	}
+	/* Constructs a grid header with label and image.
+	 *
+	 * @param lable the label. No label if null or empty.
+	 * @param src the URI of the image, or null to ignore.
+	 */
 	public Column(String label, String src) {
 		setLabel(label);
 		setImage(src);
+	}
+	/* Constructs a grid header with label, image and width.
+	 *
+	 * @param lable the label. No label if null or empty.
+	 * @param src the URI of the image. Ignored if null or empty.
+	 * @param width the width of the column. Ignored if null or empty.
+	 * @since 3.0.4
+	 */
+	public Column(String label, String src, String width) {
+		setLabel(label);
+		setImage(src);
+		setWidth(width);
 	}
 
 	/** Returns the grid that contains this column. */

@@ -45,7 +45,7 @@ abstract public class ScalableTimerTask extends TimerTask {
 	 * Rather, override {@link #exec} instead.
 	 */
 	final public void run() {
-		setDone();
+		setCalled();
 		exec();
 	}
 	/** Cancels this timer task.
@@ -55,10 +55,10 @@ abstract public class ScalableTimerTask extends TimerTask {
 	 */
 	public boolean cancel() {
 		final boolean b = super.cancel();
-		if (b) setDone();
+		if (b) setCalled();
 		return b;
 	}
-	private void setDone() {
+	private void setCalled() {
 		if (_ti != null) {
 			synchronized (_ti) {
 				--_ti.count;

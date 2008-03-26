@@ -23,7 +23,7 @@ zkTmbox = {
 };
 
 zkTmbox.init = function (cmp) {
-	zkTmbox.onVisi = zkWgt.fixDropBtn; 
+	zkTmbox.onVisi = zkTmbox.onSize = zkWgt.fixDropBtn; 
 	zkTmbox.onHide = zkTxbox.onHide; 	
 
 	zkTxbox.init($real(cmp));
@@ -54,9 +54,8 @@ zkTmbox.init = function (cmp) {
 	if(btn){
 		zk.listen(btn, "mousedown", zkTmbox._btnDown);
 		zk.listen(btn, "mouseup", zkTmbox._btnUp);
+		zk.listen(btn, "click", zk.doEventStop); //prevent listitem being selected
 		zk.listen(btn, "mouseout", zkTmbox._btnOut);
-
-		zkWgt.fixDropBtn(cmp);
 	}
 	
 	if(inp.value){
@@ -145,8 +144,12 @@ zkTmbox._inpclick= function(evt){
 };
 zkTmbox._inpkeydown= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var sels = zkTmbox._selrange(cmp);	
+	var inp = Event.element(evt),
+		cmp = $outer(inp),
+		sels = zkTmbox._selrange(cmp);
+	if (inp.disabled || inp.readOnly)
+		return;
+
 	cmp.lastPos = sels[0];
 	var code =Event.keyCode(evt);
 	switch(code){
@@ -193,7 +196,7 @@ zkTmbox._btnDown= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt)),
 		inp = $real(cmp);
-	if(inp.disabled) return;
+	if(inp.disabled || zk.dragging) return;
 
 	var btn = $e(cmp.id + "!btn"),
 		ofs = Position.cumulativeOffset(btn);
@@ -209,7 +212,7 @@ zkTmbox._btnUp= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
-	if(inp.disabled) return;
+	if(inp.disabled || zk.dragging) return;
 
 	zkTmbox._stopAutoIncProc(cmp);
 	zkTmbox._markPositionSel(cmp);
@@ -219,7 +222,7 @@ zkTmbox._btnOut= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
-	if(inp.disabled) return;
+	if(inp.disabled || zk.dragging) return;
 
 	zkTmbox._stopAutoIncProc(cmp);
 };
@@ -229,8 +232,8 @@ zkTmbox._btnOut= function(evt){
 zkTmbox._selrange = function (cmp){
 	var sel = zk.getSelectionRange($real(cmp));	
 	if(sel[0]>sel[1]){
-		var t = sel[2];
-		sel[1] = s1;
+		var t = sel[1];
+		sel[1] = sel[0];
 		sel[0] = t;
 	}
 	return sel;
@@ -261,12 +264,7 @@ zkTmbox.onDown=function(cmp){
 
 //check selection Position on minute or hour.
 zkTmbox._checkPosition=function(cmp){
-	var pos = cmp.lastPos;
-	if(pos<=2){
-		return zkTmbox.POS_HOUR
-	}else{
-		return zkTmbox.POS_MIN;
-	}
+	return cmp.lastPos <= 2 ? zkTmbox.POS_HOUR : zkTmbox.POS_MIN;
 };
 
 zkTmbox._markPositionSel=function (cmp){

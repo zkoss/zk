@@ -89,19 +89,36 @@ public class DumbFailoverManager implements FailoverManager {
 			killed.getRequestPath(), //If unknown, just pass null
 			killed.getZScriptLanguage()); //If unkown, just pass null (Java assumed)
 
-		((PageCtrl)page).init(
+		final PageCtrl pageCtrl = (PageCtrl)page;
+		final PageCtrl killedCtrl = (PageCtrl)killed;
+		pageCtrl.init(
 			new PageConfig() {
 				public String getId() {return killed.getId();} //required; never null
 				public String getUuid() {return killed.getUuid();} //required; never null
 				public String getTitle() {return killed.getTitle();} //if unknown, just pass null
 				public String getStyle() {return killed.getStyle();} //if unknown, just pass null
-				public String getHeaders() {return ((PageCtrl)killed).getHeaders();} //if unknown, just pass null
-				public String getRootAttributes() {return ((PageCtrl)killed).getRootAttributes();} //if unknown, just pass null
-				public String getContentType() {return ((PageCtrl)killed).getContentType();} //if unknown, just pass null
-				public String getDocType() {return ((PageCtrl)killed).getDocType();} //if unknown, just pass null
-				public String getFirstLine() {return ((PageCtrl)killed).getFirstLine();} //if unknown, just pass null
-				public Boolean getCacheable() {return ((PageCtrl)killed).getCacheable();} //if unknown, just pass null
+				public String getHeaders() {return killedCtrl.getHeaders();} //if unknown, just pass null
 			});
+
+		String s = killedCtrl.getRootAttributes();
+		if (s != null) pageCtrl.setRootAttributes(s);
+
+		s = killedCtrl.getContentType();
+		if (s != null) pageCtrl.setContentType(s);
+
+		s = killedCtrl.getDocType();
+		if (s != null) pageCtrl.setDocType(s);
+
+		s = killedCtrl.getFirstLine();
+		if (s != null) pageCtrl.setFirstLine(s);
+
+		if (killedCtrl.getCacheable() != null)
+			pageCtrl.setCacheable(killedCtrl.getCacheable());
+
+		if (killed.getExpressionFactoryClass() != null)
+			page.setExpressionFactoryClass(killed.getExpressionFactoryClass());
+
+		page.setComplete(killed.isComplete());
 			//optional: copy killed's attrs to page
 
 		for (Iterator it = killed.getRoots().iterator(); it.hasNext();) {

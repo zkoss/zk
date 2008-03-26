@@ -18,9 +18,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>[ 1796281 ] Improve Working with Combobox.</n:p>
-	<n:p>Both setSelectedItem(Comboitem item) and setSelectedIndex(int jsel) are
+	<n:p>[ 1796281 ] Improve Working with Combobox. Both setSelectedItem(Comboitem item) and setSelectedIndex(int jsel) are
 supported.</n:p>
+	<n:ol>
+		<n:li>click selectedItem , then combobox will sets the selectItem to "Cool!"</n:li>
+		<n:li>click selectedIndex, then combobox will sets the selectItem to "Thumbs Up!"</n:li>
+	</n:ol>
 	<combobox id="cbbox">
 		<comboitem label="Apple" />
 		<comboitem label="Banana" />

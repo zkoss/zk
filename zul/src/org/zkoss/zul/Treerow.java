@@ -173,15 +173,10 @@ public class Treerow extends XulElement {
 				HTMLs.appendAttribute(sb, "z.pgsz", tcsib.getPageSize());
 			}
 		}
-		
-		//TODO AREA JEFF ADDED
-		//Modified for load-on-demand
-		if(getTree().getModel() != null)
-			sb.append("z.onopen=\"true\"");
-		else
-			appendAsapAttr(sb, Events.ON_OPEN);
-			//it calls isAsapRequired, so it also tested Treeitem for onOpen
-		//TODO AREA JEFF ADDED END
+
+		if (tree != null && tree.getModel() != null && !item.isLoaded())
+			sb.append(" z.lod=\"t\""); //lod=Load-on-Demand
+		appendAsapAttr(sb, Events.ON_OPEN);
 		
 		final String clkattrs = getAllOnClickAttrs(false);
 		if (clkattrs != null) sb.append(clkattrs);

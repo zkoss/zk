@@ -1,7 +1,0 @@
-<window border="normal" title="Case 2: vbox and splitter">
-		<vbox height="100px" width="100%">
-		cdacdacda
-		<splitter id="vsplitter" collapse="none"/>
-		cdacdacda
-		</vbox>
-</window>

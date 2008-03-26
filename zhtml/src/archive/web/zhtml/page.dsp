@@ -51,10 +51,10 @@ ${u:redraw(root, null)}
 	<c:if test="${!empty zk_argAction && !arg.asyncUpdate}">
 ${u:outLangStyleSheets()}
 ${u:outLangJavaScripts(zk_argAction)}
-	</c:if>
 <script type="text/javascript">
 	zkau.addDesktop("${page.desktop.id}");
 </script>
+	</c:if>
 
 	<c:if test="${!empty zk_argResponses}">
 <script type="text/javascript">

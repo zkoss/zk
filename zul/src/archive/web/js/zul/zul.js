@@ -35,7 +35,82 @@ zul.cleanMovable = function (id) {
 		delete zul._movs[id];
 	}
 };
-
+zul.getMetaByHeader = function (cmp) {
+	return zkau.getMeta(getZKAttr(cmp.parentNode, "rid"));
+};
+zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
+	if (hdfaker == null || bdfaker == null || !hdfaker.cells.length
+	|| !bdfaker.cells.length || !zk.isRealVisible(hdfaker) || !rows || !rows.length) return;
+	
+	var hdtable = hdfaker.parentNode.parentNode, head = zul.getRealHeader(hdtable.tBodies[1].rows);
+	if (!head) return; 
+	if (zk.opera) {
+		if (!hdtable.style.width) {
+			var isFixed = true, tt = hdtable.parentNode.offsetWidth;
+			for(var i = hdfaker.cells.length; --i >=0;) {
+				if (!hdfaker.cells[i].style.width || hdfaker.cells[i].style.width.indexOf("%") >= 0) {
+					isFixed = false; 
+					break;
+				}
+				tt -= $int(hdfaker.cells[i].style.width);
+			}
+			if (!isFixed || tt >= 0) hdtable.style.tableLayout = "auto";
+		}
+	} 
+	var including = zk.revisedSize(head.cells[0], 100) !== zk.revisedSize(hdfaker.cells[0], 100);
+	
+	// Bug #1886788 the size of these table must be specified a fixed size.
+	var bdtable = $parentByTag(bdfaker, "TABLE"),
+		total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth), 
+		fttable = $parentByTag(ftfaker, "TABLE"), 
+		tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
+		
+	if (total == bdtable.parentNode.offsetWidth && 
+		bdtable.parentNode.offsetWidth > tblwd && bdtable.parentNode.offsetWidth - tblwd < 20)
+		total = tblwd;
+		
+	var count = total;
+	hdtable.style.width = total + "px";	
+	
+	if (bdtable) bdtable.style.width = hdtable.style.width;
+	if (fttable) bdtable.style.width = hdtable.style.width;
+	
+	for (var i = bdfaker.cells.length; --i >= 0;) {
+		if (!zk.isVisible(hdfaker.cells[i])) continue;
+		var wd = i != 0 ? bdfaker.cells[i].offsetWidth : count;
+		bdfaker.cells[i].style.width = zk.revisedSize(bdfaker.cells[i], wd) + "px";
+		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+		if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+		var cpwd = including ? zk.revisedSize(head.cells[i], $int(hdfaker.cells[i].style.width)) :
+			$int(hdfaker.cells[i].style.width);
+		head.cells[i].style.width = cpwd + "px";
+		var cell = head.cells[i].firstChild;
+		cell.style.width = zk.revisedSize(cell, cpwd) + "px";
+		count -= wd;
+	}
+	
+	// in some case, the total width of this table may be changed.
+	if (total != hdtable.offsetWidth) {
+		total = hdtable.offsetWidth;
+		tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
+		if (total == bdtable.parentNode.offsetWidth && 
+			bdtable.parentNode.offsetWidth > tblwd && bdtable.parentNode.offsetWidth - tblwd < 20)
+			total = tblwd;
+			
+		hdtable.style.width = total + "px";	
+		if (bdtable) bdtable.style.width = hdtable.style.width;
+		if (fttable) bdtable.style.width = hdtable.style.width;
+	}
+};
+zul.getRealHeader = function (rows) {
+	for(var j =0, rl = rows.length; j < rl; j++) {
+		var type = $type(rows[j]);
+		if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
+			return rows[j];
+		}
+	}
+	return null;
+};
 /////////
 // Headers
 //For sortable header, e.g., Column and Listheader (TH or TD is assumed)
@@ -88,6 +163,13 @@ zulHdrs.cleandrag = function (cmp) {
 		zk.unlisten(cmp, "mouseout",  zulHdrs.ondragout);	
 	}
 };
+zulHdrs.cleanup = function (cmp) {
+	var hdfaker = $e(cmp.id + "!hdfaker"), bdfaker = $e(cmp.id + "!bdfaker"),
+		ftfaker = $e(cmp.id + "!ftfaker");
+	if (hdfaker) zk.remove(hdfaker);
+	if (bdfaker) zk.remove(bdfaker);
+	if (ftfaker) zk.remove(ftfaker);
+};
 zulHdr = {}; //listheader
 zulHdr._szs = {};
 zulHdr.initdrag = zulHdrs.initdrag;
@@ -103,19 +185,6 @@ zulHdr.init = function (cmp) {
 	zulHdr.setSizable(cmp, zulHdr.sizable(cmp));
 		//Note: IE6 failed to crop a column if it is draggable
 		//Thus we init only necessary (to avoid the IE6 bug)
-	var type = $type(cmp), mate;
-	if (type == "Col")
-		mate = $parentByType(cmp, "Grid");
-	else if (type == "Lhr")
-		mate = $parentByType(cmp, "Libox");
-	else if (type == "Tcol")
-		mate = $parentByType(cmp, "Tree");
-	var meta = zkau.getMeta(mate);
-	if (meta) {
-		if (!meta.fixedSize)
-			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, meta.id + "Hdr");
-	}
 };
 zulHdr.sizable = function (cmp) {
 	return cmp.parentNode && getZKAttr(cmp.parentNode, "sizable") == "true";
@@ -143,101 +212,65 @@ zulHdr.setSizable = function (cmp, sizable) {
  * @param meta the metainfo of the parent, such as listbox and grid
  */
 zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
-	if(meta.paging) return;
-	meta.bodytbl.style.width = meta.headtbl.style.width;
-	wd = $int(wd);		
-	if (meta.foottbl) {
-		meta.foottbl.style.width = meta.headtbl.style.width;
-		if (meta.foottbl.rows.length) {
-			var cells = meta.foottbl.rows[0].cells;
-			if (icol < cells.length) {
-				var rwd = zk.revisedSize(cells[icol], wd);
-				cells[icol].style.width = rwd + "px";
-				var cell = cells[icol].firstChild;
-				rwd = zk.revisedSize(cell, rwd);
-				cell.style.width = rwd + "px";		
-			}
-		}
-	}
-	var head, rows = meta.headtbl.rows;
-	for(var j =0, rl = rows.length; j < rl; j++) {
-		var type = $type(rows[j]);
-		if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
-			head = rows[j];
-			break;
-		}
-	}
-
-	zk.cpCellWidth(head, meta.bodyrows, meta, false, false, icol);
-	var fake = $e(head.id + "!fake");
-	if (!fake || fake.cells.length != head.cells.length) {
-		if (fake) fake.parentNode.removeChild(fake);
-		var src = document.createElement("TR");
-		src.id = head.id + "!fake";
-		src.style.height = "0px";
-			//Note: we cannot use display="none" (offsetWidth won't be right)
-		for (var j = head.cells.length; --j >= 0;)
-			src.appendChild(document.createElement("TD"));					
-		meta.headtbl.rows[0].parentNode.insertBefore(src, meta.headtbl.rows[0]);						
-	}
-	var row = rows[0], cells = row.cells;
-	for (var k = 0, cl = cells.length; k < cl; ++k) {
-		var s = cells[k], d = head.cells[k], w =  d.style.width;							
-		if (!w || w == "auto" || w.indexOf('%') > -1) {// Bug #1822564
-			d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-			setZKAttr(d, "wd", "NaN"); // Bug #1823236
-		}
-		w = d.style.width;
-		s.style.width = $int(w) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
-	}
-
+	if(getZKAttr(meta.element, "fixed") != "true") 
+		zul.adjustHeadWidth(meta.hdfaker, meta.bdfaker, meta.ftfaker, meta.bodyrows);
 	zkau.send({uuid: meta.id, cmd: "onInnerWidth",
 			data: [meta.headtbl.style.width]}, -1);
-
-	wd = zk.revisedSize(head.cells[icol],wd) + "px";
 	zkau.send({uuid: cmp.id, cmd: "onColSize",
-		data: [icol, col.id, wd, keys]}, zkau.asapTimeout(cmp, "onColSize"));
+		data: [icol, col.id, (wd+"px"), keys]}, zkau.asapTimeout(cmp, "onColSize"));
+	meta._render(zk.gecko ? 200: 60); // just in case.
 };
 zulHdr.cleanup = function (cmp) {
 	zulHdr.setSizable(cmp, false);
+	var hdfaker = $e(cmp.id + "!hdfaker"), bdfaker = $e(cmp.id + "!bdfaker"),
+		ftfaker = $e(cmp.id + "!ftfaker");
+	if (hdfaker) zk.remove(hdfaker);
+	if (bdfaker) zk.remove(bdfaker);
+	if (ftfaker) zk.remove(ftfaker);
 };
 zulHdr.setAttr = function (cmp, nm, val) {
 	switch(nm) { // Bug #1822566 
-		case "style.width" :
-			var type = $type(cmp), mate;
-			if (type == "Col")
-				mate = $parentByType(cmp, "Grid");
-			else if (type == "Lhr")
-				mate = $parentByType(cmp, "Libox");
-			else if (type == "Tcol")
-				mate = $parentByType(cmp, "Tree");				
+		case "style.width" :			
 		case "style.height" :		
 		case "style" :			
-			var head = cmp.parentNode;
-			var fake = $e(head.id + "!fake");
 			
 			var cell = cmp.firstChild;
-			var v = val;	
+			var v = val, meta = zul.getMetaByHeader(cmp);	
 			if (nm == "style") v = zk.getTextStyle(val, true, true);
 			if (v) {
-				if (nm == "style.width")
-					v = zk.revisedSize(cell, $int(v)) + "px";
-				zkau.setAttr(cell, nm, v);
+				if (nm == "style.width") {
+					if (v && v != "auto" && v.indexOf('%') < 0) {
+						var including = zk.revisedSize(meta.headrows[0].cells[0], 100) !== zk.revisedSize(meta.hdfaker.cells[0], 100);
+						v = (including ? zk.revisedSize(cmp, $int(v)) : v);
+						v = zk.revisedSize(cell, $int(v)) + "px";
+						zkau.setAttr(cell, nm, v);
+					} else {
+						zkau.setAttr(cell, nm, "100%");
+					}
+				} else {
+					zkau.setAttr(cell, nm, v);
+				}
 			}
 			zkau.setAttr(cmp, nm, val);
 			
-			if (nm == "style.width" && fake) {
-				var wd;
-				if (!val || val == "auto" || val.indexOf('%') >= 0) {
-					wd = cmp.offsetWidth + "px";
-				} else {
-					wd = $int(val) + zk.sumStyles(cmp, "lr", zk.borders) + 
-						zk.sumStyles(cmp, "lr", zk.paddings) + "px";
+			if (nm == "style.width") {
+				var hdfaker = $e(cmp.id + "!hdfaker"), bdfaker = $e(cmp.id + "!bdfaker"),
+					ftfaker = $e(cmp.id + "!ftfaker");
+				if (hdfaker) {
+					hdfaker.style.width = val;
+					meta.headtbl.style.width = "";
 				}
-				fake.cells[zk.cellIndex(cmp)].style.width = wd; 
-			}			
-			var meta = zkau.getMeta(mate);
-			if (meta) meta.init();
+				if (bdfaker) {
+					bdfaker.style.width = val;
+					meta.bodytbl.style.width = "";
+				}
+				if (ftfaker) {
+					ftfaker.style.width = val;
+					meta.foottbl.style.width = "";
+				}
+				if (zk.opera) zk.redraw(meta.element);
+				else meta._recalcSize();
+			}
 			return true;
 	}
 	zkau.setAttr(cmp, nm, val);
@@ -246,7 +279,8 @@ zulHdr.setAttr = function (cmp, nm, val) {
 };
 
 zulHdr.onclick = function (evt, cmp) {
-	if (!zk.dragging && $uuid(Event.element(evt)) == cmp.id && zulHdr._sortable(cmp) && zkau.insamepos(evt))
+	if (!zk.dragging && $uuid(Event.element(evt)) == cmp.id && zulHdr._sortable(cmp) 
+		&& zkau.insamepos(evt) && $tag(Event.element(evt)) != "INPUT")
 		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
 };
 zulHdr.onmove = function (evt, cmp) {
@@ -279,7 +313,7 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 		var ofs = zk.revisedOffset(cmp); // Bug #1812154
 		var v = zulHdr._insizer(cmp, pointer[0] - ofs[0]);
 		if (v) {
-			dg.z_min = 5 + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings);		
+			dg.z_min = 10 + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings);		
 			return false;
 		}
 	}
@@ -288,44 +322,47 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 zulHdr._endsizing = function (cmp, evt) {
 	var dg = zulHdr._szs[cmp.id];
 	if (dg && dg.z_szofs) {
-		var cells = cmp.parentNode.cells, j = 0;
-		for (;; ++j) {
-			if (j >= cells.length) return; //impossible, but just in case
-			if (cmp == cells[j]) {
-				break;
-			} 
+		var meta = zul.getMetaByHeader(cmp);
+		var keys = "", wd = dg.z_szofs, table = $parentByTag(cmp, "TABLE"), head = table.tBodies[0].rows[0],
+			including = zk.revisedSize(head.cells[0], 100) !== zk.revisedSize(table.tBodies[1].rows[0].cells[0], 100), 
+			rwd = including ? zk.revisedSize(cmp, wd) : wd,
+			cells = head.cells, cidx = zk.cellIndex(cmp), total = 0;
+		for (var k = cells.length; --k >= 0;)
+			if (k !== cidx) total += cells[k].offsetWidth;
+
+		// For Opera, the code of adjusting width must be in front of the adjusting table.
+		// Otherwise, the whole layout in Opera always shows wrong.
+		if (meta.foottbl) {
+			meta.ftfaker.cells[cidx].style.width = wd + "px";
 		}
-		var keys = "";
+		var fixed;
+		if (meta.bodytbl) {
+			if (zk.opera && !meta.bodytbl.style.tableLayout) {
+				fixed = "auto";
+				meta.bodytbl.style.tableLayout = "fixed";
+			}
+			meta.bdfaker.cells[cidx].style.width = wd + "px";
+		}
+		
+		head.cells[cidx].style.width = wd + "px";
+		cmp.style.width = rwd + "px";
+		var cell = cmp.firstChild;
+		cell.style.width = zk.revisedSize(cell, rwd) + "px";
+		
+		table.style.width = total + wd + "px";		
+		if (meta.foottbl) {
+			meta.foottbl.style.width = table.style.width;	
+		}
+		if (meta.bodytbl) {
+			meta.bodytbl.style.width = table.style.width;	
+		}
 		if (evt) {
 			if (evt.altKey) keys += 'a';
 			if (evt.ctrlKey) keys += 'c';
 			if (evt.shiftKey) keys += 's';
 		}
-		
-		var wd = dg.z_szofs;
-		var rwd = zk.safari ? wd : zk.revisedSize(cmp, wd);
-		var table = $parentByTag(cmp, "TABLE");
-		var head;
-		
-		for(var j =0, rl = table.rows.length; j < rl; j++) {
-			var type = $type(table.rows[j]);
-			if (type == "Cols" || type == "Lhrs" || type == "Tcols") {
-				head = table.rows[j];
-				break;
-			}
-		}
-		var cells = head.cells;
-		var total = 0;
-		for (var k = cells.length; --k >= 0;)
-			if (cells[k] != cmp) total += cells[k].offsetWidth;
-		var row = table.rows[0];
-		var cidx = zk.cellIndex(cmp);
-		row.cells[cidx].style.width = $int(rwd) + zk.sumStyles(cmp, "lr", zk.borders) + zk.sumStyles(cmp, "lr", zk.paddings) + "px";
-		cmp.style.width = rwd + "px";
-		var cell = cmp.firstChild;
-		cell.style.width = zk.revisedSize(cell, rwd) + "px";	
-		table.style.width = total + wd + "px";		
-		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cidx+",'"+wd+"','"+keys+"')", 0);		
+		if (zk.opera && fixed) meta.bodytbl.style.tableLayout = fixed;
+		setTimeout("zk.eval($e('"+cmp.id+"'),'resize',null,"+cidx+",'"+wd+"','"+keys+"')", 0);
 	}
 };
 /* @param ghosting whether to create or remove the ghosting
@@ -336,11 +373,10 @@ zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 		var of = zk.revisedOffset(el);
 		var ofs = zkau.beginGhostToDIV(dg);
 		ofs[1] = of[1];
-		var head = $parentByTag(dg.element, "DIV");		
 		ofs[0] += zk.offsetWidth(dg.element);
 		document.body.insertAdjacentHTML("afterbegin",
 			'<div id="zk_ddghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk.offsetHeight(head.parentNode)
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk.offsetHeight(el.parentNode.parentNode)
 			+'px;background:darkgray"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
 					+'"/></div>');
 		dg.element = $e("zk_ddghost");

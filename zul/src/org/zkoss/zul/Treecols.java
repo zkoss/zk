@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -36,6 +37,7 @@ public class Treecols extends HeadersElement {
 		return (Tree)getParent();
 	}
 
+	//super//
 	public boolean setVisible(boolean visible) {
 		final boolean vis = super.setVisible(visible);
 		final Tree tree = getTree();
@@ -43,7 +45,15 @@ public class Treecols extends HeadersElement {
 			tree.invalidate();
 		return vis;
 	}
-	//-- Component --//
+	public String getOuterAttrs() {
+		final StringBuffer sb =
+			new StringBuffer(80).append(super.getOuterAttrs());
+		final Tree tree = getTree();
+		if (tree != null)
+			HTMLs.appendAttribute(sb, "z.rid", tree.getUuid());
+		return sb.toString();
+	}
+
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tree))
 			throw new UiException("Wrong parent: "+parent);

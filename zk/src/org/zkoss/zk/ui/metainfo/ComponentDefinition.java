@@ -276,6 +276,7 @@ public interface ComponentDefinition extends Cloneable {
 	 *
 	 * <p>Note: annotations are applied to the component when a component
 	 * is created. So, this method doesn't and need not to copy them.
+	 * See also {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}.
 	 */
 	public void applyProperties(Component comp);
 	/** Evaluates and retrieves properties to the specified map.

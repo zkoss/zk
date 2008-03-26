@@ -1,4 +1,5 @@
 <vbox>
+Click "hello world"
 <zscript>
 public void doCreate(Event evt)
 {

@@ -18,6 +18,8 @@
  */
 package org.zkoss.zkplus.databind;
 
+import java.util.List;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.ListModel;
 

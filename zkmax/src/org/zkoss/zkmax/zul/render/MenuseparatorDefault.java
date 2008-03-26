@@ -39,7 +39,7 @@ public class MenuseparatorDefault implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Menusp\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-		wh.writeln("<td></td><td colspan=\"2\" class=\"menusp\"></td>");
+		wh.writeln("<td colspan=\"3\" class=\"menusp\"></td>");
 		wh.writeln("</tr>");
 	}
 }

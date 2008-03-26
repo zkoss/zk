@@ -49,14 +49,14 @@ _zkselx._addChd = function (uuid, cmp, html) {
 	if (isLit && $type(cmp) != "Lit") { // only first listitem.
 		var head = $parentByTag(cmp, "DIV");
 		var cave = $e($uuid(head) + "!cave");	
-		if (cave.tBodies[0].rows.length) {
-			var n = cave.tBodies[0].rows[0];
+		if (cave.tBodies[1].rows.length) {
+			var n = cave.tBodies[1].rows[0];
 			var to = n.previousSibling;
 			zk.insertHTMLBefore(n, html);
 			zkau._initSibs(n, to, false);
 		} else {
-			zk.insertHTMLBeforeEnd(cave.tBodies[0], html);			
-			zkau._initChildren(cave.tBodies[0]);
+			zk.insertHTMLBeforeEnd(cave.tBodies[1], html);			
+			zkau._initChildren(cave.tBodies[1]);
 		}
 		return true;
 	}
@@ -73,7 +73,7 @@ zk.Selectable.prototype = {
 		this.qcells = [];
 		this.init();
 	},
-	init: function (isLater) {
+	init: function () {
 		this.element = $e(this.id);
 		if (!this.element) return;
 		if (getZKAttr(this.element, "vflex") == "true") {
@@ -85,34 +85,29 @@ zk.Selectable.prototype = {
 		}
 		//_headtbl might be null, while other must be NOT null
 		this.body = $e(this.id + "!body");
+		this.paging = getZKAttr(this.element, "pg") != null;
 		if (this.body) {
 			this.body.style.overflow = "";
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-			if (this.bodytbl) {
-				var bds = this.bodytbl.tBodies;
-				if (!bds || !bds.length)
-					this.bodytbl.appendChild(document.createElement("TBODY"));
-				this.bodyrows = bds[0].rows;
-			}
-
+			
 			this.head = $e(this.id + "!head");
-			if (this.head) this.headtbl = zk.firstChild(this.head, "TABLE", true);
 			this.foot = $e(this.id + "!foot");
 			if (this.foot) this.foottbl = zk.firstChild(this.foot, "TABLE", true);
-		} else {
-			this.paging = true;
-			this.body = $e(this.id + "!paging");
-			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-
-			var bs = this.bodytbl.tBodies;
-			for (var j = 0, bl = bs.length; j < bl; ++j)
-				if (bs[j].id) {
-					this.bodyrows = bs[j].rows;
-					break;
-				}
+			if (this.head) {
+				this.headtbl = zk.firstChild(this.head, "TABLE", true);
+				this.headrows = this.headtbl.tBodies[1].rows;
+				this.hdfaker = this.headtbl.tBodies[0].rows[0]; // head's faker
+				this.bdfaker = this.bodytbl.tBodies[0].rows[0]; // body's faker
+				if (this.foot) this.ftfaker = this.foottbl.tBodies[0].rows[0]; // foot's faker
+			}
+			
+			if (this.bodytbl) {
+				var bds = this.bodytbl.tBodies;
+				if (!bds || !bds.length|| (this.head && bds.length < 2))
+					this.bodytbl.appendChild(document.createElement("TBODY"));
+				this.bodyrows = bds[this.head ? 1 : 0].rows;
+			}
 		}
-
-		if (!zk.isRealVisible(this.element)) return;
 
 		if (!this.bodyrows) {
 			alert(mesg.INVALID_STRUCTURE + this.id);
@@ -151,11 +146,6 @@ zk.Selectable.prototype = {
 				};
 			}
 
-			if (!this.paging) {
-				this.fnResize = function () {meta.recalcSize(true);};
-				zk.addOnResize(this.fnResize);
-			}
-
 			this.form = zk.formOf(this.element);
 			if (this.form) {
 				this.fnSubmit = function () {
@@ -165,62 +155,42 @@ zk.Selectable.prototype = {
 			}
 		}
 
-		if (!this.paging) {
-			//FF: a small fragment is shown
-			//IE: Bug 1775014
-			if (this.headtbl && this.headtbl.rows.length) {
-				var empty = true;
-				l_out:
-				for (var j = this.headtbl.rows.length; j;) {
-					var headrow = this.headtbl.rows[--j];
-					for (var k = headrow.cells.length; k;) {
-						var n = headrow.cells[--k].firstChild; // Bug #1819037
-						for (n = n ? n.firstChild: n; n; n = n.nextSibling)
-							if (!n.id || !n.id.endsWith("!hint")) {
-								empty = false;
-								break l_out;
-							}
-					}
-				}
-				if (empty) this.head.style.height = "0px"; // Bug #1819037
-					//we have to hide if empty (otherwise, a small block is shown)					
-				else this.head.style.height = "";// Bug #1832359
-			}
-
-			this.body.onscroll = function () {
-				if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
-				if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
-				meta._render(zk.gecko ? 200: 60);
-					//Moz has a bug to send the request out if we don't wait long enough
-					//How long is enough is unknown, but 200 seems fine
-			};
-		}
 		
-		if (isLater && this.qcells.length
-		&& this.headtbl && this.headtbl.rows.length
-		&& this.bodytbl && this.bodytbl.rows.length > 1) { //recalc is only a few lines
-			zk.cpCellArrayWidth(this.headtbl.rows[0], this.qcells);
-		} else {
-			setTimeout("zkSel._calcSize('"+this.id+"')", 150); // Bug #1813722
+		//FF: a small fragment is shown
+		//IE: Bug 1775014
+		if (this.headtbl && this.headrows.length) {
+			var empty = true;
+			l_out:
+			for (var j = this.headrows.length; j;) {
+				var headrow = this.headrows[--j];
+				for (var k = headrow.cells.length; k;) {
+					var n = headrow.cells[--k].firstChild; // Bug #1819037
+					for (n = n ? n.firstChild: n; n; n = n.nextSibling)
+						if (!n.id || !n.id.endsWith("!hint")) {
+							empty = false;
+							break l_out;
+						}
+				}
+			}
+			if (empty) this.head.style.height = "0px"; // Bug #1819037
+				//we have to hide if empty (otherwise, a small block is shown)					
+			else this.head.style.height = "";// Bug #1832359
 		}
-		this.qcells.length = 0;
-		this._render(155); //prolong a bit since calSize might not be ready
-	},
-	putCellQue: function (cell) {
-/** no need to check replication, since the server generates one for each
-		for (var j = this.qcells.length; j;)
-			if (this.qcells[--j] == cell)
-				return; //replicate
-*/
-		this.qcells.push(cell);
+
+		this.body.onscroll = function () {
+			if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
+			if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
+			if (!meta.paging) meta._render(zk.gecko ? 200: 60);
+				//Moz has a bug to send the request out if we don't wait long enough
+				//How long is enough is unknown, but 200 seems fine
+		};
+		
 	},
 	cleanup: function ()  {
-		if (this.fnResize)
-			zk.rmOnResize(this.fnResize);
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
-			this.foot = this.foottbl = this.fnSubmit = this.qcells = this._focus = null;
+			this.foot = this.foottbl = this.fnSubmit = this._focus = null;
 			//in case: GC not works properly
 	},
 	/** Stripes the rows. */
@@ -434,7 +404,10 @@ zk.Selectable.prototype = {
 	_refocus: function () {
 		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
-			if (this._isFocus(r)) this._focusToAnc(r);
+			if (this._isFocus(r)) {
+				this._focusToAnc(r);
+				return;
+			}
 		}
 	},
 	/** Process the setAttr command sent from the server. */
@@ -442,8 +415,8 @@ zk.Selectable.prototype = {
 		switch (nm) {
 		case "z.innerWidth":
 			if (this.headtbl) this.headtbl.style.width = val;
-			if (this.bodytbl) this.headtbl.style.width = val;
-			if (this.foottbl) this.headtbl.style.width = val;
+			if (this.bodytbl) this.bodytbl.style.width = val;
+			if (this.foottbl) this.foottbl.style.width = val;
 			return true;
 		case "select": //select by uuid
 			var row = $e(val);
@@ -482,25 +455,22 @@ zk.Selectable.prototype = {
 		}
 		case "z.size":
 			zkau.setAttr(this.element, nm, val);
-			this.recalcSize(true);
+			this._recalcSize();
 			return true;
 		case "style":
 		case "style.width":
 		case "style.height":
-			if (!this.paging) {
-				zkau.setAttr(this.element, nm, val);
-				this.init();
-				return true;
-			}
-			break;
+			zkau.setAttr(this.element, nm, val);
+			this._recalcSize();
+			return true;
 		case "scrollTop":
-			if (!this.paging && this.body) {
+			if (this.body) {
 				this.body.scrollTop = val;
 				return true;
 			}
 			break;
 		case "scrollLeft":
-			if (!this.paging && this.body) {
+			if (this.body) {
 				this.body.scrollLeft = val;
 				return true;
 			}
@@ -584,18 +554,20 @@ zk.Selectable.prototype = {
 
 	/** Changes the specified row as focused. */
 	focus: function (row) {
-		this._unsetFocusExcept(row);
-		this._setFocus(row, true);
+		if (zkau.canFocus(row, true)) {
+			this._unsetFocusExcept(row);
+			this._setFocus(row, true);
+		}
 	},
 	/** Sets focus to the specified row if it has the anchor. */
 	_focusToAnc: function (row) {
-		if (!row) return;
-
-		var uuid = typeof row == 'string' ? row: row.id;
-		var el = $e(uuid + "!cm");
-		if (!el) el = $e(uuid + "!sel");
-		if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
-			zk.asyncFocus(el.id);
+		if (row && zkau.canFocus(row, true)) {
+			var uuid = typeof row == 'string' ? row: row.id;
+			var el = $e(uuid + "!cm");
+			if (!el) el = $e(uuid + "!sel");
+			if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
+				zk.asyncFocus(el.id);
+		}
 	},
 
 	/** Selects one and deselect others, and return whehter any changes.
@@ -724,13 +696,21 @@ zk.Selectable.prototype = {
 	 * is changed.
 	 */
 	_unsetFocusExcept: function (row) {
-		return this._focus && this._focus != row ? this._setFocus(this._focus, false) : false;
+		return this._focus && this._focus != row ? this._setFocus(this._focus, false): this._clearDirtyFocus(row);
 	},
-
+	/**
+	 * The dirty focus might be created from sever side, if any.
+	 */
+	_clearDirtyFocus: function (row) {
+		if (!this._focus && this.bodyrows && this.bodyrows[0] != row)
+			zk.remove($e(this.bodyrows[0].id + "!sel"));
+		return false;
+	},
 	/** Renders listitems that become visible by scrolling.
 	 */
 	_render: function (timeout) {
-		setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
+		if(!this.paging)
+			setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
 	},
 	_renderNow: function () {
 		var rows = this.bodyrows;
@@ -758,39 +738,8 @@ zk.Selectable.prototype = {
 	},
 
 	/** Calculates the size. */
-	_calcSize: function () {		
+	_calcSize: function () {
 		this._calcHgh();	
-		if (this.paging) {// Bug #1826101
-			if (this.bodytbl && this.bodytbl.rows.length) {
-				var head;
-				for (var j = 0, rl = this.bodytbl.rows.length; j < rl; j++) {
-					if ($type(this.bodytbl.rows[j]) == "Lhrs") {
-						head = this.bodytbl.rows[j];
-						break;
-					}
-				}
-				if (head) {
-					for (var j = 0, hl = head.cells.length; j < hl; j++) {
-						var d = head.cells[j], cave = d.firstChild;
-						if (!zk.isVisible(d)) { //Bug #1867370
-							for (var k = this.bodyrows.length; --k >=0;)
-								if (this.bodyrows[k].cells[j] != d) 
-									this.bodyrows[k].cells[j].style.display = "none";
-							continue;
-						}
-						if (cave) {
-							var wd =  d.style.width;							
-							if (!wd || wd == "auto" || wd.indexOf('%') > -1) 
-								d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";								
-							var w = $int(d.style.width);
-							cave.style.width = zk.revisedSize(cave, w) + "px";
-						}
-					}
-				}
-			}
-			return; //nothing to adjust since single table
-		}
-
 		
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
@@ -801,7 +750,7 @@ zk.Selectable.prototype = {
 		//is sometime too big
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = zk.revisedSize(this.element, this.element.offsetWidth) - (wd == "100%" ? 2 : 0);
+			wd = zk.revisedSize(this.element, this.element.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
 		}
@@ -816,50 +765,30 @@ zk.Selectable.prototype = {
 			if (tblwd && this.body.offsetWidth - tblwd > 11) {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
-			} else
-				this.bodytbl.style.width = "";		
+			}
+			
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
-			if (this.headtbl.rows.length) {
-				var head, rows = this.headtbl.rows;
-				for(var j = 0, l = rows.length; j < l; j++) {
-					var type = $type(rows[j]);
-					if (type == "Lhrs" || type == "Tcols") {
-						head = rows[j];
-						break;
-					}
-				}
-				zk.cpCellWidth(head, this.bodyrows, this);	
-				var fake = $e(head.id + "!fake");
-				if (!fake || fake.cells.length != head.cells.length) {
-					if (fake) fake.parentNode.removeChild(fake);
-					var src = document.createElement("TR");
-					src.id = head.id + "!fake";
-					src.style.height = "0px";
-						//Note: we cannot use display="none" (offsetWidth won't be right)
-					for (var j = head.cells.length; --j >= 0;)
-						src.appendChild(document.createElement("TD"));					
-					rows[0].parentNode.insertBefore(src, rows[0]);						
-				}
-				var row = rows[0], cells = row.cells, k = 0, l = cells.length;
-				
-				for (; k < l; k++) {
-					var s = cells[k], d = head.cells[k], wd = d.style.width;							
-					if (!wd || wd == "auto" || wd.indexOf('%') > -1) // Bug #1822564
-						d.style.width = zk.revisedSize(d, d.offsetWidth) + "px";
-					
-					wd = d.style.width;
-					if (zk.isVisible(d))
-						s.style.width = $int(wd) + zk.sumStyles(d, "lr", zk.borders) + zk.sumStyles(d, "lr", zk.paddings) + "px";
-					else s.style.display = "none";
-				}	
-			}
-			if (this.foottbl && this.foottbl.rows.length)
-				zk.cpCellWidth(this.headtbl.rows[0], this.foottbl.rows, this);
+			if (getZKAttr(this.element, "fixed") != "true")
+				zul.adjustHeadWidth(this.hdfaker, this.bdfaker, this.ftfaker, this.bodyrows);
 		} else if (this.foottbl) {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)
 				zk.cpCellWidth(this.foottbl.rows[0], this.bodyrows, this); //assign foot's col width
+		}
+	},
+	_beforeSize: function () {
+		var wd = this.element.style.width;
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			if (this.body) this.body.style.width = "";
+			if (this.head) this.head.style.width = "";
+			if (this.foot) this.foot.style.width = "";
+		}
+	},
+	_recalcSize: function () {
+		if (zk.isRealVisible(this.element)) {
+			this._calcSize();// Bug #1813722
+			this._render(155);
 		}
 	},
 	/** Returns the visible row at the specified index. */
@@ -903,11 +832,6 @@ zk.Selectable.prototype = {
 
 				this.realsize(sz);
 				this.body.style.height = hgh + "px";
-				
-				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
-				if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
-				// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
-				// and IE7 at initializing phase.
 				return; //done
 			}
 		}
@@ -957,7 +881,6 @@ zk.Selectable.prototype = {
 			if (!hgh) {
 				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
 				else if (nRows <= nVisiRows) {
-					//var r = this._visiRowAt(nRows - 1); disabled by Jumper
 					hgh = zk.offsetTop(midVisiRow) + zk.offsetHeight(midVisiRow);
 				} else {
 					hgh = zk.offsetTop(lastVisiRow) + zk.offsetHeight(lastVisiRow);
@@ -967,11 +890,6 @@ zk.Selectable.prototype = {
 			}
 
 			this.body.style.height = hgh + "px";
-			
-			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
-			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
-			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
-			// and IE7 at initializing phase.
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height
@@ -988,22 +906,28 @@ zk.Selectable.prototype = {
 	},
 	/* Height of the head row. If now header, defval is returned. */
 	_headHgh: function (defVal) {
-		var n = this.headtbl;
-		n = n && n.rows.length ? n.rows[0]: null;
-		var hgh = n ? zk.offsetHeight($real(n)): 0; // Bug #1823218 
+		var n = this.headrows && this.headrows.length ? this.headrows[0]: null;
+		var hgh = n ? (zk.offsetHeight($real(n)) + (zk.ie7 ? 1 : 0)) : 0; // Bug #1823218
+			// Bug #1920630: IE7 needs minus 1px.
+		if (this.paging) {
+			var pgit = $e(this.id + "!pgit"), pgib = $e(this.id + "!pgib");
+			if (pgit) hgh += pgit.offsetHeight;
+			if (pgib) hgh += pgib.offsetHeight;
+		} 
 		return hgh ? hgh: defVal;
 	},
 	/** Returns the size for vflex
 	 */
 	_vflexSize: function () {
+		if (zk.ie6Only) { 
+			// ie6 must reset the height of the element,
+			// otherwise its offsetHeight might be wrong.
+			var hgh = this.element.style.height;
+			this.element.style.height = "";
+			this.element.style.height = hgh;
+		}
 		return this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0)
 			- (this.foot ? this.foot.offsetHeight : 0); // Bug #1815882
-	},
-
-	/** Recalculate the size. */
-	recalcSize: function (cleansz) {
-		if (!zk.isRealVisible(this.element)) return;
-		setTimeout("zkSel._calcSize('"+this.id+"')", 50);
 	},
 	/** Resize the specified column. */
 	resizeCol: function (cmp, icol, col, wd, keys) {
@@ -1015,8 +939,8 @@ zk.Selectable.prototype = {
 	_selectAll: function (notify) {
 		var rows = this.bodyrows;
 		for (var j = 0, rl = rows.length; j < rl; ++j)
-			this._changeSelect(rows[j], true);
-
+			if (getZKAttr(rows[j], "disd") != "true")
+				this._changeSelect(rows[j], true);
 		this._setSelectedId(rows.length ? rows[0].id: null);
 		if (notify) this._sendSelect(rows[0]);
 	},
@@ -1132,7 +1056,8 @@ zkSel._renderNow = function (uuid) {
 };
 zkSel._shallIgnoreEvent = function (el) {
 	var tn = $tag(el);
-	return !el || ((tn == "INPUT" && !el.id.endsWith("!cm"))
+	return !el || !zkau.canFocus(el)
+	|| ((tn == "INPUT" && !el.id.endsWith("!cm"))
 	|| tn == "TEXTAREA" || tn == "BUTTON" || tn == "SELECT" || tn == "OPTION");
 };
 
@@ -1169,8 +1094,10 @@ zkSel.ondragout = function (evt) {
 };
 /** (!cm or !sel)'s onfocus. */
 zkSel.cmonfocus = function (evt) {
-	if (!evt) evt = window.event;
-	zkSel.cmonfocusTo($parentByTag(Event.element(evt), "TR"));
+	if (zkau.onfocus0(evt)) {
+		if (!evt) evt = window.event;
+		zkSel.cmonfocusTo($parentByTag(Event.element(evt), "TR"));
+	}
 };
 /** (!cm or !sel)'s onblur. */
 zkSel.cmonblur = function (evt) {
@@ -1235,11 +1162,14 @@ zkLibox.init = function (cmp) {
 	}
 };
 /** Called when a listbox becomes visible because of its parent. */
-zkLibox.onVisi = function (cmp) {
+zkLibox.childchg = zkLibox.onVisi = zkLibox.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
-	if (meta) meta.init();
+	if (meta) meta._recalcSize();
 };
-
+zkLibox.beforeSize = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) meta._beforeSize();
+};
 zkLit = {}; //listitem
 zkLit.init = function (cmp) {
 	setZKAttr(cmp, "inited", "true");
@@ -1287,15 +1217,6 @@ zkLit.stripe = function (cmp, isClean) {
 	}
 };
 zkLic = {}; //listcell or Treecell
-zkLic.init = function (cmp) {
-	var meta = zkau.getMeta(getZKAttr(cmp.parentNode, "rid"));	
-	if (meta) {
-		meta.putCellQue(cmp);
-		if (!meta.fixedSize)
-			meta.fixedSize = function () {meta.init(true);};	
-		zk.addInitLater(meta.fixedSize, false, meta.id + "Lic");
-	}
-};
 zkLic.initdrag = zkLit.initdrag;
 zkLic.cleandrag = zkLit.cleandrag;
 zkLic.setAttr = function (cmp, nm, val) {
@@ -1310,7 +1231,7 @@ zkLic.setAttr = function (cmp, nm, val) {
 };
 /** Called when _onDocCtxMnu is called. */
 zkLit.onrtclk = function (cmp) {
-	var meta = zkau.getMetaByType(cmp, "Libox");
+	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta && !meta._isSelected(cmp)) meta.doclick(null, cmp);
 };
 
@@ -1325,11 +1246,11 @@ zkLhfc.init = function (cmp) {
 };
 zkLhfc.onclick = function (evt) {
 	var cmp = zkau.evtel(evt);	
-	var meta = zkau.getMetaByType(cmp, "Libox");
+	var meta = zkau.getMeta(getZKAttr($parentByTag(cmp.parentNode, "TR"), "rid"));
 	if (meta)
 		cmp.checked ? meta._selectAll(true) : meta.select("");
 };
-zk.addModuleInit(function () {
+zk.addBeforeInit(function () {
 	//Listheader
 	//init it later because zul.js might not be loaded yet
 	zkLhr = {}
@@ -1337,7 +1258,7 @@ zk.addModuleInit(function () {
 
 	/** Resize the column. */
 	zkLhr.resize = function (col1, icol, wd1, keys) {
-		var box = $parentByType(col1, "Libox");
+		var box = getZKAttr(col1.parentNode, "rid");
 		if (box) {
 			var meta = zkau.getMeta(box);
 			if (meta)
