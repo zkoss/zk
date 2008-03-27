@@ -362,7 +362,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				final String[] data = request.getParameterValues("data."+j);
 				if (data != null) {
 					for (int k = data.length; --k >= 0;)
-						if ("_zk_n_i_l".equals(data[k]))
+						if ("_zk_nil_".equals(data[k]))
 							data[k] = null;
 				}
 				if (uuid == null || uuid.length() == 0) {

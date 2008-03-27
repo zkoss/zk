@@ -535,7 +535,7 @@ zkau._sendNow = function (dtid) {
 			for (var k = 0, dl = evt.data.length; k < dl; ++k) {
 				var data = evt.data[k];
 				content += "&data."+j+"="
-					+ (data != null ? encodeURIComponent(data): '_zk_n_i_l');
+					+ (data != null ? encodeURIComponent(data): '_zk_nil_');
 			}
 	}
 
