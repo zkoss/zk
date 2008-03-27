@@ -365,7 +365,8 @@ zkCmbox.open = function (pp, hilite) {
 	zkCmbox._open(cb, uuid, pp, hilite);
 
 	if (zkau.asap(cb, "onOpen"))
-		zkau.send({uuid: uuid, cmd: "onOpen", data: [true]});
+		zkau.send({uuid: uuid, cmd: "onOpen",
+			data: [true, null, $e(uuid + "!real").value]});
 };
 zkCmbox._open = function (cb, uuid, pp, hilite) {
 	var ppofs = zkCmbox._ppofs(pp);
@@ -656,9 +657,10 @@ zkCmbox.close = function (pp, focus) {
 	if (focus)
 		zk.asyncFocus(uuid + "!real");
 
-	var cb = $outer(pp);
+	var cb = $e(uuid);
 	if (cb && zkau.asap(cb, "onOpen"))
-		zkau.send({uuid: cb.id, cmd: "onOpen", data: [false]});
+		zkau.send({uuid: uuid, cmd: "onOpen",
+			data: [false, null, $e(uuid + "!real").value]});
 };
 zkCmbox.closepp = function (evt) {
 	if (!evt) evt = window.event;
