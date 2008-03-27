@@ -69,6 +69,20 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		Java::Messagebox.show m
 	end
 	</zscript>
+	
+	<zscript language="Python">
+import java.util
+import java.lang
+import org.zkoss.zk.ui.util.Clients
+import org.zkoss.zk.ui.event
+import org.zkoss.zk.ui
+import org.zkoss.zul
+import org.zkoss.zkex.zul
+
+def alert(m):
+	org.zkoss.zul.Messagebox.show(m)
+
+	</zscript>
 
 	<!-- the renderer version of components -->
 	<component>
@@ -153,14 +167,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.CalendarDefault</mold-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>canvas</component-name>
-		<extends>canvas</extends>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.CanvasDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
