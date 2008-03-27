@@ -41,12 +41,13 @@ import org.zkoss.zk.ui.Component;
 public class OpenEvent extends Event {
 	private final boolean _open;
 	private final Component _ref;
+	private final Object _val;
 
 	/** Constructs an onOpen event.
 	 * @param open whether the new status is open
 	 */
 	public OpenEvent(String name, Component target, boolean open) {
-		this(name, target, open, null);
+		this(name, target, open, null, null);
 	}
 	/** Constructs an onOpen event for a context menu, a tooltip or a popup.
 	 *
@@ -55,9 +56,20 @@ public class OpenEvent extends Event {
 	 */
 	public OpenEvent(String name, Component target, boolean open,
 	Component ref) {
+		this(name, target, open, ref, null);
+	}
+	/** Constructs an onOpen event.
+	 * @param open whether the new status is open
+	 * @param value the current value of the target component if applicable.
+	 * @see #getValue
+	 * @since 3.1.0
+	 */
+	public OpenEvent(String name, Component target, boolean open,
+	Component ref, Object value) {
 		super(name, target);
 		_open = open;
 		_ref = ref;
+		_val = value;
 	}
 	/** Returns the reference that is the component causing {@link #getTarget}
 	 * to be opened.
@@ -76,7 +88,22 @@ public class OpenEvent extends Event {
 	}
 	/** Returns whether it causes open.
 	 */
-	public final boolean isOpen() {
+	public boolean isOpen() {
 		return _open;
+	}
+	/** Returns the value of the target component,
+	 * when the onOpen event is sent, or null if not applicable.
+	 *
+	 * <p>Note: combobox, bandbox and other combo-type input don't
+	 * send the onChange event when the dropdown is opened (onOpen).
+	 * Thus, if you want to do something depends on the value,
+	 * use the value returned by this method.
+	 * Furthermore, for combobox and bandbox, the return value is
+	 * a non-null String instance.
+	 *
+	 * @since 3.1.0
+	 */
+	public Object getValue() {
+		return _val;
 	}
 }

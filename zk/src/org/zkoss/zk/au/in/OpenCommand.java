@@ -48,16 +48,18 @@ public class OpenCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || (data.length != 1 && data.length != 2))
+		if (data == null || data.length < 1 || data.length > 3)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
 
 		final boolean open = "true".equals(data[0]);
-		final Component ref = data.length == 2 && data[1] != null ?
+		final Component ref = data.length >= 2 && data[1] != null ?
 			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
 		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
 		if (xc instanceof Openable)
 			((Openable)xc).setOpenByClient(open);
-		Events.postEvent(new OpenEvent(getId(), comp, open, ref));
+		Events.postEvent(new OpenEvent(getId(), comp, open, ref,
+			data.length == 3 ? data[2]: null));
+			//FUTURE: support non-String value (by coerce to comp.value.class)
 	}
 }
