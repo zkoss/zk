@@ -799,11 +799,11 @@ zk.firstChild = function (el, tagName, descendant) {
 
 /** Returns whether a node is an ancestor of another (including itself).
  *
- * @param checkuuid whether to check UUID is the same (i.e., whether
+ * @param ckuuid whether to check UUID is the same (i.e., whether
  * they are different part of the same component).
  */
-zk.isAncestor = function (p, c, checkuuid) {
-	if (checkuuid && $uuid(p) == $uuid(c))
+zk.isAncestor = function (p, c, ckuuid) {
+	if (ckuuid && $uuid(p) == $uuid(c))
 		return true;
 
 	p = $e(p);
@@ -815,22 +815,34 @@ zk.isAncestor = function (p, c, checkuuid) {
 };
 /** Returns whether a node is an ancestor of one of an array of elements.
  *
- * @param checkuuid whether to check UUID is the same (i.e., whether
+ * @param ckuuid whether to check UUID is the same (i.e., whether
  * they are different part of the same component).
+ * @param ckowner whether to check p's owner (z.owner) (3.1.0)
  */
-zk.isAncestorX = function (p, ary, checkuuid) {
+zk.isAncestorX = function (p, ary, ckuuid, ckowner) {
 	for (var j = 0, al = ary.length; j < al; ++j)
-		if (zk.isAncestor(p, ary[j], checkuuid))
+		if (zk.isAncestor(p, ary[j], ckuuid))
 			return true;
+
+	if (ckowner) {
+		var owner = $e(getZKAttr(p, "owner"));
+		return owner && zk.isAncestorX(owner, ary, ckuuid, ckowner);
+	}
 	return false;
 };
 /** Returns whether any of an array of elments is an ancestor of another.
  * @since 3.0.2
+ * @param ckowner whether to check c's owner (z.owner) (3.1.0)
  */
-zk.isAncestorX1 = function (ary, c, checkuuid) {
+zk.isAncestorX1 = function (ary, c, ckuuid, ckowner) {
 	for (var j = 0, al = ary.length; j < al; ++j)
-		if (zk.isAncestor(ary[j], c, checkuuid))
+		if (zk.isAncestor(ary[j], c, ckuuid))
 			return true;
+
+	if (ckowner) {
+		var owner = $e(getZKAttr(c, "owner"));
+		return owner && zk.isAncestorX1(ary, owner, ckuuid, ckowner);
+	}
 	return false;
 };
 

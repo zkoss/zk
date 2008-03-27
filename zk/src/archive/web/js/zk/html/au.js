@@ -1085,6 +1085,8 @@ zkau._onDocLClick = function (evt) {
 						zk.setVParent(ctx); //FF: Bug 1486840, IE: Bug 1766244
 						zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 						zk.eval(ctx, "context", type, cmp);
+						if ($visible(ctx)) setZKAttr(ctx, "owner", cmp.id);
+							//bookmark owner, so closeFloats know not to close
 					}
 				}
 			}
@@ -1186,6 +1188,8 @@ zkau._onDocCtxMnu = function (evt) {
 					zk.setVParent(ctx); //FF: Bug 1486840, IE: Bug 1766244
 					zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
 					zk.eval(ctx, "context", type, cmp);
+					if ($visible(ctx)) setZKAttr(ctx, "owner", cmp.id);
+						//bookmark owner, so closeFloats know not to close
 				}
 			}
 		}
@@ -1337,6 +1341,7 @@ zkau._openTip = function (cmpId, enforce) {
 			zk.setVParent(tip); //FF: Bug 1486840, IE: Bug 1766244
 			zkau._autopos(tip, zkau._tipz.x, zkau._tipz.y);
 			zk.eval(tip, "context", null, cmp);
+			//not setZKAttr(... "owner") since it is OK to close
 		} else {
 			zkau._tipz = null;
 		}
@@ -1534,7 +1539,7 @@ zkau.closeFloatsOnFocus = function () {
 	return zkau._closeFloats("closeFloatsOnFocus", zkau._shallCloseBut, arguments);
 };
 zkau._shallCloseBut = function (n, ancestors) {
-	return !zk.isAncestorX(n, ancestors, true);
+	return !zk.isAncestorX(n, ancestors, true, true);
 };
 /** Closes popups and floats if they belongs to any of the specified component.
  * By belong we mean a component is a descendant of another.
@@ -1545,7 +1550,7 @@ zkau.closeFloatsOf = function () {
 	return zkau._closeFloats("closeFloatsOf", zkau._shallCloseOf, arguments);
 };
 zkau._shallCloseOf = function (n, ancestors) {
-	return zk.isAncestorX1(ancestors, n, true);
+	return zk.isAncestorX1(ancestors, n, true, true);
 }
 zkau._closeFloats = function (method, shallClose, ancestors) {
 	var closed;
