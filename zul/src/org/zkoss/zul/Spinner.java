@@ -93,8 +93,10 @@ public class Spinner extends NumberInputElement {
 	 * Set the step of spinner
 	 */
 	public void setStep(Integer step) {
-		_step = step;
-		smartUpdate("z.step", _step.toString());
+		if (!_step.equals(step)) {
+			_step = step;
+			smartUpdate("z.step", _step.toString());
+		}
 	}
 	
 	/** Returns whether the button (on the right of the textbox) is visible.
