@@ -1045,13 +1045,12 @@ zk._dsball = function (parent, els, visibility) {
 				continue l_els;
 		}
 
-		var what;
-		var tn = $tag(el);
+		var tn = $tag(el), what;
 		if (visibility) { //_actg1
-			if (zk.shallHideDisabled(el)) {
-				what = el.style.visibility;
-				el.style.visibility = "hidden";
-			}
+			if (!zk.shallHideDisabled(el)) continue;
+
+			what = el.style.visibility;
+			el.style.visibility = "hidden";
 		} else if (zk.gecko && tn == "A") {
 //Firefox doesn't support the disable of A
 			what = "h:" + zkau.getStamp(el, "tabIndex") + ":" +
@@ -1070,7 +1069,7 @@ zk._dsball = function (parent, els, visibility) {
 zk.shallHideDisabled = function (el) {
 	var tn = $tag(el);
 	return (tn != "IFRAME" && tn != "EMBED")
-		|| getZKAttr(el, "autohide") == "true";
+		|| (getZKAttr(el, "autohide") == "true" && $visible(el, true));
 };
 /** Restores tags being disabled by previous disableAll. If el is not null,
  * only el's children are enabled
