@@ -637,6 +637,7 @@ zkPop.context = function (ctx, ref) {
 zkPop.close = function (ctx) {
 	zkPop._pop.removeFloatId(ctx.id);
 	zkPop._close(ctx);
+	rmZKAttr(ctx, "owner"); //it is set by au.js after calling zkPop.context
 };
 zkPop._close = function (ctx) {
 	ctx.style.display = "none";
