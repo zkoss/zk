@@ -2057,7 +2057,9 @@ zk._showExtr = function (n) {
 		if (ext && "true" == getZKAttr(ext, "coexist")) {
 			ext.style.display = "";
 			ext = $e(n.id + "!chdextr2"); //hbox/vbox's space
-			if (ext) ext.style.display = "";
+			if (ext && ext.style.width != "0"
+			&& ext.style.height != "0") //box use hidden to solve some browser bugs
+				ext.style.display = "";
 		}
 	}
 };
