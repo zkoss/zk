@@ -164,9 +164,15 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	}
 	private WrongValueException outOfRangeValue(Component comp) {
 		final String errmsg = getErrorMessage(comp);
-		return errmsg != null ? new WrongValueException(comp, errmsg):
-			new WrongValueException(comp, MZul.OUT_OF_RANGE,
-				new Object[] {dateToString(comp, _beg), dateToString(comp, _end)});
+		if (errmsg != null)
+			return new WrongValueException(comp, errmsg);
+
+		final String s =
+			_beg != null ? _end != null ?
+					dateToString(comp, _beg) + " ~ " + dateToString(comp, _end):
+					">= " + dateToString(comp, _beg):
+					"<= " + dateToString(comp, _end);
+		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
 	}
 	private static String dateToString(Component comp, Date d) {
 		if (d == null)

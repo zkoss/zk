@@ -359,4 +359,13 @@ public class Datebox extends FormatInputElement {
 	protected int getRealStyleFlags() {
 		return super.getRealStyleFlags()|RS_NO_WIDTH|RS_NO_HEIGHT;
 	}
+
+	/** Returns whether the server-side formatting shall take place.
+	 * It always returns false since the client is smart enought to
+	 * handle the date format.
+	 * @since 3.1.0
+	 */
+	protected boolean shallServerFormat() {
+		return false;
+	}
 }

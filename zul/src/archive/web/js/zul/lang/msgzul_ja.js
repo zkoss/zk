@@ -20,4 +20,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 msgzul = {};
 msgzul.UNKNOWN_TYPE = "コンポーネントタイプが不明です： ";
 msgzul.DATE_REQUIRED = "日付を次の形式で指定してください: ";
+msgzul.OUT_OF_RANGE = "範囲外です";
 msgzul.NO_AUDIO_SUPPORT = "ご使用中のブラウザはダイナミックオーディオをサポートしていません";

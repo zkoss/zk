@@ -42,9 +42,11 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 		zk.listen(cmp, "keyup", zkTxbox.onkey);
 		
 	zk.listen(cmp, "keydown", zkTxbox.onkeydown);
+
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
-	if (getZKAttr($outer(cmp), "srvald")) {
+	var sa = getZKAttr($outer(cmp), "srvald");
+	if (sa && sa != "fmt") {
 		var old = cmp.value;
 		cmp.defaultValue = old + "-";
 		if (old != cmp.value) cmp.value = old; //Bug 1490079
@@ -144,7 +146,8 @@ zkTxbox.onupdate = function (inp) {
 		var uuid = $uuid(inp);			
 		var sr = zk.getSelectionRange(inp);	
 		zkau.send({uuid: uuid, cmd: "onChange",
-			data: [newval, false, sr[0]]}, zkau.asapTimeout(uuid, "onChange", zk.delayTime_onChange ? zk.delayTime_onChange : 150));
+			data: [newval, false, sr[0]]},
+			zkau.asapTimeout(uuid, "onChange", zk.delayTime_onChange ? zk.delayTime_onChange : 150));
 	} else if (inp.getAttribute("zk_err")) {
 		inp.removeAttribute("zk_err");
 		zkau.send({uuid: $uuid(inp), cmd: "onError",

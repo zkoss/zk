@@ -142,8 +142,12 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 
 	private WrongValueException outOfRangeValue(Component comp) {
 		final String errmsg = getErrorMessage(comp);
-		return errmsg != null ? new WrongValueException(comp, errmsg)
-				: new WrongValueException(comp, MZul.OUT_OF_RANGE,
-						new Object[] { _min.toString(), _max.toString() });
+		if (errmsg != null)
+			return new WrongValueException(comp, errmsg);
+
+		final String s =
+			_min != null ? _max != null ?
+				_min + " ~ " + _max: ">= " + _min: "<= " + _max;
+		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
 	}
 }

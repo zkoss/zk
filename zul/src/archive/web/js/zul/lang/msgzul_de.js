@@ -19,4 +19,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 msgzul = {};
 msgzul.UNKNOWN_TYPE = "Unbekannte Komponente: ";
 msgzul.DATE_REQUIRED = "Sie müssen ein Datum angeben. Format: ";
+msgzul.OUT_OF_RANGE = "Nicht im zulässigen Bereich";
 msgzul.NO_AUDIO_SUPPORT = "Ihr Browser unterstützt keine Tonwiedergabe";

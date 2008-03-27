@@ -413,6 +413,20 @@ implements Constrainted {
 		smartUpdate("z.sel", "all");
 	}
 
+	/** Returns whether the server-side formatting shall take place.
+	 *
+	 * <p>Default: false. It means the client is enough to do
+	 * the correct formatting with the server's help.
+	 *
+	 * <p>On the other hand, if true is returned, the data sent back to
+	 * the server for formatting.
+	 *
+	 * @since 3.1.0
+	 */
+	protected boolean shallServerFormat() {
+		return false;
+	}
+
 	//-- Constrainted --//
 	public void setConstraint(String constr) {
 		setConstraint(SimpleConstraint.getInstance(constr));
@@ -429,23 +443,6 @@ implements Constrainted {
 	}
 
 	//-- super --//
-	/** Returns whether to send back the request of the specified event
-	 * immediately -- non-deferable.
-	 * Returns true if you want the component (on the server)
-	 * to process the event immediately.
-	 *
-	 * <p>Default: Besides super.isAsapRequired(evtnm), it also returns true
-	 * if evtnm is Events.ON_CHANGE, {@link #getConstraint} is not null,
-	 * and {@link ClientConstraint#getClientValidation} is null.
-	 */
-	protected boolean isAsapRequired(String evtnm) {
-		return (Events.ON_CHANGE.equals(evtnm) && _constr != null
-			&& ((_constr instanceof CustomConstraint)
-				|| !(_constr instanceof ClientConstraint)
-				|| !((ClientConstraint)_constr).isClientComplete()))
-			|| super.isAsapRequired(evtnm);
-	}
-
 	public String getInnerAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getInnerAttrs());
@@ -486,8 +483,8 @@ implements Constrainted {
 		appendAsapAttr(sb, Events.ON_SELECTION);
 		appendAsapAttr(sb, Events.ON_OK);
 
+		String serverValid = null;
 		if (_constr != null) {
-			String serverValid = null;
 			if (_constr instanceof CustomConstraint) {
 				serverValid = "custom";
 					//validate-at-server is required and no client validation
@@ -502,8 +499,12 @@ implements Constrainted {
 			} else {
 				serverValid = "both";
 			}
-			HTMLs.appendAttribute(sb, "z.srvald", serverValid);
 		}
+
+		if (serverValid == null && shallServerFormat())
+			serverValid = "fmt";
+		HTMLs.appendAttribute(sb, "z.srvald", serverValid);
+
 		return sb.toString();
 	}
 	/** Converts the client validation to JavaScript.

@@ -161,9 +161,8 @@ zk.Cal.prototype = {
 			}
 		}
 	},
-	_invalid: function (now) {
-		return (this.begin && (now - this.begin)/86400000/*1000*60*60*24*/ < 0)
-			|| (this.end && (this.end - now)/86400000 < 0);
+	_invalid: function (d) {
+		return zkDtbox._invalid(d, this.begin, this.end);
 	},
 	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
@@ -401,13 +400,32 @@ zkDtbox.init = function (cmp) {
 zkDtbox.validate = function (cmp) {
 	var inp = $e(cmp.id+"!real");
 	if (inp.value) {
-		var fmt = getZKAttr(cmp, "fmt");
+		var fmt = getZKAttr(cmp, "fmt"),
+			bd = getZKAttr(cmp, "bd"),
+			ed = getZKAttr(cmp, "ed");
 		var d = zk.parseDate(inp.value, fmt, getZKAttr(cmp, "lenient") == "false");
 		if (!d) return msgzul.DATE_REQUIRED+fmt;
 
+		if (bd || ed) {
+			if (bd) bd = new Date($int(bd) * 1000);
+			if (ed) ed = new Date($int(ed) * 1000);
+			if (zkDtbox._invalid(d, bd, ed)) {
+				var s = msgzul.OUT_OF_RANGE + " (";
+				if (bd) bd = zk.formatDate(bd, fmt);
+				if (ed) ed = zk.formatDate(ed, fmt);
+				if (bd && ed) s += bd + " ~ " + ed;
+				else if (bd) s += ">= " +bd;
+				else s += "<= " + ed;
+				return s + ")";
+			}
+		}
 		inp.value = zk.formatDate(d, fmt); //meta might not be ready
 	}
 	return null;
+};
+zkDtbox._invalid = function (d, begin, end) {
+	return (begin && (d - begin)/86400000/*1000*60*60*24*/ < 0)
+		|| (end && (end - d)/86400000 < 0);
 };
 
 /** Handles setAttr. */

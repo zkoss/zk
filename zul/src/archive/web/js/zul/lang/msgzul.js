@@ -19,4 +19,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 msgzul = {};
 msgzul.UNKNOWN_TYPE = "Unknown component type: ";
 msgzul.DATE_REQUIRED = "You must specify a date. Format: ";
+msgzul.OUT_OF_RANGE = "Out of range";
 msgzul.NO_AUDIO_SUPPORT = "Your browser doesn't support dynamic audio";
