@@ -372,7 +372,16 @@ zkau.processing = function () {
  * @param timeout if non-negative, it is used when zkau.asap is true.
  */
 zkau.asapTimeout = function (cmp, evtnm, timeout) {
-	return zkau.asap(cmp, evtnm) ? timeout >= 0 ? timeout: 38: -1;
+	var asap = zkau.asap(cmp = $e(cmp), evtnm), fmt;
+	if (!asap && evtnm == "onChange") {
+		fmt = getZKAttr(cmp, "srvald");
+		if (fmt) { //srvald specified
+			fmt = fmt == "fmt";
+			asap = !fmt; //if not fmt (and not null), it means server-side validation required
+		}
+	}
+	return asap ? timeout >= 0 ? timeout: 38:
+		fmt ? 350: -1; //if fmt we have to send it but not OK to a bit delay
 };
 /** Returns whether any non-deferrable listener is registered for
  * the specified event.
