@@ -327,17 +327,22 @@ public class Box extends XulElement {
 	 * It is used only for the vertical layout.
 	 */
 	public String getChildOuterAttrs(Component child) {
-		final StringBuffer sb = new StringBuffer(64);
-		final boolean vert = isVertical();
-		if (child instanceof Splitter)
-			return sb.append(" class=\"")
-				.append(((Splitter)child).getRealSclass())
-				.append('"').toString();
-		
-		sb.append(" z.coexist=\"true\"");
+		final StringBuffer sb = new StringBuffer(64)
+			.append(" z.coexist=\"true\"");
 			//coexist: the visibility of exterior is the same as child.
 
-		//Note: visible is handled in getChildInnerAttrs if horizontal layout
+		final boolean vert = isVertical();
+		if (child instanceof Splitter) {
+			sb.append(" class=\"")
+				.append(((Splitter)child).getRealSclass())
+				.append('"');
+			if (!child.isVisible())
+				sb.append(" style=\"display:none\"");
+			return sb.toString();
+		}
+		
+		//Note: style is handled in getChildInnerAttrs if horizontal layout
+		//so we don't need to handle valign and visible if vertical
 		if (vert) {
 			HTMLs.appendAttribute(sb, "valign", toValign(_pack));
 			if (!child.isVisible()) {
