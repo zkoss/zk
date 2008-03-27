@@ -152,7 +152,7 @@ zkMenu._close = function (pp) {
 	if (pp) {
 		pp.style.display = "none";
 		zk.unsetVParent(pp);
-		rmZKAttr(ctx, "owner"); //it is set by au.js after calling zkMpop.context
+		rmZKAttr(pp, "owner"); //it is set by au.js after calling zkMpop.context
 
 		if (zkau.asap(pp, "onOpen"))
 			zkau.send({uuid: pp.id, cmd: "onOpen", data: [false]});
