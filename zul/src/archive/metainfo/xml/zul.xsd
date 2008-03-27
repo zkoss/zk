@@ -1650,6 +1650,20 @@
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
+	<!-- spinner -->
+	<xs:element name="spinner" type="spinnerType" />
+	<xs:complexType name="spinnerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attribute name="value" type="xs:dateTime" use="optional" />
+		<xs:attribute name="buttonVisible" type="xs:string" use="optional" />
+		<xs:attribute name="image" type="xs:string" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attribute name="onChanging" type="xs:string" use="optional" />
+		<xs:attribute name="onFocus" type="xs:string" use="optional" />
+		<xs:attribute name="onBlur" type="xs:string" use="optional" />
+		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
+	</xs:complexType>
 	<!-- splitter -->
 	<xs:element name="splitter" type="splitterType" />
 	<xs:complexType name="splitterType">

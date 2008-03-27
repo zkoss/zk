@@ -99,28 +99,26 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 		try {
 			if (minIndex >= 0 && maxIndex >= 0) { // have "min" & "max"
 				if (maxIndex > minIndex) { // min first
-					_min = Integer.parseInt(constraint.substring(minIndex + 3,
+					_min = new Integer(constraint.substring(minIndex + 3,
 							maxIndex).trim());
-					_max = Integer.parseInt(constraint.substring(maxIndex + 3)
+					_max = new Integer(constraint.substring(maxIndex + 3)
 							.trim());
 				} else { // max first
-					_min = Integer.parseInt(constraint.substring(minIndex + 3)
+					_min = new Integer(constraint.substring(minIndex + 3)
 							.trim());
-					_max = Integer.parseInt(constraint.substring(maxIndex + 3,
+					_max = new Integer(constraint.substring(maxIndex + 3,
 							minIndex).trim());
 				}
-				System.out.println(this.toString()+" " + _min + " " + _max);
-				if (_min > _max)
+				System.out.println(this.toString() + " " + _min + " " + _max);
+				if (_min.compareTo(_max) > 0)
 					throw new UiException("Constraint error: " + _min + " > "
 							+ _max);
 				return 0;
 			} else if (minIndex >= 0) { // only have "min"
-				_min = Integer.parseInt(constraint.substring(minIndex + 3)
-						.trim());
+				_min = new Integer(constraint.substring(minIndex + 3).trim());
 				return 0;
 			} else if (maxIndex >= 0) { // only have "max"
-				_max = Integer.parseInt(constraint.substring(maxIndex + 3)
-						.trim());
+				_max = new Integer(constraint.substring(maxIndex + 3).trim());
 				return 0;
 			}
 		} catch (NumberFormatException e) {

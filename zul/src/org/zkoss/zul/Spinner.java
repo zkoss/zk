@@ -46,7 +46,7 @@ public class Spinner extends NumberInputElement {
 	private static final String DEFAULT_IMAGE = "~./zul/img/updnbtn.gif";
 	private String _img;
 	private boolean _btnVisible = true;
-	private Integer _step = 1;
+	private Integer _step = new Integer(1);
 
 	public Spinner() {
 		setCols(11);
@@ -94,7 +94,7 @@ public class Spinner extends NumberInputElement {
 	 */
 	public void setStep(Integer step) {
 		_step = step;
-		smartUpdate("z.step", _step);
+		smartUpdate("z.step", _step.toString());
 	}
 	
 	/** Returns whether the button (on the right of the textbox) is visible.
@@ -138,12 +138,12 @@ public class Spinner extends NumberInputElement {
 			Integer min = st.getMin();
 			Integer max = st.getMax();
 			if (min != null)
-				HTMLs.appendAttribute(sb, "z.min", min);
+				HTMLs.appendAttribute(sb, "z.min", min.toString());
 			if (max != null)
-				HTMLs.appendAttribute(sb, "z.max", max);
+				HTMLs.appendAttribute(sb, "z.max", max.toString());
 		}
-		HTMLs.appendAttribute(sb, "z.step", _step);
-		HTMLs.appendAttribute(sb, "z.onchange", Boolean.TRUE);
+		HTMLs.appendAttribute(sb, "z.step", _step.toString());
+		HTMLs.appendAttribute(sb, "z.onchange", "true");
 		return sb.toString();
 	}
 	
