@@ -726,7 +726,9 @@ zkau.setAttr = function (cmp, name, value) {
 
 	if ("visibility" == name) {
 		//Bug 1896588: if cmp invisible, just don't do animation (performance in IE)
-		(zk.isRealVisible(cmp, true) ? zk: action).show(cmp, "true" == value);
+		var bShow = "true" == value;
+		if (zk.isRealVisible(cmp, true)) zk.show(cmp, bShow);
+		else if (bShow) action.show(cmp); else action.hide(cmp);
 	} else if ("value" == name) {
 		if (value != cmp.value) {
 			cmp.value = value;
