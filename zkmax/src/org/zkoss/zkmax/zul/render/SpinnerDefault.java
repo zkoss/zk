@@ -26,12 +26,12 @@ public class SpinnerDefault implements ComponentRenderer {
 			.write(self.getOuterAttrs()).write(" z.type=\"zul.spinner.Spinner\" z.combo=\"true\">")
 			.write("<input id=\"").write(self.getUuid()).write("!real\" autocomplete=\"off\"")
 			.write(self.getInnerAttrs()).write("/>")
-			.write("<span id=\"").write(self.getUuid()).write("!btn\" class=\"rbtnbk\">")
-			.write("<img src=\"").write(exec.encodeURL(self.getImage())).write("\"");
+			.write("<span id=\"").write(self.getUuid()).write("!btn\" class=\"rbtnbk\"");
 
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("/></span></span>");
+		wh.write("><img src=\"")
+		.write(exec.encodeURL(self.getImage())).write("\"/></span></span>");
 	}
 }
