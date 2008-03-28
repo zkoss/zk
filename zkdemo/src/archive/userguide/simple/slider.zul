@@ -42,12 +42,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<image id="img2" src="/img/sun.jpg" width="10px"/>
 
 		Progress meter:
-		<progressmeter id="pm" value="20"/>
+		<progressmeter id="pm" value="20" />
 		<hbox>
-		<button label="0" onClick="pm.value = 0"/>
-		<button label="50" onClick="pm.value = 50"/>
-		<button label="100" onClick="pm.value = 100"/>
+			<button label="0" onClick="pm.value = 0; sp.value=0" />
+			<button label="50" onClick="pm.value = 50; sp.value=50" />
+			<button label="100" onClick="pm.value = 100; sp.value=100" />
 		</hbox>
+		Spinner:
+		<spinner id="sp" value="${pm.value}" constraint="min 0 max 100" onChanging="pm.setValue(Integer.parseInt(event.value))" onChange="pm.value = sp.value" />
 	</vbox>
 	<zscript>
 	void zoom(Slider slider, Image img) {
