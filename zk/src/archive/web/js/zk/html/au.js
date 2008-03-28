@@ -1250,6 +1250,11 @@ zkau._onDocKeydown = function (evt) {
 				break; //nothing to do
 		}
 	}
+
+	if (keycode == 27 && zkau._areq) { //Bug 1927788: prevent FF from closing connection
+		Event.stop(evt);
+		return false; //eat
+	}
 	return true; //no special processing
 }
 /** returns whether a key code is specified in keys. */
