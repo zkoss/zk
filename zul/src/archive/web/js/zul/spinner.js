@@ -33,10 +33,12 @@ zkSpinner.init = function (cmp) {
 	cmp.min = parseInt(getZKAttr(cmp, "min"));
 	cmp.max = parseInt(getZKAttr(cmp, "max"));
 
+	var inp = $real(cmp);
 	var btn = $e(cmp.id+"!btn");
 	
 	//event for inpu
-	zk.listen(cmp, "keypress", zkSpinner.onkeypress);
+	zk.listen(inp, "keypress", zkSpinner.onkeypress);
+	zk.listen(inp, "keydown",zkSpinner._inpkeydown);
 	
 	//event for btn
 	if(btn){
@@ -117,11 +119,75 @@ zkSpinner.onkeypress = function (evt) {
 	zkInpEl.ignoreKeys(evt, "0123456789" + zk.MINUS);
 };
 
+zkSpinner._inpkeydown= function(evt){
+	if (!evt) evt = window.event;
+	var inp = Event.element(evt),
+		cmp = $outer(inp);
+	if (inp.disabled || inp.readOnly)
+		return;
+
+	var code =Event.keyCode(evt);
+	switch(code){
+	case 48:case 96://0
+	case 49:case 97://1
+	case 50:case 98://2
+	case 51:case 99://3	
+	case 52:case 100://4
+	case 53:case 101://5
+	case 54:case 102://6
+	case 55:case 103://7
+	case 56:case 104://8
+	case 57:case 105://9
+		break;		
+	case 37://left
+		break;		
+	case 38://up
+		zkSpinner.checkValue(cmp);
+		zkSpinner._increase(cmp,true);
+		Event.stop(evt);
+		break;
+	case 39://right
+		break;		
+	case 40://down
+		zkSpinner.checkValue(cmp);
+		zkSpinner._increase(cmp,false);
+		Event.stop(evt);
+		break;
+	case 46://del 
+		zkSpinner._clearValue(cmp);
+		Event.stop(evt);
+		break;
+	case 9: case 35:case 36://pass:tab,home,end
+		break;
+	default:
+		if (!(code >= 112 && code <= 123) //F1-F12
+		&& !evt.ctrlKey && !evt.altKey)
+			Event.stop(evt);
+	}
+};
+
+zkSpinner.checkValue = function(cmp){
+	inp = $real(cmp);
+	
+	if(!inp.value) {
+		if(cmp.min && cmp.max)
+			inp.value = (cmp.min<=0 && 0<=cmp.max) ? 0: cmp.min;
+		else if (cmp.min)
+			inp.value = cmp.min<=0 ? 0: cmp.min;
+		else if (cmp.max)
+			inp.value = 0<=cmp.max ? 0: cmp.max;
+		else
+			inp.value = 0;
+	}
+};
+
 zkSpinner._btnDown= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt)),
 		inp = $real(cmp);
 	if(inp.disabled) return;
+	
+	zkSpinner.checkValue(cmp);
 
 	var btn = $e(cmp.id + "!btn"),
 		ofs = Position.cumulativeOffset(btn);
