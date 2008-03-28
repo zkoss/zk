@@ -45,8 +45,8 @@ import org.zkoss.zul.mesg.MZul;
 public class Spinner extends NumberInputElement {
 	private static final String DEFAULT_IMAGE = "~./zul/img/updnbtn.gif";
 	private String _img;
+	private int _step = 1;
 	private boolean _btnVisible = true;
-	private Integer _step = new Integer(1);
 
 	public Spinner() {
 		setCols(11);
@@ -85,17 +85,17 @@ public class Spinner extends NumberInputElement {
 	/**
 	 * Return the step of spinner
 	 */
-	public Integer getStep(){
+	public int getStep(){
 		return _step;
 	}
 	
 	/**
 	 * Set the step of spinner
 	 */
-	public void setStep(Integer step) {
-		if (!_step.equals(step)) {
+	public void setStep(int step) {
+		if (_step != step) {
 			_step = step;
-			smartUpdate("z.step", _step.toString());
+			smartUpdate("z.step", _step);
 		}
 	}
 	
@@ -144,7 +144,7 @@ public class Spinner extends NumberInputElement {
 			if (max != null)
 				HTMLs.appendAttribute(sb, "z.max", max.toString());
 		}
-		HTMLs.appendAttribute(sb, "z.step", _step.toString());
+		HTMLs.appendAttribute(sb, "z.step", _step);
 		HTMLs.appendAttribute(sb, "z.onchange", "true");
 		return sb.toString();
 	}
