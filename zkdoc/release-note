@@ -1,8 +1,6 @@
 	--------
 ZK 2.4.3
 * Features:
-  1839256: A way to control the timeout of the Ajax resend mechanism
-  1878682: Able to turn off the Ajax resend mechanism
 
 * Bugs
   1753712: Detaching component in DesktopCleanup causing IllegalStateException
@@ -10,6 +8,7 @@ ZK 2.4.3
   1859533: Prevent the same button clicked twice for long operation
   1854571: Two clicks to close Messagebox if it took long to process
   1907640: Long operation failed to update browser with Glassfish v1
+  1927788: ESC stops Ajax (FF only)
 
 	--------
 ZK 2.4.2
