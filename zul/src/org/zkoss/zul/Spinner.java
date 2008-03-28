@@ -50,6 +50,7 @@ public class Spinner extends NumberInputElement {
 
 	public Spinner() {
 		setCols(11);
+		setSclass("spinner");
 	}
 
 	public Spinner(int value) throws WrongValueException {
