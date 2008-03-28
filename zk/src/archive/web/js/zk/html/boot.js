@@ -786,7 +786,6 @@ zk._loadAndInit = function (inf) {
 		}
 
 		var n = inf.stk.pop();
-		
 		if (n.nodeType == 1) {
 	//FF remembers the previous value that user entered when reload
 	//We have to reset them because the server doesn't know any of them
@@ -823,14 +822,15 @@ zk._loadAndInit = function (inf) {
 					//break;
 				}
 			}
-	
+
 			var v = getZKAttr(n, "dtid");
 			if (v) zkau.addDesktop(v); //desktop's ID found
-	
+
 			if (zk.loadByType(n) || getZKAttr(n, "drag")
 			|| getZKAttr(n, "drop") || getZKAttr(n, "zid"))
 				zk._initcmps.push(n);
 		}
+
 		//if nosibling, don't process its sibling (only process children)
 		if (inf.nosibling) inf.nosibling = false;
 		else if (n.nextSibling && !getZKAttr(n, "skipsib"))
