@@ -6,5 +6,5 @@ debug=true
 optimize=true
 jboss.deploy=default/deploy
 start.service=Apache Tomcat
-version=2.4.2
+version=2.4.3
 zkmob-version=0.8.0
