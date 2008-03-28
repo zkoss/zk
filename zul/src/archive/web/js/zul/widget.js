@@ -698,10 +698,10 @@ zkWgt._fixdbtn = function (cmp) {
 	cmp = $e(cmp);
 	if (!cmp) return; //it might be gone if the user press too fast
 
-	var inp = $real(cmp);
 	var btn = $e(cmp.id + "!btn");
 	//note: isRealVisible handles null argument
 	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
+		var inp = $real(cmp);
 		if (!inp.offsetHeight || !btn.offsetHeight) {
 			setTimeout("zkWgt._fixdbtn($e('" + cmp.id +"'))", 66);
 			return;

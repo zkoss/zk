@@ -82,9 +82,7 @@ zkTmbox.setAttr = function (cmp, nm, val) {
 	}else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
 		if (btn) btn.style.display = val == "true" ? "": "none";
-		if(val=="true"){
-			zkWgt.fixDropBtn(cmp);
-		}
+		zkWgt.fixDropBtn(cmp);
 		return true;
 	} else if ("style" == nm) {
 		var inp = $real(cmp);
