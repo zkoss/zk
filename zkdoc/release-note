@@ -11,6 +11,7 @@ ZK 3.1.0 Freshly
   1926742: Javascript Error after filedownload + doModal
   1926092: Treeitem/listitem popup/context does not stay up
   1926990: Timebox didn't show button when buttonVisible from false to true
+  1927788: ESC stops Ajax (FF only)
 
 * Upgrade Notes
 
