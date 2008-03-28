@@ -8,6 +8,8 @@ ZK 3.0.5 Freshly
   1926092: Treeitem/listitem popup/context does not stay up
   1926990: Timebox didn't show button when buttonVisible from false to true
   1927788: ESC stops Ajax (FF only)
+  1927196: groupbox with grid bug (IE6Only)
+  1927154: IE6Only: grid inside tabbox floats outside tabbox area
 
 	--------
 ZK 3.0.4
