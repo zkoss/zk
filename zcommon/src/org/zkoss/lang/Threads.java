@@ -29,16 +29,26 @@ import org.zkoss.util.logging.Log;
 public class Threads {
 	private static final Log log = Log.lookup(Threads.class);
 
-	/** Pauses the execution for a while.
+	/** Put the current thread to sleep for a while.
 	 * @exception SystemException if it is interrupted.
+	 * @since 2.4.3
 	 */
-	public static final void pause(int millisecs) {
+	public static final void sleep(int millisecs) {
 		try {
 			Thread.sleep(millisecs);
 		} catch (InterruptedException ex) {
 			throw SystemException.Aide.wrap(ex);
 		}
 	}
+	/** Put the current thread to sleep for a while.
+	 * It is deprecated as of release 2.4.3, replaced by {@link #sleep}.
+	 * However, we don't really deprecate it from compiling
+	 * to have a better backward-compatibilty (after all, this is 2.4.x).
+	 */
+	public static final void pause(int millisecs) {
+		sleep(millisecs);
+	}
+
 	/** Sets the priority without throwing any exception but log warning.
 	 */
 	public static final void setPriority(Thread thd, int priority) {
