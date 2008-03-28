@@ -71,7 +71,7 @@ zkau.dtid = function (n) {
 		if (id) return id;
 	}
 	return null;
-}
+};
 
 zk.addInit(function () {
 	zk.listen(document, "keydown", zkau._onDocKeydown);
