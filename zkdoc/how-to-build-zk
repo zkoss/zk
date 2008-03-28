@@ -4,7 +4,7 @@ How to Build ZK
 
 * Install Cygwin 1.90 or above if you are using Windows.
 
-* Install nawk or gawk if you are using Solaris, BSD and Mac.
+* Make sure nawk or gawk if you are using Solaris, BSD or Mac.
 
 * Install Java 6 SDK or above
   ZK's target JVM is 1.4, but the compiler must be Java 6.
