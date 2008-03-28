@@ -750,9 +750,17 @@ zk.Selectable.prototype = {
 		//is sometime too big
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			var of;
+			if (zk.ie6Only) { //Bug 1927154
+				of = this.element.style.overflow;
+				this.element.style.overflow = "hidden";
+			}
+
 			wd = zk.revisedSize(this.element, this.element.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
+
+			if (zk.ie6Only) this.element.style.overflow = of;
 		}
 		if (wd) {
 			this.body.style.width = wd;
