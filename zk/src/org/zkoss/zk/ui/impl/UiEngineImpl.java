@@ -293,6 +293,7 @@ public class UiEngineImpl implements UiEngine {
 		execCtrl.setCurrentPageDefinition(pagedef);
 
 		final Configuration config = _wapp.getConfiguration();
+		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
@@ -347,6 +348,11 @@ public class UiEngineImpl implements UiEngine {
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
+			//Cycle 2a: Handle aborting reason
+			abrn = uv.getAbortingReason();
+			if (abrn != null)
+				abrn.execute(); //always execute even if !isAborting
+
 			//Cycle 3: Redraw the page (and responses)
 			List responses = uv.getResponses();
 
@@ -373,6 +379,13 @@ public class UiEngineImpl implements UiEngine {
 		} finally {
 			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
 				//CONSIDER: whether to pass cleanup's error to users
+			if (abrn != null) {
+				try {
+					abrn.finish();
+				} catch (Throwable t) {
+					log.warning(t);
+				}
+			}
 
 			execCtrl.setCurrentPage(old); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
@@ -575,7 +588,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Asynchronous updates --//
-	public void execUpdate(Execution exec, List requests, Writer out)
+	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException {
 		if (requests == null)
 			throw new IllegalArgumentException("null requests");
@@ -597,10 +610,12 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
+		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, null);
 			final RequestQueue rque = ((DesktopCtrl)desktop).getRequestQueue();
+
 			final List errs = new LinkedList();
 			final long tmexpired = System.currentTimeMillis() + 3000;
 				//Tom Yeh: 20060120
@@ -638,6 +653,11 @@ public class UiEngineImpl implements UiEngine {
 				} while ((event = nextEvent(uv)) != null);
 			}
 
+			//Cycle 2a: Handle aborting reason
+			abrn = uv.getAbortingReason();
+			if (abrn != null)
+				abrn.execute(); //always execute even if !isAborting
+
 			//Cycle 3: Generate output
 			List responses;
 			try {
@@ -654,11 +674,11 @@ public class UiEngineImpl implements UiEngine {
 				log.error(ex);
 			}
 
-			if (rque.hasRequest())
-				responses.add(new AuEcho());
+			if (rque.endWithRequest()) //stop accept another request
+				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
 
-			responseSequenceId(desktop, out);
-			response(responses, out);
+			out.writeSequenceId(desktop);
+			out.write(responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
@@ -666,9 +686,6 @@ public class UiEngineImpl implements UiEngine {
 
 			cleaned = true;
 			config.invokeExecutionCleanups(exec, null, errs);
-
-			out.flush();
-				//flush before deactivating to make sure it has been sent
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
@@ -684,6 +701,14 @@ public class UiEngineImpl implements UiEngine {
 			}
 		} finally {
 			if (!cleaned) config.invokeExecutionCleanups(exec, null, null);
+
+			if (abrn != null) {
+				try {
+					abrn.finish();
+				} catch (Throwable t) {
+					log.warning(t);
+				}
+			}
 
 			doDeactivate(exec);
 
@@ -704,10 +729,10 @@ public class UiEngineImpl implements UiEngine {
 		final Throwable err = ex;
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
-			log.realCauseBriefly(ex);
+			log.realCause(ex);
 		} else {
 			ex = t;
-//			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
+			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
 		}
 
 		if (ex instanceof WrongValueException) {
@@ -812,7 +837,7 @@ public class UiEngineImpl implements UiEngine {
 		final Thread thd = Thread.currentThread();
 		if (!(thd instanceof EventProcessingThreadImpl))
 			throw new UiException("This method can be called only in an event listener, not in paging loading.");
-		if (log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
+//		if (log.finerable()) log.finer("Suspend "+thd+" on "+mutex);
 
 		final EventProcessingThreadImpl evtthd = (EventProcessingThreadImpl)thd;
 		evtthd.newEventThreadSuspends(mutex);
@@ -953,7 +978,7 @@ public class UiEngineImpl implements UiEngine {
 					if (uv.isAborting()) {
 						evtthd.ceaseSilently("Resume aborted");
 					} else {
-						if (log.finerable()) log.finer("Resume "+evtthd);
+//						if (log.finerable()) log.finer("Resume "+evtthd);
 						try {
 							if (evtthd.doResume()) //wait it complete or suspend again
 								recycleEventThread(evtthd); //completed
@@ -1027,69 +1052,6 @@ public class UiEngineImpl implements UiEngine {
 			}
 			evtthd.ceaseSilently("Recycled");
 		}
-	}
-
-	//-- Generate output from a response --//
-	/** Output the next response sequence ID.
-	 */
-	private static void responseSequenceId(Desktop desktop, Writer out)
-	throws IOException {
-		out.write("\n<sid>");
-		out.write(Integer.toString(
-			((DesktopCtrl)desktop).getResponseSequence(true)));
-		out.write("</sid>");
-	}
-	public void response(AuResponse response, Writer out)
-	throws IOException {
-		out.write("\n<r><c>");
-		out.write(response.getCommand());
-		out.write("</c>");
-		final String[] data = response.getData();
-		if (data != null) {
-			for (int j = 0; j < data.length; ++j) {
-				out.write("\n<d>");
-				encodeXML(data[j], out);
-				out.write("</d>");
-			}
-		}
-		out.write("\n</r>");
-	}
-	public void response(List responses, Writer out)
-	throws IOException {
-		for (Iterator it = responses.iterator(); it.hasNext();)
-			response((AuResponse)it.next(), out);
-	}
-	private static void encodeXML(String data, Writer out)
-	throws IOException {
-		if (data == null || data.length() == 0)
-			return;
-
-		//20051208: Tom Yeh
-		//The following codes are tricky.
-		//Reason:
-		//1. nested CDATA is not allowed
-		//2. Firefox (1.0.7)'s XML parser cannot handle over 4096 chars
-		//	if CDATA is not used
-		int j = 0;
-		for (int k; (k = data.indexOf("]]>", j)) >= 0;) {
-			encodeByCData(data.substring(j, k), out);
-			out.write("]]&gt;");
-			j = k + 3;
-		}
-		encodeByCData(data.substring(j), out);
-	}
-	private static void encodeByCData(String data, Writer out)
-	throws IOException {
-		for (int j = data.length(); --j >= 0;) {
-			final char cc = data.charAt(j);
-			if (cc == '<' || cc == '>' || cc == '&') {
-				out.write("<![CDATA[");
-				out.write(data);
-				out.write("]]>");
-				return;
-			}
-		}
-		out.write(data);
 	}
 
 	public void activate(Execution exec) {

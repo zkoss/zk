@@ -57,4 +57,14 @@ public interface Visualizer {
 	 * If in recovering, no response is sent to the client.
 	 */
 	public boolean isRecovering();
+
+	/** Disables this visualizer.
+	 * Once disabled, any update of components won't be synchroized to
+	 * the client. In other words, it ignores any updates to components.
+	 *
+	 * <p>Currently, it is called only when removing a desktop.
+	 * You rarely need to call this method.
+	 * @since 2.4.3
+	 */
+	public void disable();
 }

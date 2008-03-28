@@ -167,6 +167,8 @@ public class ZkFns {
 				.append(config.getProcessingPromptDelay())
 			.append(";\nzk_tipto=")
 				.append(config.getTooltipDelay())
+			.append(";\nzk_resndto=")
+				.append(9000/*TODO config.getResendDelay()*/)
 			.append(";\nzk_ver='").append(wapp.getVersion())
 			.append("';\n");
 

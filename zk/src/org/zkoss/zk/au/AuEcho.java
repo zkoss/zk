@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
+import org.zkoss.zk.ui.Desktop;
+
 /**
  * A response to ask client to send a dummy request back to the server.
  *
@@ -29,7 +31,20 @@ package org.zkoss.zk.au;
  * @author tomyeh
  */
 public class AuEcho  extends AuResponse {
+	/** Contructs an echo response with the specified desktop.
+	 *
+	 * @param desktop the desktop to send the echo response to.
+	 * If null, the echo response is sent to each desktop in the
+	 * same browser window.
+	 * @since 2.4.3
+	 */
+	public AuEcho(Desktop desktop) {
+		super("echo",  desktop != null ? desktop.getId(): null);
+	}
+	/** Contructs an echo response for each desktop in the same browser
+	 * window
+	 */
 	public AuEcho() {
-		super("echo");
+		this((Desktop) null);
 	}
 }

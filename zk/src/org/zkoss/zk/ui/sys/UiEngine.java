@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.util.DeferredValue;
+import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 
@@ -147,17 +148,7 @@ public interface UiEngine {
 	/** Executs an asynchronous update to a component (or page).
 	 * <p>Note: the output must be XML and UTF-8.
 	 */
-	public void execUpdate(Execution exec, List requests, Writer out)
-	throws IOException;
-	/** Generates the output for the specified the response.
-	 * <p>Note: the output must be XML and UTF-8.
-	 */
-	public void response(AuResponse response, Writer out)
-	throws IOException;
-	/** Generates the output of a list of responses.
-	 * <p>Note: the output must be XML and UTF-8.
-	 */
-	public void response(List responses, Writer out)
+	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException;
 
 	/** Executes the recovering.

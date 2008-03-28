@@ -103,6 +103,9 @@ import org.zkoss.zk.au.*;
 	private final boolean _recovering;
 	/** Whether it is ending, i.e., no further update is allowed. */
 	private boolean _ending;
+	/** Whether it is disabled, i.e., ignore any updates to the client.
+	 */
+	private boolean _disabled;
 
 	/**
 	 * Creates a root execution (without parent).
@@ -149,13 +152,16 @@ import org.zkoss.zk.au.*;
 	public boolean isRecovering() {
 		return _recovering;
 	}
+	public void disable() {
+		_disabled = true;
+	}
 
 	//-- update/redraw --//
 
 	/** Invalidates the whole page.
 	 */
 	public void addInvalidate(Page page) {
-		if (_recovering || page == null || !_exec.isAsyncUpdate(page))
+		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
 		if (_pgInvalid == null)
@@ -167,9 +173,9 @@ import org.zkoss.zk.au.*;
 	 */
 	public void addInvalidate(Component comp) {
 		final Page page = comp.getPage();
-		if (_recovering || page == null || !_exec.isAsyncUpdate(page))
+		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page))
 			return; //nothing to do
-		if (_ending) throw new IllegalStateException();
+		if (_ending) throw new IllegalStateException("ended");
 
 		checkDesktop(comp);
 
@@ -195,7 +201,7 @@ import org.zkoss.zk.au.*;
 	 * A deferred value is used to encapsulate a value that shall be retrieved
 	 * only in the rendering phase.
 	 *
-	 * @since 2.4.2
+	 * @since 2.4.3
 	 * @see Component#smartUpdate(String, DeferredValue);
 	 */
 	public void addSmartUpdate(Component comp, String attr, DeferredValue value) {
@@ -208,7 +214,7 @@ import org.zkoss.zk.au.*;
 	 */
 	private Map getAttrRespMap(Component comp, String attr) {
 		final Page page = comp.getPage();
-		if (_recovering || page == null || !_exec.isAsyncUpdate(page)
+		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp))
 			return null; //nothing to do
 		if (_ending) throw new IllegalStateException("ended");
@@ -220,6 +226,7 @@ import org.zkoss.zk.au.*;
 			_smartUpdated.put(comp, respmap = new HashMap());
 		return respmap;
 	}
+
 	/** Called to update (redraw) a component, when a component is moved.
 	 * If a component's page or parent is changed, this method need to be
 	 * called only once for the top one.
@@ -229,11 +236,11 @@ import org.zkoss.zk.au.*;
 	 * @param newpg the page after moved
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
-		if (_recovering || (newpg == null && oldpg == null)
+		if (_recovering || _disabled || (newpg == null && oldpg == null)
 		|| (newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
 		|| (oldpg == null && !_exec.isAsyncUpdate(newpg))) //attach to loading pg
 			return; //to avoid redundant AuRemove
-		if (_ending) throw new IllegalStateException();
+		if (_ending) throw new IllegalStateException("ended");
 
 		if (oldpg == null && !_moved.contains(comp)) { //new attached
 			_attached.add(comp);
@@ -248,7 +255,8 @@ import org.zkoss.zk.au.*;
 				if (oldparent != null) {
 					final Object xc = ((ComponentCtrl)oldparent).getExtraCtrl();
 					if ((xc instanceof Cropper) && ((Cropper)xc).isCropper())
-						_invalidated.add(oldparent);
+						oldparent.invalidate();
+						//Bug 1914130: Treechildren.invalidate triggles others
 				}
 			}
 			_attached.remove(comp);
@@ -383,7 +391,7 @@ import org.zkoss.zk.au.*;
 	/** Process {@link ChildChangedAware}
 	 */
 	private void doChildChanged() {
-		final Set ccawares = new HashSet(), checked = new HashSet(79);
+		final Set ccawares = new LinkedHashSet(), checked = new HashSet(79);
 		doChildChanged(_invalidated, ccawares, checked);
 		doChildChanged(_attached, ccawares, checked);
 		doChildChanged(_smartUpdated.keySet(), ccawares, checked);

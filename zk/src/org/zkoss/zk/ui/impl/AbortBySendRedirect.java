@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuSendRedirect;
 import org.zkoss.zk.ui.sys.AbortingReason;
 
@@ -48,7 +49,11 @@ public class AbortBySendRedirect implements AbortingReason {
 		return !_url.startsWith("mailto:") && !_url.startsWith("javascript:")
 			&& (_target == null || "_self".equals(_target));
 	}
+	public void execute() {
+	}
 	public AuResponse getResponse() {
 		return new AuSendRedirect(_url, _target);
+	}
+	public void finish() {
 	}
 }

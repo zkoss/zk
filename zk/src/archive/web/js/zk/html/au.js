@@ -43,7 +43,7 @@ zkau.addDesktop = function (dtid) {
 	ds.push(dtid);
 };
 /** Returns the desktop's ID. */
-zkau._dtid = function (uuid) {
+zkau.dtid = function (uuid) {
 	if (zkau._dtids.length == 1) return zkau._dtids[0];
 
 	for (var n = $e(uuid); n; n = n.parentNode) {
@@ -51,7 +51,7 @@ zkau._dtid = function (uuid) {
 		if (id) return id;
 	}
 	return null;
-}
+};
 
 zk.addInit(function () {
 	zk.listen(document, "keydown", zkau._onDocKeydown);
@@ -149,12 +149,17 @@ zkau.sendRemove = function (uuid) {
 };
 
 ////ajax timeout////
+if (!zk.safari) {
 /** IE6 sometimes remains readyState==1 (reason unknown), and we have
  * to resend
  */
 zkau._areqTmout = function () {
 	//Note: we don't resend if readyState >= 3. Otherwise, the server
 	//will process the same request twice
+
+	//Note: timeout has no function in Safari, since the server's sending
+	//output the client won't cause readyState to change.
+
 	var req = zkau._areq, reqInf = zkau._areqInf;
 	if (req && req.readyState < 3) {
 		zkau._areq = zkau._areqInf = null;
@@ -162,10 +167,10 @@ zkau._areqTmout = function () {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
-
-		zkau._areqResend(reqInf[1]);
+		zkau._areqResend(reqInf.reqes);
 	}
 };
+}
 zkau._areqResend = function (es) {
 	var timeout;
 	for (var j = es.length; --j >= 0;)
@@ -178,12 +183,12 @@ zkau._onRespReady = function () {
 		var req = zkau._areq, reqInf = zkau._areqInf;
 		if (req && req.readyState == 4) {
 			zkau._areq = zkau._areqInf = null;
-			clearTimeout(reqInf[0]); //stop timer
+			if (reqInf.tfn) clearTimeout(reqInf.tfn); //stop timer
 
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
 
-			if (req.status == 200) {
+			if (req.status == 200) { //correct
 				zkau._areqTry = 0;
 				var sid = req.responseXML.getElementsByTagName("sid");
 				if (sid && sid.length) {
@@ -205,6 +210,7 @@ zkau._onRespReady = function () {
 				else que.splice(ofs, 0, resp); //insert
 			} else {
 				//handle MSIE's buggy HTTP status codes
+				//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
 				switch (req.status) {
 				case 12029: // 12029 to 12031 correspond to dropped connections.
 					if (++zkau._areqTry > 3) {
@@ -212,12 +218,12 @@ zkau._onRespReady = function () {
 						break; //the server is dead
 					}
 				case 12002: // Server timeout
-				case 12030:
+				case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
 				case 12031:
 				case 12152: // Connection closed by server.
 				case 12159:
 				case 13030:
-					zkau._areqResend(reqInf[1]);
+					zkau._areqResend(reqInf.reqes);
 					return;
 				}
 
@@ -258,7 +264,7 @@ zkau._parseCmds = function (xml) {
 	if (!rs) return null;
 
 	var cmds = [];
-	for (var j = 0; j < rs.length; ++j) {
+	for (var j = 0, rl = rs.length; j < rl; ++j) {
 		var cmd = rs[j].getElementsByTagName("c")[0];
 		var data = rs[j].getElementsByTagName("d");
 
@@ -333,6 +339,9 @@ zkau.addOnSend = function (func) {
 zkau.removeOnSend = function (func) {
 	zkau._onsends.remove(func);
 };
+zkau.events = function (uuid) {
+	return zkau._events(zkau.dtid(uuid));
+};
 /** Sends a request to the client
  * @param timout milliseconds.
  * If negative, it won't be sent until next non-negative event
@@ -341,20 +350,35 @@ zkau.send = function (evt, timeout) {
 	if (timeout < 0) evt.implicit = true;
 
 	if (evt.uuid) {
-		zkau._send(zkau._dtid(evt.uuid), evt, timeout);
+		zkau._send(zkau.dtid(evt.uuid), evt, timeout);
+	} else if (evt.dtid) {
+		zkau._send(evt.dtid, evt, timeout);
 	} else {
 		var ds = zkau._dtids;
-		for (var j = 0; j < ds.length; ++j)
+		for (var j = 0, dl = ds.length; j < dl; ++j)
 			zkau._send(ds[j], evt, timeout);
 	}
 };
 zkau._send = function (dtid, evt, timeout) {
 	if (evt.ctl) {
-		var t = new Date().getTime();
-		if (zkau._ctl == evt.uuid && t - zkau._ctlt < 450)
+		//Don't send the same request if it is in processing
+		if (zkau._areqInf && zkau._areqInf.ctli == evt.uuid
+		&& zkau._areqInf.ctlc == evt.cmd)
+			return;
+
+		var t = $now();
+		if (zkau._ctli == evt.uuid && zkau._ctlc == evt.cmd //Bug 1797140
+		&& t - zkau._ctlt < 390)
 			return; //to prevent key stroke are pressed twice (quickly)
+
+		//Note: it is still possible to queue two ctl with same uuid and cmd,
+		//if the first one was not sent yet and the second one is generated
+		//after 390ms.
+		//However, it is rare so no handle it
+
 		zkau._ctlt = t;
-		zkau._ctl = evt.uuid;
+		zkau._ctli = evt.uuid;
+		zkau._ctlc = evt.cmd;
 	}
 
 	zkau._events(dtid).push(evt);
@@ -375,17 +399,20 @@ zkau._send2 = function (dtid, timeout) {
  * (reason: backward compatible)
  */
 zkau.sendAhead = function (evt, timeout) {
+	var dtid;
 	if (evt.uuid) {
-		var dtid;
-		zkau._events(dtid = zkau._dtid(evt.uuid)).unshift(evt);
-		zkau._send2(dtid, timeout);
+		zkau._events(dtid = zkau.dtid(evt.uuid)).unshift(evt);
+	} else if (evt.dtid) {
+		zkau._events(dtid = evt.dtid).unshift(evt);
 	} else {
 		var ds = zkau._dtids;
 		for (var j = ds.length; --j >= 0; ++j) {
 			zkau._events(ds[j]).unshift(evt);
 			zkau._send2(ds[j], timeout); //Spec: don't convert unefined to 0 for timeout
 		}
+		return;
 	}
+	zkau._send2(dtid, timeout);
 };
 zkau._sendNow = function (dtid) {
 	var es = zkau._events(dtid);
@@ -410,20 +437,23 @@ zkau._sendNow = function (dtid) {
 	//bug 1721809: we cannot filter out ctl even if zkau.processing
 
 	//decide implicit and ignorable
-	var implicit = true, ignorable = true;
+	var implicit = true, ignorable = true, ctli, ctlc;
 	for (var j = es.length; --j >= 0;) {
-		if (!es[j].ignorable) { //ignorable implies implicit
+		var evt = es[j];
+		if (implicit && !evt.ignorable) { //ignorable implies implicit
 			ignorable = false;
-			if (!es[j].implicit) {
+			if (!evt.implicit)
 				implicit = false;
-				break;
-			}
+		}
+		if (evt.ctl && !ctli) {
+			ctli = evt.uuid;
+			ctlc = evt.cmd;
 		}
 	}
 	zkau._ignorable = ignorable;
 
 	//callback (fckez uses it to ensure its value is sent back correctly
-	for (var j = 0; j < zkau._onsends.length; ++j) {
+	for (var j = 0, ol = zkau._onsends.length; j < ol; ++j) {
 		try {
 			zkau._onsends[j](implicit); //it might add more events
 		} catch (e) {
@@ -434,12 +464,12 @@ zkau._sendNow = function (dtid) {
 	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
 	var reqes = []; //backup events
 	var content = "";
-	for (var j = 0; es.length; ++j) {
+	for (var j = 0, el = es.length; el; ++j, --el) {
 		var evt = es.shift();
 		reqes.push(evt);
-		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+evt.uuid;
+		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+(evt.uuid?evt.uuid:'');
 		if (evt.data)
-			for (var k = 0; k < evt.data.length; ++k) {
+			for (var k = 0, dl = evt.data.length; k < dl; ++k) {
 				var data = evt.data[k];
 				content += "&data."+j+"="
 					+ (data != null ? encodeURIComponent(data): 'zk_null~q');
@@ -456,7 +486,11 @@ zkau._sendNow = function (dtid) {
 		req.open("POST", zk_action, true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 
-		zkau._areqInf = [setTimeout(zkau._areqTmout, 9100), reqes];
+		zkau._areqInf = {
+			reqes: reqes, ctli: ctli, ctlc: ctlc
+		};
+		if (zk_resndto > 0 && !zk.safari)
+			zkau._areqInf.tfn = setTimeout(zkau._areqTmout, zk_resndto);
 		req.send(content);
 
 		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
@@ -487,9 +521,8 @@ zkau._evalOnResponse = function () {
 
 /** Process the responses queued in zkau._respQue. */
 zkau._doQueResps = function () {
-	var ex;
-	var que = zkau._respQue;
-	for (var j = 0; que.length;) {
+	var ex, que = zkau._respQue, breath = $now() + 6000;
+	while (que.length) {
 		if (zk.loading) {
 			zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
 			break; //wait until the loading is done
@@ -524,8 +557,8 @@ zkau._doQueResps = function () {
 			if (!ex) ex = e;
 		}
 
-		if (!ex && ++j > 300) {
-			setTimeout(zkau._doQueResps, 0); //let browser breath
+		if (!ex && $now() > breath) {
+			setTimeout(zkau._doQueResps, 10); //let browser breath
 			return;
 		}
 	}
@@ -1131,9 +1164,9 @@ zkau._parentByZKAttr = function (n, attr1, attr2) {
 /** Handles document.onkeydown. */
 zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	var zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys;
-	var keycode = evt.keyCode, zkcode; //zkcode used to search z.ctkeys
+	var target = Event.element(evt),
+		zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys,
+		keycode = evt.keyCode, zkcode; //zkcode used to search z.ctkeys
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = $tag(target);
@@ -1156,9 +1189,9 @@ zkau._onDocKeydown = function (evt) {
 	case 17: //Ctrl
 	case 18: //Alt
 		return true;
-	case 44: //Ins
-	case 45: //Del
-		zkcode = keycode == 44 ? 'I': 'J';
+	case 45: //Ins
+	case 46: //Del
+		zkcode = keycode == 45 ? 'I': 'J';
 		break;
 	default:
 		if (keycode >= 33 && keycode <= 40) { //PgUp, PgDn, End, Home, L, U, R, D
@@ -1392,7 +1425,7 @@ zkau._zidOwner = function (n) {
 		if (getZKAttr(p, "zidsp"))
 			return p.id;
 	}
-	return "_zdt_" + zkau._dtid(n);
+	return "_zdt_" + zkau.dtid(n);
 };
 
 ///////////////
@@ -1675,8 +1708,8 @@ zkau.cmd0 = { //no uuid at all
 	script: function (dt0) {
 		eval(dt0);
 	},
-	echo: function () {
-		zkau.send({uuid: "", cmd: "dummy", data: null});
+	echo: function (dtid) {
+		zkau.send({dtid: dtid, cmd: "dummy", data: null, ignorable: true});
 	},
 	clientInfo: function () {
 		zkau._cInfoReg = true;

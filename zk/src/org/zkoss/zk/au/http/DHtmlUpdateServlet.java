@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -53,6 +54,7 @@ import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.I18Ns;
+import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuObsolete;
@@ -93,6 +95,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected long getLastModified(HttpServletRequest request) {
 		final String pi = Https.getThisPathInfo(request);
 		if (pi != null && pi.startsWith(ClassWebResource.PATH_PREFIX)
+		&& pi.indexOf('*') < 0 //language independent
 		&& !Servlets.isIncluded(request)) {
 			//If a resource processor is registered for the extension,
 			//we assume the content is dynamic
@@ -159,7 +162,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//	+", SP="+request.getServletPath()+" and "+Https.getThisServletPath(request)
 			//	+", QS="+request.getQueryString()+" and "+Https.getThisQueryString(request)
 			//	+", params="+request.getParameterMap().keySet());
-			//responseError(uieng, response, "Illegal request: dtid is required");
+			//responseError(response, "Illegal request: dtid is required");
 			//Tom M. Yeh: 20060922: Unknown reason to get here but it is annoying
 			//to response it back to users
 			return;
@@ -172,25 +175,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				final StringWriter out = getXMLWriter();
-
-				if (!"rmDesktop".equals(scmd) && !"onRender".equals(scmd)
-				&& !"onTimer".equals(scmd)) {//possible in FF due to cache
-					String uri = Devices.getTimeoutURI(
-						Servlets.isMilDevice(request) ? "mil": "ajax");
-					final AuResponse resp;
-					if (uri != null) {
-						if (uri.length() != 0)
-							uri = Encodes.encodeURL(_ctx, request, response, uri);
-						resp = new AuSendRedirect(uri, null);
-					} else {
-						resp = new AuObsolete(
-							dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
-					}
-					uieng.response(resp, out);
-				}
-
-				flushXMLWriter(request, response, out);
+				sessionTimeout(request, response, dtid, scmd);
 				return;
 			}
 		}
@@ -218,54 +203,50 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					aureqs.add(new AuRequest(desktop, uuid, cmd, data));
 				}
 			}
-			if (aureqs.isEmpty()) {
-				responseError(uieng, request, response, "Illegal request: cmd is required");
-				return;
-			}
 		} catch (CommandNotFoundException ex) {
-			responseError(uieng, request, response, Exceptions.getMessage(ex));
+			responseError(request, response, Exceptions.getMessage(ex));
+			return;
+		}
+
+		if (aureqs.isEmpty()) {
+			responseError(request, response, "Illegal request: cmd is required");
 			return;
 		}
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
-		final StringWriter out = getXMLWriter();
+		final AuWriter out = new SmartAuWriter()
+			.open(request, response,
+				9000/*config.getResendDelay()*/ / 2 - 500);
+				//Note: getResendDelay() might return nonpositive
 
 		uieng.execUpdate(
 			new ExecutionImpl(_ctx, request, response, desktop, null),
 			aureqs, out);
 
-		flushXMLWriter(request, response, out);
+		out.close(request, response);
 	}
+	private void sessionTimeout(HttpServletRequest request,
+	HttpServletResponse response, String dtid, String scmd)
+	throws ServletException, IOException {
+		final AuWriter out = new SmartAuWriter().open(request, response, 0);
 
-	/** Returns the writer for output XML.
-	 * @param withrs whether to output <rs> first.
-	 */
-	private static StringWriter getXMLWriter() {
-		final StringWriter out = new StringWriter();
-		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rs>\n");
-		return out;
-	}
-	/** Flushes all content in out to the response.
-	 * Don't write the response thereafter.
-	 * @param withrs whether to output </rs> first.
-	 */
-	private static final
-	void flushXMLWriter(HttpServletRequest request,
-	HttpServletResponse response, StringWriter out)
-	throws IOException {
-		out.write("\n</rs>");
-
-		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		byte[] data = out.toString().getBytes("UTF-8");
-		if (data.length > 200) {
-			byte[] bs = Https.gzip(request, response, null, data);
-			if (bs != null) data = bs; //yes, browser support compress
+		if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
+		&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
+			String uri = Devices.getTimeoutURI(
+				Servlets.isMilDevice(request) ? "mil": "ajax");
+			final AuResponse resp;
+			if (uri != null) {
+				if (uri.length() != 0)
+					uri = Encodes.encodeURL(_ctx, request, response, uri);
+				resp = new AuSendRedirect(uri, null);
+			} else {
+				resp = new AuObsolete(
+					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+			}
+			out.write(resp);
 		}
 
-		response.setContentType("text/xml;charset=UTF-8");
-		response.setContentLength(data.length);
-		response.getOutputStream().write(data);
-		response.flushBuffer();
+		out.close(request, response);
 	}
 
 	/** Recovers the desktop if possible.
@@ -296,14 +277,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	/** Generates a response for an error message.
 	 */
-	private static
-	void responseError(UiEngine uieng, HttpServletRequest request,
+	private static void responseError(HttpServletRequest request,
 	HttpServletResponse response, String errmsg) throws IOException {
 		log.debug(errmsg);
 
 		//Don't use sendError because Browser cannot handle UTF-8
-		final StringWriter out = getXMLWriter();
-		uieng.response(new AuAlert(errmsg), out);
-		flushXMLWriter(request, response, out);
+		final AuWriter out = new SmartAuWriter().open(request, response, 0);
+		out.write(new AuAlert(errmsg));
+		out.close(request, response);
 	}
 }

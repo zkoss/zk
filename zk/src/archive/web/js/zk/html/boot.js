@@ -233,6 +233,10 @@ zk.enableESC = function () {
 //////////////////////////////////////
 zk.mods = {}; //ZkFns depends on it
 
+function $now() {
+	return new Date().getTime();
+}
+
 /** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
  * it tried to extend the element.
  */
