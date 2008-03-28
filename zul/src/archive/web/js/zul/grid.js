@@ -95,6 +95,11 @@ zk.Grid.prototype = {
 			}
 			if (h < 0) h = 0;
 			this.body.style.height = h + "px";
+			
+			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
+			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
+			// and IE7 at initializing phase.
 		} else {
 			//Bug 1556099: it is strange if we ever check the value of
 			//body.offsetWidth. The grid's body's height is 0 if init called
@@ -167,7 +172,7 @@ zk.Grid.prototype = {
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
-			if (tblwd && this.body.offsetWidth - tblwd > 11) { //scrollbar
+			if (tblwd && this.body.offsetWidth == this.bodytbl.offsetWidth && this.body.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			}

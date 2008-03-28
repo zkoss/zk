@@ -770,7 +770,7 @@ zk.Selectable.prototype = {
 
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
-			if (tblwd && this.body.offsetWidth - tblwd > 11) {
+			if (tblwd && this.body.offsetWidth == this.bodytbl.offsetWidth && this.body.offsetWidth - tblwd > 11) {
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			}
@@ -840,6 +840,11 @@ zk.Selectable.prototype = {
 
 				this.realsize(sz);
 				this.body.style.height = hgh + "px";
+				
+				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+				if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
+				// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
+				// and IE7 at initializing phase.
 				return; //done
 			}
 		}
@@ -898,6 +903,12 @@ zk.Selectable.prototype = {
 			}
 
 			this.body.style.height = hgh + "px";
+			
+			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
+			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
+			// and IE7 at initializing phase.
+			// 2008/03/28 The unnecessary scroll bar will appear when the vflex is true.
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height
