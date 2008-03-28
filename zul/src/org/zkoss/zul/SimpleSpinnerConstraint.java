@@ -92,7 +92,6 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 
 	// super//
 	protected int parseConstraint(String constraint) throws UiException {
-		System.out.println("constraint: " + constraint);
 		int minIndex = constraint.indexOf("min");
 		int maxIndex = constraint.indexOf("max");
 
@@ -109,7 +108,6 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 					_max = new Integer(constraint.substring(maxIndex + 3,
 							minIndex).trim());
 				}
-				System.out.println(this.toString() + " " + _min + " " + _max);
 				if (_min.compareTo(_max) > 0)
 					throw new UiException("Constraint error: " + _min + " > "
 							+ _max);
