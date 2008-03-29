@@ -28,6 +28,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	if="${empty monitor}"/>
 
 <vbox unless="${empty monitor}">
+<label>Version: ${desktop.webApp.version}</label>
+<label>Build: ${desktop.webApp.build}</label>
 <grid width="500px">
 	<columns>
 		<column width="180px" label="What"/>
