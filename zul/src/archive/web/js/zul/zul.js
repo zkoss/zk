@@ -185,6 +185,29 @@ zulHdr.init = function (cmp) {
 	zulHdr.setSizable(cmp, zulHdr.sizable(cmp));
 		//Note: IE6 failed to crop a column if it is draggable
 		//Thus we init only necessary (to avoid the IE6 bug)
+	zulHdr.fixedFake(cmp);
+};
+/** The alias name of faker*/
+zulHdr._faker = ["hdfaker", "bdfaker", "ftfaker"];
+zulHdr.fixedFake = function (cmp) {
+	var meta = zul.getMetaByHeader(cmp);
+	if(!meta) return ; // uninitialized yet.
+	
+	var index = zk.cellIndex(cmp);
+	for (var i = zulHdr._faker.length; --i >= 0;)
+		if (meta[zulHdr._faker[i]] && !$e(cmp.id + "!" + zulHdr._faker[i]))
+			meta[zulHdr._faker[i]][meta[zulHdr._faker[i]].cells.length > index ? "insertBefore" : "appendChild"]
+				(zulHdr.createFake(cmp, zulHdr._faker[i]), meta[zulHdr._faker[i]].cells[index]);
+};
+zulHdr.createFake = function (cmp, postfix) {
+	var t = document.createElement("TH"), 
+		d = document.createElement("DIV");
+	t.id = cmp.id + "!" + postfix;
+	t.className = cmp.className;
+	t.style.cssText = cmp.style.cssText;
+	d.style.overflow = "hidden";
+	t.appendChild(d);
+	return t;
 };
 zulHdr.sizable = function (cmp) {
 	return cmp.parentNode && getZKAttr(cmp.parentNode, "sizable") == "true";
