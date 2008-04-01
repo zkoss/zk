@@ -20,7 +20,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.grid.Grid" z.pg="t"${self.outerAttrs}${self.innerAttrs}>
-	<c:if test="${self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
+	<c:if test="${!empty self.paging && self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
 	<div id="${self.uuid}!pgit" class="grid-pgi-t">
 	${z:redraw(self.paging, null)}
 	</div>
@@ -79,7 +79,7 @@ ${z:redraw(self.foot, null)}
 	</table>
 	</div>
 </c:if>
-	<c:if test="${self.pagingPosition == 'bottom' || self.pagingPosition == 'both'}">
+	<c:if test="${!empty self.paging && self.pagingPosition == 'bottom' || self.pagingPosition == 'both'}">
 	<div id="${self.uuid}!pgib" class="grid-pgi">
 	${z:redraw(self.paging, null)}
 	</div>
