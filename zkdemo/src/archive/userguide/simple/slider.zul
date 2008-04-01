@@ -49,7 +49,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<button label="100" onClick="pm.value = sp.value = 100" />
 		</hbox>
 		Spinner:
-		<spinner id="sp" value="${pm.value}" constraint="min 0 max 100" onChanging="pm.setValue(Integer.parseInt(event.value))" onChange="pm.value = sp.value" />
+		<spinner id="sp" value="&#36;{pm.value}" constraint="min 0 max 100"
+		onChanging="pm.setValue(Integer.parseInt(event.value))" onChange="pm.value = sp.value"
+		cols="2"/>
 	</vbox>
 	<zscript>
 	void zoom(Slider slider, Image img) {
