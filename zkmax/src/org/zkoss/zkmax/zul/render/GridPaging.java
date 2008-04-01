@@ -44,7 +44,7 @@ public class GridPaging implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.grid.Grid\" z.pg=\"t\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 
-		if (self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
+		if (self.getPaging() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid).write("!pgit\" class=\"grid-pgi-t\">")
 				.write(self.getPaging())
 				.write("</div>");
@@ -105,7 +105,7 @@ public class GridPaging implements ComponentRenderer {
 				.write("</table></div>");
 		}
 		
-		if (self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
+		if (self.getPaging() != null && self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid).write("!pgib\" class=\"grid-pgi\">")
 				.write(self.getPaging())
 				.write("</div>");
