@@ -1197,6 +1197,7 @@ Element.Methods = {
     if (element._clipping) return element;
 	element._clipping = true;
     element._overflow = element.style.overflow;
+	if (zk.ie && !element._overflow) element._overflow = 'visible';
     element._overflowX = element.style.overflowX;
 	element._overflowY = element.style.overflowY;
 //Tom M. Yeh, Potix: optimize it
@@ -1211,7 +1212,7 @@ Element.Methods = {
     if (!element._clipping) return element;
 //Tom M. Yeh, Potix
 //Bug 1822717 and 1882277
-    element.style.overflow = element._overflow;
+    element.style.overflow = zk.ie && element._overflow == 'visible' ? 'auto' : element._overflow;
 	element.style.overflowX = element._overflowX;
 	element.style.overflowY = element._overflowY;
     element._clipping = element._overflow = element._overflowX = element._overflowY = undefined;
