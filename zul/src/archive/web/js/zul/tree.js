@@ -84,6 +84,11 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	},
 	/** Toggle the open/close status. */
 	toggleOpen: function (evt, target) {
+		var of;
+		if (zk.ie6Only) { //Bug 1926094
+			of = this.element.style.overflow;
+			this.element.style.overflow = "hidden";
+		}
 		var row = zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
@@ -95,6 +100,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 		if (el) zk.asyncFocus(el.id);
 
 		Event.stop(evt);
+		if (zk.ie6Only) this.element.style.overflow = of;
 	},
 	/** Opens an item */
 	_openItem: function (row, img, toOpen) {

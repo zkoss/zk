@@ -14,9 +14,10 @@ div.listbox, div.tree, div.grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
 </c:if>
-div.tree-head, div.listbox-head, div.grid-head {<%-- always used. --%>
+div.tree-head, div.listbox-head, div.grid-head, div.tree-foot, div.listbox-foot,
+	div.grid-foot {<%-- always used. --%>
 	position:relative;
-	<%-- Bug 1712708:  we have to specify position:relative --%>
+	<%-- Bug 1712708 and 1926094:  we have to specify position:relative --%>
 }
 div.tree-head th, div.listbox-head th, div.grid-head th {
 	text-overflow: ellipsis;
