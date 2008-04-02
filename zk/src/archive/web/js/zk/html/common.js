@@ -110,13 +110,13 @@ if (zk.ie) {
 // More zk utilities (defined also in boot.js) //
 /**
  * Fixs the layout position of the element when the style of element is "overflow:hidden" or
- * "position:relative" in IE6. Because, sometimes the layout position of the element
+ * "position:relative" in IE. Because, sometimes the layout position of the element
  * will be gone or go away its original place. 
  * @param {Object} el
  * @since 3.0.5
  */
-zk.fixedPositionForIE6 = function (el){
-	if (!zk.ie6Only || !el) return;
+zk.fixedPositionForIE = function (el){
+	if (!zk.ie || !el) return;
 	var of = el.style.overflow;
 	el.style.overflow = "hidden";
 	if(el.offsetWidth){} // this is a tip.
