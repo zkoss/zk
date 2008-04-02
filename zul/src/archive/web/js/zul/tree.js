@@ -84,7 +84,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	},
 	/** Toggle the open/close status. */
 	toggleOpen: function (evt, target) {
-		zk.fixedPositionForIE6(this.element);
+		zk.fixedPositionForIE(this.element);
 		var row = zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
