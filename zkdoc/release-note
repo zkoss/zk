@@ -12,6 +12,7 @@ ZK 3.0.5 Freshly
   1927154: IE6Only: grid inside tabbox floats outside tabbox area
   1926480: Cant change header label dynamically.
   1930068: IE appears corpse of Paging while using external Paging comp
+  1926094: Listfooter overlays Listheader (IE6)
 
 	--------
 ZK 3.0.4
