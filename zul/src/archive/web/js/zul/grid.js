@@ -112,12 +112,6 @@ zk.Grid.prototype = {
 	updSize: function () {
 		var hgh = this.element.style.height;
 		this.setHgh(hgh);
-
-		var of;
-		if (zk.ie6Only) { //Bug 1927154
-			of = this.element.style.overflow;
-			this.element.style.overflow = "hidden";
-		}
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
 		//IE: element's width will be extended to fit body
@@ -134,7 +128,6 @@ zk.Grid.prototype = {
 			if (this.head) this.head.style.width = wd;
 			if (this.foot) this.foot.style.width = wd;
 		}
-		if (zk.ie6Only) this.element.style.overflow = of;
 	},
 	_beforeSize: function () {
 		var wd = this.element.style.width;
