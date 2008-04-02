@@ -740,7 +740,11 @@ zk.Selectable.prototype = {
 	/** Calculates the size. */
 	_calcSize: function () {
 		this._calcHgh();	
-		
+		var of;
+		if (zk.ie6Only) { //Bug 1927154
+			of = this.element.style.overflow;
+			this.element.style.overflow = "hidden";
+		}
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
 		//IE: element's width will be extended to fit body
@@ -750,17 +754,9 @@ zk.Selectable.prototype = {
 		//is sometime too big
 		var wd = this.element.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			var of;
-			if (zk.ie6Only) { //Bug 1927154
-				of = this.element.style.overflow;
-				this.element.style.overflow = "hidden";
-			}
-
 			wd = zk.revisedSize(this.element, this.element.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
-
-			if (zk.ie6Only) this.element.style.overflow = of;
 		}
 		if (wd) {
 			this.body.style.width = wd;
@@ -768,6 +764,7 @@ zk.Selectable.prototype = {
 			if (this.foot) this.foot.style.width = wd;
 		}
 
+		if (zk.ie6Only) this.element.style.overflow = of;
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
 			if (tblwd && this.body.offsetWidth == this.bodytbl.offsetWidth && this.body.offsetWidth - tblwd > 11) {
