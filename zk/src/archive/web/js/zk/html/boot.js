@@ -72,7 +72,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.voidf = Prototype.emptyFunction;
+zk.voidf = function () {return false;}; //always return false
 zk.booting = true; //denote ZK is booting
 
 /** Browser info. */
