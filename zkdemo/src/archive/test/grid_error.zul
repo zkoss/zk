@@ -5,7 +5,7 @@
 
 Bug 1599788: handling out-of-sequence responses.
 
-<vbox>
+<vbox width="200px">
 	<grid>
  		<columns>
 	        <column label="aa"/>
