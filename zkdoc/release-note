@@ -16,7 +16,8 @@ ZK 3.0.5 Freshly
   1822717: slider's layout went wrong if sliding parent groupbox(IE6)
   1882277: Overflow:auto lost when swiching accord tabbox (Safari only)
   1752907: groupbox mold=3d FF animation jumping
-
+  1920793: The focused style of selected item differences Firefox/IE
+  
 	--------
 ZK 3.0.4
 * Features
