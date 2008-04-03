@@ -126,7 +126,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//super.init(config);
 			//Note callback super to avoid saving config
 
-		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
+//		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
 		_ctx = config.getServletContext();
 
 		for (int j = 0;;) {
@@ -267,7 +267,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		if (sess == null) {
-			if (!withpi) {
+			if (!withpi) { //AU request
 				//Bug 1849088: rmDesktop might be sent after invalidate
 				//Bug 1859776: need send response to client for redirect or others
 				final String dtid = request.getParameter("dtid");
@@ -310,24 +310,29 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected void process(Session sess,
 	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		final WebApp wapp = sess.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
-		final UiEngine uieng = wappc.getUiEngine();
-		final List aureqs = new LinkedList();
+		final String errClient = request.getHeader("ZK-Error-Report");
+		if (errClient != null) {
+			if (log.debugable()) log.debug("Error found at client: "+errClient+"\n"+getDetail(request));
+log.info("Error found at client: "+errClient+"\n"+getDetail(request));
+		}
 
 		//parse desktop ID
 		final String dtid = request.getParameter("dtid");
 		if (dtid == null) {
-			//log.warning("dtid not found: CP="+request.getContextPath()+" and "+Https.getThisContextPath(request)
-			//	+", SP="+request.getServletPath()+" and "+Https.getThisServletPath(request)
-			//	+", QS="+request.getQueryString()+" and "+Https.getThisQueryString(request)
-			//	+", params="+request.getParameterMap().keySet());
-			//responseError(response, "Illegal request: dtid is required");
-			//Tom M. Yeh: 20060922: Unknown reason to get here but it is annoying
-			//to response it back to users
+			//Bug 1929139: incomplete request (IE only)
+			final boolean ie = Servlets.isExplorer(request);
+			if (!ie || log.debugable()) {
+				final String msg = "Incomplete request\n"+getDetail(request);
+				if (ie) log.debug(msg);
+				else log.warning(msg); //impossible, so warning
+			}
+log.info("Incomplete request for "+request.getHeader("ZK-SID")+"\n"+getDetail(request));
+			response.sendError(467, "Incomplete request");
 			return;
 		}
 
+		final WebApp wapp = sess.getWebApp();
+		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
 			final String scmd = request.getParameter("cmd.0");
@@ -342,8 +347,31 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		WebManager.setDesktop(request, desktop);
 			//reason: a new page might be created (such as include)
 
-		//parse commands
+		final UiEngine uieng = wappc.getUiEngine();
 		final Configuration config = wapp.getConfiguration();
+		final AuWriter out = AuWriters.newInstance()
+			.open(request, response,
+				desktop.getDevice().isSupported(Device.RESEND) ?
+					config.getResendDelay() / 2 - 500: 0);
+				//Note: getResendDelay() might return nonpositive
+
+		final String sid = request.getHeader("ZK-SID");
+		if (sid != null) //Mobile client doesn't have ZK-SID
+			response.setHeader("ZK-SID", sid);
+else if (!"rmDesktop".equals(request.getParameter("cmd.0")))
+log.warning("Request ignored: ZK-SID unavailable\n"+getDetail(request));
+
+		final String respCmds = ((DesktopCtrl)desktop).getLastResponse(sid);
+		if (respCmds != null) {
+			if (log.debugable()) log.debug("Repeat request and return "+respCmds);
+log.info("Repeat request and return "+respCmds);
+			out.writeRawContent(respCmds);
+			out.close(request, response);
+			return;
+		}
+
+		//parse commands
+		final List aureqs = new LinkedList();
 		final boolean timerKeepAlive = config.isTimerKeepAlive();
 		boolean keepAlive = false;
 		try {
@@ -362,7 +390,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				final String[] data = request.getParameterValues("data."+j);
 				if (data != null) {
 					for (int k = data.length; --k >= 0;)
-						if ("zk_null~q".equals(data[k]))
+						if ("_z~nil".equals(data[k]))
 							data[k] = null;
 				}
 				if (uuid == null || uuid.length() == 0) {
@@ -384,17 +412,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 		//if (log.debugable()) log.debug("AU request: "+aureqs);
-		final AuWriter out = AuWriters.newInstance()
-			.open(request, response,
-				desktop.getDevice().isSupported(Device.RESEND) ?
-					config.getResendDelay() / 2 - 500: 0);
-				//Note: getResendDelay() might return nonpositive
 		final PerformanceMeter pfmeter = config.getPerformanceMeter();
 
 		final Execution exec = 
 			new ExecutionImpl(_ctx, request, response, desktop, null);
 		final Collection reqIds = uieng.execUpdate(exec, aureqs,
-			pfmeter != null ? meterStart(pfmeter, request, exec): null,
+			new String[] {sid,
+				pfmeter != null ? meterStart(pfmeter, request, exec): null},
 			out);
 
 		if (reqIds != null && pfmeter != null)
@@ -405,6 +429,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private void sessionTimeout(HttpServletRequest request,
 	HttpServletResponse response, String dtid, String scmd)
 	throws ServletException, IOException {
+		final String sid = request.getHeader("ZK-SID");
+		if (sid != null)
+			response.setHeader("ZK-SID", sid);
+
 		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
 
 		if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
@@ -472,7 +500,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private static String meterStart(PerformanceMeter pfmeter,
 	HttpServletRequest request, Execution exec) {
 		//Format of ZK-Client-Complete:
-		//	request-id1 request-id2=time1,request-id3=time2
+		//	request-id1=time1,request-id2=time2
 		String hdr = request.getHeader("ZK-Client-Complete");
 		if (hdr != null) {
 			for (int j = 0;;) {
@@ -541,5 +569,23 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		response.setHeader("ZK-Client-Complete", sb.toString());
 			//tell the client what are completed
+	}
+
+	/** Returns the request details.
+	 */
+	private static String getDetail(HttpServletRequest request) {
+		final StringBuffer sb = new StringBuffer(128);
+		addHeaderInfo(sb, request, "user-agent");
+		addHeaderInfo(sb, request, "content-length");
+//		addHeaderInfo(sb, request, "content-type");
+		sb.append(" ip: ").append(request.getRemoteAddr());
+//		sb.append(" method: ").append(request.getMethod());
+		return sb.toString();
+	}
+	private static void addHeaderInfo(StringBuffer sb,
+	HttpServletRequest request, String header) {
+		sb.append(' ')
+			.append(header).append(": ").append(request.getHeader(header))
+			.append('\n');
 	}
 }

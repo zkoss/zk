@@ -383,6 +383,7 @@ public class UiEngineImpl implements UiEngine {
 			cleaned = true;
 			final List errs = new LinkedList();
 			errs.add(ex);
+
 			config.invokeExecutionCleanups(exec, oldexec, errs);
 				//CONSIDER: whether to pass cleanup's error to users
 
@@ -683,7 +684,7 @@ public class UiEngineImpl implements UiEngine {
 		execUpdate(exec, requests, null, out);
 	}
 	public Collection execUpdate(Execution exec, List requests,
-	String reqId, AuWriter out) throws IOException {
+	String[] reqIds, AuWriter out) throws IOException {
 		if (requests == null)
 			throw new IllegalArgumentException("null requests");
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
@@ -694,6 +695,7 @@ public class UiEngineImpl implements UiEngine {
 			return null; //done (request is added to the exec currently activated)
 
 		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
@@ -709,8 +711,9 @@ public class UiEngineImpl implements UiEngine {
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, null);
-			final RequestQueue rque = ((DesktopCtrl)desktop).getRequestQueue();
-			if (reqId != null) rque.addRequestId(reqId);
+			final RequestQueue rque = desktopCtrl.getRequestQueue();
+			if (reqIds != null && reqIds[1] != null)
+				rque.addPerfRequestId(reqIds[1]);
 
 			final List errs = new LinkedList();
 			final long tmexpired =
@@ -771,13 +774,14 @@ public class UiEngineImpl implements UiEngine {
 				log.error(ex);
 			}
 
-			if (rque.endWithRequest()) //stop accept another request
-				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
+			if (rque.isEmpty())
+				doneReqIds = rque.clearPerfRequestIds();
 			else
-				doneReqIds = rque.clearRequestIds();
+				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
 
-			out.writeSequenceId(desktop);
 			out.write(responses);
+			if (reqIds != null && reqIds[0] != null)
+				desktopCtrl.responseSent(reqIds[0], out.getRawContent());
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
@@ -1205,11 +1209,6 @@ public class UiEngineImpl implements UiEngine {
 			//to simplify the following codes, asyncupd and recovering
 			//cannot be both true
 
-		final boolean inProcess = asyncupd && !isRecovering(desktop)
-			&& desktopCtrl.getRequestQueue().addRequests(requests);
-				//used as flag to know whether to add the requests
-				//to the previous execution, if any.
-
 		//lock desktop
 		final UiVisualizer uv;
 		final Map eis = getVisualizers(sess);
@@ -1217,8 +1216,6 @@ public class UiEngineImpl implements UiEngine {
 			for (;;) {
 				final UiVisualizer old = (UiVisualizer)eis.get(desktop);
 				if (old == null) break; //grantable
-
-				if (inProcess) return null; //done
 
 				try {
 					eis.wait(120*1000);
@@ -1228,11 +1225,13 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//grant
-			if (asyncupd) desktopCtrl.getRequestQueue().setInProcess();
-				//set the flag asap to free more following executions
 			eis.put(desktop, uv = new UiVisualizer(exec, asyncupd, recovering));
 			desktopCtrl.setExecution(exec);
 		}
+
+//		if (log.finerable()) log.finer("Activated "+desktop);
+		if (asyncupd)
+			desktopCtrl.getRequestQueue().addRequests(requests);
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setVisualizer(uv);

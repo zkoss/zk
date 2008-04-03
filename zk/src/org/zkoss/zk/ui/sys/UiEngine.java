@@ -158,16 +158,20 @@ public interface UiEngine {
 	 * <p>Note: the output must be XML and UTF-8.
 	 *
 	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest}.
-	 * @param reqId the request ID which is used to invoke
+	 * @param reqIds the request IDs (null).
+	 * The first element (reqIds[0]), if not null, is the sequence ID of
+	 * the request (ZK-SID).
+	 * The second element (reqIds[1]), if not null, is the sequence ID
+	 * for performance measurement, and used to invoke
 	 * {@link org.zkoss.zk.ui.util.PerformanceMeter#requestCompleteAtClient}.
 	 * Ignored if null or {@link org.zkoss.zk.ui.util.Configuration#getPerformanceMeter}
 	 * is not defined.
 	 * @return a list of request IDs that have been processed
 	 * completely.
-	 * @since 3.0.1
+	 * @since 3.0.5
 	 */
 	public Collection execUpdate(Execution exec, List requests,
-	String reqId, AuWriter out) throws IOException;
+	String[] reqIds, AuWriter out) throws IOException;
 
 	/** Executes the recovering.
 	 */

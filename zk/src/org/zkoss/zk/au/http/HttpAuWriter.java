@@ -119,11 +119,14 @@ public class HttpAuWriter implements AuWriter{
 		for (Iterator it = responses.iterator(); it.hasNext();)
 			write((AuResponse)it.next());
 	}
-	public void writeSequenceId(Desktop desktop) throws IOException {
-		_out.write("\n<sid>");
-		_out.write(Integer.toString(
-			((DesktopCtrl)desktop).getResponseSequence(true)));
-		_out.write("</sid>");
+
+	public String getRawContent() {
+		final StringBuffer buf = _out.getBuffer();
+		final int j = buf.indexOf("<rs>");
+		return buf.substring(j >= 0 ? j + 4: 0);
+	}
+	public void writeRawContent(String rawContent) throws IOException {
+		_out.write(rawContent);
 	}
 
 	//Utilities//
