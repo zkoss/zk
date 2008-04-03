@@ -727,10 +727,10 @@ Effect.SlideDown = function(element) {
       if(window.opera) effect.element.setStyle({top: ''});
       effect.element.makeClipping().setStyle({height: '0px'}).show(); 
     },
-    afterUpdateInternal: function(effect) {
+    /**afterUpdateInternal: function(effect) { Jumper Chen, Potix: Bug #1752907
       effect.element.down().setStyle({bottom:
         (effect.dims[0] - effect.element.clientHeight) + 'px' }); 
-    },
+    },*/
     afterFinishInternal: function(effect) {
       effect.element.undoClipping().undoPositioned();
       effect.element.down().undoPositioned().setStyle({bottom: oldInnerBottom}); }
@@ -753,10 +753,10 @@ Effect.SlideUp = function(element) {
       if(window.opera) effect.element.setStyle({top: ''});
       effect.element.makeClipping().show();
     },  
-    afterUpdateInternal: function(effect) {
+    /**afterUpdateInternal: function(effect) { Jumper Chen, Potix: Bug #1752907
       effect.element.down().setStyle({bottom:
         (effect.dims[0] - effect.element.clientHeight) + 'px' });
-    },
+    },*/
     afterFinishInternal: function(effect) {
       effect.element.hide().undoClipping().undoPositioned().setStyle({bottom: oldInnerBottom});
       effect.element.down().undoPositioned();
