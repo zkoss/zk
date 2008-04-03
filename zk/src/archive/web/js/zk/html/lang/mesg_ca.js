@@ -18,11 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "No s'ha trobat: ";
-mesg.UNSUPPORTED = "Encara no és suportat: "
+mesg.UNSUPPORTED = "Encara no és compatible: "
 mesg.FAILED_TO_SEND = "Ha fallat l'enviament de la petició al servidor: ";
-mesg.FAILED_TO_RESPONSE = "El servidor ha fallat en processar la petició: ";
-mesg.UNSUPPORTED_BROWSER = "Navegador no suportat: ";
-mesg.ILLEGAL_RESPONSE = "Resposta desconeguda enviada des del servidor. Si us plau, recarregau i proveu una altra vegada.\n";
+mesg.FAILED_TO_RESPONSE = "El servidor ha fallat en processar la petició.\nTry again?\n\n";
+mesg.UNSUPPORTED_BROWSER = "El navegador no és compatible: ";
+mesg.ILLEGAL_RESPONSE = "Resposta desconeguda enviada des del servidor. Si us plau, recarregueu i proveu una altra vegada.\n";
 mesg.FAILED_TO_PROCESS = "Ha fallat el procés ";
 mesg.UUID_REQUIRED = "Es requereix l'UUID";
 mesg.INVALID_STRUCTURE = "Estructura invàlida: ";
@@ -30,14 +30,14 @@ mesg.COMP_OR_UUID_REQUIRED = "Es requereix el component o el seu UUID";
 mesg.NUMBER_REQUIRED = "Heu d'especificar un nombre, en lloc de ";
 mesg.INTEGER_REQUIRED = "Heu d'especificar un enter, en lloc de ";
 mesg.EMPTY_NOT_ALLOWED = "Cal emplenar el camp.\nNo es pot deixar buit ni a blancs.";
-mesg.GOTO_ERROR_FIELD = "Anau al camp erroni";
-mesg.PLEASE_WAIT = "Processant...";
+mesg.GOTO_ERROR_FIELD = "Aneu al camp erroni";
+mesg.PLEASE_WAIT = "S'està processant...";
 
 mesg.FILE_SIZE = "Mida de l'arxiu: ";
 mesg.KBYTES = "KB";
 
 mesg.CANCEL="Cancel·la";
 
-mesg.FAILED_TO_LOAD = "No és possible la càrrega ";
-mesg.FAILED_TO_LOAD_DETAIL = "Pot ser provocat pel mal trànsit de comunicacions. Podríeu  recarregar aquesta pàgina i provar una altra vegada.";
+mesg.FAILED_TO_LOAD = "Ha fallat la càrrega ";
+mesg.FAILED_TO_LOAD_DETAIL = "Pot ser provocat pel mal trànsit de comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.";
 mesg.CAUSE = "Motiu: ";

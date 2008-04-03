@@ -7,6 +7,7 @@
 		
 	History:
     sept 21, 2006,Created by Jérôme Vergereau
+    sept 06 2007 modified by Michael Planamente
 }}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
@@ -19,17 +20,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "Pas trouvé: ";
 mesg.UNSUPPORTED = "Pas encore supporté: "
-mesg.FAILED_TO_SEND = "Echec de l'envoie d'une requête vers le serveur: ";
-mesg.FAILED_TO_RESPONSE = "Le serveur à échouer dans le traitement de votre requête: ";
+mesg.FAILED_TO_SEND = "Echec lors de l'envoi d'une requête vers le serveur: ";
+mesg.FAILED_TO_RESPONSE = "Le serveur à échoué dans le traitement de votre requête.\nVoulez-vous essayer à nouveau?\n\n";
 mesg.UNSUPPORTED_BROWSER = "Navigateur non supporté: ";
-mesg.ILLEGAL_RESPONSE = "Réponse non connue envoyer depuis le serveur . Veuillez recharger et réessayer de nouveau.\n";
+mesg.ILLEGAL_RESPONSE = "Réponse inconnue envoyée depuis le serveur. Rechagez cette page et essayez de nouveau.\n";
 mesg.FAILED_TO_PROCESS = "N'a pas été traité ";
 mesg.UUID_REQUIRED = "UUID requis";
 mesg.INVALID_STRUCTURE = "Structure invalide: ";
 mesg.COMP_OR_UUID_REQUIRED = "Le composant ou son UUID est requis";
 mesg.NUMBER_REQUIRED = "Vous devez spécifier un nombre, plutôt que";
 mesg.INTEGER_REQUIRED = "Vous devez spécifier un entier, plutôt que";
-mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous devez spécifiez une valeur";
+mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous devez spécifier une valeur";
 mesg.GOTO_ERROR_FIELD = "Allez sur le mauvais champ";
 mesg.PLEASE_WAIT = "Chargement...";
 
@@ -38,6 +39,6 @@ mesg.KBYTES = "KB";
 
 mesg.CANCEL="Annuler";
 
-mesg.FAILED_TO_LOAD="Failed to load ";
-mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";
+mesg.FAILED_TO_LOAD="Erreur de chargement ";
+mesg.FAILED_TO_LOAD_DETAIL="Cela peut être dû à un problème de réseau. Rechagez cette page et essayez de nouveau.";
 mesg.CAUSE="Cause: ";
