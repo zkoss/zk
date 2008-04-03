@@ -1020,7 +1020,7 @@ zk.onVisiAt = function (n) {
 			if (!$visible(e))
 				break;
 			if (e == n || !n) { //elm is a child of n
-				zk.fixedPositionForIE(elm);
+				zk.fixOverflow(elm);
 				zk.eval(elm, "onVisi");
 				break;
 			}

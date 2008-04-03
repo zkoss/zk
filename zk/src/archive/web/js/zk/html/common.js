@@ -115,13 +115,14 @@ if (zk.ie) {
  * @param {Object} el
  * @since 3.0.5
  */
-zk.fixedPositionForIE = function (el){
-	if (!zk.ie || !el) return;
-	var of = el.style.overflow;
-	el.style.overflow = "hidden";
-	if(el.offsetWidth){} // this is a tip.
-	el.style.overflow = of;
-};
+zk.fixOverflow = zk.ie ? function (el){
+	if (el) {
+		var of = el.style.overflow;
+		el.style.overflow = "hidden";
+		if(el.offsetWidth){} // this is a trick to re-calc
+		el.style.overflow = of;
+	}
+}: zk.voidf;
 /**
  * Redraws the all node tree.
  * @since 3.0.4
