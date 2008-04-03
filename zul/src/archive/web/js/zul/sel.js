@@ -1115,12 +1115,20 @@ zkSel.cmonblur = function (evt) {
 	zkSel.cmonblurTo($parentByTag(Event.element(evt), "TR"));
 };
 zkSel.cmonfocusTo = function (row) {
-	if (row) zk.addClass(row, "focusd");
+	if (row) zk.addClass(zkSel.getVisibleFirstChildIfAny(row), "focusd");
 };
 zkSel.cmonblurTo = function (row) {
-	if (row) zk.rmClass(row, "focusd");
+	if (row) {
+		zk.rmClass(row, "focusd");
+		for (var i = row.cells.length; --i >= 0;)
+			zk.rmClass(row.cells[i], "focusd");
+	}
 };
-
+zkSel.getVisibleFirstChildIfAny = function (row) {
+	for (var i = 0, j = row.cells.length; i < j; i++)
+		if (zk.isVisible(row.cells[i])) return row.cells[i];
+	return row;
+};
 ////
 // listbox //
 zkLibox = {}; //listbox
