@@ -311,10 +311,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		final String errClient = request.getHeader("ZK-Error-Report");
-		if (errClient != null) {
+		if (errClient != null)
 			if (log.debugable()) log.debug("Error found at client: "+errClient+"\n"+getDetail(request));
-log.info("Error found at client: "+errClient+"\n"+getDetail(request));
-		}
 
 		//parse desktop ID
 		final String dtid = request.getParameter("dtid");
@@ -326,7 +324,7 @@ log.info("Error found at client: "+errClient+"\n"+getDetail(request));
 				if (ie) log.debug(msg);
 				else log.warning(msg); //impossible, so warning
 			}
-log.info("Incomplete request for "+request.getHeader("ZK-SID")+"\n"+getDetail(request));
+
 			response.sendError(467, "Incomplete request");
 			return;
 		}
@@ -358,13 +356,10 @@ log.info("Incomplete request for "+request.getHeader("ZK-SID")+"\n"+getDetail(re
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null) //Mobile client doesn't have ZK-SID
 			response.setHeader("ZK-SID", sid);
-else if (!"rmDesktop".equals(request.getParameter("cmd.0")))
-log.warning("Request ignored: ZK-SID unavailable\n"+getDetail(request));
 
 		final String respCmds = ((DesktopCtrl)desktop).getLastResponse(sid);
 		if (respCmds != null) {
 			if (log.debugable()) log.debug("Repeat request and return "+respCmds);
-log.info("Repeat request and return "+respCmds);
 			out.writeRawContent(respCmds);
 			out.close(request, response);
 			return;
