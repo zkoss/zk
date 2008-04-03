@@ -3,7 +3,7 @@ ZK 3.0.5 Freshly
 * Features
 
 * Bugs
-  1929139: [IE6/IE7 only] Incorrect requests being dropped
+  1929139: [IE6/IE7 only] Incomplete requests being dropped
   1926759: Invisible splitter still visible
   1926742: Javascript Error after filedownload + doModal
   1926092: Treeitem/listitem popup/context does not stay up
