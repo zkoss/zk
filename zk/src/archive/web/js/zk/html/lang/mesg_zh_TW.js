@@ -19,8 +19,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "找不到：";
 mesg.UNSUPPORTED = "尚未支援："
-mesg.FAILED_TO_SEND = "無法傳送資料到伺服器：";
-mesg.FAILED_TO_RESPONSE = "伺服器暫時無法處理你的請求。\n再試一次?\n\n";
+mesg.FAILED_TO_SEND = "無法傳送資料到伺服器。";
+mesg.FAILED_TO_RESPONSE = "伺服器暫時無法處理你的請求。";
+mesg.TRY_AGAIN = "再試一次?";
 mesg.UNSUPPORTED_BROWSER = "尚未支援你使用的瀏覽器：";
 mesg.ILLEGAL_RESPONSE = "無法辨識伺服器傳回的資料。請按重新載入，再試試。\n";
 mesg.FAILED_TO_PROCESS = "無法處理：";

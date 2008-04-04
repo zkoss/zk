@@ -19,8 +19,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "Não encontrado: ";
 mesg.UNSUPPORTED = "Ainda não suportado: "
-mesg.FAILED_TO_SEND = "Falhou ao enviar requisião para o servidor: ";
-mesg.FAILED_TO_RESPONSE = "O servidor falhou ao processar sua requisição.\nTente novamente?\n\n";
+mesg.FAILED_TO_SEND = "Falhou ao enviar requisião para o servidor.";
+mesg.FAILED_TO_RESPONSE = "O servidor falhou ao processar sua requisição.";
+mesg.TRY_AGAIN = "Tente novamente?";
 mesg.UNSUPPORTED_BROWSER = "Navegador não suportado: ";
 mesg.ILLEGAL_RESPONSE = "Resposta desconhecida enviada pelo servidor. Por favor, recarregue e tente novamente.\n";
 mesg.FAILED_TO_PROCESS = "Falhou ao processar ";

@@ -5,8 +5,9 @@
 mesg={};
 mesg.NOT_FOUND="Не знайдений: ";
 mesg.UNSUPPORTED="Не підтримується: ";
-mesg.FAILED_TO_SEND="Не вдалося відіслати запит на сервер: ";
-mesg.FAILED_TO_RESPONSE="Сервер тимчасово недоступний.\nWoud you like to try again?\n\n";
+mesg.FAILED_TO_SEND="Не вдалося відіслати запит на сервер.";
+mesg.FAILED_TO_RESPONSE="Сервер тимчасово недоступний.";
+mesg.TRY_AGAIN="Try again?";
 mesg.UNSUPPORTED_BROWSER="Браузер не підтримується: ";
 mesg.ILLEGAL_RESPONSE="Невідома відповідь з серверу. Будьласка, перевантажте сторінку і спробуйте знову.\n";
 mesg.FAILED_TO_PROCESS="Не вдалося обробити ";

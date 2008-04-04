@@ -19,8 +19,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "Not found: ";
 mesg.UNSUPPORTED = "Not supported yet: "
-mesg.FAILED_TO_SEND = "Failed to send requests to server: ";
-mesg.FAILED_TO_RESPONSE = "The server is temporarily out of service.\nWoud you like to try again?\n\n";
+mesg.FAILED_TO_SEND = "Failed to send requests to server.";
+mesg.FAILED_TO_RESPONSE = "The server is temporarily out of service.";
+mesg.TRY_AGAIN = "Woud you like to try again?";
 mesg.UNSUPPORTED_BROWSER = "Unsupported browser: ";
 mesg.ILLEGAL_RESPONSE = "Unknown response sent from the server. Please reload and try again.\n";
 mesg.FAILED_TO_PROCESS = "Failed to process ";

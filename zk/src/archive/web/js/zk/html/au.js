@@ -276,21 +276,18 @@ zkau._onRespReady = function () {
 					case 503: //service unavailable
 						if (!zkau._areqTry) zkau._areqTry = 3; //two more try
 						if (--zkau._areqTry) {
-							zkau._areqResend(reqInf, 200, 3);
+							zkau._areqResend(reqInf, 200);
 							return;
 						}
 					}
 
-					var msg;
 					if (!zkau._ignorable && !zkau._unloading) {
-						msg = mesg.FAILED_TO_RESPONSE+ "(" + req.status;
-						if (req.statusText) msg += ": " + req.statusText;
-						msg += ")";
-					}
-					if (msg && confirm(msg)) {
-						zkau._areqTry = 2; //one more try
-						zkau._areqResend(reqInf);
-						return;
+						var msg = req.statusText;
+						if (confirm(mesg.FAILED_TO_RESPONSE+"\n"+mesg.TRY_AGAIN+"\n\n("+req.status+(msg?": "+msg:"")+")")) {
+							zkau._areqTry = 2; //one more try
+							zkau._areqResend(reqInf);
+							return;
+						}
 					}
 
 					zkau._cleanupOnFatal(zkau._ignorable);
@@ -307,8 +304,12 @@ zkau._onRespReady = function () {
 		//NOTE: if connection is off and req.status is accessed,
 		//Mozilla throws exception while IE returns a value
 		if (!zkau._ignorable && !zkau._unloading) {
-			var msg = zkau._errcode = e.message;
-			zk.error(mesg.FAILED_TO_RESPONSE+(msg.indexOf("NOT_AVAILABLE")<0?msg:""));
+			var msg = e.message;
+			zkau._errcode = "[Receive] " + msg;
+			if (confirm(mesg.FAILED_TO_RESPONSE+"\n"+mesg.TRY_AGAIN+"\n\n"+(msg&&msg.indexOf("NOT_AVAILABLE")<0?"("+msg+")":""))) {
+				zkau._areqResend(reqInf);
+				return;
+			}
 		}
 		zkau._cleanupOnFatal(zkau._ignorable);
 	}
@@ -580,9 +581,14 @@ zkau._sendNow2 = function(reqInf) {
 		} catch (e2) {
 		}
 
-		var msg = zkau._errcode = e.message;
-		if (!reqInf.ignorable && !zkau._unloading)
-			zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+(msg?"\n"+msg:""));
+		if (!reqInf.ignorable && !zkau._unloading) {
+			var msg = e.message;
+			zkau._errcode = "[Send] " + msg;
+			if (confirm(mesg.FAILED_TO_SEND+"\n"+mesg.TRY_AGAIN+"\n\n"+(msg?"("+msg+")":""))) {
+				zkau._areqResend(reqInf);
+				return;
+			}
+		}
 		zkau._cleanupOnFatal(reqInf.ignorable);
 	}
 };

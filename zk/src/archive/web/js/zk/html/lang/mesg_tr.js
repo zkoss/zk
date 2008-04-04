@@ -19,8 +19,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "Bulunamadı : ";
 mesg.UNSUPPORTED = "Henüz Desteklenmiyor : "
-mesg.FAILED_TO_SEND = "İstek sunucuya yollanamadı: ";
-mesg.FAILED_TO_RESPONSE = "Sunucu isteği yerine getiremedi.\nTry again?\n\n";
+mesg.FAILED_TO_SEND = "İstek sunucuya yollanamadı.";
+mesg.FAILED_TO_RESPONSE = "Sunucu isteği yerine getiremedi.";
+mesg.TRY_AGAIN="Try again?";
 mesg.UNSUPPORTED_BROWSER = "Desteklenmeyen tarayıcı: ";
 mesg.ILLEGAL_RESPONSE = "Sunucudan anlaşılmayan cevap döndü. Lütfen yeniden deneyiniz.\n";
 mesg.FAILED_TO_PROCESS = "İşlem gerçekleştirilemedi ";

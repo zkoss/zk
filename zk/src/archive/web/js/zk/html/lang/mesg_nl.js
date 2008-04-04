@@ -19,8 +19,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "Niet gevonden: ";
 mesg.UNSUPPORTED = "Nog niet ondersteund: "
-mesg.FAILED_TO_SEND = "Verzoek kan niet aan de server gestuurd worden: ";
-mesg.FAILED_TO_RESPONSE = "Server kan verzoek niet verwerken.\nTry again?\n\n";
+mesg.FAILED_TO_SEND = "Verzoek kan niet aan de server gestuurd worden.";
+mesg.FAILED_TO_RESPONSE = "Server kan verzoek niet verwerken.";
+mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Niet ondersteunde Browser: ";
 mesg.ILLEGAL_RESPONSE = "Unbekend Antwoord van de Server, Aktualiseer aub de pagina en probeer opnieuw.\n";
 mesg.FAILED_TO_PROCESS = "Verwerking is fout gegaan ";
