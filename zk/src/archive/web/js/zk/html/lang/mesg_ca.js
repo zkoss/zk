@@ -18,9 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "No s'ha trobat: ";
-mesg.UNSUPPORTED = "Encara no és compatible: "
-mesg.FAILED_TO_SEND = "Ha fallat l'enviament de la petició al servidor: ";
-mesg.FAILED_TO_RESPONSE = "El servidor ha fallat en processar la petició.\nTry again?\n\n";
+mesg.UNSUPPORTED = "Encara no és compatible: ";
+mesg.FAILED_TO_SEND = "Ha fallat l'enviament de la petició al servidor.";
+mesg.FAILED_TO_RESPONSE = "El servidor ha fallat en processar la petició.";
+mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "El navegador no és compatible: ";
 mesg.ILLEGAL_RESPONSE = "Resposta desconeguda enviada des del servidor. Si us plau, recarregueu i proveu una altra vegada.\n";
 mesg.FAILED_TO_PROCESS = "Ha fallat el procés ";

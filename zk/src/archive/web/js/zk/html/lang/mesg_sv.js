@@ -18,9 +18,10 @@ Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Ej hittat: ";
-mesg.UNSUPPORTED = "Stödjes inte än: "
-mesg.FAILED_TO_SEND = "Kunde inte sända begäran till servern: ";
-mesg.FAILED_TO_RESPONSE = "Servern kunde inte hantera din begäran.\nTry again?\n\n";
+mesg.UNSUPPORTED = "Stödjes inte än: ";
+mesg.FAILED_TO_SEND = "Kunde inte sända begäran till servern.";
+mesg.FAILED_TO_RESPONSE = "Servern kunde inte hantera din begäran.";
+mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Icke-supportad webbläsare: ";
 mesg.ILLEGAL_RESPONSE = "Okänt svar från server. Var god uppdatera sidan och försök igen..\n";
 mesg.FAILED_TO_PROCESS = "Kunde inte hantera ";
