@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "No s'ha trobat: ";
-mesg.UNSUPPORTED = "Encara no és compatible: "
+mesg.UNSUPPORTED = "Encara no és compatible: ";
 mesg.FAILED_TO_SEND = "Ha fallat l'enviament de la petició al servidor.";
 mesg.FAILED_TO_RESPONSE = "El servidor ha fallat en processar la petició.";
 mesg.TRY_AGAIN = "Try again?";

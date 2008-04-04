@@ -18,7 +18,7 @@ Copyright (C) 2005-2008 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Nenalezeno: ";
-mesg.UNSUPPORTED = "Nepodporováno: "
+mesg.UNSUPPORTED = "Nepodporováno: ";
 mesg.FAILED_TO_SEND = "Chyba při komunikaci se serverem.";
 mesg.FAILED_TO_RESPONSE = "Server je dočasně nedostupný, prosím opakujte akci později.";
 mesg.TRY_AGAIN = "Try again?";

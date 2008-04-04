@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Nicht gefunden: ";
-mesg.UNSUPPORTED = "Bisher nicht unterstützt: "
+mesg.UNSUPPORTED = "Bisher nicht unterstützt: ";
 mesg.FAILED_TO_SEND = "Request kann nicht an Server geschickt werden.";
 mesg.FAILED_TO_RESPONSE = "Server kann Request nicht bearbeiten.";
 mesg.TRY_AGAIN = "Möchten Sie es erneut versuchen?";

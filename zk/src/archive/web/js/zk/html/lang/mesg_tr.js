@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Bulunamadı : ";
-mesg.UNSUPPORTED = "Henüz Desteklenmiyor : "
+mesg.UNSUPPORTED = "Henüz Desteklenmiyor : ";
 mesg.FAILED_TO_SEND = "İstek sunucuya yollanamadı.";
 mesg.FAILED_TO_RESPONSE = "Sunucu isteği yerine getiremedi.";
 mesg.TRY_AGAIN="Try again?";

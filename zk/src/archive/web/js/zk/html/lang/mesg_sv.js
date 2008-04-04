@@ -18,7 +18,7 @@ Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Ej hittat: ";
-mesg.UNSUPPORTED = "Stödjes inte än: "
+mesg.UNSUPPORTED = "Stödjes inte än: ";
 mesg.FAILED_TO_SEND = "Kunde inte sända begäran till servern.";
 mesg.FAILED_TO_RESPONSE = "Servern kunde inte hantera din begäran.";
 mesg.TRY_AGAIN = "Try again?";

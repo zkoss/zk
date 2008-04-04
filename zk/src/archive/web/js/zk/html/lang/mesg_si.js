@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Ni mogoče najti: ";
-mesg.UNSUPPORTED = "Še ni podporto: "
+mesg.UNSUPPORTED = "Še ni podporto: ";
 mesg.FAILED_TO_SEND = "Napaka pri pošiljanju zahteve strežniku.";
 mesg.FAILED_TO_RESPONSE = "Strežnik je sporočil napako pri obdelavi vaše zahteve.";
 mesg.TRY_AGAIN = "Try again?";

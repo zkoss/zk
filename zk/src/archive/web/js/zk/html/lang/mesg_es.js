@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "No encontrado: ";
-mesg.UNSUPPORTED = "No es soportado por esta version: "
+mesg.UNSUPPORTED = "No es soportado por esta version: ";
 mesg.FAILED_TO_SEND = "Fallo al enviar peticiones (request) al servidor.";
 mesg.FAILED_TO_RESPONSE = "El servidor fallo al procesar la peticion.";
 mesg.TRY_AGAIN = "Inténtalo de nuevo?";

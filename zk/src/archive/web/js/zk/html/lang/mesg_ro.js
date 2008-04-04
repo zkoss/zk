@@ -18,7 +18,7 @@ Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Nu s-a găsit: ";
-mesg.UNSUPPORTED = "Nu este suportat încă: "
+mesg.UNSUPPORTED = "Nu este suportat încă: ";
 mesg.FAILED_TO_SEND = "Procesul de trimitere a cererii către server a eşuat";
 mesg.FAILED_TO_RESPONSE = "Server-ul nu a putut procesa cererea dumneavoastră.";
 mesg.TRY_AGAIN = "Try again?";

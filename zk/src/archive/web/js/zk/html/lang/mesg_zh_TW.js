@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "找不到：";
-mesg.UNSUPPORTED = "尚未支援："
+mesg.UNSUPPORTED = "尚未支援：";
 mesg.FAILED_TO_SEND = "無法傳送資料到伺服器。";
 mesg.FAILED_TO_RESPONSE = "伺服器暫時無法處理你的請求。";
 mesg.TRY_AGAIN = "再試一次?";

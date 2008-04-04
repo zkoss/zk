@@ -18,7 +18,7 @@ Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Не е открит: ";
-mesg.UNSUPPORTED = "Още не се поддържа: "
+mesg.UNSUPPORTED = "Още не се поддържа: ";
 mesg.FAILED_TO_SEND = "Проблем при изпращане на заявките към сървъра.";
 mesg.FAILED_TO_RESPONSE = "Сървъра не може да обработи заявката.";
 mesg.TRY_AGAIN = "Try again?";
