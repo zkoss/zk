@@ -120,15 +120,6 @@ public class HttpAuWriter implements AuWriter{
 			write((AuResponse)it.next());
 	}
 
-	public String getRawContent() {
-		final StringBuffer buf = _out.getBuffer();
-		final int j = buf.indexOf("<rs>");
-		return buf.substring(j >= 0 ? j + 4: 0);
-	}
-	public void writeRawContent(String rawContent) throws IOException {
-		_out.write(rawContent);
-	}
-
 	//Utilities//
 	private static void encodeXML(String data, Writer out)
 	throws IOException {

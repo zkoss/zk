@@ -34,7 +34,8 @@ public interface PerformanceMeter {
 	/** Called to notify when the client starts to send the request
 	 * to server.
 	 *
-	 * @param requestId a system-wide unique ID to identify a request.
+	 * @param requestId a desktop-wide unique ID to identify a request.
+	 * Note: it is not the same as {@link org.zkoss.zk.ui.sys.ExecutionCtrl#getRequestId}
 	 * @param exec the execution. You can retrieve the desktop,
 	 * session and user's info from it. But, don't access the component
 	 * in this method since it is not safe (exec is not activated).
@@ -52,7 +53,7 @@ public interface PerformanceMeter {
 	 * sending another request. It also means that this method might
 	 * not be called for each request (due to no further request).
 	 *
-	 * @param requestId a system-wide unique ID to identify a request.
+	 * @param requestId a desktop-wide unique ID to identify a request.
 	 * @param exec the execution. You can retrieve the desktop,
 	 * session and user's info from it. But, don't access the component
 	 * in this method since it is not safe (exec is not activated).
@@ -65,7 +66,7 @@ public interface PerformanceMeter {
 
 	/** Called to notify when the server receives the request.
 	 *
-	 * @param requestId a system-wide unique ID to identify a request.
+	 * @param requestId a desktop-wide unique ID to identify a request.
 	 * It is the same request ID as {@link #requestStartAtClient}.
 	 * @param exec the execution. You can retrieve the desktop,
 	 * session and user's info from it. But, don't access the component
@@ -79,7 +80,7 @@ public interface PerformanceMeter {
 	/** Called to notify when the server has completed the processing of
 	 * the request.
 	 *
-	 * @param requestId a system-wide unique ID to identify a request.
+	 * @param requestId a desktop-wide unique ID to identify a request.
 	 * @param exec the execution. You can retrieve the desktop,
 	 * session and user's info from it. But, don't access the component
 	 * in this method since it is not safe (exec is not activated).

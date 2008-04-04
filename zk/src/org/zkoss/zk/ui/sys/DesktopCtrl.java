@@ -240,21 +240,22 @@ if (c.isEmpty()) {
 	 */
 	public void afterProcessEvent(Event event);
 
-	/** Called when ZK Update Engine has sent a response to the client
+	/** Called when ZK Update Engine has sent a collection of responses
+	 * to the client.
 	 *
-	 * @param reqId the sequence ID of the request that the response is
-	 * based on. It must be not null.
-	 * @param response the response. It must be not null.
+	 * @param reqId the sequence ID of the request that the collection
+	 * of responses are generated for. It must not be null.
+	 * @param responses the collection of responses. It must not be null.
 	 * @since 3.0.5
 	 */
-	public void responseSent(String reqId, String response);
-	/** Returns the response of the last request, or null
-	 * if no response or the specified request ID doesn't match
+	public void responseSent(String reqId, Collection responses);
+	/** Returns the collection of responses for the last request, or null
+	 * if no response yet, or the specified request ID doesn't match
 	 * the last one (passed to {@link #responseSent}).
 	 *
 	 * @since 3.0.5
 	 */
-	public String getLastResponse(String reqId);
+	public Collection getLastResponse(String reqId);
 
 	/** @deprecated As of release 3.0.5, replaced with {@link #responseSent}.
 	 */

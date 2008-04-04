@@ -31,21 +31,6 @@ import org.zkoss.zk.au.AuResponse;
  * <p>To use the writer, {@link #open} must be called first.
  * And, {@link #close} after all responses are written.
  *
- * <p>However there are two ways to write responses.
- * First, you can call {@link #write(AuResponse)}
- * and/or {@link #write(Collection)} to write responses individually.
- * After all responses are written, you
- * then invoke {@link #close} to close the writer.
- *
- * <p>Second, you can call {@link #writeRawContent} to write
- * the raw content of all responses (XML),
- * and then invoke {@link #close} to close the writer.
- * The raw content is retrieved in the previous invocation to
- * {@link #getRawContent}.
- *
- * <p>Note: you can not mix the use of {@link #write} and {@link #writeRawContent},
- * and {@link #writeRawContent} can be called only once.
- *
  * @author tomyeh
  * @since 3.0.1
  * @see AuWriters#setImplementationClass
@@ -77,31 +62,4 @@ public interface AuWriter {
 	/** Generates a list of responses to the output.
 	 */
 	public void write(Collection responses) throws IOException;
-
-	/** Retrieves the raw content of the responses being written
-	 * by {@link #write}.
-	 *
-	 * <p>It is designed to implement the resend mechanism:
-	 * <ol>
-	 * <li>Call this method after all responses being written
-	 * (by {@link #write}).</li>
-	 * <li>Call {@link org.zkoss.zk.ui.sys.DesktopCtrl#responseSent}
-	 * to store the raw content.</li>
-	 * <li>Call {@link org.zkoss.zk.ui.sys.DesktopCtrl#getLastResponse}
-	 * to see if it is a resend request, when a new request arrives.
-	 * <li>If a resend request, call {@link #writeRawContent} instead
-	 * of {@link #write}.
-	 * </ol>
-	 * @since 3.0.5
-	 */
-	public String getRawContent();
-	/** Writes the responses in the raw format.
-	 * Note: it can be called only once and cannot be used with
-	 * {@link #write}.
-	 *
-	 * @param rawContent the raw content is what the client really recieved.
-	 * @see #getRawContent
-	 * @since 3.0.5
-	 */
-	public void writeRawContent(String rawContent) throws IOException;
 }

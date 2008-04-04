@@ -133,7 +133,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private ServerPush _spush;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
-	private transient String _lastReqId, _lastResp;
+	private transient String _lastReqId;
+	private transient Collection _lastResps;
 	/** Whether any onPiggyback listener is registered. */
 	private boolean _piggybackListened;
 
@@ -698,12 +699,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	//AU Response//
-	public void responseSent(String reqId, String response) {
+	public void responseSent(String reqId, Collection responses) {
 		_lastReqId = reqId;
-		_lastResp = response;
+		_lastResps = responses;
 	}
-	public String getLastResponse(String reqId) {
-		return Objects.equals(reqId, _lastReqId) ? _lastResp: null;
+	public Collection getLastResponse(String reqId) {
+		return Objects.equals(reqId, _lastReqId) ? _lastResps: null;
 	}
 	/** @deprecated As of release 3.0.5, replaced with {@link #responseSent}.
 	 */
