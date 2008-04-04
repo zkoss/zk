@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.PerformanceMeter;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.FailoverManager;
@@ -247,7 +248,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
-		//if (log.finerable()) log.finer("Path info: "+pi);
+//		if (log.finerable()) log.finer("Path info: "+pi);
 
 		final Session sess = WebManager.getSession(_ctx, request, false);
 		final boolean withpi = pi != null && pi.length() != 0;
@@ -320,7 +321,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//Bug 1929139: incomplete request (IE only)
 			final boolean ie = Servlets.isExplorer(request);
 			if (!ie || log.debugable()) {
-				final String msg = "Incomplete request\n"+getDetail(request);
+				final String msg = "Incomplete request "+request.getHeader("ZK-SID")+"\n"+getDetail(request);
 				if (ie) log.debug(msg);
 				else log.warning(msg); //impossible, so warning
 			}
@@ -356,14 +357,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null) //Mobile client doesn't have ZK-SID
 			response.setHeader("ZK-SID", sid);
-
-		final String respCmds = ((DesktopCtrl)desktop).getLastResponse(sid);
-		if (respCmds != null) {
-			if (log.debugable()) log.debug("Repeat request and return "+respCmds);
-			out.writeRawContent(respCmds);
-			out.close(request, response);
-			return;
-		}
 
 		//parse commands
 		final List aureqs = new LinkedList();
@@ -406,15 +399,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
-		//if (log.debugable()) log.debug("AU request: "+aureqs);
+//		if (log.debugable()) log.debug("AU request: "+aureqs);
 		final PerformanceMeter pfmeter = config.getPerformanceMeter();
 
 		final Execution exec = 
 			new ExecutionImpl(_ctx, request, response, desktop, null);
+		if (sid != null)
+			((ExecutionCtrl)exec).setRequestId(sid);
 		final Collection reqIds = uieng.execUpdate(exec, aureqs,
-			new String[] {sid,
-				pfmeter != null ? meterStart(pfmeter, request, exec): null},
-			out);
+			pfmeter != null ? meterStart(pfmeter, request, exec): null, out);
 
 		if (reqIds != null && pfmeter != null)
 			meterComplete(pfmeter, response, reqIds, exec);
