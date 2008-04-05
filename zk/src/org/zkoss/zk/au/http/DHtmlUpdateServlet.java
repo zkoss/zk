@@ -321,7 +321,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//Bug 1929139: incomplete request (IE only)
 			final boolean ie = Servlets.isExplorer(request);
 			if (!ie || log.debugable()) {
-				final String msg = "Incomplete request "+request.getHeader("ZK-SID")+"\n"+getDetail(request);
+				final String msg = "Incomplete request\n"+getDetail(request);
 				if (ie) log.debug(msg);
 				else log.warning(msg); //impossible, so warning
 			}
@@ -563,6 +563,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 */
 	private static String getDetail(HttpServletRequest request) {
 		final StringBuffer sb = new StringBuffer(128);
+		sb.append(" sid: ").append(request.getHeader("ZK-SID"));
 		addHeaderInfo(sb, request, "user-agent");
 		addHeaderInfo(sb, request, "content-length");
 //		addHeaderInfo(sb, request, "content-type");
