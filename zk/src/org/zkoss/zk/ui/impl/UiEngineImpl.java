@@ -697,7 +697,7 @@ public class UiEngineImpl implements UiEngine {
 		if (sid != null) {
 			final Collection resps = desktopCtrl.getLastResponse(sid);
 			if (resps != null) {
-				if (log.debugable()) log.debug("Repeat request and return "+resps);
+				if (log.debugable()) log.debug("Repeat request "+sid+", and return "+resps.size()+" responses");
 				out.write(resps);
 				doDeactivate(exec); //deactive
 				return null; //done
