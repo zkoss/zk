@@ -896,10 +896,12 @@ zkau._onUnload = function () {
 		try {
 			var ds = zkau._dtids;
 			for (var j = 0; j < ds.length; ++j) {
-				var req = zkau.ajaxRequest();
-				req.open("POST", zk_action + "?dtid="+ds[j]+"&cmd.0=rmDesktop", true);
+				var req = zkau.ajaxRequest(),
+					content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
+				req.open("POST", zk.ie ? zk_action+"?"+content: zk_action, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				req.send();
+				if (zk.ie) req.send();
+				else req.send(content);
 			}
 		} catch (e) { //silent
 		}
