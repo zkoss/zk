@@ -302,7 +302,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 */
 	private static String getDetail(HttpServletRequest request) {
 		final StringBuffer sb = new StringBuffer(128);
-		sb.append(" sid: ").append(request.getHeader("ZK-SID"));
+		sb.append(" sid: ").append(request.getHeader("ZK-SID")).append('\n');
 		addHeaderInfo(sb, request, "user-agent");
 		addHeaderInfo(sb, request, "content-length");
 //		addHeaderInfo(sb, request, "content-type");
