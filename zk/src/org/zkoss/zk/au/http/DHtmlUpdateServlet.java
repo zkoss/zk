@@ -345,19 +345,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		WebManager.setDesktop(request, desktop);
 			//reason: a new page might be created (such as include)
 
-		final Configuration config = wapp.getConfiguration();
-		final AuWriter out = AuWriters.newInstance()
-			.open(request, response,
-				desktop.getDevice().isSupported(Device.RESEND) ?
-					config.getResendDelay() / 2 - 500: 0);
-				//Note: getResendDelay() might return nonpositive
-
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null) //Mobile client doesn't have ZK-SID
 			response.setHeader("ZK-SID", sid);
 
 		//parse commands
 		final List aureqs = new LinkedList();
+		final Configuration config = wapp.getConfiguration();
 		final boolean timerKeepAlive = config.isTimerKeepAlive();
 		boolean keepAlive = false;
 		try {
@@ -404,6 +398,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			new ExecutionImpl(_ctx, request, response, desktop, null);
 		if (sid != null)
 			((ExecutionCtrl)exec).setRequestId(sid);
+		final AuWriter out = AuWriters.newInstance()
+			.open(request, response,
+				desktop.getDevice().isSupported(Device.RESEND) ?
+					config.getResendDelay() / 2 - 500: 0);
+				//Note: getResendDelay() might return nonpositive
 		final Collection pfrqids = wappc.getUiEngine().execUpdate(exec, aureqs,
 			pfmeter != null ? meterStart(pfmeter, request, exec): null, out);
 
