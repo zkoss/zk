@@ -573,7 +573,6 @@ zkau._sendNow2 = function(reqInf) {
 		else req.send(reqInf.content);
 
 		if (!reqInf.implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
-		return; //success
 	} catch (e) {
 		//handle error
 		try {
@@ -1031,15 +1030,16 @@ zkau._onUnload = function () {
 	//to remove the desktop. Side effect: BACK to an page, its content might
 	//not be consistent with server's (due to Opera incapable to restore
 	//DHTML content 100% correctly)
-
 	if (!zk.opera && !zk.keepDesktop) {
 		try {
 			var ds = zkau._dtids;
 			for (var j = 0, dl = ds.length; j < dl; ++j) {
-				var req = zkau.ajaxRequest();
-				req.open("POST", zk_action, true);
+				var req = zkau.ajaxRequest(),
+					content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
+				req.open("POST", zk.ie ? zk_action+"?"+content: zk_action, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				req.send("dtid="+ds[j]+"&cmd.0=rmDesktop");
+				if (zk.ie) req.send();
+				else req.send(content);
 			}
 		} catch (e) { //silent
 		}

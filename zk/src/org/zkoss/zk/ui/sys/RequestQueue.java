@@ -33,6 +33,7 @@ public interface RequestQueue {
 	/** Returns if no more request available in the queue.
 	 *
 	 * @return whether no more request is available in the queue.
+	 * @since 3.0.5
 	 */
 	public boolean isEmpty();
 	/** Returns the next request, or null if no more request.
@@ -41,7 +42,6 @@ public interface RequestQueue {
 	public AuRequest nextRequest();
 
 	/** Adds a list of requests to the queue.
-	 * @since 3.0.5
 	 */
 	public void addRequests(Collection requests);
 

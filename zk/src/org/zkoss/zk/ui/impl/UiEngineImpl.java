@@ -718,10 +718,10 @@ public class UiEngineImpl implements UiEngine {
 		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
-			desktopCtrl.getRequestQueue().addRequests(requests);
+			final RequestQueue rque = desktopCtrl.getRequestQueue();
+			rque.addRequests(requests);
 
 			config.invokeExecutionInits(exec, null);
-			final RequestQueue rque = desktopCtrl.getRequestQueue();
 			if (pfReqId != null) rque.addPerfRequestId(pfReqId);
 
 			final List errs = new LinkedList();
