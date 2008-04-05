@@ -68,6 +68,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	/** Which page is being created, or null if all in update mode. */
 	private final Page _creating;
 	private final ExecutionResolver _exresolv;
+	/** The sequence ID of the current request. */
+	private String _reqId;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -294,6 +296,13 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public void addAuResponse(String key, AuResponse response) {
 		getUiEngine().addResponse(key, response);
+	}
+
+	public void setRequestId(String reqId) {
+		_reqId = reqId;
+	}
+	public String getRequestId() {
+		return _reqId;
 	}
 
 	//Object//

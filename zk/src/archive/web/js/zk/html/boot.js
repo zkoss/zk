@@ -48,8 +48,8 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "6q"; //increase this if we want the browser to reload JavaScript
-zk.voidf = Prototype.emptyFunction;
+zk.build = "6r"; //increase this if we want the browser to reload JavaScript
+zk.voidf = function () {return false;}; //always return false
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();

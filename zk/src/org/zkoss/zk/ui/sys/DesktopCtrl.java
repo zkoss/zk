@@ -103,28 +103,6 @@ public interface DesktopCtrl {
 	 */
 	public void recoverDidFail(Throwable ex);
 
-	/** Returns the sequence ID of the response.
-	 * The client and server uses the sequence ID to make sure
-	 * the responses are processed in the correct order.
-	 *
-	 * <p>The range of the sequence IDs is 0~1023.
-	 *
-	 * @param advance whether to advance the number before returning.
-	 * If true, the ID is increased and then returned.
-	 * If false, the previous value is returned
-	 */
-	public int getResponseSequence(boolean advance);
-	/** Sets the sequence ID of the response.
-	 *
-	 * <p>It is rarely called other than in the recovering mode, i.e.,
-	 * {@link ExecutionCtrl#isRecovering} is true.
-	 *
-	 * @param seqId a value between 0 and 1023.
-	 * Since ZK 2.4.1, you can reset the sequence by passing a negative
-	 * value to this argument.
-	 */
-	public void setResponseSequence(int seqId);
-
 	/** Notification that the session, which owns this desktop,
 	 * is about to be passivated (aka., serialized) by the Web container.
 	 */
@@ -184,4 +162,28 @@ if (c.isEmpty()) {
 	 * @return the media or null if not found.
 	 */
 	public Media getDownloadMedia(String medId, boolean remove);
+
+	/** Called when ZK Update Engine has sent a collection of responses
+	 * to the client.
+	 *
+	 * @param reqId the sequence ID of the request that the collection
+	 * of responses are generated for. It must not be null.
+	 * @param responses the collection of responses. It must not be null.
+	 * @since 2.4.3
+	 */
+	public void responseSent(String reqId, Collection responses);
+	/** Returns the collection of responses for the last request, or null
+	 * if no response yet, or the specified request ID doesn't match
+	 * the last one (passed to {@link #responseSent}).
+	 *
+	 * @since 2.4.3
+	 */
+	public Collection getLastResponse(String reqId);
+
+	/** @deprecated As of release 2.4.3, replaced with {@link #responseSent}.
+	 */
+	public int getResponseSequence(boolean advance);
+	/** @deprecated As of release 2.4.3, replaced with {@link #responseSent}.
+	 */
+	public void setResponseSequence(int seqId);
 }

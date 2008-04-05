@@ -729,6 +729,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (newChild == null)
 			throw new UiException("newChild is null");
 
+		if (refChild != null && refChild.getParent() != this)
+			refChild = null;
+
+		if (newChild == refChild)
+			return false; //nothing changed (Listbox and other assumes this)
+
 		boolean found = false;
 		if (_modChildByIter) {
 			_modChildByIter = false; //avoid dead loop

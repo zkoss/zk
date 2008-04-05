@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.logging.Log;
@@ -119,11 +120,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private CacheMap _meds;
 	/** ID used to identify what is stored in _meds. */
 	private int _medId;
-
-	private static final int MAX_RESPONSE_SEQUENCE = 1024;
-	/** The response sequence ID. */
-	private int _respSeqId = MAX_RESPONSE_SEQUENCE - 1;
-		//so the next value will be 0
+	private transient String _lastReqId;
+	private transient Collection _lastResps;
 
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
@@ -451,16 +449,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void recoverDidFail(Throwable ex) {
 		((WebAppCtrl)_wapp).getDesktopCache(_sess).removeDesktop(this);
 	}
-	public int getResponseSequence(boolean advance) {
-		if (advance && ++_respSeqId == MAX_RESPONSE_SEQUENCE)
-			_respSeqId = 0;
-		return _respSeqId;
-	}
-	public void setResponseSequence(int seqId) {
-		if (seqId >= 1024)
-			throw new IllegalArgumentException("Invalid sequence: "+seqId);
-		_respSeqId = seqId < 0 ? MAX_RESPONSE_SEQUENCE - 1: seqId;
-	}
 
 	public void destroy() {
 		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
@@ -554,5 +542,23 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		addComponent(comp);
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 			addAllComponents((Component)it.next());
+	}
+
+	//AU Response//
+	public void responseSent(String reqId, Collection responses) {
+		_lastReqId = reqId;
+		_lastResps = responses;
+	}
+	public Collection getLastResponse(String reqId) {
+		return Objects.equals(reqId, _lastReqId) ? _lastResps: null;
+	}
+	/** @deprecated As of release 2.4.3, replaced with {@link #responseSent}.
+	 */
+	public int getResponseSequence(boolean advance) {
+		return -1;
+	}
+	/** @deprecated As of release 2.4.3, replaced with {@link #responseSent}.
+	 */
+	public void setResponseSequence(int seqId) {
 	}
 }

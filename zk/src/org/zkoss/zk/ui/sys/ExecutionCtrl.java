@@ -134,4 +134,14 @@ public interface ExecutionCtrl {
 	 * (e.g., HTTP request) that creates this execution.
 	 */
 	public void setRequestAttribute(String name, Object value);
+
+	/** Sets the sequence ID of the current request.
+	 * @since 2.4.3
+	 */
+	public void setRequestId(String reqId);
+	/** Returns the sequence ID of the current request, or null if not
+	 * available. Not all clients support the request ID.
+	 * @since 2.4.3
+	 */
+	public String getRequestId();
 }

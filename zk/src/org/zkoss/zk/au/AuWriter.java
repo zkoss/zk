@@ -45,16 +45,13 @@ public interface AuWriter {
 	public AuWriter open(Object request, Object response, int timeout)
 	throws IOException;
 	/** Closes the writer and flush the result to client.
+	 *
 	 * @param request the request (HttpServletRequest if HTTP)
 	 * @param response the response (HttpServletResponse if HTTP)
 	 */
 	public void close(Object request, Object response)
 	throws IOException;
 
-	/** Generates the sequence ID of the specified desktop to the output.
-	 * @see org.zkoss.zk.ui.sys.DesktopCtrl#getResponseSequence
-	 */
-	public void writeSequenceId(Desktop desktop) throws IOException;
 	/** Generates the specified the response to the output.
 	 */
 	public void write(AuResponse response) throws IOException;

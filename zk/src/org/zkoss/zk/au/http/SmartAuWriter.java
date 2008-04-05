@@ -161,12 +161,6 @@ public class SmartAuWriter implements AuWriter {
 		for (Iterator it = responses.iterator(); it.hasNext();)
 			write((AuResponse)it.next());
 	}
-	public void writeSequenceId(Desktop desktop) throws IOException {
-		_out.write("\n<sid>");
-		_out.write(Integer.toString(
-			((DesktopCtrl)desktop).getResponseSequence(true)));
-		_out.write("</sid>");
-	}
 
 	//Utilities//
 	private static void encodeXML(String data, Writer out)
