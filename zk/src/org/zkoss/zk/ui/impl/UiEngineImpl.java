@@ -714,12 +714,12 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
-		desktopCtrl.getRequestQueue().addRequests(requests);
-
 		Collection doneReqIds = null; //request IDs that have been processed
 		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
+			desktopCtrl.getRequestQueue().addRequests(requests);
+
 			config.invokeExecutionInits(exec, null);
 			final RequestQueue rque = desktopCtrl.getRequestQueue();
 			if (pfReqId != null) rque.addPerfRequestId(pfReqId);
@@ -821,9 +821,6 @@ public class UiEngineImpl implements UiEngine {
 					log.warning(t);
 				}
 			}
-
-			doDeactivate(exec);
-
 			if (monitor != null) {
 				try {
 					monitor.afterUpdate(desktop);
@@ -832,6 +829,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 			}
 
+			doDeactivate(exec);
 			return doneReqIds;
 		}
 	}
