@@ -18,9 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Tidak Diketemui: ";
-mesg.UNSUPPORTED = "Belum didukung :: "
-mesg.FAILED_TO_SEND = "Gagal untuk mengirim request ke server: ";
-mesg.FAILED_TO_RESPONSE = "Server gagal memproses request Anda: ";
+mesg.UNSUPPORTED = "Belum didukung: ";
+mesg.FAILED_TO_SEND = "Gagal untuk mengirim request ke server.";
+mesg.FAILED_TO_RESPONSE = "Server gagal memproses request Anda.";
+mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Browser tidak didukung: ";
 mesg.ILLEGAL_RESPONSE = "Response yang terkirim dari server tidak diketahui. Mohon diulangi lagi.\n";
 mesg.FAILED_TO_PROCESS = "Gagal untuk di-proses";

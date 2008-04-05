@@ -18,9 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "找不到：";
-mesg.UNSUPPORTED = "尚未支持："
-mesg.FAILED_TO_SEND = "无法传送资料到服务器：";
-mesg.FAILED_TO_RESPONSE = "伺服器暂时无法处理你的请求。稍后请再试一次。\n\n";
+mesg.UNSUPPORTED = "尚未支持：";
+mesg.FAILED_TO_SEND = "无法传送资料到服务器。";
+mesg.FAILED_TO_RESPONSE = "伺服器暂时无法处理你的请求。";
+mesg.TRY_AGAIN="再试一次?";
 mesg.UNSUPPORTED_BROWSER = "尚未支持你使用的浏览器：";
 mesg.ILLEGAL_RESPONSE = "无法辨识服务器传回的资料。请按重新载入，再试试。\n";
 mesg.FAILED_TO_PROCESS = "无法处理：";

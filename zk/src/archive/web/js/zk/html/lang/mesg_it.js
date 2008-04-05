@@ -19,8 +19,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "Non trovato: ";
 mesg.UNSUPPORTED = "Non ancora supportato: ";
-mesg.FAILED_TO_SEND = "Invio della richiesta al server fallito: ";
-mesg.FAILED_TO_RESPONSE = "Il server ha fallito nel elaborare la tua richiesta: ";
+mesg.FAILED_TO_SEND = "Invio della richiesta al server fallito.";
+mesg.FAILED_TO_RESPONSE = "Il server ha fallito nel elaborare la tua richiesta.";
+mesg.TRY_AGAIN = "Riprovare?";
 mesg.UNSUPPORTED_BROWSER = "Browser non supportato: ";
 mesg.ILLEGAL_RESPONSE = "Risposta sconosciuta inviata dal server. Per favore ricarica la pagina e riprova.\n";
 mesg.FAILED_TO_PROCESS = "Errore nell'elaborazione di ";

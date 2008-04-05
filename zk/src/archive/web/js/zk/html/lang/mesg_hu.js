@@ -18,9 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 mesg = {};
 mesg.NOT_FOUND = "Nem található: ";
-mesg.UNSUPPORTED = "Még nem támogatott: "
-mesg.FAILED_TO_SEND = "A szerver kérelem nem sikerült: ";
-mesg.FAILED_TO_RESPONSE = "A webkiszolgáló ideiglenesen nem szolgál. Legyen szíves megpróbálni újra később:\n";
+mesg.UNSUPPORTED = "Még nem támogatott: ";
+mesg.FAILED_TO_SEND = "A szerver kérelem nem sikerült.";
+mesg.FAILED_TO_RESPONSE = "A webkiszolgáló ideiglenesen nem szolgál.";
+mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Nem támogatott böngésző: ";
 mesg.ILLEGAL_RESPONSE = "Ismeretlen szerver válasz. Legyen szíves az oldalt újra letölteni.\n";
 mesg.FAILED_TO_PROCESS = "Nem sikerült feldolgozni ";

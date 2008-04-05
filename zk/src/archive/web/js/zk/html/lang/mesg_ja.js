@@ -20,8 +20,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "見つかりません: ";
 mesg.UNSUPPORTED = "今後サポートする予定です: ";
-mesg.FAILED_TO_SEND = "リクエストの送信に失敗しました: ";
-mesg.FAILED_TO_RESPONSE = "サーバーが応答しませんでした。しばらく経ってから再度操作してください。\n\n ";
+mesg.FAILED_TO_SEND = "リクエストの送信に失敗しました。";
+mesg.FAILED_TO_RESPONSE = "サーバーが応答しませんでした。";
+mesg.TRY_AGAIN = "もう一度試してみますか？";
 mesg.UNSUPPORTED_BROWSER = "ご使用中のブラウザは対応しておりません: ";
 mesg.ILLEGAL_RESPONSE = "予期しない応答がありました。リロードしてから再度操作してください。\n";
 mesg.FAILED_TO_PROCESS = "処理できませんでした ";
