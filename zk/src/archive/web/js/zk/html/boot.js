@@ -813,8 +813,10 @@ zk._loadAndInit = function (inf) {
 				switch ($tag(n)) {
 				case "A": //Bug 1635685 and 1612312
 				case "AREA": //Bug 1896749
-					if (n.href.indexOf("javascript:") >= 0)
-						zk.listen(n, "click", zk._ieFixBfUnload);
+					try { // IE7 occurs some errors, if the href has any incorrect encoding.
+						if (n.href.indexOf("javascript:") >= 0)
+							zk.listen(n, "click", zk._ieFixBfUnload);
+					} catch (e) {}
 					break;
 				case "FORM":
 					//Bug 1811352
