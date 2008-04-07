@@ -2272,13 +2272,15 @@ zkau.cmd1 = {
 	},
 	focus: function (uuid, cmp) {
 		if (!zk.eval(cmp, "focus")) {
+			setTimeout(function (){
+				// But 1936366: delay it since some comp, e.g., endModal, uses timer
+				//to do the multiple-step operation
 			if (!zkau.canFocus(cmp, true)) return;
 
 			zkau.autoZIndex(cmp); //some, say, window, not listen to onfocus
 			cmp = $real(cmp); //focus goes to inner tag
 			zk.asyncFocus(cmp.id, 60);
-				//delay it since some comp, e.g., endModal, uses timer
-				//to do the multiple-step operation
+			}, 30);
 		}
 	},
 	closeErrbox: function (uuid, cmp) {
