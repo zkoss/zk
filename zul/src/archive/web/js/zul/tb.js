@@ -211,13 +211,7 @@ zkTmbox._btnUp= function(evt){
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
 	if(inp.disabled || zk.dragging) return;
-	inp.setAttribute("zk_changing_last", inp.value);
-	var selbk = inp.getAttribute("zk_changing_selbk");
-	inp.removeAttribute("zk_changing_selbk");		
-	var sr = zk.getSelectionRange(inp);
-	zkau.send({uuid: $uuid(cmp.id),
-		cmd: "onChanging", data: [inp.value, selbk == inp.value, sr[0]],
-		ignorable: true}, 100);
+	zkTxbox.sendOnChanging(inp);
 	zkTmbox._stopAutoIncProc(cmp);
 	zkTmbox._markPositionSel(cmp);
 	inp.focus();
@@ -414,6 +408,7 @@ zkTmbox._autoIncTimeout=function (cmp,inc_sec){
 			cmp.currentStep = cmp.currentStep + 1;
 		}
 		cmp.runCount = cmp.runCount + 1;
+		zkTxbox.sendOnChanging($real(cmp));
 	}
 };
 zkTmbox._startAutoIncProc=function (cmp,isup){

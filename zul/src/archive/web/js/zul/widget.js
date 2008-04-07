@@ -189,14 +189,24 @@ zkTxbox._scanChanging = function (id) {
 	var value = inp.getAttribute("zk_typeAhead") || inp.value;
 	if (inp && zkau.asap($outer(inp), "onChanging")
 	&& inp.getAttribute("zk_changing_last") != value) {
-		inp.setAttribute("zk_changing_last", value);
-		var selbk = inp.getAttribute("zk_changing_selbk");
-		inp.removeAttribute("zk_changing_selbk");		
-		var sr = zk.getSelectionRange(inp);
-		zkau.send({uuid: $uuid(id),
-			cmd: "onChanging", data: [value, selbk == value, sr[0]],
-			ignorable: true}, 100);
+		zkTxbox.sendOnChanging(inp, value);
 	}
+};
+/**
+ * Send the onChanging event to server.
+ * @param {Object} inp
+ * @param {Object} value the correct value of input element, if any.
+ * @since 3.0.5
+ */
+zkTxbox.sendOnChanging = function (inp, value) {
+	value = value || inp.value;
+	inp.setAttribute("zk_changing_last", value);
+	var selbk = inp.getAttribute("zk_changing_selbk");
+	inp.removeAttribute("zk_changing_selbk");		
+	var sr = zk.getSelectionRange(inp);
+	zkau.send({uuid: $uuid(inp),
+		cmd: "onChanging", data: [value, selbk == value, sr[0]],
+		ignorable: true}, 100);
 };
 zkTxbox.setAttr = function (cmp, nm, val) {
 	if("z.sel" == nm){
