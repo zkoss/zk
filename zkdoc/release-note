@@ -1,6 +1,7 @@
 	--------
 ZK 3.0.5 Freshly
 * Features
+  1936373: Translate messages to Arabic. Thank Ayman Ahmed Elgharabawy for his contribution.
 
 * Bugs
   1929139: [IE6/IE7 only] Incomplete requests being dropped
