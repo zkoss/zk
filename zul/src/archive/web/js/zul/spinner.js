@@ -206,14 +206,8 @@ zkSpinner._btnUp= function(evt){
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
 	if(inp.disabled) return;
-
-	inp.setAttribute("zk_changing_last", inp.value);
-	var selbk = inp.getAttribute("zk_changing_selbk");
-	inp.removeAttribute("zk_changing_selbk");		
-	var sr = zk.getSelectionRange(inp);
-	zkau.send({uuid: $uuid(cmp.id),
-		cmd: "onChanging", data: [inp.value, selbk == inp.value, sr[0]],
-		ignorable: true}, 100);
+	
+	zkTxbox.sendOnChanging(inp);
 		
 	zkSpinner._stopAutoIncProc(cmp);
 	inp.focus();	
@@ -246,6 +240,8 @@ zkSpinner._increase=function (cmp,is_add){
 	else if (cmp.min!=null && result < cmp.min) result = cmp.min;
 	
 	inp.value = result;
+	
+	zkTxbox.sendOnChanging(inp);
 };
 
 zkSpinner._clearValue = function(cmp){
