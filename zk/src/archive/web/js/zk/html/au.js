@@ -36,8 +36,7 @@ if (!window.Droppable_effect) { //define it only if not customized
 zkau = {};
 
 zkau._respQue = []; //responses in XML
-zkau._areqTry = 0; //# of resend
-zkau._evts = {}; //(dtid, Array())
+zkau._evts = {}; //(dtid, Array()): events that are not sent yet
 zkau._js4resps = []; //JS to eval upon response
 zkau._metas = {}; //(id, meta)
 zkau._drags = {}; //(id, Draggable): draggables
@@ -47,9 +46,10 @@ zkau._stamp = 0; //used to make a time stamp
 zkau.topZIndex = 12; //topmost z-index for overlap/popup/modal
 zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau._sendNow
-zkau._seqId = 0; //starting at 0 - the same as Desktop.getResponseSequence
+zkau._seqId = 0;
 zkau._dtids = []; //an array of desktop IDs
 zkau._spushInfo = {} //the server-push info: Map(dtid, {min, max, factor})
+var undef; //an undefined variable
 
 /** Adds a desktop. */
 zkau.addDesktop = function (dtid) {
@@ -189,18 +189,18 @@ zkau.sendRemove = function (uuid) {
 	zkau.send({uuid: uuid, cmd: "remove", data: null}, 5);
 };
 
-////ajax timeout////
-if (!zk.safari) {
+////ajax resend mechanism////
+if (zk.safari) {
+	//Note: resend is meaningless in Safari, since safari don'es change
+	//readyState if receiving data from the server
+	zk_resndto = -1; //no resend
+} else {
 /** IE6 sometimes remains readyState==1 (reason unknown), and we have
  * to resend
  */
 zkau._areqTmout = function () {
-	//Note: we don't resend if readyState >= 3. Otherwise, the server
-	//will process the same request twice
-
-	//Note: timeout has no function in Safari, since the server's sending
-	//output the client won't cause readyState to change.
-
+	//Note: we don't resend if readyState >= 3, since the server is already
+	//processing it
 	var req = zkau._areq, reqInf = zkau._areqInf;
 	if (req && req.readyState < 3) {
 		zkau._areq = zkau._areqInf = null;
@@ -208,16 +208,26 @@ zkau._areqTmout = function () {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
-		zkau._areqResend(reqInf.reqes);
+		zkau._areqResend(reqInf);
 	}
 };
-}
-zkau._areqResend = function (es) {
-	var timeout;
-	for (var j = es.length; --j >= 0;)
-		zkau.sendAhead(es[j], j ? timeout: 0);
+} //resend//
+
+zkau._areqResend = function (reqInf, timeout) {
+	if (zkau._seqId == reqInf.sid) {//skip if the response was recived
+		zkau._preqInf = reqInf; //store as a pending request info
+		setTimeout("zkau._areqResend2()", timeout ? timeout: 0);
+	}
 };
-/** Called when the response is received from zkau._areq.
+zkau._areqResend2 = function () {
+	var reqInf = zkau._preqInf;
+	if (reqInf) {
+		zkau._preqInf = null;
+		if (zkau._seqId == reqInf.sid)
+			zkau._sendNow2(reqInf);
+	}
+};
+/** Called when the response is received from _areq.
  */
 zkau._onRespReady = function () {
 	try {
@@ -231,51 +241,55 @@ zkau._onRespReady = function () {
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
 
+			var sid = req.getResponseHeader("ZK-SID");
 			if (req.status == 200) { //correct
-				zkau._areqTry = 0;
-				var sid = req.responseXML.getElementsByTagName("sid");
-				if (sid && sid.length) {
-					sid = $int(zk.getElementValue(sid[0]));
-					if (isNaN(sid) || sid < 0 || sid > 1024) sid = null; //ignore if error sid
-				} else
-					sid = null;
-
-				//locate whether to insert the response by use of sid
-				var que = zkau._respQue;
-				var ofs = que.length;
-				if (sid != null)
-					while (ofs > 0 && que[ofs - 1].sid != null
-					&& zkau.cmprsid(sid, que[ofs - 1].sid) < 0)
-						--ofs;
-
-				var resp = {sid: sid, cmds: zkau._parseCmds(req.responseXML)};
-				if (ofs == que.length) que.push(resp);
-				else que.splice(ofs, 0, resp); //insert
-			} else {
-				//handle MSIE's buggy HTTP status codes
-				//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
-				switch (req.status) {
-				case 12029: // 12029 to 12031 correspond to dropped connections.
-					if (++zkau._areqTry > 3) {
-						zkau._areqTry = 0;
-						break; //the server is dead
+				if (sid) {
+					if (sid != zkau._seqId) {
+						zkau._errcode = "ZK-SID " + (sid ? "mismatch": "required");
+						return;
 					}
-				case 12002: // Server timeout
-				case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
-				case 12031:
-				case 12152: // Connection closed by server.
-				case 12159:
-				case 13030:
-					zkau._areqResend(reqInf.reqes);
-					return;
-				}
 
+					//advance SID to avoid receive the same response twice
+					if (++zkau._seqId > 255) zkau._seqId = 0;
+					zkau._preqInf = null;
+				} //if null, always process (usually for showing error msg)
+				zkau._areqTry = 0;
+				zkau._respQue.push(zkau._parseCmds(req.responseXML));
+			} else if (!sid || sid == zkau._seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
+				zkau._errcode = req.status;
 				var eru = zk.eru['e' + req.status];
 				if (typeof eru == "string") {
 					zk.go(eru);
 				} else {
-					if (!zkau._ignorable && !zkau._unloading)
-						zk.error(mesg.FAILED_TO_RESPONSE+req.status+": "+(req.statusText!="Unknown"?req.statusText:""));
+				//handle MSIE's buggy HTTP status codes
+				//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
+					switch (req.status) { //auto-retry for certain case
+					default:
+						if (!zkau._areqTry) break;
+						//fall thru
+					case 12002: //server timeout
+					case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
+					case 12031:
+					case 12152: // Connection closed by server.
+					case 12159:
+					case 13030:
+					case 503: //service unavailable
+						if (!zkau._areqTry) zkau._areqTry = 3; //two more try
+						if (--zkau._areqTry) {
+							zkau._areqResend(reqInf, 200);
+							return;
+						}
+					}
+
+					if (!zkau._ignorable && !zkau._unloading) {
+						var msg = req.statusText;
+						if (confirm(mesg.FAILED_TO_RESPONSE+"\n"+mesg.TRY_AGAIN+"\n\n("+req.status+(msg?": "+msg:"")+")")) {
+							zkau._areqTry = 2; //one more try
+							zkau._areqResend(reqInf);
+							return;
+						}
+					}
+
 					zkau._cleanupOnFatal(zkau._ignorable);
 				}
 			}
@@ -291,13 +305,17 @@ zkau._onRespReady = function () {
 		//Mozilla throws exception while IE returns a value
 		if (!zkau._ignorable && !zkau._unloading) {
 			var msg = e.message;
-			zk.error(mesg.FAILED_TO_RESPONSE+(msg.indexOf("NOT_AVAILABLE")<0?msg:""));
+			zkau._errcode = "[Receive] " + msg;
+			if (confirm(mesg.FAILED_TO_RESPONSE+"\n"+mesg.TRY_AGAIN+"\n\n"+(msg&&msg.indexOf("NOT_AVAILABLE")<0?"("+msg+")":""))) {
+				zkau._areqResend(reqInf);
+				return;
+			}
 		}
 		zkau._cleanupOnFatal(zkau._ignorable);
 	}
 
 	//handle pending ajax send
-	if (zkau._sendPending && !zkau._areq) {
+	if (zkau._sendPending && !zkau._areq && !zkau._preqInf) {
 		zkau._sendPending = false;
 		var ds = zkau._dtids;
 		for (var j = ds.length; --j >= 0;)
@@ -343,13 +361,6 @@ zkau._parseCmds = function (xml) {
 	}
 	return cmds;
 };
-/** Returns 1 if a > b, -1 if a < b, or 0 if a == b.
- * Note: range of sid is 0 ~ 1023.
- */
-zkau.cmprsid = function (a, b) {
-	var dt = a - b;
-	return dt == 0 ? 0: (dt > 0 && dt < 512) || dt < -512 ? 1: -1
-};
 /** Checks whether to turn off the progress prompt.
  * @return true if the processing is done
  */
@@ -363,7 +374,7 @@ zkau._checkProgress = function () {
  * @since 3.0.0
  */
 zkau.processing = function () {
-	return zkau._respQue.length || zkau._areq;
+	return zkau._respQue.length || zkau._areq || zkau._preqInf;
 };
 
 /** Returns the timeout of the specified event.
@@ -496,12 +507,7 @@ zkau._sendNow = function (dtid) {
 		return; //wait
 	}
 
-	if (!zk_action) {
-		zk.error(mesg.NOT_FOUND+"zk_action");
-		return;
-	}
-
-	if (zkau._areq) { //send ajax request one by one
+	if (zkau._areq || zkau._preqInf) { //send ajax request one by one
 		zkau._sendPending = true;
 		return;
 	}
@@ -533,55 +539,81 @@ zkau._sendNow = function (dtid) {
 		}
 	}
 
-	//FUTURE: Consider XML (Pros: ?, Cons: larger packet)
-	var reqes = []; //backup events
+	//Consider XML (Pros: ?, Cons: larger packet)
 	var content = "";
 	for (var j = 0, el = es.length; el; ++j, --el) {
 		var evt = es.shift();
-		reqes.push(evt);
 		content += "&cmd."+j+"="+evt.cmd+"&uuid."+j+"="+(evt.uuid?evt.uuid:'');
 		if (evt.data)
 			for (var k = 0, dl = evt.data.length; k < dl; ++k) {
 				var data = evt.data[k];
 				content += "&data."+j+"="
-					+ (data != null ? encodeURIComponent(data): '_zk_nil_');
+					+ (data != null ? encodeURIComponent(data): '_z~nil');
 			}
 	}
 
-	if (!content) return; //nothing to do
-
-	content = "dtid=" + dtid + content;
-	var req = zkau._areq = zkau.ajaxRequest();
+	if (content)
+		zkau._sendNow2({
+			sid: zkau._seqId, dtid: dtid, content: "dtid=" + dtid + content,
+			ctli: ctli, ctlc: ctlc, implicit: implicit, ignorable: ignorable
+		});
+};
+zkau._sendNow2 = function(reqInf) {
+	var req = zkau.ajaxRequest(),
+		uri = zkau._useQS(reqInf) ? zk_action + '?' + reqInf.content: null;
 	zkau.sentTime = $now(); //used by server-push (zkex)
-	var msg;
 	try {
 		req.onreadystatechange = zkau._onRespReady;
-		req.open("POST", zk_action, true);
+		req.open("POST", uri ? uri: zk_action, true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-		if (zk.pfmeter) zkau._pfsend(req, dtid);
+		req.setRequestHeader("ZK-SID", reqInf.sid);
+		if (zkau._errcode) {
+			req.setRequestHeader("ZK-Error-Report", zkau._errcode);
+			delete zkau._errcode;
+		}
 
-		zkau._areqInf = {
-			reqes: reqes, ctli: ctli, ctlc: ctlc
-		};
-		if (zk_resndto > 0 && !zk.safari)
+		if (zk.pfmeter) zkau._pfsend(req, reqInf.dtid);
+
+		zkau._areq = req;
+		zkau._areqInf = reqInf;
+		if (zk_resndto > 0)
 			zkau._areqInf.tfn = setTimeout(zkau._areqTmout, zk_resndto);
-		req.send(content);
+		if (uri) req.send();
+		else req.send(reqInf.content);
 
-		if (!implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
-		return; //success
+		if (!reqInf.implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
 	} catch (e) {
+		//handle error
 		try {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
-		msg = e.message;
-	}
 
-	//handle error
-	if (!ignorable && !zkau._unloading)
-		zk.error(mesg.FAILED_TO_SEND+zk_action+"\n"+content+(msg?"\n"+msg:""));
-	zkau._cleanupOnFatal(ignorable);
+		if (!reqInf.ignorable && !zkau._unloading) {
+			var msg = e.message;
+			zkau._errcode = "[Send] " + msg;
+			if (confirm(mesg.FAILED_TO_SEND+"\n"+mesg.TRY_AGAIN+"\n\n"+(msg?"("+msg+")":""))) {
+				zkau._areqResend(reqInf);
+				return;
+			}
+		}
+		zkau._cleanupOnFatal(reqInf.ignorable);
+	}
 };
+//IE: use query string if possible to avoid IE incomplete-request problem
+zkau._useQS = zk.ie ? function (reqInf) {
+	var s = reqInf.content, j = s.length, prev, cc;
+	if (j + zk_action.length < 2000) {
+		while (--j >= 0) {
+			cc = s.charAt(j);
+			if (cc == '%' && prev >= '8') //%8x, %9x...
+				return false;
+			prev = cc;
+		}
+		return true;
+	}
+	return false;
+}: zk.voidf;
 
 /** Adds a script that will be evaluated when the next response is back. */
 zkau.addOnResponse = function (script) {
@@ -603,30 +635,9 @@ zkau._doQueResps = function () {
 		}
 
 		try {
-			var oldSeqId = zkau._seqId;
-			var resp = que.shift();
-			if (resp.sid == zkau._seqId || resp.sid == null
-			|| zkau._dtids.length > 1) { //unable to support seqId if multi-desktop
-				//we have to inc seqId first since _doResps might throw exception
-				if (resp.sid != null && ++zkau._seqId == 1024)
-					zkau._seqId = 0;
-
-				if (!zkau._doResps(resp.cmds)) {
-					que.unshift(resp); //handle it later
-					zkau._seqId = oldSeqId; //restore seqId
-				}
-			} else {
-				que.unshift(resp); //undo
-
-				setTimeout(function () {
-					if (que.length && zkau._seqId == oldSeqId) { //no new processed
-						zkau._seqId = que[0].sid;
-							//skip to the first ID if timeout
-						zkau._doQueResps();
-					}
-				}, 3600);
-				break; //wait for timeout, or arrival of another response
-			}
+			var cmds = que.shift();
+			if (!zkau._doResps(cmds))
+				que.unshift(cmds); //handle it later
 		} catch (e) {
 			if (!ex) ex = e;
 		}
@@ -1028,15 +1039,16 @@ zkau._onUnload = function () {
 	//to remove the desktop. Side effect: BACK to an page, its content might
 	//not be consistent with server's (due to Opera incapable to restore
 	//DHTML content 100% correctly)
-
 	if (!zk.opera && !zk.keepDesktop) {
 		try {
 			var ds = zkau._dtids;
 			for (var j = 0, dl = ds.length; j < dl; ++j) {
-				var req = zkau.ajaxRequest();
-				req.open("POST", zk_action, true);
+				var req = zkau.ajaxRequest(),
+					content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
+				req.open("POST", zk.ie ? zk_action+"?"+content: zk_action, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				req.send("dtid="+ds[j]+"&cmd.0=rmDesktop");
+				if (zk.ie) req.send();
+				else req.send(content);
 			}
 		} catch (e) { //silent
 		}

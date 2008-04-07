@@ -57,8 +57,8 @@ import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.PerformanceMeter;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.WebManager;
@@ -126,7 +126,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//super.init(config);
 			//Note callback super to avoid saving config
 
-		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
+//		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
 		_ctx = config.getServletContext();
 
 		for (int j = 0;;) {
@@ -247,7 +247,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
-		//if (log.finerable()) log.finer("Path info: "+pi);
+//		if (log.finerable()) log.finer("Path info: "+pi);
 
 		final Session sess = WebManager.getSession(_ctx, request, false);
 		final boolean withpi = pi != null && pi.length() != 0;
@@ -267,7 +267,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		if (sess == null) {
-			if (!withpi) {
+			if (!withpi) { //AU request
 				//Bug 1849088: rmDesktop might be sent after invalidate
 				//Bug 1859776: need send response to client for redirect or others
 				final String dtid = request.getParameter("dtid");
@@ -310,24 +310,27 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected void process(Session sess,
 	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		final WebApp wapp = sess.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
-		final UiEngine uieng = wappc.getUiEngine();
-		final List aureqs = new LinkedList();
+		final String errClient = request.getHeader("ZK-Error-Report");
+		if (errClient != null)
+			if (log.debugable()) log.debug("Error found at client: "+errClient+"\n"+getDetail(request));
 
 		//parse desktop ID
 		final String dtid = request.getParameter("dtid");
 		if (dtid == null) {
-			//log.warning("dtid not found: CP="+request.getContextPath()+" and "+Https.getThisContextPath(request)
-			//	+", SP="+request.getServletPath()+" and "+Https.getThisServletPath(request)
-			//	+", QS="+request.getQueryString()+" and "+Https.getThisQueryString(request)
-			//	+", params="+request.getParameterMap().keySet());
-			//responseError(response, "Illegal request: dtid is required");
-			//Tom M. Yeh: 20060922: Unknown reason to get here but it is annoying
-			//to response it back to users
+			//Bug 1929139: incomplete request (IE only)
+			final boolean ie = Servlets.isExplorer(request);
+			if (!ie || log.debugable()) {
+				final String msg = "Incomplete request\n"+getDetail(request);
+				if (ie) log.debug(msg);
+				else log.warning(msg); //impossible, so warning
+			}
+
+			response.sendError(467, "Incomplete request");
 			return;
 		}
 
+		final WebApp wapp = sess.getWebApp();
+		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
 			final String scmd = request.getParameter("cmd.0");
@@ -342,7 +345,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		WebManager.setDesktop(request, desktop);
 			//reason: a new page might be created (such as include)
 
+		final String sid = request.getHeader("ZK-SID");
+		if (sid != null) //Mobile client doesn't have ZK-SID
+			response.setHeader("ZK-SID", sid);
+
 		//parse commands
+		final List aureqs = new LinkedList();
 		final Configuration config = wapp.getConfiguration();
 		final boolean timerKeepAlive = config.isTimerKeepAlive();
 		boolean keepAlive = false;
@@ -362,7 +370,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				final String[] data = request.getParameterValues("data."+j);
 				if (data != null) {
 					for (int k = data.length; --k >= 0;)
-						if ("_zk_nil_".equals(data[k]))
+						if ("_z~nil".equals(data[k]))
 							data[k] = null;
 				}
 				if (uuid == null || uuid.length() == 0) {
@@ -383,28 +391,33 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
-		//if (log.debugable()) log.debug("AU request: "+aureqs);
+//		if (log.debugable()) log.debug("AU request: "+aureqs);
+		final PerformanceMeter pfmeter = config.getPerformanceMeter();
+
+		final Execution exec = 
+			new ExecutionImpl(_ctx, request, response, desktop, null);
+		if (sid != null)
+			((ExecutionCtrl)exec).setRequestId(sid);
 		final AuWriter out = AuWriters.newInstance()
 			.open(request, response,
 				desktop.getDevice().isSupported(Device.RESEND) ?
 					config.getResendDelay() / 2 - 500: 0);
 				//Note: getResendDelay() might return nonpositive
-		final PerformanceMeter pfmeter = config.getPerformanceMeter();
+		final Collection pfrqids = wappc.getUiEngine().execUpdate(exec, aureqs,
+			pfmeter != null ? meterStart(pfmeter, request, exec): null, out);
 
-		final Execution exec = 
-			new ExecutionImpl(_ctx, request, response, desktop, null);
-		final Collection reqIds = uieng.execUpdate(exec, aureqs,
-			pfmeter != null ? meterStart(pfmeter, request, exec): null,
-			out);
-
-		if (reqIds != null && pfmeter != null)
-			meterComplete(pfmeter, response, reqIds, exec);
+		if (pfrqids != null && pfmeter != null)
+			meterComplete(pfmeter, response, pfrqids, exec);
 
 		out.close(request, response);
 	}
 	private void sessionTimeout(HttpServletRequest request,
 	HttpServletResponse response, String dtid, String scmd)
 	throws ServletException, IOException {
+		final String sid = request.getHeader("ZK-SID");
+		if (sid != null)
+			response.setHeader("ZK-SID", sid);
+
 		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
 
 		if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
@@ -472,7 +485,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private static String meterStart(PerformanceMeter pfmeter,
 	HttpServletRequest request, Execution exec) {
 		//Format of ZK-Client-Complete:
-		//	request-id1 request-id2=time1,request-id3=time2
+		//	request-id1=time1,request-id2=time2
 		String hdr = request.getHeader("ZK-Client-Complete");
 		if (hdr != null) {
 			for (int j = 0;;) {
@@ -488,9 +501,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						ids = ids.substring(0, x);
 						for (int y = 0;;) {
 							int z = ids.indexOf(' ', y);
-							String reqId = z >= 0 ? ids.substring(y, z):
+							String pfrqid = z >= 0 ? ids.substring(y, z):
 								y == 0 ? ids: ids.substring(y);
-							pfmeter.requestCompleteAtClient(reqId, exec, time);
+							pfmeter.requestCompleteAtClient(pfrqid, exec, time);
 
 							if (z < 0) break; //done
 							y = z + 1;
@@ -512,12 +525,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final int j = hdr.lastIndexOf('=');
 			if (j > 0) {
 				try {
-					final String reqId = hdr.substring(0, j);
-					pfmeter.requestStartAtClient(reqId, exec,
+					final String pfrqid = hdr.substring(0, j);
+					pfmeter.requestStartAtClient(pfrqid, exec,
 						Long.parseLong(hdr.substring(j + 1)));
-					pfmeter.requestStartAtServer(reqId, exec,
+					pfmeter.requestStartAtServer(pfrqid, exec,
 						System.currentTimeMillis());
-					return reqId;
+					return pfrqid;
 				} catch (NumberFormatException ex) {
 					log.error("Unable to parse "+hdr);
 				}
@@ -529,17 +542,36 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * It sets the ZK-Client-Complete header.
 	 */
 	private static void meterComplete(PerformanceMeter pfmeter,
-	HttpServletResponse response, Collection reqIds, Execution exec) {
+	HttpServletResponse response, Collection pfrqids, Execution exec) {
 		final StringBuffer sb = new StringBuffer(256);
 		long time = System.currentTimeMillis();
-		for (Iterator it = reqIds.iterator(); it.hasNext();) {
-			final String reqId = (String)it.next();
+		for (Iterator it = pfrqids.iterator(); it.hasNext();) {
+			final String pfrqid = (String)it.next();
 			if (sb.length() > 0) sb.append(' ');
-			sb.append(reqId);
-			pfmeter.requestCompleteAtServer(reqId, exec, time);
+			sb.append(pfrqid);
+			pfmeter.requestCompleteAtServer(pfrqid, exec, time);
 		}
 
 		response.setHeader("ZK-Client-Complete", sb.toString());
 			//tell the client what are completed
+	}
+
+	/** Returns the request details.
+	 */
+	private static String getDetail(HttpServletRequest request) {
+		final StringBuffer sb = new StringBuffer(128);
+		sb.append(" sid: ").append(request.getHeader("ZK-SID")).append('\n');
+		addHeaderInfo(sb, request, "user-agent");
+		addHeaderInfo(sb, request, "content-length");
+//		addHeaderInfo(sb, request, "content-type");
+		sb.append(" ip: ").append(request.getRemoteAddr());
+//		sb.append(" method: ").append(request.getMethod());
+		return sb.toString();
+	}
+	private static void addHeaderInfo(StringBuffer sb,
+	HttpServletRequest request, String header) {
+		sb.append(' ')
+			.append(header).append(": ").append(request.getHeader(header))
+			.append('\n');
 	}
 }

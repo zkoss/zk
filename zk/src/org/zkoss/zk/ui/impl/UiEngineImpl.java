@@ -286,7 +286,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final UiVisualizer uv;
 		if (olduv != null) uv = doReactivate(exec, olduv);
-		else uv = doActivate(exec, null, false);
+		else uv = doActivate(exec, false, false);
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final Page old = execCtrl.getCurrentPage();
@@ -385,6 +385,7 @@ public class UiEngineImpl implements UiEngine {
 			cleaned = true;
 			final List errs = new LinkedList();
 			errs.add(ex);
+
 			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
 				//CONSIDER: whether to pass cleanup's error to users
@@ -398,9 +399,8 @@ public class UiEngineImpl implements UiEngine {
 			if (!cleaned) {
 				desktopCtrl.invokeExecutionCleanups(exec, oldexec, null);
 				config.invokeExecutionCleanups(exec, oldexec, null);
-					//CONSIDER: whether to pass cleanup's error to users
-			}
 				//CONSIDER: whether to pass cleanup's error to users
+			}
 			if (abrn != null) {
 				try {
 					abrn.finish();
@@ -676,7 +676,7 @@ public class UiEngineImpl implements UiEngine {
 		final Desktop desktop = exec.getDesktop();
 		final Session sess = desktop.getSession();
 
-		doActivate(exec, null, true); //it must not return null
+		doActivate(exec, false, true); //it must not return null
 		try {
 			failover.recover(sess, exec, desktop);
 		} finally {
@@ -690,18 +690,26 @@ public class UiEngineImpl implements UiEngine {
 		execUpdate(exec, requests, null, out);
 	}
 	public Collection execUpdate(Execution exec, List requests,
-	String reqId, AuWriter out) throws IOException {
+	String pfReqId, AuWriter out) throws IOException {
 		if (requests == null)
-			throw new IllegalArgumentException("null requests");
+			throw new IllegalArgumentException();
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec+", reqs="+requests;
 
-		final UiVisualizer uv = doActivate(exec, requests, false);
-		if (uv == null)
-			return null; //done (request is added to the exec currently activated)
-
+		final UiVisualizer uv = doActivate(exec, true, false);
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+		final String sid = ((ExecutionCtrl)exec).getRequestId();
+		if (sid != null) {
+			final Collection resps = desktopCtrl.getLastResponse(sid);
+			if (resps != null) {
+				if (log.debugable()) log.debug("Repeat request "+sid+", and return "+resps.size()+" responses");
+				out.write(resps);
+				doDeactivate(exec); //deactive
+				return null; //done
+			}
+		}
+
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
@@ -716,11 +724,13 @@ public class UiEngineImpl implements UiEngine {
 		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
+			final RequestQueue rque = desktopCtrl.getRequestQueue();
+			rque.addRequests(requests);
+
 			config.invokeExecutionInits(exec, null);
 			desktopCtrl.invokeExecutionInits(exec, null);
 
-			final RequestQueue rque = desktopCtrl.getRequestQueue();
-			if (reqId != null) rque.addRequestId(reqId);
+			if (pfReqId != null) rque.addPerfRequestId(pfReqId);
 
 			final List errs = new LinkedList();
 			final long tmexpired =
@@ -781,13 +791,14 @@ public class UiEngineImpl implements UiEngine {
 				log.error(ex);
 			}
 
-			if (rque.endWithRequest()) //stop accept another request
-				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
+			if (rque.isEmpty())
+				doneReqIds = rque.clearPerfRequestIds();
 			else
-				doneReqIds = rque.clearRequestIds();
+				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
 
-			out.writeSequenceId(desktop);
 			out.write(responses);
+			if (sid != null)
+				desktopCtrl.responseSent(sid, responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
@@ -823,9 +834,6 @@ public class UiEngineImpl implements UiEngine {
 					log.warning(t);
 				}
 			}
-
-			doDeactivate(exec);
-
 			if (monitor != null) {
 				try {
 					monitor.afterUpdate(desktop);
@@ -834,6 +842,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 			}
 
+			doDeactivate(exec);
 			return doneReqIds;
 		}
 	}
@@ -1188,42 +1197,33 @@ public class UiEngineImpl implements UiEngine {
 	public void activate(Execution exec) {
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
-		doActivate(exec, null, false);
+		doActivate(exec, false, false);
 	}
 	public void deactivate(Execution exec) {
 		doDeactivate(exec);
 	}
 
 	//-- Common private utilities --//
-	/** Activates the specified execution for processing.
+	/** Activates the specified execution.
 	 *
-	 * @param requests a list of requests to process.
-	 * Activation assumes it is asynchronous update if it is not null.
+	 * @param asyncupd whether it is for asynchronous update.
+	 * Note: it doesn't support if both asyncupd and recovering are true.
 	 * @param recovering whether it is in recovering, i.e.,
 	 * cause by {@link FailoverManager#recover}.
 	 * If true, the requests argument must be null.
-	 * @return the exec info if the execution is granted;
-	 * null if request has been added to the exec currently activated
+	 * @return the visualizer once the execution is granted (never null).
 	 */
 	private static
-	UiVisualizer doActivate(Execution exec, List requests, boolean recovering) {
+	UiVisualizer doActivate(Execution exec, boolean asyncupd,
+	boolean recovering) {
 		if (Executions.getCurrent() != null)
 			throw new IllegalStateException("Use doReactivate instead");
+		assert D.OFF || !recovering || !asyncupd; 
+			//Not support both asyncupd and recovering are true yet
 
 		final Desktop desktop = exec.getDesktop();
-		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Session sess = desktop.getSession();
 //		if (log.finerable()) log.finer("Activating "+desktop);
-
-		final boolean asyncupd = requests != null;
-		assert D.OFF || !recovering || !asyncupd; 
-			//to simplify the following codes, asyncupd and recovering
-			//cannot be both true
-
-		final boolean inProcess = asyncupd && !isRecovering(desktop)
-			&& desktopCtrl.getRequestQueue().addRequests(requests);
-				//used as flag to know whether to add the requests
-				//to the previous execution, if any.
 
 		//lock desktop
 		final UiVisualizer uv;
@@ -1233,8 +1233,6 @@ public class UiEngineImpl implements UiEngine {
 				final UiVisualizer old = (UiVisualizer)eis.get(desktop);
 				if (old == null) break; //grantable
 
-				if (inProcess) return null; //done
-
 				try {
 					eis.wait(120*1000);
 				} catch (InterruptedException ex) {
@@ -1243,11 +1241,11 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//grant
-			if (asyncupd) desktopCtrl.getRequestQueue().setInProcess();
-				//set the flag asap to free more following executions
 			eis.put(desktop, uv = new UiVisualizer(exec, asyncupd, recovering));
-			desktopCtrl.setExecution(exec);
+			((DesktopCtrl)desktop).setExecution(exec);
 		}
+
+//		if (log.finerable()) log.finer("Activated "+desktop);
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setVisualizer(uv);

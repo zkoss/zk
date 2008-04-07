@@ -150,7 +150,6 @@ public interface UiEngine {
 	 * <p>Note: the output must be XML and UTF-8.
 	 *
 	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest}.
-	 * @since 3.0.1
 	 */
 	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException;
@@ -158,16 +157,22 @@ public interface UiEngine {
 	 * <p>Note: the output must be XML and UTF-8.
 	 *
 	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest}.
-	 * @param reqId the request ID which is used to invoke
+	 * @param pfReqId The sequence ID of the request
+	 * for performance measurement, or null if no need to measure.
+	 * It is used to invoke
 	 * {@link org.zkoss.zk.ui.util.PerformanceMeter#requestCompleteAtClient}.
 	 * Ignored if null or {@link org.zkoss.zk.ui.util.Configuration#getPerformanceMeter}
 	 * is not defined.
-	 * @return a list of request IDs that have been processed
-	 * completely.
+	 * Note: it is not same as {@link ExecutionCtrl#getRequestId}.
+	 * pfReqId is used for performance measurement only, while
+	 * {@link ExecutionCtrl#getRequestId} is used to synchronize
+	 * the communication between client and the server.
+	 * @return a list of request IDs for performance measurement
+	 * that have been processed completely.
 	 * @since 3.0.1
 	 */
 	public Collection execUpdate(Execution exec, List requests,
-	String reqId, AuWriter out) throws IOException;
+	String pfReqId, AuWriter out) throws IOException;
 
 	/** Executes the recovering.
 	 */

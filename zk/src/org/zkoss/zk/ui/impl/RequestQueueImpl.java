@@ -45,47 +45,30 @@ public class RequestQueueImpl implements RequestQueue {
 
 	/** A list of pending {@link AuRequest}. */
 	private final List _requests = new LinkedList();
-	/** A list of request ID. */
-	private List _reqIds;
-	/** The in-process flag to denote Whether this queue is being processed
-	 * by an execution.
-	 */
-	private boolean _process;
+	/** A list of request ID for performance measurement. */
+	private List _pfreqIds;
 
 	//-- RequestQueue --//
-	public void addRequestId(String requestId) {
-		if (_reqIds == null)
-			_reqIds = new LinkedList();
-		_reqIds.add(requestId);
+	public void addPerfRequestId(String requestId) {
+		if (_pfreqIds == null)
+			_pfreqIds = new LinkedList();
+		_pfreqIds.add(requestId);
 	}
-	public Collection clearRequestIds() {
-		final List old = _reqIds;
-		_reqIds = null;
+	public Collection clearPerfRequestIds() {
+		final List old = _pfreqIds;
+		_pfreqIds = null;
 		return old;
 	}
 
-	synchronized public boolean endWithRequest() {
-		_process = false;
-		return !_requests.isEmpty();
+	public boolean isEmpty() {
+		return _requests.isEmpty();
 	}
-
-	synchronized public AuRequest nextRequest() {
-//		if (D.ON && log.finerable()) log.finer("Next req "+_requests);
-		if (_requests.isEmpty()) {
-			_process = false;
-			return null;
-		}
-		return (AuRequest)_requests.remove(0);
+	public AuRequest nextRequest() {
+		return _requests.isEmpty() ? null: (AuRequest)_requests.remove(0);
 	}
-
-	synchronized public void setInProcess() {
-		_process = true;
-	}
-
-	synchronized public boolean addRequests(Collection requests) {
+	public void addRequests(Collection requests) {
 		for (Iterator it = requests.iterator(); it.hasNext();)
 			addRequest((AuRequest)it.next());
-		return _process;
 	}
 	private void addRequest(AuRequest request) {
 //		if (D.ON && log.finerable()) log.finer("Arrive "+request+". Current "+_requests);

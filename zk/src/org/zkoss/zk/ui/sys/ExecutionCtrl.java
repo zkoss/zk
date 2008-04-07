@@ -166,4 +166,14 @@ public interface ExecutionCtrl {
 	 * @since 3.0.0
 	 */
 	public void setDesktop(Desktop desktop);
+
+	/** Sets the sequence ID of the current request.
+	 * @since 3.0.5
+	 */
+	public void setRequestId(String reqId);
+	/** Returns the sequence ID of the current request, or null if not
+	 * available. Not all clients support the request ID.
+	 * @since 3.0.5
+	 */
+	public String getRequestId();
 }

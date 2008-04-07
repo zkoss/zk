@@ -60,6 +60,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	//private Event _evtInProc;
 	/** Which page is being created, or null if all in update mode. */
 	private final Page _creating;
+	/** The sequence ID of the current request. */
+	private String _reqId;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -257,6 +259,13 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		if (desktop == null) throw new IllegalArgumentException("null");
 		if (_desktop != null) throw new IllegalStateException();
 		_desktop = desktop;
+	}
+
+	public void setRequestId(String reqId) {
+		_reqId = reqId;
+	}
+	public String getRequestId() {
+		return _reqId;
 	}
 
 	//Object//
