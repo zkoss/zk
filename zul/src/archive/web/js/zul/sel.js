@@ -1294,8 +1294,15 @@ zk.addBeforeInit(function () {
 zkLisel = {};
 zkLisel.init = function (cmp) {
 	zk.listen(cmp, "change", zkLisel.onchange);
+	if (zk.gecko || zk.safari) zk.listen(cmp, "keyup", zkLisel.onkeyup);
 	zk.listen(cmp, "focus", zkau.onfocus);
 	zk.listen(cmp, "blur", zkau.onblur);
+};
+zkLisel.onkeyup = function (evt) {
+	var cmp = zkau.evtel(evt);
+	if (cmp.multiple || cmp._lastSelIndex === cmp.selectedIndex) return; //not change or unnecessary.
+	var key = Event.keyCode(evt);
+	if (key >= 33 && key <= 40) zkLisel.onchange(evt);
 };
 /** Handles onchange from select/list. */
 zkLisel.onchange = function (evtel) {
@@ -1321,6 +1328,7 @@ zkLisel.onchange = function (evtel) {
 		var opt = cmp.options[cmp.selectedIndex];
 		data = opt.id;
 		reference = opt.id;
+		cmp._lastSelIndex = cmp.selectedIndex;
 	}
 	var uuid = $uuid(cmp);
 	zkau.send({uuid: uuid, cmd: "onSelect", data: [data, reference]},
