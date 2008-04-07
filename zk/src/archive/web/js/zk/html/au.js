@@ -2281,15 +2281,15 @@ zkau.cmd1 = {
 	},
 	focus: function (uuid, cmp) {
 		if (!zk.eval(cmp, "focus")) {
+			//Bug 1936366: endModal uses timer, so canFocus might be false
+			//when this method is called
 			setTimeout(function (){
-				// But 1936366: delay it since some comp, e.g., endModal, uses timer
-				//to do the multiple-step operation
-			if (!zkau.canFocus(cmp, true)) return;
+				if (!zkau.canFocus(cmp, true)) return;
 
-			zkau.autoZIndex(cmp); //some, say, window, not listen to onfocus
-			cmp = $real(cmp); //focus goes to inner tag
-			zk.asyncFocus(cmp.id, 60);
-			}, 30);
+				zkau.autoZIndex(cmp); //some, say, window, not listen to onfocus
+				cmp = $real(cmp); //focus goes to inner tag
+				zk.asyncFocus(cmp.id, 35);
+				}, 30); //wnd.js uses 20
 		}
 	},
 	closeErrbox: function (uuid, cmp) {
