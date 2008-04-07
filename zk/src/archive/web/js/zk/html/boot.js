@@ -48,7 +48,7 @@ if (!window.Boot_progressbox) { //not customized
 /////
 // zk
 zk = {};
-zk.build = "6r"; //increase this if we want the browser to reload JavaScript
+zk.build = "6s"; //increase this if we want the browser to reload JavaScript
 zk.voidf = function () {return false;}; //always return false
 
 /** Browser info. */
