@@ -190,14 +190,7 @@ zkau.sendRemove = function (uuid) {
 };
 
 ////ajax resend mechanism////
-if (zk.safari) {
-	//Note: resend is meaningless in Safari, since safari don'es change
-	//readyState if receiving data from the server
-	zk_resndto = -1; //no resend
-} else {
-/** IE6 sometimes remains readyState==1 (reason unknown), and we have
- * to resend
- */
+/** IE6 sometimes remains readyState==1 (reason unknown), so resend. */
 zkau._areqTmout = function () {
 	//Note: we don't resend if readyState >= 3, since the server is already
 	//processing it
@@ -208,10 +201,10 @@ zkau._areqTmout = function () {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
+		reqInf.tmout += 3000; //sever might be busy, so prolong next timeout
 		zkau._areqResend(reqInf);
 	}
 };
-} //resend//
 
 zkau._areqResend = function (reqInf, timeout) {
 	if (zkau._seqId == reqInf.sid) {//skip if the response was recived
@@ -555,7 +548,8 @@ zkau._sendNow = function (dtid) {
 	if (content)
 		zkau._sendNow2({
 			sid: zkau._seqId, dtid: dtid, content: "dtid=" + dtid + content,
-			ctli: ctli, ctlc: ctlc, implicit: implicit, ignorable: ignorable
+			ctli: ctli, ctlc: ctlc, implicit: implicit, ignorable: ignorable,
+			tmout: 0
 		});
 };
 zkau._sendNow2 = function(reqInf) {
@@ -577,7 +571,8 @@ zkau._sendNow2 = function(reqInf) {
 		zkau._areq = req;
 		zkau._areqInf = reqInf;
 		if (zk_resndto > 0)
-			zkau._areqInf.tfn = setTimeout(zkau._areqTmout, zk_resndto);
+			zkau._areqInf.tfn = setTimeout(zkau._areqTmout, zk_resndto + reqInf.tmout);
+
 		if (uri) req.send();
 		else req.send(reqInf.content);
 
