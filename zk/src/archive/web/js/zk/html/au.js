@@ -300,6 +300,8 @@ zkau._onRespReady = function () {
 		if (!zkau._ignorable && !zkau._unloading) {
 			var msg = e.message;
 			zkau._errcode = "[Receive] " + msg;
+			if (e.fileName) zkau._errcode += ", "+e.fileName;
+			if (e.lineNumber) zkau._errcode += ", "+e.lineNumber;
 			if (confirm(mesg.FAILED_TO_RESPONSE+"\n"+mesg.TRY_AGAIN+"\n\n"+(msg&&msg.indexOf("NOT_AVAILABLE")<0?"("+msg+")":""))) {
 				zkau._areqResend(reqInf);
 				return;
