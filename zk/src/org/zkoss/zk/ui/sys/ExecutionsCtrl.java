@@ -40,7 +40,7 @@ public class ExecutionsCtrl extends Executions {
 	 * ...
 	 * finally {
 	 *   setCurrent(null);
-	 * }
+	 * }</code></pre>
 	 */
 	public static final void setCurrent(Execution exec) {
 		_exec.set(exec);
