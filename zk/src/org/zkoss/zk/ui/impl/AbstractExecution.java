@@ -33,7 +33,6 @@ import org.zkoss.xel.XelException;
 import org.zkoss.lang.Classes;
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.el.ELContexts;
 import org.zkoss.web.el.ELContext;
 
 import org.zkoss.zk.ui.Execution;
@@ -171,14 +170,12 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return _ei != null;
 	}
 	public void onActivate() {
-		ELContexts.push(getELContext());
 	}
 	public void onDeactivate() {
-		ELContexts.pop();
 	}
 
 	public boolean isRecovering() {
-		return _ei.isRecovering();
+		return _ei != null && _ei.isRecovering();
 	}
 
 	public void setVisualizer(Visualizer ei) {

@@ -33,15 +33,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.el.RequestResolver;
-import org.zkoss.el.PageContext;
+import org.zkoss.el.EvaluatorImpl;
 import org.zkoss.el.impl.AttributesMap;
+import org.zkoss.xel.ExpressionEvaluator;
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.BufferedResponse;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.el.ELContexts;
 import org.zkoss.web.el.ELContext;
-import org.zkoss.web.el.PageELContext;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Page;
@@ -79,12 +81,7 @@ public class ExecutionImpl extends AbstractExecution {
 		_ctx = ctx;
 		_request = request;
 		_response = response;
-
-		final PageContext pgctx = (PageContext)
-			getVariableResolver().resolveVariable("pageContext");
-		if (pgctx == null)
-			throw new UiException("Unable to resolve pageContext");
-		_elctx = new PageELContext(pgctx);
+		_elctx = new MyELContext();
 
 		_attrs = new AttributesMap() {
 			protected Enumeration getKeys() {
@@ -103,6 +100,15 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	//-- super --//
+	public void onActivate() {
+		super.onActivate();
+		ELContexts.push(_elctx);
+	}
+	public void onDeactivate() {
+		ELContexts.pop();
+		super.onDeactivate();
+	}
+
 	protected ELContext getELContext() {
 		return _elctx;
 	}
@@ -307,5 +313,29 @@ public class ExecutionImpl extends AbstractExecution {
 
 	public Map getAttributes() {
 		return _attrs;
+	}
+
+	private class MyELContext implements ELContext {
+		private ExpressionEvaluator _eval;
+		public Writer getOut() throws IOException {
+			return _response.getWriter();
+		}
+		public VariableResolver getVariableResolver() {
+			return ExecutionImpl.this.getVariableResolver();
+		}
+		public ServletRequest getRequest() {
+			return _request;
+		}
+		public ServletResponse getResponse() {
+			return _response;
+		}
+		public ServletContext getServletContext() {
+			return _ctx;
+		}
+		public ExpressionEvaluator getExpressionEvaluator() {
+	    	if (_eval == null)
+	    		_eval = new EvaluatorImpl();
+	    	return _eval;
+		}
 	}
 }

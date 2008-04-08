@@ -31,6 +31,16 @@ public class ExecutionsCtrl extends Executions {
 
 	/** Sets the execution for the current thread.
 	 * Called only internally.
+	 *
+	 * <p>Note: you have to clean up the current execution
+	 * with try/finally:
+	 * <pre><code>
+	 * setCurrent(exec);
+	 * try {
+	 * ...
+	 * finally {
+	 *   setCurrent(null);
+	 * }</code></pre>
 	 */
 	public static final void setCurrent(Execution exec) {
 		_exec.set(exec);

@@ -68,14 +68,27 @@ public interface ExecutionCtrl {
 	/** Returns whether this execution is activated.
 	 */
 	public boolean isActivated();
-	/** Called when this execution is about to activate.
-	 * It is called before any execution.
+	/** Called when this execution is about to become the current execution
+	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
+	 *
+	 * <p>Note: an execution might spread over several threads, so
+	 * this method might be called several times to activate the states
+	 * in each thread. Also, an execution might be activated before another
+	 * is deactivate. For example, when a component includes another page,
+	 * the second exec is activated to render the included page.
+	 *
 	 * <p>It is used as callback notification.
+	 *
+	 * <p>Note: don't throw any exception in this method.
 	 */
 	public void onActivate();
-	/** Called when this execution is about to de-activate.
-	 * It is called before ending, no matter exception being throw or not.
+	/** Called when this execution is about to become a non-current execution.
+	 *
 	 * <p>It is used as callback notification.
+	 *
+	 * <p>Note: don't throw any exception in this method.
+	 *
+	 * @see #onActivate
 	 */
 	public void onDeactivate();
 
