@@ -159,7 +159,8 @@ zkau._areqTmout = function () {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
-		reqInf.tmout += 3000; //sever might be busy, so prolong next timeout
+		if (reqInf.tmout < 60000) reqInf.tmout += 3000;
+			//sever might be busy, so prolong next timeout
 		zkau._areqResend(reqInf);
 	}
 };
