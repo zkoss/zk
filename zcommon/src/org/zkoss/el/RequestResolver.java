@@ -324,6 +324,7 @@ public class RequestResolver implements VariableResolver {
 	} //ParamMap
 	/** An implemnetation of PageContext. */
 	private class PageContextImpl implements PageContext {
+		private ExpressionEvaluator _eval;
 		public ServletRequest getRequest() {
 			return _request;
 		}
@@ -346,7 +347,9 @@ public class RequestResolver implements VariableResolver {
 	    	throw new UnsupportedOperationException();
 	    }
 	    public ExpressionEvaluator getExpressionEvaluator() {
-	    	return new EvaluatorImpl();
+	    	if (_eval == null)
+	    		_eval = new EvaluatorImpl();
+	    	return _eval;
 	    }
 	}
 }
