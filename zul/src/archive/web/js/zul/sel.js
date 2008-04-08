@@ -1297,12 +1297,18 @@ zkLisel.init = function (cmp) {
 	if (zk.gecko || zk.safari) zk.listen(cmp, "keyup", zkLisel.onkeyup);
 	zk.listen(cmp, "focus", zkau.onfocus);
 	zk.listen(cmp, "blur", zkau.onblur);
+	cmp._lastSelIndex = cmp.selectedIndex;
 };
 zkLisel.onkeyup = function (evt) {
 	var cmp = zkau.evtel(evt);
 	if (cmp.multiple || cmp._lastSelIndex === cmp.selectedIndex) return; //not change or unnecessary.
 	var key = Event.keyCode(evt);
 	if (key >= 33 && key <= 40) zkLisel.onchange(evt);
+};
+zkLisel.setAttr = function (cmp, nm, val) {
+	if (nm == "selectedIndex")
+		cmp._lastSelIndex = $int(val);
+	return false;
 };
 /** Handles onchange from select/list. */
 zkLisel.onchange = function (evtel) {
