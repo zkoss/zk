@@ -187,12 +187,16 @@ zkWnd.setAttr = function (cmp, nm, val) {
 	case "style.height":
 		zkau.setAttr(cmp, nm, val);
 		zkWnd._fixHgh(cmp);
-		if (nm == "style.height")
+		if (nm == "style.height") {
+			zk.beforeSizeAt(cmp);
 			zk.onSizeAt(cmp); // Note: IE6 is broken, because its offsetHeight doesn't update.
+		}
 		return true;
 	case "style.width":
+		zkau.setAttr(cmp, nm, val);
+		zk.beforeSizeAt(cmp);
 		zk.onSizeAt(cmp);
-		return false;
+		return true;
 	case "style.top":
 	case "style.left":
 		if (!zkWnd._embedded(cmp) && getZKAttr(cmp, "pos") == "parent") {
