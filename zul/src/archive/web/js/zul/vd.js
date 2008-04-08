@@ -236,10 +236,29 @@ zkVld._errbox = function () {
 	if (!zk.opera) Effect.SlideDown(box, {duration:0.5});
 		//if we slide, opera will slide it at the top of screen and position it
 		//later. No sure it is a bug of script.aculo.us or Opera
+	if (zk.ie6Only) setTimeout(function () {
+		var ifr = document.createElement('iframe');
+		ifr.id = id + "!ifr";
+		ifr.frameBorder = "no";
+		ifr.src="javascript:false";
+		ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block";
+		box.parentNode.appendChild(ifr);
+		ifr.style.width = box.offsetWidth + "px";
+		ifr.style.height = box.offsetHeight + "px";
+		ifr.style.top = box.style.top;
+		ifr.style.left = box.style.left;
+		box._ifr = ifr;
+	}, 0);
 	zul.initMovable(box, {
-		zindex: box.style.zIndex, effecting: zkVld._fiximg,
-		starteffect: zk.voidf, endeffect: zkVld._fiximg});
+		zindex: box.style.zIndex, effecting: zkVld._fiximg, starteffect: zk.voidf,
+		endeffect: zkVld._fiximg, change: zkVld._change});
 };
+zkVld._change = zk.ie6Only ? function (dg, pointer, evt) {
+	if (dg.element._ifr) {
+		dg.element._ifr.style.top = dg.element.style.top;
+		dg.element._ifr.style.left = dg.element.style.left;
+	}
+}: zk.voidf;
 /** box is the box element or the component's ID. 
  * 
  * @param {Object} coerce it is used to close the error box coercively. (@since 3.0.3)
@@ -264,6 +283,10 @@ zkVld.closeErrbox = function (box, remaingError, coerce) {
 
 	if (box) {
 		zul.cleanMovable(box.id);
+		if (zk.ie6Only) {
+			if (box._ifr) box._ifr.parentNode.removeChild(box._ifr);
+			box._ifr = null;
+		}
 		box.parentNode.removeChild(box);
 		zkVld._ebs.remove(box.id);
 	} else if (boxid)
@@ -411,4 +434,4 @@ zkVld.addHideCovered = function (ary) {
 		var el = $e(zkVld._ebs[j]);
 		if (el) ary.push(el);
 	}
-}
+};
