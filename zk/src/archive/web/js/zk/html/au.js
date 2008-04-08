@@ -201,7 +201,8 @@ zkau._areqTmout = function () {
 			if(typeof req.abort == "function") req.abort();
 		} catch (e2) {
 		}
-		reqInf.tmout += 3000; //sever might be busy, so prolong next timeout
+		if (reqInf.tmout < 60000) reqInf.tmout += 3000;
+			//sever might be busy, so prolong next timeout
 		zkau._areqResend(reqInf);
 	}
 };
@@ -299,6 +300,10 @@ zkau._onRespReady = function () {
 		if (!zkau._ignorable && !zkau._unloading) {
 			var msg = e.message;
 			zkau._errcode = "[Receive] " + msg;
+			if (zk.gecko) {
+				if (e.fileName) zkau._errcode += ", "+e.fileName;
+				if (e.lineNumber) zkau._errcode += ", "+e.lineNumber;
+			}
 			if (confirm(mesg.FAILED_TO_RESPONSE+"\n"+mesg.TRY_AGAIN+"\n\n"+(msg&&msg.indexOf("NOT_AVAILABLE")<0?"("+msg+")":""))) {
 				zkau._areqResend(reqInf);
 				return;
