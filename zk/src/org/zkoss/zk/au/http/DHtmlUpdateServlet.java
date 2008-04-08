@@ -45,7 +45,6 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -211,13 +210,18 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					aureqs.add(new AuRequest(desktop, uuid, cmd, data));
 				}
 			}
-		} catch (CommandNotFoundException ex) {
-			responseError(request, response, Exceptions.getMessage(ex));
+		} catch (Throwable ex) {
+			final String errmsg = Exceptions.getMessage(ex);
+			if (ex instanceof CommandNotFoundException) log.debug(errmsg);
+			else log.warningBriefly(ex);
+			responseError(request, response, errmsg);
 			return;
 		}
 
 		if (aureqs.isEmpty()) {
-			responseError(request, response, "Illegal request: cmd is required");
+			final String errmsg = "Illegal request: cmd required";
+			log.debug(errmsg);
+			responseError(request, response, errmsg);
 			return;
 		}
 
@@ -289,8 +293,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 */
 	private static void responseError(HttpServletRequest request,
 	HttpServletResponse response, String errmsg) throws IOException {
-		log.debug(errmsg);
-
 		//Don't use sendError because Browser cannot handle UTF-8
 		final AuWriter out = new SmartAuWriter().open(request, response, 0);
 		out.write(new AuAlert(errmsg));
