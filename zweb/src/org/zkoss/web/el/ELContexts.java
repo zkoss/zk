@@ -78,11 +78,6 @@ public class ELContexts {
 			_elCtxs.set(jcs = new LinkedList());
 		jcs.add(0, jc);
 	}
-	/** Pushs a page context to be {@link ELContext}.
-	 */
-	public static final void push(final PageContext pc) {
-		push(new PageELContext(pc));
-	}
 	/** Pops the context out and use the previous one as the current context.
 	 *
 	 * <p>In most cases, you don't need to invoke this method, which is
