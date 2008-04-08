@@ -21,6 +21,7 @@ ZK 3.0.5 Freshly
   1920793: The focused style of selected item differences Firefox/IE
   1936366: focus don¡¦t work after Messagebox
   1933050: onSelect fail in Listbox's select mold when use key(FF&Sa)
+  1936804: combobox.onInitRender(Event data) triggers validation.
   
 	--------
 ZK 3.0.4
