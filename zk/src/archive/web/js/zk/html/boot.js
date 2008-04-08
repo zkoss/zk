@@ -787,43 +787,43 @@ zk._loadAndInit = function (inf) {
 
 		var n = inf.stk.pop();
 		if (n.nodeType == 1) {
+			try { 
+				if (zk.gecko) {
 	//FF remembers the previous value that user entered when reload
 	//We have to reset them because the server doesn't know any of them
-			if (zk.gecko) {
-				switch ($tag(n)) {
-				case "INPUT":
-					if (n.type == "checkbox" || n.type == "radio") {
-						if (n.checked != n.defaultChecked)
-							n.checked = n.defaultChecked;
+					switch ($tag(n)) {
+					case "INPUT":
+						if (n.type == "checkbox" || n.type == "radio") {
+							if (n.checked != n.defaultChecked)
+								n.checked = n.defaultChecked;
+							break;
+						}
+						if (n.type != "text" && n.type != "password") break;
+						//fall thru
+					case "TEXTAREA":
+						if (n.value != n.defaultValue
+						&& n.defaultValue != "zk_wrong!~-.zk_pha!6")
+							n.value = n.defaultValue;
 						break;
+					case "OPTION":
+						if (n.selected != n.defaultSelected)
+							n.selected = n.defaultSelected;
+						//break;
 					}
-					if (n.type != "text" && n.type != "password") break;
-					//fall thru
-				case "TEXTAREA":
-					if (n.value != n.defaultValue
-					&& n.defaultValue != "zk_wrong!~-.zk_pha!6")
-						n.value = n.defaultValue;
-					break;
-				case "OPTION":
-					if (n.selected != n.defaultSelected)
-						n.selected = n.defaultSelected;
-					//break;
-				}
-			} else if (zk.ie) {
-				switch ($tag(n)) {
-				case "A": //Bug 1635685 and 1612312
-				case "AREA": //Bug 1896749
-					try { // IE7 occurs some errors, if the href has any incorrect encoding.
+				} else if (zk.ie) {
+					switch ($tag(n)) {
+					case "A": //Bug 1635685 and 1612312
+					case "AREA": //Bug 1896749
 						if (n.href.indexOf("javascript:") >= 0)
 							zk.listen(n, "click", zk._ieFixBfUnload);
-					} catch (e) {}
-					break;
-				case "FORM":
-					//Bug 1811352
-					zk.fixSubmit(n);
-					//break;
+						break;
+					case "FORM":
+						//Bug 1811352
+						zk.fixSubmit(n);
+						//break;
+					}
 				}
-			}
+			} catch (e) {} // IE7 failed if href contains incorrect encoding
 
 			var v = getZKAttr(n, "dtid");
 			if (v) zkau.addDesktop(v); //desktop's ID found
