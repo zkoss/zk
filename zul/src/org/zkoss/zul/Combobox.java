@@ -251,7 +251,7 @@ public class Combobox extends Textbox {
 	public void onInitRender(Event data) {
 		final Renderer renderer = new Renderer();
 		final ListModel subset = syncModel(data.getData() != null ? 
-				(String)data.getData() : getValue());
+				(String)data.getData() : getRawText());
 		try {
 			int pgsz = subset.getSize(), ofs = 0, j = 0;
 			for (Iterator it = getItems().listIterator(ofs);
