@@ -288,7 +288,6 @@ zkau._onRespReady = function () {
 				}
 			}
 		}
-throw new Error("exx");
 	} catch (e) {
 		zkau._areq = zkau._areqInf = null;
 		try {
