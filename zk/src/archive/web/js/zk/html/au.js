@@ -322,7 +322,7 @@ zkau._onRespReady = function () {
 	zkau._checkProgress();
 };
 zkau._parseCmds = function (xml) {
-	var rs = xml.getElementsByTagName("r")
+	var rs = xml ? xml.getElementsByTagName("r"): null;
 	if (!rs) return null;
 
 	var cmds = [];
