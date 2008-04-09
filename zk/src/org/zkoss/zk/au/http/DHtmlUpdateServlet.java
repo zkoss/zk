@@ -151,7 +151,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	throws ServletException, IOException {
 		final String errClient = request.getHeader("ZK-Error-Report");
 		if (errClient != null)
-			if (log.debugable()) log.debug("Error found at client: "+errClient+"\n"+getDetail(request));
+			if (log.debugable()) log.debug("Error found at client: "+errClient+"\n"+Servlets.getDetail(request));
 
 		//parse desktop ID
 		final String dtid = request.getParameter("dtid");
@@ -159,7 +159,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//Bug 1929139: incomplete request (IE only)
 			final boolean ie = Servlets.isExplorer(request);
 			if (!ie || log.debugable()) {
-				final String msg = "Incomplete request\n"+getDetail(request);
+				final String msg = "Incomplete request\n"+Servlets.getDetail(request);
 				if (ie) log.debug(msg);
 				else log.warning(msg); //impossible, so warning
 			}
@@ -297,25 +297,5 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final AuWriter out = new SmartAuWriter().open(request, response, 0);
 		out.write(new AuAlert(errmsg));
 		out.close(request, response);
-	}
-
-
-	/** Returns the request details.
-	 */
-	private static String getDetail(HttpServletRequest request) {
-		final StringBuffer sb = new StringBuffer(128);
-		sb.append(" sid: ").append(request.getHeader("ZK-SID")).append('\n');
-		addHeaderInfo(sb, request, "user-agent");
-		addHeaderInfo(sb, request, "content-length");
-//		addHeaderInfo(sb, request, "content-type");
-		sb.append(" ip: ").append(request.getRemoteAddr());
-//		sb.append(" method: ").append(request.getMethod());
-		return sb.toString();
-	}
-	private static void addHeaderInfo(StringBuffer sb,
-	HttpServletRequest request, String header) {
-		sb.append(' ')
-			.append(header).append(": ").append(request.getHeader(header))
-			.append('\n');
 	}
 }

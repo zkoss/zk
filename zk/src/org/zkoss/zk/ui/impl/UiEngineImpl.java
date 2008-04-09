@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.io.Writer;
 import java.io.IOException;
 
-import org.zkoss.xel.FunctionMapper;
+import javax.servlet.ServletRequest;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
@@ -41,6 +41,8 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.logging.Log;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.*;
@@ -603,7 +605,11 @@ public class UiEngineImpl implements UiEngine {
 		if (sid != null) {
 			final Collection resps = desktopCtrl.getLastResponse(sid);
 			if (resps != null) {
-				if (log.debugable()) log.debug("Repeat request "+sid+", and return "+resps.size()+" responses");
+				if (log.debugable()) {
+					final Object req = exec.getNativeRequest();
+					log.debug("Repeat request\n"+
+						(req instanceof ServletRequest ? Servlets.getDetail((ServletRequest)req):"sid: "+sid));
+				}
 				out.write(resps);
 				doDeactivate(exec); //deactive
 				return; //done
