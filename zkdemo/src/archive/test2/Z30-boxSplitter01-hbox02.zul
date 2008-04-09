@@ -1,0 +1,13 @@
+<zk>
+	<window border="normal" width="800px" title="hbox and splitters">
+		<hbox height="100px" width="800px">
+		cdacdacdacdacdaca
+		<splitter collapse="none"/>
+		cdacdacdacdacacsdc
+		<splitter collapse="after"/>
+		cdacdacdacdacacsdc
+		<splitter collapse="before"/>
+		cdacdacdacdacacsdc
+		</hbox>
+	</window>
+</zk>
