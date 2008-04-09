@@ -17,6 +17,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.logging;
 
+import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.logging.LogManager;
 import java.util.logging.Level;
@@ -25,6 +26,7 @@ import java.util.logging.Handler;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.util.Locales;
 import org.zkoss.mesg.Messages;
 
 /**
@@ -297,7 +299,12 @@ public class Log {
 	 */
 	public final void
 	log(Level level, int code, Object[] fmtArgs, Throwable t) {
-		log(level, Messages.get(code, fmtArgs), t);
+		final Locale l = Locales.setThreadLocal(null);
+		try {
+			log(level, Messages.get(code, fmtArgs), t);
+		} finally {
+			Locales.setThreadLocal(l);
+		}
 	}
 	/**
 	 * Logs a message and a throwable object at the giving level
@@ -306,7 +313,12 @@ public class Log {
 	 * @param t the throwable object; null to ignore
 	 */
 	public final void log(Level level, int code, Object fmtArg, Throwable t) {
-		log(level, Messages.get(code, fmtArg), t);
+		final Locale l = Locales.setThreadLocal(null);
+		try {
+			log(level, Messages.get(code, fmtArg), t);
+		} finally {
+			Locales.setThreadLocal(l);
+		}
 	}
 	/**
 	 * Logs a message and a throwable object at the giving level
@@ -315,7 +327,12 @@ public class Log {
 	 * @param t the throwable object; null to ignore
 	 */
 	public final void log(Level level, int code, Throwable t) {
-		log(level, Messages.get(code), t);
+		final Locale l = Locales.setThreadLocal(null);
+		try {
+			log(level, Messages.get(code), t);
+		} finally {
+			Locales.setThreadLocal(l);
+		}
 	}
 
 	//-- ERROR --//
