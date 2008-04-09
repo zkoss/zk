@@ -1015,6 +1015,7 @@ zk.Selectable.prototype = {
 	_setMultiple: function (multiple) {
 		setZKAttr(this.element, "multiple", multiple ? "true": "false");
 		if (!multiple) {
+			this._fixSelelectedId();
 			var row = $e(this._getSelectedId());
 			this._unsetSelectAllExcept(row);
 				//no need to unfocus because we don't want to change focus
