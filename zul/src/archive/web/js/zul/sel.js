@@ -178,6 +178,7 @@ zk.Selectable.prototype = {
 		}
 
 		this.body.onscroll = function () {
+			if(zk.opera) meta._scrollTop = meta.body.scrollTop;
 			if (meta.head) meta.head.scrollLeft = meta.body.scrollLeft;
 			if (meta.foot) meta.foot.scrollLeft = meta.body.scrollLeft;
 			if (!meta.paging) meta._render(zk.gecko ? 200: 60);
@@ -1184,6 +1185,8 @@ zkLibox.init = function (cmp) {
 zkLibox.childchg = zkLibox.onVisi = zkLibox.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta._recalcSize();
+	if (zk.opera && meta.body && meta._scrollTop)
+		meta.body.scrollTop = meta._scrollTop;
 };
 zkLibox.beforeSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
