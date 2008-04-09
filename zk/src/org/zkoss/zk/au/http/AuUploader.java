@@ -163,7 +163,7 @@ public class AuUploader implements AuProcessor {
 		final Object fis = params.get("file");
 		if (fis instanceof FileItem) {
 			meds.add(processItem(desktop, (FileItem)fis, alwaysNative));
-		} else {
+		} else if (fis != null) {
 			for (Iterator it = ((List)fis).iterator(); it.hasNext();) {
 				meds.add(processItem(desktop, (FileItem)it.next(), alwaysNative));
 			}
