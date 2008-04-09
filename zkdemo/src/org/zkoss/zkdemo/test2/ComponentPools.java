@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package org.zkoss.zkdemo.test;
+package org.zkoss.zkdemo.test2;
 
 import java.util.*;
 
@@ -36,6 +36,16 @@ public class ComponentPools {
 	public static Component next() {
 		synchronized (_comps) {
 			return _comps.isEmpty() ? null: (Component)_comps.remove(0);
+		}
+	}
+	/** Put a component to the pool.
+	 * Note: the component must be detached first before calling this method.
+	 */
+	public static void add(int j, Component comp) {
+		if (comp.getPage() != null)
+			throw new IllegalArgumentException("detached first");
+		synchronized (_comps) {
+			_comps.add(j, comp);
 		}
 	}
 	/** Generates a set of components and stores them in the pool.
