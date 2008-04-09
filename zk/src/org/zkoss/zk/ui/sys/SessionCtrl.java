@@ -78,10 +78,8 @@ public interface SessionCtrl {
 	 */
 	public void invalidateNow();
 
-	/** Returns a sequence of UUID for {@link DesktopCtrl#getNextUuid}
-	 * to generate component UUID.
-	 *
-	 * @param groupSize how many number of UUID the caller wants.
+	/** @deprecated As of release 3.0.5, {@link DesktopCtrl#getNextUuid}
+	 * doesn't count on this method.
 	 */
 	public int getNextUuidGroup(int groupSize);
 

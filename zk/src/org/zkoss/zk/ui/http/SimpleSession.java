@@ -277,6 +277,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 	}
 
+	/** @deprecated */
 	synchronized public int getNextUuidGroup(int groupSize) {
 		int uuid = _nextUuid;
 		_nextUuid += groupSize;
