@@ -866,7 +866,7 @@ public class Servlets {
 			addHeaderInfo(sb, hreq, "user-agent");
 			addHeaderInfo(sb, hreq, "content-length");
 			addHeaderInfo(sb, hreq, "content-type");
-//			sb.append(" method: ").append(request.getMethod());
+//			sb.append(" method: ").append(hreq.getMethod());
 		}
 		sb.append(" ip: ").append(request.getRemoteAddr());
 		return sb.toString();
