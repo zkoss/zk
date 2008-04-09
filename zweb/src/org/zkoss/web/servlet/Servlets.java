@@ -801,4 +801,29 @@ public class Servlets {
 		}
 		return null;
 	}
+
+	/** Returns the request detail infomation.
+	 * It is used to log the debug info.
+	 * @since 2.4.3
+	 */
+	public static String getDetail(ServletRequest request) {
+		final HttpServletRequest hreq =
+			request instanceof HttpServletRequest ? (HttpServletRequest)request: null;
+		final StringBuffer sb = new StringBuffer(128);
+		if (hreq != null) {
+			sb.append(" sid: ").append(hreq.getHeader("ZK-SID")).append('\n');
+			addHeaderInfo(sb, hreq, "user-agent");
+			addHeaderInfo(sb, hreq, "content-length");
+			addHeaderInfo(sb, hreq, "content-type");
+//			sb.append(" method: ").append(request.getMethod());
+		}
+		sb.append(" ip: ").append(request.getRemoteAddr());
+		return sb.toString();
+	}
+	private static void addHeaderInfo(StringBuffer sb,
+	HttpServletRequest request, String header) {
+		sb.append(' ')
+			.append(header).append(": ").append(request.getHeader(header))
+			.append('\n');
+	}
 }
