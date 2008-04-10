@@ -2206,6 +2206,22 @@ zkau.cmd1 = {
 		if (zkau.valid) zkau.valid.fixerrboxes();
 	},
 	addAft: function (uuid, cmp, html) {
+		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
+		//Format: comp-uuid:pg-uuid (if native root)
+		if (!cmp) {
+			var j = uuid.indexOf(':');
+			if (j >= 0) { //native root
+				cmp = $e(uuid.substring(0, j)); //try comp (though not possible)
+				if (!cmp) {
+					uuid = uuid.substring(j + 1); //try page
+					cmp = $e(uuid);
+					if (!cmp) cmp = document.body;
+					zkau.cmd1.addChd(uuid, cmp, html);
+					return;
+				}
+			}
+		}
+
 		var v = zk.isVParent(cmp);
 		if (v) zk.unsetVParent(cmp);
 		var n = $childExterior(cmp);

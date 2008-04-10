@@ -18,7 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -31,7 +34,23 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuInsertAfter extends AuResponse {
-	public AuInsertAfter(Component comp, String content) {
-		super("addAft", comp, new String[] {comp.getUuid(), content});
+	/**
+	 * @param anchor the reference where the component will be added after.
+	 */
+	public AuInsertAfter(Component anchor, String content) {
+		super("addAft", anchor, new String[] {getRefId(anchor), content});
+	}
+	private static String getRefId(Component anchor) {
+		//Bug 1939059: This is a dirty fix. We only handle roots
+		//and assume it must be the last one
+		if (anchor instanceof Native) {
+			if (anchor.getParent() != null)
+				throw new UiException("Adding a component after a native one not allowed: "+anchor);
+
+			final Page page = anchor.getPage();
+			if (page != null) //just in case
+				return anchor.getUuid() + ":" + page.getUuid();
+		}
+		return anchor.getUuid();	
 	}
 }
