@@ -18,6 +18,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window xmlns:h="http://www.w3.org/1999/xhtml">
+Notice : <separator />
+Drag and drop Does not work in FF 2.0.0.9 but work in 2.0.0.13
+<separator />
+light bar only show in IE
+<separator />
     <vbox id="parent" width="80%">
         <html/>
         <html/>
@@ -26,11 +31,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
         <html/>
         <html/>
     </vbox>
+
+
     <zscript>
         <![CDATA[
         int lineno = 1;
         for (Html h : parent.getChildren()) {
-            h.setContent("<table><tr><td>Line " + (lineno++) + " - drag and drop onto another line - works in IE7, does not work in FF 2.0.0.9</td></tr></table>");
+            h.setContent("<table><tr><td>Line " + (lineno++) + " - drag and drop onto another line - works in IE7</td></tr></table>");
             h.setDraggable("true");
             h.setDroppable("true");
             /* code to rearrange children after drop */

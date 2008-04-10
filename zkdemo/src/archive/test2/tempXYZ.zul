@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-B30-1933050.zul
+B30-1826101.zul
 
 {{IS_NOTE
 	Purpose:
@@ -9,23 +9,47 @@ B30-1933050.zul
 	Description:
 		
 	History:
-		Mon Apr  7 18:43:08 TST 2008, Created by jumperchen
+		Tue Nov  6 11:50:42 TST 2007, Created by jumperchen
 }}IS_NOTE
 
-Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-<n:p>(FF, Safari)When you change the listbox using "Up" and "Down" key, the label below the listbox should be changed according to the listbox.</n:p>
-		<listbox rows="1" mold="select" onSelect="lab.value = self.selectedItem.label" onCreate="self.focus();">
-			<listitem label="option1"/>
-			<listitem label="option2"/>
-			<listitem label="option3"/>
-			<listitem label="option1"/>
-			<listitem label="option2"/>
-			<listitem label="option3"/>
-		</listbox>	
-<label id="lab"/>	
+<window>
+
+<n:ol>
+<n:li>Listbox with mold = paging:</n:li>
+<n:li>does not have scrollbar when columns do not fit in the container;</n:li>
+<n:li>does not allow to set the size of columns smaller than contents in IE6.0. </n:li>
+</n:ol>
+
+</window>
+<window title="listbox demo" border="normal" width="80px">
+
+	<listbox width="95%" mold="paging">
+		<listhead sizable="true">
+			<listheader width="200px" label="name" sort="auto" />
+			<listheader width="200px" label="gender" sort="auto" />
+		</listhead>
+		<listitem>
+			<listcell label="Mary" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="John" />
+			<listcell label="MALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Jane" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Henry" />
+			<listcell label="MALE" />
+		</listitem>
+	</listbox>
+</window>
 </zk>

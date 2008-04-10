@@ -17,14 +17,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 <window>
 
-Listbox with mold = paging:
-1) does not have bottom scroller when columns do not fit in the container;
-2) does not allow to set the size of columns smaller than contents in
-IE6.0. 
+<n:ol>
+<n:li>Listbox with mold = paging:</n:li>
+<n:li>does not have scrollbar when columns do not fit in the container;</n:li>
+<n:li>does not allow to set the size of columns smaller than contents in IE6.0. </n:li>
+</n:ol>
 
 </window>
 <window title="listbox demo" border="normal" width="80px">
