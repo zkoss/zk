@@ -115,7 +115,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
     private static final long serialVersionUID = 20070413L;
 
 	/** URI for redrawing as a desktop or part of another desktop. */
-	private final ExValue _dkURI, _pgURI;
+	private final ExValue _cplURI, _dkURI, _pgURI;
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
 	/** Used to retore _owner. */
@@ -189,6 +189,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		init();
 
 		_langdef = langdef;
+		_cplURI = new ExValue(_langdef.getCompleteURI(), String.class);
 		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
 		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = compdefs != null ? compdefs:
@@ -214,6 +215,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		init();
 
 		_langdef = richlet.getLanguageDefinition();
+		_cplURI = new ExValue(_langdef.getCompleteURI(), String.class);
 		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
 		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = new ComponentDefinitionMap(
@@ -808,7 +810,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final boolean bIncluded = asyncUpdate || exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
 		final String uri = (String)
-			(bIncluded && !_complete ? _pgURI: _dkURI)
+			(_complete ? _cplURI: bIncluded ? _pgURI: _dkURI)
 				.getValue(_langdef.getEvaluator(), this);
 				//desktop and page URI is defined in language
 

@@ -331,10 +331,17 @@ public class DefinitionLoaders {
 			final Map pagemolds = parseMolds(root);
 			final String desktopURI = (String)pagemolds.get("desktop");
 			final String pageURI = (String)pagemolds.get("page");
-			if (desktopURI == null || pageURI == null)
+			if (desktopURI == null || desktopURI.length() == 0 || pageURI == null
+			|| pageURI.length() == 0)
 				throw new UiException("Both desktop and page molds must be specified, "+root.getLocator());
 			if (desktopURI.startsWith("class:") || pageURI.startsWith("class:"))
 				throw new UiException("Both desktop and page molds don't support 'class:', "+root.getLocator());
+
+			String completeURI = (String)pagemolds.get("complete");
+			if (completeURI == null)
+				completeURI = desktopURI;
+			else if (completeURI.length() == 0)
+				throw new UiException("Empty complete mold not allowed");
 
 			final List exts = parseExtensions(root);
 			if (exts.isEmpty())
@@ -344,7 +351,7 @@ public class DefinitionLoaders {
 			String bNative = root.getElementValue("native-namespace", true);
 
 			langdef = new LanguageDefinition(
-				deviceType, lang, ns, exts, desktopURI, pageURI,
+				deviceType, lang, ns, exts, completeURI, desktopURI, pageURI,
 				"true".equals(ignoreCase), "true".equals(bNative), locator);
 		}
 
