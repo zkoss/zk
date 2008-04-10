@@ -59,7 +59,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</north>
 	<center border="0">
 		<borderlayout>
-			<west maxsize="600" minsize="300" size="30%" flex="true" border="0" splittable="true">
+			<west maxsize="600" size="30%" flex="true" border="0" splittable="true">
 				<div style="background:#E6D92C">
 					<label value="30%"
 						style="color:white;font-size:50px" />
