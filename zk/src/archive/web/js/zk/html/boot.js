@@ -891,6 +891,7 @@ zk._evalInit = function () {
 					if (o["onHide"]) zk._thidecmps.push(n.id); //child-first
 					if (o["onSize"]) zk._tsizecmps.push(n.id); //child-first
 					if (o["beforeSize"]) zk._tbfszcmps.push(n.id); //child-first
+					if (o["onScroll"]) zk._tscrlcmps.push(n.id); //child-first
 				}
 			}
 
@@ -911,6 +912,8 @@ zk._evalInit = function () {
 				zk._sizecmps.unshift(es.pop());
 			for (var es = zk._tbfszcmps; es.length;)
 				zk._bfszcmps.unshift(es.pop());
+			for (var es = zk._tscrlcmps; es.length;)
+				zk._scrlcmps.unshift(es.pop());
 
 			while (zk._initszcmps.length) {
 				var n = zk._initszcmps.shift();
@@ -1002,6 +1005,7 @@ zk._cleanupAt = function (n) {
 		zk._hidecmps.remove(n.id);
 		zk._sizecmps.remove(n.id);
 		zk._bfszcmps.remove(n.id);
+		zk._scrlcmps.remove(n.id);
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)
@@ -1098,6 +1102,26 @@ zk.beforeSizeAt = function (n) {
 				break;
 			if (!n || e == n) { //elm is a child of n
 				zk.eval(elm, "beforeSize");
+				break;
+			}
+		}
+	}
+};
+/** To notify a component that the parent is scrolled.
+ * All descendants of n is invoked if onScroll is declared.
+ * The invocation of onScroll is parent-first (and then child).
+ * @param n the topmost element which is scrolled.
+ * If null, the browser's size is changed and all elements will be handled.
+ * @since 3.0.5
+ */
+zk.onScrollAt = function (n) {
+	for (var elms = zk._scrlcmps, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]);
+		for (var e = elm; e; e = $parent(e)) {
+			if (!$visible(e))
+				break;
+			if (!n || e == n) { //elm is a child of n
+				zk.eval(elm, "onScroll");
 				break;
 			}
 		}
@@ -1383,7 +1407,9 @@ zk._visicmps = []; //an array of component's ID that requires zkType.onVisi; the
 zk._hidecmps = []; //an array of component's ID that requires zkType.onHide; the child is in front of the parent
 zk._sizecmps = []; //an array of component's ID that requires zkType.onSize; the child is in front of the parent
 zk._bfszcmps = []; //an array of component's ID that requires zkType.beforeSize; the child is in front of the parent
-zk._tsizecmps = [], zk._tbfszcmps = [], zk._tvisicmps = [], zk._thidecmps = []; //temporary array
+zk._scrlcmps = []; //an array of component's ID that requires zkType.onScroll; the child is in front of the parent
+zk._tsizecmps = [], zk._tbfszcmps = [], zk._tscrlcmps = [],
+zk._tvisicmps = [], zk._thidecmps = []; //temporary array
 function myload() {
 	var f = zk._onload;
 	if (f) {

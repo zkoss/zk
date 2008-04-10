@@ -103,6 +103,8 @@ zkau._onDocScroll = function () {
 		d.style.top = iy + zk.innerHeight() - d.offsetHeight - 20 + "px";
 		d.style.left = ix + zk.innerWidth() - d.offsetWidth - 20 + "px";
 	}
+
+	zk.onScrollAt();
 };
 zkau._fixOffset = function (el, x, y) {
 	if (!el) return;
