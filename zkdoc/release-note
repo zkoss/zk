@@ -25,6 +25,7 @@ ZK 3.0.5 Freshly
   1472534: error popup is shown behind select inputs(IE6 only)
   1938345: Log shall use Locale.getDefault, not Locales.getCurrent
   1882432: Scrolbar of listbox is moved after sorting in Opera
+  1938534: Upload causes an expcetion, not reproducible but with log
   
 	--------
 ZK 3.0.4
