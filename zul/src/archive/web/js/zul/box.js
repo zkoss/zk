@@ -157,6 +157,15 @@ zkSplt.setAttr = function (cmp, nm, val) {
 		zkSplt._fixbtn(cmp);
 		zkSplt._fixsz(cmp);
 		return true;
+	} else if (zk.opera && "visibility" == nm) {
+		zkau.setAttr(cmp, nm, val);
+		var outer = $childExterior(cmp);
+		if (zk.isVisible(outer)) {
+			var old = outer.style.display;
+			outer.style.display = "none";
+			outer.style.display = old;
+		}
+		return true;
 	}
 	return false;
 };
