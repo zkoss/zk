@@ -114,7 +114,7 @@ public class LanguageDefinition {
 	/** Map(String lang, String script). */
 	private final Map _eachscripts = new HashMap();
 	/** The URI to render a page. */
-	private final String _desktopURI, _pageURI;
+	private final String _completeURI, _desktopURI, _pageURI;
 	/** A list of Taglib. */
 	private final List _taglibs = new LinkedList();
 	/** A list of JavaScript. */
@@ -272,8 +272,8 @@ public class LanguageDefinition {
 	 * {@link #lookup}.
 	 *
 	 * @param deviceType the device type; never null or empty
-	 * @param desktopURI the URI used to render a desktop; never null.
-	 * @param pageURI the URI used to render a page; never null.
+	 * @param desktopURI the URI used to render a full page (i.e., the topmost page); never null.
+	 * @param pageURI the URI used to render a included page; never null.
 	 * @param ignoreCase whether the component name is case-insensitive
 	 * @param bNative whether it is native (i.e., all tags are
 	 * {@link org.zkoss.zk.ui.ext.Native}).
@@ -284,26 +284,49 @@ public class LanguageDefinition {
 	public LanguageDefinition(String deviceType, String name, String namespace,
 	List extensions, String desktopURI, String pageURI, boolean ignoreCase,
 	boolean bNative, Locator locator) {
+		this(deviceType, name, namespace, extensions, desktopURI, desktopURI,
+			pageURI, ignoreCase, bNative, locator);
+	}
+	/** Constructs a language defintion.
+	 *			
+	 * <p>Note: the name and namespace of any language cannot be the same.
+	 * In other words, each language has two names, name and namespace.
+	 * You can find the language back by either of them via
+	 * {@link #lookup}.
+	 *
+	 * @param deviceType the device type; never null or empty
+	 * @param completeURI the URI used to render a complete page; never null.
+	 * @param desktopURI the URI used to render a full page (i.e., the topmost page); never null.
+	 * @param pageURI the URI used to render a included page; never null.
+	 * @param ignoreCase whether the component name is case-insensitive
+	 * @param bNative whether it is native (i.e., all tags are
+	 * {@link org.zkoss.zk.ui.ext.Native}).
+	 * If native, the namespaces found in a ZUML page is no longer
+	 * used to specified a language. Rather, it is output to the client
+	 * directly.
+	 * @since 3.0.5
+	 */
+	public LanguageDefinition(String deviceType, String name, String namespace,
+	List extensions, String completeURI, String desktopURI, String pageURI,
+	boolean ignoreCase, boolean bNative, Locator locator) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new UiException("deviceType cannot be empty");
 		if (!Devices.exists(deviceType))
 			throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
-		if (name == null || name.length() == 0)
-			throw new UiException("name cannot be empty");
-		if (namespace == null || namespace.length() == 0)
-			throw new UiException("namespace cannot be empty");
 		if (ZK_NAMESPACE.equals(namespace))
 			throw new UiException(ZK_NAMESPACE+" is reserved.");
-		if (desktopURI == null || desktopURI.length() == 0)
-			throw new UiException("The URI for desktop cannot be empty");
-		if (pageURI == null || pageURI.length() == 0)
-			throw new UiException("The URI for page cannot be empty");
-		if (locator == null)
-			throw new UiException("locator cannot be null");
+		if (name == null || name.length() == 0
+		|| namespace == null || namespace.length() == 0
+		|| completeURI == null || completeURI.length() == 0
+		|| desktopURI == null || desktopURI.length() == 0
+		|| pageURI == null || pageURI.length() == 0
+		|| locator == null)
+			throw new IllegalArgumentException();
 
 		_deviceType = deviceType;
 		_name = name;
 		_ns = namespace;
+		_completeURI = completeURI;
 		_desktopURI = desktopURI;
 		_pageURI = pageURI;
 		_locator = locator;
@@ -569,14 +592,23 @@ public class LanguageDefinition {
 	}
 
 	/** Return the URI to render a full page (which might be an expression).
+	 * A full page is the topmost page of a desktop
+	 * (and its {@link Page#isComplete} is false).
 	 */
 	public String getDesktopURI() {
 		return _desktopURI;
 	}
-	/** Return the URI to render a included page (which might be an expression).
+	/** Return the URI to render an included page (which might be an expression).
 	 */
 	public String getPageURI() {
 		return _pageURI;
+	}
+	/** Return the URI to render a complete page (which might be an expression).
+	 * A complete page is a page whose {@link Page#isComplete} is true.
+	 * @since 3.0.5
+	 */
+	public String getCompleteURI() {
+		return _completeURI;
 	}
 
 	/** Sets the macro template.
