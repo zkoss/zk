@@ -3,7 +3,7 @@ desktop.dsp
 
 {{IS_NOTE
 	Purpose:
-		The desktop template for the zul language
+		The template used to render a full page
 	Description:
 		
 	History:
