@@ -51,7 +51,8 @@ public interface IdGenerator {
 	 * @param desktop the current desktop (never null)
 	 * @param comp the component (never null)
 	 * @return the next component UUID, or null to generate the
-	 * default UUID.
+	 * default UUID.<br/>
+	 * Note: don't return an UUID containing ':'.
 	 */
 	public String nextComponentUuid(Desktop desktop, Component comp);
 	/** Returns the next page UUID for the specified page,
