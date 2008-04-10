@@ -82,14 +82,6 @@ public class HibernateUtil {
 		currentSession().close();
 	}
 	
-	/**
-	 * Used in {@link HibernateSessionFactoryListener} to init
-	 * Hibernate SessionFactory.
-	 * @deprecated Use {@link #initSessionFactory(WebApp app)} instead.
-	 */
-	/* package */ static SessionFactory initSessionFactory() {
-		return initSessionFactory((WebApp)null);
-	}
 	 /**
 	 * Used in {@link HibernateSessionFactoryListener} to init
 	 * Hibernate SessionFactory.
