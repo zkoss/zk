@@ -889,7 +889,7 @@ zk._evalInit = function () {
 					//onVisi/onHide is called parent-first
 					if (o["onVisi"]) zk._tvisicmps.push(n.id); //child-first
 					if (o["onHide"]) zk._thidecmps.push(n.id); //child-first
-					if (o["onSize"]) zk._tsizecmps.push(n.id); //child-first
+					if (o["onSize"]) zk._tszcmps.push(n.id); //child-first
 					if (o["beforeSize"]) zk._tbfszcmps.push(n.id); //child-first
 					if (o["onScroll"]) zk._tscrlcmps.push(n.id); //child-first
 				}
@@ -903,13 +903,13 @@ zk._evalInit = function () {
 		}
 
 		if (!zk.loading) {
-			//put _tsizecmps at the head of _sizecmps and keep child-first
+			//put _tszcmps at the head of _szcmps and keep child-first
 			for (var es = zk._tvisicmps; es.length;)
 				zk._visicmps.unshift(es.pop());
 			for (var es = zk._thidecmps; es.length;)
 				zk._hidecmps.unshift(es.pop());
-			for (var es = zk._tsizecmps; es.length;)
-				zk._sizecmps.unshift(es.pop());
+			for (var es = zk._tszcmps; es.length;)
+				zk._szcmps.unshift(es.pop());
 			for (var es = zk._tbfszcmps; es.length;)
 				zk._bfszcmps.unshift(es.pop());
 			for (var es = zk._tscrlcmps; es.length;)
@@ -1003,7 +1003,7 @@ zk._cleanupAt = function (n) {
 		zk.unlistenAll(n); //Bug 1741959: memory leaks
 		zk._visicmps.remove(n.id);
 		zk._hidecmps.remove(n.id);
-		zk._sizecmps.remove(n.id);
+		zk._szcmps.remove(n.id);
 		zk._bfszcmps.remove(n.id);
 		zk._scrlcmps.remove(n.id);
 	}
@@ -1068,7 +1068,7 @@ zk.onHideAt = function (n) {
  * @since 3.0.4
  */
 zk.onSizeAt = function (n) {
-	for (var elms = zk._sizecmps, j = elms.length; --j >= 0;) { //parent first
+	for (var elms = zk._szcmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
 			if (!$visible(e))
@@ -1405,10 +1405,10 @@ zk._initszcmps = []; //comps that requires onSizeAt to be called in _evalInit
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = []; //an array of component's ID that requires zkType.onVisi; the child is in front of the parent
 zk._hidecmps = []; //an array of component's ID that requires zkType.onHide; the child is in front of the parent
-zk._sizecmps = []; //an array of component's ID that requires zkType.onSize; the child is in front of the parent
+zk._szcmps = []; //an array of component's ID that requires zkType.onSize; the child is in front of the parent
 zk._bfszcmps = []; //an array of component's ID that requires zkType.beforeSize; the child is in front of the parent
 zk._scrlcmps = []; //an array of component's ID that requires zkType.onScroll; the child is in front of the parent
-zk._tsizecmps = [], zk._tbfszcmps = [], zk._tscrlcmps = [],
+zk._tszcmps = [], zk._tbfszcmps = [], zk._tscrlcmps = [],
 zk._tvisicmps = [], zk._thidecmps = []; //temporary array
 function myload() {
 	var f = zk._onload;
