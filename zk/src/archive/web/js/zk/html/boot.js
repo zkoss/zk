@@ -768,7 +768,7 @@ zk.initAt = function (node) {
 
 	var stk = [];
 	stk.push(node);
-	zk._initszcmps.push(node);
+
 	zk._loadAndInit({stk: stk, nosibling: true});
 };
 
@@ -903,23 +903,23 @@ zk._evalInit = function () {
 		}
 
 		if (!zk.loading) {
-			//put _tszcmps at the head of _szcmps and keep child-first
+			//put _tvisicmps at the head of _visicmps and keep child-first
 			for (var es = zk._tvisicmps; es.length;)
 				zk._visicmps.unshift(es.pop());
 			for (var es = zk._thidecmps; es.length;)
 				zk._hidecmps.unshift(es.pop());
-			for (var es = zk._tszcmps; es.length;)
-				zk._szcmps.unshift(es.pop());
-			for (var es = zk._tbfszcmps; es.length;)
-				zk._bfszcmps.unshift(es.pop());
 			for (var es = zk._tscrlcmps; es.length;)
 				zk._scrlcmps.unshift(es.pop());
 
-			while (zk._initszcmps.length) {
-				var n = zk._initszcmps.shift();
-				zk.beforeSizeAt(n);
-				zk.onSizeAt(n);
-					//Note: beforeSize and onSize cannot call zk.load!!
+			for (var es = zk._tbfszcmps; es.length;) {
+				var n = es.pop(); //parent at the end, so pop the end first
+				zk._bfszcmps.unshift(n);
+				zk.eval($e(n), "beforeSize");
+			}
+			for (var es = zk._tszcmps; es.length;) {
+				var n = es.pop();
+				zk._szcmps.unshift(n);
+				zk.eval($e(n), "onSize");
 			}
 		}
 
@@ -932,7 +932,7 @@ zk._evalInit = function () {
 			setTimeout(zk._initLater, 25);
 		}
 	} while (!zk.loading && (zk._bfinits.length || zk._initcmps.length
-	|| zk._initszcmps.length || zk._initfns.length));
+	|| zk._initfns.length));
 	//Bug 1815074: _initfns might cause _bfinits to be added
 };
 zk._initLater = function () {
@@ -1401,7 +1401,6 @@ zk._cuLatfns = []; //used by addCleanupLater
 zk._cuLatids = {};
 zk._bfunld = []; //used by addBeforeUnload
 zk._initcmps = []; //comps to init
-zk._initszcmps = []; //comps that requires onSizeAt to be called in _evalInit
 zk._ckfns = []; //functions called to check whether a module is loaded (zk._load)
 zk._visicmps = []; //an array of component's ID that requires zkType.onVisi; the child is in front of the parent
 zk._hidecmps = []; //an array of component's ID that requires zkType.onHide; the child is in front of the parent
