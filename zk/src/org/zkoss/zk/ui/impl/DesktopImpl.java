@@ -509,8 +509,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		//theorectically, the following is not necessary, but, to be safe...
 		_pages.clear();
-		_comps.clear();
 		_attrs.clear();
+		_comps = new HashMap(1); //not clear() since # of comps might huge
 		_meds = null;
 		_rque = null;
 	}

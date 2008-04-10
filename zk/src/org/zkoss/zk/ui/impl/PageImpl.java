@@ -664,9 +664,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		//theorectically, the following is not necessary, but, to be safe...
 		_roots.clear();
+		_attrs.clear();
+		_ips.clear();
+		_fellows = new HashMap(1); //not clear() since # of fellows might huge
 		_desktop = null;
 		_owner = _defparent = null;
-		_listeners = _attrs = _fellows = _ips = null;
+		_listeners = null;
 		_ns = null;
 		_resolvers = null;
 	}
