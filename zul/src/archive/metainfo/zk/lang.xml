@@ -62,6 +62,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold-name>page</mold-name>
 		<mold-uri>~./zul/html/page.dsp</mold-uri><!-- it doesn't support class: -->
 	</mold>
+	<mold><!-- Optional. If omitted, it is assumed to be the same as desktop URI -->
+		<mold-name>complete</mold-name>
+		<mold-uri>~./zul/html/complete.dsp</mold-uri><!-- it doesn't support class: -->
+	</mold>
 
 	<!-- Defines the component and attribute names used to represent
 	a label when a plain text is found in ZUL XML.
