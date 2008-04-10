@@ -343,16 +343,6 @@ public class Treeitem extends XulElement {
 		final Component gp = p != null ? p.getParent(): null;
 		return gp instanceof Treeitem ? (Treeitem)gp: null;
 	}
-	/** Returns the nestest ancestor {@link Treeitem}, if any, or null if it is
-	 * the top-level {@link Treeitem}. By top-level we mean the first level of
-	 * a {@link Tree}.
-	 *
-	 * @deprecated As of release 2.4.1, replaced with {@link #getParentItem}
-	 * to avoid confusion
-	 */
-	public Treeitem getTreeitem() {
-		return getParentItem();
-	}
 	/** Returns the tree owning this item.
 	 */
 	public Tree getTree() {

@@ -44,15 +44,6 @@ implements ListModelExt, Set, java.io.Serializable {
 	protected Set _set;
 
 	/**
-	 * Creates an instance which accepts a "live" Set as its inner Set.
-	 * @param set the inner Set storage.
-	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelSet(Set,boolean)}
-	 */
-	public static ListModelSet instance(Set set) {
-		return new ListModelSet(set, true);
-	}
-
-	/**
 	 * Constructor
 	 *
 	 * @param set the set to represent

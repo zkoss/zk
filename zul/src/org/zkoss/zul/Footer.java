@@ -54,12 +54,6 @@ public class Footer  extends LabelImageElement {
 		final Component comp = getParent();
 		return comp != null ? (Grid)comp.getParent(): null;
 	}
-	/** Returns the set of footers that this belongs to.
-	 * @deprecated As of release 2.4.1, due to confusion
-	 */
-	public Foot getFoot() {
-		return (Foot)getParent();
-	}
 	/** Returns the column index, starting from 0.
 	 */
 	public int getColumnIndex() {

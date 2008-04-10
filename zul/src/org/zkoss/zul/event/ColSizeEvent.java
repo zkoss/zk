@@ -63,15 +63,6 @@ public class ColSizeEvent extends Event {
 		_col = col;
 		_keys = keys;
 	}
-	/**
-	 * @param icol the index of the first colum whose width is changed.
-	 * The second column is icol+1.
-	 * @deprecated As of release 3.0.0, since only one column is resized.
-	 */
-	public ColSizeEvent(String evtnm, Component target, int icol,
-	Component col1, Component col2, int keys) {
-		this(evtnm, target, icol, col1, keys);
-	}
 	/** Return the column index of the first column whose width is changed.
 	 * The other column is the returned index plus one.
 	 * <p>In other words, it is the index (starting from 0) of {@link #getColumn1}.
@@ -84,20 +75,6 @@ public class ColSizeEvent extends Event {
 	 */
 	public Component getColumn() {
 		return _col;
-	}
-	/** Returns the first column whose width is changed.
-	 * @deprecated As of release 3.0.0, use {@link #getColumn} instead,
-	 * since only one column is resized
-	 */
-	public Component getColumn1() {
-		return getColumn();
-	}
-	/** Returns the second column whose width is changed.
-	 * @deprecated As of release 3.0.0, since only one column is resized.
-	 * It always returns null since 3.0.0
-	 */
-	public Component getColumn2() {
-		return null;
 	}
 
 	/** Returns what keys were pressed when the column is resized, or 0 if

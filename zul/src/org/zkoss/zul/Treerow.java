@@ -49,12 +49,6 @@ public class Treerow extends XulElement {
 		return parent != null ? ((Treeitem)parent).getLevel(): 0;
 	}
 
-	/** Returns the parent {@link Treeitem}.
-	 * @deprecated As of release 2.4.1, due to confusing
-	 */
-	public Treeitem getTreeitem() {
-		return (Treeitem)getParent();
-	}
 	/** Returns the {@link Treechildren} associated with this
 	 * {@link Treerow}.
 	 * In other words, it is {@link Treeitem#getTreechildren} of
@@ -75,7 +69,7 @@ public class Treerow extends XulElement {
 	public String getSclass() {
 		String scls = super.getSclass();
 		if (scls == null) scls = "item";
-		final Treeitem ti = getTreeitem();
+		final Treeitem ti = (Treeitem)getParent();
 		if (ti != null) {
 			if (ti.isDisabled())
 				return scls.length() > 0 ? scls + " disd": "disd";
@@ -106,32 +100,32 @@ public class Treerow extends XulElement {
 	/** Returns the same as {@link Treeitem#getContext}.
 	 */
 	public String getContext() {
-		final Treeitem ti = getTreeitem();
+		final Treeitem ti = (Treeitem)getParent();
 		return ti != null ? ti.getContext(): null;
 	}
 	/** Returns the same as {@link Treeitem#getPopup}.
 	 */
 	public String getPopup() {
-		final Treeitem ti = getTreeitem();
+		final Treeitem ti = (Treeitem)getParent();
 		return ti != null ? ti.getPopup(): null;
 	}
 	/** Returns the same as {@link Treeitem#getTooltip}.
 	 */
 	public String getTooltip() {
-		final Treeitem ti = getTreeitem();
+		final Treeitem ti = (Treeitem)getParent();
 		return ti != null ? ti.getTooltip(): null;
 	}
 	/** Returns the same as {@link Treeitem#getTooltiptext}
 	 */
 	public String getTooltiptext() {
-		final Treeitem ti = getTreeitem();
+		final Treeitem ti = (Treeitem)getParent();
 		return ti != null ? ti.getTooltiptext(): null;
 	}
 
 	protected boolean isAsapRequired(String evtnm) {
 		if (!Events.ON_OPEN.equals(evtnm))
 			return super.isAsapRequired(evtnm);
-		final Treeitem ti = getTreeitem();
+		final Treeitem ti = (Treeitem)getParent();
 		return ti != null && ti.isAsapRequired(evtnm);
 	}
 	/** Appends attributes for generating the real checkbox HTML tags
@@ -139,7 +133,7 @@ public class Treerow extends XulElement {
 	 */
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		final Treeitem item = getTreeitem();
+		final Treeitem item = (Treeitem)getParent();
 		if (item == null) return attrs;
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);

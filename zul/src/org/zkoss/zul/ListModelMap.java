@@ -47,15 +47,6 @@ implements ListModelExt, Map, java.io.Serializable {
 	protected Map _map; //(key, value)
 	
 	/**
-	 * Creates an instance which accepts a "live" Map as its inner Map.
-	 * @param map the inner Map storage.
-	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelMap(Map, boolean)}
-	 */
-	public static ListModelMap instance(Map map) {
-		return new ListModelMap(map, true);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * @param map the map to represent

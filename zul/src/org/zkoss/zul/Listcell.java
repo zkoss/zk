@@ -53,12 +53,6 @@ public class Listcell extends LabelImageElement {
 		final Component comp = getParent();
 		return comp != null ? (Listbox)comp.getParent(): null;
 	}
-	/** Returns the list item that it belongs to.
-	 * @deprecated As of release 2.4.1, due to confusion
-	 */
-	public Listitem getListitem() {
-		return (Listitem)getParent();
-	}
 	
 	protected String getRealStyle() {
 		final Listheader h = getListheader();
@@ -154,7 +148,7 @@ public class Listcell extends LabelImageElement {
 	 * is not first column. Called only by listcell.dsp.
 	 */
 	public String getColumnHtmlPrefix() {
-		final Listitem item = getListitem();
+		final Listitem item = (Listitem)getParent();
 		final Listbox listbox = getListbox();
 		if (listbox != null && item.getFirstChild() == this) {
 			final StringBuffer sb = new StringBuffer(64);

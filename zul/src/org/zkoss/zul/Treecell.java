@@ -241,10 +241,7 @@ public class Treecell extends LabelImageElement {
 		return (Treeitem[])pitems.toArray(new Treeitem[pitems.size()]);
 	}
 
-	/** Returns the nestest parent {@link Treeitem}.
-	 * @deprecated As of release 2.4.1, due to confusion
-	 */
-	public Treeitem getTreeitem() {
+	private Treeitem getTreeitem() {
 		final Component parent = getParent();
 		return parent != null ? (Treeitem)parent.getParent(): null;
 	}

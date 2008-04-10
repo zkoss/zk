@@ -57,32 +57,12 @@ public class PagingEvent extends Event {
 		_pgi = pageable;
 		_actpg = actpg;
 	}
-	/** Construct a paging event that the target is different
-	 * from the page controller.
-	 *
-	 * @param target the event target
-	 * @param paginal the paging controller.
-	 * @deprecated As of release 2.4.1, replaced by {@link #PagingEvent(String,Component,Paginal,int)}
-	 */
-	public PagingEvent(String name, Component target, Paginal paginal,
-	int actpg) {
-		super(name, target);
-		_pgi = paginal;
-		_actpg = actpg;
-	}
 
 	/** Returns the pageable controller.
 	 * @since 2.4.1
 	 */
 	public Pageable getPageable() {
 		return _pgi;
-	}
-	/** Returns the paginal controller.
-	 *
-	 * @deprecated As of release 2.4.1, replaced by {@link #getPageable}
-	 */
-	public Paginal getPaginal() {
-		return _pgi instanceof Paginal ? (Paginal)_pgi: null;
 	}
 
 	/** Returns the active page (starting from 0).

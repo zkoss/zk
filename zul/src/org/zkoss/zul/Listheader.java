@@ -88,12 +88,6 @@ public class Listheader extends HeaderElement {
 		final Component comp = getParent();
 		return comp != null ? (Listbox)comp.getParent(): null;
 	}
-	/** Returns the listhead that this belongs to.
-	 * @deprecated As of release 2.4.1, due to confusion
-	 */
-	public Listhead getListhead() {
-		return (Listhead)getParent();
-	}
 
 	/** Returns the sort direction.
 	 * <p>Default: "natural".

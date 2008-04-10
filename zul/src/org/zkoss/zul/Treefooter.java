@@ -55,12 +55,6 @@ public class Treefooter extends LabelImageElement {
 		final Component comp = getParent();
 		return comp != null ? (Tree)comp.getParent(): null;
 	}
-	/** Returns the set of footers that this belongs to.
-	 * @deprecated As of release 2.4.1, due to confusion
-	 */
-	public Treefoot getTreefoot() {
-		return (Treefoot)getParent();
-	}
 	/** Returns the column index, starting from 0.
 	 */
 	public int getColumnIndex() {
