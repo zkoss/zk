@@ -1033,19 +1033,6 @@ public class Configuration {
 		_themeProvider = provider;
 	}
 
-	/**
-	 * @deprecated As of release 2.4.0, replaced by {@link Devices#setTimeoutURI}.
-	 */
-	public void setTimeoutURI(String uri) {
-		Devices.setTimeoutURI("ajax", uri);
-	}
-	/**
-	 * @deprecated As of release 2.4.0, replaced by {@link Devices#getTimeoutURI}.
-	 */
-	public String getTimeoutURI() {
-		return Devices.getTimeoutURI("ajax");
-	}
-
 	/** Sets the class that implements {@link UiEngine}, or null to
 	 * use the default.
 	 */
@@ -1395,12 +1382,6 @@ public class Configuration {
 	public void setSessionMaxDesktops(int max) {
 		_sessDktMax = max;
 	}
-	/**
-	 * @deprecated As of release 3.0.1, replaced with {@link #setSessionMaxDesktops}.
-	 */
-	public void setMaxDesktops(int max) {
-		setSessionMaxDesktops(max);
-	}
 	/** Returns the maximal allowed number of desktop per session.
 	 *
 	 * <p>A negative value indicates there is no limit.
@@ -1410,11 +1391,6 @@ public class Configuration {
 		return _sessDktMax;
 	}
 	/**
-	 * @deprecated As of release 3.0.1, replaced with {@link #getSessionMaxDesktops}.
-	 */
-	public int getMaxDesktops() {
-		return getSessionMaxDesktops();
-	}
 	/** Specifies the maximal allowed number of concurrent requests
 	 * per session.
 	 *
@@ -1969,12 +1945,6 @@ public class Configuration {
 		_eis.afterProcessEvent(event);
 	}
 
-	/**
-	 * @deprecated As of release 2.4.1, replaced by {@link #addErrorPage(String, Class, String)}
-	 */
-	public void addErrorPage(Class type, String location) {
-		addErrorPage("ajax", type, location);
-	}
 	/** Adds an error page.
 	 *
 	 * @param deviceType the device type: ajax or mil
@@ -2011,12 +1981,6 @@ public class Configuration {
 			l.add(new ErrorPage(type, location));
 		}
 		return previous;
-	}
-	/**
-	 * @deprecated As of release 2.4.1, replaced by {@link #getErrorPage(String, Throwable)}.
-	 */
-	public String getErrorPage(Throwable error) {
-		return getErrorPage("ajax", error);
 	}
 	/** Returns the error page that matches the specified error, or null if not found.
 	 *

@@ -359,14 +359,6 @@ public interface Page extends IdSpace {
 	 * @since 3.0.0
 	 */
 	public Function getZScriptFunction(Component comp, String name, Class[] argTypes);
-	/** @deprecated As of release 3.0.0, replaced by {@link #getZScriptFunction(String,Class[])}.
-	 */
-	public org.zkoss.zk.scripting.Method
-	getZScriptMethod(String name, Class[] argTypes);
-	/** @deprecated As of release 3.0.0, replaced by {@link #getZScriptFunction(String,Class[])}.
-	 */
-	public org.zkoss.zk.scripting.Method
-	getZScriptMethod(Namespace ns, String name, Class[] argTypes);
 
 	/** Returns the value of the variable of the specified name by searching
 	 * the loaded interpreters, if any.
@@ -417,10 +409,6 @@ public interface Page extends IdSpace {
 	 * @since 3.0.0
 	 */
 	public Object getXelVariable(String name);
-	/** Returns a variable that is visible to XEL expressions.
-	 * @deprecated As of release 3.0.0, replaced by {@link #getXelVariable}.
-	 */
-	public Object getELVariable(String name);
  
 	/** Adds a name resolver that will be used to resolve a variable
 	 * by {@link #getVariable}.

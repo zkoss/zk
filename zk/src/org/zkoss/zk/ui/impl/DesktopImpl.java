@@ -822,13 +822,4 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public Collection getLastResponse(String reqId) {
 		return Objects.equals(reqId, _lastReqId) ? _lastResps: null;
 	}
-	/** @deprecated As of release 3.0.5, replaced with {@link #responseSent}.
-	 */
-	public int getResponseSequence(boolean advance) {
-		return -1;
-	}
-	/** @deprecated As of release 3.0.5, replaced with {@link #responseSent}.
-	 */
-	public void setResponseSequence(int seqId) {
-	}
 }

@@ -291,11 +291,6 @@ public class ExecutionImpl extends AbstractExecution {
 	public String getRemoteHost() {
 		return _request.getRemoteHost();
 	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
-	 */
-	public String getRemoteName() {
-		return getRemoteHost();
-	}
 	public String getRemoteAddr() {
 		return _request.getRemoteAddr();
 	}

@@ -107,14 +107,6 @@ public interface Session {
 	 * @since 3.0.1
 	 */
 	public String getLocalAddr();
-	/** 
-	 * @deprecated As of release 3.0.1, replaced by {@link #getRemoteAddr}.
-	 */
-	public String getClientAddr();
-	/** 
-	 * @deprecated As of release 3.0.1, replaced by {@link #getRemoteHost}.
-	 */
-	public String getClientHost();
 
 	/** Invalidates this session then unbinds any objects bound to it.
 	 *

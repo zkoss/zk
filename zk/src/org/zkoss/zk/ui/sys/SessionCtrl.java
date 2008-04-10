@@ -78,11 +78,6 @@ public interface SessionCtrl {
 	 */
 	public void invalidateNow();
 
-	/** @deprecated As of release 3.0.5, {@link DesktopCtrl#getNextUuid}
-	 * doesn't count on this method.
-	 */
-	public int getNextUuidGroup(int groupSize);
-
 	/** Notifies the session that a client request is received.
 	 *
 	 * @param keepAlive if the request will keep the session alive,

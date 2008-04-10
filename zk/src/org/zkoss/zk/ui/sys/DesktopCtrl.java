@@ -298,11 +298,4 @@ if (c.isEmpty()) {
 	 * @since 3.0.5
 	 */
 	public Collection getLastResponse(String reqId);
-
-	/** @deprecated As of release 3.0.5, replaced with {@link #responseSent}.
-	 */
-	public int getResponseSequence(boolean advance);
-	/** @deprecated As of release 3.0.5, replaced with {@link #responseSent}.
-	 */
-	public void setResponseSequence(int seqId);
 }

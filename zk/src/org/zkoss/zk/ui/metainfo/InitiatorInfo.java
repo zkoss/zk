@@ -183,9 +183,4 @@ public class InitiatorInfo {
 			args[j] = _args[j].getValue(eval, page);
 		return args;
 	}
-	/** @deprecated As of release 3.0.0, replaced by {@link #resolveArguments}.
-	 */
-	public Object[] getArguments(PageDefinition pgdef, Page page) {
-		return resolveArguments(pgdef, page);
-	}
 }

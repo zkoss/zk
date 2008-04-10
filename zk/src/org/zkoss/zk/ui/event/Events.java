@@ -226,15 +226,6 @@ public class Events {
 		}
 		return false;
 	}
-	/** Returns whether an event handler or listener is available for
-	 * the specified component and event.
-	 *
-	 * @deprecated As of release 2.4.0, replaced by {@link #isListened}
-	 */
-	public static
-	boolean isListenerAvailable(Component comp, String evtnm, boolean asap) {
-		return isListened(comp, evtnm, asap);
-	}
 
 	/** Sends the event to the specified component and process it
 	 * immediately. This method can only be called when processing an event.

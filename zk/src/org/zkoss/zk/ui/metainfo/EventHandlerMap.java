@@ -93,18 +93,6 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 			return (List)_evthds.get(evtnm);
 		return null;
 	}
-	/**
-	 * @deprecated As of release 3.0.0, replaced by getAll(evtnm)[0].
-	 * See also {@link #get(Component, String)} or {@link #getAll}
-	 */
-	public EventHandler get(String evtnm) {
-		if (_evthds != null) {
-			final List ehl = (List)_evthds.get(evtnm);
-			if (ehl != null)
-				return (EventHandler)ehl.get(0); //must not empty
-		}
-		return null;
-	}
 
 	/** Adds the event handler for the specified event name.
 	 * <p>Note: the new handler won't overwrite the previous one,

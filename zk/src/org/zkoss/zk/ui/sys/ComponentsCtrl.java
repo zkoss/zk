@@ -73,12 +73,6 @@ public class ComponentsCtrl {
 		Strings.encode(sb, id);
 		return sb.toString();
 	}
-	/**
-	 * @deprecated As of release 2.4.1, replaced by {@link #ANONYMOUS_ID}
-	 */
-	public static final String getAnonymousId() {
-		return ANONYMOUS_ID;
-	}
 
 	/** Returns whether an ID is generated automatically.
 	 */

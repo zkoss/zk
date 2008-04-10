@@ -437,20 +437,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return getZScriptFunction(comp != null ? comp.getNamespace(): null,
 			name, argTypes);
 	}
-	/** @deprecated As of release 3.0.0, replaced by {@link #getZScriptFunction(String,Class[])}.
-	 */
-	public org.zkoss.zk.scripting.Method
-	getZScriptMethod(String name, Class[] argTypes) {
-		final Function fun = getZScriptFunction(name, argTypes);
-		return fun != null ? new FuncMethod(fun): null;
-	}
-	/** @deprecated As of release 3.0.0, replaced by {@link #getZScriptFunction(String,Class[])}.
-	 */
-	public org.zkoss.zk.scripting.Method
-	getZScriptMethod(Namespace ns, String name, Class[] argTypes) {
-		final Function fun = getZScriptFunction(ns, name, argTypes);
-		return fun != null ? new FuncMethod(fun): null;
-	}
 	public Object getZScriptVariable(String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
@@ -481,11 +467,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final VariableResolver resolv =
 			getExecution().getVariableResolver();
 		return resolv != null ? resolv.resolveVariable(name): null;
-	}
-	/** @deprecated As of release of 3.0.0, replaced with {@link #getXelVariable}.
-	 */
-	public Object getELVariable(String name) {
-		return getXelVariable(name);
 	}
 
 	/** Resolves the variable defined in variable resolvers.

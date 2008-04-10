@@ -378,14 +378,6 @@ public class WebManager {
 		}
 		return desktop;
 	}
-	/** Returns the desktop of the specified request, or null if not found.
-	 * @deprecated As of release 3.0.0, replaced by
-	 * {@link #getDesktop(Session,ServletRequest,ServletResponse,String,boolean)}.
-	 */
-	public Desktop getDesktop(Session sess, ServletRequest request,
-	String path, boolean autocreate) {
-		return getDesktop(sess, request, null, path, autocreate);
-	}
 	/** Creates an desktop. */
 	/*package*/ Desktop newDesktop(Session sess, ServletRequest request,
 	ServletResponse response, String path) {
