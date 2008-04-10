@@ -684,12 +684,11 @@ public class Parser {
 					if (!dns.isEmpty())
 						addDeclaredNamespace(ni, dns, langdef);
 				} else {
+					final boolean defaultNS = isDefaultNS(langdef, pref, uri);
 					final LanguageDefinition complangdef =
-						isDefaultNS(langdef, pref, uri) ?
-							langdef: LanguageDefinition.lookup(uri);
-
+						defaultNS ? langdef: LanguageDefinition.lookup(uri);
 					ComponentDefinition compdef =
-						pgdef.getComponentDefinitionMap().get(nm);
+						defaultNS ? pgdef.getComponentDefinitionMap().get(nm): null;
 					if (compdef != null) {
 						compInfo = new ComponentInfo(parent, compdef);
 					} else if (complangdef.hasComponentDefinition(nm)) {
