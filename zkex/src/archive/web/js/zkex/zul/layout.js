@@ -483,7 +483,13 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer, event) {
 					if (rr) {
 						var pos = getZKAttr(rr, "pos");
 						if (pos == "center") {
-							maxs = Math.min(maxs, (real.offsetHeight + rr.offsetHeight)- min);
+							var east = ol.getRegion("east"), west = ol.getRegion("west"),
+								btn = 0;
+							if (east && east.split && east.split.splitbtn)
+								btn = Math.max(btn, east.split.splitbtn.offsetHeight);
+							if (west && west.split && west.split.splitbtn)
+								btn = Math.max(btn, west.split.splitbtn.offsetHeight);
+							maxs = Math.min(maxs, (real.offsetHeight + rr.offsetHeight - btn)- min);
 						} else {
 							maxs = Math.min(maxs, ol.el.offsetHeight - rr.offsetHeight - rr.split.offsetHeight - split.offsetHeight - min); 
 						}
@@ -499,7 +505,7 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer, event) {
 					if (rr) {
 						var pos = getZKAttr(rr, "pos");
 						if (pos == "center") {
-							maxs = Math.min(maxs, (real.offsetWidth + rr.offsetWidth)- min);
+							maxs = Math.min(maxs, (real.offsetWidth + zk.revisedSize(rr, rr.offsetWidth))- min);
 						} else {
 							maxs = Math.min(maxs, ol.el.offsetWidth - rr.offsetWidth - rr.split.offsetWidth - split.offsetWidth - min); 
 						}
