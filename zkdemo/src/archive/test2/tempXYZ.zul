@@ -121,4 +121,3 @@ underneath.
 	<button label="changeHeight(150px)">
 		<attribute name="onClick">grid.setHeight("150px");</attribute>
 	</button>
-</div>
