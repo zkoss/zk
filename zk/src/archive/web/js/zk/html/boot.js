@@ -87,7 +87,7 @@ zk.windows = zk.agent.indexOf("windows") != -1;
 zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
 //zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 
-/** Listen an event.
+/** Listen a browser event.
  * Why not to use prototype's Event.observe? Performance.
  */
 zk.listen = function (el, evtnm, fn) {
@@ -102,7 +102,7 @@ zk.listen = function (el, evtnm, fn) {
 		el._submfns.push(fn);
 	}
 };
-/** Un-listen an event.
+/** Un-listen a browser event.
  */
 zk.unlisten = function (el, evtnm, fn) {
 	if (el.removeEventListener)
@@ -611,6 +611,53 @@ zk.beforeUnload = function () {
 	}
 };
 
+/** Unwatches a list of ZK callbacks.
+ * Example, zk.unwatch(n, "onVisi", "onSize"), and then zkType.onVisi
+ * and zkType.onSize will be ignored for the specified component
+ * Note: it cannot be called in zkType.init().
+ * @since 3.0.5
+ */
+zk.unwatch = function (n) {
+	if (typeof n != "string") n = n.id;
+	for (var as = arguments, j = as.length; --j > 0;)
+		switch (as[j]) {
+		case "onVisi": zk._visicmps.remove(n); break;
+		case "onHide": zk._hidecmps.remove(n); break;
+		case "onSize": zk._szcmps.remove(n); break;
+		case "beforeSize": zk._bfszcmps.remove(n); break;
+		case "onScroll": zk._scrlcmps.remove(n);
+		}
+};
+/** Watches a list of ZK callbacks.
+ * Example, zk.watch(n, "onVisi", "onSize"), and then zkType.onVisi
+ * and zkType.onSize will be called back for the specified component.
+ * By default, they will be called back, so you don't need to invoke
+ * this method unless you call zk.unwatch() to stop callback.
+ * Note: it cannot be called in zkType.init().
+ * @since 3.0.5
+ */
+zk.watch = function (n) {
+	n = $e(n);
+	for (var as = arguments, j = as.length; --j > 0;)
+		switch (as[j]) {
+		case "onVisi": zk._watch(n, zk._visicmps); break;
+		case "onHide": zk._watch(n, zk._hidecmps); break;
+		case "onSize": zk._watch(n, zk._szcmps); break;
+		case "beforeSize": zk._watch(n, zk._bfszcmps); break;
+		case "onScroll": zk._watch(n, zk._scrlcmps);
+		}
+};
+zk._watch = function (n, cmps) {
+	for (var j = 0; j < cmps.length; ++j) {
+		var c = cmps[j];
+		if (zk.isAncestor(c, n)) {
+			cmps.splice(j, 0, n.id);
+			return;
+		}
+	}
+	cmps.unshift(n.id);
+};
+
 /** Invokes the specified function that depends on the specified module.
  * If the module is not loaded yet, it will be loaded first.
  * If it is loaded, the function executes directly.
@@ -911,15 +958,19 @@ zk._evalInit = function () {
 			for (var es = zk._tscrlcmps; es.length;)
 				zk._scrlcmps.unshift(es.pop());
 
+			//since beforeSize/onSize might zk.unwatch, add to _szcmps first
+			for (var es = zk._tbfszcmps, j = es.length; --j >= 0;)
+				zk._bfszcmps.unshift(es[j]);
+			for (var es = zk._tszcmps, j = es.length; --j >= 0;)
+				zk._szcmps.unshift(es[j]);
+
 			for (var es = zk._tbfszcmps; es.length;) {
-				var n = es.pop(); //parent at the end, so pop the end first
-				zk._bfszcmps.unshift(n);
-				zk.eval($e(n), "beforeSize");
+				var n = $e(es.pop()); //parent at the end, so pop the end first
+				if ($visible(n)) zk.eval(n, "beforeSize");
 			}
 			for (var es = zk._tszcmps; es.length;) {
-				var n = es.pop();
-				zk._szcmps.unshift(n);
-				zk.eval($e(n), "onSize");
+				var n = $e(es.pop());
+				if ($visible(n)) zk.eval(n, "onSize");
 			}
 		}
 
@@ -1020,6 +1071,7 @@ zk._cleanupAt = function (n) {
  * If null, all elements will be handled
  */
 zk.onVisiAt = function (n) {
+	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._visicmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
@@ -1048,6 +1100,7 @@ zk.onHideAt = function (n) {
 		try {f.blur();} catch (e) {}
 	}
 
+	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._hidecmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
@@ -1068,6 +1121,7 @@ zk.onHideAt = function (n) {
  * @since 3.0.4
  */
 zk.onSizeAt = function (n) {
+	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._szcmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
@@ -1095,6 +1149,7 @@ zk.onSizeAt = function (n) {
  * @since 3.0.4
  */
 zk.beforeSizeAt = function (n) {
+	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._bfszcmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {
@@ -1115,6 +1170,7 @@ zk.beforeSizeAt = function (n) {
  * @since 3.0.5
  */
 zk.onScrollAt = function (n) {
+	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._scrlcmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
 		for (var e = elm; e; e = $parent(e)) {

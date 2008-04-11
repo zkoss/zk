@@ -38,7 +38,11 @@ zkBox.rmAttr = function (cmp, nm) {
 	return false;
 };
 zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
-	if (!getZKAttr(cmp, "hasSplt")) return;
+	if (!getZKAttr(cmp, "hasSplt")) {
+		//Note: if a child is added, box is invalidated, so safe to unwatch
+		zk.unwatch(cmp, "onVisi", "onHide", "onSize");
+		return;
+	}
 
 	var vert = getZKAttr(cmp, "vert");
 
