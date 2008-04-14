@@ -1,0 +1,34 @@
+<zk>
+	<label value="PACK AND ALIGN:" />
+	<style>
+		table.hbox{ 
+			border: solid red 1px; } 
+		table.vbox{ 
+			border: solid blue 1px;} 
+		.obj{
+		 height:50px;
+		 width:50px;
+		 border: solid black 1px;
+		}
+	</style>
+	<html>
+	&lt;pre&gt;
+
+	table.hbox{ 
+		border: solid red 1px; } 
+	table.vbox{ 
+		border: solid blue 1px;} 
+	&lt;/pre&gt;
+	</html>
+	<div>heights and widths</div>
+	<hbox widths="100px,300px,600px" heights="100px,300px,600px" sclass="hbox">
+		<div sclass="obj">100</div>
+		<div sclass="obj">300</div>
+		<div sclass="obj">600</div>
+	</hbox>
+	<vbox widths="100px,300px,600px" heights="100px,300px,600px" sclass="vbox">
+		<div sclass="obj">100</div>
+		<div sclass="obj">300</div>
+		<div sclass="obj">600</div>
+	</vbox>
+</zk>

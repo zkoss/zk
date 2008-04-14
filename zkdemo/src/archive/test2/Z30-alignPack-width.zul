@@ -1,0 +1,31 @@
+<zk>
+	<label value="PACK AND ALIGN:" />
+	<style>
+		table.hbox{ 
+			border: solid red 1px; } 
+		.obj{
+		 height:50px;
+		 width:50px;
+		 border: solid black 1px;
+		}
+	</style>
+	<html>
+	&lt;pre&gt;
+
+	table.hbox{ 
+		border: solid red 1px; } 
+	&lt;/pre&gt;
+	</html>
+	<div>width</div>
+	<hbox width="1000px" height="200px" sclass="hbox">
+		<div sclass="obj">100</div>
+		<div sclass="obj">300</div>
+		<div sclass="obj">600</div>
+	</hbox>
+	<div>widths</div>
+	<hbox widths="100px,300px,600px" height="200px" sclass="hbox">
+		<div sclass="obj">100</div>
+		<div sclass="obj">300</div>
+		<div sclass="obj">600</div>
+	</hbox>
+</zk>
