@@ -69,6 +69,7 @@ zkCmbox.onblur = function (evt) {
 zkCmbox.init = function (cmp) {
 	zkCmbox.onVisi = zkCmbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
+	zkCmbox.cleanup = zkTxbox.cleanup;
 
 	var inp = $real(cmp);
 	zkTxbox.init(inp, null, zkCmbox.onblur);

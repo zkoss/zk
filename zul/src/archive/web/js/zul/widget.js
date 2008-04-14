@@ -52,7 +52,7 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 	if (cmp.readOnly) zk.addClass(cmp, "readonly");
 	if (cmp.disabled) zk.addClass(cmp, "text-disd");
 };
-zkTxbox.onHide = function (cmp) {
+zkTxbox.cleanup = zkTxbox.onHide = function (cmp) {
 	var inp = $real(cmp);
 	if (inp) zkVld.closeErrbox(inp.id, true);
 };
@@ -274,6 +274,7 @@ zkDcbox.onkeypress = function (evt) {
 };
 zkInbox.setAttr = zkLnbox.setAttr = zkDcbox.setAttr = zkDbbox.setAttr = zkTxbox.setAttr ;
 zkInbox.onHide = zkLnbox.onHide = zkDcbox.onHide = zkDbbox.onHide = zkTxbox.onHide;
+zkInbox.cleanup = zkLnbox.cleanup = zkDcbox.cleanup = zkDbbox.cleanup = zkTxbox.cleanup;
 zkInbox.validate = function (cmp) {
 	return zkVld.onlyInt(cmp.id);
 };

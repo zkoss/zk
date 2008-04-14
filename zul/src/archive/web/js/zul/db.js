@@ -383,7 +383,8 @@ zkDtbox = {};
 zkDtbox.init = function (cmp) {
 	zkDtbox.onVisi = zkDtbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
 	zkDtbox.onHide = zkTxbox.onHide; //widget.js is ready now
-
+	zkDtbox.cleanup = zkTxbox.cleanup;
+	
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
 	zk.listen(inp, zk.ie ? "keydown": "keypress", zkDtbox.onkey);

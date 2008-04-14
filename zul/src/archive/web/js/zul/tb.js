@@ -24,8 +24,8 @@ zkTmbox = {
 
 zkTmbox.init = function (cmp) {
 	zkTmbox.onVisi = zkTmbox.onSize = zkWgt.fixDropBtn; 
-	zkTmbox.onHide = zkTxbox.onHide; 	
-
+	zkTmbox.onHide = zkTxbox.onHide;
+	
 	zkTxbox.init($real(cmp));
 	
 	cmp.lastTime = new Date();
@@ -70,6 +70,7 @@ zkTmbox.cleanup = function (cmp) {
 		clearTimeout(cmp.timerId);
 		cmp.timerId = null;
 	}
+	zkTxbox.cleanup(cmp);
 };
 zkTmbox.setAttr = function (cmp, nm, val) {
 	if ("value" == nm) {
