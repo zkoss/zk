@@ -55,6 +55,7 @@ zkSpinner.cleanup = function (cmp) {
 		clearTimeout(cmp.timerId);
 		cmp.timerId = null;
 	}
+	zkTxbox.cleanup(cmp);
 };
 zkSpinner.setAttr = function (cmp, nm, val) {
 	if ("value" == nm) {
