@@ -9,6 +9,9 @@ ZK 3.1.0 Freshly
 * Bugs
 
 * Upgrade Notes
+  + The smartUpdate, response, onChildAdded, onChildRemoved and
+    onDrawNewChid methods are moved from the Component interface
+    to the ComponentCtrl intereface.
 
 	--------
 ZK 3.0.4
