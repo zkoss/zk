@@ -1,5 +1,5 @@
 <zk>
-	<label value="PACK AND ALIGN:" />
+	<label value="PACK AND ALIGN - Hbox in Vbox:" />
 	<style>
 		table.hbox{ 
 			border: solid red 1px; } 
@@ -20,19 +20,18 @@
 		border: solid blue 1px;} 
 	&lt;/pre&gt;
 	</html>
-	<div>Vbox in Hbox</div>
-	<hbox id="v4" pack="center" align="center" height="270px" sclass="hbox"
+	<vbox id="v3" pack="center" align="center" height="270px" sclass="vbox"
 		width="270px">
-		<vbox id="h4" pack="center" align="center" height="90px" sclass="vbox"
+		<hbox id="h3" pack="center" align="center" height="90px" sclass="hbox"
 			width="90px">
 			<div sclass="obj" />
-		</vbox>
-	</hbox>
+		</hbox>
+	</vbox>
 	<div>
 		VBOX PACK:
 		<radiogroup>
 			<attribute name="onCheck">
-				v4.setPack(self.selectedItem.label);
+				v3.setPack(self.selectedItem.label);
 			</attribute>
 			<radio label="start" />
 			<radio checked="true" label="center" />
@@ -41,7 +40,7 @@
 		ALIGN:
 		<radiogroup>
 			<attribute name="onCheck">
-				v4.setAlign(self.selectedItem.label);
+				v3.setAlign(self.selectedItem.label);
 			</attribute>
 			<radio  label="start" />
 			<radio checked="true" label="center" />
@@ -52,7 +51,7 @@
 		HBOX PACK:
 		<radiogroup>
 			<attribute name="onCheck">
-				h4.setPack(self.selectedItem.label);
+				h3.setPack(self.selectedItem.label);
 			</attribute>
 			<radio label="start" />
 			<radio checked="true" label="center" />
@@ -61,7 +60,7 @@
 		ALIGN:
 		<radiogroup>
 			<attribute name="onCheck">
-				h4.setAlign(self.selectedItem.label);
+				h3.setAlign(self.selectedItem.label);
 			</attribute>
 			<radio label="start" />
 			<radio checked="true" label="center" />

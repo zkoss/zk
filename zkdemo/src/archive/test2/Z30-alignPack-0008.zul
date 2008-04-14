@@ -1,5 +1,5 @@
 <zk>
-	<label value="PACK AND ALIGN:" />
+	<label value="PACK AND ALIGN - NESTED:" />
 	<style>
 		table.hbox{ 
 			border: solid red 1px; } 
@@ -20,7 +20,6 @@
 		border: solid blue 1px;} 
 	&lt;/pre&gt;
 	</html>
-	<div>NESTED</div>
 		<hbox pack="center" align="center" height="486px" width="486px" sclass="hbox">
 			IN HBOX
 			<vbox pack="center" align="center" height="162px" sclass="vbox"

@@ -1,10 +1,8 @@
 <zk>
-	<label value="PACK AND ALIGN:" />
+	<label value="PACK AND ALIGN - width:" />
 	<style>
 		table.hbox{ 
 			border: solid red 1px; } 
-		table.vbox{ 
-			border: solid blue 1px;} 
 		.obj{
 		 height:50px;
 		 width:50px;
@@ -16,19 +14,17 @@
 
 	table.hbox{ 
 		border: solid red 1px; } 
-	table.vbox{ 
-		border: solid blue 1px;} 
 	&lt;/pre&gt;
 	</html>
-	<div>heights and widths</div>
-	<hbox widths="100px,300px,600px" heights="100px,300px,600px" sclass="hbox">
+	<hbox width="1000px" height="200px" sclass="hbox">
 		<div sclass="obj">100</div>
 		<div sclass="obj">300</div>
 		<div sclass="obj">600</div>
 	</hbox>
-	<vbox widths="100px,300px,600px" heights="100px,300px,600px" sclass="vbox">
+	<div>widths</div>
+	<hbox widths="100px,300px,600px" height="200px" sclass="hbox">
 		<div sclass="obj">100</div>
 		<div sclass="obj">300</div>
 		<div sclass="obj">600</div>
-	</vbox>
+	</hbox>
 </zk>
