@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-F30-1656278.zul
+B30-1835369.zul
 
 {{IS_NOTE
 	Purpose:
@@ -9,7 +9,7 @@ F30-1656278.zul
 	Description:
 		
 	History:
-		Tue Dec  4 12:05:33 TST 2007, Created by jumperchen
+		Mon Nov 26 12:21:03 TST 2007, Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
@@ -17,36 +17,107 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:h2>[ 1656278 ] Menuitem enabled/disabled support</n:h2>
-	<n:ol>
-		<n:li>click "File" then you will see the "Open" item to be disabled and cannot be clicked</n:li>
-                <n:li>Try to enable it and click on it, it should show alert message</n:li>
-	</n:ol>
-	<menubar id="menubar">
-		<menu label="File">
-			<menupopup>
-				<menuitem label="New" autocheck="true" />
-				<menuitem label="Open" autocheck="true" id="open"
-					onClick="alert(self.label)" disabled="false" />
-				<menuitem label="Save" />
-				<menuseparator />
-                                <menuitem label="Disable Open" onClick="open.disabled=true"/>
-                                <menuitem label="Enable Open" onClick="open.disabled=false"/>
-				<menuitem label="Exit" />
-			</menupopup>
-		</menu>
-		<menu label="Help">
-			<menupopup>
-				<menuitem label="Index" />
-				<menu label="About">
-					<menupopup>
-						<menuitem disabled="ture" label="About ZK"
-							onClick="alert(self.label)" />
-						<menuitem label="About Potix" />
-					</menupopup>
-				</menu>
-			</menupopup>
-		</menu>
-	</menubar>
-</zk>
+<div>
+	<n:table xmlns:n="http://www.zkoss.org/2005/zk/native">
+		<n:tr>
+			<n:td>Top</n:td>
+		</n:tr>
+<n:tr>
+<n:td>
+We have a screen which was working fine in ZK2.4.1. One of its sections
+is a Grid inside a Groupbox.
+
+With ZK3.0, this section continues to work fine in FF, and in fact looks
+more appealing.
+
+However in IE it is a nightmare: the Grid floats half out of the Groupbox,
+obscuring the caption completely and leaving an ugly empty blue section
+underneath.
+</n:td>
+</n:tr>
+	</n:table>
+	<grid id="grid" mold="paging" height="60px">
+		<columns>
+			<column label="column1" align="Center" />
+			<column label="column2" align="Center" />
+			<column label="column3" align="Center" />
+			<column label="column4" align="Center" />
+			<column label="column5" align="Center" />
+			<column label="column6" align="Center" />
+		</columns>
+		<rows id="rows">
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+		</rows>
+	</grid>
+	<button label="addRow">
+		<attribute name="onClick">
+			Row rw = new Row(); rw.setParent(rows); 
+			new Label("Column3").setParent(rw); 
+			new Label("Column5").setParent(rw); 
+			new Label("Column7").setParent(rw); 
+			new Label("Column8").setParent(rw); 
+			new Label("Column9").setParent(rw); 
+			new Label("Column10").setParent(rw); 
+		</attribute>
+	</button>
+	<button label="changeHeight(100px)">
+		<attribute name="onClick">grid.setHeight("100px");</attribute>
+	</button>
+	<button label="changeHeight(150px)">
+		<attribute name="onClick">grid.setHeight("150px");</attribute>
+	</button>

@@ -4,7 +4,7 @@ click ok button of the Messagebox.
 <separator/>
 2. if the popup window is popup, then clicking anywhere
 within the Messagebox should not make the Messagebox and the
-popup window disappear.(change code to test)
+popup window disappear.(unmark code "w.doPopup()" to test)
 <separator/>
 <zscript>
 

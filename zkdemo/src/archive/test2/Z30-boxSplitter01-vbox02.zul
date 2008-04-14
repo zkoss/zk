@@ -1,0 +1,13 @@
+<zk>
+	<window border="normal" width="800px" title="vbox and splitters">
+		<vbox height="100px" width="100%">
+		cdacdacdacdacdaca
+		<splitter collapse="none"/>
+		cdacdacdacdacacsdc
+		<splitter collapse="after"/>
+		cdacdacdacdacacsdc
+		<splitter collapse="before"/>
+		cdacdacdacdacacsdc
+		</vbox>
+	</window>
+</zk>

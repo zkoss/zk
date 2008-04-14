@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ZK30-grid006-03.zul
+
+{{IS_NOTE
+	Purpose:
+		paging test of grid, no live data.
+	Description:
+		
+	History:
+		Create by Dennis
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<vbox>
+	Empty grid:
+	<grid id="gd" mold="paging"/>
+             <hbox>
+	<button label="add rows" onClick="new Rows().setParent(gd)"/>
+	<button label="add row" onClick="addgd(1)"/>
+             </hbox>
+</vbox>
+</window>

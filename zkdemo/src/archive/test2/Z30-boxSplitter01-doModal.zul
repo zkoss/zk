@@ -1,0 +1,21 @@
+<zk>
+	<div>doModal</div>
+	<hbox height="400px" width="100%">
+		cdacdacdacdacdaca
+		<splitter id="hsplitter" collapse="none"/>
+		<window id="win" title="Win" border="normal" height="200px" width="600px">
+		<hbox height="100px" width="600px">
+		cdacdacdacdacdaca
+		<splitter collapse="none"/>
+		cdacdacdacdacacsdc
+		<splitter collapse="after"/>
+		cdacdacdacdacacsdc
+		<splitter collapse="before"/>
+		cdacdacdacdacacsdc
+		</hbox>
+		<button label="Embed" onClick="win.doEmbedded();"/>
+		</window>
+		</hbox>
+	<button label="doModal" onClick="win.doModal()" />
+	<button label="Overlap" onClick="win.doOverlapped();"/>
+</zk>

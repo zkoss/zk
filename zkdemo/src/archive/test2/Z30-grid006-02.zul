@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-ZK30-grid006.zul
+ZK30-grid006-02.zul
 
 {{IS_NOTE
 	Purpose:
@@ -17,46 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="Grid with Paging">
-	<grid id="grid" width="300px" mold="paging">
-		<columns>
-			<column label="Head 1"/>
-			<column label="Head 2" align="center"/>
-			<column label="Head 3" align="right"/>
-		</columns>
-		<rows>
-		</rows>
-	</grid>
-	<button label="add 5 children" onClick="add(5)"/>
-	<button label="Change the first label" onClick="changeLabel(0)"/>
-	<button label="Change the last label" onClick="changeLabel(-1)"/>
-	<button label="redraw" onClick="grid.invalidate()"/>
-	<button label="set page size to 10" onClick="grid.paginal.pageSize = 10"/>
-	<zscript><![CDATA[
-	void add(int cnt) {
-		for (int j = 0; ++j <= cnt;) {
-			Row r = new Row();
-			String prefix = "Item " + (grid.getRows().getChildren().size() + 1);
-			new Label(prefix + "-L").setParent(r);
-			new Label(prefix + "-C").setParent(r);
-			new Label(prefix + "-R").setParent(r);
-			r.setParent(grid.getRows());
-		}
-	}
-	void changeLabel(int j) {
-		int sz = grid.getRows().getChildren().size();
-		if (j < 0) j = sz - 1;
-		if (j < 0 || j >= sz) {
-			alert("No label to change");
-		} else {
-			Row r = grid.getRows().getChildren().get(j);
-			r.getChildren().get(0).setValue("Updated "+j);
-		}
-	}
-	]]></zscript>
-
-<separator bar="true"/>
-	Use external paging component in tow grids
+<window>
+	Use external paging component in two grids
 <vbox>
 <paging id="pg" pageSize="4"/>
 <hbox>
@@ -145,12 +106,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	}
 	]]>
 </zscript>
-<separator bar="true"/>
-	Empty grid:
-	<grid id="gd" mold="paging"/>
-             <hbox>
-	<button label="add rows" onClick="new Rows().setParent(gd)"/>
-	<button label="add row" onClick="addgd(1)"/>
-             </hbox>
 </vbox>
 </window>

@@ -17,7 +17,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="confirmClose Conflict on IE/IE7" border="normal" width="200px">
+<window title="confirmClose Conflict on IE/IE7" border="normal" width="400px">
+confirmClose is not supported in Opera.(It's correct)
 	<listbox mold="paging" pageSize="2">
 		<listhead>
 			<listheader label="a"/>

@@ -1,0 +1,20 @@
+<zk>
+	<window border="normal" title="vbox and splitter">
+		<vbox height="100px" width="100%">
+		a[pdjcpdacpnhdacndlandlka
+		<splitter id="vsplitter" collapse="none"/>
+		Column 2: Whether a splitter allows users to open or collapse
+		depending on the collapse attribue.
+		</vbox>
+		<label id="d" />
+		<radiogroup>
+			<attribute name="onCheck">
+				vsplitter.setCollapse(self.selectedItem.label);
+				d.setValue("Collapse: "+self.selectedItem.label);
+			</attribute>
+			<radio selected="true" label="none"/>
+			<radio label="before"/>
+			<radio label="after"/>
+		</radiogroup>
+	</window>
+</zk>

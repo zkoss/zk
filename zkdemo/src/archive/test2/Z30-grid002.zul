@@ -18,7 +18,7 @@
 	<label id="lab"/>
 	
 	<separator/>
-	This testcase test the click event in grid column, column1 handle onClick, column2 handle rightClick, column3 handle dobuld click, 
+	This testcase test the click event in grid column, column1 handle onClick, column2 handle rightClick, column3 handle double click, 
 	column4 handle click and rightclick and doublelclick
 	<separator/>
 	it also test the resize of column

@@ -1,0 +1,71 @@
+<zk>
+	<label value="PACK AND ALIGN:" />
+	<style>
+		table.hbox{ 
+			border: solid red 1px; } 
+		table.vbox{ 
+			border: solid blue 1px;} 
+		.obj{
+		 height:50px;
+		 width:50px;
+		 border: solid black 1px;
+		}
+	</style>
+	<html>
+	&lt;pre&gt;
+
+	table.hbox{ 
+		border: solid red 1px; } 
+	table.vbox{ 
+		border: solid blue 1px;} 
+	&lt;/pre&gt;
+	</html>
+	<div>Hbox in Vbox</div>
+	<vbox id="v3" pack="center" align="center" height="270px" sclass="vbox"
+		width="270px">
+		<hbox id="h3" pack="center" align="center" height="90px" sclass="hbox"
+			width="90px">
+			<div sclass="obj" />
+		</hbox>
+	</vbox>
+	<div>
+		VBOX PACK:
+		<radiogroup>
+			<attribute name="onCheck">
+				v3.setPack(self.selectedItem.label);
+			</attribute>
+			<radio label="start" />
+			<radio checked="true" label="center" />
+			<radio label="end" />
+		</radiogroup>
+		ALIGN:
+		<radiogroup>
+			<attribute name="onCheck">
+				v3.setAlign(self.selectedItem.label);
+			</attribute>
+			<radio  label="start" />
+			<radio checked="true" label="center" />
+			<radio label="end" />
+		</radiogroup>
+	</div>
+	<div>
+		HBOX PACK:
+		<radiogroup>
+			<attribute name="onCheck">
+				h3.setPack(self.selectedItem.label);
+			</attribute>
+			<radio label="start" />
+			<radio checked="true" label="center" />
+			<radio label="end" />
+		</radiogroup>
+		ALIGN:
+		<radiogroup>
+			<attribute name="onCheck">
+				h3.setAlign(self.selectedItem.label);
+			</attribute>
+			<radio label="start" />
+			<radio checked="true" label="center" />
+			<radio label="end" />
+		</radiogroup>
+	</div>
+</zk>
