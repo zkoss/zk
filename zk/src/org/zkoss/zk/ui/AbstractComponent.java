@@ -1070,17 +1070,17 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	/** Default: does nothing.
-	 * @see Component#onChildAdded
+	 * @see ComponentCtrl#onChildAdded
 	 */
 	public void onChildAdded(Component child) {
 	}
 	/** Default: does nothing.
-	 * @see Component#onChildRemoved
+	 * @see ComponentCtrl#onChildRemoved
 	 */
 	public void onChildRemoved(Component child) {
 	}
 	/** Default: handles special event listeners.
-	 * @see Component#onPageAttached
+	 * @see ComponentCtrl#onPageAttached
 	 * @since 3.0.0
 	 */
 	public void onPageAttached(Page newpage, Page oldpage) {
@@ -1088,7 +1088,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			onListenerChanged(newpage.getDesktop(), true);
 	}
 	/** Default: handles special event listeners.
-	 * @see Component#onPageDetached
+	 * @see ComponentCtrl#onPageDetached
 	 * @since 3.0.0
 	 */
 	public void onPageDetached(Page page) {

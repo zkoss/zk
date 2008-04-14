@@ -86,7 +86,7 @@ public interface UiEngine {
 	 */
 	public void addInvalidate(Component comp);
 	/** Smart updates an attribute of a component.
-	 * Called when {@link Component#smartUpdate(String,String)} is called.
+	 * Called when {@link ComponentCtrl#smartUpdate(String,String)} is called.
 	 *
 	 * <p>The second invocation of this method
 	 * in the same execution with the same attr will override the previous one.
@@ -97,12 +97,12 @@ public interface UiEngine {
 	 * only in the rendering phase.
 	 *
 	 * @since 3.0.1
-	 * @see Component#smartUpdateDeferred(String, DeferredValue)
+	 * @see ComponentCtrl#smartUpdateDeferred(String, DeferredValue)
 	 */
 	public void addSmartUpdate(Component comp, String attr, DeferredValue value);
 	/** Adds a response which will be sent to client at the end
 	 * of the execution.
-	 * Called when {@link Component#response} is called.
+	 * Called when {@link ComponentCtrl#response} is called.
 	 *
 	 * <p>Note: {@link Execution#addAuResponse} is a shortcut to this method,
 	 * and it is used by application developers.

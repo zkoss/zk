@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.Map;
 
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
@@ -32,6 +33,8 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
+import org.zkoss.zk.ui.util.DeferredValue;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * An addition interface to {@link org.zkoss.zk.ui.Component}
@@ -53,6 +56,164 @@ public interface ComponentCtrl {
 	 * @exception IllegalArgumentException if compdef is null
 	 */
 	public void setComponentDefinition(ComponentDefinition compdef);
+
+	/** Called when a child is added.
+	 * If a component want to optimize the update, it might do something
+	 * different. Otherwise, it does nothing.
+	 *
+	 * <p>Note: {@link #onChildAdded} is called in the request-processing
+	 * phase, while {@link #onDrawNewChild} is called in the redrawing phase.
+	 * See {@link #onDrawNewChild} for more details.
+	 *
+	 * <p>It is not a good idea to throw an exception in this method, since
+	 * it is in the middle of modifying the component tree.
+	 * @since 3.1.0
+	 */
+	 public void onChildAdded(Component child);
+	/** Called when a child is removed.
+	 * If a component want to optimize the update, it might do something
+	 * different. Otherwise, it simply does nothing.
+	 *
+	 * <p>It is not a good idea to throw an exception in this method, since
+	 * it is in the middle of modifying the component tree.
+	 * @since 3.1.0
+	 */
+	 public void onChildRemoved(Component child);
+
+	/** Called when this component is attached to a page.
+	 *
+	 * <p>If a component is moved from one page to another,
+	 * {@link #onPageAttached} is called with both pages.
+	 * Note: {@link #onPageDetached} is not called in this case.
+	 *
+	 * <p>Note: this method is called even if the component is attached
+	 * to a page implicitly thru, say, {@link Component#setParent}.
+	 *
+	 * <p>It is not a good idea to throw an exception in this method, since
+	 * it is in the middle of modifying the component tree.
+	 *
+	 * @param newpage the new page (never null).
+	 * @param oldpage the previous page, if any, or null if it didn't
+	 * belong to any page.
+	 * @since 3.1.0
+	 */
+	public void onPageAttached(Page newpage, Page oldpage);
+	/** Called when this component is detached from a page.
+	 *
+	 * <p>If a component is moved from one page to another,
+	 * {@link #onPageAttached} is called with both pages.
+	 * Note: {@link #onPageDetached} is not called in this case.
+	 * In other words, {@link #onPageDetached} is called only if a component
+	 * is detached from a page (not belong to any other page).
+	 *
+	 * <p>Note: this method is called even if the component is detached
+	 * to a page implicitly thru, say, {@link Component#setParent}.
+	 *
+	 * <p>It is not a good idea to throw an exception in this method, since
+	 * it is in the middle of modifying the component tree.
+	 *
+	 * @param page the previous page (never null)
+	 * @since 3.1.0
+	 */
+	public void onPageDetached(Page page);
+
+	/** Called when a new-created child is about to render.
+	 * It gives the parent a chance to fine-tune the output.
+	 * Note: it won't be called if the parent is rendered, too.
+	 * In other words, it is called only if the child is attached dynamically.
+	 *
+	 * <p>It is called in the redrawing phase by the kernel, so it is too late
+	 * to call {@link Component#invalidate()} or {@link #smartUpdate} in this method.
+	 *
+	 * <p>Note: {@link #onChildAdded} is called in the request-processing
+	 * phase, while {@link #onDrawNewChild} is called in the redrawing phase.
+	 * Component developer might do one of the follows:
+	 * <ul>
+	 * <li>Nothing, if new child can be inserted directly.</li>
+	 * <li>Overwrite {@link #onDrawNewChild} to add special tags, if
+	 * new child needs to be added an exterior with some tags before
+	 * insertion.<br>
+	 * Morever, if you shall add id="${child.uuid}!chdextr" to the added
+	 * exterior.</li>
+	 * <li>Redraw the parent, if it is too complicated.
+	 * How: overwrite {@link #onChildAdded} and calls {@link Component#invalidate()}</li>
+	 * </ul>
+	 *
+	 * @param child the child being rendered
+	 * @param out the rendered result of the child.
+	 * @since 3.1.0
+	 */
+	public void onDrawNewChild(Component child, StringBuffer out)
+	throws java.io.IOException;
+
+	/** Smart-updates a property with the specified value.
+	 * Called by component developers to do precise-update.
+	 *
+	 * <p>The second invocation with the same property will replace the previous
+	 * call. In other words, the same property will be set only once in
+	 * each execution.
+	 *
+	 * <p>This method has no effect if {@link Component#invalidate()} is ever invoked
+	 * (in the same execution), since {@link Component#invalidate()} assumes
+	 * the whole content shall be redrawn and all smart updates to
+	 * this components can be ignored,
+	 *
+	 * <p>Once this method is called, all invocations to {@link #smartUpdate}
+	 * will then be ignored, and {@link Component#redraw} will be invoked later.
+	 *
+	 * <p>It can be called only in the request-processing and event-processing
+	 * phases; excluding the redrawing phase.
+	 *
+	 * <p>There are two ways to draw a component, one is to invoke
+	 * {@link Component#invalidate()}, and the other is {@link #smartUpdate}.
+	 * While {@link Component#invalidate()} causes the whole content to redraw,
+	 * {@link #smartUpdate} let component developer control which part
+	 * to redraw.
+	 *
+	 * @param value the new value. If null, it means removing the property.
+	 * @since 3.1.0
+	 */
+	public void smartUpdate(String attr, String value);
+	/** Smart-updates a property with a deferred value.
+	 * A deferred value is used to encapsulate a value that shall be retrieved
+	 * only in the rendering phase.
+	 * In other words, {@link DeferredValue#getValue} won't be called until
+	 * the rendering phase. On the other hand, this method is usually called
+	 * in the event processing phase.
+	 *
+	 * <p>For some old application servers (example, Webshpere 5.1),
+	 * {@link Execution#encodeURL} cannot be called in the event processing
+	 * thread. So, the developers have to use {@link DeferredValue}
+	 * or disable the use of the event processing thread
+	 * (by use of <code>disable-event-thread</code> in zk.xml).
+	 *
+	 * @since 3.1.0
+	 */
+	public void smartUpdateDeferred(String attr, DeferredValue value);
+	/** Causes a response (aka., a command) to be sent to the client.
+	 *
+	 * <p>If {@link AuResponse#getDepends} is not null, the response
+	 * depends on the existence of the returned componet.
+	 * In other words, the response is removed if the component is removed.
+	 * If it is null, the response is component-independent and it is
+	 * always sent to the client.
+	 *
+	 * <p>Unlike {@link #smartUpdate}, responses are sent to client if
+	 * it is component independent or it is not removed.
+	 * In other words, it is sent even if {@link Component#invalidate()} was called.
+	 * Typical examples include setting the focus, selecting the text and so on.
+	 *
+	 * <p>It can be called only in the request-processing and event-processing
+	 * phases; excluding the redrawing phase.
+	 *
+	 * @param key could be anything.
+	 * The second invocation of this method
+	 * in the same execution with the same key will override the previous one.
+	 * However, if key is null, it won't override any other. All responses
+	 * with key == null will be sent.
+	 * @since 3.1.0
+	 */
+	public void response(String key, AuResponse response);
 
 	/** Returns the event handler of the specified name, or null
 	 * if not found.

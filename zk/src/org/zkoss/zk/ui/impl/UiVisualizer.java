@@ -839,7 +839,7 @@ import org.zkoss.zk.au.out.*;
 		final StringBuffer buf = out.getBuffer();
 		final Component parent = comp.getParent();
 		if (parent != null)
-			parent.onDrawNewChild(comp, buf);
+			((ComponentCtrl)parent).onDrawNewChild(comp, buf);
 		return buf.toString();
 	}
 	/** Redraw the specified component into a string.
