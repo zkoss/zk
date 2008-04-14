@@ -65,7 +65,7 @@ public class ColSizeEvent extends Event {
 	}
 	/** Return the column index of the first column whose width is changed.
 	 * The other column is the returned index plus one.
-	 * <p>In other words, it is the index (starting from 0) of {@link #getColumn1}.
+	 * <p>In other words, it is the index (starting from 0) of {@link #getColumn}.
 	 */
 	public int getColIndex() {
 		return _icol;

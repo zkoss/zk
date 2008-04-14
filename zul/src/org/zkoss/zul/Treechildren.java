@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Pageable;
@@ -335,7 +336,7 @@ public class Treechildren extends XulElement implements Pageable {
 		if (comp instanceof Treeitem)
 			comp = ((Treeitem)comp).getTreerow();
 		if (comp != null)
-			comp.smartUpdate(name, value);
+			((ComponentCtrl)comp).smartUpdate(name, value);
 	}
 	/** Updates paging related information.
 	 * @return # of pages
