@@ -59,7 +59,7 @@ public class SelectedComboitemConverter implements TypeConverter {
 	  		if (xmodel instanceof BindingListModel) {
 	  			final BindingListModel model = (BindingListModel) xmodel;
 	  			int index = model.indexOf(val);
-	  			if (index >= 0) {
+	  			if (index >= 0 && cbbox.getItemCount() > index) {
 	    			final Comboitem item = (Comboitem) cbbox.getItemAtIndex(index);
 	    			final int selIndex = cbbox.getSelectedIndex();
 	    			
