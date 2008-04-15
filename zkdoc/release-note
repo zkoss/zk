@@ -30,7 +30,8 @@ ZK 3.0.5 Freshly
   1938534: Upload causes an exception, not reproducible but with log
   1813518: Component namespace not work for page-level compoenent-def
   1906748: Combobox, binding and selected item Fail in Java6 only
-  
+  1942735: Failed to render <A> twith invalid URL as href(IE7 only)
+
 	--------
 ZK 3.0.4
 * Features
