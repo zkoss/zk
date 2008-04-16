@@ -305,6 +305,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		</classpath>
 		<packageset dir="${src.dir}">
 			<include name="org/zkoss/**"/>
+			<exclude name="org/zkoss/zk/au/impl"/>
 		</packageset>
 		<fileset dir="${codegen.dir}">
 			<include name="org/zkoss/**"/>
