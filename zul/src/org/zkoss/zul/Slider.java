@@ -212,7 +212,7 @@ public class Slider extends XulElement {
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
 	}
-	/** A utility class to implement {@link #getExtraCtrl}.
+	/** The extra control that will be returned by {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Scrollable {
