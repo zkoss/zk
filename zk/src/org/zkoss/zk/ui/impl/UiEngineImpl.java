@@ -861,7 +861,11 @@ public class UiEngineImpl implements UiEngine {
 		final Throwable err = ex;
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
-			log.realCauseBriefly(ex);
+			if (ex instanceof org.xml.sax.SAXException
+			|| ex instanceof org.zkoss.zk.ui.metainfo.PropertyNotFoundException)
+				log.error(Exceptions.getMessage(ex));
+			else
+				log.realCauseBriefly(ex);
 		} else {
 			ex = t;
 			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
