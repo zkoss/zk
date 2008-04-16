@@ -100,7 +100,7 @@ implements Condition, java.io.Serializable {
 			_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
 			if (_mtds.length == 0) {
 				if (!DynamicPropertied.class.isAssignableFrom(cls))
-					throw new UiException("Method "+mtdnm+" not found for "+cls); 
+					throw new PropertyNotFoundException("Method "+mtdnm+" not found for "+cls); 
 				_mtds = null;
 			} else if (_mtds.length == 1) {
 				_mtd = _mtds[0];
@@ -117,7 +117,7 @@ implements Condition, java.io.Serializable {
 						cls, mtdnm, new Class[] {null});
 				} catch (NoSuchMethodException e2) {
 					if (!DynamicPropertied.class.isAssignableFrom(cls))
-						throw new UiException("Method, "+mtdnm+", not found for "+cls);
+						throw new PropertyNotFoundException("Method, "+mtdnm+", not found for "+cls);
 					_mtd = null;
 				}
 			}
