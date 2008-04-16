@@ -29,7 +29,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ======= -->
 <target name="compile" depends="codegen.mesg" if="compile.required">
 	<mkdir dir="${out.dir}"/>
-	<javac srcdir="${src.dir}:${codegen.dir}" destdir="${out.dir}"
+	<javac srcdir="${src.dir}:${srcdpc.dir}:${codegen.dir}" destdir="${out.dir}"
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
 	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
 </target>
@@ -305,7 +305,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		</classpath>
 		<packageset dir="${src.dir}">
 			<include name="org/zkoss/**"/>
-			<exclude name="org/zkoss/zk/au/impl"/>
 		</packageset>
 		<fileset dir="${codegen.dir}">
 			<include name="org/zkoss/**"/>
