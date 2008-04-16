@@ -1159,8 +1159,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws IOException {
 	}
 
-	/** Returns whether to send back the request of the specified event
-	 * immediately -- i.e., non-deferrable.
+	/** Returns if any non-deferrable (ASAP) event listener is registered
+	 * for the specified event.
 	 * Returns true if you want the component (on the server)
 	 * to process the event immediately.
 	 *
@@ -1178,8 +1178,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return Events.isListened(this, evtnm, true);
 	}
 
-	/** Appends an attribute for the specified event name, say, onChange,
-	 * if a non-deferrable listener is registered.
+	/** Detects if a non-deferrable event is registered, and appends
+	 * a special attribute to denote it if true.
 	 * The format of the generated attribute is as follows:
 	 * <code>z.onChange="true"</code>.
 	 *
@@ -1578,7 +1578,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				//to customize which object to instantiate
 		return _xtrl;
 	}
-	/** Used by {@link #getExtraCtrl} to create a client control.
+	/** Used by {@link #getExtraCtrl} to create extra controls.
 	 * It is used only by component developers.
 	 *
 	 * <p>Default: return null.
