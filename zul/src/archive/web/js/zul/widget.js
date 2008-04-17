@@ -166,10 +166,12 @@ zkTxbox.onkey = function (evt) {
 	}
 };
 zkTxbox.onkeydown = function (evt) {
-	var inp = Event.element(evt);
-	var uuid = $uuid(inp);
-	var cmp = $e(uuid);
-	if (Event.keyCode(evt) == 13 && zkau.asap(cmp, "onOK")) {
+	var inp = Event.element(evt),
+		uuid = $uuid(inp),
+		cmp = $e(uuid),
+		keyCode = Event.keyCode(evt);
+	if ((keyCode == 13 && zkau.asap(cmp, "onOK"))
+	|| (keyCode == 27 && zkau.asap(cmp, "onCancel"))) {
 		zkTxbox._scanStop(inp);
 		zkTxbox.updateChange(inp, false);
 		//Bug 1858869: no need to send onOK here since zkau._onDocKeydown will do
