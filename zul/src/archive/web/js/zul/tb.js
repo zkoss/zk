@@ -182,7 +182,7 @@ zkTmbox._inpkeydown= function(evt){
 		zkTmbox.clearTime(cmp);
 		Event.stop(evt);
 		break;
-	case 9: case 35:case 36://pass:tab,home,end
+	case 13: case 27: case 9: case 35:case 36://enter,esc,tab,home,end
 		break;
 	default:
 		if (!(code >= 112 && code <= 123) //F1-F12
