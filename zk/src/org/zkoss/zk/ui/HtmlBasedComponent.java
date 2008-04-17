@@ -270,11 +270,23 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		return _droppable != null ? _droppable: "false";
 	}
 
-	/** Sets focus to this element. For element that does not accept focus,
+	/** Sets focus to this element. If an element does not accept focus,
 	 * this method has no effect.
 	 */
 	public void focus() {
 		response("focus", new AuFocus(this));
+	}
+	/** Sets focus to this element.
+	 * It is same as {@link #focus}, but used to allow ZUML to set focus
+	 * to particular component.
+	 *
+	 * <pre><code>&lt;textbox focus="true"/&gt;</code></pre>
+	 *
+	 * @param focus whether to set focus. If false, this method has no effect.
+	 * @since 3.0.5
+	 */
+	public void setFocus(boolean focus) {
+		if (focus) focus();
 	}
 
 	//-- component developer only --//
