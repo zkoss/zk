@@ -29,7 +29,9 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ======= -->
 <target name="compile" depends="codegen.mesg" if="compile.required">
 	<mkdir dir="${out.dir}"/>
-	<javac srcdir="${src.dir}:${srcdpc.dir}:${codegen.dir}" destdir="${out.dir}"
+	<available file="srcdpc" property="srcdpc.dir" value="srcdpc"/>
+	<property name="srcdpc.dir" value=""/>
+	<javac srcdir="${src.dir}:${codegen.dir}:${srcdpc.dir}" destdir="${out.dir}"
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
 	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
 </target>
@@ -37,7 +39,6 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ====== -->
 <!-- DEPLOY -->
 <!-- ====== -->
-
 <target name="deploy.export" depends="config.build" if="src.export.dir.exist">
 	<copy todir="${dist.export.dir}" preservelastmodified="yes">
 		<fileset dir="${src.export.dir}" excludes="**/CVS/**"/>

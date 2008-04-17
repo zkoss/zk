@@ -20,7 +20,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 -->
 
 <project name="potix.inside" default="build" basedir=".">
-	<description>The internal potix build file for ant.</description>
 <!-- ======= -->
 <!-- INITIAL -->
 <!-- ======= -->
