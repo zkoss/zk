@@ -18,20 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.fn;
 
-/**
- * Utilities to manipulate XML/HTML for EL.
+import org.zkoss.xel.fn.XmlFns;
+
+/** @deprecated As of release 3.1.0, replaced with
+ * org.zkoss.xel.fn.XmlFns.
  *
  * @author tomyeh
+ * @see XmlFns
  */
-public class XMLFns {
-	/** Generates an attribute for HTML/XML.
-	 * If val is null or empty (if String), nothing is generated.
-	 */
-	public static final String attr(String name, Object val) {
-		if (val == null
-		|| (val instanceof String && ((String)val).length() == 0))
-			return "";
-
-		return " "+ name + "=\"" + val + '"';
-	}
+public class XMLFns extends XmlFns {
 }
