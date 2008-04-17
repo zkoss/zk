@@ -190,7 +190,7 @@ public interface ComponentCtrl {
 	 * @since 3.1.0
 	 */
 	public void smartUpdateDeferred(String attr, DeferredValue value);
-	/** Causes a response (aka., a command) to be sent to the client.
+	/** Causes a response to be sent to the client.
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
 	 * depends on the existence of the returned componet.
@@ -198,9 +198,8 @@ public interface ComponentCtrl {
 	 * If it is null, the response is component-independent and it is
 	 * always sent to the client.
 	 *
-	 * <p>Unlike {@link #smartUpdate}, responses are sent to client if
-	 * it is component independent or it is not removed.
-	 * In other words, it is sent even if {@link Component#invalidate()} was called.
+	 * <p>Unlike {@link #smartUpdate}, responses are sent even if
+	 * {@link Component#invalidate()} was called.
 	 * Typical examples include setting the focus, selecting the text and so on.
 	 *
 	 * <p>It can be called only in the request-processing and event-processing
