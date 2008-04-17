@@ -47,11 +47,13 @@ import org.zkoss.zul.ext.Constrainted;
 
 /**
  * A skeletal implementation of an input box.
- * <p>Events: onChange, onChanging, onFocus, onBlur, onSelection, and onOK<br/>
+ * <p>Events: onChange, onChanging, onFocus, onBlur, onSelection, onOK
+ * and onCancel<br/>
  * 
  * <p>Default {@link #getSclass}: text.
  * @author tomyeh
  * @since 3.0.1 supports onOK event.
+ * @since 3.0.5 supports onCancel event.
  */
 abstract public class InputElement extends XulElement
 implements Constrainted {
@@ -485,6 +487,7 @@ implements Constrainted {
 		appendAsapAttr(sb, Events.ON_BLUR);
 		appendAsapAttr(sb, Events.ON_SELECTION);
 		appendAsapAttr(sb, Events.ON_OK);
+		appendAsapAttr(sb, Events.ON_CANCEL);
 
 		if (_constr != null) {
 			String serverValid = null;
