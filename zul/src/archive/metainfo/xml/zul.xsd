@@ -406,6 +406,7 @@
 		<xs:attribute name="top" type="xs:string" use="optional" />
 		<xs:attribute name="draggable" type="booleanType" use="optional" />
 		<xs:attribute name="droppable" type="booleanType" use="optional" />
+		<xs:attribute name="focus" type="booleanType" use="optional" />
 		<xs:attribute name="tooltiptext" type="xs:string" use="optional" />
 		<xs:attribute name="zindex" type="xs:string" use="optional" />
 		<xs:attribute name="onCreate" type="xs:string" use="optional" />
