@@ -21,7 +21,7 @@ package org.zkoss.xel.fn;
 import org.zkoss.lang.Objects;
 
 /**
- * Utilities to manipulate strings in EL.
+ * Functions to manipulate strings in EL.
  *
  * @author tomyeh
  */

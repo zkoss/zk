@@ -29,7 +29,7 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.util.logging.Log;
 
 /**
- * Functions used with EL.
+ * Common functions used with EL.
  *
  * @author tomyeh
  */
