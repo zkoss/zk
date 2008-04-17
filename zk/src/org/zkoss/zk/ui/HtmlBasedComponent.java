@@ -283,7 +283,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * <pre><code>&lt;textbox focus="true"/&gt;</code></pre>
 	 *
 	 * @param focus whether to set focus. If false, this method has no effect.
-	 * @since 3.1.0
+	 * @since 3.0.5
 	 */
 	public void setFocus(boolean focus) {
 		if (focus) focus();
