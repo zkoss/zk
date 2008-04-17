@@ -250,7 +250,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * Used only for component development.
 	 *
 	 * <p>Override this method if you want to customize the generation
-	 * of the client-side action.
+	 * of the client-side action (though rarely).
 	 *
 	 * @since 3.0.0
 	 */
