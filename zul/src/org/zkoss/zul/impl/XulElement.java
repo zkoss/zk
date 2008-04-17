@@ -247,10 +247,14 @@ abstract public class XulElement extends HtmlBasedComponent {
 
 	/** Returns the HTML attributes representing the client-side action,
 	 * or "" if no client-side action is defined.
+	 * Used only for component development.
+	 *
+	 * <p>Override this method if you want to customize the generation
+	 * of the client-side action.
 	 *
 	 * @since 3.0.0
 	 */
-	public String getActionAttrs() {
+	protected String getActionAttrs() {
 		if (_action == null)
 			return "";
 
