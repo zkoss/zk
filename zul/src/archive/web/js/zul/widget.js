@@ -118,6 +118,8 @@ zkTxbox.updateChange = function (inp, noonblur) {
  * component).
  */
 zkTxbox._noonblur = function (inp) {
+	if (zk.alerting) return true;
+
 	var cf = zkau.currentFocus;
 	if (inp && cf && inp != cf) {
 		var el = inp;
