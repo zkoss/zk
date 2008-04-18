@@ -994,7 +994,7 @@ zkau.onblur = function (evtel, noonblur) {
 		//Note: _onDocMousedown is called before onblur, so we have to
 		//prevent it from being cleared
 
-	if (!noonblur) {
+	if (!noonblur && !zk.alerting) {
 		var cmp = $outer(el);
 		if (zkau.asap(cmp, "onBlur"))
 			zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 100);
@@ -2046,7 +2046,7 @@ zkau.cmd0 = { //no uuid at all
 		zk.error(dt1);
 	},
 	alert: function (msg) {
-		alert(msg);
+		zk.alert(msg);
 	},
 	redirect: function (url, target) {
 		try {
