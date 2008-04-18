@@ -91,10 +91,27 @@ public class Charsets {
 
 		if (charset != null && charset.length() > 0) {
 			try {
-				if (Servlets.isServlet24())
+				if (Servlets.isServlet24()) {
 					response.setCharacterEncoding(charset);
-				else
-					response.setContentType("charset=" + charset);
+				} else {
+					final String orgtype = response.getContentType();
+					final String ctype;
+					if (orgtype != null) {
+						final int j = orgtype.indexOf(';');
+						ctype = j >= 0 ? orgtype.substring(0, j): orgtype;
+					} else {
+						ctype = "";
+					}
+
+					response.setContentType(ctype + ";charset=" + charset);
+
+					if (orgtype == null) {
+						try {
+							response.setContentType(null); //restore the state
+						} catch (Throwable t) { //ignore
+						}
+					}
+				}
 			} catch (Throwable ex) {
 				try {
 					final String v = response.getCharacterEncoding();
