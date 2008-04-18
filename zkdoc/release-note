@@ -36,6 +36,7 @@ ZK 3.0.5 Freshly
   1943783: Timebox fail to listen onOK event
   1944918: character encoding problem with pre-Servlet 2.4
   1945361: AjaxDevice's getContentType() shall not return charset
+  1943594: onblur shall not be sent if click on combobox's dropdown
 
 	--------
 ZK 3.0.4
