@@ -451,9 +451,21 @@ public class ZkFns {
 	 * @since 3.0.0
 	 */
 	public static final String outContentType(Page page) {
-		final String contentType = ((PageCtrl)page).getContentType();
-		return contentType != null ? contentType:
-			page.getDesktop().getDevice().getContentType();
+		String contentType = ((PageCtrl)page).getContentType();
+		if (contentType == null) {
+			contentType = page.getDesktop().getDevice().getContentType();
+			if (contentType == null) contentType = "";
+		}
+
+		final int j = contentType.indexOf(';');
+		if (j < 0) {
+			final String cs = page.getDesktop().getWebApp()
+				.getConfiguration().getResponseCharset();
+			if (cs != null && cs.length() > 0)
+				contentType += ";charset=" + cs;
+		}
+
+		return contentType;
 	}
 	/** Returns the doc type, or null if not available.
 	 * It is null or &lt;!DOCTYPE ...&gt;.
