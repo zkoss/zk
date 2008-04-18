@@ -82,6 +82,26 @@ public class Rows extends XulElement {
 			throw new UiException("Unsupported child for rows: "+child);
 		return super.insertBefore(child, insertBefore);
 	}
+	public boolean removeChild(Component child) {
+		//First, invalidate if child in active page and not last page
+		final Grid grid = getGrid();
+		if (grid != null && grid.inPagingMold() && child.getParent() == this) {
+			int actpg = grid.getActivePage();
+			if (actpg < grid.getPageCount() - 1) {
+				int pgsz = grid.getPageSize();
+				int ofs = actpg * pgsz;
+				if (ofs < getChildren().size()) //just in case
+					for (Iterator it = getChildren().listIterator(ofs);
+					--pgsz >= 0 && it.hasNext();) {
+						if (it.next() == child) { //in the active page
+							invalidate();
+							break;
+						}
+					}
+			}
+		}
+		return super.removeChild(child);
+	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
 

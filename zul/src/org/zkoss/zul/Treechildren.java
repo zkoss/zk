@@ -298,6 +298,25 @@ public class Treechildren extends XulElement implements Pageable {
 		}
 		return false;
 	}
+	public boolean removeChild(Component child) {
+		//First, invalidate if child in active page and not last page
+		if (child.getParent() == this) {
+			int pgsz = getPageSize();
+			int actpg = getActivePage();
+			if (pgsz > 0 && actpg < getPageCount() - 1) {
+				int ofs = actpg * pgsz;
+				if (ofs < getChildren().size()) //just in case
+					for (Iterator it = getChildren().listIterator(ofs);
+					--pgsz >= 0 && it.hasNext();) {
+						if (it.next() == child) { //in the active page
+							invalidate();
+							break;
+						}
+					}
+			}
+		}
+		return super.removeChild(child);
+	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 
