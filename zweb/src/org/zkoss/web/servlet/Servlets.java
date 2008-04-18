@@ -77,6 +77,26 @@ public class Servlets {
 	/** Utilities; no instantiation required. */
 	protected Servlets() {}
 
+	private static final boolean _svl24, _svl23;
+	static {
+		boolean b = false;
+		try {
+			ServletResponse.class.getMethod("getContentType", new Class[0]);
+			b = true;
+		} catch (Throwable ex) {
+		}
+		_svl24 = b;
+
+		if (!b) {
+			try {
+				HttpSession.class.getMethod("getServletContext", new Class[0]);
+				b = true;
+			} catch (Throwable ex) {
+			}
+		}
+		_svl23 = b;
+	}
+
 	/** Returns whether a URL starts with xxx://, mailto:, about:,
 	 * javascript:
 	 */
@@ -87,6 +107,23 @@ public class Servlets {
 		return cc >= 'a' && cc <= 'z'
 			&& (uri.indexOf("://") > 0 || uri.startsWith("mailto:")
 			|| uri.startsWith("javascript:") || uri.startsWith("about:"));
+	}
+
+	/** Returns whether the current Web server supports Servlet 2.4 or above.
+	 *
+	 * @since 2.4.3
+	 */
+	public static final boolean isServlet24() {
+		return _svl24;
+	}
+	/** Returns whether the current Web server supports Servlet 2.3 or above.
+	 * Thus, if {@link #isServlet24} returns true, {@link #isServlet23}
+	 * must return true, too.
+	 *
+	 * @since 2.4.3
+	 */
+	public static final boolean isServlet23() {
+		return _svl23;
 	}
 
 	//-- resource locator --//

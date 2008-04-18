@@ -42,8 +42,6 @@ public class Charsets {
 	private static final Log log = Log.lookup(Charsets.class);
 	private static final String ATTR_SETUP = "org.zkoss.web.charset.setup";
 
-	/** Whether the container is servlet 2.3 or earlier. */
-	private static boolean _svl23;
 	private static final String _uriCharset;
 	static {
 		String cs = System.getProperty("org.zkoss.web.uri.charset", null);
@@ -90,18 +88,20 @@ public class Charsets {
 
 		final Locale locale = getPreferredLocale(request);
 		response.setLocale(locale);
-		if (!_svl23 && charset != null && charset.length() > 0) {
+
+		if (charset != null && charset.length() > 0) {
 			try {
-				response.setCharacterEncoding(charset);
-				//if null, the mapping defined in web.xml is used
-			} catch (AbstractMethodError ex) {
-				_svl23 = true;
-			} catch (NoSuchMethodError ex) {
-				_svl23 = true;
+				if (Servlets.isServlet24())
+					response.setCharacterEncoding(charset);
+				else
+					response.setContentType("charset=" + charset);
 			} catch (Throwable ex) {
-				final String v = response.getCharacterEncoding();
-				if (!Objects.equals(v, charset))
-					log.warning("Unable to set response's charset: "+charset+" (current="+v+')', ex);
+				try {
+					final String v = response.getCharacterEncoding();
+					if (!Objects.equals(v, charset))
+						log.warning("Unable to set response's charset: "+charset+" (current="+v+')', ex);
+				} catch (Throwable t) { //just in case
+				}
 			}
 		}
 
