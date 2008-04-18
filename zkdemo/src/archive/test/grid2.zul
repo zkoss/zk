@@ -27,7 +27,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<rows>
 		</rows>
 	</grid>
-	<button label="add 5 children" onClick="add(5)"/>
+	<button label="add 5 children" onClick="add(-1, 5)"/>
+	<button label="add top" onClick="add(0, 1)"/>
 	<button label="Change the first label" onClick="changeLabel(0)"/>
 	<button label="Change the last label" onClick="changeLabel(-1)"/>
 	<button label="Remove first" onClick="remove(0)"/>
@@ -35,14 +36,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<button label="redraw" onClick="grid.invalidate()"/>
 	<button label="set page size" onClick="grid.paginal.pageSize = 10"/>
 	<zscript><![CDATA[
-	void add(int cnt) {
+	void add(int ofs, int cnt) {
 		for (int j = 0; ++j <= cnt;) {
 			Row r = new Row();
 			String prefix = "Item " + (grid.getRows().getChildren().size() + 1);
 			new Label(prefix + "-L").setParent(r);
 			new Label(prefix + "-C").setParent(r);
 			new Label(prefix + "-R").setParent(r);
-			r.setParent(grid.getRows());
+			if (ofs < 0) r.setParent(grid.getRows());
+			else grid.getRows().getChildren().add(ofs, r);
 		}
 	}
 	void changeLabel(int j) {
