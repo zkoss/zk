@@ -71,7 +71,9 @@ public class ClassWebResource {
 	/** An array of extensions that have to be compressed (with gzip). */
 	private String[] _compressExts;
 	/** Map(String ext, Extendlet). */
-	private final Map _extlets = new HashMap(5);
+	private final Map _extlets = new HashMap(4);
+	/** The charset for content type. */
+	private final Map _charsets = new HashMap(8);
 	/** Whether to debug JavaScript files. */
 	private boolean _debugJS;
 
@@ -116,7 +118,13 @@ public class ClassWebResource {
 		_ctx = ctx;
 		_mappingURI = mappingURI;
 		_cwc = new ClassWebContext();
+
 		addExtendlet("dsp", new DspExtendlet());
+
+		_charsets.put("js", "UTF-8");
+		_charsets.put("css", "UTF-8");
+		_charsets.put("txt", "UTF-8");
+		_charsets.put("xml", "UTF-8");
 	}
 	/** Process the request by retrieving the path from the path info.
 	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info,
@@ -148,6 +156,36 @@ public class ClassWebResource {
 			web(request, response, path);
 		} finally {
 			Charsets.cleanup(request, old);
+		}
+	}
+
+	/** Specifies the charset for the resources with the specified extension.
+	 * It will be part of the content type if a resource with
+	 * the specified extension is loaded.
+	 *
+	 * <p>Default: "UTF-8" for "css", "js", "xml" and "txt".
+	 *
+	 * @param ext the extension, e.g, "js" and "css".
+	 * @param charset the charset, e.g., null and "UTF-8".
+	 * If null or an empty string is specified, no charset will be appended
+	 * to the content type.
+	 * @since 3.0.5
+	 */
+	public String addCharset(String ext, String charset) {
+		if (charset != null && charset.length() == 0)
+			charset = null;
+		synchronized (_charsets) {
+			return (String)(charset != null ?
+				_charsets.put(ext, charset): _charsets.remove(ext));
+		}
+	}
+	/** Returns the charset used for the resources with the specified extension,
+	 * or null if no charset shall be generated as part of content-type.
+	 * @since 3.0.5
+	 */
+	public String getCharset(String ext) {
+		synchronized (_charsets) {
+			return (String)_charsets.get(ext);
 		}
 	}
 
@@ -321,10 +359,16 @@ public class ClassWebResource {
 			}
 
 			if (!Servlets.isIncluded(request)) {				
-				final String ctype = ContentTypes.getContentType(ext);
+				String ctype = ContentTypes.getContentType(ext),
+					charset = getCharset(ext);
+				if (charset != null) {
+					if (ctype == null)
+						ctype = ";charset=" + charset;
+					else if (ctype.indexOf(';') < 0)
+						ctype += ";charset=" + charset;
+				}
 				if (ctype != null)
 					response.setContentType(ctype);
-//				if (D.ON && log.debugable()) log.debug("Content type: "+ctype+" for "+pi);
 			}
 		}
 
