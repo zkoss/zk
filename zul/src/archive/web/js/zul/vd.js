@@ -198,7 +198,7 @@ zkVld._errbox = function () {
 	
 	var box = Validate_errorbox(id, boxid, html);
 	if (!box) {
-		alert(html);
+		zk.alert(html);
 		return;
 	}
 

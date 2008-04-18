@@ -110,7 +110,7 @@ zk.Selectable.prototype = {
 		}
 
 		if (!this.bodyrows) {
-			alert(mesg.INVALID_STRUCTURE + this.id);
+			zk.error(mesg.INVALID_STRUCTURE + this.id);
 			return;
 		}
 
@@ -976,7 +976,7 @@ zk.Selectable.prototype = {
 	_getSelectedId: function () {
 		var selId = getZKAttr(this.element, "selId");
 		if (!selId) {
-			alert(mesg.INVALID_STRUCTURE + "z.selId not found");
+			zk.error(mesg.INVALID_STRUCTURE + "z.selId not found");
 			return null;
 		}
 		return selId == "zk_n_a" ? null: selId;

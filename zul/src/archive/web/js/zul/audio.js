@@ -30,7 +30,7 @@ zkAudio.play = function (id) {
 			try {
 				cmp.Play(); //Firefox
 			} catch (e) {
-				alert(msgzul.NO_AUDIO_SUPPORT);
+				zk.alert(msgzul.NO_AUDIO_SUPPORT);
 			}
 		}
 	}
@@ -45,7 +45,7 @@ zkAudio.stop = function (id) {
 			try {
 				cmp.Stop();
 			} catch (e) {
-				alert(msgzul.NO_AUDIO_SUPPORT);
+				zk.alert(msgzul.NO_AUDIO_SUPPORT);
 			}
 		}
 	}
@@ -57,7 +57,7 @@ zkAudio.pause = function (id) {
 		try { //Note: we cannot do "if (cmp.pause)" in IE
 			cmp.pause();
 		} catch (e) {
-			alert(msgzul.NO_AUDIO_SUPPORT);
+			zk.alert(msgzul.NO_AUDIO_SUPPORT);
 		}
 	}
 };
