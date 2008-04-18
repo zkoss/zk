@@ -375,12 +375,12 @@ if [ "$target" == "official" ]; then
 	rm -rf zk-devguide-single-$ver
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm/devguide
-	mkdir -p /tmp/zk/$docnm/devref
+	#mkdir -p /tmp/zk/$docnm/devref
 
 	cd $maindir
 	cp zkdoc/*/ZK-quickstart*.pdf /tmp/zk/$docnm
 	cp -rp zkdoc/devguide/*.odt zkdoc/devguide/images /tmp/zk/$docnm/devguide
-	cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
+	#cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
 	find -name .svn | xargs rm -rf
