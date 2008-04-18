@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<window border="none" width="100%"
+xmlns="http://www.zkoss.org/2005/zul">
+
+Click dropdown and select an item. A modal dialog shall show up.
+Click OK to close the modal dialog. Then, the modal dialog shall not
+re-appear again.
+
+<zscript>
+public class AutoComplete extends Combobox implements EventListener {
+	public AutoComplete() {
+		addEventListener("onBlur", this);
+	}
+	public void onEvent(Event event) throws Exception {
+		if ("onBlur".equals(event.getName())) {
+			throw new java.io.NotSerializableException();
+		}
+	}
+}
+</zscript>
+<combobox id="combo" autodrop="true" use="AutoComplete">
+	<comboitem label="Value 1"/>
+	<comboitem label="Value 2"/>
+	<comboitem label="Value 3"/>
+	<comboitem label="Value 4"/>
+	<comboitem label="Value 5"/>
+</combobox>
+</window>
