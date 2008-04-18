@@ -28,6 +28,6 @@ import org.zkoss.zk.device.GenericDevice;
 public class XmlDevice extends GenericDevice {
 	//Device//
 	public String getContentType() {
-		return "text/xml;charset=UTF-8";
+		return "text/xml";
 	}
 }
