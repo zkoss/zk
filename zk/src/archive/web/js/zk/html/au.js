@@ -2141,9 +2141,9 @@ zkau.cmd1 = {
 			if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
 
 			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
-			else alert(dt1);
+			else zk.alert(dt1);
 		} else if (!uuid) { //keep silent if component (of uuid) not exist (being detaced)
-			alert(dt1);
+			zk.alert(dt1);
 		}
 	},
 	setAttr: function (uuid, cmp, dt1, dt2) {
