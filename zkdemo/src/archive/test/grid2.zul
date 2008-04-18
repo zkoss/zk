@@ -30,6 +30,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<button label="add 5 children" onClick="add(5)"/>
 	<button label="Change the first label" onClick="changeLabel(0)"/>
 	<button label="Change the last label" onClick="changeLabel(-1)"/>
+	<button label="Remove first" onClick="remove(0)"/>
+	<button label="Remove last" onClick="remove(-1)"/>
 	<button label="redraw" onClick="grid.invalidate()"/>
 	<button label="set page size" onClick="grid.paginal.pageSize = 10"/>
 	<zscript><![CDATA[
@@ -52,6 +54,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			Row r = grid.getRows().getChildren().get(j);
 			r.getChildren().get(0).setValue("Updated "+j);
 		}
+	}
+	void remove(int j) {
+		List kids = grid.getRows().getChildren();
+		int sz = kids.size();
+		if (j < 0) j = sz -1;
+		if (j >= 0 && j < sz) kids.get(j).detach();
 	}
 	]]></zscript>
 

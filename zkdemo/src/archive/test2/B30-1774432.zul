@@ -33,16 +33,22 @@ el has no properties". And, it shall not appear.
 	public void append() {
 		count++;
 		Treeitem ti = new Treeitem("Item "+count);
-		Treechildren children = t.getTreechildren();
-		ti.setParent(children);
+		Treechildren tc = t.getTreechildren();
+		ti.setParent(tc);
 	}
 	public void remove() {
 		Treeitem ti = t.getSelectedItem();
 		if (ti != null) ti.detach();
 		else alert("You have to select an item first");
 	}
+	public void removeLast() {
+		List kids = t.getTreechildren().getChildren();
+		if (!kids.isEmpty())
+			kids.get(kids.size() - 1).detach();
+	}
 </zscript>
 <button label="append" onClick="append()"/>
 <button label="remove" onClick="remove()"/>
+<button label="remove last" onClick="removeLast()"/>
 <button label="redraw" onClick="t.invalidate()"/>
 </window>

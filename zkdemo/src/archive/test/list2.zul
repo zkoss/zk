@@ -29,6 +29,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<button label="Change the first label" onClick="changeLabel(0)"/>
 	<button label="Change the last label" onClick="changeLabel(-1)"/>
 	<button label="Remove selected" onClick="rmsel()"/>
+	<button label="Remove first" onClick="remove(0)"/>
+	<button label="Remove last" onClick="remove(-1)"/>
 	<button label="redraw" onClick="list.invalidate()"/>
 	<zscript><![CDATA[
 	void add(int cnt) {
@@ -54,6 +56,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	void rmsel() {
 		Listitem item = list.getSelectedItem();
 		if (item != null) item.detach();
+	}
+	void remove(int j) {
+		List kids = list.getItems();
+		int sz = kids.size();
+		if (j < 0) j = sz -1;
+		if (j >= 0 && j < sz) kids.get(j).detach();
 	}
 	]]></zscript>
 
