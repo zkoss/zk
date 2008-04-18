@@ -35,10 +35,10 @@ public class AjaxDevice extends GenericDevice {
 	public boolean isCacheable() {
 		return false;
 	}
-	/** Returns <code>text/html;charset=UTF-8</code>
+	/** Returns <code>text/html</code>
 	 */
 	public String getContentType() {
-		return "text/html;charset=UTF-8";
+		return "text/html";
 	}
 	/** Returns <code>&lt;!DOCTYPE html ...XHTML 1.0 Transitional...&gt;</code>.
 	 */
