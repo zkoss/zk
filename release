@@ -34,14 +34,20 @@ if [ "$javadocdir" = "" ] ; then
 	exit 1
 fi
 javadocdir=${javadocdir/\~/$HOME}
-docdir=$HOME/prj/zkweb/ptroot/src/archive/doc
-
 if [ ! -d "$javadocdir" ] ; then
 	echo $javadocdir is not found
 	exit 1
 fi
-if [ ! -d "$docdir" ] ; then
-	echo $docdir is not found
+
+htmldocdir=$(grep '^htmldoc' $setting)
+htmldocdir=${htmldocdir#htmldoc=}
+if [ "$htmldocdir" = "" ] ; then
+	echo htmldoc must be specified in $setting
+	exit 1
+fi
+htmldocdir=${htmldocdir/\~/$HOME}
+if [ ! -d "$htmldocdir/devguide" ] ; then
+	echo $htmldocdir/devguide is not found
 	exit 1
 fi
 
@@ -345,7 +351,7 @@ if [ "$target" == "official" ]; then
 	done
 
 	cd /tmp/zk/doc
-	cp -rP $docdir/devref $docdir/devguide $docdir/devref-single $docdir/devguide-single .
+	cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single .
 	find -name .svn | xargs rm -rf
 
 	echo Output zk-devref-$ver.zip
