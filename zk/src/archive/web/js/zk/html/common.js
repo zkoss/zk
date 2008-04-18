@@ -144,6 +144,18 @@ zk.getOuterHTML = function (cmp) {
 	div.appendChild(clone);
 	return div.innerHTML;
 }
+/** To prevent onblur if alert is shown.
+ * Note: browser will change the focus back, so it is safe to ingore.
+ * @since 3.0.5
+ */
+zk.alert = function (msg) {
+	zk.alerting = true;
+	try {
+		alert(msg);
+	} finally {
+		zk.alerting = false;
+	}
+};
 /** Returns whether it is part of the class name
  * of the specified element.
  */
