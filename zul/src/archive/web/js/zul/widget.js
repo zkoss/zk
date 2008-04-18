@@ -42,6 +42,7 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 		zk.listen(cmp, "keyup", zkTxbox.onkey);
 		
 	zk.listen(cmp, "keydown", zkTxbox.onkeydown);
+
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
 	if (getZKAttr($outer(cmp), "srvald")) {
@@ -71,10 +72,11 @@ zkTxbox.onselect = function (evt) {
  * Note: we don't use onChange because it won't work if user uses IE' auto-fill
  */
 zkTxbox.onblur = function (evt) {
-	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
+	var inp = zkau.evtel(evt), //backward compatible (2.4 or before)
+		noonblur = zkTxbox._noonblur(inp);
 	zkTxbox._scanStop(inp);
-	zkTxbox.updateChange(inp, zkTxbox._noonblur(inp));
-	zkau.onblur(evt); //fire onBlur after onChange
+	zkTxbox.updateChange(inp, noonblur);
+	zkau.onblur(evt, noonblur); //fire onBlur after onChange
 };
 zkTxbox._scanStop = function (inp) {	
 	//stop the scanning of onChaning first
