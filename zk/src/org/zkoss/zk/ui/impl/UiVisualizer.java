@@ -248,18 +248,7 @@ import org.zkoss.zk.au.out.*;
 				//note: we cannot examine _exec.isAsyncUpdate here because
 				//comp.getPage might be ready when this method is called
 		} else {
-			if (_moved.add(comp)) { //first time added
-				//Due to the performance of Cropper.getAvailableAtClient
-				//usually not good, so we count on isCropper only
-				//In other words, this algorithm might redraw something that don't
-				//need to, but has better performance if no redudant redrawing
-				if (oldparent != null) {
-					final Object xc = ((ComponentCtrl)oldparent).getExtraCtrl();
-					if ((xc instanceof Cropper) && ((Cropper)xc).isCropper())
-						oldparent.invalidate();
-						//Bug 1914130: Treechildren.invalidate triggles others
-				}
-			}
+			_moved.add(comp);
 			_attached.remove(comp);
 		}
 	}
