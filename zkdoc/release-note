@@ -34,6 +34,7 @@ ZK 3.0.5 Freshly
   1906748: Combobox, binding and selected item Fail in Java6 only
   1942735: Failed to render <A> with invalid URL as href(IE7 only)
   1943783: Timebox fail to listen onOK event
+  1944918: character encoding problem with pre-Servlet 2.4
 
 	--------
 ZK 3.0.4
