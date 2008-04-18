@@ -994,15 +994,20 @@ zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
 		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 100);
 	return true;
 };
-zkau.onblur = function (evtel) {
+/**
+ * @param noonblur not to send the onblur event (3.0.5)
+ */
+zkau.onblur = function (evtel, noonblur) {
 	var el = zkau.evtel(evtel);
 	if (el == zkau.currentFocus) zkau.currentFocus = null;
 		//Note: _onDocMousedown is called before onblur, so we have to
 		//prevent it from being cleared
 
-	var cmp = $outer(el);
-	if (zkau.asap(cmp, "onBlur"))
-		zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 100);
+	if (!noonblur) {
+		var cmp = $outer(el);
+		if (zkau.asap(cmp, "onBlur"))
+			zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 100);
+	}
 };
 
 zkau.onimgover = function (evtel) {
