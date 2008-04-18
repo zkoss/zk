@@ -1210,6 +1210,23 @@ public class Listbox extends XulElement {
 			throw new IllegalStateException("The paging component cannot be removed manually. It is removed automatically when changing the mold");
 				//Feature 1906110: prevent developers from removing it accidently
 
+		//First, invalidate if child in active page and not last page
+		if ((child instanceof Listitem) && inPagingMold() && child.getParent() == this) {
+			int actpg = getActivePage();
+			if (actpg < getPageCount() - 1) {
+				int pgsz = getPageSize();
+				int ofs = actpg * pgsz;
+				if (ofs < getItems().size()) //just in case
+					for (Iterator it = getItems().listIterator(ofs);
+					--pgsz >= 0 && it.hasNext();) {
+						if (it.next() == child) { //in the active page
+							invalidate();
+							break;
+						}
+					}
+			}
+		}
+
 		if (!super.removeChild(child))
 			return false;
 
