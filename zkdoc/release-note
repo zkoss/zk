@@ -12,6 +12,7 @@ ZK 2.4.3
   1927788: ESC stops Ajax (FF only)
   1921891: insertBefore the same listitem cause ClassCastException
   1778258: EL cause nullpoint when createComponent or fulfill
+  1944918: character encoding problem with pre-Servlet 2.4
 
 	--------
 ZK 2.4.2
