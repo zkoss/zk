@@ -38,6 +38,7 @@ ZK 3.0.5 Freshly
   1945361: AjaxDevice's getContentType() shall not return charset
   1943594: onblur shall not be sent if click on combobox's dropdown
   1896267: zul.xsd invalid
+  1941947: Cannot find associated CollectionItem error
   
 	--------
 ZK 3.0.4
@@ -154,7 +155,7 @@ ZK 3.0.4
   1920630: The bottom border of Listbox is gone. (IE7 only)
   1911621: Shift Multiple Select in Listbox and Tree
   1921830: Splitter unable to change sclass dynamically
-  1858489: Include annotation markup in zul XSD
+  1921097: zul xsd does not allow binding datebox's value
   1921891: insertBefore the same listitem cause ClassCastException
   1920751: Comboitem's disable property could be broken
   1920879: Audio bug(FF, SA, OP)
