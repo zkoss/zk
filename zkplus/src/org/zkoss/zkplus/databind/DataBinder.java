@@ -626,8 +626,10 @@ public class DataBinder {
 	
 	//get associated clone of a given bean and template component
 	private Component getCollectionItem(Component comp, Object bean) {
-		Component owner = getCollectionOwner(comp);	
-		CollectionItem decor = getBindingCollectionItem(comp);
+		Component owner = getCollectionOwner(comp);
+		//bug#1941947 Cannot find associated CollectionItem error
+		//CollectionItem decor = getBindingCollectionItem(comp);
+		CollectionItem decor = getCollectionItemByOwner(owner);
 		final ListModel xmodel = decor.getModelByOwner(owner);
 		if (xmodel instanceof BindingListModel) {
   			final BindingListModel model = (BindingListModel) xmodel;
@@ -729,7 +731,8 @@ public class DataBinder {
 	
 	//whether a component is a binding template rather than a real component
 	/* package */ static boolean isTemplate(Component comp) {
-		return comp.getAttribute(OWNER) != null;
+		//bug #1941947 Cannot find associated CollectionItem error
+		return comp != null && comp.getAttribute(OWNER) != null;
 	}
 	
 	//whether a cloned component from the template.

@@ -227,7 +227,11 @@ public class Binding {
 	 * @param comp the component.
 	 */
 	public void loadAttribute(Component comp) {
-		if (!isLoadable() || _attr.startsWith("_") || _binder.isTemplate(comp) || comp.getPage() == null) { 
+		if (!isLoadable() 
+				|| _attr.startsWith("_") 
+				|| _binder.isTemplate(comp) 
+				|| comp == null //bug #1941947 Cannot find associated CollectionItem error 
+				|| comp.getPage() == null) { 
 			return; //cannot load, a control attribute, or a detached component, skip!
 		}
 		Object bean = _binder.getBeanAndRegisterBeanSameNodes(comp, _expression);
