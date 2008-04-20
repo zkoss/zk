@@ -108,4 +108,15 @@ public class PortletHttpSession implements HttpSession {
 	public void setMaxInactiveInterval(int interval) {
 		_sess.setMaxInactiveInterval(interval);
 	}
+
+	//Object//
+	public int hashCode() {
+		return _sess.hashCode();
+	}
+	public boolean equals(Object o) {
+		PortletSession val =
+			o instanceof PortletSession ? (PortletSession)o:
+			o instanceof PortletHttpSession ? ((PortletHttpSession)o)._sess: null;
+		return val != null && val.equals(_sess);
+	}
 }

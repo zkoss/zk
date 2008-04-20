@@ -269,4 +269,15 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 	public boolean isUserInRole(String role) {
 		return _req.isUserInRole(role);
 	}
+
+	//Object//
+	public int hashCode() {
+		return _req.hashCode();
+	}
+	public boolean equals(Object o) {
+		RenderRequest val =
+			o instanceof RenderRequest ? (RenderRequest)o:
+			o instanceof RenderHttpServletRequest ? ((RenderHttpServletRequest)o)._req: null;
+		return val != null && val.equals(_req);
+	}
 }

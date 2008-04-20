@@ -138,4 +138,16 @@ public class RenderHttpServletResponse implements HttpServletResponse {
 	 */
 	public void setStatus(int sc, String sm)  {
 	}
+
+
+	//Object//
+	public int hashCode() {
+		return _res.hashCode();
+	}
+	public boolean equals(Object o) {
+		RenderResponse val =
+			o instanceof RenderResponse ? (RenderResponse)o:
+			o instanceof RenderHttpServletResponse ? ((RenderHttpServletResponse)o)._res: null;
+		return val != null && val.equals(_res);
+	}
 }
