@@ -24,6 +24,9 @@ import javax.portlet.PortletSession;
 /**
  * A facade of PortletSession for implementing HttpSession.
  *
+ * <p>Note: all attributes set and get thru this class are in
+ * the applicatiop scope (PortletSession.APPLICATION_SCOPE).
+ *
  * @author tomyeh
  */
 public class PortletHttpSession implements HttpSession {
@@ -39,13 +42,19 @@ public class PortletHttpSession implements HttpSession {
 		_sess = sess;
 	}
 
+	/** Returns the portlet session being wrapped by this object.
+	 * @since 3.0.5
+	 */
+	public PortletSession getPortletSess() {
+		return _sess;
+	}
+
 	//-- HttpSession --//
 	public Object getAttribute(String name) {
-		final Object o = _sess.getAttribute(name);
-		return o != null ? o: _sess.getAttribute(name, PortletSession.APPLICATION_SCOPE);
+		return _sess.getAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
 	public java.util.Enumeration getAttributeNames() {
-		return _sess.getAttributeNames();
+		return _sess.getAttributeNames(PortletSession.APPLICATION_SCOPE);
 	}
 	public long getCreationTime() {
 		return _sess.getCreationTime();
@@ -92,7 +101,7 @@ public class PortletHttpSession implements HttpSession {
 	public void putValue(String name, Object value) {
 	}
 	public void removeAttribute(String name) {
-		_sess.removeAttribute(name);
+		_sess.removeAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
 	/**
 	 * @deprecated
@@ -100,10 +109,7 @@ public class PortletHttpSession implements HttpSession {
 	public void removeValue(String name) {
 	}
 	public void setAttribute(String name, Object value) {
-		if (name != null && name.startsWith("javax."))
-			_sess.setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
-		else
-			_sess.setAttribute(name, value);
+		_sess.setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
 	}
 	public void setMaxInactiveInterval(int interval) {
 		_sess.setMaxInactiveInterval(interval);
