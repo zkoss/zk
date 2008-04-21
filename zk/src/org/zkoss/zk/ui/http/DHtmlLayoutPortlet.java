@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.portlet.GenericPortlet;
+import javax.portlet.PortletSession;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
@@ -41,7 +41,6 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.portlet.Portlets;
-import org.zkoss.web.portlet.PortletHttpSession;
 import org.zkoss.web.portlet.RenderHttpServletRequest;
 import org.zkoss.web.portlet.RenderHttpServletResponse;
 
@@ -160,12 +159,13 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	/** Returns the session. */
 	private Session getSession(RenderRequest request)
 	throws PortletException {
-		final HttpSession hsess =
-			PortletHttpSession.getInstance(request.getPortletSession());
-		final Session sess = WebManager.getSession(hsess);
+		final WebApp wapp = getWebManager().getWebApp();
+		final PortletSession psess = request.getPortletSession();
+		final Session sess = SessionsCtrl.getSession(wapp, psess);
 		return sess != null ? sess:
-			WebManager.newSession(getWebManager().getWebApp(), hsess, request);
+			SessionsCtrl.newSession(wapp, psess, request);
 	}
+
 	/** Process a portlet request.
 	 * @return false if the page is not found.
 	 * @since 3.0.0

@@ -64,6 +64,12 @@ public interface WebAppCtrl {
 	 */
 	public IdGenerator getIdGenerator();
 
+	/** Returns the session cache (never null).
+	 * The session cache is used to store ZK sessions.
+	 * @since 3.0.5
+	 */
+	public SessionCache getSessionCache();
+
 	/** Notification that the session is about to be passivated
 	 * (aka., serialized).
 	 */

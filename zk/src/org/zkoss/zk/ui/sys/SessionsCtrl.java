@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 
@@ -78,4 +79,37 @@ public class SessionsCtrl extends Sessions {
 	}
 	private static final String ATTR_REQUEST_COUNT
 		= "org.zkoss.zk.ui.sys.RequestCount";
+
+	/** Returns the ZK session associated with the specified native session.
+	 *
+	 * @param navsess the native session (never null).
+	 * If HTTP, it is HttpSession. If portlet, it is PortletSession.
+	 * @since 3.0.5
+	 */
+	public static final Session getSession(WebApp wapp, Object navsess) {
+		final Session sess = ((WebAppCtrl)wapp).getSessionCache().get(navsess);
+		if (sess != null && sess.getNativeSession() == null)
+			((SessionCtrl)sess).recover(navsess);
+		return sess;
+	}
+	/** Instantiates a ZK session that is assoicated witht the specified
+	 * native session and request.
+	 *
+	 * @param navsess the native session (never null).
+	 * If HTTP, it is HttpSession. If portlet, it is PortletSession.
+	 * @since 3.0.5
+	 */
+	public static final
+	Session newSession(WebApp wapp, Object navsess, Object request) {
+		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final Session sess =
+			wappc.getUiFactory().newSession(wapp, navsess, request);
+		wappc.getSessionCache().put(sess);
+
+		//Note: we set timeout here, because HttpSession might have been created
+		//by other servlet or filter
+		final int v = wapp.getConfiguration().getSessionMaxInactiveInterval();
+		if (v != 0) sess.setMaxInactiveInterval(v);
+		return sess;
+	}
 }

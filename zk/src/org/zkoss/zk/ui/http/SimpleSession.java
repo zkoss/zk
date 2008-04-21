@@ -20,6 +20,8 @@ package org.zkoss.zk.ui.http;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.io.Serializable;
@@ -28,6 +30,7 @@ import java.io.Externalizable;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.portlet.PortletSession;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
@@ -57,7 +60,7 @@ import org.zkoss.zk.ui.util.SessionSerializationListener;
 public class SimpleSession implements Session, SessionCtrl {
 	private static final Log log = Log.lookup(SimpleSession.class);
 
-	/** The attribute used to hold a map of attributes that are written
+	/** The attribute used to hold a set of serializable attributes that are written
 	 * thru {@link #setAttribute}.
 	 *
 	 * <p>Note: once a HttpSession is serialized, all serializable attributes
@@ -72,8 +75,8 @@ public class SimpleSession implements Session, SessionCtrl {
 
 	/** The Web application that this session belongs to. */
 	private WebApp _wapp;
-	/** The HTTP session that this session is associated with. */
-	private HttpSession _hsess;
+	/** The HTTP or Portlet session that this session is associated with. */
+	private Object _navsess;
 	/** The device type. */
 	private String _devType = "ajax";
 	/** The attributes belonging to this session.
@@ -90,21 +93,38 @@ public class SimpleSession implements Session, SessionCtrl {
 	private long _tmLastReq = System.currentTimeMillis();
 	private boolean _invalid;
 
-	/** Constructor.
+	/** Construts a ZK session with a HTTP session.
 	 *
+	 * @param hsess the original HTTP session.
 	 * @param request the original request causing this session to be created.
 	 * If HTTP and servlet, it is javax.servlet.http.HttpServletRequest.
 	 * If portlet, it is javax.portlet.RenderRequest.
 	 * @since 3.0.1
 	 */
 	public SimpleSession(WebApp wapp, HttpSession hsess, Object request) {
-		if (wapp == null || hsess == null)
+		this(wapp, (Object)hsess, request);
+	}
+	/** Construts a ZK session with a Portlet session.
+	 *
+	 * <p>Note: it assumes the scope of attributes is
+	 * PortletSession.APPLICATION_SCOPE.
+	 *
+	 * @param psess the original Portlet session.
+	 * @param request the original request causing this session to be created.
+	 * If portlet, it is javax.portlet.RenderRequest.
+	 * @since 3.0.5
+	 */
+	public SimpleSession(WebApp wapp, PortletSession psess, Object request) {
+		this(wapp, (Object)psess, request);
+	}
+	private SimpleSession(WebApp wapp, Object navsess, Object request) {
+		if (wapp == null || navsess == null)
 			throw new IllegalArgumentException();
 
-		cleanSessAttrs(hsess);
-
 		_wapp = wapp;
-		_hsess = hsess;
+		_navsess = navsess;
+
+		cleanSessAttrs(); //after _navsess is initialized
 
 		if (request instanceof ServletRequest) {
 			final ServletRequest req = (ServletRequest)request;
@@ -140,10 +160,10 @@ public class SimpleSession implements Session, SessionCtrl {
 	private final void init() {
 		_attrs = new AttributesMap() {
 			protected Enumeration getKeys() {
-				return _hsess.getAttributeNames();
+				return getAttrNames();
 			}
 			protected Object getValue(String key) {
-				return _hsess.getAttribute(key);
+				return getAttribute(key);
 			}
 			protected void setValue(String key, Object val) {
 				setAttribute(key, val);
@@ -153,7 +173,19 @@ public class SimpleSession implements Session, SessionCtrl {
 			}
 		};
 	}
-
+	/** Cleans up the attribute being set.
+	 */
+	private final void cleanSessAttrs() {
+		final Set names = (Set)getAttribute(ATTR_PRIVATE);
+		if (names != null) //after _navsess is initialized
+			for (Iterator it = names.iterator(); it.hasNext();)
+				rmAttr((String)it.next());
+	}
+	private final Enumeration getAttrNames() {
+		return _navsess instanceof HttpSession ?
+			((HttpSession)_navsess).getAttributeNames():
+			((PortletSession)_navsess).getAttributeNames(PortletSession.APPLICATION_SCOPE);
+	}
 	public String getDeviceType() {
 		return _devType;
 	}
@@ -169,62 +201,55 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 
 	public Object getAttribute(String name) {
-		return _hsess.getAttribute(name);
+		return _navsess instanceof HttpSession ?
+			((HttpSession)_navsess).getAttribute(name):
+			((PortletSession)_navsess).getAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
 	public void setAttribute(String name, Object value) {
-		if (name.startsWith("javax.zkoss"))
-			throw new IllegalArgumentException("Unable to change the readonly attribute: "+name);
-
-		//Note: we have to handle ATTR_PRIVATE, so cleanSessAttrs knows what to do
-		if (!(this instanceof Serializable || this instanceof Externalizable)
-		/*&& name != null && !name.startsWith("javax.")*/
-		&& (value instanceof Serializable || value instanceof Externalizable)) {
+		if (!(this instanceof Serializable || this instanceof Externalizable)) {
+			final boolean bStore = value instanceof Serializable || value instanceof Externalizable;
 			synchronized (this) {
-				_hsess.setAttribute(name, value);
+				setAttr(name, value);
 
-				Map prv = (Map)_hsess.getAttribute(ATTR_PRIVATE);
-				if (prv == null)
-					_hsess.setAttribute(ATTR_PRIVATE, prv = new HashMap());
-				prv.put(name, value);
+				Set prv = (Set)getAttribute(ATTR_PRIVATE);
+				if (bStore) {
+					if (prv == null)
+						setAttr(ATTR_PRIVATE, prv = new HashSet());
+					prv.add(name);
+				} else {
+					if (prv != null) prv.remove(name);
+				}
 			}
 		} else {
-			_hsess.setAttribute(name, value);
+			setAttr(name, value);
 		}
 	}
+	private void setAttr(String name, Object value) {
+		if (_navsess instanceof HttpSession)
+			((HttpSession)_navsess).setAttribute(name, value);
+		else
+			((PortletSession)_navsess).setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
+	}
 	public void removeAttribute(String name) {
-		if (name.startsWith("javax.zkoss"))
-			throw new IllegalArgumentException("Unable to remove the readonly attribute: "+name);
-
-		//Note: we have to handle ATTR_PRIVATE, so cleanSessAttrs knows what to do
-		if (!(this instanceof Serializable || this instanceof Externalizable)
-		/*&& name != null && !name.startsWith("javax.")*/) {
+		if (!(this instanceof Serializable || this instanceof Externalizable)) {
 			synchronized (this) {
-				_hsess.removeAttribute(name);
+				rmAttr(name);
 
-				Map prv = (Map)_hsess.getAttribute(ATTR_PRIVATE);
-				if (prv != null)
-					prv.remove(name);
+				final Set prv = (Set)getAttribute(ATTR_PRIVATE);
+				if (prv != null) prv.remove(name);
 			}
 		} else {
-			_hsess.removeAttribute(name);
+			rmAttr(name);
 		}
+	}
+	private void rmAttr(String name) {
+		if (_navsess instanceof HttpSession)
+			((HttpSession)_navsess).removeAttribute(name);
+		else
+			((PortletSession)_navsess).removeAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
 	public Map getAttributes() {
 		return _attrs;
-	}
-	/** Cleans up attributes that shall not available to a brand-new session
-	 * See {@link #ATTR_PRIVATE} for details.
-	 */
-	private static void cleanSessAttrs(HttpSession hsess) {
-		final Map prv = (Map)hsess.getAttribute(ATTR_PRIVATE);
-		if (prv != null) {
-			for (Iterator it = prv.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String nm = (String)me.getKey();
-				if (hsess.getAttribute(nm) == me.getValue()) //don't use equals
-					hsess.removeAttribute(nm);
-			}
-		}
 	}
 
 	public String getRemoteAddr() {
@@ -254,16 +279,24 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 
 	public void invalidateNow() {
-		_hsess.invalidate();
+		if (_navsess instanceof HttpSession)
+			((HttpSession)_navsess).invalidate();
+		else
+			((PortletSession)_navsess).invalidate();
 	}
 	public void setMaxInactiveInterval(int interval) {
-		_hsess.setMaxInactiveInterval(interval);
+		if (_navsess instanceof HttpSession)
+			((HttpSession)_navsess).setMaxInactiveInterval(interval);
+		else
+			((PortletSession)_navsess).setMaxInactiveInterval(interval);
 	}
 	public int getMaxInactiveInterval() {
-		return _hsess.getMaxInactiveInterval();
+		return _navsess instanceof HttpSession ?
+			((HttpSession)_navsess).getMaxInactiveInterval():
+			((PortletSession)_navsess).getMaxInactiveInterval();
 	}
 	public Object getNativeSession() {
-		return _hsess;
+		return _navsess;
 	}
 
 	public void notifyClientRequest(boolean keepAlive) {
@@ -309,6 +342,8 @@ public class SimpleSession implements Session, SessionCtrl {
 		final Configuration config = getWebApp().getConfiguration();
 		config.invokeSessionCleanups(this);
 
+		cleanSessAttrs();
+
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
 			try {
@@ -341,9 +376,9 @@ public class SimpleSession implements Session, SessionCtrl {
 
 		//Since HttpSession will serialize attributes by the container
 		//we ony invoke the notification
-		for (Enumeration en = _hsess.getAttributeNames(); en.hasMoreElements();) {
+		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
 			final String nm = (String)en.nextElement();
-			willSerialize(_hsess.getAttribute(nm));
+			willSerialize(getAttribute(nm));
 		}
 	}
 	private void willSerialize(Object o) {
@@ -369,9 +404,9 @@ public class SimpleSession implements Session, SessionCtrl {
 
 		//Since HttpSession will de-serialize attributes by the container
 		//we ony invoke the notification
-		for (Enumeration en = _hsess.getAttributeNames(); en.hasMoreElements();) {
+		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
 			final String nm = (String)en.nextElement();
-			didDeserialize(_hsess.getAttribute(nm));
+			didDeserialize(getAttribute(nm));
 		}
 	}
 	private void didDeserialize(Object o) {
@@ -398,9 +433,9 @@ public class SimpleSession implements Session, SessionCtrl {
 		//Note: in Tomcat, servlet is activated later, so we have to
 		//add listener to WebManager instead of process now
 
-		_hsess = hsess;
+		_navsess = hsess;
 		WebManager.addActivationListener(
-			_hsess.getServletContext(),
+			hsess.getServletContext(),
 				//FUTURE: getServletContext only in Servlet 2.3 or later
 			new WebManagerActivationListener() {
 				public void didActivate(WebManager webman) {
