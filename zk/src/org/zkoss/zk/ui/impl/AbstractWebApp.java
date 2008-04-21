@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.ui.http.SimpleUiFactory;
+import org.zkoss.zk.ui.http.SimpleSessionCache;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.UiFactory;
@@ -37,6 +38,7 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
 import org.zkoss.zk.ui.impl.UiEngineImpl;
 
@@ -53,6 +55,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private UiFactory _factory;
 	private FailoverManager _failover;
 	private IdGenerator _idgen;
+	private SessionCache _sesscache;
 
 	/** Constructor.
 	 *
@@ -151,6 +154,18 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			}
 		}
 
+		cls = _config.getSessionCacheClass();
+		if (cls == null) {
+			_sesscache = new SimpleSessionCache();
+		} else {
+			try {
+				_sesscache = (SessionCache)cls.newInstance();
+				_sesscache.init(this);
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
+
 		_engine.start(this);
 		_provider.start(this);
 		_factory.start(this);
@@ -186,6 +201,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 	public IdGenerator getIdGenerator() {
 		return _idgen;
+	}
+	public SessionCache getSessionCache() {
+		return _sesscache;
 	}
 
 	/** Invokes {@link #getDesktopCacheProvider}'s

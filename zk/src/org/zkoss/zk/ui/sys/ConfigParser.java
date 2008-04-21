@@ -242,6 +242,9 @@ public class ConfigParser {
 				cls = parseClass(el, "id-generator-class", IdGenerator.class);
 				if (cls != null) config.setIdGeneratorClass(cls);
 
+				cls = parseClass(el, "session-cache-class", SessionCache.class);
+				if (cls != null) config.setSessionCacheClass(cls);
+
 				cls = parseClass(el, "web-app-class", WebApp.class);
 				if (cls != null) config.setWebAppClass(cls);
 

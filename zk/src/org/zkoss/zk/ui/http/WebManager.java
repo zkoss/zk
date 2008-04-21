@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.ConfigParser;
@@ -73,10 +74,6 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  */
 public class WebManager {
 	private static final Log log = Log.lookup(WebManager.class);
-
-	/** A session attribute. */
-	private static final String ATTR_SESS = "javax.zkoss.zk.ui.Session";
-		//Naming with javax to be able to shared among portlets
 
 	/** A context attribute for storing an instance of this class. */
 	/*package*/ static final String ATTR_WEB_MANAGER
@@ -192,22 +189,6 @@ public class WebManager {
 	}
 
 	//-- static --//
-	/** Initializes the request-local storage that is used to lift the limitation
-	 * of incapability of inter-portlet communication.
-	 *
-	 * <p>In other words, {@link #getRequestLocal} will look for this storage
-	 * in addition to request's attributes.
-	 */
-/* deprecated (reason: multi-desktop per HTML page is allowed)
-	static void initRequestLocal() {
-		_reqLocal.set(new HashMap());
-	}*/
-	/** Cleans up the request-local storage set by {@link #initRequestLocal}.
-	 */
-/* deprecated
-	static void cleanRequestLocal() {
-		_reqLocal.set(null);
-	}*/
 	/** Returns the value of the specified attribute in the request.
 	 * The implementation shall use this method instead of request.getAttribute,
 	 * since it resolves the limitation of incapability of inter-portlet
@@ -217,13 +198,6 @@ public class WebManager {
 	 */
 	public static Object getRequestLocal(ServletRequest request, String name) {
 		return request.getAttribute(name);
-/* deprecated
-		final Object o = request.getAttribute(name);
-		if (o != null) return o;
-
-		final Map local = (Map)_reqLocal.get();
-		return local != null ? local.get(name): null;
-*/
 	}
 	/** Sets the value of the specified attribute in the request.
 	 * The implementation shall use this method instead of request.setAttribute,
@@ -235,10 +209,6 @@ public class WebManager {
 	public static
 	void setRequestLocal(ServletRequest request, String name, Object value) {
 		request.setAttribute(name, value);
-/* deprecated
-		final Map local = (Map)_reqLocal.get();
-		if (local != null) local.put(name, value);
-*/
 	}
 
 	/** Register a listener to the specified context such that
@@ -293,7 +263,7 @@ public class WebManager {
 	 */
 	public static final
 	Session getSession(ServletContext ctx, HttpServletRequest request) {
-		return getSession(ctx, request, request.getSession());
+		return getSession(ctx, request.getSession(), request);
 	}
 	/**Returns the current HttpSession  associated with this request or,
 	 * if there is no current session and create is true, returns a new session.
@@ -306,49 +276,28 @@ public class WebManager {
 	Session getSession(ServletContext ctx, HttpServletRequest request,
 	boolean create) {
 		final HttpSession hsess = request.getSession(create);
-		return hsess != null ? getSession(ctx, request, hsess): null;
-	}
-	/*package*/ static final Session newSession(WebApp wapp,
-	HttpSession hsess, Object request) {
-		if (D.ON && log.debugable()) log.debug("Creating a new sess for "+hsess);
-
-		final Session sess = ((WebAppCtrl)wapp).getUiFactory()
-			.newSession(wapp, hsess, request);
-		hsess.setAttribute(ATTR_SESS, sess);
-
-		//Note: we set timeout here, because HttpSession might have been created
-		//by other servlet or filter
-		final Configuration config = wapp.getConfiguration();
-		final int v = config.getSessionMaxInactiveInterval();
-		if (v != 0) sess.setMaxInactiveInterval(v);
-		return sess;
+		return hsess != null ? getSession(ctx, hsess, request): null;
 	}
 	private static final Session getSession(ServletContext ctx,
-	HttpServletRequest request, HttpSession hsess) {
-		final Session sess = getSession(hsess);
+	HttpSession hsess, HttpServletRequest request) {
+		final WebApp wapp = getWebManager(ctx).getWebApp();
+		final Session sess = SessionsCtrl.getSession(wapp, hsess);
 		return sess != null ? sess:
-			newSession(getWebManager(ctx).getWebApp(), hsess, request);
+			SessionsCtrl.newSession(wapp, hsess, request);
 	}
-	/** Returns the session of the specified HTTP session, or null if n/a. */
-	/*package*/ static final Session getSession(HttpSession hsess) {
-		final Session sess =
-			(Session)hsess.getAttribute(ATTR_SESS);
-		if (sess != null && sess.getNativeSession() == null)
-			((SessionCtrl)sess).recover(hsess);
-		return sess;
-	}
+
 	/** Called when a HTTP session listner is notified.
 	 * <p>Once called the session is cleaned. All desktops are dropped.
 	 */
 	/*package*/ static final
 	void onSessionDestroyed(HttpSession hsess) {
-		final Session sess = (Session)getSession(hsess);
+		final WebApp wapp =
+			getWebManager(hsess.getServletContext()).getWebApp();
+		final Session sess = (Session)SessionsCtrl.getSession(wapp, hsess);
 		if (sess != null) {
+			final WebAppCtrl wappc = (WebAppCtrl)wapp;
 			try {
-				final WebApp wapp =
-					getWebManager(hsess.getServletContext()).getWebApp();
-				((WebAppCtrl)wapp)
-					.getDesktopCacheProvider().sessionDestroyed(sess);
+				wappc.getDesktopCacheProvider().sessionDestroyed(sess);
 			} catch (Throwable ex) {
 				log.error("Failed to cleanup session", ex);
 			}
@@ -358,7 +307,7 @@ public class WebManager {
 			} catch (Throwable ex) {
 				log.error("Failed to cleanup session", ex);
 			}
-			hsess.removeAttribute(ATTR_SESS);
+			wappc.getSessionCache().remove(sess);
 		}
 	}
 

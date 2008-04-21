@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.ui.impl.Attributes;
@@ -106,7 +107,7 @@ public class Configuration {
 	/** A set of disabled theme URIs. */
 	private Set _disThemeURIs;
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
-		_failmancls, _idgencls;
+		_failmancls, _idgencls, _sesscachecls;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
@@ -1118,8 +1119,9 @@ public class Configuration {
 		return _failmancls;
 	}
 
-	/** Sets the class that implements {@link IdGenerator}, or null to
-	 * use the default.
+	/** Sets the class that is used to generate UUID/ID of desktop,
+	 * page and components, or null to use the default.
+	 * It must implement {@link IdGenerator}.
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1131,11 +1133,29 @@ public class Configuration {
 		_idgencls = cls;
 	}
 	/** Returns the class that implements {@link IdGenerator},
-	 * or null if default is used.
+	 * or null if the default shall be used.
 	 * @since 2.4.1
 	 */
 	public Class getIdGeneratorClass() {
 		return _idgencls;
+	}
+
+	/** Sets the class that is used to store ZK sessions,
+	 * or null to use the default.
+	 * It must implement {@link SessionCache}.
+	 * @since 3.0.5
+	 */
+	public void setSessionCacheClass(Class cls) {
+		if (cls != null && !SessionCache.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("SessionCache not implemented: "+cls);
+		_sesscachecls = cls;
+	}
+	/** Returns the class that implements {@link SessionCache}, or null
+	 * if the default shall be used.
+	 * @since 3.0.5
+	 */
+	public Class getSessionCacheClass() {
+		return _sesscachecls;
 	}
 
 	/** Specifies the maximal allowed time to process events, in miliseconds.
