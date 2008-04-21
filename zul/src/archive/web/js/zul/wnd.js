@@ -56,19 +56,6 @@ zkWnd.cleanup = function (cmp) {
 /** Fixed the content div's height. */
 zkWnd.onVisi = zkWnd.onSize = zkWnd._fixHgh = function (cmp) {
 	var hgh = cmp.style.height;
-	var cave = $e(cmp.id + "!cave");
-	
-	// But #1895804 if the child is a borderlayout component, we don't need to recompute the height. 
-	if(cave && cave.firstChild) {
-		var el = cave.firstChild;
-		while (el && el.nodeType != 1) {
-			el = el.nextSibling;
-		}
-		if (el && $type(el) == "BorderLayout") {
-			cave.style.height = "100%";
-			return;
-		}
-	}
 	if (hgh && hgh != "auto") {
 		var n = $e(cmp.id + "!cave");
 		if (n) {
