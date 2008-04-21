@@ -449,7 +449,7 @@ zk.position = function (el, ref, type) {
  * @since 3.0.3
  */
 zk.getVflexHeight = function (el) {
-	hgh = el.parentNode.clientHeight;
+	var hgh = el.parentNode.clientHeight;
 	if (zk.ie6Only) { //IE6's clientHeight is wrong
 		var ref = el.parentNode;
 		var h = ref.style.height;
