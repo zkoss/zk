@@ -80,12 +80,25 @@ public class Rows extends XulElement {
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Row))
 			throw new UiException("Unsupported child for rows: "+child);
-		return super.insertBefore(child, insertBefore);
+
+		if (super.insertBefore(child, insertBefore)) {
+			checkInvalidateForMoved(child);
+			return true;
+		}
+		return false;
 	}
 	public boolean removeChild(Component child) {
-		//First, invalidate if child in active page and not last page
+		if (child.getParent() == this)
+			checkInvalidateForMoved(child);
+		return super.removeChild(child);
+	}
+	/** Checks whether to invalidate, when a child has been added or 
+	 * or will be removed.
+	 */
+	private void checkInvalidateForMoved(Component child) {
+		//Invalidate if child in active page and not last page
 		final Grid grid = getGrid();
-		if (grid != null && grid.inPagingMold() && child.getParent() == this) {
+		if (grid != null && grid.inPagingMold()) {
 			int actpg = grid.getActivePage();
 			if (actpg < grid.getPageCount() - 1) {
 				int pgsz = grid.getPageSize();
@@ -95,12 +108,11 @@ public class Rows extends XulElement {
 					--pgsz >= 0 && it.hasNext();) {
 						if (it.next() == child) { //in the active page
 							invalidate();
-							break;
+							return;
 						}
 					}
 			}
 		}
-		return super.removeChild(child);
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
