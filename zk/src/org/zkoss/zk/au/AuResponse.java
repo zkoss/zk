@@ -21,8 +21,11 @@ package org.zkoss.zk.au;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.zkoss.lang.Objects;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.util.DeferredValue;
 
 /**
  * A response sent from the server to the client via
@@ -39,7 +42,10 @@ import org.zkoss.zk.ui.Page;
 public class AuResponse {
 	protected String _cmd;
 	private final Object _depends;
-	protected String[] _data;
+	/** Either String or DeferredValue. */
+	protected Object[] _data;
+	/** Data that has been evaluated. */
+	private String[] _evdata;
 
 	/** Constructs a component-independent response.
 	 */
@@ -76,13 +82,9 @@ public class AuResponse {
 	/** Constructs a response with multiple data.
 	 */
 	protected AuResponse(String cmd, Component depends, String[] data) {
-		if (cmd == null || cmd.length() == 0)
-			throw new IllegalArgumentException("cmd");
-		_cmd = cmd;
-		_depends = depends;
-		_data = data;
+		this(cmd, depends, (Object[])data);
 	}
-	/** Constructs a response with multiple data.
+	/** Constructs a response with single data.
 	 */
 	protected AuResponse(String cmd, Page depends, String data) {
 		this(cmd, depends,  data != null ? new String[] {data}: null);
@@ -90,11 +92,72 @@ public class AuResponse {
 	/** Constructs a response with multiple data.
 	 */
 	protected AuResponse(String cmd, Page depends, String[] data) {
+		this(cmd, depends, (Object[])data);
+	}
+
+	/** Constructs a component-independent deferred response.
+	 * @since 3.0.5
+	 */
+	protected AuResponse(String cmd, DeferredValue data) {
+		this(cmd, (Component)null, data);
+	}
+	/** Constructs a component-independent response.
+	 * @since 3.0.5
+	 */
+	protected AuResponse(String cmd, Object[] data) {
+		this(cmd, (Component)null, data);
+	}
+	/** Constructs a response with one or zero deferred data.
+	 * @since 3.0.5
+	 */
+	protected AuResponse(String cmd, Component depends, DeferredValue data) {
+		this(cmd, depends, data != null ? new DeferredValue[] {data}: null);
+	}
+	/** Constructs a response with multiple data.
+	 * @param data an array of data (null to ignore).
+	 * Each element must be an instance of String, {@link DeferredValue}
+	 * or null.
+	 * @exception IllegalArgumentException if an element of data
+	 * is neither String nor DeferredValue.
+	 * @since 3.0.5
+	 */
+	protected AuResponse(String cmd, Component depends, Object[] data) {
 		if (cmd == null || cmd.length() == 0)
 			throw new IllegalArgumentException("cmd");
+		checkData(data);
 		_cmd = cmd;
 		_depends = depends;
 		_data = data;
+	}
+	/** Constructs a response with single deferred data.
+	 * @since 3.0.5
+	 */
+	protected AuResponse(String cmd, Page depends, DeferredValue data) {
+		this(cmd, depends,  data != null ? new DeferredValue[] {data}: null);
+	}
+	/** Constructs a response with multiple data.
+	 * @param data an array of data (null to ignore).
+	 * Each element must be an instance of String, {@link DeferredValue}
+	 * or null.
+	 * @exception IllegalArgumentException if an element of data
+	 * is neither String nor DeferredValue.
+	 * @since 3.0.5
+	 */
+	protected AuResponse(String cmd, Page depends, Object[] data) {
+		if (cmd == null || cmd.length() == 0)
+			throw new IllegalArgumentException("cmd");
+		checkData(data);
+		_cmd = cmd;
+		_depends = depends;
+		_data = data;
+	}
+	private static void checkData(Object[] data) {
+		if (data != null && !(data instanceof String[])
+		&& !(data instanceof DeferredValue[]))
+			for (int j = data.length; --j >= 0;)
+				if (data[j] != null && !(data[j] instanceof String)
+				&& !(data[j] instanceof DeferredValue))
+					throw new IllegalArgumentException("Data "+j+" cannot be "+data[j].getClass());
 	}
 
 	/** Returns the command of this response (never null).
@@ -102,9 +165,35 @@ public class AuResponse {
 	public String getCommand() {
 		return _cmd;
 	}
-	/** Returns the associated data of this response (might be null).
+	/** Returns the evaluated result of the associated data of
+	 * this response (might be null).
+	 * <p>Note: when this method is called, {@link DeferredValue}
+	 * will be evaluated. Thus, don't call it until the rendering phase.
+	 * If you want to access it other than the render phase,
+	 * use {@link #getRawData} instead.
+	 * <p>Note: it is a readonly array. Don't change its value.
+	 * @see #getRawData
 	 */
 	public String[] getData() {
+		if (_data == null || (_data instanceof String[]))
+			return (String[])_data;
+
+		if (_evdata == null) {
+			_evdata = new String[_data.length];
+			for (int j = 0; j < _data.length; ++j) {
+				final Object d = _data[j];
+				_evdata[j] = d instanceof DeferredValue ?
+					((DeferredValue)d).getValue(): (String)d;
+			}
+		}
+		return _evdata;
+	}
+	/** Returns the associated data of this response in the original
+	 * format (might be null).
+	 * <p>Note: it is a readonly array. Don't change its value.
+	 * @since 3.0.5
+	 */
+	public Object[] getRawData() {
 		return _data;
 	}
 
@@ -138,7 +227,8 @@ public class AuResponse {
 		}
 		return sb.append(']').toString();
 	}
-	private static String trimOutput(String s) {
+	private static String trimOutput(Object data) {
+		String s = Objects.toString(data);
 		if (s == null) return null;
 		s = s.trim();
 		return s.length() <= 36 ?  s: s.substring(0, 36) + "...";
