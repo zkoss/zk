@@ -25,7 +25,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<listheader label="Head 3" align="right"/>
 		</listhead>
 	</listbox>
-	<button label="add 5 children" onClick="add(5)"/>
+	<button label="add 5 children" onClick="add(-1, 5)"/>
+	<button label="add top" onClick="add(0, 1)"/>
 	<button label="Change the first label" onClick="changeLabel(0)"/>
 	<button label="Change the last label" onClick="changeLabel(-1)"/>
 	<button label="Remove selected" onClick="rmsel()"/>
@@ -33,14 +34,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<button label="Remove last" onClick="remove(-1)"/>
 	<button label="redraw" onClick="list.invalidate()"/>
 	<zscript><![CDATA[
-	void add(int cnt) {
+	void add(int ofs, int cnt) {
 		for (int j = 0; ++j <= cnt;) {
 			Listitem li = new Listitem();
 			String prefix = "Item " + (list.getItemCount() + 1);
 			new Listcell(prefix + "-L").setParent(li);
 			new Listcell(prefix + "-C").setParent(li);
 			new Listcell(prefix + "-R").setParent(li);
-			li.setParent(list);
+			if (ofs < 0) li.setParent(list);
+			else list.getItems().add(ofs, li);
 		}
 	}
 	void changeLabel(int j) {
