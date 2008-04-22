@@ -59,16 +59,16 @@ zkMenu.onout = function (evt) {
 	if (!evt) evt = window.event;
 	zkMenu._onout($outer(Event.element(evt)));
 };
-zkMenu._onout = function (cmp) {
+zkMenu._onout = function (cmp, noAutoClose) {
 	zk.rmClass(cmp, "seld");
 
-	if (zkMenu._pop.getFloatIds().length == 0) return; //nothing to do
-
-	var menubar = $parentByType(cmp, "Menubar");
-	if (menubar && getZKAttr(menubar, "autodrop") == "true") {
-		zkMenu._shallClose = true;
-		setTimeout("if (zkMenu._shallClose) zkau.closeFloatsOf('"+menubar.id+"');", 500);
-			//Bug 1852304: we use closeFloatsOf instead of closeFloats
+	if (!noAutoClose && zkMenu._pop.getFloatIds().length != 0) { //nothing to do
+		var menubar = $parentByType(cmp, "Menubar");
+		if (menubar && getZKAttr(menubar, "autodrop") == "true") {
+			zkMenu._shallClose = true;
+			setTimeout("if (zkMenu._shallClose) zkau.closeFloatsOf('"+menubar.id+"');", 500);
+				//Bug 1852304: we use closeFloatsOf instead of closeFloats
+		}
 	}
 };
 zkMenu.onclick = function (evt) {
@@ -200,7 +200,9 @@ zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
 	var el = Event.element(evt);
 	var cmp = $parentByType(el, "Menuit");
-	zkMenu._onout(cmp); //Bug 1822720
+	zkMenu._onout(cmp, true); //Bug 1822720
+		//Bug 1852304: theorectically, popup shall not appear since 'owner'
+		//is hidden, but owner is menu -- so popup still show
 
 	var anc = $e(cmp.id + "!a");
 	if ("javascript:;" == anc.href) {
