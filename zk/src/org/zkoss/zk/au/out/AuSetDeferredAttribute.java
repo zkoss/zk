@@ -19,44 +19,16 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.util.DeferredValue;
 
 /**
- * A response to set the deferred attribute of the specified component
- * at the client.
- * <p>data[0]: the uuid of the component<br/>
- * data[1]: the attribute name<br/>
- * data[2]: the attribute value
+ * @deprecated As of release 3.0.5, replace with {@link AuSetAttribute}.
  *
  * @author tomyeh
  * @since 3.0.1
  */
-public class AuSetDeferredAttribute extends AuResponse {
-	private DeferredValue _val;
-
+public class AuSetDeferredAttribute extends AuSetAttribute {
 	public AuSetDeferredAttribute(Component comp, String attr, DeferredValue val) {
-		super("setAttr", comp, new String[] {comp.getUuid(), attr, null});
-		if (val == null)
-			throw new IllegalArgumentException();
-		_val = val;
-	}
-	public String getCommand() {
-		eval();
-		return super.getCommand();
-	}
-	public String[] getData() {
-		eval();
-		return super.getData();
-	}
-	private void eval() {
-		if (_val != null) {
-			_data[2] = _val.getValue();
-			if (_data[2] == null) {
-				_cmd = "rmAttr";
-				_data = new String[] {_data[0], _data[1]};
-			}
-			_val = null;
-		}
+		super(comp, attr, val);
 	}
 }

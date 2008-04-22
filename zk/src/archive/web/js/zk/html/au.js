@@ -2162,6 +2162,10 @@ zkau.cmd1 = {
 			}
 			return; //done
 		}
+		if (dt2 == null) {
+			zkau.cmd1.rmAttr(uuid, cmp, dt1);
+			return;
+		}
 
 		var done = false;
 		if ("z.drag" == dt1) {

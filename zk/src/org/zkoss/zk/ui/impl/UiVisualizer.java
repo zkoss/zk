@@ -884,7 +884,7 @@ import org.zkoss.zk.au.out.*;
 		private TimedValue(int timed, Component comp, String name, DeferredValue value) {
 			_timed = timed;
 			if (value != null)
-				_response = new AuSetDeferredAttribute(comp, name, value);
+				_response = new AuSetAttribute(comp, name, value);
 			else
 				_response = new AuRemoveAttribute(comp, name);
 		}

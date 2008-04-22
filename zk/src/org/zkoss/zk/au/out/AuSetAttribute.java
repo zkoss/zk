@@ -20,12 +20,15 @@ package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.util.DeferredValue;
 
 /**
  * A response to set the attribute of the specified component at the client.
  * <p>data[0]: the uuid of the component<br/>
  * data[1]: the attribute name<br/>
  * data[2]: the attribute value
+ *
+ * <p>If val is null, it is the same as {@link AuRemoveAttribute}.
  * 
  * @author tomyeh
  * @since 3.0.0
@@ -33,5 +36,8 @@ import org.zkoss.zk.au.AuResponse;
 public class AuSetAttribute extends AuResponse {
 	public AuSetAttribute(Component comp, String attr, String val) {
 		super("setAttr", comp, new String[] {comp.getUuid(), attr, val});
+	}
+	public AuSetAttribute(Component comp, String attr, DeferredValue val) {
+		super("setAttr", comp, new Object[] {comp.getUuid(), attr, val});
 	}
 }
