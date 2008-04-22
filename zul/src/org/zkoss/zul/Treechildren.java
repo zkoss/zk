@@ -286,6 +286,8 @@ public class Treechildren extends XulElement implements Pageable {
 			throw new UiException("Unsupported child for treechildren: "+child);
 
 		if (super.insertBefore(child, insertBefore)) {
+			checkInvalidateForMoved(child);
+
 			final int sz = getChildren().size();
 			if (sz == 1) { //the first child been added
 				Executions.getCurrent().setAttribute(ATTR_NO_CHILD, Boolean.TRUE);
@@ -300,23 +302,28 @@ public class Treechildren extends XulElement implements Pageable {
 		return false;
 	}
 	public boolean removeChild(Component child) {
-		//First, invalidate if child in active page and not last page
-		if (child.getParent() == this) {
-			int pgsz = getPageSize();
-			int actpg = getActivePage();
-			if (pgsz > 0 && actpg < getPageCount() - 1) {
-				int ofs = actpg * pgsz;
-				if (ofs < getChildren().size()) //just in case
-					for (Iterator it = getChildren().listIterator(ofs);
-					--pgsz >= 0 && it.hasNext();) {
-						if (it.next() == child) { //in the active page
-							invalidate();
-							break;
-						}
-					}
-			}
-		}
+		if (child.getParent() == this)
+			checkInvalidateForMoved(child);
 		return super.removeChild(child);
+	}
+	/** Checks whether to invalidate, when a child has been added or 
+	 * or will be removed.
+	 */
+	private void checkInvalidateForMoved(Component child) {
+		//Invalidate if child in active page and not last page
+		int pgsz = getPageSize();
+		int actpg = getActivePage();
+		if (pgsz > 0 && actpg < getPageCount() - 1) {
+			int ofs = actpg * pgsz;
+			if (ofs < getChildren().size()) //just in case
+				for (Iterator it = getChildren().listIterator(ofs);
+				--pgsz >= 0 && it.hasNext();) {
+					if (it.next() == child) { //in the active page
+						invalidate();
+						return;
+					}
+				}
+		}
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);

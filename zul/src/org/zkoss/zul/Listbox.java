@@ -1084,6 +1084,8 @@ public class Listbox extends XulElement {
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
 			if (super.insertBefore(newChild, refChild)) {
+				checkInvalidateForMoved(newChild);
+
 				//Maintain _items
 				final int
 					jto = refChild instanceof Listitem ?
@@ -1210,22 +1212,8 @@ public class Listbox extends XulElement {
 			throw new IllegalStateException("The paging component cannot be removed manually. It is removed automatically when changing the mold");
 				//Feature 1906110: prevent developers from removing it accidently
 
-		//First, invalidate if child in active page and not last page
-		if ((child instanceof Listitem) && inPagingMold() && child.getParent() == this) {
-			int actpg = getActivePage();
-			if (actpg < getPageCount() - 1) {
-				int pgsz = getPageSize();
-				int ofs = actpg * pgsz;
-				if (ofs < getItems().size()) //just in case
-					for (Iterator it = getItems().listIterator(ofs);
-					--pgsz >= 0 && it.hasNext();) {
-						if (it.next() == child) { //in the active page
-							invalidate();
-							break;
-						}
-					}
-			}
-		}
+		if (child instanceof Listitem && child.getParent() == this)
+			checkInvalidateForMoved(child);
 
 		if (!super.removeChild(child))
 			return false;
@@ -1264,6 +1252,27 @@ public class Listbox extends XulElement {
 		}
 		invalidate();
 		return true;
+	}
+	/** Checks whether to invalidate, when a child has been added or 
+	 * or will be removed.
+	 */
+	private void checkInvalidateForMoved(Component child) {
+		//Invalidate if child in active page and not last page
+		if (inPagingMold()) {
+			int actpg = getActivePage();
+			if (actpg < getPageCount() - 1) {
+				int pgsz = getPageSize();
+				int ofs = actpg * pgsz;
+				if (ofs < getItems().size()) //just in case
+					for (Iterator it = getItems().listIterator(ofs);
+					--pgsz >= 0 && it.hasNext();) {
+						if (it.next() == child) { //in the active page
+							invalidate();
+							return;
+						}
+					}
+			}
+		}
 	}
 	/** Fix the selected index, _jsel, assuming there are no selected one
 	 * before (and excludes) j-the item.

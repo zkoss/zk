@@ -298,31 +298,19 @@ import org.zkoss.zk.au.out.*;
 		}
 	}
 
-	/** Process {@link Cropper}.
-	 *
-	 * <p>Note: it is too late to handle the moved/removed components here,
-	 * since we don't know their old parent now!
-	 * Rather, we handle it in {@link #addMoved}.
-	 *
-	 * @return whether any new invalidated is added
+	/** Process {@link Cropper} by removing cropped invalidates and so on.
 	 */
-	private boolean doCrop() {
-		final Map cropping = new HashMap();
-		boolean invAdded = crop(_attached, cropping, true, false);
-		invAdded = crop(_smartUpdated.keySet(), cropping, false, false) || invAdded;
+	private void doCrop() {
+		final Map croppingInfos = new HashMap();
+		crop(_attached, croppingInfos, false);
+		crop(_smartUpdated.keySet(), croppingInfos, false);
 		if (_responses != null)
-			invAdded = crop(_responses.keySet(), cropping, false, true) || invAdded;
-		invAdded = crop(_invalidated, cropping, false, false) || invAdded;
-			//crop invalidate as the last step since new invalidated might be added
-		return invAdded;
+			crop(_responses.keySet(), croppingInfos, true);
+		crop(_invalidated, croppingInfos, false);
 	}
 	/** Crop attached and moved.
-	 *
-	 * @return whether any new invalidated is added
 	 */
-	private boolean crop(Set coll, Map cropping, boolean bAttached,
-	boolean bResponse) {
-		Set newInvalid = null;
+	private void crop(Set coll, Map croppingInfos, boolean bResponse) {
 		for (Iterator it = coll.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (!(o instanceof Component))
@@ -336,43 +324,26 @@ import org.zkoss.zk.au.out.*;
 			}
 
 			for (Component p, c = comp; (p = c.getParent()) != null; c = p) {
-				final Set avail = getAvailableAtClient(p, cropping);
-				if (avail != null) {
-					if (bAttached)  {
-						if (avail.contains(c)) {
-							if (c != comp)
-								continue; //not direct child, do as if not cropper
-
-							//don't add to _invalidate directly since coll might
-							//be _invalidate
-							if (newInvalid == null)
-								newInvalid = new HashSet();
-							newInvalid.add(p);
-						}
-						it.remove();
-						break;
-					} else if (!avail.contains(c)) {
-						it.remove();
-						break;
-					}
+				final Set avail = getAvailableAtClient(p, croppingInfos);
+				if (avail != null && !avail.contains(c)) {
+					it.remove();
+					break;
 				}
 			}
 		}
-
-		return newInvalid != null && _invalidated.addAll(newInvalid);
 	}
-	private static Set getAvailableAtClient(Component comp, Map cropping) {
+	private static Set getAvailableAtClient(Component comp, Map croppingInfos) {
 		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
 		if (xc instanceof Cropper) {
 			//we don't need to check isCropper first since its component's job
 			//to ensure the consistency
 
-			Set set = (Set)cropping.get(comp);
+			Set set = (Set)croppingInfos.get(comp);
 			if (set != null)
 				return set != Collections.EMPTY_SET ? set: null;
 
 			set = ((Cropper)xc).getAvailableAtClient();
-			cropping.put(comp, set != null ? set: Collections.EMPTY_SET);
+			croppingInfos.put(comp, set != null ? set: Collections.EMPTY_SET);
 			return set;
 		}
 		return null;
@@ -511,11 +482,7 @@ import org.zkoss.zk.au.out.*;
 			removeCrossRedundant();
 
 			//1c. process Cropper
-			if (doCrop()) {
-				//optimize it again since new invalidated is added
-				removeRedundant(_invalidated);
-				removeCrossRedundant();
-			}
+			doCrop();
 
 			//1d. prepare removed pages and optimize for invalidate or removed pages
 			checkPageRemoved(removed); //maintain _pgRemoved for pages being removed
