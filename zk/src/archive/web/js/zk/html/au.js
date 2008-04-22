@@ -1582,7 +1582,7 @@ zkau.closeFloatsOf = function () {
 	return zkau._closeFloats("closeFloatsOf", zkau._shallCloseOf, arguments);
 };
 zkau._shallCloseOf = function (n, ancestors) {
-	return zk.isAncestorX1(ancestors, n, true, true);
+	return zk.isAncestorX1(ancestors, n, true);
 }
 zkau._closeFloats = function (method, shallClose, ancestors) {
 	var closed;
