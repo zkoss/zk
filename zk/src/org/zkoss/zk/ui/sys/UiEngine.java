@@ -79,10 +79,10 @@ public interface UiEngine {
 	public void popOwner();
 
 	/** Returns if this component needs to be redrawn.
-	 * More precisely, return true if {@link #addInvalidate(Component)} is ever called.
 	 * <p>Note:
 	 * <ol>
-	 * <li>It always returns false if it doesn't belong to any page.</li>
+	 * <li>It always returns true if the current execution is not an
+	 * asynchroous update.</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
 	 * too, but this method returns false since {@link #addInvalidate(Component)}
 	 * was not called against this component.</li>

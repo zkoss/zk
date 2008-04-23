@@ -159,10 +159,10 @@ import org.zkoss.zk.au.out.*;
 
 	//-- update/redraw --//
 	/** Returns if this component needs to be redrawn.
-	 * More precisely, return true if {@link #addInvalidate(Component)} is ever called.
 	 * <p>Note:
 	 * <ol>
-	 * <li>It always returns false if it doesn't belong to any page.</li>
+	 * <li>It always returns true if the current execution is not an
+	 * asynchroous update.</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
 	 * too, but this method returns false since {@link #addInvalidate(Compnent)}
 	 * was not called against this component.</li>
@@ -170,7 +170,8 @@ import org.zkoss.zk.au.out.*;
 	 * @since 3.0.5
 	 */
 	public boolean isInvalidated(Component comp) {
-		return _invalidated != null && _invalidated.contains(comp);
+		return !_exec.isAsyncUpdate(comp.getPage())
+			|| (_invalidated != null && _invalidated.contains(comp));
 			//No need to check page, recovering... since it won't be
 			//part of _invalidated if so.
 	}

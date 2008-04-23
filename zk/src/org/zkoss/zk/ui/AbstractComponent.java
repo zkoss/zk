@@ -1023,7 +1023,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public boolean isInvalidated() {
-		return _page != null && getThisUiEngine().isInvalidated(this);
+		return _page == null || getThisUiEngine().isInvalidated(this);
 	}
 	public void invalidate() {
 		if (_page != null)
