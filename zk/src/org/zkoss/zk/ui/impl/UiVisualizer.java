@@ -159,12 +159,12 @@ import org.zkoss.zk.au.out.*;
 
 	//-- update/redraw --//
 	/** Returns if this component needs to be redrawn.
-	 * More precisely, return true if {@link #invalidate} is ever called.
+	 * More precisely, return true if {@link #addInvalidate(Component)} is ever called.
 	 * <p>Note:
 	 * <ol>
 	 * <li>It always returns false if it doesn't belong to any page.</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
-	 * too, but this method returns false since {@link #invalidate}
+	 * too, but this method returns false since {@link #addInvalidate(Compnent)}
 	 * was not called against this component.</li>
 	 * </ol>
 	 * @since 3.0.5
