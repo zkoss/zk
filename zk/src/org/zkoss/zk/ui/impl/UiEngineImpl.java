@@ -219,6 +219,9 @@ public class UiEngineImpl implements UiEngine {
 	public void popOwner() {
 		getCurrentVisualizer().popOwner();
 	}
+	public boolean isInvalidated(Component comp) {
+		return getCurrentVisualizer().isInvalidated(comp);
+	}
 	public void addInvalidate(Page page) {
 		if (page == null)
 			throw new IllegalArgumentException();
