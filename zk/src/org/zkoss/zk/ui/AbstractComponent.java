@@ -1022,6 +1022,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return old;
 	}
 
+	public boolean isInvalidated() {
+		return _page != null && getThisUiEngine().isInvalidated(this);
+	}
 	public void invalidate() {
 		if (_page != null)
 			getThisUiEngine().addInvalidate(this);

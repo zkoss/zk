@@ -722,6 +722,18 @@ public interface Component extends java.io.Serializable, Cloneable {
 	String originalEvent, String targetPath, String targetEvent);
 
 	//-- drawing --//
+	/** Returns if this component needs to be redrawn.
+	 * More precisely, return true if {@link #invalidate} is ever called.
+	 * <p>Note:
+	 * <ol>
+	 * <li>It always returns false if it doesn't belong to any page.</li>
+	 * <li>If its parent is invalidated, this component will be redrawn
+	 * too, but this method returns false since {@link #invalidate}
+	 * was not called against this component.</li>
+	 * </ol>
+	 * @since 3.0.5
+	 */
+	public boolean isInvalidated();
 	/** Invalidates this component by setting the dirty flag
 	 * such that it will be redraw the whole content later.
 	 *
