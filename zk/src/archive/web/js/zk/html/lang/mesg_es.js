@@ -43,4 +43,3 @@ mesg.CANCEL="Cancelar";
 mesg.FAILED_TO_LOAD="Fallo al cargar ";
 mesg.FAILED_TO_LOAD_DETAIL="Puede ser a causa de un tráfico erroneo. Podria refrescar de nuevo la página.";
 mesg.CAUSE="Causa: ";
-
