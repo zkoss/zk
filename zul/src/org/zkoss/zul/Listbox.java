@@ -1084,8 +1084,6 @@ public class Listbox extends XulElement {
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
 			if (super.insertBefore(newChild, refChild)) {
-				checkInvalidateForMoved(newChild);
-
 				//Maintain _items
 				final int
 					jto = refChild instanceof Listitem ?
@@ -1129,6 +1127,8 @@ public class Listbox extends XulElement {
 					if (oldjsel != _jsel && !inSelectMold())
 						smartUpdate("z.selId", getSelectedId());
 				}
+
+				afterInsert(newChild);
 				return true;
 			}
 			return false;
@@ -1213,7 +1213,7 @@ public class Listbox extends XulElement {
 				//Feature 1906110: prevent developers from removing it accidently
 
 		if (child instanceof Listitem && child.getParent() == this)
-			checkInvalidateForMoved(child);
+			beforeRemove(child);
 
 		if (!super.removeChild(child))
 			return false;
@@ -1253,25 +1253,39 @@ public class Listbox extends XulElement {
 		invalidate();
 		return true;
 	}
+	/** Callback if a list item has been inserted.
+	 * <p>Note: it won't be called if other kind of child is inserted.
+	 * <p>When this method is called, the index is correct.
+	 * <p>Default: invalidate if it is the paging mold and it affects
+	 * the view of the active page.
+	 * @since 3.0.5
+	 */
+	protected void afterInsert(Component comp) {
+		checkInvalidateForMoved((Listitem)comp);
+	}
+	/** Callback if a list item will be removed (not removed yet).
+	 * Note: it won't be called if other kind of child is removed.
+	 * <p>Default: invalidate if it is the paging mold and it affects
+	 * the view of the active page.
+	 * @since 3.0.5
+	 */
+	protected void beforeRemove(Component comp) {
+		checkInvalidateForMoved((Listitem)comp);
+	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
 	 */
-	private void checkInvalidateForMoved(Component child) {
-		//Invalidate if child in active page and not last page
-		if (inPagingMold()) {
-			int actpg = getActivePage();
-			if (actpg < getPageCount() - 1) {
-				int pgsz = getPageSize();
-				int ofs = actpg * pgsz;
-				if (ofs < getItems().size()) //just in case
-					for (Iterator it = getItems().listIterator(ofs);
-					--pgsz >= 0 && it.hasNext();) {
-						if (it.next() == child) { //in the active page
-							invalidate();
-							return;
-						}
-					}
-			}
+	private void checkInvalidateForMoved(Listitem child) {
+		//No need to invalidate if
+		//1) act == last and child in act
+		//2) act != last and child after act
+		if (inPagingMold() && !isInvalidated()) {
+			final int j = child.getIndex(),
+				pgsz = getPageSize();
+			int n = (getActivePage() + 1) * pgsz;
+			if (j >= n) return; //case 2
+			if (j >= n - pgsz && getItems().size() <= n) return; //case 1
+			invalidate();
 		}
 	}
 	/** Fix the selected index, _jsel, assuming there are no selected one

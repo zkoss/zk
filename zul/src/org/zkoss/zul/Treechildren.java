@@ -21,6 +21,8 @@ package org.zkoss.zul;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.AbstractCollection;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -285,7 +287,7 @@ public class Treechildren extends XulElement implements Pageable {
 			throw new UiException("Unsupported child for treechildren: "+child);
 
 		if (super.insertBefore(child, insertBefore)) {
-			checkInvalidateForMoved(child);
+			afterInsert(child);
 
 			final int sz = getChildren().size();
 			if (sz == 1) { //the first child been added
@@ -302,26 +304,50 @@ public class Treechildren extends XulElement implements Pageable {
 	}
 	public boolean removeChild(Component child) {
 		if (child.getParent() == this)
-			checkInvalidateForMoved(child);
+			beforeRemove(child);
 		return super.removeChild(child);
+	}
+	/** Callback if a child has been inserted.
+	 * <p>Default: invalidate if it is the paging mold and it affects
+	 * the view of the active page.
+	 * @since 3.0.5
+	 */
+	protected void afterInsert(Component comp) {
+		checkInvalidateForMoved(comp);
+	}
+	/** Callback if a child will be removed (not removed yet).
+	 * <p>Default: invalidate if it is the paging mold and it affects
+	 * the view of the active page.
+	 * @since 3.0.5
+	 */
+	protected void beforeRemove(Component comp) {
+		checkInvalidateForMoved(comp);
 	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
 	 */
 	private void checkInvalidateForMoved(Component child) {
-		//Invalidate if child in active page and not last page
-		int pgsz = getPageSize();
-		int actpg = getActivePage();
-		if (pgsz > 0 && actpg < getPageCount() - 1) {
-			int ofs = actpg * pgsz;
-			if (ofs < getChildren().size()) //just in case
-				for (Iterator it = getChildren().listIterator(ofs);
-				--pgsz >= 0 && it.hasNext();) {
-					if (it.next() == child) { //in the active page
-						invalidate();
-						return;
-					}
-				}
+		//No need to invalidate if
+		//1) act == last and child in act
+		//2) act != last and child after act
+		if (!isInvalidated()) {
+			int pgsz = getPageSize();
+			if (pgsz > 0) {
+				List children = getChildren();
+				int sz = children.size();
+				int n = sz - (getActivePage() + 1) * pgsz;
+				if (n <= 0) //must be last page
+					n += pgsz; //check in-act (otherwise, check after-act)
+				else if (n > 50)
+					n = 50; //check at most 50 items (for better perf)
+
+				for (ListIterator it = children.listIterator(sz);
+				--n >= 0 && it.hasPrevious();)
+					if (it.previous() == child)
+						return; //no need to invalidate
+
+				invalidate();
+			}
 		}
 	}
 	public void onChildRemoved(Component child) {

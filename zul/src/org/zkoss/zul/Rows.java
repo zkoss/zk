@@ -20,7 +20,9 @@ package org.zkoss.zul;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -82,36 +84,56 @@ public class Rows extends XulElement {
 			throw new UiException("Unsupported child for rows: "+child);
 
 		if (super.insertBefore(child, insertBefore)) {
-			checkInvalidateForMoved(child);
+			afterInsert(child);
 			return true;
 		}
 		return false;
 	}
 	public boolean removeChild(Component child) {
 		if (child.getParent() == this)
-			checkInvalidateForMoved(child);
+			beforeRemove(child);
 		return super.removeChild(child);
+	}
+	/** Callback if a child has been inserted.
+	 * <p>Default: invalidate if it is the paging mold and it affects
+	 * the view of the active page.
+	 * @since 3.0.5
+	 */
+	protected void afterInsert(Component comp) {
+		checkInvalidateForMoved(comp);
+	}
+	/** Callback if a child will be removed (not removed yet).
+	 * <p>Default: invalidate if it is the paging mold and it affects
+	 * the view of the active page.
+	 * @since 3.0.5
+	 */
+	protected void beforeRemove(Component comp) {
+		checkInvalidateForMoved(comp);
 	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
 	 */
 	private void checkInvalidateForMoved(Component child) {
-		//Invalidate if child in active page and not last page
+		//No need to invalidate if
+		//1) act == last and child in act
+		//2) act != last and child after act
 		final Grid grid = getGrid();
-		if (grid != null && grid.inPagingMold()) {
-			int actpg = grid.getActivePage();
-			if (actpg < grid.getPageCount() - 1) {
-				int pgsz = grid.getPageSize();
-				int ofs = actpg * pgsz;
-				if (ofs < getChildren().size()) //just in case
-					for (Iterator it = getChildren().listIterator(ofs);
-					--pgsz >= 0 && it.hasNext();) {
-						if (it.next() == child) { //in the active page
-							invalidate();
-							return;
-						}
-					}
-			}
+		if (grid != null && grid.inPagingMold() && !isInvalidated()) {
+			final List children = getChildren();
+			final int sz = children.size(),
+				pgsz = grid.getPageSize();
+			int n = sz - (grid.getActivePage() + 1) * pgsz;
+			if (n <= 0) //must be last page
+				n += pgsz; //check in-act (otherwise, check after-act)
+			else if (n > 50)
+				n = 50; //check at most 50 items (for better perf)
+
+			for (ListIterator it = children.listIterator(sz);
+			--n >= 0 && it.hasPrevious();)
+				if (it.previous() == child)
+					return; //no need to invalidate
+
+			invalidate();
 		}
 	}
 	public void onChildAdded(Component child) {
