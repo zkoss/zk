@@ -108,6 +108,23 @@ if (zk.ie) {
 
 //////
 // More zk utilities (defined also in boot.js) //
+/** Override a method of the specified object.
+ *
+ * Example:
+zk.override(zkau.cmd1, "outer", mine, function (uuid, cmp, html) {
+	mine.outer(uuid, cmp, html);
+});
+ *
+ * @param obj the object containing the method
+ * @param fn the method name
+ * @param supobj the object to have the super method (i.e., previous method)
+ * @since 3.0.5
+ */
+zk.override = function (obj, fn, supobj, func) {
+	supobj[fn] = obj[fn];
+	obj[fn] = func;
+};
+
 /**
  * Fixs the layout position of the element when the style of element is "overflow:hidden" or
  * "position:relative" in IE. Because, sometimes the layout position of the element
