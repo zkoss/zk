@@ -246,7 +246,8 @@ zkSpinner._increase=function (cmp,is_add){
 };
 
 zkSpinner._clearValue = function(cmp){
-	$real(cmp).value="";
+	var real = $real(cmp);
+	real.value = real.defaultValue = "";
 	return true;
 };
 

@@ -392,7 +392,8 @@ zkTmbox._clearTime = function(cmp){
 	cmp.lastTimeStr = "";
 	cmp.lastTime.setHours(0);
 	cmp.lastTime.setMinutes(0);
-	$real(cmp).value="";
+	var real = $real(cmp);
+	real.value = real.defaultValue = "";
 	return true;
 };
 zkTmbox.clearTime = function(cmp){
