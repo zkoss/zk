@@ -6,7 +6,7 @@ ZK 3.0.5 Freshly
   1944512: HtmlBasedComponent supports setFocus(boolean)
   1947534: A way to specify the session cache
   1948462: AuResponse supports DeferredValue
-  1949336: Component supports isValidated
+  1949336: Component supports isInvalidated
 
 * Bugs
   1929139: [IE6/IE7 only] Incomplete requests being dropped
