@@ -723,10 +723,12 @@ public interface Component extends java.io.Serializable, Cloneable {
 
 	//-- drawing --//
 	/** Returns if this component needs to be redrawn.
-	 * More precisely, return true if {@link #invalidate} is ever called.
 	 * <p>Note:
 	 * <ol>
-	 * <li>It always returns false if it doesn't belong to any page.</li>
+	 * <li>It always returns true if it doesn't belong to any page
+	 * (since redraw is required if it is attached to a page later).</li>
+	 * <li>It always returns true if the current execution is not an
+	 * asynchroous update (so redrawn is always required).</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
 	 * too, but this method returns false since {@link #invalidate}
 	 * was not called against this component.</li>
