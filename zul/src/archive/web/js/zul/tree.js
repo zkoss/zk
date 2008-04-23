@@ -509,8 +509,7 @@ _zktrx.cleanup = function (trow, attr) {
 	}
 };
 
-_zktrx.au.outer = zkau.cmd1.outer;
-zkau.cmd1.outer = function (uuid, cmp, html) {
+zk.override(zkau.cmd1, "outer", _zktrx.au, function (uuid, cmp, html) {
 	if (!cmp) {
 		var dom = _zktrx.dom[uuid];
 		if (dom) {
@@ -538,30 +537,28 @@ zkau.cmd1.outer = function (uuid, cmp, html) {
 	}
 	if (cmp && html.trim()) //if treechildren has no children at all
 		_zktrx.au.outer(uuid, cmp, html);
-};
+});
 
-_zktrx.au.addAft = zkau.cmd1.addAft;
-zkau.cmd1.addAft = function (uuid, cmp, html) {
+zk.override(zkau.cmd1, "addAft", _zktrx.au, function (uuid, cmp, html) {
 	if (!cmp) {
 		cmp = $e(_zktrx.sib[uuid]);
 		if (cmp) cmp = zkTrow._lastKid(cmp);
 	}
 	_zktrx.au.addAft(uuid, cmp, html);
-};
-_zktrx.au.addBfr = zkau.cmd1.addBfr;
-zkau.cmd1.addBfr = function (uuid, cmp, html) {
+});
+
+zk.override(zkau.cmd1, "addBfr", _zktrx.au, function (uuid, cmp, html) {
 	_zktrx.au.addBfr(uuid, cmp ? cmp: $e(_zktrx.sib[uuid]), html);
-};
-_zktrx.au.addChd = zkau.cmd1.addChd;
-zkau.cmd1.addChd = function (uuid, cmp, html) {
+});
+
+zk.override(zkau.cmd1, "addChd",  _zktrx.au, function (uuid, cmp, html) {
 	if (cmp)
 		_zktrx.au.addChd(uuid, cmp, html);
 	else
 		_zktrx.au.addAft(uuid, $e(_zktrx.sib[uuid]), html);
-};
+});
 
-_zktrx.au.rm = zkau.cmd1.rm;
-zkau.cmd1.rm = function (uuid, cmp) {
+zk.override(zkau.cmd1, "rm",  _zktrx.au, function (uuid, cmp) {
 	var dom = _zktrx.dom[uuid];
 	if (dom) {
 		for (var j = dom.length; --j >= 0;) {
@@ -574,7 +571,7 @@ zkau.cmd1.rm = function (uuid, cmp) {
 		return;
 	}
 	_zktrx.au.rm(uuid, cmp);
-};
+});
 _zktrx._rmKids = function (trow) {
 	var tchsib = trow ? getZKAttr(trow, "tchsib"): null;
 	if (tchsib)
