@@ -42,6 +42,7 @@ ZK 3.0.5 Freshly
   1943594: onblur shall not be sent if click on combobox's dropdown
   1896267: zul.xsd invalid
   1941947: Cannot find associated CollectionItem error
+  1948963: Timebox validation
 
 * Upgrade Notes
   + Session's getNativeSession() returns an instance of PortletSession
