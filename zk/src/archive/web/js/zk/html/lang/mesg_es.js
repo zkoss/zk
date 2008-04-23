@@ -25,21 +25,22 @@ mesg.TRY_AGAIN = "Inténtalo de nuevo?";
 mesg.UNSUPPORTED_BROWSER = "Explorador (Browser) no compatible: ";
 mesg.ILLEGAL_RESPONSE = "Respuesta no valida por parte del servidor. Por favor actualice la pagina (reload) e intente de nuevo.\n";
 mesg.FAILED_TO_PROCESS = "Fallo al procesar ";
-mesg.UUID_REQUIRED = "UUID es requerido ";
-mesg.INVALID_STRUCTURE = "Estructura invalida: ";
-mesg.COMP_OR_UUID_REQUIRED = "Componente o su UUID es requerido ";
+mesg.UUID_REQUIRED = "Se requiere UUID";
+mesg.INVALID_STRUCTURE = "Estructura inválida: ";
+mesg.COMP_OR_UUID_REQUIRED = "Se requiere Componente o su UUID ";
 mesg.NUMBER_REQUIRED = "Debe especificar un numero, en lugar de ";
 mesg.INTEGER_REQUIRED = "Debe especificar un numero entero, en lugar de ";
-mesg.EMPTY_NOT_ALLOWED = "Vacio o espacios en blanco no son permitidos.\n Debe especificar un valor diferente ";
+mesg.EMPTY_NOT_ALLOWED = "No se permite vacio o espacios en blanco.\n Debe especificar un valor diferente ";
 mesg.GOTO_ERROR_FIELD = "Ir al campo que contiene el error ";
 mesg.PLEASE_WAIT = "Procesando...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
+mesg.VALUE_NOT_MATCHED = "Debe especificar uno de los valores de la lista desplegable.";
 
 mesg.FILE_SIZE = "Tamaño del archivo: ";
 mesg.KBYTES = "KB";
 
 mesg.CANCEL="Cancelar";
 
-mesg.FAILED_TO_LOAD="Failed to load ";
-mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";
-mesg.CAUSE="Cause: ";
+mesg.FAILED_TO_LOAD="Fallo al cargar ";
+mesg.FAILED_TO_LOAD_DETAIL="Puede ser a causa de un tráfico erroneo. Podria refrescar de nuevo la página.";
+mesg.CAUSE="Causa: ";
+
