@@ -76,13 +76,13 @@ import org.zkoss.zk.au.out.*;
 	/** A set of removed pages. */
 	private Set _pgRemoved;
 	/** A set of invalidated components  (Component). */
-	private final Set _invalidated = new LinkedHashSet(37);
+	private final Set _invalidated = new LinkedHashSet(32);
 	/** A map of smart updates (Component comp, Map(String name, TimedValue(comp,name,value))). */
-	private final Map _smartUpdated = new HashMap(53); //we use TimedValue for better sequence control
+	private final Map _smartUpdated = new HashMap(64); //we use TimedValue for better sequence control
 	/** A set of new attached components. */
-	private final Set _attached = new LinkedHashSet(37);
+	private final Set _attached = new LinkedHashSet(32);
 	/** A set of moved components (parent changed or page changed). */
-	private final Set _moved = new LinkedHashSet(37);
+	private final Set _moved = new LinkedHashSet(32);
 	/** A map of components whose UUID is changed (Component, UUID). */
 	private Map _idChgd;
 	/** A map of responses being added(Component/Page, Map(key, List/TimedValue(AuResponse))). */
@@ -171,7 +171,9 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public boolean isInvalidated(Component comp) {
 		return !_exec.isAsyncUpdate(comp.getPage())
-			|| (_invalidated != null && _invalidated.contains(comp));
+			|| _invalidated.contains(comp)
+			|| _attached.contains(comp)
+			|| _moved.contains(comp);
 			//No need to check page, recovering... since it won't be
 			//part of _invalidated if so.
 	}
