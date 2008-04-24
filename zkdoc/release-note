@@ -43,7 +43,8 @@ ZK 3.0.5 Freshly
   1896267: zul.xsd invalid
   1941947: Cannot find associated CollectionItem error
   1948963: Timebox validation
-
+  1950313: F - 1764967 bug
+  
 * Upgrade Notes
   + Session's getNativeSession() returns an instance of PortletSession
     (rather than HttpSession), if ZK porlet is used.

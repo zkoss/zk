@@ -29,6 +29,7 @@ import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.HierachicalAware;
 
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Listbox;
@@ -606,14 +607,14 @@ public class DataBinder {
 			name = Listitem.class.getName();
 		} else if (comp instanceof Grid) {
 			name = Row.class.getName();
-		} else if (comp instanceof Comboitem) {
+		} else if (comp instanceof Combobox) { //bug#1950313 F - 1764967 bug
 			name = Comboitem.class.getName();
 		}
 		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
 		if(decorName != null){
 			return decorName;
 		}else{
-			throw new UiException("Cannot find associated CollectionItem:"+comp);
+			throw new UiException("Cannot find associated CollectionItem owner:"+comp);
 		}		
 	}
 	//get Collection owner of a given collection item.
