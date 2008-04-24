@@ -41,7 +41,7 @@ zk.override(zkau.cmd1, "addBfr",  _zkselx, function (uuid, cmp, html) {
 	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
 	_zkselx.addBfr(uuid, cmp, html);
 });
-zk.override(zkau.cmd1, "addChd",  _zkselx, function (uuid, cmp, html) {
+_zkselx._addChd = function (uuid, cmp, html) {
 	var h = html.trim(), from = h.indexOf("Lit");
 	var isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">");
 	if (isLit && $type(cmp) != "Lit") { // only first listitem.
@@ -59,7 +59,7 @@ zk.override(zkau.cmd1, "addChd",  _zkselx, function (uuid, cmp, html) {
 		return true;
 	}
 	return false;
-});
+};
 
 ////
 // Seletable //
