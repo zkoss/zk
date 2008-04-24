@@ -132,7 +132,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 				var pid = getZKAttr(r, "gpitem");
 				if (!uuid || uuid != pid) return row; //not my child. Bug #1834900.
 
-				if (!silent)
+				if (!silent && getZKAttr(r, "visible") == "true")
 					r.style.display = toOpen ? "": "none";
 				r = this._showKids(r, toOpen,
 					toOpen && (silent || !zkTree.isOpen(r)));

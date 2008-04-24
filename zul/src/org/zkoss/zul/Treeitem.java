@@ -406,6 +406,12 @@ public class Treeitem extends XulElement {
 			throw new UnsupportedOperationException("Use Treerow.setAction() instead");
 	}
 
+	public boolean setVisible(boolean visible) {
+		if (isVisible() != visible && _treerow != null) 
+			_treerow.smartUpdate("z.visible", visible);
+		return super.setVisible(visible);
+	}
+
 	//impl note: no getOuterAttrs, ON_OPEN..., since treeitem is virtual
 	//and the related codes are in treerow
 
