@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -41,32 +40,45 @@ public class Components {
 	 * <p>Note: you cannot use Collections.sort to sort
 	 * {@link Component#getChildren} because Collections.sort might cause
 	 * some replicated item in the list.
+	 * @see #sort(List, int, int, Comparator)
 	 */
 	public static void sort(List list, Comparator cpr) {
+		sort(list, 0, list.size(), cpr);
+	}
+	
+	/**
+	 * Sorts the components in the list.
+	 * @param list the list to be sorted
+	 * @param from the index of the first element (inclusive) to be sorted
+	 * @param to the index of the last element (exclusive) to be sorted
+	 * @param cpr the comparator to determine the order of the list.
+	 * @since 3.1.0
+	 */
+	public static void sort(List list, int from, int to, Comparator cpr) {
 		final Object ary[] = list.toArray();
-		Arrays.sort(ary, cpr);
+		Arrays.sort(ary, from, to, cpr);
 
-		ListIterator it = list.listIterator();
-		int j = 0;
-		for (; it.hasNext(); ++j) {
+		ListIterator it = list.listIterator(from);
+		int j = from, k = to - from;
+		for (; it.hasNext() && --k >= 0; ++j) {
 			if (it.next() != ary[j]) {
 				it.remove();
 
-				if (it.hasNext()) {
+				if (it.hasNext() && --k >= 0) {
 					if (it.next() == ary[j]) continue;
 					it.previous();
+					++k;
 				}
 				break;
 			}
 		}
-		while (it.hasNext()) {
+		while (it.hasNext() && --k >= 0) {
 			it.next();
 			it.remove();
 		}
-		for (; j < ary.length; ++j)
-			list.add(ary[j]);
+		for (; j < to; ++j)
+			list.add(j, ary[j]);
 	}
-
 	/** Tests whether node1 is an ancessor of node 2.
 	 * If node1 and node2 is the same, true is returned.
 	 */
