@@ -82,6 +82,7 @@ public class DataBinder {
 		//Databinder is init automatically when saveXXX or loadXxx is called
 	
 	protected Map _collectionItemMap = new HashMap(3);
+	protected Map _collectionOwnerMap = new HashMap(3); //bug#1950313 F - 1764967 bug
 	
 	/** Binding bean to UI component. This is the same as 
 	 * addBinding(Component comp, String attr, String expr, (List)null, (List)null, (String)null, (String)null). 
@@ -559,18 +560,37 @@ public class DataBinder {
 	}
 	
 	private void initCollectionItem(){
-		addCollectionItem(Listitem.class.getName(), new ListitemCollectionItem());
-		addCollectionItem(Row.class.getName(), new RowCollectionItem());
-		addCollectionItem(Comboitem.class.getName(), new ComboitemCollectionItem());
+		addCollectionItem(Listitem.class, Listbox.class, new ListitemCollectionItem());
+		addCollectionItem(Row.class, Grid.class, new RowCollectionItem());
+		addCollectionItem(Comboitem.class, Combobox.class, new ComboitemCollectionItem());
 	}
 	
 	/**
-	 * Adds a CollectionItem for this comp.
+	 * <p>This method is deprecated. Use 
+	 * {@link #addCollectionItem(Class item, Class owner, CollectionItem)} instead.</p>
+	 * <p>Adds a CollectionItem for this comp.</p>
 	 * @see CollectionItem
+	 * @see #addCollectionItem(Class, Class, CollectionItem)
 	 * @since 3.0.0
+	 * @deprecated
 	 */
 	public void addCollectionItem(String comp, CollectionItem decor){
 		_collectionItemMap.put(comp, decor);
+	}
+	
+	/**
+	 * Adds a CollectionItem for the specified item and owner component;
+	 * e.g. Listitem and Listbox, Row and Grid, Comoboitem and Combobox.
+	 * @see CollectionItem
+	 * @since 3.0.5
+	 * 
+	 * @param item the item class
+	 * @param owner the owner class
+	 * @param decor the associated CollectionItem decorator
+	 */
+	public void addCollectionItem(Class item, Class owner, CollectionItem decor) {
+		_collectionItemMap.put(item.getName(), decor);
+		_collectionOwnerMap.put(owner.getName(), decor);
 	}
 	
 	//get Collection owner of a given collection item.
@@ -596,27 +616,29 @@ public class DataBinder {
 		if(decorName != null){
 			return decorName;
 		}else{
-			throw new UiException("Cannot find associated CollectionItem:"+comp);
+			throw new UiException("Cannot find associated CollectionItem by item: "+comp);
 		}		
 	}
 	//Get CollectionItem per the given owner.
 	//@since 3.0.4 
+	//@since 3.0.5, bug#1950313 F - 1764967 bug
 	/*package*/ CollectionItem getCollectionItemByOwner(Component comp) {
 		String name = comp.getClass().getName();
 		if (comp instanceof Listbox) {
-			name = Listitem.class.getName();
+			name = Listbox.class.getName();
 		} else if (comp instanceof Grid) {
-			name = Row.class.getName();
-		} else if (comp instanceof Combobox) { //bug#1950313 F - 1764967 bug
-			name = Comboitem.class.getName();
+			name = Grid.class.getName();
+		} else if (comp instanceof Combobox) {
+			name = Combobox.class.getName();
 		}
-		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
+		CollectionItem decorName = (CollectionItem)_collectionOwnerMap.get(name);
 		if(decorName != null){
 			return decorName;
 		}else{
-			throw new UiException("Cannot find associated CollectionItem owner:"+comp);
+			throw new UiException("Cannot find associated CollectionItem by owner: "+comp);
 		}		
 	}
+
 	//get Collection owner of a given collection item.
 	/*package*/ Component getCollectionOwner(Component comp) {
 		if (isTemplate(comp)) {
@@ -627,10 +649,10 @@ public class DataBinder {
 	
 	//get associated clone of a given bean and template component
 	private Component getCollectionItem(Component comp, Object bean) {
-		Component owner = getCollectionOwner(comp);
+		final Component owner = getCollectionOwner(comp);
 		//bug#1941947 Cannot find associated CollectionItem error
 		//CollectionItem decor = getBindingCollectionItem(comp);
-		CollectionItem decor = getCollectionItemByOwner(owner);
+		final CollectionItem decor = getCollectionItemByOwner(owner);
 		final ListModel xmodel = decor.getModelByOwner(owner);
 		if (xmodel instanceof BindingListModel) {
   			final BindingListModel model = (BindingListModel) xmodel;
