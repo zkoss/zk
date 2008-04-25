@@ -42,6 +42,10 @@ public interface RequestQueue {
 	public AuRequest nextRequest();
 
 	/** Adds a list of requests to the queue.
+	 * Notice that when the request is added, it will be activated first,
+	 * i.e., {@link AuRequest#activate} will be called before adding
+	 * to queue. If the component is not found or does not belong to
+	 * the current execution, it will be ignored.
 	 */
 	public void addRequests(Collection requests);
 
