@@ -294,12 +294,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * by checking whether the corresponding listeners are added,
 	 * or null if none is added.
 	 *
-	 * @param ignoreOnClick whether to ignore onClick
 	 * @since 3.0.5
 	 */
-	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
+	protected String getAllOnClickAttrs() {
 		StringBuffer sb = null;
-		if (!ignoreOnClick) sb = appendAsapAttr(sb, Events.ON_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_CLICK);
 		sb = appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
 		sb = appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 		return sb != null ? sb.toString():  null;
