@@ -263,6 +263,38 @@ public class CollectionsX {
 			}
 		};
 
+	/**
+	 * Returns the specified range of the specified collection into a new array.
+     * The initial index of the range (<tt>from</tt>) must lie between zero
+     * and <tt>col.size</tt>, inclusive. 
+     * The final index of the range (<tt>to</tt>), which must be greater than or
+     * equal to <tt>from</tt>.
+     * <p>The returned array will be "safe" in that no references to it are
+     * maintained by this list.  (In other words, this method must allocate
+     * a new array).  The caller is thus free to modify the returned array.
+     *
+     * <p>This method acts as bridge between array-based and collection-based
+     * APIs.
+	 * @param col the collection to be copied.
+	 * @param from the initial index of the range to be copied, inclusive.
+     * @param to the final index of the range to be copied, exclusive.
+     * @since 3.1.0
+	 */
+	public static final Object[] toArray(Collection col, int from, int to) {
+		int newLength = to - from;
+		if (newLength < 0)
+            throw new IllegalArgumentException(from + " > " + to);
+		Object[] result = new Object[newLength];
+        int i = 0, j = 0;
+        for (Iterator it = col.iterator(); it.hasNext() && i < result.length;) {
+        	if (j++ < from) {
+        		it.next();
+        		continue;
+        	}
+            result[i++] = it.next();
+        }
+		return result;
+    }
 	/** Adds all elements returned by the iterator to a collection.
 	 * @param iter the iterator; null is OK
 	 * @return the number element being added
