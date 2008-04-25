@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zul.impl.XulElement;
 
@@ -116,6 +117,7 @@ public class Listgroup extends Listitem {
 		applyImageIfAny();
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "z.open", isOpen());
+		appendAsapAttr(sb, Events.ON_OPEN);
 		return sb.toString();
 	}
 	//-- ComponentCtrl --//
