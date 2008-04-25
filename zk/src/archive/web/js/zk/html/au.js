@@ -507,6 +507,15 @@ zkau._sendNow = function (dtid) {
 		return;
 	}
 
+	//callback (fckez uses it to ensure its value is sent back correctly
+	for (var j = 0, ol = zkau._onsends.length; j < ol; ++j) {
+		try {
+			zkau._onsends[j](implicit); //it might add more events
+		} catch (e) {
+			zk.error(e.message);
+		}
+	}
+
 	//bug 1721809: we cannot filter out ctl even if zkau.processing
 
 	//decide implicit and ignorable
@@ -524,15 +533,6 @@ zkau._sendNow = function (dtid) {
 		}
 	}
 	zkau._ignorable = ignorable;
-
-	//callback (fckez uses it to ensure its value is sent back correctly
-	for (var j = 0, ol = zkau._onsends.length; j < ol; ++j) {
-		try {
-			zkau._onsends[j](implicit); //it might add more events
-		} catch (e) {
-			zk.error(e.message);
-		}
-	}
 
 	//Consider XML (Pros: ?, Cons: larger packet)
 	var content = "";
