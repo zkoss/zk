@@ -304,7 +304,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 zulHdr.onclick = function (evt, cmp) {
 	if (!zk.dragging && $uuid(Event.element(evt)) == cmp.id && zulHdr._sortable(cmp) 
 		&& zkau.insamepos(evt) && $tag(Event.element(evt)) != "INPUT")
-		zkau.send({uuid: cmp.id, cmd: "onSort", data: null}, 10);
+		zkau.send({uuid: cmp.id, cmd: "onSort"}, 10);
 };
 zulHdr.onmove = function (evt, cmp) {
 	if (zk.dragging) return;
