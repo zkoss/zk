@@ -30,6 +30,8 @@ import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  * A list cell.
+ * 
+ * <p>Default {@link #getSclass}: listgroup-cell, if parent is Listgroup.
  *
  * @author tomyeh
  */
@@ -59,10 +61,10 @@ public class Listcell extends LabelImageElement {
 		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
 				"display:none;" : super.getRealStyle();
 	}
-	protected String getRealSclass() {
-		if (!(getParent() instanceof Listgroup)) return super.getRealSclass();
-		String clx = super.getRealSclass();
-		return clx != null ? clx + " listgroup" : "listgroup";
+	public String getSclass() {
+		if (!(getParent() instanceof Listgroup)) return super.getSclass();
+		String clx = super.getSclass();
+		return clx != null ? clx + " listgroup-cell" : "listgroup-cell";
 	}
 	
 	/** Returns the list header that is in the same column as

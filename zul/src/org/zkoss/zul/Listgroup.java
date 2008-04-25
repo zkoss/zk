@@ -110,7 +110,7 @@ public class Listgroup extends Listitem {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("open", _open);
+			smartUpdate("z.open", _open);
 		}
 	}
 	public String getOuterAttrs() {

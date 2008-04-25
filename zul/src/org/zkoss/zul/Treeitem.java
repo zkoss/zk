@@ -216,7 +216,7 @@ public class Treeitem extends XulElement {
 			//Note: _treerow might not be ready yet because it might be
 			//initialized before creating child components (for ZK pages)
 			if (_treerow != null)
-				_treerow.smartUpdate("open", _open);
+				_treerow.smartUpdate("z.open", _open);
 			//If the item is open, its tree has model and not rendered, render the item
 			if(_open){
 				Tree tree = getTree();

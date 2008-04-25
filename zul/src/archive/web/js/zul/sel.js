@@ -1372,11 +1372,11 @@ zkLitgp = {
 	},	ontoggle: function (evt) {
 		if (!evt) evt = window.event;
 		var target = Event.element(evt);
-		var meta = zkau.getMeta(getZKAttr(row, "rid"));
-		if (meta) zk.fixOverflow(meta.element);
 		var row = zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
+		var meta = zkau.getMeta(getZKAttr(row, "rid"));
+		if (meta) zk.fixOverflow(meta.element);
 		var toOpen = !zkLitgp.isOpen(row); //toggle
 		zkLitgp._openItem(row, toOpen);
 
@@ -1421,7 +1421,7 @@ zkLitgp = {
 			}, false, row.id);
 	},
 	setAttr: function (cmp, nm, val) {
-		if (nm == "open") {
+		if (nm == "z.open") {
 			zkLitgp._openItem(cmp, "true" == val, true);
 			if ("true" == val) {
 				var meta = zkau.getMeta(getZKAttr(row, "rid"));

@@ -260,7 +260,7 @@ zkTrow.cleanup = zkTrow._pgclean = function (cmp) {
 	delete _zktrx.sib[getZKAttr(cmp, "tchsib")];
 };
 zkTrow.setAttr = function (cmp, nm, val) {
-	if ("open" == nm) {
+	if ("z.open" == nm) {
 		var toOpen = "true" == val;
 		if (toOpen != zkTree.isOpen(cmp)) {
 			var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
