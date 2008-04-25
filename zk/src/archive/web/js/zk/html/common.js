@@ -2129,19 +2129,16 @@ zk._hideExtr = function (n) {
 	}
 };
 
-//////////////
-/// ACTION ///
-/** Basic utilities for Client Side Action.
- */
-action = {};
-
+///////////////////
+// Communication //
+comm = {}
 /** Sends the onClick event to the server.
  * @param cmp the component's UUID, a child element's ID (xxx!yyy),
  * or a child element
  * @param area a string to identify this click
  * @since 3.0.5
  */
-action.sendClick = function (cmp, area) {
+comm.sendClick = function (cmp, area) {
 	cmp = $outer(cmp);
 	if (cmp)
 		zkau.send({uuid: cmp.id, cmd: "onClick", data: [area], ctl: true});
@@ -2152,7 +2149,7 @@ action.sendClick = function (cmp, area) {
  * @param arguments[1-n] data (Event.getData)
  * @since 3.0.5
  */
-action.sendUser = function (cmp) {
+comm.sendUser = function (cmp) {
 	cmp = $outer(cmp);
 	if (cmp) {
 		var len = arguments.length, data;
@@ -2171,7 +2168,7 @@ action.sendUser = function (cmp) {
  * @param arguments[1-n] data (Event.getData)
  * @since 3.0.5
  */
-action.sendEvent = function (cmp, evt) {
+comm.sendEvent = function (cmp, evt) {
 	cmp = $outer(cmp);
 	if (cmp) {
 		var len = arguments.length, data;
@@ -2184,6 +2181,11 @@ action.sendEvent = function (cmp, evt) {
 	}
 };
 
+//////////////
+/// Action ///
+/** Basic utilities for Client Side Action.
+ */
+action = {};
 /** Makes a component visible.
  * @param noVisiAt whether not to call onVisiAt
  */
