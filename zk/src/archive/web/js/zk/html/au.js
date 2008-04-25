@@ -440,6 +440,12 @@ zkau.send = function (evt, timeout) {
 			zkau._send(ds[j], evt, timeout);
 	}
 };
+/** A shortcut of zkau.send(evt, zkau.asapTimeout(evt.uuid, evt.cmd, timeout)).
+ * @since 3.0.5
+ */
+zkau.sendasap = function (evt, timeout) {
+	zkau.send(evt, zkau.asapTimeout(evt.uuid, evt.cmd, timeout));
+};
 zkau._send = function (dtid, evt, timeout) {
 	if (evt.ctl) {
 		//Don't send the same request if it is in processing
@@ -1514,19 +1520,16 @@ zkau.sendOnMove = function (cmp, keys) {
 		left = $int(left) - $int(xy[0]) + "px";
 		top = $int(top) - $int(xy[1]) + "px";
 	}
-	zkau.send({uuid: cmp.id, cmd: "onMove",
-		data: [left, top, keys ? keys: ""], ignorable: true}, //yes, ignorable since it is implicit for modal window
-		zkau.asapTimeout(cmp, "onMove"));
+	zkau.sendasap({uuid: cmp.id, cmd: "onMove",
+		data: [left, top, keys ? keys: ""], ignorable: true}); //yes, ignorable since it is implicit for modal window
 };
 zkau.sendOnZIndex = function (cmp) {
-	zkau.send({uuid: cmp.id, cmd: "onZIndex",
-		data: [cmp.style.zIndex], ignorable: true}, //yes, ignorable since it is implicit for modal window
-		zkau.asapTimeout(cmp, "onZIndex"));
+	zkau.sendasap({uuid: cmp.id, cmd: "onZIndex",
+		data: [cmp.style.zIndex], ignorable: true}); //yes, ignorable since it is implicit for modal window
 };
 zkau.sendOnSize = function (cmp, keys) {
-	zkau.send({uuid: cmp.id, cmd: "onSize",
-		data: [cmp.style.width, cmp.style.height, keys]},
-		zkau.asapTimeout(cmp, "onSize"));
+	zkau.sendasap({uuid: cmp.id, cmd: "onSize",
+		data: [cmp.style.width, cmp.style.height, keys]});
 
 	setTimeout(function () {zk.beforeSizeAt(cmp); zk.onSizeAt(cmp);},
 		zk.ie6Only ? 800: 0);
@@ -1596,8 +1599,7 @@ zkau._closeFloats = function (method, shallClose, ancestors) {
 			closed = true;
 			zk.unsetVParent(n);
 			zk.hide(n);
-			zkau.send({uuid: n.id, cmd: "onOpen", data: [false]},
-				zkau.asapTimeout(n, "onOpen"));
+			zkau.sendasap({uuid: n.id, cmd: "onOpen", data: [false]});
 				//We have to send onOpen since the server need to know
 				//whether the popup becomes invsibile
 		}
