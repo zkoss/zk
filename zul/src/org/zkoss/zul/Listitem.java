@@ -72,10 +72,32 @@ public class Listitem extends XulElement {
 		final Listbox listbox = getListbox();
 		return listbox != null && listbox.inSelectMold();
 	}
+	protected String getRealStyle() {
+		if (this instanceof Listgroup || !isVisible()) return super.getRealStyle();
+		final Listgroup lg = getListgroup();
+		return super.getRealStyle() + (lg != null && !lg.isOpen() ? "display:none" : "") ;
+	}
 	
+	/**
+	 * Returns the listgroup that this item owns, or null.
+	 * @since 3.1.0
+	 */
+	public Listgroup getListgroup() {
+		final Listbox lb = getListbox();
+		if (lb != null)
+			return lb.getListgroupAtIndex(getIndex());
+		return null;
+	}
 	protected String getRealSclass() {
+		String scls = super.getRealSclass();
+		if (scls == null) scls = "item";		
+		if (isDisabled())
+			scls = scls.length() > 0 ? scls + " disd": "disd";
+		else if (isSelected())
+			scls = scls.length() > 0 ? scls + " seld": "seld";	
+		if (this instanceof Listgroup || !isVisible()) return scls;
 		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
-		return super.getRealSclass() + (sclx != null ? " " + sclx : "") ;
+		return scls + (sclx != null ? " " + sclx : "") ;
 	}
 
 	/** Returns whether it is checkable.
@@ -266,25 +288,19 @@ public class Listitem extends XulElement {
 
 	//-- Utilities for implementation only (called by Listbox) */
 	/*package*/ final void setIndexDirectly(int index) {
-		_index = index;
+		setIndex(index);
+	}
+	
+	protected void setIndex(int index) {
+		_index = index;	
 	}
 	/*package*/ final void setSelectedDirectly(boolean selected) {
 		_selected = selected;
 	}
-
-	//-- super --//
-	/** Returns the style class.
-	 * Note: 1) if not set (or setSclass(null), "item" is assumed;
-	 * 2) if selected, it appends " seld" to super's getSclass().
-	 */
-	public String getSclass() {
-		String scls = super.getSclass();
-		if (scls == null) scls = "item";		
-		if (isDisabled())
-			return scls.length() > 0 ? scls + " disd": "disd";
-		else if (isSelected())
-			return scls.length() > 0 ? scls + " seld": "seld";		
-		return scls;
+	public boolean setVisible(boolean visible) {
+		if (isVisible() != visible) 
+			smartUpdate("z.visible", visible);
+		return super.setVisible(visible);
 	}
 
 	//-- Component --//
@@ -343,6 +359,7 @@ public class Listitem extends XulElement {
 			final String clkattrs = getAllOnClickAttrs();
 			if (clkattrs != null) sb.append(clkattrs);
 			HTMLs.appendAttribute(sb, "z.rid", getListbox().getUuid());
+			HTMLs.appendAttribute(sb, "z.visible", isVisible());
 		}
 		return sb.toString();
 	}

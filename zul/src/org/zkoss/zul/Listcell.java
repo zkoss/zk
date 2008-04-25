@@ -59,6 +59,11 @@ public class Listcell extends LabelImageElement {
 		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
 				"display:none;" : super.getRealStyle();
 	}
+	protected String getRealSclass() {
+		if (!(getParent() instanceof Listgroup)) return super.getRealSclass();
+		String clx = super.getRealSclass();
+		return clx != null ? clx + " listgroup" : "listgroup";
+	}
 	
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
@@ -138,6 +143,10 @@ public class Listcell extends LabelImageElement {
 		}
 	}
 
+	/*package*/ final void setImageDirectly(String src) {
+		setSrcDirectly(src);
+	}
+	
 	//-- super --//
 	public void setWidth(String width) {
 		throw new UnsupportedOperationException("Set listheader's width instead");

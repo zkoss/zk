@@ -42,14 +42,13 @@ zk.override(zkau.cmd1, "addBfr",  _zkselx, function (uuid, cmp, html) {
 	_zkselx.addBfr(uuid, cmp, html);
 });
 _zkselx._addChd = function (uuid, cmp, html) {
-	var h = html.trim(), from = h.indexOf("Lit");
-	var isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">");
-	if (isLit && $type(cmp) != "Lit") { // only first listitem.
-		var head = $parentByTag(cmp, "DIV");
-		var cave = $e($uuid(head) + "!cave");	
+	var h = html.trim(), from = h.indexOf("Lit"),
+		isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">"),
+		type = $type(cmp);
+	if (isLit && type && type.indexOf("Lit") < 0) { // only first listitem.
+		var head = $parentByTag(cmp, "DIV"), cave = $e($uuid(head) + "!cave");	
 		if (cave.tBodies[1].rows.length) {
-			var n = cave.tBodies[1].rows[0];
-			var to = n.previousSibling;
+			var n = cave.tBodies[1].rows[0], to = n.previousSibling;
 			zk.insertHTMLBefore(n, html);
 			zkau._initSibs(n, to, false);
 		} else {
@@ -198,7 +197,7 @@ zk.Selectable.prototype = {
 		if (!scOdd || !this.bodyrows) return;
 		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
-			if ($visible(row)) {
+			if ($visible(row) && $type(row) != "Litgp") {
 				zk.addClass(row, scOdd, !even);
 				even = !even;
 			}
@@ -317,9 +316,10 @@ zk.Selectable.prototype = {
 	/** Do when the right key is pressed. */
 	_doRight: function (row) {
 	},
-	/** Returns the type of the row. */
-	_rowType: function () {
-		return "Lit";
+	/** Returns whether the type of the row is "Lit" or "Litgp". */
+	_isRowType: function (row) {
+		var type = $type(row);
+		return type == "Lit" || type == "Litgp";
 	},
 	doclick: function (evt, target) {
 		if (zkSel._shallIgnoreEvent(target))
@@ -332,7 +332,7 @@ zk.Selectable.prototype = {
 
 		var checkmark = target.id && target.id.endsWith("!cm");
 		var row = tn == "TR" ? target: zk.parentNode(target, "TR");
-		if (!row || $type(row) != this._rowType())
+		if (!row || !this._isRowType(row))
 			return; //incomplete structure or grid in listbox...
 
 		//It is better not to change selection only if dragging selected
@@ -1232,7 +1232,7 @@ zkLit.stripe = function (cmp, isClean) {
 	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
-		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Lit");
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, meta.id + "Lit");
 		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Lit");
 	}
 };
@@ -1347,4 +1347,95 @@ zkLisel.onchange = function (evtel) {
 		zkau.send(zkau.lateReq, 25);
 		delete zkau.lateReq;
 	}
+};
+/** List Group*/
+zkLitgp = {
+	init: function (cmp) {
+		setZKAttr(cmp, "inited", "true");
+		if (getZKAttr(cmp, "disd") != "true") {
+			zk.listen(cmp, "click", zkLibox.onclick);
+			zk.listen(cmp, "mouseover", zkSel.onover);
+			zk.listen(cmp, "mouseout", zkSel.onout);
+		}
+		zk.listen(cmp, "keydown", zkLibox.onkeydown);
+		cmp._img = zk.firstChild(cmp, "IMG", true);
+		if (cmp._img) zk.listen(cmp._img, "click", zkLitgp.ontoggle);
+		var table = cmp.parentNode.parentNode;
+		if (table.tBodies.length > 1) {
+			var span = 0;
+			for (var row = table.rows[0], i = row.cells.length; --i >=0;)
+				if(zk.isVisible(row.cells[i])) span++;
+			for (var cells = cmp.cells, i = cells.length; --i >= 0;)
+				span -= cells[i].colSpan;
+			if (span > 0) cmp.cells[cmp.cells.length - 1].colSpan += span;
+		}
+	},	ontoggle: function (evt) {
+		if (!evt) evt = window.event;
+		var target = Event.element(evt);
+		var meta = zkau.getMeta(getZKAttr(row, "rid"));
+		if (meta) zk.fixOverflow(meta.element);
+		var row = zk.parentNode(target, "TR");
+		if (!row) return; //incomplete structure
+
+		var toOpen = !zkLitgp.isOpen(row); //toggle
+		zkLitgp._openItem(row, toOpen);
+
+		if (toOpen && meta) {	
+			meta.stripe();
+			meta._recalcSize();
+		}
+		Event.stop(evt);
+	},
+	isOpen: function (row) {
+		return getZKAttr(row, "open") == "true";
+	},/** Opens an item */
+	_openItem: function (row, toOpen, silent) {
+		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
+		row._img.src = zk.rename(row._img.src, toOpen ? "open": "close");
+		zkLitgp._openItemNow(row, toOpen);
+		if (!silent) 
+			zkau.send({uuid: row.id,
+				cmd: "onOpen", data: [toOpen]},
+				toOpen && getZKAttr(row, "lod") ? 38: //load-on-demand
+					zkau.asapTimeout(row, "onOpen"));
+				//always send since the client has to update Openable
+	},
+	_openItemNow: function (row, toOpen) {
+		for (var table = row.parentNode.parentNode, i = row.rowIndex + 1, j = table.rows.length; i < j; i++) {
+			if ($type(table.rows[i]) == "Litgp") break;
+			if (getZKAttr(table.rows[i], "visible") == "true")
+				table.rows[i].style.display = toOpen ? "" : "none";
+		}
+	},
+	cleanup: function (row) {
+		var prev, table = row.parentNode.parentNode;
+		for (var i = row.rowIndex - 1; --i >= 0;) {
+			if ($type(table.rows[i]) == "Litgp") {
+				prev = table.rows[i];
+				break;
+			}
+		}
+		if (prev)
+			zk.addCleanupLater(function () {
+				zkLitgp._openItem(prev, zkLitgp.isOpen(prev), true);
+			}, false, row.id);
+	},
+	setAttr: function (cmp, nm, val) {
+		if (nm == "open") {
+			zkLitgp._openItem(cmp, "true" == val, true);
+			if ("true" == val) {
+				var meta = zkau.getMeta(getZKAttr(row, "rid"));
+				if (meta) meta.stripe();
+			}
+			return true;
+		}
+		return false;
+	},
+	initdrag: zkLit.initdrag,
+	cleandrag: zkLit.cleandrag,
+	onrtclk: zkLit.onrtclk
+};
+zkLitgp.onVisi = zkLitgp.onSize = function (cmp) {
+	zkLitgp._openItem(cmp, zkLitgp.isOpen(cmp), true);
+	zkLit.stripe(cmp);
 };

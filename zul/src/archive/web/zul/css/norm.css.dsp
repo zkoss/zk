@@ -501,7 +501,14 @@ span.dottree-spacer {
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
-
+<%-- ZK group, listgroup --%>
+td.listgroup {
+	padding-top: 2px; border-bottom: 2px solid #84A6D4;
+}
+td.listgroup div.cell-inner {
+	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
+	padding: 4px 2px; width: auto;
+}
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;

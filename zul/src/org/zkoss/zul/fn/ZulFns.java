@@ -20,6 +20,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Box;
 
@@ -58,7 +59,7 @@ public class ZulFns {
 	 */
 	public static final void setStripeClass(Component child) {
 		final Component parent = child.getParent();
-		if (child.isVisible()) {
+		if (child.isVisible() && !(child instanceof Listgroup)) {
 			final String odd = (String)parent.getAttribute(Attributes.STRIPE_STATE);
 			if (odd == null || !odd.equals("")) {
 				parent.setAttribute(Attributes.STRIPE_STATE, "");

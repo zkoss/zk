@@ -297,7 +297,12 @@ public class Listheader extends HeaderElement {
 					throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
 				((ListModelExt)model).sort(cmpr, ascending);
 			} else { //not live data
-				Components.sort(box.getItems(), cmpr);
+				if (getListbox().hasGroup())
+					for (Iterator it = getListbox().getGroups().iterator(); it.hasNext();) {
+						Listgroup g = (Listgroup)it.next();
+						Components.sort(box.getItems(), g.getIndex()+1, g.getIndex()+1 + g.getItemCount(), cmpr);
+					}
+				else Components.sort(box.getItems(), cmpr);
 			}
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);

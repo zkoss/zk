@@ -65,7 +65,9 @@ public class LabelImageElement extends LabelElement {
 			//we prefer to invalidate (it happens rarely)
 		}
 	}
-
+	protected void setSrcDirectly(String src) {
+		_src = src;
+	}
 	/** Returns the src (an image URI).
 	 * <p>Default: null.
 	 * <p>The same as {@link #getImage}.

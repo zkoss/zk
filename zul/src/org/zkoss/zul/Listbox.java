@@ -18,49 +18,44 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
+import java.util.AbstractCollection;
+import java.util.AbstractList;
 import java.util.AbstractSequentialList;
-import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.AbstractCollection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
+import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
-
-import org.zkoss.zk.au.Command;
-import org.zkoss.zk.au.in.GenericCommand;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.RenderOnDemand;
-import org.zkoss.zk.ui.ext.client.Selectable;
-import org.zkoss.zk.ui.ext.client.InnerWidth;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
-import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-
-import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zk.ui.ext.client.InnerWidth;
+import org.zkoss.zk.ui.ext.client.RenderOnDemand;
+import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.ext.render.ChildChangedAware;
+import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
-import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A listbox.
@@ -122,7 +117,7 @@ import org.zkoss.zul.event.PagingEvent;
 public class Listbox extends XulElement {
 	private static final Log log = Log.lookup(Listbox.class);
 
-	private transient List _items;
+	private transient List _items, _groupsInfo, _groups;
 	/** A list of selected items. */
 	private transient Set _selItems;
 	/** A readonly copy of {@link #_selItems}. */
@@ -197,6 +192,18 @@ public class Listbox extends XulElement {
 			}
 			public Iterator iterator() {
 				return new Iter();
+			}
+		};
+		_groupsInfo = new LinkedList();
+		_groups = new AbstractList() {
+			public int size() {
+				return getGroupCount();
+			}
+			public Iterator iterator() {
+				return new IterGroups();
+			}
+			public Object get(int index) {
+				return getItemAtIndex(((int[])_groupsInfo.get(index))[0]);
 			}
 		};
 	}
@@ -1047,7 +1054,28 @@ public class Listbox extends XulElement {
 			smartUpdate("z.scOddRow", scls);
 		}
 	}
-
+	/**
+	 * Returns the number of listgroup
+	 * @since 3.1.0
+	 */
+	public int getGroupCount() {
+		return _groupsInfo.size();
+	}
+	
+	/**
+	 * Returns a list of all {@link Listgroup}.
+	 *	@since 3.1.0
+	 */
+	public List getGroups() {
+		return _groups;
+	}
+	/**
+	 * Returns whether listgroup exists.
+	 * @since 3.1.0
+	 */
+	public boolean hasGroup() {
+		return !_groupsInfo.isEmpty();
+	}
 	//-- Component --//
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
@@ -1068,8 +1096,38 @@ public class Listbox extends XulElement {
 		else if(inPagingMold() && (child instanceof Listitem))
 			_pgi.setTotalSize(getItemCount());
 	}
+	
+	/*package*/ void fixGroupIndex(int index, int value) {
+		int[] g = getGroupsInfoAtIndex(index, true);
+		if (g != null) g[0] = value;
+	}
+	/*package*/ Listgroup getListgroupAtIndex(int index) {
+		if (_groupsInfo.isEmpty()) return null;
+		final int[] g = getGroupsInfoAtIndex(index);
+		if (g != null) return (Listgroup)getItemAtIndex(g[0]);
+		return null;
+	}
+	/*package*/ int[] getGroupsInfoAtIndex(int index) {
+		return getGroupsInfoAtIndex(index, false);
+	}
+	/**
+	 * Returns an int array that it has two length, one is an index of listgroup,
+	 * and the other is the number of items of listgroup(inclusive).
+	 */
+	/*package*/ int[] getGroupsInfoAtIndex(int index, boolean isListgroup) {
+		for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
+			int[] g = (int[])it.next();
+			if (isListgroup) {
+				if (index == g[0]) return g;
+			} else if ((index > g[0] && index <= g[0] + g[1]))
+				return g;
+		}
+		return null;
+	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
+			if (newChild instanceof Listgroup && (inPagingMold() || inSelectMold()))
+				throw new UnsupportedOperationException("Unsupported Listgroup in Paging or Select mold!");
 			//first: listhead or auxhead
 			//last two: listfoot and paging
 			if (refChild != null && refChild.getParent() != this)
@@ -1127,7 +1185,32 @@ public class Listbox extends XulElement {
 					if (oldjsel != _jsel && !inSelectMold())
 						smartUpdate("z.selId", getSelectedId());
 				}
-
+				
+				if (newChild instanceof Listgroup) {
+					Listgroup lg = (Listgroup) newChild;
+					if (_groupsInfo.isEmpty())
+						_groupsInfo.add(new int[]{lg.getIndex(), getItemCount() - lg.getIndex()});
+					else {
+						int idx = 0;
+						int[] prev = null, next = null;
+						for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
+							int[] g = (int[])it.next();
+							if(g[0] <= lg.getIndex()) {
+								prev = g;
+								idx++;
+							} else {
+								next = g;
+								break;
+							}
+						}
+						if (prev != null && next !=null) prev[1] = lg.getIndex() - prev[0];
+						final int leng = next != null ? next[0] - lg.getIndex() : 1;
+						_groupsInfo.add(idx, new int[]{lg.getIndex(), leng});
+					}
+				} else if (!_groupsInfo.isEmpty()) {
+					final int[] g = getGroupsInfoAtIndex(newItem.getIndex());
+					if (g != null) g[1]++;
+				}
 				afterInsert(newChild);
 				return true;
 			}
@@ -1242,6 +1325,24 @@ public class Listbox extends XulElement {
 					--_jsel;
 					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
 				}
+			}
+			if (child instanceof Listgroup) {
+				int[] prev = null, remove = null;
+				for(Iterator it = _groupsInfo.iterator(); it.hasNext();) {
+					int[] g = (int[])it.next();
+					if (g[0] == index) {
+						remove = g;
+						break;
+					}
+					prev = g;
+				}
+				if (prev != null && remove !=null) {
+					prev[1] += remove[1] - 1;
+					_groupsInfo.remove(remove);
+				}
+			} else if (!_groupsInfo.isEmpty()) {
+				final int[] g = getGroupsInfoAtIndex(index);
+				if (g != null) g[1]--;
 			}
 			return true;
 		} else if (_paging == child) {
@@ -1751,6 +1852,8 @@ public class Listbox extends XulElement {
 	public void setMold(String mold) {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
+			if (!_groupsInfo.isEmpty() && ("paging".equals(mold) || "select".equals(mold)))
+					throw new UnsupportedOperationException("Unsupported Listgroup in Paging or Select mold!");
 			super.setMold(mold);
 				//we have to change model before detaching paging,
 				//since removeChild assumes it
@@ -2071,6 +2174,25 @@ public class Listbox extends XulElement {
 		}
 		public Object next() {
 			final Object o = _it.next();
+			++_j;
+			return o;
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	}
+	/**
+	 * An iterator used by _groups.
+	 */
+	private class IterGroups implements Iterator {
+		private final Iterator _it = _groupsInfo.iterator();
+		private int _j;
+
+		public boolean hasNext() {
+			return _j < getGroupCount();
+		}
+		public Object next() {
+			final Object o = getItemAtIndex(((int[])_it.next())[0]);
 			++_j;
 			return o;
 		}

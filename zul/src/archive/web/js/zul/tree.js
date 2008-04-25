@@ -68,9 +68,9 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	getItemUuid: function (row) {
 		return getZKAttr(row, "pitem");
 	},
-	/** Returns the type of the row. */
-	_rowType: function () {
-		return "Trow";
+	/** Returns whether the type of the row is "Trow". */
+	_isRowType: function (row) {
+		return $type(row) == "Trow";
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doLeft: function (row) {
@@ -132,7 +132,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 				var pid = getZKAttr(r, "gpitem");
 				if (!uuid || uuid != pid) return row; //not my child. Bug #1834900.
 
-				if (!silent)
+				if (!silent && getZKAttr(r, "visible") == "true")
 					r.style.display = toOpen ? "": "none";
 				r = this._showKids(r, toOpen,
 					toOpen && (silent || !zkTree.isOpen(r)));
