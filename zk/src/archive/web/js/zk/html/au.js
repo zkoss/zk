@@ -119,7 +119,7 @@ zkau._fixOffset = function (el, x, y) {
  */
 zkau.onclick = function (evt) {
 	if (typeof evt == 'string') {
-		zkau.send({uuid: $uuid(evt), cmd: "onClick", data: null, ctl: true});
+		zkau.send({uuid: $uuid(evt), cmd: "onClick", ctl: true});
 		return;
 	}
 
@@ -188,7 +188,7 @@ zkau.sendRemove = function (uuid) {
 		zk.error(mesg.UUID_REQUIRED);
 		return;
 	}
-	zkau.send({uuid: uuid, cmd: "remove", data: null}, 5);
+	zkau.send({uuid: uuid, cmd: "remove"}, 5);
 };
 
 ////ajax resend mechanism////
@@ -991,7 +991,7 @@ zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
 
 	var cmp = $outer(el);
 	if (!silent && zkau.asap(cmp, "onFocus"))
-		zkau.send({uuid: cmp.id, cmd: "onFocus", data: null}, 100);
+		zkau.send({uuid: cmp.id, cmd: "onFocus"}, 100);
 	return true;
 };
 /**
@@ -1006,7 +1006,7 @@ zkau.onblur = function (evtel, noonblur) {
 	if (!noonblur && !zk.alerting) {
 		var cmp = $outer(el);
 		if (zkau.asap(cmp, "onBlur"))
-			zkau.send({uuid: cmp.id, cmd: "onBlur", data: null}, 100);
+			zkau.send({uuid: cmp.id, cmd: "onBlur"}, 100);
 	}
 };
 
@@ -1536,7 +1536,7 @@ zkau.sendOnSize = function (cmp, keys) {
 zkau.sendOnClose = function (uuid, closeFloats) {
 	var el = $e(uuid);
 	if (closeFloats) zkau.closeFloats(el);
-	zkau.send({uuid: el.id, cmd: "onClose", data: null}, 5);
+	zkau.send({uuid: el.id, cmd: "onClose"}, 5);
 };
 
 /** Test if any float is opened.
@@ -1998,7 +1998,7 @@ zkau.beginUpload = function (wndid) {
 	zkau.endUpload();
 	zkau._upldWndId = wndid;
 	zkau._tmupload = setInterval(function () {
-		zkau.send({dtid: zkau.dtid(wndid), cmd: "getUploadInfo", data: null, ignorable: true});
+		zkau.send({dtid: zkau.dtid(wndid), cmd: "getUploadInfo", ignorable: true});
 	}, 1000);
 };
 zkau.updateUploadInfo = function (p, cb) {
@@ -2071,7 +2071,7 @@ zkau.cmd0 = { //no uuid at all
 		eval(dt0);
 	},
 	echo: function (dtid) {
-		zkau.send({dtid: dtid, cmd: "dummy", data: null, ignorable: true});
+		zkau.send({dtid: dtid, cmd: "dummy", ignorable: true});
 	},
 	clientInfo: function (dtid) {
 		zkau._cInfoReg = true;
