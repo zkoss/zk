@@ -7,7 +7,7 @@ ZK 3.0.5 Freshly
   1947534: A way to specify the session cache
   1948462: AuResponse supports DeferredValue
   1949336: Component supports isInvalidated
-  1951286: JavaScript utils: actiion.onClick and action.onUser
+  1951286: JavaScript utils: actiion.sendClick and action.sendUser
 
 * Bugs
   1929139: [IE6/IE7 only] Incomplete requests being dropped
