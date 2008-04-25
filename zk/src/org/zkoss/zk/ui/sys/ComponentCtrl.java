@@ -349,4 +349,14 @@ public interface ComponentCtrl {
 	 * @since 2.4.0
 	 */
 	public WrongValueException onWrongValue(WrongValueException ex);
+
+	/** Returns the command of the specified command ID, or null if not found.
+	 * It searches only the command specific to this component.
+	 * For global commands, use {@link org.zkoss.zk.au.AuRequest#getCommand}
+	 * instead.
+	 *
+	 * @since 3.0.5
+	 * @see org.zkoss.zk.au.ComponentCommand
+	 */
+	public Command getCommand(String cmdId);
 }

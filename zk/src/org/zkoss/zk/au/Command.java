@@ -20,10 +20,20 @@ package org.zkoss.zk.au;
 
 /** Represents a command of a request ({@link AuRequest}).
  * Each command is unique no matter {@link #getId} is the same or not.
- * All commands must be declared as static members of {@link AuRequest}
- * such that they will be initialized sequentially at begining.
- * Also, if a command will generate an event, it shall register the
- * event in its constructor.
+ *
+ * <p>There are two kind of commands: global commands and component-specific
+ * commands. A global command is stored in a global map (as soon as it is
+ * instantiated), and it can be retrieved by use of 
+ *
+ * <p>A component-specific command is maintained by a component, and
+ * can be retrieved by use of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getCommand}.
+ *
+ * <p>A global command is extended from {@link Command},
+ * {@link AuRequest#getCommand}. Since it is global, you have to instantiate
+ * an instance at startup. A typic usage is to declare a static instance
+ * of a class.
+ *
+ * <p>A component-specific command is extended from {@link ComponentCommand}.
  *
  * @author tomyeh
  */
@@ -64,7 +74,16 @@ abstract public class Command {
 	 */
 	public static final int IGNORE_IMMEDIATE_OLD_EQUIV = 0x0010;
 
-	/**
+	/** Component-specific command.
+	 */
+	/*package*/ static final int COMPONENT_SPECIFIC = 0x800000;
+
+	/** Construct a command.
+	 *
+	 * <p>Note: once constructed, the command is registered to a global
+	 * map automatically. And, it can be retrieved by
+	 * {@link AuRequest#getCommand}.
+	 *
 	 * @param flags a combination of {@link #SKIP_IF_EVER_ERROR},
 	 * {@link #IGNORABLE} and others
 	 */
@@ -72,7 +91,8 @@ abstract public class Command {
 		_id = id;
 		_flags = flags;
 
-		AuRequest.addCommand(this);
+		if ((flags & COMPONENT_SPECIFIC) == 0)
+			AuRequest.addCommand(this);
 	}
 	/** Returns the attributes of this command, a combination of
 	 * {@link #SKIP_IF_EVER_ERROR}, {@link #IGNORABLE} and others.

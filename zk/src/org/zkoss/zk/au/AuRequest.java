@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.in.*;
 
 /**
@@ -44,10 +45,12 @@ public class AuRequest {
 	private final Desktop _desktop;
 	private Page _page;
 	private Component _comp;
-	/** Component's UUID. Used only if _comp is not specified directly. */
-	private final String _uuid;
-	private final Command _cmd;
+	private Command _cmd;
 	private final String[] _data;
+	/** Component's UUID. Used only if _comp is not specified directly. */
+	private String _uuid;
+	/** Command's ID. Used only if _cmd is not specified directly. */
+	private String _cmdId;
 
 	//-- static --//
 	private static final Map _cmds = new HashMap();
@@ -82,13 +85,24 @@ public class AuRequest {
 	 *
 	 * @param desktop the desktop containing the component; never null.
 	 * @param uuid the component ID (never null)
-	 * @param cmd the command; never null.
+	 * @param cmdId the command ID; never null.
 	 * @param data the data; might be null.
+	 * @since 3.0.5
+	 */
+	public AuRequest(Desktop desktop, String uuid, String cmdId, String[] data) {
+		if (desktop == null || uuid == null || cmdId == null)
+			throw new IllegalArgumentException();
+		_desktop = desktop;
+		_uuid = uuid;
+		_cmdId = cmdId;
+		_data = data;
+	}
+	/** @deprecated As of release 3.0.5, replaced with
+	 * {@link #AuRequest(Desktop, String, String, String[])}.
 	 */
 	public AuRequest(Desktop desktop, String uuid, Command cmd, String[] data) {
 		if (desktop == null || uuid == null || cmd == null)
-			throw new IllegalArgumentException("null");
-
+			throw new IllegalArgumentException();
 		_desktop = desktop;
 		_uuid = uuid;
 		_cmd = cmd;
@@ -102,9 +116,8 @@ public class AuRequest {
 	 */
 	public AuRequest(Desktop desktop, Command cmd, String[] data) {
 		if (desktop == null || cmd == null)
-			throw new IllegalArgumentException("null");
+			throw new IllegalArgumentException();
 		_desktop = desktop;
-		_uuid = null;
 		_cmd = cmd;
 		_data = data;
 	}
@@ -123,15 +136,25 @@ public class AuRequest {
 		return _page;
 	}
 	private void init() {
-		if (_page == null && _uuid != null) {
+		if (_uuid != null) {
 			_comp = _desktop.getComponentByUuidIfAny(_uuid);
+
 			if (_comp != null) {
 				_page = _comp.getPage();
-			} else if (!ComponentsCtrl.isUuid(_uuid)) {
-				_page = _desktop.getPage(_uuid);
 			} else {
-				throw new ComponentNotFoundException("Component not found: "+_uuid);
+				_page = _desktop.getPageIfAny(_uuid); //it could be page UUID
+				if (_page == null)
+					throw new ComponentNotFoundException("Component not found: "+_uuid);
 			}
+			_uuid = null;
+		}
+
+		if (_cmdId != null) {
+			if (_comp != null)
+				_cmd = ((ComponentCtrl)_comp).getCommand(_cmdId);
+			if (_cmd == null)
+				_cmd = AuRequest.getCommand(_cmdId);
+			_cmdId = null;
 		}
 	}
 	/** Returns the component that this request is applied for, or null
@@ -145,11 +168,12 @@ public class AuRequest {
 	/** Returns the UUID.
 	 */
 	public final String getComponentUuid() {
-		return _uuid != null ? _uuid: _comp != null ? _comp.getUuid(): null;
+		return _comp != null ? _comp.getUuid(): _uuid;
 	}
 	/** Returns the command; never null.
 	 */
 	public final Command getCommand() {
+		init();
 		return _cmd;
 	}
 	/** Returns the data of the command, might be null.
@@ -163,12 +187,13 @@ public class AuRequest {
 		return this == o;
 	}
 	public String toString() {
-		if (_uuid != null)
-			return "[uuid="+_uuid+", cmd="+_cmd+']';
-		else if (_comp != null)
-			return "[comp="+_comp+", cmd="+_cmd+']';
+		final String cmdId = _cmd!=null ? _cmd.getId(): _cmdId;
+		if (_comp != null)
+			return "[comp="+_comp+", cmd="+cmdId+']';
+		else if (_page != null)
+			return "[page="+_page+", cmd="+cmdId+']';
 		else
-			return "[page="+_page+", cmd="+_cmd+']';
+			return "[uuid="+_uuid+", cmd="+cmdId+']';
 	}
 
 	//-- predefined commands --//

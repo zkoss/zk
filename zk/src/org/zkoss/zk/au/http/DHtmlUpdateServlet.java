@@ -332,12 +332,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
-			final String scmd = request.getParameter("cmd.0");
-			if (!"rmDesktop".equals(scmd))
+			final String cmdId = request.getParameter("cmd.0");
+			if (!"rmDesktop".equals(cmdId))
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				sessionTimeout(request, response, dtid, scmd);
+				sessionTimeout(request, response, dtid, cmdId);
 				return;
 			}
 		}
@@ -355,16 +355,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		boolean keepAlive = false;
 		try {
 			for (int j = 0;; ++j) {
-				final String scmd = request.getParameter("cmd."+j);
-				if (scmd == null)
+				final String cmdId = request.getParameter("cmd."+j);
+				if (cmdId == null)
 					break;
 
 				keepAlive = keepAlive
-					|| (!(!timerKeepAlive && Events.ON_TIMER.equals(scmd))
-						&& !"dummy".equals(scmd));
+					|| (!(!timerKeepAlive && Events.ON_TIMER.equals(cmdId))
+						&& !"dummy".equals(cmdId));
 					//dummy is used for PollingServerPush for piggyback
 
-				final Command cmd = AuRequest.getCommand(scmd);
 				final String uuid = request.getParameter("uuid."+j);
 				final String[] data = request.getParameterValues("data."+j);
 				if (data != null) {
@@ -372,11 +371,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						if ("_z~nil".equals(data[k]))
 							data[k] = null;
 				}
-				if (uuid == null || uuid.length() == 0) {
-					aureqs.add(new AuRequest(desktop, cmd, data));
-				} else {
-					aureqs.add(new AuRequest(desktop, uuid, cmd, data));
-				}
+				aureqs.add(uuid == null || uuid.length() == 0 ? 
+					new AuRequest(desktop, AuRequest.getCommand(cmdId), data):
+					new AuRequest(desktop, uuid, cmdId, data));
 			}
 		} catch (Throwable ex) {
 			final String errmsg = Exceptions.getMessage(ex);
@@ -416,7 +413,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.close(request, response);
 	}
 	private void sessionTimeout(HttpServletRequest request,
-	HttpServletResponse response, String dtid, String scmd)
+	HttpServletResponse response, String dtid, String cmdId)
 	throws ServletException, IOException {
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null)
@@ -424,8 +421,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
 
-		if (!"rmDesktop".equals(scmd) && !Events.ON_RENDER.equals(scmd)
-		&& !Events.ON_TIMER.equals(scmd) && !"dummy".equals(scmd)) {//possible in FF due to cache
+		if (!"rmDesktop".equals(cmdId) && !Events.ON_RENDER.equals(cmdId)
+		&& !Events.ON_TIMER.equals(cmdId) && !"dummy".equals(cmdId)) {//possible in FF due to cache
 			String uri = Devices.getTimeoutURI(
 				Servlets.isMilDevice(request) ? "mil": "ajax");
 			final AuResponse resp;
