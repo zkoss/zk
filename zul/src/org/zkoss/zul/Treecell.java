@@ -293,7 +293,7 @@ public class Treecell extends LabelImageElement {
 		final String attrs = super.getOuterAttrs();
 
 		final Treecol col = getTreecol();
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		if (col == null && clkattrs == null && _span == 1)
 			return attrs;
 

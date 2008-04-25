@@ -172,7 +172,7 @@ public class Treerow extends XulElement {
 			sb.append(" z.lod=\"t\""); //lod=Load-on-Demand
 		appendAsapAttr(sb, Events.ON_OPEN);
 		
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		if (clkattrs != null) sb.append(clkattrs);
 		return sb.toString();
 	}

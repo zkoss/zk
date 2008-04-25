@@ -102,7 +102,7 @@ public class Footer  extends LabelImageElement {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
 
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		if (clkattrs != null) sb.append(clkattrs);
 
 		final Column col = getColumn();

@@ -256,6 +256,22 @@ abstract public class XulElement extends HtmlBasedComponent {
 		return sb.toString();
 	}
 
+	/**
+	 * @deprecated As of release 3.0.5, replaced with {@link HtmlBasedComponent#getAllOnClickAttrs}.
+	 * If you want to generate only onDoubleClick and onRightClick, use
+	 * <pre><code>
+	 *appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
+	 *appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
+	 *</code></pre>
+	 */
+	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
+		StringBuffer sb = null;
+		if (!ignoreOnClick) sb = appendAsapAttr(sb, Events.ON_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
+		return sb != null ? sb.toString():  null;
+	}
+
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
