@@ -23,14 +23,14 @@ package org.zkoss.zk.au;
  *
  * <p>There are two kind of commands: global commands and component-specific
  * commands. A global command is stored in a global map (as soon as it is
- * instantiated), and it can be retrieved by invokiing {@link AuRequest#getCommand(String)}.
+ * instantiated), and it can be retrieved by invoking {@link AuRequest#getCommand(String)}.
  *
  * <p>A component-specific command is maintained by a component, and
  * can be retrieved by use of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getCommand}.
  *
- * <p>A global command is extended from {@link Command},
- * {@link AuRequest#getCommand}. Since it is global, you have to instantiate
- * an instance at startup. A typic usage is to declare a static instance
+ * <p>A global command is extended from {@link Command}.
+ * Since it is global, you have to instantiate
+ * an instance at startup. A typical usage is to declare a static instance
  * of a class.
  *
  * <p>A component-specific command is extended from {@link ComponentCommand}.
