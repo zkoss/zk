@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z30-action.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 25 09:37:35     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of JavaScript Utilities">
+	<html onClick='l.value = "onClick "+event.area'
+		onUser='l.value ="onUser "+org.zkoss.lang.Objects.toString(event.data)'><![CDATA[
+		<a href="javascript:;" onclick="action.onClick(this, 'Hi')">onClick with Hi</a>
+		<a href="javascript:;" onclick="action.onClick(this)">onClick with null</a>
+		<a href="javascript:;" onclick="action.onUser(this)">onUser with null</a>
+		<a href="javascript:;" onclick="action.onUser(this, 'One')">onUser with One</a>
+		<a href="javascript:;" onclick="action.onUser(this, 'One', 'Two')">onUser with [One, Two]</a>
+	]]></html>
+	<separator/>
+	<label id="l"/>
+</window>
