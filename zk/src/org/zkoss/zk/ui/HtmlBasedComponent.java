@@ -290,6 +290,20 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	}
 
 	//-- component developer only --//
+	/** Returns the attributes for onClick, onRightClick and onDoubleClick
+	 * by checking whether the corresponding listeners are added,
+	 * or null if none is added.
+	 *
+	 * @param ignoreOnClick whether to ignore onClick
+	 * @since 3.0.5
+	 */
+	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
+		StringBuffer sb = null;
+		if (!ignoreOnClick) sb = appendAsapAttr(sb, Events.ON_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
+		sb = appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
+		return sb != null ? sb.toString():  null;
+	}
 	/** Returns the exterior attributes for generating the enclosing
 	 * HTML tag; never return null.
 	 *
