@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
 import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.Command;
 
 /**
  * An addition interface to {@link org.zkoss.zk.ui.Component}
