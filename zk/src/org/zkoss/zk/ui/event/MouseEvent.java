@@ -75,8 +75,6 @@ public class MouseEvent extends Event {
 	 */
 	public MouseEvent(String name, Component target, String area) {
 		super(name, target);
-		if (area == null)
-			throw new IllegalArgumentException("area");
 		_area = area;
 		_x = _y = _keys = 0;
 	}

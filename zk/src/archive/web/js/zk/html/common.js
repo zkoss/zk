@@ -2135,6 +2135,36 @@ zk._hideExtr = function (n) {
  */
 action = {};
 
+/** Sends the onClick event to the server.
+ * @param cmp the component's UUID, a child element's ID (xxx!yyy),
+ * or a child element
+ * @param area a string to identify this click
+ * @since 3.0.5
+ */
+action.onClick = function (cmp, area) {
+	cmp = $outer(cmp);
+	if (cmp)
+		zkau.send({uuid: cmp.id, cmd: "onClick", data: [area], ctl: true});
+};
+/** Sends the onUser event to the server.
+ * @param cmp the component's UUID, a child element's ID (xxx!yyy),
+ * or a child element
+ * @param arguments[1-n] data (Event.getData)
+ * @since 3.0.5
+ */
+action.onUser = function (cmp) {
+	cmp = $outer(cmp);
+	if (cmp) {
+		var len = arguments.length, data = null;
+		if (len > 1) {
+			data = [];
+			for (var j = 1; j < len; ++j)
+				data[j - 1] = arguments[j];
+		}
+		zkau.send({uuid: cmp.id, cmd: "onUser", data: data, ctl: true});
+	}
+};
+
 /** Makes a component visible.
  * @param noVisiAt whether not to call onVisiAt
  */
