@@ -38,17 +38,9 @@ public class ListitemDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Listitem self = (Listitem)comp;
-		
-		if(self.getMold().equals("select")){
-			wh.write("<option id=\"").write(self.getUuid()).write('"')
-				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-			new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);
-			wh.write("</option>");
-		}else{
-			wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lit\"")
-				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-			wh.writeChildren(self);
-			wh.writeln("</tr>");
-		}
+		wh.write("<tr id=\"").write(self.getUuid()).write("\" z.type=\"Lit\"")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
+		wh.writeChildren(self);
+		wh.writeln("</tr>");
 	}
 }
