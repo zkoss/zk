@@ -50,6 +50,9 @@ ZK 3.0.5 Freshly
 * Upgrade Notes
   + Session's getNativeSession() returns an instance of PortletSession
     (rather than HttpSession), if ZK porlet is used.
+  + DataBinder's addCollectionItem(String comp, CollectionItem decor) is
+    deprecated. Use addCollectionItem(Class item, Class owner, CollectionItem decor)
+	instead.
 
 	--------
 ZK 3.0.4
