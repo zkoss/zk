@@ -39,6 +39,10 @@ import org.zkoss.zk.au.in.*;
 /**
  * A request sent from the client to {@link org.zkoss.zk.ui.sys.UiEngine}.
  *
+ * <p>Notice that {@link #activate} must be called in the activated execution.
+ * Before calling this method, {@link #getPage}, {@link #getComponent}
+ * and {@link #getCommand} cannot be called.
+ *
  * @author tomyeh
  */
 public class AuRequest {
@@ -80,8 +84,6 @@ public class AuRequest {
 	}
 
 	/** Constructor for a request sent from a component.
-	 * Since we cannot invoke {@link Desktop#getComponentByUuid} without
-	 * activating an execution, we have to use this method.
 	 *
 	 * @param desktop the desktop containing the component; never null.
 	 * @param uuid the component ID (never null)
@@ -97,8 +99,12 @@ public class AuRequest {
 		_cmdId = cmdId;
 		_data = data;
 	}
-	/** @deprecated As of release 3.0.5, replaced with
-	 * {@link #AuRequest(Desktop, String, String, String[])}.
+	/** Constructor for a request sent from a component.
+	 *
+	 * @param desktop the desktop containing the component; never null.
+	 * @param uuid the component ID (never null)
+	 * @param cmd the command; never null.
+	 * @param data the data; might be null.
 	 */
 	public AuRequest(Desktop desktop, String uuid, Command cmd, String[] data) {
 		if (desktop == null || uuid == null || cmd == null)
@@ -122,20 +128,14 @@ public class AuRequest {
 		_data = data;
 	}
 
-	/** Returns the desktop; never null. */
-	public final Desktop getDesktop() {
-		return _desktop;
-	}
-	/** Returns the page that this request is applied for, or null
-	 * if this reqeuest is a general request -- regardless any page or
-	 * component.
-	 * @exception ComponentNotFoundException if the page is not found
+	/** Activates this request.
+	 * <p>It can be accessed only in the activated execution.
+	 * Before calling this method, {@link #getPage}, {@link #getComponent}
+	 * and {@link #getCommand} cannot be called.
+	 * @since 3.0.5
 	 */
-	public final Page getPage() {
-		init();
-		return _page;
-	}
-	private void init() {
+	public void activate()
+	throws ComponentNotFoundException, CommandNotFoundException {
 		if (_uuid != null) {
 			_comp = _desktop.getComponentByUuidIfAny(_uuid);
 
@@ -157,28 +157,40 @@ public class AuRequest {
 			_cmdId = null;
 		}
 	}
+
+	/** Returns the desktop; never null.
+	 */
+	public Desktop getDesktop() {
+		return _desktop;
+	}
+	/** Returns the page that this request is applied for, or null
+	 * if this reqeuest is a general request -- regardless any page or
+	 * component.
+	 */
+	public Page getPage() {
+		return _page;
+	}
 	/** Returns the component that this request is applied for, or null
 	 * if it applies to the whole page or a general request.
 	 * @exception ComponentNotFoundException if the component is not found
 	 */
-	public final Component getComponent() {
-		init();
+	public Component getComponent() {
 		return _comp;
 	}
-	/** Returns the UUID.
+	/** @deprecated As of release 3.0.5, use {@link #getComponent}
+	 * instead.
 	 */
-	public final String getComponentUuid() {
+	public String getComponentUuid() {
 		return _comp != null ? _comp.getUuid(): _uuid;
 	}
 	/** Returns the command; never null.
 	 */
-	public final Command getCommand() {
-		init();
+	public Command getCommand() {
 		return _cmd;
 	}
 	/** Returns the data of the command, might be null.
 	 */
-	public final String[] getData() {
+	public String[] getData() {
 		return _data;
 	}
 
