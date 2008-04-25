@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.zkoss.util.CollectionsX;
+
 /**
  * Utilities to access {@link Component}.
  *
@@ -55,11 +57,11 @@ public class Components {
 	 * @since 3.1.0
 	 */
 	public static void sort(List list, int from, int to, Comparator cpr) {
-		final Object ary[] = list.toArray();
-		Arrays.sort(ary, from, to, cpr);
+		final Object ary[] = CollectionsX.toArray(list, from, to);
+		Arrays.sort(ary, cpr);
 
 		ListIterator it = list.listIterator(from);
-		int j = from, k = to - from;
+		int j = 0, k = to - from;
 		for (; it.hasNext() && --k >= 0; ++j) {
 			if (it.next() != ary[j]) {
 				it.remove();
@@ -76,8 +78,8 @@ public class Components {
 			it.next();
 			it.remove();
 		}
-		for (; j < to; ++j)
-			list.add(j, ary[j]);
+		for (; j < ary.length; ++j)
+			list.add(from + j, ary[j]);
 	}
 	/** Tests whether node1 is an ancessor of node 2.
 	 * If node1 and node2 is the same, true is returned.
