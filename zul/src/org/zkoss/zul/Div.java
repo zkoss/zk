@@ -56,7 +56,7 @@ public class Div extends XulElement {
 
 	//-- super --//
 	public String getOuterAttrs() {
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		final String attrs = super.getOuterAttrs();
 		if (_align == null && clkattrs == null)
 			return attrs;

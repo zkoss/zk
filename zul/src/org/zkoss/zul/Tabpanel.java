@@ -91,7 +91,7 @@ public class Tabpanel extends XulElement {
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		return clkattrs == null ? attrs: attrs + clkattrs;
 	}
 	/** Returns the style class.

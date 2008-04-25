@@ -92,7 +92,7 @@ public class Auxheader extends HeaderElement {
 	//super//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		if (clkattrs == null && _colspan == 1 && _rowspan == 1)
 			return attrs;
 

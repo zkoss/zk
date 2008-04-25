@@ -206,7 +206,7 @@ public class Listcell extends LabelImageElement {
 		final String attrs = super.getOuterAttrs();
 
 		final Listheader header = getListheader();
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		if (header == null && clkattrs == null && _span == 1)
 			return attrs;
 

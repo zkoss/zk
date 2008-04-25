@@ -179,7 +179,7 @@ public class Tab extends LabelImageElement {
 			new StringBuffer(64).append(super.getOuterAttrs());
 		appendAsapAttr(sb, Events.ON_SELECT);
 
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		if (clkattrs != null) 
 			sb.append(clkattrs);
 		return sb.toString();

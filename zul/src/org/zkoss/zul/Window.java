@@ -879,7 +879,7 @@ public class Window extends XulElement implements IdSpace {
 		appendAsapAttr(sb, Events.ON_OPEN);
 		//no need to generate ON_CLOSE since it is always sent (as ASAP)
 
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		if (clkattrs != null) sb.append(clkattrs);
 			//though widget.js handles onclick (if 3d), it is useful
 			//to support onClick for groupbox

@@ -203,7 +203,7 @@ public class Groupbox extends XulElement {
 		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
 
 		appendAsapAttr(sb, Events.ON_OPEN);
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		if (clkattrs != null) sb.append(clkattrs);
 			//though widget.js handles onclick (if 3d), it is useful
 			//to support onClick for groupbox

@@ -92,7 +92,7 @@ public class Caption extends LabelImageElement {
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs(false);
+		final String clkattrs = getAllOnClickAttrs();
 		return clkattrs == null ? attrs: attrs + clkattrs;
 	}
 
