@@ -212,7 +212,7 @@ zkMenuit.onclick = function (evt) {
 			var newval = getZKAttr(cmp, "checked") != "true";
 			zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]}, -1);
 		}
-		zkau.send({uuid: uuid, cmd: "onClick", data: null, ctl: true});
+		zkau.send({uuid: uuid, cmd: "onClick", ctl: true});
 	} else {
 		var t = anc.getAttribute("target");
 		var overwrite = false;

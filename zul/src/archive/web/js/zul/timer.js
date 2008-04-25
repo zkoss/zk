@@ -86,5 +86,5 @@ zkTimer.setAttr = function (cmp, nm, val) {
 
 /** Fires an onTimer event. */
 zkTimer._fire = function (uuid) {
-	zkau.send({uuid: uuid, cmd: "onTimer", data: null, ignorable: true}, 0);
+	zkau.send({uuid: uuid, cmd: "onTimer", ignorable: true}, 0);
 };
