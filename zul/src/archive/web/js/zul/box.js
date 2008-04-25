@@ -409,8 +409,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	zkSplt._fixszAll(cmp);
 
 	if (!silent)
-		zkau.send({uuid: cmp.id, cmd: "onOpen", data: [open]},
-			zkau.asapTimeout(cmp, "onOpen"));
+		zkau.sendasap({uuid: cmp.id, cmd: "onOpen", data: [open]});
 };
 /** Returns the next 
  * @param tn the tag name

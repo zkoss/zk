@@ -492,9 +492,8 @@ zk.Selectable.prototype = {
 	select: function (row) {
 		if (this._selectOne(row, true)) {
 			//notify server
-			zkau.send({
-				uuid: this.id, cmd: "onSelect", data: [this.getItemUuid(row), this.getItemUuid(row)]},
-				zkau.asapTimeout(this.element, "onSelect"));
+			zkau.sendasap({uuid: this.id, cmd: "onSelect",
+				data: [this.getItemUuid(row), this.getItemUuid(row)]});
 		}
 	},
 	/** Toggle the selection and notifies server. */
@@ -964,8 +963,8 @@ zk.Selectable.prototype = {
 				data += "," + this.getItemUuid(r);
 		}
 		if (data) data = data.substring(1);
-		zkau.send({uuid: this.id, cmd: "onSelect", data: [data, row ? this.getItemUuid(row) : ""]},
-				zkau.asapTimeout(this.element, "onSelect"));
+		zkau.sendasap({uuid: this.id, cmd: "onSelect",
+			data: [data, row ? this.getItemUuid(row) : ""]});
 	},
 
 	/** Returns z.selId (aka., the id of the selected item), or null if
@@ -1339,8 +1338,7 @@ zkLisel.onchange = function (evtel) {
 		cmp._lastSelIndex = cmp.selectedIndex;
 	}
 	var uuid = $uuid(cmp);
-	zkau.send({uuid: uuid, cmd: "onSelect", data: [data, reference]},
-			zkau.asapTimeout(uuid, "onSelect"));
+	zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [data, reference]});
 
 	//Bug 1756559: see au.js
 	if (zkau.lateReq) {

@@ -59,8 +59,7 @@ zkCmbox.onblur = function (evt) {
 
 			if ((jfnd >= 0 || !strict) && getZKAttr(cmp, "selid") != item.id) {
 				setZKAttr(cmp, "selid", item.id);
-				zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
-					zkau.asapTimeout(cmp, "onSelect"));
+				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]});
 			}
 		}	
 	}
@@ -129,8 +128,7 @@ zkCmit.onclick = function (evt) {
 		var selId = getZKAttr(cmp, "selid");
 		if (selId != item.id) {
 			setZKAttr(cmp, "selid", item.id);
-			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
-				zkau.asapTimeout($e(uuid), "onSelect"));			
+			zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]});
 		}
 		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
 		Event.stop(evt); //Bug 1597852 (cb might be a child of listitem)
@@ -293,8 +291,7 @@ zkCmbox.onkey = function (evt) {
 		var cmp = $e(uuid), selId = getZKAttr(cmp, "selid");
 		if (item && selId != item.id) {
 			setZKAttr(cmp, "selid", item.id);
-			zkau.send({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]},
-				zkau.asapTimeout($e(uuid), "onSelect"));			
+			zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]});
 		}
 		zkTxbox.updateChange(inp, false); //fire onChange
 		return true;
@@ -575,8 +572,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 			var selId = getZKAttr(cmp, "selid");
 			if (selId != found.id) {
 				setZKAttr(cmp, "selid", found.id);
-				zkau.send({uuid: uuid, cmd: "onSelect", data: [found.id, found.id]},
-					zkau.asapTimeout(cmp, "onSelect"));
+				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [found.id, found.id]});
 			}
 		}
 	} else if (jfnd >= 0) {
