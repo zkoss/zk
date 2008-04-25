@@ -35,8 +35,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<h:ul>
 		<h:li><toolbarbutton label="Listboxes" onClick="doSelect(&quot;lb1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Live data" onClick="doSelect(&quot;lb2&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Multiple selections" onClick="doSelect(&quot;lb3&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Checkmarks" onClick="doSelect(&quot;lb4&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Paging" onClick="doSelect(&quot;lb5&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Grouping" onClick="doSelect(&quot;lb3&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Multiple selections" onClick="doSelect(&quot;lb4&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Checkmarks" onClick="doSelect(&quot;lb5&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Paging" onClick="doSelect(&quot;lb6&quot;)"/></h:li>
 	</h:ul>
 </window>

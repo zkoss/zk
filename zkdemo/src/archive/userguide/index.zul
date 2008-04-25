@@ -73,9 +73,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 					<treechildren>
 						<treeitem id="lb1" label="Listboxes" value="/userguide/listbox/listbox.zul"/>
 						<treeitem id="lb2" label="Live data" value="/userguide/listbox/livedata.zul"/>
-						<treeitem id="lb3" label="Multiple selections" value="/userguide/listbox/multiple.zul"/>
-						<treeitem id="lb4" label="Checkmarks" value="/userguide/listbox/checkmarks.zul"/>
-						<treeitem id="lb5" label="Paging" value="/userguide/listbox/paging.zul"/>
+						<treeitem id="lb3" label="Grouping" value="/userguide/listbox/grouping.zul"/>
+						<treeitem id="lb4" label="Multiple selections" value="/userguide/listbox/multiple.zul"/>
+						<treeitem id="lb5" label="Checkmarks" value="/userguide/listbox/checkmarks.zul"/>
+						<treeitem id="lb6" label="Paging" value="/userguide/listbox/paging.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Trees" value="/userguide/tree/index.zul">
