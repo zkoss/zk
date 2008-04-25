@@ -623,6 +623,14 @@ public class DataBinder {
 	//@since 3.0.4 
 	//@since 3.0.5, bug#1950313 F - 1764967 bug
 	/*package*/ CollectionItem getCollectionItemByOwner(Component comp) {
+		final CollectionItem decorName = myGetCollectionItemByOwner(comp);
+		if (decorName == null) {
+			throw new UiException("Cannot find associated CollectionItem by owner: "+comp);
+		}
+		return decorName;
+	}
+	
+	private CollectionItem myGetCollectionItemByOwner(Component comp) {
 		String name = comp.getClass().getName();
 		if (comp instanceof Listbox) {
 			name = Listbox.class.getName();
@@ -632,11 +640,7 @@ public class DataBinder {
 			name = Combobox.class.getName();
 		}
 		CollectionItem decorName = (CollectionItem)_collectionOwnerMap.get(name);
-		if(decorName != null){
-			return decorName;
-		}else{
-			throw new UiException("Cannot find associated CollectionItem by owner: "+comp);
-		}		
+		return decorName;
 	}
 
 	//get Collection owner of a given collection item.
@@ -651,8 +655,11 @@ public class DataBinder {
 	private Component getCollectionItem(Component comp, Object bean) {
 		final Component owner = getCollectionOwner(comp);
 		//bug#1941947 Cannot find associated CollectionItem error
-		//CollectionItem decor = getBindingCollectionItem(comp);
-		final CollectionItem decor = getCollectionItemByOwner(owner);
+		//For backward compatible, if by owner failed, try again with by item
+		CollectionItem decor = myGetCollectionItemByOwner(owner);
+		if (decor == null) {
+			decor = getBindingCollectionItem(comp);
+		}
 		final ListModel xmodel = decor.getModelByOwner(owner);
 		if (xmodel instanceof BindingListModel) {
   			final BindingListModel model = (BindingListModel) xmodel;
