@@ -2141,7 +2141,7 @@ action = {};
  * @param area a string to identify this click
  * @since 3.0.5
  */
-action.onClick = function (cmp, area) {
+action.sendClick = function (cmp, area) {
 	cmp = $outer(cmp);
 	if (cmp)
 		zkau.send({uuid: cmp.id, cmd: "onClick", data: [area], ctl: true});
@@ -2152,16 +2152,35 @@ action.onClick = function (cmp, area) {
  * @param arguments[1-n] data (Event.getData)
  * @since 3.0.5
  */
-action.onUser = function (cmp) {
+action.sendUser = function (cmp) {
 	cmp = $outer(cmp);
 	if (cmp) {
-		var len = arguments.length, data = null;
+		var len = arguments.length, data;
 		if (len > 1) {
 			data = [];
 			for (var j = 1; j < len; ++j)
 				data[j - 1] = arguments[j];
 		}
 		zkau.send({uuid: cmp.id, cmd: "onUser", data: data, ctl: true});
+	}
+};
+/** Sends the specified event to the server.
+ * @param cmp the component's UUID, a child element's ID (xxx!yyy),
+ * or a child element
+ * @param evt the event name, e.g., onMyEvent
+ * @param arguments[1-n] data (Event.getData)
+ * @since 3.0.5
+ */
+action.sendEvent = function (cmp, evt) {
+	cmp = $outer(cmp);
+	if (cmp) {
+		var len = arguments.length, data;
+		if (len > 2) {
+			data = [];
+			for (var j = 2; j < len; ++j)
+				data[j - 2] = arguments[j];
+		}
+		zkau.send({uuid: cmp.id, cmd: evt, data: data, ctl: true});
 	}
 };
 
