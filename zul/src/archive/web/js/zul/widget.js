@@ -148,9 +148,8 @@ zkTxbox.onupdate = function (inp) {
 		inp.defaultValue = newval;
 		var uuid = $uuid(inp);			
 		var sr = zk.getSelectionRange(inp);	
-		zkau.send({uuid: uuid, cmd: "onChange",
-			data: [newval, false, sr[0]]},
-			zkau.asapTimeout(uuid, "onChange", zk.delayTime_onChange ? zk.delayTime_onChange : 150));
+		zkau.sendasap({uuid: uuid, cmd: "onChange", data: [newval, false, sr[0]]},
+			zk.delayTime_onChange ? zk.delayTime_onChange : 150);
 	} else if (inp.getAttribute("zk_err")) {
 		inp.removeAttribute("zk_err");
 		zkau.send({uuid: $uuid(inp), cmd: "onError",
@@ -373,8 +372,7 @@ zkCkbox.onclick = function (cmp) {
 		}
 		cmp.defaultChecked = newval;
 		var uuid = $uuid(cmp);
-		zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]},
-			zkau.asapTimeout(uuid, "onCheck"));
+		zkau.sendasap({uuid: uuid, cmd: "onCheck", data: [newval]});
 	}
 };
 
@@ -460,8 +458,7 @@ zkGrbox.open = function (gb, open, silent, ignorable) {
 			else anima.slideUp(panel);
 
 			if (!silent)
-				zkau.send({uuid: gb.id, cmd: "onOpen", data: [open]},
-					zkau.asapTimeout(gb, "onOpen"));
+				zkau.sendasap({uuid: gb.id, cmd: "onOpen", data: [open]});
 
 			setTimeout(function() {zkGrbox._fixHgh(gb);}, 500); //after slide down
 		}

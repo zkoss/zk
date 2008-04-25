@@ -155,8 +155,7 @@ zkTab._setTabSel = function (tab, toSel, notify, animation) {
 	}
 
 	if (notify)
-		zkau.send({uuid: tab.id, cmd: "onSelect", data: [tab.id]},
-				zkau.asapTimeout(tab, "onSelect"));
+		zkau.sendasap({uuid: tab.id, cmd: "onSelect", data: [tab.id]});
 };
 /** Changes the style class. */
 zkTab._changeBkgnd = function (node, toSel) {

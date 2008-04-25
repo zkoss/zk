@@ -239,8 +239,8 @@ zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 		zul.adjustHeadWidth(meta.hdfaker, meta.bdfaker, meta.ftfaker, meta.bodyrows);
 	zkau.send({uuid: meta.id, cmd: "onInnerWidth",
 			data: [meta.headtbl.style.width]}, -1);
-	zkau.send({uuid: cmp.id, cmd: "onColSize",
-		data: [icol, col.id, (wd+"px"), keys]}, zkau.asapTimeout(cmp, "onColSize"));
+	zkau.sendasap({uuid: cmp.id, cmd: "onColSize",
+		data: [icol, col.id, (wd+"px"), keys]});
 	meta._render(zk.gecko ? 200: 60); // just in case.
 };
 zulHdr.cleanup = function (cmp) {

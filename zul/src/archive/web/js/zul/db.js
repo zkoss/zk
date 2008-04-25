@@ -271,8 +271,8 @@ zk.Cal.prototype = {
 			var y = this.date.getFullYear(),
 				m = this.date.getMonth(), d = this.date.getDate();
 			setZKAttr(this.element, "value", this.getDateString());
-			zkau.send({uuid: this.id, cmd: "onChange",
-				data: [y+'/'+(m+1)+'/'+d]}, zkau.asapTimeout(this.element, "onChange"));
+			zkau.sendasap({uuid: this.id, cmd: "onChange",
+				data: [y+'/'+(m+1)+'/'+d]});
 			this._changed = false;
 		}
 	},

@@ -116,8 +116,7 @@ zk.Slider.prototype = {
 		var curpos = this._curpos();
 		if (pos != curpos) {
 			setZKAttr(this.element, "curpos", pos);
-			zkau.send({uuid: this.element.id, cmd: "onScroll", data: [pos]},
-				zkau.asapTimeout(this.element, "onScroll"));
+			zkau.sendasap({uuid: this.element.id, cmd: "onScroll", data: [pos]});
 		}
 		this._fixPos();
 		this.button.title = pos;
