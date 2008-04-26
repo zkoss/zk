@@ -72,12 +72,7 @@ public class RequestQueueImpl implements RequestQueue {
 	}
 	private static boolean isObsolete(AuRequest request) {
 		final Component comp = request.getComponent();
-		if (comp != null) {
-			final Desktop dt = comp.getDesktop();
-			if (dt == null || dt != request.getDesktop())
-				return true;
-		}
-		return false;
+		return comp != null && comp.getDesktop() != request.getDesktop();
 	}
 	public AuRequest nextRequest() {
 		while (!_requests.isEmpty()) {
