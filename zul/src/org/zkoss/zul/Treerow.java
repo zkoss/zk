@@ -180,7 +180,7 @@ public class Treerow extends XulElement {
 		
 		final String clkattrs = getAllOnClickAttrs();
 		if (clkattrs != null) sb.append(clkattrs);
-		HTMLs.appendAttribute(sb, "z.visible", isVisible());
+		HTMLs.appendAttribute(sb, "z.visible", isRealVisible());
 		return sb.toString();
 	}
 
@@ -199,6 +199,16 @@ public class Treerow extends XulElement {
 		comp = comp.getParent();
 		return !(comp instanceof Treechildren)
 			|| ((Treechildren)comp).isVisible(); //recursive
+	}
+	
+	private boolean isRealVisible() {
+		if (!super.isVisible())
+			return false;
+		Component comp = getParent();
+		if (!(comp instanceof Treeitem))
+			return true;
+		if (!comp.isVisible()) return false;
+		return true;
 	}
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible) 
