@@ -334,10 +334,15 @@ public class Treechildren extends XulElement implements Pageable {
 		//2) act != last and child after act
 		//Except removing last elem which in act and act has only one elem
 		if (!isInvalidated()) {
+			List children = getChildren();
+			int sz = children.size();
+			if (!bRemove && sz <= 1) { //Bug 1753216: no visual part
+				invalidate();
+				return;
+			}
+
 			int pgsz = getPageSize();
 			if (pgsz > 0) {
-				List children = getChildren();
-				int sz = children.size();
 				int n = sz - (getActivePage() + 1) * pgsz;
 				if (n <= 0) { //must be last page
 					n += pgsz; //check in-act (otherwise, check after-act)
