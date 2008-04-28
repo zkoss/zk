@@ -117,7 +117,7 @@ public interface UiEngine {
 	 * {@link DeferredValue}.
 	 *
 	 * @since 3.0.5
-	 * @see Component#smartUpdateArray(String, Object[])
+	 * @see Component#smartUpdateValues(String, Object[])
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object[] values);
 	/** Adds a response which will be sent to client at the end
