@@ -1362,7 +1362,7 @@ public class Listbox extends XulElement {
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
-		checkInvalidateForMoved((Listitem)comp);
+		checkInvalidateForMoved((Listitem)comp, false);
 	}
 	/** Callback if a list item will be removed (not removed yet).
 	 * Note: it won't be called if other kind of child is removed.
@@ -1371,21 +1371,29 @@ public class Listbox extends XulElement {
 	 * @since 3.0.5
 	 */
 	protected void beforeRemove(Component comp) {
-		checkInvalidateForMoved((Listitem)comp);
+		checkInvalidateForMoved((Listitem)comp, true);
 	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
+	 * @param bRemove if child will be removed
 	 */
-	private void checkInvalidateForMoved(Listitem child) {
+	private void checkInvalidateForMoved(Listitem child, boolean bRemove) {
 		//No need to invalidate if
 		//1) act == last and child in act
 		//2) act != last and child after act
+		//Except removing last elem which in act and act has only one elem
 		if (inPagingMold() && !isInvalidated()) {
 			final int j = child.getIndex(),
-				pgsz = getPageSize();
-			int n = (getActivePage() + 1) * pgsz;
-			if (j >= n) return; //case 2
-			if (j >= n - pgsz && getItems().size() <= n) return; //case 1
+				pgsz = getPageSize(),
+				n = (getActivePage() + 1) * pgsz;
+			if (j >= n)
+				return; //case 2
+
+			final int cnt = getItems().size(),
+				n2 = n - pgsz;
+			if (j >= n2 && cnt <= n && (!bRemove || cnt > n2 + 1))
+				return; //case 1
+
 			invalidate();
 		}
 	}
