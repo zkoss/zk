@@ -1053,6 +1053,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void smartUpdateDeferred(String attr, DeferredValue value) {
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
+	public void smartUpdateValues(String attr, Object[] values) {
+		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, values);
+	}
 	/** A special smart-update that update a value in int.
 	 * <p>It will invoke {@link #smartUpdate(String,String)} to update
 	 * the attribute eventually.

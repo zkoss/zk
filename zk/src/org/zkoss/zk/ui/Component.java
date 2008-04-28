@@ -790,6 +790,13 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @since 3.0.1
 	 */
 	public void smartUpdateDeferred(String attr, DeferredValue value);
+	/** Smart-updates a property with an array of values.
+	 *
+	 * @param values an array of values. Any of them must be an instance
+	 * of String or {@link DeferredValue}.
+	 * @since 3.0.5
+	 */
+	public void smartUpdateValues(String attr, Object[] values);
 	/** Causes a response (aka., a command) to be sent to the client.
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response

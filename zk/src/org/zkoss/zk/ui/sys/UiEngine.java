@@ -112,6 +112,14 @@ public interface UiEngine {
 	 * @see Component#smartUpdateDeferred(String, DeferredValue)
 	 */
 	public void addSmartUpdate(Component comp, String attr, DeferredValue value);
+	/** Smart updates an attribute of a component with an array of values.
+	 * Each element of values must be an instance of String or
+	 * {@link DeferredValue}.
+	 *
+	 * @since 3.0.5
+	 * @see Component#smartUpdateArray(String, Object[])
+	 */
+	public void addSmartUpdate(Component comp, String attr, Object[] values);
 	/** Adds a response which will be sent to client at the end
 	 * of the execution.
 	 * Called when {@link Component#response} is called.
