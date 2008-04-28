@@ -40,4 +40,17 @@ public class AuSetAttribute extends AuResponse {
 	public AuSetAttribute(Component comp, String attr, DeferredValue val) {
 		super("setAttr", comp, new Object[] {comp.getUuid(), attr, val});
 	}
+	public AuSetAttribute(Component comp, String attr, Object[] values) {
+		super("setAttr", comp, toData(comp, attr, values));
+	}
+	private static final
+	Object[] toData(Component comp, String attr, Object[] values) {
+		final int len = values != null ? values.length: 0;
+		final Object[] data = new Object[len + 2];
+		data[0] = comp.getUuid();
+		data[1] = attr;
+		for (int j = 0; j < len; ++j)
+			data[j + 2] = values[j];
+		return data;
+	}
 }

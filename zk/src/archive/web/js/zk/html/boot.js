@@ -1003,10 +1003,9 @@ zk._initLater = function () {
  * @param fn the method name, e.g., "init"
  * @param type the component type. If omitted, $type(n)
  * is assumed.
- * @param a0 the first of extra arguments; null to omitted
  * @return the result
  */
-zk.eval = function (n, fn, type, a0, a1, a2, a3, a4, a5, a6, a7) {
+zk.eval = function (n, fn, type) {
 	if (!type) type = $type(n);
 	if (type) {
 		var o = window["zk" + type];
@@ -1014,7 +1013,10 @@ zk.eval = function (n, fn, type, a0, a1, a2, a3, a4, a5, a6, a7) {
 			var f = o[fn];
 			if (f) {
 				try {
-					return f(n,a0,a1,a2,a3,a4,a5,a6,a7);
+					var args = [n];
+					for (var j = arguments.length - 2; --j > 0;) //3->1, 4->2...
+						args[j] = arguments[j + 2];
+					return f.apply(n, args);
 				} catch (ex) {
 					zk.error("Failed to invoke zk"+type+"."+fn+"\n"+ex.message);
 					if (zk.debugJS) throw ex;

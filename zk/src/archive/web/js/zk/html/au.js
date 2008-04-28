@@ -338,24 +338,9 @@ zkau._parseCmds = function (xml) {
 		}
 
 		cmds.push(cmd = {cmd: zk.getElementValue(cmd)});
-
-		switch (cmd.datanum = data ? data.length: 0) {
-		default: //7 or more
-			cmd.dt6 = zk.getElementValue(data[6]);
-		case 6:
-			cmd.dt5 = zk.getElementValue(data[5]);
-		case 5:
-			cmd.dt4 = zk.getElementValue(data[4]);
-		case 4:
-			cmd.dt3 = zk.getElementValue(data[3]);
-		case 3:
-			cmd.dt2 = zk.getElementValue(data[2]);
-		case 2:
-			cmd.dt1 = zk.getElementValue(data[1]);
-		case 1:
-			cmd.dt0 = zk.getElementValue(data[0]);
-		case 0:
-		}
+		cmd.data = [];
+		for (var k = data ? data.length: 0; --k >= 0;)
+			cmd.data[k] = zk.getElementValue(data[k]);
 	}
 	return cmds;
 };
@@ -666,10 +651,9 @@ zkau._doResps = function (cmds) {
 
 		var cmd = cmds.shift();
 		try {
-			zkau.process(cmd.cmd, cmd.datanum,
-				cmd.dt0, cmd.dt1, cmd.dt2, cmd.dt3, cmd.dt4, cmd.dt5, cmd.dt6);
+			zkau.process(cmd.cmd, cmd.data);
 		} catch (e) {
-			zk.error(mesg.FAILED_TO_PROCESS+cmd.cmd+"\n"+e.message+"\n"+cmd.dt0+"\n"+cmd.dt1);
+			zk.error(mesg.FAILED_TO_PROCESS+cmd.cmd+"\n"+e.message);
 			throw e;
 		} finally {
 			zkau._evalOnResponse();
@@ -679,31 +663,36 @@ zkau._doResps = function (cmds) {
 };
 /** Process a command.
  */
-zkau.process = function (cmd, datanum, dt0, dt1, dt2, dt3, dt4, dt5, dt6) {
-	//I. process commands that dt0 is not UUID
+zkau.process = function (cmd, data) {
+	//I. process commands that data[0] is not UUID
 	var fn = zkau.cmd0[cmd];
 	if (fn) {
-		fn.call(zkau, dt0, dt1, dt2, dt3, dt4, dt5, dt6);
+		fn.apply(zkau, data);
 		return;
 	}
 
 	//I. process commands that require uuid
-	var uuid = dt0;
-	if (!uuid) {
+	if (!data || !data.length) {
 		zk.error(mesg.ILLEGAL_RESPONSE+"uuid is required for "+cmd);
 		return;
 	}
-	var cmp = $e(uuid);
 
 	fn = zkau.cmd1[cmd];
 	if (fn) {
-		fn.call(zkau, uuid, cmp, dt1, dt2, dt3, dt4, dt5, dt6);
+		data.splice(1, 0, $e(data[0])); //insert cmp
+		fn.apply(zkau, data);
 		return;
 	}
 
 	zk.error(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
 };
-zk.process = zkau.process; //ZK assumes zk.process, so change it
+/** Used by ZkFns. */
+zk.process = function (cmd) {
+	var args = [];
+	for (var j = arguments.length; --j > 0;)
+		args[j - 1] = arguments[j];
+	zkau.process(cmd, args);
+};
 
 /** Cleans up if we detect obsolete or other severe errors. */
 zkau._cleanupOnFatal = function (ignorable) {
@@ -2157,8 +2146,8 @@ zkau.cmd1 = {
 			zk.alert(dt1);
 		}
 	},
-	setAttr: function (uuid, cmp, dt1, dt2) {
-		if (dt1 == "z.init" || dt1 == "z.chchg") { //initialize
+	setAttr: function (uuid, cmp, nm, val) {
+		if (nm == "z.init" || nm == "z.chchg") { //initialize
 			//Note: cmp might be null because it might be removed
 			if (cmp) {
 				var type = $type(cmp);
@@ -2167,54 +2156,58 @@ zkau.cmd1 = {
 					if (zk.loading) {
 						zk.addInitCmp(cmp);
 					} else {
-						zk.eval(cmp, dt1 == "z.init" ? "init": "childchg", type);
+						zk.eval(cmp, nm == "z.init" ? "init": "childchg", type);
 					}
 				}
 			}
 			return; //done
 		}
-		if (dt2 == null) {
-			zkau.cmd1.rmAttr(uuid, cmp, dt1);
+
+		if (val == null && arguments.length <= 4) { //single null value
+			zkau.cmd1.rmAttr(uuid, cmp, nm);
 			return;
 		}
 
 		var done = false;
-		if ("z.drag" == dt1) {
+		if ("z.drag" == nm) {
 			if (!getZKAttr(cmp, "drag")) zkau.initdrag(cmp);
-			zkau.setAttr(cmp, dt1, dt2);
+			zkau.setAttr(cmp, nm, val);
 			done = true;
-		} else if ("z.drop" == dt1) {
+		} else if ("z.drop" == nm) {
 			if (!getZKAttr(cmp, "drop")) zkau.initdrop(cmp);
-			zkau.setAttr(cmp, dt1, dt2);
+			zkau.setAttr(cmp, nm, val);
 			done = true;
-		} else if ("zid" == dt1) {
+		} else if ("zid" == nm) {
 			zkau.cleanzid(cmp);
-			if (dt2) zkau.initzid(cmp, dt2);
+			if (val) zkau.initzid(cmp, val);
 		}
 
-		if (zk.eval(cmp, "setAttr", null, dt1, dt2)) //NOTE: cmp is NOT converted to real!
+		var args = [cmp, "setAttr", null, nm, val];
+		for (var j = arguments.length - 4; --j >= 0;)
+			args[j + 5] = arguments[j + 4];
+		if (zk.eval.apply(cmp, args))
 			return; //done
 
 		if (!done)
-			zkau.setAttr(cmp, dt1, dt2);
+			zkau.setAttr(cmp, nm, val);
 	},
-	rmAttr: function (uuid, cmp, dt1) {
+	rmAttr: function (uuid, cmp, nm) {
 		var done = false;
-		if ("z.drag" == dt1) {
+		if ("z.drag" == nm) {
 			zkau.cleandrag(cmp);
-			zkau.rmAttr(cmp, dt1);
+			zkau.rmAttr(cmp, nm);
 			done = true;
-		} else if ("z.drop" == dt1) {
+		} else if ("z.drop" == nm) {
 			zkau.cleandrop(cmp);
-			zkau.rmAttr(cmp, dt1);
+			zkau.rmAttr(cmp, nm);
 			done = true;
 		}
 
-		if (zk.eval(cmp, "rmAttr", null, dt1)) //NOTE: cmp is NOT converted to real!
+		if (zk.eval(cmp, "rmAttr", null, nm)) //NOTE: cmp is NOT converted to real!
 			return; //done
 
 		if (!done)
-			zkau.rmAttr(cmp, dt1);
+			zkau.rmAttr(cmp, nm);
 	},
 	outer: function (uuid, cmp, html) {
 		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced

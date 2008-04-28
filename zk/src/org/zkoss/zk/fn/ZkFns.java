@@ -124,11 +124,10 @@ public class ZkFns {
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
 			sb.append("zk.process('").append(response.getCommand())
-				.append("',");
+				.append("'");
 
 			final String[] data = response.getData();
 			final int datanum = data != null ? data.length: 0;
-			sb.append(datanum);
 			for (int j = 0; j < datanum; ++j) {
 				sb.append(",\"");
 				if (data[j] != null)

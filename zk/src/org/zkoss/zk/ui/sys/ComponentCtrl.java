@@ -173,6 +173,8 @@ public interface ComponentCtrl {
 	 *
 	 * @param value the new value. If null, it means removing the property.
 	 * @since 3.1.0
+	 * @see #smartUpdateDeferred
+	 * @see #smartUpdateValues
 	 */
 	public void smartUpdate(String attr, String value);
 	/** Smart-updates a property with a deferred value.
@@ -189,8 +191,19 @@ public interface ComponentCtrl {
 	 * (by use of <code>disable-event-thread</code> in zk.xml).
 	 *
 	 * @since 3.1.0
+	 * @see #smartUpdate
+	 * @see #smartUpdateValues
 	 */
 	public void smartUpdateDeferred(String attr, DeferredValue value);
+	/** Smart-updates a property with an array of values.
+	 *
+	 * @param values an array of values. Any of them must be an instance
+	 * of String or {@link DeferredValue}.
+	 * @since 3.1.0
+	 * @see #smartUpdate
+	 * @see #smartUpdateDeferred
+	 */
+	public void smartUpdateValues(String attr, Object[] values);
 	/** Causes a response to be sent to the client.
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
