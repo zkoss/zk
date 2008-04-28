@@ -313,7 +313,7 @@ public class Treechildren extends XulElement implements Pageable {
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
-		checkInvalidateForMoved(comp);
+		checkInvalidateForMoved(comp, false);
 	}
 	/** Callback if a child will be removed (not removed yet).
 	 * <p>Default: invalidate if it is the paging mold and it affects
@@ -321,24 +321,30 @@ public class Treechildren extends XulElement implements Pageable {
 	 * @since 3.0.5
 	 */
 	protected void beforeRemove(Component comp) {
-		checkInvalidateForMoved(comp);
+		checkInvalidateForMoved(comp, true);
 	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
+	 * @param bRemove if child will be removed
 	 */
-	private void checkInvalidateForMoved(Component child) {
+	private void checkInvalidateForMoved(Component child, boolean bRemove) {
 		//No need to invalidate if
 		//1) act == last and child in act
 		//2) act != last and child after act
+		//Except removing last elem which in act and act has only one elem
 		if (!isInvalidated()) {
 			int pgsz = getPageSize();
 			if (pgsz > 0) {
 				List children = getChildren();
 				int sz = children.size();
 				int n = sz - (getActivePage() + 1) * pgsz;
-				if (n <= 0) //must be last page
+				if (n <= 0) { //must be last page
 					n += pgsz; //check in-act (otherwise, check after-act)
-				else if (n > 50)
+					if (bRemove && n <= 1) { //last elem, in act and remove
+						invalidate();
+						return;
+					}
+				} else if (n > 50)
 					n = 50; //check at most 50 items (for better perf)
 
 				for (ListIterator it = children.listIterator(sz);
