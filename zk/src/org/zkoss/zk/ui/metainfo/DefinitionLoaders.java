@@ -153,7 +153,7 @@ public class DefinitionLoaders {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				if (log.debugable()) log.debug("Loading "+res.url);
 				try {
-					if (checkVersion(zkver, res.url, res.document))
+					if (checkVersion(zkver, res.url, res.document, false))
 						parseConfig(res.document.getRootElement());
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+res.url);
@@ -172,7 +172,7 @@ public class DefinitionLoaders {
 				if (log.debugable()) log.debug("Loading "+url);
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
-					if (checkVersion(zkver, url, doc))
+					if (checkVersion(zkver, url, doc, false))
 						parseLang(doc, locator, url, false);
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+url);
@@ -190,7 +190,7 @@ public class DefinitionLoaders {
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				try {
-					if (checkVersion(zkver, res.url, res.document))
+					if (checkVersion(zkver, res.url, res.document, true))
 						parseLang(res.document, locator, res.url, true);
 				} catch (Exception ex) {
 					log.error("Failed to load addon", ex);
@@ -235,37 +235,44 @@ public class DefinitionLoaders {
 
 	/** Checks and returns whether the loaded document's version is correct.
 	 */
-	private static boolean checkVersion(int[] zkver, URL url, Document doc)
+	private static
+	boolean checkVersion(int[] zkver, URL url, Document doc, boolean optional)
 	throws Exception {
 		final Element el = doc.getRootElement().getElement("version");
-		if (el != null) {
-			final String reqzkver = el.getElementValue("zk-version", true);
-			if (reqzkver != null) {
-				for (int j = 0; j < MAX_VERSION_SEGMENT; ++j) {
-					int v = Utils.getSubversion(reqzkver, j);
-					if (v < zkver[j]) break; //ok
-					if (v > zkver[j]) {//failed
-						log.info("Ignore "+url+"\nCause: ZK version must be "+zkver+" or later, not "+Version.UID);
-						return false;
-					}
-				}
-			}
-
-			final String clsnm = IDOMs.getRequiredElementValue(el, "version-class");
-			final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
-			final Class cls = Classes.forNameByThread(clsnm);
-			final Field fld = cls.getField("UID");
-			final String uidInClass = (String)fld.get(null);
-			if (uid.equals(uidInClass)) {
-				return true;
-			} else {
-				log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
-				return false;
-			}
-		} else {
+		if (el == null) {
+			if (optional) return true; //OK if addon
 			log.info("Ignore "+url+"\nCause: version not specified");
 			return false; //backward compatible
 		}
+
+		final String reqzkver = el.getElementValue("zk-version", true);
+		if (reqzkver != null) {
+			for (int j = 0; j < MAX_VERSION_SEGMENT; ++j) {
+				int v = Utils.getSubversion(reqzkver, j);
+				if (v < zkver[j]) break; //ok
+				if (v > zkver[j]) {//failed
+					log.info("Ignore "+url+"\nCause: ZK version must be "+zkver+" or later, not "+Version.UID);
+					return false;
+				}
+			}
+		}
+
+		final String clsnm = el.getElementValue("version-class", true);
+		if (clsnm == null || clsnm.length() == 0) {
+			if (optional) return true; //OK if optional
+			throw new UiException("version-class required, "+el.getLocator());
+		}
+
+		final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
+		final Class cls = Classes.forNameByThread(clsnm);
+		final Field fld = cls.getField("UID");
+		final String uidInClass = (String)fld.get(null);
+		if (!uid.equals(uidInClass)) {
+			log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
+			return false;
+		}
+
+		return true; //matched
 	}
 
 	private static void parseConfig(Element el)
