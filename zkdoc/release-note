@@ -10,7 +10,8 @@ ZK 3.0.5 Freshly
   1948462: AuResponse supports DeferredValue
   1953246: Smart update supports an array of values
   1949336: Component supports isInvalidated
-
+  1914491: BindingListModel subclasses are not accessible.
+  
 * Bugs
   1929139: [IE6/IE7 only] Incomplete requests being dropped
   1926759: Invisible splitter still visible
