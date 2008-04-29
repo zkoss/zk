@@ -731,7 +731,7 @@ zkau.setAttr = function (cmp, name, value) {
 	cmp = zkau._attr(cmp, name);
 
 	if ("visibility" == name) {
-		zk.setVisibility(cmp, value);
+		zk.setVisible(cmp, value == "true");
 	} else if ("value" == name) {
 		if (value != cmp.value) {
 			cmp.value = value;
