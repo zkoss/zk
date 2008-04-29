@@ -27,15 +27,16 @@ import java.util.List;
  * {@link org.zkoss.zul.Listbox}, {@link org.zkoss.zul.Grid},  
  * and {@link DataBinder}.
  * Add or remove the contents of this model as a List would cause the associated Listbox or Grid to change accordingly.</p> 
+ * <p>Make as public class since 3.0.5</p>
  *
  * @author Henri Chen
  * @see BindingListModel
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelList
  */
-/*package*/ class BindingListModelList extends ListModelList
+public class BindingListModelList extends ListModelList
 implements BindingListModel, java.io.Serializable {
-	/* package */BindingListModelList(List list, boolean live) {
+	public BindingListModelList(List list, boolean live) {
 		super(list, live);
 	}
 }

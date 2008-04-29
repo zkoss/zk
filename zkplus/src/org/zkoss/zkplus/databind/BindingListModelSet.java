@@ -27,15 +27,16 @@ import java.util.Set;
  * {@link org.zkoss.zul.Listbox}, {@link org.zkoss.zul.Grid}, 
  * and {@link DataBinder}.
  * Add or remove the contents of this model as a Set would cause the associated Listbox or Grid to change accordingly.</p> 
+ * <p>Make as public class since 3.0.5</p>
  *
  * @author Henri Chen
  * @see BindingListModel
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelSet
  */
-/*package*/ class BindingListModelSet extends ListModelSet
+public class BindingListModelSet extends ListModelSet
 implements BindingListModel, java.io.Serializable {
-	/* package */ BindingListModelSet(Set set, boolean live) {
+	public BindingListModelSet(Set set, boolean live) {
 		super(set, live);
 	}
 }

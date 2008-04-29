@@ -25,15 +25,16 @@ import org.zkoss.zul.ListModelArray;
  * {@link org.zkoss.zul.Listbox}, {@link org.zkoss.zul.Grid},  
  * and {@link DataBinder}.
  * Modify the contents of this model as an Object array would cause the associated Listbox or Grid to change accordingly.</p> 
+ * <p>Make as public class since 3.0.5</p>
  *
  * @author Henri Chen
  * @see BindingListModel
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelArray
  */
-/*package*/ class BindingListModelArray extends ListModelArray
+public class BindingListModelArray extends ListModelArray
 implements BindingListModel, java.io.Serializable {
-	/* package */BindingListModelArray(Object[] c, boolean live) {
+	public BindingListModelArray(Object[] c, boolean live) {
 		super(c, live);
 	}
 }
