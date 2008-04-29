@@ -41,7 +41,7 @@ import org.zkoss.zk.au.in.*;
  *
  * <p>Notice that {@link #activate} must be called in the activated execution.
  * Before calling this method, {@link #getPage}, {@link #getComponent}
- * and {@link #getCommand} cannot be called.
+ * and {@link #getCommand()} cannot be called.
  *
  * @author tomyeh
  */
@@ -69,6 +69,8 @@ public class AuRequest {
 		return _cmds.containsKey(cmdnm);
 	}
 	/** Returns the command of the specified name.
+	 * It looks for the global commands only.
+	 * For component-specific commands, use {@link ComponentCtrl#getCommand}.
 	 * @exception CommandNotFoundException if the command is not found
 	 */
 	public static final Command getCommand(String name) {
