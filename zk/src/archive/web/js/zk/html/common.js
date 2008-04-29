@@ -2056,11 +2056,11 @@ zk.doEventStop = function (evt) {
  * @param {Boolean} alwaysAnima if true, always invoke zk.show().
  * @since 3.0.5
  */
-zk.setVisibility = function (cmp, val, alwaysAnima) {
+zk.setVisible = function (cmp, visible, alwaysAnima) {
 	//Bug 1896588: if cmp invisible, just don't do animation (performance in IE)
-	var bShow = "true" == value;
-	if (alwaysAnima || zk.isRealVisible(cmp, true)) zk.show(cmp, bShow);
-	else if (bShow) action.show(cmp); else action.hide(cmp);
+	if (alwaysAnima || zk.isRealVisible(cmp, true)) zk.show(cmp, visible);
+	else if (visible) action.show(cmp);
+	else action.hide(cmp);
 };
 ////
 //show & hide
