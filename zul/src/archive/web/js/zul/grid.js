@@ -346,7 +346,7 @@ zkGrw.stripe = function (cmp, isClean) {
 	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
-		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Grw");
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, meta.id + "Grw");
 		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Grw");
 	}
 };
