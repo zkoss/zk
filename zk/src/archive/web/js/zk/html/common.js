@@ -2051,7 +2051,17 @@ zk.doEventStop = function (evt) {
 	if (!evt) evt = window.event;
 	Event.stop(evt);
 };
-
+/**
+ * Sets the visibility property of the specified cmp.
+ * @param {Boolean} alwaysAnima if true, always invoke zk.show().
+ * @since 3.0.5
+ */
+zk.setVisibility = function (cmp, val, alwaysAnima) {
+	//Bug 1896588: if cmp invisible, just don't do animation (performance in IE)
+	var bShow = "true" == value;
+	if (alwaysAnima || zk.isRealVisible(cmp, true)) zk.show(cmp, bShow);
+	else if (bShow) action.show(cmp); else action.hide(cmp);
+};
 ////
 //show & hide
 /** Shows the specified element with the effect specified in conshow,
