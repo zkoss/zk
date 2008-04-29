@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.AbstractList;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
@@ -38,11 +40,48 @@ import org.zkoss.zul.ext.Paginal;
  * @author tomyeh
  */
 public class Rows extends XulElement {
+	private transient List _groupsInfo, _groups;
+	public Rows() {
+		_groupsInfo = new LinkedList();
+		_groups = new AbstractList() {
+			public int size() {
+				return getGroupCount();
+			}
+			public Iterator iterator() {
+				return new IterGroups();
+			}
+			public Object get(int index) {
+				return getChildren().get(((int[])_groupsInfo.get(index))[0]);
+			}
+		};
+	}
 	/** Returns the grid that contains this rows.
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Grid getGrid() {
 		return (Grid)getParent();
+	}
+	/**
+	 * Returns the number of Group
+	 * @since 3.1.0
+	 */
+	public int getGroupCount() {
+		return _groupsInfo.size();
+	}
+	
+	/**
+	 * Returns a list of all {@link Group}.
+	 *	@since 3.1.0
+	 */
+	public List getGroups() {
+		return _groups;
+	}
+	/**
+	 * Returns whether Group exists.
+	 * @since 3.1.0
+	 */
+	public boolean hasGroup() {
+		return !_groupsInfo.isEmpty();
 	}
 
 	//Paging//
@@ -72,18 +111,89 @@ public class Rows extends XulElement {
 		final Paginal pgi = grid.getPaginal();
 		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
 	}
-
+	
+	/*package*/ void fixGroupIndex(int j, int to) {
+		for (Iterator it = getChildren().listIterator(j);
+		it.hasNext() && (to < 0 || j <= to); ++j) {
+			if (it.next() instanceof Group) {
+				int[] g = getGroupsInfoAtIndex(j-1, true);
+				if (g != null) g[0] = j;
+			}
+		}
+	}
+	/*package*/ Group getGroupAtIndex(int index) {
+		if (_groupsInfo.isEmpty()) return null;
+		final int[] g = getGroupsInfoAtIndex(index);
+		if (g != null) return (Group)getChildren().get(g[0]);
+		return null;
+	}
+	/*package*/ int[] getGroupsInfoAtIndex(int index) {
+		return getGroupsInfoAtIndex(index, false);
+	}
+	/**
+	 * Returns an int array that it has two length, one is an index of Group,
+	 * and the other is the number of items of Group(inclusive).
+	 */
+	/*package*/ int[] getGroupsInfoAtIndex(int index, boolean isGroup) {
+		for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
+			int[] g = (int[])it.next();
+			if (isGroup) {
+				if (index == g[0]) return g;
+			} else if ((index > g[0] && index <= g[0] + g[1]))
+				return g;
+		}
+		return null;
+	}
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
 			throw new UiException("Unsupported parent for rows: "+parent);
 		super.setParent(parent);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public boolean insertBefore(Component child, Component refChild) {
 		if (!(child instanceof Row))
 			throw new UiException("Unsupported child for rows: "+child);
-
-		if (super.insertBefore(child, insertBefore)) {
+		Row newItem = (Row) child;
+		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;
+		if (super.insertBefore(child, refChild)) {
+			if(hasGroup()) {
+				final int
+					jto = refChild instanceof Row ? ((Row)refChild).getIndex(): -1,
+					fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
+				if (fixFrom >= 0) fixGroupIndex(fixFrom,
+					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1);
+			}
+			if (newItem instanceof Group) {
+				Group group = (Group) newItem;
+				int index = group.getIndex();
+				if (_groupsInfo.isEmpty())
+					_groupsInfo.add(new int[]{group.getIndex(), getChildren().size() - index});
+				else {
+					int idx = 0;
+					int[] prev = null, next = null;
+					for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
+						int[] g = (int[])it.next();
+						if(g[0] <= index) {
+							prev = g;
+							idx++;
+						} else {
+							next = g;
+							break;
+						}
+					}
+					if (prev != null) {
+						int leng = index - prev[0], 
+							size = prev[1] - leng + 1;
+						prev[1] = leng;
+						_groupsInfo.add(idx, new int[]{index, size});	
+					} else if (next != null) {
+						_groupsInfo.add(idx, new int[]{index, next[0] - index});
+					}
+				}
+			} else if (hasGroup()) {
+				final int[] g = getGroupsInfoAtIndex(newItem.getIndex());
+				if (g != null) g[1]++;
+			}
 			afterInsert(child);
 			return true;
 		}
@@ -92,7 +202,30 @@ public class Rows extends XulElement {
 	public boolean removeChild(Component child) {
 		if (child.getParent() == this)
 			beforeRemove(child);
-		return super.removeChild(child);
+		int index = hasGroup() ? ((Row)child).getIndex() : -1;
+		if(super.removeChild(child)) {
+			if (child instanceof Group) {
+				fixGroupIndex(index, -1);
+				int[] prev = null, remove = null;
+				for(Iterator it = _groupsInfo.iterator(); it.hasNext();) {
+					int[] g = (int[])it.next();
+					if (g[0] == index) {
+						remove = g;
+						break;
+					}
+					prev = g;
+				}
+				if (prev != null && remove !=null) {
+					prev[1] += remove[1] - 1;
+					_groupsInfo.remove(remove);
+				}
+			} else if (hasGroup()) {
+				final int[] g = getGroupsInfoAtIndex(index);
+				if (g != null) g[1]--;
+			}
+			return true;
+		}
+		return false;
 	}
 	/** Callback if a child has been inserted.
 	 * <p>Default: invalidate if it is the paging mold and it affects
@@ -192,6 +325,25 @@ public class Rows extends XulElement {
 			--pgsz >= 0 && it.hasNext();)
 				avail.add(it.next());
 			return avail;
+		}
+	}
+	/**
+	 * An iterator used by _groups.
+	 */
+	private class IterGroups implements Iterator {
+		private final Iterator _it = _groupsInfo.iterator();
+		private int _j;
+
+		public boolean hasNext() {
+			return _j < getGroupCount();
+		}
+		public Object next() {
+			final Object o = getChildren().get(((int[])_it.next())[0]);
+			++_j;
+			return o;
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 	}
 }

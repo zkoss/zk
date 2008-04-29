@@ -1203,9 +1203,14 @@ public class Listbox extends XulElement {
 								break;
 							}
 						}
-						if (prev != null && next !=null) prev[1] = lg.getIndex() - prev[0];
-						final int leng = next != null ? next[0] - lg.getIndex() : 1;
-						_groupsInfo.add(idx, new int[]{lg.getIndex(), leng});
+						if (prev != null) {
+							int leng = lg.getIndex() - prev[0], 
+								size = prev[1] - leng + 1;
+							prev[1] = leng;
+							_groupsInfo.add(idx, new int[]{lg.getIndex(), size});	
+						} else if (next != null) {
+							_groupsInfo.add(idx, new int[]{lg.getIndex(), next[0] - lg.getIndex()});
+						} 
 					}
 				} else if (!_groupsInfo.isEmpty()) {
 					final int[] g = getGroupsInfoAtIndex(newItem.getIndex());

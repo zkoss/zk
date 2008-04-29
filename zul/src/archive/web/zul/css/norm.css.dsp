@@ -502,12 +502,15 @@ span.dottree-spacer {
 	display:inline-block;
 }
 <%-- ZK group, listgroup --%>
-td.listgroup-cell {
+td.listgroup-cell, td.group-cell{
 	padding-top: 2px; border-bottom: 2px solid #84A6D4;
 }
-td.listgroup-cell div.cell-inner {
+td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 	padding: 4px 2px; width: auto;
+}
+span.group-cell {
+	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 }
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {

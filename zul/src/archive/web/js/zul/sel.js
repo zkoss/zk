@@ -1406,6 +1406,7 @@ zkLitgp = {
 		}
 	},
 	cleanup: function (row) {
+		row._img = null;
 		var prev, table = row.parentNode.parentNode;
 		for (var i = row.rowIndex - 1; --i >= 0;) {
 			if ($type(table.rows[i]) == "Litgp") {

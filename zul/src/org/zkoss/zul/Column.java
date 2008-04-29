@@ -225,7 +225,14 @@ public class Column extends HeaderElement {
 					throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
 				((ListModelExt)model).sort(cmpr, ascending);
 			} else { //not live data
-				Components.sort(grid.getRows().getChildren(), cmpr);
+				final Rows rows = grid.getRows();
+				if (rows.hasGroup())
+					for (Iterator it = rows.getGroups().iterator(); it.hasNext();) {
+						Group g = (Group)it.next();
+						int index = g.getIndex() + 1;
+						Components.sort(rows.getChildren(), index, index + g.getItemCount(), cmpr);
+					}
+				else Components.sort(rows.getChildren(), cmpr);
 			}
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);

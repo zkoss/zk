@@ -103,6 +103,11 @@ public class Row extends XulElement {
 			smartUpdate("valign", _valign);
 		}
 	}
+	public boolean setVisible(boolean visible) {
+		if (isVisible() != visible) 
+			smartUpdate("z.visible", visible);
+		return super.setVisible(visible);
+	}
 
 	/** Returns the value.
 	 * <p>Default: null.
@@ -180,8 +185,10 @@ public class Row extends XulElement {
 	}
 
 	protected String getRealSclass() {
+		final String scls = super.getRealSclass();
+		if (this instanceof Group || !isVisible()) return scls;
 		final String sclx = (String) getParent().getAttribute(Attributes.STRIPE_STATE);
-		return super.getRealSclass() + (sclx != null ? " " + sclx : "");
+		return scls + (sclx != null ? " " + sclx : "");
 	}
 	
 	/** Returns the HTML attributes for the child of the specified index.
@@ -229,9 +236,9 @@ public class Row extends XulElement {
 			HTMLs.appendStyle(sb, "height", hgh);
 			style = sb.toString();
 		}
-
+		String clx = this instanceof Group ? "gc group-cell" : "gc";
 		if (colattrs == null && style.length() == 0 && span == 1)
-			return " class=\"gc\"";
+			return " class=\"" + clx + "\"";
 
 		final StringBuffer sb = new StringBuffer(100);
 		if (colattrs != null)
@@ -240,7 +247,7 @@ public class Row extends XulElement {
 			sb.append(" colspan=\"").append(span).append('"');
 		HTMLs.appendAttribute(sb, "style", style);
 		
-		return sb.append(" class=\"gc\"").toString();
+		return sb.append(" class=\"").append(clx).append('"').toString();
 	}
 
 	//-- super --//
@@ -257,6 +264,7 @@ public class Row extends XulElement {
 		HTMLs.appendAttribute(sb, "z.rid", getGrid().getUuid());
 		HTMLs.appendAttribute(sb, "align", _align);
 		HTMLs.appendAttribute(sb, "valign", _valign);
+		HTMLs.appendAttribute(sb, "z.visible", isVisible());
 		if (_nowrap)
 			HTMLs.appendAttribute(sb, "nowrap", "nowrap");
 

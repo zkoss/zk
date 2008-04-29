@@ -70,7 +70,7 @@ public class Listgroup extends Listitem {
 			}
 		};
 	}
-	/*package*/ void applyImageIfAny() {
+	private void applyImageIfAny() {
 		if (getFirstChild() != null) {
 			final Listcell lc = (Listcell)getFirstChild();
 			if (lc.getImage() == null)

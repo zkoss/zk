@@ -327,6 +327,14 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>group</component-name>
+		<component-class>org.zkoss.zul.Group</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.GroupDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>groupbox</component-name>
 		<extends>groupbox</extends>
 		<mold>

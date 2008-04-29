@@ -150,7 +150,7 @@ zk.Grid.prototype = {
 
 		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
-			if ($visible(row)) {
+			if ($visible(row) && $type(row) != "Grwgp") {
 				zk.addClass(row, scOdd, !even);
 				even = !even;
 			}
@@ -346,7 +346,7 @@ zkGrw.stripe = function (cmp, isClean) {
 	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
-		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, "Grw");
+		if (isClean) zk.addCleanupLater(meta.fixedStripe, false, meta.id + "Grw");
 		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Grw");
 	}
 };
@@ -371,3 +371,87 @@ zk.addBeforeInit(function () {
 	//Columns
 	zkCols = zulHdrs;
 });
+
+/** Grid Group*/
+zkGrwgp = {
+	init: function (cmp) {
+		setZKAttr(cmp, "inited", "true");
+		cmp._img = zk.firstChild(cmp, "IMG", true);
+		if (cmp._img) zk.listen(cmp._img, "click", zkGrwgp.ontoggle);
+		var table = cmp.parentNode.parentNode;
+		if (table.tBodies.length > 1) {
+			var span = 0;
+			for (var row = table.rows[0], i = row.cells.length; --i >=0;)
+				if(zk.isVisible(row.cells[i])) span++;
+			for (var cells = cmp.cells, i = cells.length; --i >= 0;)
+				span -= cells[i].colSpan;
+			if (span > 0) cmp.cells[cmp.cells.length - 1].colSpan += span;
+		}
+	},	ontoggle: function (evt) {
+		if (!evt) evt = window.event;
+		var target = Event.element(evt);
+		var row = zk.parentNode(target, "TR");
+		if (!row) return; //incomplete structure
+
+		var meta = zkau.getMeta(getZKAttr(row, "rid"));
+		if (meta) zk.fixOverflow(meta.element);
+		var toOpen = !zkGrwgp.isOpen(row); //toggle
+		zkGrwgp._openItem(row, toOpen);
+
+		if (toOpen && meta) {	
+			meta.stripe();
+			meta._recalcSize();
+		}
+		Event.stop(evt);
+	},
+	isOpen: function (row) {
+		return getZKAttr(row, "open") == "true";
+	},/** Opens an item */
+	_openItem: function (row, toOpen, silent) {
+		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
+		row._img.src = zk.rename(row._img.src, toOpen ? "open": "close");
+		zkGrwgp._openItemNow(row, toOpen);
+		if (!silent) 
+			zkau.sendasap({uuid: row.id,
+				cmd: "onOpen", data: [toOpen]});
+				//always send since the client has to update Openable
+	},
+	_openItemNow: function (row, toOpen) {
+		for (var table = row.parentNode.parentNode, i = row.rowIndex + 1, j = table.rows.length; i < j; i++) {
+			if ($type(table.rows[i]) == "Grwgp") break;
+			if (getZKAttr(table.rows[i], "visible") == "true")
+				table.rows[i].style.display = toOpen ? "" : "none";
+		}
+	},
+	cleanup: function (row) {
+		row._img = null;
+		var prev, table = row.parentNode.parentNode;
+		for (var i = row.rowIndex - 1; --i >= 0;) {
+			if ($type(table.rows[i]) == "Grwgp") {
+				prev = table.rows[i];
+				break;
+			}
+		}
+		if (prev)
+			zk.addCleanupLater(function () {
+				zkGrwgp._openItem(prev, zkGrwgp.isOpen(prev), true);
+			}, false, row.id);
+	},
+	setAttr: function (cmp, nm, val) {
+		if (nm == "z.open") {
+			zkGrwgp._openItem(cmp, "true" == val, true);
+			if ("true" == val) {
+				var meta = zkau.getMeta(getZKAttr(row, "rid"));
+				if (meta) meta.stripe();
+			}
+			return true;
+		}
+		return false;
+	},
+	initdrag: zkGrw.initdrag,
+	cleandrag: zkGrw.cleandrag
+};
+zkGrwgp.onVisi = zkGrwgp.onSize = function (cmp) {
+	zkGrwgp._openItem(cmp, zkGrwgp.isOpen(cmp), true);
+	zkGrw.stripe(cmp);
+};
