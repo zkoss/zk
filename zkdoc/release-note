@@ -2,6 +2,7 @@
 ZK 3.1.0 Freshly
 * Features
   1907300: Listbox: support grouping
+  1951422: Grid: support grouping
   1883237: A way to register listeners for particular desktop
   1901211: Simplify the outline of Menu component with single TD
   1925928: Add Spinner Component
