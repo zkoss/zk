@@ -38,8 +38,8 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimpleXYModel extends AbstractChartModel implements XYModel {
-	private Map _seriesMap = new HashMap(13); //(series, SimplePieModel)
-	private List _seriesList = new ArrayList(13);
+	protected Map _seriesMap = new HashMap(13); //(series, XYPair)
+	protected List _seriesList = new ArrayList(13);
 	private boolean _autoSort = true;
 	
 	//-- XYModel --//
@@ -115,20 +115,20 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	}
 	
 	//-- internal class --//
-	private static class XYPair {
+	protected static class XYPair {
 		private Number _x;
 		private Number _y;
 		
-		private XYPair(Number x, Number y) {
+		protected XYPair(Number x, Number y) {
 			_x = x;
 			_y = y;
 		}
 		
-		private Number getX() {
+		public Number getX() {
 			return _x;
 		}
 		
-		private Number getY() {
+		public Number getY() {
 			return _y;
 		}
 	}
