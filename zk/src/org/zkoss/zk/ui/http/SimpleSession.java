@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Enumeration;
@@ -176,10 +175,12 @@ public class SimpleSession implements Session, SessionCtrl {
 	/** Cleans up the attribute being set.
 	 */
 	private final void cleanSessAttrs() {
-		final Set names = (Set)getAttribute(ATTR_PRIVATE);
-		if (names != null) //after _navsess is initialized
-			for (Iterator it = names.iterator(); it.hasNext();)
+		final Object names = getAttribute(ATTR_PRIVATE);
+		if (names instanceof Set) { //Bug 1954655: bakward-compatible
+			for (Iterator it = ((Set)names).iterator(); it.hasNext();)
 				rmAttr((String)it.next());
+		}
+		rmAttr(ATTR_PRIVATE);
 	}
 	private final Enumeration getAttrNames() {
 		return _navsess instanceof HttpSession ?
