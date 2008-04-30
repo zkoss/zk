@@ -11,6 +11,11 @@ import org.zkoss.zk.ui.Page;
 /**
  * The Python interpreter based on <a href="www.jython.org">jython</a>
  * 
+ * <p>Ludovic Drolez implemented the first Jython interpreter for ZK on May 2007:
+ * http://zkforge.svn.sourceforge.net/viewvc/zkforge/trunk/scripting/jython/src/org/zkforge/scripting/jython/
+ *
+ * <p>Inspired by Drolez's job, Grace Lin wrote this class on March 2008
+ *
  * @author gracelin
  * @since 3.0.4
  */
