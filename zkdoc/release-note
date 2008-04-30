@@ -7,7 +7,9 @@ ZK 3.1.0 Freshly
   1901211: Simplify the outline of Menu component with single TD
   1925928: Add Spinner Component
   1926069: Pass current value for bandbox/comobox in onOpen
-
+  1890941: chart support bubble chart
+  1890942: chart support wafermap chart
+  
 * Bugs
 
 * Upgrade Notes
