@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul.impl;
 
 import org.zkoss.zul.*;
+import org.zkoss.zul.WaferMapModel.IntPair;
 import org.zkoss.zul.impl.ChartEngine;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -30,6 +31,7 @@ import org.zkoss.lang.Objects;
 import org.jfree.chart.*;
 import org.jfree.chart.encoders.*;
 import org.jfree.chart.plot.*;
+import org.jfree.chart.renderer.*;
 import org.jfree.chart.entity.*;
 import org.jfree.data.general.*;
 import org.jfree.data.category.*;
@@ -41,12 +43,16 @@ import org.jfree.util.TableOrder;
 import java.util.List;
 import java.util.Date;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.HashMap;
 import java.util.TimeZone;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
 import java.awt.Paint;
 import java.awt.Color;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 
@@ -79,6 +85,12 @@ import java.util.Iterator;
  *   <tr><td></td><td>x</td></tr>
  *   <tr><td></td><td>y</td></tr>
  *
+ *   <tr><td>{@link XYZModel}</td><td>entity</td></tr>
+ *   <tr><td>since 3.1.0</td><td>series</td></tr>
+ *   <tr><td></td><td>x</td></tr>
+ *   <tr><td></td><td>y</td></tr>
+ *   <tr><td></td><td>z</td></tr>
+ *
  *   <tr><td>{@link HiLoModel}</td><td>entity</td></tr>
  *   <tr><td></td><td>series</td></tr>
  *   <tr><td></td><td>date</td></tr>
@@ -97,8 +109,9 @@ import java.util.Iterator;
  * <li>category: category name of the associated data.</li>
  * <li>value: value of the associated data.</li>
  * <li>series: series name of the associated data.</li>
- * <li>x: x value of the XYModel</li>
- * <li>y: y value of the XYModel</li>
+ * <li>x: x value of the XYModel and XYZModel</li>
+ * <li>y: y value of the XYModel and XYZModel</li>
+ * <li>z: z value of the XYZModel</li>
  * <li>date, open, high, low, close, volumn: data of the HiLoModel</li>
  * </ul>
  *
@@ -171,7 +184,13 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 
 		else if (Chart.HIGHLOW.equals(chart.getType()))			
 			_chartImpl = new Highlow();
-
+			
+		else if (Chart.BUBBLE.equals(chart.getType()))
+			_chartImpl = new Bubble();
+			
+		else if (Chart.WAFERMAP.equals(chart.getType()))
+			_chartImpl = new Wafermap();
+			
 		else 
 			throw new UiException("Unsupported chart type yet: "+chart.getType());
 
@@ -395,6 +414,43 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		return dataset;
 	}
 
+	/**
+	 * transfer a XYZModel into JFreeChart XYZDataset.
+	 * @since 3.1.0
+	 */
+	private XYZDataset XYZModelToXYZDataset(XYZModel model) {
+		DefaultXYZDataset dataset = new DefaultXYZDataset();
+		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
+			final Comparable seriesKey = (Comparable) it.next();
+			final int size = model.getDataCount(seriesKey);
+			final double[][] data = new double[3][size];
+			for(int j = 0; j < size; ++j) {
+				data[0][j] = model.getX(seriesKey, j).doubleValue();
+				data[1][j] = model.getY(seriesKey, j).doubleValue();
+				data[2][j] = model.getZ(seriesKey, j).doubleValue();
+			}
+			dataset.addSeries(seriesKey, data);
+		}
+		return dataset;
+	}
+
+	/**
+	 * transfer a WaferMapModel into JFreeChart WaferMapDataset.
+	 * @since 3.1.0
+	 */
+	private WaferMapDataset WaferMapModelToWaferMapDataset(WaferMapModel model) {
+		WaferMapDataset dataset = new WaferMapDataset(model.getXsize(), model.getYsize(), new Double(model.getSpace()));
+		for (final Iterator it = model.getEntrySet().iterator(); it.hasNext();) {
+			final Entry me = (Entry) it.next();
+			final IntPair ip = (IntPair) me.getKey();
+			final Number val = (Number) me.getValue();
+			final int x = ip.getX() + 1; //move to WaferMapDataset x is 1-based
+			final int y = ip.getY();
+			dataset.addValue(val.intValue(), x, y);
+		}
+		return dataset;
+	}
+
 	private static Map _periodMap = new HashMap(10);	
 	static {
 		_periodMap.put(Chart.MILLISECOND, org.jfree.data.time.Millisecond.class);
@@ -564,6 +620,11 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			area.setAttribute("low", ds.getLow(si, ii));
 			area.setAttribute("close", ds.getClose(si, ii));
 			area.setAttribute("volume", ds.getVolume(si, ii));
+		} else if (dataset instanceof XYZDataset) {
+			XYZDataset ds = (XYZDataset) dataset;
+			area.setAttribute("x", ds.getX(si, ii));
+			area.setAttribute("y", ds.getY(si, ii));
+			area.setAttribute("z", ds.getZ(si, ii));
 		} else {
 			area.setAttribute("x", dataset.getX(si, ii));
 			area.setAttribute("y", dataset.getY(si, ii));
@@ -1266,6 +1327,107 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				chart.getYAxis(),
 				HiLoModelToOHLCDataset((HiLoModel)model),
 				chart.isShowLegend());
+		}
+	}
+
+	/** bubble 
+	 * @since 3.1.0
+	 */
+	private class Bubble extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "DATA");
+				decodeXYInfo(area, (XYItemEntity)info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof XYZModel)) {
+				throw new UiException("model must be a org.zkoss.zul.XYZModel");
+			}
+			return ChartFactory.createBubbleChart(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				XYZModelToXYZDataset((XYZModel)model),
+				getOrientation(chart.getOrient()), 
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+		}
+	}
+
+	/** wafermap 
+	 * @since 3.1.0
+	 */
+	private class Wafermap extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+//		System.out.println("info:"+info);
+/*			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof XYItemEntity) {
+				area.setAttribute("entity", "DATA");
+				decodeXYInfo(area, (XYItemEntity)info);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+*/		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof WaferMapModel)) {
+				throw new UiException("model must be a org.zkoss.zul.WaferMapModel");
+			}
+			final JFreeChart jfchart = ChartFactory.createWaferMapChart(
+				chart.getTitle(),
+				WaferMapModelToWaferMapDataset((WaferMapModel)model),
+				getOrientation(chart.getOrient()), 
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+				
+			final WaferMapRenderer renderer = new MyWaferMapRenderer(); //workaround the paintList not ready issue
+			((WaferMapPlot)jfchart.getPlot()).setRenderer(renderer);
+			return jfchart;
+		}
+
+	}
+	//20080211, Henri Chen: To workaround null Legend fillPaint issue, we override the WaferMapRenderer
+	//to call lookupSeriesPaint instead of getSeriesPaint() directly.
+	private static class MyWaferMapRenderer extends WaferMapRenderer {
+		private boolean _inrender = false;
+		public Paint getSeriesPaint(int series) {
+			if (_inrender) {
+				return null; //avoid endless looping
+			}
+			
+			final Paint paint = super.getSeriesPaint(series);
+			if (paint != null) {
+				return paint;
+			}
+			
+			final boolean pre = _inrender;
+			try {
+				_inrender = true;
+				return lookupSeriesPaint(series); //will recursivly callback to getSeriesPaint() method
+			} finally {
+				_inrender = pre;
+			}
 		}
 	}
 
