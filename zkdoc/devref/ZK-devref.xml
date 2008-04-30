@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Reference</title>
-<subtitle>Version 3.0.4</subtitle>
+<subtitle>Version 3.0.5</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
@@ -16,9 +16,9 @@
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>March 2008</para>
+<para>April 2008</para>
 <para>Potix Corporation</para>
-<para>Revision 97</para>
+<para>Revision 99</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -71,7 +71,7 @@
 <para>A map of custom attributes associated with the ID space containing this component.</para></sect2></sect1><sect1><title>Processing Instructions</title>
 <para>The XML processing instructions describe how to process the ZUML page. They will be processed first before processing XML elements. </para><sect2><title>The component Directive</title>
 <para>&lt;?component name="myName" macroURI="/mypath/my.zul" [inline="true|false"] [prop1="value1"] [prop2="value2"]... ?&gt;</para>
-<para>&lt;?component name="myName" [class="myPackage.myClass"] [extend="true"] [moldName="myMoldName"] [moldURI="/myMoldURI"] [prop1="value1"] [prop2="value2"]... ?&gt;</para>
+<para>&lt;?component name="myName" [class="myPackage.myClass"] [extends="nameOfExistComponent"] [moldName="myMoldName"] [moldURI="/myMoldURI"] [prop1="value1"] [prop2="value2"]... ?&gt;</para>
 <para>Defines a new component. There are two formats: by-macro and by-class.</para><sect3><title>The by-macro Format</title>
 <para>&lt;?component name="myName" macroURI="/mypath/my.zul" [prop1="value1"] [prop2="value2"]... ?&gt;</para>
 <para>You could define a new component based on a ZUML page. It is also called the macro component. In other words, once an instance of the new component is created, it creates child components based on the specified ZUML page (the macroURI attribute).</para>
@@ -79,24 +79,24 @@
 <para>The inline attribute specifies whether it is an inline macro (inlinie="true") or a regular macro (default).</para>
 <para>An inline macro behaves like inline-expansion. ZK doesn't create a macro component if an inline macro is encountered. Rather, it inline-expands the components defined in the macro URI. In other words, it works as if you type the content of the inline macro directly to the target page.</para>
 <para>On the other hand, ZK will create a real component (called a macro component) to represent the regular macro. That is, the macro component is created as the parent of the components that are defined in the macro.</para></sect3><sect3><title>The by-class Format</title>
-<para>&lt;?component name="myName" [class="myPackage.myClass"] [extend="true"] [moldName="myMoldName"] [moldURI="/myMoldURI"] [prop1="value1"] [prop2="value2"]...?&gt;</para>
+<para>&lt;?component name="myName" [class="myPackage.myClass"] [extends="nameOfExistComponent"] [moldName="myMoldName"] [moldURI="/myMoldURI"] [prop1="value1"] [prop2="value2"]...?&gt;</para>
 <para>In addition to defining a component by a ZUML page (aka., a macro component), You could define a new component by implementing a class that implements the org.zkoss.zk.ui.Component interface. Then, use the by-class format to declare such kind of components for a page.</para>
 <para>To define a new component, you have to specify at least the class attribute, which is used by ZK to instantiate a new instance of the component.</para>
-<para>In addition to defining a new component, you can override properties of existent components by specifying extend="true". In other words, if extend="true" is specified, the previous definition of the component (with the same name) is loaded as the default value and then override only properties that are specified in this directive.</para>
+<para>In addition to defining a new component, you can override properties of existent components by specifying the extends element with the component name that you want to extend from (extendee). In other words, if extends is specified, the previous definition of the extendee is loaded as the default value and then override only properties that are specified in this directive.</para>
 <para>For example, assume you want to use MyWindow instead of the default window, org.zkoss.zul.html.Window, for all windows defined in this ZUML page. Then, you can declare it as follows.</para>
-<programlisting>&lt;?component name="window" extend="true" class="MyWindow"?&gt;&#13;...&#13;&lt;window&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
+<programlisting>&lt;?component name="window" extends="window" class="MyWindow"?&gt;&#13;...&#13;&lt;window&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
 <para>It is equivalent to the following codes.</para>
 <programlisting>&lt;window use="MyWindow"&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
 <para>In addition, you could specify the properties to initialize. For example, you want to use the style class called blue for all buttons used in this page, then you could:</para>
-<programlisting>&lt;?component name="button" extend="true" sclass="blue"?&gt;&#13;</programlisting>
+<programlisting>&lt;?component name="button" extends="button" sclass="blue"?&gt;&#13;</programlisting>
 <para>Similarly, you could use the following definition to use OK as the default label for all buttons specified in this page.</para>
-<programlisting>&lt;?component name="button" extend="true" label="OK"?&gt;&#13;</programlisting>
+<programlisting>&lt;?component name="button" extends="button" label="OK"?&gt;&#13;</programlisting>
 <para>Notice that the properties won't be applied if a component is created manually (by zscript or by Java codes). If you still want them to be applied with the initialial properties, you could invoke the applyProperties method as follows.</para>
 <para>&lt;zscript&gt;Button btn = new Button();btn.applyProperties(); //apply the initial properties&lt;/zscript&gt;</para></sect3><sect3><title>class</title>
 <para>[Optional]</para>
-<para>Used to specify the class to instantiate an instance of such kind of components. Unlike other directives, the class can be defined with zscript.</para></sect3><sect3><title>extend</title>
+<para>Used to specify the class to instantiate an instance of such kind of components. Unlike other directives, the class can be defined with zscript.</para></sect3><sect3><title>extends</title>
 <para>[Optional]</para>
-<para>If specified with "true", the existent definition will be loaded to initialize the new component definition. In other words, it extends the existent definition instead of defining a brand-new one.</para></sect3><sect3><title>macroURI</title>
+<para>Specifies the name of the component to extend from (extendee). If specified, the existent definition will be loaded to initialize the new component definition. In other words, it extends the existent definition instead of defining a brand-new one.</para></sect3><sect3><title>macroURI</title>
 <para>[Required if the by-macro format is used][EL is not allowed]</para>
 <para>Used with the by-macro format to specify the URI of the ZUML page, which is used as the template to create components.</para></sect3><sect3><title>moldName</title>
 <para>[Optional][Default: default]</para>
@@ -4252,46 +4252,6 @@
 <entry>
 <para>
 <code>"~./zul/img/bandbtn.gif". </code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>multiline</code>
-</para>
-</entry>
-<entry>
-<para>Sets whether it is multiline. </para>
-</entry>
-<entry>
-<para>
-<code>boolean</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>false</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>rows</code>
-</para>
-</entry>
-<entry>
-<para>Sets the rows. </para>
-</entry>
-<entry>
-<para>
-<code>int</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>1</code>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -26875,7 +26835,7 @@
 <para>It specifies the maximal allowed number of concurrent requests per session. Each time an user types an URL at the browser, it creates a request and the request ends after the response is sent to the browser. In other words, this number controls how many concurrent requests the same user can send.</para>
 <para>A negative number means no limitation at all, but it is not recommended due to the possibility of the denial-of-service (DoS) attacks.</para></sect3></sect2><sect2><title>The system-config Element</title>
 <para>You might have multiple system-config elements in one zk.xml.</para>
-<programlisting>&lt;system-config&gt;&#13;    &lt;au-writer-class&gt;my.AuWriter&lt;/au-writer-class&gt;    &#13;    &lt;cache-provider-class&gt;my.CacheProvider&lt;/cache-provider-class&gt;    &#13;    &lt;disable-event-thread/&gt;    &#13;    &lt;engine-class&gt;my.UiEngine&lt;/engine-class&gt;    &#13;&lt;failover-manager-class&gt;my.FailoverManager&lt;/failover-manager-class&gt;&#13;    &lt;id-generator-class&gt;my.IdGenerator&lt;/id-generator-class&gt;    &#13;    &lt;max-spare-threads&gt;100&lt;/max-spare-threads&gt;    &#13;    &lt;max-suspended-threads&gt;100&lt;/max-suspended-threads&gt;    &#13;&lt;max-upload-size&gt;5120&lt;/max-upload-size&gt;&#13;    &lt;max-process-time&gt;3000&lt;/max-process-time&gt;    &#13;    &lt;response-charset&gt;UTF-8&lt;/response-charset&gt;    &#13;    &lt;upload-charset&gt;UTF-8&lt;/upload-charset&gt;    &#13;    &lt;upload-charset-finder-class&gt;my.CharsetFinder&lt;/upload-charset-finder-class&gt;    &#13;    &lt;ui-factory-class&gt;my.UiFactory&lt;/ui-factory-class&gt;    &#13;    &lt;url-encoder-class&gt;my.URLEncoder&lt;/url-encoder-class&gt;    &#13;    &lt;web-app-class&gt;my.WebApp&lt;/web-app-class&gt;    &#13;&lt;/system-config&gt;&#13;</programlisting><sect3><title>The au-writer-class Element</title>
+<programlisting>&lt;system-config&gt;&#13;    &lt;au-writer-class&gt;my.AuWriter&lt;/au-writer-class&gt;    &#13;    &lt;cache-provider-class&gt;my.CacheProvider&lt;/cache-provider-class&gt;    &#13;    &lt;disable-event-thread/&gt;    &#13;    &lt;engine-class&gt;my.UiEngine&lt;/engine-class&gt;    &#13;&lt;failover-manager-class&gt;my.FailoverManager&lt;/failover-manager-class&gt;&#13;    &lt;id-generator-class&gt;my.IdGenerator&lt;/id-generator-class&gt;    &#13;    &lt;max-spare-threads&gt;100&lt;/max-spare-threads&gt;    &#13;    &lt;max-suspended-threads&gt;100&lt;/max-suspended-threads&gt;    &#13;&lt;max-upload-size&gt;5120&lt;/max-upload-size&gt;&#13;    &lt;max-process-time&gt;3000&lt;/max-process-time&gt;    &#13;    &lt;response-charset&gt;UTF-8&lt;/response-charset&gt;    &#13;    &lt;session-cache-class&gt;my.SessionCache&lt;/session-cache-class&gt;    &#13;    &lt;upload-charset&gt;UTF-8&lt;/upload-charset&gt;    &#13;    &lt;upload-charset-finder-class&gt;my.CharsetFinder&lt;/upload-charset-finder-class&gt;    &#13;    &lt;ui-factory-class&gt;my.UiFactory&lt;/ui-factory-class&gt;    &#13;    &lt;url-encoder-class&gt;my.URLEncoder&lt;/url-encoder-class&gt;    &#13;    &lt;web-app-class&gt;my.WebApp&lt;/web-app-class&gt;    &#13;&lt;/system-config&gt;&#13;</programlisting><sect3><title>The au-writer-class Element</title>
 <para>[Default: org.zkoss.zk.au.http.HttpAuWriter for standard and professional editions, or org.zkoss.zkmax.au.http.SmartAuWriter for enterprise edition]</para>
 <para>It specifies which class used to implement the AU writer. The AU writer is used to generate the output and send it to the client. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.au.AuWriter interface.</para>
 <para>There are two built-in implementations, HttpAuWriter and SmartAuWriter. The former one send the output the client after the requests are processed completely. On the other hand, the later one will send a partial output first if the processing is taking too long (half of the value specified in the resend-delay element). By sending the partial output, the client will know the server is still alive.</para></sect3><sect3><title>The cache-provider-class Element</title>
@@ -26943,7 +26903,10 @@
 <para>[Default: UTF-8]</para>
 <para>It specifies the charset for the rendering result of a ZUML page. In other words, it is used to load the ZUML page by the ZK Loader (i.e., DHtmlLayoutServlet).</para>
 <para>If you want to use the container's default value, you can specify an empty string as follows.</para>
-<programlisting>&lt;response-charset&gt;&lt;/response-charset&gt;&#13;</programlisting></sect3><sect3><title>The upload-charset Element</title>
+<programlisting>&lt;response-charset&gt;&lt;/response-charset&gt;&#13;</programlisting></sect3><sect3><title>The session-cache-class Element</title>
+<para>[Default: org.zkoss.zk.ui.http.SimpleSessionCache]</para>
+<para>It specifies the session cache used to store ZK sessions. It must implement the org.zkoss.zk.ui.sys.SessionCache interface.</para>
+<para>By default, org.zkoss.zk.ui.http.SimpleSessionCache is used and it stores the ZK session in an attribute of the native session (i.e., HttpSession or PortletSession).</para></sect3><sect3><title>The upload-charset Element</title>
 <para>[Default: UTF-8]</para>
 <para>It specifies the charset (aka., encoding) for the uploaded text files if no charset is specified with the content type.</para>
 <para>If the uploaded file is binary, there is no encoding issue at all.</para>
