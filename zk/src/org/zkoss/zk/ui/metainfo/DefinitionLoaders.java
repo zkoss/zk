@@ -153,7 +153,7 @@ public class DefinitionLoaders {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				if (log.debugable()) log.debug("Loading "+res.url);
 				try {
-					if (checkVersion(zkver, res.url, res.document, false))
+					if (checkVersion(zkver, res.url, res.document))
 						parseConfig(res.document.getRootElement());
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+res.url);
@@ -172,7 +172,7 @@ public class DefinitionLoaders {
 				if (log.debugable()) log.debug("Loading "+url);
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
-					if (checkVersion(zkver, url, doc, false))
+					if (checkVersion(zkver, url, doc))
 						parseLang(doc, locator, url, false);
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+url);
@@ -190,7 +190,7 @@ public class DefinitionLoaders {
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				try {
-					if (checkVersion(zkver, res.url, res.document, true))
+					if (checkVersion(zkver, res.url, res.document))
 						parseLang(res.document, locator, res.url, true);
 				} catch (Exception ex) {
 					log.error("Failed to load addon", ex);
@@ -236,14 +236,11 @@ public class DefinitionLoaders {
 	/** Checks and returns whether the loaded document's version is correct.
 	 */
 	private static
-	boolean checkVersion(int[] zkver, URL url, Document doc, boolean optional)
+	boolean checkVersion(int[] zkver, URL url, Document doc)
 	throws Exception {
 		final Element el = doc.getRootElement().getElement("version");
-		if (el == null) {
-			if (optional) return true; //OK if addon
-			log.info("Ignore "+url+"\nCause: version not specified");
-			return false; //backward compatible
-		}
+		if (el == null)
+			return true; //version is optional (3.0.5)
 
 		final String reqzkver = el.getElementValue("zk-version", true);
 		if (reqzkver != null) {
@@ -258,9 +255,10 @@ public class DefinitionLoaders {
 		}
 
 		final String clsnm = el.getElementValue("version-class", true);
-		if (clsnm == null || clsnm.length() == 0) {
-			if (optional) return true; //OK if optional
-			throw new UiException("version-class required, "+el.getLocator());
+		if (clsnm == null) {
+			if (clsnm.length() == 0)
+				log.warning("Ignored: empty version-class, "+el.getLocator());
+			return true; //version is optional 3.0.5
 		}
 
 		final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
