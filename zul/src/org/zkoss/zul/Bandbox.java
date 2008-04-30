@@ -156,11 +156,17 @@ public class Bandbox extends Textbox {
 		response("dropdn", new AuInvoke(this, "dropdn", false));
 	}
 
-	//-- super --//
+	/**
+	 * Bandbox can't be enabled the multiline functionality.
+	 */
 	public void setMultiline(boolean multiline) {
 		if (multiline)
 			throw new UnsupportedOperationException("Bandbox doesn't support multiline");
 	}
+
+	/**
+	 * Bandbox can't be enabled the rows functionality.
+	 */
 	public void setRows(int rows) {
 		if (rows != 1)
 			throw new UnsupportedOperationException("Bandbox doesn't support multiple rows, "+rows);
