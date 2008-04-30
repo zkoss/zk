@@ -9,7 +9,7 @@ import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.ui.Page;
 
 /**
- * The Python interpreter based on <a href="www.jython.org">jython</a>
+ * The Python interpreter based on <a href="www.jython.org">jython</a>.
  * 
  * <p>Ludovic Drolez implemented the first Jython interpreter for ZK on May 2007:
  * http://zkforge.svn.sourceforge.net/viewvc/zkforge/trunk/scripting/jython/src/org/zkforge/scripting/jython/
