@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.0.4</subtitle>
+<subtitle>Version 3.0.5</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
@@ -17,9 +17,9 @@
 <para/>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>March 2008</para>
+<para>April 2008</para>
 <para>Potix Corporation</para>
-<para>Revision 209</para>
+<para>Revision 211</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -287,7 +287,7 @@
 <para>Notice that both pages and desktops are created and remove implicitly. There are no API to create or remove them. A page is create each time ZUML loads a page. A page is removed when ZK finds it is no longer referenced. A desktop is created when the first ZUML page is loaded. A desktop is removed if too many desktops are created for the specific session.</para>
 <para>The createComponents method in the org.zkoss.zk.ui.Executions class creates only components, not page, even though it loads a ZUML file (aka., page).</para></sect3></sect2><sect2><title>Forest of Trees of Components</title>
 <para>A component has at most one parent. A component might have multiple children. Some components accept only certain types of components as children. Some must be a child of certain type of components. Some don't allow any child at all. For example, Listbox in XUL accepts Listcols and Listitem only. Refer to Javadoc or XUL tutorials for details.</para>
-<para>A component without any parent is called a root component. A page might have multiple root components, which could be retrieved by the getRoots method.</para></sect2><sect2><title>Component: a Visual Presentation and a Java Object</title>
+<para>A component without any parent is called a root component. A page might have multiple root components, which could be retrieved by the getRoots method.</para></sect2><sect2><title>Component: a Visual Part and a Java Object</title>
 <para>Besides being a Java object in the server, a component has a visual part<footnote>
 <para>If the client is a browser, the visual presentation is a DOM element or a set of DOM elements.</para>
 </footnote> in the browser, if and only if it belongs to a page. When a component is attached to a page, its visual part is created<footnote>
@@ -2969,7 +2969,54 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para>Tip: For JavaScript programmers, it is common to manipulate style.display directly for visibility. However, it is not a good idea. Rather, use action.show and action.hide instead, since ZK Client Engine has to handle visual effects, bug workaround, and so on.</para></sect3><sect3><title>The anima Object</title>
+<para>Tip: For JavaScript programmers, it is common to manipulate style.display directly for visibility. However, it is not a good idea. Rather, use action.show and action.hide instead, since ZK Client Engine has to handle visual effects, bug workaround, and so on.</para></sect3><sect3><title>The comm Object</title>
+<para>Utilities to communicate with the server.</para>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Function</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>comm.onClick(cmp, info)</para>
+</entry>
+<entry>
+<para>Sends the onClick event to the server.</para>
+<para>cmp – the component. Use #{EL-expr} or this to identify it.</para>
+<para>info – a string or null to provide extra information. It will become the return value of MouseEvent's getArea.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>comm.onUser(cmp, ...)</para>
+</entry>
+<entry>
+<para>Sends the onUser event to the server</para>
+<para>cmp – the component. Use #{EL-expr} or this to identify it.</para>
+<para>other – you can provide any number of arguments.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>comm.onEvent(cmp, evt, ...)</para>
+</entry>
+<entry>
+<para>Sends the specified event to the server</para>
+<para>cmp – the component. Use #{EL-expr} or this to identify it.</para>
+<para>evt – the event name</para>
+<para>other – you can provide any number of arguments.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>For example,</para>
+<programlisting>&lt;window title="Test of JavaScript Utilities"&gt;&#13;    &lt;html onClick='l.value = "onClick "+event.area'    &#13;        onUser='l.value ="onUser " +org.zkoss.lang.Objects.toString(event.data)'&gt;&lt;![CDATA[        &#13;        &lt;a href="javascript:;" onclick="comm.sendClick(this, 'Hi')"&gt;onClick with Hi&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendClick(this)"&gt;onClick with null&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendUser(this)"&gt;onUser with null&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendUser(this, 'One')"&gt;onUser with One&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendUser(this, 'One', 'Two')"&gt;onUser with [One, Two]&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendEvent(this, 'onUser', 'XYZ')"&gt;onUser with XYZ&lt;/a&gt;        &#13;    ]]&gt;&lt;/html&gt;    &#13;    &lt;separator/&gt;    &#13;    &lt;label id="l"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect3><sect3><title>The anima Object</title>
 <para>Animation-like visual effects. It is based on the <ulink url="http://wiki.script.aculo.us/scriptaculous/show/VisualEffects">Effect</ulink> class provided by <ulink url="http://script.aculo.us/">script.aculo.us</ulink>
 <ulink url="http://script.aculo.us/">
 <footnote>
@@ -3119,7 +3166,7 @@
 <para>onOK</para>
 </entry>
 <entry>
-<para>window</para>
+<para>window textbox intbox longbox doublebox decimalbox datebox timebox combobox bandbox</para>
 </entry>
 <entry>
 <para>Event: org.zkoss.zk.ui.event.KeyEvent</para>
@@ -3131,7 +3178,7 @@
 <para>onCancel</para>
 </entry>
 <entry>
-<para>window</para>
+<para>window textbox intbox longbox doublebox decimalbox datebox timebox combobox bandbox</para>
 </entry>
 <entry>
 <para>Event: org.zkoss.zk.ui.event.KeyEvent</para>
