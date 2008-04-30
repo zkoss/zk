@@ -15,7 +15,7 @@ import org.zkoss.zk.ui.Page;
  * @since 3.0.4
  */
 public class JythonInterpreter extends GenericInterpreter {
-	PythonInterpreter _interpreter;
+	PythonInterpreter _ip;
 
 	public JythonInterpreter() {
 	}
@@ -25,55 +25,49 @@ public class JythonInterpreter extends GenericInterpreter {
 		super.init(owner, zslang);
 
 		PySystemState.initialize();
-		_interpreter = new PythonInterpreter(new Variables());
+		PySystemState.add_extdir(owner.getDesktop().getWebApp().getRealPath("/WEB-INF/lib"));
+		PySystemState.add_extdir(owner.getDesktop().getWebApp().getRealPath("/WEB-INF/classes"));
+		_ip = new PythonInterpreter(new Variables());
 	}
 
 	protected void exec(String script) {
-		_interpreter.exec(script);
+		_ip.exec(script);
 	}
 
 	public void destroy() {
-		_interpreter.cleanup();
-		_interpreter = null;
+		_ip.cleanup();
+		_ip = null;
 		super.destroy();
 	}
 
 	protected Object get(String name) {
-		return _interpreter.get(name, Object.class);
+		return _ip.get(name, Object.class);
 	}
 
 	protected void set(String name, Object value) {
-		_interpreter.set(name, value);
+		_ip.set(name, value);
 	}
 
 	protected void unset(String name) {
-		_interpreter.set(name, Py.None);
+		_ip.set(name, Py.None);
 	}
 
 	public Object getNativeInterpreter() {
-		return _interpreter;
+		return _ip;
 	}
 
 	//helper classes//
 	/** The global scope. */
 	private class Variables extends PyStringMap {
-		public Variables() {
-			super();
-		}
-
 		public synchronized PyObject __finditem__(String key) {
 			PyObject pyo = super.__finditem__(key);
 
 			if (pyo == null) { // use "null" without "Py.None", because we override __finditem__
 				Object val = getFromNamespace(key);
 				if (val != UNDEFINED)
-					return toPy(val);
+					return Py.java2py(val);
 			}
 			return pyo;
 		}
-	}
-
-	private PyObject toPy(Object value) {
-		return Py.java2py(value);
 	}
 }
