@@ -19,6 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul.impl;
 
 import org.zkoss.zul.*;
+import org.zkoss.zul.GanttModel.GanttTask;
 import org.zkoss.zul.WaferMapModel.IntPair;
 import org.zkoss.zul.impl.ChartEngine;
 import org.zkoss.zk.ui.Component;
@@ -33,6 +34,10 @@ import org.jfree.chart.encoders.*;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.*;
 import org.jfree.chart.entity.*;
+import org.jfree.data.gantt.GanttCategoryDataset;
+import org.jfree.data.gantt.Task;
+import org.jfree.data.gantt.TaskSeries;
+import org.jfree.data.gantt.TaskSeriesCollection;
 import org.jfree.data.general.*;
 import org.jfree.data.category.*;
 import org.jfree.data.xy.*;
@@ -40,6 +45,7 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.util.TableOrder;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Date;
 import java.util.Map;
@@ -123,6 +129,9 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	//as long as the series name is not set
 	private static final String DEFAULT_HI_LO_SERIES = "High Low Data";
 	
+	private static final MessageFormat _formater = 
+		new MessageFormat("{2,number,0.00%}, {0,date,yyyy MMM dd} ~ {1,date,yyyy MMM dd}");
+	
 	//caching chartImpl if type and 3d are the same 
 	private transient boolean _threeD; 
 	private transient String _type; 
@@ -191,6 +200,9 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		else if (Chart.WAFERMAP.equals(chart.getType()))
 			_chartImpl = new Wafermap();
 			
+		else if (Chart.GANTT.equals(chart.getType()))
+			_chartImpl = new Gantt();
+		
 		else 
 			throw new UiException("Unsupported chart type yet: "+chart.getType());
 
@@ -301,7 +313,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 * transfer a PieModel into JFreeChart PieDataset.
 	 */
 	private PieDataset PieModelToPieDataset(PieModel model) {
-		DefaultPieDataset dataset = new DefaultPieDataset();
+		final DefaultPieDataset dataset = new DefaultPieDataset();
 		for (final Iterator it = model.getCategories().iterator(); it.hasNext();) {
 			Comparable category = (Comparable) it.next();
 			Number value = model.getValue(category);
@@ -314,7 +326,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 * transfer a CategoryModel into JFreeChart PieDataset.
 	 */
 	private PieDataset CategoryModelToPieDataset(CategoryModel model) {
-		DefaultPieDataset dataset = new DefaultPieDataset();
+		final DefaultPieDataset dataset = new DefaultPieDataset();
 		Comparable defaultSeries = null;
 		int max = 0;
 		for (final Iterator it = model.getKeys().iterator(); it.hasNext();) {
@@ -340,7 +352,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 * transfer a CategoryModel into JFreeChart CategoryDataset.
 	 */
 	private CategoryDataset CategoryModelToCategoryDataset(CategoryModel model) {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for (final Iterator it = model.getKeys().iterator(); it.hasNext();) {
 			final List key = (List) it.next();
 			Comparable series = (Comparable) key.get(0);
@@ -355,7 +367,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 * transfer a XYModel into JFreeChart XYSeriesCollection.
 	 */
 	private XYDataset XYModelToXYDataset(XYModel model) {
-		XYSeriesCollection dataset = new XYSeriesCollection();
+		final XYSeriesCollection dataset = new XYSeriesCollection();
 		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
 			final Comparable series = (Comparable) it.next();
 			XYSeries xyser = new XYSeries(series, model.isAutoSort());
@@ -372,7 +384,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 * transfer a XYModel into JFreeChart DefaultTableXYDataset.
 	 */
 	private TableXYDataset XYModelToTableXYDataset(XYModel model) {
-		DefaultTableXYDataset dataset = new DefaultTableXYDataset();
+		final DefaultTableXYDataset dataset = new DefaultTableXYDataset();
 		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
 			final Comparable series = (Comparable) it.next();
 			XYSeries xyser = new XYSeries(series, false, false);
@@ -397,7 +409,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		if (pclass == null) {
 			throw new UiException("Unsupported period for Time Series chart: "+p);
 		}
-		TimeSeriesCollection dataset = new TimeSeriesCollection(tz);
+		final TimeSeriesCollection dataset = new TimeSeriesCollection(tz);
 		
 		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
 			final Comparable series = (Comparable) it.next();
@@ -419,7 +431,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 * @since 3.1.0
 	 */
 	private XYZDataset XYZModelToXYZDataset(XYZModel model) {
-		DefaultXYZDataset dataset = new DefaultXYZDataset();
+		final DefaultXYZDataset dataset = new DefaultXYZDataset();
 		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
 			final Comparable seriesKey = (Comparable) it.next();
 			final int size = model.getDataCount(seriesKey);
@@ -439,7 +451,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 * @since 3.1.0
 	 */
 	private WaferMapDataset WaferMapModelToWaferMapDataset(WaferMapModel model) {
-		WaferMapDataset dataset = new WaferMapDataset(model.getXsize(), model.getYsize(), new Double(model.getSpace()));
+		final WaferMapDataset dataset = new WaferMapDataset(model.getXsize(), model.getYsize(), new Double(model.getSpace()));
 		for (final Iterator it = model.getEntrySet().iterator(); it.hasNext();) {
 			final Entry me = (Entry) it.next();
 			final IntPair ip = (IntPair) me.getKey();
@@ -450,7 +462,49 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		}
 		return dataset;
 	}
-
+	
+	/**
+	 * transfer a GanttModel into JFreeChart GanttDataset.
+	 * @since 3.1.0
+	 */
+	private GanttCategoryDataset GanttModelToGanttDataset(GanttModel model) {
+		final TaskSeriesCollection dataset = new TaskSeriesCollection();
+		final Comparable[] allseries = model.getAllSeries();
+		final int sz = allseries.length;
+		for (int j = 0; j < sz; ++j) {
+			final Comparable series = allseries[j];
+			final TaskSeries taskseries = new TaskSeries((String) series);
+			final GanttTask[] tasks = model.getTasks(series);
+			final int tsz = tasks.length;
+			for (int k = 0; k < tsz; ++k) {
+				final GanttTask task = tasks[k];
+				final Task jtask = newTask(task);
+				addSubtask(jtask, task);
+				taskseries.add(jtask); 
+			}
+			dataset.add(taskseries);
+		}
+		
+		return dataset;
+	}
+	
+	private Task newTask(GanttTask task) {
+		final Task jtask = new Task(task.getDescription(), task.getStart(), task.getEnd());
+		jtask.setPercentComplete(task.getPercent());
+		return jtask;
+	}
+	
+	private void addSubtask(Task jtask, GanttTask task) {
+		final GanttTask[] tasks = task.getSubtasks();
+		final int sz = tasks.length;
+		for (int j = 0; j < sz; ++j) {
+			final GanttTask subtask = tasks[j];
+			final Task jsubtask = newTask(subtask);
+			jtask.addSubtask(jsubtask);
+			addSubtask(jsubtask, subtask); //recursive
+		}
+	}
+	
 	private static Map _periodMap = new HashMap(10);	
 	static {
 		_periodMap.put(Chart.MILLISECOND, org.jfree.data.time.Millisecond.class);
@@ -537,6 +591,12 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		    if (chart.isShowTooltiptext() && info.getToolTipText() == null) {
 		    	area.setTooltiptext(series.toString());
 		    }
+		} else if (model instanceof GanttModel) {
+			final Comparable series = info.getSeriesKey();
+			area.setAttribute("series", series);
+		    if (chart.isShowTooltiptext() && info.getToolTipText() == null) {
+		    	area.setTooltiptext(series.toString());
+		    }
 		}
 	}
 
@@ -559,6 +619,14 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		    	area.setTooltiptext(category.toString());
 		    }
 		}
+	}
+	
+	private void decodeCategoryLabelInfo(Area area, CategoryLabelEntity info, Chart chart) {
+		final Comparable category = info.getKey(); 
+		area.setAttribute("category", category);
+	    if (chart.isShowTooltiptext() && info.getToolTipText() == null) {
+	    	area.setTooltiptext(category.toString());
+	    }
 	}
 
 	/**
@@ -593,7 +661,15 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		
 		area.setAttribute("series", series);
 		area.setAttribute("category", category);
-		area.setAttribute("value", dataset.getValue(series, category));
+		
+		if (dataset instanceof GanttCategoryDataset) {
+			final GanttCategoryDataset gd = (GanttCategoryDataset) dataset;
+			area.setAttribute("start", gd.getStartValue(series, category));
+			area.setAttribute("end", gd.getEndValue(series, category));
+			area.setAttribute("percent", gd.getPercentComplete(series, category));
+		} else {
+			area.setAttribute("value", dataset.getValue(series, category));
+		}
 	}
 
 	/**
@@ -1428,6 +1504,56 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			} finally {
 				_inrender = pre;
 			}
+		}
+	}
+
+	/** gantt 
+	 * @since 3.1.0
+	 */
+	private class Gantt extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else if (info instanceof CategoryLabelEntity) {
+				area.setAttribute("entity", "CATEGORY");
+				decodeCategoryLabelInfo(area, (CategoryLabelEntity) info, chart);
+			} else if (info instanceof CategoryItemEntity) {
+				area.setAttribute("entity", "DATA");
+				decodeCategoryInfo(area, (CategoryItemEntity) info);
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(ganttTootip(area));
+				}
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof GanttModel)) {
+				throw new UiException("model must be a org.zkoss.zul.GanttModel");
+			}
+			return ChartFactory.createGanttChart(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				GanttModelToGanttDataset((GanttModel)model),
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
+		}
+		private String ganttTootip(Area area) {
+			final long start = ((Number)area.getAttribute("start")).longValue();
+			final Date startDate = new Date(start);  
+			final long end = ((Number)area.getAttribute("end")).longValue();
+			final Date endDate = new Date(end);
+			final Number percent = ((Number)area.getAttribute("percent"));
+			return _formater.format(new Object[] {startDate, endDate, percent});
 		}
 	}
 
