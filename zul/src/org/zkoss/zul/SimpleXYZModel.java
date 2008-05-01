@@ -36,13 +36,14 @@ import java.util.Collection;
  * @author henrichen
  * @see XYModel
  * @see Chart
+ * @see 3.1.0
  */
 public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	//-- XYModel --//
 	/** Not supported since we need not only x, y, but also z information.
 	 */
 	public void addValue(Comparable series, Number x, Number y) {
-		throw new UnsupportedOperationException("User addValue(series, x, y, z) instead!");
+		throw new UnsupportedOperationException("Use addValue(series, x, y, z) instead!");
 	}
 
 	//-- XYZModel --//

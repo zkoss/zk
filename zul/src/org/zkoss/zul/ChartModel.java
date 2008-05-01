@@ -26,6 +26,7 @@ import org.zkoss.zul.event.ChartDataListener;
  * <li>{@link PieModel}: one series of data objects. Each data object contains the category name and numeric value of a pie.</li>
  * <li>{@link CategoryModel}: n series of data objects. Each data object contains the category name and associated numeric value .</li>
  * <li>{@link XYModel}: n series of data objects. Each data object contains an (x,y) pair.</li>
+ * <li>{@link XYZModel}: n series of data objects. Each data object contains an (x,y,z) pair; since 3.1.0</li>
  * </ul>
  *
  * This interface defines the data model for components like {@link Chart}
@@ -36,6 +37,7 @@ import org.zkoss.zul.event.ChartDataListener;
  * @see PieModel
  * @see CategoryModel
  * @see XYModel
+ * @see XYZModel
  * @see org.zkoss.zul.event.ChartAreaListener
  */
 public interface ChartModel {

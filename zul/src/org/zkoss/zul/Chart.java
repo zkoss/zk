@@ -48,23 +48,25 @@ import java.awt.Paint;
  *
  * <table>
  *   <tr><th>type</th><th>model</th><th>3D</th></tr>
- *   <tr><td>pie</td><td>{@link PieModel}</td><td>o</td></tr>
- *   <tr><td>ring</td><td>{@link PieModel}</td><td>x</td></tr>
- *   <tr><td>bar</td><td>{@link CategoryModel}</td><td>o</td></tr>
- *   <tr><td>line</td><td>{@link CategoryModel} or {@link XYModel}</td><td>o</td></tr>
- *   <tr><td>area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>x</td></tr>
- *   <tr><td>stacked_bar</td><td>{@link CategoryModel}</td><td>o</td></tr>
- *   <tr><td>stacked_area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>x</td></tr>
- *   <tr><td>waterfall</td><td>{@link CategoryModel}</td><td>x</td></tr>
- *   <tr><td>polar</td><td>{@link XYModel}</td><td>x</td></tr>
- *   <tr><td>scatter</td><td>{@link XYModel}</td><td>x</td></tr>
- *   <tr><td>time_series</td><td>{@link XYModel}</td><td>x</td></tr>
- *   <tr><td>polar</td><td>{@link XYModel}</td><td>x</td></tr>
- *   <tr><td>step_area</td><td>{@link XYModel}</td><td>x</td></tr>
- *   <tr><td>step</td><td>{@link XYModel}</td><td>x</td></tr>
- *   <tr><td>histogram</td><td>{@link XYModel}</td><td>x</td></tr>
- *   <tr><td>candlestick</td><td>{@link HiLoModel}</td><td>x</td></tr>
- *   <tr><td>hilow</td><td>{@link HiLoModel}</td><td>x</td></tr>
+ *   <tr><td>area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>No</td></tr>
+ *   <tr><td>bar</td><td>{@link CategoryModel}</td><td>Yes</td></tr>
+ *   <tr><td>bubble</td><td>{@link XYZModel}</td><td>No</td></tr>
+ *   <tr><td>candlestick</td><td>{@link HiLoModel}</td><td>No</td></tr>
+ *   <tr><td>gantt</td><td>{@link GanttModel}</td><td>No</td></tr>
+ *   <tr><td>hilow</td><td>{@link HiLoModel}</td><td>No</td></tr>
+ *   <tr><td>histogram</td><td>{@link XYModel}</td><td>No</td></tr>
+ *   <tr><td>line</td><td>{@link CategoryModel} or {@link XYModel}</td><td>Yes</td></tr>
+ *   <tr><td>pie</td><td>{@link PieModel}</td><td>Yes</td></tr>
+ *   <tr><td>polar</td><td>{@link XYModel}</td><td>No</td></tr>
+ *   <tr><td>ring</td><td>{@link PieModel}</td><td>No</td></tr>
+ *   <tr><td>scatter</td><td>{@link XYModel}</td><td>No</td></tr>
+ *   <tr><td>stacked_bar</td><td>{@link CategoryModel}</td><td>Yes</td></tr>
+ *   <tr><td>stacked_area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>No</td></tr>
+ *   <tr><td>step</td><td>{@link XYModel}</td><td>No</td></tr>
+ *   <tr><td>step_area</td><td>{@link XYModel}</td><td>No</td></tr>
+ *   <tr><td>time_series</td><td>{@link XYModel}</td><td>No</td></tr>
+ *   <tr><td>wafermap</td><td>{@link WaferMapModel}</td><td>No</td></tr>
+ *   <tr><td>waterfall</td><td>{@link CategoryModel}</td><td>No</td></tr>
  * </table>
  *
  * @see ChartEngine
@@ -91,6 +93,7 @@ public class Chart extends Imagemap {
 	public static final String HIGHLOW = "highlow";
 	public static final String BUBBLE = "bubble"; //@since 3.1.0
 	public static final String WAFERMAP = "wafermap"; //@since 3.1.0
+	public static final String GANTT = "gantt"; //@since 3.1.0
 	
 	//Time Series Chart Period
 	public static final String YEAR = "year";
