@@ -9,6 +9,7 @@ ZK 3.1.0 Freshly
   1926069: Pass current value for bandbox/comobox in onOpen
   1890941: chart support bubble chart
   1890942: chart support wafermap chart
+  1890944: chart support gannt chart
   
 * Bugs
 
