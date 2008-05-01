@@ -41,8 +41,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		To use Google Maps for this site, you have to assign a proper Google Maps key for your site first.
 		<toolbarbutton label="Sign up for a Google Maps API key" href="http://www.google.com/apis/maps/signup.html"/>
 	</div>
-
-	<vbox>
+<!-- 
+	<window id="gmapwin" visible="false">
 	<gmaps id="mymap" width="600px" height="350px" showSmallCtrl="true">
 		<attribute name="onMapMove">
 			mylat.setValue(self.getLat());
@@ -72,5 +72,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<row>Open Info: <button label="Change" onClick="myinfo.isOpen() ? mymark.setOpen(true) : myinfo.setOpen(true)"/></row>
 	</rows>
 	</grid>
-	</vbox>
+	</window>
+-->
+	<button label="show gmap" >
+		<attribute name="onClick">
+Window win = new Window("Window Title","normal",true);
+win.setWidth("800px");
+win.setHeight("600px");
+
+Gmaps map = new Gmaps();
+map.setWidth("100%");
+map.setHeight("100%");
+map.setParent(win);
+
+win.setPage(page);
+win.doModal();		
+		</attribute>
+	</button>
 </window>

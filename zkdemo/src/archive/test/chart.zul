@@ -228,5 +228,89 @@ hilomodel.addValue(new Date(d+18000),  new Double(63.5),  new Double(72.2),  new
   highlow.setModel(hilomodel);
 </zscript>
 
+<zscript>
+XYZModel xyzmodel = new SimpleXYZModel();
+xyzmodel.addValue("2001", new Integer(20), new Integer(120), new Integer(8));
+xyzmodel.addValue("2001", new Integer(40), new Integer(135), new Integer(10));
+xyzmodel.addValue("2001", new Integer(60), new Integer(140), new Integer(6));
+xyzmodel.addValue("2001", new Integer(80), new Integer(160), new Integer(12));
 
+xyzmodel.addValue("2002", new Integer(30), new Integer(120), new Integer(4));
+xyzmodel.addValue("2002", new Integer(50), new Integer(135), new Integer(5));
+xyzmodel.addValue("2002", new Integer(70), new Integer(140), new Integer(3));
+xyzmodel.addValue("2002", new Integer(90), new Integer(160), new Integer(6));
+</zscript>
+
+<label value="bubble"/>
+<chart id="bubble" title="Bubble Chart" width="500" height="250" type="bubble" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  bubble.setModel(xyzmodel);
+</zscript>
+
+<label value="bubble horizontal"/>
+<chart id="hbubble" title="Horizontal Bubble Chart" width="500" height="250" type="bubble" threeD="false" fgAlpha="128" onClick="drilldown()"  orient="horizontal"/>
+<zscript>
+  hbubble.setModel(xyzmodel);
+</zscript>
+
+<zscript><![CDATA[
+final int xdim = 30;
+final int ydim = 20;
+final Random random = new Random();
+WaferMapModel wafermodel = new WaferMapModel(xdim, ydim);
+for (int x = 0; x < xdim; x++) {
+	for (int y = 0; y < ydim; y++) {
+		wafermodel.addValue(random.nextInt(5), x, y);
+	}
+}
+]]></zscript>
+
+<label value="wafermap"/>
+<chart id="wafermap" title="Wafer Map Chart" width="500" height="400" type="wafermap" threeD="false" fgAlpha="128" onClick="drilldown()" />
+<zscript>
+  wafermap.setModel(wafermodel);
+</zscript>
+
+<zscript><![CDATA[
+import org.zkoss.zul.GanttModel.GanttTask;
+public Date date(int year, int month, int day) {
+	final java.util.Calendar calendar = java.util.Calendar.getInstance();
+	calendar.set(year, month-1, day);
+	final Date result = calendar.getTime();
+	return result;
+}
+
+GanttModel ganttmodel = new GanttModel();
+ganttmodel.addValue("Scheduled", new GanttTask("Write Proposal", date(2008,4,1), date(2008,4,5), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Obtain Approval", date(2008,4,9), date(2008,4,9), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Requirements Analysis", date(2008,4,10), date(2008,5,5), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Design Phase", date(2008,5,6), date(2008,5,30), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Design Signoff", date(2008,6,2), date(2008,6,2), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Alpha Implementation", date(2008,6,3), date(2008,7,31), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Design Review", date(2008,8,1), date(2008,8,8), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Revised Design Signoff", date(2008,8,10), date(2008,8,10), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Beta Implementation", date(2008,8,12), date(2008,9,12), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Testing", date(2008,9,13), date(2008,10,31), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Final Implementation", date(2008,11,1), date(2008,11,15), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Signoff", date(2008,11,28), date(2008,11,30), 0.0));
+
+ganttmodel.addValue("Actual", new GanttTask("Write Proposal", date(2008,4,1), date(2008,4,3), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Obtain Approval", date(2008,4,9), date(2008,4,9), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Requirements Analysis", date(2008,4,10), date(2008,5,15), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Design Phase", date(2008,5,15), date(2008,6,17), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Design Signoff", date(2008,6,30), date(2008,6,30), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Alpha Implementation", date(2008,7,1), date(2008,9,12), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Design Review", date(2008,9,12), date(2008,9,22), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Revised Design Signoff", date(2008,9,25), date(2008,9,27), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Beta Implementation", date(2008,8,12), date(2008,9,12), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Testing", date(2008,10,31), date(2008,11,17), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Final Implementation", date(2008,11,18), date(2008,12,5), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Signoff", date(2008,12,10), date(2008,12,11), 0.0));
+]]></zscript>
+
+<label value="gantt"/>
+<chart id="gantt" title="Gantt Chart" width="700" height="400" type="gantt" threeD="false" fgAlpha="128" onClick="drilldown()" />
+<zscript>
+  gantt.setModel(ganttmodel);
+</zscript>
 </vbox>
