@@ -84,7 +84,7 @@ public class Group extends Row {
 						it.next();	
 					}
 				}
-				return null;
+				throw new IndexOutOfBoundsException("Index: "+index);
 			}
 		};
 	}
