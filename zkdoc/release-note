@@ -1,5 +1,5 @@
 	--------
-ZK 3.1.0 Freshly
+ZK 3.1.0
 * Features
   1907300: Listbox: support grouping
   1951422: Grid: support grouping
@@ -12,11 +12,70 @@ ZK 3.1.0 Freshly
   1890944: chart support gannt chart
   
 * Bugs
+  1953249: <borderlayout> inside <tabbox> is not visible
 
 * Upgrade Notes
   + The smartUpdate, response, onChildAdded, onChildRemoved and
     onDrawNewChid methods are moved from the Component interface
     to the ComponentCtrl intereface.
+
+	--------
+ZK 3.0.5
+* Features
+  1951358: A way to have component-specific Command
+  1951286: JavaScript utils: comm.sendClick and comm.sendUser
+  1936373: Translate messages to Arabic. Thank Ayman Ahmed Elgharabawy for his contribution.
+  1944509: textbox supports onCancel
+  1944512: HtmlBasedComponent supports setFocus(boolean)
+  1947534: A way to specify the session cache
+  1948462: AuResponse supports DeferredValue
+  1953246: Smart update supports an array of values
+  1949336: Component supports isInvalidated
+  1914491: BindingListModel subclasses are not accessible.
+  
+* Bugs
+  1929139: [IE6/IE7 only] Incomplete requests being dropped
+  1926759: Invisible splitter still visible
+  1926742: Javascript Error after filedownload + doModal
+  1926092: Treeitem/listitem popup/context does not stay up
+  1926990: Timebox didn't show button when buttonVisible from false to true
+  1927788: ESC stops Ajax (FF only)
+  1927196: groupbox with grid bug (IE6Only)
+  1927154: IE6Only: grid inside tabbox floats outside tabbox area
+  1926480: Cant change header label dynamically.
+  1930068: IE appears corpse of Paging while using external Paging comp
+  1926094: Listfooter overlays Listheader (IE6)
+  1822717: slider's layout went wrong if sliding parent groupbox(IE6)
+  1882277: Overflow:auto lost when swiching accord tabbox (Safari only)
+  1752907: groupbox mold=3d FF animation jumping
+  1920793: The focused style of selected item differences Firefox/IE
+  1936366: focus don¡¦t work after Messagebox
+  1933050: onSelect fail in Listbox's select mold when use key(FF&Sa)
+  1936804: combobox.onInitRender(Event data) triggers validation.
+  1472534: error popup is shown behind select inputs(IE6 only)
+  1938345: Log shall use Locale.getDefault, not Locales.getCurrent
+  1882432: Scrolbar of listbox is moved after sorting in Opera
+  1939059: Messagebox fail when the last node is a native HTML
+  1939061: <?page complete="true"?> not applicable to zul pages
+  1938534: Upload causes an exception, not reproducible but with log
+  1813518: Component namespace not work for page-level compoenent-def
+  1906748: Combobox, binding and selected item Fail in Java6 only
+  1942735: Failed to render <A> with invalid URL as href(IE7 only)
+  1943783: Timebox fail to listen onOK event
+  1944918: character encoding problem with pre-Servlet 2.4
+  1945361: AjaxDevice's getContentType() shall not return charset
+  1943594: onblur shall not be sent if click on combobox's dropdown
+  1896267: zul.xsd invalid
+  1941947: Cannot find associated CollectionItem error
+  1948963: Timebox validation
+  1950313: F - 1764967 bug
+  
+* Upgrade Notes
+  + Session's getNativeSession() returns an instance of PortletSession
+    (rather than HttpSession), if ZK porlet is used.
+  + DataBinder's addCollectionItem(String comp, CollectionItem decor) is
+    deprecated. Use addCollectionItem(Class item, Class owner, CollectionItem decor)
+	instead.
 
 	--------
 ZK 3.0.4
