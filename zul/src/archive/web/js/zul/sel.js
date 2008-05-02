@@ -45,7 +45,7 @@ _zkselx._addChd = function (uuid, cmp, html) {
 	var h = html.trim(), from = h.indexOf("Lit"),
 		isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">"),
 		type = $type(cmp);
-	if (isLit && type && type.indexOf("Lit") < 0) { // only first listitem.
+	if (isLit && (!type || type.indexOf("Lit") < 0)) { // only first listitem.
 		var head = $parentByTag(cmp, "DIV"), cave = $e($uuid(head) + "!cave");	
 		if (cave.tBodies[1].rows.length) {
 			var n = cave.tBodies[1].rows[0], to = n.previousSibling;
