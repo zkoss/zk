@@ -67,6 +67,7 @@ import java.awt.Paint;
  *   <tr><td>time_series</td><td>{@link XYModel}</td><td>No</td></tr>
  *   <tr><td>wafermap</td><td>{@link WaferMapModel}</td><td>No</td></tr>
  *   <tr><td>waterfall</td><td>{@link CategoryModel}</td><td>No</td></tr>
+ *   <tr><td>wind</td><td>{@link XYZModel}</td><td>No</td></tr>
  * </table>
  *
  * @see ChartEngine
@@ -94,6 +95,7 @@ public class Chart extends Imagemap {
 	public static final String BUBBLE = "bubble"; //@since 3.1.0
 	public static final String WAFERMAP = "wafermap"; //@since 3.1.0
 	public static final String GANTT = "gantt"; //@since 3.1.0
+	public static final String WIND = "wind"; //@since 3.1.0
 	
 	//Time Series Chart Period
 	public static final String YEAR = "year";
