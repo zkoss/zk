@@ -29,6 +29,13 @@ zk.Grid.prototype = {
 	init: function () {
 		this.element = $e(this.id);
 		if (!this.element) return;
+		if (getZKAttr(this.element, "vflex") == "true") {
+			if (zk.ie) this.element.style.overflow = "hidden"; 
+			// added by Jumper for IE to get a correct offsetHeight so we need 
+			// to add this command faster than the this._calcSize() function.
+			var hgh = this.element.style.height;
+			if (!hgh || hgh == "auto") this.element.style.height = "99%"; // avoid border 1px;
+		}
 
 		this.body = $e(this.id + "!body");
 		this.paging = getZKAttr(this.element, "pg") != null;
@@ -83,17 +90,30 @@ zk.Grid.prototype = {
 				//How long is enough is unknown, but 200 seems fine
 		};
 	},
+	/** Returns the size for vflex
+	 */
+	_vflexSize: function () {
+		if (zk.ie6Only) { 
+			// ie6 must reset the height of the element,
+			// otherwise its offsetHeight might be wrong.
+			var hgh = this.element.style.height;
+			this.element.style.height = "";
+			this.element.style.height = hgh;
+		}
+		return this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0)
+			- (this.foot ? this.foot.offsetHeight : 0); // Bug #1815882 and Bug #1835369
+	},
 	/* set the height. */
-	setHgh: function (hgh) {		
-		if (hgh && hgh != "auto" && hgh.indexOf('%') < 0) {
-			var h =  this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0)
-				- (this.foot ? this.foot.offsetHeight : 0); // Bug #1835369
+	setHgh: function (hgh) {
+		if (getZKAttr(this.element, "vflex") == "true" || (hgh && hgh != "auto" && hgh.indexOf('%') < 0)) {
+			var h =  this._vflexSize(); 
 			if (this.paging) {
 				var pgit = $e(this.id + "!pgit"), pgib = $e(this.id + "!pgib");
 				if (pgit) h -= pgit.offsetHeight;
 				if (pgib) h -= pgib.offsetHeight;
 			}
 			if (h < 0) h = 0;
+
 			this.body.style.height = h + "px";
 			
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
@@ -224,6 +244,19 @@ zk.Grid.prototype = {
 				this.body.scrollLeft = val;
 				return true;
 			}
+		case "z.vflex":			
+			if (val == "true") {
+				if (zk.ie) this.element.style.overflow = "hidden"; 
+				// added by Jumper for IE to get a correct offsetHeight so we need 
+				// to add this command faster than the this._calcSize() function.
+				var hgh = this.element.style.height;
+				if (!hgh || hgh == "auto") this.element.style.height = "99%"; // avoid border 1px;
+			} else if (zk.ie) {
+				this.element.style.overflow = ""; // cleanup style 
+			}
+			zkau.setAttr(this.element, nm, val);
+			this._recalcSize();
+			return true;
 		}
 		return false;
 	},

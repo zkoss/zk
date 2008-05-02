@@ -133,7 +133,7 @@ public class Grid extends XulElement {
 	private String _innerHeight = null,
 	_innerTop = "height:0px;display:none", _innerBottom = "height:0px;display:none";
 	private transient GridDrawerEngine _engine;
-	private boolean _fixedLayout;
+	private boolean _fixedLayout, _vflex;
 
 	public Grid() {
 		setSclass("grid");
@@ -153,7 +153,27 @@ public class Grid extends XulElement {
 			}
 		};
 	}
-	
+
+	/** Returns whether to grow and shrink vertical to fit their given space,
+	 * so called vertial flexibility.
+	 *
+	 * <p>Default: false.
+	 * @since 3.1.0
+	 */
+	public final boolean isVflex() {
+		return _vflex;
+	}
+	/** Sets whether to grow and shrink vertical to fit their given space,
+	 * so called vertial flexibility.
+	 *
+	 * @since 3.1.0
+	 */
+	public void setVflex(boolean vflex) {
+		if (_vflex != vflex) {
+			_vflex = vflex;
+			smartUpdate("z.flex", _vflex);
+		}
+	}
 	/**
 	 * Sets the outline of grid whether is fixed layout.
 	 * If true, the outline of grid will be depended on browser. It means, we don't 
@@ -1055,6 +1075,8 @@ public class Grid extends XulElement {
 			HTMLs.appendAttribute(sb, "z.isrod",  true);
 			HTMLs.appendAttribute(sb, "z.preload",  getPreloadSize());
 		}
+		if (_vflex)
+			HTMLs.appendAttribute(sb, "z.vflex", true);
 		return sb.toString();
 	}
 
