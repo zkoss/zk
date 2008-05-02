@@ -14,7 +14,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<zscript>
 	void addRow1(){
 		Row row = new Row();
@@ -43,27 +43,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	
 	</zscript>
 	<vbox>
-		<div width="500px">
-			<button label="add row(end)" onClick="addRow1()"/>
-			<button label="add row(begin)" onClick="addRow2()"/>
-			<button label="remove row(last)" onClick="removeRow1()"/>
-			<button label="remove row(first)" onClick="removeRow2()"/>
-			<button label="setWidth200px" onClick='g1.setWidth("200px")'/>
-			<button label="setWidth600px" onClick='g1.setWidth("600px")'/>
-			<button label="setWidth null" onClick='g1.setWidth(null)'/>
-			<button label="setHeight 200px" onClick='g1.setHeight("200px")'/>
-			<button label="setHeight 600px" onClick='g1.setHeight("600px")'/>
-			<button label="setHeight null" onClick='g1.setHeight(null)'/>
-			<button label="setColumnWidth20px" onClick='col1.setWidth("20px")'/>
-			<button label="setColumnWidth100px" onClick='col1.setWidth("100px")'/>
-			<button label="setColumnWidth200px" onClick='col1.setWidth("200px")'/>
-			<button label="setColumnWidth20px" onClick='col2.setWidth("20px")'/>
-			<button label="setColumnWidth100px" onClick='col2.setWidth("100px")'/>
-			<button label="setColumnWidth20px" onClick='col3.setWidth("20px")'/>
-			<button label="setColumnWidth100px" onClick='col3.setWidth("100px")'/>
-			<button label="setSizable" onClick="cols.setSizable(true)"/>
-			<button label="setSizable false" onClick="cols.setSizable(false)"/>
-		</div>
 		<grid id="g1" width="400px" fixedLayout="true">
 			<columns id="cols">
 				<column label="Type 50px" id="col1" align="center" width="50px"/>
@@ -77,5 +56,45 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 				</row>
 			</rows>
 		</grid>
+1.Test dynamically add/remove the row of grid.
+		<hbox>
+			<button label="add row(end)" onClick="addRow1()"/>
+			<button label="add row(begin)" onClick="addRow2()"/>
+			<button label="remove row(last)" onClick="removeRow1()"/>
+			<button label="remove row(first)" onClick="removeRow2()"/>
+		</hbox>
+
+2.Test dynamically change the style of grid.
+		<hbox>
+			<button label="setWidth200px" onClick='g1.setWidth("200px")'/>
+			<button label="setWidth600px" onClick='g1.setWidth("600px")'/>
+			<button label="setWidth null" onClick='g1.setWidth(null)'/>
+			<button label="setHeight 200px" onClick='g1.setHeight("200px")'/>
+			<button label="setHeight 600px" onClick='g1.setHeight("600px")'/>
+			<button label="setHeight null" onClick='g1.setHeight(null)'/>
+		</hbox>
+
+3.Test dynamically change the width of the first column.
+		<hbox>
+			<button label="setColumnWidth20px" onClick='col1.setWidth("20px")'/>
+			<button label="setColumnWidth100px" onClick='col1.setWidth("100px")'/>
+			<button label="setColumnWidth200px" onClick='col1.setWidth("200px")'/>
+		</hbox>
+
+4.Test dynamically change the width of the second column.
+		<hbox>
+			<button label="setColumnWidth20px" onClick='col2.setWidth("20px")'/>
+			<button label="setColumnWidth100px" onClick='col2.setWidth("100px")'/>
+		</hbox>
+
+5.Test dynamically change the width of the third column.
+		<hbox>
+			<button label="setColumnWidth20px" onClick='col3.setWidth("20px")'/>
+			<button label="setColumnWidth100px" onClick='col3.setWidth("100px")'/>
+		</hbox>
+
+6.Test dynamically set the sizable property of Columns component.(you should move over the header gap of grid to test whether the column is a sizable column.)
+			<button label="setSizable" onClick="cols.sizable = !cols.sizable"/>
+			<button label="setSizable false" onClick="cols.setSizable(false)"/>
 	</vbox>
 </zk>

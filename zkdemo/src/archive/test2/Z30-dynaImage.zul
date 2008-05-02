@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-B30-1896797.zul
+Z30-dynaImage.zul
 
 {{IS_NOTE
 	Purpose:
@@ -18,9 +18,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>It is correct, if you can see the pdf file.
+	<n:p>It is correct, if you can see the image file.
 	Also, try to click the invalidate button to see if it is still OK.</n:p>
-	<window id="w2" title="Test Dynamical Image" closable="true" mode="overlapped">
+	<window id="w2" title="Test Dynamical Image" closable="true" mode="overlapped" width="300px">
 		The content of image is created by AMedia(InputStream)  
 		<button label="invalidate" onClick="img.invalidate();"/>
 		<image id="img">

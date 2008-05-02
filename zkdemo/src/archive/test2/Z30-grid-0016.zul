@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-ZK30-grid006-03.zul
+Z30-grid-0016.zul
 
 {{IS_NOTE
 	Purpose:
@@ -21,8 +21,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	Empty grid:
 	<grid id="gd" mold="paging"/>
              <hbox>
-	<button label="add rows" onClick="new Rows().setParent(gd)"/>
-	<button label="add row" onClick="addgd(1)"/>
+	<button label="1. Click me to add rows only once" onClick="new Rows().setParent(gd)"/>
+	<button label="2. Click me to add row" onClick="addgd(1)"/>
+<zscript><![CDATA[
+	void addgd(int cnt) {
+		for (int j = 0; ++j <= cnt;) {
+			Row r = new Row();
+			String prefix = "Item " + (gd.getRows().getChildren().size() + 1);
+			new Label(prefix + "-L").setParent(r);
+			new Label(prefix + "-C").setParent(r);
+			new Label(prefix + "-R").setParent(r);
+			r.setParent(gd.getRows());
+		}
+	}
+	]]>
+</zscript>
              </hbox>
 </vbox>
 </window>

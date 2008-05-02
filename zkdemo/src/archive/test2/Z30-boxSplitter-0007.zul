@@ -1,4 +1,5 @@
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>Whether you click the doModal or Overlap, the position of the splitter should not be recalculated.</n:p>
 	<div>doModal</div>
 	<hbox height="400px" width="100%">
 		cdacdacdacdacdaca

@@ -1,4 +1,17 @@
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>When you choose each radio button, each component inside the blue line or the red line is located properly.</n:p>
+	<n:p><n:strong>Vbox: (Blue line)</n:strong>
+		<n:ul>
+		<n:li><n:strong>PACK: </n:strong>It means vertical position.</n:li>
+		<n:li><n:strong>ALIGN: </n:strong>It means horizontal position.</n:li>
+		</n:ul>
+	</n:p>
+	<n:p><n:strong>Hbox: (Red line)</n:strong>
+		<n:ul>
+		<n:li><n:strong>PACK: </n:strong>It means horizontal position.</n:li>
+		<n:li><n:strong>ALIGN: </n:strong>It means vertical position.</n:li>
+		</n:ul>
+	</n:p>
 	<label value="PACK AND ALIGN - Hbox in Vbox:" />
 	<style>
 		table.hbox{ 
@@ -11,15 +24,6 @@
 		 border: solid black 1px;
 		}
 	</style>
-	<html>
-	&lt;pre&gt;
-
-	table.hbox{ 
-		border: solid red 1px; } 
-	table.vbox{ 
-		border: solid blue 1px;} 
-	&lt;/pre&gt;
-	</html>
 	<vbox id="v3" pack="center" align="center" height="270px" sclass="vbox"
 		width="270px">
 		<hbox id="h3" pack="center" align="center" height="90px" sclass="hbox"

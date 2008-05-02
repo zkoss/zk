@@ -20,6 +20,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p><n:strong>Note: </n:strong>This test case works with zkmax.jar</n:p>
+<n:p>Test each report is shown properly.</n:p>
 <window title="jasperreport demo" border="normal">
 	<listbox id="format" mold="select" onSelect="showReport()" >
 		<listitem label="PDF" value="pdf" selected="true" />
@@ -50,3 +53,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 	]]></zscript>
 </window>
+</zk>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-ZK30-grid006-01.zul
+Z30-grid-0014.zul
 
 {{IS_NOTE
 	Purpose:
@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
-	<grid id="grid" width="300px" mold="paging">
+	<grid id="grid" width="300px" mold="paging" pageSize="5">
 		<columns>
 			<column label="Head 1"/>
 			<column label="Head 2" align="center"/>

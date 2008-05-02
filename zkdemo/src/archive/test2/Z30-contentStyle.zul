@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z30-groupbox3d.zul
+Z30-contentStyle.zul
 
 {{IS_NOTE
 	Purpose:
@@ -17,6 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>Test each content style shows properly, you can also click the title of groupbox or the tab of tabbox to test.</n:p>
 <window title="3d type groupbox demo" border="normal">
 	Which kind of fruit do you want?
 	<groupbox mold="3d" width="300px" height="200px" contentStyle="background:yellow">
@@ -72,3 +74,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</tabpanels>
 	</tabbox>
 </window>
+</zk>

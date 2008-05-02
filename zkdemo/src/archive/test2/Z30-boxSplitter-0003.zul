@@ -1,7 +1,8 @@
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>You can choose each radio button, then the image of this splitter is shown as you choose.</n:p>
 	<window border="normal" title="vbox and splitter">
 		<vbox height="100px" width="100%">
-		a[pdjcpdacpnhdacndlandlka
+		Some words......
 		<splitter id="vsplitter" collapse="none"/>
 		Column 2: Whether a splitter allows users to open or collapse
 		depending on the collapse attribue.

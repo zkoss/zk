@@ -60,11 +60,15 @@ String shortHeight="520px";
 											</button>
 										</hbox>
 										<hbox>
-											<radiogroup id="radio" onCheck="fnf.value = self.selectedItem.label;main.updateModel();">
-												<radio label="F30"/>
-												<radio label="Z30"/>
-												<radio label="B30"/>
-											</radiogroup>
+											<combobox onCreate="self.selectedIndex=0;" readonly="true" 
+												onSelect="fnf.value = self.selectedItem.label;main.updateModel();">
+												<comboitem label="F30"/>
+												<comboitem label="F31"/>
+												<comboitem label="B30"/>
+												<comboitem label="B31"/>
+												<comboitem label="Z30"/>
+												<comboitem label="Z31"/>
+											</combobox>
 										</hbox>
 									</vbox>
 								</tabpanel>

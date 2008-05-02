@@ -19,6 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>It's true, you should see the image after you click the button.</n:p>
 <window id="w1" title="Foo">
 <button id="btn1" label="click me"/>
 <vbox id="w2" fulfill="btn1.onClick">
@@ -28,3 +30,5 @@ ABCD
 </div>
 </vbox>
 </window>
+</zk>
+

@@ -1,5 +1,5 @@
 <!--
-Z30-grid008-06.zul
+Z30-grid-0024.zul
 
 {{IS_NOTE
 	Purpose:
@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
-Grid without Column
+Grid without Column, you can see the layout of grid shows properly.
 
 <grid>
 	<rows>

@@ -1,7 +1,7 @@
 <zk>
 The update of list cell freeze IE.<separator/>
 
-
+You can update/add/remove the grid via timer, and the browser window should not be frozen. (IE only)
 
 <window title="test Grid" height="500px" contentStyle="overflow:auto;width:800px;height:400px;position:relative" border="normal">
 	

@@ -1,5 +1,5 @@
 <!--
-Z30-grid008-04.zul
+Z30-grid-0022.zul
 
 {{IS_NOTE
 	Purpose:
@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
-Grid without width
+Grid without width, you can see the layout of grid shows properly.
 <grid>
 	<columns sizable="true">
 		<column width="30%" label="Left : width 30%" align="left"/><column label="Center" align="center"/>

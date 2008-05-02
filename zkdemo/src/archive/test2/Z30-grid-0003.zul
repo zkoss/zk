@@ -19,8 +19,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <h:p>
 See if the sorted result printed in console is same as the data collection displayed in Browser.
 </h:p>
+<vbox>
 <toolbarbutton label="B30-1823959.zul" href="B30-1823959.zul"/>
 <toolbarbutton label="B30-1824604.zul" href="B30-1824604.zul"/>
+</vbox>
 	<separator/>
 	<zscript>
 		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel();

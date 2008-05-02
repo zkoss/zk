@@ -1,20 +1,18 @@
-<zk>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>When you choose each radio button, the textbox inside the red line is located properly.</n:p>
+	<n:p><n:strong>PACK: </n:strong>It means horizontal position.</n:p>
+	<n:p><n:strong>ALIGN: </n:strong>It means vertical position.</n:p>
 	<label value="PACK AND ALIGN - HBOX:" />
 	<style>
 		table.hbox{ 
 			border: solid red 1px; }
 	</style>
-	<html>
-	&lt;pre&gt;
-
-	table.hbox{ 
-		border: solid red 1px; }
-		&lt;/pre&gt;
-	</html> 
 	<hbox sclass="hbox" id="hb" pack="start" align="start" height="90px"
 		width="90px">
 		<textbox height="30px" width="30px" />
 	</hbox>
+	<vbox>
+	<hbox>
 	PACK:
 	<radiogroup>
 		<attribute name="onCheck">
@@ -24,6 +22,8 @@
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
+	</hbox>
+	<hbox>
 	ALIGN:
 	<radiogroup>
 		<attribute name="onCheck">
@@ -33,7 +33,7 @@
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
-	
+	</hbox>	
 	
 	<separator bar="true"/>
 	
@@ -43,6 +43,7 @@
 		<textbox height="30px" width="30px" />
 		<textbox height="30px" width="30px" />
 	</hbox>
+	<hbox>
 	PACK:
 	<radiogroup>
 		<attribute name="onCheck">
@@ -52,6 +53,8 @@
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
+	</hbox>
+	<hbox>
 	ALIGN:
 	<radiogroup>
 		<attribute name="onCheck">
@@ -61,6 +64,12 @@
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
+	</hbox>
+	This setSpacing is used to test the horizontal space between each other.
+	<hbox>
 	<intbox id="in"/>
 	<button label="setSpacing" onClick='hb2.setSpacing(in.getValue().toString()+"px")'/>
+	</hbox>
+	</vbox>
 </zk>
+

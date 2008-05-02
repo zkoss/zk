@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-ZK30-grid005-01.zul
+Z30-grid-0005.zul
 
 {{IS_NOTE
 	Purpose:
@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>Test the complex grid with Auxhead, you can see the layout shows properly and also shows properly after sizing the header.</n:p>
 <window title="Test common grid and auxhead.">
   <checkbox label="sizable" onCheck="cs.sizable = self.checked"/>
 	<grid>
@@ -54,3 +56,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</rows>
 	</grid>
 </window>
+</zk>

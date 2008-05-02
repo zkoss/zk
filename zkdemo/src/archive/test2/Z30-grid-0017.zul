@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Z30-grid007.zul
+Z30-grid-0017.zul
 
 {{IS_NOTE
 	Purpose:
@@ -17,8 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-	test rowspan and colspan on auxheader
-	Border between two rows, and different width (100, 200):
+	Border between two rows, and different width (the first column = 100, the second column = 200):
 	<grid width="300px">
 		<columns>
 			<column width="100px"/>
