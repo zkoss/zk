@@ -27,9 +27,10 @@ package org.zkoss.zul;
  * object.
  *
  * <p>For example, a list model with two groups, and each have 3 items.
- * Then, elements at index 0 and 3 will be a group object, while
- * index 0, 1 and 2 are items belonging to the first group,
- * index 4, 5 and 6 the second group.
+ * Then, there are totally 8 elements ({link ListModel#getSize}),
+ * Elements at index 0 and 4 will be a group object.
+ * Elements at index 1, 2 and 3 are items belonging to the first group,
+ * and at index 5, 6 and 7 the second group.
  *
  * @author tomyeh
  * @since 3.1.0
