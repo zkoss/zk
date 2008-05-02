@@ -65,7 +65,8 @@ public class Listgroup extends Listitem {
 			}
 			public Object get(int index) {
 				final Listbox lb = getListbox();
-				if (lb == null) return null;
+				if (lb == null)
+					throw new IndexOutOfBoundsException("Index: "+index);
 				return lb.getItemAtIndex(getIndex() + index + 1);
 			}
 		};
@@ -74,7 +75,7 @@ public class Listgroup extends Listitem {
 		if (getFirstChild() != null) {
 			final Listcell lc = (Listcell)getFirstChild();
 			if (lc.getImage() == null)
-			lc.setImageDirectly(isOpen() ? "~./zul/img/tree/open.png" : "~./zul/img/tree/close.png");
+				lc.setImageDirectly(isOpen() ? "~./zul/img/tree/open.png" : "~./zul/img/tree/close.png");
 		}
 	}
 	/** 
