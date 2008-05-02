@@ -280,6 +280,7 @@ public Date date(int year, int month, int day) {
 	return result;
 }
 
+//series, task (task description, start, end, complete percentage)
 GanttModel ganttmodel = new GanttModel();
 ganttmodel.addValue("Scheduled", new GanttTask("Write Proposal", date(2008,4,1), date(2008,4,5), 0.0));
 ganttmodel.addValue("Scheduled", new GanttTask("Obtain Approval", date(2008,4,9), date(2008,4,9), 0.0));
@@ -312,5 +313,30 @@ ganttmodel.addValue("Actual", new GanttTask("Signoff", date(2008,12,10), date(20
 <chart id="gantt" title="Gantt Chart" width="700" height="400" type="gantt" threeD="false" fgAlpha="128" onClick="drilldown()" />
 <zscript>
   gantt.setModel(ganttmodel);
+</zscript>
+
+<zscript>
+XYZModel windmodel = new SimpleXYZModel();
+//series, date, direction (0-12), force(0-12)
+windmodel.addValue("Wind!", new Long(date(2008, 1, 3).getTime()), new Double(0d), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 4).getTime()), new Double(1d), new Double(8.5));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 5).getTime()), new Double(2.0), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 6).getTime()), new Double(3.0), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 7).getTime()), new Double(4.0), new Double(7.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 8).getTime()), new Double(5.0), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 9).getTime()), new Double(6.0), new Double(8.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 10).getTime()), new Double(7.0), new Double(11.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 11).getTime()), new Double(8.0), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 12).getTime()), new Double(9.0), new Double(11.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 13).getTime()), new Double(10.0), new Double(3.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 14).getTime()), new Double(11.0), new Double(9.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 15).getTime()), new Double(12.0), new Double(11.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 16).getTime()), new Double(0.0), new Double(0.0));
+</zscript>
+
+<label value="wind"/>
+<chart id="wind" title="Wind Plot" width="700" height="400" type="wind" threeD="false" fgAlpha="128" onClick="drilldown()" />
+<zscript>
+  wind.setModel(windmodel);
 </zscript>
 </vbox>
