@@ -1,5 +1,5 @@
 <window title="test case" border="normal">
-
+First of all, click "Add item", then click "replace 1-3", it should not show any error.
 		<tree id="tree" width="400px" height="300px" vflex="true">
 			<treechildren>
 				<treeitem label="A"/>
@@ -12,6 +12,7 @@
 		</tree>
 		<button label="Add item">
 			<attribute name="onClick">
+			for(int i =0; i &lt; 3; i++ ){
 				Treechildren tc_ = (Treechildren)item.getTreechildren();
 				Treeitem ti_ = new Treeitem();
 				Treerow tr_ = new Treerow();
@@ -20,16 +21,16 @@
 				tcl_.setParent(tr_);
 				tr_.setParent(ti_);
 				ti_.setParent(tc_);
+			}
 			</attribute>
 		</button>
-		<textbox id="newV"/>
 		<button label="replace 1-3">
 			<attribute name="onClick">
 				Treechildren tc = (Treechildren)item.getTreechildren();
 				List l = tc.getChildren();
 				for(int i =0; i &lt; 3; i++ ){
 					Treeitem _item = (Treeitem)l.get(i);
-					Treecell _tc = new Treecell(newV.getValue()+i);
+					Treecell _tc = new Treecell("replace"+i);
 					Treerow _tr = null;
 					if(_item.getTreerow()==null){
 						System.out.println("null");

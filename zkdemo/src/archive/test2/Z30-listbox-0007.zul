@@ -1,5 +1,5 @@
 <!--
-list.zul
+Z30-listbox-0007.zul
 
 {{IS_NOTE
 	Purpose:
@@ -15,7 +15,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window>
+<zk>
+Test the rows property of listbox is 4.
 <listbox rows="4" width="100%">
 	<listhead>
 		<listheader label="Population"/>
@@ -42,4 +43,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<listcell label="17%"/>
 	</listitem>
 </listbox>
-</window>
+</zk>

@@ -1,4 +1,5 @@
 <zk>
+If you can see the "Created by Composer" node, it's correct.
 	<window apply="org.zkoss.zkdemo.test2.TreeComposer">
 		<tree id="tree">
 			<treechildren>

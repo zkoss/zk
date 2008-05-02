@@ -1,5 +1,5 @@
 <!--
-list.zul
+Z30-listbox-0008.zul
 
 {{IS_NOTE
 	Purpose:
@@ -15,7 +15,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window>
+<zk>
+The complex listbox should show properly.
 <listbox>
 	<listhead>
 		<listheader label="Population"/>
@@ -52,8 +53,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<listcell label="40%"/>
 	</listitem>
 </listbox>
-<radiogroup>
-<radio checked="true" label="a"/>
-<radio label="b"/>
-</radiogroup>
-</window> 
+</zk>

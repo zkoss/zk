@@ -1,5 +1,5 @@
 <!--
-list.zul
+Z30-listbox-0003.zul
 
 {{IS_NOTE
 	Purpose:
@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
+Test dynamically select the second listitem.
 <listbox rows="3" width="400px">
 	<listhead>
 		<listheader label="Population"/>

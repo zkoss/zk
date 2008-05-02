@@ -1,4 +1,5 @@
 <window title="Win" id="win">
+Test each button works properly.
 	<button label="doModal" onClick="win.doModal()" />
 	<button label="doEmbed" onClick="win.doEmbedded()" />
 	Nested header

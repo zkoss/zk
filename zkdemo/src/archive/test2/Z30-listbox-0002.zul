@@ -1,5 +1,5 @@
 <!--
-list.zul
+Z30-listbox-0002.zul
 
 {{IS_NOTE
 	Purpose:
@@ -15,7 +15,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>Click each button, then the Listbox should work as you did.</n:p>
 <hbox>
 <zscript>
 	Comparator sa0 = new ListitemComparator(0),
@@ -25,7 +26,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </zscript>
 <listbox id="src" multiple="true" width="250px">
 	<listhead id="lh" sizable="true">
-		<listheader width="150px" label="Population" sortAscending="${sa0}"/>
+		<listheader width="150px" label="Population" sortAscending="${sa0}" sortDescending="${sd0}"/>
 		<listheader width="100px" align="right" label="%" sortAscending="${sa1}" sortDescending="${sd1}"/>
 	</listhead>
 	<auxhead id="ah1">
@@ -129,4 +130,4 @@ void checkIndex(Listbox l) {
 	if (ok) alert("Correct");
 }
 ]]></zscript>
-</window>
+</zk>

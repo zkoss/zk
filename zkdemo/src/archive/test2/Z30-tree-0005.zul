@@ -1,5 +1,5 @@
 <zk>
-	Treemodel
+	Test Treemodel, when you open the tree node, it should not show any error.
 	<window height="50%" title="Load on Demand">
 	<zscript>
 	

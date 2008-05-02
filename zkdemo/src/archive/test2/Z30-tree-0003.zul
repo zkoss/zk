@@ -1,6 +1,6 @@
 <window border="normal">
-		Tree with rows more than need:
-		<tree id="tree" width="400px" height="600px" vflex="true">
+		Test each button works well.
+		<tree id="tree" width="400px" height="400px">
 			<treecols sizable="true">
 				<treecol label="Subject" />
 				<treecol label="From" />
@@ -230,6 +230,4 @@
 		<button label="Select 2nd" onClick="ti01.selected = true" />
 		<button label="Toggle Item 4"
 			onClick="item4.setOpen(!item4.isOpen())" />
-		<button label="getItems"
-			onClick="alert(&quot;&quot;+tree.getItems())" />
 </window>

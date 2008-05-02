@@ -105,22 +105,15 @@
 			</button>
 		</hbox>
 			<hbox>
-			Set Tree Height:
-			<textbox id="h"/>
+			Set Tree Height:("px")
+			<intbox id="h"/>
 			<button label="set">
 				<attribute name="onClick">
 					tree.setHeight(h.getValue() + "px");
 				</attribute>
 			</button>
 		</hbox>
-		<hbox>
-			Set Tree vflex:
-			<button label="set">
-				<attribute name="onClick">
-					tree.setVflex(true);
-				</attribute>
-			</button>
-		</hbox>
+<label value="First of all, please open the [Tommy, Juile, [Gray, [Paul, Eric]]] node for the following test case." style="font-weight:bold"/>
 		<hbox>
 			Insert Node:
 			<textbox id="_v" />

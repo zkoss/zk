@@ -1,4 +1,5 @@
 <zk>
+	The complex listbox should show properly.
 	<label value="Aux's rowspan in FF Win lost border"/>
 	<listbox id="box" width="700px" multiple="true"  checkmark="true">
 		<auxhead>

@@ -1,6 +1,5 @@
-
-
 <zk>
+	The complex listbox should show properly.
 	<listbox width="500px" id="w_list_listbox" multiple="true" checkmark="true">
 		<listhead  >
 			<listheader label="account" width="25%" /> 

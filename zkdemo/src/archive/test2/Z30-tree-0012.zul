@@ -1,5 +1,5 @@
 <zk>
-		rows with vflex
+		rows(10) with vflex (Tree height=50%)
 		
 		<tree id="tree3" vflex="true" height="50%" rows="10">
 			<treecols sizable="true">

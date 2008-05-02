@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window width="100%">
-
+The complex listbox should show properly.
 <listbox width="500px" id="w_list_listbox" multiple="true" checkmark="true">
 	<listhead id="w_tr_listhead" >
 		<listheader label="account" width="25%" /> 

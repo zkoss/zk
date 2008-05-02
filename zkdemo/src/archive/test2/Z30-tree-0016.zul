@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <zk xmlns="http://www.zkoss.org/2005/zul">
-    
+    When you click the "update" button, it should not show any error.
     <window title="Dynamically Change by Model">
         <zscript><![CDATA[
         class MySimpleTreeNode extends SimpleTreeNode {
