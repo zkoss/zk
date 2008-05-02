@@ -46,6 +46,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.util.TableOrder;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.List;
 import java.util.Date;
 import java.util.Map;
@@ -202,6 +203,9 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			
 		else if (Chart.GANTT.equals(chart.getType()))
 			_chartImpl = new Gantt();
+		
+		else if (Chart.WIND.equals(chart.getType()))
+			_chartImpl = new Wind();
 		
 		else 
 			throw new UiException("Unsupported chart type yet: "+chart.getType());
@@ -487,7 +491,6 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		
 		return dataset;
 	}
-	
 	private Task newTask(GanttTask task) {
 		final Task jtask = new Task(task.getDescription(), task.getStart(), task.getEnd());
 		jtask.setPercentComplete(task.getPercent());
@@ -503,6 +506,29 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			jtask.addSubtask(jsubtask);
 			addSubtask(jsubtask, subtask); //recursive
 		}
+	}
+	
+	/**
+	 * transfer a XYZModel into JFreeChart WindDataset.
+	 * @since 3.1.0
+	 */
+	private WindDataset XYZModelToWindDataset(XYZModel model) {
+		final Collection allseries = model.getSeries(); 
+		final int ssize = allseries.size();
+		final Object[][][] wobjs = new Object[ssize][][];
+		int k = 0;
+		for (final Iterator it = allseries.iterator(); it.hasNext();++k) {
+			final Comparable seriesKey = (Comparable) it.next();
+			final int size = model.getDataCount(seriesKey);
+			final Object[][] data = new Object[size][3];
+			wobjs[k] = data;
+			for(int j = 0; j < size; ++j) {
+				data[j][0] = model.getX(seriesKey, j);
+				data[j][1] = model.getY(seriesKey, j);
+				data[j][2] = model.getZ(seriesKey, j);
+			}
+		}
+		return new DefaultWindDataset((List)allseries, wobjs);
 	}
 	
 	private static Map _periodMap = new HashMap(10);	
@@ -1554,6 +1580,40 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			final Date endDate = new Date(end);
 			final Number percent = ((Number)area.getAttribute("percent"));
 			return _formater.format(new Object[] {startDate, endDate, percent});
+		}
+	}
+
+	/** wind 
+	 * @since 3.1.0
+	 */
+	private class Wind extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+//			System.out.println("wind info:"+info);
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+		}
+		public JFreeChart createChart(Chart chart) {
+			ChartModel model = (ChartModel) chart.getModel();
+			if (!(model instanceof XYZModel)) {
+				throw new UiException("model must be a org.zkoss.zul.XYZModel");
+			}
+			return ChartFactory.createWindPlot(
+				chart.getTitle(),
+				chart.getXAxis(),
+				chart.getYAxis(),
+				XYZModelToWindDataset((XYZModel)model),
+				chart.isShowLegend(), 
+				chart.isShowTooltiptext(), true);
 		}
 	}
 
