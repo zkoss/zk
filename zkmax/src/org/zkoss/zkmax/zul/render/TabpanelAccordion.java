@@ -97,7 +97,7 @@ public class TabpanelAccordion implements ComponentRenderer {
 
 		wh.write("<div id=\"").write(self.getUuid()).write("!real\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.write("><div id=\"").write(self.getUuid()).write("!cave\">")
+			.write("><div id=\"").write(self.getUuid()).write("!cave\" style=\"height:100%\">")
 			.writeChildren(self)
 			.writeln("</div></div></div>");
 	}
