@@ -48,7 +48,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td colspan="${tab.closable?6:5}" class="${c:cat(look,'b')}"></td>
 </tr>
 </table>
-	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave">
+	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave" style="height:100%">
 <c:forEach var="child" items="${self.children}">
 	${z:redraw(child, null)}
 </c:forEach>
