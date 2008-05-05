@@ -87,6 +87,8 @@ public class PageDefinition extends NodeInfo {
 	private List _initdefs;
 	/** List(VariableResolverInfo). */
 	private List _resolvdefs;
+	/** List(FunctionMapper mapper). */
+	private List _mapperdefs;
 	/** List(HeaderInfo). */
 	private List _headerdefs;
 	/** List(ForwardInfo). */
@@ -266,6 +268,12 @@ public class PageDefinition extends NodeInfo {
 				addVariableResolverInfo((VariableResolverInfo)it.next());
 		}
 
+		if (pgdef._mapperdefs != null
+		&& directives != null && contains(directives, "function-mapper")) {
+			for (Iterator it = pgdef._mapperdefs.iterator(); it.hasNext();)
+				addFunctionMapperInfo((FunctionMapperInfo)it.next());
+		}
+
 		if (pgdef._xelmtds != null
 		&& directives != null && contains(directives, "xel-method")) {
 			for (Iterator it = pgdef._xelmtds.iterator(); it.hasNext();) {
@@ -330,7 +338,8 @@ public class PageDefinition extends NodeInfo {
 		return inits;
 	}
 
-	/** Adds a defintion of {@link VariableResolver}. */
+	/** Adds a defintion of {@link VariableResolver}.
+	 */
 	public void addVariableResolverInfo(VariableResolverInfo resolver) {
 		if (resolver == null)
 			throw new IllegalArgumentException("null");
@@ -338,6 +347,17 @@ public class PageDefinition extends NodeInfo {
 		if (_resolvdefs == null)
 			_resolvdefs = new LinkedList();
 		_resolvdefs.add(resolver);
+	}
+	/** Adds a defintion of {@link FunctionMapper}.
+	 * @since 3.1.0
+	 */
+	public void addFunctionMapperInfo(FunctionMapperInfo mapper) {
+		if (mapper == null)
+			throw new IllegalArgumentException("null");
+
+		if (_mapperdefs == null)
+			_mapperdefs = new LinkedList();
+		_mapperdefs.add(mapper);
 	}
 	/** Adds a XEL method.
 	 *
@@ -360,7 +380,20 @@ public class PageDefinition extends NodeInfo {
 	 * @param page the page to initialize the context. It cannot be null.
 	 */
 	public void initXelContext(Page page) {
-		page.addFunctionMapper(getFunctionMapper());
+		page.addFunctionMapper(getTaglibMapper());
+
+		if (_mapperdefs != null)
+			for (Iterator it = _mapperdefs.iterator(); it.hasNext();) {
+				final FunctionMapperInfo def = (FunctionMapperInfo)it.next();
+				try {
+					FunctionMapper mapper =
+						def.newFunctionMapper(this, page);
+					if (mapper != null) 
+						page.addFunctionMapper(mapper);
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
 
 		if (_resolvdefs != null)
 			for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
@@ -716,9 +749,19 @@ public class PageDefinition extends NodeInfo {
 		return new PageEvalRef(this);
 	}
 
-	/** Returns the function mapper, or null if no mappter at all.
+	/** @deprecated As of release 3.1.0, replaced by {@link #getTaglibMapper}.
 	 */
 	public FunctionMapper getFunctionMapper() {
+		return getTaglibMapper();
+	}
+	/** Returns the mapper representing the functions defined in
+	 * taglib and xel-method.
+	 *
+	 * <p>Note: it doesn't include the function mapper defined added by
+	 * {@link #addFunctionMapper}.
+	 * @since 3.1.0
+	 */
+	public FunctionMapper getTaglibMapper() {
 		if (_mapper == null) {
 			_mapper = Taglibs.getFunctionMapper(_taglibs, _expimps, _xelmtds, _locator);
 			if (_mapper == null)

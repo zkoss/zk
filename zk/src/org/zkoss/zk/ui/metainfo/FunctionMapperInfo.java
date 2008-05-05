@@ -1,4 +1,4 @@
-/* VariableResolverInfo.java
+/* FunctionMapperInfo.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,10 +6,10 @@
 	Description:
 		
 	History:
-		Thu Jun  1 18:12:56     2006, Created by tomyeh
+		Mon May  5 14:41:03     2008, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -22,8 +22,7 @@ import java.util.Iterator;
 import java.util.Collection;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
-import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
@@ -32,48 +31,45 @@ import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
- * A definition of the variable resolver ({@link VariableResolver}).
+ * A definition of the function mapper ({@link FunctionMapper}).
  *
  * <p>Note: we resolve the class by use fo Classes.forNameByThread.
  * In other words, it doesn't support the class defined in zscript.
- * Why not? Since there is no way to run zscript before
- * the variable-resolver directive (and better performance).
+ * Why not? Since there is no way to run zscript before the function-mapper
+ * directive (and better performance).
  * </p>
  * 
  * @author tomyeh
+ * @since 3.1.0
  */
-public class VariableResolverInfo {
-//	private static final Log log = Log.lookup(VariableResolverInfo.class);
-
-	/** A class, an ExValue or an VariableResolver. */
-	private final Object _resolver;
+public class FunctionMapperInfo {
+	/** A class, an ExValue or an FunctionMapper. */
+	private final Object _mapper;
 	/** The arguments, never null (might with zero length). */
 	private final ExValue[] _args;
 
 	/** Constructs with a class.
-	 * @since 3.0.1
 	 */
-	public VariableResolverInfo(Class cls, Collection args) {
+	public FunctionMapperInfo(Class cls, Collection args) {
 		checkClass(cls);
-		_resolver = cls;
+		_mapper = cls;
 		_args = toExValues(args);
 	}
 	/** Constructs with a class.
 	 */
-	public VariableResolverInfo(Class cls) {
+	public FunctionMapperInfo(Class cls) {
 		this(cls, null);
 	}
 	private static void checkClass(Class cls) {
-		if (!VariableResolver.class.isAssignableFrom(cls))
-			throw new UiException(VariableResolver.class+" must be implemented: "+cls);
+		if (!FunctionMapper.class.isAssignableFrom(cls))
+			throw new UiException(FunctionMapper.class+" must be implemented: "+cls);
 	}
 
 	/** Constructs with a class name.
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
-	 * @since 3.0.1
 	 */
-	public VariableResolverInfo(String clsnm, Collection args)
+	public FunctionMapperInfo(String clsnm, Collection args)
 	throws ClassNotFoundException {
 		if (clsnm == null || clsnm.length() == 0)
 			throw new IllegalArgumentException("empty");
@@ -82,12 +78,12 @@ public class VariableResolverInfo {
 			try {
 				final Class cls = Classes.forNameByThread(clsnm);
 				checkClass(cls);
-				_resolver = cls;
+				_mapper = cls;
 			} catch (ClassNotFoundException ex) {
 				throw new ClassNotFoundException("Class not found: "+clsnm, ex);
 			}
 		} else {
-			_resolver = new ExValue(clsnm, String.class);
+			_mapper = new ExValue(clsnm, String.class);
 		}
 		_args = toExValues(args);
 	}
@@ -95,16 +91,16 @@ public class VariableResolverInfo {
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
-	public VariableResolverInfo(String clsnm) throws ClassNotFoundException {
+	public FunctionMapperInfo(String clsnm) throws ClassNotFoundException {
 		this(clsnm, null);
 	}
 	/** Constructs with an initiator that will be reuse each time
-	 * {@link #newVariableResolver} is called.
+	 * {@link #newFunctionMapper} is called.
 	 */
-	public VariableResolverInfo(VariableResolver resolver) {
-		if (resolver == null)
+	public FunctionMapperInfo(FunctionMapper mapper) {
+		if (mapper == null)
 			throw new IllegalArgumentException("null");
-		_resolver = resolver;
+		_mapper = mapper;
 		_args = new ExValue[0];
 	}
 	private static ExValue[] toExValues(Collection args) {
@@ -118,19 +114,18 @@ public class VariableResolverInfo {
 		return evals;
 	}
 
-	/** Creaetes and returns the variable resolver for the specified page.
+	/** Creaetes and returns the function mapper for the specified page.
 	 */
-	public VariableResolver newVariableResolver(PageDefinition pgdef, Page page)
+	public FunctionMapper newFunctionMapper(PageDefinition pgdef, Page page)
 	throws Exception {
-		if (_resolver instanceof VariableResolver)
-			return (VariableResolver)_resolver;
+		if (_mapper instanceof FunctionMapper)
+			return (FunctionMapper)_mapper;
 
 		final Class cls;
-		if (_resolver instanceof ExValue) {
-			final String clsnm = (String)((ExValue)_resolver)
+		if (_mapper instanceof ExValue) {
+			final String clsnm = (String)((ExValue)_mapper)
 				.getValue(pgdef.getEvaluator(), page);
 			if (clsnm == null || clsnm.length() == 0) {
-//				if (log.debugable()) log.debug("Ingore "+_resolver+" due to empty");
 				return null; //ignore it!!
 			}
 
@@ -138,13 +133,13 @@ public class VariableResolverInfo {
 				cls = Classes.forNameByThread(clsnm);
 				checkClass(cls);
 			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_resolver+")", ex);
+				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_mapper+")", ex);
 			}
 		} else {
-			cls = (Class)_resolver;
+			cls = (Class)_mapper;
 		}
 
-		return (VariableResolver)(_args.length == 0 ? cls.newInstance():
+		return (FunctionMapper)(_args.length == 0 ? cls.newInstance():
 			Classes.newInstance(cls, resolveArguments(pgdef, page)));
 	}
 	/** Returns the arguments array (by evaluating EL if necessary).
@@ -157,9 +152,8 @@ public class VariableResolverInfo {
 		return args;
 	}
 
-
 	//Object//
 	public String toString() {
-		return "[variable-resolver " + _resolver + "]";
+		return "[function-mapper " + _mapper + "]";
 	}
 }

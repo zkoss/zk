@@ -241,7 +241,8 @@ public class Parser {
 			parsePageDirective(pgdef, pi, params);
 		} else if ("init".equals(target)) {
 			parseInitDirective(pgdef, pi, params);
-		} else if ("variable-resolver".equals(target)) {
+		} else if ("variable-resolver".equals(target)
+		|| "function-mapper".equals(target)) {
 			final String clsnm = (String)params.remove("class");
 			if (isEmpty(clsnm))
 				throw new UiException("The class attribute is required, "+pi.getLocator());
@@ -256,10 +257,16 @@ public class Parser {
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 
-			pgdef.addVariableResolverInfo(
-				clsnm.indexOf("${") >= 0 ? //class supports EL
-					new VariableResolverInfo(clsnm, args):
-					new VariableResolverInfo(locateClass(clsnm), args));
+			if ("variable-resolver".equals(target))
+				pgdef.addVariableResolverInfo(
+					clsnm.indexOf("${") >= 0 ? //class supports EL
+						new VariableResolverInfo(clsnm, args):
+						new VariableResolverInfo(locateClass(clsnm), args));
+			else
+				pgdef.addFunctionMapperInfo(
+					clsnm.indexOf("${") >= 0 ? //class supports EL
+						new FunctionMapperInfo(clsnm, args):
+						new FunctionMapperInfo(locateClass(clsnm), args));
 		} else if ("component".equals(target)) { //declare a component
 			parseComponentDirective(pgdef, pi, params);
 		} else if ("taglib".equals(target)) {
