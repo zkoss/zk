@@ -208,7 +208,7 @@ public class PollingServerPush implements ServerPush {
 			if (_desktop != null) {
 				info.wait(timeout);
 
-				if (info.nActive <= 0) { //not granted (timeout)
+				if (_desktop != null && info.nActive <= 0) { //not granted (timeout)
 					info.nActive = GIVEUP; //denote timeout (and give up)
 					synchronized (_pending) { //undo pending
 						_pending.remove(info);
