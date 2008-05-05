@@ -65,7 +65,6 @@ public class ServerPush {
 		public void run() {
 			try {
 				while (!_ceased) {
-					Threads.sleep(500); //Update each two seconds
 					Executions.activate(_desktop);
 					try {
 						_info.setValue(Integer.toString(++_cnt));
@@ -78,6 +77,7 @@ public class ServerPush {
 					} finally {
 						Executions.deactivate(_desktop);
 					}
+					Threads.sleep(500); //Update each two seconds
 				}
 				log.info("The server push thread ceased");
 			} catch (InterruptedException ex) {
