@@ -12,6 +12,7 @@ ZK 3.1.0
   1890944: chart support gannt chart
   1890943: chart support wind chart
   1937237: Grid support vflex like Listbox and Tree
+  1957737: Support the function-mapper directive
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
