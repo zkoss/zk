@@ -55,6 +55,7 @@ zkWnd.cleanup = function (cmp) {
 };
 /** Fixed the content div's height. */
 zkWnd.onVisi = zkWnd.onSize = zkWnd._fixHgh = function (cmp) {
+	if (!zk.isRealVisible(cmp)) return; //Bug #1944729
 	var hgh = cmp.style.height;
 	if (hgh && hgh != "auto") {
 		var n = $e(cmp.id + "!cave");
