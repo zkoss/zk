@@ -31,7 +31,6 @@ import org.zkoss.xel.util.SimpleMapper;
 public class FuncMapper extends SimpleMapper {
 	public Function resolveFunction(String prefix, String name)
 	throws XelException {
-System.out.println("resolve "+prefix+", "+name);
 		if ("quote".equals(name)) {
 			try {
 				return new MethodFunction(
