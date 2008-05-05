@@ -1,5 +1,12 @@
 	--------
-ZK 3.0.5 Freshly
+ZK 3.0.6
+* Features
+
+* Bugs
+  1957661: Page.addFunctionMapper() fails
+
+	--------
+ZK 3.0.5
 * Features
   1951358: A way to have component-specific Command
   1951286: JavaScript utils: comm.sendClick and comm.sendUser
