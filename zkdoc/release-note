@@ -18,6 +18,7 @@ ZK 3.1.0
   1953249: <borderlayout> inside <tabbox> is not visible
   1955452: Liferay Failed if two portlets from different Web apps
   1957661: Page.addFunctionMapper() fails
+  1944729: Windows and boxes inside tab panels
 
 * Upgrade Notes
   + The smartUpdate, response, onChildAdded, onChildRemoved and
