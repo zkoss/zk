@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
@@ -102,6 +103,12 @@ public class SimpleEvaluator implements Evaluator {
 	 * It is passed to {@link #evaluate}
 	 */
 	public FunctionMapper getFunctionMapper(Object ref) {
+		if (ref instanceof Component)
+			ref = ((Component)ref).getPage();
+		if (ref == null)
+			ref = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
+		if (ref instanceof Page)
+			return ((Page)ref).getFunctionMapper();
 		return _mapper;
 	}
 	/** Returns the variable resolver, or null if not available.
