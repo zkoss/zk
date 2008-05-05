@@ -160,8 +160,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private boolean _visible = true;
 
 	/** Constructs a component with auto-generated ID.
+	 * @since 3.1.0 (becomes public)
 	 */
-	protected AbstractComponent() {
+	public AbstractComponent() {
 		final Execution exec = Executions.getCurrent();
 
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();

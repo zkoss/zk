@@ -75,7 +75,13 @@ public class RequestQueueImpl implements RequestQueue {
 	}
 	private static boolean isObsolete(AuRequest request) {
 		final Component comp = request.getComponent();
-		return comp != null && comp.getDesktop() != request.getDesktop();
+		if (comp != null) {
+			final Desktop dt = comp.getDesktop();
+			return dt != null && dt != request.getDesktop();
+			//Since 3.1.0, we allow a component to process events even
+			//if it is detached (due to implementation of EventQueue)
+		}
+		return false;
 	}
 	public AuRequest nextRequest() {
 		while (!_requests.isEmpty()) {
