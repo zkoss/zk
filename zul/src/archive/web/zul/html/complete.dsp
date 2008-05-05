@@ -31,7 +31,7 @@ ${z:redraw(root, null)}
 
 <c:if test="${!empty zk_argAction && !arg.asyncUpdate}">
 ${z:outLangStyleSheets()}
-${z:outLangJavaScripts(zk_argAction)}
+${z:outLangJavaScripts(null)}
 <script type="text/javascript">
 	zkau.addDesktop("${page.desktop.id}");
 </script>

@@ -89,13 +89,12 @@ public class NativeHelpers {
 			return null;
 
 		final String ATTR_ACTION = "zk_argAction";
-		final String action = (String)exec.getAttribute(ATTR_ACTION);
-		if (action == null)
+		if (exec.getAttribute(ATTR_ACTION) == null)
 			return null;
 
 		final StringBuffer sb = new StringBuffer(512).append('\n')
 			.append(ZkFns.outLangStyleSheets()).append('\n')
-			.append(ZkFns.outLangJavaScripts(action)).append('\n');
+			.append(ZkFns.outLangJavaScripts(null)).append('\n');
 
 		sb.append("<script type=\"text/javascript\">\nzkau.addDesktop(\"")
 			.append(exec.getDesktop().getId())

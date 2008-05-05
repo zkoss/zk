@@ -48,6 +48,7 @@ zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau._sendNow
 zkau._seqId = 0;
 zkau._dtids = []; //an array of desktop IDs
+zkau._uris = {}; //a map of update engine's URIs ({dtid, uri})
 zkau._spushInfo = {} //the server-push info: Map(dtid, {min, max, factor})
 var undef; //an undefined variable
 
@@ -71,6 +72,19 @@ zkau.dtid = function (n) {
 		if (id) return id;
 	}
 	return null;
+};
+/** Returns the URI of the update engine.
+ * @since 3.1.0
+ */
+zkau.uri = function (dtid) {
+	return zkau._dtids.length <= 1 || !dtid ? zkau._uri: zkau._uris[dtid];
+};
+/** Adds the update engine's UIR for the specified destkop.
+ * @since 3.1.0
+ */
+zkau.addURI = function (dtid, uri) {
+	zkau._uris[dtid] = uri;
+	if (!zkau._uri) zkau._uri = uri; //performance fine tune
 };
 
 zk.addInit(function () {
@@ -543,18 +557,19 @@ zkau._sendNow = function (dtid) {
 
 	if (content)
 		zkau._sendNow2({
-			sid: zkau._seqId, dtid: dtid, content: "dtid=" + dtid + content,
+			sid: zkau._seqId, uri: zkau.uri(dtid),
+			dtid: dtid, content: "dtid=" + dtid + content,
 			ctli: ctli, ctlc: ctlc, implicit: implicit, ignorable: ignorable,
 			tmout: 0
 		});
 };
 zkau._sendNow2 = function(reqInf) {
 	var req = zkau.ajaxRequest(),
-		uri = zkau._useQS(reqInf) ? zk_action + '?' + reqInf.content: null;
+		uri = zkau._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
 	zkau.sentTime = $now(); //used by server-push (zkex)
 	try {
 		req.onreadystatechange = zkau._onRespReady;
-		req.open("POST", uri ? uri: zk_action, true);
+		req.open("POST", uri ? uri: reqInf.uri, true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		req.setRequestHeader("ZK-SID", reqInf.sid);
 		if (zkau._errcode) {
@@ -594,7 +609,7 @@ zkau._sendNow2 = function(reqInf) {
 //IE: use query string if possible to avoid IE incomplete-request problem
 zkau._useQS = zk.ie ? function (reqInf) {
 	var s = reqInf.content, j = s.length, prev, cc;
-	if (j + zk_action.length < 2000) {
+	if (j + reqInf.uri.length < 2000) {
 		while (--j >= 0) {
 			cc = s.charAt(j);
 			if (cc == '%' && prev >= '8') //%8x, %9x...
@@ -1042,8 +1057,9 @@ zkau._onUnload = function () {
 			var ds = zkau._dtids;
 			for (var j = 0, dl = ds.length; j < dl; ++j) {
 				var req = zkau.ajaxRequest(),
-					content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
-				req.open("POST", zk.ie ? zk_action+"?"+content: zk_action, true);
+					content = "dtid="+ds[j]+"&cmd.0=rmDesktop",
+					uri = zkau.uri(ds[j]);
+				req.open("POST", zk.ie ? uri+"?"+content: uri, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 				if (zk.ie) req.send();
 				else req.send(content);

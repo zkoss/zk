@@ -23,7 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="page" value="${arg.page}"/>
 <c:if test="${!arg.asyncUpdate}">
 ${z:outLangStyleSheets()}
-${z:outLangJavaScripts(arg.action)}
+${z:outLangJavaScripts(null)}
 </c:if>
 <c:if test="${!empty zk_htmlHeadRequired}">
 <c:set var="zk_htmlHeadRequired" value="" scope="request"/>
