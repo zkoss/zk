@@ -1568,15 +1568,28 @@ public class Listbox extends XulElement {
 		for (int j = oldsz; j < newsz; ++j) {
 			if (renderer == null)
 				renderer = getRealRenderer();
-			newUnloadedItem(renderer).setParent(this);
+			newUnloadedItem(renderer, j).setParent(this);
 		}
 	}
 	/** Creates an new and unloaded listitem. */
-	private final Listitem newUnloadedItem(ListitemRenderer renderer) {
+	private final Listitem newUnloadedItem(ListitemRenderer renderer, int index) {
 		Listitem item = null;
 		if (renderer instanceof ListitemRendererExt)
 			item = ((ListitemRendererExt)renderer).newListitem(this);
-
+		if (_model instanceof GroupModel) {
+			final GroupModel model = (GroupModel) _model;
+			if (!hasGroup() && getGroupCount() < model.getGroupCount()) {
+				item = new Listgroup();
+				item.applyProperties();
+			} else if (getGroupCount() < model.getGroupCount()) {
+				int gIndex = getGroupCount() - 1,
+					size = model.getChildCount(gIndex) + ((Listgroup)getGroups().get(gIndex)).getIndex() + 1;
+				if (index == size) {
+					item = new Listgroup();
+					item.applyProperties();
+				}
+			}
+		}
 		if (item == null) {
 			item = new Listitem();
 			item.applyProperties();
@@ -1620,7 +1633,7 @@ public class Listbox extends XulElement {
 			}
 			item.setLoaded(false);
 		} else { //detach
-			item.getParent().insertBefore(newUnloadedItem(renderer), item);
+			item.getParent().insertBefore(newUnloadedItem(renderer, -1), item);
 			item.detach();
 		}
 	}
@@ -1696,7 +1709,7 @@ public class Listbox extends XulElement {
 			for (int j = min; j <= max; ++j) {
 				if (renderer == null)
 					renderer = getRealRenderer();
-				insertBefore(newUnloadedItem(renderer), before);
+				insertBefore(newUnloadedItem(renderer, j), before);
 			}
 			done = true;
 			break;

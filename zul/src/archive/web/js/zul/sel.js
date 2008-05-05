@@ -1378,8 +1378,8 @@ zkLitgp = {
 		var toOpen = !zkLitgp.isOpen(row); //toggle
 		zkLitgp._openItem(row, toOpen);
 
-		if (toOpen && meta) {	
-			meta.stripe();
+		if (toOpen && meta || getZKAttr(meta.element, "model") == "true") {	
+			if (toOpen) meta.stripe();
 			meta._recalcSize();
 		}
 		Event.stop(evt);

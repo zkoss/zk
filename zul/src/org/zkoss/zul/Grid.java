@@ -697,15 +697,28 @@ public class Grid extends XulElement {
 		for (int j = oldsz; j < newsz; ++j) {
 			if (renderer == null)
 				renderer = getRealRenderer();
-			newUnloadedRow(renderer).setParent(_rows);
+			newUnloadedRow(renderer, j).setParent(_rows);
 		}
 	}
 	/** Creates an new and unloaded row. */
-	private final Row newUnloadedRow(RowRenderer renderer) {
+	private final Row newUnloadedRow(RowRenderer renderer, int index) {
 		Row row = null;
 		if (renderer instanceof RowRendererExt)
 			row = ((RowRendererExt)renderer).newRow(this);
-
+		if (_model instanceof GroupModel) {
+			final GroupModel model = (GroupModel) _model;
+			if (!_rows.hasGroup() && _rows.getGroupCount() < model.getGroupCount()) {
+				row = new Group();
+				row.applyProperties();
+			} else if (_rows.getGroupCount() < model.getGroupCount()) {
+				int gIndex = _rows.getGroupCount() - 1,
+					size = model.getChildCount(gIndex) + ((Group) _rows.getGroups().get(gIndex)).getIndex() + 1;
+				if (index == size) {
+					row = new Group();
+					row.applyProperties();
+				}
+			}
+		}
 		if (row == null) {
 			row = new Row();
 			row.applyProperties();
@@ -762,7 +775,7 @@ public class Grid extends XulElement {
 				newUnloadedCell(renderer, row);
 			row.setLoaded(false);
 		} else { //detach
-			_rows.insertBefore(newUnloadedRow(renderer), row);
+			_rows.insertBefore(newUnloadedRow(renderer, -1), row);
 			row.detach();
 		}
 	}
@@ -834,7 +847,7 @@ public class Grid extends XulElement {
 			for (int j = min; j <= max; ++j) {
 				if (renderer == null)
 					renderer = getRealRenderer();
-				_rows.insertBefore(newUnloadedRow(renderer), before);
+				_rows.insertBefore(newUnloadedRow(renderer, j), before);
 			}
 
 			done = true;

@@ -431,8 +431,8 @@ zkGrwgp = {
 		var toOpen = !zkGrwgp.isOpen(row); //toggle
 		zkGrwgp._openItem(row, toOpen);
 
-		if (toOpen && meta) {	
-			meta.stripe();
+		if (toOpen && meta || getZKAttr(meta.element, "model") == "true") {	
+			if (toOpen) meta.stripe();
 			meta._recalcSize();
 		}
 		Event.stop(evt);
