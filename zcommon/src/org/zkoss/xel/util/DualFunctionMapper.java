@@ -30,7 +30,7 @@ import org.zkoss.xel.Function;
  * @author tomyeh
  * @since 3.0.0
  */
-public class DualFunctionMapper implements FunctionMapper {
+public class DualFunctionMapper implements FunctionMapper, java.io.Serializable {
 	private FunctionMapper _first, _second;
 
 	/** Returns a function mapper by combining two function mappers.
