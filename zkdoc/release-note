@@ -15,6 +15,7 @@ ZK 3.1.0
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
+  1955452: Liferay Failed if two portlets from different Web apps
 
 * Upgrade Notes
   + The smartUpdate, response, onChildAdded, onChildRemoved and
