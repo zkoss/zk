@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.io.IOException;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.au.AuResponse;
 
 /**
  * Represents a writer that is used to send the output back to the client,
