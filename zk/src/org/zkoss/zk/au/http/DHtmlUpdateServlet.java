@@ -102,7 +102,9 @@ import org.zkoss.zk.device.Device;
 public class DHtmlUpdateServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlUpdateServlet.class);
 	private static final String ATTR_UPDATE_SERVLET
-		= "org.zkoss.zk.au.http.UpdateServlet";
+		= "org.zkoss.zk.au.http.updateServlet";
+	private static final String ATTR_AU_PROCESSORS
+		= "org.zkoss.zk.au.http.auProcessors";
 
 	private ServletContext _ctx;
 	private long _lastModified;
@@ -152,6 +154,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 		}
 
+		//Copies au processors defined before DHtmlUpdateServlet is started
+		final WebApp wapp = WebManager.getWebManager(_ctx).getWebApp();
+		final Map procs = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
+		if (procs != null) {
+			for (Iterator it = procs.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				addAuProcessor((String)me.getKey(), (AuProcessor)me.getValue());
+			}
+			wapp.removeAttribute(ATTR_AU_PROCESSORS);
+		}
+
 		if (getAuProcessor("/upload") == null) {
 			try {
 				addAuProcessor("/upload", new AuUploader());
@@ -181,25 +194,53 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		return _ctx;
 	}
 
+	/** Adds an AU processor and associates it with the specified prefix,
+	 * even before {@link DHtmlUpdateServlet} is started.
+	 * <p>Unlike {@link #addAuProcessor(String, AuProcessor)}, it can be called
+	 * even if the update servlet is not loaded yet ({@link #getUpdateServlet}
+	 * returns null).
+	 *
+	 * <p>If there was an AU processor associated with the same name, the
+	 * the old AU processor will be replaced.
+	 * @since 3.1.0
+	 */
+	public static final AuProcessor
+	addAuProcessor(WebApp wapp, String prefix, AuProcessor processor) {
+		DHtmlUpdateServlet upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
+		if (upsv == null) {
+			synchronized (DHtmlUpdateServlet.class) {
+				upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
+				if (upsv == null) {
+					checkAuProcesor(prefix, processor);
+					Map procs = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
+					if (procs == null)
+						wapp.setAttribute(ATTR_AU_PROCESSORS, procs = new HashMap(4));
+					return (AuProcessor)procs.put(prefix, processor);
+				}
+			}
+		}
+
+		return upsv.addAuProcessor(prefix, processor);
+	}
 	/** Adds an AU processor and associates it with the specified prefix.
 	 *
 	 * <p>If there was an AU processor associated with the same name, the
 	 * the old AU processor will be replaced.
+	 *
+	 * <p>If you want to add an Au processor, even before DHtmlUpdateServlet
+	 * is started, use {@link #addAuProcessor(WebApp, String, AuProcessor)}
+	 * instead.
 	 *
 	 * @param prefix the prefix. It must start with "/", but it cannot be
 	 * "/" nor "/web" (which are reserved).
 	 * @param processor the AU processor (never null).
 	 * @return the previous AU processor associated with the specified prefix,
 	 * or null if the prefix was not associated before.
+	 * @see #addAuProcessor(WebApp,String,AuProcessor)
 	 * @since 3.0.2
 	 */
 	public AuProcessor addAuProcessor(String prefix, AuProcessor processor) {
-		if (prefix == null || !prefix.startsWith("/") || prefix.length() < 2
-		|| processor == null)
-			throw new IllegalArgumentException();
-		if (ClassWebResource.PATH_PREFIX.equalsIgnoreCase(prefix))
-			throw new IllegalArgumentException(
-				ClassWebResource.PATH_PREFIX + " is reserved");
+		checkAuProcesor(prefix, processor);
 
 		if (_procs.get(prefix) ==  processor) //speed up to avoid sync
 			return processor; //nothing changed
@@ -212,6 +253,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			_procs = ps;
 		}
 		return old;
+	}
+	private static void checkAuProcesor(String prefix, AuProcessor processor) {
+		if (prefix == null || !prefix.startsWith("/") || prefix.length() < 2
+		|| processor == null)
+			throw new IllegalArgumentException();
+		if (ClassWebResource.PATH_PREFIX.equalsIgnoreCase(prefix))
+			throw new IllegalArgumentException(
+				ClassWebResource.PATH_PREFIX + " is reserved");
 	}
 	/** Returns the AU processor associated with the specified prefix,
 	 * or null if no AU processor associated.
