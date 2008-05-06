@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkdemo.test;
+package org.zkoss.zkdemo.test2;
 
 import org.zkoss.lang.Threads;
 import org.zkoss.util.logging.Log;

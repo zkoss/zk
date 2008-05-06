@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+server-push.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug  6 12:35:50     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Server Push">
+The number at the bottom shall be counting.
+Click "Stop Push", and it shall stop.
+Click "Start Push", and it shall count again (from 1).
+	<vbox>
+	<button label="Start Push" onClick="org.zkoss.zkdemo.test2.ServerPush.start(info)"/>
+	<button label="Stop Push" onClick="org.zkoss.zkdemo.test2.ServerPush.stop()"/>
+	<label id="info"/>
+	</vbox>
+	<zscript>
+	org.zkoss.zkdemo.test2.ServerPush.start(info);
+	</zscript>
+</window>
