@@ -49,7 +49,6 @@ public class PollingServerPush implements ServerPush {
 	private static final int GIVEUP = -99;
 
 	private Desktop _desktop;
-	private Configuration _config;
 	/** List of ThreadInfo. */
 	private final List _pending = new LinkedList();
 	/** The active thread. */
@@ -64,7 +63,8 @@ public class PollingServerPush implements ServerPush {
 	/** Returns the JavaScript codes to enable (aka., start) the server push.
 	 */
 	protected String getStartScript() {
-		final String start = _config.getPreference("PollingServerPush.start", null);
+		final String start = _desktop.getWebApp().getConfiguration()
+			.getPreference("PollingServerPush.start", null);
 		if (start != null)
 			return start;
 
@@ -81,7 +81,8 @@ public class PollingServerPush implements ServerPush {
 		return sb.append(");},'").append(dtid).append("');").toString();
 	}
 	private int getIntPref(String key) {
-		final String s = _config.getPreference(key, null);
+		final String s = _desktop.getWebApp().getConfiguration()
+			.getPreference(key, null);
 		if (s != null) {
 			try {
 				return Integer.parseInt(s);
@@ -95,8 +96,8 @@ public class PollingServerPush implements ServerPush {
 	/** Returns the JavaScript codes to disable (aka., stop) the server push.
 	 */
 	protected String getStopScript() {
-		final String stop =
-			_config.getPreference("PollingServerPush.stop", null);
+		final String stop = _desktop.getWebApp().getConfiguration()
+			.getPreference("PollingServerPush.stop", null);
 		return stop != null ? stop:
 			"zkCpsp.stop('" + _desktop.getId() + "');";
 	}
@@ -108,7 +109,6 @@ public class PollingServerPush implements ServerPush {
 			throw new IllegalStateException("Already started");
 
 		_desktop = desktop;
-		_config = _desktop.getWebApp().getConfiguration();
 		Clients.response(new AuScript(null, getStartScript()));
 	}
 	public void stop() {
@@ -119,7 +119,6 @@ public class PollingServerPush implements ServerPush {
 			Clients.response(new AuScript(null, getStopScript()));
 
 		_desktop = null; //to cause DesktopUnavailableException being thrown
-		_config = null;
 
 		synchronized (_pending) {
 			for (Iterator it = _pending.iterator(); it.hasNext();) {
@@ -145,6 +144,7 @@ public class PollingServerPush implements ServerPush {
 	}
 
 	public void onPiggyback() {
+		final Configuration config = _desktop.getWebApp().getConfiguration();
 		long tmexpired = 0;
 		for (int cnt = 0; !_pending.isEmpty();) {
 			//Don't hold the client too long.
@@ -152,7 +152,7 @@ public class PollingServerPush implements ServerPush {
 			//before onPiggyback returns. It causes dead-loop in this case.
 			if (tmexpired == 0) { //first time
 				tmexpired = System.currentTimeMillis()
-					+ (_config.getMaxProcessTime() >> 1);
+					+ (config.getMaxProcessTime() >> 1);
 				cnt = _pending.size() + 3;
 			} else if (--cnt < 0 || System.currentTimeMillis() > tmexpired) {
 				break;
