@@ -135,7 +135,7 @@ public class PollingServerPush implements ServerPush {
 	 * <code>PollingServerPush.delay.min</code>
 	 * <code>PollingServerPush.delay.max</code>,
 	 * and <code>PollingServerPush.delay.factor</code>.
-	 * If not defined, min is 1100, max is 10000, and factor is 5.
+	 * If not defined, min is 1000, max is 15000, and factor is 5.
 	 */
 	public void setDelay(int min, int max, int factor) {
 		Clients.response(
