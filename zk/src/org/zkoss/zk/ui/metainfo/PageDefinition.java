@@ -758,7 +758,7 @@ public class PageDefinition extends NodeInfo {
 	 * taglib and xel-method.
 	 *
 	 * <p>Note: it doesn't include the function mapper defined added by
-	 * {@link #addFunctionMapper}.
+	 * {@link #addFunctionMapperInfo}.
 	 * @since 3.1.0
 	 */
 	public FunctionMapper getTaglibMapper() {
