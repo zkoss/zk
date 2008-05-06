@@ -29,6 +29,7 @@ import org.zkoss.util.ScalableTimerTask;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.au.AuWriter;
+import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.http.HttpAuWriter;
 
 /**
@@ -43,7 +44,7 @@ public class SmartAuWriter extends HttpAuWriter {
 	private static final Log log = Log.lookup(SmartAuWriter.class);
 
 	/** The first few bytes of the output header (byte[]). */
-	private static final byte[] OUTPUT_HEAD_BYTES = OUTPUT_HEAD.getBytes();
+	private static final byte[] CONTENT_HEAD_BYTES = AuWriters.CONTENT_HEAD.getBytes();
 	private static ScalableTimer _timer;
 
 	private Task _tmoutTask;
@@ -89,10 +90,10 @@ public class SmartAuWriter extends HttpAuWriter {
 		}
 
 		if (timeout) {
-			//write the rest of _out (except OUTPUT_HEAD)
+			//write the rest of _out (except CONTENT_HEAD)
 			//and no compress
 			response.getOutputStream()
-				.write(_out.getBuffer().substring(OUTPUT_HEAD.length()).getBytes("UTF-8"));
+				.write(_out.getBuffer().substring(AuWriters.CONTENT_HEAD.length()).getBytes("UTF-8"));
 			response.flushBuffer();
 		} else {
 			//default: compress and generate _out
@@ -114,8 +115,8 @@ public class SmartAuWriter extends HttpAuWriter {
 					//advance XMLHttpRequest.readyState (to 3).
 					//Otherwise, the client may consider it as timeout and resend
 					try {
-						_res.getOutputStream().write(OUTPUT_HEAD_BYTES);
-						_timeout = true; //let flush() know OUTPUT_HEAD is sent
+						_res.getOutputStream().write(CONTENT_HEAD_BYTES);
+						_timeout = true; //let flush() know CONTENT_HEAD is sent
 						_res.flushBuffer();
 					} catch (Throwable ex) {
 						log.warning("Ignored: failed to send the head\n"+Exceptions.getMessage(ex));
