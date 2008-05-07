@@ -104,6 +104,8 @@ public class Window extends XulElement implements IdSpace {
 	private boolean _closable;
 	/** Whether the window is sizable. */
 	private boolean _sizable;
+	
+	private int _minheight = 100, _minwidth = 200; 
 
 	/** Embeds the window as normal component. */
 	private static final int EMBEDDED = 0;
@@ -161,6 +163,48 @@ public class Window extends XulElement implements IdSpace {
 		_mutex = new Object();
 	}
 
+	/**
+	 * Sets the minimum height in pixels allowed for this window. If negative, 100 is assumed.
+	 * <p>Default: 100. 
+	 * <p>Note: Only applies when {@link #isSizable()} = true.
+	 * @since 3.1.0
+	 */
+	public void setMinheight(int minheight) {
+		if (minheight < 0) minheight = 100;
+		if (_minheight != minheight) {
+			_minheight = minheight;
+			smartUpdate("z.minheight", _minheight);
+		}
+	}
+	/**
+	 * Returns the minimum height.
+	 * <p>Default: 100.
+	 * @since 3.1.0
+	 */
+	public int getMinheight() {
+		return _minheight;
+	}
+	/**
+	 * Sets the minimum width in pixels allowed for this window. If negative, 200 is assumed.
+	 * <p>Default: 200. 
+	 * <p>Note: Only applies when {@link #isSizable()} = true.
+	 * @since 3.1.0
+	 */
+	public void setMinwidth(int minwidth) {
+		if (minwidth < 0) minwidth = 200;
+		if (_minwidth != minwidth) {
+			_minwidth = minwidth;
+			smartUpdate("z.minwidth", _minwidth);
+		}
+	}
+	/**
+	 * Returns the minimum width.
+	 * <p>Default: 200.
+	 * @since 3.1.0
+	 */
+	public int getMinwidth() {
+		return _minwidth;
+	}
 	/**
 	 * Sets the action of window component to show the animating effect by default.
 	 * 
@@ -900,6 +944,8 @@ public class Window extends XulElement implements IdSpace {
 			HTMLs.appendAttribute(sb, "z.visible", isVisible());
 		}
 
+		HTMLs.appendAttribute(sb, "z.minheight", getMinheight());
+		HTMLs.appendAttribute(sb, "z.minwidth", getMinwidth());
 		HTMLs.appendAttribute(sb, "z.ctkeys", _ctkeys);
 		return sb.toString();
 	}

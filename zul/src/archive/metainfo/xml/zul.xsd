@@ -2122,6 +2122,8 @@
 		<xs:attribute name="sizable" type="booleanType" use="optional" />
 		<xs:attribute name="position" type="windowPositionAttrType" use="optional" />
 		<xs:attribute name="contentStyle" type="xs:string" use="optional" />
+		<xs:attribute name="minheight" type="intType" use="optional" />
+		<xs:attribute name="minwidth" type="intType" use="optional" />
 		<xs:attribute name="defaultActionOnShow" type="windowActionOnShowAttrType" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />

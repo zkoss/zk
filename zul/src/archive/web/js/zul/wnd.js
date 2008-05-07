@@ -217,7 +217,7 @@ zkWnd.setSizable = function (cmp, sizable) {
 				starteffect: zkau.closeFloats, overlay: true,
 				endeffect: zkWnd._endsizing, ghosting: zkWnd._ghostsizing,
 				revert: true, reverteffect: zk.voidf,
-				ignoredrag: zkWnd._ignoresizing
+				ignoredrag: zkWnd._ignoresizing, draw: zkWnd._draw
 			});
 			cmp.style.position = orgpos;
 		}
@@ -251,14 +251,17 @@ zkWnd.onmouseove = function (evt, cmp) {
 	var target = Event.element(evt);
 	if (zkWnd.sizable(cmp)) {
 		var c = zkWnd._insizer(cmp, Event.pointerX(evt), Event.pointerY(evt));
+		var handle = $e(cmp.id + "!caption");
 		if (c) {
 			zk.backupStyle(cmp, "cursor");
 			cmp.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
 				c == 3 ? 'e-resize': c == 4 ? 'se-resize':
 				c == 5 ? 's-resize': c == 6 ? 'sw-resize':
 				c == 7 ? 'w-resize': 'nw-resize';
+			if (handle) handle.style.cursor = "";
 		} else {
 			zk.restoreStyle(cmp, "cursor");
+			if (handle) handle.style.cursor = "move";
 		}
 	}
 };
@@ -268,11 +271,12 @@ zkWnd._ignoresizing = function (cmp, pointer) {
 	if (dg) {
 		var v = zkWnd._insizer(cmp, pointer[0], pointer[1]);
 		if (v) {
-			switch (dg.z_dir = v) {
-			case 1: case 5: dg.options.constraint = 'vertical'; break;
-			case 3: case 7: dg.options.constraint = 'horizontal'; break;
-			default: dg.options.constraint = null;
-			}
+			dg.z_dir = v;
+			dg.z_box = {
+				top: cmp.offsetTop, left: cmp.offsetLeft ,height: cmp.offsetHeight,
+				width: cmp.offsetWidth, minHeight: $int(getZKAttr(cmp, "minheight")),
+				minWidth: $int(getZKAttr(cmp, "minwidth"))
+			};
 			dg.z_orgzi = cmp.style.zIndex;
 			return false;
 		}
@@ -288,7 +292,7 @@ zkWnd._endsizing = function (cmp, evt) {
 		dg.z_orgzi = null
 	}
 
-	if (dg.z_szofs && (dg.z_szofs[0] || dg.z_szofs[1])) {
+	if (dg.z_szofs) {
 		var keys = "";
 		if (evt) {
 			if (evt.altKey) keys += 'a';
@@ -297,41 +301,13 @@ zkWnd._endsizing = function (cmp, evt) {
 		}
 
 		//adjust size
-		setTimeout("zkWnd._resize($e('"+cmp.id+"'),"+dg.z_dir+","
-			+dg.z_szofs[0]+","+dg.z_szofs[1]+",'"+keys+"')", 50);
-		dg.z_dir = dg.z_szofs = null;
+		setTimeout("zkWnd._resize($e('"+cmp.id+"'),"+dg.z_szofs.top+","
+			+dg.z_szofs.left+","+dg.z_szofs.height+","+dg.z_szofs.width+",'"+keys+"')", 50);
+		dg.z_box = dg.z_dir = dg.z_szofs = null;
 	}
 };
-zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
-	var l, t, w = cmp.offsetWidth, h = cmp.offsetHeight;
-	if (ofsy) {
-		if (dir == 8 || dir <= 2) {
-			h -= ofsy;
-			if (h < 0) {
-				ofsy = cmp.offsetHeight;
-				h = 0;
-			}
-			t = $int(cmp.style.top) + ofsy;
-		}
-		if (dir >= 4 && dir <= 6) {
-			h += ofsy;
-			if (h < 0) h = 0;
-		}
-	}
-	if (ofsx) {
-		if (dir >= 6 && dir <= 8) {
-			w -= ofsx;
-			if (w < 0) {
-				ofsx = cmp.offsetWidth;
-				w = 0;
-			}
-			l = $int(cmp.style.left) + ofsx;
-		}
-		if (dir >= 2 && dir <= 4) {
-			w += ofsx;
-			if (w < 0) w = 0;
-		}
-	}
+zkWnd._resize = function (cmp, t, l, h, w, keys) {
+	cmp.style.visibility = "hidden";
 	if (w != cmp.offsetWidth || h != cmp.offsetHeight) {
 		if (w != cmp.offsetWidth) cmp.style.width = w + "px";
 		if (h != cmp.offsetHeight) {
@@ -340,12 +316,12 @@ zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
 		}
 		zkau.sendOnSize(cmp, keys);
 	}
-	if (l != null || t != null) {
+	if (l != cmp.offsetLeft || t != cmp.offsetTop) {
 		if (l != null) cmp.style.left = l + "px";
 		if (t != null) cmp.style.top = t + "px";
 		zkau.sendOnMove(cmp, keys);
 	}
-
+	cmp.style.visibility = "";
 	if (!zkWnd._embedded(cmp))
 		zkau.hideCovered();
 };
@@ -355,35 +331,56 @@ zkWnd._resize = function (cmp, dir, ofsx, ofsy, keys) {
 zkWnd._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
 		var ofs = zkau.beginGhostToDIV(dg);
-		var html =
-			'<div id="zk_ddghost" style="position:absolute;top:'
+		var html = '<div id="zk_ddghost" class="rz-win-proxy" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-			+'px;';
-		if (dg.z_dir == 8 || dg.z_dir <= 2)
-			html += 'border-top:3px solid darkgray;';
-		if (dg.z_dir >= 2 && dg.z_dir <= 4)
-			html += 'border-right:3px solid darkgray;';
-		if (dg.z_dir >= 4 && dg.z_dir <= 6)
-			html += 'border-bottom:3px solid darkgray;';
-		if (dg.z_dir >= 6 && dg.z_dir <= 8)
-			html += 'border-left:3px solid darkgray;';
-		document.body.insertAdjacentHTML("afterbegin", html + '"></div>');
+			+'px;"></div>';
+			document.body.insertAdjacentHTML("afterbegin", html);
 		dg.element = $e("zk_ddghost");
 	} else {
 		var org = zkau.getGhostOrgin(dg);
 		if (org) {
-			//calc how much window is resized
-			var ofs1 = Position.cumulativeOffset(dg.element);
-			var ofs2 = Position.cumulativeOffset(org);
-			dg.z_szofs = [ofs1[0] - ofs2[0], ofs1[1] - ofs2[1]];
+			dg.z_szofs = {
+				top: dg.element.offsetTop, left: dg.element.offsetLeft, 
+				height: zk.revisedSize(dg.element, dg.element.offsetHeight, true), 
+				width: zk.revisedSize(dg.element, dg.element.offsetWidth)
+				};
 		} else {
 			dg.z_szofs = null;
 		}
 		zkau.endGhostToDIV(dg);
 	}
 };
-
+zkWnd._draw = function (dg, pointer) {
+	if (dg.z_dir == 8 || dg.z_dir <= 2) {
+		var h = dg.z_box.height + dg.z_box.top - pointer[1];
+		if (h < dg.z_box.minHeight) {
+			pointer[1] = dg.z_box.height + dg.z_box.top - dg.z_box.minHeight;
+			h = dg.z_box.minHeight;
+		}
+		dg.element.style.height = h + "px";
+		dg.element.style.top = pointer[1] + "px";
+	}
+	if (dg.z_dir >= 4 && dg.z_dir <= 6) {
+		var h = dg.z_box.height + pointer[1] - dg.z_box.top;
+		if (h < dg.z_box.minHeight) h = dg.z_box.minHeight;
+		dg.element.style.height = h + "px";
+	}
+	if (dg.z_dir >= 6 && dg.z_dir <= 8) {
+		var w = dg.z_box.width + dg.z_box.left - pointer[0];
+		if (w < dg.z_box.minWidth) {
+			pointer[0] = dg.z_box.width + dg.z_box.left - dg.z_box.minWidth;
+			w = dg.z_box.minWidth;
+		}
+		dg.element.style.width = w + "px";
+		dg.element.style.left = pointer[0] + "px";
+	}
+	if (dg.z_dir >= 2 && dg.z_dir <= 4) {
+		var w =  dg.z_box.width + pointer[0] - dg.z_box.left;
+		if (w < dg.z_box.minWidth) w = dg.z_box.minWidth;
+		dg.element.style.width = w + "px";
+	}
+};
 ////////
 // Handling Overlapped, Modal, Popup and Embedded //
 zkWnd._initMode = function (cmp) {
@@ -697,14 +694,21 @@ zkWnd._float = function (cmp) {
 	if (cmp) {
 		var handle = $e(cmp.id + "!caption");
 		if (handle) {
+			handle.style.cursor = "move";
 			cmp.style.position = "absolute"; //just in case
 			zul.initMovable(cmp, {
 				handle: handle, starteffect: zkWnd._startMove,
 				change: zkau.hideCovered, overlay: true,
+				ignoredrag: zkWnd._ignoremove,
 				endeffect: zkWnd._onWndMove});
 			//we don't use options.change because it is called too frequently
 		}
 	}
+};
+zkWnd._ignoremove = function (cmp, pointer, event) {
+	if (!zkWnd.sizable(cmp) || (cmp.offsetTop + 4 < pointer[1] && cmp.offsetLeft + 4 < pointer[0] 
+		&& cmp.offsetLeft + cmp.offsetWidth - 4 > pointer[0])) return false;
+	return true;
 };
 /**
  * For bug #1568393: we have to change the percetage to the pixel.

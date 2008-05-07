@@ -62,6 +62,11 @@ td.gamma {background: #F4F4F4;}
 	width: 100%; height: 100%; display: block; position: absolute; left: 0; top: 0;
 	background-image: url(${c:encodeURL('~./img/spacer.gif')}); z-index: 10000;
 }
+.rz-win-proxy {
+	border: 1px dashed #1854C2; position: absolute; overflow: hidden; left: 0; 
+	top: 0; z-index: 50000; background-color: #CBDDF3; filter: alpha(opacity=50); <%-- IE --%>
+	opacity: .5;
+}
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {

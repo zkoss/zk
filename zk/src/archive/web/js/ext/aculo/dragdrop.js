@@ -539,7 +539,9 @@ if (this.z_scrl) {
 
     var style = this.element.style;
 //Tom M. Yeh, Potix: support function constraint
-if (typeof this.options.constraint == 'function') {
+if (typeof this.options.draw == 'function') {
+	this.options.draw(this, p, event);
+} else if (typeof this.options.constraint == 'function') {
 	var np = this.options.constraint(this, p, event); //return null or [newx, newy]
 	if (np) p = np;
 	style.left = p[0] + "px";
