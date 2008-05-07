@@ -115,7 +115,8 @@ public class PollingServerPush implements ServerPush {
 		if (_desktop == null)
 			throw new IllegalStateException("Not started");
 
-		if (Executions.getCurrent() != null) //Bug 1815480: don't send if timeout
+		final boolean inexec = Executions.getCurrent() != null;
+		if (inexec) //Bug 1815480: don't send if timeout
 			Clients.response(new AuScript(null, getStopScript()));
 
 		_desktop = null; //to cause DesktopUnavailableException being thrown
@@ -129,8 +130,13 @@ public class PollingServerPush implements ServerPush {
 			}
 			_pending.clear();
 		}
-		synchronized (_mutex) {
-			_mutex.notify(); //wake up onPiggyback
+		//if inexec, either in working thread, or other event listener
+		//if in working thread, we cannot notify here (too early to wake).
+		//if other listener, no need notify (since onPiggyback not running)
+		if (!inexec) {
+			synchronized (_mutex) {
+				_mutex.notify(); //wake up onPiggyback
+			}
 		}
 	}
 	/** Sets the delay between each polling request.
