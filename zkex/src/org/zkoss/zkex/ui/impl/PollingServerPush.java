@@ -165,6 +165,8 @@ public class PollingServerPush implements ServerPush {
 				info = (ThreadInfo)_pending.remove(0);
 			}
 
+			//Note: we have to sync _mutex before info. Otherwise,
+			//sync(info) might cause deactivate() to run before _mutex.wait
 			synchronized (_mutex) {
 				_carryOver = new ExecutionCarryOver(_desktop);
 
