@@ -43,14 +43,9 @@ div.layout-split-v-ns {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
     background-position: top;
 }
-div.layout-split{
-    position:absolute;
-    height:6px;
-    width:6px;
-    line-height:1px;
-    font-size:1px;
-    z-index:12;
-    background-color: #C4DCFB;
+div.layout-split {
+    position: absolute; height: 6px; width: 6px; line-height: 1px; font-size: 1px;
+    z-index: 12; background-color: #C4DCFB;
 }
 span.layout-split-btn-l:hover, span.layout-split-btn-r:hover, span.layout-split-btn-t:hover ,span.layout-split-btn-b:hover {
 	opacity:1;

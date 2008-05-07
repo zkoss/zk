@@ -410,9 +410,8 @@ zkLayoutRegionSplit.init = function (split) {
 		drag: new Draggable(split, {
 			constraint: vert ? "vertical": "horizontal",
 			ghosting: zkLayoutRegionSplit._ghostsizing,
-			snap: snap,
+			snap: snap, zindex: 12000, overlay: true,
 			ignoredrag: zkLayoutRegionSplit._ignoresizing,
-			zindex: 12000,
 			endeffect: zkLayoutRegionSplit._endDrag})
 	};
 

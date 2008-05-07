@@ -214,7 +214,7 @@ zkWnd.setSizable = function (cmp, sizable) {
 		if (!zkWnd._szs[id]) {
 			var orgpos = cmp.style.position; //Bug 1679593
 			zkWnd._szs[id] = new Draggable(cmp, {
-				starteffect: zkau.closeFloats,
+				starteffect: zkau.closeFloats, overlay: true,
 				endeffect: zkWnd._endsizing, ghosting: zkWnd._ghostsizing,
 				revert: true, reverteffect: zk.voidf,
 				ignoredrag: zkWnd._ignoresizing
@@ -700,7 +700,7 @@ zkWnd._float = function (cmp) {
 			cmp.style.position = "absolute"; //just in case
 			zul.initMovable(cmp, {
 				handle: handle, starteffect: zkWnd._startMove,
-				change: zkau.hideCovered,
+				change: zkau.hideCovered, overlay: true,
 				endeffect: zkWnd._onWndMove});
 			//we don't use options.change because it is called too frequently
 		}

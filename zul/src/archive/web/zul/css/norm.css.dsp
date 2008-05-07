@@ -58,6 +58,10 @@ td.gamma {background: #F4F4F4;}
 .overflow-hidden {
 	overflow: hidden;
 }
+.dd-overlay {
+	width: 100%; height: 100%; display: block; position: absolute; left: 0; top: 0;
+	background-image: url(${c:encodeURL('~./img/spacer.gif')}); z-index: 10000;
+}
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {

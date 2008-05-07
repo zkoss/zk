@@ -21,7 +21,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>
 	
-	<stylesheet href="~./zkex/zul/css/layout.css.dsp" type="text/css"/>
+	<stylesheet href="~./zkex/zul/css/layout*.css.dsp*" type="text/css"/>
 
 	<version>
 		<version-class>org.zkoss.zkex.Version</version-class>

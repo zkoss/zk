@@ -20,6 +20,7 @@ ZK 3.1.0
   1955452: Liferay Failed if two portlets from different Web apps
   1957661: Page.addFunctionMapper() fails
   1944729: Windows and boxes inside tab panels
+  1911280: Borderlayout and iframe issue
 
 * Upgrade Notes
   + The smartUpdate, response, onChildAdded, onChildRemoved and

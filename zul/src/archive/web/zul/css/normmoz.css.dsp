@@ -13,3 +13,6 @@ span.word-wrap {<%-- label use only --%>
 	display: block;
 }
 <%-- Append New --%>
+div.splitter-h, div.splitter-v, div.splitter-os-h, div.splitter-os-v {
+	-moz-user-select: none;
+}
