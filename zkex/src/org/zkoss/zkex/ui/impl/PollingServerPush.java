@@ -187,8 +187,7 @@ public class PollingServerPush implements ServerPush {
 
 	public boolean activate(long timeout)
 	throws InterruptedException, DesktopUnavailableException {
-		if (D.ON && Events.inEventListener())
-			throw new IllegalStateException("No need to activate in the event listener");
+		assert D.OFF || !Events.inEventListener(): "No need to activate in the event listener";
 
 		final Thread curr = Thread.currentThread();
 		if (_active != null && _active.thread.equals(curr)) { //re-activate
@@ -204,7 +203,8 @@ public class PollingServerPush implements ServerPush {
 
 		synchronized (info) {
 			if (_desktop != null) {
-				info.wait(timeout);
+				if (info.nActive == 0) //not granted yet
+					info.wait(timeout);
 
 				if (_desktop != null && info.nActive <= 0) { //not granted (timeout)
 					info.nActive = GIVEUP; //denote timeout (and give up)
