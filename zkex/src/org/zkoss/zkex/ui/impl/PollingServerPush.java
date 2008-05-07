@@ -129,6 +129,9 @@ public class PollingServerPush implements ServerPush {
 			}
 			_pending.clear();
 		}
+		synchronized (_mutex) {
+			_mutex.notify(); //wake up onPiggyback
+		}
 	}
 	/** Sets the delay between each polling request.
 	 * <p>Default: use the preference called
