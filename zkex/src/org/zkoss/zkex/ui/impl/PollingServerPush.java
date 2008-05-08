@@ -249,7 +249,7 @@ public class PollingServerPush implements ServerPush {
 					_mutex.notify();
 				}
 
-				try {Thread.sleep(500);} catch (Throwable ex) {}
+				try {Thread.sleep(100);} catch (Throwable ex) {}
 					//to minimize the chance that the server-push thread
 					//activate again, before onPiggback polls next _pending
 			}
