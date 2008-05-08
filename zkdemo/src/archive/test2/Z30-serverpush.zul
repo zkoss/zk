@@ -22,14 +22,10 @@ The number at the bottom shall be counting.
 Click "Stop Push", and it shall stop.
 Click "Start Push", and it shall count again (from 1).
 	<vbox>
-	<hbox>
 	<button label="Start Push" onClick="org.zkoss.zkdemo.test2.ServerPush.start(info)"/>
 	<button label="Stop Push" onClick="org.zkoss.zkdemo.test2.ServerPush.stop()"/>
-	</hbox>
-	<hbox>
 	<button label="Start Timer" onClick="timer.start()"/>
 	<button Label="Stop Timer" onClick="timer.stop()"/>
-	</hbox>
 	</vbox>
 	<timer id="timer" running="false" repeats="true" delay="1000"
 		onTimer='org.zkoss.zkdemo.test2.ServerPush.updateInfo(info, "timer")'/>
