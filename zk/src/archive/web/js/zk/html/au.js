@@ -264,7 +264,7 @@ zkau._onRespReady = function () {
 					zkau._preqInf = null;
 				} //if null, always process (usually for showing error msg)
 				zkau._areqTry = 0;
-				zkau._respQue.push(zkau._parseCmds(req.responseXML));
+				zkau._respQue.push(zkau._parseXmlResp(req.responseXML));
 			} else if (!sid || sid == zkau._seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
 				zkau._errcode = req.status;
 				var eru = zk.eru['e' + req.status];
@@ -337,7 +337,7 @@ zkau._onRespReady = function () {
 	zkau._doQueResps();
 	zkau._checkProgress();
 };
-zkau._parseCmds = function (xml) {
+zkau._parseXmlResp = function (xml) {
 	var rs = xml ? xml.getElementsByTagName("r"): null;
 	if (!rs) return null;
 
@@ -631,6 +631,13 @@ zkau._evalOnResponse = function () {
 		setTimeout(zkau._js4resps.shift(), 0);
 };
 
+/** Process the response XML.
+ * @since 3.1.0
+ */
+zkau.doXmlResp = function (xml) {
+	zkau._respQue.push(zkau._parseXmlResp(xml));
+	zkau._doQueResps();
+};
 /** Process the responses queued in zkau._respQue. */
 zkau._doQueResps = function () {
 	var ex, que = zkau._respQue, breath = $now() + 6000;
@@ -1494,12 +1501,18 @@ zkau._onDocKeydown = function (evt) {
 		}
 	}
 
-	if (keycode == 27 && zkau._areq) { //Bug 1927788: prevent FF from closing connection
+	if (keycode == 27 && zkau.ignoreESC()) { //Bug 1927788: prevent FF from closing connection
 		Event.stop(evt);
 		return false; //eat
 	}
 	return true; //no special processing
-}
+};
+/** Returns whether to ignore ESC.
+ * @since 3.1.0
+ */
+zkau.ignoreESC = function () {
+	return zkau._areq;
+};
 /** returns whether a key code is specified in keys. */
 zkau._inCtkeys = function (evt, zkcode, keys) {
 	if (keys) {

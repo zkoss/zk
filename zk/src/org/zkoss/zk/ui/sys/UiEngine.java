@@ -354,6 +354,19 @@ public interface UiEngine {
 	 */
 	public void deactivate(Execution exec);
 
+	/** Activates and prepare for asynchronous update
+	 * @since 3.1.0
+	 */
+	public void beginUpdate(Execution exec);
+	/** Executes posted events, deactive and ends the asynchronous update.
+	 *
+	 * @param out the AU writer to generate the responses to; never null.
+	 * @param close whether to close the AU writr ({@link AuWriter#close}.
+	 * @since 3.1.0
+	 */
+	public void endUpdate(Execution exec, AuWriter out, boolean close)
+	throws IOException;
+
 	/** Returns if any suspended event processing thread in the
 	 * whole system.
 	 */

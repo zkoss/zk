@@ -696,6 +696,43 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Asynchronous updates --//
+	public void beginUpdate(Execution exec) {
+		final UiVisualizer uv = doActivate(exec, true, false);
+		final Desktop desktop = exec.getDesktop();
+		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
+		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
+	}
+	public void endUpdate(Execution exec, AuWriter out, boolean close)
+	throws IOException {
+		boolean cleaned = false;
+		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+		final Configuration config = desktop.getWebApp().getConfiguration();
+		final UiVisualizer uv = (UiVisualizer)((ExecutionCtrl)exec).getVisualizer();
+		try {
+			Event event = nextEvent(uv);
+			do {
+				for (; event != null; event = nextEvent(uv))
+					process(desktop, event);
+				resumeAll(desktop, uv, null);
+			} while ((event = nextEvent(uv)) != null);
+			List responses = uv.getResponses();
+			out.write(responses);
+			if (close)
+				out.close(exec.getNativeRequest(), exec.getNativeResponse());
+
+			cleaned = true;
+			desktopCtrl.invokeExecutionCleanups(exec, null, null);
+			config.invokeExecutionCleanups(exec, null, null);
+		} finally {
+			if (!cleaned) {
+				desktopCtrl.invokeExecutionCleanups(exec, null, null);
+				config.invokeExecutionCleanups(exec, null, null);
+			}
+
+			doDeactivate(exec);
+		}
+	}
 	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException {
 		execUpdate(exec, requests, null, out);
@@ -705,7 +742,7 @@ public class UiEngineImpl implements UiEngine {
 		if (requests == null)
 			throw new IllegalArgumentException();
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
-			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec+", reqs="+requests;
+			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
 
 		final UiVisualizer uv = doActivate(exec, true, false);
 		final Desktop desktop = exec.getDesktop();

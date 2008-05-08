@@ -74,6 +74,7 @@ public interface ServerPush {
 	 * <p>Note: whether to support this method is up to the implementation.
 	 * Currently, only on the client-polling-based controller (the default)
 	 * supports this method.
+	 * If not supported, just return (don't throw exception).
 	 *
 	 * @param min the minimal delay to poll the server for any pending
 	 * server-push threads.
