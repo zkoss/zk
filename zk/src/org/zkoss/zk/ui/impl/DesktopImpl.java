@@ -135,7 +135,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** ID used to identify what is stored in _meds. */
 	private int _medId;
 	/** The server push controller, or null if not enabled. */
-	private ServerPush _spush;
+	private transient ServerPush _spush;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
 	private transient List _dtCleans, _execInits, _execCleans;
@@ -564,6 +564,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Serializables.smartWrite(s, _execInits);
 		willSerialize(_execCleans);
 		Serializables.smartWrite(s, _execCleans);
+		s.writeBoolean(_spush != null);
 	}
 	private void willSerialize(Collection c) {
 		if (c != null)
@@ -593,6 +594,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_execInits = (List)Serializables.smartRead(s, _execInits);
 		didDeserialize(_execInits);
 		_execCleans = (List)Serializables.smartRead(s, _execCleans);
+
+		if (s.readBoolean())
+			enableServerPush(true);
 	}
 	private void didDeserialize(Collection c) {
 		if (c != null)
