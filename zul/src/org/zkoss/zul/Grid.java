@@ -707,11 +707,12 @@ public class Grid extends XulElement {
 			row = ((RowRendererExt)renderer).newRow(this);
 		if (_model instanceof GroupModel) {
 			final GroupModel model = (GroupModel) _model;
-			if (!_rows.hasGroup() && _rows.getGroupCount() < model.getGroupCount()) {
+			int rcnt =  _rows.getGroupCount(), mcnt = model.getGroupCount();
+			if (!_rows.hasGroup() && rcnt < mcnt) {
 				row = new Group();
 				row.applyProperties();
-			} else if (_rows.getGroupCount() < model.getGroupCount()) {
-				int gIndex = _rows.getGroupCount() - 1,
+			} else if (rcnt < mcnt) {
+				int gIndex = rcnt - 1,
 					size = model.getChildCount(gIndex) + ((Group) _rows.getGroups().get(gIndex)).getIndex() + 1;
 				if (index == size) {
 					row = new Group();

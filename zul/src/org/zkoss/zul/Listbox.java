@@ -1578,11 +1578,12 @@ public class Listbox extends XulElement {
 			item = ((ListitemRendererExt)renderer).newListitem(this);
 		if (_model instanceof GroupModel) {
 			final GroupModel model = (GroupModel) _model;
-			if (!hasGroup() && getGroupCount() < model.getGroupCount()) {
+			int cnt = getGroupCount(), mcnt = model.getGroupCount();
+			if (!hasGroup() && cnt < mcnt) {
 				item = new Listgroup();
 				item.applyProperties();
-			} else if (getGroupCount() < model.getGroupCount()) {
-				int gIndex = getGroupCount() - 1,
+			} else if (cnt < mcnt) {
+				int gIndex = cnt - 1,
 					size = model.getChildCount(gIndex) + ((Listgroup)getGroups().get(gIndex)).getIndex() + 1;
 				if (index == size) {
 					item = new Listgroup();

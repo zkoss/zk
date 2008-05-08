@@ -38,7 +38,7 @@ implements ListModelExt, GroupModel, java.io.Serializable {
 
 	private final Object[] _data;
 	private int[] _groups;
-	private transient GroupModel _model;
+	private GroupModel _model;
 	
 	public SimpleGroupModel(Object[] data, GroupModel model, boolean live) {
 		if (data == null || model == null)
