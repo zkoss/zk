@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.Iterator;
 
 import org.zkoss.lang.D;
-import org.zkoss.lang.Threads;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Executions;
@@ -253,7 +252,7 @@ public class PollingServerPush implements ServerPush {
 					_mutex.notify();
 				}
 
-				try {Thread.sleep(50);} catch (Throwable ex) {}
+				try {Thread.sleep(100);} catch (Throwable ex) {}
 					//to minimize the chance that the server-push thread
 					//activate again, before onPiggback polls next _pending
 			}
