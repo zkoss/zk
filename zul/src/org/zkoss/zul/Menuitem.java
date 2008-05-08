@@ -96,6 +96,7 @@ public class Menuitem extends LabelImageElement {
 		return _checked;
 	}
 	/** Sets whether it is checked.
+	 * <p> This only applies when {@link Menupopup#isCheckmark()} = true. (since 3.1.0)
 	 */
 	public void setChecked(boolean checked) {
 		if (_checked != checked) {
@@ -109,14 +110,16 @@ public class Menuitem extends LabelImageElement {
 		}
 	}
 	/** Returns whether the menuitem check mark will update each time
-	 * the menu item is selected
+	 * the menu item is selected.
 	 * <p>Default: false.
 	 */
 	public boolean isAutocheck() {
 		return _autocheck;
 	}
 	/** Sets whether the menuitem check mark will update each time
-	 * the menu item is selected
+	 * the menu item is selected.
+	 * <p> This only applies when {@link Menupopup#isCheckmark()} = true. (since 3.1.0)
+	 * 
 	 */
 	public void setAutocheck(boolean autocheck) {
 		if (_autocheck != autocheck) {
@@ -182,7 +185,7 @@ public class Menuitem extends LabelImageElement {
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		if (topmost) sb.append(" z.top=\"true\"");
 		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
-		if (_autocheck) {
+		if (!topmost && _autocheck && ((Menupopup)getParent()).isCheckmark()) {
 			sb.append(" z.autock=\"true\"");
 			if (_checked) sb.append(" z.checked=\"true\"");
 		}

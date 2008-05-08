@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Menuitem;
+import org.zkoss.zul.Menupopup;
 import org.zkoss.lang.Strings;
 
 /**
@@ -60,8 +61,11 @@ public class MenuitemDefault implements ComponentRenderer {
 			  .write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			  .writeln(">")
 			  .write("<td class=\"menu1");
-			if(self.isChecked())
-				wh.write("ck");
+			if (((Menupopup)self.getParent()).isCheckmark()) {
+				if(self.isChecked())
+					wh.write("ck");
+				else wh.write("unck");
+			}
 			wh.write("\" align=\"left\"><a href=\"");
 			if(Strings.isBlank(self.getHref()))
 				wh.write("javascript:;");

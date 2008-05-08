@@ -16,6 +16,7 @@ ZK 3.1.0
   1957737: Support the function-mapper directive
   1955900: A subscribe/publish meachism to handle events
   1959380: Window support both properties minheight and minwidth
+  1955562: For theme: menuitem unchecked not visible
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
@@ -29,6 +30,8 @@ ZK 3.1.0
   + The smartUpdate, response, onChildAdded, onChildRemoved and
     onDrawNewChid methods are moved from the Component interface
     to the ComponentCtrl intereface.
+  + The setAutocheck and setChecked methods of Menuitem only apply
+    when Menupopup.isCheckmark is true.
 
 	--------
 ZK 3.0.5

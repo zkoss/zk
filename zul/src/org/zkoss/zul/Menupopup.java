@@ -45,10 +45,28 @@ import org.zkoss.zk.ui.event.Events;
  * @author tomyeh
  */
 public class Menupopup extends Popup {
+	private boolean _checkmark;
 	public Menupopup() {
 		setSclass("menupopup");
 	}
-
+	/** Returns whether the check mark shall be displayed in front
+	 * of each item.
+	 * <p>Default: false.
+	 * @since 3.1.0
+	 */
+	public final boolean isCheckmark() {
+		return _checkmark;
+	}
+	/** Sets whether the check mark shall be displayed in front
+	 * of each item.
+	 * @since 3.1.0
+	 */
+	public void setCheckmark(boolean checkmark) {
+		if (_checkmark != checkmark) {
+			_checkmark = checkmark;
+			invalidate();
+		}
+	}
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =

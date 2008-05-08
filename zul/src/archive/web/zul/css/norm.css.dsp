@@ -859,15 +859,20 @@ td.menusp {
 	background-image: url(${c:encodeURL('~./zul/img/menu/sep.gif')});
 	background-repeat: repeat-x;
 }
-td.menu1, td.menu1ck, td.menu3ar{<%-- menuitem normal (unchecked) --%>
+td.menu1, td.menu1ck, td.menu1unck, td.menu3ar{<%-- menuitem normal --%>
 	width: 11px; height: 13px;
-	padding: 0px 12px;
+	padding: 0px 12px 0px 14px;
 }
 td.menu1 a, td.menu1ck a, td.menu3ar a{
 	white-space: nowrap;
 }
 td.menu1ck {<%-- menuitem checked --%>
 	background-image: url(${c:encodeURL('~./zul/img/menu/checked.gif')});
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+td.menu1unck {<%-- menuitem unchecked --%>
+	background-image: url(${c:encodeURL('~./zul/img/menu/unchecked.gif')});
 	background-repeat: no-repeat;
 	background-position: left center;
 }
