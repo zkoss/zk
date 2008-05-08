@@ -2,6 +2,7 @@
 ZK 3.1.0
 * Features
   1907300: Listbox: support grouping
+  1959952: Support Comet-based Server Push
   1951422: Grid: support grouping
   1883237: A way to register listeners for particular desktop
   1901211: Simplify the outline of Menu component with single TD
