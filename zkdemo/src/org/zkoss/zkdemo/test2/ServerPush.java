@@ -23,6 +23,7 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.*;
 
 /**
@@ -34,7 +35,7 @@ public class ServerPush {
 	private static final Log log = Log.lookup(ServerPush.class);
 	private static boolean _ceased;
 
-	public static void start(Label info) throws InterruptedException {
+	public static void start(Component info) throws InterruptedException {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		if (desktop.isServerPushEnabled()) {
 			Messagebox.show("Already started");
@@ -53,12 +54,23 @@ public class ServerPush {
 			Messagebox.show("Already stopped");
 		}
 	}
+	public static void updateInfo(Component info, String postfix) {
+		Integer i = (Integer)info.getAttribute("count");
+		int v = i == null ? 0: i.intValue() + 1;
+		if (info.getChildren().size() >= 10) {
+			((Component)info.getChildren().get(0)).detach();
+			((Component)info.getChildren().get(0)).detach();
+		}
+		info.setAttribute("count", new Integer(v));
+		info.appendChild(new Label(" " + v + " " + postfix));
+		info.appendChild(new Separator());
+			//create a new component that is easier to detect bugs
+	}
 
 	private static class WorkingThread extends Thread {
 		private final Desktop _desktop;
-		private final Label _info;
-		private int _cnt;
-		private WorkingThread(Label info) {
+		private final Component _info;
+		private WorkingThread(Component info) {
 			_desktop = info.getDesktop();
 			_info = info;
 		}
@@ -67,7 +79,7 @@ public class ServerPush {
 				while (!_ceased) {
 					Executions.activate(_desktop);
 					try {
-						_info.setValue(Integer.toString(++_cnt));
+						updateInfo(_info, "comet");
 					} catch (RuntimeException ex) {
 						log.error(ex);
 						throw ex;
@@ -77,7 +89,7 @@ public class ServerPush {
 					} finally {
 						Executions.deactivate(_desktop);
 					}
-					Threads.sleep(500); //Update each two seconds
+					Threads.sleep(2000); //Update every two seconds
 				}
 				log.info("The server push thread ceased");
 			} catch (InterruptedException ex) {
