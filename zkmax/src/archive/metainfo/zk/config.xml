@@ -46,4 +46,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<client-config>
 		<resend-delay>9000</resend-delay><!-- because SmartAuWriter is used -->
 	</client-config>
+
+	<device-config>
+		<device-type>ajax</device-type>
+		<server-push-class>org.zkoss.zkmax.ui.impl.CometServerPush</server-push-class>
+	</device-config>
 </config>
