@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -67,6 +68,18 @@ import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 	//AuProcessor//
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
+	throws ServletException, IOException {
+		final SessionCtrl sessCtrl = (SessionCtrl)sess;
+		sessCtrl.notifyClientRequest(false);
+			//note: it won't invalidate it now but set a flag
+
+		process0(sess, request, response);
+
+		if (sessCtrl.isInvalidated())
+			sessCtrl.invalidateNow();
+	}
+	private void process0(Session sess,
+	HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		//Note: we don't use sendError since server will convert it
 		//to HTML to show the error (which is meaningless to Client Engine)
