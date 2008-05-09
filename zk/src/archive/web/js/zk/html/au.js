@@ -30,7 +30,7 @@ zkau._stamp = 0; //used to make a time stamp
 zkau.topZIndex = 0; //topmost z-index for overlap/popup/modal
 zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau._sendNow
-zkau._seqId = 0;
+zkau._seqId = 1;
 zkau._dtids = []; //an array of desktop IDs
 
 /** Adds a desktop. */
@@ -193,18 +193,20 @@ zkau._onRespReady = function () {
 
 			var sid = req.getResponseHeader("ZK-SID");
 			if (req.status == 200) { //correct
-				if (sid) {
-					if (sid != zkau._seqId) {
-						zkau._errcode = "ZK-SID " + (sid ? "mismatch": "required");
-						return;
-					}
+				if (sid && sid != zkau._seqId) {
+					zkau._errcode = "ZK-SID " + (sid ? "mismatch": "required");
+					return;
+				} //if sid null, always process (usually for error msg)
+
+				var cmds = zkau._parseCmds(req.responseXML);
+				if (cmds) { //valid response
+					zkau._respQue.push(cmds);
 
 					//advance SID to avoid receive the same response twice
-					if (++zkau._seqId > 255) zkau._seqId = 0;
+					if (sid && ++zkau._seqId > 999) zkau._seqId = 1;
+					zkau._areqTry = 0;
 					zkau._preqInf = null;
-				} //if null, always process (usually for showing error msg)
-				zkau._areqTry = 0;
-				zkau._respQue.push(zkau._parseCmds(req.responseXML));
+				}
 			} else if (!sid || sid == zkau._seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
 				zkau._errcode = req.status;
 				var eru = zk.eru['e' + req.status];
@@ -276,11 +278,11 @@ zkau._onRespReady = function () {
 	zkau._checkProgress();
 };
 zkau._parseCmds = function (xml) {
-	var rs = xml ? xml.getElementsByTagName("r"): null;
-	if (!rs) return null;
+	if (!xml) return null; //invalid
 
-	var cmds = [];
-	for (var j = 0, rl = rs.length; j < rl; ++j) {
+	var cmds = [],
+		rs = xml.getElementsByTagName("r");
+	for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
 		var cmd = rs[j].getElementsByTagName("c")[0];
 		var data = rs[j].getElementsByTagName("d");
 
