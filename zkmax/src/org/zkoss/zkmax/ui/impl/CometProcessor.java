@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ServerPush;
@@ -67,29 +68,47 @@ import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
+		//Note: we don't use sendError since server will convert it
+		//to HTML to show the error (which is meaningless to Client Engine)
 		final String dtid = (String)request.getParameter("dtid");
 		if (dtid == null || dtid.length() == 0) {
-			response.sendError(response.SC_BAD_REQUEST, "dtid is required");
+			response.setHeader("ZK-Comet-Error", "dtid is required");
 			return;
 		}
 
 		final Desktop desktop = ((WebAppCtrl)sess.getWebApp())
 			.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
-			response.sendError(response.SC_GONE, "Desktop not found, "+dtid);
+			response.setHeader("ZK-Comet-Error", "Desktop not found, "+dtid);
 			return;
 		}
 
-		final ServerPush sp = ((DesktopCtrl)desktop).getServerPush();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+		final ServerPush sp = desktopCtrl.getServerPush();
 		if (!(sp instanceof CometServerPush)) {
-			response.sendError(response.SC_GONE, "Server push disabled");
+			response.setHeader("ZK-Comet-Error", "Disabled");
 			return;
 		}
 
-		((CometServerPush)sp).process(
-			new ExecutionImpl(
-				(ServletContext)desktop.getWebApp().getNativeContext(),
-				request, response, desktop, null),
-			new CometAuWriter());
+		final CometServerPush cmsp = (CometServerPush)sp;
+		if (cmsp.setBusy()) {
+			response.setHeader("ZK-Comet-Error", "Busy");
+			return;
+		}
+
+		final Execution exec = new ExecutionImpl(
+			(ServletContext)desktop.getWebApp().getNativeContext(),
+			request, response, desktop, null);
+
+		final String sid = request.getHeader("ZK-SID");
+		if (sid != null) { //Mobile client doesn't have ZK-SID
+			response.setHeader("ZK-SID", sid);
+			((ExecutionCtrl)exec).setRequestId(sid);
+		}
+
+		final CometAuWriter out = new CometAuWriter();
+		out.open(request, response, -1);
+		cmsp.process(exec, out);
+		out.close(request, response);
 	}
 }

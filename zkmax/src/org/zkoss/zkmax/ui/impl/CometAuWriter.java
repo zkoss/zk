@@ -39,9 +39,13 @@ import org.zkoss.zk.au.AuResponse;
 /*package*/ class CometAuWriter implements AuWriter {
 	private HttpServletResponse _response;
 	private Writer _out;
-	private boolean _closed;
 
 	//AuWriter//
+	/** Returns au to represent the response channel for AU requests.
+	 */
+	public String getChannel() {
+		return "cm";
+	}
 	public AuWriter open(Object request, Object response, int timeout)
 	throws IOException {
 		_response = (HttpServletResponse)response;
@@ -58,11 +62,11 @@ import org.zkoss.zk.au.AuResponse;
 	 */
 	public void close(Object request, Object response)
 	throws IOException {
-		if (!_closed) {
-			_closed = true;
-			_out.write("\n</rs>");
-			_response.flushBuffer();
-		}
+		_out.write("\n</rs>");
+		_response.flushBuffer();
+	}
+	public void writeResponseId(int resId) throws IOException {
+		AuWriters.writeResponseId(_out, resId);
 	}
 	public void write(AuResponse response) throws IOException {
 		AuWriters.write(_out, response);

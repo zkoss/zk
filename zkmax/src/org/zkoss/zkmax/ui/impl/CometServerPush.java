@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.Iterator;
 
 import org.zkoss.lang.D;
-import org.zkoss.lang.Threads;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Executions;
@@ -93,16 +92,20 @@ public class CometServerPush implements ServerPush {
 	}
 	//ServerPush//
 	public void start(Desktop desktop) {
-		if (_desktop != null)
-			throw new IllegalStateException("Already started");
+		if (_desktop != null) {
+			log.warning("Ignored: Sever-push already started");
+			return;
+		}
 
 		_desktop = desktop;
 		CometProcessor.init(_desktop.getWebApp());
 		Clients.response(new AuScript(null, getStartScript()));
 	}
 	public void stop() {
-		if (_desktop == null)
-			throw new IllegalStateException("Not started");
+		if (_desktop == null) {
+			log.warning("Ignored: Sever-push not started");
+			return;
+		}
 
 		final boolean inexec = Executions.getCurrent() != null;
 		if (inexec) //Bug 1815480: don't send if timeout
@@ -137,6 +140,18 @@ public class CometServerPush implements ServerPush {
 	public void onPiggyback() {
 	}
 
+	/** Sets busy and return if it is busy for processing other request.
+	 * If it is busy, true is returned.
+	 * If it is not busy, false is returned but it is marked as busy.
+	 * 
+	 * <p>It is possible since the client might abort the previous one
+	 * and issue a new one but ther server didn't know.
+	 */
+	/*package*/ synchronized boolean setBusy() {
+		final boolean old = _busy;
+		_busy = true;
+		return old;
+	}
 	/** Called when receiving the comet request from the client.
 	 */
 	/*package*/ void process(Execution exec, CometAuWriter out)
@@ -148,13 +163,11 @@ public class CometServerPush implements ServerPush {
 		//the result of two working threads and it is wrong).
 
 		//Note: it is possible to have two or more requests since
-		//the client might abort the previous one and issue a new one
-		//but ther server didn't know
-		if (_busy) return;
-		_busy = true;
-
-		out.open(exec.getNativeRequest(), exec.getNativeResponse(), -1);
-			//send something to the client first
+		if (((WebAppCtrl)_desktop.getWebApp())
+		.getUiEngine().isRequestDuplicate(exec, out)) {
+			_busy = false;
+			return;
+		}
 
 		for (ThreadInfo info = null;;) {
 			try {
@@ -198,8 +211,7 @@ public class CometServerPush implements ServerPush {
 					info.exec = null;
 					info.out = null;
 				}
-				out.close(exec.getNativeRequest(), exec.getNativeResponse());
-					//note: OK to close twice
+				_busy = false; //just in case
 			}
 		}
 	}
@@ -255,7 +267,7 @@ public class CometServerPush implements ServerPush {
 				if (_active.exec != null && _active.out != null)
 					try {
 						((WebAppCtrl)_desktop.getWebApp()).getUiEngine()
-							.endUpdate(_active.exec, _active.out, true);
+							.endUpdate(_active.exec, _active.out);
 					} catch (Throwable ex) {
 						log.warningBriefly("Ignored error", ex);
 					}

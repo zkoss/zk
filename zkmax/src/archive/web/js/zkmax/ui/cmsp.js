@@ -18,6 +18,7 @@ zkCmsp = {};
 zkCmsp._reqs = {};
 zkCmsp._start = {};
 zkCmsp._nStart = 0;
+zkCmsp._sid = 1; //1-999
 
 zk.override(zkau, "ignoreESC", zkCmsp,
 	function () {
@@ -51,6 +52,7 @@ zkCmsp._send = function (dtid) {
 		req.onreadystatechange = zkCmsp._onRespReady;
 		req.open("POST", zk.getUpdateURI("/comet?dtid="+dtid, false, null, dtid), true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		req.setRequestHeader("ZK-SID", zkCmsp._sid);
 		req.send();
 	} catch (e) {
 		zkCmsp._reqs[dtid] = null;
@@ -65,13 +67,24 @@ zkCmsp._asend = function (dtid, timeout) {
 zkCmsp._onRespReady = function () {
 	try {
 		for (var dtid in zkCmsp._reqs) {
-			var req = zkCmsp._reqs[dtid];
+			var req = zkCmsp._reqs[dtid], timeout = 2000;
 			try {
 				if (req && req.readyState == 4) {
 					zkCmsp._reqs[dtid] = null;
-					if (req.status == 200)
-						zkau.doXmlResp(req.responseXML);
-					zkCmsp._asend(dtid, req.status == 200 ? 50: 2000); //2 sec
+					if (req.status == 200) {
+						var sid = req.getResponseHeader("ZK-SID");
+						if (!sid || sid == zkCmsp._sid) {
+							var cmds = zkau.parseXmlResp(req.responseXML);
+							if (cmds) {
+								timeout = 100;
+								zkau._respQue.push(cmds);
+								if (sid && ++zkCmsp._sid > 999) zkCmsp._sid = 1;
+								//both parseXmlResp and doQueResps might ex
+							}
+							zkau.doQueResps();
+						}
+					}
+					zkCmsp._asend(dtid, timeout);
 				}
 			} catch (e) {
 				zkCmsp._asend(dtid, 2000); //2 sec
