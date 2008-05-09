@@ -90,7 +90,7 @@ import org.zkoss.zk.device.DeviceNotFoundException;
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
-    private static final long serialVersionUID = 20080409L;
+    private static final long serialVersionUID = 20080509L;
 
 	/** Represents media. It must be distinguishable from component's ID. */
 	private static final String MEDIA_PREFIX = "med";
@@ -139,8 +139,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
 	private transient List _dtCleans, _execInits, _execCleans;
-	private transient String _lastReqId;
-	private transient Collection _lastResps;
+	private transient Map _lastRes;
+	private static final int MAX_RESPONSE_ID = 999;
+	/** The response sequence ID. */
+	private int _resId; //so next will be 1
 	/** Whether any onPiggyback listener is registered. */
 	private boolean _piggybackListened;
 
@@ -215,6 +217,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_rque = newRequestQueue();
 		_comps = new HashMap(41);
 		_attrs = new HashMap();
+		_lastRes = new HashMap(4);
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
@@ -819,11 +822,22 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	//AU Response//
-	public void responseSent(String reqId, Collection responses) {
-		_lastReqId = reqId;
-		_lastResps = responses;
+	public void responseSent(String channel, String reqId, Object response) {
+		if (reqId != null)
+			_lastRes.put(channel, new Object[] {reqId, response});
 	}
-	public Collection getLastResponse(String reqId) {
-		return Objects.equals(reqId, _lastReqId) ? _lastResps: null;
+	public Object getLastResponse(String channel, String reqId) {
+		final Object[] info = (Object[])_lastRes.get(channel);
+		return info != null && Objects.equals(reqId, info[0]) ? info[1]: null;
+	}
+	public int getResponseId(boolean advance) {
+		if (advance && ++_resId > MAX_RESPONSE_ID)
+			_resId = 1;
+		return _resId;
+	}
+	public void setResponseId(int resId) {
+		if (resId > MAX_RESPONSE_ID)
+			throw new IllegalArgumentException("Invalid response ID: "+resId);
+		_resId = resId < 0 ? 0: resId;
 	}
 }

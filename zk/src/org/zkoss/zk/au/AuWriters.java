@@ -78,6 +78,14 @@ public class AuWriters {
 	 */
 	public static final String CONTENT_TYPE = "text/xml;charset=UTF-8";
 
+	/** Wites a XML fragment representing the response ID.
+	 * @since 3.1.0
+	 */
+	public static void writeResponseId(Writer out, int resId) throws IOException {
+		out.write("<rid>");
+		out.write(Integer.toString(resId));
+		out.write("</rid>\n");
+	}
 	/** Writes a XML fragment representing the response to the output.
 	 * @since 3.1.0
 	 */

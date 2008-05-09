@@ -468,7 +468,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (sid != null)
 			response.setHeader("ZK-SID", sid);
 
-		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
+		final AuWriter out =
+			AuWriters.newInstance().open(request, response, 0);
 
 		if (!"rmDesktop".equals(cmdId) && !Events.ON_RENDER.equals(cmdId)
 		&& !Events.ON_TIMER.equals(cmdId) && !"dummy".equals(cmdId)) {//possible in FF due to cache
@@ -520,7 +521,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private static void responseError(HttpServletRequest request,
 	HttpServletResponse response, String errmsg) throws IOException {
 		//Don't use sendError because Browser cannot handle UTF-8
-		final AuWriter out = AuWriters.newInstance().open(request, response, 0);
+		AuWriter out = AuWriters.newInstance().open(request, response, 0);
 		out.write(new AuAlert(errmsg));
 		out.close(request, response);
 	}

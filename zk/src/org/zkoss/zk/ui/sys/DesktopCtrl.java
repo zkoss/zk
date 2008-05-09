@@ -284,20 +284,52 @@ if (c.isEmpty()) {
 	 */
 	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs);
 
-	/** Called when ZK Update Engine has sent a collection of responses
-	 * to the client.
+	//Response Utilities//
+	/** Called when ZK Update Engine has sent a response to the client.
 	 *
-	 * @param reqId the sequence ID of the request that the collection
-	 * of responses are generated for. It must not be null.
-	 * @param responses the collection of responses. It must not be null.
-	 * @since 3.0.5
+	 * <p>Note: the implementation has to maintain one last-sent
+	 * response information for each channel, since a different channel
+	 * has different set of request IDs and might resend in a different
+	 * condition.
+	 *
+	 * @param channel the request channel.
+	 * For example, "au" for AU requests and "cm" for Comet requests.
+	 * @param reqId the request ID that the response is generated for.
+	 * Ingore if null.
+	 * @param resInfo the response infomation. Ignored if reqId is null.
+	 * The real value depends on the caller.
+	 * @since 3.1.0
 	 */
-	public void responseSent(String reqId, Collection responses);
-	/** Returns the collection of responses for the last request, or null
+	public void responseSent(String channel, String reqId,
+	Object resInfo);
+	/** Returns the information of response for the last request, or null
 	 * if no response yet, or the specified request ID doesn't match
 	 * the last one (passed to {@link #responseSent}).
-	 *
-	 * @since 3.0.5
+	 * <p>The return value is the value passed to resInfo when calling
+	 * {@link #responseSent}. The real value depends on the caller.
+	 * @since 3.1.0
 	 */
-	public Collection getLastResponse(String reqId);
+	public Object getLastResponse(String channel, String reqId);
+	/** Returns the sequence ID of the response.
+	 * The client and server uses the sequence ID to make sure
+	 * the responses are processed in the correct order.
+	 *
+	 * <p>The range of the sequence IDs is 1~999.
+	 *
+	 * @param advance whether to advance the number before returning.
+	 * If true, the ID is increased and then returned.
+	 * If false, the previous value is returned
+	 * @since 3.1.0
+	 */
+	public int getResponseId(boolean advance);
+	/** Sets the sequence ID of the response.
+	 *
+	 * <p>It is rarely called other than in the recovering mode, i.e.,
+	 * {@link ExecutionCtrl#isRecovering} is true.
+	 *
+	 * @param resId a value between 1 and 999.
+	 * You can reset the ID by passing a non-positive value.
+	 * @since 3.1.0
+	 */
+	public void setResponseId(int resId);
 }

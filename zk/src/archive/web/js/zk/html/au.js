@@ -46,7 +46,7 @@ zkau._stamp = 0; //used to make a time stamp
 zkau.topZIndex = 12; //topmost z-index for overlap/popup/modal
 zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau._sendNow
-zkau._seqId = 0;
+zkau._seqId = 1; //1-999
 zkau._dtids = []; //an array of desktop IDs
 zkau._uris = {}; //a map of update engine's URIs ({dtid, uri})
 zkau._spushInfo = {} //the server-push info: Map(dtid, {min, max, factor})
@@ -253,18 +253,20 @@ zkau._onRespReady = function () {
 
 			var sid = req.getResponseHeader("ZK-SID");
 			if (req.status == 200) { //correct
-				if (sid) {
-					if (sid != zkau._seqId) {
-						zkau._errcode = "ZK-SID " + (sid ? "mismatch": "required");
-						return;
-					}
+				if (sid && sid != zkau._seqId) {
+					zkau._errcode = "ZK-SID " + (sid ? "mismatch": "required");
+					return;
+				} //if sid null, always process (usually for error msg)
+
+				var cmds = zkau.parseXmlResp(req.responseXML);
+				if (cmds) { //valid response
+					zkau._respQue.push(cmds);
 
 					//advance SID to avoid receive the same response twice
-					if (++zkau._seqId > 255) zkau._seqId = 0;
+					if (sid && ++zkau._seqId > 999) zkau._seqId = 1;
+					zkau._areqTry = 0;
 					zkau._preqInf = null;
-				} //if null, always process (usually for showing error msg)
-				zkau._areqTry = 0;
-				zkau._respQue.push(zkau._parseXmlResp(req.responseXML));
+				}
 			} else if (!sid || sid == zkau._seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
 				zkau._errcode = req.status;
 				var eru = zk.eru['e' + req.status];
@@ -334,17 +336,27 @@ zkau._onRespReady = function () {
 			zkau._send2(ds[j], 0);
 	}
 
-	zkau._doQueResps();
+	zkau.doQueResps();
 	zkau._checkProgress();
 };
-zkau._parseXmlResp = function (xml) {
-	var rs = xml ? xml.getElementsByTagName("r"): null;
-	if (!rs) return null;
+/** Parses a XML response.
+ * @since 3.1.0
+ */
+zkau.parseXmlResp = function (xml) {
+	if (!xml) return null; //invalid
 
-	var cmds = [];
-	for (var j = 0, rl = rs.length; j < rl; ++j) {
-		var cmd = rs[j].getElementsByTagName("c")[0];
-		var data = rs[j].getElementsByTagName("d");
+	var cmds = [],
+		rs = xml.getElementsByTagName("r"),
+		rid = xml.getElementsByTagName("rid");
+
+	if (rid && rid.length) {
+		rid = $int(zk.getElementValue(rid[0])); //response ID
+		if (!isNaN(rid)) cmds.rid = rid;
+	}
+
+	for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
+		var cmd = rs[j].getElementsByTagName("c")[0],
+			data = rs[j].getElementsByTagName("d");
 
 		if (!cmd) {
 			zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
@@ -631,34 +643,52 @@ zkau._evalOnResponse = function () {
 		setTimeout(zkau._js4resps.shift(), 0);
 };
 
-/** Process the response XML.
- * @since 3.1.0
- */
-zkau.doXmlResp = function (xml) {
-	zkau._respQue.push(zkau._parseXmlResp(xml));
-	zkau._doQueResps();
-};
 /** Process the responses queued in zkau._respQue. */
-zkau._doQueResps = function () {
-	var ex, que = zkau._respQue, breath = $now() + 6000;
-	while (que.length) {
+zkau.doQueResps = function () {
+	var ex, j = 0, que = zkau._respQue, rid = zkau._resId;
+	for (; j < que.length; ++j) {
 		if (zk.loading) {
-			zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
+			zk.addInit(zkau.doQueResps); //Note: when callback, zk.loading is false
 			break; //wait until the loading is done
 		}
 
 		try {
-			var cmds = que.shift();
-			if (!zkau._doResps(cmds))
-				que.unshift(cmds); //handle it later
+			var cmds = que[j];
+			if (rid == cmds.rid || !rid || !cmds.rid //match
+			|| zkau._dtids.length > 1) { //ignore multi-desktops (risky but...)
+				que.splice(j, 1);
+
+				var oldrid = zkau._resId;
+				if (cmds.rid && (zkau._resId = cmds.rid + 1) >= 1000)
+					zkau._resId = 1; //1~999
+
+				if (zkau._doResps(cmds)) {
+					j = -1; //starting from beginning
+				} else { //not done yet
+					zkau._resId = oldrid; //restore
+					que.splice(j, 0, cmds); //put it back
+					break;
+				}
+			}
 		} catch (e) {
 			if (!ex) ex = e;
 		}
+	}
 
-		if (!ex && $now() > breath) {
-			setTimeout(zkau._doQueResps, 10); //let browser breath
-			return;
-		}
+	if (j && j >= que.length) {
+	//sequence is wrong => enforce to run if timeout
+		setTimeout(function () {
+			if (que.length && rid == zkau._resId) {
+				var r = que[0].rid;
+				for (j = 1; j < que.length; ++j) { //find min
+					var r2 = que[j].rid,
+						v = r2 - r;
+					if (v > 500 || (v < 0 && v > -500)) r = r2;
+				}
+				zkau._resId = r;
+				zkau.doQueResps();
+			}
+		}, 3600);
 	}
 
 	if (zkau._checkProgress())

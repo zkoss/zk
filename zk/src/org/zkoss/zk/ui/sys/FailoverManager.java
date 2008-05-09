@@ -86,6 +86,8 @@ public interface FailoverManager {
 	 * <li>[optional] Call {@link Desktop#setDeviceType} to correct
 	 * the device type (default: html).</li>
 	 * <li>[Must] Recover all pages and components.</li>
+	 * <li>[Optional] Recover the response ID by use of
+	 * {@link DesktopCtrl#setResponseId}.</li>
 	 * <li>[Optional] Recover desktop's attributes.</li>
 	 * </ul>
 	 *

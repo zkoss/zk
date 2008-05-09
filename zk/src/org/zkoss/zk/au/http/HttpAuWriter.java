@@ -49,6 +49,12 @@ public class HttpAuWriter implements AuWriter{
 	}
 
 	//AuWriter//
+	/** Returns au to represent the response channel for AU requests.
+	 * @since 3.1.0
+	 */
+	public String getChannel() {
+		return "au";
+	}
 	/** Opens the connection.
 	 *
 	 * <p>Default: it creates a StringWriter instance for {@link #_out}
@@ -93,6 +99,9 @@ public class HttpAuWriter implements AuWriter{
 		response.setContentLength(data.length);
 		response.getOutputStream().write(data);
 		response.flushBuffer();
+	}
+	public void writeResponseId(int resId) throws IOException {
+		AuWriters.writeResponseId(_out, resId);
 	}
 	public void write(AuResponse response) throws IOException {
 		AuWriters.write(_out, response);

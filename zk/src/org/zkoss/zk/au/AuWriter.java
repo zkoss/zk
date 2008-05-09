@@ -21,8 +21,6 @@ package org.zkoss.zk.au;
 import java.util.Collection;
 import java.io.IOException;
 
-import org.zkoss.zk.ui.Desktop;
-
 /**
  * Represents a writer that is used to send the output back to the client,
  * when processing {@link AuRequest}.
@@ -35,6 +33,12 @@ import org.zkoss.zk.ui.Desktop;
  * @see AuWriters#setImplementationClass
  */
 public interface AuWriter {
+	/** Returns the request channel.
+	 * A channel is a kind of connections between client and server.
+	 * For example, AU is "au", while Comet is "cm".
+	 * @since 3.1.0
+	 */
+	public String getChannel();
 	/** Initializes the writer.
 	 *
 	 * @param request the request (HttpServletRequest if HTTP)
@@ -55,6 +59,11 @@ public interface AuWriter {
 	public void close(Object request, Object response)
 	throws IOException;
 
+	/** Generates the response ID to the output.
+	 * @see org.zkoss.zk.ui.sys.DesktopCtrl#getResponseId
+	 * @since 3.1.0
+	 */
+	public void writeResponseId(int resId) throws IOException;
 	/** Generates the specified the response to the output.
 	 */
 	public void write(AuResponse response) throws IOException;

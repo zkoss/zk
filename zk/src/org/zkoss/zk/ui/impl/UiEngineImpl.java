@@ -696,19 +696,50 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Asynchronous updates --//
+	public boolean isRequestDuplicate(Execution exec, AuWriter out)
+	throws IOException {
+		final String sid = ((ExecutionCtrl)exec).getRequestId();
+		if (sid != null) {
+			doActivate(exec, true, false);
+			try {
+				return isReqDup0(exec, out, sid);
+			} finally {
+				doDeactivate(exec); //deactive
+			}
+		}
+		return false;
+	}
+	private boolean isReqDup0(Execution exec, AuWriter out, String sid)
+	throws IOException {
+		final Object[] resInfo = (Object[])((DesktopCtrl)exec.getDesktop())
+			.getLastResponse(out.getChannel(), sid);
+		if (resInfo != null) {
+			if (log.debugable()) {
+				final Object req = exec.getNativeRequest();
+				log.debug("Repeat request\n"+
+					(req instanceof ServletRequest ? Servlets.getDetail((ServletRequest)req):"sid: "+sid));
+			}
+
+			out.writeResponseId(((Integer)resInfo[0]).intValue());
+			out.write((Collection)resInfo[1]);
+			return true; //replicate
+		}
+		return false;
+	}
 	public void beginUpdate(Execution exec) {
 		final UiVisualizer uv = doActivate(exec, true, false);
 		final Desktop desktop = exec.getDesktop();
 		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
 		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
 	}
-	public void endUpdate(Execution exec, AuWriter out, boolean close)
+	public void endUpdate(Execution exec, AuWriter out)
 	throws IOException {
 		boolean cleaned = false;
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Configuration config = desktop.getWebApp().getConfiguration();
-		final UiVisualizer uv = (UiVisualizer)((ExecutionCtrl)exec).getVisualizer();
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		final UiVisualizer uv = (UiVisualizer)execCtrl.getVisualizer();
 		try {
 			Event event = nextEvent(uv);
 			do {
@@ -716,10 +747,14 @@ public class UiEngineImpl implements UiEngine {
 					process(desktop, event);
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
+
 			List responses = uv.getResponses();
+			final int resId = desktopCtrl.getResponseId(true);
+			desktopCtrl.responseSent(
+				out.getChannel(), execCtrl.getRequestId(),
+				new Object[] {new Integer(resId), responses});
+			out.writeResponseId(resId);
 			out.write(responses);
-			if (close)
-				out.close(exec.getNativeRequest(), exec.getNativeResponse());
 
 			cleaned = true;
 			desktopCtrl.invokeExecutionCleanups(exec, null, null);
@@ -745,23 +780,14 @@ public class UiEngineImpl implements UiEngine {
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
 
 		final UiVisualizer uv = doActivate(exec, true, false);
-		final Desktop desktop = exec.getDesktop();
-		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final String sid = ((ExecutionCtrl)exec).getRequestId();
-		if (sid != null) {
-			final Collection resps = desktopCtrl.getLastResponse(sid);
-			if (resps != null) {
-				if (log.debugable()) {
-					final Object req = exec.getNativeRequest();
-					log.debug("Repeat request\n"+
-						(req instanceof ServletRequest ? Servlets.getDetail((ServletRequest)req):"sid: "+sid));
-				}
-				out.write(resps);
-				doDeactivate(exec); //deactive
-				return null; //done
-			}
+		if (sid != null && isReqDup0(exec, out, sid)) {
+			doDeactivate(exec); //deactive
+			return null;
 		}
 
+		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
@@ -848,9 +874,11 @@ public class UiEngineImpl implements UiEngine {
 			else
 				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
 
+			final int resId = desktopCtrl.getResponseId(true);
+			desktopCtrl.responseSent(out.getChannel(), sid,
+				new Object[] {new Integer(resId), responses});
+			out.writeResponseId(resId);
 			out.write(responses);
-			if (sid != null)
-				desktopCtrl.responseSent(sid, responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
