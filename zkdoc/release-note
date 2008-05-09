@@ -4,7 +4,7 @@ ZK 3.1.0
   1907300: Listbox: support grouping
   1959952: Support Comet-based Server Push
   1951422: Grid: support grouping
-  1883237: A way to register listeners for particular desktop
+  1959959: An option to allow user to refresh if an error
   1901211: Simplify the outline of Menu component with single TD
   1925928: Add Spinner Component
   1926069: Pass current value for bandbox/comobox in onOpen
@@ -17,7 +17,7 @@ ZK 3.1.0
   1955900: A subscribe/publish meachism to handle events
   1959380: Window support both properties minheight and minwidth
   1955562: For theme: menuitem unchecked not visible
-  1959959: An option to allow user to refresh if an error
+  1883237: A way to register listeners for particular desktop
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
