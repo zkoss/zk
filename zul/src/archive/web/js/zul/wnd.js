@@ -232,7 +232,7 @@ zkWnd.setSizable = function (cmp, sizable) {
  * 6: left-bottom, 7: left, 8: left-top
  */
 zkWnd._insizer = function (cmp, x, y) {
-	var ofs = Position.cumulativeOffset(cmp);
+	var ofs = zk.revisedOffset(cmp);
 	var r = ofs[0] + cmp.offsetWidth, b = ofs[1] + cmp.offsetHeight;
 	if (x - ofs[0] <= 5) {
 		if (y - ofs[1] <= 5) return 8;
@@ -251,7 +251,7 @@ zkWnd.onmouseove = function (evt, cmp) {
 	var target = Event.element(evt);
 	if (zkWnd.sizable(cmp)) {
 		var c = zkWnd._insizer(cmp, Event.pointerX(evt), Event.pointerY(evt));
-		var handle = $e(cmp.id + "!caption");
+		var handle = zkWnd._embedded(cmp) ? false : $e(cmp.id + "!caption");
 		if (c) {
 			zk.backupStyle(cmp, "cursor");
 			cmp.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
@@ -272,8 +272,9 @@ zkWnd._ignoresizing = function (cmp, pointer) {
 		var v = zkWnd._insizer(cmp, pointer[0], pointer[1]);
 		if (v) {
 			dg.z_dir = v;
+			var offs = zk.revisedOffset(cmp);
 			dg.z_box = {
-				top: cmp.offsetTop, left: cmp.offsetLeft ,height: cmp.offsetHeight,
+				top: offs[1], left: offs[0] ,height: cmp.offsetHeight,
 				width: cmp.offsetWidth, minHeight: $int(getZKAttr(cmp, "minheight")),
 				minWidth: $int(getZKAttr(cmp, "minwidth"))
 			};
