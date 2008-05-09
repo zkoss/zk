@@ -104,15 +104,19 @@ public class PollingServerPush implements ServerPush {
 
 	//ServerPush//
 	public void start(Desktop desktop) {
-		if (_desktop != null)
-			throw new IllegalStateException("Already started");
+		if (_desktop != null) {
+			log.warning("Ignored: Sever-push already started");
+			return;
+		}
 
 		_desktop = desktop;
 		Clients.response(new AuScript(null, getStartScript()));
 	}
 	public void stop() {
-		if (_desktop == null)
-			throw new IllegalStateException("Not started");
+		if (_desktop == null) {
+			log.warning("Ignored: Sever-push not started");
+			return;
+		}
 
 		final boolean inexec = Executions.getCurrent() != null;
 		if (inexec) //Bug 1815480: don't send if timeout
