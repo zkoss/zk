@@ -69,10 +69,11 @@ public class DumbFailoverManager implements FailoverManager {
 		System.out.println("Recover "+_killed.getId());
 
 		//recover desktop
-		final DesktopCtrl dtc = (DesktopCtrl)desktop;
-		dtc.setId(_killed.getId()); //required
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+		desktopCtrl.setId(_killed.getId()); //required
 		desktop.setCurrentDirectory(_killed.getCurrentDirectory()); //optional
 		desktop.setDeviceType(_killed.getDeviceType()); //optional
+		desktopCtrl.setResponseId(((DesktopCtrl)_killed).getResponseId(false));
 
 		//recover pages
 		for (Iterator it = _killed.getPages().iterator(); it.hasNext();)
