@@ -1439,7 +1439,8 @@ zk.error = function (msg) {
 +(zk.innerX()+50)+'px;top:'+(zk.innerY()+20)
 +'px;width:550px;border:1px solid #963;background-color:#fc9" id="'
 +id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
-+'<td width="20pt"><button onclick="zk._msgclose(this)">close</button></td>'
++'<td width="20pt"><button onclick="zk._msgclose(this)">close</button>'
++'<button onclick="zkau.sendRedraw()">redraw</button></td>'
 +'<td style="border:1px inset">'+zk.encodeXML(msg, true) //Bug 1463668: security
 +'</td></tr></table></div>';
 	zk._setOuterHTML(box, html);
@@ -1451,6 +1452,13 @@ zk.error = function (msg) {
 			starteffect: zk.voidf, starteffect: zk.voidf, endeffect: zk.voidf});
 	} catch (e) {
 	}
+};
+/** Closes all error box (zk.error).
+ * @since 3.1.0
+ */
+zk.errorDismiss = function () {
+	for (var j = zk._errcnt; j; --j)
+		zk.remove($e("zk_err_" + j));
 };
 
 //-- bootstrapping --//

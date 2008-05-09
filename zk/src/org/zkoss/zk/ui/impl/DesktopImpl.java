@@ -840,4 +840,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("Invalid response ID: "+resId);
 		_resId = resId < 0 ? 0: resId;
 	}
+
+	public void invalidate() {
+		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
+			final Page page = (Page)it.next();
+			if (((PageCtrl)page).getOwner() == null)
+				page.invalidate();
+		}
+	}
 }

@@ -21,6 +21,8 @@ if (!window.zkau) { //avoid eval twice
 //Customization
 /** Returns the background color for a list item or tree item.
  * Developer can override this method by providing a different background.
+ * @param e the element
+ * @param undo whether to undo the effect (false to set effect)
  */
 if (!window.Droppable_effect) { //define it only if not customized
 	window.Droppable_effect = function (e, undo) {
@@ -32,7 +34,19 @@ if (!window.Droppable_effect) { //define it only if not customized
 		}
 	};
 }
+/** Handles the error caused by processing the response.
+ * @param msg the error message
+ * @param cmd the command (optional)
+ * @param ex the exception (optional)
+ * @since 3.1.0
+ */
+if (!window.onProcessError) {
+	window.onProcessError = function (msg, cmd, ex) {
+		zk.error(msg + (cmd?cmd:"") + (ex?"\n"+ex.message:""));
+	};
+}
 
+//au//
 zkau = {};
 
 zkau._respQue = []; //responses in XML
@@ -705,7 +719,7 @@ zkau._doResps = function (cmds) {
 		try {
 			zkau.process(cmd.cmd, cmd.data);
 		} catch (e) {
-			zk.error(mesg.FAILED_TO_PROCESS+cmd.cmd+"\n"+e.message);
+			onProcessError(mesg.FAILED_TO_PROCESS, cmd.cmd, e);
 			throw e;
 		} finally {
 			zkau._evalOnResponse();
@@ -725,7 +739,7 @@ zkau.process = function (cmd, data) {
 
 	//I. process commands that require uuid
 	if (!data || !data.length) {
-		zk.error(mesg.ILLEGAL_RESPONSE+"uuid is required for "+cmd);
+		onProcessError(mesg.ILLEGAL_RESPONSE+"uuid is required for ", cmd);
 		return;
 	}
 
@@ -736,7 +750,7 @@ zkau.process = function (cmd, data) {
 		return;
 	}
 
-	zk.error(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
+	onProcessError(mesg.ILLEGAL_RESPONSE+"Unknown command: ", cmd);
 };
 /** Used by ZkFns. */
 zk.process = function (cmd) {
@@ -1585,6 +1599,14 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 	var el = $e(uuid);
 	if (closeFloats) zkau.closeFloats(el);
 	zkau.send({uuid: el.id, cmd: "onClose"}, 5);
+};
+/** Ask the server to redraw all desktops on the browser.
+ * @since 3.1.0
+ */
+zkau.sendRedraw = function () {
+	zk.errorDismiss();
+	for (var ds = zkau._dtids, j = ds.length; --j >= 0;)
+		zkau.send({dtid: ds[j], cmd: "redraw"});
 };
 
 /** Test if any float is opened.

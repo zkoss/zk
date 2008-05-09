@@ -307,4 +307,9 @@ public interface Desktop {
 	 * @since 3.1.0
 	 */
 	public boolean removeListener(Object listener);
+
+	/** Invalidates the desktop.
+	 * All pages will be redrawn.
+	 */
+	public void invalidate();
 }
