@@ -307,7 +307,7 @@ zk.revisedOffset = function (el, ofs) {
 	if(!ofs) {
 		if (el.getBoundingClientRect){ // IE
 			var b = el.getBoundingClientRect();
-			return [b.left + zk.innerX() - 3 , b.top + zk.innerY() - 3];
+			return [b.left + zk.innerX() - 2 , b.top + zk.innerY() - 2];
 		}
 		ofs = Position.cumulativeOffset(el);
 	}
