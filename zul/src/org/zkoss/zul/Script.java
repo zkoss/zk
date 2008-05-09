@@ -58,7 +58,7 @@ import org.zkoss.zk.ui.UiException;
  * @author tomyeh
  */
 public class Script extends AbstractComponent {
-	private String _src, _type, _charset;
+	private String _src, _type = "text/javascript", _charset;
 	private String _content;
 	private boolean _defer;
 
@@ -66,9 +66,7 @@ public class Script extends AbstractComponent {
 	}
 
 	/** Returns the type of this client script.
-	 * <p>Default: null. However, it is invalid.
-	 * In other words, you must specify a correct type.
-	 * For JavaScript, it is "text/javascript".
+	 * <p>Default: text/javascript.
 	 */
 	public String getType() {
 		return _type;
@@ -182,9 +180,6 @@ public class Script extends AbstractComponent {
 		return false;
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (_type == null)
-			throw new UiException("The type is required. For example, text/javascript");
-
 		final StringBuffer sb = new StringBuffer(256).append("\n<script");
 		HTMLs.appendAttribute(sb, "id",  getUuid());
 		HTMLs.appendAttribute(sb, "type",  _type);
