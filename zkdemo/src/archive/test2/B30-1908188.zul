@@ -4,9 +4,9 @@
 <html><![CDATA[
 <ol>
 	<li>Click "Test" and then "Show popup below component..."<br/>
-	You will see popup shown right below "Test"</li>
+	You will see popup window shown right below "Test"</li>
 	<li>Click "Test" and then "Show popup at x,y position..."<br/>
-	You will see popup shown at (50px, 50px)
+	You will see popup  window shown at (50px, 50px)
 ]]></html>
 	<zscript>
 		public class PopupOpenEventListener implements EventListener {

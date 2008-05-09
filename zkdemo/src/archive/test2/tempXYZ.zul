@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-B30-1835369.zul
+B30-1916332.zul
 
 {{IS_NOTE
 	Purpose:
@@ -9,115 +9,16 @@ B30-1835369.zul
 	Description:
 		
 	History:
-		Mon Nov 26 12:21:03 TST 2007, Created by jumperchen
+		Tue Mar 18 16:34:46     2008, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<div>
-	<n:table xmlns:n="http://www.zkoss.org/2005/zk/native">
-		<n:tr>
-			<n:td>Top</n:td>
-		</n:tr>
-<n:tr>
-<n:td>
-We have a screen which was working fine in ZK2.4.1. One of its sections
-is a Grid inside a Groupbox.
-
-With ZK3.0, this section continues to work fine in FF, and in fact looks
-more appealing.
-
-However in IE it is a nightmare: the Grid floats half out of the Groupbox,
-obscuring the caption completely and leaving an ugly empty blue section
-underneath.
-</n:td>
-</n:tr>
-	</n:table>
-	<grid id="grid" mold="paging" height="60px">
-		<columns>
-			<column label="column1" align="Center" />
-			<column label="column2" align="Center" />
-			<column label="column3" align="Center" />
-			<column label="column4" align="Center" />
-			<column label="column5" align="Center" />
-			<column label="column6" align="Center" />
-		</columns>
-		<rows id="rows">
-			<row>
-				<label value="column1" />
-				<label value="column2" />
-				<label value="column3" />
-				<label value="column4" />
-				<label value="column5" />
-				<label value="column6" />
-			</row>
-			<row>
-				<label value="column1" />
-				<label value="column2" />
-				<label value="column3" />
-				<label value="column4" />
-				<label value="column5" />
-				<label value="column6" />
-			</row>
-			<row>
-				<label value="column1" />
-				<label value="column2" />
-				<label value="column3" />
-				<label value="column4" />
-				<label value="column5" />
-				<label value="column6" />
-			</row>
-			<row>
-				<label value="column1" />
-				<label value="column2" />
-				<label value="column3" />
-				<label value="column4" />
-				<label value="column5" />
-				<label value="column6" />
-			</row>
-			<row>
-				<label value="column1" />
-				<label value="column2" />
-				<label value="column3" />
-				<label value="column4" />
-				<label value="column5" />
-				<label value="column6" />
-			</row>
-			<row>
-				<label value="column1" />
-				<label value="column2" />
-				<label value="column3" />
-				<label value="column4" />
-				<label value="column5" />
-				<label value="column6" />
-			</row>
-			<row>
-				<label value="column1" />
-				<label value="column2" />
-				<label value="column3" />
-				<label value="column4" />
-				<label value="column5" />
-				<label value="column6" />
-			</row>
-		</rows>
-	</grid>
-	<button label="addRow">
-		<attribute name="onClick">
-			Row rw = new Row(); rw.setParent(rows); 
-			new Label("Column3").setParent(rw); 
-			new Label("Column5").setParent(rw); 
-			new Label("Column7").setParent(rw); 
-			new Label("Column8").setParent(rw); 
-			new Label("Column9").setParent(rw); 
-			new Label("Column10").setParent(rw); 
-		</attribute>
-	</button>
-	<button label="changeHeight(100px)">
-		<attribute name="onClick">grid.setHeight("100px");</attribute>
-	</button>
-	<button label="changeHeight(150px)">
-		<attribute name="onClick">grid.setHeight("150px");</attribute>
-	</button>
+<hbox height="200px" width="100%">
+Test with Safari to see if the height is 200px
+<splitter id="hsplitter" collapse="none"/>
+cdacdacdacdacacsdc
+</hbox>

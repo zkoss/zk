@@ -6,13 +6,13 @@ After collapse splitter in vbox, the style of splitter in hbox is mess-up.
 </h:pre>
 <window border="normal" title="Case 4: hbox in vbox and splitter">
 	<vbox spacing="0" width="100%">
-		<hbox width="100%" height="100%">
-			cdacdacdacda
+		<hbox width="100%" height="100%" >
+			hbox-left
 			<splitter id="hs" collapse="after" />
-			cdaccdacdacda
+			hbox-right
 		</hbox>
 		<splitter id="vs" collapse="before" />
-		cdacdacdacda
+                vbox bottom
 	</vbox>
 </window> 
 

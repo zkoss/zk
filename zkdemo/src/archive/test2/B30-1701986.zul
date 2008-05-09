@@ -42,7 +42,7 @@ Constraint ctt = new Constraint() {
 	<grid width="90%">
 		<rows>
 			<row>			
-				<label id="days" />
+				<label id="val" value="days:"/> <label id="days"/>
 			</row>
 			<row>
 				start date box:
