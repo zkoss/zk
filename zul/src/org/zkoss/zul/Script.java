@@ -31,9 +31,6 @@ import org.zkoss.zk.ui.UiException;
  * <p>Note: it is the scripting codes running at the client, not at the
  * server. Don't confuse it with the <code>zscript</code> element.
  *
- * <p>To avoid typo, this compnent requires you to specify the type
- * ({@link #setType}) -- which is, if JavaScript, "text/javascript".
- *
  * <p>There are three formats when used in a ZUML page:
  *
  * <p>Method 1: Specify the URL of the JS file
