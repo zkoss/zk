@@ -35,14 +35,18 @@ if (!window.Droppable_effect) { //define it only if not customized
 	};
 }
 /** Handles the error caused by processing the response.
- * @param msg the error message
+ * @param msgCode the error message code.
+ * It is either an index of mesg (e.g., "FAILED_TO_PROCESS"),
+ * or an error message
+ * @param msg2 the additional message (optional)
  * @param cmd the command (optional)
  * @param ex the exception (optional)
  * @since 3.1.0
  */
 if (!window.onProcessError) {
-	window.onProcessError = function (msg, cmd, ex) {
-		zk.error(msg + (cmd?cmd:"") + (ex?"\n"+ex.message:""));
+	window.onProcessError = function (msgCode, msg2, cmd, ex) {
+		var msg = mesg[msgCode];
+		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
 	};
 }
 
@@ -719,7 +723,7 @@ zkau._doResps = function (cmds) {
 		try {
 			zkau.process(cmd.cmd, cmd.data);
 		} catch (e) {
-			onProcessError(mesg.FAILED_TO_PROCESS, cmd.cmd, e);
+			onProcessError("FAILED_TO_PROCESS", null, cmd.cmd, e);
 			throw e;
 		} finally {
 			zkau._evalOnResponse();
@@ -739,7 +743,7 @@ zkau.process = function (cmd, data) {
 
 	//I. process commands that require uuid
 	if (!data || !data.length) {
-		onProcessError(mesg.ILLEGAL_RESPONSE+"uuid is required for ", cmd);
+		onProcessError("ILLEGAL_RESPONSE", "uuid is required for ", cmd);
 		return;
 	}
 
@@ -750,7 +754,7 @@ zkau.process = function (cmd, data) {
 		return;
 	}
 
-	onProcessError(mesg.ILLEGAL_RESPONSE+"Unknown command: ", cmd);
+	onProcessError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
 };
 /** Used by ZkFns. */
 zk.process = function (cmd) {
