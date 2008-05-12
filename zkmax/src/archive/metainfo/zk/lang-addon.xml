@@ -236,7 +236,6 @@ def alert(m):
 	<component>
 		<component-name>comboitem</component-name>
 		<extends>comboitem</extends>
-		<!-- <text-as>content</text-as>  -->
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ComboitemDefault</mold-uri>
@@ -361,7 +360,6 @@ def alert(m):
 	<component>
 		<component-name>html</component-name>
 		<extends>html</extends>
-		<!--  <text-as>content</text-as>-->
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.HtmlDefault</mold-uri>
@@ -422,7 +420,6 @@ def alert(m):
 	<component>
 		<component-name>label</component-name>
 		<extends>label</extends>
-		<text-as>value</text-as>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.LabelDefault</mold-uri>
@@ -620,7 +617,6 @@ def alert(m):
 	<!-- <component>
 		<component-name>script</component-name>
 		<extends>script</extends>
-		<text-as>content</text-as>
 	</component>  -->
 	<component>
 		<component-name>separator</component-name>
