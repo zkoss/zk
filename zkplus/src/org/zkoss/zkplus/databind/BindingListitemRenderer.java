@@ -52,8 +52,9 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 		final Listitem clone = (Listitem)_template.clone();
 		//TODO: see if databinder has this kind of Listitem, if not, add new CollectionListItem 
 		//avoid duplicate id error, will set to new id when render()
+		//bug #1893247: Not unique in the new ID space when Grid in Grid
 		if (!ComponentsCtrl.isAutoId(clone.getId())) {
-			clone.setId("@"+ clone.getUuid() + x++);
+			clone.setId("@"+ clone.getUuid() + "_"+ x++);
 		}
 					
 		//link cloned component with template
@@ -133,7 +134,8 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 	//setup id of cloned components (cannot called until the component is attached to Listbox)
 	private void setupCloneIds(Component clone) {
 		//bug #1813271: Data binding generates duplicate ids in grids/listboxes
-		clone.setId("@" + clone.getUuid() + x++); //init id to @uuid to avoid duplicate id issue
+		//bug #1893247: Not unique in the new ID space when Grid in Grid
+		clone.setId("@" + clone.getUuid() + "_"+ x++); //init id to @uuid to avoid duplicate id issue
 
 		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
 		//no need to process down since BindingRowRenderer of the under Grid

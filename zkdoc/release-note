@@ -4,7 +4,8 @@ ZK 3.0.6
 
 * Bugs
   1957661: Page.addFunctionMapper() fails
-
+  1962153: Data binding generates duplicate id in some case
+  
 	--------
 ZK 3.0.5
 * Features
