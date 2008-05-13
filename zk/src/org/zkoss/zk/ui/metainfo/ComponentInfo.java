@@ -106,7 +106,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef,
 	String tag) {
 		if (parent == null || compdef == null)
-			throw new IllegalArgumentException("parent and compdef required");
+			throw new IllegalArgumentException();
 
 		_parent = parent;
 		_compdef = compdef;
@@ -126,6 +126,17 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 3.0.0
 	 */
 	public ComponentInfo() {
+	}
+	/** Constructs the info that doesn't have a parent.
+	 * @since 3.1.0
+	 */
+	public ComponentInfo(EvaluatorRef evalr, ComponentDefinition compdef,
+	String tag) {
+		if (compdef == null)
+			throw new IllegalArgumentException();
+		_compdef = compdef;
+		_tag = tag;
+		_evalr = evalr;
 	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
@@ -368,6 +379,20 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @param value the value. It might contain expressions (${}).
 	 */
 	public void addProperty(String name, String value, ConditionImpl cond) {
+		if (name == null || name.length() == 0)
+			throw new IllegalArgumentException("name");
+
+		if (_props == null)
+			_props = new LinkedList();
+		_props.add(new Property(_evalr, name, value, cond));
+	}
+	/** Adds a property initializer based on the native content.
+	 * The native content is a XML fragment represented by {@link NativeInfo}.
+	 *
+	 * @param value the property value represented by {@link NativeInfo}.
+	 * @since 3.1.0
+	 */
+	public void addProperty(String name, NativeInfo value, ConditionImpl cond) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("name");
 

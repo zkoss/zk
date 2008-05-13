@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.util.DeferredValue;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
@@ -371,8 +372,6 @@ public interface UiEngine {
 	public boolean isRequestDuplicate(Execution exec, AuWriter out)
 	throws IOException;
 	/** Activates and prepare for asynchronous update
-	 *
-	 * @return whether to proceed.
 	 * @since 3.1.0
 	 */
 	public void beginUpdate(Execution exec);
@@ -383,6 +382,31 @@ public interface UiEngine {
 	 */
 	public void endUpdate(Execution exec, AuWriter out)
 	throws IOException;
+
+	/** Retrieve the native content for a property of the specified component.
+	 * The native content is a value of a property that is represented
+	 * by a XML fragment (actually {@link org.zkoss.zk.ui.metainfo.NativeInfo}).
+	 *
+	 * <p>Example:
+	 * <pre><code>&lt;html&gt;
+	 * &lt;attribute name="content"&gt;
+	 *  &lt;br/&gt;
+	 * &lt;/attribute&gt;
+	 *&lt;/html&gt;</code></pre>
+	 *
+	 * @param comp the component that the native content will be assigned to.
+	 * It is the object that the self variable is assigned when evaluating
+	 * EL expressions.
+	 * @param children a list of {@link org.zkoss.zk.ui.metainfo.NativeInfo},
+	 * {@link org.zkoss.zk.ui.metainfo.TextInfo} and others.
+	 * This method evaluates them one-by-one and returns the result
+	 * which is the value that will be assigned.
+	 * @param helper the helper used to generate the content.
+	 * @see org.zkoss.zk.ui.metainfo.Property
+	 * @since 3.1.0
+	 */
+	public String getNativeContent(Component comp, List children,
+	Native.Helper helper);
 
 	/** Returns if any suspended event processing thread in the
 	 * whole system.

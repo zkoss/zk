@@ -24,17 +24,26 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
- * Info about how to initialize a property (aka., a field of a component).
+ * Information about how to initialize a property (aka., a field of a component).
+ * There are two kind of properties: one is a String instance (either
+ * a string vaue or an expression), and the other is
+ * a {@link NativeInfo} instance. The later is also called the native content.
  *
  * @author tomyeh
  */
@@ -44,7 +53,14 @@ implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;
 
 	private final String _name;
+	/** The value if it is not the native content.
+	 * Exactly one of _value and _navval is non-null.
+	 */
 	private final ExValue _value;
+	/** The value if it is the native content.
+	 * Exactly one of _value and _navval is non-null.
+	 */
+	private final NativeInfo _navval;
 	private final ConditionImpl _cond;
 	/** Used to optimize {@link #resolve}. */
 	private transient Class _lastcls;
@@ -62,6 +78,19 @@ implements Condition, java.io.Serializable {
 	 */
 	public Property(EvaluatorRef evalr, String name, String value,
 	ConditionImpl cond) {
+		this(evalr, name, value, null, cond);
+	}
+	/** Constructs a property with the native content.
+	 * The native content is represented by {@link NativeInfo},
+	 * i.e., a XML fragment (aka., a tree of {@link ComponentInfo}.
+	 * @since 3.1.0
+	 */
+	public Property(EvaluatorRef evalr, String name, NativeInfo value,
+	ConditionImpl cond) {
+		this(evalr, name, null, value, cond);
+	}
+	private Property(EvaluatorRef evalr, String name, String value,
+	NativeInfo navval, ConditionImpl cond) {
 		if (name == null || evalr == null)
 			throw new IllegalArgumentException();
 
@@ -69,7 +98,8 @@ implements Condition, java.io.Serializable {
 		_name = name;
 
 		_cond = cond;
-		_value = new ExValue(value, Object.class);
+		_navval = navval;
+		_value = navval != null ? null: new ExValue(value, Object.class);
 			//type will be fixed when mapped to a method
 	}
 
@@ -81,22 +111,30 @@ implements Condition, java.io.Serializable {
 	/** Returns the raw value of the property.
 	 * Note: it is the original value without evaluation.
 	 * In other words, it may contain EL expressions.
+	 * @exception UnsupportedOperationException if value is the native content,
+	 * i.e., it is constructed by use of {@link #Property(EvaluatorRef, String, NativeInfo, ConditionImpl)}.
 	 * @since 3.0.0
 	 */
 	public String getRawValue() {
+		if (_value == null)
+			throw new UnsupportedOperationException("native content");
 		return _value.getRawValue();
 	}
 	/** Sets the raw value of the property.
+	 * @exception UnsupportedOperationException if value is the native content,
+	 * i.e., it is constructed by use of {@link #Property(EvaluatorRef, String, NativeInfo, ConditionImpl)}.
 	 * @since 3.0.0
 	 */
 	public void setRawValue(String value) {
+		if (_value == null)
+			throw new UnsupportedOperationException("native content");
 		_value.setRawValue(value);
 	}
 
 	/** Resolves the method. */
 	private final void resolve(Class cls) {
 		final String mtdnm = Classes.toMethodName(_name, "set");
-		if (_value.isExpression()) {
+		if (_value != null && _value.isExpression()) {
 			_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
 			if (_mtds.length == 0) {
 				if (!DynamicPropertied.class.isAssignableFrom(cls))
@@ -117,13 +155,33 @@ implements Condition, java.io.Serializable {
 	 * the result (i.e., Object.class is assumed).
 	 */
 	public Object getValue(Component comp) {
-		return _value.getValue(_evalr, comp);
+		if (_value != null)
+			return _value.getValue(_evalr, comp);
+
+		Desktop desktop = comp.getDesktop();
+		Page page;
+		if (desktop == null) {
+			Execution exec = Executions.getCurrent();
+			if (exec == null)
+				throw new IllegalStateException("Not attached, nor execution");
+			desktop = exec.getDesktop();
+			page = ((ExecutionCtrl)exec).getCurrentPage();
+		} else {
+			page = comp.getPage();
+		}
+		return ((WebAppCtrl)desktop.getWebApp()).getUiEngine()
+			.getNativeContent(comp, _navval.getChildren(),
+			((Native)_navval.newInstance(page, comp)).getHelper());
 	}
 	/** Evaluates the value to an Object.
 	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
 	 * the result (i.e., Object.class is assumed).
+	 * @exception UnsupportedOperationException if value is the native content,
+	 * i.e., it is constructed by use of {@link #Property(EvaluatorRef, String, NativeInfo, ConditionImpl)}.
 	 */
 	public Object getValue(Page page) {
+		if (_value == null)
+			throw new UnsupportedOperationException("native content");
 		return _value.getValue(_evalr, page);
 	}
 	/** Assigns the value of this memeber to the specified component.
@@ -145,8 +203,8 @@ implements Condition, java.io.Serializable {
 			//However, if dyna-attr, _mtd or _mtds might not be null
 			final Class type =
 				_mtd != null ? _mtd.getParameterTypes()[0]: Object.class;
-			_value.setExpectedType(type);
-			Object val = _value.getValue(_evalr, comp);
+			if (_value != null) _value.setExpectedType(type);
+			Object val = getValue(comp);
 
 			final Method mtd;
 			if (_mtd != null) {
@@ -186,7 +244,7 @@ implements Condition, java.io.Serializable {
 		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 	public String toString() {
-		return "["+_name+"="+_value+']';
+		return "["+_name+(_navval != null ? "": "="+_value)+']';
 	}
 
 	//static utilities//

@@ -569,29 +569,8 @@ public class Parser {
 	private void parse(PageDefinition pgdef, NodeInfo parent,
 	Collection items, AnnotationHelper annHelper, boolean bNativeContent)
 	throws Exception {
-		if (items.isEmpty())
-			return;
-
-		ComponentInfo parentInfo;
-		final String textAs;
-		if (parent instanceof ComponentInfo) {
-			parentInfo = (ComponentInfo)parent;
-			textAs = parentInfo.getTextAs();
-			if (!bNativeContent && textAs != null) {
-				for (Iterator it = items.iterator(); it.hasNext();)
-					if (it.next() instanceof Element) {
-						bNativeContent = true;
-						parentInfo = new NativeInfo(parentInfo,
-							pgdef.getLanguageDefinition().getNativeDefinition(),
-							""); //means native content
-						break;
-					}
-			}
-		} else {
-			parentInfo = null;
-			textAs = null;
-		}
-
+		final ComponentInfo parentInfo =
+			parent instanceof ComponentInfo ? (ComponentInfo)parent: null;
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
@@ -611,12 +590,15 @@ public class Parser {
 					if (parentInfo instanceof NativeInfo) {
 						((NativeInfo)parentInfo).appendChild(
 							new TextInfo(pgdef.getEvaluatorRef(), trimLabel));
-					} else if (textAs != null) {
-						parentInfo.addProperty(textAs, trimLabel, null);
 					} else {
-						if (isTrimLabel() && !parentlang.isRawLabel())
-							label = trimLabel;
-						parentlang.newLabelInfo(parentInfo, label);
+						final String textAs = parentInfo.getTextAs();
+						if (textAs != null) {
+							parentInfo.addProperty(textAs, trimLabel, null);
+						} else {
+							if (isTrimLabel() && !parentlang.isRawLabel())
+								label = trimLabel;
+							parentlang.newLabelInfo(parentInfo, label);
+						}
 					}
 				}
 			}
@@ -672,7 +654,7 @@ public class Parser {
 			if (!(parent instanceof ComponentInfo))
 				throw new UiException("<attribute> cannot be the root element, "+el.getLocator());
 
-			parseAttribute((ComponentInfo)parent, el, annHelper);
+			parseAttribute(pgdef, (ComponentInfo)parent, el, annHelper);
 		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			parseCustomAttributes(parent, el, annHelper);
 		} else if ("variables".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
@@ -865,22 +847,38 @@ public class Parser {
 			parent.appendChild(zs);
 		}
 	}
-	private static void parseAttribute(ComponentInfo parent, Element el,
-	AnnotationHelper annHelper) throws Exception {
-		//if (!el.getElements().isEmpty())
-		//	throw new UiException("Child elements are not allowed for the attribute element, "+el.getLocator());
-
+	private void parseAttribute(PageDefinition pgdef,
+	ComponentInfo parent, Element el, AnnotationHelper annHelper)
+	throws Exception {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException("forEach not applicable to attribute, "+el.getLocator());
 
-		//FUTURE: handling the namespace of if and unless
+		//Test if native content is used
+		boolean bNativeContent = false;
+		for (Iterator it = el.getChildren().iterator(); it.hasNext();)
+			if (it.next() instanceof Element) {
+				bNativeContent = true;
+				break;
+			}
+
 		final String attnm = IDOMs.getRequiredAttributeValue(el, "name");
-		final String trim = el.getAttributeValue("trim");
-		noEL("trim", trim, el);
-		final String attval = el.getText(trim != null && "true".equals(trim));
-		addAttribute(parent, null, attnm, attval,
-			ConditionImpl.getInstance(
-				el.getAttributeValue("if"), el.getAttributeValue("unless")));
+		final ConditionImpl cond = ConditionImpl.getInstance(
+				el.getAttributeValue("if"), el.getAttributeValue("unless"));
+		if (bNativeContent) {
+			if (Events.isValid(attnm))
+				throw new UiException("Event listeners not support native content");
+
+			final NativeInfo nativeInfo = new NativeInfo(
+				parent.getEvaluatorRef(),
+				pgdef.getLanguageDefinition().getNativeDefinition(), "");
+			parse(pgdef, nativeInfo, el.getChildren(), annHelper, true);
+			parent.addProperty(attnm, nativeInfo, cond);
+		} else {
+			final String trim = el.getAttributeValue("trim");
+			noEL("trim", trim, el);
+			final String attval = el.getText(trim != null && "true".equals(trim));
+			addAttribute(parent, null, attnm, attval, cond);
+		}
 
 		annHelper.applyAnnotations(parent, attnm, true);
 	}

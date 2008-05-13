@@ -437,8 +437,7 @@ public class UiEngineImpl implements UiEngine {
 	 * @return the first component being created.
 	 */
 	private static final Component[] execCreate(
-	CreateInfo ci, NodeInfo parentInfo, Component parent)
-	throws IOException {
+	CreateInfo ci, NodeInfo parentInfo, Component parent) {
 		if (parentInfo instanceof ComponentInfo) {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
 			final String fulfill = pi.getFulfill();
@@ -450,8 +449,7 @@ public class UiEngineImpl implements UiEngine {
 		return execCreate0(ci, parentInfo, parent);
 	}
 	private static final Component[] execCreate0(
-	CreateInfo ci, NodeInfo parentInfo, Component parent)
-	throws IOException {
+	CreateInfo ci, NodeInfo parentInfo, Component parent) {
 		final List created = new LinkedList();
 		final Page page = ci.page;
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
@@ -492,8 +490,7 @@ public class UiEngineImpl implements UiEngine {
 		return (Component[])created.toArray(new Component[created.size()]);
 	}
 	private static Component[] execCreateChild(
-	CreateInfo ci, Component parent, ComponentInfo childInfo)
-	throws IOException {
+	CreateInfo ci, Component parent, ComponentInfo childInfo) {
 		final ComponentDefinition childdef = childInfo.getComponentDefinition();
 		if (ComponentDefinition.ZK == childdef) {
 			return execCreate(ci, childInfo, parent);
@@ -503,22 +500,13 @@ public class UiEngineImpl implements UiEngine {
 			childInfo.evalProperties(props, ci.page, parent, true);
 			return new Component[] {
 				ci.exec.createComponents(childdef.getMacroURI(), parent, props)};
-		} else if(childInfo instanceof NativeInfo
-		&& "".equals(childInfo.getTag())) { //"" means native content
-			final StringBuffer sb = new StringBuffer(256);
-			getNativeContent(ci, sb, parent, childInfo.getChildren(),
-				((Native)childInfo.newInstance(ci.page, parent)).getHelper());
-			Property.assign(parent, parent.getDefinition().getTextAs(),
-				sb.toString());
-			return new Component[0];
 		} else {
 			final Component child = execCreateChild0(ci, parent, childInfo);
 			return child != null ? new Component[] {child}: new Component[0];
 		}
 	}
 	private static Component execCreateChild0(
-	CreateInfo ci, Component parent, ComponentInfo childInfo)
-	throws IOException {
+	CreateInfo ci, Component parent, ComponentInfo childInfo) {
 		final Composer composer = childInfo.getComposer(ci.page, parent);
 		final ComposerExt composerExt =
 			composer instanceof ComposerExt ? (ComposerExt)composer: null;
@@ -588,7 +576,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Executes a non-component object, such as ZScript, AttributesInfo...
 	 */
 	private static final void execNonComponent(
-	CreateInfo ci, Component comp, Object meta) throws IOException {
+	CreateInfo ci, Component comp, Object meta) {
 		final Page page = ci.page;
 		if (meta instanceof ZScript) {
 			final ZScript zscript = (ZScript)meta;
@@ -615,10 +603,9 @@ public class UiEngineImpl implements UiEngine {
 			final VariablesInfo vars = (VariablesInfo)meta;
 			if (comp != null) vars.apply(comp); //it handles isEffective
 			else vars.apply(page);
-		} else if (meta instanceof ComponentInfo
-		&& ComponentDefinition.ZK == ((ComponentInfo)meta).getComponentDefinition()) {
-			execCreate(ci, (ComponentInfo)meta, comp);
 		} else {
+			//Note: we don't handle ComponentInfo here, because
+			//getNativeContent assumes no child component
 			throw new IllegalStateException("Unknown metainfo: "+meta);
 		}
 	}
@@ -1445,8 +1432,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Sets the prolog of the specified native component.
 	 */
 	private static final
-	void setProlog(CreateInfo ci, Component comp, NativeInfo compInfo)
-	throws IOException {
+	void setProlog(CreateInfo ci, Component comp, NativeInfo compInfo) {
 		final Native nc = (Native)comp;
 		final Native.Helper helper = nc.getHelper();
 		StringBuffer sb = null;
@@ -1470,8 +1456,7 @@ public class UiEngineImpl implements UiEngine {
 	 * @param comp the native component
 	 */
 	private static final
-	void setEpilog(CreateInfo ci, Component comp, NativeInfo compInfo)
-	throws IOException {
+	void setEpilog(CreateInfo ci, Component comp, NativeInfo compInfo) {
 		final Native nc = (Native)comp;
 		final Native.Helper helper = nc.getHelper();
 		StringBuffer sb = null;
@@ -1491,12 +1476,20 @@ public class UiEngineImpl implements UiEngine {
 			nc.setEpilogContent(
 				sb.append(nc.getEpilogContent()).toString());
 	}
+	public String getNativeContent(Component comp, List children,
+	Native.Helper helper) {
+		final StringBuffer sb = new StringBuffer(256);
+		getNativeContent(
+			new CreateInfo(((WebAppCtrl)_wapp).getUiFactory(),
+				Executions.getCurrent(), comp.getPage()),
+			sb, comp, children, helper);
+		return sb.toString();
+	}
 	/**
 	 * @param comp the native component
 	 */
 	private static final void getNativeContent(CreateInfo ci,
-	StringBuffer sb, Component comp, List children, Native.Helper helper)
-	throws IOException {
+	StringBuffer sb, Component comp, List children, Native.Helper helper) {
 		for (Iterator it = children.iterator(); it.hasNext();) {
 			final Object meta = it.next();
 			if (meta instanceof NativeInfo) {
@@ -1526,8 +1519,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Before calling this method, childInfo.isEffective must be examined
 	 */
 	private static final void getNativeFirstHalf(CreateInfo ci,
-	StringBuffer sb, Component comp, NativeInfo childInfo, Native.Helper helper)
-	throws IOException {
+	StringBuffer sb, Component comp, NativeInfo childInfo, Native.Helper helper) {
 		helper.getFirstHalf(sb, childInfo.getTag(),
 				evalProperties(comp, childInfo.getProperties()),
 				childInfo.getDeclaredNamespaces());
@@ -1543,8 +1535,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Before calling this method, childInfo.isEffective must be examined
 	 */
 	private static final void getNativeSecondHalf(CreateInfo ci,
-	StringBuffer sb, Component comp, NativeInfo childInfo, Native.Helper helper)
-	throws IOException {
+	StringBuffer sb, Component comp, NativeInfo childInfo, Native.Helper helper) {
 		final NativeInfo splitInfo = childInfo.getSplitChild();
 		if (splitInfo != null && splitInfo.isEffective(comp))
 			getNativeSecondHalf(ci, sb, comp, splitInfo, helper); //recursive
