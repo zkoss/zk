@@ -34,9 +34,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</div>
 	<div style="border:1px solid blue">
 	<html>
-	<ol>
-		<li forEach="${values}">${each}</li>
-	</ol>
+	<attribute name="content">
+		<ol>
+			<li forEach="${values}">${each}</li>
+		</ol>
+	</attribute>
 	</html>
 	</div>
 </window>
