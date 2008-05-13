@@ -206,7 +206,7 @@ public class Parser {
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
 		if (root != null)
-			parse(pgdef, pgdef, root, new AnnotationHelper());
+			parse(pgdef, pgdef, root, new AnnotationHelper(), false);
 		return pgdef;
 	}
 	private static Class locateClass(String clsnm) throws Exception {
@@ -563,16 +563,40 @@ public class Parser {
 	}
 
 	/** Parses the specified elements.
+	 * @param bNativeContent whether to consider the child element all native
+	 * It is true if a component definition with text-as is found
 	 */
 	private void parse(PageDefinition pgdef, NodeInfo parent,
-	Collection items, AnnotationHelper annHelper)
+	Collection items, AnnotationHelper annHelper, boolean bNativeContent)
 	throws Exception {
-		final ComponentInfo parentInfo =
-			parent instanceof ComponentInfo ? (ComponentInfo)parent: null;
+		if (items.isEmpty())
+			return;
+
+		ComponentInfo parentInfo;
+		final String textAs;
+		if (parent instanceof ComponentInfo) {
+			parentInfo = (ComponentInfo)parent;
+			textAs = parentInfo.getTextAs();
+			if (!bNativeContent && textAs != null) {
+				for (Iterator it = items.iterator(); it.hasNext();)
+					if (it.next() instanceof Element) {
+						bNativeContent = true;
+						parentInfo = new NativeInfo(parentInfo,
+							pgdef.getLanguageDefinition().getNativeDefinition(),
+							""); //means native content
+						break;
+					}
+			}
+		} else {
+			parentInfo = null;
+			textAs = null;
+		}
+
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
-				parse(pgdef, parent, (Element)o, annHelper);
+				parse(pgdef, bNativeContent ? parentInfo: parent,
+					(Element)o, annHelper, bNativeContent);
 			} else if (o instanceof ProcessingInstruction) {
 				parse(pgdef, (ProcessingInstruction)o);
 			} else if ((o instanceof Text) || (o instanceof CData)) {
@@ -587,15 +611,12 @@ public class Parser {
 					if (parentInfo instanceof NativeInfo) {
 						((NativeInfo)parentInfo).appendChild(
 							new TextInfo(pgdef.getEvaluatorRef(), trimLabel));
+					} else if (textAs != null) {
+						parentInfo.addProperty(textAs, trimLabel, null);
 					} else {
-						final String textAs = parentInfo.getTextAs();
-						if (textAs != null) {
-							parentInfo.addProperty(textAs, trimLabel, null);
-						} else {
-							if (isTrimLabel() && !parentlang.isRawLabel())
-								label = trimLabel;
-							parentlang.newLabelInfo(parentInfo, label);
-						}
+						if (isTrimLabel() && !parentlang.isRawLabel())
+							label = trimLabel;
+						parentlang.newLabelInfo(parentInfo, label);
 					}
 				}
 			}
@@ -634,9 +655,11 @@ public class Parser {
 	}
 
 	/** Parse an component definition specified in the given element.
+	 * @param bNativeContent whether to consider the child element all native
+	 * It is true if a component definition with text-as is found
 	 */
 	private void parse(PageDefinition pgdef, NodeInfo parent,
-	Element el, AnnotationHelper annHelper)
+	Element el, AnnotationHelper annHelper, boolean bNativeContent)
 	throws Exception {
 		final String nm = el.getLocalName();
 		final Namespace ns = el.getNamespace();
@@ -660,13 +683,18 @@ public class Parser {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 			final ComponentInfo compInfo;
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+				if (bNativeContent)
+					throw new UnsupportedOperationException("<zk> cannot be used in the native content");
+					//not yet: we have to enhance UiEngineImpl's
+					//getNativeContent to support <zk>
+
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 				compInfo = new ComponentInfo(parent, ComponentDefinition.ZK); 
 			} else {
 				boolean prefRequired =
 					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
-				boolean bNative = prefRequired ||
+				boolean bNative = bNativeContent || prefRequired ||
 					LanguageDefinition.NATIVE_NAMESPACE.equals(uri);
 
 				if (!bNative && langdef.isNative()
@@ -780,7 +808,7 @@ public class Parser {
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
 			annHelper.applyAnnotations(compInfo, null, true);
 
-			parse(pgdef, compInfo, el.getChildren(), annHelper); //recursive
+			parse(pgdef, compInfo, el.getChildren(), annHelper, bNativeContent); //recursive
 
 			//optimize native components
 			if (compInfo instanceof NativeInfo

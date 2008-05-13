@@ -503,6 +503,14 @@ public class UiEngineImpl implements UiEngine {
 			childInfo.evalProperties(props, ci.page, parent, true);
 			return new Component[] {
 				ci.exec.createComponents(childdef.getMacroURI(), parent, props)};
+		} else if(childInfo instanceof NativeInfo
+		&& "".equals(childInfo.getTag())) { //"" means native content
+			final StringBuffer sb = new StringBuffer(256);
+			getNativeContent(ci, sb, parent, childInfo.getChildren(),
+				((Native)childInfo.newInstance(ci.page, parent)).getHelper());
+			Property.assign(parent, parent.getDefinition().getTextAs(),
+				sb.toString());
+			return new Component[0];
 		} else {
 			final Component child = execCreateChild0(ci, parent, childInfo);
 			return child != null ? new Component[] {child}: new Component[0];
@@ -580,7 +588,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Executes a non-component object, such as ZScript, AttributesInfo...
 	 */
 	private static final void execNonComponent(
-	CreateInfo ci, Component comp, Object meta) {
+	CreateInfo ci, Component comp, Object meta) throws IOException {
 		final Page page = ci.page;
 		if (meta instanceof ZScript) {
 			final ZScript zscript = (ZScript)meta;
@@ -607,6 +615,9 @@ public class UiEngineImpl implements UiEngine {
 			final VariablesInfo vars = (VariablesInfo)meta;
 			if (comp != null) vars.apply(comp); //it handles isEffective
 			else vars.apply(page);
+		} else if (meta instanceof ComponentInfo
+		&& ComponentDefinition.ZK == ((ComponentInfo)meta).getComponentDefinition()) {
+			execCreate(ci, (ComponentInfo)meta, comp);
 		} else {
 			throw new IllegalStateException("Unknown metainfo: "+meta);
 		}
@@ -1434,19 +1445,21 @@ public class UiEngineImpl implements UiEngine {
 	/** Sets the prolog of the specified native component.
 	 */
 	private static final
-	void setProlog(CreateInfo ci, Component comp, NativeInfo compInfo) {
+	void setProlog(CreateInfo ci, Component comp, NativeInfo compInfo)
+	throws IOException {
 		final Native nc = (Native)comp;
+		final Native.Helper helper = nc.getHelper();
 		StringBuffer sb = null;
 		final List prokids = compInfo.getPrologChildren();
 		if (!prokids.isEmpty()) {
 			sb = new StringBuffer(256);
-			getNativeContent(ci, sb, comp, prokids);
+			getNativeContent(ci, sb, comp, prokids, helper);
 		}
 
 		final NativeInfo splitInfo = compInfo.getSplitChild();
 		if (splitInfo != null && splitInfo.isEffective(comp)) {
 			if (sb == null) sb = new StringBuffer(256);
-			getNativeFirstHalf(ci, sb, comp, splitInfo);
+			getNativeFirstHalf(ci, sb, comp, splitInfo, helper);
 		}
 
 		if (sb != null && sb.length() > 0)
@@ -1457,19 +1470,21 @@ public class UiEngineImpl implements UiEngine {
 	 * @param comp the native component
 	 */
 	private static final
-	void setEpilog(CreateInfo ci, Component comp, NativeInfo compInfo) {
+	void setEpilog(CreateInfo ci, Component comp, NativeInfo compInfo)
+	throws IOException {
 		final Native nc = (Native)comp;
+		final Native.Helper helper = nc.getHelper();
 		StringBuffer sb = null;
 		final NativeInfo splitInfo = compInfo.getSplitChild();
 		if (splitInfo != null && splitInfo.isEffective(comp)) {
 			sb = new StringBuffer(256);
-			getNativeSecondHalf(ci, sb, comp, splitInfo);
+			getNativeSecondHalf(ci, sb, comp, splitInfo, helper);
 		}
 
 		final List epikids = compInfo.getEpilogChildren();
 		if (!epikids.isEmpty()) {
 			if (sb == null) sb = new StringBuffer(256);
-			getNativeContent(ci, sb, comp, epikids);
+			getNativeContent(ci, sb, comp, epikids, helper);
 		}
 
 		if (sb != null && sb.length() > 0)
@@ -1480,7 +1495,8 @@ public class UiEngineImpl implements UiEngine {
 	 * @param comp the native component
 	 */
 	private static final void getNativeContent(CreateInfo ci,
-	StringBuffer sb, Component comp, List children) {
+	StringBuffer sb, Component comp, List children, Native.Helper helper)
+	throws IOException {
 		for (Iterator it = children.iterator(); it.hasNext();) {
 			final Object meta = it.next();
 			if (meta instanceof NativeInfo) {
@@ -1488,20 +1504,20 @@ public class UiEngineImpl implements UiEngine {
 				final ForEach forEach = childInfo.getForEach(ci.page, comp);
 				if (forEach == null) {
 					if (childInfo.isEffective(comp)) {
-						getNativeFirstHalf(ci, sb, comp, childInfo);
-						getNativeSecondHalf(ci, sb, comp, childInfo);
+						getNativeFirstHalf(ci, sb, comp, childInfo, helper);
+						getNativeSecondHalf(ci, sb, comp, childInfo, helper);
 					}
 				} else {
 					while (forEach.next()) {
 						if (childInfo.isEffective(comp)) {
-							getNativeFirstHalf(ci, sb, comp, childInfo);
-							getNativeSecondHalf(ci, sb, comp, childInfo);
+							getNativeFirstHalf(ci, sb, comp, childInfo, helper);
+							getNativeSecondHalf(ci, sb, comp, childInfo, helper);
 						}
 					}
 				}
 			} else if (meta instanceof TextInfo) {
 				final String s = ((TextInfo)meta).getValue(comp);
-				((Native)comp).getHelper().appendText(sb, s);
+				helper.appendText(sb, s);
 			} else {
 				execNonComponent(ci, comp, meta);
 			}
@@ -1510,33 +1526,34 @@ public class UiEngineImpl implements UiEngine {
 	/** Before calling this method, childInfo.isEffective must be examined
 	 */
 	private static final void getNativeFirstHalf(CreateInfo ci,
-	StringBuffer sb, Component comp, NativeInfo childInfo) {
-		((Native)comp).getHelper()
-			.getFirstHalf(sb, childInfo.getTag(),
+	StringBuffer sb, Component comp, NativeInfo childInfo, Native.Helper helper)
+	throws IOException {
+		helper.getFirstHalf(sb, childInfo.getTag(),
 				evalProperties(comp, childInfo.getProperties()),
 				childInfo.getDeclaredNamespaces());
 
 		final List prokids = childInfo.getPrologChildren();
 		if (!prokids.isEmpty())
-			getNativeContent(ci, sb, comp, prokids);
+			getNativeContent(ci, sb, comp, prokids, helper);
 
 		final NativeInfo splitInfo = childInfo.getSplitChild();
 		if (splitInfo != null && splitInfo.isEffective(comp))
-			getNativeFirstHalf(ci, sb, comp, splitInfo); //recursive
+			getNativeFirstHalf(ci, sb, comp, splitInfo, helper); //recursive
 	}
 	/** Before calling this method, childInfo.isEffective must be examined
 	 */
 	private static final void getNativeSecondHalf(CreateInfo ci,
-	StringBuffer sb, Component comp, NativeInfo childInfo) {
+	StringBuffer sb, Component comp, NativeInfo childInfo, Native.Helper helper)
+	throws IOException {
 		final NativeInfo splitInfo = childInfo.getSplitChild();
 		if (splitInfo != null && splitInfo.isEffective(comp))
-			getNativeSecondHalf(ci, sb, comp, splitInfo); //recursive
+			getNativeSecondHalf(ci, sb, comp, splitInfo, helper); //recursive
 
 		final List epikids = childInfo.getEpilogChildren();
 		if (!epikids.isEmpty())
-			getNativeContent(ci, sb, comp, epikids);
+			getNativeContent(ci, sb, comp, epikids, helper);
 
-		((Native)comp).getHelper().getSecondHalf(sb, childInfo.getTag());
+		helper.getSecondHalf(sb, childInfo.getTag());
 	}
 	/** Returns a map of properties, (String name, String value).
 	 */

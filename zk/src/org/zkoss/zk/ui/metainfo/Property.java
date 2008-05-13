@@ -108,19 +108,7 @@ implements Condition, java.io.Serializable {
 			}
 		} else {
 		//Note: String has higher priority
-			try {
-				_mtd = Classes.getCloseMethod(
-					cls, mtdnm, new Class[] {String.class});
-			} catch (NoSuchMethodException ex) {
-				try {
-					_mtd = Classes.getCloseMethod(
-						cls, mtdnm, new Class[] {null});
-				} catch (NoSuchMethodException e2) {
-					if (!DynamicPropertied.class.isAssignableFrom(cls))
-						throw new PropertyNotFoundException("Method, "+mtdnm+", not found for "+cls);
-					_mtd = null;
-				}
-			}
+			_mtd = resolveMethod0(cls, mtdnm);
 		}
 	}
 
@@ -199,5 +187,66 @@ implements Condition, java.io.Serializable {
 	}
 	public String toString() {
 		return "["+_name+"="+_value+']';
+	}
+
+	//static utilities//
+	/** Resloves the method for the specified property, or null
+	 * if {@link DynamicPropertied#setDynamicProperty} shall be used instead.
+	 *
+	 * <p>Use this method to retrieve the method when you want to assign a value
+	 * to a component's property.
+	 *
+	 * <p>Don't use the reflection directly since this method searches
+	 * more signatures.
+	 * @param name the property name, such as "title".
+	 * @exception PropertyNotFoundException if the property is not found,
+	 * i.e., no corresponding method and {@link DynamicPropertied} not
+	 * implmented.
+	 * @since 3.1.0
+	 */
+	public static final Method resolveMethod(Class cls, String name)
+	throws PropertyNotFoundException {
+		return resolveMethod0(cls, Classes.toMethodName(name, "set"));
+	}
+	private static final Method resolveMethod0(Class cls, String mtdnm)
+	throws PropertyNotFoundException {
+		try {
+			return Classes.getCloseMethod(
+				cls, mtdnm, new Class[] {String.class});
+		} catch (NoSuchMethodException ex) {
+			try {
+				return Classes.getCloseMethod(
+					cls, mtdnm, new Class[] {null});
+			} catch (NoSuchMethodException e2) {
+				if (!DynamicPropertied.class.isAssignableFrom(cls))
+					throw new PropertyNotFoundException("Method, "+mtdnm+", not found for "+cls);
+				return null;
+			}
+		}
+	}
+	/** Assigns a property.
+	 *
+	 * <p>Don't use the refelction directly since this method searches
+	 * more signatures.
+	 *
+	 * @exception PropertyNotFoundException if the property is not found,
+	 * i.e., no corresponding method and {@link DynamicPropertied} not
+	 * implmented.
+	 * @exception UiException if fail to assign
+	 * @since 3.1.0
+	 */
+	public static final void assign(Component comp, String name, String value) {
+		final Method mtd = resolveMethod(comp.getClass(), name);
+		if (mtd != null) {
+			try {
+				Object val = Classes.coerce(mtd.getParameterTypes()[0], value);
+				mtd.invoke(comp, new Object[] {val});
+			} catch (Exception ex) {
+				log.error("Failed to assign "+value+" to "+comp+"\n"+Exceptions.getMessage(ex));
+				throw UiException.Aide.wrap(ex);
+			}
+		} else {
+			((DynamicPropertied)comp).setDynamicProperty(name, value);
+		}
 	}
 }
