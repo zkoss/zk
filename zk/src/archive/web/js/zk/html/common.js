@@ -307,7 +307,14 @@ zk.revisedOffset = function (el, ofs) {
 	if(!ofs) {
 		if (el.getBoundingClientRect){ // IE
 			var b = el.getBoundingClientRect();
-			return [b.left + zk.innerX() - 2 , b.top + zk.innerY() - 2];
+			return [b.left + zk.innerX() - el.ownerDocument.documentElement.clientLeft,
+				b.top + zk.innerY() - el.ownerDocument.documentElement.clientTop];
+			// IE adds the HTML element's border, by default it is medium which is 2px
+			// IE 6 and 7 quirks mode the border width is overwritable by the following css html { border: 0; }
+			// IE 7 standards mode, the border is always 2px
+			// This border/offset is typically represented by the clientLeft and clientTop properties
+			// However, in IE6 and 7 quirks mode the clientLeft and clientTop properties are not updated when overwriting it via CSS
+			// Therefore this method will be off by 2px in IE while in quirksmode
 		}
 		ofs = Position.cumulativeOffset(el);
 	}
