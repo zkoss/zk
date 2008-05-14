@@ -807,7 +807,7 @@ zk.ald = function () {
 			zk.error("Failed to stop counting. "+ex.message);
 		}
 		
-		if (zk._ready) zk._evalInit(); //zk._loadAndInit mihgt not finish
+		if (zk._ready) zk._evalInit(); //zk._loadAndInit might not finish
 	}
 };
 zk._updCnt = function () {
