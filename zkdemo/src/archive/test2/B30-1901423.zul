@@ -44,7 +44,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<button label="Align" >
 	<attribute name="onClick">
 	List innerList = practice.getModel().getInnerList();
-	practice.setModel(ListModelList.instance(innerList));
+	practice.setModel(new ListModelList(innerList, true));
 	practice.getModel().add(new Date());
 	
 	</attribute>
@@ -73,7 +73,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<button label="Align" >
 	<attribute name="onClick">
 	List innerList1 = practice1.getModel().getInnerList();
-	practice1.setModel(ListModelList.instance(innerList1));
+	practice1.setModel(new ListModelList(innerList1, true));
 	practice1.getModel().add(new Date());
 	
 	</attribute>
