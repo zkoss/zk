@@ -27,6 +27,7 @@ ZK 3.1.0
   1944729: Windows and boxes inside tab panels
   1911280: Borderlayout and iframe issue
   1958774: cannot create tree with all treeitem branches opened
+  1962220: datebox: when 31th of May selected, select June - shows July
 
 * Upgrade Notes
   + The smartUpdate, response, onChildAdded, onChildRemoved and
