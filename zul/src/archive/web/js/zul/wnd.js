@@ -698,12 +698,35 @@ zkWnd._float = function (cmp) {
 			handle.style.cursor = "move";
 			cmp.style.position = "absolute"; //just in case
 			zul.initMovable(cmp, {
-				handle: handle, starteffect: zkWnd._startMove,
-				change: zkau.hideCovered, overlay: true,
+				handle: handle, starteffect: zkWnd._startMove, overlay: true,
+				change: zkau.hideCovered, ghosting: zkWnd._ghostmove, 
 				ignoredrag: zkWnd._ignoremove,
 				endeffect: zkWnd._onWndMove});
 			//we don't use options.change because it is called too frequently
 		}
+	}
+};
+/* @param ghosting whether to create or remove the ghosting
+ */
+zkWnd._ghostmove = function (dg, ghosting, pointer) {
+	if (ghosting) {
+		var ofs = zkau.beginGhostToDIV(dg), el  = dg.element.cloneNode(true);
+		el.id = "zk_ddghost";
+		el.className = "move-win-ghost";
+		el.style.top = ofs[1] + "px";
+		el.style.left = ofs[0] + "px";
+		document.body.appendChild(el);
+		dg.element.style.visibility = "hidden";
+		dg.element = $e("zk_ddghost");
+		document.body.style.cursor = "move";
+	} else {
+		var org = zkau.getGhostOrgin(dg);
+		if (org) {
+			org.style.top = dg.element.offsetTop + "px";
+			org.style.left = dg.element.offsetLeft + "px";
+		}
+		zkau.endGhostToDIV(dg);
+		document.body.style.cursor = "";
 	}
 };
 zkWnd._ignoremove = function (cmp, pointer, event) {
@@ -731,6 +754,7 @@ zkWnd._stick = function (cmp) {
 
 /** Called back when overlapped and popup is moved. */
 zkWnd._onWndMove = function (cmp, evt) {
+	cmp.style.visibility = "";
 	var keys = "";
 	if (evt) {
 		if (evt.altKey) keys += 'a';

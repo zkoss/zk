@@ -67,6 +67,10 @@ td.gamma {background: #F4F4F4;}
 	top: 0; z-index: 50000; background-color: #CBDDF3; filter: alpha(opacity=50); <%-- IE --%>
 	opacity: .5;
 }
+.move-win-ghost {
+	overflow: hidden; position: absolute; filter: alpha(opacity=65) !important; <%-- IE --%>
+	opacity: .65 !important;
+}
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {
