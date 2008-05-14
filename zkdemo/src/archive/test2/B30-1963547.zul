@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1963547.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 14 12:26:37     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Adding the first child to a paging listbox">
+Clicks the Test button and an list item shall be added.
+	<listbox width="250px" mold="paging" id="list"/>
+	<button label="Test" onClick='new Listitem("tt").parent=list;'/>
+</window>
