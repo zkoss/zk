@@ -859,7 +859,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (Components.isAncestor(child, parent))
 				throw new UiException("A child cannot be a parent of its ancestor: "+child);
 			if (!parent.isChildable())
-				throw new UiException(parent+" doesn't allow any child");
+				throw new UiException(parent+" doesn't allow any child, "+child);
 
 			final Page parentpg = parent.getPage(), childpg = child.getPage();
 			if (parentpg != null && childpg != null
