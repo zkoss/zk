@@ -992,6 +992,8 @@ zk._evalInit = function () {
 	} while (!zk.loading && (zk._bfinits.length || zk._initcmps.length
 	|| zk._initfns.length));
 	//Bug 1815074: _initfns might cause _bfinits to be added
+	zkau.doQueResps();
+		// just in case, if responses are not processed yet.
 };
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
