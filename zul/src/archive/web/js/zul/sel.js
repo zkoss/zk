@@ -45,16 +45,17 @@ _zkselx._addChd = function (uuid, cmp, html) {
 	var h = html.trim(), from = h.indexOf("Lit");
 	var isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">");
 	if (isLit && $type(cmp) != "Lit") { // only first listitem.
-		var head = $parentByTag(cmp, "DIV");
-		var cave = $e($uuid(head) + "!cave");	
-		if (cave.tBodies[1].rows.length) {
-			var n = cave.tBodies[1].rows[0];
+		var head = $parentByTag(cmp.parentNode, "DIV"), cave = $e($uuid(head) + "!cave");
+		if (!cave) return false; // no listbody	
+		var tBody = cave.tBodies[cave.tBodies.length-1];
+		if (tBody.rows.length) {
+			var n = tBody.rows[0];
 			var to = n.previousSibling;
 			zk.insertHTMLBefore(n, html);
 			zkau._initSibs(n, to, false);
 		} else {
-			zk.insertHTMLBeforeEnd(cave.tBodies[1], html);			
-			zkau._initChildren(cave.tBodies[1]);
+			zk.insertHTMLBeforeEnd(tBody, html);			
+			zkau._initChildren(tBody);
 		}
 		return true;
 	}
