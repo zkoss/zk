@@ -203,7 +203,7 @@ zk.Cal.prototype = {
 	_onmonclk: function (cell) {
 		if (!zkCal._seled(cell)) { //!selected
 			var y = this.date.getFullYear(), d = this.date.getDate();
-			this.date = new Date(y, zk.getIntAttr(cell, "zk_mon"), d);
+			this._setDateMonChg(y, zk.getIntAttr(cell, "zk_mon"), d);
 			this._output();
 			this._onupdate(false);
 		}
@@ -218,9 +218,19 @@ zk.Cal.prototype = {
 	_onmonofs: function (ofs) {
 		var y = this.date.getFullYear(), m = this.date.getMonth(),
 			d = this.date.getDate();
-		this.date = new Date(y, m + ofs, d);
+		this._setDateMonChg(y, m + ofs, d);
 		this._output();
 		this._onupdate(false);
+	},
+	/** Sets date caused by the change of month (it fixed 6/31 issue).
+	 */
+	_setDateMonChg: function (y, m, d) {
+		this.date = new Date(y, m, d);
+		if (m >= 0) { //just in case
+			m %= 12;
+			while (this.date.getMonth() != m) //6/31 -> 7/1
+				this.date = new Date(y, m, --d);
+		}
 	},
 	setDate: function (val) {
 		if (val != this.date) {
