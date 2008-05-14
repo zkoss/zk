@@ -312,8 +312,9 @@ public class Window extends XulElement implements IdSpace {
 	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n</dd>
 	 * <dt>@k</dt>
 	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n</dd>
-	 * <dt>$k</dt>
-	 * <dd>A shift key, i.e., Shift+k, where k could be #n</dd>
+	 * <dt>$n</dt>
+	 * <dd>A shift key, i.e., Shift+n, where n could be #n.
+	 * Note: $a ~ $z are not supported.</dd>
 	 * <dt>#home</dt>
 	 * <dd>Home</dd>
 	 * <dt>#end</dt>
@@ -430,7 +431,7 @@ public class Window extends XulElement implements IdSpace {
 				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
 					throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
 				if (sbcur == sbsft)
-					throw new WrongValueException("$"+cc+" not supported: "+keys);
+					throw new WrongValueException("$a - $z not supported ("+keys+"). Supported includes $#f1, $#home and so on.");
 
 				if (cc <= 'Z' && cc >= 'A')
 					cc = (char)(cc + ('a' - 'A')); //to lower case
