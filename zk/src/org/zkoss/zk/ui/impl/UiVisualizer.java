@@ -328,13 +328,14 @@ import org.zkoss.zk.au.out.*;
 
 	/** Process {@link Cropper} by removing cropped invalidates and so on.
 	 */
-	private void doCrop() {
+	private Map doCrop() {
 		final Map croppingInfos = new HashMap();
 		crop(_attached, croppingInfos, false);
 		crop(_smartUpdated.keySet(), croppingInfos, false);
 		if (_responses != null)
 			crop(_responses.keySet(), croppingInfos, true);
 		crop(_invalidated, croppingInfos, false);
+		return croppingInfos;
 	}
 	/** Crop attached and moved.
 	 */
@@ -360,6 +361,8 @@ import org.zkoss.zk.au.out.*;
 			}
 		}
 	}
+	/** Returns the available children, or null if no cropping.
+	 */
 	private static Set getAvailableAtClient(Component comp, Map croppingInfos) {
 		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
 		if (xc instanceof Cropper) {
@@ -495,6 +498,7 @@ import org.zkoss.zk.au.out.*;
 		final List responses = new LinkedList();
 
 		//1. process dead comonents, cropping and the removed page
+		final Map croppingInfos;
 		{
 			//1a. handle _moved
 			//The reason to remove first: some insertion might fail if the old
@@ -510,7 +514,7 @@ import org.zkoss.zk.au.out.*;
 			removeCrossRedundant();
 
 			//1c. process Cropper
-			doCrop();
+			croppingInfos = doCrop();
 
 			//1d. prepare removed pages and optimize for invalidate or removed pages
 			checkPageRemoved(removed); //maintain _pgRemoved for pages being removed
@@ -595,7 +599,7 @@ import org.zkoss.zk.au.out.*;
 		}
 		for (Iterator it = desktops.iterator(); it.hasNext();) {
 			final Set newsibs = (Set)it.next();
-			addResponsesForCreatedPerSiblings(responses, newsibs);
+			addResponsesForCreatedPerSiblings(responses, newsibs, croppingInfos);
 		}
 
 		//7. Adds smart updates and response at once based on their time stamp
@@ -677,8 +681,8 @@ import org.zkoss.zk.au.out.*;
 	 * parent is changed).
 	 */
 	private static
-	void addResponsesForCreatedPerSiblings(List responses, Set newsibs)
-	throws IOException {
+	void addResponsesForCreatedPerSiblings(List responses, Set newsibs,
+	Map croppingInfos) throws IOException {
 		final Component parent;
 		final Page page;
 		{
@@ -686,9 +690,11 @@ import org.zkoss.zk.au.out.*;
 			parent = comp.getParent();
 			page = comp.getPage();
 		}
-		final Collection sibs;
+		Collection sibs;
 		if (parent != null) {
-			sibs = parent.getChildren();
+			sibs = getAvailableAtClient(parent, croppingInfos);
+			if (sibs == null) //no cropping
+				sibs = parent.getChildren();
 		} else {
 			sibs = page.getRoots();
 		}
