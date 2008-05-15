@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-native.zul
+Z30-native.zul
 
 {{IS_NOTE
 	Purpose:
@@ -19,6 +19,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <window id="wnd" title="Test of inline html tags"
 xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<zscript>
+	String[] values = new String[] {"Red", "Blue", "Purple"};
+	</zscript>
 	<n:ul>
 		 <n:li id="direct"><!-- inline's id shall not be part of ID space -->
 		 	Some random text shall be consider part of inline.
@@ -40,6 +43,12 @@ xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:ul>
 		<n:li><n:code>Codes: <textbox/></n:code></n:li>
 	</n:ul>
+	<n:ol>
+		<n:li forEach="${values}">${each}</n:li>
+	</n:ol>
+	<n:div style="border:1px solid blue">
+		<zk forEach="${values}"><n:b>o</n:b> ${each}</zk>
+	</n:div>
 
 	<svg width="100%" height="100%" version="1.1" xmlns="native:http://www.w3.org/2000/svg">
 		<ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/>
