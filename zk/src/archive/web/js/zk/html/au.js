@@ -717,19 +717,24 @@ zkau.doQueResps = function () {
 };
 /** Process the specified response in XML. */
 zkau._doResps = function (cmds) {
-	while (cmds && cmds.length) {
-		if (zk.loading)
-			return false;
+	var processed;
+	try {
+		while (cmds && cmds.length) {
+			if (zk.loading)
+				return false;
 
-		var cmd = cmds.shift();
-		try {
-			zkau.process(cmd.cmd, cmd.data);
-		} catch (e) {
-			onProcessError("FAILED_TO_PROCESS", null, cmd.cmd, e);
-			throw e;
-		} finally {
-			zkau._evalOnResponse();
+			processed = true;
+			var cmd = cmds.shift();
+			try {
+				zkau.process(cmd.cmd, cmd.data);
+			} catch (e) {
+				onProcessError("FAILED_TO_PROCESS", null, cmd.cmd, e);
+				throw e;
+			}
 		}
+	} finally {
+		if (processed && (!cmds || !cmds.length))
+			zkau._evalOnResponse();
 	}
 	return true;
 };
