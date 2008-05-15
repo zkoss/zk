@@ -78,12 +78,6 @@ public class NativeInfo extends ComponentInfo {
 		_dns.add(ns);
 	}
 
-	/** Adds a Sting child.
-	 */
-	public void appendChild(TextInfo text) {
-		appendChildDirectly(text);
-	}
-
 	/** Returns a readonly list of the prolog children ({@link NativeInfo}).
 	 * A prolog child is a special child of {@link NativeInfo}.
 	 * (it is not part of {@link #getChildren}

@@ -60,4 +60,8 @@ public class TextInfo extends EvalRefStub implements java.io.Serializable {
 	public String getValue(Component comp) {
 		return _text != null ? (String)_text.getValue(_evalr, comp): null;
 	}
+
+	public String toString() {
+		return "[TextInfo: " + _text + ']';
+	}
 }

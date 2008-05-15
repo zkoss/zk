@@ -606,7 +606,7 @@ public class UiEngineImpl implements UiEngine {
 		} else {
 			//Note: we don't handle ComponentInfo here, because
 			//getNativeContent assumes no child component
-			throw new IllegalStateException("Unknown metainfo: "+meta);
+			throw new IllegalStateException(meta+" not allowed in "+comp);
 		}
 	}
 	private static final boolean isEffective(Condition cond,
@@ -1511,6 +1511,20 @@ public class UiEngineImpl implements UiEngine {
 			} else if (meta instanceof TextInfo) {
 				final String s = ((TextInfo)meta).getValue(comp);
 				helper.appendText(sb, s);
+			} else if (meta instanceof ComponentInfo
+			&& ComponentDefinition.ZK == ((ComponentInfo)meta).getComponentDefinition()) {
+				ComponentInfo compInfo = (ComponentInfo)meta;
+				final ForEach forEach = compInfo.getForEach(ci.page, comp);
+				if (forEach == null) {
+					if (isEffective(compInfo, ci.page, comp))
+						getNativeContent(ci, sb, comp,
+							compInfo.getChildren(), helper);
+				} else {
+					while (forEach.next())
+						if (isEffective(compInfo, ci.page, comp))
+							getNativeContent(ci, sb, comp,
+								compInfo.getChildren(), helper);
+				}
 			} else {
 				execNonComponent(ci, comp, meta);
 			}

@@ -587,9 +587,21 @@ public class Parser {
 					parentlang = pgdef.getLanguageDefinition();
 
 				if (trimLabel.length() > 0) { //consider as a label
-					if (parentInfo instanceof NativeInfo) {
-						((NativeInfo)parentInfo).appendChild(
-							new TextInfo(pgdef.getEvaluatorRef(), trimLabel));
+					ComponentInfo pi = parentInfo;
+					while (ComponentDefinition.ZK == pi.getComponentDefinition()) {
+						NodeInfo n = pi.getParent();
+						if (n instanceof ComponentInfo) {
+							pi = (ComponentInfo)n;
+						} else {
+							pi = null;
+							break;
+						}
+					}
+
+					if (pi instanceof NativeInfo) {
+						parentInfo.appendChild(
+							new TextInfo(pgdef.getEvaluatorRef(), label));
+							//Don't trim if native (3.1.0)
 					} else {
 						final String textAs = parentInfo.getTextAs();
 						if (textAs != null) {
@@ -665,11 +677,6 @@ public class Parser {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 			final ComponentInfo compInfo;
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-				if (bNativeContent)
-					throw new UnsupportedOperationException("<zk> cannot be used in the native content");
-					//not yet: we have to enhance UiEngineImpl's
-					//getNativeContent to support <zk>
-
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 				compInfo = new ComponentInfo(parent, ComponentDefinition.ZK); 

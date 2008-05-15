@@ -151,6 +151,21 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _compdef;
 	}
 
+	/** Adds a Sting child.
+	 * Note: it is callable only if this is an instance of {@link NativeInfo}
+	 * or {@link #getComponentDefinition} is {@link ComponentDefinition#ZK}.
+	 *
+	 * @exception IllegalStateException if this is not an instance of
+	 * {@link NativeInfo}, nor {@link #getComponentDefinition} is not
+	 * {@link ComponentDefinition#ZK}.
+	 * @since 3.1.0
+	 */
+	public void appendChild(TextInfo text) {
+		if (!(this instanceof NativeInfo) && _compdef != ComponentDefinition.ZK)
+			throw new IllegalStateException("NativeInfo or <zk> required");
+		appendChildDirectly(text);
+	}
+
 	/** Returns the tag name, or null if no tag name.
 	 * @since 3.0.0
 	 */
