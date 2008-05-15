@@ -108,6 +108,38 @@ if (zk.ie) {
 
 //////
 // More zk utilities (defined also in boot.js) //
+/**
+ * Applies the indicator mark over the specified element. 
+ * @param {Object/String} rel a related object
+ * @param (String) message a message.
+ * @since 3.1.0
+ */
+zk.applyMark = function (rel, message) {
+	if (typeof rel == "string") rel = $e(rel);
+	if (!rel || !zk.isRealVisible(rel, true)) return; //nothing do to.
+	var progbox = $e(rel.id + "!progbox");
+	if (progbox) return;
+	if (!message) message = "Update...";
+	var n = document.createElement("DIV");
+	document.body.appendChild(n);
+	var xy = zk.revisedOffset(rel), 
+		w = zk.offsetWidth(rel),
+		h = zk.offsetHeight(rel),
+		html = '<div id="'+rel.id+'!progbox" style="visibility:hidden"><div class="modal_mask" style="display:block;top:' + xy[1]
+			+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
+			+ '<div id="'+rel.id+'!z-loading" class="z-loading">'
+			+ '<div class="z-loading-indicator">'
+			+ '<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
+			+ message+'</div></div></div>';
+	zk.setOuterHTML(n, html);
+	var loading = $e(rel.id+"!z-loading"), progbox = $e(rel.id + "!progbox");
+	if (loading) {
+		loading.style.top = (xy[1] + ((h - zk.offsetHeight(loading)) /2)) + "px";
+		loading.style.left = (xy[0] + ((w - zk.offsetWidth(loading)) /2)) + "px";
+	}
+	progbox.style.visibility = "";
+	return progbox;
+};
 /** Override a method of the specified object.
  *
  * Example:
