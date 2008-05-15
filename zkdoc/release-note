@@ -4,7 +4,6 @@ ZK 3.1.0
   1907300: Listbox: support grouping
   1959952: Support Comet-based Server Push
   1951422: Grid: support grouping
-  1959959: An option to allow user to refresh if an error
   1962747: Allow to specify a XML fragment as compnent's content
   1901211: Simplify the outline of Menu component with single TD
   1925928: Add Spinner Component
@@ -22,9 +21,6 @@ ZK 3.1.0
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
-  1955452: Liferay Failed if two portlets from different Web apps
-  1957661: Page.addFunctionMapper() fails
-  1963607: Fail to invoke loadAll() when Databind with Paging of Grid
   1944729: Windows and boxes inside tab panels
   1911280: Borderlayout and iframe issue
   1958774: cannot create tree with all treeitem branches opened
