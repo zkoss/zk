@@ -41,7 +41,7 @@ if (!window.Droppable_effect) { //define it only if not customized
  * @param msg2 the additional message (optional)
  * @param cmd the command (optional)
  * @param ex the exception (optional)
- * @since 3.1.0
+ * @since 3.0.6
  */
 if (!window.onProcessError) {
 	window.onProcessError = function (msgCode, msg2, cmd, ex) {
@@ -92,13 +92,13 @@ zkau.dtid = function (n) {
 	return null;
 };
 /** Returns the URI of the update engine.
- * @since 3.1.0
+ * @since 3.0.6
  */
 zkau.uri = function (dtid) {
 	return zkau._dtids.length <= 1 || !dtid ? zkau._uri: zkau._uris[dtid];
 };
 /** Adds the update engine's UIR for the specified destkop.
- * @since 3.1.0
+ * @since 3.0.6
  */
 zkau.addURI = function (dtid, uri) {
 	zkau._uris[dtid] = uri;
@@ -358,7 +358,7 @@ zkau._onRespReady = function () {
 	zkau._checkProgress();
 };
 /** Parses a XML response.
- * @since 3.1.0
+ * @since 3.0.6
  */
 zkau.parseXmlResp = function (xml) {
 	if (!xml) return null; //invalid
@@ -1612,7 +1612,7 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 	zkau.send({uuid: el.id, cmd: "onClose"}, 5);
 };
 /** Ask the server to redraw all desktops on the browser.
- * @since 3.1.0
+ * @since 3.0.6
  */
 zkau.sendRedraw = function () {
 	zk.errorDismiss();
