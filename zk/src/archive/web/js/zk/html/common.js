@@ -109,12 +109,12 @@ if (zk.ie) {
 //////
 // More zk utilities (defined also in boot.js) //
 /**
- * Applies the indicator mark over the specified element. 
+ * Applies the indicator mask over the specified element. 
  * @param {Object/String} rel a related object
  * @param (String) message a message.
  * @since 3.1.0
  */
-zk.applyMark = function (rel, message) {
+zk.applyMask = function (rel, message) {
 	if (typeof rel == "string") rel = $e(rel);
 	if (!rel || !zk.isRealVisible(rel, true)) return; //nothing do to.
 	var progbox = $e(rel.id + "!progbox");
