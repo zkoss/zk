@@ -287,4 +287,10 @@ public interface Desktop {
 	 * @since 3.0.0
 	 */
 	public boolean removeEventInterceptor(EventInterceptor ei);
+
+	/** Invalidates the desktop.
+	 * All pages will be redrawn.
+	 * @since 3.0.6
+	 */
+	public void invalidate();
 }

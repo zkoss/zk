@@ -817,7 +817,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final Map attrs = new HashMap(6);
 		attrs.put("page", this);
 		attrs.put("asyncUpdate", Boolean.valueOf(asyncUpdate));
-		attrs.put("action", _desktop.getUpdateURI(null));
+		attrs.put("action", "/"); //A non-empty string (backward compatible)
 		attrs.put("responses",
 			responses != null ? responses: Collections.EMPTY_LIST);
 		if (bIncluded) {

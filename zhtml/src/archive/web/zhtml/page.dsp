@@ -25,7 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:when test="${!zk_completeDesktop}">
 	<c:if test="${!arg.asyncUpdate}">
 ${u:outLangStyleSheets()}
-${u:outLangJavaScripts(arg.action)}
+${u:outLangJavaScripts(null)}
 	</c:if>
 
 <div id="${page.uuid}" z.dtid="${page.desktop.id}" class="zk" style="${empty page.style ? 'width:100%': page.style}" z.zidsp="page">
@@ -50,7 +50,7 @@ ${u:redraw(root, null)}
 
 	<c:if test="${!empty zk_argAction && !arg.asyncUpdate}">
 ${u:outLangStyleSheets()}
-${u:outLangJavaScripts(zk_argAction)}
+${u:outLangJavaScripts(null)}
 <script type="text/javascript">
 	zkau.addDesktop("${page.desktop.id}");
 </script>

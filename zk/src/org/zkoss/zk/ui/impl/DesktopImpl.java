@@ -711,4 +711,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 */
 	public void setResponseSequence(int seqId) {
 	}
+
+	public void invalidate() {
+		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
+			final Page page = (Page)it.next();
+			if (((PageCtrl)page).getOwner() == null)
+				page.invalidate();
+		}
+	}
 }

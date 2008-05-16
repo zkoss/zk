@@ -146,15 +146,14 @@ public class ZkFns {
 	 *
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
 	 * instead of all at once.
+	 *
+	 * @param dummy ignored since 3.0.6 (reserved for backward compatibility)
 	 */
-	public static final String outLangJavaScripts(String action) {
+	public static final String outLangJavaScripts(String dummy) {
 		final ServletRequest request = ServletFns.getCurrentRequest();
 		if (WebManager.getRequestLocal(request, ATTR_LANG_JS_GENED) != null)
 			return ""; //nothing to generate
 		WebManager.setRequestLocal(request, ATTR_LANG_JS_GENED, Boolean.TRUE);
-
-		if (action == null)
-			throw new IllegalArgumentException("null");
 
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		final WebApp wapp = desktop.getWebApp();
@@ -173,8 +172,9 @@ public class ZkFns {
 		sb.append("\n<script type=\"text/javascript\">\n")
 			.append("zk_ver='").append(wapp.getVersion())
 			.append("';\nzk.build='").append(wapp.getBuild())
-			.append("';\nzk_action='").append(action)
-			.append("';\nzk_procto=")
+			.append("';\nzkau.addURI('").append(desktop.getId())
+				.append("','").append(desktop.getUpdateURI(null))
+			.append("');\nzk_procto=")
 				.append(config.getProcessingPromptDelay())
 			.append(";\nzk_tipto=")
 				.append(config.getTooltipDelay())

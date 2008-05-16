@@ -224,9 +224,10 @@ zk.disableESC = function () {
 	function (msg, url, lineno) {
 		//We display errors only for local class web resource
 		//It is annoying to show error if google analytics's js not found
-		if (url.indexOf(location.host) >= 0) {
-			var v = zk_action.lastIndexOf(';');
-			var v = v >= 0 ? zk_action.substring(0, v): zk_action;
+		var au = zkau.uri();
+		if (au && url.indexOf(location.host) >= 0) {
+			var v = au.lastIndexOf(';');
+			v = v >= 0 ? au.substring(0, v): au;
 			if (url.indexOf(v + "/web/") >= 0) {
 				msg = mesg.FAILED_TO_LOAD + url + "\n" + mesg.FAILED_TO_LOAD_DETAIL
 					+ "\n" + mesg.CAUSE + msg+" (line "+lineno + ")";
@@ -663,14 +664,14 @@ zk._watch = function (n, cmps) {
  * If it is loaded, the function executes directly.
  * @since 3.0.0
  */
-zk.invoke = function (nm, fn) {
-	if (!zk._modules[nm]) zk.load(nm, fn);
+zk.invoke = function (nm, fn, dtid) {
+	if (!zk._modules[nm]) zk.load(nm, fn, null, null, dtid);
 	else if (zk.loading) zk.addBeforeInit(fn);
 	else fn();
 };
 
 /** Loads the specified module (JS). If a feature is called "a.b.c", then
- * zk_action + "/web/js" + "a/b/c.js" is loaded.
+ * zkau.uri() + "/web/js" + "a/b/c.js" is loaded.
  *
  * <p>To load a JS file that other modules don't depend on, use zk.loadJS.
  *
@@ -681,7 +682,7 @@ zk.invoke = function (nm, fn) {
  * and the file being loaded doesn't invoke zk.ald().
  * @param modver the version of the module, or null to use zk.getBuild(nm)
  */
-zk.load = function (nm, initfn, ckfn, modver) {
+zk.load = function (nm, initfn, ckfn, modver, dtid) {
 	if (!nm) {
 		zk.error("Module name must be specified");
 		return;
@@ -690,8 +691,14 @@ zk.load = function (nm, initfn, ckfn, modver) {
 	if (!zk._modules[nm]) {
 		zk._modules[nm] = true;
 		if (initfn) zk.addBeforeInit(initfn);
-		zk._load(nm, modver);
+		zk._load(nm, modver, dtid);
 		if (ckfn) zk._ckfns.push(ckfn);
+	}
+};
+zk._loadByType = function (nm, n) {
+	if (!zk._modules[nm]) {
+		zk._modules[nm] = true;
+		zk._load(nm, null, zkau.dtid(n));
 	}
 };
 /** Loads the required module for the specified component.
@@ -702,11 +709,11 @@ zk.loadByType = function (n) {
 	var type = getZKAttr(n, "type");
 	if (type) {
 		var j = type.lastIndexOf('.');
-		if (j > 0) zk.load(type.substring(0, j));
+		if (j > 0) zk._loadByType(type.substring(0, j), n);
 		return true;
 	}
 	return false;
-}
+};
 
 /** Loads the javascript. It invokes _bld before loading.
  *
@@ -714,7 +721,7 @@ zk.loadByType = function (n) {
  * 1) call zk.ald() after loaded<br/>
  * 2) pass ckfn to test whether it is loaded.
  */
-zk._load = function (nm, modver) {
+zk._load = function (nm, modver, dtid) {
 	zk._bld();
 
 	var e = document.createElement("script");
@@ -735,7 +742,7 @@ zk._load = function (nm, modver) {
 	} else if (uri.indexOf('/') >= 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		e.charset = "UTF-8";
-		e.src = zk.getUpdateURI("/web" + zcb + uri, false, modver);
+		e.src = zk.getUpdateURI("/web" + zcb + uri, false, modver, dtid);
 	} else { //module name
 		uri = uri.replace(/\./g, '/');
 		var j = uri.lastIndexOf('!');
@@ -745,7 +752,7 @@ zk._load = function (nm, modver) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		e.charset = "UTF-8";
 		if (!modver) modver = zk.getBuild(nm);
-		e.src = zk.getUpdateURI("/web" + zcb + "/js" + uri, false, modver);
+		e.src = zk.getUpdateURI("/web" + zcb + "/js" + uri, false, modver, dtid);
 	}
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
 		//Bug 1815074: IE bug:
@@ -800,7 +807,7 @@ zk.ald = function () {
 			zk.error("Failed to stop counting. "+ex.message);
 		}
 		
-		if (zk._ready) zk._evalInit(); //zk._loadAndInit mihgt not finish
+		if (zk._ready) zk._evalInit(); //zk._loadAndInit might not finish
 	}
 };
 zk._updCnt = function () {
@@ -985,6 +992,8 @@ zk._evalInit = function () {
 	} while (!zk.loading && (zk._bfinits.length || zk._initcmps.length
 	|| zk._initfns.length));
 	//Bug 1815074: _initfns might cause _bfinits to be added
+
+	zkau.doQueResps(); //since responses might not be processed yet
 };
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
@@ -1188,13 +1197,13 @@ zk.onScrollAt = function (n) {
 
 //extra//
 /** Loads the specified style sheet (CSS).
- * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
+ * @param uri Example, "/a/b.css". It will be prefixed with zkau.uri() + "/web",
  * unless http:// or https:// is specified
  */
-zk.loadCSS = function (uri) {
+zk.loadCSS = function (uri, dtid) {
 	if (uri.indexOf("://") < 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
-		uri = zk.getUpdateURI("/web" + uri);
+		uri = zk.getUpdateURI("/web" + uri, false, null, dtid);
 	}
 	zk.loadCSSDirect(uri);
 };
@@ -1214,12 +1223,12 @@ zk.loadCSSDirect = function (uri, id) {
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
 /** Loads the specified JavaScript file directly.
- * @param uri Example, "/a/b.css". It will be prefixed with zk_action + "/web",
+ * @param uri Example, "/a/b.css". It will be prefixed with zkau.uri() + "/web",
  * unless http:// or https:// is specified
  * @param fn the function to execute after loading. It is optional.
  * Not function under safari
  */
-zk.loadJS = function (uri, fn) {
+zk.loadJS = function (uri, fn, dtid) {
 	var e = document.createElement("script");
 	e.type	= "text/javascript" ;
 	e.charset = "UTF-8";
@@ -1230,7 +1239,7 @@ zk.loadJS = function (uri, fn) {
 
 	if (uri.indexOf("://") < 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
-		uri = zk.getUpdateURI("/web" + uri);
+		uri = zk.getUpdateURI("/web" + uri, false, null, dtid);
 	}
 	e.src = uri;
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
@@ -1241,23 +1250,24 @@ zk.loadJS = function (uri, fn) {
  * @param modver the module version to insert into uri, or null to use zk.build.
  * Note: modver is used if uri starts with /uri
  */
-zk.getUpdateURI = function (uri, ignoreSessId, modver) {
-	if (!uri) return zk_action;
+zk.getUpdateURI = function (uri, ignoreSessId, modver, dtid) {
+	var au = zkau.uri(dtid);
+	if (!uri) return au;
 
 	if (uri.charAt(0) != '/') uri = '/' + uri;
 	if (modver && uri.length >= 5 && uri.substring(0, 5) == "/web/")
 		uri = "/web/_zv" + modver + uri.substring(4);
 
-	var j = zk_action.lastIndexOf(';'), k = zk_action.lastIndexOf('?');
-	if (j < 0 && k < 0) return zk_action + uri;
+	var j = au.lastIndexOf(';'), k = au.lastIndexOf('?');
+	if (j < 0 && k < 0) return au + uri;
 
 	if (k >= 0 && (j < 0 || k < j)) j = k;
-	var prefix = zk_action.substring(0, j);
+	var prefix = au.substring(0, j);
 
 	if (ignoreSessId)
 		return prefix + uri;
 
-	var suffix = zk_action.substring(j);
+	var suffix = au.substring(j);
 	var l = uri.indexOf('?');
 	return l >= 0 ?
 		k >= 0 ?
@@ -1431,7 +1441,8 @@ zk.error = function (msg) {
 +(zk.innerX()+50)+'px;top:'+(zk.innerY()+20)
 +'px;width:550px;border:1px solid #963;background-color:#fc9" id="'
 +id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
-+'<td width="20pt"><button onclick="zk._msgclose(this)">close</button></td>'
++'<td width="20pt"><button onclick="zkau.sendRedraw()">redraw</button>'
++'<button onclick="zk._msgclose(this)">close</button></td>'
 +'<td style="border:1px inset">'+zk.encodeXML(msg, true) //Bug 1463668: security
 +'</td></tr></table></div>';
 	zk._setOuterHTML(box, html);
@@ -1443,6 +1454,13 @@ zk.error = function (msg) {
 			starteffect: zk.voidf, starteffect: zk.voidf, endeffect: zk.voidf});
 	} catch (e) {
 	}
+};
+/** Closes all error box (zk.error).
+ * @since 3.0.6
+ */
+zk.errorDismiss = function () {
+	for (var j = zk._errcnt; j; --j)
+		zk.remove($e("zk_err_" + j));
 };
 
 //-- bootstrapping --//

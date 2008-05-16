@@ -21,6 +21,8 @@ if (!window.zkau) { //avoid eval twice
 //Customization
 /** Returns the background color for a list item or tree item.
  * Developer can override this method by providing a different background.
+ * @param e the element
+ * @param undo whether to undo the effect (false to set effect)
  */
 if (!window.Droppable_effect) { //define it only if not customized
 	window.Droppable_effect = function (e, undo) {
@@ -32,7 +34,23 @@ if (!window.Droppable_effect) { //define it only if not customized
 		}
 	};
 }
+/** Handles the error caused by processing the response.
+ * @param msgCode the error message code.
+ * It is either an index of mesg (e.g., "FAILED_TO_PROCESS"),
+ * or an error message
+ * @param msg2 the additional message (optional)
+ * @param cmd the command (optional)
+ * @param ex the exception (optional)
+ * @since 3.0.6
+ */
+if (!window.onProcessError) {
+	window.onProcessError = function (msgCode, msg2, cmd, ex) {
+		var msg = mesg[msgCode];
+		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
+	};
+}
 
+//au//
 zkau = {};
 
 zkau._respQue = []; //responses in XML
@@ -46,8 +64,9 @@ zkau._stamp = 0; //used to make a time stamp
 zkau.topZIndex = 12; //topmost z-index for overlap/popup/modal
 zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau._sendNow
-zkau._seqId = 0;
+zkau._seqId = 1; //1-999
 zkau._dtids = []; //an array of desktop IDs
+zkau._uris = {}; //a map of update engine's URIs ({dtid, uri})
 zkau._spushInfo = {} //the server-push info: Map(dtid, {min, max, factor})
 var undef; //an undefined variable
 
@@ -71,6 +90,19 @@ zkau.dtid = function (n) {
 		if (id) return id;
 	}
 	return null;
+};
+/** Returns the URI of the update engine.
+ * @since 3.0.6
+ */
+zkau.uri = function (dtid) {
+	return zkau._dtids.length <= 1 || !dtid ? zkau._uri: zkau._uris[dtid];
+};
+/** Adds the update engine's UIR for the specified destkop.
+ * @since 3.0.6
+ */
+zkau.addURI = function (dtid, uri) {
+	zkau._uris[dtid] = uri;
+	if (!zkau._uri) zkau._uri = uri; //performance fine tune
 };
 
 zk.addInit(function () {
@@ -239,18 +271,20 @@ zkau._onRespReady = function () {
 
 			var sid = req.getResponseHeader("ZK-SID");
 			if (req.status == 200) { //correct
-				if (sid) {
-					if (sid != zkau._seqId) {
-						zkau._errcode = "ZK-SID " + (sid ? "mismatch": "required");
-						return;
-					}
+				if (sid && sid != zkau._seqId) {
+					zkau._errcode = "ZK-SID " + (sid ? "mismatch": "required");
+					return;
+				} //if sid null, always process (usually for error msg)
+
+				var cmds = zkau.parseXmlResp(req.responseXML);
+				if (cmds) { //valid response
+					zkau._respQue.push(cmds);
 
 					//advance SID to avoid receive the same response twice
-					if (++zkau._seqId > 255) zkau._seqId = 0;
+					if (sid && ++zkau._seqId > 999) zkau._seqId = 1;
+					zkau._areqTry = 0;
 					zkau._preqInf = null;
-				} //if null, always process (usually for showing error msg)
-				zkau._areqTry = 0;
-				zkau._respQue.push(zkau._parseCmds(req.responseXML));
+				}
 			} else if (!sid || sid == zkau._seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
 				zkau._errcode = req.status;
 				var eru = zk.eru['e' + req.status];
@@ -320,17 +354,20 @@ zkau._onRespReady = function () {
 			zkau._send2(ds[j], 0);
 	}
 
-	zkau._doQueResps();
+	zkau.doQueResps();
 	zkau._checkProgress();
 };
-zkau._parseCmds = function (xml) {
-	var rs = xml ? xml.getElementsByTagName("r"): null;
-	if (!rs) return null;
+/** Parses a XML response.
+ * @since 3.0.6
+ */
+zkau.parseXmlResp = function (xml) {
+	if (!xml) return null; //invalid
 
-	var cmds = [];
-	for (var j = 0, rl = rs.length; j < rl; ++j) {
-		var cmd = rs[j].getElementsByTagName("c")[0];
-		var data = rs[j].getElementsByTagName("d");
+	var cmds = [],
+		rs = xml.getElementsByTagName("r");
+	for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
+		var cmd = rs[j].getElementsByTagName("c")[0],
+			data = rs[j].getElementsByTagName("d");
 
 		if (!cmd) {
 			zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
@@ -534,18 +571,19 @@ zkau._sendNow = function (dtid) {
 
 	if (content)
 		zkau._sendNow2({
-			sid: zkau._seqId, dtid: dtid, content: "dtid=" + dtid + content,
+			sid: zkau._seqId, uri: zkau.uri(dtid),
+			dtid: dtid, content: "dtid=" + dtid + content,
 			ctli: ctli, ctlc: ctlc, implicit: implicit, ignorable: ignorable,
 			tmout: 0
 		});
 };
 zkau._sendNow2 = function(reqInf) {
 	var req = zkau.ajaxRequest(),
-		uri = zkau._useQS(reqInf) ? zk_action + '?' + reqInf.content: null;
+		uri = zkau._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
 	zkau.sentTime = $now(); //used by server-push (zkex)
 	try {
 		req.onreadystatechange = zkau._onRespReady;
-		req.open("POST", uri ? uri: zk_action, true);
+		req.open("POST", uri ? uri: reqInf.uri, true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		req.setRequestHeader("ZK-SID", reqInf.sid);
 		if (zkau._errcode) {
@@ -585,7 +623,7 @@ zkau._sendNow2 = function(reqInf) {
 //IE: use query string if possible to avoid IE incomplete-request problem
 zkau._useQS = zk.ie ? function (reqInf) {
 	var s = reqInf.content, j = s.length, prev, cc;
-	if (j + zk_action.length < 2000) {
+	if (j + reqInf.uri.length < 2000) {
 		while (--j >= 0) {
 			cc = s.charAt(j);
 			if (cc == '%' && prev >= '8') //%8x, %9x...
@@ -597,7 +635,9 @@ zkau._useQS = zk.ie ? function (reqInf) {
 	return false;
 }: zk.voidf;
 
-/** Adds a script that will be evaluated when the next response is back. */
+/** Registers a script that will be evaluated when the next response is back.
+ * Note: it executes only once, so you have to register again if necessary.
+ */
 zkau.addOnResponse = function (script) {
 	zkau._js4resps.push(script);
 };
@@ -608,11 +648,11 @@ zkau._evalOnResponse = function () {
 };
 
 /** Process the responses queued in zkau._respQue. */
-zkau._doQueResps = function () {
+zkau.doQueResps = function () {
 	var ex, que = zkau._respQue, breath = $now() + 6000;
 	while (que.length) {
 		if (zk.loading) {
-			zk.addInit(zkau._doQueResps); //Note: when callback, zk.loading is false
+			zk.addInit(zkau.doQueResps); //Note: when callback, zk.loading is false
 			break; //wait until the loading is done
 		}
 
@@ -625,7 +665,7 @@ zkau._doQueResps = function () {
 		}
 
 		if (!ex && $now() > breath) {
-			setTimeout(zkau._doQueResps, 10); //let browser breath
+			setTimeout(zkau.doQueResps, 10); //let browser breath
 			return;
 		}
 	}
@@ -636,19 +676,24 @@ zkau._doQueResps = function () {
 };
 /** Process the specified response in XML. */
 zkau._doResps = function (cmds) {
-	while (cmds && cmds.length) {
-		if (zk.loading)
-			return false;
+	var processed;
+	try {
+		while (cmds && cmds.length) {
+			if (zk.loading)
+				return false;
 
-		var cmd = cmds.shift();
-		try {
-			zkau.process(cmd.cmd, cmd.data);
-		} catch (e) {
-			zk.error(mesg.FAILED_TO_PROCESS+cmd.cmd+"\n"+e.message);
-			throw e;
-		} finally {
-			zkau._evalOnResponse();
+			processed = true;
+			var cmd = cmds.shift();
+			try {
+				zkau.process(cmd.cmd, cmd.data);
+			} catch (e) {
+				onProcessError("FAILED_TO_PROCESS", null, cmd.cmd, e);
+				throw e;
+			}
 		}
+	} finally {
+		if (processed && (!cmds || !cmds.length))
+			zkau._evalOnResponse();
 	}
 	return true;
 };
@@ -664,7 +709,7 @@ zkau.process = function (cmd, data) {
 
 	//I. process commands that require uuid
 	if (!data || !data.length) {
-		zk.error(mesg.ILLEGAL_RESPONSE+"uuid is required for "+cmd);
+		onProcessError("ILLEGAL_RESPONSE", "uuid is required for ", cmd);
 		return;
 	}
 
@@ -675,7 +720,7 @@ zkau.process = function (cmd, data) {
 		return;
 	}
 
-	zk.error(mesg.ILLEGAL_RESPONSE+"Unknown command: "+cmd);
+	onProcessError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
 };
 /** Used by ZkFns. */
 zk.process = function (cmd) {
@@ -1033,8 +1078,9 @@ zkau._onUnload = function () {
 			var ds = zkau._dtids;
 			for (var j = 0, dl = ds.length; j < dl; ++j) {
 				var req = zkau.ajaxRequest(),
-					content = "dtid="+ds[j]+"&cmd.0=rmDesktop";
-				req.open("POST", zk.ie ? zk_action+"?"+content: zk_action, true);
+					content = "dtid="+ds[j]+"&cmd.0=rmDesktop",
+					uri = zkau.uri(ds[j]);
+				req.open("POST", zk.ie ? uri+"?"+content: uri, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 				if (zk.ie) req.send();
 				else req.send(content);
@@ -1517,6 +1563,14 @@ zkau.sendOnClose = function (uuid, closeFloats) {
 	var el = $e(uuid);
 	if (closeFloats) zkau.closeFloats(el);
 	zkau.send({uuid: el.id, cmd: "onClose"}, 5);
+};
+/** Ask the server to redraw all desktops on the browser.
+ * @since 3.0.6
+ */
+zkau.sendRedraw = function () {
+	zk.errorDismiss();
+	for (var ds = zkau._dtids, j = ds.length; --j >= 0;)
+		zkau.send({dtid: ds[j], cmd: "redraw"});
 };
 
 /** Test if any float is opened.
