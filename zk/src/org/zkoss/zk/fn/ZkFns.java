@@ -147,7 +147,7 @@ public class ZkFns {
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
 	 * instead of all at once.
 	 *
-	 * @param dummy ignored since 3.1.0 (reserved for backward compatibility)
+	 * @param dummy ignored since 3.0.6 (reserved for backward compatibility)
 	 */
 	public static final String outLangJavaScripts(String dummy) {
 		final ServletRequest request = ServletFns.getCurrentRequest();

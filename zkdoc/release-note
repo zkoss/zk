@@ -35,6 +35,11 @@ ZK 3.1.0
   + The script component now has "text/javascript" as the default type.
 
 	--------
+ZK 3.0.6
+
+Refer to http://zk1.svn.sourceforge.net/viewvc/zk1/branches/3.0/zkdoc/release-note?view=markup
+
+	--------
 ZK 3.0.5
 * Features
   1951358: A way to have component-specific Command
