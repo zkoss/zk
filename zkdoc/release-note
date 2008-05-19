@@ -2,6 +2,7 @@
 ZK 3.0.6
 * Features
   1959959: An option to allow user to refresh if an error
+  1883237: A way to register listeners for particular desktop
   1966723: A way to customize cofirm upon retry (resend mechanism)
 
 * Bugs
