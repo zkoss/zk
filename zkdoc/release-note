@@ -32,6 +32,8 @@ ZK 3.1.0
   + The setAutocheck and setChecked methods of Menuitem only apply
     when Menupopup.isCheckmark is true.
   + The script component now has "text/javascript" as the default type.
+  + Add a new trendy layout of Window as default mold, and the classic
+    Window mold is renamed to "os" mold for backward compatible.
 
 	--------
 ZK 3.0.6

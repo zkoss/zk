@@ -72,6 +72,7 @@ zkau._drops = []; //dropables
 zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
 zkau._stamp = 0; //used to make a time stamp
 zkau.topZIndex = 12; //topmost z-index for overlap/popup/modal
+zkau.topZIndexStep = 3; // the step of topmost z-index for overlap/popup/modal
 zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau._sendNow
 zkau._seqId = 1; //1-999
@@ -980,7 +981,7 @@ zkau.fixZIndex = function (cmp, silent, autoz) {
 	if (zi > zkau.topZIndex) {
 		zkau.topZIndex = zi;
 	} else if (!autoz || zi < zkau.topZIndex) {
-		cmp.style.zIndex = ++zkau.topZIndex;
+		cmp.style.zIndex = zkau.topZIndex += zkau.topZIndexStep;
 		if (!silent && cmp.id) {
 			cmp = $outer(cmp);
 			zkau.sendOnZIndex(cmp);

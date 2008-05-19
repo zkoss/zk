@@ -69,7 +69,61 @@ td.gamma {background: #F4F4F4;}
 }
 .move-win-ghost {
 	overflow: hidden; position: absolute; filter: alpha(opacity=65) !important; <%-- IE --%>
-	opacity: .65 !important;
+	background: #CBDDF3; opacity: .65 !important; cursor: move !important;
+}
+.move-win-ghost ul {
+	margin: 0; padding: 0; overflow: hidden; font-size: 0; line-height: 0;
+	border: 1px solid #99bbe8; display: block; background: #cbddf3;
+}
+<%-- Shadow --%>
+.z-shadow {
+	display: none; position: absolute; overflow: hidden; left: 0; top: 0;
+}
+.z-shadow * {
+	overflow: hidden;
+	padding: 0; border: 0; margin:0 ; clear: none; zoom: 1;
+}
+.z-shadow .ztm,.z-shadow .zbm {
+	height: 6px; float: left;
+}
+.z-shadow .ztl, .z-shadow .ztr, .z-shadow .zbl, .z-shadow .zbr {
+	width: 6px; height: 6px; float: left;
+}
+.z-shadow .zc {
+	width:100%;
+}
+.z-shadow .zcl, .z-shadow .zcr {
+	width: 6px; float: left; height: 100%;
+}
+.z-shadow .zcm {
+	float: left; height: 100%; background: transparent url(${c:encodeURL('~./zul/img/shadow-m.png')});
+}
+.z-shadow .zt, .z-shadow .zb {
+	height: 6px; overflow: hidden; width: 100%;
+}
+.z-shadow .zcl {
+	background:transparent url(${c:encodeURL('~./zul/img/shadow-lr.png')}) repeat-y 0 0;
+}
+.z-shadow .zcr {
+	background:transparent url(${c:encodeURL('~./zul/img/shadow-lr.png')}) repeat-y -6px 0;
+}
+.z-shadow .ztl {
+	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) no-repeat 0 0;
+}
+.z-shadow .ztm {
+	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) repeat-x 0 -30px;
+}
+.z-shadow .ztr {
+	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) repeat-x 0 -18px;
+}
+.z-shadow .zbl {
+	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) no-repeat 0 -12px;
+}
+.z-shadow .zbm {
+	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) repeat-x 0 -36px;
+}
+.z-shadow .zbr {
+	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) repeat-x 0 -6px;
 }
 <%-- ZK --%>
 <%-- groupbox caption --%>
@@ -121,9 +175,84 @@ div.wc-popup {
 div.wc-embedded-none, div.wc-wndcyan-none,
 div.wc-modal-none, div.wc-highlighted-none,
 div.wc-overlapped-none, div.wc-popup-none {
-	border: 0;
+	border: 0; overflow: hidden;
 }
-
+<%-- Window - trendy look-and-feel --%>
+div.z-close-btn, div.z-close-btn-over {
+	overflow: hidden; width: 17px; height: 17px; float: right; cursor: pointer;
+	background: transparent url(${c:encodeURL('~./zul/img/close-off.gif')}) no-repeat;
+	margin-left: 2px;
+}
+div.z-close-btn-over {
+	background: transparent url(${c:encodeURL('~./zul/img/close-on.gif')}) no-repeat;
+}
+div.wc-bwrap div.wc-modal, div.wc-bwrap div.wc-modal-none, div.wc-bwrap div.wc-highlighted,
+	div.wc-bwrap div.wc-highlighted-none {
+	margin: 0; padding: 2px; background: white;
+}
+div.wt-title {
+	overflow: hidden; zoom: 1; color: #222222; padding: 5px 0 4px 0;
+}
+div.wc-bwrap div.wc-embedded, div.wc-bwrap div.wc-wndcyan {
+	margin: 0; padding: 3px; border: 1px solid #8DB2E3;
+}
+div.wc-bwrap div.wc-modal, div.wc-bwrap div.wc-highlighted, div.wc-bwrap div.wc-overlapped, div.wc-bwrap div.wc-popup {
+	margin: 0; padding: 4px; border: 0; overflow: hidden;
+}
+<%-- Header --%>
+div.lwt-popup, div.lwt-modal, div.lwt-highlighted, div.lwt-overlapped, div.lwt-embedded {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l.png')}) no-repeat 0 0;
+	padding-left: 5px; zoom: 1;
+}
+div.mwt-popup, div.mwt-modal, div.mwt-highlighted, div.mwt-overlapped, div.mwt-embedded {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 0;
+	overflow: hidden; zoom: 1;
+}
+div.rwt-popup, div.rwt-modal, div.rwt-highlighted, div.rwt-overlapped, div.rwt-embedded {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right 0;
+	padding-right: 5px;
+}
+div.mwt-popup-notitle, div.mwt-modal-notitle, div.mwt-highlighted-notitle, div.mwt-overlapped-notitle<%-- unnecessary, div.mwt-embedded--%> {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 0;
+	overflow: hidden; zoom: 1; font-size: 0pt; height: 5px; line-height: 0pt;
+}
+<%-- Body --%>
+div.wc-bwrap {
+	overflow: hidden;
+}
+div.lwc-popup, div.lwc-modal, div.lwc-highlighted, div.lwc-overlapped, div.lwc-popup-none,
+	div.lwc-modal-none, div.lwc-highlighted-none, div.lwc-overlapped-none {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wcp-lr.png')}) repeat-y 0 0; 
+	padding-left: 5px; zoom: 1;
+}
+div.mwc-popup, div.mwc-modal, div.mwc-highlighted, div.mwc-overlapped {
+	border:1px solid #99bbe8; padding: 0; margin:0 ; background: #dfe8f6;
+}
+div.mwc-popup-none, div.mwc-modal-none, div.mwc-highlighted-none, div.mwc-overlapped-none {
+	border: 0; padding: 0; margin:0 ; background: #dfe8f6;
+}
+div.rwc-popup, div.rwc-modal, div.rwc-highlighted, div.rwc-overlapped, div.rwc-popup-none,
+	div.rwc-modal-none, div.rwc-highlighted-none, div.rwc-overlapped-none {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wcp-lr.png')}) repeat-y right 0;
+	padding-right: 5px; zoom: 1;
+}
+<%-- Footer --%>
+div.lwt-embedded {
+	border-bottom: 1px solid #99bbe8;
+}
+div.lwb-popup, div.lwb-modal, div.lwb-highlighted, div.lwb-overlapped {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l.png')}) no-repeat 0 bottom; 
+	padding-left: 5px; zoom: 1;
+}
+div.mwb-popup, div.mwb-modal, div.mwb-highlighted, div.mwb-overlapped {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 bottom;
+	zoom: 1; font-size: 0pt; height: 5px; line-height: 0pt;
+}
+div.rwb-popup, div.rwb-modal, div.rwb-highlighted, div.rwb-overlapped {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right bottom;
+	padding-right: 5px; zoom: 1;
+}
+<%-- Window - OS look-and-feel --%>
 td.lwt-embedded, td.mwt-embedded, td.rwt-embedded,
 td.lwt-popup, td.rwt-popup, td.mwt-popup,
 td.lwt-modal, td.mwt-modal, td.rwt-modal,
@@ -180,6 +309,7 @@ td.rwt-wndcyan {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wtcyan-r.gif')}); background-repeat: no-repeat;
 	width: 5px;
 }
+<%-- Window - OS - End--%>
 
 .title a, .title a:visited {
 	color: white;
@@ -194,10 +324,10 @@ div.modal_mask {
 	filter: alpha(opacity=60); <%-- IE --%>
 	opacity: .6;
 	hasLayout: -1;<%-- not a layout element in IE --%>
-	background: #e6edf9; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
+	background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
 div.z-loading {
-	position: absolute; z-index: 79000; background-color: #A8CAF8; 
+	position: absolute; z-index: 21000; background-color: #A8CAF8; 
 	white-space: nowrap; border: 1px solid #83B5F7; padding:3px;
 }
 div.z-loading-indicator {
@@ -205,6 +335,18 @@ div.z-loading-indicator {
 	white-space: nowrap; padding:6px;
 }
 
+div.z-apply-mask {
+	position: absolute; z-index: 89000;
+	top: 0; left: 0; width: 100%; height: 100%;
+	filter: alpha(opacity=60); <%-- IE --%>
+	opacity: .6;
+	hasLayout: -1;<%-- not a layout element in IE --%>
+	background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
+}
+div.z-apply-loading {
+	position: absolute; z-index: 89500; border: 1px solid #83B5F7;
+	overflow: hidden; font-size: 0pt; line-height: 0pt;
+}
 <%-- ZK separator --%>
 <c:choose>
 	<c:when test="${empty c:getProperty('org.zkoss.zul.Separator.spaceWithMargin')}">

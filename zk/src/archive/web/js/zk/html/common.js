@@ -108,10 +108,187 @@ if (zk.ie) {
 
 //////
 // More zk utilities (defined also in boot.js) //
+zk.Shadow = Class.create();
+zk.Shadow.prototype = {
+	diam: 4,
+	mode: "shade", // default mode
+	/**
+	 * Initial the Shadow object for the specified component.
+	 * The both config {String} mode and {Number} diam are used to configure how the
+	 * layout of the shadow will be shown.<br />
+	 * 
+	 * mode: The shadow display mode.  Supports the following options:<br />
+	 * shade: Shadow displays on both sides and bottom only (by default)<br />
+	 * frame: Shadow displays equally on all four sides<br />
+	 * drop: Traditional bottom-right drop shadow<br />
+	 *
+	 * diam: The diameter of the offset of the shadow from the element (defaults to 4)
+	 * 
+	 * @param {Object} cmp a ZK client component.
+	 * @param {Object} config The config object used to apply the default value of the Shadow object.
+	 * @since 3.1.0
+	 */
+	initialize: function (cmp, config) {
+		zk.apply(this, config);
+		this.id = cmp.id + "!shadow";
+		this.rel = cmp;
+		this.template = zk.ie ? '<div id="'+this.id+'" class="z-ie-shadow"></div>' :
+		'<div id="'+this.id+'" class="z-shadow"><div class="zt"><div class="ztl"></div><div class="ztm"></div><div class="ztr"></div></div><div class="zc"><div class="zcl"></div><div class="zcm"></div><div class="zcr"></div></div><div class="zb"><div class="zbl"></div><div class="zbm"></div><div class="zbr"></div></div></div>';
+		var o = this.diam, d = {l: -o, t: o-1, h: 0, w:0};
+		var rad = Math.floor(this.diam/2);
+		switch (this.mode.toLowerCase()) {
+			case "shade":
+				d.w = (o*2);
+				if(zk.ie) {
+					d.l -= rad - 1;
+					d.t -= (this.diam + rad);
+					d.w -= this.diam + (rad + 1);
+					d.h -= 1;
+				}
+				break;
+			case "drop":
+				d.l = -d.l;
+				if (zk.ie)
+					d.l = d.t = d.w = d.h = -rad;
+				break;
+			case "frame":
+				d.w = d.h = (o*2);
+				d.t = d.l;
+				d.t += 1;
+				d.h -= 2;
+				if (zk.ie) {
+					d.t = d.l = d.t - rad;
+					d.h = d.w = d.w - (this.diam + rad + 1);
+				}
+				break;
+		};
+		this.delta = d;
+		this.rel.parentNode.insertAdjacentHTML("afterbegin", this.template);
+		this.el = $e(this.id);
+	},
+	/**
+	 * Hides the shadow.
+	 */
+	hide: function(){
+		this.el.style.display = "none";
+		if (this.lining) this.lining.style.display = "none";
+	},
+	/**
+	 * Shows the shadow.
+	 */
+	show: function () {
+		if (!this.rel || !zk.isVisible(this.rel)) {
+			this.hide();
+			return;
+		}
+		if (zk.nextSibling(this.el, "DIV")!= this.rel)
+			this.rel.parentNode.insertBefore(this.el, this.rel);
+		this.el.style.zIndex = $int(this.rel.style.zIndex)-1;
+		if (zk.ie) 
+			this.el.style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=50) "
+				+ "progid:DXImageTransform.Microsoft.Blur(pixelradius="+(this.diam)+")";
+		this.recalc(this.rel.offsetLeft, this.rel.offsetTop, this.rel.offsetWidth,
+			this.rel.offsetHeight);
+		this.el.style.display = "block";
+		if (this.lining) this.lining.style.display = "block";
+	},
+	/**
+	 * Recalculates the position of the shadow.
+	 * @param {Object} l the number of the offset left of the real component.
+	 * @param {Object} t the number of the offset top of the real component.
+	 * @param {Object} w the number of the offset width of the real component.
+	 * @param {Object} h the number of the offset height of the real component.
+	 */
+	recalc : function(l, t, w, h){
+		var d = this.delta, r = this.el, s = r.style, width = (w + d.w), height = (h + d.h),
+			widths = width +"px", heights = height + "px";
+		s.left = (l + d.l) + "px";
+		s.top = (t + d.t) + "px";
+		if(s.width != widths || s.height != heights) {
+			s.width = widths;
+			s.height = heights;
+			if(!zk.ie) {
+				var c = r.childNodes;
+				// the 12 number means the both height the top side shadow and the bottom side shadow.
+				c[1].style.height = Math.max(0, (height - 12))+ "px";
+				
+				// the 12 number means the both width the left side shadow and the right side shadow.
+				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (width - 12)) + "px";;
+			}
+		}
+		
+		var lining = this.getLining();
+		if (lining) {
+			var s = lining.style;
+			s.left = l +"px";
+			s.top = t +"px";
+			s.width = w +"px";
+			s.height = h +"px";
+			s.zIndex = $int(this.rel.style.zIndex)-2; // re-index
+		}
+	},
+	/**
+	 * Synchronizes the state of the real component to the shadow.
+	 */
+	sync: function () {
+		this.show();
+	},
+	/**
+	 * Returns the lining of the shadow, if any.
+	 */
+	getLining: function() {
+		if(!zk.ie6Only || !this.rel)
+			return null;
+		if(this.lining)
+			return this.lining;
+		this.lining = zk.createLining(this.rel);
+		this.lining.style.zIndex = $int(this.rel.style.zIndex)-2;
+		return this.lining;
+	},
+	cleanup: function () {
+		zk.remove(this.el);
+		zk.remove(this.lining);
+		this.rel._shadow = null;
+		this.rel = this.lining = null;
+	}
+};
+/**
+ * Copies all the properties of config to obj.
+ * @param {Object} obj The receiver of the properties
+ * @param {Object} config The source of the properties
+ * @return {Object} returns obj
+ * @since 3.1.0
+ */
+zk.apply = function(obj, config) {
+	if(obj && config && typeof config == "object")
+		for(var p in config)
+			obj[p] = config[p];
+	return obj;
+};
+/**
+ * Create a lining, which resolves the layer of HTML for IE6, of the pop-up element 
+ * for the specified component.
+ * @param {String} id a ID used to concatenate the "!ifr" postfix as the lining's ID, if any,
+ * Otherwise, the cmp.id is assumed.
+ * @since 3.1.0
+ */
+zk.createLining = function (cmp, id) {
+	var ifr = document.createElement('iframe');
+	ifr.id = (id || cmp.id) + "!ifr";
+	ifr.frameBorder = "no";
+	ifr.src="javascript:false";
+	ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block";
+	ifr.style.width = cmp.offsetWidth + "px";
+	ifr.style.height = cmp.offsetHeight + "px";
+	ifr.style.top = cmp.style.top;
+	ifr.style.left = cmp.style.left;
+	cmp.parentNode.appendChild(ifr);
+	return ifr;
+};
 /**
  * Applies the indicator mask over the specified element. 
  * @param {Object/String} rel a related object
- * @param (String) message a message.
+ * @param {String} message a message for the loading indicator. Default: 'Loading...'
  * @since 3.1.0
  */
 zk.applyMask = function (rel, message) {
@@ -119,23 +296,27 @@ zk.applyMask = function (rel, message) {
 	if (!rel || !zk.isRealVisible(rel, true)) return; //nothing do to.
 	var progbox = $e(rel.id + "!progbox");
 	if (progbox) return;
-	if (!message) message = "Update...";
+	if (!message) message =  "Loading...";
 	var n = document.createElement("DIV");
 	document.body.appendChild(n);
 	var xy = zk.revisedOffset(rel), 
 		w = zk.offsetWidth(rel),
 		h = zk.offsetHeight(rel),
-		html = '<div id="'+rel.id+'!progbox" style="visibility:hidden"><div class="modal_mask" style="display:block;top:' + xy[1]
+		html = '<div id="'+rel.id+'!progbox" style="visibility:hidden">' 
+			+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 			+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
-			+ '<div id="'+rel.id+'!z-loading" class="z-loading">'
-			+ '<div class="z-loading-indicator">'
-			+ '<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
-			+ message+'</div></div></div>';
+			+ '<div id="'+rel.id+'!z-loading" class="z-apply-loading">'
+			+ '<img alt="'+message+'" style="width:126px;height:22px" src="'+zk.getUpdateURI('/web/zk/img/progress3.gif')+'"/> '
+			+ '</div></div>';
 	zk.setOuterHTML(n, html);
 	var loading = $e(rel.id+"!z-loading"), progbox = $e(rel.id + "!progbox");
 	if (loading) {
-		loading.style.top = (xy[1] + ((h - zk.offsetHeight(loading)) /2)) + "px";
-		loading.style.left = (xy[0] + ((w - zk.offsetWidth(loading)) /2)) + "px";
+		if (loading.offsetHeight > rel.offsetHeight) 
+			loading.style.height = zk.revisedSize(loading, rel.offsetHeight, true) + "px";
+		if (loading.offsetWidth > rel.offsetWidth)
+			loading.style.width = zk.revisedSize(loading, reloffsetWidth) + "px";
+		loading.style.top = (xy[1] + ((h - loading.offsetHeight) /2)) + "px";
+		loading.style.left = (xy[0] + ((w - loading.offsetWidth) /2)) + "px";
 	}
 	progbox.style.visibility = "";
 	return progbox;
@@ -890,7 +1071,23 @@ zk.firstChild = function (el, tagName, descendant) {
 	}
 	return null;
 };
+/** Returns the last child of the specified node. 
+ * @since 3.1.0
+ */
+zk.lastChild = function (el, tagName, descendant) {
+	for (var n = el.lastChild; n; n = n.previousSibling)
+		if ($tag(n) == tagName)
+			return n;
 
+	if (descendant) {
+		for (var n = el.lastChild; n; n = n.previousSibling) {
+			var chd = zk.lastChild(n, tagName, descendant);
+			if (chd)
+				return chd;
+		}
+	}
+	return null;
+};
 /** Returns whether a node is an ancestor of another (including itself).
  *
  * @param ckuuid whether to check UUID is the same (i.e., whether
@@ -1118,12 +1315,15 @@ zk.rename = function (url, name) {
 //-- special routines --//
 if (!zk._actg1) {
 	zk._actg1 = ["IFRAME","EMBED"/*,"APPLET"*/]; //comment out APPLET for better performance
+		// Due to using zk.createLining(), we don't handle the "SELECT" tag for IE6
+		// in zk.hideCovered() function.  
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
+	zk._actg3 = ["IFRAME","EMBED"]; // zk.disableAll use only.
 	if (zk.ie6Only) { //ie7 solves the z-order issue of SELECT
-		zk._actg1.unshift("SELECT"); //change visibility is required
+		zk._actg3.unshift("SELECT"); //change visibility is required
+		zk._actg1.unshift("SELECT"); // TODO: remove this code after finish all of the shadow component commented by JumperChen
 	} else
 		zk._actg2.unshift("SELECT");
-
 	zk.coveredTagnames = zk._actg1; //backward compatible 2.4 or before
 
 	zk._disTags = []; //A list of {element: xx, what: xx}
@@ -1132,8 +1332,8 @@ if (!zk._actg1) {
 
 /** Disables all active tags. */
 zk.disableAll = function (parent) {
-	for (var j = 0, al1 = zk._actg1.length; j < al1; j++)
-		zk._dsball(parent, document.getElementsByTagName(zk._actg1[j]), true);
+	for (var j = 0, al1 = zk._actg3.length; j < al1; j++)
+		zk._dsball(parent, document.getElementsByTagName(zk._actg3[j]), true);
 
 	if (zk.dbModal) //not disable-behind-modal
 		for (var j = 0, al2 = zk._actg2.length; j < al2; j++)

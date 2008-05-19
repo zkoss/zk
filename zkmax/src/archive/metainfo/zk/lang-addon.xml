@@ -859,6 +859,10 @@ def alert(m):
 		<extends>window</extends>
 		<mold>
 			<mold-name>default</mold-name>			
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Window2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>os</mold-name>			
 			<mold-uri>class:org.zkoss.zkmax.zul.render.WindowDefault</mold-uri>
 		</mold>
 	</component>

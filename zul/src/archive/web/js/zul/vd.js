@@ -237,17 +237,7 @@ zkVld._errbox = function () {
 		//if we slide, opera will slide it at the top of screen and position it
 		//later. No sure it is a bug of script.aculo.us or Opera
 	if (zk.ie6Only) setTimeout(function () {
-		var ifr = document.createElement('iframe');
-		ifr.id = id + "!ifr";
-		ifr.frameBorder = "no";
-		ifr.src="javascript:false";
-		ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block";
-		box.parentNode.appendChild(ifr);
-		ifr.style.width = box.offsetWidth + "px";
-		ifr.style.height = box.offsetHeight + "px";
-		ifr.style.top = box.style.top;
-		ifr.style.left = box.style.left;
-		box._ifr = ifr;
+		box._ifr = zk.createLining(box, id);
 	}, 0);
 	zul.initMovable(box, {
 		zindex: box.style.zIndex, effecting: zkVld._fiximg, starteffect: zk.voidf,

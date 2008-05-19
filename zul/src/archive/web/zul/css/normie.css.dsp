@@ -55,3 +55,7 @@ option {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: xx-small; font-weight: normal;
 }
+<%-- Window shadow --%>
+.z-ie-shadow { <%-- IE can use the "progid:DXImageTransform.Microsoft.Blur" function --%>
+	display: none; position: absolute; overflow: hidden; left: 0; top: 0; background: #777; zoom: 1;
+}
