@@ -25,7 +25,7 @@ if (!window.zkau) { //avoid eval twice
  * @param undo whether to undo the effect (false to set effect)
  */
 if (!window.Droppable_effect) { //define it only if not customized
-	window.Droppable_effect = function (e, undo) {
+	Droppable_effect = function (e, undo) {
 		if (undo)
 			zk.restoreStyle(e, "backgroundColor");
 		else {
@@ -44,9 +44,19 @@ if (!window.Droppable_effect) { //define it only if not customized
  * @since 3.0.6
  */
 if (!window.onProcessError) {
-	window.onProcessError = function (msgCode, msg2, cmd, ex) {
+	onProcessError = function (msgCode, msg2, cmd, ex) {
 		var msg = mesg[msgCode];
 		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
+	};
+}
+/** Confirms the user how to handle an error.
+ * Default: it shows up a message asking the user whether to retry.
+ * @since 3.0.6
+ */
+if (!window.confirmRetry) {
+	confirmRetry = function (msgCode, msg2) {
+		var msg = mesg[msgCode];
+		return zk.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
 	};
 }
 
@@ -313,7 +323,7 @@ zkau._onRespReady = function () {
 
 					if (!zkau._ignorable && !zkau._unloading) {
 						var msg = req.statusText;
-						if (confirm(mesg.FAILED_TO_RESPONSE+"\n"+mesg.TRY_AGAIN+"\n\n("+req.status+(msg?": "+msg:"")+")")) {
+						if (confirmRetry("FAILED_TO_RESPONSE", req.status+(msg?": "+msg:""))) {
 							zkau._areqTry = 2; //one more try
 							zkau._areqResend(reqInf);
 							return;
@@ -338,7 +348,7 @@ zkau._onRespReady = function () {
 			zkau._errcode = "[Receive] " + msg;
 			//if (e.fileName) zkau._errcode += ", "+e.fileName;
 			//if (e.lineNumber) zkau._errcode += ", "+e.lineNumber;
-			if (confirm(mesg.FAILED_TO_RESPONSE+"\n"+mesg.TRY_AGAIN+"\n\n"+(msg&&msg.indexOf("NOT_AVAILABLE")<0?"("+msg+")":""))) {
+			if (confirmRetry("FAILED_TO_RESPONSE", (msg&&msg.indexOf("NOT_AVAILABLE")<0?msg:""))) {
 				zkau._areqResend(reqInf);
 				return;
 			}
@@ -612,7 +622,7 @@ zkau._sendNow2 = function(reqInf) {
 		if (!reqInf.ignorable && !zkau._unloading) {
 			var msg = e.message;
 			zkau._errcode = "[Send] " + msg;
-			if (confirm(mesg.FAILED_TO_SEND+"\n"+mesg.TRY_AGAIN+"\n\n"+(msg?"("+msg+")":""))) {
+			if (confirmRetry("FAILED_TO_SEND", msg)) {
 				zkau._areqResend(reqInf);
 				return;
 			}
@@ -1520,7 +1530,7 @@ zkau._onDocKeydown = function (evt) {
 		return false; //eat
 	}
 	return true; //no special processing
-}
+};
 /** returns whether a key code is specified in keys. */
 zkau._inCtkeys = function (evt, zkcode, keys) {
 	if (keys) {
