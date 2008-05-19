@@ -284,6 +284,22 @@ if (c.isEmpty()) {
 	 */
 	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs);
 
+	/** Invokes {@link org.zkoss.zk.ui.util.UiLifeCycle#afterComponentAttached}.
+	 * @since 3.0.6
+	 */
+	public void afterComponentAttached(Component comp, Page page);
+	/** Invokes {@link org.zkoss.zk.ui.util.UiLifeCycle#afterComponentDetached}.
+	 * @since 3.0.6
+	 */
+	public void afterComponentDetached(Component comp, Page prevpage);
+	/** Invokes {@link org.zkoss.zk.ui.util.UiLifeCycle#afterComponentMoved}.
+	 *
+	 * @param prevparent the previous parent. If it is the same as
+	 * comp's {@link Component#getParent}, comp is moved in the same parent.
+	 * @since 3.0.6
+	 */
+	public void afterComponentMoved(Component parent, Component child, Component prevparent);
+
 	/** Called when ZK Update Engine has sent a collection of responses
 	 * to the client.
 	 *

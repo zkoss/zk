@@ -445,6 +445,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_parent != null)
 			throw new UiException("Only the parent of a root component can be changed: "+this);
 
+		final Page oldpg = _page;
 		final boolean samepg = page == _page;
 		if (!samepg) {
 			if (page != null) {
@@ -469,6 +470,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((PageCtrl)page).moveRoot(this, refRoot);
 
 		if (!samepg && _page != null) addToIdSpacesDown(this);
+
+		afterComponentPageChanged(page, oldpg);
 	}
 	/** Checks whether it is OK to detach the specified page.
 	 * @param page the page to detach (never null).
@@ -802,7 +805,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		} //if parent == null, assume no page at all (so no addRoot)
 
 		//correct _page
-		final Page newpg = _parent != null ? _parent.getPage(): null;
+		final Page newpg = _parent != null ? _parent.getPage(): null,
+			oldpg = _page;
 		addMoved(op, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
@@ -810,6 +814,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_spaceInfo.ns.setParent(
 				_parent != null ? _parent.getNamespace(): null);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
+
+		//call back UiLifeCycle
+		afterComponentPageChanged(newpg, oldpg);
+		if (newpg != null || oldpg != null) {
+			final Desktop desktop = (oldpg != null ? oldpg: newpg).getDesktop();
+			if (desktop != null) {
+				((DesktopCtrl)desktop).afterComponentMoved(parent, this, op);
+				desktop.getWebApp().getConfiguration().afterComponentMoved(parent, this, op);
+			}
+		}
+	}
+	private void afterComponentPageChanged(Page newpg, Page oldpg) {
+		if (newpg == oldpg) return;
+
+		final Desktop desktop = (oldpg != null ? oldpg: newpg).getDesktop();
+		if (desktop == null) return; //just in case
+
+		//Note: if newpg and oldpg both non-null, they must be the same
+		if (oldpg != null) {
+			((DesktopCtrl)desktop).afterComponentDetached(this, oldpg);
+			desktop.getWebApp().getConfiguration().afterComponentDetached(this, oldpg);
+		} else {
+			((DesktopCtrl)desktop).afterComponentAttached(this, newpg);
+			desktop.getWebApp().getConfiguration().afterComponentAttached(this, newpg);
+		}
 	}
 
 	/** Returns whether the child is being removed.

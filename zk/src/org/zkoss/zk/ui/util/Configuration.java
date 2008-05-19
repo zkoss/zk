@@ -33,6 +33,7 @@ import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.WaitLock;
+import org.zkoss.util.ArraysX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
@@ -40,6 +41,7 @@ import org.zkoss.xel.Expressions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -88,6 +90,8 @@ public class Configuration {
 		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
 		_dtInits = new LinkedList(), _dtCleans = new LinkedList(),
 		_execInits = new LinkedList(), _execCleans = new LinkedList();
+	private UiLifeCycle[] _uiCycles;
+		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
 	private final List
 		_uriIntcps = new LinkedList(), _reqIntcps = new LinkedList();
@@ -167,20 +171,23 @@ public class Configuration {
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
-	 * and/or {@link EventInterceptor} interfaces.
+	 * {@link UiLifeCycle}, and/or {@link EventInterceptor} interfaces.
+	 * @see Desktop#addListener
 	 */
 	public void addListener(Class klass) throws Exception {
 		boolean added = false;
+		Object listener = null;
+
 		if (Monitor.class.isAssignableFrom(klass)) {
 			if (_monitor != null)
 				throw new UiException("Monitor listener can be assigned only once");
-			_monitor = (Monitor)klass.newInstance();
+			_monitor = (Monitor)getInstance(klass, listener);
 			added = true;
 		}
 		if (PerformanceMeter.class.isAssignableFrom(klass)) {
 			if (_pfmeter != null)
 				throw new UiException("PerformanceMeter listener can be assigned only once");
-			_pfmeter = (PerformanceMeter)klass.newInstance();
+			_pfmeter = (PerformanceMeter)getInstance(klass, listener);
 			added = true;
 		}
 
@@ -262,7 +269,7 @@ public class Configuration {
 		}
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				final Object obj = klass.newInstance();
+				final Object obj = getInstance(klass, listener);
 				synchronized (_uriIntcps) {
 					_uriIntcps.add(obj);
 				}
@@ -273,7 +280,7 @@ public class Configuration {
 		}
 		if (RequestInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				final Object obj = klass.newInstance();
+				final Object obj = getInstance(klass, listener);
 				synchronized (_reqIntcps) {
 					_reqIntcps.add(obj);
 				}
@@ -284,7 +291,25 @@ public class Configuration {
 		}
 		if (EventInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_eis.addEventInterceptor((EventInterceptor)klass.newInstance());
+				_eis.addEventInterceptor((EventInterceptor)getInstance(klass, listener));
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+klass, ex);
+			}
+			added = true;
+		}
+		if (UiLifeCycle.class.isAssignableFrom(klass)) {
+			try {
+				final UiLifeCycle obj = (UiLifeCycle)getInstance(klass, listener);
+				synchronized (this) {
+					if (_uiCycles == null) {
+						_uiCycles = new UiLifeCycle[] {obj};
+					} else {
+						UiLifeCycle[] ary = (UiLifeCycle[])
+							ArraysX.resize(_uiCycles, _uiCycles.length + 1);
+						ary[_uiCycles.length] = obj;
+						_uiCycles = ary;
+					}
+				}
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -294,7 +319,12 @@ public class Configuration {
 		if (!added)
 			throw new UiException("Unknown listener: "+klass);
 	}
+	private static Object getInstance(Class klass, Object listener)
+	throws Exception {
+		return listener != null ? listener: klass.newInstance();
+	}
 	/** Removes a listener class.
+	 * @see Desktop#removeListener
 	 */
 	public void removeListener(Class klass) {
 		synchronized (_evtInits) {
@@ -346,6 +376,20 @@ public class Configuration {
 				final Object obj = it.next();
 				if (obj.getClass().equals(klass))
 					it.remove();
+			}
+		}
+		synchronized (this) {
+			if (_uiCycles != null) {
+				List l = new LinkedList();
+				boolean found = false;
+				for (int j = 0; j < _uiCycles.length; ++j)
+					if (_uiCycles[j].getClass().equals(klass))
+						found = true;
+					else
+						l.add(_uiCycles[j]);
+
+				if (found)
+					_uiCycles = (UiLifeCycle[])l.toArray(new UiLifeCycle[l.size()]);
 			}
 		}
 
@@ -952,6 +996,87 @@ public class Configuration {
 						.request(sess, request, response);
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex);
+				}
+			}
+		}
+	}
+
+	/** Invokes {@link UiLifeCycle#afterComponentAttached}
+	 * when a compnent is attached to a page.
+	 * @since 3.0.6
+	 */
+	public void afterComponentAttached(Component comp, Page page) {
+		UiLifeCycle[] ary = _uiCycles;
+		if (ary != null) {
+			for (int j = 0; j < ary.length; ++j) {
+				try {
+					ary[j].afterComponentAttached(comp, page);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+ary[j], ex);
+				}
+			}
+		}
+	}
+	/** Invokes {@link UiLifeCycle#afterComponentDetached}
+	 * when a compnent is detached from a page.
+	 * @since 3.0.6
+	 */
+	public void afterComponentDetached(Component comp, Page prevpage) {
+		UiLifeCycle[] ary = _uiCycles;
+		if (ary != null) {
+			for (int j = 0; j < ary.length; ++j) {
+				try {
+					ary[j].afterComponentDetached(comp, prevpage);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+ary[j], ex);
+				}
+			}
+		}
+	}
+	/** Invokes {@link UiLifeCycle#afterComponentMoved}
+	 * when a compnent is moved (aka., page changed).
+	 * @since 3.0.6
+	 */
+	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
+		UiLifeCycle[] ary = _uiCycles;
+		if (ary != null) {
+			for (int j = 0; j < ary.length; ++j) {
+				try {
+					ary[j].afterComponentMoved(parent, child, prevparent);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+ary[j], ex);
+				}
+			}
+		}
+	}
+	/** Invokes {@link UiLifeCycle#afterPageAttached}
+	 * when a compnent's parent is changed.
+	 * @since 3.0.6
+	 */
+	public void afterPageAttached(Page page, Desktop desktop) {
+		UiLifeCycle[] ary = _uiCycles;
+		if (ary != null) {
+			for (int j = 0; j < ary.length; ++j) {
+				try {
+					ary[j].afterPageAttached(page, desktop);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+ary[j], ex);
+				}
+			}
+		}
+	}
+	/** Invokes {@link UiLifeCycle#afterPageDetached}
+	 * when a compnent's parent is changed.
+	 * @since 3.0.6
+	 */
+	public void afterPageDetached(Page page, Desktop prevdesktop) {
+		UiLifeCycle[] ary = _uiCycles;
+		if (ary != null) {
+			for (int j = 0; j < ary.length; ++j) {
+				try {
+					ary[j].afterPageDetached(page, prevdesktop);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+ary[j], ex);
 				}
 			}
 		}
