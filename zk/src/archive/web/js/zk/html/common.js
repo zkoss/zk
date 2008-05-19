@@ -205,6 +205,18 @@ zk.alert = function (msg) {
 		zk.alerting = false;
 	}
 };
+/** To confirm the user for an activity.
+ * @since 3.0.6
+ */
+zk.confirm = function (msg) {
+	zk.alerting = true;
+	try {
+		return confirm(msg);
+	} finally {
+		zk.alerting = false;
+	}
+};
+
 /** Returns whether it is part of the class name
  * of the specified element.
  */
