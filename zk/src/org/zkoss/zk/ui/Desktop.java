@@ -276,13 +276,6 @@ public interface Desktop {
 	 */
 	public boolean isServerPushEnabled();
 
-	/** @deprecated As of release 3.1.0, replaced by {@link #addListener}.
-	 */
-	public void addEventInterceptor(EventInterceptor ei);
-	/** @deprecated As of release 3.1.0, replaced by {@link #removeListener}.
-	 */
-	public boolean removeEventInterceptor(EventInterceptor ei);
-
 	/** Adds a listener.
 	 *
 	 * <p>Note: if the listener is added twice, it will be invoked
@@ -299,12 +292,12 @@ public interface Desktop {
 	 * {@link org.zkoss.zk.ui.event.EventThreadSuspend} and
 	 * {@link org.zkoss.zk.ui.event.EventThreadResume} are not supported.
 	 * @exception IllegalArgumentException if not a valid listener.
-	 * @since 3.1.0
+	 * @since 3.0.6
 	 */
 	public void addListener(Object listener);
 	/** Removes a listener
 	 * @return whether the listener is removed successfully.
-	 * @since 3.1.0
+	 * @since 3.0.6
 	 */
 	public boolean removeListener(Object listener);
 

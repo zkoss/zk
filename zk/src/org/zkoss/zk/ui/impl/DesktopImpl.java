@@ -560,7 +560,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		s.defaultWriteObject();
 
 		willSerialize(_attrs.values());
-		Serializables.smartWrite(s, _attrs);		
+		Serializables.smartWrite(s, _attrs);
 		willSerialize(_dtCleans);
 		Serializables.smartWrite(s, _dtCleans);
 		willSerialize(_execInits);
@@ -615,7 +615,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 			addAllComponents((Component)it.next());
 	}
-
 
 	public void addListener(Object listener) {
 		boolean added = false;
@@ -675,16 +674,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		return false;
 	}
-	/** @deprecated As of release 3.1.0, replaced by {@link #addListener}.
-	 */
-	public void addEventInterceptor(EventInterceptor ei) {
-		addListener(ei);
-	}
-	/** @deprecated As of release 3.1.0, replaced by {@link #removeListener}.
-	 */
-	public boolean removeEventInterceptor(EventInterceptor ei) {
-		return removeListener(ei);
-	}
 	public Event beforeSendEvent(Event event) {
 		event = _eis.beforeSendEvent(event);
 		if (event != null)
@@ -707,7 +696,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_eis.afterProcessEvent(event);
 		_wapp.getConfiguration().afterProcessEvent(event);
 	}
-	
+
 	public void invokeDesktopCleanups() {
 		if (_dtCleans != null) {
 			for (Iterator it = _dtCleans.iterator(); it.hasNext();) {
@@ -747,7 +736,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 	}
-	
+
 	//Server Push//
 	public boolean enableServerPush(boolean enable) {
 		final boolean old = _spush != null;

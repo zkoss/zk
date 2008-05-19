@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.EventInterceptor;
 
 /**
- * An addition interface to {@link org.zkoss.zk.ui.Desktop}
+ * An addition interface to {@link Desktop}
  * for implementation.
  *
  * <p>Note: applications shall never access this interface.
@@ -207,7 +207,7 @@ if (c.isEmpty()) {
 	public boolean enableServerPush(ServerPush serverpush);
 
 	/** Invokes {@link EventInterceptor#beforeSendEvent}
-	 * registered by {@link Desktop#addEventInterceptor}.
+	 * registered by {@link Desktop#addListener}.
 	 *
 	 * <p>Note: it invokes
 	 * {@link org.zkoss.zk.ui.util.Configuration#beforeSendEvent}
@@ -216,7 +216,7 @@ if (c.isEmpty()) {
 	 */
 	public Event beforeSendEvent(Event event);
 	/** Invokes {@link EventInterceptor#beforePostEvent}
-	 * registered by {@link Desktop#addEventInterceptor}.
+	 * registered by {@link Desktop#addListener}.
 	 *
 	 * <p>Note: it invokes
 	 * {@link org.zkoss.zk.ui.util.Configuration#beforePostEvent}
@@ -225,7 +225,7 @@ if (c.isEmpty()) {
 	 */
 	public Event beforePostEvent(Event event);
 	/** Invokes {@link EventInterceptor#beforeProcessEvent}
-	 * registered by {@link Desktop#addEventInterceptor}.
+	 * registered by {@link Desktop#addListener}.
 	 *
 	 * <p>Note: it invokes
 	 * {@link org.zkoss.zk.ui.util.Configuration#beforeProcessEvent}
@@ -234,7 +234,7 @@ if (c.isEmpty()) {
 	 */
 	public Event beforeProcessEvent(Event event);
 	/** Invokes {@link EventInterceptor#afterProcessEvent}
-	 * registered by {@link Desktop#addEventInterceptor}.
+	 * registered by {@link Desktop#addListener}.
 	 *
 	 * <p>Note: it invokes
 	 * {@link org.zkoss.zk.ui.util.Configuration#afterProcessEvent}
@@ -249,7 +249,7 @@ if (c.isEmpty()) {
 	 *
 	 * <p>It never throws an exception.
 	 *
-	 * @since 3.1.0
+	 * @since 3.0.6
 	 */
 	public void invokeDesktopCleanups();
 
@@ -261,7 +261,7 @@ if (c.isEmpty()) {
 	 * @param exec the execution that is created
 	 * @param parent the previous execution, or null if no previous at all
 	 * @exception UiException to prevent an execution from being created
-	 * @since 3.1.0
+	 * @since 3.0.6
 	 */
 	public void invokeExecutionInits(Execution exec, Execution parent)
 	throws UiException;
@@ -280,7 +280,7 @@ if (c.isEmpty()) {
 	 * Note: you can manipulate the list directly to add or clean up exceptions.
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
-	 * @since 3.1.0
+	 * @since 3.0.6
 	 */
 	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs);
 
