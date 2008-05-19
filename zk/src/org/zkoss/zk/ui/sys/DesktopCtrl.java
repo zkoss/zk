@@ -19,19 +19,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.zkoss.util.media.Media;
 
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.EventInterceptor;
 
 /**
- * An addition interface to {@link org.zkoss.zk.ui.Desktop}
+ * An addition interface to {@link Desktop}
  * for implementation.
  *
  * <p>Note: applications shall never access this interface.
@@ -154,7 +157,7 @@ if (c.isEmpty()) {
 	public boolean ceaseSuspendedThread(EventProcessingThread evtthd, String cause);
 
 	/** Returns the media that is associated with
-	 * {@link org.zkoss.zk.ui.Desktop#getDownloadMediaURI}, or
+	 * {@link Desktop#getDownloadMediaURI}, or
 	 * null if not found.
 	 *
 	 * <p>This method is used internally. Developers rarely need to
@@ -166,13 +169,13 @@ if (c.isEmpty()) {
 	public Media getDownloadMedia(String medId, boolean remove);
 
 	/** Called when a component added or removed a listener for
-	 * {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}.
+	 * {@link Events#ON_PIGGYBACK}.
 	 *
 	 * <p>The implementation usualy uses it to optimize whether to
 	 * call the listener when {@link #onPiggyback} is called.
 	 *
 	 * @param comp the component that adds an listener for
-	 * {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}.
+	 * {@link Events#ON_PIGGYBACK}.
 	 * The component may or may not be a root component.
 	 * @param listen whether the listener is added (or removed).
 	 * @since 3.0.0
@@ -180,7 +183,7 @@ if (c.isEmpty()) {
 	public void onPiggybackListened(Component comp, boolean listen);
 	/** Called each time ZK Update Engine processes all events.
 	 * It is used to implement the piggyback feature
-	 * (see {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}).
+	 * (see {@link Events#ON_PIGGYBACK}).
 	 *
 	 * <p>Used only internally. Application develepers shall not call it.
 	 *
@@ -199,12 +202,12 @@ if (c.isEmpty()) {
 	 * Note: this method will invoke {@link ServerPush#start}, so the
 	 * caller doesn't need to do it.
 	 * @since 3.0.0
-	 * @see org.zkoss.zk.ui.Desktop#enableServerPush
+	 * @see Desktop#enableServerPush
 	 */
 	public boolean enableServerPush(ServerPush serverpush);
 
 	/** Invokes {@link EventInterceptor#beforeSendEvent}
-	 * registered by {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+	 * registered by {@link Desktop#addListener}.
 	 *
 	 * <p>Note: it invokes
 	 * {@link org.zkoss.zk.ui.util.Configuration#beforeSendEvent}
@@ -213,7 +216,7 @@ if (c.isEmpty()) {
 	 */
 	public Event beforeSendEvent(Event event);
 	/** Invokes {@link EventInterceptor#beforePostEvent}
-	 * registered by {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+	 * registered by {@link Desktop#addListener}.
 	 *
 	 * <p>Note: it invokes
 	 * {@link org.zkoss.zk.ui.util.Configuration#beforePostEvent}
@@ -222,7 +225,7 @@ if (c.isEmpty()) {
 	 */
 	public Event beforePostEvent(Event event);
 	/** Invokes {@link EventInterceptor#beforeProcessEvent}
-	 * registered by {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+	 * registered by {@link Desktop#addListener}.
 	 *
 	 * <p>Note: it invokes
 	 * {@link org.zkoss.zk.ui.util.Configuration#beforeProcessEvent}
@@ -231,7 +234,7 @@ if (c.isEmpty()) {
 	 */
 	public Event beforeProcessEvent(Event event);
 	/** Invokes {@link EventInterceptor#afterProcessEvent}
-	 * registered by {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+	 * registered by {@link Desktop#addListener}.
 	 *
 	 * <p>Note: it invokes
 	 * {@link org.zkoss.zk.ui.util.Configuration#afterProcessEvent}
@@ -239,6 +242,47 @@ if (c.isEmpty()) {
 	 * @since 3.0.0
 	 */
 	public void afterProcessEvent(Event event);
+	/** Invokes {@link org.zkoss.zk.ui.util.DesktopCleanup#cleanup} for each relevant
+	 * listener registered by {@link Desktop#addListener}.
+	 *
+ 	 * <p>Used only internally.
+	 *
+	 * <p>It never throws an exception.
+	 *
+	 * @since 3.0.6
+	 */
+	public void invokeDesktopCleanups();
+
+	/** Invokes {@link org.zkoss.zk.ui.util.ExecutionInit#init} for each relevant
+	 * listener registered by {@link Desktop#addListener}.
+	 *
+ 	 * <p>Used only internally.
+	 *
+	 * @param exec the execution that is created
+	 * @param parent the previous execution, or null if no previous at all
+	 * @exception UiException to prevent an execution from being created
+	 * @since 3.0.6
+	 */
+	public void invokeExecutionInits(Execution exec, Execution parent)
+	throws UiException;
+	/** Invokes {@link org.zkoss.zk.ui.util.ExecutionCleanup#cleanup} for each relevant
+	 * listener registered by {@link Desktop#addListener}.
+	 *
+ 	 * <p>Used only internally.
+	 *
+	 * <p>It never throws an exception but logs and adds it to the errs argument,
+	 * if not null.
+	 *
+	 * @param exec the execution that is being destroyed
+	 * @param parent the previous execution, or null if no previous at all
+	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
+	 * occured before this method is called, or null if no exeption at all.
+	 * Note: you can manipulate the list directly to add or clean up exceptions.
+	 * For example, if exceptions are fixed correctly, you can call errs.clear()
+	 * such that no error message will be displayed at the client.
+	 * @since 3.0.6
+	 */
+	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs);
 
 	/** Called when ZK Update Engine has sent a collection of responses
 	 * to the client.

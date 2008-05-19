@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.event.Event;
  * The event interceptor used to intercept the processing of events.
  *
  * <p>To register an event intercetper to a desktop, invoke
- * {@link org.zkoss.zk.ui.Desktop#addEventInterceptor}.
+ * {@link org.zkoss.zk.ui.Desktop#addListener}.
  * To register an event intercepter to a configuration, invoke
  * {@link Configuration#addListener}.
  *

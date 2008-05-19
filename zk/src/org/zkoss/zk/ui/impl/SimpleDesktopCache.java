@@ -98,6 +98,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	}
 	private static void desktopDestroyed(Desktop desktop) {
 		final WebApp wapp = desktop.getWebApp();
+		((DesktopCtrl)desktop).invokeDesktopCleanups();
 		wapp.getConfiguration().invokeDesktopCleanups(desktop);
 			//Feature 1767347: call DesktopCleanup before desktopDestroyed
 			//such that app dev has a chance to manipulate the desktop

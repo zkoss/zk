@@ -282,6 +282,7 @@ public class UiEngineImpl implements UiEngine {
 		//Update the device type first. If this is the second page and not
 		//belonging to the same device type, an exception is thrown
 		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final LanguageDefinition langdef = //default page
 			pagedef != null ? pagedef.getLanguageDefinition():
 			richlet != null ? richlet.getLanguageDefinition(): null;
@@ -309,6 +310,7 @@ public class UiEngineImpl implements UiEngine {
 		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
+			desktopCtrl.invokeExecutionInits(exec, oldexec);
 
 			if (olduv != null) {
 				final Component owner = olduv.getOwner();
@@ -395,6 +397,7 @@ public class UiEngineImpl implements UiEngine {
 			final List errs = new LinkedList();
 			errs.add(ex);
 
+			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
 				//CONSIDER: whether to pass cleanup's error to users
 
@@ -404,8 +407,11 @@ public class UiEngineImpl implements UiEngine {
 				throw UiException.Aide.wrap(ex);
 			}
 		} finally {
-			if (!cleaned) config.invokeExecutionCleanups(exec, oldexec, null);
+			if (!cleaned) {
+				desktopCtrl.invokeExecutionCleanups(exec, oldexec, null);
+				config.invokeExecutionCleanups(exec, oldexec, null);
 				//CONSIDER: whether to pass cleanup's error to users
+			}
 			if (abrn != null) {
 				try {
 					abrn.finish();
@@ -431,8 +437,7 @@ public class UiEngineImpl implements UiEngine {
 	 * @return the first component being created.
 	 */
 	private static final Component[] execCreate(
-	CreateInfo ci, NodeInfo parentInfo, Component parent)
-	throws IOException {
+	CreateInfo ci, NodeInfo parentInfo, Component parent) {
 		if (parentInfo instanceof ComponentInfo) {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
 			final String fulfill = pi.getFulfill();
@@ -444,8 +449,7 @@ public class UiEngineImpl implements UiEngine {
 		return execCreate0(ci, parentInfo, parent);
 	}
 	private static final Component[] execCreate0(
-	CreateInfo ci, NodeInfo parentInfo, Component parent)
-	throws IOException {
+	CreateInfo ci, NodeInfo parentInfo, Component parent) {
 		final List created = new LinkedList();
 		final Page page = ci.page;
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
@@ -486,8 +490,7 @@ public class UiEngineImpl implements UiEngine {
 		return (Component[])created.toArray(new Component[created.size()]);
 	}
 	private static Component[] execCreateChild(
-	CreateInfo ci, Component parent, ComponentInfo childInfo)
-	throws IOException {
+	CreateInfo ci, Component parent, ComponentInfo childInfo) {
 		final ComponentDefinition childdef = childInfo.getComponentDefinition();
 		if (ComponentDefinition.ZK == childdef) {
 			return execCreate(ci, childInfo, parent);
@@ -503,8 +506,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 	private static Component execCreateChild0(
-	CreateInfo ci, Component parent, ComponentInfo childInfo)
-	throws IOException {
+	CreateInfo ci, Component parent, ComponentInfo childInfo) {
 		final Composer composer = childInfo.getComposer(ci.page, parent);
 		final ComposerExt composerExt =
 			composer instanceof ComposerExt ? (ComposerExt)composer: null;
@@ -602,7 +604,9 @@ public class UiEngineImpl implements UiEngine {
 			if (comp != null) vars.apply(comp); //it handles isEffective
 			else vars.apply(page);
 		} else {
-			throw new IllegalStateException("Unknown metainfo: "+meta);
+			//Note: we don't handle ComponentInfo here, because
+			//getNativeContent assumes no child component
+			throw new IllegalStateException(meta+" not allowed in "+comp);
 		}
 	}
 	private static final boolean isEffective(Condition cond,
@@ -699,7 +703,7 @@ public class UiEngineImpl implements UiEngine {
 		if (requests == null)
 			throw new IllegalArgumentException();
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
-			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec+", reqs="+requests;
+			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
 
 		final UiVisualizer uv = doActivate(exec, true, false);
 		final Desktop desktop = exec.getDesktop();
@@ -737,6 +741,8 @@ public class UiEngineImpl implements UiEngine {
 			rque.addRequests(requests);
 
 			config.invokeExecutionInits(exec, null);
+			desktopCtrl.invokeExecutionInits(exec, null);
+
 			if (pfReqId != null) rque.addPerfRequestId(pfReqId);
 
 			final List errs = new LinkedList();
@@ -803,21 +809,23 @@ public class UiEngineImpl implements UiEngine {
 			else
 				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
 
-			out.write(responses);
 			if (sid != null)
 				desktopCtrl.responseSent(sid, responses);
+			out.write(responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
 //				else log.debug("Responses: "+responses.subList(0, 5)+"...");
 
 			cleaned = true;
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
 			config.invokeExecutionCleanups(exec, null, errs);
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
 				final List errs = new LinkedList();
 				errs.add(ex);
+				desktopCtrl.invokeExecutionCleanups(exec, null, errs);
 				config.invokeExecutionCleanups(exec, null, errs);
 				ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
 			}
@@ -827,7 +835,10 @@ public class UiEngineImpl implements UiEngine {
 				throw UiException.Aide.wrap(ex);
 			}
 		} finally {
-			if (!cleaned) config.invokeExecutionCleanups(exec, null, null);
+			if (!cleaned) {
+				desktopCtrl.invokeExecutionCleanups(exec, null, null);
+				config.invokeExecutionCleanups(exec, null, null);
+			}
 
 			if (abrn != null) {
 				try {
