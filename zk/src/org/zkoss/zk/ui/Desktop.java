@@ -286,6 +286,7 @@ public interface Desktop {
 	 * {@link org.zkoss.zk.ui.util.DesktopCleanup},
 	 * {@link org.zkoss.zk.ui.util.ExecutionInit},
 	 * {@link org.zkoss.zk.ui.util.ExecutionCleanup},
+	 * {@link org.zkoss.zk.ui.util.UiLifeCycle},
 	 * and/or {@link EventInterceptor}.<br/>
 	 * Note: {@link org.zkoss.zk.ui.event.EventThreadInit},
 	 * {@link org.zkoss.zk.ui.event.EventThreadCleanup},
@@ -295,8 +296,10 @@ public interface Desktop {
 	 * @since 3.0.6
 	 */
 	public void addListener(Object listener);
-	/** Removes a listener
+	/** Removes a listener.
+	 *
 	 * @return whether the listener is removed successfully.
+	 * {@link Object#equals} is used to check whether a listener is added.
 	 * @since 3.0.6
 	 */
 	public boolean removeListener(Object listener);

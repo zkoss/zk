@@ -51,6 +51,7 @@ import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.DesktopCleanup;
 import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.util.ExecutionInit;
+import org.zkoss.zk.ui.util.UiLifeCycle;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
@@ -138,7 +139,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient ServerPush _spush;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
-	private transient List _dtCleans, _execInits, _execCleans;
+	private transient List _dtCleans, _execInits, _execCleans, _uiCycles;
 	private transient Map _lastRes;
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
@@ -455,9 +456,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				log.warning(
 					page == old ? "Register a page twice: "+page:
 						"Replicated ID: "+page+"; already used by "+old);
+				return;
 			}
-			if (D.ON && log.debugable()) log.debug("After added, pages: "+_pages);
+//			if (D.ON && log.debugable()) log.debug("After added, pages: "+_pages);
 		}
+		afterPageAttached(page, this);
+		_wapp.getConfiguration().afterPageAttached(page, this);
 	}
 	public void removePage(Page page) {
 		synchronized (_pages) {
@@ -465,9 +469,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				log.warning("Removing non-exist page: "+page+"\nCurrent pages: "+_pages.values());
 				return;
 			}
-			if (D.ON && log.debugable()) log.debug("After removed, pages: "+_pages.values());
+//			if (D.ON && log.debugable()) log.debug("After removed, pages: "+_pages.values());
 		}
 		removeComponents(page.getRoots());
+
+		afterPageDetached(page, this);
+		_wapp.getConfiguration().afterPageDetached(page, this);
 
 		((PageCtrl)page).destroy();
 	}
@@ -567,6 +574,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Serializables.smartWrite(s, _execInits);
 		willSerialize(_execCleans);
 		Serializables.smartWrite(s, _execCleans);
+		willSerialize(_uiCycles);
+		Serializables.smartWrite(s, _uiCycles);
+
 		s.writeBoolean(_spush != null);
 	}
 	private void willSerialize(Collection c) {
@@ -597,6 +607,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_execInits = (List)Serializables.smartRead(s, _execInits);
 		didDeserialize(_execInits);
 		_execCleans = (List)Serializables.smartRead(s, _execCleans);
+		didDeserialize(_execCleans);
+		_uiCycles = (List)Serializables.smartRead(s, _uiCycles);
+		didDeserialize(_uiCycles);
 
 		if (s.readBoolean())
 			enableServerPush(true);
@@ -637,6 +650,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			added = true;
 		}
 
+		if (listener instanceof UiLifeCycle) {
+			_uiCycles = addListener0(_uiCycles, listener);
+			added = true;
+		}
+
 		if (!added)
 			throw new IllegalArgumentException("Unknown listener: "+listener);
 	}
@@ -659,15 +677,22 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (listener instanceof ExecutionInit
 		&& removeListener0(_execInits, listener))
 			found = true;
+
 		if (listener instanceof ExecutionCleanup
 		&& removeListener0(_execCleans, listener))
+			found = true;
+
+		if (listener instanceof UiLifeCycle
+		&& removeListener0(_uiCycles, listener))
 			found = true;
 		return found;
 	}
 	private boolean removeListener0(List list, Object listener) {
-		if (list != null)
+		//Since 3.0.6: To be consistent with Configuration,
+		//use equals instead of ==
+		if (list != null && listener != null)
 			for (Iterator it = list.iterator(); it.hasNext();) {
-				if (it.next() == listener) { //yes, use == (rather equals)
+				if (it.next().equals(listener)) {
 					it.remove();
 					return true;
 				}
@@ -732,6 +757,67 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				} catch (Throwable ex) {
 					log.error("Failed to invoke "+listener, ex);
 					if (errs != null) errs.add(ex);
+				}
+			}
+		}
+	}
+
+	public void afterComponentAttached(Component comp, Page page) {
+		if (_uiCycles != null) {
+			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+				final UiLifeCycle listener = (UiLifeCycle)it.next();
+				try {
+					listener.afterComponentAttached(comp, page);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+listener, ex);
+				}
+			}
+		}
+	}
+	public void afterComponentDetached(Component comp, Page prevpage) {
+		if (_uiCycles != null) {
+			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+				final UiLifeCycle listener = (UiLifeCycle)it.next();
+				try {
+					listener.afterComponentDetached(comp, prevpage);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+listener, ex);
+				}
+			}
+		}
+	}
+	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
+		if (_uiCycles != null) {
+			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+				final UiLifeCycle listener = (UiLifeCycle)it.next();
+				try {
+					listener.afterComponentMoved(parent, child, prevparent);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+listener, ex);
+				}
+			}
+		}
+	}
+	private void afterPageAttached(Page page, Desktop desktop) {
+		if (_uiCycles != null) {
+			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+				final UiLifeCycle listener = (UiLifeCycle)it.next();
+				try {
+					listener.afterPageAttached(page, desktop);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+listener, ex);
+				}
+			}
+		}
+	}
+	private void afterPageDetached(Page page, Desktop prevdesktop) {
+		if (_uiCycles != null) {
+			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+				final UiLifeCycle listener = (UiLifeCycle)it.next();
+				try {
+					listener.afterPageDetached(page, prevdesktop);
+				} catch (Throwable ex) {
+					log.error("Failed to invoke "+listener, ex);
 				}
 			}
 		}
