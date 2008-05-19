@@ -17,7 +17,6 @@ ZK 3.1.0
   1955900: A subscribe/publish meachism to handle events
   1959380: Window support both properties minheight and minwidth
   1955562: For theme: menuitem unchecked not visible
-  1883237: A way to register listeners for particular desktop
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
