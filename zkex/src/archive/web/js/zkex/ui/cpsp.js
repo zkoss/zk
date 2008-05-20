@@ -65,7 +65,7 @@ zkCpsp._do = function (dtid) {
 				max = zkCpsp._max(info),
 				min = zkCpsp._min(info);
 			if (delay > max) delay = max;
-			if (delay < min) delay = min;
+			else if (isNaN(delay) || delay < min) delay = min;
 			doNow = $now() > zkau.doneTime + delay;
 		}
 
