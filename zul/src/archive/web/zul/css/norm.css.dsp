@@ -344,7 +344,7 @@ div.z-apply-mask {
 	background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
 div.z-apply-loading {
-	position: absolute; z-index: 89500; border: 1px solid #83B5F7;
+	position: absolute; z-index: 89500; border: 0;
 	overflow: hidden; font-size: 0pt; line-height: 0pt;
 }
 <%-- ZK separator --%>

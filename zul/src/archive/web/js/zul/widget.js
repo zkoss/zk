@@ -641,12 +641,19 @@ zkPg.go = function (anc, pgno) {
 zkPop = {};
 
 /** Called by au.js's context menu. */
-zkPop.context = function (ctx, ref) {
+zkPop.context = function (ctx, ref) {	
 	zk.show(ctx); //onVisiAt is called in zk.show
+	var asap= zkau.asap(ctx, "onOpen");	
+	if (asap) {
+		//use a progress bar to hide the popup
+		var mask = zk.applyMask(ctx.id, "");
+		//register addOnReponse to remove the progress bar after receiving the response from server
+		zkau.addOnResponse("zk.remove($e('"+mask.id+"'))");		
+	}		
 	zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
 	zkau.hideCovered();
 
-	if (zkau.asap(ctx, "onOpen"))
+	if (asap)
 		zkau.send({uuid: ctx.id, cmd: "onOpen",
 			data: ref ? [true, ref.id]: [true]});
 };
