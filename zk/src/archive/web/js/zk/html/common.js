@@ -311,7 +311,7 @@ zk.applyMask = function (rel, message) {
 			+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 			+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
 			+ '<div id="'+rel.id+'!z-loading" class="z-apply-loading">'
-			+ '<img alt="'+message+'" style="width:126px;height:22px" src="'+zk.getUpdateURI('/web/zk/img/progress3.gif')+'"/> '
+			+ '<img alt="'+message+'" src="'+zk.getUpdateURI('/web/zk/img/progress3.gif')+'"/> '
 			+ '</div></div>';
 	zk.setOuterHTML(n, html);
 	var loading = $e(rel.id+"!z-loading"), progbox = $e(rel.id + "!progbox");
