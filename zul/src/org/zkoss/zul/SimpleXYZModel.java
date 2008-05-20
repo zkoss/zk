@@ -36,7 +36,7 @@ import java.util.Collection;
  * @author henrichen
  * @see XYModel
  * @see Chart
- * @see 3.1.0
+ * @since 3.1.0
  */
 public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	//-- XYModel --//
