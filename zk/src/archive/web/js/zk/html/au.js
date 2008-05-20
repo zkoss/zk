@@ -79,7 +79,6 @@ zkau._seqId = 1; //1-999
 zkau._dtids = []; //an array of desktop IDs
 zkau._uris = {}; //a map of update engine's URIs ({dtid, uri})
 zkau._spushInfo = {} //the server-push info: Map(dtid, {min, max, factor})
-zkau.doneTime = zkau.sentTime = 0; //to avoid NaN if do some math like cpsp.js
 var undef; //an undefined variable
 
 /** Adds a desktop. */
