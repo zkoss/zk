@@ -14,6 +14,7 @@ ZK 3.0.6
   1962153: Data binding generates duplicate id in some case
   1963547: Fail to add a Listitem with Paging mold
   1955454: imagemap shall not generate ismap if any area
+  1967811: Should disable selection when multiple selection using Shift
 
 	--------
 ZK 3.0.5
