@@ -57,8 +57,7 @@ zkWnd2.init = function (cmp) {
 zkWnd2.cleanup = function (cmp) {
 	zkWnd2.setSizable(cmp, false);
 	zkWnd2._cleanMode(cmp);
-	var sw = zkWnd2.getShadow(cmp);
-	if (sw) sw.cleanup();
+	zkWnd2.cleanupShadow(cmp);
 };
 /** Fixed the content div's height. */
 zkWnd2.onVisi = zkWnd2.onSize = zkWnd2._fixHgh = function (cmp) {
@@ -109,6 +108,14 @@ zkWnd2.getShadow = function (cmp) {
  */
 zkWnd2.initShadow = function (cmp) {
 	cmp._shadow = new zk.Shadow(cmp);
+};
+/**
+ * Clean the shadow object for the specified component.
+ * @since 3.1.0
+ */
+zkWnd2.cleanupShadow = function (cmp) {
+	if (cmp._shadow) cmp._shadow.cleanup();
+	cmp._shadow = null;
 };
 /**
  * Sync the region of the shadow from the specified component.
@@ -740,6 +747,18 @@ zkWnd2._center = function (cmp, zi, pos) {
 	if (pos == "parent") return;
 	cmp.style.position = "absolute"; //just in case
 	zk.center(cmp, pos);
+	var sw = zkWnd2.getShadow(cmp);
+	if (sw) {
+		var d = sw.getDelta(), l = cmp.offsetLeft, t = cmp.offsetTop, w = cmp.offsetWidth,
+			h = cmp.offsetHeight, s = cmp.style; 
+		if (pos.indexOf("left") >= 0 && d.l < 0) s.left = l - d.l + "px";
+		else if (pos.indexOf("right") >= 0)
+			s.left = l - (zk.ie ? Math.round((Math.abs(d.l) + d.w)/2) : Math.round((d.l + d.w)/2)) - 1 + "px";
+
+		if (pos.indexOf("top") >= 0 && d.t < 0) s.top = t - d.t + "px";
+		else if (pos.indexOf("bottom") >= 0)
+			s.top = t - (zk.ie ? Math.round((Math.abs(d.t) + d.h)/2) + 1 : Math.round((d.t + d.h)/2)) - 1 + "px";
+	}
 	zkau.sendOnMove(cmp);
 
 	if (zi || zi == 0) {

@@ -228,6 +228,12 @@ zk.Shadow.prototype = {
 		}
 	},
 	/**
+	 * Returns the delta of the shadow.
+	 */
+	getDelta: function () {
+		return this.delta;
+	},
+	/**
 	 * Synchronizes the state of the real component to the shadow.
 	 */
 	sync: function () {
@@ -248,7 +254,6 @@ zk.Shadow.prototype = {
 	cleanup: function () {
 		zk.remove(this.el);
 		zk.remove(this.lining);
-		this.rel._shadow = null;
 		this.rel = this.lining = null;
 	}
 };
