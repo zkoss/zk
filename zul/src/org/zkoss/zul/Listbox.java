@@ -1620,7 +1620,9 @@ public class Listbox extends XulElement {
 			final List cells = item.getChildren();
 			if (cells.isEmpty()) {
 				newUnloadedCell(renderer, item);
-			} else {
+			} else if (!(renderer instanceof ListitemRendererExt)
+ 			|| (((ListitemRendererExt)renderer).getControls() & 
+ 					ListitemRendererExt.RETAIN_CELLS_ON_UNLOAD) == 0) { //detach children (default) {
 				//detach and remove all but the first cell
 				for (Iterator it = cells.listIterator(1); it.hasNext();) {
 					it.next();
