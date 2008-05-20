@@ -68,4 +68,14 @@ public class Imagemap extends Image {
 			throw new UiException("Unsupported child for imagemap: "+newChild);
 		return super.insertBefore(newChild, refChild);
 	}
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		if (getChildren().size() == 1)
+			smartUpdate("ckchd", true); //change ismap to usemap
+	}
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		if (getChildren().isEmpty())
+			smartUpdate("ckchd", true); //change usmap to ismap
+	}
 }

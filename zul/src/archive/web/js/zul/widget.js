@@ -544,10 +544,27 @@ zkMap = {};
 zkArea = {};
 
 zkMap.init = function (cmp) {
+	zkMap._ckchd(cmp);
 	zk.newFrame("zk_hfr_",
 		null, zk.safari ? "width:0;height:0;display:inline": "display:none");
 		//creates a hidden frame. However, in safari, we cannot use invisible frame
 		//otherwise, safari will open a new window
+};
+/** Check if any child (area). */
+zkMap._ckchd = function (cmp) {
+	var mapid = cmp.id + "_map",
+		map = $e(mapid),
+		img = $real(cmp),
+		bArea = map && map.areas.length;
+	img.useMap = bArea ? "#" + mapid: "";
+	img.isMap = !bArea;
+};
+zkMap.setAttr = function (cmp, nm, val) {
+	if ("ckchd" == nm) {
+		zkMap._ckchd(cmp);
+		return true;
+	}
+	return false;
 };
 zkMap.onSize = function (cmp) {
 	if (zk.ie6Only) {
@@ -556,25 +573,14 @@ zkMap.onSize = function (cmp) {
 	}
 };
 zkArea.init = function (cmp) {
-	var map = $parentByType(cmp, "Map");
-	var img = $real(map);
-	if (img && !img.useMap)
-		img.useMap = "#" + map.id + "_map";
-};
-zkArea.cleanup = function (cmp) {
-	if (cmp.parentNode.areas.length <= 1) { //removing the last area
-		var img = $real($parentByType(cmp, "Map"));
-		if (img) img.useMap = "";
-			//Safari bug not solved yet: once useMap is cleaned up, ismap won't
-			//fall back to no-useMap
-	}
+	zk.listen(cmp, "click", zkArea.onclick);
 };
 
 /** Called when an area is clicked. */
-zkArea.onclick = function (id) {
+zkArea.onclick = function (evt) {
 	if (zkMap._toofast()) return;
 
-	var cmp = $e(id);
+	var cmp = Event.element(evt);
 	if (cmp) {
 		var map = $parentByType(cmp, "Map");
 		if (map)
