@@ -1133,7 +1133,6 @@ zkSel.getVisibleFirstChildIfAny = function (row) {
 ////
 // listbox //
 zkLibox = {}; //listbox
-
 /** Called when the body got a key stroke. */
 zkLibox.bodyonkeydown = function (evt) {
 	if (!evt) evt = window.event;
@@ -1145,8 +1144,14 @@ zkLibox.bodyonkeydown = function (evt) {
 zkLibox.onkeydown = function (evt) {
 	if (!evt) evt = window.event;
 	var target = Event.element(evt);
+	zk.disableSelection($parentByType(target, "Libox"));
 	var meta = zkau.getMetaByType(target, "Libox");
 	return !meta || meta.dokeydown(evt, target);
+};
+zkLibox.onkeyup = function (evt) {
+	if (!evt) evt = window.event;
+	var target = Event.element(evt);
+	zk.enableSelection($parentByType(target, "Libox"));
 };
 /** Called when mouse click. */
 zkLibox.onclick = function (evt) {
@@ -1202,6 +1207,7 @@ zkLit.init = function (cmp) {
 		zk.listen(cmp, "mouseout", zkSel.onout);
 	}	
 	zk.listen(cmp, "keydown", zkLibox.onkeydown);
+	zk.listen(cmp, "keyup", zkLibox.onkeyup);
 	zkLit.stripe(cmp);
 };
 zkLit.setAttr = function (cmp, nm, val) {
