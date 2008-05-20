@@ -48,6 +48,7 @@ zkCmsp.stop = function (dtid) {
 
 zkCmsp._send = function (dtid) {
 	var req = zkCmsp._reqs[dtid] = zkau.ajaxRequest();
+	zkau.sentTime = $now();
 	try {
 		req.onreadystatechange = zkCmsp._onRespReady;
 		req.open("POST", zk.getUpdateURI("/comet?dtid="+dtid, false, null, dtid), true);
