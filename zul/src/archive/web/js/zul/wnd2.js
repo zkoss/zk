@@ -816,6 +816,8 @@ zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 	}
 };
 zkWnd2._ignoremove = function (cmp, pointer, event) {
+	var target = Event.element(event);
+	if (target && target.id.indexOf("!close") > -1) return true;
 	if (!zkWnd2.sizable(cmp) || (cmp.offsetTop + 4 < pointer[1] && cmp.offsetLeft + 4 < pointer[0] 
 		&& cmp.offsetLeft + cmp.offsetWidth - 4 > pointer[0])) return false;
 	return true;
