@@ -192,6 +192,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</preference>
 	-->
 	
+	<!-- Configure ZUL to use the theme of ZK 3.0 (rather than the new look
+		introduced in ZK 3.1 and later)
+	<system-property>
+		<name>org.zkoss.zul.theme.v30</name>
+		<value>true</value>
+	</system-property>
+	-->
+
 	<!-- Configure the Hibernate SessionFactory Lifecycle.
 	<listener>
 		<description>Hibernate SessionFactory Lifecycle</description>
