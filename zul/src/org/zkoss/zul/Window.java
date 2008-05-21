@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A generic window.
@@ -161,6 +162,7 @@ public class Window extends XulElement implements IdSpace {
 	}
 	private void init() {
 		_mutex = new Object();
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 
 	/**

@@ -862,7 +862,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-uri>~./zul/html/window2.dsp</mold-uri>
 		</mold>
 		<mold>
-			<mold-name>os</mold-name>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zul/html/window.dsp</mold-uri>
 		</mold>
 	</component>
