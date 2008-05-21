@@ -664,6 +664,7 @@ zkau._useQS = zk.ie ? function (reqInf) {
 
 /** Registers a script that will be evaluated when the next response is back.
  * Note: it executes only once, so you have to register again if necessary.
+ * @param script a piece of JavaScript, or a function
  */
 zkau.addOnResponse = function (script) {
 	zkau._js4resps.push(script);
