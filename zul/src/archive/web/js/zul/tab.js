@@ -27,8 +27,11 @@ zkTabbox.setAttr = function (cmp, name, value) {
 	case "style.height":
 		zkau.setAttr(cmp, name, value);
 		var uuid = getZKAttr(cmp, "tabs");
-		if (uuid)
+		if (uuid) {
+			if (name != "style") zk.beforeSizeAt(cmp);
 			zkTabs.fixWidth(uuid);
+			if (name != "style") zk.onSizeAt(cmp);
+		}
 		return true;
 	}
 	return false;
@@ -250,7 +253,15 @@ zkTabs.cleanup = function (cmp) {
 zkTabs.onVisi = zkTabs.onSize = function (cmp) {
 	zkTabs.fixWidth(cmp.id);
 };
-
+zkTabs.beforeSize = zk.ie6Only ? function (tabs) {
+	var tabbox = $parentByType(tabs, "Tabbox");
+	if (!zk.isAccord(tabbox)) {
+		var panels = zk.nextSibling(tabs, "DIV");
+		if (panels)
+			for (var n = panels.firstChild; n; n = n.nextSibling)
+				if (n.id) n.style.height = "";
+	}
+}: zk.voidf;
 /** Returns whether the tabbox is accordion.
  * @since 3.0.3
  */
@@ -363,16 +374,20 @@ zkTabs._fixHgh = function (tabbox, tabs) {
 
 	var hgh = tabbox.style.height;
 	if (hgh && hgh != "auto" && !zk.isAccord(tabbox)){
-		var panels = tabs;
-		while ((panels = panels.nextSibling) && !panels.id)
-			;
+		var panels = zk.nextSibling(tabs, "DIV");
 
 		if (panels) {
 			hgh = zk.getVflexHeight(panels);
 
-			for (var n = panels.firstChild; n; n = n.nextSibling)
-				if (n.id)
+			for (var pos, n = panels.firstChild; n; n = n.nextSibling)
+				if (n.id) {
+					if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary. 
+						pos = n.style.position;
+						n.style.position = "relative";
+					}
 					zk.setOffsetHeight(n, hgh);
+					if (zk.ie) n.style.position = pos;
+				}
 		}
 	}
 };
