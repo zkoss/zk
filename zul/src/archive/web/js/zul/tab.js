@@ -28,9 +28,9 @@ zkTabbox.setAttr = function (cmp, name, value) {
 		zkau.setAttr(cmp, name, value);
 		var uuid = getZKAttr(cmp, "tabs");
 		if (uuid) {
-			if (name != "style") zk.beforeSizeAt(cmp);
+			zk.beforeSizeAt(cmp);
 			zkTabs.fixWidth(uuid);
-			if (name != "style") zk.onSizeAt(cmp);
+			zk.onSizeAt(cmp);
 		}
 		return true;
 	}
@@ -253,7 +253,7 @@ zkTabs.cleanup = function (cmp) {
 zkTabs.onVisi = zkTabs.onSize = function (cmp) {
 	zkTabs.fixWidth(cmp.id);
 };
-zkTabs.beforeSize = zk.ie6Only ? function (tabs) {
+if (zk.ie6Only) zkTabs.beforeSize = function (tabs) {
 	var tabbox = $parentByType(tabs, "Tabbox");
 	if (!zk.isAccord(tabbox)) {
 		var panels = zk.nextSibling(tabs, "DIV");
@@ -261,7 +261,7 @@ zkTabs.beforeSize = zk.ie6Only ? function (tabs) {
 			for (var n = panels.firstChild; n; n = n.nextSibling)
 				if (n.id) n.style.height = "";
 	}
-}: zk.voidf;
+};
 
 /** Returns whether the tabbox is accordion.
  * @since 3.0.3
