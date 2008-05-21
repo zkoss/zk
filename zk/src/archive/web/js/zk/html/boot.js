@@ -86,6 +86,7 @@ zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 zk.windows = zk.agent.indexOf("windows") != -1;
 zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
 //zk.macintosh = zk.agent.indexOf("macintosh") != -1;
+zk._js4ld = {}; //{name, [script]}
 
 /** Listen a browser event.
  * Why not to use prototype's Event.observe? Performance.
@@ -670,6 +671,20 @@ zk.invoke = function (nm, fn, dtid) {
 	else fn();
 };
 
+/** Registers a script that will be evaluated when the specified module
+ * is loaded.
+ * @param script a piece of JavaScript, or a function
+ * @since 3.0.6
+ */
+zk.addOnLoad = function (nm, script) {
+	if (zk._modules[nm]) {
+		setTimeout(script, 0);
+	} else {
+		var ary = zk._js4ld[nm] = [];
+		ary.push(script);
+	}
+};
+
 /** Loads the specified module (JS). If a feature is called "a.b.c", then
  * zkau.uri() + "/web/js" + "a/b/c.js" is loaded.
  *
@@ -800,6 +815,17 @@ zk.ald = function () {
 				clearInterval(zk._ckload);
 				delete zk._ckload;
 			}
+
+			//dispatch zk._js4ld
+			for (var nm in zk._js4ld)
+				if (zk._modules[nm]) {
+					var ary = zk._js4ld[nm];
+					if (ary) {
+						delete zk._js4ld[nm];
+						while (ary.length)
+							setTimeout(ary.shift(), 0);
+					}
+				}
 
 			var n = $e("zk_loadprog");
 			if (n) n.parentNode.removeChild(n);
