@@ -1,15 +1,13 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/normie.css.dsp"/>
+
 <%-- Override norm font--%>
-p, div, span, label, a, li, dt, dd, input, textarea, pre, body,
-button, input.button, input.file {
+.zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
+.zk button, .zk legend, input.button, input.file {
 	font-size: x-small;
 }
 
-legend {
-	font-size: x-small;
-}
 .caption input, .caption td {
 	font-size: xx-small;
 }

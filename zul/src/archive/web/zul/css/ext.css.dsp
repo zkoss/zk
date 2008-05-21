@@ -37,6 +37,11 @@ dd {
 	margin: 0 0 0 0.8em;
 }
 
+p, div, span, label, a, li, dt, dd, input, textarea, pre, body, button {
+	font-family: Verdana, Tahoma, Arial, serif;
+	font-size: small; font-weight: normal;
+}
+
 li	{margin-top: 2pt}
 ul li	{list-style: url(${c:encodeURL('~./img/bullet1.gif')}) disc}
 ul ul li	{list-style: url(${c:encodeURL('~./img/bullet2.gif')}) circle}

@@ -192,6 +192,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</preference>
 	-->
 	
+	<!-- Configure ZUL not to override the standard HTML tags, such as body's
+		margin and padding
+	<system-property>
+		<name>org.zkoss.zul.theme.browserDefault</name>
+		<value>true</value>
+	</system-property>
+	-->
+
 	<!-- Configure the Hibernate SessionFactory Lifecycle.
 	<listener>
 		<description>Hibernate SessionFactory Lifecycle</description>

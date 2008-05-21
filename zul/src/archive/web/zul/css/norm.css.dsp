@@ -1,14 +1,41 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-html {height:100%}
+html, body {height:100%}
+
+<c:if test="${empty c:getProperty('org.zkoss.zul.theme.browserDefault')}">
+body {
+	margin: 0px; padding: 0px 5px;
+}
+</c:if>
 
 <%-- paragraphs --%>
-p, div, span, label, a, li, dt, dd, input, textarea, pre, body,
-button, input.button, input.file {
+.zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
+.zk button, input.button, input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
+.zk legend {
+	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: small; font-weight: normal;
+}
+.zk th {
+	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-weight: bold; 
+}
+.zk thead tr {
+	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-weight: bold;
+}
+.zk img {border: 0;}
+
+<%-- DSP --%>
+a.gamma {color: #000000; text-decoration: none;}
+a.gamma:hover {color: #000000; text-decoration: underline;}
+tr.gamma {background: #F4F4F4;}
+td.gamma {background: #F4F4F4;}
+
+<%-- General --%>
 .text, .comboboxinp, .dateboxinp, .bandboxinp, .timeboxinp {<%--sclass + "inp"--%>
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
@@ -20,34 +47,7 @@ button, input.button, input.file {
 .readonly, .text-disd {
 	background: #ECEAE4;
 }
-body {
-	height:100%; margin: 0px; padding: 0px 5px;
-}
-<%-- don't set option in mozilla. or, its height too small --%>
-legend {
-	font-family: Tahoma, Arial, serif;
-	font-size: small; font-weight: normal;
-}
 
-th {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
-	font-weight: bold; 
-}
-
-thead tr {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
-	font-weight: bold;
-}
-
-img	{border: 0;}
-
-<%-- DSP --%>
-a.gamma {color: #000000; text-decoration: none;}
-a.gamma:hover {color: #000000; text-decoration: underline;}
-tr.gamma {background: #F4F4F4;}
-td.gamma {background: #F4F4F4;}
-
-<%-- General --%>
 .inline-block { <%-- used with label/checkbox and others to ensure the dimension --%>
 	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
 	display:inline-block;
