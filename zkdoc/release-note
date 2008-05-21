@@ -16,6 +16,7 @@ ZK 3.0.6
   1963547: Fail to add a Listitem with Paging mold
   1955454: imagemap shall not generate ismap if any area
   1967811: Should disable selection when multiple selection using Shift
+  1968434: Layout of grid is out of tabbox it specified height(IE only)
 
 	--------
 ZK 3.0.5
