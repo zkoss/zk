@@ -6,14 +6,11 @@ td.slider-bkr, td.slider-bkl, td.slidersph-bkr, td.slidersph-bkl {
 	display: none; <%-- Bug 1825822 --%>
 }
 
-p, div, span, label, a, li, dt, dd, input, textarea, pre, body,
-button, input.button, input.file {
+.zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
+.zk button, .zk legend, input.button, input.file {
 	font-size: x-small;
 }
 
-legend {
-	font-size: x-small;
-}
 .caption input, .caption td {
 	font-size: xx-small;
 }

@@ -191,7 +191,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value></value>
 	</preference>
 	-->
-	
+
+	<!-- Configure ZUL not to override the standard HTML tags, such as body's
+		margin and padding
+	<system-property>
+		<name>org.zkoss.zul.theme.browserDefault</name>
+		<value>true</value>
+	</system-property>
+	-->
 	<!-- Configure ZUL to use the theme of ZK 3.0 (rather than the new look
 		introduced in ZK 3.1 and later)
 	<system-property>

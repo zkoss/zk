@@ -2,14 +2,11 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/normsaf.css.dsp"/>
 
-p, div, span, label, a, li, dt, dd, input, textarea, pre, body,
-button, input.button, input.file {
+.zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
+.zk button, .zk legend, input.button, input.file {
 	font-size: medium;
 }
 
-legend {
-	font-size: medium;
-}
 .caption input, .caption td {
 	font-size: small;
 }
