@@ -33,7 +33,12 @@ ZK 3.1.0
     when Menupopup.isCheckmark is true.
   + The script component now has "text/javascript" as the default type.
   + Add a new trendy layout of Window as default mold, and the classic
-    Window mold is renamed to "os" mold for backward compatible.
+    Window mold is renamed to "v30" mold for backward compatible.
+    If you want to use "v30" as default, specify the following in zk.xml:
+	<system-property> 
+		<name>org.zkoss.zul.theme.v30</name> 
+		<value>true</value> 
+	</system-property>
 
 	--------
 ZK 3.0.6
