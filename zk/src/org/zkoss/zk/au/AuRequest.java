@@ -179,6 +179,12 @@ public class AuRequest {
 	public Component getComponent() {
 		return _comp;
 	}
+	/** @deprecated As of release 3.0.5, use {@link #getComponent}
+	 * instead.
+	 */
+	public String getComponentUuid() {
+		return _comp != null ? _comp.getUuid(): _uuid;
+	}
 	/** Returns the command; never null.
 	 */
 	public Command getCommand() {

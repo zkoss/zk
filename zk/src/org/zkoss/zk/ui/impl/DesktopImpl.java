@@ -699,6 +699,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		return false;
 	}
+	/** @deprecated As of release 3.0.6, replaced by {@link #addListener}.
+	 */
+	public void addEventInterceptor(EventInterceptor ei) {
+		addListener(ei);
+	}
+	/** @deprecated As of release 3.0.6, replaced by {@link #removeListener}.
+	 */
+	public boolean removeEventInterceptor(EventInterceptor ei) {
+		return removeListener(ei);
+	}
 	public Event beforeSendEvent(Event event) {
 		event = _eis.beforeSendEvent(event);
 		if (event != null)

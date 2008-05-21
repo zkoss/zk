@@ -1527,6 +1527,12 @@ public class Configuration {
 	public void setSessionMaxDesktops(int max) {
 		_sessDktMax = max;
 	}
+	/**
+	 * @deprecated As of release 3.0.1, replaced with {@link #setSessionMaxDesktops}.
+	 */
+	public void setMaxDesktops(int max) {
+		setSessionMaxDesktops(max);
+	}
 	/** Returns the maximal allowed number of desktop per session.
 	 *
 	 * <p>A negative value indicates there is no limit.
@@ -1536,6 +1542,11 @@ public class Configuration {
 		return _sessDktMax;
 	}
 	/**
+	 * @deprecated As of release 3.0.1, replaced with {@link #getSessionMaxDesktops}.
+	 */
+	public int getMaxDesktops() {
+		return getSessionMaxDesktops();
+	}
 	/** Specifies the maximal allowed number of concurrent requests
 	 * per session.
 	 *
