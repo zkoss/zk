@@ -170,11 +170,11 @@ public class Utils {
 
 	/** Returns whether to use the theme of ZK 3.0.
 	 * If true, {@link org.zkoss.zul.Window} and others will use "v30"
-	 * as the default theme.
+	 * as the default mold ({@link org.zkoss.zk.ui.Component#getMold}).
 	 *
 	 * @since 3.1.0
 	 */
-	public static boolean isThemeV30() {
+	public static final boolean isThemeV30() {
 		return _v30theme;
 	}
 	private static final boolean _v30theme = System.getProperty("org.zkoss.zul.theme.v30") != null;
