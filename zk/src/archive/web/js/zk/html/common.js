@@ -2059,7 +2059,11 @@ zk.disableSelection = function (el) {
 		else if (zk.safari)
 			el.style.KhtmlUserSelect = "none"; 
 		else if (zk.ie)
-			el.onselectstart = function () {return false;};
+			el.onselectstart = function (evt) {
+				if (!evt) evt = window.event;
+				var n = Event.element(evt), tag = $tag(n);
+				return tag == "TEXTAREA" || tag == "INPUT" && (n.type == "text" || n.type == "password");
+			};
 };
 /** Enables whether the specified element is selectable. */
 zk.enableSelection = function (el) {
