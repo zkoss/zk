@@ -636,6 +636,7 @@ zk.Selectable.prototype = {
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "false");
 			}
+			zkLcfc.checkAll(this, el);
 		}
 		return changed;
 	},
@@ -1266,10 +1267,44 @@ zkLcfc = {}; //checkmark or the first hyperlink of listcell
 zkLcfc.init = function (cmp) {
 	zk.listen(cmp, "focus", zkSel.cmonfocus);
 	zk.listen(cmp, "blur", zkSel.cmonblur);
+	zk.listen(cmp, "click", zkLcfc.onclick);
+};
+zkLcfc.onclick = function (evt) {
+	var cmp = zkau.evtel(evt); 
+	zkLcfc.checkAll(zkau.getMeta(getZKAttr($parentByTag(cmp, "TR"), "rid")), cmp);
+};
+/**
+ * Checks whether the all-checked item should be checked.
+ * @param {Object} meta the Selectable object of the specified cm.
+ * @param {Object} cm an input check, if any, otherwise, checks all the items.
+ * @since 3.0.6
+ */
+zkLcfc.checkAll = function (meta, cm) {
+	if (!meta || !meta._headerCkitem) return;
+	if (cm && !cm.checked) {
+		meta._headerCkitem.checked = false;
+		return;
+	}
+	var checked;
+	for (var rows = meta.bodyrows, j = rows.length; --j >= 0;)
+		if (getZKAttr(rows[j], "disd") != "true")
+			if (!(checked = ($e(rows[j].id + "!cm") || {}).checked)) break;
+	if (checked) meta._headerCkitem.checked = true;
 };
 zkLhfc = {}; //checkmark for listheader
 zkLhfc.init = function (cmp) {
 	zk.listen(cmp, "click", zkLhfc.onclick);
+	zk.addInit(function () {
+		var meta = zkau.getMeta(getZKAttr($parentByTag(cmp.parentNode, "TR"), "rid"));
+		if (meta) {
+			meta._headerCkitem = cmp;
+			zkLcfc.checkAll(meta);
+		}
+	});
+};
+zkLhfc.cleanup = function (cmp) {
+	var meta = zkau.getMeta(getZKAttr($parentByTag(cmp.parentNode, "TR"), "rid"));
+	if (meta) meta._headerCkitem = null;
 };
 zkLhfc.onclick = function (evt) {
 	var cmp = zkau.evtel(evt);	

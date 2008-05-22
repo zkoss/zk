@@ -8,6 +8,7 @@ ZK 3.0.6
   1968393: A way to run JavaScript after certain module is loaded
   1964646: [patch] Don't detach item children in ListitemRenderer
   1873553: Integration with JSP and CSS problems
+  1886786: Listbox SelectAll Checkbox should consist with all the items
 
 * Bugs
   1955452: Liferay Failed if two portlets from different Web apps
