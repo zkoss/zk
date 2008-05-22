@@ -637,7 +637,8 @@ zk.Selectable.prototype = {
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "false");
 			}
-			zkLcfc.checkAll(this, el);
+			if (this._isMultiple())
+				zkLcfc.checkAll(this, el);
 		}
 		return changed;
 	},
@@ -1267,7 +1268,8 @@ zkLcfc = {}; //checkmark or the first hyperlink of listcell
 zkLcfc.init = function (cmp) {
 	zk.listen(cmp, "focus", zkSel.cmonfocus);
 	zk.listen(cmp, "blur", zkSel.cmonblur);
-	zk.listen(cmp, "click", zkLcfc.onclick);
+	if (cmp.type == "check")
+		zk.listen(cmp, "click", zkLcfc.onclick);
 };
 zkLcfc.onclick = function (evt) {
 	var cmp = zkau.evtel(evt); 
