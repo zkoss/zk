@@ -166,6 +166,8 @@ public class Listcell extends LabelImageElement {
 						sb.append(" disabled=\"disabled\"");
 					if (item.isSelected())
 						sb.append(" checked=\"checked\"");
+					if (!listbox.isMultiple()) 
+						sb.append(" name=\"").append(listbox.getUuid()).append("\"");
 	
 					sb.append(" id=\"").append(item.getUuid())
 						.append("!cm\" z.type=\"Lcfc\"/>");

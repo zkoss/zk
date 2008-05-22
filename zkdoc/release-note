@@ -19,6 +19,7 @@ ZK 3.0.6
   1955454: imagemap shall not generate ismap if any area
   1967811: Should disable selection when multiple selection using Shift
   1968434: Layout of grid is out of tabbox it specified height(IE only)
+  1968667: bug for listbox popup IE
 
 	--------
 ZK 3.0.5

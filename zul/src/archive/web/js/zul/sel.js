@@ -636,8 +636,7 @@ zk.Selectable.prototype = {
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "false");
 			}
-			if (this._isMultiple())
-				zkLcfc.checkAll(this, el);
+			if (el) zkLcfc[this._isMultiple() ? "checkAll" : "onRadioClick"](this, el);
 		}
 		return changed;
 	},
@@ -1268,8 +1267,13 @@ zkLcfc = {}; //checkmark or the first hyperlink of listcell
 zkLcfc.init = function (cmp) {
 	zk.listen(cmp, "focus", zkSel.cmonfocus);
 	zk.listen(cmp, "blur", zkSel.cmonblur);
-	if (cmp.type == "check")
-		zk.listen(cmp, "click", zkLcfc.onclick);
+	zk.listen(cmp, "click", cmp.type == "checkbox" ? zkLcfc.onclick : zkLcfc.onRadioClick);
+};
+zkLcfc.onRadioClick = function (evt, radio) {
+	var r = radio || zkau.evtel(evt);
+	for (var nms = document.getElementsByName(r.name), i = nms.length; --i >= 0;)
+		nms[i].defaultChecked = false;
+	r.defaultChecked = r.checked;
 };
 zkLcfc.onclick = function (evt) {
 	var cmp = zkau.evtel(evt); 
