@@ -1096,7 +1096,7 @@ zk._cleanupAt = function (n) {
 		zk._scrlcmps.remove(n.id);
 	}
 
-	for (n = n.firstChild; n; n = n.nextSibling)
+	for (n = n.firstChild; n && n.nodeType == 1; n = n.nextSibling)
 		zk._cleanupAt(n); //recursive for child component
 };
 
