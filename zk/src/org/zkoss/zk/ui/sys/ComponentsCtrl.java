@@ -206,25 +206,36 @@ public class ComponentsCtrl {
 			return;
 
 		final Map fwds = new LinkedHashMap(); //remain the order
-		Maps.parse(fwds, forward, ',', '\'', true);
-
+		Maps.parse(fwds, forward, ',', '\'', true, true, true);
 		for (Iterator it = fwds.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String orgEvent = (String)me.getKey();
 			if (orgEvent != null && !Events.isValid(orgEvent))
 				throw new UiException("Not an event name: "+orgEvent);
 
-			final Object[] result =
-				parseEventExpression(comp, (String)me.getValue(), null, true);
-
-			final Object target = result[0];
-			if (target instanceof String)
-				comp.addForward(orgEvent, (String)target, (String)result[1]);
-			else
-				comp.addForward(orgEvent, (Component)target, (String)result[1]);
+			final Object cond = me.getValue();
+			if (cond instanceof Collection) {
+				for (Iterator e = ((Collection)cond).iterator(); e.hasNext();)
+					applyForward0(comp, orgEvent, (String)e.next());
+			} else {
+				applyForward0(comp, orgEvent, (String)cond);
+			}
 		}
 	}
+	private static final
+	void applyForward0(Component comp, String orgEvent, String cond) {
+		if (cond == null || cond.length() == 0)
+			return;
 
+		final Object[] result =
+			parseEventExpression(comp, cond, null, true);
+
+		final Object target = result[0];
+		if (target instanceof String)
+			comp.addForward(orgEvent, (String)target, (String)result[1]);
+		else
+			comp.addForward(orgEvent, (Component)target, (String)result[1]);
+	}
 	/** Parses a script by resolving #{xx} to make it executable
 	 * at the client.
 	 *

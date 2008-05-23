@@ -20,5 +20,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="w" onA='l.value += "A"' onB='l.value += "B"'>
 	You shall see "AB" is generate when clicking
 	<button label="Test" forward="onA,onB"/>
-	<label id="l">
+	<label id="l"/>
 </window>
