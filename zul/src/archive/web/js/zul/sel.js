@@ -171,9 +171,9 @@ zk.Selectable.prototype = {
 						}
 				}
 			}
-			if (empty) this.head.style.height = "0px"; // Bug #1819037
+			if (empty) this.head.style.display = "none"; // Bug #1819037, #1970048 
 				//we have to hide if empty (otherwise, a small block is shown)					
-			else this.head.style.height = "";// Bug #1832359
+			else this.head.style.display = "";// Bug #1832359
 		}
 
 		this.body.onscroll = function () {
