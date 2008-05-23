@@ -1330,18 +1330,26 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public boolean addForward(
 	String orgEvent, Component target, String targetEvent) {
-		return addForward0(orgEvent, target, targetEvent);
+		return addForward0(orgEvent, target, targetEvent, null);
 	}
 	public boolean addForward(
 	String orgEvent, String targetPath, String targetEvent) {
-		return addForward0(orgEvent, targetPath, targetEvent);
+		return addForward0(orgEvent, targetPath, targetEvent, null);
+	}
+	public boolean addForward(
+	String orgEvent, Component target, String targetEvent, Object eventData) {
+		return addForward0(orgEvent, target, targetEvent, eventData);
+	}
+	public boolean addForward(
+	String orgEvent, String targetPath, String targetEvent, Object eventData) {
+		return addForward0(orgEvent, targetPath, targetEvent, eventData);
 	}
 	/**
 	 * @param target the target. It is either a component, or a string,
 	 * which is used internal for implementing {@link #writeObject}
 	 */
 	private boolean addForward0(
-	String orgEvent, Object target, String targetEvent) {
+	String orgEvent, Object target, String targetEvent, Object eventData) {
 		if (orgEvent == null)
 			orgEvent = "onClick";
 		else if (!Events.isValid(orgEvent))
@@ -1361,8 +1369,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			for (Iterator it = fwds.iterator(); it.hasNext();) {
 				final Object[] fwd = (Object[])it.next();
 				if (Objects.equals(fwd[0], target)
-				&& Objects.equals(fwd[1], targetEvent)) //found
-					return false;
+				&& Objects.equals(fwd[1], targetEvent)) { //found
+					if (Objects.equals(fwd[2], eventData)) {
+						return false;
+					} else {
+						fwd[2] = eventData;
+						return true;
+					}
+				}
 			}
 		} else {
 			final ForwardListener listener = new ForwardListener(orgEvent);
@@ -1371,7 +1385,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_forwards.put(orgEvent, info);
 		}
 
-		fwds.add(new Object[] {target, targetEvent});
+		fwds.add(new Object[] {target, targetEvent, eventData});
 		return true;
 	}
 	public boolean removeForward(
@@ -1857,7 +1871,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				final List fwds = (List)info[1];
 				for (Iterator e = fwds.iterator(); e.hasNext();) {
 					final Object[] fwd = (Object[])e.next();
-					clone.addForward0(orgEvent, fwd[0], (String)fwd[1]);
+					clone.addForward0(orgEvent, fwd[0], (String)fwd[1], fwd[2]);
 				}
 			}
 		}
@@ -1979,6 +1993,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 							Components.componentToPath((Component)fwd[0], this):
 							fwd[0]);
 					s.writeObject(fwd[1]); //target event
+					s.writeObject(fwd[2]); //forward data
 				}
 			}
 		}
@@ -2073,7 +2088,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			int sz = s.readInt();
 			while (--sz >= 0)
-				addForward0(orgEvent, s.readObject(), (String)s.readObject());
+				addForward0(orgEvent, s.readObject(),
+					(String)s.readObject(), s.readObject());
 					//Note: we don't call Components.pathToComponent here
 					//since the parent doesn't deserialized completely
 					//Rather, we handle it until the event is received
@@ -2145,7 +2161,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					}
 
 					Events.postEvent(
-						new ForwardEvent((String)fwd[1], target, event));
+						new ForwardEvent((String)fwd[1], target, event, fwd[2]));
 				}
 		}
 

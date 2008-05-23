@@ -655,6 +655,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * It returns false if the conditioin was always added before.
 	 * @since 3.0.0
 	 * @see #removeForward(String, Component, String)
+	 * @see #addForward(String, Component, String, Object)
 	 */
 	public boolean addForward(
 	String originalEvent, Component target, String targetEvent);
@@ -682,6 +683,27 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public boolean addForward(
 	String originalEvent, String targetPath, String targetEvent);
+	/** Adds a forward condition to forward the event received
+	 * by this component to another component with extra event data.
+	 *
+	 * @param eventData the extra data that can be retrieve by
+	 * {@link org.zkoss.zk.ui.event.ForwardEvent#getData}.
+	 * @see #addForward(String, Component, String)
+	 * @since 3.0.6
+	 */
+	public boolean addForward(String originalEvent, Component target,
+	String targetEvent, Object eventData);
+	/** Adds a forward condition to forward the event received
+	 * by this component to another component of the specified path
+	 * with extra event data.
+	 *
+	 * @param eventData the extra data that can be retrieve by
+	 * {@link org.zkoss.zk.ui.event.ForwardEvent#getData}.
+	 * @see #addForward(String, String, String)
+	 * @since 3.0.6
+	 */
+	public boolean addForward(String originalEvent, String targetPath,
+	String targetEvent, Object eventData);
 	/** Removes a forward condition that was added by
 	 * {@link #addForward(String, Component, String)}.
 	 * If no such forward condition exists, nothing happens but return false.

@@ -37,6 +37,17 @@ public class ForwardEvent extends Event {
 		super(name, target);
 		_origin = origin;
 	}
+	/** Constructs a foward event.
+	 *
+	 * @param origin the original event that causes this forward event.
+	 * @param data the event data returned by {@link #getData}
+	 * @since 3.0.6
+	 */
+	public ForwardEvent(String name, Component target, Event origin,
+	Object data) {
+		super(name, target, data);
+		_origin = origin;
+	}
 	/** Returns the original Event.
 	 */
 	public Event getOrigin() {
