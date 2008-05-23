@@ -224,18 +224,49 @@ public class ComponentsCtrl {
 	}
 	private static final
 	void applyForward0(Component comp, String orgEvent, String cond) {
-		if (cond == null || cond.length() == 0)
+		final int len;
+		if (cond == null || (len = cond.length()) == 0)
 			return;
+
+		Object data = null;
+		for (int j = 0; j < len; ++j) {
+			final char cc = cond.charAt(j);
+			if (cc == '\\') ++j; //skip next
+			else if (cc == '{') {
+				for (int k = j + 1, depth = 0;; ++k) {
+					if (k >= len) {
+						j = k;
+						break;
+					}
+
+					final char c2 = cond.charAt(k);
+					if (c2 == '{') ++depth;
+					else if (c2 == '}' && --depth < 0) { //found
+						j = k;
+						break;
+					}
+				}
+			} else if (cc == '(') { //found
+				final int k = cond.lastIndexOf(')');
+				if (k > j) {
+					data = Executions.evaluate(
+						comp, cond.substring(j + 1, k), Object.class);
+					cond = cond.substring(0, j);
+					break;
+				}
+			}
+		}
 
 		final Object[] result =
 			parseEventExpression(comp, cond, null, true);
 
 		final Object target = result[0];
 		if (target instanceof String)
-			comp.addForward(orgEvent, (String)target, (String)result[1]);
+			comp.addForward(orgEvent, (String)target, (String)result[1], data);
 		else
-			comp.addForward(orgEvent, (Component)target, (String)result[1]);
+			comp.addForward(orgEvent, (Component)target, (String)result[1], data);
 	}
+
 	/** Parses a script by resolving #{xx} to make it executable
 	 * at the client.
 	 *
