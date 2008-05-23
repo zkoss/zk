@@ -3,33 +3,33 @@
 <book lang="zh-CN">
 <bookinfo>
 <title>ZK开发手册</title>
-<abstract>Version 3.0.0</abstract>
+<abstract>Version 3.0.5</abstract>
 <copyright>
-<year>2007</year>
+<year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
 <para/>
-<chapter><title>1.简介</title>
+<chapter><title>简介</title>
 <para>欢迎使用ZK---- 一种丰富Web应用程序的最简单方式。</para>
-<para>此开发手册买描述了ZK的概念和功能。关于如何安装配置ZK的环境，请参阅Quick Start Guide。如果想得到的各个组件(components)的属性和方法的详细描述，请参阅Developer's Guide。</para>
+<para>此开发手册买描述了ZK的概念和功能。关于如何安装配置ZK的环境，请参阅Quick Start Guide。如果想得到的各个组件(components)的属性和方法的详细描述，请参阅Developer's Reference。</para>
 <para>这章描述了Web程序，AJAX技术和ZK项目的历史背景。如果你想马上了解ZK的功能，可以跳过这一章。 </para><sect1><title>传统的Web应用程序</title>
-<para>以交换文档简单高效为目标，Web技术，超文本传输协议(HTTP)和超文本标记语言(HTML)，都来源于单页性(page-based )和无状态(stateless-communication)的模式。在这种模式中，一个页面是自给自足(self-contained)的，并且是沟通客户端与服务器端的最小单位。</para>
+<para>以简单高效交换文档为目的的Web技术，例如超文本传输协议(HTTP)和超文本标记语言(HTML)，都来源于单页性(page-based )和无状态(stateless-communication)的模式。在这种模式中，一个页面是自给自足(self-contained)的，并且是沟通客户端与服务器端的最小单位。</para>
 
 <graphic align="center"  fileref="img/1.png" />
 
 <para>随着网络俨然成为应用开发的默认平台，这种模式面临着巨大的挑战：对于表现当今应用程序中复杂性的无能为力。举个例子，为了给客户报价，你或许必须打开另一个页面来查询此客户的交易记录，再打开一个页面来显示当前的价格，还得开一个页面来存储当前信息。用户被迫离开他正在工作的页面，并且在几个页面间来回浏览。这很容易迷失，混淆，结果是把客户弄得不愉快，销售机会的损失和低生产力。</para>
 <para>在这种单页性(page-based )的模式上开发一个现代的应用程序也是一个极大的挑战。在这种模式中，运行在服务器上的应用程序必须处理来自从语法上分析请求，送出回应 ，连接用户从一个页面到另一个页面路由的一切，并且处理用户的各种错误。 数十种框架，例如Struct，Tapestry和JSF，随即出现用来简化开发过程。由于单页性(page-based)模式与现代模式之间的巨大差别，学习和使用这些框架并不是一个愉快的过程，更不要提直觉感知(intuition)和简化了。</para></sect1><sect1><title>点对点(Ad-hoc)AJAX应用</title>
-<para>经过数十年的演变，Web应用已经从静态HTML发展到动态HTML，applets，Flash，最后发展到了AJAX<footnote>
+<para>经过数十年的演变，Web应用已经从静态HTML发展到DHTML，applets，Flash，最后发展到了AJAX<footnote>
 <para>Ajax是由Jesse James Garrett於Ajax: A New Approach to Web Applications中所提出的。</para>
 </footnote> (Asynchronous JavaScript and XML ，非同步的JavaScript和XML )。通过谷歌地图及推荐(Google Maps and Suggest)的说明，AJAX技术通过提供与桌面应用程序同等水平的互动性和反应能力给Web应用带来了新生命。不同于applets或Flash，AJAX基于标准的浏览器和JavaScript，并且不需要专门的插件。</para>
 
 <graphic align="center"  fileref="img/1-2.png"/>
 
-<para>AJAX是新一代的DHTML，就像DHTML，它在很大程度上依赖于JavaScript监听用户活动产生的事件,然后动态的操纵浏览器中一个页面(aka. DOM)的视觉表现。此外，它更近一步，能够使与服务器的沟通异步进行，即不需要离开或提交整个页面。它通过引入客户与服务器间轻量级的通信(light-weight communication )打破了基于页面的模式。妥善设计，AJAX可以给Web应用带来丰富的桌面通用组件，而且这些组件的内容可以在应用程序的控制下动态更新。</para>
-<para>当提供给用户需要的交互性的同时，AJAX给已经很昂贵的Web应用程序开发增加了复杂性和技术先决条件。开发者不得不在浏览器中操纵DOM，并且使用不兼容甚至是错误的JavaScript与服务器通信，为了更好的交互性，开发者必须重复复制应用数据和业务逻辑以便于浏览。这样就增加了维护成本及同步数据的挑战。</para>
+<para>AJAX是新一代的DHTML，就像DHTML，它在很大程度上依赖于JavaScript监听用户活动产生的事件,然后动态的操纵浏览器中一个页面(亦称 DOM)的视觉表现。此外，它更近一步，能够使与服务器的沟通异步进行，即不需要离开或提交整个页面。它通过引入客户与服务器间轻量级的通信(light-weight communication )打破了基于页面的模式。妥善设计，AJAX可以给Web应用带来丰富的桌面通用组件，而且在Web应用程序的活动周期内可以动态更新这些组件并通过应用程序获得对组件的更多控制。</para>
+<para>当提供给用户需要的交互性的同时，AJAX给已经很昂贵的Web应用程序开发增加了复杂性和技术先决条件。开发者不得不在浏览器中操纵DOM，并且使用不兼容甚至是错误的JavaScript与服务器通信，为了更好的交互性，开发者必须重复复制应用数据和业务逻辑以便于浏览。这样就增加了维护成本且面临在服务端与客户端同步数据的挑战。</para>
 <para>底线是在关于处理请求方面，点对点(Ad-hoc)的AJAX应用与传统的Web应用没有区别。开发者仍然必须解决由单页性(page-based)和无状态(stateless-communication)模式造成的隔阂。</para></sect1><sect1><title>ZK: 它是什么 </title><para>ZK是一个事件驱动(event-driven)的，基于组件(component-based)的，用以丰富网络程序中用户界面的框架。ZK包括一个基于AJAX事件驱动的引擎(engine)，一套丰富的XUL和XHTML，以及一种被称为ZUML(ZK User Interface Markup Language，ZK用户界面标记语言)的标记语言。</para>
-<para>有了ZK，您可以利用XUL和XHTML的丰富特性来呈现您的Web应用，操纵它们来处理因用户活动而引发的事件，就像您使用多年的桌面应用程序那样。不同于大多数其它框架，ZK是一种幕后(behind-the-scene)技术，组件内容的同步和流水线事件(pipelining of events)都由ZK引擎自动完成。</para>
+<para>有了ZK，您可以利用XUL和XHTML的丰富特性来呈现您的Web应用，操纵它们来处理因用户活动而引发的事件，就像在桌面应用程序中那样。不同于大多数其它框架，就ZK而言，AJAX是一种幕后(behind-the-scene)技术，组件内容的同步和流水线事件(pipelining of events)都由ZK引擎自动完成。</para>
 <para>您的用户获得了如同桌面程序的互动性和反应能力，而您的开发仍然像开发桌面应用程序那样简单。</para>
 <para>除了简单的模型和丰富的组件，ZK也支持一种文本标记语言，称为ZUML。ZUML，如同HTML，可以让开发人员设计界面而无需编程。通过XML的命名空间，ZUML无缝的集成了一套不同的标签<footnote>
 <para>标签是XML元素。组件是在当ZUML网页被翻译时所产生出来的。</para>
@@ -43,13 +43,13 @@
 </footnote> and Groovy<footnote>
 <para>使用Groovy (http://groovy.codehaus.org/)的Groovy interpreter。</para>
 </footnote>. 开发人员可以选择不嵌入任何脚本语言，如果他们喜欢更严格的要求(discipline)。不同于JavaScript嵌入在HTML，ZK在服务器端执行所有的嵌入脚本。</para>
-<para>注意我们所说的一切运行在服务器端是从应用程序开发者的角度出发的。对于组件开发人员来说，他们必须平衡互动性与简单性来决定什么任务由浏览器来完成，而什么任务由服务器来完成。</para></sect1><sect1><title>ZK: 它不是什么</title><para>ZK并没有关注持久化(persistence)或伺服务器之间的沟通(inter-server communication)。ZK被设计的尽可能的简单，它只针对表示层(presentation tier)。他并不要求和暗示任何后端技术，所有你喜欢的中间件就像以前一样工作，如JDBC， Hibernate， Java Mail，EJB 或 JMS。</para>
+<para>注意我们所说的一切运行在服务器端是从应用程序开发者的角度出发的。组件开发人员必须平衡互动性与简单性来决定什么任务由浏览器来完成，而什么任务由服务器来完成。</para></sect1><sect1><title>ZK: 它不是什么</title><para>ZK并没有关注持久化(persistence)或伺服务器之间的沟通(inter-server communication)。ZK被设计的尽可能的简单，它只针对表示层(presentation tier)。他并不要求和暗示任何后端技术，所有你喜欢的中间件就像以前一样工作，如JDBC， Hibernate， Java Mail，EJB 或 JMS。</para>
 <para>Zk并没有为开发人员提供(tunnel)，RMI或其他的API用来在客户端与服务器端通信，因为所有的代码都运行在同一服务器的同一Java虚拟机(JVM)上。</para>
 <para>ZK并没有强迫开发人员使用MVC或其他设计模式。是否使用它们由开发人员选择。</para>
 <para>ZK并不是旨在把XUL带入Web应用的框架。它的目标是把桌面编程模式引入Web应用。目前，它只支持XUL和XHTML。将来它或许会支持XAML, Xquery及其它。</para>
-<para>ZK将AJAX嵌入到了现今的应用中(implementation)，但它并没有止步于AJAX结束的地方。在即将来临的ZK Mobile中，您的应用程序可以到达支持J2ME的任何设备，例如PDA，手机和游戏平台。此外，您根本不用修改您的应用程序<footnote>
+<para>ZK将AJAX嵌入到了现今的应用中(implementation)，但它并没有止步于AJAX结束的地方。在ZK Mobile中，您的应用程序可以到达支持J2ME的任何设备，例如PDA，手机和游戏平台。此外，您根本不用修改您的应用程序<footnote>
 <para>根据萤幕大小有时需要做调整。</para>
-</footnote>。</para></sect1><sect1><title>ZK: 局限</title><para>ZK不适合在客户端运行多任务的应用程序，例如3D动作游戏，除非你写编写一个特殊的组件。ZK也不适合需要大量使用客户端计算能力的应用程序。</para></sect1></chapter><chapter><title>2.让我们开始吧</title>
+</footnote>。</para></sect1><sect1><title>ZK: 局限</title><para>ZK不适合在客户端运行多任务的应用程序，例如3D动作游戏，除非你写编写一个特殊的组件。ZK也不适合需要大量使用客户端计算能力的应用程序。</para></sect1></chapter><chapter><title>让我们开始吧</title>
 <para>这一章的内容描述了如何写出你的第一个ZUML页面，如果你没时间的话建议你至少阅读这一章。</para>
 <para>此章使用ZUL来说明ZK的功能，但是也适合于其他ZK支持的语言。</para><sect1><title>Hello World!</title>
 <para>当ZK安装到你最喜爱的Web服务器<footnote>
@@ -182,12 +182,12 @@
 </footnote> 事件来完成初始化(initialize)，处理(process)和取消(cancel)等工作。</para>
 <programlisting>&lt;window id="main" onCreate="MyManager.init(main)"
    onOK="MyManager.process(main)" onCancel="MyManager.cancel(main)"/&gt;&#13;</programlisting>
-<para>另外，必须有一个名称为MyManager的Java类，内容像下面一样：</para>
+<para>另外，必须有一个名称为<code>MyManager</code>的Java类，内容像下面一样：</para>
 <programlisting>import org.zkoss.zul.Window;&#13;&#13;public class MyManager {&#13;   public static void init(Window main) { //does initialization&#13;   }&#13;   public static void save(Window main) { //saves the result&#13;   }&#13;   public static void cancel(Window main) { //cancel any changes&#13;   }&#13;}&#13;</programlisting>
 <para>
 但是，上面的方法需要你在ZUML页面内嵌入一些代码。在用户界面(UI)内嵌入代码的优点是可以很容易的动态改变行为(特别是在原型阶段)，但是这仍然会展现一些维护代码且性能会有一些降低
 <footnote>
-Java解释器会在运行时解释ZUML页面内指定的代码。
+<para>Java解释器会在运行时解释ZUML页面内指定的代码。</para>
 </footnote>
 </para>
 
@@ -313,9 +313,11 @@ public class MyWindow extends Window {&#13;
 
 &lt;button/&gt;
 &lt;button label="Cancel"/&gt;</programlisting>
-<para>如需要更多的信息，请参考ZK用户界面标记语言一章中<code>component</code>指令一节。</para></sect1></chapter><chapter><title>3.基础</title><para>这一章讲述了ZK的基础。这里使用了XUL来说明ZK的功能，但同样可用于ZK支持的其他标记语言。</para><sect1><title>架构概况</title>
+<para>如需要更多的信息，请参考ZK用户界面标记语言一章中<code>component</code>指令一节。</para></sect1></chapter><chapter><title>基础</title><para>这一章讲述了ZK的基础。这里使用了XUL来说明ZK的功能，但同样可用于ZK支持的其他标记语言。</para><sect1><title>架构概况</title>
 <para>ZK包括一种基于AJAX机制用来实现自动的交互性，一套丰富的基于XUL的组件用以丰富可用性，和一种的标记语言用来简化开发。</para>
-<para>基于AJAX的机制包括三个部分，描绘如下：ZK 加载器(ZK loader)，ZK AU引擎(ZK AU Engine )，和ZK客户端引擎(ZK Client Engine)。</para>
+<para>基于AJAX的机制包括三个部分，描绘如下：ZK 加载器(ZK loader)，ZK AU引擎(ZK AU Engine)
+<footnote><para>同ZK Update引擎</para></footnote>
+，和ZK客户端引擎(ZK Client Engine)。</para>
 
 <graphic align="center"  fileref="img/3-1.png"/><para>基于用户的请求，ZK 加载器(ZK loader)加载一个ZK页面，解释它，并将结果送到HTML页面来响应URI请求。ZK页面是用一种被称为ZUML的标记语言写成的。ZUML，就像HTML，被用来描述什么组件被创建，以及如何把它们呈现出来。这些组件一旦被创建，就会一直处于可用状态知道会话超时。</para>
 <para>然后ZK AU<footnote>
@@ -362,7 +364,7 @@ public class MyWindow extends Window {&#13;
 <para>为了实现Zk应用程序与用户的交互，更多的页面需要被加到桌面，而另一些需要从桌面移除。类似的，一个组件可能被加到页面或从页面移除。</para><sect3><title>createComponents 方法</title><para>请注意创建移除页面和桌面都是在背后达成的。并没有关于此的API。每次ZUML加载一个页面时，这个页面就被创建。当ZK发现某个页面不再被用到时这个页面就会被移除。当第一个ZUML页面被加载时桌面被创建。当太多的桌面为特定的会话而创建时桌面会被移除。</para>
 <para>
 <code>org.zkoss.zk.ui.Executions</code>类中的<code>CreateComponents</code>方法仅能创建组件，而不是页面，即使它装载一个ZUML页面(亦=page)。</para></sect3></sect2><sect2><title>组件树的森林</title>
-<para>一个组件至多有一个父组件，而可能有多个子组件。一些组件只能接受某些类型的组件作为子组件，一些组件必须为某些类型组件的子组件，一些组件根本不允许有子组件。例如，XUL中的Listbox接受Listcols 和 Listitem 。没有任何父组件的组件称为根组件(root component)。一个页面可能有多个根组件，这些组件可以由<code>getRoots</code> 方法获得。</para></sect2><sect2><title>组件：视觉表现和Java对象</title>
+<para>一个组件至多有一个父组件，而可能有多个子组件。一些组件只能接受某些类型的组件作为子组件，一些组件必须为某些类型组件的子组件，一些组件根本不允许有子组件。例如，XUL中的Listbox接受Listcols 和 Listitem 。没有任何父组件的组件称为根组件(root component)。一个页面可能有多个根组件，这些组件可以由<code>getRoots</code> 方法获得。</para></sect2><sect2><title>组件：视觉部分和Java对象</title>
 <para>除了在服务器端的Java对象，组件在浏览器端有一个可视部分<footnote>
 <para>如果客户端为浏览器， 视觉表现为 一个 DOM 元素 或一个套DOM 元素。</para>
 </footnote> ，并且当且仅当它属于一个页面时。当一个组件附加到一个页面时，其视觉部分就会被创建<footnote>
@@ -475,7 +477,7 @@ abc
 page.getInterpreter(null).getVariable("some"); //interpreter for default language</programlisting></sect3></sect2></sect1><sect1><title>事件</title>
 <para>事件(<code>org.zkoss.zk.ui.event.Event</code>)用来通知服务器发生了什么。每种类型的事件都由一种不同的类来表示。例如，<code>org.zkoss.zk.ui.event.MouseEvent</code>来代表鼠标活动，如点击。</para>
 <para>为了响应事件，服务器需要为其注册一个或多个事件监听器。由两种方法来注册一个事件监听器。一种是通过在标记语言中指定<code>onXxx</code>属性。另一种方法是为你要监听的组件或页面调用<code>addEventListener</code>方法。</para>
-<para>除了在浏览器端由客户活动触发的事件，一个应用程序可以<code>org.zkoss.zk.ui.event.Events</code>类中的<code>sendEvent</code>和<code>postEvent</code>方法来触发事件。</para></sect1><sect1><title>桌面和事件处理</title>
+<para>除了在浏览器端由客户活动触发的事件，一个应用程序可以<code>org.zkoss.zk.ui.event.Events</code>类中的<code>sendEvent</code>和<code>postEvent</code>和<code>echoEvent</code>方法来触发事件。</para></sect1><sect1><title>桌面和事件处理</title>
 <para>如上所述，桌面是页面的集合，这些页面服务于同样的URL请求。一个桌面当然是事件监听器能读取的范围。</para>
 <para>当一个事件被触发时，它就和桌面联系在一起。ZK分离基于关联桌面及流水事件(pipelines events)分成单独的队列。因此，同一桌面的事件可以被顺序处理。另一方面，不同桌面的事件可以被并行处理。</para>
 <para>一个事件监听器是被允许读取事件关联桌面内任何页面的任何组件的。它也被允许将一个组件从一个页面移到另一个页面，只要这些页面在同一桌面内。另一方面，它不能读取到其它桌面的组件。</para>
@@ -485,7 +487,7 @@ page.getInterpreter(null).getVariable("some"); //interpreter for default languag
 <para>对于大多数应用程序而言，很少在线程(thread)而不是事件监听器中创建组件。然而，如果有一个长操作(long operation)，你或许会在后台线程(background thread)中执行它。那么，你可以在后台准备一些组件树，然后在合适的事件被接收时将它们添加到桌面。关于此的详细信息，请参考事件监听及处理一章中长操作一节。</para></sect2></sect1><sect1><title>ZUML 和XML命名空间</title><para>ZK用户界面标记语言(ZK User Interface Markup Language，ZUML)是一套基于XML的语言，开发人员可以用它来描述视觉表现。ZK的目标是分离出一套独立的组件一供使用。换句话说，一套不同的组件<footnote>
 <para>亦称为标签(tags)。 在组件与标签之间有一对一的映射。</para>
 </footnote>，就像XUL和XHTML，可以同时在同一ZUML页面内使用。不同的标记语言可以被透明地添加。如果两套或更多的组件在同一页面内被使用，开发人员必须使用XML命名空间来区分它们。请参考ZK用户界面标记语言一章中组件集及XML命名空间一节，如果你想在同一页面中使用多套组件，就像XUL和XHTML。</para>
-<para>[提示]:在ZUML中使用XML命名空间是可选的，你只有在使用多套组件时会用到它。</para></sect1></chapter><chapter><title>4.组件活动周期</title><para>本章描述了加载页面和更新页面的活动周期。</para><sect1><title>加载页面的活动周期</title>
+<para>[提示]:在ZUML中使用XML命名空间是可选的，你只有在使用多套组件时会用到它。</para></sect1></chapter><chapter><title>组件活动周期</title><para>本章描述了加载页面和更新页面的活动周期。</para><sect1><title>加载页面的活动周期</title>
 <para>ZK加载器(ZK loader)加载并解释页面需要经历四个阶段：页面初始阶段，组件创建阶段，事件处理阶段及响应阶段(the Page Initial Phase, the Component Creation Phase, the Event Processing Phase, and the Rendering Phase)。</para><sect2><title>页面初始阶段</title>
 <para>在这个阶段，ZK处理处理指令，被称为初始化(<code>init</code>)。如果并没有定义这样的处理指令，此阶段会被跳过。</para>
 <para>对于每个<code>init</code>处理指令都有一个<code>class</code>属性，一个指定类的实例(instance)将会被创建，然后它的<code>doInit</code>方法将会被调用。当然，这个类要做什么取决于你的应用程序的需求。</para>
@@ -534,7 +536,7 @@ page.getInterpreter(null).getVariable("some"); //interpreter for default languag
 <para>是否重设一个组件的整个视觉表现或更新浏览器端的一个属性完全取决于组件的实现。平衡互动性与简易性，这是开发人员的工作。</para></sect2></sect1><sect1><title>模型(The Molds)</title><para>一个组件可以有不同的外观，甚至在同一页面内，这个概念被称为模型(aka., template)。通过使用<code>setMold</code>方法，开发人员可以动态的改变组件界面的模型。所有的组件都支持的模型(mold)为<code>default</code>，即默认值。一些组件可以支持两种或更多的模型。例如，<code>tabbox</code>同时支持<code>default</code>和<code>accordion</code>模型。</para>
 <programlisting>&lt;tabbox&gt;&lt;!-- if not specified, the default mold is assumed. --&gt;&#13;   &lt;tabs&gt;&#13;      &lt;tab label="Default"/&gt;&#13;   &lt;/tabs&gt;&#13;   &lt;tabpanels<inlinegraphic align="right"  fileref="img/4-3.png"/>&gt;&#13;      &lt;tabpanel&gt;&#13;      &lt;tabbox mold="accordion"&gt;&#13;         &lt;tabs&gt;&#13;            &lt;tab label="First Accordion"/&gt;&#13;            &lt;tab label="Second Accordion"/&gt;&#13;         &lt;/tabs&gt;&#13;         &lt;tabpanels&gt;&#13;            &lt;tabpanel&gt;The first panel.&lt;/tabpanel&gt;&#13;            &lt;tabpanel&gt;The second panel.&lt;/tabpanel&gt;&#13;         &lt;/tabpanels&gt;&#13;      &lt;/tabbox&gt;&#13;      &lt;/tabpanel&gt;&#13;   &lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;</programlisting></sect1><sect1><title>组件垃圾回收</title>
 <para>不同于其它基于组件的图形用户界面(GUI)， 组件类并没有destroy 或close方法。就像W3C的DOM，当一个组件从页面被卸载时它就从浏览器被移除。它的表现就像附着在页面上一样。</para>
-<para>更确切地说，一旦一个组件被卸载，如果应用程序不再涉及到它，它就不再受ZK的管理。它所占用的内存会被Java虚拟机的垃圾回收机制(JVM's garbage collector)所释放。</para></sect1></chapter><chapter><title>5.事件监听及处理</title><para>本章描述事件是如何被处理的。</para><sect1><title>通过标记语言添加事件监听器</title>
+<para>更确切地说，一旦一个组件被卸载，如果应用程序不再涉及到它，它就不再受ZK的管理。它所占用的内存会被Java虚拟机的垃圾回收机制(JVM's garbage collector)所释放。</para></sect1></chapter><chapter><title>事件监听及处理</title><para>本章描述事件是如何被处理的。</para><sect1><title>通过标记语言添加事件监听器</title>
 <para>添加一个事件监听器最简单的方法就是在一个ZUML页面内声明一个属性。用来监听的属性的值是可以被BeanShell解释的任何Java代码。</para>
 <programlisting>&lt;window title="Hello" border="normal"&gt;&#13;   &lt;button label="Say Hello" onClick="alert(&amp;quot;Hello World!&amp;quot;)"/&gt;&#13;&lt;/window&gt;&#13;</programlisting></sect1>
 <sect1>
@@ -552,6 +554,14 @@ page.getInterpreter(null).getVariable("some"); //interpreter for default languag
 <programlisting>public void onOK(org.zkoss.zk.ui.event.KeyEvent event) {
 ...
 }&#13;</programlisting>
+<para>或</para>
+<para>
+<programlisting>
+public void onOK(org.zkoss.zk.ui.event.Event event) {&#13;
+...&#13;
+}&#13;
+</programlisting>
+</para>
 <para>不同的事件或许与不同的事件对象相关联。参考附录C(Append C)来获取更多的细节。</para></sect2><sect2><title>动态地添加与移除事件监听器</title>
 <para>开发人员可以使用<code>org.zkoss.zk.ui.Component</code>接口中的<code>addEventListene</code>和<code>removeEventListener</code>方法来动态地添加或移除事件监听器。如下所示，动态添加的事件监听器必须实现<code>org.zkoss.zk.ui.event.EventListener</code>接口。</para>
 <programlisting>void init(Component comp) {&#13;   ...&#13;   comp.addEventListener("onClick", new MyListener());&#13;   ...&#13;}&#13;class MyListener implements org.zkoss.zk.ui.event.EventListener {&#13;   public void onEvent(Event event) throws UiException {&#13;      ...//processing the event&#13;   }&#13;}&#13;</programlisting></sect2><sect2><title>延期事件监听器</title>
@@ -597,10 +607,37 @@ page.getInterpreter(null).getVariable("some"); //interpreter for default languag
 </orderedlist>
 <para>
 <code>org.zkoss.zk.ui.event.Express</code>接口是一个装饰器(decorative interface)，用来改变调用事件监听器的优先级。注意，如果事件监听器被添加到页面，而不是组件，这个接口是没有意义的。</para></sect2><sect2><title>中止调用序列</title>
-<para>你可以通过调用<code>org.zkoss.zk.ui.event.Event</code>类中的<code>stopPropagation</code>方法来中止调用序列。一旦事件监听器调用了这个方法，之后所有的事件监听器将会被忽略。</para></sect2></sect1><sect1><title>事件监听器提交和发送事件</title>
+<para>你可以通过调用<code>org.zkoss.zk.ui.event.Event</code>类中的<code>stopPropagation</code>方法来中止调用序列。一旦事件监听器调用了这个方法，之后所有的事件监听器将会被忽略。</para></sect2></sect1><sect1><title>事件监听器提交,发送和回显事件</title>
 <para>除了接收事件，一个应用程序可以在事件监听器间通信通过向他们发送和提交事件。</para><sect2><title>提交事件</title>
-<para>通过使用<code>org.zkoss.zk.ui.event.Events</code>类中的<code>postEvent</code>方法，一个事件监听器可以把事件提提交到事件队列的末尾。将事件放到队列中后立即返回。当这个事件之前的所有事件都被处理完毕后，该事件就会被处理。</para></sect2><sect2><title>发送事件</title>
-<para>通过使用<code>org.zkoss.zk.ui.event.Events</code>类中的<code>sendEvent</code>方法，一个事件监听器可以使ZK马上处理指定的事件。当指定事件的事件监听器都被处理完毕后才返回。事件是在相同的线程内被处理的。</para></sect2></sect1><sect1><title>线程(Thread)模型</title>
+<para>通过使用<code>org.zkoss.zk.ui.event.Events</code>类中的<code>postEvent</code>方法，应用程序可以将事件提交至事件队列末尾。将事件放到队列中后立即返回。当这个事件之前的所有事件都被处理完毕后，该事件就会被处理。</para></sect2><sect2><title>发送事件</title>
+<para>通过使用<code>org.zkoss.zk.ui.event.Events</code>类中的<code>sendEvent</code>方法，应用程序可以请求ZK立即处理指定事件。当指定事件的事件监听器都被处理完毕后才返回。事件是在相同的线程内被处理的。</para></sect2>
+<sect2>
+	<title>回显事件</title>
+	<para>通过使用<code>org.zkoss.zk.ui.event.Events</code>类的<code>echoEvent</code>方法，应用程序可以请求客户端回显稍后要处理的事件。在排列请求客户端回显事件的响应后，该事件会立即返回。 </para>
+	<para>注意，不同于<code>sendEvent</code>和<code>postEvent</code>，事件并不会在当前执行过程中被处理，而是在客户端回显事件之后。换句话说，在客户端已更新用户界面之后，事件才会被处理。因此，对于在开始长操作之前提示用户，这是很有用的。 </para>
+	<para>例如，你可以打开一个标示(highlighted)窗口，然后在客户端显示窗口(且回显事件)之后调用<code>echoEvent</code>进行长操作。</para>
+	<para>例如，在下面的例子中，我们可以使用<code>org.zkoss.zk.ui.util.Clients.showBusy</code>方法来显示繁忙信息，这样用户就知道系统繁忙。然后用户将会看到 "Execute..." ，两秒种之后则是 "Done." 如果我们使用<code>postEvent</code>，最后两秒钟之后用户将会同时看到 "Execute..." 和"Done." 。 </para>
+<para>
+<programlisting>
+&lt;window id="w" title="Test echoEvent"&gt;&#13;
+   &lt;attribute name="onLater"&gt;&#13;
+   Thread.sleep(2000);&#13;
+   Clients.showBusy(null, false);&#13;
+   new Label("Done.").setParent(w);&#13;
+   &lt;/attribute&gt;&#13;&#13;
+			
+   &lt;button label="echo"&gt;&#13;
+   &lt;attribute name="onClick"&gt;&#13;
+   Clients.showBusy("Execute...", true);&#13;
+   Events.echoEvent("onLater", w, null);&#13;
+   &lt;/attribute&gt;&#13;
+   &lt;/button&gt;&#13;
+&lt;/window&gt;&#13;
+</programlisting>
+</para>
+</sect2>
+</sect1>
+<sect1><title>线程(Thread)模型</title>
 <para>对于每个桌面，事件总是被顺序处理的，所以线程模型是很简单的。就像开发桌面应用程序一样，你不需要担心racing和多线程(multi-threading)。所有你需要做的就是注册一个事件监听器且事件被调用时处理它。</para>
 <para>[提示]:当一个ZUML页面在servlet线程中被赋值时，每一个事件监听器都在一个被称为事件处理线程的独立线程中运行。</para>
 <para>[提示]:事件处理线程的使用可以被禁止，这样所有的线程都可以在Servlet线程中被处理。这样有更好一点的表现并且减少集成的问题。但是，你不能中止执行。参考性能提示一章中使用Servlet 线程处理事件一节。</para><sect2><title>挂起及恢复</title>
@@ -625,11 +662,14 @@ public void process() {
    synchronized (mutex) {
       Executions.notify(mutex);
    }
-}</programlisting></sect2><sect2><title>长操作(Long Operations)</title><para>对于同一个桌面而言，事件是被顺序处理的。换言之，一个事件的处理程序可以阻塞所有的后继处理程序。如果一个事件处理程序要花费大量的时间，阻塞用户请求的时间可能是不可接受的。就像桌面应用程序那样，你需要为这种长操作(Long Operations)创建一个工作线程以减少阻塞时间。
-你有四个选项来提交这个要求，包括服务器推动(server push)， 挂起和恢复(suspend and resume)，timer, 和捎带(piggyback)。
-</para>
+}</programlisting></sect2><sect2>
+<title>长操作(Long Operations)</title>
+<para>对于同一个桌面而言，事件是被顺序处理的。最坏的情况下，由于HTTP的限制，用户仅会看到显示在浏览器左上方的一个小处理对话框而没有其他任何提示。</para>
+<para>通过使用上面回显事件章节描述的回显事件和<code>showBusy</code>方法，则可以提供更多描述性信息来提示用户接下来的行为，例如，点击其他按钮为进一步进行长操作降低性能。</para>
+<para>但是，阻止来自用户的访问对你的应用程序而言也许是不可能的。为了防止阻塞，你必须在另一个线程中处理长操作，就像桌面应用程序那样。然后，持续将处理状态送回客户端。</para>
+<para>使用ZK，你有四种选择：服务器推动(server push)， 挂起和恢复(suspend and resume)，timer, 和捎带(piggyback)。</para>
 <sect3>
-<title>服务器推动</title>
+<title>选择1：服务器推动</title>
 <para>服务器推动即所谓的反向Ajax(reverse-Ajax)，允许服务器将内容动态的发至客户端。通过使用服务器推动技术，当你预先定义的条件满足时，则可以在工作线程内将内容发至客户端或更新客户端的内容。使用服务器推动很简单，仅需要如下的三步，</para>
 <orderedlist>
 	<listitem>
@@ -729,7 +769,7 @@ public	class	WorkingThread extends Thread{
 <para>最后，需要注意的一件事是频率会依赖服务器的加载而自动调整。</para>
 </sect4>
 <sect3>
-<title>选择 1：线程挂起和恢复</title>
+<title>选择 2：线程挂起和恢复</title>
 <para>使用服务器推动技术，你不需要关心多线程的问题。但是，若你想自己处理这个工作，由于HTTP的限制必须遵守如下的规则。</para>
 </sect3>
 
@@ -794,7 +834,7 @@ public	class	WorkingThread extends Thread{
 &lt;/window&gt;&#13;</programlisting>
 <para>注意到我们必须使用timer来真正地恢复被挂起的事件监听器(<code>onClick</code>)。这看起来是多余的，但是由于HTTP的限制：为了保持Web页面在浏览器端的活跃，当事件处理程序被挂起时我们必须返回响应。然后，工作线程完成了工作并唤醒了事件监听器，HTTP请求已经不在了。因此，我们需要一种方式来”捎带(piggyback)”这个结果，而这就使timer为什么会被使用的原因。</para>
 <para>更确切地说，当工作线程唤醒一个事件监听器时，ZK只是把它加到一个等待列表。当另一个HTTP请 求到达时，监听器才真正恢复(如上面例子中的<code>onTimer</code>事件)。</para>
-<para>在这个简单的事例中，我们并没有为<code>onTimer</code>事件作任何事情。对于一个复杂的应用程序，你可以用它来返回处理状态。</para></sect4><sect3><title>选择 2: Timer(没有挂起/恢复)</title>
+<para>在这个简单的事例中，我们并没有为<code>onTimer</code>事件作任何事情。对于一个复杂的应用程序，你可以用它来返回处理状态。</para></sect4><sect3><title>选择 3: Timer(没有挂起/恢复)</title>
 <para>无需挂起和恢复来实现一长操作(long operation)是由可能的。这在同步代码(synchronization codes)对于调试来说太复杂的情况下是很有用的。</para>
 <para>注意是很简单的。工作线程将结果保存在一个临时空间，然后使用<code>onTimer</code>事件将结果弹到(pops)桌面。</para>
 <programlisting>//WorkingThread2&#13;package test;&#13;public class WorkingThread2 extends Thread {
@@ -831,7 +871,7 @@ public	class	WorkingThread extends Thread{
    if (numPending == 0) timer.stop();
       &lt;/attribute&gt;
    &lt;/timer&gt;
-&lt;/window&gt;</programlisting></sect3><sect3><title>选择 3：捎带(piggyback)(没有挂起/恢复，没有Timer)</title>
+&lt;/window&gt;</programlisting></sect3><sect3><title>选择 4：捎带(piggyback)(没有挂起/恢复，没有Timer)</title>
 <para>当用户，例如，点击一个按钮或输入一些东西时，你可以将结果捎带(piggyback)到客户端，而不必循环地检查它们。</para>
 <para>为了完成捎带(piggyback)，你需要为一个根组件注册一个<code>onPiggyback</code>事件监听器。然后每次ZK更新引擎(ZK Update Engine)处理事件时，这个监听器将会被调用。例如，你可以按如下的方式重写代码。</para>
 <programlisting>&lt;window id="main" title="Working Thread3" onPiggyback="checkResult()"&gt;&#13;   &lt;zscript&gt;&#13;   List result = Collections.synchronizedList(new LinkedList());&#13;&#13;   void checkResult() {&#13;      while (!result.isEmpty())&#13;         main.appendChild(result.remove(0));&#13;   }&#13;   &lt;/zscript&gt;&#13;   &lt;button label="Start Working Thread"&gt;&#13;      &lt;attribute name="onClick"&gt;&#13;   timer.start();&#13;   new test.WorkingThread2(desktop, result).start();&#13;      &lt;/attribute&gt;&#13;   &lt;/button&gt;&#13;&lt;/window&gt;&#13;</programlisting>
@@ -857,7 +897,7 @@ public	class	WorkingThread extends Thread{
 
 
 <chapter>
-<title>6.ZK用户界面标记语言</title>
+<title>ZK用户界面标记语言</title>
 ZK用户界面标记语言<para>ZK 用户界面标记语言(ZUML)是基于XML的。每一个XML元素描述了要创建的组件。一个XML属性描述了被创建组件的初始值。一个XML处理指令(processing instruction)如何处理整个页面，如页面的标题。</para>
 <para>不同的组件集通过XML命名空间来区分。例如，XUL的命名空间为<ulink url="http://www.potix.com/2005/zul">
 <code>http://www.zkoss.org/2005/zul</code>
@@ -1560,7 +1600,7 @@ xmlns:zk="http://www.zkoss.org/2005/zk"&gt;&#13;
 <code>?&gt;</code>
 </para>
 <para>为某一页面定义新的组件。使用此指令定义的组件，仅对于使用该指令的页面是可见的。为了定义在所有组件中可以使用的组件，可是使用附加语言插件(language addon)，即一个XML文件，用来</para>
-<para>定义在Web应用程序<footnote><para>语言插件在 the Component Development Guide中有描谁。</para></footnote>中所有页面都可使用的组件。</para>
+<para>定义在Web应用程序<footnote><para>语言插件在 the Component Development Guide中有描述。</para></footnote>中所有页面都可使用的组件。</para>
 <para>有两种方式：通过宏和通过类(by-macro and by-class)。</para><sect3><title>宏格式(The by-macro Format)</title><para>
 <code>&lt;?component name="</code>
 <code>myName</code>
@@ -1654,7 +1694,7 @@ xmlns:zk="http://www.zkoss.org/2005/zk"&gt;&#13;
 <para>
 <code>&lt;?variable-resolver class="..."?&gt;</code>
 </para>
-<para>为zscript解释器指定一个变量分解器(variable resolver )用以分解未知变量。被指定的类必须实现 <code>org.zkoss.zk.scripting.VariableResolver</code>接口。</para>
+<para>为zscript解释器指定一个变量分解器(variable resolver )用以分解未知变量。被指定的类必须实现 <code>org.zkoss.xel.VariableResolver</code>接口。</para>
 <para>你可以使用多个variable-resolver指令以指定多个变量分解器。声明靠后的分解器有更高的优先级。</para>
 <para>下面是一个ZK结合Spring框架的例子，它分解了在Spring框架中声明的Java Beans，这样我们可以直接访问到它们。</para>
 <para>
@@ -1674,7 +1714,14 @@ Small Talk:ZK with Spring DAO and JDBC, Part II</ulink>
 <para>
 <code>&lt;?import uri="..."?&gt;</code>
 </para>
-<para>引入在另一个ZUML页面内的组件定义和初始器(initiator)。换句话说，即从指定的页面引入<code>component</code>和<code>init</code>指令。 注意除了<code>component</code>和<code>init</code>之外的指令被忽略，以免混淆。</para>
+<para><code>&lt;?import uri="..." directives="..."?&gt;</code></para>
+<para>引入定义在另一个ZUML页面的指令，例如组件定义(&lt;<code>?component?</code>&gt;)和初始器(&lt;<code>?init?</code>&gt;)，若省略<code>directives</code>属性，则只会引入<code>component</code>指令和<code>init</code>指令。</para>
+<para>若你想引入特定的指令，则可以指定一个指令名称的列表，以逗号分隔。例如，</para>
+<para>
+	<programlisting>
+		&lt;?import uri="/template/taglibs.zul" directives="taglib, xel-method"?&gt;
+	</programlisting>
+</para>
 <para>一个典型的应用时将一套组件定义防置在一个ZUML页面中，然后在另外的ZUML页面引入，这样除了系统默认的外(additional to the system default)，可以共享一套相同的组件定义。</para>
 <para>
 <para/>
@@ -1707,7 +1754,7 @@ Small Talk:ZK with Spring DAO and JDBC, Part II</ulink>
 此外，你可以使用EL表达式指定一个<code>Composer</code>实例，或<code>Composer</code>实例的集合。
 </para>
 <para>
-[注]：若指定了EL表达式，其会在组件初始化之前被赋值。所以你不能够引用此组件。此外，在EL表达式中引用当前页的<code>self</code>变量也在此属性内。
+[注]：若指定了EL表达式，其会在组件初始化之前被赋值。所以你不能够引用此组件。此外，此属性中EL表达式的<code>self</code>变量会引用父组件(如果有的话)，或者当前页面(如果没有父组件)。。
 </para>
 <para>若你想获得更多的控制，如处理异常，你也可以实现<code>org.zkoss.zk.util.ComposerExt</code>接口。</para>
 </sect2>
@@ -1715,11 +1762,9 @@ Small Talk:ZK with Spring DAO and JDBC, Part II</ulink>
 <sect2>
 <title><code>use</code>属性</title>
 <para>
-<code>for</code>
-<code>EachEnd="</code>
-<code>a-class-name</code>
-<code>"</code>
+<code>forEachEnd="a-class-name"</code>
 </para>
+<para><code>use="${EL_returns_a_class_or_a_class_name}"</code></para>
 <para>指定一个类来创建一个组件(代替默认的)。在下面的例子中，<code>MyWindow</code> 被用于代替默认的<code>org.zkoss.zul.Window</code>。</para>
 <para>
 <para/>
@@ -1764,22 +1809,14 @@ Small Talk:ZK with Spring DAO and JDBC, Part II</ulink>
 <para>被用于<code>forEach</code> 属性，指定迭代(iteration)结束处索引(包括此)(从0开始)。如果没有指定，迭代会在最后一个元素处结束。</para>
 <para>如果<code>forEachEnd</code>大于或等于元素的数目，则迭代会在最后一个元素处结束。</para></sect2><sect2><title>
 <code>fulfill</code>属性</title>
+<para><code>fulfill="event-expr"</code></para>
+<para><code>fulfill="event-expr1, event-expr2, event-expr3"</code></para>
 <para>
-<code>fulfill="</code>
-<code>event-name</code>
-<code>"fulfill="</code>
-<code>target-id</code>
-<code>.</code>
-<code>event-name</code>
-<code>"fulfill="</code>
-<code>id1/id2/id3</code>
-<code>.</code>
-<code>event-name</code>
-<code>"fulfill="${</code>
-<code>el-expr</code>
-<code>}.</code>
-<code>event-name</code>
-<code>"</code>
+	<para>此处的event-expr，event-expr1 和其他的类似的表达式被称为事件表达式。可以是如下的人一种格式：</para>
+	<para>event-name</para>
+	<para>target-id.event-name</para>
+	<para>id1/id2/id3.event-name</para>
+	<para>${el-expr}.event-name</para>
 </para>
 <para>指定何时创建子组件。默认(即没有指定<code>fulfill</code>)情况下，子组件会在父组件之后被创建，当ZUML页面被加载时。</para>
 <para>如果你想推迟子组件的创建，你可以通过<code>fulfill</code>属性指定条件。条件有事件名称，还有，可选的，目标组件的标识或路径。这意味着直到目标组件指定的事件(如果指定了)发生时，子组件才会被处理。如果标识被省略，则假定为同一组件。</para>
@@ -2283,7 +2320,7 @@ public class MyWindow extends Window {&#13;
 <para>在这个例子中，ZHTML的<code>onClick</code>属性用来指定在浏览器端运行的JavaScript 代码。另一方面，<code>zk:onClick </code>作为保留属性来指定一个ZK事件处理器。</para>
 <para>注意，命名空间的前缀，zk，对于<code>zscript</code>元素是可选的，因为ZHTML元素没有这个元素，而ZK有足够的信息来确定它。</para>
 <para>同样也要注意你必须为<code>window</code>组件指定XML命名空间，因为其来自于一个不同的组件集。</para></sect2></sect1></chapter>
-<chapter><title>7.ZUML页面及XUL组件集</title><para>本章描述了XUL组件集 。不同于其他的实现，ZK的XUL组件，经过了跨越网络合作的优化(co-operating across Internet)。有些组件可能不会完全兼容XUL技术标准。为方便起见，我们有时指它们为XUL组件。</para><sect1><title>基本组件</title><sect2><title>标签</title><para>Label组件用来呈现一段文字。</para>
+<chapter><title>ZUML页面及XUL组件集</title><para>本章描述了XUL组件集 。不同于其他的实现，ZK的XUL组件，经过了跨越网络合作的优化(co-operating across Internet)。有些组件可能不会完全兼容XUL技术标准。为方便起见，我们有时指它们为XUL组件。</para><sect1><title>基本组件</title><sect2><title>标签</title><para>Label组件用来呈现一段文字。</para>
 <para>
 <para/>
 <programlisting>&lt;window border="normal"&gt;&#13;   Hello World&#13;<inlinegraphic fileref="img/7-1-1a.png" align="right"/>&lt;/window&gt;&#13;</programlisting>
@@ -2677,7 +2714,38 @@ public class MyWindow extends Window {&#13;
 <para>为了支持多语言，你可以使用l函数，就像在国际化(Internationalization)一章中描述的那样。</para>
 </listitem>
 </orderedlist>
-<para>&lt;textbox constraint="/.+@.+\.[a-z]+/: ${c:l('err.email.required')}"/&gt;</para></sect3><sect3><title>定制属性</title><para>如果你想使用更复杂的约束，可以指定一个实现了<code>org.zkoss.zul.Constraint</code>接口的对象。</para>
+<para>&lt;textbox constraint="/.+@.+\.[a-z]+/: ${c:l('err.email.required')}"/&gt;</para>
+</sect3>
+<sect3>
+	<title>Datebox的约束</title>
+	<para>除了在上述章节中描述的约束(例如<code>no future</code>和正则表达式)，<code>datebox</code>支持一个日期范围。例如，</para>
+<para>
+<programlisting>
+&lt;datebox constraint="between 20071225 and 20071203"/&gt;&#13;
+&lt;datebox constraint="before 20071225"/&gt;&#13;
+&lt;datebox constraint="after 20071225"/&gt;&#13;
+</programlisting>
+</para>
+	<para>注意
+		<orderedlist>
+			<listitem>
+				<para>日期的格式被约束为<code>yyyMMdd</code>，独立于区域。</para>
+			</listitem>
+			<listitem>
+				<para>约束内指定的日期为包含。例如，"before 20071225"包括December 25, 2007 及之前的每一天。</para>
+			</listitem>
+			<listitem>
+				<para>约束实际上表示<code>org.zkoss.zul.SimpleDateConstraint</code>类的一个实例。你可以使用<code>getBeginDate</code>和<code>getEndDate</code>方法分别获取开始和结束日期。</para>
+				<para>
+					<programlisting>
+((SimpleDateConstraint)datebox.getConstraint()).getBeginDate();
+					</programlisting>
+				</para>
+			</listitem>
+		</orderedlist>
+	</para>
+</sect3>
+<sect3><title>定制属性</title><para>如果你想使用更复杂的约束，可以指定一个实现了<code>org.zkoss.zul.Constraint</code>接口的对象。</para>
 <para>
 <para/>
 <programlisting>&lt;window title="Custom Constraint"&gt;&#13;   &lt;zscript&gt;&lt;![CDATA[&#13;Constraint ctt = new Constraint() {&#13;   public void validate(Component comp, Object value) throws WrongValueException {&#13;      if (value =e= null || ((Integer)value).intValue() &lt; 100)&#13;         throw new WrongValueException(comp, "At least 100 must be specified");&#13;   }&#13;}&#13;   ]]&gt;&lt;/zscript&gt;&#13;   &lt;intbox constraint="${ctt}"/&gt;&#13;&lt;/window&gt;&#13;</programlisting>
@@ -2685,7 +2753,7 @@ public class MyWindow extends Window {&#13;
 <para>你可以在一个Java类中实现你的约束，例如<code>my.EmailValidator</code>，那么</para>
 <para>
 <para/>
-<programlisting>&lt;?taglib uri="/WEB-INF/tld/web/core.dsp.tld" prefix="c"?&gt;&#13;&lt;textbox constraint="${c:new('my.EmailValidator')}"/&gt;&#13;</programlisting>
+<programlisting>&lt;?taglib uri="/WEB-INF/tld/web/core" prefix="c"?&gt;&#13;&lt;textbox constraint="${c:new('my.EmailValidator')}"/&gt;&#13;</programlisting>
 </para><sect4><title>
 <code>org.zkoss.zk.ui.WrongValueException</code>
 </title>
@@ -4476,7 +4544,7 @@ splitter必须放置在box内。当splitter放置在水平box(<code>hbox</code>)
 <para>
 此处，<code>&lt;input&gt;</code>为由<code>textbox</code>产生的HTML标签。不同于上例中的<code>textbox</code>，ZK加载器并不会为每个<code>ul</code>和<code>li</code>
 <footnote>
-ZK实际上创建了一个特殊的组件来表示尽可能多的使用Native命名空间的XML元素。
+<para>ZK实际上创建了一个特殊的组件来表示尽可能多的使用Native命名空间的XML元素。</para>
 </footnote>
 创建一个组件。而是，它们直接被送至客户端。当然，它们必须是被客户端可识别的。对于HTML浏览器，它们必须为合法的HTML标签。 
 </para>
@@ -4506,9 +4574,6 @@ native:URI-of-another-namespace
 <para>那么，客户端接受到的内容如下：</para>
 <programlisting>
 &lt;div id="z_lx_0c" z.type="zul.wnd.Wnd"&gt;&#13;
-<footnote>
-实际窗口的输出依赖于它的实现。这里只是一个简单的版本。
-</footnote>
    &lt;svg width="100%" height="100%" version="1.1"&#13;
    xmlns="http://www.w3.org/2000/svg"&gt;&#13;
       &lt;ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/&gt;&#13;
@@ -4548,7 +4613,27 @@ XHTML表示XHTML组件集，就像ZUL命名空间(<ulink url="http://www.zkoss.o
 <programlisting>&lt;window title="include demo" border="normal" width="300px"&gt;&#13;   Hello, World!&#13;   &lt;include src="/userguide/misc/includedHello.zul"/&gt;&#13;   &lt;include src="/html/frag.html"/&gt;&#13;&lt;/window&gt;&#13;</programlisting>
 </para>
 <para>就像所有的其它属性，你可以在运行时动态的改变src属性包括来自于不同servlet的输出。</para>
-<para>若被包括的输出是另一个ZUML，开发人员被允许访问此ZUML的组件，就好像它们是包含(containing)页面的一部分。</para><sect3><title>包含ZUML页面</title><para>如果<code>include</code>组件被用于包含一个ZUML页面，那么被包含的页面会成为桌面的一部分。但是，直到请求被完全处理被包含页面才会可见。换言之，仅当下列的事件被用户或计时器(timer)触发时被包含页面才会可见。</para>
+<para>若被包括的输出是另一个ZUML，开发人员被允许访问此ZUML的组件，就好像它们是包含(containing)页面的一部分。</para>
+<sect3>
+	<title>将值传递至包含页面</title>
+	<para>有两种方式将值传递至包含页面。一，你可以使用查询字符串。</para>
+	<para>
+		<programlisting>&lt;include src="mypage?some=something"/&gt;</programlisting>
+	</para>
+	<para>然后，在包含页面内，你可以使用<code>Execution</code>或<code>ServletRequest</code>接口的<code>getParameter</code>方法来访问它们。在EL表达式(包含页面内的)中，你可以使用<code>param</code>变量来访问它们。但是，使用查询字符串，你仅能传递字符串类型的值。</para>
+	<para>
+		<programlisting>${param.some}</programlisting>
+	</para>
+	<para>另一种方式，你可以利用<code>setDynamicProperty</code>方法所谓的动态属性，或者ZUL内的一个动态属性来传递任意值，如下：</para>
+	<para>
+		<programlisting>&lt;include src="mypage" some="something" another="${expr}"/&gt;</programlisting>
+	</para>
+	<para>使用动态属性，你可以传递非字符串类型的值。在包含页面内，可以使用<code>Execution</code>或<code>ServletRequest</code>接口的<code>getAttribute</code>方法来访问它们。在EL表达式(包含页面内的)中，你可以使用<code>requestScope</code>变量来访问它们。</para>
+	<para>
+		<programlisting>${requestScope.some}</programlisting>
+	</para>
+</sect3>
+<sect3><title>包含ZUML页面</title><para>如果<code>include</code>组件被用于包含一个ZUML页面，那么被包含的页面会成为桌面的一部分。但是，直到请求被完全处理被包含页面才会可见。换言之，仅当下列的事件被用户或计时器(timer)触发时被包含页面才会可见。</para>
 <para>理由是include组件到页面响应阶段<footnote>
 <para>参考组件活动周期(Component Lifecycle )一章获取细节。</para>
 </footnote>(the Rendering phase)才会包含一个页面。另外zscript 发生在组件创建阶段(the Component Creation phase)， onCreate 发生在事件处理阶段(the Event Processing Phase)。它们都在包含前执行。</para>
@@ -5771,7 +5856,7 @@ paging</code>
 <programlisting>&lt;radiogroup onCheck="fruit.value = self.selectedItem.label"&gt;&#13;   &lt;radio label="Apple"/&gt;&#13;   &lt;radio label="Orange"/&gt;&#13;&lt;/radiogroup&gt;&#13;You have selected : &lt;label id="fruit"/&gt;&#13;</programlisting> 
 <para>上面的事例和下面的有相同的效果。</para>
 <programlisting>&lt;radiogroup&gt;&#13;   &lt;radio label="Apple" onCheck="fruit.value = self.label"/&gt;&#13;   &lt;radio label="Orange" onCheck="fruit.value = self.label"/&gt;&#13;&lt;/radiogroup&gt;&#13;You have selected : &lt;label id="fruit"/&gt;&#13;</programlisting>
-</para></sect3></sect2></sect1></chapter><chapter><title>8.在ZUML中使用XHTML组件集</title><para>本章描述了XHTML组件集。</para><sect1><title>目标</title>
+</para></sect3></sect2></sect1></chapter><chapter><title>在ZUML中使用XHTML组件集</title><para>本章描述了XHTML组件集。</para><sect1><title>目标</title>
 <para>介绍XHTML组件集的目地是，使已存在的Web页面可以简单的移植(port)到ZUML。最终目标是，所有有效的XHTML页面即为有效的ZUML页面。所有的servlet就像平常一样处理提交的表单。</para>
 <para>因此，已存在的XHTML页面可以享受ZUML页面拥有的最强大优点，丰富用户界面。这种丰富性可以用两种方式实现。第一种，你可以嵌入Java代码来动态操纵XHTML组件。第二种，你可以为已存在的页面添加off-of-shelf XUL 组件，就像为XUL页面添加XHTML。</para>
 <para>
@@ -6053,7 +6138,7 @@ ZK加载器会为在ZUML页面内声明的每个标签创建一个ZK组件。例
 </sect1>
 </chapter>
 
-<chapter><title>9.宏组件</title><para>有两种方式实现一个组件。一种方法是实现一个来自<code>org.zkoss.zk.ui.AbstractComponent</code>的类。另一种方法是使用其它组件实现它。</para>
+<chapter><title>宏组件</title><para>有两种方式实现一个组件。一种方法是实现一个来自<code>org.zkoss.zk.ui.AbstractComponent</code>的类。另一种方法是使用其它组件实现它。</para>
 <para>第一种方式更为灵活。这需要深入ZK，所以通常由组件开发人员来完成。这在Component Development Guide 中有讨论。</para>
 <para>另外，使用其它组件来实现一个新组件更为直接。就像composition，macro expansion，或 inline replacement 一样工作。为了描述方便，我们将这类组件成为宏组件(macro components)，而其它的组件称为本地组件(native components)。</para>
 <para>[提示]：从应用程序开发人员的角度来看，宏组件与本地组件是没有区别的，除了宏组件是被实现的。</para><sect1><title>使用宏组件的三个步骤</title>
@@ -6307,7 +6392,7 @@ ZK加载器会为在ZUML页面内声明的每个标签创建一个ZK组件。例
 <para>
 <para/>
 <programlisting>Username ua = new Username();&#13;ua.setWho("Joe");&#13;ua.setParent(wnd);&#13;ua.afterCompose();&#13;</programlisting>
-</para></sect3></sect2></sect1></chapter><chapter><title>10.高级特性</title><para>这一章将会描述关于组件和页面的高级主题。</para><sect1><title>标识页面</title>
+</para></sect3></sect2></sect1></chapter><chapter><title>高级特性</title><para>这一章将会描述关于组件和页面的高级主题。</para><sect1><title>标识页面</title>
 <para>所有同一desktop内的页面都可以在一个事件监听器内被访问到。你可以使用<code>org.zkoss.zk.ui.Component</code>接口内的<code>getPage</code>方法获取组件的当page。</para>
 <para>为了获取另一page 的引用，你必须为page指定一个标识，用以查找。</para>
 <para>
@@ -6338,7 +6423,9 @@ ZK加载器会为在ZUML页面内声明的每个标签创建一个ZK组件。例
 <para>
 <para/>
 <programlisting>Path parent = new Path("//P/A");&#13;new Path(parent, "B/C").getComponent();&#13;</programlisting>
-</para></sect2></sect1><sect1><title>排序</title>
+</para>
+<para>提示: Path.getComponent("//xyz") 总会返回null，因为//之后的标识为页面ID。而页面不是组件。</para>
+</sect2></sect1><sect1><title>排序</title>
 <para>
 <code>org.zkoss.zk.ui.Component</code>接口中的<code>getChildren</code>方法返回的列表是实况的(live)。<code>org.zkoss.zul.Listbox</code>中的<code>getItems</code>方法<code>及其它</code>接口中的对应方法也是如此。换言之，你可以动态操纵其内容。例如，下面的语句是等价的：</para>
 <para>
@@ -6838,7 +6925,7 @@ comp.getDesktop().getAttribute("some");
 <para>
 <para/>
 <programlisting>&lt;filter&gt;&#13;   &lt;filter-name&gt;zkFilter&lt;/filter-name&gt;&#13;   &lt;filter-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutFilter&lt;/filter-class&gt;&#13;   &lt;init-param&gt;&#13;      &lt;param-name&gt;extension&lt;/param-name&gt;&#13;      &lt;param-value&gt;html&lt;/param-value&gt;   &lt;/init-param&gt;&#13;   &lt;init-param&gt;&#13;      &lt;param-name&gt;compress&lt;/param-name&gt;&#13;      &lt;param-value&gt;false&lt;/param-value&gt;&#13;   &lt;/init-param&gt;&#13;&lt;/filter&gt;&#13;</programlisting>
-</para></sect2></sect1></chapter><chapter><title>11.性能提示</title><para>本章将要讲述使你的ZK应用程序运行的更快的提示。</para><sect1><title>使用编译过的Java代码</title>
+</para></sect2></sect1></chapter><chapter><title>性能提示</title><para>本章将要讲述使你的ZK应用程序运行的更快的提示。</para><sect1><title>使用编译过的Java代码</title>
 <para>在ZUML中使用zscript很方便，但是这需要付出代价：性能较低。降级随应用程序不同而不同(The degradation varies from one application from another)。对于大型的网站，建议尽可能的不使用zscript。</para><sect2><title>使用<code>deferred</code> 属性</title><para>若你仍然需要编写zscript 代码，可以指定<code>deferred</code> 属性来延迟zscript 代码的赋值(evaluated)，如下。</para>
 <para>
 <para/>
@@ -6944,7 +7031,38 @@ comp.getDesktop().getAttribute("some");
 <para>
 <para/>
 <programlisting>if (Messagebox.show("Delete?", "Prompt", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION) == Messagebox.YES) {&#13;   this_never_executes();&#13;}&#13;</programlisting>
-</para></sect2><sect2><title>文件上传</title>
+</para>
+<para>这样，你必须要提供一个事件监听器，如下：</para>
+<para>
+	<programlisting>
+Messagebox.show("Delete?", "Prompt", Messagebox.YES|Messagebox.NO,&#13;
+   Messagebox.QUESTION,&#13;
+   new EventListener() {&#13;
+      public void onEvent(Event evt) {&#13;
+         switch (((Integer)evt.getData()).intValue()) {&#13;
+         case Messagebox.YES: doYes(); break; //the Yes button is pressed&#13;
+         case Messagebox.NO: doNo(); break; //the No button is pressed&#13;
+         }&#13;
+      }&#13;
+   }&#13;
+);
+	</programlisting>
+</para>
+<para>你提供的事件监听器在用户点击其中一个按钮时会被调用。然后，你可以通过测试数据(事件的<code>getData</code>方法)来确定哪个按钮被按下。数据为一个整数，其值为按钮的标识，例如<code>Messagebox.YES</code>。</para>
+<para>
+	<programlisting>
+public void onEvent(Event evt) {&#13;
+   if ("onYes".equals(evt.getName())) {&#13;
+      doYes(); //the Yes button is pressed&#13;
+   } else if ("onNo".equals(evt.getName())) {&#13;
+      doNo(); //the No button is pressed&#13;
+   }&#13;
+}
+	</programlisting>
+</para>
+<para>注:OK按钮的事件名称为<code>onOK</code>，而不是<code>onOk</code>。</para>
+</sect2>
+<sect2><title>文件上传</title>
 <para>文件上传对话框不再适用。而你需要使用<code>fileupload</code>组件代替。<code>fileupload</code>组件并不是一个模态对话框。它和其它组件一起被内联置于页面内(it is placed inline with other components)。更多信息请参考<code>fileupload</code>组件一节。</para>
 <para>
 <para/>
@@ -6978,12 +7096,9 @@ comp.getDesktop().getAttribute("some");
 <programlisting>&lt;tabbox&gt;&#13;   &lt;tabs&gt;&#13;      &lt;tab label="Preload" selected="true"/&gt;&#13;      &lt;tab id="tab2" label="OnDemand"/&gt;&#13;   &lt;/tabs&gt;&#13;   &lt;tabpanels&gt;&#13;      &lt;tabpanel&gt;&#13;      This panel is pre-loaded since no fulfill specified&#13;      &lt;/tabpanel&gt;&#13;      &lt;tabpanel fulfill="tab2.onSelect"&gt;&#13;      This panel is loaded only tab2 receives the onSelect event&#13;      &lt;/tabpanel&gt;&#13;   &lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;</programlisting>
 </para></sect1><sect1><title>为大型Listbox使用实况数据和分页</title><para>将一个拥有大量项的listbox发送至客户端的代价是很昂贵的。此外，浏览器的JavaScript引擎并不擅于使用大量项初始化一个listbox。更好的解决方法是使用实况数据(live data)，也就是说，为它指派一个list model。然后，列表项仅在可见时才会被送至客户端。</para>
 <para>若使用分页模式，性能会进一步提升。</para>
-<para>细节请参考ZUML及XUL组件集一章中列表框一节。</para></sect1><sect1><title>如果花费太长的时间打开模态窗口</title><para>当打开一个模态窗口时，所有不属于模态窗口的组件都会失效。但是，若页面太大，性能或许会不可接受(取决于浏览器的JavaScript解释器及客户端电脑的速度)。若打开一个模态窗口对你来说速度太慢，可以使用如下方法关闭此特性。</para>
-<para>
-<para/>
-<programlisting>&lt;client-config&gt;&#13;   &lt;disable-behind-modal&gt;false&lt;/disable-behind-modal&gt;&lt;!-- default: true --&gt;&#13;&lt;/client-config&gt;&#13;</programlisting>
-</para>
-<para>副作用(side effect)是，用户或许会使用TAB 或shift-TAB 键移动要失效组件(component that shall be disabled)的聚焦。注意，不管此特性被打开或关闭，用户总是被阻止点击不属于模态窗口的任何组件。</para></sect1><sect1><title>使用ZK JSP标签或ZK JSF 组件代替ZK Filter</title><para>ZK filter实际上将每个HTML 标签映射到相应的XHTML组件。就像在前一章节描述的那样，由于ZK必须维护所有ZK组件的状态(包括XUL和XHTML 组件)，这比实际需求消耗了更多的内存。</para>
+<para>细节请参考ZUML及XUL组件集一章中列表框一节。</para></sect1>
+
+<sect1><title>使用ZK JSP标签或ZK JSF 组件代替ZK Filter</title><para>ZK filter实际上将每个HTML 标签映射到相应的XHTML组件。就像在前一章节描述的那样，由于ZK必须维护所有ZK组件的状态(包括XUL和XHTML 组件)，这比实际需求消耗了更多的内存。</para>
 <para>引入ZK JSP标签是为了消除(eliminate)JSP 页面对于ZK filter的需要。使用ZK JSP标签，会为每个ZK JSP标签创建一个ZUL组件。所有的其它HTML标签都会被作为一个特殊组件被封装。</para>
 <para>
 <para/>
@@ -6993,7 +7108,7 @@ comp.getDesktop().getAttribute("some");
 <para>
 <para/>
 <programlisting>&lt;!-- a ZUL page --&gt;&#13;&lt;n:table xmlns:n="http://www.zkoss.org/2005/zk/native"&gt;&#13;   &lt;n:tr&gt;&#13;      &lt;n:td&gt;Name&lt;/n:td&gt;&#13;      &lt;n:td&gt;&lt;textbox/&gt;&lt;/n:td&gt;&#13;   &lt;/n:tr&gt;&#13;&lt;/n:table&gt;&#13;</programlisting>
-</para></sect1></chapter><chapter><title>12.其它设备和输出格式</title><para>除了Ajax浏览器，ZK也支持移动设备和XML输出。本章简要描述它们。对于细节信息，你可以参考相应文档。</para><sect1><title>ZK Mobile</title>
+</para></sect1></chapter><chapter><title>其它设备和输出格式</title><para>除了Ajax浏览器，ZK也支持移动设备和XML输出。本章简要描述它们。对于细节信息，你可以参考相应文档。</para><sect1><title>ZK Mobile</title>
 <para>ZK Mobile Computing 是ZK的扩展，可以使ZK应用程序扩展到移动设备，而只需少量的编程。</para>
 <para>ZK Mobile Computing由两部分组成。在移动设备方面为ZK Mobile，一个JavaMe Midlet 瘦客户端，与ZK服务器互动，且作为客户端方面的用户界面工作。在服务器端方面为一套MIL (移动交互式语言，Mobile Interactive Language)组件，使用它们你可以控制操作何时结束来自于移动设备的用户触发行为(you can control and manipulate when end users trigger actions from the mobile device)。</para>
 <para>开发ZK Mobile应用程序是很直接的。只需下载ZK Mobile发行版(release)，且跟随the ZK Mobile Quick Start Guide，你就可以准备开始了。</para><sect2><title>Mobile组件集， <ulink url="http://www.zkoss.org/2007/mil">http://www.zkoss.org/2007/mil</ulink>
@@ -7091,7 +7206,7 @@ comp.getDesktop().getAttribute("some");
 <para/>
 <programlisting>&lt;html&gt;&#13;&lt;head&gt;&#13;&lt;META http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;&#13;&lt;title&gt;Book Info&lt;/title&gt;&#13;&lt;/head&gt;&#13;&lt;body&gt;&#13;&lt;h1&gt;Book Info&lt;/h1&gt;&#13;&lt;dl&gt;&#13;&#13;&lt;dt&gt;Title:&lt;/dt&gt;&#13;&lt;dd&gt;&#13;ZK - Ajax without the JavaScript Framework&lt;/dd&gt;&#13;&lt;dt&gt;Who is this book for:&lt;/dt&gt;&#13;&lt;dd&gt;&#13;Web application designers and programmers who wish to implement rich Ajax web applications in the simplest way.&lt;/dd&gt;&#13;&lt;dt&gt;Authors&lt;/dt&gt;&#13;&lt;dd&gt;&#13;Henri Chen and Robbie Cheng&lt;/dd&gt;&#13;&lt;/dl&gt;&#13;&lt;/body&gt;&#13;&lt;/html&gt;&#13;</programlisting>
 </para>
-<para/></sect3></sect2></sect1></chapter><chapter><title>13.国际化</title><para>本章描述了如何使ZK应用程序足够简单的运行在任何地域(in any locale)。</para>
+<para/></sect3></sect2></sect1></chapter><chapter><title>国际化</title><para>本章描述了如何使ZK应用程序足够简单的运行在任何地域(in any locale)。</para>
 <para>首先，ZK允许开发人员以任何喜欢的方式嵌入Java代码或EL表达式。你可以使用国际化(Internationalization)方法，例如<code>java.util.ResourceBundle</code>。</para>
 <para>但是，ZK对于国际化有一些内置(built-in)的支持，你或许会发现它们很有用。</para><sect1><title>地域</title><para>地域(locale)用于处理请求和事件，默认情况下，由浏览器的首选项(preferences)(通过使用<code>javax.servlet.ServletRequest</code>的<code>getLocale</code>方法)决定。</para>
 <para>但是，这是可以配置的。例如，你或许想为所有的用户使用相同的地域(locale)，而不管浏览器是如何配置的。另一个例子，若在服务器端维护用户的profiles，你或许想使用用户在他或她的profile内指定的首选(preferred)地域(locale)。</para><sect2><title>
@@ -7360,7 +7475,7 @@ public class MyThemeProvider implements ThemeProvder {&#13;
 </sect1>
 </chapter>
 
-<chapter><title>14.数据库连接</title><para>本章将要讲述如何连接数据库。</para><sect1><title>ZK仅为表现层</title><para>Zk的目的是像表现层一样瘦(thin)。此外，使用中心服务器(server-centric)技术，ZK在服务器端运行所有代码，所以，连接数据库和任何桌面应用程序没有区别。换言之，ZK并不改变你访问数据库的方式，不管你使用JDBC或其它持久层框架，例如Hibernate<footnote>
+<chapter><title>数据库连接</title><para>本章将要讲述如何连接数据库。</para><sect1><title>ZK仅为表现层</title><para>Zk的目的是像表现层一样瘦(thin)。此外，使用中心服务器(server-centric)技术，ZK在服务器端运行所有代码，所以，连接数据库和任何桌面应用程序没有区别。换言之，ZK并不改变你访问数据库的方式，不管你使用JDBC或其它持久层框架，例如Hibernate<footnote>
 <para>
 <ulink url="http://www.hibernate.org/">http://www.hibernate.org</ulink>
 </para>
@@ -7463,7 +7578,7 @@ public class MyThemeProvider implements ThemeProvder {&#13;
 <para>
 <para/>
 <programlisting>import java.sql.*;&#13;import javax.sql.DataSource;&#13;import javax.naming.InitContext;&#13;import org.zkoss.util.logging.Log;&#13;import org.zkoss.zk.ui.Page;&#13;import org.zkoss.zk.ui.util.Initiator;&#13;&#13;public class TransInitiator implements Initiator {&#13;   private static final Log log = Log.lookup(TransInitiator.class);&#13;   private Connection _conn;&#13;   private boolean _err;&#13;&#13;   public void doInit(Page page, Object[] args) {&#13;      try {&#13;         DataSource ds = (DataSource)new InitialContext()&#13;            .lookup("java:comp/env/jdbc/MyDB");&#13;         _conn = ds.getConnection();&#13;      } catch (Throwable ex) {&#13;         throw UiException.Aide.wrap(ex);&#13;      }&#13;   }&#13;   public void doCatch(Throwable t) {&#13;      if (_conn != null) {&#13;         try {&#13;            _err = true;&#13;            _conn.rollback();&#13;         } catch (SQLException ex) {&#13;            log.warning("Unable to roll back", ex);&#13;         }&#13;      }&#13;   }&#13;   public void doFinally() {&#13;      if (_conn != null) {&#13;         try {&#13;            if (!_err)&#13;               _conn.commit();&#13;         } catch (SQLException ex) {&#13;            log.warning("Failed to commit", ex);&#13;         } finally {&#13;            try {&#13;               _conn.close();&#13;            } catch (SQLException ex) {&#13;               log.warning("Unable to close transaction", ex);&#13;            }&#13;         }&#13;      }&#13;   }&#13;}&#13;</programlisting>
-</para></sect3></sect2></sect1></chapter><chapter><title>15.Portal 整合</title><para>ZK提供了一个portlet来为JSR 168 compliant portal加载ZUML页面。这个portlet被称为ZK portlet 加载器(ZK portlet loader)，它就像<code>org.zkoss.zk.ui.http.DHtmlLayoutPortlet</code>一样被实现。</para><sect1><title>配置</title><sect2><title>WEB-INF/portlet.xml</title>
+</para></sect3></sect2></sect1></chapter><chapter><title>Portal 整合</title><para>ZK提供了一个portlet来为JSR 168 compliant portal加载ZUML页面。这个portlet被称为ZK portlet 加载器(ZK portlet loader)，它就像<code>org.zkoss.zk.ui.http.DHtmlLayoutPortlet</code>一样被实现。</para><sect1><title>配置</title><sect2><title>WEB-INF/portlet.xml</title>
 <para>为使用ZK portlet 加载器，首先你需要将下列定义添加至<code>WEB-INF/portlet.xml</code>。注意，<code>exp</code>
 <code>iration-cache</code>必须被设置为0，以阻止portal缓存结果。</para>
 <para>
@@ -7505,7 +7620,7 @@ public class MyThemeProvider implements ThemeProvder {&#13;
 </para>
 <para>
 <graphic align="center" fileref="img/13-2-2.png"/>
-</para></sect2></sect1></chapter><chapter><title>16.ZK之外</title><para>除了处理ZUML页面，ZK发行版包括了许多技术和工具。本章提供了一些关于它们的基本信息。感兴趣的读者可以参考Javadoc 获取详细的 API。</para><sect1><title>Logger</title>
+</para></sect2></sect1></chapter><chapter><title>ZK之外</title><para>除了处理ZUML页面，ZK发行版包括了许多技术和工具。本章提供了一些关于它们的基本信息。感兴趣的读者可以参考Javadoc 获取详细的 API。</para><sect1><title>Logger</title>
 <para>Package： <code>org.zkoss</code>
 <code>.util.logging.Log</code>
 </para>
