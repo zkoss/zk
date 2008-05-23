@@ -214,10 +214,10 @@ public class Listbox extends XulElement {
 	}
 
 	/**
-	 * Sets the outline of grid whether is fixed layout.
-	 * If true, the outline of grid will be depended on browser. It means, we don't 
+	 * Sets the outline of listbox whether is fixed layout.
+	 * If true, the outline of listbox will be depended on browser. It means, we don't 
 	 * calculate the width of each cell. Otherwise, the outline will count on the content of body.
-	 * In other words, the outline of grid is like ZK 2.4.1 version that the header's width is only for reference.
+	 * In other words, the outline of listbox is like ZK 2.4.1 version that the header's width is only for reference.
 	 * 
 	 * <p> You can also specify the "fixed-layout" attribute of component in lang-addon.xml directly, it's a top priority. 
 	 * @since 3.0.4
@@ -229,7 +229,7 @@ public class Listbox extends XulElement {
 		}
 	}
 	/**
-	 * Returns the outline of grid whether is fixed layout.
+	 * Returns the outline of listbox whether is fixed layout.
 	 * <p>Default: false.
 	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
 	 * @since 3.0.4
