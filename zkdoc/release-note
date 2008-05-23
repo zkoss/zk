@@ -20,6 +20,7 @@ ZK 3.0.6
   1967811: Should disable selection when multiple selection using Shift
   1968434: Layout of grid is out of tabbox it specified height(IE only)
   1968667: bug for listbox popup IE
+  1970048: Don't appear the gap of listheader whose label is empty
 
 	--------
 ZK 3.0.5
