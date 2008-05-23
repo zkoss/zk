@@ -228,46 +228,31 @@ public class Maps {
 
 	/**
 	 * Parses a string into a map.
+	 * It is the same as<br/>
+	 * <pre><code>parse(map, src, separator, quote, false, false, false);</code></pre>
 	 *
-	 * <p>For example, if the following string is parsed:<br/>
-	 * a12=12,b3,c6=abc=125,x=y
-	 *
-	 * <p>Then, a map with the following content is returned:<br/>
-	 * ("a12", "12"), ("b3", null), ("c6", "abc=125"), ("x", "y")
-	 *
-	 * <p>If = is omitted, it is considered as a key with the null value.
-	 * If you want to consider it as the value, use
-	 * {@link #parse(Map, String, char, char, boolean)} instead.
-	 * Actually, this is the same as parse(map, src, separator, quote, false);
-	 *
-	 * <p>Notice: only the first = after separator is meaningful,
-	 * so you don't have to escape the following =.
-	 *
-	 * <p>Beside specifying the quote character, you could use back slash
-	 * quote a single character (as Java does).
-	 *
-	 * @param map the map to put parsed results to; null to create a
-	 * new hash map
-	 * @param src the string to parse
-	 * @param separator the separator, e.g., ' ' or ','.
-	 * @param quote the quote character to surrounding value, e.g.,
-	 * name = 'value'. If (char)0, no quotation is recognized.
-	 * Notice: if value is an expression, it is better to specify (char)0
-	 * because expression might contain strings.
-	 * @return the map being generated
-	 *
-	 * @exception IllegalSyntaxException if syntax errors
-	 * @see CollectionsX#parse
-	 * @see #toString(Map, char, char)
+	 * @see #parse(Map, String, char, char, boolean, boolean, boolean)
 	 */
 	public static final Map 
 	parse(Map map, String src, char separator, char quote)
 	throws IllegalSyntaxException {
-		return parse(map, src, separator, quote, false);
+		return parse(map, src, separator, quote, false, false, false);
 	}
 	/**
 	 * Parses a string into a map.
+	 * It is the same as<br/>
+	 * <pre><code>parse(map, src, separator, quote, asValue, false, false);</code></pre>
 	 *
+	 * @see #parse(Map, String, char, char, boolean, boolean, boolean)
+	 * @since 2.4.0
+	 */
+	public static final Map 
+	parse(Map map, String src, char separator, char quote, boolean asValue)
+	throws IllegalSyntaxException {
+		return parse(map, src, separator, quote, asValue, false, false);
+	}
+	/**
+	 * Parse a string 
 	 * <p>If = is omitted, whether it is considered as a key with the null
 	 * value or a value with the null key depends on
 	 * the asValue argument. If true, it is considered as a value with
@@ -281,28 +266,52 @@ public class Maps {
 	 *
 	 * <p>Notice: only the first = after separator is meaningful,
 	 * so you don't have to escape the following =.
-	 * <p>Beside specifying the quote character, you could use back slash
+	 * <p>Beside specifying the quote character, you could use backslash
 	 * quote a single character (as Java does).
 	 *
 	 * @param map the map to put parsed results to; null to create a
 	 * new hash map
 	 * @param src the string to parse
 	 * @param separator the separator, e.g., ' ' or ','.
-	 * @param quote the quote character to surrounding value, e.g.,
-	 * name = 'value'. If (char)0, no quotation is recognized.
-	 * Notice: if value is an expression, it is better to specify (char)0
-	 * because expression might contain strings.
+
+	 * @param quote the quote character to surround the value.
+	 * Ingored if quote is (char)0
+	 * For example, a1='b c' will generate a map entry, ("a1", "b c") if
+	 * quote is '\''.<br/>
+	 * Note: the quote is taken off before storing to the map.<br/>
+	 * Note: the quote can <i>not</i> be used to surround the name
+
 	 * @param asValue whether to consider the substring without = as
 	 * a value (with the null key), or as a key (with the null value)
+	 * For example, a12 is considered as a key if asValue is false.
+	 * However, if you surround it with a quote, it is always considered
+	 * as a value. For example, 'a12' is considered as a value no matter
+	 * asValue is true or not.
+
+	 * @param multiple whehter to use List to store the values if
+	 * there are multiple entries with the same name.
+	 * For example, src is a1=x,a1=y, then, if multiple is true,
+	 * the value for a1 is a list with two values, "x" and "y".
+	 * If multiple is false, the later one overwrites the former one and
+	 * the value for a1 in the above example is "y".
+	 * Note: if no replication, the value is always a String instance
+	 * (or null if not specified).
+
+	 * @param parenthesis whether to parse parenthesis in the value, {}, () and [].
+	 * Specify true if the value might contain EL expressions.
+	 * If true, the separator is ignored inside the parenthesis.
+	 * Note: it has no effect to the name.
+
 	 * @return the map being generated
 	 *
 	 * @exception IllegalSyntaxException if syntax errors
 	 * @see CollectionsX#parse
 	 * @see #toString(Map, char, char)
-	 * @since 2.4.0
+	 * @since 3.0.6
 	 */
-	public static final Map 
-	parse(Map map, String src, char separator, char quote, boolean asValue)
+	public static final Map
+	parse(Map map, String src, char separator, char quote, boolean asValue,
+	boolean multiple, boolean parenthesis)
 	throws IllegalSyntaxException {
 		if (separator == (char)0)
 			throw new IllegalArgumentException("Separator cannot be 0");
@@ -324,10 +333,10 @@ public class Maps {
 		//parase
 		for (int j = 0, len = src.length();;) {
 			//handle name
-			Token tk = next(src, delimKey, j, true);
+			Token tk = next(src, delimKey, j, true, parenthesis);
 //			if (D.ON && log.finerable()) log.finer("name: "+tk.token+" "+tk.cc);
 			j = tk.next;
-			final String name = tk.token;
+			String name = tk.token;
 			switch (tk.cc) {
 			case '=':
 				if (name.length() == 0)
@@ -337,24 +346,28 @@ public class Maps {
 			case (char)0:
 //				assert tk.next >= len;
 				if (name.length() > 0)
-					if (asValue) map.put(null, name);
-					else map.put(name, null);
+					if (asValue) put(map, null, name, multiple);
+					else put(map, name, null, multiple);
 				return map;//done
 			default:
+				if (quote != (char)0 && tk.cc == quote) {
+					name = null;
+					break; //value only
+				}
 				//If separator is ' ', tk.cc can be anything; see next()
 				if ((separator != ' ' && tk.cc != separator)
 				|| name.length() == 0)
 					throw newIllegalSyntaxException(MCommon.UNEXPECTED_CHARACTER, tk.cc, src);
 
-				if (asValue) map.put(null, name);
-				else map.put(name, null);
+				if (asValue) put(map, null, name, multiple);
+				else put(map, name, null, multiple);
 				if (tk.cc == separator)
 					++j; //skip separator
 				continue;
 			}
 
 			//handle value
-			tk = next(src, delimValue, j, false);
+			tk = next(src, delimValue, j, false, parenthesis);
 //			if (D.ON && log.finerable()) log.finer("value: "+tk.token+" "+tk.cc);
 			j = tk.next;
 			final String value = tk.token;
@@ -372,10 +385,10 @@ public class Maps {
 						break;
 					valsb.append(cc == '\\' ? escape(src, ++j): cc);
 				}
-				map.put(name, valsb.toString());
+				put(map, name, valsb.toString(), multiple);
 				++j; //skip the closing ' or "
 			} else {
-				map.put(name, value);
+				put(map, name, value, multiple);
 			}
 
 			if (separator != ' ') {
@@ -386,6 +399,19 @@ public class Maps {
 				if (src.charAt(j) != separator)
 					throw newIllegalSyntaxException(MCommon.EXPECTING_CHARACTER, separator, src);
 				++j; //skip separator
+			}
+		}
+	}
+	private static void put(Map map, String name, String value, boolean multiple) {
+		Object o = map.put(name, value);
+		if (multiple && o != null) {
+			if (o instanceof List) {
+				((List)o).add(value);
+			} else {
+				final List l = new LinkedList();
+				l.add(o);
+				l.add(value);
+				map.put(name, l);
 			}
 		}
 	}
@@ -407,12 +433,13 @@ public class Maps {
 		}
 	}
 	private static final Token
-	next(String src, String delimiters, int j, boolean whitespaceAware) {
+	next(String src, String delimiters, int j, boolean whitespaceAware,
+	boolean parenthesis) {
 		final StringBuffer tksb = new StringBuffer(64);
 		final int len = src.length();
 		j = Strings.skipWhitespaces(src, j);
 		for (; j < len; ++j) {
-			final char cc = src.charAt(j);
+			final char cc = src.charAt(j), endparen;
 			if (cc == '\\') {
 				tksb.append(escape(src, ++j));
 			} else if (delimiters.indexOf(cc) >= 0) {
@@ -433,6 +460,11 @@ public class Maps {
 				} else {
 					tksb.append(cc);
 				}
+			} else if (parenthesis
+			&& (endparen = getEndingParenthesis(cc)) != (char)0) {
+				int k = skipParenthesis(src, j, cc, endparen);
+				tksb.append(src.substring(j, k + 1));
+				j = k;
 			} else if (cc == (char)0) {
 				throw newIllegalSyntaxException(MCommon.UNEXPECTED_CHARACTER, (char)0, src);
 			} else {
@@ -440,6 +472,26 @@ public class Maps {
 			}
 		}
 		return new Token(j, j < len ? src.charAt(j): (char)0, tksb.toString());
+	}
+	/** Returns the ending parenthesis (such as }),
+	 * or (char)0 if cc is not the beginning parenthsis (such as {).
+	 */
+	private static final char getEndingParenthesis(char cc) {
+		return cc == '{' ? '}': cc == '(' ? ')': cc == '[' ? ']': (char)0;
+	}
+	/** Skip the string enclosed by a pair of parenthesis and
+	 * return index after the ending parenthesis.
+	 * @param j the index of the starting parenthesis
+	 */
+	private static int skipParenthesis(String src, int j, char beg, char end) {
+		for (int len = src.length(), depth = 0; ++j < len;) {
+			final char cc = src.charAt(j);
+			if (cc == '\\') ++j; //skip next
+			else if (cc == beg) ++depth;
+			else if (cc == end && --depth < 0)
+				return j;
+		}
+		throw newIllegalSyntaxException(MCommon.EXPECTING_CHARACTER, end, src);
 	}
 	private static final char escape(String src, int j) {
 		if (j >= src.length())
