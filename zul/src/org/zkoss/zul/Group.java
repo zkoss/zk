@@ -25,6 +25,7 @@ import java.util.List;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Openable;
@@ -227,19 +228,18 @@ public class Group extends Row {
 			return (Label)cell;
 		}
 		throw new UiException("Unsupported child for setLabel: "+cell);
+	}	
+	public void onChildAdded(Component child) {
+		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
+		final String clx = cmp.getSclass();
+		cmp.setSclass(clx != null && clx.length() > 0 ? clx + " group-cell" : "group-cell");
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
-		if (super.insertBefore(child, insertBefore)) {
-			if (child instanceof Label) {
-				Label label = (Label) child;
-				String clx = label.getSclass();
-				label.setSclass(clx != null && clx.length() > 0 ? clx + " group-cell" : "group-cell");
-			}				
-			return true;
-		}
-		return false;
+	public void onChildRemoved(Component child) {
+		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
+		final String cls = cmp.getSclass();
+		cmp.setSclass(cls != null && cls.indexOf("group-cell") > -1 ? 
+				cls.replaceAll("(?:^|\\s+)" + "group-cell" + "(?:\\s+|$)", " ").trim() : cls);
 	}
-	
 	public String getOuterAttrs() {
 		applyImageIfAny();
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());

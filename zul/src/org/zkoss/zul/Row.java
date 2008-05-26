@@ -190,6 +190,21 @@ public class Row extends XulElement {
 		final String sclx = (String) getParent().getAttribute(Attributes.STRIPE_STATE);
 		return scls + (sclx != null ? " " + sclx : "");
 	}
+
+	protected String getRealStyle() {
+		if (this instanceof Group || !isVisible()) return super.getRealStyle();
+		final Group g = getGroup();
+		return super.getRealStyle() + (g != null && !g.isOpen() ? "display:none" : "") ;
+	}
+	
+	/**
+	 * Returns the group that this row belongs to, or null.
+	 * @since 3.1.0
+	 */
+	public Group getGroup() {
+		final Rows rows = (Rows) getParent();
+		return (rows != null) ? rows.getGroupAtIndex(getIndex()) : null;
+	}
 	
 	/** Returns the HTML attributes for the child of the specified index.
 	 */

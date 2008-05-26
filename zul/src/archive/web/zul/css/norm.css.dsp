@@ -252,7 +252,7 @@ div.rwb-popup, div.rwb-modal, div.rwb-highlighted, div.rwb-overlapped {
 	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right bottom;
 	padding-right: 5px; zoom: 1;
 }
-<%-- Window - OS look-and-feel --%>
+<%-- Window - v30 look-and-feel --%>
 td.lwt-embedded, td.mwt-embedded, td.rwt-embedded,
 td.lwt-popup, td.rwt-popup, td.mwt-popup,
 td.lwt-modal, td.mwt-modal, td.rwt-modal,
@@ -309,7 +309,7 @@ td.rwt-wndcyan {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wtcyan-r.gif')}); background-repeat: no-repeat;
 	width: 5px;
 }
-<%-- Window - OS - End--%>
+<%-- Window - v30 - End--%>
 
 .title a, .title a:visited {
 	color: white;
@@ -664,7 +664,7 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 	padding: 4px 2px; width: auto;
 }
-span.group-cell {
+.group-cell {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 }
 <%-- ZK groupfooter --%>

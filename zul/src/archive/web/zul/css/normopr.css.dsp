@@ -7,7 +7,7 @@ td.slider-bkr, td.slider-bkl, td.slidersph-bkr, td.slidersph-bkl {
 }
 
 <%-- Append New --%>
-option {
+.zk option {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: xx-small; font-weight: normal;
 }

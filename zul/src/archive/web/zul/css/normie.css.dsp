@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/norm.css.dsp"/>
 
-img	{
+.zk img	{
 	hspace: 0; vspace: 0
 }
 .messagebox-btn {
@@ -51,11 +51,11 @@ span.dottree-last-open, span.dottree-last-close, span.dottree-tee, span.dottree-
 }
 
 <%-- Append New --%>
-option {
+.zk option {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: xx-small; font-weight: normal;
 }
-<%-- Window shadow --%>
+<%-- Shadow --%>
 .z-ie-shadow { <%-- IE can use the "progid:DXImageTransform.Microsoft.Blur" function --%>
 	display: none; position: absolute; overflow: hidden; left: 0; top: 0; background: #777; zoom: 1;
 }
