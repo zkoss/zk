@@ -518,6 +518,10 @@ public class Combobox extends Textbox {
 	}
 
 	//-- super --//
+	public void setText(String value) throws WrongValueException {
+		super.setText(value);
+		reIndex();
+	}
 	public void setMultiline(boolean multiline) {
 		if (multiline)
 			throw new UnsupportedOperationException("Combobox doesn't support multiline");
