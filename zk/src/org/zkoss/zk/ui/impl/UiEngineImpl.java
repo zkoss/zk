@@ -1434,7 +1434,8 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else if (meta instanceof TextInfo) {
 				final String s = ((TextInfo)meta).getValue(comp);
-				((Native)comp).getHelper().appendText(sb, s);
+				if (s != null)
+					((Native)comp).getHelper().appendText(sb, s);
 			} else {
 				execNonComponent(ci, comp, meta);
 			}

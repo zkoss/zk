@@ -18,6 +18,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource;
 
+import org.zkoss.lang.SystemException;
 import org.zkoss.util.resource.impl.LabelLoader;
 import org.zkoss.xel.VariableResolver;
 
@@ -40,6 +41,20 @@ public class Labels {
 	public static final String getLabel(String key) {
 		return _loader.getLabel(key);
 	}
+	/** Returns the label of the specified key based on the current locale.
+	 * Unlike {@link #getLabel}, it throws an exception if not found.
+	 *
+	 * @exception SystemException if no such label
+	 * @since 3.0.6
+	 */
+	public static final String getRequiredLabel(String key)
+	throws SystemException {
+		final String s = getLabel(key);
+		if (s == null)
+			throw new SystemException("label not found: "+key);
+		return s;
+	}
+
 	/** Resets all cached labels and next call to {@link #getLabel}
 	 * will cause re-loading i3-label*.proerties.
 	 */
