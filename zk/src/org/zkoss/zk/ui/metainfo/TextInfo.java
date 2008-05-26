@@ -50,7 +50,7 @@ public class TextInfo extends EvalRefStub implements java.io.Serializable {
 		return _text.getRawValue();
 	}
 
-	/** Returns the value after evaluation.
+	/** Returns the value after evaluation (might be null).
 	 */
 	public String getValue(Page page) {
 		return _text != null ? (String)_text.getValue(_evalr, page): null;

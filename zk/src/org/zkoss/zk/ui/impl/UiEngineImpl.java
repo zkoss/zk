@@ -1510,7 +1510,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 			} else if (meta instanceof TextInfo) {
 				final String s = ((TextInfo)meta).getValue(comp);
-				helper.appendText(sb, s);
+				if (s != null) helper.appendText(sb, s);
 			} else if (meta instanceof ComponentInfo
 			&& ComponentDefinition.ZK == ((ComponentInfo)meta).getComponentDefinition()) {
 				ComponentInfo compInfo = (ComponentInfo)meta;
