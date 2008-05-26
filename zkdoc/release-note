@@ -10,6 +10,7 @@ ZK 3.0.6
   1873553: Integration with JSP and CSS problems
   1886786: Listbox SelectAll Checkbox should consist with all the items
   1968749: Way to pass object in forward
+  1936936: Improve error messages for invalid properties and expression
 
 * Bugs
   1955452: Liferay Failed if two portlets from different Web apps
