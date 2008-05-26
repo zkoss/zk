@@ -369,15 +369,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>3d</mold-name>
 			<mold-uri>~./zul/html/groupbox-3d.dsp</mold-uri>
 		</mold>
-	</component>
-	<component>
-		<component-name>groupfooter</component-name>
-		<component-class>org.zkoss.zul.Groupfooter</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/groupfooter.dsp</mold-uri>
-		</mold>		
-	</component>
+	</component>	
 	<component>
 		<component-name>hbox</component-name>
 		<component-class>org.zkoss.zul.Hbox</component-class>
