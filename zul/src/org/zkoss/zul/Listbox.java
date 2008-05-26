@@ -1343,8 +1343,8 @@ public class Listbox extends XulElement {
 				}
 				if (prev != null && remove !=null) {
 					prev[1] += remove[1] - 1;
-					_groupsInfo.remove(remove);
 				}
+				_groupsInfo.remove(remove);
 			} else if (!_groupsInfo.isEmpty()) {
 				final int[] g = getGroupsInfoAtIndex(index);
 				if (g != null) g[1]--;

@@ -170,7 +170,7 @@ zk.Grid.prototype = {
 
 		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
-			if ($visible(row) && $type(row) != "Grwgp") {
+			if ($visible(row) && $type(row) != "Grwgp" && $type(row) != "Grwgpft") {
 				zk.addClass(row, scOdd, !even);
 				even = !even;
 			}

@@ -186,7 +186,7 @@ public class Row extends XulElement {
 
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		if (this instanceof Group || !isVisible()) return scls;
+		if (this instanceof Group || this instanceof Groupfooter || !isVisible()) return scls;
 		final String sclx = (String) getParent().getAttribute(Attributes.STRIPE_STATE);
 		return scls + (sclx != null ? " " + sclx : "");
 	}

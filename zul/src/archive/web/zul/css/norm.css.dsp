@@ -667,6 +667,13 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 span.group-cell {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 }
+<%-- ZK groupfooter --%>
+tr.groupfooter{
+	background-color:#F4F4F4;
+}
+span.groupfooter-cell{
+	font-weight: bold;
+}
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;

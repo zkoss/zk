@@ -48,7 +48,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Group extends Row {
 	private String _src = null;
-	private boolean _open = true;
+	private boolean _open = true;	
 	private transient List _items;
 	
 	public Group() {
@@ -100,9 +100,27 @@ public class Group extends Row {
 		final Rows rows = (Rows)getParent();
 		if (rows != null) {
 			int[] g = rows.getGroupsInfoAtIndex(getIndex(), true);
-			if (g != null) return g[1] - 1;
+			if (g != null) {
+				if (g[2] == -1)
+					return g[1] - 1;
+				else
+					return g[1] - 2;
+			}
+			
 		}
 		return 0;
+	}
+	/**
+	 * Returns the index of Groupfooter
+	 * <p> -1: no Groupfooter
+	 */
+	public int getGroupfooterIndex(){
+		final Rows rows = (Rows)getParent();
+		if (rows != null) {
+			int[] g = rows.getGroupsInfoAtIndex(getIndex(), true);
+			if (g != null) return g[2];
+		}
+		return -1;
 	}
 	/** Returns the image URI.
 	 * <p>Default: null.

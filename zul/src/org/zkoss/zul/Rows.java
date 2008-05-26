@@ -154,7 +154,29 @@ public class Rows extends XulElement {
 		if (!(child instanceof Row))
 			throw new UiException("Unsupported child for rows: "+child);
 		Row newItem = (Row) child;
-		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;
+		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
+		
+		if (newItem instanceof Groupfooter){
+			if (!hasGroup())
+				throw new UiException("Groupfooter cannot exist alone, you have to add a Group first");
+			if (refChild == null){
+				if (getLastChild() instanceof Groupfooter)
+					throw new UiException("Only one Goupfooter is allowed per Group");
+				final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
+				g[2] = getChildren().size();		
+			}else{
+				final int idx = ((Row)refChild).getIndex();				
+				final int[] g = getGroupsInfoAtIndex(idx);
+				if (g == null)
+					throw new UiException("Groupfooter cannot exist alone, you have to add a Group first");				
+				if (g[2] != -1)
+					throw new UiException("Only one Goupfooter is allowed per Group");
+				if (idx != (g[0] + g[1]))
+					throw new UiException("Groupfooter must be placed after the last Row of the Group");
+				final int[] t = (int[]) _groupsInfo.get(g[0]);
+				t[2] = idx-1;
+			}							
+		}		
 		if (super.insertBefore(child, refChild)) {
 			if(hasGroup()) {
 				final int
@@ -167,7 +189,7 @@ public class Rows extends XulElement {
 				Group group = (Group) newItem;
 				int index = group.getIndex();
 				if (_groupsInfo.isEmpty())
-					_groupsInfo.add(new int[]{group.getIndex(), getChildren().size() - index});
+					_groupsInfo.add(new int[]{group.getIndex(), getChildren().size() - index, -1});
 				else {
 					int idx = 0;
 					int[] prev = null, next = null;
@@ -185,15 +207,16 @@ public class Rows extends XulElement {
 						int leng = index - prev[0], 
 							size = prev[1] - leng + 1;
 						prev[1] = leng;
-						_groupsInfo.add(idx, new int[]{index, size});	
+						_groupsInfo.add(idx, new int[]{index, size, -1});	
 					} else if (next != null) {
-						_groupsInfo.add(idx, new int[]{index, next[0] - index});
+						_groupsInfo.add(idx, new int[]{index, next[0] - index, -1});
 					}
 				}
 			} else if (hasGroup()) {
 				final int[] g = getGroupsInfoAtIndex(newItem.getIndex());
 				if (g != null) g[1]++;
 			}
+			
 			afterInsert(child);
 			return true;
 		}
@@ -217,11 +240,20 @@ public class Rows extends XulElement {
 				}
 				if (prev != null && remove !=null) {
 					prev[1] += remove[1] - 1;
-					_groupsInfo.remove(remove);
+				}
+				_groupsInfo.remove(remove);
+				final int idx = remove[2];
+				if (idx != -1){				
+					final Component gft = (Component) getChildren().get(idx -1);
+					super.removeChild(gft);
 				}
 			} else if (hasGroup()) {
 				final int[] g = getGroupsInfoAtIndex(index);
 				if (g != null) g[1]--;
+			}
+			if (child instanceof Groupfooter){
+				final int[] g = getGroupsInfoAtIndex(index);
+				g[2] = -1;
 			}
 			return true;
 		}

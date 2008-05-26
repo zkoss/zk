@@ -43,4 +43,8 @@ public interface GroupModel {
 	/** Returns the number of items belong the specified group.
 	 */
 	public int getChildCount(int index);
+	/**
+	 * Returns whether the Group has a Groupfooter or not.
+	 */
+	public boolean hasGroupfooter(int index);
 }
