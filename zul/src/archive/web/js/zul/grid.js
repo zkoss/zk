@@ -451,7 +451,7 @@ zkGrwgp = {
 	},
 	_openItemNow: function (row, toOpen) {
 		for (var table = row.parentNode.parentNode, i = row.rowIndex + 1, j = table.rows.length; i < j; i++) {
-			if ($type(table.rows[i]) == "Grwgp") break;
+			if ($type(table.rows[i]) == "Grwgp" || $type(table.rows[i]) == "Grwgpft") break;
 			if (getZKAttr(table.rows[i], "visible") == "true")
 				table.rows[i].style.display = toOpen ? "" : "none";
 		}

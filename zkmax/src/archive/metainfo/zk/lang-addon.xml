@@ -346,6 +346,14 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>groupfooter</component-name>
+		<component-class>org.zkoss.zul.Groupfooter</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.GroupfooterDefault</mold-uri>
+		</mold>		
+	</component>
+	<component>
 		<component-name>hbox</component-name>
 		<extends>hbox</extends>
 		<mold>

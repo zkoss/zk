@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -70,21 +71,16 @@ public class Groupfooter extends Row{
 			return (Label)cell;
 		}
 		throw new UiException("Unsupported child for setLabel: "+cell);
+	}	
+	public void onChildAdded(Component child) {
+		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
+		final String clx = cmp.getSclass();
+		cmp.setSclass(clx != null && clx.length() > 0 ? clx + " groupfooter-cell" : "groupfooter-cell");
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
-		if (super.insertBefore(child, insertBefore)) {
-			if (child instanceof Label) {
-				Label label = (Label) child;
-				String clx = label.getSclass();
-				label.setSclass(clx != null && clx.length() > 0 ? clx + " groupfooter-cell" : "groupfooter-cell");
-			}				
-			return true;
-		}
-		return false;
-	}
-	
-	public String getOuterAttrs() {		
-		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());		
-		return sb.toString();
+	public void onChildRemoved(Component child) {
+		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
+		final String cls = cmp.getSclass();
+		cmp.setSclass(cls != null && cls.indexOf("groupfooter-cell") > -1 ? 
+		cls.replaceAll("(?:^|\\s+)" + "groupfooter-cell" + "(?:\\s+|$)", " ").trim() : cls);
 	}
 }

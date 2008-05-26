@@ -711,21 +711,21 @@ public class Grid extends XulElement {
 			if (!_rows.hasGroup() && rcnt < mcnt) {
 				row = new Group();
 				row.applyProperties();
-			} else if (rcnt < mcnt) {									
+			} else if (rcnt < mcnt || (rcnt == mcnt && model.hasGroupfooter(gIndex))) {
 				int	size = model.getChildCount(gIndex) + ((Group) _rows.getGroups().get(gIndex)).getIndex() + 1;
-				if(model.hasGroupfooter(gIndex)) size++;
-				if (index == size) {
+				if (index == size && !model.hasGroupfooter(gIndex)){
 					row = new Group();
 					row.applyProperties();
-				}
-			}
-			if (_rows.hasGroup() && model.hasGroupfooter(gIndex)){
-				int	size = model.getChildCount(gIndex) + ((Group) _rows.getGroups().get(gIndex)).getIndex() + 1;
-				if (index == size) {
-					row = new Groupfooter();
-					row.applyProperties();
-				}
-			}
+				} else if (model.hasGroupfooter(gIndex)){
+					if (index == size){
+						row = new Groupfooter();
+						row.applyProperties();
+					}else if (index == (size + 1)){
+						row = new Group();
+						row.applyProperties();
+					}
+				}				
+			}			
 		}
 		if (row == null) {
 			row = new Row();
