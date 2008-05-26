@@ -24,6 +24,7 @@ ZK 3.0.6
   1969455: Unable to forward one event to two targets
   1968667: bug for listbox popup IE
   1970048: Don't appear the gap of listheader whose label is empty
+  1876391: To support Combobox uses setText() to receive correct item
 
 	--------
 ZK 3.0.5
