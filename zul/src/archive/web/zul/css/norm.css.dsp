@@ -671,11 +671,11 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 .group-cell {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 }
-<%-- ZK groupfooter --%>
-tr.groupfooter{
+<%-- ZK groupfooter, listgroupfooter --%>
+tr.groupfooter, tr.listgroupfooter{
 	background-color:#F4F4F4;
 }
-.groupfooter-cell{
+.groupfooter-cell, .listgroupfooter{
 	font-weight: bold;
 }
 <%-- ZK tab. --%>

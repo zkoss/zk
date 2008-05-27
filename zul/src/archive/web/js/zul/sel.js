@@ -1441,7 +1441,7 @@ zkLitgp = {
 	},
 	_openItemNow: function (row, toOpen) {
 		for (var table = row.parentNode.parentNode, i = row.rowIndex + 1, j = table.rows.length; i < j; i++) {
-			if ($type(table.rows[i]) == "Litgp") break;
+			if ($type(table.rows[i]) == "Litgp" || $type(table.rows[i]) == "Litgpft") break;
 			if (getZKAttr(table.rows[i], "visible") == "true")
 				table.rows[i].style.display = toOpen ? "" : "none";
 		}

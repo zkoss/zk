@@ -708,15 +708,16 @@ public class Grid extends XulElement {
 		if (_model instanceof GroupModel) {
 			final GroupModel model = (GroupModel) _model;
 			int rcnt =  _rows.getGroupCount(), mcnt = model.getGroupCount(), gIndex = rcnt == 0 ? rcnt: rcnt - 1;
+			boolean has = model.hasGroupfooter(gIndex);
 			if (!_rows.hasGroup() && rcnt < mcnt) {
 				row = new Group();
 				row.applyProperties();
-			} else if (rcnt < mcnt || (rcnt == mcnt && model.hasGroupfooter(gIndex))) {
+			} else if (rcnt < mcnt || (rcnt == mcnt && has)) {
 				int	size = model.getChildCount(gIndex) + ((Group) _rows.getGroups().get(gIndex)).getIndex() + 1;
-				if (index == size && !model.hasGroupfooter(gIndex)){
+				if (index == size && !has){
 					row = new Group();
 					row.applyProperties();
-				} else if (model.hasGroupfooter(gIndex)){
+				} else if (has){
 					if (index == size){
 						row = new Groupfooter();
 						row.applyProperties();

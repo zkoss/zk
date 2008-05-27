@@ -90,9 +90,26 @@ public class Listgroup extends Listitem {
 		final Listbox lb = getListbox();
 		if (lb != null) {
 			int[] g = lb.getGroupsInfoAtIndex(getIndex(), true);
-			if (g != null) return g[1] - 1;
+			if (g != null) {
+				if (g[2] == -1)
+					return g[1] - 1;
+				else
+					return g[1] - 2;
+			}
 		}
 		return 0;
+	}
+	/**
+	 * Returns the index of Listgroupfooter
+	 * <p> -1: no Listgroupfooter
+	 */
+	public int getListgroupfooterIndex(){
+		final Listbox lb = (Listbox)getParent();
+		if (lb != null) {			
+			int[] g = lb.getGroupsInfoAtIndex(getIndex(), true);
+			if (g != null) return g[2];
+		}
+		return -1;
 	}
 	protected void setIndex(int index) {
 		final int old = getIndex();

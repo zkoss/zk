@@ -73,7 +73,7 @@ public class Listitem extends XulElement {
 		return listbox != null && listbox.inSelectMold();
 	}
 	protected String getRealStyle() {
-		if (this instanceof Listgroup || !isVisible()) return super.getRealStyle();
+		if (this instanceof Listgroup || this instanceof Listgroupfooter || !isVisible()) return super.getRealStyle();
 		final Listgroup lg = getListgroup();
 		return super.getRealStyle() + (lg != null && !lg.isOpen() ? "display:none" : "") ;
 	}

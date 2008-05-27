@@ -41,7 +41,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * <p>Default {@link #getSclass}: group.
  * 
- * <p>Note: All the {@link Label} child of this component are automatically applied
+ * <p>Note: All the child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
  * after the child added.
  * @author jumperchen

@@ -1128,6 +1128,27 @@ public class Listbox extends XulElement {
 		if (newChild instanceof Listitem) {
 			if (newChild instanceof Listgroup && (inPagingMold() || inSelectMold()))
 				throw new UnsupportedOperationException("Unsupported Listgroup in Paging or Select mold!");
+			if (newChild instanceof Listgroupfooter){
+				if (!hasGroup())
+					throw new UiException("Listgroupfooter cannot exist alone, you have to add a Listgroup first");
+				if (refChild == null){
+					if (getLastChild() instanceof Listgroupfooter)
+						throw new UiException("Only one Goupfooter is allowed per Listgroup");
+					final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
+					g[2] = getChildren().size();
+				}else{
+					final int idx = ((Listitem)refChild).getIndex();				
+					final int[] g = getGroupsInfoAtIndex(idx);
+					if (g == null)
+						throw new UiException("Listgroupfooter cannot exist alone, you have to add a Listgroup first");				
+					if (g[2] != -1)
+						throw new UiException("Only one Goupfooter is allowed per Listgroup");
+					if (idx != (g[0] + g[1]))
+						throw new UiException("Listgroupfooter must be placed after the last Row of the Listgroup");
+					final int[] t = (int[]) _groupsInfo.get(g[0]);
+					t[2] = idx-1;
+				}							
+			}		
 			//first: listhead or auxhead
 			//last two: listfoot and paging
 			if (refChild != null && refChild.getParent() != this)
@@ -1189,7 +1210,7 @@ public class Listbox extends XulElement {
 				if (newChild instanceof Listgroup) {
 					Listgroup lg = (Listgroup) newChild;
 					if (_groupsInfo.isEmpty())
-						_groupsInfo.add(new int[]{lg.getIndex(), getItemCount() - lg.getIndex()});
+						_groupsInfo.add(new int[]{lg.getIndex(), getItemCount() - lg.getIndex(), -1});
 					else {
 						int idx = 0;
 						int[] prev = null, next = null;
@@ -1207,9 +1228,9 @@ public class Listbox extends XulElement {
 							int leng = lg.getIndex() - prev[0], 
 								size = prev[1] - leng + 1;
 							prev[1] = leng;
-							_groupsInfo.add(idx, new int[]{lg.getIndex(), size});	
+							_groupsInfo.add(idx, new int[]{lg.getIndex(), size, -1});	
 						} else if (next != null) {
-							_groupsInfo.add(idx, new int[]{lg.getIndex(), next[0] - lg.getIndex()});
+							_groupsInfo.add(idx, new int[]{lg.getIndex(), next[0] - lg.getIndex(), -1});
 						} 
 					}
 				} else if (!_groupsInfo.isEmpty()) {
@@ -1348,6 +1369,10 @@ public class Listbox extends XulElement {
 			} else if (!_groupsInfo.isEmpty()) {
 				final int[] g = getGroupsInfoAtIndex(index);
 				if (g != null) g[1]--;
+			}
+			if (child instanceof Groupfooter){
+				final int[] g = getGroupsInfoAtIndex(index);
+				g[2] = -1;
 			}
 			return true;
 		} else if (_paging == child) {
@@ -1578,16 +1603,24 @@ public class Listbox extends XulElement {
 			item = ((ListitemRendererExt)renderer).newListitem(this);
 		if (_model instanceof GroupModel) {
 			final GroupModel model = (GroupModel) _model;
-			int cnt = getGroupCount(), mcnt = model.getGroupCount();
+			int cnt = getGroupCount(), mcnt = model.getGroupCount(), gIndex = cnt == 0 ? cnt: cnt - 1;;
+			boolean has = model.hasGroupfooter(gIndex);
 			if (!hasGroup() && cnt < mcnt) {
 				item = new Listgroup();
 				item.applyProperties();
-			} else if (cnt < mcnt) {
-				int gIndex = cnt - 1,
-					size = model.getChildCount(gIndex) + ((Listgroup)getGroups().get(gIndex)).getIndex() + 1;
-				if (index == size) {
+			} else if (cnt < mcnt || (cnt == mcnt && has)) {
+				int size = model.getChildCount(gIndex) + ((Listgroup)getGroups().get(gIndex)).getIndex() + 1;
+				if (index == size && !has) {
 					item = new Listgroup();
 					item.applyProperties();
+				} else if (has) {
+					if (index == size) {
+						item = new Listgroupfooter();
+						item.applyProperties();
+					} else if (index == (size + 1)) {
+						item = new Listgroup();
+						item.applyProperties();
+					}
 				}
 			}
 		}
