@@ -128,8 +128,9 @@ public interface Device {
 	 */
 	public String getDocType();
 
-	/** Adds the specified content to the output being generated to
-	 * to the client. What content can be embedded depends on the device.
+	/** Adds the content that shall be added to the output generated and
+	 * sent to the client, when rending a desktop.
+	 * What content can be embedded depends on the device.
 	 * For Ajax devices, it can be anything that can be placed inside
 	 * HTML HEAD, such as JavaScript codes.
 	 *
