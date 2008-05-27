@@ -20,6 +20,7 @@ package org.zkoss.util.resource;
 
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.resource.impl.LabelLoader;
+import org.zkoss.text.MessageFormats;
 import org.zkoss.xel.VariableResolver;
 
 /**
@@ -41,8 +42,21 @@ public class Labels {
 	public static final String getLabel(String key) {
 		return _loader.getLabel(key);
 	}
+	/** Returns the label of the specified key and formats it
+	 * with the specified argument, or null if not found.
+	 *
+	 * <p>It first uses {@link #getLabel(String)} to load the label.
+	 * Then, it, if not null, invokes {@link MessageFormats#format} to format it.
+	 *
+	 * <p>The current locale is given by {@link org.zkoss.util.Locales#getCurrent}.
+	 * @since 3.0.6
+	 */
+	public static final String getLabel(String key, Object[] args) {
+		final String s = getLabel(key);
+		return s != null ? MessageFormats.format(s, args, null): null;
+	}
 	/** Returns the label of the specified key based on the current locale.
-	 * Unlike {@link #getLabel}, it throws an exception if not found.
+	 * Unlike {@link #getLabel(String)}, it throws an exception if not found.
 	 *
 	 * @exception SystemException if no such label
 	 * @since 3.0.6
@@ -54,8 +68,22 @@ public class Labels {
 			throw new SystemException("label not found: "+key);
 		return s;
 	}
+	/** Returns the label of the specified key and formats it
+	 * with the specified argument, or null if not found.
+	 * Unlike {@link #getLabel(String, Object[])}, it throws an exception if not found.
+	 *
+	 * <p>The current locale is given by {@link org.zkoss.util.Locales#getCurrent}.
+	 * @exception SystemException if no such label
+	 * @since 3.0.6
+	 */
+	public static final String getRequiredLabel(String key, Object[] args) {
+		final String s = getLabel(key);
+		if (s == null)
+			throw new SystemException("label not found: "+key);
+		return MessageFormats.format(s, args, null);
+	}
 
-	/** Resets all cached labels and next call to {@link #getLabel}
+	/** Resets all cached labels and next call to {@link #getLabel(String)}
 	 * will cause re-loading i3-label*.proerties.
 	 */
 	public static final void reset() {

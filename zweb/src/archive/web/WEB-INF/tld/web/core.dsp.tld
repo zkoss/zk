@@ -261,6 +261,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Returns the label of the specified key.
 		</description>
 	</function>
+	<function>
+		<name>l2</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>java.lang.String getLabel(java.lang.String, java.lang.Object[])</function-signature>
+		<description>
+		Returns the label of the specified key, and formats with the specified
+		argument.
+		</description>
+	</function>
 
 	<!--                    -->
 	<!-- XML/HTML Utilities -->
