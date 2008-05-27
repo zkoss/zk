@@ -360,20 +360,14 @@ zk.Selectable.prototype = {
 			}
 
 			if (this._isMultiple()) {
-				if (evt && evt.shiftKey) {
+				if (evt && evt.shiftKey)
 					this.selectUpto(row);
-				} else if (evt && evt.ctrlKey) {
+				else if (evt && evt.ctrlKey)
 					this.toggleSelect(row, !this._isSelected(row));
-				} else {
-	//Note: onclick means toggle if checkmark is enabled
-	//Otherwise, we mimic Windows if checkmark is disabled
-					var el = $e(row.id + "!cm");
-					if (el) this.toggleSelect(row, !el.checked);
-					else this.select(row);
-				}
-			} else {
+				else // Bug: 1973470
+					this.select(row);
+			} else
 				this.select(row);
-			}
 
 			//since row might was selected, we always enfoce focus here
 			this._focusToAnc(row);
