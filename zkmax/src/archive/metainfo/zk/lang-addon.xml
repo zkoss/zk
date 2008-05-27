@@ -482,6 +482,14 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>listgroupfooter</component-name>
+		<component-class>org.zkoss.zul.Listgroupfooter</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.ListgroupfooterDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>listhead</component-name>
 		<extends>listhead</extends>
 		<mold>
