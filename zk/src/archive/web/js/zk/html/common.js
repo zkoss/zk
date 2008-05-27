@@ -112,6 +112,7 @@ zk.Shadow = Class.create();
 zk.Shadow.prototype = {
 	diam: 4,
 	mode: "shade", // default mode
+	autoShow: false,
 	/**
 	 * Initial the Shadow object for the specified component.
 	 * The both config {String} mode and {Number} diam are used to configure how the
@@ -124,6 +125,7 @@ zk.Shadow.prototype = {
 	 *
 	 * diam: The diameter of the offset of the shadow from the element (defaults to 4)
 	 * 
+	 * autoShow: true to show the shadow in the initial phase. (default: false)
 	 * @param {Object} cmp a ZK client component.
 	 * @param {Object} config The config object used to apply the default value of the Shadow object.
 	 * @since 3.1.0
@@ -165,6 +167,7 @@ zk.Shadow.prototype = {
 		this.delta = d;
 		this.rel.parentNode.insertAdjacentHTML("afterbegin", this.template);
 		this.el = $e(this.id);
+		if (this.autoShow === true) this.show();
 	},
 	/**
 	 * Hides the shadow.
@@ -183,7 +186,7 @@ zk.Shadow.prototype = {
 		}
 		if (zk.nextSibling(this.el, "DIV")!= this.rel)
 			this.rel.parentNode.insertBefore(this.el, this.rel);
-		this.el.style.zIndex = $int(this.rel.style.zIndex)-1;
+		this.el.style.zIndex = $int(Element.getStyle(this.rel, "zIndex"))-1;
 		if (zk.ie) 
 			this.el.style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=50) "
 				+ "progid:DXImageTransform.Microsoft.Blur(pixelradius="+(this.diam)+")";
@@ -224,7 +227,7 @@ zk.Shadow.prototype = {
 			s.top = t +"px";
 			s.width = w +"px";
 			s.height = h +"px";
-			s.zIndex = $int(this.rel.style.zIndex)-2; // re-index
+			s.zIndex = $int(Element.getStyle(this.rel, "zIndex"))-2; // re-index
 		}
 	},
 	/**
@@ -311,7 +314,7 @@ zk.applyMask = function (rel, message) {
 			+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 			+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
 			+ '<div id="'+rel.id+'!z-loading" class="z-apply-loading">'
-			+ '<img alt="'+message+'" src="'+zk.getUpdateURI('/web/zk/img/progress3.gif')+'"/> '
+			+ '<img class="z-apply-loading-icon" alt="'+message+'" src="'+zk.getUpdateURI('/web/img/spacer.gif')+'"/> '
 			+ '</div></div>';
 	zk.setOuterHTML(n, html);
 	var loading = $e(rel.id+"!z-loading"), progbox = $e(rel.id + "!progbox");
