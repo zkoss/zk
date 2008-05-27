@@ -128,6 +128,23 @@ public interface Device {
 	 */
 	public String getDocType();
 
+	/** Adds the specified content to the output being generated to
+	 * to the client. What content can be embedded depends on the device.
+	 * For Ajax devices, it can be anything that can be placed inside
+	 * HTML HEAD, such as JavaScript codes.
+	 *
+	 * <p>As the method name suggests, the embedded contents are accumulated
+	 * and all generated to the output.
+	 * @since 3.0.6
+	 */
+	public void addEmbedded(String content);
+	/** Returns the content that shall be embedded to the output being
+	 * generated to the client, or null if no embedded content.
+	 *
+	 * @since 3.0.6
+	 */
+	public String getEmbedded();
+
 	/** Initializes the device.
 	 * A device is created for each desktop, and this method is called
 	 * when it is associated to the desktop.

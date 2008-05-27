@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -217,6 +218,48 @@ public class Devices {
 		}
 	}
 
+	/** Returns the content that shall be embedded to the output being
+	 * generated to the client, or null if no embedded content.
+	 *
+	 * @since 3.0.6
+	 */
+	public String getEmbedded(String deviceType) {
+		final Object o;
+		synchronized (_devs) {
+			o = _devs.get(deviceType);
+		}
+		return o instanceof Device ? ((Device)o).getEmbedded():
+			o instanceof DeviceInfo ? ((DeviceInfo)o).getEmbedded(): null;
+	}
+	/** Embed the specified content to the output being generated to
+	 * to the client. What content can be embedded depends on the device.
+	 * For Ajax devices, it can be anything that can be placed inside
+	 * HTML HEAD, such as JavaScript codes.
+	 *
+	 * <p>As the method name suggests, the embedded contents are accumulated
+	 * and all generated to the output.
+	 * @since 3.0.6
+	 */
+	public static void addEmbedded(String deviceType, String content) {
+		if (deviceType == null || deviceType.length() == 0)
+			throw new IllegalArgumentException();
+		if (content == null || content.length() == 0)
+			return; //nothing to do
+
+		synchronized (_devs) {
+			final Object o = _devs.get(deviceType);
+			if (o instanceof Device) {
+				((Device)o).addEmbedded(content);
+			} else if (o instanceof DeviceInfo) {
+				((DeviceInfo)o).addEmbedded(content);
+			} else {
+				final DeviceInfo info = new DeviceInfo();
+				_devs.put(deviceType, info);
+				info.addEmbedded(content);
+			}
+		}
+	}
+
 	/** Returns the class name that implements the server push feature.
 	 *
 	 * <p>Default: null (the server-push feature is not available).
@@ -299,24 +342,29 @@ public class Devices {
 	 */
 	public static final void add(Element config) {
 		//Spec: it is OK to declare an nonexist device
-		final String type =
+		final String deviceType =
 			IDOMs.getRequiredElementValue(config, "device-type");
 
 		String s = config.getElementValue("device-class", true);
 		if (s != null)
-			add(type, s);
+			add(deviceType, s);
 
 		s = config.getElementValue("unavailable-message", true);
 		if (s != null)
-			setUnavailableMessage(type, s);
+			setUnavailableMessage(deviceType, s);
 
 		s = config.getElementValue("timeout-uri", true);
 		if (s != null)
-			setTimeoutURI(type, s);
+			setTimeoutURI(deviceType, s);
 
 		s = config.getElementValue("server-push-class", true);
 		if (s != null)
-			setServerPushClass(type, s);
+			setServerPushClass(deviceType, s);
+
+		for (Iterator it = config.getElements("embed").iterator();
+		it.hasNext();) {
+			addEmbedded(deviceType, ((Element)it.next()).getText(true));
+		}
 	}
 	/** Device info.
 	 */
@@ -329,6 +377,7 @@ public class Devices {
 		/** The class name or class of {@link ServerPush}.
 		 */
 		private Object _spushcls;
+		private String _embed;
 
 		private DeviceInfo() {
 		}
@@ -390,6 +439,14 @@ public class Devices {
 				throw new UiException("Class not found: "+_spushcls);
 			}
 		}
+		public void addEmbedded(String content) {
+			if (content != null && content.length() > 0)
+				_embed = _embed != null ? _embed + '\n' + content: content;
+		}
+		public String getEmbedded() {
+			return _embed;
+		}
+
 		/** Creates a device based on this device info.
 		 */
 		private Device newDevice(String deviceType) {

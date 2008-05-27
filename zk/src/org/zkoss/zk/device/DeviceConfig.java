@@ -42,4 +42,10 @@ public interface DeviceConfig {
 	 * @since 3.0.0
 	 */
 	public Class getServerPushClass();
+	/** Returns the content that shall be embedded to the output being
+	 * generated to the client, or null if no embedded content.
+	 *
+	 * @since 3.0.6
+	 */
+	public String getEmbedded();
 }
