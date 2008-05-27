@@ -675,7 +675,7 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 tr.groupfooter, tr.listgroupfooter{
 	background-color:#F4F4F4;
 }
-.groupfooter-cell, .listgroupfooter{
+span.groupfooter-cell, td.listgroupfooter-cell div.cell-inner{
 	font-weight: bold;
 }
 <%-- ZK tab. --%>
