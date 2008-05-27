@@ -21,36 +21,39 @@ if (!window.zk) { //avoid eval twice
 
 ////
 //Customization
-/** Creates the error box to display the specified error message.
- * Developer can override this method to provide a customize errorbox.
- * If null is returned, alert() is used.
+/** Creates the message box to notify the user that ZK client engine
+ * is booting.
+ * Developer can override this method to provide a customized message box.
  *
  * @param id the progress box's ID
  * @param msg the message
  * @param x the x-coordinate of the box
  * @param y the y-coordinate of the box
- * @param mk sets whether show the modal_mark (since 3.0.2)
+ * @param mask sets whether show the modal_mark (since 3.0.2)
  * @param center sets whether center the loading bar (since 3.0.2)
+ * @param imguri the URI of the image (since 3.0.6).
+ * Default: /web/zk/img/progress2.gif
  */
 if (!window.Boot_progressbox) { //not customized
-	window.Boot_progressbox = function (id, msg, x, y, mk, center) {
+	Boot_progressbox = function (id, msg, x, y, mask, center, imguri) {
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 
 		var html = '<div id="'+id+'"';
-
-		var mask = mk || zk.loading && !zk._prgsOnce;
 		var ix = zk.innerX(), iy = zk.innerY();
-		if (mask) {
+		if (mask || zk.loading && !zk._prgsOnce) {
 			zk._prgsOnce = true; //do it only once
 			html += '><div id="zk_mask" class="modal_mask" style="display:block;left:'+ ix + 'px;top:' + iy +	
 				'px;" z.x="' + ix + '" z.y="' + iy + '"></div><div';
 		} else html += "><div";
+
 		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
 		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
+		if (!imguri) imguri = '/web/zk/img/progress2.gif';
+
 		html += ' id="zk_loading" class="z-loading" style="left:'+x+';top:'+y+';visibility: hidden;"'
 		+' z.x="' + ix + '" z.y="' + iy + '"><div class="z-loading-indicator">'
-		+'<img alt="..." style="width:18px;height:18px" src="'+zk.getUpdateURI('/web/zk/img/progress2.gif')+'"/> '
+		+'<img alt="..." src="'+zk.getUpdateURI(imguri)+'"/> '
 		+msg+'</div></div></div>';
 
 		zk._setOuterHTML(n, html);
@@ -66,6 +69,18 @@ if (!window.Boot_progressbox) { //not customized
 		}
 		el.style.visibility = "visible";
 		return $e(id);
+	};
+}
+/** Creates the message box to notify the user that his request is in
+ * processing.
+ * Developer can override this method to provide a customized message box.
+ * @param id the progress box's ID
+ * @param msg the message
+ * @since 3.0.6
+ */
+if (!window.AU_progressbox) {
+	AU_progressbar = function (id, msg) {
+		Boot_progressbox(id, msg, zk.innerX(), zk.innerY());
 	};
 }
 
@@ -1325,7 +1340,7 @@ zk._progress = function () {
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
 
-			Boot_progressbox("zk_prog", msg, zk.innerX(), zk.innerY());
+			AU_progressbar("zk_prog", msg);
 			zk.progressPrompted = true;
 		}
 	}
