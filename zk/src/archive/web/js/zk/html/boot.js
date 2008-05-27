@@ -31,8 +31,6 @@ if (!window.zk) { //avoid eval twice
  * @param y the y-coordinate of the box
  * @param mask sets whether show the modal_mark (since 3.0.2)
  * @param center sets whether center the loading bar (since 3.0.2)
- * @param imguri the URI of the image (since 3.0.6).
- * Default: /web/zk/img/progress2.gif
  */
 if (!window.Boot_progressbox) { //not customized
 	Boot_progressbox = function (id, msg, x, y, mask, center, imguri) {
@@ -49,11 +47,10 @@ if (!window.Boot_progressbox) { //not customized
 
 		if (typeof x != 'string' || x.indexOf("%") == -1) x += "px";
 		if (typeof y != 'string' || y.indexOf("%") == -1) y += "px";
-		if (!imguri) imguri = '/web/zk/img/progress2.gif';
 
 		html += ' id="zk_loading" class="z-loading" style="left:'+x+';top:'+y+';visibility: hidden;"'
 		+' z.x="' + ix + '" z.y="' + iy + '"><div class="z-loading-indicator">'
-		+'<img alt="..." src="'+zk.getUpdateURI(imguri)+'"/> '
+		+'<img class="z-loading-icon" alt="..." src="'+zk.getUpdateURI('/web/img/spacer.gif')+'"/> '
 		+msg+'</div></div></div>';
 
 		zk._setOuterHTML(n, html);

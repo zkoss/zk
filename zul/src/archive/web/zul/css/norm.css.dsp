@@ -191,7 +191,10 @@ div.z-loading-indicator {
 	color: #102B6D; border:1px solid #83B5F7; background-color: #FFF; 
 	white-space: nowrap; padding:6px;
 }
-
+.z-loading-icon {
+	background: transparent url(${c:encodeURL('~./zk/img/progress2.gif')}) no-repeat center;
+	width: 16px; height: 16px;
+}
 <%-- ZK separator --%>
 <c:choose>
 	<c:when test="${empty c:getProperty('org.zkoss.zul.Separator.spaceWithMargin')}">
