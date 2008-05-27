@@ -527,13 +527,13 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public void detach();
 
-	/** Returns the mold for this component.
+	/** Returns the mold to render this component.
 	 * <p>Default: "default"
 	 *
 	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
 	 */
 	public String getMold();
-	/** Sets the mold for this component.
+	/** Sets the mold to render this component.
 	 *
 	 * @param mold the mold. If null or empty, "default" is assumed.
 	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
