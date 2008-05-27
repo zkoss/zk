@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.sys.ServerPush;
 abstract public class GenericDevice implements Device {
 	private String _type, _uamsg, _tmoutURI;
 	private Class _spushcls;
+	private String _embed;
 
 	//Device//
 	public boolean isSupported(int func) {
@@ -76,11 +77,20 @@ abstract public class GenericDevice implements Device {
 		return null;
 	}
 
+	public void addEmbedded(String content) {
+		if (content != null && content.length() > 0)
+			_embed = _embed != null ? _embed + '\n' + content: content;
+	}
+	public String getEmbedded() {
+		return _embed;
+	}
+
 	public void init(String type, DeviceConfig config) {
 		_type = type;
 		_uamsg = config.getUnavailableMessage();
 		_tmoutURI = config.getTimeoutURI();
 		_spushcls = config.getServerPushClass();
+		_embed = config.getEmbedded();
 	}
 	public void sessionWillPassivate(Desktop desktop) {
 	}

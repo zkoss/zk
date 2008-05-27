@@ -64,6 +64,7 @@ import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.device.Device;
 
 /**
  * Utilities for using EL.
@@ -225,9 +226,14 @@ public class ZkFns {
 		}
 
 		sb.append("\n</script>\n");
-		final String uamsg = desktop.getDevice().getUnavailableMessage();
-		if (uamsg != null)
-			sb.append("<noscript>\n").append(uamsg).append("\n</noscript>\n");
+
+		final Device device = desktop.getDevice();
+		String s = device.getUnavailableMessage();
+		if (s != null)
+			sb.append("<noscript>\n").append(s).append("\n</noscript>\n");
+		s = device.getEmbedded();
+		if (s != null)
+			sb.append(s).append('\n');
 
 		return sb.toString();
 	}

@@ -108,6 +108,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<!-- An empty URL can cause the browser to reload the same URL -->
 	</device-config>
 
+	<!-- Uncomment if you want to embed JavaScript codes and any other
+	tags to be generated inside HTML HEAD.
+	<device-config>
+		<device-type>ajax</device-type>
+		<embed><![CDATA[
+	<script type="text/javascript">
+	</script>
+		]]></embed>
+	</device-config>
+	-->
+
 	<!-- Optional -->
 	<!-- the following listener is used to see # of sessions, desktops...
 	-->
