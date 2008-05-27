@@ -74,15 +74,15 @@ zkWnd2.onVisi = zkWnd2.onSize = zkWnd2._fixHgh = function (cmp) {
  * @since 3.1.0
  */
 zkWnd2.getFrameHeight = function (cmp) {
-	var h = zk.sumStyles(cmp, "tb", zk.borders) + zk.sumStyles(cmp, "tb", zk.paddings);
+	var h = zk.getFrameHeight(cmp);
     h += zkWnd2.getTitleHeight(cmp);
     if(!zkWnd2._embedded(cmp)){
         var n = $e(cmp.id + "!cave"), ft = zk.lastChild($e(cmp.id + "!bwrap"), "DIV"), title = $e(cmp.id + "!caption");
         h += ft.offsetHeight;
 		if (n)
-			h += zk.sumStyles(n.parentNode, "tb", zk.borders) + zk.sumStyles(n.parentNode, "tb", zk.paddings);
+			h += zk.getFrameHeight(n.parentNode);
 		if (title)
-	        h += zk.sumStyles(title.parentNode, "tb", zk.borders) + zk.sumStyles(title.parentNode, "tb", zk.paddings);
+	        h += zk.getFrameHeight(title.parentNode);
     }
     return h;
 };

@@ -108,6 +108,49 @@ if (zk.ie) {
 
 //////
 // More zk utilities (defined also in boot.js) //
+/**
+ * Provides precise pixel measurements for blocks of text so that you can determine
+ * exactly how high and wide, in pixels, a given block of text will be.<br/>
+ * For example,
+ * 		var size = zk.TextUtil.measure(element, text);
+ * 		btn.style.width = size.width + "px";
+ * 		btn.style.height = size.height + "px";
+ * @param {Object} element an element
+ * @param {String} text the measured text, if any. Otherwise, element's innerHTML is assumed.
+ * @since 3.1.0
+ */
+zk.TextUtil = {
+	getInstance: function () {
+		var d = $e("zk-TextUtil");
+		if (!d) {
+			d = document.createElement("div");
+			document.body.appendChild(d);
+			d.id = "zk-TextUtil";
+		}
+		d.style.position = "absolute";
+		d.style.top = d.style.left = "-1000px";
+		d.style.width = "auto";
+		d.style.visibility = "hidden";
+		var instance = {
+			styles: ["fontSize", "fontStyle", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform" ],
+			getSize: function () {
+				return {width: d.offsetWidth, height: d.offsetWidth};
+			},
+			apply: function (el, text) {
+				for (var s = this.styles.length; --s >= 0;)
+					d.style[this.styles[s]] = Element.getStyle(el, this.styles[s]);
+				d.innerHTML = typeof text == "string" ? text : el.innerHTML;	
+			}
+		};
+		return instance;
+	},
+	measure: function (el, text) {
+		if (!this.instance)
+			this.instance = this.getInstance();
+		this.instance.apply(el, text);
+		return this.instance.getSize();
+	}
+};
 zk.Shadow = Class.create();
 zk.Shadow.prototype = {
 	diam: 4,
@@ -447,16 +490,25 @@ zk.rmClass = function (el, clsnm, bRemove) {
 
 /** Sets the offset height. */
 zk.setOffsetHeight = function (el, hgh) {
-	hgh = hgh
-		- $int(Element.getStyle(el, "padding-top"))
-		- $int(Element.getStyle(el, "padding-bottom"))
+	hgh = hgh - zk.getFrameHeight(el)
 		- $int(Element.getStyle(el, "margin-top"))
-		- $int(Element.getStyle(el, "margin-bottom"))
-		- $int(Element.getStyle(el, "border-top-width"))
-		- $int(Element.getStyle(el, "border-bottom-width"));
+		- $int(Element.getStyle(el, "margin-bottom"));
 	el.style.height = (hgh > 0 ? hgh: 0) + "px";
 };
-
+/**
+ * Returns the number of the padding width and the border width from the specified element.  
+ * @since 3.1.0
+ */
+zk.getFrameWidth = function (el) {
+	return zk.sumStyles(el, "lr", zk.borders) + zk.sumStyles(el, "lr", zk.paddings);
+};
+/**
+ * Returns the number of the padding height and the border height from the specified element.  
+ * @since 3.1.0
+ */
+zk.getFrameHeight = function (el) {
+	return zk.sumStyles(el, "tb", zk.borders) + zk.sumStyles(el, "tb", zk.paddings);
+};
 /** Return el.offsetWidth, which solving Safari's bug. */
 zk.offsetWidth = function (el) {
 	if (!el) return 0;
@@ -522,9 +574,7 @@ zk.sumStyles = function (el, areas, styles) {
  * @since 3.0.0
  */
 zk.revisedSize = function (el, size, isHgh) {
-	var areas = "lr";
-	if (isHgh) areas = "tb";
-    size -= (zk.sumStyles(el, areas, zk.borders) + zk.sumStyles(el, areas, zk.paddings));
+    size -= (isHgh === true ? zk.getFrameHeight(el): zk.getFrameWidth(el));
     if (size < 0) size = 0;
 	return size;
 };

@@ -466,11 +466,9 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer, event) {
 			var mins = $int(getZKAttr(real, "mins")) || 0;	
 			var ol = zk.Layout.getOwnerLayout(real);
 			var mars = ol._paserMargin(getZKAttr(real, "mars") || "0,0,0,0");
-			var lr = zk.sumStyles(real, "lr", zk.borders) + 
-				zk.sumStyles(real, "lr", zk.paddings) + 
+			var lr = zk.getFrameWidth(real) + 
 				(split.pos == "west" ? mars.left : mars.right);
-			var tb = zk.sumStyles(real, "tb", zk.borders) + 
-				zk.sumStyles(real, "tb", zk.paddings) + 
+			var tb = zk.getFrameHeight(real) + 
 				(split.pos == "north" ? mars.top : mars.bottom);
 			var min = 0;
 			switch (split.pos) {
