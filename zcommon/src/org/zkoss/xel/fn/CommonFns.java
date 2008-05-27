@@ -27,6 +27,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.logging.Log;
+import org.zkoss.text.MessageFormats;
 
 /**
  * Common functions used with EL.
@@ -87,8 +88,9 @@ public class CommonFns {
 	/** Returns the label or message of the specified key.
 	 * <ul>
 	 * <li>If key is "mesg:class:MMM", Messages.get(class.MMM) is called</li>
-	 * <li>Otherwise, {@link Labels#getLabel} is called.
+	 * <li>Otherwise, {@link Labels#getLabel(String)} is called.
 	 * </ul>
+	 * @see #getLabel(String, Object[])
 	 */
 	public static final String getLabel(String key) {
 		if (key == null)
@@ -115,6 +117,19 @@ public class CommonFns {
 			}
 		}
 		return Labels.getLabel(key);
+	}
+	/** Returns the label of the specified key and formats it
+	 * with the specified argument, or null if not found.
+	 *
+	 * <p>It first uses {@link #getLabel(String)} to load the label.
+	 * Then, it, if not null, invokes {@link MessageFormats#format} to format it.
+	 *
+	 * <p>The current locale is given by {@link org.zkoss.util.Locales#getCurrent}.
+	 * @since 3.0.6
+	 */
+	public static final String getLabel(String key, Object[] args) {
+		final String s = getLabel(key);
+		return s != null ? MessageFormats.format(s, args, null): null;
 	}
 	/** Returns the length of an array, string, collection or map.
 	 */
