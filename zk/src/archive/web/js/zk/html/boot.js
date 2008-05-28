@@ -1108,8 +1108,8 @@ zk._cleanupAt = function (n) {
 		zk._scrlcmps.remove(n.id);
 	}
 
-	for (n = n.firstChild; n && n.nodeType == 1; n = n.nextSibling)
-		zk._cleanupAt(n); //recursive for child component
+	for (n = n.firstChild; n; n = n.nextSibling)
+		if (n.nodeType == 1) zk._cleanupAt(n); //recursive for child component
 };
 
 /** To notify a component that it becomes visible because one its ancestors
