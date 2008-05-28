@@ -1141,12 +1141,12 @@ a.z-menu-item .z-menu-btn .z-btn-m em {
 	background: #F0F0F0 url(${c:encodeURL('~./zul/img/menu2/pp-bg.gif')}) repeat-y;
 }
 .z-menupopup ul, .z-menupopup li {
-	list-style: none !important;
+	list-style: none !important; margin: 0 !important;
 	list-style-position: outside !important; list-style-type: none !important;
 	list-style-image: none !important;
 }
 .z-menupopup ul {
-	padding: 0; margin: 0;
+	padding: 0;
 }
 .z-menupopup a {
 	text-decoration: none!important;
