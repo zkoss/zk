@@ -199,7 +199,7 @@ zk.Selectable.prototype = {
 		if (!scOdd || !this.bodyrows) return;
 		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
-			if ($visible(row) && $type(row) != "Litgp") {
+			if ($visible(row) && $type(row) != "Litgp" && $type(row) != "Litgpft") {
 				zk.addClass(row, scOdd, !even);
 				even = !even;
 			}
@@ -318,10 +318,10 @@ zk.Selectable.prototype = {
 	/** Do when the right key is pressed. */
 	_doRight: function (row) {
 	},
-	/** Returns whether the type of the row is "Lit" or "Litgp". */
+	/** Returns whether the type of the row is "Lit" or "Litgp" or "Litgpft". */
 	_isRowType: function (row) {
 		var type = $type(row);
-		return type == "Lit" || type == "Litgp";
+		return type == "Lit" || type == "Litgp" || type == "Litgpft";
 	},
 	doclick: function (evt, target) {
 		if (zkSel._shallIgnoreEvent(target))
@@ -1478,4 +1478,21 @@ zkLitgp = {
 zkLitgp.onVisi = zkLitgp.onSize = function (cmp) {
 	zkLitgp._openItem(cmp, zkLitgp.isOpen(cmp), true);
 	zkLit.stripe(cmp);
+};
+/** List Group Footer*/
+zkLitgpft = {
+	init: function (cmp) {
+		setZKAttr(cmp, "inited", "true");		
+		if (getZKAttr(cmp, "disd") != "true") {
+			zk.listen(cmp, "click", zkLibox.onclick);
+			zk.listen(cmp, "mouseover", zkSel.onover);
+			zk.listen(cmp, "mouseout", zkSel.onout);
+		}	
+		zk.listen(cmp, "keydown", zkLibox.onkeydown);
+		zk.listen(cmp, "keyup", zkLibox.onkeyup);		
+	},
+	cleanup: zkLit.cleanup,	
+	initdrag: zkLit.initdrag,
+	cleandrag: zkLit.cleandrag,
+	onrtclk: zkLit.onrtclk
 };

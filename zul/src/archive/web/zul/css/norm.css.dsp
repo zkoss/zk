@@ -672,7 +672,7 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 }
 <%-- ZK groupfooter, listgroupfooter --%>
-tr.groupfooter, tr.listgroupfooter{
+.groupfooter, .listgroupfooter{
 	background-color:#F4F4F4;
 }
 .groupfooter-cell, td.listgroupfooter-cell div.cell-inner{

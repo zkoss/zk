@@ -20,12 +20,11 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.UiException;
 
 /**
- * GroupFooter serves as a summary listitem of group.
+ * GroupFooter serves as a summary listitem of listgroup.
  * 
- * <p>Default {@link #getSclass}: listgroupfooter. * 
+ * <p>Default {@link #getSclass}: listgroupfooter.
  *
  *<p>Note: All the {@link Label} child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
@@ -79,7 +78,7 @@ public class Listgroupfooter extends Listitem{
 	public void onChildRemoved(Component child) {
 		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
 		final String cls = cmp.getSclass();
-		cmp.setSclass(cls != null && cls.indexOf("listgroupfooter-cell") > -1 ? 
-		cls.replaceAll("(?:^|\\s+)" + "listgroupfooter-cell" + "(?:\\s+|$)", " ").trim() : cls);
+		cmp.setSclass(cls != null && cls.indexOf("listgroupfooter-cell") > -1 ?
+			cls.replaceAll("(?:^|\\s+)" + "listgroupfooter-cell" + "(?:\\s+|$)", " ").trim() : cls);
 	}
 }
