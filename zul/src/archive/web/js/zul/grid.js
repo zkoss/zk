@@ -488,7 +488,7 @@ zkGrwgp.onVisi = zkGrwgp.onSize = function (cmp) {
 	zkGrwgp._openItem(cmp, zkGrwgp.isOpen(cmp), true);
 	zkGrw.stripe(cmp);
 };
-/** Grid Group Footer*/
+/** Grid Group Footer */
 zkGrwgpft = {
 	init: function(cmp) {
 		setZKAttr(cmp, "inited", "true");
@@ -496,5 +496,5 @@ zkGrwgpft = {
 	initdrag: zkGrw.initdrag,
 	cleandrag: zkGrw.cleandrag,
 	ondragover: zkGrw.ondragover,
-	ondragout: zkGrw.ondragout,	
+	ondragout: zkGrw.ondragout
 };
