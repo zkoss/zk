@@ -18,6 +18,7 @@ ZK 3.1.0
   1955900: A subscribe/publish meachism to handle events
   1959380: Window support both properties minheight and minwidth
   1955562: For theme: menuitem unchecked not visible
+  1895872: Keyboard support for menues
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
@@ -33,14 +34,16 @@ ZK 3.1.0
   + The setAutocheck and setChecked methods of Menuitem only apply
     when Menupopup.isCheckmark is true.
   + The script component now has "text/javascript" as the default type.
-  + Add a new trendy layout of Window as default mold, and the classic
+  + Add some new trendy layout of these components, including Window, Menu,
+  	, Menuitem, Menupopup, Menubar, and Menuseparator, as default mold, and the classic
     Window mold is renamed to "v30" mold for backward compatible.
     If you want to use "v30" as default, specify the following in zk.xml:
 	<system-property> 
 		<name>org.zkoss.zul.theme.v30</name> 
 		<value>true</value> 
 	</system-property>
-
+	+ Both molds vertical and horizontal of Menubar are unsupported, please use the setOrient()
+		of Menubar to specify them.
 	--------
 ZK 3.0.6
 

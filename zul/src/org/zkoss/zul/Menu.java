@@ -28,28 +28,53 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * An element, much like a button, that is placed on a menu bar.
  * When the user clicks the menu element, the child {@link Menupopup}
  * of the menu will be displayed.
  * This element is also used to create submenus (of {@link Menupopup}.
- *
+ * 
  * @author tomyeh
  */
 public class Menu extends LabelImageElement {
 	private Menupopup _popup;
 
 	public Menu() {
+		init();
 	}
 	public Menu(String label) {
+		this();
 		setLabel(label);
 	}
 	public Menu(String label, String src) {
+		this();
 		setLabel(label);
 		setImage(src);
 	}
 
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
+	}
+	
+	public String getImgTag() {
+		if ("v30".equals(getMold()))
+			return super.getImgTag();
+		else {
+			final String src = getImageContent() != null ? getContentSrc():
+				getDesktop().getExecution().encodeURL(getSrc() != null ? getSrc() : "~./img/spacer.gif");
+				
+			final StringBuffer sb = new StringBuffer(64)
+				.append("<img class=\"z-menu-item-icon\" src=\"")
+				.append(src).append("\" align=\"absmiddle\"/>");
+
+			final String label = getLabel();
+			if (label != null && label.length() > 0) sb.append(' ');
+
+			return sb.toString(); //keep a space
+		}
+	}
 	/** Returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.
 	 */

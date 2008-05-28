@@ -139,8 +139,9 @@ public class LabelImageElement extends LabelElement {
 	 * Don't call this method unless _image is not null;
 	 *
 	 * <p>Used only for component template, not for application developers.
+	 * @since 3.1.0 (public)
 	 */
-	private String getContentSrc() {
+	public String getContentSrc() {
 		return Utils.getDynamicMediaURI(
 			this, _imgver, _image.getName(), _image.getFormat());
 	}

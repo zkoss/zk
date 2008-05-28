@@ -21,41 +21,47 @@ package org.zkoss.zul;
 import java.io.IOException;
 
 import org.zkoss.lang.JVMs;
+import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getSclass}: menubar.
+ * <p>Default {@link #getSclass}: z-menubar, if {@link #getOrient()} == vertical, z-menubar-vertical will be added .(since 3.1.0)
+ * 	If {@link #getMold()} == "v30", menubar is assumed for backward compatible.
  *
  * @author tomyeh
  */
 public class Menubar extends XulElement {
 	private boolean _autodrop;
+	private String _orient = "horizontal";
 
 	public Menubar() {
-		setSclass("menubar");
-		setMold("horizontal");
+		init();
 	}
 	/**
 	 * @param orient either horizontal or vertical
 	 */
 	public Menubar(String orient) {
-		setSclass("menubar");
+		this();
 		setOrient(orient);
 	}
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
+	}
 
-	/** Returns the orient (the same as {@link #getMold}).
+	/** Returns the orient.
 	 * <p>Default: "horizontal".
 	 */
 	public String getOrient() {
-		return getMold();
+		return _orient;
 	}
 	/** Sets the orient.
 	 * @param orient either horizontal or vertical
@@ -63,8 +69,16 @@ public class Menubar extends XulElement {
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
 			throw new WrongValueException("orient cannot be "+orient);
-
-		setMold(orient);
+		
+		if (!Objects.equals(_orient, orient)) {
+			_orient = orient;
+			invalidate();
+		}
+	}
+	public String getSclass() {
+		final String sclass = super.getSclass();
+		return (sclass == null || sclass.length() == 0) ? "v30".equals(getMold()) ? 
+					"menubar" : "z-menubar" + ("vertical".equals(_orient) ? " z-menubar-vertical" : "") : sclass;
 	}
 
 	/** Returns whether to automatically drop down menus if user moves mouse

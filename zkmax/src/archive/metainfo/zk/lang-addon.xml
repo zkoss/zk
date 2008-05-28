@@ -526,6 +526,10 @@ def alert(m):
 		<extends>menu</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Menu2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.MenuDefault</mold-uri>
 		</mold>
 	</component>
@@ -533,12 +537,12 @@ def alert(m):
 		<component-name>menubar</component-name>
 		<extends>menubar</extends>
 		<mold>
-			<mold-name>horizontal</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.MenubarHorizontal</mold-uri>
+			<mold-name>default</mold-name>
+			<mold-uri>${self.orient == 'horizontal' ? 'class:org.zkoss.zkmax.zul.render.Menubar2Horizontal' : 'class:org.zkoss.zkmax.zul.render.Menubar2Vertical'}</mold-uri>
 		</mold>
 		<mold>
-			<mold-name>vertical</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.MenubarVertical</mold-uri>
+			<mold-name>v30</mold-name>
+			<mold-uri>${self.orient == 'horizontal' ? 'class:org.zkoss.zkmax.zul.render.MenubarHorizontal' : 'class:org.zkoss.zkmax.zul.render.MenubarVertical'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -546,6 +550,10 @@ def alert(m):
 		<extends>menuitem</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Menuitem2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.MenuitemDefault</mold-uri>
 		</mold>
 	</component>
@@ -554,6 +562,10 @@ def alert(m):
 		<extends>menupopup</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Menupopup2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.MenupopupDefault</mold-uri>
 		</mold>
 	</component>
@@ -562,6 +574,10 @@ def alert(m):
 		<extends>menuseparator</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Menuseparator2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.MenuseparatorDefault</mold-uri>
 		</mold>
 	</component>

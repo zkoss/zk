@@ -525,6 +525,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menu</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/menu2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zul/html/menu.dsp</mold-uri>
 		</mold>
 	</component>
@@ -533,15 +537,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menubar</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/hmenubar.dsp</mold-uri>
+			<mold-uri>${self.orient == 'horizontal' ? '~./zul/html/hmenubar2.dsp' : '~./zul/html/vmenubar2.dsp'}</mold-uri>
 		</mold>
 		<mold>
-			<mold-name>horizontal</mold-name>
-			<mold-uri>~./zul/html/hmenubar.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>vertical</mold-name>
-			<mold-uri>~./zul/html/vmenubar.dsp</mold-uri>
+			<mold-name>v30</mold-name>
+			<mold-uri>${self.orient == 'horizontal' ? '~./zul/html/hmenubar.dsp' : '~./zul/html/vmenubar.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -549,6 +549,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menuitem</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/menuitem2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zul/html/menuitem.dsp</mold-uri>
 		</mold>
 	</component>
@@ -557,6 +561,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menupopup</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/menupopup2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zul/html/menupopup.dsp</mold-uri>
 		</mold>
 	</component>
@@ -565,6 +573,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menuseparator</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/menuseparator2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zul/html/menuseparator.dsp</mold-uri>
 		</mold>
 	</component>

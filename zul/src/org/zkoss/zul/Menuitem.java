@@ -27,11 +27,12 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.Checkable;
 
 import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
- * sA single choice in a {@link Menupopup} element.
+ * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
- *
+ * 
  * @author tomyeh
  */
 public class Menuitem extends LabelImageElement {
@@ -41,20 +42,47 @@ public class Menuitem extends LabelImageElement {
 	private boolean _disabled = false;
 
 	public Menuitem() {
+		init();
 	}
 	public Menuitem(String label) {
+		this();
 		setLabel(label);
 	}
 	public Menuitem(String label, String src) {
+		this();
 		setLabel(label);
 		setImage(src);
 	}
 
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
+	}
+
 	public String getSclass() {
-		String scls = super.getSclass();	
-		if (isDisabled())
-			return scls != null && scls.length() > 0 ? scls + " disd": "disd";
+		final String scls = super.getSclass();
+		if (isDisabled()) {
+			final String disd = "v30".equals(getMold()) ? "disd" : "z-item-disd";
+			return scls != null && scls.length() > 0 ? scls + " " + disd : disd;
+		}
 		return scls;
+	}
+
+	public String getImgTag() {
+		if ("v30".equals(getMold()))
+			return super.getImgTag();
+		else {
+			final String src = getImageContent() != null ? getContentSrc():
+				getDesktop().getExecution().encodeURL(getSrc() != null ? getSrc() : "~./img/spacer.gif");
+				
+			final StringBuffer sb = new StringBuffer(64)
+				.append("<img class=\"z-menu-item-icon\" src=\"")
+				.append(src).append("\" align=\"absmiddle\"/>");
+
+			final String label = getLabel();
+			if (label != null && label.length() > 0) sb.append(' ');
+
+			return sb.toString(); //keep a space
+		}
 	}
 	
 	/**

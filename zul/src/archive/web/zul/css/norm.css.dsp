@@ -545,7 +545,7 @@ tr.seld, td.seld {
 }
 tr.disd, td.disd, tr.disd div.cell-inner, td.disd div.cell-inner, tr.disd a, td.disd a, 
 	a.disd, .text-disd {
-	color: #C5CACB !important;
+	color: #C5CACB !important; cursor: default!important;
 }
 a.disd:visited, a.disd:hover { 
 	text-decoration: none !important;
@@ -675,7 +675,7 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 tr.groupfooter, tr.listgroupfooter{
 	background-color:#F4F4F4;
 }
-span.groupfooter-cell, td.listgroupfooter-cell div.cell-inner{
+.groupfooter-cell, td.listgroupfooter-cell div.cell-inner{
 	font-weight: bold;
 }
 <%-- ZK tab. --%>
@@ -987,7 +987,208 @@ td.slidersph-bkr {
 	width: 4px; height: 20px;
 }
 
-<%-- ZK menu --%>
+<%-- Button - trendy look-and-feel (unready for 3.1.0) --%>
+.z-btn {
+	font: normal 11px tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap;
+}
+.z-btn button {
+	border: 0 none; background: transparent; font: normal 11px tahoma, verdana, helvetica;
+	padding-left: 3px; padding-right: 3px; cursor: pointer; margin: 0; overflow: visible;
+	width: auto; -moz-outline: 0 none; outline: 0 none;
+}
+<c:if test="${c:isExplorer()}">
+<%-- IE only --%>
+.z-btn button {
+	padding-top: 2px;
+}
+</c:if>
+<c:if test="${c:isGecko()}">
+<%-- Firefox only --%>
+.z-btn button {
+	padding-left: 0; padding-right: 0;
+}
+</c:if>
+.z-btn-icon .z-btn-m .z-btn-text {
+	background-position: center; background-repeat: no-repeat; height: 16px; width: 16px;
+	cursor: pointer; white-space: nowrap; padding: 0;
+}
+.z-btn-icon .z-btn-m {
+	padding: 1px;
+}
+.z-btn em {
+	font-style: normal; font-weight: normal;
+}
+.z-btn-text-icon .z-btn-m .z-btn-text {
+	background-position: 0 2px; background-repeat: no-repeat; padding-left: 18px;
+	padding-top: 3px; padding-bottom: 2px; padding-right:0;
+}
+.z-btn-l, .z-btn-r {
+	font-size: 1px; line-height: 1px;
+}
+.z-btn-l {
+	width: 3px; height: 21px; background: url(${c:encodeURL('~./zul/img/button/btn-side.gif')}) no-repeat 0 0;}
+.z-btn-r {
+	width: 3px; height: 21px; background: url(${c:encodeURL('~./zul/img/button/btn-side.gif')}) no-repeat 0 -21px;
+}
+.z-btn-l i,.z-btn-r i {
+	display: block; width: 3px; overflow: hidden; font-size: 1px; line-height: 1px;
+}
+.z-btn-m {
+	background: url(${c:encodeURL('~./zul/img/button/btn-side.gif')}) repeat-x 0 -42px;
+	vertical-align: middle; text-align: center; padding: 0 5px; cursor: pointer;
+	white-space: nowrap;
+}
+.z-btn-over .z-btn-l {
+	background-position: 0 -63px;
+}
+.z-btn-over .z-btn-r {
+	background-position: 0 -84px;
+}
+.z-btn-over .z-btn-m {
+	background-position: 0 -105px;
+}
+.z-btn-click .z-btn-m, .z-menu-btn-seld .z-btn-m {
+	background-position: 0 -126px;
+}
+.disd z-btn * {
+	color: gray!important; cursor: default!important;
+}
+<%-- Menu - trendy look-and-feel --%>
+.z-menu-btn .z-btn-m {
+	padding-right: 2px!important;
+}
+.z-menu-btn .z-btn-m em {
+	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')}) no-repeat right 0;
+	padding-right: 10px; min-height: 16px;
+}
+.z-btn-text-icon .z-menu-btn .z-btn-m em {
+	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')}) no-repeat right 3px;
+	padding-right: 10px;
+}
+.z-menubar-vertical .z-menu-btn .z-btn-m em {
+	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow-ver.gif')}) no-repeat right 0;
+	padding-right: 10px; min-height: 16px;
+}
+.z-menubar-vertical .z-btn-text-icon .z-menu-btn .z-btn-m em {
+	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow-ver.gif')}) no-repeat right 3px;
+	padding-right: 10px;
+}
+.z-menubar {
+	border-color: #a9bfd3; border-style: solid; border-width: 0 0 1px 0; display: block;
+	padding: 2px; background: #d0def0 url(${c:encodeURL('~./zul/img/button/tb-bg.gif')}) repeat-x top left;
+	position: relative; zoom: 1;
+}
+.z-menubar .z-item-disd .z-btn-icon, .z-menupopup .z-item-disd .z-btn-icon {
+	opacity: .35; -moz-opacity: .35; filter: alpha(opacity=35);
+}
+.z-menubar td {
+	vertical-align: middle;
+}
+.z-menubar .z-menu-btn td {
+	border: 0 !important;
+}
+.z-menubar td, .z-menubar span, .z-menubar input, .z-menubar div, .z-menubar select, .z-menubar label {
+	white-space: nowrap; font: normal 11px tahoma, arial, helvetica, sans-serif;
+}
+.z-menubar .z-item-disd, .z-menupopup .z-item-disd {
+	color: gray !important; cursor: default !important; opacity: .5; -moz-opacity: .5; filter: alpha(opacity=50);
+}
+.z-menubar .z-item-disd *, .z-menupopup .z-item-disd * {
+	color: gray !important; cursor: default !important;
+}
+.z-menubar .z-btn-l {
+	background: none;
+}
+.z-menubar .z-btn-r {
+	background: none;
+}
+.z-menubar .z-btn-m {
+	background: none; padding: 0;
+}
+.z-menubar .z-btn-over .z-btn-l {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 0;
+}
+.z-menubar .z-btn-over .z-btn-r {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -21px;
+}
+.z-menubar .z-btn-over .z-btn-m {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) repeat-x 0 -42px;
+}
+.z-menubar .z-btn-click .z-btn-l, .z-menubar .z-btn-pressed .z-btn-l, .z-menubar .z-menu-btn-seld .z-btn-l {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -63px;
+}
+.z-menubar .z-btn-click .z-btn-r, .z-menubar .z-btn-pressed .z-btn-r, .z-menubar .z-menu-btn-seld .z-btn-r {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -84px;
+}
+.z-menubar .z-btn-click .z-btn-m, .z-menubar .z-btn-pressed .z-btn-m, .z-menubar .z-menu-btn-seld .z-btn-m {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) repeat-x 0 -105px;
+}
+.z-menubar .z-menu-btn .z-btn-m em {
+	padding-right: 8px;
+}
+.z-menu-list li {
+	text-decoration: none; font: normal 11px tahoma, arial, sans-serif; white-space: nowrap;
+	display: block; padding: 1px;
+}
+a.z-menu-item {
+	text-decoration: none; font: normal 11px tahoma, arial, sans-serif; white-space: nowrap;
+}
+a.z-menu-item .z-menu-btn .z-btn-m em {
+	background: none; padding-right: 0;
+}
+.z-menupopup {
+	border:	1px solid #7F9DB9;	z-index: 88000; zoom: 1; padding: 2px;
+	background: #F0F0F0 url(${c:encodeURL('~./zul/img/menu2/pp-bg.gif')}) repeat-y;
+}
+.z-menupopup ul, .z-menupopup li {
+	list-style: none !important;
+	list-style-position: outside !important; list-style-type: none !important;
+	list-style-image: none !important;
+}
+.z-menupopup ul {
+	padding: 0; margin: 0;
+}
+.z-menupopup a {
+	text-decoration: none!important;
+}
+.z-menu-list {
+	background: transparent; border: 0 none;
+}
+.z-menupopup li {	
+	line-height:100%;
+}
+.z-menupopup li.z-menu-sp {
+	font-size: 1px; line-height: 1px;
+}
+.z-menu-item-arrow {
+	background: transparent url(${c:encodeURL('~./zul/img/menu2/arrow.gif')}) no-repeat right;
+}
+span.z-menu-sp {
+	display: block; font-size: 1px; line-height: 1px; margin: 2px 3px; background-color: #e0e0e0;
+	border-bottom: 1px solid #fff; overflow: hidden; width: auto;
+}
+.z-menupopup a.z-menu-item {
+	display: block; line-height: 16px; padding: 3px 21px 3px 3px; white-space: nowrap;
+	text-decoration: none; color: #222; -moz-outline: 0 none; outline: 0 none; cursor: pointer;
+}
+li.z-menu-item-over {
+	background: #ebf3fd url(${c:encodeURL('~./zul/img/menu2/item-over.gif')}) repeat-x left bottom;
+	border: 1px solid #aaccf6; padding: 0;
+}
+.z-menu-item-over a.z-menu-item {
+	color:#233d6d;
+}
+.z-menu-item-icon {
+	border: 0 none; height: 16px; padding: 0; vertical-align: top; width: 16px;
+	margin: 0 8px 0 0; background-position: center;
+}
+.z-menu-item-ck .z-menu-item-icon {
+	background: transparent url(${c:encodeURL('~./zul/img/menu/checked.gif')}) no-repeat center;
+}
+.z-menu-item-unck .z-menu-item-icon {
+	background: transparent url(${c:encodeURL('~./zul/img/menu/unchecked.gif')}) no-repeat center;
+}
+<%-- Menu - v30 look-and-feel --%>
 div.menubar, div.menupopup, div.ctxpopup {
 	cursor: pointer; background: #e9effa; padding: 1px;
 }
