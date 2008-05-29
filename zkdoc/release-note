@@ -30,6 +30,10 @@ ZK 3.0.6
   1970048: Don't appear the gap of listheader whose label is empty
   1876391: To support Combobox uses setText() to receive correct item
   1973470: Listbox with multiple and checkmark and contextmenu
+  
+* Upgrade Notes:
+  + org.zkoss.zkplus.databind.CollectionItemEx is renamed to 
+    org.zkoss.zkplus.databind.CollectionItemExt
 
 	--------
 ZK 3.0.5

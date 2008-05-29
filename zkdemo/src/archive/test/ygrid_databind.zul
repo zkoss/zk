@@ -1,0 +1,48 @@
+<?init class="org.zkoss.yuiext.zkplus.databind.AnnotateDataBinderInit" ?> 
+<window xmlns:y="http://www.zkoss.org/2007/yui" width="500px">
+  <zscript src="Person.zs"/>
+  <y:grid height="200px" model="@{persons}" selectedItem="@{selected}">
+      <y:columns>
+        <y:column label="First Name"/>
+        <y:column label="Last Name"/>
+        <y:column label="Full Name"/>
+      </y:columns>
+      <y:rows>
+       <y:row self="@{each=person}">
+       <y:label value="@{person.firstName}"/>
+       <y:label value="@{person.lastName}"/>
+       <y:label value="@{person.fullName}"/>
+       </y:row>
+       </y:rows>
+   </y:grid>
+  <!-- show the detail of the selected person --> 
+  <y:grid width="500px" editable="true" trackMouseOver="false">
+  	<y:columns sizable="false">
+  		<y:column editortype="readonly" label="Person Info"/>
+  		<y:column label="Person Value"/>
+	</y:columns>
+    <y:rows>
+      <y:row>First Name:<y:label value="@{selected.firstName}"/></y:row>
+      <y:row>Last Name:<y:label value="@{selected.lastName}"/></y:row>
+      <y:row>Full Name:<y:label value="@{selected.fullName}"/></y:row>
+    </y:rows>
+  </y:grid>
+  
+  <zscript>
+    //init each person
+    setupPerson(Person person, int j) {
+      person.setFirstName("First "+j);
+      person.setLastName("Last "+j);
+    }    
+    //prepare the example persons List
+    int count = 30;
+    List persons = new ArrayList();
+    for(int j= 0; j &lt; count; ++j) {
+      Person personx = new Person();
+      if(j==0)
+      selected = personx;
+      setupPerson(personx, j);
+      persons.add(personx);
+    }    
+  </zscript>
+</window>

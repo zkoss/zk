@@ -534,8 +534,8 @@ public class Binding {
 					final Component owner = (Component) it.next();
 					final CollectionItem decor = binder.getCollectionItemByOwner(owner);
 					//backward compatible, CollectionItemEx.getItems() is faster
-					if (decor instanceof CollectionItemEx) {
-						final CollectionItemEx decorex = (CollectionItemEx) decor;
+					if (decor instanceof CollectionItemExt) {
+						final CollectionItemExt decorex = (CollectionItemExt) decor;
 						for (final Iterator iti = decorex.getItems(owner).iterator(); iti.hasNext();) {
 							final Component item = (Component) iti.next();
 							kidowners.add(DataBinder.lookupClone(item, comp));
