@@ -327,7 +327,7 @@ div.modal_mask {
 	background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
 div.z-loading {
-	position: absolute; z-index: 21000; background-color: #A8CAF8; 
+	position: absolute; z-index: 21000; background-color: #A8CAF8; cursor: wait;
 	white-space: nowrap; border: 1px solid #83B5F7; padding:3px;
 }
 div.z-loading-indicator {
@@ -340,16 +340,18 @@ div.z-loading-indicator {
 }
 
 div.z-apply-mask {
-	position: absolute; z-index: 89000;
-	top: 0; left: 0; width: 100%; height: 100%;
-	filter: alpha(opacity=60); <%-- IE --%>
-	opacity: .6;
-	hasLayout: -1;<%-- not a layout element in IE --%>
-	background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
+	position: absolute; z-index: 89000; top: 0; left: 0; width: 100%; height: 100%;
+	filter: alpha(opacity=60); opacity: .6;
+	hasLayout: -1; background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
+}
+div.z-apply-loading-indicator {
+	color: #102B6D; border:1px solid #A6C5DC; background-color: #FFF; 
+	white-space: nowrap; padding: 2px; font: normal 11px tahoma, arial, helvetica, sans-serif;
+	cursor: wait;
 }
 div.z-apply-loading {
-	position: absolute; z-index: 89500; border: 0;
-	overflow: hidden; font-size: 0pt; line-height: 0pt;
+	position: absolute; z-index: 89500; background-color: #CEDFEC; border: 1px solid #99C6E9;
+	padding: 3px; overflow: hidden; white-space: nowrap; cursor: wait;
 }
 <%-- ZK separator --%>
 <c:choose>

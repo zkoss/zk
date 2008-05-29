@@ -346,7 +346,7 @@ zk.applyMask = function (rel, message) {
 	if (typeof rel == "string") rel = $e(rel);
 	if (!rel || !zk.isRealVisible(rel, true)) return; //nothing do to.
 	var progbox = $e(rel.id + "!progbox");
-	if (progbox) return;
+	if (progbox) return progbox;
 	if (!message) message =  "Loading...";
 	var n = document.createElement("DIV");
 	document.body.appendChild(n);
@@ -356,9 +356,9 @@ zk.applyMask = function (rel, message) {
 		html = '<div id="'+rel.id+'!progbox" style="visibility:hidden">' 
 			+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 			+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
-			+ '<div id="'+rel.id+'!z-loading" class="z-apply-loading">'
-			+ '<img class="z-apply-loading-icon" alt="'+message+'" src="'+zk.getUpdateURI('/web/img/spacer.gif')+'"/> '
-			+ '</div></div>';
+			+ '<div id="'+rel.id+'!z-loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
+			+ '<img class="z-apply-loading-icon" alt="..." src="'+zk.getUpdateURI('/web/img/spacer.gif')+'"/> '
+			+ message+ '</div></div></div>';
 	zk.setOuterHTML(n, html);
 	var loading = $e(rel.id+"!z-loading"), progbox = $e(rel.id + "!progbox");
 	if (loading) {

@@ -653,7 +653,7 @@ zkPop = {
 			//use a progress bar to hide the popup
 			var mask = zk.applyMask(ctx.id, "");
 			//register addOnReponse to remove the progress bar after receiving the response from server
-			zkau.addOnResponse("zk.remove($e('"+mask.id+"'))");		
+			if (mask) zkau.addOnResponse("zk.remove($e('"+mask.id+"'))");		
 		}		
 		zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
 		zkau.hideCovered();

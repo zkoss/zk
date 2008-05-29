@@ -23,6 +23,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.ext.render.Floating;
 
@@ -129,7 +130,7 @@ public class Popup extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements ZidRequired, Floating {
+	implements ZidRequired, Floating, Openable {
 		//ZidRequired//
 		public boolean isZidRequired() {
 			return !(getParent() instanceof Menu);
@@ -137,6 +138,13 @@ public class Popup extends XulElement {
 		//Floating//
 		public boolean isFloating() {
 			return true;
+		}
+		/**
+		 * @since 3.1.0
+		 */
+		public void setOpenByClient(boolean open) {
+			if (open) smartUpdate("z.closemask", true);
+				//make sure to remove the progress bar at client side, if open.
 		}
 	}
 }
