@@ -18,6 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 //zk//
 if (!window.zk) { //avoid eval twice
+zk = {};
+zk.booting = true; //denote ZK is booting
 
 ////
 //Customization
@@ -33,7 +35,7 @@ if (!window.zk) { //avoid eval twice
  * @param center sets whether center the loading bar (since 3.0.2)
  */
 if (!window.Boot_progressbox) { //not customized
-	Boot_progressbox = function (id, msg, x, y, mask, center, imguri) {
+	Boot_progressbox = function (id, msg, x, y, mask, center) {
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 
@@ -83,9 +85,6 @@ if (!window.AU_progressbox) {
 
 /////
 // zk
-zk = {};
-zk.voidf = function () {return false;}; //always return false
-zk.booting = true; //denote ZK is booting
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();
@@ -99,6 +98,8 @@ zk.windows = zk.agent.indexOf("windows") != -1;
 zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
 //zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 zk._js4ld = {}; //{name, [script]}
+zk._stdpgs = [];
+zk.voidf = function () {return false;}; //always return false
 
 /** Listen a browser event.
  * Why not to use prototype's Event.observe? Performance.
@@ -801,7 +802,7 @@ zk._bld = function () {
 		}, 10);
 
 		setTimeout(function () {
-			if (zk.loading) {
+			if (zk.loading || window.dbg_progressbox) {
 				var n = $e("zk_loadprog");
 				if (!n)
 					Boot_progressbox("zk_loadprog",
@@ -923,6 +924,18 @@ zk._loadAndInit = function (inf) {
 			if (zk.loadByType(n) || getZKAttr(n, "drag")
 			|| getZKAttr(n, "drop") || getZKAttr(n, "zid"))
 				zk._initcmps.push(n);
+
+			//Test if a (non-owned) page included by other content (e.g. JSP)
+			if (getZKAttr(n, "zidsp") == "page" && !getZKAttr(n, "owner")) {
+				var found = n.parentNode != document.body;
+				if (!found)
+					for (var p = n; p = p.previousSibling;)
+						if (p.nodeType == 1) {
+							found = true;
+							break;
+						}
+				if (found) zk._stdpgs.push(n.id);
+			}
 		}
 
 		//if nosibling, don't process its sibling (only process children)
