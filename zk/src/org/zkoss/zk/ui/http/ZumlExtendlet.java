@@ -33,13 +33,13 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
-import org.zkoss.util.resource.Loader;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.Extendlet;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
+import org.zkoss.web.util.resource.ExtendletLoader;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -79,10 +79,12 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	//Extendlet//
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
-		_cache = new ResourceCache(new ZUMLLoader(), 17);
+		final ZumlLoader loader = new ZumlLoader();
+		_cache = new ResourceCache(loader, 17);
 		_cache.setMaxSize(512);
 		_cache.setLifetime(60*60*1000); //1hr
-		_cache.setCheckPeriod(60*60*1000); //1hr
+		final int checkPeriod = loader.getCheckPeriod();
+		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
 	}
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
@@ -186,42 +188,20 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	}
 
 	/** Helper class. */
-	private class ZUMLLoader implements Loader {
-		private ZUMLLoader() {
+	private class ZumlLoader extends ExtendletLoader {
+		private ZumlLoader() {
 		}
 
 		//-- super --//
-		public boolean shallCheck(Object src, long expiredMillis) {
-			return expiredMillis > 0;
-		}
-		/** Returns the last modified time.
-		 */
-		public long getLastModified(Object src) {
-			return 1; //any value (because it is packed in jar)
-		}
-		public Object load(Object src) throws Exception {
-//			if (D.ON && log.debugable()) log.debug("Parse "+src);
-			final String path = (String)src;
-			final InputStream is = _webctx.getResourceAsStream(path);
-			if (is == null)
-				return null;
-
-			try {
-				return parse0(is, Servlets.getExtension(path));
-			} catch (Exception ex) {
-				if (log.debugable())
-					log.realCauseBriefly("Failed to parse "+path, ex);
-				else
-					log.error("Failed to parse "+path
-					+"\nCause: "+ex.getClass().getName()+" "+Exceptions.getMessage(ex)
-					+"\n"+Exceptions.getBriefStackTrace(ex));
-				return null; //as non-existent
-			}
-		}
-		private Object parse0(InputStream is, String ext) throws Exception {
+		//-- super --//
+		protected Object parse(InputStream is, String path) throws Exception {
 			return PageDefinitions.getPageDefinitionDirectly(
 				getWebApp(), _webctx.getLocator(),
-				new java.io.InputStreamReader(is, "UTF-8"), ext);
+				new java.io.InputStreamReader(is, "UTF-8"),
+				Servlets.getExtension(path));
+		}
+		protected ExtendletContext getExtendletContext() {
+			return _webctx;
 		}
 	}
 }

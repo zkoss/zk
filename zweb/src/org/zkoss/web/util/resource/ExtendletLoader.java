@@ -1,0 +1,120 @@
+/* ExtendletLoader.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 28 17:01:32     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package org.zkoss.web.util.resource;
+
+import java.net.URL;
+import java.io.InputStream;
+
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Loader;
+
+/**
+ * A skeletal implementation of the loader used to implement an extendlet.
+ * All you have to do is to implement {@link #parse}
+ * and {@link #getExtendletContext}.
+ *
+ * @author tomyeh
+ * @see Extendlet
+ * @since 3.0.6
+ */
+abstract public class ExtendletLoader implements Loader {
+	private static final Log log = Log.lookup(ExtendletLoader.class);
+
+	private int _checkPeriod;
+
+	protected ExtendletLoader() {
+		_checkPeriod = getInitCheckPeriod();
+	}
+
+	//Loader//
+	public boolean shallCheck(Object src, long expiredMillis) {
+		return expiredMillis > 0;
+	}
+	/** Returns the last modified time.
+	 */
+	public long getLastModified(Object src) {
+		if (getCheckPeriod() < 0)
+			return 1; //any value (because it is not dynamic)
+
+		try {
+			final URL url = getExtendletContext().getResource((String)src);
+			return url != null ? url.openConnection().getLastModified(): -1;
+		} catch (Throwable ex) {
+			return -1; //reload
+		}
+	}
+	public Object load(Object src) throws Exception {
+//		if (D.ON && log.debugable()) log.debug("Parse "+src);
+		final String path = (String)src;
+		final InputStream is = getExtendletContext().getResourceAsStream(path);
+		if (is == null)
+			return null;
+
+		try {
+			return parse(is, path);
+		} catch (Exception ex) {
+			if (log.debugable())
+				log.realCauseBriefly("Failed to parse "+path, ex);
+			else
+				log.error("Failed to parse "+path
+				+"\nCause: "+ex.getClass().getName()+" "+Exceptions.getMessage(ex)
+				+"\n"+Exceptions.getBriefStackTrace(ex));
+			return null; //as non-existent
+		}
+	}
+	//Derive to override//
+	/** It is called to parse the resource into an intermediate format
+	 * depending on {@link Extendlet}.
+	 *
+	 * @param is the content of the resource
+	 * @param path the path of the resource
+	 */
+	abstract protected Object parse(InputStream is, String path)
+	throws Exception;
+	/** Returns the extendlet context.
+	 */
+	abstract protected ExtendletContext getExtendletContext();
+
+	/** Returns the check period, or -1 if the content is never changed.
+	 * Unit: milliseconds.
+	 *
+	 * <p>Default: It checks if an integer (unit: second) is assigned
+	 * to a system property called org.zkoss.util.resource.extendlet.checkPeriod.
+	 * If no such system property, -1 is assumed (never change).
+	 * For the runtime environment the content is never changed,
+	 * since all extendlet resources are packed in JAR files.
+	 */
+	public int getCheckPeriod() {
+		return _checkPeriod;
+	}
+	private static int getInitCheckPeriod() {
+		final String ATTR = "org.zkoss.util.resource.extendlet.checkPeriod";
+		try {
+			final Integer v = Integer.getInteger(ATTR);
+			if (v != null) {
+				final int i = v.intValue();
+				if (i > 0) return i * 1000;
+			}
+		} catch (Throwable t) {
+			log.warning("Failed to parse "+System.getProperty(ATTR));
+		}
+		return -1; //never change
+	}
+}

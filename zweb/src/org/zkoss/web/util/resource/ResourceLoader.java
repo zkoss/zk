@@ -71,7 +71,7 @@ abstract public class ResourceLoader implements Loader {
 			&& !"ftp".equals(protocol)) {
 				try {
 					return si.url.openConnection().getLastModified();
-				} catch (IOException ex) {
+				} catch (Throwable ex) {
 					return -1; //reload
 				}
 			}

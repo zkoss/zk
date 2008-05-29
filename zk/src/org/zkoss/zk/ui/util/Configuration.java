@@ -2027,12 +2027,6 @@ public class Configuration {
 	 */
 	public void setDebugJS(boolean debug) {
 		_debugJS = debug;
-
-		//FUTURE: The following codes assume the existence of WebManager
-		//but theorectically ZK doesn't assume it
-		if (_wapp != null)
-			org.zkoss.zk.ui.http.WebManager
-				.getWebManager(_wapp).getClassWebResource().setDebugJS(debug);
 	}
 
 	/** Sets the implementation of the expression factory that shall
