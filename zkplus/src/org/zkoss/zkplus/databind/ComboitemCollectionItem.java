@@ -30,7 +30,7 @@ import org.zkoss.zul.ListModel;
  * @author jumperchen
  * @since 3.0.2
  */
-/* package */ class ComboitemCollectionItem implements CollectionItemEx {
+/* package */ class ComboitemCollectionItem implements CollectionItemExt {
 
 	public Component getComponentCollectionOwner(Component comp) {
 		if (comp instanceof Comboitem) {

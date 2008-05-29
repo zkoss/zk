@@ -26,7 +26,7 @@ import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Row;
 
-/* package */class RowCollectionItem implements CollectionItemEx {
+/* package */class RowCollectionItem implements CollectionItemExt {
 
 	public Component getComponentAtIndexByOwner(Component comp, int index) {
 		return (Component) getItems(comp).get(index);

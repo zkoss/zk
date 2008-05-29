@@ -27,15 +27,31 @@ import java.util.Map;
  * {@link org.zkoss.zul.Listbox}, {@link org.zkoss.zul.Grid}, 
  * and {@link DataBinder}.
  * Add or remove the contents of this model as a Map would cause the associated Listbox or Grid to change accordingly.</p> 
+ * <p>Make as public class since 3.0.5</p>
+ * <p>Support BindingListModelEx since 3.1</p>
  *
  * @author Henri Chen
  * @see BindingListModel
+ * @see BindingListModelExt
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelMap
  */
-/*package*/ class BindingListModelMap extends ListModelMap
-implements BindingListModel, java.io.Serializable {
-	/* package */ BindingListModelMap(Map map, boolean live) {
+public class BindingListModelMap extends ListModelMap
+implements BindingListModelExt, java.io.Serializable {
+	/**
+	 * @since 3.0.5
+	 */
+	public BindingListModelMap(Map map, boolean live) {
 		super(map, live);
+	}
+	
+	//Map is naturally distinct
+	public boolean isDistinct() {
+		return true;
+	}
+	
+	public int[] indexesOf(Object elm) {
+		final int idx = indexOf(elm);
+		return idx < 0 ? new int[0] : new int[] {idx};
 	}
 }

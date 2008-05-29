@@ -139,6 +139,7 @@ public class Chart extends Imagemap {
 	//Time Series Chart related attributes
 	private TimeZone _tzone;
 	private String _period;
+	private String _dateFormat;
 	
 	//chart data model
 	private ChartModel _model; //chart data model
@@ -513,6 +514,26 @@ public class Chart extends Imagemap {
 			return;
 		}
 		_period = period;
+		smartDrawChart();
+	}
+	
+	/**
+	 * Returns the date format used by date related Chart.
+	 * @return the date format used by date related Chart..
+	 */
+	public String getDateFormat() {
+		return _dateFormat;
+	}
+	
+	/**
+	 * Sets the date format used by date related Chart.
+	 * @param format
+	 */
+	public void setDateFormat(String format) {
+		if (Objects.equals(format, _dateFormat)) {
+			return;
+		}
+		_dateFormat = format;
 		smartDrawChart();
 	}
 	

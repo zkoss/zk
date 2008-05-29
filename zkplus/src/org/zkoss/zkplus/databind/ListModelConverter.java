@@ -40,21 +40,36 @@ public class ListModelConverter implements TypeConverter {
 		if (val == null) {
 			val = new ArrayList();
 		}
+		final boolean distinct = isDistinct(comp);
+		//since 3.1, 20080416, Henri Chen: allow custom arguments.
+		//model can specify distinct=false in annotation to allow handle same-object-in-multiple-items
 		if (val instanceof BindingListModel) {
 			return val;
 		} else if (val instanceof Set) {
 			return new BindingListModelSet((Set)val, true);
 		} else if (val instanceof List) {
-			return new BindingListModelList((List)val, true);
+			return new BindingListModelList((List)val, true, distinct);
 		} else if (val instanceof Map) {
 			return new BindingListModelMap((Map)val, true);
 		} else if (val instanceof Object[]) {
-			return new BindingListModelArray((Object[]) val, true);
+			return new BindingListModelArray((Object[]) val, true, distinct);
 		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
 			return new BindingListModelArray((Object[]) ((Class)val).getEnumConstants(), true);
 		} else {
 			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, or BindingListModel only. "+val.getClass());
 		}
+	}
+	
+	/*package*/ static boolean isDistinct(Component comp) {
+		Map args = (Map) comp.getAttribute(DataBinder.ARGS);
+		boolean distinct = true;
+		if (args != null) {
+			final String distinctstr = (String) args.get("distinct");
+			if (distinctstr != null) {
+				distinct = Boolean.valueOf(distinctstr).booleanValue();
+			}
+		}
+		return distinct;
 	}
 
 	/** Convert a {@link BindingListModel} to Set, Map, List, or BindingListModel (itself).

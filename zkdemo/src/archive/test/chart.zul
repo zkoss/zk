@@ -19,6 +19,20 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <vbox>
 <zscript>
+  public Date date(int year, int month, int day) {
+	final java.util.Calendar calendar = java.util.Calendar.getInstance();
+	calendar.set(year, month-1, day);
+	final Date result = calendar.getTime();
+	return result;
+  }
+
+  public Date time(int year, int month, int day, int hour, int minute, int second) {
+	final java.util.Calendar calendar = java.util.Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+	calendar.set(year, month-1, day, hour, minute, second);
+	final Date result = calendar.getTime();
+	return result;
+  }
+
   void drilldown() {
   	String areaid = event.getArea();
   	if (areaid != null) {
@@ -168,10 +182,23 @@ xymodel.addValue("2002", new Integer(90), new Integer(160));
   steparea.setModel(xymodel);
 </zscript>
 
+<zscript>
+XYModel datemodel = new SimpleXYModel();
+datemodel.addValue("2001", new Long(time(2001, 5, 2, 1, 10, 15).getTime()), new Integer(120));
+datemodel.addValue("2001", new Long(time(2001, 5, 2, 2, 10, 15).getTime()), new Integer(135));
+datemodel.addValue("2001", new Long(time(2001, 5, 2, 3, 10, 15).getTime()), new Integer(140));
+datemodel.addValue("2001", new Long(time(2001, 5, 2, 4, 10, 15).getTime()), new Integer(160));
+
+datemodel.addValue("2002", new Long(time(2001, 5, 2, 1, 10, 20).getTime()), new Integer(125));
+datemodel.addValue("2002", new Long(time(2001, 5, 2, 2, 10, 20).getTime()), new Integer(130));
+datemodel.addValue("2002", new Long(time(2001, 5, 2, 3, 10, 20).getTime()), new Integer(120));
+datemodel.addValue("2002", new Long(time(2001, 5, 2, 4, 10, 20).getTime()), new Integer(180));
+</zscript>
+
 <label value="step"/>
 <chart id="step" title="Step Chart" width="500" height="250" type="step" threeD="false" fgAlpha="128" onClick="drilldown()"/>
 <zscript>
-  step.setModel(xymodel);
+  step.setModel(datemodel);
 </zscript>
 
 <label value="stacked_area"/>
@@ -223,7 +250,8 @@ hilomodel.addValue(new Date(d+18000),  new Double(63.5),  new Double(72.2),  new
 </zscript>
 
 <label value="highlow"/>
-<chart id="highlow" title="High Low Chart" width="500" height="250" type="highlow" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<chart id="highlow" title="High Low Chart" width="500" height="250" type="highlow" threeD="false" fgAlpha="128" onClick="drilldown()"
+dateFormat="yyyy/MM/dd" />
 <zscript>
   highlow.setModel(hilomodel);
 </zscript>
@@ -273,12 +301,6 @@ for (int x = 0; x < xdim; x++) {
 
 <zscript><![CDATA[
 import org.zkoss.zul.GanttModel.GanttTask;
-public Date date(int year, int month, int day) {
-	final java.util.Calendar calendar = java.util.Calendar.getInstance();
-	calendar.set(year, month-1, day);
-	final Date result = calendar.getTime();
-	return result;
-}
 
 //series, task (task description, start, end, complete percentage)
 GanttModel ganttmodel = new GanttModel();
@@ -310,7 +332,8 @@ ganttmodel.addValue("Actual", new GanttTask("Signoff", date(2008,12,10), date(20
 ]]></zscript>
 
 <label value="gantt"/>
-<chart id="gantt" title="Gantt Chart" width="700" height="400" type="gantt" threeD="false" fgAlpha="128" onClick="drilldown()" />
+<chart id="gantt" title="Gantt Chart" width="700" height="400" type="gantt" threeD="false" fgAlpha="128" onClick="drilldown()" 
+dateFormat="yyyy/MM/dd" />
 <zscript>
   gantt.setModel(ganttmodel);
 </zscript>
@@ -335,7 +358,8 @@ windmodel.addValue("Wind!", new Long(date(2008, 1, 16).getTime()), new Double(0.
 </zscript>
 
 <label value="wind"/>
-<chart id="wind" title="Wind Plot" width="700" height="400" type="wind" threeD="false" fgAlpha="128" onClick="drilldown()" />
+<chart id="wind" title="Wind Plot" width="700" height="400" type="wind" threeD="false" fgAlpha="128" onClick="drilldown()"
+dateFormat="yyyy/MM/dd" />
 <zscript>
   wind.setModel(windmodel);
 </zscript>

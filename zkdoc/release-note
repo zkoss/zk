@@ -1,7 +1,7 @@
 	--------
 ZK 3.1.0
 * Features
-	1972591: Grid support Groupfooter in Group
+  1972591: Grid support Groupfooter in Group
   1907300: Listbox: support grouping
   1959952: Support Comet-based Server Push
   1951422: Grid: support grouping
@@ -19,6 +19,7 @@ ZK 3.1.0
   1959380: Window support both properties minheight and minwidth
   1955562: For theme: menuitem unchecked not visible
   1895872: Keyboard support for menues
+  1944610: Data Binding support non-distinct collection items
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
@@ -42,7 +43,7 @@ ZK 3.1.0
 		<name>org.zkoss.zul.theme.v30</name> 
 		<value>true</value> 
 	</system-property>
-	+ Both molds vertical and horizontal of Menubar are unsupported, please use the setOrient()
+  + Both molds vertical and horizontal of Menubar are unsupported, please use the setOrient()
 		of Menubar to specify them.
 	--------
 ZK 3.0.6

@@ -29,6 +29,7 @@ import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.HierachicalAware;
 
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Listbox;
@@ -45,6 +46,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Date;
 import java.util.Map.Entry;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -63,10 +65,12 @@ import java.util.LinkedHashSet;
  */
 public class DataBinder {
 	public static final String NULLIFY = "none"; //used to nullify default configuration
+	public static final String ARGS = "bindingArgs"; //extra arguments specified in annotation
 	public static final String VARNAME = "zkplus.databind.VARNAME"; //_var name
 	public static final String TEMPLATEMAP = "zkplus.databind.TEMPLATEMAP"; // template -> clone
 	public static final String TEMPLATE = "zkplus.databind.TEMPLATE"; //clone -> template
 	private static final String OWNER = "zkplus.databind.OWNER"; //the collection owner of the template component
+	private static final String ITEM = "zkplus.databind.ITEM"; //the collection item of the template component
 	private static final String IAMOWNER = "zkplus.databind.IAMOWNER"; //I am the collection owner
 	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
@@ -81,6 +85,7 @@ public class DataBinder {
 		//Databinder is init automatically when saveXXX or loadXxx is called
 	
 	protected Map _collectionItemMap = new HashMap(3);
+	protected Map _collectionOwnerMap = new HashMap(3); //bug#1950313 F - 1764967 bug
 	
 	/** Binding bean to UI component. This is the same as 
 	 * addBinding(Component comp, String attr, String expr, (List)null, (List)null, (String)null, (String)null). 
@@ -186,8 +191,29 @@ public class DataBinder {
 	 */
 	public void addBinding(Component comp, String attr, String expr,
 		List loadWhenEvents, List saveWhenEvents, String access, String converter) {
-			
-		//Since 2.5, 20070726, Henri Chen: we accept "each" to replace "_var" in collection data binding
+		addBinding(comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null);
+	}
+	
+	/** Binding bean to UI component. 
+	 * @param comp The component to be associated.
+	 * @param attr The attribute of the component to be associated.
+	 * @param expr The expression to associate the data bean.
+	 * @param loadWhenEvents The event list when to load data.
+	 * @param saveWhenEvents The event list when to save data.
+	 * @param access In the view of UI component: "load" load only, 
+	 * "both" load/save, "save" save only when doing
+	 * data binding. null means using the default access natural of the component. 
+	 * e.g. Label.value is "load", but Textbox.value is "both".
+	 * @param converter The converter class used to convert classes between component 
+	 *  and the associated bean. null means using the default class conversion method.
+	 * @param args generic argument map for each binding.
+	 * @since 3.1.0
+	 */
+	public void addBinding(Component comp, String attr, String expr,
+		List loadWhenEvents, List saveWhenEvents, String access, String converter, Map args) {
+		//since 3.1, 20080416, Henri Chen: add a generic arguments map (string, string)
+		
+		//Since 3.0, 20070726, Henri Chen: we accept "each" to replace "_var" in collection data binding
 		//Before 2.4.1
 		//<a:bind _var="person">
 		//<listitem...>
@@ -283,7 +309,7 @@ public class DataBinder {
 			binding.setAccess(access);
 			binding.setConverter(converter);
 		} else {
-			attrMap.put(attr, new Binding(this, comp, attr, expr, loadEvents, saveEvents, access, converter));
+			attrMap.put(attr, new Binding(this, comp, attr, expr, loadEvents, saveEvents, access, converter, args));
 		}
 	}
 	
@@ -475,7 +501,7 @@ public class DataBinder {
 		}
 	}
 
-	//[0] expr, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter
+	//[0] expr, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter, [5] args
 	protected Object[] loadPropertyAnnotation(Component comp, String propName, String bindName) {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		Annotation ann = compCtrl.getAnnotation(propName, bindName);
@@ -486,6 +512,7 @@ public class DataBinder {
 			String access = null;
 			String converter = null;
 			String expr = null;
+			Map args = null;
 			for (final Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
 				Map.Entry entry = (Map.Entry) it.next();
 				String tag = (String) entry.getKey();
@@ -500,11 +527,16 @@ public class DataBinder {
 					loadWhenEvents = parseExpression(tagExpr, ",");
 				} else if ("value".equals(tag)) {
 					expr = tagExpr;
+				} else {
+					if (args == null) {
+						args = new HashMap();
+					}
+					args.put(tag, tagExpr);
 				}
 			}
-			return new Object[] {expr, loadWhenEvents, saveWhenEvents, access, converter};
+			return new Object[] {expr, loadWhenEvents, saveWhenEvents, access, converter, args};
 		}
-		return new Object[5];
+		return new Object[6];
 	}
 	
 	//late init
@@ -526,6 +558,7 @@ public class DataBinder {
 				
 				//_var special case; meaning a template component
 				if (attrMap.containsKey("_var")) {
+					comp.setAttribute(ITEM, comp);
 					final Component owner = getComponentCollectionOwner(comp);
 					//bug#1888911 databind and Grid in Grid not work when no _var in inner Grid
 					owner.setAttribute(IAMOWNER, Boolean.TRUE);
@@ -558,18 +591,37 @@ public class DataBinder {
 	}
 	
 	private void initCollectionItem(){
-		addCollectionItem(Listitem.class.getName(), new ListitemCollectionItem());
-		addCollectionItem(Row.class.getName(), new RowCollectionItem());
-		addCollectionItem(Comboitem.class.getName(), new ComboitemCollectionItem());
+		addCollectionItem(Listitem.class, Listbox.class, new ListitemCollectionItem());
+		addCollectionItem(Row.class, Grid.class, new RowCollectionItem());
+		addCollectionItem(Comboitem.class, Combobox.class, new ComboitemCollectionItem());
 	}
 	
 	/**
-	 * Adds a CollectionItem for this comp.
+	 * <p>This method is deprecated. Use 
+	 * {@link #addCollectionItem(Class item, Class owner, CollectionItem)} instead.</p>
+	 * <p>Adds a CollectionItem for this comp.</p>
 	 * @see CollectionItem
+	 * @see #addCollectionItem(Class, Class, CollectionItem)
 	 * @since 3.0.0
+	 * @deprecated
 	 */
 	public void addCollectionItem(String comp, CollectionItem decor){
 		_collectionItemMap.put(comp, decor);
+	}
+	
+	/**
+	 * Adds a CollectionItem for the specified item and owner component;
+	 * e.g. Listitem and Listbox, Row and Grid, Comoboitem and Combobox.
+	 * @see CollectionItem
+	 * @since 3.0.5
+	 * 
+	 * @param item the item class
+	 * @param owner the owner class
+	 * @param decor the associated CollectionItem decorator
+	 */
+	public void addCollectionItem(Class item, Class owner, CollectionItem decor) {
+		_collectionItemMap.put(item.getName(), decor);
+		_collectionOwnerMap.put(owner.getName(), decor);
 	}
 	
 	//get Collection owner of a given collection item.
@@ -600,22 +652,28 @@ public class DataBinder {
 	}
 	//Get CollectionItem per the given owner.
 	//@since 3.0.4 
+	//@since 3.0.5, bug#1950313 F - 1764967 bug
 	/*package*/ CollectionItem getCollectionItemByOwner(Component comp) {
+		final CollectionItem decorName = myGetCollectionItemByOwner(comp);
+		if (decorName == null) {
+			throw new UiException("Cannot find associated CollectionItem by owner: "+comp);
+		}
+		return decorName;
+	}
+	
+	private CollectionItem myGetCollectionItemByOwner(Component comp) {
 		String name = comp.getClass().getName();
 		if (comp instanceof Listbox) {
-			name = Listitem.class.getName();
+			name = Listbox.class.getName();
 		} else if (comp instanceof Grid) {
-			name = Row.class.getName();
-		} else if (comp instanceof Comboitem) {
-			name = Comboitem.class.getName();
+			name = Grid.class.getName();
+		} else if (comp instanceof Combobox) {
+			name = Combobox.class.getName();
 		}
-		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
-		if(decorName != null){
-			return decorName;
-		}else{
-			throw new UiException("Cannot find associated CollectionItem:"+comp);
-		}		
+		CollectionItem decorName = (CollectionItem)_collectionOwnerMap.get(name);
+		return decorName;
 	}
+	
 	//get Collection owner of a given collection item.
 	/*package*/ Component getCollectionOwner(Component comp) {
 		if (isTemplate(comp)) {
@@ -623,22 +681,70 @@ public class DataBinder {
 		}
 		return getComponentCollectionOwner(comp);
 	}
-	
+
+	//since 3.1
 	//get associated clone of a given bean and template component
-	private Component getCollectionItem(Component comp, Object bean) {
-		Component owner = getCollectionOwner(comp);	
-		CollectionItem decor = getBindingCollectionItem(comp);
-		final ListModel xmodel = decor.getModelByOwner(owner);
-		if (xmodel instanceof BindingListModel) {
-  			final BindingListModel model = (BindingListModel) xmodel;
-  			int index = model.indexOf(bean);
-  			if (index >= 0) {
-    			return lookupClone(decor.getComponentAtIndexByOwner(owner, index), comp);
-    		}
-    	}
-		return null;
+	private Component getCollectionItem(Component comp, Object bean, boolean isCollectionItem) {
+		final Component[] comps = getCollectionItems(comp, bean, isCollectionItem);
+		
+		return comps.length == 0 ? null : comps[0];
 	}
-  		
+
+	//since 3.1
+	//get associated clone components of a given bean and template component
+	//note that same bean can be used in multiple components
+	//assume comp is template component
+	private Component[] getCollectionItems(Component comp, Object bean, boolean isCollectionItem) {
+		Component owner = getCollectionOwner(comp);
+		Component item = (Component) comp.getAttribute(DataBinder.ITEM);
+		//For backward compatible, if by owner failed, try again with by item
+		CollectionItem decor = myGetCollectionItemByOwner(owner);
+		if (decor == null) {
+			decor = getBindingCollectionItem(item);
+		}
+		final ListModel xmodel = decor.getModelByOwner(owner);
+		if (isCollectionItem && comp == item) {
+	    	if (xmodel instanceof BindingListModelExt && !((BindingListModelExt)xmodel).isDistinct()) {
+	    		final BindingListModelExt model = (BindingListModelExt) xmodel;
+	    		final int[] indexes = model.indexesOf(bean);
+	    		final int sz = indexes.length;
+	    		final List comps = new ArrayList(sz);
+	    		for (int j = 0; j < sz; ++j) {
+	    			final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, indexes[j]), comp);
+	    			comps.add(xcomp);
+	    		}
+	    		return (Component[]) comps.toArray(new Component[comps.size()]);
+	    	} else 	if (xmodel instanceof BindingListModel) {
+	  			final BindingListModel model = (BindingListModel) xmodel;
+	  			int index = model.indexOf(bean);
+	  			if (index >= 0) {
+	    			return new Component[] {lookupClone(decor.getComponentAtIndexByOwner(owner, index), comp)};
+	    		}
+	    	}
+		} else { 
+			//though the comp is in collection but the binding does not relate to _var, 
+			//have to scan through the whole cloned children items   
+			final boolean isDistinct = ListModelConverter.isDistinct(owner);
+			final int sz = xmodel.getSize();
+    		final List comps = new ArrayList(sz);
+			if (decor instanceof CollectionItemExt) {
+				final List items = ((CollectionItemExt)decor).getItems(owner);
+				for (final Iterator it = items.iterator(); it.hasNext(); ) {
+					final Component cloneitem = (Component) it.next();
+	    			final Component xcomp = lookupClone(cloneitem, comp);
+	    			comps.add(xcomp);
+				}
+			} else {
+				for (int j = 0; j < sz; ++j) {
+	    			final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, j), comp);
+	    			comps.add(xcomp);
+				}
+			}
+    		return (Component[]) comps.toArray(new Component[sz]);
+		}
+		return new Component[0];
+	}
+
 	//set the binding renderer for the template listitem component
 	private void setupBindingRenderer(Component comp) {
 		getBindingCollectionItem(comp).setupBindingRenderer(comp, this);		
@@ -689,15 +795,20 @@ public class DataBinder {
 	 * Sets up the specified comp and its decendents to be as template (or not)
 	 */
 	public void setupTemplateComponent(Component comp, Object owner) {
+		mySetupTemplateComponent(comp, owner, comp);
+	}
+	
+	private void mySetupTemplateComponent(Component comp, Object owner, Component item) {
 		if (existsBindings(comp)) {
 			if (comp.getAttribute(OWNER) != null) {
 				comp.setAttribute(HASTEMPLATEOWNER, Boolean.TRUE); //owner is a template
 			}
 			comp.setAttribute(OWNER, owner);
+			comp.setAttribute(ITEM, item);
 		}
 		List kids = comp.getChildren();
 		for(final Iterator it = kids.iterator(); it.hasNext(); ) {
-			setupTemplateComponent((Component) it.next(), owner); //recursive
+			mySetupTemplateComponent((Component) it.next(), owner, item); //recursive
 		}
 	}
 	
@@ -706,7 +817,7 @@ public class DataBinder {
 		if (expr == null) {
 			return null;
 		}
-		List results = new ArrayList(5);
+		List results = new ArrayList(6);
 		while(true) {
 			int j = expr.indexOf(separator);
 			if (j < 0) {
@@ -729,7 +840,8 @@ public class DataBinder {
 	
 	//whether a component is a binding template rather than a real component
 	/* package */ static boolean isTemplate(Component comp) {
-		return comp.getAttribute(OWNER) != null;
+		//bug #1941947 Cannot find associated CollectionItem error
+		return comp != null && comp.getAttribute(OWNER) != null;
 	}
 	
 	//whether a cloned component from the template.
@@ -1155,7 +1267,7 @@ public class DataBinder {
 			}
 		}
 
-		return getCollectionItem(comp, bean);		
+		return getCollectionItem(comp, bean, /* isCollectionItem */ true);		
 	}
 	
 	private class LoadOnSaveEventListener implements EventListener {
@@ -1165,20 +1277,20 @@ public class DataBinder {
 		//-- EventListener --//
 		public void onEvent(Event event) {
 			final Set walkedNodes = new HashSet(32);
-			final Set loadedBindings = new HashSet(32*2);
+			final Set loadedComps = new HashSet(32*2);
 
 			Object obj = event.getData();
 			if (obj instanceof List) {
 				for(final Iterator it = ((List)obj).iterator(); it.hasNext();) {
 					final Object[] data = (Object[]) it.next();
-					doLoad(data, walkedNodes, loadedBindings);
+					doLoad(data, walkedNodes, loadedComps);
 				}
 			} else {
-				doLoad((Object[]) obj, walkedNodes, loadedBindings);
+				doLoad((Object[]) obj, walkedNodes, loadedComps);
 			}
 		}
 		
-		private void doLoad(Object[] data, Set walkedNodes, Set loadedBindings) {
+		private void doLoad(Object[] data, Set walkedNodes, Set loadedComps) {
 			if (!data[0].equals(DataBinder.this)) {
 				return; //not for this DataBinder, skip
 			}
@@ -1189,15 +1301,15 @@ public class DataBinder {
 			final List nodes = (List) data[5]; //the complete nodes along the path to the node
 			final Component savecomp = (Component) data[6]; //saved comp that trigger this load-on-save event
 			if (savecomp != null) {
-				loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes, walkedNodes, loadedBindings);
+				loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes, walkedNodes, loadedComps);
 			}
 		}
 		
 		/** Load all associated BindingNodes below the given nodes (depth first traverse).
 		 */
 		private void loadAllNodes(Object bean, BindingNode node, Component collectionComp, 
-			Binding savebinding, boolean refChanged, List nodes, Set walkedNodes, Set loadedBindings) {
-			myLoadAllNodes(bean, node, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
+			Binding savebinding, boolean refChanged, List nodes, Set walkedNodes, Set loadedComps) {
+			myLoadAllNodes(bean, node, new Component[] {collectionComp}, walkedNodes, savebinding, loadedComps, refChanged);
 
 			//for each ancestor, find associated same nodes			
 			if (!nodes.isEmpty()) {
@@ -1210,22 +1322,20 @@ public class DataBinder {
 						Object obj = itx.next();
 						if (obj instanceof BindingNode) {
 							BindingNode samenode = (BindingNode) obj;
-							myLoadAllNodes(bean, samenode, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged);
+							myLoadAllNodes(bean, samenode, new Component[] {collectionComp}, walkedNodes, savebinding, loadedComps, refChanged);
 						} else {
 							BindingNode samenode = (BindingNode)((Object[])obj)[0];
 							Component varRootComp = (Component) ((Object[])obj)[1];
-							myLoadAllNodes(bean, samenode, varRootComp, walkedNodes, savebinding, loadedBindings, refChanged);
-
+							myLoadAllNodes(bean, samenode, new Component[] {varRootComp}, walkedNodes, savebinding, loadedComps, refChanged);
 						}
 					}
 				}
 			}
 		}
-
-
 		
-		private void myLoadAllNodes(Object bean, BindingNode node, Component collectionComp,
-		Set walkedNodes, Binding savebinding, Set loadedBindings, boolean refChanged) {
+		//since 3.1, 20080416, Henri Chen: suppport one object multiple collection items of ListModel
+		private void myLoadAllNodes(Object bean, BindingNode node, Component[] collectionComps,
+		Set walkedNodes, Binding savebinding, Set loadedComps, boolean refChanged) {
 			if (walkedNodes.contains(node)) {
 				return; //already walked, skip
 			}
@@ -1233,18 +1343,29 @@ public class DataBinder {
 			walkedNodes.add(node);
 
 			//the component might have been removed
-			if (collectionComp == null) {
+			if (collectionComps.length == 0) {
 				return;
 			}
-			//loading
-			collectionComp = loadBindings(bean, node, collectionComp, savebinding, loadedBindings, refChanged);
 			
+			//loading component associated with the node, return related collection items
+			//since 3.1, 20080416, Henri Chen: suppport one object multiple collection items of ListModel
+			final int sz = collectionComps.length;
+			Component[][] kidCollectionCompsArray = new Component[sz][];
+			for (int j = 0; j < sz; ++j) {
+				kidCollectionCompsArray[j] =
+						loadAllBindings(bean, node, collectionComps[j], savebinding, loadedComps, refChanged);
+			}
+
+			//walk all kid nodes
 			for(final Iterator it = node.getKidNodes().iterator(); it.hasNext();) {
 				final BindingNode kidnode = (BindingNode) it.next();
 				final Object kidbean = fetchValue(bean, kidnode, kidnode.getNodeId(), true);
-				myLoadAllNodes(kidbean, kidnode, collectionComp, walkedNodes, savebinding, loadedBindings, true); //recursive
+				for (int j = 0; j < sz; ++j) {
+					myLoadAllNodes(kidbean, kidnode, kidCollectionCompsArray[j], walkedNodes, savebinding, loadedComps, true); //recursive
+				}
 			}
-			
+				
+			//walk all same nodes (different expression but keep same bean)
 			for(final Iterator it = new ArrayList(node.getSameNodes()).iterator(); it.hasNext();) {
 				final Object obj = it.next();
 				if (obj instanceof BindingNode) {
@@ -1254,7 +1375,7 @@ public class DataBinder {
 					}
 					if (samenode.isVar()) { // -> var node
 						//var node must traverse from the root 
-						//even a root, must make sure the samebean (could be diff)
+						//even a root, must make sure the samebean (could be different)
 						//even the same bean, if a inner var root(collection in collection), not a real root
 						if (!samenode.isRoot() || !isSameBean(samenode, bean) || samenode.isInnerCollectionNode()) { 
 							continue;
@@ -1262,23 +1383,25 @@ public class DataBinder {
 					} else if (node.isVar() && !isSameBean(samenode, bean)) { //var -> !var, must same bean
 						continue;
 					}
-					myLoadAllNodes(bean, samenode, collectionComp, walkedNodes, savebinding, loadedBindings, refChanged); //recursive
+					myLoadAllNodes(bean, samenode, collectionComps, walkedNodes, savebinding, loadedComps, refChanged); //recursive
 				}
 			}
 		}
 	
-		//return nearest collection item Component (i.e. Listitem)
-		private Component loadBindings(Object bean, BindingNode node, Component collectionComp, 
-		Binding savebinding, Set loadedBindings, boolean refChanged) {
+		//load each binding of the node and return nearest collection item Components (i.e. Listitem)
+		private Component[] loadAllBindings(Object bean, BindingNode node, Component collectionComp, 
+		Binding savebinding,  Set loadedComps, boolean refChanged) {
 			final Collection bindings = node.getBindings();
+			Component[] collectionComps = null;
 			for(final Iterator it = bindings.iterator(); it.hasNext();) {
 				final Binding binding = (Binding) it.next();
-				if (loadedBindings.contains(binding)) {
+				
+				if (loadedComps.contains(new Dual(collectionComp, binding))) {
 					continue;
 				}
-				loadedBindings.add(binding);
+				loadedComps.add(new Dual(collectionComp, binding));
 
-				// bug 1775051: a multiple selection Listbox. When onSelect and loadOnSave cause 
+				// bug#1775051: a multiple selection Listbox. When onSelect and loadOnSave cause 
 				// setSelectedItem (loading) to be called and cause deselection of other multiple 
 				// selected items. Must skip such case.
 				
@@ -1287,29 +1410,52 @@ public class DataBinder {
 					continue;
 				}
 
-				Component comp = binding.getComponent();
+				final String attr = binding.getAttr();
+				final boolean isCollectionItem =  "_var".equals(attr);
+				final Component comp = binding.getComponent();
+					
+				//since 3.1, 20080416, Henri Chen: support one object maps to multiple item of a ListModel
 				if (isTemplate(comp)) { //a template component, locate the listitem
-					Component clonecomp = null;
+					Component[] clonecomps = new Component[0];
 					if (isClone(collectionComp)) { //A listbox in listbox
-						clonecomp = lookupClone(collectionComp, comp);
-					} else {
-						clonecomp = getCollectionItem(comp, bean);
-					}
-					if ("_var".equals(binding.getAttr())) {
-						if (clonecomp == null) { //the comp is in another Listbox
-							clonecomp = getCollectionItem(comp, bean);
+						Component clonecomp = lookupClone(collectionComp, comp);
+						if (clonecomp == null) { //the comp is in another Listbox?
+							if (isCollectionItem) {
+								clonecomps = getCollectionItems(comp, bean, isCollectionItem);
+							} else {
+								throw new UiException("Cannot find associated CollectionItem="+comp+", binding="+binding+", collectionComp="+ collectionComp);
+							}
+						} else {
+							clonecomps = new Component[] {clonecomp};
 						}
-						collectionComp = clonecomp;
+					} else {
+						clonecomps = getCollectionItems(comp, bean, isCollectionItem);
 					}
-					comp = clonecomp;
-				}
-				
-				if (refChanged) {
-					binding.loadAttribute(comp);
+					if (refChanged) {
+						for (int j = 0; j < clonecomps.length; ++j) {
+							final Component clonecomp = clonecomps[j]; 
+							binding.loadAttribute(clonecomp);
+						}
+					}
+					//special case, collection items are found, 
+					//use it to handle the rest of the bindings in this node
+					if (isCollectionItem) {
+						collectionComps = clonecomps;
+						for (int j = 0; j < collectionComps.length; ++j) {
+							//recursive exclude this _var binding
+							loadAllBindings(bean, node, collectionComps[j], binding, loadedComps, refChanged); 
+						}
+						break;
+					}
+				} else {
+					if (refChanged) {
+						binding.loadAttribute(comp);
+					}
 				}
 			}
-			return collectionComp;
+			return collectionComps == null ? new Component[] {collectionComp} : collectionComps;
 		}
+		
 		private boolean isSameBean(BindingNode node, Object bean) {	
 			final Collection bindings = node.getBindings();
 			if (bindings.isEmpty()) {
@@ -1321,6 +1467,21 @@ public class DataBinder {
 			}
 			final Object nodebean = getBeanWithExpression(comp, node.getPath());
 			return Objects.equals(nodebean, bean);
+		}
+		private class Dual {
+			private Component _comp;
+			private Binding _binding;
+			public Dual(Component comp, Binding binding) {
+				_comp = comp;
+				_binding = binding;
+			}
+			public int hashCode() {
+				return (_comp == null ? 0 : _comp.hashCode()) ^ (_binding == null ? 0 : _binding.hashCode());
+			}
+			public boolean equals(Object other) {
+				final Dual o = (Dual) other;
+				return o._comp == _comp && o._binding == _binding;
+			}
 		}
 	}
 }

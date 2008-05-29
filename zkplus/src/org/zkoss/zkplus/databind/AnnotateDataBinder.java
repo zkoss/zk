@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.Annotation; 
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -69,11 +70,11 @@ import java.util.Iterator;
  * real bean object or you can neglect it and this DataBinder would try to find it from the variables map via
  * ({@link org.zkoss.zk.ui.Component#getVariable} method. That is, all those variables defined in zscript are 
  * accessible by this DataBinder. Note that you can choose either two formats of annotations as your will and you 
- * can even hybrid them together though it is generaly not a good practice.</p>
+ * can even hybrid them together though it is not generally a good practice.</p>
  *
  * <p>The tag:expression or tag='expression' is a generic form to bind more metainfo to the attrY of the componentX. 
- * The currently supported tag includes "load-when", "save-when", "access", and "converter"</p>
- *
+ * The currently supported tags includes "load-when", "save-when", "access", and "converter".</p>
+ * 
  * <ul>
  * <li>load-when. You can specify the events concerned when to load the attribute of the component from the bean.
  * Multiple definition is allowed and would be called one by one.
@@ -151,6 +152,26 @@ import java.util.Iterator;
  * &lt;textbox id="firstName" value="@{person.firstName, save-when=''}"/>
  * </pre>
  * </li>
+ *
+ * <p>Since 3.1, if you specify some tags other than the supported tags, they will be put into an argument Map 
+ * and is stored as a component attribute "bindingArgs". e.g. Also from 3.1, we start to support the "distinct" 
+ * concept for collection components with "model" attribute(i.e. Grid, Listbox, Comobobox, etc.). You can
+ * specify as follows to tell the Data Binder that there might be one same object in multiple entries.</p>
+ * <pre><code>
+ * &lt;grid model="@{persons, distinct=false}" ...>
+ *    ...
+ * &lt;/grid>
+ * </code></pre>
+ * <p>or</p>
+ * <pre><code>
+ * &lt;a:bind model="persons; distinct:false"/>
+ * &lt;grid ...>
+ *    ...
+ * &lt;/grid>
+ * </code></pre>
+ * <p>The default value for distinct is "true". However, if you specify distinct=false, the Data Binder will 
+ * scan the whole ListModel to find out all items with the specified objects (thus worse performance if a 
+ * big ListModel).</p>
  *
  * <p>Since 3.0.0, DataBinder supports validation phase before doing a save. Note that a DataBinder "save" is triggered by
  * a component event as specified on the "save-when" tag. Before doing a save, it first fires an onBindingSave event to each 
@@ -311,10 +332,10 @@ public class AnnotateDataBinder extends DataBinder {
 		final List props = compCtrl.getAnnotatedPropertiesBy(annotName);
 		for (final Iterator it = props.iterator(); it.hasNext(); ) {
 			final String propName = (String) it.next();
-			//[0] value, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter
+			//[0] value, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter, [5] args
 			final Object[] objs = loadPropertyAnnotation(comp, propName, annotName);
 			addBinding(comp, propName, (String) objs[0], 
-					(List) objs[1], (List) objs[2], (String) objs[3], (String) objs[4]);
+					(List) objs[1], (List) objs[2], (String) objs[3], (String) objs[4], (Map) objs[5]);
 		}
 	}
 	
@@ -346,6 +367,7 @@ public class AnnotateDataBinder extends DataBinder {
 				List saveWhenEvents = null;
 				String access = null;
 				String converter = null;
+				Map args = null;
 				
 				//process tags
 				for(int j = 1; j < expr.size(); ++j) {
@@ -369,6 +391,11 @@ public class AnnotateDataBinder extends DataBinder {
 						access = tags.size() > 1 ? (String) tags.get(1) : NULLIFY;
 					} else if ("converter".equals(tags.get(0))) {
 						converter = tags.size() > 1 ? (String) tags.get(1) : NULLIFY;
+					} else {
+						if (args == null) {
+							args = new HashMap(1);
+						}
+						args.put(tags.get(0), tags.get(1));
 					}
 				}
 				
@@ -379,7 +406,7 @@ public class AnnotateDataBinder extends DataBinder {
 					saveWhenEvents = null;
 				}
 				
-				addBinding(comp, attr, (String) expr.get(0), loadWhenEvents, saveWhenEvents, access, converter);
+				addBinding(comp, attr, (String) expr.get(0), loadWhenEvents, saveWhenEvents, access, converter, args);
 			}
 		}
 	}

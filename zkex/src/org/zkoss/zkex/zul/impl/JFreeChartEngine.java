@@ -22,14 +22,12 @@ import org.zkoss.zul.*;
 import org.zkoss.zul.GanttModel.GanttTask;
 import org.zkoss.zul.WaferMapModel.IntPair;
 import org.zkoss.zul.impl.ChartEngine;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.image.AImage;
 import org.zkoss.util.TimeZones;
-import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 
 import org.jfree.chart.*;
+import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.encoders.*;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.*;
@@ -45,7 +43,9 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.util.TableOrder;
 
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Date;
@@ -53,13 +53,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
 import java.util.TimeZone;
-import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
 import java.awt.Paint;
 import java.awt.Color;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 
@@ -129,9 +125,7 @@ import java.util.Iterator;
 public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	//as long as the series name is not set
 	private static final String DEFAULT_HI_LO_SERIES = "High Low Data";
-	
-	private static final MessageFormat _formater = 
-		new MessageFormat("{2,number,0.00%}, {0,date,yyyy MMM dd} ~ {1,date,yyyy MMM dd}");
+	private static final SimpleDateFormat _dateFormat = new SimpleDateFormat();
 	
 	//caching chartImpl if type and 3d are the same 
 	private transient boolean _threeD; 
@@ -177,10 +171,17 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		else if (Chart.SCATTER.equals(chart.getType()))
 			_chartImpl = new Scatter();
 
-		else if (Chart.TIME_SERIES.equals(chart.getType()))
+		else if (Chart.TIME_SERIES.equals(chart.getType())) {
 			_chartImpl = new TimeSeries();
+			final TimeZone tz = chart.getTimeZone();
+			if (tz != null) {
+				_dateFormat.setTimeZone(tz);
+			}
+			if (chart.getDateFormat() != null) {
+				_dateFormat.applyPattern(chart.getDateFormat());
+			}
 
-		else if (Chart.STEP_AREA.equals(chart.getType()))
+		} else if (Chart.STEP_AREA.equals(chart.getType()))
 			_chartImpl = new StepArea();
 
 		else if (Chart.STEP.equals(chart.getType()))
@@ -189,25 +190,54 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		else if (Chart.HISTOGRAM.equals(chart.getType()))			
 			_chartImpl = new Histogram();
 
-		else if (Chart.CANDLESTICK.equals(chart.getType()))			
+		else if (Chart.CANDLESTICK.equals(chart.getType())) {			
 			_chartImpl = new Candlestick();
+			final TimeZone tz = chart.getTimeZone();
+			if (tz != null) {
+				_dateFormat.setTimeZone(tz);
+			}
+			if (chart.getDateFormat() != null) {
+				_dateFormat.applyPattern(chart.getDateFormat());
+			}
 
-		else if (Chart.HIGHLOW.equals(chart.getType()))			
+		} else if (Chart.HIGHLOW.equals(chart.getType())) {			
 			_chartImpl = new Highlow();
-			
-		else if (Chart.BUBBLE.equals(chart.getType()))
+			final TimeZone tz = chart.getTimeZone();
+			if (tz != null) {
+				_dateFormat.setTimeZone(tz);
+			}
+			if (chart.getDateFormat() != null) {
+				_dateFormat.applyPattern(chart.getDateFormat());
+			}
+
+		} else if (Chart.BUBBLE.equals(chart.getType()))
 			_chartImpl = new Bubble();
 			
 		else if (Chart.WAFERMAP.equals(chart.getType()))
 			_chartImpl = new Wafermap();
 			
-		else if (Chart.GANTT.equals(chart.getType()))
+		else if (Chart.GANTT.equals(chart.getType())) {
 			_chartImpl = new Gantt();
-		
-		else if (Chart.WIND.equals(chart.getType()))
+			final TimeZone tz = chart.getTimeZone();
+			if (tz != null) {
+				_dateFormat.setTimeZone(tz);
+			}
+			if (chart.getDateFormat() == null) {
+				_dateFormat.applyPattern("MMM d ''yy");
+			} else {
+				_dateFormat.applyPattern(chart.getDateFormat());
+			}
+
+		} else if (Chart.WIND.equals(chart.getType())) {
 			_chartImpl = new Wind();
-		
-		else 
+			final TimeZone tz = chart.getTimeZone();
+			if (tz != null) {
+				_dateFormat.setTimeZone(tz);
+			}
+			if (chart.getDateFormat() != null) {
+				_dateFormat.applyPattern(chart.getDateFormat());
+			}
+		} else 
 			throw new UiException("Unsupported chart type yet: "+chart.getType());
 
 		_threeD = chart.isThreeD();
@@ -702,12 +732,15 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 * decode XYItemEntity into key-value pair of Area's componentScope.
 	 * @param area the Area where the final attribute is set
 	 * @param info the XYItemEntity to be decoded.
+	 * @param chart TODO
 	 */
-	private void decodeXYInfo(Area area, XYItemEntity info) {
+	private void decodeXYInfo(Area area, XYItemEntity info, Chart chart) {
 		if (info == null) {
 			return;
 		}
-		
+		TimeZone tz = chart.getTimeZone();
+		if (tz == null) tz = TimeZones.getCurrent();
+
 		XYDataset dataset = info.getDataset();
 		int si = info.getSeriesIndex();
 		int ii = info.getItem();
@@ -819,7 +852,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity) info);
+				decodeXYInfo(area, (XYItemEntity) info, chart);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
 				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
@@ -893,7 +926,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity) info);
+				decodeXYInfo(area, (XYItemEntity) info, chart);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
 				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
@@ -948,7 +981,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity) info);
+				decodeXYInfo(area, (XYItemEntity) info, chart);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
 				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
@@ -1080,7 +1113,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeCategoryInfo(area, (CategoryItemEntity)info);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity) info);
+				decodeXYInfo(area, (XYItemEntity) info, chart);
 			} else if (info instanceof TickLabelEntity) {
 				area.setAttribute("entity", "CATEGORY");
 				Integer seq = (Integer)chart.getAttribute("TICK_SEQ");
@@ -1203,7 +1236,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity)info);
+				decodeXYInfo(area, (XYItemEntity)info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1238,7 +1271,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity) info);
+				decodeXYInfo(area, (XYItemEntity) info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1251,13 +1284,27 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			if (!(model instanceof XYModel)) {
 				throw new UiException("model must be a org.zkoss.zul.XYModel");
 			}
-			return ChartFactory.createTimeSeriesChart(
+			final JFreeChart jchart = ChartFactory.createTimeSeriesChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
 				XYModelToTimeDataset((XYModel)model, chart),
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
+			setupDateAxis(jchart, chart);
+			return jchart;
+		}
+	}
+	
+	private void setupDateAxis(JFreeChart jchart, Chart chart) {
+		final Plot plot = jchart.getPlot();
+		final DateAxis axisX = (DateAxis) ((XYPlot)plot).getDomainAxis();
+		final TimeZone zone = chart.getTimeZone();
+		if (zone != null) {
+			axisX.setTimeZone(zone);
+		}
+		if (chart.getDateFormat() != null) {
+			axisX.setDateFormatOverride(_dateFormat);
 		}
 	}
 
@@ -1272,7 +1319,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity)info);
+				decodeXYInfo(area, (XYItemEntity)info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1307,7 +1354,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity)info);
+				decodeXYInfo(area, (XYItemEntity)info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1342,7 +1389,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity)info);
+				decodeXYInfo(area, (XYItemEntity)info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1377,7 +1424,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity)info);
+				decodeXYInfo(area, (XYItemEntity)info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1390,12 +1437,14 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			if (!(model instanceof HiLoModel)) {
 				throw new UiException("model must be a org.zkoss.zul.HiLoModel");
 			}
-			return ChartFactory.createCandlestickChart(
+			final JFreeChart jchart = ChartFactory.createCandlestickChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
 				HiLoModelToOHLCDataset((HiLoModel)model),
 				chart.isShowLegend());
+			setupDateAxis(jchart, chart);
+			return jchart;
 		}
 	}
 
@@ -1410,7 +1459,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity)info);
+				decodeXYInfo(area, (XYItemEntity)info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1423,12 +1472,14 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			if (!(model instanceof HiLoModel)) {
 				throw new UiException("model must be a org.zkoss.zul.HiLoModel");
 			}
-			return ChartFactory.createHighLowChart(
+			final JFreeChart jchart = ChartFactory.createHighLowChart(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
 				HiLoModelToOHLCDataset((HiLoModel)model),
 				chart.isShowLegend());
+			setupDateAxis(jchart, chart);
+			return jchart;
 		}
 	}
 
@@ -1445,7 +1496,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity)info);
+				decodeXYInfo(area, (XYItemEntity)info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1483,7 +1534,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				decodeLegendInfo(area, (LegendItemEntity)info, chart);
 			} else if (info instanceof XYItemEntity) {
 				area.setAttribute("entity", "DATA");
-				decodeXYInfo(area, (XYItemEntity)info);
+				decodeXYInfo(area, (XYItemEntity)info, chart);
 			} else {
 				area.setAttribute("entity", "TITLE");
 				if (chart.isShowTooltiptext()) {
@@ -1551,7 +1602,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				area.setAttribute("entity", "DATA");
 				decodeCategoryInfo(area, (CategoryItemEntity) info);
 				if (chart.isShowTooltiptext()) {
-					area.setTooltiptext(ganttTootip(area));
+					area.setTooltiptext(ganttTooltip(chart, area));
 				}
 			} else {
 				area.setAttribute("entity", "TITLE");
@@ -1573,14 +1624,26 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
 		}
-		private String ganttTootip(Area area) {
+		private String ganttTooltip(Chart chart, Area area) {
 			final long start = ((Number)area.getAttribute("start")).longValue();
 			final Date startDate = new Date(start);  
 			final long end = ((Number)area.getAttribute("end")).longValue();
 			final Date endDate = new Date(end);
 			final Number percent = ((Number)area.getAttribute("percent"));
-			return _formater.format(new Object[] {startDate, endDate, percent});
+			return getGanttTaskTooltip(startDate, endDate, percent);
 		}
+	}
+	
+	/**
+	 * Returns data tooltiptext of the GanttTask.
+	 * @param start the starting date
+	 * @param end the ending date
+	 * @param percent the complete percentage
+	 * @return data tooltiptext of the GanttTask.
+	 */
+	protected String getGanttTaskTooltip(Date start, Date end, Number percent) {
+		return new MessageFormat("{2,number,0.0%}, {0} ~ {1}")
+			.format(new Object[] {_dateFormat.format(start), _dateFormat.format(end), percent});
 	}
 
 	/** wind 
@@ -1607,13 +1670,15 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			if (!(model instanceof XYZModel)) {
 				throw new UiException("model must be a org.zkoss.zul.XYZModel");
 			}
-			return ChartFactory.createWindPlot(
+			final JFreeChart jchart = ChartFactory.createWindPlot(
 				chart.getTitle(),
 				chart.getXAxis(),
 				chart.getYAxis(),
 				XYZModelToWindDataset((XYZModel)model),
 				chart.isShowLegend(), 
 				chart.isShowTooltiptext(), true);
+			setupDateAxis(jchart, chart);
+			return jchart;
 		}
 	}
 

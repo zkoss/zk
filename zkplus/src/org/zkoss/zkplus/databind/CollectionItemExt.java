@@ -31,16 +31,16 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  * @see CollectionItem
  * @see DataBinder
- * @since 3.0.4
+ * @since 3.0.6
  */
-public interface CollectionItemEx extends CollectionItem {
+public interface CollectionItemExt extends CollectionItem {
 	/**
 	 * <p>
 	 * Returns all children items of the given Collection owner such as <i>Grid</i>.
 	 * </p>
 	 * @param owner Collection owner component such as <i>Grid</i>.
 	 * @return children items of the given Collection owner.
-	 * @since 3.0.4 
+	 * @since 3.0.6 
 	 */
 	public List getItems(Component owner);
 }

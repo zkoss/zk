@@ -62,6 +62,7 @@ public class Binding {
 	private boolean _savable;
 	private TypeConverter _converter;
 	private String[] _paths; //bean reference path (a.b.c)
+	private Map _args; //generic arguments
 	
 	/** Constrcutor to form a binding between UI component and backend data bean.
 	 * @param binder the associated Data Binder.
@@ -78,6 +79,26 @@ public class Binding {
 	 */
 	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
 		LinkedHashSet loadWhenEvents, Set saveWhenEvents, String access, String converter) {
+		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null);
+	}
+	
+	/** Constrcutor to form a binding between UI component and backend data bean.
+	 * @param binder the associated Data Binder.
+	 * @param comp The concerned component
+	 * @param attr The component attribute
+	 * @param expr The bean expression.
+	 * @param loadWhenEvents The event set when to load data.
+	 * @param saveWhenEvents The event set when to save data.
+	 * @param access In the view of UI component: "load" load only, "both" load/save, 
+	 *	"save" save only when doing data binding. null means using the default access 
+	 *	natural of the component. e.g. Label.expr is "load", but Textbox.expr is "both".
+	 * @param converter The converter class used to convert classes between component attribute 
+	 * and the associated bean expression. null means using the default class conversion method.
+	 * @param args generic arguments
+	 * @since 3.1
+	 */
+	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
+		LinkedHashSet loadWhenEvents, Set saveWhenEvents, String access, String converter, Map args) {
 		_binder = binder;
 		_comp = comp;
 		setAttr(attr);
@@ -86,7 +107,7 @@ public class Binding {
 		setSaveWhenEvents(saveWhenEvents);
 		setAccess(access);
 		setConverter(converter);
-		
+		setArgs(args);
 	}
 
 	/** Gets the associated Data Binder of this Binding.
@@ -112,6 +133,17 @@ public class Binding {
 	 */
 	public String getAttr() {
 		return _attr;
+	}
+	
+	/*package*/void setArgs(Map args) {
+		_args = args;
+	}
+	
+	/** Get generic arguments.
+	 * 
+	 */
+	public Map getArgs() {
+		return _args;
 	}
 	
 	/** Set bean expression (a.b.c).
@@ -247,6 +279,9 @@ public class Binding {
 	
 	private void myLoadAttribute(Component comp, Object bean) {
 		try {
+			//since 3.1, 20080416, support bindingArgs for non-supported tag
+			comp.setAttribute(DataBinder.ARGS, _args);
+			
 			if (_converter != null) {
 				bean = _converter.coerceToUi(bean, comp);
 			}
@@ -530,8 +565,8 @@ public class Binding {
 					final Component owner = (Component) it.next();
 					final CollectionItem decor = binder.getCollectionItemByOwner(owner);
 					//backward compatible, CollectionItemEx.getItems() is faster
-					if (decor instanceof CollectionItemEx) {
-						final CollectionItemEx decorex = (CollectionItemEx) decor;
+					if (decor instanceof CollectionItemExt) {
+						final CollectionItemExt decorex = (CollectionItemExt) decor;
 						for (final Iterator iti = decorex.getItems(owner).iterator(); iti.hasNext();) {
 							final Component item = (Component) iti.next();
 							kidowners.add(DataBinder.lookupClone(item, comp));

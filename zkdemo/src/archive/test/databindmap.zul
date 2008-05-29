@@ -1,0 +1,10 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
+<window id="mainwin">
+<zscript>
+	Map mymap = new HashMap();
+	mymap.put("firstName", "Henri");
+	mymap.put("lastName", "Chen");
+</zscript>
+	<label value="@{mymap.firstName}"/>
+	<label value="@{mymap.lastName}"/>
+</window>
