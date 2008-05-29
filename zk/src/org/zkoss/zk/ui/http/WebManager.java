@@ -104,12 +104,37 @@ public class WebManager {
 		_ctx = ctx;
 		_updateURI = updateURI;
 
+		//load config as soon as possible since it might set some system props
+		final Configuration config = new Configuration();
+		try {
+			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
+			if (cfgUrl != null)
+				new ConfigParser()
+					.parse(cfgUrl, config, new ServletContextLocator(_ctx));
+		} catch (Throwable ex) {
+			log.error("Unable to load /WEB-INF/zk.xml", ex);
+		}
+
 		Labels.register(new ServletLabelLocator(_ctx));
 		Labels.setVariableResolver(new ServletLabelResovler());
 
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
 		_cwr.setCompress(new String[] {"js", "css"});
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
+		_cwr.setDebugJS(config.isDebugJS());
+
+		//create a WebApp instance
+		final Class cls = config.getWebAppClass();
+		if (cls == null) {
+			_wapp = new SimpleWebApp();
+		} else {
+			try {
+				_wapp = (WebApp)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
+		((WebAppCtrl)_wapp).init(_ctx, config);
 
 		//Register resource processors for each extension
 		//FUTURE: Extendlet can be specified in zk.xml
@@ -127,23 +152,6 @@ public class WebManager {
 			}
 		}
 
-		final Configuration config = new Configuration();
-		try {
-			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
-			if (cfgUrl != null)
-				new ConfigParser()
-					.parse(cfgUrl, config, new ServletContextLocator(_ctx));
-		} catch (Throwable ex) {
-			log.error("Unable to load /WEB-INF/zk.xml", ex);
-		}
-
-		//create a WebApp instance
-		_wapp = newWebApp(config);
-		((WebAppCtrl)_wapp).init(_ctx, config);
-		_cwr.setDebugJS(config.isDebugJS());
-			//Note: when ConfigParser ran, WebApp is not assigned to
-			//Configuration yet (so we have to setDebugJS here)
-
 		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
 			for (Iterator it = listeners.iterator(); it.hasNext();) {
@@ -154,18 +162,6 @@ public class WebManager {
 				} catch (Throwable ex) {
 					log.realCause(ex);
 				}
-			}
-		}
-	}
-	private static WebApp newWebApp(Configuration config) {
-		Class cls = config.getWebAppClass();
-		if (cls == null) {
-			return new SimpleWebApp();
-		} else {
-			try {
-				return (WebApp)cls.newInstance();
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}
 		}
 	}
@@ -189,22 +185,6 @@ public class WebManager {
 	}
 
 	//-- static --//
-	/** Initializes the request-local storage that is used to lift the limitation
-	 * of incapability of inter-portlet communication.
-	 *
-	 * <p>In other words, {@link #getRequestLocal} will look for this storage
-	 * in addition to request's attributes.
-	 */
-/* deprecated (reason: multi-desktop per HTML page is allowed)
-	static void initRequestLocal() {
-		_reqLocal.set(new HashMap());
-	}*/
-	/** Cleans up the request-local storage set by {@link #initRequestLocal}.
-	 */
-/* deprecated
-	static void cleanRequestLocal() {
-		_reqLocal.set(null);
-	}*/
 	/** Returns the value of the specified attribute in the request.
 	 * The implementation shall use this method instead of request.getAttribute,
 	 * since it resolves the limitation of incapability of inter-portlet
@@ -214,13 +194,6 @@ public class WebManager {
 	 */
 	public static Object getRequestLocal(ServletRequest request, String name) {
 		return request.getAttribute(name);
-/* deprecated
-		final Object o = request.getAttribute(name);
-		if (o != null) return o;
-
-		final Map local = (Map)_reqLocal.get();
-		return local != null ? local.get(name): null;
-*/
 	}
 	/** Sets the value of the specified attribute in the request.
 	 * The implementation shall use this method instead of request.setAttribute,
@@ -232,10 +205,6 @@ public class WebManager {
 	public static
 	void setRequestLocal(ServletRequest request, String name, Object value) {
 		request.setAttribute(name, value);
-/* deprecated
-		final Map local = (Map)_reqLocal.get();
-		if (local != null) local.put(name, value);
-*/
 	}
 
 	/** Register a listener to the specified context such that

@@ -31,11 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.D;
-import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
-import org.zkoss.util.resource.Loader;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
@@ -59,10 +57,12 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
-		_cache = new ResourceCache(new DSPLoader(), 131);
+		final DspLoader loader = new DspLoader();
+		_cache = new ResourceCache(loader, 131);
 		_cache.setMaxSize(1024);
 		_cache.setLifetime(60*60*1000); //1hr
-		_cache.setCheckPeriod(60*60*1000); //1hr
+		final int checkPeriod = loader.getCheckPeriod();
+		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
 	}
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
@@ -122,44 +122,20 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 	}
 
 	/** Helper class. */
-	private class DSPLoader implements Loader {
-		private DSPLoader() {
+	private class DspLoader extends ExtendletLoader {
+		private DspLoader() {
 		}
 
 		//-- super --//
-		public boolean shallCheck(Object src, long expiredMillis) {
-			return expiredMillis > 0;
-		}
-		/** Returns the last modified time.
-		 */
-		public long getLastModified(Object src) {
-			return 1; //any value (because it is packed in jar)
-		}
-		public Object load(Object src) throws Exception {
-//			if (D.ON && log.debugable()) log.debug("Parse "+src);
-			final String path = (String)src;
-			final InputStream is = _webctx.getResourceAsStream(path);
-			if (is == null)
-				return null;
-
-			try {
-				return parse0(is, Interpreter.getContentType(path));
-			} catch (Exception ex) {
-				if (log.debugable())
-					log.realCauseBriefly("Failed to parse "+path, ex);
-				else
-					log.error("Failed to parse "+path
-					+"\nCause: "+ex.getClass().getName()+" "+Exceptions.getMessage(ex)
-					+"\n"+Exceptions.getBriefStackTrace(ex));
-				return null; //as non-existent
-			}
-		}
-		private Object parse0(InputStream is, String ctype) throws Exception {
+		protected Object parse(InputStream is, String path) throws Exception {
 			final String content =
-				Files.readAll(new InputStreamReader(is, "UTF-8"))
-				.toString();
+				Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
 			return new Interpreter()
-				.parse(content, ctype, null, _webctx.getLocator());
+				.parse(content, Interpreter.getContentType(path),
+					null, _webctx.getLocator());
+		}
+		protected ExtendletContext getExtendletContext() {
+			return _webctx;
 		}
 	}
 }

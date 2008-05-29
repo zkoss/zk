@@ -126,6 +126,7 @@ public class ConfigParser {
 			//	desktop-timeout
 			//  disable-theme-uri
 			//	file-check-period
+			//	extendlet-check-period
 			//	theme-provider-class
 			//	theme-uri
 				parseDesktopConfig(config, el);
@@ -345,6 +346,11 @@ public class ConfigParser {
 			System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
 			//System-wide property
 
+		//extendlet-check-period
+		v = parseInteger(conf, "extendlet-check-period", true);
+		if (v != null)
+			System.setProperty("org.zkoss.util.resource.extendlet.checkPeriod", v.toString());
+			//System-wide property
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {

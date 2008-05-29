@@ -73,7 +73,7 @@ public class ResourceCache extends CacheMap {
 			final Integer v = Integer.getInteger(ATTR);
 			if (v != null) {
 				final int i = v.intValue();
-				if (i > 0) return i * 1000;
+				if (i >= 0) return i * 1000;
 			}
 		} catch (Throwable t) {
 			log.warning("Failed to parse "+System.getProperty(ATTR));
@@ -87,7 +87,7 @@ public class ResourceCache extends CacheMap {
 		return _loader;
 	}
 	/** Returns how often to check (unit=milliseconds).
-	 * <p>Default: 300000
+	 * <p>Default: 5000
 	 */
 	public int getCheckPeriod() {
 		return _checkPeriod;
