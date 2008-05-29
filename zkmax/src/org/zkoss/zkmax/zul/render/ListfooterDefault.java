@@ -6,10 +6,10 @@
 	Description:
 		
 	History:
-		Thu Sep 6 2007, Created by Jeff.Liu
+		2008/5/26 11:23:09 , Created by robbiecheng
 }}IS_NOTE
 
-Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -30,8 +30,8 @@ import org.zkoss.zul.Listfooter;
 
 /**
  * {@link Listfooter}'s default mold.
- * @author Jeff Liu
- * @since 3.0.0
+ * @author robbiecheng
+ * @since 3.1.0
  */
 public class ListfooterDefault implements ComponentRenderer {
 

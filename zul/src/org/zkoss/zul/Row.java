@@ -202,6 +202,7 @@ public class Row extends XulElement {
 	 * @since 3.1.0
 	 */
 	public Group getGroup() {
+		if (this instanceof Group) return (Group)this;
 		final Rows rows = (Rows) getParent();
 		return (rows != null) ? rows.getGroupAtIndex(getIndex()) : null;
 	}
