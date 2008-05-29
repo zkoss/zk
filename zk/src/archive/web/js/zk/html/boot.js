@@ -41,7 +41,7 @@ if (!window.Boot_progressbox) { //not customized
 
 		var html = '<div id="'+id+'"';
 		var ix = zk.innerX(), iy = zk.innerY();
-		if (mask || zk.loading && !zk._prgsOnce) {
+		if (mask || (zk.loading && !zk._prgsOnce)) {
 			zk._prgsOnce = true; //do it only once
 			html += '><div id="zk_mask" class="modal_mask" style="display:block;left:'+ ix + 'px;top:' + iy +	
 				'px;" z.x="' + ix + '" z.y="' + iy + '"></div><div';
