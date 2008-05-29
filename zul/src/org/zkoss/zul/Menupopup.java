@@ -85,7 +85,10 @@ public class Menupopup extends Popup {
 
 		appendAsapAttr(sb, Events.ON_OPEN);
 		if (typeRequired())
-			sb.append(" z.type=\"zul.menu.Mpop\"");
+			if ("v30".equals(getMold())) 
+				sb.append(" z.type=\"zul.menu.Mpop\"");
+			else
+				sb.append(" z.type=\"zul.menu2.Mpop2\"");
 			//to minimize HTML's size, generate z.type only if necessary
 		return sb.toString();
 	}
