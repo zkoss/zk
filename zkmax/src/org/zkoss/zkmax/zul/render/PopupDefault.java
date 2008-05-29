@@ -26,16 +26,25 @@ import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Popup;
 
+/** 
+ * {@link Popup}'s default mold.
+ * @author Jeff Liu
+ * @since 3.0.0
+ */
 public class PopupDefault implements ComponentRenderer {
 
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Popup self = (Popup)comp;
-		wh.write("<div id=\"").write(self.getUuid())
-			.write("\" z.type=\"zul.widget.Pop\"")
+		final String uuid = self.getUuid();
+		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Pop\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
+			.write("<div class=\"z-pp-tl\"><div class=\"z-pp-tr\"><div class=\"z-pp-tm\"></div></div></div>")
+			.write("<div id=\"").write(uuid).write("!bwrap\" class=\"z-pp-bwrap\"><div class=\"z-pp-cl\">")
+			.write("<div class=\"z-pp-cr\"><div class=\"z-pp-cm\"><div id=\"")
+			.write(uuid).write("!cave\" class=\"z-pp-body\">")
 			.writeChildren(self)
-			.write("</div>");
+			.write("</div></div></div></div><div class=\"z-pp-bl\"><div class=\"z-pp-br\">")
+			.write("<div class=\"z-pp-bm\"></div></div></div></div></div>");
 	}
-	
 }

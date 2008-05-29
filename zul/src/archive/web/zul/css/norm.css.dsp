@@ -1189,16 +1189,16 @@ li.z-menu-item-over {
 	background: transparent url(${c:encodeURL('~./zul/img/menu/unchecked.gif')}) no-repeat center;
 }
 <%-- Menu - v30 look-and-feel --%>
-div.menubar, div.menupopup, div.ctxpopup {
+div.menubar, div.menupopup {
 	cursor: pointer; background: #e9effa; padding: 1px;
 }
-div.menupopup, div.ctxpopup {
+div.menupopup {
 	background: #f0f5ff;
 }
 div.menubar {
 	border: 1px solid #919397;
 }
-div.menupopup, div.ctxpopup {
+div.menupopup {
 	display: block; position: absolute; z-index: 88000;
 	border: 1px outset;
 }
@@ -1262,7 +1262,49 @@ div.comboboxpp {
 .comboboxpp td span {<%--description--%>
 	color: #888; font-size: xx-small; padding-left: 6px;
 }
-
+<%-- ZK Popup --%>
+.ctxpopup {
+	position: absolute; top: 0; left: 0; visibility: hidden; z-index: 88000; border: 0 none;
+}
+.ctxpopup .z-pp-tm {
+	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-tb.gif')}) repeat-x 0 0;
+	overflow: hidden; zoom: 1; font-size: 0; line-height: 0; height: 8px;
+}
+.ctxpopup .z-pp-tl {
+	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')}) no-repeat 0 0;
+	padding-left: 8px; overflow: hidden; zoom: 1;
+}
+.ctxpopup .z-pp-tr {
+	background:transparent url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')}) no-repeat right -8px;
+	overflow: hidden; zoom: 1; padding-right: 8px;
+}
+.ctxpopup .z-pp-cm {
+	background: #EEEEEE url(${c:encodeURL('~./zul/img/popup/pp-tb.gif')}) repeat-x 0 -16px;
+	padding:4px 10px; overflow: hidden; zoom: 1;
+}
+.ctxpopup .z-pp-cl {
+	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-l.gif')}) repeat-y 0;
+	padding-left: 4px; overflow: hidden; zoom: 1;
+}
+.ctxpopup .z-pp-cr {
+	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-r.gif')}) repeat-y right;
+	padding-right: 4px; overflow: hidden; zoom: 1;
+}
+.ctxpopup .z-pp-bm {
+	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-tb.gif')}) repeat-x 0 -8px;
+	height: 8px; overflow: hidden; zoom: 1;
+}
+.ctxpopup .z-pp-bl {
+	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')}) no-repeat 0 -16px;
+	zoom: 1; padding-left: 8px;
+}
+.ctxpopup .z-pp-br {
+	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')}) no-repeat right -24px;
+	zoom:1; padding-right: 8px;
+}
+.ctxpopup .z-pp-body {
+	margin: 0 !important; line-height: 14px; color: #444; padding: 0;
+}
 <%-- ZK error message box --%>
 div.errbox {
 	margin: 0; padding: 1px; border: 1px outset; cursor: pointer;

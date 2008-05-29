@@ -644,39 +644,58 @@ zkPg.go = function (anc, pgno) {
 };
 
 //popup//
-zkPop = {};
-
-/** Called by au.js's context menu. */
-zkPop.context = function (ctx, ref) {	
-	zk.show(ctx); //onVisiAt is called in zk.show
-	var asap= zkau.asap(ctx, "onOpen");	
-	if (asap) {
-		//use a progress bar to hide the popup
-		var mask = zk.applyMask(ctx.id, "");
-		//register addOnReponse to remove the progress bar after receiving the response from server
-		zkau.addOnResponse("zk.remove($e('"+mask.id+"'))");		
-	}		
-	zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
-	zkau.hideCovered();
-
-	if (asap)
-		zkau.send({uuid: ctx.id, cmd: "onOpen",
-			data: ref ? [true, ref.id]: [true]});
+zkPop = {
+	/** Called by au.js's context menu. */
+	context: function (ctx, ref) {	
+		zk.show(ctx); //onVisiAt is called in zk.show
+		var asap= zkau.asap(ctx, "onOpen");	
+		if (asap) {
+			//use a progress bar to hide the popup
+			var mask = zk.applyMask(ctx.id, "");
+			//register addOnReponse to remove the progress bar after receiving the response from server
+			zkau.addOnResponse("zk.remove($e('"+mask.id+"'))");		
+		}		
+		zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
+		zkau.hideCovered();
+		if (zk.ie6Only) {
+			if (!ctx._lining)
+				ctx._lining = zk.createLining(ctx);
+			else {
+				ctx._lining.style.top = ctx.style.top;
+				ctx._lining.style.left = ctx.style.left;
+				ctx._lining.style.display = "block";
+			}
+		}
+		
+		ctx.style.visibility = "visible";
+		if (asap)
+			zkau.send({uuid: ctx.id, cmd: "onOpen",
+				data: ref ? [true, ref.id]: [true]});
+	},
+	close: function (ctx) {
+		zkPop._pop.removeFloatId(ctx.id);
+		zkPop._close(ctx);
+			
+		rmZKAttr(ctx, "owner"); //it is set by au.js after calling zkPop.context
+	},
+	_close: function (ctx) {
+		ctx.style.display = "none";
+		
+		if (ctx._lining)
+			ctx._lining.style.display = "none";
+			
+		zk.unsetVParent(ctx);
+		zkau.hideCovered();
+	
+		if (zkau.asap(ctx, "onOpen"))
+			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [false]});
+	},
+	cleanup: function (ctx) {
+		if (ctx._lining)
+			zk.remove(ctx._lining);
+		ctx._lining = null;
+	}
 };
-zkPop.close = function (ctx) {
-	zkPop._pop.removeFloatId(ctx.id);
-	zkPop._close(ctx);
-	rmZKAttr(ctx, "owner"); //it is set by au.js after calling zkPop.context
-};
-zkPop._close = function (ctx) {
-	ctx.style.display = "none";
-	zk.unsetVParent(ctx);
-	zkau.hideCovered();
-
-	if (zkau.asap(ctx, "onOpen"))
-		zkau.send({uuid: ctx.id, cmd: "onOpen", data: [false]});
-};
-
 zk.Popup = Class.create();
 Object.extend(Object.extend(zk.Popup.prototype, zk.Floats.prototype), {
 	_close: function (el) {
