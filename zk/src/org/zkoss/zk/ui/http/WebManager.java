@@ -118,11 +118,6 @@ public class WebManager {
 		Labels.register(new ServletLabelLocator(_ctx));
 		Labels.setVariableResolver(new ServletLabelResovler());
 
-		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
-		_cwr.setCompress(new String[] {"js", "css"});
-		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
-		_cwr.setDebugJS(config.isDebugJS());
-
 		//create a WebApp instance
 		final Class cls = config.getWebAppClass();
 		if (cls == null) {
@@ -135,6 +130,11 @@ public class WebManager {
 			}
 		}
 		((WebAppCtrl)_wapp).init(_ctx, config);
+
+		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
+		_cwr.setCompress(new String[] {"js", "css"});
+		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
+		_cwr.setDebugJS(config.isDebugJS());
 
 		//Register resource processors for each extension
 		//FUTURE: Extendlet can be specified in zk.xml
