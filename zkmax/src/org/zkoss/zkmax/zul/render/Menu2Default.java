@@ -50,7 +50,7 @@ public class Menu2Default implements ComponentRenderer {
 					wh.write("-text");
 				wh.write("-icon");
 			}
-			wh.write("\" style=\"width: auto;\"><tbody><tr class=\"z-menu-btn\"><td class=\"z-btn-l\"><i></i></td>");
+			wh.write("\" style=\"width: auto;\"><tbody><tr class=\"z-menu-btn\"><td class=\"z-btn-l\"><i>&nbsp;</i></td>");
 			String imagesrc;
 			if (self.getImageContent() != null)
 				imagesrc = "background-image:url(" + self.getContentSrc() + ")";
@@ -64,7 +64,7 @@ public class Menu2Default implements ComponentRenderer {
 				.write(uuid).write("!b\" type=\"button\" class=\"z-btn-text\" style=\"")
 				.write(imagesrc).write("\">");
 			new Out(self.getLabel()).render(out);
-			wh.write("</button>").write(self.getMenupopup()).writeln("</em></td><td class=\"z-btn-r\"><i></i></td></tr></tbody></table></td>");
+			wh.write("</button>").write(self.getMenupopup()).writeln("</em></td><td class=\"z-btn-r\"><i>&nbsp;</i></td></tr></tbody></table></td>");
 		} else {
 			wh.write("<li id=\"").write(uuid).write("\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())

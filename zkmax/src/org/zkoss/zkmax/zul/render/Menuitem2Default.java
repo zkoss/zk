@@ -60,7 +60,7 @@ public class Menuitem2Default implements ComponentRenderer {
 					wh.write("-text");
 				wh.write("-icon");
 			}
-			wh.write("\" style=\"width: auto;\"><tbody><tr class=\"z-menu-btn\"><td class=\"z-btn-l\"><i></i></td>");
+			wh.write("\" style=\"width: auto;\"><tbody><tr class=\"z-menu-btn\"><td class=\"z-btn-l\"><i>&nbsp;</i></td>");
 			String imagesrc;
 			if (self.getImageContent() != null)
 				imagesrc = "background-image:url(" + self.getContentSrc() + ")";
@@ -74,7 +74,7 @@ public class Menuitem2Default implements ComponentRenderer {
 				.write(uuid).write("!b\" type=\"button\" class=\"z-btn-text\" style=\"")
 				.write(imagesrc).write("\">");
 			new Out(self.getLabel()).render(out);
-			wh.write("</button>").writeln("</em></td><td class=\"z-btn-r\"><i></i></td></tr></tbody></table></a></td>");
+			wh.write("</button>").writeln("</em></td><td class=\"z-btn-r\"><i>&nbsp;</i></td></tr></tbody></table></a></td>");
 		} else {
 			wh.write("<li id=\"").write(uuid).write("\" z.type=\"Menuit2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())

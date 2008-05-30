@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:when test="${self.topmost}">
 <td id="${self.uuid}" align="left" z.type="zul.menu2.Menu2"${self.outerAttrs}${self.innerAttrs}>
 <table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="z-btn <c:if test="${self.imageAssigned}">z-btn<c:if test="${!empty self.label}">-text</c:if>-icon</c:if>" style="width: auto;">
-<tbody><tr class="z-menu-btn"><td class="z-btn-l"><i></i></td>
+<tbody><tr class="z-menu-btn"><td class="z-btn-l"><i>&nbsp;</i></td>
 <c:if test="${!empty self.imageContent}">
 	<c:set var="imagesrc" value="background-image:url(${self.contentSrc})"/>
 </c:if>
@@ -32,7 +32,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 ${z:redraw(self.menupopup, null)}
 </em>
 </td>
-<td class="z-btn-r"><i></i></td>
+<td class="z-btn-r"><i>&nbsp;</i></td>
 </tr>
 </tbody>
 </table>
