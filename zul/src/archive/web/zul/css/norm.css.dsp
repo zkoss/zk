@@ -1089,7 +1089,9 @@ td.slidersph-bkr {
 .z-menubar .z-menu-btn td {
 	border: 0 !important;
 }
-.z-menubar td, .z-menubar span, .z-menubar input, .z-menubar div, .z-menubar select, .z-menubar label, .z-pagingbar td, .z-pagingbar span, .z-pagingbar input, .z-pagingbar div, .z-pagingbar select, .z-pagingbar label {
+.z-menubar td, .z-menubar span, .z-menubar input, .z-menubar div, .z-menubar select,
+	.z-menubar label, .z-pagingbar td, .z-pagingbar span, .z-pagingbar input,
+	.z-pagingbar div, .z-pagingbar select, .z-pagingbar label {
 	white-space: nowrap; font: normal 11px tahoma, arial, helvetica, sans-serif;
 }
 .z-menubar .z-item-disd, .z-menupopup .z-item-disd, .z-pagingbar .z-item-disd {
@@ -1116,13 +1118,16 @@ td.slidersph-bkr {
 .z-menubar .z-btn-over .z-btn-m, .z-pagingbar .z-btn-over .z-btn-m {
 	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) repeat-x 0 -42px;
 }
-.z-menubar .z-btn-click .z-btn-l, .z-menubar .z-btn-pressed .z-btn-l, .z-menubar .z-menu-btn-seld .z-btn-l, .z-pagingbar .z-btn-click .z-btn-l {
+.z-menubar .z-btn-click .z-btn-l, .z-menubar .z-btn-pressed .z-btn-l,
+	.z-menubar .z-menu-btn-seld .z-btn-l, .z-pagingbar .z-btn-click .z-btn-l {
 	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -63px;
 }
-.z-menubar .z-btn-click .z-btn-r, .z-menubar .z-btn-pressed .z-btn-r, .z-menubar .z-menu-btn-seld .z-btn-r, .z-pagingbar .z-btn-click .z-btn-r {
+.z-menubar .z-btn-click .z-btn-r, .z-menubar .z-btn-pressed .z-btn-r,
+	.z-menubar .z-menu-btn-seld .z-btn-r, .z-pagingbar .z-btn-click .z-btn-r {
 	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -84px;
 }
-.z-menubar .z-btn-click .z-btn-m, .z-menubar .z-btn-pressed .z-btn-m, .z-menubar .z-menu-btn-seld .z-btn-m, .z-pagingbar .z-btn-click .z-btn-m {
+.z-menubar .z-btn-click .z-btn-m, .z-menubar .z-btn-pressed .z-btn-m,
+	.z-menubar .z-menu-btn-seld .z-btn-m, .z-pagingbar .z-btn-click .z-btn-m {
 	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) repeat-x 0 -105px;
 }
 .z-menubar .z-menu-btn .z-btn-m em {
@@ -1194,8 +1199,9 @@ li.z-menu-item-over {
 	padding:2px;
 }
 .z-pagingbar .ypb-sep{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-split.gif')});background-position:center;
-	background-repeat:no-repeat;display:block;font-size:1px;height:16px;width:4px;overflow:hidden;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-split.gif')});
+	background-position:center;	background-repeat:no-repeat;
+	display:block;font-size:1px;height:16px;width:4px;overflow:hidden;
 	cursor:default;margin:0 2px 0;border:0;
 }
 .z-pagingbar .ypb-spacer{
