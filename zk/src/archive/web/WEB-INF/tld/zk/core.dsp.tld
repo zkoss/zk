@@ -160,4 +160,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Returns date relevant labels in JavaScript.
 		</description>
 	</function>
+
+	<function>
+		<name>outPageAttrs</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outPageAttrs(org.zkoss.zk.ui.Page)
+		</function-signature>
+		<description>
+	Returns the attributes to render a page.
+		</description>
+	</function>
 </taglib>

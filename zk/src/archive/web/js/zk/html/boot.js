@@ -98,7 +98,7 @@ zk.windows = zk.agent.indexOf("windows") != -1;
 zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
 //zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 zk._js4ld = {}; //{name, [script]}
-zk._stdpgs = [];
+zk._ctpgs = []; //contained page IDs
 zk.voidf = function () {return false;}; //always return false
 
 /** Listen a browser event.
@@ -926,16 +926,8 @@ zk._loadAndInit = function (inf) {
 				zk._initcmps.push(n);
 
 			//Test if a (non-owned) page included by other content (e.g. JSP)
-			if (getZKAttr(n, "zidsp") == "page" && !getZKAttr(n, "owner")) {
-				var found = n.parentNode != document.body;
-				if (!found)
-					for (var p = n; p = p.previousSibling;)
-						if (p.nodeType == 1) {
-							found = true;
-							break;
-						}
-				if (found) zk._stdpgs.push(n.id);
-			}
+			if (getZKAttr(n, "zidsp") == "ctpage")
+				zk._ctpgs.push(n.id);
 		}
 
 		//if nosibling, don't process its sibling (only process children)

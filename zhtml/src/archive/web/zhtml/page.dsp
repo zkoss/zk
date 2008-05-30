@@ -28,7 +28,7 @@ ${u:outLangStyleSheets()}
 ${u:outLangJavaScripts(null)}
 	</c:if>
 
-<div id="${page.uuid}" z.dtid="${page.desktop.id}" class="zk" style="${empty page.style ? 'width:100%': page.style}" z.zidsp="page"${c:attr('z.owner', page.owner.uuid)}>
+<div${z:outPageAttrs(page)}>
 	<c:forEach var="root" items="${page.roots}">
 ${u:redraw(root, null)}
 	</c:forEach>
