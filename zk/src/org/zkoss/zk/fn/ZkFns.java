@@ -47,8 +47,10 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
+import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -652,5 +654,45 @@ public class ZkFns {
 	static {
 		_datejs = new CacheMap(8);
 		_datejs.setLifetime(24*60*60*1000);
+	}
+
+	/** Returns the attributes to render a page.
+	 * Used only in HTML devices.
+	 * @since 3.0.6
+	 */
+	public static final String outPageAttrs(Page page) {
+		final Desktop desktop = page.getDesktop();
+		final PageCtrl pageCtrl = (PageCtrl)page;
+		final Component owner = pageCtrl.getOwner();
+		boolean contained = false;
+		if (owner == null) {
+			final Execution exec = Executions.getCurrent();
+			contained = exec != null && exec.isIncluded();
+		}
+
+		//prepare style
+		String style = page.getStyle();
+		if (style == null || style.length() == 0) {
+			String wd = null, hgh = null;
+			if (owner instanceof HtmlBasedComponent) {
+				final HtmlBasedComponent hbc = (HtmlBasedComponent)owner;
+				wd = hbc.getWidth(); //null if not set
+				hgh = hbc.getHeight(); //null if not set
+			}
+
+			final StringBuffer sb = new StringBuffer(32);
+			HTMLs.appendStyle(sb, "width", wd != null ? wd: "100%");
+			HTMLs.appendStyle(sb, "height",
+				hgh != null ? hgh: contained ? null: "100%");
+			style = sb.toString();
+		}
+
+		final StringBuffer sb = new StringBuffer(100)
+			.append(" class=\"zk\"");
+		HTMLs.appendAttribute(sb, "id", page.getUuid());
+		HTMLs.appendAttribute(sb, "z.dtid", desktop.getId());
+		HTMLs.appendAttribute(sb, "style", style);
+		HTMLs.appendAttribute(sb, "z.zidsp", contained ? "ctpage": "page");
+		return sb.toString();
 	}
 }
