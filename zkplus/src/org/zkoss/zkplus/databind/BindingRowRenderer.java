@@ -50,6 +50,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		final Row clone = (Row)_template.clone();
 		
 		//avoid duplicate id error, will set to new id when render()
+		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
 		if (!ComponentsCtrl.isAutoId(clone.getId())) {
 			clone.setId("@"+ clone.getUuid() + "_" + x++);
 		}
@@ -130,6 +131,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 	//setup id of cloned components (cannot called until the component is attached to Grid)
 	private void setupCloneIds(Component clone) {
 		//bug #1813271: Data binding generates duplicate ids in grids/listboxes
+		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
 		clone.setId("@" + clone.getUuid() + "_" + x++); //init id to @uuid to avoid duplicate id issue
 
 		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 

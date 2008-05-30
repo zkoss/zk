@@ -74,6 +74,7 @@ import org.zkoss.zul.Listbox;
 	//setup id of cloned components (cannot called until the component is attached to Listbox)
 	private void setupCloneIds(Component clone) {
 		//bug #1813271: Data binding generates duplicate ids in grids/listboxes
+		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
 		clone.setId("@" + clone.getUuid() + "_" + x++); //init id to @uuid to avoid duplicate id issue
 
 		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
@@ -115,6 +116,7 @@ import org.zkoss.zul.Listbox;
 		final Comboitem clone = (Comboitem)_template.clone();
 		//TODO: see if databinder has this kind of Comboitem, if not, add new CollectionListItem 
 		//avoid duplicate id error, will set to new id when render()
+		//Bug #1962153: Data binding generates duplicate id in some case add "_".
 		if (!ComponentsCtrl.isAutoId(clone.getId())) {
 			clone.setId("@"+ clone.getUuid() + "_" + x++);
 		}
