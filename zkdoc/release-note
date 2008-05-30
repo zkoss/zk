@@ -33,6 +33,9 @@ ZK 3.0.6
   1973470: Listbox with multiple and checkmark and contextmenu
   
 * Upgrade Notes:
+  + The default CSS style of a page becomes "width:100%" (rather than
+    "width:100%;height:100%", if it is included by a non-ZK page,
+    such as JSP, DSP and so on.
   + org.zkoss.zkplus.databind.CollectionItemEx is renamed to 
     org.zkoss.zkplus.databind.CollectionItemExt
 
