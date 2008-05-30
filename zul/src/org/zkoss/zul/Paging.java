@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.mesg.Messages;
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zk.ui.event.Events;
@@ -160,59 +161,39 @@ public class Paging extends XulElement implements Paginal {
 			if (_npg == 1) invalidate();
 		}
 	}
-
-	/** Returns the inner HTML tags of this component.
-	 * <p>Used only for component development. Not accessible by
-	 * application developers.
+	
+	/**
+	 * Returns the HTML tags of paging information.
+	 * 
+	 * @since 3.1.0
+	 * @author gracelin
 	 */
-	public String getInnerTags() {
+	public String getInfoTags() {
 		final StringBuffer sb = new StringBuffer(512);
-
-		int half = _pginc / 2;
-		int begin, end = _actpg + half - 1;
-		if (end >= _npg) {
-			end = _npg - 1;
-			begin = end - _pginc + 1;
-			if (begin < 0) begin = 0;
-		} else {
-			begin = _actpg - half;
-			if (begin < 0) begin = 0;
-			end = begin + _pginc - 1;
-			if (end >= _npg) end = _npg - 1;
-		}
-
-		if (_actpg > 0) {
-			if (begin > 0) //show first
-				appendAnchor(sb, Messages.get(MZul.FIRST), 0);
-			appendAnchor(sb, Messages.get(MZul.PREV), _actpg - 1);
-		}
-
-		boolean bNext = _actpg < _npg - 1;
-		for (; begin <= end; ++begin) {
-			if (begin == _actpg) {
-				sb.append(begin + 1).append("&nbsp;");
-			} else {
-				appendAnchor(sb, Integer.toString(begin + 1), begin);
-			}
-		}
-
-		if (bNext) {
-			appendAnchor(sb, Messages.get(MZul.NEXT), _actpg + 1);
-			if (end < _npg - 1) //show last
-				appendAnchor(sb, Messages.get(MZul.LAST), _npg - 1);
-		}
-		if (_detailed)
-			sb.append("<span>[").append(_actpg * _pgsz + 1).append('/')
-				.append(_ttsz).append("]</span>");
+		if (_ttsz == 0)
+			return sb.append("No topics to display").toString();
+			
+		int lastItem = (_actpg+1) * _pgsz;
+		sb.append("<div class=\"z-paging-info\">Displaying topics ")
+			.append(_actpg * _pgsz + 1).append(" - ").append(lastItem > _ttsz ? _ttsz : lastItem)
+			.append(" of ").append(_ttsz).append("</div>");
 		return sb.toString();
 	}
-	private static final
-	void appendAnchor(StringBuffer sb, String label, int val) {
-		sb.append("<a href=\"javascript:;\" onclick=\"zkPg.go(this,")
-			.append(val).append(")\">").append(label).append("</a>&nbsp;");
+	
+	/**
+	 * 
+	 * @since 3.1.0
+	 * @author gracelin
+	 */
+	public String getOuterAttrs() {
+		final StringBuffer sb = new StringBuffer(64).append(super
+				.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.actpg", _actpg);
+		HTMLs.appendAttribute(sb, "z.numpg", _npg);
+		return sb.toString();
 	}
 
-	//-- Component --//
+	// -- Component --//
 	public boolean isVisible() {
 		return super.isVisible() && (_npg > 1 || !_autohide);
 	}
