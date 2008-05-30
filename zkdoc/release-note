@@ -20,6 +20,7 @@ ZK 3.1.0
   1955562: For theme: menuitem unchecked not visible
   1895872: Keyboard support for menues
   1944610: Data Binding support non-distinct collection items
+  1977343: The booting progress bar covers only ZK page if included
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible

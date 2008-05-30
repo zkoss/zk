@@ -36,13 +36,14 @@ zk.booting = true; //denote ZK is booting
  */
 if (!window.Boot_progressbox) { //not customized
 	Boot_progressbox = function (id, msg, x, y, mask, center) {
-		var n = document.createElement("DIV");
-		document.body.appendChild(n);
-
 		var html = '<div id="'+id+'"';
 		var ix = zk.innerX(), iy = zk.innerY();
-		if (mask || (zk.loading && !zk._prgsOnce)) {
-			zk._prgsOnce = true; //do it only once
+		if (mask) {
+			if (zk._ctpgs.length) {
+				for (var c = zk._ctpgs.length, e = $e(zk._ctpgs[--c]); e; e = $e(zk._ctpgs[--c]))
+					zk.applyMask(e);
+				return;
+			}
 			html += '><div id="zk_mask" class="modal_mask" style="display:block;left:'+ ix + 'px;top:' + iy +	
 				'px;" z.x="' + ix + '" z.y="' + iy + '"></div><div';
 		} else html += "><div";
@@ -54,7 +55,9 @@ if (!window.Boot_progressbox) { //not customized
 		+' z.x="' + ix + '" z.y="' + iy + '"><div class="z-loading-indicator">'
 		+'<img class="z-loading-icon" alt="..." src="'+zk.getUpdateURI('/web/img/spacer.gif')+'"/> '
 		+msg+'</div></div></div>';
-
+		
+		var n = document.createElement("DIV");
+		document.body.appendChild(n);
 		zk._setOuterHTML(n, html);
 		
 		var el = $e("zk_loading");
@@ -62,8 +65,6 @@ if (!window.Boot_progressbox) { //not customized
 			if (el) {
 				el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + ix + "px";
 				el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + iy + "px";
-				setZKAttr(el, "x", ix);
-				setZKAttr(el, "y", iy);
 			}
 		}
 		el.style.visibility = "visible";
@@ -807,7 +808,7 @@ zk._bld = function () {
 				if (!n)
 					Boot_progressbox("zk_loadprog",
 						'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
-						"45%", "40%");
+						0, 0, true, true);
 			}
 		}, 350);
 	}
@@ -840,14 +841,24 @@ zk.ald = function () {
 					}
 				}
 
-			var n = $e("zk_loadprog");
-			if (n) n.parentNode.removeChild(n);
+			zk.cleanAllMask("zk_loadprog");
 		} catch (ex) {
 			zk.error("Failed to stop counting. "+ex.message);
 		}
 		
 		if (zk._ready) zk._evalInit(); //zk._loadAndInit might not finish
 	}
+};
+/**
+ * Cleans up all the masks applied by the Boot_progressbox function.
+ * @param {String} id an element Id, such as "zk_loadprog" or "zk_prog"
+ * @since 3.1.0
+ */
+zk.cleanAllMask = function (id) {
+	var n = $e(id);
+	if (n) zk.remove(n);
+	for (var c = zk._ctpgs.length, n = $e(zk._ctpgs[--c]+"!progbox"); n; n = $e(zk._ctpgs[--c]+"!progbox"))
+		zk.remove(n);
 };
 zk._updCnt = function () {
 	var n = $e("zk_loadcnt");
@@ -1328,8 +1339,7 @@ zk.progress = function (timeout) {
 };
 zk.progressDone = function() {
 	zk.progressing = zk.progressPrompted = false;
-	var n = $e("zk_prog");
-	if (n) n.parentNode.removeChild(n);
+	zk.cleanAllMask("zk_prog");
 };
 /** Generates the progressing dialog. */
 zk._progress = function () {

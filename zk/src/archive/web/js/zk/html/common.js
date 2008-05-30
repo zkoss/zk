@@ -365,7 +365,7 @@ zk.applyMask = function (rel, message) {
 		if (loading.offsetHeight > rel.offsetHeight) 
 			loading.style.height = zk.revisedSize(loading, rel.offsetHeight, true) + "px";
 		if (loading.offsetWidth > rel.offsetWidth)
-			loading.style.width = zk.revisedSize(loading, reloffsetWidth) + "px";
+			loading.style.width = zk.revisedSize(loading, rel.offsetWidth) + "px";
 		loading.style.top = (xy[1] + ((h - loading.offsetHeight) /2)) + "px";
 		loading.style.left = (xy[0] + ((w - loading.offsetWidth) /2)) + "px";
 	}

@@ -27,5 +27,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<p>You shall see the progress bar only appear in the following box.</p>
 		<jsp:include page="F30-1977343-inc.zul"/>
 		<p>This is another part of the JSP page (container).</p>
+		<jsp:include page="F30-1977343-inc.zul"/>
 	</body>
 </html>
