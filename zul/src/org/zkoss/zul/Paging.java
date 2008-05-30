@@ -54,6 +54,7 @@ public class Paging extends XulElement implements Paginal {
 	public Paging() {
 		setSclass("paging");
 	}
+
 	/** Contructor.
 	 *
 	 * @param totalsz the total # of items
@@ -174,9 +175,9 @@ public class Paging extends XulElement implements Paginal {
 			return sb.append("No topics to display").toString();
 			
 		int lastItem = (_actpg+1) * _pgsz;
-		sb.append("<div class=\"z-paging-info\">Displaying topics ")
+		sb.append("<div class=\"z-paging-info\">[ ")
 			.append(_actpg * _pgsz + 1).append(" - ").append(lastItem > _ttsz ? _ttsz : lastItem)
-			.append(" of ").append(_ttsz).append("</div>");
+			.append(" / ").append(_ttsz).append(" ]</div>");
 		return sb.toString();
 	}
 	
