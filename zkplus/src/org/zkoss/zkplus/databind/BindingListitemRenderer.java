@@ -53,6 +53,7 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 		//TODO: see if databinder has this kind of Listitem, if not, add new CollectionListItem 
 		//avoid duplicate id error, will set to new id when render()
 		//bug #1893247: Not unique in the new ID space when Grid in Grid
+		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
 		if (!ComponentsCtrl.isAutoId(clone.getId())) {
 			clone.setId("@"+ clone.getUuid() + "_"+ x++);
 		}
@@ -135,6 +136,7 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 	private void setupCloneIds(Component clone) {
 		//bug #1813271: Data binding generates duplicate ids in grids/listboxes
 		//bug #1893247: Not unique in the new ID space when Grid in Grid
+		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
 		clone.setId("@" + clone.getUuid() + "_"+ x++); //init id to @uuid to avoid duplicate id issue
 
 		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
