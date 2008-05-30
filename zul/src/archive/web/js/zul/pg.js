@@ -32,6 +32,7 @@ zkPg = {
 		var inp = $real(cmp);
 		zk.listen(inp, "keypress", zkPg.onkeypress);
 		zk.listen(inp, "keydown", zkPg.inpkeydown);
+		zk.listen(inp, "blur", zkPg.inpblur);
 		
 		var tb_first = $e(cmp.id+"!tb_f");
 		var tb_prev = $e(cmp.id+"!tb_p");
@@ -85,6 +86,18 @@ zkPg = {
 	
 	onkeypress: function (evt) {
 		zkInpEl.ignoreKeys(evt, "0123456789");
+	},
+	
+	inpblur: function (evt) {
+		if (!evt) evt = window.event;
+		var inp = Event.element(evt),
+			cmp = $outer(inp);
+		if (inp.disabled || inp.readOnly)
+			return;
+		
+		zkPg.checkValue(cmp);
+		zkPg.go(cmp, inp.value-1);
+		Event.stop(evt);
 	},
 	
 	inpkeydown: function(evt){
