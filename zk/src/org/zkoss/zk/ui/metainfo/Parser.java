@@ -588,7 +588,7 @@ public class Parser {
 
 				if (trimLabel.length() > 0) { //consider as a label
 					ComponentInfo pi = parentInfo;
-					while (ComponentDefinition.ZK == pi.getComponentDefinition()) {
+					while (pi instanceof ZkInfo) {
 						NodeInfo n = pi.getParent();
 						if (n instanceof ComponentInfo) {
 							pi = (ComponentInfo)n;
@@ -679,7 +679,7 @@ public class Parser {
 			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
-				compInfo = new ComponentInfo(parent, ComponentDefinition.ZK); 
+				compInfo = new ZkInfo(parent); 
 			} else {
 				boolean prefRequired =
 					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);

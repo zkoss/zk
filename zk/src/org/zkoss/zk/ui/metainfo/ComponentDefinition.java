@@ -24,7 +24,6 @@ import java.net.URL;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 
 /**
@@ -38,9 +37,9 @@ import org.zkoss.zk.ui.render.ComponentRenderer;
  * @author tomyeh
  */
 public interface ComponentDefinition extends Cloneable {
-	/** A special definition to represent the zk component. */
-	public final static ComponentDefinition ZK =
-		new ComponentDefinitionImpl(null, null, "zk", Component.class);;
+	/** @deprecated As of release 3.1.0, replaced by {@link ZkInfo}.
+	 */
+	public final static ComponentDefinition ZK = ZkInfo.ZK;
 
 	/** Returns the language definition, or null if it is a temporty definition
 	 * belonging to a page.

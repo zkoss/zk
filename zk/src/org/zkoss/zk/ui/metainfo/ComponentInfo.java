@@ -161,7 +161,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 3.1.0
 	 */
 	public void appendChild(TextInfo text) {
-		if (!(this instanceof NativeInfo) && _compdef != ComponentDefinition.ZK)
+		if (!(this instanceof NativeInfo) && !(this instanceof ZkInfo))
 			throw new IllegalStateException("NativeInfo or <zk> required");
 		appendChildDirectly(text);
 	}

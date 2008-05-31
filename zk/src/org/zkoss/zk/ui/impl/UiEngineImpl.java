@@ -491,10 +491,11 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private static Component[] execCreateChild(
 	CreateInfo ci, Component parent, ComponentInfo childInfo) {
-		final ComponentDefinition childdef = childInfo.getComponentDefinition();
-		if (ComponentDefinition.ZK == childdef) {
+		if (childInfo instanceof ZkInfo)
 			return execCreate(ci, childInfo, parent);
-		} else if (childdef.isInlineMacro()) {
+
+		final ComponentDefinition childdef = childInfo.getComponentDefinition();
+		if (childdef.isInlineMacro()) {
 			final Map props = new HashMap();
 			props.put("includer", parent);
 			childInfo.evalProperties(props, ci.page, parent, true);
@@ -1511,8 +1512,7 @@ public class UiEngineImpl implements UiEngine {
 			} else if (meta instanceof TextInfo) {
 				final String s = ((TextInfo)meta).getValue(comp);
 				if (s != null) helper.appendText(sb, s);
-			} else if (meta instanceof ComponentInfo
-			&& ComponentDefinition.ZK == ((ComponentInfo)meta).getComponentDefinition()) {
+			} else if (meta instanceof ZkInfo) {
 				ComponentInfo compInfo = (ComponentInfo)meta;
 				final ForEach forEach = compInfo.getForEach(ci.page, comp);
 				if (forEach == null) {
