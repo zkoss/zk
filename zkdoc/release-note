@@ -46,6 +46,7 @@ ZK 3.1.0
 	</system-property>
   + Both molds vertical and horizontal of Menubar are unsupported, please use the setOrient()
 		of Menubar to specify them.
+  + Change the layout of Popup component to a new trendy layout as default.
 	--------
 ZK 3.0.6
 
