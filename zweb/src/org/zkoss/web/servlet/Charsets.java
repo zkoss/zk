@@ -89,29 +89,13 @@ public class Charsets {
 
 		final Locale locale = getPreferredLocale(request);
 		response.setLocale(locale);
-
 		if (charset != null && charset.length() > 0) {
 			try {
 				if (Servlets.isServlet24()) {
 					response.setCharacterEncoding(charset);
 				} else {
-					final String orgtype = response.getContentType();
-					final String ctype;
-					if (orgtype != null) {
-						final int j = orgtype.indexOf(';');
-						ctype = j >= 0 ? orgtype.substring(0, j): orgtype;
-					} else {
-						ctype = "";
-					}
-
-					response.setContentType(ctype + ";charset=" + charset);
-
-					if (orgtype == null) {
-						try {
-							response.setContentType(null); //restore the state
-						} catch (Throwable t) { //ignore
-						}
-					}
+				//don't access 2.4 API: setCharacterEncoding, getContentType
+					response.setContentType(";charset=" + charset);
 				}
 			} catch (Throwable ex) {
 				try {
