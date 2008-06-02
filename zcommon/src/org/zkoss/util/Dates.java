@@ -439,49 +439,27 @@ public class Dates {
 			}
 			case Calendar.HOUR:
 			{
-				int hour1 = cal1.get(Calendar.HOUR_OF_DAY);
-				int hour2 = cal2.get(Calendar.HOUR_OF_DAY);
-				int day1 = cal1.get(Calendar.DAY_OF_YEAR);
-				int day2 = cal2.get(Calendar.DAY_OF_YEAR);
-				
-				int maxDay1 = year1 == year2 ? 
-					0 : cal1.getActualMaximum(Calendar.DAY_OF_YEAR);
-				int hours = 24 * (maxDay1 - day1 + day2) + hour2 - hour1;
-				
-				final Calendar cal = Calendar.getInstance(tz);
-				for(int year = year1+1; year < year2; year++) {
-					cal.set(Calendar.YEAR, year);
-					hours += 24 * cal.getActualMaximum(Calendar.DAY_OF_YEAR);
-				}
-				return negative ? -hours : hours;
+				long time1 = date1.getTime();
+				long time2 = date2.getTime();
+				long min1 = (time1 < 0 ? (time1 - (1000 * 60 * 60 - 1)) : time1 ) / (1000 * 60 * 60);
+				long min2 = (time2 < 0 ? (time2 - (1000 * 60 * 60 - 1)) : time2 ) / (1000 * 60 * 60);
+				return negative ? (min1 - min2) : (min2 - min1);
 			}
 			case Calendar.MINUTE:
 			{
-				int minute1 = cal1.get(Calendar.MINUTE);
-				int minute2 = cal2.get(Calendar.MINUTE);
-				int hour1 = cal1.get(Calendar.HOUR_OF_DAY);
-				int hour2 = cal2.get(Calendar.HOUR_OF_DAY);
-				int day1 = cal1.get(Calendar.DAY_OF_YEAR);
-				int day2 = cal2.get(Calendar.DAY_OF_YEAR);
-				
-				int maxHour1 = day1 == day2 ? 0 : 24;
-				int maxDay1 = year1 == year2 ? 
-					0 : cal1.getActualMaximum(Calendar.DAY_OF_YEAR);
-	
-				int minutes = 60 * (maxHour1 - hour1 + hour2) + minute2 - minute1
-					+ 24 * 60 * (maxDay1 - day1 + day2);
-				
-				for(int year = year1+1; year < year2; year++) {
-					final Calendar cal = Calendar.getInstance(tz);
-					cal.set(Calendar.YEAR, year);
-					minutes += 24 * 60 * cal.getActualMaximum(Calendar.DAY_OF_YEAR);
-				}
-				return negative ? -minutes : minutes;
+				long time1 = date1.getTime();
+				long time2 = date2.getTime();
+				long min1 = (time1 < 0 ? (time1 - (1000 * 60 - 1)) : time1 ) / (1000 * 60);
+				long min2 = (time2 < 0 ? (time2 - (1000 * 60 - 1)) : time2 ) / (1000 * 60);
+				return negative ? (min1 - min2) : (min2 - min1);
 			}
 			case Calendar.SECOND:
 			{
-				long sec1 = date1.getTime() / 1000;
-				long sec2 = date2.getTime() / 1000;
+				long time1 = date1.getTime();
+				long time2 = date2.getTime();
+				long sec1 = (time1 < 0 ? (time1 - (1000 - 1)) : time1 ) / 1000;
+				long sec2 = (time2 < 0 ? (time2 - (1000 - 1)) : time2 ) / 1000;
+				
 				return negative ? (sec1 - sec2) : (sec2 - sec1);
 			}
 			case Calendar.MILLISECOND:
