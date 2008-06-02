@@ -221,7 +221,7 @@ public class Parser {
 	private static String[] parseToArray(String s) {
 		if (s == null)
 			return null;
-		Collection ims = CollectionsX.parse(null, s, ',', false);
+		Collection ims = CollectionsX.parse(null, s, ',', false); //NO EL
 		return (String[])ims.toArray(new String[ims.size()]);
 	}
 
@@ -480,10 +480,7 @@ public class Parser {
 
 		final String imports = (String)params.remove("import");
 		if (imports != null && imports.length() > 0) {
-			//Note: we cannot use Maps.parse since it cannot handle
-			//"a,b" => (null, a) will be replaced by (null, b)
-
-			Collection ims = CollectionsX.parse(null, imports, ',', false);
+			Collection ims = CollectionsX.parse(null, imports, ',', false); //No EL
 			for (Iterator it = ims.iterator(); it.hasNext();) {
 				final String im = (String)it.next();
 
