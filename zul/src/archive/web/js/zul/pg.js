@@ -27,11 +27,11 @@ zkPg = {
 		cmp.npg = $int(getZKAttr(cmp, "numpg"));
 		
 		var inputs = $es(cmp.id + "!real");
-		for ( var i = 0; i < inputs.length; ++i)
+		for (var i = inputs.length; --i>=0;)
 			zkTxbox.init(inputs[i]);
 			
 		//event for input
-		for ( var i = 0; i < inputs.length; ++i) {
+		for (var i = inputs.length; --i>=0;) {
 			zk.listen(inputs[i], "keypress", zkPg.onkeypress);
 			zk.listen(inputs[i], "keydown", zkPg.inpkeydown);
 			zk.listen(inputs[i], "blur", zkPg.inpblur);
@@ -42,7 +42,7 @@ zkPg = {
 		var tb_next = $es(cmp.id+"!tb_n");
 		var tb_last = $es(cmp.id+"!tb_l");
 		
-		for ( var i = 0; i < tb_first.length; ++i) {
+		for (var i = tb_first.length; --i>=0;) {
 			zk.listen(tb_first[i], "click", zkPg.onclick_first);
 			zk.listen(tb_prev[i], "click", zkPg.onclick_prev);
 			zk.listen(tb_next[i], "click", zkPg.onclick_next);
@@ -59,7 +59,7 @@ zkPg = {
 		
 		for (var btns = ["!tb_f", "!tb_p", "!tb_n", "!tb_l"], i = btns.length; --i >= 0;){
 			var btn = $es(cmp.id + btns[i]);
-			for ( var j = 0; j < btn.length; ++j) {
+			for (var j = btn.length; --j>=0;) {
 				zk.listen(btn[j], "mouseover", zkPg.onover);
 				zk.listen(btn[j], "mouseout", zkPg.onout);
 				zk.listen(btn[j], "mousedown", zkPg.ondown);
