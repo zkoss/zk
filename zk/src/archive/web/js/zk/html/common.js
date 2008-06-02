@@ -1379,7 +1379,6 @@ if (!zk._actg1) {
 	zk._actg3 = ["IFRAME","EMBED"]; // zk.disableAll use only.
 	if (zk.ie6Only) { //ie7 solves the z-order issue of SELECT
 		zk._actg3.unshift("SELECT"); //change visibility is required
-		zk._actg1.unshift("SELECT"); // TODO: remove this code after finish all of the shadow component commented by JumperChen
 	} else
 		zk._actg2.unshift("SELECT");
 	zk.coveredTagnames = zk._actg1; //backward compatible 2.4 or before

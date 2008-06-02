@@ -68,8 +68,7 @@ zkCmbox.onblur = function (evt) {
 zkCmbox.init = function (cmp) {
 	zkCmbox.onVisi = zkCmbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
-	zkCmbox.cleanup = zkTxbox.cleanup;
-
+	
 	var inp = $real(cmp);
 	zkTxbox.init(inp, null, zkCmbox.onblur);
 	zk.listen(inp, "keydown", zkCmbox.onkey);
@@ -83,6 +82,14 @@ zkCmbox.init = function (cmp) {
 	var btn = $e(cmp.id + "!btn");
 	if (btn)
 		zk.listen(btn, "click", function (evt) {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp, evt);});
+};
+zkCmbox.cleanup = function (cmp) {
+	zkTxbox.cleanup(cmp);
+	var pp = $e(cmp.id + "!pp");
+	if (pp && pp._shadow) {
+		pp._shadow.cleanup();
+		pp._shadow = null;
+	}
 };
 zkCmbox.strict = function (id) {
 	var inp = $real($e(id));
@@ -455,7 +462,10 @@ zkCmbox._repos = function (uuid, hilite) {
 	zk.position(pp, inp, "after-start");
 	zkau.hideCovered();
 	zk.asyncFocus(inpId);
-
+	if (!pp._shadow)
+		pp._shadow = new zk.Shadow(pp, {autoShow: true});
+	else pp._shadow.sync();
+		
 	if (hilite) zkCmbox._hilite(uuid);
 };
 
@@ -653,7 +663,7 @@ zkCmbox.close = function (pp, focus) {
 
 	if (focus)
 		zk.asyncFocus(uuid + "!real");
-
+	if (pp._shadow) pp._shadow.hide();
 	var cb = $e(uuid);
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: uuid, cmd: "onOpen",

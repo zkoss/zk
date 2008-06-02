@@ -1308,7 +1308,7 @@ span.rbtnbk {<%-- button at the right edge --%>
 }
 div.comboboxpp, div.bandboxpp {<%--sclass + "pp"--%>
 	display: block; position: absolute; z-index: 88000;
-	background: white; border: 1px solid black; padding: 2px;
+	background: white; border: 1px solid #7F9DB9; padding: 2px;
 	font-size: x-small;
 }
 div.comboboxpp {
