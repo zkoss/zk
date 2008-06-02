@@ -38,16 +38,19 @@ public class GroupboxDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Groupbox self = (Groupbox) comp;
-		wh.write("<fieldset id=\"").write(self.getUuid()).write("\"");
+		final String uuid = self.getUuid();
+		wh.write("<fieldset id=\"").write(uuid).write("\" z.type=\"zul.widget.Grfs\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.write(self.getCaption());
-
+		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
+			.write(self.getContentSclass()).write("\"")
+			.writeAttr("style", self.getContentStyle()).write(">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();
 			if(self.getCaption() != child)
 				child.redraw(out);
 		}
 
-		wh.writeln("</fieldset>");
+		wh.writeln("</div></fieldset>");
 	}
 }

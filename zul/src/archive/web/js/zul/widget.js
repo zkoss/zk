@@ -379,6 +379,50 @@ zkCkbox.onclick = function (cmp) {
 ////
 // groupbox, caption //
 zkGrbox = {};
+// groupbox default mold;
+zkGrfs = {
+	init: function (cmp) {
+		var head = zk.firstChild(cmp, "LEGEND");
+		if (head) zk.listen(head, "click", zkGrfs.onclick);
+	},
+	onclick: function (evt) {
+		if (!evt) evt = window.event;
+		var target = Event.element(evt);
+		var tn = $tag(target);
+		if ("BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn
+		|| "A" == tn || ("TD" != tn && "TR" != tn && target.onclick))
+			return;
+			
+		var cmp = $parentByTag(target, "FIELDSET");
+		zkGrfs.open(cmp);
+	},
+	open: function (cmp, silent) {
+		var open = zk.hasClass(cmp, "fieldset-collapsed");
+		zk[open ? "rmClass" : "addClass"](cmp, "fieldset-collapsed");
+		if (!silent)
+			zkau.sendasap({uuid: cmp.id, cmd: "onOpen", data: [open]});
+	},
+	setAttr: function (cmp, nm, val) {
+		switch (nm) {
+			case "z.open":
+				zkGrfs.open(cmp, val == "true", true);
+				return true; //no need to store z.open
+		
+			case "z.cntStyle":
+				var n = $e(cmp.id + "!cave");
+				if (n)
+					zk.setStyle(n, val != null ? val: "");
+					
+				return true; //no need to store z.cntType
+			case "z.cntScls":
+				var n = $e(cmp.id + "!cave");
+				if (n)
+					n.className = val != null ? val: "";
+					
+				return true; //no need to store it
+		}
+	}
+};
 zkCapt = {};
 
 zkGrbox.onSize = zkGrbox._fixHgh = function (cmp) {

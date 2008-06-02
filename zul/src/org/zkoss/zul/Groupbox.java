@@ -88,7 +88,11 @@ public class Groupbox extends XulElement {
 			smartUpdate("z.closable", closable);
 		}
 	}
-
+	public String getRealSclass() {
+		final String cls = super.getRealSclass();
+		final String added = isLegend() && isClosable() && !isOpen() ? "fieldset-collapsed" : "";
+		return cls == null ? added : cls + " " + added;
+	}
 	/** Returns the CSS style for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
 	 */
@@ -121,9 +125,10 @@ public class Groupbox extends XulElement {
 		String cntscls = _cntscls;
 		if (cntscls != null)
 			return cntscls;
-
+		
 		cntscls = getSclass();
-		return cntscls == null ? "gc-default": "gc-" + cntscls;
+		return "3d".equals(getMold()) ? cntscls == null ? "gc-default": "gc-" + cntscls
+					: cntscls == null ? "fieldset-bwrap" : "fieldset-bwrap " + cntscls;
 	}
 	/** Sets the style class used for the content block.
 	 *

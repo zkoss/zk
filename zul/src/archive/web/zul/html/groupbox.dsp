@@ -19,9 +19,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<fieldset id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-	${z:redraw(self.caption, null)}
-	<c:forEach var="child" items="${self.children}">
-	<c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
-	</c:forEach>
+<fieldset id="${self.uuid}" z.type="zul.widget.Grfs"${self.outerAttrs}${self.innerAttrs}>
+${z:redraw(self.caption, null)}
+<div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style', self.contentStyle)}>
+<c:forEach var="child" items="${self.children}">
+<c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if>
+</c:forEach>
+</div>
 </fieldset>

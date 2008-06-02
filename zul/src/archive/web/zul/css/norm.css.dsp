@@ -141,7 +141,15 @@ td.gamma {background: #F4F4F4;}
 	font-size: x-small; font-weight: normal; color: black; background: none;
 	text-decoration: none;
 }
-
+.fieldset-bwrap {
+	overflow: hidden;
+}
+.fieldset-collapsed {
+	padding-bottom: 0 !important; border-width: 2px 0 0 0 !important;
+}
+.fieldset-collapsed .fieldset-bwrap {
+	visibility: hidden; position: absolute; left: -1000px; top: -1000px;
+}
 <%-- window title/caption --%>
 div.embedded, div.modal, div.overlapped, div.popup, div.highlighted, div.wndcyan {
 	margin: 0; padding: 0;
