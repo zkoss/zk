@@ -298,8 +298,8 @@ public class Maps {
 	 * (or null if not specified).
 
 	 * @param parenthesis whether to parse parenthesis in the value, {}, () and [].
-	 * Specify true if the value might contain EL expressions.
 	 * If true, the separator is ignored inside the parenthesis.
+	 * Specify true if the value might contain EL expressions.
 	 * Note: it has no effect to the name.
 
 	 * @return the map being generated

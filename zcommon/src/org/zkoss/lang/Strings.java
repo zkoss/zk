@@ -396,14 +396,30 @@ public class Strings {
 	public static final 
 	Result nextToken(String src, int from, char[] separators)
 	throws IllegalSyntaxException {
-		return nextToken(src, from, separators, true, true);
+		return nextToken(src, from, separators, true, true, false);
 	}	
-	/** Returns the next token with unescape option.
+	/** Returns the next token with additional options.
+	 * It is the same as nextToken(src, from, separators, escBackslash, quotAsToken, false);
+	 * Refer to {@link #nextToken(String, int, char[], boolean, boolean, boolean)}
+	 * for more infomation.
+	 *
+	 * @exception IllegalSyntaxException if the quoted string is unclosed.
+	 * @see #nextToken(String, int, char[], boolean, boolean, boolean)
+	 */
+	public static final Result nextToken(String src, int from,
+	char[] separators, boolean escBackslash, boolean quotAsToken)
+	throws IllegalSyntaxException {
+		return nextToken(src, from, separators, escBackslash, quotAsToken, false);
+	}
+	/** Returns the next token with additional options.
 	 *
 	 * <ul>
 	 * <li>It trims whitespaces before and after the token.</li>
 	 * <li>If quotAsToken is true, all characters between quotations
 	 * ('\'' or '"') are considered as a token.</li>
+	 * <li>If parenthesis is true, the separators and quots inside
+	 * a pair of parenthesis won't be treated specially.
+	 * It is useful if EL expressions might be contained.</li>
 	 * <li>Consider '\\' as the escape char if escBackslash is true.</li>
 	 * <li>If nothing found before end-of-string, null is returned</li>
 	 * </ul>
@@ -414,11 +430,16 @@ public class Strings {
 	 * @param escBackslash whether to treat '\\' specially (as escape char)
 	 * It doesn't handle u and x yet.
 	 * @param quotAsToken whether to treat characters inside '\'' or '"'
-	 * as a token
+	 * as a token. Note: the quots are excluded from the token.
+	 * @param parenthesis whether to ignore separators and quots in side
+	 * a pair of parenthesises. Recognized parentheseses include
+	 * {}, [] or ().
 	 * @exception IllegalSyntaxException if the quoted string is unclosed.
+	 * @since 3.0.6
 	 */
 	public static final Result nextToken(String src, int from,
-	char[] separators, boolean escBackslash, boolean quotAsToken)
+	char[] separators, boolean escBackslash, boolean quotAsToken,
+	boolean parenthesis)
 	throws IllegalSyntaxException {
 		final int len = src.length();
 		from = skipWhitespaces(src, from);
@@ -440,7 +461,7 @@ public class Strings {
 
 		//2. handle not-quoted
 		final int j = nextSeparator(src, from, separators,
-			escBackslash, false, quotAsToken);
+			escBackslash, false, quotAsToken, parenthesis);
 		int next = j;
 		if (j < len) {
 			if (quotAsToken) {
@@ -473,8 +494,27 @@ public class Strings {
 	 */
 	public static int nextSeparator(String src, int from, char[] separators,
 	boolean escBackslash, boolean escQuot, boolean quotAsSeparator) {
+		return nextSeparator(src, from, separators, escBackslash, escQuot,
+			quotAsSeparator, false);
+	}
+	/** Returns the next seperator index in the src string.
+	 *
+	 * @param escQuot whether to escape characters inside quotations
+	 * ('\'' or '"'). In other words, it specifies whether to ignore
+	 * separators inside quotations
+	 * @param quotAsSeparator whether to consider quotations as one of
+	 * the separators.
+	 * If escQuot is true, quotAsSeparator is ignored.
+	 * @param parenthesis whether to ignore separators and quots in side
+	 * a pair of parenthesises. Recognized parentheseses include
+	 * {}, [] or ().
+	 * @since 3.0.6
+	 */
+	public static int nextSeparator(String src, int from, char[] separators,
+	boolean escBackslash, boolean escQuot, boolean quotAsSeparator,
+	boolean parenthesis) {
 		boolean esc = false;
-		char quot = (char)0;
+		char quot = (char)0, endparen;
 		for (final int len = src.length(); from < len; ++from) {
 			if (esc) {
 				esc = false;
@@ -492,9 +532,32 @@ public class Strings {
 			} else if ((quotAsSeparator && (cc == '\'' || cc == '"'))
 			|| isSeparator(cc, separators)) {
 				return from;
+			} else if (parenthesis
+			&& (endparen = getEndingParenthesis(cc)) != (char)0) {
+				from = skipParenthesis(src, from, cc, endparen);
 			}
 		}
 		return from;
+	}
+	/** Returns the ending parenthesis (such as }),
+	 * or (char)0 if cc is not the beginning parenthsis (such as {).
+	 */
+	private static final char getEndingParenthesis(char cc) {
+		return cc == '{' ? '}': cc == '(' ? ')': cc == '[' ? ']': (char)0;
+	}
+	/** Skip the string enclosed by a pair of parenthesis and
+	 * return index after the ending parenthesis.
+	 * @param j the index of the starting parenthesis
+	 */
+	private static int skipParenthesis(String src, int j, char beg, char end) {
+		for (int len = src.length(), depth = 0; ++j < len;) {
+			final char cc = src.charAt(j);
+			if (cc == '\\') ++j; //skip next
+			else if (cc == beg) ++depth;
+			else if (cc == end && --depth < 0)
+				return j;
+		}
+		throw new IllegalSyntaxException(MCommon.EXPECTING_CHARACTER, new Object[] {new Character(end), src});
 	}
 	private static final boolean isSeparator(char cc, char[] separators) {
 		for (int j = 0; j < separators.length; ++j) {

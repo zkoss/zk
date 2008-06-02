@@ -278,7 +278,7 @@ public class CollectionsX {
 	 * @param col the collection to be copied.
 	 * @param from the initial index of the range to be copied, inclusive.
      * @param to the final index of the range to be copied, exclusive.
-     * @since 3.1.0
+     * @since 3.0.6
 	 */
 	public static final Object[] toArray(Collection col, int from, int to) {
 		int newLength = to - from;
@@ -352,39 +352,32 @@ public class CollectionsX {
 	}
 	/**
 	 * Parses a string into a list.
-	 * To quote a string, both '\'' and '"' are OK.
-	 * Whitespaces are trimmed between quotation and separators.
-	 *
-	 * <p>Unlike Java, quotation could spread over multiple lines.
-	 *
-	 * <p>Example,<br>
-	 * a b , ' c d',"'f'", '1' "2", 3<br>
-	 * generate a list of "a b", "c d", "'f'", "1", "2" and "3".
-	 * Note: the separator between "1" and "2" is optional.
-	 *
-	 * <p>Note: Like Java, if the string is ending with a separator,
-	 * it will be ignored.
-	 *
-	 * <p>Example,<br>
-	 * a, , b, <br>
-	 * generate a list of "a", "", "b".
-	 *
-	 * @param c the collection to hold the parsed results; a linked list
-	 * is created if c is null.
-	 * @param src the string to parse
-	 * @param separator the separator, e.g., ',', '\n' or ' '.
-	 * Note: if separator is ' ', it denotes any white space.
-	 * @return the <code>c</code> collection if not null; or a linked list
-	 * if c is null (so you can cast it to List)
+	 * It is the same as parse(c, src, separator, true, false).
+	 * Refer to {@link #parse(Collection, String, char, boolean, boolean)}
+	 * for details.
 	 *
 	 * @exception IllegalSyntaxException if syntax errors
 	 * @see Maps#parse
+	 * @see #parse(Collection, String, char, boolean, boolean)
 	 */
 	public static final Collection
 	parse(Collection c, final String src, char separator) {
 		return parse(c, src, separator, true);
 	}
-
+	/**
+	 * Parses a string into a list.
+	 * It is the same as parse(c, src, separator, escBackslash, false).
+	 * Refer to {@link #parse(Collection, String, char, boolean, boolean)}
+	 * for details.
+	 *
+	 * @exception IllegalSyntaxException if syntax errors
+	 * @see Maps#parse
+	 * @see #parse(Collection, String, char, boolean, boolean)
+	 */
+	public static final Collection parse(Collection c, final String src,
+	char separator, boolean escBackslash) {
+		return parse(c, src, separator, escBackslash, false);
+	}
 	/**
 	 * Parses a string into a list.
 	 * To quote a string, both '\'' and '"' are OK.
@@ -409,22 +402,26 @@ public class CollectionsX {
 	 * @param src the string to parse
 	 * @param separator the separator, e.g., ',', '\n' or ' '.
 	 * Note: if separator is ' ', it denotes any white space.
-	 * @param handleBackslash whether to treat '\\' specially (as escape char)
+	 * @param escBackslash whether to treat '\\' specially (as escape char)
 	 * @return the <code>c</code> collection if not null; or a linked list
 	 * if c is null (so you can cast it to List)
+	 * @param parenthesis whether to parse parenthesis in the value, {}, () and [].
+	 * If true, the separator is ignored inside the parenthesis.
+	 * Specify true if the value might contain EL expressions.
 	 *
 	 * @exception IllegalSyntaxException if syntax errors
 	 * @see Maps#parse
+	 * @since 3.0.6
 	 */
 	public static final Collection parse(Collection c, final String src,
-	char separator, boolean handleBackslash) {
+	char separator, boolean escBackslash, boolean parenthesis) {
 		if (c == null)
 			c = new LinkedList();
 
 		final char[] seps = new char[] {separator};
 		int j = 0;
 		for (Strings.Result res;
-		(res = Strings.nextToken(src, j, seps, handleBackslash, true)) != null;
+		(res = Strings.nextToken(src, j, seps, escBackslash, true, parenthesis)) != null;
 		j = res.next) {
 			assert res.token != null;
 			c.add(res.token);
