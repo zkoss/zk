@@ -1482,8 +1482,10 @@ zkau._onDocKeydown = function (evt) {
 
 	if (zkcode) evtnm = "onCtrlKey";
 
-	for (var n = target; n; n = $parent(n)) {
+	for (var n = target, ref; n; n = $parent(n)) {
 		if (n.id && n.getAttribute) {
+			if (!ref && n.id.indexOf("!") == -1)
+				ref = n.id;
 			if (getZKAttr(n, evtnm) == "true"
 			&& (!zkcode || zkau._inCtkeys(evt, zkcode, getZKAttr(n, "ctkeys")))) {
 				var bSend = true;
@@ -1501,7 +1503,7 @@ zkau._onDocKeydown = function (evt) {
 				}
 
 				var req = {uuid: n.id, cmd: evtnm, ctl: true,
-					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey]};
+					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey, ref]};
 				if (zk.gecko && $tag(inp) == "SELECT" && $type(inp))
 					zkau.lateReq = req; //Bug 1756559:let SELECT to send (see sel.js)
 				else

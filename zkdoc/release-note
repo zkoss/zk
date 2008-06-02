@@ -1,6 +1,7 @@
 	--------
 ZK 3.0.6
 * Features
+  1978624: Keyevent support for every ZUL component
   1959959: An option to allow user to refresh if an error
   1883237: A way to register listeners for particular desktop
   1966723: A way to customize cofirm upon retry (resend mechanism)
@@ -16,6 +17,7 @@ ZK 3.0.6
   1970894: Labels with variables (MessageFormat)
   1978632: A ZK page being included shall inherit width and height
   1765940: A way to prevent caching dsp file in DspExtendlet (for dev)
+  1978636: Keyevent support getReference() to get the causing component
 
 * Bugs
   1955452: Liferay Failed if two portlets from different Web apps
