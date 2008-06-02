@@ -20,61 +20,52 @@ zk.load("zul.widget");
 
 //Paging//
 zkPg = {
-	down_btn: "",
+	down_btn: null,
 	
 	init: function (cmp) {
-		zkTxbox.init($real(cmp));
-		
 		cmp.actpg = $int(getZKAttr(cmp, "actpg"));
 		cmp.npg = $int(getZKAttr(cmp, "numpg"));
-	
+		
+		var inputs = $es(cmp.id + "!real");
+		for ( var i = 0; i < inputs.length; ++i)
+			zkTxbox.init(inputs[i]);
+			
 		//event for input
-		var inp = $real(cmp);
-		zk.listen(inp, "keypress", zkPg.onkeypress);
-		zk.listen(inp, "keydown", zkPg.inpkeydown);
-		zk.listen(inp, "blur", zkPg.inpblur);
+		for ( var i = 0; i < inputs.length; ++i) {
+			zk.listen(inputs[i], "keypress", zkPg.onkeypress);
+			zk.listen(inputs[i], "keydown", zkPg.inpkeydown);
+			zk.listen(inputs[i], "blur", zkPg.inpblur);
+		}
 		
-		var tb_first = $e(cmp.id+"!tb_f");
-		var tb_prev = $e(cmp.id+"!tb_p");
-		var tb_next = $e(cmp.id+"!tb_n");
-		var tb_last = $e(cmp.id+"!tb_l");
+		var tb_first = $es(cmp.id+"!tb_f");
+		var tb_prev = $es(cmp.id+"!tb_p");
+		var tb_next = $es(cmp.id+"!tb_n");
+		var tb_last = $es(cmp.id+"!tb_l");
 		
-		zk.listen(tb_first, "click", zkPg.onclick_first);
-		zk.listen(tb_prev, "click", zkPg.onclick_prev);
-		zk.listen(tb_next, "click", zkPg.onclick_next);
-		zk.listen(tb_last, "click", zkPg.onclick_last);
+		for ( var i = 0; i < tb_first.length; ++i) {
+			zk.listen(tb_first[i], "click", zkPg.onclick_first);
+			zk.listen(tb_prev[i], "click", zkPg.onclick_prev);
+			zk.listen(tb_next[i], "click", zkPg.onclick_next);
+			zk.listen(tb_last[i], "click", zkPg.onclick_last);
+			
+			if (cmp.actpg == 0) {
+				zk.addClass(tb_first[i], "z-item-disd");
+				zk.addClass(tb_prev[i], "z-item-disd");
+			} else if (cmp.actpg == cmp.npg - 1) {
+				zk.addClass(tb_next[i], "z-item-disd");
+				zk.addClass(tb_last[i], "z-item-disd");
+			}
+		}		
 		
-		zk.listen(tb_first, "mouseover", zkPg.onover);
-		zk.listen(tb_prev, "mouseover", zkPg.onover);
-		zk.listen(tb_next, "mouseover", zkPg.onover);
-		zk.listen(tb_last, "mouseover", zkPg.onover);
-		
-		zk.listen(tb_first, "mouseout", zkPg.onout);
-		zk.listen(tb_prev, "mouseout", zkPg.onout);
-		zk.listen(tb_next, "mouseout", zkPg.onout);
-		zk.listen(tb_last, "mouseout", zkPg.onout);
-		
-		zk.listen(tb_first, "mousedown", zkPg.ondown);
-		zk.listen(tb_prev, "mousedown", zkPg.ondown);
-		zk.listen(tb_next, "mousedown", zkPg.ondown);
-		zk.listen(tb_last, "mousedown", zkPg.ondown);
-		
-		zk.listen(tb_first, "focus", zkPg.onfocus);
-		zk.listen(tb_prev, "focus", zkPg.onfocus);
-		zk.listen(tb_next, "focus", zkPg.onfocus);
-		zk.listen(tb_last, "focus", zkPg.onfocus);
-		
-		zk.listen(tb_first, "blur", zkPg.onblur);
-		zk.listen(tb_prev, "blur", zkPg.onblur);
-		zk.listen(tb_next, "blur", zkPg.onblur);
-		zk.listen(tb_last, "blur", zkPg.onblur);
-
-		if (cmp.actpg == 0) {
-			zk.addClass(tb_first, "z-item-disd");
-			zk.addClass(tb_prev, "z-item-disd");
-		} else if (cmp.actpg == cmp.npg - 1) {
-			zk.addClass(tb_next, "z-item-disd");
-			zk.addClass(tb_last, "z-item-disd");
+		for (var btns = ["!tb_f", "!tb_p", "!tb_n", "!tb_l"], i = btns.length; --i >= 0;){
+			var btn = $es(cmp.id + btns[i]);
+			for ( var j = 0; j < btn.length; ++j) {
+				zk.listen(btn[j], "mouseover", zkPg.onover);
+				zk.listen(btn[j], "mouseout", zkPg.onout);
+				zk.listen(btn[j], "mousedown", zkPg.ondown);
+				zk.listen(btn[j], "focus", zkPg.onfocus);
+				zk.listen(btn[j], "blur", zkPg.onblur);
+			}
 		}
 	},
 	
@@ -95,7 +86,7 @@ zkPg = {
 		if (inp.disabled || inp.readOnly)
 			return;
 		
-		zkPg.checkValue(cmp);
+		zkPg.checkValue(inp);
 		zkPg.go(cmp, inp.value-1);
 		Event.stop(evt);
 	},
@@ -123,13 +114,13 @@ zkPg = {
 		case 37://left
 			break;		
 		case 38: case 33: //up, PageUp
-			zkPg.increase(cmp,true);
+			zkPg.increase(inp,true);
 			Event.stop(evt);
 			break;
 		case 39://right
 			break;		
 		case 40: case 34: //down, PageDown
-			zkPg.increase(cmp,false);
+			zkPg.increase(inp,false);
 			Event.stop(evt);
 			break;
 		case 36://home
@@ -143,7 +134,7 @@ zkPg = {
 		case 9: case 8: case 46: //tab, backspace, delete 
 			break;
 		case 13: //enter
-			zkPg.checkValue(cmp);
+			zkPg.checkValue(inp);
 			zkPg.go(cmp, inp.value-1);
 			Event.stop(evt);
 			break;
@@ -154,8 +145,8 @@ zkPg = {
 		}
 	},
 	
-	checkValue: function(cmp){
-		inp = $real(cmp);
+	checkValue: function(inp){
+		var	cmp = $outer(inp);
 		var value = $int(inp.value);
 		
 		if (value < 1)
@@ -166,8 +157,8 @@ zkPg = {
 		inp.value = value;
 	},
 	
-	increase: function (cmp,is_add){
-		var inp = $real(cmp);
+	increase: function (inp,is_add){
+		var	cmp = $outer(inp);
 		var value = $int(inp.value);
 		if(is_add){
 			value = value + 1;
@@ -215,7 +206,6 @@ zkPg = {
 	onover: function (evt) {
 		if (!evt) evt = window.event;
 		var table = $parentByTag(Event.element(evt), "TABLE");
-		var cmp = $outer(Event.element(evt));
 		
 		if (table.className.indexOf("z-item-disd") == -1) 
 			zk.addClass(table, "z-btn-over");
@@ -230,18 +220,18 @@ zkPg = {
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
 		var table = $parentByTag(Event.element(evt), "TABLE");
-		var cmp = $outer(Event.element(evt));
 
 		if (table.className.indexOf("z-item-disd") != -1)  return;
 		
 		zk.addClass(table, "z-btn-click");
-		down_btn = table.id;
+		zkPg.down_btn = table;
 		zk.listen(document.body, "mouseup", zkPg.onup);
 	},
 	
 	onup: function (evt) {
 		if (!evt) evt = window.event;
-		zk.rmClass($e(down_btn), "z-btn-click");
+		zk.rmClass(zkPg.down_btn, "z-btn-click");
+		zkPg.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkPg.onup);
 	},
 	

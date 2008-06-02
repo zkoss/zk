@@ -37,26 +37,32 @@ public class PagingDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Paging self = (Paging) comp;
-		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.pg.Pg\"");
+		wh.write("<div id=\"").write(self.getUuid()).write("\" name=\"")
+			.write(self.getUuid()).write("\" z.type=\"zul.pg.Pg\"");
 		wh.write(" class=\"z-pagingbar\" ");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
 		wh.write("<table cellspacing=\"0\"><tbody><tr>");
 		wh.write("<td><table id=\"").write(self.getUuid()+"!tb_f")
+			.write("\" name=\"").write(self.getUuid()+"!tb_f")
 			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn z-btn-icon\" style=\"width: auto;\"><tbody><tr><td class=\"z-btn-l\"><i>&#160;</i></td><td class=\"z-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"z-btn-text z-pbar-page-first\"> </button></em></td><td class=\"z-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
 		wh.write("<td><table id=\"").write(self.getUuid()+"!tb_p")
+			.write("\" name=\"").write(self.getUuid()+"!tb_p")
 			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn z-btn-icon\" style=\"width: auto;\"><tbody><tr><td class=\"z-btn-l\"><i>&#160;</i></td><td class=\"z-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"z-btn-text z-pbar-page-prev\"> </button></em></td><td class=\"z-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
 		wh.write("<td><span class=\"ypb-sep\"/></td>");
 		wh.write("<td><span class=\"ypb-text\">Page</span></td>");
 		wh.write("<td><input type=\"text\" class=\"z-pbar-page-number\" value=\"")
 			.write(self.getActivePage() + 1).write("\" size=\"3\" id=\"").write(self.getUuid() + "!real")
+			.write("\" name=\"").write(self.getUuid() + "!real")
 			.write("\" style=\"height: 14px;\" onChange=\"\"/></td>");
 		wh.write("<td><span class=\"ypb-text\">of ").write(self.getPageCount())
 			.write("</span></td>");
 		wh.write("<td><span class=\"ypb-sep\"/></td>");
 		wh.write("<td><table id=\"").write(self.getUuid()+"!tb_n")
+			.write("\" name=\"").write(self.getUuid()+"!tb_n")
 			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn z-btn-icon\" style=\"width: auto;\"><tbody><tr><td class=\"z-btn-l\"><i>&#160;</i></td><td class=\"z-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"z-btn-text z-pbar-page-next\"> </button></em></td><td class=\"z-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
 		wh.write("<td><table id=\"").write(self.getUuid()+"!tb_l")
+			.write("\" name=\"").write(self.getUuid()+"!tb_l")
 			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn z-btn-icon\" style=\"width: auto;\"><tbody><tr><td class=\"z-btn-l\"><i>&#160;</i></td><td class=\"z-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"z-btn-text z-pbar-page-last\"> </button></em></td><td class=\"z-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
 		wh.write("</tr></tbody></table>");
 		
