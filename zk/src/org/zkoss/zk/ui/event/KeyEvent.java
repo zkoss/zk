@@ -53,15 +53,21 @@ public class KeyEvent extends Event {
 
 	private final int _keyCode;
 	private final boolean _ctrlKey, _shiftKey, _altKey;
+	private final Component _ref;
+	public KeyEvent(String name, Component target, int keyCode,
+			boolean ctrlKey, boolean shiftKey, boolean altKey) {
+		this(name, target, keyCode, ctrlKey, shiftKey, altKey, null);
+	}
 	/** Constructs a mouse relevant event.
 	 */
 	public KeyEvent(String name, Component target, int keyCode,
-	boolean ctrlKey, boolean shiftKey, boolean altKey) {
+	boolean ctrlKey, boolean shiftKey, boolean altKey, Component ref) {
 		super(name, target);
 		_keyCode = keyCode;
 		_ctrlKey = ctrlKey;
 		_shiftKey = shiftKey;
 		_altKey = altKey;
+		_ref = ref;
 	}
 	/** Returns the key code.
 	 */
@@ -83,4 +89,14 @@ public class KeyEvent extends Event {
 	public final boolean isAltKey() {
 		return _altKey;
 	}
+
+	/** 
+	 * Returns the reference item that is the component causing the key event to
+	 * be fired.
+	 *
+	 * @since 3.0.6
+	 */
+	public Component getReference() {
+		return _ref;
+	} 
 }

@@ -46,13 +46,15 @@ public class KeyCommand extends Command {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final String[] data = request.getData();
-		if (data == null || data.length != 4)
+		if (data == null || (data.length != 4 && data.length != 5))
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
-
+		final Component ref = data.length == 5 && data[4] != null ?
+				request.getDesktop().getComponentByUuidIfAny(data[4]): null;
+				
 		final KeyEvent event = new KeyEvent(getId(), comp,
 			Integer.parseInt(data[0]), "true".equals(data[1]),
-			"true".equals(data[2]), "true".equals(data[3]));
+			"true".equals(data[2]), "true".equals(data[3]), ref);
 		Events.postEvent(event);
 	}
 }

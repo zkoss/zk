@@ -24,10 +24,11 @@ import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.mesg.MCommon;
 import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
@@ -42,7 +43,13 @@ import org.zkoss.zul.event.ZulEvents;
 /**
  * The fundamental class for XUL elements.
  *
+ * <p>Events:<br/>
+ * 	onOK, onCacnel and onCtrlKey.<br/>
+ * 
  * @author tomyeh
+ * @since 3.0.6 supports onOK event.
+ * @since 3.0.6 supports onCancel event.
+ * @since 3.0.6 supports onCtrlKey event.
  */
 abstract public class XulElement extends HtmlBasedComponent {
 	static {
@@ -62,6 +69,164 @@ abstract public class XulElement extends HtmlBasedComponent {
 	private String _tooltip;
 	/** The action. */
 	private String _action;
+	/** What control and function keys to intercepts. */
+	private String _ctrlKeys;
+	/** The value passed to the client; parsed from _ctrlKeys. */
+	private String _ctkeys;
+
+
+	/** Returns what keystrokes to intercept.
+	 * <p>Default: null.
+	 * @since 3.0.6
+	 */
+	public String getCtrlKeys() {
+		return _ctrlKeys;
+	}
+	/** Sets what keystrokes to intercept.
+	 *
+	 * <p>The string could be a combination of the following:
+	 * <dl>
+	 * <dt>^k</dt>
+	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n</dd>
+	 * <dt>@k</dt>
+	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n</dd>
+	 * <dt>$n</dt>
+	 * <dd>A shift key, i.e., Shift+n, where n could be #n.
+	 * Note: $a ~ $z are not supported.</dd>
+	 * <dt>#home</dt>
+	 * <dd>Home</dd>
+	 * <dt>#end</dt>
+	 * <dd>End</dd>
+	 * <dt>#ins</dt>
+	 * <dd>Insert</dd>
+	 * <dt>#del</dt>
+	 * <dd>Delete</dd>
+	 * <dt>#left</dt>
+	 * <dd>Left arrow</dd>
+	 * <dt>#right</dt>
+	 * <dd>Right arrow</dd>
+	 * <dt>#up</dt>
+	 * <dd>Up arrow</dd>
+	 * <dt>#down</dt>
+	 * <dd>Down arrow</dd>
+	 * <dt>#pgup</dt>
+	 * <dd>PageUp</dd>
+	 * <dt>#pgdn</dt>
+	 * <dd>PageDn</dd>
+	 * <dt>#f1 #f2 ... #f12</dt>
+	 * <dd>Function keys representing F1, F2, ... F12</dd>
+	 * </dl>
+	 *
+	 * <p>For example,
+	 * <dl>
+	 * <dt>^a^d@c#f10#left#right</dt>
+	 * <dd>It means you want to intercept Ctrl+A, Ctrl+D, Alt+C, F10,
+	 * Left and Right.</dd>
+	 * <dt>^#left</dt>
+	 * <dd>It means Ctrl+Left.</dd>
+	 * <dt>^#f1</dt>
+	 * <dd>It means Ctrl+F1.</dd>
+	 * <dt>@#f3</dt>
+	 * <dd>It means Alt+F3.</dd>
+	 * </dl>
+	 *
+	 * <p>Note: it doesn't support Ctrl+Alt, Shift+Ctrl, Shift+Alt or Shift+Ctrl+Alt.
+	 * @since 3.0.6
+	 */
+	public void setCtrlKeys(String ctrlKeys) throws UiException {
+		if (ctrlKeys != null && ctrlKeys.length() == 0)
+			ctrlKeys = null;
+		if (!Objects.equals(_ctrlKeys, ctrlKeys)) {
+			parseCtrlKeys(ctrlKeys);
+			smartUpdate("z.ctkeys", _ctkeys);
+		}
+	}
+	private void parseCtrlKeys(String keys) throws UiException {
+		if (keys == null || keys.length() == 0) {
+			_ctrlKeys = _ctkeys = null;
+			return;
+		}
+
+		final StringBuffer sbctl = new StringBuffer(),
+			sbsft = new StringBuffer(), sbalt = new StringBuffer(),
+			sbext = new StringBuffer();
+		StringBuffer sbcur = null;
+		for (int j = 0, len = keys.length(); j < len; ++j) {
+			char cc = keys.charAt(j);
+			switch (cc) {
+			case '^':
+			case '$':
+			case '@':
+				if (sbcur != null)
+					throw new WrongValueException("Combination of Shift, Alt and Ctrl not supported: "+keys);
+				sbcur = cc == '^' ? sbctl: cc == '@' ? sbalt: sbsft;
+				break;
+			case '#':
+				{
+					int k = j + 1;
+					for (; k < len; ++k) {
+						final char c2 = (char)keys.charAt(k);
+						if ((c2 > 'Z' || c2 < 'A') 	&& (c2 > 'z' || c2 < 'a')
+						&& (c2 > '9' || c2 < '0'))
+							break;
+					}
+					if (k == j + 1)
+						throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
+
+					final String s = keys.substring(j+1, k).toLowerCase();
+					if ("pgup".equals(s)) cc = 'A';
+					else if ("pgdn".equals(s)) cc = 'B';
+					else if ("end".equals(s)) cc = 'C';
+					else if ("home".equals(s)) cc = 'D';
+					else if ("left".equals(s)) cc = 'E';
+					else if ("up".equals(s)) cc = 'F';
+					else if ("right".equals(s)) cc = 'G';
+					else if ("down".equals(s)) cc = 'H';
+					else if ("ins".equals(s)) cc = 'I';
+					else if ("del".equals(s)) cc = 'J';
+					else if (s.length() > 1 && s.charAt(0) == 'f') {
+						final int v;
+						try {
+							v = Integer.parseInt(s.substring(1));
+						} catch (Throwable ex) {
+							throw new WrongValueException("Unknown #"+s+" in "+keys);
+						}
+						if (v == 0 || v > 12)
+							throw new WrongValueException("Unsupported function key: #f"+v);
+						cc = (char)('O' + v); //'P': F1, 'Q': F2... 'Z': F12
+					} else
+						throw new WrongValueException("Unknown #"+s+" in "+keys);
+
+					if (sbcur == null) sbext.append(cc);
+					else {
+						sbcur.append(cc);
+						sbcur = null;
+					}
+					j = k - 1;
+				}
+				break;
+			default:
+				if (sbcur == null || ((cc > 'Z' || cc < 'A') 
+				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
+					throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
+				if (sbcur == sbsft)
+					throw new WrongValueException("$a - $z not supported ("+keys+"). Supported includes $#f1, $#home and so on.");
+
+				if (cc <= 'Z' && cc >= 'A')
+					cc = (char)(cc + ('a' - 'A')); //to lower case
+				sbcur.append(cc);
+				sbcur = null;
+				break;
+			}
+		}
+
+		_ctkeys = new StringBuffer()
+			.append('^').append(sbctl).append(';')
+			.append('@').append(sbalt).append(';')
+			.append('$').append(sbsft).append(';')
+			.append('#').append(sbext).append(';').toString();
+		_ctrlKeys = keys;
+	}
 
 	/** Returns the ID of the popup ({@link Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
@@ -277,13 +442,15 @@ abstract public class XulElement extends HtmlBasedComponent {
 		final String attrs = super.getOuterAttrs();
 		final String ctx = getContext(), popup = getPopup(), tip = getTooltip();
 			//Let derives (e.g., treerow has a chance to override it)
-		if (ctx == null &&  tip == null && popup == null)
-			return attrs;
 
 		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		HTMLs.appendAttribute(sb, "z.ctx", ctx);
-		HTMLs.appendAttribute(sb, "z.pop", popup);
-		HTMLs.appendAttribute(sb, "z.tip", tip);
+		if (ctx != null) HTMLs.appendAttribute(sb, "z.ctx", ctx);
+		if (popup != null) HTMLs.appendAttribute(sb, "z.pop", popup);
+		if (tip != null) HTMLs.appendAttribute(sb, "z.tip", tip);
+		appendAsapAttr(sb, Events.ON_OK);
+		appendAsapAttr(sb, Events.ON_CANCEL);
+		appendAsapAttr(sb, Events.ON_CTRL_KEY);
+		HTMLs.appendAttribute(sb, "z.ctkeys", _ctkeys);
 		return sb.toString();
 	}
 
