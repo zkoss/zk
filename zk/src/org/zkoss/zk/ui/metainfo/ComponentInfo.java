@@ -84,9 +84,9 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** The fulfill condition.
 	 */
 	private String _fulfill;
-	/** The apply attribute.
+	/** The apply attribute (parsed into an array of ExValue).
 	 */
-	private ExValue _apply;
+	private ExValue[] _apply;
 	/** The forward condition.
 	 */
 	private String _forward;
@@ -106,7 +106,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef,
 	String tag) {
 		if (parent == null || compdef == null)
-			throw new IllegalArgumentException("parent and compdef required");
+			throw new IllegalArgumentException();
 
 		_parent = parent;
 		_compdef = compdef;
@@ -240,68 +240,107 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 3.0.1
 	 */
 	public Composer getComposer(Page page, Component comp) {
-		if (_apply != null) {
-			Object o = comp != null ?
-				_apply.getValue(_evalr.getEvaluator(), comp):
-				_apply.getValue(_evalr.getEvaluator(), page);;
-			try {
-				if (o instanceof String) {
-					final String s = (String)o;
-					if (s.indexOf(',') >= 0)
-						o = CollectionsX.parse(null, s, ',');
-				}
+		if (_apply == null)
+			return null;
 
-				if (o instanceof Collection) {
-					final Collection c = (Collection)o;
-					int sz = c.size();
-					switch (sz) {
-					case 0: return null;
-					case 1: o = c.iterator().next(); break;
-					default: o = c.toArray(new Object[sz]); break;
-					}
-				}
+		try {
+			List composers = new LinkedList();
+			for (int j = 0; j < _apply.length; ++j)
+				toComposer(composers, page,
+					comp != null ?
+						_apply[j].getValue(_evalr.getEvaluator(), comp):
+						_apply[j].getValue(_evalr.getEvaluator(), page));
 
-				if (o instanceof Object[])
-					return MultiComposer.getComposer(page, (Object[])o);
-
-				if (o instanceof String) {
-					final String clsnm = ((String)o).trim();
-					o = page != null ? page.resolveClass(clsnm).newInstance():
-						Classes.newInstanceByThread(clsnm);
-				} else if (o instanceof Class)
-					o = ((Class)o).newInstance();
-
-				if (o instanceof Composer)
-					return (Composer)o;
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex);
-			}
-			if (o != null)
-				throw new UiException(Composer.class + " not implemented by "+o);
+			return MultiComposer.getComposer(page,
+				(Composer[])composers.toArray(new Composer[composers.size()]));
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
 		}
-		return null;
 	}
-	/** Returns the apply attribute that is the class that implements
-	 * {@link Composer}, an instance of it or null.
+	private static void toComposer(List composers, Page page, Object o)
+	throws Exception {
+		if (o instanceof String) {
+			final String s = (String)o;
+			if (s.indexOf(',') >= 0)
+				o = CollectionsX.parse(null, s, ','); //No EL
+		}
+
+		if (o instanceof Collection) {
+			for (Iterator it = ((Collection)o).iterator(); it.hasNext();) {
+				final Composer cp = toComposer(page, it.next());
+				if (cp != null)
+					composers.add(cp);
+			}
+			return;
+		}
+
+		if (o instanceof Object[]) {
+			final Object[] ary = (Object[])o;
+			for (int j = 0; j < ary.length; ++j) {
+				final Composer cp = toComposer(page, ary[j]);
+				if (cp != null)
+					composers.add(cp);
+			}
+			return;
+		}
+
+		final Composer cp = toComposer(page, o);
+		if (cp != null)
+			composers.add(cp);
+	}
+	private static Composer toComposer(Page page, Object o)
+	throws Exception {
+		if (o instanceof String) {
+			final String clsnm = ((String)o).trim();
+			o = page != null ? page.resolveClass(clsnm).newInstance():
+				Classes.newInstanceByThread(clsnm);
+		} else if (o instanceof Class) {
+			o = ((Class)o).newInstance();
+		}
+		return (Composer)o;
+	}
+	/** Returns the apply attribute that is a list of {@link Composer} class
+	 * names or EL expressions, or null if no apply attribute.
 	 *
 	 * @since 3.0.0
 	 * @see #getComposer
 	 */
 	public String getApply() {
-		return _apply != null ? _apply.getRawValue(): null;
+		if (_apply == null)
+			return null;
+
+		final StringBuffer sb = new StringBuffer();
+		for (int j = 0; j < _apply.length; ++j) {
+			if (j > 0) sb.append(',');
+			sb.append(_apply[j].getRawValue());
+		}
+		return sb.toString();
 	}
-	/** Sets the apply attribute that is used to initialize
-	 * the component.
+	/** Sets the apply attribute that is is a list of {@link Composer} class
+	 * or EL expressions.
 	 *
-	 * @param apply the attribute which must be the class that implements
-	 * {@link org.zkoss.zk.ui.util.Composer}, an instance of it, or null.
-	 * El expressions are allowed, but self means the parent, if not null,
-	 * or page, if root, (after all, the component is not created yet).
+	 * @param apply the attribute this is a list of {@link Composer} class
+	 * or EL expressions
+	 * El expressions are allowed, but self means the parent, if available;
+	 * or page, if no parent at all. (Note: the component is not created yet
+	 * when the apply attribute is evaluated).
 	 * @since 3.0.0
 	 */
 	public void setApply(String apply) {
-		_apply = apply != null && apply.length() > 0 ?
-			new ExValue(apply, Object.class): null;
+		_apply = null;
+		if (apply == null || apply.length() == 0)
+			return;
+
+		List dst = new LinkedList();
+		Collection src = CollectionsX.parse(null, apply, ',', true, true);
+		for (Iterator it = src.iterator(); it.hasNext();) {
+			final String s = (String)it.next();
+			if (s.length() > 0)
+				dst.add(new ExValue(s, Object.class));
+		}
+
+		if (!dst.isEmpty())
+			_apply = (ExValue[])dst.toArray(new ExValue[dst.size()]);
 	}
 
 	/** Returns the forward condition that controls how to forward
@@ -768,7 +807,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_tag = (String)in.readObject();
 		_cond = (ConditionImpl)in.readObject();
 		_fulfill = (String)in.readObject();
-		_apply = (ExValue)in.readObject();
+		_apply = (ExValue[])in.readObject();
 		_forward = (String)in.readObject();
 		_forEach = (String[])in.readObject();
 	}

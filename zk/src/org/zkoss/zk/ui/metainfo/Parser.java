@@ -473,9 +473,6 @@ public class Parser {
 
 		final String imports = (String)params.remove("import");
 		if (imports != null && imports.length() > 0) {
-			//Note: we cannot use Maps.parse since it cannot handle
-			//"a,b" => (null, a) will be replaced by (null, b)
-
 			Collection ims = CollectionsX.parse(null, imports, ',', false);
 			for (Iterator it = ims.iterator(); it.hasNext();) {
 				final String im = (String)it.next();
