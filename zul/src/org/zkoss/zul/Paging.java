@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zk.ui.event.Events;
@@ -66,6 +67,37 @@ public class Paging extends XulElement implements Paginal {
 		setPageSize(pagesz);
 	}
 
+	public void smartUpdate(String attr, String value) {
+		super.smartUpdate(attr, value);
+		invalidateWholeIfAny();
+	}
+	public void smartUpdate(String attr, int value) {
+		super.smartUpdate(attr, Integer.toString(value));
+		invalidateWholeIfAny();
+	}
+	public void smartUpdate(String attr, boolean value) {
+		super.smartUpdate(attr, Boolean.toString(value));
+		invalidateWholeIfAny();
+	}
+	public void invalidate() {
+		if (isBothPaging())
+			getParent().invalidate();
+		else
+			super.invalidate();
+	}
+	protected void invalidateWholeIfAny() {
+		if (isBothPaging())
+			getParent().invalidate();
+	}
+	private boolean isBothPaging () {
+		Component parent = getParent();
+		if (parent instanceof Listbox)
+			return "both".equals(((Listbox)parent).getPagingPosition());
+		else if (parent instanceof Grid)
+			return "both".equals(((Grid)parent).getPagingPosition());
+		return false;
+	}
+	
 	//Paginal//
 	public int getPageSize() {
 		return _pgsz;
