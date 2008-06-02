@@ -276,7 +276,7 @@ zk.mods = {}; //ZkFns depends on it
  * @since 3.1.0
  */
 function $es(id) {
-	return typeof id == 'string' ? id ? document.getElementsByName(name): null: id;
+	return typeof id == 'string' ? id ? document.getElementsByName(id): null: id;
 }
 /** Returns the current time (new Date().getTime()) (since 01/01/1970).
  * @since 3.0.0
