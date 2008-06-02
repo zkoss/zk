@@ -35,6 +35,7 @@ ZK 3.0.6
   1973470: Listbox with multiple and checkmark and contextmenu
   1979088: Both paging fail to change the style in Grid and Listbox
   1981877: Dates.substract() for MINUTE field returns wrong value
+  1981934: appy fail to handle mix of class name and composer insntance
   
 * Upgrade Notes:
   + The default CSS style of a page becomes "width:100%" (rather than
