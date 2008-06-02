@@ -71,7 +71,7 @@ public class OpenEvent extends Event {
 		_ref = ref;
 		_val = value;
 	}
-	/** Returns the reference that is the component causing {@link #getTarget}
+	/** Returns the reference that causes {@link #getTarget}
 	 * to be opened.
 	 *
 	 * <p>It is null, if the open event is not caused by opening
