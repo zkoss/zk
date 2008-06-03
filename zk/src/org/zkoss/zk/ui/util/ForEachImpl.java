@@ -49,7 +49,7 @@ public class ForEachImpl implements ForEach {
 	private final EvaluatorRef _evalr;
 	private final Page _page;
 	private final Component _comp;
-	private final ExValue _expr;
+	private final ExValue[] _expr;
 	private final ExValue _begin, _end;
 	private Status _status;
 	private Iterator _it;
@@ -57,9 +57,87 @@ public class ForEachImpl implements ForEach {
 	private boolean _done;
 
 	/** Returns an instance that represents the iterator for the
+	 * specified collection.
+	 *
+	 * @param expr an array of expressions. There are two formats.
+	 * <ol>
+	 * <li>length == 1: it iterates thru the content of expr[0].
+	 * For example, if expr[0] is an array, all items in this array will
+	 * be iterated.</li>
+	 * <li>length > 1, it will iterate thru expr[0]</li>
+	 * <li>length == 0 or expr is null, null is returned</li>
+	 * </ol>
+	 * @since 3.0.6
+	 */
+	public static
+	ForEach getInstance(EvaluatorRef evalr, Component comp,
+	ExValue[] expr, ExValue begin, ExValue end) {
+		if (expr == null || expr.length == 0)
+			return null;
+		return new ForEachImpl(evalr, comp, expr, begin, end);
+	}
+	/** Returns an instance that represents the iterator for the
+	 * specified collection, or null if expr is null or empty.
+	 *
+	 * @param expr an array of expressions. There are two formats.
+	 * <ol>
+	 * <li>length == 1: it iterates thru the content of expr[0].
+	 * For example, if expr[0] is an array, all items in this array will
+	 * be iterated.</li>
+	 * <li>length > 1, it will iterate thru expr[0]</li>
+	 * <li>length == 0 or expr is null, null is returned</li>
+	 * </ol>
+	 * @since 3.0.6
+	 */
+	public static
+	ForEach getInstance(EvaluatorRef evalr, Page page,
+	ExValue[] expr, ExValue begin, ExValue end) {
+		if (expr == null || expr.length == 0)
+			return null;
+		return new ForEachImpl(evalr, page, expr, begin, end);
+	}
+
+	/** Constructor.
+	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue)}
+	 * instead of this constructor.
+	 * @exception IllegalArgumentException if comp or evalr is null
+	 * @since 3.0.6
+	 */
+	public ForEachImpl(EvaluatorRef evalr, Component comp,
+	ExValue[] expr, ExValue begin, ExValue end) {
+		if (comp == null || evalr == null)
+			throw new IllegalArgumentException();
+
+		_evalr = evalr;
+		_page = null;
+		_comp = comp;
+		_expr = expr;
+		_begin = begin;
+		_end = end;
+	}
+	/** Constructor.
+	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue)}
+	 * instead of this constructor.
+	 * @exception IllegalArgumentException if page or evalr is null
+	 * @since 3.0.6
+	 */
+	public ForEachImpl(EvaluatorRef evalr, Page page, ExValue[] expr, ExValue begin, ExValue end) {
+		if (page == null || evalr == null)
+			throw new IllegalArgumentException();
+
+		_evalr = evalr;
+		_page = page;
+		_comp = null;
+		_expr = expr;
+		_begin = begin;
+		_end = end;
+	}
+
+	/** Returns an instance that represents the iterator for the
 	 * specified collection, or null if expr is null or empty.
 	 *
 	 * @param expr an EL expression that shall return a collection of objects.
+	 * @see #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue)
 	 */
 	public static
 	ForEach getInstance(EvaluatorRef evalr, Component comp, String expr, String begin, String end) {
@@ -72,6 +150,7 @@ public class ForEachImpl implements ForEach {
 	 *
 	 * @param expr an EL expression that shall return a collection of objects.
 	 * @since 3.0.0
+	 * @see #getInstance(EvaluatorRef, Page, ExValue[], ExValue, ExValue)
 	 */
 	public static
 	ForEach getInstance(EvaluatorRef evalr, Page page, String expr, String begin, String end) {
@@ -85,6 +164,7 @@ public class ForEachImpl implements ForEach {
 	 * instead of this constructor.
 	 * @exception IllegalArgumentException if comp or evalr is null
 	 * @since 3.0.0
+	 * @see #ForEachImpl(EvaluatorRef, Component, ExValue[], ExValue, ExValue)
 	 */
 	public ForEachImpl(EvaluatorRef evalr, Component comp, String expr, String begin, String end) {
 		if (comp == null || evalr == null)
@@ -93,7 +173,7 @@ public class ForEachImpl implements ForEach {
 		_evalr = evalr;
 		_page = null;
 		_comp = comp;
-		_expr = expr != null ? new ExValue(expr, Object.class): null;
+		_expr = expr != null ? new ExValue[] {new ExValue(expr, Object.class)}: null;
 		_begin = begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class): null;
 		_end = end != null && end.length() > 0 ? new ExValue(end, Integer.class): null;
 	}
@@ -102,6 +182,7 @@ public class ForEachImpl implements ForEach {
 	 * instead of this constructor.
 	 * @exception IllegalArgumentException if page or evalr is null
 	 * @since 3.0.0
+	 * @see #ForEachImpl(EvaluatorRef, Page, ExValue[], ExValue, ExValue)
 	 */
 	public ForEachImpl(EvaluatorRef evalr, Page page, String expr, String begin, String end) {
 		if (page == null || evalr == null)
@@ -110,7 +191,7 @@ public class ForEachImpl implements ForEach {
 		_evalr = evalr;
 		_page = page;
 		_comp = null;
-		_expr = expr != null ? new ExValue(expr, Object.class): null;
+		_expr = expr != null ? new ExValue[] {new ExValue(expr, Object.class)}: null;
 		_begin = begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class): null;
 		_end = end != null && end.length() > 0 ? new ExValue(end, Integer.class): null;
 	}
@@ -130,7 +211,17 @@ public class ForEachImpl implements ForEach {
 			//_begin or _end might depend on it
 			setupStatus();
 
-			final Object o = eval(_expr);
+			final Object o;
+			if (_expr == null || _expr.length == 0) {
+				o = null;
+			} else if (_expr.length == 1) {
+				o = eval(_expr[0]);
+			} else {
+				Object[] ary = new Object[_expr.length];
+				for (int j = 0; j < _expr.length; ++j)
+					ary[j] = eval(_expr[j]);
+				o = ary;
+			}
 			if (o == null) {
 				_done = true;
 				restoreStatus();

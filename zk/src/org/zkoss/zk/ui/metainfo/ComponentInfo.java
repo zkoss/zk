@@ -90,10 +90,12 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** The forward condition.
 	 */
 	private String _forward;
-	/** The forEach, forEachBegin and forEachEnd attribute,
-	 * which are used to evaluate this info multiple times.
+	/** The forEach content, i.e., what to iterate.
 	 */
-	private String[] _forEach;
+	private ExValue[] _forEach;
+	/** The forEach info: [forEachBegin, forEachEnd].
+	 */
+	private ExValue[] _forEachInfo;
 
 	/** Constructs the information about how to create component.
 	 * @param parent the parent; never null.
@@ -327,20 +329,24 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 3.0.0
 	 */
 	public void setApply(String apply) {
-		_apply = null;
-		if (apply == null || apply.length() == 0)
-			return;
+		_apply = parseList(apply, Object.class);
+	}
+	/** Parses a list of expressions.
+	 */
+	private static ExValue[] parseList(String expr, Class expcls) {
+		if (expr == null || expr.length() == 0)
+			return null;
 
 		List dst = new LinkedList();
-		Collection src = CollectionsX.parse(null, apply, ',', true, true);
+		Collection src = CollectionsX.parse(null, expr, ',', true, true);
 		for (Iterator it = src.iterator(); it.hasNext();) {
 			final String s = (String)it.next();
 			if (s.length() > 0)
-				dst.add(new ExValue(s, Object.class));
+				dst.add(new ExValue(s, expcls));
 		}
 
-		if (!dst.isEmpty())
-			_apply = (ExValue[])dst.toArray(new ExValue[dst.size()]);
+		return dst.isEmpty() ? null:
+			(ExValue[])dst.toArray(new ExValue[dst.size()]);
 	}
 
 	/** Returns the forward condition that controls how to forward
@@ -463,17 +469,22 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _forEach == null ? null:
 			comp != null ?
 				ForEachImpl.getInstance(
-					_evalr, comp, _forEach[0], _forEach[1], _forEach[2]):
+					_evalr, comp, _forEach, _forEachInfo[0], _forEachInfo[1]):
 				ForEachImpl.getInstance(
-					_evalr, page, _forEach[0], _forEach[1], _forEach[2]);
+					_evalr, page, _forEach, _forEachInfo[0], _forEachInfo[1]);
 	}
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
 	 * null/empty to denote no iteration.
 	 */
 	public void setForEach(String expr, String begin, String end) {
-		_forEach = expr != null && expr.length() > 0 ?
-			new String[] {expr, begin, end}: null;
+		_forEach = parseList(expr, Object.class);
+		_forEachInfo = _forEach == null ? null:
+			new ExValue[] {
+				begin != null && begin.length() > 0 ?
+					new ExValue(begin, Integer.class): null,
+				end != null && end.length() > 0 ?
+					new ExValue(end, Integer.class): null};
 	}
 	/** Returns whether the forEach condition is defined.
 	 * @since 3.0.0
@@ -782,6 +793,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		out.writeObject(_apply);
 		out.writeObject(_forward);
 		out.writeObject(_forEach);
+		out.writeObject(_forEachInfo);
 	}
 	private void readMembers(java.io.ObjectInput in)
 	throws java.io.IOException, ClassNotFoundException {
@@ -809,7 +821,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_fulfill = (String)in.readObject();
 		_apply = (ExValue[])in.readObject();
 		_forward = (String)in.readObject();
-		_forEach = (String[])in.readObject();
+		_forEach = (ExValue[])in.readObject();
+		_forEachInfo = (ExValue[])in.readObject();
 	}
 
 	/** Writes the evaluator reference.
