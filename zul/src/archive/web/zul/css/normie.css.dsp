@@ -37,6 +37,9 @@ div.tree-body, div.listbox-body, div.grid-body {<%-- always used. --%>
 	position: relative;
 	<%-- Bug 1766244: we have to specify position:relative with overflow:auto --%>
 }
+tr.grid-fake, tr.listbox-fake, tr.tree-fake { 
+	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%> 
+}
 .comboboxpp td span {<%--description--%>
 	padding-left: 5px;
 }
