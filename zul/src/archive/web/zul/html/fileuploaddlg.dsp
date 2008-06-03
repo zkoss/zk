@@ -48,7 +48,11 @@ function init() {
 	var el = document.getElementById("form");
 	el.action = parent.zk.getUpdateURI(
 		"/upload?dtid=${param.dtid}&uuid=${param.uuid}");
-
+	if (parent.zk.ie) {
+		var cave = parent.$e("${param.uuid}!cave");
+		if (cave)
+			document.body.style.backgroundColor = parent.Element.getStyle(cave, "background-color") || "";
+	}
 	parent.zk.focus(document.getElementById("file"));
 }
 function onDocKeydown(evt) {
