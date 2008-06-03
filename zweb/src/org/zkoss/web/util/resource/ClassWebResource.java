@@ -20,6 +20,8 @@ package org.zkoss.web.util.resource;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
@@ -60,6 +62,9 @@ import org.zkoss.web.servlet.http.Encodes;
  * <li>Calling {@link #service} when a request is receive.
  * </ol>
  *
+ * <p>Note: it assumes the file being loaded and the output stream is
+ * encoded in UTF-8 unless the extendlet handles it differently.
+ *
  * @author tomyeh
  */
 public class ClassWebResource {
@@ -71,7 +76,7 @@ public class ClassWebResource {
 	/** An array of extensions that have to be compressed (with gzip). */
 	private String[] _compressExts;
 	/** Map(String ext, Extendlet). */
-	private final Map _extlets = new HashMap(5);
+	private final Map _extlets = new HashMap(4);
 
 	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
@@ -114,6 +119,7 @@ public class ClassWebResource {
 		_ctx = ctx;
 		_mappingURI = mappingURI;
 		_cwc = new ClassWebContext();
+
 		addExtendlet("dsp", new DSPExtendlet());
 	}
 	/** Process the request.
@@ -263,13 +269,23 @@ public class ClassWebResource {
 				extlet.service(request, response, pi, jsextra);
 				return;
 			}
+		}
 
-			if (!Servlets.isIncluded(request)) {				
-				final String ctype = ContentTypes.getContentType(ext);
-				if (ctype != null)
-					response.setContentType(ctype);
-//				if (D.ON && log.debugable()) log.debug("Content type: "+ctype+" for "+pi);
+		//NOTE: Unlike DspExtendlet, the output stream is always UTF-8
+		//since we load the source directly.
+
+		if (!Servlets.isIncluded(request) && isCharsetRequired(ext)) {
+			String ctype = ContentTypes.getContentType(ext);
+			if (ctype == null) {
+				ctype = ";charset=UTF-8";
+			} else {
+				final int k = ctype.indexOf(';');
+				if (k >= 0)
+					ctype = ctype.substring(0, k);
+				ctype += ";charset=UTF-8";
 			}
+
+			response.setContentType(ctype);
 		}
 
 		byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
@@ -312,6 +328,15 @@ public class ClassWebResource {
 				if (ext.equals(_compressExts[j]))
 					return true;
 		return false;
+	}
+	private static boolean isCharsetRequired(String ext) {
+		return !_binexts.contains(ext);
+	}
+	private static final Set _binexts = new HashSet();
+	static {
+		final String[] exts = {"jpg", "jpeg", "png", "gif", "pdf", "mpg", "avi"};
+		for (int j = exts.length; --j >= 0;)
+			_binexts.add(exts[j]);
 	}
 
 	/**

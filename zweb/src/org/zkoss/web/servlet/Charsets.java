@@ -101,7 +101,7 @@ public class Charsets {
 				try {
 					final String v = response.getCharacterEncoding();
 					if (!Objects.equals(v, charset))
-						log.warning("Unable to set response's charset: "+charset+" (current="+v+')', ex);
+						log.warningBriefly("Unable to set response's charset: "+charset+" (current="+v+')', ex);
 				} catch (Throwable t) { //just in case
 				}
 			}

@@ -82,7 +82,10 @@ import org.zkoss.web.servlet.dsp.ServletDSPContext;
 		if (extra != null)
 			(sw != null ? (Writer)sw: response.getWriter()).write(extra);
 		if (sw != null) {
-			byte[] data = sw.toString().getBytes("UTF-8");
+			String charset = response.getCharacterEncoding();
+			if (charset == null || charset.length() == 0)
+				charset = "UTF-8";
+			byte[] data = sw.toString().getBytes(charset);
 			sw = null; //free
 			if (data.length > 200) {
 				byte[] bs = Https.gzip(request, response, null, data);
@@ -93,7 +96,6 @@ import org.zkoss.web.servlet.dsp.ServletDSPContext;
 			response.getOutputStream().write(data);
 			response.flushBuffer();
 		}
-		return; //done
 	}
 	/** Returns the second extension. For example, js in xx.js.dsp.
 	 */
@@ -145,6 +147,11 @@ import org.zkoss.web.servlet.dsp.ServletDSPContext;
 			final String content =
 				Files.readAll(new InputStreamReader(is, "UTF-8"))
 				.toString();
+
+			if (ctype == null)
+				ctype = ";charset=UTF-8";
+			else if (ctype.indexOf(';') < 0)
+				ctype += ";charset=UTF-8";
 			return new Interpreter()
 				.parse(content, ctype, null, _webctx.getLocator());
 		}
