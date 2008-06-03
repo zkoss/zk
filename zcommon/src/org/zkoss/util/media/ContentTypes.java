@@ -46,20 +46,24 @@ public class ContentTypes {
 	protected ContentTypes() {} //prevent from initializing
 
 	/** Returns the content type of the specified format,
-	 * such as "html" and "pdf", or null if not found.
+	 * such as "html" and "pdf", or null if not found (or format is null).
 	 */
 	public static final String getContentType(String format) {
-		format = format.trim().toLowerCase();
-		final String ctype;
-		synchronized (_fmt2ct) {
-			ctype = (String)_fmt2ct.get(format);
-		}
+		if (format == null)
+			return null;
 
-		return ctype;
+		format = format.trim().toLowerCase();
+		synchronized (_fmt2ct) {
+			return (String)_fmt2ct.get(format);
+		}
 	}
 	/** Returns the format of the specified content type, or null if not found.
+	 * @exception IllealArgumentException if ctype is null
 	 */
 	public static final String getFormat(String ctype) {
+		if (ctype == null)
+			throw new IllegalArgumentException();
+
 		ctype = ctype.trim().toLowerCase();
 		String format;
 		synchronized (_ct2fmt) {

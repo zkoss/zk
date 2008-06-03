@@ -45,6 +45,10 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
  * The DSP resource processor ({@link Extendlet}) used to parse
  * DSP files loaded from the classpath.
  *
+ * <p>Note: it assumes the file being loaded is UTF-8.
+ * The encoding of the output stream is default to UTF-8, but
+ * DSP can change by use of the page directive.
+ *
  * @author tomyeh
  * @since 2.4.1
  */
@@ -92,7 +96,10 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 				final OutputStream os = response.getOutputStream();
 					//Call it first to ensure getWrite() is not called yet
 
-				byte[] data = result.getBytes("UTF-8");
+				String charset = response.getCharacterEncoding();
+				if (charset == null || charset.length() == 0)
+					charset = "UTF-8";
+				byte[] data = result.getBytes(charset);
 				if (data.length > 200) {
 					byte[] bs = Https.gzip(request, response, null, data);
 					if (bs != null) data = bs; //yes, browser support compress
@@ -106,7 +113,6 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 
 			response.flushBuffer();
 		}
-		return; //done
 	}
 	/** Returns the second extension. For example, js in xx.js.dsp.
 	 */
@@ -130,9 +136,14 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 		protected Object parse(InputStream is, String path) throws Exception {
 			final String content =
 				Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
+
+			String ctype = Interpreter.getContentType(path);
+			if (ctype == null)
+				ctype = ";charset=UTF-8";
+			else if (ctype.indexOf(';') < 0)
+				ctype += ";charset=UTF-8";
 			return new Interpreter()
-				.parse(content, Interpreter.getContentType(path),
-					null, _webctx.getLocator());
+				.parse(content, ctype, null, _webctx.getLocator());
 		}
 		protected ExtendletContext getExtendletContext() {
 			return _webctx;
