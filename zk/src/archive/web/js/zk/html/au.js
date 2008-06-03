@@ -1299,6 +1299,10 @@ zkau._onDocMouseover = function (evt) {
 		if (tip) {
 			var open = zkau._tipz && zkau._tipz.open;
 			if (!open || zkau._tipz.cmpId != cmp.id) {
+				if (zkau._tipz) {
+					zkau._tipz.shallClose = true;
+					zkau._tryCloseTip();
+				}
 				zkau._tipz = {
 					tipId: tip.id, cmpId: cmp.id,
 					x: Event.pointerX(evt) + 1, y: Event.pointerY(evt) + 2
@@ -1391,14 +1395,10 @@ zkau._openTip = function (cmpId, enforce) {
 	if (!zkau._tipz || (zkau._tipz.open && !enforce))
 		return;
 
-	//Bug 1906405: prevent tip if any float is opened
- 	if (!enforce && zkau.anyFloat())
-		zkau._tipz = null;
- 	else if (!cmpId || cmpId == zkau._tipz.cmpId) {
+ 	if (!cmpId || cmpId == zkau._tipz.cmpId) {
 	//We have to filter out non-matched cmpId because user might move
 	//from one component to another
 		var tip = $e(zkau._tipz.tipId);
-		zkau.closeFloats(tip, $e(cmpId));
 		if (tip) {
 			var cmp = $e(cmpId);
 			zkau._tipz.open = true;
@@ -1416,8 +1416,23 @@ zkau._openTip = function (cmpId, enforce) {
 /** Closes tooltip if _tipz.shallClose is set. */
 zkau._tryCloseTip = function () {
 	if (zkau._tipz && zkau._tipz.shallClose) {
-		if (zkau._tipz.open) zkau.closeFloats();
-		zkau._tipz = null;
+		if (zkau._tipz.open) {
+			for (var close, n = $e(zkau._tipz.tipId), fts = zkau.floats, j = fts.length; --j >= 0;) {
+				if (!$visible(n) || getZKAttr(n, "animating") == "hide") break;
+				for (var f = fts[j].getFloatIds(), len = f.length; --len >= 0;) {
+					if (zk.isAncestor(n, f[len])) {
+						fts[j]._close($e(f[len]));
+						f.splice(len, 1);
+						close = true;
+					}
+				}
+				
+				if (close) {
+					zkau._tipz = null;
+					break;
+				}
+			}
+		}
 	}
 };
 
