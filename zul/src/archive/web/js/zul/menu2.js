@@ -363,7 +363,7 @@ zkMenuit2 = { //menuitem
 			//Bug 1852304: theorectically, popup shall not appear since 'owner'
 			//is hidden, but owner is menu -- so popup still show
 	
-		var anc = $e(cmp.id + "!a");
+		var anc = $e(cmp.id + "!a").parentNode;
 		if ("javascript:;" == anc.href) {
 			var cmp = $outer(anc);
 			var uuid = cmp.id;
@@ -379,7 +379,7 @@ zkMenuit2 = { //menuitem
 				zk.progress();
 				overwrite = true;
 			}
-			if (el.id != anc.id) zk.go(anc.href, overwrite, t); // Bug #1886352
+			if (cmp.id != anc.id) zk.go(anc.href, overwrite, t); // Bug #1886352
 			//Note: we cannot eat onclick. or, <a> won't work
 		}
 		zkau.closeFloats(cmp); //bug 1711822: fire onClick first
