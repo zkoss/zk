@@ -32,10 +32,14 @@ import org.zkoss.zul.Menubar;
  * @since 3.0.0
  */
 public class MenubarHorizontal implements ComponentRenderer {
-
+	private final MenubarVertical _ver = new MenubarVertical();
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menubar self = (Menubar)comp;
+		if ("vertical".equals(self.getOrient())) {
+			_ver.render(comp, out);
+			return; 
+		}
 		final String uuid = self.getUuid();
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.menu.Menubar\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>');

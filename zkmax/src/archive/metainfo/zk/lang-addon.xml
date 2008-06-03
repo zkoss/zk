@@ -538,11 +538,11 @@ def alert(m):
 		<extends>menubar</extends>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.orient == 'horizontal' ? 'class:org.zkoss.zkmax.zul.render.Menubar2Horizontal' : 'class:org.zkoss.zkmax.zul.render.Menubar2Vertical'}</mold-uri>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Menubar2Horizontal</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>v30</mold-name>
-			<mold-uri>${self.orient == 'horizontal' ? 'class:org.zkoss.zkmax.zul.render.MenubarHorizontal' : 'class:org.zkoss.zkmax.zul.render.MenubarVertical'}</mold-uri>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.MenubarHorizontal</mold-uri>
 		</mold>
 	</component>
 	<component>
