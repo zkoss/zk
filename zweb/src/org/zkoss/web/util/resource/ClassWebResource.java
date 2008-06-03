@@ -20,6 +20,8 @@ package org.zkoss.web.util.resource;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
@@ -60,6 +62,9 @@ import org.zkoss.web.servlet.http.Encodes;
  * <li>Calling {@link #service} when a request is receive.
  * </ol>
  *
+ * <p>Note: it assumes the file being loaded and the output stream is
+ * encoded in UTF-8 unless the extendlet handles it differently.
+ *
  * @author tomyeh
  */
 public class ClassWebResource {
@@ -72,8 +77,6 @@ public class ClassWebResource {
 	private String[] _compressExts;
 	/** Map(String ext, Extendlet). */
 	private final Map _extlets = new HashMap(4);
-	/** The charset for content type. */
-	private final Map _charsets = new HashMap(8);
 	/** Whether to debug JavaScript files. */
 	private boolean _debugJS;
 
@@ -120,11 +123,6 @@ public class ClassWebResource {
 		_cwc = new ClassWebContext();
 
 		addExtendlet("dsp", new DspExtendlet());
-
-		_charsets.put("js", "UTF-8");
-		_charsets.put("css", "UTF-8");
-		_charsets.put("txt", "UTF-8");
-		_charsets.put("xml", "UTF-8");
 	}
 	/** Process the request by retrieving the path from the path info.
 	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info,
@@ -156,36 +154,6 @@ public class ClassWebResource {
 			web(request, response, path);
 		} finally {
 			Charsets.cleanup(request, old);
-		}
-	}
-
-	/** Specifies the charset for the resources with the specified extension.
-	 * It will be part of the content type if a resource with
-	 * the specified extension is loaded.
-	 *
-	 * <p>Default: "UTF-8" for "css", "js", "xml" and "txt".
-	 *
-	 * @param ext the extension, e.g, "js" and "css".
-	 * @param charset the charset, e.g., null and "UTF-8".
-	 * If null or an empty string is specified, no charset will be appended
-	 * to the content type.
-	 * @since 3.0.5
-	 */
-	public String addCharset(String ext, String charset) {
-		if (charset != null && charset.length() == 0)
-			charset = null;
-		synchronized (_charsets) {
-			return (String)(charset != null ?
-				_charsets.put(ext, charset): _charsets.remove(ext));
-		}
-	}
-	/** Returns the charset used for the resources with the specified extension,
-	 * or null if no charset shall be generated as part of content-type.
-	 * @since 3.0.5
-	 */
-	public String getCharset(String ext) {
-		synchronized (_charsets) {
-			return (String)_charsets.get(ext);
 		}
 	}
 
@@ -357,19 +325,23 @@ public class ClassWebResource {
 				extlet.service(request, response, pi, jsextra);
 				return;
 			}
+		}
 
-			if (!Servlets.isIncluded(request)) {				
-				String ctype = ContentTypes.getContentType(ext),
-					charset = getCharset(ext);
-				if (charset != null) {
-					if (ctype == null)
-						ctype = ";charset=" + charset;
-					else if (ctype.indexOf(';') < 0)
-						ctype += ";charset=" + charset;
-				}
-				if (ctype != null)
-					response.setContentType(ctype);
+		//NOTE: Unlike DspExtendlet, the output stream is always UTF-8
+		//since we load the source directly.
+
+		if (!Servlets.isIncluded(request) && isCharsetRequired(ext)) {
+			String ctype = ContentTypes.getContentType(ext);
+			if (ctype == null) {
+				ctype = ";charset=UTF-8";
+			} else {
+				final int k = ctype.indexOf(';');
+				if (k >= 0)
+					ctype = ctype.substring(0, k);
+				ctype += ";charset=UTF-8";
 			}
+
+			response.setContentType(ctype);
 		}
 
 		byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
@@ -425,6 +397,15 @@ public class ClassWebResource {
 				if (ext.equals(_compressExts[j]))
 					return true;
 		return false;
+	}
+	private static boolean isCharsetRequired(String ext) {
+		return !_binexts.contains(ext);
+	}
+	private static final Set _binexts = new HashSet();
+	static {
+		final String[] exts = {"jpg", "jpeg", "png", "gif", "pdf", "mpg", "avi"};
+		for (int j = exts.length; --j >= 0;)
+			_binexts.add(exts[j]);
 	}
 
 	/**
