@@ -555,9 +555,9 @@ public class Strings {
 			if (cc == '\\') ++j; //skip next
 			else if (cc == beg) ++depth;
 			else if (cc == end && --depth < 0)
-				return j;
+				break;
 		}
-		throw new IllegalSyntaxException(MCommon.EXPECTING_CHARACTER, new Object[] {new Character(end), src});
+		return j;
 	}
 	private static final boolean isSeparator(char cc, char[] separators) {
 		for (int j = 0; j < separators.length; ++j) {
