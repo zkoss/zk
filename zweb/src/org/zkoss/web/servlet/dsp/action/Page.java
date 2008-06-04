@@ -29,7 +29,7 @@ import org.zkoss.web.servlet.ServletException;
  * @author tomyeh
  */
 public class Page extends AbstractAction {
-	private String _ctype;
+	private String _ctype, _octype;
 
 	/** Returns the content type. */
 	public String getContentType() {
@@ -38,6 +38,14 @@ public class Page extends AbstractAction {
 	/** Sets the content type. */
 	public void setContentType(String ctype) {
 		_ctype = ctype;
+	}
+	/** Sets the optional content type.
+	 * It is the content type generated automatically.
+	 * We will ignore it if the page is included.
+	 * @since 3.0.6
+	 */
+	public void setOptionalContentType(String ctype) {
+		_octype = ctype;
 	}
 
 	//-- Action --//
@@ -50,6 +58,8 @@ public class Page extends AbstractAction {
 				new Object[] {this, new Integer(ac.getLineNumber())});
 		if (_ctype != null)
 			ac.setContentType(_ctype);
+		else if (!ac.isIncluded() && _octype != null)
+			ac.setContentType(_octype);
 	}
 
 	//-- Object --//

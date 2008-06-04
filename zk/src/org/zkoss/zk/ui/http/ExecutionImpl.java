@@ -212,10 +212,14 @@ public class ExecutionImpl extends AbstractExecution {
 						old = _request.getAttribute(Attributes.ARG);
 						_request.setAttribute(Attributes.ARG, params);
 					}
+
+					_request.setAttribute("org.zkoss.web.servlet.include", Boolean.TRUE);
+						//so Servlets.isIncluded returns correctly
 					try {
 						cwr.service(_request, bufresp, page.substring(2));
 						return; //done
 					} finally {
+						_request.removeAttribute("org.zkoss.web.servlet.include");
 						if (mode == PASS_THRU_ATTR)
 							_request.setAttribute(Attributes.ARG, old);
 					}
