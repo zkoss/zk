@@ -79,7 +79,7 @@ public class Utils {
 
 		final int len = expr.length();
 		if (len >= 2 && expr.charAt(0) == '[' && expr.charAt(len - 1) == ']')
-			return parseList(expr.substring(1, len - 1), expcls, false);
+			return parseList(expr.substring(1, len - 1), expcls, true);
 		return new ExValue[] {new ExValue(expr, expcls)};
 	}
 
