@@ -196,9 +196,10 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * See {@link #ATTR_PRIVATE} for details.
 	 */
 	private static void cleanSessAttrs(HttpSession hsess) {
-		final Map prv = (Map)hsess.getAttribute(ATTR_PRIVATE);
-		if (prv != null) {
-			for (Iterator it = prv.entrySet().iterator(); it.hasNext();) {
+		//In the environment of mixing 2.4 and 3.0, it might be Set or Map
+		final Object prev = hsess.getAttribute(ATTR_PRIVATE);
+		if (prev instanceof Map) {
+			for (Iterator it = ((Map)prev).entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String nm = (String)me.getKey();
 				if (hsess.getAttribute(nm) == me.getValue()) //don't use equals
