@@ -60,7 +60,31 @@ zkWnd2.cleanup = function (cmp) {
 	zkWnd2.cleanupShadow(cmp);
 };
 /** Fixed the content div's height. */
-zkWnd2.onVisi = zkWnd2.onSize = zkWnd2._fixHgh = function (cmp) {
+zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
+	zkWnd2._fixHgh(cmp);
+	zkWnd2._fixWdh(cmp);
+};
+zkWnd2._fixWdh = zk.ie ? function (cmp) {
+	if (zkWnd2._embedded(cmp) || !zk.isRealVisible(cmp)) return;
+	var wdh = cmp.style.width;
+	var fir = zk.firstChild(cmp, "DIV"), last = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),
+		n = $e(cmp.id + "!cave").parentNode;
+	if (!wdh || wdh == "auto") {
+		var diff = zk.getFrameWidth(n.parentNode) + zk.getFrameWidth(n.parentNode.parentNode);
+		if (fir) {
+			fir.firstChild.firstChild.style.width = n.offsetWidth - (zk.getFrameWidth(fir)
+				+ zk.getFrameWidth(fir.firstChild) - diff) + "px";
+		}
+		if (last) {
+			last.firstChild.firstChild.style.width = n.offsetWidth - (zk.getFrameWidth(last)
+				+ zk.getFrameWidth(last.firstChild) - diff) + "px";
+		}
+	} else {
+		if (fir) fir.firstChild.firstChild.style.width = "";
+		if (last) last.firstChild.firstChild.style.width = "";
+	}
+} : zk.voidf;
+zkWnd2._fixHgh = function (cmp) {
 	if (!zk.isRealVisible(cmp)) return; //Bug #1944729
 	var hgh = cmp.style.height;
 	var n = $e(cmp.id + "!cave");
@@ -192,14 +216,14 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 		var n = $e(cmp.id + "!cave");
 		if (n) {
 			zk.setStyle(n, val != null ? val: "");
-			zkWnd2._fixHgh(cmp); //border's dimension might be changed
+			zkWnd2.onSize(cmp); //border's dimension might be changed
 		}
 		return true;  //no need to store z.cntType
 	case "z.cntScls":
 		var n = $e(cmp.id + "!cave");
 		if (n) {
 			n.className = val != null ? val: "";
-			zkWnd2._fixHgh(cmp); //border's dimension might be changed
+			zkWnd2.onSize(cmp); //border's dimension might be changed
 		}
 		return true; //no need to store it
 
@@ -237,10 +261,11 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 	case "style":
 	case "style.height":
 		zkau.setAttr(cmp, nm, val);
-		zkWnd2._fixHgh(cmp);
 		if (nm == "style.height") {
 			zk.beforeSizeAt(cmp);
 			zk.onSizeAt(cmp); // Note: IE6 is broken, because its offsetHeight doesn't update.
+		} else {
+			zkWnd2._fixHgh(cmp);
 		}
 		return true;
 	case "style.width":
@@ -375,7 +400,10 @@ zkWnd2._endsizing = function (cmp, evt) {
 zkWnd2._resize = function (cmp, t, l, h, w, keys) {
 	cmp.style.visibility = "hidden";
 	if (w != cmp.offsetWidth || h != cmp.offsetHeight) {
-		if (w != cmp.offsetWidth) cmp.style.width = w + "px";
+		if (w != cmp.offsetWidth) {
+			cmp.style.width = w + "px";
+			zkWnd2._fixWdh(cmp);
+		}
 		if (h != cmp.offsetHeight) {
 			cmp.style.height = h + "px";
 			zkWnd2._fixHgh(cmp);
