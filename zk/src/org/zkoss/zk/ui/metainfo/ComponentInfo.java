@@ -46,9 +46,9 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
 import org.zkoss.zk.ui.metainfo.impl.MultiComposer;
-import org.zkoss.zk.ui.metainfo.impl.Utils;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.impl.Utils;
 
 /**
  * Represents a componennt instance defined in a ZUML page.

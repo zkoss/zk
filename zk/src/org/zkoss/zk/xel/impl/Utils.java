@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.metainfo.impl;
+package org.zkoss.zk.xel.impl;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +24,10 @@ import java.util.LinkedList;
 import java.util.Iterator;
 
 import org.zkoss.util.CollectionsX;
+
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.ExValue;
 
 /**
@@ -57,5 +61,45 @@ public class Utils {
 		}
 
 		return ignoreEmpty ? null: new ExValue[] {new ExValue(expr, expcls)};
+	}
+	/** Evaluates the array of expressions against a component.
+	 * <ol>
+	 * <li>expr.length == 0, return null</li>
+	 * <li>expr.length == 1, return expr[0].getValue()</li>
+	 * <li>expr.length > 1, return an array where element i is
+	 * expr[i].getValue()</li>
+	 * </ol>
+	 */
+	public static
+	Object evaluate(Evaluator eval, Component comp, ExValue[] expr) {
+		if (expr == null || expr.length == 0)
+			return null;
+		if (expr.length == 1)
+			return expr[0].getValue(eval, comp);
+
+		Object[] ary = new Object[expr.length];
+		for (int j = 0; j < expr.length; ++j)
+			ary[j] = expr[j].getValue(eval, comp);
+		return ary;
+	}
+	/** Evaluates the array of expressions against a page.
+	 * <ol>
+	 * <li>expr.length == 0, return null</li>
+	 * <li>expr.length == 1, return expr[0].getValue()</li>
+	 * <li>expr.length > 1, return an array where element i is
+	 * expr[i].getValue()</li>
+	 * </ol>
+	 */
+	public static
+	Object evaluate(Evaluator eval, Page page, ExValue[] expr) {
+		if (expr == null || expr.length == 0)
+			return null;
+		if (expr.length == 1)
+			return expr[0].getValue(eval, page);
+
+		Object[] ary = new Object[expr.length];
+		for (int j = 0; j < expr.length; ++j)
+			ary[j] = expr[j].getValue(eval, page);
+		return ary;
 	}
 }
