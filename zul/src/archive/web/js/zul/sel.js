@@ -823,9 +823,11 @@ zk.Selectable.prototype = {
 					}
 				}
 				sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
-
+				
 				this.realsize(sz);
-				this.body.style.height = hgh + "px";
+                
+                hgh -= (this.foot ? this.foot.offsetHeight : 0);
+                this.body.style.height = (hgh < 0 ? 0 : hgh) + "px";
 				
 				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
 				if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
