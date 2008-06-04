@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.impl.Utils;
 
 /**
  * The information about the variables element in the ZUML page.
@@ -38,7 +39,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  */
 public class VariablesInfo extends EvalRefStub
 implements Condition, java.io.Serializable {
-	/** Map(String name, ExValue value). */
+	/** Map(String name, ExValue[] value). */
 	private final Map _vars;
 	private final ConditionImpl _cond;
 	private final boolean _local;
@@ -60,7 +61,8 @@ implements Condition, java.io.Serializable {
 		if (_vars != null) {
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				me.setValue(new ExValue((String)me.getValue(), Object.class));
+				me.setValue(
+					Utils.parseBracketList((String)me.getValue(), Object.class));
 			}
 		}
 
@@ -78,8 +80,9 @@ implements Condition, java.io.Serializable {
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
-				final ExValue value = (ExValue)me.getValue();
-				comp.setVariable(name, value.getValue(eval, comp), _local);
+				final ExValue[] value = (ExValue[])me.getValue();
+				comp.setVariable(
+					name, Utils.evaluate(eval, comp, value), _local);
 			}
 		}
 	}
@@ -92,8 +95,9 @@ implements Condition, java.io.Serializable {
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
-				final ExValue value = (ExValue)me.getValue();
-				page.setVariable(name, value.getValue(eval, page));
+				final ExValue[] value = (ExValue[])me.getValue();
+				page.setVariable(
+					name, Utils.evaluate(eval, page, value));
 			}
 		}
 	}
