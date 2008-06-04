@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
 import org.zkoss.zk.ui.metainfo.impl.MultiComposer;
+import org.zkoss.zk.ui.metainfo.impl.Utils;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
@@ -355,24 +356,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 3.0.0
 	 */
 	public void setApply(String apply) {
-		_apply = parseList(apply, Object.class);
-	}
-	/** Parses a list of expressions.
-	 */
-	private static ExValue[] parseList(String expr, Class expcls) {
-		if (expr == null || expr.length() == 0)
-			return null;
-
-		List dst = new LinkedList();
-		Collection src = CollectionsX.parse(null, expr, ',', true, true);
-		for (Iterator it = src.iterator(); it.hasNext();) {
-			final String s = (String)it.next();
-			if (s.length() > 0)
-				dst.add(new ExValue(s, expcls));
-		}
-
-		return dst.isEmpty() ? null:
-			(ExValue[])dst.toArray(new ExValue[dst.size()]);
+		_apply = Utils.parseList(apply, Object.class, true);
 	}
 
 	/** Returns the forward condition that controls how to forward
@@ -518,7 +502,9 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * null/empty to denote no iteration.
 	 */
 	public void setForEach(String expr, String begin, String end) {
-		_forEach = parseList(expr, Object.class);
+		_forEach = Utils.parseList(expr, Object.class, false);
+			//forEach="" means to iterate a single-element array and the value
+			//is empty
 		_forEachInfo = _forEach == null ? null:
 			new ExValue[] {
 				begin != null && begin.length() > 0 ?
