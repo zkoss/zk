@@ -44,10 +44,13 @@ public class Utils {
 	 * @param ignoreEmpty whether to return null if expr is an empty expression.
 	 * @return an array of the parsed expressions (at least with one element),
 	 * or null if expr is null.
+	 * @see #parseBracketList
 	 */
-	public static ExValue[] parseList(String expr, Class expcls, boolean ignoreEmpty) {
+	public static ExValue[] parseList(String expr, Class expcls,
+	boolean ignoreEmpty) {
 		if (expr == null)
 			return null;
+
 		if (expr.length() != 0) {
 			List dst = new LinkedList();
 			Collection src = CollectionsX.parse(null, expr, ',', true, true);
@@ -62,6 +65,24 @@ public class Utils {
 
 		return ignoreEmpty ? null: new ExValue[] {new ExValue(expr, expcls)};
 	}
+	/** Parses an expression and considers it as a list of expressions
+	 * only if it starts with '[' and ends with ']'.
+	 * It is similar to {@link #parseList} except the expression is
+	 * considered as a list only if it is enclosed with [ and ].
+	 * <p>For example, "a, b" is considered as a string whose value is
+	 * "a, b". On the other hand, "[a, b]" is considered as a two-element
+	 * array.
+	 */
+	public static ExValue[] parseBracketList(String expr, Class expcls) {
+		if (expr == null)
+			return null;
+
+		final int len = expr.length();
+		if (len >= 2 && expr.charAt(0) == '[' && expr.charAt(len - 1) == ']')
+			return parseList(expr.substring(1, len - 1), expcls, true);
+		return new ExValue[] {new ExValue(expr, expcls)};
+	}
+
 	/** Evaluates the array of expressions against a component.
 	 * <ol>
 	 * <li>expr.length == 0, return null</li>

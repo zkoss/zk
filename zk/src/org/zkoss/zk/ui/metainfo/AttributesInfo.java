@@ -31,6 +31,8 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.impl.Utils;
+
 /**
  * Represents a map of custom attributes of a component definition
  * ({@link ComponentDefinition}).
@@ -42,7 +44,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  */
 public class AttributesInfo extends EvalRefStub
 implements Condition, java.io.Serializable {
-	/** Map(String name, ExValue value). */
+	/** Map(String name, ExValue[] value). */
 	private final Map _attrs;
 	private final ConditionImpl _cond;
 	private final int _scope;
@@ -64,7 +66,8 @@ implements Condition, java.io.Serializable {
 		if (_attrs != null) {
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				me.setValue(new ExValue((String)me.getValue(), Object.class));
+				me.setValue(
+					Utils.parseBracketList((String)me.getValue(), Object.class));
 			}
 		}
 
@@ -82,8 +85,9 @@ implements Condition, java.io.Serializable {
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
-				final ExValue value = (ExValue)me.getValue();
-				comp.setAttribute(name, value.getValue(eval, comp), _scope);
+				final ExValue[] value = (ExValue[])me.getValue();
+				comp.setAttribute(
+					name, Utils.evaluate(eval, comp, value), _scope);
 			}
 		}
 	}
@@ -96,8 +100,9 @@ implements Condition, java.io.Serializable {
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
-				final ExValue value = (ExValue)me.getValue();
-				page.setAttribute(name, value.getValue(eval, page), _scope);
+				final ExValue[] value = (ExValue[])me.getValue();
+				page.setAttribute(name,
+					Utils.evaluate(eval, page, value), _scope);
 			}
 		}
 	}
