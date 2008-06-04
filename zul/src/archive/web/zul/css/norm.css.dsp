@@ -200,7 +200,7 @@ div.z-loading-indicator {
 	<c:when test="${empty c:getProperty('org.zkoss.zul.Separator.spaceWithMargin')}">
 	<%-- 3.0.4 and later --%>
 div.hsep, div.hsep-bar {
-	height: 7px; overflow: hidden;
+	height: 7px; overflow: hidden; line-height: 0pt; font-size: 0pt;
 }
 span.vsep, span.vsep-bar {
 	display:-moz-inline-box; display: inline-block;
