@@ -102,6 +102,9 @@ class ActionContextImpl implements ActionContext {
 			BufferedResponse.getInstance(_ic.dc.getResponse(), _ic.dc.getOut()),
 			uri, params, Servlets.PASS_THRU_ATTR);
 	}
+	public boolean isIncluded() {
+		return Servlets.isIncluded(_ic.dc.getRequest());
+	}
 
 	public String encodeURL(String uri)
 	throws javax.servlet.ServletException {

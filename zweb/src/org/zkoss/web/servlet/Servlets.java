@@ -379,7 +379,10 @@ public class Servlets {
 	 * Tests whether this page is included by another page.
 	 */
 	public static final boolean isIncluded(ServletRequest request) {
-		return request.getAttribute(Attributes.INCLUDE_CONTEXT_PATH) != null;
+		return request.getAttribute(Attributes.INCLUDE_CONTEXT_PATH) != null
+			|| request.getAttribute("org.zkoss.web.servlet.include") != null;
+				//org.zkoss.web.servlet.include is used by ZK (or others)
+				//to 'simulate' inclusion
 	}
 	/**
 	 * Tests whether this page is forwarded by another page.
