@@ -21,14 +21,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	You shall see the following text below:
 	<vbox>
 	<label value="1 apple"/>
-	<label value="2 banana"/>
+	<label value="2 orange"/>
 	<label value="3 cola"/>
+	<label value="4 (a, (apple, 1), 2)"/>
+	<label value="5 ((a),"/>
 	</vbox>
 	<separator bar="true"/>
 
 	<variables a="apple" c="cola"/>
 	<vbox>
-	<label value="${forEachStatus.index} ${each}" forEach="void, ${a}, banana, ${c}"
+	<label value="${forEachStatus.index} ${each}"
+	forEach="void, ${a}, orange, ${c}, (a, (${a}, 1), 2), ((a),"
 		forEachBegin="1"/>
 	</vbox>
 </window>

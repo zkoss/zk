@@ -489,9 +489,9 @@ public class Maps {
 			if (cc == '\\') ++j; //skip next
 			else if (cc == beg) ++depth;
 			else if (cc == end && --depth < 0)
-				return j;
+				break;
 		}
-		throw newIllegalSyntaxException(MCommon.EXPECTING_CHARACTER, end, src);
+		return j;
 	}
 	private static final char escape(String src, int j) {
 		if (j >= src.length())
