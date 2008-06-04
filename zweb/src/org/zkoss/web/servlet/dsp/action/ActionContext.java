@@ -89,6 +89,11 @@ public interface ActionContext {
 	public void include(String uri, Map params)
 	throws ServletException, IOException;
 
+	/** Returns whether this page is included.
+	 * @since 2.4.3
+	 */
+	public boolean isIncluded();
+
 	/** Encodes the specified URI.
 	 * <p>In additions, if uri starts with "/", the context path, e.g., /we2,
 	 * is prefixed.

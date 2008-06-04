@@ -28,7 +28,6 @@ import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.el.SimpleMapper;
 import org.zkoss.idom.input.SAXBuilder;
@@ -48,8 +47,6 @@ import org.zkoss.web.servlet.dsp.action.Action;
  * @author tomyeh
  */
 public class Parser {
-	private static final Log log = Log.lookup(Parser.class);
-
 	/** Parses the content into a meta format
 	 *
 	 * @param content the content to parse; never null.
@@ -69,11 +66,14 @@ public class Parser {
 
 		if (!ctx.pageDefined) {
 			//We always create a page definition
-			if (D.ON && log.debugable()) log.debug("Use default content type: "+ctype);
 			final ActionNode action = new ActionNode(Page.class, 0);
 			root.addChild(0, action);
 			final Map attrs = new HashMap(2);
-			attrs.put("contentType", ctype != null ? ctype: "text/html");
+
+			if (ctype == null) ctype = "text/html";
+			else if (ctype.startsWith(";")) ctype = "text/html" + ctype;
+
+			attrs.put("optionalContentType", ctype);
 			applyAttrs("page", action, attrs);
 		}
 
@@ -234,7 +234,6 @@ public class Parser {
 				new Object[] {prefix+':'+actnm, new Integer(ctx.nLines)});
 		final ActionNode action = new ActionNode(actcls, ctx.nLines);
 		parent.addChild(action);
-		if (D.ON && log.debugable()) log.debug("Action "+actnm);
 
 		//2: action's attributes
 		final Map attrs = new HashMap();
@@ -469,7 +468,6 @@ public class Parser {
 		}
 		private void loadTaglib(String prefix, String uri)
 		throws javax.servlet.ServletException, IOException {
-			if (D.ON && log.debugable()) log.debug("Loading "+prefix+" at "+uri);
 			if (this.locator == null)
 				throw new ServletException("Unable to load "+uri+" because locator is not specified");
 
@@ -502,7 +500,6 @@ public class Parser {
 				if (!Action.class.isAssignableFrom(cls))
 					throw new ServletException(cls+" doesn't implement "+Action.class);
 				acts.put(name, cls);
-//				if (D.ON && log.finerable()) log.finer("Action "+prefix+":"+name+" are added");
 			}
 			if (!acts.isEmpty())
 				_actions.put(prefix, acts);

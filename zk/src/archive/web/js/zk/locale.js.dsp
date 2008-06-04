@@ -1,4 +1,4 @@
-<%--
+<%@ page contentType="application/x-javascript;charset=UTF-8" %><%--
 locale.js.dsp
 
 {{IS_NOTE
