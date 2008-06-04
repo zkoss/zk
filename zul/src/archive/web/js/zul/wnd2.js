@@ -64,7 +64,7 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 	zkWnd2._fixHgh(cmp);
 	zkWnd2._fixWdh(cmp);
 };
-zkWnd2._fixWdh = zk.ie ? function (cmp) {
+zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 	if (zkWnd2._embedded(cmp) || !zk.isRealVisible(cmp)) return;
 	var wdh = cmp.style.width;
 	var fir = zk.firstChild(cmp, "DIV"), last = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),

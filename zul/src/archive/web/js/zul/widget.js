@@ -732,7 +732,7 @@ zkPop = {
 			zk.remove(ctx._lining);
 		ctx._lining = null;
 	},
-	onVisi: zk.ie ? function (cmp) {
+	onVisi: zk.ie7 ? function (cmp) {
 		var wdh = cmp.style.width;
 		var fir = zk.firstChild(cmp, "DIV"), last = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),
 			n = $e(cmp.id + "!cave").parentNode;
