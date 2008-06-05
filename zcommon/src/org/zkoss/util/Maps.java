@@ -463,6 +463,7 @@ public class Maps {
 			} else if (parenthesis
 			&& (endparen = getEndingParenthesis(cc)) != (char)0) {
 				int k = skipParenthesis(src, j, cc, endparen);
+				if (k >= len) k = len - 1; //endparen not found
 				tksb.append(src.substring(j, k + 1));
 				j = k;
 			} else if (cc == (char)0) {

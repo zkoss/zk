@@ -27,7 +27,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.xel.impl.Utils;
@@ -39,12 +38,13 @@ import org.zkoss.zk.xel.impl.Utils;
  */
 public class VariablesInfo extends EvalRefStub
 implements Condition, java.io.Serializable {
-	/** Map(String name, ExValue[] value). */
+	/** Map(String name, ExValue/ExValue[]/Map value). */
 	private final Map _vars;
 	private final ConditionImpl _cond;
+	private final int _composite;
 	private final boolean _local;
 
-	/**
+	/** Constructor.
 	 * @param evalr the evaluator reference. It cannot be null.
 	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
 	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
@@ -52,22 +52,69 @@ implements Condition, java.io.Serializable {
 	 * @param vars a map of (String name, String value).
 	 * Note: once called, the caller cannot access it any more.
 	 * In other words, it becomes part of this object.
+	 * @param local whether they are local variables.
+	 * @param composite indicates the composite type.
+	 * It can be one of "none", "list" or "map".
+	 * If null or empty, "none" is assumed.
+	 * @exception IllegalArgumentException if evalr is null,
+	 * or the composite type is illegal.
+	 * @since 3.0.6
 	 */
 	public VariablesInfo(EvaluatorRef evalr, Map vars, boolean local,
-	ConditionImpl cond) {
+	String composite, ConditionImpl cond) {
 		if (evalr == null) throw new IllegalArgumentException();
+		if (composite == null || composite.length() == 0
+		|| composite.equals("none"))
+			_composite = Utils.SCALAR;
+		else if (composite.equals("list"))
+			_composite = Utils.LIST;
+		else if (composite.equals("map"))
+			_composite = Utils.MAP;
+		else
+			throw new IllegalArgumentException("Unkonwn composite: "+composite);
+
 		_evalr = evalr;
 		_vars = vars;
 		if (_vars != null) {
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				me.setValue(
-					Utils.parseBracketList((String)me.getValue(), Object.class));
+					Utils.parseComposite(
+						(String)me.getValue(), Object.class, _composite));
 			}
 		}
 
 		_local = local;
 		_cond = cond;
+	}
+	/** The same as VariablesInfo(evalr, vars, locale, "none", cond).
+	 * @param evalr the evaluator reference. It cannot be null.
+	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
+	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
+	 * belongs.
+	 * @param vars a map of (String name, String value).
+	 * Note: once called, the caller cannot access it any more.
+	 * In other words, it becomes part of this object.
+	 * @param local whether they are local variables.
+	 * @exception IllegalArgumentException if evalr is null
+	 */
+	public VariablesInfo(EvaluatorRef evalr, Map vars, boolean local,
+	ConditionImpl cond) {
+		this(evalr, vars, local, null, cond);
+	}
+
+	/** Returns if it is for local variable.
+	 * @since 3.0.6
+	 */
+	public boolean isLocal() {
+		return _local;
+	}
+	/** Returns the composite type: "none", "list" or "map".
+	 * @since 3.0.6
+	 */
+	public String getComposite() {
+		return _composite == Utils.LIST ? "list":
+			_composite == Utils.MAP ? "map": "none";
 	}
 
 	/** Applies the variable element against the parent component.
@@ -80,9 +127,9 @@ implements Condition, java.io.Serializable {
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
-				final ExValue[] value = (ExValue[])me.getValue();
+				final Object value = me.getValue();
 				comp.setVariable(
-					name, Utils.evaluate(eval, comp, value), _local);
+					name, Utils.evaluateComposite(eval, comp, value), _local);
 			}
 		}
 	}
@@ -95,9 +142,9 @@ implements Condition, java.io.Serializable {
 			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
-				final ExValue[] value = (ExValue[])me.getValue();
+				final Object value = me.getValue();
 				page.setVariable(
-					name, Utils.evaluate(eval, page, value));
+					name, Utils.evaluateComposite(eval, page, value));
 			}
 		}
 	}

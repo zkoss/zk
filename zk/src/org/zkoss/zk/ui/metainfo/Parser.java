@@ -856,7 +856,7 @@ public class Parser {
 		if (annHelper.clear())
 			log.warning("Annotations are ignored since <custom-attribute> doesn't support them, "+el.getLocator());
 
-		String ifc = null, unless = null, scope = null;
+		String ifc = null, unless = null, scope = null, composite = null;
 		final Map attrs = new HashMap();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
@@ -869,6 +869,8 @@ public class Parser {
 				unless = attval;
 			} else if ("scope".equals(attnm)) {
 				scope = attval;
+			} else if ("composite".equals(attnm)) {
+				composite = attval;
 			} else if ("forEach".equals(attnm)) {
 				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
 			} else {
@@ -879,7 +881,7 @@ public class Parser {
 		if (!attrs.isEmpty())
 			parent.appendChild(new AttributesInfo(
 				parent.getEvaluatorRef(),
-				attrs, scope, ConditionImpl.getInstance(ifc, unless)));
+				attrs, scope, composite, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private static void parseVariables(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
@@ -891,7 +893,7 @@ public class Parser {
 		if (annHelper.clear())
 			log.warning("Annotations are ignored since <variables> doesn't support them, "+el.getLocator());
 
-		String ifc = null, unless = null;
+		String ifc = null, unless = null, composite = null;
 		boolean local = false;
 		final Map vars = new HashMap();
 		for (Iterator it = el.getAttributeItems().iterator();
@@ -905,6 +907,8 @@ public class Parser {
 				unless = attval;
 			} else if ("local".equals(attnm)) {
 				local = "true".equals(attval);
+			} else if ("composite".equals(attnm)) {
+				composite = attval;
 			} else if ("forEach".equals(attnm)) {
 				throw new UiException("forEach not applicable to <variables>, "+el.getLocator());
 			} else {
@@ -914,7 +918,7 @@ public class Parser {
 		if (!vars.isEmpty())
 			parent.appendChild(new VariablesInfo(
 				parent.getEvaluatorRef(),
-				vars, local, ConditionImpl.getInstance(ifc, unless)));
+				vars, local, composite, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private static void parseAnnotation(Element el, AnnotationHelper annHelper)
 	throws Exception {

@@ -18,11 +18,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.xel.impl;
 
+import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
+import org.zkoss.util.Maps;
 import org.zkoss.util.CollectionsX;
 
 import org.zkoss.zk.ui.Component;
@@ -37,6 +40,22 @@ import org.zkoss.zk.xel.ExValue;
  * @since 3.0.6
  */
 public class Utils {
+	/** Used with {@link #parseComposite} to indicate the expression
+	 * is a scalar value.
+	 * In other words, it won't handle it specially. If a
+	 */
+	public static final int SCALAR = 0;
+	/** Used with {@link #parseComposite} to indicate the expression
+	 * is a vector, i.e., a list separated with comma.
+	 * Example: "first, ${second}".
+	 */
+	public static final int LIST = 1;
+	/** Used with {@link #parseComposite} to indicate the expression
+	 * is a map, i.e., a map paired with equal and
+	 * separated with comma.
+	 * Example: "one=first, two=${second}".
+	 */
+	public static final int MAP = 2;
 	/** Parses a list of expressions that is separated by comma.
 	 * For example, parseList("${a}, b, ${c}", Object.class)
 	 * will return a three-element array.
@@ -44,7 +63,7 @@ public class Utils {
 	 * @param ignoreEmpty whether to return null if expr is an empty expression.
 	 * @return an array of the parsed expressions (at least with one element),
 	 * or null if expr is null.
-	 * @see #parseBracketList
+	 * @see #parseComposite
 	 */
 	public static ExValue[] parseList(String expr, Class expcls,
 	boolean ignoreEmpty) {
@@ -56,7 +75,7 @@ public class Utils {
 			Collection src = CollectionsX.parse(null, expr, ',', true, true);
 			for (Iterator it = src.iterator(); it.hasNext();) {
 				final String s = (String)it.next();
-				if (s.length() > 0)
+				if (!ignoreEmpty || s.length() > 0)
 					dst.add(new ExValue(s, expcls));
 			}
 			if (!dst.isEmpty())
@@ -65,62 +84,97 @@ public class Utils {
 
 		return ignoreEmpty ? null: new ExValue[] {new ExValue(expr, expcls)};
 	}
-	/** Parses an expression and considers it as a list of expressions
-	 * only if it starts with '[' and ends with ']'.
-	 * It is similar to {@link #parseList} except the expression is
-	 * considered as a list only if it is enclosed with [ and ].
-	 * <p>For example, "a, b" is considered as a string whose value is
-	 * "a, b". On the other hand, "[a, b]" is considered as a two-element
-	 * array.
+	/** Parses an expression which could a scalar, vector or map,
+	 * depending on the specified type.
+	 *
+	 * <p>If type is {@link #SCALAR}, it is a simple expression and
+	 * no special parsing happens. For example, "a, ${b}" will be evaluated
+	 * to "a, boy" if b is "boy" if {@link #evaluateComposite} is called.</p>
+	 *
+	 * <p>If type is {@link #LIST}, the expression is a list separated
+	 * with comma. For example, "a, ${b}" will be evaluated
+	 * to a list with two elements: "a" and "boy".
+	 * It is similar to {@link #parseList}.</p>
+	 *
+	 * <p>If type is {@link #MAP}, the expression is a list of paired
+	 * entries. For example, "a=apple, b=${b}" will be evaluated
+	 * to a map with two entries, ("a", "apple") and ("b", "boy").
+	 *
+	 * @param type one of {@link #SCALAR}, {@link #LIST} and {@link #MAP}.
+	 * @return ExValue if {@link #SCALAR}, ExValue[] if {@link #LIST},
+	 * Map(String, ExValue) if {@link #MAP}, or null if expr is null.
+	 * To evaluate it, invoke {@link #evaluateComposite} by passing
+	 * the returned value as its expr argument.
 	 */
-	public static ExValue[] parseBracketList(String expr, Class expcls) {
+	public static Object parseComposite(String expr, Class expcls,
+	int type) {
 		if (expr == null)
 			return null;
 
-		final int len = expr.length();
-		if (len >= 2 && expr.charAt(0) == '[' && expr.charAt(len - 1) == ']')
-			return parseList(expr.substring(1, len - 1), expcls, true);
-		return new ExValue[] {new ExValue(expr, expcls)};
+		if (type == LIST) {
+			return parseList(expr, expcls, false);
+		} else if (type == MAP) {
+			Map dst = Maps.parse(new LinkedHashMap(), expr, ',', '\'', false, false, true);
+			for (Iterator it = dst.entrySet().iterator(); it.hasNext();) {
+				Map.Entry me = (Map.Entry)it.next();
+				me.setValue(new ExValue((String)me.getValue(), expcls));
+			}
+			return dst;
+		} else {
+			return new ExValue(expr, expcls);
+		}
 	}
 
-	/** Evaluates the array of expressions against a component.
-	 * <ol>
-	 * <li>expr.length == 0, return null</li>
-	 * <li>expr.length == 1, return expr[0].getValue()</li>
-	 * <li>expr.length > 1, return an array where element i is
-	 * expr[i].getValue()</li>
-	 * </ol>
+	/** Evaluates the composite expression parsed by
+	 * {@link #parseComposite} against a component.
 	 */
 	public static
-	Object evaluate(Evaluator eval, Component comp, ExValue[] expr) {
-		if (expr == null || expr.length == 0)
+	Object evaluateComposite(Evaluator eval, Component comp, Object expr) {
+		if (expr == null) {
 			return null;
-		if (expr.length == 1)
-			return expr[0].getValue(eval, comp);
-
-		Object[] ary = new Object[expr.length];
-		for (int j = 0; j < expr.length; ++j)
-			ary[j] = expr[j].getValue(eval, comp);
-		return ary;
+		} else if (expr instanceof ExValue) {
+			return ((ExValue)expr).getValue(eval, comp);
+		} else if (expr instanceof ExValue[]) {
+			ExValue[] src = (ExValue[])expr;
+			Object[] dst = new Object[src.length];
+			for (int j = 0; j < src.length; ++j)
+				dst[j] = src[j].getValue(eval, comp);
+			return dst;
+		} else {
+			Map src = (Map)expr;
+			Map dst = new LinkedHashMap(src.size());
+			for (Iterator it = src.entrySet().iterator(); it.hasNext();) {
+				Map.Entry me = (Map.Entry)it.next();
+				dst.put(me.getKey(),
+					((ExValue)me.getValue()).getValue(eval, comp));
+			}
+			return dst;
+		}
 	}
-	/** Evaluates the array of expressions against a page.
-	 * <ol>
-	 * <li>expr.length == 0, return null</li>
-	 * <li>expr.length == 1, return expr[0].getValue()</li>
-	 * <li>expr.length > 1, return an array where element i is
-	 * expr[i].getValue()</li>
-	 * </ol>
+	/** Evaluates the composite expression parsed by
+	 * {@link #parseComposite} against a page.
 	 */
 	public static
-	Object evaluate(Evaluator eval, Page page, ExValue[] expr) {
-		if (expr == null || expr.length == 0)
+	Object evaluateComposite(Evaluator eval, Page page, Object expr) {
+		if (expr == null) {
 			return null;
-		if (expr.length == 1)
-			return expr[0].getValue(eval, page);
-
-		Object[] ary = new Object[expr.length];
-		for (int j = 0; j < expr.length; ++j)
-			ary[j] = expr[j].getValue(eval, page);
-		return ary;
+		} else if (expr instanceof ExValue) {
+			return ((ExValue)expr).getValue(eval, page);
+		} else if (expr instanceof ExValue[]) {
+			ExValue[] src = (ExValue[])expr;
+			Object[] dst = new Object[src.length];
+			for (int j = 0; j < src.length; ++j)
+				dst[j] = src[j].getValue(eval, page);
+			return dst;
+		} else {
+			Map src = (Map)expr;
+			Map dst = new LinkedHashMap(src.size());
+			for (Iterator it = src.entrySet().iterator(); it.hasNext();) {
+				Map.Entry me = (Map.Entry)it.next();
+				dst.put(me.getKey(),
+					((ExValue)me.getValue()).getValue(eval, page));
+			}
+			return dst;
+		}
 	}
 }

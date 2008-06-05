@@ -29,7 +29,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.xel.impl.Utils;
 
@@ -44,12 +43,13 @@ import org.zkoss.zk.xel.impl.Utils;
  */
 public class AttributesInfo extends EvalRefStub
 implements Condition, java.io.Serializable {
-	/** Map(String name, ExValue[] value). */
+	/** Map(String name, ExValue/ExValue[]/Map value). */
 	private final Map _attrs;
 	private final ConditionImpl _cond;
+	private final int _composite;
 	private final int _scope;
 
-	/**
+	/** Constructor.
 	 * @param evalr the evaluator reference. It cannot be null.
 	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
 	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
@@ -57,23 +57,71 @@ implements Condition, java.io.Serializable {
 	 * @param attrs the custom attributes (String name, String value).
 	 * Once called, the caller shall not access attrs again -- it belongs
 	 * to this object.
+	 * @param scope specifies the scope.
+	 * @param composite indicates the composite type.
+	 * It can be one of "none", "list" or "map".
+	 * If null or empty, "none" is assumed.
+	 * @exception IllegalArgumentException if evalr is null,
+	 * or the composite type is illegal.
+	 * @since 3.0.6
 	 */
 	public AttributesInfo(EvaluatorRef evalr,
-	Map attrs, String scope, ConditionImpl cond) {
+	Map attrs, String scope, String composite, ConditionImpl cond) {
 		if (evalr == null) throw new IllegalArgumentException();
+		if (composite == null || composite.length() == 0
+		|| composite.equals("none"))
+			_composite = Utils.SCALAR;
+		else if (composite.equals("list"))
+			_composite = Utils.LIST;
+		else if (composite.equals("map"))
+			_composite = Utils.MAP;
+		else
+			throw new IllegalArgumentException("Unkonwn composite: "+composite);
+
 		_evalr = evalr;
 		_attrs = attrs;
 		if (_attrs != null) {
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				me.setValue(
-					Utils.parseBracketList((String)me.getValue(), Object.class));
+					Utils.parseComposite(
+						(String)me.getValue(), Object.class, _composite));
 			}
 		}
 
 		_scope = scope == null ?
 			Component.COMPONENT_SCOPE: Components.getScope(scope);
 		_cond = cond;
+	}
+	/** The same as AttributesInfo(evalr, attrs, scope, "none", cond).
+	 *
+	 * @param evalr the evaluator reference. It cannot be null.
+	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
+	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
+	 * belongs.
+	 * @param attrs the custom attributes (String name, String value).
+	 * Once called, the caller shall not access attrs again -- it belongs
+	 * to this object.
+	 * @param scope specifies the scope.
+	 * @exception IllegalArgumentException if evalr is null
+	 */
+	public AttributesInfo(EvaluatorRef evalr,
+	Map attrs, String scope, ConditionImpl cond) {
+		this(evalr, attrs, scope, null, cond);
+	}
+
+	/** Returns the scope.
+	 * @since 3.0.6
+	 */
+	public String getScope() {
+		return Components.scopeToString(_scope);
+	}
+	/** Returns the composite type: "none", "list" or "map".
+	 * @since 3.0.6
+	 */
+	public String getComposite() {
+		return _composite == Utils.LIST ? "list":
+			_composite == Utils.MAP ? "map": "none";
 	}
 
 	/** Applies the custom attributes.
@@ -85,9 +133,9 @@ implements Condition, java.io.Serializable {
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
-				final ExValue[] value = (ExValue[])me.getValue();
+				final Object value = me.getValue();
 				comp.setAttribute(
-					name, Utils.evaluate(eval, comp, value), _scope);
+					name, Utils.evaluateComposite(eval, comp, value), _scope);
 			}
 		}
 	}
@@ -100,9 +148,9 @@ implements Condition, java.io.Serializable {
 			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
-				final ExValue[] value = (ExValue[])me.getValue();
+				final Object value = me.getValue();
 				page.setAttribute(name,
-					Utils.evaluate(eval, page, value), _scope);
+					Utils.evaluateComposite(eval, page, value), _scope);
 			}
 		}
 	}

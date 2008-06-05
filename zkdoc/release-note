@@ -3,7 +3,7 @@ ZK 3.0.6
 * Features
   1978624: Keyevent support for every ZUL component
   1980357: forEach supports forEach="a, b, c"
-  1982861: variables and custom-attributes support var="[a, b, c]"
+  1982861: variables and custom-attributes support composite="list|map"
   1959959: An option to allow user to refresh if an error
   1883237: A way to register listeners for particular desktop
   1966723: A way to customize cofirm upon retry (resend mechanism)

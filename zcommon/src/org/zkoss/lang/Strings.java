@@ -531,10 +531,11 @@ public class Strings {
 				quot = cc;
 			} else if ((quotAsSeparator && (cc == '\'' || cc == '"'))
 			|| isSeparator(cc, separators)) {
-				return from;
+				break;
 			} else if (parenthesis
 			&& (endparen = getEndingParenthesis(cc)) != (char)0) {
 				from = skipParenthesis(src, from, cc, endparen);
+				if (from >= len) break; //don't increase
 			}
 		}
 		return from;
