@@ -459,7 +459,7 @@ public class UiEngineImpl implements UiEngine {
 			final Object meta = it.next();
 			if (meta instanceof ComponentInfo) {
 				final ComponentInfo childInfo = (ComponentInfo)meta;
-				final ForEach forEach = childInfo.getForEach(page, parent);
+				final ForEach forEach = childInfo.resolveForEach(page, parent);
 				if (forEach == null) {
 					if (isEffective(childInfo, page, parent)) {
 						final Component[] children =
@@ -491,8 +491,12 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private static Component[] execCreateChild(
 	CreateInfo ci, Component parent, ComponentInfo childInfo) {
-		if (childInfo instanceof ZkInfo)
-			return execCreate(ci, childInfo, parent);
+		if (childInfo instanceof ZkInfo) {
+			final ZkInfo zkInfo = (ZkInfo)childInfo;
+			return zkInfo.withSwitch() ?
+				execSwitch(ci, zkInfo, parent):
+				execCreate0(ci, childInfo, parent);
+		}
 
 		final ComponentDefinition childdef = childInfo.getComponentDefinition();
 		if (childdef.isInlineMacro()) {
@@ -508,7 +512,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private static Component execCreateChild0(
 	CreateInfo ci, Component parent, ComponentInfo childInfo) {
-		final Composer composer = childInfo.getComposer(ci.page, parent);
+		final Composer composer = childInfo.resolveComposer(ci.page, parent);
 		final ComposerExt composerExt =
 			composer instanceof ComposerExt ? (ComposerExt)composer: null;
 		Component child = null;
@@ -573,6 +577,47 @@ public class UiEngineImpl implements UiEngine {
 				}
 			}
 		}
+	}
+	/** Handles <zk switch>. */
+	private static Component[] execSwitch(CreateInfo ci, ZkInfo switchInfo,
+	Component parent) {
+		final Page page = ci.page;
+		final Object switchCond = switchInfo.resolveSwitch(page, parent);
+		for (Iterator it = switchInfo.getChildren().iterator(); it.hasNext();) {
+			final ZkInfo caseInfo = (ZkInfo)it.next();
+			final ForEach forEach = caseInfo.resolveForEach(page, parent);
+			if (forEach == null) {
+				if (isEffective(caseInfo, page, parent)
+				&& isCaseMatched(caseInfo, page, parent, switchCond)) {
+					return execCreateChild(ci, parent, caseInfo);
+				}
+			} else {
+				final List created = new LinkedList();
+				while (forEach.next()) {
+					if (isEffective(caseInfo, page, parent)
+					&& isCaseMatched(caseInfo, page, parent, switchCond)) {
+						final Component[] children =
+							execCreateChild(ci, parent, caseInfo);
+						for (int j = 0; j < children.length; ++j)
+							created.add(children[j]);
+						return (Component[])created.toArray(new Component[created.size()]);
+							//only once (AND condition)
+					}
+				}
+			}
+		}			
+		return new Component[0];
+	}
+	private static boolean isCaseMatched(ZkInfo caseInfo, Page page,
+	Component parent, Object switchCond) {
+		if (!caseInfo.withCase())
+			return true; //default clause
+
+		final Object[] caseValues = caseInfo.resolveCase(page, parent);
+		for (int j = 0; j < caseValues.length; ++j)
+			if (Objects.equals(switchCond, caseValues[j]))
+				return true; //OR condition
+		return false;
 	}
 	/** Executes a non-component object, such as ZScript, AttributesInfo...
 	 */
@@ -1495,7 +1540,7 @@ public class UiEngineImpl implements UiEngine {
 			final Object meta = it.next();
 			if (meta instanceof NativeInfo) {
 				final NativeInfo childInfo = (NativeInfo)meta;
-				final ForEach forEach = childInfo.getForEach(ci.page, comp);
+				final ForEach forEach = childInfo.resolveForEach(ci.page, comp);
 				if (forEach == null) {
 					if (childInfo.isEffective(comp)) {
 						getNativeFirstHalf(ci, sb, comp, childInfo, helper);
@@ -1513,17 +1558,21 @@ public class UiEngineImpl implements UiEngine {
 				final String s = ((TextInfo)meta).getValue(comp);
 				if (s != null) helper.appendText(sb, s);
 			} else if (meta instanceof ZkInfo) {
-				ComponentInfo compInfo = (ComponentInfo)meta;
-				final ForEach forEach = compInfo.getForEach(ci.page, comp);
+				ZkInfo zkInfo = (ZkInfo)meta;
+				if (zkInfo.withSwitch())
+					throw new UnsupportedOperationException("<zk switch> in native not allowed yet");
+
+				final ForEach forEach = zkInfo.resolveForEach(ci.page, comp);
 				if (forEach == null) {
-					if (isEffective(compInfo, ci.page, comp))
+					if (isEffective(zkInfo, ci.page, comp)) {
 						getNativeContent(ci, sb, comp,
-							compInfo.getChildren(), helper);
+							zkInfo.getChildren(), helper);
+					}
 				} else {
 					while (forEach.next())
-						if (isEffective(compInfo, ci.page, comp))
+						if (isEffective(zkInfo, ci.page, comp))
 							getNativeContent(ci, sb, comp,
-								compInfo.getChildren(), helper);
+								zkInfo.getChildren(), helper);
 				}
 			} else {
 				execNonComponent(ci, comp, meta);

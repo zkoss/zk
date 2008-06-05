@@ -584,6 +584,9 @@ public class Parser {
 					parentlang = pgdef.getLanguageDefinition();
 
 				if (trimLabel.length() > 0) { //consider as a label
+					if (isZkSwitch(parent))
+						throw new UiException("Only <zk> can be used in <zk switch>, "+((Item)o).getLocator());
+
 					ComponentInfo pi = parentInfo;
 					while (pi instanceof ZkInfo) {
 						NodeInfo n = pi.getParent();
@@ -673,11 +676,16 @@ public class Parser {
 		} else {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 			final ComponentInfo compInfo;
-			if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+			final boolean bzk =
+				"zk".equals(nm) && isZkElement(langdef, nm, pref, uri);
+			if (bzk) {
 				if (annHelper.clear())
 					log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
 				compInfo = new ZkInfo(parent); 
 			} else {
+				if (isZkSwitch(parent))
+					throw new UiException("Only <zk> can be used in <zk switch>, "+el.getLocator());
+
 				boolean prefRequired =
 					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
 				boolean bNative = bNativeContent || prefRequired ||
@@ -746,13 +754,18 @@ public class Parser {
 				final String attval = attr.getValue();
 				if (attrns != null
 				&& LanguageDefinition.ANNO_NAMESPACE.equals(attrns.getURI())) {
-					if (attrAnnHelper == null)
-						attrAnnHelper = new AnnotationHelper();
-					attrAnnHelper.addByRawValue(attnm, attval);
+					if (bzk) warnWrongZkAttr(attr);
+					else {
+						if (attrAnnHelper == null)
+							attrAnnHelper = new AnnotationHelper();
+						attrAnnHelper.addByRawValue(attnm, attval);
+					}
 				} else if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
-					compInfo.setApply(attval);
+					if (bzk) warnWrongZkAttr(attr);
+					else compInfo.setApply(attval);
 				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
-					compInfo.setForward(attval);
+					if (bzk) warnWrongZkAttr(attr);
+					else compInfo.setForward(attval);
 				} else if ("if".equals(attnm) && isZkAttr(langdef, attrns)) {
 					ifc = attval;
 				} else if ("unless".equals(attnm) && isZkAttr(langdef, attrns)) {
@@ -764,7 +777,19 @@ public class Parser {
 				} else if ("forEachEnd".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEachEnd = attval;
 				} else if ("fulfill".equals(attnm) && isZkAttr(langdef, attrns)) {
-					compInfo.setFulfill(attval);
+					if (bzk) warnWrongZkAttr(attr);
+					else compInfo.setFulfill(attval);
+				} else if (bzk) {
+					if ("switch".equals(attnm)) {
+						if (isZkSwitch(parent))
+							throw new UiException("<zk switch> cannot be used in <zk switch>, "+el.getLocator());
+						((ZkInfo)compInfo).setSwitch(attval);
+					} else if ("case".equals(attnm)) {
+						if (!isZkSwitch(parent))
+							throw new UiException("<zk case> can be used only in <zk switch>, "+attr.getLocator());
+						((ZkInfo)compInfo).setCase(attval);
+					} else
+						warnWrongZkAttr(attr);
 				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
 					final Namespace attns = attr.getNamespace();
 					final String attpref = attns != null ? attns.getPrefix(): "";
@@ -801,6 +826,12 @@ public class Parser {
 			&& !compInfo.getChildren().isEmpty())
 				optimizeNativeInfos((NativeInfo)compInfo);
 		}
+	}
+	private void warnWrongZkAttr(Attribute attr) {
+		log.warning("Attribute "+attr.getName()+" ignored in <zk>, "+attr.getLocator());
+	}
+	private boolean isZkSwitch(NodeInfo nodeInfo) {
+		return nodeInfo instanceof ZkInfo && ((ZkInfo)nodeInfo).withSwitch();
 	}
 	private void parseZScript(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) {
@@ -896,7 +927,7 @@ public class Parser {
 		if (annHelper.clear())
 			log.warning("Annotations are ignored since <custom-attribute> doesn't support them, "+el.getLocator());
 
-		String ifc = null, unless = null, scope = null;
+		String ifc = null, unless = null, scope = null, composite = null;
 		final Map attrs = new HashMap();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
@@ -909,6 +940,8 @@ public class Parser {
 				unless = attval;
 			} else if ("scope".equals(attnm)) {
 				scope = attval;
+			} else if ("composite".equals(attnm)) {
+				composite = attval;
 			} else if ("forEach".equals(attnm)) {
 				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
 			} else {
@@ -919,7 +952,7 @@ public class Parser {
 		if (!attrs.isEmpty())
 			parent.appendChild(new AttributesInfo(
 				parent.getEvaluatorRef(),
-				attrs, scope, ConditionImpl.getInstance(ifc, unless)));
+				attrs, scope, composite, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private static void parseVariables(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
@@ -931,7 +964,7 @@ public class Parser {
 		if (annHelper.clear())
 			log.warning("Annotations are ignored since <variables> doesn't support them, "+el.getLocator());
 
-		String ifc = null, unless = null;
+		String ifc = null, unless = null, composite = null;
 		boolean local = false;
 		final Map vars = new HashMap();
 		for (Iterator it = el.getAttributeItems().iterator();
@@ -945,6 +978,8 @@ public class Parser {
 				unless = attval;
 			} else if ("local".equals(attnm)) {
 				local = "true".equals(attval);
+			} else if ("composite".equals(attnm)) {
+				composite = attval;
 			} else if ("forEach".equals(attnm)) {
 				throw new UiException("forEach not applicable to <variables>, "+el.getLocator());
 			} else {
@@ -954,7 +989,7 @@ public class Parser {
 		if (!vars.isEmpty())
 			parent.appendChild(new VariablesInfo(
 				parent.getEvaluatorRef(),
-				vars, local, ConditionImpl.getInstance(ifc, unless)));
+				vars, local, composite, ConditionImpl.getInstance(ifc, unless)));
 	}
 	private static void parseAnnotation(Element el, AnnotationHelper annHelper)
 	throws Exception {

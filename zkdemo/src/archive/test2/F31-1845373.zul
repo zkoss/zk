@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F31-1845373.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  5 17:05:32     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of switch/case">
+	You shall see the following below the separator
+	<vbox>
+		<label value="Correct 1"/>
+		<label value="Correct 2"/>
+		<label value="Correct 4"/>
+		<label value="Correct 3"/>
+	</vbox>
+	<separator bar="true"/>
+	<variables var="apple"/>
+	<vbox>
+	<zk switch="${var}">
+		<zk case="wrong">
+			Error 1
+		</zk>
+		<zk case="orange, apple">
+			Correct 1
+			<zk switch="${each}">
+				<zk case="">
+					Error 1.1
+				</zk>
+				<zk if="${!empty nothing}">
+					Error 1.2
+				</zk>
+				<zk>
+					Correct 2
+				</zk>
+				<zk case="more">
+					Error 1.3
+				</zk>
+			</zk>
+		</zk>
+		<zk>
+			Error 2
+		</zk>
+	</zk>
+	<zk switch="${each}" forEach="zk, gwt">
+		<zk case="gwt">
+			Correct 3
+		</zk>
+		<zk case="${each}" forEach="best, zk">
+			Correct 4
+		</zk>
+		<zk>
+			Error 3
+		</zk>
+	</zk>
+	</vbox>
+</window>

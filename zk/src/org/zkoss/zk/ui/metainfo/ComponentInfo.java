@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
 import org.zkoss.zk.ui.metainfo.impl.MultiComposer;
+import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.xel.impl.Utils;
@@ -249,15 +250,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_fulfill = fulfill != null && fulfill.length() > 0 ? fulfill: null;
 	}
 
-	/** Returns the composer for this info, or null if not available.
-	 * It evaluates the value returned by {@link #getApply}.
-	 *
-	 * @see #getApply
-	 * @since 3.0.0
-	 */
-	public Composer getComposer(Page page) {
-		return getComposer(page, null);
-	}
 	/** Returns the composer for this info, or nuull if not available.
 	 *
 	 * @param comp the component used as the self variable to resolve
@@ -266,9 +258,9 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * If comp is null, it is the same as {@link #getComposer(Page)}.
 	 * If comp is not null, it is used as the self variable.
 	 * @see #getApply
-	 * @since 3.0.1
+	 * @since 3.1.0
 	 */
-	public Composer getComposer(Page page, Component comp) {
+	public Composer resolveComposer(Page page, Component comp) {
 		if (_apply == null)
 			return null;
 
@@ -277,14 +269,24 @@ implements Cloneable, Condition, java.io.Externalizable {
 			for (int j = 0; j < _apply.length; ++j)
 				toComposer(composers, page,
 					comp != null ?
-						_apply[j].getValue(_evalr.getEvaluator(), comp):
-						_apply[j].getValue(_evalr.getEvaluator(), page));
+						_apply[j].getValue(getEvaluator(), comp):
+						_apply[j].getValue(getEvaluator(), page));
 
 			return MultiComposer.getComposer(page,
 				(Composer[])composers.toArray(new Composer[composers.size()]));
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}
+	}
+	/** @deprecated As of release 3.1.0, replaced with {@link #resolveComposer}.
+	 */
+	public Composer getComposer(Page page) {
+		return getComposer(page, null);
+	}
+	/** @deprecated As of release 3.1.0, replaced with {@link #resolveComposer}.
+	 */
+	public Composer getComposer(Page page, Component comp) {
+		return resolveComposer(page, comp);
 	}
 	private static void toComposer(List composers, Page page, Object o)
 	throws Exception {
@@ -488,14 +490,20 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @param comp the component.
 	 * @return the forEach object to iterate this info multiple times,
 	 * or null if this info shall be interpreted only once.
+	 * @since 3.1.0
 	 */
-	public ForEach getForEach(Page page, Component comp) {
+	public ForEach resolveForEach(Page page, Component comp) {
 		return _forEach == null ? null:
 			comp != null ?
 				ForEachImpl.getInstance(
 					_evalr, comp, _forEach, _forEachInfo[0], _forEachInfo[1]):
 				ForEachImpl.getInstance(
 					_evalr, page, _forEach, _forEachInfo[0], _forEachInfo[1]);
+	}
+	/** @deprecated As of release 3.1.0, replaced with {@link #resolveForEach}.
+	 */
+	public ForEach getForEach(Page page, Component comp) {
+		return resolveForEach(page, comp);
 	}
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
@@ -565,8 +573,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	private Object evalImplClass(Page page, Component parent) {
 		return _implcls == null ? null:
 			parent != null ?
-				_implcls.getValue(_evalr.getEvaluator(), parent):
-				_implcls.getValue(_evalr.getEvaluator(), page);
+				_implcls.getValue(getEvaluator(), parent):
+				_implcls.getValue(getEvaluator(), page);
 	}
 	/** Creates an component based on this info (never null).
 	 * It is the same as newInstance(page, null).
@@ -710,6 +718,13 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs);
+	}
+
+	/** Returns the evaluator.
+	 * @since 3.1.0
+	 */
+	public Evaluator getEvaluator() {
+		return _evalr.getEvaluator();
 	}
 
 	//Condition//

@@ -7,6 +7,7 @@ ZK 3.1.0
   1951422: Grid: support grouping
   1962747: Allow to specify a XML fragment as compnent's content
   1901211: Simplify the outline of Menu component with single TD
+  1845373: Support switch/case or choose/when
   1925928: Add Spinner Component
   1926069: Pass current value for bandbox/comobox in onOpen
   1890941: chart support bubble chart
