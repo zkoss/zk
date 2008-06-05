@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Collection;
+import java.util.regex.Pattern;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -614,9 +615,22 @@ public class UiEngineImpl implements UiEngine {
 			return true; //default clause
 
 		final Object[] caseValues = caseInfo.resolveCase(page, parent);
-		for (int j = 0; j < caseValues.length; ++j)
+		for (int j = 0; j < caseValues.length; ++j) {
+			if (caseValues[j] instanceof String && switchCond instanceof String) {
+				final String casev = (String)caseValues[j];
+				final int len = casev.length();
+				if (len >= 2 && casev.charAt(0) == '/'
+				&& casev.charAt(len - 1) == '/') { //regex
+					if (Pattern.compile(casev.substring(1, len - 1))
+					.matcher((String)switchCond).matches())
+						return true;
+					else
+						continue;
+				}
+			}
 			if (Objects.equals(switchCond, caseValues[j]))
 				return true; //OR condition
+		}
 		return false;
 	}
 	/** Executes a non-component object, such as ZScript, AttributesInfo...
