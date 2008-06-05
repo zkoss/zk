@@ -438,7 +438,8 @@
 	</xs:attributeGroup>
 	<xs:attributeGroup name="labelImageElementAttrGroup">
 		<xs:attributeGroup ref="labelElementAttrGroup" />
-		<xs:attribute name="image" type="xs:anyURI" use="optional" />
+		<xs:attribute name="image" type="xs:string" use="optional" />
+		<xs:attribute name="imageContent" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="headerElementAttrGroup">
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
@@ -579,7 +580,7 @@
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
-		<xs:attribute name="image" type="xs:anyURI" use="optional" />
+		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
@@ -1061,6 +1062,7 @@
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="rowRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
+		<xs:attribute name="oddRowSclass" type="xs:string" use="optional" />
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
@@ -1148,6 +1150,7 @@
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="hspace" type="xs:string" use="optional" />
 		<xs:attribute name="vspace" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
@@ -1167,6 +1170,7 @@
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="hspace" type="xs:string" use="optional" />
 		<xs:attribute name="vspace" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
@@ -2125,6 +2129,7 @@
 		<xs:attribute name="minheight" type="intType" use="optional" />
 		<xs:attribute name="minwidth" type="intType" use="optional" />
 		<xs:attribute name="defaultActionOnShow" type="windowActionOnShowAttrType" use="optional" />
+		<xs:attribute name="contentSclass" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
