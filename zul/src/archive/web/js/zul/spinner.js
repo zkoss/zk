@@ -20,7 +20,7 @@ zkSpinner = {
 };
 
 zkSpinner.init = function (cmp) {
-	zkSpinner.onVisi = zkWgt.fixDropBtn; 
+	zkSpinner.onVisi = zkSpinner.onSize = zkWgt.fixDropBtn2;
 	zkSpinner.onHide = zkTxbox.onHide; 	
 	zkSpinner.validate = zkInbox.validate;
 
@@ -45,8 +45,7 @@ zkSpinner.init = function (cmp) {
 		zk.listen(btn, "mousedown", zkSpinner._btnDown);
 		zk.listen(btn, "mouseup", zkSpinner._btnUp);
 		zk.listen(btn, "mouseout", zkSpinner._btnOut);
-
-		zkWgt.fixDropBtn(cmp);
+		zk.listen(btn, "mouseover", zkWgt.onbtnover);
 	}
 };
 
@@ -78,7 +77,7 @@ zkSpinner.setAttr = function (cmp, nm, val) {
 	}else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
 		if (btn) btn.style.display = val == "true" ? "": "none";
-		zkWgt.fixDropBtn(cmp);
+		zkWgt.fixDropBtn2(cmp);
 		return true;
 	} else if ("style" == nm) {
 		var inp = $real(cmp);
@@ -184,6 +183,7 @@ zkSpinner.checkValue = function(cmp){
 
 zkSpinner._btnDown= function(evt){
 	if (!evt) evt = window.event;
+	zkWgt.onbtndown(evt);
 	var cmp = $outer(Event.element(evt)),
 		inp = $real(cmp);
 	if(inp.disabled) return;
@@ -215,6 +215,7 @@ zkSpinner._btnUp= function(evt){
 };
 zkSpinner._btnOut= function(evt){
 	if (!evt) evt = window.event;
+	zkWgt.onbtnout(evt);
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
 	if(inp.disabled) return;

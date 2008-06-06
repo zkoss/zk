@@ -43,7 +43,6 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.1.0
  */
 public class Spinner extends NumberInputElement {
-	private static final String DEFAULT_IMAGE = "~./zul/img/updnbtn.gif";
 	private String _img;
 	private int _step = 1;
 	private boolean _btnVisible = true;
@@ -117,7 +116,7 @@ public class Spinner extends NumberInputElement {
 	/** Returns the URI of the button image.
 	 */
 	public String getImage() {
-		return _img != null ? _img: DEFAULT_IMAGE;
+		return _img;
 	}
 	/** Sets the URI of the button image.
 	 *
@@ -125,7 +124,7 @@ public class Spinner extends NumberInputElement {
 	 * URI is used.
 	 */
 	public void setImage(String img) {
-		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+		if (img != null && img.length() == 0)
 			img = null;
 		if (!Objects.equals(_img, img)) {
 			_img = img;

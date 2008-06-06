@@ -29,8 +29,11 @@ _zktbau = {
 zkau.setAttr = function (cmp, nm, val) {
 	if ("disabled" == nm || "readOnly" == nm) {
 		var inp = $real(cmp), type = inp.type ? inp.type.toUpperCase() : "";
-		if (type == "TEXT" || type == "TEXTAREA")
+		if (type == "TEXT" || type == "TEXTAREA") {
+			if ("disabled" == nm)
+				zk[val == "true" ? "addClass" : "rmClass"]($outer(cmp), "z-form-disd");
 			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? "text-disd" : "readonly");
+		}
 	}
 	return _zktbau.setAttr(cmp, nm, val);
 };
@@ -52,7 +55,10 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 		if (old != cmp.value) cmp.value = old; //Bug 1490079
 	}
 	if (cmp.readOnly) zk.addClass(cmp, "readonly");
-	if (cmp.disabled) zk.addClass(cmp, "text-disd");
+	if (cmp.disabled) {
+		zk.addClass(cmp, "text-disd");
+		zk.addClass($outer(cmp), "z-form-disd");
+	}
 };
 zkTxbox.cleanup = zkTxbox.onHide = function (cmp) {
 	var inp = $real(cmp);
@@ -78,6 +84,7 @@ zkTxbox.onblur = function (evt) {
 	zkTxbox._scanStop(inp);
 	zkTxbox.updateChange(inp, noonblur);
 	zkau.onblur(evt, noonblur); //fire onBlur after onChange
+	zk.rmClass($outer(inp), "z-form-focus");
 };
 zkTxbox._scanStop = function (inp) {	
 	//stop the scanning of onChaning first
@@ -189,6 +196,7 @@ zkTxbox.onfocus = function (evt) {
 			zkTxbox._intervals[inp.id] =
 				setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
 	}
+	zk.addClass($outer(inp), "z-form-focus");
 };
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
@@ -832,4 +840,79 @@ zkWgt._fixdbtn = function (cmp) {
 		btn.style.top = v + "px";
 		if (zk.safari) btn.style.left = "-2px";
 	}
+};
+/** Fixes the button align with an input box, such as combobox, datebox. for the trendy mold
+ * @since 3.1.0
+ */
+zkWgt.fixDropBtn2 = function (cmp) {
+	//For new initial phase, we don't need to delay the function for IE. (Bug 1752477) 
+	var cmp = $e(cmp);
+	if (cmp) zkWgt._fixdbtn2(cmp);
+};
+zkWgt._fixdbtn2 = function (cmp) {
+	cmp = $e(cmp);
+	if (!cmp) return; //it might be gone if the user press too fast
+
+	var btn = $e(cmp.id + "!btn");
+	//note: isRealVisible handles null argument
+	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
+		var inp = $real(cmp), img = zk.firstChild(btn, "IMG");
+		if (!inp.offsetHeight || !img.offsetHeight) {
+			setTimeout("zkWgt._fixdbtn2($e('" + cmp.id +"'))", 66);
+			return;
+		}
+
+		//Bug 1738241: don't use align="xxx"
+		var v = inp.offsetHeight - img.offsetHeight;
+		if (v !== 0) {
+			var imghgh = $int(Element.getStyle(img, "height")) + v;
+			img.style.height = (imghgh < 0 ? 0 : imghgh) + "px"; 
+		}
+
+		v = inp.offsetTop - img.offsetTop;
+		btn.style.position = "relative";
+		btn.style.top = v + "px";
+		if (zk.safari) btn.style.left = "-2px";
+	}
+};
+zkWgt.isV30 = function (cmp) {
+	return getZKAttr(cmp, "mold") == "v30";
+};
+zkWgt.onbtnover = function (evt) {
+	if (!evt) evt = window.event;
+	var btn = $parentByTag(Event.element(evt), "SPAN");
+	var inp = $real(btn);
+	if (inp && !inp.disabled && !zk.dragging)
+		zk.addClass(btn, "z-rbtn-over");
+};
+zkWgt.onbtnout = function (evt) {
+	if (!evt) evt = window.event;
+	var btn = $parentByTag(Event.element(evt), "SPAN");
+	var inp = $real(btn);
+	if (inp && !inp.disabled && !zk.dragging)
+		zk.rmClass(btn, "z-rbtn-over");
+};
+zkWgt.onbtndown = function (evt) {
+	if (!evt) evt = window.event;
+	var btn = $parentByTag(Event.element(evt), "SPAN");
+	var inp = $real(btn);
+	if (inp && !inp.disabled && !zk.dragging) {
+		if (zkWgt._currentbtn) 
+			zkWgt.onbtnup(evt);
+		zk.addClass(btn, "z-rbtn-click");
+		zk.listen(document.body, "mouseup", zkWgt.onbtnup);
+		zkWgt._currentbtn = btn;
+	}
+};
+zkWgt.onbtnup = function (evt) {
+	zkWgt._currentbtn = $e(zkWgt._currentbtn);
+	zk.rmClass(zkWgt._currentbtn, "z-rbtn-click");
+	zk.unlisten(document.body, "mouseup", zkWgt.onbtnup);
+	zkWgt._currentbtn = null;
+};
+zkWgt.onFixDropBtn = function (cmp) {
+	if (zkWgt.isV30(cmp)) 
+		zkWgt.fixDropBtn(cmp);
+	else
+		zkWgt.fixDropBtn2(cmp);
 };

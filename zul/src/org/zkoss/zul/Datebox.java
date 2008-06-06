@@ -38,6 +38,7 @@ import org.zkoss.zk.au.out.AuInvoke;
 
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.impl.FormatInputElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * An edit box for holding a date.
@@ -60,6 +61,7 @@ public class Datebox extends FormatInputElement {
 	private boolean _compact, _btnVisible = true;
 
 	public Datebox() {
+		init();
 		setFormat(getDefaultFormat());
 		setSclass("datebox");
 		setCols(11);
@@ -68,6 +70,10 @@ public class Datebox extends FormatInputElement {
 	public Datebox(Date date) throws WrongValueException {
 		this();
 		setValue(date);
+	}
+
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 	/** Returns the default format, which is used when contructing
 	 * a datebox.
@@ -145,7 +151,7 @@ public class Datebox extends FormatInputElement {
 	 * @since 3.0.0
 	 */
 	public String getImage() {
-		return _img != null ? _img: DEFAULT_IMAGE;
+		return _img != null || !"v30".equals(getMold()) ? _img: DEFAULT_IMAGE;
 	}
 	/** Sets the URI of the button image.
 	 *
@@ -340,6 +346,7 @@ public class Datebox extends FormatInputElement {
 		}
 		if (!_lenient) sb.append(" z.lenient=\"false\"");
 		if (_compact) sb.append(" z.compact=\"true\"");
+		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		return sb.toString();
 	}
 	public String getInnerAttrs() {

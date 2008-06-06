@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A combo box.
@@ -89,11 +90,16 @@ public class Combobox extends Textbox {
 	private transient EventListener _eventListener;
 	
 	public Combobox() {
+		init();
 		setSclass("combobox");
 	}
 	public Combobox(String value) throws WrongValueException {
 		this();
 		setValue(value);
+	}
+	
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 	
 	protected String coerceToString(Object value) {
@@ -419,7 +425,7 @@ public class Combobox extends Textbox {
 	 * @since 2.4.1
 	 */
 	public String getImage() {
-		return _img != null ? _img: DEFAULT_IMAGE;
+		return _img != null || !"v30".equals(getMold()) ? _img: DEFAULT_IMAGE;
 	}
 	/** Sets the URI of the button image.
 	 *
@@ -532,12 +538,13 @@ public class Combobox extends Textbox {
 	}
 
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
+		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
 		final boolean aco = isAutocomplete(), adr = isAutodrop();
+		
+		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		if (!isAsapRequired(Events.ON_OPEN) && !isAsapRequired(Events.ON_SELECT) && !aco && !adr)
-			return attrs;
+			return sb.toString();
 
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		appendAsapAttr(sb, Events.ON_OPEN);
 		appendAsapAttr(sb, Events.ON_SELECT);
 		if (aco) HTMLs.appendAttribute(sb, "z.aco", "true");

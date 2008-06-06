@@ -23,7 +23,7 @@ zkTmbox = {
 };
 
 zkTmbox.init = function (cmp) {
-	zkTmbox.onVisi = zkTmbox.onSize = zkWgt.fixDropBtn; 
+	zkTmbox.onVisi = zkTmbox.onSize = zkWgt.onFixDropBtn;
 	zkTmbox.onHide = zkTxbox.onHide; 
 
 	zkTxbox.init($real(cmp));
@@ -56,6 +56,7 @@ zkTmbox.init = function (cmp) {
 		zk.listen(btn, "mouseup", zkTmbox._btnUp);
 		zk.listen(btn, "click", zk.doEventStop); //prevent listitem being selected
 		zk.listen(btn, "mouseout", zkTmbox._btnOut);
+		zk.listen(btn, "mouseover", zkWgt.onbtnover);
 	}
 	
 	if(inp.value){
@@ -64,7 +65,6 @@ zkTmbox.init = function (cmp) {
 		zkTmbox._clearTime(cmp);
 	}
 };
-
 zkTmbox.cleanup = function (cmp) {
 	if(cmp.timerId){
 		clearTimeout(cmp.timerId);
@@ -83,7 +83,7 @@ zkTmbox.setAttr = function (cmp, nm, val) {
 	}else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
 		if (btn) btn.style.display = val == "true" ? "": "none";
-		zkWgt.fixDropBtn(cmp);
+		zkWgt.onFixDropBtn(cmp);
 		return true;
 	} else if ("style" == nm) {
 		var inp = $real(cmp);
@@ -206,6 +206,7 @@ zkTmbox._btnDown= function(evt){
 		zkTmbox.onDown(cmp);
 		zkTmbox._startAutoIncProc(cmp,false);
 	}
+	zk.listen(btn, "mousedown", zkWgt.onbtndown);
 };
 zkTmbox._btnUp= function(evt){
 	if (!evt) evt = window.event;
@@ -219,6 +220,7 @@ zkTmbox._btnUp= function(evt){
 };
 zkTmbox._btnOut= function(evt){
 	if (!evt) evt = window.event;
+	zkWgt.onbtnout(evt);
 	var cmp = $outer(Event.element(evt));
 	var inp = $real(cmp);
 	if(inp.disabled || zk.dragging) return;

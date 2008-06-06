@@ -31,6 +31,7 @@ import org.zkoss.util.TimeZones;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.InputElement;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -63,6 +64,7 @@ public class Timebox extends InputElement {
 	private boolean _btnVisible = true;
 	
 	public Timebox() {
+		init();
 		setCols(5);
 		setMaxlength(5);
 		setSclass("timebox");
@@ -70,6 +72,10 @@ public class Timebox extends InputElement {
 	public Timebox(Date date) throws WrongValueException {
 		this();
 		setValue(date);
+	}
+
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 	
 	/** Returns the value (in Date), might be null unless
@@ -107,7 +113,7 @@ public class Timebox extends InputElement {
 	/** Returns the URI of the button image.
 	 */
 	public String getImage() {
-		return _img != null ? _img: DEFAULT_IMAGE;
+		return _img != null || !"v30".equals(getMold()) ? _img: DEFAULT_IMAGE;
 	}
 	/** Sets the URI of the button image.
 	 *
@@ -185,5 +191,10 @@ public class Timebox extends InputElement {
 		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;
+	}
+	public String getOuterAttrs() {
+		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.mold", getMold());
+		return sb.toString();
 	}
 }

@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A band box. A bank box consists of an input box ({@link Textbox} and
@@ -52,11 +53,16 @@ public class Bandbox extends Textbox {
 	private boolean _autodrop, _btnVisible = true;
 
 	public Bandbox() {
+		init();
 		setSclass("bandbox");
 	}
 	public Bandbox(String value) throws WrongValueException {
 		this();
 		setValue(value);
+	}
+	
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 
 	/** Returns the dropdown window belonging to this band box.
@@ -104,16 +110,16 @@ public class Bandbox extends Textbox {
 
 	/** Returns the image URI that is displayed as the button to open
 	 * {@link Bandpopup}.
-	 * <p>Default: "~./zul/img/bandbtn.gif".
+	 * <p>Default: "~./zul/img/bandbtn.gif". (v30 mold only)
 	 */
 	public String getImage() {
-		return _img != null ? _img: DEFAULT_IMAGE;
+		return _img != null || !"v30".equals(getMold()) ? _img: DEFAULT_IMAGE;
 	}
 	/** Sets the image URI that is displayed as the button to open
 	 * {@link Bandpopup}.
 	 *
 	 * @param img the image URI. If null or empty, it is reset to
-	 * the default value: "~./zul/img/bandbtn.gif".
+	 * the default value: "~./zul/img/bandbtn.gif". (v30 mold only)
 	 */
 	public void setImage(String img) {
 		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
@@ -173,12 +179,12 @@ public class Bandbox extends Textbox {
 	}
 
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
+		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
 		final boolean adr = isAutodrop();
+		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		if (!isAsapRequired(Events.ON_OPEN) && !adr)
-			return attrs;
+			return sb.toString();
 
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		appendAsapAttr(sb, Events.ON_OPEN);
 		if (adr) HTMLs.appendAttribute(sb, "z.adr", "true");
 		return sb.toString();

@@ -36,9 +36,18 @@ tr.gamma {background: #F4F4F4;}
 td.gamma {background: #F4F4F4;}
 
 <%-- General --%>
+.z-form-disd {
+	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
+}
+.z-form-disd * {
+	color: gray !important; cursor: default !important;
+}
 .text, .comboboxinp, .dateboxinp, .bandboxinp, .timeboxinp, .spinnerinp {<%--sclass + "inp"--%>
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
+}
+input.z-form-focus, .z-form-focus input {
+	border: 1px solid #90BCE6;
 }
 .text-invalid {
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
@@ -1298,14 +1307,63 @@ td.menu3ar {<%-- menuitem arrow --%>
 	background-position: right center;
 }
 
-<%-- Combobox and Datebox --%>
+<%-- Combobox, Bandbox and Datebox --%>
 span.combobox, span.datebox, span.bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 }
+<%-- v30 mold --%>
 span.rbtnbk {<%-- button at the right edge --%>
 	background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); background-repeat: no-repeat;
 	border: 1px solid #7f9db9; border-left: none;
 }
+<%-- Combobox trendy mold --%>
+img.combobox {
+	background: transparent url(${c:encodeURL('~./zul/img/button/combobtn.gif')}) no-repeat 0 0;
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	border-bottom: 1px solid #B5B8C8;
+}
+<%-- Bandbox trendy mold --%>
+img.bandbox {
+	background: transparent url(${c:encodeURL('~./zul/img/button/bandbtn.gif')}) no-repeat 0 0;
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	border-bottom: 1px solid #B5B8C8;
+}
+<%-- Datebox trendy mold --%>
+img.datebox {
+	background: transparent url(${c:encodeURL('~./zul/img/button/datebtn.gif')}) no-repeat 0 0;
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	border-bottom: 1px solid #B5B8C8;
+}
+<%-- Timebox trendy mold --%>
+img.timebox {
+	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	border-bottom: 1px solid #B5B8C8;
+}
+<%-- Spinner trendy mold --%>
+img.spinner {
+	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	border-bottom: 1px solid #B5B8C8;
+}
+span.z-rbtn-over img.combobox, span.z-rbtn-over img.bandbox, span.z-rbtn-over img.datebox,
+	span.z-rbtn-over img.timebox, span.z-rbtn-over img.spinner {
+	background-position: -17px 0;
+}
+span.z-rbtn-click img.combobox, span.z-rbtn-click img.bandbox, span.z-rbtn-click img.datebox,
+	span.z-rbtn-click img.timebox, span.z-rbtn-click img.spinner {
+	background-position: -34px 0;
+}
+.z-form-focus img.combobox, .z-form-focus img.bandbox, .z-form-focus img.datebox,
+	.z-form-focus img.timebox, .z-form-focus img.spinner {
+	background-position: -51px 0;
+}
+.z-form-focus span.z-rbtn-over img.combobox, .z-form-focus span.z-rbtn-over img.bandbox,
+	.z-form-focus span.z-rbtn-over img.datebox, .z-form-focus span.z-rbtn-over img.timebox,
+	.z-form-focus span.z-rbtn-over img.spinner {
+	background-position: -68px 0;
+}
+<%-- Popup of Combox, Bandbox--%>
 div.comboboxpp, div.bandboxpp {<%--sclass + "pp"--%>
 	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid #7F9DB9; padding: 2px;

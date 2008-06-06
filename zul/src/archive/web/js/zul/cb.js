@@ -65,8 +65,9 @@ zkCmbox.onblur = function (evt) {
 	}
 	zkTxbox.onblur(evt);
 };
+
 zkCmbox.init = function (cmp) {
-	zkCmbox.onVisi = zkCmbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
+	zkCmbox.onVisi = zkCmbox.onSize = zkWgt.onFixDropBtn;
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
 	
 	var inp = $real(cmp);
@@ -78,10 +79,19 @@ zkCmbox.init = function (cmp) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) // Bug #1879511
 		zk.listen(pp, "click", zkCmbox.closepp);
-		
+	
 	var btn = $e(cmp.id + "!btn");
-	if (btn)
-		zk.listen(btn, "click", function (evt) {if (!inp.disabled && !zk.dragging) zkCmbox.onbutton(cmp, evt);});
+	if (btn) {
+		zk.listen(btn, "click", function (evt) {
+			if (!inp.disabled && !zk.dragging)
+				zkCmbox.onbutton(cmp, evt);
+		});
+		if (!zkWgt.isV30(cmp)) {
+			zk.listen(btn, "mouseover", zkWgt.onbtnover);
+			zk.listen(btn, "mousedown", zkWgt.onbtndown);
+			zk.listen(btn, "mouseout", zkWgt.onbtnout);
+		}
+	}
 };
 zkCmbox.cleanup = function (cmp) {
 	zkTxbox.cleanup(cmp);
@@ -189,7 +199,7 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 	} else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
 		if (btn) btn.style.display = val == "true" ? "": "none";
-		zkWgt.fixDropBtn(cmp);
+		zkWgt.onFixDropBtn(cmp);
 		return true;
 	} else if ("z.sel" == nm ) {
 		return zkTxbox.setAttr(cmp, nm, val);
@@ -368,7 +378,7 @@ zkCmbox.open = function (pp, hilite) {
 	zkCmbox._pop.addFloatId(pp.id, $type(cb) != "Cmbox");
 
 	zkCmbox._open(cb, uuid, pp, hilite);
-
+		
 	if (zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: uuid, cmd: "onOpen",
 			data: [true, null, $e(uuid + "!real").value]});
@@ -665,6 +675,9 @@ zkCmbox.close = function (pp, focus) {
 		zk.asyncFocus(uuid + "!real");
 	if (pp._shadow) pp._shadow.hide();
 	var cb = $e(uuid);
+	
+	var btn = $e(uuid + "!btn");
+	if (btn && !zkWgt.isV30(cb)) zk.rmClass(btn, "z-rbtn-over");
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: uuid, cmd: "onOpen",
 			data: [false, null, $e(uuid + "!real").value]});

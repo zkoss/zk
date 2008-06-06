@@ -9,6 +9,9 @@
 	width: 47pt;
 	text-overflow: ellipsis;
 }
+.z-form-disd * {
+	filter: alpha(opacity=60);
+}
 <c:if test="${c:isExplorer() && !c:isExplorer7()}">
 div.listbox, div.tree, div.grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>

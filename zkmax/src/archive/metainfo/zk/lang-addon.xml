@@ -122,6 +122,10 @@ def alert(m):
 		<extends>bandbox</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Bandbox2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.BandboxDefault</mold-uri>
 		</mold>
 	</component>
@@ -230,6 +234,10 @@ def alert(m):
 		<extends>combobox</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Combobox2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ComboboxDefault</mold-uri>
 		</mold>
 	</component>
@@ -246,6 +254,10 @@ def alert(m):
 		<extends>datebox</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Datebox2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.DateboxDefault</mold-uri>
 		</mold>
 	</component>
@@ -767,6 +779,10 @@ def alert(m):
 		<extends>timebox</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Timebox2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.TimeboxDefault</mold-uri>
 		</mold>
 	</component>

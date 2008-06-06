@@ -388,9 +388,8 @@ zkCal._seled = function (cell) {
 
 //Datebox//
 zkDtbox = {};
-
 zkDtbox.init = function (cmp) {
-	zkDtbox.onVisi = zkDtbox.onSize = zkWgt.fixDropBtn; //widget.js is ready now
+	zkDtbox.onVisi = zkDtbox.onSize = zkWgt.onFixDropBtn;
 	zkDtbox.onHide = zkTxbox.onHide; //widget.js is ready now
 	zkDtbox.cleanup = zkTxbox.cleanup;
 
@@ -400,14 +399,21 @@ zkDtbox.init = function (cmp) {
 		//IE: use keydown. otherwise, it causes the window to scroll
 
 	var btn = $e(cmp.id + "!btn");
-	if (btn)
-		zk.listen(btn, "click", function (evt) {if (!inp.disabled && !zk.dragging) zkDtbox.onbutton(cmp, evt);});
-
+	if (btn) {
+		zk.listen(btn, "click", function (evt) {
+			if (!inp.disabled && !zk.dragging)
+				zkDtbox.onbutton(cmp, evt);
+		});
+		if (!zkWgt.isV30(cmp)) {
+			zk.listen(btn, "mouseover", zkWgt.onbtnover);
+			zk.listen(btn, "mouseout", zkWgt.onbtnout);
+			zk.listen(btn, "mousedown", zkWgt.onbtndown);
+		}
+	}
 	var pp = $e(cmp.id + "!pp");
 	if (pp) // Bug #1912363
 		zk.listen(pp, "click", zkDtbox.closepp);
 };
-
 zkDtbox.validate = function (cmp) {
 	var inp = $e(cmp.id+"!real");
 	if (inp.value) {
@@ -573,12 +579,12 @@ zkDtbox.open = function (pp) {
 	zkau._dtbox.setFloatId(pp.id);
 
 	var uuid = $uuid(pp.id);
-	var cb = $e(uuid);
-	if (!cb) return;
+	var db = $e(uuid);
+	if (!db) return;
 
-	var meta = zkau.getMeta(cb);
+	var meta = zkau.getMeta(db);
 	if (meta) meta.init();
-	else zkau.setMeta(cb, new zk.Cal(cb, pp));
+	else zkau.setMeta(db, new zk.Cal(db, pp));
 
 	pp.style.width = pp.style.height = "auto";
 	pp.style.position = "absolute"; //just in case
@@ -598,30 +604,30 @@ zkDtbox.open = function (pp) {
 	} else if (pp.offsetHeight < 10) {
 		pp.style.height = "10px"; //minimal
 	}
-	if (pp.offsetWidth < cb.offsetWidth) {
-		pp.style.width = cb.offsetWidth + "px";
+	if (pp.offsetWidth < db.offsetWidth) {
+		pp.style.width = db.offsetWidth + "px";
 	} else {
 		var wd = zk.innerWidth() - 20;
-		if (wd < cb.offsetWidth) wd = cb.offsetWidth;
+		if (wd < db.offsetWidth) wd = db.offsetWidth;
 		if (pp.offsetWidth > wd) pp.style.width = wd;
 	}
 
-	zk.position(pp, cb, "after-start");
-
+	zk.position(pp, db, "after-start");
+	
 	setTimeout("zkDtbox._repos('"+uuid+"')", 3);
 		//IE issue: we have to re-position again because some dimensions
 		//might not be correct here
 };
 /** Re-position the popup. */
 zkDtbox._repos = function (uuid) {
-	var cb = $e(uuid);
-	if (!cb) return;
+	var db = $e(uuid);
+	if (!db) return;
 
 	var pp = $e(uuid + "!pp");
-	var inpId = cb.id + "!real";
+	var inpId = db.id + "!real";
 	var inp = $e(inpId);
 
-	zk.position(pp, cb, "after-start");
+	zk.position(pp, db, "after-start");
 	zkau.hideCovered();
 	zk.asyncFocus(inpId);
 };
@@ -637,6 +643,9 @@ zkDtbox.close = function (pp, focus) {
 	//No special child, so no need to: zk.onHideAt(pp);
 	zkau.hideCovered();
 
+	var btn = $e(uuid + "!btn");
+	if (btn && !zkWgt.isV30($e(uuid))) zk.rmClass(btn, "z-rbtn-over");
+	
 	if (focus)
 		zk.asyncFocus(uuid + "!real");
 };
@@ -652,7 +661,6 @@ zkDtbox.closepp = function (evt) {
 		if (pp.onclick) return;
 	}
 };
-
 zk.FloatDatebox = Class.create();
 Object.extend(Object.extend(zk.FloatDatebox.prototype, zk.Float.prototype), {
 	_close: function (el) {
