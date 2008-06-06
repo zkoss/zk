@@ -409,7 +409,7 @@ implements Constrainted {
 	/** Selects the whole text in this input.
 	 */
 	public void select() {
-		smartUpdate("z.sel", "all");
+		response("setAttr", new AuSetAttribute(this, "z.sel", "all"));
 	}
 
 	//-- Constrainted --//
