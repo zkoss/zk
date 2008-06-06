@@ -780,16 +780,19 @@ public class Parser {
 					if (bzk) warnWrongZkAttr(attr);
 					else compInfo.setFulfill(attval);
 				} else if (bzk) {
-					if ("switch".equals(attnm)) {
+					if ("switch".equals(attnm) || "choose".equals(attnm)) {
 						if (isZkSwitch(parent))
-							throw new UiException("<zk switch> cannot be used in <zk switch>, "+el.getLocator());
+							throw new UiException("<zk "+attnm+"> cannot be used in <zk switch/choose>, "+el.getLocator());
 						((ZkInfo)compInfo).setSwitch(attval);
 					} else if ("case".equals(attnm)) {
 						if (!isZkSwitch(parent))
 							throw new UiException("<zk case> can be used only in <zk switch>, "+attr.getLocator());
 						((ZkInfo)compInfo).setCase(attval);
-					} else
+					} else if ("when".equals(attnm)) {
+						ifc = attval;
+					} else {
 						warnWrongZkAttr(attr);
+					}
 				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
 					final Namespace attns = attr.getNamespace();
 					final String attpref = attns != null ? attns.getPrefix(): "";

@@ -58,6 +58,8 @@ public class ZkInfo extends ComponentInfo {
 	 * (returned by {@link #resolveSwitch}) is an empty string.
 	 */
 	public void setSwitch(String switchc) {
+		if (_case != null && switchc != null)
+			throw new IllegalStateException("case and switch/choose cannot coexist");
 		_switch = switchc != null ? new ExValue(switchc, Object.class): null;
 	}
 	/** Returns the switch condition's value; evaluate EL expression if any.
@@ -78,6 +80,8 @@ public class ZkInfo extends ComponentInfo {
 	/** Sets the case condition.
 	 */
 	public void setCase(String casec) {
+		if (_switch != null && casec != null)
+			throw new IllegalStateException("case and switch/choose cannot coexist");
 		_case = Utils.parseList(casec, Object.class, false);
 	}
 	/** Returns the case condition's value, or null if no case is
