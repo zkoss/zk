@@ -1563,7 +1563,7 @@ zkau._onDocKeydown = function (evt) {
 
 				var req = {uuid: n.id, cmd: evtnm, ctl: true,
 					data: [keycode, evt.ctrlKey, evt.shiftKey, evt.altKey, ref]};
-				if (zk.gecko && $tag(inp) == "SELECT" && $type(inp))
+				if (zk.gecko && $tag(inp) == "SELECT" && $type(inp) && zkau.asap(inp, "onSelect"))
 					zkau.lateReq = req; //Bug 1756559:let SELECT to send (see sel.js)
 				else
 					zkau.send(req, 38);
