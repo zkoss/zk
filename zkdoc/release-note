@@ -45,6 +45,7 @@ ZK 3.0.6
   1984152: Separator fail to show the bar on IE
   1985081: Select method in InputElement does not work properly
   1984643: onOK and onCancel don't work if listbox alone in modal
+  1984990: Missing attributes definition in zul.xsd
   
 * Upgrade Notes:
   + The default CSS style of a page becomes "width:100%" (rather than
