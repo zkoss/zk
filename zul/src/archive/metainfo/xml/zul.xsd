@@ -2267,6 +2267,10 @@
 			<xs:element ref="west" />
 		</xs:choice>
 		<xs:attributeGroup ref="zkAttrGroup" />
+		<xs:attribute name="switch" type="xs:string" use="optional" />
+		<xs:attribute name="case" type="xs:string" use="optional" />
+		<xs:attribute name="choose" type="xs:string" use="optional" />
+		<xs:attribute name="when" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- zscript -->
 	<xs:element name="zscript" type="zscriptType" />
