@@ -1418,6 +1418,7 @@ zkau._tryCloseTip = function () {
 	if (zkau._tipz && zkau._tipz.shallClose) {
 		if (zkau._tipz.open) {
 			for (var close, n = $e(zkau._tipz.tipId), fts = zkau.floats, j = fts.length; --j >= 0;) {
+				if (typeof fts[j].getFloatIds != "function") continue;
 				if (!$visible(n) || getZKAttr(n, "animating") == "hide") break;
 				for (var f = fts[j].getFloatIds(), len = f.length; --len >= 0;) {
 					if (zk.isAncestor(n, f[len])) {
