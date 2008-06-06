@@ -410,6 +410,7 @@ implements Constrainted {
 	 */
 	public void select() {
 		response("setAttr", new AuSetAttribute(this, "z.sel", "all"));
+			//don't use smartUpdate due to Bug 1985081
 	}
 
 	/** Returns whether the server-side formatting shall take place.
