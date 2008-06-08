@@ -668,9 +668,9 @@ public class Parser {
 
 			parseAttribute(pgdef, (ComponentInfo)parent, el, annHelper);
 		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parseCustomAttributes(parent, el, annHelper);
+			parseCustomAttributes(langdef, parent, el, annHelper);
 		} else if ("variables".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parseVariables(parent, el, annHelper);
+			parseVariables(langdef, parent, el, annHelper);
 		} else if (LanguageDefinition.ANNO_NAMESPACE.equals(uri)) {
 			parseAnnotation(el, annHelper);
 		} else {
@@ -920,8 +920,8 @@ public class Parser {
 
 		annHelper.applyAnnotations(parent, attnm, true);
 	}
-	private static void parseCustomAttributes(NodeInfo parent, Element el,
-	AnnotationHelper annHelper) throws Exception {
+	private static void parseCustomAttributes(LanguageDefinition langdef,
+	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <custom-attributes>, "+el.getLocator());
 
@@ -935,17 +935,18 @@ public class Parser {
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
+			final Namespace attrns = attr.getNamespace();
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
-			if ("if".equals(attnm)) {
+			if ("if".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				ifc = attval;
-			} else if ("unless".equals(attnm)) {
+			} else if ("unless".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				unless = attval;
-			} else if ("scope".equals(attnm)) {
+			} else if ("scope".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				scope = attval;
-			} else if ("composite".equals(attnm)) {
+			} else if ("composite".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				composite = attval;
-			} else if ("forEach".equals(attnm)) {
+			} else if ("forEach".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
 			} else {
 				attrs.put(attnm, attval);
@@ -957,13 +958,11 @@ public class Parser {
 				parent.getEvaluatorRef(),
 				attrs, scope, composite, ConditionImpl.getInstance(ifc, unless)));
 	}
-	private static void parseVariables(NodeInfo parent, Element el,
-	AnnotationHelper annHelper) throws Exception {
+	private static void parseVariables(LanguageDefinition langdef,
+	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <variables> element, "+el.getLocator());
 
-		if (el.getAttributeItem("forEach") != null)
-			throw new UiException("forEach not applicable to <variables>, "+el.getLocator());
 		if (annHelper.clear())
 			log.warning("Annotations are ignored since <variables> doesn't support them, "+el.getLocator());
 
@@ -973,17 +972,18 @@ public class Parser {
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
+			final Namespace attrns = attr.getNamespace();
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
-			if ("if".equals(attnm)) {
+			if ("if".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				ifc = attval;
-			} else if ("unless".equals(attnm)) {
+			} else if ("unless".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				unless = attval;
-			} else if ("local".equals(attnm)) {
+			} else if ("local".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				local = "true".equals(attval);
-			} else if ("composite".equals(attnm)) {
+			} else if ("composite".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				composite = attval;
-			} else if ("forEach".equals(attnm)) {
+			} else if ("forEach".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				throw new UiException("forEach not applicable to <variables>, "+el.getLocator());
 			} else {
 				vars.put(attnm, attval);
@@ -1028,17 +1028,30 @@ public class Parser {
 			return !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri);
 	}
-	/** Returns whether it is a ZK attribute.
+	/** Returns whether it is a ZK attribute (in a non-ZK element).
 	 */
 	private static final boolean
 	isZkAttr(LanguageDefinition langdef, Namespace attrns) {
 		//if native we will make sure URI is ZK or lang's namespace
-		if (langdef.isNative()) {
-			final String uri = attrns.getURI();
-			return LanguageDefinition.ZK_NAMESPACE.equals(uri)
-				|| langdef.getNamespace().equals(uri);
-		}
-		return true;
+		if (langdef.isNative()
+		&& attrns != null && "".equals(attrns.getPrefix()))
+			return false; //if navtive, "" means not ZK
+
+		return isZkElementAttr(langdef, attrns);
+	}
+	/** Similar to {@link #isZkAttr}, except it doesn't care isNative
+	 * (i.e., we consider it as a ZK attribute unless a namespace
+	 * other than ZK is specified.
+	 */
+	private static final
+	boolean isZkElementAttr(LanguageDefinition langdef, Namespace attrns) {
+		if (attrns == null  //not possible; just in case
+		|| "".equals(attrns.getPrefix())) //w3c attr: uri is "" if prefix ""
+			return true;
+
+		final String uri = attrns.getURI();
+		return  LanguageDefinition.ZK_NAMESPACE.equals(uri)
+			|| langdef.getNamespace().equals(uri);
 	}
 
 	/** Parse an attribute and adds it to the definition.
