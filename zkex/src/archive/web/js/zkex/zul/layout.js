@@ -252,6 +252,14 @@ zk.Layout.prototype = {
 		this.el = this._regions = null;
 	}
 };
+/**
+ * To notify the component that the parent is scrolled.
+ * @since 3.0.6
+ */
+zk.Layout.onscroll = function (evt) {
+	if (!evt) evt = window.event;
+	zk.onScrollAt(Event.element(evt));
+};
 zk.Layout.getOwnerLayout = function (cmp, cleanup) {
 	var bl = $parentByType(cmp, "BorderLayout");
 	var meta = zkau.getMeta(bl);
@@ -312,6 +320,12 @@ zkLayoutRegion.init = function (cmp) {
 		cmp.split.splitbtn = $e($uuid(cmp) + "!splitbtn");
 		zkLayoutRegionSplit.init(split);
 	}
+	
+	if (getZKAttr(cmp, "autoscl") == "true") { 
+		var cid = getZKAttr(cmp, "cid"), bodyEl = (getZKAttr(cmp, "flex") == "true" && cid != "zk_n_a") ?
+			$e(getZKAttr(cmp, "cid")) : $e($uuid(cmp) + "!cave");
+		zk.listen(bodyEl, "scroll", zk.Layout.onscroll);
+	}
 	var layout = zk.Layout.getOwnerLayout(cmp);	
 	if (layout)	layout.addRegion(pos, cmp);
 };
@@ -355,12 +369,16 @@ zkLayoutRegion.setAttr = function (cmp, nm, val) {
 			return true; 
 		case "z.autoscl" :
 			setZKAttr(cmp, "autoscl", val);
+			var cid = getZKAttr(cmp, "cid"), bodyEl = (getZKAttr(cmp, "flex") == "true" && cid != "zk_n_a") ?
+				$e(getZKAttr(cmp, "cid")) : $e($uuid(cmp) + "!cave");
 			if (val == "true") { 
 				cmp.bodyEl.style.overflow = "auto";				
 				cmp.bodyEl.style.position = "relative";
-			} else {
+				zk.listen(bodyEl, "scroll", zk.Layout.onscroll);
+			} else { 
 				cmp.bodyEl.style.overflow = "hidden";							
 				cmp.bodyEl.style.position = "";
+				zk.unlisten(bodyEl, "scroll", zk.Layout.onscroll);
 			}
 			return true;
 		case "z.colps" :
