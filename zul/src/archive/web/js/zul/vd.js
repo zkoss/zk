@@ -52,6 +52,49 @@ if (!zkVld._ebs) zkVld._ebs = []; //a list of id of errbox to show
 if (!zkVld._cbs) zkVld._cbs = []; //a list of id of errbox that shall not shown
 zkau.valid = zkVld; //zkau depends on it
 
+/**
+ * To notify the error box that the parent is scrolled.
+ * @since 3.0.6
+ */
+zkVld.onScrollAt = function (n) {
+	for (var elms = zkVld._ebs, j = elms.length; --j >= 0;) { //parent first
+		var elm = $e(elms[j]), outer = $outer(elm);
+		for (var e = outer; e; e = $parent(e)) {
+			if (!$visible(e))
+				break;
+			if (!n || e == n) { //elm is a child of n
+				zkVld.syncErrBox(elm, true);
+				break;
+			}
+		}
+	}
+};
+/**
+ * To sync the offset of the error box and its real component.
+ * @param {Object} box
+ * @param {Object} unfocused if true, the box only moves to the real component not zkau.currentFocus one.
+ * @since 3.0.6
+ */
+zkVld.syncErrBox = function (box, unfocused) {
+	var cmp = $outer(box), ofs = zk.revisedOffset(cmp), wd = cmp.offsetWidth,
+		hgh = cmp.offsetHeight, atTop;
+	if (!unfocused && zkau.currentFocus && zkau.currentFocus != cmp) {
+		var o2 = zk.revisedOffset(zkau.currentFocus);
+		if (o2[0] < ofs[0] + wd
+		&& ofs[0] + wd + 220 < zk.innerX() + zk.innerWidth()) //Bug 1731646 (box's width unknown, so use 220)
+			ofs[0] += wd + 2;
+		else if (o2[1] < ofs[1]
+		&& ofs[1] + hgh + 50 < zk.innerY() + zk.innerHeight())
+			ofs[1] += hgh + 2;
+		else atTop = true;
+	} else {
+		ofs[0] += wd + 2;
+	}
+	box.style.display = "block"; //we need to calculate the size
+	if (atTop) ofs[1] -= box.offsetHeight + 1;
+	ofs = zk.toStyleOffset(box, ofs[0], ofs[1]);
+	box.style.left = ofs[0] + "px"; box.style.top = ofs[1] + "px";
+};
 /** Validates the specified component and returns the error msg. */
 zkVld.validate = function (id) {
 	//There are two ways to validate a component.
@@ -207,25 +250,7 @@ zkVld._errbox = function () {
 	if (!zkVld._cnt) zkVld._cnt = 0;
 	box.style.zIndex = $int(Element.getStyle(box ,"z-index")) + (++zkVld._cnt);
 	if (cmp) {
-		var ofs = zk.revisedOffset(cmp), wd = cmp.offsetWidth,
-			hgh = cmp.offsetHeight, atTop;
-		if (zkau.currentFocus && zkau.currentFocus != cmp) {
-			var o2 = zk.revisedOffset(zkau.currentFocus);
-			if (o2[0] < ofs[0] + wd
-			&& ofs[0] + wd + 220 < zk.innerX() + zk.innerWidth()) //Bug 1731646 (box's width unknown, so use 220)
-				ofs[0] += wd + 2;
-			else if (o2[1] < ofs[1]
-			&& ofs[1] + hgh + 50 < zk.innerY() + zk.innerHeight())
-				ofs[1] += hgh + 2;
-			else atTop = true;
-		} else {
-			ofs[0] += wd + 2;
-		}
-
-		box.style.display = "block"; //we need to calculate the size
-		if (atTop) ofs[1] -= box.offsetHeight + 1;
-		ofs = zk.toStyleOffset(box, ofs[0], ofs[1]);
-		box.style.left = ofs[0] + "px"; box.style.top = ofs[1] + "px";
+		zkVld.syncErrBox(box);
 	} else {
 		box.style.display = "block"; //we need to calculate the size
 		zk.center(box);
