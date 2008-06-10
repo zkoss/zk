@@ -18,11 +18,11 @@
  */
 package org.zkoss.zkex.zul;
 
+import java.util.Iterator;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
-import org.zkoss.zul.impl.XulElement;
 
 /**
  * A border layout lays out a container, arranging and resizing its components
@@ -96,15 +96,15 @@ public class Borderlayout extends HtmlBasedComponent {
 	 */
 	public static final String CENTER = "center";
 
-	private North _north;
+	private transient North _north;
 
-	private South _south;
+	private transient South _south;
 
-	private West _west;
+	private transient West _west;
 
-	private East _east;
+	private transient East _east;
 
-	private Center _center;
+	private transient Center _center;
 
 	public Borderlayout() {
 		setClass("layout-container");
@@ -167,5 +167,43 @@ public class Borderlayout extends HtmlBasedComponent {
 		}
 		smartUpdate("z.chchg", true);
 		return super.insertBefore(child, insertBefore);
+	}
+	
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		if (_north == child) _north = null;
+		else if (_south == child) _south = null;
+		else if (_west == child) _west = null;
+		else if (_east == child) _east = null;
+		else if (_center == child) _center = null;
+	}
+	
+	//Cloneable//
+	public Object clone() {
+		final Borderlayout clone = (Borderlayout) super.clone();
+		clone.afterUnmarshal();
+		return clone;
+	}
+	private void afterUnmarshal() {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof North) {
+				_north = (North) child;
+			} else if (child instanceof South) {
+				_south = (South) child;
+			} else if (child instanceof Center) {
+				_center = (Center) child;
+			} else if (child instanceof West) {
+				_west = (West) child;
+			} else if (child instanceof East) {
+				_east = (East) child;
+			}
+		}
+	}
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		afterUnmarshal();
 	}
 }
