@@ -490,6 +490,7 @@
 			<xs:element ref="menupopup" />
 			<xs:element ref="paging" />
 			<xs:element ref="popup" />
+			<xs:element ref="progressmeter" />
 			<xs:element ref="radio" />
 			<xs:element ref="radiogroup" />
 			<xs:element ref="script" />
