@@ -371,7 +371,8 @@ zkMenuit2 = { //menuitem
 			//Bug 1852304: theorectically, popup shall not appear since 'owner'
 			//is hidden, but owner is menu -- so popup still show
 	
-		var anc = $e(cmp.id + "!a").parentNode;
+		var anc = $e(cmp.id + "!a");
+		if (zkMenu2.isTop(cmp)) anc = anc.parentNode;
 		if ("javascript:;" == anc.href) {
 			var cmp = $outer(anc);
 			var uuid = cmp.id;
