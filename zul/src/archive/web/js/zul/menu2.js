@@ -145,7 +145,11 @@ zkMenu2 = { // menu
 						}
 					}
 				if (!item.el) {
-					item.el = zk.lastChild(ul, "LI");
+					for (var n = ul.lastChild; n; n = n.previousSibling)
+						if (zkMenu2.isItemActive(n)) {
+							item.el = n;
+							break;	
+						}
 					item.index = -1;
 					for (var n = ul.firstChild; n; n = n.nextSibling)
 						if (zkMenu2.isItemActive(n)) item.index++;
@@ -161,7 +165,11 @@ zkMenu2 = { // menu
 						}
 					}
 				if (!item.el) {
-					item.el = zk.firstChild(ul, "LI");
+					for (var n = ul.firstChild; n; n = n.nextSibling)
+						if (zkMenu2.isItemActive(n)) {
+							item.el = n;
+							break;	
+						}
 					item.index = 0;
 				}
 				zkMenu2.onPopupOver(item.el, item.index);
