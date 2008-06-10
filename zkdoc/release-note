@@ -48,6 +48,7 @@ ZK 3.0.6
   1984643: onOK and onCancel don't work if listbox alone in modal
   1984990: Missing attributes definition in zul.xsd
   1819264: Popup doen't follow the component when scrolling with layout
+  1989387: Fail to reinsert the new region of borderlayout
   
 * Upgrade Notes:
   + The default CSS style of a page becomes "width:100%" (rather than
