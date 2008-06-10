@@ -210,6 +210,9 @@ div.wc-bwrap div.wc-modal, div.wc-bwrap div.wc-modal-none, div.wc-bwrap div.wc-h
 div.wt-title {
 	overflow: hidden; zoom: 1; color: #222222; padding: 5px 0 4px 0;
 }
+div.wt-title a, div.wt-title a:visited, div.wt-title a:hover {
+	color: #222222;
+}
 div.wc-bwrap div.wc-embedded, div.wc-bwrap div.wc-wndcyan {
 	margin: 0; padding: 3px; border: 1px solid #8DB2E3;
 }
