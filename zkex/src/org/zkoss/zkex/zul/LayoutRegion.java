@@ -335,6 +335,11 @@ public abstract class LayoutRegion extends XulElement {
 		return false;
 	}
 
+	public void setParent(Component parent) {
+		if (parent != null && !(parent instanceof Borderlayout))
+			throw new UiException("Wrong parent: "+parent);
+		super.setParent(parent);
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80).append(super
 				.getOuterAttrs());
