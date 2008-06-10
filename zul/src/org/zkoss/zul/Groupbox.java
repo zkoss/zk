@@ -54,9 +54,6 @@ public class Groupbox extends XulElement {
 
 	/** Returns whether this groupbox is open.
 	 *
-	 * <p>Note: the default mold ({@link #getMold}) doesn't support
-	 * the open attribute.
-	 *
 	 * <p>Default: true.
 	 */
 	public boolean isOpen() {
