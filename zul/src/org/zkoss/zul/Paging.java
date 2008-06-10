@@ -199,7 +199,6 @@ public class Paging extends XulElement implements Paginal {
 	 * Returns the HTML tags of paging information.
 	 * 
 	 * @since 3.1.0
-	 * @author gracelin
 	 */
 	public String getInfoTags() {
 		final StringBuffer sb = new StringBuffer(512);
@@ -213,11 +212,6 @@ public class Paging extends XulElement implements Paginal {
 		return sb.toString();
 	}
 	
-	/**
-	 * 
-	 * @since 3.1.0
-	 * @author gracelin
-	 */
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super
 				.getOuterAttrs());
