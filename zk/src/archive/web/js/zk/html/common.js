@@ -1372,7 +1372,7 @@ zk.rename = function (url, name) {
 
 //-- special routines --//
 if (!zk._actg1) {
-	zk._actg1 = ["IFRAME","EMBED"/*,"APPLET"*/]; //comment out APPLET for better performance
+	zk._actg1 = ["IFRAME","EMBED","APPLET"];
 		// Due to using zk.createLining(), we don't handle the "SELECT" tag for IE6
 		// in zk.hideCovered() function.  
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
@@ -1431,7 +1431,7 @@ zk._dsball = function (parent, els, visibility) {
  */
 zk.shallHideDisabled = function (el) {
 	var tn = $tag(el);
-	return (tn != "IFRAME" && tn != "EMBED")
+	return (tn != "IFRAME" && tn != "EMBED" && tn != "APPLET")
 		|| (getZKAttr(el, "autohide") == "true" && $visible(el, true));
 };
 /** Restores tags being disabled by previous disableAll. If el is not null,
