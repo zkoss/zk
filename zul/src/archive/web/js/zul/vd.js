@@ -48,8 +48,8 @@ if (!window.Validate_errorbox) { //not customized
 
 ////
 zkVld = {};
-if (!zkVld._ebs) zkVld._ebs = []; //a list of id of errbox to show
-if (!zkVld._cbs) zkVld._cbs = []; //a list of id of errbox that shall not shown
+zkVld._ebs = []; //a list of id of errbox to show
+zkVld._cbs = []; //a list of id of errbox that shall not shown
 zkau.valid = zkVld; //zkau depends on it
 
 /**
