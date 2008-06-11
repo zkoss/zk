@@ -1078,7 +1078,7 @@ zk.rename = function (url, name) {
 
 //-- special routines --//
 if (!zk._actg1) {
-	zk._actg1 = ["IFRAME","EMBED"/*,"APPLET"*/]; //comment out APPLET for better performance
+	zk._actg1 = ["IFRAME","EMBED","APPLET"];
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
 	if (zk.ie6Only) { //ie7 solves the z-order issue of SELECT
 		zk._actg1.unshift("SELECT"); //change visibility is required
@@ -1135,7 +1135,7 @@ zk._dsball = function (parent, els, visibility) {
  */
 zk.shallHideDisabled = function (el) {
 	var tn = $tag(el);
-	return (tn != "IFRAME" && tn != "EMBED")
+	return (tn != "IFRAME" && tn != "EMBED" && tn != "APPLET")
 		|| (getZKAttr(el, "autohide") == "true" && $visible(el, true));
 };
 /** Restores tags being disabled by previous disableAll. If el is not null,
