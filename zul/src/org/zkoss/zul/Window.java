@@ -224,7 +224,7 @@ public class Window extends XulElement implements IdSpace {
 			border = "none";
 		if (!Objects.equals(_border, border)) {
 			_border = border;
-			smartUpdate("class", getSclass());
+			smartUpdate("z.cntScls", getContentSclass());
 		}
 	}
 
