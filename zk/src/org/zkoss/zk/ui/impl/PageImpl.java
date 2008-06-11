@@ -572,6 +572,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public Component getFellowIfAny(String compId) {
 		return (Component)_fellows.get(compId);
 	}
+	public Collection getFellows() {
+		return Collections.unmodifiableCollection(_fellows.values());
+	}
 
 	public boolean isComplete() {
 		return _complete;

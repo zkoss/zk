@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.util.Collection;
+
 /**
  * Implemented by a component ({@link Component}) and a page
  * ({@link Page})
@@ -71,4 +73,9 @@ public interface IdSpace {
 	 * <p>Unlike {@link #getFellow}, it returns null if not found.
 	 */
 	public Component getFellowIfAny(String id);
+	/** Returns all fellows in this ID space.
+	 * The returned collection is readonly.
+	 * @since 3.0.6
+	 */
+	public Collection getFellows();
 }
