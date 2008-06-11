@@ -26,6 +26,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<checkbox label="Change the state"/>
 	<textbox/>
 	<script>
-	onProcessError("A sample of the error box");
+	zk.addInit( function () {onProcessError("A sample of the error box");});
 	</script>
 </window>
