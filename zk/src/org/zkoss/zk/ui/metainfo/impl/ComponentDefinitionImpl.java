@@ -72,6 +72,8 @@ implements ComponentDefinition, java.io.Serializable {
 	private String _textAs;
 	private AnnotationMap _annots;
 	private URL _declURL;
+	/** Whether to preserve the blank text. */
+	private boolean _blankpresv;
 
 	/** Constructs a native component, i.e., a component implemented by
 	 * a Java class.
@@ -199,6 +201,17 @@ implements ComponentDefinition, java.io.Serializable {
 	public void setTextAs(String propnm) {
 		_textAs = propnm != null && propnm.length() > 0 ? propnm: null;
 	}
+	/** Sets whether to preserve the blank text.
+	 * If false, the blank text (a non-empty string consisting of whitespaces)
+	 * are ignored.
+	 * If true, they are converted to a label child.
+	 * <p>Default: false.
+	 * @see #isBlnakPreserved
+	 * @since 3.1.0
+	 */
+	public void setBlankPreserved(boolean preserve) {
+		_blankpresv = preserve;
+	}
 
 	/** Sets the URI where this definition is declared.
 	 *
@@ -219,6 +232,9 @@ implements ComponentDefinition, java.io.Serializable {
 
 	public String getTextAs() {
 		return _textAs;
+	}
+	public boolean isBlankPreserved() {
+		return _blankpresv;
 	}
 
 	public boolean isMacro() {

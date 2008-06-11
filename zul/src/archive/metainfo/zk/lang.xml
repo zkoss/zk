@@ -168,6 +168,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/auxheader.dsp</mold-uri>
 		</mold>
+		<preserve-blank/><!-- blank text is converted as a label child -->
 	</component>
 	<component>
 		<component-name>bandbox</component-name>
@@ -188,6 +189,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/bandpopup.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>button</component-name>
@@ -236,6 +238,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
  			<mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>chart</component-name>
@@ -260,6 +263,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/column.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>columns</component-name>
@@ -317,6 +321,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/div.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>doublebox</component-name>
@@ -357,6 +362,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/footer.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>grid</component-name>
@@ -381,6 +387,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>3d</mold-name>
 			<mold-uri>~./zul/html/groupbox-3d.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>	
 	<component>
 		<component-name>hbox</component-name>
@@ -483,6 +490,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/listcell.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listfoot</component-name>
@@ -499,6 +507,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/listfooter.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listhead</component-name>
@@ -515,6 +524,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/listheader.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listitem</component-name>
@@ -607,6 +617,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/popup.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>progressmeter</component-name>
@@ -713,6 +724,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab.dsp'}</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>tabbox</component-name>
@@ -733,6 +745,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd.dsp': self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>tabpanels</component-name>
@@ -785,6 +798,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/toolbar.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>toolbarbutton</component-name>
@@ -809,6 +823,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/treecell.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treechildren</component-name>
@@ -825,6 +840,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/treecol.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treecols</component-name>
@@ -849,6 +865,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/treefooter.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treeitem</component-name>
@@ -893,5 +910,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>v30</mold-name>
 			<mold-uri>~./zul/html/window.dsp</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 </language>

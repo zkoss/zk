@@ -39,7 +39,7 @@ public class ToolbarbuttonDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Toolbarbutton self = (Toolbarbutton) comp;
 		
-		wh.write("\n<a id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Tbtn\"")
+		wh.write("<a id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Tbtn\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 
 		if (self.getDir().equals("reverse")){

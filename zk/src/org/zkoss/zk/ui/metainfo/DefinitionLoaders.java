@@ -503,11 +503,15 @@ public class DefinitionLoaders {
 				langdef.addComponentDefinition(compdef);
 			}
 
-			final String textAs = el.getElementValue("text-as", true);
-			if (textAs != null) { //empty means cleanup (for overriding)
-				noEL("text-as", textAs, el);
-				compdef.setTextAs(textAs);
+			String s = el.getElementValue("text-as", true);
+			if (s != null) { //empty means cleanup (for overriding)
+				noEL("text-as", s, el);
+				compdef.setTextAs(s);
 			}
+
+			s = el.getElementValue("preserve-blank", true);
+			if (s != null && !"false".equals(s))
+				compdef.setBlankPreserved(true);
 
 			for (Iterator e = parseMolds(el).entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();

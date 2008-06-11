@@ -99,6 +99,14 @@ public interface ComponentDefinition extends Cloneable {
 	 * @since 3.0.0
 	 */
 	public String getTextAs();
+	/** Returns whether to preserve the blank text.
+	 * If false, the blank text (a non-empty string consisting of whitespaces)
+	 * are ignored.
+	 * If true, they are converted to a label child.
+	 * <p>Default: false.
+	 * @since 3.1.0
+	 */
+	public boolean isBlankPreserved();
 
 	/** Returns whether this is a macro component.
 	 * @see #getMacroURI

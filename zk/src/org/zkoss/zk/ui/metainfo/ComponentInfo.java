@@ -206,6 +206,16 @@ implements Cloneable, Condition, java.io.Externalizable {
 	public String getTextAs() {
 		return _compdef.getTextAs();
 	}
+	/** Returns whether to preserve the blank text.
+	 * If false, the blank text (a non-empty string consisting of whitespaces)
+	 * are ignored.
+	 * If true, they are converted to a label child.
+	 * <p>Default: false.
+	 * @since 3.1.0
+	 */
+	public boolean isBlankPreserved() {
+		return _compdef.isBlankPreserved();
+	}
 
 	/** Returns the fulfill condition that controls when to create
 	 * the child components, or null if the child components

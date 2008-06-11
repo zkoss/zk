@@ -578,39 +578,47 @@ public class Parser {
 			} else if ((o instanceof Text) || (o instanceof CData)) {
 				String label = ((Item)o).getText(),
 					trimLabel = label.trim();;
+				if (label.length() == 0)
+					continue;
 
 				LanguageDefinition parentlang = getLanguageDefinition(parent);
 				if (parentlang == null)
 					parentlang = pgdef.getLanguageDefinition();
 
-				if (trimLabel.length() > 0) { //consider as a label
-					if (isZkSwitch(parent))
-						throw new UiException("Only <zk> can be used in <zk switch>, "+((Item)o).getLocator());
-
-					ComponentInfo pi = parentInfo;
-					while (pi instanceof ZkInfo) {
-						NodeInfo n = pi.getParent();
-						if (n instanceof ComponentInfo) {
-							pi = (ComponentInfo)n;
-						} else {
-							pi = null;
-							break;
-						}
-					}
-
-					if (pi instanceof NativeInfo) {
-						parentInfo.appendChild(
-							new TextInfo(pgdef.getEvaluatorRef(), label));
-							//Don't trim if native (3.1.0)
+				ComponentInfo pi = parentInfo;
+				while (pi instanceof ZkInfo) {
+					NodeInfo n = pi.getParent();
+					if (n instanceof ComponentInfo) {
+						pi = (ComponentInfo)n;
 					} else {
-						final String textAs = parentInfo.getTextAs();
-						if (textAs != null) {
-							parentInfo.addProperty(textAs, trimLabel, null);
-						} else {
-							if (isTrimLabel() && !parentlang.isRawLabel())
-								label = trimLabel;
-							parentlang.newLabelInfo(parentInfo, label);
-						}
+						pi = null;
+						break;
+					}
+				}
+
+				//Ingore blank text if no need to preserved
+				if (trimLabel.length() == 0
+				&& (pi == null || !pi.isBlankPreserved())
+				&& !(pi instanceof NativeInfo))
+					continue;
+
+				//consider as a label
+				if (isZkSwitch(parent))
+					throw new UiException("Only <zk> can be used in <zk switch>, "+((Item)o).getLocator());
+
+
+				if (pi instanceof NativeInfo) {
+					parentInfo.appendChild(
+						new TextInfo(pgdef.getEvaluatorRef(), label));
+						//Don't trim if native (3.1.0)
+				} else {
+					final String textAs = parentInfo.getTextAs();
+					if (textAs != null) {
+						parentInfo.addProperty(textAs, trimLabel, null);
+					} else {
+						if (isTrimLabel() && !parentlang.isRawLabel())
+							label = trimLabel;
+						parentlang.newLabelInfo(parentInfo, label);
 					}
 				}
 			}
