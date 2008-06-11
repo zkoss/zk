@@ -1309,6 +1309,8 @@ zkau._onDocMouseover = function (evt) {
 				};
 				if (open) zkau._openTip(cmp.id, true);
 				else setTimeout("zkau._openTip('"+cmp.id+"')", zk_tipto);
+			} else {
+				zkau._openTip(cmp.id, true);
 			}
 			return; //done
 		}
