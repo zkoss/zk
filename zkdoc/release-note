@@ -22,6 +22,9 @@ ZK 3.0.6
   1765940: A way to prevent caching dsp file in DspExtendlet (for dev)
   1978636: Keyevent support getReference() to get the causing component
   1990422: Component and/or IdSpace support getFellows() method
+  1990677: Support autowire fellow component utility
+  1990666: Support autowire fellow components in GenericComposer
+  1990681: Support event regisration utility
 
 * Bugs
   1955452: Liferay Failed if two portlets from different Web apps

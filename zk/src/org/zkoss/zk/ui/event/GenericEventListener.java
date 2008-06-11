@@ -73,7 +73,7 @@ abstract public class GenericEventListener implements EventListener {
 			if (mtd.getParameterTypes().length == 0)
 				mtd.invoke(this, null);
 			else
-				 mtd.invoke(this, new Object[] {evt});
+				mtd.invoke(this, new Object[] {evt});
 		}
 	}
 	
@@ -82,7 +82,7 @@ abstract public class GenericEventListener implements EventListener {
 	 * to the specified target component.
 	 *
 	 * <p>All public methods whose names start with "on" are considered
-	 * as event handlers and the correponding event is listened.
+	 * as event handlers and the corresponding event is listened.
 	 * For example, if the derived class has a method named onOK,
 	 * then the onOK event is listened and the onOK method is called
 	 * when the event is received.
