@@ -953,7 +953,6 @@ zkau.autoZIndex = function (node) {
 		if (node.style && node.style.position == "absolute") {
 			if (getZKAttr(node, "autoz"))
 				zkau.fixZIndex(node, false, true); //don't inc if equals
-			break;
 		}
 	}
 };
