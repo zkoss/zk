@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
@@ -213,6 +214,11 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * <p>Unlike {@link #getFellow}, it returns null if not found.
 	 */
 	public Component getFellowIfAny(String id);
+	/** Returns all fellows in the same ID space of this component.
+	 * The returned collection is readonly.
+	 * @since 3.0.6
+	 */
+	public Collection getFellows();
 
 	/** Returns the next sibling, or null if it is the last child.
 	 * @since 3.0.0

@@ -661,6 +661,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final IdSpace idspace = getSpaceOwner();
 		return idspace == null ? null: idspace.getFellowIfAny(compId);
 	}
+	public Collection getFellows() {
+		if (this instanceof IdSpace)
+			return Collections.unmodifiableCollection(_spaceInfo.fellows.values());
+
+		final IdSpace idspace = getSpaceOwner();
+		return idspace == null ? Collections.EMPTY_LIST: idspace.getFellows();
+	}
 
 	public Component getNextSibling() {
 		return _next;
