@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Collection;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.util.CollectionsX;
 
 /**
@@ -274,5 +277,66 @@ public class Components {
 			return (Component)owner;
 		}
 		return Path.getComponent(ref.getSpaceOwner(), path);
+	}
+	/** <p>Wire fellow components of the specified component into a POJO Java
+	 * object. This implementation checks the setXxx() methods first then the
+	 * field name. If a setXxx() method matches the fellow's id and with correct 
+	 * argument type, the method is called with the fellow component as the 
+	 * argument. If no proper setXxx() method then search the field of the 
+	 * POJO object for a matched field with name equals to the fellow 
+	 * component's id and proper type. Then the fellow component 
+	 * is assigned as the value of the field if the field value is null 
+	 * originally.</p> 
+	 * 
+	 * <p>This is useful in writing controller code in MVC design practice. You
+	 * can wire the page components into controller(the POJO object) per the
+	 * component's id and do whatever you like.</p>
+	 * 
+	 * @param comp the component
+	 * @param pojo the POJO Java object to be injected the fellow components.
+	 * @see org.zkoss.zk.ui.util.GenericAutowireComposer
+	 * @since 3.0.6
+	 */
+	public static final void wireFellows(Component comp, Object pojo) {
+		final Collection fellows = comp.getFellows();
+		for(final Iterator it = fellows.iterator(); it.hasNext();) {
+			final Component xcomp = (Component) it.next();
+			inject(xcomp, pojo);
+		}
+	}
+		
+	private static void inject(Component comp, Object pojo) {
+		//try setXxx
+		final String fdname = comp.getId();
+		final String mdname = Classes.toMethodName(fdname, "set");
+		final Class compcls = comp.getClass();
+		final Class tgtcls = pojo.getClass();
+		try {
+			final Method md = 
+				Classes.getCloseMethod(tgtcls, mdname, new Class[] {compcls});
+			md.invoke(pojo, new Object[] {comp});
+		} catch (NoSuchMethodException ex) {
+			//no setXxx() method, try inject into Field
+			try {
+				final Field fd = Classes.getAnyField(tgtcls, fdname);
+				final boolean old = fd.isAccessible();
+				try {
+					fd.setAccessible(true);
+					final Class fdcls = fd.getType();
+					if (fdcls.isAssignableFrom(compcls) 
+					&& fd.get(pojo) == null) { //correct type && null
+						fd.set(pojo, comp);
+					}
+				} finally {
+					fd.setAccessible(old);
+				}
+			} catch (NoSuchFieldException e) {
+				//ignore
+			} catch (Exception ex2) {
+				throw UiException.Aide.wrap(ex2);
+			}
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		}
 	}
 }

@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import java.lang.reflect.Method;
 import java.util.Set;
 
 import org.zkoss.lang.D;
@@ -324,5 +325,48 @@ public class Events {
 			throw new IllegalArgumentException();
 
 		Clients.response(new AuEcho(target, name, data));
+	}
+	/** <p>Add onXxx event handler defined in evtcodes object to the specified 
+	 * component. 
+	 * The evtcodes is a POJO file with onXxx methods(the event handler codes). 
+	 * This utility method registers these onXxx events to the specified
+	 * component so you don't have to implement and add {@link EventListener}
+	 * into the component one by one.</p>
+	 * 
+	 * <p>All public methods whose names start with "on" in evtcodes object 
+	 * are considered
+	 * as event handlers and the corresponding event is listened.
+	 * For example, if the evtcodes object has a method named onOK,
+	 * then the onOK event is listened and the onOK method is called
+	 * when the event is received.
+
+	 * <p>This is a useful tool for MVC design practice. You can write
+	 * onXxx event handler codes in controller object and use this utility to
+	 * register the events to the specified component.</p>
+	 * 
+	 * @param comp the component to be registered the events 
+	 * @param evtcodes a POJO file with onXxx methods(event handlers) 
+	 * @since 3.0.6
+	 * @see GenericEventListener
+	 */
+	public static final void addEventListeners(Component comp, final Object evtcodes) {
+		final Method [] mtds = evtcodes.getClass().getMethods();
+		final EventListener evtl = new EventListener() {
+			public void onEvent(Event evt) throws Exception {		
+				final Method mtd = ComponentsCtrl.getEventMethod(evtcodes.getClass(), evt.getName());
+				if (mtd != null) {
+					if (mtd.getParameterTypes().length == 0)
+						mtd.invoke(this, null);
+					else
+						mtd.invoke(this, new Object[] {evt});
+				}
+			}
+		};
+		
+		for(int i=0; i < mtds.length; i ++){
+			final String evtnm = mtds[i].getName();
+			if (Events.isValid(evtnm))
+				comp.addEventListener(evtnm, evtl);
+		}
 	}
 }
