@@ -21,6 +21,7 @@ ZK 3.0.6
   1978632: A ZK page being included shall inherit width and height
   1765940: A way to prevent caching dsp file in DspExtendlet (for dev)
   1978636: Keyevent support getReference() to get the causing component
+  1990422: Component and/or IdSpace support getFellows() method
 
 * Bugs
   1955452: Liferay Failed if two portlets from different Web apps
