@@ -179,11 +179,13 @@ zkau.onclick = function (evt) {
 		Event.stop(evt); //prevent _onDocLClick
 		return; //done
 	}
-
+	zkau._lastClickId = target.id;
 	zkau.send({uuid: $uuid(target.id),
 		cmd: "onClick", data: zkau._getMouseData(evt, target), ctl: true});
 	//Don't stop event so popup will work (bug 1734801)
+	zkau.addOnSend(zkau._resetLastClickId);
 };
+zkau._resetLastClickId = function () {zkau._lastClickId = null;};
 /** Handles ondblclick for button (for non-FF).
  * Note: double clicks are handled by zkau._onDocDClick, but
  * some tags (button and checkbox) eat the event, so _onDocDClick won't
@@ -1135,13 +1137,12 @@ zkau._onDocLClick = function (evt) {
 	if (!evt) evt = window.event;
 
 	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
-		var cmp = Event.element(evt);
-		cmp = zkau._parentByZKAttr(cmp, "lfclk", "pop");
+		var target = Event.element(evt), cmp = zkau._parentByZKAttr(target, "lfclk", "pop");
 		if (cmp) {
 			var ctx = getZKAttr(cmp, "pop");
 			if (ctx) {
 				ctx = zkau.getByZid(cmp, ctx);
-				if (ctx) {
+				if (ctx && (!zkau._lastClickId || zkau._lastClickId == target.id)) {
 					var type = $type(ctx);
 					if (type) {
 						zkau.closeFloats(ctx, cmp);
@@ -1156,7 +1157,7 @@ zkau._onDocLClick = function (evt) {
 				}
 			}
 
-			if (getZKAttr(cmp, "lfclk") && zkau.insamepos(evt))
+			if (getZKAttr(cmp, "lfclk") && zkau.insamepos(evt) && !zkau._lastClickId)
 				zkau.send({uuid: $uuid(cmp),
 					cmd: "onClick", data: zkau._getMouseData(evt, cmp), ctl: true});
 
