@@ -21,7 +21,7 @@ mesg.NOT_FOUND = "No s'ha trobat: ";
 mesg.UNSUPPORTED = "Encara no és compatible: ";
 mesg.FAILED_TO_SEND = "Ha fallat l'enviament de la petició al servidor.";
 mesg.FAILED_TO_RESPONSE = "El servidor ha fallat en processar la petició.";
-mesg.TRY_AGAIN = "Try again?";
+mesg.TRY_AGAIN = "Voleu provar una altra vegada?";
 mesg.UNSUPPORTED_BROWSER = "El navegador no és compatible: ";
 mesg.ILLEGAL_RESPONSE = "Resposta desconeguda enviada des del servidor. Si us plau, recarregueu i proveu una altra vegada.\n";
 mesg.FAILED_TO_PROCESS = "Ha fallat el procés ";
@@ -33,7 +33,7 @@ mesg.INTEGER_REQUIRED = "Heu d'especificar un enter, en lloc de ";
 mesg.EMPTY_NOT_ALLOWED = "Cal emplenar el camp.\nNo es pot deixar buit ni a blancs.";
 mesg.GOTO_ERROR_FIELD = "Aneu al camp erroni";
 mesg.PLEASE_WAIT = "S'està processant...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
+mesg.VALUE_NOT_MATCHED = "Heu d'especificar un dels valors de la llista desplegable."
 
 mesg.FILE_SIZE = "Mida de l'arxiu: ";
 mesg.KBYTES = "KB";
@@ -41,5 +41,5 @@ mesg.KBYTES = "KB";
 mesg.CANCEL="Cancel·la";
 
 mesg.FAILED_TO_LOAD = "Ha fallat la càrrega ";
-mesg.FAILED_TO_LOAD_DETAIL = "Pot ser provocat pel mal trànsit de comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.";
+mesg.FAILED_TO_LOAD_DETAIL = "Pot haver estat provocat pel mal trànsit de les comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.";
 mesg.CAUSE = "Motiu: ";
