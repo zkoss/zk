@@ -8,7 +8,7 @@ reproducible step.<br/>
 4.disselect Jane, Henry.<br/>
 5.click invalidate.<br/>
 <br/>
-you will see Henry is still selected.<br/>
+If Henry is still selected, it is bug.<br/>
 <br/>
 it also happen when you select Mary,John,Jane at step 1, and disselect
 Jane,John in step 4.<br/>

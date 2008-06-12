@@ -23,12 +23,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<n:li>
 			After loading zul, please drop down the list of items and click
 			outside of the combobox (for example in order to close dropped
-			down list without any selection) the onSelect event is fired
-			and messagebox 'on select: item is null' is apeared.
+			down list without any selection) the onSelect event should not fire
+			and messagebox 'on select: item is null' shouldn't appear.
 		</n:li>
 		<n:li>
 			After loading zul, please focus in combobox, and then click on the 'anyMessage' button.
-			It should not shown any messages about the onSelect event.
+			It should not show any messages about the onSelect event. It should show "anyMessage".
 		</n:li>
 	</n:ol>
 	<vbox>
