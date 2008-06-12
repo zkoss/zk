@@ -1476,6 +1476,11 @@ zk.debug = zk.message;
 
 /** Error message must be a popup. */
 zk.error = function (msg) {
+	if (zk.booting) {
+		setTimeout(function () {zk.error(msg)}, 100);
+		return;
+	}
+
 	if (!zk._errcnt) zk._errcnt = 1;
 	var id = "zk_err_" + zk._errcnt++;
 	var box = document.createElement("DIV");
