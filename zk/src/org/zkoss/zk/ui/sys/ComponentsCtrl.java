@@ -385,6 +385,9 @@ public class ComponentsCtrl {
 		public boolean isNative() {
 			return false;
 		}
+		public boolean isBlankPreserved() {
+			return false;
+		}
 		public Object getImplementationClass() {
 			return Component.class;
 		}
