@@ -23,6 +23,7 @@ ZK 3.1.0
   1944610: Data Binding support non-distinct collection items
   1977343: The booting progress bar covers only ZK page if included
   1981878: Groupbox's default mold support open/close effect as 3d mold
+  1990503: The blank text shall be preserved for some components
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
