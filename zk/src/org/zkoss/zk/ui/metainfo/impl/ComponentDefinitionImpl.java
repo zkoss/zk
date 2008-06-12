@@ -206,7 +206,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * are ignored.
 	 * If true, they are converted to a label child.
 	 * <p>Default: false.
-	 * @see #isBlnakPreserved
+	 * @see #isBlankPreserved
 	 * @since 3.1.0
 	 */
 	public void setBlankPreserved(boolean preserve) {
