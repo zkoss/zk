@@ -207,10 +207,14 @@ div.wc-bwrap div.wc-modal, div.wc-bwrap div.wc-modal-none, div.wc-bwrap div.wc-h
 	div.wc-bwrap div.wc-highlighted-none {
 	margin: 0; padding: 2px; background: white;
 }
-div.wt-title {
+div.wt-modal, div.wt-popup, div.wt-highlighted, div.wt-overlapped, div.wt-embedded {
 	overflow: hidden; zoom: 1; color: #222222; padding: 5px 0 4px 0;
 }
-div.wt-title a, div.wt-title a:visited, div.wt-title a:hover {
+div.wt-modal a, div.wt-modal a:visited, div.wt-modal a:hover,
+	div.wt-popup a,	div.wt-popup a:visited, div.wt-popup a:hover, 
+	div.wt-highlighted a, div.wt-highlighted a:visited, div.wt-highlighted a:hover,
+	div.wt-overlapped a, div.wt-overlapped a:visited, div.wt-overlapped a:hover, 
+	div.wt-embedded a, div.wt-embedded a:visited, div.wt-embedded a:hover {
 	color: #222222;
 }
 div.wc-bwrap div.wc-embedded, div.wc-bwrap div.wc-wndcyan {

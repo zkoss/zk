@@ -22,7 +22,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:choose>
 <c:when test="${!empty self.caption or !empty self.title}">
 <div class="l${titlesc}"><div class="r${titlesc}"><div class="m${titlesc}">
-<div id="${self.uuid}!caption" class="wt-title title">
+<div id="${self.uuid}!caption" class="${titlesc} title">
 <c:choose>
 <c:when test="${empty self.caption}">
 <c:if test="${self.closable}"><div id="${self.uuid}!close" class="z-close-btn"></div></c:if>
