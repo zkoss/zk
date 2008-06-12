@@ -1191,7 +1191,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			getExecution()
 				.include(out, (String)mold, attrs, Execution.PASS_THRU_ATTR);
 
-			//Trim the output to have smaller outputer and to avoid
+			//Trim the output to have smaller output and to avoid
 			//whitespace around the separator and space components
 			if (buf != null)
 				Strings.trim(buf, index);

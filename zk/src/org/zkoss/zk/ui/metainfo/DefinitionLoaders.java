@@ -574,11 +574,9 @@ public class DefinitionLoaders {
 	void parseLabelTemplate(LanguageDefinition langdef, Element el) {
 		el = el.getElement("label-template");
 		if (el != null) {
-			final Element raw = el.getElement("raw");
 			langdef.setLabelTemplate(
 				IDOMs.getRequiredElementValue(el, "component-name"),
-				IDOMs.getRequiredElementValue(el, "component-attribute"),
-				raw != null && !"false".equals(raw.getText(true)));
+				IDOMs.getRequiredElementValue(el, "component-attribute"));
 		}
 	}
 	private static

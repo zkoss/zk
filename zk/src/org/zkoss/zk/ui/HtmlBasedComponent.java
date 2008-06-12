@@ -18,6 +18,9 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.io.Writer;
+import java.io.IOException;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.xml.HTMLs;
@@ -31,8 +34,10 @@ import org.zkoss.zk.ui.ext.client.Sizable;
 import org.zkoss.zk.ui.ext.client.ZIndexed;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.ext.render.Floating;
+import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.out.AuFocus;
+import org.zkoss.zk.fn.ZkFns;
 
 /**
  * A skeletal implementation for HTML based components.
@@ -66,6 +71,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	/** The droppable. */
 	private String _droppable;
 	private int _zIndex = -1;
+	/** The prolog content that shall be generated before real content. */
+	private String _prolog;
 
 	protected HtmlBasedComponent() {
 	}
@@ -444,6 +451,14 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	}
 
 	//-- Component --//
+	public void redraw(Writer out) throws IOException {
+		if (_prolog != null) {
+			final Writer o = out != null ? out: ZkFns.getCurrentOut();
+			if (o != null) o.write(_prolog);
+			_prolog = null; //one shot only
+		}
+		super.redraw(out);
+	}
 
 	//--ComponentCtrl--//
 	/** Used by {@link #getExtraCtrl} to create a client control.
@@ -461,7 +476,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * override {@link #newExtraCtrl} to return an instance that extends from
 	 * this interface.
 	 */
-	protected class ExtraCtrl implements Movable, Sizable, ZIndexed {
+	protected class ExtraCtrl implements Movable, Sizable, ZIndexed, PrologAllowed {
 		//-- Movable --//
 		public void setLeftByClient(String left) {
 			_left =left;
@@ -479,6 +494,10 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		//-- ZIndexed --//
 		public void setZIndexByClient(int zIndex) {
 			_zIndex = zIndex;
+		}
+		//-- PrologAware --//
+		public void setPrologContent(String prolog) {
+			_prolog = prolog;
 		}
 	}
 }

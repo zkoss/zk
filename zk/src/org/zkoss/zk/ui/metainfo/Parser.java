@@ -616,9 +616,12 @@ public class Parser {
 					if (textAs != null) {
 						parentInfo.addProperty(textAs, trimLabel, null);
 					} else {
-						if (isTrimLabel() && !parentlang.isRawLabel())
+						if (isTrimLabel())
 							label = trimLabel;
-						parentlang.newLabelInfo(parentInfo, label);
+						final ComponentInfo labelInfo =
+							parentlang.newLabelInfo(parentInfo, label);
+						if (trimLabel.length() == 0)
+							labelInfo.setReplaceableText(label); //yes, it can be replaced by a text
 					}
 				}
 			}

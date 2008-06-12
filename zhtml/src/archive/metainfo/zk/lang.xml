@@ -91,7 +91,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<label-template>
 		<component-name>text</component-name>
 		<component-attribute>value</component-attribute>
-		<raw/><!-- 1) don't trim, 2) generated directly -->
 	</label-template>
 	<!-- Defines the template for macro components -->
 	<macro-template>

@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.scripting.*;
 import org.zkoss.zk.au.*;
@@ -456,6 +457,7 @@ public class UiEngineImpl implements UiEngine {
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
 			//note: don't use page.getDefinition because createComponents
 			//might be called from a page other than instance's
+		final ReplaceableText replaceableText = new ReplaceableText();
 		for (Iterator it = parentInfo.getChildren().iterator(); it.hasNext();) {
 			final Object meta = it.next();
 			if (meta instanceof ComponentInfo) {
@@ -464,7 +466,7 @@ public class UiEngineImpl implements UiEngine {
 				if (forEach == null) {
 					if (isEffective(childInfo, page, parent)) {
 						final Component[] children =
-							execCreateChild(ci, parent, childInfo);
+							execCreateChild(ci, parent, childInfo, replaceableText);
 						for (int j = 0; j < children.length; ++j)
 							created.add(children[j]);
 					}
@@ -472,7 +474,7 @@ public class UiEngineImpl implements UiEngine {
 					while (forEach.next()) {
 						if (isEffective(childInfo, page, parent)) {
 							final Component[] children =
-								execCreateChild(ci, parent, childInfo);
+								execCreateChild(ci, parent, childInfo, replaceableText);
 							for (int j = 0; j < children.length; ++j)
 								created.add(children[j]);
 						}
@@ -491,7 +493,8 @@ public class UiEngineImpl implements UiEngine {
 		return (Component[])created.toArray(new Component[created.size()]);
 	}
 	private static Component[] execCreateChild(
-	CreateInfo ci, Component parent, ComponentInfo childInfo) {
+	CreateInfo ci, Component parent, ComponentInfo childInfo,
+	ReplaceableText replaceableText) {
 		if (childInfo instanceof ZkInfo) {
 			final ZkInfo zkInfo = (ZkInfo)childInfo;
 			return zkInfo.withSwitch() ?
@@ -507,12 +510,23 @@ public class UiEngineImpl implements UiEngine {
 			return new Component[] {
 				ci.exec.createComponents(childdef.getMacroURI(), parent, props)};
 		} else {
-			final Component child = execCreateChild0(ci, parent, childInfo);
+			String rt = null;
+			if (replaceableText != null) {
+				rt = replaceableText.text;
+				replaceableText.text = childInfo.getReplaceableText();;
+				if (replaceableText.text != null)
+					return new Component[0];
+				//Note: replaceableText is one-shot only
+				//So, replaceable text might not be generated
+				//and it is ok since it is onl blank string
+			}
+
+			Component child = execCreateChild0(ci, parent, childInfo, rt);
 			return child != null ? new Component[] {child}: new Component[0];
 		}
 	}
-	private static Component execCreateChild0(
-	CreateInfo ci, Component parent, ComponentInfo childInfo) {
+	private static Component execCreateChild0(CreateInfo ci,
+	Component parent, ComponentInfo childInfo, String replaceableText) {
 		final Composer composer = childInfo.resolveComposer(ci.page, parent);
 		final ComposerExt composerExt =
 			composer instanceof ComposerExt ? (ComposerExt)composer: null;
@@ -527,8 +541,13 @@ public class UiEngineImpl implements UiEngine {
 			child = ci.uf.newComponent(ci.page, parent, childInfo);
 
 			final boolean bNative = childInfo instanceof NativeInfo;
-			if (bNative)
+			if (bNative) {
 				setProlog(ci, child, (NativeInfo)childInfo);
+			} else if (replaceableText != null) {
+				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
+				if (xc instanceof PrologAllowed)
+					((PrologAllowed)xc).setPrologContent(replaceableText);
+			}
 
 			if (composerExt != null)
 				composerExt.doBeforeComposeChildren(child);
@@ -590,7 +609,7 @@ public class UiEngineImpl implements UiEngine {
 			if (forEach == null) {
 				if (isEffective(caseInfo, page, parent)
 				&& isCaseMatched(caseInfo, page, parent, switchCond)) {
-					return execCreateChild(ci, parent, caseInfo);
+					return execCreateChild(ci, parent, caseInfo, null);
 				}
 			} else {
 				final List created = new LinkedList();
@@ -598,7 +617,7 @@ public class UiEngineImpl implements UiEngine {
 					if (isEffective(caseInfo, page, parent)
 					&& isCaseMatched(caseInfo, page, parent, switchCond)) {
 						final Component[] children =
-							execCreateChild(ci, parent, caseInfo);
+							execCreateChild(ci, parent, caseInfo, null);
 						for (int j = 0; j < children.length; ++j)
 							created.add(children[j]);
 						return (Component[])created.toArray(new Component[created.size()]);
@@ -1731,5 +1750,8 @@ public class UiEngineImpl implements UiEngine {
 			this.page = page;
 			this.uf = uf;
 		}
+	}
+	private static class ReplaceableText {
+		private String text;
 	}
 }
