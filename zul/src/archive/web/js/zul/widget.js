@@ -431,10 +431,11 @@ zkGrbox.onclick = function (evt, uuid) {
 	if (!evt) evt = window.event;
 
 	var target = Event.element(evt);
-	var tn = $tag(target);
-	if ("BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn
-	|| "A" == tn || ("TD" != tn && "TR" != tn && target.onclick))
-		return;
+	for (var tn = $tag(target); $type(target) != "Grbox"; target = $parent(target), tn = $tag(target)) {
+		if ("BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn ||
+			"A" == tn || ("TD" != tn && "TR" != tn && target.onclick)) 
+			return;
+	}
 
 	if (uuid) {
 		var cmp = $e(uuid);
