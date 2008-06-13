@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk>
         1.click paging to 2rd page..
-2.click sort twice, grid will become empty.
+2.click sort twice, grid shouldn't become empty.
 	<separator/>
 	<zscript>
 		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel();

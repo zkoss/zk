@@ -41,7 +41,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 				<menuitem label="Index" />
 				<menu label="About">
 					<menupopup>
-						<menuitem disabled="ture" label="About ZK"
+						<menuitem disabled="true" label="About ZK"
 							onClick="alert(self.label)" />
 						<menuitem label="About Potix" />
 					</menupopup>
