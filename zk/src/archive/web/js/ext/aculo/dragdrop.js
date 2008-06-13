@@ -154,7 +154,7 @@ var Draggables = {
   },
   
   activate: function(draggable) {
-    if(draggable.options.delay) { 
+    if(zk.opera || draggable.options.delay) { 
       this._timeout = setTimeout(function() { 
         Draggables._timeout = null; 
         window.focus(); 
