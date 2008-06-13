@@ -1432,7 +1432,7 @@ zkLitgp = {
 	},/** Opens an item */
 	_openItem: function (row, toOpen, silent) {
 		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
-		row._img.src = zk.rename(row._img.src, toOpen ? "open": "close");
+		if (row._img) row._img.src = zk.rename(row._img.src, toOpen ? "open": "close");
 		zkLitgp._openItemNow(row, toOpen);
 		if (!silent) 
 			zkau.send({uuid: row.id,
@@ -1459,7 +1459,9 @@ zkLitgp = {
 		}
 		if (prev)
 			zk.addCleanupLater(function () {
-				zkLitgp._openItem(prev, zkLitgp.isOpen(prev), true);
+				prev = $e(prev.id);
+				if (prev)
+					zkLitgp._openItem(prev, zkLitgp.isOpen(prev), true);
 			}, false, row.id);
 	},
 	setAttr: function (cmp, nm, val) {
