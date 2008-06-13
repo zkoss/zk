@@ -27,8 +27,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<menu label="File">
 			<menupopup>
 				<menuitem label="New" autocheck="true" />
-				<menuitem label="Open" autocheck="true" id="open" disabled="true"
-					onClick="alert(self.label)" />
+				<menuitem label="Open" autocheck="true" id="open"
+					onClick="alert(self.label)" disabled="true" />
 				<menuitem label="Save" />
 				<menuseparator />
                                 <menuitem label="Disable Open" onClick="open.disabled=true"/>
@@ -41,7 +41,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 				<menuitem label="Index" />
 				<menu label="About">
 					<menupopup>
-						<menuitem label="About ZK"
+						<menuitem disabled="true" label="About ZK"
 							onClick="alert(self.label)" />
 						<menuitem label="About Potix" />
 					</menupopup>
