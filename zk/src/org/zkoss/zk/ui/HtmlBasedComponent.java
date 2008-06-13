@@ -455,7 +455,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (_prolog != null) {
 			final Writer o = out != null ? out: ZkFns.getCurrentOut();
 			if (o != null) o.write(_prolog);
-			_prolog = null; //one shot only
+			//don't reset _prolog, since it might be redrawn later
 		}
 		super.redraw(out);
 	}
