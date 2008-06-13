@@ -791,7 +791,7 @@ zk.getStyleOffset = function (el) {
  */
 zk.toStyleOffset = function (el, x, y) {
 	var oldx = el.style.left, oldy = el.style.top;
-	if (zk.opera) {
+	if (zk.opera || zk.air) {
 		//Opera:
 		//1)we have to reset left/top. Or, the second call position wrong
 		//test case: Tooltips and Popups

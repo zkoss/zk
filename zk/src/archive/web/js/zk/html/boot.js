@@ -97,6 +97,7 @@ zk.ie6Only =  zk.ie && !zk.ie7;
 zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 zk.windows = zk.agent.indexOf("windows") != -1;
 zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
+zk.air = zk.agent.indexOf("adobeair") != -1;
 //zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 zk._js4ld = {}; //{name, [script]}
 zk._ctpgs = []; //contained page IDs
