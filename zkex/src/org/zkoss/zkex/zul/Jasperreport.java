@@ -91,6 +91,14 @@ public class Jasperreport extends HtmlBasedComponent {
 	private int _medver;
 	private String _type = TASK_PDF;
 	private Locale _locale; // i18n
+	/** The result of the image map is cached since HTML results will
+	 * cause other requests to them.
+	 */
+	private transient Map _imageMap;
+	/** The result is cached since the browser might send the request
+	 * multiple times (such as parent's invalidated or setVParent at client).
+	 */
+	private transient Media _media;
 
 	public Jasperreport() {
 		setHeight("100%");
@@ -269,6 +277,12 @@ public class Jasperreport extends HtmlBasedComponent {
 		}
 	}
 
+	//Component//
+	public void invalidate() {
+		_media = null; //re-gen
+		super.invalidate();
+	}
+
 	// -- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -282,7 +296,6 @@ public class Jasperreport extends HtmlBasedComponent {
 			DynamicMedia {
 		// -- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
-
 			int indexOfImg = pathInfo.lastIndexOf(IMAGE_DIR);
 
 			// path has IMAGE_DIR, it may be an image.
@@ -307,27 +320,26 @@ public class Jasperreport extends HtmlBasedComponent {
 	 * 
 	 * @return A AMedia contains report's byte stream.
 	 */
-	private AMedia doReport() {
+	private Media doReport() {
+		if (_media != null)
+			return _media;
 
 		InputStream is = null;
-
 		try {
 			// get template file
-			if (is == null) {// try to load by web context.
-				final Execution exec = Executions.getCurrent();
-				is = exec.getDesktop().getWebApp()
-						.getResourceAsStream(exec.toAbsoluteURI(_src, false));
-				if (is == null) {// try to load by class loader
-					is = Thread.currentThread().getContextClassLoader()
-							.getResourceAsStream(_src);
-					if (is == null) {// try to load by file
-						File fl = new File(_src);
-						if (!fl.exists())
-							throw new RuntimeException("resource for " + _src
-									+ " not found.");
+			final Execution exec = Executions.getCurrent();
+			is = exec.getDesktop().getWebApp()
+					.getResourceAsStream(exec.toAbsoluteURI(_src, false));
+			if (is == null) {// try to load by class loader
+				is = Thread.currentThread().getContextClassLoader()
+						.getResourceAsStream(_src);
+				if (is == null) {// try to load by file
+					File fl = new File(_src);
+					if (!fl.exists())
+						throw new RuntimeException("resource for " + _src
+								+ " not found.");
 
-						is = new FileInputStream(fl);
-					}
+					is = new FileInputStream(fl);
 				}
 			}
 
@@ -360,13 +372,15 @@ public class Jasperreport extends HtmlBasedComponent {
 				
 				JRExporter exporter = new JRPdfExporter();
 				if (exportPara != null)
-					_exporter.setParameters(exportPara);
+					exporter.setParameters(exportPara);
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, arrayOutputStream);
 				exporter.exportReport();
 				
 				arrayOutputStream.close();
-				return new AMedia("report.pdf", "pdf", "application/pdf",
+
+				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+				return _media = new AMedia("report.pdf", "pdf", "application/pdf",
 						arrayOutputStream.toByteArray());
 				
 			} else if (TASK_XML.equals(_type)) {
@@ -381,7 +395,9 @@ public class Jasperreport extends HtmlBasedComponent {
 				exporter.exportReport();
 				
 				arrayOutputStream.close();
-				return new AMedia("report.xml", "xml", "text/xml", arrayOutputStream.toByteArray());
+
+				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+				return _media = new AMedia("report.xml", "xml", "text/xml", arrayOutputStream.toByteArray());
 				
 			} else if (TASK_HTML.equals(_type)) {
 				
@@ -400,7 +416,8 @@ public class Jasperreport extends HtmlBasedComponent {
 				
 				arrayOutputStream.close();
 
-				return new AMedia("report.html", "html", "text/html",
+				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+				return _media = new AMedia("report.html", "html", "text/html",
 						arrayOutputStream.toByteArray());
 
 			} else if (TASK_RTF.equals(_type)) {
@@ -415,7 +432,9 @@ public class Jasperreport extends HtmlBasedComponent {
 				exporter.exportReport();
 
 				arrayOutputStream.close();
-				return new AMedia("report.rtf", "rtf", "application/rtf",
+
+				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+				return _media = new AMedia("report.rtf", "rtf", "application/rtf",
 						arrayOutputStream.toByteArray());
 
 			} else if (TASK_XLS.equals(_type)) {
@@ -431,7 +450,9 @@ public class Jasperreport extends HtmlBasedComponent {
 				exporter.exportReport();
 
 				arrayOutputStream.close();
-				return new AMedia("report.xls", "xls",
+
+				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+				return _media = new AMedia("report.xls", "xls",
 						"application/vnd.ms-excel", arrayOutputStream.toByteArray());
 
 			} else if (TASK_JXL.equals(_type)) {
@@ -447,7 +468,9 @@ public class Jasperreport extends HtmlBasedComponent {
 				exporter.exportReport();
 
 				arrayOutputStream.close();
-				return new AMedia("report.xls", "xls",
+
+				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+				return _media = new AMedia("report.xls", "xls",
 						"application/vnd.ms-excel", arrayOutputStream.toByteArray());
 				
 			} else if (TASK_CSV.equals(_type)) {
@@ -462,7 +485,9 @@ public class Jasperreport extends HtmlBasedComponent {
 				exporter.exportReport();
 
 				arrayOutputStream.close();
-				return new AMedia("report.csv", "csv", "text/csv", arrayOutputStream.toByteArray());
+
+				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+				return _media = new AMedia("report.csv", "csv", "text/csv", arrayOutputStream.toByteArray());
 				
 			} else if (TASK_ODT.equals(_type)) {
 
@@ -476,7 +501,9 @@ public class Jasperreport extends HtmlBasedComponent {
 				exporter.exportReport();
 
 				arrayOutputStream.close();
-				return new AMedia("report.odt", "odt",
+
+				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
+				return _media = new AMedia("report.odt", "odt",
 						"application/vnd.oasis.opendocument.text", arrayOutputStream.toByteArray());
 
 			} else {
@@ -504,11 +531,12 @@ public class Jasperreport extends HtmlBasedComponent {
 	 * @return A AMdia contains a image.
 	 */
 	private AMedia getImage(String imageName) {
-		Map imageMap = (Map) exporter
-				.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-		
-		byte[] imageBytes = (byte[]) imageMap.get(imageName);
+		if (_imageMap == null) {
+			log.warning("The image map not ready, "+imageName);
+			return null;
+		}
 
+		byte[] imageBytes = (byte[])_imageMap.get(imageName);
 		return new AMedia(imageName, "", "image/gif", imageBytes);
 	}
 }
