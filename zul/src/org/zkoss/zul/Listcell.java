@@ -63,12 +63,12 @@ public class Listcell extends LabelImageElement {
 	}
 	public String getSclass() {
 		Component p = getParent();
-		if (!(p instanceof Listgroup) && !(p instanceof Listgroupfooter)) return super.getSclass();
+		if (!(p instanceof Listgroup) && !(p instanceof Listgroupfoot)) return super.getSclass();
 		String clx = super.getSclass();
 		if (p instanceof Listgroup)
 			return clx != null ? clx + " listgroup-cell" : "listgroup-cell";
 		else
-			return clx != null ? clx + " listgroupfooter-cell" : "listgroupfooter-cell";
+			return clx != null ? clx + " listgroupfoot-cell" : "listgroupfoot-cell";
 	}
 	
 	/** Returns the list header that is in the same column as

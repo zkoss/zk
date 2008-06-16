@@ -21,10 +21,10 @@ import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Box;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Group;
-import org.zkoss.zul.Groupfooter;
+import org.zkoss.zul.Groupfoot;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listgroup;
-import org.zkoss.zul.Listgroupfooter;
+import org.zkoss.zul.Listgroupfoot;
 import org.zkoss.zul.Row;
 
 /**
@@ -62,7 +62,8 @@ public class ZulFns {
 	 */
 	public static final void setStripeClass(Component child) {
 		final Component parent = child.getParent();
-		if (child.isVisible() && !(child instanceof Listgroup) && !(child instanceof Group) && !(child instanceof Groupfooter) && !(child instanceof Listgroupfooter)){
+		if (child.isVisible() && !(child instanceof Listgroup) && !(child instanceof Group) 
+			&& !(child instanceof Groupfoot) && !(child instanceof Listgroupfoot)){
 			final String odd = (String)parent.getAttribute(Attributes.STRIPE_STATE);
 			if (odd == null || !odd.equals("")) {
 				parent.setAttribute(Attributes.STRIPE_STATE, "");

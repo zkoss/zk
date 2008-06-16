@@ -38,7 +38,7 @@ implements ListModelExt, GroupModel, java.io.Serializable {
 
 	private final Object[] _data;
 	private int[] _groups;
-	private boolean[] _grfooters;
+	private boolean[] _grfoots;
 	private GroupModel _model;
 	
 	public SimpleGroupModel(Object[] data, GroupModel model, boolean live) {
@@ -77,7 +77,7 @@ implements ListModelExt, GroupModel, java.io.Serializable {
 			throw new NullPointerException();
 		_data = live ? data: (Object[])ArraysX.clone(data);
 		_groups = groups;
-		_grfooters = grfooters;
+		_grfoots = grfooters;
 	}
 	public SimpleGroupModel(Object[] data, int[] groups, boolean[] grfooters) {
 		this(data, groups, grfooters,  false);
@@ -88,7 +88,7 @@ implements ListModelExt, GroupModel, java.io.Serializable {
 	public SimpleGroupModel(List data, int[] groups, boolean[] grfooters) {
 		_data = data.toArray(new Object[data.size()]);
 		_groups = groups;
-		_grfooters = grfooters;
+		_grfoots = grfooters;
 	}
 	public int getSize() {
 		return _data.length;
@@ -111,8 +111,8 @@ implements ListModelExt, GroupModel, java.io.Serializable {
 	public int getGroupCount() {
 		return  _model != null ? _model.getGroupCount() : _groups.length;
 	}	
-	public boolean hasGroupfooter(int index) {
-		return  _model != null ? _model.hasGroupfooter(index) : _grfooters != null ? _grfooters[index]: false;
+	public boolean hasGroupfoot(int index) {
+		return  _model != null ? _model.hasGroupfoot(index) : _grfoots != null ? _grfoots[index]: false;
 	}
 
 }

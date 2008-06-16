@@ -44,7 +44,7 @@ public interface GroupModel {
 	 */
 	public int getChildCount(int index);
 	/**
-	 * Returns whether the Group has a Groupfooter or not.
+	 * Returns whether the Group has a Groupfoot or not.
 	 */
-	public boolean hasGroupfooter(int index);
+	public boolean hasGroupfoot(int index);
 }

@@ -73,7 +73,7 @@ public class Listitem extends XulElement {
 		return listbox != null && listbox.inSelectMold();
 	}
 	protected String getRealStyle() {
-		if (this instanceof Listgroup || this instanceof Listgroupfooter || !isVisible()) return super.getRealStyle();
+		if (this instanceof Listgroup || this instanceof Listgroupfoot || !isVisible()) return super.getRealStyle();
 		final Listgroup lg = getListgroup();
 		return super.getRealStyle() + (lg != null && !lg.isOpen() ? "display:none" : "") ;
 	}
@@ -96,7 +96,7 @@ public class Listitem extends XulElement {
 			scls = scls.length() > 0 ? scls + " disd": "disd";
 		else if (isSelected())
 			scls = scls.length() > 0 ? scls + " seld": "seld";	
-		if (this instanceof Listgroup || !isVisible()) return scls;
+		if (this instanceof Listgroup || this instanceof Listgroupfoot || !isVisible()) return scls;
 		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
 		return scls + (sclx != null ? " " + sclx : "") ;
 	}

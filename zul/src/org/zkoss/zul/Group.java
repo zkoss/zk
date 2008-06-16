@@ -112,10 +112,10 @@ public class Group extends Row {
 		return 0;
 	}
 	/**
-	 * Returns the index of Groupfooter
-	 * <p> -1: no Groupfooter
+	 * Returns the index of Groupfoot
+	 * <p> -1: no Groupfoot
 	 */
-	public int getGroupfooterIndex(){
+	public int getGroupfootIndex(){
 		final Rows rows = (Rows)getParent();
 		if (rows != null) {
 			int[] g = rows.getGroupsInfoAtIndex(getIndex(), true);

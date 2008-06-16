@@ -48,10 +48,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<listcell label="e John" />
 			<listcell label="e MALE" />
 		</listitem>
-		<listgroupfooter>
+		<listgroupfoot>
 			<listcell label="4 People" />
 			<listcell label="4 People" />
-		</listgroupfooter>
+		</listgroupfoot>	
 		<listgroup id="g2" label="Grouping 2" />
 		<listitem>
 			<listcell label="Jane" />
@@ -61,10 +61,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<listcell label="Henry" />
 			<listcell label="MALE" />
 		</listitem>
-		<listgroupfooter>
+		<listgroupfoot>
 			<listcell label="2 People" />
 			<listcell label="2 People" />
-		</listgroupfooter>
+		</listgroupfoot>
 	</listbox>
 	<zscript>
 		String[] data = new String[50];

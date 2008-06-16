@@ -116,7 +116,7 @@ public class Rows extends XulElement {
 		for (Iterator it = getChildren().listIterator(j);
 		it.hasNext() && (to < 0 || j <= to); ++j) {
 			if (it.next() instanceof Group) {
-				int[] g = getGroupsInfoAtIndex(j-1, true);
+				int[] g = getGroupsInfoAtIndex(j+1, true);
 				if (g != null) g[0] = j;
 			}
 		}
@@ -156,11 +156,11 @@ public class Rows extends XulElement {
 		Row newItem = (Row) child;
 		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
 		
-		if (newItem instanceof Groupfooter){
+		if (newItem instanceof Groupfoot){
 			if (!hasGroup())
-				throw new UiException("Groupfooter cannot exist alone, you have to add a Group first");
+				throw new UiException("Groupfoot cannot exist alone, you have to add a Group first");
 			if (refChild == null){
-				if (getLastChild() instanceof Groupfooter)
+				if (getLastChild() instanceof Groupfoot)
 					throw new UiException("Only one Goupfooter is allowed per Group");
 				final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
 				g[2] = getChildren().size();		
@@ -168,11 +168,11 @@ public class Rows extends XulElement {
 				final int idx = ((Row)refChild).getIndex();				
 				final int[] g = getGroupsInfoAtIndex(idx);
 				if (g == null)
-					throw new UiException("Groupfooter cannot exist alone, you have to add a Group first");				
+					throw new UiException("Groupfoot cannot exist alone, you have to add a Group first");				
 				if (g[2] != -1)
 					throw new UiException("Only one Goupfooter is allowed per Group");
 				if (idx != (g[0] + g[1]))
-					throw new UiException("Groupfooter must be placed after the last Row of the Group");
+					throw new UiException("Groupfoot must be placed after the last Row of the Group");
 				final int[] t = (int[]) _groupsInfo.get(g[0]);
 				t[2] = idx-1;
 			}							
@@ -227,8 +227,7 @@ public class Rows extends XulElement {
 			beforeRemove(child);
 		int index = hasGroup() ? ((Row)child).getIndex() : -1;
 		if(super.removeChild(child)) {
-			if (child instanceof Group) {
-				fixGroupIndex(index, -1);
+			if (child instanceof Group) {				
 				int[] prev = null, remove = null;
 				for(Iterator it = _groupsInfo.iterator(); it.hasNext();) {
 					int[] g = (int[])it.next();
@@ -241,17 +240,18 @@ public class Rows extends XulElement {
 				if (prev != null && remove !=null) {
 					prev[1] += remove[1] - 1;
 				}
+				fixGroupIndex(index, -1);
 				_groupsInfo.remove(remove);
 				final int idx = remove[2];
 				if (idx != -1){				
 					final Component gft = (Component) getChildren().get(idx -1);
 					super.removeChild(gft);
-				}
+				}				
 			} else if (hasGroup()) {
 				final int[] g = getGroupsInfoAtIndex(index);
 				if (g != null) g[1]--;
 			}
-			if (child instanceof Groupfooter){
+			if (child instanceof Groupfoot){
 				final int[] g = getGroupsInfoAtIndex(index);
 				g[2] = -1;
 			}

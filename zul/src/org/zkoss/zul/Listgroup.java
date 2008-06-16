@@ -100,10 +100,10 @@ public class Listgroup extends Listitem {
 		return 0;
 	}
 	/**
-	 * Returns the index of Listgroupfooter
-	 * <p> -1: no Listgroupfooter
+	 * Returns the index of Listgroupfoot
+	 * <p> -1: no Listgroupfoot
 	 */
-	public int getListgroupfooterIndex(){
+	public int getListgroupfootIndex(){
 		final Listbox lb = (Listbox)getParent();
 		if (lb != null) {			
 			int[] g = lb.getGroupsInfoAtIndex(getIndex(), true);

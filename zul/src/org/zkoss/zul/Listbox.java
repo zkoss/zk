@@ -1128,11 +1128,11 @@ public class Listbox extends XulElement {
 		if (newChild instanceof Listitem) {
 			if (newChild instanceof Listgroup && (inPagingMold() || inSelectMold()))
 				throw new UnsupportedOperationException("Unsupported Listgroup in Paging or Select mold!");
-			if (newChild instanceof Listgroupfooter){
+			if (newChild instanceof Listgroupfoot){
 				if (!hasGroup())
-					throw new UiException("Listgroupfooter cannot exist alone, you have to add a Listgroup first");
+					throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");
 				if (refChild == null){
-					if (getLastChild() instanceof Listgroupfooter)
+					if (getLastChild() instanceof Listgroupfoot)
 						throw new UiException("Only one Goupfooter is allowed per Listgroup");
 					final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
 					g[2] = getChildren().size();
@@ -1140,11 +1140,11 @@ public class Listbox extends XulElement {
 					final int idx = ((Listitem)refChild).getIndex();				
 					final int[] g = getGroupsInfoAtIndex(idx);
 					if (g == null)
-						throw new UiException("Listgroupfooter cannot exist alone, you have to add a Listgroup first");				
+						throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");				
 					if (g[2] != -1)
 						throw new UiException("Only one Goupfooter is allowed per Listgroup");
 					if (idx != (g[0] + g[1]))
-						throw new UiException("Listgroupfooter must be placed after the last Row of the Listgroup");
+						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
 					final int[] t = (int[]) _groupsInfo.get(g[0]);
 					t[2] = idx-1;
 				}							
@@ -1370,7 +1370,7 @@ public class Listbox extends XulElement {
 				final int[] g = getGroupsInfoAtIndex(index);
 				if (g != null) g[1]--;
 			}
-			if (child instanceof Groupfooter){
+			if (child instanceof Groupfoot){
 				final int[] g = getGroupsInfoAtIndex(index);
 				g[2] = -1;
 			}
@@ -1604,7 +1604,7 @@ public class Listbox extends XulElement {
 		if (_model instanceof GroupModel) {
 			final GroupModel model = (GroupModel) _model;
 			int cnt = getGroupCount(), mcnt = model.getGroupCount(), gIndex = cnt == 0 ? cnt: cnt - 1;;
-			boolean has = model.hasGroupfooter(gIndex);
+			boolean has = model.hasGroupfoot(gIndex);
 			if (!hasGroup() && cnt < mcnt) {
 				item = new Listgroup();
 				item.applyProperties();
@@ -1615,7 +1615,7 @@ public class Listbox extends XulElement {
 					item.applyProperties();
 				} else if (has) {
 					if (index == size) {
-						item = new Listgroupfooter();
+						item = new Listgroupfoot();
 						item.applyProperties();
 					} else if (index == (size + 1)) {
 						item = new Listgroup();
