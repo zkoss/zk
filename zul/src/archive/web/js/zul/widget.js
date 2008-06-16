@@ -516,7 +516,7 @@ zkGrbox.open = function (gb, open, silent, ignorable) {
 			if (!silent)
 				zkau.sendasap({uuid: gb.id, cmd: "onOpen", data: [open]});
 
-			setTimeout(function() {zkGrbox._fixHgh(gb);}, 500); //after slide down
+			if (open) setTimeout(function() {zkGrbox._fixHgh(gb);}, 500); //after slide down
 		}
 	}
 };
