@@ -151,8 +151,8 @@ zkVld.onlyNum = function (id, noDot) {
 	var fmt = $outer(inp);
 	if (fmt) fmt = getZKAttr(fmt, "fmt");
 	inp = $real(inp);
-	val = inp.value.trim();
-	for (var j=0,doted,numed,dashed,perted, vl = val.length; j < vl; ++j) {
+	var doted, numed, dashed, perted, grouped, val = inp.value.trim();
+	for (var j = 0, vl = val.length; j < vl; ++j) {
 		var cc = val.charAt(j);
 		if (cc >= '0' && cc <= '9') {
 			numed = true;
@@ -160,7 +160,7 @@ zkVld.onlyNum = function (id, noDot) {
 		}
 		switch (cc) {
 		case '+': case zk.MINUS:
-			if (doted || numed || dashed || perted) break; //err
+			if (doted || numed || dashed || perted || grouped) break; //err
 			dashed = true;
 			continue; //ok
 		case zk.DECIMAL:
@@ -172,6 +172,7 @@ zkVld.onlyNum = function (id, noDot) {
 			perted = true;
 			//fall thru
 		case zk.GROUPING:
+			grouped = true;
 		case ' ':
 		case '\t':
 			continue;
@@ -182,6 +183,9 @@ zkVld.onlyNum = function (id, noDot) {
 		}
 		return mesg.NUMBER_REQUIRED+val;
 	}
+	if (!numed && (doted || dashed || perted || grouped))
+		return mesg.NUMBER_REQUIRED+val;
+		 
 	return null;
 };
 zkVld.noEmpty = function (id) {
