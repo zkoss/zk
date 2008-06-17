@@ -10,8 +10,10 @@ body {
 </c:if>
 
 <%-- paragraphs --%>
+<c:choose>
+<c:when  test="${empty c:getProperty('org.zkoss.zul.theme.disableZKPrefix')}">
 .zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
-.zk button, input.button, input.file {
+.zk button, .zk input.button, .zk input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: small; font-weight: normal;
 }
@@ -28,7 +30,28 @@ body {
 	font-weight: bold;
 }
 .zk img {border: 0;}
-
+</c:when>
+<c:otherwise>
+p, div, span, label, a, input, textarea,
+button, input.button, input.file {
+	font-family: Verdana, Tahoma, Arial, serif;
+	font-size: small; font-weight: normal;
+}
+legend {
+	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: small; font-weight: normal;
+}
+th {
+	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-weight: bold; 
+}
+thead tr {
+	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-weight: bold;
+}
+img {border: 0;}
+</c:otherwise>
+</c:choose>
 <%-- DSP --%>
 a.gamma {color: #000000; text-decoration: none;}
 a.gamma:hover {color: #000000; text-decoration: underline;}

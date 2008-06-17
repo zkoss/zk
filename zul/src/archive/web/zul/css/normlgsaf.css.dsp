@@ -1,11 +1,28 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/normsaf.css.dsp"/>
-
+<c:choose>
+<c:when  test="${empty c:getProperty('org.zkoss.zul.theme.disableZKPrefix')}">
 .zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
-.zk button, .zk legend, input.button, input.file {
+.zk button, .zk legend, .zk input.button, .zk input.file {
 	font-size: medium;
 }
+<%-- override normsaf font--%>
+.zk input.button{
+	font-size: medium; 
+}
+</c:when>
+<c:otherwise>
+p, div, span, label, a, input, textarea,
+button, legend, input.button, input.file {
+	font-size: medium;
+}
+<%-- override normsaf font--%>
+input.button{
+	font-size: medium; 
+}
+</c:otherwise>
+</c:choose>
 
 .caption input, .caption td {
 	font-size: small;
@@ -77,8 +94,4 @@ table.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
 }
 tr.caldow td {
 	font-size: small;
-}
-<%-- override normsaf font--%>
-input.button{
-	font-size: medium; 
 }

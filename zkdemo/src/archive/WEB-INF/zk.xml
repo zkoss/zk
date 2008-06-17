@@ -210,6 +210,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</system-property>
 	-->
+	
+	<!-- Configure ZUL not to apply the zk prefix in the css file.
+	<system-property>
+		<name>org.zkoss.zul.theme.disableZKPrefix</name>
+		<value>true</value>
+	</system-property>
+	-->
 
 	<!-- Configure the Hibernate SessionFactory Lifecycle.
 	<listener>

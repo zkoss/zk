@@ -68,6 +68,12 @@ ZK 3.0.6
     such as JSP, DSP and so on.
   + org.zkoss.zkplus.databind.CollectionItemEx is renamed to 
     org.zkoss.zkplus.databind.CollectionItemExt
+  + A way to disable the zk prefix, a feature #1873553, in the css file is to use
+  	the System-Property as follows for backward compatible.
+	<system-property>
+		<name>org.zkoss.zul.theme.disableZKPrefix</name>
+		<value>true</value>
+	</system-property>
 
 	--------
 ZK 3.0.5

@@ -1,10 +1,26 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/norm.css.dsp"/>
-
+<c:choose>
+<c:when  test="${empty c:getProperty('org.zkoss.zul.theme.disableZKPrefix')}">
+.zk img	{
+	hspace: 0; vspace: 0
+}
+.zk option {
+	font-family: Verdana, Tahoma, Arial, serif;
+	font-size: xx-small; font-weight: normal;
+}
+</c:when>
+<c:otherwise>
 img	{
 	hspace: 0; vspace: 0
 }
+option {
+	font-family: Verdana, Tahoma, Arial, serif;
+	font-size: xx-small; font-weight: normal;
+}
+</c:otherwise>
+</c:choose>
 .messagebox-btn {
 	width: 47pt;
 	text-overflow: ellipsis;
@@ -54,7 +70,3 @@ span.dottree-last-open, span.dottree-last-close, span.dottree-tee, span.dottree-
 }
 
 <%-- Append New --%>
-option {
-	font-family: Verdana, Tahoma, Arial, serif;
-	font-size: xx-small; font-weight: normal;
-}
