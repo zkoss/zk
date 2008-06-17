@@ -202,7 +202,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value></value>
 	</preference>
 	-->
-
+	
 	<!-- Configure ZUL not to override the standard HTML tags, such as body's
 		margin and padding
 	<system-property>
@@ -210,6 +210,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</system-property>
 	-->
+	
+	<!-- Configure ZUL not to apply the zk prefix in the css file.
+	<system-property>
+		<name>org.zkoss.zul.theme.disableZKPrefix</name>
+		<value>true</value>
+	</system-property>
+	-->
+	
 	<!-- Configure ZUL to use the theme of ZK 3.0 (rather than the new look
 		introduced in ZK 3.1 and later)
 	<system-property>

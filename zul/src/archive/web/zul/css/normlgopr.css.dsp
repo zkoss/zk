@@ -1,14 +1,43 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/normopr.css.dsp"/>
+<c:choose>
+<c:when  test="${empty c:getProperty('org.zkoss.zul.theme.disableZKPrefix')}">
+.zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
+.zk button, .zk legend, .zk input.button, .zk input.file {
+	font-size: medium;
+}
+<%-- override normopr font--%>
+.zk input.button{
+	font-size: small; 
+}
+.zk input.file {
+	font-size: small; 
+}
+.zk option {
+	font-size: x-small; font-weight: normal;
+}
+</c:when>
+<c:otherwise>
+p, div, span, label, a, input, textarea,
+button, legend, input.button, input.file {
+	font-size: medium;
+}
+<%-- override normopr font--%>
+input.button{
+	font-size: small; 
+}
+input.file {
+	font-size: small; 
+}
+option {
+	font-size: x-small; font-weight: normal;
+}
+</c:otherwise>
+</c:choose>
 
 td.slider-bkr, td.slider-bkl, td.slidersph-bkr, td.slidersph-bkl {
 	display: none; <%-- Bug 1825822 --%>
-}
-
-.zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
-.zk button, .zk legend, input.button, input.file {
-	font-size: medium;
 }
 
 .caption input, .caption td {
@@ -81,15 +110,4 @@ table.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
 }
 tr.caldow td {
 	font-size: small;
-}
-
-<%-- override normopr font--%>
-input.button{
-	font-size: small; 
-}
-input.file {
-	font-size: small; 
-}
-option {
-	font-size: x-small; font-weight: normal;
 }
