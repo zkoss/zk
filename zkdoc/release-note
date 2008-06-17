@@ -1,26 +1,26 @@
 	--------
 ZK 3.0.6
 * Features
+  1968749: A way to pass object in forward attribute
   1978624: Keyevent support for every ZUL component
+  1978636: Keyevent support getReference() to get the causing component
   1980357: forEach supports forEach="a, b, c"
-  1982861: variables and custom-attributes support composite="list|map"
+  1982861: variables and custom-attributes support List and Map
   1988011: variables allows to assign variable with reserved name
-  1959959: An option to allow user to refresh if an error
-  1883237: A way to register listeners for particular desktop
+  1959959: An option to allow user to refresh if an error  
   1966723: A way to customize cofirm upon retry (resend mechanism)
+  1873553: Integration with JSP and CSS problems
+  1883237: A way to register listeners for particular desktop  
   1966839: Able to listen when a component is attached, detached...
   1968393: A way to run JavaScript after certain module is loaded
-  1964646: [patch] Don't detach item children in ListitemRenderer
-  1873553: Integration with JSP and CSS problems
-  1886786: Listbox SelectAll Checkbox should consist with all the items
-  1968749: Way to pass object in forward
+  1964646: [patch] Don't detach item children in ListitemRenderer  
+  1886786: Listbox SelectAll Checkbox should consist with all the items  
   1936936: Improve error messages for invalid properties and expression
   1941010: Reduce size of loading's gif: progress2.gif
   1864622: progress loading gif using CSS
   1970894: Labels with variables (MessageFormat)
   1978632: A ZK page being included shall inherit width and height
-  1765940: A way to prevent caching dsp file in DspExtendlet (for dev)
-  1978636: Keyevent support getReference() to get the causing component
+  1765940: A way to prevent caching dsp file in DspExtendlet (for dev)  
   1990422: Component and/or IdSpace support getFellows() method
   1990677: Support autowire fellow component utility
   1990666: Support autowire fellow components in GenericComposer
