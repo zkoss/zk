@@ -47,7 +47,7 @@ zk.Grid.prototype = {
 			if (this.foot) this.foottbl = zk.firstChild(this.foot, "TABLE", true);
 			if (this.head) {
 				this.headtbl = zk.firstChild(this.head, "TABLE", true);
-				this.headrows = this.headtbl.tBodies[1].rows;
+				this.headrows = this.headtbl.tBodies[this.headtbl.tBodies.length-1].rows;
 				this.hdfaker = this.headtbl.tBodies[0].rows[0]; // head's faker
 				this.bdfaker = this.bodytbl.tBodies[0].rows[0]; // body's faker
 				if (this.foot) this.ftfaker = this.foottbl.tBodies[0].rows[0]; // foot's faker
