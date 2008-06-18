@@ -588,7 +588,7 @@ zk.revisedSize = function (el, size, isHgh) {
  */
 zk.revisedOffset = function (el, ofs) {
 	if(!ofs) {
-		if (el.getBoundingClientRect){ // IE
+		if (el.getBoundingClientRect){ // IE and FF3
 			var b = el.getBoundingClientRect();
 			return [b.left + zk.innerX() - el.ownerDocument.documentElement.clientLeft,
 				b.top + zk.innerY() - el.ownerDocument.documentElement.clientTop];

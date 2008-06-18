@@ -2008,18 +2008,14 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 		var ofs = zkau._proxyXY(evt);		
 		if (special) {
 			var msg = "";
-			if (evt.rangeParent) 
-				msg = evt.rangeParent.nodeValue;
-			else {
-				var target = Event.element(evt);
-				if (target.id.indexOf("!cave") > 0)
-					msg = target.textContent || target.innerText;
-				else if (target.id.indexOf("!cell") > 0) {
-					var real = $real(target.id);
-					msg = real.textContent || real.innerText;
-				} else
-					msg = target.textContent || target.innerText;
-			}			
+			var target = Event.element(evt);
+			if (target.id.indexOf("!cave") > 0)
+				msg = target.textContent || target.innerText;
+			else if (target.id.indexOf("!cell") > 0) {
+				var real = $real(target.id);
+				msg = real.textContent || real.innerText;
+			} else
+				msg = target.textContent || target.innerText;			
 			if (!msg) msg = "";
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
 			var el = dg.element;
