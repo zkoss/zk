@@ -33,7 +33,7 @@ import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.WaitLock;
-import org.zkoss.util.ArraysX;
+import org.zkoss.util.FastReadArray;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
@@ -83,18 +83,25 @@ public class Configuration {
 
 	private WebApp _wapp;
 	/** List of classes. */
-	private final List
-		_evtInits = new LinkedList(), _evtCleans = new LinkedList(),
-		_evtSusps = new LinkedList(), _evtResus = new LinkedList(),
-		_appInits = new LinkedList(), _appCleans = new LinkedList(),
-		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
-		_dtInits = new LinkedList(), _dtCleans = new LinkedList(),
-		_execInits = new LinkedList(), _execCleans = new LinkedList();
-	private UiLifeCycle[] _uiCycles;
+	private final FastReadArray
+		_evtInits = new FastReadArray(Class.class),
+		_evtCleans = new FastReadArray(Class.class),
+		_evtSusps = new FastReadArray(Class.class),
+		_evtResus = new FastReadArray(Class.class),
+		_appInits = new FastReadArray(Class.class),
+		_appCleans = new FastReadArray(Class.class),
+		_sessInits = new FastReadArray(Class.class),
+		_sessCleans = new FastReadArray(Class.class),
+		_dtInits = new FastReadArray(Class.class),
+		_dtCleans = new FastReadArray(Class.class),
+		_execInits = new FastReadArray(Class.class),
+		_execCleans = new FastReadArray(Class.class);
+	private FastReadArray _uiCycles = new FastReadArray(UiLifeCycle.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
-	private final List
-		_uriIntcps = new LinkedList(), _reqIntcps = new LinkedList();
+	private final FastReadArray
+		_uriIntcps = new FastReadArray(URIInterceptor.class),
+		_reqIntcps = new FastReadArray(RequestInterceptor.class);
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap()),
 		_errURIs  = Collections.synchronizedMap(new HashMap());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
@@ -105,8 +112,7 @@ public class Configuration {
 	private final Map _errpgs = new HashMap(3);
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
-	private final List _themeURIs = new LinkedList();
-	private transient String[] _roThemeURIs = new String[0];
+	private final FastReadArray _themeURIs = new FastReadArray(String.class);
 	private ThemeProvider _themeProvider;
 	/** A set of disabled theme URIs. */
 	private Set _disThemeURIs;
@@ -192,87 +198,61 @@ public class Configuration {
 		}
 
 		if (EventThreadInit.class.isAssignableFrom(klass)) {
-			synchronized (_evtInits) {
-				_evtInits.add(klass);
-			}
+			_evtInits.add(klass);
 			added = true;
 		}
 		if (EventThreadCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_evtCleans) {
-				_evtCleans.add(klass);
-			}
+			_evtCleans.add(klass);
 			added = true;
 		}
 		if (EventThreadSuspend.class.isAssignableFrom(klass)) {
-			synchronized (_evtSusps) {
-				_evtSusps.add(klass);
-			}
+			_evtSusps.add(klass);
 			added = true;
 		}
 		if (EventThreadResume.class.isAssignableFrom(klass)) {
-			synchronized (_evtResus) {
-				_evtResus.add(klass);
-			}
+			_evtResus.add(klass);
 			added = true;
 		}
 
 		if (WebAppInit.class.isAssignableFrom(klass)) {
-			synchronized (_appInits) {
-				_appInits.add(klass);
-			}
+			_appInits.add(klass);
 			added = true;
 		}
 		if (WebAppCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_appCleans) {
-				_appCleans.add(klass);
-			}
+			_appCleans.add(klass);
 			added = true;
 		}
 
 		if (SessionInit.class.isAssignableFrom(klass)) {
-			synchronized (_sessInits) {
-				_sessInits.add(klass);
-			}
+			_sessInits.add(klass);
 			added = true;
 		}
 		if (SessionCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_sessCleans) {
-				_sessCleans.add(klass);
-			}
+			_sessCleans.add(klass);
 			added = true;
 		}
 
 		if (DesktopInit.class.isAssignableFrom(klass)) {
-			synchronized (_dtInits) {
-				_dtInits.add(klass);
-			}
+			_dtInits.add(klass);
 			added = true;
 		}
 		if (DesktopCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_dtCleans) {
-				_dtCleans.add(klass);
-			}
+			_dtCleans.add(klass);
 			added = true;
 		}
 
 		if (ExecutionInit.class.isAssignableFrom(klass)) {
-			synchronized (_execInits) {
-				_execInits.add(klass);
-			}
+			_execInits.add(klass);
 			added = true;
 		}
 		if (ExecutionCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_execCleans) {
-				_execCleans.add(klass);
-			}
+			_execCleans.add(klass);
 			added = true;
 		}
+
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				final Object obj = getInstance(klass, listener);
-				synchronized (_uriIntcps) {
-					_uriIntcps.add(obj);
-				}
+				_uriIntcps.add(getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -280,10 +260,7 @@ public class Configuration {
 		}
 		if (RequestInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				final Object obj = getInstance(klass, listener);
-				synchronized (_reqIntcps) {
-					_reqIntcps.add(obj);
-				}
+				_reqIntcps.add(getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -299,17 +276,7 @@ public class Configuration {
 		}
 		if (UiLifeCycle.class.isAssignableFrom(klass)) {
 			try {
-				final UiLifeCycle obj = (UiLifeCycle)getInstance(klass, listener);
-				synchronized (this) {
-					if (_uiCycles == null) {
-						_uiCycles = new UiLifeCycle[] {obj};
-					} else {
-						UiLifeCycle[] ary = (UiLifeCycle[])
-							ArraysX.resize(_uiCycles, _uiCycles.length + 1);
-						ary[_uiCycles.length] = obj;
-						_uiCycles = ary;
-					}
-				}
+				_uiCycles.add(getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -326,72 +293,28 @@ public class Configuration {
 	/** Removes a listener class.
 	 * @see Desktop#removeListener
 	 */
-	public void removeListener(Class klass) {
-		synchronized (_evtInits) {
-			_evtInits.remove(klass);
-		}
-		synchronized (_evtCleans) {
-			_evtCleans.remove(klass);
-		}
-		synchronized (_evtSusps) {
-			_evtSusps.remove(klass);
-		}
-		synchronized (_evtResus) {
-			_evtResus.remove(klass);
-		}
+	public void removeListener(final Class klass) {
+		_evtInits.remove(klass);
+		_evtCleans.remove(klass);
+		_evtSusps.remove(klass);
+		_evtResus.remove(klass);
 
-		synchronized (_appInits) {
-			_appInits.remove(klass);
-		}
-		synchronized (_appCleans) {
-			_appCleans.remove(klass);
-		}
-		synchronized (_sessInits) {
-			_sessInits.remove(klass);
-		}
-		synchronized (_sessCleans) {
-			_sessCleans.remove(klass);
-		}
-		synchronized (_dtInits) {
-			_dtInits.remove(klass);
-		}
-		synchronized (_dtCleans) {
-			_dtCleans.remove(klass);
-		}
-		synchronized (_execInits) {
-			_execInits.remove(klass);
-		}
-		synchronized (_execCleans) {
-			_execCleans.remove(klass);
-		}
-		synchronized (_uriIntcps) {
-			for (Iterator it = _uriIntcps.iterator(); it.hasNext();) {
-				final Object obj = it.next();
-				if (obj.getClass().equals(klass))
-					it.remove();
-			}
-		}
-		synchronized (_reqIntcps) {
-			for (Iterator it = _reqIntcps.iterator(); it.hasNext();) {
-				final Object obj = it.next();
-				if (obj.getClass().equals(klass))
-					it.remove();
-			}
-		}
-		synchronized (this) {
-			if (_uiCycles != null) {
-				List l = new LinkedList();
-				boolean found = false;
-				for (int j = 0; j < _uiCycles.length; ++j)
-					if (_uiCycles[j].getClass().equals(klass))
-						found = true;
-					else
-						l.add(_uiCycles[j]);
+		_appInits.remove(klass);
+		_appCleans.remove(klass);
 
-				if (found)
-					_uiCycles = (UiLifeCycle[])l.toArray(new UiLifeCycle[l.size()]);
-			}
-		}
+		_sessInits.remove(klass);
+		_sessCleans.remove(klass);
+
+		_dtInits.remove(klass);
+		_dtCleans.remove(klass);
+
+		_execInits.remove(klass);
+		_execCleans.remove(klass);
+
+		final SameClass sc = new SameClass(klass);
+		_uriIntcps.removeBy(sc, true);
+		_reqIntcps.removeBy(sc, true);
+		_uiCycles.removeBy(sc, true);
 
 		_eis.removeEventInterceptor(klass);
 	}
@@ -411,22 +334,20 @@ public class Configuration {
 	 */
 	public List newEventThreadInits(Component comp, Event evt)
 	throws UiException {
-		if (_evtInits.isEmpty()) return null;
-			//it is OK to test LinkedList.isEmpty without synchronized
+		final Class[] ary = (Class[])_evtInits.toArray();
+		if (ary.length == 0) return null;
 
 		final List inits = new LinkedList();
-		synchronized (_evtInits) {
-			for (Iterator it = _evtInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					final EventThreadInit init =
-						(EventThreadInit)klass.newInstance();
-					init.prepare(comp, evt);
-					inits.add(init);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the event being processed
-				}
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final EventThreadInit init =
+					(EventThreadInit)klass.newInstance();
+				init.prepare(comp, evt);
+				inits.add(init);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the event being processed
 			}
 		}
 		return inits;
@@ -489,25 +410,23 @@ public class Configuration {
 	 * @return a list of {@link EventThreadCleanup}, or null
 	 */
 	public List newEventThreadCleanups(Component comp, Event evt, List errs) {
-		if (_evtCleans.isEmpty()) return null;
-			//it is OK to test LinkedList.isEmpty without synchronized
+		final Class[] ary = (Class[])_evtCleans.toArray();
+		if (ary.length == 0) return null;
 
 		final List cleanups = new LinkedList();
-		synchronized (_evtCleans) {
-			for (Iterator it = _evtCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					final EventThreadCleanup cleanup =
-						(EventThreadCleanup)klass.newInstance();
-					cleanup.cleanup(comp, evt, errs);
-					cleanups.add(cleanup);
-				} catch (Throwable t) {
-					if (errs != null) errs.add(t);
-					log.error("Failed to invoke "+klass, t);
-				}
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final EventThreadCleanup cleanup =
+					(EventThreadCleanup)klass.newInstance();
+				cleanup.cleanup(comp, evt, errs);
+				cleanups.add(cleanup);
+			} catch (Throwable t) {
+				if (errs != null) errs.add(t);
+				log.error("Failed to invoke "+klass, t);
 			}
 		}
-		return cleanups;
+		return cleanups.isEmpty() ? null: cleanups;
 	}
 	/** Invoke {@link EventThreadCleanup#complete} for each instance returned by
 	 * {@link #newEventThreadCleanups}.
@@ -554,22 +473,20 @@ public class Configuration {
 	 * @return a list of {@link EventThreadSuspend}, or null
 	 */
 	public List newEventThreadSuspends(Component comp, Event evt, Object obj) {
-		if (_evtSusps.isEmpty()) return null;
-			//it is OK to test LinkedList.isEmpty without synchronized
+		final Class[] ary = (Class[])_evtSusps.toArray();
+		if (ary.length == 0) return null;
 
 		final List suspends = new LinkedList();
-		synchronized (_evtSusps) {
-			for (Iterator it = _evtSusps.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					final EventThreadSuspend suspend =
-						(EventThreadSuspend)klass.newInstance();
-					suspend.beforeSuspend(comp, evt, obj);
-					suspends.add(suspend);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the event being suspended
-				}
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final EventThreadSuspend suspend =
+					(EventThreadSuspend)klass.newInstance();
+				suspend.beforeSuspend(comp, evt, obj);
+				suspends.add(suspend);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the event being suspended
 			}
 		}
 		return suspends;
@@ -621,22 +538,20 @@ public class Configuration {
 	 */
 	public List newEventThreadResumes(Component comp, Event evt)
 	throws UiException {
-		if (_evtResus.isEmpty()) return null;
-			//it is OK to test LinkedList.isEmpty without synchronized
+		final Class[] ary = (Class[])_evtResus.toArray();
+		if (ary.length == 0) return null;
 
 		final List resumes = new LinkedList();
-		synchronized (_evtResus) {
-			for (Iterator it = _evtResus.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					final EventThreadResume resume =
-						(EventThreadResume)klass.newInstance();
-					resume.beforeResume(comp, evt);
-					resumes.add(resume);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the event being resumed
-				}
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final EventThreadResume resume =
+					(EventThreadResume)klass.newInstance();
+				resume.beforeResume(comp, evt);
+				resumes.add(resume);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the event being resumed
 			}
 		}
 		return resumes;
@@ -682,18 +597,14 @@ public class Configuration {
 	 * @param evt the event to process
 	 */
 	public void invokeEventThreadResumeAborts(Component comp, Event evt) {
-		if (_evtResus.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_evtResus) {
-			for (Iterator it = _evtResus.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((EventThreadResume)klass.newInstance())
-						.abortResume(comp, evt);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass+" for aborting", ex);
-				}
+		final Class[] ary = (Class[])_evtResus.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((EventThreadResume)klass.newInstance())
+					.abortResume(comp, evt);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+klass+" for aborting", ex);
 			}
 		}
 	}
@@ -710,17 +621,13 @@ public class Configuration {
 	 * Rather, it only logs them.
 	 */
 	public void invokeWebAppInits() throws UiException {
-		if (_appInits.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_appInits) {
-			for (Iterator it = _appInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((WebAppInit)klass.newInstance()).init(_wapp);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-				}
+		final Class[] ary = (Class[])_appInits.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((WebAppInit)klass.newInstance()).init(_wapp);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+klass, ex);
 			}
 		}
 	}
@@ -735,17 +642,13 @@ public class Configuration {
 	 * <p>It never throws an exception.
 	 */
 	public void invokeWebAppCleanups() {
-		if (_appCleans.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_appCleans) {
-			for (Iterator it = _appCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-				}
+		final Class[] ary = (Class[])_appCleans.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+klass, ex);
 			}
 		}
 	}
@@ -766,26 +669,22 @@ public class Configuration {
 	 */
 	public void invokeSessionInits(Session sess, Object request)
 	throws UiException {
-		if (_sessInits.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_sessInits) {
-			for (Iterator it = _sessInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
+		final Class[] ary = (Class[])_sessInits.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final SessionInit fn = (SessionInit)klass.newInstance();
 				try {
-					final SessionInit fn = (SessionInit)klass.newInstance();
-					try {
-						fn.init(sess, request);
-					} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
-						final Method m =
-							klass.getMethod("init", new Class[] {Session.class});
-						Fields.setAccessible(m, true);
-						m.invoke(fn, new Object[] {sess});
-					}
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the creation of a session
+					fn.init(sess, request);
+				} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
+					final Method m =
+						klass.getMethod("init", new Class[] {Session.class});
+					Fields.setAccessible(m, true);
+					m.invoke(fn, new Object[] {sess});
 				}
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the creation of a session
 			}
 		}
 	}
@@ -802,17 +701,13 @@ public class Configuration {
 	 * @param sess the session that is being destroyed
 	 */
 	public void invokeSessionCleanups(Session sess) {
-		if (_sessCleans.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_sessCleans) {
-			for (Iterator it = _sessCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((SessionCleanup)klass.newInstance()).cleanup(sess);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-				}
+		final Class[] ary = (Class[])_sessCleans.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((SessionCleanup)klass.newInstance()).cleanup(sess);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+klass, ex);
 			}
 		}
 	}
@@ -833,26 +728,22 @@ public class Configuration {
 	 */
 	public void invokeDesktopInits(Desktop desktop, Object request)
 	throws UiException {
-		if (_dtInits.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_dtInits) {
-			for (Iterator it = _dtInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
+		final Class[] ary = (Class[])_dtInits.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final DesktopInit fn = (DesktopInit)klass.newInstance();
 				try {
-					final DesktopInit fn = (DesktopInit)klass.newInstance();
-					try {
-						fn.init(desktop, request);
-					} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
-						final Method m =
-							klass.getMethod("init", new Class[] {Desktop.class});
-						Fields.setAccessible(m, true);
-						m.invoke(fn, new Object[] {desktop});
-					}
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the creation of a session
+					fn.init(desktop, request);
+				} catch (AbstractMethodError ex) { //backward compatible prior to 3.0.1
+					final Method m =
+						klass.getMethod("init", new Class[] {Desktop.class});
+					Fields.setAccessible(m, true);
+					m.invoke(fn, new Object[] {desktop});
 				}
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the creation of a session
 			}
 		}
 	}
@@ -869,17 +760,12 @@ public class Configuration {
 	 * @param desktop the desktop that is being destroyed
 	 */
 	public void invokeDesktopCleanups(Desktop desktop) {
-		if (_dtCleans.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_dtCleans) {
-			for (Iterator it = _dtCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((DesktopCleanup)klass.newInstance()).cleanup(desktop);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-				}
+		final Class[] ary = (Class[])_dtCleans.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				((DesktopCleanup)ary[j].newInstance()).cleanup(desktop);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
 			}
 		}
 	}
@@ -898,18 +784,13 @@ public class Configuration {
 	 */
 	public void invokeExecutionInits(Execution exec, Execution parent)
 	throws UiException {
-		if (_execInits.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_execInits) {
-			for (Iterator it = _execInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((ExecutionInit)klass.newInstance()).init(exec, parent);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the creation of a session
-				}
+		final Class[] ary = (Class[])_execInits.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				((ExecutionInit)ary[j].newInstance()).init(exec, parent);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the creation of a session
 			}
 		}
 	}
@@ -933,19 +814,14 @@ public class Configuration {
 	 * such that no error message will be displayed at the client.
 	 */
 	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs) {
-		if (_execCleans.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_execCleans) {
-			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((ExecutionCleanup)klass.newInstance())
-						.cleanup(exec, parent, errs);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-					if (errs != null) errs.add(ex);
-				}
+		final Class[] ary = (Class[])_execCleans.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				((ExecutionCleanup)ary[j].newInstance())
+					.cleanup(exec, parent, errs);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
+				if (errs != null) errs.add(ex);
 			}
 		}
 	}
@@ -962,15 +838,12 @@ public class Configuration {
 	 * Use {@link UiException#getCause} to retrieve the cause.
 	 */
 	public void invokeURIInterceptors(String uri) {
-		if (_uriIntcps.isEmpty()) return;
-
-		synchronized (_uriIntcps) {
-			for (Iterator it = _uriIntcps.iterator(); it.hasNext();) {
-				try {
-					((URIInterceptor)it.next()).request(uri);
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex);
-				}
+		URIInterceptor[] ary = (URIInterceptor[])_uriIntcps.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].request(uri);
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex);
 			}
 		}
 	}
@@ -987,16 +860,12 @@ public class Configuration {
 	 */
 	public void invokeRequestInterceptors(Session sess, Object request,
 	Object response) {
-		if (_reqIntcps.isEmpty()) return;
-
-		synchronized (_reqIntcps) {
-			for (Iterator it = _reqIntcps.iterator(); it.hasNext();) {
-				try {
-					((RequestInterceptor)it.next())
-						.request(sess, request, response);
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex);
-				}
+		RequestInterceptor[] ary = (RequestInterceptor[])_reqIntcps.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].request(sess, request, response);
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex);
 			}
 		}
 	}
@@ -1006,14 +875,12 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterComponentAttached(Component comp, Page page) {
-		UiLifeCycle[] ary = _uiCycles;
-		if (ary != null) {
-			for (int j = 0; j < ary.length; ++j) {
-				try {
-					ary[j].afterComponentAttached(comp, page);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+ary[j], ex);
-				}
+		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].afterComponentAttached(comp, page);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
 			}
 		}
 	}
@@ -1022,14 +889,12 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterComponentDetached(Component comp, Page prevpage) {
-		UiLifeCycle[] ary = _uiCycles;
-		if (ary != null) {
-			for (int j = 0; j < ary.length; ++j) {
-				try {
-					ary[j].afterComponentDetached(comp, prevpage);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+ary[j], ex);
-				}
+		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].afterComponentDetached(comp, prevpage);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
 			}
 		}
 	}
@@ -1038,14 +903,12 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
-		UiLifeCycle[] ary = _uiCycles;
-		if (ary != null) {
-			for (int j = 0; j < ary.length; ++j) {
-				try {
-					ary[j].afterComponentMoved(parent, child, prevparent);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+ary[j], ex);
-				}
+		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].afterComponentMoved(parent, child, prevparent);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
 			}
 		}
 	}
@@ -1054,14 +917,12 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterPageAttached(Page page, Desktop desktop) {
-		UiLifeCycle[] ary = _uiCycles;
-		if (ary != null) {
-			for (int j = 0; j < ary.length; ++j) {
-				try {
-					ary[j].afterPageAttached(page, desktop);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+ary[j], ex);
-				}
+		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].afterPageAttached(page, desktop);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
 			}
 		}
 	}
@@ -1070,14 +931,12 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterPageDetached(Page page, Desktop prevdesktop) {
-		UiLifeCycle[] ary = _uiCycles;
-		if (ary != null) {
-			for (int j = 0; j < ary.length; ++j) {
-				try {
-					ary[j].afterPageDetached(page, prevdesktop);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+ary[j], ex);
-				}
+		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].afterPageDetached(page, prevdesktop);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
 			}
 		}
 	}
@@ -1090,11 +949,7 @@ public class Configuration {
 	public void addThemeURI(String uri) {
 		if (uri == null || uri.length() == 0)
 			throw new IllegalArgumentException("empty");
-		synchronized (_themeURIs) {
-			_themeURIs.add(uri);
-			_roThemeURIs =
-				(String[])_themeURIs.toArray(new String[_themeURIs.size()]);
-		}
+		_themeURIs.add(uri);
 	}
 	/** Returns a readonly list of the URI of the CSS resources that will be
 	 * generated for each ZUML desktop (never null).
@@ -1102,7 +957,7 @@ public class Configuration {
 	 * <p>Default: an array with zero length.
 	 */
 	public String[] getThemeURIs() {
-		return _roThemeURIs;
+		return (String[])_themeURIs.toArray();
 	}
 	/** Enables or disables the default theme of the specified language.
 	 *
@@ -2187,6 +2042,18 @@ public class Configuration {
 		private ErrorPage(Class type, String location) {
 			this.type = type;
 			this.location = location;
+		}
+	}
+	/** Used with {@link FastReadArray} to check if an object is
+	 * the same class as specified.
+	 */
+	private static class SameClass implements Comparable {
+		private final Class _klass;
+		private SameClass(Class klass) {
+			_klass = klass;
+		}
+		public int compareTo(Object o) {
+			return o.getClass().equals(_klass) ? 0: 1;
 		}
 	}
 }
