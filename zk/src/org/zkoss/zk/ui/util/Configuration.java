@@ -187,13 +187,13 @@ public class Configuration {
 		if (Monitor.class.isAssignableFrom(klass)) {
 			if (_monitor != null)
 				throw new UiException("Monitor listener can be assigned only once");
-			_monitor = (Monitor)getInstance(klass, listener);
+			_monitor = (Monitor)(listener = getInstance(klass, listener));
 			added = true;
 		}
 		if (PerformanceMeter.class.isAssignableFrom(klass)) {
 			if (_pfmeter != null)
 				throw new UiException("PerformanceMeter listener can be assigned only once");
-			_pfmeter = (PerformanceMeter)getInstance(klass, listener);
+			_pfmeter = (PerformanceMeter)(listener = getInstance(klass, listener));
 			added = true;
 		}
 
@@ -252,7 +252,7 @@ public class Configuration {
 
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_uriIntcps.add(getInstance(klass, listener));
+				_uriIntcps.add(listener = getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -260,7 +260,7 @@ public class Configuration {
 		}
 		if (RequestInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_reqIntcps.add(getInstance(klass, listener));
+				_reqIntcps.add(listener = getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -268,7 +268,8 @@ public class Configuration {
 		}
 		if (EventInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_eis.addEventInterceptor((EventInterceptor)getInstance(klass, listener));
+				_eis.addEventInterceptor((EventInterceptor)
+					(listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -276,7 +277,7 @@ public class Configuration {
 		}
 		if (UiLifeCycle.class.isAssignableFrom(klass)) {
 			try {
-				_uiCycles.add(getInstance(klass, listener));
+				_uiCycles.add(listener = getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -294,6 +295,11 @@ public class Configuration {
 	 * @see Desktop#removeListener
 	 */
 	public void removeListener(final Class klass) {
+		if (_monitor != null && _monitor.getClass().equals(klass))
+			_monitor = null;
+		if (_pfmeter != null && _pfmeter.getClass().equals(klass))
+			_pfmeter = null;
+
 		_evtInits.remove(klass);
 		_evtCleans.remove(klass);
 		_evtSusps.remove(klass);
