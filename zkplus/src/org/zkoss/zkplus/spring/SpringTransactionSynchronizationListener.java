@@ -22,10 +22,12 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.ThreadLocals;
 import org.zkoss.lang.SystemException;
@@ -60,34 +62,52 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 	private static final Log log = Log.lookup(SpringTransactionSynchronizationListener.class);
 	
 	private Object[] _threadLocals = null;
+	private Configuration _config; //configuration
+
+	public SpringTransactionSynchronizationListener() {
+		final WebApp app = Executions.getCurrent().getDesktop().getWebApp();
+		_config = app.getConfiguration();
+	}
 
 	//-- EventThreadInit --//
 	public void prepare(Component comp, Event evt) {
-		getThreadLocals(); //get from servlet thread's ThreadLocal
+		if (_config.isEventThreadEnabled()) {
+			getThreadLocals(); //get from servlet thread's ThreadLocal
+		}
 	}
 	
 	public boolean init(Component comp, Event evt) {
-		setThreadLocals(); //copy to event thread's ThreadLocal
+		if (_config.isEventThreadEnabled()) {
+			setThreadLocals(); //copy to event thread's ThreadLocal
+		}
 		return true;
 	}
 
 	//-- EventThreadCleanup --//
 	public void cleanup(Component comp, Event evt, List errs) {
-		getThreadLocals(); //get from event thread's ThreadLocal
-		//we don't handle the exception since the ZK engine will throw it again!
+		if (_config.isEventThreadEnabled()) {
+			getThreadLocals(); //get from event thread's ThreadLocal
+			//we don't handle the exception since the ZK engine will throw it again!
+		}
 	}
 
 	public void complete(Component comp, Event evt) {
-		setThreadLocals(); //copy to servlet thread's ThreadLocal
+		if (_config.isEventThreadEnabled()) {
+			setThreadLocals(); //copy to servlet thread's ThreadLocal
+		}
 	}
 
 	//-- EventThreadResume --//
 	public void beforeResume(Component comp, Event evt) {
-		getThreadLocals(); //get from servlet thread's ThreadLocal
+		if (_config.isEventThreadEnabled()) {
+			getThreadLocals(); //get from servlet thread's ThreadLocal
+		}
 	}
 	
 	public void afterResume(Component comp, Event evt) {
-		setThreadLocals(); //copy to event thread's ThreadLocal
+		if (_config.isEventThreadEnabled()) {
+			setThreadLocals(); //copy to event thread's ThreadLocal
+		}
 	}
 	
 	public void abortResume(Component comp, Event evt){

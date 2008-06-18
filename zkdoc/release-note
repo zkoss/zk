@@ -25,6 +25,7 @@ ZK 3.0.6
   1990677: Support autowire fellow component utility
   1990666: Support autowire fellow components in GenericComposer
   1990681: Support event regisration utility
+  1996808: Disable ThreadLocal listeners when ZK disable event thread
 
 * Bugs
   1955452: Liferay Failed if two portlets from different Web apps
