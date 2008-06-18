@@ -61,7 +61,8 @@ ZK 3.0.6
   1992605: Popup component reposition is incorrect in Adobe Air
   1992842: jasperreport will be empty report in IE
   1995373: Intbox can't only be entered a % sign
-  
+  1996625: A dead listener, say, ExecutionInit, stall ZK execution
+
 * Upgrade Notes:
   + The default CSS style of a page becomes "width:100%" (rather than
     "width:100%;height:100%", if it is included by a non-ZK page,
