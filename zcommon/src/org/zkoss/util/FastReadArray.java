@@ -36,7 +36,7 @@ import org.zkoss.lang.Objects;
  *  <i>whatever</i>;</code></pre>
  *
  * @author tomyeh
- * @since 3.0.5
+ * @since 3.0.6
  */
 public class FastReadArray implements java.io.Serializable, Cloneable {
 	private Object[] _ary;
