@@ -94,12 +94,12 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 	private static final Log log = Log.lookup(ThreadLocalListener.class);
 	private Map _fieldsMap; //(class name, String[] of fields)
 	private Map _threadLocalsMap; //(class name, ThreadLocal_Contents[] for fields)
-	private Configuration _config; //configuration
+	private final boolean _enabled; //whether event thread enabled
 
 	public ThreadLocalListener() {
 		final WebApp app = Executions.getCurrent().getDesktop().getWebApp();
 		_fieldsMap = (Map) app.getAttribute("zkplus.util.ThreadLocalListener.fieldsMap");
-		_config = app.getConfiguration();
+		_enabled = app.getConfiguration().isEventThreadEnabled();
 		if (_fieldsMap == null) {
 			_fieldsMap = new HashMap(8);
 			app.setAttribute("zkplus.util.ThreadLocalListener.fieldsMap", _fieldsMap);
@@ -124,13 +124,13 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 	
 	//-- EventThreadInit --//
 	public void prepare(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			getThreadLocals(); //get from servlet thread's ThreadLocal
 		}
 	}
 
 	public boolean init(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			setThreadLocals(); //copy to event thread's ThreadLocal
 		}
 		return true;
@@ -138,27 +138,27 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 
 	//-- EventThreadCleanup --//
 	public void cleanup(Component comp, Event evt, List errs) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			getThreadLocals(); //get from event thread's ThreadLocal
 			//we don't handle the exception since the ZK engine will throw it again!
 		}
 	}
 
 	public void complete(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			setThreadLocals(); //copy to servlet thread's ThreadLocal
 		}
 	}
 
 	//-- EventThreadResume --//
 	public void beforeResume(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			getThreadLocals(); //get from servlet thread's ThreadLocal
 		}
 	}
 
 	public void afterResume(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			setThreadLocals(); //copy to event thread's ThreadLocal
 		}
 	}

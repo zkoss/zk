@@ -71,22 +71,22 @@ import javax.servlet.ServletResponse;
 public class AcegiSecurityContextListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
 	private static final Log log = Log.lookup(AcegiSecurityContextListener.class);
 	private SecurityContext _context;
-	private Configuration _config; //configuration
+	private final boolean _enabled; //whether event thread enabled
 
 	public AcegiSecurityContextListener() {
 		final WebApp app = Executions.getCurrent().getDesktop().getWebApp();
-		_config = app.getConfiguration();
+		_enabled = app.getConfiguration().isEventThreadEnabled();
 	}
 	
 	//-- EventThreadInit --//
 	public void prepare(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
 		}
 	}
 	
 	public boolean init(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			SecurityContextHolder.setContext(_context); //store into event thread
 			_context = null;
 		}
@@ -95,7 +95,7 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 	
 	//-- EventThreadCleanup --//
 	public void cleanup(Component comp, Event evt, List errs) {
-		if (!_config.isEventThreadEnabled()) 
+		if (!_enabled) 
 			return;
 			
 		_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
@@ -145,7 +145,7 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 	}
 	
 	public void complete(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			SecurityContextHolder.setContext(_context); //store into servlet thread
 			_context = null;
 		}
@@ -153,13 +153,13 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 	
 	//-- EventThreadResume --//
 	public void beforeResume(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
 		}
 	}
 	
 	public void afterResume(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			SecurityContextHolder.setContext(_context); //store into event thread
 			_context = null;
 		}

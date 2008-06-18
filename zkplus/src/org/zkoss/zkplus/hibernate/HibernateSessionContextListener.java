@@ -64,16 +64,16 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 	private static final String HIBERNATE_SESSION_MAP = "org.zkoss.zkplus.hibernate.SessionMap";
 	private static final Object SOMETHING = new Object();
 
-	private Configuration _config; //configuration
+	private final boolean _enabled; //whether event thread enabled
 
 	public HibernateSessionContextListener() {
 		final WebApp app = Executions.getCurrent().getDesktop().getWebApp();
-		_config = app.getConfiguration();
+		_enabled = app.getConfiguration().isEventThreadEnabled();
 	}
 	
 	//-- ExecutionInit --//
 	public void init(Execution exec, Execution parent) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			if (parent == null) { //root execution
 				//always prepare a ThreadLocal SessionMap in Execution attribute
 				Map map = getSessionMap();
@@ -93,7 +93,7 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 	
 	//-- ExecutionCleanup --//
 	public void cleanup(Execution exec, Execution parent, List errs) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			if (parent == null) { //root execution
 				Map map = getSessionMap();
 				if (map != null) {
@@ -114,7 +114,7 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 	}
 	
 	public boolean init(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			//Copy SessionMap stored in Execution attribute into event's ThreadLocal
 			Map map = (Map) Executions.getCurrent().getAttribute(HIBERNATE_SESSION_MAP);
 			setSessionMap(map); //copy to event thread's ThreadLocal
@@ -128,7 +128,7 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 	}
 	
 	public void afterResume(Component comp, Event evt) {
-		if (_config.isEventThreadEnabled()) {
+		if (_enabled) {
 			//always keep the prepared SessionMap in event's ThreadLocal
 			Map map = (Map) Executions.getCurrent().getAttribute(HIBERNATE_SESSION_MAP);
 			setSessionMap(map); //copy to event thread's ThreadLocal
