@@ -24,10 +24,12 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.au.Command;
 
 import org.zkoss.util.logging.Log;
@@ -69,20 +71,33 @@ import javax.servlet.ServletResponse;
 public class AcegiSecurityContextListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
 	private static final Log log = Log.lookup(AcegiSecurityContextListener.class);
 	private SecurityContext _context;
+	private Configuration _config; //configuration
 
+	public AcegiSecurityContextListener() {
+		final WebApp app = Executions.getCurrent().getDesktop().getWebApp();
+		_config = app.getConfiguration();
+	}
+	
 	//-- EventThreadInit --//
 	public void prepare(Component comp, Event evt) {
-		_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
+		if (_config.isEventThreadEnabled()) {
+			_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
+		}
 	}
 	
 	public boolean init(Component comp, Event evt) {
-		SecurityContextHolder.setContext(_context); //store into event thread
-		_context = null;
+		if (_config.isEventThreadEnabled()) {
+			SecurityContextHolder.setContext(_context); //store into event thread
+			_context = null;
+		}
 		return true;
 	}
 	
 	//-- EventThreadCleanup --//
 	public void cleanup(Component comp, Event evt, List errs) {
+		if (!_config.isEventThreadEnabled()) 
+			return;
+			
 		_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
 
 		//handle Acegi Exception occured within Event handling
@@ -130,18 +145,24 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 	}
 	
 	public void complete(Component comp, Event evt) {
-		SecurityContextHolder.setContext(_context); //store into servlet thread
-		_context = null;
+		if (_config.isEventThreadEnabled()) {
+			SecurityContextHolder.setContext(_context); //store into servlet thread
+			_context = null;
+		}
 	}
 	
 	//-- EventThreadResume --//
 	public void beforeResume(Component comp, Event evt) {
-		_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
+		if (_config.isEventThreadEnabled()) {
+			_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
+		}
 	}
 	
 	public void afterResume(Component comp, Event evt) {
-		SecurityContextHolder.setContext(_context); //store into event thread
-		_context = null;
+		if (_config.isEventThreadEnabled()) {
+			SecurityContextHolder.setContext(_context); //store into event thread
+			_context = null;
+		}
 	}
 	
  	public void abortResume(Component comp, Event evt) {

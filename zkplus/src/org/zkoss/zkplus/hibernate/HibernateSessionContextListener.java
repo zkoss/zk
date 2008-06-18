@@ -22,6 +22,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ExecutionInit;
 import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.event.Event;
@@ -62,36 +64,47 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 	private static final String HIBERNATE_SESSION_MAP = "org.zkoss.zkplus.hibernate.SessionMap";
 	private static final Object SOMETHING = new Object();
 
+	private Configuration _config; //configuration
+
+	public HibernateSessionContextListener() {
+		final WebApp app = Executions.getCurrent().getDesktop().getWebApp();
+		_config = app.getConfiguration();
+	}
+	
 	//-- ExecutionInit --//
 	public void init(Execution exec, Execution parent) {
-		if (parent == null) { //root execution
-			//always prepare a ThreadLocal SessionMap in Execution attribute
-			Map map = getSessionMap();
-			if (map == null) {
-				map = new HashMap();
-				setSessionMap(map); //copy to servlet thread's ThreadLocal
+		if (_config.isEventThreadEnabled()) {
+			if (parent == null) { //root execution
+				//always prepare a ThreadLocal SessionMap in Execution attribute
+				Map map = getSessionMap();
+				if (map == null) {
+					map = new HashMap();
+					setSessionMap(map); //copy to servlet thread's ThreadLocal
+				}
+				exec.setAttribute(HIBERNATE_SESSION_MAP, map); // store in Execution attribute
+				
+				//20060912, henrichen: tricky. Stuff something into session map to 
+				//prevent the map from being removed from context ThreadLocal by the 
+				//ThreadLocalSessionContext#unbind() when it is empty.
+				map.put(SOMETHING, null); 
 			}
-			exec.setAttribute(HIBERNATE_SESSION_MAP, map); // store in Execution attribute
-			
-			//20060912, henrichen: tricky. Stuff something into session map to 
-			//prevent the map from being removed from context ThreadLocal by the 
-			//ThreadLocalSessionContext#unbind() when it is empty.
-			map.put(SOMETHING, null); 
 		}
 	}
 	
 	//-- ExecutionCleanup --//
 	public void cleanup(Execution exec, Execution parent, List errs) {
-		if (parent == null) { //root execution
-			Map map = getSessionMap();
-			if (map != null) {
-				//20060912, henrichen: tricky. Remove the previously stuffed 
-				//something (when ExecutuionInit#init() is called) from 
-				//session map to make the map possible to be removed by the 
-				//ThreadLocalSessionContext#unbind() when it is empty.
-				map.remove(SOMETHING);
+		if (_config.isEventThreadEnabled()) {
+			if (parent == null) { //root execution
+				Map map = getSessionMap();
+				if (map != null) {
+					//20060912, henrichen: tricky. Remove the previously stuffed 
+					//something (when ExecutuionInit#init() is called) from 
+					//session map to make the map possible to be removed by the 
+					//ThreadLocalSessionContext#unbind() when it is empty.
+					map.remove(SOMETHING);
+				}
+				exec.removeAttribute(HIBERNATE_SESSION_MAP);
 			}
-			exec.removeAttribute(HIBERNATE_SESSION_MAP);
 		}
 	}
 	
@@ -101,9 +114,11 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 	}
 	
 	public boolean init(Component comp, Event evt) {
-		//Copy SessionMap stored in Execution attribute into event's ThreadLocal
-		Map map = (Map) Executions.getCurrent().getAttribute(HIBERNATE_SESSION_MAP);
-		setSessionMap(map); //copy to event thread's ThreadLocal
+		if (_config.isEventThreadEnabled()) {
+			//Copy SessionMap stored in Execution attribute into event's ThreadLocal
+			Map map = (Map) Executions.getCurrent().getAttribute(HIBERNATE_SESSION_MAP);
+			setSessionMap(map); //copy to event thread's ThreadLocal
+		}
 		return true;
 	}
 
@@ -113,9 +128,11 @@ public class HibernateSessionContextListener implements ExecutionInit, Execution
 	}
 	
 	public void afterResume(Component comp, Event evt) {
-		//always keep the prepared SessionMap in event's ThreadLocal
-		Map map = (Map) Executions.getCurrent().getAttribute(HIBERNATE_SESSION_MAP);
-		setSessionMap(map); //copy to event thread's ThreadLocal
+		if (_config.isEventThreadEnabled()) {
+			//always keep the prepared SessionMap in event's ThreadLocal
+			Map map = (Map) Executions.getCurrent().getAttribute(HIBERNATE_SESSION_MAP);
+			setSessionMap(map); //copy to event thread's ThreadLocal
+		}
 	}
 	
 	public void abortResume(Component comp, Event evt){
