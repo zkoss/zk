@@ -31,6 +31,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.WaitLock;
+import org.zkoss.util.FastReadArray;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Component;
@@ -71,16 +72,23 @@ public class Configuration {
 
 	private WebApp _wapp;
 	/** List of classes. */
-	private final List
-		_evtInits = new LinkedList(), _evtCleans = new LinkedList(),
-		_evtSusps = new LinkedList(), _evtResus = new LinkedList(),
-		_appInits = new LinkedList(), _appCleans = new LinkedList(),
-		_sessInits = new LinkedList(), _sessCleans = new LinkedList(),
-		_dtInits = new LinkedList(), _dtCleans = new LinkedList(),
-		_execInits = new LinkedList(), _execCleans = new LinkedList();
+	private final FastReadArray
+		_evtInits = new FastReadArray(Class.class),
+		_evtCleans = new FastReadArray(Class.class),
+		_evtSusps = new FastReadArray(Class.class),
+		_evtResus = new FastReadArray(Class.class),
+		_appInits = new FastReadArray(Class.class),
+		_appCleans = new FastReadArray(Class.class),
+		_sessInits = new FastReadArray(Class.class),
+		_sessCleans = new FastReadArray(Class.class),
+		_dtInits = new FastReadArray(Class.class),
+		_dtCleans = new FastReadArray(Class.class),
+		_execInits = new FastReadArray(Class.class),
+		_execCleans = new FastReadArray(Class.class);
 	/** List of objects. */
-	private final List
-		_uriIntcps = new LinkedList(), _reqIntcps = new LinkedList();
+	private final FastReadArray
+		_uriIntcps = new FastReadArray(URIInterceptor.class),
+		_reqIntcps = new FastReadArray(RequestInterceptor.class);
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
 	private final Map _richlets = new HashMap();
@@ -89,8 +97,7 @@ public class Configuration {
 	/** Map(String deviceType, List(ErrorPage)). */
 	private final Map _errpgs = new HashMap(3);
 	private Monitor _monitor;
-	private final List _themeUris = new LinkedList();
-	private transient String[] _roThemeUris = new String[0];
+	private final FastReadArray _themeURIs = new FastReadArray(String.class);
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls, _failmancls, _idgencls;
 	private int _dtTimeout = 3600, _dtMax = 10, _sessTimeout = 0,
 		_sparThdMax = 100, _suspThdMax = -1,
@@ -127,95 +134,71 @@ public class Configuration {
 	 */
 	public void addListener(Class klass) throws Exception {
 		boolean added = false;
+		Object listener = null;
+
 		if (Monitor.class.isAssignableFrom(klass)) {
 			if (_monitor != null)
 				throw new UiException("Monitor listener can be assigned only once");
-			_monitor = (Monitor)klass.newInstance();
+			_monitor = (Monitor)(listener = getInstance(klass, listener));
 			added = true;
 		}
 
 		if (EventThreadInit.class.isAssignableFrom(klass)) {
-			synchronized (_evtInits) {
-				_evtInits.add(klass);
-			}
+			_evtInits.add(klass);
 			added = true;
 		}
 		if (EventThreadCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_evtCleans) {
-				_evtCleans.add(klass);
-			}
+			_evtCleans.add(klass);
 			added = true;
 		}
 		if (EventThreadSuspend.class.isAssignableFrom(klass)) {
-			synchronized (_evtSusps) {
-				_evtSusps.add(klass);
-			}
+			_evtSusps.add(klass);
 			added = true;
 		}
 		if (EventThreadResume.class.isAssignableFrom(klass)) {
-			synchronized (_evtResus) {
-				_evtResus.add(klass);
-			}
+			_evtResus.add(klass);
 			added = true;
 		}
 
 		if (WebAppInit.class.isAssignableFrom(klass)) {
-			synchronized (_appInits) {
-				_appInits.add(klass);
-			}
+			_appInits.add(klass);
 			added = true;
 		}
 		if (WebAppCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_appCleans) {
-				_appCleans.add(klass);
-			}
+			_appCleans.add(klass);
 			added = true;
 		}
 
 		if (SessionInit.class.isAssignableFrom(klass)) {
-			synchronized (_sessInits) {
-				_sessInits.add(klass);
-			}
+			_sessInits.add(klass);
 			added = true;
 		}
 		if (SessionCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_sessCleans) {
-				_sessCleans.add(klass);
-			}
+			_sessCleans.add(klass);
 			added = true;
 		}
 
 		if (DesktopInit.class.isAssignableFrom(klass)) {
-			synchronized (_dtInits) {
-				_dtInits.add(klass);
-			}
+			_dtInits.add(klass);
 			added = true;
 		}
 		if (DesktopCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_dtCleans) {
-				_dtCleans.add(klass);
-			}
+			_dtCleans.add(klass);
 			added = true;
 		}
 
 		if (ExecutionInit.class.isAssignableFrom(klass)) {
-			synchronized (_execInits) {
-				_execInits.add(klass);
-			}
+			_execInits.add(klass);
 			added = true;
 		}
 		if (ExecutionCleanup.class.isAssignableFrom(klass)) {
-			synchronized (_execCleans) {
-				_execCleans.add(klass);
-			}
+			_execCleans.add(klass);
 			added = true;
 		}
+
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				final Object obj = klass.newInstance();
-				synchronized (_uriIntcps) {
-					_uriIntcps.add(obj);
-				}
+				_uriIntcps.add(listener = getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -223,10 +206,7 @@ public class Configuration {
 		}
 		if (RequestInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				final Object obj = klass.newInstance();
-				synchronized (_reqIntcps) {
-					_reqIntcps.add(obj);
-				}
+				_reqIntcps.add(listener = getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -236,68 +216,44 @@ public class Configuration {
 		if (!added)
 			throw new UiException("Unknown listener: "+klass);
 	}
+	private static Object getInstance(Class klass, Object listener)
+	throws Exception {
+		return listener != null ? listener: klass.newInstance();
+	}
 	/** Removes a listener class.
 	 */
 	public void removeListener(Class klass) {
-		synchronized (_evtInits) {
-			_evtInits.remove(klass);
-		}
-		synchronized (_evtCleans) {
-			_evtCleans.remove(klass);
-		}
-		synchronized (_evtSusps) {
-			_evtSusps.remove(klass);
-		}
-		synchronized (_evtResus) {
-			_evtResus.remove(klass);
-		}
+		if (_monitor != null && _monitor.getClass().equals(klass))
+			_monitor = null;
 
-		synchronized (_appInits) {
-			_appInits.remove(klass);
-		}
-		synchronized (_appCleans) {
-			_appCleans.remove(klass);
-		}
-		synchronized (_sessInits) {
-			_sessInits.remove(klass);
-		}
-		synchronized (_sessCleans) {
-			_sessCleans.remove(klass);
-		}
-		synchronized (_dtInits) {
-			_dtInits.remove(klass);
-		}
-		synchronized (_dtCleans) {
-			_dtCleans.remove(klass);
-		}
-		synchronized (_execInits) {
-			_execInits.remove(klass);
-		}
-		synchronized (_execCleans) {
-			_execCleans.remove(klass);
-		}
-		synchronized (_uriIntcps) {
-			for (Iterator it = _uriIntcps.iterator(); it.hasNext();) {
-				final Object obj = it.next();
-				if (obj.getClass().equals(klass))
-					it.remove();
-			}
-		}
-		synchronized (_reqIntcps) {
-			for (Iterator it = _reqIntcps.iterator(); it.hasNext();) {
-				final Object obj = it.next();
-				if (obj.getClass().equals(klass))
-					it.remove();
-			}
-		}
+		_evtInits.remove(klass);
+		_evtCleans.remove(klass);
+		_evtSusps.remove(klass);
+		_evtResus.remove(klass);
+
+		_appInits.remove(klass);
+		_appCleans.remove(klass);
+
+		_sessInits.remove(klass);
+		_sessCleans.remove(klass);
+
+		_dtInits.remove(klass);
+		_dtCleans.remove(klass);
+
+		_execInits.remove(klass);
+		_execCleans.remove(klass);
+
+		final SameClass sc = new SameClass(klass);
+		_uriIntcps.removeBy(sc, true);
+		_reqIntcps.removeBy(sc, true);
 	}
 
 	/** Contructs a list of {@link EventThreadInit} instances and invokes
 	 * {@link EventThreadInit#prepare} for
 	 * each relevant listener registered by {@link #addListener}.
 	 *
-	 * <p>It is called by {@link UiEngine} before starting an event
-	 * processing thread.
+	 * <p>Used only internally (by {@link UiEngine} before starting an event
+	 * processing thread).
 	 *
 	 * @exception UiException to prevent a thread from being processed
 	 * if {@link EventThreadInit#prepare} throws an exception
@@ -307,28 +263,28 @@ public class Configuration {
 	 */
 	public List newEventThreadInits(Component comp, Event evt)
 	throws UiException {
-		if (_evtInits.isEmpty()) return Collections.EMPTY_LIST;
-			//it is OK to test LinkedList.isEmpty without synchronized
+		final Class[] ary = (Class[])_evtInits.toArray();
+		if (ary.length == 0) return Collections.EMPTY_LIST;
 
 		final List inits = new LinkedList();
-		synchronized (_evtInits) {
-			for (Iterator it = _evtInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					final EventThreadInit init =
-						(EventThreadInit)klass.newInstance();
-					init.prepare(comp, evt);
-					inits.add(init);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the event being processed
-				}
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final EventThreadInit init =
+					(EventThreadInit)klass.newInstance();
+				init.prepare(comp, evt);
+				inits.add(init);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the event being processed
 			}
 		}
 		return inits;
 	}
 	/** Invokes {@link EventThreadInit#init} for each instance returned
 	 * by {@link #newEventThreadInits}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * @param inits a list of {@link EventThreadInit} instances returned from
 	 * {@link #newEventThreadInits}, or null if no instance at all.
@@ -354,6 +310,8 @@ public class Configuration {
 	/** Invokes {@link EventThreadCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>An instance of {@link EventThreadCleanup} is constructed first,
 	 * and then invoke {@link EventThreadCleanup#cleanup}.
 	 *
@@ -369,28 +327,28 @@ public class Configuration {
 	 * such that no error message will be displayed at the client.
 	 */
 	public List newEventThreadCleanups(Component comp, Event evt, List errs) {
-		if (_evtCleans.isEmpty()) return Collections.EMPTY_LIST;
-			//it is OK to test LinkedList.isEmpty without synchronized
+		final Class[] ary = (Class[])_evtCleans.toArray();
+		if (ary.length == 0) return Collections.EMPTY_LIST;
 
 		final List cleanups = new LinkedList();
-		synchronized (_evtCleans) {
-			for (Iterator it = _evtCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					final EventThreadCleanup cleanup =
-						(EventThreadCleanup)klass.newInstance();
-					cleanup.cleanup(comp, evt, errs);
-					cleanups.add(cleanup);
-				} catch (Throwable t) {
-					if (errs != null) errs.add(t);
-					log.error("Failed to invoke "+klass, t);
-				}
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final EventThreadCleanup cleanup =
+					(EventThreadCleanup)klass.newInstance();
+				cleanup.cleanup(comp, evt, errs);
+				cleanups.add(cleanup);
+			} catch (Throwable t) {
+				if (errs != null) errs.add(t);
+				log.error("Failed to invoke "+klass, t);
 			}
 		}
 		return cleanups;
 	}
 	/** Invoke {@link EventThreadCleanup#complete} for each instance returned by
 	 * {@link #newEventThreadCleanups}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
@@ -419,7 +377,10 @@ public class Configuration {
 	/** Constructs a list of {@link EventThreadSuspend} instances and invokes
 	 * {@link EventThreadSuspend#beforeSuspend} for each relevant
 	 * listener registered by {@link #addListener}.
-	 * Caller shall execute in the event processing thread.
+	 *
+ 	 * <p>Used only internally.
+ 	 *
+	 * <p>Note: caller shall execute in the event processing thread.
 	 *
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
@@ -428,22 +389,20 @@ public class Configuration {
 	 * @exception UiException to prevent a thread from suspending
 	 */
 	public List newEventThreadSuspends(Component comp, Event evt, Object obj) {
-		if (_evtSusps.isEmpty()) return Collections.EMPTY_LIST;
-			//it is OK to test LinkedList.isEmpty without synchronized
+		final Class[] ary = (Class[])_evtSusps.toArray();
+		if (ary.length == 0) return Collections.EMPTY_LIST;
 
 		final List suspends = new LinkedList();
-		synchronized (_evtSusps) {
-			for (Iterator it = _evtSusps.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					final EventThreadSuspend suspend =
-						(EventThreadSuspend)klass.newInstance();
-					suspend.beforeSuspend(comp, evt, obj);
-					suspends.add(suspend);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the event being suspended
-				}
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final EventThreadSuspend suspend =
+					(EventThreadSuspend)klass.newInstance();
+				suspend.beforeSuspend(comp, evt, obj);
+				suspends.add(suspend);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the event being suspended
 			}
 		}
 		return suspends;
@@ -452,6 +411,8 @@ public class Configuration {
 	 * listener registered by {@link #addListener}.
 	 * Unlike {@link #invokeEventThreadSuspends}, caller shall execute in
 	 * the main thread (aka, servlet thread).
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>Unlike {@link #invokeEventThreadSuspends}, exceptions are logged
 	 * and ignored.
@@ -479,8 +440,8 @@ public class Configuration {
 	 * {@link EventThreadResume#beforeResume} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
-	 * <p>It is called by {@link UiEngine} when resuming a suspended event
-	 * thread.
+	 * <p>Used only internally (by {@link UiEngine} when resuming a suspended event
+	 * thread).
 	 * Notice: it executes in the main thread (i.e., the servlet thread).
 	 *
 	 * @param comp the component which the event is targeting
@@ -493,28 +454,28 @@ public class Configuration {
 	 */
 	public List newEventThreadResumes(Component comp, Event evt)
 	throws UiException {
-		if (_evtResus.isEmpty()) return Collections.EMPTY_LIST;
-			//it is OK to test LinkedList.isEmpty without synchronized
+		final Class[] ary = (Class[])_evtResus.toArray();
+		if (ary.length == 0) return Collections.EMPTY_LIST;
 
 		final List resumes = new LinkedList();
-		synchronized (_evtResus) {
-			for (Iterator it = _evtResus.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					final EventThreadResume resume =
-						(EventThreadResume)klass.newInstance();
-					resume.beforeResume(comp, evt);
-					resumes.add(resume);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the event being resumed
-				}
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				final EventThreadResume resume =
+					(EventThreadResume)klass.newInstance();
+				resume.beforeResume(comp, evt);
+				resumes.add(resume);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the event being resumed
 			}
 		}
 		return resumes;
 	}
 	/** Invokes {@link EventThreadResume#afterResume} for each instance returned
 	 * by {@link #newEventThreadResumes}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
@@ -544,6 +505,8 @@ public class Configuration {
 	/** Invokes {@link EventThreadResume#abortResume} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
+ 	 * <p>Used only internally.
+	 *
 	 * <p>An instance of {@link EventThreadResume} is constructed first,
 	 * and then invoke {@link EventThreadResume#abortResume}.
 	 *
@@ -553,24 +516,22 @@ public class Configuration {
 	 * @param evt the event to process
 	 */
 	public void invokeEventThreadResumeAborts(Component comp, Event evt) {
-		if (_evtResus.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_evtResus) {
-			for (Iterator it = _evtResus.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((EventThreadResume)klass.newInstance())
-						.abortResume(comp, evt);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass+" for aborting", ex);
-				}
+		final Class[] ary = (Class[])_evtResus.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((EventThreadResume)klass.newInstance())
+					.abortResume(comp, evt);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+klass+" for aborting", ex);
 			}
 		}
 	}
 
 	/** Invokes {@link WebAppInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link WebAppInit} is constructed first,
 	 * and then invoke {@link WebAppInit#init}.
@@ -579,22 +540,20 @@ public class Configuration {
 	 * Rather, it only logs them.
 	 */
 	public void invokeWebAppInits() throws UiException {
-		if (_appInits.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_appInits) {
-			for (Iterator it = _appInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((WebAppInit)klass.newInstance()).init(_wapp);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-				}
+		final Class[] ary = (Class[])_appInits.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((WebAppInit)klass.newInstance()).init(_wapp);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+klass, ex);
 			}
 		}
 	}
 	/** Invokes {@link WebAppCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link WebAppCleanup} is constructed first,
 	 * and then invoke {@link WebAppCleanup#cleanup}.
@@ -602,23 +561,21 @@ public class Configuration {
 	 * <p>It never throws an exception.
 	 */
 	public void invokeWebAppCleanups() {
-		if (_appCleans.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_appCleans) {
-			for (Iterator it = _appCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-				}
+		final Class[] ary = (Class[])_appCleans.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+klass, ex);
 			}
 		}
 	}
 
 	/** Invokes {@link SessionInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link SessionInit} is constructed first,
 	 * and then invoke {@link SessionInit#init}.
@@ -628,23 +585,21 @@ public class Configuration {
 	 */
 	public void invokeSessionInits(Session sess)
 	throws UiException {
-		if (_sessInits.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_sessInits) {
-			for (Iterator it = _sessInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((SessionInit)klass.newInstance()).init(sess);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the creation of a session
-				}
+		final Class[] ary = (Class[])_sessInits.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((SessionInit)klass.newInstance()).init(sess);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the creation of a session
 			}
 		}
 	}
 	/** Invokes {@link SessionCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link SessionCleanup} is constructed first,
 	 * and then invoke {@link SessionCleanup#cleanup}.
@@ -654,23 +609,21 @@ public class Configuration {
 	 * @param sess the session that is being destroyed
 	 */
 	public void invokeSessionCleanups(Session sess) {
-		if (_sessCleans.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_sessCleans) {
-			for (Iterator it = _sessCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((SessionCleanup)klass.newInstance()).cleanup(sess);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-				}
+		final Class[] ary = (Class[])_sessCleans.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((SessionCleanup)klass.newInstance()).cleanup(sess);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+klass, ex);
 			}
 		}
 	}
 
 	/** Invokes {@link DesktopInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link DesktopInit} is constructed first,
 	 * and then invoke {@link DesktopInit#init}.
@@ -680,23 +633,21 @@ public class Configuration {
 	 */
 	public void invokeDesktopInits(Desktop desktop)
 	throws UiException {
-		if (_dtInits.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_dtInits) {
-			for (Iterator it = _dtInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((DesktopInit)klass.newInstance()).init(desktop);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the creation of a session
-				}
+		final Class[] ary = (Class[])_dtInits.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final Class klass = (Class)ary[j];
+			try {
+				((DesktopInit)klass.newInstance()).init(desktop);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the creation of a session
 			}
 		}
 	}
 	/** Invokes {@link DesktopCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link DesktopCleanup} is constructed first,
 	 * and then invoke {@link DesktopCleanup#cleanup}.
@@ -706,23 +657,20 @@ public class Configuration {
 	 * @param desktop the desktop that is being destroyed
 	 */
 	public void invokeDesktopCleanups(Desktop desktop) {
-		if (_dtCleans.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_dtCleans) {
-			for (Iterator it = _dtCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((DesktopCleanup)klass.newInstance()).cleanup(desktop);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-				}
+		final Class[] ary = (Class[])_dtCleans.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				((DesktopCleanup)ary[j].newInstance()).cleanup(desktop);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
 			}
 		}
 	}
 
 	/** Invokes {@link ExecutionInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link ExecutionInit} is constructed first,
 	 * and then invoke {@link ExecutionInit#init}.
@@ -733,23 +681,20 @@ public class Configuration {
 	 */
 	public void invokeExecutionInits(Execution exec, Execution parent)
 	throws UiException {
-		if (_execInits.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_execInits) {
-			for (Iterator it = _execInits.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((ExecutionInit)klass.newInstance()).init(exec, parent);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-					//Don't intercept; to prevent the creation of a session
-				}
+		final Class[] ary = (Class[])_execInits.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				((ExecutionInit)ary[j].newInstance()).init(exec, parent);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the creation of a session
 			}
 		}
 	}
 	/** Invokes {@link ExecutionCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link ExecutionCleanup} is constructed first,
 	 * and then invoke {@link ExecutionCleanup#cleanup}.
@@ -766,25 +711,22 @@ public class Configuration {
 	 * such that no error message will be displayed at the client.
 	 */
 	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs) {
-		if (_execCleans.isEmpty()) return;
-			//it is OK to test LinkedList.isEmpty without synchronized
-
-		synchronized (_execCleans) {
-			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
-				final Class klass = (Class)it.next();
-				try {
-					((ExecutionCleanup)klass.newInstance())
-						.cleanup(exec, parent, errs);
-				} catch (Throwable ex) {
-					log.error("Failed to invoke "+klass, ex);
-					if (errs != null) errs.add(ex);
-				}
+		final Class[] ary = (Class[])_execCleans.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				((ExecutionCleanup)ary[j].newInstance())
+					.cleanup(exec, parent, errs);
+			} catch (Throwable ex) {
+				log.error("Failed to invoke "+ary[j], ex);
+				if (errs != null) errs.add(ex);
 			}
 		}
 	}
 
 	/** Invokes {@link URIInterceptor#request} for each relevant listner
 	 * registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>If any of them throws an exception, the exception is propogated to
 	 * the caller.
@@ -793,20 +735,19 @@ public class Configuration {
 	 * Use {@link UiException#getCause} to retrieve the cause.
 	 */
 	public void invokeURIInterceptors(String uri) {
-		if (_uriIntcps.isEmpty()) return;
-
-		synchronized (_uriIntcps) {
-			for (Iterator it = _uriIntcps.iterator(); it.hasNext();) {
-				try {
-					((URIInterceptor)it.next()).request(uri);
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex);
-				}
+		URIInterceptor[] ary = (URIInterceptor[])_uriIntcps.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].request(uri);
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex);
 			}
 		}
 	}
 	/** Invokes {@link RequestInterceptor#request} for each relevant listner
 	 * registered by {@link #addListener}.
+	 *
+ 	 * <p>Used only internally.
 	 *
 	 * <p>If any of them throws an exception, the exception is propogated to
 	 * the caller.
@@ -816,16 +757,12 @@ public class Configuration {
 	 */
 	public void invokeRequestInterceptors(Session sess, Object request,
 	Object response) {
-		if (_reqIntcps.isEmpty()) return;
-
-		synchronized (_reqIntcps) {
-			for (Iterator it = _reqIntcps.iterator(); it.hasNext();) {
-				try {
-					((RequestInterceptor)it.next())
-						.request(sess, request, response);
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex);
-				}
+		RequestInterceptor[] ary = (RequestInterceptor[])_reqIntcps.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			try {
+				ary[j].request(sess, request, response);
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex);
 			}
 		}
 	}
@@ -835,11 +772,7 @@ public class Configuration {
 	public void addThemeURI(String uri) {
 		if (uri == null || uri.length() == 0)
 			throw new IllegalArgumentException("empty");
-		synchronized (_themeUris) {
-			_themeUris.add(uri);
-			_roThemeUris =
-				(String[])_themeUris.toArray(new String[_themeUris.size()]);
-		}
+		_themeURIs.add(uri);
 	}
 	/** Returns a readonly list of the URI of the CSS resources that will be
 	 * generated for each ZUML desktop (never null).
@@ -847,7 +780,7 @@ public class Configuration {
 	 * <p>Default: an array with zero length.
 	 */
 	public String[] getThemeURIs() {
-		return _roThemeUris;
+		return (String[])_themeURIs.toArray();
 	}
 
 	/** Sets the URI that is used when the session timeout or
@@ -1558,5 +1491,17 @@ public class Configuration {
 			this.type = type;
 			this.location = location;
 		}
-	};
+	}
+	/** Used with {@link FastReadArray} to check if an object is
+	 * the same class as specified.
+	 */
+	private static class SameClass implements Comparable {
+		private final Class _klass;
+		private SameClass(Class klass) {
+			_klass = klass;
+		}
+		public int compareTo(Object o) {
+			return o.getClass().equals(_klass) ? 0: 1;
+		}
+	}
 }

@@ -31,6 +31,7 @@ ZK 2.4.2
   1847708: OnBookmarkChanged doesn't send
   1849076: NoSuchElementException in UiVisualizer
   1850895: encodeURL causes IllegalStateException with Websphere 5.1.1  
+  1996625: A dead listener, say, ExecutionInit, stall ZK execution
 
 * Upgrade Note:
   + The pageContext variable in EL expressions becomes an instance of
