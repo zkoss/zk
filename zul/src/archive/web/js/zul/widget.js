@@ -735,9 +735,16 @@ zkWgt._fixdbtn = function (cmp) {
 		//Bug 1738241: don't use align="xxx"
 		var v = inp.offsetHeight - btn.offsetHeight;
 		if (v > 0) {
-			var v2 = Math.round(v/2); //yes, round to integer
-			btn.style.paddingTop = v2 + "px";
-			btn.style.paddingBottom = (v - v2) + "px";
+			if (zk.gecko3) {
+				zk.addClass(btn, "inline-block");
+				var img = zk.firstChild(btn, "IMG");
+				if (img) img.style.marginTop = "1px";
+				btn.style.height = zk.revisedSize(btn, inp.offsetHeight, true) + "px";
+			} else {
+				var v2 = Math.round(v / 2); //yes, round to integer
+				btn.style.paddingTop = v2 + "px";
+				btn.style.paddingBottom = (v - v2) + "px";
+			}
 		}
 
 		v = inp.offsetTop - btn.offsetTop;
