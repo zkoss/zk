@@ -738,7 +738,7 @@ zkWgt._fixdbtn = function (cmp) {
 			if (zk.gecko3) {
 				zk.addClass(btn, "inline-block");
 				var img = zk.firstChild(btn, "IMG");
-				if (img) img.style.marginTop = "1px";
+				if (img) img.style.marginTop = Math.round(v / 2) + "px";
 				btn.style.height = zk.revisedSize(btn, inp.offsetHeight, true) + "px";
 			} else {
 				var v2 = Math.round(v / 2); //yes, round to integer
