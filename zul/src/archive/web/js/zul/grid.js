@@ -442,7 +442,7 @@ zkGrwgp = {
 	},/** Opens an item */
 	_openItem: function (row, toOpen, silent) {
 		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
-		row._img.src = zk.rename(row._img.src, toOpen ? "open": "close");
+		if (row._img) row._img.src = zk.rename(row._img.src, toOpen ? "open": "close");
 		zkGrwgp._openItemNow(row, toOpen);
 		if (!silent) 
 			zkau.sendasap({uuid: row.id,
@@ -467,7 +467,9 @@ zkGrwgp = {
 		}
 		if (prev)
 			zk.addCleanupLater(function () {
-				zkGrwgp._openItem(prev, zkGrwgp.isOpen(prev), true);
+				prev = $e(prev.id);
+				if (prev)
+					zkGrwgp._openItem(prev, zkGrwgp.isOpen(prev), true);
 			}, false, row.id);
 	},
 	setAttr: function (cmp, nm, val) {

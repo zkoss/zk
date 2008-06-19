@@ -40,7 +40,7 @@ zkWnd2.init = function (cmp) {
 		if (!btn.style.cursor) btn.style.cursor = "default";
 	}
 
-	zk.listen(cmp, "mousemove", function (evt) {if(window.zkWnd2) zkWnd2.onmouseove(evt, cmp);});
+	zk.listen(cmp, "mousemove", function (evt) {if(window.zkWnd2) zkWnd2.onmouseover(evt, cmp);});
 		//FF: at the moment of browsing to other URL, listen is still attached but
 		//our js are unloaded. It causes JavaScript error though harmlessly
 		//This is a dirty fix (since onclick and others still fail but hardly happen)
@@ -61,8 +61,8 @@ zkWnd2.cleanup = function (cmp) {
 };
 /** Fixed the content div's height. */
 zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
-	zkWnd2._fixHgh(cmp);
 	zkWnd2._fixWdh(cmp);
+	zkWnd2._fixHgh(cmp);
 };
 zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 	if (zkWnd2._embedded(cmp) || !zk.isRealVisible(cmp)) return;
@@ -90,7 +90,7 @@ zkWnd2._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (zk.ie6Only && n.style.height) n.style.height = "0px";
 	if (hgh && hgh != "auto")
-		zk.setOffsetHeight(n, cmp.offsetHeight - zkWnd2.getFrameHeight(cmp));
+		zk.setOffsetHeight(n, cmp.offsetHeight - zkWnd2.getFrameHeight(cmp) - 1);
 	zkWnd2.syncShadow(cmp);
 };
 /**
@@ -337,7 +337,7 @@ zkWnd2._insizer = function (cmp, x, y) {
 		else if (b - y <= 5) return 5;
 	}
 };
-zkWnd2.onmouseove = function (evt, cmp) {
+zkWnd2.onmouseover = function (evt, cmp) {
 	var target = Event.element(evt);
 	if (zkWnd2.sizable(cmp)) {
 		var c = zkWnd2._insizer(cmp, Event.pointerX(evt), Event.pointerY(evt));
