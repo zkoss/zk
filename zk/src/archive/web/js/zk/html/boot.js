@@ -1244,7 +1244,7 @@ zk.beforeSizeAt = function (n) {
  * @since 3.0.5
  */
 zk.onScrollAt = function (n) {
-	if (zkVld) zkVld.onScrollAt(n); // Bug #1819264
+	if (zkau.valid) zkau.valid.onScrollAt(n); // Bug #1819264
 	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._scrlcmps, j = elms.length; --j >= 0;) { //parent first
 		var elm = $e(elms[j]);
