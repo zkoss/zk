@@ -39,7 +39,6 @@ public class PagingDefault implements ComponentRenderer {
 		final Paging self = (Paging) comp;
 		wh.write("<div id=\"").write(self.getUuid()).write("\" name=\"")
 			.write(self.getUuid()).write("\" z.type=\"zul.pg.Pg\"");
-		wh.write(" class=\"z-pagingbar\" ");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
 		wh.write("<table cellspacing=\"0\"><tbody><tr>");

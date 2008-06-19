@@ -32,7 +32,7 @@ import org.zkoss.zul.ext.Paginal;
 /**
  * Paging of long content.
  *
- * <p>Default {@link #getSclass}: paging.
+ * <p>Default {@link #getSclass}: z-paging. (since 3.1.0)
  *
  * @author tomyeh
  */
@@ -53,7 +53,7 @@ public class Paging extends XulElement implements Paginal {
 	private boolean _detailed;
 
 	public Paging() {
-		setSclass("paging");
+		setSclass("z-paging");
 	}
 
 	/** Contructor.

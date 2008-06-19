@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" name="${self.uuid}" class="z-pagingbar" z.type="zul.pg.Pg"${self.outerAttrs}${self.innerAttrs}>
+<div id="${self.uuid}" name="${self.uuid}" z.type="zul.pg.Pg"${self.outerAttrs}${self.innerAttrs}>
 <table cellspacing="0">
 	<tbody>
 		<tr>
