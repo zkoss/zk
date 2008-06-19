@@ -26,17 +26,23 @@ import java.util.Iterator;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
 
 /**
  * <p>An abstract composer that you can extend and write intuitive onXxx 
- * event handler methods with "auto-wired" fellow components; this class 
- * will registers onXxx events to the supervised component and wire its fellow 
- * components to this composer by calling setXxx() method or set xxx field 
- * value directly per the fellow component's id name.</p>
+ * event handler methods with "auto-wired" accessible variable objects such
+ * as embedded objects, components, and external resolvable variables in a ZK 
+ * zuml page; this class will registers onXxx events to the supervised 
+ * component and wire all accessible variable objects to this composer by 
+ * calling setXxx() method or set xxx field value directly per the variable 
+ * name.</p>
+ * 
+ * <p>Notice that since this composer kept references to the components, single
+ * instance object cannot be shared by multiple components.</p>
  *  
  * <p>The following is an example. The onOK event listener is registered into 
- * the target main window, and the Textbox component with id name "mytextbox" is
+ * the target window, and the Textbox component with id name "mytextbox" is
  * injected into the "mytextbox" field automatically (so you can use 
  * mytextbox variable directly in onOK).</p>
  * 
@@ -45,6 +51,8 @@ import org.zkoss.zk.ui.UiException;
  * 
  * public class MyComposer extends GenericAutowireComposer {
  *     private Textbox mytextbox;
+ *     private Window self; //embeded object, the supervised window "mywin"
+ *     private Page page; //the ZK zuml page
  *     
  *     public void onOK() {
  *         mytextbox.setValue("Enter Pressed");
@@ -53,7 +61,7 @@ import org.zkoss.zk.ui.UiException;
  * 
  * test.zul
  * 
- * &lt;window apply="MyComposer">
+ * &lt;window id="mywin" apply="MyComposer">
  *     &lt;textbox id="mytextbox"/>
  * &lt;/window>
  * </code></pre>
@@ -64,14 +72,15 @@ import org.zkoss.zk.ui.UiException;
  */
 abstract public class GenericAutowireComposer extends GenericComposer {
 	/**
-	 * Auto wire the fellow components to instance variabls; a subclass that 
+	 * Auto wire accessible variables of the specified component into a 
+	 * controller Java object; a subclass that 
 	 * override this method should remember to call super.doAfterCompose(comp) 
 	 * or it will not work.
 	 */
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		
-		//wire fellow components to instance variables
-		Components.wireFellows(comp, this);
+		//wire variables to reference fields
+		Components.wireVariables(comp, this);
 	}
 }
