@@ -22,8 +22,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="break" value=""/>
 <c:set var="verticalBreak" value="${self.orient == 'vertical' ? '<br/>': ''}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
+<div id="${self.uuid}!cave" class="${self.sclass}-body ${self.sclass}-${self.align}">
 	<c:forEach var="child" items="${self.children}">
 	${break}${z:redraw(child, null)}
 	<c:set var="break" value="${verticalBreak}"/>
 	</c:forEach>
-</div>
+</div><div class="z-clear"></div></div>

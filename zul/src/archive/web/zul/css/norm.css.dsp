@@ -109,6 +109,10 @@ input.z-form-focus, .z-form-focus input {
 	margin: 0; padding: 0; overflow: hidden; font-size: 0; line-height: 0;
 	border: 1px solid #99bbe8; display: block; background: #cbddf3;
 }
+<%-- Fix float issue for CSS --%>
+.z-clear {
+	clear: both; height: 0; overflow: hidden; line-height: 0; font-size: 0;
+}
 <%-- Shadow --%>
 .z-shadow {
 	display: none; position: absolute; overflow: hidden; left: 0; top: 0;
@@ -441,8 +445,9 @@ div.vsep-bar {
 
 <%-- ZK toolbar and toolbarbutton --%>
 .toolbar {
-	padding: 1px; background: #e0eaf7; border: 1px solid;
-	border-color: #f8fbff #aca899 #aca899 #f8fbff;
+	border-color: #a9bfd3; border-style: solid; border-width: 0 0 1px 0; display: block;
+	padding: 2px; background: #D0DEF0 url(${c:encodeURL('~./zul/img/button/tb-bg.gif')}) repeat-x top left;
+	position: relative; zoom: 1;
 }
 .caption .toolbar, .caption .toolbarbutton {
 	background: none; border: 0;
@@ -451,7 +456,7 @@ div.vsep-bar {
 .toolbar a, .toolbar a:visited, .toolbar a:hover {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: x-small; font-weight: normal; color: black;
-	background: #e0eaf7; border: 1px solid #e0eaf7;
+	background: #D0DEF0; border: 1px solid #D0DEF0;
 	text-decoration: none;
 }
 .toolbar a:hover {
@@ -483,6 +488,34 @@ td.lwt-embedded, td.mwt-embedded, td.rwt-embedded {
 	border-bottom: 1px solid #8aa3c1;
 }
 
+<%-- Toolbar Panel Mold--%>
+.toolbar-panel {
+	padding: 5px;
+}
+.toolbar-panel .toolbar-panel-body td {
+	border: 0; padding: 0;
+}
+.toolbar-panel .toolbar-panel-end table, .toolbar-end {
+	float: right; clear: none;
+}
+.toolbar-panel .toolbar-panel-start table, .toolbar-start {
+	float: left; clear: none;
+}
+.toolbar-panel .toolbar-panel-center, .toolbar-center {
+	text-align: center;
+}
+.toolbar-center {
+	display: table;
+}
+.toolbar-panel .toolbar-panel-center table, .toolbar-center {
+	margin: 0 auto;
+}
+.toolbar-panel table td.toolbar-panel-h {
+	padding: 3px;
+}
+.toolbar-panel table td.toolbar-panel-v {
+	padding: 1px;
+}
 <%-- ZK tree, listbox, grid --%>
 div.listbox, div.tree, div.grid {<%-- depends sclass --%>
 	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden;
@@ -601,7 +634,7 @@ tr.disd, td.disd, tr.disd div.cell-inner, td.disd div.cell-inner, tr.disd a, td.
 a.disd:visited, a.disd:hover { 
 	text-decoration: none !important;
 	cursor: default !important;;
-	border-color: #E0EAF7 !important;
+	border-color: #D0DEF0 !important;
 }
 tr.overd, td.overd {<%-- item onmouseover --%>
 	background: #D3EFFA;

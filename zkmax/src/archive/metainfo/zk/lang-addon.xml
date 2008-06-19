@@ -805,6 +805,10 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ToolbarDefault</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>panel</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.ToolbarpanelDefault</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>toolbarbutton</component-name>

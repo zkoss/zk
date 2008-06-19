@@ -37,10 +37,12 @@ public class ToolbarDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Toolbar self = (Toolbar) comp;
 		boolean shallBreak = self.getOrient().equals("vertical"), follow = false;
-		
-		wh.write("<div id=\"").write(self.getUuid()).write('"')
+		final String sclass = self.getSclass(), uuid = self.getUuid();
+		wh.write("<div id=\"").write(uuid).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>');
-
+		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
+			.write(sclass).write("-body ").write(sclass).write('-').write(self.getAlign())
+			.write("\">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			if (shallBreak)
 				if (follow) wh.writeln("<br/>");
@@ -48,6 +50,6 @@ public class ToolbarDefault implements ComponentRenderer {
 			((Component)it.next()).redraw(out);
 		}
 
-		wh.write("</div>");
+		wh.write("</div><div class=\"z-clear\"></div></div>");
 	}
 }

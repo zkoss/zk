@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F31-1997383.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 19 11:21:15 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="These buttons should center on the body of window." border="normal" width="500px">
+	<toolbar align="center" mold="panel">
+		<button label="button1" />
+		<button label="button2" />
+	</toolbar>
+</window>

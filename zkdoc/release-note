@@ -25,6 +25,8 @@ ZK 3.1.0
   1977343: The booting progress bar covers only ZK page if included
   1981878: Groupbox's default mold support open/close effect as 3d mold
   1990503: The blank text shall be preserved for some components
+  1997383: Provide a panel mold for Toolbar as Panel's foot toolbar
+  1997384: Toolbar support alignment control
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
