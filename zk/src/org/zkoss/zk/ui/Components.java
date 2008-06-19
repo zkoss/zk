@@ -20,17 +20,19 @@ package org.zkoss.zk.ui;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Collection;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Set;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.util.CollectionsX;
 
 /**
  * Utilities to access {@link Component}.
@@ -45,32 +47,45 @@ public class Components {
 	 * <p>Note: you cannot use Collections.sort to sort
 	 * {@link Component#getChildren} because Collections.sort might cause
 	 * some replicated item in the list.
+	 * @see #sort(List, int, int, Comparator)
 	 */
 	public static void sort(List list, Comparator cpr) {
-		final Object ary[] = list.toArray();
+		sort(list, 0, list.size(), cpr);
+	}
+	
+	/**
+	 * Sorts the components in the list.
+	 * @param list the list to be sorted
+	 * @param from the index of the first element (inclusive) to be sorted
+	 * @param to the index of the last element (exclusive) to be sorted
+	 * @param cpr the comparator to determine the order of the list.
+	 * @since 3.1.0
+	 */
+	public static void sort(List list, int from, int to, Comparator cpr) {
+		final Object ary[] = CollectionsX.toArray(list, from, to);
 		Arrays.sort(ary, cpr);
 
-		ListIterator it = list.listIterator();
-		int j = 0;
-		for (; it.hasNext(); ++j) {
+		ListIterator it = list.listIterator(from);
+		int j = 0, k = to - from;
+		for (; it.hasNext() && --k >= 0; ++j) {
 			if (it.next() != ary[j]) {
 				it.remove();
 
-				if (it.hasNext()) {
+				if (it.hasNext() && --k >= 0) {
 					if (it.next() == ary[j]) continue;
 					it.previous();
+					++k;
 				}
 				break;
 			}
 		}
-		while (it.hasNext()) {
+		while (it.hasNext() && --k >= 0) {
 			it.next();
 			it.remove();
 		}
 		for (; j < ary.length; ++j)
-			list.add(ary[j]);
+			list.add(from + j, ary[j]);
 	}
-
 	/** Tests whether node1 is an ancessor of node 2.
 	 * If node1 and node2 is the same, true is returned.
 	 */
@@ -265,66 +280,242 @@ public class Components {
 		}
 		return Path.getComponent(ref.getSpaceOwner(), path);
 	}
-
-	/** <p>Wire fellow components of the specified component into a POJO Java
-	 * object. This implementation checks the setXxx() methods first then the
-	 * field name. If a setXxx() method matches the fellow's id and with correct 
+	/** <p>Wire fellow components and space owner ancestors of the specified 
+	 * Id space into a controller Java object. This implementation checks the 
+	 * setXxx() method names first then the
+	 * field names. If a setXxx() method name matches the id of the fellow or
+	 * space owner ancestors and with correct 
 	 * argument type, the method is called with the fellow component as the 
 	 * argument. If no proper setXxx() method then search the field of the 
-	 * POJO object for a matched field with name equals to the fellow 
+	 * controller object for a matched field with name equals to the fellow 
 	 * component's id and proper type. Then the fellow component 
-	 * is assigned as the value of the field if the field value is null 
-	 * originally.</p> 
+	 * is assigned as the value of the field.</p> 
 	 * 
 	 * <p>This is useful in writing controller code in MVC design practice. You
-	 * can wire the page components into controller(the POJO object) per the
+	 * can wire the components into the controller object per the
 	 * component's id and do whatever you like.</p>
 	 * 
-	 * @param comp the component
-	 * @param pojo the POJO Java object to be injected the fellow components.
-	 * @see org.zkoss.zk.ui.util.GenericAutowireComposer
+	 * @param idspace the id space to be bound
+	 * @param controller the controller Java object to be injected the fellow components.
 	 * @since 3.0.6
 	 */
-	public static final void wireFellows(Component comp, Object pojo) {
-		final Collection fellows = comp.getFellows();
+	public static final void wireFellows(IdSpace idspace, Object controller) {
+		//inject space owner ancestors
+		IdSpace xidspace = idspace;
+		if (xidspace instanceof Component) {
+			while (true) {
+				final Component parent = ((Component)xidspace).getParent();
+				if (parent == null) {//hit page
+					inject(((Component)xidspace).getPage(), controller);
+					break;
+				}
+				xidspace = parent.getSpaceOwner();
+				inject(xidspace, controller);
+			}
+		} else {
+			inject((Page) idspace, controller);
+		}
+
+		//inject fellows
+		final Collection fellows = idspace.getFellows();
 		for(final Iterator it = fellows.iterator(); it.hasNext();) {
 			final Component xcomp = (Component) it.next();
-			inject(xcomp, pojo);
+			inject(xcomp, controller);
 		}
 	}
 		
-	private static void inject(Component comp, Object pojo) {
-		//try setXxx
-		final String fdname = comp.getId();
-		final String mdname = Classes.toMethodName(fdname, "set");
-		final Class compcls = comp.getClass();
-		final Class tgtcls = pojo.getClass();
-		try {
-			final Method md = 
-				Classes.getCloseMethod(tgtcls, mdname, new Class[] {compcls});
-			md.invoke(pojo, new Object[] {comp});
-		} catch (NoSuchMethodException ex) {
-			//no setXxx() method, try inject into Field
-			try {
-				final Field fd = Classes.getAnyField(tgtcls, fdname);
-				final boolean old = fd.isAccessible();
-				try {
-					fd.setAccessible(true);
-					final Class fdcls = fd.getType();
-					if (fdcls.isAssignableFrom(compcls) 
-					&& fd.get(pojo) == null) { //correct type && null
-						fd.set(pojo, comp);
+	/** <p>Wire accessible variable objects of the specified component into a 
+	 * controller Java object. This implementation checks the 
+	 * setXxx() method names first then the field names. If a setXxx() method 
+	 * name matches the name of the resolved variable object with correct 
+	 * argument type, the method is called with the resolved variable 
+	 * object as the argument. If no proper setXxx() method then search the 
+	 * field name of the controller object. If the field name matches the name
+	 * of the resolved variable object and with correct field type, the field
+	 * is then assigned the resolved variable object.</p> 
+	 * 
+	 * <p>This is useful in writing controller code in MVC design practice. You
+	 * can wire the embedded objects, components, and accessible variables into 
+	 * the controller object per the components' id and variables' name and do 
+	 * whatever you like.
+	 * </p>
+	 * 
+	 * @param comp the reference component to wire variables
+	 * @param controller the controller Java object to be injected the 
+	 * accessible variable objects.
+	 * @see org.zkoss.zk.ui.util.GenericAutowireComposer
+	 * @since 3.0.6
+	 */
+	public static final void wireVariables(Component comp, Object controller) {
+		Class cls = controller.getClass();
+		//check methods
+		final Set injected = new HashSet();
+		Method[] mtds = cls.getMethods();
+		for (int j = 0; j < mtds.length; ++j) {
+			final Method md = mtds[j];
+			final String mdname = md.getName();
+			if (mdname.length() > 3 && mdname.startsWith("set") 
+			&& Character.isUpperCase(mdname.charAt(3))) {
+				final String fdname = Classes.toAttributeName(mdname);
+				final Class[] parmcls = md.getParameterTypes();
+				if (parmcls.length == 1) {
+					if ("self".equals(fdname)) { //special case
+						final Object arg = comp;
+						final Class argcls = comp.getClass();
+						final Class fdcls = parmcls[0]; 
+						if (fdcls.isAssignableFrom(argcls)) {
+							try {
+								md.invoke(controller, new Object[] {arg});
+								injected.add(fdname); //mark as injected
+							} catch (Exception ex) {
+								throw UiException.Aide.wrap(ex);
+							}
+						}
+					} else if (comp.containsVariable(fdname, false)) {
+						final Object arg = comp.getVariable(fdname, false);
+						final Class argcls = arg == null ? null : arg.getClass();
+						final Class fdcls = parmcls[0]; 
+						if (argcls == null || fdcls.isAssignableFrom(argcls)) {
+							try {
+								md.invoke(controller, new Object[] {arg});
+								injected.add(fdname); //mark as injected
+							} catch (Exception ex) {
+								throw UiException.Aide.wrap(ex);
+							}
+						}
 					}
-				} finally {
-					fd.setAccessible(old);
 				}
-			} catch (NoSuchFieldException e) {
-				//ignore
-			} catch (Exception ex2) {
-				throw UiException.Aide.wrap(ex2);
 			}
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex);
+		}
+		
+		//check fields
+		do {
+			Field[] flds = cls.getDeclaredFields();
+			for (int j = 0; j < flds.length; ++j) {
+				final Field fd = flds[j];
+				final String fdname = fd.getName();
+				if (!injected.contains(fdname)) { //if not injected by setXxx
+					if ("self".equals(fdname)) { //special case
+						injectField(comp, comp.getClass(), controller, fd);
+					} else if (comp.containsVariable(fdname, false)) {
+						final Object arg = comp.getVariable(fdname, false);
+						final Class argcls = arg == null ? null : arg.getClass();
+						injectField(arg, argcls, controller, fd);
+					}
+				}
+			}
+			cls = cls.getSuperclass();
+		} while (cls != null && !Object.class.equals(cls));
+	}
+	
+	/** <p>Wire accessible variables of the specified page into a 
+	 * controller Java object. This implementation checks the 
+	 * setXxx() method names first then the field names. If a setXxx() method 
+	 * name matches the name of the resolved variable object with correct 
+	 * argument type, the method is called with the resolved variable 
+	 * object as the argument. If no proper setXxx() method then search the 
+	 * field name of the controller object. If the field name matches the name
+	 * of the resolved variable object and with correct field type, the field
+	 * is then assigned the resolved variable object.</p> 
+	 * 
+	 * <p>This is useful in writing controller code in MVC design practice. You
+	 * can wire the embedded objects, components, and accessible variables into 
+	 * the controller object per the component's id and variable name and do 
+	 * whatever you like.
+	 * </p>
+	 * 
+	 * @param page the reference page to wire variables
+	 * @param controller the controller Java object to be injected the fellow components.
+	 * @since 3.0.6
+	 */
+	public static final void wireVariable(Page page, Object controller) {
+		Class cls = controller.getClass();
+		//check methods
+		final Set injected = new HashSet();
+		Method[] mtds = cls.getMethods();
+		for (int j = 0; j < mtds.length; ++j) {
+			final Method md = mtds[j];
+			final String mdname = md.getName();
+			if (mdname.length() > 3 && mdname.startsWith("set") 
+			&& Character.isUpperCase(mdname.charAt(3))) {
+				final String fdname = Classes.toAttributeName(mdname);
+				final Class[] parmcls = md.getParameterTypes();
+				if (parmcls.length == 1) {
+					if (page.containsVariable(fdname)) {
+						final Object arg = page.getVariable(fdname);
+						final Class argcls = arg == null ? null : arg.getClass();
+						final Class fdcls = parmcls[0]; 
+						if (argcls == null || fdcls.isAssignableFrom(argcls)) {
+							try {
+								md.invoke(controller, new Object[] {arg});
+								injected.add(fdname); //mark as injected
+							} catch (Exception ex) {
+								throw UiException.Aide.wrap(ex);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//check fields
+		do {
+			Field[] flds = cls.getDeclaredFields();
+			for (int j = 0; j < flds.length; ++j) {
+				final Field fd = flds[j];
+				final String fdname = fd.getName();
+				if (!injected.contains(fdname)) { //if not injected by setXxx
+					if (page.containsVariable(fdname)) {
+						final Object arg = page.getVariable(fdname);
+						final Class argcls = arg == null ? null : arg.getClass();
+						injectField(arg, argcls, controller, fd);
+					}
+				}
+			}
+			cls = cls.getSuperclass();
+		} while (cls != null && !Object.class.equals(cls));
+	}
+	
+	private static void inject(Object comp, Object injectee) {
+		//try setXxx
+		final String fdname = (comp instanceof Page) ? 
+				((Page)comp).getId() : ((Component)comp).getId();
+		if (!isAutoId(fdname)) {
+			final String mdname = Classes.toMethodName(fdname, "set");
+			final Class compcls = comp.getClass();
+			final Class tgtcls = injectee.getClass();
+			try {
+				final Method md = 
+					Classes.getCloseMethod(tgtcls, mdname, new Class[] {compcls});
+				md.invoke(injectee, new Object[] {comp});
+			} catch (NoSuchMethodException ex) {
+				//no setXxx() method, try inject into Field
+				try {
+					final Field fd = Classes.getAnyField(tgtcls, fdname);
+					injectField(comp, compcls, injectee, fd);
+				} catch (NoSuchFieldException e) {
+					//ignore
+				} catch (Exception ex2) {
+					throw UiException.Aide.wrap(ex2);
+				}
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+	}
+	
+	private static void injectField(Object comp, Class compcls, Object injectee, Field fd) {
+		final boolean old = fd.isAccessible();
+		try {
+			fd.setAccessible(true);
+			final Class fdcls = fd.getType();
+			if (compcls == null || fdcls.isAssignableFrom(compcls)) { //correct type 
+				fd.set(injectee, comp);
+			}
+		} catch (Exception e) {
+			throw UiException.Aide.wrap(e);
+		} finally {
+			fd.setAccessible(old);
 		}
 	}
 }
