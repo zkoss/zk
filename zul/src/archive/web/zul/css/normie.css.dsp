@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/norm.css.dsp"/>
 <c:choose>
-<c:when  test="${empty c:getProperty('org.zkoss.zul.theme.disableZKPrefix')}">
+<c:when  test="${!empty c:getProperty('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk img	{
 	hspace: 0; vspace: 0
 }

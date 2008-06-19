@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/normie.css.dsp"/>
 <c:choose>
-<c:when  test="${empty c:getProperty('org.zkoss.zul.theme.disableZKPrefix')}">
+<c:when  test="${!empty c:getProperty('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
 .zk button, .zk legend, .zk input.button, .zk input.file {
 	font-size: medium;

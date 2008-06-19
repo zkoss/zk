@@ -211,9 +211,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</system-property>
 	-->
 	
-	<!-- Configure ZUL not to apply the zk prefix in the css file.
+	<!-- Configure ZUL to apply the zk prefix in the css file.
 	<system-property>
-		<name>org.zkoss.zul.theme.disableZKPrefix</name>
+		<name>org.zkoss.zul.theme.enableZKPrefix</name>
 		<value>true</value>
 	</system-property>
 	-->
