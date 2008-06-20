@@ -19,7 +19,6 @@ zkColumnLayout = {
 	
 	init: function(cmp) {
 		zkColumnLayout.onVisi = zkColumnLayout.onSize;
-		zkColumnLayout.childChange = zkColumnLayout.onSize;
 	},
 	
 	onSize: function(cmp) {
@@ -72,7 +71,7 @@ zkColumnLayout = {
 			if (widx > 0) {
 				var percentage_width = $int(child._width.substring(0, widx));
 				var result = (Math.floor(percentage_width / 100 * pw) - zk.getFrameWidth(child));
-				child.style.width = result > 0 ? result + "px" : "0px";
+				child.style.width = (result > 0 ? result : 0) + "px";
 			}
 		}
 	}
@@ -82,9 +81,6 @@ zkColumnChildren = {
 	init: function(cmp){
 		cmp = $real(cmp);
 		cmp._width = cmp.style.width;
-		
-//		var layout = $parentByType(cmp, "ColumnLayout");
-//		zkColumnLayout.render(layout);
 	},
 	
 	cleanup: function(cmp){
