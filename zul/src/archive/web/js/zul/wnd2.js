@@ -63,6 +63,11 @@ zkWnd2.cleanup = function (cmp) {
 zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 	zkWnd2._fixWdh(cmp);
 	zkWnd2._fixHgh(cmp);
+	zkWnd2.syncShadow(cmp);
+};
+zkWnd2.onHide = function(cmp) {
+	var sw = zkWnd2.getShadow(cmp);
+	if (sw) sw.hide();
 };
 zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 	if (zkWnd2._embedded(cmp) || !zk.isRealVisible(cmp)) return;
@@ -91,7 +96,6 @@ zkWnd2._fixHgh = function (cmp) {
 	if (zk.ie6Only && n.style.height) n.style.height = "0px";
 	if (hgh && hgh != "auto")
 		zk.setOffsetHeight(n, cmp.offsetHeight - zkWnd2.getFrameHeight(cmp) - 1);
-	zkWnd2.syncShadow(cmp);
 };
 /**
  * Returns the height of the framing elements.
@@ -266,13 +270,13 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			zk.onSizeAt(cmp); // Note: IE6 is broken, because its offsetHeight doesn't update.
 		} else {
 			zkWnd2._fixHgh(cmp);
+			zkWnd2.syncShadow(cmp);
 		}
 		return true;
 	case "style.width":
 		zkau.setAttr(cmp, nm, val);
 		zk.beforeSizeAt(cmp);
 		zk.onSizeAt(cmp);
-		zkWnd2.syncShadow(cmp);
 		return true;
 	case "style.top":
 	case "style.left":
