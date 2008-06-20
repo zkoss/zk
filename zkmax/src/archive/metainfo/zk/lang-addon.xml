@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>
+	
+	<stylesheet href="~./zkmax/zul/css/column-layout*.css.dsp*" type="text/css"/>
 
 	<version>
 		<version-class>org.zkoss.zkmax.Version</version-class>
@@ -218,11 +220,27 @@ def alert(m):
 		<extends>column</extends>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.Column2Default</mold-uri>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.ColumnDefault</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ColumnDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>columnchildren</component-name>
+		<component-class>org.zkoss.zkmax.zul.Columnchildren</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.ColumnchildrenDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>columnlayout</component-name>
+		<component-class>org.zkoss.zkmax.zul.Columnlayout</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.ColumnlayoutDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
