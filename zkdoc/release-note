@@ -1,7 +1,7 @@
 	--------
 ZK 3.1.0
 * Features
-	1973888: Listbox support Listgroupfoot in Group
+  1973888: Listbox support Listgroupfoot in Group
   1972591: Grid support Groupfoot in Group
   1907300: Listbox: support grouping
   1959952: Support Comet-based Server Push
