@@ -79,6 +79,9 @@ zkTmbox.setAttr = function (cmp, nm, val) {
 		}else{
 			zkTmbox._clearTime(cmp);
 		}
+		var real = $real(cmp); // Bug 1948963 (related to 1998417).
+		if (real.defaultValue != real.value)
+			real.defaultValue = real.value;
 		return true;
 	}else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
@@ -394,8 +397,7 @@ zkTmbox._clearTime = function(cmp){
 	cmp.lastTimeStr = "";
 	cmp.lastTime.setHours(0);
 	cmp.lastTime.setMinutes(0);
-	var real = $real(cmp);
-	real.value = real.defaultValue = "";
+	$real(cmp).value = "";
 	return true;
 };
 zkTmbox.clearTime = function(cmp){
