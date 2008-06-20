@@ -1186,7 +1186,7 @@ zkau._onDocLClick = function (evt) {
 			var ctx = getZKAttr(cmp, "pop");
 			if (ctx) {
 				ctx = zkau.getByZid(cmp, ctx);
-				if (ctx && (!zkau._lastClickId || zkau._lastClickId == zkau._getRealTargetId(target))) {
+				if (ctx && (!zkau._lastClickId || zkau._lastClickId == $id(target))) {
 					var type = $type(ctx);
 					if (type) {
 						zkau.closeFloats(ctx, cmp);
@@ -1209,11 +1209,6 @@ zkau._onDocLClick = function (evt) {
 		}
 	}
 	//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
-};
-zkau._getRealTargetId = function (target) {
-	for (;; target = $parent(target))
-	if (!target) return null;
-	else if (target.id) return target.id;
 };
 /** Saves the mouse position to be used with insamepos. */
 zkau._savepos = function (evt) {

@@ -307,6 +307,17 @@ function $uuid(n) {
 	var j = n.lastIndexOf('!');
 	return j > 0 ? n.substring(0, j): n;
 }
+/**
+ * Returns the id of the first element which can be found from its parent node, inclusive itself.
+ * Otherwise, "" is assumed. 
+ * @param {Object} n an element.
+ * @since 3.0.6
+ */
+function $id(n) {
+	for (; n; n = $parent(n))
+		if (n.id) return n.id;
+	return ""; 
+}
 /** Returns the real element (ends with !real).
  * If a component's attributes are located in the inner tag, i.e.,
  * you have to surround it with span or other tag, you have to place
