@@ -330,7 +330,10 @@ public class ClassWebResource {
 		//NOTE: Unlike DspExtendlet, the output stream is always UTF-8
 		//since we load the source directly.
 
-		if (!Servlets.isIncluded(request) && isCharsetRequired(ext)) {
+		if (!Servlets.isIncluded(request)) {
+			//Bug 1998613: we have to set content type to avoid Apache's bug
+			//Apache sets content-type automatically if not set
+			//but if jsessionid is part of URL, Apache thought it is text/plain
 			String ctype = ContentTypes.getContentType(ext);
 			if (ctype == null) {
 				ctype = ";charset=UTF-8";
@@ -338,7 +341,8 @@ public class ClassWebResource {
 				final int k = ctype.indexOf(';');
 				if (k >= 0)
 					ctype = ctype.substring(0, k);
-				ctype += ";charset=UTF-8";
+				if (!ContentTypes.isBinary(ctype))
+					ctype += ";charset=UTF-8";
 			}
 
 			response.setContentType(ctype);
@@ -347,7 +351,7 @@ public class ClassWebResource {
 		byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
 		InputStream is = null;
 
-		if (_debugJS && pi.endsWith(".js")) {
+		if (_debugJS && "js".equals(ext)) {
 			final String orgpi = Servlets.locate(_ctx, request,
 				pi.substring(0, pi.length() - 3) + ".org.js",
 				_cwc.getLocator());
@@ -397,15 +401,6 @@ public class ClassWebResource {
 				if (ext.equals(_compressExts[j]))
 					return true;
 		return false;
-	}
-	private static boolean isCharsetRequired(String ext) {
-		return !_binexts.contains(ext);
-	}
-	private static final Set _binexts = new HashSet();
-	static {
-		final String[] exts = {"jpg", "jpeg", "png", "gif", "pdf", "mpg", "avi"};
-		for (int j = exts.length; --j >= 0;)
-			_binexts.add(exts[j]);
 	}
 
 	/**

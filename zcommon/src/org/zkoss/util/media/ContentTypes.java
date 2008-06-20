@@ -45,6 +45,16 @@ public class ContentTypes {
 
 	protected ContentTypes() {} //prevent from initializing
 
+	/** Returns whether the content type is binary.
+	 * @param ctype the content type, e.g., text/plain
+	 * If ctype is null or empty, false is returned.
+	 * @since 3.0.6
+	 */
+	public static final boolean isBinary(String ctype) {
+		return ctype != null && ctype.length() > 0
+			&& !ctype.startsWith("text/") && ctype.indexOf("script") < 0;
+	}
+
 	/** Returns the content type of the specified format,
 	 * such as "html" and "pdf", or null if not found (or format is null).
 	 */

@@ -833,13 +833,10 @@ public class Servlets {
 		}
 	}
 
-	/** Returns the file extension of the specified path, or null
-	 * if no extension at all.
+	/** Returns the file extension of the specified path (excluding dot),
+	 * or null if no extension at all.
 	 *
 	 * <p>Note: the extension is converted to the lower case.
-	 *
-	 * <p>Note: it assumes the session ID, if any, starts with semicolon.
-	 * For example, the path could be "/a/b.zul;jsession=xxx".
 	 *
 	 * @param path the path. If path is null, null is returned.
 	 * @since 2.4.1
@@ -847,11 +844,9 @@ public class Servlets {
 	public static final String getExtension(String path) {
 		if (path != null) {
 			int j = path.lastIndexOf('.');
-			if (j >= 0 && path.indexOf('/', j + 1) < 0) {
-				final String ext = path.substring(j + 1);
-				j = ext.indexOf(';');
-				return j >= 0 ? ext.substring(0, j).toLowerCase(): ext.toLowerCase();
-			}
+			if (j >= 0 && path.indexOf('/', j + 1) < 0)
+				return path.substring(j + 1).toLowerCase();
+				//don't worry jsessionid since it is handled by container
 		}
 		return null;
 	}
