@@ -23,7 +23,6 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zkex.zul.Borderlayout;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
@@ -32,35 +31,11 @@ import org.zkoss.zul.impl.XulElement;
  * @author liwn
  */
 public class Columnchildren extends XulElement {
-	private boolean _flex = true;
 	private int[] _margins = new int[] { 0, 0, 0, 0 };
 
 	public Columnchildren() {
 		super();
 		setSclass("z-plain z-column-children");
-	}
-
-	/**
-	 * Returns whether to grow and shrink vertical/horizontal to fit their given
-	 * space, so called flexibility.
-	 * 
-	 * <p>
-	 * Default: false.
-	 */
-	public final boolean isFlex() {
-		return _flex;
-	}
-
-	/**
-	 * Sets whether to grow and shrink vertical/horizontal to fit their given
-	 * space, so called flexibility.
-	 * 
-	 */
-	public void setFlex(boolean flex) {
-		if (_flex != flex) {
-			_flex = flex;
-			invalidate();
-		}
 	}
 
 	/**
@@ -95,9 +70,6 @@ public class Columnchildren extends XulElement {
 		final StringBuffer sb = new StringBuffer(80).append(super
 				.getOuterAttrs());
 		appendAsapAttr(sb, Events.ON_SIZE);
-		HTMLs.appendAttribute(sb, "z.cid", getChildren().isEmpty() ? "zk_n_a"
-				: ((Component) getChildren().get(0)).getUuid());
-		HTMLs.appendAttribute(sb, "z.flex", isFlex());
 		HTMLs.appendAttribute(sb, "z.mars", getMargins());
 		return sb.toString();
 	}
