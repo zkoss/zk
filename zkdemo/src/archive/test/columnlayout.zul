@@ -19,13 +19,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<columnlayout>
-		<columnchildren width="40%" margins="10,5,8,15">
+		<columnchildren width="40%">
 			<spinner/>
 		</columnchildren>
 		<columnchildren width="20%">
 			<progressmeter value="30" />
 		</columnchildren>
-		<columnchildren width="300px" margins="5,5,5,5">
+		<columnchildren width="300px">
 			<progressmeter value="30" />
 		</columnchildren>
 	</columnlayout>
