@@ -14,15 +14,11 @@
     zoom: 1;
 }
 
-.z-plain-body {
+.z-column-children-body {
     overflow: hidden;
 }
 
-.z-plain-bwrap {
+.z-column-children-bwrap {
     overflow: hidden;
     zoom: 1;
-}
-
-.z-plain {
-    overflow: hidden;
 }

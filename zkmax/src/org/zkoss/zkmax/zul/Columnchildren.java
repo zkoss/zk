@@ -32,7 +32,7 @@ public class Columnchildren extends XulElement {
 
 	public Columnchildren() {
 		super();
-		setSclass("z-plain z-column-children");
+		setSclass("z-column-children");
 	}
 
 	public void setParent(Component parent) {

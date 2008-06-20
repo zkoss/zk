@@ -41,9 +41,9 @@ public class ColumnchildrenDefault implements ComponentRenderer {
 				" z.type=\"zkmax.zul.columnlayout.ColumnChildren\">");
 		wh.write("<div id=\"").write(self.getUuid()).write("!real\"").write(
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<div class=\"z-plain-bwrap\">");
+		wh.write("<div class=\"" + self.getSclass() + "-bwrap\">");
 		wh.write("<div id=\"").write(self.getUuid()).write(
-				"!cave\" class=\"z-plain-body\">");
+				"!cave\" class=\"" + self.getSclass() + "-body\">");
 		wh.writeChildren(self);
 		wh.write("</div></div></div></div>");
 	}
