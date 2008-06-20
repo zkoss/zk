@@ -34,6 +34,7 @@ import org.zkoss.lang.D;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.util.media.ContentTypes;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
@@ -140,7 +141,7 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 			String ctype = Interpreter.getContentType(path);
 			if (ctype == null)
 				ctype = ";charset=UTF-8";
-			else if (ctype.indexOf(';') < 0)
+			else if (ctype.indexOf(';') < 0 && !ContentTypes.isBinary(ctype))
 				ctype += ";charset=UTF-8";
 			return new Interpreter()
 				.parse(content, ctype, null, _webctx.getLocator());

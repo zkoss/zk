@@ -65,6 +65,7 @@ ZK 3.0.6
   1995373: Intbox can't only be entered a % sign
   1996625: A dead listener, say, ExecutionInit, stall ZK execution
   1998417: Timebox doesn't update after clean the text
+  1998613: Content-type for ~./img/spacer.gif is wrong with Apache
 
 * Upgrade Notes:
   + The default CSS style of a page becomes "width:100%" (rather than
