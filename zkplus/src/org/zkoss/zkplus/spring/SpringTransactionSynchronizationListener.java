@@ -18,6 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.spring;
 
+import org.zkoss.zkplus.util.ThreadLocals;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Execution;
@@ -29,7 +30,6 @@ import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.ThreadLocals;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 
