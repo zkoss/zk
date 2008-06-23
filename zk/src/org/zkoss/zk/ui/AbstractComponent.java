@@ -39,6 +39,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
+import org.zkoss.io.PrintWriterX;
 import org.zkoss.io.Serializables;
 import org.zkoss.xml.HTMLs;
 
@@ -1182,8 +1183,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((ComponentRenderer)mold)
 				.render(this, out != null ? out: ZkFns.getCurrentOut());
 		} else {
-			final StringBuffer buf = out instanceof StringWriter ?
-				((StringWriter)out).getBuffer(): null;
+			final StringBuffer buf;
+			if (out instanceof StringWriter) {
+				buf = ((StringWriter)out).getBuffer();
+			} else if (out instanceof PrintWriterX) {
+				Writer w = ((PrintWriterX)out).getOrigin();
+				buf = w instanceof StringWriter ? ((StringWriter)w).getBuffer(): null;
+			} else {
+				buf = null;
+			}
+
 			final int index = buf != null ? buf.length(): 0;
 
 			final Map attrs = new HashMap(2);

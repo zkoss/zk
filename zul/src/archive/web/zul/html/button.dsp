@@ -19,13 +19,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<c:choose>
+<c:choose trim="true">
 <c:when test="${!self.imageAssigned && c:isSafari()}">
 <input type="button" id="${self.uuid}" z.type="zul.widget.Button" value="${self.label}"${self.outerAttrs}${self.innerAttrs}/>
 </c:when>
 <c:otherwise>
 <button type="button" id="${self.uuid}" z.type="zul.widget.Button"${self.outerAttrs}${self.innerAttrs}>
-<c:choose>
+<c:choose trim="true">
 <c:when test="${self.dir == 'reverse'}">
 	<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
 </c:when>

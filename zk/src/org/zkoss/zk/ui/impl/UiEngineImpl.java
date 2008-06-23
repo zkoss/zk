@@ -897,7 +897,7 @@ public class UiEngineImpl implements UiEngine {
 			&& (request = rque.nextRequest()) != null;) {
 				//Cycle 1: Process one request
 				//Don't process more such that requests will be queued
-				//adn we have the chance to optimize them
+				//and we have the chance to optimize them
 				try {
 					process(exec, request, !errs.isEmpty());
 				} catch (ComponentNotFoundException ex) {

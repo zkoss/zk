@@ -39,7 +39,7 @@ public class ForEach extends AbstractAction {
 	private String _var, _varStatus;
 	private Object _items;
 	private int _beg = 0, _end = Integer.MAX_VALUE;
-	private boolean _trim = true;
+	private boolean _trim;
 	private boolean _endSpecified, _itemsSpecified;
 
 	/** Returns the variable name used to iterate thru items. */

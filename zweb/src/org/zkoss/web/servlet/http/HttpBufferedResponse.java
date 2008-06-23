@@ -30,6 +30,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.zkoss.io.PrintWriterX;
 import org.zkoss.web.servlet.ServletOutputStreamWrapper;
 
 /**
@@ -105,10 +106,10 @@ public class HttpBufferedResponse extends HttpServletResponseWrapper {
 				if (_writer instanceof PrintWriter) {
 					_pwt = (PrintWriter)_writer;
 				} else {
-					_pwt = new PrintWriter(_writer);
+					_pwt = new PrintWriterX(_writer);
 				}
 			} else {
-				_pwt = new PrintWriter(new OutputStreamWriter(
+				_pwt = new PrintWriterX(new OutputStreamWriter(
 					_stream, getCharacterEncoding()));
 			}
 		}

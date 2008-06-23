@@ -65,21 +65,21 @@ public class Strings {
 	 * @since 3.0.4
 	 */
 	public static final StringBuffer trim(StringBuffer buf,
-	int index) {
-		for (int k = index, len = buf.length();; ++index) {
-			if (index >= len) {
-				buf.delete(k, len);
+	final int index) {
+		for (int j = index, len = buf.length();; ++j) {
+			if (j >= len) {
+				buf.delete(index, len);
 				break; //done
 			}
 
-			char cc = buf.charAt(index);
+			char cc = buf.charAt(j);
 			if (cc > ' ') { //same as String.trim()
-				buf.delete(k, index);
+				buf.delete(index, j);
 
-				for (len = index = buf.length(); --index > k;) {
-					cc = buf.charAt(index);
+				for (len = j = buf.length(); --j >= index;) {
+					cc = buf.charAt(j);
 					if (cc > ' ') { //same as String.trim()
-						buf.delete(index + 1, len);
+						buf.delete(j + 1, len);
 						break;
 					}
 				}

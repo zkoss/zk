@@ -31,7 +31,7 @@ import org.zkoss.web.servlet.ServletException;
  * @author tomyeh
  */
 public class If extends AbstractAction {
-	private boolean _cond, _trim = true;
+	private boolean _cond, _trim;
 
 	/** Returns the test result. */
 	public boolean getTest() {

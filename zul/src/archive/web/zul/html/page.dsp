@@ -32,9 +32,7 @@ ${z:outHeaders(page)}
 <body${c:attr('style', page.style)}>
 </c:if>
 <div${z:outPageAttrs(page)}>
-<c:forEach var="root" items="${page.roots}">
-${z:redraw(root, null)}
-</c:forEach>
+<c:forEach var="root" items="${page.roots}">${z:redraw(root, null)}</c:forEach>
 </div>
 <c:if test="${!empty arg.responses}">
 <script type="text/javascript">

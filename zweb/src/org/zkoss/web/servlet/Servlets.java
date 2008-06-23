@@ -388,7 +388,8 @@ public class Servlets {
 	 * Tests whether this page is forwarded by another page.
 	 */
 	public static final boolean isForwarded(ServletRequest request) {
-		return request.getAttribute(Attributes.FORWARD_CONTEXT_PATH) != null;
+		return request.getAttribute(Attributes.FORWARD_CONTEXT_PATH) != null
+		|| request.getAttribute("org.zkoss.web.servlet.forward") != null;
 	}
 	/**
 	 * Forward to the specified URI.

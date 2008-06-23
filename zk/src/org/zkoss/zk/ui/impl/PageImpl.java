@@ -786,7 +786,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	public void redraw(Collection responses, Writer out) throws IOException {
-		if (log.debugable()) log.debug("Redrawing page: "+this+", roots="+_roots);
+//		if (log.debugable()) log.debug("Redrawing page: "+this+", roots="+_roots);
 
 		final Execution exec = getExecution();
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;

@@ -35,9 +35,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 </table></td>
 </tr>
 
-	<c:forEach var="child" items="${self.children}">
-	${z:redraw(child, null)}
-	</c:forEach>
+	<c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach>
 
 <tr style="display:none" id="${self.uuid}!child"><td></td></tr><%-- bookmark for adding children --%>
 

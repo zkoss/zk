@@ -192,44 +192,52 @@ public class ExecutionImpl extends AbstractExecution {
 
 	public void include(Writer out, String page, Map params, int mode)
 	throws IOException {
-		final HttpServletResponse bufresp =
-			HttpBufferedResponse.getInstance(_response, out);
 		try {
-			//FUTURE: handle if ~./, PASS_THRU_ATTR and with query string
-			//In other words, we convert query string to params if
-			//PASS_THRU_ATTR and ~./ (to have a better performance)
-			if ((mode == PASS_THRU_ATTR || params == null)
-			&& page.startsWith("~./") && page.indexOf('?') < 0) {
-				//Bug 1801028: We cannot invoke ZumlExtendlet directly
-				//The real reason is unknown yet -- it could be due to
-				//the re-creation of ExecutionImpl
-				//However, the performance is not a major issue, so just skip
-				final ClassWebResource cwr =
-					WebManager.getWebManager(_ctx).getClassWebResource();
-				if (!isZumlExtendlet(cwr, page)) {
-					Object old = null;
-					if (mode == PASS_THRU_ATTR) {
-						old = _request.getAttribute(Attributes.ARG);
-						_request.setAttribute(Attributes.ARG, params);
-					}
-
-					_request.setAttribute("org.zkoss.web.servlet.include", Boolean.TRUE);
-						//so Servlets.isIncluded returns correctly
-					try {
-						cwr.service(_request, bufresp, page.substring(2));
-						return; //done
-					} finally {
-						_request.removeAttribute("org.zkoss.web.servlet.include");
-						if (mode == PASS_THRU_ATTR)
-							_request.setAttribute(Attributes.ARG, old);
-					}
-				}
-			}
-
-			Servlets.include(_ctx, _request, bufresp, page, params, mode);
+			if (!dispatch(out, page, params, mode, true))
+				Servlets.include(_ctx, _request,
+					HttpBufferedResponse.getInstance(_response, out),
+					page, params, mode);
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}
+	}
+	private boolean dispatch(Writer out, String page, Map params, int mode,
+	boolean include) throws IOException, ServletException {
+		//FUTURE: handle if ~./, PASS_THRU_ATTR and with query string
+		//In other words, we convert query string to params if
+		//PASS_THRU_ATTR and ~./ (to have a better performance)
+		if ((mode != PASS_THRU_ATTR && params != null)
+		|| !page.startsWith("~./") || page.indexOf('?') >= 0)
+			return false;
+
+		//Bug 1801028: We cannot invoke ZumlExtendlet directly
+		//The real reason is unknown yet -- it could be due to
+		//the re-creation of ExecutionImpl
+		//However, the performance is not a major issue, so just skip
+		final ClassWebResource cwr =
+			WebManager.getWebManager(_ctx).getClassWebResource();
+		final String attrnm = include ?
+			"org.zkoss.web.servlet.include": "org.zkoss.web.servlet.forward";
+		if (!isZumlExtendlet(cwr, page)) {
+			Object old = null;
+			if (mode == PASS_THRU_ATTR) {
+				old = _request.getAttribute(Attributes.ARG);
+				_request.setAttribute(Attributes.ARG, params);
+			}
+
+			_request.setAttribute(attrnm, Boolean.TRUE);
+				//so Servlets.isIncluded returns correctly
+			try {
+				cwr.service(_request,
+					HttpBufferedResponse.getInstance(_response, out),
+					page.substring(2));
+			} finally {
+				_request.removeAttribute(attrnm);
+				if (mode == PASS_THRU_ATTR)
+					_request.setAttribute(Attributes.ARG, old);
+			}
+		}
+		return true;
 	}
 	/** Returns whether the specified extension is served by
 	 * {@link ZumlExtendlet}.
@@ -250,9 +258,10 @@ public class ExecutionImpl extends AbstractExecution {
 		setVoided(true);
 
 		try {
-			Servlets.forward(_ctx, _request,
-				HttpBufferedResponse.getInstance(_response, out),
-				page, params, mode);
+			if (!dispatch(out, page, params, mode, false))
+				Servlets.forward(_ctx, _request,
+					HttpBufferedResponse.getInstance(_response, out),
+					page, params, mode);
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}

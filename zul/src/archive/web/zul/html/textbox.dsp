@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<c:choose>
+<c:choose trim="true">
 <c:when test="${self.multiline}"><%-- textarea doesn't support maxlength --%>
 <textarea id="${self.uuid}" z.type="zul.widget.Txbox"${self.outerAttrs}${self.innerAttrs}>${self.areaText}</textarea>
 </c:when>

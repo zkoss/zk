@@ -31,7 +31,7 @@ import org.zkoss.web.servlet.ServletException;
  * @author tomyeh
  */
 public class Choose extends AbstractAction {
-	private boolean _matched, _trim = true;
+	private boolean _matched, _trim;
 
 	/** Returns whether any child {@link When} is evaluated to true. */
 	/*package*/ boolean isMatched() {
@@ -40,6 +40,17 @@ public class Choose extends AbstractAction {
 	/** Sets whether any child {@link When} is evaluated to true. */
 	/*package*/ void setMatched(boolean matched) {
 		_matched = matched;
+	}
+
+	/** Returns whether to trim the result. */
+	public boolean isTrim() {
+		return _trim;
+	}
+	/** Sets whether to trim the result.
+	 * <p>Default: true.
+	 */
+	public void setTrim(boolean trim) {
+		_trim = trim;
 	}
 
 	//-- Action --//

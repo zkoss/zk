@@ -27,9 +27,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<tbody style="visibility:hidden;height:0px">
 			<tr id="${self.columns.uuid}!hdfaker" class="grid-fake">
 			<c:forEach var="child" items="${self.columns.children}">
-					<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
-						<div style="overflow:hidden"></div>
-					</th>
+				<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
+					<div style="overflow:hidden"></div>
+				</th>
 			</c:forEach>
 			</tr>
 		</tbody>
@@ -46,9 +46,9 @@ ${z:redraw(head, null)}
 		<tbody style="visibility:hidden;height:0px">
 			<tr id="${self.columns.uuid}!bdfaker" class="grid-fake">
 			<c:forEach var="child" items="${self.columns.children}">
-					<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
-						<div style="overflow:hidden"></div>
-					</th>
+				<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
+					<div style="overflow:hidden"></div>
+				</th>
 			</c:forEach>
 			</tr>
 		</tbody>
@@ -63,9 +63,9 @@ ${z:redraw(head, null)}
 		<tbody style="visibility:hidden;height:0px">
 			<tr id="${self.columns.uuid}!ftfaker" class="grid-fake">
 			<c:forEach var="child" items="${self.columns.children}">
-					<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
-						<div style="overflow:hidden"></div>
-					</th>
+				<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
+					<div style="overflow:hidden"></div>
+				</th>
 			</c:forEach>
 			</tr>
 		</tbody>
