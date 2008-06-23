@@ -37,6 +37,9 @@ public class MyAutowireComposer extends GenericAutowireComposer {
 	 private Page page;
 	 private Window self;
 	 
+	 public void setMylabel(Label lb) {
+		 mylabel = lb;
+	 }
      public void onOK() {
          main.setTitle("main:"+ ++count + ", pageid:"+page.getId());
          win1.setTitle("win1:"+ count);
