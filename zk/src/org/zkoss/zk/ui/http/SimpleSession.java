@@ -162,10 +162,10 @@ public class SimpleSession implements Session, SessionCtrl {
 			synchronized (this) {
 				_hsess.setAttribute(name, value);
 
-				Map prv = (Map)_hsess.getAttribute(ATTR_PRIVATE);
-				if (prv == null)
+				Object prv = _hsess.getAttribute(ATTR_PRIVATE);
+				if (!(prv instanceof Map))
 					_hsess.setAttribute(ATTR_PRIVATE, prv = new HashMap());
-				prv.put(name, value);
+				((Map)prv).put(name, value);
 			}
 		} else {
 			_hsess.setAttribute(name, value);
@@ -181,9 +181,9 @@ public class SimpleSession implements Session, SessionCtrl {
 			synchronized (this) {
 				_hsess.removeAttribute(name);
 
-				Map prv = (Map)_hsess.getAttribute(ATTR_PRIVATE);
-				if (prv != null)
-					prv.remove(name);
+				Object prv = _hsess.getAttribute(ATTR_PRIVATE);
+				if (prv instanceof Map)
+					((Map)prv).remove(name);
 			}
 		} else {
 			_hsess.removeAttribute(name);
