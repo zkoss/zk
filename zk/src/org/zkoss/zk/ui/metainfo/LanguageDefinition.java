@@ -670,14 +670,9 @@ public class LanguageDefinition {
 	 * be called to define the component and attribute names used to create
 	 * an {@link ComponentInfo} for a label.
 	 */
-	public void setLabelTemplate(String compName, String propName) {
-		_labeltmpl = compName != null ?
-			new LabelTemplate(compName, propName): null;
-	}
-	/** @deprecated As of release 3.1.0, replaced with {@link #setLabelTemplate(String,String)}.
-	 */
 	public void setLabelTemplate(String compName, String propName, boolean raw) {
-		setLabelTemplate(compName, propName);
+		_labeltmpl = compName != null ?
+			new LabelTemplate(compName, propName, raw): null;
 	}
 	/** Constructs and returns an {@link ComponentInfo} for
 	 * the specified parent and text,
@@ -687,11 +682,13 @@ public class LanguageDefinition {
 			throw new UiException("No default label component is supported by "+this);
 		return _labeltmpl.newComponentInfo(parent, text);
 	}
-	/** @deprecated As of release 3.1.0, it becomes meaningless
-	 * since labels won't be trimmed.
+	/** Returns whether this language prefers the raw label.
+	 * By raw labels we mean the text shall not be trimmed and
+	 * shall be generated directly to the output (rather than wrapping
+	 * with, say, SPAN).
 	 */
 	public boolean isRawLabel() {
-		return false;
+		return _labeltmpl != null && _labeltmpl.raw;
 	}
 
 	/** Adds the definition for the dynamic tag.
@@ -789,13 +786,16 @@ public class LanguageDefinition {
 		private final String _name;
 		/** The component property used for contructing a label. */
 		private final String _prop;
+		/** Whether the raw label is required. */
+		private final boolean raw;
 
-		private LabelTemplate(String name, String prop) {
+		private LabelTemplate(String name, String prop, boolean raw) {
 			if (name == null || name.length() == 0
 			|| prop == null || prop.length() == 0)
 				throw new IllegalArgumentException();
 			_name = name;
 			_prop = prop;
+			this.raw = raw;
 		}
 		private ComponentInfo newComponentInfo(ComponentInfo parent, String text) {
 			if (_compdef == null) //no sync since racing is OK

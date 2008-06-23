@@ -47,6 +47,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<label-template>
 		<component-name>native</component-name>
 		<component-attribute>prologContent</component-attribute>
+		<raw/><!-- 1) don't trim, 2) generated directly -->
 	</label-template>
 	<!-- Defines the templat for macro components -->
 	<macro-template>

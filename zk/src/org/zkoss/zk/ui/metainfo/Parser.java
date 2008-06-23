@@ -616,8 +616,11 @@ public class Parser {
 					if (textAs != null) {
 						parentInfo.addProperty(textAs, trimLabel, null);
 					} else {
-						if (isTrimLabel())
+						if (isTrimLabel() && !parentlang.isRawLabel()) {
+							if (trimLabel.length() == 0)
+								continue; //ignore
 							label = trimLabel;
+						}
 						final ComponentInfo labelInfo =
 							parentlang.newLabelInfo(parentInfo, label);
 						if (trimLabel.length() == 0)
