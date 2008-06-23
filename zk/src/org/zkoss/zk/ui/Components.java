@@ -22,6 +22,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.ListIterator;
 import java.util.Collection;
 import java.util.AbstractCollection;
@@ -29,7 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.util.CollectionsX;
@@ -328,11 +331,13 @@ public class Components {
 	 * controller Java object. This implementation checks the 
 	 * setXxx() method names first then the field names. If a setXxx() method 
 	 * name matches the name of the resolved variable object with correct 
-	 * argument type, the method is called with the resolved variable 
-	 * object as the argument. If no proper setXxx() method then search the 
+	 * argument type and the associated field value is null, then the method is 
+	 * called with the resolved variable object as the argument. 
+	 * If no proper setXxx() method then search the 
 	 * field name of the controller object. If the field name matches the name
-	 * of the resolved variable object and with correct field type, the field
-	 * is then assigned the resolved variable object.</p> 
+	 * of the resolved variable object with correct field type and null field
+	 * value, the field is then assigned the resolved variable object.
+	 * </p> 
 	 * 
 	 * <p>This is useful in writing controller code in MVC design practice. You
 	 * can wire the embedded objects, components, and accessible variables into 
@@ -348,6 +353,20 @@ public class Components {
 	 */
 	public static final void wireVariables(Component comp, Object controller) {
 		Class cls = controller.getClass();
+		Class xcls = cls;
+		
+		final Map fldMaps = new LinkedHashMap(64);
+		do {
+			Field[] flds = xcls.getDeclaredFields();
+			for (int j = 0; j < flds.length; ++j) {
+				final Field fd = flds[j];
+				final String fdname = fd.getName();
+				if (!fldMaps.containsKey(fdname))
+					fldMaps.put(fdname, fd);
+			}
+			xcls = xcls.getSuperclass();
+		} while (xcls != null && !Object.class.equals(xcls));
+
 		//check methods
 		final Set injected = new HashSet();
 		Method[] mtds = cls.getMethods();
@@ -359,64 +378,68 @@ public class Components {
 				final String fdname = Classes.toAttributeName(mdname);
 				final Class[] parmcls = md.getParameterTypes();
 				if (parmcls.length == 1) {
-					if ("self".equals(fdname)) { //special case
-						final Object arg = comp;
-						final Class argcls = comp.getClass();
-						final Class fdcls = parmcls[0]; 
-						if (fdcls.isAssignableFrom(argcls)) {
-							try {
-								md.invoke(controller, new Object[] {arg});
-								injected.add(fdname); //mark as injected
-							} catch (Exception ex) {
-								throw UiException.Aide.wrap(ex);
-							}
-						}
-					} else if (comp.containsVariable(fdname, false)) {
-						final Object arg = comp.getVariable(fdname, false);
+					final boolean isself = "self".equals(fdname);
+					if (comp.containsVariable(fdname, false) || isself) {
+						final Object arg = isself ? comp : comp.getVariable(fdname, false);
 						final Class argcls = arg == null ? null : arg.getClass();
 						final Class fdcls = parmcls[0]; 
 						if (argcls == null || fdcls.isAssignableFrom(argcls)) {
-							try {
-								md.invoke(controller, new Object[] {arg});
-								injected.add(fdname); //mark as injected
-							} catch (Exception ex) {
-								throw UiException.Aide.wrap(ex);
+							final Field fd = (Field) fldMaps.get(fdname);
+							if (fd != null) {
+								final boolean old = fd.isAccessible();
+								try {
+									//check field value
+									fd.setAccessible(true);
+									final Object value = fd.get(controller);
+									if (value == null) {
+										md.invoke(controller, new Object[] {arg});
+										injected.add(fdname); //mark as injected
+									}
+								} catch (Exception ex) {
+									throw UiException.Aide.wrap(ex);
+								} finally {
+									fd.setAccessible(old);
+								}
+							} else {
+								try {
+									md.invoke(controller, new Object[] {arg});
+									injected.add(fdname); //mark as injected
+								} catch (Exception ex) {
+									throw UiException.Aide.wrap(ex);
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-		
+
 		//check fields
-		do {
-			Field[] flds = cls.getDeclaredFields();
-			for (int j = 0; j < flds.length; ++j) {
-				final Field fd = flds[j];
-				final String fdname = fd.getName();
-				if (!injected.contains(fdname)) { //if not injected by setXxx
-					if ("self".equals(fdname)) { //special case
-						injectField(comp, comp.getClass(), controller, fd);
-					} else if (comp.containsVariable(fdname, false)) {
-						final Object arg = comp.getVariable(fdname, false);
-						final Class argcls = arg == null ? null : arg.getClass();
-						injectField(arg, argcls, controller, fd);
-					}
+		for (final Iterator it=fldMaps.entrySet().iterator();it.hasNext();) {
+			final Entry entry = (Entry) it.next();
+			final String fdname = (String) entry.getKey();
+			if (!injected.contains(fdname)) { //if not injected by setXxx
+				final boolean isself = "self".equals(fdname);
+				if (comp.containsVariable(fdname, false) || isself) {
+					final Field fd = (Field) entry.getValue();
+					final Object arg = isself ? comp : comp.getVariable(fdname, false);
+					final Class argcls = arg == null ? null : arg.getClass();
+					injectField(arg, argcls, controller, fd);
 				}
 			}
-			cls = cls.getSuperclass();
-		} while (cls != null && !Object.class.equals(cls));
+		}
 	}
 	
 	/** <p>Wire accessible variables of the specified page into a 
 	 * controller Java object. This implementation checks the 
 	 * setXxx() method names first then the field names. If a setXxx() method 
 	 * name matches the name of the resolved variable object with correct 
-	 * argument type, the method is called with the resolved variable 
-	 * object as the argument. If no proper setXxx() method then search the 
+	 * argument type and the associated field value is null, then the method is 
+	 * called with the resolved variable object as the argument. 
+	 * If no proper setXxx() method then search the 
 	 * field name of the controller object. If the field name matches the name
-	 * of the resolved variable object and with correct field type, the field
-	 * is then assigned the resolved variable object.</p> 
+	 * of the resolved variable object with correct field type and null field
+	 * value, the field is then assigned the resolved variable object.</p> 
 	 * 
 	 * <p>This is useful in writing controller code in MVC design practice. You
 	 * can wire the embedded objects, components, and accessible variables into 
@@ -428,8 +451,22 @@ public class Components {
 	 * @param controller the controller Java object to be injected the fellow components.
 	 * @since 3.0.6
 	 */
-	public static final void wireVariable(Page page, Object controller) {
+	public static final void wireVariables(Page page, Object controller) {
 		Class cls = controller.getClass();
+		Class xcls = cls;
+		
+		final Map fldMaps = new LinkedHashMap(64);
+		do {
+			Field[] flds = xcls.getDeclaredFields();
+			for (int j = 0; j < flds.length; ++j) {
+				final Field fd = flds[j];
+				final String fdname = fd.getName();
+				if (!fldMaps.containsKey(fdname))
+					fldMaps.put(fdname, fd);
+			}
+			xcls = xcls.getSuperclass();
+		} while (xcls != null && !Object.class.equals(xcls));
+
 		//check methods
 		final Set injected = new HashSet();
 		Method[] mtds = cls.getMethods();
@@ -441,16 +478,35 @@ public class Components {
 				final String fdname = Classes.toAttributeName(mdname);
 				final Class[] parmcls = md.getParameterTypes();
 				if (parmcls.length == 1) {
-					if (page.containsVariable(fdname)) {
-						final Object arg = page.getVariable(fdname);
+					final boolean isself = "self".equals(fdname);
+					if (page.containsVariable(fdname) || isself) {
+						final Object arg = isself ? page : page.getVariable(fdname);
 						final Class argcls = arg == null ? null : arg.getClass();
 						final Class fdcls = parmcls[0]; 
 						if (argcls == null || fdcls.isAssignableFrom(argcls)) {
-							try {
-								md.invoke(controller, new Object[] {arg});
-								injected.add(fdname); //mark as injected
-							} catch (Exception ex) {
-								throw UiException.Aide.wrap(ex);
+							final Field fd = (Field) fldMaps.get(fdname);
+							if (fd != null) {
+								final boolean old = fd.isAccessible();
+								try {
+									//check field value
+									fd.setAccessible(true);
+									final Object value = fd.get(controller);
+									if (value == null) {
+										md.invoke(controller, new Object[] {arg});
+										injected.add(fdname); //mark as injected
+									}
+								} catch (Exception ex) {
+									throw UiException.Aide.wrap(ex);
+								} finally {
+									fd.setAccessible(old);
+								}
+							} else {
+								try {
+									md.invoke(controller, new Object[] {arg});
+									injected.add(fdname); //mark as injected
+								} catch (Exception ex) {
+									throw UiException.Aide.wrap(ex);
+								}
 							}
 						}
 					}
@@ -459,21 +515,19 @@ public class Components {
 		}
 
 		//check fields
-		do {
-			Field[] flds = cls.getDeclaredFields();
-			for (int j = 0; j < flds.length; ++j) {
-				final Field fd = flds[j];
-				final String fdname = fd.getName();
-				if (!injected.contains(fdname)) { //if not injected by setXxx
-					if (page.containsVariable(fdname)) {
-						final Object arg = page.getVariable(fdname);
-						final Class argcls = arg == null ? null : arg.getClass();
-						injectField(arg, argcls, controller, fd);
-					}
+		for (final Iterator it=fldMaps.entrySet().iterator();it.hasNext();) {
+			final Entry entry = (Entry) it.next();
+			final String fdname = (String) entry.getKey();
+			if (!injected.contains(fdname)) { //if not injected by setXxx
+				final boolean isself = "self".equals(fdname);
+				if (page.containsVariable(fdname) || isself) {
+					final Field fd = (Field) entry.getValue();
+					final Object arg = isself ? page : page.getVariable(fdname);
+					final Class argcls = arg == null ? null : arg.getClass();
+					injectField(arg, argcls, controller, fd);
 				}
 			}
-			cls = cls.getSuperclass();
-		} while (cls != null && !Object.class.equals(cls));
+		}
 	}
 	
 	private static void inject(Object comp, Object injectee) {
@@ -509,8 +563,10 @@ public class Components {
 		try {
 			fd.setAccessible(true);
 			final Class fdcls = fd.getType();
-			if (compcls == null || fdcls.isAssignableFrom(compcls)) { //correct type 
-				fd.set(injectee, comp);
+			if (compcls != null && fdcls.isAssignableFrom(compcls)) { //correct type 
+				final Object value = fd.get(injectee);
+				if (value == null) 
+					fd.set(injectee, comp);
 			}
 		} catch (Exception e) {
 			throw UiException.Aide.wrap(e);
