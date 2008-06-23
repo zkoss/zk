@@ -23,6 +23,7 @@ import org.zkoss.lang.reflect.Fields;
 /**
  * @deprecated As of release 3.0.6, due to the functionality not worth to
  * additional classes in zcommon.
+ * Use org.zkoss.zkplus.util.ThreadLocals instead.
  *
  * @author henrichen
  */
