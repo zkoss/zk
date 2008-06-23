@@ -18,9 +18,10 @@ package org.zkoss.lang;
 
 import java.lang.reflect.Field;
 
+import org.zkoss.lang.reflect.Fields;
+
 /**
- * ThreadLocal related utilties. This implementation get the static 
- * ThreadLocal via reflection.
+ * ThreadLocal related utilties. 
  *
  * @author henrichen
  */
@@ -43,14 +44,20 @@ public class ThreadLocals {
 	 * @param fldname the ThreadLocal field name.
 	 */
 	public static ThreadLocal getThreadLocal(Class cls, String fldname) {
+		Field fld = null;
+		boolean acs = false;
 		try {
-			Field fld = cls.getDeclaredField(fldname);
+			fld = cls.getDeclaredField(fldname);
+			acs = fld.isAccessible();
 			fld.setAccessible(true);
 			return (ThreadLocal) fld.get(cls); //class static field, a ThreadLocal
 		} catch (java.lang.NoSuchFieldException ex) {
 			throw SystemException.Aide.wrap(ex);
 		} catch (java.lang.IllegalAccessException ex) {
 			throw SystemException.Aide.wrap(ex);
+		} finally {
+			if (fld != null)
+				Fields.setAccessible(fld, acs); //restore
 		}
 	}
 }

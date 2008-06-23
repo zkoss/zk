@@ -43,17 +43,19 @@ public class Fields {
 		} catch (Throwable t) {
 		}
 	}
-	/** Returnst the value of the specfied field of the object.
+	/** Returnst the value of the specfied public field or public
+	 * method of the object.
 	 *
-	 * <p>If getField(obj, "a.b.c") is called and obj.getA() or
+	 * <p>If getByCompound(obj, "a.b.c") is called and obj.getA() or
 	 * obj.getA().getB() returns null, the result is null.
 	 * However, NullPointerException is thrown if obj is null.
 	 *
 	 * @param name the field name. It can be in form of "a.b.c", but cannot
 	 * be an expression.
+	 * It must be a public field or public method (prefixed with set).
 	 * @exception NoSuchMethodException if no corresponding field.
 	 */
-	public static final Object getField(Object obj, String name)
+	public static final Object getByCompound(Object obj, String name)
 	throws NoSuchMethodException {
 		for (;;) {
 			final int j = name.indexOf('.');
@@ -66,12 +68,14 @@ public class Fields {
 			name = name.substring(j + 1);
 		}
 	}
-	/** Sets the value of the specified field in the object.
+	/** Sets the value of the specified public field or public
+	 * method in the object.
 	 *
 	 * @param autoCoerce whether to automatically convert val to the proper
 	 * class that matches the argument of method or field.
 	 */
-	public static final void setField(Object obj, String name, Object val,
+	public static final
+	void setByCompound(Object obj, String name, Object val,
 	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
 		for (;;) {
 			final int j = name.indexOf('.');
@@ -81,23 +85,31 @@ public class Fields {
 			}
 
 			obj = get(obj, name.substring(0, j));
-			//Unlike getField, obj==null is considered error here
+			//Unlike getByCompound, obj==null is considered error here
 			name = name.substring(j + 1);
 		}
 	}
-	/** Sets the value of the specfied field in the object, without
-	 * converting the specified val.
+	/** Sets the value of the specfied public field  or public method
+	 * in the object, without converting the specified val.
 	 *
-	 * <p>It is a shortcut of setField(obj, name, val, false).
+	 * <p>It is a shortcut of setByCompound(obj, name, val, false).
 	 *
 	 * @param name the field name. It can be in form of "a.b.c", but cannot
 	 * be an expression.
+	 * It must be a public field or public method (prefixed with set).
 	 */
-	public static final void setField(Object obj, String name, Object val)
+	public static final
+	void setByCompound(Object obj, String name, Object val)
 	throws NoSuchMethodException, ModificationException {
-		setField(obj, name, val, false);
+		setByCompound(obj, name, val, false);
 	}
 
+	/** Returns the value of the specified public field or public method
+	 * in the object.
+	 * Unlike {@link #getByCompound}, name cannot contain '.'.
+	 * In other words, it must be the name of a public field
+	 * or method (prefixed with get).
+	 */
 	public static final Object get(Object obj, String name)
 	throws NoSuchMethodException {
 		try {
@@ -112,6 +124,12 @@ public class Fields {
 			throw SystemException.Aide.wrap(ex, MCommon.NOT_FOUND, name);
 		}
 	}
+	/** Sets the value of the specified public filed or public method
+	 * in the object.
+	 * Unlike {@link #setByCompound}, name cannot contain '.'.
+	 * In other words, it must be the name of a public field
+	 * or method (prefixed with set).
+	 */
 	public static final void set(Object obj, String name, Object val,
 	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
 		try {
@@ -145,5 +163,24 @@ public class Fields {
 		} catch (Exception ex) {
 			throw ModificationException.Aide.wrap(ex, MCommon.NOT_FOUND, name);
 		}
+	}
+
+	/** @deprecated As of release 3.0.6, replaced with {@link #getByCompound}.
+	 */
+	public static final Object getField(Object obj, String name)
+	throws NoSuchMethodException {
+		return getByCompound(obj, name);
+	}
+	/** @deprecated As of release 3.0.6, replaced with {@link #setByCompound(Object, String, Object, boolean}.
+	 */
+	public static final void setField(Object obj, String name, Object val)
+	throws NoSuchMethodException, ModificationException {
+		setByCompound(obj, name, val);
+	}
+	/** @deprecated As of release 3.0.6, replaced with {@link #setByCompound(Object, String, Object, boolean}.
+	 */
+	public static final void setField(Object obj, String name, Object val,
+	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
+		setByCompound(obj, name, val, autoCoerce);
 	}
 }
