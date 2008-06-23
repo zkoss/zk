@@ -212,13 +212,14 @@ public class SimpleSession implements Session, SessionCtrl {
 			synchronized (this) {
 				setAttr(name, value);
 
-				Set prv = (Set)getAttribute(ATTR_PRIVATE);
+				Object prv = getAttribute(ATTR_PRIVATE);
 				if (bStore) {
-					if (prv == null)
+					if (!(prv instanceof Set))
 						setAttr(ATTR_PRIVATE, prv = new HashSet());
-					prv.add(name);
+					((Set)prv).add(name);
 				} else {
-					if (prv != null) prv.remove(name);
+					if (prv instanceof Set)
+						((Set)prv).remove(name);
 				}
 			}
 		} else {
@@ -236,8 +237,9 @@ public class SimpleSession implements Session, SessionCtrl {
 			synchronized (this) {
 				rmAttr(name);
 
-				final Set prv = (Set)getAttribute(ATTR_PRIVATE);
-				if (prv != null) prv.remove(name);
+				Object prv = getAttribute(ATTR_PRIVATE);
+				if (prv instanceof Set)
+					((Set)prv).remove(name);
 			}
 		} else {
 			rmAttr(name);
