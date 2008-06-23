@@ -29,7 +29,6 @@ import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.ThreadLocals;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
