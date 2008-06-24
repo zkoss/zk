@@ -22,7 +22,7 @@ package org.zkoss.xel.fn;
  * Functions to manipulate XML/HTML for EL.
  *
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class XmlFns {
 	/** Generates an attribute for HTML/XML.

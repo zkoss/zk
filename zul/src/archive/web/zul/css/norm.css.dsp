@@ -1071,7 +1071,7 @@ td.slidersph-bkr {
 	width: 4px; height: 20px;
 }
 
-<%-- Button - trendy look-and-feel (unready for 3.1.0) --%>
+<%-- Button - trendy look-and-feel (unready for 3.5.0) --%>
 .z-btn {
 	font: normal 11px tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap;
 }

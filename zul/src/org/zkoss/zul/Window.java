@@ -165,7 +165,7 @@ public class Window extends XulElement implements IdSpace {
 	 * Sets the minimum height in pixels allowed for this window. If negative, 100 is assumed.
 	 * <p>Default: 100. 
 	 * <p>Note: Only applies when {@link #isSizable()} = true.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void setMinheight(int minheight) {
 		if (minheight < 0) minheight = 100;
@@ -177,7 +177,7 @@ public class Window extends XulElement implements IdSpace {
 	/**
 	 * Returns the minimum height.
 	 * <p>Default: 100.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public int getMinheight() {
 		return _minheight;
@@ -186,7 +186,7 @@ public class Window extends XulElement implements IdSpace {
 	 * Sets the minimum width in pixels allowed for this window. If negative, 200 is assumed.
 	 * <p>Default: 200. 
 	 * <p>Note: Only applies when {@link #isSizable()} = true.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void setMinwidth(int minwidth) {
 		if (minwidth < 0) minwidth = 200;
@@ -198,7 +198,7 @@ public class Window extends XulElement implements IdSpace {
 	/**
 	 * Returns the minimum width.
 	 * <p>Default: 200.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public int getMinwidth() {
 		return _minwidth;

@@ -30,7 +30,7 @@ import org.zkoss.zkmax.zul.Columnlayout;
  * {@link Columnlayout}'s default mold.
  * 
  * @author gracelin
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class ColumnlayoutDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {

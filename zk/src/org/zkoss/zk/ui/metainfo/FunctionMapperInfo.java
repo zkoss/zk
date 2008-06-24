@@ -40,7 +40,7 @@ import org.zkoss.zk.xel.Evaluator;
  * </p>
  * 
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class FunctionMapperInfo {
 	/** A class, an ExValue or an FunctionMapper. */

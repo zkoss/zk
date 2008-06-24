@@ -58,7 +58,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</function-signature>
 		<description>
 	Returns HTML tags to include all JavaScripts used by all languages.
-	The argument is ignored (since 3.1.0; reserved for backward compatible).
+	The argument is ignored (since 3.5.0; reserved for backward compatible).
 		</description>
 	</function>
 	<function>

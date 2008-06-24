@@ -36,7 +36,7 @@ import org.zkoss.zul.event.ChartDataEvent;
  * @author henrichen
  * @see GanttTask
  * @see Chart
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class GanttModel extends AbstractChartModel {
 	private Map _taskMap = new LinkedHashMap(13); //(series, task list)
@@ -83,7 +83,7 @@ public class GanttModel extends AbstractChartModel {
 	/**
 	 * A Task in an operation series; a helper class used in {@link GanttModel}.
 	 * @author henrichen
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 * @see GanttModel
 	 */
 	public static class GanttTask {

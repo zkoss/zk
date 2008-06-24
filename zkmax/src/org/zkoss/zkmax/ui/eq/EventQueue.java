@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.event.EventListener;
  * listeners.
  *
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 public interface EventQueue {
 	/** Publishes an event the queue.

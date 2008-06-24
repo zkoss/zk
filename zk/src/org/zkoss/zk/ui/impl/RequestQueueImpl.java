@@ -78,7 +78,7 @@ public class RequestQueueImpl implements RequestQueue {
 		if (comp != null) {
 			final Desktop dt = comp.getDesktop();
 			return dt != null && dt != request.getDesktop();
-			//Since 3.1.0, we allow a component to process events even
+			//Since 3.5.0, we allow a component to process events even
 			//if it is detached (due to implementation of EventQueue)
 		}
 		return false;

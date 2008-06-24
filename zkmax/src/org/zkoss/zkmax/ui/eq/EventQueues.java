@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.Desktop;
  * Utilities to access the event queue.
  *
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class EventQueues {
 	private static final String ATTR_EVENT_QUEUES = "org.zkoss.zkmax.ui.eq.eventQueues";

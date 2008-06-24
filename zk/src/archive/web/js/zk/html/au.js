@@ -1596,7 +1596,7 @@ zkau._onDocKeydown = function (evt) {
 	return true; //no special processing
 };
 /** Returns whether to ignore ESC.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkau.ignoreESC = function () {
 	return zkau._areq;

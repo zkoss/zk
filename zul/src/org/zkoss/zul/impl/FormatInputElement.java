@@ -67,7 +67,7 @@ abstract public class FormatInputElement extends InputElement {
 	 * In other words, if the format is specified, ON_CHANGE is sent
 	 * back immediately to the server to retrieve back the data
 	 * in the correct format.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	protected boolean shallServerFormat() {
 		return getFormat() != null;

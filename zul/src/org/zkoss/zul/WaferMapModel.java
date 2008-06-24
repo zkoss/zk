@@ -36,7 +36,7 @@ import java.util.Collection;
  *
  * @author henrichen
  * @see Chart
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class WaferMapModel extends AbstractChartModel {
 	private int _xsize;

@@ -29,7 +29,7 @@ import org.zkoss.zul.event.ListDataEvent;
  * A simple implementation of {@link GroupModel}.
  * Note: It assumes the content is immutable.
  * @author jumperchen
- * @since 3.1.0
+ * @since 3.5.0
  * @see GroupModel
  */
 public class SimpleGroupModel extends AbstractListModel 

@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 /**
  * {@link Menubar}'s vertical oriented.
  * @author jumperchen
- * @since 3.1.0
+ * @since 3.5.0
  *
  */
 public class Menubar2Vertical implements ComponentRenderer {

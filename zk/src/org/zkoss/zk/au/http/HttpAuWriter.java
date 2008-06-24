@@ -50,7 +50,7 @@ public class HttpAuWriter implements AuWriter{
 
 	//AuWriter//
 	/** Returns au to represent the response channel for AU requests.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public String getChannel() {
 		return "au";

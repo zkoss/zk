@@ -34,7 +34,7 @@ import org.zkoss.zk.au.AuResponse;
  * The AU writer used with {@link CometServerPush}.
  *
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 /*package*/ class CometAuWriter implements AuWriter {
 	private HttpServletResponse _response;

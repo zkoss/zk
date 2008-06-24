@@ -62,7 +62,7 @@ public class OpenEvent extends Event {
 	 * @param open whether the new status is open
 	 * @param value the current value of the target component if applicable.
 	 * @see #getValue
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public OpenEvent(String name, Component target, boolean open,
 	Component ref, Object value) {
@@ -101,7 +101,7 @@ public class OpenEvent extends Event {
 	 * Furthermore, for combobox and bandbox, the return value is
 	 * a non-null String instance.
 	 *
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public Object getValue() {
 		return _val;

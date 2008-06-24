@@ -41,7 +41,7 @@ import org.zkoss.zul.impl.Utils;
  * and then create menuitem when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen}
  * is true.
  *
- * <p>Default {@link #getSclass}: z-menupopup. (since 3.1.0)
+ * <p>Default {@link #getSclass}: z-menupopup. (since 3.5.0)
  * 	If {@link #getMold()} == "v30", menupopup is assumed for backward compatible.
  *
  * @author tomyeh
@@ -63,14 +63,14 @@ public class Menupopup extends Popup {
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.
 	 * <p>Default: false.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public final boolean isCheckmark() {
 		return _checkmark;
 	}
 	/** Sets whether the check mark shall be displayed in front
 	 * of each item.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {

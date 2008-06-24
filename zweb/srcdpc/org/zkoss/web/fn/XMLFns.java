@@ -20,7 +20,7 @@ package org.zkoss.web.fn;
 
 import org.zkoss.xel.fn.XmlFns;
 
-/** @deprecated As of release 3.1.0, replaced with
+/** @deprecated As of release 3.5.0, replaced with
  * org.zkoss.xel.fn.XmlFns.
  *
  * @author tomyeh

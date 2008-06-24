@@ -89,7 +89,7 @@ import java.util.Iterator;
  *   <tr><td></td><td>y</td></tr>
  *
  *   <tr><td>{@link XYZModel}</td><td>entity</td></tr>
- *   <tr><td>since 3.1.0</td><td>series</td></tr>
+ *   <tr><td>since 3.5.0</td><td>series</td></tr>
  *   <tr><td></td><td>x</td></tr>
  *   <tr><td></td><td>y</td></tr>
  *   <tr><td></td><td>z</td></tr>
@@ -462,7 +462,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 
 	/**
 	 * transfer a XYZModel into JFreeChart XYZDataset.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	private XYZDataset XYZModelToXYZDataset(XYZModel model) {
 		final DefaultXYZDataset dataset = new DefaultXYZDataset();
@@ -482,7 +482,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 
 	/**
 	 * transfer a WaferMapModel into JFreeChart WaferMapDataset.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	private WaferMapDataset WaferMapModelToWaferMapDataset(WaferMapModel model) {
 		final WaferMapDataset dataset = new WaferMapDataset(model.getXsize(), model.getYsize(), new Double(model.getSpace()));
@@ -499,7 +499,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	
 	/**
 	 * transfer a GanttModel into JFreeChart GanttDataset.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	private GanttCategoryDataset GanttModelToGanttDataset(GanttModel model) {
 		final TaskSeriesCollection dataset = new TaskSeriesCollection();
@@ -540,7 +540,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	
 	/**
 	 * transfer a XYZModel into JFreeChart WindDataset.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	private WindDataset XYZModelToWindDataset(XYZModel model) {
 		final Collection allseries = model.getSeries(); 
@@ -1484,7 +1484,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	}
 
 	/** bubble 
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	private class Bubble extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
@@ -1521,7 +1521,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	}
 
 	/** wafermap 
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	private class Wafermap extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
@@ -1585,7 +1585,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	}
 
 	/** gantt 
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	private class Gantt extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
@@ -1647,7 +1647,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	}
 
 	/** wind 
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	private class Wind extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {

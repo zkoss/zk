@@ -199,7 +199,7 @@ public class Row extends XulElement {
 	
 	/**
 	 * Returns the group that this row belongs to, or null.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public Group getGroup() {
 		if (this instanceof Group) return (Group)this;

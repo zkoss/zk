@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.UiException;
  * after the child added.
  * 
  * @author robbiecheng
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Groupfoot extends Row{
 	public Groupfoot() {

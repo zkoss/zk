@@ -207,7 +207,7 @@ public class DataBinder {
 	 * @param converter The converter class used to convert classes between component 
 	 *  and the associated bean. null means using the default class conversion method.
 	 * @param args generic argument map for each binding.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void addBinding(Component comp, String attr, String expr,
 		List loadWhenEvents, List saveWhenEvents, String access, String converter, Map args) {

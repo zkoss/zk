@@ -158,7 +158,7 @@ public class Grid extends XulElement {
 	 * so called vertial flexibility.
 	 *
 	 * <p>Default: false.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public final boolean isVflex() {
 		return _vflex;
@@ -166,7 +166,7 @@ public class Grid extends XulElement {
 	/** Sets whether to grow and shrink vertical to fit their given space,
 	 * so called vertial flexibility.
 	 *
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void setVflex(boolean vflex) {
 		if (_vflex != vflex) {

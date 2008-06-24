@@ -370,7 +370,7 @@ public class Datebox extends FormatInputElement {
 	/** Returns whether the server-side formatting shall take place.
 	 * It always returns false since the client is smart enought to
 	 * handle the date format.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	protected boolean shallServerFormat() {
 		return false;

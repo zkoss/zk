@@ -24,7 +24,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * Used to create a separator between menu items.
  *
- *<p>Default {@link #getSclass}: z-menu-sp. (since 3.1.0)
+ *<p>Default {@link #getSclass}: z-menu-sp. (since 3.5.0)
  * 	If {@link #getMold()} == "v30", null is assumed for backward compatible.
  * 
  * @author tomyeh

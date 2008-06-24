@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * column may contain no more than one component.
  * 
  * @author gracelin
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Columnlayout extends HtmlBasedComponent {
 

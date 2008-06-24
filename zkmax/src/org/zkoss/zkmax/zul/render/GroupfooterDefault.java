@@ -32,7 +32,7 @@ import org.zkoss.zul.Row;
  * 
  * @author robbiecheng
  * 
- * @since 3.1.0
+ * @since 3.5.0
  * 
  */
 public class GroupfooterDefault implements ComponentRenderer{

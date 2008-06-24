@@ -80,7 +80,7 @@ public class Listitem extends XulElement {
 	
 	/**
 	 * Returns the listgroup that this item belongs to, or null.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public Listgroup getListgroup() {
 		if (this instanceof Listgroup) return (Listgroup)this;

@@ -42,7 +42,7 @@ implements BindingListModelExt, java.io.Serializable {
 	private boolean _distinct = true; //since 3.1; default to true
 	
 	/**
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public BindingListModelArray(Object[] c, boolean live, boolean distinct) {
 		super(c, live);

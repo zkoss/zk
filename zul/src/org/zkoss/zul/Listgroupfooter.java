@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
  * after the child added.
  * 
  * @author robbiecheng
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Listgroupfooter extends Listitem{
 	public Listgroupfooter() {

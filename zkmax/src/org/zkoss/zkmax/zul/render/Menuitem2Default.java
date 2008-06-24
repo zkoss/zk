@@ -35,7 +35,7 @@ import org.zkoss.zul.Menupopup;
 /**
  * {@link Menuitem}'s default mold.
  * @author jumperchen
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Menuitem2Default implements ComponentRenderer {
 

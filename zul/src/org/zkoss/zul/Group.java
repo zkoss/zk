@@ -45,7 +45,7 @@ import org.zkoss.zul.impl.XulElement;
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
  * after the child added.
  * @author jumperchen
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Group extends Row {
 	private String _src = null;

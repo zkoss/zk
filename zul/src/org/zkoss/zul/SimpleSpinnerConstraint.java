@@ -31,7 +31,7 @@ import org.zkoss.zul.mesg.MZul;
  * A simple spinner constraint.
  * 
  * @author gracelin
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class SimpleSpinnerConstraint extends SimpleConstraint {
 	private Integer _min;

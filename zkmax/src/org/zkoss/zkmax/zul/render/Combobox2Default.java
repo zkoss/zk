@@ -33,7 +33,7 @@ import org.zkoss.zul.Combobox;
  * 
  * @author jumperchen
  * 
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Combobox2Default implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {

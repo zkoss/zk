@@ -202,7 +202,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 *
 	 * <p>If there was an AU processor associated with the same name, the
 	 * the old AU processor will be replaced.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static final AuProcessor
 	addAuProcessor(WebApp wapp, String prefix, AuProcessor processor) {

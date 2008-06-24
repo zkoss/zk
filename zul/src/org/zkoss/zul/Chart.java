@@ -92,10 +92,10 @@ public class Chart extends Imagemap {
 	public static final String HISTOGRAM = "histogram";
 	public static final String CANDLESTICK = "candlestick";
 	public static final String HIGHLOW = "highlow";
-	public static final String BUBBLE = "bubble"; //@since 3.1.0
-	public static final String WAFERMAP = "wafermap"; //@since 3.1.0
-	public static final String GANTT = "gantt"; //@since 3.1.0
-	public static final String WIND = "wind"; //@since 3.1.0
+	public static final String BUBBLE = "bubble"; //@since 3.5.0
+	public static final String WAFERMAP = "wafermap"; //@since 3.5.0
+	public static final String GANTT = "gantt"; //@since 3.5.0
+	public static final String WIND = "wind"; //@since 3.5.0
 	
 	//Time Series Chart Period
 	public static final String YEAR = "year";

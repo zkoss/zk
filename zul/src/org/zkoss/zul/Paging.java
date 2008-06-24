@@ -32,7 +32,7 @@ import org.zkoss.zul.ext.Paginal;
 /**
  * Paging of long content.
  *
- * <p>Default {@link #getSclass}: z-paging. (since 3.1.0)
+ * <p>Default {@link #getSclass}: z-paging. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -198,7 +198,7 @@ public class Paging extends XulElement implements Paginal {
 	/**
 	 * Returns the HTML tags of paging information.
 	 * 
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public String getInfoTags() {
 		final StringBuffer sb = new StringBuffer(512);

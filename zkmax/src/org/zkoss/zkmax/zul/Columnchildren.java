@@ -26,7 +26,7 @@ import org.zkoss.zul.impl.XulElement;
  * The column of Columnlayout
  * 
  * @author gracelin
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Columnchildren extends XulElement {
 

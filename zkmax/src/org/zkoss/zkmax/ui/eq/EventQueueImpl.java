@@ -33,7 +33,7 @@ import org.zkoss.zkmax.ui.eq.EventQueue;
 /**
  * A simple implementation of the event queue ({@link EventQueue}).
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 /*package*/ class EventQueueImpl implements EventQueue {
 	private final Component _dummy = new AbstractComponent();

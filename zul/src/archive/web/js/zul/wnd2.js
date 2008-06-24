@@ -20,7 +20,7 @@ zk.load("zul.zul"); //zul and msgzul
 // window //
 /**
  * A new trendy mold for Window component
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkWnd2 = {
 	ztype: "Wnd2",
@@ -99,7 +99,7 @@ zkWnd2._fixHgh = function (cmp) {
 };
 /**
  * Returns the height of the framing elements.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkWnd2.getFrameHeight = function (cmp) {
 	var h = zk.getFrameHeight(cmp);
@@ -116,7 +116,7 @@ zkWnd2.getFrameHeight = function (cmp) {
 };
 /**
  * Returns the title height of the specified element.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkWnd2.getTitleHeight = function (cmp) {
 	var title = $e(cmp.id + "!caption");
@@ -125,21 +125,21 @@ zkWnd2.getTitleHeight = function (cmp) {
 /**
  * Returns the shadow instance of the specified component.
  * @param {Object} cmp a window component.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkWnd2.getShadow = function (cmp) {
 	return cmp._shadow;
 };
 /**
  * Initializes the shadow object for the specified component.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkWnd2.initShadow = function (cmp) {
 	cmp._shadow = new zk.Shadow(cmp);
 };
 /**
  * Clean the shadow object for the specified component.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkWnd2.cleanupShadow = function (cmp) {
 	if (cmp._shadow) cmp._shadow.cleanup();
@@ -148,7 +148,7 @@ zkWnd2.cleanupShadow = function (cmp) {
 /**
  * Sync the region of the shadow from the specified component.
  * @param {Object} cmp a window component.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkWnd2.syncShadow = function (cmp) {
 	if (zkWnd2._embedded(cmp)) return;

@@ -349,7 +349,7 @@ public class PageDefinition extends NodeInfo {
 		_resolvdefs.add(resolver);
 	}
 	/** Adds a defintion of {@link FunctionMapper}.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void addFunctionMapperInfo(FunctionMapperInfo mapper) {
 		if (mapper == null)
@@ -749,7 +749,7 @@ public class PageDefinition extends NodeInfo {
 		return new PageEvalRef(this);
 	}
 
-	/** @deprecated As of release 3.1.0, replaced by {@link #getTaglibMapper}.
+	/** @deprecated As of release 3.5.0, replaced by {@link #getTaglibMapper}.
 	 */
 	public FunctionMapper getFunctionMapper() {
 		return getTaglibMapper();
@@ -759,7 +759,7 @@ public class PageDefinition extends NodeInfo {
 	 *
 	 * <p>Note: it doesn't include the function mapper defined added by
 	 * {@link #addFunctionMapperInfo}.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public FunctionMapper getTaglibMapper() {
 		if (_mapper == null) {

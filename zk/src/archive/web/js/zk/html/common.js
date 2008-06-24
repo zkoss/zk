@@ -117,7 +117,7 @@ if (zk.ie) {
  * 		btn.style.height = size.height + "px";
  * @param {Object} element an element
  * @param {String} text the measured text, if any. Otherwise, element's innerHTML is assumed.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zk.TextUtil = {
 	getInstance: function () {
@@ -171,7 +171,7 @@ zk.Shadow.prototype = {
 	 * autoShow: true to show the shadow in the initial phase. (default: false)
 	 * @param {Object} cmp a ZK client component.
 	 * @param {Object} config The config object used to apply the default value of the Shadow object.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	initialize: function (cmp, config) {
 		zk.apply(this, config);
@@ -308,7 +308,7 @@ zk.Shadow.prototype = {
  * @param {Object} obj The receiver of the properties
  * @param {Object} config The source of the properties
  * @return {Object} returns obj
- * @since 3.1.0
+ * @since 3.5.0
  */
 zk.apply = function(obj, config) {
 	if(obj && config && typeof config == "object")
@@ -321,7 +321,7 @@ zk.apply = function(obj, config) {
  * for the specified component.
  * @param {String} id a ID used to concatenate the "!ifr" postfix as the lining's ID, if any,
  * Otherwise, the cmp.id is assumed.
- * @since 3.1.0
+ * @since 3.5.0
  */
 zk.createLining = function (cmp, id) {
 	var ifr = document.createElement('iframe');
@@ -340,7 +340,7 @@ zk.createLining = function (cmp, id) {
  * Applies the indicator mask over the specified element. 
  * @param {Object/String} rel a related object
  * @param {String} message a message for the loading indicator. Default: 'Loading...'
- * @since 3.1.0
+ * @since 3.5.0
  */
 zk.applyMask = function (rel, message) {
 	if (typeof rel == "string") rel = $e(rel);
@@ -497,14 +497,14 @@ zk.setOffsetHeight = function (el, hgh) {
 };
 /**
  * Returns the number of the padding width and the border width from the specified element.  
- * @since 3.1.0
+ * @since 3.5.0
  */
 zk.getFrameWidth = function (el) {
 	return zk.sumStyles(el, "lr", zk.borders) + zk.sumStyles(el, "lr", zk.paddings);
 };
 /**
  * Returns the number of the padding height and the border height from the specified element.  
- * @since 3.1.0
+ * @since 3.5.0
  */
 zk.getFrameHeight = function (el) {
 	return zk.sumStyles(el, "tb", zk.borders) + zk.sumStyles(el, "tb", zk.paddings);
@@ -1130,7 +1130,7 @@ zk.firstChild = function (el, tagName, descendant) {
 	return null;
 };
 /** Returns the last child of the specified node. 
- * @since 3.1.0
+ * @since 3.5.0
  */
 zk.lastChild = function (el, tagName, descendant) {
 	for (var n = el.lastChild; n; n = n.previousSibling)
@@ -1166,7 +1166,7 @@ zk.isAncestor = function (p, c, ckuuid) {
  *
  * @param ckuuid whether to check UUID is the same (i.e., whether
  * they are different part of the same component).
- * @param ckowner whether to check p's owner (z.owner) (3.1.0)
+ * @param ckowner whether to check p's owner (z.owner) (3.5.0)
  */
 zk.isAncestorX = function (p, ary, ckuuid, ckowner) {
 	for (var j = 0, al = ary.length; j < al; ++j)
@@ -1181,7 +1181,7 @@ zk.isAncestorX = function (p, ary, ckuuid, ckowner) {
 };
 /** Returns whether any of an array of elments is an ancestor of another.
  * @since 3.0.2
- * @param ckowner whether to check c's owner (z.owner) (3.1.0)
+ * @param ckowner whether to check c's owner (z.owner) (3.5.0)
  */
 zk.isAncestorX1 = function (ary, c, ckuuid, ckowner) {
 	for (var j = 0, al = ary.length; j < al; ++j)

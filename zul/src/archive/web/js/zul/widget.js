@@ -853,7 +853,7 @@ zkWgt._fixdbtn = function (cmp) {
 	}
 };
 /** Fixes the button align with an input box, such as combobox, datebox. for the trendy mold
- * @since 3.1.0
+ * @since 3.5.0
  */
 zkWgt.fixDropBtn2 = function (cmp) {
 	//For new initial phase, we don't need to delay the function for IE. (Bug 1752477) 

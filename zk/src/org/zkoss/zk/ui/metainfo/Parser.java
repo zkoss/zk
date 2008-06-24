@@ -610,7 +610,7 @@ public class Parser {
 				if (pi instanceof NativeInfo) {
 					parentInfo.appendChild(
 						new TextInfo(pgdef.getEvaluatorRef(), label));
-						//Don't trim if native (3.1.0)
+						//Don't trim if native (3.5.0)
 				} else {
 					final String textAs = parentInfo.getTextAs();
 					if (textAs != null) {

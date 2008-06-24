@@ -83,7 +83,7 @@ implements Condition, java.io.Serializable {
 	/** Constructs a property with the native content.
 	 * The native content is represented by {@link NativeInfo},
 	 * i.e., a XML fragment (aka., a tree of {@link ComponentInfo}.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public Property(EvaluatorRef evalr, String name, NativeInfo value,
 	ConditionImpl cond) {
@@ -260,7 +260,7 @@ implements Condition, java.io.Serializable {
 	 * @exception PropertyNotFoundException if the property is not found,
 	 * i.e., no corresponding method and {@link DynamicPropertied} not
 	 * implmented.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static final Method resolveMethod(Class cls, String name)
 	throws PropertyNotFoundException {
@@ -291,7 +291,7 @@ implements Condition, java.io.Serializable {
 	 * i.e., no corresponding method and {@link DynamicPropertied} not
 	 * implmented.
 	 * @exception UiException if fail to assign
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static final void assign(Component comp, String name, String value) {
 		final Method mtd = resolveMethod(comp.getClass(), name);

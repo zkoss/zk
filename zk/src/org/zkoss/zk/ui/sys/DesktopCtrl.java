@@ -314,7 +314,7 @@ if (c.isEmpty()) {
 	 * Ingore if null.
 	 * @param resInfo the response infomation. Ignored if reqId is null.
 	 * The real value depends on the caller.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void responseSent(String channel, String reqId,
 	Object resInfo);
@@ -323,7 +323,7 @@ if (c.isEmpty()) {
 	 * the last one (passed to {@link #responseSent}).
 	 * <p>The return value is the value passed to resInfo when calling
 	 * {@link #responseSent}. The real value depends on the caller.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public Object getLastResponse(String channel, String reqId);
 	/** Returns the sequence ID of the response.
@@ -335,7 +335,7 @@ if (c.isEmpty()) {
 	 * @param advance whether to advance the number before returning.
 	 * If true, the ID is increased and then returned.
 	 * If false, the previous value is returned
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public int getResponseId(boolean advance);
 	/** Sets the sequence ID of the response.
@@ -345,7 +345,7 @@ if (c.isEmpty()) {
 	 *
 	 * @param resId a value between 1 and 999.
 	 * You can reset the ID by passing a non-positive value.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void setResponseId(int resId);
 }

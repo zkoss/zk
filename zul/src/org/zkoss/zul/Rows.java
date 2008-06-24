@@ -63,7 +63,7 @@ public class Rows extends XulElement {
 	}
 	/**
 	 * Returns the number of Group
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public int getGroupCount() {
 		return _groupsInfo.size();
@@ -71,14 +71,14 @@ public class Rows extends XulElement {
 	
 	/**
 	 * Returns a list of all {@link Group}.
-	 *	@since 3.1.0
+	 *	@since 3.5.0
 	 */
 	public List getGroups() {
 		return _groups;
 	}
 	/**
 	 * Returns whether Group exists.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public boolean hasGroup() {
 		return !_groupsInfo.isEmpty();

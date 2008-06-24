@@ -124,7 +124,7 @@ public class Menuitem extends LabelImageElement {
 		return _checked;
 	}
 	/** Sets whether it is checked.
-	 * <p> This only applies when {@link Menupopup#isCheckmark()} = true. (since 3.1.0)
+	 * <p> This only applies when {@link Menupopup#isCheckmark()} = true. (since 3.5.0)
 	 */
 	public void setChecked(boolean checked) {
 		if (_checked != checked) {
@@ -146,7 +146,7 @@ public class Menuitem extends LabelImageElement {
 	}
 	/** Sets whether the menuitem check mark will update each time
 	 * the menu item is selected.
-	 * <p> This only applies when {@link Menupopup#isCheckmark()} = true. (since 3.1.0)
+	 * <p> This only applies when {@link Menupopup#isCheckmark()} = true. (since 3.5.0)
 	 * 
 	 */
 	public void setAutocheck(boolean autocheck) {

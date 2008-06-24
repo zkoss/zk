@@ -28,7 +28,7 @@ import org.zkoss.zk.xel.impl.Utils;
  * Represents the zk element in a ZUML page.
  *
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class ZkInfo extends ComponentInfo {
 	/** A special definition to represent the zk component. */

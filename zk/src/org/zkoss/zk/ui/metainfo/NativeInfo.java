@@ -58,7 +58,7 @@ public class NativeInfo extends ComponentInfo {
 	}
 	/** Constructs a native info without a parent.
 	 * @param compdef the component definition (never null).
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public NativeInfo(EvaluatorRef evlar, ComponentDefinition compdef,
 	String tagnm) {

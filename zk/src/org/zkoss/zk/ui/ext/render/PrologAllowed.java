@@ -36,7 +36,7 @@ package org.zkoss.zk.ui.ext.render;
  * <pre><code>&lt;textbox/&gt; &lt;datebox/&gt;</code></pre>
  *
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 public interface PrologAllowed {
 	/** Sets the prolog content. It is the content generated

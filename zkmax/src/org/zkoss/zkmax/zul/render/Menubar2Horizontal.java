@@ -29,7 +29,7 @@ import org.zkoss.zul.Menubar;
 /**
  * {@link Menubar}'s horizontal oriented.
  * @author jumperchen
- * @since 3.1.0
+ * @since 3.5.0
  *
  */
 public class Menubar2Horizontal implements ComponentRenderer {

@@ -32,7 +32,7 @@ import org.zkoss.zul.Bandbox;
  * {@link Bandbox}'s default mold.
  * 
  * @author jumperchen
- * @since 3.1.0
+ * @since 3.5.0
  *
  */
 public class Bandbox2Default implements ComponentRenderer {

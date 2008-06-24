@@ -30,7 +30,7 @@ import org.zkoss.zkmax.zul.Columnchildren;
  * {@link Columnchildren}'s default mold.
  * 
  * @author garcelin
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class ColumnchildrenDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {

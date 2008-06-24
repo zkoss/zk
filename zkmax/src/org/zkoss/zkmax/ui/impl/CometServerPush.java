@@ -41,7 +41,7 @@ import org.zkoss.zk.au.out.AuScript;
  * A server-push implementation that is based on client-polling.
  * 
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class CometServerPush implements ServerPush {
 	private static final Log log = Log.lookup(CometServerPush.class);

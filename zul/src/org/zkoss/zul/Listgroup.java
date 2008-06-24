@@ -37,7 +37,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * <p>Default {@link #getSclass}: listgroup.
  * @author jumperchen
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Listgroup extends Listitem {
 	private boolean _open = true;

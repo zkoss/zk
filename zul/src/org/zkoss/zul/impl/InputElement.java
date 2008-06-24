@@ -421,7 +421,7 @@ implements Constrainted {
 	 * <p>On the other hand, if true is returned, the data sent back to
 	 * the server for formatting.
 	 *
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	protected boolean shallServerFormat() {
 		return false;

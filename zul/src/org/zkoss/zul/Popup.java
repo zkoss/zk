@@ -140,7 +140,7 @@ public class Popup extends XulElement {
 			return true;
 		}
 		/**
-		 * @since 3.1.0
+		 * @since 3.5.0
 		 */
 		public void setOpenByClient(boolean open) {
 			if (open) smartUpdate("z.closemask", true);

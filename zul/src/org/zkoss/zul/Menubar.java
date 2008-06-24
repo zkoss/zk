@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getSclass}: z-menubar, if {@link #getOrient()} == vertical, z-menubar-vertical will be added .(since 3.1.0)
+ * <p>Default {@link #getSclass}: z-menubar, if {@link #getOrient()} == vertical, z-menubar-vertical will be added .(since 3.5.0)
  * 	If {@link #getMold()} == "v30", menubar is assumed for backward compatible.
  *
  * @author tomyeh

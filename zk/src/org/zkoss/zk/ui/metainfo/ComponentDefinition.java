@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.render.ComponentRenderer;
  * @author tomyeh
  */
 public interface ComponentDefinition extends Cloneable {
-	/** @deprecated As of release 3.1.0, replaced by {@link ZkInfo}.
+	/** @deprecated As of release 3.5.0, replaced by {@link ZkInfo}.
 	 */
 	public final static ComponentDefinition ZK = ZkInfo.ZK;
 
@@ -104,7 +104,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * are ignored.
 	 * If true, they are converted to a label child.
 	 * <p>Default: false.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public boolean isBlankPreserved();
 

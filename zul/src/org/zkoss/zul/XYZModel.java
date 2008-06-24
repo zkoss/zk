@@ -26,7 +26,7 @@ import java.util.Collection;
  * @author henrichen
  * @see Chart
  * @see SimpleXYModel
- * @since 3.1.0
+ * @since 3.5.0
  */	
 public interface XYZModel extends XYModel {
 

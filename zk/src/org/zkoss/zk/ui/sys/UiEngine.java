@@ -367,18 +367,18 @@ public interface UiEngine {
 	 * @return whether the request is duplicated.
 	 * If duplicate (true), the response is generated automatically
 	 * and no more processing is required.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public boolean isRequestDuplicate(Execution exec, AuWriter out)
 	throws IOException;
 	/** Activates and prepare for asynchronous update
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void beginUpdate(Execution exec);
 	/** Executes posted events, deactive and ends the asynchronous update.
 	 *
 	 * @param out the AU writer to generate the responses to; never null.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void endUpdate(Execution exec, AuWriter out)
 	throws IOException;
@@ -403,7 +403,7 @@ public interface UiEngine {
 	 * which is the value that will be assigned.
 	 * @param helper the helper used to generate the content.
 	 * @see org.zkoss.zk.ui.metainfo.Property
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public String getNativeContent(Component comp, List children,
 	Native.Helper helper);

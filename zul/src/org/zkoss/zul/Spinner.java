@@ -40,7 +40,7 @@ import org.zkoss.zul.mesg.MZul;
  * 	<li>delete : clear the value to empty (null)
  * </lu>
  * @author gracelin
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class Spinner extends NumberInputElement {
 	private String _img;

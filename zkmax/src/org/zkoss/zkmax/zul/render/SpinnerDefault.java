@@ -14,7 +14,7 @@ import org.zkoss.zul.Spinner;
  * {@link Spinner}'s default mold.
  * @author gracelin
  * 
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class SpinnerDefault implements ComponentRenderer {	
 	public void render(Component comp, Writer out) throws IOException {

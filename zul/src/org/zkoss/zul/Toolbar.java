@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Mold:
  * <ol>
  * <li>default</li>
- * <li>panel: since 3.1.0, this mold is used for {@link Panel} component as its
+ * <li>panel: since 3.5.0, this mold is used for {@link Panel} component as its
  * foot toolbar.</li>
  * </ol>
  * 
@@ -51,7 +51,7 @@ public class Toolbar extends XulElement {
 	 * Returns the alignment of any children added to this toolbar. Valid values
 	 * are "start", "end" and "center".
 	 * <p>Default: "start"
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public String getAlign() {
 		return _align;
@@ -62,7 +62,7 @@ public class Toolbar extends XulElement {
 	 * are "start", "end" and "center".
 	 * <p>Default: "start", if null, "start" is assumed.
 	 * 
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void setAlign(String align) {
 		if (align == null) align = "start";
@@ -88,7 +88,7 @@ public class Toolbar extends XulElement {
 	/**
 	 * Returns the CSS class. If the mold is panel, the class that returned will
 	 * be concatenated with "-panel", that is, "<i>sclass</i>-panel" is assumed.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public String getSclass() {
 		String scls = super.getSclass();

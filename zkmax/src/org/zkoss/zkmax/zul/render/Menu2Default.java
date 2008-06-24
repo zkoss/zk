@@ -30,7 +30,7 @@ import org.zkoss.zul.Menu;
 /**
  * {@link Menu}'s default mold.
  * @author jumperchen
- * @since 3.1.0
+ * @since 3.5.0
  *
  */
 public class Menu2Default implements ComponentRenderer {

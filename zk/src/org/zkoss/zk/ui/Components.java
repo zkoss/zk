@@ -62,7 +62,7 @@ public class Components {
 	 * @param from the index of the first element (inclusive) to be sorted
 	 * @param to the index of the last element (exclusive) to be sorted
 	 * @param cpr the comparator to determine the order of the list.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static void sort(List list, int from, int to, Comparator cpr) {
 		final Object ary[] = CollectionsX.toArray(list, from, to);

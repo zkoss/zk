@@ -47,7 +47,7 @@ import org.zkoss.zk.au.http.DHtmlUpdateServlet;
  * for each desktop (if turned on).
  *
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  */
 /*package*/ class CometProcessor implements AuProcessor {
 	private CometProcessor() {

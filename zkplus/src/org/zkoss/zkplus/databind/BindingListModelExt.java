@@ -51,7 +51,7 @@ public interface BindingListModelExt extends BindingListModel {
 	 * This is for {@link DataBinder} performance so there is no need 
 	 * to scan the whole ListModel as long as find one.  
 	 * @return true if all objects inside this ListModel is distinct; otherwise, return false.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public boolean isDistinct();
 

@@ -68,7 +68,7 @@ public interface ComponentCtrl {
 	 *
 	 * <p>It is not a good idea to throw an exception in this method, since
 	 * it is in the middle of modifying the component tree.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	 public void onChildAdded(Component child);
 	/** Called when a child is removed.
@@ -77,7 +77,7 @@ public interface ComponentCtrl {
 	 *
 	 * <p>It is not a good idea to throw an exception in this method, since
 	 * it is in the middle of modifying the component tree.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	 public void onChildRemoved(Component child);
 
@@ -96,7 +96,7 @@ public interface ComponentCtrl {
 	 * @param newpage the new page (never null).
 	 * @param oldpage the previous page, if any, or null if it didn't
 	 * belong to any page.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void onPageAttached(Page newpage, Page oldpage);
 	/** Called when this component is detached from a page.
@@ -114,7 +114,7 @@ public interface ComponentCtrl {
 	 * it is in the middle of modifying the component tree.
 	 *
 	 * @param page the previous page (never null)
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void onPageDetached(Page page);
 
@@ -142,7 +142,7 @@ public interface ComponentCtrl {
 	 *
 	 * @param child the child being rendered
 	 * @param out the rendered result of the child.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws java.io.IOException;
@@ -172,7 +172,7 @@ public interface ComponentCtrl {
 	 * to redraw.
 	 *
 	 * @param value the new value. If null, it means removing the property.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 * @see #smartUpdateDeferred
 	 * @see #smartUpdateValues
 	 */
@@ -190,7 +190,7 @@ public interface ComponentCtrl {
 	 * or disable the use of the event processing thread
 	 * (by use of <code>disable-event-thread</code> in zk.xml).
 	 *
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 * @see #smartUpdate
 	 * @see #smartUpdateValues
 	 */
@@ -199,7 +199,7 @@ public interface ComponentCtrl {
 	 *
 	 * @param values an array of values. Any of them must be an instance
 	 * of String or {@link DeferredValue}.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 * @see #smartUpdate
 	 * @see #smartUpdateDeferred
 	 */
@@ -224,7 +224,7 @@ public interface ComponentCtrl {
 	 * in the same execution with the same key will override the previous one.
 	 * However, if key is null, it won't override any other. All responses
 	 * with key == null will be sent.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public void response(String key, AuResponse response);
 

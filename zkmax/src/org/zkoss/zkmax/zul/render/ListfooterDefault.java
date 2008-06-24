@@ -31,7 +31,7 @@ import org.zkoss.zul.Listfooter;
 /**
  * {@link Listfooter}'s default mold.
  * @author robbiecheng
- * @since 3.1.0
+ * @since 3.5.0
  */
 public class ListfooterDefault implements ComponentRenderer {
 

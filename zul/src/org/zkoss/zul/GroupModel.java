@@ -33,7 +33,7 @@ package org.zkoss.zul;
  * and at index 5, 6 and 7 the second group.
  *
  * @author tomyeh
- * @since 3.1.0
+ * @since 3.5.0
  * @see ListModel
  */
 public interface GroupModel {

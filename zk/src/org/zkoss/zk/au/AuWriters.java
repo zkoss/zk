@@ -69,17 +69,17 @@ public class AuWriters {
 	}
 
 	/** The first few characters of the output content.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static final String CONTENT_HEAD =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	/** The content type of the output.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static final String CONTENT_TYPE = "text/xml;charset=UTF-8";
 
 	/** Wites a XML fragment representing the response ID.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static void writeResponseId(Writer out, int resId) throws IOException {
 		out.write("<rid>");
@@ -87,7 +87,7 @@ public class AuWriters {
 		out.write("</rid>\n");
 	}
 	/** Writes a XML fragment representing the response to the output.
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static void write(Writer out, AuResponse response)
 	throws IOException {

@@ -172,7 +172,7 @@ public class Utils {
 	 * If true, {@link org.zkoss.zul.Window} and others will use "v30"
 	 * as the default mold ({@link org.zkoss.zk.ui.Component#getMold}).
 	 *
-	 * @since 3.1.0
+	 * @since 3.5.0
 	 */
 	public static final boolean isThemeV30() {
 		return _v30theme;

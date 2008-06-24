@@ -275,7 +275,7 @@ zk.mods = {}; //ZkFns depends on it
 
 /** 
  * A shorthand of document.getElementsByName();
- * @since 3.1.0
+ * @since 3.5.0
  */
 function $es(id) {
 	return typeof id == 'string' ? id ? document.getElementsByName(id): null: id;
@@ -872,7 +872,7 @@ zk.ald = function () {
 /**
  * Cleans up all the masks applied by the Boot_progressbox function.
  * @param {String} id an element Id, such as "zk_loadprog" or "zk_prog"
- * @since 3.1.0
+ * @since 3.5.0
  */
 zk.cleanAllMask = function (id) {
 	var n = $e(id);
