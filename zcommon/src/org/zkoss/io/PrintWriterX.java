@@ -45,7 +45,7 @@ public class PrintWriterX extends PrintWriter {
 	}
 
 	/** Returns the original writer.
-	 * If {@link #PrintWriterX(OutputStream} is used, the returned object
+	 * If {@link #PrintWriterX(OutputStream)} is used, the returned object
 	 * is the encapsulated writer.
 	 */
 	public Writer getOrigin() {

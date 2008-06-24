@@ -171,13 +171,13 @@ public class Fields {
 	throws NoSuchMethodException {
 		return getByCompound(obj, name);
 	}
-	/** @deprecated As of release 3.0.6, replaced with {@link #setByCompound(Object, String, Object, boolean}.
+	/** @deprecated As of release 3.0.6, replaced with {@link #setByCompound(Object, String, Object, boolean)}.
 	 */
 	public static final void setField(Object obj, String name, Object val)
 	throws NoSuchMethodException, ModificationException {
 		setByCompound(obj, name, val);
 	}
-	/** @deprecated As of release 3.0.6, replaced with {@link #setByCompound(Object, String, Object, boolean}.
+	/** @deprecated As of release 3.0.6, replaced with {@link #setByCompound(Object, String, Object, boolean)}.
 	 */
 	public static final void setField(Object obj, String name, Object val,
 	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
