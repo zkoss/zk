@@ -454,6 +454,7 @@
 			<xs:element ref="attribute" />
 			<xs:element ref="custom-attributes" />
 			<xs:element ref="variables" />
+			<xs:any processContents="lax"/>
 		</xs:choice>
 	</xs:group>
 	<xs:group name="anyGroup">
