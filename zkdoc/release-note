@@ -55,9 +55,85 @@ ZK 3.5.0
   + Change the layout of Paging component to a new trendy layout as default.
 
 	--------
-ZK 3.0.6
+ZK 3.0.7
 
 Refer to http://zk1.svn.sourceforge.net/viewvc/zk1/branches/3.0/zkdoc/release-note?view=markup
+
+	--------
+ZK 3.0.6
+* Features
+  1968749: A way to pass object in forward attribute
+  1978624: Keyevent support for every ZUL component
+  1978636: Keyevent support getReference() to get the causing component
+  1980357: forEach supports forEach="a, b, c"
+  1982861: variables and custom-attributes support List and Map
+  1988011: variables allows to assign variable with reserved name
+  1959959: An option to allow user to refresh if an error  
+  1966723: A way to customize cofirm upon retry (resend mechanism)
+  1873553: Integration with JSP and CSS problems
+  1883237: A way to register listeners for particular desktop  
+  1966839: Able to listen when a component is attached, detached...
+  1968393: A way to run JavaScript after certain module is loaded
+  1964646: [patch] Don't detach item children in ListitemRenderer  
+  1886786: Listbox SelectAll Checkbox should consist with all the items  
+  1936936: Improve error messages for invalid properties and expression
+  1941010: Reduce size of loading's gif: progress2.gif
+  1864622: progress loading gif using CSS
+  1970894: Labels with variables (MessageFormat)
+  1978632: A ZK page being included shall inherit width and height
+  1765940: A way to prevent caching dsp file in DspExtendlet (for dev)  
+  1990422: Component and/or IdSpace support getFellows() method
+  1990677: Support autowire fellow component utility
+  1990666: Support autowire variable object in GenericAutowireComposer
+  1990681: Support event regisration utility
+  1996808: Disable ThreadLocal listeners when ZK disable event thread
+  1997525: Support autowire variable object utility
+
+* Bugs
+  1955452: Liferay Failed if two portlets from different Web apps
+  1957661: Page.addFunctionMapper() fails
+  1963607: Fail to invoke loadAll() when Databind with Paging of Grid
+  1962153: Data binding generates duplicate id in some case
+  1963547: Fail to add a Listitem with Paging mold
+  1955454: imagemap shall not generate ismap if any area
+  1967811: Should disable selection when multiple selection using Shift
+  1968434: Layout of grid is out of tabbox it specified height(IE only)
+  1969455: Unable to forward one event to two targets
+  1968667: bug for listbox popup IE
+  1970048: Don't appear the gap of listheader whose label is empty
+  1876391: To support Combobox uses setText() to receive correct item
+  1973470: Listbox with multiple and checkmark and contextmenu
+  1979088: Both paging fail to change the style in Grid and Listbox
+  1981877: Dates.substract() for MINUTE field returns wrong value
+  1981934: appy fail to handle mix of class name and composer insntance
+  1944918: character encoding problem with pre-Servlet 2.4
+  1979161: FileUpload styles is not working on IE.
+  1979239: Tooltip in Menupopup / Menuitem
+  1984025: Listfoot/footer invisible when Listbox height set
+  1984152: Separator fail to show the bar on IE
+  1985081: Select method in InputElement does not work properly
+  1984643: onOK and onCancel don't work if listbox alone in modal
+  1984990: Missing attributes definition in zul.xsd
+  1819264: Popup doen't follow the component when scrolling with layout
+  1989387: Fail to reinsert the new region of borderlayout
+  1989659: Missing element in anyGroup of zul.xsd
+  1990423: Fail to change Window's border dynamically
+  1990036: Window Focus Problem
+  1991550: Group box 3d closes/opens unexpectedly
+  1991859: Button's onclick event should not propagate
+  1992605: Popup component reposition is incorrect in Adobe Air
+  1992842: jasperreport will be empty report in IE
+  1995373: Intbox can't only be entered a % sign
+  1996625: A dead listener, say, ExecutionInit, stall ZK execution
+  1998417: Timebox doesn't update after clean the text
+  1998613: Content-type for ~./img/spacer.gif is wrong with Apache
+
+* Upgrade Notes:
+  + The default CSS style of a page becomes "width:100%" (rather than
+    "width:100%;height:100%", if it is included by a non-ZK page,
+    such as JSP, DSP and so on.
+  + org.zkoss.zkplus.databind.CollectionItemEx is renamed to 
+    org.zkoss.zkplus.databind.CollectionItemExt
 
 	--------
 ZK 3.0.5
