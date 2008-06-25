@@ -1342,60 +1342,43 @@ zkau._onDocMouseout = function (evt) {
 };
 /** window.onresize */
 zkau._onResize = function () {
-	if (zkau._cInfoReg) {
-		//since IE keeps sending onresize when dragging the browser border,
-		//we reduce # of packs sent to the server by use of timeout
-		zkau._cInfoPend = true;
-		setTimeout(zkau._doClientInfo, 150);
-	}
-
-	zkau._onResize1();
-}
-zkau._onResize1 = function () {
 	if (zk.booting)
 		return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:
-	//In certain case, IE will keep sending onresize (because
+	//1. In certain case, IE will keep sending onresize (because
 	//grid/listbox may adjust size, which causes IE to send onresize again)
 	//To avoid this endless loop, we ignore onresize a whilf if _reszfn
 	//is called
-	if (!zkau._tmResz || $now() > zkau._tmResz) {
-		++zkau._reszcnt;
-		setTimeout(zkau._onResize2, zk.ie && zkau._reszcnt < 5 ? 200: 35);
-			//IE keeps sending onresize when dragging the browser's border,
-			//so we have to filter (most of) them out
-	
-	} else if (!zkau._tmDelayResz || $now() > zkau._tmDelayResz + 500) {
-		zkau._tmDelayResz = zkau._tmResz + 500;
-		setTimeout(zkau._onResize1, zkau._tmDelayResz - $now());
-	}
-};
-zkau._onResize2 = function () {
-	if (!--zkau._reszcnt) {
-		if (zk.loading || anima.count) {
-			zkau._onResize1();
-			return;
-		}
+	//
+	//2. IE keeps sending onresize when dragging the browser's border,
+	//so we have to filter (most of) them out
 
-		if (zk.ie) zkau._tmResz = $now() + 1500;
-			//IE keeps sending onresize when dragging the browser's border,
-			//so we have to filter (most of) them out
-			
-		zk.beforeSizeAt();
-		zk.onSizeAt();
-		if (zk.ie && $now() > zkau._tmDelayResz)
-			zkau._tmDelayResz = null;
-	}
-};
-zkau._reszcnt = 0;
+	var now = $now();
+	if (zkau._tmLastResz && now < zkau._tmLastResz)
+		return; //ignore resize for a while (since zk.onSizeAt might trigger onsize)
 
-/** send clientInfo to the server ontimeout. */
-zkau._doClientInfo = function () {
-	if (zkau._cInfoPend) {
-		zkau._cInfoPend = false;
-		zkau.cmd0.clientInfo();
+	var delay = zk.ie ? 200: 35;
+	zkau._tmResz = now + delay - 1; //handle it later
+	setTimeout(zkau._onDidResize, delay);
+};
+zkau._onDidResize = function () {
+	if (!zkau._tmResz) return; //already handled
+
+	var now = $now();
+	if (zk.loading || anima.count || now < zkau._tmResz) {
+		setTimeout(zkau._onDidResize, 10);
+		return;
 	}
+
+	if (zkau._cInfoReg)
+		setTimeout(zkau.cmd0.clientInfo, 20);
+		
+	zkau._tmResz = null; //handled
+	zkau._tmLastResz = now + 300; //when to process onresize again
+
+	zk.beforeSizeAt();
+	zk.onSizeAt();
 };
 
 zkau._openTip = function (cmpId, enforce) {
