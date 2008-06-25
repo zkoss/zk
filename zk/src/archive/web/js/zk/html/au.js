@@ -1371,12 +1371,12 @@ zkau._onDidResize = function () {
 		return;
 	}
 
-	if (zkau._cInfoReg)
-		setTimeout(zkau.cmd0.clientInfo, 20);
-		
 	zkau._tmResz = null; //handled
 	zkau._tmLastResz = now + 300; //when to process onresize again
 
+	if (zkau._cInfoReg)
+		setTimeout(zkau.cmd0.clientInfo, 20);
+		
 	zk.beforeSizeAt();
 	zk.onSizeAt();
 };
