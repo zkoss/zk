@@ -1386,55 +1386,43 @@ zkau._onDocMouseout = function (evt) {
 };
 /** window.onresize */
 zkau._onResize = function () {
-	if (zkau._cInfoReg) {
-		//since IE keeps sending onresize when dragging the browser border,
-		//we reduce # of packs sent to the server by use of timeout
-		zkau._cInfoPend = true;
-		setTimeout(zkau._doClientInfo, 150);
-	}
-
-	zkau._onResize1();
-}
-zkau._onResize1 = function () {
 	if (zk.booting)
 		return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:
-	//In certain case, IE will keep sending onresize (because
+	//1. In certain case, IE will keep sending onresize (because
 	//grid/listbox may adjust size, which causes IE to send onresize again)
 	//To avoid this endless loop, we ignore onresize a whilf if _reszfn
 	//is called
-	if (!zkau._tmResz || $now() > zkau._tmResz) {
-		++zkau._reszcnt;
-		setTimeout(zkau._onResize2, zk.ie && zkau._reszcnt < 5 ? 200: 35);
-			//IE keeps sending onresize when dragging the browser's border,
-			//so we have to filter (most of) them out
+	//
+	//2. IE keeps sending onresize when dragging the browser's border,
+	//so we have to filter (most of) them out
 
-	} else setTimeout(zkau._onResize1, 200);
+	var now = $now();
+	if (zkau._tmLastResz && now < zkau._tmLastResz)
+		return; //ignore resize for a while (since zk.onSizeAt might trigger onsize)
+
+	var delay = zk.ie ? 200: 50;
+	zkau._tmResz = now + delay - 1; //handle it later
+	setTimeout(zkau._onDidResize, delay);
 };
-zkau._onResize2 = function () {
-	if (!--zkau._reszcnt) {
-		if (zk.loading || anima.count) {
-			zkau._onResize1();
-			return;
-		}
+zkau._onDidResize = function () {
+	if (!zkau._tmResz) return; //already handled
 
-		if (zk.ie) zkau._tmResz = $now() + 1500;
-			//IE keeps sending onresize when dragging the browser's border,
-			//so we have to filter (most of) them out
-
-		zk.beforeSizeAt();
-		zk.onSizeAt();
+	var now = $now();
+	if (zk.loading || anima.count || now < zkau._tmResz) {
+		setTimeout(zkau._onDidResize, 10);
+		return;
 	}
-};
-zkau._reszcnt = 0;
 
-/** send clientInfo to the server ontimeout. */
-zkau._doClientInfo = function () {
-	if (zkau._cInfoPend) {
-		zkau._cInfoPend = false;
-		zkau.cmd0.clientInfo();
-	}
+	zkau._tmResz = null; //handled
+	zkau._tmLastResz = now + (zk.ie ? 300: 100); //when to process onresize again
+
+	if (zkau._cInfoReg)
+		setTimeout(zkau.cmd0.clientInfo, 20);
+
+	zk.beforeSizeAt();
+	zk.onSizeAt();
 };
 
 zkau._openTip = function (cmpId, enforce) {
