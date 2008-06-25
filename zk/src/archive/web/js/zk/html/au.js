@@ -1365,8 +1365,11 @@ zkau._onResize1 = function () {
 		setTimeout(zkau._onResize2, zk.ie && zkau._reszcnt < 5 ? 200: 35);
 			//IE keeps sending onresize when dragging the browser's border,
 			//so we have to filter (most of) them out
-
-	} else setTimeout(zkau._onResize1, 200);
+	
+	} else if (!zkau._tmDelayResz || $now() > zkau._tmDelayResz + 500) {
+		zkau._tmDelayResz = zkau._tmResz + 500;
+		setTimeout(zkau._onResize1, zkau._tmDelayResz - $now());
+	}
 };
 zkau._onResize2 = function () {
 	if (!--zkau._reszcnt) {
@@ -1378,9 +1381,11 @@ zkau._onResize2 = function () {
 		if (zk.ie) zkau._tmResz = $now() + 1500;
 			//IE keeps sending onresize when dragging the browser's border,
 			//so we have to filter (most of) them out
-
+			
 		zk.beforeSizeAt();
 		zk.onSizeAt();
+		if (zk.ie && $now() > zkau._tmDelayResz)
+			zkau._tmDelayResz = null;
 	}
 };
 zkau._reszcnt = 0;
