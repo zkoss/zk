@@ -35,10 +35,6 @@ import org.zkoss.lang.Strings;
 
 import java.util.Date;
 import java.util.TimeZone;
-import java.io.ByteArrayOutputStream;
-import java.awt.image.BufferedImage;
-import java.awt.Paint;
-
 
 /**
  * The generic chart component. Developers set proper chart type, data model,
