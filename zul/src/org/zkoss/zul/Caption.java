@@ -99,7 +99,7 @@ public class Caption extends LabelImageElement {
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Window)
-		&& !(parent instanceof Groupbox))
+		&& !(parent instanceof Groupbox) && !(parent instanceof Panel))
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
 	}

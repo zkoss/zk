@@ -175,6 +175,17 @@ public class Events {
 	 */
 	public static final String ON_USER = "onUser";
 
+	/** The onMinimize event (used with {@link MinimizeEvent}).
+	 * @since 3.5.0
+	 */
+	public static final String ON_MINIMIZE = "onMinimize";
+
+	/** The onMaximize event (used with {@link MaximizeEvent}).
+	 * @since 3.5.0
+	 */
+	public static final String ON_MAXIMIZE = "onMaximize";
+
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

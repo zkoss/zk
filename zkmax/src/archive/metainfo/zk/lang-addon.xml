@@ -632,6 +632,22 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>panel</component-name>
+		<extends>panel</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.PanelDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>panelchildren</component-name>
+		<extends>panelchildren</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.PanelchildrenDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>popup</component-name>
 		<extends>popup</extends>
 		<mold>

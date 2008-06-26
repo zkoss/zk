@@ -249,6 +249,8 @@ public class AuRequest {
 
 		new MoveCommand(Events.ON_MOVE, Command.IGNORE_OLD_EQUIV);
 		new SizeCommand(Events.ON_SIZE, Command.IGNORE_OLD_EQUIV);
+		new MinMaximizeCommand(Events.ON_MAXIMIZE, Command.IGNORE_OLD_EQUIV);
+		new MinMaximizeCommand(Events.ON_MINIMIZE, Command.IGNORE_OLD_EQUIV);
 		new InnerWidthCommand("onInnerWidth", Command.IGNORE_OLD_EQUIV);
 
 		new MouseCommand(Events.ON_CLICK,

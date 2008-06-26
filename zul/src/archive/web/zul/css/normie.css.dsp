@@ -82,3 +82,6 @@ span.dottree-last-open, span.dottree-last-close, span.dottree-tee, span.dottree-
 	overflow: visible;
 }
 </c:if>
+.z-panel-bbar {
+	position: relative;
+}

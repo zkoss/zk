@@ -4,6 +4,7 @@ ZK 3.5.0
   1973888: Listbox support Listgroupfoot in Group
   1972591: Grid support Groupfoot in Group
   1907300: Listbox: support grouping
+  1997391: Provide a new component, Panel, like Window but more richer
   1959952: Support Comet-based Server Push
   1951422: Grid: support grouping
   1962747: Allow to specify a XML fragment as compnent's content

@@ -611,6 +611,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>panel</component-name>
+		<component-class>org.zkoss.zul.Panel</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/panel.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>panelchildren</component-name>
+		<component-class>org.zkoss.zul.Panelchildren</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/panelchildren.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>popup</component-name>
 		<component-class>org.zkoss.zul.Popup</component-class>
 		<mold>
