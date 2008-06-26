@@ -758,10 +758,10 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 }
 <%-- ZK groupfooter, listgroupfooter --%>
-.groupfooter, .listgroupfooter{
+.groupfoot, .listgroupfoot{
 	background-color:#F4F4F4;
 }
-.groupfooter-cell, td.listgroupfooter-cell div.cell-inner{
+.groupfoot-cell, td.listgroupfoot-cell div.cell-inner{
 	font-weight: bold;
 }
 <%-- ZK tab. --%>
