@@ -3,6 +3,7 @@ ZK 3.0.7
 * Features
 
 * Bugs
+  1939919: Borderlayout does not fit inside Window (IE6)
 
 	--------
 ZK 3.0.6

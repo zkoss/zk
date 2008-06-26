@@ -107,7 +107,7 @@ div.wc-embedded-none, div.wc-wndcyan-none {
 	margin: 0; padding: 0;
 }
 div.wc-embedded, div.wc-wndcyan {
-	margin: 0; padding: 3px; border: 1px solid #6082ac;
+	margin: 0; padding: 3px; border: 1px solid #6082ac; overflow: hidden; zoom: 1;
 }
 div.wc-wndcyan {
 	background: white;
