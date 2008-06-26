@@ -468,6 +468,7 @@
 			<xs:element ref="calendar" />
 			<xs:element ref="chart" />
 			<xs:element ref="checkbox" />
+			<xs:element ref="columnlayout" />
 			<xs:element ref="combobox" />
 			<xs:element ref="datebox" />
 			<xs:element ref="decimalbox" />
@@ -753,6 +754,31 @@
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- columnchildren -->
+	<xs:element name="columnchildren" type="columnchildrenType" />
+	<xs:complexType name="columnchildrenType">		
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:choice minOccurs="0" maxOccurs="1">
+				<xs:sequence>
+					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!-- columnlayout -->
+	<xs:element name="columnlayout" type="columnlayoutType" />
+	<xs:complexType name="columnlayoutType" mixed="true">
+		<xs:all>		
+			<xs:element ref="attribute" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="custom-attributes" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="variables" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="columnchildren" />
+		</xs:all>			
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- columns -->
 	<xs:element name="columns" type="columnsType" />
@@ -2233,6 +2259,7 @@
 			<xs:element ref="center" />
 			<xs:element ref="columns" />
 			<xs:element ref="column" />
+			<xs:element ref="columnchildren" />
 			<xs:element ref="comboitem" />
 			<xs:element ref="east" />
 			<xs:element ref="fisheyeitem" />
