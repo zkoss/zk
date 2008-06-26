@@ -207,16 +207,16 @@ zkPanel = {
 				h = s.height;
 				
 				// prevent the scroll bar.
-				zk.addClass(cmp, "z-hidden-offset");
+				s.top = "-10000px";
+				s.left = "-10000px";
 				
-				s.top = "0px";
-				s.left = "0px";
 				s.width = op.clientWidth + "px";
 				s.height = op.clientHeight + "px";
 				cmp._lastSize = {l:l, t:t, w:w, h:h};
 				
 				// restore.
-				zk.rmClass(cmp, "z-hidden-offset");
+				s.top = "0px";
+				s.left = "0px";
 				
 				if (zkPanel.isClosable(cmp) && getZKAttr(cmp, "open") != "true") {
 					zk.rmClass(cmp, "z-panel-collapsed");

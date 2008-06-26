@@ -54,7 +54,7 @@ public class PanelDefault implements ComponentRenderer {
 			wh.write("<div class=\"").write(titlesc).write("l");
 			if (caption == null && noTitle)
 				wh.write(' ').write(titlesc).write("-notitle");
-			wh.write("\"><div class=\"").write("r\"><div class=\"").write(titlesc)
+			wh.write("\"><div class=\"").write(titlesc).write("r\"><div class=\"").write(titlesc)
 				.write("m\">");
 		}
 		if (caption != null || !noTitle) {
