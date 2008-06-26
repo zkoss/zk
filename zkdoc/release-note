@@ -28,6 +28,7 @@ ZK 3.5.0
   1990503: The blank text shall be preserved for some components
   1997383: Provide a panel mold for Toolbar as Panel's foot toolbar
   1997384: Toolbar support alignment control
+  2002986: Columnlayout Component
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
