@@ -1931,6 +1931,9 @@ tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.s
 .z-panel-collapsed .z-panel-toggle {
 	background-position: 0 -75px;
 }
+.z-panel-collapsed {
+	height:auto !important;
+}
 .z-panel-collapsed .z-panel-toggle-over {
 	background-position: -15px -75px;
 }
