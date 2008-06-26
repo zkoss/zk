@@ -140,7 +140,6 @@ zkau._onDocScroll = function () {
 	zkau._fixOffset($e("zk_loading"), ix, iy);
 	zkau._fixOffset($e("zk_loadprog"), ix, iy);
 	zkau._fixOffset($e("zk_prog"), ix, iy);
-	zkau._fixOffset($e("zk_prog"), ix, iy);
 	var d = $e("zk_debugbox");
 	if (d) {
 		d.style.top = iy + zk.innerHeight() - d.offsetHeight - 20 + "px";
