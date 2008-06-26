@@ -65,6 +65,10 @@ if (!window.Boot_progressbox) { //not customized
 			if (el) {
 				el.style.left = (zk.innerWidth() - el.offsetWidth) / 2 + ix + "px";
 				el.style.top = (zk.innerHeight() - el.offsetHeight) / 2 + iy + "px";
+				
+				// the use is for zkau._fixOffset
+				setZKAttr(el, "x", ix);
+				setZKAttr(el, "y", iy);
 			}
 		}
 		el.style.visibility = "visible";
