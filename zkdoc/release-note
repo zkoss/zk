@@ -1,7 +1,8 @@
 	--------
 ZK 3.0.7
 * Features
-
+  2003033: Provides an utitlity to forward events to a component
+  
 * Bugs
   1939919: Borderlayout does not fit inside Window (IE6)
 
