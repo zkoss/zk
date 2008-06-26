@@ -758,15 +758,7 @@
 	<!-- columnchildren -->
 	<xs:element name="columnchildren" type="columnchildrenType" />
 	<xs:complexType name="columnchildrenType">		
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
-				</xs:sequence>
-			</xs:choice>
-		</xs:sequence>
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- columnlayout -->
