@@ -138,6 +138,7 @@ zkSpinner._inpkeydown= function(evt){
 	case 55:case 103://7
 	case 56:case 104://8
 	case 57:case 105://9
+	case 109: // -
 		break;		
 	case 37://left
 		break;		
