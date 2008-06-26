@@ -771,13 +771,11 @@
 	</xs:complexType>
 	<!-- columnlayout -->
 	<xs:element name="columnlayout" type="columnlayoutType" />
-	<xs:complexType name="columnlayoutType" mixed="true">
-		<xs:all>		
-			<xs:element ref="attribute" minOccurs="0" maxOccurs="1"/>
-			<xs:element ref="custom-attributes" minOccurs="0" maxOccurs="1"/>
-			<xs:element ref="variables" minOccurs="0" maxOccurs="1"/>
+	<xs:complexType name="columnlayoutType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
 			<xs:element ref="columnchildren" />
-		</xs:all>			
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- columns -->
