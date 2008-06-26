@@ -19,9 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 import java.lang.reflect.Method;
-import java.util.Set;
-
-import org.zkoss.lang.D;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -35,7 +32,6 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.impl.EventProcessor;
-import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.ui.util.Clients;
 
@@ -337,17 +333,17 @@ public class Events {
 
 		Clients.response(new AuEcho(target, name, data));
 	}
-	/** <p>Add onXxx event handler defined in evtcodes object to the specified 
+	/** <p>Add onXxx event handler defined in controller object to the specified 
 	 * component. 
-	 * The evtcodes is a POJO file with onXxx methods(the event handler codes). 
+	 * The controller is a POJO file with onXxx methods(the event handler codes). 
 	 * This utility method registers these onXxx events to the specified
 	 * component so you don't have to implement and add {@link EventListener}
 	 * into the component one by one.</p>
 	 * 
-	 * <p>All public methods whose names start with "on" in evtcodes object 
+	 * <p>All public methods whose names start with "on" in controller object 
 	 * are considered
 	 * as event handlers and the corresponding event is listened.
-	 * For example, if the evtcodes object has a method named onOK,
+	 * For example, if the controller object has a method named onOK,
 	 * then the onOK event is listened and the onOK method is called
 	 * when the event is received.
 
@@ -356,15 +352,15 @@ public class Events {
 	 * register the events to the specified component.</p>
 	 * 
 	 * @param comp the component to be registered the events 
-	 * @param evtcodes a POJO file with onXxx methods(event handlers) 
+	 * @param controller a POJO file with onXxx methods(event handlers) 
 	 * @since 3.0.6
 	 * @see GenericEventListener
 	 */
-	public static final void addEventListeners(Component comp, final Object evtcodes) {
-		final Method [] mtds = evtcodes.getClass().getMethods();
+	public static final void addEventListeners(Component comp, final Object controller) {
+		final Method [] mtds = controller.getClass().getMethods();
 		final EventListener evtl = new EventListener() {
 			public void onEvent(Event evt) throws Exception {		
-				final Method mtd = ComponentsCtrl.getEventMethod(evtcodes.getClass(), evt.getName());
+				final Method mtd = ComponentsCtrl.getEventMethod(controller.getClass(), evt.getName());
 				if (mtd != null) {
 					if (mtd.getParameterTypes().length == 0)
 						mtd.invoke(this, null);

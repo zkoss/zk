@@ -574,4 +574,44 @@ public class Components {
 			fd.setAccessible(old);
 		}
 	}
+
+	/** <p>Adds forward conditions to myid source component so onXxx source 
+	 * event received by 
+	 * myid component can be forwarded to the specified target 
+	 * component with the target event name onXxx$myid.</p> 
+	 * <p>The controller is a POJO file with onXxx$myid methods (the event handler 
+	 * codes). This utility method search such onXxx$myid methods and adds 
+	 * forward condition to the source myid component as being looked up by  
+	 * {@link org.zkoss.zk.ui.Component#getVariable(myid, false)}, so you 
+	 * don't have to specify in zul file the "forward" attribute one by one. 
+	 * If the source component cannot be looked up or the object looked up is 
+	 * not a component, we will throw an UiException.
+	 * </p>
+	 * 
+	 * @param comp the targetComponent
+	 * @param controller the controller code with onXxx$myid event handler methods
+	 */
+	public static void addForwards(Component comp, Object controller) {
+		final Class cls = controller.getClass();
+		final Method[] mtds = cls.getMethods();
+		for (int j = 0; j < mtds.length; ++j) {
+			final Method md = mtds[j];
+			final String mdname = md.getName();
+			if (mdname.length() > 5 && mdname.startsWith("on") 
+			&& Character.isUpperCase(mdname.charAt(2))) {
+				final int k = mdname.indexOf('$', 3);
+				if (k >= 0) { //found '$'
+					final String srcevt = mdname.substring(0, k);
+					if ((k+1) < mdname.length()) {
+						final String srccompid = mdname.substring(k+1);
+						final Object srccomp = comp.getVariable(srccompid, false);
+						if (srccomp == null || !(srccomp instanceof Component)) {
+							throw new UiException("Cannot find the associated component: "+mdname);
+						}
+						((Component)srccomp).addForward(srcevt, comp, mdname);
+					}
+				}
+			}
+		}
+	}
 }
