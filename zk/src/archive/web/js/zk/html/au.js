@@ -338,6 +338,9 @@ zkau._onRespReady = function () {
 			}
 		}
 	} catch (e) {
+		if (!window.zkau)
+			return; //the doc has been unloaded
+
 		zkau._areq = zkau._areqInf = null;
 		try {
 			if(req && typeof req.abort == "function") req.abort();
