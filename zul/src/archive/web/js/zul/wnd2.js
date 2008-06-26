@@ -61,13 +61,10 @@ zkWnd2.cleanup = function (cmp) {
 };
 /** Fixed the content div's height. */
 zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
+	zkWnd2.hideShadow(cmp);
 	zkWnd2._fixWdh(cmp);
 	zkWnd2._fixHgh(cmp);
 	zkWnd2.syncShadow(cmp);
-};
-zkWnd2.onHide = function(cmp) {
-	var sw = zkWnd2.getShadow(cmp);
-	if (sw) sw.hide();
 };
 zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 	if (zkWnd2._embedded(cmp) || !zk.isRealVisible(cmp)) return;
@@ -104,7 +101,7 @@ zkWnd2._fixHgh = function (cmp) {
 zkWnd2.getFrameHeight = function (cmp) {
 	var h = zk.getFrameHeight(cmp);
     h += zkWnd2.getTitleHeight(cmp);
-    if(!zkWnd2._embedded(cmp)){
+    if(!zkWnd2._embedded(cmp)) {
         var n = $e(cmp.id + "!cave"), ft = zk.lastChild($e(cmp.id + "!bwrap"), "DIV"), title = $e(cmp.id + "!caption");
         h += ft.offsetHeight;
 		if (n)
@@ -119,8 +116,10 @@ zkWnd2.getFrameHeight = function (cmp) {
  * @since 3.5.0
  */
 zkWnd2.getTitleHeight = function (cmp) {
-	var title = $e(cmp.id + "!caption");
-	return title ? title.offsetHeight : 0;
+	var title = $e(cmp.id + "!caption"), top = 0;
+    if (!zkWnd2._embedded(cmp) && !title)
+		top = zk.firstChild(cmp, "DIV").firstChild.firstChild.offsetHeight;
+	return title ? title.offsetHeight : top;
 };
 /**
  * Returns the shadow instance of the specified component.
@@ -142,8 +141,10 @@ zkWnd2.initShadow = function (cmp) {
  * @since 3.5.0
  */
 zkWnd2.cleanupShadow = function (cmp) {
-	if (cmp._shadow) cmp._shadow.cleanup();
-	cmp._shadow = null;
+	if (cmp._shadow) {
+		cmp._shadow.cleanup();
+		cmp._shadow = null;
+	}
 };
 /**
  * Sync the region of the shadow from the specified component.
@@ -155,10 +156,20 @@ zkWnd2.syncShadow = function (cmp) {
 	var sw = zkWnd2.getShadow(cmp);
 	if (sw) sw.sync();
 };
+/**
+ * Hides the region of the shadow from the specified component.
+ * @param {Object} cmp a window component.
+ * @since 3.5.0
+ */
+zkWnd2.hideShadow = function (cmp) {
+	if (zkWnd2.getShadow(cmp)) zkWnd2.getShadow(cmp).hide();
+};
 zkWnd2._embedded = function (cmp) {
 	var v = getZKAttr(cmp, "mode");
 	return !v || v == "embedded";
 };
+// declare this function after zkWnd2.hideShadow is ready.
+zkWnd2.onHide = zkWnd2.hideShadow;
 zkWnd2.setAttr = function (cmp, nm, val) {
 	switch (nm) {
 	case "visibility":
@@ -166,6 +177,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			embedded = zkWnd2._embedded(cmp),
 			order = embedded ? 0: 1;
 
+		zkWnd2.hideShadow(cmp);
 		//three cases:
 		//order=0: cmp and all its ancestor are embedded
 		//1: cmp is the first non-embedded, i.e., all its ancestors are embeded
@@ -235,8 +247,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 		var pos = getZKAttr(cmp, "pos");
 		zkau.setAttr(cmp, nm, val);
 		if (val && !zkWnd2._embedded(cmp)) {
-			var shadow = zkWnd2.getShadow(cmp);
-			if (shadow) shadow.hide();
+			zkWnd2.hideShadow(cmp);
 			if (pos == "parent" && val != pos) {
 				var left = cmp.style.left, top = cmp.style.top;
 				var xy = getZKAttr(cmp, "offset").split(",");
@@ -264,6 +275,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 
 	case "style":
 	case "style.height":
+		zkWnd2.hideShadow(cmp);
 		zkau.setAttr(cmp, nm, val);
 		if (nm == "style.height") {
 			zk.beforeSizeAt(cmp);
@@ -283,6 +295,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 		if (!zkWnd2._embedded(cmp) && getZKAttr(cmp, "pos") == "parent") {
 			var offset = getZKAttr(cmp, "offset");
 			if (offset) {
+				zkWnd2.hideShadow(cmp);
 				var xy = offset.split(",");
 				if (nm == "style.top") {
 					cmp.style.top = $int(xy[1]) + $int(val) + "px";
@@ -365,6 +378,7 @@ zkWnd2._ignoresizing = function (cmp, pointer) {
 	if (dg) {
 		var v = zkWnd2._insizer(cmp, pointer[0], pointer[1]);
 		if (v) {
+			zkWnd2.hideShadow(cmp);
 			dg.z_dir = v;
 			var offs = zk.revisedOffset(cmp);
 			dg.z_box = {
@@ -429,6 +443,7 @@ zkWnd2._resize = function (cmp, t, l, h, w, keys) {
  */
 zkWnd2._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
+		zkWnd2.hideShadow(dg.element);
 		var ofs = zkau.beginGhostToDIV(dg);
 		var html = '<div id="zk_ddghost" class="rz-win-proxy" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
@@ -822,6 +837,7 @@ zkWnd2._float = function (cmp) {
  */
 zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 	if (ghosting) {
+		zkWnd2.hideShadow(dg.element);
 		var ofs = zkau.beginGhostToDIV(dg),  title = zk.firstChild(dg.element, "DIV"),
 			fakeT = title.cloneNode(true);
 		var html = '<div id="zk_ddghost" class="move-win-ghost" style="position:absolute;top:'
@@ -831,8 +847,6 @@ zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 		document.body.insertAdjacentHTML("afterbegin", html);
 		dg._zoffs = ofs;
 		dg.element.style.visibility = "hidden";
-		var sw = zkWnd2.getShadow(dg.element);
-		if (sw) sw.hide();
 		var h = dg.element.offsetHeight - title.offsetHeight;
 		dg.element = $e("zk_ddghost");
 		dg.element.firstChild.style.height = zk.revisedSize(dg.element.firstChild, h, true) + "px";
