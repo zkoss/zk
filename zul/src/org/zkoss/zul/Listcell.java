@@ -61,10 +61,10 @@ public class Listcell extends LabelImageElement {
 		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
 				"display:none;" : super.getRealStyle();
 	}
-	public String getSclass() {
+	public String getRealSclass() {
 		Component p = getParent();
-		if (!(p instanceof Listgroup) && !(p instanceof Listgroupfoot)) return super.getSclass();
-		String clx = super.getSclass();
+		if (!(p instanceof Listgroup) && !(p instanceof Listgroupfoot)) return super.getRealSclass();
+		String clx = super.getRealSclass();
 		if (p instanceof Listgroup)
 			return clx != null ? clx + " listgroup-cell" : "listgroup-cell";
 		else
