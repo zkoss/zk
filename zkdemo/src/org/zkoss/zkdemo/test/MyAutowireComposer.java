@@ -34,8 +34,6 @@ public class MyAutowireComposer extends GenericAutowireComposer {
 	 private Window win1;
 	 private Window main;
 	 private int count;
-	 private Page page;
-	 private Window self;
 	 
 	 public void setMylabel(Label lb) {
 		 mylabel = lb;
@@ -46,5 +44,6 @@ public class MyAutowireComposer extends GenericAutowireComposer {
          mylabel.setValue("label:"+ count+", selfid:"+self.getId());
          mytextbox.setValue("Enter Pressed"+ count);
          mytextbox.focus();
+         alert("Hi! You have pressed Enter.");
      }
 }
