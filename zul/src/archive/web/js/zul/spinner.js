@@ -128,14 +128,10 @@ zkSpinner._inpkeydown= function(evt){
 
 	var code =Event.keyCode(evt);
 	switch (code) {
-		case 37://left
-			break;
 		case 38://up
 			zkSpinner.checkValue(cmp);
 			zkSpinner._increase(cmp, true);
 			Event.stop(evt);
-			break;
-		case 39://right
 			break;
 		case 40://down
 			zkSpinner.checkValue(cmp);
