@@ -755,14 +755,14 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 	padding: 4px 2px; width: auto;
 }
 .group-cell {
-	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
+	color: #3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 }
 <%-- ZK groupfooter, listgroupfooter --%>
 .groupfoot, .listgroupfoot{
-	background-color:#F4F4F4;
+	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
 .groupfoot-cell, td.listgroupfoot-cell div.cell-inner{
-	font-weight: bold;
+	color: #2C559C; font: bold 12px Tahoma, Arial, Helvetica, sans-serif;
 }
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {

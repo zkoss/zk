@@ -71,16 +71,5 @@ public class Groupfoot extends Row{
 			return (Label)cell;
 		}
 		throw new UiException("Unsupported child for setLabel: "+cell);
-	}	
-	public void onChildAdded(Component child) {
-		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
-		final String clx = cmp.getSclass();
-		cmp.setSclass(clx != null && clx.length() > 0 ? clx + " Groupfoot-cell" : "Groupfoot-cell");
-	}
-	public void onChildRemoved(Component child) {
-		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
-		final String cls = cmp.getSclass();
-		cmp.setSclass(cls != null && cls.indexOf("Groupfoot-cell") > -1 ? 
-		cls.replaceAll("(?:^|\\s+)" + "Groupfoot-cell" + "(?:\\s+|$)", " ").trim() : cls);
 	}
 }

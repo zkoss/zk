@@ -70,15 +70,4 @@ public class Listgroupfoot extends Listitem{
 		}
 		return cell;
 	}
-	public void onChildAdded(Component child) {
-		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
-		final String clx = cmp.getSclass();
-		cmp.setSclass(clx != null && clx.length() > 0 ? clx + " listgroupfoot-cell" : "listgroupfoot-cell");
-	}
-	public void onChildRemoved(Component child) {
-		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
-		final String cls = cmp.getSclass();
-		cmp.setSclass(cls != null && cls.indexOf("listgroupfoot-cell") > -1 ?
-			cls.replaceAll("(?:^|\\s+)" + "listgroupfoot-cell" + "(?:\\s+|$)", " ").trim() : cls);
-	}
 }

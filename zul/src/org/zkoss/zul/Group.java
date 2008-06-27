@@ -228,17 +228,6 @@ public class Group extends Row {
 			return (Label)cell;
 		}
 		throw new UiException("Unsupported child for setLabel: "+cell);
-	}	
-	public void onChildAdded(Component child) {
-		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
-		final String clx = cmp.getSclass();
-		cmp.setSclass(clx != null && clx.length() > 0 ? clx + " group-cell" : "group-cell");
-	}
-	public void onChildRemoved(Component child) {
-		final HtmlBasedComponent cmp = (HtmlBasedComponent) child;
-		final String cls = cmp.getSclass();
-		cmp.setSclass(cls != null && cls.indexOf("group-cell") > -1 ? 
-				cls.replaceAll("(?:^|\\s+)" + "group-cell" + "(?:\\s+|$)", " ").trim() : cls);
 	}
 	public String getOuterAttrs() {
 		applyImageIfAny();

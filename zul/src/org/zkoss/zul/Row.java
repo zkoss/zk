@@ -192,7 +192,7 @@ public class Row extends XulElement {
 	}
 
 	protected String getRealStyle() {
-		if (this instanceof Group || !isVisible()) return super.getRealStyle();
+		if (this instanceof Group || this instanceof Groupfoot || !isVisible()) return super.getRealStyle();
 		final Group g = getGroup();
 		return super.getRealStyle() + (g != null && !g.isOpen() ? "display:none" : "") ;
 	}
@@ -252,7 +252,7 @@ public class Row extends XulElement {
 			HTMLs.appendStyle(sb, "height", hgh);
 			style = sb.toString();
 		}
-		String clx = this instanceof Group ? "gc group-cell" : "gc";
+		String clx = this instanceof Group ? "gc group-cell" : this instanceof Groupfoot ? "gc groupfoot-cell" : "gc";
 		if (colattrs == null && style.length() == 0 && span == 1)
 			return " class=\"" + clx + "\"";
 
