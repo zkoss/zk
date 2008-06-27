@@ -5,7 +5,6 @@ ZK 3.0.7
   2003751: GenericAutowireComposer support implicit objects and alert()
   
 * Bugs
-  1939919: Borderlayout does not fit inside Window (IE6)
   2001707: ZK3.0.6 page style not height:100% on weblogic & OC4J
 
 	--------
