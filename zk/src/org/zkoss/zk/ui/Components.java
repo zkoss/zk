@@ -592,6 +592,7 @@ public class Components {
 	 * 
 	 * @param comp the targetComponent
 	 * @param controller the controller code with onXxx$myid event handler methods
+	 * @since 3.0.7
 	 */
 	public static void addForwards(Component comp, Object controller) {
 		final Class cls = controller.getClass();
