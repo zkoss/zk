@@ -25,7 +25,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * The column of Columnlayout. <br> 
- * Only can include Panel.
+ * Child of Columnchildren only can be Panel.
  * 
  * @author gracelin
  * @since 3.5.0
