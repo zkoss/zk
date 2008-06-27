@@ -34,8 +34,6 @@ public class MyAutowireComposer extends GenericAutowireComposer {
 	 private Window win1;
 	 private Window main;
 	 private int count;
-	 private Page page;
-	 private Window self;
 	 
      public void onOK() {
          main.setTitle("main:"+ ++count + ", pageid:"+page.getId());

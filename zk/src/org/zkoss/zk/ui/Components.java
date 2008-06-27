@@ -606,7 +606,7 @@ public class Components {
 						final String srccompid = mdname.substring(k+1);
 						final Object srccomp = comp.getVariable(srccompid, false);
 						if (srccomp == null || !(srccomp instanceof Component)) {
-							throw new UiException("Cannot find the associated component: "+mdname);
+							throw new UiException("Cannot find the associated component to forward event: "+mdname);
 						}
 						((Component)srccomp).addForward(srcevt, comp, mdname);
 					}
