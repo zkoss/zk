@@ -20,10 +20,12 @@ package org.zkoss.zkmax.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.Panel;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- * The column of Columnlayout
+ * The column of Columnlayout. <br> 
+ * Only can include Panel.
  * 
  * @author gracelin
  * @since 3.5.0
@@ -39,5 +41,12 @@ public class Columnchildren extends XulElement {
 		if (parent != null && !(parent instanceof Columnlayout))
 			throw new UiException("Wrong parent: " + parent);
 		super.setParent(parent);
+	}
+	
+	public boolean insertBefore(Component child, Component insertBefore) {
+		if (!(child instanceof Panel))
+			throw new UiException("Unsupported child for Columnchildren: "
+					+ child);
+		return super.insertBefore(child, insertBefore);
 	}
 }
