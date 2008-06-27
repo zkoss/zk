@@ -750,7 +750,7 @@ span.dottree-spacer {
 td.listgroup-cell, td.group-cell{
 	padding-top: 2px; border-bottom: 2px solid #84A6D4;
 }
-td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
+td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner span, td.group-cell div.cell-inner {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 	padding: 4px 2px; width: auto;
 }
@@ -761,7 +761,7 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner {
 .groupfoot, .listgroupfoot{
 	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
-.groupfoot-cell, td.listgroupfoot-cell div.cell-inner{
+.groupfoot-cell div.cell-inner span, .groupfoot-cell div.cell-inner , td.listgroupfoot-cell div.cell-inner{
 	color: #2C559C; font: bold 12px Tahoma, Arial, Helvetica, sans-serif;
 }
 <%-- ZK tab. --%>
