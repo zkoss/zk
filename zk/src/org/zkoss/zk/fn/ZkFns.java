@@ -664,10 +664,22 @@ public class ZkFns {
 		final Desktop desktop = page.getDesktop();
 		final PageCtrl pageCtrl = (PageCtrl)page;
 		final Component owner = pageCtrl.getOwner();
-		boolean contained = false;
+		boolean contained = false; //included by non-ZK servlet
 		if (owner == null) {
+			//Bug 2001707: Don't use exec.isIncluded() though
+			//exec.getNativeRequest reutrns the original request
+			//(while ServletFns.getCurrentRequest returns the 'real' one
+			//-- for page.dsp, it is different due to being included).
+			//WebLogic's request.getAttribute (which Servlets.include
+			//depends on) returns the same set of attributes for both
+			// the 'real' request and the original request.
+
 			final Execution exec = Executions.getCurrent();
-			contained = exec != null && exec.isIncluded();
+			if (exec != null) {
+				final Object o = exec.getAttribute("arg");
+				if (o instanceof Map)
+					contained = ((Map)o).get("included") != null;
+			}
 		}
 
 		//prepare style
@@ -693,6 +705,7 @@ public class ZkFns {
 		HTMLs.appendAttribute(sb, "z.dtid", desktop.getId());
 		HTMLs.appendAttribute(sb, "style", style);
 		HTMLs.appendAttribute(sb, "z.zidsp", contained ? "ctpage": "page");
+
 		return sb.toString();
 	}
 }
