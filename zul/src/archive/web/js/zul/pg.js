@@ -47,13 +47,21 @@ zkPg = {
 			zk.listen(tb_prev[i], "click", zkPg.onclick_prev);
 			zk.listen(tb_next[i], "click", zkPg.onclick_next);
 			zk.listen(tb_last[i], "click", zkPg.onclick_last);
-			
-			if (cmp.actpg == 0) {
+						
+			if (cmp.npg == 1) {
 				zk.addClass(tb_first[i], "z-item-disd");
 				zk.addClass(tb_prev[i], "z-item-disd");
-			} else if (cmp.actpg == cmp.npg - 1) {
 				zk.addClass(tb_next[i], "z-item-disd");
 				zk.addClass(tb_last[i], "z-item-disd");
+			} else {
+				if (cmp.actpg == 0) {
+					zk.addClass(tb_first[i], "z-item-disd");
+					zk.addClass(tb_prev[i], "z-item-disd");
+				}
+				else if (cmp.actpg == cmp.npg - 1) {
+					zk.addClass(tb_next[i], "z-item-disd");
+					zk.addClass(tb_last[i], "z-item-disd");
+				}
 			}
 		}		
 		
