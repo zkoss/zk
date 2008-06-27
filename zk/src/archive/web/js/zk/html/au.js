@@ -255,7 +255,7 @@ zkau._areqTmout = function () {
 zkau._areqResend = function (reqInf, timeout) {
 	if (zkau._seqId == reqInf.sid) {//skip if the response was recived
 		zkau._preqInf = reqInf; //store as a pending request info
-		setTimeout("zkau._areqResend2()", timeout ? timeout: 0);
+		setTimeout(zkau._areqResend2, timeout ? timeout: 0);
 	}
 };
 zkau._areqResend2 = function () {
@@ -1360,7 +1360,7 @@ zkau._onResize = function () {
 	if (zkau._tmLastResz && now < zkau._tmLastResz)
 		return; //ignore resize for a while (since zk.onSizeAt might trigger onsize)
 
-	var delay = zk.ie ? 200: 50;
+	var delay = zk.ie ? 250: 50;
 	zkau._tmResz = now + delay - 1; //handle it later
 	setTimeout(zkau._onDidResize, delay);
 };
@@ -1374,13 +1374,19 @@ zkau._onDidResize = function () {
 	}
 
 	zkau._tmResz = null; //handled
-	zkau._tmLastResz = now + (zk.ie ? 300: 100); //when to process onresize again
+	zkau._tmLastResz = now + (zk.ie ? 350: 100); //when to process onresize again
 
 	if (zkau._cInfoReg)
-		setTimeout(zkau.cmd0.clientInfo, 20);
+		setTimeout(zkau._doClientInfo, 20);
+			//we cannot pass zkau.cmd0.clientInfo directly
+			//otherwise, FF will pass 1 as the firt argument,
+			//i.e., it is equivalent to zkau.cmd0.clientInfo(1)
 
 	zk.beforeSizeAt();
 	zk.onSizeAt();
+};
+zkau._doClientInfo = function () {
+	zkau.cmd0.clientInfo();
 };
 
 zkau._openTip = function (cmpId, enforce) {
