@@ -242,7 +242,7 @@ public class Row extends XulElement {
 		String style;
 		_rsflags = RS_NO_WIDTH|RS_NO_HEIGHT|RS_NO_DISPLAY;
 		try {
-			style = getRealStyle();
+			style = super.getRealStyle(); // since we overrode the original getRealStyle();
 		} finally {
 			_rsflags = 0;
 		}
