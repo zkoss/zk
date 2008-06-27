@@ -68,11 +68,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<label value="Group1: content"/>
 			</group>
 			<row>
-				<label value="File:"/>
+				<label style="padding-left:15px" value="File:"/>
 				<textbox width="98%"/>
 			</row>
 			<row>
-				<label value="Type:"/>
+				<label style="padding-left:15px" value="Type:"/>
 				<hbox>
 					<listbox rows="1" mold="select">
 						<listitem label="Java Files,(*.java)"/>
@@ -81,11 +81,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					<button label="Browse..."/>
 				</hbox>
 			</row>
-			<group label="Group 2"/>
+			<group label="Group 2" open="false"/>
 			<row>
-				<label value="Options:"/>
+				<label style="padding-left:15px" value="Options:"/>
 				<textbox rows="3" width="98%"/>
 			</row>
+			<groupfoot spans="2">
+				<label value="This a summary about Group 2"/>
+			</groupfoot>
 		</rows>
 	</grid>
 </window>
