@@ -4,7 +4,6 @@ complete.dsp
 {{IS_NOTE
 	Purpose:
 		Used to render a ZUL page as a complete page (aka., desktop)
-		if it is not included
 	Description:
 		
 	History:
