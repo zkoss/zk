@@ -798,6 +798,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				.getValue(_langdef.getEvaluator(), this);
 				//desktop and page URI is defined in language
 
+		if (bIncluded)
+			exec.setAttribute("org.zkoss.zk.ui.page.included", Boolean.TRUE);
+			//maintain original state since desktop.dsp will include page.dsp
+
 		final Map attrs = new HashMap(6);
 		attrs.put("page", this);
 		attrs.put("asyncUpdate", Boolean.valueOf(asyncUpdate));
@@ -805,8 +809,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		attrs.put("responses",
 			responses != null ? responses: Collections.EMPTY_LIST);
 		if (bIncluded) {
-			attrs.put("included", "true");
-				//maintain original state since desktop will include page...
 			exec.include(out, uri, attrs, Execution.PASS_THRU_ATTR);
 		} else {
 //FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
