@@ -675,11 +675,8 @@ public class ZkFns {
 			// the 'real' request and the original request.
 
 			final Execution exec = Executions.getCurrent();
-			if (exec != null) {
-				final Object o = exec.getAttribute("arg");
-				if (o instanceof Map)
-					contained = ((Map)o).get("included") != null;
-			}
+			contained = exec != null
+				&& exec.getAttribute("org.zkoss.zk.ui.page.included") != null;
 		}
 
 		//prepare style
