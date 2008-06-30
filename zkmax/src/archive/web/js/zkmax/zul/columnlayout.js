@@ -77,7 +77,7 @@ zkColumnLayout = {
 };
 if (zk.ie6Only) 
 	zkColumnLayout.beforeSize = function (cmp) {
-		$real(cmp).style.width = "";
+		$real(cmp).style.width = "0px";
 	};
 zkColumnChildren = {
 	init: function(cmp){
