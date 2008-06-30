@@ -250,6 +250,8 @@ zkPanel = {
 			setZKAttr(cmp, "maximized", maximized ? "true" : "false");
 			if (!silent)
 				zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized == true]});
+				
+			zk.beforeSizeAt(cmp);
 			zk.onSizeAt(cmp);
 		}
 	},
@@ -313,7 +315,7 @@ zkPanel = {
 		var body = $e(getZKAttr(cmp, "children"));
 		if (!body) return;
 		var hgh = cmp.style.height;
-		if (zk.ie6Only && body.style.height) body.style.height = "0px";
+		if (zk.ie6Only && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
 		if (hgh && hgh != "auto")
 			zk.setOffsetHeight(body, cmp.offsetHeight - zkPanel.getFrameHeight(cmp) - 1);
 	},

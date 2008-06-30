@@ -90,7 +90,7 @@ zkWnd2._fixHgh = function (cmp) {
 	if (!zk.isRealVisible(cmp)) return; //Bug #1944729
 	var hgh = cmp.style.height;
 	var n = $e(cmp.id + "!cave");
-	if (zk.ie6Only && n.style.height) n.style.height = "0px";
+	if (zk.ie6Only && ((hgh && hgh != "auto" )|| n.style.height)) n.style.height = "0px";
 	if (hgh && hgh != "auto")
 		zk.setOffsetHeight(n, cmp.offsetHeight - zkWnd2.getFrameHeight(cmp) - 1);
 };

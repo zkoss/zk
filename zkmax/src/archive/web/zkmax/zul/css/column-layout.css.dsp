@@ -22,3 +22,6 @@
     overflow: hidden;
     zoom: 1;
 }
+.z-column-layout-inner {
+    overflow: hidden;
+}

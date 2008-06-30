@@ -34,7 +34,6 @@ zkColumnLayout = {
 		}
 		return false;
 	},
-	
 	render: function(cmp){
 		if (!zk.isRealVisible(cmp)) 
 			return;
@@ -76,7 +75,10 @@ zkColumnLayout = {
 		}
 	}
 };
-
+if (zk.ie6Only) 
+	zkColumnLayout.beforeSize = function (cmp) {
+		$real(cmp).style.width = "";
+	};
 zkColumnChildren = {
 	init: function(cmp){
 		cmp = $real(cmp);
