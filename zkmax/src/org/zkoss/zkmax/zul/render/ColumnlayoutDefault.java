@@ -42,7 +42,7 @@ public class ColumnlayoutDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(self.getUuid() + "!real\" ").write(
 				"class=\"" + self.getSclass() + "-inner\">");
 		wh.writeChildren(self);
-		wh.write("<div class=\"z-clear\"/>");
+		wh.write("<div class=\"z-clear\"></div>");
 		wh.write("</div></div>");
 	}
 }
