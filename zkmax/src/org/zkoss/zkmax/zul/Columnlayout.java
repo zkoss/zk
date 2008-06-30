@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * A columnlayout lays out a container which can have multiple columns, and each
- * column may contain no more than one panel.<br>
+ * column may contain one or more panel.<br>
  * Use Columnlayout need assign width (either present or pixel) on every
  * Columnchildren, or we cannot make sure about layout look.
  * 
