@@ -27,7 +27,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			by a corresponding component name: north, south, east, west, and center. 
 			When adding a component to a container with a border layout, use one of these five constants.</p>		
 		]]></html>
-		<toolbarbutton label="More layout..." href="/userguide/layout/columnlayout.zul"/>
+		<toolbarbutton label="More layout..." onClick='((Include)Path.getComponent("//userGuide/xcontents")).setSrc("/userguide/layout/columnlayout.zul");'/>
 		<groupbox mold="3d" width="100%">
 			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
 			<window id="view" width="100%">
