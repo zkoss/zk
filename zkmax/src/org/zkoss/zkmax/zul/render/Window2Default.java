@@ -49,7 +49,7 @@ public class Window2Default implements ComponentRenderer {
 		if (caption != null || title.length() > 0) {
 			wh.write("<div class=\"l").write(titlesc).write("\"><div class=\"r")
 				.write(titlesc).write("\"><div class=\"m").write(titlesc).write("\"><div id=\"")
-				.write(uuid).write("!caption\" class=\"wt-title title\">");
+				.write(uuid).write("!caption\" class=\"").write(titlesc).write(" title\">");
 			if (caption == null) {
 				if (self.isClosable())
 					wh.write("<div id=\"").write(uuid).write("!close\" class=\"z-close-btn\"></div>");

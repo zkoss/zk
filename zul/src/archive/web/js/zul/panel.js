@@ -202,6 +202,13 @@ zkPanel = {
 			if (maximized) {
 				zk.addClass($e(cmp.id + "!maximize"), "z-panel-maximized");
 				zkPanel.hideShadow(cmp);
+				
+				if (zkPanel.isClosable(cmp) && getZKAttr(cmp, "open") != "true") {
+					zk.rmClass(cmp, "z-panel-collapsed");
+					var bwrap = $e(cmp.id + "!bwrap");
+					if (bwrap) bwrap.style.display = "";
+				}
+				
 				var op = zkPanel.isFloatable(cmp) ? Position.offsetParent(cmp) : cmp.parentNode;
 				l = s.left;
 				t = s.top;
@@ -219,18 +226,12 @@ zkPanel = {
 				if (sh < 0) sh = 0;
 				
 				s.width = sw + "px";
-				s.height = sw + "px";
+				s.height = sh + "px";
 				cmp._lastSize = {l:l, t:t, w:w, h:h};
 				
 				// restore.
 				s.top = "0px";
 				s.left = "0px";
-				
-				if (zkPanel.isClosable(cmp) && getZKAttr(cmp, "open") != "true") {
-					zk.rmClass(cmp, "z-panel-collapsed");
-					var bwrap = $e(cmp.id + "!bwrap");
-					if (bwrap) bwrap.style.display = "";
-				}
 			} else {
 				var max = $e(cmp.id + "!maximize");
 				zk.rmClass(max, "z-panel-maximized");
