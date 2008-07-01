@@ -581,8 +581,8 @@ public class Components {
 	 * component with the target event name onXxx$myid.</p> 
 	 * <p>The controller is a POJO file with onXxx$myid methods (the event handler 
 	 * codes). This utility method search such onXxx$myid methods and adds 
-	 * forward condition to the source myid component as being looked up by  
-	 * {@link org.zkoss.zk.ui.Component#getVariable(myid, false)}, so you 
+	 * forward condition to the source myid component looked up by  
+	 * {@link Component#getVariable} of the specified component, so you 
 	 * don't have to specify in zul file the "forward" attribute one by one. 
 	 * If the source component cannot be looked up or the object looked up is 
 	 * not a component, we will throw an UiException.
