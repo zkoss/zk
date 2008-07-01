@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.Out;
 import org.zkoss.zk.ui.render.SmartWriter;
@@ -39,7 +41,7 @@ public class Menu2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menu self = (Menu)comp;
 		final String uuid = self.getUuid();
-		
+		final Execution exec = Executions.getCurrent();
 		if (self.isTopmost()) {
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
@@ -57,7 +59,7 @@ public class Menu2Default implements ComponentRenderer {
 			else {
 				final String src = self.getSrc();
 				if (src != null && src.length() > 0)
-					imagesrc = "background-image:url(" + src + ")";
+					imagesrc = "background-image:url(" + exec.encodeURL(src) + ")";
 				else imagesrc = "";
 			}
 			wh.write("<td class=\"z-btn-m\"><em unselectable=\"on\"><button id=\"")

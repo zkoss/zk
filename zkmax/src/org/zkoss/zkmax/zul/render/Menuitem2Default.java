@@ -67,7 +67,7 @@ public class Menuitem2Default implements ComponentRenderer {
 			else {
 				final String src = self.getSrc();
 				if (src != null && src.length() > 0)
-					imagesrc = "background-image:url(" + src + ")";
+					imagesrc = "background-image:url(" + exec.encodeURL(src) + ")";
 				else imagesrc = "";
 			}
 			wh.write("<td class=\"z-btn-m\"><em unselectable=\"on\"><button id=\"")
