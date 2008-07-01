@@ -318,6 +318,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<fileset dir="${working.javadoc.dir}"/>
 	</move>
 	<delete quiet="true" dir="${working.javadoc.dir}"/>
+	<delete quiet="true" dir="${working.dir}"/>
 
 	<!-- copy xml and html to the destination since they might be referenced
 		by package.html -->
