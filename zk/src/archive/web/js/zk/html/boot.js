@@ -731,8 +731,9 @@ zk.addOnLoad = function (nm, script) {
  * @param nm the module name if no / is specified, or filename if / is
  * specified, or URL if :// is specified.
  * @param initfn the function that will be added to zk.addBeforeInit
- * @param ckfn used ONLY if URL (i.e., xxx://) is used as nm,
- * and the file being loaded doesn't invoke zk.ald().
+ * @param ckfn used if URL (i.e., xxx://) is used as nm
+ * and the file being loaded doesn't invoke zk.ald(), or
+ * we have to check more condition than calling back zk.ald().
  * @param modver the version of the module, or null to use zk.getBuild(nm)
  */
 zk.load = function (nm, initfn, ckfn, modver, dtid) {
@@ -744,8 +745,7 @@ zk.load = function (nm, initfn, ckfn, modver, dtid) {
 	if (!zk._modules[nm]) {
 		zk._modules[nm] = true;
 		if (initfn) zk.addBeforeInit(initfn);
-		zk._load(nm, modver, dtid);
-		if (ckfn) zk._ckfns.push(ckfn);
+		zk._load(nm, modver, dtid, ckfn);
 	}
 };
 zk._loadByType = function (nm, n) {
@@ -769,33 +769,29 @@ zk.loadByType = function (n) {
 };
 
 /** Loads the javascript. It invokes _bld before loading.
- *
- * <p>The JavaScript file being loaded must<br/>
- * 1) call zk.ald() after loaded<br/>
- * 2) pass ckfn to test whether it is loaded.
  */
-zk._load = function (nm, modver, dtid) {
-	zk._bld();
+zk._load = function (nm, modver, dtid, ckfn) {
+	//We don't use e.onload since Safari doesn't support it
+	//See also
+	//Bug 1815074: IE bug: zk.ald might be called before appendChild returns
 
-	var e = document.createElement("script");
+	zk._bld();
+	var e = document.createElement("script"),
+		prefix = "/web",
+		uri = nm;
 	e.type = "text/javascript" ;
 
-	var zcb;
-	if (zk.gecko) {
-		e.onload = zk.ald;
-		zcb = "";
-	} else {
-		zcb = "/_zcbzk.ald";
-			//Note: we use /_zcb to enforce callback of zk.ald
-	}
+	if (ckfn) zk._ckfns.push(ckfn);
+	else prefix += "/_zcbzk.ald";
 
-	var uri = nm;
 	if (uri.indexOf("://") > 0) {
+		if (!ckfn && zk.debugJS)
+			zk.error("zk.load: ckfn required to load "+uri);
 		e.src = uri;
 	} else if (uri.indexOf('/') >= 0) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		e.charset = "UTF-8";
-		e.src = zk.getUpdateURI("/web" + zcb + uri, false, modver, dtid);
+		e.src = zk.getUpdateURI(prefix + uri, false, modver, dtid);
 	} else { //module name
 		uri = uri.replace(/\./g, '/');
 		var j = uri.lastIndexOf('!');
@@ -805,11 +801,9 @@ zk._load = function (nm, modver, dtid) {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 		e.charset = "UTF-8";
 		if (!modver) modver = zk.getBuild(nm);
-		e.src = zk.getUpdateURI("/web" + zcb + "/js" + uri, false, modver, dtid);
+		e.src = zk.getUpdateURI(prefix + "/js" + uri, false, modver, dtid);
 	}
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
-		//Bug 1815074: IE bug:
-		//zk.ald might be called before returning from appendChild
 };
 /** before load. */
 zk._bld = function () {
