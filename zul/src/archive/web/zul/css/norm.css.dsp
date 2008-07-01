@@ -1817,7 +1817,7 @@ tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.s
 }--%>
 <%-- ZK Panel --%>
 .z-panel {
-	border-style: solid; border-color: #99BBE8; border-width: 0;
+	border-style: solid; border-color: #99BBE8; border-width: 0; overflow: hidden;
 }
 .z-panel-t {
 	overflow: hidden; zoom: 1; color: #15428b; font: bold 11px tahoma, arial, verdana, sans-serif;

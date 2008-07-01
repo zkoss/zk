@@ -82,6 +82,7 @@ zkPanel = {
 			cmp.style.top = xy[1] + "px";
 		}
 		zkau.fixZIndex(cmp);
+		zkau._overlaps.push(cmp.id);
 		cmp.style.position = "absolute";
 		if (zkPanel.isMovable(cmp))
 			zkPanel._initMove(cmp);
@@ -130,6 +131,7 @@ zkPanel = {
 		if (cmp._lastSize) {
 			cmp._lastSize = null;
 		}
+		zkau._overlaps.remove(cmp.id);
 		zkPanel.cleanupShadow(cmp);
 	},
 	isFloatable: function (cmp) {
@@ -210,8 +212,14 @@ zkPanel = {
 				s.top = "-10000px";
 				s.left = "-10000px";
 				
-				s.width = op.clientWidth + "px";
-				s.height = op.clientHeight + "px";
+				// Sometimes, the clientWidth/Height in IE6 is wrong. 
+				var sw = zk.ie6Only ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
+				if (sw < 0) sw = 0;
+				var sh = zk.ie6Only ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+				if (sh < 0) sh = 0;
+				
+				s.width = sw + "px";
+				s.height = sw + "px";
 				cmp._lastSize = {l:l, t:t, w:w, h:h};
 				
 				// restore.

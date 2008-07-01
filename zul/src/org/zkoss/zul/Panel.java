@@ -38,11 +38,12 @@ import org.zkoss.zul.impl.XulElement;
  * footer and body sections. It also provides built-in collapsible, closable,
  * maximizable, and minimizable behavior, along with a variety of pre-built tool 
  * buttons that can be wired up to provide other customized behavior. Panels can
- * be easily embedded into any component or layout component. Panels also provide
- * specific behavior like the ability to float and move, unlike {@link Window}, 
- * Panels can only be floated and moved into its parent node not using zk.setVParent()
- * function at client side. In other words, if Panel's parent node is an absolute
- * position, the floated panel is only inside its parent.
+ * be easily embedded into any kind of ZUL component that is allowed to have children
+ * or layout component. Panels also provide specific features like float and move.
+ * Unlike {@link Window}, Panels can only be floated and moved inside its parent
+ * node, which is not using zk.setVParent() function at client side. In other words,
+ * if Panel's parent node is an relative position, the floated panel is only inside
+ * its parent, not the whole page.
  * The second difference of {@link Window} is that Panel is not an independent ID
  * space (by implementing {@link IdSpace}), so the ID of each child can be used 
  * throughout the panel.

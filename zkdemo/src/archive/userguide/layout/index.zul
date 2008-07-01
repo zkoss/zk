@@ -41,5 +41,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="Groupbox" onClick="doSelect(&quot;l4&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Grids" onClick="doSelect(&quot;l5&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Grid's Grouping" onClick="doSelect(&quot;l6&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Panel" onClick="doSelect(&quot;l7&quot;)"/></h:li>
 	</h:ul>
 </window>
