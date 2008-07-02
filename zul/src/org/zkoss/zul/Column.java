@@ -18,9 +18,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
@@ -202,7 +207,7 @@ public class Column extends HeaderElement {
 	 * null but {@link ListModelExt} is not implemented.
 	 */
 	public boolean sort(boolean ascending) {
-		final String dir = getSortDirection();
+		final String dir = getSortDirection();		
 		if (ascending) {
 			if ("ascending".equals(dir)) return false;
 		} else {
@@ -261,6 +266,57 @@ public class Column extends HeaderElement {
 	public boolean sort(boolean ascending, boolean force) {
 		if (force) setSortDirection("natural");
 		return sort(ascending);
+	}
+	/**
+	 * Groups the rows ({@link Row}) based on {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 *    
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @return whether the rows are grouped.
+	 */
+	public boolean groupByField(boolean ascending){
+		final Comparator<Component> cmpr = ascending ? _sortAsc: _sortDsc;
+		if (cmpr == null) return false;
+		
+		final Grid grid = getGrid();
+		if (grid == null) return false;
+		
+		final Rows rows = grid.getRows();		
+		if (rows.getChildren().size() > 0){
+			final List children = new ArrayList(rows.getChildren());
+			for (Iterator it = children.iterator(); it.hasNext();) {
+				Row row = (Row) it.next();
+				if (row instanceof Group || row instanceof Groupfoot) rows.removeChild(row);
+			}						
+		}					
+		//comparator might be zscript
+		final HashMap backup = new HashMap();
+		final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
+		try {		    
+		    if (rows.getChildren().size() > 0) {
+		    	final List children = new ArrayList(rows.getChildren());
+		    	Components.sort(children, cmpr);						
+		    	rows.getChildren().clear();
+		    	for (Iterator it = children.iterator(); it.hasNext();) {
+		    		Row row = (Row) it.next();
+		    		int index = grid.getColumns().getChildren().indexOf(this);		    						
+		    		if ((children.indexOf(row) == 0 || (children.indexOf(row) > 0 
+		    				&& cmpr.compare(row, rows.getLastChild()) != 0))) {
+		    			Group gr = new Group();
+		    			Component cmp = (Component) row.getChildren().get(index);
+		    			if (cmp instanceof Label) gr.setLabel(((Label)cmp).getValue());
+		    			rows.appendChild(gr);
+		    		}
+		    		rows.appendChild(row);		    		
+		    	}			
+		    }
+		} finally {
+			Namespaces.afterInterpret(backup, ns, true);
+		}		
+		return ascending;		
 	}
 
 	//-- event listener --//
