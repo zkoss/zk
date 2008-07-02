@@ -1119,7 +1119,7 @@ zkau.ajaxRequest = function () {
 	}
 };
 
-/** Handles window.unload. */
+/** Handles window.onunload. */
 zkau._onUnload = function () {
 	zkau._unloading = true; //to disable error message
 
@@ -1164,7 +1164,7 @@ zkau._onBfUnload = function () {
 		if (s) return s;
 	}
 
-	zkau._unloading = true;
+	zkau._unloading = true; //FF3 aborts ajax before calling window.onunload
 	//Return nothing
 };
 
