@@ -314,11 +314,9 @@ zkTbtn.init = function (cmp) {
 
 			zkau.onclick(evt); //Bug 1878839: we shall always fire onClick
 
-			if ("javascript:;" != cmp.href) {
-				var t = cmp.getAttribute("target");
-				if (cmp.href && !zk.isNewWindow(cmp.href, t))
-					zk.progress();
-			}
+			if (cmp.href
+			&& !zk.isNewWindow(cmp.href, cmp.getAttribute("target")))
+				zk.progress();
 		});
 	
 	if (getZKAttr(cmp, "disd") != "true") {

@@ -170,7 +170,7 @@ zk.alert = function (msg) {
 	try {
 		alert(msg);
 	} finally {
-		zk.alerting = false;
+		try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 	}
 };
 /** To confirm the user for an activity.
@@ -181,7 +181,7 @@ zk.confirm = function (msg) {
 	try {
 		return confirm(msg);
 	} finally {
-		zk.alerting = false;
+		try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 	}
 };
 
@@ -1390,6 +1390,7 @@ zk.go = function (url, overwrite, target) {
 	if (bProgress) zk.progressDone(); // Bug #1843032
 };
 /** Tests whether a new window will be opened.
+ * More precisely, whether the current document won't be changed.
  */
 zk.isNewWindow = function (url, target) {
 	return url.startsWith("mailto:") || url.startsWith("javascript:")
