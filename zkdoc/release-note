@@ -5,6 +5,7 @@ ZK 3.0.7
   2003751: GenericAutowireComposer support implicit objects and alert()
   
 * Bugs
+  2008676: Firefox 3: toolbarbutton with href causes false alarm
 
 	--------
 ZK 3.0.6
