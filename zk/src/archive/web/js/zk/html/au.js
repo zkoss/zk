@@ -1159,8 +1159,12 @@ zkau._onBfUnload = function () {
 		if (s) return s;
 	}
 
-	if (zkau._oldBfUnload)
-		return zkau._oldBfUnload.apply(window, arguments);
+	if (zkau._oldBfUnload) {
+		var s = zkau._oldBfUnload.apply(window, arguments);
+		if (s) return s;
+	}
+
+	zkau._unloading = true;
 	//Return nothing
 };
 
