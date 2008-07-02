@@ -140,8 +140,8 @@ zkPanel = {
 	isMovable: function (cmp) {
 		return getZKAttr(cmp, "movable") == "true";
 	},
-	isClosable: function (cmp) {
-		return getZKAttr(cmp, "closable") == "true";
+	isCollapsible: function (cmp) {
+		return getZKAttr(cmp, "collapsible") == "true";
 	},
 	onOpen: function (evt) {
 		if (!evt) evt = window.event;
@@ -203,7 +203,7 @@ zkPanel = {
 				zk.addClass($e(cmp.id + "!maximize"), "z-panel-maximized");
 				zkPanel.hideShadow(cmp);
 				
-				if (zkPanel.isClosable(cmp) && getZKAttr(cmp, "open") != "true") {
+				if (zkPanel.isCollapsible(cmp) && getZKAttr(cmp, "open") != "true") {
 					zk.rmClass(cmp, "z-panel-collapsed");
 					var bwrap = $e(cmp.id + "!bwrap");
 					if (bwrap) bwrap.style.display = "";
@@ -246,7 +246,7 @@ zkPanel = {
 				t = s.top;
 				w = s.width;
 				h = s.height;
-				if (zkPanel.isClosable(cmp) && getZKAttr(cmp, "open") != "true") {
+				if (zkPanel.isCollapsible(cmp) && getZKAttr(cmp, "open") != "true") {
 					zk.addClass(cmp, "z-panel-collapsed");
 					var bwrap = $e(cmp.id + "!bwrap");
 					if (bwrap) bwrap.style.display = "none";

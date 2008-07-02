@@ -35,7 +35,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<attribute name="value"><![CDATA[
 <zk>
 	<columnlayout>
-		<columnchildren width="20%" style="padding: 5px">
+		<columnchildren width="30%" style="padding: 5px">
 			<panel height="100px" style="margin-bottom:10px"
 				title="column1-1" border="normal" maximizable="true"
 				collapsible="true">
@@ -106,11 +106,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</panel>
 		</columnchildren>
 
-		<columnchildren width="30%" style="padding: 10px">
-			<panel title="Data" framable="true" border="normal"
+		<columnchildren width="40%" style="padding: 10px">
+			<panel title="Data" maximizable="true" border="normal"
 				style="margin-bottom:10px">
 				<panelchildren>
-					<grid>
+					<grid fixedLayout="true" style="border:0px" height="100%">
 						<columns>
 							<column label="category" />
 							<column label="value" />

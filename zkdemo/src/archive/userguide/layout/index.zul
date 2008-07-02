@@ -36,6 +36,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="The box model" onClick="doSelect(&quot;l1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Splitters" onClick="doSelect(&quot;lsplt&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Border layout" onClick="doSelect(&quot;layout&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Column layout" onClick="doSelect(&quot;columnlayout&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Tabboxes" onClick="doSelect(&quot;l2&quot;)"/></h:li>
 		<h:li><toolbarbutton label="More tabboxes" onClick="doSelect(&quot;l3&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Groupbox" onClick="doSelect(&quot;l4&quot;)"/></h:li>
