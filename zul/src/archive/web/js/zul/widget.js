@@ -315,23 +315,22 @@ zkButton.init = function (cmp) {
 };
 zkTbtn = {}; //toolbarbutton
 zkTbtn.init = function (cmp) {
-		zk.listen(cmp, "click", function (evt) {			
-			if (getZKAttr(cmp, "disd") == "true") {
-				Event.stop(evt);
-				return;
-			}
-
-			zkau.onclick(evt); //Bug 1878839: we shall always fire onClick
-
-			if (cmp.href
-			&& !zk.isNewWindow(cmp.href, cmp.getAttribute("target")))
-				zk.progress();
-		});
+	zk.listen(cmp, "click", zkTbtn.onclick);
 	
 	if (getZKAttr(cmp, "disd") != "true") {
 		zk.listen(cmp, "focus", zkau.onfocus);
 		zk.listen(cmp, "blur", zkau.onblur);
 	}
+};
+zkTbtn.onclick = function (evt) {
+	if (getZKAttr(cmp, "disd") == "true") {
+		Event.stop(evt);
+		return;
+	}
+
+	zkau.onclick(evt, true); //Bug 1878839: we shall always fire onClick
+
+	//No need to call zk.proress() since zkau.onclick sends onClick
 };
 
 ////
