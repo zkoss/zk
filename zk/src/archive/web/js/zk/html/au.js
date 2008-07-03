@@ -178,6 +178,7 @@ zkau.onclick = function (evt) {
 		Event.stop(evt); //prevent _onDocLClick
 		return; //done
 	}
+
 	zkau._lastClickId = target.id;
 	zkau.send({uuid: $uuid(target.id),
 		cmd: "onClick", data: zkau._getMouseData(evt, target), ctl: true});
