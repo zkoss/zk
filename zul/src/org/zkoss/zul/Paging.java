@@ -201,12 +201,12 @@ public class Paging extends XulElement implements Paginal {
 	 * @since 3.5.0
 	 */
 	public String getInfoTags() {
-		final StringBuffer sb = new StringBuffer(512);
 		if (_ttsz == 0)
-			return sb.append("No topics to display").toString();
-			
+			return "";
+
+		final StringBuffer sb = new StringBuffer(512);
 		int lastItem = (_actpg+1) * _pgsz;
-		sb.append("<div class=\"z-paging-info\">[ ")
+		sb.append("<div class=\"").append(getSclass()).append("-info\">[ ")
 			.append(_actpg * _pgsz + 1).append(" - ").append(lastItem > _ttsz ? _ttsz : lastItem)
 			.append(" / ").append(_ttsz).append(" ]</div>");
 		return sb.toString();

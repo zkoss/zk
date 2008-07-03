@@ -61,7 +61,7 @@ public class Window2Default implements ComponentRenderer {
 			wcExtStyle = "border-top:0;";
 		} else if (!isEmbedded) {
 			wh.write("<div class=\"l").write(titlesc).write("\"><div class=\"r")
-				.write(titlesc).write("\"></div class=\"m").write(titlesc)
+				.write(titlesc).write("\"><div class=\"m").write(titlesc)
 				.write("-notitle\"></div></div></div>");
 		}
 		final String ccls = self.getContentSclass();

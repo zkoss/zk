@@ -1279,44 +1279,41 @@ li.z-menu-item-over {
 .z-menu-item-unck .z-menu-item-icon {
 	background: transparent url(${c:encodeURL('~./zul/img/menu/unchecked.gif')}) no-repeat center;
 }
-.z-paging .ypb-text{
+.z-paging .z-paging-text {
 	padding:2px;
 }
-.z-paging .ypb-sep{
+.z-paging .z-paging-sep {
 	background-image:url(${c:encodeURL('~./zul/img/paging/pg-split.gif')});
 	background-position:center;	background-repeat:no-repeat;
 	display:block;font-size:1px;height:16px;width:4px;overflow:hidden;
 	cursor:default;margin:0 2px 0;border:0;
 }
-.z-paging .ypb-spacer{
-	width:2px;
-}
-.z-pbar-page-number {
+.z-paging-number {
 	width: 24px; height: 14px; border: 1px solid #7F9DB9;
 }
-.z-pbar-page-first{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-first.gif')})!important;
+.z-paging-first {
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-first.gif')})!important;
 }
-.z-pbar-page-last{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-last.gif')})!important;
+.z-paging-last {
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-last.gif')})!important;
 }
-.z-pbar-page-next{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-next.gif')})!important;
+.z-paging-next {
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-next.gif')})!important;
 }
-.z-pbar-page-prev{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-prev.gif')})!important;
+.z-paging-prev {
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-prev.gif')})!important;
 }
-.z-item-disd .z-pbar-page-first{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-first-disd.gif')})!important;
+.z-item-disd .z-paging-first {
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-first-disd.gif')})!important;
 }
-.z-item-disd .z-pbar-page-last{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-last-disd.gif')})!important;
+.z-item-disd .z-paging-last {
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-last-disd.gif')})!important;
 }
-.z-item-disd .z-pbar-page-next{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-next-disd.gif')})!important;
+.z-item-disd .z-paging-next {
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-next-disd.gif')})!important;
 }
-.z-item-disd .z-pbar-page-prev{
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-prev-disd.gif')})!important;
+.z-item-disd .z-paging-prev {
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-prev-disd.gif')})!important;
 }
 .z-paging-info{
 	position:absolute;top:5px;right:8px;color:#444;
