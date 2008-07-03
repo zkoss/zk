@@ -106,7 +106,93 @@ zk.air = zk.agent.indexOf("adobeair") != -1;
 //zk.macintosh = zk.agent.indexOf("macintosh") != -1;
 zk._js4ld = {}; //{name, [script]}
 zk._ctpgs = []; //contained page IDs
+zk._gevts = {}; // ZK Global Events. 
 zk.voidf = function () {return false;}; //always return false
+
+/**
+ * Appends an event listener from the specified component
+ * 
+ * <p>Note: If you want to stop the propagation of the event,
+ * 	you can return false at that listener function</p>
+ * 
+ * For example,     
+ * <pre><code>
+zk.on(cmp, "close", function (cmp) {
+	// do something...
+
+	return false; // if you want to stop the propagation of the event. Otherwise, don't need to return.
+
+});</code></pre>
+ * @param {Object} el an element or a zk component
+ * @param {String} evtnm The name of event to listen for
+ * @param {Function} fn handler The method the event invokes
+ * @since 3.5.0
+ */
+zk.on = function (el, evtnm, fn) {
+	var ls = zk._gevts[el];
+	if (!ls) zk._gevts[el] = ls = {};
+	var fns = ls[evtnm];
+	if (!fns) ls[evtnm] = fns = [];
+	fns.push(fn);
+};
+/**
+ * Removes an event listener from the specified component
+ * @param {Object} el an element or a zk component
+ * @param {String} evtnm The name of event to listen for
+ * @param {Function} fn The handler to remove
+ * @since 3.5.0
+ */
+zk.un = function (el, evtnm, fn) {
+	var fns = zk.find(el, evtnm);
+	if (fns) {
+		fns.remove(fn);
+		if (!fns.length) delete ls[evtnm];
+	}
+};
+/**
+ * Removes all listeners for the specified component
+ * @param {Object} el an element or a zk component
+ * @since 3.5.0
+ */
+zk.unAll = function (el) {
+	var ls = zk._gevts[el];
+	for (var evtnm in ls) {
+		var fns = ls[evtnm];
+		delete ls[evtnm];
+		fns = null;
+	}
+};
+/**
+ * Finds all listeners of the event name from the specified component
+ * @param {Object} el an element or a zk component
+ * @param {String} evtnm The name of event to listen for
+ * @since 3.5.0
+ */
+zk.find = function (el, evtnm) {
+	var ls = zk._gevts[el];
+	return ls ? ls[evtnm] : null;
+};
+
+/**
+ * Fires the specified event with the passed parameters.
+ * @param {Object} el an element or a zk component
+ * @param {String} evtnm The name of event to listen for
+ * @param {Object...} args Variable number of parameters are passed to handlers
+ * @param {Object} scope The scope in which to execute the listener function. 
+ * 	The listener function's "this" context.
+ * @since 3.5.0
+ */
+zk.fire = function (el, evtnm, args, scope) {
+	var fns = zk.find(el, evtnm);
+	if (fns) {
+		for (var i = 0, j = fns.length; i < j; i++) {
+			var f = fns[i];
+			if (!args) args = [el];
+			if(f.apply(scope || el, args) === false)
+				return; // stop propagation, if any.
+		}
+	}
+};
 
 /** Listen a browser event.
  * Why not to use prototype's Event.observe? Performance.
@@ -1097,7 +1183,7 @@ zk.eval = function (n, fn, type) {
 					var args = [n];
 					for (var j = arguments.length - 2; --j > 0;) //3->1, 4->2...
 						args[j] = arguments[j + 2];
-					return f.apply(n, args);
+					return f.apply(o, args);
 				} catch (ex) {
 					zk.error("Failed to invoke zk"+type+"."+fn+"\n"+ex.message);
 					if (zk.debugJS) throw ex;
@@ -1140,6 +1226,7 @@ zk._cleanupAt = function (n) {
 		zk._szcmps.remove(n.id);
 		zk._bfszcmps.remove(n.id);
 		zk._scrlcmps.remove(n.id);
+		zk.unAll(n); // since 3.5.0
 	}
 
 	for (n = n.firstChild; n; n = n.nextSibling)

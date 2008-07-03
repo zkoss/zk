@@ -5,6 +5,7 @@ ZK 3.5.0
   1972591: Grid support Groupfoot in Group
   1907300: Listbox: support grouping
   1997391: Provide a new component, Panel, like Window but more richer
+  2002986: Columnlayout Component
   1959952: Support Comet-based Server Push
   1951422: Grid: support grouping
   1962747: Allow to specify a XML fragment as compnent's content
@@ -28,7 +29,7 @@ ZK 3.5.0
   1990503: The blank text shall be preserved for some components
   1997383: Provide a panel mold for Toolbar as Panel's foot toolbar
   1997384: Toolbar support alignment control
-  2002986: Columnlayout Component
+  2009346: Support event listener of ZK client cmp for cmp developer
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
