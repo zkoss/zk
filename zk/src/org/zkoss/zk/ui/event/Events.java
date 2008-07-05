@@ -19,9 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 import java.lang.reflect.Method;
-import java.util.Set;
-
-import org.zkoss.lang.D;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -35,7 +32,6 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.impl.EventProcessor;
-import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.ui.util.Clients;
 
@@ -287,9 +283,10 @@ public class Events {
 		sendEvent(event.getTarget(), event);
 	}
 
-	/** Posts an event.
-	 * The event is placed at the end of the event queue.
-	 * It will be processed after all other events are processed.
+	/** Posts an event to the current execution.
+	 *
+	 * <p>The priority of the event is assumed to be 0. Refer to
+	 * {@link #postEvent(int, Event)}.
 	 *
 	 * <p>On the other hand, the event sent by {@link #sendEvent} is processed
 	 * immediately without posting it to the queue.
@@ -298,16 +295,62 @@ public class Events {
 	 * the page yet, the event is ignored silently.
 	 * @see #sendEvent
 	 * @see #echoEvent
+	 * @see #postEvent(int, Event)
 	 */
 	public static final void postEvent(Event event) {
 		Executions.getCurrent().postEvent(event);
 	}
-	/** Posts a generic event (aka, an instance of {@link Event}).
+	/** Posts an instance of {@link Event} to the current execution.
+	 * <p>The priority of the event is assumed to be 0. Refer to
+	 * {@link #postEvent(int, String, Component, Object)}.
+	 * @see #postEvent(Event)
+	 * @see #postEvent(int, String, Component, Object)
 	 */
-	public static final void postEvent(String name, Component target, Object data) {
+	public static final
+	void postEvent(String name, Component target, Object data) {
+		postEvent(0, name, target, data);
+	}
+	/** Posts an event to the current execution with the specified priority.
+	 *
+	 * <p>The posted events are processed from the higher priority to the 
+	 * lower one. If two events are posted with the same priority,
+	 * the earlier the event being posted is processed earlier
+	 * (first-in-first-out).
+	 *
+	 * <p>The priority posted by posted by {@link #postEvent(Event)} is
+	 * 0.
+	 * Applications shall not use the priority higher than 10,000 and
+	 * lower than -10,000 since they are reserved for component
+	 * development.
+	 *
+	 * @param priority the priority of the event.
+	 * @since 3.0.7
+	 */
+	public static final void postEvent(int priority, Event event) {
+		Executions.getCurrent().postEvent(priority, event);
+	}
+	/** Posts an instance of {@link Event} to the current execution
+	 * with the specified priority.
+	 *
+	 * <p>The posted events are processed from the higher priority to the 
+	 * lower one. If two events are posted with the same priority,
+	 * the earlier the event being posted is processed earlier
+	 * (first-in-first-out).
+	 *
+	 * <p>The priority posted by posted by {@link #postEvent(Event)} is
+	 * 0.
+	 * Applications shall not use the priority higher than 10,000 and
+	 * lower than -10,000 since they are reserved for component
+	 * development.
+	 *
+	 * @param priority the priority of the event.
+	 * @since 3.0.7
+	 */
+	public static final void postEvent(int priority,
+	String name, Component target, Object data) {
 		if (name == null || name.length() == 0 || target == null)
 			throw new IllegalArgumentException("null");
-		postEvent(new Event(name, target, data));
+		postEvent(priority, new Event(name, target, data));
 	}
 
 	/** Echos an event.
