@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Collections;
+import java.util.ListIterator;
 import java.io.Reader;
 import java.io.IOException;
 
@@ -54,7 +55,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private Page _curpage;
 	private PageDefinition _curpgdef;
 	private Visualizer _ei;
-	private List _events;
+	/** A list of EventInfo. */
+	private final List _evtInfos = new LinkedList();
 	/** A stack of args being pushed by {@link #pushArg}. */
 	private List _args;
 	//private Event _evtInProc;
@@ -84,17 +86,24 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public void postEvent(Event evt) {
+		postEvent(0, evt);
+	}
+	public void postEvent(int priority, Event evt) {
 		if (evt == null)
 			throw new IllegalArgumentException("null");
 
 		evt = ((DesktopCtrl)_desktop).beforePostEvent(evt);
 		if (evt == null)
-			return; //done
+			return; //done (ignored)
 
-		if (_events == null)
-			_events = new LinkedList();
-		_events.add(evt);
-		//_piggybacked = false; //allow piggyback to be called again
+		for (ListIterator it = _evtInfos.listIterator(_evtInfos.size());;) {
+			EventInfo ei = it.hasPrevious() ? (EventInfo)it.previous(): null;
+			if (ei == null || ei.priority >= priority) {
+				if (ei != null) it.next();
+				it.add(new EventInfo(priority, evt));
+				break;
+			}
+		}	
 	}
 
 	//-- ExecutionCtrl --//
@@ -115,16 +124,17 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Event getNextEvent() {
-		if (_events != null && !_events.isEmpty())
-			return (Event)_events.remove(0);
+		if (!_evtInfos.isEmpty())
+			return ((EventInfo)_evtInfos.remove(0)).event;
 
 		if (!_piggybacked) { //handle piggyback only once
 			((DesktopCtrl)_desktop).onPiggyback();
 			_piggybacked = true;
-		}
 
-		return _events != null && !_events.isEmpty() ? 
-			(Event)_events.remove(0): null;
+			if (!_evtInfos.isEmpty())
+				return ((EventInfo)_evtInfos.remove(0)).event;
+		}
+		return null;
 	}
 
 	public boolean isActivated() {
@@ -271,5 +281,17 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	//Object//
 	public String toString() {
 		return "[Exec"+System.identityHashCode(this)+": "+_desktop+']';
+	}
+
+	private static class EventInfo {
+		private final int priority;
+		private final Event event;
+		private EventInfo(int priority, Event event) {
+			this.priority = priority;
+			this.event = event;
+		}
+		public String toString() {
+			return "[" + this.priority + ": " + this.event.toString() + "]";
+		}
 	}
 }

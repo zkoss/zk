@@ -158,11 +158,32 @@ public interface Execution  {
 	 */
 	public VariableResolver getVariableResolver();
 
-	/** Queues an event to the current execution.
-	 * The event is placed at the end of the event queue.
-	 * It will be processed after all other events are processed.
+	/** Queues an event to this execution.
+	 * In other words, the event is placed to the event queue.
+	 *
+	 * <p>The priority of the event is assumed to be 0. Refer to
+	 * {@link #postEvent(int, Event)}.
 	 */
 	public void postEvent(Event evt);
+	/** Queues an event with the specified priority to this execution.
+	 * In other words, the event is placed to the event queue
+	 * with the specified prority.
+	 *
+	 * <p>The posted events are processed from the higher priority to the 
+	 * lower one. If two events are posted with the same priority,
+	 * the earlier the event being posted is processed earlier
+	 * (first-in-first-out).
+	 *
+	 * <p>The priority posted by posted by {@link #postEvent(Event)} is
+	 * 0.
+	 * Applications shall not use the priority higher than 10,000 and
+	 * lower than -10,000 since they are reserved for component
+	 * development.
+	 *
+	 * @param priority the priority of the event.
+	 * @since 3.0.7
+	 */
+	public void postEvent(int priority, Event evt);
 
 	/** Whether to overwrite uri if both uri and params contain the same
 	 * parameter.
