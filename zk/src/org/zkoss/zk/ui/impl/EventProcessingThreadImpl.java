@@ -202,8 +202,8 @@ implements EventProcessingThread {
 				//Bug 1814298: need to call Execution.onDeactivate
 				Execution exec = getExecution();
 				if (exec != null) {
-					((ExecutionCtrl)exec).onDeactivate();
 					_acted = false;
+					((ExecutionCtrl)exec).onDeactivate();
 				}
 
 				//let the main thread continue
@@ -426,8 +426,10 @@ implements EventProcessingThread {
 						if (!cleaned) newEventThreadCleanups(config, _ex);
 
 //						if (log.finerable()) log.finer("Real processing is done: "+_proc);
-						if (exec != null && _acted) //_acted is false if suspended is killed
+						if (exec != null && _acted) { //_acted is false if suspended is killed
+							_acted = false;
 							((ExecutionCtrl)exec).onDeactivate();
+						}
 						cleanup();
 
 						Locales.setThreadLocal(_locale = null);
