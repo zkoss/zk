@@ -1408,7 +1408,7 @@ zkLitgp = {
 				if(zk.isVisible(row.cells[i])) span++;
 			for (var cells = cmp.cells, i = cells.length; --i >= 0;)
 				span -= cells[i].colSpan;
-			if (span > 0) cmp.cells[cmp.cells.length - 1].colSpan += span;
+			if (span > 0 && cmp.cells.length) cmp.cells[cmp.cells.length - 1].colSpan += span;
 		}
 	},	ontoggle: function (evt) {
 		if (!evt) evt = window.event;
