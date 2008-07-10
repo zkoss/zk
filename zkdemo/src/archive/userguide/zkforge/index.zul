@@ -37,7 +37,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	]]></html> 
 	<h:ul>
 		<h:li><toolbarbutton label="FCKeditor" onClick="doSelect(&quot;zf1&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Dojo Fisheye List" onClick="doSelect(&quot;zf2&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Google Maps" onClick="doSelect(&quot;zf3&quot;)"/></h:li>
 		<h:li><toolbarbutton label="SIMILE Timeline" onClick="doSelect(&quot;zf4&quot;)"/></h:li>
 	</h:ul>

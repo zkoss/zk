@@ -59,7 +59,7 @@ if (!window.Boot_progressbox) { //not customized
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 		zk._setOuterHTML(n, html);
-		
+		if (mask) zk.listen($e("zk_mask"), "mousemove", Event.stop);
 		var el = $e("zk_loading");
 		if (center) {
 			if (el) {
@@ -378,9 +378,12 @@ function $now() {
 }
 /** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
  * it tried to extend the element.
+ * @param alias a name is postfixed with the id via the "!" word. (since 3.5.0)
+ *  for example, if alias is "real", the "id!real" element is returned, if any.
  */
-function $e(id) {
-	return typeof id == 'string' ? id ? document.getElementById(id): null: id;
+function $e(id, alias) {
+	if (id && id.id) id = id.id;
+	return typeof id == 'string' ? id ? document.getElementById(id + (alias ? "!" + alias : "")): null: id;
 		//strange but getElementById("") fails in IE7
 }
 /** A control might be enclosed by other tag while event is sent from

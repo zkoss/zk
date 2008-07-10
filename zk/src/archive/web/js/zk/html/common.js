@@ -545,6 +545,7 @@ zk.offsetLeft = function (el) {
 		el = el.cells[0];
 	return el.offsetLeft;
 };
+zk.margins = {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"};
 zk.borders = {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"};
 zk.paddings = {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"};
 /** Returns the summation of the specified styles.
@@ -1113,6 +1114,16 @@ zk.parentNode = function (el, tagName) {
 	while (el && (el = $parent(el))/*yes,assign*/ && $tag(el) != tagName)
 		;
 	return el;
+};
+/**
+ * Returns a collection of child nodes of the given element. (Only nodeType = 1)
+ * @since 3.5.0
+ */
+zk.childNodes = function (el) {
+	var nodes = [];
+	for (var n = el.firstChild; n; n = n.nextSibling)
+		if (n.nodeType == 1) nodes.push(n);
+	return nodes;
 };
 /** Returns the first child of the specified node. */
 zk.firstChild = function (el, tagName, descendant) {

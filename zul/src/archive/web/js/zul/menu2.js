@@ -336,9 +336,11 @@ zkMenu2 = { // menu
 				zkMenu2.onPopupOut(zkMenu2.getItemAt($e(pp.id + "!cave"), $int(seld)).el);
 				rmZKAttr(pp, "seld");
 			}
+			zk.fire(pp, "close");
 		}
 	},
 	_close2: function (pp) {
+		if (pp._shadow) pp._shadow.hide();
 		setTimeout("zkMenu2._close('"+pp.id+"')", 0);
 	}
 };
@@ -411,6 +413,6 @@ zkMpop2 = { //menupopup
 			if (zkau.asap(ctx, "onOpen"))
 				zkau.send({uuid: ctx.id, cmd: "onOpen",
 					data: ref ? [true, ref.id]: [true]});
-		}
+		} else if (ctx._shadow) ctx._shadow.sync();
 	}
 };

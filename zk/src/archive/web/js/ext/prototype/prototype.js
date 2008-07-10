@@ -2111,7 +2111,7 @@ if (!window.opera || element.tagName == 'BODY' || (tagName != "TR" && tagName !=
 				valueT += $int(Element.getStyle(el, "border-top-width"));
 				valueL += $int(Element.getStyle(el, "border-left-width"));
 			}
-	        el = el.parentNode;
+	        el = el.offsetParent;
 	    }
 	}
 	

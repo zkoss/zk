@@ -1958,3 +1958,16 @@ tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.s
 .z-panel-maximized-over {
 	background-position: -15px -45px;
 }
+.z-fisheye-label {
+	font-family: Arial, Helvetica, sans-serif; background-color: #eee; border: 2px solid #666;
+	padding: 2px; text-align: center; position: absolute; display: none;
+}
+.z-fisheye-image {
+	border: 0px; position: absolute; width: 100%; height: 100%;
+}
+.z-fisheye {
+	position: absolute; z-index: 2;
+}
+.z-fisheyebar-inner {
+	position: relative;
+}

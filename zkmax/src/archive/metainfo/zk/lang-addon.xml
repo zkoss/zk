@@ -324,6 +324,22 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>fisheye</component-name>
+		<extends>fisheye</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.FisheyeDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>fisheyebar</component-name>
+		<extends>fisheyebar</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.FisheyebarDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>flash</component-name>
 		<extends>flash</extends>
 		<mold>
