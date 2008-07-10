@@ -613,7 +613,7 @@ zkau._sendNow2 = function(reqInf) {
 		if (zk_resndto > 0)
 			zkau._areqInf.tfn = setTimeout(zkau._areqTmout, zk_resndto + reqInf.tmout);
 
-		if (uri) req.send();
+		if (uri) req.send(null);
 		else req.send(reqInf.content);
 
 		if (!reqInf.implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
@@ -1096,7 +1096,7 @@ zkau._onUnload = function () {
 					uri = zkau.uri(ds[j]);
 				req.open("POST", zk.ie ? uri+"?"+content: uri, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				if (zk.ie) req.send();
+				if (zk.ie) req.send(null);
 				else req.send(content);
 			}
 		} catch (e) { //silent
