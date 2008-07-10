@@ -21,6 +21,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 The number at the bottom shall be counting.
 Click "Stop Push", and it shall stop.
 Click "Start Push", and it shall count again (from 1).
+<separator/>
+Note: the server push is enabled and timer disabled at the beginning.
 	<vbox>
 	<button label="Start Push" onClick="org.zkoss.zkdemo.test2.ServerPush.start(info)"/>
 	<button label="Stop Push" onClick="org.zkoss.zkdemo.test2.ServerPush.stop()"/>
