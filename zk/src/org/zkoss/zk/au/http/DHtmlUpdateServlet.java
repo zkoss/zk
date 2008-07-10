@@ -288,6 +288,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						return; //done
 					}
 				}
+				response.setIntHeader("ZK-Error", response.SC_NOT_FOUND);
+					//Don't use sendError since browser might handle it
 				log.warning("Unknown path info: "+pi);
 			} else {
 				process(sess, request, response);
