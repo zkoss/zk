@@ -34,12 +34,12 @@ if (!window.Selectable_effect) { //define it only if not customized
 }
 var _zkselx = {};
 zk.override(zkau.cmd1, "addAft",  _zkselx, function (uuid, cmp, html) {
-	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
-	_zkselx.addAft(uuid, cmp, html);
+	if (!cmp || !_zkselx._addChd(uuid, cmp, html))
+		_zkselx.addAft(uuid, cmp, html);
 });
 zk.override(zkau.cmd1, "addBfr",  _zkselx, function (uuid, cmp, html) {
-	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
-	_zkselx.addBfr(uuid, cmp, html);
+	if (!cmp || !_zkselx._addChd(uuid, cmp, html))
+		_zkselx.addBfr(uuid, cmp, html);
 });
 _zkselx._addChd = function (uuid, cmp, html) {
 	var h = html.trim(), from = h.indexOf("Lit"),
