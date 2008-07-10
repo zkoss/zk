@@ -54,7 +54,7 @@ zkCmsp._send = function (dtid) {
 		req.open("POST", zk.getUpdateURI("/comet?dtid="+dtid, false, null, dtid), true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		req.setRequestHeader("ZK-SID", zkCmsp._sid);
-		req.send();
+		req.send(null);
 	} catch (e) {
 		zkCmsp._reqs[dtid] = null;
 		zkCmsp._asend(dtid, 5000); //5 sec
@@ -72,6 +72,11 @@ zkCmsp._onRespReady = function () {
 			try {
 				if (req && req.readyState == 4) {
 					zkCmsp._reqs[dtid] = null;
+
+					if (req.getResponseHeader("ZK-Error") == "404") {
+						zkCmsp.stop(dtid);
+						return;
+					}
 					if (req.status == 200) {
 						var sid = req.getResponseHeader("ZK-SID");
 						if (!sid || sid == zkCmsp._sid) {
