@@ -220,7 +220,11 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			zk.setVisible(cmp, visible, true);
 		}
 		if (!embedded) zkau.hideCovered(); //Bug 1719826
-		zkWnd2.syncShadow(cmp);
+		
+		// sometimes the timing of the sync shadow with the cmp is unreliable
+		// when the cmp uses the onshow() or the onhide() to do something with anima.
+		if (visible) zkWnd2.syncShadow(cmp); 
+		else zkWnd2.hideShadow(cmp);
 		return true;
 
 	case "z.sizable":
