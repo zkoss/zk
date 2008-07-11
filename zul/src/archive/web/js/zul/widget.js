@@ -323,11 +323,12 @@ zkTbtn.init = function (cmp) {
 	}
 };
 zkTbtn.onclick = function (evt) {
+	if (!evt) evt = window.event;
+	var cmp = Event.element(evt);
 	if (getZKAttr(cmp, "disd") == "true") {
 		Event.stop(evt);
 		return;
 	}
-
 	zkau.onclick(evt, true); //Bug 1878839: we shall always fire onClick
 
 	//No need to call zk.proress() since zkau.onclick sends onClick
