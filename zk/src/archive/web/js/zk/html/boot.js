@@ -1154,7 +1154,7 @@ zk._evalInit = function () {
 	|| zk._initfns.length));
 	//Bug 1815074: _initfns might cause _bfinits to be added
 
-	zkau.doQueResps(); //since responses might not be processed yet
+	zkau.doCmds(); //since response commands might not be processed yet
 };
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)

@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkmax.ui.impl;
+package org.zkoss.zkmax.ui.comet;
 
 import java.util.Iterator;
 import java.util.Collection;

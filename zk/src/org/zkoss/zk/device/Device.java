@@ -110,7 +110,7 @@ public interface Device {
 	 * the client-polling-based server push (org.zkoss.zkex.ui.impl.PollingServerPush)
 	 * is the default.
 	 * If the enterprise edition (with zkmax.jar) is loaded,
-	 * the COMET-based server push (org.zkoss.zkmax.ui.impl.CometServerPush)
+	 * the COMET-based server push (org.zkoss.zkmax.ui.comet.CometServerPush)
 	 * is the default.
 	 * @return the previous class, or null if not available.
 	 * @since 3.0.0

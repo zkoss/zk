@@ -83,6 +83,9 @@ zkTimer.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
+//zkTimer.stopAll = function () {
+//	clearInterval(*);
+//};
 
 /** Fires an onTimer event. */
 zkTimer._fire = function (uuid) {

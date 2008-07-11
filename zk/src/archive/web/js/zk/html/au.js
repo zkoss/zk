@@ -63,7 +63,7 @@ if (!window.confirmRetry) {
 //au//
 zkau = {};
 
-zkau._respQue = []; //responses in XML
+zkau._cmdsQue = []; //response commands in XML
 zkau._evts = {}; //(dtid, Array()): events that are not sent yet
 zkau._js4resps = []; //JS to eval upon response
 zkau._metas = {}; //(id, meta)
@@ -289,10 +289,7 @@ zkau._onRespReady = function () {
 					return;
 				} //if sid null, always process (usually for error msg)
 
-				var cmds = zkau.parseXmlResp(req.responseXML);
-				if (cmds) { //valid response
-					zkau._respQue.push(cmds);
-
+				if (zkau.pushXmlResp(req.responseXML)) { //valid response
 					//advance SID to avoid receive the same response twice
 					if (sid && ++zkau._seqId > 999) zkau._seqId = 1;
 					zkau._areqTry = 0;
@@ -370,14 +367,15 @@ zkau._onRespReady = function () {
 			zkau._send2(ds[j], 0);
 	}
 
-	zkau.doQueResps();
+	zkau.doCmds();
 	zkau._checkProgress();
 };
-/** Parses a XML response.
- * @since 3.0.6
+/** Parses a XML response and pushes the parsed commands to the queue.
+ * @return false if no command found at all
+ * @since 3.0.7
  */
-zkau.parseXmlResp = function (xml) {
-	if (!xml) return null; //invalid
+zkau.pushXmlResp = function (xml) {
+	if (!xml) return false; //invalid
 
 	var cmds = [],
 		rs = xml.getElementsByTagName("r"),
@@ -402,7 +400,9 @@ zkau.parseXmlResp = function (xml) {
 		for (var k = data ? data.length: 0; --k >= 0;)
 			cmd.data[k] = zk.getElementValue(data[k]);
 	}
-	return cmds;
+
+	zkau._cmdsQue.push(cmds);
+	return true;
 };
 /** Checks whether to turn off the progress prompt.
  * @return true if the processing is done
@@ -417,7 +417,7 @@ zkau._checkProgress = function () {
  * @since 3.0.0
  */
 zkau.processing = function () {
-	return zkau._respQue.length || zkau._areq || zkau._preqInf;
+	return zkau._cmdsQue.length || zkau._areq || zkau._preqInf;
 };
 
 /** Returns the timeout of the specified event.
@@ -680,40 +680,59 @@ zkau._evalOnResponse = function () {
 		setTimeout(zkau._js4resps.shift(), 0);
 };
 
-/** Process the responses queued in zkau._respQue. */
-zkau.doQueResps = function () {
-	var ex, j = 0, que = zkau._respQue, rid = zkau._resId;
+/** Process the response response commands.
+ * @since 3.0.7
+ */
+zkau.doCmds = function () {
+	//avoid reentry since it calls loadAndInit, and loadAndInit call this
+	if (zkau._doingCmds) {
+		setTimeout(zkau.doCmds, 10);
+	} else {
+		zkau._doingCmds = true;
+		try {
+			zkau._doCmds0();
+		} finally {
+			zkau._doingCmds = false;
+		}
+	}
+};
+zkau._doCmds0 = function () {
+	var ex, j = 0, que = zkau._cmdsQue, rid = zkau._resId;
 	for (; j < que.length; ++j) {
 		if (zk.loading) {
-			zk.addInit(zkau.doQueResps); //Note: when callback, zk.loading is false
-			break; //wait until the loading is done
+			zk.addInit(zkau.doCmds); //wait until the loading is done
+			return;
 		}
 
-		try {
-			var cmds = que[j];
-			if (rid == cmds.rid || !rid || !cmds.rid //match
-			|| zkau._dtids.length > 1) { //ignore multi-desktops (risky but...)
-				que.splice(j, 1);
+		var cmds = que[j];
+		if (rid == cmds.rid || !rid || !cmds.rid //match
+		|| zkau._dtids.length > 1) { //ignore multi-desktops (risky but...)
+			que.splice(j, 1);
 
-				var oldrid = zkau._resId;
-				if (cmds.rid && (zkau._resId = cmds.rid + 1) >= 1000)
-					zkau._resId = 1; //1~999
+			var oldrid = rid;
+			if (cmds.rid) {
+				if ((rid = cmds.rid + 1) >= 1000)
+					rid = 1; //1~999
+				zkau._resId = rid;
+			}
 
-				if (zkau._doResps(cmds)) {
-					j = -1; //starting from beginning
-				} else { //not done yet
+			try {
+				if (zkau._doCmds1(cmds)) {
+					j = -1; //start over
+				} else { //not done yet (=zk.loading)
 					zkau._resId = oldrid; //restore
 					que.splice(j, 0, cmds); //put it back
-					break;
+					zk.addInit(zkau.doCmds);
+					return;
 				}
+			} catch (e) {
+				if (!ex) ex = e;
+				j = -1; //start over
 			}
-		} catch (e) {
-			if (!ex) ex = e;
 		}
 	}
 
-	if (j && j >= que.length) {
-	//sequence is wrong => enforce to run if timeout
+	if (que.length) { //sequence is wrong => enforce to run if timeout
 		setTimeout(function () {
 			if (que.length && rid == zkau._resId) {
 				var r = que[0].rid;
@@ -723,7 +742,7 @@ zkau.doQueResps = function () {
 					if (v > 500 || (v < 0 && v > -500)) r = r2;
 				}
 				zkau._resId = r;
-				zkau.doQueResps();
+				zkau.doCmds();
 			}
 		}, 3600);
 	}
@@ -732,8 +751,7 @@ zkau.doQueResps = function () {
 		zkau.doneTime = $now();
 	if (ex) throw ex;
 };
-/** Process the specified response in XML. */
-zkau._doResps = function (cmds) {
+zkau._doCmds1 = function (cmds) {
 	var processed;
 	try {
 		while (cmds && cmds.length) {

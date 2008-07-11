@@ -45,6 +45,10 @@ zkCmsp.stop = function (dtid) {
 		}
 	}
 };
+zkCmsp.stopAll = function () {
+	for (var dtid in zkCmsp._start)
+		zkCmsp.stop(dtid);
+};
 
 zkCmsp._send = function (dtid) {
 	var req = zkCmsp._reqs[dtid] = zkau.ajaxRequest();
@@ -80,14 +84,12 @@ zkCmsp._onRespReady = function () {
 					if (req.status == 200) {
 						var sid = req.getResponseHeader("ZK-SID");
 						if (!sid || sid == zkCmsp._sid) {
-							var cmds = zkau.parseXmlResp(req.responseXML);
-							if (cmds) {
+							if (zkau.pushXmlResp(req.responseXML)) {
 								timeout = 100;
-								zkau._respQue.push(cmds);
 								if (sid && ++zkCmsp._sid > 999) zkCmsp._sid = 1;
-								//both parseXmlResp and doQueResps might ex
+								//both pushXmlResp and doCmds might ex
 							}
-							zkau.doQueResps();
+							zkau.doCmds();
 						}
 					}
 					zkCmsp._asend(dtid, timeout);

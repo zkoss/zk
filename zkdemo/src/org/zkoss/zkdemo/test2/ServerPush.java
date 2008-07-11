@@ -33,14 +33,13 @@ import org.zkoss.zul.*;
  */
 public class ServerPush {
 	private static final Log log = Log.lookup(ServerPush.class);
-	private static boolean _ceased;
 
 	public static void start(Component info) throws InterruptedException {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		if (desktop.isServerPushEnabled()) {
 			Messagebox.show("Already started");
 		} else {
-			_ceased = false;
+			desktop.removeAttribute("sp.ceased");
 			desktop.enableServerPush(true);
 			new WorkingThread(info).start();
 		}
@@ -48,8 +47,8 @@ public class ServerPush {
 	public static void stop() throws InterruptedException {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		if (desktop.isServerPushEnabled()) {
-			Executions.getCurrent().getDesktop().enableServerPush(false);
-			_ceased = true;
+			desktop.enableServerPush(false);
+			desktop.setAttribute("sp.ceased", Boolean.TRUE);
 		} else {
 			Messagebox.show("Already stopped");
 		}
@@ -76,7 +75,7 @@ public class ServerPush {
 		}
 		public void run() {
 			try {
-				while (!_ceased) {
+				while (_desktop.getAttribute("sp.ceased") == null) {
 					Executions.activate(_desktop);
 					try {
 						updateInfo(_info, "comet");

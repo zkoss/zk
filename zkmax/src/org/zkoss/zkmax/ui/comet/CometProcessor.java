@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkmax.ui.impl;
+package org.zkoss.zkmax.ui.comet;
 
 import java.io.IOException;
 
@@ -57,7 +57,7 @@ import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 	 * Notice: the second invocation with the same application has no effect at all.
 	 */
 	/*package*/ static void init(WebApp wapp) {
-		final String STARTED = "org.zkoss.zkmax.ui.impl.CometStarted";
+		final String STARTED = "org.zkoss.zkmax.ui.comet.CometStarted";
 		if (wapp.getAttribute(STARTED) == null) {
 			DHtmlUpdateServlet
 				.addAuProcessor(wapp, "/comet", new CometProcessor());
