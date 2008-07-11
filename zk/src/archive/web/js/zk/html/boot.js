@@ -1045,7 +1045,7 @@ zk._evalInit = function () {
 	|| zk._initfns.length));
 	//Bug 1815074: _initfns might cause _bfinits to be added
 
-	zkau.doQueResps(); //since responses might not be processed yet
+	zkau.doCmds(); //since response commands might not be processed yet
 };
 zk._initLater = function () {
 	while (!zk.loading && zk._inLatfns.length)
@@ -1077,7 +1077,7 @@ zk.eval = function (n, fn, type) {
 					var args = [n];
 					for (var j = arguments.length - 2; --j > 0;) //3->1, 4->2...
 						args[j] = arguments[j + 2];
-					return f.apply(n, args);
+					return f.apply(o, args);
 				} catch (ex) {
 					zk.error("Failed to invoke zk"+type+"."+fn+"\n"+ex.message);
 					if (zk.debugJS) throw ex;
