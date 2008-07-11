@@ -1968,6 +1968,9 @@ tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.s
 .z-fisheye {
 	position: absolute; z-index: 2;
 }
+.z-fisheyebar {
+	visibility: hidden;
+}
 .z-fisheyebar-inner {
 	position: relative;
 }

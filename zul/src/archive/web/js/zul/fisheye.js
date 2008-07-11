@@ -80,6 +80,7 @@ zk.fisheye.prototype = {
 			};
 		zk.listen(document.documentElement, "mousemove", this._onMouseMove);
 		zk.listen(document.documentElement, "mouseout", this._onBodyOut);
+		this.el.style.visibility = "visible";
 	},
 	getAttachEdge: function () {
 		var edge = getZKAttr(this.el, "attachedge") || "center";

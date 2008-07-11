@@ -2,16 +2,11 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-column-layout {
-    overflow: hidden;
-    zoom: 1;
+	visibility: hidden; overflow: hidden; zoom: 1;
 }
 
 .z-column-children {
-    float: left;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    zoom: 1;
+    float: left; padding: 0; margin: 0; overflow: hidden; zoom: 1;
 }
 
 .z-column-children-body {
@@ -19,8 +14,7 @@
 }
 
 .z-column-children-bwrap {
-    overflow: hidden;
-    zoom: 1;
+    overflow: hidden; zoom: 1;
 }
 .z-column-layout-inner {
     overflow: hidden;
