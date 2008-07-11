@@ -205,7 +205,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
-	cp dist/lib/fckez.jar dist/lib/dojoz.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
+	cp dist/lib/fckez.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
 	chmod 644 /tmp/zk/$binnm/dist/lib/*.jar
 	chmod 644 /tmp/zk/$binnm/dist/lib/*/*.jar
@@ -292,7 +292,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		cd zkforge
 		rm gmapsz.jar
-		rm dojoz.jar
 		rm fckez.jar
 		rm timelinez.jar
 
@@ -379,12 +378,12 @@ if [ "$target" == "official" ]; then
 	rm -rf zk-devguide-single-$ver
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm/devguide
-	#mkdir -p /tmp/zk/$docnm/devref
+	mkdir -p /tmp/zk/$docnm/devref
 
 	cd $maindir
 	cp zkdoc/*/ZK-quickstart*.pdf /tmp/zk/$docnm
 	cp -rp zkdoc/devguide/*.odt zkdoc/devguide/images /tmp/zk/$docnm/devguide
-	#cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
+	cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
 	find -name .svn | xargs rm -rf
