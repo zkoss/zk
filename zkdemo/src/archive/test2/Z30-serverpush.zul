@@ -35,4 +35,18 @@ Note: the server push is enabled and timer disabled at the beginning.
 	<zscript>
 	org.zkoss.zkdemo.test2.ServerPush.start(info);
 	</zscript>
+
+<script>
+spau = {};
+zk.override(zkau.cmd1, "addAft", spau, function (uuid, cmp, html) {
+	try {
+		spau.addAft(uuid, cmp, html);
+	} catch (e) {
+		zk.debug("Error: addAft: "+uuid+"\n"+html);
+		zkCmsp.stopAll();
+		if (zkTimer.stopAll) zkTimer.stopAll();
+		throw e;
+	}
+});
+</script>
 </window>
