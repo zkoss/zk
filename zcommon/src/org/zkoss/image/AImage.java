@@ -46,7 +46,11 @@ import org.zkoss.util.media.ContentTypes;
  * <p>In other words, it is used to retrieve and store the opaque data
  * as polymorphic thru the {@link org.zkoss.util.media.Media} interface.
  *
+ * <p>To encode AWT image to an instance of {@link Image},
+ * use {@link Images#encode}.
+ *
  * @author tomyeh
+ * @see Images#encode
  */
 public class AImage implements Image, java.io.Serializable {
 	private static final Log log = Log.lookup(AImage.class);
