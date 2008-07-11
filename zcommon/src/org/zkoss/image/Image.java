@@ -25,7 +25,11 @@ import org.zkoss.util.media.Media;
 /**
  * Represents an image.
  *
+ * <p>To encode AWT image to an instance of {@link Image},
+ * use {@link Images#encode}.
+ *
  * @author tomyeh
+ * @see Images#encode
  */
 public interface Image extends Media {
 	/** Returns the width.

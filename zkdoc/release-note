@@ -4,6 +4,7 @@ ZK 3.0.7
   2003033: Provides an utitlity to forward events to a component
   2003751: GenericAutowireComposer support implicit objects and alert()
   2010314: A way to post event that will be executed after others
+  2015827: Provide utilities to encode AWT image to ZK image
 
 * Bugs
   2008676: Firefox 3: toolbarbutton with href causes false alarm
