@@ -1470,6 +1470,7 @@ zk._domsg = function () {
 			d.style.visibility = "visible";
 		}
 		console.value = console.value + zk._msg + '\n';
+		console.scrollTop = console.scrollHeight;
 		zk._msg = null;
 	}
 };

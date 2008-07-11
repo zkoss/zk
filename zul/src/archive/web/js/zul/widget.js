@@ -313,7 +313,9 @@ zkTbtn.init = function (cmp) {
 		zk.listen(cmp, "blur", zkau.onblur);
 	}
 };
-zkTbtn.onclick = function (evt) {
+zkTbtn.onclick = function (evt) {	
+	if (!evt) evt = window.event;
+	var cmp = Event.element(evt);
 	if (getZKAttr(cmp, "disd") == "true") {
 		Event.stop(evt);
 		return;
