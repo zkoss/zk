@@ -289,7 +289,7 @@ zkau._onRespReady = function () {
 					return;
 				} //if sid null, always process (usually for error msg)
 
-				if (zkau.pushXmlResp(req.responseXML)) { //valid response
+				if (zkau.pushXmlResp(req)) { //valid response
 					//advance SID to avoid receive the same response twice
 					if (sid && ++zkau._seqId > 999) zkau._seqId = 1;
 					zkau._areqTry = 0;
@@ -374,7 +374,8 @@ zkau._onRespReady = function () {
  * @return false if no command found at all
  * @since 3.0.7
  */
-zkau.pushXmlResp = function (xml) {
+zkau.pushXmlResp = function (req) {
+	var xml = req.responseXML;
 	if (!xml) return false; //invalid
 
 	var cmds = [],

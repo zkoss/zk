@@ -315,7 +315,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		if (sess == null) {
-			response.setIntHeader("ZK-Error", response.SC_GONE);
+			response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
 			if (!withpi) { //AU request
 				//Bug 1849088: rmDesktop might be sent after invalidate
 				//Bug 1859776: need send response to client for redirect or others

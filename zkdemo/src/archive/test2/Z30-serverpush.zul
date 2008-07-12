@@ -44,7 +44,7 @@ zk.override(zkau.cmd1, "addAft", spau, function (uuid, cmp, html) {
 	} catch (e) {
 		zk.debug("Error: addAft: "+uuid+"\n"+html);
 		zkCmsp.stopAll();
-		if (zkTimer.stopAll) zkTimer.stopAll();
+		zkTimer.stopAll();
 		throw e;
 	}
 });

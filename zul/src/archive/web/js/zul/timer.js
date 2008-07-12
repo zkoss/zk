@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 //Timer//
 zkTimer = {};
+zkTimer._intvs = []; //an array of intervals
 
 zk.Timer = Class.create();
 zk.Timer.prototype = {
@@ -47,7 +48,7 @@ zk.Timer.prototype = {
 		var delay = getZKAttr(el, "delay");
 		var func = "zkTimer._fire('"+this.id+"')";
 		if (repeats)
-			this.interval = setInterval(func, delay);
+			zkTimer._intvs.push(this.interval = setInterval(func, delay));
 		else
 			this.timeout = setTimeout(func, delay);
 	},
@@ -58,6 +59,7 @@ zk.Timer.prototype = {
 		}
 		if (this.interval) {
 			clearInterval(this.interval);
+			zkTimer._intvs.remove(this.interval);
 			this.interval = null;
 		}
 	}
@@ -83,11 +85,21 @@ zkTimer.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-//zkTimer.stopAll = function () {
-//	clearInterval(*);
-//};
+/** Stops all interval timer.
+ * @since 3.0.7
+ */
+zkTimer.stopAll = function () {
+	for (var ivs = zkTimer._intvs; ivs.length;)
+		clearInterval(ivs.shift());
+};
 
 /** Fires an onTimer event. */
 zkTimer._fire = function (uuid) {
 	zkau.send({uuid: uuid, cmd: "onTimer", ignorable: true}, 0);
 };
+
+zk.override(zkau, "pushXmlResp", zkTimer, function (req) {
+	if (req.getResponseHeader("ZK-Error") == "410") //SC_GONE: session timeout
+		zkTimer.stopAll();
+	return zkTimer.pushXmlResp(req);
+});

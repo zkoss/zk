@@ -86,7 +86,7 @@ zkCmsp._onRespReady = function () {
 					if (req.status == 200) {
 						var sid = req.getResponseHeader("ZK-SID");
 						if (!sid || sid == zkCmsp._sid) {
-							if (zkau.pushXmlResp(req.responseXML)) {
+							if (zkau.pushXmlResp(req)) {
 								timeout = 100;
 								if (sid && ++zkCmsp._sid > 999) zkCmsp._sid = 1;
 								//both pushXmlResp and doCmds might ex
