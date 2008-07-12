@@ -77,7 +77,9 @@ zkCmsp._onRespReady = function () {
 				if (req && req.readyState == 4) {
 					zkCmsp._reqs[dtid] = null;
 
-					if (req.getResponseHeader("ZK-Error") == "404") {
+					switch (req.getResponseHeader("ZK-Error")) {
+					case "404": //SC_NOT_FOUND: server restart
+					case "410": //SC_GONE: session timeout
 						zkCmsp.stop(dtid);
 						return;
 					}
