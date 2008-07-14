@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkmax.scripting.rhino;
 
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Undefined;
@@ -85,9 +86,15 @@ public class RhinoInterpreter extends GenericInterpreter {
 		_global.delete(name);
 	}
 	protected void beforeExec() {
-		Context.enter();
+		enterContext();
 	}
 	protected void afterExec() {
+		exitContext();
+	}
+	private Context enterContext() {
+		return ContextFactory.getGlobal().enterContext();
+	}
+	private void exitContext() {
 		Context.exit();
 	}
 
@@ -95,11 +102,11 @@ public class RhinoInterpreter extends GenericInterpreter {
 	public void init(Page owner, String zslang) {
 		super.init(owner, zslang);
 
-		final Context ctx = Context.enter();
+		final Context ctx = enterContext();
 		try {
 			_global = new GlobalScope(ctx);
 		} finally {
-			Context.exit();
+			exitContext();
 		}
 	}
 	public void destroy() {
@@ -115,14 +122,14 @@ public class RhinoInterpreter extends GenericInterpreter {
 	 * <p>Note: JavaScript identifies a function with the name only.
 	 */
 	public org.zkoss.xel.Function getFunction(String name, Class[] argTypes) {
-		Context.enter();
+		enterContext();
 		try {
 			final Object val = _global.get(name, _global);
 			if (!(val instanceof Function))
 				return null;
 			return new RhinoFunction((Function)val);
 		} finally {
-			Context.exit();
+			exitContext();
 		}
 	}
 
@@ -164,12 +171,12 @@ public class RhinoInterpreter extends GenericInterpreter {
 			return Object.class;
 		}
 		public Object invoke(Object obj, Object[] args) throws Exception {
-			final Context ctx = Context.enter();
+			final Context ctx = enterContext();
 			try {
 				final Scriptable scope = getGlobalScope();
 				return _func.call(ctx, scope, scope, args);
 			} finally {
-				Context.exit();
+				exitContext();
 			}
 		}
 		public java.lang.reflect.Method toMethod() {

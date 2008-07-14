@@ -21,7 +21,6 @@ package org.zkoss.zkmax.scripting.jruby;
 import java.util.Iterator;
 
 import org.jruby.Ruby;
-import org.jruby.javasupport.Java;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.javasupport.JavaObject;
 import org.jruby.javasupport.JavaUtil;
@@ -56,7 +55,7 @@ public class JRubyInterpreter extends GenericInterpreter {
 
 	//GenericInterpreter//
 	protected void exec(String script) {
-		_runtime.evalScript(script);
+		_runtime.evalScriptlet(script);
 	}
 
 	protected boolean contains(String name) {
@@ -81,7 +80,7 @@ public class JRubyInterpreter extends GenericInterpreter {
 	public void init(Page owner, String zslang) {
 		super.init(owner, zslang);
 
-		_runtime = Ruby.getDefaultInstance();
+		_runtime = Ruby.newInstance();
 		_runtime.setGlobalVariables(new Variables(_runtime));
 	}
 	public void destroy() {
@@ -107,10 +106,7 @@ public class JRubyInterpreter extends GenericInterpreter {
 		return ro;
 	}
 	private Object rubyToJava(IRubyObject value) {
-		return JavaUtil.convertArgument(
-			Java.ruby_to_java(
-				_runtime.getObject(), value, Block.NULL_BLOCK),
-			Object.class);
+		return JavaUtil.convertRubyToJava(value, Object.class);
 	}
 
 	/** The global scope. */
@@ -120,7 +116,7 @@ public class JRubyInterpreter extends GenericInterpreter {
 
 			//we have to copy variables from the origin one to this
 			GlobalVariables vars = runtime.getGlobalVariables();
-			for (Iterator it = vars.getNames(); it.hasNext();) {
+			for (Iterator it = vars.getNames().iterator(); it.hasNext();) {
 				final String nm = (String)it.next();
 				set(nm, vars.get(nm));
 			}
