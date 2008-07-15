@@ -165,6 +165,16 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * <p>For child components, the page they belong is maintained
 	 * automatically. You need to invoke this method only for root 
 	 * components.
+	 *
+	 * <p>Note: a component might be attached to a page due invocations
+	 * other than this method. For example, a component is attached
+	 * if its parent is attached.
+	 * To know whether it is attached, override
+	 * {@link org.zkoss.zk.ui.sys.ComponentCtrl#onPageAttached}
+	 * rather than this method.
+	 *
+	 * @see org.zkoss.zk.ui.sys.ComponentCtrl#onPageAttached
+	 * @see org.zkoss.zk.ui.sys.ComponentCtrl#onPageDetached
 	 */
 	public void setPage(Page page);
 	/** Sets what page this component belongs to, and insert
@@ -184,6 +194,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * If null, this component will be placed at the end of all
 	 * root components (no matter whether it already belongs to the same page).
 	 * @since 3.0.0
+	 * @see #setPage
 	 */
 	public void setPageBefore(Page page, Component refRoot);
 
