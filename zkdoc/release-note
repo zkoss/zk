@@ -9,6 +9,9 @@ ZK 3.0.7
 
 * Bugs
   2008676: Firefox 3: toolbarbutton with href causes false alarm
+  2017848: ListModelList.iterator().remove() does not work
+  2018378: ListModelList.listIterator(1).previous().remove() not work
+  2018385: ListModelList.listIterator(0).next().set() not work
 
 	--------
 ZK 3.0.6

@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zk.ui.UiException;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.Comparator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.ListIterator;
+import java.util.SortedSet;
 
 /**
  * <p>This is the {@link ListModel} as a {@link java.util.List} to be used with {@link Listbox}.
@@ -40,15 +42,6 @@ public class ListModelList extends AbstractListModel
 implements ListModelExt, List, java.io.Serializable {
 	protected List _list;
 	
-	/**
-	 * Creates an instance which accepts a "live" List as its inner List.
-	 * @param list the inner List storage
-	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelList(List,boolean)}
-	 */
-	public static ListModelList instance(List list) {
-		return new ListModelList(list, true);
-	}
-
 	/**
 	 * Constructor
 	 *
@@ -222,7 +215,22 @@ implements ListModelExt, List, java.io.Serializable {
 	}
     
     public Iterator iterator() {
-    	return _list.iterator();
+		return new Iterator() {
+			private Iterator _it = _list.iterator();
+			private Object _current = null;
+			public boolean hasNext() {
+				return _it.hasNext();
+			}
+			public Object next() {
+				_current = _it.next();
+				return _current;
+			}
+			public void remove() {
+				final int index = indexOf(_current);
+				_it.remove();
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+			}
+		};
     }
     
     public int lastIndexOf(Object elem) {
@@ -233,8 +241,50 @@ implements ListModelExt, List, java.io.Serializable {
 		return _list.listIterator();
 	}
 	
-	public ListIterator listIterator(int index) {
-		return _list.listIterator(index);
+	public ListIterator listIterator(final int index) {
+		return new ListIterator() {
+			private ListIterator _it = _list.listIterator(index);
+			private Object _current = null;
+			public boolean hasNext() {
+				return _it.hasNext();
+			}
+			public Object next() {
+				_current = _it.next();
+				return _current;
+			}
+			public void remove() {
+				final int index = _list.indexOf(_current);
+				if (index >= 0) {
+					_it.remove();
+					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+				}
+			}
+			public void add(Object arg0) {
+				final int index = _it.nextIndex();
+				_it.add(arg0);
+				fireEvent(ListDataEvent.INTERVAL_ADDED, index, index);
+			}
+			public boolean hasPrevious() {
+				return _it.hasPrevious();
+			}
+			public int nextIndex() {
+				return _it.nextIndex();
+			}
+			public Object previous() {
+				_current = _it.previous();
+				return _current;
+			}
+			public int previousIndex() {
+				return _it.previousIndex();
+			}
+			public void set(Object arg0) {
+				final int index = _list.indexOf(_current);
+				if (index >= 0) {
+					_it.set(arg0);
+					fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
+				}
+			}
+		};
 	}
 	
 	public Object remove(int index) {
