@@ -823,9 +823,9 @@ public class Servlets {
 		return (ExtendletContext)getExtWebCtxs(ctx).get(name);
 	}
 	private static final Map getExtWebCtxs(ServletContext ctx) {
+		final String attr = "javax.zkoss.web.servlets.ExtendletContexts";
+			//such that it could be shared among portlets
 		synchronized (Servlets.class) { //don't use ctx because it might be a proxy (in portlet)
-			final String attr = "javax.zkoss.web.servlets.ExtendletContexts";
-				//such that it could be shared among portlets
 			Map ctxs = (Map)ctx.getAttribute(attr);
 			if (ctxs == null)
 				ctx.setAttribute(attr,
