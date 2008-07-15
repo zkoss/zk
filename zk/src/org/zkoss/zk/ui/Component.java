@@ -167,6 +167,16 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * <p>For child components, the page they belong is maintained
 	 * automatically. You need to invoke this method only for root 
 	 * components.
+	 *
+	 * <p>Note: a component might be attached to a page due invocations
+	 * other than this method. For example, a component is attached
+	 * if its parent is attached.
+	 * To know whether it is attached, override
+	 * {@link #onPageAttached}
+	 * rather than this method.
+	 *
+	 * @see #onPageAttached
+	 * @see #onPageDetached
 	 */
 	public void setPage(Page page);
 	/** Sets what page this component belongs to, and insert
