@@ -215,7 +215,7 @@ zkPg = {
 		if (!evt) evt = window.event;
 		var table = $parentByTag(Event.element(evt), "TABLE");
 		
-		if (table.className.indexOf("z-item-disd") == -1) 
+		if (!zk.hasClass(table, "z-item-disd")) 
 			zk.addClass(table, "z-btn-over");
 	},
 	
@@ -228,8 +228,7 @@ zkPg = {
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
 		var table = $parentByTag(Event.element(evt), "TABLE");
-
-		if (table.className.indexOf("z-item-disd") != -1)  return;
+		if (zk.hasClass(table, "z-item-disd")) return;
 		
 		zk.addClass(table, "z-btn-click");
 		zkPg.down_btn = table;
@@ -238,7 +237,8 @@ zkPg = {
 	
 	onup: function (evt) {
 		if (!evt) evt = window.event;
-		zk.rmClass(zkPg.down_btn, "z-btn-click");
+		if (zkPg.down_btn)
+			zk.rmClass(zkPg.down_btn, "z-btn-click");
 		zkPg.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkPg.onup);
 	},

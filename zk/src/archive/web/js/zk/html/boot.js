@@ -123,27 +123,32 @@ zk.on(cmp, "close", function (cmp) {
 	return false; // if you want to stop the propagation of the event. Otherwise, don't need to return.
 
 });</code></pre>
- * @param {Object} el an element or a zk component
+ * @param {Object} cmp an ID or a zk component
  * @param {String} evtnm The name of event to listen for
  * @param {Function} fn handler The method the event invokes
  * @since 3.5.0
  */
-zk.on = function (el, evtnm, fn) {
-	var ls = zk._gevts[el];
-	if (!ls) zk._gevts[el] = ls = {};
+zk.on = function (cmp, evtnm, fn) {
+	var id = typeof cmp == "string" ? cmp: cmp ? cmp.id: null;
+	if (!id) {
+		zk.error(mesg.COMP_OR_UUID_REQUIRED);
+		return;
+	}
+	var ls = zk._gevts[id];
+	if (!ls) zk._gevts[id] = ls = {};
 	var fns = ls[evtnm];
 	if (!fns) ls[evtnm] = fns = [];
 	fns.push(fn);
 };
 /**
  * Removes an event listener from the specified component
- * @param {Object} el an element or a zk component
+ * @param {Object} cmp an ID or a zk component
  * @param {String} evtnm The name of event to listen for
  * @param {Function} fn The handler to remove
  * @since 3.5.0
  */
-zk.un = function (el, evtnm, fn) {
-	var fns = zk.find(el, evtnm);
+zk.un = function (cmp, evtnm, fn) {
+	var fns = zk.find(cmp, evtnm);
 	if (fns) {
 		fns.remove(fn);
 		if (!fns.length) delete ls[evtnm];
@@ -151,11 +156,11 @@ zk.un = function (el, evtnm, fn) {
 };
 /**
  * Removes all listeners for the specified component
- * @param {Object} el an element or a zk component
+ * @param {Object} cmp an ID or a zk component
  * @since 3.5.0
  */
-zk.unAll = function (el) {
-	var ls = zk._gevts[el];
+zk.unAll = function (cmp) {
+	var ls = zk.find(cmp);
 	for (var evtnm in ls) {
 		var fns = ls[evtnm];
 		delete ls[evtnm];
@@ -164,31 +169,35 @@ zk.unAll = function (el) {
 };
 /**
  * Finds all listeners of the event name from the specified component
- * @param {Object} el an element or a zk component
- * @param {String} evtnm The name of event to listen for
+ * @param {Object} cmp an ID or a zk component
+ * @param {String} evtnm The name of event to listen for, if any. Otherwise,
+`* all the listeners of the specified component are returned.
  * @since 3.5.0
  */
-zk.find = function (el, evtnm) {
-	var ls = zk._gevts[el];
-	return ls ? ls[evtnm] : null;
+zk.find = function (cmp, evtnm) {
+	var id = typeof cmp == "string" ? cmp: cmp ? cmp.id: null;
+	if (!id) return null;
+	var ls = zk._gevts[id];
+	return ls ? evtnm ? ls[evtnm] : ls : null;
 };
 
 /**
  * Fires the specified event with the passed parameters.
- * @param {Object} el an element or a zk component
+ * @param {Object} cmp an ID or a zk component
  * @param {String} evtnm The name of event to listen for
  * @param {Object...} args Variable number of parameters are passed to handlers
  * @param {Object} scope The scope in which to execute the listener function. 
  * 	The listener function's "this" context.
  * @since 3.5.0
  */
-zk.fire = function (el, evtnm, args, scope) {
-	var fns = zk.find(el, evtnm);
+zk.fire = function (cmp, evtnm, args, scope) {
+	var fns = zk.find(cmp, evtnm);
 	if (fns) {
+		cmp = $e(cmp);
 		for (var i = 0, j = fns.length; i < j; i++) {
 			var f = fns[i];
-			if (!args) args = [el];
-			if(f.apply(scope || el, args) === false)
+			if (!args) args = [cmp];
+			if(f.apply(scope || cmp, args) === false)
 				return; // stop propagation, if any.
 		}
 	}
