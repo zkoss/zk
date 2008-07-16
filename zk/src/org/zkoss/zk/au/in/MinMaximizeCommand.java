@@ -59,7 +59,7 @@ public class MinMaximizeCommand extends Command {
 			min.setLeftByClient(data[0]);
 			min.setTopByClient(data[1]);
 			min.setWidthByClient(data[2]);
-			min.setWidthByClient(data[3]);
+			min.setHeightByClient(data[3]);
 			min.setMinimizedByClient(minimized);
 			Events.postEvent(new MinimizeEvent(getId(), comp, data[0], data[1],
 					data[2], data[3], minimized));
@@ -69,7 +69,7 @@ public class MinMaximizeCommand extends Command {
 			max.setLeftByClient(data[0]);
 			max.setTopByClient(data[1]);
 			max.setWidthByClient(data[2]);
-			max.setWidthByClient(data[3]);
+			max.setHeightByClient(data[3]);
 			max.setMaximizedByClient(maximized);
 			Events.postEvent(new MaximizeEvent(getId(), comp, data[0], data[1],
 					data[2], data[3], maximized));
