@@ -172,7 +172,8 @@ public class UiEngineImpl implements UiEngine {
 
 		Execution exec = Executions.getCurrent();
 		if (exec == null) {
-			//Bug 2015878: it is null if it is caused by session invalidation
+			//Bug 2015878: exec is null if it is caused by session invalidated
+			//while listener (ResumeAbort and so) might need it
 			exec = new MockExecution(desktop);
 			activate(exec);
 			try {
