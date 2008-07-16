@@ -220,7 +220,35 @@ div.wc-popup, div.wc-popup-none {
 div.wc-popup {
 	border: 1px solid #1854c2;
 }
-
+.z-window-tool {
+	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
+	margin-left: 2px;
+}
+.z-window-close {
+	background-position: 0 0;
+}
+.z-window-close-over {
+	background-position: -15px 0;
+}
+.z-window-minimize {
+	background-position: 0 -15px;
+}
+.z-window-minimize-over {
+	background-position: -15px -15px;
+}
+.z-window-maximize {
+	background-position: 0 -30px;
+}
+.z-window-maximize-over {
+	background-position: -15px -30px;
+}
+.z-window-maximized {
+	background-position: 0 -45px;
+}
+.z-window-maximized-over {
+	background-position: -15px -45px;
+}
 div.wc-embedded-none, div.wc-wndcyan-none,
 div.wc-modal-none, div.wc-highlighted-none,
 div.wc-overlapped-none, div.wc-popup-none {

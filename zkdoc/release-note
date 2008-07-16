@@ -32,6 +32,7 @@ ZK 3.5.0
   1997383: Provide a panel mold for Toolbar as Panel's foot toolbar
   1997384: Toolbar support alignment control
   2009346: Support event listener of ZK client cmp for cmp developer
+  1444991: Minimize / Maximize window decorations
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible

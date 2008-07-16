@@ -52,7 +52,15 @@ public class Window2Default implements ComponentRenderer {
 				.write(uuid).write("!caption\" class=\"").write(titlesc).write(" title\">");
 			if (caption == null) {
 				if (self.isClosable())
-					wh.write("<div id=\"").write(uuid).write("!close\" class=\"z-close-btn\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!close\" class=\"z-window-tool z-window-close\"></div>");
+				if (self.isMaximizable()) {
+					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"z-window-tool z-window-maximize");
+					if (self.isMaximized())
+							wh.write(" z-window-maximized");
+					wh.write("\"></div>");
+				}
+				if (self.isMinimizable())
+					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"z-window-tool z-window-minimize\"></div>");
 				new Out(title).render(out);
 			} else {
 				wh.write(caption);

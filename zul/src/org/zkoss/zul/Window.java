@@ -40,6 +40,8 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
+import org.zkoss.zk.ui.ext.client.Maximizable;
+import org.zkoss.zk.ui.ext.client.Minimizable;
 import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.event.Events;
@@ -61,10 +63,13 @@ import org.zkoss.zul.impl.Utils;
  * you have to invoke Y.getFellow('X').getFellow('Z').
  *
  * <p>Events:<br/>
- * onMove, onOpen, and onClose.<br/>
+ * onMove, onOpen, onMaximize, onMinimize, and onClose.<br/>
  * Note: to have better performance, onOpen is sent only if a
  * non-deferrable event listener is registered
  * (see {@link org.zkoss.zk.ui.event.Deferrable}).
+ * 
+ * <p><code>onMaximize</code> and <code>onMinimize</code> are only applied when 
+ * {@link #getMold()} is not "v30". (since 3.5.0)
  *
  * <p><code>onClose</code> is sent when the close button is pressed
  * (if {@link #isClosable} is true). The window has to detach or hide
@@ -101,6 +106,8 @@ public class Window extends XulElement implements IdSpace {
 	private boolean _closable;
 	/** Whether the window is sizable. */
 	private boolean _sizable;
+	
+	private boolean _maximizable, _minimizable, _maximized, _minimized;
 	
 	private int _minheight = 100, _minwidth = 200; 
 
@@ -161,6 +168,106 @@ public class Window extends XulElement implements IdSpace {
 		if (Utils.isThemeV30()) setMold("v30");
 	}
 
+	/**
+	 * Returns whether the window is maximized.
+	 * @since 3.5.0
+	 */
+	public boolean isMaximized() {
+		return _maximized;
+	}
+	/**
+	 * Sets whether the window is maximized, and then the size of the window will depend 
+	 * on it to show a appropriate size. In other words, if true, the size of the
+	 * window will count on the size of its offset parent node whose position is
+	 * absolute (by not {@link #inEmbedded()}) or its parent node. Otherwise, its size
+	 * will be original size. Note that the maximized effect will run at client's
+	 * sizing phase not initial phase.
+	 * 
+	 * <p>Default: false.
+	 * <p>Note: this method only applied when {@link #isMaximizable} is true. 
+	 * 	And it is only applied when  {@link #getMold()} is not "v30".
+	 * @since 3.5.0
+	 */
+	public void setMaximized(boolean maximized) {
+		if (_maximized != maximized) {
+			_maximized = maximized;
+			smartUpdate("z.maximized", _maximized);
+		}
+	}
+	/**
+	 * Returns whether to display the maximizing button and allow the user to maximize
+     * the window. 
+     * <p>Default: false.
+	 * @since 3.5.0
+	 */
+	public boolean isMaximizable() {
+		return _maximizable;
+	}
+	/**
+     * Sets whether to display the maximizing button and allow the user to maximize
+     * the window, when a window is maximized, the button will automatically
+     * change to a restore button with the appropriate behavior already built-in
+     * that will restore the window to its previous size.
+     * <p>Default: false.
+     * 
+	 * <p>Note: the maximize button won't be displayed if no title or caption at all. 
+	 * 	And it is only applied when {@link #getMold()} is not "v30".
+	 * @since 3.5.0
+	 */
+	public void setMaximizable(boolean maximizable) {
+		if (_maximizable != maximizable) {
+			_maximizable = maximizable;
+			invalidate();
+		}
+	}
+
+	/**
+	 * Returns whether the window is minimized.
+	 * <p>Default: false.
+	 * @since 3.5.0
+	 */
+	public boolean isMinimized() {
+		return _minimized;
+	}
+	/**
+	 * Sets whether the window is minimized.
+	 * <p>Default: false.
+	 * <p>Note: it is only applied when {@link #getMold()} is not "v30".
+	 * @since 3.5.0
+	 */
+	public void setMinimized(boolean minimized) {
+		if (_minimized != minimized) {
+			_minimized = minimized;
+			smartUpdate("z.minimized", _minimized);
+		}
+	}
+	/**
+	 * Returns whether to display the minimizing button and allow the user to minimize
+     * the window. 
+     * <p>Default: false.
+	 * @since 3.5.0
+	 */
+	public boolean isMinimizable() {
+		return _minimizable;
+	}
+	/**
+     * Sets whether to display the minimizing button and allow the user to minimize
+     * the window. Note that this button provides no implementation -- the behavior
+     * of minimizing a window is implementation-specific, so the {@link MinimizeEvent}
+     * event must be handled and a custom minimize behavior implemented for this
+     * option to be useful.
+     * 
+     * <p>Default: false. 
+	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
+	 * And it is only applied when {@link #getMold()} is not "v30".
+	 * @since 3.5.0
+	 */
+	public void setMinimizable(boolean minimizable) {
+		if (_minimizable != minimizable) {
+			_minimizable = minimizable;
+			invalidate();
+		}
+	}
 	/**
 	 * Sets the minimum height in pixels allowed for this window. If negative, 100 is assumed.
 	 * <p>Default: 100. 
@@ -750,7 +857,7 @@ public class Window extends XulElement implements IdSpace {
 		super.setDraggable(draggable);
 	}
 	protected String getRealStyle() {
-		final String style = super.getRealStyle();
+		final String style = super.getRealStyle() + (isVisible() && isMinimized() ? "display:none;" : "");
 		return _mode != EMBEDDED ? 
 			(isVisible() ? "position:absolute;visibility:hidden;" : "position:absolute;") + style: style;
 			//If no absolute, Opera ignores left and top
@@ -766,6 +873,8 @@ public class Window extends XulElement implements IdSpace {
 		appendAsapAttr(sb, Events.ON_SIZE);
 		appendAsapAttr(sb, Events.ON_Z_INDEX);
 		appendAsapAttr(sb, Events.ON_OPEN);
+		appendAsapAttr(sb, Events.ON_MAXIMIZE);
+		appendAsapAttr(sb, Events.ON_MINIMIZE);
 		//no need to generate ON_CLOSE since it is always sent (as ASAP)
 
 		final String clkattrs = getAllOnClickAttrs();
@@ -788,6 +897,15 @@ public class Window extends XulElement implements IdSpace {
 			HTMLs.appendAttribute(sb, "z.mode", getMode());
 			HTMLs.appendAttribute(sb, "z.visible", isVisible());
 		}
+
+		if (_maximizable)
+			sb.append(" z.maximizable=\"true\"");
+		if (_minimizable)
+			sb.append(" z.minimizable=\"true\"");
+		if (_maximized)
+			sb.append(" z.maximized=\"true\"");
+		if (_minimized)
+			sb.append(" z.minimized=\"true\"");
 
 		HTMLs.appendAttribute(sb, "z.minheight", getMinheight());
 		HTMLs.appendAttribute(sb, "z.minwidth", getMinwidth());
@@ -827,7 +945,7 @@ public class Window extends XulElement implements IdSpace {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable, Floating {
+	implements MultiBranch, Openable, Floating, Maximizable, Minimizable {
 		//-- MultiBranch --//
 		public boolean inDifferentBranch(Component child) {
 			return child instanceof Caption; //in different branch
@@ -839,6 +957,12 @@ public class Window extends XulElement implements IdSpace {
 		//Floating//
 		public boolean isFloating() {
 			return _mode != EMBEDDED;
+		}
+		public void setMaximizedByClient(boolean maximized) {
+			_maximized = maximized;
+		}
+		public void setMinimizedByClient(boolean minimized) {
+			_minimized = minimized;
 		}
 	}
 }

@@ -29,16 +29,7 @@ zkWnd2 = {
 	_modal2: {} //Map(id, todo): to do 2nd phase modaling (disable)
 };
 zkWnd2.init = function (cmp) {
-	var btn = $e(cmp.id + "!close");
-	if (btn) {
-		zk.listen(btn, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
-		zk.listen(btn, "mouseover", function () {zk.addClass(btn, "z-close-btn-over");});
-			//FF: at the moment of browsing to other URL, listen is still attached but
-			//our js are unloaded. It causes JavaScript error though harmlessly
-			//This is a dirty fix (since onclick and others still fail but hardly happen)
-		zk.listen(btn, "mouseout", function () {zk.rmClass(btn, "z-close-btn-over");});
-		if (!btn.style.cursor) btn.style.cursor = "default";
-	}
+	zkWnd2._initBtn(cmp);
 
 	zk.listen(cmp, "mousemove", function (evt) {if(window.zkWnd2) zkWnd2.onmouseover(evt, cmp);});
 		//FF: at the moment of browsing to other URL, listen is still attached but
@@ -53,8 +44,147 @@ zkWnd2.init = function (cmp) {
 		// Note: we fixed bug #1830668 bug by using addInitLater to invoke
 		// _initMode later, but, with ZK 3.0.4, the problem is already resolved
 		// without using addInitLater
+
+	if (getZKAttr(cmp, "maximizable") == "true" && getZKAttr(cmp, "maximized") == "true")
+		zk.addInitLater(function () {zkWnd2.maximize(cmp, true, true);});		
+};
+zkWnd2._initBtn = function (cmp) {
+	if (getZKAttr(cmp, "closable") == "true") {
+		var close = $e(cmp, "close");
+		if (close) {
+			zk.listen(close, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
+			zk.listen(close, "mouseover", function () {zk.addClass(close, "z-window-close-over");});
+			zk.listen(close, "mouseout", function () {zk.rmClass(close, "z-window-close-over");});
+			if (!close.style.cursor) close.style.cursor = "default";
+		}
+	}
+	if (getZKAttr(cmp, "maximizable") == "true") {
+		var max = $e(cmp, "maximize");
+		if (max) {
+			zk.listen(max, "click", zkWnd2.onMaximize);
+			zk.listen(max, "mouseover", function () {
+					if (getZKAttr(cmp, "maximized") == "true")
+						zk.addClass(max, "z-window-maximized-over");
+					zk.addClass(max, "z-window-maximize-over");
+				});
+			zk.listen(max, "mouseout", function () {
+					if (getZKAttr(cmp, "maximized") == "true")
+						zk.rmClass(max, "z-window-maximized-over");
+					zk.rmClass(max, "z-window-maximize-over");
+				});
+			if (!max.style.cursor) max.style.cursor = "default";
+		}
+	}
+	if (getZKAttr(cmp, "minimizable") == "true") {
+		var min = $e(cmp, "minimize");
+		if (min) {
+			zk.listen(min, "click", zkWnd2.onMinimize);
+			zk.listen(min, "mouseover", function () {zk.addClass(min, "z-window-minimize-over");});
+			zk.listen(min, "mouseout", function () {zk.rmClass(min, "z-window-minimize-over");});
+			if (!min.style.cursor) min.style.cursor = "default";
+		}
+	}
+};
+zkWnd2.onMaximize = function (evt) {
+	if (!evt) evt = window.event;
+	var cmp = $parentByType(Event.element(evt), "Wnd2");
+	if (cmp) {
+		if (getZKAttr(cmp, "maximizable") != "true")
+			return;
+
+		zkWnd2.maximize(cmp, getZKAttr(cmp, "maximized") != "true", false, true);
+	}
+};
+zkWnd2.maximize = function (cmp, maximized, silent) {
+	var cmp = $e(cmp);
+	if (!zk.isRealVisible(cmp)) return;
+	if (cmp) {
+		var l, t, w, h, s = cmp.style;
+		if (maximized) {
+			zk.addClass($e(cmp, "maximize"), "z-window-maximized");
+			zkWnd2.hideShadow(cmp);
+			var op = !zkWnd2._embedded(cmp) ? Position.offsetParent(cmp) : cmp.parentNode;
+			l = s.left;
+			t = s.top;
+			w = s.width;
+			h = s.height;
+			
+			// prevent the scroll bar.
+			s.top = "-10000px";
+			s.left = "-10000px";
+			
+			// Sometimes, the clientWidth/Height in IE6 is wrong. 
+			var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
+			if (sw < 0) sw = 0;
+			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+			if (sh < 0) sh = 0;
+			
+			s.width = sw + "px";
+			s.height = sh + "px";
+			cmp._lastSize = {l:l, t:t, w:w, h:h};
+			
+			// restore.
+			s.top = "0px";
+			s.left = "0px";
+		} else {
+			var max = $e(cmp, "maximize");
+			zk.rmClass(max, "z-window-maximized");
+			zk.rmClass(max, "z-window-maximized-over");
+			if (cmp._lastSize) {
+				s.left = cmp._lastSize.l;
+				s.top = cmp._lastSize.t;
+				s.width = cmp._lastSize.w;
+				s.height = cmp._lastSize.h;
+			}
+			l = s.left;
+			t = s.top;
+			w = s.width;
+			h = s.height;
+			var body = $e(cmp, "cave");
+			if (body)
+				body.style.width = body.style.height = "";
+		}
+
+		setZKAttr(cmp, "maximized", maximized ? "true" : "false");
+		if (!silent)
+			zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized == true]});
+			
+		zk.beforeSizeAt(cmp);
+		zk.onSizeAt(cmp);
+	}
+};
+zkWnd2.onMinimize = function (evt) {
+	if (!evt) evt = window.event;
+
+	var cmp = $parentByType(Event.element(evt), "Wnd2");
+	if (cmp) {
+		if (getZKAttr(cmp, "minimizable") != "true")
+			return;
+
+		zkWnd2.minimize(cmp, getZKAttr(cmp, "minimized") != "true", false, true);
+	}
+};
+zkWnd2.minimize = function (cmp, minimized, silent) {
+	var cmp = $e(cmp);
+	if (cmp) {
+		var s = cmp.style, l = s.left, t = s.top, w = s.width, h = s.height;
+		if (minimized) {
+			zkWnd2.hideShadow(cmp);
+			zk.hide(cmp);
+		} else {
+			zkWnd2._show(cmp);
+			zk.onSizeAt(cmp);
+		}
+
+		setZKAttr(cmp, "minimized", minimized ? "true" : "false");
+		if (!silent)
+			zkau.sendasap({uuid: cmp.id, cmd: "onMinimize", data: [l, t, w, h, minimized == true]});
+	}
 };
 zkWnd2.cleanup = function (cmp) {
+	if (cmp._lastSize) {
+		cmp._lastSize = null;
+	}
 	zkWnd2.setSizable(cmp, false);
 	zkWnd2._cleanMode(cmp);
 	zkWnd2.cleanupShadow(cmp);
@@ -153,6 +283,10 @@ zkWnd2.cleanupShadow = function (cmp) {
  */
 zkWnd2.syncShadow = function (cmp) {
 	if (zkWnd2._embedded(cmp)) return;
+	if (getZKAttr(cmp, "maximized") == "true" || getZKAttr(cmp, "minimized") == "true") {
+		zkWnd2.hideShadow(cmp);
+		return;
+	}
 	var sw = zkWnd2.getShadow(cmp);
 	if (sw) sw.sync();
 };
@@ -310,6 +444,12 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 				return true;
 			}
 		}
+	case "z.maximized":
+		zkWnd2.maximize(cmp, val == "true", true);
+		return true;
+	case "z.minimized":
+		zkWnd2.minimize(cmp, val == "true", true);
+		return true;
 	}
 	return false;
 };
@@ -868,7 +1008,8 @@ zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 };
 zkWnd2._ignoremove = function (cmp, pointer, event) {
 	var target = Event.element(event);
-	if (target && target.id.indexOf("!close") > -1) return true;
+	if (!target || target.id.indexOf("!close") > -1 || target.id.indexOf("!minimize") > -1
+			|| target.id.indexOf("!maximize") > -1) return true;
 	if (!zkWnd2.sizable(cmp) || (cmp.offsetTop + 4 < pointer[1] && cmp.offsetLeft + 4 < pointer[0] 
 		&& cmp.offsetLeft + cmp.offsetWidth - 4 > pointer[0])) return false;
 	return true;
