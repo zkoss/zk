@@ -373,11 +373,15 @@ public class ExecutionImpl extends AbstractExecution {
 			((HttpServletResponse)_response).addDateHeader(name, value);
 	}
 
+	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
+	 */
 	public Object getRequestAttribute(String name) {
-		return _request.getAttribute(name);
+		return getAttribute(name);
 	}
+	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#setAttribute}.
+	 */
 	public void setRequestAttribute(String name, Object value) {
-		_request.setAttribute(name, value);
+		setAttribute(name, value);
 	}
 
 	public boolean isBrowser() {

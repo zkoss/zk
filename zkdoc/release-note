@@ -12,6 +12,7 @@ ZK 3.0.7
   2017848: ListModelList.iterator().remove() does not work
   2018378: ListModelList.listIterator(1).previous().remove() not work
   2018385: ListModelList.listIterator(0).next().set() not work
+  2015878: ThreadLocalListener causes NullPointerException on timeout
 
 	--------
 ZK 3.0.6
