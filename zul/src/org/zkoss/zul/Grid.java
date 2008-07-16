@@ -879,6 +879,9 @@ public class Grid extends XulElement {
 
 			done = true;
 			break;
+		case ListDataEvent.GROUP_REORDERED:
+			if (_rows != null) _rows.getChildren().clear();
+			break;
 		}
 
 		if (!done) //CONTENTS_CHANGED

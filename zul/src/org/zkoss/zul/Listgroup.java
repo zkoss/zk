@@ -111,6 +111,15 @@ public class Listgroup extends Listitem {
 		}
 		return -1;
 	}
+	/**
+	 * Returns the Listfoot, if any. Otherwise, null is returned.
+	 */
+	public Listfoot getListfoot() {
+		int index = getListgroupfootIndex();
+		if (index < 0) return null;
+		final Listbox lb = (Listbox)getParent();
+		return (Listfoot) lb.getChildren().get(index);
+	}
 	protected void setIndex(int index) {
 		final int old = getIndex();
 		super.setIndex(index);

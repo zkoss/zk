@@ -20,8 +20,11 @@ package org.zkoss.zul;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
 
@@ -36,25 +39,98 @@ public class SimpleGroupModel extends AbstractListModel
 implements ListModelExt, GroupModel, java.io.Serializable {
     private static final long serialVersionUID = 20080505L;
 
-	private final Object[] _data;
+	private Object[] _data;
 	private int[] _groups;
-	private boolean[] _grfoots;
+	private boolean[] _gpfoots;
 	private GroupModel _model;
-	
+
+	/**
+	 * Constructor. 
+	 * @param data the list to represent
+	 * @param groups the int array of group that indicates the number of items 
+	 * belong to the specified group.
+	 * @see #SimpleGroupModel(List, int[], boolean[])
+	 */
+	public SimpleGroupModel(List data, int[] groups) {
+		this(data, groups, null);
+	}
+	/**
+	 * Constructor. 
+	 * @param data the list to represent
+	 * @param groups the int array of group that indicates the number of items 
+	 * belong to the specified group.
+	 * @param gpfoots the boolean array of groupfoot
+	 */
+	public SimpleGroupModel(List data, int[] groups, boolean[] gpfoots) {
+		_data = data.toArray(new Object[data.size()]);
+		_groups = groups;
+		_gpfoots = gpfoots;
+	}
+	/**
+	 * Constructor.
+	 *
+	 * @param data the array to represent
+	 * @param model an implementation of GroupModel
+	 * @see #SimpleGroupModel(Object[], GroupModel, boolean)
+	 */
+	public SimpleGroupModel(Object[] data, GroupModel model) {
+		this(data, model, false);
+	}
+	/**
+	 * Constructor.
+	 * @param data the array to represent
+	 * @param model an implementation of GroupModel
+	 * @param live whether to have a 'live' {@link ListModel} on top of
+	 * the specified list.
+	 */
 	public SimpleGroupModel(Object[] data, GroupModel model, boolean live) {
 		if (data == null || model == null)
 			throw new NullPointerException();
 		_data = live ? data: (Object[])ArraysX.clone(data);
 		_model = model;
 	}
-	public SimpleGroupModel(Object[] data, GroupModel model) {
-		this(data, model, false);
+	/**
+	 * Constructor.
+	 *
+	 * @param data the array to represent
+	 * @param groups the int array of group that indicates the number of items 
+	 * belong to the specified group.
+	 * @see #SimpleGroupModel(Object[], int[], boolean[], boolean)
+	 */
+	public SimpleGroupModel(Object[] data, int[] groups) {
+		this(data, groups, null,  false);
 	}
+	/**
+	 * Constructor.
+	 *
+	 * @param data the array to represent
+	 * @param groups the int array of group that indicates the number of items 
+	 * belong to the specified group.
+	 * @param live whether to have a 'live' {@link ListModel} on top of
+	 * the specified list.
+	 * @see #SimpleGroupModel(Object[], int[], boolean[], boolean)
+	 */
+	public SimpleGroupModel(Object[] data, int[] groups, boolean live) {
+		this(data, groups, null, live);		
+	}
+	/**
+	 * Constructor.
+	 *
+	 * @param data the array to represent
+	 * @param groups the int array of group that indicates the number of items 
+	 * belong to the specified group.
+	 * @param gpfoots the boolean array of groupfoot
+	 * @see #SimpleGroupModel(Object[], int[], boolean[], boolean)
+	 */
+	public SimpleGroupModel(Object[] data, int[] groups, boolean[] gpfoots) {
+		this(data, groups, gpfoots,  false);
+	}	
 	/** Constructor.
 	 *
 	 * @param data the array to represent
 	 * @param groups the int array of group that indicates the number of items 
 	 * belong to the specified group.
+	 * @param gpfoots the boolean array of groupfoot
 	 * @param live whether to have a 'live' {@link ListModel} on top of
 	 * the specified list.
 	 * If false, the content of the specified list is copied.
@@ -66,29 +142,11 @@ implements ListModelExt, GroupModel, java.io.Serializable {
 	 * once it is passed to this method with live is true,
 	 * since {@link Listbox} is not smart enough to hanle it.
 	 */
-	public SimpleGroupModel(Object[] data, int[] groups, boolean live) {
-		this(data, groups, null, live);		
-	}
-	public SimpleGroupModel(Object[] data, int[] groups) {
-		this(data, groups, null,  false);
-	}
-	public SimpleGroupModel(Object[] data, int[] groups, boolean[] grfooters, boolean live) {
+	public SimpleGroupModel(Object[] data, int[] groups, boolean[] grfoots, boolean live) {
 		if (data == null || groups == null)
 			throw new NullPointerException();
 		_data = live ? data: (Object[])ArraysX.clone(data);
 		_groups = groups;
-		_grfoots = grfooters;
-	}
-	public SimpleGroupModel(Object[] data, int[] groups, boolean[] grfooters) {
-		this(data, groups, grfooters,  false);
-	}	
-	public SimpleGroupModel(List data, int[] groups) {
-		this(data, groups, null);
-	}
-	public SimpleGroupModel(List data, int[] groups, boolean[] grfooters) {
-		_data = data.toArray(new Object[data.size()]);
-		_groups = groups;
-		_grfoots = grfooters;
 	}
 	public int getSize() {
 		return _data.length;
@@ -112,7 +170,49 @@ implements ListModelExt, GroupModel, java.io.Serializable {
 		return  _model != null ? _model.getGroupCount() : _groups.length;
 	}	
 	public boolean hasGroupfoot(int index) {
-		return  _model != null ? _model.hasGroupfoot(index) : _grfoots != null ? _grfoots[index]: false;
+		return  _model != null ? _model.hasGroupfoot(index) : _gpfoots != null ? _gpfoots[index]: false;
+	}
+	public void groupByField(Comparator cmpr, boolean ascending, int index) {
+		if (_model != null) {
+			_model.groupByField(cmpr, ascending, index);
+			return;
+		}
+		if (cmpr == null) return;
+		LinkedList list = new LinkedList(Arrays.asList(_data));
+		for (int i = 0, z = 0; i < getGroupCount(); i++) {
+			list.remove(z);
+			z += getChildCount(i);
+			if (hasGroupfoot(i))
+				list.remove(z);
+		}
+		Object[] data = list.toArray();
+		Arrays.sort(data, cmpr);
+		list.clear();
+		Object group = null;
+		LinkedList groups = new LinkedList();
+		boolean existed = true;		
+		for (int i = 0, cnt = 0; i < data.length; i++, cnt++) {
+			if (!Objects.equals(group, data[i])) {
+				if (group != null) groups.add(new Integer(cnt));
+				group = data[i];
+				existed = false;
+			}
+			if (!existed) {
+				list.add(group);
+				existed = true;
+				cnt = 0;
+			}
+			list.add(data[i]);
+			if (i == data.length - 1)
+				groups.add(new Integer(cnt));
+		}
+		_data = list.toArray();
+		_groups = new int[groups.size()];
+		int i = 0;
+		for (Iterator it = groups.iterator(); it.hasNext(); i++)
+			_groups[i] = ((Integer)it.next()).intValue();
+		
+		fireEvent(ListDataEvent.GROUP_REORDERED, -1, -1);
 	}
 
 }

@@ -227,7 +227,16 @@ zkMenu2 = { // menu
 	},
 	onout: function (evt) {
 		if (!evt) evt = window.event;
-		zkMenu2._onout($outer(Event.element(evt)));
+		var cmp = $outer(Event.element(evt));
+		if (!zk.ie || zkMenu2._shouldDeactivate(cmp, evt))
+			zkMenu2._onout(cmp);
+	},
+	_shouldDeactivate: function (cmp, evt) {
+		var xy = zk.revisedOffset(cmp),
+			x = Event.pointerX(evt),
+			y = Event.pointerY(evt);
+		return !(x >= xy[0] && x <= xy[0] + cmp.offsetWidth && y >= xy[1] &&
+					y <= xy[1] + cmp.offsetHeight);
 	},
 	_onout: function (cmp, noAutoClose) {
 		if ($type(cmp) != "Menusp2") {

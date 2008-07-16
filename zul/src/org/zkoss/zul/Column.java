@@ -22,13 +22,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
+import org.zkoss.mesg.Messages;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Page;
@@ -40,6 +38,7 @@ import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
 import org.zkoss.zul.impl.HeaderElement;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * A single column in a {@link Columns} element.
@@ -50,6 +49,8 @@ import org.zkoss.zul.impl.HeaderElement;
  *
  * <p>The use of column is mainly to define attributes for each cell
  * in the grid.
+ * 
+ * <p>Default {@link #getSclass}: z-grid-column. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -58,8 +59,10 @@ public class Column extends HeaderElement {
 	private Comparator _sortAsc, _sortDsc;
 
 	public Column() {
+		setSclass("z-grid-column");
 	}
 	public Column(String label) {
+		this();
 		setLabel(label);
 	}
 	/* Constructs a grid header with label and image.
@@ -68,6 +71,7 @@ public class Column extends HeaderElement {
 	 * @param src the URI of the image, or null to ignore.
 	 */
 	public Column(String label, String src) {
+		this();
 		setLabel(label);
 		setImage(src);
 	}
@@ -79,6 +83,7 @@ public class Column extends HeaderElement {
 	 * @since 3.0.4
 	 */
 	public Column(String label, String src, String width) {
+		this();
 		setLabel(label);
 		setImage(src);
 		setWidth(width);
@@ -126,9 +131,8 @@ public class Column extends HeaderElement {
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
-			if (sorter == null) smartUpdate("z.asc", null);
-			else if (_sortAsc == null) smartUpdate("z.asc", "true");
 			_sortAsc = sorter;
+			invalidate();
 		}
 	}
 	/** Sets the ascending sorter with the class name, or null for
@@ -150,9 +154,8 @@ public class Column extends HeaderElement {
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
-			if (sorter == null) smartUpdate("z.dsc", null);
-			else if (_sortDsc == null) smartUpdate("z.dsc", "true");
 			_sortDsc = sorter;
+			invalidate();
 		}
 	}
 	/** Sets the descending sorter with the class name, or null for
@@ -242,7 +245,12 @@ public class Column extends HeaderElement {
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);
 		}
-
+		fixDirection(grid, ascending);
+		
+		return true;
+	}
+	
+	private void fixDirection(Grid grid, boolean ascending) {
 		//maintain
 		for (Iterator it = grid.getColumns().getChildren().iterator();
 		it.hasNext();) {
@@ -250,7 +258,6 @@ public class Column extends HeaderElement {
 			hd.setSortDirection(
 				hd != this ? "natural": ascending ? "ascending": "descending");
 		}
-		return true;
 	}
 	/** Sorts the rows ({@link Row}) based on {@link #getSortAscending}
 	 * and {@link #getSortDescending}.
@@ -267,6 +274,94 @@ public class Column extends HeaderElement {
 		if (force) setSortDirection("natural");
 		return sort(ascending);
 	}
+	/**
+	 * Groups the rows ({@link Row}) based on {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * 
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @return whether the rows are grouped.
+	 * @since 3.5.0
+	 */
+	public boolean groupByField(boolean ascending) {
+		final String dir = getSortDirection();		
+		if (ascending) {
+			if ("ascending".equals(dir)) return false;
+		} else {
+			if ("descending".equals(dir)) return false;
+		}
+		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
+		if (cmpr == null) return false;
+		
+		final Grid grid = getGrid();
+		if (grid == null) return false;
+		
+		//comparator might be zscript
+		final HashMap backup = new HashMap();
+		final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
+		try {
+			final ListModel model = grid.getModel();
+			int index = grid.getColumns().getChildren().indexOf(this);
+			if (model != null) { //live data
+				if (!(model instanceof GroupModel))
+					throw new UiException("GroupModel must be implemented in "+model.getClass().getName());
+				((GroupModel)model).groupByField(cmpr, ascending, index);
+			} else { // not live data
+				final Rows rows = grid.getRows();		
+				if (rows.hasGroup()) {
+					final List groups = new ArrayList(rows.getGroups());
+					for (Iterator it = groups.iterator(); it.hasNext();)
+						rows.removeChild((Group)it.next()); // Groupfoot is removed automatically, if any.
+				}
+				
+				Components.sort(rows.getChildren(), cmpr);
+				
+				final List children = new ArrayList(rows.getChildren());
+				rows.getChildren().clear();
+				
+				Group group = null;
+				for (Iterator it = children.iterator(); it.hasNext();) {
+					final Row row = (Row) it.next();
+					final List child = row.getChildren();
+					if (child.size() < index)
+						throw new IndexOutOfBoundsException(
+								"Index: "+index+", Size: "+ child.size());
+					final Component cmp = (Component) child.get(index);
+					if (cmp instanceof Label) {
+						String val = ((Label)cmp).getValue();
+						if (group == null) group = new Group(val);
+						else if (!Objects.equals(group.getLabel(), val))
+							group = new Group(val);
+					} else {
+						group = new Group(Messages.get(MZul.GRID_OTHER));
+					}
+					if (group.getParent() != rows)
+						rows.appendChild(group);
+					rows.appendChild(row);		    		
+				}
+			}
+		} finally {
+			Namespaces.afterInterpret(backup, ns, true);
+		}
+
+		fixDirection(grid, ascending);
+		return true;
+	}
+	
+	public void setLabel(String label) {
+		super.setLabel(label);
+		if (getParent() != null)
+			((Columns)getParent()).postOnInitLater();
+	}
+	
+	public boolean setVisible(boolean visible) {
+		boolean old = super.setVisible(visible);
+		if (getParent() != null)
+			((Columns)getParent()).postOnInitLater();
+		return old;
+	}
 
 	//-- event listener --//
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
@@ -279,20 +374,11 @@ public class Column extends HeaderElement {
 		else if (!sort(true)) sort(false);
 	}
 
-	/** Returns the style class.
-	 * If the style class is not defined ({@link #setSclass} is not called
-	 * or called with null or empty), it returns "sort" if sortable,
-	 * or null if not sortable.
-	 * <p>By sortable we mean that {@link #setSortAscending}
-	 * or {@link #setSortDescending}
-	 * was called with a non-null comparator
-	 */
-	public String getSclass() {
-		final String scls = super.getSclass();
-		if (scls != null) return scls;
-		return _sortAsc != null || _sortDsc != null ? "sort": null;
+	public String getRealSclass() {
+		final String scls = super.getRealSclass();
+		final String sort = _sortAsc != null || _sortDsc != null ? "sort": "";
+		return scls != null ? scls + ' ' + sort : sort;
 	}
-
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80);
 		if (_sortAsc != null) sb.append(" z.asc=\"true\"");

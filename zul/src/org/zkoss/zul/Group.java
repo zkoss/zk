@@ -123,6 +123,17 @@ public class Group extends Row {
 		}
 		return -1;
 	}
+
+	/**
+	 * Returns the Groupfoot, if any. Otherwise, null is returned.
+	 */
+	public Groupfoot getGroupfoot() {
+		int index = getGroupfootIndex();
+		if (index < 0) return null;
+		final Rows rows = (Rows)getParent();
+		return (Groupfoot) rows.getChildren().get(index);
+	}
+	
 	/** Returns the image URI.
 	 * <p>Default: null.
 	 * <p>The same as {@link #getSrc}.

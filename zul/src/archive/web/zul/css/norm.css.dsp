@@ -554,6 +554,9 @@ div.listbox-head th.sort-asc div.head-cell-inner, div.grid-head th.sort-asc div.
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
+div.grid-head th.sort-asc, div.grid-head th.sort-dsc {
+	background: #DDEEFB url(${c:encodeURL('~./zul/img/grid/column-over.gif')}) repeat-x 0 0;
+}
 div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.head-cell-inner
 	<%-- ,tr.listbox-fake th.sort-dsc div ,tr.tree-fake th.sort-dsc div ,tr.grid-fake th.sort-dsc div 
 	// Header's width excluds its style by default--%> {
@@ -763,6 +766,24 @@ td.listgroup-cell div.cell-inner, td.group-cell div.cell-inner span, td.group-ce
 }
 .groupfoot-cell div.cell-inner span, .groupfoot-cell div.cell-inner , td.listgroupfoot-cell div.cell-inner{
 	color: #2C559C; font: bold 12px Tahoma, Arial, Helvetica, sans-serif;
+}
+<%-- ZK Column's menu --%>
+.z-grid-column .head-cell-inner {
+	position: relative;
+}
+.z-grid-column-btn {
+	background: #DDEEFB url(${c:encodeURL('~./zul/img/grid/hd-btn.gif')}) no-repeat left center;
+	display: none; position: absolute; width: 14px; right: 0; top: 0; z-index: 2;
+	cursor: pointer;
+}
+.z-grid-column-over .z-grid-column-btn, .z-grid-column-menu-open .z-grid-column-btn {
+	display: block;
+}
+a.z-grid-column-btn:hover {
+	background-position: -14px center;
+}
+.z-grid-column-over {
+	background: #DDEEFB url(${c:encodeURL('~./zul/img/grid/column-over.gif')}) repeat-x 0 0;
 }
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {
@@ -1263,8 +1284,8 @@ span.z-menu-sp {
 	text-decoration: none; color: #222; -moz-outline: 0 none; outline: 0 none; cursor: pointer;
 }
 li.z-menu-item-over {
-	background: #ebf3fd url(${c:encodeURL('~./zul/img/menu2/item-over.gif')}) repeat-x left bottom;
-	border: 1px solid #aaccf6; padding: 0;
+	background: #DDEEFB url(${c:encodeURL('~./zul/img/menu2/item-over.gif')}) repeat-x 0 0;
+	border: 1px solid #A8D8EB; padding: 0;
 }
 .z-menu-item-over a.z-menu-item {
 	color:#233d6d;

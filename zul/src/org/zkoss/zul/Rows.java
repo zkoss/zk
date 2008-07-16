@@ -117,7 +117,10 @@ public class Rows extends XulElement {
 		it.hasNext() && (to < 0 || j <= to); ++j) {
 			if (it.next() instanceof Group) {
 				int[] g = getGroupsInfoAtIndex(j+1, true);
-				if (g != null) g[0] = j;
+				if (g != null) {
+					g[0] = j;
+					if (g[2] != -1) g[2]--;
+				}
 			}
 		}
 	}
@@ -249,7 +252,11 @@ public class Rows extends XulElement {
 				}				
 			} else if (hasGroup()) {
 				final int[] g = getGroupsInfoAtIndex(index);
-				if (g != null) g[1]--;
+				if (g != null) {
+					g[1]--;
+					if (g[2] != -1) g[2]--;
+				}
+				else fixGroupIndex(index, -1);
 			}
 			if (child instanceof Groupfoot){
 				final int[] g = getGroupsInfoAtIndex(index);

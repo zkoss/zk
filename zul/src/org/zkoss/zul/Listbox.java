@@ -1099,7 +1099,10 @@ public class Listbox extends XulElement {
 	
 	/*package*/ void fixGroupIndex(int index, int value) {
 		int[] g = getGroupsInfoAtIndex(index, true);
-		if (g != null) g[0] = value;
+		if (g != null) {
+			g[0] = value;
+			if (g[2] != -1) g[2]--;
+		}
 	}
 	/*package*/ Listgroup getListgroupAtIndex(int index) {
 		if (_groupsInfo.isEmpty()) return null;
@@ -1368,7 +1371,10 @@ public class Listbox extends XulElement {
 				_groupsInfo.remove(remove);
 			} else if (!_groupsInfo.isEmpty()) {
 				final int[] g = getGroupsInfoAtIndex(index);
-				if (g != null) g[1]--;
+				if (g != null) {
+					g[1]--;
+					if (g[2] != -1) g[2]--;
+				} else fixGroupIndex(index, -1);
 			}
 			if (child instanceof Groupfoot){
 				final int[] g = getGroupsInfoAtIndex(index);

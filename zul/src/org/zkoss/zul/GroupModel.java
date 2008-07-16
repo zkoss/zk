@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Comparator;
+
 /**
  * Used with {@link ListModel} to represent a list model with grouping.
  *
@@ -47,4 +49,15 @@ public interface GroupModel {
 	 * Returns whether the Group has a Groupfoot or not.
 	 */
 	public boolean hasGroupfoot(int index);
+	/**
+	 * Groups the rows by the specified column.
+	 * It only called when {@link Listbox} or {@link Grid} has the sort function.
+	 * @param cmpr the comparator assigned to {@link Column#setSortAscending}
+	 * 	and other relative methods. If developers didn't assign any one,
+	 * 	the method is returned directly.
+	 * @param ascending whether to sort in the ascending order (or in
+	 * 	the descending order)
+	 * @param index the index of the column
+	 */
+	public void groupByField(Comparator cmpr, boolean ascending, int index);
 }

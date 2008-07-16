@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Column;
+import org.zkoss.zul.Columns;
 
 /*
  * {@link Column}'s default mold.
@@ -46,6 +47,10 @@ public class ColumnDefault implements ComponentRenderer {
 		.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"head-cell-inner\">");
 		wh.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
+		String mpop = ((Columns)self.getParent()).getMenupopup();
+		if (mpop != null && mpop.trim().length() > 0 && !mpop.equals("none"))
+			wh.write("<a id=\"").write(uuid).write("!btn\" href=\"#\" class=\"").write(self.getSclass())
+				.write("-btn\"></a>");
 		wh.writeChildren(self);
 		wh.writeln("</div></th>");
 	}

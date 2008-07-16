@@ -70,7 +70,7 @@ zk.Grid.prototype = {
 				for (var k = headrow.cells.length; k;) {
 					var n = headrow.cells[--k].firstChild; // Bug #1819037
 					for (n = n ? n.firstChild: n; n; n = n.nextSibling)
-						if (!n.id || !n.id.endsWith("!hint")) {
+						if (!n.id || (!n.id.endsWith("!hint") && !n.id.endsWith("!btn"))) {
 							empty = false;
 							break l_out;
 						}
@@ -400,7 +400,92 @@ zk.addBeforeInit(function () {
 					$parentByType(col1, "Cols"), icol, col1, wd1, keys);
 		}
 	};
-
+	
+	/** since ZK 3.5.0 */
+	zk.apply(zkCol, {
+		_zkColinit: zkCol.init,
+		init: function (cmp) {
+			zkCol._zkColinit(cmp);	
+			var pp = getZKAttr(cmp.parentNode, "mpop");
+				zk.listen(cmp, "mouseover", zkCol.onHdOver);
+				zk.listen(cmp, "mouseout", zkCol.onHdOut);
+			if (pp != "zk_n_a") {
+				var btn = $e(cmp, "btn");
+				if (btn) {
+					zk.listen(btn, "click", zkCol.onMenuClick);
+					
+					// zid might not be ready yet.
+					zk.addInitLater(function () {
+						var mpop = $e(pp);
+						if (!mpop)
+							mpop = zkau.getByZid(cmp.parentNode, pp);
+						if (mpop) {
+							if (getZKAttr(mpop, "autocreate") == "true" &&
+								getZKAttr(cmp.parentNode, "columnshide") != "true" &&
+								getZKAttr(cmp, "asc") != "true" &&
+								getZKAttr(cmp, "dsc") != "true") 
+									zk.remove($e(cmp.id + "!btn"));
+							zk.on(mpop, "close", zkCol.onMenuClose);
+						}
+					});
+				}
+			}
+		},
+		onMenuClick: function (evt) {
+			if (!evt) evt = window.event;
+			var cmp = $parentByType(Event.element(evt), "Col"),
+				pp = zkau.getByZid(cmp.parentNode, getZKAttr(cmp.parentNode, "mpop")),
+				btn = $e(cmp, "btn");
+			if (!pp) return;
+			zk.addClass(cmp, "z-grid-column-menu-open");
+			
+			if (getZKAttr(pp, "autocreate") == "true") {
+				var group = getZKAttr(cmp.parentNode, "columnsgroup") == "true",
+					asc = getZKAttr(cmp, "asc") == "true",
+					dsc = getZKAttr(cmp, "dsc") == "true";
+				var ul = $e(pp, "cave");
+				if (ul) {
+					var li = zk.firstChild(ul, "LI");
+					if (group) {
+						li.style.display = asc || dsc ? "" : "none";
+						li = zk.nextSibling(li, "LI");
+					}
+					if (li) li.style.display = asc ? "" : "none";
+					li = zk.nextSibling(li, "LI");
+					if (li) li.style.display = dsc ? "" : "none";
+				}
+			}
+			
+			pp.style.position = "absolute";
+			zk.setVParent(pp);
+			zk.position(pp, btn, "after_start");
+			var xy = zk.revisedOffset(cmp), t = $int(pp.style.top);
+			if (xy[1] < t) pp.style.top = t - 4 + "px"; 
+			
+			zkMpop2.context(pp, cmp);
+			setZKAttr(pp, "menuId", cmp.id);
+			Event.stop(evt); // avoid onSort event.
+		},
+		onMenuClose: function (pp) {
+			var cmp = $e(getZKAttr(pp, "menuId"));
+			zk.rmClass(cmp, "z-grid-column-menu-open");
+			zk.rmClass(cmp, "z-grid-column-over");	
+		},
+		onHdOver: function (evt) {
+			if (!evt) evt = window.event;
+			var cmp = $parentByType(Event.element(evt), "Col");			
+			zk.addClass(cmp, "z-grid-column-over");
+			var btn = $e(cmp, "btn");
+			if (btn) btn.style.height = cmp.offsetHeight - 1 + "px";											
+		},
+		onHdOut: function (evt) {
+			if (!evt) evt = window.event;
+			var cmp = $parentByType(Event.element(evt), "Col");
+			if (!zk.hasClass(cmp, "z-grid-column-menu-open") &&
+				(!zk.ie || !zk.isAncestor(cmp, evt.relatedTarget || evt.toElement)))
+				zk.rmClass(cmp, "z-grid-column-over");	
+		}
+	});
 	//Columns
 	zkCols = zulHdrs;
 });
@@ -418,9 +503,10 @@ zkGrwgp = {
 				if(zk.isVisible(row.cells[i])) span++;
 			for (var cells = cmp.cells, i = cells.length; --i >= 0;)
 				span -= cells[i].colSpan;
-			if (span > 0) cmp.cells[cmp.cells.length - 1].colSpan += span;
+			if (span > 0 && cmp.cells.length) cmp.cells[cmp.cells.length - 1].colSpan += span;
 		}
-	},	ontoggle: function (evt) {
+	},	
+	ontoggle: function (evt) {
 		if (!evt) evt = window.event;
 		var target = Event.element(evt);
 		var row = zk.parentNode(target, "TR");
