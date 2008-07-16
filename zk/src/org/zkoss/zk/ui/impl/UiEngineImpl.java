@@ -170,6 +170,21 @@ public class UiEngineImpl implements UiEngine {
 	public void desktopDestroyed(Desktop desktop) {
 //		if (log.debugable()) log.debug("destroy "+desktop);
 
+		Execution exec = Executions.getCurrent();
+		if (exec == null) {
+			//Bug 2015878: it is null if it is caused by session invalidation
+			exec = new MockExecution(desktop);
+			activate(exec);
+			try {
+				desktopDestroyed0(desktop);
+			} finally {
+				deactivate(exec);
+			}
+		} else {
+			desktopDestroyed0(desktop);
+		}
+	}
+	private void desktopDestroyed0(Desktop desktop) {
 		final Configuration conf = _wapp.getConfiguration();
 		final Map map;
 		synchronized (_suspended) {

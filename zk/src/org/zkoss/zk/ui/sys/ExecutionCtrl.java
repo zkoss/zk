@@ -138,18 +138,10 @@ public interface ExecutionCtrl {
 	 */
 	public void addDateHeader(String name, long value);
 
-	/** Returns the value of an attribute in the client request
-	 * (e.g., HTTP request) that creates this execution.
-	 *
-	 * <p>Notice that a servlet might include serveral ZK pages,
-	 * while an independent execution is created for adding a new page.
-	 * It means, each client request might create several executions.
-	 * Thus, the attribute set by this method might last for several
-	 * executions (until the request ends).
+	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
 	 */
 	public Object getRequestAttribute(String name);
-	/** Sets the value of an attribute to the client request
-	 * (e.g., HTTP request) that creates this execution.
+	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#setAttribute}.
 	 */
 	public void setRequestAttribute(String name, Object value);
 
