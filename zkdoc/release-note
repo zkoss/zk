@@ -15,7 +15,8 @@ ZK 3.0.7
   2015878: ThreadLocalListener causes NullPointerException on timeout
   2020152: requestCompleteAtClient not called if browse to another URL
   2019171: IE Bookmark Bug - first bookmark is ignored 
-
+  2020454: JpaUtil.getEntityManagerFactory should cache in WebApp scope
+  
 	--------
 ZK 3.0.6
 * Features

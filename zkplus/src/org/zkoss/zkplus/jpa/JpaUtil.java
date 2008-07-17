@@ -25,10 +25,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.hibernate.HibernateException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 
 /**
@@ -49,44 +51,33 @@ public class JpaUtil {
 	public static final String JPA_EM_MAP = "org.zkoss.zkplus.jpa.EmMap";
 
 	/*
-	 * Get the EntityManagerFactories Map from Execution scope
+	 * Get the EntityManagerFactories Map from WebApp scope
 	 */
-	static Map getEmfMap() {
-		return getMapThreadLocal(JPA_EMF_MAP);
-	}
-
-	/*
-	 * Clean the EntityManagerFactories Map
-	 */
-	static void cleanEmfMap() {
-		Executions.getCurrent().removeAttribute(JPA_EMF_MAP);
+	private static Map getEmfMap() {
+		final Map appattrs = getWebApp().getAttributes(); 
+		Map map = (Map) appattrs.get(JPA_EMF_MAP);
+		if (map == null) {
+			map = new HashMap();
+			appattrs.put(JPA_EMF_MAP, map);
+		}
+		return map;
 	}
 
 	/*
 	 * Get the EntityManagers Map from Execution scope
 	 */
-	static Map getEmMap() {
-		return getMapThreadLocal(JPA_EM_MAP);
-	}
-
-	/*
-	 * Clean the EntityManagersMap
-	 */
-	static void cleanEmMap() {
-		Executions.getCurrent().removeAttribute(JPA_EM_MAP);
-	}
-
-	private static Map getMapThreadLocal(String key) {
-		Map map = (Map) Executions.getCurrent().getAttribute(key);
+	private static Map getEmMap() {
+		Execution current = Executions.getCurrent();
+		Map map = (Map) current.getAttribute(JPA_EM_MAP);
 		if (map == null) {
 			map = new HashMap();
-			Executions.getCurrent().setAttribute(key, map);
+			Executions.getCurrent().setAttribute(JPA_EM_MAP, map);
 		}
 		return map;
 	}
 
 	/**
-	 * Create or return the EntityManager by peference in zk.xml
+	 * Create or return the default EntityManagerFactory as defined in zk.xml.
 	 * 
 	 * <p>
 	 * In WEB-INF/zk.xml, add following lines:
@@ -100,7 +91,7 @@ public class JpaUtil {
 	 * 
 	 * </p>
 	 * 
-	 * @return EntityManager
+	 * @return EntityManagerFactory
 	 */
 	public static EntityManagerFactory getEntityManagerFactory() {
 		return initEntityManagerFactory(null, null);
@@ -109,10 +100,9 @@ public class JpaUtil {
 	/**
 	 * Create or return the EntityManagerFactory for the specified persistence
 	 * unit name. </br>*Notice:If the EntityManagerFactory with specified
-	 * presistence unit is not created before, a new one will be created.
+	 * persistence unit is not created yet, a new one will be created.
 	 * 
-	 * @param puName -
-	 *            Persistence unit name
+	 * @param puName Persistence unit name
 	 * @return EntityManagerFactory
 	 */
 	public static EntityManagerFactory getEntityManagerFactory(String puName) {
@@ -121,23 +111,21 @@ public class JpaUtil {
 
 	/**
 	 * Create the EntityManagerFactory for the specified persistence unit and
-	 * defined priorities. </br>*Notice: It always creates a new
-	 * EntityManagerFactory.
+	 * defined properties. </br>*Notice: It always creates a new
+	 * EntityManagerFactory unless properties is null.
 	 * 
-	 * @param puName -
-	 *            Persistence unit name
-	 * @param priority -
-	 *            Defined priorities
+	 * @param puName Persistence unit name
+	 * @param properties Defined priorities
 	 * @return EntityManagerFactory
 	 */
 	public static EntityManagerFactory getEntityManagerFactory(String puName,
-			Map priority) {
-		return initEntityManagerFactory(puName, priority);
+	Map properties) {
+		return initEntityManagerFactory(puName, properties);
 	}
 
 	/**
-	 * Create the EntityManager by peference in zk.xml
-	 *  <p>
+	 * Returns an EntityManager of the default EntityManagerFactory as defined in zk.xml in an Execution scope.
+	 * <p>
 	 * In WEB-INF/zk.xml, add following lines:
 	 * 
 	 * <pre><code>
@@ -155,9 +143,11 @@ public class JpaUtil {
 	}
 
 	/**
-	 * Create the EntityManager for the specified persistence unit name. </br>*Notice:If
+	 * Returns or create an EntityManager for the specified persistence unit name. </br>*Notice:If
 	 * the EntityManagerFactory with specified presistence unit is not created
-	 * before, a new one will be created.
+	 * before, a new one will be created automatically.
+	 * <p>The EntityManager get by this method is guaranteed to be the same within one Execution for the
+	 * specified persistence unit name.</p>
 	 * 
 	 * @param puName -
 	 *            Persistence unit name
@@ -168,34 +158,63 @@ public class JpaUtil {
 	}
 
 	/**
-	 * Create the EntityManager for the specified persistence unit name and
-	 * defined priorities. </br>*Notice: It always creates a new EntityManger
+	 * Closes the EntityManager of the default EntityManagerFactory as 
+	 * defined in zk.xml in an Execution scope. It is equals to 
+	 * closeEntityManager(null).
+	 * <p>
+	 * In WEB-INF/zk.xml, add following lines:
+	 * 
+	 * <pre><code>
+	 *&lt;preference&gt;
+	 *	&lt;name&gt;JPA.PersistenceUnitName&lt;/name&gt;
+	 *	&lt;value&gt;PERSISTENCE_UNIT_NAME&lt;/value&gt;
+     *&lt;/preference&gt;
+	 * </code></pre>
+	 * @since 3.0.7
+	 */
+	public static void closeEntityManager() {
+		closeEntityManager(null);
+	}
+
+	/**
+	 * Closes the EntityManager of the EntityManagerFactory of the specified puName; 
+	 * @since 3.0.7
+	 */
+	public static void closeEntityManager(String puName) {
+		EntityManager em = (EntityManager) getEmMap().remove(getPersistenceUnitName(puName));
+		if (em != null && em.isOpen()) em.close();
+	}
+	
+	/**
+	 * Returns an EntityManager for the specified persistence unit name and
+	 * defined properties. </br>*Notice: It always creates a new EntityManagerFactory
+	 * and thus a new EntityManager unless properties is null.
 	 * 
 	 * @param puName -
 	 *            Persistence unit name
-	 * @param priority -
+	 * @param properties -
 	 *            Defined priorities
 	 * @return EntityManager
 	 */
-	public static EntityManager getEntiyManager(String puName, Map priority) {
-		return initEntityManger(puName, priority);
+	public static EntityManager getEntiyManager(String puName, Map properties) {
+		return initEntityManger(puName, properties);
 	}
 
 	/*
 	 * If EntityManagerFactory with persistence name puName is not found in Map,
-	 * created a new one and return Else, return the EntityManagerFactory
+	 * created a new one and return; or return a new created EntityManagerFactory
 	 * directly.
 	 */
-	/* package */static EntityManagerFactory initEntityManagerFactory(String puName, Map priority) {
+	private static EntityManagerFactory initEntityManagerFactory(String puName, Map properties) {
 		EntityManagerFactory emf;
-		if (priority == null) {
+		if (properties == null) {
 			emf = (EntityManagerFactory) getEmfMap().get(puName);
 			if (emf == null) {
 				emf = createEntityManagerFactory(puName, null);
 				getEmfMap().put(puName, emf);
 			}
 		} else {
-			emf = createEntityManagerFactory(puName, priority);
+			emf = createEntityManagerFactory(puName, properties);
 			getEmfMap().put(puName, emf);
 		}
 		return emf;
@@ -203,53 +222,39 @@ public class JpaUtil {
 
 	/*
 	 * If EntityManager with persistence name puName is not found in Map,
-	 * created a new one and return Else, return the EntityManager directly.
+	 * created a new one; or return the existing EntityManager of this execution directly.
 	 */
-	/* package */static EntityManager initEntityManger(String puName,Map priority) {
+	private static EntityManager initEntityManger(String puName,Map properties) {
 		EntityManager em;
-		if (priority == null) {
+		if (properties == null) {
 			em = (EntityManager) getEmMap().get(puName);
 			if (em == null) {
 				em = createEntityManager(puName, null);
 				getEmMap().put(puName, em);
 			}
 		} else {
-			em = createEntityManager(puName, priority);
+			em = createEntityManager(puName, properties);
 			getEmMap().put(puName, em);
 		}
 		return em;
 	}
 
 	/*
-	 * Clear up all EntityManagerFactory in map
-	 */
-	/* package */static void cleanupAllEmf() {
-		if (!getEmfMap().isEmpty()) {
-
-			for (Iterator itr = getEmfMap().values().iterator(); itr.hasNext();) {
-				((EntityManagerFactory) itr.next()).close();
-			}
-			cleanEmfMap();
-		}
-	}
-
-	/*
-	 * Util
-	 */
-	/*
 	 * Create the EntityManagerFactory by persistence unit name. If persistence
 	 * unit name not given, using the one which is defined in zk.xml
 	 */
 	private static EntityManagerFactory createEntityManagerFactory(
-			String puName, Map priority) {
+	String puName, Map properties) {
 		puName = getPersistenceUnitName(puName);
 		EntityManagerFactory emf;
 		try {
-			if (priority == null) {
+			if (properties == null) {
 				emf = Persistence.createEntityManagerFactory(puName);
 				log.info("EntityManagerFactory for: " + puName + " is created ");
-			} else
-				emf = Persistence.createEntityManagerFactory(puName, priority);
+			} else {
+				emf = Persistence.createEntityManagerFactory(puName, properties);
+				log.info("EntityManagerFactory for: " + puName + " with properties "+properties + " is created ");
+			}
 		} catch (Exception ex) {
 			log.error("Initial EntityManagerFactory creation failed." + ex);
 			throw new ExceptionInInitializerError(ex);
@@ -262,9 +267,9 @@ public class JpaUtil {
 	 * Create the EntityManager by persistence unit name. If persistence unit
 	 * name not given, using the one which is defined in zk.xml
 	 */
-	private static EntityManager createEntityManager(String puName, Map priority) {
+	private static EntityManager createEntityManager(String puName, Map properties) {
 		puName = getPersistenceUnitName(puName);
-		EntityManager em = createEntityManagerFactory(puName, priority).createEntityManager();
+		EntityManager em = initEntityManagerFactory(puName, properties).createEntityManager();
 		return em;
 	}
 
@@ -288,7 +293,9 @@ public class JpaUtil {
 			final org.zkoss.zk.ui.util.Configuration config = getWebApp().getConfiguration();
 			pu = config.getPreference(CONFIG, null);
 		}
+		if (pu == null) {
+			throw new UiException("Forget to specify the preference of "+CONFIG+" in WEB-INF/zk.xml?");
+		}
 		return pu;
 	}
-
 }
