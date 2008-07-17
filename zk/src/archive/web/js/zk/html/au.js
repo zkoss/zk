@@ -1149,15 +1149,19 @@ zkau._onUnload = function () {
 	//Good news: Opera preserves the most udpated content, when BACK to
 	//a cached page, its content. OTOH, IE/FF/Safari cannot.
 	//Note: Safari won't send rmDesktop when onunload is called
-	if (!zk.opera && !zk.keepDesktop) {
+	var bRmDesktop = !zk.opera && !zk.keepDesktop;
+	if (bRmDesktop || zk.pfmeter) {
 		try {
 			var ds = zkau._dtids;
 			for (var j = 0, dl = ds.length; j < dl; ++j) {
-				var req = zkau.ajaxRequest(),
-					content = "dtid="+ds[j]+"&cmd.0=rmDesktop",
-					uri = zkau.uri(ds[j]);
+				var dtid = ds[j],
+					req = zkau.ajaxRequest(),
+					content = "dtid="+dtid+"&cmd.0="+
+						(bRmDesktop?"rmDesktop":"dummy"),
+					uri = zkau.uri(dtid);
 				req.open("POST", zk.ie ? uri+"?"+content: uri, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				if (zk.pfmeter) zkau._pfsend(req, dtid, true);
 				if (zk.ie) req.send(null);
 				else req.send(content);
 			}
@@ -2099,9 +2103,10 @@ zkau.endGhostToDIV = function (dg) {
 //Perfomance Meter//
 zkau._pfj = 0; //an index
 zkau._pfIds = ""; //what are processed
-zkau._pfsend = function (req, dtid) {
-	req.setRequestHeader("ZK-Client-Start",
-		dtid + "-" + zkau._pfj++ + "=" + Math.round($now()));
+zkau._pfsend = function (req, dtid, completeOnly) {
+	if (!completeOnly)
+		req.setRequestHeader("ZK-Client-Start",
+			dtid + "-" + zkau._pfj++ + "=" + Math.round($now()));
 
 	if (zkau._pfIds) {
 		req.setRequestHeader("ZK-Client-Complete", zkau._pfIds);
