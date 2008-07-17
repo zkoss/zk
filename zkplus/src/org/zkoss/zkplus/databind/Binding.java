@@ -253,6 +253,8 @@ public class Binding {
 		try {
 			if (_converter != null) {
 				bean = _converter.coerceToUi(bean, comp);
+				if (bean == TypeConverter.IGNORE)
+					return; //ignore, so don't do Fields.set()
 			}
 			
 			//Bug #1876198 Error msg appears when load page (databind+CustomConstraint)
@@ -310,7 +312,8 @@ public class Binding {
 	 */
 	public void saveAttribute(Component comp) {
 		final Object[] vals = getAttributeValues(comp);
-		saveAttributeValue(comp, vals, null);
+		if (vals != null)
+			saveAttributeValue(comp, vals, null);
 	}
 	
 	private void saveAttributeValue(Component comp, Object[] vals, List loadOnSaveInfos) {
@@ -345,7 +348,7 @@ public class Binding {
 		}
 		try {
 			final Object val = (_converter == null) ? rawval : _converter.coerceToBean(rawval, comp);
-			return new Object[] {val, rawval};
+			return val == TypeConverter.IGNORE ? null : new Object[] {val, rawval};
 		} catch (ClassCastException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -478,8 +481,10 @@ public class Binding {
 				//then binder.lookupClone() will return null dataTarget.
 				if (dataTarget != null) {
 					final Object[] vals = binding.getAttributeValues(dataTarget);
-					tmplist.add(new BindingInfo(binding, dataTarget, vals));
-					Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget, target, binding, vals[0]));
+					if (vals != null) {
+						tmplist.add(new BindingInfo(binding, dataTarget, vals));
+						Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget, target, binding, vals[0]));
+					}
 				} else {
 					//bi.getComponent a template and a null dataTarget, meaning all collection items has to
 					//be handled. Search the owner to iterate all cloned items.
@@ -487,8 +492,10 @@ public class Binding {
 					for (final Iterator itc = clones.iterator(); itc.hasNext();) {
 						final Component dataTarget1 = (Component)itc.next();
 						final Object[] vals = binding.getAttributeValues(dataTarget1);
-						tmplist.add(new BindingInfo(binding, dataTarget1, vals));
-						Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget1, target, binding, vals[0]));
+						if (vals != null) {
+							tmplist.add(new BindingInfo(binding, dataTarget1, vals));
+							Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget1, target, binding, vals[0]));
+						}
 					}
 					
 				}

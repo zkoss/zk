@@ -16,6 +16,7 @@ ZK 3.0.7
   2020152: requestCompleteAtClient not called if browse to another URL
   2019171: IE Bookmark Bug - first bookmark is ignored 
   2020454: JpaUtil.getEntityManagerFactory should cache in WebApp scope
+  2010389: Data binding error: changing selected item of combobox
   
 	--------
 ZK 3.0.6

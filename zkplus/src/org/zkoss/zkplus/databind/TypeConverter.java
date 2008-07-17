@@ -25,6 +25,11 @@ import org.zkoss.zk.ui.Component;
  * @author Henri Chen
  */
 public interface TypeConverter {
+	/** Special Value, when returned in {@link #coerceToBean} or {@link #coerceToUi},
+	 * meaning ignore it.
+	 */
+	public static final Object IGNORE = new Object();
+
 	/** Convert an value object to UI component attribute type.
 	 * @param val the object to be corece to UI component attribute type.
 	 * @param comp associated component
