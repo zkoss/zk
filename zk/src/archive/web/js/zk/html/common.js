@@ -2012,7 +2012,7 @@ zk.History.prototype = {
 		this.curbk = "";
 		zk.addBeforeInit(function () { // Bug #1847708
 			zkau.history.checkBookmark(); // We don't need to wait for the first time.
-			setInterval("zkau.history.checkBookmark()", 380);
+			setInterval("zkau.history.checkBookmark()", 300);
 		});
 			//Though IE use history.html, timer is still required 
 			//because user might specify URL directly
