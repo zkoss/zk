@@ -2312,7 +2312,7 @@ zk.History.prototype = {
 		this.curbk = "";
 		zk.addBeforeInit(function () { // Bug #1847708
 			zkau.history.checkBookmark(); // We don't need to wait for the first time.
-			setInterval("zkau.history.checkBookmark()", 520);
+			setInterval("zkau.history.checkBookmark()", 380);
 		});
 			//Though IE use history.html, timer is still required 
 			//because user might specify URL directly
@@ -2322,8 +2322,8 @@ zk.History.prototype = {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
 			var encnm = encodeURIComponent(nm);
-			window.location.hash = zk.safari ? encnm: '#' + encnm;
-			if (zk.ie /*|| zk.safari*/) this.bkIframe(nm);
+			window.location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
+			this.bkIframe(nm);
 		}
 	},
 	/** Checks whether the bookmark is changed. */
@@ -2338,30 +2338,25 @@ zk.History.prototype = {
 		var nm = window.location.hash;
 		var j = nm.indexOf('#');
 		return j >= 0 ? decodeURIComponent(nm.substring(j + 1)): '';
-	}
-};
-if (zk.ie /*|| zk.safari*/) {
+	},
 	/** bookmark iframe */
-	zk.History.prototype.bkIframe = function (nm) {
-		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true);
-		if (nm) url += '?' +encodeURIComponent(nm);
+	bkIframe: zk.ie ? function (nm) {
+		//Bug 2019171: we have to create iframe frist
+		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true),
+			ifr = $e('zk_histy');
+		if (!ifr) ifr = zk.newFrame('zk_histy', url, "display:none");
 
-		var ifr = $e('zk_histy');
-		if (ifr) {
-			ifr.src = url;
-		} else {
-			zk.newFrame('zk_histy', url,
-				/*zk.safari ? "width:0;height:0;display:inline":*/ "display:none");
-		}
-	};
+		if (nm) url += '?' +encodeURIComponent(nm);
+		ifr.src = url;
+	}: zk.voidf,
 	/** called when history.html is loaded*/
-	zk.History.prototype.onHistoryLoaded = function (src) {
+	onHistoryLoaded: zk.ie ? function (src) {
 		var j = src.indexOf('?');
 		var nm = j >= 0 ? src.substring(j + 1): '';
 		window.location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';
 		this.checkBookmark();
-	};
-}
+	}: zk.voidf
+};
 
 /** Removes a node. */
 zk.remove = function (n) {
