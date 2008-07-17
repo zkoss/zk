@@ -270,6 +270,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		rm zkmax.jar
 		rm ../src/zkmax-sources.jar
 
+		cd zkforge
+		rm gmapsz.jar
+
 		cd /tmp/zk
 
 		if [ "$target" == "official" ] ; then
@@ -291,7 +294,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		rm ../src/zkex-sources.jar
 
 		cd zkforge
-		rm gmapsz.jar
 		rm dojoz.jar
 		rm fckez.jar
 		rm timelinez.jar
