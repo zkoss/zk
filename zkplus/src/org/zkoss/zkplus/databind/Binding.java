@@ -62,7 +62,6 @@ public class Binding {
 	private boolean _savable;
 	private TypeConverter _converter;
 	private String[] _paths; //bean reference path (a.b.c)
-	private Map _args; //generic arguments
 	
 	/** Constrcutor to form a binding between UI component and backend data bean.
 	 * @param binder the associated Data Binder.
@@ -79,26 +78,6 @@ public class Binding {
 	 */
 	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
 		LinkedHashSet loadWhenEvents, Set saveWhenEvents, String access, String converter) {
-		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null);
-	}
-	
-	/** Constrcutor to form a binding between UI component and backend data bean.
-	 * @param binder the associated Data Binder.
-	 * @param comp The concerned component
-	 * @param attr The component attribute
-	 * @param expr The bean expression.
-	 * @param loadWhenEvents The event set when to load data.
-	 * @param saveWhenEvents The event set when to save data.
-	 * @param access In the view of UI component: "load" load only, "both" load/save, 
-	 *	"save" save only when doing data binding. null means using the default access 
-	 *	natural of the component. e.g. Label.expr is "load", but Textbox.expr is "both".
-	 * @param converter The converter class used to convert classes between component attribute 
-	 * and the associated bean expression. null means using the default class conversion method.
-	 * @param args generic arguments
-	 * @since 3.1
-	 */
-	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
-		LinkedHashSet loadWhenEvents, Set saveWhenEvents, String access, String converter, Map args) {
 		_binder = binder;
 		_comp = comp;
 		setAttr(attr);
@@ -107,7 +86,7 @@ public class Binding {
 		setSaveWhenEvents(saveWhenEvents);
 		setAccess(access);
 		setConverter(converter);
-		setArgs(args);
+		
 	}
 
 	/** Gets the associated Data Binder of this Binding.
@@ -133,17 +112,6 @@ public class Binding {
 	 */
 	public String getAttr() {
 		return _attr;
-	}
-	
-	/*package*/void setArgs(Map args) {
-		_args = args;
-	}
-	
-	/** Get generic arguments.
-	 * 
-	 */
-	public Map getArgs() {
-		return _args;
 	}
 	
 	/** Set bean expression (a.b.c).
@@ -259,7 +227,11 @@ public class Binding {
 	 * @param comp the component.
 	 */
 	public void loadAttribute(Component comp) {
-		if (!isLoadable() || _attr.startsWith("_") || _binder.isTemplate(comp) || comp.getPage() == null) { 
+		if (!isLoadable() 
+				|| _attr.startsWith("_") 
+				|| _binder.isTemplate(comp) 
+				|| comp == null //bug #1941947 Cannot find associated CollectionItem error 
+				|| comp.getPage() == null) { 
 			return; //cannot load, a control attribute, or a detached component, skip!
 		}
 		Object bean = _binder.getBeanAndRegisterBeanSameNodes(comp, _expression);
@@ -279,11 +251,10 @@ public class Binding {
 	
 	private void myLoadAttribute(Component comp, Object bean) {
 		try {
-			//since 3.1, 20080416, support bindingArgs for non-supported tag
-			comp.setAttribute(DataBinder.ARGS, _args);
-			
 			if (_converter != null) {
 				bean = _converter.coerceToUi(bean, comp);
+				if (bean == TypeConverter.IGNORE)
+					return; //ignore, so don't do Fields.set()
 			}
 			
 			//Bug #1876198 Error msg appears when load page (databind+CustomConstraint)
@@ -341,7 +312,8 @@ public class Binding {
 	 */
 	public void saveAttribute(Component comp) {
 		final Object[] vals = getAttributeValues(comp);
-		saveAttributeValue(comp, vals, null);
+		if (vals != null)
+			saveAttributeValue(comp, vals, null);
 	}
 	
 	private void saveAttributeValue(Component comp, Object[] vals, List loadOnSaveInfos) {
@@ -376,7 +348,7 @@ public class Binding {
 		}
 		try {
 			final Object val = (_converter == null) ? rawval : _converter.coerceToBean(rawval, comp);
-			return new Object[] {val, rawval};
+			return val == TypeConverter.IGNORE ? null : new Object[] {val, rawval};
 		} catch (ClassCastException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -509,8 +481,10 @@ public class Binding {
 				//then binder.lookupClone() will return null dataTarget.
 				if (dataTarget != null) {
 					final Object[] vals = binding.getAttributeValues(dataTarget);
-					tmplist.add(new BindingInfo(binding, dataTarget, vals));
-					Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget, target, binding, vals[0]));
+					if (vals != null) {
+						tmplist.add(new BindingInfo(binding, dataTarget, vals));
+						Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget, target, binding, vals[0]));
+					}
 				} else {
 					//bi.getComponent a template and a null dataTarget, meaning all collection items has to
 					//be handled. Search the owner to iterate all cloned items.
@@ -518,8 +492,10 @@ public class Binding {
 					for (final Iterator itc = clones.iterator(); itc.hasNext();) {
 						final Component dataTarget1 = (Component)itc.next();
 						final Object[] vals = binding.getAttributeValues(dataTarget1);
-						tmplist.add(new BindingInfo(binding, dataTarget1, vals));
-						Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget1, target, binding, vals[0]));
+						if (vals != null) {
+							tmplist.add(new BindingInfo(binding, dataTarget1, vals));
+							Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget1, target, binding, vals[0]));
+						}
 					}
 					
 				}

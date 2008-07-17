@@ -41,11 +41,24 @@ public class SelectedComboitemConverter implements TypeConverter {
 	 */
 	public Object coerceToBean(Object val, Component comp) {
 		Combobox cbbox = (Combobox) comp;
+		if (cbbox.getAttribute("zkoss.zkplus.databind.ON_SELECT") != null) {
+			//triggered by coerceToUi(), ignore this
+			cbbox.removeAttribute("zkoss.zkplus.databind.ON_SELECT");
+			return TypeConverter.IGNORE;
+		}
 	  	if (val != null) {
 	  		ListModel model = cbbox.getModel();
+	  		//Bug #2010389
+	  		//1. loadAll 
+	  		//2. setModel (by 1.), post onInitRender. 
+	  		//3. setSelectedItem (by 1.), coerceToUi, post onSelect with OLD Comboitem. 
+	  		//4. onInitRender(by 2.), syncModel and reconstruct new Comboitem(s) list, fire onInitRenderLater  
+	  		//** 5. save (by 3.), coreceToBean with OLD Comboitem, cannot locate the index with indexOf()
+	  		//6. onInitRenderLater(by 4.), setSelectedItem, coerceToUi, post onSelect with new Comboitem
+	  		
 	  		//no model case, assume Comboitem.value to be used with selectedItem
 	 		return model != null ? model.getElementAt(cbbox.getItems().indexOf(val)) : ((Comboitem) val).getValue();
-	  	}
+	 	}
 	 	return null;
 	}
 	
@@ -56,18 +69,24 @@ public class SelectedComboitemConverter implements TypeConverter {
 		final Combobox cbbox = (Combobox) comp;
 	  	if (val != null) {
 	  		final ListModel xmodel = cbbox.getModel();
+			
 	  		if (xmodel instanceof BindingListModel) {
+		  		//Bug #2010389
+	  			//if combobox is going to do onInitRender (syncModel), no need to setSelectedItem
+	  			if (cbbox.getAttribute("zkoss.zul.Combobox.ON_INITRENDER") != null) {
+	  				return null;
+	  			}
 	  			final BindingListModel model = (BindingListModel) xmodel;
 	  			int index = model.indexOf(val);
 	  			if (index >= 0 && cbbox.getItemCount() > index) {
 	    			final Comboitem item = (Comboitem) cbbox.getItemAtIndex(index);
 	    			final int selIndex = cbbox.getSelectedIndex();
 	    			
-	    			//We need this to support load-when:onSelect when first load 
-					//the page in (so it is called only once).
+	    			//We need this to support load-when:onSelect
 	  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
 	    				Set items = new HashSet();
 	    				items.add(item);
+	    				cbbox.setAttribute("zkoss.zkplus.databind.ON_SELECT", Boolean.TRUE);
 	    				Events.postEvent(new SelectEvent("onSelect", cbbox, items, item));
 	    			}		
 	  				return item;
