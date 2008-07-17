@@ -13,6 +13,7 @@ ZK 3.0.7
   2018378: ListModelList.listIterator(1).previous().remove() not work
   2018385: ListModelList.listIterator(0).next().set() not work
   2015878: ThreadLocalListener causes NullPointerException on timeout
+  2020152: requestCompleteAtClient not called if browse to another URL
 
 	--------
 ZK 3.0.6
