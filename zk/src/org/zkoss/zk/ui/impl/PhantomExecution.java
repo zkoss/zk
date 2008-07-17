@@ -1,4 +1,4 @@
-/* MockExecution.java
+/* PhantomExecution.java
 
 {{IS_NOTE
 	Purpose:
@@ -31,15 +31,15 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
- * A 'mock' execution that is used when no request/response available.
+ * A 'phantom' execution that is used when no request/response available.
  * For example, it is used when a session is invalidated.
  *
  * @author tomyeh
  */
-/*package*/ class MockExecution extends AbstractExecution {
+/*package*/ class PhantomExecution extends AbstractExecution {
 	private boolean _voided;
 
-	/*package*/ MockExecution(Desktop desktop) {
+	/*package*/ PhantomExecution(Desktop desktop) {
 		super(desktop, null);
 	}
 
