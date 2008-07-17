@@ -469,7 +469,8 @@ zk.addBeforeInit(function () {
 		onMenuClose: function (pp) {
 			var cmp = $e(getZKAttr(pp, "menuId"));
 			zk.rmClass(cmp, "z-grid-column-menu-open");
-			zk.rmClass(cmp, "z-grid-column-over");	
+			zk.rmClass(cmp, "z-grid-column-over");
+			return false; // stop event propagation
 		},
 		onHdOver: function (evt) {
 			if (!evt) evt = window.event;

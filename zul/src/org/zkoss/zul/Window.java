@@ -191,7 +191,8 @@ public class Window extends XulElement implements IdSpace {
 	public void setMaximized(boolean maximized) {
 		if (_maximized != maximized) {
 			_maximized = maximized;
-			smartUpdate("z.maximized", _maximized);
+			if (_maximizable)
+				smartUpdate("z.maximized", _maximized);
 		}
 	}
 	/**
@@ -238,7 +239,8 @@ public class Window extends XulElement implements IdSpace {
 	public void setMinimized(boolean minimized) {
 		if (_minimized != minimized) {
 			_minimized = minimized;
-			smartUpdate("z.minimized", _minimized);
+			if (_minimizable)
+				smartUpdate("z.minimized", _minimized);
 		}
 	}
 	/**

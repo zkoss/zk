@@ -97,8 +97,10 @@ zkWnd2.onMaximize = function (evt) {
 };
 zkWnd2.maximize = function (cmp, maximized, silent) {
 	var cmp = $e(cmp);
-	if (!zk.isRealVisible(cmp)) return;
 	if (cmp) {
+		var isRealVisible = zk.isRealVisible(cmp);
+		if (!isRealVisible && maximized) return;
+		
 		var l, t, w, h, s = cmp.style;
 		if (maximized) {
 			zk.addClass($e(cmp, "maximize"), "z-window-maximized");
@@ -147,10 +149,12 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 
 		setZKAttr(cmp, "maximized", maximized ? "true" : "false");
 		if (!silent)
-			zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized == true]});
-			
-		zk.beforeSizeAt(cmp);
-		zk.onSizeAt(cmp);
+			zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized]});
+		
+		if (isRealVisible) {
+			zk.beforeSizeAt(cmp);
+			zk.onSizeAt(cmp);
+		}
 	}
 };
 zkWnd2.onMinimize = function (evt) {
@@ -178,7 +182,7 @@ zkWnd2.minimize = function (cmp, minimized, silent) {
 
 		setZKAttr(cmp, "minimized", minimized ? "true" : "false");
 		if (!silent)
-			zkau.sendasap({uuid: cmp.id, cmd: "onMinimize", data: [l, t, w, h, minimized == true]});
+			zkau.sendasap({uuid: cmp.id, cmd: "onMinimize", data: [l, t, w, h, minimized]});
 	}
 };
 zkWnd2.cleanup = function (cmp) {
@@ -445,9 +449,11 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			}
 		}
 	case "z.maximized":
+		zkau.setAttr(cmp, nm, val);
 		zkWnd2.maximize(cmp, val == "true", true);
 		return true;
 	case "z.minimized":
+		zkau.setAttr(cmp, nm, val);
 		zkWnd2.minimize(cmp, val == "true", true);
 		return true;
 	}

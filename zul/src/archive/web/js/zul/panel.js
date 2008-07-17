@@ -196,8 +196,10 @@ zkPanel = {
 	},
 	maximize: function (cmp, maximized, silent) {
 		var cmp = $e(cmp);
-		if (!zk.isRealVisible(cmp)) return;
 		if (cmp) {
+			var isRealVisible = zk.isRealVisible(cmp);
+			if (!isRealVisible && maximized) return;
+			
 			var l, t, w, h, s = cmp.style;
 			if (maximized) {
 				zk.addClass($e(cmp.id + "!maximize"), "z-panel-maximized");
@@ -258,10 +260,13 @@ zkPanel = {
 
 			setZKAttr(cmp, "maximized", maximized ? "true" : "false");
 			if (!silent)
-				zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized == true]});
-				
-			zk.beforeSizeAt(cmp);
-			zk.onSizeAt(cmp);
+				zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized]});
+			
+			if (isRealVisible) {
+				zk.beforeSizeAt(cmp);
+				zk.onSizeAt(cmp);
+				zk.fire(cmp, "maximize", [cmp, maximized]);
+			}
 		}
 	},
 	onMinimize: function (evt) {
@@ -288,7 +293,7 @@ zkPanel = {
 
 			setZKAttr(cmp, "minimized", minimized ? "true" : "false");
 			if (!silent)
-				zkau.sendasap({uuid: cmp.id, cmd: "onMinimize", data: [l, t, w, h, minimized == true]});
+				zkau.sendasap({uuid: cmp.id, cmd: "onMinimize", data: [l, t, w, h, minimized]});
 		}
 	},
 	/** Fixed the content div's height. */
@@ -408,9 +413,11 @@ zkPanel = {
 				zkPanel.open(cmp, val == "true", true);
 				return true; //no need to store z.open
 			case "z.maximized":
+				zkau.setAttr(cmp, nm, val);
 				zkPanel.maximize(cmp, val == "true", true);
 				return true;
 			case "z.minimized":
+				zkau.setAttr(cmp, nm, val);
 				zkPanel.minimize(cmp, val == "true", true);
 				return true;
 			case "style":

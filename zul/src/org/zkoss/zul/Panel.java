@@ -167,7 +167,8 @@ public class Panel extends XulElement {
 	public void setMaximized(boolean maximized) {
 		if (_maximized != maximized) {
 			_maximized = maximized;
-			smartUpdate("z.maximized", _maximized);
+			if (_maximizable)
+				smartUpdate("z.maximized", _maximized);
 		}
 	}
 	/**
@@ -208,7 +209,8 @@ public class Panel extends XulElement {
 	public void setMinimized(boolean minimized) {
 		if (_minimized != minimized) {
 			_minimized = minimized;
-			smartUpdate("z.minimized", _minimized);
+			if (_minimizable)
+				smartUpdate("z.minimized", _minimized);
 		}
 	}
 	/**
@@ -443,7 +445,8 @@ public class Panel extends XulElement {
 			sb.append(" z.minimized=\"true\"");
 		if (_open)
 			sb.append(" z.open=\"true\"");
-		
+		if (isVisible())
+			HTMLs.appendAttribute(sb, "z.visible", isVisible());
 		return sb.toString();
 	}
 	
