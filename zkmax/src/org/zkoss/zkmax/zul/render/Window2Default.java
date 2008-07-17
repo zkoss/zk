@@ -77,7 +77,10 @@ public class Window2Default implements ComponentRenderer {
 		if (!isEmbedded)
 			wh.write("<div class=\"l").write(ccls).write("\"><div class=\"r").write(ccls)
 				.write("\"><div class=\"m").write(ccls).write("\">");
-		wcExtStyle += self.getContentStyle();
+		final String cs = self.getContentStyle();
+		if(cs != null){
+			wcExtStyle += cs;
+		}
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"");
 		wh.write(ccls).write("\"").writeAttr("style", wcExtStyle);
 		wh.write(">");
