@@ -28,7 +28,7 @@ import org.zkoss.lang.Expectable;
  * @author tomyeh
  */
 public class UiException extends SystemException {
-	/** Utilities.
+	/** Utilities to wrap {@link UiException}.
 	 *
 	 * <p>The reason to use a class to hold static utilities is we can
 	 * override the method's return type later.
