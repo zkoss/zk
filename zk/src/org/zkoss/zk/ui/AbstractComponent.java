@@ -161,7 +161,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private boolean _visible = true;
 
 	/** Constructs a component with auto-generated ID.
-	 * @since 3.5.0 (becomes public)
+	 * @since 3.0.7 (becomes public)
 	 */
 	public AbstractComponent() {
 		final Execution exec = Executions.getCurrent();
@@ -254,7 +254,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	/** Adds to the ID spaces, if any, when ID is changed.
-	 * Caller has to make sure the uniqueness.
+	 * Caller has to make sure the uniqueness (and not auto id).
 	 */
 	private static void addToIdSpaces(final Component comp) {
 		if (comp instanceof IdSpace)
@@ -273,14 +273,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	/** Removes from the ID spaces, if any, when ID is changed. */
 	private static void removeFromIdSpaces(final Component comp) {
-		final AbstractComponent abcomp = (AbstractComponent)comp;
-		final String compId = abcomp._id;
-		if (compId == null
-		|| (comp instanceof NonFellow) || ComponentsCtrl.isAutoId(compId))
+		final String compId = getIdDirectly(comp);
+		if (comp instanceof NonFellow || ComponentsCtrl.isAutoId(compId))
 			return; //nothing to do
 
 		if (comp instanceof IdSpace)
-			abcomp.unbindFromIdSpace(compId);
+			((AbstractComponent)comp).unbindFromIdSpace(compId);
 
 		final IdSpace is = getSpaceOwnerOfParent(comp);
 		if (is instanceof Component)
@@ -317,21 +315,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		else if (is != null)
 			addToIdSpacesDown(comp, (PageCtrl)is);
 	}
+	/** comp's ID might be auto id. */
 	private static void addToIdSpacesDown(Component comp, Component owner) {
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(comp.getId()))
+		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			((AbstractComponent)owner).bindToIdSpace(comp);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 				addToIdSpacesDown((Component)it.next(), owner); //recursive
 	}
+	/** comp's ID might be auto id. */
 	private static void addToIdSpacesDown(Component comp, PageCtrl owner) {
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(comp.getId()))
+		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			owner.addFellow(comp);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 				addToIdSpacesDown((Component)it.next(), owner); //recursive
+	}
+	/** Similar to {@link #getId} except it won't generate one if not
+	 * available.
+	 */
+	private static String getIdDirectly(Component comp) {
+		return ((AbstractComponent)comp)._id;
 	}
 
 	/** Adds its descendants to the ID space when parent or page is changed,
@@ -345,7 +351,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			removeFromIdSpacesDown(comp, (PageCtrl)is);
 	}
 	private static void removeFromIdSpacesDown(Component comp, Component owner) {
-		final String compId = comp.getId();
+		final String compId = getIdDirectly(comp);
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(compId))
 			((AbstractComponent)owner).unbindFromIdSpace(compId);
@@ -355,7 +361,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	private static void removeFromIdSpacesDown(Component comp, PageCtrl owner) {
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(comp.getId()))
+		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			owner.removeFellow(comp);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
@@ -372,7 +378,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	/** Checks comp and its descendants for the specified SpaceInfo. */
 	private static void checkIdSpacesDown(Component comp, SpaceInfo si) {
-		final String compId = comp.getId();
+		final String compId = getIdDirectly(comp);
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(compId) && si.fellows.containsKey(compId))
 			throw new UiException("Not unique in the new ID space: "+compId);
@@ -382,7 +388,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	/** Checks comp and its descendants for the specified page. */
 	private static void checkIdSpacesDown(Component comp, PageCtrl pageCtrl) {
-		final String compId = comp.getId();
+		final String compId = getIdDirectly(comp);
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(compId) && pageCtrl.hasFellow(compId))
 			throw new UiException("Not unique in the ID space of "+pageCtrl+": "+compId);
@@ -393,10 +399,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Bind comp to this ID space (owned by this component).
 	 * Called only if IdSpace is implemented.
+	 * comp's ID must be unquie (and not auto id)
 	 */
 	private void bindToIdSpace(Component comp) {
-		final String compId = comp.getId();
-		_spaceInfo.fellows.put(compId, comp);
+		_spaceInfo.fellows.put(getIdDirectly(comp), comp);
 	}
 	/** Unbind comp from this ID space (owned by this component).
 	 * Called only if IdSpace is implemented.
@@ -565,7 +571,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private String nextUuid(Desktop desktop) {
 		final IdGenerator idgen =
 			((WebAppCtrl)desktop.getWebApp()).getIdGenerator();
-
 		String uuid;
 		do {
 			uuid = idgen != null ? idgen.nextComponentUuid(desktop, this): null;
@@ -1200,7 +1205,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			getExecution()
 				.include(out, (String)mold, attrs, Execution.PASS_THRU_ATTR);
 
-			//Trim the output to have smaller output and to avoid
+			//Trim output to have smaller output and to avoid
 			//whitespace around the separator and space components
 			if (buf != null)
 				Strings.trim(buf, index);
@@ -1909,7 +1914,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		//rebuild ID space by binding itself and all children
-		clone.bindToIdSpace(clone);
+		if (!ComponentsCtrl.isAutoId(getIdDirectly(clone)))
+			clone.bindToIdSpace(clone);
 		for (AbstractComponent p = clone._first; p != null; p = p._next)
 			addToIdSpacesDown(p, clone);
 	}
@@ -2092,7 +2098,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 
 			//restore ID space by binding itself and all children
-			bindToIdSpace(this);
+			if (!ComponentsCtrl.isAutoId(getIdDirectly(this)))
+				bindToIdSpace(this);
 			for (Iterator it = getChildren().iterator(); it.hasNext();)
 				addToIdSpacesDown((Component)it.next(), this);
 		}
