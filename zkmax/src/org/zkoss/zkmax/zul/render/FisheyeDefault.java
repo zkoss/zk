@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.Out;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zul.Fisheye;
+import org.zkoss.zkex.zul.Fisheye;
 
 /**
  * {@link Fisheye}'s default mold.
@@ -44,7 +44,7 @@ public class FisheyeDefault implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		final String sclass = self.getSclass();
 		final Execution exe = Executions.getCurrent();
-		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.fisheye.Fisheye\"")
+		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zkex.zul.fisheye.Fisheye\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("><img id=\"")
 			.write(uuid).write("!img\" src=\"").write(exe.encodeURL(self.getImage()))
 			.write("\" class=\"").write(sclass).write("-image\"/><div id=\"")

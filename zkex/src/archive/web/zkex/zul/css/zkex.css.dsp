@@ -1,5 +1,6 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<%-- Borderlayout --%>
 div.layout-container {
     width:100%;
     height:100%;
@@ -76,4 +77,40 @@ span.layout-split-btn-t {
 span.layout-split-btn-b {
 	width: 50px; min-height: 5px; height: 6px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.png')});
+}
+<%-- Column Layout--%>
+.z-column-layout {
+	visibility: hidden; overflow: hidden; zoom: 1;
+}
+
+.z-column-children {
+    float: left; padding: 0; margin: 0; overflow: hidden; zoom: 1;
+}
+
+.z-column-children-body {
+    overflow: hidden;
+}
+
+.z-column-children-bwrap {
+    overflow: hidden; zoom: 1;
+}
+.z-column-layout-inner {
+    overflow: hidden;
+}
+<%-- Fisheyebar--%>
+.z-fisheye-label {
+	font-family: Arial, Helvetica, sans-serif; background-color: #eee; border: 2px solid #666;
+	padding: 2px; text-align: center; position: absolute; display: none;
+}
+.z-fisheye-image {
+	border: 0px; position: absolute; width: 100%; height: 100%;
+}
+.z-fisheye {
+	position: absolute; z-index: 2;
+}
+.z-fisheyebar {
+	visibility: hidden;
+}
+.z-fisheyebar-inner {
+	position: relative;
 }

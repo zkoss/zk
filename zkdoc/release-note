@@ -49,7 +49,7 @@ ZK 3.5.0
   + The setAutocheck and setChecked methods of Menuitem only apply
     when Menupopup.isCheckmark is true.
   + The script component now has "text/javascript" as the default type.
-  + Add some new trendy layout of these components, including Window, Menu,
+  + Add some new trendy layout of these components, including Groupbox, Window, Menu,
   	, Menuitem, Menupopup, Menubar, and Menuseparator, as default mold, and the classic
     Window mold is renamed to "v30" mold for backward compatible.
     If you want to use "v30" as default, specify the following in zk.xml:
@@ -60,6 +60,7 @@ ZK 3.5.0
   + Both molds vertical and horizontal of Menubar are unsupported, please use the setOrient()
 		of Menubar to specify them.
   + Change the layout of Paging component to a new trendy layout as default.
+  + Rename from layout*.css.dsp to zkex*.css.dsp.
 
 	--------
 ZK 3.0.7

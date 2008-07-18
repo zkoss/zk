@@ -69,6 +69,22 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</custom-attribute>
 	</component>	
 	<component>
+		<component-name>columnchildren</component-name>
+		<component-class>org.zkoss.zkex.zul.Columnchildren</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/columnchildren.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>columnlayout</component-name>
+		<component-class>org.zkoss.zkex.zul.Columnlayout</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/columnlayout.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>east</component-name>
 		<component-class>org.zkoss.zkex.zul.East</component-class>
 		<mold>
@@ -78,11 +94,59 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<preserve-blank/>
 	</component>
 	<component>
+		<component-name>fisheye</component-name>
+		<component-class>org.zkoss.zkex.zul.Fisheye</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/fisheye.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>fisheyebar</component-name>
+		<component-class>org.zkoss.zkex.zul.Fisheyebar</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/fisheyebar.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>group</component-name>
+		<component-class>org.zkoss.zul.Group</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/group.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>groupfoot</component-name>
+		<component-class>org.zkoss.zul.Groupfoot</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/groupfoot.dsp</mold-uri>
+		</mold>		
+	</component>
+	<component>
 		<component-name>jasperreport</component-name>
 		<component-class>org.zkoss.zkex.zul.Jasperreport</component-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/jasperreport.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>listgroup</component-name>
+		<component-class>org.zkoss.zul.Listgroup</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/listgroup.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>listgroupfoot</component-name>
+		<component-class>org.zkoss.zul.Listgroupfoot</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/listgroupfoot.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>

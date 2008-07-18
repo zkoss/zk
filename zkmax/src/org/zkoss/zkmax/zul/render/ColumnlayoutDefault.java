@@ -24,7 +24,7 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zkmax.zul.Columnlayout;
+import org.zkoss.zkex.zul.Columnlayout;
 
 /**
  * {@link Columnlayout}'s default mold.
@@ -38,9 +38,9 @@ public class ColumnlayoutDefault implements ComponentRenderer {
 		final Columnlayout self = (Columnlayout) comp;
 		wh.write("<div id=\"").write(self.getUuid()).write('"').write(
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(
-				" z.type=\"zkmax.zul.columnlayout.ColumnLayout\">");
-		wh.write("<div id=\"").write(self.getUuid() + "!real\" ").write(
-				"class=\"" + self.getSclass() + "-inner\">");
+				" z.type=\"zkex.zul.columnlayout.ColumnLayout\">");
+		wh.write("<div id=\"").write(self.getUuid() + "!real\" class=\"")
+			.write(self.getSclass()).write("-inner\">");
 		wh.writeChildren(self);
 		wh.write("<div class=\"z-clear\"></div>");
 		wh.write("</div></div>");

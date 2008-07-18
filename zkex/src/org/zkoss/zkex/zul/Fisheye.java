@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zul;
+package org.zkoss.zkex.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;

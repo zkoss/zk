@@ -1,5 +1,5 @@
 <%--
-fisheyebar.dsp
+listgroup.dsp
 
 {{IS_NOTE
 	Purpose:
@@ -7,7 +7,7 @@ fisheyebar.dsp
 	Description:
 		
 	History:
-		Tue Jul  8 14:31:16 TST 2008, Created by jumperchen
+		Fri Jul 18 14:14:07 TST 2008, Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
@@ -17,8 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" z.type="zul.fisheye.Fisheyebar"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave" class="${self.sclass}-inner"> 
+<tr id="${self.uuid}" z.type="Litgp"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" items="${self.children}">
-${z:redraw(child, null)}
+	${z:redraw(child, null)}
 	</c:forEach>
-</div></div>
+</tr>

@@ -229,7 +229,7 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>columnchildren</component-name>
-		<component-class>org.zkoss.zkmax.zul.Columnchildren</component-class>
+		<extends>columnchildren</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ColumnchildrenDefault</mold-uri>
@@ -237,7 +237,7 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>columnlayout</component-name>
-		<component-class>org.zkoss.zkmax.zul.Columnlayout</component-class>
+		<extends>columnlayout</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ColumnlayoutDefault</mold-uri>
@@ -377,7 +377,7 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>group</component-name>
-		<component-class>org.zkoss.zul.Group</component-class>
+		<extends>group</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.GroupDefault</mold-uri>
@@ -401,7 +401,7 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>groupfoot</component-name>
-		<component-class>org.zkoss.zul.Groupfoot</component-class>
+		<extends>groupfoot</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.GroupfootDefault</mold-uri>
@@ -521,7 +521,7 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>listgroup</component-name>
-		<component-class>org.zkoss.zul.Listgroup</component-class>
+		<extends>listgroup</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ListgroupDefault</mold-uri>
@@ -529,7 +529,7 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>listgroupfoot</component-name>
-		<component-class>org.zkoss.zul.Listgroupfoot</component-class>
+		<extends>listgroupfoot</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ListgroupfootDefault</mold-uri>

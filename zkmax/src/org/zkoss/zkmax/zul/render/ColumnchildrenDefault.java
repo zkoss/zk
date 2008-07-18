@@ -24,7 +24,7 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zkmax.zul.Columnchildren;
+import org.zkoss.zkex.zul.Columnchildren;
 
 /**
  * {@link Columnchildren}'s default mold.
@@ -36,14 +36,14 @@ public class ColumnchildrenDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Columnchildren self = (Columnchildren) comp;
-
+		final String sclass = self.getSclass();
 		wh.write("<div id=\"").write(self.getUuid()).write('"').write(
-				" z.type=\"zkmax.zul.columnlayout.ColumnChildren\">");
+				" z.type=\"zkex.zul.columnlayout.ColumnChildren\">");
 		wh.write("<div id=\"").write(self.getUuid()).write("!real\"").write(
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<div class=\"" + self.getSclass() + "-bwrap\">");
-		wh.write("<div id=\"").write(self.getUuid()).write(
-				"!cave\" class=\"" + self.getSclass() + "-body\">");
+		wh.write("<div class=\"").write(sclass).write("-bwrap\">");
+		wh.write("<div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(sclass)
+			.write("-body\">");
 		wh.writeChildren(self);
 		wh.write("</div></div></div></div>");
 	}

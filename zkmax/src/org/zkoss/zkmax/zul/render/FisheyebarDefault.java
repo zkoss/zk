@@ -24,7 +24,7 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zul.Fisheyebar;
+import org.zkoss.zkex.zul.Fisheyebar;
 
 /**
  * {@link Fisheyebar}'s default mold.
@@ -38,7 +38,7 @@ public class FisheyebarDefault  implements ComponentRenderer {
 		final Fisheyebar self = (Fisheyebar)cmp;
 		final String uuid = self.getUuid();
 		
-		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.fisheye.Fisheyebar\"")
+		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zkex.zul.fisheye.Fisheyebar\"")
 		  .write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("><div id=\"")
 		  .write(uuid).write("!cave\" class=\"").write(self.getSclass()).write("-inner\">")
 		  .writeChildren(self)
