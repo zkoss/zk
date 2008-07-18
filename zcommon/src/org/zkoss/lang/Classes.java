@@ -200,6 +200,20 @@ public class Classes {
 			Class.forName(clsName, true, Thread.currentThread().getContextClassLoader());
 	}
 
+	/** Returns whether the specified class exists for the current thread's
+	 * context class loader.
+	 * @param clsnm the class name to test
+	 * @since 3.0.7
+	 */
+	public static final boolean existsByThread(String clsnm) {
+		try {
+			forNameByThread(clsnm);
+			return true;
+		} catch (Throwable ex) {
+			return false;
+		}
+	}
+
 	/**
 	 * Change class name to internal form (e.g. byte[] -> [B). If already in
 	 * internal form, then just return it.
