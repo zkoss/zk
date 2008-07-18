@@ -35,6 +35,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>To customize the visual style of the caption,
  * refer to {@link #getCaptionLook}.
  *
+ * <p>Default {@link #getSclass}: z-groupbox. (since 3.5.0)
  * @author tomyeh
  */
 public class Groupbox extends XulElement {
@@ -45,7 +46,10 @@ public class Groupbox extends XulElement {
 	private String _cntscls;
 	private Boolean _legend;
 	private boolean _open = true, _closable = true;
-
+	
+	public Groupbox() {
+		setSclass("z-groupbox");
+	}
 	/** Returns the caption of this groupbox.
 	 */
 	public Caption getCaption() {
@@ -122,10 +126,11 @@ public class Groupbox extends XulElement {
 		String cntscls = _cntscls;
 		if (cntscls != null)
 			return cntscls;
-		
 		cntscls = getSclass();
-		return "3d".equals(getMold()) ? cntscls == null ? "gc-default": "gc-" + cntscls
-					: cntscls == null ? "fieldset-bwrap" : "fieldset-bwrap " + cntscls;
+		final String mold = getMold();
+		return "default".equals(mold) ? cntscls == null ? "fieldset-bwrap" : "fieldset-bwrap " + cntscls
+				: "v30-3d".equals(mold) ? "z-groupbox".equals(cntscls) ? "gc-default" : "gc-" + cntscls :
+					cntscls == null ? "gc-z-groupbox" : "gc-" + cntscls;
 	}
 	/** Sets the style class used for the content block.
 	 *
@@ -186,7 +191,7 @@ public class Groupbox extends XulElement {
 	 * "groupbox-3d-tl" for the top-left corner of the caption,
 	 * "groupbox-3d-tm" for the top-middle border, and so on.
 	 *
-	 * <p>Note: currenlty only the 3d mold supports this feature.
+	 * <p>Note: currenlty only the v30-3d mold (since 3.5.0) supports this feature.
 	 * In other words, the default mold ignores this method.
 	 * @since 3.0,0
 	 */
@@ -195,7 +200,7 @@ public class Groupbox extends XulElement {
 		final String scls = getSclass();
 		final boolean noScls = scls == null || scls.length() == 0;
 		String val = "groupbox";
-		if (!"default".equals(mold) && (!"3d".equals(mold) || noScls))
+		if (!"default".equals(mold) && (!"v30-3d".equals(mold) || noScls))
 			val += '-' + mold;
 		return noScls ? val: val + '-' + scls;
 	}

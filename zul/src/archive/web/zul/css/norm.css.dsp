@@ -813,6 +813,57 @@ a.z-grid-column-btn:hover {
 .z-grid-column-over {
 	background: #DDEEFB url(${c:encodeURL('~./zul/img/grid/column-over.gif')}) repeat-x 0 0;
 }
+<%-- Groupbox --%>
+div.gc-default {<%-- content of 3d groupbox --%>
+	border: 1px solid #5C6C7C; padding: 5px;
+}
+td.groupbox-3d-shdl {
+	background-image: url(${c:encodeURL('~./img/shdlf.gif')});
+	width: 6px; height: 6px;
+}
+td.groupbox-3d-shdm {
+	background-image: url(${c:encodeURL('~./img/shdmd.gif')});
+}
+td.groupbox-3d-shdr {
+	background-image: url(${c:encodeURL('~./img/shdrg.gif')});
+	width: 6px; height: 6px;
+}
+<%-- Groupbox new trendy look-and-feel--%>
+div.gc-z-groupbox {
+	border: 1px solid #E1E1E1; padding: 5px;
+}
+.z-groupbox-bm {
+	background:transparent url(${c:encodeURL('~./img/shdmd.gif')}) repeat-x 0 0;
+	height: 6px; font-size: 0; line-height: 0; zoom: 1;
+}
+.z-groupbox-bl {
+	background:transparent url(${c:encodeURL('~./img/shdlf.gif')}) no-repeat 0 bottom;
+	padding-left: 6px; zoom: 1;
+}
+.z-groupbox-br {
+	background:transparent url(${c:encodeURL('~./img/shdrg.gif')}) no-repeat right bottom;
+	padding-right: 6px; zoom: 1;
+}
+
+.z-groupbox-t {
+	overflow: hidden; zoom: 1;
+}
+.z-groupbox-tl .z-groupbox-t {
+	color: #373737; font: bold 11px tahoma, arial, verdana, sans-serif; padding: 5px 0 4px 0;
+	border: 0 none; background: transparent;
+}
+.z-groupbox-tm {
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-tb.jpg')}) repeat-x 0 0;
+	overflow: hidden;
+}
+.z-groupbox-tl {
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-corners.jpg')}) no-repeat 0 0;
+	padding-left: 6px; zoom: 1; border-bottom: 1px solid #E1E1E1;
+}
+.z-groupbox-tr {
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-corners.jpg')}) no-repeat right 0;
+	zoom: 1; padding-right: 6px;
+}
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
@@ -859,11 +910,7 @@ a.z-grid-column-btn:hover {
 	text-decoration: none;
 	cursor: default;
 }
-
-
-div.gc-default {<%-- content of 3d groupbox --%>
-	border: 1px solid #5C6C7C; padding: 5px;
-}
+<%-- Tabpanel --%>
 div.tabpanel, div.tabpanel-accordion {<%-- horz, accd: tabpanel --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
@@ -1067,20 +1114,6 @@ td.tab-v3d-br-uns {
 	background-image: url(${c:encodeURL('~./zul/img/tab/v3d-br-uns.gif')});
 	width: 3px; height: 5px;
 }
-
-<%-- shadow effect --%>
-td.groupbox-3d-shdl {
-	background-image: url(${c:encodeURL('~./img/shdlf.gif')});
-	width: 6px; height: 6px;
-}
-td.groupbox-3d-shdm {
-	background-image: url(${c:encodeURL('~./img/shdmd.gif')});
-}
-td.groupbox-3d-shdr {
-	background-image: url(${c:encodeURL('~./img/shdrg.gif')});
-	width: 6px; height: 6px;
-}
-
 <%-- ZK slider --%>
 span.slider-btn {
 	background-image: url(${c:encodeURL('~./zul/img/slider/btn.gif')});

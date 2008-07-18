@@ -392,6 +392,10 @@ def alert(m):
 		</mold>
 		<mold>
 			<mold-name>3d</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Groupbox23d</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30-3d</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Groupbox3d</mold-uri>
 		</mold>
 	</component>
