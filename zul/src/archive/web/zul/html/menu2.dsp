@@ -40,7 +40,7 @@ ${z:redraw(self.menupopup, null)}
 </c:when>
 <c:otherwise>
 <li id="${self.uuid}" z.type="zul.menu2.Menu2"${self.outerAttrs}${self.innerAttrs}>
-<a href="javascript:;" id="${self.uuid}!a" class="z-menu-item z-menu-item-arrow">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}
+<a href="javascript:;" id="${self.uuid}!a" class="${self.sclass}-item ${self.sclass}-item-arrow">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}
 </li>
 </c:otherwise>
 </c:choose>

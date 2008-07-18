@@ -23,10 +23,59 @@ zk.load("zul.zul"); //zul and msgzul
  * @since 3.5.0
  */
 zkWnd2 = {
+	cssKeywords: ["collapsed"],
 	ztype: "Wnd2",
 	_szs: {}, //Map(id, Draggable)
 	_clean2: {}, //Map(id, mode): to be cleanup the modal effect
-	_modal2: {} //Map(id, todo): to do 2nd phase modaling (disable)
+	_modal2: {}, //Map(id, todo): to do 2nd phase modaling (disable)
+	// tool button event
+	onCloseMouseover: function (evt) {
+		if (!evt) evt = window.event;
+		var btn = Event.element(evt),
+			cmp = $parentByType(btn, "Wnd2");
+		zk.addClass(btn, zk.realClass(cmp, zkWnd2.cssKeywords) + "-close-over");
+	},
+	onCloseMouseout: function (evt) {
+		if (!evt) evt = window.event;
+		var btn = Event.element(evt),
+			cmp = $parentByType(btn, "Wnd2");
+		zk.rmClass(btn, zk.realClass(cmp, zkWnd2.cssKeywords) + "-close-over");
+	},
+	onCloseClick: function (evt) {
+		if (!evt) evt = window.event;
+		zkau.sendOnClose($parentByType(Event.element(evt), "Wnd2"), true);
+		Event.stop(evt);
+	},
+	onMinimizeMouseover: function (evt) {
+		if (!evt) evt = window.event;
+		var btn = Event.element(evt),
+			cmp = $parentByType(btn, "Wnd2");
+		zk.addClass(btn, zk.realClass(cmp, zkWnd2.cssKeywords) + "-minimize-over");
+	},
+	onMinimizeMouseout: function (evt) {
+		if (!evt) evt = window.event;
+		var btn = Event.element(evt),
+			cmp = $parentByType(btn, "Wnd2");
+		zk.rmClass(btn, zk.realClass(cmp, zkWnd2.cssKeywords) + "-minimize-over");
+	},
+	onMaximizeMouseover: function (evt) {
+		if (!evt) evt = window.event;
+		var btn = Event.element(evt),
+			cmp = $parentByType(btn, "Wnd2"), 
+			cls = zk.realClass(cmp, zkWnd2.cssKeywords);
+		if (getZKAttr(cmp, "maximized") == "true")
+			zk.addClass(btn, cls + "-maximized-over");
+		zk.addClass(btn, cls + "-maximize-over");
+	},
+	onMaximizeMouseout: function (evt) {
+		if (!evt) evt = window.event;
+		var btn = Event.element(evt),
+			cmp = $parentByType(btn, "Wnd2"), 
+			cls = zk.realClass(cmp, zkWnd2.cssKeywords);
+		if (getZKAttr(cmp, "maximized") == "true")
+			zk.rmClass(btn, cls + "-maximized-over");
+		zk.rmClass(btn, cls + "-maximize-over");
+	}
 };
 zkWnd2.init = function (cmp) {
 	zkWnd2._initBtn(cmp);
@@ -52,9 +101,9 @@ zkWnd2._initBtn = function (cmp) {
 	if (getZKAttr(cmp, "closable") == "true") {
 		var close = $e(cmp, "close");
 		if (close) {
-			zk.listen(close, "click", function (evt) {zkau.sendOnClose(cmp, true); Event.stop(evt);});
-			zk.listen(close, "mouseover", function () {zk.addClass(close, "z-window-close-over");});
-			zk.listen(close, "mouseout", function () {zk.rmClass(close, "z-window-close-over");});
+			zk.listen(close, "click", this.onCloseClick);
+			zk.listen(close, "mouseover", this.onCloseMouseover);
+			zk.listen(close, "mouseout", this.onCloseMouseout);
 			if (!close.style.cursor) close.style.cursor = "default";
 		}
 	}
@@ -62,16 +111,8 @@ zkWnd2._initBtn = function (cmp) {
 		var max = $e(cmp, "maximize");
 		if (max) {
 			zk.listen(max, "click", zkWnd2.onMaximize);
-			zk.listen(max, "mouseover", function () {
-					if (getZKAttr(cmp, "maximized") == "true")
-						zk.addClass(max, "z-window-maximized-over");
-					zk.addClass(max, "z-window-maximize-over");
-				});
-			zk.listen(max, "mouseout", function () {
-					if (getZKAttr(cmp, "maximized") == "true")
-						zk.rmClass(max, "z-window-maximized-over");
-					zk.rmClass(max, "z-window-maximize-over");
-				});
+			zk.listen(max, "mouseover", this.onMaximizeMouseover);
+			zk.listen(max, "mouseout", this.onMaximizeMouseout);
 			if (!max.style.cursor) max.style.cursor = "default";
 		}
 	}
@@ -79,8 +120,8 @@ zkWnd2._initBtn = function (cmp) {
 		var min = $e(cmp, "minimize");
 		if (min) {
 			zk.listen(min, "click", zkWnd2.onMinimize);
-			zk.listen(min, "mouseover", function () {zk.addClass(min, "z-window-minimize-over");});
-			zk.listen(min, "mouseout", function () {zk.rmClass(min, "z-window-minimize-over");});
+			zk.listen(min, "mouseover", this.onMinimizeMouseover);
+			zk.listen(min, "mouseout", this.onMinimizeMouseout);
 			if (!min.style.cursor) min.style.cursor = "default";
 		}
 	}
@@ -101,9 +142,9 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 		var isRealVisible = zk.isRealVisible(cmp);
 		if (!isRealVisible && maximized) return;
 		
-		var l, t, w, h, s = cmp.style;
+		var l, t, w, h, s = cmp.style, cls = zk.realClass(cmp, zkWnd2.cssKeywords);
 		if (maximized) {
-			zk.addClass($e(cmp, "maximize"), "z-window-maximized");
+			zk.addClass($e(cmp, "maximize"), cls + "-maximized");
 			zkWnd2.hideShadow(cmp);
 			var op = !zkWnd2._embedded(cmp) ? Position.offsetParent(cmp) : cmp.parentNode;
 			l = s.left;
@@ -130,8 +171,8 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 			s.left = "0px";
 		} else {
 			var max = $e(cmp, "maximize");
-			zk.rmClass(max, "z-window-maximized");
-			zk.rmClass(max, "z-window-maximized-over");
+			zk.rmClass(max, cls + "-maximized");
+			zk.rmClass(max, cls + "-maximized-over");
 			if (cmp._lastSize) {
 				s.left = cmp._lastSize.l;
 				s.top = cmp._lastSize.t;

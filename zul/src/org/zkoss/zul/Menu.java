@@ -36,12 +36,14 @@ import org.zkoss.zul.impl.Utils;
  * of the menu will be displayed.
  * This element is also used to create submenus (of {@link Menupopup}.
  * 
+ * <p>Default {@link #getSclass}: z-mean. (since 3.5.0)
  * @author tomyeh
  */
 public class Menu extends LabelImageElement {
 	private Menupopup _popup;
 
 	public Menu() {
+		setSclass("z-menu");
 		init();
 	}
 	public Menu(String label) {
@@ -66,7 +68,7 @@ public class Menu extends LabelImageElement {
 				getDesktop().getExecution().encodeURL(getSrc() != null ? getSrc() : "~./img/spacer.gif");
 				
 			final StringBuffer sb = new StringBuffer(64)
-				.append("<img class=\"z-menu-item-icon\" src=\"")
+				.append("<img class=\"").append(getSclass()).append("-item-icon\" src=\"")
 				.append(src).append("\" align=\"absmiddle\"/>");
 
 			final String label = getLabel();

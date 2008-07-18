@@ -39,6 +39,7 @@ public class Window2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Window self = (Window)comp;
 		final String uuid = self.getUuid();
+		final String sclass = self.getSclass();
 		
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.wnd2.Wnd2\" z.autoz=\"true\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
@@ -52,15 +53,15 @@ public class Window2Default implements ComponentRenderer {
 				.write(uuid).write("!caption\" class=\"").write(titlesc).write(" title\">");
 			if (caption == null) {
 				if (self.isClosable())
-					wh.write("<div id=\"").write(uuid).write("!close\" class=\"z-window-tool z-window-close\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(sclass).write("-tool ").write(sclass).write("-close\"></div>");
 				if (self.isMaximizable()) {
-					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"z-window-tool z-window-maximize");
+					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(sclass).write("-tool ").write(sclass).write("-maximize");
 					if (self.isMaximized())
-							wh.write(" z-window-maximized");
+							wh.write(" ").write(sclass).write("-maximized");
 					wh.write("\"></div>");
 				}
 				if (self.isMinimizable())
-					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"z-window-tool z-window-minimize\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(sclass).write("-tool ").write(sclass).write("-minimize\"></div>");
 				new Out(title).render(out);
 			} else {
 				wh.write(caption);

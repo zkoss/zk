@@ -220,33 +220,33 @@ div.wc-popup, div.wc-popup-none {
 div.wc-popup {
 	border: 1px solid #1854c2;
 }
-.z-window-tool {
+.embedded-tool, .modal-tool, .overlapped-tool, .popup-tool, .highlighted-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
 	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
 	margin-left: 2px;
 }
-.z-window-close {
+.embedded-close, .modal-close, .overlapped-close, .popup-close, .highlighted-close {
 	background-position: 0 0;
 }
-.z-window-close-over {
+.embedded-close-over, .modal-close-over, .overlapped-close-over, .popup-close-over, .highlighted-close-over {
 	background-position: -15px 0;
 }
-.z-window-minimize {
+.embedded-minimize, .modal-minimize, .overlapped-minimize, .popup-minimize, .highlighted-minimize {
 	background-position: 0 -15px;
 }
-.z-window-minimize-over {
+.embedded-minimize-over, .modal-minimize-over, .overlapped-minimize-over, .popup-minimize-over, .highlighted-minimize-over {
 	background-position: -15px -15px;
 }
-.z-window-maximize {
+.embedded-maximize, .modal-maximize, .overlapped-maximize, .popup-maximize, .highlighted-maximize {
 	background-position: 0 -30px;
 }
-.z-window-maximize-over {
+.embedded-maximize-over, .modal-maximize-over, .overlapped-maximize-over, .popup-maximize-over, .highlighted-maximize-over {
 	background-position: -15px -30px;
 }
-.z-window-maximized {
+.embedded-maximized, .modal-maximized, .overlapped-maximized, .popup-maximized, .highlighted-maximized {
 	background-position: 0 -45px;
 }
-.z-window-maximized-over {
+.embedded-maximized-over, .modal-maximized-over, .overlapped-maximized-over, .popup-maximized-over, .highlighted-maximized-over {
 	background-position: -15px -45px;
 }
 div.wc-embedded-none, div.wc-wndcyan-none,

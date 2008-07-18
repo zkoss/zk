@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:choose>
 <c:when test="${self.topmost}">
 <td id="${self.uuid}" align="left" z.type="Menuit2"${self.outerAttrs}${self.innerAttrs}>
-<a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} class="z-menu-item">
+<a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} class="${self.sclass}">
 <table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="z-btn <c:if test="${self.imageAssigned}">z-btn<c:if test="${!empty self.label}">-text</c:if>-icon</c:if>" style="width: auto;">
 <tbody><tr class="z-menu-btn"><td class="z-btn-l"><i>&nbsp;</i></td>
 <c:if test="${!empty self.imageContent}">
@@ -39,7 +39,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 </c:when>
 <c:otherwise>
 <li id="${self.uuid}" z.type="Menuit2"${self.outerAttrs}${self.innerAttrs}>
-<a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} id="${self.uuid}!a" class="${self.parent.checkmark ? self.checked ? 'z-menu-item z-menu-item-ck' : 'z-menu-item z-menu-item-unck' : 'z-menu-item'} ${self.disabled ? 'z-item-disd' : ''}">${self.imgTag}<c:out value="${self.label}"/></a>
+<c:choose>
+	<c:when test="${self.parent.checkmark}">
+		<c:choose>
+			<c:when test="${self.checked}">
+				<c:set var="class1" value="${self.sclass} ${self.sclass}-ck"/>
+			</c:when>
+			<c:otherwise>
+				<c:set var="class1" value="${self.sclass} ${self.sclass}-unck"/>
+			</c:otherwise>
+		</c:choose>
+	</c:when>
+	<c:otherwise>
+		<c:set var="class1" value="${self.sclass}"/>
+	</c:otherwise>
+</c:choose>
+<a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} id="${self.uuid}!a" class="${class1} ${self.disabled ? 'z-item-disd' : ''}">${self.imgTag}<c:out value="${self.label}"/></a>
 </li>
 </c:otherwise>
 </c:choose>

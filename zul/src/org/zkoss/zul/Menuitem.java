@@ -33,6 +33,7 @@ import org.zkoss.zul.impl.Utils;
  * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
  * 
+ * <p>Default {@link #getSclass}: z-mean-item. (since 3.5.0)
  * @author tomyeh
  */
 public class Menuitem extends LabelImageElement {
@@ -42,6 +43,7 @@ public class Menuitem extends LabelImageElement {
 	private boolean _disabled = false;
 
 	public Menuitem() {
+		setSclass("z-menu-item");
 		init();
 	}
 	public Menuitem(String label) {
@@ -75,7 +77,7 @@ public class Menuitem extends LabelImageElement {
 				getDesktop().getExecution().encodeURL(getSrc() != null ? getSrc() : "~./img/spacer.gif");
 				
 			final StringBuffer sb = new StringBuffer(64)
-				.append("<img class=\"z-menu-item-icon\" src=\"")
+				.append("<img class=\"").append(getSclass()).append("-icon\" src=\"")
 				.append(src).append("\" align=\"absmiddle\"/>");
 
 			final String label = getLabel();

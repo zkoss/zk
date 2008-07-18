@@ -43,6 +43,7 @@ public class Menuitem2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menuitem self = (Menuitem)comp;
 		final String uuid = self.getUuid();
+		final String sclass = self.getSclass();
 		final Execution exec = Executions.getCurrent();
 		if (self.isTopmost()){
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"Menuit2\"");
@@ -52,7 +53,7 @@ public class Menuitem2Default implements ComponentRenderer {
 			else
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
-			wh.write(" class=\"z-menu-item\">");
+			wh.write(" class=\"").write(sclass).write("\">");
 			wh.write("<table id=\"").write(uuid).write("!a\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn ");
 			if (self.isImageAssigned()) {
 				wh.write("z-btn");
@@ -87,11 +88,11 @@ public class Menuitem2Default implements ComponentRenderer {
 			wh.write(" class=\"");
 			if (((Menupopup)self.getParent()).isCheckmark()) {
 				if (self.isChecked()) 
-					wh.write("z-menu-item z-menu-item-ck");
+					wh.write(sclass).write(" ").write(sclass).write("-ck");
 				else 
-					wh.write("z-menu-item z-menu-item-unck");
+					wh.write(sclass).write(" ").write(sclass).write("-unck");
 			} else
-				wh.write("z-menu-item");
+				wh.write(sclass).write("");
 			if (self.isDisabled())
 				wh.write(" z-item-disd");
 			wh.write("\">").write(self.getImgTag());

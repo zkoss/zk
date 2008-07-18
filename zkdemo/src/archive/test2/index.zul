@@ -64,6 +64,7 @@ String shortHeight="520px";
 												onSelect="fnf.value = self.selectedItem.label;main.updateModel();">
 												<comboitem label="F30"/>
 												<comboitem label="F31"/>
+												<comboitem label="F35"/>
 												<comboitem label="B30"/>
 												<comboitem label="B31"/>
 												<comboitem label="Z30"/>

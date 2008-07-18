@@ -448,7 +448,40 @@ zk.confirm = function (msg) {
 		try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 	}
 };
-
+/** The css keywords of ZK framework, since 3.5.0 .*/
+zk.cssKeywords = ["over", "click", "seld", "disd"];
+/**
+ * Returns the real class name that determines whether the end of the css name of
+ * the specified element does not match the special string where is existed
+ * in ZK framework. i.e zk.cssKeywords, including "over", "click", "seld", and "disd".
+ * This match of the real class name is from the end to the beginning.
+ * For example,
+ * 	If el.className is a "ab ab-over abc disd abc-seld" string, the "abc" class name is returned.
+ * <p>Note: if not one to be foundd, the "" string is assumed.</p>
+ * @param {Object} el an element.
+ * @param {Array} keywords an array that has some special keywords you want to ingore.
+ * @since 3.5.0
+ */
+zk.realClass = function (el, keywords) {
+	var cn = el.className.trim(), kds = keywords ? keywords.concat(zk.cssKeywords) : zk.cssKeywords;
+ 	if (cn) {
+		for (var has, cs = cn.split(" "), i = cs.length; --i >= 0;) {
+			if (!cs[i].trim()) continue;
+			for (var j = kds.length; --j >= 0;) {
+				if (cs[i] == kds[j] || cs[i].endsWith("-" + kds[j])) {
+					has = true;
+					break;
+				}
+			}
+			if (has) {
+				has = false;
+				continue;
+			}
+			return cs[i];
+		}
+	}
+	return "";
+};
 /** Returns whether it is part of the class name
  * of the specified element.
  */

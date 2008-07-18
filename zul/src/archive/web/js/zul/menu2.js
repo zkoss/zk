@@ -66,7 +66,12 @@ zkMenu2 = { // menu
 	 * is only invoked on the popup-list.
 	 */
 	onPopupOut: function (cmp) {
-		if (cmp) zk.rmClass(cmp, "z-menu-item-over");
+		if (cmp) {
+			var cls = zk.realClass(cmp);
+			if ($type(cmp) == "Menu2")
+				cls += "-item";
+			zk.rmClass(cmp, cls + "-over");
+		}
 	},
 	/**
 	 * Applies the "z-menu-item-over" class name of the specified cmp, this function
@@ -79,7 +84,10 @@ zkMenu2 = { // menu
 			zkMenu2.onPopupOut(zkMenu2.getItemAt(cmp.parentNode, $int(seld)).el);
 			
 		setZKAttr(pp, "seld", index === undefined ? zkMenu2.indexOf(cmp) : index);
-		zk.addClass(cmp, "z-menu-item-over");
+		var cls = zk.realClass(cmp);
+		if ($type(cmp) == "Menu2")
+			cls += "-item";
+		zk.addClass(cmp, cls + "-over");
 	},
 	/**
 	 * Returns the object whose index is matched from the ul items.
@@ -228,7 +236,7 @@ zkMenu2 = { // menu
 	onout: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt));
-		if (!zk.ie || zkMenu2._shouldDeactivate(cmp, evt))
+		if (!zk.ie || zkMenu2.isTop(cmp) || zkMenu2._shouldDeactivate(cmp, evt))
 			zkMenu2._onout(cmp);
 	},
 	_shouldDeactivate: function (cmp, evt) {

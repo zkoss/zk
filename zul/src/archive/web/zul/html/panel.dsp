@@ -27,16 +27,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<c:choose>
 				<c:when test="${empty self.caption}">
 					<c:if test="${self.closable}">
-<div id="${self.uuid}!close" class="z-panel-tool z-panel-close"></div>
+<div id="${self.uuid}!close" class="${self.sclass}-tool ${self.sclass}-close"></div>
 					</c:if>
 					<c:if test="${self.maximizable}">
-<div id="${self.uuid}!maximize" class="z-panel-tool z-panel-maximize <c:if test="${self.maximized}">z-panel-maximized</c:if>"></div>
+<div id="${self.uuid}!maximize" class="${self.sclass}-tool ${self.sclass}-maximize <c:if test="${self.maximized}">${self.sclass}-maximized</c:if>"></div>
 					</c:if>
 					<c:if test="${self.minimizable}">
-<div id="${self.uuid}!minimize" class="z-panel-tool z-panel-minimize"></div>
+<div id="${self.uuid}!minimize" class="${self.sclass}-tool ${self.sclass}-minimize"></div>
 					</c:if>
 					<c:if test="${self.collapsible}">
-<div id="${self.uuid}!toggle" class="z-panel-tool z-panel-toggle"></div>
+<div id="${self.uuid}!toggle" class="${self.sclass}-tool ${self.sclass}-toggle"></div>
 					</c:if>
 					<c:out value="${self.title}" />
 				</c:when>

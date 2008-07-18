@@ -41,6 +41,7 @@ public class Menu2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menu self = (Menu)comp;
 		final String uuid = self.getUuid();
+		final String sclass = self.getSclass();
 		final Execution exec = Executions.getCurrent();
 		if (self.isTopmost()) {
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"zul.menu2.Menu2\"");
@@ -70,7 +71,8 @@ public class Menu2Default implements ComponentRenderer {
 		} else {
 			wh.write("<li id=\"").write(uuid).write("\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-				.write(">\n<a href=\"javascript:;\" id=\"").write(uuid).write("!a\" class=\"z-menu-item z-menu-item-arrow\">")
+				.write(">\n<a href=\"javascript:;\" id=\"").write(uuid).write("!a\" class=\"").write(sclass)
+				.write("-item ").write(sclass).write("-item-arrow\">")
 				.write(self.getImgTag());
 
 			new Out(self.getLabel()).render(out);

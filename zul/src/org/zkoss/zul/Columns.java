@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -251,7 +252,7 @@ public class Columns extends HeadersElement {
 					_ref = ((OpenEvent)event).getReference();
 				}
 			});
-			if(cols._columnsgroup) {
+			if(WebApps.getFeature("professional") && cols._columnsgroup) {
 				Menuitem group = new Menuitem(Messages.get(MZul.GRID_GROUP), "~./zul/img/grid/grouping.gif");
 				group.addEventListener(Events.ON_CLICK, new EventListener(){
 					public void onEvent(Event event) throws Exception {
