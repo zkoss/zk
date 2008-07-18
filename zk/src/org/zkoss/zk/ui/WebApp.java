@@ -159,24 +159,6 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 */
 	public Configuration getConfiguration();
 
-	/** Returns whether the specified feature is supported.
-	 *
-	 * @param feature which feature to check. Supported features:
-	 * <dl>
-	 * <dt>professional</dt>
-	 * <dd>Whether it is the professional edition, i.e.,
-	 * whether zkex.jar (and others) are installed.</dd>
-	 * <dt>enterprise</dt>
-	 * <dd>Whether it is the enterprise edition, i.e.,
-	 * whether zkmax.jar (and others) are installed.
-	 * Note: the enterperise edition implies "professional".
-	 * In other words, if getFeature("enterprise") is true,
-	 * getFeature("professional") must be true.</dd>
-	 * </dl>
-	 * @since 3.0.7
-	 */
-	public boolean getFeature(String feature);
-
 	/** Returns the native application context, or null if not available.
 	 *
 	 * <p>The returned object depends on the Web container.

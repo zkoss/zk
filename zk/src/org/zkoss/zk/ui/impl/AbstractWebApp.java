@@ -20,7 +20,6 @@ package org.zkoss.zk.ui.impl;
 
 import java.io.InputStream;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.util.Utils;
 import org.zkoss.io.Files;
 
@@ -57,7 +56,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private FailoverManager _failover;
 	private IdGenerator _idgen;
 	private SessionCache _sesscache;
-	private final boolean _profed, _entped;
 
 	/** Constructor.
 	 *
@@ -69,8 +67,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	 * and then calling {@link #init}.
 	 */
 	protected AbstractWebApp() {
-		_profed = Classes.existsByThread("org.zkoss.zkex.Version");
-		_entped = Classes.existsByThread("org.zkoss.zkmax.Version");
 	}
 
 	public String getAppName() {
@@ -221,12 +217,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	 */
 	public void sessionDidActivate(Session sess) {
 		_provider.sessionDidActivate(sess);
-	}
-
-	public boolean getFeature(String feature) {
-		final String f = feature.toLowerCase();
-		return "professional".equals(f) ? _profed:
-			"enterprise".equals(f) ? _entped: false;
 	}
 
 	/** Loads the build identifier. */
