@@ -75,12 +75,15 @@ public class ComponentsCtrl {
 	}
 
 	/** Returns whether an ID is generated automatically.
+	 * Note: true is returned if id is null.
 	 */
 	public static final boolean isAutoId(String id) {
-		return id.startsWith(AUTO_ID_PREFIX)
-			&& id.indexOf('_', AUTO_ID_PREFIX.length()) > 0;
+		return id == null || (id.startsWith(AUTO_ID_PREFIX)
+			&& id.indexOf('_', AUTO_ID_PREFIX.length()) > 0);
 	}
-	/** Returns whether an ID is a valid UUID. */
+	/** Returns whether an ID is a valid UUID.
+	 * Note: true is returned if id is null.
+	 */
 	public static final boolean isUuid(String id) {
 		return isAutoId(id);
 	}

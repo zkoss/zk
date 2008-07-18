@@ -329,7 +329,7 @@ implements DynamicPropertied, RawId {
 
 	//Object//
 	public String toString() {
-		return "["+_tagnm+' '+getId()+']';
+		return "["+_tagnm+' '+super.toString()+']';
 	}
 
 	private static class EventInfo {

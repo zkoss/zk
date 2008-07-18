@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
  */
 public class ViewIdGenerator implements IdGenerator {
 	public String nextComponentUuid(Desktop desktop, Component comp) {
-		System.out.println("nextComponentUuid: "+comp.getPage());
+		System.out.println("nextComponentUuid for "+comp.getClass()+", parent="+comp.getParent()+", page="+comp.getPage());
 		return null;
 	}
 	public String nextPageUuid(Page page) {

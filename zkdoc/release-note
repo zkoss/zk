@@ -17,6 +17,7 @@ ZK 3.0.7
   2019171: IE Bookmark Bug - first bookmark is ignored 
   2020454: JpaUtil.getEntityManagerFactory should cache in WebApp scope
   2010389: Data binding error: changing selected item of combobox
+  2021100: When IdGenerator.nextComponentUuid called, parent/page null
   
 	--------
 ZK 3.0.6
