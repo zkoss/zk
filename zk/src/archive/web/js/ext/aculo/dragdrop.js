@@ -264,7 +264,7 @@ else
       scrollSpeed: 15,
       snap: false,  // false, or xy or [x,y] or function(x,y){ return [x,y] }
       delay: 0,
-	  overlay: false
+      overlay: false
     };
     
     if(!arguments[1] || typeof arguments[1].endeffect == 'undefined')
