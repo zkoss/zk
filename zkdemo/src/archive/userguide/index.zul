@@ -142,7 +142,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			</treechildren>
 		</tree>
 	</west>
-	<center autoscroll="true">
+	<center>
 		<include style="padding:3px;" width="99%" id="xcontents" src="${requestScope.contentSrc}"/><!-- prepared by TocTree -->
 	</center>
 </borderlayout>
