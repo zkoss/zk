@@ -18,22 +18,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo">
-	<vbox width="100%">
-		<html><![CDATA[
-			<h4>The onChanging event</h4>
-			<p>Sometimes computer has to response immediatly when user is typing text into textbox.
-			The onChanging event is used to serve such requirements (e.g. text auto-completion)</p>
-			<p>Try to type in the "onChanging textbox" any texts and you will find the "instant copy:" changes instantly and accordingly.</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	<html><![CDATA[
+		<h4>The onChanging event</h4>
+		<p>Sometimes computer has to response immediatly when user is typing text into textbox.
+		The onChanging event is used to serve such requirements (e.g. text auto-completion)</p>
+		<p>Try to type in the "onChanging textbox" any texts and you will find the "instant copy:" changes instantly and accordingly.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <window title="onChanging event demo" border="normal">
 	<grid width="80%">
 	<rows>
@@ -42,8 +41,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</rows>
 	</grid>
 </window>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

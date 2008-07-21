@@ -18,22 +18,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo">
-	<vbox width="100%">
-		<html><![CDATA[
+	<html><![CDATA[
 	<h4>Multiple Selections</h4>
 	<p>End user may pick multiple options from a tree.</p>
 	<p>Try to use CTRL+arrow keys, SHIFT+arrow keys, CTRL+click
 	and SHIFT+click to do multiple selections.</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <window title="tree multiple selection demo" border="normal">
 	<tree id="tree" width="90%" rows="5" multiple="true">
 		<treecols sizable="true">
@@ -82,8 +81,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</treechildren>
 	</tree>
 </window>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

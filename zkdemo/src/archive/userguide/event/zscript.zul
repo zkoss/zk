@@ -18,30 +18,28 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
-	<vbox width="100%">
-		<html><![CDATA[
-			<h4>Scripts</h4>
-			<p>The Java language (NOT JavaScript) is the default page scripting language in our system. 
-			The Java codes contained in the zscript element is executed when the page is rendered.</p>
-			<p>The example script is executed and changes the label's value  from "Hello, World!" to "Hello, Script!".</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	<html><![CDATA[
+		<h4>Scripts</h4>
+		<p>The Java language (NOT JavaScript) is the default page scripting language in our system. 
+		The Java codes contained in the zscript element is executed when the page is rendered.</p>
+		<p>The example script is executed and changes the label's value  from "Hello, World!" to "Hello, Script!".</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <window title="ZScript Demo" border="normal" width="200px">
 	<label id="mylabel" value="Hello, World!"/>
 	<zscript>
 		mylabel.value = "Hello, Script!";
 	</zscript>
 </window>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

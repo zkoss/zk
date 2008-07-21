@@ -18,23 +18,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo">
-	<vbox width="100%">
-		<html><![CDATA[
-			<h4>Chart</h4>
-			<p>Chart is used to show a set of data as a graph. 
-			In this demo, change the value of the grid and the chart 
-			will be redrawn accordingly. Also, the chart can be drill down with a click 
-			on the pie. </p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	<html><![CDATA[
+		<h4>Chart</h4>
+		<p>Chart is used to show a set of data as a graph. 
+		In this demo, change the value of the grid and the chart 
+		will be redrawn accordingly. Also, the chart can be drill down with a click 
+		on the pie. </p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <vbox>
 <grid width="400px">
 <columns>
@@ -73,8 +72,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 </chart>
 <toolbarbutton label="More chart..." href="/test/chart.zul"/>
 </vbox>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

@@ -18,25 +18,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo">
-	<vbox width="100%">
-		<html><![CDATA[
-			<h4>The box model</h4>
-			<p>The box model is the major layout method for components.</p>
-			<ul>
-				<li>hbox: components inside this element will orient themselves horizontally</li>
-				<li>vbox: components inside this element will orient themselves vertically</li>
-			</ul>
-			<p>With the combination of the hbox and vbox, basically we can layout the window into a series of boxes.</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	<html><![CDATA[
+		<h4>The box model</h4>
+		<p>The box model is the major layout method for components.</p>
+		<ul>
+			<li>hbox: components inside this element will orient themselves horizontally</li>
+			<li>vbox: components inside this element will orient themselves vertically</li>
+		</ul>
+		<p>With the combination of the hbox and vbox, basically we can layout the window into a series of boxes.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <window title="box layout demo" border="normal">
 	<hbox spacing="0">
 		<window border="normal">0</window>
@@ -58,8 +57,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</vbox>
 	</hbox>
 </window>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

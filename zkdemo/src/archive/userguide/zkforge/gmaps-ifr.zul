@@ -25,8 +25,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	-->
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${sessionScope.gmapsKey}"
 	type="text/javascript" unless="${empty sessionScope.gmapsKey}"/>
-
-	<vbox>
 	<gmaps id="mymap" width="500px" height="300px" showSmallCtrl="true">
 		<attribute name="onMapMove">
 			mylat.setValue(self.getLat());
@@ -60,5 +58,4 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<row>Zoom Level: <intbox id="myzoom" value="${mymap.zoom}" onChange="mymap.setZoom(self.getValue())"/></row>
 		<row>Open Info: <button label="Change" onClick="myinfo.isOpen() ? mymark.setOpen(true) : myinfo.setOpen(true)"/></row>
 	</rows></grid>
-	</vbox>
 </window>

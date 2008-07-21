@@ -18,70 +18,68 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo">
-	<vbox width="100%">
-		<html><![CDATA[
-				<h4>Trees</h4>
-				<p>tree provides the hierarchy structure that user can browser and pick an option from. Tree can be opened or closed by clicking on the "node".</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" class="code" rows="15" width="100%" use="org.zkoss.zkdemo.userguide.CodeView">
-				<attribute name="value"><![CDATA[
+	<html><![CDATA[
+			<h4>Trees</h4>
+			<p>tree provides the hierarchy structure that user can browser and pick an option from. Tree can be opened or closed by clicking on the "node".</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" class="code" rows="15" width="100%" use="org.zkoss.zkdemo.userguide.CodeView">
+			<attribute name="value"><![CDATA[
 <window title="tree demo" border="normal">
-	<tree id="tree" width="90%" rows="5">
-		<treecols sizable="true">
-			<treecol label="Name"/>
-			<treecol label="Description"/>
-		</treecols>
-		<treechildren>
-			<treeitem>
-				<treerow>
-					<treecell label="Item 1"/>
-					<treecell label="Item 1 description"/>
-				</treerow>
-			</treeitem>
-			<treeitem>
-				<treerow>
-					<treecell label="Item 2"/>
-					<treecell label="Item 2 description"/>
-				</treerow>
-				<treechildren>
-					<treeitem>
-						<treerow>
-							<treecell label="Item 2.1"/>
-						</treerow>
-						<treechildren>
-							<treeitem>
-								<treerow>
-									<treecell label="Item 2.1.1"/>
-								</treerow>
-							</treeitem>
-							<treeitem>
-								<treerow>
-									<treecell label="Item 2.1.2"/>
-								</treerow>
-							</treeitem>
-						</treechildren>
-					</treeitem>
-					<treeitem>
-						<treerow>
-							<treecell label="Item 2.2"/>
-							<treecell label="Item 2.2 is something who cares"/>
-						</treerow>
-					</treeitem>
-				</treechildren>
-			</treeitem>
-			<treeitem label="Item 3"/>
-		</treechildren>
-	</tree>
+<tree id="tree" width="90%" rows="5">
+	<treecols sizable="true">
+		<treecol label="Name"/>
+		<treecol label="Description"/>
+	</treecols>
+	<treechildren>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 1"/>
+				<treecell label="Item 1 description"/>
+			</treerow>
+		</treeitem>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 2"/>
+				<treecell label="Item 2 description"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.1"/>
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.1"/>
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.2"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.2"/>
+						<treecell label="Item 2.2 is something who cares"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 3"/>
+	</treechildren>
+</tree>
 </window>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

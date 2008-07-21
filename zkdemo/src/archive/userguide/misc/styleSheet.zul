@@ -18,8 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
-	<vbox width="100%">
-		<html><![CDATA[
+	<html><![CDATA[
 <h4>Style sheets</h4>
 <p>CSS style sheet, class attribute, and style attribute are supported.</p>
 <p>Developers use the style components as follows to specify what style sheet
@@ -35,16 +34,16 @@ td.mine {
 }
 &lt;/style&gt;
 </code></pre>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <zk>
 	<vbox>
 		<radiogroup onCheck='msg.style = "color:white;background:" + self.selectedItem.label;'>
@@ -55,8 +54,7 @@ td.mine {
 		<label id="msg" value="Hello, World" style="color:white;background:blue"/>
 	</vbox>
 </zk>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

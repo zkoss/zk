@@ -18,23 +18,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
-	<vbox width="100%">
-		<html><![CDATA[
-			<h4>Hibernate</h4>
-			<p>Presentation components do not assume any persistent technology. 
-			This example simply demostrate the possiblility to combine presentation 
-			components and Hibernate persistent system.</p>
-			<p>Note that we comment out the script on purpose because it will not run on our web site.</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	<html><![CDATA[
+		<h4>Hibernate</h4>
+		<p>Presentation components do not assume any persistent technology. 
+		This example simply demostrate the possiblility to combine presentation 
+		components and Hibernate persistent system.</p>
+		<p>Note that we comment out the script on purpose because it will not run on our web site.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <window title="Hibernate demo" border="normal">
 	<zscript>{
 		void submit() {
@@ -63,8 +62,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</rows>
 	</grid>
 </window>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

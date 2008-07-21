@@ -18,23 +18,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
-	<vbox width="100%">
-		<html><![CDATA[
-			<h4>onOK, onCancel and onCtrlKey</h4>
-			<p>Special keypress event for ENTER, ESC, CTRL key are 
-			handled via three special event listeners, onOK, onCancel, and onCtrlKey respectivly. Note that function keys are deemed as CTRL keys.</p>
-			<p>Only window component is allowed to handle these events.</p>
-			<p>Try to press "ENTER", "ESC", "CTRL+A", "F2" and see what happened.(Note that the focus must be inside the demo widow when pressing the key.)</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	<html><![CDATA[
+		<h4>onOK, onCancel and onCtrlKey</h4>
+		<p>Special keypress event for ENTER, ESC, CTRL key are 
+		handled via three special event listeners, onOK, onCancel, and onCtrlKey respectivly. Note that function keys are deemed as CTRL keys.</p>
+		<p>Only window component is allowed to handle these events.</p>
+		<p>Try to press "ENTER", "ESC", "CTRL+A", "F2" and see what happened.(Note that the focus must be inside the demo widow when pressing the key.)</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <window title="onOK, onCancel, onCtrlKey demo" border="normal" onOK="doOk()" onCancel="doCancel()" ctrlKeys="^a#f2" onCtrlKey="doCtrlKey()">
 	<checkbox id="winfocus" label="Hello, World!"/>
 	<zscript>{
@@ -53,8 +52,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		winfocus.focus();
 	}</zscript>
 </window>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

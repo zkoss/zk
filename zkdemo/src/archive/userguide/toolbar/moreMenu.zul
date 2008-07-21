@@ -18,25 +18,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo">
-	<vbox width="100%">
-		<html><![CDATA[
-			<h4>More Menu Features</h4>
-			<p>Menu supports special feature of autocheck and autodrop.</p>
-			<ul>
-				<li>autocheck make the menu item as a checkbox.</li>
-				<li>autodrop make the menu to pop up when the mouse roll over.</li>
-			</ul>
-			<p>Try to move mouse pointer over the menu. Click check1 and check2; then see what happened.</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
-				<attribute name="value"><![CDATA[
+	<html><![CDATA[
+		<h4>More Menu Features</h4>
+		<p>Menu supports special feature of autocheck and autodrop.</p>
+		<ul>
+			<li>autocheck make the menu item as a checkbox.</li>
+			<li>autodrop make the menu to pop up when the mouse roll over.</li>
+		</ul>
+		<p>Try to move mouse pointer over the menu. Click check1 and check2; then see what happened.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
 <window title="More Menu Demo" border="normal">
 	<menubar id="menubar" autodrop="true">
 		<menu label="File">
@@ -67,8 +66,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</menu>
 	</menubar>
 </window>
-				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+			]]></attribute>
+		</textbox>
+	</groupbox>
 </window>

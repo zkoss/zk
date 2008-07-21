@@ -18,23 +18,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window id="demo">
-	<vbox width="100%">
-		<html><![CDATA[
+	<html><![CDATA[
 	<h4>Demo of Google Maps</h4>
 	<p><a href="http://maps.google.com">Google Maps</a> is a popular maps service developed by Google.</p>
 	<p>In this demo, user can enter the new center(latitude and longitude) of the maps and the maps would 
 	move to show the new location. User can also drag the maps around to a new location and see the 
 	current center of the maps.</p>
-		]]></html>
-		<groupbox mold="3d" width="100%">
-			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
-			<window id="view">
-			</window>
-		</groupbox>
-		<groupbox id="tryView" mold="3d" open="false" width="100%">
-			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="10" width="100%">
-				<attribute name="value"><![CDATA[
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="10" width="100%">
+			<attribute name="value"><![CDATA[
 <window title="Google Maps">
 	<div style="border: 1px solid red;margin-top:10px;margin-bottom:20px"
 	if="&#36;{empty sessionScope.gmapsKey}">
@@ -84,7 +83,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 </window>
 				]]></attribute>
-			</textbox>
-		</groupbox>
-	</vbox>
+		</textbox>
+	</groupbox>
 </window>
