@@ -33,6 +33,7 @@ ZK 3.5.0
   1997384: Toolbar support alignment control
   2009346: Support event listener of ZK client cmp for cmp developer
   1444991: Minimize / Maximize window decorations
+  2023188: A way to avoid the conflict of the prototype's method names
   
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
@@ -61,6 +62,20 @@ ZK 3.5.0
 		of Menubar to specify them.
   + Change the layout of Paging component to a new trendy layout as default.
   + Rename from layout*.css.dsp to zkex*.css.dsp.
+  + The method names of prototype and script.aculo.us embedded in ZK are
+    renamed. If your client codes depend on them, you can specify the following
+    statement in lang-addon.xml:
+	<javascript src="~./js/ext/prototype.js"/>
+
+	If you want your client codes to be backward with differet ZK versions,
+	you can have the following codes in your JavaScript files.\
+	Then, use zClass, zDraggable and so on in your client codes
+	if (!window.zClass) {
+		zClass = Class;
+		zDraggable = Draggable;
+		zEffect = Effect;
+		zPos = Position;
+	}
 
 	--------
 ZK 3.0.7
