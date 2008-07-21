@@ -18,7 +18,8 @@ ZK 3.0.7
   2020454: JpaUtil.getEntityManagerFactory should cache in WebApp scope
   2010389: Data binding error: changing selected item of combobox
   2021100: When IdGenerator.nextComponentUuid called, parent/page null
-  
+  2023407: JavaScript error if zk.load called with ckfn
+
 	--------
 ZK 3.0.6
 * Features
