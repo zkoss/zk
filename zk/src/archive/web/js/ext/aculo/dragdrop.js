@@ -11,18 +11,18 @@ if (!window.z_dragdrop_js) {
 	z_dragdrop_js = true;
 
 /* Tom M. Yeh, Potix: remove unused codes
-if(typeof Effect == 'undefined')
+if(typeof zEffect == 'undefined')
   throw("dragdrop.js requires including script.aculo.us' effects.js library");
 
-var Droppables = {
+var zDroppables = {
   drops: [],
 
   remove: function(element) {
-    this.drops = this.drops.reject(function(d) { return d.element==$(element) });
+    this.drops = this.drops.reject(function(d) { return d.element==z$(element) });
   },
 
   add: function(element) {
-    element = $(element);
+    element = z$(element);
     var options = Object.extend({
       greedy:     true,
       hoverclass: null,
@@ -35,9 +35,9 @@ var Droppables = {
       var containment = options.containment;
       if((typeof containment == 'object') && 
         (containment.constructor == Array)) {
-        containment.each( function(c) { options._containers.push($(c)) });
+        containment.each( function(c) { options._containers.push(z$(c)) });
       } else {
-        options._containers.push($(containment));
+        options._containers.push(z$(containment));
       }
     }
     
@@ -77,7 +77,7 @@ var Droppables = {
       ((!drop.accept) ||
         (Element.classNames(element).detect( 
           function(v) { return drop.accept.include(v) } ) )) &&
-      Position.within(drop.element, point[0], point[1]) );
+      zPos.within(drop.element, point[0], point[1]) );
   },
 
   deactivate: function(drop) {
@@ -98,23 +98,23 @@ var Droppables = {
     
     if(this.last_active) this.deactivate(this.last_active);
     this.drops.each( function(drop) {
-      if(Droppables.isAffected(point, element, drop))
+      if(zDroppables.isAffected(point, element, drop))
         affected.push(drop);
     });
         
     if(affected.length>0) {
-      drop = Droppables.findDeepestChild(affected);
-      Position.within(drop.element, point[0], point[1]);
+      drop = zDroppables.findDeepestChild(affected);
+      zPos.within(drop.element, point[0], point[1]);
       if(drop.onHover)
-        drop.onHover(element, drop.element, Position.overlap(drop.overlap, drop.element));
+        drop.onHover(element, drop.element, zPos.overlap(drop.overlap, drop.element));
       
-      Droppables.activate(drop);
+      zDroppables.activate(drop);
     }
   },
 
   fire: function(event, element) {
     if(!this.last_active) return;
-    Position.prepare();
+    zPos.prepare();
 
     if (this.isAffected([Event.pointerX(event), Event.pointerY(event)], element, this.last_active))
       if (this.last_active.onDrop) 
@@ -127,7 +127,7 @@ var Droppables = {
   }
 }
 */
-var Draggables = {
+var zDraggables = {
   drags: [],
   observers: [],
   
@@ -156,9 +156,9 @@ var Draggables = {
   activate: function(draggable) {
     if(zk.opera || draggable.options.delay) { 
       this._timeout = setTimeout(function() { 
-        Draggables._timeout = null; 
+        zDraggables._timeout = null; 
         window.focus(); 
-        Draggables.activeDraggable = draggable; 
+        zDraggables.activeDraggable = draggable; 
       }.bind(this), draggable.options.delay); 
     } else {
       window.focus(); // allows keypress events if window isn't currently focused, fails for Safari
@@ -217,7 +217,7 @@ var Draggables = {
   
   _cacheObserverCallbacks: function() {
     ['onStart','onEnd','onDrag'].each( function(eventName) {
-      Draggables[eventName+'Count'] = Draggables.observers.select(
+      zDraggables[eventName+'Count'] = zDraggables.observers.select(
         function(o) { return o[eventName]; }
       ).length;
     });
@@ -226,10 +226,10 @@ var Draggables = {
 
 /*--------------------------------------------------------------------------*/
 
-var Draggable = Class.create();
-Draggable._dragging    = {};
+var zDraggable = zClass.create();
+zDraggable._dragging    = {};
 
-Draggable.prototype = {
+zDraggable.prototype = {
   initialize: function(element) {
  var zdd = zk.ie && arguments[1] && arguments[1].z_dragdrop; //Tom M. Yeh, Potix: Bug 1538506
     var defaults = {
@@ -237,7 +237,7 @@ Draggable.prototype = {
       reverteffect: function(element, top_offset, left_offset) {
 var orgpos = element.style.position; //Tom M. Yeh, Potix: Bug 1538506
         var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
-        new Effect.Move(element, { x: -left_offset, y: -top_offset, duration: dur,
+        new zEffect.Move(element, { x: -left_offset, y: -top_offset, duration: dur,
           queue: {scope:'_draggable', position:'end'}
         });
 //Tom M. Yeh, Potix: Bug 1538506: a strange bar appear in IE
@@ -250,10 +250,10 @@ else
       },
       endeffect: function(element) {
         var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0;
-        new Effect.Opacity(element, {duration:0.2, from:0.7, to:toOpacity, 
+        new zEffect.Opacity(element, {duration:0.2, from:0.7, to:toOpacity, 
           queue: {scope:'_draggable', position:'end'},
           afterFinish: function(){ 
-            Draggable._dragging[element] = false 
+            zDraggable._dragging[element] = false 
           }
         }); 
       },
@@ -264,30 +264,30 @@ else
       scrollSpeed: 15,
       snap: false,  // false, or xy or [x,y] or function(x,y){ return [x,y] }
       delay: 0,
-      overlay: false
+	  overlay: false
     };
     
     if(!arguments[1] || typeof arguments[1].endeffect == 'undefined')
       Object.extend(defaults, {
         starteffect: function(element) {
           element._opacity = Element.getOpacity(element);
-          Draggable._dragging[element] = true;
-          new Effect.Opacity(element, {duration:0.2, from:element._opacity, to:0.7}); 
+          zDraggable._dragging[element] = true;
+          new zEffect.Opacity(element, {duration:0.2, from:element._opacity, to:0.7}); 
         }
       });
     
     var options = Object.extend(defaults, arguments[1] || {});
 
-    this.element = $(element);
+    this.element = z$(element);
     
     if(options.handle && (typeof options.handle == 'string'))
       this.handle = this.element.down('.'+options.handle, 0);
     
-    if(!this.handle) this.handle = $(options.handle);
+    if(!this.handle) this.handle = z$(options.handle);
     if(!this.handle) this.handle = this.element;
     
     if(options.scroll && !options.scroll.scrollTo && !options.scroll.outerHTML) {
-      options.scroll = $(options.scroll);
+      options.scroll = z$(options.scroll);
       this._isScrollChild = Element.childOf(this.element, options.scroll);
     }
 
@@ -301,12 +301,12 @@ if (zk.opera || !options.z_dragdrop) //Tom M. Yeh, Potix: Bug 1534426, 1535787 (
     this.eventMouseDown = this.initDrag.bindAsEventListener(this);
     Event.observe(this.handle, "mousedown", this.eventMouseDown);
     
-    Draggables.register(this);
+    zDraggables.register(this);
   },
   
   destroy: function() {
     Event.stopObserving(this.handle, "mousedown", this.eventMouseDown);
-    Draggables.unregister(this);
+    zDraggables.unregister(this);
   },
   
   currentDelta: function() {
@@ -316,8 +316,8 @@ if (zk.opera || !options.z_dragdrop) //Tom M. Yeh, Potix: Bug 1534426, 1535787 (
   },
   
   initDrag: function(event) {
-    if(typeof Draggable._dragging[this.element] != 'undefined' &&
-      Draggable._dragging[this.element]) return;
+    if(typeof zDraggable._dragging[this.element] != 'undefined' &&
+      zDraggable._dragging[this.element]) return;
     if(Event.isLeftClick(event)) {    
       // abort on form elements, fixes a Firefox issue
       var src = Event.element(event);
@@ -339,10 +339,10 @@ if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer, ev
 	return;
 //Tom M. Yeh, Potix: disable selection
 //zk.disableSelection(document.body); // Bug #1820433
-      var pos     = Position.cumulativeOffset(this.element);
+      var pos     = zPos.cumulativeOffset(this.element);
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
       
-      Draggables.activate(this);
+      zDraggables.activate(this);
 //Jumper Chen, Potix: Bug #1845026
 //We need to ensure that the onBlur event is fired before the onSelect event for consistent among four browsers. 
 	  if (zkau.currentFocus && Event.element(event) != zkau.currentFocus 
@@ -375,7 +375,7 @@ if (ghosting) {
       this._clone = this.element.cloneNode(true);
 this.z_orgpos = this.element.style.position; //Tom M. Yeh, Potix: Bug 1514789
 if (this.z_orgpos != 'absolute')
-      Position.absolutize(this.element);
+      zPos.absolutize(this.element);
       this.element.parentNode.insertBefore(this._clone, this.element);
 }
     }
@@ -396,17 +396,17 @@ if (this.z_orgpos != 'absolute')
       }
     }
     
-    Draggables.notify('onStart', this, event);
+    zDraggables.notify('onStart', this, event);
     if(this.options.starteffect) this.options.starteffect(this.element, this.handle);
   },
   
   updateDrag: function(event, pointer) {
     if(!this.dragging) this.startDrag(event);
-    Position.prepare();
+    zPos.prepare();
 /* Tom M. Yeh, Potix: remove unused codes
-    Droppables.show(pointer, this.element);
+    zDroppables.show(pointer, this.element);
 */
-    Draggables.notify('onDrag', this, event);
+    zDraggables.notify('onDrag', this, event);
     this.draw(pointer, event);
     if(this.options.change) this.options.change(this, pointer, event); //Tom M Yeh, Potix: add pointer
     
@@ -417,9 +417,9 @@ if (this.z_orgpos != 'absolute')
       if (this.options.scroll == window) {
         with(this._getWindowScroll(this.options.scroll)) { p = [ left, top, left+width, top+height ]; }
       } else {
-        p = Position.page(this.options.scroll);
-        p[0] += this.options.scroll.scrollLeft + Position.deltaX;
-        p[1] += this.options.scroll.scrollTop + Position.deltaY;
+        p = zPos.page(this.options.scroll);
+        p[0] += this.options.scroll.scrollLeft + zPos.deltaX;
+        p[1] += this.options.scroll.scrollTop + zPos.deltaY;
         p.push(p[0]+this.options.scroll.offsetWidth);
         p.push(p[1]+this.options.scroll.offsetHeight);
       }
@@ -450,7 +450,7 @@ var ghosting = true;
 if (typeof this.options.ghosting == 'function') ghosting = this.options.ghosting(this, false);
 if (ghosting) {
 if (this.z_orgpos != "absolute") { //Tom M. Yeh, Potix: Bug 1514789
-      Position.relativize(this.element);
+      zPos.relativize(this.element);
 this.element.style.position = this.z_orgpos;
 }
       Element.remove(this._clone);
@@ -459,9 +459,9 @@ this.element.style.position = this.z_orgpos;
     }
 
 /* Tom M. Yeh, Potix: remove unused codes
-    if(success) Droppables.fire(event, this.element);
+    if(success) zDroppables.fire(event, this.element);
 */
-    Draggables.notify('onEnd', this, event);
+    zDraggables.notify('onEnd', this, event);
 
 	var pointer = [Event.pointerX(event), Event.pointerY(event)]; //Tom M. Yeh, Potix: add pointer
     var revert = this.options.revert;
@@ -481,9 +481,9 @@ this.element.style.position = this.z_orgpos;
     if(this.options.endeffect) 
       this.options.endeffect(this.element, event); //Tom M. Yeh, Potix: add event
       	
-    Draggables.deactivate(this);
+    zDraggables.deactivate(this);
 /* Tom M. Yeh, Potix: remove unused codes
-    Droppables.reset();
+    zDroppables.reset();
 */
   },
   
@@ -501,10 +501,10 @@ this.element.style.position = this.z_orgpos;
   },
   
   draw: function(point, event) {
-    var pos = Position.cumulativeOffset(this.element);
+    var pos = zPos.cumulativeOffset(this.element);
     if(this.options.ghosting) {
-      var r   = Position.realOffset(this.element);
-      pos[0] += r[0] - Position.deltaX; pos[1] += r[1] - Position.deltaY;
+      var r   = zPos.realOffset(this.element);
+      pos[0] += r[0] - zPos.deltaX; pos[1] += r[1] - zPos.deltaY;
     }
     
     var d = this.currentDelta();
@@ -560,7 +560,7 @@ if (typeof this.options.draw == 'function') {
     if(this.scrollInterval) {
       clearInterval(this.scrollInterval);
       this.scrollInterval = null;
-      Draggables._lastScrollPointer = null;
+      zDraggables._lastScrollPointer = null;
     }
   },
   
@@ -587,20 +587,20 @@ if (typeof this.options.draw == 'function') {
       this.options.scroll.scrollTop  += this.scrollSpeed[1] * delta / 1000;
     }
     
-    Position.prepare();
+    zPos.prepare();
 /* Tom M. Yeh, Potix: remove unused codes
-    Droppables.show(Draggables._lastPointer, this.element);
+    zDroppables.show(zDraggables._lastPointer, this.element);
 */
-    Draggables.notify('onDrag', this);
+    zDraggables.notify('onDrag', this);
     if (this._isScrollChild) {
-      Draggables._lastScrollPointer = Draggables._lastScrollPointer || $A(Draggables._lastPointer);
-      Draggables._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
-      Draggables._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
-      if (Draggables._lastScrollPointer[0] < 0)
-        Draggables._lastScrollPointer[0] = 0;
-      if (Draggables._lastScrollPointer[1] < 0)
-        Draggables._lastScrollPointer[1] = 0;
-      this.draw(Draggables._lastScrollPointer);
+      zDraggables._lastScrollPointer = zDraggables._lastScrollPointer || z$A(zDraggables._lastPointer);
+      zDraggables._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
+      zDraggables._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
+      if (zDraggables._lastScrollPointer[0] < 0)
+        zDraggables._lastScrollPointer[0] = 0;
+      if (zDraggables._lastScrollPointer[1] < 0)
+        zDraggables._lastScrollPointer[1] = 0;
+      this.draw(zDraggables._lastScrollPointer);
     }
     
     if(this.options.change) this.options.change(this);
@@ -633,12 +633,12 @@ if (typeof this.options.draw == 'function') {
 
 /*--------------------------------------------------------------------------*/
 
-/* Tom M. Yeh, Potix: remove Sortable
-var SortableObserver = Class.create();
-SortableObserver.prototype = {
+/* Tom M. Yeh, Potix: remove zSortable
+var zSortableObserver = zClass.create();
+zSortableObserver.prototype = {
 ...
 }
-var Sortable = {
+var zSortable = {
 ...
 }
 */
@@ -656,7 +656,7 @@ Element.findChildren = function(element, only, recursive, tagName) {
   tagName = tagName.toUpperCase();
   if(only) only = [only].flatten();
   var elements = [];
-  $A(element.childNodes).each( function(e) {
+  z$A(element.childNodes).each( function(e) {
     if(e.tagName && e.tagName.toUpperCase()==tagName &&
       (!only || (Element.classNames(e).detect(function(v) { return only.include(v) }))))
         elements.push(e);

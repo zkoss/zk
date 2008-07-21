@@ -167,7 +167,7 @@ zkSpinner._btnDown= function(evt){
 	
 
 	var btn = $e(cmp.id + "!btn"),
-		ofs = Position.cumulativeOffset(btn);
+		ofs = zPos.cumulativeOffset(btn);
 	if ((Event.pointerY(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
 		zkSpinner._increase(cmp,true);
 		zkSpinner._startAutoIncProc(cmp, true);

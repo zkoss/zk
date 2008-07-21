@@ -64,7 +64,7 @@ _zkselx._addChd = function (uuid, cmp, html) {
 
 ////
 // Seletable //
-zk.Selectable = Class.create();
+zk.Selectable = zClass.create();
 zk.Selectable.prototype = {
 	initialize: function (cmp) {
 		this.id = cmp.id;

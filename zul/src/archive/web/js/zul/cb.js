@@ -696,7 +696,7 @@ zkCmbox.closepp = function (evt) {
 	}
 };
 
-zk.FloatCombo = Class.create();
+zk.FloatCombo = zClass.create();
 Object.extend(Object.extend(zk.FloatCombo.prototype, zk.Floats.prototype), {
 	_close: function (el) {
 		zkCmbox.close(el);

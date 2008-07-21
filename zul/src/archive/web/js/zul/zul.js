@@ -20,13 +20,13 @@ zk.load("zul.lang.msgzul*");
 
 ////
 zul = {};
-zul._movs = {}; //(id, Draggable): movables
+zul._movs = {}; //(id, zDraggable): movables
 
 /////////
 // Movable
 /** Make a component movable (by moving). */
 zul.initMovable = function (cmp, options) {
-	zul._movs[cmp.id] = new Draggable(cmp, options);
+	zul._movs[cmp.id] = new zDraggable(cmp, options);
 };
 /** Undo movable for a component. */
 zul.cleanMovable = function (id) {
@@ -217,7 +217,7 @@ zulHdr.setSizable = function (cmp, sizable) {
 	if (sizable) {
 		if (!zulHdr._szs[id]) {
 			var snap = function (x, y) {return zulHdr._snap(cmp, x, y);};
-			zulHdr._szs[id] = new Draggable(cmp, {
+			zulHdr._szs[id] = new zDraggable(cmp, {
 				starteffect: zk.voidf,
 				endeffect: zulHdr._endsizing, ghosting: zulHdr._ghostsizing,
 				revert: true, ignoredrag: zulHdr._ignoresizing, snap: snap,

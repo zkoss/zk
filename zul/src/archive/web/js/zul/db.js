@@ -22,7 +22,7 @@ zk.load("zul.widget");
 //Calendar//
 zkCal = {};
 
-zk.Cal = Class.create();
+zk.Cal = zClass.create();
 zk.Cal.prototype = {
 	initialize: function (cmp, popup) {
 		this.id = cmp.id;
@@ -661,7 +661,7 @@ zkDtbox.closepp = function (evt) {
 		if (pp.onclick) return;
 	}
 };
-zk.FloatDatebox = Class.create();
+zk.FloatDatebox = zClass.create();
 Object.extend(Object.extend(zk.FloatDatebox.prototype, zk.Float.prototype), {
 	_close: function (el) {
 		zkDtbox.close(el);

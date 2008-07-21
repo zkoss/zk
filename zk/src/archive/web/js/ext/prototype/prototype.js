@@ -9,7 +9,7 @@
 if (!window.z_prot_js) {
 z_prot_js = true;
 
-var Prototype = {
+var zPrototype = {
   Version: '1.5.0',
 /* Tom M. Yeh, Potix: remove unused codes
   BrowserFeatures: {
@@ -21,7 +21,7 @@ var Prototype = {
   K: function(x) { return x }
 }
 
-var Class = {
+var zClass = {
   create: function() {
     return function() {
       this.initialize.apply(this, arguments);
@@ -71,16 +71,16 @@ Object.extend(Object, {
 });
 
 Function.prototype.bind = function() {
-  var __method = this, args = $A(arguments), object = args.shift();
+  var __method = this, args = z$A(arguments), object = args.shift();
   return function() {
-    return __method.apply(object, args.concat($A(arguments)));
+    return __method.apply(object, args.concat(z$A(arguments)));
   }
 }
 
 Function.prototype.bindAsEventListener = function(object) {
-  var __method = this, args = $A(arguments), object = args.shift();
+  var __method = this, args = z$A(arguments), object = args.shift();
   return function(event) {
-    return __method.apply(object, [( event || window.event)].concat(args).concat($A(arguments)));
+    return __method.apply(object, [( event || window.event)].concat(args).concat(z$A(arguments)));
   }
 }
 
@@ -96,7 +96,7 @@ Object.extend(Number.prototype, {
   },
 
   times: function(iterator) {
-    $R(0, this, true).each(iterator);
+    z$R(0, this, true).each(iterator);
     return this;
   }
 });
@@ -120,7 +120,7 @@ var Try = {
 */
 /*--------------------------------------------------------------------------*/
 /* Tom M. Yeh, Potix: remove unused codes
-var PeriodicalExecuter = Class.create();
+var PeriodicalExecuter = zClass.create();
 PeriodicalExecuter.prototype = {
   initialize: function(callback, frequency) {
     this.callback = callback;
@@ -206,12 +206,12 @@ Object.extend(String.prototype, {
   },
 
   stripScripts: function() {
-    return this.replace(new RegExp(Prototype.ScriptFragment, 'img'), '');
+    return this.replace(new RegExp(zPrototype.ScriptFragment, 'img'), '');
   },
 
   extractScripts: function() {
-    var matchAll = new RegExp(Prototype.ScriptFragment, 'img');
-    var matchOne = new RegExp(Prototype.ScriptFragment, 'im');
+    var matchAll = new RegExp(zPrototype.ScriptFragment, 'img');
+    var matchOne = new RegExp(zPrototype.ScriptFragment, 'im');
     return (this.match(matchAll) || []).map(function(scriptTag) {
       return (scriptTag.match(matchOne) || ['', ''])[1];
     });
@@ -232,7 +232,7 @@ Object.extend(String.prototype, {
     var div = document.createElement('div');
     div.innerHTML = this.stripTags();
     return div.childNodes[0] ? (div.childNodes.length > 1 ?
-      $A(div.childNodes).inject('',function(memo,node){ return memo+node.nodeValue }) :
+      z$A(div.childNodes).inject('',function(memo,node){ return memo+node.nodeValue }) :
       div.childNodes[0].nodeValue) : '';
   },
 
@@ -302,19 +302,19 @@ Object.extend(String.prototype, {
 
 String.prototype.gsub.prepareReplacement = function(replacement) {
   if (typeof replacement == 'function') return replacement;
-  var template = new Template(replacement);
+  var template = new zTemplate(replacement);
   return function(match) { return template.evaluate(match) };
 }
 
 /* Tom M. Yeh, Potix: remove unused codes
 String.prototype.parseQuery = String.prototype.toQueryParams;
 */
-var Template = Class.create();
-Template.Pattern = /(^|.|\r|\n)(#\{(.*?)\})/;
-Template.prototype = {
+var zTemplate = zClass.create();
+zTemplate.Pattern = /(^|.|\r|\n)(#\{(.*?)\})/;
+zTemplate.prototype = {
   initialize: function(template, pattern) {
     this.template = template.toString();
-    this.pattern  = pattern || Template.Pattern;
+    this.pattern  = pattern || zTemplate.Pattern;
   },
 
   evaluate: function(object) {
@@ -326,10 +326,10 @@ Template.prototype = {
   }
 }
 
-var $break    = new Object();
-var $continue = new Object();
+var z$break    = new Object();
+var z$continue = new Object();
 
-var Enumerable = {
+var zEnum = {
   each: function(iterator) {
     var index = 0;
     try {
@@ -337,11 +337,11 @@ var Enumerable = {
         try {
           iterator(value, index++);
         } catch (e) {
-          if (e != $continue) throw e;
+          if (e != z$continue) throw e;
         }
       });
     } catch (e) {
-      if (e != $break) throw e;
+      if (e != z$break) throw e;
     }
     return this;
   },
@@ -357,8 +357,8 @@ var Enumerable = {
   all: function(iterator) {
     var result = true;
     this.each(function(value, index) {
-      result = result && !!(iterator || Prototype.K)(value, index);
-      if (!result) throw $break;
+      result = result && !!(iterator || zPrototype.K)(value, index);
+      if (!result) throw z$break;
     });
     return result;
   },
@@ -366,8 +366,8 @@ var Enumerable = {
   any: function(iterator) {
     var result = false;
     this.each(function(value, index) {
-      if (result = !!(iterator || Prototype.K)(value, index))
-        throw $break;
+      if (result = !!(iterator || zPrototype.K)(value, index))
+        throw z$break;
     });
     return result;
   },
@@ -375,7 +375,7 @@ var Enumerable = {
   collect: function(iterator) {
     var results = [];
     this.each(function(value, index) {
-      results.push((iterator || Prototype.K)(value, index));
+      results.push((iterator || zPrototype.K)(value, index));
     });
     return results;
   },
@@ -385,7 +385,7 @@ var Enumerable = {
     this.each(function(value, index) {
       if (iterator(value, index)) {
         result = value;
-        throw $break;
+        throw z$break;
       }
     });
     return result;
@@ -406,7 +406,7 @@ var Enumerable = {
     this.each(function(value, index) {
       var stringValue = value.toString();
       if (stringValue.match(pattern))
-        results.push((iterator || Prototype.K)(value, index));
+        results.push((iterator || zPrototype.K)(value, index));
     })
     return results;
   },
@@ -416,7 +416,7 @@ var Enumerable = {
     this.each(function(value) {
       if (value == object) {
         found = true;
-        throw $break;
+        throw z$break;
       }
     });
     return found;
@@ -439,7 +439,7 @@ var Enumerable = {
   },
 
   invoke: function(method) {
-    var args = $A(arguments).slice(1);
+    var args = z$A(arguments).slice(1);
     return this.map(function(value) {
       return value[method].apply(value, args);
     });
@@ -448,7 +448,7 @@ var Enumerable = {
   max: function(iterator) {
     var result;
     this.each(function(value, index) {
-      value = (iterator || Prototype.K)(value, index);
+      value = (iterator || zPrototype.K)(value, index);
       if (result == undefined || value >= result)
         result = value;
     });
@@ -459,7 +459,7 @@ var Enumerable = {
   min: function(iterator) {
     var result;
     this.each(function(value, index) {
-      value = (iterator || Prototype.K)(value, index);
+      value = (iterator || zPrototype.K)(value, index);
       if (result == undefined || value < result)
         result = value;
     });
@@ -469,7 +469,7 @@ var Enumerable = {
   partition: function(iterator) {
     var trues = [], falses = [];
     this.each(function(value, index) {
-      ((iterator || Prototype.K)(value, index) ?
+      ((iterator || zPrototype.K)(value, index) ?
         trues : falses).push(value);
     });
     return [trues, falses];
@@ -508,7 +508,7 @@ var Enumerable = {
   },
 
   zip: function() {
-    var iterator = Prototype.K, args = $A(arguments);
+    var iterator = zPrototype.K, args = z$A(arguments);
     if (typeof args.last() == 'function')
       iterator = args.pop();
 
@@ -523,19 +523,19 @@ var Enumerable = {
   },
 
   inspect: function() {
-    return '#<Enumerable:' + this.toArray().inspect() + '>';
+    return '#<zEnum:' + this.toArray().inspect() + '>';
 */
   }
 }
 
-Object.extend(Enumerable, {
-  map:     Enumerable.collect,
-  find:    Enumerable.detect,
-  select:  Enumerable.findAll,
-  member:  Enumerable.include,
-  entries: Enumerable.toArray
+Object.extend(zEnum, {
+  map:     zEnum.collect,
+  find:    zEnum.detect,
+  select:  zEnum.findAll,
+  member:  zEnum.include,
+  entries: zEnum.toArray
 });
-var $A = Array.from = function(iterable) {
+var z$A = Array.from = function(iterable) {
   if (!iterable) return [];
   if (iterable.toArray) {
     return iterable.toArray();
@@ -547,7 +547,7 @@ var $A = Array.from = function(iterable) {
   }
 }
 
-Object.extend(Array.prototype, Enumerable);
+Object.extend(Array.prototype, zEnum);
 
 if (!Array.prototype._reverse)
   Array.prototype._reverse = Array.prototype.reverse;
@@ -587,7 +587,7 @@ Object.extend(Array.prototype, {
   },
 
   without: function() {
-    var values = $A(arguments);
+    var values = z$A(arguments);
     return this.select(function(value) {
       return !values.include(value);
     });
@@ -631,7 +631,7 @@ Object.extend(Array.prototype, {
 
 Array.prototype.toArray = Array.prototype.clone;
 
-function $w(string){
+function z$w(string){
   string = string.strip();
   return string ? string.split(/\s+/) : [];
 }
@@ -651,12 +651,12 @@ if(window.opera){
     return array;
   }
 }
-var Hash = function(obj) {
+var zHash = function(obj) {
   Object.extend(this, obj || {});
 };
 
 /* Tom M. Yeh, Potix: remove unused codes
-Object.extend(Hash, {
+Object.extend(zHash, {
   toQueryString: function(obj) {
     var parts = [];
 
@@ -683,12 +683,12 @@ Object.extend(Hash, {
   }
 });
 */
-Object.extend(Hash.prototype, Enumerable);
-Object.extend(Hash.prototype, {
+Object.extend(zHash.prototype, zEnum);
+Object.extend(zHash.prototype, {
   _each: function(iterator) {
     for (var key in this) {
       var value = this[key];
-      if (value && value == Hash.prototype[key]) continue;
+      if (value && value == zHash.prototype[key]) continue;
 
       var pair = [key, value];
       pair.key = key;
@@ -707,7 +707,7 @@ Object.extend(Hash.prototype, {
 
 /* Tom M. Yeh, Potix: remove unused codes
   merge: function(hash) {
-    return $H(hash).inject(this, function(mergedHash, pair) {
+    return z$H(hash).inject(this, function(mergedHash, pair) {
       mergedHash[pair.key] = pair.value;
       return mergedHash;
     });
@@ -731,24 +731,24 @@ Object.extend(Hash.prototype, {
   },
 
   toQueryString: function() {
-    return Hash.toQueryString(this);
+    return zHash.toQueryString(this);
   },
 
   inspect: function() {
-    return '#<Hash:{' + this.map(function(pair) {
+    return '#<zHash:{' + this.map(function(pair) {
       return pair.map(Object.inspect).join(': ');
     }).join(', ') + '}>';
 */
   }
 });
 
-function $H(object) {
-  if (object && object.constructor == Hash) return object;
-  return new Hash(object);
+function z$H(object) {
+  if (object && object.constructor == zHash) return object;
+  return new zHash(object);
 };
-ObjectRange = Class.create();
-Object.extend(ObjectRange.prototype, Enumerable);
-Object.extend(ObjectRange.prototype, {
+zObjectRange = zClass.create();
+Object.extend(zObjectRange.prototype, zEnum);
+Object.extend(zObjectRange.prototype, {
   initialize: function(start, end, exclusive) {
     this.start = start;
     this.end = end;
@@ -772,8 +772,8 @@ Object.extend(ObjectRange.prototype, {
   }
 });
 
-var $R = function(start, end, exclusive) {
-  return new ObjectRange(start, end, exclusive);
+var z$R = function(start, end, exclusive) {
+  return new zObjectRange(start, end, exclusive);
 }
 
 /* Tom M. Yeh, Potix: remove Ajax
@@ -781,10 +781,10 @@ var Ajax = {
 ...
 }
 */
-function $(element) {
+function z$(element) {
   if (arguments.length > 1) {
     for (var i = 0, elements = [], length = arguments.length; i < length; i++)
-      elements.push($(arguments[i]));
+      elements.push(z$(arguments[i]));
     return elements;
   }
   if (typeof element == 'string')
@@ -793,10 +793,10 @@ function $(element) {
 }
 
 /* Tom M. Yeh, Potix: remove unused codes
-if (Prototype.BrowserFeatures.XPath) {
+if (zPrototype.BrowserFeatures.XPath) {
   document._getElementsByXPath = function(expression, parentElement) {
     var results = [];
-    var query = document.evaluate(expression, $(parentElement) || document,
+    var query = document.evaluate(expression, z$(parentElement) || document,
       null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
     for (var i = 0, length = query.snapshotLength; i < length; i++)
       results.push(query.snapshotItem(i));
@@ -805,11 +805,11 @@ if (Prototype.BrowserFeatures.XPath) {
 }
 
 document.getElementsByClassName = function(className, parentElement) {
-  if (Prototype.BrowserFeatures.XPath) {
+  if (zPrototype.BrowserFeatures.XPath) {
     var q = ".//*[contains(concat(' ', @class, ' '), ' " + className + " ')]";
     return document._getElementsByXPath(q, parentElement);
   } else {
-    var children = ($(parentElement) || document.body).getElementsByTagName('*');
+    var children = (z$(parentElement) || document.body).getElementsByTagName('*');
     var elements = [], child;
     for (var i = 0, length = children.length; i < length; i++) {
       child = children[i];
@@ -853,34 +853,34 @@ Element.extend = function(element) {
 Element.extend.cache = {
   findOrStore: function(value) {
     return this[value] = this[value] || function() {
-      return value.apply(null, [this].concat($A(arguments)));
+      return value.apply(null, [this].concat(z$A(arguments)));
     }
   }
 };
 
 Element.Methods = {
   visible: function(element) {
-    return $(element).style.display != 'none';
+    return z$(element).style.display != 'none';
   },
 
   toggle: function(element) {
-    element = $(element);
+    element = z$(element);
     Element[Element.visible(element) ? 'hide' : 'show'](element);
     return element;
   },
 
   hide: function(element) {
-    $(element).style.display = 'none';
+    z$(element).style.display = 'none';
     return element;
   },
 
   show: function(element) {
-    $(element).style.display = '';
+    z$(element).style.display = '';
     return element;
   },
 
   remove: function(element) {
-    element = $(element);
+    element = z$(element);
     element.parentNode.removeChild(element);
     return element;
   },
@@ -888,13 +888,13 @@ Element.Methods = {
 /* Tom M. Yeh, Potix: remove unused codes
   update: function(element, html) {
     html = typeof html == 'undefined' ? '' : html.toString();
-    $(element).innerHTML = html.stripScripts();
+    z$(element).innerHTML = html.stripScripts();
     setTimeout(function() {html.evalScripts()}, 10);
     return element;
   },
 
   replace: function(element, html) {
-    element = $(element);
+    element = z$(element);
     html = typeof html == 'undefined' ? '' : html.toString();
     if (element.outerHTML) {
       element.outerHTML = html.stripScripts();
@@ -909,9 +909,9 @@ Element.Methods = {
   },
 
   inspect: function(element) {
-    element = $(element);
+    element = z$(element);
     var result = '<' + element.tagName.toLowerCase();
-    $H({'id': 'id', 'className': 'class'}).each(function(pair) {
+    z$H({'id': 'id', 'className': 'class'}).each(function(pair) {
       var property = pair.first(), attribute = pair.last();
       var value = (element[property] || '').toString();
       if (value) result += ' ' + attribute + '=' + value.inspect(true);
@@ -920,7 +920,7 @@ Element.Methods = {
   },
 
   recursivelyCollect: function(element, property) {
-    element = $(element);
+    element = z$(element);
     var elements = [];
     while (element = element[property])
       if (element.nodeType == 1)
@@ -929,61 +929,61 @@ Element.Methods = {
   },
 
   ancestors: function(element) {
-    return $(element).recursivelyCollect('parentNode');
+    return z$(element).recursivelyCollect('parentNode');
   },
 */
   descendants: function(element) {
-    return $A($(element).getElementsByTagName('*'));
+    return z$A(z$(element).getElementsByTagName('*'));
   },
 
 /* Tom M. Yeh, Potix: remove unused codes
   immediateDescendants: function(element) {
-    if (!(element = $(element).firstChild)) return [];
+    if (!(element = z$(element).firstChild)) return [];
     while (element && element.nodeType != 1) element = element.nextSibling;
-    if (element) return [element].concat($(element).nextSiblings());
+    if (element) return [element].concat(z$(element).nextSiblings());
     return [];
   },
 
   previousSiblings: function(element) {
-    return $(element).recursivelyCollect('previousSibling');
+    return z$(element).recursivelyCollect('previousSibling');
   },
 
   nextSiblings: function(element) {
-    return $(element).recursivelyCollect('nextSibling');
+    return z$(element).recursivelyCollect('nextSibling');
   },
 
   siblings: function(element) {
-    element = $(element);
+    element = z$(element);
     return element.previousSiblings().reverse().concat(element.nextSiblings());
   },
 */
   match: function(element, selector) {
     if (typeof selector == 'string')
-      selector = new Selector(selector);
-    return selector.match($(element));
+      selector = new zSelector(selector);
+    return selector.match(z$(element));
   },
 
 /* Tom M. Yeh, Potix: remove unused codes
   up: function(element, expression, index) {
-    return Selector.findElement($(element).ancestors(), expression, index);
+    return zSelector.findElement(z$(element).ancestors(), expression, index);
   },
 */
   down: function(element, expression, index) {
-    return Selector.findElement($(element).descendants(), expression, index);
+    return zSelector.findElement(z$(element).descendants(), expression, index);
   },
 
 /* Tom M. Yeh, Potix: remove unused codes
   previous: function(element, expression, index) {
-    return Selector.findElement($(element).previousSiblings(), expression, index);
+    return zSelector.findElement(z$(element).previousSiblings(), expression, index);
   },
 
   next: function(element, expression, index) {
-    return Selector.findElement($(element).nextSiblings(), expression, index);
+    return zSelector.findElement(z$(element).nextSiblings(), expression, index);
   },
 
   getElementsBySelector: function() {
-    var args = $A(arguments), element = $(args.shift());
-    return Selector.findChildElements(element, args);
+    var args = z$A(arguments), element = z$(args.shift());
+    return zSelector.findChildElements(element, args);
   },
 
   getElementsByClassName: function(element, className) {
@@ -991,7 +991,7 @@ Element.Methods = {
   },
 */
   readAttribute: function(element, name) {
-    element = $(element);
+    element = z$(element);
     if (document.all && !window.opera) {
       var t = Element._attributeTranslations;
       if (t.values[name]) return t.values[name](element, name);
@@ -1004,11 +1004,11 @@ Element.Methods = {
 
 /* Tom M. Yeh, Potix: remove unused codes
   getHeight: function(element) {
-    return $(element).getDimensions().height;
+    return z$(element).getDimensions().height;
   },
 
   getWidth: function(element) {
-    return $(element).getDimensions().width;
+    return z$(element).getDimensions().width;
   },
 */
   classNames: function(element) {
@@ -1016,7 +1016,7 @@ Element.Methods = {
   },
 
   hasClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = z$(element))) return;
     var elementClassName = element.className;
     if (elementClassName.length == 0) return false;
     if (elementClassName == className ||
@@ -1026,37 +1026,37 @@ Element.Methods = {
   },
 
   addClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = z$(element))) return;
     Element.classNames(element).add(className);
     return element;
   },
 
   removeClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = z$(element))) return;
     Element.classNames(element).remove(className);
     return element;
   },
 
 /* Tom M. Yeh, Potix: remove unused codes
   toggleClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    if (!(element = z$(element))) return;
     Element.classNames(element)[element.hasClassName(className) ? 'remove' : 'add'](className);
     return element;
   },
 */
   observe: function() {
     Event.observe.apply(Event, arguments);
-    return $A(arguments).first();
+    return z$A(arguments).first();
   },
 
   stopObserving: function() {
     Event.stopObserving.apply(Event, arguments);
-    return $A(arguments).first();
+    return z$A(arguments).first();
   },
 
   // removes whitespace-only text node children
   cleanWhitespace: function(element) {
-    element = $(element);
+    element = z$(element);
     var node = element.firstChild;
     while (node) {
       var nextNode = node.nextSibling;
@@ -1069,25 +1069,25 @@ Element.Methods = {
 
 /* Tom M. Yeh, Potix: remove unused codes
   empty: function(element) {
-    return $(element).innerHTML.match(/^\s*$/);
+    return z$(element).innerHTML.match(/^\s*$/);
   },
 */
   descendantOf: function(element, ancestor) {
-    element = $(element), ancestor = $(ancestor);
+    element = z$(element), ancestor = z$(ancestor);
     while (element = element.parentNode)
       if (element == ancestor) return true;
     return false;
   },
 
   scrollTo: function(element) {
-    element = $(element);
-    var pos = Position.cumulativeOffset(element);
+    element = z$(element);
+    var pos = zPos.cumulativeOffset(element);
     window.scrollTo(pos[0], pos[1]);
     return element;
   },
 
   getStyle: function(element, style) {
-    element = $(element);
+    element = z$(element);
     if (['float','cssFloat'].include(style))
       style = (typeof element.style.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
     style = style.camelize();
@@ -1116,7 +1116,7 @@ Element.Methods = {
   },
 
   setStyle: function(element, style) {
-    element = $(element);
+    element = z$(element);
     for (var name in style) {
       var value = style[name];
       if(name == 'opacity') {
@@ -1141,8 +1141,8 @@ Element.Methods = {
   },
 
   getDimensions: function(element) {
-    element = $(element);
-    var display = $(element).getStyle('display');
+    element = z$(element);
+    var display = z$(element).getStyle('display');
     if (display != 'none' && display != null) // Safari bug
       return {width: zk.offsetWidth(element), height: zk.offsetHeight(element)}; //Tom M. Yeh, Potix: safari bug
 
@@ -1164,7 +1164,7 @@ Element.Methods = {
   },
 
   makePositioned: function(element) {
-    element = $(element);
+    element = z$(element);
     var pos = Element.getStyle(element, 'position');
     if (pos == 'static' || !pos) {
       element._madePositioned = true;
@@ -1180,7 +1180,7 @@ Element.Methods = {
   },
 
   undoPositioned: function(element) {
-    element = $(element);
+    element = z$(element);
     if (element._madePositioned) {
       element._madePositioned = undefined;
       element.style.position =
@@ -1193,7 +1193,7 @@ Element.Methods = {
   },
 
   makeClipping: function(element) {
-    element = $(element);
+    element = z$(element);
     if (element._clipping) return element;
 	element._clipping = true;
     element._overflow = element.style.overflow;
@@ -1208,7 +1208,7 @@ Element.Methods = {
   },
 
   undoClipping: function(element) {
-    element = $(element);
+    element = z$(element);
     if (!element._clipping) return element;
 //Tom M. Yeh, Potix
 //Bug 1822717 and 1882277
@@ -1243,7 +1243,7 @@ Element._attributeTranslations.values = {
   },
 
   _flag: function(element, attribute) {
-    return $(element).hasAttribute(attribute) ? attribute : null;
+    return z$(element).hasAttribute(attribute) ? attribute : null;
   },
 
   style: function(element) {
@@ -1270,14 +1270,14 @@ Element.Methods.Simulated = {
   hasAttribute: function(element, attribute) {
     var t = Element._attributeTranslations;
     attribute = t.names[attribute] || attribute;
-    return $(element).getAttributeNode(attribute).specified;
+    return z$(element).getAttributeNode(attribute).specified;
   }
 };
 
 // IE is missing .innerHTML support for TABLE-related elements
 if (document.all && !window.opera){
   Element.Methods.update = function(element, html) {
-    element = $(element);
+    element = z$(element);
     html = typeof html == 'undefined' ? '' : html.toString();
     var tagName = element.tagName.toUpperCase();
     if (['THEAD','TBODY','TR','TD'].include(tagName)) {
@@ -1296,12 +1296,12 @@ if (document.all && !window.opera){
           div.innerHTML = '<table><tbody><tr><td>' +  html.stripScripts() + '</td></tr></tbody></table>';
           depth = 4;
       }
-      $A(element.childNodes).each(function(node){
+      z$A(element.childNodes).each(function(node){
         element.removeChild(node)
       });
       depth.times(function(){ div = div.firstChild });
 
-      $A(div.childNodes).each(
+      z$A(div.childNodes).each(
         function(node){ element.appendChild(node) });
     } else {
       element.innerHTML = html.stripScripts();
@@ -1362,7 +1362,7 @@ Abstract.Insertion = function(adjacency) {
 
 Abstract.Insertion.prototype = {
   initialize: function(element, content) {
-    this.element = $(element);
+    this.element = z$(element);
     this.content = content.stripScripts();
 
     if (this.adjacency && this.element.insertAdjacentHTML) {
@@ -1388,13 +1388,13 @@ Abstract.Insertion.prototype = {
   contentFromAnonymousTable: function() {
     var div = document.createElement('div');
     div.innerHTML = '<table><tbody>' + this.content + '</tbody></table>';
-    return $A(div.childNodes[0].childNodes[0].childNodes);
+    return z$A(div.childNodes[0].childNodes[0].childNodes);
   }
 }
 
 var Insertion = new Object();
 
-Insertion.Before = Class.create();
+Insertion.Before = zClass.create();
 Insertion.Before.prototype = Object.extend(new Abstract.Insertion('beforeBegin'), {
   initializeRange: function() {
     this.range.setStartBefore(this.element);
@@ -1407,7 +1407,7 @@ Insertion.Before.prototype = Object.extend(new Abstract.Insertion('beforeBegin')
   }
 });
 
-Insertion.Top = Class.create();
+Insertion.Top = zClass.create();
 Insertion.Top.prototype = Object.extend(new Abstract.Insertion('afterBegin'), {
   initializeRange: function() {
     this.range.selectNodeContents(this.element);
@@ -1421,7 +1421,7 @@ Insertion.Top.prototype = Object.extend(new Abstract.Insertion('afterBegin'), {
   }
 });
 
-Insertion.Bottom = Class.create();
+Insertion.Bottom = zClass.create();
 Insertion.Bottom.prototype = Object.extend(new Abstract.Insertion('beforeEnd'), {
   initializeRange: function() {
     this.range.selectNodeContents(this.element);
@@ -1435,7 +1435,7 @@ Insertion.Bottom.prototype = Object.extend(new Abstract.Insertion('beforeEnd'), 
   }
 });
 
-Insertion.After = Class.create();
+Insertion.After = zClass.create();
 Insertion.After.prototype = Object.extend(new Abstract.Insertion('afterEnd'), {
   initializeRange: function() {
     this.range.setStartAfter(this.element);
@@ -1451,10 +1451,10 @@ Insertion.After.prototype = Object.extend(new Abstract.Insertion('afterEnd'), {
 */
 /*--------------------------------------------------------------------------*/
 
-Element.ClassNames = Class.create();
+Element.ClassNames = zClass.create();
 Element.ClassNames.prototype = {
   initialize: function(element) {
-    this.element = $(element);
+    this.element = z$(element);
   },
 
   _each: function(iterator) {
@@ -1469,22 +1469,22 @@ Element.ClassNames.prototype = {
 
   add: function(classNameToAdd) {
     if (this.include(classNameToAdd)) return;
-    this.set($A(this).concat(classNameToAdd).join(' '));
+    this.set(z$A(this).concat(classNameToAdd).join(' '));
   },
 
   remove: function(classNameToRemove) {
     if (!this.include(classNameToRemove)) return;
-    this.set($A(this).without(classNameToRemove).join(' '));
+    this.set(z$A(this).without(classNameToRemove).join(' '));
   },
 
   toString: function() {
-    return $A(this).join(' ');
+    return z$A(this).join(' ');
   }
 };
 
-Object.extend(Element.ClassNames.prototype, Enumerable);
-var Selector = Class.create();
-Selector.prototype = {
+Object.extend(Element.ClassNames.prototype, zEnum);
+var zSelector = zClass.create();
+zSelector.prototype = {
   initialize: function(expression) {
     this.params = {classNames: []};
     this.expression = expression.toString().strip();
@@ -1559,13 +1559,13 @@ Selector.prototype = {
 
 // Tom M. Yeh, Potix: make it compressable with YUI compressor
   compileMatcher: function() {
-    this.match = new Function('element', 'if (!element.tagName) return false; element = $(element); return ' + this.buildMatchExpression());
+    this.match = new Function('element', 'if (!element.tagName) return false; element = z$(element); return ' + this.buildMatchExpression());
   },
 
   findElements: function(scope) {
     var element;
 
-    if (element = $(this.params.id))
+    if (element = z$(this.params.id))
       if (this.match(element))
         if (!scope || Element.childOf(element, scope))
           return [element];
@@ -1585,22 +1585,22 @@ Selector.prototype = {
   }
 }
 
-Object.extend(Selector, {
+Object.extend(zSelector, {
   matchElements: function(elements, expression) {
-    var selector = new Selector(expression);
+    var selector = new zSelector(expression);
     return elements.select(selector.match.bind(selector)).map(Element.extend);
   },
 
   findElement: function(elements, expression, index) {
     if (typeof expression == 'number') index = expression, expression = false;
-    return Selector.matchElements(elements, expression || '*')[index || 0];
+    return zSelector.matchElements(elements, expression || '*')[index || 0];
 /* Tom M. Yeh, Potix: remove unused codes
   },
 
   findChildElements: function(element, expressions) {
     return expressions.map(function(expression) {
       return expression.match(/[^\s"]+(?:"[^"]*"[^\s"]+)*\/g).inject([null], function(results, expr) {
-        var selector = new Selector(expr);
+        var selector = new zSelector(expr);
         return results.inject([], function(elements, result) {
           return elements.concat(selector.findElements(result || element));
         });
@@ -1611,20 +1611,20 @@ Object.extend(Selector, {
 });
 
 /* Tom M. Yeh, Potix: remove unused codes
-function $$() {
-  return Selector.findChildElements(document, $A(arguments));
+function $z$() {
+  return zSelector.findChildElements(document, z$A(arguments));
 }
 
 var Form = {
   reset: function(form) {
-    $(form).reset();
+    z$(form).reset();
     return form;
   },
 
   serializeElements: function(elements, getHash) {
     var data = elements.inject({}, function(result, element) {
       if (!element.disabled && element.name) {
-        var key = element.name, value = $(element).getValue();
+        var key = element.name, value = z$(element).getValue();
         if (value != undefined) {
           if (result[key]) {
             if (result[key].constructor != Array) result[key] = [result[key]];
@@ -1636,7 +1636,7 @@ var Form = {
       return result;
     });
 
-    return getHash ? data : Hash.toQueryString(data);
+    return getHash ? data : zHash.toQueryString(data);
   }
 };
 
@@ -1646,7 +1646,7 @@ Form.Methods = {
   },
 
   getElements: function(form) {
-    return $A($(form).getElementsByTagName('*')).inject([],
+    return z$A(z$(form).getElementsByTagName('*')).inject([],
       function(elements, child) {
         if (Form.Element.Serializers[child.tagName.toLowerCase()])
           elements.push(Element.extend(child));
@@ -1656,10 +1656,10 @@ Form.Methods = {
   },
 
   getInputs: function(form, typeName, name) {
-    form = $(form);
+    form = z$(form);
     var inputs = form.getElementsByTagName('input');
 
-    if (!typeName && !name) return $A(inputs).map(Element.extend);
+    if (!typeName && !name) return z$A(inputs).map(Element.extend);
 
     for (var i = 0, matchingInputs = [], length = inputs.length; i < length; i++) {
       var input = inputs[i];
@@ -1672,7 +1672,7 @@ Form.Methods = {
   },
 
   disable: function(form) {
-    form = $(form);
+    form = z$(form);
     form.getElements().each(function(element) {
       element.blur();
       element.disabled = 'true';
@@ -1681,7 +1681,7 @@ Form.Methods = {
   },
 
   enable: function(form) {
-    form = $(form);
+    form = z$(form);
     form.getElements().each(function(element) {
       element.disabled = '';
     });
@@ -1689,14 +1689,14 @@ Form.Methods = {
   },
 
   findFirstElement: function(form) {
-    return $(form).getElements().find(function(element) {
+    return z$(form).getElements().find(function(element) {
       return element.type != 'hidden' && !element.disabled &&
         ['input', 'select', 'textarea'].include(element.tagName.toLowerCase());
     });
   },
 
   focusFirstElement: function(form) {
-    form = $(form);
+    form = z$(form);
     form.findFirstElement().activate();
     return form;
   }
@@ -1708,47 +1708,47 @@ Object.extend(Form, Form.Methods);
 /* Tom M. Yeh, Potix: remove unused codes
 Form.Element = {
   focus: function(element) {
-    $(element).focus();
+    z$(element).focus();
     return element;
   },
 
   select: function(element) {
-    $(element).select();
+    z$(element).select();
     return element;
   }
 }
 
 Form.Element.Methods = {
   serialize: function(element) {
-    element = $(element);
+    element = z$(element);
     if (!element.disabled && element.name) {
       var value = element.getValue();
       if (value != undefined) {
         var pair = {};
         pair[element.name] = value;
-        return Hash.toQueryString(pair);
+        return zHash.toQueryString(pair);
       }
     }
     return '';
   },
 
   getValue: function(element) {
-    element = $(element);
+    element = z$(element);
     var method = element.tagName.toLowerCase();
     return Form.Element.Serializers[method](element);
   },
 
   clear: function(element) {
-    $(element).value = '';
+    z$(element).value = '';
     return element;
   },
 
   present: function(element) {
-    return $(element).value != '';
+    return z$(element).value != '';
   },
 
   activate: function(element) {
-    element = $(element);
+    element = z$(element);
     element.focus();
     if (element.select && ( element.tagName.toLowerCase() != 'input' ||
       !['button', 'reset', 'submit'].include(element.type) ) )
@@ -1757,13 +1757,13 @@ Form.Element.Methods = {
   },
 
   disable: function(element) {
-    element = $(element);
+    element = z$(element);
     element.disabled = true;
     return element;
   },
 
   enable: function(element) {
-    element = $(element);
+    element = z$(element);
     element.blur();
     element.disabled = false;
     return element;
@@ -1828,7 +1828,7 @@ Abstract.TimedObserver = function() {}
 Abstract.TimedObserver.prototype = {
   initialize: function(element, frequency, callback) {
     this.frequency = frequency;
-    this.element   = $(element);
+    this.element   = z$(element);
     this.callback  = callback;
 
     this.lastValue = this.getValue();
@@ -1850,14 +1850,14 @@ Abstract.TimedObserver.prototype = {
   }
 }
 
-Form.Element.Observer = Class.create();
+Form.Element.Observer = zClass.create();
 Form.Element.Observer.prototype = Object.extend(new Abstract.TimedObserver(), {
   getValue: function() {
     return Form.Element.getValue(this.element);
   }
 });
 
-Form.Observer = Class.create();
+Form.Observer = zClass.create();
 Form.Observer.prototype = Object.extend(new Abstract.TimedObserver(), {
   getValue: function() {
     return Form.serialize(this.element);
@@ -1869,7 +1869,7 @@ Form.Observer.prototype = Object.extend(new Abstract.TimedObserver(), {
 Abstract.EventObserver = function() {}
 Abstract.EventObserver.prototype = {
   initialize: function(element, callback) {
-    this.element  = $(element);
+    this.element  = z$(element);
     this.callback = callback;
 
     this.lastValue = this.getValue();
@@ -1906,14 +1906,14 @@ Abstract.EventObserver.prototype = {
   }
 }
 
-Form.Element.EventObserver = Class.create();
+Form.Element.EventObserver = zClass.create();
 Form.Element.EventObserver.prototype = Object.extend(new Abstract.EventObserver(), {
   getValue: function() {
     return Form.Element.getValue(this.element);
   }
 });
 
-Form.EventObserver = Class.create();
+Form.EventObserver = zClass.create();
 Form.EventObserver.prototype = Object.extend(new Abstract.EventObserver(), {
   getValue: function() {
     return Form.serialize(this.element);
@@ -2035,7 +2035,7 @@ Object.extend(Event, {
   },
 
   observe: function(element, name, observer, useCapture) {
-    element = $(element);
+    element = z$(element);
     useCapture = useCapture || false;
 
     if (name == 'keypress' &&
@@ -2047,7 +2047,7 @@ Object.extend(Event, {
   },
 
   stopObserving: function(element, name, observer, useCapture) {
-    element = $(element);
+    element = z$(element);
     useCapture = useCapture || false;
 
     if (name == 'keypress' &&
@@ -2068,7 +2068,7 @@ Object.extend(Event, {
 /* prevent memory leaks in IE */
 if (navigator.appVersion.match(/\bMSIE\b/))
   Event.observe(window, 'unload', Event.unloadCache, false);
-var Position = {
+var zPos = {
   // set to true if needed, warning: firefox performance problems
   // NOT neeeded for page scrolling, only if draggable contained in
   // scrollable elements
@@ -2135,7 +2135,7 @@ if (Element.getStyle(element, "position") == 'fixed') {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
 //Tom M. Yeh, Potix: Bug 1721158: In FF, element.offsetParent is null in this case
-      element = zk.gecko && element != document.body ? Position.offsetParent(element): element.offsetParent;
+      element = zk.gecko && element != document.body ? zPos.offsetParent(element): element.offsetParent;
 }
     } while (element);
     return [valueL, valueT];
@@ -2147,7 +2147,7 @@ if (Element.getStyle(element, "position") == 'fixed') {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
 //Tom M. Yeh, Potix: Bug 1721158: In FF, element.offsetParent is null in this case
-      element = zk.gecko && element != document.body ? Position.offsetParent(element): element.offsetParent;
+      element = zk.gecko && element != document.body ? zPos.offsetParent(element): element.offsetParent;
       if (element) {
         if(element.tagName=='BODY') break;
         var p = Element.getStyle(element, 'position');
@@ -2251,18 +2251,18 @@ if (Element.getStyle(element, "position") == 'fixed') {
     }, arguments[2] || {})
 
     // find page position of source
-    source = $(source);
-    var p = Position.page(source);
+    source = z$(source);
+    var p = zPos.page(source);
 
     // find coordinate system to use
-    target = $(target);
+    target = z$(target);
     var delta = [0, 0];
     var parent = null;
     // delta [0,0] will do fine with position: fixed elements,
     // position:absolute needs offsetParent deltas
     if (Element.getStyle(target,'position') == 'absolute') {
-      parent = Position.offsetParent(target);
-      delta = Position.page(parent);
+      parent = zPos.offsetParent(target);
+      delta = zPos.page(parent);
     }
 
     // correct by body offsets (fixes Safari)
@@ -2279,11 +2279,11 @@ if (Element.getStyle(element, "position") == 'fixed') {
   },
 */
   absolutize: function(element) {
-    element = $(element);
+    element = z$(element);
     if (element.style.position == 'absolute') return;
-    Position.prepare();
+    zPos.prepare();
 
-    var offsets = Position.positionedOffset(element);
+    var offsets = zPos.positionedOffset(element);
     var top     = offsets[1];
     var left    = offsets[0];
 /* Tom M Yeh, Potix: Bug 1591389
@@ -2307,9 +2307,9 @@ if (Element.getStyle(element, "position") == 'fixed') {
   },
 
   relativize: function(element) {
-    element = $(element);
+    element = z$(element);
     if (element.style.position == 'relative') return;
-    Position.prepare();
+    zPos.prepare();
 
     element.style.position = 'relative';
     var top  = parseFloat(element.style.top  || 0) - (element._originalTop || 0);
@@ -2325,10 +2325,10 @@ if (Element.getStyle(element, "position") == 'fixed') {
 }
 
 // Safari returns margins on body which is incorrect if the child is absolutely
-// positioned.  For performance reasons, redefine Position.cumulativeOffset for
+// positioned.  For performance reasons, redefine zPos.cumulativeOffset for
 // KHTML/WebKit only.
 if (/Konqueror|Safari|KHTML/.test(navigator.userAgent)) {
-  Position.cumulativeOffset = function(element) {
+  zPos.cumulativeOffset = function(element) {
     var valueT = 0, valueL = 0, el = element.parentNode;
 //Jumper Chen, Poitx: fix safari difference, the offset of safari excludes its border-width when its CSS position is relative or absolute.
 	if (zk.safari) {

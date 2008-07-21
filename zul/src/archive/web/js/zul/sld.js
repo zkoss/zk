@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 //Slider
-zk.Slider = Class.create();
+zk.Slider = zClass.create();
 zk.Slider.prototype = {
 	initialize: function (comp) {
 		this.id = comp.id;
@@ -45,7 +45,7 @@ zk.Slider.prototype = {
 		//calc the snap
 		var meta = this; //such that snap() could access it
 		var snap = function (x, y) {return meta._snap(x, y);};
-		this.draggable = new Draggable(this.button, {
+		this.draggable = new zDraggable(this.button, {
 			constraint: "horizontal", snap: snap,
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
 			endeffect: zkSld._endDrag});
@@ -61,7 +61,7 @@ zk.Slider.prototype = {
 	/** (x, y) is in the style's coordination (use zk.toStyleOffset to convert).
 	 */
 	_snap: function (x, y) {
-		var ofs = Position.cumulativeOffset(this.element);
+		var ofs = zPos.cumulativeOffset(this.element);
 		ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
@@ -80,7 +80,7 @@ zk.Slider.prototype = {
 	_fixPos: function () {
 		var wd = this._width();
 		var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
-		var ofs = Position.cumulativeOffset(this.element);
+		var ofs = zPos.cumulativeOffset(this.element);
 		ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);
 		ofs = this._snap(ofs[0] + x, 0);
 		this.button.style.left = ofs[0] + "px";
@@ -124,8 +124,8 @@ zk.Slider.prototype = {
 		this.slidetip = null;
 	},
 	_realpos: function () {
-		var btnofs = Position.cumulativeOffset(this.button);
-		var refofs = Position.cumulativeOffset(this.element);
+		var btnofs = zPos.cumulativeOffset(this.button);
+		var refofs = zPos.cumulativeOffset(this.element);
 		var maxpos = this._maxpos();
 		var wd = this._width();
 		var pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd): 0;

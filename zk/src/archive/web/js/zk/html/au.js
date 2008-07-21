@@ -67,7 +67,7 @@ zkau._cmdsQue = []; //response commands in XML
 zkau._evts = {}; //(dtid, Array()): events that are not sent yet
 zkau._js4resps = []; //JS to eval upon response
 zkau._metas = {}; //(id, meta)
-zkau._drags = {}; //(id, Draggable): draggables
+zkau._drags = {}; //(id, zDraggable): draggables
 zkau._drops = []; //dropables
 zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
 zkau._stamp = 0; //used to make a time stamp
@@ -217,7 +217,7 @@ zkau._getMouseData = function (evt, target) {
 	if (evt.ctrlKey) extra += "c";
 	if (evt.shiftKey) extra += "s";
 
-	var ofs = Position.cumulativeOffset(target);
+	var ofs = zPos.cumulativeOffset(target);
 	var x = Event.pointerX(evt) - ofs[0];
 	var y = Event.pointerY(evt) - ofs[1];
 	return [x, y, extra];
@@ -1871,7 +1871,7 @@ zkau._zidOwner = function (n) {
 ///////////////
 //Drag & Drop//
 zkau.initdrag = function (n) {
-	zkau._drags[n.id] = new Draggable(n, {
+	zkau._drags[n.id] = new zDraggable(n, {
 		starteffect: zk.voidf, // bug #1886342: we cannot use the zkau.closeFloats function in this situation.
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true,
@@ -2073,10 +2073,10 @@ zkau.beginGhostToDIV = function (dg) {
 	dg.delta = dg.currentDelta();
 	dg.z_elorg = dg.element;
 	
-	var ofs = Position.cumulativeOffset(dg.element);
-	dg.z_scrl = Position.realOffset(dg.element);
+	var ofs = zPos.cumulativeOffset(dg.element);
+	dg.z_scrl = zPos.realOffset(dg.element);
 	dg.z_scrl[0] -= zk.innerX(); dg.z_scrl[1] -= zk.innerY();
-		//Store scrolling offset since Draggable.draw not handle DIV well
+		//Store scrolling offset since zDraggable.draw not handle DIV well
 	
 	ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];	
 	return ofs;
@@ -2475,7 +2475,7 @@ zkau.cmd1 = {
 				if (mode == "1") { //ref
 					ref = $e(x);
 					if (ref) {
-						var ofs = Position.cumulativeOffset($e(x));
+						var ofs = zPos.cumulativeOffset($e(x));
 						x = ofs[0];
 						y = ofs[1] + zk.offsetHeight(ref);
 					}

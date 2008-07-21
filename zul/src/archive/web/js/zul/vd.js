@@ -262,7 +262,7 @@ zkVld._errbox = function () {
 	zkVld._fiximg(box);
 	zkVld.uncover();
 
-	if (!zk.opera) Effect.SlideDown(box, {duration:0.5});
+	if (!zk.opera) zEffect.SlideDown(box, {duration:0.5});
 		//if we slide, opera will slide it at the top of screen and position it
 		//later. No sure it is a bug of script.aculo.us or Opera
 	if (zk.ie6Only) setTimeout(function () {
@@ -388,8 +388,8 @@ zkVld.uncover = function (el) {
 	}
 };
 zkVld._uncover = function (box, el, ctag) {
-	var elofs = Position.cumulativeOffset(el);
-	var boxofs = Position.cumulativeOffset(box);
+	var elofs = zPos.cumulativeOffset(el);
+	var boxofs = zPos.cumulativeOffset(box);
 
 	if (zk.isOffsetOverlapped(
 	elofs, [el.offsetWidth, el.offsetHeight],
@@ -397,7 +397,7 @@ zkVld._uncover = function (box, el, ctag) {
 		var cmp = $e(box.id.substring(0, box.id.length - 5));
 		var y;
 		if (cmp) {
-			var cmpofs = Position.cumulativeOffset(cmp), cmphgh = cmp.offsetHeight;
+			var cmpofs = zPos.cumulativeOffset(cmp), cmphgh = cmp.offsetHeight;
 			if (ctag) {
 				var y1 = elofs[1] + el.offsetHeight, boxhgh = box.offsetHeight;
 				y = cmpofs[1];

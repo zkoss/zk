@@ -108,7 +108,7 @@ zkSplt.init = function (cmp) {
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var drag = zkSplt._drags[cmp.id] = {
 		vert: vert,
-		drag: new Draggable(cmp, {
+		drag: new zDraggable(cmp, {
 			constraint: vert ? "vertical": "horizontal", ignoredrag: zkSplt._ignoresizing,
 			ghosting: zkSplt._ghostsizing, overlay: true,
 			snap: snap, endeffect: zkSplt._endDrag})
@@ -194,12 +194,12 @@ zkSplt._ignoresizing = function (cmp, pointer, event) {
 		var el = Event.element(event);
 		if (!el || !el.id || $type(el) != "Splt") return true;
 		var run = drag.run = {};
-		run.org = Position.cumulativeOffset(cmp);
+		run.org = zPos.cumulativeOffset(cmp);
 		var nd = $e(cmp.id + "!chdextr");
 		var tn = $tag(nd);
 		run.prev = zkSplt._prev(nd, tn);
 		run.next = zkSplt._next(nd, tn);
-		run.z_offset = Position.cumulativeOffset(cmp);
+		run.z_offset = zPos.cumulativeOffset(cmp);
 	}
 	return false;
 };

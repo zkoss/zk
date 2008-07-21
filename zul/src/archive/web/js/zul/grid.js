@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 zk.load("zul.zul");
 
 ////
-zk.Grid = Class.create();
+zk.Grid = zClass.create();
 zk.Grid.prototype = {
 	initialize: function (comp) {
 		this.id = comp.id;

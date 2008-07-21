@@ -62,7 +62,7 @@ if (!window.Tree_paging) { //not customized
 function zkTreeNewClass() {
 	if (zk.Tree) return;
 
-zk.Tree = Class.create();
+zk.Tree = zClass.create();
 Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	/** Overrides what is defined in zk.Selectable. */
 	getItemUuid: function (row) {

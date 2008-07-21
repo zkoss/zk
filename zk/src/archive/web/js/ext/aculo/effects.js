@@ -32,21 +32,21 @@ String.prototype.parseColor = function() {
 
 /* Tom M. Yeh, Potix: remove unused codes
 Element.collectTextNodes = function(element) {  
-  return $A($(element).childNodes).collect( function(node) {
+  return z$A(z$(element).childNodes).collect( function(node) {
     return (node.nodeType==3 ? node.nodeValue : 
       (node.hasChildNodes() ? Element.collectTextNodes(node) : ''));
   }).flatten().join('');
 }
 
 Element.collectTextNodesIgnoreClass = function(element, className) {  
-  return $A($(element).childNodes).collect( function(node) {
+  return z$A(z$(element).childNodes).collect( function(node) {
     return (node.nodeType==3 ? node.nodeValue : 
       ((node.hasChildNodes() && !Element.hasClassName(node,className)) ? 
         Element.collectTextNodesIgnoreClass(node, className) : ''));
   }).flatten().join('');
 }
 Element.setContentZoom = function(element, percent) {
-  element = $(element);  
+  element = z$(element);  
   element.setStyle({fontSize: (percent/100) + 'em'});   
   if(navigator.appVersion.indexOf('AppleWebKit')>0) window.scrollBy(0,0);
   return element;
@@ -54,20 +54,20 @@ Element.setContentZoom = function(element, percent) {
 */
 
 Element.getOpacity = function(element){
-  return $(element).getStyle('opacity');
+  return z$(element).getStyle('opacity');
 }
 
 Element.setOpacity = function(element, value){
-  return $(element).setStyle({opacity:value});
+  return z$(element).setStyle({opacity:value});
 }
 
 Element.getInlineOpacity = function(element){
-  return $(element).style.opacity || '';
+  return z$(element).style.opacity || '';
 }
 
 Element.forceRerendering = function(element) {
   try {
-    element = $(element);
+    element = z$(element);
     var n = document.createTextNode(' ');
     element.appendChild(n);
     element.removeChild(n);
@@ -83,7 +83,7 @@ Array.prototype.call = function() {
 
 /*--------------------------------------------------------------------------*/
 
-var Effect = {
+var zEffect = {
   _elNotExistErr: {
     name: 'ElementDoesNotExistError',
     message: 'The specified DOM element does not exist, but is required for this effect to operate'
@@ -91,13 +91,13 @@ var Effect = {
   },
   tagifyText: function(element) {
     if(typeof Builder == 'undefined')
-      throw("Effect.tagifyText requires including script.aculo.us' builder.js library");
+      throw("zEffect.tagifyText requires including script.aculo.us' builder.js library");
       
     var tagifyStyle = 'position:relative';
     if(/MSIE/.test(navigator.userAgent) && !window.opera) tagifyStyle += ';zoom:1';
     
-    element = $(element);
-    $A(element.childNodes).each( function(child) {
+    element = z$(element);
+    z$A(element.childNodes).each( function(child) {
       if(child.nodeType==3) {
         child.nodeValue.toArray().each( function(character) {
           element.insertBefore(
@@ -116,7 +116,7 @@ var Effect = {
        (element.length))
       elements = element;
     else
-      elements = $(element).childNodes;
+      elements = z$(element).childNodes;
       
     var options = Object.extend({
       speed: 0.1,
@@ -124,7 +124,7 @@ var Effect = {
     }, arguments[2] || {});
     var masterDelay = options.delay;
 
-    $A(elements).each( function(element, index) {
+    z$A(elements).each( function(element, index) {
       new effect(element, Object.extend(options, { delay: index * options.speed + masterDelay }));
     });
   },
@@ -134,25 +134,25 @@ var Effect = {
     'appear': ['Appear','Fade']
   },
   toggle: function(element, effect) {
-    element = $(element);
+    element = z$(element);
     effect = (effect || 'appear').toLowerCase();
     var options = Object.extend({
       queue: { position:'end', scope:(element.id || 'global'), limit: 1 }
     }, arguments[2] || {});
-    Effect[element.visible() ? 
-      Effect.PAIRS[effect][1] : Effect.PAIRS[effect][0]](element, options);
+    zEffect[element.visible() ? 
+      zEffect.PAIRS[effect][1] : zEffect.PAIRS[effect][0]](element, options);
 */
   }
 };
 
 /* Tom M. Yeh, Potix: remove unused codes
-var Effect2 = Effect; // deprecated
+var Effect2 = zEffect; // deprecated
 */
 /* ------------- transitions ------------- */
 
-Effect.Transitions = {
+zEffect.Transitions = {
 /* Tom M. Yeh, Potix: remove unused codes
-  linear: Prototype.K,
+  linear: zPrototype.K,
 */
   sinoidal: function(pos) {
     return (-Math.cos(pos*Math.PI)/2) + 0.5;
@@ -188,8 +188,8 @@ Effect.Transitions = {
 
 /* ------------- core effects ------------- */
 
-Effect.ScopedQueue = Class.create();
-Object.extend(Object.extend(Effect.ScopedQueue.prototype, Enumerable), {
+zEffect.ScopedQueue = zClass.create();
+Object.extend(Object.extend(zEffect.ScopedQueue.prototype, zEnum), {
   initialize: function() {
     this.effects  = [];
     this.interval = null;
@@ -243,23 +243,23 @@ Object.extend(Object.extend(Effect.ScopedQueue.prototype, Enumerable), {
   }
 });
 
-Effect.Queues = {
-  instances: $H(),
+zEffect.Queues = {
+  instances: z$H(),
   get: function(queueName) {
     if(typeof queueName != 'string') return queueName;
     
     if(!this.instances[queueName])
-      this.instances[queueName] = new Effect.ScopedQueue();
+      this.instances[queueName] = new zEffect.ScopedQueue();
       
     return this.instances[queueName];
   }
 }
-Effect.Queue = Effect.Queues.get('global');
+zEffect.Queue = zEffect.Queues.get('global');
 
-Effect.DefaultOptions = {
-  transition: Effect.Transitions.sinoidal,
+zEffect.DefaultOptions = {
+  transition: zEffect.Transitions.sinoidal,
   duration:   1.0,   // seconds
-  fps:        60.0,  // max. 60fps due to Effect.Queue implementation
+  fps:        60.0,  // max. 60fps due to zEffect.Queue implementation
   sync:       false, // true for combining
   from:       0.0,
   to:         1.0,
@@ -267,18 +267,18 @@ Effect.DefaultOptions = {
   queue:      'parallel'
 }
 
-Effect.Base = function() {};
-Effect.Base.prototype = {
+zEffect.Base = function() {};
+zEffect.Base.prototype = {
   position: null,
   start: function(options) {
-    this.options      = Object.extend(Object.extend({},Effect.DefaultOptions), options || {});
+    this.options      = Object.extend(Object.extend({},zEffect.DefaultOptions), options || {});
     this.currentFrame = 0;
     this.state        = 'idle';
     this.startOn      = this.options.delay*1000;
     this.finishOn     = this.startOn + (this.options.duration*1000);
     this.event('beforeStart');
     if(!this.options.sync)
-      Effect.Queues.get(typeof this.options.queue == 'string' ? 
+      zEffect.Queues.get(typeof this.options.queue == 'string' ? 
         'global' : this.options.queue.scope).add(this);
   },
   loop: function(timePos) {
@@ -318,7 +318,7 @@ Effect.Base.prototype = {
   },
   cancel: function() {
     if(!this.options.sync)
-      Effect.Queues.get(typeof this.options.queue == 'string' ? 
+      zEffect.Queues.get(typeof this.options.queue == 'string' ? 
         'global' : this.options.queue.scope).remove(this);
     this.state = 'finished';
   },
@@ -327,15 +327,15 @@ Effect.Base.prototype = {
     if(this.options[eventName]) this.options[eventName](this);
   },
   inspect: function() {
-    var data = $H();
+    var data = z$H();
     for(property in this)
       if(typeof this[property] != 'function') data[property] = this[property];
-    return '#<Effect:' + data.inspect() + ',options:' + $H(this.options).inspect() + '>';
+    return '#<zEffect:' + data.inspect() + ',options:' + z$H(this.options).inspect() + '>';
   }
 }
 
-Effect.Parallel = Class.create();
-Object.extend(Object.extend(Effect.Parallel.prototype, Effect.Base.prototype), {
+zEffect.Parallel = zClass.create();
+Object.extend(Object.extend(zEffect.Parallel.prototype, zEffect.Base.prototype), {
   initialize: function(effects) {
     this.effects = effects || [];
     this.start(arguments[1]);
@@ -354,22 +354,22 @@ Object.extend(Object.extend(Effect.Parallel.prototype, Effect.Base.prototype), {
   }
 });
 
-Effect.Event = Class.create();
-Object.extend(Object.extend(Effect.Event.prototype, Effect.Base.prototype), {
+zEffect.Event = zClass.create();
+Object.extend(Object.extend(zEffect.Event.prototype, zEffect.Base.prototype), {
   initialize: function() {
     var options = Object.extend({
       duration: 0
     }, arguments[0] || {});
     this.start(options);
   },
-  update: Prototype.emptyFunction
+  update: zPrototype.emptyFunction
 });
 
-Effect.Opacity = Class.create();
-Object.extend(Object.extend(Effect.Opacity.prototype, Effect.Base.prototype), {
+zEffect.Opacity = zClass.create();
+Object.extend(Object.extend(zEffect.Opacity.prototype, zEffect.Base.prototype), {
   initialize: function(element) {
-    this.element = $(element);
-    if(!this.element) throw(Effect._elNotExistErr);
+    this.element = z$(element);
+    if(!this.element) throw(zEffect._elNotExistErr);
     // make this work on IE on elements without 'layout'
     if(/MSIE/.test(navigator.userAgent) && !window.opera && (!this.element.currentStyle.hasLayout))
       this.element.setStyle({zoom: 1});
@@ -384,11 +384,11 @@ Object.extend(Object.extend(Effect.Opacity.prototype, Effect.Base.prototype), {
   }
 });
 
-Effect.Move = Class.create();
-Object.extend(Object.extend(Effect.Move.prototype, Effect.Base.prototype), {
+zEffect.Move = zClass.create();
+Object.extend(Object.extend(zEffect.Move.prototype, zEffect.Base.prototype), {
   initialize: function(element) {
-    this.element = $(element);
-    if(!this.element) throw(Effect._elNotExistErr);
+    this.element = z$(element);
+    if(!this.element) throw(zEffect._elNotExistErr);
     var options = Object.extend({
       x:    0,
       y:    0,
@@ -419,16 +419,16 @@ Object.extend(Object.extend(Effect.Move.prototype, Effect.Base.prototype), {
 });
 
 // for backwards compatibility
-Effect.MoveBy = function(element, toTop, toLeft) {
-  return new Effect.Move(element, 
+zEffect.MoveBy = function(element, toTop, toLeft) {
+  return new zEffect.Move(element, 
     Object.extend({ x: toLeft, y: toTop }, arguments[3] || {}));
 };
 
-Effect.Scale = Class.create();
-Object.extend(Object.extend(Effect.Scale.prototype, Effect.Base.prototype), {
+zEffect.Scale = zClass.create();
+Object.extend(Object.extend(zEffect.Scale.prototype, zEffect.Base.prototype), {
   initialize: function(element, percent) {
-    this.element = $(element);
-    if(!this.element) throw(Effect._elNotExistErr);
+    this.element = z$(element);
+    if(!this.element) throw(zEffect._elNotExistErr);
     var options = Object.extend({
       scaleX: true,
       scaleY: true,
@@ -499,11 +499,11 @@ Object.extend(Object.extend(Effect.Scale.prototype, Effect.Base.prototype), {
   }
 });
 
-Effect.Highlight = Class.create();
-Object.extend(Object.extend(Effect.Highlight.prototype, Effect.Base.prototype), {
+zEffect.Highlight = zClass.create();
+Object.extend(Object.extend(zEffect.Highlight.prototype, zEffect.Base.prototype), {
   initialize: function(element) {
-    this.element = $(element);
-    if(!this.element) throw(Effect._elNotExistErr);
+    this.element = z$(element);
+    if(!this.element) throw(zEffect._elNotExistErr);
     var options = Object.extend({ startcolor: '#ffff99' }, arguments[1] || {});
     this.start(options);
   },
@@ -521,11 +521,11 @@ Object.extend(Object.extend(Effect.Highlight.prototype, Effect.Base.prototype), 
     if(!this.options.restorecolor)
       this.options.restorecolor = this.element.getStyle('background-color');
     // init color calculations
-    this._base  = $R(0,2).map(function(i){ return parseInt(this.options.startcolor.slice(i*2+1,i*2+3),16) }.bind(this));
-    this._delta = $R(0,2).map(function(i){ return parseInt(this.options.endcolor.slice(i*2+1,i*2+3),16)-this._base[i] }.bind(this));
+    this._base  = z$R(0,2).map(function(i){ return parseInt(this.options.startcolor.slice(i*2+1,i*2+3),16) }.bind(this));
+    this._delta = z$R(0,2).map(function(i){ return parseInt(this.options.endcolor.slice(i*2+1,i*2+3),16)-this._base[i] }.bind(this));
   },
   update: function(position) {
-    this.element.setStyle({backgroundColor: $R(0,2).inject('#',function(m,v,i){
+    this.element.setStyle({backgroundColor: z$R(0,2).inject('#',function(m,v,i){
       return m+(Math.round(this._base[i]+(this._delta[i]*position)).toColorPart()); }.bind(this)) });
   },
   finish: function() {
@@ -535,35 +535,35 @@ Object.extend(Object.extend(Effect.Highlight.prototype, Effect.Base.prototype), 
   }
 });
 
-Effect.ScrollTo = Class.create();
-Object.extend(Object.extend(Effect.ScrollTo.prototype, Effect.Base.prototype), {
+zEffect.ScrollTo = zClass.create();
+Object.extend(Object.extend(zEffect.ScrollTo.prototype, zEffect.Base.prototype), {
   initialize: function(element) {
-    this.element = $(element);
+    this.element = z$(element);
     this.start(arguments[1] || {});
   },
   setup: function() {
-    Position.prepare();
-    var offsets = Position.cumulativeOffset(this.element);
+    zPos.prepare();
+    var offsets = zPos.cumulativeOffset(this.element);
     if(this.options.offset) offsets[1] += this.options.offset;
     var max = window.innerHeight ? 
       window.height - window.innerHeight :
       document.body.scrollHeight - 
         (document.documentElement.clientHeight ? 
           document.documentElement.clientHeight : document.body.clientHeight);
-    this.scrollStart = Position.deltaY;
+    this.scrollStart = zPos.deltaY;
     this.delta = (offsets[1] > max ? max : offsets[1]) - this.scrollStart;
   },
   update: function(position) {
-    Position.prepare();
-    window.scrollTo(Position.deltaX, 
+    zPos.prepare();
+    window.scrollTo(zPos.deltaX, 
       this.scrollStart + (position*this.delta));
   }
 });
 
 /* ------------- combination effects ------------- */
 
-Effect.Fade = function(element) {
-  element = $(element);
+zEffect.Fade = function(element) {
+  element = z$(element);
   var oldOpacity = element.getInlineOpacity();
   var options = Object.extend({
   from: element.getOpacity() || 1.0,
@@ -572,11 +572,11 @@ Effect.Fade = function(element) {
     if(effect.options.to!=0) return;
     effect.element.hide().setStyle({opacity: oldOpacity}); 
   }}, arguments[1] || {});
-  return new Effect.Opacity(element,options);
+  return new zEffect.Opacity(element,options);
 }
 
-Effect.Appear = function(element) {
-  element = $(element);
+zEffect.Appear = function(element) {
+  element = z$(element);
   var options = Object.extend({
   from: (element.getStyle('display') == 'none' ? 0.0 : element.getOpacity() || 0.0),
   to:   1.0,
@@ -587,11 +587,11 @@ Effect.Appear = function(element) {
   beforeSetup: function(effect) {
     effect.element.setOpacity(effect.options.from).show(); 
   }}, arguments[1] || {});
-  return new Effect.Opacity(element,options);
+  return new zEffect.Opacity(element,options);
 }
 
-Effect.Puff = function(element) {
-  element = $(element);
+zEffect.Puff = function(element) {
+  element = z$(element);
   var oldStyle = { 
     opacity: element.getInlineOpacity(), 
     position: element.getStyle('position'),
@@ -600,13 +600,13 @@ Effect.Puff = function(element) {
     width: element.style.width,
     height: element.style.height
   };
-  return new Effect.Parallel(
-   [ new Effect.Scale(element, 200, 
+  return new zEffect.Parallel(
+   [ new zEffect.Scale(element, 200, 
       { sync: true, scaleFromCenter: true, scaleContent: true, restoreAfterFinish: true }), 
-     new Effect.Opacity(element, { sync: true, to: 0.0 } ) ], 
+     new zEffect.Opacity(element, { sync: true, to: 0.0 } ) ], 
      Object.extend({ duration: 1.0, 
       beforeSetupInternal: function(effect) {
-        Position.absolutize(effect.effects[0].element)
+        zPos.absolutize(effect.effects[0].element)
       },
       afterFinishInternal: function(effect) {
          effect.effects[0].element.hide().setStyle(oldStyle); }
@@ -614,10 +614,10 @@ Effect.Puff = function(element) {
    );
 }
 
-Effect.BlindUp = function(element) {
-  element = $(element);
+zEffect.BlindUp = function(element) {
+  element = z$(element);
   element.makeClipping();
-  return new Effect.Scale(element, 0,
+  return new zEffect.Scale(element, 0,
     Object.extend({ scaleContent: false, 
       scaleX: false, 
       restoreAfterFinish: true,
@@ -628,10 +628,10 @@ Effect.BlindUp = function(element) {
   );
 }
 
-Effect.BlindDown = function(element) {
-  element = $(element);
+zEffect.BlindDown = function(element) {
+  element = z$(element);
   var elementDimensions = element.getDimensions();
-  return new Effect.Scale(element, 100, Object.extend({ 
+  return new zEffect.Scale(element, 100, Object.extend({ 
     scaleContent: false, 
     scaleX: false,
     scaleFrom: 0,
@@ -646,15 +646,15 @@ Effect.BlindDown = function(element) {
   }, arguments[1] || {}));
 }
 
-Effect.SwitchOff = function(element) {
-  element = $(element);
+zEffect.SwitchOff = function(element) {
+  element = z$(element);
   var oldOpacity = element.getInlineOpacity();
-  return new Effect.Appear(element, Object.extend({
+  return new zEffect.Appear(element, Object.extend({
     duration: 0.4,
     from: 0,
-    transition: Effect.Transitions.flicker,
+    transition: zEffect.Transitions.flicker,
     afterFinishInternal: function(effect) {
-      new Effect.Scale(effect.element, 1, { 
+      new zEffect.Scale(effect.element, 1, { 
         duration: 0.3, scaleFromCenter: true,
         scaleX: false, scaleContent: false, restoreAfterFinish: true,
         beforeSetup: function(effect) { 
@@ -668,15 +668,15 @@ Effect.SwitchOff = function(element) {
   }, arguments[1] || {}));
 }
 
-Effect.DropOut = function(element) {
-  element = $(element);
+zEffect.DropOut = function(element) {
+  element = z$(element);
   var oldStyle = {
     top: element.getStyle('top'),
     left: element.getStyle('left'),
     opacity: element.getInlineOpacity() };
-  return new Effect.Parallel(
-    [ new Effect.Move(element, {x: 0, y: 100, sync: true }), 
-      new Effect.Opacity(element, { sync: true, to: 0.0 }) ],
+  return new zEffect.Parallel(
+    [ new zEffect.Move(element, {x: 0, y: 100, sync: true }), 
+      new zEffect.Opacity(element, { sync: true, to: 0.0 }) ],
     Object.extend(
       { duration: 0.5,
         beforeSetup: function(effect) {
@@ -689,33 +689,33 @@ Effect.DropOut = function(element) {
 }
 
 /* Tom M. Yeh, Potix: remove unused codes
-Effect.Shake = function(element) {
-  element = $(element);
+zEffect.Shake = function(element) {
+  element = z$(element);
   var oldStyle = {
     top: element.getStyle('top'),
     left: element.getStyle('left') };
-    return new Effect.Move(element, 
+    return new zEffect.Move(element, 
       { x:  20, y: 0, duration: 0.05, afterFinishInternal: function(effect) {
-    new Effect.Move(effect.element,
+    new zEffect.Move(effect.element,
       { x: -40, y: 0, duration: 0.1,  afterFinishInternal: function(effect) {
-    new Effect.Move(effect.element,
+    new zEffect.Move(effect.element,
       { x:  40, y: 0, duration: 0.1,  afterFinishInternal: function(effect) {
-    new Effect.Move(effect.element,
+    new zEffect.Move(effect.element,
       { x: -40, y: 0, duration: 0.1,  afterFinishInternal: function(effect) {
-    new Effect.Move(effect.element,
+    new zEffect.Move(effect.element,
       { x:  40, y: 0, duration: 0.1,  afterFinishInternal: function(effect) {
-    new Effect.Move(effect.element,
+    new zEffect.Move(effect.element,
       { x: -20, y: 0, duration: 0.05, afterFinishInternal: function(effect) {
         effect.element.undoPositioned().setStyle(oldStyle);
   }}) }}) }}) }}) }}) }});
 }
 */
-Effect.SlideDown = function(element) {
-  element = $(element).cleanWhitespace();
+zEffect.SlideDown = function(element) {
+  element = z$(element).cleanWhitespace();
   // SlideDown need to have the content of the element wrapped in a container element with fixed height!
   var oldInnerBottom = element.down().getStyle('bottom');
   var elementDimensions = element.getDimensions();
-  return new Effect.Scale(element, 100, Object.extend({ 
+  return new zEffect.Scale(element, 100, Object.extend({ 
     scaleContent: false, 
     scaleX: false, 
     scaleFrom: window.opera ? 0 : 1,
@@ -738,10 +738,10 @@ Effect.SlideDown = function(element) {
   );
 }
 
-Effect.SlideUp = function(element) {
-  element = $(element).cleanWhitespace();
+zEffect.SlideUp = function(element) {
+  element = z$(element).cleanWhitespace();
   var oldInnerBottom = element.down().getStyle('bottom');
-  return new Effect.Scale(element, window.opera ? 0 : 1,
+  return new zEffect.Scale(element, window.opera ? 0 : 1,
    Object.extend({ scaleContent: false, 
     scaleX: false, 
     scaleMode: 'box',
@@ -767,8 +767,8 @@ Effect.SlideUp = function(element) {
 
 // Bug in opera makes the TD containing this element expand for a instance after finish 
 /* Tom M. Yeh, Potix: remove unused codes
-Effect.Squish = function(element) {
-  return new Effect.Scale(element, window.opera ? 1 : 0, { 
+zEffect.Squish = function(element) {
+  return new zEffect.Scale(element, window.opera ? 1 : 0, { 
     restoreAfterFinish: true,
     beforeSetup: function(effect) {
       effect.element.makeClipping(); 
@@ -780,13 +780,13 @@ Effect.Squish = function(element) {
 }
 */
 /* Tom M. Yeh, Potix: remove unused codes
-Effect.Grow = function(element) {
-  element = $(element);
+zEffect.Grow = function(element) {
+  element = z$(element);
   var options = Object.extend({
     direction: 'center',
-    moveTransition: Effect.Transitions.sinoidal,
-    scaleTransition: Effect.Transitions.sinoidal,
-    opacityTransition: Effect.Transitions.full
+    moveTransition: zEffect.Transitions.sinoidal,
+    scaleTransition: zEffect.Transitions.sinoidal,
+    opacityTransition: zEffect.Transitions.full
   }, arguments[1] || {});
   var oldStyle = {
     top: element.style.top,
@@ -827,7 +827,7 @@ Effect.Grow = function(element) {
       break;
   }
   
-  return new Effect.Move(element, {
+  return new zEffect.Move(element, {
     x: initialMoveX,
     y: initialMoveY,
     duration: 0.01, 
@@ -835,10 +835,10 @@ Effect.Grow = function(element) {
       effect.element.hide().makeClipping().makePositioned();
     },
     afterFinishInternal: function(effect) {
-      new Effect.Parallel(
-        [ new Effect.Opacity(effect.element, { sync: true, to: 1.0, from: 0.0, transition: options.opacityTransition }),
-          new Effect.Move(effect.element, { x: moveX, y: moveY, sync: true, transition: options.moveTransition }),
-          new Effect.Scale(effect.element, 100, {
+      new zEffect.Parallel(
+        [ new zEffect.Opacity(effect.element, { sync: true, to: 1.0, from: 0.0, transition: options.opacityTransition }),
+          new zEffect.Move(effect.element, { x: moveX, y: moveY, sync: true, transition: options.moveTransition }),
+          new zEffect.Scale(effect.element, 100, {
             scaleMode: { originalHeight: dims.height, originalWidth: dims.width }, 
             sync: true, scaleFrom: window.opera ? 1 : 0, transition: options.scaleTransition, restoreAfterFinish: true})
         ], Object.extend({
@@ -855,13 +855,13 @@ Effect.Grow = function(element) {
 }
 */
 /* Tom M. Yeh, Potix: remove unused codes
-Effect.Shrink = function(element) {
-  element = $(element);
+zEffect.Shrink = function(element) {
+  element = z$(element);
   var options = Object.extend({
     direction: 'center',
-    moveTransition: Effect.Transitions.sinoidal,
-    scaleTransition: Effect.Transitions.sinoidal,
-    opacityTransition: Effect.Transitions.none
+    moveTransition: zEffect.Transitions.sinoidal,
+    scaleTransition: zEffect.Transitions.sinoidal,
+    opacityTransition: zEffect.Transitions.none
   }, arguments[1] || {});
   var oldStyle = {
     top: element.style.top,
@@ -895,10 +895,10 @@ Effect.Shrink = function(element) {
       break;
   }
   
-  return new Effect.Parallel(
-    [ new Effect.Opacity(element, { sync: true, to: 0.0, from: 1.0, transition: options.opacityTransition }),
-      new Effect.Scale(element, window.opera ? 1 : 0, { sync: true, transition: options.scaleTransition, restoreAfterFinish: true}),
-      new Effect.Move(element, { x: moveX, y: moveY, sync: true, transition: options.moveTransition })
+  return new zEffect.Parallel(
+    [ new zEffect.Opacity(element, { sync: true, to: 0.0, from: 1.0, transition: options.opacityTransition }),
+      new zEffect.Scale(element, window.opera ? 1 : 0, { sync: true, transition: options.scaleTransition, restoreAfterFinish: true}),
+      new zEffect.Move(element, { x: moveX, y: moveY, sync: true, transition: options.moveTransition })
     ], Object.extend({            
          beforeStartInternal: function(effect) {
            effect.effects[0].element.makePositioned().makeClipping(); 
@@ -910,32 +910,32 @@ Effect.Shrink = function(element) {
 }
 */
 /* Tom M. Yeh, Potix: remove unused codes
-Effect.Pulsate = function(element) {
-  element = $(element);
+zEffect.Pulsate = function(element) {
+  element = z$(element);
   var options    = arguments[1] || {};
   var oldOpacity = element.getInlineOpacity();
-  var transition = options.transition || Effect.Transitions.sinoidal;
-  var reverser   = function(pos){ return transition(1-Effect.Transitions.pulse(pos, options.pulses)) };
+  var transition = options.transition || zEffect.Transitions.sinoidal;
+  var reverser   = function(pos){ return transition(1-zEffect.Transitions.pulse(pos, options.pulses)) };
   reverser.bind(transition);
-  return new Effect.Opacity(element, 
+  return new zEffect.Opacity(element, 
     Object.extend(Object.extend({  duration: 2.0, from: 0,
       afterFinishInternal: function(effect) { effect.element.setStyle({opacity: oldOpacity}); }
     }, options), {transition: reverser}));
 }
 
-Effect.Fold = function(element) {
-  element = $(element);
+zEffect.Fold = function(element) {
+  element = z$(element);
   var oldStyle = {
     top: element.style.top,
     left: element.style.left,
     width: element.style.width,
     height: element.style.height };
   element.makeClipping();
-  return new Effect.Scale(element, 5, Object.extend({   
+  return new zEffect.Scale(element, 5, Object.extend({   
     scaleContent: false,
     scaleX: false,
     afterFinishInternal: function(effect) {
-    new Effect.Scale(element, 1, { 
+    new zEffect.Scale(element, 1, { 
       scaleContent: false, 
       scaleY: false,
       afterFinishInternal: function(effect) {
@@ -945,27 +945,27 @@ Effect.Fold = function(element) {
 };
 */
 /* Tom M. Yeh, Potix: remove unused codes
-Effect.Morph = Class.create();
-Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
+zEffect.Morph = zClass.create();
+Object.extend(Object.extend(zEffect.Morph.prototype, zEffect.Base.prototype), {
   initialize: function(element) {
-    this.element = $(element);
-    if(!this.element) throw(Effect._elNotExistErr);
+    this.element = z$(element);
+    if(!this.element) throw(zEffect._elNotExistErr);
     var options = Object.extend({
       style: {}
     }, arguments[1] || {});
     if (typeof options.style == 'string') {
       if(options.style.indexOf(':') == -1) {
         var cssText = '', selector = '.' + options.style;
-        $A(document.styleSheets).reverse().each(function(styleSheet) {
+        z$A(document.styleSheets).reverse().each(function(styleSheet) {
           if (styleSheet.cssRules) cssRules = styleSheet.cssRules;
           else if (styleSheet.rules) cssRules = styleSheet.rules;
-          $A(cssRules).reverse().each(function(rule) {
+          z$A(cssRules).reverse().each(function(rule) {
             if (selector == rule.selectorText) {
               cssText = rule.style.cssText;
-              throw $break;
+              throw z$break;
             }
           });
-          if (cssText) throw $break;
+          if (cssText) throw z$break;
         });
         this.style = cssText.parseStyle();
         options.afterFinishInternal = function(effect){
@@ -976,14 +976,14 @@ Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
           });
         }
       } else this.style = options.style.parseStyle();
-    } else this.style = $H(options.style)
+    } else this.style = z$H(options.style)
     this.start(options);
   },
   setup: function(){
     function parseColor(color){
       if(!color || ['rgba(0, 0, 0, 0)','transparent'].include(color)) color = '#ffffff';
       color = color.parseColor();
-      return $R(0,2).map(function(i){
+      return z$R(0,2).map(function(i){
         return parseInt( color.slice(i*2+1,i*2+3), 16 ) 
       });
     }
@@ -1002,7 +1002,7 @@ Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
           value = parseFloat(components[1]), unit = (components.length == 3) ? components[2] : null;
 
       var originalValue = this.element.getStyle(property);
-      return $H({ 
+      return z$H({ 
         style: property, 
         originalValue: unit=='color' ? parseColor(originalValue) : parseFloat(originalValue || 0), 
         targetValue: unit=='color' ? parseColor(value) : value,
@@ -1019,10 +1019,10 @@ Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
     });
   },
   update: function(position) {
-    var style = $H(), value = null;
+    var style = z$H(), value = null;
     this.transforms.each(function(transform){
       value = transform.unit=='color' ?
-        $R(0,2).inject('#',function(m,v,i){
+        z$R(0,2).inject('#',function(m,v,i){
           return m+(Math.round(transform.originalValue[i]+
             (transform.targetValue[i] - transform.originalValue[i])*position)).toColorPart() }) : 
         transform.originalValue + Math.round(
@@ -1033,8 +1033,8 @@ Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
   }
 });
 
-Effect.Transform = Class.create();
-Object.extend(Effect.Transform.prototype, {
+zEffect.Transform = zClass.create();
+Object.extend(zEffect.Transform.prototype, {
   initialize: function(tracks){
     this.tracks  = [];
     this.options = arguments[1] || {};
@@ -1042,19 +1042,19 @@ Object.extend(Effect.Transform.prototype, {
   },
   addTracks: function(tracks){
     tracks.each(function(track){
-      var data = $H(track).values().first();
-      this.tracks.push($H({
-        ids:     $H(track).keys().first(),
-        effect:  Effect.Morph,
+      var data = z$H(track).values().first();
+      this.tracks.push(z$H({
+        ids:     z$H(track).keys().first(),
+        effect:  zEffect.Morph,
         options: { style: data }
       }));
     }.bind(this));
     return this;
   },
   play: function(){
-    return new Effect.Parallel(
+    return new zEffect.Parallel(
       this.tracks.map(function(track){
-        var elements = [$(track.ids) || $$(track.ids)].flatten();
+        var elements = [z$(track.ids) || $z$(track.ids)].flatten();
         return elements.map(function(e){ return new track.effect(e, Object.extend({ sync:true }, track.options)) });
       }).flatten(),
       this.options
@@ -1062,7 +1062,7 @@ Object.extend(Effect.Transform.prototype, {
   }
 });
 */
-Element.CSS_PROPERTIES = $w(
+Element.CSS_PROPERTIES = z$w(
   'backgroundColor backgroundPosition borderBottomColor borderBottomStyle ' + 
   'borderBottomWidth borderLeftColor borderLeftStyle borderLeftWidth ' +
   'borderRightColor borderRightStyle borderRightWidth borderSpacing ' +
@@ -1078,7 +1078,7 @@ Element.CSS_LENGTH = /^(([\+\-]?[0-9\.]+)(em|ex|px|in|cm|mm|pt|pc|\%))|0$/;
 String.prototype.parseStyle = function(){
   var element = Element.extend(document.createElement('div'));
   element.innerHTML = '<div style="' + this + '"></div>';
-  var style = element.down().style, styleRules = $H();
+  var style = element.down().style, styleRules = z$H();
   
   Element.CSS_PROPERTIES.each(function(property){
     if(style[property]) styleRules[property] = style[property]; 
@@ -1091,7 +1091,7 @@ String.prototype.parseStyle = function(){
 
 /* Tom M. Yeh, Potix: remove unused codes
 Element.morph = function(element, style) {
-  new Effect.Morph(element, Object.extend({ style: style }, arguments[2] || {}));
+  new zEffect.Morph(element, Object.extend({ style: style }, arguments[2] || {}));
   return element;
 };
 */
@@ -1108,8 +1108,8 @@ Element.morph = function(element, style) {
 Element.Methods.visualEffect = function(element, effect, options) {
   s = effect.gsub(/_/, '-').camelize();
   effect_class = s.charAt(0).toUpperCase() + s.substring(1);
-  new Effect[effect_class](element, options);
-  return $(element);
+  new zEffect[effect_class](element, options);
+  return z$(element);
 };
 */
 Element.addMethods();

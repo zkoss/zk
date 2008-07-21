@@ -770,7 +770,7 @@ zkPop = {
 		return false;
 	}
 };
-zk.Popup = Class.create();
+zk.Popup = zClass.create();
 Object.extend(Object.extend(zk.Popup.prototype, zk.Floats.prototype), {
 	_close: function (el) {
 		zkPop._close(el);

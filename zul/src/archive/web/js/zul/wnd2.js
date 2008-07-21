@@ -25,7 +25,7 @@ zk.load("zul.zul"); //zul and msgzul
 zkWnd2 = {
 	cssKeywords: ["collapsed"],
 	ztype: "Wnd2",
-	_szs: {}, //Map(id, Draggable)
+	_szs: {}, //Map(id, zDraggable)
 	_clean2: {}, //Map(id, mode): to be cleanup the modal effect
 	_modal2: {}, //Map(id, todo): to do 2nd phase modaling (disable)
 	// tool button event
@@ -146,7 +146,7 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 		if (maximized) {
 			zk.addClass($e(cmp, "maximize"), cls + "-maximized");
 			zkWnd2.hideShadow(cmp);
-			var op = !zkWnd2._embedded(cmp) ? Position.offsetParent(cmp) : cmp.parentNode;
+			var op = !zkWnd2._embedded(cmp) ? zPos.offsetParent(cmp) : cmp.parentNode;
 			l = s.left;
 			t = s.top;
 			w = s.width;
@@ -511,7 +511,7 @@ zkWnd2.setSizable = function (cmp, sizable) {
 	if (sizable) {
 		if (!zkWnd2._szs[id]) {
 			var orgpos = cmp.style.position; //Bug 1679593
-			zkWnd2._szs[id] = new Draggable(cmp, {
+			zkWnd2._szs[id] = new zDraggable(cmp, {
 				starteffect: zkau.closeFloats, overlay: true,
 				endeffect: zkWnd2._endsizing, ghosting: zkWnd2._ghostsizing,
 				revert: true, reverteffect: zk.voidf,

@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 zkTimer = {};
 zkTimer._intvs = []; //an array of intervals
 
-zk.Timer = Class.create();
+zk.Timer = zClass.create();
 zk.Timer.prototype = {
 	initialize: function (comp) {
 		this.id = comp.id;

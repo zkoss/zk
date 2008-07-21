@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zk.load("zul.lang.msgzul*");
-zk.fisheye = Class.create();
+zk.fisheye = zClass.create();
 /**
  * Menu similar to the fish eye menu on the Mac OS
  * @since 3.5.0

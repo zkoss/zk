@@ -21,7 +21,7 @@ zk.load("zul.zul"); //zul and msgzul
 zkWnd = {
 	ztype: "Wnd" // since we have a 'Wnd2' js.
 };
-zkWnd._szs = {} //Map(id, Draggable)
+zkWnd._szs = {} //Map(id, zDraggable)
 zkWnd._clean2 = {}; //Map(id, mode): to be cleanup the modal effect
 zkWnd._modal2 = {}; //Map(id, todo): to do 2nd phase modaling (disable)
 
@@ -216,7 +216,7 @@ zkWnd.setSizable = function (cmp, sizable) {
 	if (sizable) {
 		if (!zkWnd._szs[id]) {
 			var orgpos = cmp.style.position; //Bug 1679593
-			zkWnd._szs[id] = new Draggable(cmp, {
+			zkWnd._szs[id] = new zDraggable(cmp, {
 				starteffect: zkau.closeFloats, overlay: true,
 				endeffect: zkWnd._endsizing, ghosting: zkWnd._ghostsizing,
 				revert: true, reverteffect: zk.voidf,

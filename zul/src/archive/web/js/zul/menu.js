@@ -19,7 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 ////
 zkMenu = {};
 
-zk.FloatMenu = Class.create();
+zk.FloatMenu = zClass.create();
 Object.extend(Object.extend(zk.FloatMenu.prototype, zk.Floats.prototype), {
 	_close: function (el) {
 		zkMenu._close2(el); // Bug #1852304. invoke zkMenu._close function later.

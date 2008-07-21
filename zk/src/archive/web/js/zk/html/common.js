@@ -151,7 +151,7 @@ zk.TextUtil = {
 		return this.instance.getSize();
 	}
 };
-zk.Shadow = Class.create();
+zk.Shadow = zClass.create();
 zk.Shadow.prototype = {
 	diam: 4,
 	mode: "shade", // default mode
@@ -633,24 +633,24 @@ zk.revisedOffset = function (el, ofs) {
 			// However, in IE6 and 7 quirks mode the clientLeft and clientTop properties are not updated when overwriting it via CSS
 			// Therefore this method will be off by 2px in IE while in quirksmode
 		}
-		ofs = Position.cumulativeOffset(el);
+		ofs = zPos.cumulativeOffset(el);
 	}
-	var scrolls = Position.realOffset(el);
+	var scrolls = zPos.realOffset(el);
 	scrolls[0] -= zk.innerX(); scrolls[1] -= zk.innerY(); 
 	return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 };
 if (zk.safari) {
 	//fix safari's bug
-	zk._oldposofs = Position.positionedOffset;
-	Position.positionedOffset = function (el) {
+	zk._oldposofs = zPos.positionedOffset;
+	zPos.positionedOffset = function (el) {
 		if ($tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
 		return zk._oldposofs(el);
 	};
 }
 if (zk.gecko || zk.safari) {
-	zk._oldcumofs = Position.cumulativeOffset;
-	Position.cumulativeOffset = function (el) {
+	zk._oldcumofs = zPos.cumulativeOffset;
+	zPos.cumulativeOffset = function (el) {
 		//fix safari's bug: TR has no offsetXxx
 		if (zk.safari && $tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
@@ -737,7 +737,7 @@ zk.getDimension = function (el) {
 	}
 	return [wd, hgh];
 };
-/** Position a component being releted to another. */
+/** zPos a component being releted to another. */
 zk.position = function (el, ref, type) {
 	var refofs = zk.getDimension(el);
 	var wd = refofs[0], hgh = refofs[1];
@@ -820,7 +820,7 @@ zk.getStyleOffset = function (el) {
 /** Converts from absolute coordination to style's coordination.
  * It is only useful for table's cell.
  * We cannot use zk.toParentCoord, because
- * after calling Draggable, offsetParent becomes BODY but
+ * after calling zDraggable, offsetParent becomes BODY but
  * style.left/top is still relevant to original offsetParent
  */
 zk.toStyleOffset = function (el, x, y) {
@@ -838,7 +838,7 @@ zk.toStyleOffset = function (el, x, y) {
 		if (el.style.top == "" || el.style.top == "auto") el.style.top = "0";
 	}
 
-	var ofs1 = Position.cumulativeOffset(el);
+	var ofs1 = zPos.cumulativeOffset(el);
 	var ofs2 = zk.getStyleOffset(el);
 	ofs1 = [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
 	el.style.left = oldx;
@@ -849,8 +849,8 @@ zk.toStyleOffset = function (el, x, y) {
 /** Whether el1 and el2 are overlapped. */
 zk.isOverlapped = function (el1, el2) {
 	return zk.isOffsetOverlapped(
-		Position.cumulativeOffset(el1), [el1.offsetWidth, el1.offsetHeight],
-		Position.cumulativeOffset(el2), [el2.offsetWidth, el2.offsetHeight]);
+		zPos.cumulativeOffset(el1), [el1.offsetWidth, el1.offsetHeight],
+		zPos.cumulativeOffset(el2), [el2.offsetWidth, el2.offsetHeight]);
 };
 /** Whether ofs1/dim1 is overlapped with ofs2/dim2. */
 zk.isOffsetOverlapped = function (ofs1, dim1, ofs2, dim2) {
@@ -1512,7 +1512,7 @@ zk.restoreDisabled = function (n) {
 				||  tn == "TEXTAREA"){
 				//focus only visible (to prevent scroll)
 					try {
-						var ofs = Position.cumulativeOffset(el);
+						var ofs = zPos.cumulativeOffset(el);
 						if (ofs[0] >= zk.innerX() && ofs[1] >= zk.innerY()
 						&& (ofs[0]+20) <= (zk.innerX()+zk.innerWidth())
 						&& (ofs[1]+20) <= (zk.innerY()+zk.innerHeight())) {
@@ -2191,7 +2191,7 @@ zk.clearSelection = function (){
 /*Float: used to be added to zkau.floats
  * Derives must provide an implementation of _close(el).
  */
-zk.Float = Class.create();
+zk.Float = zClass.create();
 zk.Float.prototype = {
 	initialize: function () {
 	},
@@ -2256,7 +2256,7 @@ zk.Float.prototype = {
 /*Floats: used to be added to zkau.floats
  * Derives must provide an implementation of _close(el).
  */
-zk.Floats = Class.create();
+zk.Floats = zClass.create();
 zk.Floats.prototype = {
 	initialize: function () {
 		this._ftids = [];
@@ -2339,7 +2339,7 @@ zk.Floats.prototype = {
 };
 
 //Histroy//
-zk.History = Class.create();
+zk.History = zClass.create();
 zk.History.prototype = {
 	initialize: function () {
 		this.curbk = "";
@@ -2601,7 +2601,7 @@ anima.appear = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
-			Effect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
+			zEffect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
 		}
 	}
 };
@@ -2617,7 +2617,7 @@ anima.slideDown = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
-			Effect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi, y :0});
+			zEffect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi, y :0});
 				//duration must be less than 0.5 since other part assumes it
 		}
 	}
@@ -2663,7 +2663,7 @@ anima.moveBy = function (id, pos, dur) {
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
 			if (!pos) pos = "topleft"
-			Effect.MoveBy(n, 0, 0, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterHide, afterSetup: function(effect) {
+			zEffect.MoveBy(n, 0, 0, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterHide, afterSetup: function(effect) {
 				 if (pos.indexOf("left") > -1) {
 					 effect.options.x = effect.originalLeft;
 					 effect.originalLeft = 0;
@@ -2689,7 +2689,7 @@ anima.slideUp = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.SlideUp(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterHide});
+			zEffect.SlideUp(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterHide});
 				//duration must be less than 0.5 since other part assumes it
 		}
 	}
@@ -2706,7 +2706,7 @@ anima.fade = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.Fade(n, {duration:dur ? dur/1000: 0.55, afterFinish: anima._afterHide});
+			zEffect.Fade(n, {duration:dur ? dur/1000: 0.55, afterFinish: anima._afterHide});
 		}
 	}
 };
@@ -2722,7 +2722,7 @@ anima.puff = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.Puff(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
+			zEffect.Puff(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
 		}
 	}
 };
@@ -2738,7 +2738,7 @@ anima.dropOut = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.DropOut(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
+			zEffect.DropOut(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
 		}
 	}
 };

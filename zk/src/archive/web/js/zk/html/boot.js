@@ -1626,7 +1626,7 @@ zk.error = function (msg) {
 	box = $e(id); //we have to retrieve back
 
 	try {
-		new Draggable(box, {
+		new zDraggable(box, {
 			handle: box, zindex: box.style.zIndex,
 			starteffect: zk.voidf, starteffect: zk.voidf, endeffect: zk.voidf});
 	} catch (e) {

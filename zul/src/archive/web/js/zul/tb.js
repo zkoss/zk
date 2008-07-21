@@ -201,7 +201,7 @@ zkTmbox._btnDown= function(evt){
 	if(inp.disabled || zk.dragging) return;
 
 	var btn = $e(cmp.id + "!btn"),
-		ofs = Position.cumulativeOffset(btn);
+		ofs = zPos.cumulativeOffset(btn);
 	if ((Event.pointerY(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
 		zkTmbox.onUp(cmp);
 		zkTmbox._startAutoIncProc(cmp, true);
@@ -266,7 +266,7 @@ zkTmbox.onDown=function(cmp){
 	zkTmbox._markPositionSel(cmp);
 };
 
-//check selection Position on minute or hour.
+//check selection position on minute or hour.
 zkTmbox._checkPosition=function(cmp){
 	return cmp.lastPos <= 2 ? zkTmbox.POS_HOUR : zkTmbox.POS_MIN;
 };

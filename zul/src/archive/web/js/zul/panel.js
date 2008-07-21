@@ -264,7 +264,7 @@ zkPanel = {
 					if (bwrap) bwrap.style.display = "";
 				}
 				
-				var op = zkPanel.isFloatable(cmp) ? Position.offsetParent(cmp) : cmp.parentNode;
+				var op = zkPanel.isFloatable(cmp) ? zPos.offsetParent(cmp) : cmp.parentNode;
 				l = s.left;
 				t = s.top;
 				w = s.width;

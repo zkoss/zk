@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zk.Layout = Class.create();
+zk.Layout = zClass.create();
 zk.Layout.prototype = {
 	initialize: function (cmp) {
 		this.id = cmp.id;			
@@ -35,7 +35,7 @@ zk.Layout.prototype = {
 		return this._regions[region];
 	},
 	_getAmbit: function (cmp, region) {
-		var xy = Position.positionedOffset(cmp);
+		var xy = zPos.positionedOffset(cmp);
 		var w = cmp.style.width, h = cmp.style.height;
 		var widx = w.indexOf("%");
 		var hidx = h.indexOf("%");
@@ -285,7 +285,7 @@ zk.Layout.cumulativeOffset = function (element, rootelemnt) {
 		} else {
 			valueT += element.offsetTop  || 0;
 			valueL += element.offsetLeft || 0;			
-			element = zk.gecko && element != document.body ? Position.offsetParent(element): element.offsetParent;
+			element = zk.gecko && element != document.body ? zPos.offsetParent(element): element.offsetParent;
 		}
 	} while (element);
 	return [valueL, valueT];
@@ -425,7 +425,7 @@ zkLayoutRegionSplit.init = function (split) {
 	var vert = split.pos == "west" || split.pos == "east" ? false : true;
 	var drag = zkLayoutRegionSplit._drags[split.id] = {
 		vert: vert,
-		drag: new Draggable(split, {
+		drag: new zDraggable(split, {
 			constraint: vert ? "vertical": "horizontal",
 			ghosting: zkLayoutRegionSplit._ghostsizing,
 			snap: snap, zindex: 12000, overlay: true,
@@ -529,7 +529,7 @@ zkLayoutRegionSplit._ignoresizing = function (split, pointer, event) {
 					}
 					break;						
 			}
-			var ofs = Position.cumulativeOffset(real);
+			var ofs = zPos.cumulativeOffset(real);
 			dg.drag.z_rootlyt = {
 				maxs: maxs,
 				mins: mins,
