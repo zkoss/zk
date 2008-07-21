@@ -914,6 +914,7 @@ zk._bld = function () {
 			for (var j = 0, cl = zk._ckfns.length; j < cl; ++j)
 				if (zk._ckfns[j]()) {
 					zk._ckfns.splice(j--, 1);
+					--cl;
 					zk.ald();
 				} else return; //wait a while
 		}, 10);
