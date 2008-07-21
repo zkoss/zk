@@ -263,7 +263,8 @@ else
       scrollSensitivity: 20,
       scrollSpeed: 15,
       snap: false,  // false, or xy or [x,y] or function(x,y){ return [x,y] }
-      delay: 0
+      delay: 0,
+      overlay: false
     };
     
     if(!arguments[1] || typeof arguments[1].endeffect == 'undefined')
@@ -355,7 +356,15 @@ zkau.autoZIndex(src, false, true);
   startDrag: function(event) {
 //Tom M. Yeh, Potix: disable selection
 zk.disableSelection(document.body); // Bug #1820433
-  
+  	if (this.options.overlay) { // Bug #1911280
+		this.domOverlay = document.createElement("DIV");
+		document.body.appendChild(this.domOverlay);
+		zk.setOuterHTML(this.domOverlay, '<div class="dd-overlay" id="zk_dd_overlay"></div>');
+		this.domOverlay = $e("zk_dd_overlay");
+		if (zk.gecko) this.domOverlay.style.MozUserSelect = "none";
+		this.domOverlay.style.width = zk.pageWidth() + "px";
+		this.domOverlay.style.height = zk.pageHeight() + "px";
+	}
     this.dragging = true;
     
     if(this.options.ghosting) {
@@ -430,7 +439,8 @@ if (this.z_orgpos != 'absolute')
   
   finishDrag: function(event, success) {
     this.dragging = false;
-
+	if (this.domOverlay) zk.remove(this.domOverlay);
+	delete this.domOverlay;
 //Tom M. Yeh, Potix: enable selection back and clear selection if any
 zk.enableSelection(document.body);
 setTimeout("zk.clearSelection()", 0);
@@ -529,7 +539,9 @@ if (this.z_scrl) {
 
     var style = this.element.style;
 //Tom M. Yeh, Potix: support function constraint
-if (typeof this.options.constraint == 'function') {
+if (typeof this.options.draw == 'function') {
+	this.options.draw(this, p, event);
+} else if (typeof this.options.constraint == 'function') {
 	var np = this.options.constraint(this, p, event); //return null or [newx, newy]
 	if (np) p = np;
 	style.left = p[0] + "px";

@@ -1997,7 +1997,8 @@ Object.extend(Event, {
     } else {
       event.returnValue = false;
       event.cancelBubble = true;
-	  event.keyCode = 0; //Jumper Chen, Potix: Bug #1834891
+	  if (!event.shiftKey && !event.ctrlKey)
+	  	event.keyCode = 0; //Jumper Chen, Potix: Bug #1834891
     }
   },
 /* Tom M. Yeh, Potix: remove unused codes
@@ -2111,7 +2112,7 @@ if (!window.opera || element.tagName == 'BODY' || (tagName != "TR" && tagName !=
 				valueT += $int(Element.getStyle(el, "border-top-width"));
 				valueL += $int(Element.getStyle(el, "border-left-width"));
 			}
-	        el = el.parentNode;
+	        el = el.offsetParent;
 	    }
 	}
 	
