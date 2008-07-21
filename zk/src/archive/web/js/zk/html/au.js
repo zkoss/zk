@@ -1398,7 +1398,8 @@ zkau._onDidResize = function () {
 	}
 
 	zkau._tmResz = null; //handled
-	zkau._tmLastResz = now + (zk.ie ? 350: 100); //when to process onresize again
+	zkau._tmLastResz = now + 1000;
+		//ignore following for a while if processing (in slow machine)
 
 	if (zkau._cInfoReg)
 		setTimeout(zkau._doClientInfo, 20);
@@ -1408,6 +1409,7 @@ zkau._onDidResize = function () {
 
 	zk.beforeSizeAt();
 	zk.onSizeAt();
+	zkau._tmLastResz = $now() + 8;
 };
 zkau._doClientInfo = function () {
 	zkau.cmd0.clientInfo();
