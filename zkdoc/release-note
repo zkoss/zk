@@ -19,6 +19,7 @@ ZK 3.0.7
   2010389: Data binding error: changing selected item of combobox
   2021100: When IdGenerator.nextComponentUuid called, parent/page null
   2023407: JavaScript error if zk.load called with ckfn
+  2024133: ZKdemo's theme cannot be changed
 
 	--------
 ZK 3.0.6
