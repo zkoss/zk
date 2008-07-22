@@ -1,10 +1,6 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-<c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
-<c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
-<c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
-
 h1 {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: x-large; font-weight: bold; color: #250070;
@@ -31,7 +27,7 @@ h6 {
 	font-size: small; font-weight: normal; color: #404040;
 }
 
-h1 em	{color: #dd0000}
+h1 em {color: #dd0000}
 
 dt {
 	margin: 0.5em 0 0.3em 0;
@@ -41,9 +37,9 @@ dd {
 	margin: 0 0 0 0.8em;
 }
 
-p, div, span, label, a, li, dt, dd, input, textarea, pre, body, button {
+li, dt, dd, pre, body {
 	font-family: Verdana, Tahoma, Arial, serif;
-	font-size: ${fontSizeM}; font-weight: normal;
+	font-weight: normal;
 }
 
 li	{margin-top: 2pt}
@@ -53,11 +49,11 @@ ul ul ul li	{list-style: url(${c:encodeURL('~./img/bullet3.gif')}) square}
 
 code {
 	font-family: "Lucida Console", "Courier New", Courier, mono;
-	font-size: ${fontSizeS};  font-weight: normal;
+	font-weight: normal;
 }
 dfn {
 	font-family: "Lucida Console", "Courier New", Courier, mono;
-	font-size: ${fontSizeS}; font-style: normal;
+	font-style: normal;
 }
 
 <%-- The hyperlink's style class. --%>
