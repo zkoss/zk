@@ -8,7 +8,7 @@
 }
 .zk option {
 	font-family: Verdana, Tahoma, Arial, serif;
-	font-size: xx-small; font-weight: normal;
+	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:when>
 <c:otherwise>
@@ -17,10 +17,11 @@ img	{
 }
 option {
 	font-family: Verdana, Tahoma, Arial, serif;
-	font-size: xx-small; font-weight: normal;
+	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:otherwise>
 </c:choose>
+
 .messagebox-btn {
 	width: 47pt;
 	text-overflow: ellipsis;

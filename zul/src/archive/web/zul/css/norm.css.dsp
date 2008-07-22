@@ -1,6 +1,10 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
+<c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
+<c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
+<c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
+
 html, body {height:100%}
 
 <c:if test="${empty c:getProperty('org.zkoss.zul.theme.browserDefault')}">
@@ -10,17 +14,16 @@ body {
 </c:if>
 
 <%-- paragraphs --%>
-
 <c:choose>
-<c:when  test="${!empty c:getProperty('org.zkoss.zul.theme.enableZKPrefix')}">
+<c:when test="${!empty c:getProperty('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
 .zk button, .zk input.button, .zk input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
-	font-size: small; font-weight: normal;
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 .zk legend {
 	font-family: Tahoma, Garamond, Century, Arial, serif;
-	font-size: small; font-weight: normal;
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 .zk th {
 	font-family: Tahoma, Garamond, Century, Arial, serif;
@@ -36,11 +39,11 @@ body {
 p, div, span, label, a, input, textarea,
 button, input.button, input.file {
 	font-family: Verdana, Tahoma, Arial, serif;
-	font-size: small; font-weight: normal;
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 legend {
 	font-family: Tahoma, Garamond, Century, Arial, serif;
-	font-size: small; font-weight: normal;
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 th {
 	font-family: Tahoma, Garamond, Century, Arial, serif;
@@ -170,17 +173,17 @@ input.z-form-focus, .z-form-focus input {
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {
-	font-size: x-small;
+	font-size: ${fontSizeS};
 }
 .caption td.caption {
-	font-size: small;
+	font-size: ${fontSizeM};
 }
 .caption button {
-	font-size: xx-small; font-weight: normal;
+	font-size: ${fontSizeXS}; font-weight: normal;
 	padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;
 }
 .caption a, .caption a:visited {
-	font-size: x-small; font-weight: normal; color: black; background: none;
+	font-size: ${fontSizeS}; font-weight: normal; color: black; background: none;
 	text-decoration: none;
 }
 .fieldset-bwrap {
@@ -343,7 +346,7 @@ td.lwt-modal, td.mwt-modal, td.rwt-modal,
 td.lwt-highlighted, td.mwt-highlighted, td.rwt-highlighted,
 td.lwt-overlapped, td.mwt-overlapped, td.rwt-overlapped,
 td.lwt-wndcyan, td.mwt-wndcyan, td.rwt-wndcyan {
-	font-size: small;
+	font-size: ${fontSizeM};
 	padding: 4px 0 3px 0; margin: 0 0 2px 0;
 	color: white;
 }
@@ -484,11 +487,11 @@ div.vsep-bar {
 	background: none; border: 0;
 }
 .toolbar-body, .toolbar-body span {
-	font-size: x-small;
+	font-size: ${fontSizeS};
 }
 .toolbar a, .toolbar a:visited, .toolbar a:hover {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: x-small; font-weight: normal; color: black;
+	font-size: ${fontSizeS}; font-weight: normal; color: black;
 	background: #D0DEF0; border: 1px solid #D0DEF0;
 	text-decoration: none;
 }
@@ -564,7 +567,7 @@ div.tree-head th, div.listbox-head th, div.grid-head th
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
-	font-size: small; font-weight: normal;
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 div.listbox-head th.sort div.head-cell-inner, div.grid-head th.sort div.head-cell-inner
 	<%-- ,tr.listbox-fake th.sort div ,tr.tree-fake th.sort div ,tr.grid-fake th.sort div 
@@ -594,7 +597,7 @@ div.listbox-head th.sort-dsc div.head-cell-inner, div.grid-head th.sort-dsc div.
 	background-repeat: no-repeat;
 }
 div.head-cell-inner {
-	font-size: small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: ${fontSizeM}; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
 div.tree-body, div.listbox-body, div.grid-body {<%-- always used. --%>
 	background: white; border: 0; overflow: auto; width: 100%;
@@ -607,7 +610,7 @@ div.listbox-pgi-t, div.grid-pgi-t {
 }
 div.tree-body td, div.listbox-body td, div.tree-foot td, div.listbox-foot td {
 	cursor: pointer; padding: 0 2px;
-	font-size: small; font-weight: normal; overflow: hidden; 
+	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden; 
 }
 
 div.listbox-foot, div.grid-foot, div.tree-foot{<%-- always used --%>
@@ -633,7 +636,7 @@ td.gc {
 	padding: 2px; overflow: hidden; 
 }
 div.gc {
-	font-size: small; font-weight: normal; color: black;
+	font-size: ${fontSizeM}; font-weight: normal; color: black;
 }
 td.hbox-sp {
 	width: 0.3em; padding: 0; margin: 0;
@@ -642,7 +645,7 @@ tr.vbox-sp {
 	height: 0.3em; padding: 0; margin: 0;
 }
 tr.item, tr.item a, tr.item a:visited {
-	font-size: small; font-weight: normal; color: black;
+	font-size: ${fontSizeM}; font-weight: normal; color: black;
 	text-decoration: none;
 }
 tr.item a:hover {
@@ -867,7 +870,7 @@ div.gc-z-groupbox {
 <%-- ZK tab. --%>
 .tab, .tab a, a.tab {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: x-small; font-weight: normal; color: #300030;
+	font-size: ${fontSizeS}; font-weight: normal; color: #300030;
 }
 .tab a, .tab a:visited, a.tab, a.tab:visited {
 	text-decoration: none;
@@ -877,7 +880,7 @@ div.gc-z-groupbox {
 }
 .tabsel, .tabsel a, a.tabsel {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: x-small; font-weight: bold; color: #500060;
+	font-size: ${fontSizeS}; font-weight: bold; color: #500060;
 }
 .tabsel a, .tabsel a:visited, a.tabsel, a.tabsel:visited {
 	text-decoration: none;
@@ -888,7 +891,7 @@ div.gc-z-groupbox {
 
 .tabdis, .tabdis a, a.tabdis {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: x-small; font-weight: normal; color: #AAAAAA;
+	font-size: ${fontSizeS}; font-weight: normal; color: #AAAAAA;
 }
 .tabdis a, .tabdis a:visited, a.tabdis, a.tabdis:visited {
 	text-decoration: none;
@@ -900,7 +903,7 @@ div.gc-z-groupbox {
 }
 .tabdissel, .tabdissel a, a.tabdissel {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: x-small; font-weight: bold; color: #999999;
+	font-size: ${fontSizeS}; font-weight: bold; color: #999999;
 }
 .tabdissel a, .tabdissel a:visited, a.tabdissel, a.tabdissel:visited {
 	text-decoration: none;
@@ -1513,16 +1516,16 @@ span.z-rbtn-click img.combobox, span.z-rbtn-click img.bandbox, span.z-rbtn-click
 div.comboboxpp, div.bandboxpp {<%--sclass + "pp"--%>
 	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid #7F9DB9; padding: 2px;
-	font-size: x-small;
+	font-size: ${fontSizeS};
 }
 div.comboboxpp {
 	overflow: auto; <%-- if bandboxpp overflow:auto, crop popup if any --%>
 }
 .comboboxpp td {<%--label--%>
-	white-space: nowrap; font-size: x-small; cursor: pointer;
+	white-space: nowrap; font-size: ${fontSizeS}; cursor: pointer;
 }
 .comboboxpp td span {<%--description--%>
-	color: #888; font-size: xx-small; padding-left: 6px;
+	color: #888; font-size: ${fontSizeXS}; padding-left: 6px;
 }
 <%-- ZK Popup --%>
 .ctxpopup {
@@ -1611,11 +1614,11 @@ table.calday {
 	border: 1px solid #ddd;
 }
 table.calyear td {
-	font-size: small; font-weight: bold; text-align: center;
+	font-size: ${fontSizeM}; font-weight: bold; text-align: center;
 	white-space: nowrap;
 }
 table.calmon td, tr.calday td, tr.calday td a, tr.calday td a:visited {
-	font-size: x-small; color: #35254F; text-align: center;
+	font-size: ${fontSizeS}; color: #35254F; text-align: center;
 	cursor: pointer; text-decoration: none;
 }
 tr.calday td {
@@ -1631,7 +1634,7 @@ table.calmon td.dis, tr.calday td.dis {
 	color: #888;
 }
 tr.caldow td {
-	font-size: x-small; color: #333; font-weight: bold;
+	font-size: ${fontSizeS}; color: #333; font-weight: bold;
 	padding: 1px 2px; background: #e8e8f0; text-align: center;
 }
 
@@ -1874,7 +1877,7 @@ tr.listbox-fake th, tr.tree-fake th, tr.grid-fake th {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
-	font-size: small; font-weight: normal;
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 tr.listbox-fake th.sort div, tr.tree-fake th.sort div, tr.grid-fake th.sort div{
 	cursor: pointer; padding-right: 9px;
