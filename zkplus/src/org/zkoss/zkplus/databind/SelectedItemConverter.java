@@ -53,6 +53,7 @@ public class SelectedItemConverter implements TypeConverter {
   				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
     				Set items = new HashSet();
     				items.add(item);
+    				lbx.setAttribute("zkoss.zkplus.databind.ON_SELECT", Boolean.TRUE);
     				Events.postEvent(new SelectEvent("onSelect", lbx, items, item));
     			}    			
   				return item;
@@ -74,6 +75,11 @@ public class SelectedItemConverter implements TypeConverter {
   
   public Object coerceToBean(Object val, Component comp) { //save
   	Listbox lbx = (Listbox) comp;
+	if (lbx.getAttribute("zkoss.zkplus.databind.ON_SELECT") != null) {
+		//triggered by coerceToUi(), ignore this
+		lbx.removeAttribute("zkoss.zkplus.databind.ON_SELECT");
+		return TypeConverter.IGNORE;
+	}
   	if (val != null) {
   		ListModel model = lbx.getModel();
   		//no model case, assume Listitem.value to be used with selectedItem

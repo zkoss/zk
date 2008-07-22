@@ -74,7 +74,7 @@ public class SelectedComboitemConverter implements TypeConverter {
 		  		//Bug #2010389
 	  			//if combobox is going to do onInitRender (syncModel), no need to setSelectedItem
 	  			if (cbbox.getAttribute("zkoss.zul.Combobox.ON_INITRENDER") != null) {
-	  				return null;
+	  				return TypeConverter.IGNORE;
 	  			}
 	  			final BindingListModel model = (BindingListModel) xmodel;
 	  			int index = model.indexOf(val);
