@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page id="userGuide" title="ZK Live Demo"?>
-
+<?link  rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?>
 <!--
 index.zul
 
@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-<style src="~./zul/css/ext.css.dsp"/>
 <borderlayout use="org.zkoss.zkdemo.userguide.MainLayout">
 	<west border="none" size="320px" splittable="true" minsize="150" maxsize="500" collapsible="true">
 		<tree id="toc" use="org.zkoss.zkdemo.userguide.LayoutTree" pageSize="-1" vflex="true" height="100%" width="100%">
