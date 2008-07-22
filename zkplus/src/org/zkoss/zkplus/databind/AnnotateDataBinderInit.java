@@ -19,6 +19,7 @@ package org.zkoss.zkplus.databind;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
 
 /**
@@ -55,7 +56,7 @@ public class AnnotateDataBinderInit implements Initiator {
 		if (_comp instanceof Component) {
 			_binder = new AnnotateDataBinder(_comp, b);
 			_comp.setVariable("binder", _binder, true);
-		}	else if (_compPath == null || "page".equals(_compPath)) {
+		} else if (_compPath == null || "page".equals(_compPath)) {
 			_binder = new AnnotateDataBinder(page, b);
 			page.setVariable("binder", _binder);
 		} else if (_compPath.startsWith("/")) {
@@ -82,6 +83,8 @@ public class AnnotateDataBinderInit implements Initiator {
 				_compPath = (String) arg0;
 			} else if (arg0 instanceof Component) {
 				_comp = (Component) arg0;
+			} else if (!(arg0 instanceof Page)) {
+				throw new UiException("arg0 has to be String, Component, or Page: "+arg0);
 			}
 		}
 		

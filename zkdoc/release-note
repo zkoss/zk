@@ -20,7 +20,8 @@ ZK 3.0.7
   2021100: When IdGenerator.nextComponentUuid called, parent/page null
   2023407: JavaScript error if zk.load called with ckfn
   2024133: ZKdemo's theme cannot be changed
-
+  2024223: Shall throw Exception when pass in arg0 is not correct
+  
 	--------
 ZK 3.0.6
 * Features
