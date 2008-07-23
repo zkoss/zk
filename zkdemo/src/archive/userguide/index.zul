@@ -145,16 +145,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<include style="padding:3px;" width="99%" id="xcontents" src="${requestScope.contentSrc}"/><!-- prepared by TocTree -->
 	</center>
 </borderlayout>
-<script type="text/javascript"
-if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}"><![CDATA[
-if (!zk.https()) {
-	_urchin = function() {
-		try {
-			_uacct = "UA-121377-3";
-			urchinTracker();
-		} catch (e) {}
-	};
-	setTimeout('zk.loadJS("http://www.google-analytics.com/urchin.js", _urchin)', 5000);
-}
-]]></script>
+<script if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}">
+var pageTracker = _gat._getTracker("UA-121377-3");
+pageTracker._setDomainName("zkoss.org");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
 </zk>
