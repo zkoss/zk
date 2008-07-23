@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -218,12 +217,15 @@ public class Treeitem extends XulElement {
 			if (_treerow != null)
 				_treerow.smartUpdate("z.open", _open);
 			//If the item is open, its tree has model and not rendered, render the item
-			if(_open){
+			boolean shouldNotify = _treechildren != null && isVisible();
+			if(_open) {
+				if (shouldNotify) addVisibleItemCount(_treechildren.getVisibleItemCount(), false);
 				Tree tree = getTree();
 				if(tree != null && tree.getModel() !=null){
 					tree.renderItem(this);
 				}
-			}
+			} else 
+				if (shouldNotify) addVisibleItemCount(-_treechildren.getVisibleItemCount(), true);
 		}
 	}
 	/** Returns whether this item is selected.
@@ -399,7 +401,26 @@ public class Treeitem extends XulElement {
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible && _treerow != null) 
 			_treerow.smartUpdate("z.visible", visible);
-		return super.setVisible(visible);
+		int count = isOpen() && _treechildren != null ?
+				_treechildren.getVisibleItemCount() + 1: 1;
+		boolean result = super.setVisible(visible);
+		if (isVisible()) {
+			addVisibleItemCount(count, false);
+		} else {
+			addVisibleItemCount(-count, true);
+		}
+		return result;
+	}
+	/**
+	 * adds the number of the visible item to the count of its parent.
+	 * @param count
+	 * @param force if true, ignores {@link #isVisible()}
+	 * @since 3.0.7
+	 */
+	void addVisibleItemCount(int count, boolean force) {
+		Treechildren tc = (Treechildren) getParent();
+		if (tc != null && (force || isVisible()))
+			tc.addVisibleItemCount(count);
 	}
 	
 	//impl note: no getOuterAttrs, ON_OPEN..., since treeitem is virtual
@@ -471,6 +492,7 @@ public class Treeitem extends XulElement {
 		}
 		super.onChildRemoved(child);
 	}
+	
 	public void invalidate() {
 		//There is no counter-part at client if no tree row
 		//We didn't set ATTR_NO_CHILD at insertBefore, since we cannot
@@ -524,6 +546,13 @@ public class Treeitem extends XulElement {
 		public void setOpenByClient(boolean open) {
 			_open = open;
 
+			if (_treechildren != null && isVisible()) {
+				if (_open)
+					addVisibleItemCount(_treechildren.getVisibleItemCount(), false);
+				else {
+					addVisibleItemCount(-_treechildren.getVisibleItemCount(), true);
+				}
+			}
 			if (_open) {
 				final Tree tree = getTree();
 				if (tree != null && tree.getModel() != null)

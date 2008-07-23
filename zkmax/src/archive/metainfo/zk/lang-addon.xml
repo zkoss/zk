@@ -871,6 +871,10 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.TreeDefault</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>paging</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TreePaging</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>treecell</component-name>

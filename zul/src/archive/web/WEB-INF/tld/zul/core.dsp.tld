@@ -80,4 +80,34 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	Resets the stripe CSS for each row.
 		</description>
 	</function>
+	<function>
+		<name>shouldBeVisited</name>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
+		<function-signature>
+	boolean shouldBeVisited(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component)
+		</function-signature>
+		<description>
+	 Returns whether the treeitem should be visited.
+		</description>
+	</function>
+	<function>
+		<name>shouldBeRendered</name>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
+		<function-signature>
+	boolean shouldBeRendered(org.zkoss.zk.ui.Component)
+		</function-signature>
+		<description>
+	Returns whether the treeitem should be rendered.
+		</description>
+	</function>
+	<function>
+		<name>clearRenderedItem</name>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
+		<function-signature>
+	void clearRenderedItem(org.zkoss.zk.ui.Component)
+		</function-signature>
+		<description>
+	Clears up these attributes which are used for Tree's paging mold.
+		</description>
+	</function>
 </taglib>

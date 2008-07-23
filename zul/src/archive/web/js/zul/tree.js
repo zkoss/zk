@@ -19,44 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 zk.load("zul.sel");
 
 ////
-//Customization
-/** Returns HTML for the pagination.
- *
- * @param row the parent treerow owns this paging
- * @param pgc # of pages
- * @param pgi the active page
- * @param end whether it is the end pagination or the begin pagination
- */
-if (!window.Tree_paging) { //not customized
-	window.Tree_paging = function (row, pgc, pgi, pgsz, end) {
-		var html = "";
-		if (end) {
-			html += zkTrow._genimg("dn", "zkTrow._onpg(1");
-			var v = pgc - pgi;
-			if (v > 2) {
-				html += zkTrow._genimg(v > 3 ? "dn2": "btm", "zkTrow._onpg(2");
-				if (v > 3)
-					html += zkTrow._genimg("btm", "zkTrow._onpg(9");
-			}
-		} else {
-			html += zkTrow._genimg("up", "zkTrow._onpg(-1");
-			if (pgi > 1) {
-				html += zkTrow._genimg(pgi > 2 ? "up2": "top", "zkTrow._onpg(-2");
-				if (pgi > 2)
-					html += zkTrow._genimg("top", "zkTrow._onpg(-9");
-			}
-		}
-
-		html += '<img src="' + zk.getUpdateURI("/web/zul/img/tree/spacer.gif") + '" width="15" height="1"/>';
-
-		if (pgsz < 50)
-			html += zkTrow._genimg("zoomin", "zkTrow._onzoom(10");
-		if (pgsz > 10)
-			html += zkTrow._genimg("zoomout", "zkTrow._onzoom(-10");
-		return html;
-	};
-}
-
 //when this executes, sel.js might not be loaded yet, so we have to delay
 //the creation of zk.Tree until zkTree.init
 function zkTreeNewClass() {
@@ -158,14 +120,6 @@ zkTree.init = function (cmp) {
 		if (meta.body)
 			zk.listen(meta.body, "keydown", zkTree.bodyonkeydown);
 	}
-
-	//we have re-paginate since treechild might be invalidated
-	if (meta.bodytbl)
-		zkTrow._pgnt(cmp, meta.bodyrows);
-};
-
-zkTree.cleanup = function (cmp) {
-	zkTrow._pgclean(cmp);
 };
 
 /** Called when a tree becomes visible because of its parent. */
@@ -211,12 +165,6 @@ zkTree.focus = function (cmp) {
 zkTree.setAttr = function (cmp, nm, val) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) {
-		if ("z.pgInfo" == nm) {
-			zkTrow._setPgInfo(cmp, val);
-			if (meta.bodytbl)
-				zkTrow._pgnt(cmp, meta.bodyrows);
-			return true;
-		}
 		return meta.setAttr(nm, val);
 	}
 };
@@ -249,11 +197,8 @@ zkTrow.init = function (cmp) {
 	var sib = getZKAttr(cmp, "tchsib");
 	if (sib) _zktrx.sib[sib] = cmp.id;
 
-	zkTrow._pgnt(cmp);
 };
 zkTrow.cleanup = zkTrow._pgclean = function (cmp) {
-	zk.remove($e(cmp.id + "!ph"));
-	zk.remove($e(cmp.id + "!pt"));
 
 	_zktrx.cleanup(cmp, "ptch");
 	_zktrx.cleanup(cmp, "pitem");
@@ -268,19 +213,9 @@ zkTrow.setAttr = function (cmp, nm, val) {
 				meta._openItem(cmp, null, toOpen);
 		}
 		return true; //no more processing
-	} else if ("z.pgInfo" == nm) {
-		zkTrow._setPgInfo(cmp, val);
-		zkTrow._pgnt(cmp);
-		return true;
 	}
 	return false;
 };
-zkTrow._setPgInfo = function (cmp, pgInfo) {
-	var j = pgInfo.indexOf(','), k = pgInfo.indexOf(',', j + 1);
-	setZKAttr(cmp, "pgc", pgInfo.substring(0, j).trim());
-	setZKAttr(cmp, "pgi", pgInfo.substring(j + 1, k).trim());
-	setZKAttr(cmp, "pgsz", pgInfo.substring(k + 1).trim());
-}
 
 /** Opens a treeitem.
  * @param {String or Element} n the ID of treeitem or treerow, or the treerow
@@ -302,131 +237,6 @@ zkTrow.open = function (n, open) {
 zkTrow.onrtclk = function (cmp) {
 	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta && !meta._isSelected(cmp)) meta.doclick(null, cmp);
-};
-/* Paginate.
- * @param cmp treerow or tree
- * @param rows all rows of the tree, null if cmp is treerow
- */
-zkTrow._pgnt = function (cmp, rows) {
-	var head = $e(cmp.id + "!ph"), tail = $e(cmp.id + "!pt");
-	var pgc = getZKAttr(cmp, "pgc");
-	if (pgc > 1) {
-		var ncol = (rows ? rows[0].cells: cmp.cells).length;
-		var pgsz = getZKAttr(cmp, "pgsz");
-		var pgi = getZKAttr(cmp, "pgi");
-		if (pgi > 0) { //head visible
-			if (!head || pgc != getZKAttr(head, "pgc")
-			|| pgi != getZKAttr(head, "pgi")) {
-				if (!head) head = zkTrow._genpg(cmp, rows, false);
-				zk.setInnerHTML($e(cmp.id + "!pch"),
-					Tree_paging(cmp, pgc, pgi, pgsz, false));
-			} else
-				zkTrow._fixpgspan(head, ncol);
-			head = null; //so it won't be removed later
-		}
-
-		if (pgi < pgc - 1) { //tail visible
-			if (!tail || pgc != getZKAttr(tail, "pgc")
-			|| pgi != getZKAttr(tail, "pgi")) {
-				if (!tail) tail = zkTrow._genpg(cmp, rows, true);
-				zk.setInnerHTML($e(cmp.id + "!pct"),
-					Tree_paging(cmp, pgc, pgi, pgsz, true));
-			} else
-				zkTrow._fixpgspan(tail, ncol);
-			tail = null; //so it won't be removed later
-		}
-	}
-
-	zk.remove(head);
-	zk.remove(tail);
-};
-/** Fixes colspan of pagination. */
-zkTrow._fixpgspan = function (n, ncol) {
-	if (ncol != getZKAttr(n, "ncol")) {
-		n.colSpan = ncol;
-		setZKAttr(n, "ncol", ncol);
-	}
-};
-/** Generate the pagination tags.
- * @param end whether it is the end pagination or the begin pagination
- */
-zkTrow._genpg = function (cmp, rows, end) {
-	var tr = document.createElement("TR");
-	tr.id = cmp.id + (end ? "!pt": "!ph");
-	if (!rows //!rows => parent is treeitem
-	&& (!zkTree.isOpen(cmp) || !$visible(cmp))) //not visible if ancestor is not open
-		tr.style.display = "none"
-	var td = document.createElement("TD");
-	tr.appendChild(td);
-
-	if (rows) {
-		if (end) zk.insertAfter(tr, rows[rows.length - 1]);
-		else zk.insertBefore(tr, rows[0]);
-	} else {
-		setZKAttr(tr, "gpitem", getZKAttr(cmp, "pitem"));
-		zk.insertAfter(tr, end ? zkTrow._lastKid(cmp): cmp);
-	}
-
-	//clone images with z.fc
-	//Note: we don't clone the last image
-	if (!rows) {
-		var n = zk.nextSibling(end ? cmp: tr, "TR");
-		if (n.id.endsWith("!ph")) n = zk.nextSibling(n, "TR"); //skip head
-		var last = null;
-		for (n = n.cells[0].firstChild, n = n && n.firstChild ? n.firstChild: n; //TD/DIV/icons
-		n; n = n.nextSibling) {
-			if (n.getAttribute) {
-				if (!getZKAttr(n, "fc") && !n.id.endsWith("!cm"))
-					break;
-				if (last) {
-					var cloned = last.cloneNode(true);
-					if (cloned.id.endsWith("!cm")) {
-						cloned.id = "";
-						cloned.style.visibility = "hidden";
-					}
-					td.appendChild(cloned);
-				}
-				last = n;
-			}
-		}
-	}
-
-	//create content
-	var cnt = document.createElement("SPAN");
-	cnt.id = cmp.id + "!pc" + (end ? 't': 'h');
-	cnt.className = "treeitem-paging";
-	cnt.style.width = "100%";
-	td.appendChild(cnt);
-
-	return tr;
-};
-zkTrow._genimg = function (uri, js) {
-	return '<img src="'+zk.getUpdateURI("/web/zul/img/tree/" + uri + "-off.gif")
-		+'" onmouseover="zkau.onimgover(event)" onmouseout="zkau.onimgout(event)" align="top" onclick="'
-		+js+',event)"/>';
-};
-/** page up or down
- * @param index -9: top page, -1: up one page, -2: up two pages
- * 9: bottom, 1: down one page, 2: down two pages
- */
-zkTrow._onpg = function (index, evt) {
-	if (!evt) evt = window.event;
-	var n = $outer($parent(Event.element(evt)));
-
-	zkau.send({uuid: getZKAttr(n, "tchsib"), cmd: "onPaging",
-		data: [index == -9 ? 0:
-			index == 9 ? $int(getZKAttr(n, "pgc")) - 1:
-			$int(getZKAttr(n, "pgi")) + index]});
-};
-/** Zoom in or out
- * @param index -1: zoom out, 1: zoom in
- */
-zkTrow._onzoom = function (index, evt) {
-	if (!evt) evt = window.event;
-	var n = $outer($parent(Event.element(evt)));
-
-	zkau.send({uuid: getZKAttr(n, "tchsib"), cmd: "onPageSize",
-		data: [$int(getZKAttr(n, "pgsz")) + index]});
 };
 /** Returns the last direct child.
  * It returns itself if there is no child at all.

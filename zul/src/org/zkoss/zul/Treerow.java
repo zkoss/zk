@@ -170,8 +170,9 @@ public class Treerow extends XulElement {
 
 		if (tree != null && tree.getModel() != null && !item.isLoaded())
 			sb.append(" z.lod=\"t\""); //lod=Load-on-Demand
-		appendAsapAttr(sb, Events.ON_OPEN);
-		
+		if (getTree().inPagingMold())
+			HTMLs.appendAttribute(sb, "z."+Events.ON_OPEN, true);
+		else appendAsapAttr(sb, Events.ON_OPEN);
 		final String clkattrs = getAllOnClickAttrs();
 		if (clkattrs != null) sb.append(clkattrs);
 		HTMLs.appendAttribute(sb, "z.visible", isBothVisible());

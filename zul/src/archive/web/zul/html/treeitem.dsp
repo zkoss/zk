@@ -18,6 +18,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
-<c:set var="self" value="${requestScope.arg.self}"/>
-${z:redraw(self.treerow, null)}
-${z:redraw(self.treechildren, null)}
+<%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="zu" %>
+<c:set var="self" value="${requestScope.arg.self}" />
+<c:set var="tree" value="${self.tree}" />
+<c:choose>
+	<c:when test="${tree.mold == 'paging'}">
+		<c:if test="${self.visible and zu:shouldBeVisited(tree, self)}">
+			<c:if test="${zu:shouldBeRendered(tree)}">
+			${z:redraw(self.treerow, null)}
+			</c:if>
+			<c:if test="${self.open}">
+			${z:redraw(self.treechildren, null)}
+			</c:if>
+		</c:if>
+	</c:when>
+	<c:otherwise>
+	${z:redraw(self.treerow, null)}
+	${z:redraw(self.treechildren, null)}
+	</c:otherwise>
+</c:choose>

@@ -24,7 +24,9 @@ import java.io.Writer;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
+import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
+import org.zkoss.zul.fn.ZulFns;
 
 /**
  * {@link Treeitem}'s default mold.
@@ -36,9 +38,17 @@ import org.zkoss.zul.Treeitem;
 public class TreeitemDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {		
 		final Treeitem self = (Treeitem) comp;
-		new SmartWriter(out)
-			.write(self.getTreerow())
-			.write(self.getTreechildren());
+		final SmartWriter wh = new SmartWriter(out);
+		final Tree tree = self.getTree();
+		if ("paging".equals(tree.getMold())) {
+			if (self.isVisible() && ZulFns.shouldBeVisited(tree, self)) {
+				if (ZulFns.shouldBeRendered(tree))
+					wh.write(self.getTreerow());
+				if (self.isOpen())
+					wh.write(self.getTreechildren());
+			}
+		} else {
+			wh.write(self.getTreerow()).write(self.getTreechildren());
+		}
 	}
-
 }

@@ -95,6 +95,8 @@ public class Paging extends XulElement implements Paginal {
 			return "both".equals(((Listbox)parent).getPagingPosition());
 		else if (parent instanceof Grid)
 			return "both".equals(((Grid)parent).getPagingPosition());
+		else if (parent instanceof Tree)
+			return "both".equals(((Tree)parent).getPagingPosition());
 		return false;
 	}
 	

@@ -602,10 +602,10 @@ div.head-cell-inner {
 div.tree-body, div.listbox-body, div.grid-body {<%-- always used. --%>
 	background: white; border: 0; overflow: auto; width: 100%;
 }
-div.listbox-pgi, div.grid-pgi {
+div.listbox-pgi, div.grid-pgi, div.tree-pgi {
 	border-top: 1px solid #AAB; overflow: hidden;
 }
-div.listbox-pgi-t, div.grid-pgi-t {
+div.listbox-pgi-t, div.grid-pgi-t, div.tree-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden;
 }
 div.tree-body td, div.listbox-body td, div.tree-foot td, div.listbox-foot td {
