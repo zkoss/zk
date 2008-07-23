@@ -137,7 +137,7 @@ for fn in $cnfpath/*$flext ; do
 		pkgnm=${clsnm%.*}
 		clsnm=${clsnm##*.}
 
-		if [ "$clsnm" = "" ] || [ "$pkgnm" == "" ] ; then
+		if [ "$clsnm" = "" ] || [ "$pkgnm" = "" ] ; then
 			echo The first line of $fn must be "#class=package.class"
 			exit 1
 		fi
