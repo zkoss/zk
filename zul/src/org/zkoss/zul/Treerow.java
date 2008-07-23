@@ -159,13 +159,6 @@ public class Treerow extends XulElement {
 		final Treechildren tcsib = getLinkedTreechildren();
 		if (tcsib != null) {
 			HTMLs.appendAttribute(sb, "z.tchsib", tcsib.getUuid());
-
-			final int pgcnt = tcsib.getPageCount();
-			if (pgcnt > 1) {
-				HTMLs.appendAttribute(sb, "z.pgc", pgcnt);
-				HTMLs.appendAttribute(sb, "z.pgi", tcsib.getActivePage());
-				HTMLs.appendAttribute(sb, "z.pgsz", tcsib.getPageSize());
-			}
 		}
 
 		if (tree != null && tree.getModel() != null && !item.isLoaded())

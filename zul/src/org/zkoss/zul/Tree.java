@@ -137,7 +137,7 @@ public class Tree extends XulElement {
 	 * Returens a map of current visible item.
 	 * @since 3.0.7
 	 */
-	Map getCurrentVisibleItem() {
+	Map getVisibleItems() {
 		Map map = new HashMap();
 		final Paginal pgi = getPaginal();
 		final int pgsz = pgi.getPageSize();
@@ -145,13 +145,13 @@ public class Tree extends XulElement {
 		
 		// data[pageSize, beginPageIndex, visitedCount, visitedTotal, RenderedCount]
 		int[] data = new int[]{pgsz, ofs, 0, 0, 0};
-		DFS(getChildren(), map, data);
+		getVisibleItemsDFS(getChildren(), map, data);
 		return map;
 	}
 	/**
-	 * Depth-First-Search
+	 * Prepare the map of the visible items recursively in deep-first order.
 	 */
-	private boolean DFS(List list, Map map, int[] data) {
+	private boolean getVisibleItemsDFS(List list, Map map, int[] data) {
 		for (Iterator it = list.iterator(); it.hasNext(); ) {
 			Component cmp = (Component)it.next();
 			if (cmp instanceof Treeitem) {
@@ -170,7 +170,7 @@ public class Tree extends XulElement {
 							map.put(item, Boolean.TRUE);
 						}
 						if (item.isOpen()) {
-							if (!DFS(item.getChildren(), map, data)) {
+							if (!getVisibleItemsDFS(item.getChildren(), map, data)) {
 								return false;
 							} else {
 								// the children may be visible.
@@ -180,7 +180,7 @@ public class Tree extends XulElement {
 					}
 				}
 			} else if (cmp instanceof Treechildren) {
-				if(!DFS(cmp.getChildren(), map, data)) return false;
+				if(!getVisibleItemsDFS(cmp.getChildren(), map, data)) return false;
 			}
 		}
 		return true;
@@ -381,7 +381,6 @@ public class Tree extends XulElement {
 	private int getVisibleItemCount() {
 		return _treechildren != null ? _treechildren.getVisibleItemCount() : 0;
 	}
-	
 	
 	/**
 	 * Sets the outline of grid whether is fixed layout.
@@ -1706,23 +1705,6 @@ public class Tree extends XulElement {
 			
 			if(i<path.length-1) 
 				ti.setOpen(true);
-			else if(i==path.length-1){
-				//active page
-				//if parentTi is null, parentTi is Tree.
-				Treechildren ch = null;
-				if(parentTi ==null)
-					ch = this.getTreechildren();
-				else
-					ch = parentTi.getTreechildren();
-				int pgSize = ch.getPageSize();
-				/*
-				 * pgSize is -1 if no limitation.
-				 */
-				if(pgSize >0){
-					ch.setActivePage(path[i]/pgSize);
-				}
-			}
-			
 			
 			if(ti.getTreechildren()!=null){
 				children = ti.getTreechildren().getChildren();

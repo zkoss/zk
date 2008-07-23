@@ -83,5 +83,5 @@ ${z:redraw(self.treefoot, null)}
 	${z:redraw(self.paging, null)}
 	</div>
 	</c:if>
-${zu:clearRenderedItem(self)}
+${zu:clearTreeRenderInfo(self)}
 </div>

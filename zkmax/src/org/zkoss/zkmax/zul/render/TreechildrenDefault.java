@@ -42,13 +42,13 @@ public class TreechildrenDefault implements ComponentRenderer {
 		if (self.getParent() instanceof Tree) { //top level
 			wh.write("<tbody id=\"").write(self.getUuid()).write('"')
 				.write(self.getOuterAttrs()).write( self.getInnerAttrs() ).writeln(">");
-			for (Iterator it = self.getVisibleItemIterator(); it.hasNext();) {
+			for (Iterator it = self.getVisibleChildrenIterator(); it.hasNext();) {
 				final Component child = (Component) it.next();
 				child.redraw(out);
 			}
 			wh.writeln("</tbody>");
 		} else {
-			for (Iterator it = self.getVisibleItemIterator(); it.hasNext();) {
+			for (Iterator it = self.getVisibleChildrenIterator(); it.hasNext();) {
 				final Component child = (Component) it.next();
 				child.redraw(out);
 			}

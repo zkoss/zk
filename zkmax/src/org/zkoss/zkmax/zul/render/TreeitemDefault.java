@@ -41,8 +41,8 @@ public class TreeitemDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tree tree = self.getTree();
 		if ("paging".equals(tree.getMold())) {
-			if (self.isVisible() && ZulFns.shouldBeVisited(tree, self)) {
-				if (ZulFns.shouldBeRendered(tree))
+			if (self.isVisible() && ZulFns.shallVisitTree(tree, self)) {
+				if (ZulFns.shallRenderTree(tree))
 					wh.write(self.getTreerow());
 				if (self.isOpen())
 					wh.write(self.getTreechildren());

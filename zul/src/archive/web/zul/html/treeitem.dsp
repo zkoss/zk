@@ -23,8 +23,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="tree" value="${self.tree}" />
 <c:choose>
 	<c:when test="${tree.mold == 'paging'}">
-		<c:if test="${self.visible and zu:shouldBeVisited(tree, self)}">
-			<c:if test="${zu:shouldBeRendered(tree)}">
+		<c:if test="${self.visible and zu:shallVisitTree(tree, self)}">
+			<c:if test="${zu:shallRenderTree(tree)}">
 			${z:redraw(self.treerow, null)}
 			</c:if>
 			<c:if test="${self.open}">

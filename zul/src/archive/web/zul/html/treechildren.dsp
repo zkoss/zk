@@ -22,13 +22,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:choose>
 <c:when test="${self.tree == self.parent}">
 <tbody id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-	<c:forEach var="child" items="${self.visibleItemIterator}">
+	<c:forEach var="child" items="${self.visibleChildrenIterator}">
 	${z:redraw(child, null)}
 	</c:forEach>
 </tbody>
 </c:when>
 <c:otherwise>
-	<c:forEach var="child" items="${self.visibleItemIterator}">
+	<c:forEach var="child" items="${self.visibleChildrenIterator}">
 	${z:redraw(child, null)}
 	</c:forEach>
 </c:otherwise>

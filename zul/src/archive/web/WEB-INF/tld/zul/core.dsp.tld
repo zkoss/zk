@@ -81,33 +81,34 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 	<function>
-		<name>shouldBeVisited</name>
+		<name>shallVisitTree</name>
 		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
 		<function-signature>
-	boolean shouldBeVisited(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component)
+	boolean shallVisitTree(org.zkoss.zk.ui.Tree, org.zkoss.zk.ui.Component)
 		</function-signature>
 		<description>
-	 Returns whether the treeitem should be visited.
+	 Returns whether the specified tree should be visited.
 		</description>
 	</function>
 	<function>
-		<name>shouldBeRendered</name>
+		<name>shallRenderTree</name>
 		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
 		<function-signature>
-	boolean shouldBeRendered(org.zkoss.zk.ui.Component)
+	boolean shallRenderTree(org.zkoss.zk.ui.Tree)
 		</function-signature>
 		<description>
-	Returns whether the treeitem should be rendered.
+	Returns whether the specified tree shall be rendered.
 		</description>
 	</function>
 	<function>
-		<name>clearRenderedItem</name>
+		<name>clearTreeRenderInfo</name>
 		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
 		<function-signature>
-	void clearRenderedItem(org.zkoss.zk.ui.Component)
+	void clearTreeRenderInfo(org.zkoss.zk.ui.Tree)
 		</function-signature>
 		<description>
-	Clears up these attributes which are used for Tree's paging mold.
+	Clears up the info stored in attributes that are used to render
+	a tree in the paging mold.
 		</description>
 	</function>
 </taglib>
