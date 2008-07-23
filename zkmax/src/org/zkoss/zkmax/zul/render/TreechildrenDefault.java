@@ -20,6 +20,7 @@ package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
@@ -38,14 +39,19 @@ public class TreechildrenDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Treechildren self = (Treechildren) comp;
-		
 		if (self.getParent() instanceof Tree) { //top level
 			wh.write("<tbody id=\"").write(self.getUuid()).write('"')
-				.write(self.getOuterAttrs()).write( self.getInnerAttrs() ).writeln(">")
-				.writeChildren(self, self.getVisibleBegin(), self.getVisibleEnd())
-				.writeln("</tbody>");
+				.write(self.getOuterAttrs()).write( self.getInnerAttrs() ).writeln(">");
+			for (Iterator it = self.getVisibleItemIterator(); it.hasNext();) {
+				final Component child = (Component) it.next();
+				child.redraw(out);
+			}
+			wh.writeln("</tbody>");
 		} else {
-			wh.writeChildren(self, self.getVisibleBegin(), self.getVisibleEnd());
+			for (Iterator it = self.getVisibleItemIterator(); it.hasNext();) {
+				final Component child = (Component) it.next();
+				child.redraw(out);
+			}
 		}
 	}
 }

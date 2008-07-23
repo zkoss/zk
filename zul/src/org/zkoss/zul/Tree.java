@@ -18,8 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 
+import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
@@ -46,9 +48,11 @@ import org.zkoss.zk.ui.event.Events;
 
 //import org.zkoss.zul.Listbox.Renderer;
 
-import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
+import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -81,8 +85,6 @@ public class Tree extends XulElement {
 	private String _name;
 	/** The style class prefix for generating icons. */
 	private String _iconScls = "tree";
-	/** # of items per page. */
-	private int _pgsz = 10;
 	private boolean _multiple, _checkmark;
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
@@ -93,6 +95,15 @@ public class Tree extends XulElement {
 	private TreeitemRenderer _renderer;	
 	private transient TreeDataListener _dataListener;
 	private boolean _fixedLayout;
+
+	private transient Paginal _pgi;
+	/** The paging controller, used only if mold = "paging" and user
+	 * doesn't assign a controller via {@link #setPaginal}.
+	 * If exists, it is the last child
+	 */
+	private transient Paging _paging;
+	private transient EventListener _pgListener, _pgImpListener;
+	private String _pagingPosition = "bottom";
 	
 
 	public Tree() {
@@ -106,6 +117,7 @@ public class Tree extends XulElement {
 				int sz = getChildren().size();
 				if (_treechildren != null) --sz;
 				if (_treefoot != null) --sz;
+				if (_paging != null) --sz;
 				return sz;
 			}
 			public Iterator iterator() {
@@ -114,6 +126,263 @@ public class Tree extends XulElement {
 		};
 	}
 
+	void addVisibleItemCount(int count) {
+		if (inPagingMold()) {
+			Paging pg = getPaging();
+			pg.setTotalSize(pg.getTotalSize() + count);
+			invalidate();
+		}
+	}
+	/**
+	 * Returens a map of current visible item.
+	 * @since 3.0.7
+	 */
+	Map getCurrentVisibleItem() {
+		Map map = new HashMap();
+		final Paginal pgi = getPaginal();
+		final int pgsz = pgi.getPageSize();
+		final int ofs = pgi.getActivePage() * pgsz;
+		
+		// data[pageSize, beginPageIndex, visitedCount, visitedTotal, RenderedCount]
+		int[] data = new int[]{pgsz, ofs, 0, 0, 0};
+		DFS(getChildren(), map, data);
+		return map;
+	}
+	/**
+	 * Depth-First-Search
+	 */
+	private boolean DFS(List list, Map map, int[] data) {
+		for (Iterator it = list.iterator(); it.hasNext(); ) {
+			Component cmp = (Component)it.next();
+			if (cmp instanceof Treeitem) {
+				if (data[4] >= data[0]) return false; // full
+				final Treeitem item = (Treeitem) cmp;
+				if (item.isVisible()) {
+					int count = item.isOpen() && item.getTreechildren() != null ? 
+							item.getTreechildren().getVisibleItemCount(): 0;
+					boolean shoulbBeVisited = data[1] < data[2] + 1 + count;
+					data[2] += (shoulbBeVisited ? 1 : count + 1);
+					data[3] += count + 1;
+					if (shoulbBeVisited) {
+						if(data[1] < data[2]) {
+							// count the rendered item
+							data[4]++;
+							map.put(item, Boolean.TRUE);
+						}
+						if (item.isOpen()) {
+							if (!DFS(item.getChildren(), map, data)) {
+								return false;
+							} else {
+								// the children may be visible.
+								map.put(item, Boolean.TRUE);
+							}
+						}
+					}
+				}
+			} else if (cmp instanceof Treechildren) {
+				if(!DFS(cmp.getChildren(), map, data)) return false;
+			}
+		}
+		return true;
+	}
+	//-- super --//
+	public void setMold(String mold) {
+		final String old = getMold();
+		if (!Objects.equals(old, mold)) {
+			super.setMold(mold);
+				//we have to change model before detaching paging,
+				//since removeChild assumes it
+
+			if ("paging".equals(old)) { //change from paging
+				if (_paging != null) {
+					removePagingListener(_paging);
+					_paging.detach();
+				} else if (_pgi != null) {
+					removePagingListener(_pgi);
+				}
+			} else if (inPagingMold()) { //change to paging
+				if (_pgi != null) addPagingListener(_pgi);
+				else newInternalPaging();
+				setFixedLayout(true);
+			}
+		}
+	}
+	
+	//--Paging--//
+	/**
+	 * Sets how to position the paging of tree at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
+	 * "top", or "both".
+	 * @since 3.0.7
+	 */
+	public void setPagingPosition(String pagingPosition) {
+		if (pagingPosition == null || (!pagingPosition.equals("top") &&
+			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
+			throw new WrongValueException("Unsupported position : "+pagingPosition);
+		if(!Objects.equals(_pagingPosition, pagingPosition)){
+			_pagingPosition = pagingPosition;
+			invalidate();
+		}
+	}
+	/**
+	 * Returns how to position the paging of tree at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @since 3.0.7
+	 */
+	public String getPagingPosition() {
+		return _pagingPosition;
+	}
+	/** Returns the paging controller, or null if not available.
+	 * Note: the paging controller is used only if {@link #getMold} is "paging".
+	 *
+	 * <p>If mold is "paging", this method never returns null, because
+	 * a child paging controller is created automcatically (if not specified
+	 * by developers with {@link #setPaginal}).
+	 *
+	 * <p>If a paging controller is specified (either by {@link #setPaginal},
+	 * or by {@link #setMold} with "paging"),
+	 * the tree will rely on the paging controller to handle long-content
+	 * instead of scrolling.
+	 * @since 3.0.7
+	 */
+	public Paginal getPaginal() {
+		return _pgi;
+	}
+	/* Specifies the paging controller.
+	 * Note: the paging controller is used only if {@link #getMold} is "paging".
+	 *
+	 * <p>It is OK, though without any effect, to specify a paging controller
+	 * even if mold is not "paging".
+	 *
+	 * @param pgi the paging controller. If null and {@link #getMold} is "paging",
+	 * a paging controller is created automatically as a child component
+	 * (see {@link #getPaging}).
+	 * @since 3.0.7
+	 */
+	public void setPaginal(Paginal pgi) {
+		if (!Objects.equals(pgi, _pgi)) {
+			final Paginal old = _pgi;
+			_pgi = pgi; //assign before detach paging, since removeChild assumes it
+
+			if (inPagingMold()) {
+				if (old != null) removePagingListener(old);
+				if (_pgi == null) {
+					if (_paging != null) _pgi = _paging;
+					else newInternalPaging();
+				} else { //_pgi != null
+					if (_pgi != _paging) {
+						if (_paging != null) _paging.detach();
+						_pgi.setTotalSize(getItemCount());
+						addPagingListener(_pgi);
+					}
+				}
+			}
+		}
+	}
+	/** Creates the internal paging component.
+	 */
+	private void newInternalPaging() {
+		assert D.OFF || inPagingMold(): "paging mold only";
+		assert D.OFF || (_paging == null && _pgi == null);
+
+		final Paging paging = new Paging();
+		paging.setAutohide(true);
+		paging.setDetailed(true);
+		paging.setTotalSize(getVisibleItemCount());
+		paging.setParent(this);
+		addPagingListener(_pgi);
+	}
+	/** Adds the event listener for the onPaging event. */
+	private void addPagingListener(Paginal pgi) {
+		if (_pgListener == null)
+			_pgListener = new EventListener() {
+				public void onEvent(Event event) {
+					final PagingEvent evt = (PagingEvent)event;
+					Events.postEvent(
+						new PagingEvent(evt.getName(),
+							Tree.this, evt.getPageable(), evt.getActivePage()));
+				}
+			};
+		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
+
+		if (_pgImpListener == null)
+			_pgImpListener = new EventListener() {
+	public void onEvent(Event event) {
+		if (inPagingMold()) {
+			invalidate();
+		}
+	}
+			};
+		pgi.addEventListener("onPagingImpl", _pgImpListener);
+	}
+	/** Removes the event listener for the onPaging event. */
+	private void removePagingListener(Paginal pgi) {
+		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
+		pgi.removeEventListener("onPagingImpl", _pgImpListener);
+	}
+
+	/** Returns the child paging controller that is created automatically,
+	 * or null if mold is not "paging", or the controller is specified externally
+	 * by {@link #setPaginal}.
+	 * @since 3.0.7
+	 */
+	public Paging getPaging() {
+		return _paging;
+	}
+	/** Returns the page size, aka., the number items per page.
+	 * @exception IllegalStateException if {@link #getPaginal} returns null,
+	 * i.e., mold is not "paging" and no external controller is specified.
+	 * @since 3.0.7
+	 */
+	public int getPageSize() {
+		return inPagingMold() ? pgi().getPageSize(): 0;
+	}
+	/** Sets the page size, aka., the number items per page.
+	 * <p>Note: mold is not "paging" and no external controller is specified.
+	 * @since 3.0.7
+	 */
+	public void setPageSize(int pgsz) throws WrongValueException {
+		if (pgsz < 0 || !inPagingMold()) return;
+		pgi().setPageSize(pgsz);
+	}
+	/** Returns the number of pages.
+	 * Note: there is at least one page even no item at all.
+	 * @since 3.0.7
+	 */
+	public int getPageCount() {
+		return pgi().getPageCount();
+	}
+	/** Returns the active page (starting from 0).
+	 * @since 3.0.7
+	 */
+	public int getActivePage() {
+		return pgi().getActivePage();
+	}
+	/** Sets the active page (starting from 0).
+	 * @since 3.0.7
+	 */
+	public void setActivePage(int pg) throws WrongValueException {
+		pgi().setActivePage(pg);
+	}
+	private Paginal pgi() {
+		if (_pgi == null)
+			throw new IllegalStateException("Available only the paging mold");
+		return _pgi;
+	}
+
+	/** Returns whether this tree is in the paging mold.
+	 * @since 3.0.7
+	 */
+	/*package*/ boolean inPagingMold() {
+		return "paging".equals(getMold());
+	}
+	
+	private int getVisibleItemCount() {
+		return _treechildren != null ? _treechildren.getVisibleItemCount() : 0;
+	}
+	
+	
 	/**
 	 * Sets the outline of grid whether is fixed layout.
 	 * If true, the outline of grid will be depended on browser. It means, we don't 
@@ -335,25 +604,53 @@ public class Tree extends XulElement {
 	/** Sets the active page in which the specified item is.
 	 * The active page will become the page that contains the specified item.
 	 *
-	 * @param item the item to show. If the item is null or doesn't belong
+	 * @param item the item to show. If the item is null, invisible, or doesn't belong
 	 * to the same tree, nothing happens.
 	 * @since 3.0.4
 	 * @see Treechildren#setActivePage
 	 */
 	public void setActivePage(Treeitem item) {
-		if (item != null && item.getTree() == this) {
-			final Treechildren tc = (Treechildren)item.getParent();
-			final int pgsz = tc.getPageSize();
-			if (pgsz > 0 && tc.getChildren().size() > pgsz) {
-				int j = 0;
-				for (Iterator it = tc.getChildren().iterator(); it.hasNext(); ++j)
-					if (it.next() == item) {
-						tc.setActivePage(j /pgsz);
-						break;
-					}
+		if (item.isVisible() && item.getTree() == this && isVisible()) {
+			int count = BFSR(item, false);
+			if (count > 0) {
+				count--;
+				final Paginal pgi = getPaginal();
+				int pg = count / pgi.getPageSize();
+				if (pg != getActivePage())
+					setActivePage(pg);
 			}
+				
 		}
 	}
+	/**
+	 * Breadth-First-Search-Reverse.
+	 * @return If 0, the item is top. If -1, the item is invisible.
+	 */
+	private int BFSR(Treeitem item, boolean inclusive) {
+		if (item == null || !item.isVisible()) return 0;
+		int count = 1;
+		if (inclusive && item.isOpen() && item.getTreechildren() != null)
+			count += item.getTreechildren().getVisibleItemCount();
+					
+		int c = BFSR((Treeitem) item.getPreviousSibling(), true);
+		if (c == -1) return -1;
+		else if (c != 0) {
+			count += c;
+		} else {
+			Component cmp = item.getParent().getParent();
+			if (cmp instanceof Treeitem) {
+				Treeitem parent = (Treeitem)cmp;
+				if (parent.isVisible()) {
+					parent.setOpen(true);
+					int cnt = BFSR((Treeitem)parent, false);
+					if (cnt == -1) return -1;
+					count += cnt;
+				} else return -1;
+			}
+		}
+		return count;
+	}
+	
 
 	/** Returns the ID of the selected item (it is stored as the z.selId
 	 * attribute of the tree).
@@ -409,8 +706,8 @@ public class Tree extends XulElement {
 				if (tr != null)
 					smartUpdate("select", tr.getUuid());
 			}
-
-			setActivePage(item);
+			if (inPagingMold())
+				setActivePage(item);
 		}
 	}
 	/** Selects the given item, without deselecting any other items
@@ -551,55 +848,6 @@ public class Tree extends XulElement {
 			((Component)it.next()).detach();
 	}
 
-	/** Returns the page size that is used by all {@link Treechildren}
-	 * to display a portion of their child {@link Treeitem},
-	 * or -1 if no limitation.
-	 *
-	 * <p>Default: 10.
-	 *
-	 * @since 2.4.1
-	 */
-	public int getPageSize() {
-		return _pgsz;
-	}
-	/** Sets the page size that is used by all {@link Treechildren}
-	 * to display a portion of their child {@link Treeitem}.
-	 *
-	 * @param size the page size. If non-positive, there won't be
-	 * any limitation. In other wordss, all {@link Treeitem} are shown.
-	 * Notice: since the browser's JavaScript engine is slow to
-	 * handle huge trees, it is better not to set a non-positive size
-	 * if your tree is huge.
-	 * @since 2.4.1
-	 */
-	public void setPageSize(int size) throws WrongValueException {
-		if (size <= 0) size = -1; //no limitation
-		if (_pgsz != size) {
-			_pgsz = size;
-			updateActivePageChildren(_treechildren);
-			invalidate();
-				//FUTURE: trade-off: search and update only
-				//necessary Treechildren is faster or not
-		}
-	}
-	/** Updates the active page for all tree children if necessary.
-	 */
-	private static void updateActivePageChildren(Treechildren tc) {
-		if (tc != null) {
-			if (tc.getPageSizeDirectly() == 0) {
-				final int pgcnt = tc.getPageCount();
-				if (tc.getActivePage() >= pgcnt)
-					tc.setActivePageDirectly(pgcnt - 1);
-					//no need to invalidate since the whole tree is change
-			}
-
-			for (Iterator it = tc.getChildren().iterator(); it.hasNext();) {
-				final Treeitem ti = (Treeitem)it.next();
-				updateActivePageChildren(ti.getTreechildren()); //recursive
-			}
-		}
-	}
-
 	/** Returns the style class prefix used to generate the icons of this tree.
 	 *
 	 * <p>Default: tree.</br>
@@ -660,11 +908,23 @@ public class Tree extends XulElement {
 			if (_treefoot != null && _treefoot != newChild)
 				throw new UiException("Only one treefoot is allowed: "+this);
 			_treefoot = (Treefoot)newChild;
+			refChild = _paging; //the last two: listfoot and paging
 		} else if (newChild instanceof Treechildren) {
 			if (_treechildren != null && _treechildren != newChild)
 				throw new UiException("Only one treechildren is allowed: "+this);
 			_treechildren = (Treechildren)newChild;
 			fixSelectedSet();
+		} else if (newChild instanceof Paging) {
+			if (_paging != null && _paging != newChild)
+				throw new UiException("Only one paging is allowed: "+this);
+			if (_pgi != null)
+				throw new UiException("External paging cannot coexist with child paging");
+			if (!inPagingMold())
+				throw new UiException("The child paging is allowed only in the paging mold");
+
+			invalidate();
+			_pgi = _paging = (Paging)newChild;
+			refChild = null; //the last: paging
 		} else if (!(newChild instanceof Auxhead)) {
 			throw new UiException("Unsupported newChild: "+newChild);
 		}
@@ -758,6 +1018,9 @@ public class Tree extends XulElement {
 			_treechildren = null;
 			_selItems.clear();
 			_sel = null;
+		} else if (_paging == child) {
+			_paging = null;
+			if (_pgi == child) _pgi = null;
 		}
 		super.onChildRemoved(child);
 		invalidate();
@@ -823,13 +1086,6 @@ public class Tree extends XulElement {
 		if (tc != null) {
 			HTMLs.appendAttribute(sb, "z.tchsib", tc.getUuid());
 				//we have to generate first, since # of page might grow later
-
-			final int pgcnt = tc.getPageCount();
-			if (pgcnt > 1) {
-				HTMLs.appendAttribute(sb, "z.pgc", pgcnt);
-				HTMLs.appendAttribute(sb, "z.pgi", tc.getActivePage());
-				HTMLs.appendAttribute(sb, "z.pgsz", tc.getPageSize());
-			}
 		}
 
 		HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
@@ -847,6 +1103,7 @@ public class Tree extends XulElement {
 		if (_treecols != null) ++cnt;
 		if (_treefoot != null) ++cnt;
 		if (_treechildren != null) ++cnt;
+		if (_paging != null) ++cnt;
 		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
 		if(clone._model != null){
 			clone._dataListener = null;
@@ -870,6 +1127,9 @@ public class Tree extends XulElement {
 					if (--cnt == 0) break;
 				} else if (child instanceof Treechildren) {
 					_treechildren = (Treechildren)child;
+					if (--cnt == 0) break;
+				}else if (child instanceof Paging) {
+					_paging = (Paging)child;
 					if (--cnt == 0) break;
 				}
 			}

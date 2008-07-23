@@ -765,6 +765,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/tree.dsp</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>paging</mold-name>
+			<mold-uri>~./zul/html/tree-pg.dsp</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>treecell</component-name>

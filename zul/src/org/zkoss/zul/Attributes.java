@@ -32,4 +32,19 @@ public class Attributes {
 	 * @since 3.0.3
 	 */
 	public static final String STRIPE_STATE = "org.zkoss.zul.StripeState";
+	/**
+	 * It is used to count the count of the rendered Treeitem.
+	 * @since 3.0.7
+	 */
+	public static final String RENDERED_ITEM_COUNT = "org.zkoss.zul.RenderedItemCount";
+	/**
+	 * It is used to count the count of the visible Treeitem without its Treechildren.
+	 * @since 3.0.7
+	 */
+	public static final String VISITED_ITEM_COUNT = "org.zkoss.zul.VisitedItemCount";
+	/**
+	 * It is used to count the total of the visible Treeitem, including its Treechildren.
+	 * @since 3.0.7
+	 */
+	public static final String VISITED_ITEM_TOTAL = "org.zkoss.zul.VisitedItemTotal";
 }

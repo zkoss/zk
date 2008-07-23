@@ -22,6 +22,9 @@ ZK 3.0.7
   2024133: ZKdemo's theme cannot be changed
   2024223: Shall throw Exception when pass in arg0 is not correct
   
+* Upgrade Notes:
+  Tree support paging component as its paging mold, the original paging display of Tree is disabled. 
+  
 	--------
 ZK 3.0.6
 * Features

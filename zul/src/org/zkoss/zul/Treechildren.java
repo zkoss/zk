@@ -18,24 +18,27 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.AbstractCollection;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.zkoss.lang.Objects;
-
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Pageable;
+import org.zkoss.zul.ext.Paginal;
 
 /**
  * A treechildren.
@@ -44,12 +47,13 @@ import org.zkoss.zul.ext.Pageable;
  */
 public class Treechildren extends XulElement implements Pageable {
 	private static final String ATTR_NO_CHILD = "org.zkoss.zul.Treechildren.noChild";
+	private static final String VISIBLE_ITEM = "org.zkoss.zul.Treechildren.visibleItem";
 
 	/** the active page. */
 	private int _actpg;
 	/** # of items per page. Zero means the same as Tree's. */
 	private int _pgsz;
-
+	private int _visibleItemCount;
 	/** Returns the {@link Tree} instance containing this element.
 	 */
 	public Tree getTree() {
@@ -142,6 +146,34 @@ public class Treechildren extends XulElement implements Pageable {
 		return sz;
 	}
 
+	/**
+	 * Returns the number of visible child{@link Treeitem}
+	 * @since 3.0.7
+	 */
+	public int getVisibleItemCount() {
+		return _visibleItemCount;
+	}
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		if (((Treeitem)child).isVisible())
+			addVisibleItemCount(1);
+	}
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		if (((Treeitem)child).isVisible())
+			addVisibleItemCount(-1);
+	}
+	void addVisibleItemCount(int count) {
+		if (count == 0) return;
+		Component parent = (Component) getParent();
+		if (parent instanceof Treeitem) {
+			if (((Treeitem)parent).isOpen())
+				((Treeitem)parent).addVisibleItemCount(count, false);
+		} else if (parent instanceof Tree)
+			((Tree)parent).addVisibleItemCount(count);
+		_visibleItemCount += count;
+	}
+	
 	/** Returns the page size which controls the number of
 	 * visible child {@link Treeitem}, or -1 if no limitation.
 	 *
@@ -155,11 +187,13 @@ public class Treechildren extends XulElement implements Pageable {
 	 * @since 2.4.1
 	 * @see Tree#getPageSize
 	 * @see #setPageSize
+	 * @deprecated 3.0.7
 	 */
 	public int getPageSize() {
-		if (_pgsz != 0) return _pgsz;
+		return Integer.MAX_VALUE;
+		/**if (_pgsz != 0) return _pgsz;
 		final Tree tree = getTree();
-		return tree != null ? tree.getPageSize(): -1;
+		return tree != null ? tree.getPageSize(): -1;*/
 	}
 	/*package*/ int getPageSizeDirectly() {
 		return _pgsz;
@@ -172,8 +206,10 @@ public class Treechildren extends XulElement implements Pageable {
 	 * In other words, zero means the default page size is used.
 	 * If negative, all {@link Treeitem} are shown.
 	 * @since 2.4.1
+	 * @deprecated 3.0.7
 	 */
 	public void setPageSize(int size) throws WrongValueException {
+		return;/**
 		if (size < 0) size = -1;
 			//Note: -1=no limitation, 0=tree's default
 		if (_pgsz != size) {
@@ -199,23 +235,26 @@ public class Treechildren extends XulElement implements Pageable {
 				smartUpdatePaging();
 					//it affect treerow (so invalidate won't 'eat' it)
 			}
-		}
+		}*/
 	}
 
 	/** Returns the number of pages (at least one).
 	 * Note: there is at least one page even no item at all.
 	 *
 	 * @since 2.4.1
+	 * @deprecated 3.0.7
 	 */
 	public int getPageCount() {
+		return Integer.MAX_VALUE;/**
 		final int cnt = getChildren().size();
 		if (cnt <= 0) return 1;
 		final int pgsz = getPageSize();
-		return pgsz <= 0 ? 1: 1 + (cnt - 1)/pgsz;
+		return pgsz <= 0 ? 1: 1 + (cnt - 1)/pgsz;*/
 	}
 	/** Returns the active page (starting from 0).
 	 *
 	 * @since 2.4.1
+	 * @deprecated 3.0.7
 	 */
 	public int getActivePage() {
 		return _actpg;
@@ -225,8 +264,10 @@ public class Treechildren extends XulElement implements Pageable {
 	 * @exception WrongValueException if no such page
 	 * @since 2.4.1
 	 * @see Tree#setActivePage
+	 * @deprecated 3.0.7
 	 */
 	public void setActivePage(int pg) throws WrongValueException {
+		return;/**
 		final int pgcnt = getPageCount();
 		if (pg >= pgcnt || pg < 0)
 			throw new WrongValueException("Unable to set active page to "+pg+" since only "+pgcnt+" pages");
@@ -236,7 +277,7 @@ public class Treechildren extends XulElement implements Pageable {
 			invalidate();
 			smartUpdatePaging();
 				//it affect treerow (so invalidate won't 'eat' it)
-		}
+		}*/
 	}
 	/** Called by {@link Tree} to set the active page directly. */
 	/*package*/ void setActivePageDirectly(int pg) {
@@ -245,19 +286,24 @@ public class Treechildren extends XulElement implements Pageable {
 	/** Returns the index of the first visible child.
 	 * <p>Used only for component development, not for application developers.
 	 * @since 2.4.1
+	 * @deprecated 3.0.7
 	 */
 	public int getVisibleBegin() {
-		final int pgsz = getPageSize();
-		return pgsz <= 0 ? 0: getActivePage() * pgsz;
+		return 0;
+		/**final int pgsz = getPageSize();
+		return pgsz <= 0 ? 0: getActivePage() * pgsz;*/
 	}
 	/** Returns the index of the last visible child.
 	 * <p>Used only for component development, not for application developers.
 	 * @since 2.4.1
+	 * @deprecated 3.0.7
 	 */
 	public int getVisibleEnd() {
+		return Integer.MAX_VALUE;
+		/**
 		final int pgsz = getPageSize();
 		return pgsz <= 0 ? Integer.MAX_VALUE:
-			(getActivePage() + 1) * getPageSize() - 1; //inclusive
+			(getActivePage() + 1) * getPageSize() - 1; //inclusive*/
 	}
 
 	//-- Component --//
@@ -285,8 +331,8 @@ public class Treechildren extends XulElement implements Pageable {
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Treeitem))
 			throw new UiException("Unsupported child for treechildren: "+child);
-
-		if (super.insertBefore(child, insertBefore)) {
+		return super.insertBefore(child, insertBefore);
+		/**if (super.insertBefore(child, insertBefore)) {
 			afterInsert(child);
 
 			final int sz = getChildren().size();
@@ -300,17 +346,20 @@ public class Treechildren extends XulElement implements Pageable {
 			}
 			return true;
 		}
-		return false;
+		return false;*/
 	}
 	public boolean removeChild(Component child) {
+		return super.removeChild(child);
+		/**
 		if (child.getParent() == this)
 			beforeRemove(child);
-		return super.removeChild(child);
+		return super.removeChild(child);*/
 	}
 	/** Callback if a child has been inserted.
 	 * <p>Default: invalidate if it is the paging mold and it affects
 	 * the view of the active page.
 	 * @since 3.0.5
+	 * @deprecated 3.0.7
 	 */
 	protected void afterInsert(Component comp) {
 		checkInvalidateForMoved(comp, false);
@@ -319,6 +368,7 @@ public class Treechildren extends XulElement implements Pageable {
 	 * <p>Default: invalidate if it is the paging mold and it affects
 	 * the view of the active page.
 	 * @since 3.0.5
+	 * @deprecated 3.0.7
 	 */
 	protected void beforeRemove(Component comp) {
 		checkInvalidateForMoved(comp, true);
@@ -326,6 +376,7 @@ public class Treechildren extends XulElement implements Pageable {
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
 	 * @param bRemove if child will be removed
+	 * @deprecated 3.0.7
 	 */
 	private void checkInvalidateForMoved(Component child, boolean bRemove) {
 		//No need to invalidate if
@@ -361,33 +412,12 @@ public class Treechildren extends XulElement implements Pageable {
 			}
 		}
 	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-
-		final int pgsz = getPageSize();
-		if (pgsz > 0) {
-			final int sz = getChildren().size();
-			if (sz > 0 && ((sz % pgsz) == 0 || pgsz == 1)) { //one page less
-				final int pgcnt = smartUpdatePaging();
-				if (_actpg >= pgcnt) { //removing the last page
-					_actpg = pgcnt - 1;
-					getParent().invalidate();
-				//We have to invalidate the parent, since
-				//no client at the item when user removes the last one
-				//Server: generate rm and outer in this case
-				}
-			} else if (getParent() instanceof Tree) {
-				smartUpdatePaging(); //Bug 1877059
-			}
-		}
-	}
 	public void invalidate() {
 		final Component parent = getParent();
 		if (parent instanceof Tree) {
 			//Browser Limitation (IE/FF): we cannot update TBODY only
 			parent.invalidate();
-		} else if (!getChildren().isEmpty()
-		&& Executions.getCurrent().getAttribute(ATTR_NO_CHILD) == null) {
+		} else if (!getChildren().isEmpty()) {
 		//Don't invalidate if no child at all, since there is no
 		//counter-part at the client
 			super.invalidate();
@@ -400,18 +430,35 @@ public class Treechildren extends XulElement implements Pageable {
 		if (comp != null)
 			comp.smartUpdate(name, value);
 	}
-	/** Updates paging related information.
-	 * @return # of pages
+	/**
+	 * Component developer only.
+	 * @since 3.0.7
 	 */
-	private int smartUpdatePaging() {
-		//We update all attributes at once, because
-		//1) if pgsz <= 1, none of them are generated (to save HTML size)
-		final int pgcnt = getPageCount();
-		smartUpdate("z.pgInfo",
-			pgcnt+","+getActivePage()+","+getPageSize());
-		return pgcnt;
+	public Iterator getVisibleItemIterator() {
+		return new VisibleItemIterator();
 	}
+	/**
+	 * An iterator used by visible item.
+	 */
+	private class VisibleItemIterator implements Iterator {
+		private final Iterator _it = getChildren().iterator();
+		private Tree _tree = getTree();
 
+		public boolean hasNext() {
+			if (!_tree.inPagingMold()) return _it.hasNext();
+			Integer renderedCount = (Integer)_tree.getAttribute(Attributes.RENDERED_ITEM_COUNT);
+			final Paginal pgi = _tree.getPaginal();
+			if (renderedCount == null || renderedCount.intValue() < pgi.getPageSize())
+				return _it.hasNext();
+			return false; 
+		}
+		public Object next() {
+			return _it.next();
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -423,22 +470,27 @@ public class Treechildren extends XulElement implements Pageable {
 	implements Cropper {
 		//--Cropper--//
 		public boolean isCropper() {
-			final int pgsz = getPageSize();
-			return pgsz > 0 && getChildren().size() >= pgsz;
-				//Single page is considered as not a cropper.
-				//It is called after a component is removed, so
-				//we have to test >= rather than >
+			return getTree().inPagingMold();
 		}
 		public Set getAvailableAtClient() {
-			int pgsz = getPageSize();
-			if (pgsz <= 0 || getChildren().size() <= pgsz)
-				return null;
-
+			final Tree tree = getTree();
+			final Component parent = getParent();
+			if (!isCropper() || tree == null) return null;
+			if ((parent instanceof Treeitem)
+				&& !((Treeitem)parent).isOpen()) return Collections.EMPTY_SET;
+			final Execution exe = Executions.getCurrent();
+			final String uuid = tree.getUuid();
+			Map map = (Map)exe.getAttribute(VISIBLE_ITEM + uuid);
+			if (map == null) {
+				map = tree.getCurrentVisibleItem();
+				Executions.getCurrent().setAttribute(VISIBLE_ITEM + uuid, map);
+			}
 			final Set avail = new HashSet(37);
-			final int ofs = getActivePage() * pgsz;
-			for (final Iterator it = getChildren().listIterator(ofs);
-			--pgsz >= 0 && it.hasNext();)
-				avail.add(it.next());
+			for (Iterator it = getChildren().iterator();it.hasNext();) {
+				Treeitem item = (Treeitem)it.next();
+				if (!map.containsKey(item)) continue;
+				avail.add(item);
+			}
 			return avail;
 		}
 	}
