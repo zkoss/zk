@@ -1114,4 +1114,7 @@ Element.Methods.visualEffect = function(element, effect, options) {
 */
 Element.addMethods();
 
+//backward compatible (3.0 or earlier)
+if (!window.Effect) Effect = zEffect;
+
 } //Tom M. Yeh, Potix: prevent it from load twice

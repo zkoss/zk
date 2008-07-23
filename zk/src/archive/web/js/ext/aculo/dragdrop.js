@@ -678,4 +678,9 @@ else
   //return element['offset' + ((type=='vertical' || type=='height') ? 'Height' : 'Width')];
 }
 */
+
+//backward compatible (3.0 or earlier)
+if (!window.Draggables) Draggables = zDraggables;
+if (!window.Draggable) Draggable = zDraggable;
+
 } //Tom M. Yeh, Potix: prevent it from load twice

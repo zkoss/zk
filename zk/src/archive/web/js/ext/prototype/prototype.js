@@ -2356,4 +2356,21 @@ if (/Konqueror|Safari|KHTML/.test(navigator.userAgent)) {
 
 Element.addMethods();
 
+//backward compatible (3.0 or earlier)
+if (!window.$) $ = z$;
+if (!window.$A) $A = z$A;
+if (!window.Enumerable) Enumerable = zEnum;
+if (!window.Prototype) Prototype = zPrototype;
+if (!window.Class) Class = zClass;
+if (!window.Template) Template = zTemplate;
+if (!window.$break) $break = z$break;
+if (!window.$continue) $continue = z$continue;
+if (!window.$w) $w = z$w;
+if (!window.Hash) Hash = zHash;
+if (!window.$H) $H = z$H;
+if (!window.ObjectRange) ObjectRange = zObjectRange;
+if (!window.$R) $R = z$R;
+if (!window.Selector) Selector = zSelector;
+if (!window.Position) Position = zPos;
+
 }//Tom M. Yeh, Potix :prevent it from load twice
