@@ -44,10 +44,10 @@ public class TreePaging implements ComponentRenderer {
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tree.Tree\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
-		if (self.getPaging() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
+		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
 				.write("!pgit\" class=\"tree-pgi-t\">")
-				.write(self.getPaging())
+				.write(self.getPagingChild())
 				.write("</div>");
 		}
 		
@@ -108,10 +108,10 @@ public class TreePaging implements ComponentRenderer {
 		}
 
 		//Paging
-		if (self.getPaging() != null && self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
+		if (self.getPagingChild() != null && self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
 				.write("!pgib\" class=\"tree-pgi\">")
-				.write(self.getPaging())
+				.write(self.getPagingChild())
 				.write("</div>");
 		}
 		ZulFns.clearTreeRenderInfo(self);

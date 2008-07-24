@@ -22,7 +22,9 @@ import org.zkoss.zk.ui.event.EventListener;
 /**
  * Represents a component that is used to control how to display
  * other components in multiple pages.
- * It is used to provide an abstract contract between controller and controllee.
+ * In other words, it represents a paging controller.
+ *
+ * <p>It is used to provide an abstract contract between controller and controllee.
  * For example, {@link org.zkoss.zul.Paging} is a paging controller
  * while {@link org.zkoss.zul.Grid} is a paging controllee.
  * In other words, {@link org.zkoss.zul.Grid} (contains long content)
@@ -38,8 +40,17 @@ import org.zkoss.zk.ui.event.EventListener;
  * Example, {@link org.zkoss.zul.Treechildren}
  * is {@link Pageable} but not controllable by {@link Paginal}.
  *
+ * <ul>
+ * <li>{@link Paginated}: a multi-page component whose pagination
+ * is controlled by an external page controlle ({@link Paginal}).</li>
+ * <li>{@link Paginal}: the paging controller used to control
+ * the pagination of {@link Paginated}.</li>
+ * <li>{@link Pageable}: a multi-page component that handles pagination
+ * by itself.</li>
+ * </ul>
+ *
  * @author tomyeh
- * @see Pageable
+ * @see Paginated
  */
 public interface Paginal extends Pageable {
 	/** Returns the total number of items.

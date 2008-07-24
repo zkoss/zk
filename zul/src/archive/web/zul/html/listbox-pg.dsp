@@ -21,9 +21,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="zu" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.sel.Libox" z.pg="t"${self.outerAttrs}${self.innerAttrs}>
-	<c:if test="${!empty self.paging && self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
+	<c:if test="${!empty self.pagingChild && self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
 	<div id="${self.uuid}!pgit" class="listbox-pgi-t">
-	${z:redraw(self.paging, null)}
+	${z:redraw(self.pagingChild, null)}
 	</div>
 	</c:if>
 <c:if test="${!empty self.listhead}">
@@ -33,9 +33,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<tbody style="visibility:hidden;height:0px">
 			<tr id="${self.listhead.uuid}!hdfaker" class="listbox-fake">
 			<c:forEach var="child" items="${self.listhead.children}">
-					<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
-						<div style="overflow:hidden"></div>
-					</th>
+				<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
+					<div style="overflow:hidden"></div>
+				</th>
 			</c:forEach>
 			</tr>
 		</tbody>
@@ -54,9 +54,9 @@ ${z:redraw(head, null)}
 		<tbody style="visibility:hidden;height:0px">
 			<tr id="${self.listhead.uuid}!bdfaker" class="listbox-fake">
 			<c:forEach var="child" items="${self.listhead.children}">
-					<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
-						<div style="overflow:hidden"></div>
-					</th>
+				<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
+					<div style="overflow:hidden"></div>
+				</th>
 			</c:forEach>
 			</tr>
 		</tbody>
@@ -75,9 +75,9 @@ ${z:redraw(item, null)}
 		<tbody style="visibility:hidden;height:0px">
 			<tr id="${self.listhead.uuid}!ftfaker" class="listbox-fake">
 			<c:forEach var="child" items="${self.listhead.children}">
-					<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
-						<div style="overflow:hidden"></div>
-					</th>
+				<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
+					<div style="overflow:hidden"></div>
+				</th>
 			</c:forEach>
 			</tr>
 		</tbody>
@@ -86,9 +86,9 @@ ${z:redraw(self.listfoot, null)}
 	</table>
 	</div>
 </c:if>
-	<c:if test="${!empty self.paging && self.pagingPosition == 'bottom' || self.pagingPosition == 'both'}">
+	<c:if test="${!empty self.pagingChild && self.pagingPosition == 'bottom' || self.pagingPosition == 'both'}">
 	<div id="${self.uuid}!pgib" class="listbox-pgi">
-	${z:redraw(self.paging, null)}
+	${z:redraw(self.pagingChild, null)}
 	</div>
 	</c:if>
 </div>

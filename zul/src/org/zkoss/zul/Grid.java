@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
@@ -104,7 +105,7 @@ import org.zkoss.zul.event.PagingEvent;
  * @see RowRenderer
  * @see RowRendererExt
  */
-public class Grid extends XulElement {
+public class Grid extends XulElement implements Paginated {
 	private static final Log log = Log.lookup(Grid.class);
 
 	private transient Rows _rows;
@@ -367,9 +368,16 @@ public class Grid extends XulElement {
 	/** Returns the child paging controller that is created automatically,
 	 * or null if mold is not "paging", or the controller is specified externally
 	 * by {@link #setPaginal}.
+	 * @since 3.0.7
+	 */
+	public Paging getPagingChild() {
+		return _paging;
+	}
+	/** @deprecated As of release 3.0.7, replaced with {@link #getPagingChild}
+	 * to avoid the confusion with {@link #getPaginal}.
 	 */
 	public Paging getPaging() {
-		return _paging;
+		return getPagingChild();
 	}
 	/** Returns the page size, aka., the number rows per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,

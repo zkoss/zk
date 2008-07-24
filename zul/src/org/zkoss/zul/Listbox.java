@@ -59,6 +59,7 @@ import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
 
@@ -119,7 +120,7 @@ import org.zkoss.zul.event.PagingEvent;
  * @see ListitemRenderer
  * @see ListitemRendererExt
  */
-public class Listbox extends XulElement {
+public class Listbox extends XulElement implements Paginated {
 	private static final Log log = Log.lookup(Listbox.class);
 
 	private transient List _items;
@@ -938,9 +939,16 @@ public class Listbox extends XulElement {
 	/** Returns the child paging controller that is created automatically,
 	 * or null if mold is not "paging", or the controller is specified externally
 	 * by {@link #setPaginal}.
+	 * @since 3.0.7
+	 */
+	public Paging getPagingChild() {
+		return _paging;
+	}
+	/** @deprecated As of release 3.0.7, replaced with {@link #getPagingChild}
+	 * to avoid the confusion with {@link #getPaginal}.
 	 */
 	public Paging getPaging() {
-		return _paging;
+		return getPagingChild();
 	}
 	/** Returns the page size, aka., the number items per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
