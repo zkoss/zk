@@ -39,16 +39,18 @@ if [ ! -d "$javadocdir" ] ; then
 	exit 1
 fi
 
-htmldocdir=$(grep '^htmldoc' $setting)
-htmldocdir=${htmldocdir#htmldoc=}
-if [ "$htmldocdir" = "" ] ; then
-	echo htmldoc must be specified in $setting
-	exit 1
-fi
-htmldocdir=${htmldocdir/\~/$HOME}
-if [ ! -d "$htmldocdir/devguide" ] ; then
-	echo $htmldocdir/devguide is not found
-	exit 1
+if [ "$target" == "official" ] ; then
+	htmldocdir=$(grep '^htmldoc' $setting)
+	htmldocdir=${htmldocdir#htmldoc=}
+	if [ "$htmldocdir" = "" ] ; then
+		echo htmldoc must be specified in $setting
+		exit 1
+	fi
+	htmldocdir=${htmldocdir/\~/$HOME}
+	if [ ! -d "$htmldocdir/devguide" ] ; then
+		echo $htmldocdir/devguide is not found
+		exit 1
+	fi
 fi
 
 ver=$(grep '^version=' $setting)
