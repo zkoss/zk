@@ -610,28 +610,43 @@ public class Tree extends XulElement {
 	 */
 	public void setActivePage(Treeitem item) {
 		if (item.isVisible() && item.getTree() == this && isVisible()) {
-			int count = BFSR(item, false);
-			if (count > 0) {
-				count--;
+			int index = getVisibleIndexOfItem(item);
+			if (index != -1) {
 				final Paginal pgi = getPaginal();
-				int pg = count / pgi.getPageSize();
+				int pg = index / pgi.getPageSize();
 				if (pg != getActivePage())
 					setActivePage(pg);
 			}
 				
 		}
 	}
+
 	/**
-	 * Breadth-First-Search-Reverse.
-	 * @return If 0, the item is top. If -1, the item is invisible.
+	 * Returns the index of the specified item in which it should be shown on the
+	 * paging mold recursively in breadth-first order.
+	 * @return -1 if the item is invisible.
+	 * @since 3.0.7
 	 */
-	private int BFSR(Treeitem item, boolean inclusive) {
-		if (item == null || !item.isVisible()) return 0;
-		int count = 1;
-		if (inclusive && item.isOpen() && item.getTreechildren() != null)
-			count += item.getTreechildren().getVisibleItemCount();
-					
-		int c = BFSR((Treeitem) item.getPreviousSibling(), true);
+	private int getVisibleIndexOfItem(Treeitem item) {
+		int count = getVisibleIndexOfItem0(item, false);
+		if (count <= 0) return -1;
+		return --count;
+	}
+	/**
+	 * Returns the count the specified item in which it should be shown on the
+	 * paging mold recursively in breadth-first order.
+	 * @return If 0, the item is top. If -1, the item is invisible.
+	 * @since 3.0.7
+	 */
+	private int getVisibleIndexOfItem0(Treeitem item, boolean inclusive) {
+		if (item == null) return 0;
+		int count = 0;
+		if (item.isVisible()) {
+			count++;
+			if (inclusive && item.isOpen() && item.getTreechildren() != null)
+				count += item.getTreechildren().getVisibleItemCount();
+		}
+		int c = getVisibleIndexOfItem0((Treeitem) item.getPreviousSibling(), true);
 		if (c == -1) return -1;
 		else if (c != 0) {
 			count += c;
@@ -641,7 +656,7 @@ public class Tree extends XulElement {
 				Treeitem parent = (Treeitem)cmp;
 				if (parent.isVisible()) {
 					parent.setOpen(true);
-					int cnt = BFSR((Treeitem)parent, false);
+					int cnt = getVisibleIndexOfItem0((Treeitem)parent, false);
 					if (cnt == -1) return -1;
 					count += cnt;
 				} else return -1; // invisible item

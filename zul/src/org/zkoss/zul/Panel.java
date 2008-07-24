@@ -224,12 +224,13 @@ public class Panel extends XulElement {
 	/**
      * Sets whether to display the minimizing button and allow the user to minimize
      * the panel. Note that this button provides no implementation -- the behavior
-     * of minimizing a panel is implementation-specific, so the {@link MinimizeEvent}
+     * of minimizing a panel is implementation-specific, so the MinimizeEvent
      * event must be handled and a custom minimize behavior implemented for this
      * option to be useful.
      * 
      * <p>Default: false. 
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
+	 * @see MinimizeEvent
 	 */
 	public void setMinimizable(boolean minimizable) {
 		if (_minimizable != minimizable) {

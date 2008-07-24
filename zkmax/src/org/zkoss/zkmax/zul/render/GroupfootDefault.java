@@ -25,7 +25,7 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
-import org.zkoss.zul.Row;
+import org.zkoss.zul.Groupfoot;
 
 /**
  * {@link Groupfoot}'s default mold
@@ -39,7 +39,7 @@ public class GroupfootDefault implements ComponentRenderer{
 	
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
-		final Row self = (Row) comp;
+		final Groupfoot self = (Groupfoot) comp;
 		final String uuid = self.getUuid();
 		wh.write("<tr z.type=\"Grwgpft\" id=\"").write(uuid).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>');

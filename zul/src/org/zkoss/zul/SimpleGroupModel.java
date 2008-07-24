@@ -142,11 +142,12 @@ implements ListModelExt, GroupModel, java.io.Serializable {
 	 * once it is passed to this method with live is true,
 	 * since {@link Listbox} is not smart enough to hanle it.
 	 */
-	public SimpleGroupModel(Object[] data, int[] groups, boolean[] grfoots, boolean live) {
+	public SimpleGroupModel(Object[] data, int[] groups, boolean[] gpfoots, boolean live) {
 		if (data == null || groups == null)
 			throw new NullPointerException();
 		_data = live ? data: (Object[])ArraysX.clone(data);
 		_groups = groups;
+		_gpfoots = gpfoots;
 	}
 	public int getSize() {
 		return _data.length;

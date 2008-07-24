@@ -255,13 +255,14 @@ public class Window extends XulElement implements IdSpace {
 	/**
      * Sets whether to display the minimizing button and allow the user to minimize
      * the window. Note that this button provides no implementation -- the behavior
-     * of minimizing a window is implementation-specific, so the {@link MinimizeEvent}
+     * of minimizing a window is implementation-specific, so the MinimizeEvent
      * event must be handled and a custom minimize behavior implemented for this
      * option to be useful.
      * 
      * <p>Default: false. 
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 	 * And it is only applied when {@link #getMold()} is not "v30".
+	 * @see MinimizeEvent
 	 * @since 3.5.0
 	 */
 	public void setMinimizable(boolean minimizable) {

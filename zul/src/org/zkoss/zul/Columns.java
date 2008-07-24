@@ -126,7 +126,7 @@ public class Columns extends HeadersElement {
 	 * 	"none" is assumed by default, "auto" means the menupopup component is 
 	 *  created automatically.
 	 * @since 3.5.0
-	 * @see #setMenupopup(Menupopup)
+	 * @see #setMenupopup(String)
 	 */
 	public void setMenupopup(String mpop) {
 		if (!Objects.equals(_mpop, mpop)) {
