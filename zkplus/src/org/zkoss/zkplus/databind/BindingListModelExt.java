@@ -21,7 +21,7 @@ package org.zkoss.zkplus.databind;
 /**
  * <p>Support same object in multiple items of a ListModel.</p> 
  * <p>To speed up performance, DataBinder used to find only the first item of a given bean (see
- * {@link ListModel#indexOf}). However, in some cases, there might be one object in multiple items which 
+ * {@link BindingListModel#indexOf}). However, in some cases, there might be one object in multiple items which 
  * will cause "unexpected" results of data binding (i.e. While one change should cause multiple
  * items to be updated in Grid, we saw only one item is updated.). Therefore, 
  * since version 3.1, we now support a "distinct" annotation that you can specify in model attribute
