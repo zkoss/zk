@@ -28,6 +28,7 @@ import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Paginated;
 
 /**
  * Paging of long content.
@@ -91,12 +92,8 @@ public class Paging extends XulElement implements Paginal {
 	}
 	private boolean isBothPaging () {
 		Component parent = getParent();
-		if (parent instanceof Listbox)
-			return "both".equals(((Listbox)parent).getPagingPosition());
-		else if (parent instanceof Grid)
-			return "both".equals(((Grid)parent).getPagingPosition());
-		else if (parent instanceof Tree)
-			return "both".equals(((Tree)parent).getPagingPosition());
+		if (parent instanceof Paginated)
+			return "both".equals(((Paginated)parent).getPagingPosition());
 		return false;
 	}
 	

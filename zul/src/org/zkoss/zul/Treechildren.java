@@ -43,10 +43,12 @@ import org.zkoss.zul.ext.Paginal;
 /**
  * A treechildren.
  *
+ * <p>Note: Though Treechildren extends from {@link Pageable}, it is
+ * no longer meaningful (since 3.0.7).
+ *
  * @author tomyeh
  */
 public class Treechildren extends XulElement implements Pageable {
-	private static final String ATTR_NO_CHILD = "org.zkoss.zul.Treechildren.noChild";
 	private static final String VISIBLE_ITEM = "org.zkoss.zul.Treechildren.visibleItem";
 
 	private int _visibleItemCount;
@@ -282,10 +284,10 @@ public class Treechildren extends XulElement implements Pageable {
 		private Tree _tree = getTree();
 
 		public boolean hasNext() {
-			if (!_tree.inPagingMold()) return _it.hasNext();
+			if (_tree == null || !_tree.inPagingMold()) return _it.hasNext();
+
 			Integer renderedCount = (Integer)_tree.getAttribute(Attributes.RENDERED_ITEM_COUNT);
-			final Paginal pgi = _tree.getPaginal();
-			if (renderedCount == null || renderedCount.intValue() < pgi.getPageSize())
+			if (renderedCount == null || renderedCount.intValue() < _tree.getPaginal().getPageSize())
 				return _it.hasNext();
 			return false; 
 		}
@@ -307,25 +309,44 @@ public class Treechildren extends XulElement implements Pageable {
 	implements Cropper {
 		//--Cropper--//
 		public boolean isCropper() {
-			return getTree().inPagingMold();
+			final Tree tree = getTree();
+			return tree != null && tree.inPagingMold();
 		}
 		public Set getAvailableAtClient() {
+			if (!isCropper()) return null;
+
 			final Tree tree = getTree();
 			final Component parent = getParent();
-			if (!isCropper() || tree == null) return null;
-			if ((parent instanceof Treeitem)
-				&& !((Treeitem)parent).isOpen()) return Collections.EMPTY_SET;
 			final Execution exe = Executions.getCurrent();
-			final String uuid = tree.getUuid();
-			Map map = (Map)exe.getAttribute(VISIBLE_ITEM + uuid);
+			final String attrnm = VISIBLE_ITEM + tree.getUuid();
+			Map map = (Map)exe.getAttribute(attrnm);
 			if (map == null) {
+				//Test very simple case first since getVisibleItems costly
+				if (parent instanceof Treeitem) {
+					for (Treeitem ti = (Treeitem)parent;;) {
+						if (!ti.isOpen())
+							return Collections.EMPTY_SET;
+						Component gp = ti.getParent().getParent();
+						if (!(gp instanceof Treeitem))
+							break;
+						ti = (Treeitem)gp;
+					}
+				}
+
 				map = tree.getVisibleItems();
-				Executions.getCurrent().setAttribute(VISIBLE_ITEM + uuid, map);
+				Executions.getCurrent().setAttribute(attrnm, map);
 			}
-			final Set avail = new HashSet(37);
+
+			//If parent is not in map, all its children not visible
+			if (!map.containsKey(parent))
+				return Collections.EMPTY_SET;
+
+			final Set avail = new HashSet(32);
 			for (Iterator it = getChildren().iterator();it.hasNext();) {
 				Treeitem item = (Treeitem)it.next();
-				if (!map.containsKey(item)) continue;
+				if (!map.containsKey(item))
+					if (avail.isEmpty() || !item.isVisible()) continue;
+					else break;
 				avail.add(item);
 			}
 			return avail;

@@ -53,6 +53,7 @@ import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -69,7 +70,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Tree extends XulElement {	
+public class Tree extends XulElement implements Paginated {
 	private static final Log log = Log.lookup(Tree.class);
 
 	private transient Treecols _treecols;
@@ -128,9 +129,9 @@ public class Tree extends XulElement {
 
 	void addVisibleItemCount(int count) {
 		if (inPagingMold()) {
-			Paging pg = getPaging();
-			pg.setTotalSize(pg.getTotalSize() + count);
-			invalidate();
+			Paginal pgi = getPaginal();
+			pgi.setTotalSize(pgi.getTotalSize() + count);
+			invalidate(); //the set of visible items might change
 		}
 	}
 	/**
@@ -327,20 +328,20 @@ public class Tree extends XulElement {
 	 * by {@link #setPaginal}.
 	 * @since 3.0.7
 	 */
-	public Paging getPaging() {
+	public Paging getPagingChild() {
 		return _paging;
 	}
 	/** Returns the page size, aka., the number items per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
-	 * @since 3.0.7
+	 * @since 2.4.1
 	 */
 	public int getPageSize() {
 		return inPagingMold() ? pgi().getPageSize(): 0;
 	}
 	/** Sets the page size, aka., the number items per page.
 	 * <p>Note: mold is not "paging" and no external controller is specified.
-	 * @since 3.0.7
+	 * @since 2.4.1
 	 */
 	public void setPageSize(int pgsz) throws WrongValueException {
 		if (pgsz < 0 || !inPagingMold()) return;
@@ -606,7 +607,6 @@ public class Tree extends XulElement {
 	 * @param item the item to show. If the item is null, invisible, or doesn't belong
 	 * to the same tree, nothing happens.
 	 * @since 3.0.4
-	 * @see Treechildren#setActivePage
 	 */
 	public void setActivePage(Treeitem item) {
 		if (item.isVisible() && item.getTree() == this && isVisible()) {

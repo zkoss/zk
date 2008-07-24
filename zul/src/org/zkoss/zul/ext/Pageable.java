@@ -21,17 +21,28 @@ package org.zkoss.zul.ext;
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
- * Denotes a component that can be displayed in multiple pages.
+ * Represents a component that can be displayed in multiple pages
+ * but cannot be controlled by an external paging controller.
+ *
+ * <ul>
+ * <li>{@link Paginated}: a multi-page component whose pagination
+ * is controlled by an external page controlle ({@link Paginal}).</li>
+ * <li>{@link Paginal}: the paging controller used to control
+ * the pagination of {@link Paginated}.</li>
+ * <li>{@link Pageable}: a multi-page component that handles pagination
+ * by itself.</li>
+ * </ul>
  *
  * <p>Note: a component that can be displayed in multiple pages
  * can be implemented in two ways.
  *
- * <p>1) If it can be controlled by a paging controller
+ * <p>1) If it can be controlled by an external paging controller
  * (i.e., {@link Paginal}), it shall hold an reference to one of
- * the paging controllers.
+ * the paging controllers. And, it doesn't need to implement {@link Pageable}.
+ * Example: grid, listbox and tree.
  *
- * <p>2) If it cannot be controlled, it shall implement
- * the {@link Pageable} interface.
+ * <p>2) If it cannot be controlled by external controller, it shall
+ * implement the {@link Pageable} interface.
  *
  * @author tomyeh
  * @since 2.4.1
