@@ -249,7 +249,7 @@ public class Combobox extends Textbox {
 	 * @since 3.0.2
 	 */
 	public void onInitRender(Event data) {
-  		//Bug #2010389
+		//Bug #2010389
 		removeAttribute("zkoss.zul.Combobox.ON_INITRENDER"); //clear syncModel flag
 		final Renderer renderer = new Renderer();
 		final ListModel subset = syncModel(data.getData() != null ? 
@@ -268,9 +268,12 @@ public class Combobox extends Textbox {
 	}
 	
 	private void postOnInitRender(String idx) {
-  		//Bug #2010389
-		setAttribute("zkoss.zul.Combobox.ON_INITRENDER", Boolean.TRUE); //flag syncModel
-		Events.postEvent("onInitRender", this, idx);
+		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
+		if (getAttribute("zkoss.zul.Combobox.ON_INITRENDER") == null) {
+			//Bug #2010389
+			setAttribute("zkoss.zul.Combobox.ON_INITRENDER", Boolean.TRUE); //flag syncModel, see zkplus.databind/SelectedComboitemConverter
+			Events.postEvent("onInitRender", this, idx);
+		}
 	}
 
 	private static final ComboitemRenderer getDefaultItemRenderer() {

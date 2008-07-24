@@ -758,6 +758,7 @@ public class Grid extends XulElement implements Paginated {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
 	public void onInitRender() {
+		removeAttribute("zul.Grid.ON_INITRENDER");
 		if (inSpecialMold()) {
 			_engine.onInitRender();
 		} else {
@@ -795,8 +796,12 @@ public class Grid extends XulElement implements Paginated {
 		}
 	}
 	private void postOnInitRender() {
-		Events.postEvent("onInitRender", this, null);
-		smartUpdate("z.render", true);
+		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
+		if (getAttribute("zul.Grid.ON_INITRENDER") == null) {
+			setAttribute("zul.Grid.ON_INITRENDER", Boolean.TRUE);
+			Events.postEvent("onInitRender", this, null);
+			smartUpdate("z.render", true);
+		}
 	}
 
 	/** Handles when the list model's content changed.

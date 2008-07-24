@@ -1532,6 +1532,7 @@ public class Listbox extends XulElement implements Paginated {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
 	public void onInitRender() {
+		removeAttribute("zul.Listbox.ON_INITRENDER"); 
 		if (inSpecialMold()) {
 			_engine.onInitRender();
 		} else {
@@ -1566,9 +1567,14 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		}
 	}
+	
 	private void postOnInitRender() {
-		Events.postEvent("onInitRender", this, null);
-		smartUpdate("z.render", true);
+		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
+		if (getAttribute("zul.Listbox.ON_INITRENDER") == null) {
+			setAttribute("zul.Listbox.ON_INITRENDER", Boolean.TRUE);
+			Events.postEvent("onInitRender", this, null);
+			smartUpdate("z.render", true);
+		}
 	}
 
 	/** Handles when the list model's content changed.
