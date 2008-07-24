@@ -41,7 +41,7 @@ public class TreePaging implements ComponentRenderer {
 		final Tree self = (Tree) comp;
 		final String uuid = self.getUuid();
 
-		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tree.Tree\"")
+		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tree.Tree\" z.pg=\"t\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
