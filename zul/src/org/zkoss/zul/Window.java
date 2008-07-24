@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.ext.client.Minimizable;
 import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.MinimizeEvent;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;

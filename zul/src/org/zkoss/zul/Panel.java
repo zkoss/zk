@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.ext.client.Maximizable;
 import org.zkoss.zk.ui.ext.client.Minimizable;
 import org.zkoss.zk.ui.ext.client.Openable;
