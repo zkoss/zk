@@ -45,10 +45,10 @@ public class ListboxPaging implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\" z.pg=\"t\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
-		if (self.getPaging() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
+		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
 				.write("!pgit\" class=\"listbox-pgi-t\">")
-				.write(self.getPaging())
+				.write(self.getPagingChild())
 				.write("</div>");
 		}
 		
@@ -121,10 +121,10 @@ public class ListboxPaging implements ComponentRenderer {
 		}
 
 		//Paging
-		if (self.getPaging() != null && self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
+		if (self.getPagingChild() != null && self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
 				.write("!pgib\" class=\"listbox-pgi\">")
-				.write(self.getPaging())
+				.write(self.getPagingChild())
 				.write("</div>");
 		}
 		wh.write("</div>");
