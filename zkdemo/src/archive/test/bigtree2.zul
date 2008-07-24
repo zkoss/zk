@@ -26,7 +26,7 @@
 		</tabs>
 		<tabpanels>
 			<tabpanel>
-				<tree id="tree" rows="30" width="100%">
+				<tree id="tree" width="100%" mold="paging">
 					<treecols>
 						<treecol />
 					</treecols>
@@ -355,7 +355,7 @@
 				</tree>
 			</tabpanel>
 			<tabpanel>
-				<tree rows="30" width="100%">
+				<tree width="100%" mold="paging">
 					<treecols>
 						<treecol />
 					</treecols>
@@ -388,7 +388,7 @@
 				</tree>
 			</tabpanel>
 			<tabpanel>
-				<tree rows="30" width="100%">
+				<tree width="100%" mold="paging">
 					<treecols>
 						<treecol />
 					</treecols>
@@ -434,7 +434,7 @@
 				</tree>
 			</tabpanel>
 			<tabpanel>
-				<tree rows="30" width="100%">
+				<tree width="100%" mold="paging" iconSclass="dottree">
 					<treecols>
 						<treecol />
 					</treecols>
