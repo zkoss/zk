@@ -369,13 +369,15 @@ import org.zkoss.zk.au.out.*;
 			//we don't need to check isCropper first since its component's job
 			//to ensure the consistency
 
-			Set set = (Set)croppingInfos.get(comp);
-			if (set != null)
-				return set != Collections.EMPTY_SET ? set: null;
+			Object crop = croppingInfos.get(comp);
+			if (crop == Objects.UNKNOWN)
+				return null;
+			if (crop != null)
+				return (Set)crop;
 
-			set = ((Cropper)xc).getAvailableAtClient();
-			croppingInfos.put(comp, set != null ? set: Collections.EMPTY_SET);
-			return set;
+			crop = ((Cropper)xc).getAvailableAtClient();
+			croppingInfos.put(comp, crop != null ? crop: Objects.UNKNOWN);
+			return (Set)crop;
 		}
 		return null;
 	}
