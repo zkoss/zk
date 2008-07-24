@@ -338,7 +338,7 @@ public class Treechildren extends XulElement implements Pageable {
 			}
 
 			//If parent is not in map, all its children not visible
-			if (!map.containsKey(parent))
+			if (parent != tree && !map.containsKey(parent))
 				return Collections.EMPTY_SET;
 
 			final Set avail = new HashSet(32);
