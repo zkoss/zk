@@ -931,8 +931,14 @@ zk.Selectable.prototype = {
 			this.element.style.height = "";
 			this.element.style.height = hgh;
 		}
+		var pgHgh = 0;
+		if (this.paging) {
+			var pgit = $e(this.id + "!pgit"), pgib = $e(this.id + "!pgib");
+			if (pgit) pgHgh += pgit.offsetHeight;
+			if (pgib) pgHgh += pgib.offsetHeight;
+		}
 		return this.element.offsetHeight - 2 - (this.head ? this.head.offsetHeight : 0)
-			- (this.foot ? this.foot.offsetHeight : 0); // Bug #1815882
+			- (this.foot ? this.foot.offsetHeight : 0) - pgHgh; // Bug #1815882
 	},
 	/** Resize the specified column. */
 	resizeCol: function (cmp, icol, col, wd, keys) {
