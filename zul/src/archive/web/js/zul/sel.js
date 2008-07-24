@@ -1352,8 +1352,7 @@ zkLisel.init = function (cmp) {
 zkLisel.onkeyup = function (evt) {
 	var cmp = zkau.evtel(evt);
 	if (cmp.multiple || cmp._lastSelIndex === cmp.selectedIndex) return; //not change or unnecessary.
-	var key = Event.keyCode(evt);
-	if (key >= 33 && key <= 40) zkLisel.onchange(evt);
+	zkLisel.onchange(evt);
 };
 zkLisel.setAttr = function (cmp, nm, val) {
 	if (nm == "selectedIndex")
