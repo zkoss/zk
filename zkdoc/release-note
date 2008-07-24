@@ -25,7 +25,9 @@ ZK 3.0.7
   2026493: The height of Listbox with vflex is wrong in paging mold
   
 * Upgrade Notes:
-  Tree support paging component as its paging mold, the original paging display of Tree is disabled. 
+  + Tree supports the paging mold. The original way to paginate treechild
+  is discarded. To enable the paging mode, use the following codes
+  <tree mold="paging">
   
 	--------
 ZK 3.0.6
