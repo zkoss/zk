@@ -22,6 +22,7 @@ ZK 3.0.7
   2023407: JavaScript error if zk.load called with ckfn
   2024133: ZKdemo's theme cannot be changed
   2024223: Shall throw Exception when pass in arg0 is not correct
+  2026493: The height of Listbox with vflex is wrong in paging mold
   
 * Upgrade Notes:
   Tree support paging component as its paging mold, the original paging display of Tree is disabled. 
