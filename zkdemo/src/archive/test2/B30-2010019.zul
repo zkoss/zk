@@ -1,0 +1,56 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+
+<div width="100%" xmlns="http://www.zkoss.org/2005/zul" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+
+
+	<zscript>
+		<![CDATA[
+			import org.zkoss.zkdemo.test2.BizService;
+			
+			BizService businessService = new BizService();
+			void addNewRepository(){
+				businessService.addNewRepository(parentsListBox.getModel());
+			}
+			
+			void refreshFields(){
+				System.out.println("refresh selected driver");
+				binder.loadAll();
+			}
+			
+			void refreshURL() {
+				System.out.println("selecting driver");
+			}
+			
+			void disable(boolean arg0) {
+				System.out.println(arg0);
+			}
+			
+		]]>
+	</zscript>
+	<vbox width="100%">
+		<div>Repositories</div>
+		<hbox >
+			Select Repository:
+			<listbox id="parentsListBox" mold="select" model="@{businessService.repositories}"
+				selectedItem="@{businessService.repository}" onSelect="disable(businessService.getRepository()==null)">
+				<listitem self="@{each=repository}">
+					<listcell label="@{repository.name}" />
+				</listitem>
+			</listbox>
+			<div>
+				Cause Error:
+				<button label="New" onClick="addNewRepository();refreshFields();" />
+			</div>
+		</hbox>
+		<div>Driver</div>
+
+		<hbox>
+			Select Driver:
+			<listbox id="driversListbox" model="@{businessService.drivers}" mold="select"
+				selectedItem="@{businessService.repository.driver}" onSelect="refreshURL()">
+				<listitem self="@{each=driver}" label="@{driver}" />
+			</listbox>
+		</hbox>
+	</vbox>
+</div>
