@@ -1143,7 +1143,7 @@ public class Tree extends XulElement implements Paginated {
 					_treechildren = (Treechildren)child;
 					if (--cnt == 0) break;
 				}else if (child instanceof Paging) {
-					_paging = (Paging)child;
+					_pgi = _paging = (Paging)child;
 					if (--cnt == 0) break;
 				}
 			}
@@ -1697,7 +1697,8 @@ public class Tree extends XulElement implements Paginated {
 	/**
 	 * Load treeitems through path <b>path</b>
 	 * <br>Note: By using this method, all treeitems in path will be rendered
-	 * and opened ({@link Treeitem#setOpen}).
+	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
+	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
 	 * @param path - an int[] path, see {@link TreeModel#getPath} 
 	 * @return the treeitem from tree by given path
 	 * @since 3.0.0
