@@ -8,7 +8,7 @@ pageSize
 				tree.setPageSize(10);
 			</attribute>
 		</button>
-	<tree id="tree" width="90%" pageSize="2">
+	<tree id="tree" mold="paging" width="90%" pageSize="2">
 		<treechildren>
 			<treeitem label="Item 1" />
 			<treeitem label="Item 2" />
