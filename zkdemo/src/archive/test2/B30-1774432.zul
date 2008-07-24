@@ -14,7 +14,7 @@ Error Message:
 "Failed to invoke zkTree.setAttr
 el has no properties". And, it shall not appear.
 ]]></html>
-<tree id="t" pageSize="3">
+<tree id="t" mold="paging" pageSize="3">
 	<treechildren>
 				<treeitem>
 								<treerow >
