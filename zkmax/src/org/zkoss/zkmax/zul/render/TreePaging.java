@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecol;
+import org.zkoss.zul.fn.ZulFns;
 
 /**
  * {@link Tree}'s Paging mold.
@@ -113,6 +114,7 @@ public class TreePaging implements ComponentRenderer {
 				.write(self.getPaging())
 				.write("</div>");
 		}
+		ZulFns.clearTreeRenderInfo(self);
 		wh.write("</div>");
 	}
 

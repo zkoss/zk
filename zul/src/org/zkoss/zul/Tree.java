@@ -137,7 +137,7 @@ public class Tree extends XulElement {
 	 * Returens a map of current visible item.
 	 * @since 3.0.7
 	 */
-	Map getCurrentVisibleItem() {
+	Map getVisibleItems() {
 		Map map = new HashMap();
 		final Paginal pgi = getPaginal();
 		final int pgsz = pgi.getPageSize();
@@ -145,13 +145,13 @@ public class Tree extends XulElement {
 		
 		// data[pageSize, beginPageIndex, visitedCount, visitedTotal, RenderedCount]
 		int[] data = new int[]{pgsz, ofs, 0, 0, 0};
-		DFS(getChildren(), map, data);
+		getVisibleItemsDFS(getChildren(), map, data);
 		return map;
 	}
 	/**
-	 * Depth-First-Search
+	 * Prepare the map of the visible items recursively in deep-first order.
 	 */
-	private boolean DFS(List list, Map map, int[] data) {
+	private boolean getVisibleItemsDFS(List list, Map map, int[] data) {
 		for (Iterator it = list.iterator(); it.hasNext(); ) {
 			Component cmp = (Component)it.next();
 			if (cmp instanceof Treeitem) {
@@ -170,7 +170,7 @@ public class Tree extends XulElement {
 							map.put(item, Boolean.TRUE);
 						}
 						if (item.isOpen()) {
-							if (!DFS(item.getChildren(), map, data)) {
+							if (!getVisibleItemsDFS(item.getChildren(), map, data)) {
 								return false;
 							} else {
 								// the children may be visible.
@@ -180,7 +180,7 @@ public class Tree extends XulElement {
 					}
 				}
 			} else if (cmp instanceof Treechildren) {
-				if(!DFS(cmp.getChildren(), map, data)) return false;
+				if(!getVisibleItemsDFS(cmp.getChildren(), map, data)) return false;
 			}
 		}
 		return true;
@@ -381,7 +381,6 @@ public class Tree extends XulElement {
 	private int getVisibleItemCount() {
 		return _treechildren != null ? _treechildren.getVisibleItemCount() : 0;
 	}
-	
 	
 	/**
 	 * Sets the outline of grid whether is fixed layout.
@@ -611,28 +610,43 @@ public class Tree extends XulElement {
 	 */
 	public void setActivePage(Treeitem item) {
 		if (item.isVisible() && item.getTree() == this && isVisible()) {
-			int count = BFSR(item, false);
-			if (count > 0) {
-				count--;
+			int index = getVisibleIndexOfItem(item);
+			if (index != -1) {
 				final Paginal pgi = getPaginal();
-				int pg = count / pgi.getPageSize();
+				int pg = index / pgi.getPageSize();
 				if (pg != getActivePage())
 					setActivePage(pg);
 			}
 				
 		}
 	}
+
 	/**
-	 * Breadth-First-Search-Reverse.
-	 * @return If 0, the item is top. If -1, the item is invisible.
+	 * Returns the index of the specified item in which it should be shown on the
+	 * paging mold recursively in breadth-first order.
+	 * @return -1 if the item is invisible.
+	 * @since 3.0.7
 	 */
-	private int BFSR(Treeitem item, boolean inclusive) {
-		if (item == null || !item.isVisible()) return 0;
-		int count = 1;
-		if (inclusive && item.isOpen() && item.getTreechildren() != null)
-			count += item.getTreechildren().getVisibleItemCount();
-					
-		int c = BFSR((Treeitem) item.getPreviousSibling(), true);
+	private int getVisibleIndexOfItem(Treeitem item) {
+		int count = getVisibleIndexOfItem0(item, false);
+		if (count <= 0) return -1;
+		return --count;
+	}
+	/**
+	 * Returns the count the specified item in which it should be shown on the
+	 * paging mold recursively in breadth-first order.
+	 * @return If 0, the item is top. If -1, the item is invisible.
+	 * @since 3.0.7
+	 */
+	private int getVisibleIndexOfItem0(Treeitem item, boolean inclusive) {
+		if (item == null) return 0;
+		int count = 0;
+		if (item.isVisible()) {
+			count++;
+			if (inclusive && item.isOpen() && item.getTreechildren() != null)
+				count += item.getTreechildren().getVisibleItemCount();
+		}
+		int c = getVisibleIndexOfItem0((Treeitem) item.getPreviousSibling(), true);
 		if (c == -1) return -1;
 		else if (c != 0) {
 			count += c;
@@ -642,10 +656,10 @@ public class Tree extends XulElement {
 				Treeitem parent = (Treeitem)cmp;
 				if (parent.isVisible()) {
 					parent.setOpen(true);
-					int cnt = BFSR((Treeitem)parent, false);
+					int cnt = getVisibleIndexOfItem0((Treeitem)parent, false);
 					if (cnt == -1) return -1;
 					count += cnt;
-				} else return -1;
+				} else return -1; // invisible item
 			}
 		}
 		return count;
@@ -1706,23 +1720,6 @@ public class Tree extends XulElement {
 			
 			if(i<path.length-1) 
 				ti.setOpen(true);
-			else if(i==path.length-1){
-				//active page
-				//if parentTi is null, parentTi is Tree.
-				Treechildren ch = null;
-				if(parentTi ==null)
-					ch = this.getTreechildren();
-				else
-					ch = parentTi.getTreechildren();
-				int pgSize = ch.getPageSize();
-				/*
-				 * pgSize is -1 if no limitation.
-				 */
-				if(pgSize >0){
-					ch.setActivePage(path[i]/pgSize);
-				}
-			}
-			
 			
 			if(ti.getTreechildren()!=null){
 				children = ti.getTreechildren().getChildren();

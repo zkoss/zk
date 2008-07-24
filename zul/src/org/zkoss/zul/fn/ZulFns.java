@@ -84,12 +84,11 @@ public class ZulFns {
 	}
 	/**
 	 * Returns whether the treeitem should be visited.
-	 * @param root Tree
+	 * @param tree the tree
 	 * @param child Treeitem
 	 * @since 3.0.7
 	 */
-	public static final boolean shouldBeVisited(Component root, Component child) {
-		final Tree tree = (Tree) root;
+	public static final boolean shallVisitTree(Tree tree, Component child) {
 		final Treeitem item = (Treeitem) child;
 		int count = item.isOpen() && item.getTreechildren() != null ? 
 				item.getTreechildren().getVisibleItemCount(): 0;
@@ -109,12 +108,11 @@ public class ZulFns {
 		return shoulbBeVisited;
 	}
 	/**
-	 * Returns whether the treeitem should be rendered.
-	 * @param root Tree
+	 * Returns whether the specified should be rendered.
+	 * @param tree the tree
 	 * @since 3.0.7
 	 */
-	public static final boolean shouldBeRendered(Component root) {
-		final Tree tree = (Tree) root;
+	public static final boolean shallRenderTree(Tree tree) {
 		Integer visited = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
 		final Paginal pgi = tree.getPaginal();
 		final int ofs = pgi.getActivePage() * pgi.getPageSize();
@@ -129,13 +127,13 @@ public class ZulFns {
 		return false;
 	}
 	/**
-	 * Clears up these attributes which are used for Tree's paging mold
-	 * @param tree Tree
+	 * Clears up the attributes which are used to render a tree in paging mold
+	 * @param tree the tree
 	 * @since 3.0.7
 	 */
-	public static final void clearRenderedItem(Component tree) {
-		((Tree)tree).setAttribute(Attributes.RENDERED_ITEM_COUNT, null);
-		((Tree)tree).setAttribute(Attributes.VISITED_ITEM_COUNT, null);
-		((Tree)tree).setAttribute(Attributes.VISITED_ITEM_TOTAL, null);
+	public static final void clearTreeRenderInfo(Tree tree) {
+		tree.removeAttribute(Attributes.RENDERED_ITEM_COUNT);
+		tree.removeAttribute(Attributes.VISITED_ITEM_COUNT);
+		tree.removeAttribute(Attributes.VISITED_ITEM_TOTAL);
 	}
 }
