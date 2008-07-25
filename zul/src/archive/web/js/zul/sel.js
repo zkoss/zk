@@ -34,23 +34,23 @@ if (!window.Selectable_effect) { //define it only if not customized
 }
 var _zkselx = {};
 zk.override(zkau.cmd1, "addAft",  _zkselx, function (uuid, cmp, html) {
-	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
-	_zkselx.addAft(uuid, cmp, html);
+	if (!cmp || !_zkselx._addChd(uuid, cmp, html))
+		_zkselx.addAft(uuid, cmp, html);
 });
 zk.override(zkau.cmd1, "addBfr",  _zkselx, function (uuid, cmp, html) {
-	if (cmp && _zkselx._addChd(uuid, cmp, html)) return true;
-	_zkselx.addBfr(uuid, cmp, html);
+	if (!cmp || !_zkselx._addChd(uuid, cmp, html))
+		_zkselx.addBfr(uuid, cmp, html);
 });
 _zkselx._addChd = function (uuid, cmp, html) {
-	var h = html.trim(), from = h.indexOf("Lit");
-	var isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">");
-	if (isLit && $type(cmp) != "Lit") { // only first listitem.
+	var h = html.trim(), from = h.indexOf("Lit"),
+		isLit = h.indexOf("<tr") == 0 && from > -1 && from < h.indexOf(">"),
+		type = $type(cmp);
+	if (isLit && (!type || type.indexOf("Lit") < 0)) { // only first listitem.
 		var head = $parentByTag(cmp.parentNode, "DIV"), cave = $e($uuid(head) + "!cave");
-		if (!cave) return false; // no listbody	
+		if (!cave) return false; // no listbody
 		var tBody = cave.tBodies[cave.tBodies.length-1];
 		if (tBody.rows.length) {
-			var n = tBody.rows[0];
-			var to = n.previousSibling;
+			var n = tBody.rows[0], to = n.previousSibling;
 			zk.insertHTMLBefore(n, html);
 			zkau._initSibs(n, to, false);
 		} else {
@@ -171,7 +171,7 @@ zk.Selectable.prototype = {
 						}
 				}
 			}
-			if (empty) this.head.style.display = "none"; // Bug #1819037, #1970048
+			if (empty) this.head.style.display = "none"; // Bug #1819037, #1970048 
 				//we have to hide if empty (otherwise, a small block is shown)					
 			else this.head.style.display = "";// Bug #1832359
 		}
@@ -318,9 +318,9 @@ zk.Selectable.prototype = {
 	/** Do when the right key is pressed. */
 	_doRight: function (row) {
 	},
-	/** Returns the type of the row. */
-	_rowType: function () {
-		return "Lit";
+	/** Returns whether the type of the row is "Lit". */
+	_isRowType: function (row) {
+		return $type(row) == "Lit";
 	},
 	doclick: function (evt, target) {
 		if (zkSel._shallIgnoreEvent(target))
@@ -332,8 +332,8 @@ zk.Selectable.prototype = {
 			return;
 
 		var checkmark = target.id && target.id.endsWith("!cm");
-		var row = tn == "TR" ? target: zk.parentNode(target, "TR");
-		if (!row || $type(row) != this._rowType())
+		var row = zkSel.getNearestRow(target);
+		if (!row || !this._isRowType(row))
 			return; //incomplete structure or grid in listbox...
 
 		//It is better not to change selection only if dragging selected
@@ -822,10 +822,10 @@ zk.Selectable.prototype = {
 					}
 				}
 				sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
-
-				this.realsize(sz);
 				
-				hgh -= (this.foot ? this.foot.offsetHeight : 0);
+				this.realsize(sz);
+                
+                hgh -= (this.foot ? this.foot.offsetHeight : 0);
                 this.body.style.height = (hgh < 0 ? 0 : hgh) + "px";
 				
 				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
@@ -1051,7 +1051,27 @@ zk.Selectable.prototype = {
 
 ////
 // Utilities to help implement zk.Selectable //
-zkSel = {};
+zkSel = {
+	/**
+	 * Returns the nearest row element that is allowed by zk.Selectable._isRowType(),
+	 * including row itself, recursively from row's parent node.
+	 * @since 3.0.7
+	 */
+	getNearestRow: function (row) {
+		var row = $parentByTag(row, "TR");
+		while(row) {
+			var rid = getZKAttr(row, "rid");
+			if (rid) {
+				var meta = zkau.getMeta(rid);
+				if (meta && meta._isRowType)
+					if (meta._isRowType(row))
+						break;
+			}
+			row = $parentByTag(row.parentNode, "TR");
+		}
+		return row;
+	}
+};
 
 zkSel._init = function (uuid) {
 	var meta = zkau.getMeta(uuid);
@@ -1076,7 +1096,7 @@ zkSel._shallIgnoreEvent = function (el) {
 zkSel.onover = function (evt) {
 	if (!zk.dragging) {
 		if (!evt) evt = window.event;
-		var row = $parentByTag(Event.element(evt), "TR");
+		var row = zkSel.getNearestRow(Event.element(evt));
 		if (row) Selectable_effect(row);
 	}
 };
@@ -1084,7 +1104,7 @@ zkSel.onover = function (evt) {
 zkSel.onout = function (evt) {
 	if (!zk.dragging) {
 		if (!evt) evt = window.event;
-		zkSel.onoutTo($parentByTag(Event.element(evt), "TR"));
+		zkSel.onoutTo(zkSel.getNearestRow(Event.element(evt)));
 	}
 };
 zkSel.onoutTo = function (row) {
@@ -1133,7 +1153,6 @@ zkSel.getVisibleFirstChildIfAny = function (row) {
 ////
 // listbox //
 zkLibox = {}; //listbox
-
 /** Called when the body got a key stroke. */
 zkLibox.bodyonkeydown = function (evt) {
 	if (!evt) evt = window.event;

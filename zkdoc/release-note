@@ -25,6 +25,7 @@ ZK 3.0.7
   2026493: The height of Listbox with vflex is wrong in paging mold
   2009958: auto selection by key doesn't fire event
   2010019: listbox firing select event with null as a parameter
+  2003798: Cannot select tree row using hbox inside treecell
   
 * Upgrade Notes:
   + Tree supports the paging mold. The original way to paginate treechild

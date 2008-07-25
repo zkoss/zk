@@ -30,9 +30,9 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 	getItemUuid: function (row) {
 		return getZKAttr(row, "pitem");
 	},
-	/** Returns the type of the row. */
-	_rowType: function () {
-		return "Trow";
+	/** Returns whether the type of the row is "Trow". */
+	_isRowType: function (row) {
+		return $type(row) == "Trow";
 	},
 	/** Overrides what is defined in zk.Selectable. */
 	_doLeft: function (row) {
