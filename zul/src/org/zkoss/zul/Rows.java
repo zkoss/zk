@@ -21,7 +21,7 @@ package org.zkoss.zul;
 import java.util.AbstractList;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -356,7 +356,7 @@ public class Rows extends XulElement {
 			if (grid.inSpecialMold())
 				return grid.getDrawerEngine().getAvailableAtClient();
 
-			final Set avail = new HashSet(37);
+			final Set avail = new LinkedHashSet(32);
 			final Paginal pgi = grid.getPaginal();
 			int pgsz = pgi.getPageSize();
 			final int ofs = pgi.getActivePage() * pgsz;

@@ -385,7 +385,7 @@ import org.zkoss.zk.au.out.*;
 	/** Process {@link ChildChangedAware}
 	 */
 	private void doChildChanged() {
-		final Set ccawares = new LinkedHashSet(), checked = new HashSet(79);
+		final Set ccawares = new LinkedHashSet(), checked = new HashSet(64);
 		doChildChanged(_invalidated, ccawares, checked);
 		doChildChanged(_attached, ccawares, checked);
 		doChildChanged(_smartUpdated.keySet(), ccawares, checked);
@@ -434,7 +434,7 @@ import org.zkoss.zk.au.out.*;
 				|| isAncestor(removed, owner, true)) {
 					addPageRemoved(page);
 				} else {
-					if (pages == null) pages = new HashSet();
+					if (pages == null) pages = new LinkedHashSet();
 					pages.add(page);
 				}
 			}
@@ -459,7 +459,7 @@ import org.zkoss.zk.au.out.*;
 		} while (pgRemovedFound); //loop due to chain effect
 	}
 	private void addPageRemoved(Page page) {
-		if (_pgRemoved == null) _pgRemoved = new HashSet();
+		if (_pgRemoved == null) _pgRemoved = new LinkedHashSet();
 		_pgRemoved.add(page);
 		if (_pgInvalid != null) _pgInvalid.remove(page);
 //		if (D.ON && log.debugable()) log.debug("Page removed: "+page);
@@ -585,7 +585,7 @@ import org.zkoss.zk.au.out.*;
 				final Page page = comp.getPage();
 				if (page != null && _exec.isAsyncUpdate(page)) {
 					final Component parent = comp.getParent();
-					final Set newsibs = new LinkedHashSet(37);
+					final Set newsibs = new LinkedHashSet(32);
 					newsibs.add(comp);
 					desktops.add(newsibs);
 
@@ -655,7 +655,7 @@ import org.zkoss.zk.au.out.*;
 	 */
 	private Set doMoved(List responses) {
 		//Remove components that have to removed from the client
-		final Set removed = new HashSet();
+		final Set removed = new LinkedHashSet();
 		for (Iterator it = _moved.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			final Page page = comp.getPage();

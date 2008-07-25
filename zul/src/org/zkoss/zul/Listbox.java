@@ -24,7 +24,7 @@ import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -2189,7 +2189,7 @@ public class Listbox extends XulElement implements Paginated {
 			if (inSpecialMold())
 				return _engine.getAvailableAtClient();
 
-			final Set avail = new HashSet(37);
+			final Set avail = new LinkedHashSet(32);
 			avail.addAll(_heads);
 			if (_listfoot != null) avail.add(_listfoot);
 			if (_paging != null) avail.add(_paging);

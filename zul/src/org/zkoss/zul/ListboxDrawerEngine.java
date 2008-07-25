@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -81,7 +81,7 @@ import org.zkoss.zul.Listbox.Renderer;
 		if (!_listbox.inSpecialMold())
 			return null;
 
-		final Set avail = new HashSet(37);
+		final Set avail = new LinkedHashSet(32);
 		avail.addAll(_listbox.getHeads());
 		if (_listbox.getListfoot() != null)
 			avail.add(_listbox.getListfoot());
