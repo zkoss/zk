@@ -697,6 +697,19 @@ import org.zkoss.zk.au.out.*;
 			sibs = getAvailableAtClient(parent, croppingInfos);
 			if (sibs == null) //no cropping
 				sibs = parent.getChildren();
+			else if (sibs.size() > 1 && !(sibs instanceof LinkedHashSet)) {
+//				log.warning("Use LinkedHashSet instead of "+sibs.getClass());
+				final Set s = new LinkedHashSet(sibs.size() * 2);
+				for (Iterator it = parent.getChildren().iterator(); it.hasNext();) {
+					final Object o = it.next();
+					if (sibs.remove(o)) {
+						s.add(o);
+						if (sibs.isEmpty())
+							break;
+					}
+				}
+				sibs = s;
+			}
 		} else {
 			sibs = page.getRoots();
 		}
