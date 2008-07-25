@@ -41,7 +41,15 @@ import java.util.SortedSet;
 public class ListModelList extends AbstractListModel
 implements ListModelExt, List, java.io.Serializable {
 	protected List _list;
-	
+
+	/**
+	 * Creates an instance which accepts a "live" List as its inner List.
+	 * @param list the inner List storage
+	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelList(List,boolean)}
+	 */
+	public static ListModelList instance(List list) {
+		return new ListModelList(list, true);
+	}	
 	/**
 	 * Constructor
 	 *
