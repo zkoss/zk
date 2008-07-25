@@ -1960,7 +1960,49 @@ zk.parseDate = function (txt, fmt, strict) {
 				if (y < 100) y += y > 29 ? 1900 : 2000;
 				break;
 			case 'M':
-				if (len <= 2) {
+				if (len == 3){
+					switch (token.toLowerCase()){
+						case 'jan': 
+							m=0;
+							break;							
+						case 'feb':
+							m=1;
+							break;
+						case 'mar': 
+							m=2;
+							break;							
+						case 'apr':
+							m=3;
+							break;
+						case 'may': 
+							m=4;
+							break;							
+						case 'jun':
+							m=5;
+							break;
+						case 'jul': 
+							m=6;
+							break;							
+						case 'aug':
+							m=7;
+							break;
+						case 'sep': 
+							m=8;
+							break;							
+						case 'oct':
+							m=9;
+							break;
+						case 'nov': 
+							m=10;
+							break;							
+						case 'dec':
+							m=11;
+							break;
+						default:
+							if (isNaN(m)) return null; //failed
+						}		
+					break;
+				}else if (len <= 2) {
 					if (nosep && token.length > 2) {
 						ts[--i] = token.substring(2);
 						token = token.substring(0, 2);

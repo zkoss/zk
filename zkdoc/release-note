@@ -42,6 +42,7 @@ ZK 3.5.0
   1958774: cannot create tree with all treeitem branches opened
   1962220: datebox: when 31th of May selected, select June - shows July
   1939919: Borderlayout does not fit inside Window (IE6)
+  2015606: Datebox in lenient mode ignores text
 
 * Upgrade Notes
   + The smartUpdate, response, onChildAdded, onChildRemoved and
