@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -341,7 +341,7 @@ public class Treechildren extends XulElement implements Pageable {
 			if (parent != tree && !map.containsKey(parent))
 				return Collections.EMPTY_SET;
 
-			final Set avail = new HashSet(32);
+			final Set avail = new LinkedHashSet(32);
 			for (Iterator it = getChildren().iterator();it.hasNext();) {
 				Treeitem item = (Treeitem)it.next();
 				if (!map.containsKey(item))

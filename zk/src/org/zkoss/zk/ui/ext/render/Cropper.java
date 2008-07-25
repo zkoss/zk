@@ -45,7 +45,10 @@ public interface Cropper {
 	 */
 	public boolean isCropper();
 	/** Returns a set of child components that are available at the client,
-	 * or null if ALL available.
+	 * or null if ALL available. The child components in the returned set
+	 * must be in the same order of {@link org.zkoss.zk.ui.Component#getChildren}.
+	 * In order words, you must use LinkedHashSet or similar to ensure the order
+	 * in the returned set.
 	 *
 	 * <p>Note: for better performance, it is better to return null if
 	 * all children are available at the client.

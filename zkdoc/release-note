@@ -26,6 +26,7 @@ ZK 3.0.7
   2009958: auto selection by key doesn't fire event
   2010019: listbox firing select event with null as a parameter
   2003798: Cannot select tree row using hbox inside treecell
+  2027442: Paging mold Listbox + model not in order
   
 * Upgrade Notes:
   + Tree supports the paging mold. The original way to paginate treechild

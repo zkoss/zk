@@ -18,7 +18,7 @@
  */
 package org.zkoss.zul;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -85,7 +85,7 @@ import org.zkoss.zul.Grid.Renderer;
 		if (!_grid.inSpecialMold())
 			return null;
 
-		final Set avail = new HashSet(37);
+		final Set avail = new LinkedHashSet(32);
 		avail.addAll(_grid.getHeads());
 		int pgsz = getRenderAmount();
 		int ofs = getRenderBegin();
