@@ -1,0 +1,195 @@
+<window id="win" title="tree demo" border="normal" xmlns:h="http://www.w3.org/1999/xhtml">
+	<vbox>
+	<html>
+	Do things as follow, and check the paging function is correct after every step.
+	&lt;ol&gt;
+	&lt;li&gt;
+	Change PageSize value = 5 and click ChangePageSize&lt;/li&gt;
+	&lt;li&gt;
+	Click ChangeMold to change the mold of tree. repeat;&lt;/li&gt;
+	&lt;li&gt;
+	Click Item 2.1.1 and Click Visible &lt;/li&gt;
+	&lt;li&gt;
+	Click Do repeat.&lt;/li&gt;
+	&lt;li&gt;
+	Click Gen , it will generate 3000 new child of tree , every treeitem got ID=IT* (default IT0~IT3000),&lt;/li&gt;
+	&lt;li&gt;
+	type IT3000 on Delete , then click Delete , if OK then try any number you want.&lt;/li&gt;
+	&lt;li&gt;
+	type IT2999 on Update , and type something in Value , then click Update.	&lt;/li&gt;
+
+</html>	
+	</vbox>
+	<hbox>	
+	<vbox width="80%">
+		
+		<tree id="tree" width="400px" rows="30" mold="paging" pageSize="10">
+			<treecols sizable="true">
+				<treecol label="A"/>
+				<treecol label="B"/>
+			</treecols>
+			<treechildren id="it1">
+				<treeitem >
+					<treerow>
+						<treecell  label="Item 1"/>
+						<treecell label="Item 1 description"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2"/>
+						<treecell label="Item 2 description"/>
+					</treerow>
+					<treechildren>
+						<treeitem id="it2">
+							<treerow>
+								<treecell label="Item 2.1"/>
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.1"/>
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.2"/>
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.3"/>
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.3"/>
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.2"/>
+								<treecell label="Item 2.2 Testing"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Item 3"/>
+				<treeitem label="Item 4"/>
+				<treeitem label="Item 5"/>
+				<treeitem label="Item 6"/>
+				<treeitem label="Item 7"/>
+			</treechildren>
+		</tree>
+	</vbox>
+	<vbox>
+		<listbox >
+			<listhead sizable="true">
+				<listheader label="Description" width="180px"  sort="auto"/>
+				<listheader label="Value" width="180px" sort="auto"/>
+				<listheader label="Button" sort="auto"/>
+			</listhead>
+			
+			<listitem id="ps">
+				<listcell>
+					<label id="ChangePZ" value="Change Page Size" />
+				</listcell>
+				<listcell>
+					<intbox id="psz" />	
+				</listcell>
+				<listcell>
+					<button label="ChangePageSize" onClick="CPS()" />		
+				</listcell>
+			</listitem>			
+<listitem>
+				<listcell>
+					<label value="Mold " />
+				</listcell>
+				<listcell>
+					<label id="md" value="" />
+				</listcell>
+				<listcell>
+					<button label="ChangeMold" onClick="ChangeMold()" />		
+				</listcell>
+			</listitem>										
+			<listitem>
+				<listcell>Visible</listcell>
+				<listcell>Selected Item <label id="vis" /></listcell>
+				<listcell><button label="Visible" onClick="seeits();" /></listcell>
+			</listitem>
+			<listitem>
+				<listcell>Open/Close</listcell>
+				<listcell>See Item2.1</listcell>
+				<listcell><button label="Do" onClick="it2.open = !it2.open;" /> </listcell>
+			</listitem>
+			<listitem>
+				<listcell>Generate Cell</listcell>
+				<listcell>IT0~IT<intbox id="gc" value="3000" /></listcell>
+				<listcell><button label="Gen" onClick="Genall();" />		</listcell>
+			</listitem>			
+			<listitem>
+				<listcell>Delete</listcell>
+				<listcell><textbox id="gf2" /></listcell>
+				<listcell><button label="Del" onClick="delete();" /></listcell>
+			</listitem>			
+			<listitem>
+				<listcell>Update</listcell>
+				<listcell><vbox><hbox>ID<textbox id="gf" /></hbox><hbox>Value<textbox id="givevalue" value="Value" /></hbox></vbox></listcell>
+				<listcell><button label="Update" onClick="update();" /></listcell>
+			</listitem>			
+			
+		</listbox>				
+	</vbox>
+	
+	</hbox>
+	<zscript>
+	/*init*/
+	int i = 0;
+	md.value=tree.Mold ;
+	psz.value=tree.pageSize;
+	rows.value=tree.rows;
+	ChangeMold(){
+		if (tree.Mold.equals("paging")){
+			tree.Mold="default";	
+			
+			md.value=tree.Mold;
+		}else{
+		
+			tree.mold="paging";
+			tree.pageSize=psz.value;
+			md.value=tree.Mold ;
+		}			
+	}	
+	CPS(){
+		tree.pageSize=psz.value;
+	}
+	seeits(){
+		tree.getSelectedItem().setVisible(!tree.getSelectedItem().isVisible());
+		vis.value=tree.getSelectedItem().id;
+	}
+	Genall(){	
+		for ( int a =0; a &lt;= gc.value ; a++){
+			Treeitem tit = new Treeitem();
+			Treerow  trw = new Treerow();			
+			Treecell tcl = new Treecell("Gen "+a);
+			tit.Id="IT"+a;
+			tcl.Id="TC"+a;
+			tcl.setParent(trw);		
+			trw.setParent(tit);
+			tit.setParent(it1);		
+		};
+			
+	}
+	delete(){
+		it1.getFellow(gf2.value).detach();
+	}
+	update(){
+		it1.getFellow(gf.value).label = givevalue.value;		
+	}
+	
+	</zscript>
+	
+</window>
+				

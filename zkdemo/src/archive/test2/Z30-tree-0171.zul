@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+serialize2.zul
+
+{{IS_NOTE
+	Purpose:
+		Test Serializable with Live Data
+	Description:
+		
+	History:
+		Tue May 29 17:38:37     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test Tree Clone" border="normal">
+<vbox>
+  <label value="1. Click addItem1"/>  
+  <label value="2. Double check the content of Item1 is the same as the original one"/>
+</vbox>
+<zscript>
+int i = 0;
+ void clone(comp){  
+	Treeitem tc = comp.clone();
+	tc.setId("it" + i++);
+	tc.setParent(c1);
+	}
+</zscript>
+<button label="clone Item1" onClick="clone(t1)"/>
+	<tree id="tree" mold="paging" pageSize="10">
+		<treecols sizable="true">
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren id="c1">
+			<treeitem id="t1">
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell label="Item 2.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3"/>
+		</treechildren>
+	</tree>
+</window>
+				

@@ -1,0 +1,26 @@
+<zk>	
+  <vbox>
+	<label value="Treemodel"/>
+	<label value="1. Keep on open tree node until you see a paging apears on the bottom of the page."/>
+	</vbox>
+	<window height="50%" title="Load on Demand">
+	<zscript>
+	
+		import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+		
+		ArrayList al = new ArrayList();
+		int i=0;
+		for(; i &lt; 100000; i++)
+		{
+			Object obj = ""+i;
+			al.add(obj);
+		}
+		BinaryTreeModel btm = new BinaryTreeModel(al);
+		
+	</zscript>
+		<tree vflex="true" model="${btm}" id="tree" mold="paging" pageSize="5">
+		</tree>
+		<button label="change vflex" onClick='tree.vflex = !tree.vflex'/>
+	</window>
+	
+</zk>

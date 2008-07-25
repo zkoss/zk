@@ -1,0 +1,207 @@
+<window title="Test External Paging" border="normal">
+<label value="clicks the paging"/>
+<paging id="pg1" pageSize="10"/>
+	<tree id="tree" width="90%" paginal="${pg1}" mold="paging" fixedLayout="true">
+		<treecols sizable="true">
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem >
+				<treerow>
+					<treecell id="firstitem" label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem >
+								<treerow>
+									<treecell label="Item 3"/>
+								</treerow>
+							</treeitem>
+					<treeitem id="ti1" >
+						<treerow>
+							<treecell id="ic4" label="Item 4"/>
+						</treerow>
+						<treechildren id="firstchild">
+							<treeitem>
+								<treerow>
+									<treecell label="Item 5"/>
+								</treerow>
+							</treeitem>
+							<treeitem >
+								<treerow>
+									<treecell label="Item 6"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 7"/>
+							<treecell label="Item 7"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 8"/>
+					<treecell label="Item 8"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 9"/>
+					<treecell label="Item 9 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 10"/>
+					<treecell label="Item 10 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell id="seconditem" label="Item 11"/>
+					<treecell label="Item 11 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 12"/>
+					<treecell label="Item 12 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 13"/>
+					<treecell label="Item 13 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 14"/>
+					<treecell label="Item 14 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 15"/>
+					<treecell label="Item 15 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 16"/>
+					<treecell label="Item 16 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem open="false">
+				<treerow>
+					<treecell label="Item 17"/>
+					<treecell label="Item 17 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 18"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 19"/>
+								</treerow>
+							</treeitem>
+							<treeitem id="item20">
+								<treerow>
+									<treecell label="Item 20"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 21"/>
+							<treecell label="Item 21 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 22"/>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 23"/>
+					<treecell label="Item 23 description"/>
+				</treerow><treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 24"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 25"/>
+								</treerow>
+							</treeitem>
+							<treeitem id="it26">
+								<treerow>
+									<treecell label="Item 26"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 27"/>
+							<treecell label="Item 27 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem >
+				<treerow>
+					<treecell label="Item 28"/>
+					<treecell label="Item 28 description"/>
+				</treerow><treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 29"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 30"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 31"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 32"/>
+							<treecell label="Item 32 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell id="lastitem" label="Item 33"/>
+					<treecell label="Item 33 description"/>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>	
+</window>
+				
