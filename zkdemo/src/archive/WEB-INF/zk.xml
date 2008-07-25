@@ -13,11 +13,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 <zk>
 	<!-- Turn on if you want to debug JavaScript.
-		Once turned on, the uncompressed JavaScript files will be loaded. -->
+		Once turned on, the uncompressed JavaScript files will be loaded.
 	<client-config>
 		<debug-js>true</debug-js>
 	</client-config>
-
+	-->
 	<!--
 	<log>
 		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
