@@ -1,0 +1,28 @@
+<window id="wnd" width="100%">
+<html><![CDATA[
+<p>1. Yous shall see a button "Load".<br/>
+2. Click "Load" button.<br/>
+3. You shall see a list with "0", "1", "2", "3" in order.<br/>
+4. If not in order, it is a bug.<br/>
+5. Done.
+</p>
+]]></html>
+	<zscript><![CDATA[
+	    String[] entries = new String[10];
+		ListModel model = new SimpleListModel(new String[] {}); 
+
+		void load() { 
+		    for(int j=0; j < 10; ++j) {
+		    	entries[j] = ""+j;
+		    }	
+			model = new SimpleListModel(entries);
+			lbx.setModel(model);
+		} 
+	]]></zscript>
+	<caption label="Data is not in order, why?" />
+
+	<button id="load" label="Load" onClick="load()" />
+	<listbox id="lbx" width="95%" fixedLayout="true" mold="paging" pageSize="4"
+		model="${model}">
+	</listbox>
+</window>
