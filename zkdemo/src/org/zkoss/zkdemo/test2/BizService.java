@@ -1,5 +1,6 @@
 /* Copyright (C) 2008 Kinetic Networks Inc. All rights reserved.
  */
+//TestCase used with B30-2010019.zul
 package org.zkoss.zkdemo.test2;
 
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import java.util.List;
 public class BizService {
 	public class Repository {
 
-		@Override
 		public boolean equals(Object obj) {
 			return super.equals(obj);
 		}
@@ -49,35 +49,35 @@ public class BizService {
 
 	private Repository repository;
 
-	private ArrayList<Repository> repositories;
+	private ArrayList repositories;
 
 	public void addNewRepository(List list) throws Exception {
-		this.repository = new Repository(drivers.get(this.repositories.size() % drivers.size()), "name"
+		this.repository = new Repository((String)drivers.get(this.repositories.size() % drivers.size()), "name"
 				+ System.currentTimeMillis());
 		list.add(repository);
 	}
 
 	public BizService() throws Exception {
 		super();
-		drivers = new ArrayList<String>();
+		drivers = new ArrayList();
 		drivers.add("A");
 		drivers.add("B");
 		drivers.add("C");
 
-		repositories = new ArrayList<Repository>();
+		repositories = new ArrayList();
 		for (int i = 0; i < 5; i++) {
-			repositories.add(new Repository(drivers.get(i % drivers.size()), "Name-" + i));
+			repositories.add(new Repository((String)drivers.get(i % drivers.size()), "Name-" + i));
 		}
 	}
 
-	List<String> drivers;
+	List drivers;
 
-	public List<String> getDrivers() {
+	public List getDrivers() {
 
 		return drivers;
 	}
 
-	public List<Repository> getRepositories() {
+	public List getRepositories() {
 		return repositories;
 	}
 
