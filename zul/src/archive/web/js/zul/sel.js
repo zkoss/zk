@@ -333,7 +333,7 @@ zk.Selectable.prototype = {
 			return;
 
 		var checkmark = target.id && target.id.endsWith("!cm");
-		var row = tn == "TR" ? target: zk.parentNode(target, "TR");
+		var row = zkSel.getNearestRow(target);
 		if (!row || !this._isRowType(row))
 			return; //incomplete structure or grid in listbox...
 
@@ -1052,7 +1052,27 @@ zk.Selectable.prototype = {
 
 ////
 // Utilities to help implement zk.Selectable //
-zkSel = {};
+zkSel = {
+	/**
+	 * Returns the nearest row element that is allowed by zk.Selectable._isRowType(),
+	 * including row itself, recursively from row's parent node.
+	 * @since 3.0.7
+	 */
+	getNearestRow: function (row) {
+		var row = $parentByTag(row, "TR");
+		while(row) {
+			var rid = getZKAttr(row, "rid");
+			if (rid) {
+				var meta = zkau.getMeta(rid);
+				if (meta && meta._isRowType)
+					if (meta._isRowType(row))
+						break;
+			}
+			row = $parentByTag(row.parentNode, "TR");
+		}
+		return row;
+	}
+};
 
 zkSel._init = function (uuid) {
 	var meta = zkau.getMeta(uuid);
@@ -1077,7 +1097,7 @@ zkSel._shallIgnoreEvent = function (el) {
 zkSel.onover = function (evt) {
 	if (!zk.dragging) {
 		if (!evt) evt = window.event;
-		var row = $parentByTag(Event.element(evt), "TR");
+		var row = zkSel.getNearestRow(Event.element(evt));
 		if (row) Selectable_effect(row);
 	}
 };
@@ -1085,7 +1105,7 @@ zkSel.onover = function (evt) {
 zkSel.onout = function (evt) {
 	if (!zk.dragging) {
 		if (!evt) evt = window.event;
-		zkSel.onoutTo($parentByTag(Event.element(evt), "TR"));
+		zkSel.onoutTo(zkSel.getNearestRow(Event.element(evt)));
 	}
 };
 zkSel.onoutTo = function (row) {
