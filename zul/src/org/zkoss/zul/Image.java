@@ -18,7 +18,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.awt.image.RenderedImage;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.image.Images;
 import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
@@ -136,7 +139,7 @@ public class Image extends XulElement {
 	}
 	/** Sets the source URI of the image.
 	 *
-	 * <p>If {@link #setContent} is ever called with non-null,
+	 * <p>If {@link #setContent(org.zkoss.image.Image)} is ever called with non-null,
 	 * it takes heigher priority than this method.
 	 *
 	 * @param src the URI of the image source
@@ -174,9 +177,26 @@ public class Image extends XulElement {
 			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
-	/** Returns the content set by {@link #setContent}.
+	/** Sets the content directly with the rendered image.
+	 * It actually encodes the rendered image to an PNG image
+	 * ({@link org.zkoss.image.Image}) with {@link Images#encode},
+	 * and then invoke {@link #setContent(org.zkoss.image.Image)}.
+	 *
+	 * <p>If you want more control such as different format, quality,
+	 * and naming, you can use {@link Images} directly.
+	 *
+	 * @since 3.0.7
+	 */
+	public void setContent(RenderedImage image) {
+		try {
+			setContent(Images.encode("a.png", image));
+		} catch (java.io.IOException ex) {
+			throw new UiException(ex);
+		}
+	}
+	/** Returns the content set by {@link #setContent(org.zkoss.image.Image)}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
-	 * It simply returns what is passed to {@link #setContent}.
+	 * It simply returns what is passed to {@link #setContent(org.zkoss.image.Image)}.
 	 */
 	public org.zkoss.image.Image getContent() {
 		return _image;

@@ -18,7 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.awt.image.RenderedImage;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.image.Images;
 import org.zkoss.util.media.Media;
 import org.zkoss.image.Image;
 
@@ -95,9 +98,26 @@ public class LabelImageElement extends LabelElement {
 			invalidate();
 		}
 	}
-	/** Returns the content set by {@link #setImageContent}.
+	/** Sets the content directly with the rendered image.
+	 * It actually encodes the rendered image to an PNG image
+	 * ({@link org.zkoss.image.Image}) with {@link Images#encode},
+	 * and then invoke {@link #setImageContent(org.zkoss.image.Image)}.
+	 *
+	 * <p>If you want more control such as different format, quality,
+	 * and naming, you can use {@link Images} directly.
+	 *
+	 * @since 3.0.7
+	 */
+	public void setImageContent(RenderedImage image) {
+		try {
+			setImageContent(Images.encode("a.png", image));
+		} catch (java.io.IOException ex) {
+			throw new UiException(ex);
+		}
+	}
+	/** Returns the content set by {@link #setImageContent(org.zkoss.image.Image)}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
-	 * It simply returns what is passed to {@link #setImageContent}.
+	 * It simply returns what is passed to {@link #setImageContent(org.zkoss.image.Image)}.
 	 */
 	public Image getImageContent() {
 		return _image;
@@ -105,7 +125,7 @@ public class LabelImageElement extends LabelElement {
 
 	/** Returns whether the image is available.
 	 * In other words, it return true if {@link #setImage} or
-	 * {@link #setImageContent} is called with non-null.
+	 * {@link #setImageContent(org.zkoss.image.Image)} is called with non-null.
 	 */
 	public boolean isImageAssigned() {
 		return _src != null || _image != null;

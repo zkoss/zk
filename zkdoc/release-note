@@ -7,6 +7,7 @@ ZK 3.0.7
   2010314: A way to post event that will be executed after others
   2015827: Provide utilities to encode AWT image to ZK image
   2016523: Stop timer at the client if session timeout
+  2028549: Support Image.setContent(javax.awt.image.RenderedImage)
 
 * Bugs
   2008676: Firefox 3: toolbarbutton with href causes false alarm
