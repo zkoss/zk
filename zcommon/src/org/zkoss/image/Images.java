@@ -34,10 +34,11 @@ import org.zkoss.image.encoder.ImageEncoder;
  * @since 3.0.7
  */
 public class Images {
-	/** Encodes an AWT image into a ZK image.
+	/** Encodes an AWT image into a ZK image (in PNG, JPEG or other format).
 	 *
 	 * @param name The name of the image. The extension of the name must
-	 * be the format. For example, foo.png and foo.jpeg.
+	 * be the format. Supported format: png and jpeg.
+	 * For example, foo.png and foo.jpeg.
 	 * @param image  The AWT image to be encoded.
      * @param quality  The quality to use for the image encoding.
 	 * It is a number between 0 and 1. The higher the value,
