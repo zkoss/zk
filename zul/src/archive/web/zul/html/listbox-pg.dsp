@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="zu" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.sel.Libox" z.pg="t"${self.outerAttrs}${self.innerAttrs}>
 	<c:if test="${!empty self.pagingChild && self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
@@ -61,9 +61,9 @@ ${z:redraw(head, null)}
 			</tr>
 		</tbody>
 		</c:if>
-${zu:resetStripeClass(self)}
+${u:resetStripeClass(self)}
 	<c:forEach var="item" items="${self.items}" begin="${self.visibleBegin}" end="${self.visibleEnd}">
-${zu:setStripeClass(item)}	
+${u:setStripeClass(item)}
 ${z:redraw(item, null)}
 	</c:forEach>
 	</table>

@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="zu" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.tree.Tree" z.pg="t"${self.outerAttrs}${self.innerAttrs}>
 	<c:if test="${!empty self.pagingChild && self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
@@ -83,5 +83,5 @@ ${z:redraw(self.treefoot, null)}
 	${z:redraw(self.pagingChild, null)}
 	</div>
 	</c:if>
-${zu:clearTreeRenderInfo(self)}
+${u:clearTreeRenderInfo(self)}
 </div>
