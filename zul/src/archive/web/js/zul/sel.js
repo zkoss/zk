@@ -522,6 +522,7 @@ zk.Selectable.prototype = {
 		var focusfound = false, rowfound = false;
 		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
+			if (getZKAttr(r, "disd") == "true") continue; // Bug: 2030986
 			if (focusfound) {
 				this._changeSelect(r, true);
 				if (r == row)
