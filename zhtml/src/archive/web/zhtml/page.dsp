@@ -18,25 +18,25 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="u" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
 <c:choose>
 <c:when test="${!zk_completeDesktop}">
 	<c:if test="${!arg.asyncUpdate}">
-${u:outLangStyleSheets()}
-${u:outLangJavaScripts(null)}
+${z:outLangStyleSheets()}
+${z:outLangJavaScripts(null)}
 	</c:if>
 
-<div${u:outPageAttrs(page)}>
+<div${z:outPageAttrs(page)}>
 	<c:forEach var="root" items="${page.roots}">
-${u:redraw(root, null)}
+${z:redraw(root, null)}
 	</c:forEach>
 </div>
 
 	<c:if test="${!empty arg.responses}">
 <script type="text/javascript">
-${u:outResponseJavaScripts(arg.responses)}
+${z:outResponseJavaScripts(arg.responses)}
 </script>
 	</c:if>
 </c:when>
@@ -45,12 +45,12 @@ ${u:outResponseJavaScripts(arg.responses)}
 	<c:set var="zk_argAction" value="${arg.action}" scope="request"/><%-- ZHTML head counts on it --%>
 	<c:set var="zk_argResponses" value="${arg.responses}" scope="request"/><%-- ZHTML body counts on it --%>
 	<c:forEach var="root" items="${page.roots}">
-${u:redraw(root, null)}
+${z:redraw(root, null)}
 	</c:forEach>
 
 	<c:if test="${!empty zk_argAction && !arg.asyncUpdate}">
-${u:outLangStyleSheets()}
-${u:outLangJavaScripts(null)}
+${z:outLangStyleSheets()}
+${z:outLangJavaScripts(null)}
 <script type="text/javascript">
 	zkau.addDesktop("${page.desktop.id}");
 </script>
@@ -58,7 +58,7 @@ ${u:outLangJavaScripts(null)}
 
 	<c:if test="${!empty zk_argResponses}">
 <script type="text/javascript">
-${u:outResponseJavaScripts(zk_argResponses)}
+${z:outResponseJavaScripts(zk_argResponses)}
 </script>
 	</c:if>
 </c:otherwise>
