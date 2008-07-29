@@ -728,7 +728,7 @@ public class Log {
 	/** Logs only the first few lines of the real cause as an error message.
 	 */
 	public final void realCauseBriefly(String message, Throwable ex) {
-		realCause0(message, ex, true, 5);
+		realCause0(message, ex, true, 6);
 	}
 	/** Lo only the first few lines of the real cause as an error message.
 	 */
