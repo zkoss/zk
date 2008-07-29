@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.dsp.DspException;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
 import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestContexts;
@@ -121,7 +122,7 @@ public class ServletFns {
 	 * @param ac the action context; never null.
 	 */
 	public static void render(ActionContext ac)
-	throws ServletException, IOException {
+	throws DspException, IOException {
 		ac.renderFragment(null);
 	}
 }

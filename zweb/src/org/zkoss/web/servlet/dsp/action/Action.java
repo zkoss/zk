@@ -19,7 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.dsp.action;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
+
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * An action that could be used with
@@ -35,5 +36,5 @@ public interface Action {
 	 * @param nested whether there is any nested content.
 	 */
 	public void render(ActionContext ac, boolean nested)
-	throws ServletException, IOException;
+	throws DspException, IOException;
 }

@@ -82,7 +82,7 @@ class ActionContextImpl implements ActionContext {
 	}
 
 	public void renderFragment(Writer out)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (out == null || out == _ic.dc.getOut()) {
 			_current.renderFragment(_ic);
 		} else {
@@ -96,20 +96,28 @@ class ActionContextImpl implements ActionContext {
 		}
 	}
 	public void include(String uri, Map params)
-	throws javax.servlet.ServletException, IOException {
-		Servlets.include(_ic.dc.getServletContext(),
-			_ic.dc.getRequest(),
-			BufferedResponse.getInstance(_ic.dc.getResponse(), _ic.dc.getOut()),
-			uri, params, Servlets.PASS_THRU_ATTR);
+	throws DspException, IOException {
+		try {
+			Servlets.include(_ic.dc.getServletContext(),
+				_ic.dc.getRequest(),
+				BufferedResponse.getInstance(_ic.dc.getResponse(), _ic.dc.getOut()),
+				uri, params, Servlets.PASS_THRU_ATTR);
+		} catch (javax.servlet.ServletException ex) {
+			throw new DspException(ex);
+		}
 	}
 	public boolean isIncluded() {
 		return Servlets.isIncluded(_ic.dc.getRequest());
 	}
 
 	public String encodeURL(String uri)
-	throws javax.servlet.ServletException {
-		return Encodes.encodeURL(_ic.dc.getServletContext(),
-			_ic.dc.getRequest(), _ic.dc.getResponse(), uri);
+	throws DspException {
+		try {
+			return Encodes.encodeURL(_ic.dc.getServletContext(),
+				_ic.dc.getRequest(), _ic.dc.getResponse(), uri);
+		} catch (javax.servlet.ServletException ex) {
+			throw new DspException(ex);
+		}
 	}
 
 	public int getLineNumber() {

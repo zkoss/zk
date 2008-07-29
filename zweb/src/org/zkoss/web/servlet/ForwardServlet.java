@@ -56,7 +56,7 @@ public class ForwardServlet extends GenericServlet {
 	public void init() throws ServletException {
 		_target = getInitParameter("target");
 		if (_target == null || _target.length() == 0)
-			throw new ServletException("ForwardServlet requires the init param, target");
+			throw new ServletException("The init param, target, required");
 	}
 
 	public void service(ServletRequest request, ServletResponse response)

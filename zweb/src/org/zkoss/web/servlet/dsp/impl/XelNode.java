@@ -26,7 +26,6 @@ import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.XelException;
 import org.zkoss.util.logging.Log;
-import org.zkoss.web.servlet.ServletException;
 
 /**
  * Represents an expression.
@@ -45,15 +44,14 @@ class XelNode extends Node {
 
 	//-- super --//
 	void interpret(InterpretContext ic)
-	throws javax.servlet.ServletException, IOException {
+	throws IOException {
 		try {
 			final String result = (String)_expr.evaluate(ic.xelc);
 			if (result != null)
 				ic.dc.getOut().write(result);
 		} catch (XelException ex) {
-			//we have to log since Tomcat 'eats' the real cause
-			log.realCause(ex);
-			throw new ServletException("Unable to evaluate an EL expression: "+_expr, ex);
+			log.realCauseBriefly(ex); //Web server might 'eat'
+			throw ex;
 		}
 	}
 	void addChild(Node node) {

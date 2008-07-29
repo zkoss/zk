@@ -412,7 +412,7 @@ public class Encodes {
 				_urlEncoder.encodeURL(ctx, request, response, url):
 				url;
 		} catch (Exception ex) {
-			log.realCause(ex);
+			log.realCauseBriefly(ex);
 			throw new ServletException("Unable to encode "+uri, ex);
 		}
 	}

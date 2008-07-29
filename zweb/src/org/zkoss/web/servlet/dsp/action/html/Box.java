@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.io.IOException;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.dsp.DspException;
 import org.zkoss.web.servlet.dsp.action.AbstractAction;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
 
@@ -115,7 +115,7 @@ public class Box extends AbstractAction {
 	}
 
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (!isEffective())
 			return;
 

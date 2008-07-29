@@ -39,7 +39,7 @@ class RootNode extends Node implements Interpretation {
 
 	//-- Node --//
 	void interpret(InterpretContext ic)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (_children == null)
 			return;
 		for (Iterator it = _children.iterator(); it.hasNext();) {
@@ -49,7 +49,7 @@ class RootNode extends Node implements Interpretation {
 
 	//-- Interpretation --//
 	public void interpret(DspContext dc)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		RequestContexts.push(dc);
 		try {
 			interpret(new InterpretContext(dc));

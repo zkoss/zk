@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * Tests whether an condition is true and render the child only
@@ -54,7 +54,7 @@ public class If extends AbstractAction {
 
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (nested && _cond && isEffective()) {
 			final StringWriter out = getFragmentOut(ac, _trim);
 			renderFragment(ac, out, _trim);

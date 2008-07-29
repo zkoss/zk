@@ -28,7 +28,7 @@ import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * Iterators thru a collection/array of items.
@@ -110,7 +110,7 @@ public class ForEach extends AbstractAction {
 
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		//at least items or end must be specified
 		if (!nested || (_itemsSpecified && _items == null)
 		|| (_endSpecified && _end < _beg)
@@ -165,7 +165,7 @@ public class ForEach extends AbstractAction {
 		} else if (_items instanceof String) {
 			renderWith(ac, st, (String)_items);
 		} else {
-			throw new ServletException(MWeb.DSP_UNKNOWN_ATTRIBUTE_VALUE,
+			throw new DspException(MWeb.DSP_UNKNOWN_ATTRIBUTE_VALUE,
 				new Object[] {this, "items", new Integer(ac.getLineNumber())});
 		}
 
@@ -174,7 +174,7 @@ public class ForEach extends AbstractAction {
 	}
 
 	private void renderWith(ActionContext ac, Status st)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j <= _end; ++j) {
 			final Object val = new Integer(j);
@@ -186,7 +186,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, ListIterator it)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = 0, cnt = _end - _beg + 1; it.hasNext() && --cnt >= 0; ++j) {
 			final Object val = it.next();
@@ -198,7 +198,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, Iterator it)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 
 		for (int j = 0; ++j <= _beg && it.hasNext();) //skip
@@ -214,7 +214,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, Enumeration enm)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 
 		for (int j = 0; ++j <= _beg && enm.hasMoreElements();) //skip
@@ -230,7 +230,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, Object[] ary)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = ary[j];
@@ -242,7 +242,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, int[] ary)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Integer(ary[j]);
@@ -254,7 +254,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, short[] ary)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Short(ary[j]);
@@ -266,7 +266,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, long[] ary)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Long(ary[j]);
@@ -278,7 +278,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, char[] ary)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Character(ary[j]);
@@ -290,7 +290,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, byte[] ary)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Byte(ary[j]);
@@ -302,7 +302,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, float[] ary)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Float(ary[j]);
@@ -314,7 +314,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, double[] ary)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringWriter out = getFragmentOut(ac, _trim);
 		for (int j = _beg; j < ary.length && j <= _end; ++j) {
 			final Object val = new Double(ary[j]);
@@ -326,7 +326,7 @@ public class ForEach extends AbstractAction {
 			ac.getOut().write(out.toString());
 	}
 	private void renderWith(ActionContext ac, Status st, String txt)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final StringBuffer sb = new StringBuffer();
 		int idx = 0;
 		final StringWriter out = getFragmentOut(ac, _trim);

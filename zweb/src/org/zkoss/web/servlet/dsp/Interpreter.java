@@ -89,7 +89,7 @@ public class Interpreter {
 	 */
 	public final Interpretation parse(String content, String ctype,
 	XelContext xelc, Locator loc)
-	throws javax.servlet.ServletException, IOException,  XelException {
+	throws DspException, IOException,  XelException {
 		return new Parser().parse(content, ctype, xelc, loc);
 	}
 	/** Interprets the specified content and generates the result to
@@ -104,7 +104,7 @@ public class Interpreter {
 	 */
 	public final void interpret(DspContext dc, String content,
 	String ctype, XelContext xelc)
-	throws javax.servlet.ServletException, IOException, XelException {
+	throws DspException, IOException, XelException {
 		parse(content, ctype, xelc, dc.getLocator()).interpret(dc);
 	}
 	/** Interprets the specified content based on the HTTP request.
@@ -122,7 +122,7 @@ public class Interpreter {
 	public final void interpret(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response,
 	String content, String ctype, Locator locator)
-	throws javax.servlet.ServletException, IOException, XelException {
+	throws DspException, IOException, XelException {
 		interpret(
 			new ServletDspContext(ctx, request, response, locator),
 			content, ctype, null);
@@ -146,7 +146,7 @@ public class Interpreter {
 	public final void interpret(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, Writer out,
 	String content, String ctype, Locator locator)
-	throws javax.servlet.ServletException, IOException, XelException {
+	throws DspException, IOException, XelException {
 		interpret(
 			new ServletDspContext(ctx, request, response, out, locator),
 			content, ctype, null);

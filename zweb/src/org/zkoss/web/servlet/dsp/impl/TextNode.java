@@ -21,6 +21,8 @@ package org.zkoss.web.servlet.dsp.impl;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.web.servlet.dsp.DspException;
+
 /**
  * Represents a node holding a plain text.
  *
@@ -41,7 +43,7 @@ class TextNode extends Node {
 
 	//-- super --//
 	void interpret(InterpretContext ic)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		ic.dc.getOut().write(_text);
 	}
 	void addChild(Node node) {

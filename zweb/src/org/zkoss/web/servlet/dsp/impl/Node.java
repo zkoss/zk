@@ -24,6 +24,8 @@ import java.util.LinkedList;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.web.servlet.dsp.DspException;
+
 /**
  * Represents a node in an {@link org.zkoss.web.servlet.dsp.Interpretation}.
  *
@@ -36,7 +38,7 @@ abstract class Node {
 	 * specified in the interpret context.
 	 */
 	abstract void interpret(InterpretContext ic)
-	throws javax.servlet.ServletException, IOException;
+	throws DspException, IOException;
 
 	/** Adds a child. */
 	void addChild(Node node) {

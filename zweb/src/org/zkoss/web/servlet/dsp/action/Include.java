@@ -21,7 +21,7 @@ package org.zkoss.web.servlet.dsp.action;
 import java.io.IOException;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * Includes another URL.
@@ -42,14 +42,14 @@ public class Include extends AbstractAction {
 
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (!isEffective())
 			return;
 		if (nested)
-			throw new ServletException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
+			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
 				new Object[] {this, new Integer(ac.getLineNumber())});
 		if (_page == null)
-			throw new ServletException(MWeb.DSP_ATTRIBUTE_REQUIRED,
+			throw new DspException(MWeb.DSP_ATTRIBUTE_REQUIRED,
 				new Object[] {this, "page", new Integer(ac.getLineNumber())});
 		ac.include(_page, null);
 	}

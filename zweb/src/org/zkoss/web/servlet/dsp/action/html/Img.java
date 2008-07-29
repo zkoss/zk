@@ -21,7 +21,7 @@ package org.zkoss.web.servlet.dsp.action.html;
 import java.io.IOException;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 import org.zkoss.web.servlet.dsp.action.AbstractAction;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
 
@@ -183,11 +183,11 @@ public class Img extends AbstractAction {
 
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (!isEffective()|| _src == null || _src.length() == 0)
 			return; //nothing to generate
 		if (nested)
-			throw new ServletException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
+			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
 				new Object[] {this, new Integer(ac.getLineNumber())});
 
 		final StringBuffer sb = new StringBuffer(64)
