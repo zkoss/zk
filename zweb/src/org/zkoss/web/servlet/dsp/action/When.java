@@ -21,7 +21,7 @@ package org.zkoss.web.servlet.dsp.action;
 import java.io.IOException;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * Represents an alternative within a {@link Choose} action.
@@ -42,13 +42,13 @@ public class When extends AbstractAction {
 
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (!isEffective())
 			return;
 
 		final Action parent = ac.getParent();
 		if (!(parent instanceof Choose))
-			throw new ServletException("The parent of when must be choose");
+			throw new DspException("The parent of when must be choose");
 
 		final Choose choose = (Choose)parent;
 		if (_cond && !choose.isMatched()) {

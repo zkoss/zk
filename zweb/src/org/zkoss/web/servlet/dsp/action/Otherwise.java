@@ -21,7 +21,7 @@ package org.zkoss.web.servlet.dsp.action;
 import java.io.IOException;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * Represents the last alternative within a {@link Choose} action.
@@ -31,13 +31,13 @@ import org.zkoss.web.servlet.ServletException;
 public class Otherwise extends AbstractAction {
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (!nested && !isEffective())
 			return;
 
 		final Action parent = ac.getParent();
 		if (!(parent instanceof Choose))
-			throw new ServletException("The parent of otherwise must be choose");
+			throw new DspException("The parent of otherwise must be choose");
 		final Choose choose = (Choose)parent;
 		if (!choose.isMatched())
 			ac.renderFragment(null);

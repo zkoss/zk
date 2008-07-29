@@ -22,7 +22,7 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * Encapsulates a portion of DSP page in an object that can be invoked
@@ -75,7 +75,7 @@ public interface ActionContext {
 	 * @param out the output. If null, {@link #getOut} is assumed.
 	 */
 	public void renderFragment(Writer out)
-	throws ServletException, IOException;
+	throws DspException, IOException;
 	/** Includes the specified URI and render the result to the specified
 	 * output.
 	 *
@@ -87,7 +87,7 @@ public interface ActionContext {
 	 * The map is passed thru the request attribute called arg.
 	 */
 	public void include(String uri, Map params)
-	throws ServletException, IOException;
+	throws DspException, IOException;
 
 	/** Returns whether this page is included.
 	 * @since 3.0.6
@@ -106,7 +106,7 @@ public interface ActionContext {
 	 *
 	 * <p>Finally, the uri is encoded by HttpServletResponse.encodeURL.
 	 */
-	public String encodeURL(String uri) throws ServletException;
+	public String encodeURL(String uri) throws DspException;
 
 	/** Returns the line number of this action.
 	 * It is used for throwing exception and debug purpose.

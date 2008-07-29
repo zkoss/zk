@@ -23,7 +23,7 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * Provides the context for mutually exclusive conditional execution.
@@ -55,7 +55,7 @@ public class Choose extends AbstractAction {
 
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (nested && isEffective()) {
 			final StringWriter out = getFragmentOut(ac, _trim);
 			renderFragment(ac, out, _trim);

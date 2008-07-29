@@ -21,7 +21,7 @@ package org.zkoss.web.servlet.dsp.action;
 import java.io.IOException;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 
 /**
  * The page action used to set the page info, such as the content type.
@@ -50,11 +50,11 @@ public class Page extends AbstractAction {
 
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (!isEffective())
 			return;
 		if (nested)
-			throw new ServletException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
+			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
 				new Object[] {this, new Integer(ac.getLineNumber())});
 		if (_ctype != null)
 			ac.setContentType(_ctype);

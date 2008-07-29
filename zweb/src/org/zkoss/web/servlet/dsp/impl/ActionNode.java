@@ -32,7 +32,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelException;
 
-import org.zkoss.web.servlet.ServletException;
+import org.zkoss.web.servlet.dsp.DspException;
 import org.zkoss.web.servlet.dsp.action.Action;
 
 /**
@@ -56,7 +56,7 @@ class ActionNode extends Node {
 	}
 
 	void interpret(InterpretContext ic)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		final Action parent = ic.action;
 		try {
 			ic.action = newAction();
@@ -75,11 +75,12 @@ class ActionNode extends Node {
 		}
 	}
 	/** Creates an instance of Action. */
-	private Action newAction() throws javax.servlet.ServletException {
+	private Action newAction() throws DspException {
 		try {
 			return (Action)_cls.newInstance();
 		} catch (Exception ex) {
-			throw new ServletException("Failed to create "+_cls+". Cause: "+Exceptions.getMessage(ex));
+			log.realCauseBriefly(ex); //Web server might 'eat'
+			throw DspException.Aide.wrap(ex, "Failed to create "+_cls);
 		}
 	}
 
@@ -89,7 +90,7 @@ class ActionNode extends Node {
 	}
 	/** Renders the nested fragment. */
 	void renderFragment(InterpretContext ic)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (_children == null)
 			return;
 		for (Iterator it = _children.iterator(); it.hasNext();) {
@@ -128,7 +129,7 @@ class ActionNode extends Node {
 		}
 		/** Applies this attribute to the specified action. */
 		private void apply(InterpretContext ic, Action action)
-		throws javax.servlet.ServletException {
+		throws DspException {
 			final Object[] args = new Object[1];
 			try {
 				if (_value instanceof Expression) {
@@ -139,13 +140,10 @@ class ActionNode extends Node {
 				}
 				_method.invoke(action, args);
 			} catch (Exception ex) {
-				if (log.debugable()) log.debug(ex);
-				throw new ServletException("Failed to invoke "+_method+" with "+args[0]
-	+(args[0] != null ? " @"+args[0].getClass().getName(): "")
-	+". Cause: "+ex.getClass().getName()+", "+Exceptions.getMessage(ex)
-	+"\n"+Exceptions.getBriefStackTrace(ex));
-					//Web container might not show the real cause, we have to
-					//make it part of the exception
+				log.realCauseBriefly(ex); //Web server might 'eat'
+				throw DspException.Aide.wrap(ex,
+	"Failed to invoke "+_method+" with "+args[0]
+	+(args[0] != null ? " @"+args[0].getClass().getName(): ""));
 			}
 		}
 	}

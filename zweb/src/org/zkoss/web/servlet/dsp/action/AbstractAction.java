@@ -25,6 +25,8 @@ import java.io.IOException;
 import org.zkoss.lang.Strings;
 import org.zkoss.xml.XMLs;
 
+import org.zkoss.web.servlet.dsp.DspException;
+
 /**
  * A skeletal implementation to simplify the implementation of actions.
  *
@@ -171,7 +173,7 @@ abstract public class AbstractAction implements Action {
 	 */
 	/*package*/ static
 	void renderFragment(ActionContext ac, StringWriter out, boolean trim)
-	throws javax.servlet.ServletException, IOException {
+	throws DspException, IOException {
 		if (trim) {
 			final StringBuffer buf =
 				(out != null ? out: (StringWriter)ac.getOut()).getBuffer();

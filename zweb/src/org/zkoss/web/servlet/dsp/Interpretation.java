@@ -33,5 +33,5 @@ public interface Interpretation {
 	 * @param dc the interpreter context; never null.
 	 */
 	public void interpret(DspContext dc)
-	throws javax.servlet.ServletException, IOException;
+	throws DspException, IOException;
 }

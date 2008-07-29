@@ -41,7 +41,6 @@ import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
 
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.ServletException;
 import org.zkoss.web.servlet.dsp.*;
 import org.zkoss.web.servlet.dsp.action.Page;
 import org.zkoss.web.servlet.dsp.action.Action;
@@ -66,7 +65,7 @@ public class Parser {
 	 */
 	public Interpretation parse(String content, String ctype,
 	XelContext xelc, Locator loc)
-	throws javax.servlet.ServletException, IOException, XelException {
+	throws DspException, IOException, XelException {
 		final Context ctx = new Context(content, xelc, loc);
 		final RootNode root = new RootNode();
 		parse0(ctx, root, 0, content.length());
@@ -90,7 +89,7 @@ public class Parser {
 	/** Recursively parse the content into a tree of {@link Node}.
 	 */
 	private static void parse0(Context ctx, Node parent, int from, int to)
-	throws javax.servlet.ServletException, IOException, XelException {
+	throws DspException, IOException, XelException {
 		boolean esc = false;
 		final StringBuffer sb = new StringBuffer(512);
 		for (int j = from; j < to; ++j) {
@@ -153,10 +152,10 @@ public class Parser {
 	 */
 	private static int parseControl(Context ctx, Node parent,
 	int from, int to)
-	throws javax.servlet.ServletException, IOException, XelException {
+	throws DspException, IOException, XelException {
 		int j = from + 2;
 		if (j + 1 >= to)
-			throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
+			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
 				new Object[] {null, new Integer(ctx.nLines)});
 
 		//0. comment
@@ -164,7 +163,7 @@ public class Parser {
 		if (cc == '-' && ctx.content.charAt(j + 1)  == '-') { //comment
 			for (int end = to - 4;; ++j) {
 				if (j > end)
-					throw new ServletException(MWeb.DSP_COMMENT_NOT_TERMINATED,
+					throw new DspException(MWeb.DSP_COMMENT_NOT_TERMINATED,
 						new Integer(ctx.nLines));
 				if (ctx.content.charAt(j) == '\n')
 					++ctx.nLines;
@@ -173,14 +172,14 @@ public class Parser {
 			}
 		}
 		if (cc != '@')
-			throw new ServletException(MWeb.DSP_EXPECT_CHARACTER,
+			throw new DspException(MWeb.DSP_EXPECT_CHARACTER,
 				new Object[] {new Character('@'), new Integer(ctx.nLines)});
 
 		//1: which control
 		j = skipWhitespaces(ctx, j + 1, to);
 		int k = nextSeparator(ctx, j, to);
 		if (k >= to)
-			throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
+			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
 				new Object[] {null, new Integer(ctx.nLines)});
 		final ActionNode action;
 		final String ctlnm = ctx.content.substring(j, k);
@@ -191,7 +190,7 @@ public class Parser {
 			trim(parent); //Bug 1798123: avoid getOut being called before Page
 			parent.addChild(action = new ActionNode(Page.class, ctx.nLines));
 		} else {
-			throw new ServletException(MWeb.DSP_UNKNOWN_ACTION,
+			throw new DspException(MWeb.DSP_UNKNOWN_ACTION,
 				new Object[] {ctlnm, new Integer(ctx.nLines)});
 		}
 
@@ -200,21 +199,21 @@ public class Parser {
 		k = parseAttrs(ctx, attrs, ctlnm, k, to);
 		cc = ctx.content.charAt(k);
 		if (cc != '%')
-			throw new ServletException(MWeb.DSP_EXPECT_CHARACTER,
+			throw new DspException(MWeb.DSP_EXPECT_CHARACTER,
 				new Object[] {new Character('%'), new Integer(ctx.nLines)});
 
 		if (action == null) { //taglib
 			final String uri = (String)attrs.get("uri"),
 				prefix = (String)attrs.get("prefix");
 			if (prefix == null || uri == null)
-				throw new ServletException(MWeb.DSP_TAGLIB_ATTRIBUTE_REQUIRED, new Integer(ctx.nLines));
+				throw new DspException(MWeb.DSP_TAGLIB_ATTRIBUTE_REQUIRED, new Integer(ctx.nLines));
 			ctx.loadTaglib(prefix, uri);
 		} else {
 			applyAttrs(ctlnm, action, attrs, ctx);
 		}
 
 		if (++k >= to || ctx.content.charAt(k) != '>')
-			throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
+			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
 				new Object[] {ctlnm, new Integer(ctx.nLines)});
 		return k;
 	}
@@ -237,20 +236,20 @@ public class Parser {
 	 */
 	private static int parseAction(Context ctx, Node parent,
 	String prefix, int from, int to)
-	throws javax.servlet.ServletException, IOException, XelException {
+	throws DspException, IOException, XelException {
 		//1: which action
 		int j = skipWhitespaces(ctx, from + 1, to);
 		int k = nextSeparator(ctx, j, to);
 		if (k >= to)
-			throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
+			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
 				new Object[] {prefix+':', new Integer(ctx.nLines)});
 		if (k == j)
-			throw new ServletException(MWeb.DSP_ACTION_REQUIRED, new Integer(ctx.nLines));
+			throw new DspException(MWeb.DSP_ACTION_REQUIRED, new Integer(ctx.nLines));
 
 		final String actnm = ctx.content.substring(j, k);
 		final Class actcls = ctx.getActionClass(prefix, actnm);
 		if (actcls == null)
-			throw new ServletException(MWeb.DSP_UNKNOWN_ACTION,
+			throw new DspException(MWeb.DSP_UNKNOWN_ACTION,
 				new Object[] {prefix+':'+actnm, new Integer(ctx.nLines)});
 		final ActionNode action = new ActionNode(actcls, ctx.nLines);
 		parent.addChild(action);
@@ -261,14 +260,14 @@ public class Parser {
 		char cc = ctx.content.charAt(j);
 		boolean ended = cc == '/';
 		if (!ended && cc != '>')
-			throw new ServletException(MWeb.DSP_UNEXPECT_CHARACTER,
+			throw new DspException(MWeb.DSP_UNEXPECT_CHARACTER,
 				new Object[] {new Character(cc), new Integer(ctx.nLines)});
 
 		applyAttrs(actnm, action, attrs, ctx);
 
 		if (ended) {
 			if (j + 1 >= to || ctx.content.charAt(j + 1) != '>')
-				throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
+				throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
 					new Object[] {prefix+':'+actnm, new Integer(action.getLineNumber())});
 			return j + 1;
 		}
@@ -277,7 +276,7 @@ public class Parser {
 		final int nestedFrom = ++j, nestedTo;
 		for (int depth = 0;; ++j) {
 			if (j >= to)
-				throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
+				throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
 					new Object[] {actnm, new Integer(action.getLineNumber())});
 
 			cc = ctx.content.charAt(j);
@@ -356,12 +355,12 @@ public class Parser {
 	 */
 	private static int parseAttrs(Context ctx, Map attrs, String actnm,
 	int from, int to)
-	throws javax.servlet.ServletException {
+	throws DspException {
 		for (int j, k = from;;) {
 			j = skipWhitespaces(ctx, k, to);
 			k = nextSeparator(ctx, j, to);
 			if (k >= to)
-				throw new ServletException(MWeb.DSP_ACTION_NOT_TERMINATED,
+				throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
 					new Object[] {actnm, new Integer(ctx.nLines)});
 			if (j == k) return j;
 
@@ -369,22 +368,22 @@ public class Parser {
 			k = skipWhitespaces(ctx, k, to);
 			j = skipWhitespaces(ctx, k + 1, to);
 			if (j >= to || ctx.content.charAt(k) != '=')
-				throw new ServletException(MWeb.DSP_ATTRIBUTE_VALUE_REQUIRED,
+				throw new DspException(MWeb.DSP_ATTRIBUTE_VALUE_REQUIRED,
 					new Object[] {actnm, attrnm, new Integer(ctx.nLines)});
 
 			final char quot = ctx.content.charAt(j);
 			if (quot != '"' && quot != '\'')
-				throw new ServletException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
+				throw new DspException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
 					new Object[] {actnm, attrnm, new Integer(ctx.nLines)});
 
 			final StringBuffer sbval = new StringBuffer();
 			for (k = ++j;; ++k) {
 				if (k >= to)
-					throw new ServletException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
+					throw new DspException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
 						new Object[] {actnm, attrnm, new Integer(ctx.nLines)});
 				final char cc = ctx.content.charAt(k);
 				if (cc == '\n')
-					throw new ServletException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
+					throw new DspException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
 						new Object[] {actnm, attrnm, new Integer(ctx.nLines)});
 
 				if (cc == quot) {
@@ -405,7 +404,7 @@ public class Parser {
 	private static final
 	void applyAttrs(String actnm, ActionNode action, Map attrs,
 	ParseContext ctx)
-	throws javax.servlet.ServletException, XelException {
+	throws DspException, XelException {
 		for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String attrnm = (String)me.getKey();
@@ -413,10 +412,10 @@ public class Parser {
 			try {
 				action.addAttribute(attrnm, attrval, ctx);
 			} catch (NoSuchMethodException ex) {
-				throw new ServletException(MWeb.DSP_ATTRIBUTE_NOT_FOUND,
+				throw new DspException(MWeb.DSP_ATTRIBUTE_NOT_FOUND,
 					new Object[] {actnm, attrnm, new Integer(action.getLineNumber())});
 			} catch (ClassCastException ex) {
-				throw new ServletException(MWeb.DSP_ATTRIBUTE_INVALID_VALUE,
+				throw new DspException(MWeb.DSP_ATTRIBUTE_INVALID_VALUE,
 					new Object[] {actnm, attrnm, attrval, new Integer(action.getLineNumber())}, ex);
 			}
 		}
@@ -426,7 +425,7 @@ public class Parser {
 	 * @return the position of }.
 	 */
 	private static int parseEL(Context ctx, Node parent, int from, int to)
-	throws javax.servlet.ServletException, XelException {
+	throws DspException, XelException {
 		int j = endOfEL(ctx, from, to); //point to }
 		parent.addChild(
 			new XelNode(ctx.content.substring(from, j + 1), ctx));
@@ -434,10 +433,10 @@ public class Parser {
 	}
 	/** Returns the position of '}'. */
 	private static int endOfEL(Context ctx, int from, int to)
-	throws javax.servlet.ServletException {
+	throws DspException {
 		for (int j = from + 2;; ++j) {
 			if (j >= to)
-				throw new ServletException(MWeb.EL_NOT_TERMINATED, new Integer(ctx.nLines));
+				throw new DspException(MWeb.EL_NOT_TERMINATED, new Integer(ctx.nLines));
 
 			final char cc = ctx.content.charAt(j);
 			if (cc == '}') {
@@ -447,7 +446,7 @@ public class Parser {
 					final char c2 = ctx.content.charAt(j);
 					if (c2 == cc) break;
 					if (cc == '\n')
-						throw new ServletException("Illegal EL expression: non-terminaled "+cc+" at line "+ctx.nLines+" character "+j);
+						throw new DspException("Illegal EL expression: non-terminaled "+cc+" at line "+ctx.nLines+" character "+j);
 					if (c2 == '\\' && ++j < to && ctx.content.charAt(j) == '\n')
 						++ctx.nLines;
 				}
@@ -506,9 +505,9 @@ public class Parser {
 			return acts != null ? (Class)acts.get(actnm): null;
 		}
 		private void loadTaglib(String prefix, String uri)
-		throws javax.servlet.ServletException, IOException {
+		throws DspException, IOException {
 			if (_locator == null)
-				throw new ServletException("Unable to load "+uri+" because locator is not specified");
+				throw new DspException("Unable to load "+uri+" because locator is not specified");
 
 			URL url = uri.indexOf("://") > 0 ? null: _locator.getResource(uri);
 			if (url == null) {
@@ -522,7 +521,7 @@ public class Parser {
 			} catch (IOException ex) {
 				throw ex;
 			} catch (Exception ex) {
-				throw ServletException.Aide.wrap(ex);
+				throw DspException.Aide.wrap(ex);
 			}	
 		}
 		private void loadTaglib0(String prefix, URL url)
@@ -539,7 +538,7 @@ public class Parser {
 				final String clsName = IDOMs.getRequiredElementValue(e, "tag-class");
 				final Class cls = Classes.forNameByThread(clsName);
 				if (!Action.class.isAssignableFrom(cls))
-					throw new ServletException(cls+" doesn't implement "+Action.class);
+					throw new DspException(cls+" doesn't implement "+Action.class);
 				acts.put(name, cls);
 			}
 			if (!acts.isEmpty())
