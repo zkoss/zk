@@ -1576,15 +1576,15 @@ div.errbox {
 	background: #E8E0D8; position: absolute; z-index: 88000;
 }
 
-div.progressmeter {
-	border-top: 1px solid #666; border-left: 1px solid #666;
-	border-bottom: 1px solid #bbb; border-right: 1px solid #bbb;
+div.progressmeter {	
+	background:#E0E8F3 url(${c:encodeURL('~./zk/img/prgmeter_bg.gif')}) repeat-x scroll 0 0 ;
+	border:1px solid #7FA9E4;
 	text-align: left;
 }
 span.progressmeter-img {
 	display:-moz-inline-box; display:inline-block;
-	background-image: url(${c:encodeURL('~./zk/img/prgmeter.gif')});
-	height: 10px; font-size:0;
+	background:#9CBFEE url(${c:encodeURL('~./zk/img/prgmeter.gif')}) repeat-x scroll left center;
+	height: 17px; font-size:0;
 }
 .messagebox {
 	word-break: break-all; overflow:auto;
