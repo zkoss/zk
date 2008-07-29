@@ -28,7 +28,7 @@ ${u:outLangStyleSheets()}
 ${u:outLangJavaScripts(null)}
 	</c:if>
 
-<div${z:outPageAttrs(page)}>
+<div${u:outPageAttrs(page)}>
 	<c:forEach var="root" items="${page.roots}">
 ${u:redraw(root, null)}
 	</c:forEach>
