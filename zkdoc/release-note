@@ -30,6 +30,7 @@ ZK 3.0.7
   2027442: Paging mold Listbox + model not in order
   2027719: Changing Include's src causes ServletException
   2030986: Disable checkmarks can be selected by shift button
+  1869744: Fileupload display mess label in upload and cancel button
   
 * Upgrade Notes:
   + Tree supports the paging mold. The original way to paginate treechild
