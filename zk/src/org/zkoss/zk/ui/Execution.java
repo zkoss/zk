@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.io.Reader;
 import java.io.Writer;
@@ -829,4 +830,45 @@ public interface Execution  {
 	/** Returns a map of request attributes associated with this session.
 	 */
 	public Map getAttributes();
+
+	/** Returns the value of the specified header as a {@link String},
+	 * or null if not found.
+	 * @since 3.5.0
+	 */
+	public String getHeader(String name);
+	/** Returns all the values of the specified header as a {@link Iterator}
+	 * of {@link String} objects.
+	 *
+	 * <p>If the request did not include any headers of the specified name,
+	 * this method returns an empty {@link Iterator}.
+	 * If the container does not allow access to header information,
+	 * it returns null.
+	 *
+	 * @since 3.5.0
+	 */
+	public Iterator getHeaders(String name);
+	/** Returns all header names this request contains.
+	 * If the request has no headers, this method returns an empty
+	 * {@link Iterator}.
+	 * If the container does not allow access to header information,
+	 * it returns null.
+	 * @since 3.5.0
+	 */
+	public Iterator getHeaderNames();
+
+	/** Sets a response header with the give name and value.
+	 * If the header had already been set, the new value overwrites the previous one.
+	 * @since 3.5.0
+	 * @see #containsResponseHeader
+	 */
+	public void setResponseHeader(String name, String value);
+	/** Adds a response header with the give name and value.
+	 *  This method allows response headers to have multiple values.
+	 * @since 3.5.0
+	 */
+	public void addResponseHeader(String name, String value);
+	/** Returns whether the named response header has already been set.
+	 * @since 3.5.0
+	 */
+	public boolean containsResponseHeader(String name);
 }

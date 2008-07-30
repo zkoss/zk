@@ -54,8 +54,8 @@ public interface PageConfig {
 	 * a non-empty value before, this method is ignored.
 	 */
 	public String getStyle();
-	/** Returns the content that will be generated inside the header element,
-	 * or null if no special header is required.
+	/** Returns the content that will be generated inside the header element
+	 * (HTML HEAD), or null if no special header is required.
 	 * <p>For HTML, the header element is the HEAD element.
 	 * @see PageCtrl#getHeaders
 	 */

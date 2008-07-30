@@ -1670,12 +1670,17 @@ function myload() {
 		f();
 	}
 }
+zk.bootDone = function () {
+	if (zk.pfmeter && zkau._dtids.length)
+		zkau.pfdone(zkau._dtids[0]);
+	zk.progressDone();
+	zk.booting = false;;
+};
 zk._onload = function () {
 	//It is possible to move javascript defined in zul's language.xml
 	//However, IE has bug to order JavaScript properly if zk._load is used
 	zk.progress(600);
-	zk.addInitLater(zk.progressDone);
-	zk.addInitLater(function() {zk.booting = false;});
+	zk.addInitLater(zk.bootDone);
 	zk.initAt(document.body);
 };
 

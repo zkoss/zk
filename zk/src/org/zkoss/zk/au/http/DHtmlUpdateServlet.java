@@ -53,7 +53,6 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.PerformanceMeter;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -445,8 +444,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 //		if (log.debugable()) log.debug("AU request: "+aureqs);
-		final PerformanceMeter pfmeter = config.getPerformanceMeter();
-
 		final Execution exec = 
 			new ExecutionImpl(_ctx, request, response, desktop, null);
 		if (sid != null)
@@ -456,11 +453,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop.getDevice().isSupported(Device.RESEND) ?
 					config.getResendDelay() / 2 - 500: 0);
 				//Note: getResendDelay() might return nonpositive
-		final Collection pfrqids = wappc.getUiEngine().execUpdate(exec, aureqs,
-			pfmeter != null ? meterStart(pfmeter, request, exec): null, out);
-
-		if (pfrqids != null && pfmeter != null)
-			meterComplete(pfmeter, response, pfrqids, exec);
+		wappc.getUiEngine().execUpdate(exec, aureqs, out);
 
 		out.close(request, response);
 	}
@@ -527,84 +520,5 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		AuWriter out = AuWriters.newInstance().open(request, response, 0);
 		out.write(new AuAlert(errmsg));
 		out.close(request, response);
-	}
-
-	/** Handles the start of request.
-	 *
-	 * @return the request ID from the ZK-Client-Start header,
-	 * or null if not found.
-	 */
-	private static String meterStart(PerformanceMeter pfmeter,
-	HttpServletRequest request, Execution exec) {
-		//Format of ZK-Client-Complete:
-		//	request-id1=time1,request-id2=time2
-		String hdr = request.getHeader("ZK-Client-Complete");
-		if (hdr != null) {
-			for (int j = 0;;) {
-				int k = hdr.indexOf(',', j);
-				String ids = k >= 0 ? hdr.substring(j, k):
-					j == 0 ? hdr: hdr.substring(j);
-
-				int x = ids.lastIndexOf('=');
-				if (x > 0) {
-					try {
-						long time = Long.parseLong(ids.substring(x + 1));
-
-						ids = ids.substring(0, x);
-						for (int y = 0;;) {
-							int z = ids.indexOf(' ', y);
-							String pfrqid = z >= 0 ? ids.substring(y, z):
-								y == 0 ? ids: ids.substring(y);
-							pfmeter.requestCompleteAtClient(pfrqid, exec, time);
-
-							if (z < 0) break; //done
-							y = z + 1;
-						}
-					} catch (NumberFormatException ex) {
-						log.error("Unable to parse "+ids);
-					}
-				}
-
-				if (k < 0) break; //done
-				j = k + 1;
-			}
-		}
-
-		//Format of ZK-Client-Start:
-		//	request-id=time
-		hdr = request.getHeader("ZK-Client-Start");
-		if (hdr != null) {
-			final int j = hdr.lastIndexOf('=');
-			if (j > 0) {
-				try {
-					final String pfrqid = hdr.substring(0, j);
-					pfmeter.requestStartAtClient(pfrqid, exec,
-						Long.parseLong(hdr.substring(j + 1)));
-					pfmeter.requestStartAtServer(pfrqid, exec,
-						System.currentTimeMillis());
-					return pfrqid;
-				} catch (NumberFormatException ex) {
-					log.error("Unable to parse "+hdr);
-				}
-			}
-		}
-		return null;
-	}
-	/** Handles the complete of the request.
-	 * It sets the ZK-Client-Complete header.
-	 */
-	private static void meterComplete(PerformanceMeter pfmeter,
-	HttpServletResponse response, Collection pfrqids, Execution exec) {
-		final StringBuffer sb = new StringBuffer(256);
-		long time = System.currentTimeMillis();
-		for (Iterator it = pfrqids.iterator(); it.hasNext();) {
-			final String pfrqid = (String)it.next();
-			if (sb.length() > 0) sb.append(' ');
-			sb.append(pfrqid);
-			pfmeter.requestCompleteAtServer(pfrqid, exec, time);
-		}
-
-		response.setHeader("ZK-Client-Complete", sb.toString());
-			//tell the client what are completed
 	}
 }

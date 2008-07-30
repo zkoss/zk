@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Enumeration;
 import java.io.Writer;
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
@@ -440,6 +442,27 @@ public class ExecutionImpl extends AbstractExecution {
 
 	public Map getAttributes() {
 		return _attrs;
+	}
+
+	public String getHeader(String name) {
+		return _request.getHeader(name);
+	}
+	public Iterator getHeaders(String name) {
+		final Enumeration enm = _request.getHeaders(name);
+		return enm != null ? new CollectionsX.EnumerationIterator(enm): null;
+	}
+	public Iterator getHeaderNames() {
+		final Enumeration enm = _request.getHeaderNames();
+		return enm != null ? new CollectionsX.EnumerationIterator(enm): null;
+	}
+	public void setResponseHeader(String name, String value) {
+		_response.setHeader(name, value);
+	}
+	public void addResponseHeader(String name, String value) {
+		_response.addHeader(name, value);
+	}
+	public boolean containsResponseHeader(String name) {
+		return _response.containsHeader(name);
 	}
 
 	private class ReqContext implements RequestContext {

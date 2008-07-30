@@ -186,7 +186,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 	}
 	private void desktopDestroyed0(Desktop desktop) {
-		final Configuration conf = _wapp.getConfiguration();
+		final Configuration config = _wapp.getConfiguration();
 		final Map map;
 		synchronized (_suspended) {
 			map = (Map)_suspended.remove(desktop);
@@ -199,7 +199,7 @@ public class UiEngineImpl implements UiEngine {
 						final EventProcessingThreadImpl evtthd =
 							(EventProcessingThreadImpl)i2.next();
 						evtthd.ceaseSilently("Destroy desktop "+desktop);
-						conf.invokeEventThreadResumeAborts(
+						config.invokeEventThreadResumeAborts(
 							evtthd.getComponent(), evtthd.getEvent());
 					}
 				}
@@ -216,7 +216,7 @@ public class UiEngineImpl implements UiEngine {
 					final EventProcessingThreadImpl evtthd =
 						(EventProcessingThreadImpl)it.next();
 					evtthd.ceaseSilently("Destroy desktop "+desktop);
-					conf.invokeEventThreadResumeAborts(
+					config.invokeEventThreadResumeAborts(
 						evtthd.getComponent(), evtthd.getEvent());
 				}
 			}
@@ -307,6 +307,12 @@ public class UiEngineImpl implements UiEngine {
 		if (langdef != null)
 			desktop.setDeviceType(langdef.getDeviceType()); //set and check!
 
+		final WebApp wapp = desktop.getWebApp();
+		final Configuration config = wapp.getConfiguration();
+		PerformanceMeter pfmeter = config.getPerformanceMeter();
+		final long startTime = pfmeter != null ? System.currentTimeMillis(): 0;
+				//snapshot time since activate might take time
+
 		//It is possible this method is invoked when processing other exec
 		final Execution oldexec = Executions.getCurrent();
 		final ExecutionCtrl oldexecCtrl = (ExecutionCtrl)oldexec;
@@ -314,8 +320,12 @@ public class UiEngineImpl implements UiEngine {
 			oldexecCtrl != null ? (UiVisualizer)oldexecCtrl.getVisualizer(): null;
 
 		final UiVisualizer uv;
-		if (olduv != null) uv = doReactivate(exec, olduv);
-		else uv = doActivate(exec, false, false);
+		if (olduv != null) {
+			uv = doReactivate(exec, olduv);
+			pfmeter = null; //don't count included pages
+		} else {
+			uv = doActivate(exec, false, false);
+		}
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final Page old = execCtrl.getCurrentPage();
@@ -323,7 +333,8 @@ public class UiEngineImpl implements UiEngine {
 		execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
 
-		final Configuration config = _wapp.getConfiguration();
+		final String pfReqId =
+			pfmeter != null ? meterLoadStart(pfmeter, exec, startTime): null;
 		AbortingReason abrn = null;
 		boolean cleaned = false;
 		try {
@@ -360,7 +371,7 @@ public class UiEngineImpl implements UiEngine {
 					} else {
 						comps = uv.isAborting() || exec.isVoided() ? null:
 							execCreate(new CreateInfo(
-								((WebAppCtrl)_wapp).getUiFactory(), exec, page),
+								((WebAppCtrl)wapp).getUiFactory(), exec, page),
 							pagedef, null);
 					}
 
@@ -443,6 +454,9 @@ public class UiEngineImpl implements UiEngine {
 
 			if (olduv != null) doDereactivate(exec, olduv);
 			else doDeactivate(exec);
+
+			if (pfmeter != null)
+				meterLoadServerComplete(pfmeter, pfReqId, exec);
 		}
 	}
 
@@ -863,25 +877,30 @@ public class UiEngineImpl implements UiEngine {
 	}
 	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException {
-		execUpdate(exec, requests, null, out);
-	}
-	public Collection execUpdate(Execution exec, List requests,
-	String pfReqId, AuWriter out) throws IOException {
 		if (requests == null)
 			throw new IllegalArgumentException();
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
 
+		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+		final Configuration config = desktop.getWebApp().getConfiguration();
+
+		final PerformanceMeter pfmeter = config.getPerformanceMeter();
+		long startTime = 0;
+		if (pfmeter != null) {
+			startTime = System.currentTimeMillis();
+				//snapshot time since activate might take time
+			meterAuClientComplete(pfmeter, exec);
+		}
+
 		final UiVisualizer uv = doActivate(exec, true, false);
 		final String sid = ((ExecutionCtrl)exec).getRequestId();
 		if (sid != null && isReqDup0(exec, out, sid)) {
 			doDeactivate(exec); //deactive
-			return null;
+			return;
 		}
 
-		final Desktop desktop = exec.getDesktop();
-		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
-		final Configuration config = desktop.getWebApp().getConfiguration();
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
 			try {
@@ -891,6 +910,8 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
+		final String pfReqId =
+			pfmeter != null ? meterAuStart(pfmeter, exec, startTime): null;
 		Collection doneReqIds = null; //request IDs that have been processed
 		AbortingReason abrn = null;
 		boolean cleaned = false;
@@ -1016,7 +1037,9 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			doDeactivate(exec);
-			return doneReqIds;
+
+			if (pfmeter != null && doneReqIds != null)
+				meterAuServerComplete(pfmeter, doneReqIds, exec);
 		}
 	}
 	/** Handles each error. The erros will be queued to the errs list
@@ -1769,5 +1792,131 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private static class ReplaceableText {
 		private String text;
+	}
+
+	//performance meter//
+	/** Handles the client complete of AU request for performance measurement.
+	 */
+	private static void meterAuClientComplete(PerformanceMeter pfmeter,
+	Execution exec) {
+		//Format of ZK-Client-Complete:
+		//	request-id1=time1,request-id2=time2
+		String hdr = exec.getHeader("ZK-Client-Complete");
+		if (hdr != null) {
+			for (int j = 0;;) {
+				int k = hdr.indexOf(',', j);
+				String ids = k >= 0 ? hdr.substring(j, k):
+					j == 0 ? hdr: hdr.substring(j);
+
+				int x = ids.lastIndexOf('=');
+				if (x > 0) {
+					try {
+						long time = Long.parseLong(ids.substring(x + 1));
+
+						ids = ids.substring(0, x);
+						for (int y = 0;;) {
+							int z = ids.indexOf(' ', y);
+							String pfReqId = z >= 0 ? ids.substring(y, z):
+								y == 0 ? ids: ids.substring(y);
+							pfmeter.requestCompleteAtClient(pfReqId, exec, time);
+	
+							if (z < 0) break; //done
+							y = z + 1;
+						}
+					} catch (NumberFormatException ex) {
+						log.warning("Ingored: unable to parse "+ids);
+					} catch (Throwable ex) {
+						log.warning("Ingored: failed to invoke "+pfmeter, ex);
+					}
+				}
+
+				if (k < 0) break; //done
+				j = k + 1;
+			}
+		}
+	}
+	/** Handles the client and server start of AU request
+	 * for the performance measurement.
+	 *
+	 * @return the request ID from the ZK-Client-Start header,
+	 * or null if not found.
+	 */
+	private static String meterAuStart(PerformanceMeter pfmeter,
+	Execution exec, long startTime) {
+		//Format of ZK-Client-Start:
+		//	request-id=time
+		String hdr = exec.getHeader("ZK-Client-Start");
+		if (hdr != null) {
+			final int j = hdr.lastIndexOf('=');
+			if (j > 0) {
+				final String pfReqId = hdr.substring(0, j);
+				try {
+					pfmeter.requestStartAtClient(pfReqId, exec,
+						Long.parseLong(hdr.substring(j + 1)));
+					pfmeter.requestStartAtServer(pfReqId, exec, startTime);
+				} catch (NumberFormatException ex) {
+					log.warning("Ingored: failed to parse ZK-Client-Start, "+hdr);
+				} catch (Throwable ex) {
+					log.warning("Ingored: failed to invoke "+pfmeter, ex);
+				}
+				return pfReqId;
+			}
+		}
+		return null;
+	}
+	/** Handles the server complete of the AU request for the performance measurement.
+	 * It sets the ZK-Client-Complete header.
+	 *
+	 * @param pfReqIds a collection of request IDs that are processed
+	 * at the server
+	 */
+	private static void meterAuServerComplete(PerformanceMeter pfmeter,
+	Collection pfReqIds, Execution exec) {
+		final StringBuffer sb = new StringBuffer(256);
+		long time = System.currentTimeMillis();
+		for (Iterator it = pfReqIds.iterator(); it.hasNext();) {
+			final String pfReqId = (String)it.next();
+			if (sb.length() > 0) sb.append(' ');
+			sb.append(pfReqId);
+
+			try {
+				pfmeter.requestCompleteAtServer(pfReqId, exec, time);
+			} catch (Throwable ex) {
+				log.warning("Ingored: failed to invoke "+pfmeter, ex);
+			}
+		}
+
+		exec.setResponseHeader("ZK-Client-Complete", sb.toString());
+			//tell the client what are completed
+	}
+
+	/** Handles the (client and) server start of load request
+	 * for the performance measurement.
+	 *
+	 * @return the request ID
+	 */
+	private static String meterLoadStart(PerformanceMeter pfmeter,
+	Execution exec, long startTime) {
+		//Future: handle the zkClientStart paramter
+		final String pfReqId = exec.getDesktop().getId();
+		try {
+			pfmeter.requestStartAtServer(pfReqId, exec, startTime);
+		} catch (Throwable ex) {
+			log.warning("Ingored: failed to invoke "+pfmeter, ex);
+		}
+		return pfReqId;
+	}
+	/** Handles the server complete of the AU request for the performance measurement.
+	 * It sets the ZK-Client-Complete header.
+	 *
+	 * @param pfReqId the request ID that is processed at the server
+	 */
+	private static void meterLoadServerComplete(PerformanceMeter pfmeter,
+	String pfReqId, Execution exec) {
+		try {
+			pfmeter.requestCompleteAtServer(pfReqId, exec, System.currentTimeMillis());
+		} catch (Throwable ex) {
+			log.warning("Ingored: failed to invoke "+pfmeter, ex);
+		}
 	}
 }

@@ -18,13 +18,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.Iterator;
 import java.util.Collections;
 import java.util.Map;
 import java.io.Writer;
 import java.io.Reader;
 import java.io.IOException;
 
+import org.zkoss.util.CollectionsX;
 import org.zkoss.idom.Document;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -196,6 +199,25 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	}
 	public Map getAttributes() {
 		return Collections.EMPTY_MAP;
+	}
+
+	public String getHeader(String name) {
+		return null;
+	}
+	public Iterator getHeaders(String name) {
+		return CollectionsX.EMPTY_ITERATOR;
+	}
+	public Iterator getHeaderNames() {
+		return CollectionsX.EMPTY_ITERATOR;
+	}
+	public void setResponseHeader(String name, String value) {
+		throw new UnsupportedOperationException();
+	}
+	public void addResponseHeader(String name, String value) {
+		throw new UnsupportedOperationException();
+	}
+	public boolean containsResponseHeader(String name) {
+		return false;
 	}
 
 	public String[] getParameterValues(String name) {

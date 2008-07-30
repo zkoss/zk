@@ -2118,10 +2118,15 @@ zkau._pfsend = function (req, dtid, completeOnly) {
 zkau._pfrecv = function (req) {
 	//ZK-Client-Complete from the server is a list of requestId
 	//separated with ' '
-	var ids = req.getResponseHeader("ZK-Client-Complete");
-	if (ids && (ids = ids.trim())) {
+	zkau.pfdone(req.getResponseHeader("ZK-Client-Complete"));
+};
+/** Adds performance request IDs that have been processed completely.
+ * @since 3.5.0
+ */
+zkau.pfdone = function (pfIds) {
+	if (pfIds && (pfIds = pfIds.trim())) {
 		if (zkau._pfIds) zkau._pfIds += ',';
-		zkau._pfIds += ids + "=" + Math.round($now());
+		zkau._pfIds += pfIds + "=" + Math.round($now());
 	}
 };
 

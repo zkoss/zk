@@ -21,11 +21,20 @@ package org.zkoss.zk.ui.util;
 import org.zkoss.zk.ui.Execution;
 
 /**
- * A listener to measure the performance of certain activities.
+ * A listener to measure the performance of the processing of client
+ * requests.
  *
  * <p>Note: ZK doesn't fork another low-priority thread to call the
  * methods defined in this listener. It is the implementation's job to
  * minimize the overhead when calculating the performance data.
+ *
+ * <p>There are two kind of requests: loading a page (regular HTTP requests)
+ * and AU updates (aka., Ajax requests).
+ * When loading a page, {@link #requestStartAtClient} might not be called
+ * (since the browser doesn't carry the initial time in the request),
+ * and the request ID will be the desktop's ID.
+ * For AU updates, {@link #requestStartAtClient} must be called
+ * and the request ID a desktop-wide uique ID to identify a request.
  *
  * @author tomyeh
  * @since 3.0.0
@@ -54,6 +63,9 @@ public interface PerformanceMeter {
 	 * not be called for each request (due to no further request).
 	 *
 	 * @param requestId a desktop-wide unique ID to identify a request.
+	 * If {@link #requestStartAtClient} was called, it is the same as
+	 * the request ID that was passed to {@link #requestStartAtClient},
+	 * If not called, it is the desktop's ID.
 	 * @param exec the execution. You can retrieve the desktop,
 	 * session and user's info from it. But, don't access the component
 	 * in this method since it is not safe (exec is not activated).
@@ -67,7 +79,9 @@ public interface PerformanceMeter {
 	/** Called to notify when the server receives the request.
 	 *
 	 * @param requestId a desktop-wide unique ID to identify a request.
-	 * It is the same request ID as {@link #requestStartAtClient}.
+	 * If {@link #requestStartAtClient} was called, it is the same as
+	 * the request ID that was passed to {@link #requestStartAtClient},
+	 * If not called, it is the desktop's ID.
 	 * @param exec the execution. You can retrieve the desktop,
 	 * session and user's info from it. But, don't access the component
 	 * in this method since it is not safe (exec is not activated).
@@ -81,6 +95,9 @@ public interface PerformanceMeter {
 	 * the request.
 	 *
 	 * @param requestId a desktop-wide unique ID to identify a request.
+	 * If {@link #requestStartAtClient} was called, it is the same as
+	 * the request ID that was passed to {@link #requestStartAtClient},
+	 * If not called, it is the desktop's ID.
 	 * @param exec the execution. You can retrieve the desktop,
 	 * session and user's info from it. But, don't access the component
 	 * in this method since it is not safe (exec is not activated).
