@@ -114,3 +114,18 @@ span.layout-split-btn-b {
 .z-fisheyebar-inner {
 	position: relative;
 }
+<%-- Detail --%>
+.z-detail {
+	height: 100%; padding: 0!important; overflow: hidden;
+	-o-text-overflow: ellipsis; text-overflow: ellipsis; white-space:nowrap;
+}
+tr.grid td.z-detail-td {
+	background: transparent url(${c:encodeURL('~./zul/img/grid/detail-bg.gif')}) repeat-y right;
+}
+.z-detail-img {
+	width: 100%; height: 18px; background-position: 4px 2px;
+	background-repeat: no-repeat; background-color: transparent; 
+}
+.z-detail-expanded .z-detail-img {
+	background-position: -21px 2px;
+}

@@ -85,6 +85,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>detail</component-name>
+		<component-class>org.zkoss.zul.Detail</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/detail.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>east</component-name>
 		<component-class>org.zkoss.zkex.zul.East</component-class>
 		<mold>

@@ -19,7 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.List;
-import java.util.LinkedList;
 import java.util.Iterator;
 import java.io.IOException;
 
@@ -54,7 +53,17 @@ public class Row extends XulElement {
 	 * the grid owning this row is using a list model.
 	 */
 	private boolean _loaded;
+	
+	private transient Detail _detail;
 
+	/**
+	 * Returns the child detail component.
+	 * @since 3.5.0
+	 */
+	public Detail getDetailChild() {
+		return _detail;
+	}
+	
 	/** Returns the grid that contains this row. */
 	public Grid getGrid() {
 		final Component parent = getParent();
@@ -239,10 +248,16 @@ public class Row extends XulElement {
 			}
 		}
 
+		final Component child = (Component)getChildren().get(index);
 		String style;
 		_rsflags = RS_NO_WIDTH|RS_NO_HEIGHT|RS_NO_DISPLAY;
 		try {
 			style = super.getRealStyle(); // since we overrode the original getRealStyle();
+
+			if (child instanceof Detail) {
+				final String wd = ((Detail) child).getWidth();
+				if (wd != null) style += "width:" + wd + ";";
+			}
 		} finally {
 			_rsflags = 0;
 		}
@@ -252,7 +267,12 @@ public class Row extends XulElement {
 			HTMLs.appendStyle(sb, "height", hgh);
 			style = sb.toString();
 		}
-		String clx = this instanceof Group ? "gc group-cell" : this instanceof Groupfoot ? "gc groupfoot-cell" : "gc";
+		String clx = this instanceof Group ? "gc group-cell" :
+			this instanceof Groupfoot ? "gc groupfoot-cell" : "gc";
+		
+		if (child instanceof Detail)
+			clx += " " + ((Detail)child).getSclass() + "-td";
+		
 		if (colattrs == null && style.length() == 0 && span == 1)
 			return " class=\"" + clx + "\"";
 
@@ -330,6 +350,46 @@ public class Row extends XulElement {
 			throw new UiException("Unsupported parent for row: "+parent);
 		super.setParent(parent);
 	}
+	
+	public boolean insertBefore(Component newChild, Component refChild) {
+		if (newChild instanceof Detail) {
+			if (_detail != null && _detail != newChild)
+				throw new UiException("Only one detail is allowed: "+this);
+			_detail = (Detail) newChild;
+			
+			//move to the first child
+			refChild = getChildren().isEmpty() ? null : (Component) getChildren().get(0); 
+		} else if (refChild != null && refChild == _detail) {
+			if (getChildren().size() <= 1) refChild = null;
+			else refChild = (Component) getChildren().get(1);
+		}
+		return super.insertBefore(newChild, refChild);
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Row clone = (Row)super.clone();
+		if (_detail != null) clone.afterUnmarshal();
+		return clone;
+	}
+	
+	private void afterUnmarshal() {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Detail) {
+				_detail = (Detail)child;
+				break; //done
+			}
+		}
+	}
+
+	//Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		afterUnmarshal();
+	}
+	
 	public void onDrawNewChild(Component child, StringBuffer out)
 	throws IOException {
 		final StringBuffer sb = new StringBuffer(128)

@@ -292,6 +292,14 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>detail</component-name>
+		<extends>detail</extends>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.DetailDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>div</component-name>
 		<extends>div</extends>
 		<mold>

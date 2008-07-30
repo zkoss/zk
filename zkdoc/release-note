@@ -10,6 +10,7 @@ ZK 3.5.0
   2019158: Provide a Menupopup for Columns component
   1959952: Support Comet-based Server Push
   1951422: Grid: support grouping
+  2032202: Provide a detail component as master details
   1962747: Allow to specify a XML fragment as compnent's content
   1901211: Simplify the outline of Menu component with single TD
   1845373: Support switch/case and choose/when
