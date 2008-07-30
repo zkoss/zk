@@ -18,9 +18,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * GroupFoot serves as a summary row of group.
@@ -61,6 +63,11 @@ public class Groupfoot extends Row{
 	 */
 	public void setLabel(String label) {
 		autoFirstCell().setValue(label);
+	}
+	public String getOuterAttrs() {
+		final StringBuffer sb = new StringBuffer(32).append( super.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.nostripe", true);
+		return sb.toString();
 	}
 	private Label autoFirstCell() {
 		Component cell = (Component)getFirstChild();

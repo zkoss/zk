@@ -244,6 +244,7 @@ public class Group extends Row {
 		applyImageIfAny();
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "z.open", isOpen());
+		HTMLs.appendAttribute(sb, "z.nostripe", true);
 		appendAsapAttr(sb, Events.ON_OPEN);
 		return sb.toString();
 	}

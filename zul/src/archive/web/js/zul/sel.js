@@ -199,7 +199,7 @@ zk.Selectable.prototype = {
 		if (!scOdd || !this.bodyrows) return;
 		for (var j = 0, even = true, bl = this.bodyrows.length; j < bl; ++j) {
 			var row = this.bodyrows[j];
-			if ($visible(row) && $type(row) != "Litgp" && $type(row) != "Litgpft") {
+			if ($visible(row) && getZKAttr(row, "nostripe") != "true") {
 				zk.addClass(row, scOdd, !even);
 				even = !even;
 			}

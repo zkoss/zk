@@ -18,6 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 
@@ -60,6 +61,11 @@ public class Listgroupfoot extends Listitem{
 	 */
 	public void setLabel(String label) {
 		autoFirstCell().setLabel(label);
+	}
+	public String getOuterAttrs() {
+		final StringBuffer sb = new StringBuffer(32).append( super.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.nostripe", true);
+		return sb.toString();
 	}
 	private Listcell autoFirstCell() {
 		Listcell cell = (Listcell)getFirstChild();
