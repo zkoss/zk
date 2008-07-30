@@ -408,10 +408,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					config.getResendDelay() / 2 - 500: 0);
 				//Note: getResendDelay() might return nonpositive
 		final Collection pfrqids = wappc.getUiEngine().execUpdate(exec, aureqs,
-			pfmeter != null ? meterStart(pfmeter, request, exec): null, out);
+			pfmeter != null ? meterAuStart(pfmeter, request, exec): null,
+			out);
 
 		if (pfrqids != null && pfmeter != null)
-			meterComplete(pfmeter, response, pfrqids, exec);
+			meterAuComplete(pfmeter, response, pfrqids, exec);
 
 		out.close(request, response);
 	}
@@ -479,12 +480,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.close(request, response);
 	}
 
-	/** Handles the start of request.
+	/** Handles the start of AU request for performance measurement.
 	 *
 	 * @return the request ID from the ZK-Client-Start header,
 	 * or null if not found.
 	 */
-	private static String meterStart(PerformanceMeter pfmeter,
+	private static String meterAuStart(PerformanceMeter pfmeter,
 	HttpServletRequest request, Execution exec) {
 		//Format of ZK-Client-Complete:
 		//	request-id1=time1,request-id2=time2
@@ -511,7 +512,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 							y = z + 1;
 						}
 					} catch (NumberFormatException ex) {
-						log.error("Unable to parse "+ids);
+						log.warning("Ingored: unable to parse "+ids);
+					} catch (Throwable ex) {
+						log.warning("Ingored: failed to invoke "+pfmeter, ex);
 					}
 				}
 
@@ -526,24 +529,29 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (hdr != null) {
 			final int j = hdr.lastIndexOf('=');
 			if (j > 0) {
+				final String pfrqid = hdr.substring(0, j);
 				try {
-					final String pfrqid = hdr.substring(0, j);
 					pfmeter.requestStartAtClient(pfrqid, exec,
 						Long.parseLong(hdr.substring(j + 1)));
 					pfmeter.requestStartAtServer(pfrqid, exec,
 						System.currentTimeMillis());
-					return pfrqid;
 				} catch (NumberFormatException ex) {
-					log.error("Unable to parse "+hdr);
+					log.warning("Ingored: failed to parse ZK-Client-Start, "+hdr);
+				} catch (Throwable ex) {
+					log.warning("Ingored: failed to invoke "+pfmeter, ex);
 				}
+				return pfrqid;
 			}
 		}
 		return null;
 	}
-	/** Handles the complete of the request.
+	/** Handles the complete of the AU request for the performance measurement.
 	 * It sets the ZK-Client-Complete header.
+	 *
+	 * @param pfrqids a collection of request IDs that are processed
+	 * at the server
 	 */
-	private static void meterComplete(PerformanceMeter pfmeter,
+	private static void meterAuComplete(PerformanceMeter pfmeter,
 	HttpServletResponse response, Collection pfrqids, Execution exec) {
 		final StringBuffer sb = new StringBuffer(256);
 		long time = System.currentTimeMillis();
@@ -551,7 +559,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final String pfrqid = (String)it.next();
 			if (sb.length() > 0) sb.append(' ');
 			sb.append(pfrqid);
-			pfmeter.requestCompleteAtServer(pfrqid, exec, time);
+
+			try {
+				pfmeter.requestCompleteAtServer(pfrqid, exec, time);
+			} catch (Throwable ex) {
+				log.warning("Ingored: failed to invoke "+pfmeter, ex);
+			}
 		}
 
 		response.setHeader("ZK-Client-Complete", sb.toString());
