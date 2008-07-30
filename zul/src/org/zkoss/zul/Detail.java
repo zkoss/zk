@@ -30,6 +30,12 @@ import org.zkoss.zul.impl.XulElement;
  * The detail component is used to show a detail section where a master row and 
  * multiple detail rows are the same row.
  * 
+ * <p>Event:
+ * <ol>
+ * <li>onOpen is sent when this component is opened or closed by user.</li>
+ * </ol>
+ * </p>
+ * 
  * <p>Default {@link #getSclass}: z-detail.
  * 
  * <p>Default {@link #getWidth}: 18px. It depends on the width of the icon of
