@@ -1671,8 +1671,9 @@ function myload() {
 	}
 }
 zk.bootDone = function () {
-	if (zk.pfmeter && zkau._dtids.length)
-		zkau.pfdone(zkau._dtids[0]);
+	if (zk.pfmeter)
+		for (var dtids = zkau._dtids, j = dtids.length; --j >=0;)
+			zkau.pfdone(dtids[j], dtids[j]);
 	zk.progressDone();
 	zk.booting = false;;
 };
