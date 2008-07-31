@@ -86,6 +86,10 @@ public class ExecutionResolver implements VariableResolver {
 			if ("desktop".equals(name))
 				return _exec.getDesktop();
 			break;
+		case 'e':
+			if ("execution".equals(name))
+				return _exec;
+			break;
 		case 'p':
 			if ("pageScope".equals(name)) {
 				if (_self instanceof Component)

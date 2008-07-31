@@ -1167,9 +1167,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	private final static Set _nonSerNames = new HashSet();
 	static {
-		final String[] nms = {"log", "page", "desktop", "pageScope", "desktopScope",
+		final String[] nms = {
+			"log", "page", "desktop", "pageScope", "desktopScope",
 			"applicationScope", "requestScope", "spaceOwner",
-		"session", "sessionScope"};
+			"session", "sessionScope", "execution"};
 		for (int j = 0; j < nms.length; ++j)
 			_nonSerNames.add(nms[j]);
 	}

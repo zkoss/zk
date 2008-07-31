@@ -26,6 +26,8 @@ import java.util.LinkedList;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.Function;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.scripting.Interpreter;
@@ -227,6 +229,13 @@ abstract public class GenericInterpreter implements Interpreter {
 			if (val != null || ns.containsVariable(name, false))
 				return val;
 		}
+		return getImplicit(name);
+	}
+	private Object getImplicit(String name) {
+		if ("execution".equals(name)) {
+			final Execution exec = Executions.getCurrent();
+			if (exec != null) return exec;
+		}
 		return UNDEFINED;
 	}
 	/** Returns the variable through the specified namespaces and
@@ -249,7 +258,7 @@ abstract public class GenericInterpreter implements Interpreter {
 			if (val != null || ns.containsVariable(name, false))
 				return val;
 		}
-		return UNDEFINED;
+		return getImplicit(name);
 	}
 
 	//Interpreter//
