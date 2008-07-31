@@ -121,6 +121,8 @@ span.layout-split-btn-b {
 }
 tr.grid td.z-detail-td {
 	background: transparent url(${c:encodeURL('~./zul/img/grid/detail-bg.gif')}) repeat-y right;
+	vertical-align: top; border-top: none; border-left: 1px solid white;
+	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
 .z-detail-img {
 	width: 100%; height: 18px; background-position: 4px 2px;

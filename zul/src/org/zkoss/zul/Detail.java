@@ -27,8 +27,8 @@ import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- * The detail component is used to show a detail section where a master row and 
- * multiple detail rows are the same row.
+ * The detail component is used to display a detailed section where a master row and 
+ * multiple detail rows are on the same row.
  * 
  * <p>Event:
  * <ol>

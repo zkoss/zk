@@ -268,10 +268,8 @@ public class Row extends XulElement {
 			style = sb.toString();
 		}
 		String clx = this instanceof Group ? "gc group-cell" :
-			this instanceof Groupfoot ? "gc groupfoot-cell" : "gc";
-		
-		if (child instanceof Detail)
-			clx += " " + ((Detail)child).getSclass() + "-td";
+			this instanceof Groupfoot ? "gc groupfoot-cell" :
+			child instanceof Detail ? ((Detail)child).getSclass() + "-td" : "gc";
 		
 		if (colattrs == null && style.length() == 0 && span == 1)
 			return " class=\"" + clx + "\"";
