@@ -132,7 +132,7 @@ public class WebManager {
 		((WebAppCtrl)_wapp).init(_ctx, config);
 
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
-		_cwr.setCompress(new String[] {"js", "css"});
+		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 		_cwr.setDebugJS(config.isDebugJS());
 

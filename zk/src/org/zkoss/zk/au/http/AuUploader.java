@@ -78,7 +78,7 @@ public class AuUploader implements AuProcessor {
 	throws ServletException, IOException {
 		final Map attrs = new HashMap();
 		String alert = null, uuid = null,
-			nextURI = "~./zul/html/fileuploaddlg-done.dsp";
+			nextURI = "~./zul/html/fileupload-done.html.dsp";
 		try {
 			if (!isMultipartContent(request)) {
 				alert = "enctype must be multipart/form-data";

@@ -17,6 +17,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-<iframe style="width:100%;" frameborder="0" src="${c:encodeURL('~./zul/html/fileuploaddlg.dsp')}?dtid=${self.desktop.id}&amp;uuid=${self.uuid}&amp;max=${self.number}&amp;native=${self.native}">
+<iframe style="width:100%;" frameborder="0" src="${c:encodeURL('~./zul/html/fileupload.html.dsp')}?dtid=${self.desktop.id}&amp;uuid=${self.uuid}&amp;max=${self.number}&amp;native=${self.native}">
 </iframe>
 </div>

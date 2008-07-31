@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page contentType="text/html;charset=UTF-8" %><%--
-fileuploaddlg.dsp
+fileupload.html.dsp
 
 {{IS_NOTE
 	Purpose:
 		The content of the inline frame of the fileupload modal dialog
-		(fileuploaddlg.zul)
+		(fileupload.html.zul)
 	Description:
 		
 	History:
@@ -24,7 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiV="CONTENT-TYPE" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8">
 <title>Upload</title>
 ${z:outDeviceStyleSheets('ajax')}
 <%-- We cannot use ${z:outLangStyleSheets()} since Executions.getCurrent()
@@ -97,7 +96,7 @@ parent.zk.listen(document, "keydown", onDocKeydown);
 		2) parsing multi-part might fail
 	--%>
 	<%-- change the following if you want the return URI to be different from the default
-	<input type="hidden" name="nextURI" value="~./zul/html/fileuploaddlg-done.dsp"/>
+	<input type="hidden" name="nextURI" value="~./zul/html/fileupload-done.html.dsp"/>
 	--%>
 	<input type="hidden" name="native" value="${param.native}"/>
 

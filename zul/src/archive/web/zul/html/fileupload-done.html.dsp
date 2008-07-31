@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page contentType="text/html;charset=UTF-8" %><%--
-fileuploaddlg-done.dsp
+fileupload-done.html.dsp
 
 {{IS_NOTE
 	Purpose:
@@ -24,6 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="arg" value="${requestScope.arg}"/>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8">
 <title>Upload Result</title>
 ${z:outDeviceStyleSheets('ajax')}
 <%-- We cannot use ${z:outLangStyleSheets()} since Executions.getCurrent()
