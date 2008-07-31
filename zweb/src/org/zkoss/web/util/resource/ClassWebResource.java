@@ -220,7 +220,7 @@ public class ClassWebResource {
 	 *
 	 * <p>Default: null (no compression at all).
 	 *
-	 * @param exts an array of extensions, e.g., {"js", "css"}.
+	 * @param exts an array of extensions, e.g., {"js", "css", "html"}.
 	 * If null or zero-length, it means no compression at all.
 	 *@since 2.4.1
 	 */
