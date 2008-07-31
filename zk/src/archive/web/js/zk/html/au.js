@@ -276,7 +276,7 @@ zkau._onRespReady = function () {
 			zkau._areq = zkau._areqInf = null;
 			if (reqInf.tfn) clearTimeout(reqInf.tfn); //stop timer
 
-			if (zk.pfmeter) zkau._pfrecv(req);
+			if (zk.pfmeter) zkau._pfrecv(reqInf.dtid, req);
 
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
@@ -607,7 +607,7 @@ zkau._sendNow2 = function(reqInf) {
 			delete zkau._errcode;
 		}
 
-		if (zk.pfmeter) zkau._pfsend(req, reqInf.dtid);
+		if (zk.pfmeter) zkau._pfsend(reqInf.dtid, req);
 
 		zkau._areq = req;
 		zkau._areqInf = reqInf;
@@ -1114,7 +1114,7 @@ zkau._onUnload = function () {
 					uri = zkau.uri(dtid);
 				req.open("POST", zk.ie ? uri+"?"+content: uri, true);
 				req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				if (zk.pfmeter) zkau._pfsend(req, dtid, true);
+				if (zk.pfmeter) zkau._pfsend(dtid, req, true);
 				if (zk.ie) req.send(null);
 				else req.send(content);
 			}
@@ -2053,24 +2053,30 @@ zkau.endGhostToDIV = function (dg) {
 
 //Perfomance Meter//
 zkau._pfj = 0; //an index
-zkau._pfIds = ""; //what are processed
-zkau._pfsend = function (req, dtid, completeOnly) {
+zkau._pfIds = {}; //a map of (dtid, ids) to denote what are processed
+zkau._pfsend = function (dtid, req, completeOnly) {
 	if (!completeOnly)
 		req.setRequestHeader("ZK-Client-Start",
 			dtid + "-" + zkau._pfj++ + "=" + Math.round($now()));
 
-	if (zkau._pfIds) {
-		req.setRequestHeader("ZK-Client-Complete", zkau._pfIds);
-		zkau._pfIds = "";
+	if (zkau._pfIds[dtid]) {
+		req.setRequestHeader("ZK-Client-Complete", zkau._pfIds[dtid]);
+		zkau._pfIds[dtid] = "";
 	}
 };
-zkau._pfrecv = function (req) {
+zkau._pfrecv = function (dtid, req) {
 	//ZK-Client-Complete from the server is a list of requestId
 	//separated with ' '
-	var ids = req.getResponseHeader("ZK-Client-Complete");
-	if (ids && (ids = ids.trim())) {
-		if (zkau._pfIds) zkau._pfIds += ',';
-		zkau._pfIds += ids + "=" + Math.round($now());
+	zkau.pfdone(dtid, req.getResponseHeader("ZK-Client-Complete"));
+};
+/** Adds performance request IDs that have been processed completely.
+ * @since 3.0.7
+ */
+zkau.pfdone = function (dtid, pfIds) {
+	if (pfIds && (pfIds = pfIds.trim())) {
+		var s = pfIds + "=" + Math.round($now());
+		if (zkau._pfIds[dtid]) zkau._pfIds[dtid] += ',' + s;
+		else zkau._pfIds[dtid] = s;
 	}
 };
 
