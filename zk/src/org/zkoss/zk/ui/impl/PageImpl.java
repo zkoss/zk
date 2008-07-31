@@ -855,11 +855,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				//set first to avoid dead loop if script calls interpret again
 
 			final String script = _langdef.getInitScript(zslang);
-			if (script != null) {
-				_ns.setVariable("log", _zklog, true);
-				_ns.setVariable("page", this, true);
+			if (script != null)
 				ip.interpret(script, _ns);
-			}
 
 			//evaluate deferred zscripts, if any
 			try {
@@ -1148,9 +1145,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	}
 	private final static Set _nonSerNames = new HashSet();
 	static {
-		final String[] nms = {"log", "page", "desktop", "pageScope", "desktopScope",
+		final String[] nms = {
+			"log", "page", "desktop", "pageScope", "desktopScope",
 			"applicationScope", "requestScope", "spaceOwner",
-		"session", "sessionScope"};
+			"session", "sessionScope", "execution"};
 		for (int j = 0; j < nms.length; ++j)
 			_nonSerNames.add(nms[j]);
 	}
