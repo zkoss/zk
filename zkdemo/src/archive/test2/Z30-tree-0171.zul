@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <window title="Test Tree Clone" border="normal">
 <vbox>
-  <label value="1. Click addItem1"/>  
+  <label value="1. Click clone Item1"/>  
   <label value="2. Double check the content of Item1 is the same as the original one"/>
 </vbox>
 <zscript>

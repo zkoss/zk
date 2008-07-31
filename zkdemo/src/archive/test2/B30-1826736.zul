@@ -3,7 +3,7 @@
 <window id="win">
 This code has two bugs.
 
-The first bug happens when i sort by date. The rows always stays in the
+The first bug happens when i sort it. The rows always stays in the
 same order.
 
 The second bug is that the first column of data disappear when i press the

@@ -21,8 +21,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <n:h2>[ 1872505]   Provide a "parent" position for Window component.</n:h2>
 	<n:ol>
 		<n:li>Try overlapped Nestedwindow and move it to some where, then click overlpaped inner window, the nestedwindow position should be changed follow the inner window</n:li>
-		<n:li>move the inner window, the nextedwindow position should follow the new position too.</n:li>
-                <n:li>embed the nextedwindow, it should back to the inner window</n:li>
+		<n:li>move the inner window, the nestedwindow position should follow the new position too.</n:li>
+                <n:li>embed the nestedwindow, it should back to the inner window</n:li>
                 <n:li>change textbox of top and left value and click save, the position will change ,(in IE, two field must both assigned.)</n:li>
 	</n:ol>
 <window border="none" style="border:1px solid black;">

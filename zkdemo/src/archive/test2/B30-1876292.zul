@@ -20,10 +20,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>If I try to type wrong value and then click reset button, the first time
 it reset wrong value, but after typing wrong value the second time,
-cb1.value = null refuses to reset wrong value.
+cb1.value = null refuses to reset wrong value(It's a bug).
 
 Or after loading the page and resetting blank combobox or with right value,
-and then type a wrong value, it refuses to reset.</n:p>
+and then type a wrong value, it refuses to reset(It's a bug).</n:p>
 	<vbox>
 	<combobox id="cb1" constraint="strict"/>
 	<zscript>

@@ -1,7 +1,7 @@
 <zk>
 <html><![CDATA[
 1. Watch the listbox headers, there should be two headers (header1, header2) there.<br/>
-2. Press add item button, you should see first0 and last0 as the first Listitem. But the header2 appear and gone immediately. (IE show horizontal and vertical scrollbar).<br/>
+2. Press add item button, you should see first0 and last0 as the first Listitem. If the header2 appear and gone immediately, it's a bug. (IE show horizontal and vertical scrollbar).<br/>
 3. Press invalidate will correct the case.<br/>
 NOTE: The mentioned bug occurs only if you add item via ListModel and ListDataEvent. If you add Listitem and listcells directly, it works ok.<br/>
 ]]></html>
