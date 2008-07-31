@@ -8,6 +8,7 @@ ZK 3.0.7
   2015827: Provide utilities to encode AWT image to ZK image
   2016523: Stop timer at the client if session timeout
   2028549: Support Image.setContent(javax.awt.image.RenderedImage)
+  2033582: Adds the execution variable as builtin
 
 * Bugs
   2008676: Firefox 3: toolbarbutton with href causes false alarm
@@ -30,6 +31,7 @@ ZK 3.0.7
   2027442: Paging mold Listbox + model not in order
   2027719: Changing Include's src causes ServletException
   2030986: Disable checkmarks can be selected by shift button
+  2033357: PerformanceMeter doesn't work if multiple desktops (Liferay)
   1869744: Fileupload display mess label in upload and cancel button
   
 * Upgrade Notes:
