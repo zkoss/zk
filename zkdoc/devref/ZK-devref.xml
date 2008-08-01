@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Reference</title>
-<subtitle>Version 3.0.6</subtitle>
+<subtitle>Version 3.0.7</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
@@ -16,9 +16,9 @@
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>June 2008</para>
+<para>August 2008</para>
 <para>Potix Corporation</para>
-<para>Revision 104</para>
+<para>Revision 107</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -52,7 +52,8 @@
 <para>The current item of the collection being iterated, when ZK evaluates an iterative element. An iterative element is an element with the forEach attribute.</para>
 <programlisting>&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${each}" forEach="${contacts}"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting></sect2><sect2><title>event - org.zkoss.zk.ui.event.Event or derived</title>
 <para>The current event. Available for the event listener only.</para>
-<programlisting>&lt;textbox onChanging="react(event.value)"/&gt;&#13;&lt;combobox onChanging="autoComplete()"/&gt;&#13;&lt;zscript&gt;&#13;void react(String value) {&#13;...&#13;}&#13;void autoComplete() {&#13;String value = event.getValue();&#13;...&#13;}&#13;&lt;/zscript&gt;&#13;</programlisting></sect2><sect2><title>forEachStatus – org.zkoss.zk.ui.util.ForEachStatus</title>
+<programlisting>&lt;textbox onChanging="react(event.value)"/&gt;&#13;&lt;combobox onChanging="autoComplete()"/&gt;&#13;&lt;zscript&gt;&#13;void react(String value) {&#13;...&#13;}&#13;void autoComplete() {&#13;String value = event.getValue();&#13;...&#13;}&#13;&lt;/zscript&gt;&#13;</programlisting></sect2><sect2><title>execution – org.zkoss.zk.ui.Execution</title>
+<para>The current execution.</para></sect2><sect2><title>forEachStatus – org.zkoss.zk.ui.util.ForEachStatus</title>
 <para>The status of an iteration. ZK exposes the information relative to the iteration taking place when evaluating the iterative element.</para>
 <programlisting>&lt;zk&gt;&#13;&lt;zscript&gt;&#13;grades = new String[] {"Best", "Better", "Good"};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${forEachStatus.index}: ${each}" forEach="${grades}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
 <para>Note: forEachStatus.index is absolute with respect to the underlying collection, array or other type. For example, if forEachBegin is 5, then the first value of forEachStatus.index with be 5.</para></sect2><sect2><title>page - org.zkoss.zk.ui.Page</title>
@@ -249,7 +250,7 @@
 <para>These are so-called header elements in HTML. Currently only HTML-based clients (so-called browsers) support them.</para>
 <para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
 <para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or servlets. Also, they are ignored if the page is a zhtml file.</para>
-<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>The page Directive</title>
+<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&lt;?link rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>The page Directive</title>
 <para>&lt;?page [id="..."] [title="..."] [style="..."] [cacheable="false|true"] [language="xul/html"] [zscriptLanguage="Java"] [contentType="text/html;charset=UTF-8"] [docType="tag PUBLIC &amp;quot;doctype name&amp;quot; &amp;quot;doctype UI&amp;quot;"] [xml="version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;"] [complete="true|false"]?&gt;</para>
 <para>It specifies how a page shall be handled. The id and title arguments are the two most important ones.</para><sect3><title>cacheable</title>
 <para>[Optional][Default: false if Ajax devices, true if XML and MIL devices]</para>
@@ -27025,11 +27026,17 @@
 <para>It specifies an error page used when an un-caught exception is thrown in updating a ZUML page (e.g., in an event listener). Each page is associated with an exception type, aka, a class deriving from java.lang.Throwable. You can specify multiple error pages, each with a different exception type. When an error occurs, ZK searches the proper error page by examing the exception type one-by-one. If none is found, it shows, by default, an alert message at the client.</para>
 <para>The device-type element is optional. If omitted, ajax is assumed. If you want to specify an error page for mobile devices, it has to be mil.</para></sect2><sect2><title>The preference Element</title>
 <programlisting>&lt;preference&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/preference&gt;&#13;</programlisting>
-<para>You can specify any number of preferences with the preference element depicted above. The name and value are application specific and you can specify whatever value you like. To avoid name conflict, it is suggested to prefix the name with your domain name, such as com.poitx.some.another.</para>
-<para>The preferences can then be retrieved back by calling the getPreference method of the org.zkoss.zk.ui.util.Configuration class. Notice that each Web application has one configuration, which can be found by use of getConfiguration method of the org.zkoss.zk.ui.WebApp interface.</para>
-<programlisting>String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;    ...    &#13;}&#13;</programlisting></sect2><sect2><title>The system-property Element</title>
+<para>Specify a preference with the preference element depicted above. The name and value are application specific and you can specify whatever value you like. Mupltie To avoid name conflict, it is suggested to prefix the name with your domain name, such as com.friend.some.another.</para>
+<para>The preferences are application-level. They are shared by a single ZK application (org.zkoss.zk.ui.WebApp).</para>
+<para>They can then be retrieved back by calling the getPreference method of the org.zkoss.zk.ui.util.Configuration class. Notice that each Web application has one configuration, which can be found by use of getConfiguration method of the org.zkoss.zk.ui.WebApp interface.</para>
+<programlisting>String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;    ...    &#13;}&#13;</programlisting></sect2><sect2><title>The library-property Element</title>
+<programlisting>&lt;library-property&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/library-property&gt;&#13;</programlisting>
+<para>Species a library-level property with the library-property element. The above example is equivalent to</para>
+<para>org.zkoss.lang.Library.setProperty("any name", "any value");</para>
+<para>The library properties are shared by all Java codes that use the same set of ZK libraries. If you installed ZK libraries in WEB-INF/ib of a ZK application, the library properties are shared only within the application.</para>
+<para>The library properties are easier to access than the preferences since they are static members (of org.zkoss.lang.Library). However, their scope depends on the installation.</para></sect2><sect2><title>The system-property Element</title>
 <programlisting>&lt;system-property&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/system-property&gt;&#13;</programlisting>
-<para>You can specify any number of system properties with the system-property element. The above example is equivalent to</para>
+<para>Specifies a system properties with the system-property element. The above example is equivalent to</para>
 <programlisting>System.setProperty("any name", "any value");&#13;</programlisting>
 <para/></sect2></sect1></chapter>
 </book>

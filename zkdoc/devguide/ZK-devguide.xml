@@ -2,10 +2,10 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.0.6</subtitle>
+<subtitle>Version 3.0.7</subtitle>
 <bookinfo>
 <copyright>
-<year>2007</year>
+<year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
@@ -17,9 +17,9 @@
 <para/>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>June 2008</para>
+<para>August 2008</para>
 <para>Potix Corporation</para>
-<para>Revision 213</para>
+<para>Revision 215</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -901,6 +901,15 @@
 </row>
 <row>
 <entry>
+<para>execution</para>
+</entry>
+<entry>
+<para>org.zkoss.zk.ui.Execution</para>
+<para>The current execution.</para>
+</entry>
+</row>
+<row>
+<entry>
 <para>session</para>
 </entry>
 <entry>
@@ -1081,7 +1090,12 @@
 <para>Then, other ZUML pages can share the same set of component definitions as follows.</para>
 <programlisting>&lt;?import uri="special.zul"?&gt;&#13;...&#13;&lt;special/&gt;&lt;!-- you can use the component defined in special.zul --&gt;&#13;</programlisting>
 <para>Unlike other directives, the import directives must be at the topmost level, i.e., at the the same level as the root element.</para>
-<para>For more information, refer to the Developer's Reference.</para></sect2></sect1><sect1><title>ZK Attributes</title>
+<para>For more information, refer to the Developer's Reference.</para></sect2><sect2><title>The link and meta Directives</title>
+<para>&lt;?link [href="uri"] [name0="value0"] [name1="value1"] [name2="value2"]?&gt;&lt;?meta [name0="value0"] [name1="value1"] [name2="value2"]?&gt;</para>
+<para>These are so-called header elements in HTML. Currently only HTML-based clients (so-called browsers) support them.</para>
+<para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
+<para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or servlets. Also, they are ignored if the page is a zhtml file.</para>
+<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&lt;?link rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2></sect1><sect1><title>ZK Attributes</title>
 <para>ZK attributes are used to control the associated element, other than initializing the data member.</para><sect2><title>The apply Attribute</title>
 <para>apply="a-class-name"apply="class1, class2,..."apply="${EL_returns_a_class_or_a_collection_of_classes}"apply="${EL_returns_an_instance_or_a_collection_of_Composer_instances}"</para>
 <para>It specifies a class, a collection of classes that are used to initialize the component. The class must implement the org.zkoss.zk.util.Composer interface. And then, you can do the initialization in the doAfterCompose method, since it is called after the component and all its children are instantiated.</para>
