@@ -9,6 +9,7 @@ ZK 3.0.7
   2016523: Stop timer at the client if session timeout
   2028549: Support Image.setContent(javax.awt.image.RenderedImage)
   2033582: Adds the execution variable as builtin
+  2034518: Support library(application)-level propertities
 
 * Bugs
   2008676: Firefox 3: toolbarbutton with href causes false alarm
