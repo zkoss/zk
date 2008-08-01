@@ -874,11 +874,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				//set first to avoid dead loop if script calls interpret again
 
 			final String script = _langdef.getInitScript(zslang);
-			if (script != null) {
-				_ns.setVariable("log", _zklog, true);
-				_ns.setVariable("page", this, true);
+			if (script != null)
 				ip.interpret(script, _ns);
-			}
 
 			//evaluate deferred zscripts, if any
 			try {
