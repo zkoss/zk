@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
@@ -189,7 +190,7 @@ public class Separator extends XulElement {
 	 */
 	public boolean isSpaceWithMargin() { //it cannot be static since EL uses it
 		if (_spmargin == null) {
-			final String s = System.getProperty("org.zkoss.zul.Separator.spaceWithMargin");
+			final String s = Library.getProperty("org.zkoss.zul.Separator.spaceWithMargin");
 			_spmargin = Boolean.valueOf(s != null && s.length() > 0);
 		}
 		return _spmargin.booleanValue();

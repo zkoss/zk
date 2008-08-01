@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
@@ -45,7 +46,7 @@ public class Charsets {
 
 	private static final String _uriCharset;
 	static {
-		String cs = System.getProperty("org.zkoss.web.uri.charset", null);
+		String cs = Library.getProperty("org.zkoss.web.uri.charset");
 		if (cs == null || cs.length() == 0)
 			cs = "UTF-8"; //Default: UTF-8
 		_uriCharset = cs;

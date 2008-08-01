@@ -34,6 +34,7 @@ import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
@@ -182,7 +183,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (_def != null)
 				addSharedAnnotationMap(_def.getAnnotationMap());
 			else if ((this instanceof Macro)
-			&& System.getProperty("org.zkoss.zk.MacroNoDefinitionAllowed") == null)
+			&& Library.getProperty("org.zkoss.zk.MacroNoDefinitionAllowed") == null)
 				//3.0.3: check addition prop to allow user to maintain backward compatibility
 				throw new DefinitionNotFoundException(
 					"Component definition not found for the macro "+this.getClass()

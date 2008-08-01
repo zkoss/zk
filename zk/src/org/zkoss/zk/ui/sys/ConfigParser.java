@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.net.URL;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.Cache;
 import org.zkoss.util.resource.Locator;
@@ -301,6 +302,10 @@ public class ConfigParser {
 				final String nm = IDOMs.getRequiredElementValue(el, "name");
 				final String val = IDOMs.getRequiredElementValue(el, "value");
 				config.setPreference(nm, val);
+			} else if ("library-property".equals(elnm)) {
+				final String nm = IDOMs.getRequiredElementValue(el, "name");
+				final String val = IDOMs.getRequiredElementValue(el, "value");
+				Library.setProperty(nm, val);
 			} else if ("system-property".equals(elnm)) {
 				final String nm = IDOMs.getRequiredElementValue(el, "name");
 				final String val = IDOMs.getRequiredElementValue(el, "value");
@@ -343,14 +348,14 @@ public class ConfigParser {
 		//file-check-period
 		v = parseInteger(conf, "file-check-period", true);
 		if (v != null)
-			System.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
-			//System-wide property
+			Library.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
+			//library-wide property
 
 		//extendlet-check-period
 		v = parseInteger(conf, "extendlet-check-period", true);
 		if (v != null)
-			System.setProperty("org.zkoss.util.resource.extendlet.checkPeriod", v.toString());
-			//System-wide property
+			Library.setProperty("org.zkoss.util.resource.extendlet.checkPeriod", v.toString());
+			//library-wide property
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {

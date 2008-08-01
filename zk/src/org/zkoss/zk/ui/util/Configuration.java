@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.lang.reflect.Method;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
@@ -147,11 +148,12 @@ public class Configuration {
 		_resendDelay = getInitResendDelay();
 	}
 	private static int getInitResendDelay() {
+		final String s = Library.getProperty(Attributes.RESEND_DELAY);
 		try {
-			final Integer v = Integer.getInteger(Attributes.RESEND_DELAY);
-			if (v != null) return v.intValue();
+			if (s != null)
+				return Integer.parseInt(s);
 		} catch (Throwable t) {
-			log.warning("Failed to parse "+Attributes.RESEND_DELAY+"="+System.getProperty(Attributes.RESEND_DELAY));
+			log.warning("Failed to parse "+Attributes.RESEND_DELAY+"="+s);
 		}
 		return -1; //disabled
 	}

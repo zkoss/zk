@@ -21,6 +21,7 @@ package org.zkoss.web.util.resource;
 import java.net.URL;
 import java.io.InputStream;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Loader;
@@ -106,14 +107,14 @@ abstract public class ExtendletLoader implements Loader {
 	}
 	private static int getInitCheckPeriod() {
 		final String ATTR = "org.zkoss.util.resource.extendlet.checkPeriod";
+		final String s = Library.getProperty(ATTR);
 		try {
-			final Integer v = Integer.getInteger(ATTR);
-			if (v != null) {
-				final int i = v.intValue();
+			if (s != null) {
+				final int i = Integer.parseInt(s);
 				if (i > 0) return i * 1000;
 			}
-		} catch (Throwable t) {
-			log.warning("Failed to parse "+System.getProperty(ATTR));
+		} catch (Throwable ex) {
+			log.warningBriefly("Failed to parse "+ATTR+", value="+s, ex);
 		}
 		return -1; //never change
 	}

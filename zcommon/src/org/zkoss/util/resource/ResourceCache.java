@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.util.resource;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
@@ -69,14 +70,12 @@ public class ResourceCache extends CacheMap {
 	}
 	private static int getInitCheckPeriod() {
 		final String ATTR = "org.zkoss.util.resource.checkPeriod";
+		final String s = Library.getProperty(ATTR);
 		try {
-			final Integer v = Integer.getInteger(ATTR);
-			if (v != null) {
-				final int i = v.intValue();
-				if (i >= 0) return i * 1000;
-			}
+			final int i = Integer.parseInt(s);
+			if (i >= 0) return i * 1000;
 		} catch (Throwable t) {
-			log.warning("Failed to parse "+System.getProperty(ATTR));
+			log.warning("Failed to parse "+ATTR+", value="+s);
 		}
 		return 5000; //5 secs
 	}
