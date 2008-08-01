@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 
 import org.zkoss.zk.ui.Desktop;
@@ -177,5 +178,9 @@ public class Utils {
 	public static final boolean isThemeV30() {
 		return _v30theme;
 	}
-	private static final boolean _v30theme = System.getProperty("org.zkoss.zul.theme.v30") != null;
+	private static final boolean _v30theme;
+	static {
+		final String s = Library.getProperty("org.zkoss.zul.theme.v30");
+		_v30theme = Boolean.valueOf(s != null && !"false".equals(s));
+	}
 }

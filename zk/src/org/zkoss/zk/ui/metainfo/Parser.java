@@ -35,6 +35,7 @@ import java.io.Reader;
 import java.net.URL;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.util.CollectionsX;
@@ -640,7 +641,7 @@ public class Parser {
 	 */
 	private static boolean isTrimLabel() {
 		if (_trimLabel == null) {
-			final String s = System.getProperty("org.zkoss.zk.ui.parser.trimLabel");
+			final String s = Library.getProperty("org.zkoss.zk.ui.parser.trimLabel");
 			_trimLabel = Boolean.valueOf(s != null && s.length() > 0);
 		}
 		return _trimLabel.booleanValue();

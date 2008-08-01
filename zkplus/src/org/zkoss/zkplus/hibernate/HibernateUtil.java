@@ -56,7 +56,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
  * @author henrichen
  */
 public class HibernateUtil {
-	public static String CONFIG = "HibernateUtil.config";
+	public static final String CONFIG = "HibernateUtil.config";
 	private static final Log log = Log.lookup(HibernateUtil.class);
 	
 	private static SessionFactory _factory;

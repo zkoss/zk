@@ -367,6 +367,8 @@ abstract public class GenericAutowireComposer extends GenericComposer {
 			return exec().getRemoteHost();
 		}
 
+		/** @deprecated
+		 */
 		public String getRemoteName() {
 			return exec().getRemoteName();
 		}

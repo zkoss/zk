@@ -21,6 +21,7 @@ package org.zkoss.io;
 import java.io.*;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.util.ArraysX;
 
 /**
@@ -55,7 +56,7 @@ public class Files {
 	 * the current directory.
 	 */
 	public final static File getConfigDirectory() {
-		final String confdir = System.getProperty("org.zkoss.io.conf.dir", null);
+		final String confdir = Library.getProperty("org.zkoss.io.conf.dir");
 		if (confdir != null) return new File(confdir);
 
 		final String userdir = System.getProperty("user.dir", ".");

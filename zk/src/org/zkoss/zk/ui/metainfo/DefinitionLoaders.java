@@ -32,6 +32,7 @@ import java.net.URL;
 import java.io.IOException;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Utils;
@@ -309,7 +310,7 @@ public class DefinitionLoaders {
 		if (el != null) {
 			Integer v = parseInteger(el, "resend-delay", false);
 			if (v != null)
-				System.setProperty(Attributes.RESEND_DELAY, v.toString());
+				Library.setProperty(Attributes.RESEND_DELAY, v.toString());
 		}
 	}
 

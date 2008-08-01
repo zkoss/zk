@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileNotFoundException;
 
+import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -146,13 +147,12 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 	}
 
 	/*package*/ static int getIntProp(String name, int defVal) {
-		String val = null;
+		String val = Library.getProperty(name);
 		try {
-			val = System.getProperty(name);
 			if (val != null)
 				return Integer.parseInt(val);
 		} catch (Throwable ex) { //ignore
-			log.warning("Ignored: illegal number, "+val+", for "+name);
+			log.warning("Ignored: unable to parse "+name+", value="+val);
 		}
 		return defVal;
 	}
