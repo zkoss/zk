@@ -181,6 +181,6 @@ public class Utils {
 	private static final boolean _v30theme;
 	static {
 		final String s = Library.getProperty("org.zkoss.zul.theme.v30");
-		_v30theme = Boolean.valueOf(s != null && !"false".equals(s));
+		_v30theme = s != null && !"false".equals(s);
 	}
 }
