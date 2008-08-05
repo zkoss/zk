@@ -144,8 +144,6 @@ public class Iframe extends XulElement {
 		return _src;
 	}
 	/** Sets the src.
-	 * <p>If src is changed, the whole component is invalidate.
-	 * Thus, you want to smart-update, you have to override this method.
 	 *
 	 * @param src the source URL. If null or empty, nothing is included.
 	 */
