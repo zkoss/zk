@@ -116,6 +116,9 @@ input.z-form-focus, .z-form-focus input {
 	visibility: hidden !important; position: absolute !important;
 	left: -10000px !important; top: -10000px !important;
 }
+.z-repaint {
+	zoom: 1; background-color: transparent; -moz-outline: none;
+}
 <%-- Fix float issue for CSS --%>
 .z-clear {
 	clear: both; height: 0; overflow: hidden; line-height: 0; font-size: 0;
@@ -551,7 +554,7 @@ td.lwt-embedded, td.mwt-embedded, td.rwt-embedded {
 }
 <%-- ZK tree, listbox, grid --%>
 div.listbox, div.tree, div.grid {<%-- depends sclass --%>
-	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden;
+	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;
 }
 div.tree-head, div.listbox-head, div.grid-head, div.tree-head tr, div.listbox-head tr,
 	div.grid-head tr, div.tree-foot, 

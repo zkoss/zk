@@ -1443,7 +1443,6 @@ zkLitgp = {
 		if (!row) return; //incomplete structure
 
 		var meta = zkau.getMeta(getZKAttr(row, "rid"));
-		if (meta) zk.fixOverflow(meta.element);
 		var toOpen = !zkLitgp.isOpen(row); //toggle
 		zkLitgp._openItem(row, toOpen);
 

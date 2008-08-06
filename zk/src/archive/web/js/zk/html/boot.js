@@ -148,7 +148,8 @@ zk.on = function (cmp, evtnm, fn) {
  * @since 3.5.0
  */
 zk.un = function (cmp, evtnm, fn) {
-	var fns = zk.find(cmp, evtnm);
+	var ls = zk.find(cmp),
+		fns = ls[evtnm];
 	if (fns) {
 		fns.remove(fn);
 		if (!fns.length) delete ls[evtnm];
@@ -1281,7 +1282,6 @@ zk.onVisiAt = function (n) {
 			if (!$visible(e))
 				break;
 			if (e == n || !n) { //elm is a child of n
-				zk.fixOverflow(elm);
 				zk.eval(elm, "onVisi");
 				break;
 			}

@@ -515,7 +515,6 @@ zkGrwgp = {
 		if (!row) return; //incomplete structure
 
 		var meta = zkau.getMeta(getZKAttr(row, "rid"));
-		if (meta) zk.fixOverflow(meta.element);
 		var toOpen = !zkGrwgp.isOpen(row); //toggle
 		zkGrwgp._openItem(row, toOpen);
 
