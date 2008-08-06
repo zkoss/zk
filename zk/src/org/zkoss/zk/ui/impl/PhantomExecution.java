@@ -115,6 +115,9 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public String getContextPath() {
 		return "/";
 	}
+	public String getScheme() {
+		return "n/a";
+	}
 
 	public PageDefinition getPageDefinition(String uri) {
 		throw new UnsupportedOperationException();

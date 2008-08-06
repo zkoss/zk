@@ -791,8 +791,10 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final Execution exec = getExecution();
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
+		final boolean proxy = isProxy(exec);
 		final boolean bIncluded = asyncUpdate || exec.isIncluded()
-			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
+			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null
+			|| proxy;
 		final String uri = (String)
 			(_complete ? _cplURI: bIncluded ? _pgURI: _dkURI)
 				.getValue(_langdef.getEvaluator(), this);
@@ -802,9 +804,14 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			exec.setAttribute("org.zkoss.zk.ui.page.included", Boolean.TRUE);
 			//maintain original state since desktop.dsp will include page.dsp
 
-		final Map attrs = new HashMap(6);
+		final Map attrs = new HashMap(8);
 		attrs.put("page", this);
 		attrs.put("asyncUpdate", Boolean.valueOf(asyncUpdate));
+			//whether it is caused by AU request
+		attrs.put("proxy", Boolean.valueOf(proxy));
+			//whether it is caused by ZK Proxy
+		attrs.put("embed", Boolean.valueOf(asyncUpdate || proxy));
+			//if embed, not to generate JavaScript and CSS
 		attrs.put("action", "/"); //A non-empty string (backward compatible)
 		attrs.put("responses",
 			responses != null ? responses: Collections.EMPTY_LIST);
@@ -838,6 +845,11 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
 				//Don't use include. Otherwise, headers will be gone.
 		}
+	}
+	/** Tests if the request is sent by ZK Proxy. */
+	private static boolean isProxy(Execution exec) {
+		final String ua = exec.getHeader("User-Agent");
+		return ua != null && ua.indexOf("ZK Proxy") >= 0;
 	}
 
 	public final Namespace getNamespace() {

@@ -22,6 +22,8 @@ import java.util.Map;
 import java.io.Reader;
 import java.io.Writer;
 import java.io.IOException;
+import java.net.URL;
+import java.net.MalformedURLException;
 
 import org.zkoss.idom.Document;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -113,17 +115,47 @@ public class Executions {
 		return getCurrent().evaluate(page, expr, expectedType);
 	}
 
-	/** Encodes an URL.
+	/** Encodes the specified URL.
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
 	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
+	 *
+	 * @exception NullPointerException if the current execution is not
+	 * available.
+	 * @see #encodeURL
 	 */
 	public static final String encodeURL(String uri) {
 		return getCurrent().encodeURL(uri);
 	}
 
+	/**  Encodes the specified URL into an instance of {@link URL}.
+	 * It is similar to {@link #encodeURL}, except it returns an instance
+	 * of {@link URL}.
+	 *
+	 * @exception NullPointerException if the current execution is not
+	 * available.
+	 * @exception MalformedURLException if failed to convert it to
+	 * a legal {@link URL}
+	 * @since 3.5.0
+	 */
+	public static final URL encodeToURL(String uri)
+	throws MalformedURLException {
+		final Execution exec = getCurrent();
+		uri = exec.encodeURL(uri);
+		if (uri.indexOf("://") < 0) {
+			final StringBuffer sb = new StringBuffer(256)
+				.append(exec.getScheme()).append("://")
+				.append(exec.getServerName());
+			int port = exec.getServerPort();
+			if (port != 80) sb.append(':').append(port);
+			if (uri.length() > 0 && uri.charAt(0) != '/')
+				sb.append('/');
+			uri = sb.append(uri).toString();
+		}
+		return new URL(uri);
+	}
 	/** Creates components from a page file specified by an URI.
 	 * Shortcut to {@link Execution#createComponents(String, Component, Map)}.
 	 *

@@ -21,7 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
-<c:if test="${!arg.asyncUpdate}">
+<c:if test="${!arg.embed}">
 ${z:outLangStyleSheets()}
 ${z:outLangJavaScripts(null)}
 </c:if>

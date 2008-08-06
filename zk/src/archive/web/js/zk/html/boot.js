@@ -985,14 +985,20 @@ zk._updCnt = function () {
 /** Initializes the dom tree.
  */
 zk.initAt = function (node) {
-	if (!node) return;
+	if (!node || node.nodeType != 1) return;
 
 	var stk = [];
 	stk.push(node);
 
 	zk._loadAndInit({stk: stk, nosibling: true});
 };
-
+/** Initializes all children of the specified node.
+ * @since 3.5.0
+ */
+zk.initChildren = function (n) {
+	for (n = n.firstChild; n; n = n.nextSibling)
+		zk.initAt(n);
+};
 /** Loads all required module and initializes components. */
 zk._loadAndInit = function (inf) {
 	zk._ready = false;
@@ -1047,7 +1053,11 @@ zk._loadAndInit = function (inf) {
 			} catch (e) {} // IE7 failed if href contains incorrect encoding
 
 			var v = getZKAttr(n, "dtid");
-			if (v) zkau.addDesktop(v); //desktop's ID found
+			if (v) {
+				zkau.addDesktop(v); //desktop's ID found
+				var uri = getZKAttr(n, "au");
+				if (uri) zkau.addURI(v, uri);
+			}
 
 			if (zk.loadByType(n) || getZKAttr(n, "drag")
 			|| getZKAttr(n, "drop") || getZKAttr(n, "zid"))
@@ -1211,7 +1221,17 @@ zk.eval = function (n, fn, type) {
  */
 zk.cleanupAt = function (n) {
 	zk._cleanupAt(n);
-
+	zk._afterCleanup();
+};
+/** Cleanup all children of the specified node.
+ * @since 3.5.0
+ */
+zk.cleanupChildren = function (n) {
+	for (n = n.firstChild; n; n = n.nextSibling)
+		zk._cleanupAt(n);
+	zk._afterCleanup();
+};
+zk._afterCleanup = function () {
 	while (zk._cufns.length)
 		(zk._cufns.shift())();
 		

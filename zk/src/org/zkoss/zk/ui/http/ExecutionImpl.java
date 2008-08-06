@@ -332,6 +332,9 @@ public class ExecutionImpl extends AbstractExecution {
 	public String getContextPath() {
 		return _request.getContextPath();
 	}
+	public String getScheme() {
+		return _request.getScheme();
+	}
 
 	public PageDefinition getPageDefinition(String uri) {
 		if (uri == null || uri.length() == 0)

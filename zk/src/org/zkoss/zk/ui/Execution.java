@@ -366,6 +366,14 @@ public interface Execution  {
 	 */
 	public int getLocalPort();
 
+	/** Returns the name of the scheme used to make this request,
+	 * for example, http, https, or ftp.
+	 * Different schemes have different rules for constructing URLs,
+	 * as noted in RFC 1738.
+	 * @since 3.5.0
+	 */
+	public String getScheme();
+
 	/** Returns the portion of the request URI that indicates the context of
 	 * the current execution. The path starts with a "/" character but does not end with
 	 * a "/" character. For servlets in the default (root) context,

@@ -26,7 +26,7 @@ ${z:outDocType(page)}
 <c:set var="zk_argResponses" value="${arg.responses}" scope="request"/><%-- ZHTML body counts on it --%>
 <c:forEach var="root" items="${page.roots}">${z:redraw(root, null)}</c:forEach>
 
-<c:if test="${!empty zk_argAction && !arg.asyncUpdate}">
+<c:if test="${!empty zk_argAction && !arg.embed}">
 ${z:outLangStyleSheets()}
 ${z:outLangJavaScripts(null)}
 <script type="text/javascript">

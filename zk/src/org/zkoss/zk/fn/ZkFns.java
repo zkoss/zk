@@ -175,9 +175,7 @@ public class ZkFns {
 		sb.append("\n<script type=\"text/javascript\">\n")
 			.append("zk_ver='").append(wapp.getVersion())
 			.append("';\nzk.build='").append(wapp.getBuild())
-			.append("';\nzkau.addURI('").append(desktop.getId())
-				.append("','").append(desktop.getUpdateURI(null))
-			.append("');\nzk_procto=")
+			.append("';\nzk_procto=")
 				.append(config.getProcessingPromptDelay())
 			.append(";\nzk_tipto=")
 				.append(config.getTooltipDelay())
@@ -702,6 +700,8 @@ public class ZkFns {
 		HTMLs.appendAttribute(sb, "z.dtid", desktop.getId());
 		HTMLs.appendAttribute(sb, "style", style);
 		HTMLs.appendAttribute(sb, "z.zidsp", contained ? "ctpage": "page");
+		if (owner == null)
+			HTMLs.appendAttribute(sb, "z.au", desktop.getUpdateURI(null));
 
 		return sb.toString();
 	}

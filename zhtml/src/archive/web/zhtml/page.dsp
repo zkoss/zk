@@ -23,7 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="page" value="${arg.page}"/>
 <c:choose>
 <c:when test="${!zk_completeDesktop}">
-	<c:if test="${!arg.asyncUpdate}">
+	<c:if test="${!arg.embed}">
 ${z:outLangStyleSheets()}
 ${z:outLangJavaScripts(null)}
 	</c:if>
@@ -48,7 +48,7 @@ ${z:outResponseJavaScripts(arg.responses)}
 ${z:redraw(root, null)}
 	</c:forEach>
 
-	<c:if test="${!empty zk_argAction && !arg.asyncUpdate}">
+	<c:if test="${!empty zk_argAction && !arg.embed}">
 ${z:outLangStyleSheets()}
 ${z:outLangJavaScripts(null)}
 <script type="text/javascript">

@@ -385,6 +385,10 @@ abstract public class GenericAutowireComposer extends GenericComposer {
 			return exec().getServerPort();
 		}
 
+		public String getScheme() {
+			return exec().getScheme();
+		}
+
 		public String getUserAgent() {
 			return exec().getUserAgent();
 		}
