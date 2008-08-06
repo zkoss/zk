@@ -28,6 +28,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</version>
 
 	<!-- Interpreters -->
+	<zscript language="Java">
+	import org.zkoss.zkmax.zul.*;
+	</zscript>
+
 	<zscript language="JavaScript">
 	importPackage(Packages.java.util);
 	importPackage(Packages.java.lang);
@@ -36,6 +40,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	importPackage(Packages.org.zkoss.zk.ui);
 	importPackage(Packages.org.zkoss.zul);
 	importPackage(Packages.org.zkoss.zkex.zul);
+	importPackage(Packages.org.zkoss.zkmax.zul);
 	function alert(m) {
 		Messagebox.show(m);
 	}
@@ -51,6 +56,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	import org.zkoss.zk.ui.*
 	import org.zkoss.zul.*
 	import org.zkoss.zkex.zul.*
+	import org.zkoss.zkmax.zul.*
 	</zscript>
 	<zscript language="Groovy">
 	alert = {m -> Messagebox.show(m)}
@@ -66,6 +72,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		include_package 'org.zkoss.zk.ui'
 		include_package 'org.zkoss.zul'
 		include_package 'org.zkoss.zkex.zul'
+		include_package 'org.zkoss.zkmax.zul'
 	end
 	def alert (m)
 		Java::Messagebox.show m
