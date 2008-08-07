@@ -17,6 +17,9 @@ div.layout-nested {
 div.layout-region-west {
     z-index: 12;
 }
+div.layout-region-center {
+	z-index: 8;
+}
 div.layout-region-east {
     z-index: 10;
 }
