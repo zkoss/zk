@@ -115,7 +115,7 @@ zk.voidf = function () {return false;}; //always return false
  * <p>Note: If you want to stop the propagation of the event,
  * 	you can return false at that listener function</p>
  * 
- * For example,     
+ * For example, 
  * <pre><code>
 zk.on(cmp, "close", function (cmp) {
 	// do something...
@@ -1504,13 +1504,13 @@ zk.https = function () {
 };
 /** Returns the x coordination of the visible part. */
 zk.innerX = function () {
-    return window.pageXOffset
+	return window.pageXOffset
 		|| document.documentElement.scrollLeft
 		|| document.body.scrollLeft || 0;
 };
 /** Returns the y coordination of the visible part. */
 zk.innerY = function () {
-    return window.pageYOffset
+	return window.pageYOffset
 		|| document.documentElement.scrollTop
 		|| document.body.scrollTop || 0;
 };
@@ -1713,11 +1713,11 @@ if (zk.ie && !zk.https()) {
 	var e = $e("_zie_load");
 	e.onreadystatechange = function() {
 		if ("complete" == this.readyState) //don't check loaded!
-	        myload(); // call the onload handler
+			myload(); // call the onload handler
 	};
 	e.onreadystatechange();
 } else if (zk.safari) {
-    var timer = setInterval(function() {
+	var timer = setInterval(function() {
 		if (/loaded|complete/.test(document.readyState)) {
 			clearInterval(timer);
 			delete timer;
