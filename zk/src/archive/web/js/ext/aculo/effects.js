@@ -717,8 +717,11 @@ zEffect.SlideOut = function(element, anchor) {
         beforeSetup: function(effect) {
           effect.effects[0].element.makePositioned(); 
         },
+		beforeFinishInternal: function (effect) {
+			effect.effects[0].element.hide();
+		},
         afterFinishInternal: function(effect) {
-          effect.effects[0].element.hide().undoPositioned().setStyle(oldStyle);
+          effect.effects[0].element.undoPositioned().setStyle(oldStyle);
         } 
       }, arguments[2] || {}));
 }
@@ -884,8 +887,11 @@ zEffect.SlideUp = function(element, anchor) {
 	        	(orig.ol + orig.ow - $int(effect.element.style.width)) + 'px' });
 		} 
 	},
+	beforeFinishInternal: function (effect) {
+		effect.element.hide();
+	},
     afterFinishInternal: function(effect) {
-      effect.element.hide().undoClipping().undoPositioned().setStyle({
+      effect.element.undoClipping().undoPositioned().setStyle({
 	  	top: orig.t, left: orig.l});
     }
    }, arguments[2] || {})
