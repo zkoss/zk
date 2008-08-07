@@ -47,6 +47,7 @@ div.cell-inner span {
 	color: #0E3A99;
 }
 </style>
+<!-- Due to the security constraint, ZK demo site doesn't allow
 <zscript>
 class Comp implements Comparator {
 	private boolean _asc;
@@ -61,6 +62,12 @@ class Comp implements Comparator {
 	}
 }
 Comp asc = new Comp(true), dsc = new Comp(false);
+</zscript>
+-->
+<zscript>
+import org.zkoss.zkdemo.userguide.*;
+Comparator asc = new RowDetailComparator(true),
+	dsc = new RowDetailComparator(false);
 </zscript>
 <grid fixedLayout="true" width="600px" oddRowSclass="myodd">
 	<columns>
