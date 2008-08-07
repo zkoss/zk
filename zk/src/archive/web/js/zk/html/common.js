@@ -1683,7 +1683,7 @@ zk.scrollIntoView = function (outer, inner) {
  */
 zk.go = function (url, overwrite, target) {
 	var bProgress = !zk.opera && !zk.keepDesktop
-		&& window.location.href.indexOf('#') < 0; //whether to show progress
+		&& location.href.indexOf('#') < 0; //whether to show progress
 		//we don't show progress for opera, since user might press BACK to
 		//return this page (and found the progress dlg remains on browse)
 		//
@@ -1694,10 +1694,10 @@ zk.go = function (url, overwrite, target) {
 	}
 	if (!url) {
 		if (bProgress) zk.progress(); //BACK button issue
-		window.location.reload();
+		location.reload();
 	} else if (overwrite) {
 		if (bProgress) zk.progress();
-		window.location.replace(url);
+		location.replace(url);
 	} else if (target) {
 		//we have to process query string because browser won't do it
 		//even if we use insertHTMLBeforeEnd("<form...")
@@ -1718,7 +1718,7 @@ zk.go = function (url, overwrite, target) {
 		frm.submit();
 	} else {
 		if (bProgress) zk.progress();
-		window.location.href = url;
+		location.href = url;
 	}
 	if (bProgress) zk.progressDone(); // Bug #1843032
 };
@@ -2397,8 +2397,9 @@ zk.History.prototype = {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
 			var encnm = encodeURIComponent(nm);
-			window.location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
-			this.bkIframe(nm);
+			location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
+			this._bkIframe(nm);
+			zkau.onURLChange();
 		}
 	},
 	/** Checks whether the bookmark is changed. */
@@ -2407,15 +2408,16 @@ zk.History.prototype = {
 		if (nm != this.curbk) {
 			this.curbk = nm;
 			zkau.send({uuid: '', cmd: "onBookmarkChanged", data: [nm]}, 50);
+			zkau.onURLChange();
 		}
 	},
 	getBookmark: function () {
-		var nm = window.location.hash;
+		var nm = location.hash;
 		var j = nm.indexOf('#');
 		return j >= 0 ? decodeURIComponent(nm.substring(j + 1)): '';
 	},
 	/** bookmark iframe */
-	bkIframe: zk.ie ? function (nm) {
+	_bkIframe: zk.ie ? function (nm) {
 		//Bug 2019171: we have to create iframe frist
 		var url = zk.getUpdateURI("/web/js/zk/html/history.html", true),
 			ifr = $e('zk_histy');
@@ -2428,7 +2430,7 @@ zk.History.prototype = {
 	onHistoryLoaded: zk.ie ? function (src) {
 		var j = src.indexOf('?');
 		var nm = j >= 0 ? src.substring(j + 1): '';
-		window.location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';
+		location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';
 		this.checkBookmark();
 	}: zk.voidf
 };

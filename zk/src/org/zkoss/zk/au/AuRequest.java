@@ -214,6 +214,8 @@ public class AuRequest {
 	static {
 		new BookmarkChangedCommand(Events.ON_BOOKMARK_CHANGED,
 			Command.IGNORE_OLD_EQUIV);
+		new URIChangedCommand(Events.ON_URI_CHANGED,
+			Command.IGNORE_OLD_EQUIV);
 		new CheckCommand(Events.ON_CHECK, 0);
 		new ClientInfoCommand(Events.ON_CLIENT_INFO, Command.IGNORE_OLD_EQUIV);
 		new UpdateResultCommand("updateResult", 0);

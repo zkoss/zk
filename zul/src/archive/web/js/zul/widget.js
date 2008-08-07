@@ -787,7 +787,12 @@ if (zk.ie) {
 	//Bug 1896797: setVParent (for overlapped) cause IE7 malfunction, so reload
 	//1. it is OK if under AU (so only booting)
 	//2. no 2nd load so the performance not hurt
-		if (zk.booting) cmp.src = cmp.src;
+		if (zk.booting)
+			for (var n = cmp; n = n.parentNode;) {
+				var m = getZKAttr(n, "mode");
+				if (m && m != "embedded")
+					cmp.src = cmp.src;
+			}
 	};
 } else if (zk.gecko) { //Bug 1692495
 	zkIfr.onVisi = function (cmp) {

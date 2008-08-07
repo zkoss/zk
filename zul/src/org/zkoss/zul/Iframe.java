@@ -25,6 +25,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
+import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
@@ -209,6 +210,7 @@ public class Iframe extends XulElement {
 		HTMLs.appendAttribute(sb, "align", _align);
 		HTMLs.appendAttribute(sb, "name", _name);
 		HTMLs.appendAttribute(sb, "src", getEncodedSrc());
+		appendAsapAttr(sb, Events.ON_URI_CHANGED);
 
 		if (!"auto".equals(_scrolling))
 			HTMLs.appendAttribute(sb, "scrolling", 

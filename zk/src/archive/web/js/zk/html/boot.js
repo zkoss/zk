@@ -1696,6 +1696,7 @@ zk.bootDone = function () {
 			zkau.pfdone(dtids[j], dtids[j]);
 	zk.progressDone();
 	zk.booting = false;;
+	zkau.onURLChange();
 };
 zk._onload = function () {
 	//It is possible to move javascript defined in zul's language.xml

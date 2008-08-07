@@ -36,7 +36,8 @@ ZK 3.5.0
   1444991: Minimize / Maximize window decorations
   2023188: A way to avoid the conflict of the prototype's method names
   2032228: A way to call PerformanceMeter in ZK Loader
-  
+  2039788: A way to notify parent if iframe's URL or bookmark changed
+
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
   1944729: Windows and boxes inside tab panels

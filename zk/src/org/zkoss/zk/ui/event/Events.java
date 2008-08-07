@@ -139,6 +139,12 @@ public class Events {
 	 * recieve this event.
 	 */
 	public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
+	/** The onURIChanged event (used with {@link URIEvent})
+	 * to notify that the associated URI of a component is changed.
+	 * Currently only the iframe component supports this event.
+	 * @since 3.5.0
+	 */
+	public static final String ON_URI_CHANGED = "onURIChanged";
 	/** The onClientInfo event (used with {@link ClientInfoEvent}).
 	 */
 	public static final String ON_CLIENT_INFO = "onClientInfo";

@@ -1138,6 +1138,38 @@ zkau.ajaxRequest = function () {
 	}
 };
 
+zkau._onIfrChange = function (uuid, uri) {
+	if (zkau._unloading)
+		return;
+
+	zkau.sendasap({uuid: uuid, cmd: "onURIChanged", data: [uri]});
+};
+zkau.onURLChange = function () {
+	var ifr = window.frameElement;
+	if (!parent || parent == window || !ifr) //not iframe
+		return;
+
+	if (getZKAttr(ifr, "xsrc") != ifr.src) {
+		setZKAttr(ifr, "xsrc", ifr.src);
+		return; //not notify if changed by server
+	}
+
+	var l0 = parent.location, l1 = location,
+		uri = l0.protocol != l1.protocol || l0.host != l1.host
+		|| l0.port != l1.port ? l1.href: l1.pathname,
+		j = uri.lastIndexOf(';'), k = uri.lastIndexOf('?');
+	if (j >= 0 && (k < 0 || j < k)) {
+		var s = uri.substring(0, j);
+		uri = k < 0 ? s: s + uri.substring(k);
+	}
+	if (l1.hash && "#" != l1.hash) uri += l1.hash;
+
+	if (getZKAttr(ifr, "xuri") != uri) {
+		parent.zkau._onIfrChange(ifr.id, uri);
+		setZKAttr(ifr, "xuri", uri);
+	}
+};
+
 /** Handles window.onunload. */
 zkau._onUnload = function () {
 	zkau._unloading = true; //to disable error message
