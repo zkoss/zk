@@ -272,6 +272,7 @@ zEffect.Base.prototype = {
   position: null,
   start: function(options) {
     this.options      = Object.extend(Object.extend({},zEffect.DefaultOptions), options || {});
+	this.name         = this.options.name || "Base";
     this.currentFrame = 0;
     this.state        = 'idle';
     this.startOn      = this.options.delay*1000;
@@ -685,9 +686,86 @@ zEffect.DropOut = function(element) {
         afterFinishInternal: function(effect) {
           effect.effects[0].element.hide().undoPositioned().setStyle(oldStyle);
         } 
-      }, arguments[1] || {}));
+      }, arguments[2] || {}));
 }
+zEffect.SlideOut = function(element, anchor) {
+  anchor = anchor || 't';
+  element = z$(element);
+  var movement, s = element.style;
+  switch (anchor) {
+  	case 't':
+		movement = {x: 0, y: -$int(s.height), sync: true};
+		break;
+	case 'b':
+		movement = {x: 0, y: $int(s.height), sync: true};
+		break;
+	case 'l':
+		movement = {x: -$int(s.width), y: 0, sync: true};
+		break;
+	case 'r':
+		movement = {x: $int(s.width), y: 0, sync: true};
+		break;
+  }
+  var oldStyle = {
+    top: element.getStyle('top'),
+    left: element.getStyle('left'),
+    opacity: element.getInlineOpacity() };
+  return new zEffect.Parallel(
+    [ new zEffect.Move(element, movement)],
+    Object.extend(
+      { duration: 0.5,
+        beforeSetup: function(effect) {
+          effect.effects[0].element.makePositioned(); 
+        },
+        afterFinishInternal: function(effect) {
+          effect.effects[0].element.hide().undoPositioned().setStyle(oldStyle);
+        } 
+      }, arguments[2] || {}));
+}
+zEffect.SlideIn = function(element, anchor) {
+  anchor = anchor || 't';
+  element = z$(element);
+  var oldStyle = {
+    top: element.getStyle('top'),
+    left: element.getStyle('left'),
+    opacity: element.getInlineOpacity() };
 
+   var movement, s = element.style;
+  switch (anchor) {
+  	case 't':
+		var t = $int(s.top), h = $int(s.height);
+		s.top = t - h + "px";
+		movement = {x: 0, y: h, sync: true};
+		break;
+	case 'b':
+		var t = $int(s.top), h = $int(s.height);
+		s.top = t + h + "px";
+		movement = {x: 0, y: -h, sync: true};
+		break;
+	case 'l':
+		var l = $int(s.left), w = $int(s.width);
+		s.left = l - w + "px";
+		movement = {x: w, y: 0, sync: true};
+		break;
+	case 'r':
+		var l = $int(s.left), w = $int(s.width);
+		s.left = l + w + "px";
+		movement = {x: -w, y: 0, sync: true};
+		break; 
+  }
+  return new zEffect.Parallel(
+    [ new zEffect.Move(element, movement)],
+    Object.extend(
+      { duration: 0.5,
+        beforeSetup: function(effect) {
+		  effect.effects[0].element.show();
+          effect.effects[0].element.makePositioned();
+        },
+        afterFinishInternal: function(effect) {
+          effect.effects[0].element.undoPositioned().setStyle(oldStyle);
+        } 
+      }, arguments[2] || {}));
+}
 /* Tom M. Yeh, Potix: remove unused codes
 zEffect.Shake = function(element) {
   element = z$(element);
@@ -710,58 +788,107 @@ zEffect.Shake = function(element) {
   }}) }}) }}) }}) }}) }});
 }
 */
-zEffect.SlideDown = function(element) {
+zEffect.SlideDown = function(element, anchor) {
+  if (typeof anchor == 'object') { // backward compatible
+  	arguments[2] = anchor;
+	anchor = 't';
+  }
+  anchor = anchor || 't';
   element = z$(element).cleanWhitespace();
   // SlideDown need to have the content of the element wrapped in a container element with fixed height!
-  var oldInnerBottom = element.down().getStyle('bottom');
-  var elementDimensions = element.getDimensions();
+  var orig = {
+	  	t: element.getStyle('top'),
+	  	l: element.getStyle('left')
+	  },
+	  isVert = anchor == 't' || anchor == 'b';
+  var dims = element.getDimensions();
   return new zEffect.Scale(element, 100, Object.extend({ 
     scaleContent: false, 
-    scaleX: false, 
+    scaleX: !isVert,
+    scaleY: isVert,
     scaleFrom: window.opera ? 0 : 1,
-    scaleMode: {originalHeight: elementDimensions.height, originalWidth: elementDimensions.width},
+    scaleMode: {originalHeight: dims.height, originalWidth: dims.width},
     restoreAfterFinish: true,
     afterSetup: function(effect) {
       effect.element.makePositioned();
-      effect.element.down().makePositioned();
-      if(window.opera) effect.element.setStyle({top: ''});
-      effect.element.makeClipping().setStyle({height: '0px'}).show(); 
+	  switch (anchor) {
+	  	case 't':
+      		effect.element.makeClipping().setStyle({height: '0px'}).show();
+			break;
+	  	case 'b':
+			orig.ot = dims.top + dims.height;
+      		effect.element.makeClipping().setStyle({
+				height: '0px', top: orig.ot + 'px'}).show();
+			break;
+	  	case 'l':
+      		effect.element.makeClipping().setStyle({width: '0px'}).show();
+			break;
+	  	case 'r':
+			orig.ol = dims.left + dims.width;
+      		effect.element.makeClipping().setStyle({
+				width: '0px', left: orig.ol + 'px'}).show();
+			break;
+	  }
     },
-    /**afterUpdateInternal: function(effect) { Jumper Chen, Potix: Bug #1752907
-      effect.element.down().setStyle({bottom:
-        (effect.dims[0] - effect.element.clientHeight) + 'px' }); 
-    },*/
+	afterUpdateInternal: function(effect){
+		if (anchor == 'b') {
+			effect.element.setStyle({top:
+	        	(orig.ot - $int(effect.element.style.height)) + 'px' });
+		} else if (anchor == 'r') {
+	    	effect.element.setStyle({left:
+	        	(orig.ol - $int(effect.element.style.width)) + 'px' });
+		} 
+	},
     afterFinishInternal: function(effect) {
       effect.element.undoClipping().undoPositioned();
-      effect.element.down().undoPositioned().setStyle({bottom: oldInnerBottom}); }
-    }, arguments[1] || {})
+      effect.element.undoPositioned().setStyle({
+	  	top: orig.t, left: orig.l});
+	 }
+    }, arguments[2] || {})
   );
 }
 
-zEffect.SlideUp = function(element) {
+zEffect.SlideUp = function(element, anchor) {
+  if (typeof anchor == 'object') { // backward compatible
+  	arguments[2] = anchor;
+	anchor = 't';
+  }
+  anchor = anchor || 't';
   element = z$(element).cleanWhitespace();
-  var oldInnerBottom = element.down().getStyle('bottom');
+    var orig = {
+	  	t: element.getStyle('top'),
+	  	l: element.getStyle('left')
+	  },
+	  isVert = anchor == 't' || anchor == 'b';
   return new zEffect.Scale(element, window.opera ? 0 : 1,
    Object.extend({ scaleContent: false, 
-    scaleX: false, 
+    scaleX: !isVert,
+    scaleY: isVert,
     scaleMode: 'box',
     scaleFrom: 100,
     restoreAfterFinish: true,
     beforeStartInternal: function(effect) {
       effect.element.makePositioned();
-      effect.element.down().makePositioned();
-      if(window.opera) effect.element.setStyle({top: ''});
       effect.element.makeClipping().show();
-    },  
-    /**afterUpdateInternal: function(effect) { Jumper Chen, Potix: Bug #1752907
-      effect.element.down().setStyle({bottom:
-        (effect.dims[0] - effect.element.clientHeight) + 'px' });
-    },*/
+	  orig.ot = effect.element.offsetTop;
+	  orig.oh = effect.element.offsetHeight;
+	  orig.ol = effect.element.offsetLeft;
+	  orig.ow = effect.element.offsetWidth;
+    },
+	afterUpdateInternal: function(effect){
+		if (anchor == 'b') {
+			effect.element.setStyle({top:
+	        	(orig.ot + orig.oh - $int(effect.element.style.height)) + 'px' });
+		} else if (anchor == 'r') {
+	    	effect.element.setStyle({left:
+	        	(orig.ol + orig.ow - $int(effect.element.style.width)) + 'px' });
+		} 
+	},
     afterFinishInternal: function(effect) {
-      effect.element.hide().undoClipping().undoPositioned().setStyle({bottom: oldInnerBottom});
-      effect.element.down().undoPositioned();
+      effect.element.hide().undoClipping().undoPositioned().setStyle({
+	  	top: orig.t, left: orig.l});
     }
-   }, arguments[1] || {})
+   }, arguments[2] || {})
   );
 }
 

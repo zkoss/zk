@@ -262,7 +262,7 @@ zkVld._errbox = function () {
 	zkVld._fiximg(box);
 	zkVld.uncover();
 
-	if (!zk.opera) zEffect.SlideDown(box, {duration:0.5});
+	if (!zk.opera) anima.slideDown(box, {duration:0.5});
 		//if we slide, opera will slide it at the top of screen and position it
 		//later. No sure it is a bug of script.aculo.us or Opera
 	if (zk.ie6Only) setTimeout(function () {

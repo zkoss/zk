@@ -390,20 +390,19 @@ zk.override = function (obj, fn, supobj, func) {
 };
 
 /**
- * Fixs the layout position of the element when the style of element is "overflow:hidden" or
- * "position:relative" in IE. Because, sometimes the layout position of the element
- * will be gone or go away its original place. 
- * @param {Object} el
- * @since 3.0.5
+ * Forces the browser to repaint the specified element via changing its css name.
+ * <p>
+ * Note: this function uses setTimeout to clean up the appended css name.
+ * @param {Object} el an element
+ * @param {Number} timeout a millisecond.  
+ * @since 3.5.0
  */
-zk.fixOverflow = zk.ie ? function (el){
-	if (el) {
-		var of = el.style.overflow;
-		el.style.overflow = "hidden";
-		if(el.offsetWidth){} // this is a trick to re-calc
-		el.style.overflow = of;
-	}
-}: zk.voidf;
+zk.repaint = function (el, timeout) {
+	zk.addClass(el, "z-repaint");
+	setTimeout(function() {
+		zk.rmClass(el, "z-repaint");
+	}, timeout > 0 ? timeout : 1);
+};
 /**
  * Redraws the all node tree.
  * @since 3.0.4
@@ -517,7 +516,7 @@ zk.rmClass = function (el, clsnm, bRemove) {
 
 	if (zk.hasClass(el, clsnm)) {
     	var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
-        el.className = el.className.replace(re, " ");            
+        el.className = el.className.replace(re, " ").trim();            
 	}
 };
 
@@ -2629,188 +2628,326 @@ action.hide = function (id, noHideAt) {
 /* Animation effects. It requires the component to have the <div><div>
  * structure.
  */
-anima = {}
-/** @since 3.0.1 */
-anima.count = 0;
-
-/** Make a component visible by increasing the opacity.
- * @param id component or its ID
- */
-anima.appear = function (id, dur) {
-	var n = $e(id);
-	if (n) {
-		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.appear");
-		} else {
-			++anima.count;
-			setZKAttr(n, "animating", "show");
-			zk._showExtr(n);  //parent visible first
-			zEffect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
+anima = {
+	/** @since 3.0.1 */
+	count: 0,
+	/** Make a component visible by increasing the opacity.
+	 * 
+	 * <p>Event: <code>beforeAppear</code> and <code>afterAppear</code>.
+	 * The <code>beforeAppear</code> callback function is called before the
+	 * effect begins. The <code>afterAppear</code> callback function
+	 * is called after the effect is finished. (since 3.5.0)
+	 * </p>
+	 * @param id component or its ID
+	 */
+	appear: function (id, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima.appear");
+			} else {
+				++anima.count;
+				setZKAttr(n, "animating", "show");
+				zk._showExtr(n);  //parent visible first
+				zEffect.Appear(n, {
+					duration:dur ? dur/1000: 0.8, name: "Appear",
+					beforeStart: anima._beforeAnimaVisi,
+					afterFinish: anima._afterAnimaVisi});
+			}
 		}
-	}
-};
-/** Make a component visible by sliding down.
- * @param id component or its ID
- */
-anima.slideDown = function (id, dur) {
-	var n = $e(id);
-	if (n) {
-		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.slideDown");
-		} else {
-			++anima.count;
-			setZKAttr(n, "animating", "show");
-			zk._showExtr(n);  //parent visible first
-			zEffect.SlideDown(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterVisi, y :0});
-				//duration must be less than 0.5 since other part assumes it
+	},
+	/**
+	 * Make a component visible by moving down.
+	 * @param {Object} id
+	 * @since 3.0.2
+	 * @see #moveBy
+	 */
+	moveDown: function (id) {
+		anima.moveBy(id, 'top');
+	},
+	/**
+	 * Make a component visible by moving right.
+	 * @param {Object} id
+	 * @since 3.0.2
+	 * @see #moveBy
+	 */
+	moveRight: function (id) {
+		anima.moveBy(id, 'left');
+	},
+	/**
+	 * Make a component visible by moving diagonal.
+	 * @param {Object} id
+	 * @since 3.0.2
+	 * @see #moveBy
+	 */
+	moveDiagonal: function (id) {
+		anima.moveBy(id);
+	},
+	/** Make a component visible by moving.
+	 * 
+	 * <p>Event: <code>beforeMoveBy</code> and <code>afterMoveBy</code>.
+	 * The <code>beforeMoveBy</code> callback function is called before the
+	 * effect begins. The <code>afterMoveBy</code> callback function
+	 * is called after the effect is finished. (since 3.5.0)
+	 * </p>
+	 * 
+	 * @param id component or its ID
+	 * @param pos the move position. "top" means from 0 to the original top, 
+	 *  "left" means from 0 to the original left.
+	 * @since 3.0.2
+	 */
+	moveBy: function (id, pos, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima." + (pos == "top" ? "moveDown" : pos == "left" ? 
+					"moveRight" : "moveBy"));
+			} else {
+				++anima.count;
+				setZKAttr(n, "animating", "show");
+				zk._showExtr(n);  //parent visible first
+				if (!pos) pos = "topleft"
+				zEffect.MoveBy(n, 0, 0, {
+					duration:dur ? dur/1000: 0.8, name: "MoveBy",
+					beforeStart: anima._beforeAnimaHide,
+					afterFinish: anima._afterAnimaHide,
+					afterSetup: function(effect) {
+						if (pos.indexOf("left") > -1) {
+							effect.options.x = effect.originalLeft;
+							effect.originalLeft = 0;
+						}
+						if (pos.indexOf("top") > -1) {
+							effect.options.y = effect.originalTop;
+							effect.originalTop = 0;
+						}
+						effect.element.show();
+	    		}});
+			}
 		}
-	}
-};
-/**
- * Make a component visible by moving down.
- * @param {Object} id
- * @since 3.0.2
- */
-anima.moveDown = function (id) {
-	anima.moveBy(id, 'top');
-};
-/**
- * Make a component visible by moving right.
- * @param {Object} id
- * @since 3.0.2
- */
-anima.moveRight = function (id) {
-	anima.moveBy(id, 'left');
-};
-/**
- * Make a component visible by moving diagonal.
- * @param {Object} id
- * @since 3.0.2
- */
-anima.moveDiagonal = function (id) {
-	anima.moveBy(id);
-};
-/** Make a component visible by moving.
- * @param id component or its ID
- * @param pos the move position. "top" means from 0 to the original top, 
- *  "left" means from 0 to the original left.
- * @since 3.0.2
- */
-anima.moveBy = function (id, pos, dur) {
-	var n = $e(id);
-	if (n) {
-		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima." + (pos == "top" ? "moveDown" : pos == "left" ? 
-				"moveRight" : "moveBy"));
-		} else {
-			++anima.count;
-			setZKAttr(n, "animating", "show");
-			zk._showExtr(n);  //parent visible first
-			if (!pos) pos = "topleft"
-			zEffect.MoveBy(n, 0, 0, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterHide, afterSetup: function(effect) {
-				 if (pos.indexOf("left") > -1) {
-					 effect.options.x = effect.originalLeft;
-					 effect.originalLeft = 0;
-				 }
-				 if (pos.indexOf("top") > -1) {
-					 effect.options.y = effect.originalTop;
-					 effect.originalTop = 0;
-				 }
-     			 effect.element.show();
-    		}});
+	},
+	/** Make a component invisible by sliding in.
+	 * <p>Event: <code>beforeSlideIn</code> and <code>afterSlideIn</code>.
+	 * The <code>beforeSlideIn</code> callback function is called before the
+	 * effect begins. The <code>afterSlideIn</code> callback function
+	 * is called after the effect is finished.
+	 * </p>
+	 * @param id component or its ID
+	 * @param anchor An anchor point can be optionally passed to set the point of
+	 * origin for the slide effect ('t', 'b', 'l', and 'r'). Default: 't'.
+	 * @since 3.5.0
+	 */
+	slideIn: function (id, anchor, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima.slideIn");
+			} else {
+				++anima.count;
+				setZKAttr(n, "animating", "show");
+				zk._showExtr(n); //callback first
+				zEffect.SlideIn(n, anchor, {
+					duration:dur ? dur/1000: 0.4, name: "SlideIn",
+					beforeStart: anima._beforeAnimaVisi,
+					afterFinish: anima._afterAnimaVisi});
+			}
 		}
-	}
-};
-/** Make a component invisible by sliding up.
- * @param id component or its ID
- */
-anima.slideUp = function (id, dur) {
-	var n = $e(id);
-	if (n) {
-		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.slideUp");
-		} else {
-			++anima.count;
-			setZKAttr(n, "animating", "hide");
-			zk.onHideAt(n); //callback first
-			zEffect.SlideUp(n, {duration:dur ? dur/1000: 0.4, afterFinish: anima._afterHide});
-				//duration must be less than 0.5 since other part assumes it
+	},
+	/** Make a component invisible by sliding out.
+	 * <p>Event: <code>beforeSlideOut</code> and <code>afterSlideIn</code>.
+	 * The <code>beforeSlideIn</code> callback function is called before the
+	 * effect begins. The <code>afterSlideOut</code> callback function
+	 * is called after the effect is finished.
+	 * </p>
+	 * @param id component or its ID
+	 * @param anchor An anchor point can be optionally passed to set the point of
+	 * origin for the slide effect ('t', 'b', 'l', and 'r'). Default: 't'.
+	 * @since 3.5.0
+	 */
+	slideOut: function (id, anchor, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima.slideOut");
+			} else {
+				++anima.count;
+				setZKAttr(n, "animating", "hide");
+				zk.onHideAt(n); //callback first
+				zEffect.SlideOut(n, anchor, {
+					duration:dur ? dur/1000: 0.4, name: "SlideOut",
+					beforeStart: anima._beforeAnimaHide,
+					afterFinish: anima._afterAnimaHide});
+			}
 		}
-	}
-};
-/** Make a component invisible by fading it out.
- * @param id component or its ID
- */
-anima.fade = function (id, dur) {
-	var n = $e(id);
-	if (n) {
-		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.fade");
-		} else {
-			++anima.count;
-			setZKAttr(n, "animating", "hide");
-			zk.onHideAt(n); //callback first
-			zEffect.Fade(n, {duration:dur ? dur/1000: 0.55, afterFinish: anima._afterHide});
+	},
+	/** Make a component visible by sliding down.
+	 * 
+	 * <p>Event: <code>beforeSlideDown</code> and <code>afterSlideDown</code>.
+	 * The <code>beforeSlideDown</code> callback function is called before the
+	 * effect begins. The <code>afterSlideDown</code> callback function
+	 * is called after the effect is finished. (since 3.5.0)
+	 * </p>
+	 * @param id component or its ID
+	 * @param anchor An anchor point can be optionally passed to set the point of
+	 * origin for the slide effect ('t', 'b', 'l', and 'r'). Default: 't'.
+	 */
+	slideDown: function (id, anchor, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima.slideDown");
+			} else {
+				if (anchor && typeof anchor != "string") dur = anchor; // backward compatible
+				++anima.count;
+				setZKAttr(n, "animating", "show");
+				zk._showExtr(n);  //parent visible first
+				zEffect.SlideDown(n, anchor, {
+					duration:dur ? dur/1000: 0.4, name: "SlideDown",
+					beforeStart: anima._beforeAnimaVisi,
+					afterFinish: anima._afterAnimaVisi, y :0});
+					//duration must be less than 0.5 since other part assumes it
+			}
 		}
-	}
-};
-/** Make a component invisible by puffing away.
- * @param id component or its ID
- */
-anima.puff = function (id, dur) {
-	var n = $e(id);
-	if (n) {
-		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.puff");
-		} else {
-			++anima.count;
-			setZKAttr(n, "animating", "hide");
-			zk.onHideAt(n); //callback first
-			zEffect.Puff(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
+	},
+	/** Make a component invisible by sliding up.
+	 * 
+	 * <p>Event: <code>beforeSlideUp</code> and <code>afterSlideUp</code>.
+	 * The <code>beforeSlideUp</code> callback function is called before the
+	 * effect begins. The <code>afterSlideUp</code> callback function
+	 * is called after the effect is finished. (since 3.5.0)
+	 * </p>
+	 * @param id component or its ID
+	 * @param anchor An anchor point can be optionally passed to set the point of
+	 * origin for the slide effect ('t', 'b', 'l', and 'r'). Default: 't'.
+	 */
+	slideUp: function (id, anchor, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima.slideUp");
+			} else {
+				if (anchor && typeof anchor != "string") dur = anchor; // backward compatible
+				++anima.count;
+				setZKAttr(n, "animating", "hide");
+				zk.onHideAt(n); //callback first
+				zEffect.SlideUp(n, anchor, {
+					duration:dur ? dur/1000: 0.4, name: "SlideUp",
+					beforeStart: anima._beforeAnimaHide,
+					afterFinish: anima._afterAnimaHide});
+					//duration must be less than 0.5 since other part assumes it
+			}
 		}
-	}
-};
-/** Make a component invisible by fading and dropping out.
- * @param id component or its ID
- */
-anima.dropOut = function (id, dur) {
-	var n = $e(id);
-	if (n) {
-		if (getZKAttr(n, "animating")) {
-			zk._addAnique(n.id, "anima.dropOut");
-		} else {
-			++anima.count;
-			setZKAttr(n, "animating", "hide");
-			zk.onHideAt(n); //callback first
-			zEffect.DropOut(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
+	},
+	/** Make a component invisible by fading it out.
+	 * 
+	 * <p>Event: <code>beforeFade</code> and <code>afterFade</code>.
+	 * The <code>beforeFade</code> callback function is called before the
+	 * effect begins. The <code>afterFade</code> callback function
+	 * is called after the effect is finished. (since 3.5.0)
+	 * </p>
+	 * @param id component or its ID
+	 */
+	fade: function (id, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima.fade");
+			} else {
+				++anima.count;
+				setZKAttr(n, "animating", "hide");
+				zk.onHideAt(n); //callback first
+				zEffect.Fade(n, {
+					duration:dur ? dur/1000: 0.55, name: "Fade",
+					beforeStart: anima._beforeAnimaHide,
+					afterFinish: anima._afterAnimaHide});
+			}
 		}
-	}
-};
-anima._afterVisi = function (ef) {
-	var n = ef.element;
-	if (n) {
-		--anima.count;
-		rmZKAttr(n, "animating");
-		zk.onVisiAt(n);
-		zk._doAnique(n.id);
-	}
-};
-anima._afterHide = function (ef) {
-	var n = ef.element;
-	if (n) {
-		zk._hideExtr(n); //hide parent later
-		--anima.count;
-		rmZKAttr(n, "animating");
-		zk._doAnique(n.id);
-	}
-};
-anima._afterHide0 = function (ef) {
-	var n = ef.effects[0].element;
-	if (n) {
-		zk._hideExtr(n); //hide parent later
-		--anima.count;
-		rmZKAttr(n, "animating");
-		zk._doAnique(n.id);
+	},
+	/** Make a component invisible by puffing away.
+	 * 
+	 * <p>Event: <code>beforePuff</code> and <code>afterPuff</code>.
+	 * The <code>beforePuff</code> callback function is called before the
+	 * effect begins. The <code>afterPuff</code> callback function
+	 * is called after the effect is finished. (since 3.5.0)
+	 * </p>
+	 * @param id component or its ID
+	 */
+	puff: function (id, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima.puff");
+			} else {
+				++anima.count;
+				setZKAttr(n, "animating", "hide");
+				zk.onHideAt(n); //callback first
+				zEffect.Puff(n, {
+					duration:dur ? dur/1000: 0.7, name: "Puff",
+					beforeStart: anima._beforeAnimaHide,
+					afterFinish: anima._afterAnimaHide});
+			}
+		}
+	},
+	/** Make a component invisible by fading and dropping out.
+	 * 
+	 * <p>Event: <code>beforeDropOut</code> and <code>afterDropOut</code>.
+	 * The <code>beforeDropOut</code> callback function is called before the
+	 * effect begins. The <code>afterDropOut</code> callback function
+	 * is called after the effect is finished. (since 3.5.0)
+	 * </p>
+	 * @param id component or its ID
+	 */
+	dropOut: function (id, dur) {
+		var n = $e(id);
+		if (n) {
+			if (getZKAttr(n, "animating")) {
+				zk._addAnique(n.id, "anima.dropOut");
+			} else {
+				++anima.count;
+				setZKAttr(n, "animating", "hide");
+				zk.onHideAt(n); //callback first
+				zEffect.DropOut(n, {
+					duration:dur ? dur/1000: 0.7, name: "DropOut",
+					beforeStart: anima._beforeAnimaHide,
+					afterFinish: anima._afterAnimaHide});
+			}
+		}
+	},
+	// private
+	// The function called before the hidden effect begins.(since 3.5.0)
+	_beforeAnimaHide: function (ef) {
+		var n = ef.element || ef.effects[0].element;
+		if (n) zk.fire(n, "before" + ef.name, [n, ef]);
+	},
+	// private
+	// The function called before the visible effect begins.(since 3.5.0)
+	_beforeAnimaVisi: function (ef) {
+		var n = ef.element || ef.effects[0].element;
+		if (n) zk.fire(n, "before" + ef.name, [n, ef]);
+	},
+	// private
+	// The function called after the hidden effect is finished.(since 3.5.0)
+	_afterAnimaHide: function (ef) {
+		var n = ef.element || ef.effects[0].element;
+		if (n) {
+			zk._hideExtr(n); //hide parent later
+			--anima.count;
+			rmZKAttr(n, "animating");
+			zk._doAnique(n.id);
+			zk.fire(n, "after" + ef.name, [n, ef]);
+		}
+	},
+	// private
+	// The function called after the visible effect is finished.(since 3.5.0)
+	_afterAnimaVisi: function (ef) {
+		var n = ef.element || ef.effects[0].element;
+		if (n) {
+			--anima.count;
+			rmZKAttr(n, "animating");
+			if (zk.ie) zk.repaint(n); // fixed a bug of the finished animation for IE
+			zk.onVisiAt(n);
+			zk._doAnique(n.id);
+			zk.fire(n, "after" + ef.name, [n, ef]);
+		}
 	}
 };
 

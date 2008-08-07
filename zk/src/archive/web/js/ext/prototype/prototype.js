@@ -1144,7 +1144,10 @@ Element.Methods = {
     element = z$(element);
     var display = z$(element).getStyle('display');
     if (display != 'none' && display != null) // Safari bug
-      return {width: zk.offsetWidth(element), height: zk.offsetHeight(element)}; //Tom M. Yeh, Potix: safari bug
+      return {
+	  		width: zk.offsetWidth(element), height: zk.offsetHeight(element),
+			top: zk.offsetTop(element), left: zk.offsetLeft(element)
+			}; //Tom M. Yeh, Potix: safari bug
 
     // All *Width and *Height properties give 0 on elements with display none,
     // so enable the element temporarily
@@ -1155,12 +1158,17 @@ Element.Methods = {
     els.visibility = 'hidden';
     els.position = 'absolute';
     els.display = 'block';
-    var originalWidth = element.clientWidth;
-    var originalHeight = element.clientHeight;
+    var originalWidth = element.clientWidth,
+		originalHeight = element.clientHeight,
+		originalTop = element.offsetTop,
+		originalLeft = element.offsetLeft;
     els.display = originalDisplay;
     els.position = originalPosition;
     els.visibility = originalVisibility;
-    return {width: originalWidth, height: originalHeight};
+    return {
+			width: originalWidth, height: originalHeight,
+			top: originalTop, left: originalLeft
+		};
   },
 
   makePositioned: function(element) {
@@ -1197,7 +1205,6 @@ Element.Methods = {
     if (element._clipping) return element;
 	element._clipping = true;
     element._overflow = element.style.overflow;
-	if (zk.ie && !element._overflow) element._overflow = 'visible';
     element._overflowX = element.style.overflowX;
 	element._overflowY = element.style.overflowY;
 //Tom M. Yeh, Potix: optimize it
@@ -1212,7 +1219,7 @@ Element.Methods = {
     if (!element._clipping) return element;
 //Tom M. Yeh, Potix
 //Bug 1822717 and 1882277
-    element.style.overflow = zk.ie && element._overflow == 'visible' ? 'auto' : element._overflow;
+    element.style.overflow = element._overflow;
 	element.style.overflowX = element._overflowX;
 	element.style.overflowY = element._overflowY;
     element._clipping = element._overflow = element._overflowX = element._overflowY = undefined;
