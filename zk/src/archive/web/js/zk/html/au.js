@@ -1138,11 +1138,18 @@ zkau.ajaxRequest = function () {
 	}
 };
 
-zkau._onIfrChange = function (uuid, uri) {
+/** Callback when iframe's URL/bookmark been changed.
+ * Notice the containing page might not be ZK. It could be any technology
+ * and it can got the notification by implementing this method.
+ * @param uuid the component UUID
+ * @param url the new URL
+ * @since 3.5.0
+ */
+function onIframeURLChanged(uuid, url) {
 	if (zkau._unloading)
 		return;
 
-	zkau.sendasap({uuid: uuid, cmd: "onURIChanged", data: [uri]});
+	zkau.sendasap({uuid: uuid, cmd: "onURIChanged", data: [url]});
 };
 zkau.onURLChange = function () {
 	var ifr = window.frameElement;
@@ -1151,22 +1158,23 @@ zkau.onURLChange = function () {
 
 	if (getZKAttr(ifr, "xsrc") != ifr.src) {
 		setZKAttr(ifr, "xsrc", ifr.src);
+		rmZKAttr(ifr, "xurl");
 		return; //not notify if changed by server
 	}
 
 	var l0 = parent.location, l1 = location,
-		uri = l0.protocol != l1.protocol || l0.host != l1.host
+		url = l0.protocol != l1.protocol || l0.host != l1.host
 		|| l0.port != l1.port ? l1.href: l1.pathname,
-		j = uri.lastIndexOf(';'), k = uri.lastIndexOf('?');
+		j = url.lastIndexOf(';'), k = url.lastIndexOf('?');
 	if (j >= 0 && (k < 0 || j < k)) {
-		var s = uri.substring(0, j);
-		uri = k < 0 ? s: s + uri.substring(k);
+		var s = url.substring(0, j);
+		url = k < 0 ? s: s + url.substring(k);
 	}
-	if (l1.hash && "#" != l1.hash) uri += l1.hash;
+	if (l1.hash && "#" != l1.hash) url += l1.hash;
 
-	if (getZKAttr(ifr, "xuri") != uri) {
-		parent.zkau._onIfrChange(ifr.id, uri);
-		setZKAttr(ifr, "xuri", uri);
+	if (parent.onIframeURLChanged && getZKAttr(ifr, "xurl") != url) {
+		parent.onIframeURLChanged(ifr.id, url);
+		setZKAttr(ifr, "xurl", url);
 	}
 };
 
