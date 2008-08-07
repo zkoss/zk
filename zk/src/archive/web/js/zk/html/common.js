@@ -515,8 +515,8 @@ zk.rmClass = function (el, clsnm, bRemove) {
 	}
 
 	if (zk.hasClass(el, clsnm)) {
-    	var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
-        el.className = el.className.replace(re, " ").trim();            
+		var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
+		el.className = el.className.replace(re, " ").trim();
 	}
 };
 
@@ -593,11 +593,11 @@ zk.paddings = {l: "padding-left", r: "padding-right", t: "padding-top", b: "padd
  */
 zk.sumStyles = function (el, areas, styles) {
 	var val = 0;
-    for (var i = 0, l = areas.length; i < l; i++){
+	for (var i = 0, l = areas.length; i < l; i++){
 		 var w = $int(Element.getStyle(el, styles[areas.charAt(i)]));
-         if (!isNaN(w)) val += w;
-    }
-    return val;
+		 if (!isNaN(w)) val += w;
+	}
+	return val;
 };
 /**
  * Returns the revised size, which subtracted the size of its CSS border or padding, for the specified element.
@@ -607,8 +607,8 @@ zk.sumStyles = function (el, areas, styles) {
  * @since 3.0.0
  */
 zk.revisedSize = function (el, size, isHgh) {
-    size -= (isHgh === true ? zk.getFrameHeight(el): zk.getFrameWidth(el));
-    if (size < 0) size = 0;
+	size -= (isHgh === true ? zk.getFrameHeight(el): zk.getFrameWidth(el));
+	if (size < 0) size = 0;
 	return size;
 };
 /**
@@ -2721,7 +2721,7 @@ anima = {
 							effect.originalTop = 0;
 						}
 						effect.element.show();
-	    		}});
+				}});
 			}
 		}
 	},
