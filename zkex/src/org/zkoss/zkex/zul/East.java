@@ -22,12 +22,14 @@ package org.zkoss.zkex.zul;
  * This component is a east region. The default class of CSS is specified
  * "layout-region-east".
  * 
+ * <p>Default: {@link #getCmargins()} is "0,5,5,0" (since 3.5.0)</p>
  * @author jumperchen
  * @since 3.0.0
  */
 public class East extends LayoutRegion {
 	public East() {
 		addSclass("layout-region-east");
+		setCmargins("0,5,5,0");
 	}
 
 	/**

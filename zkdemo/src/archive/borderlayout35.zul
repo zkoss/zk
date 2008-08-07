@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+borderlayout35.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug  7 15:41:21 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="root" height="100%">
+<borderlayout>
+	<north id="n" size="100px" border="1" title="North" splittable="true"
+		collapsible="true">
+		<zk>
+	<grid width="90%">
+	<rows>
+		<row>
+			textbox: <textbox value="text..."/>
+		</row>
+		<row>int box:<intbox/></row>
+		<row>decimal box:<decimalbox format="#,##0.##"/></row>
+		<row>date box:
+			<hbox>
+			<datebox id="db"/>
+			<listbox onSelect="db.setFormat(self.selectedItem.value)" mold="select" rows="1">
+				<listitem label="Default" value=""/>
+				<listitem label="yyyy/MM/dd" value="yyyy/MM/dd"/>
+				<listitem label="MM-dd-yy" value="MM-dd-yy"/>
+			</listbox>
+			</hbox>
+		</row>
+		<row>time box:<timebox /></row>		
+		<row>positive int box:<intbox constraint="no negative,no zero"/></row>
+		<row>e-mail:<textbox constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"/></row>
+		<row>spinner:<spinner /></row>		
+		<row>
+			multiple lines: 
+			<textbox rows="5" cols="40">
+				<attribute name="value">
+text line1...
+text line2...
+ 				</attribute>
+ 			</textbox>
+		</row>		
+		<row>
+			Selection event: 
+			<vbox>
+				<textbox id="sel" rows="5" cols="40" >
+					<attribute name="value">Welcome John !</attribute>
+					<attribute name="onSelection">
+						int start = event.start;
+						int end = event.end;
+						msg.setValue("Start: "+start+" , End:"+end);
+					</attribute>
+				</textbox>
+				<button label="Replace" onClick="replace()"/>
+				<label id="msg"/>
+			</vbox>
+		</row>
+	</rows>
+	</grid>
+<zscript>
+	int start,end;
+	void replace(){
+		sel.setSelectedText(start,end,"Mary",true);
+	}
+</zscript>
+</zk>
+				
+	</north>
+	<center title="Center" border="1">
+		Center
+	</center>
+	<west id="w" title="West" size="30%" flex="true" open="false" collapsible="true"  splittable="true">
+		<div style="background:blue">West</div>
+	</west>
+	<east id="e" title="East" size="300px"  flex="true" collapsible="true"  splittable="true">
+		East
+	</east>	
+	<south id="s" title="South" maxsize="300" size="150px" border="1" splittable="true"
+		collapsible="true">
+		<vbox>
+			<hbox>ID:(n, s, c, e, and w)<textbox id="rid"/></hbox>
+			<hbox>
+				<vbox>
+				<hbox>
+				Change Size:
+				<textbox id="tsz"/>
+				</hbox>
+				<hbox>
+				Change collapsible:
+				<radiogroup id="cols">
+					<radio label="true" checked="true"/>
+					<radio label="false"/>
+				</radiogroup>
+				</hbox>
+				<hbox>
+				Change splittable:
+				<radiogroup id="split">
+					<radio label="true" checked="true"/>
+					<radio label="false"/>
+				</radiogroup>
+				</hbox>
+				<button label="change">
+					<attribute name="onClick"><![CDATA[
+						Component cmp = root.getFellow(rid.value);
+						if(cmp instanceof LayoutRegion) {
+							LayoutRegion lr = (LayoutRegion) cmp;
+							if (tsz.value != null && tsz.value.trim() != "")
+								lr.size = tsz.value;
+							if (!(cmp instanceof Center)) {
+								lr.collapsible = cols.selectedItem.label.equals("true");
+								lr.splittable = split.selectedItem.label.equals("true");
+							}
+						}
+					]]></attribute>
+				</button>
+				</vbox>
+			</hbox>
+		</vbox>
+	</south>
+</borderlayout>
+</window>

@@ -21,12 +21,15 @@ package org.zkoss.zkex.zul;
 /**
  * This component is a west region. The default class of CSS is specified
  * "layout-region-west".
+ * 
+ * <p>Default: {@link #getCmargins()} is "0,5,5,0" (since 3.5.0)</p>
  * @author jumperchen
  * @since 3.0.0
  */
 public class West extends LayoutRegion {
 	public West() {
 		addSclass("layout-region-west");
+		setCmargins("0,5,5,0");
 	}
 
 	/**

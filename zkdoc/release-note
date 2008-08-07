@@ -37,6 +37,7 @@ ZK 3.5.0
   2023188: A way to avoid the conflict of the prototype's method names
   2032228: A way to call PerformanceMeter in ZK Loader
   2039788: A way to notify parent if iframe's URL or bookmark changed
+  2041292: Borderlayout support title and animation like Outlook
 
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
@@ -54,14 +55,14 @@ ZK 3.5.0
   + The setAutocheck and setChecked methods of Menuitem only apply
     when Menupopup.isCheckmark is true.
   + The script component now has "text/javascript" as the default type.
-  + Add some new trendy layout of these components, including Groupbox, Window, Menu,
+  + Add some new trendy layout of these components, including Borderlayout, Groupbox, Window, Menu,
   	, Menuitem, Menupopup, Menubar, and Menuseparator, as default mold, and the classic
     Window mold is renamed to "v30" mold for backward compatible.
     If you want to use "v30" as default, specify the following in zk.xml:
-	<system-property> 
+	<library-property> 
 		<name>org.zkoss.zul.theme.v30</name> 
 		<value>true</value> 
-	</system-property>
+	</library-property>
   + Both molds vertical and horizontal of Menubar are unsupported, please use the setOrient()
 		of Menubar to specify them.
   + Change the layout of Paging component to a new trendy layout as default.

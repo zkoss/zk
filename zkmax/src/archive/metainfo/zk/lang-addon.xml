@@ -159,6 +159,10 @@ def alert(m):
 		<extends>borderlayout</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Borderlayout2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.BorderlayoutDefault</mold-uri>
 		</mold>
 	</component>
@@ -203,6 +207,10 @@ def alert(m):
 		<extends>center</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
@@ -327,6 +335,10 @@ def alert(m):
 		<extends>east</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
@@ -647,6 +659,10 @@ def alert(m):
 		<extends>north</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
@@ -752,6 +768,10 @@ def alert(m):
 		<extends>south</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
@@ -972,6 +992,10 @@ def alert(m):
 		<extends>west</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>

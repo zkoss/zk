@@ -39,6 +39,14 @@ public class Center extends LayoutRegion {
 	}
 
 	/**
+	 * Center region can't be enabled the collapsed margin functionality.
+	 * @since 3.5.0
+	 */
+	public void setCmargins(String cmargins) {
+		throw new UnsupportedOperationException("readonly");
+	}
+
+	/**
 	 * Center region can't be enabled the split functionality.
 	 */
 	public void setSplittable(boolean splittable) {

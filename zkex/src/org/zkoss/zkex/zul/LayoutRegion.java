@@ -53,17 +53,43 @@ public abstract class LayoutRegion extends XulElement {
 
 	private String _border = "normal";
 
+	private String _title = null;
+	
 	private int _maxsize = 2000;
 
 	private int _minsize = 0;
 
 	private int[] _margins = new int[] { 0, 0, 0, 0 };
+	private int[] _cmargins = new int[] { 5, 5, 5, 5 };
 
 	public LayoutRegion() {
 		addSclass("layout-region");
 		addSclass("layout-region-normal");
 	}
-
+	
+	/** 
+	 * Returns the title.
+	 * <p>Default: null.
+	 * 
+	 * @since 3.5.0
+	 */
+	public String getTitle() {
+		return _title;
+	}
+	
+	/**
+	 * Sets the title.
+	 * <p> It only applied when {@link #getMold()} is not v30.
+	 * 
+	 * @since 3.5.0
+	 */
+	public void setTitle(String title) {
+		if (!Objects.equals(_title, title)) {
+			_title = title;
+			invalidate();
+		}
+	}
+	
 	/**
 	 * Returns the border.
 	 * <p>
@@ -203,6 +229,33 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	/**
+	 * Returns the collapsed margins, which is a list of numbers separated by comma.
+	 * 
+	 * <p>
+	 * Default: "5,5,5,5".
+	 * @since 3.5.0
+	 */
+	public String getCmargins() {
+		return Utils.intsToString(_cmargins);
+	}
+
+	/**
+	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
+	 * "top,left,right,bottom"
+	 * 
+	 * <p>
+	 * Note: this property is only applied when {@link #getMold()} is not "v30" 
+	 * @since 3.5.0
+	 */
+	public void setCmargins(String cmargins) {
+		final int[] imargins = Utils.stringToInts(cmargins, 0);
+		if (!Objects.equals(imargins, _cmargins)) {
+			_cmargins = imargins;
+			smartUpdate("z.cmars", Utils.intsToString(_cmargins));
+		}
+	}
+
+	/**
 	 * Returns whether set the initial display to collapse.
 	 * <p>
 	 * Default: false.
@@ -213,6 +266,8 @@ public abstract class LayoutRegion extends XulElement {
 
 	/**
 	 * Sets whether set the initial display to collapse.
+	 * 
+	 * <p>It only applied when {@link #getTitle()} is not null. (since 3.5.0)
 	 */
 	public void setCollapsible(boolean collapsible) {
 		if (collapsible != _collapsible) {
@@ -334,7 +389,11 @@ public abstract class LayoutRegion extends XulElement {
 		}
 		return false;
 	}
-
+	public void invalidate() {
+		super.invalidate();
+		Borderlayout layout = (Borderlayout)getParent();
+		if (layout != null) layout.resize();
+	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Borderlayout))
 			throw new UiException("Wrong parent: "+parent);
@@ -350,6 +409,7 @@ public abstract class LayoutRegion extends XulElement {
 		HTMLs.appendAttribute(sb, "z.pos", getPosition());
 		HTMLs.appendAttribute(sb, "z.flex", isFlex());
 		HTMLs.appendAttribute(sb, "z.mars", getMargins());
+		HTMLs.appendAttribute(sb, "z.cmars", getCmargins());
 		HTMLs.appendAttribute(sb, "z.colps", isCollapsible());
 		HTMLs.appendAttribute(sb, "z.open", isOpen());
 		HTMLs.appendAttribute(sb, "z.splt", isSplittable());

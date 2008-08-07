@@ -95,7 +95,7 @@ public class MainLayout extends Borderlayout {
 			log.warning("Ingored: failed to load a properties file, \nCause: "
 					+ ex.getMessage());
 		}
-		iframe = (Iframe) getFellow("w2").getFellow("ifr");
+		iframe = (Iframe) getFellow("ifr");
 		lb = (Listbox) getFellow("w1").getFellow("lb");
 		lb.setItemRenderer(new FileitemRenderer());
 		lb.setModel(fileModel);

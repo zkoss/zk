@@ -38,6 +38,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zkex.zul.Borderlayout</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/borderlayout2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zkex/zul/html/borderlayout.dsp</mold-uri>
 		</mold>
 	</component>	
@@ -55,6 +59,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zkex.zul.Center</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion.dsp</mold-uri>
 		</mold>
 		<preserve-blank/>
@@ -97,6 +105,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zkex.zul.East</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion.dsp</mold-uri>
 		</mold>
 		<preserve-blank/>
@@ -162,6 +174,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zkex.zul.North</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion.dsp</mold-uri>
 		</mold>
 		<preserve-blank/>
@@ -171,6 +187,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zkex.zul.South</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion.dsp</mold-uri>
 		</mold>
 		<preserve-blank/>
@@ -180,6 +200,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zkex.zul.West</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion.dsp</mold-uri>
 		</mold>
 		<preserve-blank/>
