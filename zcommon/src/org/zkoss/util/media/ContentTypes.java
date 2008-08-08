@@ -152,6 +152,8 @@ public class ContentTypes {
 			}
 		} catch (IOException ex) {
 			log.warning("Ingored error: Unable to read "+flnm, ex);
+		} finally {
+			try {strm.close();} catch (Throwable ex) {}
 		}
 		return true;
 	}
