@@ -63,10 +63,14 @@ public abstract class LayoutRegion extends XulElement {
 	private int[] _cmargins = new int[] { 5, 5, 5, 5 };
 
 	public LayoutRegion() {
+		init();
 		addSclass("layout-region");
 		addSclass("layout-region-normal");
 	}
 	
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
+	}
 	/** 
 	 * Returns the title.
 	 * <p>Default: null.
@@ -364,7 +368,7 @@ public abstract class LayoutRegion extends XulElement {
 	protected void removeSclass(String cls) {
 		final String sclass = getSclass();
 		if (sclass != null && cls != null && hasSclass(cls)) {
-			setSclass(sclass.replaceAll("(?:^|\\s+)" + cls + "(?:\\s+|$)", " "));
+			setSclass(sclass.replaceAll("(?:^|\\s+)" + cls + "(?:\\s+|$)", " ").trim());
 		}
 	}
 
@@ -383,7 +387,9 @@ public abstract class LayoutRegion extends XulElement {
 			smartUpdate("z.cid", child.getUuid());
 			if (child instanceof Borderlayout) {
 				setFlex(true);
-				addSclass("layout-nested");
+				if ("v30".equals(getMold()) || !"normal".equals(_border)) {
+					addSclass("layout-nested");
+				}
 			}
 			return true;
 		}

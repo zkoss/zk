@@ -20,8 +20,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <borderlayout use="org.zkoss.zkdemo.userguide.MainLayout">
-	<west title="ZK ${desktop.webApp.version} Live Demo" border="none" size="320px" splittable="true" minsize="150" maxsize="500" collapsible="true">
-		<tree id="toc" fixedLayout="true" use="org.zkoss.zkdemo.userguide.LayoutTree" pageSize="-1" vflex="true" height="100%" width="100%">
+	<west title="ZK ${desktop.webApp.version} Live Demo" size="320px" splittable="true" minsize="150" maxsize="500" collapsible="true">
+		<tree id="toc" style="border:none;" fixedLayout="true" use="org.zkoss.zkdemo.userguide.LayoutTree" pageSize="-1" vflex="true" height="100%" width="100%">
 			<treechildren>
 				<treeitem label="Simple Elements" value="/userguide/simple/index.zul">
 					<treechildren>

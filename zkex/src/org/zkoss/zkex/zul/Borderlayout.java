@@ -23,6 +23,7 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A border layout lays out a container, arranging and resizing its components
@@ -107,9 +108,14 @@ public class Borderlayout extends HtmlBasedComponent {
 	private transient Center _center;
 
 	public Borderlayout() {
+		init();
 		setClass("layout-container");
 	}
-
+	
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
+	}
+	
 	public North getNorth() {
 		return _north;
 	}

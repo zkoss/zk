@@ -36,9 +36,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 			<attribute name="value"><![CDATA[
 <borderlayout height="500px">
-	<north maxsize="300" size="50%" border="0" splittable="true" collapsible="true">
+	<north title="North" maxsize="300" size="50%" splittable="true" collapsible="true">
 		<borderlayout>
-			<west title="West" size="25%" border="none" flex="true" maxsize="250" splittable="true" collapsible="true">
+			<west title="West" size="25%" flex="true" maxsize="250" splittable="true" collapsible="true">
 				<div style="background:#B8D335">
 					<label value="25%"
 						style="color:white;font-size:50px" />
@@ -68,7 +68,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 				<label value="Here is a border"
 					style="color:gray;font-size:30px" />
 			</center>
-			<east title="East" size="30%" flex="true" border="0" collapsible="true">
+			<east title="East" size="30%" flex="true" collapsible="true">
 				<div style="background:#B8D335">
 					<label value="30%"
 						style="color:white;font-size:50px" />
