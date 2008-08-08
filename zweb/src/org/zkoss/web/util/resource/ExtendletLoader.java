@@ -78,6 +78,11 @@ abstract public class ExtendletLoader implements Loader {
 				+"\nCause: "+ex.getClass().getName()+" "+Exceptions.getMessage(ex)
 				+"\n"+Exceptions.getBriefStackTrace(ex));
 			return null; //as non-existent
+		} finally {
+			try {
+				is.close();
+			} catch (Throwable ex) { //ignore
+			}
 		}
 	}
 	//Derive to override//

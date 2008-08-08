@@ -383,6 +383,11 @@ public class ClassWebResource {
 			if (data != null) extra = null; //extra is compressed and output
 			else data = Files.readAll(is);
 				//since what is embedded in the jar is not big, so load completely
+
+			try {
+				is.close(); //just in case
+			} catch (Throwable ex) { //ignore
+			}
 		}
 
 		int len = data.length;
