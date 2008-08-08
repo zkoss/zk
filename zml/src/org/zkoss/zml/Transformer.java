@@ -112,8 +112,9 @@ public class Transformer extends AbstractComponent {
 		}
 
 		final Source xsl;
+		InputStream is = null;
 		if (_xsl instanceof String) {
-			InputStream is = getDesktop().getWebApp().getResourceAsStream(
+			is = getDesktop().getWebApp().getResourceAsStream(
 				getDesktop().getExecution().toAbsoluteURI((String)_xsl, false));
 			if (is == null)
 				throw new UiException("Resouce not found, "+_xsl);
@@ -125,7 +126,7 @@ public class Transformer extends AbstractComponent {
 		} else if (_xsl instanceof Reader) {
 			xsl = new StreamSource((Reader)_xsl);
 		} else if (_xsl instanceof URL) {
-			xsl = new StreamSource(((URL)_xsl).openStream());
+			xsl = new StreamSource(is = ((URL)_xsl).openStream());
 		} else if (_xsl instanceof org.w3c.dom.Document) { //include iDOM
 			xsl = new DOMSource((org.w3c.dom.Document)_xsl);
 		} else if (_xsl == null) {
@@ -141,6 +142,8 @@ public class Transformer extends AbstractComponent {
 				.transform(src, new StreamResult(result));
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
+		} finally {
+			if (is != null) try {is.close();} catch (Throwable ex) {}
 		}
 
 		//We have to stripe <?xml...?> since UiEngine generates spaces

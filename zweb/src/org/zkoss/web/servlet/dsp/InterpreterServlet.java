@@ -190,9 +190,9 @@ public class InterpreterServlet extends HttpServlet {
 		//-- super --//
 		protected Object parse(String path, File file, Object extra)
 		throws Exception {
+			final FileInputStream is = new FileInputStream(file);
 			try {
-				return parse0(new FileInputStream(file),
-					Interpreter.getContentType(file.getName()));
+				return parse0(is, Interpreter.getContentType(file.getName()));
 			} catch (Exception ex) {
 				if (log.debugable())
 					log.realCauseBriefly("Failed to parse "+file, ex);
@@ -200,12 +200,15 @@ public class InterpreterServlet extends HttpServlet {
 					log.error("Failed to parse "+file+"\nCause: "+Exceptions.getMessage(ex)
 						+"\n"+Exceptions.getBriefStackTrace(ex));
 				return null; //as non-existent
+			} finally {
+				try {is.close();} catch (Throwable ex) {}
 			}
 		}
 		protected Object parse(String path, URL url, Object extra)
 		throws Exception {
+			final InputStream is = url.openStream();
 			try {
-				return parse0(url.openStream(),
+				return parse0(is,
 					Interpreter.getContentType(url.getPath()));
 			} catch (Exception ex) {
 				if (log.debugable())
@@ -213,6 +216,8 @@ public class InterpreterServlet extends HttpServlet {
 				else
 					log.error("Failed to parse "+url+"\nCause: "+Exceptions.getMessage(ex));
 				return null; //as non-existent
+			} finally {
+				try {is.close();} catch (Throwable ex) {}
 			}
 		}
 		private Object parse0(InputStream is, String ctype) throws Exception {

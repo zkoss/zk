@@ -183,11 +183,21 @@ public class ResourceCaches {
 		//-- super --//
 		protected Object parse(String path, File file, Object extra)
 		throws Exception {
-			return readAll(new FileInputStream(file));
+			final InputStream is = new FileInputStream(file);
+			try {
+				return readAll(is);
+			} finally {
+				try {is.close();} catch (Throwable ex) {}
+			}
 		}
 		protected Object parse(String path, URL url, Object extra)
 		throws Exception {
-			return readAll(url.openStream());
+			final InputStream is = url.openStream();
+			try {
+				return readAll(is);
+			} finally {
+				try {is.close();} catch (Throwable ex) {}
+			}
 		}
 		private String readAll(InputStream is) throws Exception {
 			if (is == null) return null;

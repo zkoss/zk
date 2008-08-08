@@ -211,7 +211,12 @@ public class LabelLoader {
 	private static final void load(Map labels, URL url) throws IOException {
 		log.info(MCommon.FILE_OPENING, url);
 		final Map news = new HashMap();
-		Maps.load(news, url.openStream());
+		final InputStream is = url.openStream();
+		try {
+			Maps.load(news, is);
+		} finally {
+			try {is.close();} catch (Throwable ex) {}
+		}
 		for (Iterator it = news.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final Object key = me.getKey();

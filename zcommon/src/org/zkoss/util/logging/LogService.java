@@ -213,7 +213,12 @@ public class LogService {
 	throws FileNotFoundException, IOException {
 		log.info(MCommon.FILE_OPENING, file);
 		final Properties props = new Properties();
-		props.load(new FileInputStream(file));
+		final FileInputStream is = new FileInputStream(file);
+		try {
+			props.load(is);
+		} finally {
+			try {is.close();} catch (Throwable ex) {}
+		}
 		configure(props);
 	}
 	/**
