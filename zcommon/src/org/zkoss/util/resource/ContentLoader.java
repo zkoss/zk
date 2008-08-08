@@ -47,6 +47,10 @@ public class ContentLoader extends AbstractLoader {
 		} else {
 			throw new IllegalArgumentException("Unknown soruce: "+src+"\nOnly File and URL are supported");
 		}
-		return Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
+		try {
+			return Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
+		} finally {
+			try {is.close();} catch (Throwable ex) {}
+		}
 	}
 }
