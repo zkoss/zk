@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A button.
@@ -48,6 +49,10 @@ public class Button extends LabelImageElement {
 	public Button(String label, String image) {
 		setLabel(label);
 		setImage(image);
+	}
+	
+	private void init() {
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 
 	/** Returns whether it is disabled.
@@ -188,6 +193,7 @@ public class Button extends LabelImageElement {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		HTMLs.appendAttribute(sb, "z.href", getEncodedHref());
 		HTMLs.appendAttribute(sb, "z.target", getTarget());
 

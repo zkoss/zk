@@ -151,6 +151,10 @@ def alert(m):
 		<extends>button</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Button2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ButtonDefault</mold-uri>
 		</mold>
 	</component>

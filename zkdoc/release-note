@@ -38,7 +38,7 @@ ZK 3.5.0
   2032228: A way to call PerformanceMeter in ZK Loader
   2039788: A way to notify parent if iframe's URL or bookmark changed
   2041292: Borderlayout support title and animation like Outlook
-
+  2046034: Trendy Button
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
   1944729: Windows and boxes inside tab panels

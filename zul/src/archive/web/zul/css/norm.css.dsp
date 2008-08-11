@@ -1161,7 +1161,7 @@ td.slidersph-bkr {
 	width: 4px; height: 20px;
 }
 
-<%-- Button - trendy look-and-feel (unready for 3.5.0) --%>
+<%-- Button - trendy look-and-feel --%>
 .z-btn {
 	font: normal 11px tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap;
 }
@@ -1204,8 +1204,9 @@ td.slidersph-bkr {
 .z-btn-r {
 	width: 3px; height: 21px; background: url(${c:encodeURL('~./zul/img/button/btn-side.gif')}) no-repeat 0 -21px;
 }
-.z-btn-l i,.z-btn-r i {
+.z-btn-l i,.z-btn-r i, .z-btn-ml i, .z-btn-mr i{
 	display: block; width: 3px; overflow: hidden; font-size: 1px; line-height: 1px;
+	
 }
 .z-btn-m {
 	background: url(${c:encodeURL('~./zul/img/button/btn-side.gif')}) repeat-x 0 -42px;
@@ -1226,6 +1227,110 @@ td.slidersph-bkr {
 }
 .disd z-btn * {
 	color: gray!important; cursor: default!important;
+}
+
+<%-- default --%>
+td.z-btn-tl {
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 0;
+	width: 3px; height: 3px;
+}
+td.z-btn-tm {
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -252px;	
+}
+td.z-btn-tr {
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -126px;
+	width: 3px; height: 3px;
+}
+td.z-btn-ml {
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -3px;
+	width: 3px; height: 12px;
+}
+td.z-btn-mm {
+  vertical-align: middle;
+  text-align:center;
+  padding:0 5px;
+  cursor:pointer;
+  white-space:nowrap;
+  background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;
+  height: 12px;    
+}
+td.z-btn-mr {
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -129px;
+	width: 3px; height: 12px;	
+}
+td.z-btn-bl {
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -120px;
+	width: 3px; height: 6px;
+}
+td.z-btn-bm {
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -372px;	
+}
+td.z-btn-br {
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -246px;
+	width: 3px; height: 6px;
+}
+<%-- focus --%>
+.z-btn-focus td.z-btn-tl {
+	background-position:0 -882px;
+}
+.z-btn-focus td.z-btn-tm {
+	background-position:0 -1134px;	
+}
+.z-btn-focus td.z-btn-tr {
+	background-position:0 -1008px;
+}
+.z-btn-focus td.z-btn-ml {
+	background-position:0 -885px;
+}
+.z-btn-focus td.z-btn-mm {
+  background-position:0 -1137px;    
+}
+.z-btn-focus td.z-btn-mr {
+	background-position:0 -1011px;	
+}
+.z-btn-focus td.z-btn-bl {
+	background-position:0 -1002px;
+}
+.z-btn-focus td.z-btn-bm {
+	background-position:0 -1254px;	
+}
+.z-btn-focus td.z-btn-br {
+	background-position:0 -1128px;
+}
+<%-- hover --%>
+.z-btn-hover td.z-btn-tl {
+	background-position:0 -378px;
+}
+.z-btn-hover td.z-btn-tm {
+	background-position:0 -629px;	
+}
+.z-btn-hover td.z-btn-tr {
+	background-position:0 -504px;
+}
+.z-btn-hover td.z-btn-ml {
+	background-position:0 -381px;
+}
+.z-btn-hover td.z-btn-mm {
+  background-position:0 -633px;    
+}
+.z-btn-hover td.z-btn-mr {
+	background-position:0 -507px;	
+}
+.z-btn-hover td.z-btn-bl {
+	background-position:0 -498px;
+}
+.z-btn-hover td.z-btn-bm {
+	background-position:0 -750px;	
+}
+.z-btn-hover td.z-btn-br {
+	background-position:0 -624px;
+}
+<%-- click --%>
+.z-btn-click td.z-btn-mm{
+	background-position:0 -759px;
+}
+.z-btn-click td.z-btn-bm {
+	background-position:0 -876px;	
 }
 <%-- Menu - trendy look-and-feel --%>
 .z-menu-btn .z-btn-m {
