@@ -72,7 +72,7 @@ zkColumnLayout = {
 				child.style.width = (result > 0 ? result : 0) + "px";
 			}
 		}
-		cmp.style.visibility = "visible";
+		cmp.style.visibility = "inherit";
 	}
 };
 if (zk.ie6Only) 

@@ -158,7 +158,7 @@ zk.Layout2.prototype = {
 				};
 			this._resize(c, ambit, true);
 		}
-		this.el.style.visibility = "visible";
+		this.el.style.visibility = "inherit";
 		this.isOnSize = false; // reset
 	},
 	_paserMargin: function (val) {

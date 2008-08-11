@@ -714,7 +714,7 @@ zkPop = {
 			}
 		}
 		
-		ctx.style.visibility = "visible";
+		ctx.style.visibility = "inherit";
 		if (asap)
 			zkau.send({uuid: ctx.id, cmd: "onOpen",
 				data: ref ? [true, ref.id]: [true]});
