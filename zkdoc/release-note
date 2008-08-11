@@ -1,6 +1,7 @@
 	--------
 ZK 3.0.8
 * Features
+  2045837: PerformanceMeter adds the time after updating all components
 
 * Bugs
 
@@ -45,7 +46,7 @@ ZK 3.0.7
   + Tree supports the paging mold. The original way to paginate treechild
   is discarded. To enable the paging mode, use the following codes
   <tree mold="paging">
-  
+
 	--------
 ZK 3.0.6
 * Features

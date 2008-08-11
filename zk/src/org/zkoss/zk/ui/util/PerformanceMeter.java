@@ -46,6 +46,31 @@ public interface PerformanceMeter {
 	 */
 	public void requestStartAtClient(
 		String requestId, Execution exec, long time);
+	/** Called to notify when the client has received the response
+	 * (but not processed yet).
+	 *
+	 * <p>Note: the invocation of this method doesn't take place
+	 * immediately. Rather it is piggyback when the client is
+	 * sending another request. It also means that this method might
+	 * not be called for each request (due to no further request).
+	 *
+	 * <p>Note to version prior to 3.0.8:<br/>
+	 * This method is introduced since 3.0.8.
+	 * Prior to 3.0.8, {@link #requestCompleteAtClient} is actually
+	 * the time when the client recieved the response rather than
+	 * when the response has been processed.
+	 *
+	 * @param requestId a desktop-wide unique ID to identify a request.
+	 * @param exec the execution. You can retrieve the desktop,
+	 * session and user's info from it. But, don't access the component
+	 * in this method since it is not safe (exec is not activated).
+	 * @param time the time representing the number of milliseconds
+	 * between midnight January 1, 1970 (UTC) to when the client has
+	 * completed the process. It is client's time, not server's.
+	 * @since 3.0.8
+	 */
+	public void requestReceiveAtClient(
+		String requestId, Execution exec, long time);
 	/** Called to notify when the client has completed the processing of
 	 * the response.
 	 *

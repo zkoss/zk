@@ -80,13 +80,16 @@ zkau._uris = {}; //a map of update engine's URIs ({dtid, uri})
 zkau._spushInfo = {} //the server-push info: Map(dtid, {min, max, factor})
 var undef; //an undefined variable
 
-/** Adds a desktop. */
+/** Adds a desktop.
+ * @return true if it is a new desktop (3.0.8)
+ */
 zkau.addDesktop = function (dtid) {
 	var ds = zkau._dtids;
 	for (var j = ds.length; --j >= 0;)
 		if (ds[j] == dtid)
-			return; //nothing to do
+			return false; //nothing to do
 	ds.push(dtid);
+	return true;
 };
 /** Returns the desktop's ID.
  * @param {String or Element} n the component to look for its desktop ID.
@@ -276,7 +279,7 @@ zkau._onRespReady = function () {
 			zkau._areq = zkau._areqInf = null;
 			if (reqInf.tfn) clearTimeout(reqInf.tfn); //stop timer
 
-			if (zk.pfmeter) zkau._pfrecv(reqInf.dtid, req);
+			if (zk.pfmeter) zkau.pfrecv(reqInf.dtid, zkau._pfGetIds(req));
 
 			if (zkau._revertpending) zkau._revertpending();
 				//revert any pending when the first response is received
@@ -288,7 +291,7 @@ zkau._onRespReady = function () {
 					return;
 				} //if sid null, always process (usually for error msg)
 
-				if (zkau.pushXmlResp(req)) { //valid response
+				if (zkau.pushXmlResp(reqInf.dtid, req)) { //valid response
 					//advance SID to avoid receive the same response twice
 					if (sid && ++zkau._seqId > 999) zkau._seqId = 1;
 					zkau._areqTry = 0;
@@ -371,14 +374,22 @@ zkau._onRespReady = function () {
 };
 /** Parses a XML response and pushes the parsed commands to the queue.
  * @return false if no command found at all
- * @since 3.0.7
+ * @since 3.0.8
  */
-zkau.pushXmlResp = function (req) {
+zkau.pushXmlResp = function (dtid, req) {
 	var xml = req.responseXML;
-	if (!xml) return false; //invalid
+	if (!xml) {
+		if (zk.pfmeter) zkau.pfdone(dtid, zkau._pfGetIds(req));
+		return false; //invalid
+	}
 
 	var cmds = [],
 		rs = xml.getElementsByTagName("r");
+	if (zk.pfmeter) {
+		cmds.dtid = dtid;
+		cmds.pfIds = zkau._pfGetIds(req);
+	}
+
 	for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
 		var cmd = rs[j].getElementsByTagName("c")[0],
 			data = rs[j].getElementsByTagName("d");
@@ -689,7 +700,9 @@ zkau._doCmds0 = function () {
 
 		try {
 			var cmds = que.shift();
-			if (!zkau._doCmds1(cmds))
+			if (zkau._doCmds1(cmds)) {
+				if (zk.pfmeter) zkau.pfdone(cmds.dtid, cmds.pfIds);
+			} else
 				que.unshift(cmds); //handle it later
 		} catch (e) {
 			if (!ex) ex = e;
@@ -2053,30 +2066,44 @@ zkau.endGhostToDIV = function (dg) {
 
 //Perfomance Meter//
 zkau._pfj = 0; //an index
-zkau._pfIds = {}; //a map of (dtid, ids) to denote what are processed
+zkau._pfRecvIds = {}; //a map of (dtid, ids) to denote what are received
+zkau._pfDoneIds = {}; //a map of (dtid, ids) to denote what are processed
 zkau._pfsend = function (dtid, req, completeOnly) {
 	if (!completeOnly)
 		req.setRequestHeader("ZK-Client-Start",
 			dtid + "-" + zkau._pfj++ + "=" + Math.round($now()));
 
-	if (zkau._pfIds[dtid]) {
-		req.setRequestHeader("ZK-Client-Complete", zkau._pfIds[dtid]);
-		zkau._pfIds[dtid] = "";
+	if (zkau._pfRecvIds[dtid]) {
+		req.setRequestHeader("ZK-Client-Receive", zkau._pfRecvIds[dtid]);
+		zkau._pfRecvIds[dtid] = "";
+	}
+	if (zkau._pfDoneIds[dtid]) {
+		req.setRequestHeader("ZK-Client-Complete", zkau._pfDoneIds[dtid]);
+		zkau._pfDoneIds[dtid] = "";
 	}
 };
-zkau._pfrecv = function (dtid, req) {
-	//ZK-Client-Complete from the server is a list of requestId
-	//separated with ' '
-	zkau.pfdone(dtid, req.getResponseHeader("ZK-Client-Complete"));
+/** Returns a list of request IDs sent from the server separated by space.
+ */
+zkau._pfGetIds = function (req) {
+	return req.getResponseHeader("ZK-Client-Complete");
+};
+/** Adds performance request IDs that have been processed completely.
+ * @since 3.0.8
+ */
+zkau.pfrecv = function (dtid, pfIds) {
+	zkau._pfAddIds(dtid, pfIds, zkau._pfRecvIds);
 };
 /** Adds performance request IDs that have been processed completely.
  * @since 3.0.7
  */
 zkau.pfdone = function (dtid, pfIds) {
+	zkau._pfAddIds(dtid, pfIds, zkau._pfDoneIds);
+};
+zkau._pfAddIds = function (dtid, pfIds, map) {
 	if (pfIds && (pfIds = pfIds.trim())) {
 		var s = pfIds + "=" + Math.round($now());
-		if (zkau._pfIds[dtid]) zkau._pfIds[dtid] += ',' + s;
-		else zkau._pfIds[dtid] = s;
+		if (map[dtid]) map[dtid] += ',' + s;
+		else map[dtid] = s;
 	}
 };
 

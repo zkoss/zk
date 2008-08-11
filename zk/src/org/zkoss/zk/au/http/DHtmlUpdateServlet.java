@@ -487,41 +487,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 */
 	private static String meterAuStart(PerformanceMeter pfmeter,
 	HttpServletRequest request, Execution exec) {
-		//Format of ZK-Client-Complete:
+		//Format of ZK-Client-Complete and ZK-Client-Receive:
 		//	request-id1=time1,request-id2=time2
-		String hdr = request.getHeader("ZK-Client-Complete");
-		if (hdr != null) {
-			for (int j = 0;;) {
-				int k = hdr.indexOf(',', j);
-				String ids = k >= 0 ? hdr.substring(j, k):
-					j == 0 ? hdr: hdr.substring(j);
-
-				int x = ids.lastIndexOf('=');
-				if (x > 0) {
-					try {
-						long time = Long.parseLong(ids.substring(x + 1));
-
-						ids = ids.substring(0, x);
-						for (int y = 0;;) {
-							int z = ids.indexOf(' ', y);
-							String pfrqid = z >= 0 ? ids.substring(y, z):
-								y == 0 ? ids: ids.substring(y);
-							pfmeter.requestCompleteAtClient(pfrqid, exec, time);
-
-							if (z < 0) break; //done
-							y = z + 1;
-						}
-					} catch (NumberFormatException ex) {
-						log.warning("Ingored: unable to parse "+ids);
-					} catch (Throwable ex) {
-						log.warning("Ingored: failed to invoke "+pfmeter, ex);
-					}
-				}
-
-				if (k < 0) break; //done
-				j = k + 1;
-			}
-		}
+		String hdr = request.getHeader("ZK-Client-Receive");
+		if (hdr != null) meterAuClient(pfmeter, exec, hdr, false);
+		hdr = request.getHeader("ZK-Client-Complete");
+		if (hdr != null) meterAuClient(pfmeter, exec, hdr, true);
 
 		//Format of ZK-Client-Start:
 		//	request-id=time
@@ -544,6 +515,44 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 		}
 		return null;
+	}
+	private static void meterAuClient(PerformanceMeter pfmeter,
+	Execution exec, String hdr, boolean complete) {
+		for (int j = 0;;) {
+			int k = hdr.indexOf(',', j);
+			String ids = k >= 0 ? hdr.substring(j, k):
+				j == 0 ? hdr: hdr.substring(j);
+
+			int x = ids.lastIndexOf('=');
+			if (x > 0) {
+				try {
+					long time = Long.parseLong(ids.substring(x + 1));
+
+					ids = ids.substring(0, x);
+					for (int y = 0;;) {
+						int z = ids.indexOf(' ', y);
+						String pfReqId = z >= 0 ? ids.substring(y, z):
+							y == 0 ? ids: ids.substring(y);
+						if (complete)
+							pfmeter.requestCompleteAtClient(pfReqId, exec, time);
+						else
+							pfmeter.requestReceiveAtClient(pfReqId, exec, time);
+
+						if (z < 0) break; //done
+						y = z + 1;
+					}
+				} catch (NumberFormatException ex) {
+					log.warning("Ingored: unable to parse "+ids);
+				} catch (Throwable ex) {
+					//backward compatibile: requestReceiveAtClient added since 3.0.8
+					if (complete || !(ex instanceof AbstractMethodError))
+						log.warning("Ingored: failed to invoke "+pfmeter, ex);
+				}
+			}
+
+			if (k < 0) break; //done
+			j = k + 1;
+		}
 	}
 	/** Handles the complete of the AU request for the performance measurement.
 	 * It sets the ZK-Client-Complete header.
