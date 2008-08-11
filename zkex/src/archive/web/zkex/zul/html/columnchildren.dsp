@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div z.type="zkex.zul.columnlayout.ColumnChildren" id="${self.uuid}">
 <div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}>
-<div class="${sclass}-bwrap"><div id="${self.uuid}!cave" class="${self.sclass}-body">
+<div class="${self.sclass}-bwrap"><div id="${self.uuid}!cave" class="${self.sclass}-body">
 	<c:forEach var="child" items="${self.children}">
 ${z:redraw(child, null)}
 	</c:forEach>

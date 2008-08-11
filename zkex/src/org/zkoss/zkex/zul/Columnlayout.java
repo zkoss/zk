@@ -19,9 +19,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A columnlayout lays out a container which can have multiple columns, and each
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * @author gracelin
  * @since 3.5.0
  */
-public class Columnlayout extends HtmlBasedComponent {
+public class Columnlayout extends XulElement {
 
 	public Columnlayout() {
 		setSclass("z-column-layout");
