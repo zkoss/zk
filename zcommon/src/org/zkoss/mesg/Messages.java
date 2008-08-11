@@ -92,7 +92,7 @@ public class Messages implements MessageConst {
 
 		try {
 			log.error("Message code not found: " +
-				Integer.toHexString(code) + " not in " + Aide.getBundleInfo(code));
+				Integer.toHexString(code) + " not in " + locale + ":" + Aide.getBundleInfo(code));
 	
 			final String hexcode = Integer.toHexString(code);
 			final String s = getFromBundle(
@@ -101,7 +101,7 @@ public class Messages implements MessageConst {
 				MessageFormats.format(s, new Object[] {hexcode}, locale):
 				"Unknown message code: " + hexcode;
 		}catch(Exception ex) {
-			log.error(ex);
+			log.realCauseBriefly(ex);
 			return "Unknown message code: " + Integer.toHexString(code);
 		}
 	}
