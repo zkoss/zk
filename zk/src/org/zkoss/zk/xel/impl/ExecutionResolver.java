@@ -68,46 +68,10 @@ public class ExecutionResolver implements VariableResolver {
 		if (name == null || name.length() == 0) //just in case
 			return null;
 
-		if (_self instanceof Component) {
-			final Component comp = (Component)_self;
-
-			//We have to look getZScriptVariable first and then namespace
-			//so it is in the same order of interpreter
-			final Page page = comp.getPage();
-			if (page != null) {
-				final Object o =
-					page.getZScriptVariable(comp.getNamespace(), name);
-				if (o != null)
-					return o;
-			}
-
-			final Object o = comp.getVariable(name, false);
-			if (o != null)
-				return o;
-		} else {
-			Page page;
-			if (_self instanceof Page) {
-				page = (Page)_self;
-			} else {
-				page = ((ExecutionCtrl)_exec).getCurrentPage();
-			}
-
-			if (page != null) {
-				Object o = page.getZScriptVariable(name);
-				if (o != null)
-					return o;
-
-				o = page.getVariable(name);
-				if (o != null)
-					return o;
-			}
-		}
-
-		if (_parent != null) {
-			Object o = _parent.resolveVariable(name);
-			if (o != null) return o;
-		}
-
+		//Note: we have to access keyword frist (rather than component's ns)
+		//since our BeanShell interpreter will store back variables
+		//and page.getZScriptVariable will return the old value
+		//we have 
 		switch (name.charAt(0)) {
 		case 'a':
 			if ("arg".equals(name))
@@ -174,7 +138,43 @@ public class ExecutionResolver implements VariableResolver {
 			}
 			break;
 		}
-		return null;
+
+		if (_self instanceof Component) {
+			final Component comp = (Component)_self;
+
+			//We have to look getZScriptVariable first and then namespace
+			//so it is in the same order of interpreter
+			final Page page = comp.getPage();
+			if (page != null) {
+				final Object o =
+					page.getZScriptVariable(comp.getNamespace(), name);
+				if (o != null)
+					return o;
+			}
+
+			final Object o = comp.getVariable(name, false);
+			if (o != null)
+				return o;
+		} else {
+			Page page;
+			if (_self instanceof Page) {
+				page = (Page)_self;
+			} else {
+				page = ((ExecutionCtrl)_exec).getCurrentPage();
+			}
+
+			if (page != null) {
+				Object o = page.getZScriptVariable(name);
+				if (o != null)
+					return o;
+
+				o = page.getVariable(name);
+				if (o != null)
+					return o;
+			}
+		}
+
+		return _parent != null ? _parent.resolveVariable(name): null;
 	}
 
 	//Object//
