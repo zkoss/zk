@@ -159,7 +159,7 @@ zk.Layout.prototype = {
 			};			
 			this._resize(c, ambit);
 		}
-		this.el.style.visibility = "visible";
+		this.el.style.visibility = "inherit";
 	},
 	_paserMargin: function (val) {
 		var ms = val.split(",");
