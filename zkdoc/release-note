@@ -84,9 +84,51 @@ ZK 3.5.0
 	}
 
 	--------
-ZK 3.0.7
+ZK 3.0.8
 
 Refer to http://zk1.svn.sourceforge.net/viewvc/zk1/branches/3.0/zkdoc/release-note?view=markup
+
+	--------
+ZK 3.0.7
+* Features
+  2026318: Enhance Tree's paging to use Paging cmp as its paging mold
+  2003033: Provides an utitlity to forward events to a component
+  2003751: GenericAutowireComposer support implicit objects and alert()
+  2010314: A way to post event that will be executed after others
+  2015827: Provide utilities to encode AWT image to ZK image
+  2016523: Stop timer at the client if session timeout
+  2028549: Support Image.setContent(javax.awt.image.RenderedImage)
+  2033582: Adds the execution variable as builtin
+  2034518: Support library(application)-level propertities
+
+* Bugs
+  2008676: Firefox 3: toolbarbutton with href causes false alarm
+  2017848: ListModelList.iterator().remove() does not work
+  2018378: ListModelList.listIterator(1).previous().remove() not work
+  2018385: ListModelList.listIterator(0).next().set() not work
+  2015878: ThreadLocalListener causes NullPointerException on timeout
+  2020152: requestCompleteAtClient not called if browse to another URL
+  2019171: IE Bookmark Bug - first bookmark is ignored 
+  2020454: JpaUtil.getEntityManagerFactory should cache in WebApp scope
+  2010389: Data binding error: changing selected item of combobox
+  2021100: When IdGenerator.nextComponentUuid called, parent/page null
+  2023407: JavaScript error if zk.load called with ckfn
+  2024133: ZKdemo's theme cannot be changed
+  2024223: Shall throw Exception when pass in arg0 is not correct
+  2026493: The height of Listbox with vflex is wrong in paging mold
+  2009958: auto selection by key doesn't fire event
+  2010019: listbox firing select event with null as a parameter
+  2003798: Cannot select tree row using hbox inside treecell
+  2027442: Paging mold Listbox + model not in order
+  2027719: Changing Include's src causes ServletException
+  2030986: Disable checkmarks can be selected by shift button
+  2033357: PerformanceMeter doesn't work if multiple desktops (Liferay)
+  1869744: Fileupload display mess label in upload and cancel button
+  
+* Upgrade Notes:
+  + Tree supports the paging mold. The original way to paginate treechild
+  is discarded. To enable the paging mode, use the following codes
+  <tree mold="paging">
 
 	--------
 ZK 3.0.6

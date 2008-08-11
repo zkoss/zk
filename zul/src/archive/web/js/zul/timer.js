@@ -98,8 +98,8 @@ zkTimer._fire = function (uuid) {
 	zkau.send({uuid: uuid, cmd: "onTimer", ignorable: true}, 0);
 };
 
-zk.override(zkau, "pushXmlResp", zkTimer, function (req) {
+zk.override(zkau, "pushXmlResp", zkTimer, function (dtid, req) {
 	if (req.getResponseHeader("ZK-Error") == "410") //SC_GONE: session timeout
 		zkTimer.stopAll();
-	return zkTimer.pushXmlResp(req);
+	return zkTimer.pushXmlResp(dtid, req);
 });

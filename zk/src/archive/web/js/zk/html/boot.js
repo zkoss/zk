@@ -1054,8 +1054,10 @@ zk._loadAndInit = function (inf) {
 			} catch (e) {} // IE7 failed if href contains incorrect encoding
 
 			var v = getZKAttr(n, "dtid");
-			if (v) {
-				zkau.addDesktop(v); //desktop's ID found
+			if (v) { //desktop's ID found
+				if (zkau.addDesktop(v) && zk.pfmeter)
+					zkau.pfrecv(v, v);
+
 				var uri = getZKAttr(n, "au");
 				if (uri) zkau.addURI(v, uri);
 			}

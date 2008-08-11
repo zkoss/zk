@@ -30,6 +30,10 @@ public class PerformanceMeter implements org.zkoss.zk.ui.util.PerformanceMeter {
 	String requestId, Execution exec, long time) {
 		System.out.println("Client start: "+requestId+"="+time);
 	}
+	public void requestReceiveAtClient(
+	String requestId, Execution exec, long time) {
+		System.out.println("Client recev: "+requestId+"="+time);
+	}
 	public void requestCompleteAtClient(
 	String requestId, Execution exec, long time) {
 		System.out.println("Client cmplt: "+requestId+"="+time);
