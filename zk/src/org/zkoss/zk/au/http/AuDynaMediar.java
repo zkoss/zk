@@ -131,13 +131,12 @@ public class AuDynaMediar implements AuProcessor {
 				if (!errs.isEmpty()) {
 					for (Iterator it = errs.iterator(); it.hasNext();) {
 						final Throwable t = (Throwable)it.next();
-						if (t == ex) //not eaten
-							log.error("Failed to load the media.", t);
+						log.realCauseBriefly("Failed to load media", t);
 						errmsg.append('\n').append(Exceptions.getMessage(t));
 					}
 				}
 
-				response.sendError(response.SC_GONE, "Failed to load the media."+errmsg);
+				response.sendError(response.SC_GONE, "Failed to load media"+errmsg);
 				return;
 			} finally {
 				if (!err) {
