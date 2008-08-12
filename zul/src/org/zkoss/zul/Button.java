@@ -42,19 +42,17 @@ public class Button extends LabelImageElement {
 	private boolean _readonly;
 
 	public Button() {
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 	public Button(String label) {
+		this();
 		setLabel(label);
 	}
 	public Button(String label, String image) {
-		setLabel(label);
+		this(label);
 		setImage(image);
 	}
 	
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
-	}
-
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
