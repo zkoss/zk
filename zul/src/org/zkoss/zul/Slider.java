@@ -25,12 +25,13 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Scrollable;
 
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * A slider.
  *
- * <p>To customize the look, you can specify the style class with
+ * <p>To customize the look of 3.0.0(v30), you can specify the style class with
  * {@link #setSclass}. Then, the following style classes are generated
  * to style the look. Assume that the style class is "slider"
  * <ul>
@@ -46,12 +47,14 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Slider extends XulElement {
+	private String _orient = "horizontal";
 	private int _curpos, _maxpos = 100, _pginc = 10;
 	/** The name. */
 	private String _name;
 	private String _slidingtext = "{0}";
 
 	public Slider() {
+		if (Utils.isThemeV30()) setMold("v30");
 		setWidth("100px");
 	}
 	/**
@@ -60,8 +63,34 @@ public class Slider extends XulElement {
 	public Slider(int curpos) {
 		this();
 		setCurpos(curpos);
+	}	
+	/** Returns the orient.
+	 * <p>Default: "horizontal".
+	 */
+	public String getOrient() {
+		return _orient;
 	}
+	/** Sets the orient.
+	 * <p>Default : "horizontal" 
+	 * @param orient either "horizontal" or "vertical".
+	 * @since 3.5.0
+	 */
+	public void setOrient(String orient) throws WrongValueException {
+		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
+			throw new WrongValueException("orient cannot be "+orient);
 
+		if (!Objects.equals(_orient, orient)) {
+			_orient = orient;
+			if ("vertical".equals(_orient)) {
+				setWidth(null);
+				setHeight("100px");
+			} else {
+				setWidth("100px");
+				setHeight(null);
+			}
+			invalidate();
+		}
+	}
 	/**
 	 * Returns the sliding text.
 	 * <p>Default : "{0}"
@@ -187,11 +216,14 @@ public class Slider extends XulElement {
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
+		if ("vertical".equals(getOrient()))
+			HTMLs.appendAttribute(sb, "z.vert", "true");
+		
 		HTMLs.appendAttribute(sb, "z.name", _name);
 		HTMLs.appendAttribute(sb, "z.curpos", _curpos);
 		HTMLs.appendAttribute(sb, "z.maxpos", _maxpos);
 		HTMLs.appendAttribute(sb, "z.pginc", _pginc);
-		HTMLs.appendAttribute(sb, "z.slidingtext", getSlidingtext());
+		HTMLs.appendAttribute(sb, "z.slidingtext", getSlidingtext());		
 		
 		appendAsapAttr(sb, Events.ON_SCROLL);
 		appendAsapAttr(sb, Events.ON_SCROLLING);

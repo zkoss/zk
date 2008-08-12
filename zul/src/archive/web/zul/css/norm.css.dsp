@@ -1161,6 +1161,91 @@ td.slidersph-bkr {
 	width: 4px; height: 20px;
 }
 
+<%-- ZK slider 3.5.0 --%>
+
+<%-- Shared style --%>
+.z-slider {
+    zoom:1;
+}
+.z-slider-inner {
+    position:relative;
+    left:0;
+    top:0;
+    overflow:visible;
+    zoom:1;
+}
+.z-slider-focus {
+	position:absolute;
+	left:0;
+	top:0;
+	width:1px;
+	height:1px;
+    line-height:1px;
+    font-size:1px;
+    -moz-outline:0 none;
+    outline:0 none;
+    -moz-user-select: normal;
+    -khtml-user-select: normal;  
+}
+
+<%-- Horizontal style --%>
+.z-slider-horz {
+    padding-left:7px;
+    background:transparent url(${c:encodeURL('~./zul/img/slider2/slider-bg.png')}) no-repeat 0 -22px;
+}
+.z-slider-horz .z-slider-end {
+    padding-right:7px;
+    zoom:1;
+    background:transparent url(${c:encodeURL('~./zul/img/slider2/slider-bg.png')}) no-repeat right -44px;
+}
+.z-slider-horz .z-slider-inner {
+    background:transparent url(${c:encodeURL('~./zul/img/slider2/slider-bg.png')}) repeat-x 0 0;
+    height:22px;
+}
+.z-slider-horz .z-slider-thumb {
+    width:14px;
+    height:15px;
+    position:absolute;
+    left:0;
+    top:3px;
+    background:transparent url(${c:encodeURL('~./zul/img/slider2/slider-thumb.png')}) no-repeat 0 0;
+}
+.z-slider-horz .z-slider-thumb-over {
+    background-position: -14px -15px;
+}
+.z-slider-horz .z-slider-thumb-drag {
+    background-position: -28px -30px;
+}
+
+<%-- Vertical style --%>
+.z-slider-vert {
+    padding-top:7px;
+    background:transparent url(${c:encodeURL('~./zul/img/slider2/slider-v-bg.png')}) no-repeat -44px 0;
+    width:22px;
+}
+.z-slider-vert .z-slider-end {
+    padding-bottom:7px;
+    zoom:1;
+    background:transparent url(${c:encodeURL('~./zul/img/slider2/slider-v-bg.png')}) no-repeat -22px bottom;
+}
+.z-slider-vert .z-slider-inner {
+    background:transparent url(${c:encodeURL('~./zul/img/slider2/slider-v-bg.png')}) repeat-y 0 0;
+}
+.z-slider-vert .z-slider-thumb {
+    width:15px;
+    height:14px;
+    position:absolute;
+    left:3px;
+    bottom:0;
+    background:transparent url(${c:encodeURL('~./zul/img/slider2/slider-v-thumb.png')}) no-repeat 0 0;
+}
+.z-slider-vert .z-slider-thumb-over {
+    background-position: -15px -14px;
+}
+.z-slider-vert .z-slider-thumb-drag {
+    background-position: -30px -28px;
+}
+
 <%-- Button - trendy look-and-feel --%>
 .z-btn {
 	font: normal 11px tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap;

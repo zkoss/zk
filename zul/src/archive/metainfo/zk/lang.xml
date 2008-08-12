@@ -196,6 +196,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Button</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/button2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zul/html/button.dsp</mold-uri>
 		</mold>
 	</component>
@@ -697,6 +701,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Slider</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>~./zul/html/slider.dsp</mold-uri>
 		</mold>
 		<mold>

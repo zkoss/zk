@@ -20,4 +20,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<taglib-uri>http://www.zkoss.org/dsp/zul/core</taglib-uri>
 		<taglib-location>/web/WEB-INF/tld/zul/core.dsp.tld</taglib-location>
 	</taglib>
+	<taglib>
+		<taglib-uri>http://www.zkoss.org/dsp/zk/core</taglib-uri>
+		<taglib-location>/web/WEB-INF/tld/zk/core.dsp.tld</taglib-location>
+	</taglib>	
+	<taglib>
+		<taglib-uri>http://www.zkoss.org/dsp/zweb/core</taglib-uri>
+		<taglib-location>/web/WEB-INF/tld/zweb/core.dsp.tld</taglib-location>
+	</taglib>
 </config>

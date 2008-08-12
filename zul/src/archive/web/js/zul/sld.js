@@ -16,13 +16,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
+
+zk.load("zul.widget");
+
 //Slider
 zk.Slider = zClass.create();
-zk.Slider.prototype = {
+zk.Slider._drags = {};
+
+zk.Slider.prototype = {	
 	initialize: function (comp) {
 		this.id = comp.id;
-		zkau.setMeta(comp, this);
-		this.init();
+		zkau.setMeta(comp, this);				
+		this.init(comp);
 	},
 	cleanup: function ()  {
 		if (this.draggable) {
@@ -34,9 +39,14 @@ zk.Slider.prototype = {
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.fnSubmit = null;
 	},
-	init: function() {
+	init: function(cmp) {		
 		this.cleanup();
-
+		
+		var vert = getZKAttr(cmp, "vert");
+		zk.Slider._drags[cmp.id] = {
+			vert: vert
+		};
+				
 		this.element = $e(this.id);
 		if (!this.element) return; //removed
 
@@ -44,12 +54,13 @@ zk.Slider.prototype = {
 
 		//calc the snap
 		var meta = this; //such that snap() could access it
-		var snap = function (x, y) {return meta._snap(x, y);};
+		
+		var snap = function (x, y) {return meta._snap(x,y)};
 		this.draggable = new zDraggable(this.button, {
-			constraint: "horizontal", snap: snap,
+			constraint: vert ? "vertical": "horizontal", snap: snap,
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
-			endeffect: zkSld._endDrag});
-
+			endeffect: zkSld._endDrag});		
+		
 		this.form = zk.formOf(this.element);
 		if (this.form && !this.fnSubmit) {
 			this.fnSubmit = function () {
@@ -62,7 +73,7 @@ zk.Slider.prototype = {
 	 */
 	_snap: function (x, y) {
 		var ofs = zPos.cumulativeOffset(this.element);
-		ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);
+		ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);		
 		if (x <= ofs[0]) {
 			x = ofs[0];
 		} else {
@@ -72,18 +83,30 @@ zk.Slider.prototype = {
 		if (y <= ofs[1]) {
 			y = ofs[1];
 		} else {
-			var max = ofs[1] + this.element.clientHeight;
+			var max = ofs[1] + this._height();
 			if (y > max) y = max;
 		}
 		return [x, y];
 	},
-	_fixPos: function () {
-		var wd = this._width();
-		var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
-		var ofs = zPos.cumulativeOffset(this.element);
-		ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);
-		ofs = this._snap(ofs[0] + x, 0);
-		this.button.style.left = ofs[0] + "px";
+	_fixPos: function (cmp) {
+		var drag = $type(cmp) == "Sld" ? zk.Slider._drags[cmp.id] : zk.Slider._drags[cmp.id.substring(0, cmp.id.length-4)];									
+		if (drag.vert) {
+			var ht = this._height();
+			var x = ht > 0 ? Math.round((this._curpos() * ht)/this._maxpos()): 0;
+			var ofs = zPos.cumulativeOffset(this.element);
+			ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);			
+			ofs = this._snap(0, ofs[1] + x);
+			this.button.style.top = ofs[1] + "px";								
+		}
+		else {
+			var wd = this._width();
+			var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
+			var ofs = zPos.cumulativeOffset(this.element);
+			ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);			
+			ofs = this._snap(ofs[0] + x, 0);
+			this.button.style.left = ofs[0] + "px";						
+		}
+		
 	},
 	_startDrag: function () {
 		this.button.title = ""; //to avoid annoying effect
@@ -96,7 +119,8 @@ zk.Slider.prototype = {
 		this.slidetip =  $e("zul_slidetip");
 		if (this.slidetip) {
 			this.slidetip.style.display = "block";
-			zk.position(this.slidetip, this.element,"after-start");
+			var drag = zk.Slider._drags[this.element.id];			
+			zk.position(this.slidetip, this.element, drag.vert? "end_before" : "after-start");
 		}
 	},
 	_dragging: function () {
@@ -111,24 +135,32 @@ zk.Slider.prototype = {
 					100);
 		}
 	},
-	_endDrag: function () {
+	_endDrag: function (cmp) {		
 		var pos = this._realpos();
 		var curpos = this._curpos();
 		if (pos != curpos) {
 			setZKAttr(this.element, "curpos", pos);
 			zkau.sendasap({uuid: this.element.id, cmd: "onScroll", data: [pos]});
 		}
-		this._fixPos();
+		this._fixPos(cmp);		
 		this.button.title = pos;
 		zk.remove(this.slidetip);
 		this.slidetip = null;
 	},
 	_realpos: function () {
+		var drag = zk.Slider._drags[this.element.id];		
 		var btnofs = zPos.cumulativeOffset(this.button);
 		var refofs = zPos.cumulativeOffset(this.element);
 		var maxpos = this._maxpos();
-		var wd = this._width();
-		var pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd): 0;
+		var pos;
+		if (drag.vert) {
+			var ht = this._height();
+			pos = ht ? Math.round(((btnofs[1] - refofs[1]) * maxpos) / ht): 0;
+		}
+		else {
+			var wd = this._width();
+			pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd): 0;
+		}		
 		return pos >= 0 ? pos: 0;
 	},
 	_curpos: function () {
@@ -138,9 +170,14 @@ zk.Slider.prototype = {
 		return $int(getZKAttr(this.element, "maxpos"))
 	},
 	/** Returns the slider's real width. */
-	_width: function () {
+	_width: function () {		
 		return this.element.clientWidth - this.button.offsetWidth;
 			//button shall not exceed the right edge
+	},
+	/** Returns the slider's real height. */
+	_height: function () {
+		return this.element.clientHeight - this.button.offsetHeight;
+			//button shall not exceed the bottom edge
 	},
 	onsubmit: function () {
 		var nm = getZKAttr(this.element, "name");
@@ -155,11 +192,64 @@ zk.Slider.prototype = {
 
 ////
 //Slider//
-zkSld = {};
+zkSld = {
+	down_btn : null,
+	
+	onover: function (evt) {
+		if (!evt) evt = window.event;
+		var cmp = $outer(Event.element(evt));
+		var btn = $e(cmp.id + "!btn");
+		if ($type(cmp) == "Sld") {
+			zk.addClass(btn, "z-slider-thumb-over");		
+		}	
+	},
+	onout: function (evt) {
+		if (!evt) evt = window.event;
+		var cmp = $outer(Event.element(evt));
+		var btn = $e(cmp.id + "!btn");	
+		if (btn != zkButton.down_btn) {
+			zk.rmClass(btn, "z-slider-thumb-over");											
+		}
+	},
+	ondown: function (evt) {
+		if (!evt) evt = window.event;
+		var cmp = $outer(Event.element(evt));
+		var btn = $e(cmp.id + "!btn");
+		zk.addClass(btn, "z-slider-thumb-drag");		
+		zkSld.down_btn = btn;
+		zk.listen(document.body, "mouseup", zkSld.onup);
+	},
+	onup: function (evt) {
+		if (!evt) evt = window.event;
+		var cmp = $outer(Event.element(evt));	
+		if (zkSld.down_btn) {
+			zk.rmClass(zkSld.down_btn, "z-slider-thumb-drag");							
+		}				
+		zkSld.down_btn = null;
+		zk.unlisten(document.body, "mouseup", zkSld.onup);
+	}
+};
 zkSld.init = function (cmp) {
 	var meta = zkau.getMeta(cmp);
-	if (meta) meta.init();
-	else new zk.Slider(cmp);
+	var vert = getZKAttr(cmp, "vert");
+		
+	if (meta) meta.init(vert);
+	else new zk.Slider(cmp);	
+	
+	if (!zkWgt.isV30(cmp)) {		 
+		var btn = $e(cmp.id + "!btn");
+		var inner = $e(cmp.id + "!inner");
+		//var width = cmp.style.width -7;
+		//inner.style.width = width + "px";
+		if (vert) {
+			var het = cmp.clientHeight - 14;			
+			inner.style.height = het + "px";
+		} 
+		zk.listen(btn, "mouseover", zkSld.onover);
+		zk.listen(btn, "mouseout", zkSld.onout);
+		zk.listen(btn, "mousedown", zkSld.ondown);
+		zk.listen(btn, "mouseup", zkSld.onup);
+	}	
 };
 
 /** Starts dragging. */
@@ -168,9 +258,9 @@ zkSld._startDrag = function (button) {
 	return meta ? meta._startDrag(): null;
 };
 /** Ends dragging. */
-zkSld._endDrag = function (button) {
+zkSld._endDrag = function (button) {		
 	var meta = zkSld._metaByBtn(button);
-	return meta ? meta._endDrag(): null;
+	return meta ? meta._endDrag(button): null;
 };
 /** Dragging. */
 zkSld._dragging = function (draggable) {
@@ -187,7 +277,7 @@ zkSld.setAttr = function (cmp, nm, val) {
 	if ("z.curpos" == nm) {
 		setZKAttr(cmp, "curpos", val);
 		var meta = zkau.getMeta(cmp);
-		if (meta) meta._fixPos();
+		if (meta) meta._fixPos(cmp);
 		return true;
 	} else if ("z.slidingtext" == nm) {
 		setZKAttr(cmp, "slidingtext", val);
@@ -197,5 +287,5 @@ zkSld.setAttr = function (cmp, nm, val) {
 };
 zkSld.onVisi = zkSld.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp); //cmp or id both OK
-	if (meta) meta._fixPos();
+	if (meta) meta._fixPos(cmp);
 };
