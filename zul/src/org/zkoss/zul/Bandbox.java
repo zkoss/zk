@@ -53,7 +53,7 @@ public class Bandbox extends Textbox {
 	private boolean _autodrop, _btnVisible = true;
 
 	public Bandbox() {
-		init();
+		if (Utils.isThemeV30()) setMold("v30");
 		setSclass("bandbox");
 	}
 	public Bandbox(String value) throws WrongValueException {
@@ -61,10 +61,6 @@ public class Bandbox extends Textbox {
 		setValue(value);
 	}
 	
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
-	}
-
 	/** Returns the dropdown window belonging to this band box.
 	 */
 	public Bandpopup getDropdown() {

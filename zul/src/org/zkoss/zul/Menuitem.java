@@ -43,8 +43,8 @@ public class Menuitem extends LabelImageElement {
 	private boolean _disabled = false;
 
 	public Menuitem() {
+		if (Utils.isThemeV30()) setMold("v30");
 		setSclass("z-menu-item");
-		init();
 	}
 	public Menuitem(String label) {
 		this();
@@ -54,10 +54,6 @@ public class Menuitem extends LabelImageElement {
 		this();
 		setLabel(label);
 		setImage(src);
-	}
-
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
 	}
 
 	public String getSclass() {

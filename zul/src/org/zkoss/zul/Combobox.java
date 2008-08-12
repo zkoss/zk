@@ -90,16 +90,12 @@ public class Combobox extends Textbox {
 	private transient EventListener _eventListener;
 	
 	public Combobox() {
-		init();
+		if (Utils.isThemeV30()) setMold("v30");
 		setSclass("combobox");
 	}
 	public Combobox(String value) throws WrongValueException {
 		this();
 		setValue(value);
-	}
-	
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
 	}
 	
 	protected String coerceToString(Object value) {

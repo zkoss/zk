@@ -49,13 +49,9 @@ import org.zkoss.zul.impl.Utils;
 public class Menupopup extends Popup {
 	private boolean _checkmark;
 	public Menupopup() {
-		init();
-	}
-
-	private void init() {
 		if (Utils.isThemeV30()) setMold("v30");
 	}
-	
+
 	public String getSclass() {
 		final String sclass = super.getSclass();
 		return (sclass == null || sclass.length() == 0) ? "v30".equals(getMold()) ? "menupopup" : "z-menupopup" : sclass;

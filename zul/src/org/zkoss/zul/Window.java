@@ -152,6 +152,7 @@ public class Window extends XulElement implements IdSpace {
 
 	public Window() {
 		init();
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 	/**
 	 * @param title the window title (see {@link #setTitle}).
@@ -166,7 +167,6 @@ public class Window extends XulElement implements IdSpace {
 	}
 	private void init() {
 		_mutex = new Object();
-		if (Utils.isThemeV30()) setMold("v30");
 	}
 
 	/**

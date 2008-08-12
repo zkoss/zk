@@ -31,13 +31,9 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Menuseparator extends XulElement {
 	public Menuseparator() {
-		init();
+		if (Utils.isThemeV30()) setMold("v30");
 	}
 
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
-	}	
-	
 	public String getSclass() {
 		String scls = super.getSclass();
 		return (scls == null || scls.length() == 0) && !"v30".equals(getMold()) ? "z-menu-sp" : scls;

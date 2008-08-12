@@ -43,8 +43,8 @@ public class Menu extends LabelImageElement {
 	private Menupopup _popup;
 
 	public Menu() {
+		if (Utils.isThemeV30()) setMold("v30");
 		setSclass("z-menu");
-		init();
 	}
 	public Menu(String label) {
 		this();
@@ -56,10 +56,6 @@ public class Menu extends LabelImageElement {
 		setImage(src);
 	}
 
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
-	}
-	
 	public String getImgTag() {
 		if ("v30".equals(getMold()))
 			return super.getImgTag();

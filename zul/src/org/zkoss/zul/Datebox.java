@@ -61,7 +61,7 @@ public class Datebox extends FormatInputElement {
 	private boolean _compact, _btnVisible = true;
 
 	public Datebox() {
-		init();
+		if (Utils.isThemeV30()) setMold("v30");
 		setFormat(getDefaultFormat());
 		setSclass("datebox");
 		setCols(11);
@@ -72,9 +72,6 @@ public class Datebox extends FormatInputElement {
 		setValue(date);
 	}
 
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
-	}
 	/** Returns the default format, which is used when contructing
 	 * a datebox.
 	 * <p>The default format ({@link #getFormat}) depends on JVM's setting

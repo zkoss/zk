@@ -64,7 +64,7 @@ public class Timebox extends InputElement {
 	private boolean _btnVisible = true;
 	
 	public Timebox() {
-		init();
+		if (Utils.isThemeV30()) setMold("v30");
 		setCols(5);
 		setMaxlength(5);
 		setSclass("timebox");
@@ -74,10 +74,6 @@ public class Timebox extends InputElement {
 		setValue(date);
 	}
 
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
-	}
-	
 	/** Returns the value (in Date), might be null unless
 	 *  a constraint stops it. And, only Hour and Mintue field is effective.
 	 * @exception WrongValueException if user entered a wrong value
