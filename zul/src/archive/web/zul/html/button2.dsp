@@ -19,45 +19,36 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<c:choose trim="true">
-<table id="${self.uuid}" z.type="zul.widget.Button" cellspacing="0" cellpadding="0" border="0" class="z-btn" 
-${self.outerAttrs}${self.innerAttrs}>
+<table id="${self.uuid}" z.type="zul.widget.Button" cellspacing="0" cellpadding="0" border="0" 
+${self.outerAttrs}>
 <tbody>
 <tr>
-	<td class="z-btn-tl"></td>
-	<td colspan="3" class="z-btn-tm"></td>
-	<td class="z-btn-tr"></td>
+	<td class="${self.moldSclass}-tl"></td>
+	<td colspan="3" class="${self.moldSclass}-tm"></td>
+	<td class="${self.moldSclass}-tr"></td>
 </tr>
 <tr>
-	<td class="z-btn-ml"><i>&#160;</i></td>
-	<td colspan="3" class="z-btn-mm">
-	<em unselectable="on">
-	<c:choose trim="true">	
-	<button id="${self.uuid}!b" type="button">
+	<td class="${self.moldSclass}-ml"><i>&#160;</i></td>
+	<td colspan="3" class="${self.moldSclass}-mm">
+	<em unselectable="on">	
+	<button id="${self.uuid}!b" type="button"${self.innerAttrs}>
 	<c:choose trim="true">
 	<c:when test="${self.dir == 'reverse'}">
 		<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
 	</c:when>
 	<c:otherwise>
 		${self.imgTag}<c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if><c:out value="${self.label}"/>
-	</c:otherwise>
-	</c:choose>
+	</c:otherwise>	
 	</button>
 	</em>	
 	</c:choose>		
 	</td>
-	<td class="z-btn-mr"><i>&#160;</i></td>
+	<td class="${self.moldSclass}-mr"><i>&#160;</i></td>
 </tr>
 <tr>
-	<td class="z-btn-bl"></td>
-	<td colspan="3" class="z-btn-bm"></td>
-	<td class="z-btn-br"></td>
+	<td class="${self.moldSclass}-bl"></td>
+	<td colspan="3" class="${self.moldSclass}-bm"></td>
+	<td class="${self.moldSclass}-br"></td>
 </tr>
 </tbody>
 </table>
-</c:choose>
-
-
-<!-- 
-
- -->

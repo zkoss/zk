@@ -39,15 +39,16 @@ public class Button2Default implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Button self = (Button) comp;
-		final String uuid = self.getUuid();		
-		wh.write("<table id=\"").write(uuid).write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn ");						
+		final String uuid = self.getUuid();
+		final String sclass = self.getMoldSclass();
+		
+		wh.write("<table id=\"").write(uuid).write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"");						
 		wh.write("\" z.type=\"zul.widget.Button\" ").write(
-				self.getOuterAttrs());
-		wh.write(self.getInnerAttrs());
-		wh.write("><tbody><tr><td class=\"z-btn-tl\"></td>");
-		wh.write("<td colspan=\"3\" class=\"z-btn-tm\"></td><td class=\"z-btn-tr\"></td></tr>");
-		wh.write("<tr><td class=\"z-btn-ml\"><i>&#160;</i></td><td colspan=\"3\" class=\"z-btn-mm\"><em unselectable=\"on\">");
-		wh.write("<button type=\"button\" id=\"").write(uuid).write("!b\" />");				
+				self.getOuterAttrs());		
+		wh.write("><tbody><tr><td class=\"").write(sclass).write("-tl\"></td>");
+		wh.write("<td colspan=\"3\" class=\"").write(sclass).write("-tm\"></td><td class=\"").write(sclass).write("-tr\"></td></tr>");
+		wh.write("<tr><td class=\"").write(sclass).write("-ml\"><i>&#160;</i></td><td colspan=\"3\" class=\"").write(sclass).write("-mm\"><em unselectable=\"on\">");
+		wh.write("<button id=\"").write(uuid).write("!b\" type=\"button\"").write(self.getInnerAttrs()).write(">");				
 		if (self.getDir().equals("reverse")) {
 			new Out(self.getLabel()).render(out);
 			if (self.isImageAssigned()
@@ -61,7 +62,7 @@ public class Button2Default implements ComponentRenderer {
 			wh.writeln("<br/>");
 			new Out(self.getLabel()).render(out);
 		}		
-		wh.write("</button></em></td><td class=\"z-btn-mr\"><i>&#160;</i></td></tr><tr><td class=\"z-btn-bl\"></td>" +
-				"<td colspan=\"3\" class=\"z-btn-bm\"></td><td class=\"z-btn-br\"></td></tr></tbody></table>");						
+		wh.write("</button></em></td><td class=\"").write(sclass).write("-mr\"><i>&#160;</i></td></tr><tr><td class=\"").write(sclass).write("-bl\"></td>" +
+				"<td colspan=\"3\" class=\"").write(sclass).write("-bm\"></td><td class=\"").write(sclass).write("-br\"></td></tr></tbody></table>");						
 		}
 }

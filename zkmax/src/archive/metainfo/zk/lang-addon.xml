@@ -760,6 +760,10 @@ def alert(m):
 		<extends>slider</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Slider2Default</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.SliderDefault</mold-uri>
 		</mold>
 		<mold>

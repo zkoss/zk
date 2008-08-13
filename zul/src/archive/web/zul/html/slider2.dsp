@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.type="zul.sld.Sld">
+<div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.type="zul.sld.Sld" class="${self.moldSclass}">
 	<div class="${self.moldSclass}-end">
 		<div id="${self.uuid}!inner" class="${self.moldSclass}-inner">
 			<div id="${self.uuid}!btn" class="${self.moldSclass}-thumb"></div>

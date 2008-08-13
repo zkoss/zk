@@ -68,6 +68,7 @@ public class Button extends LabelImageElement {
 		}
 	}
 
+	
 	/** Returns the direction.
 	 * <p>Default: "normal".
 	 */
@@ -187,6 +188,22 @@ public class Button extends LabelImageElement {
 			//if desktop is null, it doesn't belong to any execution
 	}
 
+	//-- super --//
+	protected int getRealStyleFlags() {		
+		return "v30".equals(this.getMold()) ? super.getRealStyleFlags() : super.getRealStyleFlags() | RS_NO_WIDTH|RS_NO_HEIGHT;
+	}
+	
+	//-- super --//
+	public String getInnerAttrs() {
+		if ("v30".equals(this.getMold())) super.getInnerAttrs();
+		
+		final StringBuffer sb =
+			new StringBuffer(64).append(super.getInnerAttrs());
+		sb.append(" style=\"");
+		HTMLs.appendStyle(sb, "width", getWidth());
+		HTMLs.appendStyle(sb, "height", getHeight());		
+		return sb.append("\"").toString();
+	}
 	//-- super --//
 	public String getOuterAttrs() {
 		final StringBuffer sb =

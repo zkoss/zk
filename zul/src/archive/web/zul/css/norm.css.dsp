@@ -181,7 +181,7 @@ input.z-form-focus, .z-form-focus input {
 .caption td.caption {
 	font-size: ${fontSizeM};
 }
-.caption button {
+.caption button, .caption .z-btn-mm button {
 	font-size: ${fontSizeXS}; font-weight: normal;
 	padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;
 }
@@ -1248,12 +1248,12 @@ td.slidersph-bkr {
 
 <%-- Button - trendy look-and-feel --%>
 .z-btn {
-	font: normal 11px tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap;
+	font: normal tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap; font-size: ${fontSizeM};
 }
 .z-btn button {
-	border: 0 none; background: transparent; font: normal 11px tahoma, verdana, helvetica;
+	border: 0 none; background: transparent; font: normal tahoma, verdana, helvetica; font-size: ${fontSizeM};
 	padding-left: 3px; padding-right: 3px; cursor: pointer; margin: 0; overflow: visible;
-	width: auto; -moz-outline: 0 none; outline: 0 none;
+	width: auto; -moz-outline: 0 none; outline: 0 none; min-height: 15px;
 }
 <c:if test="${c:isExplorer()}">
 <%-- IE only --%>
@@ -1320,7 +1320,7 @@ td.z-btn-tl {
 	width: 3px; height: 3px;
 }
 td.z-btn-tm {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -252px;	
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -252px;		
 }
 td.z-btn-tr {
 	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -126px;
@@ -1328,7 +1328,7 @@ td.z-btn-tr {
 }
 td.z-btn-ml {
 	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -3px;
-	width: 3px; height: 12px;
+	width: 3px;
 }
 td.z-btn-mm {
   vertical-align: middle;
@@ -1336,23 +1336,23 @@ td.z-btn-mm {
   padding:0 5px;
   cursor:pointer;
   white-space:nowrap;
-  background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;
-  height: 12px;    
+  background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;  
 }
 td.z-btn-mr {
 	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -129px;
-	width: 3px; height: 12px;	
+	width: 3px; 
 }
 td.z-btn-bl {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -120px;
-	width: 3px; height: 6px;
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -123px;
+	width: 3px; height: 3px; 
 }
 td.z-btn-bm {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -372px;	
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -375px;
+	height: 3px;
 }
 td.z-btn-br {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -246px;
-	width: 3px; height: 6px;
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -249px;
+	width: 3px; height: 3px;
 }
 <%-- focus --%>
 .z-btn-focus td.z-btn-tl {
@@ -1368,19 +1368,19 @@ td.z-btn-br {
 	background-position:0 -885px;
 }
 .z-btn-focus td.z-btn-mm {
-  background-position:0 -1137px;    
+  	background-position:0 -1137px;    
 }
 .z-btn-focus td.z-btn-mr {
 	background-position:0 -1011px;	
 }
 .z-btn-focus td.z-btn-bl {
-	background-position:0 -1002px;
+	background-position:0 -1005px;
 }
 .z-btn-focus td.z-btn-bm {
-	background-position:0 -1254px;	
+	background-position:0 -1257px;	
 }
 .z-btn-focus td.z-btn-br {
-	background-position:0 -1128px;
+	background-position:0 -1131px;
 }
 <%-- hover --%>
 .z-btn-hover td.z-btn-tl {
@@ -1402,20 +1402,20 @@ td.z-btn-br {
 	background-position:0 -507px;	
 }
 .z-btn-hover td.z-btn-bl {
-	background-position:0 -498px;
+	background-position:0 -501px;
 }
 .z-btn-hover td.z-btn-bm {
-	background-position:0 -750px;	
+	background-position:0 -753px;	
 }
 .z-btn-hover td.z-btn-br {
-	background-position:0 -624px;
+	background-position:0 -627px;
 }
 <%-- click --%>
 .z-btn-click td.z-btn-mm{
 	background-position:0 -759px;
 }
 .z-btn-click td.z-btn-bm {
-	background-position:0 -876px;	
+	background-position:0 -879px;	
 }
 <%-- Menu - trendy look-and-feel --%>
 .z-menu-btn .z-btn-m {

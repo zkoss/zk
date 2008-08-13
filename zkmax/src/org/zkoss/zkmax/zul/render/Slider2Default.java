@@ -41,12 +41,12 @@ public class Slider2Default implements ComponentRenderer {
 		
 		wh.write("<div id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.writeln(" z.type=\"zul.sld.Sld\">")
-			.writeln("<div class=\"").write(sclass).write("\">")
-			.writeln("<div id=\"").write(uuid).write("!inner\" class=\"").write(sclass).write("-inner\">")
-			.writeln("<div id=\"").write(uuid).write("!btn\" class=\"").write(sclass).write("-thumb\"></div>")
-			.writeln("<a class=\"").write(sclass).write("-focus\" href=\"#\" tabindex=\"-1\" hidefocus=\"on\"></a>")
-			.writeln("</div></div></div>");		
+			.write(" z.type=\"zul.sld.Sld\" class=\"").write(sclass).write("\">")
+			.write("<div class=\"").write(sclass).write("-end\">")
+			.write("<div id=\"").write(uuid).write("!inner\" class=\"").write(sclass).write("-inner\">")
+			.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(sclass).write("-thumb\"></div>")
+			.write("<a class=\"").write(sclass).write("-focus\" href=\"#\" tabindex=\"-1\" hidefocus=\"on\"></a>")
+			.write("</div></div></div>");		
 	}
 
 }

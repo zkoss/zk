@@ -310,61 +310,60 @@ zkButton = {
 	
 	onover: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $outer(Event.element(evt));	    
+		var cmp = $outer(Event.element(evt));
 		if ($type(cmp) == "Button") {
-			zk.addClass($e(cmp.id), "z-btn-hover");		
-		}	
+			zk.addClass($e(cmp.id), "z-btn-hover");
+		}
 	},
 	onout: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $outer(Event.element(evt));	
+		var cmp = $outer(Event.element(evt));
 		if (cmp != zkButton.down_btn) {
-			zk.rmClass(cmp, "z-btn-hover");											
+			zk.rmClass(cmp, "z-btn-hover");
 		}
 	},
-	onfocus: function (evt) {		
+	onfocus: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $outer(Event.element(evt));	
+		var cmp = $outer(Event.element(evt));
 		if ($type(cmp) == "Button") {
-			zk.addClass($e(cmp.id), "z-btn-focus");		
+			zk.addClass($e(cmp.id), "z-btn-focus");
 		}
 	},
 	onblur: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $outer(Event.element(evt));	
+		var cmp = $outer(Event.element(evt));
 		if ($type(cmp) == "Button") {
-			zk.rmClass($e(cmp.id), "z-btn-focus");		
+			zk.rmClass($e(cmp.id), "z-btn-focus");
 		}
 	},
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $outer(Event.element(evt));	
+		var cmp = $outer(Event.element(evt));
 		if ($type(cmp) == "Button") {
 			zk.addClass($e(cmp.id), "z-btn-click");
-			zk.addClass($e(cmp.id), "z-btn-hover");		
+			zk.addClass($e(cmp.id), "z-btn-hover");
 		}
 		zkButton.down_btn = cmp;
 		zk.listen(document.body, "mouseup", zkButton.onup);
 	},
 	onup: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $outer(Event.element(evt));	
+		var cmp = $outer(Event.element(evt));
 		if (zkButton.down_btn) {
-			zk.rmClass(zkButton.down_btn, "z-btn-click");				
+			zk.rmClass(zkButton.down_btn, "z-btn-click");
 			zk.rmClass(zkButton.down_btn, "z-btn-hover");
-		}				
+		}
 		zkButton.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkButton.onup);
 	}, 
 	onclick: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $outer(Event.element(evt));	
+		var cmp = $outer(Event.element(evt));
 		if ($type(cmp) == "Button") {
-			zk.addClass($e(cmp.id), "z-btn-hover");		
+			zk.addClass($e(cmp.id), "z-btn-hover");
 			zk.addClass($e(cmp.id), "z-btn-click");
-		}		
-	} 
-	
+		}
+	}	
 };
 zkButton.init = function (cmp) {
 	zk.listen(cmp, "click", zkau.onclick);
@@ -372,15 +371,23 @@ zkButton.init = function (cmp) {
 		//we have to handle here since _onDocDClick won't receive it
 	zk.listen(cmp, "focus", zkau.onfocus);
 	zk.listen(cmp, "blur", zkau.onblur);
-	if (!zkWgt.isV30(cmp)) {	
-		var btn = $e(cmp.id + "!b");				
-		//zk.listen(btn, "click", zkButton.onclick);
+	if (!zkWgt.isV30(cmp)) {
+		var btn = $e(cmp.id + "!b");
+		var wd = btn.style.width;
+		var ht = btn.style.height;
+		if (ht && ht.indexOf("px") > -1) {
+			btn.style.height = $int(ht) - zk.offsetHeight(cmp.rows[0]) - zk.offsetHeight(cmp.rows[2]) + "px";
+		}
+		if (wd && wd.indexOf("px") > -1) {
+			btn.style.width = $int(wd) - zk.offsetWidth(cmp.rows[0].cells[0]) - zk.offsetWidth(cmp.rows[0].cells[2]) 
+			- (zk.offsetWidth(cmp.rows[0].cells[1]) - $int(wd))  + "px";
+		}
 		zk.listen(btn, "focus", zkButton.onfocus);
-		zk.listen(btn, "blur", zkButton.onblur);		
+		zk.listen(btn, "blur", zkButton.onblur);
 		zk.listen(cmp, "mousedown", zkButton.ondown);
 		zk.listen(cmp, "mouseup", zkButton.onup);
 		zk.listen(cmp, "mouseover", zkButton.onover);
-		zk.listen(cmp, "mouseout", zkButton.onout);		
+		zk.listen(cmp, "mouseout", zkButton.onout);
 	} 
 };
 
