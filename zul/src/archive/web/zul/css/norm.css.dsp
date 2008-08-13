@@ -112,6 +112,20 @@ input.z-form-focus, .z-form-focus input {
 	margin: 0; padding: 0; overflow: hidden; font-size: 0; line-height: 0;
 	border: 1px solid #99BBE8; display: block; background: #cbddf3;
 }
+.move-panel-ghost {
+	overflow: hidden; position: absolute; filter: alpha(opacity=65) !important; <%-- IE --%>
+	background: #CBDDF3; opacity: .65 !important; cursor: move !important;
+}
+.move-panel-ghost ul {
+	margin: 0; padding: 0; overflow: hidden; font-size: 0; line-height: 0;
+	border: 1px solid #99BBE8; display: block; background: #cbddf3;
+}
+.move-panel-ghost ul {
+	border-top-width: 0;
+}
+.move-panel-block {
+	border: 2px dashed #99bbe8;
+}
 .z-hidden-offset {
 	visibility: hidden !important; position: absolute !important;
 	left: -10000px !important; top: -10000px !important;

@@ -6,6 +6,7 @@ ZK 3.5.0
   1907300: Listbox: support grouping
   1997391: Provide a new component, Panel, like Window but more richer
   2002986: Columnlayout Component
+  2049401: Provide a new component, Portal Layout, like iGoogle
   2014828: Implement ZK own Fisheye component
   2019158: Provide a Menupopup for Columns component
   1959952: Support Comet-based Server Push
