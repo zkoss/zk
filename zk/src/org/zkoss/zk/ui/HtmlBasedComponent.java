@@ -221,7 +221,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (sclass != null && sclass.length() == 0) sclass = null;
 		if (!Objects.equals(_sclass, sclass)) {
 			_sclass = sclass;
-			smartUpdate("class", getSclass());
+			invalidate();
 		}
 	}
 	/** Sets the CSS class. This method is a bit confused with Java's class,
@@ -394,7 +394,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		HTMLs.appendAttribute(sb, "title", getTooltiptext());
 		HTMLs.appendAttribute(sb, "z.drag", _draggable);
 		HTMLs.appendAttribute(sb, "z.drop", _droppable);
-		HTMLs.appendAttribute(sb, "z.moldSclass", getMoldSclass());
+		HTMLs.appendAttribute(sb, "z.mcls", getMoldSclass());
 
 		final Object xc = getExtraCtrl();
 		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
