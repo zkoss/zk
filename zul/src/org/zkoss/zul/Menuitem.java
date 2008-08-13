@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.Utils;
  * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
  * 
- * <p>Default {@link #getSclass}: z-mean-item. (since 3.5.0)
+ * <p>Default {@link #getMoldSclass}: z-mean-item. (since 3.5.0)
  * @author tomyeh
  */
 public class Menuitem extends LabelImageElement {
@@ -43,8 +43,8 @@ public class Menuitem extends LabelImageElement {
 	private boolean _disabled = false;
 
 	public Menuitem() {
-		if (Utils.isThemeV30()) setMold("v30");
-		setSclass("z-menu-item");
+		Utils.updateMoldByTheme(this);
+		setMoldSclass("z-menu-item");
 	}
 	public Menuitem(String label) {
 		this();
@@ -56,8 +56,8 @@ public class Menuitem extends LabelImageElement {
 		setImage(src);
 	}
 
-	public String getSclass() {
-		final String scls = super.getSclass();
+	protected String getRealSclass() {
+		final String scls = super.getRealSclass();
 		if (isDisabled()) {
 			final String disd = "v30".equals(getMold()) ? "disd" : "z-item-disd";
 			return scls != null && scls.length() > 0 ? scls + " " + disd : disd;
@@ -73,7 +73,7 @@ public class Menuitem extends LabelImageElement {
 				getDesktop().getExecution().encodeURL(getSrc() != null ? getSrc() : "~./img/spacer.gif");
 				
 			final StringBuffer sb = new StringBuffer(64)
-				.append("<img class=\"").append(getSclass()).append("-icon\" src=\"")
+				.append("<img class=\"").append(getMoldSclass()).append("-icon\" src=\"")
 				.append(src).append("\" align=\"absmiddle\"/>");
 
 			final String label = getLabel();

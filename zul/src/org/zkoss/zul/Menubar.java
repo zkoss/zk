@@ -34,7 +34,8 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getSclass}: z-menubar, if {@link #getOrient()} == vertical, z-menubar-vertical will be added .(since 3.5.0)
+ * <p>Default {@link #getMoldSclass}: z-menubar, if {@link #getOrient()} == vertical,
+ *  z-menubar-vertical will be added .(since 3.5.0)
  * 	If {@link #getMold()} == "v30", menubar is assumed for backward compatible.
  *
  * @author tomyeh
@@ -44,7 +45,8 @@ public class Menubar extends XulElement {
 	private String _orient = "horizontal";
 
 	public Menubar() {
-		init();
+		Utils.updateMoldByTheme(this);
+		setMoldSclass("z-menubar");
 	}
 	/**
 	 * @param orient either horizontal or vertical
@@ -53,10 +55,11 @@ public class Menubar extends XulElement {
 		this();
 		setOrient(orient);
 	}
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
+	public void setMold(String mold) {
+		if ("v30".equals(mold)) setMoldSclass("menubar");
+		else setMoldSclass("z-menubar");
+		super.setMold(mold);
 	}
-
 	/** Returns the orient.
 	 * <p>Default: "horizontal".
 	 */
@@ -75,10 +78,10 @@ public class Menubar extends XulElement {
 			invalidate();
 		}
 	}
-	public String getSclass() {
-		final String sclass = super.getSclass();
-		return (sclass == null || sclass.length() == 0) ? "v30".equals(getMold()) ? 
-					"menubar" : "z-menubar" + ("vertical".equals(_orient) ? " z-menubar-vertical" : "") : sclass;
+	protected String getRealSclass() {
+		final String sclass = super.getRealSclass();
+		return sclass != null && "vertical".equals(_orient) ?
+				sclass + " " + getMoldSclass() + "-vertical" : sclass;
 	}
 
 	/** Returns whether to automatically drop down menus if user moves mouse

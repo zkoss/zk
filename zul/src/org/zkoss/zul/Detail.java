@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  * </ol>
  * </p>
  * 
- * <p>Default {@link #getSclass}: z-detail.
+ * <p>Default {@link #getMoldSclass}: z-detail.
  * 
  * <p>Default {@link #getWidth}: 18px. It depends on the width of the icon of
  * the detail.
@@ -50,7 +50,7 @@ public class Detail extends XulElement {
 	private String _img;
 	
 	public Detail() {
-		setSclass("z-detail");
+		setMoldSclass("z-detail");
 		setWidth("18px");
 	}
 

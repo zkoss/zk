@@ -37,15 +37,15 @@ public class Slider2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Slider self = (Slider)comp;
 		final String uuid = self.getUuid();
-		String orient = "horizontal".equals(self.getOrient()) ? "z-slider-horz" : "z-slider-vert";
+		final String sclass = self.getMoldSclass();
 		
 		wh.write("<div id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.writeln(" z.type=\"zul.sld.Sld\" class=\"").write(orient).write("\">")
-			.writeln("<div class=\"z-slider-end\">")
-			.writeln("<div id=\"").write(uuid).write("!inner\" class=\"z-slider-inner\">")
-			.writeln("<div id=\"").write(uuid).write("!btn\" class=\"z-slider-thumb\"></div>")
-			.writeln("<a class=\"z-slider-focus\" href=\"#\" tabindex=\"-1\" hidefocus=\"on\"></a>")
+			.writeln(" z.type=\"zul.sld.Sld\">")
+			.writeln("<div class=\"").write(sclass).write("\">")
+			.writeln("<div id=\"").write(uuid).write("!inner\" class=\"").write(sclass).write("-inner\">")
+			.writeln("<div id=\"").write(uuid).write("!btn\" class=\"").write(sclass).write("-thumb\"></div>")
+			.writeln("<a class=\"").write(sclass).write("-focus\" href=\"#\" tabindex=\"-1\" hidefocus=\"on\"></a>")
 			.writeln("</div></div></div>");		
 	}
 

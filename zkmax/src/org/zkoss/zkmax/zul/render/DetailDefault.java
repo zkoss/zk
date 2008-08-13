@@ -38,12 +38,11 @@ public class DetailDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Detail self = (Detail) comp;
 		final String uuid = self.getUuid();
-		final String sclass = self.getSclass();
 		final Execution exec = Executions.getCurrent();
 		
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zkex.zul.detail.Detail\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<div id=\"").write(uuid).write("!img\" class=\"").write(sclass)
+		wh.write("<div id=\"").write(uuid).write("!img\" class=\"").write(self.getMoldSclass())
 			.write("-img\"");
 		if (self.getImage() != null)
 			wh.write(" style=\"background-image:url(").write(exec.encodeURL(self.getImage()))

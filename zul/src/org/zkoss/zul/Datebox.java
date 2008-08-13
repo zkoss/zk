@@ -61,7 +61,7 @@ public class Datebox extends FormatInputElement {
 	private boolean _compact, _btnVisible = true;
 
 	public Datebox() {
-		if (Utils.isThemeV30()) setMold("v30");
+		Utils.updateMoldByTheme(this);
 		setFormat(getDefaultFormat());
 		setSclass("datebox");
 		setCols(11);

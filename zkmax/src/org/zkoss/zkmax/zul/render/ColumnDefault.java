@@ -49,7 +49,7 @@ public class ColumnDefault implements ComponentRenderer {
 		new Out(self.getLabel()).render(out);
 		String mpop = ((Columns)self.getParent()).getMenupopup();
 		if (mpop != null && mpop.trim().length() > 0 && !mpop.equals("none"))
-			wh.write("<a id=\"").write(uuid).write("!btn\" href=\"#\" class=\"").write(self.getSclass())
+			wh.write("<a id=\"").write(uuid).write("!btn\" href=\"#\" class=\"").write(self.getMoldSclass())
 				.write("-btn\"></a>");
 		wh.writeChildren(self);
 		wh.writeln("</div></th>");

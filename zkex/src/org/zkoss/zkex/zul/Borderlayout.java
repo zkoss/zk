@@ -65,7 +65,7 @@ import org.zkoss.zul.impl.Utils;
  * 
  * </pre>
  * 
- * The default class of CSS is specified "layout-container".
+ * <p>Default {@link #getMoldSclass}: layout-container.
  * 
  * @author jumperchen
  * @since 3.0.0
@@ -108,12 +108,8 @@ public class Borderlayout extends HtmlBasedComponent {
 	private transient Center _center;
 
 	public Borderlayout() {
-		init();
-		setClass("layout-container");
-	}
-	
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
+		Utils.updateMoldByTheme(this);
+		setMoldSclass("layout-container");
 	}
 	
 	public North getNorth() {

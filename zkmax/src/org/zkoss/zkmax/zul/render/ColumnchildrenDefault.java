@@ -36,15 +36,13 @@ public class ColumnchildrenDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Columnchildren self = (Columnchildren) comp;
-		final String sclass = self.getSclass();
-		wh.write("<div id=\"").write(self.getUuid()).write('"').write(
-				" z.type=\"zkex.zul.columnlayout.ColumnChildren\">");
-		wh.write("<div id=\"").write(self.getUuid()).write("!real\"").write(
+		final String sclass = self.getMoldSclass();
+		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zkex.zul.columnlayout.ColumnChildren\"").write(
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<div class=\"").write(sclass).write("-bwrap\">");
 		wh.write("<div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(sclass)
 			.write("-body\">");
 		wh.writeChildren(self);
-		wh.write("</div></div></div></div>");
+		wh.write("</div></div></div>");
 	}
 }

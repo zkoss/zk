@@ -41,9 +41,10 @@ import org.zkoss.zul.impl.XulElement;
  * <li>slider-btn: the bottom background</li>
  * </ul>
  *
- * <p>If {@link #getSclass} is empty and {@link #getMold} is "default",
+ * <p>If {@link #getSclass} is empty and {@link #getMold} is "v30",
  * "slider" is assumed. If {@link #getMold} is "sphere", "slidersph" is assumed.
  *
+ * <p>Default {@link #getMoldSclass}: z-slider. (since 3.5.0)
  * @author tomyeh
  */
 public class Slider extends XulElement {
@@ -54,7 +55,8 @@ public class Slider extends XulElement {
 	private String _slidingtext = "{0}";
 
 	public Slider() {
-		if (Utils.isThemeV30()) setMold("v30");
+		Utils.updateMoldByTheme(this);
+		setMoldSclass("z-slider");
 		setWidth("100px");
 	}
 	/**
@@ -64,6 +66,12 @@ public class Slider extends XulElement {
 		this();
 		setCurpos(curpos);
 	}	
+	protected String getRealClass() {
+		final String sclass = super.getRealSclass();
+		String moldsclass = getMoldSclass();
+		moldsclass += ("horizontal".equals(getOrient()) ? "-horz" : "-vert");
+		return sclass != null ? sclass + " " + moldsclass : moldsclass;
+	}
 	/** Returns the orient.
 	 * <p>Default: "horizontal".
 	 */

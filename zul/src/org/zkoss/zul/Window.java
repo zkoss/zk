@@ -152,7 +152,7 @@ public class Window extends XulElement implements IdSpace {
 
 	public Window() {
 		init();
-		if (Utils.isThemeV30()) setMold("v30");
+		Utils.updateMoldByTheme(this);
 	}
 	/**
 	 * @param title the window title (see {@link #setTitle}).

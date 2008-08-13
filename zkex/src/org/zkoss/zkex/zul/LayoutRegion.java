@@ -32,9 +32,9 @@ import org.zkoss.zul.impl.Utils;
  * <p>
  * Events:<br/> onOpen, onSize.<br/>
  * 
- * The default class of CSS is specified "layout-region" and
+ * The default CSS class of the mold is specified "layout-region" and
  * "layout-region-normal". If the border specifies "none" or null or "0", the
- * "layout-region-normal" class will remove.
+ * "layout-region-normal" class will remove. (see {@link #getMoldSclass()}, since 3.5.0)
  * 
  * @author jumperchen
  * @since 3.0.0
@@ -63,14 +63,11 @@ public abstract class LayoutRegion extends XulElement {
 	private int[] _cmargins = new int[] { 5, 5, 5, 5 };
 
 	public LayoutRegion() {
-		init();
-		addSclass("layout-region");
+		Utils.updateMoldByTheme(this);
 		addSclass("layout-region-normal");
+		addSclass("layout-region");
 	}
 	
-	private void init() {
-		if (Utils.isThemeV30()) setMold("v30");
-	}
 	/** 
 	 * Returns the title.
 	 * <p>Default: null.
@@ -352,13 +349,13 @@ public abstract class LayoutRegion extends XulElement {
 	abstract public String getSize();
 
 	protected void addSclass(String cls) {
-		final String sclass = getSclass();
+		final String sclass = getMoldSclass();
 		if (!hasSclass(cls))
-			setSclass(sclass == null ? cls : sclass + " " + cls);
+			setMoldSclass(sclass == null ? cls : cls + " " + sclass);
 	}
 
 	protected boolean hasSclass(String cls) {
-		String sclass = getSclass();
+		String sclass = getMoldSclass();
 		if (sclass == null)
 			sclass = "";
 		return cls == null
@@ -366,9 +363,9 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	protected void removeSclass(String cls) {
-		final String sclass = getSclass();
+		final String sclass = getMoldSclass();
 		if (sclass != null && cls != null && hasSclass(cls)) {
-			setSclass(sclass.replaceAll("(?:^|\\s+)" + cls + "(?:\\s+|$)", " ").trim());
+			setMoldSclass(sclass.replaceAll("(?:^|\\s+)" + cls + "(?:\\s+|$)", " ").trim());
 		}
 	}
 

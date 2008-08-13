@@ -41,7 +41,7 @@ public class Menu2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menu self = (Menu)comp;
 		final String uuid = self.getUuid();
-		final String sclass = self.getSclass();
+		final String sclass = self.getMoldSclass();
 		final Execution exec = Executions.getCurrent();
 		if (self.isTopmost()) {
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"zul.menu2.Menu2\"");

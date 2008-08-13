@@ -64,7 +64,7 @@ public class Timebox extends InputElement {
 	private boolean _btnVisible = true;
 	
 	public Timebox() {
-		if (Utils.isThemeV30()) setMold("v30");
+		Utils.updateMoldByTheme(this);
 		setCols(5);
 		setMaxlength(5);
 		setSclass("timebox");

@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>To customize the visual style of the caption,
  * refer to {@link #getCaptionLook}.
  *
- * <p>Default {@link #getSclass}: z-groupbox. (since 3.5.0)
+ * <p>Default {@link #getMoldSclass}: z-groupbox. (since 3.5.0)
  * @author tomyeh
  */
 public class Groupbox extends XulElement {
@@ -48,7 +48,7 @@ public class Groupbox extends XulElement {
 	private boolean _open = true, _closable = true;
 	
 	public Groupbox() {
-		setSclass("z-groupbox");
+		setMoldSclass("z-groupbox");
 	}
 	/** Returns the caption of this groupbox.
 	 */
@@ -126,8 +126,8 @@ public class Groupbox extends XulElement {
 		String cntscls = _cntscls;
 		if (cntscls != null)
 			return cntscls;
-		cntscls = getSclass();
 		final String mold = getMold();
+		cntscls = "v30-3d".equals(mold) ? getSclass() : getMoldSclass();
 		return "default".equals(mold) ? cntscls == null ? "fieldset-bwrap" : "fieldset-bwrap " + cntscls
 				: "v30-3d".equals(mold) ? "z-groupbox".equals(cntscls) ? "gc-default" : "gc-" + cntscls :
 					cntscls == null ? "gc-z-groupbox" : "gc-" + cntscls;

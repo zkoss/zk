@@ -43,7 +43,7 @@ public class Menuitem2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menuitem self = (Menuitem)comp;
 		final String uuid = self.getUuid();
-		final String sclass = self.getSclass();
+		final String sclass = self.getMoldSclass();
 		final Execution exec = Executions.getCurrent();
 		if (self.isTopmost()){
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"Menuit2\"");

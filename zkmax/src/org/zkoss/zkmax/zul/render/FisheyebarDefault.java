@@ -40,7 +40,7 @@ public class FisheyebarDefault  implements ComponentRenderer {
 		
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zkex.zul.fisheye.Fisheyebar\"")
 		  .write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("><div id=\"")
-		  .write(uuid).write("!cave\" class=\"").write(self.getSclass()).write("-inner\">")
+		  .write(uuid).write("!cave\" class=\"").write(self.getMoldSclass()).write("-inner\">")
 		  .writeChildren(self)
 		  .writeln("</div></div>");
 	}

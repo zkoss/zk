@@ -63,6 +63,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	private String _height;
 	/** The CSS class. */
 	private String _sclass;
+	/** The CSS class of the specific mold. */
+	private String _moldSclass;
 	/** The CSS style. */
 	private String _style;
 	private String _left, _top;
@@ -172,6 +174,28 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 
+	 /**
+	  * Returns the CSS class of the specific mold of the component.
+	  * @since 3.5.0
+	  */
+	 public String getMoldSclass() {
+		 return _moldSclass;
+	 }
+	 
+	 /**
+	  * Sets the CSS class of the specific mold of the component. Usually, the
+	  * method is used for component developer. For client side component developer,
+	  * the moldSclass value will append to the component's output via {@link #getOuterAttrs()}
+	  * as the key "z.moldSclass" with its value.
+	  * @since 3.5.0
+	  */
+	 public void setMoldSclass(String moldSclass) {
+		if (moldSclass != null && moldSclass.length() == 0) moldSclass = null;
+		if (!Objects.equals(_moldSclass, moldSclass)) {
+			_moldSclass = moldSclass;
+			invalidate();
+		}
+	 }
 	/** Returns the CSS class.
 	 * Due to Java's limitation, we cannot use the name called getClas.
 	 * <p>Default: null (the default value depends on element).
@@ -359,6 +383,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		HTMLs.appendAttribute(sb, "title", getTooltiptext());
 		HTMLs.appendAttribute(sb, "z.drag", _draggable);
 		HTMLs.appendAttribute(sb, "z.drop", _droppable);
+		HTMLs.appendAttribute(sb, "z.moldSclass", getMoldSclass());
 
 		final Object xc = getExtraCtrl();
 		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
@@ -382,7 +407,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	/** Returns the real style class that will be generated to the client
 	 * (when {@link #getOuterAttrs} is called).
 	 *
-	 * <p>Default: it simply returns {@link #getSclass}.
+	 * <p>Default: it simply returns {@link #getSclass}
+	 * and {@link #getMoldSclass()} (since 3.5.0).
 	 *
 	 * <p>Derived classes might override it to provide, say, dual style classes.
 	 * For example,
@@ -390,9 +416,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 *return sclass != null ? sclass + " my-addon": "myaddon";</code></pre>
 	 *
 	 * @since 3.0.0
+	 * @see #getMoldSclass()
 	 */
 	protected String getRealSclass() {
-		return getSclass();
+		final String moldsclass = getMoldSclass();
+		final String sclass = getSclass();
+		return moldsclass == null ? sclass : 
+				sclass == null ? moldsclass : sclass + " " + moldsclass;
 	}
 	/** Returns the real style that will be generated to client
 	 * (when {@link #getOuterAttrs} is called).

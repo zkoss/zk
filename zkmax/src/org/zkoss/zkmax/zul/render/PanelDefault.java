@@ -41,7 +41,7 @@ public class PanelDefault implements ComponentRenderer {
 		final Panel self = (Panel)comp;
 		final String uuid = self.getUuid();
 		final String titlesc = self.getTitleSclass();
-		final String sclass = self.getSclass();
+		final String sclass = self.getMoldSclass();
 		final String title = self.getTitle();
 		final String border = self.getBorder();
 		final boolean hasBorder = "normal".equals(border);

@@ -42,7 +42,7 @@ public class FisheyeDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Fisheye self = (Fisheye) comp;
 		final String uuid = self.getUuid();
-		final String sclass = self.getSclass();
+		final String sclass = self.getMoldSclass();
 		final Execution exe = Executions.getCurrent();
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zkex.zul.fisheye.Fisheye\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("><img id=\"")

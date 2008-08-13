@@ -40,7 +40,7 @@ public class ColumnlayoutDefault implements ComponentRenderer {
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(
 				" z.type=\"zkex.zul.columnlayout.ColumnLayout\">");
 		wh.write("<div id=\"").write(self.getUuid() + "!real\" class=\"")
-			.write(self.getSclass()).write("-inner\">");
+			.write(self.getMoldSclass()).write("-inner\">");
 		wh.writeChildren(self);
 		wh.write("<div class=\"z-clear\"></div>");
 		wh.write("</div></div>");

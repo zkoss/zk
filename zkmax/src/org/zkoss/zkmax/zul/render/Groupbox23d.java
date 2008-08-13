@@ -39,7 +39,7 @@ public class Groupbox23d implements ComponentRenderer {
 		final Groupbox self = (Groupbox) comp;
 		final Caption caption = self.getCaption();
 		final String uuid = self.getUuid();
-		final String sclass = self.getSclass();
+		final String sclass = self.getMoldSclass();
 
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.widget.Grbox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())

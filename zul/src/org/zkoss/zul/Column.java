@@ -50,7 +50,7 @@ import org.zkoss.zul.mesg.MZul;
  * <p>The use of column is mainly to define attributes for each cell
  * in the grid.
  * 
- * <p>Default {@link #getSclass}: z-grid-column. (since 3.5.0)
+ * <p>Default {@link #getMoldSclass}: z-grid-column. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -59,7 +59,7 @@ public class Column extends HeaderElement {
 	private Comparator _sortAsc, _sortDsc;
 
 	public Column() {
-		setSclass("z-grid-column");
+		setMoldSclass("z-grid-column");
 	}
 	public Column(String label) {
 		this();

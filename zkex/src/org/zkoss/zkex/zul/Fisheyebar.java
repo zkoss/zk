@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
  * A fisheye bar is a bar of {@link Fisheye} that is a menu similar to the fish 
  * eye menu on the Mac OS.
  * 
- * <p>Default {@link #getSclass}: z-fisheyebar.
+ * <p>Default {@link #getMoldSclass}: z-fisheyebar.
  * 
  * @author jumperchen
  * @since 3.5.0
@@ -41,7 +41,7 @@ public class Fisheyebar extends XulElement {
 		_labelEdge = "bottom";
 	
 	public Fisheyebar() {
-		setSclass("z-fisheyebar");
+		setMoldSclass("z-fisheyebar");
 	}
 	
 	/** Returns the item width of {@link Fisheye}.

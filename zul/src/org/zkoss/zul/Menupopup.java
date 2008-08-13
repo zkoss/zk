@@ -41,7 +41,7 @@ import org.zkoss.zul.impl.Utils;
  * and then create menuitem when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen}
  * is true.
  *
- * <p>Default {@link #getSclass}: z-menupopup. (since 3.5.0)
+ * <p>Default {@link #getMoldSclass}: z-menupopup. (since 3.5.0)
  * 	If {@link #getMold()} == "v30", menupopup is assumed for backward compatible.
  *
  * @author tomyeh
@@ -49,13 +49,16 @@ import org.zkoss.zul.impl.Utils;
 public class Menupopup extends Popup {
 	private boolean _checkmark;
 	public Menupopup() {
-		if (Utils.isThemeV30()) setMold("v30");
+		Utils.updateMoldByTheme(this);
+		setMoldSclass("z-menupopup");
 	}
 
-	public String getSclass() {
-		final String sclass = super.getSclass();
-		return (sclass == null || sclass.length() == 0) ? "v30".equals(getMold()) ? "menupopup" : "z-menupopup" : sclass;
+	public void setMold(String mold) {
+		if ("v30".equals(mold)) setMoldSclass("menupopup");
+		else setMoldSclass("z-menupopup");
+		super.setMold(mold);
 	}
+	
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.
 	 * <p>Default: false.

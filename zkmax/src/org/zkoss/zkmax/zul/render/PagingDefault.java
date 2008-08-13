@@ -37,7 +37,7 @@ public class PagingDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Paging self = (Paging) comp;
-		final String sclass = self.getSclass();
+		final String sclass = self.getMoldSclass();
 		wh.write("<div id=\"").write(self.getUuid()).write("\" name=\"")
 			.write(self.getUuid()).write("\" z.type=\"zul.pg.Pg\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");

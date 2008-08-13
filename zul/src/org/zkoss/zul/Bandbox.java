@@ -53,7 +53,7 @@ public class Bandbox extends Textbox {
 	private boolean _autodrop, _btnVisible = true;
 
 	public Bandbox() {
-		if (Utils.isThemeV30()) setMold("v30");
+		Utils.updateMoldByTheme(this);
 		setSclass("bandbox");
 	}
 	public Bandbox(String value) throws WrongValueException {

@@ -42,7 +42,7 @@ public class Button extends LabelImageElement {
 	private boolean _readonly;
 
 	public Button() {
-		if (Utils.isThemeV30()) setMold("v30");
+		Utils.updateMoldByTheme(this);
 	}
 	public Button(String label) {
 		this();

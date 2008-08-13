@@ -33,7 +33,7 @@ import org.zkoss.zul.ext.Paginated;
 /**
  * Paging of long content.
  *
- * <p>Default {@link #getSclass}: z-paging. (since 3.5.0)
+ * <p>Default {@link #getMoldSclass}: z-paging. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -54,7 +54,7 @@ public class Paging extends XulElement implements Paginal {
 	private boolean _detailed;
 
 	public Paging() {
-		setSclass("z-paging");
+		setMoldSclass("z-paging");
 	}
 
 	/** Contructor.
@@ -205,7 +205,7 @@ public class Paging extends XulElement implements Paginal {
 
 		final StringBuffer sb = new StringBuffer(512);
 		int lastItem = (_actpg+1) * _pgsz;
-		sb.append("<div class=\"").append(getSclass()).append("-info\">[ ")
+		sb.append("<div class=\"").append(getMoldSclass()).append("-info\">[ ")
 			.append(_actpg * _pgsz + 1).append(" - ").append(lastItem > _ttsz ? _ttsz : lastItem)
 			.append(" / ").append(_ttsz).append(" ]</div>");
 		return sb.toString();

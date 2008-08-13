@@ -22,12 +22,14 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.ext.client.Maximizable;
 import org.zkoss.zk.ui.ext.client.Minimizable;
 import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.ext.client.Updatable;
 import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zul.impl.XulElement;
@@ -52,12 +54,15 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Events:<br/>
  * onMove, onOpen, onZIndex, onMaximize, onMinimize, and onClose.<br/>
  * 
- * <p>Default {@link #getSclass}: z-panel.
+ * <p>Default {@link #getMoldSclass}: z-panel.
  * 
  * @author jumperchen
  * @since 3.5.0
  */
 public class Panel extends XulElement {
+	/** disable smartUpdate; usually caused by the client. */
+	private boolean _noSmartUpdate;
+	private transient Component _noSmartParent;
 	private transient Toolbar _tbar, _bbar, _fbar;
 	private transient Panelchildren _panelchildren;
 	private transient Caption _caption;
@@ -69,7 +74,7 @@ public class Panel extends XulElement {
 	private boolean  _open = true;
 
 	public Panel() {
-		setSclass("z-panel");
+		setMoldSclass("z-panel");
 	}
 	/**
 	 * Returns whether this Panel is open.
@@ -368,22 +373,22 @@ public class Panel extends XulElement {
 	public void onClose() {
 		detach();
 	}
-	public String getRealStyle() {
+	protected String getRealStyle() {
 		return super.getRealStyle() + (isVisible() && isMinimized() ? "display:none;" : "");
 	}
-	public String getRealSclass() {
+	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
 		return scls + ("normal".equals(_border) ? "" : ' ' + scls + '-' + _border)
-			+ (_open ? "" : " z-panel-collapsed");
+			+ (_open ? "" : " " + getMoldSclass() + "-collapsed");
 	}
 
 	/** Returns the style class used for the title.
 	 *
-	 * <p>It returns "<i>sclass</i>-t" is returned,
-	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
+	 * <p>It returns "<i>moldSclass</i>-t" is returned,
+	 * where <i>moldSclass</i> is the value returned by {@link #getMoldSclass}.
 	 */
 	public String getTitleSclass() {
-		return getSclass() + "-t";
+		return getMoldSclass() + "-t";
 	}
 	
 	/**
@@ -542,7 +547,7 @@ public class Panel extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable, Floating, Maximizable, Minimizable {
+	implements MultiBranch, Openable, Floating, Maximizable, Minimizable, Updatable {
 		//-- MultiBranch --//
 		public boolean inDifferentBranch(Component child) {
 			return child instanceof Caption; //in different branch
@@ -561,5 +566,17 @@ public class Panel extends XulElement {
 		public void setMinimizedByClient(boolean minimized) {
 			_minimized = minimized;
 		}
+		public void setResult(Object result) {
+			Object[] r = ((Object[]) result);
+			_noSmartUpdate = ((Boolean) r[0]).booleanValue();
+			_noSmartParent = (Component) r[1];
+		}
 	}
+
+	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
+		if (!_noSmartUpdate || _noSmartParent != getParent()) {
+			super.addMoved(oldparent, oldpg, newpg);
+		}
+	}
+	
 }

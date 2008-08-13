@@ -27,16 +27,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<c:choose>
 				<c:when test="${empty self.caption}">
 					<c:if test="${self.closable}">
-<div id="${self.uuid}!close" class="${self.sclass}-tool ${self.sclass}-close"></div>
+<div id="${self.uuid}!close" class="${self.moldSclass}-tool ${self.moldSclass}-close"></div>
 					</c:if>
 					<c:if test="${self.maximizable}">
-<div id="${self.uuid}!maximize" class="${self.sclass}-tool ${self.sclass}-maximize <c:if test="${self.maximized}">${self.sclass}-maximized</c:if>"></div>
+<div id="${self.uuid}!maximize" class="${self.moldSclass}-tool ${self.moldSclass}-maximize <c:if test="${self.maximized}">${self.moldSclass}-maximized</c:if>"></div>
 					</c:if>
 					<c:if test="${self.minimizable}">
-<div id="${self.uuid}!minimize" class="${self.sclass}-tool ${self.sclass}-minimize"></div>
+<div id="${self.uuid}!minimize" class="${self.moldSclass}-tool ${self.moldSclass}-minimize"></div>
 					</c:if>
 					<c:if test="${self.collapsible}">
-<div id="${self.uuid}!toggle" class="${self.sclass}-tool ${self.sclass}-toggle"></div>
+<div id="${self.uuid}!toggle" class="${self.moldSclass}-tool ${self.moldSclass}-toggle"></div>
 					</c:if>
 					<c:out value="${self.title}" />
 				</c:when>
@@ -47,10 +47,10 @@ ${z:redraw(self.caption, null)}
 			</div>
 		</c:if>
 		<c:if test="${self.framable}"></div></div></div></c:if>
-<div id="${self.uuid}!bwrap" class="${self.sclass}-bwrap" <c:if test="${!self.open}">style="display:none;"</c:if>>
-	<c:if test="${self.framable}"><div class="${self.sclass}-cl"><div class="${self.sclass}-cr"><div class="${self.sclass}-cm"></c:if>
+<div id="${self.uuid}!bwrap" class="${self.moldSclass}-bwrap" <c:if test="${!self.open}">style="display:none;"</c:if>>
+	<c:if test="${self.framable}"><div class="${self.moldSclass}-cl"><div class="${self.moldSclass}-cr"><div class="${self.moldSclass}-cm"></c:if>
 		<c:if test="${!empty self.topToolbar}">
-<div id="${self.uuid}!tbar" class="${self.sclass}-tbar <c:if test="${self.border != 'normal'}">${self.sclass}-tbar-${self.border}</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.sclass}-notitle</c:if>">
+<div id="${self.uuid}!tbar" class="${self.moldSclass}-tbar <c:if test="${self.border != 'normal'}">${self.moldSclass}-tbar-${self.border}</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.moldSclass}-notitle</c:if>">
 ${z:redraw(self.topToolbar, null)}
 </div>
 		</c:if>
@@ -58,16 +58,16 @@ ${z:redraw(self.topToolbar, null)}
 ${z:redraw(self.panelchildren, null)}
 		</c:if>
 		<c:if test="${!empty self.bottomToolbar}">
-<div id="${self.uuid}!bbar" class="${self.sclass}-bbar <c:if test="${self.border != 'normal'}">${self.sclass}-bbar-${self.border}</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.sclass}-notitle</c:if>">
+<div id="${self.uuid}!bbar" class="${self.moldSclass}-bbar <c:if test="${self.border != 'normal'}">${self.moldSclass}-bbar-${self.border}</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.moldSclass}-notitle</c:if>">
 ${z:redraw(self.bottomToolbar, null)}
 </div>
 		</c:if>
 	<c:if test="${self.framable}">
 </div></div></div>
-<div class="${self.sclass}-bl <c:if test="${empty self.footToolbar}">${self.sclass}-nofbar</c:if>"><div class="${self.sclass}-br"><div class="${self.sclass}-bm">
+<div class="${self.moldSclass}-bl <c:if test="${empty self.footToolbar}">${self.moldSclass}-nofbar</c:if>"><div class="${self.moldSclass}-br"><div class="${self.moldSclass}-bm">
 	</c:if>
 	<c:if test="${!empty self.footToolbar}">
-<div id="${self.uuid}!fbar" class="${self.sclass}-fbar">
+<div id="${self.uuid}!fbar" class="${self.moldSclass}-fbar">
 ${z:redraw(self.footToolbar, null)}
 </div>
 	</c:if>

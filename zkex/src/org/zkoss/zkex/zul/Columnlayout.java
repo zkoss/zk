@@ -29,13 +29,15 @@ import org.zkoss.zul.impl.XulElement;
  * Use Columnlayout need assign width (either present or pixel) on every
  * Columnchildren, or we cannot make sure about layout look.
  * 
+ * <p>Default {@link #getMoldSclass}: z-column-layout.
+ * 
  * @author gracelin
  * @since 3.5.0
  */
 public class Columnlayout extends XulElement {
 
 	public Columnlayout() {
-		setSclass("z-column-layout");
+		setMoldSclass("z-column-layout");
 	}
 
 	public boolean insertBefore(Component child, Component insertBefore) {
