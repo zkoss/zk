@@ -66,7 +66,12 @@ public class Slider extends XulElement {
 		this();
 		setCurpos(curpos);
 	}	
-	protected String getRealClass() {
+	public void setMold(String mold) {
+		if ("v30".equals(mold) || "sphere".equals(mold)) setMoldSclass("slider");
+		else setMoldSclass("z-slider");
+		super.setMold(mold);
+	}
+	protected String getRealSclass() {
 		final String sclass = super.getRealSclass();
 		String moldsclass = getMoldSclass();
 		moldsclass += ("horizontal".equals(getOrient()) ? "-horz" : "-vert");
@@ -218,7 +223,7 @@ public class Slider extends XulElement {
 			_name = name;
 			smartUpdate("z.name", _name);
 		}
-	}
+	}	
 
 	//-- super --//
 	public String getOuterAttrs() {
@@ -227,6 +232,7 @@ public class Slider extends XulElement {
 		if ("vertical".equals(getOrient()))
 			HTMLs.appendAttribute(sb, "z.vert", "true");
 		
+		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		HTMLs.appendAttribute(sb, "z.name", _name);
 		HTMLs.appendAttribute(sb, "z.curpos", _curpos);
 		HTMLs.appendAttribute(sb, "z.maxpos", _maxpos);
