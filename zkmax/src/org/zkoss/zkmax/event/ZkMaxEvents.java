@@ -27,7 +27,7 @@ package org.zkoss.zkmax.event;
 public class ZkMaxEvents {
 	private ZkMaxEvents() {} //prevent from creation
 
-	/** The onColSize event used with {@link ColSizeEvent}.
+	/** The onColSize event used with {@link PortalMoveEvent}.
 	 */
 	public static final String ON_PORTAL_MOVE = "onPortalMove";
 }
