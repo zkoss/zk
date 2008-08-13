@@ -19,12 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * column may contain one or more panel.
  * @since 3.5.0
  */
-zkColumnLayout = {
-	
-	init: function(cmp) {
-		zkColumnLayout.onVisi = zkColumnLayout.onSize = zkColumnLayout.render;
-	},
-	
+zkColumnLayout = {	
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
 			case "z.childchg" :
@@ -34,6 +29,9 @@ zkColumnLayout = {
 		}
 		return false;
 	},
+	_isLegalChild: function (n) {
+		return n.id && $tag(n) == "DIV"; 
+	},
 	render: function(cmp){
 		if (!zk.isRealVisible(cmp)) 
 			return;
@@ -42,39 +40,32 @@ zkColumnLayout = {
 			h = cmp.offsetHeight - zk.getFrameHeight(cmp),
 			pw = w,
 			inner = $real(cmp),
-			cns = inner.childNodes;
+			cns = zk.childNodes(inner, this._isLegalChild);
 			
 		inner.style.width = w + "px";
-		
-		for (var child, i = 0, j = cns.length; i < j; i++) {
-			if ($tag(cns[i]) != "DIV" || !cns[i].id) 
-				continue;
-			child = $real(cns[i]);
-			
-			var widx = child._width.indexOf("px");
+				
+		for (var i = 0, j = cns.length; i < j; i++) {
+			var widx = cns[i]._width.indexOf("px");
 			if (widx > 0) {
-				var px_width = $int(child._width.substring(0, widx));
-				pw -= (px_width + zk.getFrameWidth(child));
+				var px_width = $int(cns[i]._width.substring(0, widx));
+				pw -= (px_width + zk.getFrameWidth(cns[i]));
 			}
 		}
 		
 		pw = pw < 0 ? 0 : pw;
 		
-		for (var child, i = 0, j = cns.length; i < j; i++) {
-			if ($tag(cns[i]) != "DIV" || !cns[i].id) 
-				continue;
-			child = $real(cns[i]);
-			
-			var widx = child._width.indexOf("%");
+		for (var i = 0, j = cns.length; i < j; i++) {
+			var widx = cns[i]._width.indexOf("%");
 			if (widx > 0) {
-				var percentage_width = $int(child._width.substring(0, widx));
-				var result = (Math.floor(percentage_width / 100 * pw) - zk.getFrameWidth(child));
-				child.style.width = (result > 0 ? result : 0) + "px";
+				var percentage_width = $int(cns[i]._width.substring(0, widx));
+				var result = (Math.floor(percentage_width / 100 * pw) - zk.getFrameWidth(cns[i]));
+				cns[i].style.width = (result > 0 ? result : 0) + "px";
 			}
 		}
 		cmp.style.visibility = "inherit";
 	}
 };
+zkColumnLayout.onVisi = zkColumnLayout.onSize = zkColumnLayout.render;
 if (zk.ie6Only) 
 	zkColumnLayout.beforeSize = function (cmp) {
 		$real(cmp).style.width = "0px";
@@ -86,8 +77,7 @@ if (zk.ie6Only)
  */
 zkColumnChildren = {
 	init: function(cmp) {
-		var real = $real(cmp);
-		real._width = real.style.width;
+		cmp._width = cmp.style.width;
 		var cave = $e(cmp, "cave"),
 			cns = zk.childNodes(cave);
 		for (var i = cns.length; --i >= 0;) {
@@ -115,7 +105,6 @@ zkColumnChildren = {
 		}
 	},
 	cleanup: function(cmp) {
-		cmp = $real(cmp);
 		if (cmp._width) cmp._width = null;
 		var layout = $parentByType(cmp, "ColumnLayout");
 		if (layout) {

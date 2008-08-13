@@ -1955,7 +1955,9 @@ Object.extend(Event, {
     return (((event.which) && (event.which == 1)) ||
             ((event.button) && (event.button == 1)));
   },
-
+  pointer: function (event) {
+  	return [Event.pointerX(event), Event.pointerY(event)];
+  },
   pointerX: function(event) {
     return event.pageX || (event.clientX +
       (document.documentElement.scrollLeft || document.body.scrollLeft));

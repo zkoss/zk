@@ -72,6 +72,60 @@ Array.prototype.contains = function (o) {
 	return false;
 };
 
+//This prototype is provided by the Mozilla foundation and is distributed under
+/// the MIT license.
+//http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
+if (!Array.prototype.forEach) {
+	/**
+	 * forEach is a JavaScript extension to the ECMA-262 standard; as such it may not
+	 * be present in other implementations of the standard. (like IE)
+	 * @param {Funcation} fun Function to execute for each element.
+	 * @param {Object} thisp Object to use as this when executing callback, if any.
+	 * @since 3.5.0
+	 */
+	Array.prototype.forEach = function(fun /*, thisp*/){
+		if (typeof fun != "function") 
+			throw new TypeError();
+		
+		var thisp = arguments[1];
+		for (var i = 0, len = this.length; i < len; i++) {
+			if (i in this) 
+				fun.call(thisp, this[i], i, this);
+		}
+	};
+}
+
+//This prototype is provided by the Mozilla foundation and is distributed under
+/// the MIT license.
+//http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
+if (!Array.prototype.indexOf) {
+	/**
+	 * indexOf is a JavaScript extension to the ECMA-262 standard; as such it may
+	 * not be present in other implementations of the standard. (like IE)
+	 * @param {Element} Element to locate in the array.
+	 * @param {Number} formIndex The index at which to begin the search.
+	 * Defaults to 0, i.e. the whole array will be searched.
+	 * If the index is greater than or equal to the length of the array, -1 is returned,
+	 * i.e. the array will not be searched. If negative, it is taken as the offset
+	 * from the end of the array.
+	 * Note that even when the index is negative, the array is still searched from
+	 * front to back. If the calculated index is less than 0, the whole array will be searched.
+	 * @since 3.5.0
+	 */
+	Array.prototype.indexOf = function(elt /*, fromIndex*/) {
+		var from = Number(arguments[1]) || 0,
+			len = this.length;
+		from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+		if (from < 0) 
+			from += len;
+		
+		for (; from < len; from++) {
+			if (from in this &&	this[from] === elt) 
+				return from;
+		}
+		return -1;
+	};
+}
 ////
 //Form//
 function z_fmsubm(a, b, c) {
@@ -1149,12 +1203,15 @@ zk.parentNode = function (el, tagName) {
 };
 /**
  * Returns a collection of child nodes of the given element. (Only nodeType = 1)
+ * @param el an element.
+ * @param fn a filter function to test for each element, if any. Returns true, the child node
+ * is legal.
  * @since 3.5.0
  */
-zk.childNodes = function (el) {
+zk.childNodes = function (el, fn) {
 	var nodes = [];
 	for (var n = el.firstChild; n; n = n.nextSibling)
-		if (n.nodeType == 1) nodes.push(n);
+		if (n.nodeType == 1 && (!(typeof fn == "function") || fn(n))) nodes.push(n);
 	return nodes;
 };
 /** Returns the first child of the specified node. */
