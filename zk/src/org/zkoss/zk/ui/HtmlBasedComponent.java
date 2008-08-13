@@ -175,19 +175,28 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	}
 
 	 /**
-	  * Returns the CSS class of the specific mold of the component.
+	  * Returns the CSS class(es) of the specific mold of the component.
+	  * It usually depends on the implementation of the mold (@{link #getMold}).
+	  * <p>Default: null.
 	  * @since 3.5.0
+	  * @see #getSclass
+	  * @see #getRealSclass
 	  */
 	 public String getMoldSclass() {
 		 return _moldSclass;
 	 }
 	 
 	 /**
-	  * Sets the CSS class of the specific mold of the component. Usually, the
-	  * method is used for component developer. For client side component developer,
-	  * the moldSclass value will append to the component's output via {@link #getOuterAttrs()}
-	  * as the key "z.moldSclass" with its value.
+	  * Sets the CSS class of the specific mold of the component.
+	  * It usually depends on the implementation of the mold (@{link #getMold}).
+	  * Replacing the CSS classes with {@link #setMoldSclass} will
+	  * replace all default styles. In other words, you have to provide
+	  * a complete replacement.
+	  * On the other hand, if you want to do small adjustments,
+	  * use {@link #setSclass} instead.
+	  * 
 	  * @since 3.5.0
+	  * @see #setSclass
 	  */
 	 public void setMoldSclass(String moldSclass) {
 		if (moldSclass != null && moldSclass.length() == 0) moldSclass = null;
@@ -200,11 +209,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * Due to Java's limitation, we cannot use the name called getClas.
 	 * <p>Default: null (the default value depends on element).
 	 * @see #getRealSclass
+	 * @see #getMoldSclass
 	 */
 	public String getSclass() {
 		return _sclass;
 	}
 	/** Sets the CSS class.
+	 * @see #setMoldSclass
 	 */
 	public void setSclass(String sclass) {
 		if (sclass != null && sclass.length() == 0) sclass = null;
@@ -407,7 +418,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	/** Returns the real style class that will be generated to the client
 	 * (when {@link #getOuterAttrs} is called).
 	 *
-	 * <p>Default: it simply returns {@link #getSclass}
+	 * <p>Default: it simply returns the catenation of {@link #getSclass}
 	 * and {@link #getMoldSclass()} (since 3.5.0).
 	 *
 	 * <p>Derived classes might override it to provide, say, dual style classes.
