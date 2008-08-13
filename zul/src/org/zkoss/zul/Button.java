@@ -43,6 +43,7 @@ public class Button extends LabelImageElement {
 
 	public Button() {
 		Utils.updateMoldByTheme(this);
+		setMoldSclass("z-btn");
 	}
 	public Button(String label) {
 		this();
