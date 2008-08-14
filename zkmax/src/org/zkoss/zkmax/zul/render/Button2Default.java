@@ -42,13 +42,14 @@ public class Button2Default implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		final String sclass = self.getMoldSclass();
 		
-		wh.write("<table id=\"").write(uuid).write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"");						
-		wh.write("\" z.type=\"zul.widget.Button\" ").write(
-				self.getOuterAttrs());		
-		wh.write("><tbody><tr><td class=\"").write(sclass).write("-tl\"></td>");
+		wh.write("<span id=\"").write(uuid).write("\" class=\"").write(sclass)
+			.write("\" z.type=\"zul.widget.Button\">").write("<table id=\"").write(uuid)
+			.write("!real\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"")						
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+			.write("><tbody><tr><td class=\"").write(sclass).write("-tl\"></td>");
 		wh.write("<td colspan=\"3\" class=\"").write(sclass).write("-tm\"></td><td class=\"").write(sclass).write("-tr\"></td></tr>");
 		wh.write("<tr><td class=\"").write(sclass).write("-ml\"><i>&#160;</i></td><td colspan=\"3\" class=\"").write(sclass).write("-mm\"><em unselectable=\"on\">");
-		wh.write("<button id=\"").write(uuid).write("!b\" type=\"button\"").write(self.getInnerAttrs()).write(">");				
+		wh.write("<a id=\"").write(uuid).write("!btn\" href=\"javascript:;\" class=\"").write(sclass).write("\">");				
 		if (self.getDir().equals("reverse")) {
 			new Out(self.getLabel()).render(out);
 			if (self.isImageAssigned()
@@ -62,7 +63,7 @@ public class Button2Default implements ComponentRenderer {
 			wh.writeln("<br/>");
 			new Out(self.getLabel()).render(out);
 		}		
-		wh.write("</button></em></td><td class=\"").write(sclass).write("-mr\"><i>&#160;</i></td></tr><tr><td class=\"").write(sclass).write("-bl\"></td>" +
-				"<td colspan=\"3\" class=\"").write(sclass).write("-bm\"></td><td class=\"").write(sclass).write("-br\"></td></tr></tbody></table>");						
-		}
+		wh.write("</a></em></td><td class=\"").write(sclass).write("-mr\"><i>&#160;</i></td></tr><tr><td class=\"").write(sclass).write("-bl\"></td>" +
+				"<td colspan=\"3\" class=\"").write(sclass).write("-bm\"></td><td class=\"").write(sclass).write("-br\"></td></tr></tbody></table></span>");						
+	}
 }

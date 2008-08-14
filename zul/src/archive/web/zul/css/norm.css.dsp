@@ -1264,20 +1264,27 @@ td.slidersph-bkr {
 .z-btn {
 	font: normal tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap; font-size: ${fontSizeM};
 }
-.z-btn button {
+span.z-btn {
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
+}
+.z-btn a.z-btn {
+	color: #000000; text-decoration: none; display: block;
+}
+.z-btn button, .z-btn a.z-btn {
 	border: 0 none; background: transparent; font: normal tahoma, verdana, helvetica; font-size: ${fontSizeM};
 	padding-left: 3px; padding-right: 3px; cursor: pointer; margin: 0; overflow: visible;
-	width: auto; -moz-outline: 0 none; outline: 0 none; min-height: 15px;
+	width: auto; -moz-outline: 0 none; outline: 0 none; min-height: 13px;
 }
 <c:if test="${c:isExplorer()}">
 <%-- IE only --%>
-.z-btn button {
+.z-btn button, .z-btn a.z-btn {
 	padding-top: 2px;
 }
 </c:if>
 <c:if test="${c:isGecko()}">
 <%-- Firefox only --%>
-.z-btn button {
+.z-btn button, .z-btn a.z-btn {
 	padding-left: 0; padding-right: 0;
 }
 </c:if>

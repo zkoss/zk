@@ -19,8 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<table id="${self.uuid}" z.type="zul.widget.Button" cellspacing="0" cellpadding="0" border="0" 
-${self.outerAttrs}>
+<span id="${self.uuid}" class="${self.moldSclass}" z.type="zul.widget.Button">
+<table id="${self.uuid}!real" cellspacing="0" cellpadding="0" border="0" ${self.outerAttrs}${self.innerAttrs}>
 <tbody>
 <tr>
 	<td class="${self.moldSclass}-tl"></td>
@@ -29,19 +29,16 @@ ${self.outerAttrs}>
 </tr>
 <tr>
 	<td class="${self.moldSclass}-ml"><i>&#160;</i></td>
-	<td colspan="3" class="${self.moldSclass}-mm">
-	<em unselectable="on">	
-	<button id="${self.uuid}!b" type="button"${self.innerAttrs}>
+	<td colspan="3" class="${self.moldSclass}-mm"><em unselectable="on"><a id="${self.uuid}!btn" class="${self.moldSclass}" href="javascript:;">
 	<c:choose trim="true">
 	<c:when test="${self.dir == 'reverse'}">
 		<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
 	</c:when>
 	<c:otherwise>
 		${self.imgTag}<c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if><c:out value="${self.label}"/>
-	</c:otherwise>	
-	</button>
-	</em>	
-	</c:choose>		
+	</c:otherwise>
+	</c:choose>			
+	</a></em>
 	</td>
 	<td class="${self.moldSclass}-mr"><i>&#160;</i></td>
 </tr>
@@ -52,3 +49,4 @@ ${self.outerAttrs}>
 </tr>
 </tbody>
 </table>
+</span>
