@@ -1,4 +1,4 @@
-\<%--
+<%--
 menu2.dsp
 
 {{IS_NOTE
