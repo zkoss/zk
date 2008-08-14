@@ -1321,9 +1321,6 @@ td.slidersph-bkr {
 .z-btn-over .z-btn-m {
 	background-position: 0 -105px;
 }
-.z-btn-click .z-btn-m, .z-menu-btn-seld .z-btn-m {
-	background-position: 0 -126px;
-}
 .disd z-btn * {
 	color: gray!important; cursor: default!important;
 }
@@ -1432,12 +1429,18 @@ td.z-btn-br {
 	background-position:0 -879px;	
 }
 <%-- Menu - trendy look-and-feel --%>
+.z-btn-click .z-btn-m, .z-menu-btn-seld .z-btn-m {
+	background-position: 0 -126px;
+}
 .z-menu-btn .z-btn-m {
 	padding-right: 2px!important;
 }
 .z-menu-btn .z-btn-m em {
 	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')}) no-repeat right 0;
 	padding-right: 10px; min-height: 16px;
+}
+.z-menu-btn button {
+	font-size: ${fontSizeS};
 }
 .z-btn-text-icon .z-menu-btn .z-btn-m em {
 	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')}) no-repeat right 3px;
