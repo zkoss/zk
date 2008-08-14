@@ -404,17 +404,6 @@ public class SimpleSession implements Session, SessionCtrl {
 
 		_cache = (DesktopCache)s.readObject();
 		_nextUuid = s.readInt();
-
-		//Since HttpSession will de-serialize attributes by the container
-		//we ony invoke the notification
-		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
-			final String nm = (String)en.nextElement();
-			didDeserialize(getAttribute(nm));
-		}
-	}
-	private void didDeserialize(Object o) {
-		if (o instanceof SessionSerializationListener)
-			((SessionSerializationListener)o).didDeserialize(this);
 	}
 
 	/** Used by the deriving class to pre-process a session before writing
@@ -423,7 +412,20 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * <p>Refer to {@link SerializableSession} for how to use this method.
 	 */
 	protected void sessionWillPassivate() {
+		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
+			final String nm = (String)en.nextElement();
+			willPassivate(getAttribute(nm));
+		}
+
 		((WebAppCtrl)_wapp).sessionWillPassivate(this);
+	}
+	private void willPassivate(Object o) {
+		if (o instanceof SessionSerializationListener) {
+			try {
+				((SessionSerializationListener)o).willPassivate(this);
+			} catch (AbstractMethodError ex) { //backward compatible
+			}
+		}
 	}
 	/** Used by the deriving class to post-process a session after
 	 * it is read back.
@@ -447,5 +449,18 @@ public class SimpleSession implements Session, SessionCtrl {
 						.sessionDidActivate(SimpleSession.this);
 				}
 			});
+
+		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
+			final String nm = (String)en.nextElement();
+			didActivate(getAttribute(nm));
+		}
+	}
+	private void didActivate(Object o) {
+		if (o instanceof SessionSerializationListener) {
+			try {
+				((SessionSerializationListener)o).didActivate(this);
+			} catch (AbstractMethodError ex) { //backward compatible
+			}
+		}
 	}
 }
