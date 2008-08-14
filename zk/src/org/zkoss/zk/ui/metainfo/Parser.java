@@ -599,7 +599,7 @@ public class Parser {
 
 				//Ingore blank text if no need to preserved
 				if (trimLabel.length() == 0
-				&& (pi == null || !pi.isBlankPreserved())
+				&& pi != null && !pi.isBlankPreserved()
 				&& !(pi instanceof NativeInfo))
 					continue;
 
@@ -613,7 +613,8 @@ public class Parser {
 						new TextInfo(pgdef.getEvaluatorRef(), label));
 						//Don't trim if native (3.5.0)
 				} else {
-					final String textAs = parentInfo.getTextAs();
+					final String textAs =
+						parentInfo != null ? parentInfo.getTextAs(): null;
 					if (textAs != null) {
 						parentInfo.addProperty(textAs, trimLabel, null);
 					} else {
