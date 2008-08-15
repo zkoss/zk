@@ -35,6 +35,9 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  */
 public interface ComposerExt {
 	/** Invokes before composing a component.
+	 * If you want to manipulate the specified component info,
+	 * you can use {@link ComponentInfo#duplicate} to make a copy and then
+	 * modify it such that it won't affect the default behavior.
 	 *
 	 * @param page the page for composing this component.
 	 * @param parent the parent component, or null if it is the root component.
