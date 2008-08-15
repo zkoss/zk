@@ -189,7 +189,7 @@ input.z-form-focus, .z-form-focus input {
 }
 <%-- ZK --%>
 <%-- groupbox caption --%>
-.caption input, .caption td {
+.caption input, .caption td, .caption td .z-btn button, .caption td .z-btn a.z-btn {
 	font-size: ${fontSizeS};
 }
 .caption td.caption {
