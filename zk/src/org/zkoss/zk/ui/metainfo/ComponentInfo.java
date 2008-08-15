@@ -143,6 +143,30 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_tag = tag;
 		_evalr = evalr;
 	}
+	/** Used only by {@link DupComponentInfo}.
+	 */
+	private ComponentInfo(ComponentInfo compInfo) {
+		_parent = compInfo._parent; //direct copy since it is 'virtual'
+		_children = compInfo._children;
+		_evalr = compInfo._evalr;
+		_compdef = compInfo._compdef;
+		_implcls = compInfo._implcls;
+		_tag = compInfo._tag;
+		_cond = compInfo._cond;
+		_fulfill = compInfo._fulfill;
+		_apply = compInfo._apply;
+		_forward = compInfo._forward;
+		_forEach = compInfo._forEach;
+		_forEachInfo = compInfo._forEachInfo;
+		_replaceableText = compInfo._replaceableText;
+
+		if (_annots != null)
+			_annots = (AnnotationMap)_annots.clone();
+		if (_props != null)
+			_props = new LinkedList(_props);
+		if (_evthds != null)
+			_evthds = (EventHandlerMap)_evthds.clone();
+	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
 	 * belongs to, or null if the component definition is temporary.
@@ -566,6 +590,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 	}
 
 	/** Returns the class name (String) that implements the component.
+	 * It is actually the value of the use attribute which might contains
+	 * EL expressions.
+	 * To resolve the real implementation class, use
+	 * {@link #resolveImplementationClass}.
 	 */
 	public String getImplementationClass() {
 		return _implcls != null ? _implcls.getRawValue(): null;
@@ -765,6 +793,33 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _evalr.getEvaluator();
 	}
 
+	/** Duplicates the specified component info but retaining
+	 * the same but virtual parent-child relationship.
+	 * It is designed to use with
+	 * {@link org.zkoss.zk.ui.util.ComposerExt#doBeforeCompose}
+	 * to override some properties of the default component info.
+	 *
+	 * <p>Unlike {@link #clone}, the parent-child relation is duplicated
+	 * but it is 'virtual'. By virtual we mean
+	 * all the children's parent doesn't reference to 
+	 * the duplicated info (the returned instance).
+	 * Rather, they reference to the original info being duplicated.
+	 *
+	 * <p>Since the parent-children relation of the returned info is 'virtual',
+	 * you can not call {@link #appendChild} or others to change it.
+	 * If you need to change the parent-children relation, use {@link #clone}
+	 * instead, and then clone the required children.
+	 *
+	 * <p>Notice, we actually copy the values to the returned info
+	 * so any change to the original one doesn't affect the duplicated info.
+	 *
+	 * @since 3.0.8
+	 * @see #clone
+	 */
+	public ComponentInfo duplicate() {
+		return new DupComponentInfo(this);
+	}
+
 	//Condition//
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(_evalr, comp);
@@ -787,6 +842,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 	//Cloneable//
 	/** Clones this info.
 	 * After cloned, {@link #getParent} is null.
+	 * The children (@{link #getChildren}) is not cloned, either.
+	 * Thus, it is better to use {@link #duplicate} with
+	 * {@link org.zkoss.zk.ui.util.ComposerExt#doBeforeCompose}
+	 * if you want to override some properties.
 	 */
 	public Object clone() {
 		try {
@@ -942,4 +1001,44 @@ implements Cloneable, Condition, java.io.Externalizable {
 		((List)_evalRefStack.get()).remove(0);
 	}
 	private static final ThreadLocal _evalRefStack = new ThreadLocal();
+
+	private static class DupComponentInfo extends ComponentInfo {
+		private DupComponentInfo(ComponentInfo compInfo) {
+			super(compInfo);
+		}
+
+		public void appendChild(ZScript zscript) {
+			throw new UnsupportedOperationException();
+		}
+		public void appendChild(VariablesInfo variables) {
+			throw new UnsupportedOperationException();
+		}
+		public void appendChild(AttributesInfo custAttrs) {
+			throw new UnsupportedOperationException();
+		}
+		public void appendChild(ComponentInfo compInfo) {
+			throw new UnsupportedOperationException();
+		}
+		public boolean removeChild(ZScript zscript) {
+			throw new UnsupportedOperationException();
+		}
+		public boolean removeChild(VariablesInfo variables) {
+			throw new UnsupportedOperationException();
+		}
+		public boolean removeChild(AttributesInfo custAttrs) {
+			throw new UnsupportedOperationException();
+		}
+		public boolean removeChild(ComponentInfo compInfo) {
+			throw new UnsupportedOperationException();
+		}
+		/*pacakge*/ void appendChildDirectly(Object child) {
+			throw new UnsupportedOperationException();
+		}
+		/*package*/ boolean removeChildDirectly(Object child) {
+			throw new UnsupportedOperationException();
+		}
+		public void appendChild(TextInfo text) {
+			throw new UnsupportedOperationException();
+		}
+	}
 }
