@@ -160,12 +160,16 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_forEachInfo = compInfo._forEachInfo;
 		_replaceableText = compInfo._replaceableText;
 
-		if (_annots != null)
-			_annots = (AnnotationMap)_annots.clone();
-		if (_props != null)
-			_props = new LinkedList(_props);
-		if (_evthds != null)
-			_evthds = (EventHandlerMap)_evthds.clone();
+		dupProps(compInfo);
+	}
+	/** Duplicates special properties to isolate the dependency. */
+	private void dupProps(ComponentInfo compInfo) {
+		if (compInfo._annots != null)
+			_annots = (AnnotationMap)compInfo._annots.clone();
+		if (compInfo._props != null)
+			_props = new LinkedList(compInfo._props);
+		if (compInfo._evthds != null)
+			_evthds = (EventHandlerMap)compInfo._evthds.clone();
 	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
@@ -851,12 +855,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		try {
 			final ComponentInfo info = (ComponentInfo)super.clone();
 			info._parent = null;
-			if (_annots != null)
-				info._annots = (AnnotationMap)_annots.clone();
-			if (_props != null)
-				info._props = new LinkedList(_props);
-			if (_evthds != null)
-				info._evthds = (EventHandlerMap)_evthds.clone();
+			info.dupProps(this);
 			return info;
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
