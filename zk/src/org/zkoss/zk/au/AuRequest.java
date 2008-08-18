@@ -212,7 +212,7 @@ public class AuRequest {
 
 	//-- predefined commands --//
 	static {
-		new BookmarkChangedCommand(Events.ON_BOOKMARK_CHANGED,
+		new BookmarkChangedCommand(Events.ON_BOOKMARK_CHANGE,
 			Command.IGNORE_OLD_EQUIV);
 		new CheckCommand(Events.ON_CHECK, 0);
 		new ClientInfoCommand(Events.ON_CLIENT_INFO, Command.IGNORE_OLD_EQUIV);

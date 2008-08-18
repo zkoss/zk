@@ -395,6 +395,7 @@
 		<xs:attribute name="id" type="xs:string" use="optional" />
 		<xs:attribute name="visible" type="booleanType" use="optional" />
 		<xs:attribute name="mold" type="xs:string" use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="htmlBasedComponentAttrGroup">
 		<xs:attributeGroup ref="abstractComponentAttrGroup" />
@@ -543,7 +544,6 @@
 		<xs:attribute name="border" type="xs:string" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="autostart" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- auxhead -->
@@ -589,7 +589,6 @@
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="onOK" type="xs:string" use="optional" />
 	</xs:complexType>
@@ -626,7 +625,6 @@
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="widths" type="xs:string" use="optional" />
 		<xs:attribute name="heights" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
@@ -647,7 +645,6 @@
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- calendar -->
@@ -660,7 +657,6 @@
 		<xs:attribute name="compact" type="booleanType" use="optional" />
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- caption -->
@@ -719,7 +715,6 @@
 		<xs:attribute name="areaListener" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- checkbox -->
@@ -736,7 +731,6 @@
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- column -->
@@ -787,7 +781,6 @@
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- comboitem -->
@@ -822,7 +815,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- decimalbox -->
@@ -837,7 +829,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- div -->
@@ -849,7 +840,6 @@
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- doublebox -->
@@ -863,7 +853,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- east -->
@@ -1064,7 +1053,6 @@
 		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="oddRowSclass" type="xs:string" use="optional" />
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="preloadSize" type="intType" use="optional" />
 	</xs:complexType>
@@ -1086,7 +1074,6 @@
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- hbox -->
@@ -1099,7 +1086,6 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="widths" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
@@ -1110,7 +1096,6 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- iframe -->
@@ -1123,7 +1108,6 @@
 		<xs:attribute name="scrolling" type="iframeScrollingAttrType" use="optional" />
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="autohide" type="booleanType" use="optional" />		
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="iframeScrollingAttrType">
@@ -1154,7 +1138,6 @@
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- imagemap -->
@@ -1173,7 +1156,6 @@
 		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- include -->
@@ -1184,7 +1166,6 @@
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="localized" type="booleanType" use="optional" />
 		<xs:attribute name="progressing" type="booleanType" use="optional"/>
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- intbox -->
@@ -1198,7 +1179,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- longbox -->
@@ -1212,7 +1192,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- label -->
@@ -1226,7 +1205,6 @@
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- listbox -->
@@ -1324,7 +1302,6 @@
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="pagingPosition" type="listboxPagingPositionAttrType" use="optional" />
 		<xs:attribute name="preloadSize" type="intType" use="optional" />
@@ -1431,7 +1408,6 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- menuitem -->
@@ -1513,7 +1489,6 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- progressmeter -->
@@ -1546,7 +1521,6 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- row -->
@@ -1599,7 +1573,6 @@
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="bar" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- slider -->
@@ -1616,7 +1589,6 @@
 
 		<xs:attribute name="onScroll" type="xs:string" use="optional" />
 		<xs:attribute name="onScrolling" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- south -->
@@ -1652,7 +1624,6 @@
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="bar" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- splitter -->
@@ -1700,7 +1671,6 @@
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- tabpanel -->
@@ -1745,7 +1715,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- timer -->
@@ -1757,7 +1726,6 @@
 		<xs:attribute name="repeats" type="booleanType" use="optional" />
 		<xs:attribute name="running" type="booleanType" use="optional" />
 		<xs:attribute name="onTimer" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- timebox -->
@@ -1774,7 +1742,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- toolbar -->
@@ -1791,7 +1758,6 @@
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- toolbarbutton -->
@@ -1809,7 +1775,6 @@
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- tree -->
@@ -1946,7 +1911,6 @@
 		<xs:attribute name="vflex" type="booleanType" use="optional" />
 		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="treeitemRenderer" type="xs:string" use="optional" />
@@ -2063,7 +2027,6 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="heights" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
@@ -2124,7 +2087,6 @@
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attribute name="onClose" type="xs:string" use="optional" />
 		<xs:attribute name="onZIndex" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="windowActionOnShowAttrType">

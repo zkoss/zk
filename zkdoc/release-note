@@ -7,6 +7,9 @@ ZK 3.0.8
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
 
+* Upgrade Notes:
+  + onBookmarkChanged is renamed to onBookmarkChange
+
 	--------
 ZK 3.0.7
 * Features

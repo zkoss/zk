@@ -52,5 +52,6 @@ public class BookmarkChangedCommand extends Command {
 		final String nm = data[0];
 		((DesktopCtrl)request.getDesktop()).setBookmarkByClient(nm);
 		Events.postEvent(new BookmarkEvent(getId(), nm));
+		Events.postEvent(new BookmarkEvent("onBookmarkChanged", nm)); //backward compatibility
 	}
 }

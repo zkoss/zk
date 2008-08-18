@@ -187,7 +187,7 @@ public interface Desktop {
 	 */
 	public String getBookmark();
 	/** Sets a bookmark to this desktop. Then, when user press BACK, FORWARD
-	 * or specify an URL with this bookmark, the onBookmarkChanged event
+	 * or specify an URL with this bookmark, the onBookmarkChange event
 	 * is sent to all pages of the desktop.
 	 */
 	public void setBookmark(String name);

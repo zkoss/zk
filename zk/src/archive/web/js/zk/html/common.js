@@ -2031,7 +2031,7 @@ zk.History.prototype = {
 		var nm = this.getBookmark();
 		if (nm != this.curbk) {
 			this.curbk = nm;
-			zkau.send({uuid: '', cmd: "onBookmarkChanged", data: [nm]}, 50);
+			zkau.send({uuid: '', cmd: "onBookmarkChange", data: [nm]}, 50);
 		}
 	},
 	getBookmark: function () {

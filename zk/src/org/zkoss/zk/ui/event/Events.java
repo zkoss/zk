@@ -132,11 +132,15 @@ public class Events {
 	/** The onUpload event (used with {@link UploadEvent}.
 	 */
 	public static final String ON_UPLOAD = "onUpload";
-	/** The onBookmarkChanged event (used with {@link BookmarkEvent})
+	/** The onBookmarkChange event (used with {@link BookmarkEvent})
 	 * to notify that user pressed BACK, FORWARD or specified URL directly
 	 * that causes the bookmark is changed (but still in the same desktop).
 	 * <p>All root components of all pages of the desktop will
 	 * recieve this event.
+	 * @since 3.0.8
+	 */
+	public static final String ON_BOOKMARK_CHANGE = "onBookmarkChange";
+	/** @deprecated As of release 3.0.8, replaced with {@link ON_BOOKMARK_CHANGE}.
 	 */
 	public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
 	/** The onClientInfo event (used with {@link ClientInfoEvent}).
