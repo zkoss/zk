@@ -336,7 +336,7 @@ zk.disableESC = function () {
 		//if error occurs, loading will be never ended, so try to ignore
 		//we cannot use zk.listen. reason: no way to get back msg...(FF)
 		zk._oldOnErr = window.onerror;
-		zk._onErrChanged = true;
+		zk._onErrChange = true;
 		window.onerror =
 	function (msg, url, lineno) {
 		//We display errors only for local class web resource
@@ -363,10 +363,10 @@ zk.enableESC = function () {
 		zk.unlisten(document, "keydown", zk._noESC);
 		delete zk._noESC;
 	}
-	if (zk._onErrChanged) {
+	if (zk._onErrChange) {
 		window.onerror = zk._oldOnErr;
 		if (zk._oldOnErr) delete zk._oldOnErr;
-		delete zk._onErrChanged;
+		delete zk._onErrChange;
 	}
 };
 

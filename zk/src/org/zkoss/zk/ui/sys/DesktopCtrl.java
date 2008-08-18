@@ -89,7 +89,7 @@ public interface DesktopCtrl {
 	 */
 	public void setExecution(Execution exec);
 
-	/** Sets the bookmark when receiving the onBookmarkChanged command
+	/** Sets the bookmark when receiving the onBookmarkChange command
 	 * from the client.
 	 */
 	public void setBookmarkByClient(String name);

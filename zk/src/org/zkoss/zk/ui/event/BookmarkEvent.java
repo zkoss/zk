@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-/** The bookmark udpate event used with <code>onBookmarkChanged</code>
+/** The bookmark udpate event used with <code>onBookmarkChange</code>
  * to notify that user pressed BACK, FORWARD or others
  * that causes the bookmark changed (but still in the same desktop).
  *

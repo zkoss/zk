@@ -210,7 +210,7 @@ public class Iframe extends XulElement {
 		HTMLs.appendAttribute(sb, "align", _align);
 		HTMLs.appendAttribute(sb, "name", _name);
 		HTMLs.appendAttribute(sb, "src", getEncodedSrc());
-		appendAsapAttr(sb, Events.ON_URI_CHANGED);
+		appendAsapAttr(sb, Events.ON_URI_CHANGE);
 
 		if (!"auto".equals(_scrolling))
 			HTMLs.appendAttribute(sb, "scrolling", 

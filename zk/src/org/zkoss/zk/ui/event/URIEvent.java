@@ -21,7 +21,7 @@ package org.zkoss.zk.ui.event;
 import org.zkoss.zk.ui.Component;
 
 /**
- * The URI update event used with <code>onURIChanged</code>
+ * The URI update event used with <code>onURIChange</code>
  * to notify that the assoicated URI
  * is changed by the user. Currently it is supported only by ZUL's
  * iframe component (and only if iframe contains a ZK page).

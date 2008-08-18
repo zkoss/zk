@@ -1156,11 +1156,11 @@ zkau.ajaxRequest = function () {
  * @param url the new URL
  * @since 3.5.0
  */
-function onIframeURLChanged(uuid, url) {
+function onIframeURLChange(uuid, url) {
 	if (zkau._unloading)
 		return;
 
-	zkau.sendasap({uuid: uuid, cmd: "onURIChanged", data: [url]});
+	zkau.sendasap({uuid: uuid, cmd: "onURIChange", data: [url]});
 };
 zkau.onURLChange = function () {
 	var ifr = window.frameElement;
@@ -1183,8 +1183,8 @@ zkau.onURLChange = function () {
 	}
 	if (l1.hash && "#" != l1.hash) url += l1.hash;
 
-	if (parent.onIframeURLChanged && getZKAttr(ifr, "xurl") != url) {
-		parent.onIframeURLChanged(ifr.id, url);
+	if (parent.onIframeURLChange && getZKAttr(ifr, "xurl") != url) {
+		parent.onIframeURLChange(ifr.id, url);
 		setZKAttr(ifr, "xurl", url);
 	}
 };

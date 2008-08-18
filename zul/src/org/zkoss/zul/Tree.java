@@ -1210,7 +1210,7 @@ public class Tree extends XulElement implements Paginated {
 				break;
 			case TreeDataEvent.CONTENTS_CHANGED:
 				for(int i=indexFrom;i<=indexTo;i++)
-					onTreeDataContentChanged(parent,node,i);
+					onTreeDataContentChange(parent,node,i);
 				break;
 			}
 		}			
@@ -1263,7 +1263,7 @@ public class Tree extends XulElement implements Paginated {
 	/*
 	 * Handle event that child's content is changed
 	 */
-	private void onTreeDataContentChanged(Component parent,Object node, int index){
+	private void onTreeDataContentChange(Component parent,Object node, int index){
 		List items = treechildrenOf(parent).getChildren();		
 
 		/*

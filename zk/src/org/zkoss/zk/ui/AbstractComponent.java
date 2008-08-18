@@ -1136,14 +1136,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	public void onPageAttached(Page newpage, Page oldpage) {
 		if (oldpage == null) //new added
-			onListenerChanged(newpage.getDesktop(), true);
+			onListenerChange(newpage.getDesktop(), true);
 	}
 	/** Default: handles special event listeners.
 	 * @see ComponentCtrl#onPageDetached
 	 * @since 3.0.0
 	 */
 	public void onPageDetached(Page page) {
-		onListenerChanged(page.getDesktop(), false);
+		onListenerChange(page.getDesktop(), false);
 	}
 
 	/** Default: null (no propagation at all).
@@ -1339,7 +1339,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 						final Desktop desktop = getDesktop();
 						if (desktop != null) {
-							onListenerChanged(desktop, false);
+							onListenerChange(desktop, false);
 
 							if (asap && !isAsapRequired(evtnm))
 								smartUpdate(getAttrOfEvent(evtnm), null);
@@ -1513,13 +1513,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			final Desktop desktop = getDesktop();
 			if (desktop != null)
-				onListenerChanged(desktop, true);
+				onListenerChange(desktop, true);
 		}
 	}
 	public Set getEventHandlerNames() {
 		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
 	}
-	private void onListenerChanged(Desktop desktop, boolean listen) {
+	private void onListenerChange(Desktop desktop, boolean listen) {
 		if (listen) {
 			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
 				response("clientInfo", new AuClientInfo(desktop));
