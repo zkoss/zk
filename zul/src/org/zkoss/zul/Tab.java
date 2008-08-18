@@ -27,12 +27,11 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Selectable;
 
 import org.zkoss.zul.impl.LabelImageElement;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A tab.
  * <p>
- * Default {@link #getMoldSclass}: z-mean. (since 3.5.0)
+ * Default {@link #getMoldSclass}: z-tab. (since 3.5.0)
  * 
  * @author tomyeh
  * 
@@ -46,7 +45,6 @@ public class Tab extends LabelImageElement {
 
 	public Tab() {
 		setMoldSclass("z-tab");
-		Utils.updateMoldByTheme(this);
 	}
 
 	public Tab(String label) {
@@ -223,29 +221,18 @@ public class Tab extends LabelImageElement {
 	 */
 	public String getRealSclass() {
 		final String mold = super.getMold();
-		String scls = null;
-		if (mold.equals("v30")) {
-			scls = super.getSclass();
-			if (scls == null)
-				scls = "tab";
-			if (isDisabled())
-				scls = scls + "dis";
-			return isSelected() ? scls + "sel" : scls;
-		} else {
-			scls = super.getMoldSclass();
-			if (scls == null)
-				scls = "z-tab";
-			if (isDisabled())
-				scls = scls + "dis";
-			return isSelected() ? scls + "sel" : scls;
-		}
+		String scls = super.getMoldSclass();
+		if (scls == null)
+			scls = "z-tab";
+		if (isDisabled())
+			scls = scls + "dis";
+		return isSelected() ? scls + "sel" : scls;
 	}
 
 	// -- Component --//
 	public void invalidate() {
 		final Tabbox tabbox = getTabbox();
-		if (tabbox != null && 
-				("accordion".equals(tabbox.getMold())||"accordion-lite".equals(tabbox.getMold()))) {
+		if (tabbox != null && tabbox.inAccordionMold()) {
 			tabbox.invalidate();			
 		} else {			
 			super.invalidate();

@@ -21,17 +21,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zkTabbox2 = {
 	setAttr : function(cmp, name, value){
 	    switch (name) {
-	        case "style":
-	        case "style.width":
-	        case "style.height":
-	            zkau.setAttr(cmp, name, value);
-	            var uuid = getZKAttr(cmp, "tabs");
-	            if (uuid) {
-	                zk.beforeSizeAt(cmp);
-	                zkTabs2._fixWidth(uuid);					
-	                zk.onSizeAt(cmp);
-	            }
-	            return true;
+        case "style":
+        case "style.width":
+        case "style.height":
+            zkau.setAttr(cmp, name, value);
+            var uuid = getZKAttr(cmp, "tabs");
+            if (uuid) {
+                zk.beforeSizeAt(cmp);
+                zkTabs2._fixWidth(uuid);					
+                zk.onSizeAt(cmp);
+            }
+            return true;
 	    }
 	    return false;
 	},
@@ -66,18 +66,18 @@ zkTab2 = {
 	},
 	setAttr : function(cmp, name, value){    
 	    switch (name) {
-	        case "z.disabled":
-	            zkTab2._disable(cmp, value);
-	            return true;
-	        case "style":
-	        case "style.width":
-	        case "style.height":
-	            zkau.setAttr(cmp, name, value);
-	            zk.beforeSizeAt(cmp);
-	            zkTabs2.scrollingchk($uuid($parent(cmp)));
-	            zkTabs2._fixWidth($uuid($parent(cmp)));
-	            zk.onSizeAt(cmp);
-	            return true;
+        case "z.disabled":
+            zkTab2._disable(cmp, value);
+            return true;
+        case "style":
+        case "style.width":
+        case "style.height":
+            zkau.setAttr(cmp, name, value);
+            zk.beforeSizeAt(cmp);
+            zkTabs2.scrollingchk($uuid($parent(cmp)));
+            zkTabs2._fixWidth($uuid($parent(cmp)));
+            zk.onSizeAt(cmp);
+            return true;
 	    }
 	    return false;
 	},
@@ -312,28 +312,25 @@ scrollingchk : function(uuid, way, cmp){
             }
             // scroll to specific position            
             switch (way) {
-                case "sta":
-                    break;
-                case "end":
-                    var d = cldwidth - header.offsetWidth - header.scrollLeft + 2;
-                    d >= 0 ? zkTabs2.tabscroll(uuid, "right", d) : zkTabs2.tabscroll(uuid, "left", Math.abs(d));
-                    break;
-                case "sel":
-                    var osl = cmp.offsetLeft, 
-						tosw = cmp.offsetWidth, 
-						scl = header.scrollLeft, 
-						hosw = headwidth;
-                    //over left
-                    if (osl < scl) {
-                        zkTabs2.tabscroll(uuid, "left", scl - osl + 2);
-                    }else {
-                        if (osl + tosw > scl + hosw) {
-                            zkTabs2.tabscroll(uuid, "right", osl + tosw - scl - hosw + 2);
-                        }
+            case "end":
+                var d = cldwidth - header.offsetWidth - header.scrollLeft + 2;
+                d >= 0 ? zkTabs2.tabscroll(uuid, "right", d) : zkTabs2.tabscroll(uuid, "left", Math.abs(d));
+                break;
+            case "sel":
+                var osl = cmp.offsetLeft, 
+					tosw = cmp.offsetWidth, 
+					scl = header.scrollLeft, 
+					hosw = headwidth;
+                //over left
+                if (osl < scl) {
+                    zkTabs2.tabscroll(uuid, "left", scl - osl + 2);
+                }else {
+                    if (osl + tosw > scl + hosw) {
+                        zkTabs2.tabscroll(uuid, "right", osl + tosw - scl - hosw + 2);
                     }
-                    break;
-                default:
-                    ;
+                }
+            case "sta":
+                break;
             }
             /*if (way =="start") maybe one day have a "Scroll To Start" button ?*/
         
@@ -510,11 +507,11 @@ if (zk.ie6Only)
  * @since 3.0.3
  */
 zk.isAccord = function(tabbox){
-    return getZKAttr(tabbox, "accd") == "true";
+    return getZKAttr(tabbox, "accd");
 };
 /** Returns whether the tabbox is scrollable.
  * @since 3.5.0
  */
 zk.isScroll = function(tabbox){
-    return getZKAttr(tabbox, "tabscroll") == "true";
-}
+    return getZKAttr(tabbox, "tabscrl");
+};

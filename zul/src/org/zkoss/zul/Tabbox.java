@@ -33,7 +33,6 @@ import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.au.out.AuInvoke;
 
-import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -55,8 +54,7 @@ import org.zkoss.zul.impl.XulElement;
  * </dl>
  * 
  * <p>
- * <p>Default {@link #getMoldSclass}: z-mean. (since 3.5.0)
- * @author tomyeh
+ * <p>Default {@link #getMoldSclass}: z-tabbox. (since 3.5.0)
  * 
  * @author tomyeh
  */
@@ -76,7 +74,6 @@ public class Tabbox extends XulElement {
 	}
 	
 	private void init() {
-		Utils.updateMoldByTheme(this);
 		_listener = new Listener();
 	}
 
@@ -84,10 +81,7 @@ public class Tabbox extends XulElement {
 	 * Returns whether it is in the accordion mold.
 	 */
 	/* package */boolean inAccordionMold() {
-
-		return ("accordion".equals(getMold())
-				|| "accordion-lite".equals(getMold()) || "v30-accordion"
-				.equals(getMold()));
+		return getMold().startsWith("accordion");
 	}
 
 	/**
@@ -105,8 +99,8 @@ public class Tabbox extends XulElement {
 	}
 
 	/**
-	 * Returns tab-scrolling status 
-	 * Default: true (have scrolling).
+	 * Returns whether the tab scrolling is enabled. 
+	 * Default: true.
 	 * @since 3.5.0
 	 */
 	public boolean isTabscroll() {
@@ -114,7 +108,7 @@ public class Tabbox extends XulElement {
 	}
 
 	/**
-	 * Enable/Disable tab-scrolling
+	 * Sets whether to eable the tab scrolling
 	 * @since 3.5.0
 	 */
 	public void setTabscroll(boolean tabscroll) {
@@ -289,31 +283,15 @@ public class Tabbox extends XulElement {
 	 * selected tab, "tab-3d-tm-uns" for the top-middle border of the
 	 * non-selected tab, and so on.
 	 * 
-	 * @since 3.0,0
+	 * @since 3.0.0
 	 */
 	public String getTabLook() {
 		final String mold = getMold();
-		String prefix = "";
-		String scls = "";
-		if (mold.equals("v30")) {
-			prefix = "v30".equals(mold) ? "tab-"
-					: "v30-accordion".equals(mold) ? "tabaccd-" : "tab" + mold
-							+ '-';
-			if ("v30-vertical".equals(_orient))
-				prefix += 'v';
-			scls = getSclass();
-			return scls != null && scls.length() > 0 ? prefix + scls : prefix
-					+ "3d";
-		} else {
-			prefix = "vertical".equals(_orient) ? "v" : ""
-					+ ("default".equals(mold) ? "" : "accordion".equals(mold)
-							|| "accordion-lite".equals(mold) ? "" : "tab"
-							+ mold + '-');
-			scls = getMoldSclass();
-			return prefix + scls ;
-		}
-		
-	
+		String prefix = "vertical".equals(_orient) ? "v" : ""
+			+ ("default".equals(mold) ? "" :
+				mold.startsWith("accordion") ? "" : "tab" + mold + '-');
+		String scls = getMoldSclass();
+		return scls != null ? prefix + scls: prefix;
 	}
 
 	// -- Component --//
@@ -355,8 +333,7 @@ public class Tabbox extends XulElement {
 			throw new UiException("Unsupported child for tabbox: " + child);
 		}
 		if (super.insertBefore(child, insertBefore)) {
-			invalidate(); // due to DSP might implemented diff for children
-			// order
+			invalidate(); //DSP might implement diff for children order
 			return true;
 		}
 		return false;
@@ -405,7 +382,7 @@ public class Tabbox extends XulElement {
 		if (_tabs != null && !inAccordionMold())
 			HTMLs.appendAttribute(sb, "z.tabs", _tabs.getUuid());
 		if (_tabscroll)
-			HTMLs.appendAttribute(sb, "z.tabscroll", _tabscroll);
+			HTMLs.appendAttribute(sb, "z.tabscrl", _tabscroll);
 		return sb.toString();
 	}
 
