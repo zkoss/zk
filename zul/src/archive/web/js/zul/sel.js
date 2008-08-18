@@ -451,8 +451,10 @@ zk.Selectable.prototype = {
 			zkau.setAttr(this.element, nm, val);
 			this._recalcSize();
 			return true;
-		case "style":
 		case "style.width":
+			if (this.headtbl) this.headtbl.style.width = "";
+			if (this.foottbl) this.foottbl.style.width = "";
+		case "style":
 		case "style.height":
 			zkau.setAttr(this.element, nm, val);
 			this._recalcSize();
