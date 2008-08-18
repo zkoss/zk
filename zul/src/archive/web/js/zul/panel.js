@@ -355,7 +355,21 @@ zkPanel = {
 		zkPanel._fixHgh(cmp);
 		zkPanel._fixWdh(cmp);
 		zkPanel.syncShadow(cmp);
+		if (getZKAttr(cmp, "maximized") == "true")zkPanel.syncMaximized(cmp);
 	}, 
+	syncMaximized: function (cmp) {
+		var op = zkPanel.isFloatable(cmp) ? zPos.offsetParent(cmp) : cmp.parentNode,
+			s = cmp.style;
+			
+		// Sometimes, the clientWidth/Height in IE6 is wrong. 
+		var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
+		if (sw < 0) sw = 0;
+		var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+		if (sh < 0) sh = 0;
+		
+		s.width = sw + "px";
+		s.height = sh + "px";
+	},
 	_fixWdh: zk.ie7 ? function (cmp) {
 		if (getZKAttr(cmp, "framable") != "true" || !zk.isRealVisible(cmp)) return;
 		var body = $e(getZKAttr(cmp, "children"));
