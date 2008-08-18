@@ -850,12 +850,28 @@ def alert(m):
 			<mold-name>accordion</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxAccordion</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>accordion-lite</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxAccordion</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxDefault</mold-uri>
+		</mold>		
+		<mold>
+			<mold-name>v30-accordion</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxAccordion</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>tabpanel</component-name>
 		<extends>tabpanel</extends>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TabpanelDefault2</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.TabpanelDefault</mold-uri>
 		</mold>
 	</component>

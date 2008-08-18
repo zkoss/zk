@@ -42,7 +42,7 @@ public class TabpanelDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final Tabpanel self = (Tabpanel) comp;
 		final Tabbox tabbox = self.getTabbox();
-		if ("accordion".equals(tabbox.getMold())) {
+		if ("v30-accordion".equals(tabbox.getMold())) {
 			_acdpanel.render(comp, out);
 			return;
 		}

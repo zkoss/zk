@@ -1134,6 +1134,457 @@ td.tab-v3d-br-uns {
 	background-image: url(${c:encodeURL('~./zul/img/tab/v3d-br-uns.gif')});
 	width: 3px; height: 5px;
 }
+<%-- Tabbox2 --%>
+
+.z-tabbox-tabs .z-tabbox-space{		
+	background:#DEECFD none repeat scroll 0 0;
+	border:1px solid #8DB2E3;
+	border-top:0 none;	
+	font-size:1px;
+	height:2px;
+	line-height:1px;
+}
+	
+.z-tabbox-tabs .z-tabbox-ul{
+	background:transparent none repeat scroll 0 0 !important;
+	padding-left:0px;				
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	display:block;
+	margin:0;
+	border-bottom:1px solid #8DB2E3;
+	width:5432px;
+	ZOOM: 1;
+}
+
+.z-tabbox-tabs{
+	overflow:hidden;
+	border:1px solid #8DB2E3;
+	background:transparent none repeat scroll 0 0 !important;
+	border-width:0 !important;
+	padding:0 !important;
+	margin:0 !important;	
+	position:relative;
+}
+.z-tabbox-tabs .z-tabbox-head{
+	width:100%;
+    overflow:hidden;
+    position:relative;
+    zoom:1;	
+}
+
+.z-tabbox-ul a, .z-tabbox-ul em, .z-tabbox-ul span{
+	display:block;
+}
+.z-tabbox-scrolltabs{
+	overflow:hidden;
+	border:1px solid #8DB2E3;	
+	background:#DEECFD none repeat scroll 0 0;
+	position:relative;	
+	padding-bottom:2px;
+}
+
+.z-tabbox-scrolltabs .z-tabbox-head{
+	width:100%;
+	overflow:hidden;
+	position:relative;
+	zoom:1;
+}
+.z-Scrolling .z-tabbox-head{	
+	margin-left: 18px;
+	margin-right: 18px;
+	
+}
+
+.z-tabbox-scrolltabs .z-tabbox-ul{
+	background:#CEDFF5 url(${c:encodeURL('~./zul/img/tab2/tab-strip-bg.gif')}) repeat-x scroll center bottom;	
+	padding-left:0px;
+	padding-top:1px;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	display:block;
+	margin:0;	
+	width:5432px;
+	ZOOM: 1;
+	border-bottom:1px solid #8DB2E3;
+	-moz-user-select:none;
+	-khtml-user-select:none;
+}
+
+.z-tabbox-ul li{
+	position:relative;
+	font-family:helvetica,tahoma,verdana,sans-serif;
+	font-size:13px;
+	cursor:default;	
+	display:block;
+	float:left;	
+	padding: 0px;
+	margin:0 0 0 2px;
+	-moz-user-select:none;
+	-khtml-user-select:none;
+}
+.z-tabbox-ul a{
+	text-decoration:none;
+}
+
+.z-tabbox-close {
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close.gif')});
+	background-repeat:no-repeat;
+	cursor:pointer;
+	display:block;
+	height:11px;
+	opacity:0.6;
+	position:absolute;
+	right:3px;
+	top:3px;
+	width:11px;
+	z-index:2;
+}
+.z-tabbox-a{
+	position:relative;	
+	padding-left:10px;	
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tabs-sprite.gif')});
+	background-repeat: no-repeat; 	
+	-moz-outline: none;
+	outline: none;
+	cursor:pointer;
+}
+
+.z-tabbox-em{	
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/tabs-sprite.gif')}) no-repeat scroll right -351px;
+	padding-right:10px;
+	display:block;
+}
+.z-tabbox-inner{
+	padding-left:2px;
+	padding-right:1px;
+	overflow:hidden;	
+	cursor:pointer;
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/tabs-sprite.gif')}) repeat-x scroll 0 -201px;	
+}
+.z-tabbox-innerclose {
+	padding-right:10px;
+}
+
+.z-tabbox-edge{	
+	float:left;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 none !important;
+    font-size:1px !important;
+    line-height:1px !important;
+    overflow:hidden;
+    zoom:1;
+    background:transparent !important;
+    width:1px;
+}
+.z-tabbox-clear{
+	clear:both;
+	font-size:0;
+	height:0;
+	line-height:0;
+	overflow:hidden;	
+}
+.z-tabdis a,.z-tabdissel a {
+	color:gray;
+	cursor:default;
+	opacity:0.6;
+}
+.z-tabdis .z-tabbox-a,.z-tabdissel .z-tabbox-a {
+	background-position:0pt -51px;	
+}
+.z-tabdis .z-tabbox-close:hover , .z-tabdissel .z-tabbox-close:hover{
+	opacity:0.6;
+} 
+.z-tabdis .z-tabbox-text,.z-tabdissel .z-tabbox-text{			 
+	cursor:default;		
+	font-style:normal;
+	font-family:tahoma,arial,helvetica;
+	font-size:11px;	
+	white-space:nowrap;	
+	padding:4px 0 4px;		
+}
+.z-tabdis .z-tabbox-inner , .z-tabdissel .z-tabbox-inner{
+	cursor:default;
+}
+
+.z-tabsel .z-tabbox-a{
+	cursor:default;
+	background-position:0 0px;
+	margin:0 0 -1px 0;
+}
+.z-tabsel .z-tabbox-inner{
+	cursor:default;
+	background-position:0 -151px;
+	hasLayout:-1;
+	white-space:nowrap;	
+	overflow: hidden;	
+	text-overflow: ellipsis;
+}
+.z-tabsel .z-tabbox-close{
+	opacity:0.8;
+}
+.z-tabsel .z-tabbox-em{
+	background-position:right -301px;
+}
+.z-tabsel .z-tabbox-text{
+	color:#15428B;
+	cursor:default;	
+	font-weight:bold;
+	font-style:normal;
+	font-family:tahoma,arial,helvetica;
+	font-size:11px;	
+	white-space:nowrap;	
+	padding:4px 0 5px;		
+}
+<c:if test="${c:isExplorer()}">
+.z-tabsel .z-tabbox-em{
+	position:relative;
+}
+</c:if>
+.z-tabbox-close:hover{
+	opacity:1;
+}
+
+
+.z-tab .z-tabbox-a{
+	background-position:0 -51px;		
+}
+.z-tab .z-tabbox-a:hover{
+	background-position:0 -101px;		
+}
+.z-tab .z-tabbox-a:hover .z-tabbox-em{
+	background-position:right -401px;
+}
+.z-tab .z-tabbox-a:hover .z-tabbox-inner{
+	background-position:right -251px;
+}
+.z-tab .z-tabbox-a:hover .z-tabbox-text{
+	color:#15428B;
+}
+.z-tab .z-tabbox-text{
+	color:#416AA3;
+	cursor:pointer;
+	font-style:normal;
+	font-family:tahoma,arial,helvetica;
+	font-size:11px;
+	font-size-adjust:none;
+	padding:4px 0 4px;
+	white-space:nowrap;
+}
+
+.z-Scrolling .z-tabbox-scrollright{
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/scroll-right.gif')}) no-repeat scroll 0 0;
+	border-bottom:1px solid #8DB2E3;
+	cursor:pointer;
+	position:absolute;
+	right:0;
+	top:0;
+	width:18px;
+	z-index:10;
+	height:22px;
+}
+
+.z-Scrolling .z-tabbox-scrollright:hover{
+	background-position:-18px 0;
+}
+
+.z-Scrolling .z-tabbox-scrollleft{
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/scroll-left.gif')}) no-repeat scroll -18px 0;
+	border-bottom:1px solid #8DB2E3;
+	cursor:pointer;
+	left:0;
+	position:absolute;
+	top:0;
+	width:18px;
+	z-index:10;
+	height:22px	
+}
+
+.z-Scrolling .z-tabbox-scrollleft:hover{	
+	background-position:0px 0;
+}
+
+<%-- Tabbox2-accordion --%>
+
+.z-tabbox-accd{
+	position:relative;
+}
+.z-tabbox-accd .header{
+	cursor:pointer;
+	position:relative;
+}
+.z-tabbox-accd .left-tr {	
+	text-decoration:none;
+	padding-left:6px;
+	line-height:0;
+	display:block;
+}
+.z-tabbox-accd .right-tr {
+	padding-right:6px;
+	display:block;	
+}
+.z-tabbox-accd .span-inner{
+	display:block;
+	padding:7px 0 6px 0;
+	overflow:hidden;
+}
+.z-tabbox-accd .span-text{
+	cursor:pointer;	
+	color:#373737;	
+	font-family:tahoma,arial,verdana,sans-serif;		
+	font-style:normal;
+	font-variant:normal;
+	font-weight:bold;
+	font-size:small;
+	line-height:normal;
+	text-decoration:none;
+	padding-right:30px;
+}
+.tabpanels-accordion{
+	padding-right:15px;
+}
+.z-tabbox-accd .tabpanel-accordion{
+	border-bottom:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	padding:5px;
+		
+}
+.z-tabbox-accd .z-tab .left-tr{	
+	text-decoration:none;
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.jpg')}) no-repeat scroll 0 0;
+}
+.z-tabbox-accd .z-tab .right-tr {
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.jpg')}) no-repeat scroll right 0;
+}
+.z-tabbox-accd .z-tab .span-inner{
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-inner.jpg')}) repeat-x scroll 0 0;
+}
+.z-tabbox-accd .closebtn{
+	z-index:5;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.gif')});
+	background-repeat:no-repeat;
+	cursor:pointer;
+	width:17px;
+	height:16px;
+	position:absolute;
+	right:10px;
+	top:5px;	
+	z-index:2;
+}
+.z-tabbox-accd .z-tab .closebtn{	
+	opacity:0.6;	
+}
+
+.z-tabbox-accd .z-tabsel .left-tr{	
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.jpg')}) no-repeat scroll 0 0;
+}
+.z-tabbox-accd .z-tabsel .right-tr{
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.jpg')}) no-repeat scroll right 0;
+}
+.z-tabbox-accd .z-tabsel .span-inner{
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-inner.jpg')}) repeat-x scroll 0 0;
+}
+.z-tabbox-accd .z-tabsel .closebtn{	
+	opacity:0.8;	
+}
+.z-tabbox-accd .closebtn:hover{
+	opacity:1;
+}
+
+<%-- Accordion-Lite --%>
+.tabpanels-accordion-lite{
+	border-top:1px solid #99BBE8;
+	border-right:1px solid #99BBE8;
+	border-left:1px solid #99BBE8;
+}
+.z-tabbox-accdlite{	
+	position:relative;
+}
+.z-tabbox-accdlite .header{	
+	border-bottom:1px solid #99BBE8;		
+	cursor:pointer;
+	position:relative;
+}
+.z-tabbox-accdlite .left-tr {	
+	text-decoration:none;
+	padding-left:6px;
+	line-height:0;
+	display:block;
+}
+.z-tabbox-accdlite .right-tr {
+	padding-right:6px;
+	display:block;	
+}
+.z-tabbox-accdlite .span-inner{
+	display:block;
+	padding:4px 0 3px 0;
+	overflow:hidden;
+}
+.z-tabbox-accdlite .span-text{
+	cursor:pointer;	
+	color:#373737;	
+	font-family:tahoma,arial,verdana,sans-serif;
+	font-size:11px;		
+	font-style:normal;
+	font-variant:normal;	
+	font-size:small;
+	line-height:15px;
+	text-decoration:none;
+	padding-right:30px;
+}
+.z-tabbox-accdlite .tabpanel-accordion-lite{	
+	_border-right:1px solid #99BBE8;
+	_border-left:1px solid #99BBE8;
+	border-bottom:1px solid #99BBE8;
+	padding:5px;
+}
+
+.z-tabbox-accdlite .z-tab .left-tr{		
+	text-decoration:none;
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.gif')}) repeat-x scroll 0 -9px;
+}
+.z-tabbox-accdlite .z-tab .right-tr {
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.gif')}) repeat-x scroll 0 -9px;
+}
+.z-tabbox-accdlite .z-tab .span-inner{
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.gif')}) repeat-x scroll 0 -9px;
+}
+.z-tabbox-accdlite .closebtn{
+	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.gif')});
+	background-repeat:no-repeat;
+	cursor:pointer;
+	height:16px;
+	position:absolute;
+	right:10px;
+	top:5px;
+	width:17px;
+	z-index:5;
+}
+.z-tabbox-accdlite .z-tab .closebtn{	
+	opacity:0.6;	
+}
+	
+.z-tabbox-accdlite .z-tabsel .left-tr{	
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.gif')}) repeat-x scroll 0 -9px;
+}
+.z-tabbox-accdlite .z-tabsel .right-tr{
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.gif')}) repeat-x scroll 0 -9px;
+}
+.z-tabbox-accdlite .z-tabsel .span-inner{
+	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.gif')}) repeat-x scroll 0 -9px;
+}
+.z-tabbox-accdlite .z-tabsel .closebtn{
+	opacity:0.8;
+}
+.z-tabbox-accdlite .closebtn:hover{
+	opacity:1;
+}
+
+
 <%-- ZK slider --%>
 span.slider-btn {
 	background-image: url(${c:encodeURL('~./zul/img/slider/btn.gif')});

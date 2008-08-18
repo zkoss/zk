@@ -15,7 +15,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
-*/
+ */
 package org.zkoss.zul;
 
 import java.util.Set;
@@ -27,60 +27,76 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Selectable;
 
 import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A tab.
- *
+ * <p>
+ * Default {@link #getMoldSclass}: z-mean. (since 3.5.0)
+ * 
  * @author tomyeh
+ * 
  */
 public class Tab extends LabelImageElement {
 	private boolean _selected;
 	/** Whether to show a close button. */
 	private boolean _closable;
-	
+
 	private boolean _disabled;
 
 	public Tab() {
+		setMoldSclass("z-tab");
+		Utils.updateMoldByTheme(this);
 	}
+
 	public Tab(String label) {
+		this();
 		setLabel(label);
 	}
+
 	public Tab(String label, String image) {
+		this();
 		setLabel(label);
 		setImage(image);
 	}
 
-	/** Returns whether this tab is closable.
-	 * If closable, a button is displayed and the onClose event is sent
-	 * if an user clicks the button.
-	 * <p>Default: false.
+	/**
+	 * Returns whether this tab is closable. If closable, a button is displayed
+	 * and the onClose event is sent if an user clicks the button.
+	 * <p>
+	 * Default: false.
 	 */
 	public boolean isClosable() {
 		return _closable;
 	}
-	/** Sets whether this tab is closable.
-	 * If closable, a button is displayed and the onClose event is sent
-	 * if an user clicks the button.
-	 * <p>Default: false.
-	 * <p>You can intercept the default behavior by either overriding
+
+	/**
+	 * Sets whether this tab is closable. If closable, a button is displayed and
+	 * the onClose event is sent if an user clicks the button.
+	 * <p>
+	 * Default: false.
+	 * <p>
+	 * You can intercept the default behavior by either overriding
 	 * {@link #onClose}, or listening the onClose event.
 	 */
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			invalidate(); //re-init is required
+			invalidate(); // re-init is required
 		}
 	}
 
-	/** Process the onClose event sent when the close button is pressed.
-	 * <p>Default: detach itself and the corresponding {@link Tabpanel}.
+	/**
+	 * Process the onClose event sent when the close button is pressed.
+	 * <p>
+	 * Default: detach itself and the corresponding {@link Tabpanel}.
 	 */
 	public void onClose() {
 		if (_selected) {
-			final Tabs tabs = (Tabs)getParent();
+			final Tabs tabs = (Tabs) getParent();
 			if (tabs != null) {
 				for (Iterator it = tabs.getChildren().iterator(); it.hasNext();) {
-					final Tab t = (Tab)it.next();
+					final Tab t = (Tab) it.next();
 					if (t != this) {
 						t.setSelected(true);
 						break;
@@ -90,17 +106,21 @@ public class Tab extends LabelImageElement {
 		}
 
 		final Tabpanel panel = getLinkedPanel();
-		if (panel != null) panel.detach();
+		if (panel != null)
+			panel.detach();
 		detach();
 	}
 
-	/** Returns the tabbox owns this component.
+	/**
+	 * Returns the tabbox owns this component.
 	 */
 	public Tabbox getTabbox() {
-		final Tabs tabs = (Tabs)getParent();
-		return tabs != null ? tabs.getTabbox(): null;
+		final Tabs tabs = (Tabs) getParent();
+		return tabs != null ? tabs.getTabbox() : null;
 	}
-	/** Returns the panel associated with this tab.
+
+	/**
+	 * Returns the panel associated with this tab.
 	 */
 	public Tabpanel getLinkedPanel() {
 		final int j = getIndex();
@@ -109,24 +129,27 @@ public class Tab extends LabelImageElement {
 			if (tabbox != null) {
 				final Tabpanels tabpanels = tabbox.getTabpanels();
 				if (tabpanels != null && tabpanels.getChildren().size() > j)
-					return (Tabpanel)tabpanels.getChildren().get(j);
+					return (Tabpanel) tabpanels.getChildren().get(j);
 			}
 		}
 		return null;
 	}
 
-	/** Returns whether this tab is selected.
+	/**
+	 * Returns whether this tab is selected.
 	 */
 	public final boolean isSelected() {
 		return _selected;
 	}
-	/** Sets whether this tab is selected.
+
+	/**
+	 * Sets whether this tab is selected.
 	 */
 	public void setSelected(boolean selected) {
 		if (_selected != selected) {
-			final Tabbox tabbox = (Tabbox)getTabbox();
+			final Tabbox tabbox = (Tabbox) getTabbox();
 			if (tabbox != null) {
-				//Note: we don't update it here but let its parent does the job
+				// Note: we don't update it here but let its parent does the job
 				tabbox.setSelectedTab(this);
 			} else {
 				_selected = selected;
@@ -134,18 +157,24 @@ public class Tab extends LabelImageElement {
 			}
 		}
 	}
-	
-	/** Returns whether this tab is disabled.
-	 * <p>Default: false.
+
+	/**
+	 * Returns whether this tab is disabled.
+	 * <p>
+	 * Default: false.
+	 * 
 	 * @since 3.0.0
 	 */
 	public final boolean isDisabled() {
 		return _disabled;
 	}
-	/** Sets whether this tab is disabled. If a tab is disabled, 
-	 * then it cann't be selected or closed by user, 
-	 * but it still can be controlled by server side program.
-	 * @since 3.0.0 
+
+	/**
+	 * Sets whether this tab is disabled. If a tab is disabled, then it cann't
+	 * be selected or closed by user, but it still can be controlled by server
+	 * side program.
+	 * 
+	 * @since 3.0.0
 	 */
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
@@ -153,18 +182,19 @@ public class Tab extends LabelImageElement {
 			smartUpdate("z.disabled", _disabled);
 		}
 	}
-	
-	/** Updates _selected directly without updating the client.
+
+	/**
+	 * Updates _selected directly without updating the client.
 	 */
-	/*package*/ void setSelectedDirectly(boolean selected) {
+	/* package */void setSelectedDirectly(boolean selected) {
 		_selected = selected;
 	}
 
-	/** Returns the index of this panel, or -1 if it doesn't belong to any
-	 * tabs.
+	/**
+	 * Returns the index of this panel, or -1 if it doesn't belong to any tabs.
 	 */
 	public int getIndex() {
-		final Tabs tabs = (Tabs)getParent();
+		final Tabs tabs = (Tabs) getParent();
 		if (tabs == null)
 			return -1;
 		int j = 0;
@@ -173,67 +203,90 @@ public class Tab extends LabelImageElement {
 				return j;
 	}
 
-	//-- super --//
+	// -- super --//
 	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
+		final StringBuffer sb = new StringBuffer(64).append(super
+				.getOuterAttrs());
 		appendAsapAttr(sb, Events.ON_SELECT);
 
 		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) 
+		if (clkattrs != null)
 			sb.append(clkattrs);
 		return sb.toString();
 	}
-	/** Returns the style class.
-	 * Note: 
-	 * 1) if not specified (or setSclass(null))<br/>
-	 * 1.1) if not disabled ,"tab" is assumed; <br/>
-	 * 1.2) if disabled ,"tabdis" is assumed; <br/>
-	 * 2) if selected, it appends "sel" to step 1. <br/>
+
+	/**
+	 * Returns the style class. Note: 1) if not specified (or
+	 * setSclass(null))<br/> 1.1) if not disabled ,"tab" is assumed; <br/> 1.2)
+	 * if disabled ,"tabdis" is assumed; <br/> 2) if selected, it appends "sel"
+	 * to step 1. <br/>
 	 */
-	public String getSclass() {
-		String scls = super.getSclass();
-		if (scls == null) scls = "tab";
-		if (isDisabled()) scls = scls+"dis";
-		return isSelected() ? scls + "sel": scls;
+	public String getRealSclass() {
+		final String mold = super.getMold();
+		String scls = null;
+		if (mold.equals("v30")) {
+			scls = super.getSclass();
+			if (scls == null)
+				scls = "tab";
+			if (isDisabled())
+				scls = scls + "dis";
+			return isSelected() ? scls + "sel" : scls;
+		} else {
+			scls = super.getMoldSclass();
+			if (scls == null)
+				scls = "z-tab";
+			if (isDisabled())
+				scls = scls + "dis";
+			return isSelected() ? scls + "sel" : scls;
+		}
 	}
 
-	//-- Component --//
+	// -- Component --//
 	public void invalidate() {
 		final Tabbox tabbox = getTabbox();
-		if (tabbox != null && "accordion".equals(tabbox.getMold()))
-			tabbox.invalidate();
-		else
+		if (tabbox != null && 
+				("accordion".equals(tabbox.getMold())||"accordion-lite".equals(tabbox.getMold()))) {
+			tabbox.invalidate();			
+		} else {			
 			super.invalidate();
+		}
 	}
-	/** No child is allowed.
+
+	/**
+	 * No child is allowed.
 	 */
 	public boolean isChildable() {
 		return false;
 	}
+
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tabs))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.setParent(parent);
 	}
 
-	//-- ComponentCtrl --//
+	// -- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
 	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+
+	/**
+	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
+	 * component developers.
 	 */
-	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
-	implements Selectable {
-		//-- Selectable --//
+	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl implements
+			Selectable {
+		// -- Selectable --//
 		public void selectItemsByClient(Set selItems) {
 			if (selItems == null || selItems.size() != 1)
-				throw new UiException("Exactly one selected tab is required: "+selItems); //debug purpose
+				throw new UiException("Exactly one selected tab is required: "
+						+ selItems); // debug purpose
 
 			final Tabbox tabbox = getTabbox();
 			if (tabbox != null)
-				tabbox.selectTabDirectly((Tab)selItems.iterator().next(), true);
+				tabbox
+						.selectTabDirectly((Tab) selItems.iterator().next(),
+								true);
 		}
 	}
- }
+}

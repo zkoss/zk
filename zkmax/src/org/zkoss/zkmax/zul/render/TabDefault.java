@@ -58,8 +58,9 @@ public class TabDefault implements ComponentRenderer {
 		final String look = tabbox.getTabLook() + '-';
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
 		final Tabpanel panel = self.getLinkedPanel();
-
 		final int colspan = self.isClosable() ? 4 : 3;
+		final String mold = self.getMold();
+		if (mold.equals("v30")){
 		wh.write("<td id=\"").write(self.getUuid()).write("\" z.type=\"Tab\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(" z.sel=\"").write(self.isSelected()).write("\" z.box=\"")
@@ -76,30 +77,60 @@ public class TabDefault implements ComponentRenderer {
 
 		wh.write("<tr class=\"").write(look).write('m');
 		if (!Strings.isBlank(self.getHeight()))
-			wh.write("\" style=\"height:").write(self.getHeight());
-		wh.writeln("\"><td class=\"")
-			.write(look).write("ml").write(suffix).writeln("\"></td>")
-			.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
-			.write("<td align=\"center\" class=\"").write(look).write("mm").write(suffix)
-			.write("\"><a href=\"javascript:;\"").write(" id=\"").write(self.getUuid()).write("!a\">")
-			.write(self.getImgTag());
-		new Out(self.getLabel()).render(out);
-		wh.writeln("</a></td>");
-
-		if (self.isClosable()) {
-			// Bug 1780044: width cannot (and need not) be specified
-			wh.write("<td align=\"right\" class=\"").write(look).write("mm").write(suffix)
-				.write("\"><img id=\"")
-				.write(self.getUuid()).write("!close\" src=\"")
-				.write(exec.encodeURL("~./zul/img/close-off.gif"))
-				.writeln("\"/></td>");
+				wh.write("\" style=\"height:").write(self.getHeight());
+			wh.writeln("\"><td class=\"")
+				.write(look).write("ml").write(suffix).writeln("\"></td>")
+				.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
+				.write("<td align=\"center\" class=\"").write(look).write("mm").write(suffix)
+				.write("\"><a href=\"javascript:;\"").write(" id=\"").write(self.getUuid()).write("!a\">")
+				.write(self.getImgTag());
+			new Out(self.getLabel()).render(out);
+			wh.writeln("</a></td>");
+	
+			if (self.isClosable()) {
+				// Bug 1780044: width cannot (and need not) be specified
+				wh.write("<td align=\"right\" class=\"").write(look).write("mm").write(suffix)
+					.write("\"><img id=\"")
+					.write(self.getUuid()).write("!close\" src=\"")
+					.write(exec.encodeURL("~./zul/img/close-off.gif"))
+					.writeln("\"/></td>");
+			}
+	
+			wh.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
+				.write("<td class=\"").write(look).write("mr").write(suffix).writeln("\"></td></tr>");
+	
+			wh.write("<tr><td class=\"").write(look).write("bl").write(suffix).writeln("\"></td>")
+				.write("<td colspan=\"").write(colspan).write("\" class=\"").write(look).write("bm").write(suffix).writeln("\"></td>")
+				.write("<td class=\"").write(look).write("br").write(suffix).writeln("\"></td></tr></table></td>");
+		}else {
+			String uuid = self.getUuid();
+			wh.write("<li id=\""+uuid+"\""); 
+				if (!Strings.isBlank(self.getHeight())){
+					wh.write("style=\"height:"+self.getHeight()+";\"");
+				}
+				wh.write("z.type=\"Tab2\"").write(self.getOuterAttrs()).write(self.getInnerAttrs())
+					.write(" z.sel=\"").write(self.isSelected()).write("\" z.box=\"")
+					.write(tabbox.getUuid()).write("\" z.panel=\"")
+					.write(panel==null?"":panel.getUuid()).write("\" ")
+					.write("z.disabled=\"").write(self.isDisabled())
+					.writeln("\">");	
+				if(self.isClosable()){				
+					wh.writeln("<a class=\""+look+"close\" id=\""+uuid+"!close\" onclick=\"return false;\"/>");
+				}
+				wh.writeln("<a class=\""+look+"a\" id=\""+uuid+"a\"  onclick=\"return false;\" href=\"#\">");
+					wh.writeln("<em id=\""+uuid+"\" class=\""+look+"em\">");						
+						if(self.isClosable()){
+							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner"+" "+look+"innerclose\">");
+						}else{
+							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner\"");	
+						}
+							wh.write("<span class=\""+look+"text\">").write(self.getImgTag());
+							new Out(self.getLabel()).render(out);
+							wh.writeln("</span>");
+						wh.writeln("</span>");
+					wh.writeln("</em>");
+				wh.writeln("</a>");
+			wh.writeln("</li>");
 		}
-
-		wh.write("<td width=\"3\" class=\"").write(look).write("mm").write(suffix).writeln("\"></td>")
-			.write("<td class=\"").write(look).write("mr").write(suffix).writeln("\"></td></tr>");
-
-		wh.write("<tr><td class=\"").write(look).write("bl").write(suffix).writeln("\"></td>")
-			.write("<td colspan=\"").write(colspan).write("\" class=\"").write(look).write("bm").write(suffix).writeln("\"></td>")
-			.write("<td class=\"").write(look).write("br").write(suffix).writeln("\"></td></tr></table></td>");
 	}
 }

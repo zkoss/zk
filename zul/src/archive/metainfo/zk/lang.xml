@@ -745,42 +745,31 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-uri>~./zul/html/style.dsp</mold-uri>
 		</mold>
 	</component>
-	<component>
-		<component-name>tab</component-name>
-		<component-class>org.zkoss.zul.Tab</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab.dsp'}</mold-uri>
-		</mold>
-		<preserve-blank/>
-	</component>
+	<!-- 	
+		  
+	-->
 	<component>
 		<component-name>tabbox</component-name>
 		<component-class>org.zkoss.zul.Tabbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox.dsp'}</mold-uri>
+			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox2.dsp'}</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
+			<mold-uri>~./zul/html/tabbox-accd2.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>accordion-lite</mold-name>
+			<mold-uri>~./zul/html/tabbox-accd2-lite.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30-accordion</mold-name>
 			<mold-uri>~./zul/html/tabbox-accd.dsp</mold-uri>
 		</mold>
-	</component>
-	<component>
-		<component-name>tabpanel</component-name>
-		<component-class>org.zkoss.zul.Tabpanel</component-class>
 		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd.dsp': self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
-		</mold>
-		<preserve-blank/>
-	</component>
-	<component>
-		<component-name>tabpanels</component-name>
-		<component-class>org.zkoss.zul.Tabpanels</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels.dsp': '~./zul/html/tabpanels.dsp'}</mold-uri>
+			<mold-name>v30</mold-name>
+			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -788,8 +777,46 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabs</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs.dsp'}</mold-uri>
+			<mold-uri>${self.tabbox.mold == 'v30' ? self.parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs.dsp' : self.parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs2.dsp'}</mold-uri>
 		</mold>
+	</component>
+	<component>
+		<component-name>tab</component-name>
+		<component-class>org.zkoss.zul.Tab</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab2.dsp'}</mold-uri>
+		</mold>		
+		<mold>
+			<mold-name>v30</mold-name>
+			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab.dsp'}</mold-uri>
+		</mold>	
+		<preserve-blank/>
+	</component>
+	<component>
+		<component-name>tabpanels</component-name>
+		<component-class>org.zkoss.zul.Tabpanels</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels.dsp' : '~./zul/html/tabpanels.dsp'}</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>tabpanel</component-name>
+		<component-class>org.zkoss.zul.Tabpanel</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd2.dsp' : self.tabbox.mold == 'accordion-lite' ? '~./zul/html/tabpanel-accd2-lite.dsp' : self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30</mold-name>
+			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>v30-accordion</mold-name>
+			<mold-uri>'~./zul/html/tabpanel-accd.dsp'</mold-uri>
+		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>textbox</component-name>

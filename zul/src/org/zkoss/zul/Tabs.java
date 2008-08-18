@@ -49,7 +49,7 @@ public class Tabs extends XulElement {
 	 *
 	 * <p>Default: "start".
 	 *
-	 * <p>Note: only the default mold supports it (not supported if accordion).
+	 * <p>Note: only the default mold supports it (not supported in mold accordion and version 3.5).
 	 * 
 	 * @since 3.0.0
 	 */
@@ -57,6 +57,7 @@ public class Tabs extends XulElement {
 		return _align;
 	}
 	/** Sets the alignment of tab.
+	 * (not supported in mold accordion and version 3.5)
 	 * @param align must be "start" or "center" or "end".
 	 * @since 3.0.0
 	 */
@@ -90,6 +91,7 @@ public class Tabs extends XulElement {
 			throw new UiException("Unsupported child for tabs: "+child);
 
 		boolean sel = getChildren().isEmpty(), desel = false;
+		if (sel) invalidate();
 		final Tab newtab = (Tab)child;
 		if (!sel && newtab.isSelected()) {
 			newtab.setSelectedDirectly(false);	//turn off first
@@ -126,7 +128,7 @@ public class Tabs extends XulElement {
 		if (tabbox != null)
 			((Tab)child).removeEventListener(Events.ON_SELECT, tabbox._listener);
 
-		if (tabbox == null || !tabbox.inAccordionMold())
+		if (tabbox == null && !tabbox.inAccordionMold() && getMold().equals("v30"))
 			smartUpdate("z.init", true); //fixWidth
 	}
 	public void onChildAdded(Component child) {
@@ -135,8 +137,8 @@ public class Tabs extends XulElement {
 		final Tabbox tabbox = getTabbox();
 		if (tabbox != null)
 			((Tab)child).addEventListener(Events.ON_SELECT, tabbox._listener);
-
-		if (tabbox == null || !tabbox.inAccordionMold())
+		//
+		if (tabbox == null || !tabbox.inAccordionMold() && getMold().equals("v30") )
 			smartUpdate("z.init", true); //fixWidth
 	}
 		

@@ -49,28 +49,46 @@ public class TabsDefault implements ComponentRenderer {
 
 		final SmartWriter wh = new SmartWriter(out);		
 		final String look = tabbox.getTabLook() + '-';
-
-		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tab.Tabs\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>')
-			.writeln("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
-			.write("<tr valign=\"bottom\">");
-		
-		/* prefix column */
-		wh.writeln("<td><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
-		wh.write("<tr><td class=\"").write(look).writeln("first1\"></td>");
-		wh.write("<td class=\"").write(look).write("first2\" id=\"").write(self.getUuid())
-			.write("!first\"></td></tr></table></td>");
-
-		wh.writeChildren(self);
-		
-		wh.write("<td style=\"display:none\" id=\"")
-			.write(self.getUuid()).writeln("!child\"></td>"); //bookmark for adding children
-		
-		/* postfix column */		
-		wh.writeln("<td><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
-			.write("<tr><td class=\"").write(look).write("last1\" id=\"")
-			.write(self.getUuid()).writeln("!last\"></td>")
-			.write("<td class=\"").write(look).writeln("last2\"></td>")
-			.writeln("</tr></table></td></tr></table></div>");
+		final String mold = self.getMold();
+		final String scroll = tabbox.isTabscroll() ? "scrolltabs" : "tabs" ;
+		if (mold.equals("v30")){
+			wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tab.Tabs\"")
+				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>')
+				.writeln("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+				.write("<tr valign=\"bottom\">");
+			
+			/* prefix column */
+			wh.writeln("<td><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
+			wh.write("<tr><td class=\"").write(look).writeln("first1\"></td>");
+			wh.write("<td class=\"").write(look).write("first2\" id=\"").write(self.getUuid())
+				.write("!first\"></td></tr></table></td>");
+	
+			wh.writeChildren(self);
+			
+			wh.write("<td style=\"display:none\" id=\"")
+				.write(self.getUuid()).writeln("!child\"></td>"); //bookmark for adding children
+			
+			/* postfix column */		
+			wh.writeln("<td><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
+				.write("<tr><td class=\"").write(look).write("last1\" id=\"")
+				.write(self.getUuid()).writeln("!last\"></td>")
+				.write("<td class=\"").write(look).writeln("last2\"></td>")
+				.writeln("</tr></table></td></tr></table></div>");
+		}else {						
+			String uuid = self.getUuid();
+			wh.write("<div id=\""+uuid+"\" class=\"").write(look+scroll).write("\" z.type=\"zul.tab2.Tabs2\"")
+			    .write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>');
+			    wh.write("<div id=\""+uuid+"!right").writeln("\" class=\"" + look + "scrollright\" ></div>");
+				wh.write("<div id=\""+uuid+"!left").writeln("\" class=\"" + look + "scrollleft\" ></div>");
+			    wh.write("<div id=\""+uuid+"!header\"").writeln(" class=\""+look+"head\" >");
+				    wh.writeln("<ul id="+uuid+"!cave\" class=\""+look+"ul\" >");							    	
+				    	wh.writeChildren(self);			    	
+				    	wh.writeln("<li id=\""+uuid+"!edge\" class=\""+look+"edge\" ></li>");
+				    	wh.writeln("<div id=\""+uuid+"!clear\" class=\""+look+"clear\"></div>");
+				    wh.writeln("</ul>");
+			    wh.writeln("</div>");
+			    wh.writeln("<div id=\""+uuid+"!line\" class=\""+look+"space\" ></div>");	
+			wh.writeln("</div>");
+		}
 	}
 }

@@ -113,15 +113,28 @@ public class Tabpanel extends XulElement {
 	 * the tabbox's orientation.
 	 */
 	public String getSclass() {
-		final String scls = super.getSclass();
-		if (scls != null) return scls;
-
-		final Tabbox tabbox = getTabbox();
-		final boolean vert = tabbox != null && tabbox.isVertical();
-		final String mold = tabbox != null ? tabbox.getMold(): null;
-		return mold == null || "default".equals(mold) ?
-			vert ? "vtabpanel": "tabpanel":
-			(vert ? "vtabpanel-": "tabpanel-")+mold;
+		String mold = super.getMold();
+		String scls = null;
+		if (mold.equals("v30")){
+			scls=super.getSclass();
+			if (scls != null) return scls;
+			final Tabbox tabbox = getTabbox();
+			final boolean vert = tabbox != null && tabbox.isVertical();
+			mold = tabbox != null ? tabbox.getMold(): null;		
+			return mold == null || "v30".equals(mold) ?
+				vert ? "vtabpanel": "tabpanel":
+				(vert ? "vtabpanel-": "tabpanel-")+mold;			
+		}else{
+			scls=super.getMoldSclass();	
+			if (scls != null) return scls;
+			final Tabbox tabbox = getTabbox();
+			final boolean vert = tabbox != null && tabbox.isVertical();
+			mold = tabbox != null ? tabbox.getMold(): null;		
+			return mold == null || "default".equals(mold) ?
+				vert ? "vtabpanel": "tabpanel":
+				(vert ? "vtabpanel-": "tabpanel-")+mold;
+		}
+		
 	}
 
 	//-- Component --//

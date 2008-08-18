@@ -41,6 +41,7 @@ ZK 3.5.0
   2041292: Borderlayout support title and animation like Outlook
   2046034: Trendy Button
   2046129: Trendy Slider and veritcal orient
+  2056723: Support tabbox scrolling and new mold
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
   1944729: Windows and boxes inside tab panels
