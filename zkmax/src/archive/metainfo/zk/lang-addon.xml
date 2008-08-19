@@ -868,12 +868,8 @@ def alert(m):
 		<extends>tabpanel</extends>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabpanelDefault2</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabpanelDefault</mold-uri>
-		</mold>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabpanel2Default</mold-uri>
+		</mold>		
 	</component>
 	<component>
 		<component-name>tabpanels</component-name>
