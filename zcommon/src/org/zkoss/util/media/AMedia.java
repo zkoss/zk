@@ -23,6 +23,7 @@ import java.io.Reader;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.ByteArrayInputStream;
+import java.net.URL;
 
 import org.zkoss.io.NullInputStream;
 import org.zkoss.io.NullReader;
@@ -142,26 +143,104 @@ public class AMedia implements Media {
 	 * after {@link InputStream#close} is called.
 	 * See also {@link RepeatableInputStream} and {@link RepeatableReader}.
 	 *
-	 * <p>It tries to construct format and ctype from each other or name.
-	 *
 	 * @param name the name (usually filename); might be null.
+	 * If null, the file name is used.
 	 * @param format the format; might be null.
 	 * @param ctype the content type; might be null.
-	 * @param data the string data; never null
-	 * If the reader is created dyanmically each tiime {@link #getReaderData}
-	 * is called, you shall pass {@link #DYNAMIC_READER}
-	 * as the data argument. Then, override {@link #getReaderData} to return
-	 * the correct reader.
+	 * @param file the file; never null.
+	 * @param binary whether it is binary.
+	 * If not binary, "UTF-8" is assumed.
 	 */
-	public AMedia(String name, String format, String ctype, File data,
+	public AMedia(String name, String format, String ctype, File file,
 	boolean binary) throws java.io.FileNotFoundException {
-		if (data == null)
-			throw new IllegalArgumentException("data");
-		if (binary)
-			_isdata = RepeatableInputStream.getInstance(data);
+		this(name, format, ctype, file, binary ? null: "UTF-8");
+	}
+	/** Construct with name, format, content type and a file.
+	 *
+	 * <p>Unlike others, it uses the so-called repetable input
+	 * stream or reader (depending on charset is null or not)
+	 * to represent the file, so the input stream ({@link #getStreamData})
+	 * or the reader ({@link #getReaderData}) will be re-opened
+	 * in the next invocation of {@link InputStream#read}
+	 * after {@link InputStream#close} is called.
+	 * See also {@link RepeatableInputStream} and {@link RepeatableReader}.
+	 *
+	 * @param name the name (usually filename); might be null.
+	 * If null, the file name is used.
+	 * @param format the format; might be null.
+	 * @param ctype the content type; might be null.
+	 * @param file the file; never null.
+	 * @param charset the charset. If null, it is assumed to be binary.
+	 */
+	public AMedia(String name, String format, String ctype, File file,
+	String charset) throws java.io.FileNotFoundException {
+		if (file == null)
+			throw new IllegalArgumentException("file");
+
+		if (charset == null)
+			_isdata = RepeatableInputStream.getInstance(file);
 		else
-			_rddata = RepeatableReader.getInstance(data);
+			_rddata = RepeatableReader.getInstance(file, charset);
+
+		if (name == null) name = file.getName();
 		setup(name, format, ctype);
+	}
+	/** Construct with a file.
+	 * It is the same as AMedia(null, null, ctype, file, charset).
+	 *
+	 * @param ctype the content type; might be null.
+	 * If null, it is retrieved from the file name's extension.
+	 * @since 3.0.8
+	 */
+	public AMedia(File file, String ctype, String charset)
+	throws java.io.FileNotFoundException {
+		this(null, null, ctype, file, charset);
+	}
+	/** Construct with name, format, content type and URL.
+	 *
+	 * <p>Unlike others, it uses the so-called repetable input
+	 * stream or reader (depending on charset is null or not) to represent the
+	 * resource, so the input stream ({@link #getStreamData})
+	 * or the reader ({@link #getReaderData}) will be re-opened
+	 * in the next invocation of {@link InputStream#read}
+	 * after {@link InputStream#close} is called.
+	 * See also {@link RepeatableInputStream} and {@link RepeatableReader}.
+	 *
+	 * @param name the name; might be null.
+	 * If null, URL's name is used.
+	 * @param format the format; might be null.
+	 * @param ctype the content type; might be null.
+	 * @param url the resource URL; never null.
+	 * @since 3.0.8
+	 */
+	public AMedia(String name, String format, String ctype, URL url,
+	String charset) throws java.io.FileNotFoundException {
+		if (url == null)
+			throw new IllegalArgumentException("url");
+
+		if (charset == null)
+			_isdata = RepeatableInputStream.getInstance(url);
+		else
+			_rddata = RepeatableReader.getInstance(url, charset);
+
+		if (name == null) {
+			name = url.toExternalForm();
+			final int j = name.lastIndexOf('/');
+			if (j >= 0 && j < name.length() - 1)
+				name = name.substring(j + 1);
+		}
+		setup(name, format, ctype);
+	}
+	/** Construct with a file.
+	 * It is the same as AMedia(null, null, ctype, url, charset).
+	 *
+	 * @param ctype the content type; might be null.
+	 * If null, it is retrieved from the file name's extension.
+	 * @since 3.0.8
+	 */
+	public AMedia(URL url, String ctype, String charset)
+	throws java.io.FileNotFoundException {
+		this(null, null, ctype, url, charset);
 	}
 
 	/** Sets up the format and content type.

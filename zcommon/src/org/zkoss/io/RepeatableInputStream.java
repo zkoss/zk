@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileNotFoundException;
+import java.net.URL;
 
 import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
@@ -105,7 +106,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 		return is;
 	}
 	/**
-	 * Returns an input stream on top of a file that can be read repeatedly.
+	 * Returns an input stream of a file that can be read repeatedly.
 	 * Note: it assumes the file is binary (rather than text).
 	 *
 	 * <p>By repeatable-read we meaen, after {@link #close}, the next
@@ -128,7 +129,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 		return new RepeatableFileInputStream(file);
 	}
 	/**
-	 * Returns an input stream on top of a file that can be read repeatedly.
+	 * Returns an input stream of a file that can be read repeatedly.
 	 * Note: it assumes the file is binary (rather than text).
 	 *
 	 * <p>By repeatable-read we meaen, after {@link #close}, the next
@@ -144,6 +145,26 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 	public static InputStream getInstance(String filename)
 	throws FileNotFoundException {
 		return getInstance(new File(filename));
+	}
+	/**
+	 * Returns an input stream of the resource of the given URL
+	 * that can be read repeatedly.
+	 * Note: it assumes the resource is binary (rather than text).
+	 *
+	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * invocation of {@link #read} will re-open the input stream.
+	 *
+	 * <p>Note: it is effecient since we don't have to buffer the
+	 * content of the resource to make it repeatable-read.
+	 *
+	 * @exception IllegalArgumentException if url is null.
+	 * @see #getInstance(InputStream)
+ 	 * @see #getInstance(String)
+	 */
+	public static InputStream getInstance(URL url) {
+		if (url == null)
+			throw new IllegalArgumentException("null");
+		return new RepeatableURLInputStream(url);
 	}
 
 	/*package*/ static int getIntProp(String name, int defVal) {
@@ -301,6 +322,38 @@ implements Repeatable {
 	public int read() throws IOException {
 		if (_in == null)
 			_in = new FileInputStream(_file);
+		return _in.read();
+	}
+	/** Closes the current access, and the next call of {@link #read}
+	 * re-opens the buffered input stream.
+	 */
+	public void close() throws IOException {
+		if (_in != null) {
+			_in.close();
+			_in = null;
+		}
+	}
+
+	//Object//
+	protected void finalize() throws Throwable {
+		close();
+		super.finalize();
+	}
+}
+/*package*/ class RepeatableURLInputStream extends InputStream
+implements Repeatable {
+	private final URL _url;
+	private InputStream _in;
+
+	RepeatableURLInputStream(URL url) {
+		_url = url;
+	}
+
+	public int read() throws IOException {
+		if (_in == null) {
+			_in = _url.openStream();
+			if (_in == null) throw new FileNotFoundException(_url.toExternalForm());
+		}
 		return _in.read();
 	}
 	/** Closes the current access, and the next call of {@link #read}
