@@ -743,9 +743,8 @@ public class Parser {
 				} else if ("fulfill".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setFulfill(attval);
 				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
-					final Namespace attns = attr.getNamespace();
-					final String attpref = attns != null ? attns.getPrefix(): "";
-					final String attruri = attns != null ? attns.getURI(): "";
+					final String attpref = attrns != null ? attrns.getPrefix(): "";
+					final String attruri = attrns != null ? attrns.getURI(): "";
 					if (!"xmlns".equals(attpref)
 					&& !("xmlns".equals(attnm) && "".equals(attpref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attruri)) {
@@ -759,7 +758,7 @@ public class Parser {
 							attrAnnHelper.applyAnnotations(compInfo,
 								"self".equals(attnm) ? null: attnm, true);
 						} else {
-							addAttribute(compInfo, attns, attnm, attval, null);
+							addAttribute(compInfo, attrns, attnm, attval, null);
 							if (attrAnnHelper != null)
 								attrAnnHelper.applyAnnotations(compInfo, attnm, true);
 						}
