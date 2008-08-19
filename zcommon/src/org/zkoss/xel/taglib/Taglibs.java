@@ -315,7 +315,7 @@ public class Taglibs {
 				urls.put(
 					IDOMs.getRequiredElementValue(el, "taglib-uri"), url);
 			} else {
-				log.error("taglib-location not found, "+el.getLocator());
+				log.error(s+" not found, "+el.getLocator());
 			}
 		}
 	}
