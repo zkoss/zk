@@ -372,6 +372,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<component-name>listitem</component-name>
 		<extends>listitem</extends>
 	</component-->
+	<component>
+		<component-name>longbox</component-name>
+		<extends>longbox</extends>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>value</property-name>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onChange</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<!--component>
 		<component-name>menu</component-name>
 		<extends>menu</extends>
@@ -501,6 +517,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>save-when</attribute-name>
 				<attribute-value>self.onScroll</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
+		<component-name>spinner</component-name>
+		<extends>spinner</extends>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>value</property-name>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onChange</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
