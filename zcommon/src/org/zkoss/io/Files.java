@@ -18,7 +18,18 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.io;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.io.Reader;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
@@ -152,8 +163,7 @@ public class Files {
 			parent.mkdirs();
 
 		final Writer writer = charset != null ?
-			new OutputStreamWriter(new FileOutputStream(dst), charset):
-			new FileWriter(dst);
+			(Writer)new FileWriter(dst, charset): new java.io.FileWriter(dst);
 
 		try {
 			copy(writer, reader);

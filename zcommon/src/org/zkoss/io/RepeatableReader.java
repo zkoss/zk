@@ -24,10 +24,9 @@ import java.io.CharArrayReader;
 import java.io.Writer;
 import java.io.StringWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.net.URL;
 
 import org.zkoss.util.logging.Log;
 
@@ -103,7 +102,32 @@ public class RepeatableReader extends Reader implements Repeatable {
 		return rd;
 	}
 	/**
-	 * Returns a reader on top of a file that can be read repeatedly.
+	 * Returns a reader to read a file that can be read repeatedly.
+	 * Note: it assumes the file is text (rather than binary).
+	 *
+	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * invocation of {@link #read} will re-open the reader.
+	 *
+	 * <p>Note: it is effecient since we don't have to buffer the
+	 * content of the file to make it repeatable-read.
+	 *
+	 * @param charset the charset. If null, "UTF-8" is assumed.
+	 * @exception IllegalArgumentException if file is null.
+	 * @see #getInstance(Reader)
+	 * @see #getInstance(String, String)
+	 * @since 3.0.8
+	 */
+	public static Reader getInstance(File file, String charset)
+	throws FileNotFoundException {
+		if (file == null)
+			throw new IllegalArgumentException("null");
+		if (!file.exists())
+			throw new FileNotFoundException(file.toString());
+		return new RepeatableFileReader(file, charset);
+	}
+	/**
+	 * Returns a reader to read a file, encoded in UTF-8,
+	 * that can be read repeatedly.
 	 * Note: it assumes the file is text (rather than binary).
 	 *
 	 * <p>By repeatable-read we meaen, after {@link #close}, the next
@@ -118,14 +142,33 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 */
 	public static Reader getInstance(File file)
 	throws FileNotFoundException {
-		if (file == null)
-			throw new IllegalArgumentException("null");
-		if (!file.exists())
-			throw new FileNotFoundException(file.toString());
-		return new RepeatableFileReader(file);
+		return getInstance(file, "UTF-8");
 	}
 	/**
-	 * Returns a reader on top of a file that can be read repeatedly.
+	 * Returns a reader to read a file that can be read repeatedly.
+	 * Note: it assumes the file is text (rather than binary).
+	 *
+	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * invocation of {@link #read} will re-open the reader.
+	 *
+	 * <p>Note: it is effecient since we don't have to buffer the
+	 * content of the file to make it repeatable-read.
+	 *
+	 * @param filename the file name
+	 * @param charset the charset. If null, "UTF-8" is assumed.
+	 * @exception IllegalArgumentException if file is null.
+	 * @exception FileNotFoundException if file is not found.
+	 * @see #getInstance(Reader)
+	 * @see #getInstance(File, String)
+	 * @since 3.0.8
+	 */
+	public static Reader getInstance(String filename, String charset)
+	throws FileNotFoundException {
+		return getInstance(new File(filename));
+	}
+	/**
+	 * Returns a reader to read a file, encoded in UTF-8,
+	 * that can be read repeatedly.
 	 * Note: it assumes the file is text (rather than binary).
 	 *
 	 * <p>By repeatable-read we meaen, after {@link #close}, the next
@@ -142,7 +185,48 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 */
 	public static Reader getInstance(String filename)
 	throws FileNotFoundException {
-		return getInstance(new File(filename));
+		return getInstance(new File(filename), "UTF-8");
+	}
+	/**
+	 * Returns a reader to read the resource of the specified URL.
+	 * The reader can be read repeatedly.
+	 * Note: it assumes the resource is text (rather than binary).
+	 *
+	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * invocation of {@link #read} will re-open the reader.
+	 *
+	 * <p>Note: it is effecient since we don't have to buffer the
+	 * content of the file to make it repeatable-read.
+	 *
+	 * @param charset the charset. If null, "UTF-8" is assumed.
+	 * @exception IllegalArgumentException if file is null.
+	 * @see #getInstance(Reader)
+	 * @see #getInstance(String, String)
+	 * @since 3.0.8
+	 */
+	public static Reader getInstance(URL url, String charset) {
+		if (url == null)
+			throw new IllegalArgumentException("null");
+		return new RepeatableURLReader(url, charset);
+	}
+	/**
+	 * Returns a reader to read the resource of the specified URL,
+	 * encoded in UTF-8.
+	 * The reader can be read repeatedly.
+	 * Note: it assumes the resource is text (rather than binary).
+	 *
+	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * invocation of {@link #read} will re-open the reader.
+	 *
+	 * <p>Note: it is effecient since we don't have to buffer the
+	 * content of the file to make it repeatable-read.
+	 *
+	 * @exception IllegalArgumentException if file is null.
+	 * @see #getInstance(Reader)
+	 * @see #getInstance(String)
+	 */
+	public static Reader getInstance(URL url) {
+		return getInstance(url, "UTF-8");
 	}
 
 	private Writer getWriter() throws IOException {
@@ -163,7 +247,7 @@ public class RepeatableReader extends Reader implements Repeatable {
 					f.mkdir();
 				_f = File.createTempFile("zk.io", ".zk.io", f);
 				final String cnt = ((StringWriter)_out).toString();
-				_out = new FileWriter(_f);
+				_out = new FileWriter(_f, "UTF-8");
 				_out.write(cnt);
 			} catch (Throwable ex) {
 				log.warning("Ingored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
@@ -202,7 +286,7 @@ public class RepeatableReader extends Reader implements Repeatable {
 			return cnt;
 		} else {
 			if (_in == null)
-				_in = new FileReader(_f); //_f must be non-null
+				_in = new FileReader(_f, "UTF-8"); //_f must be non-null
 
 			return _in.read(cbuf, off, len);
 		}
@@ -279,14 +363,47 @@ public class RepeatableReader extends Reader implements Repeatable {
 /*package*/ class RepeatableFileReader extends Reader implements Repeatable {
 	private final File _file;
 	private Reader _in;
+	private final String _charset;
 
-	RepeatableFileReader(File file) {
+	RepeatableFileReader(File file, String charset) {
 		_file = file;
+		_charset = charset != null ? charset: "UTF-8";
 	}
 
 	public int read(char cbuf[], int off, int len) throws IOException {
 		if (_in == null)
-			_in = new FileReader(_file);
+			_in = new FileReader(_file, _charset);
+		return _in.read(cbuf, off, len);
+	}
+	/** Closes the current access and the next call of {@link #read}
+	 * re-opens the buffered reader.
+	 */
+	public void close() throws IOException {
+		if (_in != null) {
+			_in.close();
+			_in = null;
+		}
+	}
+
+	//Object//
+	protected void finalize() throws Throwable {
+		close();
+		super.finalize();
+	}
+}
+/*package*/ class RepeatableURLReader extends Reader implements Repeatable {
+	private final URL _url;
+	private Reader _in;
+	private final String _charset;
+
+	RepeatableURLReader(URL url, String charset) {
+		_url = url;
+		_charset = charset != null ? charset: "UTF-8";
+	}
+
+	public int read(char cbuf[], int off, int len) throws IOException {
+		if (_in == null)
+			_in = new URLReader(_url, _charset);
 		return _in.read(cbuf, off, len);
 	}
 	/** Closes the current access and the next call of {@link #read}
