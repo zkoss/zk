@@ -35,14 +35,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 				<attribute name="value"><![CDATA[
 <button label="Download sun.jpg">
-	<attribute name="onClick">{
-	java.io.InputStream is = desktop.getWebApp()
-		.getResourceAsStream("/img/sun.jpg");
-	if (is != null)
-		Filedownload.save(is, "image/jpeg", "sun.jpg");
-	else
-		alert("/img/sun.jpg not found");
-	}</attribute>
+	<attribute name="onClick">
+	Filedownload.save("/img/sun.jpg", null);
+	</attribute>
 </button>
 				]]></attribute>
 			</textbox>
