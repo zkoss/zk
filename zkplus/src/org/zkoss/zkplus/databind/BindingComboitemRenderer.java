@@ -29,13 +29,12 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Grid;
-import org.zkoss.zul.Listbox;
 /**
  * @author jumperchen
  * @since 3.0.2
  */
 /*package*/ class BindingComboitemRenderer implements org.zkoss.zul.ComboitemRenderer, org.zkoss.zul.ComboitemRendererExt, Serializable {
+	private static final long serialVersionUID = 200808191415L;
 	private static final String KIDS = "zkplus.databind.KIDS";
 	private Comboitem _template;
 	private DataBinder _binder;
@@ -50,8 +49,8 @@ import org.zkoss.zul.Listbox;
 	private void linkTemplates(Component clone, Component template, Map templatemap) {
 		if (_binder.existsBindings(template)) {
 			templatemap.put(template, clone);
-			clone.setAttribute(_binder.TEMPLATEMAP, templatemap);
-			clone.setAttribute(_binder.TEMPLATE, template);
+			clone.setAttribute(DataBinder.TEMPLATEMAP, templatemap);
+			clone.setAttribute(DataBinder.TEMPLATE, template);
 		}
 		
 		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
@@ -103,8 +102,8 @@ import org.zkoss.zul.Listbox;
 		setupCloneIds(item);
 
 		//bind bean to the associated listitem and its decendant
-		final String varname = (String) _template.getAttribute(_binder.VARNAME);
-		final Map templatemap = (Map) item.getAttribute(_binder.TEMPLATEMAP);
+		final String varname = (String) _template.getAttribute(DataBinder.VARNAME);
+		final Map templatemap = (Map) item.getAttribute(DataBinder.TEMPLATEMAP);
 		templatemap.put(varname, bean);
 
 		//apply the data binding
@@ -127,9 +126,9 @@ import org.zkoss.zul.Listbox;
 		linkTemplates(clone, _template, templatemap);
 		
 		//link this template map to parent templatemap (Combobox in Combobox)
-		Map parenttemplatemap = (Map) combobox.getAttribute(_binder.TEMPLATEMAP);
+		Map parenttemplatemap = (Map) combobox.getAttribute(DataBinder.TEMPLATEMAP);
 		if (parenttemplatemap != null) {
-				templatemap.put(_binder.TEMPLATEMAP, parenttemplatemap);
+				templatemap.put(DataBinder.TEMPLATEMAP, parenttemplatemap);
 		}
 		//kept clone kids somewhere to avoid create too many components in browser
 		final List kids = new ArrayList(clone.getChildren());

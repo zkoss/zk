@@ -40,7 +40,8 @@ import java.util.List;
  */
 public class BindingListModelList extends ListModelList
 implements BindingListModelExt, java.io.Serializable {
-	private boolean _distinct = true; //since 3.1; default to true
+	private static final long serialVersionUID = 200808191518L;
+	private boolean _distinct = true; //since 3.5; default to true
 
 	/**
 	 * @since 3.1

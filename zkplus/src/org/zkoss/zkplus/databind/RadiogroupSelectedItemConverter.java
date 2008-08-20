@@ -16,27 +16,21 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
-import org.zkoss.zul.Radiogroup;
-import org.zkoss.zul.Radio;
+import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.SelectEvent;
-
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Iterator;
+import org.zkoss.zul.Radio;
+import org.zkoss.zul.Radiogroup;
 
 /**
  * Convert Radiogroup selected item to radio value and vice versa.
  *
  * @author Henri
  */
-public class RadiogroupSelectedItemConverter implements TypeConverter {
-  public Object coerceToUi(Object val, Component comp) { //load
-  	if (val != null) {
+public class RadiogroupSelectedItemConverter implements TypeConverter, java.io.Serializable {
+  	private static final long serialVersionUID = 200808191534L;
+	public Object coerceToUi(Object val, Component comp) { //load
+		if (val != null) {
 			//iterate to find the selected radio via the value
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
 				final Component child = (Component)it.next();
@@ -49,10 +43,10 @@ public class RadiogroupSelectedItemConverter implements TypeConverter {
 				}
 			}
 		}
-  	return null;
-  }
+		return null;
+	}
   
-  public Object coerceToBean(Object val, Component comp) { //save
+	public Object coerceToBean(Object val, Component comp) { //save
  		return val != null ? ((Radio)val).getValue() : null;
-  }
+	}
 }

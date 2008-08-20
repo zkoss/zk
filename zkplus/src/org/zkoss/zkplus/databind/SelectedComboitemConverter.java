@@ -35,7 +35,8 @@ import org.zkoss.zul.ListModel;
  * @author jumperchen
  * @since 3.0.2
  */
-public class SelectedComboitemConverter implements TypeConverter {
+public class SelectedComboitemConverter implements TypeConverter, java.io.Serializable {
+	private static final long serialVersionUID = 200808191437L;
 	/**
 	 * @since 3.0.2
 	 */

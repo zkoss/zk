@@ -37,6 +37,8 @@ import java.util.Set;
  */
 public class BindingListModelSet extends ListModelSet
 implements BindingListModelExt, java.io.Serializable {
+	private static final long serialVersionUID = 200808191422L;
+
 	/**
 	 * @since 3.0.5.
 	 */

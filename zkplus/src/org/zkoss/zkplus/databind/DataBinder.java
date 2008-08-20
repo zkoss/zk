@@ -16,54 +16,51 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Path;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.metainfo.Annotation; 
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.HierachicalAware;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Grid;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Row;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ListModel;
-
-import org.zkoss.util.ModificationException;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Primitives;
 import org.zkoss.lang.reflect.Fields;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.Date;
-import java.util.Map.Entry;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.ListIterator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import org.zkoss.util.ModificationException;
+import org.zkoss.zk.scripting.HierachicalAware;
+import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Path;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.metainfo.Annotation;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Row;
 
 /**
  * The DataBinder used for binding ZK UI component and the backend data bean.
  *
  * @author Henri Chen
  */
-public class DataBinder {
+public class DataBinder implements java.io.Serializable {
+	private static final long serialVersionUID = 200808191508L;
 	public static final String NULLIFY = "none"; //used to nullify default configuration
 	public static final String ARGS = "bindingArgs"; //extra arguments specified in annotation
 	public static final String VARNAME = "zkplus.databind.VARNAME"; //_var name
@@ -249,7 +246,6 @@ public class DataBinder {
 		}
 	
 		//nullify check
-		boolean nullify = false;
 		LinkedHashSet loadEvents = null;
 		if (loadWhenEvents != null && loadWhenEvents.size() > 0) {
 			loadEvents = new LinkedHashSet(loadWhenEvents.size());
@@ -257,9 +253,7 @@ public class DataBinder {
 				final String event = (String) it.next();
 				if (NULLIFY.equals(event)) {
 					loadEvents.clear();
-					nullify = true;
 				} else {
-					nullify = false;
 					loadEvents.add(event);
 				}
 			}
@@ -268,7 +262,6 @@ public class DataBinder {
 			}
 		}
 
-		nullify = false;
 		Set saveEvents = null;
 		if (saveWhenEvents != null && saveWhenEvents.size() > 0) {
 			saveEvents = new HashSet(saveWhenEvents.size());
@@ -276,9 +269,7 @@ public class DataBinder {
 				final String event = (String) it.next();
 				if (NULLIFY.equals(event)) {
 					saveEvents.clear();
-					nullify = true;
 				} else {
-					nullify = false;
 					saveEvents.add(event);
 				}
 			}
@@ -478,14 +469,6 @@ public class DataBinder {
 			saveComponent(comp);
 		}
 	}
-
-	private void loadAttrs(String expr, Collection attrs) {
-		for(final Iterator it = attrs.iterator(); it.hasNext();) {
-			Binding binding = (Binding) it.next();
-			Component comp = binding.getComponent();
-			binding.loadAttribute(comp, expr);
-		}
-	}	
 
 	private void loadAttrs(Component comp, Collection attrs) {
 		for(final Iterator it = attrs.iterator(); it.hasNext();) {
@@ -724,7 +707,6 @@ public class DataBinder {
 		} else { 
 			//though the comp is in collection but the binding does not relate to _var, 
 			//have to scan through the whole cloned children items   
-			final boolean isDistinct = ListModelConverter.isDistinct(owner);
 			final int sz = xmodel.getSize();
     		final List comps = new ArrayList(sz);
 			if (decor instanceof CollectionItemExt) {
@@ -1206,11 +1188,9 @@ public class DataBinder {
 		final int sz = nodeids.size();
 		final List subids = nodeids.subList(sz - level, sz);
 
-		Object bean = null;
 		for (final Iterator it = parentNode.getSameNodes().iterator(); it.hasNext();) {
 			Object obj = it.next();
 			if (!(obj instanceof BindingNode)) {
-				bean = obj;
 				break;
 			}
 		}
@@ -1270,7 +1250,9 @@ public class DataBinder {
 		return getCollectionItem(comp, bean, /* isCollectionItem */ true);		
 	}
 	
-	private class LoadOnSaveEventListener implements EventListener {
+	private class LoadOnSaveEventListener implements EventListener, java.io.Serializable {
+		private static final long serialVersionUID = 200808191508L;
+
 		public LoadOnSaveEventListener() {
 		}
 		
@@ -1468,7 +1450,8 @@ public class DataBinder {
 			final Object nodebean = getBeanWithExpression(comp, node.getPath());
 			return Objects.equals(nodebean, bean);
 		}
-		private class Dual {
+		private class Dual implements java.io.Serializable {
+			private static final long serialVersionUID = 200808191743L;
 			private Component _comp;
 			private Binding _binding;
 			public Dual(Component comp, Binding binding) {

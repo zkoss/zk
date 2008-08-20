@@ -26,7 +26,8 @@ import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Row;
 
-/* package */class RowCollectionItem implements CollectionItemExt {
+/* package */class RowCollectionItem implements CollectionItemExt, java.io.Serializable {
+	static final long serialVersionUID = 200808191436L;
 
 	public Component getComponentAtIndexByOwner(Component comp, int index) {
 		return (Component) getItems(comp).get(index);

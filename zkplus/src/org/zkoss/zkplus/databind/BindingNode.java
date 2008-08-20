@@ -16,25 +16,25 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.Component;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.List;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.zkoss.zk.ui.UiException;
 
 /**
  * BindingNode that forms a databinding bean path dependant tree.
  *
  * @author Henri
  */
-/*package*/ class BindingNode {
+/*package*/ class BindingNode implements java.io.Serializable {
+	private static final long serialVersionUID = 200808191424L;
+
 	private LinkedHashSet _bindingSet = new LinkedHashSet(); //(Binding set of this expression BindingNode)
 	private Map _kids = new LinkedHashMap(7); //(nodeid, BindingNode)
 	private String _path; //path of this BindingNode

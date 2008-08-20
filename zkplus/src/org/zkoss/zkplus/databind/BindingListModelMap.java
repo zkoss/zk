@@ -38,6 +38,8 @@ import java.util.Map;
  */
 public class BindingListModelMap extends ListModelMap
 implements BindingListModelExt, java.io.Serializable {
+	private static final long serialVersionUID = 200808191420L;
+
 	/**
 	 * @since 3.0.5
 	 */
