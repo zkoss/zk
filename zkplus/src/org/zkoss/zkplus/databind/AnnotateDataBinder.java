@@ -16,19 +16,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
-import org.zkoss.zk.ui.Path;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.metainfo.Annotation; 
-
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map.Entry;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.Annotation;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * <p>The DataBinder that reads ZUML annotations to create binding info.</p>
@@ -210,6 +208,8 @@ import java.util.Iterator;
  * @see DataBinder
  */
 public class AnnotateDataBinder extends DataBinder {
+	private static final long serialVersionUID = 2008081914121L;
+
 	/**
 	 * Constructor that read all binding annotations of the components inside the specified desktop.
 	 * @param desktop the ZUML desktop.

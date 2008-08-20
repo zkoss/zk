@@ -26,7 +26,8 @@ import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 
-/* package */class ListitemCollectionItem implements CollectionItemExt {
+/* package */class ListitemCollectionItem implements CollectionItemExt, java.io.Serializable {
+	private static final long serialVersionUID = 200808191434L;
 
 	public Component getComponentCollectionOwner(Component comp) {
 		if (comp instanceof Listitem) {

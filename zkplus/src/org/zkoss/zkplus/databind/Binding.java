@@ -16,34 +16,26 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
-import org.zkoss.zul.ListModel;
-import org.zkoss.zul.impl.InputElement;
-
-import org.zkoss.zk.ui.Path;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.Express;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.ext.DynamicPropertied;
-
-import org.zkoss.util.ModificationException;
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
-import org.zkoss.lang.reflect.Fields;
-
-import java.lang.reflect.Method;
 import java.io.Serializable;
-import java.util.Map;
-import java.util.Set;
-import java.util.List;
-import java.util.HashMap;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.reflect.Fields;
+import org.zkoss.util.ModificationException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.Express;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zul.impl.InputElement;
 
 /**
  * A Data Binding that associate component+attr to an bean expression.
@@ -51,7 +43,8 @@ import java.util.ArrayList;
  * @author Henri
  * @since 3.0.0
  */
-public class Binding {
+public class Binding implements Serializable {
+	private static final long serialVersionUID = 200808191311L;
 	private DataBinder _binder;
 	private Component _comp;
 	private String _attr;
@@ -229,7 +222,7 @@ public class Binding {
 	public void loadAttribute(Component comp) {
 		if (!isLoadable() 
 				|| _attr.startsWith("_") 
-				|| _binder.isTemplate(comp) 
+				|| DataBinder.isTemplate(comp) 
 				|| comp == null //bug #1941947 Cannot find associated CollectionItem error 
 				|| comp.getPage() == null) { 
 			return; //cannot load, a control attribute, or a detached component, skip!
@@ -243,7 +236,7 @@ public class Binding {
 	 * @param bean the bean value.
 	 */
 	public void loadAttribute(Component comp, Object bean) {
-		if (!isLoadable() || _attr.startsWith("_") || _binder.isTemplate(comp) || comp.getPage() == null) { 
+		if (!isLoadable() || _attr.startsWith("_") || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
 			return; //cannot load, a control attribute, or a detached component, skip!
 		}
 		myLoadAttribute(comp, bean);
@@ -327,7 +320,7 @@ public class Binding {
 	/** Get converted value and original value of this Binding.
 	 */
 	private Object[] getAttributeValues(Component comp) {
-		if (!isSavable() || _attr.startsWith("_") || _binder.isTemplate(comp) || comp.getPage() == null) { 
+		if (!isSavable() || _attr.startsWith("_") || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
 			return null; //cannot save, a control attribute, or a detached component, skip!
 		}
 		Object rawval = null;
@@ -406,6 +399,7 @@ public class Binding {
 	}
 	
 	private static class BindingInfo implements Serializable {
+		private static final long serialVersionUID = 200808191315L;
 		private Binding _binding;
 		private Component _comp;
 		private Object[] _vals;
@@ -429,7 +423,7 @@ public class Binding {
 		}
 	}
 	
-	private static abstract class BaseEventListener implements EventListener, Express {
+	private static abstract class BaseEventListener implements EventListener, Express, Serializable {
 		protected List _dataTargets;
 		
 		public BaseEventListener() {
@@ -442,6 +436,7 @@ public class Binding {
 	}
 			
 	private static class LoadEventListener extends BaseEventListener {
+		private static final long serialVersionUID = 200808191313L;
 		public LoadEventListener() {
 			super();
 		}
@@ -450,9 +445,8 @@ public class Binding {
 				final BindingInfo bi = (BindingInfo) it.next();
 				final Component dt = bi.getComponent();
 				final Binding binding = bi.getBinding();
-				final DataBinder binder = binding.getBinder();
-				final Component dataTarget = binder.isTemplate(dt) ? 
-					binder.lookupClone(event.getTarget(), dt) : dt;
+				final Component dataTarget = DataBinder.isTemplate(dt) ? 
+					DataBinder.lookupClone(event.getTarget(), dt) : dt;
 				if (dataTarget != null) {
 					binding.loadAttribute(dataTarget);
 				}
@@ -461,6 +455,7 @@ public class Binding {
 	}
 
 	private static class SaveEventListener extends BaseEventListener {
+		private static final long serialVersionUID = 200808191314L;
 		public SaveEventListener() {
 			super();
 		}

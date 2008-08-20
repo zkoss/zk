@@ -16,23 +16,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
-import org.zkoss.zul.ListModelSet;
-import org.zkoss.zul.ListModelMap;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.Component;
-
-import java.util.Set;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * The {@link TypeConverter} implmentation for converting collection to ListModel and vice versa.
  *
  * @author Henri Chen
  */
-public class ListModelConverter implements TypeConverter {
+public class ListModelConverter implements TypeConverter, java.io.Serializable {
+	private static final long serialVersionUID = 200808191433L;
+
 	/** Convert a Set, Map, List, Object[], Enum, or other kind of BindingListModel to associated {@link BindingListModel}.
 	 * @param val must be instanceof Set, Map, List, Object[], Enum Class, or other kind of BindingListModel implementation.
 	 */

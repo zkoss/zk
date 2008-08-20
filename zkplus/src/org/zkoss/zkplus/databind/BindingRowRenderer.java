@@ -16,24 +16,21 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-
-import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Row;
-import org.zkoss.zul.RowRenderer;
-import org.zkoss.zul.RowRendererExt;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.io.Serializable;
 
 /*package*/ class BindingRowRenderer 
 implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable {
+	private static final long serialVersionUID = 200808191425L;
 	private static final String KIDS = "zkplus.databind.KIDS";
 	private Row _template;
 	private DataBinder _binder;
@@ -61,9 +58,9 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		linkTemplates(clone, _template, templatemap);
 		
 		//link this template map to parent templatemap (Grid in Grid)
-		Map parenttemplatemap = (Map) grid.getAttribute(_binder.TEMPLATEMAP);
+		Map parenttemplatemap = (Map) grid.getAttribute(DataBinder.TEMPLATEMAP);
 		if (parenttemplatemap != null) {
-			templatemap.put(_binder.TEMPLATEMAP, parenttemplatemap);
+			templatemap.put(DataBinder.TEMPLATEMAP, parenttemplatemap);
 		}
 		//kept clone kids somewhere to avoid create too many components in browser
 		final List kids = new ArrayList(clone.getChildren());
@@ -95,8 +92,8 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		setupCloneIds(row);
 
 		//bind bean to the associated listitem and its decendant
-		final String varname = (String) _template.getAttribute(_binder.VARNAME);
-		final Map templatemap = (Map) row.getAttribute(_binder.TEMPLATEMAP);
+		final String varname = (String) _template.getAttribute(DataBinder.VARNAME);
+		final Map templatemap = (Map) row.getAttribute(DataBinder.TEMPLATEMAP);
 		templatemap.put(varname, bean);
 
 		//apply the data binding
@@ -107,8 +104,8 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 	private void linkTemplates(Component clone, Component template, Map templatemap) {
 		if (_binder.existsBindings(template)) {
 			templatemap.put(template, clone);
-			clone.setAttribute(_binder.TEMPLATEMAP, templatemap);
-			clone.setAttribute(_binder.TEMPLATE, template);
+			clone.setAttribute(DataBinder.TEMPLATEMAP, templatemap);
+			clone.setAttribute(DataBinder.TEMPLATE, template);
 		}
 		
 		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 

@@ -36,6 +36,8 @@ import java.util.Map;
  */
 public class BindingListModelMap extends ListModelMap
 implements BindingListModel, java.io.Serializable {
+	private static final long serialVersionUID = 200808191420L;
+
 	public BindingListModelMap(Map map, boolean live) {
 		super(map, live);
 	}

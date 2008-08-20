@@ -36,6 +36,8 @@ import java.util.List;
  */
 public class BindingListModelList extends ListModelList
 implements BindingListModel, java.io.Serializable {
+	private static final long serialVersionUID = 200808191420L;
+
 	public BindingListModelList(List list, boolean live) {
 		super(list, live);
 	}

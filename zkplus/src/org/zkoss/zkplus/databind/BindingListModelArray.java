@@ -34,6 +34,8 @@ import org.zkoss.zul.ListModelArray;
  */
 public class BindingListModelArray extends ListModelArray
 implements BindingListModel, java.io.Serializable {
+	private static final long serialVersionUID = 200808191419L;
+
 	public BindingListModelArray(Object[] c, boolean live) {
 		super(c, live);
 	}

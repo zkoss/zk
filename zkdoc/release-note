@@ -7,7 +7,9 @@ ZK 3.0.8
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
   2056760: Fail to change the width of Listbox
-
+  2051639: Data binding longbox does not work
+  2037288: Clustering failed with AnnotateDataBinder
+  
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
 
