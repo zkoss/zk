@@ -18,8 +18,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.FileNotFoundException;
+import java.net.URL;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
@@ -113,5 +116,55 @@ public class Filedownload {
 	 */
 	public static void save(Reader content, String contentType, String flnm) {
 		save(new AMedia(flnm, null, contentType, content), flnm);
+	}
+	/** Open a download dialog to save the specified file at the client.
+	 *
+	 * @param contentType the content type, e.g., application/pdf.
+	 * Unlike other save methods, it is optional. If null, the file name's
+	 * extension is used to determine the content type.
+	 * @exception FileNotFoundException if the file is not found.
+	 * @since 3.0.8
+	 */
+	public static void save(File file, String contentType)
+	throws FileNotFoundException {
+		save(new AMedia(file, contentType, null), file.getName());
+	}
+	/** Open a download dialog to save the resource of the specified URL
+	 * at the client.
+	 * The path must be retrieveable by use of {@link org.zkoss.zk.ui.WebApp#getResource}.
+	 *
+	 * @param url the URL to get the resource
+	 * @param contentType the content type, e.g., application/pdf.
+	 * Unlike other save methods, it is optional. If null, the path's
+	 * extension is used to determine the content type.
+	 * @exception FileNotFoundException if the resource is not found.
+	 * @since 3.0.8
+	 */
+	public static void save(URL url, String contentType)
+	throws FileNotFoundException {
+		String name = url.toExternalForm();
+		int j = name.lastIndexOf('/');
+		if (j >= 0 && j < name.length() - 1)
+			name = name.substring(j + 1);
+		save(new AMedia(url, contentType, null), name);
+	}
+	/** Open a download dialog to save the resource of the specified path
+	 * at the client.
+	 *
+	 * @param path the path of the resource.
+	 * It must be retrieveable by use of {@link org.zkoss.zk.ui.WebApp#getResource}.
+	 * @param contentType the content type, e.g., application/pdf.
+	 * Unlike other save methods, it is optional. If null, the path's
+	 * extension is used to determine the content type.
+	 * @exception FileNotFoundException if the resource is not found.
+	 * @since 3.0.8
+	 */
+	public static void save(String path, String contentType)
+	throws FileNotFoundException {
+		final URL url = Executions.getCurrent().getDesktop().getWebApp()
+			.getResource(path);
+		if (url == null)
+			throw new FileNotFoundException(path);
+		save(url, contentType);
 	}
 }

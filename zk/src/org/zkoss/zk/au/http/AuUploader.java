@@ -71,6 +71,11 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 public class AuUploader implements AuProcessor {
 	private static final Log log = Log.lookup(AuUploader.class);
 
+	public void process(ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response, String pathInfo)
+	throws ServletException, IOException {
+		//does nothing if no session
+	}
 	/** Processes a file uploaded from the client.
 	 */
 	public void process(Session sess, ServletContext ctx,

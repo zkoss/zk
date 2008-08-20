@@ -70,7 +70,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 public class AuDynaMediar implements AuProcessor {
 	private static final Log log = Log.lookup(AuDynaMediar.class);
 
-	/** Retrieves the response from {@link DynamicMedia#getMedia}.
+	/** Retrieves the media from {@link DynamicMedia#getMedia}.
 	 */
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
@@ -115,7 +115,7 @@ public class AuDynaMediar implements AuProcessor {
 						throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
 					media = ((DynamicMedia)cc).getMedia(l >= 0 ? pi.substring(l): "");
 					if (media == null) {
-						response.sendError(response.SC_GONE, "Media not found in "+comp);
+						response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi+" - "+comp));
 						return;
 					}
 				}
@@ -136,7 +136,8 @@ public class AuDynaMediar implements AuProcessor {
 					}
 				}
 
-				response.sendError(response.SC_GONE, "Failed to load media, "+pi+errmsg);
+				response.sendError(response.SC_GONE,
+					Messages.get(MZk.PAGE_FAILED, new Object[] {pi, errmsg, ""}));
 				return;
 			} finally {
 				if (!err) {
@@ -225,5 +226,12 @@ public class AuDynaMediar implements AuProcessor {
 		out.write(data);
 		out.flush();
 		//FUTURE: support last-modified
+	}
+	/** Retrieves the media when the session is not available.
+	 */
+	public void process(ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response, String pi)
+	throws ServletException, IOException {
+		response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
 	}
 }

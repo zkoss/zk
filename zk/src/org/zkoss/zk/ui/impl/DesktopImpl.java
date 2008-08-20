@@ -93,8 +93,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
     private static final long serialVersionUID = 20080509L;
 
-	/** Represents media. It must be distinguishable from component's ID. */
-	private static final String MEDIA_PREFIX = "med";
+	/** Represents media stored with {@link #getDownloadMediaURI}.
+	 * It must be distinguishable from component's ID.
+	 */
+	private static final String DOWNLOAD_PREFIX = "dwnmed-";
 
 	private transient WebApp _wapp;
 	private transient Session _sess;
@@ -313,7 +315,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				//6 minutes (CONSIDER: configurable)
 		}
 		String medId = Strings.encode(
-			new StringBuffer(12).append(MEDIA_PREFIX), _medId++).toString();
+			new StringBuffer(12).append(DOWNLOAD_PREFIX), _medId++).toString();
 		_meds.put(medId, media);
 
 		final StringBuffer sb = new StringBuffer(64)

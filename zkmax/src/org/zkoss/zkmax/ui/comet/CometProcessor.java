@@ -66,6 +66,11 @@ import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 	}
 
 	//AuProcessor//
+	public void process(ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response, String pi)
+	throws ServletException, IOException {
+		//Does nothing if no session
+	}
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {

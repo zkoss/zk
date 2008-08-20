@@ -211,7 +211,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
-	<!-- Configure ZUL to apply the zk prefix in the css file.
+	<!-- Configure ZUL to apply the zk prefix in the CSS file (norm*.css).
 	<library-property>
 		<name>org.zkoss.zul.theme.enableZKPrefix</name>
 		<value>true</value>

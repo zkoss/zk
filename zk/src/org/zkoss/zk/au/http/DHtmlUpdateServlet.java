@@ -180,6 +180,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						throws ServletException, IOException {
 							throw new ServletException("Failed to upload."+msg);
 						}
+						public void process(ServletContext ctx,
+						HttpServletRequest request, HttpServletResponse response, String pi)
+						throws ServletException, IOException {
+						}
 					});
 			}
 		}
@@ -268,6 +272,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	public AuProcessor getAuProcessor(String prefix) {
 		return (AuProcessor)_procs.get(prefix);
 	}
+	/** Returns the first AU processor matches the specified path,
+	 * or null if not found.
+	 */
+	private AuProcessor getAuProcessorByPath(String path) {
+		for (Iterator it = _procs.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			if (path.startsWith((String)me.getKey()))
+				return (AuProcessor)me.getValue();
+		}
+		return null;
+	}
 
 	//-- super --//
 	protected long getLastModified(HttpServletRequest request) {
@@ -315,7 +330,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		if (sess == null) {
 			response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
-			if (!withpi) { //AU request
+			if (withpi) {
+				final AuProcessor proc = getAuProcessorByPath(pi);
+				if (proc != null) {
+					try {
+						proc.process(_ctx, request, response, pi);
+					} catch (AbstractMethodError ex) { //ingore (backward compaible)
+					}
+				}
+			} else { //AU request
 				//Bug 1849088: rmDesktop might be sent after invalidate
 				//Bug 1859776: need send response to client for redirect or others
 				final String dtid = request.getParameter("dtid");
@@ -329,14 +352,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
 			if (withpi) {
-				for (Iterator it = _procs.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					if (pi.startsWith((String)me.getKey())) {
-						((AuProcessor)me.getValue())
-							.process(sess, _ctx, request, response, pi);
-						return; //done
-					}
+				final AuProcessor proc = getAuProcessorByPath(pi);
+				if (proc != null) {
+					proc.process(sess, _ctx, request, response, pi);
+					return; //done
 				}
+
 				response.setIntHeader("ZK-Error", response.SC_NOT_FOUND);
 					//Don't use sendError since browser might handle it
 				log.warning("Unknown path info: "+pi);
