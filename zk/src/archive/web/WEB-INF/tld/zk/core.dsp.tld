@@ -171,4 +171,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Returns the attributes to render a page.
 		</description>
 	</function>
+
+	<function>
+		<name>outZkHtmlTags</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outZkHtmlTags()
+		</function-signature>
+		<description>
+	Returns the desktop info to render a desktop.
+	It is required only if outPageAttrs might not be called
+		</description>
+	</function>
 </taglib>

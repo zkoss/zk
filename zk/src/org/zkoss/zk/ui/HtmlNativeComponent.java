@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.impl.NativeHelpers;
+import org.zkoss.zk.fn.ZkFns;
 
 /**
  * A comonent used to represent XML elements that are associated
@@ -145,7 +146,7 @@ implements DynamicTag, Native {
 		if ("html".equals(tn) || "body".equals(tn)) {//</head> might be part of _prolog
 			final int j = indexOfHead(sb);
 			if (j >= 0) {
-				final String zktags = NativeHelpers.outZKHtmlTags();
+				final String zktags = ZkFns.outZkHtmlTags();
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
@@ -165,7 +166,7 @@ implements DynamicTag, Native {
 		if ("html".equals(tn) || "body".equals(tn) || "head".equals(tn)) {
 			final int j = sb.indexOf("</" + _tag);
 			if (j >= 0) {
-				final String zktags = NativeHelpers.outZKHtmlTags();
+				final String zktags = ZkFns.outZkHtmlTags();
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}

@@ -27,7 +27,6 @@ ${z:outDocType(page)}
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="-1">
 <title>${page.title}</title>
-${z:outLangStyleSheets()}
 <c:set var="zk_htmlHeadRequired" value="true" scope="request"/><%-- ask page.dsp to generate </head><body> --%>
 <c:include page="~./zul/html/page.dsp"/><%-- OC4J cannot handle relative page correctly --%>
 </body>

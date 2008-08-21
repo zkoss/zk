@@ -33,33 +33,18 @@ ${z:outLangJavaScripts(null)}
 ${z:redraw(root, null)}
 	</c:forEach>
 </div>
-
-	<c:if test="${!empty arg.responses}">
-<script type="text/javascript">
 ${z:outResponseJavaScripts(arg.responses)}
-</script>
-	</c:if>
 </c:when>
 
 <c:otherwise><%-- zk_completeDesktop --%>
-	<c:set var="zk_argAction" value="${arg.action}" scope="request"/><%-- ZHTML head counts on it --%>
 	<c:set var="zk_argResponses" value="${arg.responses}" scope="request"/><%-- ZHTML body counts on it --%>
 	<c:forEach var="root" items="${page.roots}">
 ${z:redraw(root, null)}
 	</c:forEach>
 
-	<c:if test="${!empty zk_argAction && !arg.embed}">
-${z:outLangStyleSheets()}
-${z:outLangJavaScripts(null)}
-<script type="text/javascript">
-	zkau.addDesktop("${page.desktop.id}");
-</script>
+	<c:if test="${!arg.embed}">
+${z:outZkHtmlTags()}
 	</c:if>
-
-	<c:if test="${!empty zk_argResponses}">
-<script type="text/javascript">
 ${z:outResponseJavaScripts(zk_argResponses)}
-</script>
-	</c:if>
 </c:otherwise>
 </c:choose>

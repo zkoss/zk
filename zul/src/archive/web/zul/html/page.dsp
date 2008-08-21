@@ -34,8 +34,4 @@ ${z:outHeaders(page)}
 <div${z:outPageAttrs(page)}>
 <c:forEach var="root" items="${page.roots}">${z:redraw(root, null)}</c:forEach>
 </div>
-<c:if test="${!empty arg.responses}">
-<script type="text/javascript">
 ${z:outResponseJavaScripts(arg.responses)}
-</script>
-</c:if>

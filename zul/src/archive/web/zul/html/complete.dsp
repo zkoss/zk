@@ -22,20 +22,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="page" value="${arg.page}"/>
 <%@ page contentType="${z:outContentType(page)}" %>
 ${z:outDocType(page)}
-<c:set var="zk_argAction" value="${arg.action}" scope="request"/><%-- ZHTML head counts on it --%>
 <c:set var="zk_argResponses" value="${arg.responses}" scope="request"/><%-- ZHTML body counts on it --%>
 <c:forEach var="root" items="${page.roots}">${z:redraw(root, null)}</c:forEach>
 
-<c:if test="${!empty zk_argAction && !arg.embed}">
-${z:outLangStyleSheets()}
-${z:outLangJavaScripts(null)}
-<script type="text/javascript">
-	zkau.addDesktop("${page.desktop.id}");
-</script>
+<c:if test="${!arg.embed}">
+${z:outZkHtmlTags()}
 </c:if>
-
-<c:if test="${!empty zk_argResponses}">
-<script type="text/javascript">
 ${z:outResponseJavaScripts(zk_argResponses)}
-</script>
-</c:if>

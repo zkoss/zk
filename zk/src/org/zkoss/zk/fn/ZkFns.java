@@ -84,6 +84,9 @@ public class ZkFns {
 	private static final String ATTR_LANG_JS_GENED
 		= "javax.zkoss.zk.lang.js.generated";
 		//Naming with javax to be able to shared among portlets
+	/** Denotes whether JavaScripts are generated for this request. */
+	private static final String ATTR_DESKTOP_INFO_GENED
+		= "javax.zkoss.zk.desktopInfo.generated";
 
 	protected ZkFns() {}
 
@@ -123,6 +126,7 @@ public class ZkFns {
 		if (responses == null || responses.isEmpty()) return "";
 
 		final StringBuffer sb = new StringBuffer(256)
+			.append("\n<script type=\"text/javascript\">\n")
 			.append("zk.addInit(function(){\n");
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
@@ -139,7 +143,7 @@ public class ZkFns {
 			}
 			sb.append(");\n");
 		}
-		return sb.append("});").toString();
+		return sb.append("});\n</script>\n").toString();
 	}
 
 	/** Returns HTML tags to include all JavaScript files and codes that are
@@ -290,6 +294,7 @@ public class ZkFns {
 		for (Iterator it = getStyleSheets(exec).iterator(); it.hasNext();)
 			append(sb, (StyleSheet)it.next(), exec, null);
 
+		if (sb.length() > 0) sb.append('\n');
 		return sb.toString();
 	}
 	/** Returns HTML tags to include style sheets of the specified device
@@ -677,6 +682,9 @@ public class ZkFns {
 				&& exec.getAttribute("org.zkoss.zk.ui.page.included") != null;
 		}
 
+		final ServletRequest request = ServletFns.getCurrentRequest();
+		WebManager.setRequestLocal(request, ATTR_DESKTOP_INFO_GENED, Boolean.TRUE);
+
 		//prepare style
 		String style = page.getStyle();
 		if (style == null || style.length() == 0) {
@@ -703,6 +711,61 @@ public class ZkFns {
 		if (owner == null)
 			HTMLs.appendAttribute(sb, "z.au", desktop.getUpdateURI(null));
 
+		return sb.toString();
+	}
+	/** Returns the desktop info to render a desktop.
+	 * It must be called if {@link #outPageAttrs} might not be called.
+	 * On the other hand, {@link #outDesktopInfo} does nothing if
+	 * {@link #outPageAttrs} was called.
+	 *
+	 * <p>It is OK to call both {@link #outPageAttrs}
+	 * and {@link #outDesktopInfo}.
+	 * @since 3.5.0.
+	 */
+	public static final String outDesktopInfo(Desktop desktop) {
+		final ServletRequest request = ServletFns.getCurrentRequest();
+		if (WebManager.getRequestLocal(request, ATTR_DESKTOP_INFO_GENED) != null)
+			return ""; //nothing to generate
+		WebManager.setRequestLocal(request, ATTR_DESKTOP_INFO_GENED, Boolean.TRUE);
+
+		return "<script type=\"text/javascript\">\n"
+			+"zkau.addDesktop(\""+desktop.getId()+"\");"
+			+"zkau.addURI(\""+desktop.getId()+"\",\""+desktop.getUpdateURI(null)
+			+"\");\n</script>\n";
+	}
+
+	/** Generates and returns the ZK specific HTML tags for
+	 * a desktop.
+	 *
+	 * <p>For each desktop, we have to generate a set of HTML tags
+	 * to load ZK Client engine, style sheets and so on.
+	 * For ZUL pages, it is generated automatically by page.dsp.
+	 * However, for ZHTML pages, we have to generate these tags
+	 * with special component such as org.zkoss.zhtml.Head, such that
+	 * the result HTML page is legal.
+	 *
+	 * @return the string holding the HTML tags, or null if already generated.
+	 * @since 3.5.0
+	 */
+	public static String outZkHtmlTags() {
+		final Execution exec = Executions.getCurrent();
+		if (exec == null)
+			return "";
+
+		final ServletRequest request = ServletFns.getCurrentRequest();
+		if (WebManager.getRequestLocal(request, "zkHtmlTagsGened") != null)
+			return null;
+		WebManager.setRequestLocal(request, "zkHtmlTagsGened", Boolean.TRUE);
+
+		final StringBuffer sb = new StringBuffer(512).append('\n')
+			.append(ZkFns.outLangStyleSheets())
+			.append(ZkFns.outLangJavaScripts(null))
+			.append(ZkFns.outDesktopInfo(exec.getDesktop()));
+
+		final String ATTR_RESPONSES = "zk_argResponses";
+		sb.append(ZkFns.outResponseJavaScripts(
+			(Collection)exec.getAttribute(ATTR_RESPONSES)));
+		exec.removeAttribute(ATTR_RESPONSES);
 		return sb.toString();
 	}
 }

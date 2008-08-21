@@ -70,45 +70,10 @@ public class NativeHelpers {
 		}
 	}
 
-	/** Generates and returns the ZK specific HTML tags for
-	 * a desktop.
-	 *
-	 * <p>For each desktop, we have to generate a set of HTML tags
-	 * to load ZK Client engine, style sheets and so on.
-	 * For ZUL pages, it is generated automatically by page.dsp.
-	 * However, for ZHTML pages, we have to generate these tags
-	 * with special component such as org.zkoss.zhtml.Head, such that
-	 * the result HTML page is legal.
-	 *
-	 * @return the string holding the HTML tags, or null if already generated.
-	 * @since 3.0.4
+	/** @deprecated As of release 3.5.0, replaced with
+	 * {@link ZkFns#outZKHtmlTags}.
 	 */
 	public static String outZKHtmlTags() {
-		final Execution exec = Executions.getCurrent();
-		if (exec == null)
-			return null;
-
-		final String ATTR_ACTION = "zk_argAction";
-		if (exec.getAttribute(ATTR_ACTION) == null)
-			return null;
-
-		final StringBuffer sb = new StringBuffer(512).append('\n')
-			.append(ZkFns.outLangStyleSheets()).append('\n')
-			.append(ZkFns.outLangJavaScripts(null)).append('\n');
-
-		sb.append("<script type=\"text/javascript\">\nzkau.addDesktop(\"")
-			.append(exec.getDesktop().getId())
-			.append("\");\n</script>\n");
-
-		final String ATTR_RESPONSES = "zk_argResponses";
-		final Collection responses = (Collection)exec.getAttribute(ATTR_RESPONSES);
-		if (responses != null && !responses.isEmpty())
-			sb.append("\n<script type=\"text/javascript\">\n")
-				.append(ZkFns.outResponseJavaScripts(responses))
-				.append("\n</script>\n");
-		exec.removeAttribute(ATTR_RESPONSES);
-
-		exec.removeAttribute(ATTR_ACTION); //turn off page.dsp's generation
-		return sb.toString();
+		return ZkFns.outZkHtmlTags();
 	}
 }

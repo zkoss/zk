@@ -812,7 +812,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			//whether it is caused by ZK Proxy
 		attrs.put("embed", Boolean.valueOf(asyncUpdate || proxy));
 			//if embed, not to generate JavaScript and CSS
-		attrs.put("action", "/"); //A non-empty string (backward compatible)
 		attrs.put("responses",
 			responses != null ? responses: Collections.EMPTY_LIST);
 		if (bIncluded) {
