@@ -840,6 +840,22 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>tablechildren</component-name>
+		<component-class>org.zkoss.zkmax.zul.Tablechildren</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TablechildrenDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>tablelayout</component-name>
+		<component-class>org.zkoss.zkmax.zul.Tablelayout</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TablelayoutDefault</mold-uri>
+		</mold>
+	</component>	
+	<component>
 		<component-name>tabbox</component-name>
 		<extends>tabbox</extends>
 		<mold>
