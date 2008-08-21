@@ -18,18 +18,22 @@ package org.zkoss.web.servlet.http;
 
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.zip.GZIPOutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +41,7 @@ import javax.servlet.http.Cookie;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.SystemException;
+import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 
@@ -388,4 +393,94 @@ public class Https extends Servlets {
 		new SimpleDateFormat("EEEEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US),
 		new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US)
 	};
+
+	/** Write the specified media to HTTP response.
+	 *
+	 * @param response the HTTP response to write to
+	 * @param media the content to be writeen
+	 * @param download whether to cause the download to show at the client.
+	 * If true, it sets the Content-Disposition header.
+	 * @param resumable whether to handle the partial content.
+	 * Note: the partial content is handled only if resumable is true
+	 * and the Range header is specified in the request.
+	 * @since 3.5.0
+	 */
+	public static
+	void write(HttpServletRequest request, HttpServletResponse response,
+	Media media, boolean download, boolean resumable)
+	throws IOException {
+		final byte[] data;
+		synchronized (media) { //Bug 1896797: media might be access concurr.
+			//reading an image and send it back to client
+			final String ctype = media.getContentType();
+			if (ctype != null)
+				response.setContentType(ctype);
+
+			if (download) {
+				String value = "attachment";
+				final String flnm = media.getName();
+				if (flnm != null && flnm.length() > 0)
+					value += ";filename=\"" + URLEncoder.encode(flnm, "UTF-8") +'"';
+				response.setHeader("Content-Disposition", value);
+				//response.setHeader("Content-Transfer-Encoding", "binary");
+				//response.setHeader("Accept-Ranges", "bytes");
+			}
+
+			if (!media.inMemory()) {
+				if (media.isBinary()) {
+					final ServletOutputStream out = response.getOutputStream();
+					final InputStream in = media.getStreamData();
+					try {
+						Files.copy(out, in);
+					} catch (IOException ex) {
+						//browser might close the connection
+						//and reread (test case: B30-1896797.zul)
+						//so, read it completely, since 2nd read counts on it
+						if (in instanceof org.zkoss.io.Repeatable) {
+							try {
+								final byte[] buf = new byte[1024*8];
+								for (int v; (v = in.read(buf)) >= 0;)
+									;
+							} catch (Throwable t) { //ignore it
+							}
+						}
+						throw ex;
+					} finally {
+						in.close();
+					}
+					out.flush();
+				} else {
+					final Writer out = response.getWriter();
+					final Reader in = media.getReaderData();
+					try {
+						Files.copy(out, in);
+					} catch (IOException ex) {
+						//browser might close the connection and reread
+						//so, read it completely, since 2nd read counts on it
+						if (in instanceof org.zkoss.io.Repeatable) {
+							try {
+								final char[] buf = new char[1024*4];
+								for (int v; (v = in.read(buf)) >= 0;)
+									;
+							} catch (Throwable t) { //ignore it
+							}
+						}
+						throw ex;
+					} finally {
+						in.close();
+					}
+					out.flush();
+				}
+				return; //done;
+			}
+
+			data = media.isBinary() ? media.getByteData():
+				media.getStringData().getBytes("UTF-8");
+		}
+
+		response.setContentLength(data.length);
+		final ServletOutputStream out = response.getOutputStream();
+		out.write(data);
+		out.flush();
+	}
 }

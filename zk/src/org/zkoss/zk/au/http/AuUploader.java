@@ -74,7 +74,7 @@ public class AuUploader implements AuProcessor {
 	public void process(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pathInfo)
 	throws ServletException, IOException {
-		//does nothing if no session
+		response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pathInfo));
 	}
 	/** Processes a file uploaded from the client.
 	 */

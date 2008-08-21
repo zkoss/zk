@@ -119,6 +119,7 @@ public class Filedownload {
 	}
 	/** Open a download dialog to save the specified file at the client.
 	 *
+	 * @param file the file to download to the client
 	 * @param contentType the content type, e.g., application/pdf.
 	 * Unlike other save methods, it is optional. If null, the file name's
 	 * extension is used to determine the content type.

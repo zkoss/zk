@@ -30,7 +30,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- Interpreters -->
 	<zscript language="Java">
 	import org.zkoss.zkmax.zul.*;
-	</zscript>
+	</zscript><!-- the later the import, the higher the priority -->
 
 	<zscript language="JavaScript">
 	importPackage(Packages.java.util);

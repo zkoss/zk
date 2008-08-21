@@ -57,19 +57,17 @@ import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 	 * Notice: the second invocation with the same application has no effect at all.
 	 */
 	/*package*/ static void init(WebApp wapp) {
-		final String STARTED = "org.zkoss.zkmax.ui.comet.CometStarted";
-		if (wapp.getAttribute(STARTED) == null) {
+		if (DHtmlUpdateServlet.getAuProcessor(wapp, "/comet") == null)
 			DHtmlUpdateServlet
 				.addAuProcessor(wapp, "/comet", new CometProcessor());
-			wapp.setAttribute(STARTED, Boolean.TRUE);
-		}
 	}
 
 	//AuProcessor//
 	public void process(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
-		//Does nothing if no session
+		response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
+			//Not use response.sendError to avoid being processed by browser
 	}
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)

@@ -197,6 +197,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		return _ctx;
 	}
 
+	/** Returns the AU processor that is associated the specified prefix.
+	 * @since 3.5.0
+	 */
+	public static final AuProcessor getAuProcessor(WebApp wapp, String prefix) {
+		DHtmlUpdateServlet upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
+		return upsv != null ? upsv.getAuProcessor(prefix): null;
+	}
 	/** Adds an AU processor and associates it with the specified prefix,
 	 * even before {@link DHtmlUpdateServlet} is started.
 	 * <p>Unlike {@link #addAuProcessor(String, AuProcessor)}, it can be called
@@ -329,7 +336,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		if (sess == null) {
-			response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
 			if (withpi) {
 				final AuProcessor proc = getAuProcessorByPath(pi);
 				if (proc != null) {
@@ -339,6 +345,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					}
 				}
 			} else { //AU request
+				response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
 				//Bug 1849088: rmDesktop might be sent after invalidate
 				//Bug 1859776: need send response to client for redirect or others
 				final String dtid = request.getParameter("dtid");
