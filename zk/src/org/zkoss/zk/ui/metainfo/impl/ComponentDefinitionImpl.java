@@ -89,10 +89,32 @@ implements ComponentDefinition, java.io.Serializable {
 	 */
 	public ComponentDefinitionImpl(LanguageDefinition langdef,
 	PageDefinition pgdef, String name, Class cls) {
-		if (name == null)
-			throw new IllegalArgumentException();
 		if (cls != null && !Component.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException(cls+" must implement "+Component.class);
+		init(langdef, pgdef, name, cls);
+	}
+	/** Constructs a native component, i.e., a component implemented by
+	 * a Java class.
+	 *
+	 * <p>Note; if both langdef and pgdef are null, it must be a reserved
+	 * component.
+	 *
+	 * @param langdef the language definition. It is null if it is defined
+	 * as part of a page definition
+	 * @param pgdef the page definition. It is null if it is defined
+	 * as part of a language definition.
+	 * doesn't belong to any language.
+	 * @param clsnm the implementation class.
+	 * @since 3.0.8
+	 */
+	public ComponentDefinitionImpl(LanguageDefinition langdef,
+	PageDefinition pgdef, String name, String clsnm) {
+		init(langdef, pgdef, name, clsnm);
+	}
+	private void init(LanguageDefinition langdef,
+	PageDefinition pgdef, String name, Object cls) {
+		if (name == null)
+			throw new IllegalArgumentException();
 		if (langdef != null && pgdef != null)
 			throw new IllegalArgumentException("langdef and pgdef cannot both null or both non-null");
 
