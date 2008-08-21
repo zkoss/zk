@@ -1,4 +1,4 @@
-<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+<?page id="firstZul" title=" New ZUL Title" cacheable="false" 
 	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 <zk>
