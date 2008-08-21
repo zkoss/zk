@@ -194,7 +194,7 @@ public class DefinitionLoaders {
 					if (checkVersion(zkver, res.url, res.document))
 						parseLang(res.document, locator, res.url, true);
 				} catch (Exception ex) {
-					log.error("Failed to load addon", ex);
+					log.realCauseBriefly("Failed to load addon", ex);
 					//keep running
 				}
 			}
@@ -438,17 +438,22 @@ public class DefinitionLoaders {
 			final String name =
 				IDOMs.getRequiredElementValue(el, "component-name");
 
+			String clsnm = el.getElementValue("component-class", true);
 			Class cls = null;
-			{
-				String clsnm = el.getElementValue("component-class", true);
-				if (clsnm != null && clsnm.length() > 0) {
+			if (clsnm != null) {
+				if (clsnm.length() > 0) {
 					noEL("component-class", clsnm, el);
 					try {
 						cls = locateClass(clsnm);
 					} catch (Throwable ex) { //Feature 1873426
-						log.warningBriefly("Component "+name+" ignored. Reason: unable to load "+clsnm+".\n"+el.getLocator(), ex);
-						continue;
+						log.warning("Component "+name+" ignored. Reason: unable to load "+clsnm+" due to "
+							+ex.getClass().getName()+": "+ex.getMessage()
+							+(ex instanceof NoClassDefFoundError?"":"\n"+el.getLocator()));
+						log.debug(ex);
+						//keep processing (Feature 2060367)
 					}
+				} else {
+					clsnm = null;
 				}
 			}
 
@@ -464,7 +469,8 @@ public class DefinitionLoaders {
 
 				if (cls != null)
 					compdef.setImplementationClass(cls);
-						//resolve it now because it is part of lang-addon
+				else if (clsnm != null)
+					compdef.setImplementationClass(clsnm);
 
 				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
@@ -494,12 +500,16 @@ public class DefinitionLoaders {
 
 				if (cls != null)
 					compdef.setImplementationClass(cls);
+				else if (clsnm != null)
+					compdef.setImplementationClass(clsnm);
 			} else {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 
-				if (cls == null)
+				if (cls == null && clsnm == null)
 					throw new UiException("component-class is required, "+el.getLocator());
-				compdef = new ComponentDefinitionImpl(langdef, null, name, cls);
+				compdef = cls != null ?
+					new ComponentDefinitionImpl(langdef, null, name, cls):
+					new ComponentDefinitionImpl(langdef, null, name, clsnm);
 				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			}
