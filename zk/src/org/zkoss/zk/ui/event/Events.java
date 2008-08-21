@@ -140,7 +140,7 @@ public class Events {
 	 * @since 3.0.8
 	 */
 	public static final String ON_BOOKMARK_CHANGE = "onBookmarkChange";
-	/** @deprecated As of release 3.0.8, replaced with {@link ON_BOOKMARK_CHANGE}.
+	/** @deprecated As of release 3.0.8, replaced with {@link #ON_BOOKMARK_CHANGE}.
 	 */
 	public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
 	/** The onURIChange event (used with {@link URIEvent})
