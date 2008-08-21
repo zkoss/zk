@@ -3,7 +3,8 @@ ZK 3.0.8
 * Features
   2045837: PerformanceMeter adds the time after updating all components
   2052603: A way to proxy ComponentInfo with ComposerExt
-
+  2045810: AnnotatedDataBinderInit accept relative path in arg0
+  
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
   2056760: Fail to change the width of Listbox
