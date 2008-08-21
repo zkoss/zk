@@ -81,7 +81,7 @@ public class TabsDefault implements ComponentRenderer {
 			    wh.write("<div id=\""+uuid+"!right").writeln("\" class=\"" + look + "scrollright\" ></div>");
 				wh.write("<div id=\""+uuid+"!left").writeln("\" class=\"" + look + "scrollleft\" ></div>");
 			    wh.write("<div id=\""+uuid+"!header\"").writeln(" class=\""+look+"head\" >");
-				    wh.writeln("<ul id="+uuid+"!cave\" class=\""+look+"ul\" >");							    	
+				    wh.writeln("<ul id=\""+uuid+"!cave\" class=\""+look+"ul\" >");							    	
 				    	wh.writeChildren(self);			    	
 				    	wh.writeln("<li id=\""+uuid+"!edge\" class=\""+look+"edge\" ></li>");
 				    	wh.writeln("<div id=\""+uuid+"!clear\" class=\""+look+"clear\"></div>");
