@@ -71,7 +71,7 @@ public class NativeHelpers {
 	}
 
 	/** @deprecated As of release 3.5.0, replaced with
-	 * {@link ZkFns#outZKHtmlTags}.
+	 * {@link ZkFns#outZkHtmlTags}.
 	 */
 	public static String outZKHtmlTags() {
 		return ZkFns.outZkHtmlTags();
