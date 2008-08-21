@@ -43,6 +43,8 @@ ZK 3.5.0
   2046129: Trendy Slider and veritcal orient  
   2056723: Support tabbox scrolling and new mold
   2056753: Tablelayout
+  2063596: A way to specify where to generate JS/CSS in ZHTML pages
+
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
   1944729: Windows and boxes inside tab panels
@@ -60,16 +62,11 @@ ZK 3.5.0
   + The setAutocheck and setChecked methods of Menuitem only apply
     when Menupopup.isCheckmark is true.
   + The script component now has "text/javascript" as the default type.
-  + Add some new trendy layout of these components, including Borderlayout, Groupbox, Window, Menu,
-  	, Menuitem, Menupopup, Menubar, and Menuseparator, as default mold, and the classic
-    Window mold is renamed to "v30" mold for backward compatible.
-    If you want to use "v30" as default, specify the following in zk.xml:
-	<library-property> 
-		<name>org.zkoss.zul.theme.v30</name> 
-		<value>true</value> 
-	</library-property>
-  + Both molds vertical and horizontal of Menubar are unsupported, please use the setOrient()
-		of Menubar to specify them.
+  + Add some new trendy layout of these components, including Borderlayout, Groupbox,
+    Window, Menu, Menuitem, Menupopup, Menubar, and Menuseparator, as
+    default mold. The ZK 3.0 customization won't work in ZK 3.5.
+  + Both molds vertical and horizontal of Menubar are unsupported, please use
+    the setOrient() of Menubar to specify them.
   + Change the layout of Paging component to a new trendy layout as default.
   + Rename from layout*.css.dsp to zkex*.css.dsp.
   + The method names of prototype and script.aculo.us embedded in ZK are

@@ -1,5 +1,6 @@
 <html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns:z="http://www.zkoss.org/2005/zul">
 <head>
+<zkheaders/>
 <title>ZHTML Demo</title>
 </head>
 <body>
@@ -41,9 +42,7 @@
 	</iframe>
 
 	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
-	<z:datebox id="db"/>
-	<zscript>db.focus();</zscript>
-
+	<z:datebox id="db" focus="true"/>
 	<center>
 	center something
 	</center>

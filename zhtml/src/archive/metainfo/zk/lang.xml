@@ -459,4 +459,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-name>var</component-name>
 		<component-class>org.zkoss.zhtml.Var</component-class>
 	</component>
+	<component>
+		<component-name>zkheaders</component-name>
+		<component-class>org.zkoss.zhtml.Zkheaders</component-class>
+	</component>
 </language>
