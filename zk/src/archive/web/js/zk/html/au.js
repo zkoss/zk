@@ -1274,9 +1274,8 @@ zkau._onDocCtxMnu = function (evt) {
 				var type = $type(n);
 				if (type) {
 					var o = window["zk" + type];
-					if (o && o.onrtclk)
-						if (o.onrtclk(n))
-							ctx = rtclk = null;
+					if (o && o.onrtclk && o.onrtclk(n))
+						ctx = rtclk = null;
 				}
 				if (n == cmp) break; //only up to the one with right click
 			}
@@ -1562,6 +1561,13 @@ zkau._onDocKeydown = function (evt) {
 				else
 					zkau.send(req, 38);
 				Event.stop(evt);
+
+				//Bug 2041347
+				if (zk.ie && keycode == 112) {
+					zk._oldOnHelp = window.onhelp;
+					window.onhelp = function () {return false;}
+					setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);
+				}
 				return false;
 			}
 			if ("onCancel" == evtnm && $type(n) == "Wnd") {
