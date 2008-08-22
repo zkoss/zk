@@ -43,7 +43,7 @@ import org.zkoss.zul.Tabpanel;
  * 
  */
 public class Tab2Default implements ComponentRenderer {
-	private final TabDefaultV _vtab = new TabDefaultV();
+	private final Tab2DefaultV _vtab = new Tab2DefaultV();
 
 	public void render(Component comp, Writer out) throws IOException {
 		final Tab self = (Tab) comp;

@@ -1,4 +1,4 @@
-/* TabpanelsDefault.java
+/* TabpanelsDefaultV.java
 
 {{IS_NOTE
 	Purpose:
@@ -27,29 +27,23 @@ import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tabpanels;
 
 /**
- * {@link Tabpanels}'s default mold.
- * It forwards the vertical orient to {@link TabpanelsDefaultV}.
- *
+ * {@link Tabpanels}'s default mold for the vertical orient only.
+ * 
  * @author robbiecheng
  * 
  * @since 3.0.0
  */
 
-public class Tabpanels2Default implements ComponentRenderer {
-	private final Tabpanels2DefaultV _vpanels = new Tabpanels2DefaultV();
-
+public class Tabpanels2DefaultV implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
-		final Tabpanels self = (Tabpanels) comp;
-		if ("vertical".equals(self.getTabbox().getOrient())) {
-			_vpanels.render(comp, out);
-			return;
-		}
-
 		final SmartWriter wh = new SmartWriter(out);
+		final Tabpanels self = (Tabpanels) comp;
 
 		wh.write("<div id=\"").write(self.getUuid()).write("\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
 			.writeChildren(self)
 			.writeln("</div>");
+		
+		
 	}
 }

@@ -25,13 +25,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<a class="${c:cat(look,'close')}" id="${self.uuid}!close" onclick="return false;"/>
 		</c:if>
 		<a class="${c:cat(look,'a')}" id="${self.uuid}!a"  onclick="return false;" href="#">
-			<em id="${self.uuid}" class="${c:cat(look,'em')}">
+			<em id="${self.uuid}!em" class="${c:cat(look,'em')}">
 			<c:choose>
 				<c:when test="${self.closable}">
-					<span id="${self.uuid}" class="${c:cat(look,'inner')} ${c:cat(look,'innerclose')}">
+					<span id="${self.uuid}!inner" class="${c:cat(look,'inner')} ${c:cat(look,'innerclose')}">
 				</c:when>
 				<c:otherwise>
-					<span id="${self.uuid}" class="${c:cat(look,'inner')}">
+					<span id="${self.uuid}!inner" class="${c:cat(look,'inner')}">
 				</c:otherwise>
 			</c:choose>			
 				<span class="${c:cat(look,'text')}">${self.imgTag}<c:out value="${self.label}"/></span>

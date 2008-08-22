@@ -214,19 +214,20 @@ public class Tab extends LabelImageElement {
 	}
 
 	/**
-	 * Returns the style class. Note: 1) if not specified (or
-	 * setSclass(null))<br/> 1.1) if not disabled ,"tab" is assumed; <br/> 1.2)
-	 * if disabled ,"tabdis" is assumed; <br/> 2) if selected, it appends "sel"
-	 * to step 1. <br/>
+	 * Returns the style class. 
+	 * Note: 
+	 * 1.1) if not disabled ,"z-tab" is assumed; <br/> 
+	 * 1.2) if disabled ,appends "-disd" to Class Name <br/> 
+	 * 1.3) if selected, appends "-seld" to Class Name <br/>
 	 */
-	public String getRealSclass() {
-		final String mold = super.getMold();
+	public String getMoldSclass(){
+		final String mold = super.getMold();		
 		String scls = super.getMoldSclass();
 		if (scls == null)
 			scls = "z-tab";
 		if (isDisabled())
-			scls = scls + "dis";
-		return isSelected() ? scls + "sel" : scls;
+			scls = scls + "-disd";
+		return isSelected() ? scls + "-seld" : scls;
 	}
 
 	// -- Component --//

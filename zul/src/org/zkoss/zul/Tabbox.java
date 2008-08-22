@@ -220,7 +220,23 @@ public class Tabbox extends XulElement {
 	public String getOrient() {
 		return _orient;
 	}
-
+	/**
+	 * Sets the mold.
+	 * 
+	 * @param mold default , accordion and accordion-lite 
+	 *            
+	 */
+	public void setMold(String mold){
+		if (isVertical()){
+			if (mold.startsWith("accordion")){
+				throw new WrongValueException("Unsupported vertical orient in mold : "+mold);
+			}else{
+				super.setMold(mold);				
+			}
+		}else{
+			super.setMold(mold);			
+		}
+	}
 	/**
 	 * Sets the orient.
 	 * 
@@ -230,7 +246,8 @@ public class Tabbox extends XulElement {
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
 			throw new WrongValueException(orient);
-
+		if (inAccordionMold())
+			throw new WrongValueException("Unsupported vertical orient in mold : "+getMold());
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
 			invalidate();
@@ -256,42 +273,19 @@ public class Tabbox extends XulElement {
 	}
 
 	/**
-	 * Returns the look of the {@link Tab} and {@link Tabbox}. It is, in fact, a
-	 * portion of the style class that are used to generate the style of
-	 * {@link Tabs} and {@link Tab}.
-	 * 
-	 * <p>
-	 * If the style class ({@link #getSclass}) of this tab box is not defined
-	 * and the mold is default, "tab-3d" and "tab-v3d" are returned for
-	 * horizontal and vertical orient, respectively. If the style class not
-	 * defined and the mold is accordion, "tabaccd-3d" and "tabaccd-v3d"
-	 * returned (note: accordion doesn't support vertical yet).
-	 * 
-	 * <p>
-	 * If the style class is defined, say "lite", then this method return
-	 * "tab-lite" and "tab-vlite" for horizontal and vertical orient,
-	 * respectively, and "tabacc-lite" for horizontal accordion.
-	 * 
-	 * <p>
-	 * If the mold is not "default" nor "accordion", this method returns "tab" +
-	 * getMold() + "-" + (vertical ? 'v': '') + getSclass().
-	 * 
-	 * <p>
-	 * With this method, {@link Tab} and {@link Tabpanel} generate the style
-	 * class accordingly. For example, if the mold is "default" and the style
-	 * class not defined, then "tab-3d-tl-sel" for the top-left corner of the
-	 * selected tab, "tab-3d-tm-uns" for the top-middle border of the
-	 * non-selected tab, and so on.
-	 * 
-	 * @since 3.0.0
+	 * Returns the look of the {@link Tab} and {@link Tabbox}. 
+	 * @since 3.5.0
 	 */
-	public String getTabLook() {
-		final String mold = getMold();
-		String prefix = "vertical".equals(_orient) ? "v" : ""
-			+ ("default".equals(mold) ? "" :
-				mold.startsWith("accordion") ? "" : "tab" + mold + '-');
-		String scls = getMoldSclass();
-		return scls != null ? prefix + scls: prefix;
+	public String getTabLook() {		
+		String scls = getMoldSclass();		
+		if ("vertical".equals(_orient)){
+			String postfix = "-v";
+			return scls != null ? scls + postfix: postfix;
+		}else{
+			return scls;
+		}
+		
+		
 	}
 
 	// -- Component --//

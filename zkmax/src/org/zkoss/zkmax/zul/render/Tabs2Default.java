@@ -36,7 +36,7 @@ import org.zkoss.zul.Tabs;
  * @since 3.0.0
  */
 public class Tabs2Default implements ComponentRenderer {
-	private final TabsDefaultV _vtabs = new TabsDefaultV();
+	private final Tabs2DefaultV _vtabs = new Tabs2DefaultV();
 
 	public void render(Component comp, Writer out) throws IOException {
 		final Tabs self = (Tabs)comp;
