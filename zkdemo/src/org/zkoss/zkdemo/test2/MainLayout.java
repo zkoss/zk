@@ -297,18 +297,22 @@ public class MainLayout extends Borderlayout {
 			final String[] vals = me.getValue().toString().split(",");
 			boolean match = true;
 			for (int j = 0; j < ptns.length; j++) {
-				boolean m = false;
-				for (int k = 0; k < vals.length; k++) {
-					if (ptns[j].trim().length() > 1 && vals[k].trim().length() > 1) {
-						if (vals[k].trim().toLowerCase().indexOf(ptns[j].trim().toLowerCase()) > -1) {
+				boolean m = false;				
+				if (!ptns[j].contains("!")) {
+					for (int k = 0; k < vals.length; k++) {												
+						if (ptns[j].trim().length() > 1 && vals[k].trim().length() > 1) {
+							if (vals[k].trim().toLowerCase().indexOf(ptns[j].trim().toLowerCase()) > -1) {
+								m = true;
+								break;
+							}
+						} else if (ptns[j].trim().equalsIgnoreCase(vals[k].trim())) {
 							m = true;
 							break;
-						}
-					} else if (ptns[j].trim().equalsIgnoreCase(vals[k].trim())) {
-						m = true;
-						break;
+						}										
 					}
 				}
+				else
+					m = true;				
 				if (!m) {
 					match = false;
 					break;
@@ -316,6 +320,30 @@ public class MainLayout extends Borderlayout {
 			}
 			if (match)
 				linkedList.add(me.getKey().toString());
+			
+			for (int j = 0; j < ptns.length; j++) {
+				boolean m = true;
+				System.out.println("TAG: " + ptns[j]);
+				if (ptns[j].contains("!")) {
+					for (int k = 0; k < vals.length; k++) {										
+						if (ptns[j].trim().length() > 1 && (vals[k].trim().length()-1 > 1)) {
+							if (vals[k].trim().toLowerCase().indexOf(ptns[j].trim().toLowerCase().substring(1)) > -1) {
+								m = false;
+								break;
+							}
+						} else if (ptns[j].trim().substring(1).equalsIgnoreCase(vals[k].trim())) {
+							m = false;
+							break;
+						}										
+					}
+				}				
+				if (!m) {
+					match = false;
+					break;
+				}
+			}
+			if (!match)
+				linkedList.remove(me.getKey().toString());
 		}
 		final File[] files = test2.listFiles(new MyFilenameFilter("", false));
 		for (Iterator it = linkedList.iterator(); it.hasNext();) {

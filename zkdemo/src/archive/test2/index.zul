@@ -68,7 +68,7 @@ function newWindow(url){
 								Filter File Name By Tag:
 								<textbox id="fnt"/>
 								<button label="Show Uncategorized" onClick="main.showUncategorized();"/> 
-								For Example: [A,H,Grid]
+								For Example: [A,H,Grid,!BI]
 								</vbox>
 							</tabpanel>
 						</tabpanels>
