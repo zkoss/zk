@@ -37,7 +37,6 @@ import org.zkoss.zul.impl.XulElement;
 public class Columnlayout extends XulElement {
 
 	public Columnlayout() {
-		setMoldSclass("z-column-layout");
 	}
 
 	public boolean insertBefore(Component child, Component insertBefore) {
@@ -45,6 +44,9 @@ public class Columnlayout extends XulElement {
 			throw new UiException("Unsupported child for Columnlayout: "
 					+ child);
 		return super.insertBefore(child, insertBefore);
+	}
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-column-layout" : super.getMoldSclass();
 	}
 
 	/**

@@ -43,27 +43,22 @@ import org.zkoss.zul.impl.Utils;
 /**
  * An edit box for holding a date.
  *
- * <p>Default {@link #getSclass}: datebox.
- *
  * <p>The default format ({@link #getFormat}) depends on JVM's setting
  * and the current user's locale. That is,
  * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Locales.getCurrent).</code>
  * You might override {@link #getDefaultFormat} to provide your own default
  * format.
- *
+ * <p>Default {@link #getMoldSclass}: z-datebox.(since 3.5.0)
  * @author tomyeh
  */
 public class Datebox extends FormatInputElement {
-	private static final String DEFAULT_IMAGE = "~./zul/img/caldrbtn.gif";
 	private String _img;
 	private TimeZone _tzone;
 	private boolean _lenient = true;
 	private boolean _compact, _btnVisible = true;
 
 	public Datebox() {
-		Utils.updateMoldByTheme(this);
 		setFormat(getDefaultFormat());
-		setSclass("datebox");
 		setCols(11);
 		_compact = "zh".equals(Locales.getCurrent().getLanguage());
 	}
@@ -145,19 +140,19 @@ public class Datebox extends FormatInputElement {
 		}
 	}
 	/** Returns the URI of the button image.
+	 * <p>Default: null. (since 3.5.0)
 	 * @since 3.0.0
 	 */
 	public String getImage() {
-		return _img != null || !"v30".equals(getMold()) ? _img: DEFAULT_IMAGE;
+		return _img;
 	}
 	/** Sets the URI of the button image.
 	 *
-	 * @param img the URI of the button image. If null or empty, the default
-	 * URI is used.
+	 * @param img the URI of the button image.
 	 * @since 3.0.0
 	 */
 	public void setImage(String img) {
-		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+		if (img != null && img.length() == 0)
 			img = null;
 		if (!Objects.equals(_img, img)) {
 			_img = img;
@@ -330,6 +325,11 @@ public class Datebox extends FormatInputElement {
 		return df;
 	}
 
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-datebox" : super.getMoldSclass();
+	}
+	
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
 		if (getConstraint() instanceof SimpleDateConstraint) {
@@ -343,7 +343,6 @@ public class Datebox extends FormatInputElement {
 		}
 		if (!_lenient) sb.append(" z.lenient=\"false\"");
 		if (_compact) sb.append(" z.compact=\"true\"");
-		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		return sb.toString();
 	}
 	public String getInnerAttrs() {

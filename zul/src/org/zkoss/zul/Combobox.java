@@ -49,7 +49,7 @@ import org.zkoss.zul.impl.Utils;
  * is more flexible than menulist, such as {@link #setAutocomplete}
  * {@link #setAutodrop}.
  *
- * <p>Default {@link #getSclass}: combobox.
+ * <p>Default {@link #getMoldSclass}: z-combobox.(since 3.5.0)
  *
  * <p>Events: onOpen, onSelect<br/>
  * Developers can listen to the onOpen event and initializes it
@@ -80,7 +80,6 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Combobox extends Textbox {
 	private static final Log log = Log.lookup(Combobox.class);
-	private static final String DEFAULT_IMAGE = "~./zul/img/combobtn.gif";
 	private String _img;
 	private boolean _autodrop, _autocomplete, _btnVisible = true;
 	private transient Comboitem _selItem;
@@ -90,8 +89,6 @@ public class Combobox extends Textbox {
 	private transient EventListener _eventListener;
 	
 	public Combobox() {
-		Utils.updateMoldByTheme(this);
-		setSclass("combobox");
 	}
 	public Combobox(String value) throws WrongValueException {
 		this();
@@ -425,19 +422,19 @@ public class Combobox extends Textbox {
 	}
 
 	/** Returns the URI of the button image.
+	 * <p>Default: null. (since 3.5.0)
 	 * @since 2.4.1
 	 */
 	public String getImage() {
-		return _img != null || !"v30".equals(getMold()) ? _img: DEFAULT_IMAGE;
+		return _img;
 	}
 	/** Sets the URI of the button image.
 	 *
-	 * @param img the URI of the button image. If null or empty, the default
-	 * URI is used.
+	 * @param img the URI of the button image.
 	 * @since 2.4.1
 	 */
 	public void setImage(String img) {
-		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+		if (img != null && img.length() == 0)
 			img = null;
 		if (!Objects.equals(_img, img)) {
 			_img = img;
@@ -540,11 +537,14 @@ public class Combobox extends Textbox {
 			throw new UnsupportedOperationException("Combobox doesn't support multiple rows, "+rows);
 	}
 
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-combobox" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
 		final boolean aco = isAutocomplete(), adr = isAutodrop();
 		
-		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		if (!isAsapRequired(Events.ON_OPEN) && !isAsapRequired(Events.ON_SELECT) && !aco && !adr)
 			return sb.toString();
 

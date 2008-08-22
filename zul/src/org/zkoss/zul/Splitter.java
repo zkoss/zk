@@ -36,7 +36,11 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Events: onOpen
  *
- * <p>Default {@link #getSclass}: splitter.
+ *  <p>Default {@link #getMoldSclass} as follows: (since 3.5.0)
+ *  <ol>
+ *  	<li>Case 1: If {@link #getOrient()} is vertical, "z-splitter-ver" is assumed</li>
+ *  	<li>Case 2: If {@link #getOrient()} is horizontal, "z-splitter-hor" is assumed</li>
+ *  </ol>
  * 
  * @author tomyeh
  */
@@ -45,7 +49,6 @@ public class Splitter extends XulElement {
 	private boolean _open = true;
 
 	public Splitter() {
-		setSclass("splitter");
 	}	
 	
 	/** Returns the orientation of the splitter.
@@ -120,21 +123,13 @@ public class Splitter extends XulElement {
 			smartUpdate("z.open", open);
 		}
 	}
-	
-	protected String getRealSclass() {
-		String s = super.getRealSclass();
-		if (s == null) s = "";
-		return "vertical".equals(getOrient()) ? s + "-v": s + "-h";
-	}
 
 	//super//
-	public void setSclass(String sclass) {
-		if (sclass != null && sclass.length() == 0) sclass = null;
-		if (!Objects.equals(getSclass(), sclass)) {
-			super.setSclass(sclass);
-			invalidate(); //redraw since there are several sub-sclass
-		}
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-splitter" +
+				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getMoldSclass();
 	}
+	
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());

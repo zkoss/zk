@@ -18,15 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.io.IOException;
-
-import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A container used to display menus. It should be placed inside a
@@ -41,23 +35,12 @@ import org.zkoss.zul.impl.Utils;
  * and then create menuitem when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen}
  * is true.
  *
- * <p>Default {@link #getMoldSclass}: z-menupopup. (since 3.5.0)
- * 	If {@link #getMold()} == "v30", menupopup is assumed for backward compatible.
+ * <p>Default {@link #getMoldSclass}: z-menu-popup. (since 3.5.0)
  *
  * @author tomyeh
  */
 public class Menupopup extends Popup {
 	private boolean _checkmark;
-	public Menupopup() {
-		Utils.updateMoldByTheme(this);
-		setMoldSclass("z-menupopup");
-	}
-
-	public void setMold(String mold) {
-		if ("v30".equals(mold)) setMoldSclass("menupopup");
-		else setMoldSclass("z-menupopup");
-		super.setMold(mold);
-	}
 	
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.
@@ -78,15 +61,15 @@ public class Menupopup extends Popup {
 		}
 	}
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-menu-popup" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
 
 		appendAsapAttr(sb, Events.ON_OPEN);
 		if (typeRequired())
-			if ("v30".equals(getMold())) 
-				sb.append(" z.type=\"zul.menu.Mpop\"");
-			else
 				sb.append(" z.type=\"zul.menu2.Mpop2\"");
 			//to minimize HTML's size, generate z.type only if necessary
 		return sb.toString();

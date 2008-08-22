@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * A hbox.
+ * <p>Default {@link #getMoldSclass}: z-hbox.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -36,5 +37,9 @@ public class Hbox extends Box {
 	 */
 	public Hbox(Component[] children) {
 		super("horizontal", children);
+	}
+	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-hbox" : super.getMoldSclass();
 	}
 }

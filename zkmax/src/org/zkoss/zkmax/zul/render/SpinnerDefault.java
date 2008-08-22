@@ -21,18 +21,20 @@ public class SpinnerDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Execution exec = Executions.getCurrent();		
 		final Spinner self = (Spinner) comp;
+		final String uuid = self.getUuid();
+		final String mcls = self.getMoldSclass();
 		
-		wh.write("<span id=\"").write(self.getUuid()).write('"')
+		wh.write("<span id=\"").write(uuid).write('"')
 			.write(self.getOuterAttrs()).write(" z.type=\"zul.spinner.Spinner\" z.combo=\"true\">")
-			.write("<input id=\"").write(self.getUuid()).write("!real\" autocomplete=\"off\"")
-			.write(" class=\"").write(self.getSclass()).write("inp\"")
+			.write("<input id=\"").write(uuid).write("!real\" autocomplete=\"off\"")
+			.write(" class=\"").write(mcls).write("-inp\"")
 			.write(self.getInnerAttrs()).write("/>")
-			.write("<span id=\"").write(self.getUuid()).write("!btn\" class=\"z-rbtn\"");
+			.write("<span id=\"").write(uuid).write("!btn\" class=\"").write(mcls).write("-btn\"");
 
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("><img class=\"").write(self.getSclass()).write("\"");
+		wh.write("><img class=\"").write(mcls).write("-img\"");
 		if (self.getImage() != null) 
 			wh.write(" style=\"background-image:url(").write(exec.encodeURL(self.getImage()))
 				.write(")\"");

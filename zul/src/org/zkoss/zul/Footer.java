@@ -32,6 +32,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * Its parent must be {@link Foot}.
  *
  * <p>Unlike {@link Column}, you could place any child in a grid footer.
+ * <p>Default {@link #getMoldSclass}: z-footer.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -98,6 +99,9 @@ public class Footer  extends LabelImageElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-footer" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());

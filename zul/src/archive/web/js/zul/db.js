@@ -39,10 +39,10 @@ zk.Cal.prototype = {
 	_newCal: function() {
 		this.element = $e(this.id);
 		if (!this.element) return;
-
+		var mcls = getZKAttr(this.element, "mcls");
 		var compact = getZKAttr(this.element, "compact") == "true";
 		var html = this.popup ? '<table border="0" cellspacing="0" cellpadding="0" tabindex="-1">': '';
-		html += '<tr><td><table class="calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="5"></td><td align="right"><img src="'
+		html += '<tr><td><table class="'+mcls+'-calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="5"></td><td align="right"><img src="'
 			+zk.getUpdateURI('/web/zul/img/cal/arrowL.gif')
 			+'" style="cursor:pointer" onclick="zkCal.onyearofs(event,-1)" id="'
 			+this.id+'!ly"/></td>';
@@ -64,7 +64,7 @@ zk.Cal.prototype = {
 			+this.id+'!ry"/></td><td width="5"></td></tr></table></td></tr>';
 
 		if (!compact) {
-			html += '<tr><td><table class="calmon" width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
+			html += '<tr><td><table class="'+mcls+'-calmon" width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
 			for (var j = 0 ; j < 12; ++j) {
 				html += '<td id="'+this.id+'!m'+j
 					+'" onclick="zkCal.onmonclk(event)" onmouseover="zkCal.onover(event)" onmouseout="zkCal.onout(event)">'
@@ -75,7 +75,7 @@ zk.Cal.prototype = {
 		}
 		if (this.popup) html += '<tr><td height="3px"></td></tr>';
 
-		html += '<tr><td><table class="calday" width="100%" border="0" cellspacing="0" cellpadding="0"><tr class="caldow">';
+		html += '<tr><td><table class="'+mcls+'-calday" width="100%" border="0" cellspacing="0" cellpadding="0"><tr class="'+mcls+'-caldow">';
 		var sun = (7 - zk.DOW_1ST) % 7, sat = (6 + sun) % 7;
 		for (var j = 0 ; j < 7; ++j) {
 			html += '<td';
@@ -84,7 +84,7 @@ zk.Cal.prototype = {
 		}
 		html += '</tr>';
 		for (var j = 0; j < 6; ++j) { //at most 7 rows
-			html += '<tr class="calday" id="'+this.id+'!w'+j
+			html += '<tr class="'+mcls+'-calday" id="'+this.id+'!w'+j
 				+'" onclick="zkCal.ondayclk(event)" onmouseover="zkCal.onover(event)" onmouseout="zkCal.onout(event)">';
 			for (var k = 0; k < 7; ++k)
 				html += '<td></td>';
@@ -130,12 +130,12 @@ zk.Cal.prototype = {
 		var y = val.getFullYear();
 		var el = $e(this.id + "!title");
 		zk.setInnerHTML(el, zk.SMON[m] + ', ' + y);
-
+		var mcls = getZKAttr(this.element, "mcls");
 		//month
 		for (var j = 0; j < 12; ++j) {
 			el = $e(this.id + "!m" + j);
 			if (el) { //omitted if compact
-				el.className = m == j ? "seld": "";
+				el.className = m == j ? mcls + "-seld": "";
 				el.setAttribute("zk_mon", j);
 			}
 		}
@@ -166,7 +166,8 @@ zk.Cal.prototype = {
 	},
 	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
-		cell.className = !disd ? sel ? "seld": "" : sel ? "seld disd": "disd";
+		var mcls = getZKAttr(this.element, "mcls");
+		cell.className = !disd ? sel ? mcls + "-seld": "" : sel ? mcls + "-seld " + mcls + "-disd": mcls + "-disd";
 		var d = cell.getAttribute("zk_day");
 		zk.setInnerHTML(cell,
 			!sel || this.popup ? d:
@@ -375,7 +376,7 @@ zkCal.onblur = function (evt) {
 
 zkCal.onover = function (evt) {
 	var el = Event.element(evt);
-	if (el.className.indexOf("disd") == -1)
+	if (el.className.indexOf("-disd") == -1)
 		el.style.textDecoration = "underline";
 };
 zkCal.onout = function (evt) {
@@ -383,7 +384,7 @@ zkCal.onout = function (evt) {
 };
 /** Returns if a cell is selected. */
 zkCal._seled = function (cell) {
-	return cell.className.indexOf("seld") >= 0;
+	return cell.className.indexOf("-seld") >= 0;
 };
 
 //Datebox//
@@ -404,11 +405,9 @@ zkDtbox.init = function (cmp) {
 			if (!inp.disabled && !zk.dragging)
 				zkDtbox.onbutton(cmp, evt);
 		});
-		if (!zkWgt.isV30(cmp)) {
-			zk.listen(btn, "mouseover", zkWgt.onbtnover);
-			zk.listen(btn, "mouseout", zkWgt.onbtnout);
-			zk.listen(btn, "mousedown", zkWgt.onbtndown);
-		}
+		zk.listen(btn, "mouseover", zkWgt.onbtnover);
+		zk.listen(btn, "mouseout", zkWgt.onbtnout);
+		zk.listen(btn, "mousedown", zkWgt.onbtndown);
 	}
 	var pp = $e(cmp.id + "!pp");
 	if (pp) // Bug #1912363
@@ -644,7 +643,7 @@ zkDtbox.close = function (pp, focus) {
 	zkau.hideCovered();
 
 	var btn = $e(uuid + "!btn");
-	if (btn && !zkWgt.isV30($e(uuid))) zk.rmClass(btn, "z-rbtn-over");
+	if (btn) zk.rmClass(btn, getZKAttr($e(uuid), "mcls") + "-btn-over");
 	
 	if (focus)
 		zk.asyncFocus(uuid + "!real");

@@ -41,20 +41,21 @@ public class GridPaging implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Grid self = (Grid) comp;
 		final String uuid = self.getUuid();
+		final String mcls = self.getMoldSclass();
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.grid.Grid\" z.pg=\"t\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
-			wh.write("<div id=\"").write(uuid).write("!pgit\" class=\"grid-pgi-t\">")
+			wh.write("<div id=\"").write(uuid).write("!pgit\" class=\"").write(mcls).write("-pgi-t\">")
 				.write(self.getPagingChild())
 				.write("</div>");
 		}
 		if(self.getColumns() != null){
-			wh.write("<div id=\"").write(uuid).write("!head\" class=\"grid-head\">")
+			wh.write("<div id=\"").write(uuid).write("!head\" class=\"").write(mcls).write("-header\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!hdfaker\" class=\"grid-fake\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!hdfaker\" class=\"").write(mcls).write("-faker\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();
@@ -67,15 +68,15 @@ public class GridPaging implements ComponentRenderer {
 				.write("</table></div>");
 		}
 
-		wh.write("<div id=\"").write(uuid).write("!body\" class=\"grid-body\"");
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(mcls).write("-body\"");
 		if (self.getHeight() != null) wh.write("style=\"height:").write(self.getHeight()).write("\"");
-		wh.write("><table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"grid-btable\"");
+		wh.write("><table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"");
 		if (self.isFixedLayout())
 			wh.write(" style=\"table-layout:fixed\"");
 		wh.write(">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!bdfaker\" class=\"grid-fake\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!bdfaker\" class=\"").write(mcls).write("-faker\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();
@@ -88,11 +89,11 @@ public class GridPaging implements ComponentRenderer {
 			.write("</table></div>");
 
 		if(self.getFoot() != null){
-			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"grid-foot\">")
+			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(mcls).write("-footer\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"  style=\"table-layout:fixed\">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!ftfaker\" class=\"grid-fake\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!ftfaker\" class=\"").write(mcls).write("-faker\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();
@@ -106,7 +107,7 @@ public class GridPaging implements ComponentRenderer {
 		}
 		
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
-			wh.write("<div id=\"").write(uuid).write("!pgib\" class=\"grid-pgi\">")
+			wh.write("<div id=\"").write(uuid).write("!pgib\" class=\"").write(mcls).write("-pgi-b\">")
 				.write(self.getPagingChild())
 				.write("</div>");
 		}

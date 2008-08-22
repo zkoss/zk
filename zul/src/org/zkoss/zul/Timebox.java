@@ -37,7 +37,7 @@ import org.zkoss.zul.mesg.MZul;
 /**
  * An input box for holding a time (a java.util.Date Object , but only Hour & Minute are used.
  *
- * <p>Default {@link #getSclass}: timebox.
+ * <p>Default {@link #getMoldSclass}: z-timebox. (since 3.5.0)
  *
  * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
  * 
@@ -58,16 +58,13 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.0.0
  */
 public class Timebox extends InputElement {
-	private static final String DEFAULT_IMAGE = "~./zul/img/updnbtn.gif";
 	private String _img;
 	private TimeZone _tzone;
 	private boolean _btnVisible = true;
 	
 	public Timebox() {
-		Utils.updateMoldByTheme(this);
 		setCols(5);
 		setMaxlength(5);
-		setSclass("timebox");
 	}
 	public Timebox(Date date) throws WrongValueException {
 		this();
@@ -107,17 +104,17 @@ public class Timebox extends InputElement {
 		}
 	}
 	/** Returns the URI of the button image.
+	 * <p>Default: null. (since 3.5.0)
 	 */
 	public String getImage() {
-		return _img != null || !"v30".equals(getMold()) ? _img: DEFAULT_IMAGE;
+		return _img;
 	}
 	/** Sets the URI of the button image.
 	 *
-	 * @param img the URI of the button image. If null or empty, the default
-	 * URI is used.
+	 * @param img the URI of the button image.
 	 */
 	public void setImage(String img) {
-		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+		if (img != null && img.length() == 0)
 			img = null;
 		if (!Objects.equals(_img, img)) {
 			_img = img;
@@ -188,9 +185,9 @@ public class Timebox extends InputElement {
 		df.setTimeZone(tz);
 		return df;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.mold", getMold());
-		return sb.toString();
+
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ?  "z-timebox" : super.getMoldSclass();
 	}
 }

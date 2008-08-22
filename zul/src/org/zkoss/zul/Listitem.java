@@ -18,10 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
@@ -34,7 +30,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A list item.
  *
- * <p>Default {@link #getSclass}: item.
+ * <p>Default {@link #getMoldSclass}: z-list-item.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -91,16 +87,15 @@ public class Listitem extends XulElement {
 	}
 	protected String getRealSclass() {
 		String scls = super.getRealSclass();
-		if (scls == null) scls = "item";		
-		if (isDisabled())
-			scls = scls.length() > 0 ? scls + " disd": "disd";
-		else if (isSelected())
-			scls = scls.length() > 0 ? scls + " seld": "seld";	
+		final String added = isDisabled() ? getMoldSclass() + "-disd" : isSelected() ? getMoldSclass() + "-seld" : "";
 		if (this instanceof Listgroup || this instanceof Listgroupfoot || !isVisible()) return scls;
 		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
-		return scls + (sclx != null ? " " + sclx : "") ;
+		return scls + (sclx != null ? " " + sclx : "") + " " + added ;
 	}
 
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-list-item" : super.getMoldSclass();
+	}
 	/** Returns whether it is checkable.
 	 * <p>Default: true.
 	 * @since 3.0.4

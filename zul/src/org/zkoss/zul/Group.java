@@ -25,7 +25,6 @@ import java.util.List;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Openable;
@@ -39,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  * 	<li>onOpen is sent when this listgroup is opened or closed by user.</li>
  * </ol>
  * 
- * <p>Default {@link #getSclass}: group.
+ * <p>Default {@link #getMoldSclass}: z-group.
  * 
  * <p>Note: All the child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
@@ -53,7 +52,6 @@ public class Group extends Row {
 	private transient List _items;
 	
 	public Group() {
-		setSclass("group");
 		init();
 	}
 	public Group(String label) {
@@ -220,7 +218,7 @@ public class Group extends Row {
 	 * if no such cell.
 	 */
 	public String getLabel() {
-		final Component cell = (Component)getFirstChild();
+		final Component cell = getFirstChild();
 		return cell != null && cell instanceof Label ? ((Label)cell).getValue(): null;
 	}
 	/** Sets the value of the {@link Label} it contains.
@@ -231,7 +229,7 @@ public class Group extends Row {
 		autoFirstCell().setValue(label);
 	}
 	private Label autoFirstCell() {
-		Component cell = (Component)getFirstChild();
+		Component cell = getFirstChild();
 		if (cell == null || cell instanceof Label) {
 			if (cell == null) cell = new Label();
 			cell.applyProperties();
@@ -239,6 +237,10 @@ public class Group extends Row {
 			return (Label)cell;
 		}
 		throw new UiException("Unsupported child for setLabel: "+cell);
+	}
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-group" : super.getMoldSclass();
 	}
 	public String getOuterAttrs() {
 		applyImageIfAny();

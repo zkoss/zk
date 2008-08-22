@@ -19,15 +19,14 @@
 package org.zkoss.zkex.zul;
 
 /**
- * This component is a north region. The default class of CSS is specified
- * "layout-region-north".
+ * This component is a north region.
+ * <p>Default {@link #getMoldSclass}: z-north.(since 3.5.0)
  * 
  * @author jumperchen
  * @since 3.0.0
  */
 public class North extends LayoutRegion {
 	public North() {
-		addSclass("layout-region-north");
 	}
 
 	/**

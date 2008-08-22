@@ -41,7 +41,7 @@ zkPg = {
 		var tb_prev = $es(cmp.id+"!tb_p");
 		var tb_next = $es(cmp.id+"!tb_n");
 		var tb_last = $es(cmp.id+"!tb_l");
-		
+		var mcls = getZKAttr(cmp, "mcls");
 		for (var i = tb_first.length; --i>=0;) {
 			zk.listen(tb_first[i], "click", zkPg.onclick_first);
 			zk.listen(tb_prev[i], "click", zkPg.onclick_prev);
@@ -49,18 +49,18 @@ zkPg = {
 			zk.listen(tb_last[i], "click", zkPg.onclick_last);
 						
 			if (cmp.npg == 1) {
-				zk.addClass(tb_first[i], "z-item-disd");
-				zk.addClass(tb_prev[i], "z-item-disd");
-				zk.addClass(tb_next[i], "z-item-disd");
-				zk.addClass(tb_last[i], "z-item-disd");
+				zk.addClass(tb_first[i], mcls + "-btn-disd");
+				zk.addClass(tb_prev[i], mcls + "-btn-disd");
+				zk.addClass(tb_next[i], mcls + "-btn-disd");
+				zk.addClass(tb_last[i], mcls + "-btn-disd");
 			} else {
 				if (cmp.actpg == 0) {
-					zk.addClass(tb_first[i], "z-item-disd");
-					zk.addClass(tb_prev[i], "z-item-disd");
+					zk.addClass(tb_first[i], mcls + "-btn-disd");
+					zk.addClass(tb_prev[i], mcls + "-btn-disd");
 				}
 				else if (cmp.actpg == cmp.npg - 1) {
-					zk.addClass(tb_next[i], "z-item-disd");
-					zk.addClass(tb_last[i], "z-item-disd");
+					zk.addClass(tb_next[i], mcls + "-btn-disd");
+					zk.addClass(tb_last[i], mcls + "-btn-disd");
 				}
 			}
 		}		
@@ -71,8 +71,6 @@ zkPg = {
 				zk.listen(btn[j], "mouseover", zkPg.onover);
 				zk.listen(btn[j], "mouseout", zkPg.onout);
 				zk.listen(btn[j], "mousedown", zkPg.ondown);
-				zk.listen(btn[j], "focus", zkPg.onfocus);
-				zk.listen(btn[j], "blur", zkPg.onblur);
 			}
 		}
 	},
@@ -213,45 +211,37 @@ zkPg = {
 	
 	onover: function (evt) {
 		if (!evt) evt = window.event;
-		var table = $parentByTag(Event.element(evt), "TABLE");
-		
-		if (!zk.hasClass(table, "z-item-disd")) 
-			zk.addClass(table, "z-btn-over");
+		var table = $parentByTag(Event.element(evt), "TABLE"),
+			mcls = getZKAttr($outer(table), "mcls");
+		if (!zk.hasClass(table, mcls + "-btn-disd")) 
+			zk.addClass(table, mcls + "-btn-over");
 	},
 	
 	onout: function (evt) {
 		if (!evt) evt = window.event;
-		var table = $parentByTag(Event.element(evt), "TABLE");
-		zk.rmClass(table, "z-btn-over");
+		var table = $parentByTag(Event.element(evt), "TABLE"),
+			mcls = getZKAttr($outer(table), "mcls");
+		zk.rmClass(table, mcls + "-btn-over");
 	},
 	
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
-		var table = $parentByTag(Event.element(evt), "TABLE");
-		if (zk.hasClass(table, "z-item-disd")) return;
+		var table = $parentByTag(Event.element(evt), "TABLE"),
+			mcls = getZKAttr($outer(table), "mcls");
+		if (zk.hasClass(table, mcls + "-btn-disd")) return;
 		
-		zk.addClass(table, "z-btn-click");
+		zk.addClass(table, mcls + "-btn-click");
 		zkPg.down_btn = table;
 		zk.listen(document.body, "mouseup", zkPg.onup);
 	},
 	
 	onup: function (evt) {
 		if (!evt) evt = window.event;
-		if (zkPg.down_btn)
-			zk.rmClass(zkPg.down_btn, "z-btn-click");
+		if (zkPg.down_btn) {
+			var mcls = getZKAttr($outer(zkPg.down_btn), "mcls");
+			zk.rmClass(zkPg.down_btn, mcls + "-btn-click");
+		}
 		zkPg.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkPg.onup);
-	},
-	
-	onfocus: function (evt) {
-		if (!evt) evt = window.event;
-		var table = $parentByTag(Event.element(evt), "TABLE");
-		zk.addClass(table, "z-btn-focus");
-	},
-	
-	onblur: function (evt) {
-		if (!evt) evt = window.event;
-		var table = $parentByTag(Event.element(evt), "TABLE");
-		zk.rmClass(table, "z-btn-focus");
 	}
 };

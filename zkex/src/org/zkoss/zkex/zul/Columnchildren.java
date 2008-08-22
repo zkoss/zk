@@ -34,9 +34,11 @@ import org.zkoss.zul.impl.XulElement;
 public class Columnchildren extends XulElement {
 
 	public Columnchildren() {
-		setMoldSclass("z-column-children");
 	}
 
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-column-children" : super.getMoldSclass();
+	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Columnlayout))
 			throw new UiException("Wrong parent: " + parent);

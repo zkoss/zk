@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.Utils;
  * any kind of children. For example, you could place a textbox in
  * the popup to let user search particular items.
  *
- * <p>Default {@link #getSclass}: bandbox.
+ * <p>Default {@link #getMoldSclass}: z-bandbox.(since 3.5.0)
  *
  * <p>Events: onOpen<br/>
  * Developers can listen to the onOpen event and initializes it
@@ -47,14 +47,11 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Bandbox extends Textbox {
-	private static final String DEFAULT_IMAGE = "~./zul/img/bandbtn.gif";
 	private transient Bandpopup _drop;
 	private String _img;
 	private boolean _autodrop, _btnVisible = true;
 
 	public Bandbox() {
-		Utils.updateMoldByTheme(this);
-		setSclass("bandbox");
 	}
 	public Bandbox(String value) throws WrongValueException {
 		this();
@@ -106,19 +103,18 @@ public class Bandbox extends Textbox {
 
 	/** Returns the image URI that is displayed as the button to open
 	 * {@link Bandpopup}.
-	 * <p>Default: "~./zul/img/bandbtn.gif". (v30 mold only)
+	 * Default: null. (since 3.5.0)
 	 */
 	public String getImage() {
-		return _img != null || !"v30".equals(getMold()) ? _img: DEFAULT_IMAGE;
+		return _img;
 	}
 	/** Sets the image URI that is displayed as the button to open
 	 * {@link Bandpopup}.
 	 *
-	 * @param img the image URI. If null or empty, it is reset to
-	 * the default value: "~./zul/img/bandbtn.gif". (v30 mold only)
+	 * @param img the image URI.
 	 */
 	public void setImage(String img) {
-		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
+		if (img != null && img.length() == 0)
 			img = null;
 		if (!Objects.equals(_img, img)) {
 			_img = img;
@@ -174,10 +170,13 @@ public class Bandbox extends Textbox {
 			throw new UnsupportedOperationException("Bandbox doesn't support multiple rows, "+rows);
 	}
 
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-bandbox" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
 		final boolean adr = isAutodrop();
-		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		if (!isAsapRequired(Events.ON_OPEN) && !adr)
 			return sb.toString();
 

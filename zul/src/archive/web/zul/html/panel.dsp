@@ -17,13 +17,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"%>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z"%>
 <c:set var="self" value="${requestScope.arg.self}" />
-<c:set var="titlesc" value="${self.titleSclass}" />
 <div id="${self.uuid}" z.type="zul.panel.Panel" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
 		<c:if test="${self.framable}">
-<div class="${titlesc}l <c:if test="${empty self.caption and empty self.title}">${titlesc}-notitle</c:if>"><div class="${titlesc}r"><div class="${titlesc}m">
+<div class="${self.moldSclass}-tl <c:if test="${empty self.caption and empty self.title}">${self.moldSclass}-header-noheader</c:if>"><div class="${self.moldSclass}-tr"><div class="${self.moldSclass}-tm">
 		</c:if>
 		<c:if test="${!empty self.caption or !empty self.title}">
-<div id="${self.uuid}!caption" class="${titlesc} title <c:if test="${!self.framable && self.border != 'normal'}">${titlesc}-${self.border}</c:if>">
+<div id="${self.uuid}!caption" class="${self.moldSclass}-header <c:if test="${!self.framable && self.border != 'normal'}">${self.moldSclass}-header-noborder</c:if>">
 			<c:choose>
 				<c:when test="${empty self.caption}">
 					<c:if test="${self.closable}">
@@ -47,10 +46,10 @@ ${z:redraw(self.caption, null)}
 			</div>
 		</c:if>
 		<c:if test="${self.framable}"></div></div></div></c:if>
-<div id="${self.uuid}!bwrap" class="${self.moldSclass}-bwrap" <c:if test="${!self.open}">style="display:none;"</c:if>>
+<div id="${self.uuid}!bwrap" class="${self.moldSclass}-body" <c:if test="${!self.open}">style="display:none;"</c:if>>
 	<c:if test="${self.framable}"><div class="${self.moldSclass}-cl"><div class="${self.moldSclass}-cr"><div class="${self.moldSclass}-cm"></c:if>
 		<c:if test="${!empty self.topToolbar}">
-<div id="${self.uuid}!tbar" class="${self.moldSclass}-tbar <c:if test="${self.border != 'normal'}">${self.moldSclass}-tbar-${self.border}</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.moldSclass}-notitle</c:if>">
+<div id="${self.uuid}!tbar" class="${self.moldSclass}-tbar <c:if test="${self.border != 'normal'}">${self.moldSclass}-tbar-noborder</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.moldSclass}-noheader</c:if>">
 ${z:redraw(self.topToolbar, null)}
 </div>
 		</c:if>
@@ -58,7 +57,7 @@ ${z:redraw(self.topToolbar, null)}
 ${z:redraw(self.panelchildren, null)}
 		</c:if>
 		<c:if test="${!empty self.bottomToolbar}">
-<div id="${self.uuid}!bbar" class="${self.moldSclass}-bbar <c:if test="${self.border != 'normal'}">${self.moldSclass}-bbar-${self.border}</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.moldSclass}-notitle</c:if>">
+<div id="${self.uuid}!bbar" class="${self.moldSclass}-bbar <c:if test="${self.border != 'normal'}">${self.moldSclass}-bbar-noborder</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.moldSclass}-noheader</c:if>">
 ${z:redraw(self.bottomToolbar, null)}
 </div>
 		</c:if>

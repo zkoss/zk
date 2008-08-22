@@ -23,7 +23,6 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A border layout lays out a container, arranging and resizing its components
@@ -65,7 +64,7 @@ import org.zkoss.zul.impl.Utils;
  * 
  * </pre>
  * 
- * <p>Default {@link #getMoldSclass}: layout-container.
+ * <p>Default {@link #getMoldSclass}: z-border-layout. (since 3.5.0)
  * 
  * @author jumperchen
  * @since 3.0.0
@@ -108,8 +107,6 @@ public class Borderlayout extends HtmlBasedComponent {
 	private transient Center _center;
 
 	public Borderlayout() {
-		Utils.updateMoldByTheme(this);
-		setMoldSclass("layout-container");
 	}
 	
 	public North getNorth() {
@@ -179,7 +176,10 @@ public class Borderlayout extends HtmlBasedComponent {
 		else if (_east == child) _east = null;
 		else if (_center == child) _center = null;
 	}
-	
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-border-layout" : super.getMoldSclass();
+	}
 	//Cloneable//
 	public Object clone() {
 		final Borderlayout clone = (Borderlayout) super.clone();

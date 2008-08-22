@@ -43,9 +43,9 @@ public class TreecellDefault implements ComponentRenderer{
 		wh.write("<td z.type=\"Lic\" id=\"").write(self.getUuid()).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write("><div id=\"").write(self.getUuid()).write("!cave\"")
-			.write(self.getLabelAttrs()).write(" class=\"cell-inner ");
+			.write(self.getLabelAttrs()).write(" class=\"").write(self.getMoldSclass()).write("-content");
 		if (self.getTree().isFixedLayout())
-			wh.write("overflow-hidden");
+			wh.write(" z-overflow-hidden");
 		wh.write("\">").write(self.getColumnHtmlPrefix()).write(self.getImgTag());
 
 		new Out(self.getLabel()).setMaxlength(self.getMaxlength()).render(out);

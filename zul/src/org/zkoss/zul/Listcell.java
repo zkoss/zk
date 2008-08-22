@@ -24,6 +24,7 @@ import java.util.Iterator;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zul.impl.LabelImageElement;
@@ -31,7 +32,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 /**
  * A list cell.
  * 
- * <p>Default {@link #getSclass}: listgroup-cell, if parent is Listgroup.
+ * <p>Default {@link #getMoldSclass}: z-list-cell. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -62,15 +63,15 @@ public class Listcell extends LabelImageElement {
 				"display:none;" : super.getRealStyle();
 	}
 	public String getRealSclass() {
-		Component p = getParent();
+		HtmlBasedComponent p = (HtmlBasedComponent) getParent();
 		if (!(p instanceof Listgroup) && !(p instanceof Listgroupfoot)) return super.getRealSclass();
 		String clx = super.getRealSclass();
-		if (p instanceof Listgroup)
-			return clx != null ? clx + " listgroup-cell" : "listgroup-cell";
-		else
-			return clx != null ? clx + " listgroupfoot-cell" : "listgroupfoot-cell";
+		return clx != null ? clx + " " + p.getMoldSclass() + "-inner" : p.getMoldSclass() + "-inner";
 	}
-	
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-list-cell" : super.getMoldSclass();
+	}
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
 	 */

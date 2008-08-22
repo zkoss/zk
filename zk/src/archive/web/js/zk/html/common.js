@@ -232,7 +232,13 @@ zk.Shadow.prototype = {
 		this.id = cmp.id + "!shadow";
 		this.rel = cmp;
 		this.template = zk.ie ? '<div id="'+this.id+'" class="z-ie-shadow"></div>' :
-		'<div id="'+this.id+'" class="z-shadow"><div class="zt"><div class="ztl"></div><div class="ztm"></div><div class="ztr"></div></div><div class="zc"><div class="zcl"></div><div class="zcm"></div><div class="zcr"></div></div><div class="zb"><div class="zbl"></div><div class="zbm"></div><div class="zbr"></div></div></div>';
+		'<div id="'+this.id+'" class="z-shadow"><div class="z-shadow-t">' +
+		'<div class="z-shadow-tl"></div><div class="z-shadow-tm"></div>' +
+		'<div class="z-shadow-tr"></div></div><div class="z-shadow-c">' +
+		'<div class="z-shadow-cl"></div><div class="z-shadow-cm"></div>' +
+		'<div class="z-shadow-cr"></div></div><div class="z-shadow-b">' +
+		'<div class="z-shadow-bl"></div><div class="z-shadow-bm"></div>' +
+		'<div class="z-shadow-br"></div></div></div>';
 		var o = this.diam, d = {l: -o, t: o-1, h: 0, w:0};
 		var rad = Math.floor(this.diam/2);
 		switch (this.mode.toLowerCase()) {

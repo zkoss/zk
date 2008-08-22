@@ -19,4 +19,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<td z.type="Lic" id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave"${self.labelAttrs} class="cell-inner <c:if test="${self.tree.fixedLayout}">overflow-hidden</c:if>">${self.columnHtmlPrefix}${self.imgTag}<c:out value="${self.label}" maxlength="${self.maxlength}"/><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach>${self.columnHtmlPostfix}</div></td>
+<td z.type="Lic" id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave"${self.labelAttrs} class="${self.moldSclass}-content <c:if test="${self.tree.fixedLayout}">z-overflow-hidden</c:if>">${self.columnHtmlPrefix}${self.imgTag}<c:out value="${self.label}" maxlength="${self.maxlength}"/><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach>${self.columnHtmlPostfix}</div></td>

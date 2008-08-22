@@ -37,9 +37,12 @@ public class Portalchildren extends XulElement {
 	private boolean _noSmartUpdate;
 	
 	public Portalchildren() {
-		setMoldSclass("z-portal-children");
 	}
 
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-portal-children" : super.getMoldSclass();
+	}
+	
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Portallayout))
 			throw new UiException("Wrong parent: " + parent);

@@ -40,23 +40,23 @@ public class TreePaging implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tree self = (Tree) comp;
 		final String uuid = self.getUuid();
-
+		final String mcls = self.getMoldSclass();
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tree.Tree\" z.pg=\"t\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
-				.write("!pgit\" class=\"tree-pgi-t\">")
+				.write("!pgit\" class=\"").write(mcls).write("-pgi-t\">")
 				.write(self.getPagingChild())
 				.write("</div>");
 		}
 		
 		if(self.getTreecols() != null){
-			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"tree-head\">")
+			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"").write(mcls).write("-header\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!hdfaker\" class=\"tree-fake\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!hdfaker\" class=\"").write(mcls).write("-faker\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 					final Treecol child = (Treecol) it.next();
@@ -69,7 +69,7 @@ public class TreePaging implements ComponentRenderer {
 				.write("</table></div>");
 		}
 
-		wh.write("<div id=\"").write(self.getUuid()).write("!body\" class=\"tree-body\">")
+		wh.write("<div id=\"").write(self.getUuid()).write("!body\" class=\"").write(mcls).write("-body\">")
 			 .write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"");
 		if (self.isFixedLayout())
 			wh.write(" style=\"table-layout:fixed\"");
@@ -77,7 +77,7 @@ public class TreePaging implements ComponentRenderer {
 		
 		if(self.getTreecols() != null) {
 			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"tree-fake\">");
+				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"").write(mcls).write("-faker\">");
 				
 			for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 				final Treecol child = (Treecol) it.next();
@@ -90,11 +90,11 @@ public class TreePaging implements ComponentRenderer {
 			.write("</table></div>");
 
 		if(self.getTreefoot() != null){
-			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"tree-foot\">")
+			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"").write(mcls).write("-footer\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"tree-fake\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"").write(mcls).write("-faker\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 					final Treecol child = (Treecol) it.next();
@@ -110,7 +110,7 @@ public class TreePaging implements ComponentRenderer {
 		//Paging
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
-				.write("!pgib\" class=\"tree-pgi\">")
+				.write("!pgib\" class=\"").write(mcls).write("-pgi-b\">")
 				.write(self.getPagingChild())
 				.write("</div>");
 		}

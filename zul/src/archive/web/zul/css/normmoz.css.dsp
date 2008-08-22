@@ -1,20 +1,30 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/norm.css.dsp"/>
-.messagebox-btn {
+.z-messagebox-btn {
 	width: 45pt;
 }
-span.rbtnbk {<%-- button at the right edge --%>
+<%-- combo.css.dsp --%>
+span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
+	span.z-spinner-btn {<%-- button at the right edge --%>
 	margin: 0; padding: 0;
 }
-.word-wrap, .word-wrap div.cell-inner, .word-wrap div.foot-cell-inner, .word-wrap div.head-cell-inner {
+<%-- tree.css.dsp, grid.css.dsp, and listbox.css.dsp --%>
+.z-word-wrap div.z-tree-cell-content, .z-word-wrap div.z-tree-footer-content, <%-- Tree --%>
+	.z-word-wrap div.z-tree-col-content,
+.z-word-wrap div.z-row-content, <%-- Grid --%>
+.z-word-wrap div.z-group-content,
+.z-word-wrap div.z-group-foot-content,
+.z-word-wrap div.z-footer-content, .z-word-wrap div.z-column-content,
+.z-word-wrap div.z-list-cell-content, .z-word-wrap div.z-list-footer-content, <%-- Listbox --%>
+	.z-word-wrap div.z-list-header-content {
 	overflow: hidden;
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
 }
-span.word-wrap {<%-- label use only --%>
+span.z-word-wrap {<%-- label use only --%>
 	display: block;
 }
-<%-- Append New --%>
-div.splitter-h, div.splitter-v, div.splitter-os-h, div.splitter-os-v {
+<%-- box.css.dsp --%>
+div.z-splitter-hor, div.z-splitter-ver, div.z-splitter-os-hor, div.z-splitter-os-ver {
 	-moz-user-select: none;
 }

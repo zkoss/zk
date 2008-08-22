@@ -34,6 +34,10 @@ public class Bandpopup extends XulElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-band-popup" : super.getMoldSclass();
+	}
+
 	public boolean setVisible(boolean visible) {
 		if (!visible)
 			throw new UnsupportedOperationException("Use Bandbox.setOpen(false) instead");

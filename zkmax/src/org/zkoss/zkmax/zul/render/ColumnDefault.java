@@ -42,14 +42,15 @@ public class ColumnDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Column self = (Column) comp;
 		final String uuid = self.getUuid();
+		final String mcls = self.getMoldSclass();
 		wh.write("<th id=\"").write(uuid).write("\"").write(" z.type=\"Col\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-		.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"head-cell-inner\">");
+		.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(mcls).write("-content\">");
 		wh.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
 		String mpop = ((Columns)self.getParent()).getMenupopup();
 		if (mpop != null && mpop.trim().length() > 0 && !mpop.equals("none"))
-			wh.write("<a id=\"").write(uuid).write("!btn\" href=\"#\" class=\"").write(self.getMoldSclass())
+			wh.write("<a id=\"").write(uuid).write("!btn\" href=\"#\" class=\"").write(mcls)
 				.write("-btn\"></a>");
 		wh.writeChildren(self);
 		wh.writeln("</div></th>");

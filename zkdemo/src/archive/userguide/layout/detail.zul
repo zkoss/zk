@@ -33,16 +33,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <zk>
 <style>
-tr.myodd td.gc, tr.myodd {
+tr.myodd td.z-row-inner, tr.myodd {
 	background-color: #E4EBF8;
 }
 .myimg {
 	margin: 5px; border: 1px solid #B0C75E;
 }
-div.head-cell-inner {
+div.z-column-content {
 	text-align: center; font-weight: bold;
 }
-div.cell-inner span {
+div.z-row-content span {
 	font-family: Tahoma,Arial,serif;
 	color: #0E3A99;
 }

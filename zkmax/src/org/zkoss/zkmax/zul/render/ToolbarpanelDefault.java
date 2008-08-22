@@ -37,24 +37,24 @@ public class ToolbarpanelDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Toolbar self = (Toolbar) comp;
-		final String sclass = self.getSclass(), uuid = self.getUuid();
+		final String mcls = self.getMoldSclass(), uuid = self.getUuid();
 		wh.write("<div id=\"").write(uuid).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>');
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
-			.write(sclass).write("-body ").write(sclass).write('-').write(self.getAlign())
+			.write(mcls).write("-body ").write(mcls).write('-').write(self.getAlign())
 			.write("\">");
-		wh.writeln("<table cellspacing=\"0\"><tbody>");
+		wh.writeln("<table class=\"").write(mcls).write("-content\" cellspacing=\"0\"><tbody>");
 		if (!self.getOrient().equals("vertical")) {
 			wh.write("<tr>");
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				wh.write("<td class=\"").write(sclass).write("-h\">");
+				wh.write("<td class=\"").write(mcls).write("-hor\">");
 				((Component)it.next()).redraw(out);
 				wh.write("</td>");
 			}
 			wh.writeln("</tr>");
 		} else {
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-				wh.write("<tr><td class=\"").write(sclass).write("-v\">");
+				wh.write("<tr><td class=\"").write(mcls).write("-ver\">");
 				((Component)it.next()).redraw(out);
 				wh.writeln("</td></tr>");
 			}

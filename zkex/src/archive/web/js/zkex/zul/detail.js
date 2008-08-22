@@ -43,10 +43,10 @@ zk.override(zkau.cmd1, "addBfr",  _zkexdetail, function (uuid, cmp, html) {
 zkDetail = {
 	/**
      * The keywords of  CSS class are applied to this component.
-     * <p>Default: ["expanded", "fake"]
+     * <p>Default: ["expanded", "faker"]
      * @type Array
      */
-	cssKeywords: ["expanded", "fake"],
+	cssKeywords: ["expanded", "faker"],
 	/**
 	 * Returns the detail component belongs to the specified row, if any.
 	 * @param {Object} tr a TR tag
@@ -85,8 +85,7 @@ zkDetail = {
 				setZKAttr(fake, "nostripe", "true");
 				cell.colSpan = zk.ncols(tr.cells) - 1;
 				
-				zk.addClass(fake, tr.className + " " + cls + "-fake");
-				zk.addClass(cell, zk.realClass(td, [cls + "-td"]));
+				zk.addClass(fake, tr.className + " " + cls + "-faker");
 				td.rowSpan = 2;
 				cell.appendChild(cave);
 				cave.style.display = "";
@@ -113,7 +112,7 @@ zkDetail = {
 			var fake = $e(cmp, "fake"),
 				cls = zk.realClass(cmp, zkDetail.cssKeywords);
 			fake.className = "";
-			zk.addClass(fake, tr.className + " " + cls + "-fake");
+			zk.addClass(fake, tr.className + " " + cls + "-faker");
 		}
 		
 	},

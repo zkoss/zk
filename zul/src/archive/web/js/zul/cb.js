@@ -25,11 +25,12 @@ zk.load("zul.widget");
  */
 if (!window.Comboitem_effect) { //define it only if not customized
 	window.Comboitem_effect = function (item, undo) {
+		var mcls = getZKAttr(item, "mcls");
 		if (undo) {
-			zk.rmClass(item, "overseld");
-			zk.rmClass(item, "overd");
+			zk.rmClass(item, mcls + "-over-seld");
+			zk.rmClass(item, mcls + "-over");
 		} else
-			zk.addClass(item, zk.hasClass(item, "seld") ? "overseld": "overd");
+			zk.addClass(item, zk.hasClass(item, mcls + "-seld") ? mcls + "-over-seld": mcls + "-over");
 	};
 }
 
@@ -86,11 +87,9 @@ zkCmbox.init = function (cmp) {
 			if (!inp.disabled && !zk.dragging)
 				zkCmbox.onbutton(cmp, evt);
 		});
-		if (!zkWgt.isV30(cmp)) {
-			zk.listen(btn, "mouseover", zkWgt.onbtnover);
-			zk.listen(btn, "mousedown", zkWgt.onbtndown);
-			zk.listen(btn, "mouseout", zkWgt.onbtnout);
-		}
+		zk.listen(btn, "mouseover", zkWgt.onbtnover);
+		zk.listen(btn, "mousedown", zkWgt.onbtndown);
+		zk.listen(btn, "mouseout", zkWgt.onbtnout);
 	}
 };
 zkCmbox.cleanup = function (cmp) {
@@ -359,7 +358,7 @@ zkCmbox.dropdn = function (cmp, dropdown) {
 
 /** Marks an item as selected or un-selected. */
 zkCmbox._setsel = function (item, sel) {
-	zk.addClass(item, "seld", sel);
+	zk.addClass(item, getZKAttr(item, "mcls") + "-seld", sel);
 };
 
 /** Returns the text contained in the specified item. */
@@ -675,10 +674,10 @@ zkCmbox.close = function (pp, focus) {
 	if (focus)
 		zk.asyncFocus(uuid + "!real");
 	if (pp._shadow) pp._shadow.hide();
-	var cb = $e(uuid);
-	
-	var btn = $e(uuid + "!btn");
-	if (btn && !zkWgt.isV30(cb)) zk.rmClass(btn, "z-rbtn-over");
+	var cb = $e(uuid),
+		btn = $e(uuid, "btn"),
+		mcls = getZKAttr(cb, "mcls");
+	if (btn) zk.rmClass(btn, mcls + "-btn-over");
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: uuid, cmd: "onOpen",
 			data: [false, null, $e(uuid + "!real").value]});

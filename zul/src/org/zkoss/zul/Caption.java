@@ -27,6 +27,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *  A header for a {@link Groupbox}.
  * It may contain either a text label, using {@link #setLabel},
  * or child elements for a more complex caption.
+ * <p>Default {@link #getMoldSclass}: z-caption.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -80,15 +81,9 @@ public class Caption extends LabelImageElement {
 		return (p instanceof Window) && ((Window)p).isClosable();
 	}
 
-	//-- super --//
-	/** Returns the style class.
-	 * <p>Default: return caption if the parent is groupbox,
-	 * or title otherwise (say, the parent is window)
-	 */
-	public String getSclass() {
-		final String scls = super.getSclass();
-		if (scls != null) return scls;
-		return getParent() instanceof Groupbox ? "caption": "title";
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-caption" : super.getMoldSclass();
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();

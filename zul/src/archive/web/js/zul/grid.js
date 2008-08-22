@@ -440,7 +440,7 @@ zk.addBeforeInit(function () {
 				pp = zkau.getByZid(cmp.parentNode, getZKAttr(cmp.parentNode, "mpop")),
 				btn = $e(cmp, "btn");
 			if (!pp) return;
-			zk.addClass(cmp, "z-grid-column-menu-open");
+			zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-visi");
 			
 			if (getZKAttr(pp, "autocreate") == "true") {
 				var group = getZKAttr(cmp.parentNode, "columnsgroup") == "true",
@@ -470,24 +470,26 @@ zk.addBeforeInit(function () {
 			Event.stop(evt); // avoid onSort event.
 		},
 		onMenuClose: function (pp) {
-			var cmp = $e(getZKAttr(pp, "menuId"));
-			zk.rmClass(cmp, "z-grid-column-menu-open");
-			zk.rmClass(cmp, "z-grid-column-over");
+			var cmp = $e(getZKAttr(pp, "menuId")),
+				mcls = getZKAttr(cmp, "mcls");
+			zk.rmClass(cmp, mcls + "-visi");
+			zk.rmClass(cmp, mcls + "-over");
 			return false; // stop event propagation
 		},
 		onHdOver: function (evt) {
 			if (!evt) evt = window.event;
 			var cmp = $parentByType(Event.element(evt), "Col");			
-			zk.addClass(cmp, "z-grid-column-over");
+			zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-over");
 			var btn = $e(cmp, "btn");
 			if (btn) btn.style.height = cmp.offsetHeight - 1 + "px";											
 		},
 		onHdOut: function (evt) {
 			if (!evt) evt = window.event;
-			var cmp = $parentByType(Event.element(evt), "Col");
-			if (!zk.hasClass(cmp, "z-grid-column-menu-open") &&
+			var cmp = $parentByType(Event.element(evt), "Col"),
+				mcls = getZKAttr(cmp, "mcls");
+			if (!zk.hasClass(cmp, mcls + "-visi") &&
 				(!zk.ie || !zk.isAncestor(cmp, evt.relatedTarget || evt.toElement)))
-				zk.rmClass(cmp, "z-grid-column-over");	
+				zk.rmClass(cmp, mcls + "-over");	
 		}
 	});
 	//Columns

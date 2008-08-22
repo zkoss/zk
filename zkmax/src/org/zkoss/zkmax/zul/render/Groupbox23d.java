@@ -39,16 +39,16 @@ public class Groupbox23d implements ComponentRenderer {
 		final Groupbox self = (Groupbox) comp;
 		final Caption caption = self.getCaption();
 		final String uuid = self.getUuid();
-		final String sclass = self.getMoldSclass();
+		final String mcls = self.getMoldSclass();
 
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.widget.Grbox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(">");
 		String gcExtStyle;
 		if (caption != null) {
-			wh.write("<div class=\"").write(sclass).write("-tl\"><div class=\"")
-				.write(sclass).write("-tr\"><div class=\"").write(sclass).write("-tm\">")
-				.write("<div class=\"").write(sclass).write("-t title\">").write(caption)
+			wh.write("<div class=\"").write(mcls).write("-tl\"><div class=\"")
+				.write(mcls).write("-tr\"><div class=\"").write(mcls).write("-tm\">")
+				.write("<div class=\"").write(mcls).write("-header\">").write(caption)
 				.write("</div></div></div></div>");
 			gcExtStyle = "border-top:0;";
 		} else 
@@ -57,13 +57,13 @@ public class Groupbox23d implements ComponentRenderer {
 		String cs = self.getContentStyle();
 		if (cs != null) gcExtStyle += cs;
 		
-		wh.write("<div id=\"").write(uuid).write("!slide\"");
+		wh.write("<div id=\"").write(uuid).write("!slide\" class=\"").write(mcls).write("-body\"");
 		if (!self.isOpen())
 			wh.write(" style=\"display:none\" ");
 		wh.write(">");
 
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
-			.write(self.getContentSclass()).write("\"")
+			.write(self.getContentSclass()).write(" ").write(mcls).write("-content\"")
 			.writeAttr("style", gcExtStyle).write(">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
@@ -75,8 +75,8 @@ public class Groupbox23d implements ComponentRenderer {
 		wh.write("</div></div>");
 
 		// shadow
-		wh.write("<div id=\"").write(uuid).write("!sdw\" class=\"").write(sclass)
-			.write("-bl\"><div class=\"").write(sclass).write("-br\"><div class=\"")
-			.write(sclass).write("-bm\"></div></div></div></div>");
+		wh.write("<div id=\"").write(uuid).write("!sdw\" class=\"").write(mcls)
+			.write("-bl\"><div class=\"").write(mcls).write("-br\"><div class=\"")
+			.write(mcls).write("-bm\"></div></div></div></div>");
 	}
 }

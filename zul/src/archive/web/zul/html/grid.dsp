@@ -21,11 +21,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.grid.Grid"${self.outerAttrs}${self.innerAttrs}>
 <c:if test="${!empty self.columns}">
-	<div id="${self.uuid}!head" class="grid-head">
+	<div id="${self.uuid}!head" class="${self.moldSclass}-header">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 		<c:if test="${!empty self.columns}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.columns.uuid}!hdfaker" class="grid-fake">
+			<tr id="${self.columns.uuid}!hdfaker" class="${self.moldSclass}-faker">
 			<c:forEach var="child" items="${self.columns.children}">
 				<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
 					<div style="overflow:hidden"></div>
@@ -40,11 +40,11 @@ ${z:redraw(head, null)}
 	</table>
 	</div>
 </c:if>
-	<div id="${self.uuid}!body" class="grid-body" <c:if test="${!empty self.height}">style="height:${self.height}"</c:if>>
-	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" class="grid-btable" <c:if test="${self.fixedLayout}">style="table-layout:fixed"</c:if>>
+	<div id="${self.uuid}!body" class="${self.moldSclass}-body" <c:if test="${!empty self.height}">style="height:${self.height}"</c:if>>
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" <c:if test="${self.fixedLayout}">style="table-layout:fixed"</c:if>>
 		<c:if test="${!empty self.columns}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.columns.uuid}!bdfaker" class="grid-fake">
+			<tr id="${self.columns.uuid}!bdfaker" class="${self.moldSclass}-faker">
 			<c:forEach var="child" items="${self.columns.children}">
 				<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
 					<div style="overflow:hidden"></div>
@@ -57,11 +57,11 @@ ${z:redraw(head, null)}
 	</table>
 	</div>
 <c:if test="${!empty self.foot}">
-	<div id="${self.uuid}!foot" class="grid-foot">
+	<div id="${self.uuid}!foot" class="${self.moldSclass}-footer">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 		<c:if test="${!empty self.columns}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.columns.uuid}!ftfaker" class="grid-fake">
+			<tr id="${self.columns.uuid}!ftfaker" class="${self.moldSclass}-faker">
 			<c:forEach var="child" items="${self.columns.children}">
 				<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
 					<div style="overflow:hidden"></div>

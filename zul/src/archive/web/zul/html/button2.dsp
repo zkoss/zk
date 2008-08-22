@@ -28,8 +28,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<td class="${self.moldSclass}-tr"></td>
 </tr>
 <tr>
-	<td class="${self.moldSclass}-ml"><i>&#160;</i></td>
-	<td colspan="3" class="${self.moldSclass}-mm"><em unselectable="on"><a id="${self.uuid}!btn" class="${self.moldSclass}" href="javascript:;">
+	<td class="${self.moldSclass}-cl"><i>&#160;</i></td>
+	<td colspan="3" class="${self.moldSclass}-cm"><em unselectable="on"><a id="${self.uuid}!btn" class="${self.moldSclass}-btn" href="javascript:;">
 	<c:choose trim="true">
 	<c:when test="${self.dir == 'reverse'}">
 		<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
@@ -40,7 +40,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</c:choose>			
 	</a></em>
 	</td>
-	<td class="${self.moldSclass}-mr"><i>&#160;</i></td>
+	<td class="${self.moldSclass}-cr"><i>&#160;</i></td>
 </tr>
 <tr>
 	<td class="${self.moldSclass}-bl"></td>

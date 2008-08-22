@@ -18,11 +18,7 @@ option {
 </c:otherwise>
 </c:choose>
 
-td.slider-bkr, td.slider-bkl, td.slidersph-bkr, td.slidersph-bkl {
-	display: none; <%-- Bug 1825822 --%>
-}
-
 <%-- Append New --%>
-.messagebox-btn {
+.z-messagebox-btn {
 	width: 47pt;
 }

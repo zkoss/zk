@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.Utils;
  * of the grid. The row with the most child elements determines the number
  * of columns in each row.
  *
- * <p>Default {@link #getSclass}: the same as grid's sclass.
+ * <p>Default {@link #getMoldSclass}: z-row. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -200,6 +200,10 @@ public class Row extends XulElement {
 		return scls + (sclx != null ? " " + sclx : "");
 	}
 
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-row" : super.getMoldSclass();
+	}
+	
 	protected String getRealStyle() {
 		if (this instanceof Group || this instanceof Groupfoot || !isVisible()) return super.getRealStyle();
 		final Group g = getGroup();
@@ -267,9 +271,7 @@ public class Row extends XulElement {
 			HTMLs.appendStyle(sb, "height", hgh);
 			style = sb.toString();
 		}
-		String clx = this instanceof Group ? "gc group-cell" :
-			this instanceof Groupfoot ? "gc groupfoot-cell" :
-			child instanceof Detail ? ((Detail)child).getSclass() + "-td" : "gc";
+		String clx = child instanceof Detail ? ((Detail)child).getMoldSclass() + "-outer" : getMoldSclass() + "-inner";
 		
 		if (colattrs == null && style.length() == 0 && span == 1)
 			return " class=\"" + clx + "\"";

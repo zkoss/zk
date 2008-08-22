@@ -27,7 +27,6 @@ import org.zkoss.xml.XMLs;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.client.InputableX;
@@ -49,7 +48,6 @@ import org.zkoss.zul.ext.Constrainted;
  * A skeletal implementation of an input box.
  * <p>Events: onChange, onChanging, onFocus, onBlur, and onSelection.<br/>
  * 
- * <p>Default {@link #getSclass}: text.
  * @author tomyeh
  */
 abstract public class InputElement extends XulElement
@@ -75,9 +73,6 @@ implements Constrainted {
 	/** Whether the validation is calused by {@link #isValid}. */
 	private transient boolean _checkOnly;
 
-	public InputElement(){
-		setSclass("text");
-	}
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
@@ -442,7 +437,6 @@ implements Constrainted {
 		return _constr;
 	}
 
-	//-- super --//
 	public String getInnerAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getInnerAttrs());

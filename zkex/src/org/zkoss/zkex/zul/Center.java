@@ -19,8 +19,7 @@
 package org.zkoss.zkex.zul;
 
 /**
- * This component is a center region. The default class of CSS is specified
- * "layout-region-center".
+ * This component is a center region.
  * <p>
  * <strong>Note:</strong> This component doesn't support the following method,
  * including {@link #setSplittable(boolean)}, {@link #setOpen(boolean)},
@@ -29,13 +28,13 @@ package org.zkoss.zkex.zul;
  * {@link #setWidth(String)}, {@link #getSize()}, {@link #setSize(String)},
  * and {@link #setVisible(boolean)}.
  * 
+ * <p>Default {@link #getMoldSclass}: z-center.(since 3.5.0)
  * @author jumperchen
  * @since 3.0.0
  */
 public class Center extends LayoutRegion {
 
 	public Center() {
-		addSclass("layout-region-center");
 	}
 
 	/**

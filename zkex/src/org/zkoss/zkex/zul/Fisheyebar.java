@@ -41,7 +41,6 @@ public class Fisheyebar extends XulElement {
 		_labelEdge = "bottom";
 	
 	public Fisheyebar() {
-		setMoldSclass("z-fisheyebar");
 	}
 	
 	/** Returns the item width of {@link Fisheye}.
@@ -175,7 +174,10 @@ public class Fisheyebar extends XulElement {
 			smartUpdate("z.labeledge", labelEdge);
 		}
 	}
-	
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-fisheyebar" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(256).append(super.getOuterAttrs());

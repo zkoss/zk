@@ -25,6 +25,7 @@ import org.zkoss.zul.impl.NumberInputElement;
 
 /**
  * An edit box for holding an float point value (double).
+ * <p>Default {@link #getMoldSclass}: z-doublebox.(since 3.5.0)
  *
  * @author henrichen
  */
@@ -87,6 +88,9 @@ public class Doublebox extends NumberInputElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-doublebox" : super.getMoldSclass();
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
 		final String val = (String)vals[0];

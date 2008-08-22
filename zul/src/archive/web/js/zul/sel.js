@@ -26,10 +26,13 @@ zk.load("zul.zul");
 if (!window.Selectable_effect) { //define it only if not customized
 	window.Selectable_effect = function (row, undo) {
 		if (undo) {
-			zk.rmClass(row, "overseld");
-			zk.rmClass(row, "overd");
-		} else
-			zk.addClass(row, zk.hasClass(row, "seld") ? "overseld": "overd");
+			var mcls = getZKAttr(row, "mcls");
+			zk.rmClass(row, mcls + "-over-seld");
+			zk.rmClass(row, mcls + "-over");
+		} else {
+			var mcls = getZKAttr(row, "mcls");
+			zk.addClass(row, zk.hasClass(row, mcls + "-seld") ? mcls + "-over-seld" : mcls + "-over");
+		}
 	};
 }
 var _zkselx = {};
@@ -622,15 +625,16 @@ zk.Selectable.prototype = {
 
 		var changed = this._isSelected(row) != toSel;
 		if (changed) {
-			var el = $e(row.id + "!cm");
+			var el = $e(row.id + "!cm"),
+				mcls = getZKAttr(row, "mcls");
 			if (toSel) {
 				if (el) el.checked = true;
-				zk.addClass(row, "seld");
+				zk.addClass(row, mcls + "-seld");
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "true");
 			} else {
 				if (el) el.checked = false;
-				zk.rmClass(row, "seld");
+				zk.rmClass(row, mcls + "-seld");
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "false");
 			}
@@ -1140,13 +1144,16 @@ zkSel.cmonblur = function (evt) {
 	zkSel.cmonblurTo($parentByTag(Event.element(evt), "TR"));
 };
 zkSel.cmonfocusTo = function (row) {
-	if (row) zk.addClass(zkSel.getVisibleFirstChildIfAny(row), "focusd");
+	if (row) {
+		zk.addClass(zkSel.getVisibleFirstChildIfAny(row), getZKAttr(row, "mcls") + "-focus");
+	}
 };
 zkSel.cmonblurTo = function (row) {
 	if (row) {
-		zk.rmClass(row, "focusd");
+		var mcls = getZKAttr(row, "mcls");
+		zk.rmClass(row, mcls + "-focus");
 		for (var i = row.cells.length; --i >= 0;)
-			zk.rmClass(row.cells[i], "focusd");
+			zk.rmClass(row.cells[i], mcls + "-focus");
 	}
 };
 zkSel.getVisibleFirstChildIfAny = function (row) {

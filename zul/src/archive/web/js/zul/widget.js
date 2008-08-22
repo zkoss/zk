@@ -30,9 +30,11 @@ zkau.setAttr = function (cmp, nm, val) {
 	if ("disabled" == nm || "readOnly" == nm) {
 		var inp = $real(cmp), type = inp.type ? inp.type.toUpperCase() : "";
 		if (type == "TEXT" || type == "TEXTAREA") {
+			var outer = $outer(cmp),
+				mcls = getZKAttr(outer, "mcls");
 			if ("disabled" == nm)
-				zk[val == "true" ? "addClass" : "rmClass"]($outer(cmp), "z-form-disd");
-			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? "text-disd" : "readonly");
+				zk[val == "true" ? "addClass" : "rmClass"](outer, mcls + "-disd");
+			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? mcls + "-text-disd" : mcls + "-readonly");
 		}
 	}
 	return _zktbau.setAttr(cmp, nm, val);
@@ -54,10 +56,14 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 		cmp.defaultValue = old + "-";
 		if (old != cmp.value) cmp.value = old; //Bug 1490079
 	}
-	if (cmp.readOnly) zk.addClass(cmp, "readonly");
+	var outer = $outer(cmp),
+		mcls = getZKAttr(outer, "mcls");
+	if (cmp.readOnly) {
+		zk.addClass(cmp, mcls + "-readonly");
+	}
 	if (cmp.disabled) {
-		zk.addClass(cmp, "text-disd");
-		zk.addClass($outer(cmp), "z-form-disd");
+		zk.addClass(cmp, mcls + "-text-disd");
+		zk.addClass(outer, mcls + "-disd");
 	}
 };
 zkTxbox.cleanup = zkTxbox.onHide = function (cmp) {
@@ -84,7 +90,9 @@ zkTxbox.onblur = function (evt) {
 	zkTxbox._scanStop(inp);
 	zkTxbox.updateChange(inp, noonblur);
 	zkau.onblur(evt, noonblur); //fire onBlur after onChange
-	zk.rmClass($outer(inp), "z-form-focus");
+	var cmp = $outer(inp),
+		mcls = getZKAttr(cmp, "mcls");
+	zk.rmClass(cmp, mcls + "-focus");
 };
 zkTxbox._scanStop = function (inp) {	
 	//stop the scanning of onChaning first
@@ -187,16 +195,17 @@ zkTxbox.onkeydown = function (evt) {
 	}
 };
 zkTxbox.onfocus = function (evt) {
-	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
+	var inp = zkau.evtel(evt), //backward compatible (2.4 or before)
+		cmp = $outer(inp);
 	if (zkau.onfocus0(evt)
-	&& inp && inp.id && zkau.asap($outer(inp), "onChanging")) {
+	&& inp && inp.id && zkau.asap(cmp, "onChanging")) {
 		//handling onChanging
 		inp.setAttribute("zk_changing_last", inp.value);
 		if (!zkTxbox._intervals[inp.id])
 			zkTxbox._intervals[inp.id] =
 				setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
 	}
-	zk.addClass($outer(inp), "z-form-focus");
+	zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
 };
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
@@ -309,21 +318,21 @@ zkButton = {
 	down_btn: null,
 	init: function (cmp) {
 		cmp = $real(cmp);
+		if (getZKAttr(cmp, "disd") == "true") return;
+		
 		zk.listen(cmp, "click", zkau.onclick);
 		zk.listen(cmp, "dblclick", zkau.ondblclick);
 			//we have to handle here since _onDocDClick won't receive it
 		zk.listen(cmp, "focus", zkau.onfocus);
 		zk.listen(cmp, "blur", zkau.onblur);
-		if (!zkWgt.isV30(cmp)) {
-			zk.disableSelection(cmp);
-			var btn = $e($uuid(cmp), "btn");
-			zk.listen(btn, "focus", zkButton.onfocus);
-			zk.listen(btn, "blur", zkButton.onblur);
-			zk.listen(cmp, "mousedown", zkButton.ondown);
-			zk.listen(cmp, "mouseup", zkButton.onup);
-			zk.listen(cmp, "mouseover", zkButton.onover);
-			zk.listen(cmp, "mouseout", zkButton.onout);
-		}
+		zk.disableSelection(cmp);
+		var btn = $e($uuid(cmp), "btn");
+		zk.listen(btn, "focus", zkButton.onfocus);
+		zk.listen(btn, "blur", zkButton.onblur);
+		zk.listen(cmp, "mousedown", zkButton.ondown);
+		zk.listen(cmp, "mouseup", zkButton.onup);
+		zk.listen(cmp, "mouseover", zkButton.onover);
+		zk.listen(cmp, "mouseout", zkButton.onout);
 	},
 	onover: function (evt) {
 		if (!evt) evt = window.event;
@@ -370,7 +379,7 @@ zkButton = {
 if (zk.ie) {
 	zkButton.onVisi = zkButton.onSize = function(cmp){
 		cmp = $real(cmp);
-		if (!zkWgt.isV30(cmp) && cmp.offsetHeight) {
+		if (cmp.offsetHeight) {
 			var cellHgh = $int(Element.getStyle(cmp.rows[0].cells[0], "height"));
 			if (cellHgh != cmp.rows[0].cells[0].offsetHeight) {
 				cmp.rows[1].style.height = cmp.offsetHeight -
@@ -379,25 +388,26 @@ if (zk.ie) {
 		}
 	};
 }
-zkTbtn = {}; //toolbarbutton
-zkTbtn.init = function (cmp) {
-	zk.listen(cmp, "click", zkTbtn.onclick);
-	
-	if (getZKAttr(cmp, "disd") != "true") {
-		zk.listen(cmp, "focus", zkau.onfocus);
-		zk.listen(cmp, "blur", zkau.onblur);
+//toolbarbutton
+zkTbtn = {
+	init: function (cmp) {
+		zk.listen(cmp, "click", zkTbtn.onclick);
+		
+		if (getZKAttr(cmp, "disd") != "true") {
+			zk.listen(cmp, "focus", zkau.onfocus);
+			zk.listen(cmp, "blur", zkau.onblur);
+		}
+	},
+	onclick: function (evt) {
+		if (!evt) evt = window.event;
+		var cmp = Event.element(evt);
+		if (getZKAttr(cmp, "disd") == "true") {
+			Event.stop(evt);
+			return;
+		}
+		zkau.onclick(evt, true); //Bug 1878839: we shall always fire onClick
+		//No need to call zk.proress() since zkau.onclick sends onClick
 	}
-};
-zkTbtn.onclick = function (evt) {
-	if (!evt) evt = window.event;
-	var cmp = Event.element(evt);
-	if (getZKAttr(cmp, "disd") == "true") {
-		Event.stop(evt);
-		return;
-	}
-	zkau.onclick(evt, true); //Bug 1878839: we shall always fire onClick
-
-	//No need to call zk.proress() since zkau.onclick sends onClick
 };
 
 ////
@@ -450,53 +460,69 @@ zkCkbox.onclick = function (cmp) {
 
 ////
 // groupbox, caption //
-zkGrbox = {};
-// groupbox default mold;
-zkGrfs = {
-	init: function (cmp) {
-		var head = zk.firstChild(cmp, "LEGEND");
-		if (head) zk.listen(head, "click", zkGrfs.onclick);
-	},
-	onclick: function (evt) {
-		if (!evt) evt = window.event;
-		var target = Event.element(evt);
-		var tn = $tag(target);
-		if ("BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn
-		|| "A" == tn || ("TD" != tn && "TR" != tn && target.onclick))
-			return;
-			
-		var cmp = $parentByTag(target, "FIELDSET");
-		zkGrfs.open(cmp);
-	},
-	open: function (cmp, silent) {
-		var open = zk.hasClass(cmp, "fieldset-collapsed");
-		zk[open ? "rmClass" : "addClass"](cmp, "fieldset-collapsed");
-		if (!silent)
-			zkau.sendasap({uuid: cmp.id, cmd: "onOpen", data: [open]});
-	},
+zkGrbox = {
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
-			case "z.open":
-				zkGrfs.open(cmp, val == "true", true);
-				return true; //no need to store z.open
-		
-			case "z.cntStyle":
-				var n = $e(cmp.id + "!cave");
-				if (n)
-					zk.setStyle(n, val != null ? val: "");
-					
-				return true; //no need to store z.cntType
-			case "z.cntScls":
-				var n = $e(cmp.id + "!cave");
-				if (n)
-					n.className = val != null ? val: "";
-					
-				return true; //no need to store it
+		case "z.open":
+			zkGrbox.open(cmp, val == "true", true);
+			return true; //no need to store z.open
+	
+		case "z.cntStyle":
+			var n = $e(cmp.id + "!cave");
+			if (n) {
+				zk.setStyle(n, val != null ? val: "");
+				zkGrbox._fixHgh(cmp);
+			}
+			return true; //no need to store z.cntType
+		case "style":
+		case "style.height":
+			zkau.setAttr(cmp, nm, val);
+			zkGrbox._fixHgh(cmp);
+			return true;
+		}
+		return false;
+	},
+	onclick: function (evt, uuid) {
+		if (!evt) evt = window.event;
+	
+		var target = Event.element(evt);
+	
+		// Bug: 1991550
+		for (var type; (type = $type(target)) != "Grbox"; target = $parent(target)) {
+			var tn = $tag(target);
+			if (type == "Button" || "BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn ||
+				"A" == tn || ("TD" != tn && "TR" != tn && target.onclick)) 
+				return;
+		}
+	
+		if (uuid) {
+			var cmp = $e(uuid);
+			if (getZKAttr(cmp, "closable") == "false")
+				return;
+	
+			cmp = $e(uuid + "!slide");
+			if (cmp)
+				zkGrbox.open(uuid, !$visible(cmp), false, true);
+		}
+	},
+	open: function (gb, open, silent, ignorable) {
+		var gb = $e(gb);
+		if (gb) {
+			var panel = $e(gb.id + "!slide");
+			if (panel && open != $visible(panel)
+			&& !panel.getAttribute("zk_visible")
+			&& (!ignorable || !getZKAttr(panel, "animating"))) {
+				if (open) anima.slideDown(panel);
+				else anima.slideUp(panel);
+	
+				if (!silent)
+					zkau.sendasap({uuid: gb.id, cmd: "onOpen", data: [open]});
+	
+				if (open) setTimeout(function() {zkGrbox._fixHgh(gb);}, 500); //after slide down
+			}
 		}
 	}
 };
-zkCapt = {};
-
 zkGrbox.onSize = zkGrbox._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (n) {
@@ -515,75 +541,46 @@ zkGrbox.onSize = zkGrbox._fixHgh = function (cmp) {
 	}
 
 };
-zkGrbox.setAttr = function (cmp, nm, val) {
-	switch (nm) {
-	case "z.open":
-		zkGrbox.open(cmp, val == "true", true);
-		return true; //no need to store z.open
-
-	case "z.cntStyle":
-		var n = $e(cmp.id + "!cave");
-		if (n) {
-			zk.setStyle(n, val != null ? val: "");
-			zkGrbox._fixHgh(cmp);
-		}
-		return true; //no need to store z.cntType
-	case "z.cntScls":
-		var n = $e(cmp.id + "!cave");
-		if (n) {
-			n.className = val != null ? val: "";
-			zkGrbox._fixHgh(cmp); //border's dimension might be changed
-		}
-		return true; //no need to store it
-
-	case "style":
-	case "style.height":
-		zkau.setAttr(cmp, nm, val);
-		zkGrbox._fixHgh(cmp);
-		return true;
-	}
-	return false;
-};
-zkGrbox.onclick = function (evt, uuid) {
-	if (!evt) evt = window.event;
-
-	var target = Event.element(evt);
-
-	// Bug: 1991550
-	for (; $type(target) != "Grbox"; target = $parent(target)) {
+// groupbox default mold;
+zkGrfs = {
+	init: function (cmp) {
+		var head = zk.firstChild(cmp, "LEGEND");
+		if (head) zk.listen(head, "click", zkGrfs.onclick);
+	},
+	onclick: function (evt) {
+		if (!evt) evt = window.event;
+		var target = Event.element(evt);
 		var tn = $tag(target);
-		if ("BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn ||
-			"A" == tn || ("TD" != tn && "TR" != tn && target.onclick)) 
+		if ("BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn
+		|| "A" == tn || ("TD" != tn && "TR" != tn && target.onclick))
 			return;
-	}
-
-	if (uuid) {
-		var cmp = $e(uuid);
-		if (getZKAttr(cmp, "closable") == "false")
-			return;
-
-		cmp = $e(uuid + "!slide");
-		if (cmp)
-			zkGrbox.open(uuid, !$visible(cmp), false, true);
-	}
-};
-zkGrbox.open = function (gb, open, silent, ignorable) {
-	var gb = $e(gb);
-	if (gb) {
-		var panel = $e(gb.id + "!slide");
-		if (panel && open != $visible(panel)
-		&& !panel.getAttribute("zk_visible")
-		&& (!ignorable || !getZKAttr(panel, "animating"))) {
-			if (open) anima.slideDown(panel);
-			else anima.slideUp(panel);
-
-			if (!silent)
-				zkau.sendasap({uuid: gb.id, cmd: "onOpen", data: [open]});
-
-			if (open) setTimeout(function() {zkGrbox._fixHgh(gb);}, 500); //after slide down
+			
+		var cmp = $parentByTag(target, "FIELDSET");
+		zkGrfs.open(cmp);
+	},
+	open: function (cmp, silent) {
+		var mcls = getZKAttr(cmp, "mcls") + "-collapsed",
+			open = zk.hasClass(cmp, mcls);
+		zk[open ? "rmClass" : "addClass"](cmp, mcls);
+		if (!silent)
+			zkau.sendasap({uuid: cmp.id, cmd: "onOpen", data: [open]});
+	},
+	setAttr: function (cmp, nm, val) {
+		switch (nm) {
+			case "z.open":
+				zkGrfs.open(cmp, val == "true", true);
+				return true; //no need to store z.open
+		
+			case "z.cntStyle":
+				var n = $e(cmp.id + "!cave");
+				if (n)
+					zk.setStyle(n, val != null ? val: "");
+					
+				return true; //no need to store z.cntType
 		}
 	}
 };
+zkCapt = {};
 
 zkCapt.init = function (cmp) {
 	var gb = zkCapt._parentGrbox(cmp);
@@ -880,47 +877,6 @@ zkStyle.cleanup = function (cmp) {
 
 //utilities//
 var zkWgt = {};
-/** Fixes the button align with an input box, such as combobox, datebox.
- */
-zkWgt.fixDropBtn = function (cmp) {
-	//For new initial phase, we don't need to delay the function for IE. (Bug 1752477) 
-	var cmp = $e(cmp);
-	if (cmp) zkWgt._fixdbtn(cmp);
-};
-zkWgt._fixdbtn = function (cmp) {
-	cmp = $e(cmp);
-	if (!cmp) return; //it might be gone if the user press too fast
-
-	var btn = $e(cmp.id + "!btn");
-	//note: isRealVisible handles null argument
-	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
-		var inp = $real(cmp);
-		if (!inp.offsetHeight || !btn.offsetHeight) {
-			setTimeout("zkWgt._fixdbtn($e('" + cmp.id +"'))", 66);
-			return;
-		}
-
-		//Bug 1738241: don't use align="xxx"
-		var v = inp.offsetHeight - btn.offsetHeight;
-		if (v > 0) {
-			if (zk.gecko3) {
-				zk.addClass(btn, "inline-block");
-				var img = zk.firstChild(btn, "IMG");
-				if (img) img.style.marginTop = Math.round(v / 2) + "px";
-				btn.style.height = zk.revisedSize(btn, inp.offsetHeight, true) + "px";
-			} else {
-				var v2 = Math.round(v / 2); //yes, round to integer
-				btn.style.paddingTop = v2 + "px";
-				btn.style.paddingBottom = (v - v2) + "px";
-			}
-		}
-
-		v = inp.offsetTop - btn.offsetTop;
-		btn.style.position = "relative";
-		btn.style.top = v + "px";
-		if (zk.safari) btn.style.left = "-2px";
-	}
-};
 /** Fixes the button align with an input box, such as combobox, datebox. for the trendy mold
  * @since 3.5.0
  */
@@ -955,44 +911,42 @@ zkWgt._fixdbtn2 = function (cmp) {
 		if (zk.safari) btn.style.left = "-2px";
 	}
 };
-zkWgt.isV30 = function (cmp) {
-	return getZKAttr(cmp, "mold") == "v30";
-};
 zkWgt.onbtnover = function (evt) {
 	if (!evt) evt = window.event;
-	var btn = $parentByTag(Event.element(evt), "SPAN");
-	var inp = $real(btn);
+	var btn = $parentByTag(Event.element(evt), "SPAN"),
+		inp = $real(btn),
+		mcls = getZKAttr($outer(btn), "mcls");
 	if (inp && !inp.disabled && !zk.dragging)
-		zk.addClass(btn, "z-rbtn-over");
+		zk.addClass(btn, mcls + "-btn-over");
 };
 zkWgt.onbtnout = function (evt) {
 	if (!evt) evt = window.event;
-	var btn = $parentByTag(Event.element(evt), "SPAN");
-	var inp = $real(btn);
+	var btn = $parentByTag(Event.element(evt), "SPAN"),
+		inp = $real(btn),
+		mcls = getZKAttr($outer(btn), "mcls");
 	if (inp && !inp.disabled && !zk.dragging)
-		zk.rmClass(btn, "z-rbtn-over");
+		zk.rmClass(btn, mcls + "-btn-over");
 };
 zkWgt.onbtndown = function (evt) {
 	if (!evt) evt = window.event;
-	var btn = $parentByTag(Event.element(evt), "SPAN");
-	var inp = $real(btn);
+	var btn = $parentByTag(Event.element(evt), "SPAN"),
+		inp = $real(btn),
+		mcls = getZKAttr($outer(btn), "mcls");
 	if (inp && !inp.disabled && !zk.dragging) {
 		if (zkWgt._currentbtn) 
 			zkWgt.onbtnup(evt);
-		zk.addClass(btn, "z-rbtn-click");
+		zk.addClass(btn, mcls + "-btn-click");
 		zk.listen(document.body, "mouseup", zkWgt.onbtnup);
 		zkWgt._currentbtn = btn;
 	}
 };
 zkWgt.onbtnup = function (evt) {
 	zkWgt._currentbtn = $e(zkWgt._currentbtn);
-	zk.rmClass(zkWgt._currentbtn, "z-rbtn-click");
+	var mcls = getZKAttr($outer(zkWgt._currentbtn), "mcls");
+	zk.rmClass(zkWgt._currentbtn, mcls + "-btn-click");
 	zk.unlisten(document.body, "mouseup", zkWgt.onbtnup);
 	zkWgt._currentbtn = null;
 };
 zkWgt.onFixDropBtn = function (cmp) {
-	if (zkWgt.isV30(cmp)) 
-		zkWgt.fixDropBtn(cmp);
-	else
-		zkWgt.fixDropBtn2(cmp);
+	zkWgt.fixDropBtn2(cmp);
 };

@@ -20,7 +20,6 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -29,6 +28,13 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A separator.
+ *  <p>Default {@link #getMoldSclass} as follows: (since 3.5.0)
+ *  <ol>
+ *  	<li>Case 1: If {@link #getOrient()} is vertical and {@link #isBar()} is false, "z-separator-ver" is assumed</li>
+ *  	<li>Case 2: If {@link #getOrient()} is vertical and {@link #isBar()} is true, "z-separator-ver-bar" is assumed</li>
+ *  	<li>Case 3: If {@link #getOrient()} is horizontal and {@link #isBar()} is false, "z-separator-hor" is assumed</li>
+ *  	<li>Case 4: If {@link #getOrient()} is horizontal and {@link #isBar()} is true, "z-separator-hor-bar" is assumed</li>
+ *  </ol>
  *
  * @author tomyeh
  */
@@ -88,7 +94,7 @@ public class Separator extends XulElement {
 	public void setBar(boolean bar) {
 		if (_bar != bar) {
 			_bar = bar;
-			smartUpdate("class", getSclass());
+			smartUpdate("class", getMoldSclass());
 		}
 	}
 
@@ -132,7 +138,7 @@ public class Separator extends XulElement {
 
 		//3.0.3-compatibility
 		final StringBuffer sb = new StringBuffer(64).append("margin:");
-		if ("vertical".equals(_orient))
+		if (isVertical())
 			sb.append("0 ").append(spacing);
 		else
 			sb.append(spacing).append(" 0");
@@ -162,17 +168,11 @@ public class Separator extends XulElement {
 		}
 		return null;
 	}
-
-	/** Returns the style class.
-	 * If the style class is not defined ({@link #setSclass} is not called
-	 * or called with null or empty), it returns the style class based
-	 * on {@link #getOrient} and {@link #isBar}.
-	 */
-	public String getSclass() {
-		final String scls = super.getSclass();
-		if (scls != null) return scls;
-		return "vertical".equals(getOrient()) ?
-			isBar() ?"vsep-bar":"vsep": isBar() ?"hsep-bar":"hsep";
+	
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
+			"-hor" + (isBar() ? "-bar" : "")) : super.getMoldSclass();
 	}
 
 	/** Returns whether to use margins for spacing.

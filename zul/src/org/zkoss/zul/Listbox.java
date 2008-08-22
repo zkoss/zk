@@ -98,16 +98,10 @@ import org.zkoss.zul.impl.XulElement;
  * controller at different location (other than as a child component), or
  * you want to use the same controller to control multiple listboxes.
  *
- * <p>Default {@link #getSclass}: listbox.
+ * <p>Default {@link #getMoldSclass}: z-listbox.(since 3.5.0)
  *
  * <p>To have a list box without stripping, you can specify a non-existent
  * style class to {@link #setOddRowSclass}.
- * If you want to disable all striping, you can specify the style:
- * <pre><code>
-	tr.odd {
-		background: white;
-	}
- * </code></pre>
  *
  * @author tomyeh
  * @see ListModel
@@ -149,7 +143,7 @@ public class Listbox extends XulElement implements Paginated {
 	private transient Paging _paging;
 	private transient EventListener _pgListener, _pgImpListener;
 	/** The style class of the odd row. */
-	private String _scOddRow = "odd";
+	private String _scOddRow = null;
 	private int _tabindex = -1;
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
@@ -1042,11 +1036,11 @@ public class Listbox extends XulElement implements Paginated {
 	}
 
 	/** Returns the style class for the odd rows.
-	 * <p>Default: odd.
+	 * <p>Default: {@link #getMoldSclass()}-odd. (since 3.5.0)
 	 * @since 3.0.0
 	 */
 	public String getOddRowSclass() {
-		return _scOddRow;
+		return _scOddRow == null ? getMoldSclass() + "-odd" : _scOddRow;
 	}
 	/** Sets the style class for the odd rows.
 	 * If the style class doesn't exist, the striping effect disappears.
@@ -1953,7 +1947,10 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		}
 	}
-	
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-listbox" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
@@ -1983,8 +1980,8 @@ public class Listbox extends XulElement implements Paginated {
 			if (_model != null)
 				HTMLs.appendAttribute(sb, "z.model", true);
 
-			if (_scOddRow != null)
-				HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
+			if (getOddRowSclass() != null)
+				HTMLs.appendAttribute(sb, "z.scOddRow", getOddRowSclass());
 			
 			if (getModel() != null) {
 				int index = getItemCount();

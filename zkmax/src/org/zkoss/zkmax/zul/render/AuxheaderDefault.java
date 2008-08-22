@@ -42,7 +42,7 @@ public class AuxheaderDefault implements ComponentRenderer {
 		wh.write("<th id=\"").write(self.getUuid()).write('"')
 		  .write(self.getOuterAttrs()).write(self.getInnerAttrs())
 		  .write("><div id=\"").write(self.getUuid())
-		  .write("!cave\" class=\"head-cell-inner\">")
+		  .write("!cave\" class=\"").write(self.getMoldSclass()).write("-content\">")
 		  .write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
 		wh.writeChildren(self).writeln("</div></th>");

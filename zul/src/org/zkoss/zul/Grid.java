@@ -89,17 +89,10 @@ import org.zkoss.zul.event.PagingEvent;
  * controller at different location (other than as a child component), or
  * you want to use the same controller to control multiple grids.
  *
- * <p>Default {@link #getSclass}: grid.
+ * <p>Default {@link #getMoldSclass}: z-grid.(since 3.5.0)
  *
  * <p>To have a grid without stripping, you can specify a non-existent
  * style class to {@link #setOddRowSclass}.
- * If you want to disable all striping, you can specify the style:
- * <pre><code>
-	tr.odd td.gc {
-		background: white;
-	}
- * </code></pre>
- *
  * @author tomyeh
  * @see ListModel
  * @see RowRenderer
@@ -126,7 +119,7 @@ public class Grid extends XulElement implements Paginated {
 	private transient Paging _paging;
 	private transient EventListener _pgListener, _pgImpListener;
 	/** The style class of the odd row. */
-	private String _scOddRow = "odd";
+	private String _scOddRow = null;
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
@@ -137,7 +130,6 @@ public class Grid extends XulElement implements Paginated {
 	private boolean _fixedLayout, _vflex;
 
 	public Grid() {
-		setSclass("grid");
 		init();
 	}
 	private void init() {
@@ -1044,12 +1036,12 @@ public class Grid extends XulElement implements Paginated {
 
 	/** Returns the style class for the odd rows.
 	 *
-	 * <p>Default: odd.
+	 * <p>Default: {@link #getMoldSclass()}-odd. (since 3.5.0)
 	 *
 	 * @since 3.0.0
 	 */
 	public String getOddRowSclass() {
-		return _scOddRow;
+		return _scOddRow == null ? getMoldSclass() + "-odd" : _scOddRow;
 	}
 	/** Sets the style class for the odd rows.
 	 * If the style class doesn't exist, the striping effect disappears.
@@ -1088,6 +1080,9 @@ public class Grid extends XulElement implements Paginated {
 			}
 		}
 	}
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-grid" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());
@@ -1103,8 +1098,8 @@ public class Grid extends XulElement implements Paginated {
 			HTMLs.appendAttribute(sb, "z.lastLoadIdx", !inSpecialMold() || 
 					rows.size() <= _engine.getVisibleAmount() ? index : _engine.getVisibleAmount());
 		}
-		if (_scOddRow != null)
-			HTMLs.appendAttribute(sb, "z.scOddRow", _scOddRow);
+		if (getOddRowSclass() != null)
+			HTMLs.appendAttribute(sb, "z.scOddRow", getOddRowSclass());
 		HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
 		if (inSpecialMold()) {
 			HTMLs.appendAttribute(sb, "z.cnt",  getRows().getChildren().size());

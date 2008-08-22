@@ -19,15 +19,14 @@
 package org.zkoss.zkex.zul;
 
 /**
- * This component is a south region. The default class of CSS is specified
- * "layout-region-south".
+ * This component is a south region.
+ * <p>Default {@link #getMoldSclass}: z-south.(since 3.5.0)
  * 
  * @author jumperchen
  * @since 3.0.0
  */
 public class South extends LayoutRegion {
 	public South() {
-		addSclass("layout-region-south");
 	}
 
 	/**

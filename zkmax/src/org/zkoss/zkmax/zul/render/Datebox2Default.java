@@ -41,24 +41,25 @@ public class Datebox2Default implements ComponentRenderer {
 		final Datebox self = (Datebox) comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
+		final String mcls = self.getMoldSclass();
 
 		wh.write("<span id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs())
 			.write(" z.type=\"zul.db.Dtbox\" z.combo=\"true\"><input id=\"")
 			.write(uuid).write("!real\" autocomplete=\"off\"")
-			.write(" class=\"").write(self.getSclass()).write("inp\"")
+			.write(" class=\"").write(mcls).write("-inp\"")
 			.write(self.getInnerAttrs()).write("/><span id=\"")
-			.write(uuid).write("!btn\" class=\"z-rbtn\"");
+			.write(uuid).write("!btn\" class=\"").write(mcls).write("-btn\"");
 
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("><img class=\"").write(self.getSclass()).write("\"");
+		wh.write("><img class=\"").write(mcls).write("-img\"");
 		if (self.getImage() != null) 
 			wh.write(" style=\"background-image:url(").write(exec.encodeURL(self.getImage()))
 				.write(")\"");
 		wh.write(" src=\"").write(exec.encodeURL("~./img/spacer.gif")).write("\"")
 			.write("\"/></span><div id=\"").write(uuid).write("!pp\" class=\"")
-			.write(self.getSclass()).write("pp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
+			.write(mcls).write("-pp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
 	}
 }

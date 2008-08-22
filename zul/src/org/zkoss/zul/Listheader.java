@@ -47,7 +47,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * <li>There is no listcol in ZUL because it is merged into {@link Listheader}.
  * Reason: easier to write Listbox.</li>
  * </ol>
- *
+ * <p>Default {@link #getMoldSclass}: z-list-header.(since 3.5.0)
  * @author tomyeh
  */
 public class Listheader extends HeaderElement {
@@ -345,18 +345,14 @@ public class Listheader extends HeaderElement {
 	}
 
 	//-- super --//
-	/** Returns the style class.
-	 * If the style class is not defined ({@link #setSclass} is not called
-	 * or called with null or empty), it returns "sort" if sortable,
-	 * or null if not sortable.
-	 * <p>By sortable we mean that {@link #setSortAscending}
-	 * or {@link #setSortDescending}
-	 * was called with a non-null comparator
-	 */
-	public String getSclass() {
-		final String scls = super.getSclass();
-		if (scls != null) return scls;
-		return _sortAsc != null || _sortDsc != null ? "sort": null;
+	protected String getRealSclass() {
+		final String scls = super.getRealSclass();
+		final String added = _sortAsc != null || _sortDsc != null ?  getMoldSclass() + "-sort": "";
+		return scls != null ? scls + ' ' + added : added;
+	}
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-list-header" : super.getMoldSclass();
 	}
 
 	public String getOuterAttrs() {

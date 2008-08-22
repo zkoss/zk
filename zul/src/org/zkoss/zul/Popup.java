@@ -18,9 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Openable;
@@ -37,14 +34,13 @@ import org.zkoss.zul.au.out.AuPopup;
  * the id of the popup to either the {@link #setPopup},
  * {@link #setContext} or {@link #setTooltip} attribute of the element.
  *
- * <p>Default {@link #getSclass}: ctxpopup.
+ * <p>Default {@link #getMoldSclass}: z-popup.(since 3.5.0)
  *
  * @author tomyeh
  */
 public class Popup extends XulElement {
 	public Popup() {
 		super.setVisible(false);
-		if (!(this instanceof Menupopup)) setSclass("ctxpopup");
 	}
 
 	/**
@@ -114,6 +110,9 @@ public class Popup extends XulElement {
 	 */
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("Use open/close instead");
+	}
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-popup" : super.getMoldSclass();
 	}
 	public String getOuterAttrs() {
 	//Note: don't generate z.type here because Menupopup's z.type diff

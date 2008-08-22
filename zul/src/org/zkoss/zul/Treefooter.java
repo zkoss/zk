@@ -33,6 +33,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * <p>Unlike {@link Treecol}, you could place any child in a tree footer.
  * <p>Note: {@link Treecell} also accepts children.
+ * <p>Default {@link #getMoldSclass}: z-tree-footer.(since 3.5.0)
  * 
  * @author tomyeh
  */
@@ -99,6 +100,9 @@ public class Treefooter extends LabelImageElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-tree-footer" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(80).append(super.getOuterAttrs());

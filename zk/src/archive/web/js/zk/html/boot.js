@@ -44,7 +44,7 @@ if (!window.Boot_progressbox) { //not customized
 					zk.applyMask(e);
 				return;
 			}
-			html += '><div id="zk_mask" class="modal_mask" style="display:block;left:'+ ix + 'px;top:' + iy +	
+			html += '><div id="zk_mask" class="z-modal-mask" style="display:block;left:'+ ix + 'px;top:' + iy +	
 				'px;" z.x="' + ix + '" z.y="' + iy + '"></div><div';
 		} else html += "><div";
 
@@ -1598,7 +1598,7 @@ zk._domsg = function () {
 		if (!console) {
 			console = document.createElement("DIV");
 			document.body.appendChild(console);
-			var html = '<div id="zk_debugbox" class="debugbox" style="visibility:hidden">'
+			var html = '<div id="zk_debugbox" class="z-debugbox" style="visibility:hidden">'
 +'<table cellpadding="0" cellspacing="0" width="100%"><tr>'
 +'<td width="20pt"><button onclick="zk._msgclose(this)">close</button><br/>'
 +'<button onclick="$e(\'zk_msg\').value = \'\'">clear</button></td>'

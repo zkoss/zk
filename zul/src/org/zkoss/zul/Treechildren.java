@@ -257,6 +257,11 @@ public class Treechildren extends XulElement {
 			super.invalidate();
 		}
 	}
+
+	//-- Component --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-tree-children" : super.getMoldSclass();
+	}
 	public void smartUpdate(String name, String value) {
 		Component comp = getParent();
 		if (comp instanceof Treeitem)

@@ -22,16 +22,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.sel.Libox" z.pg="t"${self.outerAttrs}${self.innerAttrs}>
 	<c:if test="${!empty self.pagingChild && self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
-	<div id="${self.uuid}!pgit" class="listbox-pgi-t">
+	<div id="${self.uuid}!pgit" class="${self.moldSclass}-pgi-t">
 	${z:redraw(self.pagingChild, null)}
 	</div>
 	</c:if>
 <c:if test="${!empty self.listhead}">
-	<div id="${self.uuid}!head" class="listbox-head">
+	<div id="${self.uuid}!head" class="${self.moldSclass}-header">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 		<c:if test="${!empty self.listhead}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.listhead.uuid}!hdfaker" class="listbox-fake">
+			<tr id="${self.listhead.uuid}!hdfaker" class="${self.moldSclass}-faker">
 			<c:forEach var="child" items="${self.listhead.children}">
 				<th id="${child.uuid}!hdfaker"${child.outerAttrs}>
 					<div style="overflow:hidden"></div>
@@ -48,11 +48,11 @@ ${z:redraw(head, null)}
 </c:if>
 <c:set var="hgh" if="${self.rows > 1}" value="style=\"overflow:hidden;height:${self.rows * 15}px\""/>
 <c:set var="hgh" if="${!empty self.height}" value="style=\"overflow:hidden;height:${self.height}\""/>
-	<div id="${self.uuid}!body" class="listbox-body" ${hgh}>
-	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" class="listbox-btable" <c:if test="${self.fixedLayout}">style="table-layout:fixed"</c:if>>
+	<div id="${self.uuid}!body" class="${self.moldSclass}-body" ${hgh}>
+	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" id="${self.uuid}!cave" <c:if test="${self.fixedLayout}">style="table-layout:fixed"</c:if>>
 		<c:if test="${!empty self.listhead}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.listhead.uuid}!bdfaker" class="listbox-fake">
+			<tr id="${self.listhead.uuid}!bdfaker" class="${self.moldSclass}-faker">
 			<c:forEach var="child" items="${self.listhead.children}">
 				<th id="${child.uuid}!bdfaker"${child.outerAttrs}>
 					<div style="overflow:hidden"></div>
@@ -69,11 +69,11 @@ ${z:redraw(item, null)}
 	</table>
 	</div>
 <c:if test="${!empty self.listfoot}">
-	<div id="${self.uuid}!foot" class="listbox-foot">
+	<div id="${self.uuid}!foot" class="${self.moldSclass}-footer">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">
 	<c:if test="${!empty self.listhead}">
 		<tbody style="visibility:hidden;height:0px">
-			<tr id="${self.listhead.uuid}!ftfaker" class="listbox-fake">
+			<tr id="${self.listhead.uuid}!ftfaker" class="${self.moldSclass}-faker">
 			<c:forEach var="child" items="${self.listhead.children}">
 				<th id="${child.uuid}!ftfaker"${child.outerAttrs}>
 					<div style="overflow:hidden"></div>
@@ -87,7 +87,7 @@ ${z:redraw(self.listfoot, null)}
 	</div>
 </c:if>
 	<c:if test="${!empty self.pagingChild && self.pagingPosition == 'bottom' || self.pagingPosition == 'both'}">
-	<div id="${self.uuid}!pgib" class="listbox-pgi">
+	<div id="${self.uuid}!pgib" class="${self.moldSclass}-pgi-b">
 	${z:redraw(self.pagingChild, null)}
 	</div>
 	</c:if>

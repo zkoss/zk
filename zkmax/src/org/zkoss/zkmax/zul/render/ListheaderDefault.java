@@ -41,7 +41,7 @@ public class ListheaderDefault implements ComponentRenderer {
 		wh.write("<th id=\"").write(self.getUuid()).write("\" z.type=\"Lhr\"")
 		  .write(self.getOuterAttrs()).write(self.getInnerAttrs())
 		  .write("><div id=\"").write(self.getUuid())
-		  .write("!cave\" class=\"head-cell-inner\">")
+		  .write("!cave\" class=\"").write(self.getMoldSclass()).write("-content\">")
 		  .write(self.getColumnHtmlPrefix())
 		  .write(self.getImgTag());
 		new Out(self.getLabel()).render(out);

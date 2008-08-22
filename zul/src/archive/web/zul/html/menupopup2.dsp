@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 <a id="${self.uuid}!a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:-10000px;top:-10000px;width:0px;height:0px;line-height:1px;">&nbsp;</a>
-<ul class="z-menu-list" id="${self.uuid}!cave">
+<ul class="${self.moldSclass}-content" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
 ${z:redraw(child, null)}
 	</c:forEach>

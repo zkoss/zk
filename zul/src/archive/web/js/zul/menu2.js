@@ -62,19 +62,16 @@ zkMenu2 = { // menu
 		return item && item.nodeType == 1 && $type(item) != "Menusp2" && getZKAttr(item, "disd") != "true";
 	},
 	/**
-	 * Removes the "z-menu-item-over" class name of the specified cmp, this function
+	 * Removes the mcls + "-over" class name of the specified cmp, this function
 	 * is only invoked on the popup-list.
 	 */
 	onPopupOut: function (cmp) {
 		if (cmp) {
-			var cls = zk.realClass(cmp);
-			if ($type(cmp) == "Menu2")
-				cls += "-item";
-			zk.rmClass(cmp, cls + "-over");
+			zk.rmClass(cmp, getZKAttr(cmp, "mcls") + "-over");
 		}
 	},
 	/**
-	 * Applies the "z-menu-item-over" class name of the specified cmp, this function
+	 * Applies the mcls + "-over" class name of the specified cmp, this function
 	 * is only invoked on the popup-list.
 	 */
 	onPopupOver: function (cmp, index) {
@@ -84,10 +81,7 @@ zkMenu2 = { // menu
 			zkMenu2.onPopupOut(zkMenu2.getItemAt(cmp.parentNode, $int(seld)).el);
 			
 		setZKAttr(pp, "seld", index === undefined ? zkMenu2.indexOf(cmp) : index);
-		var cls = zk.realClass(cmp);
-		if ($type(cmp) == "Menu2")
-			cls += "-item";
-		zk.addClass(cmp, cls + "-over");
+		zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-over");
 	},
 	/**
 	 * Returns the object whose index is matched from the ul items.
@@ -212,7 +206,7 @@ zkMenu2 = { // menu
 	
 		if ($type(cmp) != "Menusp2") {
 			if (zkMenu2.isTop(cmp))
-				zk.addClass($e(cmp.id + "!a"), "z-btn-over");
+				zk.addClass($e(cmp.id + "!a"), getZKAttr(cmp, "mcls") + "-btn-over");
 			else 
 				zkMenu2.onPopupOver(cmp);
 		}
@@ -249,7 +243,7 @@ zkMenu2 = { // menu
 	_onout: function (cmp, noAutoClose) {
 		if ($type(cmp) != "Menusp2") {
 			if (zkMenu2.isTop(cmp))
-				zk.rmClass($e(cmp.id + "!a"), "z-btn-over");
+				zk.rmClass($e(cmp.id + "!a"), getZKAttr(cmp, "mcls") + "-btn-over");
 			else 
 				zkMenu2.onPopupOut(cmp);
 		}
@@ -268,7 +262,7 @@ zkMenu2 = { // menu
 		var cmp = $outer(Event.element(evt));
 		
 		if ($type(cmp) != "Menusp2")
-			zk.addClass($e(cmp.id + "!a"), "z-menu-btn-seld");
+			zk.addClass($e(cmp.id + "!a"), getZKAttr(cmp, "mcls") + "-btn-seld");
 		
 		if ("Menu2" == $type(cmp)) { //note: Menuit also go thru this method
 			zkMenu2.open(cmp, zkMenu2.isTop(cmp));
@@ -342,7 +336,7 @@ zkMenu2 = { // menu
 			rmZKAttr(pp, "owner"); //it is set by au.js after calling zkMpop.context
 			var menu = $e(getZKAttr(pp, "menuId"));
 			if (zkMenu2.isTop(menu))
-				zk.rmClass($e(menu.id + "!a"), "z-menu-btn-seld");
+				zk.rmClass($e(menu.id + "!a"), getZKAttr(menu, "mcls") + "-btn-seld");
 				
 			if (zkau.asap(pp, "onOpen"))
 				zkau.send({uuid: pp.id, cmd: "onOpen", data: [false]});

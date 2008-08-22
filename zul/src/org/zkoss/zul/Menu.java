@@ -18,17 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.io.IOException;
-
-import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.impl.LabelImageElement;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * An element, much like a button, that is placed on a menu bar.
@@ -43,8 +38,6 @@ public class Menu extends LabelImageElement {
 	private Menupopup _popup;
 
 	public Menu() {
-		Utils.updateMoldByTheme(this);
-		setMoldSclass("z-menu");
 	}
 	public Menu(String label) {
 		this();
@@ -57,21 +50,17 @@ public class Menu extends LabelImageElement {
 	}
 
 	public String getImgTag() {
-		if ("v30".equals(getMold()))
-			return super.getImgTag();
-		else {
-			final String src = getImageContent() != null ? getContentSrc():
-				getDesktop().getExecution().encodeURL(getSrc() != null ? getSrc() : "~./img/spacer.gif");
-				
-			final StringBuffer sb = new StringBuffer(64)
-				.append("<img class=\"").append(getMoldSclass()).append("-item-icon\" src=\"")
-				.append(src).append("\" align=\"absmiddle\"/>");
+		final String src = getImageContent() != null ? getContentSrc():
+			getDesktop().getExecution().encodeURL(getSrc() != null ? getSrc() : "~./img/spacer.gif");
+			
+		final StringBuffer sb = new StringBuffer(64)
+			.append("<img class=\"").append(getMoldSclass()).append("-img\" src=\"")
+			.append(src).append("\" align=\"absmiddle\"/>");
 
-			final String label = getLabel();
-			if (label != null && label.length() > 0) sb.append(' ');
+		final String label = getLabel();
+		if (label != null && label.length() > 0) sb.append(' ');
 
-			return sb.toString(); //keep a space
-		}
+		return sb.toString(); //keep a space
 	}
 	/** Returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.
@@ -87,6 +76,9 @@ public class Menu extends LabelImageElement {
 	}
 
 	//-- Component --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-menu" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());

@@ -50,7 +50,6 @@ public class Detail extends XulElement {
 	private String _img;
 	
 	public Detail() {
-		setMoldSclass("z-detail");
 		setWidth("18px");
 	}
 
@@ -93,6 +92,9 @@ public class Detail extends XulElement {
 		return _open;
 	}
 	//-- Component --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-detail" : super.getMoldSclass();
+	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Row))
 			throw new UiException("Unsupported parent for detail: "+parent);

@@ -39,51 +39,56 @@ public class Window2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Window self = (Window)comp;
 		final String uuid = self.getUuid();
-		final String sclass = self.getSclass();
+		final String mcls = self.getMoldSclass();
 		
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.wnd2.Wnd2\" z.autoz=\"true\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		final Caption caption = self.getCaption();
-		final String title = self.getTitle(), titlesc = self.getTitleSclass();
-		final boolean isEmbedded = self.inEmbedded();
+		final String title = self.getTitle();
+		final boolean isFrame = !self.inEmbedded() && !self.inPopup();
+		final boolean hasBorder = "normal".equals(self.getBorder());
 		String wcExtStyle = "";
 		if (caption != null || title.length() > 0) {
-			wh.write("<div class=\"l").write(titlesc).write("\"><div class=\"r")
-				.write(titlesc).write("\"><div class=\"m").write(titlesc).write("\"><div id=\"")
-				.write(uuid).write("!caption\" class=\"").write(titlesc).write(" title\">");
+			wh.write("<div class=\"").write(mcls).write("-tl\"><div class=\"")
+				.write(mcls).write("-tr\"><div class=\"").write(mcls).write("-tm\"><div id=\"")
+				.write(uuid).write("!caption\" class=\"").write(mcls).write("-header\">");
 			if (caption == null) {
 				if (self.isClosable())
-					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(sclass).write("-tool ").write(sclass).write("-close\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(mcls).write("-tool ").write(mcls).write("-close\"></div>");
 				if (self.isMaximizable()) {
-					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(sclass).write("-tool ").write(sclass).write("-maximize");
+					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(mcls).write("-tool ").write(mcls).write("-maximize");
 					if (self.isMaximized())
-							wh.write(" ").write(sclass).write("-maximized");
+							wh.write(" ").write(mcls).write("-maximized");
 					wh.write("\"></div>");
 				}
 				if (self.isMinimizable())
-					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(sclass).write("-tool ").write(sclass).write("-minimize\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(mcls).write("-tool ").write(mcls).write("-minimize\"></div>");
 				new Out(title).render(out);
 			} else {
 				wh.write(caption);
 			}
 			wh.write("</div></div></div></div>");
 			wcExtStyle = "border-top:0;";
-		} else if (!isEmbedded) {
-			wh.write("<div class=\"l").write(titlesc).write("\"><div class=\"r")
-				.write(titlesc).write("\"><div class=\"m").write(titlesc)
-				.write("-notitle\"></div></div></div>");
+		} else if (isFrame) {
+			wh.write("<div class=\"").write(mcls).write("-tl\"><div class=\"")
+				.write(mcls).write("-tr\"><div class=\"").write(mcls)
+				.write("-tm-notitle\"></div></div></div>");
 		}
-		final String ccls = self.getContentSclass();
-		wh.write("<div id=\"").write(uuid).write("!bwrap\" class=\"wc-bwrap\">");
-		if (!isEmbedded)
-			wh.write("<div class=\"l").write(ccls).write("\"><div class=\"r").write(ccls)
-				.write("\"><div class=\"m").write(ccls).write("\">");
+		wh.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(mcls).write("-body\">");
+		if (isFrame) {
+			wh.write("<div class=\"").write(mcls).write("-cl\"><div class=\"").write(mcls)
+				.write("-cr\"><div class=\"").write(mcls).write("-cm");
+			if (!hasBorder) wh.write("-noborder");
+			wh.write("\">");
+		}
 		final String cs = self.getContentStyle();
 		if(cs != null){
 			wcExtStyle += cs;
 		}
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"");
-		wh.write(ccls).write("\"").writeAttr("style", wcExtStyle);
+		wh.write(self.getContentSclass()).write(" ").write(mcls).write("-content");
+		if (!hasBorder) wh.write("-noborder");
+		wh.write("\"").writeAttr("style", wcExtStyle);
 		wh.write(">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component)it.next();
@@ -91,11 +96,10 @@ public class Window2Default implements ComponentRenderer {
 				wh.write(child);
 		}
 		wh.write("</div>");
-		final String mode = self.getMode();
-		if (!isEmbedded)
-			wh.write("</div></div></div><div class=\"lwb-").write(mode)
-				.write("\"><div class=\"rwb-").write(mode).write("\"><div class=\"mwb-")
-				.write(mode).write("\"></div></div></div>");
+		if (isFrame)
+			wh.write("</div></div></div><div class=\"").write(mcls)
+				.write("-bl\"><div class=\"").write(mcls).write("-br\"><div class=\"")
+				.write(mcls).write("-bm\"></div></div></div>");
 		wh.write("</div></div>");	
 	}
 }

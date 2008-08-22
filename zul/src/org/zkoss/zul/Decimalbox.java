@@ -20,7 +20,6 @@ package org.zkoss.zul;
 
 import java.math.BigDecimal;
 
-import org.zkoss.math.BigDecimals;
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
@@ -28,6 +27,7 @@ import org.zkoss.zul.impl.NumberInputElement;
 
 /**
  * An edit box for holding BigDecimal.
+ * <p>Default {@link #getMoldSclass}: z-decimalbox.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -105,6 +105,9 @@ public class Decimalbox extends NumberInputElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-decimalbox" : super.getMoldSclass();
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
 		final String val = (String)vals[0];

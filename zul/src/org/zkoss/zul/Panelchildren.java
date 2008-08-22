@@ -35,9 +35,6 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Panelchildren extends XulElement {
 	
-	public Panelchildren() {
-		setMoldSclass("z-panel-children");
-	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Panel))
 			throw new UiException("Wrong parent: "+parent);
@@ -56,6 +53,11 @@ public class Panelchildren extends XulElement {
 	public void setHeight(String height) {
 		throw new UnsupportedOperationException("readonly");
 	}
+
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ?  "z-panel-children" : super.getMoldSclass();
+	}
 	
 	/** Returns the real style class used for the content block of the panel.
 	 *
@@ -63,21 +65,20 @@ public class Panelchildren extends XulElement {
 	 * say, "z-panel-children", then
 	 * <ol>
 	 * <li>Case 1: If {@link Panel#getBorder} is "normal", "z-panel-children" is returned.</li>
-	 * <li>Case 2: Otherwise, "z-panel-children-<i>border</i>" is returned
-	 * where <i>border</i> is the value returned by {@link Panel#getBorder()}.</li>
+	 * <li>Case 2: Otherwise, "z-panel-children-noborder" is returned.</li>
 	 * <li>Case 3: If {@link Panel#getTitle()} and {@link Panel#getCaption()} are
-	 * null, "z-panel-children-notitle" is returned with above cases.</li>
+	 * null, "z-panel-children-noheader" is returned with above cases.</li>
 	 * </ol>
 	 */
-	public String getRealSclass() {
+	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String moldsclass = getMoldSclass();
+		final String mcls = getMoldSclass();
 		final Panel parent = (Panel) getParent();
 		if (parent != null) {
-			final String title = moldsclass != null && parent.getTitle().length() == 0 
-				&& parent.getCaption() == null ? moldsclass + "-notitle" : "";
+			final String title = mcls != null && parent.getTitle().length() == 0 
+				&& parent.getCaption() == null ? mcls + "-noheader" : "";
 			final String border = parent.getBorder();
-			return scls + ("normal".equals(border) ? "" : ' ' + scls + '-' + border) + (title.length() > 0 ? ' ' + title : title);
+			return scls + ("normal".equals(border) ? "" : ' ' + mcls + "-noborder") + (title.length() > 0 ? ' ' + title : title);
 		}
 		return scls;
 			

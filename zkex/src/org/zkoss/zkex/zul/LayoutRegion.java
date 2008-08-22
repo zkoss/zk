@@ -32,10 +32,6 @@ import org.zkoss.zul.impl.Utils;
  * <p>
  * Events:<br/> onOpen, onSize.<br/>
  * 
- * The default CSS class of the mold is specified "layout-region" and
- * "layout-region-normal". If the border specifies "none" or null or "0", the
- * "layout-region-normal" class will remove. (see {@link #getMoldSclass()}, since 3.5.0)
- * 
  * @author jumperchen
  * @since 3.0.0
  */
@@ -63,9 +59,6 @@ public abstract class LayoutRegion extends XulElement {
 	private int[] _cmargins = new int[] { 5, 5, 5, 5 };
 
 	public LayoutRegion() {
-		Utils.updateMoldByTheme(this);
-		addSclass("layout-region-normal");
-		addSclass("layout-region");
 	}
 	
 	/** 
@@ -80,7 +73,6 @@ public abstract class LayoutRegion extends XulElement {
 	
 	/**
 	 * Sets the title.
-	 * <p> It only applied when {@link #getMold()} is not v30.
 	 * 
 	 * @since 3.5.0
 	 */
@@ -119,11 +111,7 @@ public abstract class LayoutRegion extends XulElement {
 			border = "none";
 		if (!_border.equals(border)) {
 			_border = border;
-			if (_border.equals("none")) {
-				removeSclass("layout-region-normal");
-			} else {
-				addSclass("layout-region-normal");
-			}
+			smartUpdate("class", getRealSclass());
 		}
 	}
 
@@ -243,9 +231,7 @@ public abstract class LayoutRegion extends XulElement {
 	/**
 	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
 	 * "top,left,right,bottom"
-	 * 
-	 * <p>
-	 * Note: this property is only applied when {@link #getMold()} is not "v30" 
+	 *  
 	 * @since 3.5.0
 	 */
 	public void setCmargins(String cmargins) {
@@ -349,13 +335,13 @@ public abstract class LayoutRegion extends XulElement {
 	abstract public String getSize();
 
 	protected void addSclass(String cls) {
-		final String sclass = getMoldSclass();
+		final String sclass = getSclass();
 		if (!hasSclass(cls))
-			setMoldSclass(sclass == null ? cls : cls + " " + sclass);
+			setSclass(sclass == null ? cls : cls + " " + sclass);
 	}
 
 	protected boolean hasSclass(String cls) {
-		String sclass = getMoldSclass();
+		String sclass = getSclass();
 		if (sclass == null)
 			sclass = "";
 		return cls == null
@@ -363,34 +349,41 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	protected void removeSclass(String cls) {
-		final String sclass = getMoldSclass();
+		final String sclass = getSclass();
 		if (sclass != null && cls != null && hasSclass(cls)) {
-			setMoldSclass(sclass.replaceAll("(?:^|\\s+)" + cls + "(?:\\s+|$)", " ").trim());
+			setSclass(sclass.replaceAll("(?:^|\\s+)" + cls + "(?:\\s+|$)", " ").trim());
 		}
 	}
 
+	protected String getRealSclass() {
+		final String cls = super.getRealSclass();
+		final String added = "normal".equals(getBorder()) ? "" : getMoldSclass() + "-noborder";
+		return cls != null ? cls + " " + added : added; 
+	}
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-" + getPosition() : super.getMoldSclass();
+	}
 	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
 		smartUpdate("z.cid", "zk_n_a");
 		if (child instanceof Borderlayout) {
 			setFlex(false);
-			removeSclass("layout-nested");
+			removeSclass(getMoldSclass() + "-nested");
+		}
+	}
+	public void onChildAdded(Component child) {
+		smartUpdate("z.cid", child.getUuid());
+		super.onChildAdded(child);
+		if (child instanceof Borderlayout) {
+			setFlex(true);
+			addSclass(getMoldSclass() + "-nested");
 		}
 	}
 
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (getChildren().size() > 0)
 			throw new UiException("Only one child is allowed: " + this);
-		if (super.insertBefore(child, insertBefore)) {
-			smartUpdate("z.cid", child.getUuid());
-			if (child instanceof Borderlayout) {
-				setFlex(true);
-				if ("v30".equals(getMold()) || !"normal".equals(_border)) {
-					addSclass("layout-nested");
-				}
-			}
-			return true;
-		}
-		return false;
+		return super.insertBefore(child, insertBefore);
 	}
 	public void invalidate() {
 		super.invalidate();

@@ -37,15 +37,15 @@ public class Slider2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Slider self = (Slider)comp;
 		final String uuid = self.getUuid();
-		final String sclass = self.getMoldSclass();
+		final String mcls = self.getMoldSclass();
 		
 		wh.write("<div id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.write(" z.type=\"zul.sld.Sld\" class=\"").write(sclass).write("\">")
-			.write("<div class=\"").write(sclass).write("-end\">")
-			.write("<div id=\"").write(uuid).write("!inner\" class=\"").write(sclass).write("-inner\">")
-			.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(sclass).write("-thumb\"></div>")
-			.write("<a class=\"").write(sclass).write("-focus\" href=\"#\" tabindex=\"-1\" hidefocus=\"on\"></a>")
+			.write(" z.type=\"zul.sld.Sld\">")
+			.write("<div class=\"").write(mcls).write("-end\">")
+			.write("<div id=\"").write(uuid).write("!inner\" class=\"").write(mcls).write("-inner\">")
+			.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(mcls).write("-btn\"></div>")
+			.write("<a class=\"").write(mcls).write("-focus\" href=\"#\" tabindex=\"-1\" hidefocus=\"on\"></a>")
 			.write("</div></div></div>");		
 	}
 

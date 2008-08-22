@@ -39,9 +39,9 @@ public class ColumnchildrenDefault implements ComponentRenderer {
 		final String sclass = self.getMoldSclass();
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zkex.zul.columnlayout.ColumnChildren\"").write(
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<div class=\"").write(sclass).write("-bwrap\">");
+		wh.write("<div class=\"").write(sclass).write("-body\">");
 		wh.write("<div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(sclass)
-			.write("-body\">");
+			.write("-content\">");
 		wh.writeChildren(self);
 		wh.write("</div></div></div>");
 	}

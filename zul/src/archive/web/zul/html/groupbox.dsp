@@ -21,7 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <fieldset id="${self.uuid}" z.type="zul.widget.Grfs"${self.outerAttrs}${self.innerAttrs}>
 ${z:redraw(self.caption, null)}
-<div id="${self.uuid}!cave" class="${self.contentSclass}"${c:attr('style', self.contentStyle)}>
+<div id="${self.uuid}!cave" class="${self.contentSclass} ${self.moldSclass}-content"${c:attr('style', self.contentStyle)}>
 <c:forEach var="child" items="${self.children}"><c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if></c:forEach>
 </div>
 </fieldset>

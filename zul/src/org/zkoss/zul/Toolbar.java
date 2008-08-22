@@ -33,18 +33,22 @@ import org.zkoss.zul.impl.XulElement;
  * <li>panel: since 3.5.0, this mold is used for {@link Panel} component as its
  * foot toolbar.</li>
  * </ol>
- * 
- * <p>Default {@link #getSclass}: toolbox, if the mold is panel, 
- * "<i>sclass</i>-panel" is assumed.
- *
+ * <p>Default {@link #getMoldSclass}: z-toolbar, if {@link #getMold()} is panel,
+ * z-toolbar-panel is assumed.(since 3.5.0)
+ *  
  * @author tomyeh
  */
 public class Toolbar extends XulElement {
 	private String _orient = "horizontal";
 	private String _align = "start";
 
-	public Toolbar() {
-		setSclass("toolbar");
+	public Toolbar() {}
+	/**
+	 * @param orient either "horizontal" or "vertical".
+	 */
+	public Toolbar(String orient) {
+		this();
+		setOrient(orient);
 	}
 	
 	/** 
@@ -84,23 +88,13 @@ public class Toolbar extends XulElement {
 		}
 		return false;
 	}
+
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-toolbar" +
+				(inPanelMold() ? "-panel" : "") : super.getMoldSclass();
+	}
 	
-	/**
-	 * Returns the CSS class. If the mold is panel, the class that returned will
-	 * be concatenated with "-panel", that is, "<i>sclass</i>-panel" is assumed.
-	 * @since 3.5.0
-	 */
-	public String getSclass() {
-		String scls = super.getSclass();
-		return scls + (inPanelMold() ? "-panel" : "");
-	}
-	/**
-	 * @param orient either "horizontal" or "vertical".
-	 */
-	public Toolbar(String orient) {
-		this();
-		setOrient(orient);
-	}
 
 	/** Returns the orient.
 	 * <p>Default: "horizontal".

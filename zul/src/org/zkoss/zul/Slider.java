@@ -25,26 +25,16 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Scrollable;
 
-import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * A slider.
- *
- * <p>To customize the look of 3.0.0(v30), you can specify the style class with
- * {@link #setSclass}. Then, the following style classes are generated
- * to style the look. Assume that the style class is "slider"
- * <ul>
- * <li>slider-bk: the center background</li>
- * <li>slider-bkl: the left background</li>
- * <li>slider-bkr: the right background</li>
- * <li>slider-btn: the bottom background</li>
- * </ul>
- *
- * <p>If {@link #getSclass} is empty and {@link #getMold} is "v30",
- * "slider" is assumed. If {@link #getMold} is "sphere", "slidersph" is assumed.
- *
- * <p>Default {@link #getMoldSclass}: z-slider. (since 3.5.0)
+ *  <p>Default {@link #getMoldSclass} as follows: (since 3.5.0)
+ *  <ol>
+ *  	<li>Case 1: If {@link #getOrient()} is vertical, "z-slider-ver" is assumed</li>
+ *  	<li>Case 2: If {@link #getOrient()} is horizontal, "z-slider-hor" is assumed</li>
+ *  </ol>
+ * 
  * @author tomyeh
  */
 public class Slider extends XulElement {
@@ -55,8 +45,6 @@ public class Slider extends XulElement {
 	private String _slidingtext = "{0}";
 
 	public Slider() {
-		Utils.updateMoldByTheme(this);
-		setMoldSclass("z-slider");
 		setWidth("100px");
 	}
 	/**
@@ -65,18 +53,13 @@ public class Slider extends XulElement {
 	public Slider(int curpos) {
 		this();
 		setCurpos(curpos);
-	}	
-	public void setMold(String mold) {
-		if ("v30".equals(mold) || "sphere".equals(mold)) setMoldSclass("slider");
-		else setMoldSclass("z-slider");
-		super.setMold(mold);
 	}
-	protected String getRealSclass() {
-		final String sclass = super.getRealSclass();
-		String moldsclass = getMoldSclass();
-		moldsclass += ("horizontal".equals(getOrient()) ? "-horz" : "-vert");
-		return sclass != null ? sclass + " " + moldsclass : moldsclass;
+	
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-slider" + ("horizontal".equals(getOrient()) ? "-hor" : "-ver") : super.getMoldSclass();
 	}
+	
 	/** Returns the orient.
 	 * <p>Default: "horizontal".
 	 */
@@ -232,7 +215,6 @@ public class Slider extends XulElement {
 		if ("vertical".equals(getOrient()))
 			HTMLs.appendAttribute(sb, "z.vert", "true");
 		
-		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		HTMLs.appendAttribute(sb, "z.name", _name);
 		HTMLs.appendAttribute(sb, "z.curpos", _curpos);
 		HTMLs.appendAttribute(sb, "z.maxpos", _maxpos);

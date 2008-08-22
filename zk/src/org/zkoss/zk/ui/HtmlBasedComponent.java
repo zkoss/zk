@@ -64,7 +64,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	/** The CSS class. */
 	private String _sclass;
 	/** The CSS class of the specific mold. */
-	private String _moldSclass;
+	protected String _moldSclass;
 	/** The CSS style. */
 	private String _style;
 	private String _left, _top;

@@ -40,26 +40,27 @@ public class Combobox2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Combobox self = (Combobox) comp;
 		final String uuid = self.getUuid();
+		final String mcls = self.getMoldSclass();
 		final Execution exec = Executions.getCurrent();
 
 		wh.write("<span id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs())
 			.write(" z.type=\"zul.cb.Cmbox\" z.combo=\"true\"><input id=\"")
 			.write(uuid).write("!real\" autocomplete=\"off\"")
-			.write(" class=\"").write(self.getSclass()).write("inp\"")
+			.write(" class=\"").write(mcls).write("-inp\"")
 			.write(self.getInnerAttrs()).write("/><span id=\"")
-			.write(uuid).write("!btn\" class=\"z-rbtn\"");
+			.write(uuid).write("!btn\" class=\"").write(mcls).write("-btn\"");
 
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("><img class=\"").write(self.getSclass()).write("\"");
+		wh.write("><img class=\"").write(mcls).write("-img\"");
 		if (self.getImage() != null) 
 			wh.write(" style=\"background-image:url(").write(exec.encodeURL(self.getImage()))
 				.write(")\"");
 		wh.write(" src=\"").write(exec.encodeURL("~./img/spacer.gif")).write("\"")
 			.write("\"/></span><div id=\"").write(uuid).write("!pp\" class=\"")
-			.write(self.getSclass()).write("pp\" style=\"display:none\" tabindex=\"-1\">")
+			.write(mcls).write("-pp\" style=\"display:none\" tabindex=\"-1\">")
 			.write("<table id=\"").write(uuid)
 			.write("!cave\" cellpadding=\"0\" cellspacing=\"0\">")
 			.writeChildren(self)

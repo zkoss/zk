@@ -42,22 +42,24 @@ public class ComboitemDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Comboitem self = (Comboitem) comp;
 		final String uuid = self.getUuid();
+		final String mcls = self.getMoldSclass();
 		wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Cmit\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
-			.write("<td>").write(self.getImgTag()).write("</td>\n<td>");
+			.write("<td class=\"").write(mcls).write("-img\">").write(self.getImgTag())
+			.write("</td>\n<td class=\"").write(mcls).write("-text\">");
 
 		new Out(self.getLabel()).render(out);
 
 		String s = self.getDescription();
 		if (!Strings.isBlank(s)) {
-			wh.write("<br/>\n<span>");
+			wh.write("<br/>\n<span class=\"").write(mcls).write("-inner\">");
 			new Out(s).render(out);
 			wh.write("</span>");
 		}
 
 		s = self.getContent();
 		if (!Strings.isBlank(s))
-			wh.write("<span>").write(s).write("</span>");
+			wh.write("<span class=\"").write(mcls).write("-content\">").write(s).write("</span>");
 			//1. don't use Out to encode since content might contain HTML tags
 			//2. Feature 1908524: no <br/>
 

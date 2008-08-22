@@ -433,13 +433,13 @@ zulHdr._sortable = function (cmp) {
 /** Shows the hint, ascending or descending image.
  */
 zulHdr._show = function (cmp) {
-	var cls = zk.realClass(cmp, ["dsc", "asc"]);
-	zk.rmClass(cmp, cls + "-dsc");
-	zk.rmClass(cmp, cls + "-asc");
+	var cls = getZKAttr(cmp, "mcls");
+	zk.rmClass(cmp, cls + "-sort-dsc");
+	zk.rmClass(cmp, cls + "-sort-asc");
 	switch (getZKAttr(cmp, "sort")) {
-		case "ascending": zk.addClass(cmp, cls + "-asc"); break;
-		case "descending": zk.addClass(cmp, cls + "-dsc"); break;
-		case "natural": zk.addClass(cmp, cls); break;
+		case "ascending": zk.addClass(cmp, cls + "-sort-asc"); break;
+		case "descending": zk.addClass(cmp, cls + "-sort-dsc"); break;
+		case "natural": zk.addClass(cmp, cls + "-sort"); break;
 	}
 };
 zkFtr = {};

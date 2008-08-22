@@ -1,0 +1,51 @@
+<%@ page contentType="text/css;charset=UTF-8" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+
+<c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
+<c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
+<c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
+.z-fieldset-content {
+	overflow: hidden;
+}
+.z-fieldset-collapsed {
+	padding-bottom: 0 !important; border-width: 2px 0 0 0 !important;
+}
+.z-fieldset-collapsed .z-fieldset-content {
+	visibility: hidden; position: absolute; left: -1000px; top: -1000px;
+}
+
+<%-- 3D --%>
+.z-groupbox-content {<%-- content of 3d groupbox --%>
+	border: 1px solid #E1E1E1; padding: 5px;
+}
+.z-groupbox-bm {
+	background:transparent url(${c:encodeURL('~./img/shdmd.gif')}) repeat-x 0 0;
+	height: 6px; font-size: 0; line-height: 0; zoom: 1;
+}
+.z-groupbox-bl {
+	background:transparent url(${c:encodeURL('~./img/shdlf.gif')}) no-repeat 0 bottom;
+	padding-left: 6px; zoom: 1;
+}
+.z-groupbox-br {
+	background:transparent url(${c:encodeURL('~./img/shdrg.gif')}) no-repeat right bottom;
+	padding-right: 6px; zoom: 1;
+}
+.z-groupbox-header {
+	overflow: hidden; zoom: 1;
+}
+.z-groupbox-tl .z-groupbox-header {
+	color: #373737; font: bold 11px tahoma, arial, verdana, sans-serif; padding: 5px 0 4px 0;
+	border: 0 none; background: transparent;
+}
+.z-groupbox-tm {
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-tb.jpg')}) repeat-x 0 0;
+	overflow: hidden;
+}
+.z-groupbox-tl {
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-corners.jpg')}) no-repeat 0 0;
+	padding-left: 6px; zoom: 1; border-bottom: 1px solid #E1E1E1;
+}
+.z-groupbox-tr {
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-corners.jpg')}) no-repeat right 0;
+	zoom: 1; padding-right: 6px;
+}

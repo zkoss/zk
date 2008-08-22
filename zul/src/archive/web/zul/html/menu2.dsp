@@ -20,19 +20,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:choose>
 <c:when test="${self.topmost}">
 <td id="${self.uuid}" align="left" z.type="zul.menu2.Menu2"${self.outerAttrs}${self.innerAttrs}>
-<table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="z-btn <c:if test="${self.imageAssigned}">z-btn<c:if test="${!empty self.label}">-text</c:if>-icon</c:if>" style="width: auto;">
-<tbody><tr class="z-menu-btn"><td class="z-btn-l"><i>&nbsp;</i></td>
+<table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${self.moldSclass}-btn <c:if test="${self.imageAssigned}">${self.moldSclass}-btn<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
+<tbody><tr><td class="${self.moldSclass}-btn-l"><i>&nbsp;</i></td>
 <c:if test="${!empty self.imageContent}">
 	<c:set var="imagesrc" value="background-image:url(${self.contentSrc})"/>
 </c:if>
 <c:if test="${!empty self.src}">
 	<c:set var="imagesrc" value="background-image:url(${c:encodeURL(self.src)})"/>
 </c:if>
-<td class="z-btn-m"><em unselectable="on"><button id="${self.uuid}!b" type="button" class="z-btn-text" style="${imagesrc}"><c:out value="${self.label}"/></button>
+<td class="${self.moldSclass}-btn-m"><em unselectable="on"><button id="${self.uuid}!b" type="button" class="${self.moldSclass}-btn-text" style="${imagesrc}"><c:out value="${self.label}"/></button>
 ${z:redraw(self.menupopup, null)}
 </em>
 </td>
-<td class="z-btn-r"><i>&nbsp;</i></td>
+<td class="${self.moldSclass}-btn-r"><i>&nbsp;</i></td>
 </tr>
 </tbody>
 </table>
@@ -40,7 +40,7 @@ ${z:redraw(self.menupopup, null)}
 </c:when>
 <c:otherwise>
 <li id="${self.uuid}" z.type="zul.menu2.Menu2"${self.outerAttrs}${self.innerAttrs}>
-<a href="javascript:;" id="${self.uuid}!a" class="${self.moldSclass}-item ${self.moldSclass}-item-arrow">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}
+<a href="javascript:;" id="${self.uuid}!a" class="${self.moldSclass}-content ${self.moldSclass}-content-img">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}
 </li>
 </c:otherwise>
 </c:choose>

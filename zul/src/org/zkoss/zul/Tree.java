@@ -66,7 +66,7 @@ import org.zkoss.zul.impl.XulElement;
  * the selection.</li>
  * </ol>
  *
- * <p>Default {@link #getSclass}: tree.
+ * <p>Default {@link #getMoldSclass}: z-tree, and an other option is z-dottree. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -84,8 +84,6 @@ public class Tree extends XulElement implements Paginated {
 	private int _rows = 0;
 	/** The name. */
 	private String _name;
-	/** The style class prefix for generating icons. */
-	private String _iconScls = "tree";
 	private boolean _multiple, _checkmark;
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
@@ -109,7 +107,6 @@ public class Tree extends XulElement implements Paginated {
 
 	public Tree() {
 		init();
-		setSclass("tree");
 	}
 	private void init() {
 		_selItems = new LinkedHashSet(5);
@@ -893,23 +890,24 @@ public class Tree extends XulElement implements Paginated {
 	 * </dl>
 	 *
 	 * @since 3.0.0
+	 * @deprecated As of release 3.5.0, replaced with {@link #getMoldSclass()}
 	 */
 	public String getIconSclass() {
-		return _iconScls;
+		return null;
 	}
 	/** Sets the style class prefix used to generate the icons of this tree.
 	 *
 	 * @since 3.0.0
 	 * @see #getIconSclass
+	 * @deprecated As of release 3.5.0, replaced with {@link #setMoldSclass(String)}
 	 */
 	public void setIconSclass(String scls) {
-		if (!Objects.equals(_iconScls, scls)) {
-			_iconScls = scls;
-			invalidate();
-		}
 	}
 
 	//-- Component --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-tree" : super.getMoldSclass();
+	}
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}

@@ -18,8 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Locale;
-
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
@@ -27,6 +25,7 @@ import org.zkoss.zul.impl.NumberInputElement;
 
 /**
  * An edit box for holding an integer.
+ * <p>Default {@link #getMoldSclass}: z-longbox.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -71,6 +70,9 @@ public class Longbox extends NumberInputElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-longbox" : super.getMoldSclass();
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
 		final String val = (String)vals[0];

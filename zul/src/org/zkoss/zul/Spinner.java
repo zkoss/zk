@@ -18,13 +18,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Date;
-
 import javax.swing.SpinnerNumberModel;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.NumberInputElement;
 import org.zkoss.zul.mesg.MZul;
@@ -32,7 +29,7 @@ import org.zkoss.zul.mesg.MZul;
 /**
  * An edit box for holding a constrained integer.
  *
- * <p>Default {@link #getSclass}: spinner.
+ * <p>Default {@link #getMoldSclass}: z-spinner.
  *
  * <p>spinner supports below key events.
  * <lu>
@@ -49,7 +46,6 @@ public class Spinner extends NumberInputElement {
 
 	public Spinner() {
 		setCols(11);
-		setSclass("spinner");
 	}
 
 	public Spinner(int value) throws WrongValueException {
@@ -131,7 +127,11 @@ public class Spinner extends NumberInputElement {
 			invalidate();
 		}
 	}
-	
+
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ?  "z-spinner" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super
 				.getOuterAttrs());

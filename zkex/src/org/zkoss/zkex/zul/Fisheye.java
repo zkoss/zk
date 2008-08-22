@@ -37,7 +37,6 @@ public class Fisheye extends XulElement {
 	private String _image, _label = "";
 
 	public Fisheye() {
-		setMoldSclass("z-fisheye");
 	}
 	public Fisheye(String label, String image) {
 		this();
@@ -85,6 +84,9 @@ public class Fisheye extends XulElement {
 		
 	}
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-fisheye" : super.getMoldSclass();
+	}
 	protected int getRealStyleFlags() {
 		return super.getRealStyleFlags() | RS_NO_WIDTH|RS_NO_HEIGHT;
 	}

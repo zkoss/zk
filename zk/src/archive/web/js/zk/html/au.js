@@ -1971,11 +1971,11 @@ zkau._dragging = function (dg, pointer, evt) {
 		}
 	}
 	if (flag && dg.element._img) {
-		if (dg.element._img.className != "drop-allow")
-			dg.element._img.className = "drop-allow";
+		if (dg.element._img.className != "z-drop-allow")
+			dg.element._img.className = "z-drop-allow";
 	} else if (dg.element._img) {
-		if (dg.element._img.className != "drop-disallow")
-		dg.element._img.className = "drop-disallow";
+		if (dg.element._img.className != "z-drop-disallow")
+		dg.element._img.className = "z-drop-disallow";
 	}
 	dg.zk_lastTarget = target;
 };
@@ -2102,8 +2102,8 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
 			var el = dg.element;
 			document.body.insertAdjacentHTML("beforeend",	
-				'<div id="zk_ddghost" class="drop-ghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="drop-content"><span id="zk_ddghost!img" class="drop-disallow"></span>&nbsp;'+msg+'</div></div>');				
+				'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
+				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-content"><span id="zk_ddghost!img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');				
 		}else {
 			var el  = dg.element.cloneNode(true);
 			el.id = "zk_ddghost";

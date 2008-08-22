@@ -703,14 +703,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/slider.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>sphere</mold-name>
-			<mold-uri>~./zul/html/slider.dsp</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>space</component-name>

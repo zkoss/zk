@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A treerow.
- *
+ * <p>Default {@link #getMoldSclass}: z-tree-row.(since 3.5.0)
  * @author tomyeh
  */
 public class Treerow extends XulElement {
@@ -62,21 +62,17 @@ public class Treerow extends XulElement {
 	}
 
 	//-- super --//
-	/** Returns the style class.
-	 * Note: 1) if not set (or setSclass(null), "item" is assumed;
-	 * 2) if selected, it appends " seld" to super's getSclass().
-	 */
-	public String getSclass() {
-		String scls = super.getSclass();
-		if (scls == null) scls = "item";
+	protected String getRealSclass() {
+		final String scls = super.getRealSclass();
 		final Treeitem ti = (Treeitem)getParent();
-		if (ti != null) {
-			if (ti.isDisabled())
-				return scls.length() > 0 ? scls + " disd": "disd";
-			else if (ti.isSelected())
-				return scls.length() > 0 ? scls + " seld": "seld";
-		}
-		return scls;
+		final String added = ti != null ? ti.isDisabled() ? getMoldSclass() + "-disd"
+				: ti.isSelected() ? getMoldSclass() + "-seld" : "" : "";
+		return scls != null ? scls + " " + added : added;
+	}
+
+	//-- Component --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-tree-row" : super.getMoldSclass();
 	}
 
 	/** Alwasys throws UnsupportedOperationException since developers shall

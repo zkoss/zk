@@ -40,6 +40,6 @@ public class ProgressmeterDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.PMeter\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<span id=\"").write(self.getUuid()).write("!img\" class=\"")
-			.write(self.getIconSclass()).write("\"></span></div>");
+			.write(self.getMoldSclass()).write("-img\"></span></div>");
 	}
 }

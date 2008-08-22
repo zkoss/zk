@@ -32,7 +32,7 @@ if (!window.Validate_errorbox) { //not customized
 	window.Validate_errorbox = function (id, boxid, msg) {
 		var html =
 	'<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
-	+boxid+'" style="display:none;position:absolute" class="errbox"><div>'
+	+boxid+'" style="display:none;position:absolute" class="z-errbox"><div>'
 	+'<table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
 	+'<td width="17"><img src="'
 	+zk.getUpdateURI('/web/zul/img/vd/arrowU.gif')+'" id="'+id
@@ -235,7 +235,7 @@ zkVld._errbox = function () {
 	
 	cmp = $e(id);
 	if (cmp) {
-		zk.addClass($real(cmp), "text-invalid");
+		zk.addClass($real(cmp), getZKAttr(cmp, "mcls") + "-text-invalid");
 	}
 
 	if (!zk.isRealVisible(cmp, true)) return; //don't show the erro box
@@ -296,7 +296,7 @@ zkVld.closeErrbox = function (box, remaingError, coerce) {
 	if (!remaingError) {
 		var cmp = $e(id);
 		if (cmp) {
-			zk.rmClass($real(cmp), "text-invalid");
+			zk.rmClass($real(cmp), getZKAttr(cmp, "mcls") + "-text-invalid");
 		}
 	}
 

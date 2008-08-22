@@ -41,6 +41,7 @@ public class CaptionDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Caption self = (Caption) comp;
 		final String uuid = self.getUuid();
+		final String mcls = self.getMoldSclass();
 		final Execution exec = Executions.getCurrent();
 		final String imgTag = self.getImgTag();
 
@@ -55,11 +56,11 @@ public class CaptionDefault implements ComponentRenderer {
 					.write(self.getInnerAttrs());
 			wh.writeln(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 			wh.writeln("<tr valign=\"middle\">");
-			wh.write("<td align=\"left\" class=\"caption\">").write(imgTag);
+			wh.write("<td align=\"left\" class=\"").write(mcls).write("-left\">").write(imgTag);
 			new Out(self.getCompoundLabel()).setNbsp(true).render(out);
 			wh.writeln("</td>");
 
-			wh.write("<td align=\"right\" class=\"caption\" id=\"").write(uuid).write("!cave\">")
+			wh.write("<td align=\"right\" class=\"").write(mcls).write("-right\" id=\"").write(uuid).write("!cave\">")
 				.writeChildren(self)
 				.writeln("</td>");
 

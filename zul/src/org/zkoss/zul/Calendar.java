@@ -37,7 +37,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A calendar.
  *
- * <p>Default {@link #getSclass}: calendar.
+ * <p>Default {@link #getMoldSclass}: z-calendar. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -54,7 +54,6 @@ public class Calendar extends XulElement {
 		this(null);
 	}
 	public Calendar(Date value) {
-		setSclass("calendar");
 		_value = value != null ? value: Dates.today();
 		_compact = "zh".equals(Locales.getCurrent().getLanguage());
 	}
@@ -146,6 +145,9 @@ public class Calendar extends XulElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-calendar" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());

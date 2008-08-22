@@ -102,9 +102,8 @@ zkSplt.init = function (cmp) {
 	//change chdextr (see Bug 1921830)
 		if (vert) p = p.parentNode; //TR
 		if (p && p.id.endsWith("!chdextr"))
-			p.className = cmp.className;
+			p.className = getZKAttr(cmp, "mcls") + "-outer";
 	}
-
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var drag = zkSplt._drags[cmp.id] = {
 		vert: vert,
@@ -114,13 +113,14 @@ zkSplt.init = function (cmp) {
 			snap: snap, endeffect: zkSplt._endDrag})
 	};
 
-	var btn = $e(cmp.id + "!btn");
+	var btn = $e(cmp.id + "!btn"),
+		mcls = getZKAttr(cmp, "mcls");
 	if (zk.ie) {
-		zk.listen(btn, "mouseover", function () {zk.addClass(btn, "splitter-btn-visi")});
-	 	zk.listen(btn, "mouseout", function () {zk.rmClass(btn, "splitter-btn-visi")});
+		zk.listen(btn, "mouseover", function () {zk.addClass(btn, mcls + "-btn-visi")});
+	 	zk.listen(btn, "mouseout", function () {zk.rmClass(btn, mcls + "-btn-visi")});
 	}
 	zk.listen(btn, "click", function () {		
-		zk.rmClass(btn, "splitter-btn-visi");
+		zk.rmClass(btn, mcls + "-btn-visi");
 		zkSplt.open(cmp, getZKAttr(cmp, "open") == "false");
 	});
 

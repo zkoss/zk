@@ -359,7 +359,7 @@ zk.disableSelection(document.body); // Bug #1820433
   	if (this.options.overlay) { // Bug #1911280
 		this.domOverlay = document.createElement("DIV");
 		document.body.appendChild(this.domOverlay);
-		zk.setOuterHTML(this.domOverlay, '<div class="dd-overlay" id="zk_dd_overlay"></div>');
+		zk.setOuterHTML(this.domOverlay, '<div class="z-dd-overlay" id="zk_dd_overlay"></div>');
 		this.domOverlay = $e("zk_dd_overlay");
 		if (zk.gecko) this.domOverlay.style.MozUserSelect = "none";
 		this.domOverlay.style.width = zk.pageWidth() + "px";

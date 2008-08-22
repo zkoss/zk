@@ -21,8 +21,6 @@ package org.zkoss.zul;
 import java.util.List;
 import java.util.Iterator;
 
-import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -30,7 +28,7 @@ import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * A treecol.
- *
+ * <p>Default {@link #getMoldSclass}: z-tree-col.(since 3.5.0)
  * @author tomyeh
  */
 public class Treecol extends HeaderElement {
@@ -119,6 +117,9 @@ public class Treecol extends HeaderElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-tree-col" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		final String clkattrs = getAllOnClickAttrs();

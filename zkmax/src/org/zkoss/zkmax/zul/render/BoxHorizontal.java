@@ -40,7 +40,7 @@ public class BoxHorizontal implements ComponentRenderer{
 		final Box self = (Box) comp;
 		final String uuid = self.getUuid();		
 		final String spacing = self.getSpacing();
-		String spscls = null, spstyle = null;
+		String spstyle = null;
 
 		wh.write("<table id=\"").write(uuid).write("\" z.type=\"zul.box.Box\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
@@ -56,15 +56,11 @@ public class BoxHorizontal implements ComponentRenderer{
 				.writeln("</td>");
 
 			if (child.getNextSibling() != null) {
-				if (spscls == null) {
-					spscls = self.getSclass();
-					spscls = spscls == null || spscls.length() == 0 ? "hbox-sp": spscls + "-sp";
-					if (spacing != null)
-						spstyle = "width:" + spacing;
-				}
+				if (spacing != null)
+					spstyle = "width:" + spacing;
 
 				wh.write("<td id=\"").write(child.getUuid())
-					.write("!chdextr2\" class=\"").write(spscls).write("\"");
+					.write("!chdextr2\" class=\"").write(self.getMoldSclass()).write("-sep\"");
 
 				//note: we have to hide if spacing is 0
 				//since Opera will scale it up if maximized

@@ -25,6 +25,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * Defines a set of footers ({@link Footer}) for a grid ({@link Grid}).
+ * <p>Default {@link #getMoldSclass}: z-foot.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -46,5 +47,9 @@ public class Foot extends XulElement {
 		if (!(child instanceof Footer))
 			throw new UiException("Unsupported child for foot: "+child);
 		return super.insertBefore(child, insertBefore);
+	}
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-foot" : super.getMoldSclass();
 	}
 }

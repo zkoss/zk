@@ -21,7 +21,6 @@ package org.zkoss.zul;
 import java.util.Iterator;
 import java.io.IOException;
 
-import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
@@ -35,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
 
 /**
  * A box.
- *
+ *<p>Default {@link #getMoldSclass}: z-box.(since 3.5.0)
  * @author tomyeh
  */
 public class Box extends XulElement {
@@ -334,8 +333,8 @@ public class Box extends XulElement {
 		final boolean vert = isVertical();
 		if (child instanceof Splitter) {
 			sb.append(" class=\"")
-				.append(((Splitter)child).getRealSclass())
-				.append('"');
+				.append(((Splitter)child).getMoldSclass())
+				.append("-outer\"");
 			if (!child.isVisible())
 				sb.append(" style=\"display:none\"");
 			return sb.toString();
@@ -426,6 +425,10 @@ public class Box extends XulElement {
 		return valign != null ? " valign=\"" + valign + '"': null;
 	}
 
+	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-box" : super.getMoldSclass();
+	}
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {
 		//Bug 1828702: onChildAdded not called if only moved

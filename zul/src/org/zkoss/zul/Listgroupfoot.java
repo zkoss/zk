@@ -20,12 +20,11 @@ package org.zkoss.zul;
 
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 
 /**
  * GroupFooter serves as a summary listitem of listgroup.
  * 
- * <p>Default {@link #getSclass}: listgroupfoot.
+ * <p>Default {@link #getMoldSclass}: z-list-group-foot.
  *
  *<p>Note: All the {@link Label} child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
@@ -36,7 +35,6 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
  */
 public class Listgroupfoot extends Listitem{
 	public Listgroupfoot() {
-		setSclass("listgroupfoot");		
 	}
 	public Listgroupfoot(String label) {
 		this();
@@ -52,7 +50,7 @@ public class Listgroupfoot extends Listitem{
 	 * if no such cell.
 	 */
 	public String getLabel() {
-		final Component cell = (Component)getFirstChild();
+		final Component cell = getFirstChild();
 		return cell != null && cell instanceof Label ? ((Label)cell).getValue(): null;
 	}
 	/** Sets the value of the {@link Label} it contains.
@@ -61,6 +59,10 @@ public class Listgroupfoot extends Listitem{
 	 */
 	public void setLabel(String label) {
 		autoFirstCell().setLabel(label);
+	}
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-list-group-foot" : super.getMoldSclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(32).append( super.getOuterAttrs());

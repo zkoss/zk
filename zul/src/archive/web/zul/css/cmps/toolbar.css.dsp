@@ -1,0 +1,64 @@
+<%@ page contentType="text/css;charset=UTF-8" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+
+<c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
+<c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
+<c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
+
+.z-toolbar {
+	border-color: #a9bfd3; border-style: solid; border-width: 0 0 1px 0; display: block;
+	padding: 2px; background: #D0DEF0 url(${c:encodeURL('~./zul/img/button/tb-bg.gif')}) repeat-x top left;
+	position: relative; zoom: 1;
+}
+.z-caption .z-toolbar, .z-caption .z-toolbarbutton {
+	background: none; border: 0;
+}
+.z-toolbar-body, .z-toolbar-body span {
+	font-size: ${fontSizeS};
+}
+.z-toolbar a, .z-toolbar a:visited, .z-toolbar a:hover {
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: ${fontSizeS}; font-weight: normal; color: black;
+	background: #D0DEF0; border: 1px solid #D0DEF0;
+	text-decoration: none;
+}
+.z-toolbar a:hover {
+	border-color: #f8fbff #aca899 #aca899 #f8fbff;
+}
+
+.z-caption .z-toolbar a:hover {
+	text-decoration: underline;
+}
+<%-- Toolbar Panel Mold--%>
+.z-toolbar-panel {
+	padding: 5px;
+}
+.z-toolbar-panel .z-toolbar-panel-body td {
+	border: 0; padding: 0;
+}
+.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-content, .z-toolbar-end {
+	float: right; clear: none;
+}
+.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-content, .z-toolbar-start {
+	float: left; clear: none;
+}
+.z-toolbar-panel .z-toolbar-panel-center, .z-toolbar-center {
+	text-align: center;
+}
+.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-content, .z-toolbar-center {
+	margin: 0 auto;
+}
+.z-toolbar-panel .z-toolbar-panel-content .z-toolbar-panel-hor {
+	padding: 3px;
+}
+.z-toolbar-panel .z-toolbar-panel-content .z-toolbar-panel-ver {
+	padding: 1px;
+}
+<%-- Toolbar Button--%>
+.z-toolbar-button-disd {
+	color: #C5CACB !important; cursor: default!important;
+}
+.z-toolbar-button-disd:visited, .z-toolbar-button-disd:hover { 
+	text-decoration: none !important; cursor: default !important;;
+	border-color: #D0DEF0 !important;
+}

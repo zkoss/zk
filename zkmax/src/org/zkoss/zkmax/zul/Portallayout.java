@@ -46,7 +46,6 @@ import org.zkoss.zul.impl.XulElement;
 public class Portallayout extends XulElement {
 
 	public Portallayout() {
-		setMoldSclass("z-portal-layout");
 	}
 	
 	/**
@@ -89,7 +88,10 @@ public class Portallayout extends XulElement {
 		else pos[1] = panel.getParent().getChildren().indexOf(panel);
 		return pos; 
 	}
-	
+
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-portal-layout" : super.getMoldSclass();
+	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Portalchildren))
 			throw new UiException("Unsupported child for Portallayout: "

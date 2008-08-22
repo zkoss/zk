@@ -47,8 +47,8 @@ public class FisheyeDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zkex.zul.fisheye.Fisheye\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("><img id=\"")
 			.write(uuid).write("!img\" src=\"").write(exe.encodeURL(self.getImage()))
-			.write("\" class=\"").write(sclass).write("-image\"/><div id=\"")
-			.write(uuid).write("!label\" style=\"display:none;\" class=\"").write(sclass).write("-label\">");
+			.write("\" class=\"").write(sclass).write("-img\"/><div id=\"")
+			.write(uuid).write("!label\" style=\"display:none;\" class=\"").write(sclass).write("-text\">");
 		new Out(self.getLabel()).render(out);
 		wh.write("</div></div>");
 	}

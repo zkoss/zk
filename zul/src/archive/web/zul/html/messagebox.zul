@@ -23,25 +23,25 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 use="org.zkoss.zul.impl.MessageboxDlg">
 	<hbox>
 		<image src="${arg.icon}"/>
-		<div sclass="messagebox" width="210pt">
+		<div sclass="z-messagebox" width="210pt">
 			${arg.message}
 		</div>
 	</hbox>
 	<separator bar="true"/>
 	<hbox style="margin-left:auto; margin-right:auto">
-	<button id="btn1" identity="${arg.OK}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button id="btn1" identity="${arg.OK}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.OK}"/>
-	<button identity="${arg.CANCEL}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.CANCEL}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.CANCEL}"/>
-	<button identity="${arg.YES}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.YES}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.YES}"/>
-	<button identity="${arg.NO}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.NO}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.NO}"/>
-	<button identity="${arg.RETRY}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.RETRY}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.RETRY}"/>
-	<button identity="${arg.ABORT}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.ABORT}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.ABORT}"/>
-	<button identity="${arg.IGNORE}" sclass="messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+	<button identity="${arg.IGNORE}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.IGNORE}"/>
 	</hbox>
 </window>

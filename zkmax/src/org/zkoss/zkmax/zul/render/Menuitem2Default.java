@@ -43,7 +43,7 @@ public class Menuitem2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menuitem self = (Menuitem)comp;
 		final String uuid = self.getUuid();
-		final String sclass = self.getMoldSclass();
+		final String mcls = self.getMoldSclass();
 		final Execution exec = Executions.getCurrent();
 		if (self.isTopmost()){
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"Menuit2\"");
@@ -53,15 +53,15 @@ public class Menuitem2Default implements ComponentRenderer {
 			else
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
-			wh.write(" class=\"").write(sclass).write("\">");
-			wh.write("<table id=\"").write(uuid).write("!a\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn ");
+			wh.write(" class=\"").write(mcls).write("-content\">");
+			wh.write("<table id=\"").write(uuid).write("!a\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"").write(mcls).write("-btn ");
 			if (self.isImageAssigned()) {
-				wh.write("z-btn");
+				wh.write("").write(mcls).write("-btn");
 				if (self.getLabel().length() > 0)
 					wh.write("-text");
-				wh.write("-icon");
+				wh.write("-img");
 			}
-			wh.write("\" style=\"width: auto;\"><tbody><tr class=\"z-menu-btn\"><td class=\"z-btn-l\"><i>&nbsp;</i></td>");
+			wh.write("\" style=\"width: auto;\"><tbody><tr><td class=\"").write(mcls).write("-btn-l\"><i>&nbsp;</i></td>");
 			String imagesrc;
 			if (self.getImageContent() != null)
 				imagesrc = "background-image:url(" + self.getContentSrc() + ")";
@@ -71,11 +71,11 @@ public class Menuitem2Default implements ComponentRenderer {
 					imagesrc = "background-image:url(" + exec.encodeURL(src) + ")";
 				else imagesrc = "";
 			}
-			wh.write("<td class=\"z-btn-m\"><em unselectable=\"on\"><button id=\"")
-				.write(uuid).write("!b\" type=\"button\" class=\"z-btn-text\" style=\"")
+			wh.write("<td class=\"").write(mcls).write("-btn-m\"><em unselectable=\"on\"><button id=\"")
+				.write(uuid).write("!b\" type=\"button\" class=\"").write(mcls).write("-btn-text\" style=\"")
 				.write(imagesrc).write("\">");
 			new Out(self.getLabel()).render(out);
-			wh.write("</button>").writeln("</em></td><td class=\"z-btn-r\"><i>&nbsp;</i></td></tr></tbody></table></a></td>");
+			wh.write("</button>").writeln("</em></td><td class=\"").write(mcls).write("-btn-r\"><i>&nbsp;</i></td></tr></tbody></table></a></td>");
 		} else {
 			wh.write("<li id=\"").write(uuid).write("\" z.type=\"Menuit2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
@@ -86,15 +86,14 @@ public class Menuitem2Default implements ComponentRenderer {
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" class=\"");
-			if (((Menupopup)self.getParent()).isCheckmark()) {
+			if (!self.isImageAssigned() && ((Menupopup)self.getParent()).isCheckmark()) {
 				if (self.isChecked()) 
-					wh.write(sclass).write(" ").write(sclass).write("-ck");
+					wh.write(mcls).write("-content ").write(mcls).write("-content-ck");
 				else 
-					wh.write(sclass).write(" ").write(sclass).write("-unck");
+					wh.write(mcls).write("-content ").write(mcls).write("-content-unck");
 			} else
-				wh.write(sclass).write("");
-			if (self.isDisabled())
-				wh.write(" z-item-disd");
+				wh.write(mcls).write("-content");
+			
 			wh.write("\">").write(self.getImgTag());
 			
 			new Out(self.getLabel()).render(out);

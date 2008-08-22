@@ -22,55 +22,62 @@ option {
 </c:otherwise>
 </c:choose>
 
-.messagebox-btn {
+.z-messagebox-btn {
 	width: 47pt;
 	text-overflow: ellipsis;
 }
-.z-form-disd * {
+<%-- Widget.css.dsp --%>
+.z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
 	filter: alpha(opacity=60);
 }
+
+<%-- tree.css.dsp, listbox.css.dsp, and grid.css.dsp --%>
 <c:if test="${c:isExplorer() && !c:isExplorer7()}">
-div.listbox, div.tree, div.grid {
+div.z-listbox, div.z-tree, div.z-dottree, div.z-grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
 </c:if>
-div.tree-head, div.listbox-head, div.grid-head, div.tree-foot, div.listbox-foot,
-	div.grid-foot {<%-- always used. --%>
+div.z-tree-header, div.z-listbox-header, div.z-grid-header, div.z-tree-footer, div.z-listbox-footer,
+	div.z-grid-footer {<%-- always used. --%>
 	position:relative;
 	<%-- Bug 1712708 and 1926094:  we have to specify position:relative --%>
 }
-div.tree-head th, div.listbox-head th, div.grid-head th {
+div.z-tree-header th, div.z-listbox-header th, div.z-grid-header th {
 	text-overflow: ellipsis;
 }
-div.head-cell-inner {
+div.z-tree-col-content, div.z-list-header-content, div.z-column-content, .z-auxheader-content {
 	white-space: nowrap;
 	<%-- Bug #1839960  --%>
 }
-div.foot-cell-inner, div.cell-inner, div.head-cell-inner {
+div.z-footer-content, div.z-row-content, div.z-group-content, div.z-group-foot-content, div.z-column-content,
+div.z-tree-footer-content, div.z-tree-cell-content, div.z-tree-col-content, .z-auxheader-content,
+div.z-list-footer-content, div.z-list-cell-content, div.z-list-header-content {
 	position: relative;
 	<%-- Bug #1825896  --%>
 }
-div.cell-inner {
+div.z-row-content, div.z-group-content, div.z-group-foot-content, div.z-tree-cell-content, div.z-list-cell-content {
 	width: 100%;
 }
-div.tree-body, div.listbox-body, div.grid-body {<%-- always used. --%>
+div.z-tree-body, div.z-dottree-body, div.z-listbox-body, div.z-grid-body {<%-- always used. --%>
 	position: relative;
 	<%-- Bug 1766244: we have to specify position:relative with overflow:auto --%>
 }
-tr.grid-fake, tr.listbox-fake, tr.tree-fake { 
+tr.z-grid-faker, tr.z-listbox-faker, tr.z-tree-faker, tr.z-dottree-faker { 
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%> 
 }
-.comboboxpp td span {<%--description--%>
+span.z-tree-root-open, span.z-tree-root-close, span.z-tree-tee-open, span.z-tree-tee-close, 
+span.z-tree-last-open, span.z-tree-last-close, span.z-tree-tee, span.z-tree-vbar, span.z-tree-last, span.z-tree-spacer,
+span.z-dottree-root-open, span.z-dottree-root-close, span.z-dottree-tee-open, span.z-dottree-tee-close, 
+span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-dottree-vbar, span.z-dottree-last, span.z-dottree-spacer {
+	height: 18px;
+}
+
+<%-- combo.css.dsp --%>
+.z-combobox-pp td span {<%--description--%>
 	padding-left: 5px;
 }
-table.calyear td {
+.z-calendar-calyear td, .z-datebox-calyear td {
 	color: black; <%-- 1735084 --%>
-}
-span.tree-root-open, span.tree-root-close, span.tree-tee-open, span.tree-tee-close, 
-span.tree-last-open, span.tree-last-close, span.tree-tee, span.tree-vbar, span.tree-last, span.tree-spacer,
-span.dottree-root-open, span.dottree-root-close, span.dottree-tee-open, span.dottree-tee-close, 
-span.dottree-last-open, span.dottree-last-close, span.dottree-tee, span.dottree-vbar, span.dottree-last, span.dottree-spacer {
-	height: 18px;
 }
 
 <%-- Append New --%>

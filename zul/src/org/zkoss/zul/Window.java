@@ -18,15 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.LinkedHashSet;
 
-import org.zkoss.mesg.MCommon;
-import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
@@ -48,7 +41,6 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A generic window.
@@ -69,8 +61,7 @@ import org.zkoss.zul.impl.Utils;
  * non-deferrable event listener is registered
  * (see {@link org.zkoss.zk.ui.event.Deferrable}).
  * 
- * <p><code>onMaximize</code> and <code>onMinimize</code> are only applied when 
- * {@link #getMold()} is not "v30". (since 3.5.0)
+ * <p><code>onMaximize</code> and <code>onMinimize</code> are supported. (since 3.5.0)
  *
  * <p><code>onClose</code> is sent when the close button is pressed
  * (if {@link #isClosable} is true). The window has to detach or hide
@@ -83,6 +74,8 @@ import org.zkoss.zul.impl.Utils;
  * (such as press ESC). This event is only a notification.
  * In other words, the popup is hidden before the event is sent to the server.
  * The application cannot prevent the window from being hidden.
+ * 
+ * <p>Default {@link #getMoldSclass}: z-window-{@link #getMode()}.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -152,7 +145,6 @@ public class Window extends XulElement implements IdSpace {
 
 	public Window() {
 		init();
-		Utils.updateMoldByTheme(this);
 	}
 	/**
 	 * @param title the window title (see {@link #setTitle}).
@@ -185,8 +177,7 @@ public class Window extends XulElement implements IdSpace {
 	 * sizing phase not initial phase.
 	 * 
 	 * <p>Default: false.
-	 * <p>Note: this method only applied when {@link #isMaximizable} is true. 
-	 * 	And it is only applied when  {@link #getMold()} is not "v30".
+	 * <p>Note: this method only applied when {@link #isMaximizable} is true.
 	 * @since 3.5.0
 	 */
 	public void setMaximized(boolean maximized) {
@@ -212,8 +203,7 @@ public class Window extends XulElement implements IdSpace {
      * that will restore the window to its previous size.
      * <p>Default: false.
      * 
-	 * <p>Note: the maximize button won't be displayed if no title or caption at all. 
-	 * 	And it is only applied when {@link #getMold()} is not "v30".
+	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 	 * @since 3.5.0
 	 */
 	public void setMaximizable(boolean maximizable) {
@@ -234,7 +224,6 @@ public class Window extends XulElement implements IdSpace {
 	/**
 	 * Sets whether the window is minimized.
 	 * <p>Default: false.
-	 * <p>Note: it is only applied when {@link #getMold()} is not "v30".
 	 * @since 3.5.0
 	 */
 	public void setMinimized(boolean minimized) {
@@ -262,7 +251,6 @@ public class Window extends XulElement implements IdSpace {
      * 
      * <p>Default: false. 
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
-	 * And it is only applied when {@link #getMold()} is not "v30".
 	 * @see MinimizeEvent
 	 * @since 3.5.0
 	 */
@@ -381,7 +369,7 @@ public class Window extends XulElement implements IdSpace {
 			border = "none";
 		if (!Objects.equals(_border, border)) {
 			_border = border;
-			smartUpdate("z.cntScls", getContentSclass());
+			invalidate();
 		}
 	}
 
@@ -734,32 +722,10 @@ public class Window extends XulElement implements IdSpace {
 
 	/** Returns the style class used for the content block.
 	 *
-	 * <p>If {@link #setContentSclass} was called with a non-empty value,
-	 * say, "mycnt", then
-	 * <ol>
-	 * <li>Case 1: If {@link #getBorder} is "normal", "mycnt" is returned.</li>
-	 * <li>Case 2: Otherwise, "mycnt-<i>border</i>" is returned
-	 * where <i>border</i> is the value returned by {@link #getBorder}.</li>
-	 * </ol>
-	 *
-	 * <p>If {@link #setContentSclass} was not called, or called with null,
-	 * then the content style class is decided by {@link #getSclass} as follows:
-	 * <ol>
-	 * <li>Case 1: If {@link #getBorder} is "normal", "wc-<i>sclass</i>" is
-	 * returned, where <i>sclass</i> is the value returned by {@link #getSclass}.</li>
-	 * <li>Otherwise, "wc-<i>mode</i>-<i>border</i>",
-	 * where <i>border</i> is the value returned by {@link #getBorder}.</li>
-	 * </li>
 	 * @see #setContentSclass
 	 */
 	public String getContentSclass() {
-		String cntscls = _cntscls;
-		if (cntscls == null) {
-			cntscls = getSclass();
-			cntscls = cntscls != null ? "wc-" + cntscls: "wc";
-		}
-		final String border = getBorder();
-		return "normal".equals(border) ? cntscls: cntscls + '-' + border;
+		return _cntscls;
 	}
 	/** Sets the style class used for the content block.
 	 *
@@ -769,7 +735,7 @@ public class Window extends XulElement implements IdSpace {
 	public void setContentSclass(String scls) {
 		if (!Objects.equals(_cntscls, scls)) {
 			_cntscls = scls;
-			smartUpdate("z.cntScls", getContentSclass());
+			invalidate();
 		}
 	}
 
@@ -777,28 +743,15 @@ public class Window extends XulElement implements IdSpace {
 	 *
 	 * <p>It returns "wt-<i>sclass</i>" is returned,
 	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
+	 * @deprecated As of release 3.5.0
 	 */
 	public String getTitleSclass() {
-		return "wt-" + getSclass();
+		return null;
 	}
-
-	//-- super --//
-	/** Returns the style class.
-	 * If the style class is not defined ({@link #setSclass} is not called
-	 * or called with null or empty), it returns {@link #getMode}.
-	 * In other words, the style class is, by default, the same as
-	 * the mode name.
-	 */
-	public String getSclass() {
-		final String scls = super.getSclass();
-		return scls != null ? scls: getMode();
-	}
-	public void setSclass(String sclass) {
-		if (sclass != null && sclass.length() == 0) sclass = null;
-		if (!Objects.equals(super.getSclass(), sclass)) {
-			super.setSclass(sclass);
-			invalidate();
-		}
+	
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-window-" + getMode() : super.getMoldSclass();
 	}
 
 	//-- Component --//

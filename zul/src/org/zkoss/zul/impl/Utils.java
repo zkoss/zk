@@ -169,30 +169,4 @@ public class Utils {
 		}
 		return desktop.getDynamicMediaURI(comp, sb.toString()); //already encoded
 	}
-
-	/**
-	 * Sets the mold of the specified component whether to use the theme of ZK 3.0.
-	 * @since 3.5.0
-	 */
-	public static final void updateMoldByTheme(Component cmp) {
-		if (!Utils.isThemeV30()) {
-			final String s = Library.getProperty("org.zkoss.zul.theme.v30."+cmp.getClass());
-			if (s == null || "false".equals(s)) return;
-		}
-		cmp.setMold("v30");
-	}
-	/** Returns whether to use the theme of ZK 3.0.
-	 * If true, {@link org.zkoss.zul.Window} and others will use "v30"
-	 * as the default mold ({@link org.zkoss.zk.ui.Component#getMold}).
-	 *
-	 * @since 3.5.0
-	 */
-	public static final boolean isThemeV30() {
-		return _v30theme;
-	}
-	private static final boolean _v30theme;
-	static {
-		final String s = Library.getProperty("org.zkoss.zul.theme.v30");
-		_v30theme = s != null && !"false".equals(s);
-	}
 }

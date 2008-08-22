@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * A vbox.
+ * <p>Default {@link #getMoldSclass}: z-vbox.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -35,5 +36,10 @@ public class Vbox extends Box {
 	 */
 	public Vbox(Component[] children) {
 		super(children);
+	}
+
+	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-vbox" : super.getMoldSclass();
 	}
 }

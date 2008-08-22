@@ -33,6 +33,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * <p>Unlike {@link Listheader}, you could place any child in a list footer.
  * <p>Note: {@link Listcell} also accepts children.
+ * <p>Default {@link #getMoldSclass}: z-list-footer.(since 3.5.0)
  * 
  * @author tomyeh
  */
@@ -116,6 +117,9 @@ public class Listfooter extends LabelImageElement {
 	}
 
 	//-- Component --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-list-footer" : super.getMoldSclass();
+	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listfoot))
 			throw new UiException("Wrong parent: "+parent);

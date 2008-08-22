@@ -16,15 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.mesg.Messages;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.au.Command;
 import org.zkoss.zk.ui.event.Events;
 
-import org.zkoss.zul.mesg.MZul;
-import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
@@ -54,7 +50,6 @@ public class Paging extends XulElement implements Paginal {
 	private boolean _detailed;
 
 	public Paging() {
-		setMoldSclass("z-paging");
 	}
 
 	/** Contructor.
@@ -210,7 +205,11 @@ public class Paging extends XulElement implements Paginal {
 			.append(" / ").append(_ttsz).append(" ]</div>");
 		return sb.toString();
 	}
-	
+
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ?  "z-paging" : super.getMoldSclass();
+	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super
 				.getOuterAttrs());

@@ -22,16 +22,14 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.LabelImageElement;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A button.
- *
+ * <p>Default {@link #getMoldSclass}: z-button.(since 3.5.0)
  * @author tomyeh
  */
 public class Button extends LabelImageElement {
@@ -42,8 +40,6 @@ public class Button extends LabelImageElement {
 	private boolean _readonly;
 
 	public Button() {
-		Utils.updateMoldByTheme(this);
-		setMoldSclass("z-btn");
 	}
 	public Button(String label) {
 		this();
@@ -65,7 +61,7 @@ public class Button extends LabelImageElement {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			smartUpdate("disabled", _disabled);
+			invalidate();
 		}
 	}
 
@@ -190,12 +186,21 @@ public class Button extends LabelImageElement {
 	}
 
 	//-- super --//
+	protected String getRealSclass() {
+		final String scls = super.getRealSclass();
+		final String added = isDisabled() ? getMoldSclass() + "-disd" : "";
+		return scls == null ? added : scls + " " + added;
+	}
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-button" : super.getMoldSclass();
+	}
+	
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.mold", getMold());
 		HTMLs.appendAttribute(sb, "z.href", getEncodedHref());
 		HTMLs.appendAttribute(sb, "z.target", getTarget());
+		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
 
 		appendAsapAttr(sb, Events.ON_FOCUS);
 		appendAsapAttr(sb, Events.ON_BLUR);
@@ -203,8 +208,6 @@ public class Button extends LabelImageElement {
 		appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
 			//no z.lfclk since it is handled by widget.js
 
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "disabled",  "disabled");
 		if (_tabindex >= 0)
 			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		return sb.toString();

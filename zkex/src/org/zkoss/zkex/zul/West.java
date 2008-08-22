@@ -19,8 +19,8 @@
 package org.zkoss.zkex.zul;
 
 /**
- * This component is a west region. The default class of CSS is specified
- * "layout-region-west".
+ * This component is a west region.
+ * <p>Default {@link #getMoldSclass}: z-west.(since 3.5.0)
  * 
  * <p>Default: {@link #getCmargins()} is "0,5,5,0" (since 3.5.0)</p>
  * @author jumperchen
@@ -28,7 +28,6 @@ package org.zkoss.zkex.zul;
  */
 public class West extends LayoutRegion {
 	public West() {
-		addSclass("layout-region-west");
 		setCmargins("0,5,5,0");
 	}
 
@@ -38,7 +37,6 @@ public class West extends LayoutRegion {
 	public String getPosition() {
 		return Borderlayout.WEST;
 	}
-
 	/**
 	 * The height can't be specified in this component because its height is
 	 * determined by other region components ({@link North} or {@link South}).
@@ -54,7 +52,6 @@ public class West extends LayoutRegion {
 	public String getSize() {
 		return getWidth();
 	}
-
 	/**
 	 * Sets the size of this region. This method is shortcut for
 	 * {@link #setWidth(String)}.

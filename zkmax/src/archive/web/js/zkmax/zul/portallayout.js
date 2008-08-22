@@ -104,7 +104,7 @@ zkPortalLayout = {
 		s.marginLeft = cs.marginLeft;
 		s.marginRight = cs.marginRight;
 		s.marginBottom = cs.marginBottom;
-		zk.addClass(proxy, "move-panel-block");
+		zk.addClass(proxy, "z-panel-move-block");
 		
 		s.height = zk.revisedSize(proxy, cmp.offsetHeight, true) + "px";
 		
@@ -119,7 +119,7 @@ zkPortalLayout = {
 		if (ghosting) {
 			var ofs = zkau.beginGhostToDIV(dg), title = zk.firstChild(dg.element, "DIV"),
 				fakeT = title.cloneNode(true);
-			var html = '<div id="zk_ddghost" class="move-panel-ghost" style="position:absolute;top:'
+			var html = '<div id="zk_ddghost" class="z-panel-move-ghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 				+'px;z-index:'+dg.element.style.zIndex+'"><ul></ul></div></div>';

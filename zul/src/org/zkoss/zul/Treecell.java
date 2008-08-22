@@ -35,7 +35,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>In XUL, treecell cannot have any child, but ZUL allows it.
  * Thus, you could place any kind of children in it. They will be placed
  * right after the image and label.
- *
+ * 
+ * <p>Default {@link #getMoldSclass}: z-tree-cell.(since 3.5.0)
  * @author tomyeh
  */
 public class Treecell extends LabelImageElement {
@@ -174,7 +175,7 @@ public class Treecell extends LabelImageElement {
 			}
 			String iconScls = null;
 			if (tree != null)
-				iconScls = tree.getIconSclass();
+				iconScls = tree.getMoldSclass();
 			if (iconScls == null)
 				iconScls = ""; //default
 
@@ -248,13 +249,16 @@ public class Treecell extends LabelImageElement {
 		return parent != null ? (Treeitem)parent.getParent(): null;
 	}
 
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-tree-cell" : super.getMoldSclass();
+	} 
 	/** Generates HTML tags for &lt;img&gt;.
 	 * @param button whether this is the button to toggle open/close
 	 */
-	private void appendIcon(StringBuffer sb, String sclass,
+	private void appendIcon(StringBuffer sb, String mcls,
 	String name, boolean button) {
 		sb.append("<span z.fc=\"t\" class=\"")
-			.append(sclass).append('-').append(name).append('"');
+			.append(mcls).append('-').append(name).append('"');
 			//z.fc used to let tree.js know what to clone
 
 		if (button) {

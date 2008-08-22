@@ -18,7 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.WrongValueException;
@@ -29,7 +28,7 @@ import org.zkoss.zul.impl.InputElement;
  * A textbox.
  *
  * <p>See <a href="package-summary.html">Specification</a>.</p>
- *
+ * <p>Default {@link #getMoldSclass}: z-textbox.(since 3.5.0)
  * @author tomyeh
  */
 public class Textbox extends InputElement {
@@ -134,6 +133,9 @@ public class Textbox extends InputElement {
 	}
 
 	//-- super --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-textbox" : super.getMoldSclass();
+	}
 	public String getInnerAttrs() {
 		final String attrs = super.getInnerAttrs();
 		if (!_multiline) return attrs;

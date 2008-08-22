@@ -73,9 +73,6 @@ public class Panel extends XulElement {
 		_maximizable, _minimizable, _maximized, _minimized;
 	private boolean  _open = true;
 
-	public Panel() {
-		setMoldSclass("z-panel");
-	}
 	/**
 	 * Returns whether this Panel is open.
 	 * <p>Default: true.
@@ -373,23 +370,6 @@ public class Panel extends XulElement {
 	public void onClose() {
 		detach();
 	}
-	protected String getRealStyle() {
-		return super.getRealStyle() + (isVisible() && isMinimized() ? "display:none;" : "");
-	}
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		return scls + ("normal".equals(_border) ? "" : ' ' + scls + '-' + _border)
-			+ (_open ? "" : " " + getMoldSclass() + "-collapsed");
-	}
-
-	/** Returns the style class used for the title.
-	 *
-	 * <p>It returns "<i>moldSclass</i>-t" is returned,
-	 * where <i>moldSclass</i> is the value returned by {@link #getMoldSclass}.
-	 */
-	public String getTitleSclass() {
-		return getMoldSclass() + "-t";
-	}
 	
 	/**
 	 * Returns the top toolbar of this panel.
@@ -418,6 +398,20 @@ public class Panel extends XulElement {
 	public Panelchildren getPanelchildren() {
 		return _panelchildren;
 	}
+
+	// super
+	protected String getRealStyle() {
+		return super.getRealStyle() + (isVisible() && isMinimized() ? "display:none;" : "");
+	}
+	protected String getRealSclass() {
+		final String scls = super.getRealSclass();
+		final String mcls = getMoldSclass();
+		return scls + ("normal".equals(_border) ? "" : ' ' + mcls + "-noborder")
+			+ (_open ? "" : " " + mcls + "-collapsed");
+	}
+	public String getMoldSclass() {
+		return _moldSclass == null ?  "z-panel" : super.getMoldSclass();
+	}	
 	public String getOuterAttrs() {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());

@@ -4,16 +4,15 @@
 .z-portal-layout {
 	visibility: hidden; overflow: hidden; zoom: 1;
 }
-
 .z-portal-children {
     float: left; padding: 0; margin: 0; overflow: hidden; zoom: 1;
 }
 
-.z-portal-children-body {
+.z-portal-children-content {
     overflow: hidden;
 }
 
-.z-portal-children-bwrap {
+.z-portal-children-body {
     overflow: hidden; zoom: 1;
 }
 .z-portal-layout-inner {

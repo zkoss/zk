@@ -18,23 +18,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * Used to create a separator between menu items.
  *
- *<p>Default {@link #getMoldSclass}: z-menu-sp. (since 3.5.0)
+ *<p>Default {@link #getMoldSclass}: z-menu-separator. (since 3.5.0)
  * 
  * @author tomyeh
  */
 public class Menuseparator extends XulElement {
-	public Menuseparator() {
-		Utils.updateMoldByTheme(this);
-		setMoldSclass("z-menu-sp");
-	}
 
 	//-- Component --//
+	public String getMoldSclass() {
+		return _moldSclass == null ? "z-menu-separator" : super.getMoldSclass();
+	}
 	/** Not childable. */
 	public boolean isChildable() {
 		return false;

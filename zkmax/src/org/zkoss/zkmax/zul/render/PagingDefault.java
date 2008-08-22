@@ -37,37 +37,52 @@ public class PagingDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Paging self = (Paging) comp;
-		final String sclass = self.getMoldSclass();
-		wh.write("<div id=\"").write(self.getUuid()).write("\" name=\"")
-			.write(self.getUuid()).write("\" z.type=\"zul.pg.Pg\"");
+		final String mcls = self.getMoldSclass();
+		final String uuid = self.getUuid();
+		wh.write("<div id=\"").write(uuid).write("\" name=\"")
+			.write(uuid).write("\" z.type=\"zul.pg.Pg\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		
 		wh.write("<table cellspacing=\"0\"><tbody><tr>");
-		wh.write("<td><table id=\"").write(self.getUuid()+"!tb_f")
-			.write("\" name=\"").write(self.getUuid()+"!tb_f")
-			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn z-btn-icon\" style=\"width: auto;\"><tbody><tr><td class=\"z-btn-l\"><i>&#160;</i></td><td class=\"z-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"z-btn-text ")
-			.write(sclass).write("-first\"> </button></em></td><td class=\"z-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
-		wh.write("<td><table id=\"").write(self.getUuid()+"!tb_p")
-			.write("\" name=\"").write(self.getUuid()+"!tb_p")
-			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn z-btn-icon\" style=\"width: auto;\"><tbody><tr><td class=\"z-btn-l\"><i>&#160;</i></td><td class=\"z-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"z-btn-text ")
-			.write(sclass).write("-prev\"> </button></em></td><td class=\"z-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
-		wh.write("<td><span class=\"").write(sclass).write("-sep\"/></td>");
-		wh.write("<td><span class=\"").write(sclass).write("-text\"></span></td>");
-		wh.write("<td><input type=\"text\" class=\"").write(sclass).write("-number\" value=\"")
-			.write(self.getActivePage() + 1).write("\" size=\"3\" id=\"").write(self.getUuid() + "!real")
-			.write("\" name=\"").write(self.getUuid() + "!real")
-			.write("\" style=\"height: 14px;\"/></td>");
-		wh.write("<td><span class=\"").write(sclass).write("-text\">/ ").write(self.getPageCount())
+		wh.write("<td><table id=\"").write(uuid+"!tb_f")
+			.write("\" name=\"").write(uuid+"!tb_f")
+			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"")
+			.write(mcls).write("-btn\"><tbody><tr><td class=\"").write(mcls)
+			.write("-btn-l\"><i>&#160;</i></td><td class=\"").write(mcls)
+			.write("-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"")
+			.write(mcls).write("-first\"> </button></em></td><td class=\"").write(mcls).write("-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
+		wh.write("<td><table id=\"").write(uuid+"!tb_p")
+			.write("\" name=\"").write(uuid+"!tb_p")
+			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"").write(mcls)
+			.write("-btn\"><tbody><tr><td class=\"").write(mcls).write("-btn-l\"><i>&#160;</i></td><td class=\"")
+			.write(mcls).write("-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"")
+			.write(mcls).write("-prev\"> </button></em></td><td class=\"").write(mcls)
+			.write("-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
+		wh.write("<td><span class=\"").write(mcls).write("-sep\"/></td>");
+		wh.write("<td><span class=\"").write(mcls).write("-text\"></span></td>");
+		wh.write("<td><input type=\"text\" class=\"").write(mcls).write("-inp\" value=\"")
+			.write(self.getActivePage() + 1).write("\" size=\"3\" id=\"").write(uuid + "!real")
+			.write("\" name=\"").write(uuid + "!real")
+			.write("\"/></td>");
+		wh.write("<td><span class=\"").write(mcls).write("-text\">/ ").write(self.getPageCount())
 			.write("</span></td>");
-		wh.write("<td><span class=\"").write(sclass).write("-sep\"/></td>");
-		wh.write("<td><table id=\"").write(self.getUuid()+"!tb_n")
-			.write("\" name=\"").write(self.getUuid()+"!tb_n")
-			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn z-btn-icon\" style=\"width: auto;\"><tbody><tr><td class=\"z-btn-l\"><i>&#160;</i></td><td class=\"z-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"z-btn-text ")
-			.write(sclass).write("-next\"> </button></em></td><td class=\"z-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
-		wh.write("<td><table id=\"").write(self.getUuid()+"!tb_l")
-			.write("\" name=\"").write(self.getUuid()+"!tb_l")
-			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"z-btn z-btn-icon\" style=\"width: auto;\"><tbody><tr><td class=\"z-btn-l\"><i>&#160;</i></td><td class=\"z-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"z-btn-text ")
-			.write(sclass).write("-last\"> </button></em></td><td class=\"z-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
+		wh.write("<td><span class=\"").write(mcls).write("-sep\"/></td>");
+		wh.write("<td><table id=\"").write(uuid+"!tb_n")
+			.write("\" name=\"").write(uuid+"!tb_n")
+			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"")
+			.write(mcls).write("-btn\"><tbody><tr><td class=\"").write(mcls)
+			.write("-btn-l\"><i>&#160;</i></td><td class=\"").write(mcls)
+			.write("-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"")
+			.write(mcls).write("-next\"> </button></em></td><td class=\"").write(mcls)
+			.write("-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
+		wh.write("<td><table id=\"").write(uuid+"!tb_l")
+			.write("\" name=\"").write(uuid+"!tb_l")
+			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"")
+			.write(mcls).write("-btn\"><tbody><tr><td class=\"").write(mcls)
+			.write("-btn-l\"><i>&#160;</i></td><td class=\"").write(mcls)
+			.write("-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"")
+			.write(mcls).write("-last\"> </button></em></td><td class=\"").write(mcls)
+			.write("-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
 		wh.write("</tr></tbody></table>");
 		
 		if (self.isDetailed())

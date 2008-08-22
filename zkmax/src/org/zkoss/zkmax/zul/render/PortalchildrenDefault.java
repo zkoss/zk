@@ -35,12 +35,12 @@ public class PortalchildrenDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Portalchildren self = (Portalchildren) comp;
-		final String sclass = self.getMoldSclass();
+		final String mcls = self.getMoldSclass();
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zkmax.zul.portallayout.PortalChildren\"").write(
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<div class=\"").write(sclass).write("-bwrap\">");
-		wh.write("<div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(sclass)
-			.write("-body\">");
+		wh.write("<div class=\"").write(mcls).write("-body\">");
+		wh.write("<div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(mcls)
+			.write("-content\">");
 		wh.writeChildren(self);
 		wh.write("</div></div></div>");
 	}

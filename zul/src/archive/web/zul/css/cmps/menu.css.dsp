@@ -1,0 +1,241 @@
+<%@ page contentType="text/css;charset=UTF-8" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+
+<c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
+<c:set var="fontSizeMS" value="11px" scope="request" if="${empty fontSizeMS}"/>
+<c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
+<c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
+
+<%-- Menu and Menuitem --%>
+.z-menu-btn, .z-menu-item-btn {
+	font: normal tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap; font-size: ${fontSizeMS};
+}
+.z-menu-btn button, .z-menu-item-btn button {
+	border: 0 none; background: transparent; font-family: tahoma, verdana, helvetica; font-size: ${fontSizeMS};
+	padding-left: 3px; padding-right: 3px; cursor: pointer; margin: 0; overflow: visible;
+	width: auto; -moz-outline: 0 none; outline: 0 none; min-height: 13px;
+}
+<c:if test="${c:isExplorer()}">
+<%-- IE only --%>
+.z-menu-btn button, .z-menu-item-btn button {
+	padding-top: 2px;
+}
+</c:if>
+<c:if test="${c:isGecko()}">
+<%-- Firefox only --%>
+.z-menu-btn button, .z-menu-item-btn button {
+	padding-left: 0; padding-right: 0;
+}
+</c:if>
+.z-menu-btn-img .z-menu-btn-m .z-menu-btn-text,
+.z-menu-item-btn-img .z-menu-item-btn-m .z-menu-item-btn-text {
+	background-position: center; background-repeat: no-repeat; height: 16px; width: 16px;
+	cursor: pointer; white-space: nowrap; padding: 0;
+}
+.z-menu-btn-img .z-menu-btn-m,
+.z-menu-item-btn-img .z-menu-item-btn-m {
+	padding: 1px;
+}
+.z-menu-btn em, .z-menu-item-btn em {
+	font-style: normal; font-weight: normal;
+}
+.z-menu-btn-text-img .z-menu-btn-m .z-menu-btn-text,
+.z-menu-item-btn-text-img .z-menu-item-btn-m .z-menu-item-btn-text {
+	background-position: 0 2px; background-repeat: no-repeat; padding-left: 18px;
+	padding-top: 3px; padding-bottom: 2px; padding-right:0;
+}
+.z-menu-btn-l, .z-menu-btn-r,
+.z-menu-item-btn-l, .z-menu-item-btn-r {
+	font-size: 1px; line-height: 1px;
+	width: 3px; height: 21px;
+}
+.z-menu-btn-l i,.z-menu-btn-r i, .z-menu-btn-ml i, .z-menu-btn-mr i,
+.z-menu-item-btn-l i,.z-menu-item-btn-r i, .z-menu-item-btn-ml i, .z-menu-item-btn-mr i {
+	display: block; width: 3px; overflow: hidden; font-size: 1px; line-height: 1px;
+}
+.z-menu-btn-m, .z-menu-item-btn-m {
+	text-align: center; cursor: pointer;
+}
+.z-menu-btn-over .z-menu-btn-l, .z-menu-item-btn-over .z-menu-item-btn-l {
+	background-position: 0 -63px;
+}
+.z-menu-btn-over .z-menu-btn-r, .z-menu-item-btn-over .z-menu-item-btn-r {
+	background-position: 0 -84px;
+}
+.z-menu-btn-over .z-menu-btn-m, .z-menu-item-btn-over .z-menu-item-btn-m {
+	background-position: 0 -105px;
+}
+.z-menu-disd *, .z-menu-item-disd * {
+	color: gray!important; cursor: default!important;
+}
+.z-menu-btn-click .z-menu-btn-m, .z-menu-btn-seld .z-menu-btn-m,
+.z-menu-item-btn-click .z-menu-item-btn-m, .z-menu-item-btn-seld .z-menu-item-btn-m {
+	background-position: 0 -126px;
+}
+.z-menu-btn .z-menu-btn-m,
+.z-menu-item-btn .z-menu-item-btn-m {
+	padding-right: 2px!important;
+}
+.z-menu-btn .z-menu-btn-m em,
+.z-menu-item-btn .z-menu-item-btn-m em {
+	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')}) no-repeat right 0;
+	padding-right: 10px; min-height: 16px;
+}
+.z-menu-btn-text-img .z-menu-btn-m em,
+.z-menu-item-btn-text-img .z-menu-item-btn-m em {
+	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')}) no-repeat right 3px;
+	padding-right: 10px;
+}
+.z-menu-content-img {
+	background: transparent url(${c:encodeURL('~./zul/img/menu2/arrow.gif')}) no-repeat right;
+}
+.z-menu-content, .z-menu-item-content {
+	text-decoration: none; white-space: nowrap;
+	font-family: tahoma, arial, sans-serif; font-size: ${fontSizeMS};
+}
+.z-menu-popup-content .z-menu-item-over, .z-menu-popup-content .z-menu-over {
+	background: #DDEEFB url(${c:encodeURL('~./zul/img/menu2/item-over.gif')}) repeat-x 0 0;
+	border: 1px solid #A8D8EB; padding: 0;
+}
+.z-menu-item-over .z-menu-content, .z-menu-over .z-menu-item-content {
+	color:#233d6d;
+}
+.z-menu-item-img, .z-menu-img {
+	border: 0 none; height: 16px; padding: 0; vertical-align: top; width: 16px;
+	margin: 0 8px 0 0; background-position: center;
+}
+.z-menu-item-content-ck .z-menu-item-img {
+	background: transparent url(${c:encodeURL('~./zul/img/menu/checked.gif')}) no-repeat center;
+}
+.z-menu-item-content-unck .z-menu-item-img {
+	background: transparent url(${c:encodeURL('~./zul/img/menu/unchecked.gif')}) no-repeat center;
+}
+<%-- Menubar --%>
+.z-menubar-hor, .z-menubar-ver  {
+	border-color: #a9bfd3; border-style: solid; border-width: 0 0 1px 0; display: block;
+	padding: 2px; background: #D0DEF0 url(${c:encodeURL('~./zul/img/button/tb-bg.gif')}) repeat-x top left;
+	position: relative; zoom: 1;
+}
+.z-menubar-hor .z-menu-item-disd .z-menu-btn-img,
+.z-menubar-ver .z-menu-item-disd .z-menu-btn-img,
+.z-menu-popup .z-menu-item-disd .z-menu-btn-img {
+	opacity: .35; -moz-opacity: .35; filter: alpha(opacity=35);
+}
+.z-menubar-hor td, .z-menubar-ver td {
+	vertical-align: middle;
+}
+.z-menubar-hor .z-menu-btn td, .z-menubar-ver .z-menu-btn td,
+.z-menubar-hor .z-menu-item-btn td, .z-menubar-ver .z-menu-item-btn td {
+	border: 0 !important;
+}
+.z-menubar-hor td, .z-menubar-hor span, .z-menubar-hor input, .z-menubar-hor div, .z-menubar-hor select,
+	.z-menubar-hor label,
+.z-menubar-ver td, .z-menubar-ver span, .z-menubar-ver input, .z-menubar-ver div, .z-menubar-ver select,
+	.z-menubar-ver label {
+	white-space: nowrap; font: normal 11px tahoma, arial, helvetica, sans-serif;
+}
+.z-menubar-hor .z-menu-item-disd,
+.z-menubar-ver .z-menu-item-disd,
+.z-menu-popup .z-menu-item-disd {
+	color: gray !important; cursor: default !important; opacity: .5; -moz-opacity: .5; filter: alpha(opacity=50);
+}
+.z-menubar-hor .z-menu-item-disd *,
+.z-menubar-ver .z-menu-item-disd *,
+.z-menu-popup .z-menu-item-disd * {
+	color: gray !important; cursor: default !important;
+}
+.z-menubar-hor .z-menu-btn-l, .z-menubar-ver .z-menu-btn-l,
+.z-menubar-hor .z-menu-item-btn-l, .z-menubar-ver .z-menu-item-btn-l {
+	background: none;
+}
+.z-menubar-hor .z-menu-btn-r, .z-menubar-ver .z-menu-btn-r,
+.z-menubar-hor .z-menu-item-btn-r, .z-menubar-ver .z-menu-item-btn-r {
+	background: none;
+}
+.z-menubar-hor .z-menu-btn-m, .z-menubar-ver .z-menu-btn-m,
+.z-menubar-hor .z-menu-item-btn-m, .z-menubar-ver .z-menu-item-btn-m {
+	background: none; padding: 0;
+}
+.z-menubar-hor .z-menu-btn-over .z-menu-btn-l, .z-menubar-ver .z-menu-btn-over .z-menu-btn-l,
+.z-menubar-hor .z-menu-item-btn-over .z-menu-item-btn-l, .z-menubar-ver .z-menu-item-btn-over .z-menu-item-btn-l {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 0;
+}
+.z-menubar-hor .z-menu-btn-over .z-menu-btn-r, .z-menubar-ver .z-menu-btn-over .z-menu-btn-r,
+.z-menubar-hor .z-menu-item-btn-over .z-menu-item-btn-r, .z-menubar-ver .z-menu-item-btn-over .z-menu-item-btn-r {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -21px;
+}
+.z-menubar-hor .z-menu-btn-over .z-menu-btn-m, .z-menubar-ver .z-menu-btn-over .z-menu-btn-m,
+.z-menubar-hor .z-menu-item-btn-over .z-menu-item-btn-m, .z-menubar-ver .z-menu-item-btn-over .z-menu-item-btn-m {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) repeat-x 0 -42px;
+}
+.z-menubar-hor .z-menu-btn-click .z-menu-btn-l,	.z-menubar-hor .z-menu-btn-seld .z-menu-btn-l,
+.z-menubar-ver .z-menu-btn-click .z-menu-btn-l,	.z-menubar-ver .z-menu-btn-seld .z-menu-btn-l,
+.z-menubar-hor .z-menu-item-btn-click .z-menu-item-btn-l,	.z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-l,
+.z-menubar-ver .z-menu-item-btn-click .z-menu-item-btn-l,	.z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-l {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -63px;
+}
+.z-menubar-hor .z-menu-btn-click .z-menu-btn-r, .z-menubar-hor .z-menu-btn-seld .z-menu-btn-r,
+.z-menubar-ver .z-menu-btn-click .z-menu-btn-r, .z-menubar-ver .z-menu-btn-seld .z-menu-btn-r,
+.z-menubar-hor .z-menu-item-btn-click .z-menu-item-btn-r, .z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-r,
+.z-menubar-ver .z-menu-item-btn-click .z-menu-item-btn-r, .z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-r {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -84px;
+}
+.z-menubar-hor .z-menu-btn-click .z-menu-btn-m, .z-menubar-hor .z-menu-btn-seld .z-menu-btn-m,
+.z-menubar-ver .z-menu-btn-click .z-menu-btn-m, .z-menubar-ver .z-menu-btn-seld .z-menu-btn-m,
+.z-menubar-hor .z-menu-item-btn-click .z-menu-item-btn-m, .z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-m,
+.z-menubar-ver .z-menu-item-btn-click .z-menu-item-btn-m, .z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-m {
+	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) repeat-x 0 -105px;
+}
+.z-menubar-hor .z-menu-btn .z-menu-btn-m em, .z-menubar-ver .z-menu-btn .z-menu-btn-m em,
+.z-menubar-hor .z-menu-item-btn .z-menu-item-btn-m em, .z-menubar-ver .z-menu-item-btn .z-menu-item-btn-m em {
+	padding-right: 8px;
+}
+.z-menubar-ver .z-menu-btn .z-menu-btn-m em, .z-menubar-ver .z-menu-item-btn .z-menu-item-btn-m em {
+	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow-ver.gif')}) no-repeat right 0;
+	padding-right: 10px; min-height: 16px;
+}
+.z-menubar-ver .z-menu-btn-text-img .z-menu-btn-m em, 
+.z-menubar-ver .z-menu-item-btn-text-img .z-menu-item-btn-m em {
+	display: block; background: transparent url(${c:encodeURL('~./zul/img/button/tb-btn-arrow-ver.gif')}) no-repeat right 3px;
+	padding-right: 10px;
+}
+
+<%-- Menuseparator --%>
+.z-menu-popup .z-menu-separator {
+	font-size: 1px; line-height: 1px;
+}
+.z-menu-separator-inner {
+	display: block; font-size: 1px; line-height: 1px; margin: 2px 3px; background-color: #e0e0e0;
+	border-bottom: 1px solid #fff; overflow: hidden; width: auto;
+}
+
+<%-- Menupopup--%>
+.z-menu-popup {
+	border:	1px solid #7F9DB9;	z-index: 88000; zoom: 1; padding: 2px;
+	background: #F0F0F0 url(${c:encodeURL('~./zul/img/menu2/pp-bg.gif')}) repeat-y;
+}
+.z-menu-popup-content li {
+	text-decoration: none; font: normal 11px tahoma, arial, sans-serif; white-space: nowrap;
+	display: block; padding: 1px;
+}
+.z-menu-popup .z-menu-popup-content, .z-menu-popup li {
+	list-style: none !important; margin: 0 !important;
+	list-style-position: outside !important; list-style-type: none !important;
+	list-style-image: none !important;
+}
+.z-menu-popup .z-menu-popup-content {
+	padding: 0;
+}
+.z-menu-popup a {
+	text-decoration: none!important;
+}
+.z-menu-popup-content {
+	background: transparent; border: 0 none;
+}
+.z-menu-popup li {	
+	line-height:100%;
+}
+.z-menu-popup a.z-menu-content, .z-menu-popup a.z-menu-item-content {
+	display: block; line-height: 16px; padding: 3px 21px 3px 3px; white-space: nowrap;
+	text-decoration: none; color: #222; -moz-outline: 0 none; outline: 0 none; cursor: pointer;
+}

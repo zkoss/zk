@@ -23,7 +23,6 @@ zk.load("zul.zul"); //zul and msgzul
  * @since 3.5.0
  */
 zkWnd2 = {
-	cssKeywords: ["collapsed"],
 	ztype: "Wnd2",
 	_szs: {}, //Map(id, zDraggable)
 	_clean2: {}, //Map(id, mode): to be cleanup the modal effect
@@ -33,13 +32,13 @@ zkWnd2 = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.addClass(btn, zk.realClass(cmp, zkWnd2.cssKeywords) + "-close-over");
+		zk.addClass(btn, getZKAttr(cmp, "mcls") + "-close-over");
 	},
 	onCloseMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.rmClass(btn, zk.realClass(cmp, zkWnd2.cssKeywords) + "-close-over");
+		zk.rmClass(btn, getZKAttr(cmp, "mcls") + "-close-over");
 	},
 	onCloseClick: function (evt) {
 		if (!evt) evt = window.event;
@@ -50,19 +49,19 @@ zkWnd2 = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.addClass(btn, zk.realClass(cmp, zkWnd2.cssKeywords) + "-minimize-over");
+		zk.addClass(btn, getZKAttr(cmp, "mcls") + "-minimize-over");
 	},
 	onMinimizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.rmClass(btn, zk.realClass(cmp, zkWnd2.cssKeywords) + "-minimize-over");
+		zk.rmClass(btn, getZKAttr(cmp, "mcls") + "-minimize-over");
 	},
 	onMaximizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2"), 
-			cls = zk.realClass(cmp, zkWnd2.cssKeywords);
+			cls = getZKAttr(cmp, "mcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.addClass(btn, cls + "-maximized-over");
 		zk.addClass(btn, cls + "-maximize-over");
@@ -71,7 +70,7 @@ zkWnd2 = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2"), 
-			cls = zk.realClass(cmp, zkWnd2.cssKeywords);
+			cls = getZKAttr(cmp, "mcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.rmClass(btn, cls + "-maximized-over");
 		zk.rmClass(btn, cls + "-maximize-over");
@@ -142,7 +141,7 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 		var isRealVisible = zk.isRealVisible(cmp);
 		if (!isRealVisible && maximized) return;
 		
-		var l, t, w, h, s = cmp.style, cls = zk.realClass(cmp, zkWnd2.cssKeywords);
+		var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "mcls");
 		if (maximized) {
 			zk.addClass($e(cmp, "maximize"), cls + "-maximized");
 			zkWnd2.hideShadow(cmp);
@@ -242,7 +241,7 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 	zkWnd2.syncShadow(cmp);
 };
 zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
-	if (zkWnd2._embedded(cmp) || !zk.isRealVisible(cmp)) return;
+	if (zkWnd2._embedded(cmp) || zkWnd2._popup(cmp) || !zk.isRealVisible(cmp)) return;
 	var wdh = cmp.style.width;
 	var fir = zk.firstChild(cmp, "DIV"), last = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),
 		n = $e(cmp.id + "!cave").parentNode;
@@ -276,7 +275,7 @@ zkWnd2._fixHgh = function (cmp) {
 zkWnd2.getFrameHeight = function (cmp) {
 	var h = zk.getFrameHeight(cmp);
     h += zkWnd2.getTitleHeight(cmp);
-    if(!zkWnd2._embedded(cmp)) {
+    if(!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp)) {
         var n = $e(cmp.id + "!cave"), ft = zk.lastChild($e(cmp.id + "!bwrap"), "DIV"), title = $e(cmp.id + "!caption");
         h += ft.offsetHeight;
 		if (n)
@@ -292,7 +291,7 @@ zkWnd2.getFrameHeight = function (cmp) {
  */
 zkWnd2.getTitleHeight = function (cmp) {
 	var title = $e(cmp.id + "!caption"), top = 0;
-    if (!zkWnd2._embedded(cmp) && !title)
+    if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title)
 		top = zk.firstChild(cmp, "DIV").firstChild.firstChild.offsetHeight;
 	return title ? title.offsetHeight : top;
 };
@@ -346,6 +345,10 @@ zkWnd2.hideShadow = function (cmp) {
 zkWnd2._embedded = function (cmp) {
 	var v = getZKAttr(cmp, "mode");
 	return !v || v == "embedded";
+};
+zkWnd2._popup = function (cmp) {
+	var v = getZKAttr(cmp, "mode");
+	return !v || v == "popup";
 };
 // declare this function after zkWnd2.hideShadow is ready.
 zkWnd2.onHide = zkWnd2.hideShadow;
@@ -418,14 +421,6 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			zkWnd2.onSize(cmp); //border's dimension might be changed
 		}
 		return true;  //no need to store z.cntType
-	case "z.cntScls":
-		var n = $e(cmp.id + "!cave");
-		if (n) {
-			n.className = val != null ? val: "";
-			zkWnd2.onSize(cmp); //border's dimension might be changed
-		}
-		return true; //no need to store it
-
 	case "z.pos":
 		var pos = getZKAttr(cmp, "pos");
 		zkau.setAttr(cmp, nm, val);
@@ -636,7 +631,7 @@ zkWnd2._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
 		zkWnd2.hideShadow(dg.element);
 		var ofs = zkau.beginGhostToDIV(dg);
-		var html = '<div id="zk_ddghost" class="rz-win-proxy" style="position:absolute;top:'
+		var html = '<div id="zk_ddghost" class="z-window-resize-proxy" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;"></div>';
@@ -890,7 +885,7 @@ zkWnd2._doModal = function (cmp, replace) {
 		if (bMask) {
 			//bug 1510218: we have to make it as a sibling to cmp
 			cmp.insertAdjacentHTML(
-				"beforebegin", '<div id="'+maskId+'" class="modal_mask"></div>');
+				"beforebegin", '<div id="'+maskId+'" class="z-modal-mask"></div>');
 			mask =  $e(maskId);
 			zk.listen(mask, "mousemove", Event.stop);
 		}
@@ -1032,7 +1027,7 @@ zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 		zkWnd2.hideShadow(dg.element);
 		var ofs = zkau.beginGhostToDIV(dg),  title = zk.firstChild(dg.element, "DIV"),
 			fakeT = title.cloneNode(true);
-		var html = '<div id="zk_ddghost" class="move-win-ghost" style="position:absolute;top:'
+		var html = '<div id="zk_ddghost" class="z-window-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;z-index:'+dg.element.style.zIndex+'"><ul></ul></div></div>';

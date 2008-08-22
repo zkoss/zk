@@ -31,11 +31,9 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * Groups a set of child elements to have a visual effect.
+ * <p>Default {@link #getMoldSclass}: "z-fieldset". If {@link #getMold()} is 3d,
+ * "z-groupbox" is assumed.(since 3.5.0)
  *
- * <p>To customize the visual style of the caption,
- * refer to {@link #getCaptionLook}.
- *
- * <p>Default {@link #getMoldSclass}: z-groupbox. (since 3.5.0)
  * @author tomyeh
  */
 public class Groupbox extends XulElement {
@@ -47,9 +45,6 @@ public class Groupbox extends XulElement {
 	private Boolean _legend;
 	private boolean _open = true, _closable = true;
 	
-	public Groupbox() {
-		setMoldSclass("z-groupbox");
-	}
 	/** Returns the caption of this groupbox.
 	 */
 	public Caption getCaption() {
@@ -89,11 +84,16 @@ public class Groupbox extends XulElement {
 			smartUpdate("z.closable", closable);
 		}
 	}
-	public String getRealSclass() {
+	// super
+	public String getMoldSclass() {
+		return _moldSclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : super.getMoldSclass();
+	}
+	protected String getRealSclass() {
 		final String cls = super.getRealSclass();
-		final String added = isLegend() && isClosable() && !isOpen() ? "fieldset-collapsed" : "";
+		final String added = isClosable() && !isOpen() ? getMoldSclass() + "-collapsed" : "";
 		return cls == null ? added : cls + " " + added;
 	}
+	
 	/** Returns the CSS style for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
 	 */
@@ -113,24 +113,9 @@ public class Groupbox extends XulElement {
 	}
 	/** Returns the style class used for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
-	 *
-	 * <ul>
-	 * <li>If {@link #setContentSclass} is called with non-null string,
-	 * this method returns it.</li>
-	 * <li>If {@link #getSclass} is null, "gc-default" is returned,</li>
-	 * <li>Otherwise, "gc-<i>sclass</i>",
-	 * where <i>sclass</i> is the value returned by {@link #getSclass}.</li>
-	 * </ul>
 	 */
 	public String getContentSclass() {
-		String cntscls = _cntscls;
-		if (cntscls != null)
-			return cntscls;
-		final String mold = getMold();
-		cntscls = "v30-3d".equals(mold) ? getSclass() : getMoldSclass();
-		return "default".equals(mold) ? cntscls == null ? "fieldset-bwrap" : "fieldset-bwrap " + cntscls
-				: "v30-3d".equals(mold) ? "z-groupbox".equals(cntscls) ? "gc-default" : "gc-" + cntscls :
-					cntscls == null ? "gc-z-groupbox" : "gc-" + cntscls;
+		return _cntscls;
 	}
 	/** Sets the style class used for the content block.
 	 *
@@ -140,7 +125,7 @@ public class Groupbox extends XulElement {
 	public void setContentSclass(String scls) {
 		if (!Objects.equals(_cntscls, scls)) {
 			_cntscls = scls;
-			smartUpdate("z.cntScls", getContentSclass());
+			invalidate();
 		}
 	}
 
@@ -191,18 +176,11 @@ public class Groupbox extends XulElement {
 	 * "groupbox-3d-tl" for the top-left corner of the caption,
 	 * "groupbox-3d-tm" for the top-middle border, and so on.
 	 *
-	 * <p>Note: currenlty only the v30-3d mold (since 3.5.0) supports this feature.
-	 * In other words, the default mold ignores this method.
 	 * @since 3.0,0
+	 * @deprecated As of release 3.5.0
 	 */
 	public String getCaptionLook() {
-		final String mold = getMold();
-		final String scls = getSclass();
-		final boolean noScls = scls == null || scls.length() == 0;
-		String val = "groupbox";
-		if (!"default".equals(mold) && (!"v30-3d".equals(mold) || noScls))
-			val += '-' + mold;
-		return noScls ? val: val + '-' + scls;
+		return null;
 	}
 
 	//-- super --//
