@@ -44,6 +44,11 @@ ZK 3.5.0
   2056723: Support tabbox scrolling and new mold
   2056753: Tablelayout
   2063596: A way to specify where to generate JS/CSS in ZHTML pages
+  2045837: PerformanceMeter adds the time after updating all components
+  2052603: A way to proxy ComponentInfo with ComposerExt
+  2045810: AnnotatedDataBinderInit accept relative path in arg0
+  2060367: More neat startup log for ignorable errors
+  2066299: fulfill: fire onFulfill after fulfilling the children
 
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
@@ -54,8 +59,13 @@ ZK 3.5.0
   1939919: Borderlayout does not fit inside Window (IE6)
   2009503: Datebox fail to verify when use a Local format such as 'MMM'
   1939859: splitter of borderLayout problem
+  2051014: NPE error with ZK + Tomcat Clusteriing
+  2056760: Fail to change the width of Listbox
+  2051639: Data binding longbox does not work
+  2037288: Clustering failed with AnnotateDataBinder
 
 * Upgrade Notes
+  + onBookmarkChanged is renamed to onBookmarkChange
   + The smartUpdate, response, onChildAdded, onChildRemoved and
     onDrawNewChid methods are moved from the Component interface
     to the ComponentCtrl intereface.
@@ -83,11 +93,6 @@ ZK 3.5.0
 		zEffect = Effect;
 		zPos = Position;
 	}
-
-	--------
-ZK 3.0.8
-
-Refer to http://zk1.svn.sourceforge.net/viewvc/zk1/branches/3.0/zkdoc/release-note?view=markup
 
 	--------
 ZK 3.0.7
