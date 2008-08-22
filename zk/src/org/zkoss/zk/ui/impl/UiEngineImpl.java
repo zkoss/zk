@@ -1755,6 +1755,7 @@ public class UiEngineImpl implements UiEngine {
 					((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
 					exec, _comp.getPage()),
 				_compInfo, _comp);
+			Events.postEvent(new FulfillEvent(Events.ON_FULFILL, _comp, evt));
 		}
 
 		//ComponentSerializationListener//
