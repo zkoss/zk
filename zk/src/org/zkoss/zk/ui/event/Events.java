@@ -175,6 +175,15 @@ public class Events {
 	 */
 	public static final String ON_USER = "onUser";
 
+	/** The onFulfill event (used with {@link FulfillEvent})
+	 * to denote a fulfill condition has been applied.
+	 * Developer usually listens to this event to process the
+	 * new created children. For example, you might invoke
+	 * {@link org.zkoss.zk.ui.Components#wireFellows} to process these new components.
+	 * @since 3.0.8
+	 */
+	public static final String ON_FULFILL = "onFulfill";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

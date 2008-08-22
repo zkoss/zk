@@ -5,6 +5,7 @@ ZK 3.0.8
   2052603: A way to proxy ComponentInfo with ComposerExt
   2045810: AnnotatedDataBinderInit accept relative path in arg0
   2060367: More neat startup log for ignorable errors
+  2066299: fulfill: fire onFulfill after fulfilling the children
   
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
