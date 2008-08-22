@@ -272,3 +272,5 @@ span.z-progressmeter-img {
 <c:include page="~./zul/css/cmps/listbox.css.dsp"/>
 <%-- Tree --%>
 <c:include page="~./zul/css/cmps/tree.css.dsp"/>
+<%-- Tabbox --%>
+<c:include page="~./zul/css/cmps/tabbox.css.dsp"/>

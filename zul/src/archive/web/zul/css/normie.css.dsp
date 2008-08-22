@@ -93,3 +93,7 @@ span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-
 .z-panel-bbar {
 	position: relative;
 }
+<%-- tabbox.css.dsp --%>
+div.tabpanel-accordion {
+	zoom:1;
+}

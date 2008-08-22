@@ -177,10 +177,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/bandbox2.dsp</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/bandbox.dsp</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>bandpopup</component-name>
@@ -197,10 +193,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/button2.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/button.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -284,10 +276,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/combobox2.dsp</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/combobox.dsp</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>comboitem</component-name>
@@ -304,10 +292,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/datebox2.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/datebox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -390,10 +374,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>3d</mold-name>
 			<mold-uri>~./zul/html/groupbox2-3d.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30-3d</mold-name>
-			<mold-uri>~./zul/html/groupbox-3d.dsp</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>	
@@ -557,10 +537,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/menu2.dsp</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/menu.dsp</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>menubar</component-name>
@@ -568,10 +544,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>${self.orient == 'horizontal' ? '~./zul/html/hmenubar2.dsp' : '~./zul/html/vmenubar2.dsp'}</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>${self.orient == 'horizontal' ? '~./zul/html/hmenubar.dsp' : '~./zul/html/vmenubar.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -581,10 +553,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/menuitem2.dsp</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/menuitem.dsp</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>menupopup</component-name>
@@ -593,10 +561,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/menupopup2.dsp</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/menupopup.dsp</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>menuseparator</component-name>
@@ -604,10 +568,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/menuseparator2.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/menuseparator.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -745,7 +705,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox2.dsp'}</mold-uri>
+			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox2.dsp': '~./zul/html/tabbox2.dsp'}</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
@@ -755,21 +715,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>accordion-lite</mold-name>
 			<mold-uri>~./zul/html/tabbox-accd2-lite.dsp</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30-accordion</mold-name>
-			<mold-uri>~./zul/html/tabbox-accd.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox.dsp': '~./zul/html/tabbox.dsp'}</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>tabs</component-name>
 		<component-class>org.zkoss.zul.Tabs</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.tabbox.mold == 'v30' ? self.parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs.dsp' : self.parent.orient == 'vertical' ? '~./zul/html/vtabs.dsp': '~./zul/html/tabs2.dsp'}</mold-uri>
+			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabs2.dsp': '~./zul/html/tabs2.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -777,12 +729,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tab</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab2.dsp'}</mold-uri>
-		</mold>		
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab.dsp': '~./zul/html/tab.dsp'}</mold-uri>
-		</mold>	
+			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab2.dsp': '~./zul/html/tab2.dsp'}</mold-uri>
+		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
@@ -790,7 +738,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabpanels</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels.dsp' : '~./zul/html/tabpanels.dsp'}</mold-uri>
+			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels2.dsp' : '~./zul/html/tabpanels2.dsp'}</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -798,15 +746,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabpanel</component-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd2.dsp' : self.tabbox.mold == 'accordion-lite' ? '~./zul/html/tabpanel-accd2-lite.dsp' : self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel.dsp': '~./zul/html/tabpanel.dsp'}</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30-accordion</mold-name>
-			<mold-uri>'~./zul/html/tabpanel-accd.dsp'</mold-uri>
+			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd2.dsp' : self.tabbox.mold == 'accordion-lite' ? '~./zul/html/tabpanel-accd2-lite.dsp' : self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel2.dsp': '~./zul/html/tabpanel2.dsp'}</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -824,10 +764,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/timebox2.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/timebox.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -960,10 +896,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/window2.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>~./zul/html/window.dsp</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>

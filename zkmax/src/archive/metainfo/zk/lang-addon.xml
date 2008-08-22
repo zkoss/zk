@@ -133,10 +133,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Bandbox2Default</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.BandboxDefault</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>bandpopup</component-name>
@@ -153,10 +149,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Button2Default</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.ButtonDefault</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>borderlayout</component-name>
@@ -164,10 +156,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Borderlayout2Default</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.BorderlayoutDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -213,10 +201,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>chart</component-name>
@@ -239,10 +223,6 @@ def alert(m):
 		<extends>column</extends>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.ColumnDefault</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ColumnDefault</mold-uri>
 		</mold>
 	</component>
@@ -277,10 +257,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Combobox2Default</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.ComboboxDefault</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>comboitem</component-name>
@@ -296,10 +272,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Datebox2Default</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.DateboxDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -340,10 +312,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -424,10 +392,6 @@ def alert(m):
 		<mold>
 			<mold-name>3d</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Groupbox23d</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30-3d</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.Groupbox3d</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -605,10 +569,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Menu2Default</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.MenuDefault</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>menubar</component-name>
@@ -616,10 +576,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Menubar2Horizontal</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.MenubarHorizontal</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -629,10 +585,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Menuitem2Default</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.MenuitemDefault</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>menupopup</component-name>
@@ -640,10 +592,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Menupopup2Default</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.MenupopupDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -653,10 +601,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Menuseparator2Default</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.MenuseparatorDefault</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>north</component-name>
@@ -664,10 +608,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -779,10 +719,6 @@ def alert(m):
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Slider2Default</mold-uri>
 		</mold>
 		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.SliderDefault</mold-uri>
-		</mold>
-		<mold>
 			<mold-name>sphere</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.SliderDefault</mold-uri>
 		</mold>
@@ -793,10 +729,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -851,10 +783,6 @@ def alert(m):
 		<component-name>tab</component-name>
 		<extends>tab</extends>
 		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabDefault</mold-uri>
-		</mold>
-		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Tab2Default</mold-uri>
 		</mold>
@@ -874,22 +802,10 @@ def alert(m):
 			<mold-name>accordion-lite</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabbox2Accordion</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxDefault</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v-30accordion</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxAccordion</mold-uri>
-		</mold>				
 	</component>
 	<component>
 		<component-name>tabpanel</component-name>
 		<extends>tabpanel</extends>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabpanelDefault</mold-uri>
-		</mold>	
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabpanel2Default</mold-uri>
@@ -899,21 +815,13 @@ def alert(m):
 		<component-name>tabpanels</component-name>
 		<extends>tabpanels</extends>
 		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabpanelsDefault</mold-uri>
-		</mold>
-		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabpanels2Default</mold-uri>
 		</mold>
 	</component>
 	<component>
-		<component-name>v30</component-name>
+		<component-name>tabs</component-name>
 		<extends>tabs</extends>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabsDefault</mold-uri>
-		</mold>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabs2Default</mold-uri>
@@ -933,10 +841,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Timebox2Default</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TimeboxDefault</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -1062,10 +966,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Layoutregion2Default</mold-uri>
 		</mold>
-		<mold>
-			<mold-name>v30</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.LayoutregionDefault</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>window</component-name>
@@ -1073,10 +973,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>			
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Window2Default</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>os</mold-name>			
-			<mold-uri>class:org.zkoss.zkmax.zul.render.WindowDefault</mold-uri>
 		</mold>
 	</component>
 </language-addon>
