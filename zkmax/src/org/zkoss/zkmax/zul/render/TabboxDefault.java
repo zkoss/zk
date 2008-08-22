@@ -47,21 +47,13 @@ public class TabboxDefault implements ComponentRenderer {
 
 		final SmartWriter wh = new SmartWriter(out);
 		final Tabs tabs = self.getTabs();
-		final String mold = self.getMold();
-		if (mold.equals("v30")){
+
 			wh.write("<div id=\"").write(self.getUuid()).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(" z.type=\"zul.tab.Tabbox\">")
 			.writeln(tabs)
 			.writeln(self.getTabpanels())
 			.write("</div>");
-		}else{
-			wh.write("<div id=\"").write(self.getUuid()).write("\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.writeln(" z.type=\"zul.tab2.Tabbox2\">")
-			.writeln(tabs)
-			.writeln(self.getTabpanels())
-			.write("</div>");
-		}
+		
 	}
 }

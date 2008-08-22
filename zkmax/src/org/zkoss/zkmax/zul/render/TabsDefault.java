@@ -48,10 +48,7 @@ public class TabsDefault implements ComponentRenderer {
 		}
 
 		final SmartWriter wh = new SmartWriter(out);		
-		final String look = tabbox.getTabLook() + '-';
-		final String mold = self.getMold();
-		final String scroll = tabbox.isTabscroll() ? "scrolltabs" : "tabs" ;
-		if (mold.equals("v30")){
+		final String look = tabbox.getTabLook() + '-';				
 			wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tab.Tabs\"")
 				.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>')
 				.writeln("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">")
@@ -74,21 +71,5 @@ public class TabsDefault implements ComponentRenderer {
 				.write(self.getUuid()).writeln("!last\"></td>")
 				.write("<td class=\"").write(look).writeln("last2\"></td>")
 				.writeln("</tr></table></td></tr></table></div>");
-		}else {						
-			String uuid = self.getUuid();
-			wh.write("<div id=\""+uuid+"\" class=\"").write(look+scroll).write("\" z.type=\"zul.tab2.Tabs2\"")
-			    .write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>');
-			    wh.write("<div id=\""+uuid+"!right").writeln("\" class=\"" + look + "scrollright\" ></div>");
-				wh.write("<div id=\""+uuid+"!left").writeln("\" class=\"" + look + "scrollleft\" ></div>");
-			    wh.write("<div id=\""+uuid+"!header\"").writeln(" class=\""+look+"head\" >");
-				    wh.writeln("<ul id=\""+uuid+"!cave\" class=\""+look+"ul\" >");							    	
-				    	wh.writeChildren(self);			    	
-				    	wh.writeln("<li id=\""+uuid+"!edge\" class=\""+look+"edge\" ></li>");
-				    	wh.writeln("<div id=\""+uuid+"!clear\" class=\""+look+"clear\"></div>");
-				    wh.writeln("</ul>");
-			    wh.writeln("</div>");
-			    wh.writeln("<div id=\""+uuid+"!line\" class=\""+look+"space\" ></div>");	
-			wh.writeln("</div>");
-		}
 	}
 }

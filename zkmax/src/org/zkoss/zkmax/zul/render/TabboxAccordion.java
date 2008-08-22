@@ -39,21 +39,12 @@ public class TabboxAccordion implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tabbox self = (Tabbox) comp;
-		final String mold = self.getMold();
-		if (mold.equals("v30-accordion")){		
+			
 		wh.write("<div id=\"").write(self.getUuid()).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(" z.accd=\"true\">")
 			.writeln(self.getTabpanels())
 			.write("</div>");
-		}else if(mold.equals("accordion")||
-				mold.equals("accordion-lite")){
-		wh.write("<div id=\"").write(self.getUuid()).write("\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.writeln(" z.accd=\"true\" z.type=\"zul.tab2.Tabbox2\">")
-			.writeln(self.getTabpanels())
-			.write("</div>");
-			
-		}
+		
 	}
 }

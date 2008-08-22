@@ -832,14 +832,6 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
-		<component-name>tab</component-name>
-		<extends>tab</extends>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabDefault</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>tablechildren</component-name>
 		<component-class>org.zkoss.zkmax.zul.Tablechildren</component-class>
 		<mold>
@@ -856,32 +848,48 @@ def alert(m):
 		</mold>
 	</component>	
 	<component>
+		<component-name>tab</component-name>
+		<extends>tab</extends>
+		<mold>
+			<mold-name>v30</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TabDefault</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Tab2Default</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>tabbox</component-name>
 		<extends>tabbox</extends>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxDefault</mold-uri>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabbox2Default</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxAccordion</mold-uri>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabbox2Accordion</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion-lite</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxAccordion</mold-uri>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabbox2Accordion</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxDefault</mold-uri>
-		</mold>		
-		<mold>
-			<mold-name>v30-accordion</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxAccordion</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>v-30accordion</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TabboxAccordion</mold-uri>
+		</mold>				
 	</component>
 	<component>
 		<component-name>tabpanel</component-name>
 		<extends>tabpanel</extends>
+		<mold>
+			<mold-name>v30</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.TabpanelDefault</mold-uri>
+		</mold>	
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabpanel2Default</mold-uri>
@@ -891,16 +899,24 @@ def alert(m):
 		<component-name>tabpanels</component-name>
 		<extends>tabpanels</extends>
 		<mold>
-			<mold-name>default</mold-name>
+			<mold-name>v30</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.TabpanelsDefault</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabpanels2Default</mold-uri>
 		</mold>
 	</component>
 	<component>
-		<component-name>tabs</component-name>
+		<component-name>v30</component-name>
 		<extends>tabs</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.TabsDefault</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Tabs2Default</mold-uri>
 		</mold>
 	</component>
 	<component>

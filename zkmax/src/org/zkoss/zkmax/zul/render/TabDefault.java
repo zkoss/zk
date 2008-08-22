@@ -59,8 +59,6 @@ public class TabDefault implements ComponentRenderer {
 		final String suffix = self.isSelected() ? "-sel" : "-uns";
 		final Tabpanel panel = self.getLinkedPanel();
 		final int colspan = self.isClosable() ? 4 : 3;
-		final String mold = self.getMold();
-		if (mold.equals("v30")){
 		wh.write("<td id=\"").write(self.getUuid()).write("\" z.type=\"Tab\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(" z.sel=\"").write(self.isSelected()).write("\" z.box=\"")
@@ -102,35 +100,5 @@ public class TabDefault implements ComponentRenderer {
 			wh.write("<tr><td class=\"").write(look).write("bl").write(suffix).writeln("\"></td>")
 				.write("<td colspan=\"").write(colspan).write("\" class=\"").write(look).write("bm").write(suffix).writeln("\"></td>")
 				.write("<td class=\"").write(look).write("br").write(suffix).writeln("\"></td></tr></table></td>");
-		}else {
-			String uuid = self.getUuid();
-			wh.write("<li id=\""+uuid+"\""); 
-				if (!Strings.isBlank(self.getHeight())){
-					wh.write("style=\"height:"+self.getHeight()+";\"");
-				}
-				wh.write("z.type=\"Tab2\"").write(self.getOuterAttrs()).write(self.getInnerAttrs())
-					.write(" z.sel=\"").write(self.isSelected()).write("\" z.box=\"")
-					.write(tabbox.getUuid()).write("\" z.panel=\"")
-					.write(panel==null?"":panel.getUuid()).write("\" ")
-					.write("z.disabled=\"").write(self.isDisabled())
-					.writeln("\">");	
-				if(self.isClosable()){				
-					wh.writeln("<a class=\""+look+"close\" id=\""+uuid+"!close\" onclick=\"return false;\"/>");
-				}
-				wh.writeln("<a class=\""+look+"a\" id=\""+uuid+"a\"  onclick=\"return false;\" href=\"#\">");
-					wh.writeln("<em id=\""+uuid+"\" class=\""+look+"em\">");						
-						if(self.isClosable()){
-							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner"+" "+look+"innerclose\">");
-						}else{
-							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner\"");	
-						}
-							wh.write("<span class=\""+look+"text\">").write(self.getImgTag());
-							new Out(self.getLabel()).render(out);
-							wh.writeln("</span>");
-						wh.writeln("</span>");
-					wh.writeln("</em>");
-				wh.writeln("</a>");
-			wh.writeln("</li>");
-		}
 	}
 }
