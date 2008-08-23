@@ -38,6 +38,7 @@ import org.zkoss.zul.impl.Utils;
  * any other components).
  *
  * @author tomyeh
+ * @see Include
  */
 public class Iframe extends XulElement {
 	private String _align, _name;

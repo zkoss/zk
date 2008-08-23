@@ -56,11 +56,11 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>There are two ways to pass parameters to the included page.
  * First, you can use the query string:
- * <pre><code><include src="/WEB-INF/mypage?arg=something"></code></pre>
+ * <pre><code>&lt;include src="/WEB-INF/mypage?arg=something"/&gt;</code></pre>
  *
  * <p>Second, since ZK 3.0.4,
  * you can use {@link #setDynamicProperty}, or, in ZUL,
- * <pre><code><include src="/WEB-INF/mypage" arg="something"/></code></pre>
+ * <pre><code>&lt;include src="/WEB-INF/mypage" arg="something"/&gt;</code></pre>
  *
  * <p>With the query string, you can pass only the String values.
  * and the parameter can be accessed by {@link Execution#getParameter}
@@ -75,7 +75,27 @@ import org.zkoss.zul.mesg.MZul;
  * getAttribute. Or, you can access with the requestScope variable
  * in EL expressions.
  *
+ * <h3>Macro Component versus {@link Include}</h3>
+ *
+ * <ol>
+ * <li>{@link Include} could include anything include ZUML, JSP or any other
+ * servlet, while a macro component could embed only a ZUML page.</li>
+ * <li>If {@link Include} includes a ZUML page, a
+ * {@link org.zkoss.zk.ui.Page} instance is created as a child
+ * of {@link Include}. On the other hand, a macro component makes
+ * the created components as the direct children -- i.e.,
+ * you can browse them with {@link org.zkoss.zk.ui.Component#getChildren}.</li>
+ * <li>{@link Include} creates components in the Rendering phase,
+ * while a macro component creates components in {@link org.zkoss.zk.ui.HtmlMacroComponent#afterCompose}.</li>
+ * <li>{@link Include#invalidate} will cause it to re-include
+ * the page (and then recreate the page if it includes a ZUML page).
+ * However, {@link org.zkoss.zk.ui.HtmlMacroComponent#invalidate} just causes it to redraw
+ * and update the content at the client -- like any other component does.
+ To re-create, you have to invoke {@link org.zkoss.zk.ui.HtmlMacroComponent#recreate}.</li>
+ * </ol>
+ *
  * @author tomyeh
+ * @see Iframe
  */
 public class Include extends XulElement implements DynamicPropertied {
 	private static final Log log = Log.lookup(Include.class);
