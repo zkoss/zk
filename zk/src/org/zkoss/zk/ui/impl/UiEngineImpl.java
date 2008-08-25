@@ -42,6 +42,7 @@ import org.zkoss.lang.Threads;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
 import org.zkoss.mesg.Messages;
+import org.zkoss.util.ArraysX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 
@@ -54,6 +55,7 @@ import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.util.*;
+import org.zkoss.zk.xel.Evaluators;
 import org.zkoss.zk.scripting.*;
 import org.zkoss.zk.au.*;
 import org.zkoss.zk.au.out.*;
@@ -470,15 +472,40 @@ public class UiEngineImpl implements UiEngine {
 	 */
 	private static final Component[] execCreate(
 	CreateInfo ci, NodeInfo parentInfo, Component parent) {
+		String fulfillURI = null;
 		if (parentInfo instanceof ComponentInfo) {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
-			final String fulfill = pi.getFulfill();
-			if (fulfill != null && fulfill.length() > 0) { //defer the creation of children
-				new FulfillListener(fulfill, pi, parent);
-				return new Component[0];
+			String fulfill = pi.getFulfill();
+			if (fulfill != null) { //defer the creation of children
+				fulfill = fulfill.trim();
+				if (fulfill.length() > 0) {
+					if (fulfill.startsWith("=")) {
+						fulfillURI = fulfill.substring(1).trim();
+					} else {
+						new FulfillListener(fulfill, pi, parent);
+						return new Component[0];
+					}
+				}
 			}
 		}
-		return execCreate0(ci, parentInfo, parent);
+
+		Component[] cs = execCreate0(ci, parentInfo, parent);
+
+		if (fulfillURI != null) {
+			fulfillURI = (String)Evaluators.evaluate(
+				((ComponentInfo)parentInfo).getEvaluator(),
+				parent, fulfillURI, String.class);
+			if (fulfillURI != null) {
+				final Component c =
+					ci.exec.createComponents(fulfillURI, parent, null);
+				if (c != null) {
+					cs = (Component[])ArraysX.resize(cs, cs.length + 1);
+					cs[cs.length - 1] = c;
+				}
+			}
+		}
+
+		return cs;
 	}
 	private static final Component[] execCreate0(
 	CreateInfo ci, NodeInfo parentInfo, Component parent) {
@@ -1710,6 +1737,7 @@ public class UiEngineImpl implements UiEngine {
 		private transient Component _comp;
 		private final ComponentInfo _compInfo;
 		private final String _fulfill;
+		private transient String _uri;
 
 		private FulfillListener(String fulfill, ComponentInfo compInfo,
 		Component comp) {
@@ -1723,16 +1751,32 @@ public class UiEngineImpl implements UiEngine {
 				_targets[j].addEventListener(_evtnms[j], this);
 		}
 		private void init() {
+			_uri = null;
 			final List results = new LinkedList();
 			for (int j = 0, len = _fulfill.length();;) {
-				int k = _fulfill.indexOf(',', j);
+				int k = j;
+				for (int elcnt = 0; k < len; ++k) {
+					final char cc = _fulfill.charAt(k);
+					if (elcnt == 0) {
+						if (cc == ',') break;
+						if (cc == '=')  {
+							_uri = _fulfill.substring(k + 1).trim();
+							break;
+						}
+					} else if (cc == '{') {
+						++elcnt;
+					} else if (cc == '}') {
+						if (elcnt > 0) --elcnt;
+					}
+				}
+
 				String sub =
 					(k >= 0 ? _fulfill.substring(j, k): _fulfill.substring(j)).trim();
 				if (sub.length() > 0)
 					results.add(ComponentsCtrl
 						.parseEventExpression(_comp, sub, _comp, false));
 
-				if (k < 0 || (j = k + 1) >= len) break;
+				if (_uri != null || k < 0 || (j = k + 1) >= len) break;
 			}
 
 			int j = results.size();
@@ -1755,6 +1799,15 @@ public class UiEngineImpl implements UiEngine {
 					((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
 					exec, _comp.getPage()),
 				_compInfo, _comp);
+
+			if (_uri != null) {
+				final String uri = (String)Evaluators.evaluate(
+					_compInfo.getEvaluator(),
+					_comp, _uri, String.class);
+				if (uri != null)
+					exec.createComponents(uri, _comp, null);
+			}
+
 			Events.postEvent(new FulfillEvent(Events.ON_FULFILL, _comp, evt));
 		}
 

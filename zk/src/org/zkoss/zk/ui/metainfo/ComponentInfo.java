@@ -310,6 +310,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * <p>Since 3.0.2, you can specify a list of fulfill conditions by
 	 * separating them with comma. For example:<br/>
 	 * "id1.event1, id2/id3.event2"
+	 * <p>Since 3.5.0, you can specify the URI to fulfill with. For example:<br/>
+	 * "id1.event1=/my/super.zul".
 	 * @since 2.4.0
 	 */
 	public void setFulfill(String fulfill) {
