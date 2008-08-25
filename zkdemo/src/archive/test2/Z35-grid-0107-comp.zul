@@ -102,7 +102,7 @@
 		</tabpanels>
 	</tabbox>
 
-<groupbox mold="3d" width="300px"  if="${!empty arg.groupbox1}">
+	<groupbox mold="3d" width="300px"  if="${!empty arg.groupbox1}">
 			<caption image="/img/inet.png" label="fruits"/>
 			<radiogroup onCheck="fruit.value = self.selectedItem.label">
 				<radio label="Apple"/>
@@ -110,5 +110,22 @@
 				<radio label="Banana"/>
 			</radiogroup>
 		</groupbox>
+	<panel framable="true" width="200px"
+		title="Panel component"
+		maximizable="true" minimizable="true" border="normal"
+		collapsible="true" closable="true"  if="${!empty arg.panel1}">
+		<panelchildren>
+		<window border="normal" width="250px" sizable="true">
+			<caption image="/img/inet.png" label="Hi there!"/>
+			<checkbox label="Hello, World!"/>
+			<separator bar="true"/>
+			Auto-position (applicable if not embedded)
+			<separator/>
+			<button label="left,center" onClick='spaceOwner.position = "left,center"'/>
+			<button label="right,bottom" onClick='spaceOwner.position = "right,bottom"'/>
+			<button label="center" onClick='spaceOwner.position = "center"'/>
+		</window>
+		</panelchildren>
+	</panel>
 
 </zk>
