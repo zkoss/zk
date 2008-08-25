@@ -45,7 +45,7 @@ public class Slider extends XulElement {
 	private String _slidingtext = "{0}";
 
 	public Slider() {
-		setWidth("100px");
+		setWidth("207px");
 	}
 	/**
 	 * @param curpos the current position (default: 0)
@@ -54,10 +54,20 @@ public class Slider extends XulElement {
 		this();
 		setCurpos(curpos);
 	}
+	/*package*/ final boolean inScaleMold() {
+		return "scale".equals(getMold());
+	}
 	
 	// super
 	public String getMoldSclass() {
-		return _moldSclass == null ? "z-slider" + ("horizontal".equals(getOrient()) ? "-hor" : "-ver") : super.getMoldSclass();
+		final String name = "z-slider";
+		if (_moldSclass == null) {
+			if (inScaleMold())
+				return name + "-scale";
+			else
+				return name + ("horizontal".equals(getOrient()) ? "-hor" : "-ver");
+		}
+		return super.getMoldSclass();
 	}
 	
 	/** Returns the orient.
@@ -79,9 +89,9 @@ public class Slider extends XulElement {
 			_orient = orient;
 			if ("vertical".equals(_orient)) {
 				setWidth(null);
-				setHeight("100px");
+				setHeight("207px");
 			} else {
-				setWidth("100px");
+				setWidth("207px");
 				setHeight(null);
 			}
 			invalidate();
@@ -154,6 +164,15 @@ public class Slider extends XulElement {
 			smartUpdate("z.maxpos", _maxpos);
 		}
 	}
+	
+	/**
+	 * Returns whether it is a vertical slider.
+	 * 
+	 * @since 3.5.0
+	 */
+	public boolean isVertical() {
+		return "vertical".equals(getOrient());
+	}
 
 	/** Returns the amount that the value of {@link #getCurpos}
 	 * changes by when the tray of the scroll bar is clicked. 
@@ -206,7 +225,25 @@ public class Slider extends XulElement {
 			_name = name;
 			smartUpdate("z.name", _name);
 		}
-	}	
+	}
+	
+	/**
+	 * Sets the mold.
+	 * 
+	 * @param mold default , scale 
+	 *            
+	 */
+	public void setMold(String mold){
+		if (isVertical()){
+			if (mold.startsWith("scale")){
+				throw new WrongValueException("Unsupported vertical orient in mold : "+mold);
+			}else{
+				super.setMold(mold);				
+			}
+		}else{
+			super.setMold(mold);			
+		}
+	}
 
 	//-- super --//
 	public String getOuterAttrs() {

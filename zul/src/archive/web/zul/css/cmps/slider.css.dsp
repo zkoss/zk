@@ -63,3 +63,37 @@
     font-size: 1px; -moz-outline: 0 none; outline: 0 none; -moz-user-select: normal;
     -khtml-user-select: normal;  
 }
+<%-- Scale style --%>
+.z-slider-scale-tick {
+    background-image:url(${c: encodeURL('~./zul/img/slider2/ticks.gif')});
+	padding-top:6px;
+	width:214px;
+}
+.z-slider-scale {
+    padding-left: 7px; zoom:1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.png')}) no-repeat 0 -22px;
+}
+.z-slider-scale-inner {
+    position: relative; left: 0; top: 0; overflow: visible; zoom: 1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.png')}) repeat-x 0 0;
+    height: 22px;
+}
+.z-slider-scale-end {
+    padding-right: 7px; zoom: 1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.png')}) no-repeat right -44px;
+}
+.z-slider-scale-btn {
+    width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-thumb.png')}) no-repeat 0 0;
+}
+.z-slider-scale-btn-over {
+    background-position: -14px -15px;
+}
+.z-slider-scale-btn-drag {
+    background-position: -28px -30px;
+}
+.z-slider-scale-focus {
+	position: absolute;	left: 0; top: 0; width: 1px; height: 1px; line-height: 1px;
+    font-size: 1px; -moz-outline: 0 none; outline: 0 none; -moz-user-select: normal;
+    -khtml-user-select: normal;  
+}
