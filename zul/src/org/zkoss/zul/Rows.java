@@ -113,14 +113,15 @@ public class Rows extends XulElement {
 		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
 	}
 	
-	/*package*/ void fixGroupIndex(int j, int to) {
+	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
 		for (Iterator it = getChildren().listIterator(j);
 		it.hasNext() && (to < 0 || j <= to); ++j) {
-			if (it.next() instanceof Group) {
-				int[] g = getGroupsInfoAtIndex(j+1, true);
+			Object o = it.next();
+			if (o instanceof Group) {
+				int[] g = getGroupsInfoAtIndex(j + (infront ? -1 : 1), true);
 				if (g != null) {
 					g[0] = j;
-					if (g[2] != -1) g[2]--;
+					if (g[2] != -1) g[2] += (infront ? 1 : -1);
 				}
 			}
 		}
@@ -167,7 +168,7 @@ public class Rows extends XulElement {
 				if (getLastChild() instanceof Groupfoot)
 					throw new UiException("Only one Goupfooter is allowed per Group");
 				final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
-				g[2] = getChildren().size();		
+				g[2] = getChildren().size() - 1;		
 			}else{
 				final int idx = ((Row)refChild).getIndex();				
 				final int[] g = getGroupsInfoAtIndex(idx);
@@ -187,7 +188,7 @@ public class Rows extends XulElement {
 					jto = refChild instanceof Row ? ((Row)refChild).getIndex(): -1,
 					fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
 				if (fixFrom >= 0) fixGroupIndex(fixFrom,
-					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1);
+					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, true);
 			}
 			if (newItem instanceof Group) {
 				Group group = (Group) newItem;
@@ -217,8 +218,13 @@ public class Rows extends XulElement {
 					}
 				}
 			} else if (hasGroup()) {
-				final int[] g = getGroupsInfoAtIndex(newItem.getIndex());
-				if (g != null) g[1]++;
+				int index = newItem.getIndex();
+				final int[] g = getGroupsInfoAtIndex(index);
+				if (g != null) {
+					g[1]++;
+					if (g[2] != -1) g[2]++;
+				}
+				
 			}
 			
 			afterInsert(child);
@@ -244,7 +250,7 @@ public class Rows extends XulElement {
 				if (prev != null && remove !=null) {
 					prev[1] += remove[1] - 1;
 				}
-				fixGroupIndex(index, -1);
+				fixGroupIndex(index, -1, false);
 				_groupsInfo.remove(remove);
 				final int idx = remove[2];
 				if (idx != -1){				
@@ -256,8 +262,9 @@ public class Rows extends XulElement {
 				if (g != null) {
 					g[1]--;
 					if (g[2] != -1) g[2]--;
+					fixGroupIndex(index, -1, false);
 				}
-				else fixGroupIndex(index, -1);
+				else fixGroupIndex(index, -1, false);
 			}
 			if (child instanceof Groupfoot){
 				final int[] g = getGroupsInfoAtIndex(index);

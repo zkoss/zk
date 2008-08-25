@@ -1098,11 +1098,18 @@ public class Listbox extends XulElement implements Paginated {
 			_pgi.setTotalSize(getItemCount());
 	}
 	
-	/*package*/ void fixGroupIndex(int index, int value) {
-		int[] g = getGroupsInfoAtIndex(index, true);
-		if (g != null) {
-			g[0] = value;
-			if (g[2] != -1) g[2]--;
+	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
+		for (Iterator it = _items.listIterator(j);
+		it.hasNext() && (to < 0 || j <= to); ++j) {
+			Object o = it.next();
+			((Listitem)o).setIndexDirectly(j);
+			if (o instanceof Listgroup) {
+			int[] g = getGroupsInfoAtIndex(j + (infront ? -1 : 1), true);
+				if (g != null) {
+					g[0] = j;
+					if (g[2] != -1) g[2] += (infront ? 1 : -1);
+				}
+			}
 		}
 	}
 	/*package*/ Listgroup getListgroupAtIndex(int index) {
@@ -1139,7 +1146,7 @@ public class Listbox extends XulElement implements Paginated {
 					if (getLastChild() instanceof Listgroupfoot)
 						throw new UiException("Only one Goupfooter is allowed per Listgroup");
 					final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
-					g[2] = getChildren().size();
+					g[2] = ((Listitem)getItems().get(getItems().size() - 1)).getIndex();
 				}else{
 					final int idx = ((Listitem)refChild).getIndex();				
 					final int[] g = getGroupsInfoAtIndex(idx);
@@ -1176,8 +1183,8 @@ public class Listbox extends XulElement implements Paginated {
 						//jto < 0: use jfrom
 						//otherwise: use min(jfrom, jto)
 				if (fixFrom < 0) newItem.setIndexDirectly(_items.size() - 1);
-				else fixItemIndices(fixFrom,
-					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1);
+				else fixGroupIndex(fixFrom,
+					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, true);
 
 				//Maintain selected
 				final int newIndex = newItem.getIndex();
@@ -1239,7 +1246,10 @@ public class Listbox extends XulElement implements Paginated {
 					}
 				} else if (!_groupsInfo.isEmpty()) {
 					final int[] g = getGroupsInfoAtIndex(newItem.getIndex());
-					if (g != null) g[1]++;
+					if (g != null) {
+						g[1]++;
+						if (g[2] != -1) g[2]++;
+					}
 				}
 				afterInsert(newChild);
 				return true;
@@ -1341,7 +1351,6 @@ public class Listbox extends XulElement implements Paginated {
 			final Listitem item = (Listitem)child;
 			final int index = item.getIndex();
 			item.setIndexDirectly(-1); //mark
-			fixItemIndices(index, -1);
 
 			//Maintain selected
 			if (item.isSelected()) {
@@ -1369,14 +1378,16 @@ public class Listbox extends XulElement implements Paginated {
 				if (prev != null && remove !=null) {
 					prev[1] += remove[1] - 1;
 				}
+				fixGroupIndex(index, -1, false);
 				_groupsInfo.remove(remove);
 			} else if (!_groupsInfo.isEmpty()) {
 				final int[] g = getGroupsInfoAtIndex(index);
 				if (g != null) {
 					g[1]--;
 					if (g[2] != -1) g[2]--;
-				} else fixGroupIndex(index, -1);
-			}
+					fixGroupIndex(index, -1, false);
+				} else fixGroupIndex(index, -1, false);
+			} else fixItemIndices(index, -1);
 			if (child instanceof Groupfoot){
 				final int[] g = getGroupsInfoAtIndex(index);
 				g[2] = -1;
