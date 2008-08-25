@@ -1,21 +1,21 @@
-/* TabDefault.java
+/* Tab2Default.java
 
- {{IS_NOTE
- Purpose:
- 
- Description:
- 
- History:
- Sep 6, 2007 3:59:51 PM , Created by robbiecheng
- }}IS_NOTE
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Aug 22, 2008 6:03:53 PM , Created by RyanWu
+}}IS_NOTE
 
- Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
- {{IS_RIGHT
- This program is distributed under GPL Version 2.0 in the hope that
- it will be useful, but WITHOUT ANY WARRANTY.
- }}IS_RIGHT
- */
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
 package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
@@ -35,11 +35,12 @@ import org.zkoss.zul.Tabpanel;
 
 /**
  * {@link Tab}'s default mold.
- * It forward to {@link TabDefaultV} if the orient is vertical.
+ * It forward to {@link Tab2DefaultV} if the orient is vertical.
  * 
- * @author robbiecheng
+
+ * @author RyanWu
  * 
- * @since 3.0.0
+ * @since 3.5.0
  * 
  */
 public class Tab2Default implements ComponentRenderer {

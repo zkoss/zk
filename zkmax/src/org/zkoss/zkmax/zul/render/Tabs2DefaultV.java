@@ -1,4 +1,4 @@
-/* TabsDefaultV.java
+/* Tabs2DefaultV.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,10 +6,10 @@
 	Description:
 		
 	History:
-		Sep 6, 2007 6:21:35 PM , Created by robbiecheng
+		Aug 22, 2008 6:03:53 PM , Created by RyanWu
 }}IS_NOTE
 
-Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -29,9 +29,9 @@ import org.zkoss.zul.Tabs;
 /**
  * {@link Tabs}'s default mold for vertial orient only.
  * 
- * @author robbiecheng
+ * @author RyanWu
  * 
- * @since 3.0.0
+ * @since 3.5.0
  */
 public class Tabs2DefaultV implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {

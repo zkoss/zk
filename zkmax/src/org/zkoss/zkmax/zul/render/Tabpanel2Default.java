@@ -1,21 +1,21 @@
-/* TabpanelDefault.java
+/* Tabpanel2Default.java
 
- {{IS_NOTE
- Purpose:
- 
- Description:
- 
- History:
- Sep 6, 2007 6:49:21 PM , Created by robbiecheng
- }}IS_NOTE
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Aug 22, 2008 6:03:53 PM , Created by RyanWu
+}}IS_NOTE
 
- Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
- {{IS_RIGHT
- This program is distributed under GPL Version 2.0 in the hope that
- it will be useful, but WITHOUT ANY WARRANTY.
- }}IS_RIGHT
- */
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
 package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
@@ -29,12 +29,12 @@ import org.zkoss.zul.Tabpanel;
 
 /**
  * {@link Tabpanel}'s default mold.
- * It forwards to {@link TabpanelAccordion} if the tabbox's mold is accordion.
- * It forwards to {@link TabpanelDefaultV} if the tabbox's orient is vertical.
+ * It forwards to {@link Tabpanel2Accordion} if the tabbox's mold is accordion.
+ * It forwards to {@link Tabpanel2DefaultV} if the tabbox's orient is vertical.
  * 
- * @author robbiecheng
+ * @author RyanWu
  * 
- * @since 3.0.0
+ * @since 3.5.0
  */
 public class Tabpanel2Default implements ComponentRenderer {
 	private final Tabpanel2DefaultV _vpanel = new Tabpanel2DefaultV();
