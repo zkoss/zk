@@ -24,7 +24,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td align="left" class="${self.moldSclass}-left">${self.imgTag}<c:out value="${self.compoundLabel}" nbsp="true"/></td><%-- bug 1688261: nbsp is required --%>
 	<td align="right" class="${self.moldSclass}-right" id="${self.uuid}!cave"><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></td>
 <c:if test="${self.closableVisible}">
-	<td width="16"><img id="${self.parent.uuid}!close" src="${c:encodeURL('~./zul/img/close-off.gif')}"/></td>
+	<td width="16"><div id="${self.parent.uuid}!close" class="${self.parent.moldSclass}-tool ${self.parent.moldSclass}-close"></div></td>
 </c:if>
 </tr>
 </table>

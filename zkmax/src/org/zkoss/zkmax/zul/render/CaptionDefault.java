@@ -24,6 +24,7 @@ import java.io.IOException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
@@ -42,7 +43,6 @@ public class CaptionDefault implements ComponentRenderer {
 		final Caption self = (Caption) comp;
 		final String uuid = self.getUuid();
 		final String mcls = self.getMoldSclass();
-		final Execution exec = Executions.getCurrent();
 		final String imgTag = self.getImgTag();
 
 		if (self.isLegend()) {
@@ -65,11 +65,11 @@ public class CaptionDefault implements ComponentRenderer {
 				.writeln("</td>");
 
 			if (self.isClosableVisible()) {
-				wh.write("<td width=\"16\"><img id=\"")
+				final String pcls = ((HtmlBasedComponent)self.getParent()).getMoldSclass();
+				wh.write("<td width=\"16\"><div id=\"")
 					.write(self.getParent().getUuid())
-					.write("!close\" src=\"")
-					.write(exec.encodeURL("~./zul/img/close-off.gif"))
-					.writeln("\"/></td>");
+					.write("!close\" class=\"")
+					.write(pcls).write("-tool ").write(pcls).write("-close\"></div></td>");
 			}
 
 			wh.write("</tr></table>");
