@@ -320,11 +320,11 @@ zkButton = {
 		cmp = $real(cmp);
 		if (getZKAttr(cmp, "disd") == "true") return;
 		
-		zk.listen(cmp, "click", zkau.onclick);
+		zk.listen(cmp, "click", zkButton.onclick);
 		zk.listen(cmp, "dblclick", zkau.ondblclick);
 			//we have to handle here since _onDocDClick won't receive it
-		zk.listen(cmp, "focus", zkau.onfocus);
-		zk.listen(cmp, "blur", zkau.onblur);
+		//zk.listen(cmp, "focus", zkau.onfocus);
+		//zk.listen(cmp, "blur", zkau.onblur);
 		zk.disableSelection(cmp);
 		var btn = $e($uuid(cmp), "btn");
 		zk.listen(btn, "focus", zkButton.onfocus);
@@ -333,6 +333,11 @@ zkButton = {
 		zk.listen(cmp, "mouseup", zkButton.onup);
 		zk.listen(cmp, "mouseover", zkButton.onover);
 		zk.listen(cmp, "mouseout", zkButton.onout);
+	},
+	onclick: function (evt) {
+		if (!evt) evt = window.event;
+		var cmp = $real(Event.element(evt));
+		zkau.onclick(evt,cmp);
 	},
 	onover: function (evt) {
 		if (!evt) evt = window.event;
@@ -350,11 +355,13 @@ zkButton = {
 		if (!evt) evt = window.event;
 		var cmp = $real(Event.element(evt));
 		zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
+		zkau.onfocus(evt, $real(cmp));
 	},
 	onblur: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $real(Event.element(evt));
 		zk.rmClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
+		zkau.onblur(cmp,false,$real(cmp));
 	},
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
