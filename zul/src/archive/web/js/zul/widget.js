@@ -320,7 +320,7 @@ zkButton = {
 		if (getZKAttr(cmp, "disd") == "true") return;
 		
 		var cmp = $real(cmp);
-		zk.listen(cmp, "click", zkButton.onclick);
+		zk.listen(cmp, "click", zkau.onclick);
 		zk.listen(cmp, "dblclick", zkau.ondblclick);
 			//we have to handle here since _onDocDClick won't receive it
 		zk.disableSelection(cmp);
@@ -331,11 +331,6 @@ zkButton = {
 		zk.listen(cmp, "mouseup", zkButton.onup);
 		zk.listen(cmp, "mouseover", zkButton.onover);
 		zk.listen(cmp, "mouseout", zkButton.onout);
-	},
-	onclick: function (evt) {
-		if (!evt) evt = window.event;
-		var cmp = $real(Event.element(evt));
-		zkau.onclick(evt,cmp);
 	},
 	onover: function (evt) {
 		if (!evt) evt = window.event;
