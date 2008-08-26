@@ -39,7 +39,7 @@ public class Tabs2DefaultV implements ComponentRenderer {
 		final Tabs self = (Tabs)comp;
 		final String look = self.getTabbox().getTabLook() + '-';
 		wh.write("<div id=\""+self.getUuid()+"\" class=\""+look+"tabs\"")
-			.write("z.type=\"zul.tabs.Tabs2\"")
+			.write("z.type=\"zul.tab2.Tabs2\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(">");
 		
