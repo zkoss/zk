@@ -83,6 +83,7 @@ zkDetail = {
 					cell = fake.insertCell(0);
 				fake.id = $uuid(cmp) + "!fake";
 				setZKAttr(fake, "nostripe", "true");
+				setZKAttr(fake, "visible", "true");
 				cell.colSpan = zk.ncols(tr.cells) - 1;
 				
 				zk.addClass(fake, tr.className + " " + cls + "-faker");
