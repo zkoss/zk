@@ -27,7 +27,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<!-- //// -->
 	<!-- ZK -->
 	<listener>
-		<description>ZK listener for cleanup when a session is destroyed</description>
+		<description>ZK listener for session cleanup</description>
 		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
 	</listener>
 	<servlet>
