@@ -263,9 +263,11 @@ public class Row extends XulElement {
 		final Grid grid = getGrid();
 		if (grid != null && grid.getModel() != null) {
 			HTMLs.appendAttribute(sb, "z.loaded", _loaded);
-			if (getAttribute(Attributes.SKIP_SIBLING) != null) {
-				HTMLs.appendAttribute(sb, "z.skipsib", "true");
-				removeAttribute(Attributes.SKIP_SIBLING);
+
+			if (_loaded && !grid.inPagingMold()) {
+				final Component c = getNextSibling();
+				if (c instanceof Row && !((Row)c)._loaded)
+					HTMLs.appendAttribute(sb, "z.skipsib", "true");
 			}
 		}
 		return sb.toString();

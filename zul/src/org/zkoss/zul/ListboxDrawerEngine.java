@@ -106,10 +106,6 @@ import org.zkoss.zul.Listbox.Renderer;
 			for (Iterator it = _listbox.getItems().listIterator(ofs);
 				j < pgsz && it.hasNext(); ++j)
 				renderer.render((Listitem) it.next());
-			
-			if (!_listbox.inPagingMold() && _listbox.getItemCount() > pgsz)
-				_listbox.getItemAtIndex(pgsz).setAttribute(
-						Attributes.SKIP_SIBLING, Boolean.TRUE);
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {

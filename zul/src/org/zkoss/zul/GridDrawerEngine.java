@@ -105,11 +105,6 @@ import org.zkoss.zul.Grid.Renderer;
 			for (Iterator it = _grid.getRows().getChildren().listIterator(ofs); j < pgsz
 					&& it.hasNext(); ++j)
 				renderer.render((Row) it.next());
-
-			if (!_grid.inPagingMold()
-					&& _grid.getRows().getChildren().size() > pgsz)
-				((Row) _grid.getRows().getChildren().get(pgsz)).setAttribute(
-						Attributes.SKIP_SIBLING, Boolean.TRUE);
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
