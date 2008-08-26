@@ -51,4 +51,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<device-type>ajax</device-type>
 		<server-push-class>org.zkoss.zkmax.ui.comet.CometServerPush</server-push-class>
 	</device-config>
+
+	<listener>
+		<listener-class>org.zkoss.zkmax.init.WebAppInit</listener-class>
+	</listener>
 </config>

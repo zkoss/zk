@@ -18,27 +18,34 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.net.URL;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.Cache;
+import org.zkoss.util.Utils;
 import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.util.logging.Log;
+import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.web.servlet.http.Encodes;
 
+import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.au.AuWriters;
@@ -51,8 +58,142 @@ import org.zkoss.zk.au.AuWriters;
 public class ConfigParser {
 	private static final Log log = Log.lookup(ConfigParser.class);
 
+	/** The number of segments in a version.
+	 */
+	private static final int MAX_VERSION_SEGMENT = 4;
+	private static int[] _zkver;
+
+	/** Checks and returns whether the loaded document's version is correct.
+	 * @param zk
+	 * @since 3.5.0
+	 */
+	public static boolean checkVersion(URL url, Document doc)
+	throws Exception {
+		final Element el = doc.getRootElement().getElement("version");
+		if (el == null)
+			return true; //version is optional (3.0.5)
+
+		if (_zkver == null) {
+			//no need to worry synchronization since we init zkver (not _zkver)
+			final int[] zkver = new int[MAX_VERSION_SEGMENT];
+			for (int j = 0; j < MAX_VERSION_SEGMENT; ++j)
+				zkver[j] = Utils.getSubversion(Version.UID, j);
+			_zkver = zkver;
+		}
+
+		final String reqzkver = el.getElementValue("zk-version", true);
+		if (reqzkver != null) {
+			for (int j = 0; j < MAX_VERSION_SEGMENT; ++j) {
+				int v = Utils.getSubversion(reqzkver, j);
+				if (v < _zkver[j]) break; //ok
+				if (v > _zkver[j]) {//failed
+					log.info("Ignore "+url+"\nCause: ZK version must be "+reqzkver+" or later, not "+Version.UID);
+					return false;
+				}
+			}
+		}
+
+		final String clsnm = el.getElementValue("version-class", true);
+		if (clsnm == null) {
+			if (clsnm.length() == 0)
+				log.warning("Ignored: empty version-class, "+el.getLocator());
+			return true; //version is optional 3.0.5
+		}
+
+		final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
+		final Class cls = Classes.forNameByThread(clsnm);
+		final Field fld = cls.getField("UID");
+		final String uidInClass = (String)fld.get(null);
+		if (!uid.equals(uidInClass)) {
+			log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
+			return false;
+		}
+
+		return true; //matched
+	}
+
 	/** Used to provide backward compatibility to 2.3.0's richlet definition. */
 	private int _richletnm;
+
+	/** Parses metainfo/zk/config.xml placed in class-path.
+	 * @since 3.5.0
+	 */
+	public void parseConfigXml(Configuration config) {
+		try {
+			final ClassLocator locator = new ClassLocator();
+			final List xmls = locator.getDependentXMLResources(
+				"metainfo/zk/config.xml", "config-name", "depends");
+			for (Iterator it = xmls.iterator(); it.hasNext();) {
+				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
+				if (log.debugable()) log.debug("Loading "+res.url);
+				try {
+					if (checkVersion(res.url, res.document))
+						parseConfigXml0(config, res.document.getRootElement());
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex, "Failed to load "+res.url);
+						//abort since it is hardly to work then
+				}
+			}
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex); //abort
+		}
+	}
+	private static void parseConfigXml0(Configuration config, Element el)
+	throws Exception {
+		parseZScriptConfig(el);
+		parseDeviceConfig(el);
+		parseSystemConfig(el);
+		parseClientConfig(el);
+		parseListeners(config, el);
+	}
+	private static void parseZScriptConfig(Element root) {
+		for (Iterator it = root.getElements("zscript-config").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			Interpreters.add(el);
+				//Note: zscript-config is applied to the whole system, not just langdef
+		}
+	}
+	private static void parseDeviceConfig(Element root) {
+		for (Iterator it = root.getElements("device-config").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			Devices.add(el);
+		}
+	}
+	private static void parseSystemConfig(Element root) throws Exception {
+		final Element el = root.getElement("system-config");
+		if (el != null) {
+			String s = el.getElementValue("au-writer-class", true);
+			if (s != null)
+				AuWriters.setImplementationClass(
+					s.length() == 0 ? null: Classes.forNameByThread(s));
+		}
+	}
+	private static void parseClientConfig(Element root) throws Exception {
+		final Element el = root.getElement("client-config");
+		if (el != null) {
+			Integer v = parseInteger(el, "resend-delay", false);
+			if (v != null)
+				Library.setProperty(Attributes.RESEND_DELAY, v.toString());
+		}
+	}
+	private static void parseListeners(Configuration config, Element root)
+	throws Exception {
+		for (Iterator it = root.getElements("listener").iterator();
+		it.hasNext();) {
+			parseListener(config, (Element)it.next());
+		}
+	}
+	private static void parseListener(Configuration config, Element el) {
+		final String clsnm = IDOMs.getRequiredElementValue(el, "listener-class");
+		try {
+			final Class cls = Classes.forNameByThread(clsnm);
+			config.addListener(cls);
+		} catch (Throwable ex) {
+			throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
+		}
+	}
 
 	/** Parses zk.xml, specified by url, into the configuration.
 	 *
@@ -75,14 +216,7 @@ public class ConfigParser {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
 			if ("listener".equals(elnm)) {
-				final String clsnm =
-					IDOMs.getRequiredElementValue(el, "listener-class");
-				try {
-					final Class cls = Classes.forNameByThread(clsnm);
-					config.addListener(cls);
-				} catch (Throwable ex) {
-					throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
-				}
+				parseListener(config, el);
 			} else if ("richlet".equals(elnm)) {
 				final String clsnm =
 					IDOMs.getRequiredElementValue(el, "richlet-class");

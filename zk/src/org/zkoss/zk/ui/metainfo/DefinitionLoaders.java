@@ -18,7 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.List;
@@ -29,13 +28,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Enumeration;
 import java.net.URL;
-import java.io.IOException;
 
-import org.zkoss.lang.D;
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Strings;
-import org.zkoss.util.Utils;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ClassLocator;
@@ -49,13 +43,9 @@ import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 
-import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
-import org.zkoss.zk.ui.impl.Attributes;
-import org.zkoss.zk.scripting.Interpreters;
-import org.zkoss.zk.device.Devices;
-import org.zkoss.zk.au.AuWriters;
+import org.zkoss.zk.ui.sys.ConfigParser;
 
 /**
  * Utilities to load language definitions.
@@ -65,7 +55,6 @@ import org.zkoss.zk.au.AuWriters;
 public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
 
-	private static final int MAX_VERSION_SEGMENT = 4;
 	private static List _addons;
 	/** A map of (String ext, String lang). */
 	private static Map _exts;
@@ -142,30 +131,7 @@ public class DefinitionLoaders {
 	private static void load0() {
 		final ClassLocator locator = new ClassLocator();
 
-		final int[] zkver = new int[MAX_VERSION_SEGMENT];
-		for (int j = 0; j < MAX_VERSION_SEGMENT; ++j)
-			zkver[j] = Utils.getSubversion(Version.UID, j);
-
-		//1. process config.xml (no particular dependency)
-		try {
-			final List xmls = locator.getDependentXMLResources(
-				"metainfo/zk/config.xml", "config-name", "depends");
-			for (Iterator it = xmls.iterator(); it.hasNext();) {
-				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
-				if (log.debugable()) log.debug("Loading "+res.url);
-				try {
-					if (checkVersion(zkver, res.url, res.document))
-						parseConfig(res.document.getRootElement());
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex, "Failed to load "+res.url);
-						//abort since it is hardly to work then
-				}
-			}
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex); //abort
-		}
-
-		//2. process lang.xml (no particular dependency)
+		//1. process lang.xml (no particular dependency)
 		try {
 			for (Enumeration en = locator.getResources("metainfo/zk/lang.xml");
 			en.hasMoreElements();) {
@@ -173,7 +139,7 @@ public class DefinitionLoaders {
 				if (log.debugable()) log.debug("Loading "+url);
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
-					if (checkVersion(zkver, url, doc))
+					if (ConfigParser.checkVersion(url, doc))
 						parseLang(doc, locator, url, false);
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+url);
@@ -184,14 +150,14 @@ public class DefinitionLoaders {
 			throw UiException.Aide.wrap(ex); //abort
 		}
 
-		//3. process lang-addon.xml (with dependency)
+		//2. process lang-addon.xml (with dependency)
 		try {
 			final List xmls = locator.getDependentXMLResources(
 				"metainfo/zk/lang-addon.xml", "addon-name", "depends");
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				try {
-					if (checkVersion(zkver, res.url, res.document))
+					if (ConfigParser.checkVersion(res.url, res.document))
 						parseLang(res.document, locator, res.url, true);
 				} catch (Exception ex) {
 					log.realCauseBriefly("Failed to load addon", ex);
@@ -203,7 +169,7 @@ public class DefinitionLoaders {
 			//keep running
 		}
 
-		//4. process other addon (from addAddon)
+		//3. process other addon (from addAddon)
 		if (_addons != null) {
 			for (Iterator it = _addons.iterator(); it.hasNext();) {
 				final Object[] p = (Object[])it.next();
@@ -231,86 +197,6 @@ public class DefinitionLoaders {
 		} catch (Exception ex) {
 			log.error("Failed to load addon: "+url, ex);
 			//keep running
-		}
-	}
-
-	/** Checks and returns whether the loaded document's version is correct.
-	 */
-	private static
-	boolean checkVersion(int[] zkver, URL url, Document doc)
-	throws Exception {
-		final Element el = doc.getRootElement().getElement("version");
-		if (el == null)
-			return true; //version is optional (3.0.5)
-
-		final String reqzkver = el.getElementValue("zk-version", true);
-		if (reqzkver != null) {
-			for (int j = 0; j < MAX_VERSION_SEGMENT; ++j) {
-				int v = Utils.getSubversion(reqzkver, j);
-				if (v < zkver[j]) break; //ok
-				if (v > zkver[j]) {//failed
-					log.info("Ignore "+url+"\nCause: ZK version must be "+zkver+" or later, not "+Version.UID);
-					return false;
-				}
-			}
-		}
-
-		final String clsnm = el.getElementValue("version-class", true);
-		if (clsnm == null) {
-			if (clsnm.length() == 0)
-				log.warning("Ignored: empty version-class, "+el.getLocator());
-			return true; //version is optional 3.0.5
-		}
-
-		final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
-		final Class cls = Classes.forNameByThread(clsnm);
-		final Field fld = cls.getField("UID");
-		final String uidInClass = (String)fld.get(null);
-		if (!uid.equals(uidInClass)) {
-			log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
-			return false;
-		}
-
-		return true; //matched
-	}
-
-	private static void parseConfig(Element el)
-	throws Exception {
-		parseZScriptConfig(el);
-		parseDeviceConfig(el);
-		parseSystemConfig(el);
-		parseClientConfig(el);
-	}
-	private static void parseZScriptConfig(Element root) {
-		for (Iterator it = root.getElements("zscript-config").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
-			Interpreters.add(el);
-				//Note: zscript-config is applied to the whole system, not just langdef
-		}
-	}
-	private static void parseDeviceConfig(Element root) {
-		for (Iterator it = root.getElements("device-config").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
-			Devices.add(el);
-		}
-	}
-	private static void parseSystemConfig(Element root) throws Exception {
-		final Element el = root.getElement("system-config");
-		if (el != null) {
-			String s = el.getElementValue("au-writer-class", true);
-			if (s != null)
-				AuWriters.setImplementationClass(
-					s.length() == 0 ? null: Classes.forNameByThread(s));
-		}
-	}
-	private static void parseClientConfig(Element root) throws Exception {
-		final Element el = root.getElement("client-config");
-		if (el != null) {
-			Integer v = parseInteger(el, "resend-delay", false);
-			if (v != null)
-				Library.setProperty(Attributes.RESEND_DELAY, v.toString());
 		}
 	}
 
@@ -618,7 +504,7 @@ public class DefinitionLoaders {
 		if (el != null) {
 			final String compnm =
 				IDOMs.getRequiredElementValue(el, "component-name");
-			final Set reservedAttrs = new HashSet(5);
+			final Set reservedAttrs = new HashSet(8);
 			for (Iterator it = el.getElements("reserved-attribute").iterator();
 			it.hasNext();)
 				reservedAttrs.add(((Element)it.next()).getText(true));

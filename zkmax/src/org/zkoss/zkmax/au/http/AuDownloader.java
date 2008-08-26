@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkmax.zul;
+package org.zkoss.zkmax.au.http;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,35 +52,53 @@ import org.zkoss.zkmax.zul.FiledownloadListener;
  * @since 3.5.0
  * @see Filedownload
  */
-/*pacakge*/ class AuDownloader implements AuProcessor {
+public class AuDownloader implements AuProcessor {
 	private static final Log log = Log.lookup(AuDownloader.class);
 	private static FiledownloadListener _listener;
 	private static final String URI_PREFIX = "/download";
 
+	/** Initializes the downloader.
+	 */
+	public static void init(WebApp wapp) {
+		if (DHtmlUpdateServlet.getAuProcessor(wapp, URI_PREFIX) == null) {
+			final String clsnm = Library.getProperty("org.zkoss.zkmax.zul.FiledownloadListener.class");
+			if (clsnm != null) {
+				try {
+					_listener = (FiledownloadListener)Classes.newInstanceByThread(clsnm);
+				} catch (Throwable ex) {
+					log.warning("Failed to instantiate "+clsnm);
+				}
+			}
+
+			DHtmlUpdateServlet
+				.addAuProcessor(wapp, URI_PREFIX, new AuDownloader());
+		}
+	}
+
+	/** Use {@link #init} instead. */
 	private AuDownloader() {}
 
 	/** Returns the download URI of the specified file.
 	 */
-	/*pacakge*/ static
+	public static
 	String getDownloadURI(File file, String contentType, String data) {
 		return getDownloadURI('f', file.getAbsolutePath(), contentType, data);
 	}
 	/** Returns the download URI of the specified file.
 	 */
-	/*pacakge*/ static
+	public static
 	String getDownloadURI(URL url, String contentType, String data) {
 		return getDownloadURI('u', url.toExternalForm(), contentType, data);
 	}
 	/** Returns the download URI of the specified file.
 	 */
-	/*pacakge*/ static
+	public static
 	String getDownloadURI(String path, String contentType, String data) {
 		return getDownloadURI('p', path, contentType, data);
 	}
 	private static String
 	getDownloadURI(char type, String path, String contentType, String data) {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
-		init(desktop);
 
 		final StringBuffer sb = new StringBuffer(256)
 			.append(URI_PREFIX).append('/').append(type);
@@ -165,23 +183,6 @@ import org.zkoss.zkmax.zul.FiledownloadListener;
 			sb.append(cc);
 		}
 		return sb.toString();
-	}
-
-	private static void init(Desktop desktop) {
-		final WebApp wapp = desktop.getWebApp();
-		if (DHtmlUpdateServlet.getAuProcessor(wapp, URI_PREFIX) == null) {
-			final String clsnm = Library.getProperty("org.zkoss.zkmax.zul.FiledownloadListener.class");
-			if (clsnm != null) {
-				try {
-					_listener = (FiledownloadListener)Classes.newInstanceByThread(clsnm);
-				} catch (Throwable ex) {
-					log.warning("Failed to instantiate "+clsnm);
-				}
-			}
-
-			DHtmlUpdateServlet
-				.addAuProcessor(wapp, URI_PREFIX, new AuDownloader());
-		}
 	}
 
 	//AuProcessor//

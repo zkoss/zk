@@ -107,10 +107,14 @@ public class WebManager {
 		//load config as soon as possible since it might set some system props
 		final Configuration config = new Configuration();
 		try {
+			//load metainfo/zk/config.xml
+			final ConfigParser parser = new ConfigParser();
+			parser.parseConfigXml(config);
+
+			//load /WEB-INF/zk.xml
 			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
 			if (cfgUrl != null)
-				new ConfigParser()
-					.parse(cfgUrl, config, new ServletContextLocator(_ctx));
+				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx));
 		} catch (Throwable ex) {
 			log.error("Unable to load /WEB-INF/zk.xml", ex);
 		}

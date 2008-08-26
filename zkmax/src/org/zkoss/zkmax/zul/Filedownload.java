@@ -25,6 +25,8 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.au.out.AuDownload;
 
+import org.zkoss.zkmax.au.http.AuDownloader;
+
 /**
  * More filedownload utilities, such as resumable filedownload.
  *
