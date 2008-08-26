@@ -31,6 +31,7 @@ zkPortalLayout = {
 		var header = $e(n, "caption");
 		if (!header) return;
 		this.drags[n.id] = new zDraggable(n, {
+			handle: header,
 			zindex: 12000,
 			overlay: true,
 			starteffect: zkPanel._startMove,
@@ -85,9 +86,9 @@ zkPortalLayout = {
 		}
 				
 		if (p) {
-			p.parentNode.insertBefore($e(dg.handle, "proxy"), match ? p : null);
+			p.parentNode.insertBefore($e(zkau.getGhostOrgin(dg), "proxy"), match ? p : null);
 		} else {
-			$e(cns[col], "cave").insertBefore($e(dg.handle, "proxy"), null);
+			$e(cns[col], "cave").insertBefore($e(zkau.getGhostOrgin(dg), "proxy"), null);
 		}
 	},
 	_ignoreMove: function (cmp, pointer, event) {
