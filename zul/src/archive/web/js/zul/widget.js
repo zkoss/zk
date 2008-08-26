@@ -317,14 +317,12 @@ zkDbbox.validate = function (cmp) {
 zkButton = {
 	down_btn: null,
 	init: function (cmp) {
-		cmp = $real(cmp);
 		if (getZKAttr(cmp, "disd") == "true") return;
 		
+		var cmp = $real(cmp);
 		zk.listen(cmp, "click", zkButton.onclick);
 		zk.listen(cmp, "dblclick", zkau.ondblclick);
 			//we have to handle here since _onDocDClick won't receive it
-		//zk.listen(cmp, "focus", zkau.onfocus);
-		//zk.listen(cmp, "blur", zkau.onblur);
 		zk.disableSelection(cmp);
 		var btn = $e($uuid(cmp), "btn");
 		zk.listen(btn, "focus", zkButton.onfocus);
@@ -355,13 +353,13 @@ zkButton = {
 		if (!evt) evt = window.event;
 		var cmp = $real(Event.element(evt));
 		zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
-		zkau.onfocus(evt, $real(cmp));
+		zkau.onfocus(evt);
 	},
 	onblur: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $real(Event.element(evt));
 		zk.rmClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
-		zkau.onblur(cmp,false,$real(cmp));
+		zkau.onblur(evt);
 	},
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
@@ -381,6 +379,19 @@ zkButton = {
 		}
 		zkButton.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkButton.onup);
+	},
+	setAttr: function (cmp, nm, val) {
+		switch (nm) {
+			case "style.height":
+			case "style.width":
+			case "style":
+			case "class":
+				zkau.setAttr($real(cmp), nm, val);
+				return true;
+		}
+		zkau.setAttr(cmp, nm, val);
+		zkau.setAttr($real(cmp), nm, val);
+		return true;
 	}
 };
 if (zk.ie) {

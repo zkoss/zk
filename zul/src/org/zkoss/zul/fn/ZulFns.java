@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.fn;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Box;
 import org.zkoss.zul.Grid;
@@ -140,5 +141,30 @@ public class ZulFns {
 		tree.removeAttribute(Attributes.RENDERED_ITEM_COUNT);
 		tree.removeAttribute(Attributes.VISITED_ITEM_COUNT);
 		tree.removeAttribute(Attributes.VISITED_ITEM_TOTAL);
+	}
+	/**
+	 * Returns the outer attributes of the specified component except CSS name and Style.
+	 * @param cmp
+	 * @since 3.5.0
+	 */
+	public static final String getZkOuterAttrs(HtmlBasedComponent cmp) {
+		String attrs = cmp.getOuterAttrs();
+		if (attrs == null || attrs.length() == 0) return attrs;
+		final String CSS = "class=\"";
+		final String STYLE = "style=\"";
+		StringBuffer sb = new StringBuffer(attrs);
+		int start = sb.indexOf(CSS);
+		if (start > -1) {
+			int end = sb.indexOf("\"", start + CSS.length());
+			if (end > -1)
+				sb.replace(start, end + 1, "");
+		}
+		start = sb.indexOf(STYLE);
+		if (start > -1) {
+			int end = sb.indexOf("\"", start + STYLE.length());
+			if (end > -1)
+				sb.replace(start, end + 1, "");
+		}
+		return sb.toString();
 	}
 }

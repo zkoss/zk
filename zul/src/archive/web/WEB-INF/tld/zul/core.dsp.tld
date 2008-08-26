@@ -111,4 +111,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	a tree in the paging mold.
 		</description>
 	</function>
+	<function>
+		<name>getZkOuterAttrs</name>
+		<function-class>org.zkoss.zul.fn.ZulFns</function-class>
+		<function-signature>
+	String getZkOuterAttrs(org.zkoss.zk.ui.HtmlBasedComponent)
+		</function-signature>
+		<description>
+	Returns the outer attributes of the specified component except CSS name and Style.
+		</description>
+	</function>
 </taglib>

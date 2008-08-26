@@ -162,21 +162,21 @@ zkau._fixOffset = function (el, x, y) {
 };
 /** Handles onclick for button-type.
  */
-zkau.onclick = function (evt,outer) {
+zkau.onclick = function (evt) {
 	if (typeof evt == 'string') {
-		zkau.send({uuid: $uuid(evt), cmd: "onClick", ctl: true});		
+		zkau.send({uuid: $uuid(evt), cmd: "onClick", ctl: true});
 		return;
 	}
 
-	//if (!evt) evt = window.event;
-	//var target = Event.element(evt);
-	var target = zkau.evtel(evt);
+	if (!evt) evt = window.event;
+	var target = Event.element(evt);
+
 	//it might be clicked on the inside element
 	for (;; target = $parent(target))
 		if (!target) return;
 		else if (target.id) break;
-
-	var href = outer ? getZKAttr(outer, "href") : getZKAttr(target, "href") ;
+	target = $outer(target);
+	var href = getZKAttr(target, "href");
 	if (href) {
 		zk.go(href, false, getZKAttr(target, "target"));
 		Event.stop(evt); //prevent _onDocLClick
@@ -184,7 +184,7 @@ zkau.onclick = function (evt,outer) {
 	}
 
 	zkau._lastClickId = target.id;
-	zkau.send({uuid: $uuid(target.id),
+	zkau.send({uuid: target.id,
 		cmd: "onClick", data: zkau._getMouseData(evt, target), ctl: true});
 	//Don't stop event so popup will work (bug 1734801)
 	zkau.addOnSend(zkau._resetLastClickId);
@@ -1086,15 +1086,15 @@ zkau.evtel = function (evtel) {
 	return Event.element(evtel);
 };
 
-zkau.onfocus = function (evtel, outer) { //accept both evt and cmp
-	zkau.onfocus0(evtel, false, outer);
+zkau.onfocus = function (evtel) { //accept both evt and cmp
+	zkau.onfocus0(evtel);
 };
 /** When a component implements its own onfocus, it shall call back this
  * method and ignore the event if this method returns false.
  * Like zkau.onfocus except returns false if it shall be ignored.
  * @since 3.0.4
  */
-zkau.onfocus0 = function (evtel, silent, outer) { //accept both evt and cmp
+zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
 	var el = zkau.evtel(evtel);
 	if (!zkau.canFocus(el)) return false;
 
@@ -1104,24 +1104,24 @@ zkau.onfocus0 = function (evtel, silent, outer) { //accept both evt and cmp
 
 	zkau.autoZIndex(el);
 
-	var cmp = outer || $outer(el);
+	var cmp = $outer(el);
 	if (!silent && zkau.asap(cmp, "onFocus"))
-		zkau.send({uuid: $uuid(cmp), cmd: "onFocus"}, 100);
+		zkau.send({uuid: cmp.id, cmd: "onFocus"}, 100);
 	return true;
 };
 /**
  * @param noonblur not to send the onblur event (3.0.5)
  */
-zkau.onblur = function (evtel, noonblur, outer) {
+zkau.onblur = function (evtel, noonblur) {
 	var el = zkau.evtel(evtel);
 	if (el == zkau.currentFocus) zkau.currentFocus = null;
 		//Note: _onDocMousedown is called before onblur, so we have to
 		//prevent it from being cleared
 
 	if (!noonblur && !zk.alerting) {
-		var cmp = outer || $outer(el);
+		var cmp = $outer(el);
 		if (zkau.asap(cmp, "onBlur"))
-			zkau.send({uuid: $uuid(cmp), cmd: "onBlur"}, 100);
+			zkau.send({uuid: cmp.id, cmd: "onBlur"}, 100);
 	}
 };
 
