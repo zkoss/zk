@@ -341,14 +341,17 @@ public class Listitem extends XulElement {
 			if (listbox != null) {
 				if (listbox.getName() != null)
 					HTMLs.appendAttribute(sb, "z.value",  Objects.toString(_value));
-				if (listbox.getModel() != null)
+				if (listbox.getModel() != null) {
 					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
+					if (_loaded && !listbox.inPagingMold()) {
+						final Component c = getNextSibling();
+						if (c instanceof Listitem && !((Listitem)c)._loaded)
+							HTMLs.appendAttribute(sb, "z.skipsib", "true");
+					}
+				}
 			}
+
 			HTMLs.appendAttribute(sb, "z.disd", isDisabled());
-			if (getAttribute(Attributes.SKIP_SIBLING) != null) {
-				HTMLs.appendAttribute(sb, "z.skipsib", "true");
-				removeAttribute(Attributes.SKIP_SIBLING);
-			}
 			if (isSelected())
 				HTMLs.appendAttribute(sb, "z.sel", "true");
 

@@ -818,10 +818,6 @@ public class Grid extends XulElement implements Paginated {
 				for (Iterator it = _rows.getChildren().listIterator(ofs);
 				j < pgsz && it.hasNext(); ++j)
 					renderer.render((Row)it.next());
-	
-				if (!inPagingMold() && getRows().getChildren().size() > pgsz)
-					((Row)getRows().getChildren().get(pgsz))
-						.setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
 			} catch (Throwable ex) {
 				renderer.doCatch(ex);
 			} finally {

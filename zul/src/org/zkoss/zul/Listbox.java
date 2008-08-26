@@ -1721,8 +1721,6 @@ public class Listbox extends XulElement implements Paginated {
 				for (Iterator it = getItems().listIterator(ofs);
 				j < pgsz && it.hasNext(); ++j)
 					renderer.render((Listitem)it.next());
-				if (!inPagingMold() && getItemCount() > pgsz)
-					getItemAtIndex(pgsz).setAttribute(Attributes.SKIP_SIBLING, Boolean.TRUE);
 			} catch (Throwable ex) {
 				renderer.doCatch(ex);
 			} finally {

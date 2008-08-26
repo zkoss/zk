@@ -66,6 +66,7 @@ ZK 3.5.0
   2051639: Data binding longbox does not work
   2037288: Clustering failed with AnnotateDataBinder
   2041347: F1 key not overridden correctly in IE
+  2071996: Selection on a paged Listbox doesn't work an last page
 
 * Upgrade Notes
   + onBookmarkChanged is renamed to onBookmarkChange
