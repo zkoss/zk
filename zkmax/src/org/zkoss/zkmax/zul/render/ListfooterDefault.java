@@ -1,4 +1,4 @@
-﻿/* ListfooterDefault.java
+/* ListfooterDefault.java
 
 {{IS_NOTE
 	Purpose:
