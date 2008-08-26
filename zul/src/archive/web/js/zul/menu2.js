@@ -289,7 +289,7 @@ zkMenu2 = { // menu
 			
 			pp.style.position = "absolute"; //just in case
 			zk.setVParent(pp);
-			zkMenu2._open(pp, top, menu, pos);
+			zkMenu2._open(pp, top, $e(menu, "a"), pos);
 	
 			if (zkau.asap(pp, "onOpen"))
 				zkau.send({uuid: pp.id, cmd: "onOpen", data: [true, menu.id]});
