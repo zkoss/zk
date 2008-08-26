@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z31-grid-0001.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May  6 09:29:59 TST 2008, Created by DennisChen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Grid with Group feature" border="normal">
+	1.Test Manipulate DataModel to change Grid
+	<zscript>
+	<![CDATA[//@IMPORT
+	    
+	]]>
+		<![CDATA[
+		String[][] datas1 = new String[][]{
+			// Today
+			new String[]{"","Group-Title","date","size"},
+			new String[]{"1","[zk1 - Help] RE: ZK problem in dynamic menu","2008/4/29 15:47:27","12KB"},
+			new String[]{"2","[zk1 - Help] RE: FileUpload","2008/4/29 15:37:57","14KB"},
+			new String[]{"3","[zk1 - Help] RE: Datebox format","2008/4/29 15:27:31","11KB"},
+			new String[]{"4","[zk1 - Help] RE: Datebox format","2008/4/29 14:17:22","12KB"},
+			new String[]{"5","[zk1 - Help] FileUpload","2008/4/29 14:07:25","11KB"},
+			new String[]{"6","[zk1 - General] RE: Opening more than one new	browser window","2008/4/29 13:44:17","12KB"},
+			new String[]{"7","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/29 13:31:12","14KB"},
+			new String[]{"8","[zk1 - Help] RE: Times_Series Chart help","2008/4/29 13:26:37","14KB"},
+			new String[]{"9","[zk1 - Help] RE: Times_Series Chart help","2008/4/29 10:41:33","14KB"},	
+			new String[]{"10","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/29 10:14:27","14KB"},
+			new String[]{"","foot Title 1","",""},
+			
+		};
+		
+		String[][] datas2 = new String[][]{
+				// Today
+				new String[]{"","Group-Title","date","size"},
+				new String[]{"1","[zk1 - Help] RE: ZK problem in dynamic menu","2008/4/29 15:47:27","12KB"},
+				new String[]{"2","[zk1 - Help] RE: FileUpload","2008/4/29 15:37:57","14KB"},
+				new String[]{"3","[zk1 - Help] RE: Datebox format","2008/4/29 15:27:31","11KB"},
+				new String[]{"4","[zk1 - Help] RE: Datebox format","2008/4/29 14:17:22","12KB"},
+				new String[]{"5","[zk1 - Help] FileUpload","2008/4/29 14:07:25","11KB"},
+				new String[]{"6","[zk1 - General] RE: Opening more than one new	browser window","2008/4/29 13:44:17","12KB"},
+				new String[]{"7","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/29 13:31:12","14KB"},
+				new String[]{"8","[zk1 - Help] RE: Times_Series Chart help","2008/4/29 13:26:37","14KB"},
+				new String[]{"9","[zk1 - Help] RE: Times_Series Chart help","2008/4/29 10:41:33","14KB"},	
+				new String[]{"10","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/29 10:14:27","14KB"},
+				new String[]{"","foot Title 1","",""},
+				// Yesterday
+				new String[]{"","group-Title","date","size"},
+				new String[]{"11","[zk1 - General] RE: Opening more than one new	browser window","2008/4/28 13:44:17","12KB"},
+				new String[]{"12","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 13:31:12","14KB"},
+				new String[]{"13","[zk1 - Help] RE: Times_Series Chart help","2008/4/28 13:26:37","14KB"},
+				new String[]{"14","[zk1 - Help] RE: Times_Series Chart help","2008/4/28 10:41:33","14KB"},	
+				new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 10:14:27","14KB"},
+				new String[]{"","foot Title 2","",""},
+				
+			};
+		ListModel model1 = new SimpleGroupModel (datas1, new int[]{10},new boolean[]{true});
+		ListModel model2 = new SimpleGroupModel (datas2, new int[]{10,5},new boolean[]{true,true});
+		
+	]]>
+	<![CDATA[//@DECLARATION
+	void setNewModel(){
+		gd.setModel(model2);
+	}
+
+	class MyRowRenderer implements RowRenderer,RowRendererExt{
+		public void render(Row row, java.lang.Object data){
+			String[] datas = (String[])data;
+			if(row instanceof Groupfoot){
+				new Label(datas[0]).setParent(row);
+				new Label(datas[1]).setParent(row);
+				row.setSpans("1,3");
+			}else if(row instanceof Group){
+				new Label(datas[0]).setParent(row);
+				new Button(datas[1]).setParent(row);
+				new Button(datas[2]).setParent(row);
+				row.setSpans("1,1,1,2");
+			}else if(row instanceof Row){
+				Detail detail = new Detail();
+				new Label("Label"+new Date()).setParent(detail);
+				detail.setParent(row);
+				new Label(datas[0]+"."+datas[1]).setParent(row);
+				new Label(datas[2]).setParent(row);
+				new Label(datas[3]).setParent(row);
+			}
+		}
+		
+		public int getControls(){
+			return RowRendererExt.DETACH_ON_RENDER;
+		}
+		
+		public Row newRow(Grid grid){
+			return null;
+		}
+		
+		public Component newCell(Row row){
+			
+			if(row instanceof Groupfoot){
+			}else if(row instanceof Group){
+			}else if(row instanceof Row){
+				//Detail detail = new Detail();
+				//new Label("Label"+new Date()).setParent(detail);
+				//return detail;
+			}
+			return null;
+		}
+		
+	}
+	
+	MyRowRenderer renderer = new MyRowRenderer();
+	]]>
+	</zscript>
+	<hbox>
+		<button label="1.set new model " onClick="setNewModel()"/>
+	</hbox>
+	<grid fixedLayout="true" model="${model2}" rowRenderer="${renderer}" id="gd">
+        <columns sizable="true">
+          <column width="35px" label="open"/>
+          <column label="Subject"/>
+          <column width="150px" label="Received"/>
+          <column width="50px" label="Size"/>
+        </columns>
+      </grid>
+	
+</window>

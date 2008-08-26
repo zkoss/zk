@@ -68,8 +68,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</zscript>
 	<hbox>
 		<button label="1.add group " onClick="addNewGroup()"/>
-		<button label="2.print foot" onClick="printFoot();"/>
-		<button label="3.add foot" onClick="addFoot()"/>
+		<button label="2.add foot" onClick="addFoot()"/>
+		<button label="3.print foot" onClick="printFoot();"/>
 	</hbox>
 	<grid fixedLayout="true">
         <columns sizable="true">
