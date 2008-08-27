@@ -108,11 +108,6 @@ zkColumnChildren = {
 	},
 	cleanup: function(cmp) {
 		if (cmp._width) cmp._width = null;
-		var layout = $parentByType(cmp, "ColumnLayout");
-		if (layout) {
-			zk.beforeSizeAt(layout);
-			zk.onSizeAt(layout);
-		}
 	},
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
