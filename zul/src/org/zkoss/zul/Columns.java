@@ -222,6 +222,7 @@ public class Columns extends HeadersElement {
 			if (exe.getAttribute("_zk_columns_menupopup_" + uuid) == null) {
 				if (_menupopup != null) _menupopup.detach();
 				_menupopup = new Columnmenupopup(this);
+				smartUpdate("z.mpop", _menupopup.getId());
 				exe.setAttribute("_zk_columns_menupopup_" + uuid, Boolean.TRUE);
 			}
 		}
