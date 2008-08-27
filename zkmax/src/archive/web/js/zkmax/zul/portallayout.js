@@ -270,11 +270,6 @@ zkPortalChildren = {
 	},
 	cleanup: function(cmp) {
 		if (cmp._width) cmp._width = null;
-		var layout = $parentByType(cmp, "PortalLayout");
-		if (layout) {
-			zk.beforeSizeAt(layout);
-			zk.onSizeAt(layout);
-		}
 	},
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
