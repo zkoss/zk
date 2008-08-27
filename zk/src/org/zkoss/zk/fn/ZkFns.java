@@ -768,4 +768,40 @@ public class ZkFns {
 		exec.removeAttribute(ATTR_RESPONSES);
 		return sb.toString();
 	}
+
+	/**
+	 * Removes the class and style attributes from the specified one.
+	 * 
+	 * <p>For example, if attrs is <code>href="a" class="c"</code>,
+	 * then the output will be <code>href="a"</code>
+	 * @param attrs the attributes to filter
+	 * @since 3.5.0
+	 */
+	public static final String noCSSAttrs(String attrs) {
+		if (attrs == null || attrs.length() == 0) return attrs;
+
+		final String CSS = "class=\"";
+		final String STYLE = "style=\"";
+		StringBuffer sb = null;
+
+		int start = attrs.indexOf(CSS);
+		if (start >= 0) {
+			sb = new StringBuffer(attrs);
+			int end = sb.indexOf("\"", start + CSS.length());
+			if (end >= 0)
+				sb.delete(start, end + 1);
+
+			start = sb.indexOf(STYLE);
+		} else {
+			start = attrs.indexOf(STYLE);
+		}
+
+		if (start >= 0) {
+			if (sb == null) sb = new StringBuffer(attrs);
+			int end = sb.indexOf("\"", start + STYLE.length());
+			if (end >= 0)
+				sb.delete(start, end + 1);
+		}
+		return sb != null ? sb.toString(): attrs;
+	}
 }

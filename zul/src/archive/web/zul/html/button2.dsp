@@ -18,9 +18,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="z" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<span id="${self.uuid}" class="${self.moldSclass}" ${z:getZkOuterAttrs(self)} z.type="zul.widget.Button">
+<span id="${self.uuid}" class="${self.moldSclass}"${z:noCSSAttrs(self.outerAttrs)} z.type="zul.widget.Button">
 <table id="${self.uuid}!real" cellspacing="0" cellpadding="0" border="0" ${self.outerAttrs}${self.innerAttrs}>
 <tbody>
 <tr>

@@ -183,4 +183,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	It is required only if outPageAttrs might not be called
 		</description>
 	</function>
+
+	<function>
+		<name>noCSSAttrs</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String noCSSAttrs(java.lang.String)
+		</function-signature>
+		<description>
+	Removes the class and style attributes from the specified one.
+		</description>
+	</function>
 </taglib>

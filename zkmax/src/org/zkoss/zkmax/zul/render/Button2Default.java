@@ -25,8 +25,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.Out;
 import org.zkoss.zk.ui.render.SmartWriter;
+import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.fn.ZulFns;
 
 /**
  * 
@@ -43,7 +43,8 @@ public class Button2Default implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		final String mcls = self.getMoldSclass();
 		
-		wh.write("<span id=\"").write(uuid).write("\"").write(ZulFns.getZkOuterAttrs(self)).write(" class=\"").write(mcls)
+		wh.write("<span id=\"").write(uuid).write("\"")
+			.write(ZkFns.noCSSAttrs(self.getOuterAttrs())).write(" class=\"").write(mcls)
 			.write("\" z.type=\"zul.widget.Button\">").write("<table id=\"").write(uuid)
 			.write("!real\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"")						
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
