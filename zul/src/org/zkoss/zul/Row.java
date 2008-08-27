@@ -407,7 +407,9 @@ public class Row extends XulElement {
 			sb.append(getChildAttrs(j));
 		}
 		sb.append("><div id=\"").append(child.getUuid())
-		.append("!cell\"").append(" class=\"gc cell-inner\">");
+		.append("!cell\"").append(" class=\"" + getMoldSclass()	+ "-content z-overflow-hidden\">");
+		if (this instanceof Group && this.getChildren().indexOf(child) == 0)
+			sb.append(((Group)this).getImgTag());
 		if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 		else out.insert(0, sb.toString());
 		out.append("</div></td>");

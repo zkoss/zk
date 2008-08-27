@@ -386,7 +386,12 @@ zkGrw.stripe = function (cmp, isClean) {
 		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Grw");
 	}
 };
-zkGcl = {}; //cell
+zkGcl = {
+	init: function (cmp) {		
+		cmp._img = zk.firstChild(cmp, "IMG", true);
+		if (cmp._img) zk.listen(cmp._img, "click", zkGrwgp.ontoggle);		
+	}
+}; //cell
 zk.addBeforeInit(function () {
 	//Column
 	//init it later because zul.js might not be loaded yet

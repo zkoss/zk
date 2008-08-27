@@ -237,7 +237,7 @@ public class Rows extends XulElement {
 			beforeRemove(child);
 		int index = hasGroup() ? ((Row)child).getIndex() : -1;
 		if(super.removeChild(child)) {
-			if (child instanceof Group) {				
+			if (child instanceof Group) {
 				int[] prev = null, remove = null;
 				for(Iterator it = _groupsInfo.iterator(); it.hasNext();) {
 					int[] g = (int[])it.next();
@@ -255,8 +255,8 @@ public class Rows extends XulElement {
 				final int idx = remove[2];
 				if (idx != -1){				
 					final Component gft = (Component) getChildren().get(idx -1);
-					super.removeChild(gft);
-				}				
+					remove[2] = -1;
+				}
 			} else if (hasGroup()) {
 				final int[] g = getGroupsInfoAtIndex(index);
 				if (g != null) {
@@ -267,7 +267,7 @@ public class Rows extends XulElement {
 				else fixGroupIndex(index, -1, false);
 			}
 			if (child instanceof Groupfoot){
-				final int[] g = getGroupsInfoAtIndex(index);
+				final int[] g = getGroupsInfoAtIndex(index);				
 				g[2] = -1;
 			}
 			return true;
