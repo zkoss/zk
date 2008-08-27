@@ -200,7 +200,8 @@ public class Button extends LabelImageElement {
 			new StringBuffer(64).append(super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "z.href", getEncodedHref());
 		HTMLs.appendAttribute(sb, "z.target", getTarget());
-		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
+		if (isDisabled())
+			HTMLs.appendAttribute(sb, "z.disd", true);
 
 		appendAsapAttr(sb, Events.ON_FOCUS);
 		appendAsapAttr(sb, Events.ON_BLUR);

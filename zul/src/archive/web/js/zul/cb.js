@@ -50,7 +50,7 @@ zkCmbox.onblur = function (evt) {
 			for (var j = 0, rl = rows.length; j < rl; ++j) {			
 			var item = rows[j];
 				var txt = zkCmbox.getLabel(item).toLowerCase();
-				if (zk.isVisible(item) && (!strict || getZKAttr(item, "disd") != "true") && txt == inpval) {
+				if (zk.isVisible(item) && (!strict || !getZKAttr(item, "disd")) && txt == inpval) {
 					jfnd = j;
 					break;
 				}
@@ -107,7 +107,7 @@ zkCmbox.strict = function (id) {
 		if (pp2 && pp2.rows) {
 			for (var j = 0, rl = rows.length; j < rl; ++j) {
 				var item = rows[j];
-				if (!zk.isVisible(item) || getZKAttr(item, "disd") == "true") continue;
+				if (!zk.isVisible(item) || getZKAttr(item, "disd")) continue;
 				var txt = zkCmbox.getLabel(item);
 				if (txt.toLowerCase() == inp.value.toLowerCase()) {
 					inp.value = txt;
@@ -121,7 +121,7 @@ zkCmbox.strict = function (id) {
 };
 zkCmit = {};
 zkCmit.init = function (cmp) {
-	if (getZKAttr(cmp, "disd") != "true") {
+	if (!getZKAttr(cmp, "disd")) {
 		zk.listen(cmp, "click", zkCmit.onclick);
 		zk.listen(cmp, "mouseover", zkCmit.onover);
 		zk.listen(cmp, "mouseout", zkCmit.onout);
@@ -597,7 +597,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 			}
 		}
 	} else if (jfnd >= 0) {
-		found = getZKAttr(rows[jfnd], "disd") == "true" ? null : rows[jfnd];
+		found = getZKAttr(rows[jfnd], "disd") ? null : rows[jfnd];
 	}
 
 	if (old != found) {
@@ -654,7 +654,7 @@ zkCmbox._next = function (rows, index, including) {
  * @since 3.0.4
  */
 zkCmbox.disabled = function (n) {
-	return !n || !zk.isVisible(n) || getZKAttr(n, "disd") == "true";
+	return !n || !zk.isVisible(n) || getZKAttr(n, "disd");
 };
 /** Called from the server to close the popup based on combobox, not popup.
  */

@@ -59,7 +59,7 @@ zkMenu2 = { // menu
 	 * @param {Object} item
 	 */
 	isItemActive: function (item) {
-		return item && item.nodeType == 1 && $type(item) != "Menusp2" && getZKAttr(item, "disd") != "true";
+		return item && item.nodeType == 1 && $type(item) != "Menusp2" && !getZKAttr(item, "disd");
 	},
 	/**
 	 * Removes the mcls + "-over" class name of the specified cmp, this function
@@ -361,7 +361,7 @@ if (!zkMenu2._pop)
 zkMenuit2 = { //menuitem
 	fixBtn: zkMenu2.fixBtn,
 	init: function (cmp) {
-		if (getZKAttr(cmp, "disd") != "true") {
+		if (!getZKAttr(cmp, "disd")) {
 			zk.listen(cmp, "click", zkMenuit2.onclick);
 			zk.listen(cmp, "mouseover", zkMenu2.onover);
 			zk.listen(cmp, "mouseout", zkMenu2.onout);

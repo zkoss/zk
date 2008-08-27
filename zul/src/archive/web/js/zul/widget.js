@@ -317,7 +317,7 @@ zkDbbox.validate = function (cmp) {
 zkButton = {
 	down_btn: null,
 	init: function (cmp) {
-		if (getZKAttr(cmp, "disd") == "true") return;
+		if (getZKAttr(cmp, "disd")) return;
 		
 		var cmp = $real(cmp);
 		zk.listen(cmp, "click", zkau.onclick);
@@ -406,7 +406,7 @@ zkTbtn = {
 	init: function (cmp) {
 		zk.listen(cmp, "click", zkTbtn.onclick);
 		
-		if (getZKAttr(cmp, "disd") != "true") {
+		if (!getZKAttr(cmp, "disd")) {
 			zk.listen(cmp, "focus", zkau.onfocus);
 			zk.listen(cmp, "blur", zkau.onblur);
 		}
@@ -414,7 +414,7 @@ zkTbtn = {
 	onclick: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = Event.element(evt);
-		if (getZKAttr(cmp, "disd") == "true") {
+		if (getZKAttr(cmp, "disd")) {
 			Event.stop(evt);
 			return;
 		}

@@ -351,9 +351,10 @@ public class Listitem extends XulElement {
 				}
 			}
 
-			HTMLs.appendAttribute(sb, "z.disd", isDisabled());
+			if (isDisabled())
+				HTMLs.appendAttribute(sb, "z.disd", true);
 			if (isSelected())
-				HTMLs.appendAttribute(sb, "z.sel", "true");
+				HTMLs.appendAttribute(sb, "z.sel", true);
 
 			final String clkattrs = getAllOnClickAttrs();
 			if (clkattrs != null) sb.append(clkattrs);

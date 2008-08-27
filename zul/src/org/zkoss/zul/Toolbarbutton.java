@@ -197,7 +197,8 @@ public class Toolbarbutton extends LabelImageElement {
 				.append('"');
 				//When hyper to other page, we always show progress dlg
 		}
-		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
+		if (isDisabled())
+			HTMLs.appendAttribute(sb, "z.disd", true);
 		HTMLs.appendAttribute(sb, "target", _target);
 
 		if (_tabindex >= 0)

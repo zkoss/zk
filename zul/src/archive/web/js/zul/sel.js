@@ -280,7 +280,7 @@ zk.Selectable.prototype = {
 		if (step) {
 			if (shift) this.toggleSelect(row, true);
 			for (; (row = step > 0 ? row.nextSibling: row.previousSibling) != null;) {
-				if ($tag(row) == "TR"  && this._isValid(row) && getZKAttr(row, "disd") != "true") {
+				if ($tag(row) == "TR"  && this._isValid(row) && !getZKAttr(row, "disd")) {
 					if (shift) this.toggleSelect(row, true);
 
 					if ($visible(row)) {
@@ -527,7 +527,7 @@ zk.Selectable.prototype = {
 		var focusfound = false, rowfound = false;
 		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
 			var r = this.bodyrows[j];
-			if (getZKAttr(r, "disd") == "true") continue; // Bug: 2030986
+			if (getZKAttr(r, "disd")) continue; // Bug: 2030986
 			if (focusfound) {
 				this._changeSelect(r, true);
 				if (r == row)
@@ -957,7 +957,7 @@ zk.Selectable.prototype = {
 	_selectAll: function (notify) {
 		var rows = this.bodyrows;
 		for (var j = 0, rl = rows.length; j < rl; ++j)
-			if (getZKAttr(rows[j], "disd") != "true")
+			if (!getZKAttr(rows[j], "disd"))
 				this._changeSelect(rows[j], true);
 		this._setSelectedId(rows.length ? rows[0].id: null);
 		if (notify) this._sendSelect(rows[0]);
@@ -1232,7 +1232,7 @@ zkLit.init = function (cmp) {
 	setZKAttr(cmp, "inited", "true");
 	//zk.disableSelection(cmp);
 	//Tom Yeh: 20060106: side effect: unable to select textbox if turned on
-	if (getZKAttr(cmp, "disd") != "true") {
+	if (!getZKAttr(cmp, "disd")) {
 		zk.listen(cmp, "click", zkLibox.onclick);
 		zk.listen(cmp, "mouseover", zkSel.onover);
 		zk.listen(cmp, "mouseout", zkSel.onout);
@@ -1323,7 +1323,7 @@ zkLcfc.checkAll = function (meta, cm) {
 	}
 	var checked;
 	for (var rows = meta.bodyrows, j = rows.length; --j >= 0;)
-		if (getZKAttr(rows[j], "disd") != "true")
+		if (!getZKAttr(rows[j], "disd"))
 			if (!(checked = ($e(rows[j].id + "!cm") || {}).checked)) break;
 	if (checked) meta._headerCkitem.checked = true;
 };
@@ -1428,7 +1428,7 @@ zkLisel.onchange = function (evtel) {
 zkLitgp = {
 	init: function (cmp) {
 		setZKAttr(cmp, "inited", "true");
-		if (getZKAttr(cmp, "disd") != "true") {
+		if (!getZKAttr(cmp, "disd")) {
 			zk.listen(cmp, "click", zkLibox.onclick);
 			zk.listen(cmp, "mouseover", zkSel.onover);
 			zk.listen(cmp, "mouseout", zkSel.onout);
@@ -1521,7 +1521,7 @@ zkLitgp.onVisi = zkLitgp.onSize = function (cmp) {
 zkLitgpft = {
 	init: function (cmp) {
 		setZKAttr(cmp, "inited", "true");		
-		if (getZKAttr(cmp, "disd") != "true") {
+		if (!getZKAttr(cmp, "disd")) {
 			zk.listen(cmp, "click", zkLibox.onclick);
 			zk.listen(cmp, "mouseover", zkSel.onover);
 			zk.listen(cmp, "mouseout", zkSel.onout);

@@ -205,7 +205,8 @@ public class Menuitem extends LabelImageElement {
 
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		if (topmost) sb.append(" z.top=\"true\"");
-		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
+		if (isDisabled())
+			HTMLs.appendAttribute(sb, "z.disd", true);
 		if (!topmost && _autocheck && ((Menupopup)getParent()).isCheckmark()) {
 			sb.append(" z.autock=\"true\"");
 			if (_checked) sb.append(" z.checked=\"true\"");

@@ -138,11 +138,13 @@ public class Treerow extends XulElement {
 		if (tree != null && tree.getName() != null)
 			HTMLs.appendAttribute(sb, "z.value",  Objects.toString(item.getValue()));
 		HTMLs.appendAttribute(sb, "z.pitem", item.getUuid());
-		HTMLs.appendAttribute(sb, "z.sel", item.isSelected());
-		HTMLs.appendAttribute(sb, "z.disd", item.isDisabled());
+		if (item.isSelected())
+			HTMLs.appendAttribute(sb, "z.sel", true);
+		if (item.isDisabled())
+			HTMLs.appendAttribute(sb, "z.disd", true);
 		HTMLs.appendAttribute(sb, "z.rid", tree.getUuid());
-		if (item.isContainer())
-			HTMLs.appendAttribute(sb, "z.open", item.isOpen());
+		if (item.isContainer() && item.isOpen())
+			HTMLs.appendAttribute(sb, "z.open", true);
 
 		final Component gp = item.getParent(); //Treechildren
 		if (gp != null) {

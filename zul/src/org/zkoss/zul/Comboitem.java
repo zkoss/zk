@@ -211,9 +211,12 @@ public class Comboitem extends LabelImageElement {
 	}
 	
 	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(60).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.disd", isDisabled());
-		return sb.toString();
+		final String attrs = super.getOuterAttrs();
+		if (isDisabled()) {
+			final StringBuffer sb = new StringBuffer(60).append(attrs);
+			HTMLs.appendAttribute(sb, "z.disd", true);
+			return sb.toString();
+		}
+		return attrs;
 	}
 }
