@@ -523,6 +523,12 @@ public class Grid extends XulElement implements Paginated {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
+					if (_model instanceof GroupModel || model instanceof GroupModel) {
+						for (Iterator it = _rows.getChildren().iterator(); it.hasNext();) {
+							it.next();
+							it.remove();
+						}
+					}
 				} else {
 					if (_rows != null) _rows.getChildren().clear(); //Bug 1807414
 					smartUpdate("z.model", "true");
