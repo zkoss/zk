@@ -81,14 +81,16 @@ public class TablelayoutDefault implements ComponentRenderer{
 	}
 	
 	private int[] getNextNonSpan(int columns, int colIndex, int rowIndex) {
-		while((colIndex >= (columns - 1)) || (_rowinfos.size() >= (rowIndex + 1)
-				&& ((int[])_rowinfos.get(rowIndex))[1] > (colIndex + 1)) ) {
-			if(colIndex >= (columns - 1)) {
+		while((_rowinfos.size() > 0 && colIndex >= (columns - 1)) || (_rowinfos.size() >= (rowIndex + 1)
+				&& ((int[])_rowinfos.get(rowIndex))[1] > (colIndex + 1)) ) {	
+			if (colIndex >= (columns - 1)) {
 				rowIndex++;
 				colIndex = 0;
 			}else{
 				colIndex++;
 			}
+			if (columns == 1)
+				break;
 		}
 		return new int[]{colIndex, rowIndex};
 	}
@@ -99,11 +101,11 @@ public class TablelayoutDefault implements ComponentRenderer{
 		_curCol = index[0];
 		_curRol = index[1];		
 		for(int rowIndex = _curRol; rowIndex < _curRol + (child.getRowspan() > 1 ? child.getRowspan() : 1); rowIndex++) {			
-			if(_rowinfos.size() <= rowIndex) {
+			if (_rowinfos.size() <= rowIndex) {
 				_rowinfos.add(rowIndex, new int[]{0,0});
 			}
 			int[] rowinfo = (int[]) _rowinfos.get(rowIndex);
-			for(int colIndex = _curCol; colIndex < _curCol + (child.getColspan() > 1 ? child.getColspan() : 1); colIndex++) {
+			for (int colIndex = _curCol; colIndex < _curCol + (child.getColspan() > 1 ? child.getColspan() : 1); colIndex++) {
 				rowinfo[1] += 1;
 			}
 		}
