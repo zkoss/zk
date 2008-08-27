@@ -677,8 +677,15 @@ zkLayoutRegion2 = {
 			case "z.open" :		
 				zkLayoutRegionSplit2.open(cmp.split, val == "true", true, true);
 				return true;
+			case "class" :
+				zkau.setAttr(cmp, nm, val);	
+				cmp._width = false; // reset
+				zk.Layout2.getOwnerLayout(cmp).render();
+				return true;
+			default:
+				zkau.setAttr(cmp, nm, val);
+				return true;
 		}
-		return false;
 	}
 };
 
