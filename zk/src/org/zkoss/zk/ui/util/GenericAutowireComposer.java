@@ -148,6 +148,10 @@ abstract public class GenericAutowireComposer extends GenericComposer {
 	 * @since 3.0.7
 	 */
 	protected Execution execution;
+	/** Implicit Object; the arg argument passed to the createComponents method. It is never null.
+	 * @since 3.0.8
+	 */
+	protected Map arg;
 	
 	/**
 	 * Auto wire accessible variables of the specified component into a 
@@ -174,6 +178,7 @@ abstract public class GenericAutowireComposer extends GenericComposer {
 		applicationScope = application.getAttributes();
 		requestScope = REQUEST_SCOPE;
 		execution = EXECUTION;
+		arg = desktop.getExecution().getArg();
 		
 		//wire variables to reference fields
 		Components.wireVariables(comp, this);
