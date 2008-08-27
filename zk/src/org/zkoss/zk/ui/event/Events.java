@@ -422,9 +422,9 @@ public class Events {
 				final Method mtd = ComponentsCtrl.getEventMethod(controller.getClass(), evt.getName());
 				if (mtd != null) {
 					if (mtd.getParameterTypes().length == 0)
-						mtd.invoke(this, null);
+						mtd.invoke(controller, null);
 					else
-						mtd.invoke(this, new Object[] {evt});
+						mtd.invoke(controller, new Object[] {evt});
 				}
 			}
 		};

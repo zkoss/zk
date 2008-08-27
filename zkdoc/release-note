@@ -14,6 +14,7 @@ ZK 3.0.8
   2037288: Clustering failed with AnnotateDataBinder
   2041347: F1 key not overridden correctly in IE
   2071996: Selection on a paged Listbox doesn't work an last page
+  2077739: Events.addEventListeners() cause Exception in onEvent()
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
