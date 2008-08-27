@@ -194,4 +194,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Removes the class and style attributes from the specified one.
 		</description>
 	</function>
+	<function>
+		<name>outCSSAttrs</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outCSSAttrs(java.lang.String)
+		</function-signature>
+		<description>
+	Returns only the class and style attributes from the specified one.
+		</description>
+	</function>
 </taglib>
