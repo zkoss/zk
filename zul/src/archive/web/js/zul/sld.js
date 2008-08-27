@@ -231,9 +231,11 @@ zkSld = {
 	onup: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt));
-		if (zkSld.down_btn) {
-			var mcls = getZKAttr(cmp, "mcls");
-			zk.rmClass(zkSld.down_btn, mcls + "-btn-drag");
+		var btn = zkSld.down_btn;
+		if (btn) {			
+			var mcls = getZKAttr($real(btn), "mcls");
+			zk.rmClass(btn, mcls + "-btn-drag");
+			zk.rmClass(btn, mcls + "-btn-over");
 		}
 		zkSld.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkSld.onup);
