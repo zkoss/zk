@@ -726,10 +726,12 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Slider2Default</mold-uri>
 		</mold>
+		<!-- not yet
 		<mold>
 			<mold-name>sphere</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.SliderDefault</mold-uri>
 		</mold>
+		-->
 	</component>
 	<component>
 		<component-name>south</component-name>
