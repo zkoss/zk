@@ -169,13 +169,7 @@ zkau.onclick = function (evt) {
 	}
 
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-
-	//it might be clicked on the inside element
-	for (;; target = $parent(target))
-		if (!target) return;
-		else if (target.id) break;
-	target = $outer(target);
+	var target = $outer(Event.element(evt));
 	var href = getZKAttr(target, "href");
 	if (href) {
 		zk.go(href, false, getZKAttr(target, "target"));
@@ -198,11 +192,6 @@ zkau._resetLastClickId = function () {zkau._lastClickId = null;};
 zkau.ondblclick = function (evt) {
 	if (!evt) evt = window.event;
 	var cmp = Event.element(evt);
-
-	//it might be clicked on the inside element
-	for (;; cmp = $parent(cmp))
-		if (!cmp) return;
-		else if (cmp.id) break;
 
 	cmp = $outer(cmp);
 	if (cmp && getZKAttr(cmp, "dbclk")) {
