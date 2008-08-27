@@ -475,15 +475,29 @@ zkPanel = {
 	},
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
+			case "visibility":
+				if (getZKAttr(cmp, "maximized") == "true") {
+					zkPanel.maximize(cmp, false);
+				} else if (getZKAttr(cmp, "minimized") == "true") {
+					zkPanel.minimize(cmp, false);
+				}
+				zkau.setAttr(cmp, nm, val);
+				return true;
 			case "z.open":
 				zkPanel.open(cmp, val == "true", true);
 				return true; //no need to store z.open
 			case "z.maximized":
 				zkau.setAttr(cmp, nm, val);
+				if (getZKAttr(cmp, "minimized") == "true") {
+					zkPanel.minimize(cmp, false);
+				}
 				zkPanel.maximize(cmp, val == "true", true);
 				return true;
 			case "z.minimized":
 				zkau.setAttr(cmp, nm, val);
+				if (getZKAttr(cmp, "maximized") == "true") {
+					zkPanel.maximize(cmp, false);
+				}
 				zkPanel.minimize(cmp, val == "true", true);
 				return true;
 			case "style":

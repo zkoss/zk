@@ -72,6 +72,8 @@ public class Panel extends XulElement {
 	private boolean _closable, _collapsible, _floatable, _framable, _movable, 
 		_maximizable, _minimizable, _maximized, _minimized;
 	private boolean  _open = true;
+	
+	private boolean _visible = true;
 
 	/**
 	 * Returns whether this Panel is open.
@@ -133,6 +135,22 @@ public class Panel extends XulElement {
 	public boolean isFloatable() {
 		return _floatable;
 	}
+	public boolean isVisible() {
+		return _visible;
+	}
+	public boolean setVisible(boolean visible) {
+		_maximized = false;
+		_minimized = false;
+		return setVisible0(visible);
+	}
+	private boolean setVisible0(boolean visible) {
+		final boolean old = _visible;
+		if (old != visible) {
+			_visible = visible;
+			smartUpdate("visibility", _visible);
+		}
+		return old;
+	}
 	/**
 	 * Sets whether to float the panel to display it inline where it is rendered.
 	 * 
@@ -170,8 +188,13 @@ public class Panel extends XulElement {
 	public void setMaximized(boolean maximized) {
 		if (_maximized != maximized) {
 			_maximized = maximized;
-			if (_maximizable)
+			if (_maximizable) {
+				if (_maximized) {
+					setVisible0(true);
+					_minimized = false;
+				}
 				smartUpdate("z.maximized", _maximized);
+			}
 		}
 	}
 	/**
@@ -212,8 +235,13 @@ public class Panel extends XulElement {
 	public void setMinimized(boolean minimized) {
 		if (_minimized != minimized) {
 			_minimized = minimized;
-			if (_minimizable)
+			if (_minimizable) {
+				if (_minimized) {
+					_visible = false;
+					_maximized = false;
+				}
 				smartUpdate("z.minimized", _minimized);
+			}
 		}
 	}
 	/**
@@ -399,10 +427,6 @@ public class Panel extends XulElement {
 		return _panelchildren;
 	}
 
-	// super
-	protected String getRealStyle() {
-		return super.getRealStyle() + (isVisible() && isMinimized() ? "display:none;" : "");
-	}
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
 		final String mcls = getMoldSclass();
@@ -556,9 +580,11 @@ public class Panel extends XulElement {
 		}
 		public void setMaximizedByClient(boolean maximized) {
 			_maximized = maximized;
+			if (_maximized) _visible = true;
 		}
 		public void setMinimizedByClient(boolean minimized) {
 			_minimized = minimized;
+			if (_minimized) _visible = false;
 		}
 		public void setResult(Object result) {
 			Object[] r = ((Object[]) result);

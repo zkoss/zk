@@ -358,7 +358,12 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 		var visible = val == "true",
 			embedded = zkWnd2._embedded(cmp),
 			order = embedded ? 0: 1;
-
+		if (getZKAttr(cmp, "maximized") == "true") {
+			zkWnd2.maximize(cmp, false);
+		} else if (getZKAttr(cmp, "minimized") == "true") {
+			zkWnd2.minimize(cmp, false);
+		}
+		
 		zkWnd2.hideShadow(cmp);
 		//three cases:
 		//order=0: cmp and all its ancestor are embedded
@@ -486,10 +491,16 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 		}
 	case "z.maximized":
 		zkau.setAttr(cmp, nm, val);
+		if (getZKAttr(cmp, "minimized") == "true") {
+			zkWnd2.minimize(cmp, false);
+		}
 		zkWnd2.maximize(cmp, val == "true", true);
 		return true;
 	case "z.minimized":
 		zkau.setAttr(cmp, nm, val);
+		if (getZKAttr(cmp, "maximized") == "true") {
+			zkWnd2.maximize(cmp, false);
+		}
 		zkWnd2.minimize(cmp, val == "true", true);
 		return true;
 	}

@@ -102,6 +102,8 @@ public class Window extends XulElement implements IdSpace {
 	private boolean _sizable;
 	
 	private boolean _maximizable, _minimizable, _maximized, _minimized;
+
+	private boolean _visible = true;
 	
 	private int _minheight = 100, _minwidth = 200; 
 
@@ -183,8 +185,13 @@ public class Window extends XulElement implements IdSpace {
 	public void setMaximized(boolean maximized) {
 		if (_maximized != maximized) {
 			_maximized = maximized;
-			if (_maximizable)
+			if (_maximizable) {
+				if (_maximized) {
+					setVisible0(true);
+					_minimized = false;
+				}
 				smartUpdate("z.maximized", _maximized);
+			}
 		}
 	}
 	/**
@@ -229,8 +236,13 @@ public class Window extends XulElement implements IdSpace {
 	public void setMinimized(boolean minimized) {
 		if (_minimized != minimized) {
 			_minimized = minimized;
-			if (_minimizable)
+			if (_minimizable) {
+				if (_minimized) {
+					setVisible0(false);
+					_maximized = false;
+				}
 				smartUpdate("z.minimized", _minimized);
+			}
 		}
 	}
 	/**
@@ -796,14 +808,27 @@ public class Window extends XulElement implements IdSpace {
 	 * will become {@link #OVERLAPPED} and the suspending thread is resumed.
 	 */
 	public boolean setVisible(boolean visible) {
+		_maximized = false;
+		_minimized = false;
+		return setVisible0(visible);
+	}
+	private boolean setVisible0(boolean visible) {
 		if (!visible && _mode == MODAL) {
 			leaveModal();
 			invalidate();
 		} else if ( _mode != EMBEDDED)
 			smartUpdate("z.visible", visible);
-		return super.setVisible(visible);
+		final boolean old = _visible;
+		if (old != visible) {
+			_visible = visible;
+			smartUpdate("visibility", _visible);
+		}
+		return old;
 	}
-
+	public boolean isVisible() {
+		return _visible;
+	}
+	
 	//-- super --//
 	public void setDraggable(String draggable) {
 		if (_mode != EMBEDDED) {
@@ -831,7 +856,10 @@ public class Window extends XulElement implements IdSpace {
 		appendAsapAttr(sb, Events.ON_Z_INDEX);
 		appendAsapAttr(sb, Events.ON_OPEN);
 		appendAsapAttr(sb, Events.ON_MAXIMIZE);
-		appendAsapAttr(sb, Events.ON_MINIMIZE);
+		
+		if (inModal()) HTMLs.appendAttribute(sb, "z." + Events.ON_MINIMIZE, true);
+		else appendAsapAttr(sb, Events.ON_MINIMIZE);
+		
 		//no need to generate ON_CLOSE since it is always sent (as ASAP)
 
 		final String clkattrs = getAllOnClickAttrs();
@@ -917,9 +945,17 @@ public class Window extends XulElement implements IdSpace {
 		}
 		public void setMaximizedByClient(boolean maximized) {
 			_maximized = maximized;
+			if (_maximized) _visible = true;
 		}
 		public void setMinimizedByClient(boolean minimized) {
 			_minimized = minimized;
+			if (_minimized) {
+				_visible = false;
+				if (_mode == MODAL) {
+					leaveModal();
+					invalidate();
+				}
+			}
 		}
 	}
 }
