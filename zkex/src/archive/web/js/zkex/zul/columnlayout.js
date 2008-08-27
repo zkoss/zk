@@ -23,8 +23,9 @@ zkColumnLayout = {
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
 			case "z.childchg" :
-				if (val)
-					zkColumnLayout.render(cmp);
+				if (val) {
+					zkColumnLayout.render(cmp, true);
+				}
 				return true;
 		}
 		return false;
@@ -32,7 +33,7 @@ zkColumnLayout = {
 	_isLegalChild: function (n) {
 		return n.id && $tag(n) == "DIV"; 
 	},
-	render: function(cmp){
+	render: function(cmp, broadcast){
 		if (!zk.isRealVisible(cmp)) 
 			return;
 		
@@ -60,6 +61,7 @@ zkColumnLayout = {
 				var percentage_width = $int(cns[i]._width.substring(0, widx));
 				var result = (Math.floor(percentage_width / 100 * pw) - zk.getFrameWidth(cns[i]));
 				cns[i].style.width = (result > 0 ? result : 0) + "px";
+				if (broadcast) zk.onSizeAt(cns[i]);
 			}
 		}
 		cmp.style.visibility = "inherit";
@@ -111,5 +113,16 @@ zkColumnChildren = {
 			zk.beforeSizeAt(layout);
 			zk.onSizeAt(layout);
 		}
+	},
+	setAttr: function (cmp, nm, val) {
+		switch (nm) {
+			case "style.width":
+			case "style":
+			zkau.setAttr(cmp, nm, val);
+			cmp._width = cmp.style.width;
+			zkColumnLayout.render($parentByType(cmp, "ColumnLayout"), true);
+			return true;
+		}
+		return false;
 	}
 };

@@ -172,7 +172,7 @@ zkPortalLayout = {
 		switch (nm) {
 			case "z.childchg":
 				if (val)
-					zkPortalLayout.render(cmp);
+					zkPortalLayout.render(cmp, true);
 				return true;
 			case "z.childAdded":
 				this._initDrag($e(val));
@@ -189,7 +189,7 @@ zkPortalLayout = {
 	_isVisibleChild: function (n) {
 		return $tag(n) == "DIV" && zk.isVisible(n); 
 	},
-	render: function(cmp) {
+	render: function(cmp, broadcast) {
 		if (!zk.isRealVisible(cmp)) 
 			return;
 		
@@ -217,6 +217,7 @@ zkPortalLayout = {
 				var percentage_width = $int(cns[i]._width.substring(0, widx));
 				var result = (Math.floor(percentage_width / 100 * pw) - zk.getFrameWidth(cns[i]));
 				cns[i].style.width = (result > 0 ? result : 0) + "px";
+				if (broadcast) zk.onSizeAt(cns[i]);
 			}
 		}
 		cmp.style.visibility = "inherit";
@@ -274,5 +275,16 @@ zkPortalChildren = {
 			zk.beforeSizeAt(layout);
 			zk.onSizeAt(layout);
 		}
+	},
+	setAttr: function (cmp, nm, val) {
+		switch (nm) {
+			case "style.width":
+			case "style":
+			zkau.setAttr(cmp, nm, val);
+			cmp._width = cmp.style.width;
+			zkPortalLayout.render($parentByType(cmp, "PortalLayout"), true);
+			return true;
+		}
+		return false;
 	}
 };

@@ -43,6 +43,6 @@ public class ColumnchildrenDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(sclass)
 			.write("-content\">");
 		wh.writeChildren(self);
-		wh.write("</div></div></div>");
+		wh.write("</div><div style=\"height:1px;position:relative;width:1px;\"><br/></div></div></div>");
 	}
 }
