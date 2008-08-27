@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zul.impl.XulElement;
@@ -143,6 +144,14 @@ public class Listgroup extends Listitem {
 		HTMLs.appendAttribute(sb, "z.nostripe", true);
 		appendAsapAttr(sb, Events.ON_OPEN);
 		return sb.toString();
+	}
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		invalidate();
+	}
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		invalidate();
 	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
