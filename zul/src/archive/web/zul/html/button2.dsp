@@ -20,34 +20,28 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<span id="${self.uuid}" class="${self.moldSclass}"${z:noCSSAttrs(self.outerAttrs)} z.type="zul.widget.Button">
-<table id="${self.uuid}!real" cellspacing="0" cellpadding="0" border="0" ${self.outerAttrs}${self.innerAttrs}>
-<tbody>
+<span z.type="zul.widget.Button" id="${self.uuid}" class="${self.moldSclass}"${z:noCSSAttrs(self.outerAttrs)}>
+<table id="${self.uuid}!box" cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
 <tr>
 	<td class="${self.moldSclass}-tl"></td>
-	<td colspan="3" class="${self.moldSclass}-tm"></td>
+	<td class="${self.moldSclass}-tm"></td>
 	<td class="${self.moldSclass}-tr"></td>
 </tr>
 <tr>
-	<td class="${self.moldSclass}-cl"><i>&#160;</i></td>
-	<td colspan="3" class="${self.moldSclass}-cm"><em unselectable="on"><a id="${self.uuid}!btn" class="${self.moldSclass}-btn" href="javascript:;">
-	<c:choose trim="true">
+	<td class="${self.moldSclass}-cl"><button id="${self.uuid}!real" class="z-"> </button></td>
+	<td class="${self.moldSclass}-cm" valign="center"><c:choose trim="true">
 	<c:when test="${self.dir == 'reverse'}">
 		<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
 	</c:when>
 	<c:otherwise>
 		${self.imgTag}<c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if><c:out value="${self.label}"/>
 	</c:otherwise>
-	</c:choose>			
-	</a></em>
-	</td>
-	<td class="${self.moldSclass}-cr"><i>&#160;</i></td>
+	</c:choose></td>
+	<td class="${self.moldSclass}-cr z-"><i>&#160;</i></td>
 </tr>
 <tr>
 	<td class="${self.moldSclass}-bl"></td>
-	<td colspan="3" class="${self.moldSclass}-bm"></td>
+	<td class="${self.moldSclass}-bm"></td>
 	<td class="${self.moldSclass}-br"></td>
 </tr>
-</tbody>
-</table>
-</span>
+</table></span>

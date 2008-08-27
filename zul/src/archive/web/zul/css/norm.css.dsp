@@ -70,6 +70,16 @@ div.z-debugbox {
 }
 
 <%-- General --%>
+em.z-, .z- em {
+	font-style: normal; font-weight: normal;
+	font-family: Verdana, Tahoma, Arial, serif;
+	font-size: ${fontSizeM};
+}
+i.z-, .z- li {
+	display: block; width: 3px; overflow: hidden;
+	font-size: 1px; line-height: 1px;
+}
+
 .z-modal-mask {
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;

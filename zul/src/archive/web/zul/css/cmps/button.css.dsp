@@ -9,38 +9,21 @@
 	font: normal tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap; font-size: ${fontSizeM};
 }
 span.z-button {
-	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
-	display:inline-block;
+	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
 }
-.z-button .z-button-btn {
-	color: #000000;	text-decoration: none !important; display: block;
-	border: 0 none; background: transparent; font: normal tahoma, verdana, helvetica; font-size: ${fontSizeM};
-	padding-left: 3px; padding-right: 3px; cursor: pointer; margin: 0; overflow: visible;
-	width: auto; -moz-outline: 0 none; outline: 0 none; min-height: 13px;
+button.z- {
+	padding:0 !important; margin:0 !important; border:0 !important;
+	background: transparent !important;
+	font-size: 1px !important; width: 1px !important; height: 1px !important;
+<c:if test="${c:isGecko()}">
+	height: 0px !important;
+</c:if>
 }
 .z-button-disd * {
 	color: gray!important; cursor: default!important;
 }
 .z-button-disd {
-	color: gray; cursor: default; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);}
-}
-<c:if test="${c:isExplorer()}">
-<%-- IE only --%>
-.z-button .z-button-btn {
-	padding-top: 2px;
-}
-</c:if>
-<c:if test="${c:isGecko()}">
-<%-- Firefox only --%>
-.z-button .z-button-btn {
-	padding-left: 0; padding-right: 0;
-}
-</c:if>
-.z-button em {
-	font-style: normal; font-weight: normal;
-}
-.z-button-cl i, .z-button-cr i {
-	display: block; width: 3px; overflow: hidden; font-size: 1px; line-height: 1px;
+	color: gray; cursor: default; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
 }
 <%-- default --%>
 .z-button .z-button-tl {
@@ -59,12 +42,13 @@ span.z-button {
 	width: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-cm {
-  vertical-align: middle;
-  text-align: center;
-  padding: 0 5px;
-  cursor: pointer;
-  white-space: nowrap;
-  background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;  
+	font-family: Tahoma, Garamond, Century, Arial, serif;
+	margin: 0; overflow: hidden;
+	vertical-align: middle;
+	text-align: center;
+	padding: 0 5px;
+	cursor: pointer; white-space: nowrap;
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;  
 }
 .z-button .z-button-cr {
 	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -129px;

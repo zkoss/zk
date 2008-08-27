@@ -315,88 +315,89 @@ zkDbbox.validate = function (cmp) {
 ////
 // button //
 zkButton = {
-	down_btn: null,
 	init: function (cmp) {
 		if (getZKAttr(cmp, "disd")) return;
-		
-		var cmp = $real(cmp);
-		zk.listen(cmp, "click", zkau.onclick);
-		zk.listen(cmp, "dblclick", zkau.ondblclick);
+
+		var box = $e(cmp.id + "!box");
+		zk.listen(box, "click", zkau.onclick);
+		zk.listen(box, "dblclick", zkau.ondblclick);
 			//we have to handle here since _onDocDClick won't receive it
-		zk.disableSelection(cmp);
-		var btn = $e($uuid(cmp), "btn");
+		zk.disableSelection(box);
+		var btn = $real(cmp);
 		zk.listen(btn, "focus", zkButton.onfocus);
 		zk.listen(btn, "blur", zkButton.onblur);
-		zk.listen(cmp, "mousedown", zkButton.ondown);
-		zk.listen(cmp, "mouseup", zkButton.onup);
-		zk.listen(cmp, "mouseover", zkButton.onover);
-		zk.listen(cmp, "mouseout", zkButton.onout);
+		zk.listen(box, "mousedown", zkButton.ondown);
+		zk.listen(box, "mouseup", zkButton.onup);
+		zk.listen(box, "mouseover", zkButton.onover);
+		zk.listen(box, "mouseout", zkButton.onout);
 	},
 	onover: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $real(Event.element(evt));
-		zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-hover");
+		var cmp = $outer(Event.element(evt)),
+			box = $e(cmp.id + "!box");
+		zk.addClass(box, getZKAttr(cmp, "mcls") + "-hover");
 	},
 	onout: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $real(Event.element(evt));
-		if (cmp != zkButton.down_btn) {		
-			zk.rmClass(cmp, getZKAttr(cmp, "mcls") + "-hover");
-		}
+		var cmp = $outer(Event.element(evt)),
+			box = $e(cmp.id + "!box");
+		if (box != zkButton.down_box)
+			zk.rmClass(box, getZKAttr(cmp, "mcls") + "-hover");
 	},
 	onfocus: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $real(Event.element(evt));
-		zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
+		var cmp = $outer(Event.element(evt)),
+			box = $e(cmp.id + "!box");
+		zk.addClass(box, getZKAttr(cmp, "mcls") + "-focus");
 		zkau.onfocus(evt);
 	},
 	onblur: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $real(Event.element(evt));
-		zk.rmClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
+		var cmp = $outer(Event.element(evt)),
+			box = $e(cmp.id + "!box");
+		zk.rmClass(box, getZKAttr(cmp, "mcls") + "-focus");
 		zkau.onblur(evt);
 	},
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $real(Event.element(evt)),
+		var cmp = $outer(Event.element(evt)),
+			box = $e(cmp.id + "!box"),
 			mcls = getZKAttr(cmp, "mcls");
-		zk.addClass(cmp, mcls + "-click");
-		zk.addClass(cmp, mcls + "-hover");
-		zkButton.down_btn = cmp;
+		zk.addClass(box, mcls + "-click");
+		zk.addClass(box, mcls + "-hover");
+		zk.asyncFocus(cmp.id + "!real", 30);
+		zkButton.down_box = box;
 		zk.listen(document.body, "mouseup", zkButton.onup);
 	},
 	onup: function (evt) {
 		if (!evt) evt = window.event;
-		if (zkButton.down_btn) {
-			var mcls = getZKAttr(zkButton.down_btn, "mcls");
-			zk.rmClass(zkButton.down_btn, mcls + "-click");
-			zk.rmClass(zkButton.down_btn, mcls + "-hover");
+		if (zkButton.down_box) {
+			var mcls = getZKAttr($outer(zkButton.down_box), "mcls");
+			zk.rmClass(zkButton.down_box, mcls + "-click");
+			zk.rmClass(zkButton.down_box, mcls + "-hover");
 		}
-		zkButton.down_btn = null;
+		zkButton.down_box = null;
 		zk.unlisten(document.body, "mouseup", zkButton.onup);
 	},
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
-			case "style.height":
-			case "style.width":
-			case "style":
-			case "class":
-				zkau.setAttr($real(cmp), nm, val);
-				return true;
+		case "style.height":
+		case "style.width":
+		case "style":
+		case "class":
+			zkau.setAttr($e(cmp.id + "!box"), nm, val);
+			return true;
 		}
-		zkau.setAttr(cmp, nm, val);
-		zkau.setAttr($real(cmp), nm, val);
-		return true;
 	}
 };
 if (zk.ie) {
 	zkButton.onVisi = zkButton.onSize = function(cmp){
-		cmp = $real(cmp);
-		if (cmp.offsetHeight) {
-			var cellHgh = $int(Element.getStyle(cmp.rows[0].cells[0], "height"));
-			if (cellHgh != cmp.rows[0].cells[0].offsetHeight) {
-				cmp.rows[1].style.height = cmp.offsetHeight -
-				cellHgh - $int(Element.getStyle(cmp.rows[2].cells[0], "height")) + "px";
+		var box = $e(cmp.id + "!box");
+		if (box.offsetHeight) {
+			var cellHgh = $int(Element.getStyle(box.rows[0].cells[0], "height"));
+			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
+				box.rows[1].style.height = box.offsetHeight -
+				cellHgh - $int(Element.getStyle(box.rows[2].cells[0], "height")) + "px";
 			}
 		}
 	};
