@@ -662,7 +662,7 @@ zkLayoutRegion2 = {
 				return true;
 			case "z.splt" :
 				setZKAttr(cmp, "splt", val);
-				zkLayoutRegionSplit2._fixsplit(cmp.split);
+				zk.Layout2.getOwnerLayout(cmp).render();
 				return true;
 			case "style.height" :
 				cmp.style["height"] = val;
