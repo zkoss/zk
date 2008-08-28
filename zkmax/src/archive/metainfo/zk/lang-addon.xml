@@ -725,13 +725,15 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Slider2Default</mold-uri>
-		</mold>
-		<!-- not yet
+		</mold>	
+		<mold>
+   			<mold-name>scale</mold-name>
+   			<mold-uri>class:org.zkoss.zkmax.zul.render.Slider2Scale</mold-uri>
+  		</mold>	
 		<mold>
 			<mold-name>sphere</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.SliderDefault</mold-uri>
-		</mold>
-		-->
+			<mold-uri>class:org.zkoss.zkmax.zul.render.Slider2Default</mold-uri>
+		</mold>		
 	</component>
 	<component>
 		<component-name>south</component-name>

@@ -57,6 +57,9 @@ public class Slider extends XulElement {
 	/*package*/ final boolean inScaleMold() {
 		return "scale".equals(getMold());
 	}
+	/*package*/ final boolean inSphereMold() {
+		return "sphere".equals(getMold());
+	}
 	
 	// super
 	public String getMoldSclass() {
@@ -64,6 +67,8 @@ public class Slider extends XulElement {
 		if (_moldSclass == null) {
 			if (inScaleMold())
 				return name + "-scale";
+			else if (inSphereMold())			  
+				return name + ("horizontal".equals(getOrient()) ? "-sphere-hor" : "-sphere-ver");
 			else
 				return name + ("horizontal".equals(getOrient()) ? "-hor" : "-ver");
 		}

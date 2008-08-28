@@ -97,3 +97,62 @@
     font-size: 1px; -moz-outline: 0 none; outline: 0 none; -moz-user-select: normal;
     -khtml-user-select: normal;  
 }
+<%-- Sphere style --%>
+.z-slider-sphere-hor {
+    padding-left: 7px; zoom:1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-bg.png')}) no-repeat 0 -22px;
+}
+.z-slider-sphere-hor-inner {
+    position: relative; left: 0; top: 0; overflow: visible; zoom: 1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-bg.png')}) repeat-x 0 0;
+    height: 22px;
+}
+.z-slider-sphere-hor-end {
+    padding-right: 7px; zoom: 1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-bg.png')}) no-repeat right -44px;
+}
+.z-slider-sphere-hor-btn {
+    width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-thumb_circle.png')}) no-repeat 0 0;
+}
+.z-slider-sphere-hor-btn-over {
+    background-position: -14px -15px;
+}
+.z-slider-sphere-hor-btn-drag {
+    background-position: -28px -30px;
+}
+.z-slider-sphere-hor-focus {
+	position: absolute;	left: 0; top: 0; width: 1px; height: 1px; line-height: 1px;
+    font-size: 1px; -moz-outline: 0 none; outline: 0 none; -moz-user-select: normal;
+    -khtml-user-select: normal;  
+}
+<%-- Sphere verticle style --%>
+.z-slider-sphere-ver {
+    padding-top: 7px; zoom:1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.png')}) no-repeat -44px 0;
+    width: 22px;
+}
+.z-slider-sphere-ver-inner {
+    position: relative; left: 0; top: 0; overflow: visible; zoom: 1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.png')}) repeat-y 0 0;
+}
+.z-slider-sphere-ver-end {
+    padding-bottom: 7px; zoom: 1;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.png')}) no-repeat -22px bottom;
+}
+.z-slider-sphere-ver-btn {
+    width: 15px; height: 14px; position: absolute; left: 3px; bottom: 0;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb_circle.png')}) no-repeat 1px -1px;
+}
+.z-slider-sphere-ver-btn-over {
+    background-position:  -13px -16px;
+}
+.z-slider-sphere-ver-btn-drag {
+    background-position:  -27px -31px;
+}
+.z-slider-sphere-ver-focus {
+	position: absolute;	left: 0; top: 0; width: 1px; height: 1px; line-height: 1px;
+    font-size: 1px; -moz-outline: 0 none; outline: 0 none; -moz-user-select: normal;
+    -khtml-user-select: normal;  
+}
+

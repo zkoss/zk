@@ -18,10 +18,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-<slider orient="vertical" height="300px"/>
-<div height="50px"/>
-<slider width="300px"/>
-<div height="50px"/>
-<slider width="300px" mold="v30"/>
-<slider width="300px" mold="sphere"/>
+	<hbox>
+		<slider orient="vertical" height="300px"/>
+		<separator />
+		<slider orient="vertical" mold="sphere" height="200px"/>
+	</hbox>
+	<slider width="300px"/>
+		<separator />			
+	<slider width="300px" mold="scale"/>
+		<separator />
+	<slider width="300px" mold="sphere"/>
+
 </zk>

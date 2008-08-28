@@ -1,5 +1,5 @@
 <%--
-slider.dsp
+slider2.dsp
 
 {{IS_NOTE
 	Purpose:
