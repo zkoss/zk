@@ -37,7 +37,7 @@
 .z-combobox-btn-over .z-combobox-img {
 	background-position: -17px 0;
 }
-.z-combobox-btn-click .z-combobox-img {
+.z-combobox-btn-clk .z-combobox-img {
 	background-position: -34px 0;
 }
 .z-combobox-focus .z-combobox-img {
@@ -112,7 +112,7 @@
 .z-bandbox-btn-over .z-bandbox-img {
 	background-position: -17px 0;
 }
-.z-bandbox-btn-click .z-bandbox-img {
+.z-bandbox-btn-clk .z-bandbox-img {
 	background-position: -34px 0;
 }
 .z-bandbox-focus .z-bandbox-img {
@@ -159,7 +159,7 @@
 .z-datebox-btn-over .z-datebox-img {
 	background-position: -17px 0;
 }
-.z-datebox-btn-click .z-datebox-img {
+.z-datebox-btn-clk .z-datebox-img {
 	background-position: -34px 0;
 }
 .z-datebox-focus .z-datebox-img {
@@ -205,7 +205,7 @@
 .z-timebox-btn-over .z-timebox-img {
 	background-position: -17px 0;
 }
-.z-timebox-btn-click .z-timebox-img {
+.z-timebox-btn-clk .z-timebox-img {
 	background-position: -34px 0;
 }
 .z-timebox-focus .z-timebox-img {
@@ -243,7 +243,7 @@
 .z-spinner-btn-over .z-spinner-img {
 	background-position: -17px 0;
 }
-.z-spinner-btn-click .z-spinner-img {
+.z-spinner-btn-clk .z-spinner-img {
 	background-position: -34px 0;
 }
 .z-spinner-focus .z-spinner-img {

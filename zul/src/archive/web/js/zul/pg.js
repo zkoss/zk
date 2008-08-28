@@ -230,7 +230,7 @@ zkPg = {
 			mcls = getZKAttr($outer(table), "mcls");
 		if (zk.hasClass(table, mcls + "-btn-disd")) return;
 		
-		zk.addClass(table, mcls + "-btn-click");
+		zk.addClass(table, mcls + "-btn-clk");
 		zkPg.down_btn = table;
 		zk.listen(document.body, "mouseup", zkPg.onup);
 	},
@@ -239,7 +239,7 @@ zkPg = {
 		if (!evt) evt = window.event;
 		if (zkPg.down_btn) {
 			var mcls = getZKAttr($outer(zkPg.down_btn), "mcls");
-			zk.rmClass(zkPg.down_btn, mcls + "-btn-click");
+			zk.rmClass(zkPg.down_btn, mcls + "-btn-clk");
 		}
 		zkPg.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkPg.onup);

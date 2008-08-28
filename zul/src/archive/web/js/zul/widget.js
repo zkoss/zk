@@ -363,7 +363,7 @@ zkButton = {
 		var cmp = $outer(Event.element(evt)),
 			box = $e(cmp.id + "!box"),
 			mcls = getZKAttr(cmp, "mcls");
-		zk.addClass(box, mcls + "-click");
+		zk.addClass(box, mcls + "-clk");
 		zk.addClass(box, mcls + "-over");
 		zk.asyncFocus(cmp.id + "!real", 30);
 		zkButton.down_box = box;
@@ -373,7 +373,7 @@ zkButton = {
 		if (!evt) evt = window.event;
 		if (zkButton.down_box) {
 			var mcls = getZKAttr($outer(zkButton.down_box), "mcls");
-			zk.rmClass(zkButton.down_box, mcls + "-click");
+			zk.rmClass(zkButton.down_box, mcls + "-clk");
 			zk.rmClass(zkButton.down_box, mcls + "-over");
 		}
 		zkButton.down_box = null;
@@ -949,7 +949,7 @@ zkWgt.onbtndown = function (evt) {
 	if (inp && !inp.disabled && !zk.dragging) {
 		if (zkWgt._currentbtn) 
 			zkWgt.onbtnup(evt);
-		zk.addClass(btn, mcls + "-btn-click");
+		zk.addClass(btn, mcls + "-btn-clk");
 		zk.listen(document.body, "mouseup", zkWgt.onbtnup);
 		zkWgt._currentbtn = btn;
 	}
@@ -957,7 +957,7 @@ zkWgt.onbtndown = function (evt) {
 zkWgt.onbtnup = function (evt) {
 	zkWgt._currentbtn = $e(zkWgt._currentbtn);
 	var mcls = getZKAttr($outer(zkWgt._currentbtn), "mcls");
-	zk.rmClass(zkWgt._currentbtn, mcls + "-btn-click");
+	zk.rmClass(zkWgt._currentbtn, mcls + "-btn-clk");
 	zk.unlisten(document.body, "mouseup", zkWgt.onbtnup);
 	zkWgt._currentbtn = null;
 };

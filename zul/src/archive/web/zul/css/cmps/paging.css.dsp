@@ -117,12 +117,12 @@
 	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) repeat-x 0 -42px;
 }
 <%-- Click --%>
-.z-paging-btn-click .z-paging-btn-l {
+.z-paging-btn-clk .z-paging-btn-l {
 	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -63px;
 }
-.z-paging-btn-click .z-paging-btn-r {
+.z-paging-btn-clk .z-paging-btn-r {
 	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) no-repeat 0 -84px;
 }
-.z-paging-btn-click .z-paging-btn-m {
+.z-paging-btn-clk .z-paging-btn-m {
 	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.gif')}) repeat-x 0 -105px;
 }

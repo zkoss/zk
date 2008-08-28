@@ -36,7 +36,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		${self.imgTag}<c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if><c:out value="${self.label}"/>
 	</c:otherwise>
 	</c:choose></td>
-	<td class="${self.moldSclass}-cr"><i class="z-"> </i></td>
+	<td class="${self.moldSclass}-cr"><i class="z-"></i></td>
 </tr>
 <tr>
 	<td class="${self.moldSclass}-bl"></td>

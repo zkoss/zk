@@ -123,9 +123,9 @@ span.z-button {
 	background-position:0 -626px;
 }
 <%-- click --%>
-.z-button-click .z-button-cm{
+.z-button-clk .z-button-cm{
 	background-position:0 -759px;
 }
-.z-button-click .z-button-bm {
+.z-button-clk .z-button-bm {
 	background-position:0 -879px;	
 }
