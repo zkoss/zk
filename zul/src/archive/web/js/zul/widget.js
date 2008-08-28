@@ -335,14 +335,14 @@ zkButton = {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			box = $e(cmp.id + "!box");
-		zk.addClass(box, getZKAttr(cmp, "mcls") + "-hover");
+		zk.addClass(box, getZKAttr(cmp, "mcls") + "-over");
 	},
 	onout: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			box = $e(cmp.id + "!box");
 		if (box != zkButton.down_box)
-			zk.rmClass(box, getZKAttr(cmp, "mcls") + "-hover");
+			zk.rmClass(box, getZKAttr(cmp, "mcls") + "-over");
 	},
 	onfocus: function (evt) {
 		if (!evt) evt = window.event;
@@ -364,7 +364,7 @@ zkButton = {
 			box = $e(cmp.id + "!box"),
 			mcls = getZKAttr(cmp, "mcls");
 		zk.addClass(box, mcls + "-click");
-		zk.addClass(box, mcls + "-hover");
+		zk.addClass(box, mcls + "-over");
 		zk.asyncFocus(cmp.id + "!real", 30);
 		zkButton.down_box = box;
 		zk.listen(document.body, "mouseup", zkButton.onup);
@@ -374,7 +374,7 @@ zkButton = {
 		if (zkButton.down_box) {
 			var mcls = getZKAttr($outer(zkButton.down_box), "mcls");
 			zk.rmClass(zkButton.down_box, mcls + "-click");
-			zk.rmClass(zkButton.down_box, mcls + "-hover");
+			zk.rmClass(zkButton.down_box, mcls + "-over");
 		}
 		zkButton.down_box = null;
 		zk.unlisten(document.body, "mouseup", zkButton.onup);

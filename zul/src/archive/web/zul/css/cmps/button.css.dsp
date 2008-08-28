@@ -94,33 +94,33 @@ span.z-button {
 .z-button-focus .z-button-br {
 	background-position:0 -1131px;
 }
-<%-- hover --%>
-.z-button-hover .z-button-tl {
+<%-- Mouseover --%>
+.z-button-over .z-button-tl {
 	background-position:0 -378px;
 }
-.z-button-hover .z-button-tm {
+.z-button-over .z-button-tm {
 	background-position:0 -629px;	
 }
-.z-button-hover .z-button-tr {
+.z-button-over .z-button-tr {
 	background-position:0 -504px;
 }
-.z-button-hover .z-button-cl {
+.z-button-over .z-button-cl {
 	background-position:0 -381px;
 }
-.z-button-hover .z-button-cm {
+.z-button-over .z-button-cm {
   background-position:0 -633px;    
 }
-.z-button-hover .z-button-cr {
+.z-button-over .z-button-cr {
 	background-position:0 -507px;	
 }
-.z-button-hover .z-button-bl {
+.z-button-over .z-button-bl {
 	background-position:0 -501px;
 }
-.z-button-hover .z-button-bm {
+.z-button-over .z-button-bm {
 	background-position:0 -753px;	
 }
-.z-button-hover .z-button-br {
-	background-position:0 -627px;
+.z-button-over .z-button-br {
+	background-position:0 -626px;
 }
 <%-- click --%>
 .z-button-click .z-button-cm{
