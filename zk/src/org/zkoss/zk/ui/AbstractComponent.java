@@ -158,8 +158,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient boolean _annotsShared;
 	/** Whether _evthds is shared with other components. */
 	private transient boolean _evthdsShared;
-	/** Whether this component is visible. */
-	private boolean _visible = true;
+	/** Whether this component is visible.
+	 * @since 3.5.0 (becomes protected)
+	 */
+	protected boolean _visible = true;
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
