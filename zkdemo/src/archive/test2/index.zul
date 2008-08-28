@@ -30,7 +30,7 @@ function newWindow(url){
 									</checkbox>
 									<hbox>
 										<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("ifr").setSrc("");main.getFellow("center").title = "ZK TEST2"'/>
-										<button label="reload" onClick='main.getFellow("ifr").invalidate()'/>
+										<button label="reload" onClick='main.getFellow("center").invalidate()'/>
 										<button label="tracker">
 		<attribute name="onClick"><![CDATA[
 			if (lb.getSelectedItem() != null) {
