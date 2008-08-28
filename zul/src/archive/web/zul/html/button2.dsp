@@ -20,8 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<span z.type="zul.widget.Button" id="${self.uuid}" class="${self.moldSclass}"${z:noCSSAttrs(self.outerAttrs)}>
-<table id="${self.uuid}!box" cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
+<span z.type="zul.widget.Button" id="${self.uuid}" class="${self.moldSclass}"${z:noCSSAttrs(self.outerAttrs)}><table id="${self.uuid}!box" cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
 <tr>
 	<td class="${self.moldSclass}-tl"></td>
 	<td class="${self.moldSclass}-tm"></td>
