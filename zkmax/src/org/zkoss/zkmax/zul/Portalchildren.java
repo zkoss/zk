@@ -60,7 +60,7 @@ public class Portalchildren extends XulElement {
 		super.onChildAdded(child);
 		final Portallayout layout = (Portallayout)getParent();
 		if (!_noSmartUpdate && layout != null) {
-			layout.smartUpdate("z.childAdded", child.getUuid());
+			layout.smartUpdate("z.reset", true);
 		}
 	}
 	
@@ -68,7 +68,7 @@ public class Portalchildren extends XulElement {
 		super.onChildRemoved(child);
 		final Portallayout layout = (Portallayout)getParent();
 		if (!_noSmartUpdate && layout != null) {
-			layout.smartUpdate("z.childRemoved", child.getUuid());
+			layout.smartUpdate("z.reset", true);
 		}
 	}
 	

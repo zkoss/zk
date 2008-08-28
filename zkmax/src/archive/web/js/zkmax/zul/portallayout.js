@@ -156,10 +156,11 @@ zkPortalLayout = {
 		return zk.childNodes(el.parentNode, this._isVisibleChild).indexOf(el);
 	},
 	_cleanupDrag: function (n) {
-		if (!n || !n.id) return;
-		var dg = this.drags[n.id];
+		if (!n) return;
+		if (typeof n == 'object') n = n.id;
+		var dg = this.drags[n];
 		if (dg) {
-			delete this.drags[n.id];
+			delete this.drags[n];
 			dg.destroy();
 		}
 	},
@@ -174,11 +175,13 @@ zkPortalLayout = {
 				if (val)
 					zkPortalLayout.render(cmp, true);
 				return true;
-			case "z.childAdded":
-				this._initDrag($e(val));
-				return true;
-			case "z.childRemoved":
-				this._cleanupDrag($e(val));
+			case "z.reset":
+				for (var id in this.drags) {
+					this._cleanupDrag(id);
+				}
+				for (var cols = zk.childNodes($real(cmp), this._isLegalChild), i = cols.length; --i >= 0;)
+					for (var cns = zk.childNodes($e(cols[i], "cave")), j = cns.length; --j >= 0;) 
+						this._initDrag(cns[j]);
 				return true;
 		}
 		return false;
@@ -270,6 +273,8 @@ zkPortalChildren = {
 	},
 	cleanup: function(cmp) {
 		if (cmp._width) cmp._width = null;
+		for (var cns = zk.childNodes($e(cmp, "cave")), j = cns.length; --j >= 0;) 
+			zkPortalLayout._cleanupDrag(cns[j]);
 	},
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
