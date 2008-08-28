@@ -37,9 +37,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<vbox>
 		<slider id="slider1" onScrolling="zooming(slider1, img1)" onScroll="zooming(slider1, img1)"/>
 		<image id="img1" src="/img/sun.jpg" width="10px"/>
-		<!--<separator bar="true"/>
+		<separator bar="true"/>
 		<slider id="slider2" onScrolling="zooming(slider2, img2)" onScroll="zooming(slider2, img2)" width="200px" mold="sphere"/>
-		<image id="img2" src="/img/sun.jpg" width="10px"/>-->
+		<image id="img2" src="/img/sun.jpg" width="10px"/>
 	</vbox>
 	<zscript>
 	void zooming(Slider slider, Image img) {
