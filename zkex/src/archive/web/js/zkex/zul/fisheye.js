@@ -37,6 +37,7 @@ zk.fisheye.prototype = {
 		var meta = this;
 		if(!this._onMouseMove)
 			this._onMouseMove = function (evt) {
+				if (zkau.processing()) return;
 				var x = Event.pointerX(evt),
 					y = Event.pointerY(evt);
 				if ((x >= meta.box.l) && (x <= meta.box.r) &&
@@ -67,6 +68,7 @@ zk.fisheye.prototype = {
 			};
 		if (!this._onBodyOut)
 			this._onBodyOut = function (evt) {
+				if (zkau.processing()) return;
 				var x = Event.pointerX(evt),
 					y = Event.pointerY(evt),
 					offs = zk.revisedOffset(document.body),
@@ -391,6 +393,7 @@ zkFisheyebar = {
 			case "z.orient":
 				zkau.setAttr(cmp, nm, val);
 				meta.syncAttr();
+				meta.onSize();
 				return true;
 		}
 		return false;
