@@ -611,7 +611,8 @@ zkDtbox.open = function (pp) {
 		if (pp.offsetWidth > wd) pp.style.width = wd;
 	}
 
-	zk.position(pp, db, "after-start");
+	var input = $e(db.id + "!real");
+	zk.position(pp, input, "after-start");
 	
 	setTimeout("zkDtbox._repos('"+uuid+"')", 3);
 		//IE issue: we have to re-position again because some dimensions
@@ -626,7 +627,7 @@ zkDtbox._repos = function (uuid) {
 	var inpId = db.id + "!real";
 	var inp = $e(inpId);
 
-	zk.position(pp, db, "after-start");
+	zk.position(pp, inp, "after-start");
 	zkau.hideCovered();
 	zk.asyncFocus(inpId);
 };
