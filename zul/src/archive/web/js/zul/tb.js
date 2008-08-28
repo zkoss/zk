@@ -200,8 +200,8 @@ zkTmbox._btnDown= function(evt){
 		inp = $real(cmp);
 	if(inp.disabled || zk.dragging) return;
 
-	var btn = $e(cmp.id + "!btn"),
-		ofs = zPos.cumulativeOffset(btn);
+	var btn = $e(cmp.id + "!btn"),		
+		ofs = zk.revisedOffset(btn);
 	if ((Event.pointerY(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
 		zkTmbox.onUp(cmp);
 		zkTmbox._startAutoIncProc(cmp, true);
