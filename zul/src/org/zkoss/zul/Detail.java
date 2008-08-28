@@ -48,11 +48,48 @@ public class Detail extends XulElement {
 	private static final String DEFAULT_IMAGE = "~./zul/img/grid/row-expand.gif";
 	private boolean _open;
 	private String _img;
+	/** The style used for the content block. */
+	private String _cntStyle;
+	/** The style class used for the content block. */
+	private String _cntscls;
 	
 	public Detail() {
 		setWidth("18px");
 	}
 
+	/** 
+	 * Returns the CSS style for the content block of the window.
+	 */
+	public String getContentStyle() {
+		return _cntStyle != null ? _cntStyle + " ;display:none;" : "display:none;";
+	}
+	/** 
+	 * Sets the CSS style for the content block of the window.
+	 *
+	 * <p>Default: null.
+	 */
+	public void setContentStyle(String style) {
+		if (!Objects.equals(_cntStyle, style)) {
+			_cntStyle = style;
+			smartUpdate("z.cntStyle", getContentStyle());
+		}
+	}
+
+	/** 
+	 * Returns the style class used for the content block.
+	 */
+	public String getContentSclass() {
+		return _cntscls;
+	}
+	/**
+	 * Sets the style class used for the content block.
+	 */
+	public void setContentSclass(String scls) {
+		if (!Objects.equals(_cntscls, scls)) {
+			_cntscls = scls;
+			smartUpdate("z.cntScls", _cntscls);
+		}
+	}
 	/**
 	 * Returns the URI of the button image.
 	 */

@@ -368,6 +368,11 @@ public class Row extends XulElement {
 		return super.insertBefore(newChild, refChild);
 	}
 
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		if (_detail == child) _detail = null;
+	}
+
 	//Cloneable//
 	public Object clone() {
 		final Row clone = (Row)super.clone();

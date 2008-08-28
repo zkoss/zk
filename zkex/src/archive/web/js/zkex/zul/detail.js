@@ -126,6 +126,12 @@ zkDetail = {
 		if (nm == "z.open") {
 			this.open(cmp, val == "true", true);
 			return true; //no need to store z.open
+		} else if (nm == "z.cntStyle") {
+			var n = $e(cmp.id + "!cave");
+			if (n) zk.setStyle(n, val != null ? val : "");
+		} else if (nm == "z.cntScls") {
+			var n = $e(cmp.id + "!cave");
+			if (n) n.className = val != null ? val : "";
 		}
 		return false;
 	}
