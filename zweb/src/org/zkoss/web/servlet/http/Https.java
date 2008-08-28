@@ -409,6 +409,9 @@ public class Https extends Servlets {
 	void write(HttpServletRequest request, HttpServletResponse response,
 	Media media, boolean download, boolean resumable)
 	throws IOException {
+//		response.setHeader("Accept-Ranges", "bytes");
+
+		final boolean headOnly = "HEAD".equalsIgnoreCase(request.getMethod());
 		final byte[] data;
 		synchronized (media) { //Bug 1896797: media might be access concurr.
 			//reading an image and send it back to client
@@ -423,13 +426,21 @@ public class Https extends Servlets {
 					value += ";filename=\"" + URLEncoder.encode(flnm, "UTF-8") +'"';
 				response.setHeader("Content-Disposition", value);
 				//response.setHeader("Content-Transfer-Encoding", "binary");
-				//response.setHeader("Accept-Ranges", "bytes");
 			}
 
 			if (!media.inMemory()) {
 				if (media.isBinary()) {
-					final ServletOutputStream out = response.getOutputStream();
 					final InputStream in = media.getStreamData();
+					if (headOnly) {
+						int cnt = 0;
+						final byte[] buf = new byte[512];
+						for (int v; (v = in.read(buf)) >= 0;)
+							cnt += v;
+						response.setContentLength(cnt);
+						return;
+					}
+
+					final ServletOutputStream out = response.getOutputStream();
 					try {
 						Files.copy(out, in);
 					} catch (IOException ex) {
@@ -450,8 +461,26 @@ public class Https extends Servlets {
 					}
 					out.flush();
 				} else {
-					final Writer out = response.getWriter();
 					final Reader in = media.getReaderData();
+					if (headOnly) {
+						String charset = "UTF-8";
+						if (ctype != null) {
+							int j = ctype.indexOf("charset=");
+							if (j >= 0) {
+								String cs = ctype.substring(j + 8).trim();
+								if (cs.length() > 0) charset = cs;
+							}
+						}
+
+						int cnt = 0;
+						final char[] buf = new char[256];
+						for (int v; (v = in.read(buf)) >= 0;)
+							cnt += new String(buf, 0, v).getBytes(charset).length;
+						response.setContentLength(cnt);
+						return;
+					}
+
+					final Writer out = response.getWriter();
 					try {
 						Files.copy(out, in);
 					} catch (IOException ex) {
@@ -479,8 +508,10 @@ public class Https extends Servlets {
 		}
 
 		response.setContentLength(data.length);
-		final ServletOutputStream out = response.getOutputStream();
-		out.write(data);
-		out.flush();
+		if (!headOnly) {
+			final ServletOutputStream out = response.getOutputStream();
+			out.write(data);
+			out.flush();
+		}
 	}
 }
