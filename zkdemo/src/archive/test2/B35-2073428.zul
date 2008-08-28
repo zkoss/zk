@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2073428.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 28 12:09:18 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Please click the menu icon, when no menuitem in menu, menu won't be a dark background.(It should be the same as a background of mouseover)
+<menubar>
+<menu label="stone" id="stone" />
+</menubar>
+</zk>

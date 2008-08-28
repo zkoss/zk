@@ -275,7 +275,11 @@ zkMenu2 = { // menu
 		if (toggle) zkau.closeFloats(menu);
 	
 		var popupId = getZKAttr(menu, "mpop");
-		if (!popupId) return; //menuitem
+		if (!popupId) {
+			if ($type(menu) != "Menusp2")
+				zk.rmClass($e(menu.id + "!a"), getZKAttr(menu, "mcls") + "-btn-seld");
+			return; //menuitem
+		}
 	
 		var pp = $e(popupId);
 		if (!pp) {
