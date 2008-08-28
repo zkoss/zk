@@ -70,6 +70,7 @@ ZK 3.5.0
   2077739: Events.addEventListeners() cause Exception in onEvent()
   2077792: GenericAutowireComposer shall support implicit objects "arg"
   2041674: Menubar popup disappears with disabled menuitem
+  2080237: A disabled Menuitem with href can link to the href location
   
 * Upgrade Notes
   + onBookmarkChanged is renamed to onBookmarkChange

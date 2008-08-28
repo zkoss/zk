@@ -380,6 +380,7 @@ zkMenuit2 = { //menuitem
 				zk.listen(cmp, "mouseover", zkMenuit2.onover);
 				zk.listen(cmp, "mouseout", zkMenu2.onout);
 			}
+			zk.listen($e(cmp.id + "!a"), "click", Event.stop);
 		}
 		zkMenuit2.fixBtn(cmp);
 	},
