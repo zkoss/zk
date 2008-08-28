@@ -13,8 +13,11 @@ span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
 	margin: 0 1px 0 0;
 }
-.z-button-cr .i {
-	width: 3px;
+.z-button-cl button.z- {
+	width: 3px !important;
+}
+.z-button-cr i {
+	width: 3px !important;
 }
 .z-button-disd * {
 	color: gray!important; cursor: default!important;
