@@ -200,6 +200,7 @@ zkMenuit.init = function (cmp) {
 			zk.listen(cmp, "mouseover", zkMenuit.onover);
 			zk.listen(cmp, "mouseout", zkMenu.onout);
 		}
+		zk.listen($e(cmp.id + "!a"), "click", Event.stop);
 	}
 };
 zkMenuit.onover = function () {
