@@ -71,6 +71,7 @@ ZK 3.5.0
   2077792: GenericAutowireComposer shall support implicit objects "arg"
   2041674: Menubar popup disappears with disabled menuitem
   2080237: A disabled Menuitem with href can link to the href location
+  2080346: Onchaning evt of combobox wrongly includes type-ahead string
   
 * Upgrade Notes
   + onBookmarkChanged is renamed to onBookmarkChange
