@@ -374,8 +374,18 @@ zkMenuit2 = { //menuitem
 				zk.listen(anc, "focus", zkau.onfocus);
 				zk.listen(anc, "blur", zkau.onblur);		
 			}
+		} else {
+			var menubar = $parentByType(cmp, "Menubar");
+			if (!menubar || getZKAttr(menubar, "autodrop") == "true") {
+				zk.listen(cmp, "mouseover", zkMenuit2.onover);
+				zk.listen(cmp, "mouseout", zkMenu2.onout);
+			}
 		}
 		zkMenuit2.fixBtn(cmp);
+	},
+	onover: function (evt) {
+		zkMenu2._shallClose = false;
+			//turn off pending auto-close
 	},
 	onclick: function (evt) {
 		if (!evt) evt = window.event;
