@@ -102,9 +102,6 @@ public class Window extends XulElement implements IdSpace {
 	private boolean _sizable;
 	
 	private boolean _maximizable, _minimizable, _maximized, _minimized;
-
-	private boolean _visible = true;
-	
 	private int _minheight = 100, _minwidth = 200; 
 
 	/** Embeds the window as normal component. */
@@ -179,19 +176,20 @@ public class Window extends XulElement implements IdSpace {
 	 * sizing phase not initial phase.
 	 * 
 	 * <p>Default: false.
-	 * <p>Note: this method only applied when {@link #isMaximizable} is true.
+	 * @exception UiException if {@link #isMaximizable} is false.
 	 * @since 3.5.0
 	 */
 	public void setMaximized(boolean maximized) {
 		if (_maximized != maximized) {
+			if (!_maximizable)
+				throw new UiException("Not maximizable, "+this);
+
 			_maximized = maximized;
-			if (_maximizable) {
-				if (_maximized) {
-					setVisible0(true);
-					_minimized = false;
-				}
-				smartUpdate("z.maximized", _maximized);
+			if (_maximized) {
+				_minimized = false;
+				setVisible0(true); //avoid dead loop
 			}
+			smartUpdate("z.maximized", _maximized);
 		}
 	}
 	/**
@@ -231,18 +229,20 @@ public class Window extends XulElement implements IdSpace {
 	/**
 	 * Sets whether the window is minimized.
 	 * <p>Default: false.
+	 * @exception UiException if {@link #isMinimizable} is false.
 	 * @since 3.5.0
 	 */
 	public void setMinimized(boolean minimized) {
 		if (_minimized != minimized) {
+			if (!_minimizable)
+				throw new UiException("not minimizable, "+ this);
+
 			_minimized = minimized;
-			if (_minimizable) {
-				if (_minimized) {
-					setVisible0(false);
-					_maximized = false;
-				}
-				smartUpdate("z.minimized", _minimized);
+			if (_minimized) {
+				_maximized = false;
+				setVisible0(false); //avoid dead loop
 			}
+			smartUpdate("z.minimized", _minimized);
 		}
 	}
 	/**
@@ -808,25 +808,19 @@ public class Window extends XulElement implements IdSpace {
 	 * will become {@link #OVERLAPPED} and the suspending thread is resumed.
 	 */
 	public boolean setVisible(boolean visible) {
-		_maximized = false;
-		_minimized = false;
+		if (visible == _visible)
+			return visible;
+		_maximized = _minimized = false;
 		return setVisible0(visible);
 	}
 	private boolean setVisible0(boolean visible) {
 		if (!visible && _mode == MODAL) {
 			leaveModal();
 			invalidate();
-		} else if ( _mode != EMBEDDED)
+		} else if ( _mode != EMBEDDED) {
 			smartUpdate("z.visible", visible);
-		final boolean old = _visible;
-		if (old != visible) {
-			_visible = visible;
-			smartUpdate("visibility", _visible);
 		}
-		return old;
-	}
-	public boolean isVisible() {
-		return _visible;
+		return super.setVisible(visible);
 	}
 	
 	//-- super --//

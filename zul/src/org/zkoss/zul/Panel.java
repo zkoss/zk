@@ -73,8 +73,6 @@ public class Panel extends XulElement {
 		_maximizable, _minimizable, _maximized, _minimized;
 	private boolean  _open = true;
 	
-	private boolean _visible = true;
-
 	/**
 	 * Returns whether this Panel is open.
 	 * <p>Default: true.
@@ -135,21 +133,14 @@ public class Panel extends XulElement {
 	public boolean isFloatable() {
 		return _floatable;
 	}
-	public boolean isVisible() {
-		return _visible;
-	}
 	public boolean setVisible(boolean visible) {
-		_maximized = false;
-		_minimized = false;
+		if (visible == _visible)
+			return visible;
+		_maximized = _minimized = false;
 		return setVisible0(visible);
 	}
 	private boolean setVisible0(boolean visible) {
-		final boolean old = _visible;
-		if (old != visible) {
-			_visible = visible;
-			smartUpdate("visibility", _visible);
-		}
-		return old;
+		return super.setVisible(visible);
 	}
 	/**
 	 * Sets whether to float the panel to display it inline where it is rendered.
@@ -183,18 +174,19 @@ public class Panel extends XulElement {
 	 * sizing phase not initial phase.
 	 * 
 	 * <p>Default: false.
-	 * <p>Note: this method only applied when {@link #isMaximizable} is true.
+	 * @exception UiException if {@link #isMaximizable} is false.
 	 */
 	public void setMaximized(boolean maximized) {
 		if (_maximized != maximized) {
+			if (!_maximizable)
+				throw new UiException("Not maximizable, "+this);
+
 			_maximized = maximized;
-			if (_maximizable) {
-				if (_maximized) {
-					setVisible0(true);
-					_minimized = false;
-				}
-				smartUpdate("z.maximized", _maximized);
+			if (_maximized) {
+				_minimized = false;
+				setVisible0(true); //avoid dead loop
 			}
+			smartUpdate("z.maximized", _maximized);
 		}
 	}
 	/**
@@ -231,17 +223,19 @@ public class Panel extends XulElement {
 	/**
 	 * Sets whether the panel is minimized.
 	 * <p>Default: false.
+	 * @exception UiException if {@link #isMinimizable} is false.
 	 */
 	public void setMinimized(boolean minimized) {
 		if (_minimized != minimized) {
+			if (!_minimizable)
+				throw new UiException("not minimizable, "+ this);
+
 			_minimized = minimized;
-			if (_minimizable) {
-				if (_minimized) {
-					_visible = false;
-					_maximized = false;
-				}
-				smartUpdate("z.minimized", _minimized);
+			if (_minimized) {
+				_maximized = false;
+				setVisible0(false); //avoid dead loop
 			}
+			smartUpdate("z.minimized", _minimized);
 		}
 	}
 	/**
