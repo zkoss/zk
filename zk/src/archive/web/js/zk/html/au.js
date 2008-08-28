@@ -1252,12 +1252,12 @@ zkau._onDocLClick = function (evt) {
 	if (!evt) evt = window.event;
 
 	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
-		var target = Event.element(evt), cmp = zkau._parentByZKAttr(target, "lfclk", "pop");
+		var target = $outer(Event.element(evt)), cmp = zkau._parentByZKAttr(target, "lfclk", "pop");
 		if (cmp) {
 			var ctx = getZKAttr(cmp, "pop");
 			if (ctx) {
 				ctx = zkau.getByZid(cmp, ctx);
-				if (ctx && (!zkau._lastClickId || zkau._lastClickId == $id(target))) {
+				if (ctx && (!zkau._lastClickId || zkau._lastClickId == target.id)) {
 					var type = $type(ctx);
 					if (type) {
 						zkau.closeFloats(ctx, cmp);
