@@ -16,6 +16,7 @@ ZK 3.0.8
   2071996: Selection on a paged Listbox doesn't work an last page
   2077739: Events.addEventListeners() cause Exception in onEvent()
   2077792: GenericAutowireComposer shall support implicit objects "arg"
+  2041674: Menubar popup disappears with disabled menuitem
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange

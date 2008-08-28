@@ -193,8 +193,17 @@ zkMenuit.init = function (cmp) {
 			var anc = $e(cmp.id + "!a");
 			zk.listen(anc, "focus", zkau.onfocus);
 			zk.listen(anc, "blur", zkau.onblur);		
-		}	
+		}
+	} else {
+		var menubar = $parentByType(cmp, "Menubar");
+		if (!menubar || getZKAttr(menubar, "autodrop") == "true") {
+			zk.listen(cmp, "mouseover", zkMenuit.onover);
+			zk.listen(cmp, "mouseout", zkMenu.onout);
+		}
 	}
+};
+zkMenuit.onover = function () {
+	zkMenu._shallClose = false;
 };
 zkMenuit.onclick = function (evt) {
 	if (!evt) evt = window.event;
