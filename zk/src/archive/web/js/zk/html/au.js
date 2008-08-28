@@ -417,7 +417,8 @@ zkau._checkProgress = function () {
  * @since 3.0.0
  */
 zkau.processing = function () {
-	return zkau._cmdsQue.length || zkau._areq || zkau._preqInf;
+	return zkau._cmdsQue.length || zkau._areq || zkau._preqInf
+		|| zkau._doingCmds;
 };
 
 /** Returns the timeout of the specified event.
@@ -693,6 +694,9 @@ zkau.doCmds = function () {
 			zkau._doCmds0();
 		} finally {
 			zkau._doingCmds = false;
+
+			if (zkau._checkProgress())
+				zkau.doneTime = $now();
 		}
 	}
 };
@@ -748,8 +752,6 @@ zkau._doCmds0 = function () {
 		}, 3600);
 	}
 
-	if (zkau._checkProgress())
-		zkau.doneTime = $now();
 	if (ex) throw ex;
 };
 zkau._doCmds1 = function (cmds) {
