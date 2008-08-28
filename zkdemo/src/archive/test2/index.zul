@@ -9,7 +9,7 @@ function newWindow(url){
 	<borderlayout id="main" use="org.zkoss.zkdemo.test2.MainLayout">
 	<west title="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}" size="355px" border="0" collapsible="true" maxsize="600" splittable="true" flex="true">
 	<!-- ******************** Ctrl Panel ******************** -->
-			<window id="w1" contentStyle="overflow:auto">
+			<window id="w1" contentStyle="overflow:auto;position:relative;">
 				<vbox>
 					<tabbox mold="accordion">				
 						<tabs>
