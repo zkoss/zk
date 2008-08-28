@@ -70,14 +70,14 @@ div.z-debugbox {
 }
 
 <%-- General --%>
-em.z-, .z- em {
+em.z- {
 	font-style: normal; font-weight: normal;
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: ${fontSizeM};
 }
-i.z-, .z- i {
-	display: block; width: 1px; overflow: hidden;
-	font-size: 1px; line-height: 1px;
+i.z- {
+	display: block; width: 1px !important; overflow: hidden;
+	font-size: 1px !important; line-height: 1px !important;
 }
 button.z- {
 	padding:0 !important; margin:0 !important; border:0 !important;

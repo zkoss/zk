@@ -16,7 +16,7 @@ span.z-button {
 .z-button-cl button.z- {
 	width: 3px !important;
 }
-.z-button-cr i {
+.z-button-cr i.z- {
 	width: 3px !important;
 }
 .z-button-disd * {
