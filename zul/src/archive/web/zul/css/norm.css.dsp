@@ -75,9 +75,15 @@ em.z-, .z- em {
 	font-family: Verdana, Tahoma, Arial, serif;
 	font-size: ${fontSizeM};
 }
-i.z-, .z- li {
-	display: block; width: 3px; overflow: hidden;
+i.z-, .z- i {
+	display: block; width: 1px; overflow: hidden;
 	font-size: 1px; line-height: 1px;
+}
+button.z- {
+	padding:0 !important; margin:0 !important; border:0 !important;
+	background: transparent !important;
+	font-size: 1px !important; width: 1px !important;
+	height: ${c:isGecko() ? 0: 1}px !important;
 }
 
 .z-modal-mask {

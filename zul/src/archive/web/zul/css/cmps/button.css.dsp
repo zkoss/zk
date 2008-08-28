@@ -6,18 +6,14 @@
 <c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
 
 .z-button {
-	font: normal tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap; font-size: ${fontSizeM};
+	font: normal tahoma, verdana, helvetica; cursor: pointer;
+	white-space: nowrap; font-size: ${fontSizeM};
 }
 span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
 }
-button.z- {
-	padding:0 !important; margin:0 !important; border:0 !important;
-	background: transparent !important;
-	font-size: 1px !important; width: 1px !important; height: 1px !important;
-<c:if test="${c:isGecko()}">
-	height: 0px !important;
-</c:if>
+.z-button-cr .i {
+	width: 3px;
 }
 .z-button-disd * {
 	color: gray!important; cursor: default!important;
@@ -39,7 +35,7 @@ button.z- {
 }
 .z-button .z-button-cl {
 	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -3px;
-	width: 3px; padding: 0; margin: 0;
+	width: 3px; padding: 0; margin: 0; text-align: right;
 }
 .z-button .z-button-cm {
 	font-family: Tahoma, Garamond, Century, Arial, serif;

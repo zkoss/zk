@@ -41,17 +41,25 @@ public class Button2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Button self = (Button) comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		String mcls = self.getMoldSclass();
+		if (mcls == null) mcls = "";
+		final String outerattrs = self.getOuterAttrs();
 		
-		wh.write("<span id=\"").write(uuid).write("\"")
-			.write(ZkFns.noCSSAttrs(self.getOuterAttrs())).write(" class=\"").write(mcls)
-			.write("\" z.type=\"zul.widget.Button\">").write("<table id=\"").write(uuid)
-			.write("!real\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"")						
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.write("><tbody><tr><td class=\"").write(mcls).write("-tl\"></td>");
-		wh.write("<td colspan=\"3\" class=\"").write(mcls).write("-tm\"></td><td class=\"").write(mcls).write("-tr\"></td></tr>");
-		wh.write("<tr><td class=\"").write(mcls).write("-cl\"><i>&#160;</i></td><td colspan=\"3\" class=\"").write(mcls).write("-cm\"><em unselectable=\"on\">");
-		wh.write("<a id=\"").write(uuid).write("!btn\" href=\"javascript:;\" class=\"").write(mcls).write("-btn\">");				
+		wh.write("<span z.type=\"zul.widget.Button\" id=\"").write(uuid)
+			.write("\" class=\"").write(mcls).write("\"")
+			.write(ZkFns.noCSSAttrs(outerattrs))
+			.write('>').write("<table id=\"").write(uuid)
+			.write("!box\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"")						
+			.write(ZkFns.outCSSAttrs(outerattrs))
+			.write(self.getInnerAttrs())
+			.write(">\n<tr><td class=\"").write(mcls).write("-tl\"></td>");
+		wh.write("<td class=\"").write(mcls).write("-tm\"></td><td class=\"")
+			.write(mcls).write("-tr\"></td></tr>\n")
+			.write("<tr><td class=\"")
+			.write(mcls).write("-cl\"><button id=\"")
+			.write(uuid).write("!real\" class=\"z-\"></button></td><td class=\"")
+			.write(mcls).write("-cm\">");
+
 		if (self.getDir().equals("reverse")) {
 			new Out(self.getLabel()).render(out);
 			if (self.isImageAssigned()
@@ -65,7 +73,11 @@ public class Button2Default implements ComponentRenderer {
 			wh.writeln("<br/>");
 			new Out(self.getLabel()).render(out);
 		}		
-		wh.write("</a></em></td><td class=\"").write(mcls).write("-cr\"><i>&#160;</i></td></tr><tr><td class=\"").write(mcls).write("-bl\"></td>" +
-				"<td colspan=\"3\" class=\"").write(mcls).write("-bm\"></td><td class=\"").write(mcls).write("-br\"></td></tr></tbody></table></span>");						
+
+		wh.write("</td>\n<td class=\"").write(mcls)
+			.write("-cr z-\"><i></i></td></tr>\n<tr><td class=\"").write(mcls)
+			.write("-bl\"></td><td class=\"").write(mcls)
+			.write("-bm\"></td><td class=\"")
+			.write(mcls).write("-br\"></td></tr>\n</table></span>");						
 	}
 }
