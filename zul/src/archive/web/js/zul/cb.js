@@ -321,14 +321,12 @@ zkCmbox.onkey = function (evt) {
 	var selback = keycode == 38 || keycode == 40; //UP and DN
 	if (getZKAttr(cb, "adr") == "true" && !opened){
 		zkCmbox.open(pp, bCombobox && !selback);
-		setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
-			((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
+		zkCmbox._hiliteLater(uuid, evt);
 	}
 	else if (!bCombobox)
 		return true; //ignore
 	else if (!selback /*&& opened disabled by JumperChen 2008/01/09*/)
-		setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
-			((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
+		zkCmbox._hiliteLater(uuid, evt);
 
 	if (selback/* || getZKAttr(cb, "aco") == "true"*/) {
 		//Note: zkCmbox.open won't repos immediately, so we have to delay it
@@ -338,6 +336,11 @@ zkCmbox.onkey = function (evt) {
 		return false;
 	}
 	return true;
+};
+zkCmbox._hiliteLater = function (uuid, evt) {
+	var keycode = Event.keyCode(evt);
+	setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
+		((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
 };
 
 /* Whn the button is clicked on button. */
@@ -613,8 +616,8 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 			found.setAttribute("zk_hilite", "true");
 			inpval = zkCmbox.getLabel(found);
 		}
-	}	
-	if (reminder) {		
+	}
+	if (reminder) {
 		inp.setAttribute("zk_typeAhead", inp.value);
 		if (found) {
 			var c = zkCmbox.getLabel(found);
