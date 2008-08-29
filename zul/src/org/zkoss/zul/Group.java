@@ -283,4 +283,12 @@ public class Group extends Row {
 			throw new UnsupportedOperationException();
 		}
 	}
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		invalidate();
+	}
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		invalidate();
+	}
 }

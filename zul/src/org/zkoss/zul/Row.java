@@ -422,7 +422,5 @@ public class Row extends XulElement {
 		if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 		else out.insert(0, sb.toString());
 		out.append("</div></td>");
-		if (this instanceof Group && getFirstChild() == child)
-			smartUpdate("z.firstchg", true);
 	}
 }

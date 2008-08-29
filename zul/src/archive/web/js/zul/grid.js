@@ -571,10 +571,7 @@ zkGrwgp = {
 				if (meta) meta.stripe();
 			}
 			return true;
-		} else if (nm == "z.firstchg") {
-			cmp._img = zk.firstChild(cmp, "IMG", true);
-			if (cmp._img) zk.listen(cmp._img, "click", zkGrwgp.ontoggle);
-		}
+		} 
 		return false;
 	},
 	initdrag: zkGrw.initdrag,
