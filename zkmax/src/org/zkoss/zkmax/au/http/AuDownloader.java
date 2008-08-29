@@ -50,7 +50,7 @@ import org.zkoss.zkmax.zul.FiledownloadListener;
  *
  * @author tomyeh
  * @since 3.5.0
- * @see Filedownload
+ * @see org.zkoss.zkmax.zul.Filedownload
  */
 public class AuDownloader implements AuProcessor {
 	private static final Log log = Log.lookup(AuDownloader.class);

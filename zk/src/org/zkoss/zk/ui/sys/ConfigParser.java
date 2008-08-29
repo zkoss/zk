@@ -64,7 +64,6 @@ public class ConfigParser {
 	private static int[] _zkver;
 
 	/** Checks and returns whether the loaded document's version is correct.
-	 * @param zk
 	 * @since 3.5.0
 	 */
 	public static boolean checkVersion(URL url, Document doc)

@@ -26,7 +26,7 @@ package org.zkoss.zul;
  * {@link RowRendererExt}.
  * If you need better control about generating {@link Group} and
  * {@link Groupfoot}, your renderer can also implement
- * {@link GroupRendererExt).
+ * {@link GroupRendererExt}.
  *
  * <p>In addition, you could also
  * implement {@link RendererCtrl}. For example, starts an transaction,
