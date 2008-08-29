@@ -210,6 +210,7 @@
 }
 
 <%-- Menupopup--%>
+.z-menu-popup :-moz-any-link:focus {outline: none!important;}
 .z-menu-popup {
 	border:	1px solid #7F9DB9;	z-index: 88000; zoom: 1; padding: 2px;
 	background: #F0F0F0 url(${c:encodeURL('~./zul/img/menu2/pp-bg.gif')}) repeat-y;
