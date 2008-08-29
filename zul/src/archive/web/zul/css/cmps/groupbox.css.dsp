@@ -16,7 +16,7 @@
 
 <%-- 3D --%>
 .z-groupbox-cnt {<%-- content of 3d groupbox --%>
-	border: 1px solid #E1E1E1; padding: 5px;
+	border: 1px solid #B2CCD9; padding: 5px;
 }
 .z-groupbox-bm {
 	background:transparent url(${c:encodeURL('~./img/shdmd.gif')}) repeat-x 0 0;
@@ -38,14 +38,14 @@
 	border: 0 none; background: transparent;
 }
 .z-groupbox-tm {
-	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-tb.jpg')}) repeat-x 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-tb.png')}) repeat-x 0 0;
 	overflow: hidden;
 }
 .z-groupbox-tl {
-	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-corners.jpg')}) no-repeat 0 0;
-	padding-left: 6px; zoom: 1; border-bottom: 1px solid #E1E1E1;
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-corners.png')}) no-repeat 0 0;
+	padding-left: 6px; zoom: 1; border-bottom: 1px solid #B2CCD9;
 }
 .z-groupbox-tr {
-	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-corners.jpg')}) no-repeat right 0;
+	background: transparent url(${c:encodeURL('~./zul/img/groupbox/groupbox-corners.png')}) no-repeat right 0;
 	zoom: 1; padding-right: 6px;
 }

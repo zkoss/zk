@@ -40,11 +40,11 @@ div.z-tree-footer {
 
 <%-- faker uses only for grid/listbox/tree --%>
 tr.z-tree-faker, tr.z-tree-faker th, tr.z-tree-faker div {
-	border-top: 0 !important; border-bottom: 0 !important; margin-top: 0 !important;
-	margin-bottom: 0 !important; padding-top: 0 !important;	padding-bottom: 0 !important;
-	height: 0px !important; <%-- these above css cannot be overrided--%>
-	border-left: 0; border-right: 0; margin-left: 0; margin-right: 0; padding-left: 0;
-	padding-right: 0;
+	height: 0px !important; 	
+	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;  
+	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;			
+	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;  	
+	<%-- these above css cannot be overrided--%>
 }
 
 <%-- tree icons --%>
@@ -108,10 +108,9 @@ tr.z-tree-row-over-seld {
 	background: #82D5F8;
 }
 tr.z-tree-row td.z-tree-row-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/focusd.png')});
 	background-repeat: no-repeat;
 }
-
 
 <%-- z-dottree --%>
 div.z-dottree {

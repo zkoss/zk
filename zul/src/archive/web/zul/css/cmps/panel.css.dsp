@@ -11,38 +11,38 @@
 }
 .z-panel-move-ghost ul {
 	margin: 0; padding: 0; overflow: hidden; font-size: 0; line-height: 0;
-	border: 1px solid #99BBE8; display: block; background: #cbddf3;
+	border: 1px solid #B1CBD5; display: block; background: #cbddf3;
 }
 .z-panel-move-ghost ul {
 	border-top-width: 0;
 }
 .z-panel-move-block {
-	border: 2px dashed #99bbe8;
+	border: 2px dashed #B1CBD5;
 }
 
 .z-panel {
-	border-style: solid; border-color: #99BBE8; border-width: 0; overflow: hidden;
+	border-style: solid; border-color: #B1CBD5; border-width: 0; overflow: hidden;
 }
 .z-panel-header {
 	overflow: hidden; zoom: 1; color: #15428b; font: bold 11px tahoma, arial, verdana, sans-serif;
-	padding: 5px 3px 4px 5px; border: 1px solid #99BBE8; line-height: 15px; 
-	background:transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.gif')}) repeat-x 0 -1px;
+	padding: 5px 3px 4px 5px; border: 1px solid #B1CBD5; line-height: 15px; 
+	background:transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 -1px;
 }
 .z-panel-children {
-	border: 1px solid #99BBE8; border-top: 0 none; overflow: hidden; background: white;
+	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; background: white;
 	position: relative;
 }
 .z-panel-bbar .z-toolbar {
-	border: 1px solid #99BBE8; border-top: 0 none; overflow: hidden; padding: 2px;
+	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; padding: 2px;
 }
 .z-panel-tbar .z-toolbar {
-	border: 1px solid #99BBE8; border-top: 0 none; overflow: hidden; padding: 2px;
+	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; padding: 2px;
 }
 .z-panel-tbar .z-toolbar {
-	border-top: 1px solid #99BBE8; border-bottom: 0 none;
+	border-top: 1px solid #B1CBD5; border-bottom: 0 none;
 }
 .z-panel-children-noheader, .z-panel-cm .z-panel-children {
-	border-top: 1px solid #99BBE8;
+	border-top: 1px solid #B1CBD5;
 }
 .z-panel-header {
 	overflow: hidden; zoom: 1;
@@ -52,15 +52,15 @@
 	border: 0 none; background: transparent;
 }
 .z-panel-tm {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.gif')}) repeat-x 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 0;
 	overflow: hidden;
 }
 .z-panel-tl {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')}) no-repeat 0 0;
-	padding-left: 6px; zoom: 1; border-bottom: 1px solid #99BBE8;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat 0 0;
+	padding-left: 6px; zoom: 1; border-bottom: 1px solid #B1CBD5;
 }
 .z-panel-tr {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')}) no-repeat right 0;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat right 0;
 	zoom: 1; padding-right: 6px;
 }
 .z-panel-header-noheader {
@@ -70,23 +70,23 @@
 	height: 6px; font-size: 0; line-height: 0;
 }
 .z-panel-bm {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.gif')}) repeat-x 0 bottom;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 bottom;
 	zoom: 1;
 }
 .z-panel-bl {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')}) no-repeat 0 bottom;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat 0 bottom;
 	padding-left: 6px; zoom: 1;
 }
 .z-panel-br {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')}) no-repeat right bottom;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat right bottom;
 	padding-right: 6px; zoom: 1;
 }
 .z-panel-cm {
 	border: 0 none; padding: 0; margin: 0; font: normal 11px tahoma, arial, helvetica, sans-serif;
-	padding-top: 6px; background: #dfe8f6;
+	padding-top: 6px; background: #D8ECF7;
 }
 .z-panel-cm .z-panel-children {
-	border:1px solid #99BBE8; background: transparent;
+	border:1px solid #B1CBD5; background: transparent;
 }
 .z-panel-cl {
 	background: #fff url(${c:encodeURL('~./zul/img/panel/panel-lr.gif')}) repeat-y 0 0;
@@ -109,18 +109,18 @@
 	border-width: 0;
 }
 .z-panel-noborder .z-panel-header-noborder{
-	border-width: 0; border-bottom: 1px solid #99BBE8;
+	border-width: 0; border-bottom: 1px solid #B1CBD5;
 }
 .z-panel-noborder .z-panel-tbar-noborder .z-toolbar {
-	border-width: 0; border-bottom: 1px solid #99BBE8;
+	border-width: 0; border-bottom: 1px solid #B1CBD5;
 }
 .z-panel-noborder .z-panel-bbar-noborder .z-toolbar{
-	border-width: 0; border-top: 1px solid #99BBE8;
+	border-width: 0; border-top: 1px solid #B1CBD5;
 }
 <%-- Panel Tool --%>
 .z-panel-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.png')}) no-repeat;
 	margin-left: 2px;
 }
 .z-panel-toggle {

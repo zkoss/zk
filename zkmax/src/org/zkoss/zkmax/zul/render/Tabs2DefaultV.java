@@ -46,7 +46,7 @@ public class Tabs2DefaultV implements ComponentRenderer {
 		wh.write("<div id=\""+self.getUuid()+"!header\"")
 			.write(" class=\""+look+"header\"")
 			.writeln(">");
-			wh.write("<ul id=\""+self.getUuid()+"\"")
+			wh.write("<ul id=\""+self.getUuid()+"!ul\"")
 				.write(" class=\""+look+"si\"")
 				.writeln(">");			
 				wh.writeChildren(self);				

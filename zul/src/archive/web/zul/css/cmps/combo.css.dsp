@@ -30,7 +30,7 @@
 	background: #ECEAE4;
 }
 .z-combobox .z-combobox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/combobtn.gif')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/combobtn.png')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
@@ -105,7 +105,7 @@
 	background: #ECEAE4;
 }
 .z-bandbox .z-bandbox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/bandbtn.gif')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/bandbtn.png')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
@@ -152,7 +152,7 @@
 	background: #ECEAE4;
 }
 .z-datebox .z-datebox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/datebtn.gif')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/datebtn.png')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
@@ -198,7 +198,7 @@
 	background: #ECEAE4;
 }
 .z-timebox .z-timebox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.png')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
@@ -236,7 +236,7 @@
 	background: #ECEAE4;
 }
 .z-spinner .z-spinner-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.png')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }

@@ -57,7 +57,12 @@ public class Tab extends LabelImageElement {
 		setLabel(label);
 		setImage(image);
 	}
-
+	//-- super --//
+	public void setWidth(String width) {
+		if (getTabbox().isVertical()){
+			throw new UnsupportedOperationException("Set Tabs' width instead");
+		}
+	}
 	/**
 	 * Returns whether this tab is closable. If closable, a button is displayed
 	 * and the onClose event is sent if an user clicks the button.
@@ -93,13 +98,13 @@ public class Tab extends LabelImageElement {
 		if (_selected) {
 			final Tabs tabs = (Tabs) getParent();
 			if (tabs != null) {
-				for (Iterator it = tabs.getChildren().iterator(); it.hasNext();) {
-					final Tab t = (Tab) it.next();
-					if (t != this) {
-						t.setSelected(true);
-						break;
-					}
-				}
+				Tab t = null;
+				t = this.getPreviousSibling() != null ? 
+						(Tab)this.getPreviousSibling() :
+							this.getNextSibling() != null ? 
+								(Tab)this.getNextSibling():
+									null;
+				if (t != null ) t.setSelected(true);
 			}
 		}
 

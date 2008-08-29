@@ -7,7 +7,7 @@
 
 .z-toolbar {
 	border-color: #a9bfd3; border-style: solid; border-width: 0 0 1px 0; display: block;
-	padding: 2px; background: #D0DEF0 url(${c:encodeURL('~./zul/img/button/tb-bg.gif')}) repeat-x top left;
+	padding: 2px; background: #D0DEF0 url(${c:encodeURL('~./zul/img/button/tb-bg.png')}) repeat-x top left;
 	position: relative; zoom: 1;
 }
 .z-caption .z-toolbar, .z-caption .z-toolbarbutton {

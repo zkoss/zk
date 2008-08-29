@@ -45,8 +45,7 @@ public class Tab2DefaultV implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final Tab self = (Tab) comp;
 		final Tabbox tabbox = self.getTabbox();
-		final SmartWriter wh = new SmartWriter(out);
-		final Execution exec = Executions.getCurrent();
+		final SmartWriter wh = new SmartWriter(out);		
 		final String look = tabbox.getTabLook() + '-';		
 		final Tabpanel panel = self.getLinkedPanel();
 		wh.write("<li id=\""+self.getUuid()+"\"");
@@ -67,9 +66,9 @@ public class Tab2DefaultV implements ComponentRenderer {
 			}
 			wh.write("<a class=\""+look+"a\" id=\""+self.getUuid()+"!real\"");
 			wh.writeln(self.getInnerAttrs()+" >");		
-				wh.writeln("<em id=\""+self.getUuid()+"\" class=\""+look+"em\">");
+				wh.writeln("<em id=\""+self.getUuid()+"!em\" class=\""+look+"em\">");
 					if (self.isClosable()){
-						wh.writeln("<span id=\""+self.getUuid()+"!inner\" class=\""+look+"inner "+look+"innerclose\" \">");
+						wh.writeln("<span id=\""+self.getUuid()+"!inner\" class=\""+look+"inner "+look+"innerclose\" >");
 					}else{
 						wh.writeln("<span id=\""+self.getUuid()+"!inner\" class=\""+look+"inner \">");
 					}

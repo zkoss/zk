@@ -71,7 +71,7 @@ function addUpload(img) {
 	td.innerHTML = table.rows.length;
 	td.align = "right";
 	tr.insertCell(1).innerHTML = '<input class="file" type="file" id="file" name="file"/>' +
-		'<img src="${c:encodeURL('~./zul/img/add.gif')}" onclick="addUpload(this);" />';
+		'<img src="${c:encodeURL('~./zul/img/add.png')}" onclick="addUpload(this);" />';
 	adjustHgh(table);
 }
 function deleteUpload(img) {
@@ -107,7 +107,7 @@ parent.zk.listen(document, "keydown", onDocKeydown);
 <c:forEach var="cnt" begin="1" end="${maxcnt}" varStatus="s">
 	<tr>
 		<td align="right"><c:if test="${unlimited || maxcnt gt 2}">${cnt}</c:if></td>
-		<td><input class="file" type="file" id="file" name="file"/><c:if test="${unlimited && s.index == maxcnt}"><img src="${c:encodeURL('~./zul/img/add.gif')}" onclick='addUpload(this);'"/></c:if><c:if test="${unlimited && s.index < maxcnt}"><img src="${c:encodeURL('~./zul/img/delete.gif')}" onclick='deleteUpload(this);'"/></c:if></td>
+		<td><input class="file" type="file" id="file" name="file"/><c:if test="${unlimited && s.index == maxcnt}"><img src="${c:encodeURL('~./zul/img/add.png')}" onclick='addUpload(this);'"/></c:if><c:if test="${unlimited && s.index < maxcnt}"><img src="${c:encodeURL('~./zul/img/delete.png')}" onclick='deleteUpload(this);'"/></c:if></td>
 	</tr>
 </c:forEach>
 	</table>

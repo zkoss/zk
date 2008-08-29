@@ -44,6 +44,13 @@ public class Tabs extends XulElement {
 	public Tabbox getTabbox() {
 		return (Tabbox)getParent();
 	}
+	public String getWidth() {
+		String width = super.getWidth();
+		if (getTabbox().isVertical()){
+			if (width == null) width = "50px";
+		}
+		return width;
+	}
 	
 	/** Returns the alignment of tab.
 	 *

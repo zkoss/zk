@@ -7,7 +7,7 @@
 }
 .z-border-layout-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.png')}) no-repeat;
 	margin-left: 2px;
 }
 <%-- LayoutRegion --%>
@@ -15,7 +15,7 @@
 	border:0 none;
 }
 .z-west, .z-center, .z-east, .z-north, .z-south {
-	border:1px solid #9CBDFF; position:absolute; overflow:hidden; background-color:white;
+	border:1px solid #B1CBD5; position:absolute; overflow:hidden; background-color:white;
 }
 .z-west-noborder, .z-center-noborder, .z-east-noborder,
 	.z-north-noborder, .z-south {
@@ -63,8 +63,8 @@
 .z-west-header, .z-center-header, .z-east-header,
 	.z-north-header, .z-south-header {
 	overflow: hidden; zoom: 1; color: #15428b; font: bold 11px tahoma, arial, verdana, sans-serif;
-	padding: 5px 3px 4px 5px; border-bottom: 1px solid #99BBE8; line-height: 15px; 
-	background:transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.gif')}) repeat-x 0 -1px;
+	padding: 5px 3px 4px 5px; border-bottom: 1px solid #B1CBD5; line-height: 15px; 
+	background:transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 -1px;
 	white-space: nowrap;
 }
 .z-south-collapse {

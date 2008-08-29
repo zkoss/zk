@@ -31,7 +31,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		</c:otherwise>
 	</c:choose>			
 	<a class="${c:cat(look,"a")}" id="${self.uuid}!real"${self.innerAttrs}>
-		<em id="${self.uuid}" class="${c:cat(look,'em')}">	 	
+		<em id="${self.uuid}!em" class="${c:cat(look,'em')}">	 	
 				<c:choose>
 					<c:when test="${self.closable}">
 						<span id="${self.uuid}!inner" class="${c:cat(look,'inner')} ${c:cat(look,'innerclose')}">

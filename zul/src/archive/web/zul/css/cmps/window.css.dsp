@@ -14,9 +14,12 @@
 	overflow: hidden; position: absolute; filter: alpha(opacity=65) !important; <%-- IE --%>
 	background: #CBDDF3; opacity: .65 !important; cursor: move !important;
 }
+.z-window-move-ghost .z-window-popup-tl {
+	border-bottom: 0;
+}
 .z-window-move-ghost ul {
 	margin: 0; padding: 0; overflow: hidden; font-size: 0; line-height: 0;
-	border: 1px solid #99BBE8; display: block; background: #cbddf3;
+	border: 1px solid #538BA2; display: block; background: #cbddf3;
 }
 .z-window-embedded, .z-window-modal, .z-window-overlapped, .z-window-popup, .z-window-highlighted {
 	margin: 0; padding: 0; overflow: hidden; zoom: 1;
@@ -27,7 +30,7 @@
 	padding-left: 6px; zoom: 1;
 }
 .z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl, .z-window-popup-tl {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l.png')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.png')}) no-repeat 0 0;
 	padding-left: 6px; zoom: 1;
 }
 .z-window-embedded-tm {
@@ -35,7 +38,7 @@
 	overflow: hidden; zoom: 1;
 }
 .z-window-modal-tm, .z-window-highlighted-tm, .z-window-overlapped-tm, .z-window-popup-tm {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;
 	overflow: hidden; zoom: 1;
 }
 .z-window-embedded-tr {
@@ -43,16 +46,19 @@
 	padding-right: 6px;
 }
 .z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr, .z-window-popup-tr {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right 0;
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.png')}) no-repeat right 0;
 	padding-right: 6px;
 }
 .z-window-modal-tm-noheader, .z-window-highlighted-tm-noheader,
 	.z-window-overlapped-tm-noheader, .z-window-popup-tm-noheader {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;
 	overflow: hidden; zoom: 1; font-size: 0pt; height: 5px; line-height: 0pt;
 }
 .z-window-embedded-tl {
-	border-bottom: 1px solid #99BBE8;
+	border-bottom: 1px solid #538BA2;
+}
+.z-window-popup-tl {
+	border-bottom: 1px solid #0B5CA0;
 }
 .z-window-modal-header, .z-window-popup-header, .z-window-highlighted-header,
 	.z-window-overlapped-header, .z-window-embedded-header {
@@ -60,14 +66,21 @@
 }
 .z-window-modal-header, .z-window-popup-header, .z-window-highlighted-header,
 	.z-window-overlapped-header {
-	color: #222222;
+	color: #FFFFFF;
 }
-.z-window-modal-header a, .z-window-modal-header a:visited, .z-window-modal-header a:hover,
-.z-window-popup-header a, .z-window-popup-header a:visited, .z-window-popup-header a:hover,
-.z-window-highlighted-header a, .z-window-highlighted-header a:visited, .z-window-highlighted-header a:hover,
-.z-window-overlapped-header a, .z-window-overlapped-header a:visited, .z-window-overlapped-header a:hover,
 .z-window-embedded-header a, .z-window-embedded-header a:visited, .z-window-embedded-header a:hover {
 	color: #222222;
+}
+<%-- Caption and Toolbarbutton --%>
+.z-window-modal-header a, .z-window-modal-header a:visited, .z-window-modal-header a:hover,
+.z-window-modal-header .z-caption a, .z-window-modal-header .z-caption a:visited, .z-window-modal-header .z-caption a:hover,
+.z-window-popup-header a, .z-window-popup-header a:visited, .z-window-popup-header a:hover,
+.z-window-popup-header .z-caption a, .z-window-popup-header .z-caption a:visited, .z-window-popup-header .z-caption a:hover,
+.z-window-highlighted-header a, .z-window-highlighted-header a:visited, .z-window-highlighted-header a:hover,
+.z-window-highlighted-header .z-caption a, .z-window-highlighted-header .z-caption a:visited, .z-window-highlighted-header .z-caption a:hover,
+.z-window-overlapped-header a, .z-window-overlapped-header a:visited, .z-window-overlapped-header a:hover,
+.z-window-overlapped-header .z-caption a, .z-window-overlapped-header .z-caption a:visited, .z-window-overlapped-header .z-caption a:hover {
+	color: #FFFFFF;
 }
 <%-- Body --%>
 .z-window-embedded-cnt {
@@ -95,38 +108,43 @@
 	margin: 0; padding: 1px; background: white;
 }
 .z-window-modal-cl, .z-window-highlighted-cl, .z-window-overlapped-cl, .z-window-popup-cl {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-lr.png')}) repeat-y 0 0; 
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-lr-ol.png')}) repeat-y 0 0; 
 	padding-left: 6px; zoom: 1;
 }
 .z-window-popup-cm, .z-window-modal-cm, .z-window-highlighted-cm, .z-window-overlapped-cm {
-	border:1px solid #8DB2E3; padding: 0; margin:0 ; background: #5EABDB;
+	border:1px solid #0B5CA0; padding: 0; margin:0 ; background: #5EABDB;
 }
 .z-window-popup-cm-noborder, .z-window-modal-cm-noborder, .z-window-highlighted-cm-noborder,
 	.z-window-overlapped-cm-noborder {
 	border: 0; padding: 0; margin:0 ; background: #5EABDB;
 }
 .z-window-modal-cr, .z-window-highlighted-cr, .z-window-overlapped-cr, .z-window-popup-cr {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-lr.png')}) repeat-y right 0;
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-lr-ol.png')}) repeat-y right 0;
 	padding-right: 6px; zoom: 1;
 }
 <%-- Footer --%>
 .z-window-modal-bl, .z-window-highlighted-bl, .z-window-overlapped-bl, .z-window-popup-bl {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l.png')}) no-repeat 0 bottom; 
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.png')}) no-repeat 0 bottom; 
 	padding-left: 6px; zoom: 1;
 }
 .z-window-modal-bm, .z-window-highlighted-bm, .z-window-overlapped-bm, .z-window-popup-bm {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 bottom;
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 bottom;
 	zoom: 1; font-size: 0pt; height: 5px; line-height: 0pt;
 }
 .z-window-modal-br, .z-window-highlighted-br, .z-window-overlapped-br, .z-window-popup-br {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right bottom;
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.png')}) no-repeat right bottom;
 	padding-right: 6px; zoom: 1;
 }
 <%-- Tools --%>
-.z-window-embedded-tool, .z-window-modal-tool, .z-window-overlapped-tool,
+.z-window-embedded-tool {
+	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.png')}) no-repeat;
+	margin-left: 2px;
+}
+.z-window-modal-tool, .z-window-overlapped-tool,
 	.z-window-popup-tool, .z-window-highlighted-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.png')}) no-repeat;
 	margin-left: 2px;
 }
 .z-window-embedded-close, .z-window-modal-close, .z-window-overlapped-close,

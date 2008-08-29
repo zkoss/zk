@@ -71,12 +71,11 @@ div.z-footer-cnt, div.z-column-cnt{
 }
 <%-- faker uses only --%>
 tr.z-grid-faker, tr.z-grid-faker th, tr.z-grid-faker div {
-	border-top: 0 !important; border-bottom: 0 !important; margin-top: 0 !important;
-	margin-bottom: 0 !important; padding-top: 0 !important;	padding-bottom: 0 !important;
-	height: 0px !important; <%-- these above css cannot be overrided--%>
-	border-left: 0; border-right: 0; margin-left: 0; margin-right: 0; padding-left: 0;
-	padding-right: 0;
-}
+	height: 0px !important; 	
+	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;  
+	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;			
+	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;  	
+} <%-- these above css cannot be overrided--%>
 td.z-row-inner, td.z-group-inner, td.z-group-foot-inner {
 	padding: 2px; overflow: hidden; 
 }

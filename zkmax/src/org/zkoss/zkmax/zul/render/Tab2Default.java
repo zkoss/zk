@@ -69,14 +69,14 @@ public class Tab2Default implements ComponentRenderer {
 					.write("z.disabled=\"").write(self.isDisabled())
 					.writeln("\">");	
 				if(self.isClosable()){				
-					wh.writeln("<a class=\""+look+"close\" id=\""+uuid+"!close\" onclick=\"return false;\"/>");
+					wh.writeln("<a class=\""+look+"close\" id=\""+uuid+"!close\" onclick=\"return false;\" />");
 				}
 				wh.writeln("<a class=\""+look+"a\" id=\""+uuid+"a\"  onclick=\"return false;\" href=\"#\">");
-					wh.writeln("<em id=\""+uuid+"\" class=\""+look+"em\">");						
+					wh.writeln("<em id=\""+uuid+"!em\" class=\""+look+"em\" >");						
 						if(self.isClosable()){
-							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner"+" "+look+"innerclose\">");
+							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner"+" "+look+"innerclose\" >");
 						}else{
-							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner\"");	
+							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner\">");	
 						}
 							wh.write("<span class=\""+look+"text\">").write(self.getImgTag());
 							new Out(self.getLabel()).render(out);

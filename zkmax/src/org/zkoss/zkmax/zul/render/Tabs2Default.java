@@ -55,11 +55,11 @@ public class Tabs2Default implements ComponentRenderer {
 			    .write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>');
 			    wh.write("<div id=\""+uuid+"!right").writeln("\" class=\"" + look + "scrollright\" ></div>");
 				wh.write("<div id=\""+uuid+"!left").writeln("\" class=\"" + look + "scrollleft\" ></div>");
-			    wh.write("<div id=\""+uuid+"!header\"").writeln(" class=\""+look+"head\" >");
+			    wh.write("<div id=\""+uuid+"!header\"").writeln(" class=\""+look+"header\" >");
 				    wh.writeln("<ul id=\""+uuid+"!cave\" class=\""+look+"ul\" >");							    	
 				    	wh.writeChildren(self);			    	
 				    	wh.writeln("<li id=\""+uuid+"!edge\" class=\""+look+"edge\" ></li>");
-				    	wh.writeln("<div id=\""+uuid+"!clear\" class=\""+look+"clear\"></div>");
+				    	wh.writeln("<div id=\""+uuid+"!clear\" class=\"z-clear\"></div>");
 				    wh.writeln("</ul>");
 			    wh.writeln("</div>");
 			    wh.writeln("<div id=\""+uuid+"!line\" class=\""+look+"space\" ></div>");	
