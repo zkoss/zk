@@ -6,8 +6,9 @@
 <c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
 
 .z-button {
-	font: normal tahoma, verdana, helvetica; cursor: pointer;
-	white-space: nowrap; font-size: ${fontSizeM};
+	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: ${fontSizeM};
+	cursor: pointer; white-space: nowrap;
 }
 span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
@@ -42,12 +43,10 @@ span.z-button {
 	width: 3px; padding: 0; margin: 0; text-align: right;
 }
 .z-button .z-button-cm {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
 	margin: 0; overflow: hidden;
 	vertical-align: middle;
 	text-align: center;
 	padding: 0 5px;
-	cursor: pointer; white-space: nowrap;
 	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;  
 }
 .z-button .z-button-cr {
