@@ -516,7 +516,7 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>listfooter</component-name>
-		<extends>listfoot</extends>
+		<extends>listfooter</extends>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.ListfooterDefault</mold-uri>
