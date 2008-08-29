@@ -18,6 +18,7 @@ ZK 3.0.8
   2077792: GenericAutowireComposer shall support implicit objects "arg"
   2041674: Menubar popup disappears with disabled menuitem
   2080237: A disabled Menuitem with href can link to the href location
+  2075332: Paginated listbox doesn't expand properly inside a BL(IE)
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange

@@ -163,6 +163,8 @@ zk.Grid.prototype = {
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
+			if (this.headtbl && this.headtbl.offsetWidth != this.bodytbl.offsetWidth)
+				this.bodytbl.style.width = ""; //reset 
 			if (tblwd && this.body.offsetWidth == this.bodytbl.offsetWidth && this.body.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
