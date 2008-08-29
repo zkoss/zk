@@ -1,15 +1,9 @@
 <zk>
 <vbox>
-1.click update group, then click again. the [+] is disappear.
-<separator/>
-2.remove group, then remove foot, this caused exception
-<separator/>
-3.remove foot, then remove group, then invalidate , this caused exception
-too.
+1.click "updateGroup1", then click again. the [+] should NOT disappear.
 </vbox>
 
 <window title="Grid with Group feature" border="normal">
-1.Dynamically update/remove grid group and foot.
 <zscript>
 <![CDATA[
 String[][] datas = new String[][]{
@@ -70,12 +64,6 @@ f1.detach();
 </zscript>
 <div>
 <button label="1.updateGroup 1" onClick="updateGroup(g1)"/>
-<button label="2.updateFoot 1" onClick="updateFoot(f1)"/>
-<button label="3.updateGroup 2" onClick="updateGroup(g2)"/>
-<button label="4.updateFoot 2" onClick="updateFoot(f2)"/>
-<button label="5.removeGroup 1" onClick="removeGroup(g1)"/>
-<button label="6.removeFoot 1" onClick="removeFoot(f1)"/>
-<button label="invalidate" onClick="gd.invalidate()"/>
 </div>
 <grid fixedLayout="true" id="gd">
 <columns sizable="true">
