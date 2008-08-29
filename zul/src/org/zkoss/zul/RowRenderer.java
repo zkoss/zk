@@ -24,6 +24,9 @@ package org.zkoss.zul;
  *
  * <p>If you need better control, your renderer can also implement
  * {@link RowRendererExt}.
+ * If you need better control about generating {@link Group} and
+ * {@link Groupfoot}, your renderer can also implement
+ * {@link GroupRendererExt).
  *
  * <p>In addition, you could also
  * implement {@link RendererCtrl}. For example, starts an transaction,
@@ -33,6 +36,7 @@ package org.zkoss.zul;
  * @see ListModel
  * @see Listbox
  * @see RowRendererExt
+ * @see GroupRendererExt
  */
 public interface RowRenderer {
 	/** Renders the data to the specified row.

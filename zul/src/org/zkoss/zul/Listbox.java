@@ -1617,39 +1617,62 @@ public class Listbox extends XulElement implements Paginated {
 	/** Creates an new and unloaded listitem. */
 	private final Listitem newUnloadedItem(ListitemRenderer renderer, int index) {
 		Listitem item = null;
-		if (renderer instanceof ListitemRendererExt)
-			item = ((ListitemRendererExt)renderer).newListitem(this);
 		if (_model instanceof GroupModel) {
 			final GroupModel model = (GroupModel) _model;
 			int cnt = getGroupCount(), mcnt = model.getGroupCount(), gIndex = cnt == 0 ? cnt: cnt - 1;;
 			boolean has = model.hasGroupfoot(gIndex);
 			if (!hasGroup() && cnt < mcnt) {
-				item = new Listgroup();
-				item.applyProperties();
+				item = newListgroup(renderer);
 			} else if (cnt < mcnt || (cnt == mcnt && has)) {
 				int size = model.getChildCount(gIndex) + ((Listgroup)getGroups().get(gIndex)).getIndex() + 1;
 				if (index == size && !has) {
-					item = new Listgroup();
-					item.applyProperties();
+					item = newListgroup(renderer);
 				} else if (has) {
 					if (index == size) {
-						item = new Listgroupfoot();
-						item.applyProperties();
+						item = newListgroupfoot(renderer);
 					} else if (index == (size + 1)) {
-						item = new Listgroup();
-						item.applyProperties();
+						item = newListgroup(renderer);
 					}
 				}
 			}
 		}
-		if (item == null) {
-			item = new Listitem();
-			item.applyProperties();
-		}
+
+		if (item == null)
+			item = newListitem(renderer);
 		item.setLoaded(false);
 
 		newUnloadedCell(renderer, item);
 		return item;
+	}
+	private Listitem newListitem(ListitemRenderer renderer) {
+		Listitem item = null;
+		if (renderer instanceof ListitemRendererExt)
+			item = ((ListitemRendererExt)renderer).newListitem(this);
+		if (item == null) {
+			item = new Listitem();
+			item.applyProperties();
+		}
+		return item;
+	}
+	private Listgroup newListgroup(ListitemRenderer renderer) {
+		Listgroup group = null;
+		if (renderer instanceof ListgroupRendererExt)
+			group = ((ListgroupRendererExt)renderer).newListgroup(this);
+		if (group == null) {
+			group = new Listgroup();
+			group.applyProperties();
+		}
+		return group;
+	}
+	private Listgroupfoot newListgroupfoot(ListitemRenderer renderer) {
+		Listgroupfoot groupfoot = null;
+		if (renderer instanceof ListgroupRendererExt)
+			groupfoot = ((ListgroupRendererExt)renderer).newListgroupfoot(this);
+		if (groupfoot == null) {
+			groupfoot = new Listgroupfoot();
+			groupfoot.applyProperties();
+		}
+		return groupfoot;
 	}
 	private Listcell newUnloadedCell(ListitemRenderer renderer, Listitem item) {
 		Listcell cell = null;

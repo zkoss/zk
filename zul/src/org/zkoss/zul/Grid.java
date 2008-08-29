@@ -705,39 +705,62 @@ public class Grid extends XulElement implements Paginated {
 	/** Creates an new and unloaded row. */
 	private final Row newUnloadedRow(RowRenderer renderer, int index) {
 		Row row = null;
-		if (renderer instanceof RowRendererExt)
-			row = ((RowRendererExt)renderer).newRow(this);
 		if (_model instanceof GroupModel) {
 			final GroupModel model = (GroupModel) _model;
 			int rcnt =  _rows.getGroupCount(), mcnt = model.getGroupCount(), gIndex = rcnt == 0 ? rcnt: rcnt - 1;
 			boolean has = model.hasGroupfoot(gIndex);
 			if (!_rows.hasGroup() && rcnt < mcnt) {
-				row = new Group();
-				row.applyProperties();
+				row = newGroup(renderer);
 			} else if (rcnt < mcnt || (rcnt == mcnt && has)) {
 				int	size = model.getChildCount(gIndex) + ((Group) _rows.getGroups().get(gIndex)).getIndex() + 1;
 				if (index == size && !has){
-					row = new Group();
-					row.applyProperties();
+					row = newGroup(renderer);
 				} else if (has){
 					if (index == size){
-						row = new Groupfoot();
-						row.applyProperties();
+						row = newGroupfoot(renderer);
 					}else if (index == (size + 1)){
-						row = new Group();
-						row.applyProperties();
+						row = newGroup(renderer);
 					}
 				}				
 			}			
 		}
-		if (row == null) {
-			row = new Row();
-			row.applyProperties();
-		}
+
+		if (row == null)
+			row = newRow(renderer);
 		row.setLoaded(false);
 
 		newUnloadedCell(renderer, row);
 		return row;
+	}
+	private Row newRow(RowRenderer renderer) {
+		Row row = null;
+		if (renderer instanceof RowRendererExt)
+			row = ((RowRendererExt)renderer).newRow(this);
+		if (row == null) {
+			row = new Row();
+			row.applyProperties();
+		}
+		return row;
+	}
+	private Group newGroup(RowRenderer renderer) {
+		Group group = null;
+		if (renderer instanceof GroupRendererExt)
+			group = ((GroupRendererExt)renderer).newGroup(this);
+		if (group == null) {
+			group = new Group();
+			group.applyProperties();
+		}
+		return group;
+	}
+	private Groupfoot newGroupfoot(RowRenderer renderer) {
+		Groupfoot groupfoot = null;
+		if (renderer instanceof GroupRendererExt)
+			groupfoot = ((GroupRendererExt)renderer).newGroupfoot(this);
+		if (groupfoot == null) {
+			groupfoot = new Groupfoot();
+			groupfoot.applyProperties();
+		}
+		return groupfoot;
 	}
 	private Component newUnloadedCell(RowRenderer renderer, Row row) {
 		Component cell = null;

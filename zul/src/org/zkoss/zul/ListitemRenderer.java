@@ -24,6 +24,9 @@ package org.zkoss.zul;
  *
  * <p>If you need better control, your renderer can also implement
  * {@link ListitemRendererExt}.
+ * If you need better control for generting {@link Listgroup} and
+ * {@link Listgroupfoot}, your renderer can also implement
+ * {@link ListgroupRendererExt}.
  *
  * <p>In addition, you could also
  * implement {@link RendererCtrl}. For example, starts an transaction,
@@ -33,6 +36,7 @@ package org.zkoss.zul;
  * @see ListModel
  * @see Listbox
  * @see ListitemRendererExt
+ * @see ListgroupRendererExt
  */
 public interface ListitemRenderer {
 	/** Renders the data to the specified list item.
