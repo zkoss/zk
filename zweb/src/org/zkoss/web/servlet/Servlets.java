@@ -302,6 +302,19 @@ public class Servlets {
 		agt = agt.toLowerCase();
 		return agt.indexOf("gecko/") >= 0 && agt.indexOf("safari") < 0;
 	}
+	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
+	 * @since 3.5.0
+	 */
+	public static final boolean isGecko3(ServletRequest req) {
+		String agt = req instanceof HttpServletRequest ?
+			((HttpServletRequest)req).getHeader("user-agent"): null;
+		if (agt == null)
+			return false;
+
+		agt = agt.toLowerCase();
+		return agt.indexOf("gecko/") >= 0 && agt.indexOf("safari") < 0
+			&& agt.indexOf("firefox/3") >= 0;
+	}
 	/** Returns whether the browser is Safari.
 	 */
 	public static final boolean isSafari(ServletRequest req) {

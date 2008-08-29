@@ -413,6 +413,9 @@ public class ExecutionImpl extends AbstractExecution {
 	public boolean isGecko() {
 		return Servlets.isGecko(_request);
 	}
+	public boolean isGecko3() {
+		return Servlets.isGecko3(_request);
+	}
 	public boolean isSafari() {
 		return Servlets.isSafari(_request);
 	}

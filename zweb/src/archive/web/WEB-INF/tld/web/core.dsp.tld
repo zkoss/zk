@@ -357,6 +357,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 	<function>
+		<name>isGecko3</name>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
+		<function-signature>
+	boolean isGecko3()
+		</function-signature>
+		<description>
+	Whether the current request is coming from a Gecko 3-based browser,
+	such as Firefox 3.
+		</description>
+	</function>
+	<function>
 		<name>isSafari</name>
 		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>

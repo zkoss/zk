@@ -85,6 +85,12 @@ public class ServletFns {
 	public static boolean isGecko() {
 		return Servlets.isGecko(getCurrentRequest());
 	}
+	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
+	 * @since 3.5.0
+	 */
+	public static boolean isGecko3() {
+		return Servlets.isGecko3(getCurrentRequest());
+	}
 	/** Returns whether the browser of the current request is Safari.
 	 */
 	public static boolean isSafari() {

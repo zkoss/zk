@@ -780,6 +780,10 @@ public interface Execution  {
 	/** Returns whether the client is Gecko based, such as Mozilla, Firefox and Camino.
 	 */
 	public boolean isGecko();
+	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
+	 * @since 3.5.0
+	 */
+	public boolean isGecko3();
 	/** Returns whether the client is Safari.
 	 */
 	public boolean isSafari();

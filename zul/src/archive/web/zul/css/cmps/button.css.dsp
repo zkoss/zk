@@ -10,6 +10,11 @@
 	font-size: ${fontSizeM};
 	cursor: pointer; white-space: nowrap;
 }
+<c:if test="${c:isGecko() and !c:isGecko3()}">
+table.z-button {
+	table-layout:fixed;
+}
+</c:if>
 span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
 	margin: 0 1px 0 0;

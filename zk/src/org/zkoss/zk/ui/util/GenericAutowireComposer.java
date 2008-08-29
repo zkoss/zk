@@ -438,6 +438,9 @@ abstract public class GenericAutowireComposer extends GenericComposer {
 		public boolean isGecko() {
 			return exec().isGecko();
 		}
+		public boolean isGecko3() {
+			return exec().isGecko3();
+		}
 
 		public boolean isHilDevice() {
 			return exec().isHilDevice();

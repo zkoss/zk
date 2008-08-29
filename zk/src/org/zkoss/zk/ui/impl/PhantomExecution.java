@@ -148,6 +148,9 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public boolean isGecko() {
 		return false;
 	}
+	public boolean isGecko3() {
+		return false;
+	}
 	public boolean isSafari() {
 		return false;
 	}
