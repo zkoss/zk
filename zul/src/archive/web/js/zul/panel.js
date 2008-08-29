@@ -263,7 +263,7 @@ zkPanel = {
 					if (bwrap) bwrap.style.display = "";
 				}
 				
-				var op = zkPanel.isFloatable(cmp) ? zPos.offsetParent(cmp) : cmp.parentNode;
+				var floated = zkPanel.isFloatable(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode;
 				l = s.left;
 				t = s.top;
 				w = s.width;
@@ -275,8 +275,14 @@ zkPanel = {
 				
 				// Sometimes, the clientWidth/Height in IE6 is wrong. 
 				var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
-				if (sw < 0) sw = 0;
 				var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+				if (!floated) {
+					sw -= zk.sumStyles(op, "rl", zk.paddings);
+					sw = zk.revisedSize(cmp, sw);
+					sh -= zk.sumStyles(op, "tb", zk.paddings);
+					sh = zk.revisedSize(cmp, sh, true);
+				}
+				if (sw < 0) sw = 0;
 				if (sh < 0) sh = 0;
 				
 				s.width = sw + "px";
@@ -357,17 +363,26 @@ zkPanel = {
 		if (getZKAttr(cmp, "maximized") == "true")zkPanel.syncMaximized(cmp);
 	}, 
 	syncMaximized: function (cmp) {
-		var op = zkPanel.isFloatable(cmp) ? zPos.offsetParent(cmp) : cmp.parentNode,
+		var floated = zkPanel.isFloatable(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode,
 			s = cmp.style;
 			
 		// Sometimes, the clientWidth/Height in IE6 is wrong. 
 		var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
+		if (!floated) {
+			sw -= zk.sumStyles(op, "rl", zk.paddings);
+			sw = zk.revisedSize(cmp, sw);
+		}
 		if (sw < 0) sw = 0;
-		var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
-		if (sh < 0) sh = 0;
-		
 		s.width = sw + "px";
-		s.height = sh + "px";
+		if (getZKAttr(cmp, "open") == "true") {
+			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+			if (!floated) {
+				sh -= zk.sumStyles(op, "tb", zk.paddings);
+				sh = zk.revisedSize(cmp, sh, true);
+			}
+			if (sh < 0) sh = 0;
+			s.height = sh + "px";
+		}
 	},
 	_fixWdh: zk.ie7 ? function (cmp) {
 		if (getZKAttr(cmp, "framable") != "true" || !zk.isRealVisible(cmp)) return;
