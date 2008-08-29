@@ -687,6 +687,7 @@ public class Grid extends XulElement implements Paginated {
 				renderer = getRealRenderer();
 			newUnloadedRow(renderer).setParent(_rows);
 		}
+		if (newsz - oldsz > 200) invalidate(); //performance is better
 	}
 	/** Creates an new and unloaded row. */
 	private final Row newUnloadedRow(RowRenderer renderer) {
@@ -825,7 +826,7 @@ public class Grid extends XulElement implements Paginated {
 					renderer = getRealRenderer();
 				_rows.insertBefore(newUnloadedRow(renderer), before);
 			}
-
+			if (max - min > 200) invalidate(); //performance is better
 			done = true;
 			break;
 

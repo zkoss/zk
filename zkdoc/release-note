@@ -21,8 +21,8 @@ ZK 3.0.8
   2080346: Onchaning evt of combobox wrongly includes type-ahead string
   2075332: Paginated listbox doesn't expand properly inside a BL(IE)
   2079837: Timebox behaves wrongly if there is scrollbar
-  
-  
+  2081560: Unresponsive script warning when changing big ListModel
+
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
 

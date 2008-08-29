@@ -1471,6 +1471,7 @@ public class Listbox extends XulElement implements Paginated {
 				renderer = getRealRenderer();
 			newUnloadedItem(renderer).setParent(this);
 		}
+		if (newsz - oldsz > 200) invalidate(); //performance is better
 	}
 	/** Creates an new and unloaded listitem. */
 	private final Listitem newUnloadedItem(ListitemRenderer renderer) {
@@ -1605,6 +1606,7 @@ public class Listbox extends XulElement implements Paginated {
 					renderer = getRealRenderer();
 				insertBefore(newUnloadedItem(renderer), before);
 			}
+			if (max - min > 200) invalidate(); //performance is better
 			done = true;
 			break;
 
