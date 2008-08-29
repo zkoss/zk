@@ -386,12 +386,7 @@ zkGrw.stripe = function (cmp, isClean) {
 		else zk.addInitLater(meta.fixedStripe, false, meta.id + "Grw");
 	}
 };
-zkGcl = {
-	init: function (cmp) {		
-		cmp._img = zk.firstChild(cmp, "IMG", true);
-		if (cmp._img) zk.listen(cmp._img, "click", zkGrwgp.ontoggle);		
-	}
-}; //cell
+zkGcl = {}; //cell
 zk.addBeforeInit(function () {
 	//Column
 	//init it later because zul.js might not be loaded yet
@@ -576,6 +571,9 @@ zkGrwgp = {
 				if (meta) meta.stripe();
 			}
 			return true;
+		} else if (nm == "z.firstchg") {
+			cmp._img = zk.firstChild(cmp, "IMG", true);
+			if (cmp._img) zk.listen(cmp._img, "click", zkGrwgp.ontoggle);
 		}
 		return false;
 	},

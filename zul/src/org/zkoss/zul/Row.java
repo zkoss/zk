@@ -412,11 +412,17 @@ public class Row extends XulElement {
 			sb.append(getChildAttrs(j));
 		}
 		sb.append("><div id=\"").append(child.getUuid())
-		.append("!cell\"").append(" class=\"" + getMoldSclass()	+ "-cnt z-overflow-hidden\">");
+		.append("!cell\"").append(" class=\"").append(getMoldSclass())
+		.append("-cnt");
+		if (grid.isFixedLayout())
+			sb.append(" z-overflow-hidden\">");
+		
 		if (this instanceof Group && this.getChildren().indexOf(child) == 0)
 			sb.append(((Group)this).getImgTag());
 		if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 		else out.insert(0, sb.toString());
 		out.append("</div></td>");
+		if (this instanceof Group && getFirstChild() == child)
+			smartUpdate("z.firstchg", true);
 	}
 }
