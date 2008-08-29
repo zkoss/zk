@@ -303,8 +303,11 @@ zkCmbox.onkey = function (evt) {
 
 	var bCombobox = $type(cb) == "Cmbox";
 	var selback = keycode == 38 || keycode == 40; //UP and DN
-	if (getZKAttr(cb, "adr") == "true" && !opened)
+	if (getZKAttr(cb, "adr") == "true" && !opened) {
 		zkCmbox.open(pp, bCombobox && !selback);
+		setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
+			((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
+	}
 	else if (!bCombobox)
 		return true; //ignore
 	else if (!selback /*&& opened disabled by JumperChen 2008/01/09*/)
