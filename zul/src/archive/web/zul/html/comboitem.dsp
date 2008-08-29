@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
+<c:set var="mcls" value="${self.moldSclass}"/>
 <tr id="${self.uuid}" z.type="Cmit"${self.outerAttrs}${self.innerAttrs}>
-<td class="${self.moldSclass}-img">${self.imgTag}</td><td class="${self.moldSclass}-text"><c:out value="${self.label}"/><c:if test="${!empty self.description}"><br/><span class="${self.moldSclass}-inner"><c:out value="${self.description}"/></span></c:if><c:if test="${!empty self.content}"><span class="${self.moldSclass}-content">${self.content}</span></c:if></td>
+<td class="${mcls}-img">${self.imgTag}</td><td class="${mcls}-text"><c:out value="${self.label}"/><c:if test="${!empty self.description}"><br/><span class="${mcls}-inner"><c:out value="${self.description}"/></span></c:if><c:if test="${!empty self.content}"><span class="${mcls}-content">${self.content}</span></c:if></td>
 </tr><%-- No space between td, because cb.js depends on it --%>

@@ -17,20 +17,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
+<c:set var="mcls" value="${self.moldSclass}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-<div class="${self.moldSclass}-body ${self.moldSclass}-${self.align}">
-<table class="${self.moldSclass}-content" cellspacing="0"><tbody>
+<div class="${mcls}-body ${mcls}-${self.align}">
+<table class="${mcls}-content" cellspacing="0"><tbody>
 <c:if test="${self.orient != 'vertical'}">
 <tr>
 	<c:forEach var="child" items="${self.children}">
-	<td class="${self.moldSclass}-hor">${z:redraw(child, null)}</td>
+	<td class="${mcls}-hor">${z:redraw(child, null)}</td>
 	</c:forEach>
 </tr>
 </c:if>
 <c:if test="${self.orient == 'vertical'}">
 	<c:forEach var="child" items="${self.children}">
 <tr>
-	<td class="${self.moldSclass}-ver">${z:redraw(child, null)}</td>
+	<td class="${mcls}-ver">${z:redraw(child, null)}</td>
 </tr>
 	</c:forEach>
 </c:if>

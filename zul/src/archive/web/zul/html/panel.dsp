@@ -17,25 +17,26 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"%>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z"%>
 <c:set var="self" value="${requestScope.arg.self}" />
+<c:set var="mcls" value="${self.moldSclass}"/>
 <div id="${self.uuid}" z.type="zul.panel.Panel" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
 		<c:if test="${self.framable}">
-<div class="${self.moldSclass}-tl <c:if test="${empty self.caption and empty self.title}">${self.moldSclass}-header-noheader</c:if>"><div class="${self.moldSclass}-tr"><div class="${self.moldSclass}-tm">
+<div class="${mcls}-tl <c:if test="${empty self.caption and empty self.title}">${mcls}-header-noheader</c:if>"><div class="${mcls}-tr"><div class="${mcls}-tm">
 		</c:if>
 		<c:if test="${!empty self.caption or !empty self.title}">
-<div id="${self.uuid}!caption" class="${self.moldSclass}-header <c:if test="${!self.framable && self.border != 'normal'}">${self.moldSclass}-header-noborder</c:if>">
+<div id="${self.uuid}!caption" class="${mcls}-header <c:if test="${!self.framable && self.border != 'normal'}">${mcls}-header-noborder</c:if>">
 			<c:choose>
 				<c:when test="${empty self.caption}">
 					<c:if test="${self.closable}">
-<div id="${self.uuid}!close" class="${self.moldSclass}-tool ${self.moldSclass}-close"></div>
+<div id="${self.uuid}!close" class="${mcls}-tool ${mcls}-close"></div>
 					</c:if>
 					<c:if test="${self.maximizable}">
-<div id="${self.uuid}!maximize" class="${self.moldSclass}-tool ${self.moldSclass}-maximize <c:if test="${self.maximized}">${self.moldSclass}-maximized</c:if>"></div>
+<div id="${self.uuid}!maximize" class="${mcls}-tool ${mcls}-maximize <c:if test="${self.maximized}">${mcls}-maximized</c:if>"></div>
 					</c:if>
 					<c:if test="${self.minimizable}">
-<div id="${self.uuid}!minimize" class="${self.moldSclass}-tool ${self.moldSclass}-minimize"></div>
+<div id="${self.uuid}!minimize" class="${mcls}-tool ${mcls}-minimize"></div>
 					</c:if>
 					<c:if test="${self.collapsible}">
-<div id="${self.uuid}!toggle" class="${self.moldSclass}-tool ${self.moldSclass}-toggle"></div>
+<div id="${self.uuid}!toggle" class="${mcls}-tool ${mcls}-toggle"></div>
 					</c:if>
 					<c:out value="${self.title}" />
 				</c:when>
@@ -46,10 +47,10 @@ ${z:redraw(self.caption, null)}
 			</div>
 		</c:if>
 		<c:if test="${self.framable}"></div></div></div></c:if>
-<div id="${self.uuid}!bwrap" class="${self.moldSclass}-body" <c:if test="${!self.open}">style="display:none;"</c:if>>
-	<c:if test="${self.framable}"><div class="${self.moldSclass}-cl"><div class="${self.moldSclass}-cr"><div class="${self.moldSclass}-cm"></c:if>
+<div id="${self.uuid}!bwrap" class="${mcls}-body" <c:if test="${!self.open}">style="display:none;"</c:if>>
+	<c:if test="${self.framable}"><div class="${mcls}-cl"><div class="${mcls}-cr"><div class="${mcls}-cm"></c:if>
 		<c:if test="${!empty self.topToolbar}">
-<div id="${self.uuid}!tbar" class="${self.moldSclass}-tbar <c:if test="${self.border != 'normal'}">${self.moldSclass}-tbar-noborder</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.moldSclass}-noheader</c:if>">
+<div id="${self.uuid}!tbar" class="${mcls}-tbar <c:if test="${self.border != 'normal'}">${mcls}-tbar-noborder</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${mcls}-noheader</c:if>">
 ${z:redraw(self.topToolbar, null)}
 </div>
 		</c:if>
@@ -57,16 +58,16 @@ ${z:redraw(self.topToolbar, null)}
 ${z:redraw(self.panelchildren, null)}
 		</c:if>
 		<c:if test="${!empty self.bottomToolbar}">
-<div id="${self.uuid}!bbar" class="${self.moldSclass}-bbar <c:if test="${self.border != 'normal'}">${self.moldSclass}-bbar-noborder</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${self.moldSclass}-noheader</c:if>">
+<div id="${self.uuid}!bbar" class="${mcls}-bbar <c:if test="${self.border != 'normal'}">${mcls}-bbar-noborder</c:if> <c:if test="${self.framable and empty self.caption and empty self.title}">${mcls}-noheader</c:if>">
 ${z:redraw(self.bottomToolbar, null)}
 </div>
 		</c:if>
 	<c:if test="${self.framable}">
 </div></div></div>
-<div class="${self.moldSclass}-bl <c:if test="${empty self.footToolbar}">${self.moldSclass}-nofbar</c:if>"><div class="${self.moldSclass}-br"><div class="${self.moldSclass}-bm">
+<div class="${mcls}-bl <c:if test="${empty self.footToolbar}">${mcls}-nofbar</c:if>"><div class="${mcls}-br"><div class="${mcls}-bm">
 	</c:if>
 	<c:if test="${!empty self.footToolbar}">
-<div id="${self.uuid}!fbar" class="${self.moldSclass}-fbar">
+<div id="${self.uuid}!fbar" class="${mcls}-fbar">
 ${z:redraw(self.footToolbar, null)}
 </div>
 	</c:if>

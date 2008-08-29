@@ -20,15 +20,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<span z.type="zul.widget.Button" id="${self.uuid}" class="${self.moldSclass}"${z:noCSSAttrs(self.outerAttrs)}><table id="${self.uuid}!box" cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
+<c:set var="mcls" value="${self.moldSclass}"/>
+<span z.type="zul.widget.Button" id="${self.uuid}" class="${mcls}"${z:noCSSAttrs(self.outerAttrs)}><table id="${self.uuid}!box" cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
 <tr>
-	<td class="${self.moldSclass}-tl"></td>
-	<td class="${self.moldSclass}-tm"></td>
-	<td class="${self.moldSclass}-tr"></td>
+	<td class="${mcls}-tl"></td>
+	<td class="${mcls}-tm"></td>
+	<td class="${mcls}-tr"></td>
 </tr>
 <tr>
-	<td class="${self.moldSclass}-cl"><button id="${self.uuid}!real" class="z-"></button></td>
-	<td class="${self.moldSclass}-cm"><c:choose trim="true">
+	<td class="${mcls}-cl"><button id="${self.uuid}!real" class="z ${mcls}"></button></td>
+	<td class="${mcls}-cm"><c:choose trim="true">
 	<c:when test="${self.dir == 'reverse'}">
 		<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
 	</c:when>
@@ -36,11 +37,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		${self.imgTag}<c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if><c:out value="${self.label}"/>
 	</c:otherwise>
 	</c:choose></td>
-	<td class="${self.moldSclass}-cr"><i class="z-"></i></td>
+	<td class="${mcls}-cr"><i class="z ${mcls}"></i></td>
 </tr>
 <tr>
-	<td class="${self.moldSclass}-bl"></td>
-	<td class="${self.moldSclass}-bm"></td>
-	<td class="${self.moldSclass}-br"></td>
+	<td class="${mcls}-bl"></td>
+	<td class="${mcls}-bm"></td>
+	<td class="${mcls}-br"></td>
 </tr>
 </table></span>

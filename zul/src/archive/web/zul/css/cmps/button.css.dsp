@@ -13,10 +13,10 @@ span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
 	margin: 0 1px 0 0;
 }
-.z-button-cl button.z- {
+.z-button button.z-button {
 	width: 3px !important;
 }
-.z-button-cr i.z- {
+.z-button i.z-button {
 	width: 3px !important;
 }
 .z-button-disd * {

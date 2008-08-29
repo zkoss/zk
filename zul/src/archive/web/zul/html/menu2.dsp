@@ -17,22 +17,23 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
+<c:set var="mcls" value="${self.moldSclass}"/>
 <c:choose>
 <c:when test="${self.topmost}">
 <td id="${self.uuid}" align="left" z.type="zul.menu2.Menu2"${self.outerAttrs}${self.innerAttrs}>
-<table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${self.moldSclass}-btn <c:if test="${self.imageAssigned}">${self.moldSclass}-btn<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
-<tbody><tr><td class="${self.moldSclass}-btn-l"><i>&nbsp;</i></td>
+<table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${mcls}-btn <c:if test="${self.imageAssigned}">${mcls}-btn<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
+<tbody><tr><td class="${mcls}-btn-l"><i>&nbsp;</i></td>
 <c:if test="${!empty self.imageContent}">
 	<c:set var="imagesrc" value="background-image:url(${self.contentSrc})"/>
 </c:if>
 <c:if test="${!empty self.src}">
 	<c:set var="imagesrc" value="background-image:url(${c:encodeURL(self.src)})"/>
 </c:if>
-<td class="${self.moldSclass}-btn-m"><em unselectable="on"><button id="${self.uuid}!b" type="button" class="${self.moldSclass}-btn-text" style="${imagesrc}"><c:out value="${self.label}"/></button>
+<td class="${mcls}-btn-m"><em unselectable="on"><button id="${self.uuid}!b" type="button" class="${mcls}-btn-text" style="${imagesrc}"><c:out value="${self.label}"/></button>
 ${z:redraw(self.menupopup, null)}
 </em>
 </td>
-<td class="${self.moldSclass}-btn-r"><i>&nbsp;</i></td>
+<td class="${mcls}-btn-r"><i>&nbsp;</i></td>
 </tr>
 </tbody>
 </table>
@@ -40,7 +41,7 @@ ${z:redraw(self.menupopup, null)}
 </c:when>
 <c:otherwise>
 <li id="${self.uuid}" z.type="zul.menu2.Menu2"${self.outerAttrs}${self.innerAttrs}>
-<a href="javascript:;" id="${self.uuid}!a" class="${self.moldSclass}-content ${self.moldSclass}-content-img">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}
+<a href="javascript:;" id="${self.uuid}!a" class="${mcls}-content ${mcls}-content-img">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}
 </li>
 </c:otherwise>
 </c:choose>

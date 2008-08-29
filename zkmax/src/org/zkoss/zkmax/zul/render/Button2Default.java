@@ -57,7 +57,8 @@ public class Button2Default implements ComponentRenderer {
 			.write(mcls).write("-tr\"></td></tr>\n")
 			.write("<tr><td class=\"")
 			.write(mcls).write("-cl\"><button id=\"")
-			.write(uuid).write("!real\" class=\"z-\"></button></td><td class=\"")
+			.write(uuid).write("!real\" class=\"z ")
+			.write(mcls).write("\"></button></td><td class=\"")
 			.write(mcls).write("-cm\">");
 
 		if (self.getDir().equals("reverse")) {
@@ -75,8 +76,9 @@ public class Button2Default implements ComponentRenderer {
 		}		
 
 		wh.write("</td>\n<td class=\"").write(mcls)
-			.write("-cr\"><i class=\"z-\"></i></td></tr>\n<tr><td class=\"").write(mcls)
-			.write("-bl\"></td><td class=\"").write(mcls)
+			.write("-cr\"><i class=\"z ")
+			.write(mcls).write("\"></i></td></tr>\n<tr><td class=\"")
+			.write(mcls).write("-bl\"></td><td class=\"").write(mcls)
 			.write("-bm\"></td><td class=\"")
 			.write(mcls).write("-br\"></td></tr>\n</table></span>");						
 	}
