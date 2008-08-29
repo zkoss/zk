@@ -1613,7 +1613,7 @@ public class Listbox extends XulElement implements Paginated {
 				renderer = getRealRenderer();
 			newUnloadedItem(renderer, j).setParent(this);
 		}
-		if (newsz - oldsz > 200) invalidate(); //performance is better
+		if (newsz - oldsz > 100) invalidate(); //performance is better
 	}
 	/** Creates an new and unloaded listitem. */
 	private final Listitem newUnloadedItem(ListitemRenderer renderer, int index) {
@@ -1792,7 +1792,7 @@ public class Listbox extends XulElement implements Paginated {
 					renderer = getRealRenderer();
 				insertBefore(newUnloadedItem(renderer, j), before);
 			}
-			if (max - min > 200) invalidate(); //performance is better
+			if (max - min > 100) invalidate(); //performance is better
 			done = true;
 			break;
 
