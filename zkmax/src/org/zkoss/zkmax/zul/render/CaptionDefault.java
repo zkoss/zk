@@ -56,11 +56,11 @@ public class CaptionDefault implements ComponentRenderer {
 					.write(self.getInnerAttrs());
 			wh.writeln(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 			wh.writeln("<tr valign=\"middle\">");
-			wh.write("<td align=\"left\" class=\"").write(mcls).write("-left\">").write(imgTag);
+			wh.write("<td align=\"left\" class=\"").write(mcls).write("-l\">").write(imgTag);
 			new Out(self.getCompoundLabel()).setNbsp(true).render(out);
 			wh.writeln("</td>");
 
-			wh.write("<td align=\"right\" class=\"").write(mcls).write("-right\" id=\"").write(uuid).write("!cave\">")
+			wh.write("<td align=\"right\" class=\"").write(mcls).write("-r\" id=\"").write(uuid).write("!cave\">")
 				.writeChildren(self)
 				.writeln("</td>");
 

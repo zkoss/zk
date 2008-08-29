@@ -8,7 +8,7 @@
 .z-caption input, .z-caption td {
 	font-size: ${fontSizeS};
 }
-.z-caption .z-caption-left, .z-caption .z-caption-right {
+.z-caption .z-caption-l, .z-caption .z-caption-r {
 	font-size: ${fontSizeM};
 }
 .z-caption button, .z-caption .z-button .z-button-btn {
