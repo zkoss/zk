@@ -36,5 +36,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="Toolbar and Toolbarbutton" onClick="doSelect(&quot;t1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Menu" onClick="doSelect(&quot;t2&quot;)"/></h:li>
 		<h:li><toolbarbutton label="More Menu Features" onClick="doSelect(&quot;t3&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Fisheye Menu" onClick="doSelect(&quot;t4&quot;)"/></h:li>
 	</h:ul>
 </window>
