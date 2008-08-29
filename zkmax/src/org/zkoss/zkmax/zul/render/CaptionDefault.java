@@ -65,11 +65,12 @@ public class CaptionDefault implements ComponentRenderer {
 				.writeln("</td>");
 
 			if (self.isClosableVisible()) {
-				final String pcls = ((HtmlBasedComponent)self.getParent()).getMoldSclass();
+				final String pmcls = ((HtmlBasedComponent)self.getParent()).getMoldSclass();
 				wh.write("<td width=\"16\"><div id=\"")
 					.write(self.getParent().getUuid())
 					.write("!close\" class=\"")
-					.write(pcls).write("-tool ").write(pcls).write("-close\"></div></td>");
+					.write(pmcls).write("-tool ").write(pmcls)
+					.write("-close\"></div></td>");
 			}
 
 			wh.write("</tr></table>");
