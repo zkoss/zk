@@ -7,7 +7,7 @@
 
 .z-button {
 	font-family: Tahoma, Garamond, Century, Arial, serif;
-	font-size: ${fontSizeM};
+	font-size: ${fontSizeM}; color: black;
 	cursor: pointer; white-space: nowrap;
 }
 <c:if test="${c:isGecko() and !c:isGecko3()}">
