@@ -41,7 +41,7 @@ ${z:redraw(self.menupopup, null)}
 </c:when>
 <c:otherwise>
 <li id="${self.uuid}" z.type="zul.menu2.Menu2"${self.outerAttrs}${self.innerAttrs}>
-<a href="javascript:;" id="${self.uuid}!a" class="${mcls}-content ${mcls}-content-img">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}
+<a href="javascript:;" id="${self.uuid}!a" class="${mcls}-cnt ${mcls}-cnt-img">${self.imgTag}<c:out value="${self.label}"/></a>${z:redraw(self.menupopup, null)}
 </li>
 </c:otherwise>
 </c:choose>

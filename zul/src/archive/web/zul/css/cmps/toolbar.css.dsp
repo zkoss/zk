@@ -36,22 +36,22 @@
 .z-toolbar-panel .z-toolbar-panel-body td {
 	border: 0; padding: 0;
 }
-.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-content, .z-toolbar-end {
+.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt, .z-toolbar-end {
 	float: right; clear: none;
 }
-.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-content, .z-toolbar-start {
+.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt, .z-toolbar-start {
 	float: left; clear: none;
 }
 .z-toolbar-panel .z-toolbar-panel-center, .z-toolbar-center {
 	text-align: center;
 }
-.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-content, .z-toolbar-center {
+.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt, .z-toolbar-center {
 	margin: 0 auto;
 }
-.z-toolbar-panel .z-toolbar-panel-content .z-toolbar-panel-hor {
+.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-hor {
 	padding: 3px;
 }
-.z-toolbar-panel .z-toolbar-panel-content .z-toolbar-panel-ver {
+.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-ver {
 	padding: 1px;
 }
 <%-- Toolbar Button--%>

@@ -2094,7 +2094,7 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 			var el = dg.element;
 			document.body.insertAdjacentHTML("beforeend",	
 				'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-content"><span id="zk_ddghost!img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');				
+				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost!img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');				
 		}else {
 			var el  = dg.element.cloneNode(true);
 			el.id = "zk_ddghost";

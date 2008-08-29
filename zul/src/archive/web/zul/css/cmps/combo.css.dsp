@@ -55,7 +55,7 @@
 .z-combobox-pp .z-combo-item-text, .z-combobox-pp .z-combo-item-img {
 	white-space: nowrap; font-size: ${fontSizeS}; cursor: pointer;
 }
-.z-combobox-pp .z-combo-item-inner, .z-combobox-pp .z-combo-item-content {<%--description--%>
+.z-combobox-pp .z-combo-item-inner, .z-combobox-pp .z-combo-item-cnt {<%--description--%>
 	color: #888; font-size: ${fontSizeXS}; padding-left: 6px;
 }
 .z-combobox-pp .z-combo-item, .z-combobox-pp .z-combo-item a, .z-combobox-pp .z-combo-item a:visited {

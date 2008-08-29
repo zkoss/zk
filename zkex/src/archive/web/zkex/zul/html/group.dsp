@@ -20,6 +20,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <tr z.type="Grwgp" id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" varStatus="status" items="${self.children}">
-	<td z.type="Gcl" id="${child.uuid}!chdextr"${u:getColAttrs(self, status.index)}><div id="${child.uuid}!cell" class="${self.moldSclass}-content <c:if test="${self.grid.fixedLayout}">z-overflow-hidden</c:if>"><c:if test="${status.index == 0}">${self.imgTag}</c:if>${z:redraw(child, null)}</div></td>
+	<td z.type="Gcl" id="${child.uuid}!chdextr"${u:getColAttrs(self, status.index)}><div id="${child.uuid}!cell" class="${self.moldSclass}-cnt${self.grid.fixedLayout?' z-overflow-hidden':''}">${status.index == 0?self.imgTag:''}${z:redraw(child, null)}</div></td>
 	</c:forEach>
 </tr>

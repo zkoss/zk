@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="mcls" value="${self.moldSclass}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 <div class="${mcls}-body ${mcls}-${self.align}">
-<table class="${mcls}-content" cellspacing="0"><tbody>
+<table class="${mcls}-cnt" cellspacing="0"><tbody>
 <c:if test="${self.orient != 'vertical'}">
 <tr>
 	<c:forEach var="child" items="${self.children}">

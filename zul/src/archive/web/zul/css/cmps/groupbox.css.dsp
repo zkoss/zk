@@ -4,18 +4,18 @@
 <c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
 <c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
 <c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
-.z-fieldset-content {
+.z-fieldset-cnt {
 	overflow: hidden;
 }
 .z-fieldset-collapsed {
 	padding-bottom: 0 !important; border-width: 2px 0 0 0 !important;
 }
-.z-fieldset-collapsed .z-fieldset-content {
+.z-fieldset-collapsed .z-fieldset-cnt {
 	visibility: hidden; position: absolute; left: -1000px; top: -1000px;
 }
 
 <%-- 3D --%>
-.z-groupbox-content {<%-- content of 3d groupbox --%>
+.z-groupbox-cnt {<%-- content of 3d groupbox --%>
 	border: 1px solid #E1E1E1; padding: 5px;
 }
 .z-groupbox-bm {

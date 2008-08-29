@@ -63,7 +63,7 @@ public class Groupbox23d implements ComponentRenderer {
 		wh.write(">");
 
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
-			.write(self.getContentSclass()).write(" ").write(mcls).write("-content\"")
+			.write(self.getContentSclass()).write(" ").write(mcls).write("-cnt\"")
 			.writeAttr("style", gcExtStyle).write(">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {

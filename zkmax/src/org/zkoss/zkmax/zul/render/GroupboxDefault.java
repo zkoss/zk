@@ -43,7 +43,7 @@ public class GroupboxDefault implements ComponentRenderer {
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.write(self.getCaption());
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
-			.write(self.getContentSclass()).write(" ").write(self.getMoldSclass()).write("-content\"")
+			.write(self.getContentSclass()).write(" ").write(self.getMoldSclass()).write("-cnt\"")
 			.writeAttr("style", self.getContentStyle()).write(">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
 			final Component child = (Component) it.next();

@@ -22,25 +22,25 @@ div.z-listbox-header th {
 	white-space: nowrap; padding: 2px;
 	font-size: ${fontSizeM}; font-weight: normal;
 }
-div.z-listbox-header th.z-list-header-sort div.z-list-header-content {
+div.z-listbox-header th.z-list-header-sort div.z-list-header-cnt {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-div.z-listbox-header th.z-list-header-sort-asc div.z-list-header-content {
+div.z-listbox-header th.z-list-header-sort-asc div.z-list-header-cnt {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-div.z-listbox-header th.z-list-header-sort-dsc div.z-list-header-content {
+div.z-listbox-header th.z-list-header-sort-dsc div.z-list-header-cnt {
 	cursor: pointer; padding-right: 9px;
 	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-div.z-list-header-content {
+div.z-list-header-cnt {
 	font-size: ${fontSizeM}; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
 div.z-listbox-body {
@@ -59,14 +59,14 @@ div.z-listbox-body td, div.z-listbox-footer td {
 div.z-listbox-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
-div.z-list-footer-content, div.z-list-cell-content, div.z-list-header-content {
+div.z-list-footer-cnt, div.z-list-cell-cnt, div.z-list-header-cnt {
 	border: 0; margin: 0; padding: 0;
 }
-div.z-list-footer-content, div.z-list-header-content {
+div.z-list-footer-cnt, div.z-list-header-cnt {
 	overflow: hidden;
 }
-.z-word-wrap div.z-list-cell-content, .z-word-wrap div.z-list-footer-content,
-	.z-word-wrap div.z-list-header-content {
+.z-word-wrap div.z-list-cell-cnt, .z-word-wrap div.z-list-footer-cnt,
+	.z-word-wrap div.z-list-header-cnt {
 	word-wrap: break-word;
 }
 <%-- faker uses only --%>
@@ -113,13 +113,13 @@ tr.z-list-item td.z-list-item-focus {
 td.z-list-group-inner {
 	padding-top: 2px; border-bottom: 2px solid #84A6D4;
 }
-td.z-list-group-inner div.z-list-cell-content {
+td.z-list-group-inner div.z-list-cell-cnt {
 	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
 	padding: 4px 2px; width: auto;
 }<%-- Listgroupfoot --%>
 .z-list-group-foot{
 	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
-td.z-list-group-foot-inner div.z-list-cell-content {
+td.z-list-group-foot-inner div.z-list-cell-cnt {
 	color: #2C559C; font: bold 12px Tahoma, Arial, Helvetica, sans-serif;
 }

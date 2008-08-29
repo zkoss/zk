@@ -147,7 +147,7 @@
 .z-column-children {
     float: left; padding: 0; margin: 0; overflow: hidden; zoom: 1;
 }
-.z-column-children-content {
+.z-column-children-cnt {
     overflow: hidden;
 }
 .z-column-children-body {

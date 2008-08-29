@@ -45,7 +45,7 @@ public class ColumnDefault implements ComponentRenderer {
 		final String mcls = self.getMoldSclass();
 		wh.write("<th id=\"").write(uuid).write("\"").write(" z.type=\"Col\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-		.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(mcls).write("-content\">");
+		.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"").write(mcls).write("-cnt\">");
 		wh.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
 		String mpop = ((Columns)self.getParent()).getMenupopup();

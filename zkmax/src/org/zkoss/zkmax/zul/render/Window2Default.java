@@ -86,7 +86,7 @@ public class Window2Default implements ComponentRenderer {
 			wcExtStyle += cs;
 		}
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"");
-		wh.write(self.getContentSclass()).write(" ").write(mcls).write("-content");
+		wh.write(self.getContentSclass()).write(" ").write(mcls).write("-cnt");
 		if (!hasBorder) wh.write("-noborder");
 		wh.write("\"").writeAttr("style", wcExtStyle);
 		wh.write(">");

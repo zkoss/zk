@@ -74,7 +74,7 @@ public class Menu2Default implements ComponentRenderer {
 			wh.write("<li id=\"").write(uuid).write("\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 				.write(">\n<a href=\"javascript:;\" id=\"").write(uuid).write("!a\" class=\"").write(mcls)
-				.write("-content ").write(mcls).write("-content-img\">")
+				.write("-cnt ").write(mcls).write("-cnt-img\">")
 				.write(self.getImgTag());
 
 			new Out(self.getLabel()).render(out);

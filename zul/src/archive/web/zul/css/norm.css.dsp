@@ -216,7 +216,7 @@ span.z-drop-disallow {
 div.z-drop-ghost {
 	border:1px solid #6593CF;
 }
-div.z-drop-content {
+div.z-drop-cnt {
 	background-image: url(${c:encodeURL('~./zul/img/grid/drop-bg.gif')});	
 	width:120px;height:18px;
 	padding:2px;
@@ -248,11 +248,11 @@ span.z-progressmeter-img {
 	min-width: 45pt; width: 100%;
 }
 <%-- Auxheader --%>
-.z-auxheader-content {
+.z-auxheader-cnt {
 	font-size: ${fontSizeM}; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 	border: 0; margin: 0; padding: 0; overflow: hidden;
 }
-.z-word-wrap .z-auxheader-content {
+.z-word-wrap .z-auxheader-cnt {
 	word-wrap: break-word;
 }
 <%-- Window --%>

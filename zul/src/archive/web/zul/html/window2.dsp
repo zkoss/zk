@@ -51,7 +51,7 @@ ${z:redraw(self.caption, null)}
 <div class="${mcls}-cl"><div class="${mcls}-cr"><div class="${mcls}-cm<c:if test="${'normal' != self.border}">-noborder</c:if>">
 </c:if>
 <c:set var="wcExtStyle" value="${c:cat(wcExtStyle, self.contentStyle)}"/>
-<div id="${self.uuid}!cave" class="${self.contentSclass} ${mcls}-content<c:if test="${'normal' != self.border}">-noborder</c:if>"${c:attr('style',wcExtStyle)}>
+<div id="${self.uuid}!cave" class="${self.contentSclass} ${mcls}-cnt<c:if test="${'normal' != self.border}">-noborder</c:if>"${c:attr('style',wcExtStyle)}>
 	<c:forEach var="child" items="${self.children}"><c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if></c:forEach>
 </div><%-- we don't generate shadow here since it looks odd when on top of modal mask --%>
 <c:if test="${self.mode != 'embedded' and self.mode != 'popup'}">

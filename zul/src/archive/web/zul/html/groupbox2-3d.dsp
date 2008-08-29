@@ -25,7 +25,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 </div></div></div>
 </c:if>
 <c:set var="gcExtStyle" value="${c:cat(empty self.caption ? '': 'border-top:0;', self.contentStyle)}"/>
-	<div id="${self.uuid}!slide" class="${mcls}-body" ${self.open?'':' style="display:none"'}><div id="${self.uuid}!cave" class="${self.contentSclass} ${mcls}-content"${c:attr('style',gcExtStyle)}>
+	<div id="${self.uuid}!slide" class="${mcls}-body" ${self.open?'':' style="display:none"'}><div id="${self.uuid}!cave" class="${self.contentSclass} ${mcls}-cnt"${c:attr('style',gcExtStyle)}>
 	<c:forEach var="child" items="${self.children}"><c:if test="${self.caption != child}">${z:redraw(child, null)}</c:if></c:forEach>
 	</div></div>
 <%-- shadow --%>

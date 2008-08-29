@@ -68,17 +68,17 @@ span.z-tree-tee, span.z-tree-vbar, span.z-tree-last, span.z-tree-spacer, span.ch
 	display:inline-block;
 }
 <%-- Treecol, Treefooter, and Treecell--%>
-div.z-tree-col-content {
+div.z-tree-col-cnt {
 	font-size: ${fontSizeM}; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
 }
-div.z-tree-footer-content, div.z-tree-cell-content, div.z-tree-col-content {
+div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt {
 	border: 0; margin: 0; padding: 0;
 }
-div.z-tree-footer-content, div.z-tree-col-content{
+div.z-tree-footer-cnt, div.z-tree-col-cnt{
 	overflow: hidden;
 }
-.z-word-wrap div.z-tree-cell-content, .z-word-wrap div.z-tree-footer-content,
-	.z-word-wrap div.z-tree-col-content {
+.z-word-wrap div.z-tree-cell-cnt, .z-word-wrap div.z-tree-footer-cnt,
+	.z-word-wrap div.z-tree-col-cnt {
 	word-wrap: break-word;
 }
 <%-- Treerow --%>

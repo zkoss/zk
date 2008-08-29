@@ -59,7 +59,7 @@ public class ComboitemDefault implements ComponentRenderer {
 
 		s = self.getContent();
 		if (!Strings.isBlank(s))
-			wh.write("<span class=\"").write(mcls).write("-content\">").write(s).write("</span>");
+			wh.write("<span class=\"").write(mcls).write("-cnt\">").write(s).write("</span>");
 			//1. don't use Out to encode since content might contain HTML tags
 			//2. Feature 1908524: no <br/>
 

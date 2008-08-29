@@ -43,7 +43,7 @@ public class ToolbarpanelDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"")
 			.write(mcls).write("-body ").write(mcls).write('-').write(self.getAlign())
 			.write("\">");
-		wh.writeln("<table class=\"").write(mcls).write("-content\" cellspacing=\"0\"><tbody>");
+		wh.writeln("<table class=\"").write(mcls).write("-cnt\" cellspacing=\"0\"><tbody>");
 		if (!self.getOrient().equals("vertical")) {
 			wh.write("<tr>");
 			for (Iterator it = self.getChildren().iterator(); it.hasNext();) {

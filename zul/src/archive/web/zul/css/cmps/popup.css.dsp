@@ -44,6 +44,6 @@
 	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')}) no-repeat right -24px;
 	zoom:1; padding-right: 8px;
 }
-.z-popup .z-popup-content {
+.z-popup .z-popup-cnt {
 	margin: 0 !important; line-height: 14px; color: #444; padding: 0;
 }

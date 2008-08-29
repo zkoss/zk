@@ -8,7 +8,7 @@
     float: left; padding: 0; margin: 0; overflow: hidden; zoom: 1;
 }
 
-.z-portal-children-content {
+.z-portal-children-cnt {
     overflow: hidden;
 }
 

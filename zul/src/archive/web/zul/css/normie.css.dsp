@@ -45,17 +45,17 @@ div.z-tree-header, div.z-listbox-header, div.z-grid-header, div.z-tree-footer, d
 div.z-tree-header th, div.z-listbox-header th, div.z-grid-header th {
 	text-overflow: ellipsis;
 }
-div.z-tree-col-content, div.z-list-header-content, div.z-column-content, .z-auxheader-content {
+div.z-tree-col-cnt, div.z-list-header-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	white-space: nowrap;
 	<%-- Bug #1839960  --%>
 }
-div.z-footer-content, div.z-row-content, div.z-group-content, div.z-group-foot-content, div.z-column-content,
-div.z-tree-footer-content, div.z-tree-cell-content, div.z-tree-col-content, .z-auxheader-content,
-div.z-list-footer-content, div.z-list-cell-content, div.z-list-header-content {
+div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-column-cnt,
+div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt, .z-auxheader-cnt,
+div.z-list-footer-cnt, div.z-list-cell-cnt, div.z-list-header-cnt {
 	position: relative;
 	<%-- Bug #1825896  --%>
 }
-div.z-row-content, div.z-group-content, div.z-group-foot-content, div.z-tree-cell-content, div.z-list-cell-content {
+div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-tree-cell-cnt, div.z-list-cell-cnt {
 	width: 100%;
 }
 div.z-tree-body, div.z-dottree-body, div.z-listbox-body, div.z-grid-body {<%-- always used. --%>

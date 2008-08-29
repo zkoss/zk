@@ -53,7 +53,7 @@ public class Menuitem2Default implements ComponentRenderer {
 			else
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
-			wh.write(" class=\"").write(mcls).write("-content\">");
+			wh.write(" class=\"").write(mcls).write("-cnt\">");
 			wh.write("<table id=\"").write(uuid).write("!a\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"").write(mcls).write("-btn ");
 			if (self.isImageAssigned()) {
 				wh.write("").write(mcls).write("-btn");
@@ -88,11 +88,11 @@ public class Menuitem2Default implements ComponentRenderer {
 			wh.write(" class=\"");
 			if (!self.isImageAssigned() && ((Menupopup)self.getParent()).isCheckmark()) {
 				if (self.isChecked()) 
-					wh.write(mcls).write("-content ").write(mcls).write("-content-ck");
+					wh.write(mcls).write("-cnt ").write(mcls).write("-cnt-ck");
 				else 
-					wh.write(mcls).write("-content ").write(mcls).write("-content-unck");
+					wh.write(mcls).write("-cnt ").write(mcls).write("-cnt-unck");
 			} else
-				wh.write(mcls).write("-content");
+				wh.write(mcls).write("-cnt");
 			
 			wh.write("\">").write(self.getImgTag());
 			

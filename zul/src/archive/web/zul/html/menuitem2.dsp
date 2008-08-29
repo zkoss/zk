@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:choose>
 <c:when test="${self.topmost}">
 <td id="${self.uuid}" align="left" z.type="Menuit2"${self.outerAttrs}${self.innerAttrs}>
-<a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} class="${mcls}-content">
+<a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} class="${mcls}-cnt">
 <table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${mcls}-btn <c:if test="${self.imageAssigned}">${mcls}-btn<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
 <tbody><tr><td class="${mcls}-btn-l"><i>&nbsp;</i></td>
 <c:if test="${!empty self.imageContent}">
@@ -44,15 +44,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<c:when test="${!self.imageAssigned && self.parent.checkmark}">
 		<c:choose>
 			<c:when test="${self.checked}">
-				<c:set var="class1" value="${mcls}-content ${mcls}-content-ck"/>
+				<c:set var="class1" value="${mcls}-cnt ${mcls}-cnt-ck"/>
 			</c:when>
 			<c:otherwise>
-				<c:set var="class1" value="${mcls}-content ${mcls}-content-unck"/>
+				<c:set var="class1" value="${mcls}-cnt ${mcls}-cnt-unck"/>
 			</c:otherwise>
 		</c:choose>
 	</c:when>
 	<c:otherwise>
-		<c:set var="class1" value="${mcls}-content"/>
+		<c:set var="class1" value="${mcls}-cnt"/>
 	</c:otherwise>
 </c:choose>
 <a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} id="${self.uuid}!a" class="${class1}">${self.imgTag}<c:out value="${self.label}"/></a>
