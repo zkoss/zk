@@ -1466,12 +1466,13 @@ public class Listbox extends XulElement implements Paginated {
 				getItemAtIndex(newsz).detach(); //detach and remove
 		}
 
+		if (newsz - oldsz > 50 && !inPagingMold())
+			invalidate(); //performance is better
 		for (int j = oldsz; j < newsz; ++j) {
 			if (renderer == null)
 				renderer = getRealRenderer();
 			newUnloadedItem(renderer).setParent(this);
 		}
-		if (newsz - oldsz > 100) invalidate(); //performance is better
 	}
 	/** Creates an new and unloaded listitem. */
 	private final Listitem newUnloadedItem(ListitemRenderer renderer) {
@@ -1601,12 +1602,13 @@ public class Listbox extends XulElement implements Paginated {
 
 			ListitemRenderer renderer = null;
 			final Listitem before = min < oldsz ? getItemAtIndex(min): null;
+			if (max - min > 50 && !inPagingMold())
+				invalidate(); //performance is better
 			for (int j = min; j <= max; ++j) {
 				if (renderer == null)
 					renderer = getRealRenderer();
 				insertBefore(newUnloadedItem(renderer), before);
 			}
-			if (max - min > 100) invalidate(); //performance is better
 			done = true;
 			break;
 

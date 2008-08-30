@@ -682,12 +682,13 @@ public class Grid extends XulElement implements Paginated {
 		if (_rows == null)
 			new Rows().setParent(this);
 
+		if (newsz - oldsz > 50 && !inPagingMold())
+			invalidate(); //performance is better
 		for (int j = oldsz; j < newsz; ++j) {
 			if (renderer == null)
 				renderer = getRealRenderer();
 			newUnloadedRow(renderer).setParent(_rows);
 		}
-		if (newsz - oldsz > 100) invalidate(); //performance is better
 	}
 	/** Creates an new and unloaded row. */
 	private final Row newUnloadedRow(RowRenderer renderer) {
@@ -821,12 +822,13 @@ public class Grid extends XulElement implements Paginated {
 			RowRenderer renderer = null;
 			final Row before =
 				min < oldsz ? (Row)_rows.getChildren().get(min): null;
+			if (max - min > 50 && !inPagingMold())
+				invalidate(); //performance is better
 			for (int j = min; j <= max; ++j) {
 				if (renderer == null)
 					renderer = getRealRenderer();
 				_rows.insertBefore(newUnloadedRow(renderer), before);
 			}
-			if (max - min > 100) invalidate(); //performance is better
 			done = true;
 			break;
 
