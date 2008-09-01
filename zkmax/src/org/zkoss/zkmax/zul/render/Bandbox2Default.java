@@ -54,7 +54,7 @@ public class Bandbox2Default implements ComponentRenderer {
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("><img class=\"").write(mcls).write("-img\"");
+		wh.write("><img class=\"").write(mcls).write("-img\" onmousedown=\"return false;\"");
 		if (self.getImage() != null) 
 			wh.write(" style=\"background-image:url(").write(exec.encodeURL(self.getImage()))
 				.write(")\"");
