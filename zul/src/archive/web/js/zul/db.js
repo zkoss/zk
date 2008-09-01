@@ -171,9 +171,7 @@ zk.Cal.prototype = {
 		var d = cell.getAttribute("zk_day");
 		zk.setInnerHTML(cell,
 			!sel || this.popup ? d:
-			'<a href="javascript:;" onkeyup="zkCal.onup(event)" on'
-				+(zk.ie ? "keydown": "keypress")
-				+'="zkCal.onkey(event)" onblur="zkCal.onblur(event)">'+d+'</a>');
+			'<a href="javascript:;" onkeyup="zkCal.onup(event)" onkeydown="zkCal.onkey(event)" onblur="zkCal.onblur(event)">'+d+'</a>');
 			//IE: use keydown. otherwise, it causes the window to scroll
 	},
 	_ondayclk: function (cell) {
@@ -396,7 +394,7 @@ zkDtbox.init = function (cmp) {
 
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
-	zk.listen(inp, zk.ie ? "keydown": "keypress", zkDtbox.onkey);
+	zk.listen(inp, "keydown", zkDtbox.onkey);
 		//IE: use keydown. otherwise, it causes the window to scroll
 
 	var btn = $e(cmp.id + "!btn");
