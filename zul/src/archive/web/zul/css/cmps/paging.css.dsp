@@ -31,7 +31,7 @@
 }
 .z-paging td, .z-paging span, .z-paging input,
 	.z-paging div, .z-paging select, .z-paging label {
-	white-space: nowrap; font: normal 11px tahoma, arial, helvetica, sans-serif;
+	white-space: nowrap; font: normal ${fontSizeM} Tahoma, Arial, Helvetica, sans-serif;
 }
 .z-paging-first {
 	background-image: url(${c:encodeURL('~./zul/img/paging/pg-first.gif')})!important;
@@ -49,11 +49,14 @@
 	position:absolute;top:5px;right:8px;color:#444;
 }
 .z-paging-btn {
-	font: normal tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap; font-size: ${fontSizeM};
+	font-weight: normal; font-family: Tahoma, Arial, Helvetica, sans-serif;
+	cursor: pointer; white-space: nowrap; font-size: ${fontSizeM};
 	width: auto;
 }
 .z-paging-btn button {
-	border: 0 none; background: transparent; font: normal tahoma, verdana, helvetica; font-size: ${fontSizeM};
+	border: 0 none; background: transparent;
+	font-weight: normal; font-size: ${fontSizeM};
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	padding-left: 3px; padding-right: 3px; cursor: pointer; margin: 0; overflow: visible;
 	width: auto; -moz-outline: 0 none; outline: 0 none; min-height: 13px;
 }

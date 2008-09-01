@@ -69,7 +69,8 @@ span.z-tree-tee, span.z-tree-vbar, span.z-tree-last, span.z-tree-spacer, span.ch
 }
 <%-- Treecol, Treefooter, and Treecell--%>
 div.z-tree-col-cnt {
-	font-size: ${fontSizeM}; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: ${fontSizeM}; font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
 div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt {
 	border: 0; margin: 0; padding: 0;

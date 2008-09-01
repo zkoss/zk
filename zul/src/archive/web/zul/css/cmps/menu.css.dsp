@@ -8,10 +8,12 @@
 
 <%-- Menu and Menuitem --%>
 .z-menu-btn, .z-menu-item-btn {
-	font: normal tahoma, verdana, helvetica; cursor: pointer; white-space: nowrap; font-size: ${fontSizeMS};
+	font: normal Tahoma, Helvetica; cursor: pointer; white-space: nowrap; font-size: ${fontSizeMS};
 }
 .z-menu-btn button, .z-menu-item-btn button {
-	border: 0 none; background: transparent; font-family: tahoma, verdana, helvetica; font-size: ${fontSizeMS};
+	border: 0 none; background: transparent;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: ${fontSizeMS};
 	padding-left: 3px; padding-right: 3px; cursor: pointer; margin: 0; overflow: visible;
 	width: auto; -moz-outline: 0 none; outline: 0 none; min-height: 13px;
 }
@@ -130,7 +132,7 @@
 	.z-menubar-hor label,
 .z-menubar-ver .z-menu, .z-menubar-ver .z-menu-item, .z-menubar-ver span, .z-menubar-ver input, .z-menubar-ver div, .z-menubar-ver select,
 	.z-menubar-ver label {
-	white-space: nowrap; font: normal 11px tahoma, arial, helvetica, sans-serif;
+	white-space: nowrap; font: normal ${fontSizeMS} Tahoma, Arial, Helvetica, sans-serif;
 }
 .z-menubar-hor .z-menu-item-disd,
 .z-menubar-ver .z-menu-item-disd,
@@ -214,7 +216,8 @@
 	background: #F0F0F0 url(${c:encodeURL('~./zul/img/menu2/pp-bg.gif')}) repeat-y;
 }
 .z-menu-popup-cnt li {
-	text-decoration: none; font: normal 11px tahoma, arial, sans-serif; white-space: nowrap;
+	text-decoration: none; font: normal ${fontSizeMS} Tahoma, Arial, sans-serif;
+	white-space: nowrap;
 	display: block; padding: 1px;
 }
 .z-menu-popup .z-menu-popup-cnt, .z-menu-popup li {

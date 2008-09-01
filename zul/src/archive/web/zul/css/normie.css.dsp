@@ -7,7 +7,7 @@
 	hspace: 0; vspace: 0
 }
 .zk option {
-	font-family: Verdana, Tahoma, Arial, serif;
+	font-family: Tahoma, Arial, serif;
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:when>
@@ -16,7 +16,7 @@ img	{
 	hspace: 0; vspace: 0
 }
 option {
-	font-family: Verdana, Tahoma, Arial, serif;
+	font-family: Tahoma, Arial, serif;
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:otherwise>

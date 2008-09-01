@@ -15,7 +15,7 @@ h3 {
 	font-size: medium; font-weight: bold; color: #100050;
 }
 h4 {
-	font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: small; font-weight: bold; color: #107080;
 }
 h5 {
@@ -38,7 +38,7 @@ dd {
 }
 
 li, dt, dd, pre, body {
-	font-family: Verdana, Tahoma, Arial, serif;
+	font-family: Tahoma, Arial, serif;
 	font-weight: normal;
 }
 

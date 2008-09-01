@@ -6,13 +6,13 @@
 <c:choose>
 <c:when  test="${!empty c:getProperty('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk option {
-	font-family: Verdana, Tahoma, Arial, serif;
+	font-family: Tahoma, Arial, serif;
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:when>
 <c:otherwise>
 option {
-	font-family: Verdana, Tahoma, Arial, serif;
+	font-family: Tahoma, Arial, serif;
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:otherwise>

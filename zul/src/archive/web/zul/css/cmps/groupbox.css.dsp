@@ -34,7 +34,8 @@
 	overflow: hidden; zoom: 1;
 }
 .z-groupbox-tl .z-groupbox-header {
-	color: #373737; font: bold 11px tahoma, arial, verdana, sans-serif; padding: 5px 0 4px 0;
+	color: #373737; font: bold ${fontSizeM} Tahoma, Arial, Helvetica, sans-serif;
+	padding: 5px 0 4px 0;
 	border: 0 none; background: transparent;
 }
 .z-groupbox-tm {

@@ -41,7 +41,8 @@ div.z-listbox-header th.z-list-header-sort-dsc div.z-list-header-cnt {
 	background-repeat: no-repeat;
 }
 div.z-list-header-cnt {
-	font-size: ${fontSizeM}; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: ${fontSizeM}; font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
 div.z-listbox-body {
 	background: white; border: 0; overflow: auto; width: 100%;
@@ -114,12 +115,12 @@ td.z-list-group-inner {
 	padding-top: 2px; border-bottom: 2px solid #84A6D4;
 }
 td.z-list-group-inner div.z-list-cell-cnt {
-	color:#3764a0; font: bold 11px tahoma, arial, helvetica, sans-serif;
+	color:#3764a0; font: bold ${fontSizeM} Tahoma, Arial, helvetica, sans-serif;
 	padding: 4px 2px; width: auto;
 }<%-- Listgroupfoot --%>
 .z-list-group-foot{
 	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
 td.z-list-group-foot-inner div.z-list-cell-cnt {
-	color: #2C559C; font: bold 12px Tahoma, Arial, Helvetica, sans-serif;
+	color: #2C559C; font: bold ${fontSizeM} Tahoma, Arial, Helvetica, sans-serif;
 }

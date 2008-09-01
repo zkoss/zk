@@ -24,7 +24,7 @@
 	border-style: solid; border-color: #B1CBD5; border-width: 0; overflow: hidden;
 }
 .z-panel-header {
-	overflow: hidden; zoom: 1; color: #15428b; font: bold 11px tahoma, arial, verdana, sans-serif;
+	overflow: hidden; zoom: 1; color: #15428b; font: bold ${fontSizeM} Tahoma, Arial, Helvetica, sans-serif;
 	padding: 5px 3px 4px 5px; border: 1px solid #B1CBD5; line-height: 15px; 
 	background:transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 -1px;
 }
@@ -48,7 +48,7 @@
 	overflow: hidden; zoom: 1;
 }
 .z-panel-tl .z-panel-header {
-	color: #15428b; font: bold 11px tahoma, arial, verdana, sans-serif; padding: 5px 0 4px 0;
+	color: #15428b; font: bold ${fontSizeM} Tahoma, Arial, Helvetica, sans-serif; padding: 5px 0 4px 0;
 	border: 0 none; background: transparent;
 }
 .z-panel-tm {
@@ -82,7 +82,7 @@
 	padding-right: 6px; zoom: 1;
 }
 .z-panel-cm {
-	border: 0 none; padding: 0; margin: 0; font: normal 11px tahoma, arial, helvetica, sans-serif;
+	border: 0 none; padding: 0; margin: 0; font: normal ${fontSizeM} tahoma, arial, helvetica, sans-serif;
 	padding-top: 6px; background: #D8ECF7;
 }
 .z-panel-cm .z-panel-children {

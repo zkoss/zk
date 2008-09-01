@@ -18,19 +18,19 @@ body {
 <c:when test="${!empty c:getProperty('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
 .zk button, .zk input.button, .zk input.file {
-	font-family: Verdana, Tahoma, Arial, serif;
+	font-family: Tahoma, Arial, serif;
 	font-size: ${fontSizeM}; font-weight: normal;
 }
 .zk legend {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: ${fontSizeM}; font-weight: normal;
 }
 .zk th {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: bold; 
 }
 .zk thead tr {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }
 .zk img {border: 0;}
@@ -38,19 +38,19 @@ body {
 <c:otherwise>
 p, div, span, label, a, input, textarea,
 button, input.button, input.file {
-	font-family: Verdana, Tahoma, Arial, serif;
+	font-family: Tahoma, Arial, serif;
 	font-size: ${fontSizeM}; font-weight: normal;
 }
 legend {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: ${fontSizeM}; font-weight: normal;
 }
 th {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: bold; 
 }
 thead tr {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }
 img {border: 0;}
@@ -72,7 +72,7 @@ div.z-debugbox {
 <%-- General --%>
 em.z {
 	font-style: normal; font-weight: normal;
-	font-family: Verdana, Tahoma, Arial, serif;
+	font-family: Tahoma, Arial, serif;
 	font-size: ${fontSizeM};
 }
 i.z {
@@ -117,7 +117,8 @@ button.z {
 }
 .z-apply-loading-indicator {
 	color: #102B6D; border:1px solid #A6C5DC; background-color: #FFF; 
-	white-space: nowrap; padding: 2px; font: normal 11px tahoma, arial, helvetica, sans-serif;
+	white-space: nowrap; padding: 2px;
+	font: normal ${fontSizeM} Tahoma, Arial, Helvetica, sans-serif;
 	cursor: wait;
 }
 .z-apply-loading {
@@ -220,8 +221,8 @@ div.z-drop-cnt {
 	background-image: url(${c:encodeURL('~./zul/img/grid/drop-bg.gif')});	
 	width:120px;height:18px;
 	padding:2px;
-	font-size:13px;
-	font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: ${fontSizeM};
+	font-weight: normal; font-family: Tahoma, Arial, serif;
 }
 
 <%-- ZK error message box --%>
@@ -249,7 +250,8 @@ span.z-progressmeter-img {
 }
 <%-- Auxheader --%>
 .z-auxheader-cnt {
-	font-size: ${fontSizeM}; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: ${fontSizeM}; font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	border: 0; margin: 0; padding: 0; overflow: hidden;
 }
 .z-word-wrap .z-auxheader-cnt {
