@@ -178,10 +178,9 @@ public class Rows extends XulElement {
 					throw new UiException("Only one Goupfooter is allowed per Group");
 				if (idx != (g[0] + g[1]))
 					throw new UiException("Groupfoot must be placed after the last Row of the Group");
-				final int[] t = (int[]) _groupsInfo.get(g[0]);
-				t[2] = idx-1;
+				g[2] = idx-1;
 			}							
-		}		
+		}
 		if (super.insertBefore(child, refChild)) {
 			if(hasGroup()) {
 				final int

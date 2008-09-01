@@ -1156,8 +1156,7 @@ public class Listbox extends XulElement implements Paginated {
 						throw new UiException("Only one Goupfooter is allowed per Listgroup");
 					if (idx != (g[0] + g[1]))
 						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
-					final int[] t = (int[]) _groupsInfo.get(g[0]);
-					t[2] = idx-1;
+					g[2] = idx-1;
 				}							
 			}		
 			//first: listhead or auxhead
