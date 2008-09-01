@@ -28,3 +28,6 @@ span.z-word-wrap {<%-- label use only --%>
 div.z-splitter-hor, div.z-splitter-ver, div.z-splitter-os-hor, div.z-splitter-os-ver {
 	-moz-user-select: none;
 }
+
+<%-- Menupopup--%>
+.z-menu-popup :-moz-any-link:focus {outline: none!important;}
