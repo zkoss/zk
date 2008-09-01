@@ -105,10 +105,10 @@
 	margin: 0 8px 0 0; background-position: center;
 }
 .z-menu-item-cnt-ck .z-menu-item-img {
-	background: transparent url(${c:encodeURL('~./zul/img/menu/checked.gif')}) no-repeat center;
+	background: transparent url(${c:encodeURL('~./zul/img/menu2/checked.gif')}) no-repeat center;
 }
 .z-menu-item-cnt-unck .z-menu-item-img {
-	background: transparent url(${c:encodeURL('~./zul/img/menu/unchecked.png')}) no-repeat center;
+	background: transparent url(${c:encodeURL('~./zul/img/menu2/unchecked.png')}) no-repeat center;
 }
 <%-- Menubar --%>
 .z-menubar-hor, .z-menubar-ver  {
