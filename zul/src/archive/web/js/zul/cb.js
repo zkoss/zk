@@ -260,7 +260,8 @@ zkCmbox.ondown = function (evt) {
 zkCmbox.onkey = function (evt) {
 	var inp = Event.element(evt);
 	if (!inp) return true;
-
+	
+	inp.removeAttribute("zk_typeAhead"); // reset
 	var uuid = $uuid(inp.id), cb = $e(uuid), pp = $e(uuid + "!pp");
 	if (!pp) return true;
 	
@@ -305,14 +306,12 @@ zkCmbox.onkey = function (evt) {
 	var selback = keycode == 38 || keycode == 40; //UP and DN
 	if (getZKAttr(cb, "adr") == "true" && !opened) {
 		zkCmbox.open(pp, bCombobox && !selback);
-		setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
-			((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
+		zkCmbox._hiliteLater(uuid, evt);
 	}
 	else if (!bCombobox)
 		return true; //ignore
 	else if (!selback /*&& opened disabled by JumperChen 2008/01/09*/)
-		setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
-			((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
+		zkCmbox._hiliteLater(uuid, evt);
 
 	if (selback/* || getZKAttr(cb, "aco") == "true"*/) {
 		//Note: zkCmbox.open won't repos immediately, so we have to delay it
@@ -322,6 +321,11 @@ zkCmbox.onkey = function (evt) {
 		return false;
 	}
 	return true;
+};
+zkCmbox._hiliteLater = function (uuid, evt) {
+	var keycode = Event.keyCode(evt);
+	setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
+		((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
 };
 
 /* Whn the button is clicked on button. */
@@ -517,8 +521,8 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	if (!rows) return;
 
 	//The comparison is case-insensitive
-	var inpval = inp.value.toLowerCase();
-	if (!selback && pp.getAttribute("zk_ckval") == inpval)
+	var inpval = inp.value.toLowerCase(), ckval = pp.getAttribute("zk_ckval");
+	if (!selback && ckval == inpval && ckval == inp.getAttribute("zk_changing_last"))
 		return; //not changed
 
 	//Identify the best matched item
