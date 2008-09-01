@@ -277,6 +277,7 @@ zkCmbox.onkey = function (evt) {
 	var inp = Event.element(evt);
 	if (!inp) return true;
 
+	inp.removeAttribute("zk_typeAhead"); // reset
 	var uuid = $uuid(inp.id), cb = $e(uuid), pp = $e(uuid + "!pp");
 	if (!pp) return true;
 	
@@ -541,10 +542,10 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	if (!rows) return;
 
 	//The comparison is case-insensitive
-	var inpval = inp.value.toLowerCase();
-	if (!selback && pp.getAttribute("zk_ckval") == inpval)
+	var inpval = inp.value.toLowerCase(), ckval = pp.getAttribute("zk_ckval");
+	if (!selback && ckval == inpval && ckval == inp.getAttribute("zk_changing_last"))
 		return; //not changed
-
+		
 	//Identify the best matched item
 	var jfnd = -1, exact = !inpval, old;
 	for (var j = 0, rl = rows.length; j < rl; ++j) {
