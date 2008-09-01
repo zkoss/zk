@@ -55,10 +55,10 @@ public class Tabs2DefaultV implements ComponentRenderer {
 					.writeln("</li>");
 			wh.writeln("</ul>");
 		wh.writeln("</div>");
-		wh.writeln("<div id=\""+self.getUuid()+"up\"")
+		wh.writeln("<div id=\""+self.getUuid()+"!up\"")
 			.write(" class=\""+look+"scrollup\"")
 			.writeln(" > </div>");
-		wh.writeln("<div id=\""+self.getUuid()+"down\"")
+		wh.writeln("<div id=\""+self.getUuid()+"!down\"")
 			.write(" class=\""+look+"scrolldown\"")
 			.writeln(" > </div>");
 		wh.writeln("</div>");
