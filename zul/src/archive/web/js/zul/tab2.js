@@ -593,23 +593,25 @@ _fixHgh : function (tabbox, tabs) {
 		   ul = zk.firstChild($e(tabs, "header"), "UL"),
 		   li = zk.childNodes(ul, function (n) {return ($tag(n) == "LI");});
 		   if (tabbox.style.height){
-		   		// has style height
-		   }else{		   				   		
+		   		//Tabs2(+border)	
+																		
+				zk.forceStyle(tabs, "h", tabbox.style.height);
+		   }else{		   		
+		   			   				   		
 				zk.forceStyle(tabbox,"h", li.length*35+"px");
+				//Tabs2(+border)
+				zk.forceStyle(child[0],"h",tabbox.offsetHeight-2+"px");
 		   }
 		   //coz we have to make the header full
 		   if (zk.hasClass(tabbox, "z-tabbox-scrolling")) {
-		   		zk.forceStyle($e(tabs, "header"),"h", tabbox.style.height.replace("px","") - 38 + "px");		   		
+		   		zk.forceStyle($e(tabs, "header"),"h", tabs.offsetHeight - 38 + "px");		   		
 		   }else{
-		   		zk.forceStyle($e(tabs, "header"),"h", tabbox.style.height.replace("px","") - 2 + "px");		   	   	
+		   		zk.forceStyle($e(tabs, "header"),"h", tabs.offsetHeight - 2 + "px");		   	   	
 		   }
-		   //Tabs2(+border)
 		   //separator(+border)
-		   //tabpanels(+border)
-		   zk.forceStyle(child[0],"h",tabbox.style.height.replace("px","")-2+"px");
-		   zk.forceStyle(child[1],"h",tabbox.style.height.replace("px","")-2+"px");
-		   zk.forceStyle(child[2],"h",tabbox.style.height.replace("px","")-2+"px");
-		   
+		   //tabpanels(+border)		   
+		   zk.forceStyle(child[1],"h",tabs.offsetHeight-2+"px");
+		   zk.forceStyle(child[2],"h",tabs.offsetHeight-2+"px");
 	}else {
 		$e(tabs.id,"header").style.height="";
 		var hgh = tabbox.style.height;
