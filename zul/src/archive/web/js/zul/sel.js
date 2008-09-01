@@ -333,7 +333,7 @@ zk.Selectable.prototype = {
 
 		var checkmark = target.id && target.id.endsWith("!cm");
 		var row = zkSel.getNearestRow(target);
-		if (!row || !this._isRowType(row))
+		if (!row || !this._isRowType(row) || getZKAttr(row, "rid") != this.id)
 			return; //incomplete structure or grid in listbox...
 
 		//It is better not to change selection only if dragging selected
