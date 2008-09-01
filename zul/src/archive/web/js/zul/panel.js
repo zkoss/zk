@@ -321,6 +321,7 @@ zkPanel = {
 				zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized]});
 			
 			if (isRealVisible) {
+				cmp._maximized = true;
 				zk.beforeSizeAt(cmp);
 				zk.onSizeAt(cmp);
 				zk.fire(cmp, "maximize", [cmp, maximized]);
@@ -360,7 +361,11 @@ zkPanel = {
 		zkPanel._fixHgh(cmp);
 		zkPanel._fixWdh(cmp);
 		zkPanel.syncShadow(cmp);
-		if (getZKAttr(cmp, "maximized") == "true")zkPanel.syncMaximized(cmp);
+		if (getZKAttr(cmp, "maximized") == "true") {
+			if (!cmp._maximized)
+				zkPanel.syncMaximized(cmp);
+			cmp._maximized = false;
+		}
 	}, 
 	syncMaximized: function (cmp) {
 		var floated = zkPanel.isFloatable(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode,

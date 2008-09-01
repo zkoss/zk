@@ -198,6 +198,7 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 			zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized]});
 		
 		if (isRealVisible) {
+			cmp._maximized = true;
 			zk.beforeSizeAt(cmp);
 			zk.onSizeAt(cmp);
 		}
@@ -245,6 +246,30 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 	zkWnd2._fixWdh(cmp);
 	zkWnd2._fixHgh(cmp);
 	zkWnd2.syncShadow(cmp);
+	if (getZKAttr(cmp, "maximized") == "true") {
+		if (!cmp._maximized)
+			zkWnd2.syncMaximized(cmp);
+		cmp._maximized = false;
+	}
+};
+zkWnd2.syncMaximized = function (cmp) {
+	var floated = !zkWnd2._embedded(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode,
+		s = cmp.style;
+		
+	// Sometimes, the clientWidth/Height in IE6 is wrong.
+	var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
+	var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+	if (!floated) {
+		sw -= zk.sumStyles(op, "rl", zk.paddings);
+		sw = zk.revisedSize(cmp, sw);
+		sh -= zk.sumStyles(op, "tb", zk.paddings);
+		sh = zk.revisedSize(cmp, sh, true);
+	}
+	if (sw < 0) sw = 0;
+	if (sh < 0) sh = 0;
+	
+	s.width = sw + "px";
+	s.height = sh + "px";
 };
 zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 	if (zkWnd2._embedded(cmp) || zkWnd2._popup(cmp) || !zk.isRealVisible(cmp)) return;
