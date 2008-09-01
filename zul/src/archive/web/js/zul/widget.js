@@ -334,7 +334,9 @@ zkButton = {
 	onover: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
-			box = $e(cmp.id + "!box");
+			box = $e(cmp.id + "!box"),
+			mcls = getZKAttr(cmp, "mcls");
+		if (zk.hasClass(box, mcls + "-focus")) return;
 		zk.addClass(box, getZKAttr(cmp, "mcls") + "-over");
 	},
 	onout: function (evt) {
