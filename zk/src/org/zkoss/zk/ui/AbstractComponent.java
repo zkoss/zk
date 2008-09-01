@@ -588,20 +588,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _id;
 	}
 	public void setId(String id) {
-		if (id == null || id.length() == 0)
+		if (id != null && id.length() == 0)
 			throw new UiException("ID cannot be empty");
 
 		if (!Objects.equals(_id, id)) {
-			if (Names.isReserved(id)
-			|| (!(this instanceof NonFellow) && ComponentsCtrl.isAutoId(id)))
-				throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Names.getReservedNames());
-
 			final boolean rawId = this instanceof RawId;
-			if (rawId && _page != null
-			&& _page.getDesktop().getComponentByUuidIfAny(id) != null)
-				throw new UiException("Replicated ID is not allowed for "+getClass()+": "+id+"\nNote: HTML/WML tags, ID must be unique");
+			if (id != null) {
+				if (Names.isReserved(id)
+				|| (!(this instanceof NonFellow) && ComponentsCtrl.isAutoId(id)))
+					throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Names.getReservedNames());
 
-			checkIdSpaces(this, id);
+				if (rawId && _page != null
+				&& _page.getDesktop().getComponentByUuidIfAny(id) != null)
+					throw new UiException("Replicated ID is not allowed for "+getClass()+": "+id+"\nNote: HTML/WML tags, ID must be unique");
+
+				checkIdSpaces(this, id);
+			}
 
 			removeFromIdSpaces(this);
 			if (rawId) { //we have to change UUID
@@ -620,7 +622,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			} else {
 				_id = id;
 			}
-			addToIdSpaces(this);
+
+			if (_id != null)
+				addToIdSpaces(this);
 
 			final Object xc = getExtraCtrl();
 			if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())

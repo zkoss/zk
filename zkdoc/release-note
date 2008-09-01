@@ -51,6 +51,7 @@ ZK 3.5.0
   2066299: fulfill: fire onFulfill after fulfilling the children
   2070812: Fulfill allows to specify URI to create children from
   2075293: Allow to specify listener in metainfo/zk/config.xml
+  2086401: A way to 'reset' component ID to be anonymous
 
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible

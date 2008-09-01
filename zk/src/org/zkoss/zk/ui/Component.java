@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.scripting.Namespace;
 
 /**
- * A UI component.
+ * An UI component.
  *
  * <p>There are two kind of lifecycles: one is page creations and the other
  * is asynchronous updates.
@@ -111,6 +111,9 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * <p>When a component is constructed, an ID is generated automatically.
 	 * Thus, calling this method only you need to identify a component.
 	 *
+	 * @param id the identifier. It cannot be empty.
+	 * If null, it means the previous ID is removed (aka., reset)
+	 * and an anonymous ID is assigned.
 	 * @see Page
 	 */
 	public void setId(String id);
