@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.zul.event.GroupsDataListener;
+
 /**
  * The interface defines a suitable data model for grouping {@link Listbox}
  * and {@link Grid}.
@@ -33,29 +35,36 @@ package org.zkoss.zul;
 public interface GroupsModel {
 	/** Returns the group value at the specified index.
 	 * It is used to render {@link Group} and {@link Listgroup}.
+	 * @param groupIndex the index of the group.
 	 */
-	public Object getGroup(int index);
+	public Object getGroup(int groupIndex);
 	/** Returns the number of groups.
 	 */
 	public int getGroupCount();
 
 	/** Returns the child value of the specified group at the specified index.
+	 * @param groupIndex the index of the group.
+	 * @param index the index of the element in the group.
 	 */
-	public Object getChild(Object group, int index);
+	public Object getChild(int groupIndex, int index);
 	/** Returns the number of children of the specified group.
 	 * <p>Note: it does <i>not</i> include the groot foot ({@link #getGroupfoot}).
+	 * @param groupIndex the index of the group.
+	 * @param index the index of the element in the group.
 	 */
-	public int getChildCount(Object group);
+	public int getChildCount(int groupIndex);
 
 	/** Returns the foot value of the specified group.
 	 * It is used to render {@link Groupfoot} and {@link Listgroupfoot}.
 	 *
 	 * <p>Note: it is ignored if {@link #hasGroupfoot} returns false.
+	 * @param groupIndex the index of the group.
 	 */
-	public Object getGroupfoot(Object group);
+	public Object getGroupfoot(int groupIndex);
 	/** Returns if the specified group has a foot value.
+	 * @param groupIndex the index of the group.
 	 */
-	public boolean hasGroupfoot(Object group);
+	public boolean hasGroupfoot(int groupIndex);
 
 	/** Adds a listener to the groups that's notified each time a change
 	 * to the data model occurs. 

@@ -91,6 +91,8 @@ public class GroupsDataEvent {
 	int groupIndex, int index0, int index1) {
 		if (model == null)
 			throw new IllegalArgumentException();
+		if (type < GROUPS_CHANGED && groupIndex < 0)
+			throw new IllegalArgumentException("groupIndex required for type "+type);
 		_model = model;
 		_type = type;
 		_groupIndex = groupIndex;
@@ -119,14 +121,14 @@ public class GroupsDataEvent {
 		return _groupIndex;
 	}
 	/** Returns the lower index of the change range.
-	 * For a single element, this value is the same as that returned by
+	 * For a single element/group, this value is the same as that returned by
 	 * {@link #getIndex1}.
 	 */
 	public int getIndex0() {
 		return _index0;
 	}
 	/** Returns the upper index of the change range.
-	 * For a single element, this value is the same as that returned by
+	 * For a single element/group, this value is the same as that returned by
 	 * {@link #getIndex0}.
 	 */
 	public int getIndex1() {

@@ -21,6 +21,8 @@ package org.zkoss.zul;
 import java.util.Comparator;
 
 /**
+ * An extra interface that can be implemented with {@link GroupsModel}
+ * to control the sorting and grouping of the data model.
  * 
  * @author tomyeh
  * @since 3.5.0
@@ -46,9 +48,9 @@ public interface GroupsModelExt {
 	 * the default comparator is used.
 	 * @param ascending whether to sort in the ascending order (or in
 	 * the descending order)
-	 * @param index the index of the column
+	 * @param colIndex the index of the column
 	 */
-	public void sort(Comparator cmpr, boolean ascending, int index);
+	public void sort(Comparator cmpr, boolean ascending, int colIndex);
 
 	/**
 	 * Groups and sorts the data by the specified column.
@@ -59,7 +61,7 @@ public interface GroupsModelExt {
 	 * 	the method is returned directly.
 	 * @param ascending whether to sort in the ascending order (or in
 	 * 	the descending order)
-	 * @param index the index of the column
+	 * @param colIndex the index of the column
 	 */
-	public void group(Comparator cmpr, boolean ascending, int index);
+	public void group(Comparator cmpr, boolean ascending, int colIndex);
 }
