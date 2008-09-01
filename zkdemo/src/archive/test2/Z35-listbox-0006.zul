@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Add Group"?>
+<!--
+	Z35-listbox-0006.zul
+	
+	{{IS_NOTE
+	Purpose:
+	
+	Description:
+	
+	History:
+	Mon Aug 25 14:53:53 TST 2008, Created by RyanWu
+	}}IS_NOTE
+	
+	Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+	
+	{{IS_RIGHT
+	}}IS_RIGHT
+-->
+<window title="Add Group" border="normal" width="600px" height="600px">
+	<html><![CDATA[
+0.Dennis said, this is wrong case cause of manipulating Model and Component together. Flyworld should fix this case when he available.<br/>
+	1.Press Add group <br /> 
+	2.Check if the group label should be "new group" and next listitem's label is "list1" 
+	3.Scroll down(to item 100) , you should not see any error 
+
+	]]></html>
+	<zscript>
+	<![CDATA[
+	     	String[] data = new String[101];
+		    for(int j=0; j < data.length ; ++j) {
+		       data[j] = "item  "+j;
+		     }		    
+		    ListModel strset = new SimpleGroupModel(data, new int[]{10,20,30,40,50,75});	         
+	]]>
+    <![CDATA[//@DECLARATION
+            void addGroup1(){
+            	//add to 5
+            	Listgroup listgroup1 = new Listgroup("new group");
+       			Listitem listitem1 = new Listitem();       			
+       			new Listcell("list1").setParent(listitem1);       			
+       			list.getChildren().add(5,listitem1);       			
+       			list.getChildren().add(5,listgroup1);      
+       			this.updatenum();
+    		}
+       		void addGroup2(){
+       			//insert before select
+       			Listgroup listgroup1 = new Listgroup("new group");
+       			Listitem listitem1 = new Listitem();       			
+       			new Listcell("list1").setParent(listitem1);       			
+       			list.insertBefore(listgroup1,list.getSelectedItem());
+       			list.insertBefore(listitem1,list.getSelectedItem());
+       			this.updatenum();
+       		}   
+       		void addGroup3(){
+       			//append to end       			
+       			Listgroup listgroup1 = new Listgroup("new group");
+       			Listitem listitem1 = new Listitem();       			
+       			new Listcell("list1").setParent(listitem1);
+       			listgroup1.setParent(list);
+       			listitem1.setParent(list);
+       			this.updatenum();
+       		}       
+       		void updatenum(){
+       			lsf.setLabel("All items : "+list.getItemCount());
+       		}
+       		void inva(){
+       			
+       		}
+	]]></zscript>
+	<hbox>
+		<button label="Add group1 " onClick="addGroup1()" />		
+		<button label="Add group2 " onClick="addGroup2()" />
+		<button label="Add group3 " onClick="addGroup3()" />		
+	</hbox>
+	<listbox id="list" width="200px" rows="20" model="&#36;{strset}" >
+		<listhead>
+			<listheader label="Load on Demend" sort="auto" />
+		</listhead>			
+		<listfoot>
+			<listfooter id="lsf" label="All items : ${list.itemCount} " />
+		</listfoot>
+	</listbox>
+</window>

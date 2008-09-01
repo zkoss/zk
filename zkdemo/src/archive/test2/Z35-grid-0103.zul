@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Grid with Group feature" border="normal">
-	1.Test Grid with Group,Group Foot ,   2,change the column size 
+	1.Add a group , 2. add a group footer. any step should work as well.
 	<zscript>
 		<![CDATA[
 		String[][] datas = new String[][]{
@@ -56,20 +56,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		myrows.getChildren().add(12,row1);
 		myrows.getChildren().add(12,group);
 	}
-	void printFoot(){
-		System.out.println("=====>"+gg.getGroupfoot());
-	}
 	void addFoot(){
 		Groupfoot foot = new Groupfoot("footer");
-		myrows.getChildren().add(13,foot);
-		//myrows.getChildren().add(15,foot);
+try{
+		myrows.getChildren().add(15,foot);
+}catch(Exception x){
+alert("Exception:"+x.getClass()+":"+x.getMessage());
+}
 	}
 	]]>
 	</zscript>
 	<hbox>
 		<button label="1.add group " onClick="addNewGroup()"/>
 		<button label="2.add foot" onClick="addFoot()"/>
-		<button label="3.print foot" onClick="printFoot();"/>
 	</hbox>
 	<grid fixedLayout="true">
         <columns sizable="true">

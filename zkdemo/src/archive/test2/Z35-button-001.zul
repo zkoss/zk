@@ -1,0 +1,20 @@
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+  <window title="Testing buttons basic onClick functionality in window" border="normal" width="600px">
+
+1.Click the following button, it should show a message box.
+<button label="Click Here" onClick='Messagebox.show("If you see this message, test is completed ok.");'/>
+  </window>
+  <window>
+2.This is a button in window with no border.
+<button label="Click Here" onClick='Messagebox.show("If you see this message, test is completed ok.");'/>
+  </window>
+  <window border="normal" width="600px">
+    <vbox>
+3.A button in bordered window with vbox 
+<button label="Click Here" onClick='Messagebox.show("If you see this message, test is completed ok.");'/>
+    </vbox>
+  </window>
+</zk>

@@ -1,0 +1,123 @@
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert (dada) -->
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+  All sliders should work, horizontal sliders modified by vertical sliders.
+<groupbox>
+<vbox>
+<label value="1. Operate vertical sliders so the horizontal slider is changed accordingly, however notice if you do this too quickly the onScrolling event will not fire successfully."/>
+<label value="2. Right click on the first vertical slider button, you should see label change with values."/>
+</vbox>
+</groupbox>
+  <window title="Slider connections" border="normal" width="600px">
+    <hbox width="100%">
+      <label id="myLabel"/>
+      <vbox>
+Test right click for first slider.
+        <slider id="a01" orient="vertical" curpos="0" maxpos="100" onScrolling="a21.setCurpos(event.getPos());" onRightClick='myLabel.setValue("Right Clicked OK." +self.getCurpos());'/>
+      </vbox>
+      <vbox>
+        <slider id="a02" orient="vertical" curpos="0" onScrolling="a22.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a03" orient="vertical" curpos="0" onScrolling="a23.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a04" orient="vertical" curpos="0" onScrolling="a24.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a05" orient="vertical" curpos="0" onScrolling="a25.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a06" orient="vertical" curpos="0" onScrolling="a26.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a07" orient="vertical" curpos="0" onScrolling="a27.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a08" orient="vertical" curpos="0" onScrolling="a28.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a09" orient="vertical" curpos="0" onScrolling="a29.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a10" orient="vertical" curpos="0" onScrolling="a30.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a11" orient="vertical" curpos="0" onScrolling="a31.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a12" orient="vertical" curpos="0" onScrolling="a32.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a13" orient="vertical" curpos="0" onScrolling="a33.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a14" orient="vertical" curpos="0" onScrolling="a34.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a15" orient="vertical" curpos="0" onScrolling="a35.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a16" orient="vertical" curpos="0" onScrolling="a36.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="a17" orient="vertical" curpos="0" onScrolling="a37.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+    </hbox>
+    <vbox width="100%">
+      <hbox>
+        <slider id="a21" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a22" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a23" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a24" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a25" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a26" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a27" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a28" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a29" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a30" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a31" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a32" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a33" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a34" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a35" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a36" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a37" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+    </vbox>
+  </window>
+</zk>
