@@ -12,7 +12,7 @@ div.z-tree {
 div.z-tree-header, div.z-tree-header tr, div.z-tree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-tree-header tr.z-tree-cols {
+div.z-tree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
 div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader {
@@ -119,7 +119,7 @@ div.z-dottree {
 div.z-dottree-header, div.z-dottree-header tr, div.z-dottree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-dottree-header tr.z-tree-cols {
+div.z-dottree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
 div.z-dottree-header th {

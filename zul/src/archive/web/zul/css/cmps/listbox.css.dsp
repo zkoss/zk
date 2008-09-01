@@ -13,7 +13,7 @@ div.z-listbox-header, div.z-listbox-header tr, div.z-listbox-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 
-div.z-listbox-header tr.z-list-head {
+div.z-listbox-header tr.z-list-head, div.z-listbox-header tr.z-auxhead {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
 div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader {
