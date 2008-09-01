@@ -580,6 +580,7 @@ zkGrfs = {
 		zk[open ? "rmClass" : "addClass"](cmp, mcls);
 		if (!silent)
 			zkau.sendasap({uuid: cmp.id, cmd: "onOpen", data: [open]});
+		if (open) zk.onSizeAt(cmp);
 	},
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
