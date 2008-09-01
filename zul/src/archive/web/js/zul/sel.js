@@ -1099,7 +1099,7 @@ zkSel._shallIgnoreEvent = function (el) {
 	var tn = $tag(el);
 	return !el || !zkau.canFocus(el)
 	|| ((tn == "INPUT" && !el.id.endsWith("!cm"))
-	|| tn == "TEXTAREA" || tn == "BUTTON" || tn == "SELECT" || tn == "OPTION");
+	|| tn == "TEXTAREA" || tn == "BUTTON" || tn == "SELECT" || tn == "OPTION" || $type($outer(el)) == "Button");
 };
 
 /** row's onmouseover. */
