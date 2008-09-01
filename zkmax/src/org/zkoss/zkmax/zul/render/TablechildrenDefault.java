@@ -42,7 +42,7 @@ public class TablechildrenDefault implements ComponentRenderer{
 			final Component child = (Component) it.next();
 			wh.write("<td id=\"").write(self.getUuid()).write("\"")
 				.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-				.write(" \">");
+				.write(" >");
 			child.redraw(out);
 			wh.writeln("</td>");
 		}
