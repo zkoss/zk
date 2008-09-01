@@ -18,9 +18,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
-	1. Press the “add” button, and see the new column of columnlayout is 50% of right remainder width.
+	1. Press the &quot;add&quot; button, and see the new column of columnlayout is 50% of right remainder width.
 	<separator/>
-	2. Press the “remove” button, and see the column disappear.
+	2. Press the &quot;remove&quot; button, and see the column disappear.
 
 	<columnlayout id="cl">
 		<columnchildren width="200px" style="padding: 5px">

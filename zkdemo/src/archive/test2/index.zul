@@ -57,6 +57,7 @@ function newWindow(url){
 											<comboitem label="B30"/>
 											<comboitem label="Z30"/>
 											<comboitem label="Z35"/>
+											<comboitem label="B35"/>
 										</combobox>
 									</hbox>
 								</vbox>

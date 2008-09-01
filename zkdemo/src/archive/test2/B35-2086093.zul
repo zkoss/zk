@@ -1,24 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-B35-2086093.zul
+Z30-listbox-0008.zul
 
 {{IS_NOTE
-	Purpose:
-		
-	Description:
-		
-	History:
-		Mon Sep  1 12:52:27 TST 2008, Created by jumperchen
+Purpose:
+
+Description:
+
+History:
+Thu Oct 27 21:18:02 2005, Created by tomyeh
 }}IS_NOTE
 
-Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
 -->
 <zk>
-Please click the "Click Me!" button, then the listitem should not be selected.(That is correct.)
+no metter click on checkbox, button or textbox. it should not popup selection message.
 <listbox onSelect='alert("selected")'>
 	<listhead>
 		<listheader label="Population"/>
@@ -30,7 +28,7 @@ Please click the "Click Me!" button, then the listitem should not be selected.(T
 	</listitem>
 	<listitem value="B">
 		<listcell><checkbox label="B. College"/></listcell>
-		<listcell><button label="Click Me!"/></listcell>
+		<listcell><button label="23%"/></listcell>
 	</listitem>
 	<listitem value="C">
 		<listcell label="C. High School"/>

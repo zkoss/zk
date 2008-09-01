@@ -1,34 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--
-B35-2073438.zul
-
-{{IS_NOTE
-	Purpose:
-		
-	Description:
-		
-	History:
-		Thu Aug 28 12:34:37 TST 2008, Created by jumperchen
-}}IS_NOTE
-
-Copyright (C) 2008 Potix Corporation. All Rights Reserved.
-
-{{IS_RIGHT
-}}IS_RIGHT
--->
+<?page title="Welcome to ZK Demo"?>
+	<!--
+		index.zul {{IS_NOTE Purpose: Description: History: Thu May 11 17:24:33
+		2006, Created by tomyeh }}IS_NOTE Copyright (C) 2006 Potix
+		Corporation. All Rights Reserved. {{IS_RIGHT }}IS_RIGHT
+	-->
 <window title="Menu Demo" border="normal">
-When use menubar botton with scrollbar. It sould not be automatically scroll top.
-<div height="1000px">Please scoll down to click the menuitem.</div>
-<window>
-<menubar>
-<menu label="Dynamically Attribute">
-<menupopup>
-<menuitem label="ChangeStoneToT1" onClick="changeAttribute(T1)" />
-<menuitem label="ChangeStoneToT2" onClick="changeAttribute(T2)" />
-<menuitem label="ChangeStoneToT3" onClick="changeAttribute(T3)" />
-</menupopup>
-</menu>
-</menubar>
-</window>
+	<label value="When user click the menu item "Dynamically Attribute" the window should not scroll top automatically"/>
+	<div height="1000px"> 123</div>
+	<window>
+		<menubar>
+			<menu label="Dynamically Attribute">
+				<menupopup>
+				</menupopup>
+			</menu>
+		</menubar>
+	</window>
 </window>

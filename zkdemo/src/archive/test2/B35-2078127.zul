@@ -2,7 +2,7 @@
 <vbox>
 1.click updateGroup 1, then click again. the [+] should not disappear.
 <separator/>
-2.click updateFoot 1, then click again. the [+] should not disappear.
+2.click updateFoot 1, then click again. the style of words should remain the same.
 </vbox>
 
 <window title="Grid with Group feature" border="normal">	

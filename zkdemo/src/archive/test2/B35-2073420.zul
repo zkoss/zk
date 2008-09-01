@@ -1,6 +1,7 @@
 <zk>
 <vbox>
-1.click "updateGroup1", then click again. the [+] should NOT disappear.
+1.click "updateGroup1", the label changed to a Icon<separator/>
+2.then click again. the samll open icon of group header(a [+] or [arrow]) should NOT disappear.
 </vbox>
 
 <window title="Grid with Group feature" border="normal">

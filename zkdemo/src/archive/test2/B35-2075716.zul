@@ -23,7 +23,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 2. Press the "remove" button, and see the column disappear.
 	<separator />
 3. If no any error, that is true.
- 
+
+	<button label="add" onClick="add()" />
+	<button label="remove" onClick="remove()" />
  
 	<portallayout id="cl">
 		<portalchildren width="200px" style="padding: 5px">
@@ -68,6 +70,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 </zscript>
 
-	<button label="add" onClick="add()" />
-	<button label="remove" onClick="remove()" />
 </window>

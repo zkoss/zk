@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-If the layout displayed correctly, it is correct.
-<panel title="table1" border="normal" maximized="true"
-maximizable="true" collapsible="true">
+<panel title="table1" border="normal"  collapsible="true">
 <panelchildren>
 <tablelayout>
 <tablechildren>
