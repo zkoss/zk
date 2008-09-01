@@ -42,7 +42,9 @@ div.z-tree-header, div.z-listbox-header, div.z-grid-header, div.z-tree-footer, d
 	position:relative;
 	<%-- Bug 1712708 and 1926094:  we have to specify position:relative --%>
 }
-div.z-tree-header th, div.z-listbox-header th, div.z-grid-header th {
+div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader,
+div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader,
+div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	text-overflow: ellipsis;
 }
 div.z-tree-col-cnt, div.z-list-header-cnt, div.z-column-cnt, .z-auxheader-cnt {
@@ -73,7 +75,7 @@ span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-
 }
 
 <%-- combo.css.dsp --%>
-.z-combobox-pp td span {<%--description--%>
+.z-combobox-pp .z-combo-item-inner {<%--description--%>
 	padding-left: 5px;
 }
 .z-calendar-calyear td, .z-datebox-calyear td {

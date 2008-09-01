@@ -22,7 +22,7 @@ tr.z-vbox-sep, tr-z-box-sep {
     background-repeat: repeat-y; max-width: 8px; width: 8px;
     background-position: top right;
 }
-.z-splitter-ver-outer td {
+.z-splitter-ver-outer .z-splitter-ver-outer-td {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v-ns.png')}");
     background-repeat: repeat-x; max-height: 8px; height: 8px;
     background-position: bottom left;
@@ -85,7 +85,7 @@ tr.z-vbox-sep, tr-z-box-sep {
     background-repeat: repeat-y; max-width: 8px; width: 8px;
     background-position: top right;
 }
-.z-splitter-os-ver-outer td {
+.z-splitter-os-ver-outer .z-splitter-os-ver-outer-td {
     background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.gif')}");
     background-repeat: repeat-x; max-height: 8px; height: 8px;
     background-position: bottom left;

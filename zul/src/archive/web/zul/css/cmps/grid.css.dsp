@@ -12,10 +12,10 @@ div.z-grid {
 div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-grid-header tr {
+div.z-grid-header tr.z-columns {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
-div.z-grid-header th {
+div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;

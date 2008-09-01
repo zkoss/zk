@@ -121,16 +121,16 @@
 .z-menu-popup .z-menu-item-disd .z-menu-btn-img {
 	opacity: .35; -moz-opacity: .35; filter: alpha(opacity=35);
 }
-.z-menubar-hor td, .z-menubar-ver td {
+.z-menubar-hor .z-menu, .z-menubar-hor .z-menu-item, .z-menubar-ver .z-menu, .z-menubar-ver .z-menu-item{
 	vertical-align: middle;
 }
 .z-menubar-hor .z-menu-btn td, .z-menubar-ver .z-menu-btn td,
 .z-menubar-hor .z-menu-item-btn td, .z-menubar-ver .z-menu-item-btn td {
 	border: 0 !important;
 }
-.z-menubar-hor td, .z-menubar-hor span, .z-menubar-hor input, .z-menubar-hor div, .z-menubar-hor select,
+.z-menubar-hor .z-menu, .z-menubar-hor .z-menu-item, .z-menubar-hor span, .z-menubar-hor input, .z-menubar-hor div, .z-menubar-hor select,
 	.z-menubar-hor label,
-.z-menubar-ver td, .z-menubar-ver span, .z-menubar-ver input, .z-menubar-ver div, .z-menubar-ver select,
+.z-menubar-ver .z-menu, .z-menubar-ver .z-menu-item, .z-menubar-ver span, .z-menubar-ver input, .z-menubar-ver div, .z-menubar-ver select,
 	.z-menubar-ver label {
 	white-space: nowrap; font: normal 11px tahoma, arial, helvetica, sans-serif;
 }

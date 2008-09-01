@@ -13,10 +13,10 @@ div.z-listbox-header, div.z-listbox-header tr, div.z-listbox-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 
-div.z-listbox-header tr {
+div.z-listbox-header tr.z-list-head {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
-div.z-listbox-header th {
+div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
@@ -52,7 +52,7 @@ div.z-listbox-pgi-b {
 div.z-listbox-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden;
 }
-div.z-listbox-body td, div.z-listbox-footer td {
+div.z-listbox-body .z-list-cell, div.z-listbox-footer .z-list-footer {
 	cursor: pointer; padding: 0 2px;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden; 
 }

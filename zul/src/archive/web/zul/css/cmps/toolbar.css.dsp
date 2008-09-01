@@ -33,7 +33,8 @@
 .z-toolbar-panel {
 	padding: 5px;
 }
-.z-toolbar-panel .z-toolbar-panel-body td {
+.z-toolbar-panel .z-toolbar-panel-body .z-toolbar-panel-hor,
+.z-toolbar-panel .z-toolbar-panel-body .z-toolbar-panel-ver {
 	border: 0; padding: 0;
 }
 .z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt, .z-toolbar-end {

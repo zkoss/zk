@@ -12,10 +12,10 @@ div.z-tree {
 div.z-tree-header, div.z-tree-header tr, div.z-tree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-tree-header tr {
+div.z-tree-header tr.z-tree-cols {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
-div.z-tree-header th {
+div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
@@ -30,7 +30,7 @@ div.z-tree-pgi-b {
 div.z-tree-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden;
 }
-div.z-tree-body td, div.z-tree-footer td {
+div.z-tree-body td.z-tree-cell, div.z-tree-footer td.z-tree-footer {
 	cursor: pointer; padding: 0 2px;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden; 
 }
@@ -119,7 +119,7 @@ div.z-dottree {
 div.z-dottree-header, div.z-dottree-header tr, div.z-dottree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-dottree-header tr {
+div.z-dottree-header tr.z-tree-cols {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 }
 div.z-dottree-header th {
@@ -137,7 +137,7 @@ div.z-dottree-pgi-b {
 div.z-dottree-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden;
 }
-div.z-dottree-body td, div.z-dottree-footer td {
+div.z-dottree-body td.z-tree-cell, div.z-dottree-footer td.z-tree-footer {
 	cursor: pointer; padding: 0 2px;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden; 
 }

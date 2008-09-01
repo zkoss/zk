@@ -356,11 +356,14 @@ public class Box extends XulElement {
 	 * Used only by component development to generate HTML tags.
 	 */
 	public String getChildInnerAttrs(Component child) {
-		if (child instanceof Splitter)
-			return "";
-
 		final boolean vert = isVertical();
 		final StringBuffer sb = new StringBuffer(64);
+		if (vert && child instanceof Splitter) {
+			sb.append(" class=\"")
+				.append(((Splitter)child).getMoldSclass())
+				.append("-outer-td\"");
+			return sb.toString();
+		}
 
 		final String align = toHalign(vert ? _align: _pack);
 		if (align != null && align.length() > 0) {
