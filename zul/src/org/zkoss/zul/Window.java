@@ -241,7 +241,7 @@ public class Window extends XulElement implements IdSpace {
 			if (_minimized) {
 				_maximized = false;
 				setVisible0(false); //avoid dead loop
-			}
+			} else setVisible0(true);
 			smartUpdate("z.minimized", _minimized);
 		}
 	}

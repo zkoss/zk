@@ -234,7 +234,7 @@ public class Panel extends XulElement {
 			if (_minimized) {
 				_maximized = false;
 				setVisible0(false); //avoid dead loop
-			}
+			} else setVisible0(true);
 			smartUpdate("z.minimized", _minimized);
 		}
 	}
