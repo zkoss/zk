@@ -686,8 +686,10 @@ public class Window extends XulElement implements IdSpace {
 	 * will become {@link #OVERLAPPED} and the suspending thread is resumed.
 	 */
 	public boolean setVisible(boolean visible) {
-		if (!visible && _mode == MODAL) {
-			leaveModal();
+		if (!visible && (_mode == MODAL || _mode == HIGHLIGHTED)) {
+			if (_mode == MODAL)
+				leaveModal();
+			else _mode = OVERLAPPED;
 			invalidate();
 		} else if ( _mode != EMBEDDED)
 			smartUpdate("z.visible", visible);
