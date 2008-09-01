@@ -814,8 +814,10 @@ public class Window extends XulElement implements IdSpace {
 		return setVisible0(visible);
 	}
 	private boolean setVisible0(boolean visible) {
-		if (!visible && _mode == MODAL) {
-			leaveModal();
+		if (!visible && (_mode == MODAL || _mode == HIGHLIGHTED)) {
+			if (_mode == MODAL)
+				leaveModal();
+			else _mode = OVERLAPPED;
 			invalidate();
 		} else if ( _mode != EMBEDDED) {
 			smartUpdate("z.visible", visible);
@@ -851,7 +853,7 @@ public class Window extends XulElement implements IdSpace {
 		appendAsapAttr(sb, Events.ON_OPEN);
 		appendAsapAttr(sb, Events.ON_MAXIMIZE);
 		
-		if (inModal()) HTMLs.appendAttribute(sb, "z." + Events.ON_MINIMIZE, true);
+		if (inModal() || inHighlighted()) HTMLs.appendAttribute(sb, "z." + Events.ON_MINIMIZE, true);
 		else appendAsapAttr(sb, Events.ON_MINIMIZE);
 		
 		//no need to generate ON_CLOSE since it is always sent (as ASAP)
@@ -947,6 +949,9 @@ public class Window extends XulElement implements IdSpace {
 				_visible = false;
 				if (_mode == MODAL) {
 					leaveModal();
+					invalidate();
+				} else if (_mode == HIGHLIGHTED) {
+					_mode = OVERLAPPED; // according to leaveModal()
 					invalidate();
 				}
 			}
