@@ -1329,6 +1329,9 @@ public class Listbox extends XulElement implements Paginated {
 		}
 		return refChild;
 	}
+	/**
+	 * If the child is a listgroup, its listgroupfoot will be removed at the same time.
+	 */
 	public boolean removeChild(Component child) {
 		if (_paging == child && _pgi == child && inPagingMold())
 			throw new IllegalStateException("The paging component cannot be removed manually. It is removed automatically when changing the mold");

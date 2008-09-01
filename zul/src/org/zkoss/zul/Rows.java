@@ -231,6 +231,9 @@ public class Rows extends XulElement {
 		}
 		return false;
 	}
+	/**
+	 * If the child is a group, its groupfoot will be removed at the same time.
+	 */
 	public boolean removeChild(Component child) {
 		if (child.getParent() == this)
 			beforeRemove(child);
