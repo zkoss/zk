@@ -1648,7 +1648,7 @@ public class Listbox extends XulElement implements Paginated {
 					if (item.isLoaded()) {
 						if (renderer == null)
 							renderer = getRealRenderer();
-						unloadItem(renderer, item);
+						unloadItem(renderer, item, min);
 					}
 				}
 			}
@@ -1738,8 +1738,8 @@ public class Listbox extends XulElement implements Paginated {
 		return cell;
 	}
 	/** Clears a listitem as if it is not loaded. */
-	private final void unloadItem(ListitemRenderer renderer, Listitem item) {
-		item.getParent().insertBefore(newUnloadedItem(renderer, -1), item);
+	private final void unloadItem(ListitemRenderer renderer, Listitem item, int index) {
+		item.getParent().insertBefore(newUnloadedItem(renderer, index), item);
 		item.detach(); //always detach
 	}
 	/** Handles a private event, onInitRender. It is used only for

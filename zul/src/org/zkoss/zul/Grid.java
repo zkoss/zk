@@ -723,7 +723,7 @@ public class Grid extends XulElement implements Paginated {
 					if (row.isLoaded()) {
 						if (renderer == null)
 							renderer = getRealRenderer();
-						unloadRow(renderer, row);
+						unloadRow(renderer, row, min);
 					}
 				}
 			}
@@ -831,8 +831,8 @@ public class Grid extends XulElement implements Paginated {
 		return label;
 	}
 	/** Clears a row as if it is not loaded. */
-	private final void unloadRow(RowRenderer renderer, Row row) {
-		_rows.insertBefore(newUnloadedRow(renderer, -1), row);
+	private final void unloadRow(RowRenderer renderer, Row row, int index) {
+		_rows.insertBefore(newUnloadedRow(renderer, index), row);
 		row.detach(); //always detach
 	}
 	/** Handles a private event, onInitRender. It is used only for
