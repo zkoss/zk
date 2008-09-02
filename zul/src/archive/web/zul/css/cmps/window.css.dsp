@@ -134,13 +134,13 @@
 <%-- Tools --%>
 .z-window-embedded-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.png')}) no-repeat;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
 	margin-left: 2px;
 }
 .z-window-modal-tool, .z-window-overlapped-tool,
 	.z-window-popup-tool, .z-window-highlighted-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.png')}) no-repeat;
+	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.gif')}) no-repeat;
 	margin-left: 2px;
 }
 .z-window-embedded-close, .z-window-modal-close, .z-window-overlapped-close,

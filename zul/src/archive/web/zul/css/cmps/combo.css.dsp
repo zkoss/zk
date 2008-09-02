@@ -26,7 +26,7 @@
 	background: #ECEAE4;
 }
 .z-combobox .z-combobox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/combobtn.png')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/combobtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
