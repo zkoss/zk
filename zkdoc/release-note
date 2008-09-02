@@ -79,6 +79,7 @@ ZK 3.5.0
   2086020: onchanging event of combobox didn't fired properly
   2086350: Select a nested listbox that should not throw a exception
   2088269: radiogroup wouldn't work before ZK finish loading
+  2088496: OPERA ONLY - hbox setAlign does not update in view.
   
 * Upgrade Notes
   + onBookmarkChanged is renamed to onBookmarkChange
