@@ -269,8 +269,10 @@ public class Rows extends XulElement {
 				else fixGroupIndex(index, -1, false);
 			}
 			if (child instanceof Groupfoot){
-				final int[] g = getGroupsInfoAt(index);				
-				g[2] = -1;
+				final int[] g = getGroupsInfoAt(index);	
+				if(g != null){ // group info maybe remove cause of grouphead removed in previous op
+					g[2] = -1;
+				}
 			}
 			return true;
 		}

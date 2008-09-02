@@ -53,6 +53,7 @@ import org.zkoss.zul.event.GroupsDataListener;
 	private void init() {
 		_groupCount = _model.getGroupCount();
 		_gpofs = new int[_groupCount];
+		_gpfts = new boolean[_groupCount];
 		_size = 0;
 		for (int j = 0; j < _groupCount; ++j) {
 			_gpofs[j] = _size;
@@ -60,7 +61,7 @@ import org.zkoss.zul.event.GroupsDataListener;
 			_gpfts[j] = _model.hasGroupfoot(j);
 			if (_gpfts[j]) ++_size;
 		}
-		_size += _groupCount;
+		//_size += _groupCount;, already add 1 in above loop for group head
 
 		_model.addGroupsDataListener(_listener = new DataListener());
 	}
@@ -92,20 +93,46 @@ import org.zkoss.zul.event.GroupsDataListener;
 	/*package*/ void group(Comparator cmpr, boolean ascending, int colIndex) {
 		if (!(_model instanceof GroupsModelExt))
 			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
+		((GroupsModelExt)_model).group(cmpr, ascending, colIndex);
 	}
 	/** Sorts the data by the specified column and comparator.
 	 */
 	/*package*/ void sort(Comparator cmpr, boolean ascending, int colIndex) {
 		if (!(_model instanceof GroupsModelExt))
 			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
+		((GroupsModelExt)_model).sort(cmpr, ascending, colIndex);
 	}
 
 	/** Returns the offset of the next group.
 	 */
 	private int getNextOffset(int groupIndex) {
-		return groupIndex >= _gpofs.length ? _size: _gpofs[groupIndex + 1];
+		return groupIndex >= (_gpofs.length - 1) ? _size: _gpofs[groupIndex + 1];
 	}
 
+	/**
+	 * return the group info of given index
+	 * [0] group index 
+	 * [1] type of index: 0-grouphead, 1-row, 2- groupfoot
+	 * [2] offset : the offset of index in group, only available when type is row 
+	 * [3] hasfoot : 1 if this group has foot.
+	 */
+	/*package*/ int[] getGroupInfo(int index) {
+		if (index < 0 || index >= _size)
+			throw new IndexOutOfBoundsException("Not in 0.."+_size+": "+index);
+
+		int gi = Arrays.binarySearch(_gpofs, index);
+		if (gi >= 0) {
+			return new int[]{gi, 0 , -1, (_gpfts[gi])?1:0};
+		} else {
+			gi = - gi - 2; //0 ~ _gpofs.length - 2
+			int ofs = index - _gpofs[gi] - 1;
+			if (_gpfts[gi]) {
+				if (ofs >=  getNextOffset(gi) - _gpofs[gi] -2) //child count
+					return new int[]{gi, 2, -1,(_gpfts[gi])?1:0};
+			}
+			return new int[]{gi, 1, ofs,(_gpfts[gi])?1:0};
+		}
+	}
 	//ListModel//
 	public Object getElementAt(int index) {
 		if (index < 0 || index >= _size)
@@ -183,7 +210,7 @@ import org.zkoss.zul.event.GroupsDataListener;
 				if (j1 >= 0) {
 					if (j1 >= _gpofs.length)
 						throw new IndexOutOfBoundsException("Group index not in 0.."+_groupCount+", "+j1);
-					j1 = getNextOffset(j0) - 1; //include groupfoot
+					j1 = getNextOffset(j1) - 1; //include groupfoot
 				}
 			}
 			fireEvent(type, j0, j1);

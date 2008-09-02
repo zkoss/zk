@@ -1670,26 +1670,23 @@ public class Listbox extends XulElement implements Paginated {
 		Listitem item = null;
 		if (_model instanceof GroupsListModel) {
 			final GroupsListModel model = (GroupsListModel) _model;
-			int cnt = getGroupCount(), mcnt = model.getGroupCount(), gIndex = cnt == 0 ? cnt: cnt - 1;;
-			boolean has = model.hasGroupfoot(gIndex);
-			if (!hasGroup() && cnt < mcnt) {
+			final int[] ginfo = model.getGroupInfo(index);
+			switch(ginfo[1]){
+			case 0:
 				item = newListgroup(renderer);
-			} else if (cnt < mcnt || (cnt == mcnt && has)) {
-				int size = model.getChildCount(gIndex) + ((Listgroup)getGroups().get(gIndex)).getIndex() + 1;
-				if (index == size && !has) {
-					item = newListgroup(renderer);
-				} else if (has) {
-					if (index == size) {
-						item = newListgroupfoot(renderer);
-					} else if (index == (size + 1)) {
-						item = newListgroup(renderer);
-					}
-				}
-			}
-		}
-
-		if (item == null)
+				break;
+			case 1:
+				item = newListitem(renderer);
+				break;
+			case 2:
+				item = newListgroupfoot(renderer);
+				break;
+			default:
+				throw new UiException("Uknow type:"+ginfo[1]);
+			}		
+		}else{
 			item = newListitem(renderer);
+		}
 		item.setLoaded(false);
 
 		newUnloadedCell(renderer, item);
@@ -1988,8 +1985,6 @@ public class Listbox extends XulElement implements Paginated {
 	public void setMold(String mold) {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
-			if (!_groupsInfo.isEmpty() && ("paging".equals(mold) || "select".equals(mold)))
-					throw new UnsupportedOperationException("Unsupported Listgroup in Paging or Select mold!");
 			super.setMold(mold);
 				//we have to change model before detaching paging,
 				//since removeChild assumes it

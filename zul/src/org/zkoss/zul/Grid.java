@@ -755,26 +755,23 @@ public class Grid extends XulElement implements Paginated {
 		Row row = null;
 		if (_model instanceof GroupsListModel) {
 			final GroupsListModel model = (GroupsListModel) _model;
-			int rcnt =  _rows.getGroupCount(), mcnt = model.getGroupCount(), gIndex = rcnt == 0 ? rcnt: rcnt - 1;
-			boolean has = model.hasGroupfoot(gIndex);
-			if (!_rows.hasGroup() && rcnt < mcnt) {
+			final int[] ginfo = model.getGroupInfo(index);
+			switch(ginfo[1]){
+			case 0:
 				row = newGroup(renderer);
-			} else if (rcnt < mcnt || (rcnt == mcnt && has)) {
-				int	size = model.getChildCount(gIndex) + ((Group) _rows.getGroups().get(gIndex)).getIndex() + 1;
-				if (index == size && !has){
-					row = newGroup(renderer);
-				} else if (has){
-					if (index == size){
-						row = newGroupfoot(renderer);
-					}else if (index == (size + 1)){
-						row = newGroup(renderer);
-					}
-				}				
-			}			
-		}
-
-		if (row == null)
+				break;
+			case 1:
+				row = newRow(renderer);
+				break;
+			case 2:
+				row = newGroupfoot(renderer);
+				break;
+			default:
+				throw new UiException("Uknow type:"+ginfo[1]);
+			}		
+		}else{
 			row = newRow(renderer);
+		}
 		row.setLoaded(false);
 
 		newUnloadedCell(renderer, row);
