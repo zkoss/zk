@@ -13,7 +13,7 @@
 	font-size: ${fontSizeS};
 }
 .z-toolbar a, .z-toolbar a:visited, .z-toolbar a:hover {
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeS}; font-weight: normal; color: black;
 	background: #D0DEF0; border: 1px solid #D0DEF0;
 	text-decoration: none;

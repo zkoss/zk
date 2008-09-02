@@ -74,7 +74,7 @@
 
 .z-tabbox-ul li{
 	position:relative;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	cursor:default;
 	display:block;
@@ -153,7 +153,7 @@
 .z-tab-disd .z-tabbox-text,.z-tab-disd-seld .z-tabbox-text{
 	cursor:default;
 	font-style:normal;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	white-space:nowrap;
 	padding:4px 0 4px;
@@ -185,7 +185,7 @@
 	cursor:default;
 	font-weight:bold;
 	font-style:normal;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	white-space:nowrap;
 	padding:4px 0 5px;
@@ -219,7 +219,7 @@
 	color:#416AA3;
 	cursor:pointer;
 	font-style:normal;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	font-size-adjust:none;
 	padding:4px 0 4px;
@@ -304,7 +304,7 @@
 }
 .z-tabbox-v-si li{
 	position:relative;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	cursor:default;
 	display:block;
@@ -408,7 +408,7 @@
 }
 .z-tabbox-v-text{	
 	font-style:normal;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	text-align:center;
 	font-style:normal;
@@ -516,7 +516,7 @@ div.vtabpanel {<%-- vert tabpanel --%>
 .z-tabbox-accd .span-text{
 	cursor:pointer;
 	color:#373737;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-style:normal;
 	font-variant:normal;
 	font-weight:bold;
@@ -634,7 +634,7 @@ div.vtabpanel {<%-- vert tabpanel --%>
 .z-tabbox-accdlite .span-text{
 	cursor:pointer;
 	color:#373737;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	font-style:normal;
 	font-variant:normal;

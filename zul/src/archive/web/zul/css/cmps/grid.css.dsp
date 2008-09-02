@@ -39,7 +39,8 @@ div.z-grid-header .z-column-sort-dsc div.z-column-cnt {
 	background-repeat: no-repeat;
 }
 div.z-column-cnt {
-	font-size: ${fontSizeM}; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-size: ${fontSizeM}; font-weight: normal;
+	font-family: ${fontFamilyC};
 }
 div.z-grid-body {
 	background: white; border: 0; overflow: auto; width: 100%;
@@ -90,18 +91,18 @@ td.z-group-inner {
 	padding-top: 2px; border-bottom: 2px solid #84A6D4;
 }
 .z-group-inner .z-group-cnt span, .z-group-inner .z-group-cnt {
-	color:#3764a0; font: bold ${fontSizeM} Tahoma, Arial, Helvetica, Sans-serif;
+	color:#3764a0; font: bold ${fontSizeM} ${fontFamilyT};
 	padding: 4px 2px; width: auto;
 }
 .z-group-inner {
-	color: #3764a0; font: bold ${fontSizeM} Tahoma, Arial, Helvetica, Sans-serif;
+	color: #3764a0; font: bold ${fontSizeM} ${fontFamilyT};
 }
 <%-- Groupfooter --%>
 .z-group-foot {
 	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
 .z-group-foot-inner .z-group-foot-cnt span, .z-group-foot-inner .z-group-foot-cnt {
-	color: #2C559C; font: bold ${fontSizeM} Tahoma, Arial, Helvetica, sans-serif;
+	color: #2C559C; font: bold ${fontSizeM} ${fontFamilyT};
 }
 <%-- ZK Column's menu --%>
 .z-column .z-column-cnt {

@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-button {
-	font-family: Tahoma, Garamond, Century, Arial, serif;
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM}; color: black;
 	cursor: pointer; white-space: nowrap;
 }
