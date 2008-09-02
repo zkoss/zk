@@ -69,8 +69,8 @@ import org.zkoss.zul.impl.XulElement;
  * <p>See <a href="package-summary.html">Specification</a>.</p>
  *
  * <p>Besides creating {@link Listitem} programmingly, you could assign
- * a data model (a {@link ListModel} instance) to a listbox
- * via {@link #setModel} and then
+ * a data model (a {@link ListModel} or {@link GroupsModel} instance) to a listbox
+ * via {@link #setModel(ListModel)} or {@link #setModel(GroupsModel)} and then
  * the listbox will retrieve data via {@link ListModel#getElementAt} when
  * necessary.
  *
@@ -1104,7 +1104,7 @@ public class Listbox extends XulElement implements Paginated {
 			Object o = it.next();
 			((Listitem)o).setIndexDirectly(j);
 			if (o instanceof Listgroup) {
-			int[] g = getGroupsInfoAtIndex(j + (infront ? -1 : 1), true);
+			int[] g = getGroupsInfoAt(j + (infront ? -1 : 1), true);
 				if (g != null) {
 					g[0] = j;
 					if (g[2] != -1) g[2] += (infront ? 1 : -1);
@@ -1112,20 +1112,20 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		}
 	}
-	/*package*/ Listgroup getListgroupAtIndex(int index) {
+	/*package*/ Listgroup getListgroupAt(int index) {
 		if (_groupsInfo.isEmpty()) return null;
-		final int[] g = getGroupsInfoAtIndex(index);
+		final int[] g = getGroupsInfoAt(index);
 		if (g != null) return (Listgroup)getItemAtIndex(g[0]);
 		return null;
 	}
-	/*package*/ int[] getGroupsInfoAtIndex(int index) {
-		return getGroupsInfoAtIndex(index, false);
+	/*package*/ int[] getGroupsInfoAt(int index) {
+		return getGroupsInfoAt(index, false);
 	}
 	/**
 	 * Returns an int array that it has two length, one is an index of listgroup,
 	 * and the other is the number of items of listgroup(inclusive).
 	 */
-	/*package*/ int[] getGroupsInfoAtIndex(int index, boolean isListgroup) {
+	/*package*/ int[] getGroupsInfoAt(int index, boolean isListgroup) {
 		for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
 			int[] g = (int[])it.next();
 			if (isListgroup) {
@@ -1149,7 +1149,7 @@ public class Listbox extends XulElement implements Paginated {
 					g[2] = ((Listitem)getItems().get(getItems().size() - 1)).getIndex();
 				}else{
 					final int idx = ((Listitem)refChild).getIndex();				
-					final int[] g = getGroupsInfoAtIndex(idx);
+					final int[] g = getGroupsInfoAt(idx);
 					if (g == null)
 						throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");				
 					if (g[2] != -1)
@@ -1244,7 +1244,7 @@ public class Listbox extends XulElement implements Paginated {
 						} 
 					}
 				} else if (!_groupsInfo.isEmpty()) {
-					final int[] g = getGroupsInfoAtIndex(newItem.getIndex());
+					final int[] g = getGroupsInfoAt(newItem.getIndex());
 					if (g != null) {
 						g[1]++;
 						if (g[2] != -1) g[2]++;
@@ -1383,7 +1383,7 @@ public class Listbox extends XulElement implements Paginated {
 				fixGroupIndex(index, -1, false);
 				_groupsInfo.remove(remove);
 			} else if (!_groupsInfo.isEmpty()) {
-				final int[] g = getGroupsInfoAtIndex(index);
+				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
 					g[1]--;
 					if (g[2] != -1) g[2]--;
@@ -1391,7 +1391,7 @@ public class Listbox extends XulElement implements Paginated {
 				} else fixGroupIndex(index, -1, false);
 			} else fixItemIndices(index, -1);
 			if (child instanceof Groupfoot){
-				final int[] g = getGroupsInfoAtIndex(index);
+				final int[] g = getGroupsInfoAt(index);
 				g[2] = -1;
 			}
 			return true;
@@ -1474,10 +1474,12 @@ public class Listbox extends XulElement implements Paginated {
 
 	//-- ListModel dependent codes --//
 	/** Returns the list model associated with this listbox, or null
-	 * if this listbox is not associated with any list data model.
+	 * if this listbox is not associated with a {@link GroupsModel}
+	 * or not associated with any list data model.
+	 * @see #setModel(ListModel)
 	 */
 	public ListModel getModel() {
-		return _model;
+		return _model instanceof GroupsListModel ? null: _model;
 	}
 	/** Sets the list model associated with this listbox.
 	 * If a non-null model is assigned, no matter whether it is the same as
@@ -1486,12 +1488,16 @@ public class Listbox extends XulElement implements Paginated {
 	 * @param model the list model to associate, or null to dis-associate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
+	 * @see #getModel
+	 * @see #setModel(GroupsModel)
 	 */
 	public void setModel(ListModel model) {
 		if (model != null) {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
+					if (_model instanceof GroupsListModel)
+						getItems().clear();
 				} else {
 					getItems().clear(); //Bug 1807414
 					if (!inSelectMold())
@@ -1518,6 +1524,33 @@ public class Listbox extends XulElement implements Paginated {
 			if (!inSelectMold())
 				smartUpdate("z.model", null);
 		}
+	}
+	/** Returns the groups model associated with this list box, or null
+	 * if this list boxis associated with a {@link ListModel}
+	 * or not associated with any list data model.
+	 * @since 3.5.0
+	 * @see #setModel(GroupsModel)
+	 */
+	public GroupsModel getGroupsModel() {
+		return _model instanceof GroupsListModel ?
+			((GroupsListModel)_model).getGroupsModel(): null;
+	}
+	/** Sets the groups model associated with this grid.
+	 * If a non-null model is assigned, no matter whether it is the same as
+	 * the previous, it will always cause re-render.
+	 *
+	 * <p>The groups model is used to represent a list of data with
+	 * grouping.
+	 *
+	 * @param model the groups model to associate, or null to dis-associate
+	 * any previous model.
+	 * @exception UiException if failed to initialize with the model
+	 * @since 3.5.0
+	 * @see #setModel(ListModel)
+	 * @see #getGroupsModel()
+	 */
+	public void setModel(GroupsModel model) {
+		setModel((ListModel)(model != null ? new GroupsListModel(model): null));
 	}
 
 	/** Returns the renderer to render each item, or null if the default
@@ -1554,7 +1587,7 @@ public class Listbox extends XulElement implements Paginated {
 	 *
 	 * <p>Default: 7.
 	 *
-	 * <p>It is used only if live data ({@link #setModel} and
+	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
 	 * not paging ({@link #getPaging}.
 	 * 
 	 * <p>Note: if the "pre-load-size" attribute of component is specified, it's prior to the original value.(@since 3.0.4)
@@ -1566,7 +1599,7 @@ public class Listbox extends XulElement implements Paginated {
 	}
 	/** Sets the number of items to preload when receiving
 	 * the rendering request from the client.
-	 * <p>It is used only if live data ({@link #setModel} and
+	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
 	 * not paging ({@link #getPaging}.
 	 *
 	 * @param sz the number of items to preload. If zero, no preload
@@ -1610,18 +1643,19 @@ public class Listbox extends XulElement implements Paginated {
 				getItemAtIndex(newsz).detach(); //detach and remove
 		}
 
+		if (newsz - oldsz > 50 && !inPagingMold())
+			invalidate(); //performance is better
 		for (int j = oldsz; j < newsz; ++j) {
 			if (renderer == null)
 				renderer = getRealRenderer();
 			newUnloadedItem(renderer, j).setParent(this);
 		}
-		if (newsz - oldsz > 100) invalidate(); //performance is better
 	}
 	/** Creates an new and unloaded listitem. */
 	private final Listitem newUnloadedItem(ListitemRenderer renderer, int index) {
 		Listitem item = null;
-		if (_model instanceof GroupModel) {
-			final GroupModel model = (GroupModel) _model;
+		if (_model instanceof GroupsListModel) {
+			final GroupsListModel model = (GroupsListModel) _model;
 			int cnt = getGroupCount(), mcnt = model.getGroupCount(), gIndex = cnt == 0 ? cnt: cnt - 1;;
 			boolean has = model.hasGroupfoot(gIndex);
 			if (!hasGroup() && cnt < mcnt) {
@@ -1691,31 +1725,8 @@ public class Listbox extends XulElement implements Paginated {
 	}
 	/** Clears a listitem as if it is not loaded. */
 	private final void unloadItem(ListitemRenderer renderer, Listitem item) {
-		if (!(renderer instanceof ListitemRendererExt)
-		|| (((ListitemRendererExt)renderer).getControls() & 
-				ListitemRendererExt.DETACH_ON_UNLOAD) == 0) { //re-use (default)
-			final List cells = item.getChildren();
-			if (cells.isEmpty()) {
-				newUnloadedCell(renderer, item);
-			} else if (!(renderer instanceof ListitemRendererExt)
- 			|| (((ListitemRendererExt)renderer).getControls() & 
- 					ListitemRendererExt.RETAIN_CELLS_ON_UNLOAD) == 0) { //detach children (default) {
-				//detach and remove all but the first cell
-				for (Iterator it = cells.listIterator(1); it.hasNext();) {
-					it.next();
-					it.remove();
-				}
-
-				final Listcell listcell = (Listcell)cells.get(0);
-				listcell.getChildren().clear(); //another renderer might do diff
-				listcell.setLabel(null);
-				listcell.setImage(null);
-			}
-			item.setLoaded(false);
-		} else { //detach
-			item.getParent().insertBefore(newUnloadedItem(renderer, -1), item);
-			item.detach();
-		}
+		item.getParent().insertBefore(newUnloadedItem(renderer, -1), item);
+		item.detach(); //always detach
 	}
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.
@@ -1789,12 +1800,13 @@ public class Listbox extends XulElement implements Paginated {
 
 			ListitemRenderer renderer = null;
 			final Listitem before = min < oldsz ? getItemAtIndex(min): null;
+			if (max - min > 50 && !inPagingMold())
+				invalidate(); //performance is better
 			for (int j = min; j <= max; ++j) {
 				if (renderer == null)
 					renderer = getRealRenderer();
 				insertBefore(newUnloadedItem(renderer, j), before);
 			}
-			if (max - min > 100) invalidate(); //performance is better
 			done = true;
 			break;
 

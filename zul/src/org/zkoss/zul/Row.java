@@ -217,7 +217,7 @@ public class Row extends XulElement {
 	public Group getGroup() {
 		if (this instanceof Group) return (Group)this;
 		final Rows rows = (Rows) getParent();
-		return (rows != null) ? rows.getGroupAtIndex(getIndex()) : null;
+		return (rows != null) ? rows.getGroup(getIndex()) : null;
 	}
 	
 	/** Returns the HTML attributes for the child of the specified index.

@@ -22,7 +22,7 @@ import java.util.Comparator;
 
 /**
  * An extra interface that can be implemented with {@link ListModel}
- * to control the sorting of the listbox.
+ * to control the sorting of the data model.
  *
  * @author tomyeh
  */

@@ -118,7 +118,7 @@ public class Rows extends XulElement {
 		it.hasNext() && (to < 0 || j <= to); ++j) {
 			Object o = it.next();
 			if (o instanceof Group) {
-				int[] g = getGroupsInfoAtIndex(j + (infront ? -1 : 1), true);
+				int[] g = getGroupsInfoAt(j + (infront ? -1 : 1), true);
 				if (g != null) {
 					g[0] = j;
 					if (g[2] != -1) g[2] += (infront ? 1 : -1);
@@ -126,20 +126,20 @@ public class Rows extends XulElement {
 			}
 		}
 	}
-	/*package*/ Group getGroupAtIndex(int index) {
+	/*package*/ Group getGroup(int index) {
 		if (_groupsInfo.isEmpty()) return null;
-		final int[] g = getGroupsInfoAtIndex(index);
+		final int[] g = getGroupsInfoAt(index);
 		if (g != null) return (Group)getChildren().get(g[0]);
 		return null;
 	}
-	/*package*/ int[] getGroupsInfoAtIndex(int index) {
-		return getGroupsInfoAtIndex(index, false);
+	/*package*/ int[] getGroupsInfoAt(int index) {
+		return getGroupsInfoAt(index, false);
 	}
 	/**
 	 * Returns an int array that it has two length, one is an index of Group,
 	 * and the other is the number of items of Group(inclusive).
 	 */
-	/*package*/ int[] getGroupsInfoAtIndex(int index, boolean isGroup) {
+	/*package*/ int[] getGroupsInfoAt(int index, boolean isGroup) {
 		for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
 			int[] g = (int[])it.next();
 			if (isGroup) {
@@ -171,7 +171,7 @@ public class Rows extends XulElement {
 				g[2] = getChildren().size() - 1;		
 			}else{
 				final int idx = ((Row)refChild).getIndex();				
-				final int[] g = getGroupsInfoAtIndex(idx);
+				final int[] g = getGroupsInfoAt(idx);
 				if (g == null)
 					throw new UiException("Groupfoot cannot exist alone, you have to add a Group first");				
 				if (g[2] != -1)
@@ -218,7 +218,7 @@ public class Rows extends XulElement {
 				}
 			} else if (hasGroup()) {
 				int index = newItem.getIndex();
-				final int[] g = getGroupsInfoAtIndex(index);
+				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
 					g[1]++;
 					if (g[2] != -1) g[2]++;
@@ -260,7 +260,7 @@ public class Rows extends XulElement {
 					remove[2] = -1;
 				}
 			} else if (hasGroup()) {
-				final int[] g = getGroupsInfoAtIndex(index);
+				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
 					g[1]--;
 					if (g[2] != -1) g[2]--;
@@ -269,7 +269,7 @@ public class Rows extends XulElement {
 				else fixGroupIndex(index, -1, false);
 			}
 			if (child instanceof Groupfoot){
-				final int[] g = getGroupsInfoAtIndex(index);				
+				final int[] g = getGroupsInfoAt(index);				
 				g[2] = -1;
 			}
 			return true;

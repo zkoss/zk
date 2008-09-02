@@ -98,7 +98,7 @@ public class Group extends Row {
 	public int getItemCount() {
 		final Rows rows = (Rows)getParent();
 		if (rows != null) {
-			int[] g = rows.getGroupsInfoAtIndex(getIndex(), true);
+			int[] g = rows.getGroupsInfoAt(getIndex(), true);
 			if (g != null) {
 				if (g[2] == -1)
 					return g[1] - 1;
@@ -116,7 +116,7 @@ public class Group extends Row {
 	public int getGroupfootIndex(){
 		final Rows rows = (Rows)getParent();
 		if (rows != null) {
-			int[] g = rows.getGroupsInfoAtIndex(getIndex(), true);
+			int[] g = rows.getGroupsInfoAt(getIndex(), true);
 			if (g != null) return g[2];
 		}
 		return -1;

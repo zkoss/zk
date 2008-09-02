@@ -82,7 +82,7 @@ public class Listitem extends XulElement {
 		if (this instanceof Listgroup) return (Listgroup)this;
 		final Listbox lb = getListbox();
 		if (lb != null)
-			return lb.getListgroupAtIndex(getIndex());
+			return lb.getListgroupAt(getIndex());
 		return null;
 	}
 	protected String getRealSclass() {

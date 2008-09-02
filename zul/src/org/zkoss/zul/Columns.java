@@ -264,9 +264,9 @@ public class Columns extends HeadersElement {
 						if (_ref instanceof Column) {
 							Column col = ((Column) _ref);
 							final String dir = col.getSortDirection();
-							if ("ascending".equals(dir)) col.groupByField(false);
-							else if ("descending".equals(dir)) col.groupByField(true);
-							else if (!col.groupByField(true)) col.groupByField(false);
+							if ("ascending".equals(dir)) col.group(false);
+							else if ("descending".equals(dir)) col.group(true);
+							else if (!col.group(true)) col.group(false);
 						}
 					}
 				});

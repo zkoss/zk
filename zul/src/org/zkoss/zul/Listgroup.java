@@ -89,7 +89,7 @@ public class Listgroup extends Listitem {
 	public int getItemCount() {
 		final Listbox lb = getListbox();
 		if (lb != null) {
-			int[] g = lb.getGroupsInfoAtIndex(getIndex(), true);
+			int[] g = lb.getGroupsInfoAt(getIndex(), true);
 			if (g != null) {
 				if (g[2] == -1)
 					return g[1] - 1;
@@ -106,7 +106,7 @@ public class Listgroup extends Listitem {
 	public int getListgroupfootIndex(){
 		final Listbox lb = (Listbox)getParent();
 		if (lb != null) {			
-			int[] g = lb.getGroupsInfoAtIndex(getIndex(), true);
+			int[] g = lb.getGroupsInfoAt(getIndex(), true);
 			if (g != null) return g[2];
 		}
 		return -1;

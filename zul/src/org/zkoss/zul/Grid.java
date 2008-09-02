@@ -61,8 +61,9 @@ import org.zkoss.zul.event.PagingEvent;
  * typically contain content, while the other may provide size information.
  *
  * <p>Besides creating {@link Row} programmingly, you can assign
- * a data model (a {@link ListModel} instance) to a grid via
- * {@link #setModel} and then the grid will retrieve data
+ * a data model (a {@link ListModel} or {@link GroupsModel} instance) to a grid via
+ * {@link #setModel(ListModel)} or {@link #setModel(GroupsModel)}
+ * and then the grid will retrieve data
  * by calling {@link ListModel#getElementAt} when necessary.
  *
  * <p>Besides assign a list model, you could assign a renderer
@@ -505,10 +506,12 @@ public class Grid extends XulElement implements Paginated {
 	}
 	//-- ListModel dependent codes --//
 	/** Returns the list model associated with this grid, or null
-	 * if this grid is not associated with any list data model.
+	 * if this grid is associated with a {@link GroupsModel}
+	 * or not associated with any list data model.
+	 * @see #setModel(ListModel)
 	 */
 	public ListModel getModel() {
-		return _model;
+		return _model instanceof GroupsListModel ? null: _model;
 	}
 	/** Sets the list model associated with this grid.
 	 * If a non-null model is assigned, no matter whether it is the same as
@@ -517,13 +520,15 @@ public class Grid extends XulElement implements Paginated {
 	 * @param model the list model to associate, or null to dis-associate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
+	 * @see #getModel
+	 * @see #setModel(GroupsModel)
 	 */
 	public void setModel(ListModel model) {
 		if (model != null) {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
-					if (_model instanceof GroupModel || model instanceof GroupModel)
+					if (_model instanceof GroupsListModel)
 						_rows.getChildren().clear();
 				} else {
 					if (_rows != null) _rows.getChildren().clear(); //Bug 1807414
@@ -550,6 +555,33 @@ public class Grid extends XulElement implements Paginated {
 			if (_rows != null) _rows.getChildren().clear();
 			smartUpdate("z.model", null);
 		}
+	}
+	/** Returns the groups model associated with this grid, or null
+	 * if this grid is associated with a {@link ListModel}
+	 * or not associated with any list data model.
+	 * @since 3.5.0
+	 * @see #setModel(GroupsModel)
+	 */
+	public GroupsModel getGroupsModel() {
+		return _model instanceof GroupsListModel ?
+			((GroupsListModel)_model).getGroupsModel(): null;
+	}
+	/** Sets the groups model associated with this grid.
+	 * If a non-null model is assigned, no matter whether it is the same as
+	 * the previous, it will always cause re-render.
+	 *
+	 * <p>The groups model is used to represent a list of data with
+	 * grouping.
+	 *
+	 * @param model the groups model to associate, or null to dis-associate
+	 * any previous model.
+	 * @exception UiException if failed to initialize with the model
+	 * @since 3.5.0
+	 * @see #setModel(ListModel)
+	 * @see #getGroupsModel()
+	 */
+	public void setModel(GroupsModel model) {
+		setModel((ListModel)(model != null ? new GroupsListModel(model): null));
 	}
 	private void initDataListener() {
 		if (_dataListener == null)
@@ -594,7 +626,7 @@ public class Grid extends XulElement implements Paginated {
 	 *
 	 * <p>Default: 7.
 	 *
-	 * <p>It is used only if live data ({@link #setModel} and
+	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
 	 * not paging ({@link #getPaging}.
 	 *
 	 * <p>Note: if the "pre-load-size" attribute of component is specified, it's prior to the original value.(@since 3.0.4)
@@ -606,7 +638,7 @@ public class Grid extends XulElement implements Paginated {
 	}
 	/** Sets the number of rows to preload when receiving
 	 * the rendering request from the client.
-	 * <p>It is used only if live data ({@link #setModel} and
+	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
 	 * not paging ({@link #getPaging}.
 	 *
 	 * @param sz the number of rows to preload. If zero, no preload
@@ -696,18 +728,19 @@ public class Grid extends XulElement implements Paginated {
 		if (_rows == null)
 			new Rows().setParent(this);
 
+		if (newsz - oldsz > 50 && !inPagingMold())
+			invalidate(); //performance is better
 		for (int j = oldsz; j < newsz; ++j) {
 			if (renderer == null)
 				renderer = getRealRenderer();
 			newUnloadedRow(renderer, j).setParent(_rows);
 		}
-		if (newsz - oldsz > 100) invalidate(); //performance is better
 	}
 	/** Creates an new and unloaded row. */
 	private final Row newUnloadedRow(RowRenderer renderer, int index) {
 		Row row = null;
-		if (_model instanceof GroupModel) {
-			final GroupModel model = (GroupModel) _model;
+		if (_model instanceof GroupsListModel) {
+			final GroupsListModel model = (GroupsListModel) _model;
 			int rcnt =  _rows.getGroupCount(), mcnt = model.getGroupCount(), gIndex = rcnt == 0 ? rcnt: rcnt - 1;
 			boolean has = model.hasGroupfoot(gIndex);
 			if (!_rows.hasGroup() && rcnt < mcnt) {
@@ -785,34 +818,8 @@ public class Grid extends XulElement implements Paginated {
 	}
 	/** Clears a row as if it is not loaded. */
 	private final void unloadRow(RowRenderer renderer, Row row) {
-		if (!(renderer instanceof RowRendererExt)
-		|| (((RowRendererExt)renderer).getControls() & 
-				RowRendererExt.DETACH_ON_UNLOAD) == 0) { //re-use (default)
-			final List cells = row.getChildren();
-			boolean bNewCell = cells.isEmpty();
-			if (!bNewCell) {
-				//detach and remove all but the first cell
-				for (Iterator it = cells.listIterator(1); it.hasNext();) {
-					it.next();
-					it.remove();
-				}
-
-				final Component cell = (Component)cells.get(0);
-				bNewCell = !(cell instanceof Label);
-				if (bNewCell) {
-					cell.detach();
-				} else {
-					((Label)cell).setValue("");
-				}
-			}
-
-			if (bNewCell)
-				newUnloadedCell(renderer, row);
-			row.setLoaded(false);
-		} else { //detach
-			_rows.insertBefore(newUnloadedRow(renderer, -1), row);
-			row.detach();
-		}
+		_rows.insertBefore(newUnloadedRow(renderer, -1), row);
+		row.detach(); //always detach
 	}
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.
@@ -880,12 +887,13 @@ public class Grid extends XulElement implements Paginated {
 			RowRenderer renderer = null;
 			final Row before =
 				min < oldsz ? (Row)_rows.getChildren().get(min): null;
+			if (max - min > 50 && !inPagingMold())
+				invalidate(); //performance is better
 			for (int j = min; j <= max; ++j) {
 				if (renderer == null)
 					renderer = getRealRenderer();
 				_rows.insertBefore(newUnloadedRow(renderer, j), before);
 			}
-			if (max - min > 100) invalidate(); //performance is better
 			done = true;
 			break;
 
@@ -905,9 +913,6 @@ public class Grid extends XulElement implements Paginated {
 			}
 
 			done = true;
-			break;
-		case ListDataEvent.GROUP_REORDERED:
-			if (_rows != null) _rows.getChildren().clear();
 			break;
 		}
 

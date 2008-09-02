@@ -42,24 +42,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<separator bar="true"/>
 		<listbox width="250px">
 			<listhead sizable="true">
-				<listheader label="name" sort="auto"/>
-				<listheader label="gender" sort="auto"/>
+				<listheader label="Name" sort="auto"/>
+				<listheader label="Gender" sort="auto"/>
 			</listhead>
 			<listitem>
 				<listcell label="Mary"/>
-				<listcell label="FEMALE"/>
+				<listcell label="female"/>
 			</listitem>
 			<listitem>
 				<listcell label="John"/>
-				<listcell label="MALE"/>
+				<listcell label="male"/>
 			</listitem>
 			<listitem>
 				<listcell label="Jane"/>
-				<listcell label="FEMALE"/>
+				<listcell label="female"/>
 			</listitem>
 			<listitem>
 				<listcell label="Henry"/>
-				<listcell label="MALE"/>
+				<listcell label="male"/>
 			</listitem>
 		</listbox>		
 	</vbox>

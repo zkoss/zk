@@ -32,8 +32,6 @@ public class ListDataEvent {
 	public static final int INTERVAL_ADDED = 1;
     /** Identifies the removal of one or more contiguous items from the list. */   
 	public static final int INTERVAL_REMOVED = 2;
-    /** Identifies the group reorders in the lists. (since 3.5.0) */   
-	public static final int GROUP_REORDERED = 3;
 
 	private final ListModel _model;
 	private final int _type, _index0, _index1;
@@ -41,7 +39,7 @@ public class ListDataEvent {
 	/** Contructor.
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
-	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}, {@link #GROUP_REORDERED} (since 3.5.0).
+	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}.
 	 * @param index0 the lower index of the change range.
 	 * For simple element, index0 is the same as index1.
 	 * -1 means the first element (the same as 0).
@@ -50,7 +48,7 @@ public class ListDataEvent {
 	 */
 	public ListDataEvent(ListModel model, int type, int index0, int index1) {
 		if (model == null)
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		_model = model;
 		_type = type;
 		_index0 = index0;
@@ -62,7 +60,7 @@ public class ListDataEvent {
 		return _model;
 	}
 	/** Returns the event type. One of {@link #CONTENTS_CHANGED},
-	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}, or {@link #GROUP_REORDERED} (since 3.5.0).
+	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}.
 	 */
 	public int getType() {
 		return _type;
@@ -84,6 +82,6 @@ public class ListDataEvent {
 
 	//Object//
 	public String toString() {
-		return "[Event type=" + _type +", index="+_index0+", "+_index1+']';
+		return "[ListDataEvent type=" + _type +", index="+_index0+", "+_index1+']';
 	}
 }

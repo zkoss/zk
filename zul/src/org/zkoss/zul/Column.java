@@ -228,9 +228,15 @@ public class Column extends HeaderElement {
 		try {
 			final ListModel model = grid.getModel();
 			if (model != null) { //live data
-				if (!(model instanceof ListModelExt))
-					throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
-				((ListModelExt)model).sort(cmpr, ascending);
+				if (model instanceof GroupsListModel) {
+					((GroupsListModel)model).sort(cmpr, ascending,
+						grid.getColumns().getChildren().indexOf(this));
+				} else {
+					if (!(model instanceof ListModelExt))
+						throw new UiException("ListModelExt must be implemented in "+model.getClass());
+					((ListModelExt)model).sort(cmpr, ascending);
+					//CONSIDER: provide index for sort
+				}
 			} else { //not live data
 				final Rows rows = grid.getRows();
 				if (rows.hasGroup())
@@ -274,7 +280,8 @@ public class Column extends HeaderElement {
 		return sort(ascending);
 	}
 	/**
-	 * Groups the rows ({@link Row}) based on {@link #getSortAscending}.
+	 * Groups and sorts the rows ({@link Row}) based on
+	 * {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
 	 * 
@@ -284,7 +291,7 @@ public class Column extends HeaderElement {
 	 * @return whether the rows are grouped.
 	 * @since 3.5.0
 	 */
-	public boolean groupByField(boolean ascending) {
+	public boolean group(boolean ascending) {
 		final String dir = getSortDirection();		
 		if (ascending) {
 			if ("ascending".equals(dir)) return false;
@@ -304,9 +311,9 @@ public class Column extends HeaderElement {
 			final ListModel model = grid.getModel();
 			int index = grid.getColumns().getChildren().indexOf(this);
 			if (model != null) { //live data
-				if (!(model instanceof GroupModel))
-					throw new UiException("GroupModel must be implemented in "+model.getClass().getName());
-				((GroupModel)model).groupByField(cmpr, ascending, index);
+				if (!(model instanceof GroupsListModel))
+					throw new UiException("GroupsModel must be implemented in "+model.getClass().getName());
+				((GroupsListModel)model).group(cmpr, ascending, index);
 			} else { // not live data
 				final Rows rows = grid.getRows();		
 				if (rows.hasGroup()) {
