@@ -435,13 +435,6 @@ zkLayoutRegion2 = {
 		if (!colled.id.endsWith("!collapsed") || real._isSilde) return;
 		real._isSilde = true;
 		var pos = getZKAttr(real, "pos");
-		
-		/**if (pos == "east" || pos == "west") {
-			real.style.height = zk.revisedSize(real, colled.offsetHeight, true);
-		} else {
-			real.style.width = zk.revisedSize(real, colled.offsetWidth);
-		}*/
-		
 		real.style.visibilty = "hidden";
 		real.style.display = "";
 		
