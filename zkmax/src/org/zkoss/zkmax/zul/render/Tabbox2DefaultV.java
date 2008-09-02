@@ -46,8 +46,8 @@ public class Tabbox2DefaultV implements ComponentRenderer {
 				wh.write(" style=\"height:"+self.getHeight()+";\"");
 			}
 			wh.writeln(" z.type=\"zul.tab2.Tabbox2\">");
-			wh.writeln(tabs);
-			wh.writeln(self.getTabpanels());
+			wh.write(tabs);
+			wh.write(self.getTabpanels());
 			wh.writeln("<div class=\"z-clear\" ></div>");
 		wh.writeln("</div>");		
 	}

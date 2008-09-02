@@ -1,14 +1,10 @@
 <%--
-tabpanel.dsp
+tabpanel2.dsp
 
 {{IS_NOTE
 	Purpose:
 		
-	Description:
-		Border cannot be specified in <tr>, so we cannot specify style
-		in <style-class> in zk-xul-html.xml.
-		To customize it, user could specify a class for this tabpanel
-		and then, in CSS, specify tr.yourClass td.tabpanel {...}
+	Description:		
 
 	History:
 		Tue Jul 12 10:58:38     2005, Created by tomyeh

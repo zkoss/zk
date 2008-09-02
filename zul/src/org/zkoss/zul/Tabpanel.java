@@ -96,45 +96,18 @@ public class Tabpanel extends XulElement {
 	}
 	/** Returns the style class.
 	 *
-	 * <p>The default style class, i.e., the style class is not defined (i.e.,
-	 * {@link #setSclass} is not called or called with null or empty):
-	 * <table border="1" cellspacing="0">
-	 * <tr>
-	 * <td>sclass</td><td>tabbox's mold</td>
-	 * <td>tabbox's orient {@link Tabbox#getOrient}</td>
-	 * </tr>
-	 * <tr><td>tabpanel</td><td>default</td><td>horizontal</td></tr>
-	 * <tr><td>tabpanel-<em>something</em></td><td><em>something</em></td><td>horizontal</td></tr>
-	 * <tr><td>vtabpanel</td><td>default</td><td>vertical</td></tr>
-	 * <tr><td>vtabpanel-<em>something</em></td><td><em>something</em></td><td>vertical</td></tr>
-	 * </table>
-	 *
-	 * <p>Note: prior to 3.0.3, the default style class doesn't depend on
-	 * the tabbox's orientation.
+	 * @since 3.5.0
 	 */
-	public String getSclass() {
-		String mold = super.getMold();
-		String scls = null;
-		if (mold.equals("v30")){
-			scls=super.getSclass();
-			if (scls != null) return scls;
-			final Tabbox tabbox = getTabbox();
-			final boolean vert = tabbox != null && tabbox.isVertical();
-			mold = tabbox != null ? tabbox.getMold(): null;		
-			return mold == null || "v30".equals(mold) ?
-				vert ? "vtabpanel": "tabpanel":
-				(vert ? "vtabpanel-": "tabpanel-")+mold;			
-		}else{
-			scls=super.getMoldSclass();	
-			if (scls != null) return scls;
-			final Tabbox tabbox = getTabbox();
-			final boolean vert = tabbox != null && tabbox.isVertical();
-			mold = tabbox != null ? tabbox.getMold(): null;		
-			return mold == null || "default".equals(mold) ?
-				vert ? "vtabpanel": "tabpanel":
-				(vert ? "vtabpanel-": "tabpanel-")+mold;
-		}
-		
+	public String getMoldSclass(){
+		String mold = super.getMold();							
+		String scls = super.getMoldSclass();
+		final Tabbox tabbox = getTabbox();
+		if (scls != null) return scls;
+		final boolean vert = tabbox != null && tabbox.isVertical();
+		mold = tabbox != null ? tabbox.getMold(): null;		
+		return mold == null || "default".equals(mold) ?
+			vert ? "z-vtabpanel": "z-tabpanel":
+			(vert ? "z-vtabpanel-": "z-tabpanel-")+mold;
 	}
 
 	//-- Component --//

@@ -33,4 +33,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<%-- Button --%>
 	<div id="${self.uuid}!up" class="${c:cat3(look,'scroll','up')}" ></div>
 	<div id="${self.uuid}!down" class="${c:cat3(look,'scroll','down')}" ></div>		
-</div><div id="${self.uuid}!line" class="${c:cat(look,'space')}" ></div>
+</div>
+<div id="${self.uuid}!line" class="${c:cat(look,'space')}" ></div>

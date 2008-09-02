@@ -225,8 +225,7 @@ public class Tab extends LabelImageElement {
 	 * 1.2) if disabled ,appends "-disd" to Class Name <br/> 
 	 * 1.3) if selected, appends "-seld" to Class Name <br/>
 	 */
-	public String getMoldSclass(){
-		final String mold = super.getMold();		
+	public String getMoldSclass(){				
 		String scls = super.getMoldSclass();
 		if (scls == null)
 			scls = "z-tab";

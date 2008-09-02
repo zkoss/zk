@@ -48,22 +48,19 @@ public class Tabs2DefaultV implements ComponentRenderer {
 			.writeln(">");
 			wh.write("<ul id=\""+self.getUuid()+"!ul\"")
 				.write(" class=\""+look+"si\"")
-				.writeln(">");			
+				.write(">");			
 				wh.writeChildren(self);				
 				wh.write("<li id=\""+self.getUuid()+"!edge\"")
 					.write(" class=\""+look+"edge\"")
 					.writeln("</li>");
-			wh.writeln("</ul>");
-		wh.writeln("</div>");
-		wh.writeln("<div id=\""+self.getUuid()+"!up\"")
-			.write(" class=\""+look+"scrollup\"")
-			.writeln(" > </div>");
-		wh.writeln("<div id=\""+self.getUuid()+"!down\"")
-			.write(" class=\""+look+"scrolldown\"")
-			.writeln(" > </div>");
-		wh.writeln("</div>");
+			wh.write("</ul>");
+		wh.write("</div>");
+		wh.write("<div id=\""+self.getUuid()+"!up\"")
+			.write(" class=\""+look+"scrollup\" > </div>");
+		wh.write("<div id=\""+self.getUuid()+"!down\"")
+			.write(" class=\""+look+"scrolldown\" > </div>");
+		wh.write("</div>");
 		wh.write("<div id=\""+self.getUuid()+"!line\"")
-			.write(" class=\""+look+"space\" >")
-			.writeln("</div>");			
+			.write(" class=\""+look+"space\" ></div>");			
 	}
 }

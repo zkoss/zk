@@ -416,8 +416,7 @@
 }
 .z-tabbox-v-si .z-tab .z-tabbox-v-text{
 	color:#416AA3;
-	cursor:pointer;
-	_padding:0 4px 0 5px;
+	cursor:pointer;	
 	font-size-adjust:none;
 }
 .z-tabbox-v-si .z-tab-seld .z-tabbox-v-text{
@@ -425,7 +424,7 @@
 	cursor:default;
 	font-weight:bold;
 	white-space:nowrap;
-	_padding:0 4px 0 5px;
+	
 }
 .z-tabbox-v-space{
 	float:left;
@@ -435,6 +434,8 @@
 	font-size:1px;
 	width:2px;
 	position:relative;
+	<%-- DO NOT Delete this line--%>	
+	
 }
 .z-tabbox-scrolling .z-tabbox-v-tabs{
 }
@@ -473,17 +474,17 @@
 	background-position:1px -18px;
 }
 <%-- Tabpanels Tabpanel --%>
-div.tabpanel, div.tabpanel-accordion {<%-- horz, accd: tabpanel --%>
+div.z-tabpanel, div.z-tabpanel-accordion {<%-- horz, accd: tabpanel --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
-div.vtabpanels {<%-- vert tabpanels --%>
+div.z-vtabpanels {<%-- vert tabpanels --%>
 	overflow:hidden;
 	border-top: 1px solid #8DB2E3; 
 	border-right: 1px solid #8DB2E3; 
 	border-bottom: 1px solid #8DB2E3;
 }
-div.vtabpanel {<%-- vert tabpanel --%>	
+div.z-vtabpanel {<%-- vert tabpanel --%>	
 	padding: 5px;
 }
 
@@ -526,7 +527,7 @@ div.vtabpanel {<%-- vert tabpanel --%>
 	padding-right:30px;
 }
 
-.z-tabbox-accd .tabpanel-accordion{
+.z-tabbox-accd .z-tabpanel-accordion{
 	border-bottom:1px solid #CCCCCC;
 	border-left:1px solid #CCCCCC;
 	border-right:1px solid #CCCCCC;
@@ -597,7 +598,7 @@ div.vtabpanel {<%-- vert tabpanel --%>
 }
 
 <%-- ZK Tabbox accordion-lite --%>
-.tabpanels-accordion-lite{
+.z-tabpanels-accordion-lite{
 	border-top:1px solid #99BBE8;
 	border-right:1px solid #99BBE8;
 	border-left:1px solid #99BBE8;
@@ -642,7 +643,7 @@ div.vtabpanel {<%-- vert tabpanel --%>
 	text-decoration:none;
 	padding-right:30px;
 }
-.z-tabbox-accdlite .tabpanel-accordion-lite{		
+.z-tabbox-accdlite .z-tabpanel-accordion-lite{		
 	border-bottom:1px solid #99BBE8;
 	padding:5px;
 	zoom : 1;
