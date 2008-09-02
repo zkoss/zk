@@ -53,7 +53,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				</menu>
 			</menupopup>
 		</menu>
-		<menu src="/img/m2.gif"/>
+		<menu src="/img/m2.gif">
+			<menupopup>
+				<menuitem label="Index" onClick="alert(self.label)"/>
+			</menupopup>
+		</menu>
 	</menubar>
 </window>
 			]]></attribute>

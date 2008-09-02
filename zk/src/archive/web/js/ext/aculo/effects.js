@@ -686,7 +686,7 @@ zEffect.DropOut = function(element) {
         afterFinishInternal: function(effect) {
           effect.effects[0].element.hide().undoPositioned().setStyle(oldStyle);
         } 
-      }, arguments[2] || {}));
+      }, arguments[1] || {}));
 }
 zEffect.SlideOut = function(element, anchor) {
   anchor = anchor || 't';

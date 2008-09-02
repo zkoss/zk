@@ -35,18 +35,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <style>
 .ctl {
 border: 1px outset #777; background:#ddeedd;
-margin: 2px; margin-right: 10px; padding-left: 2px; padding-right: 2px; 
+margin: 2px; margin-right: 10px; padding-left: 2px; padding-right: 2px;
+display: block;
 }
 </style>
 <hbox>
-<div sclass="ctl" 
-action="onmouseover: anima.slideDown(#{t}); onmouseout: anima.slideUp(#{t})">Slide</div>
-<div  sclass="ctl"
-action="onmouseover: anima.appear(#{t}); onmouseout: anima.fade(#{t})">Fade</div>
-<div sclass="ctl"
-action="onmouseover: anima.appear(#{t}); onmouseout: anima.puff(#{t})">Puff</div>
-<div sclass="ctl"
-action="onmouseover: anima.appear(#{t}); onmouseout: anima.dropOut(#{t})">Drop Out</div>
+<label sclass="ctl" 
+action="onmouseover: anima.slideDown(#{t}); onmouseout: anima.slideUp(#{t})" value="Slide"/>
+<label  sclass="ctl"
+action="onmouseover: anima.appear(#{t}); onmouseout: anima.fade(#{t})" value="Fade"/>
+<label sclass="ctl"
+action="onmouseover: anima.appear(#{t}); onmouseout: anima.puff(#{t})" value="Puff"/>
+<label sclass="ctl"
+action="onmouseover: anima.appear(#{t}); onmouseout: anima.dropOut(#{t})" value="Drop Out"/>
 <button label="Toggle Visible" onClick="win.visible = !win.visible"/>
 </hbox>
 <window id="win" border="normal" width="200px" position="center" mode="overlapped"
@@ -64,7 +65,6 @@ action="onshow:anima.moveDown(#{self});onhide:anima.fade(#{self})" visible="fals
 	Description <textbox/>
 </div>
 </window>
-		
 			]]></attribute>
 		</textbox>
 	</groupbox>
