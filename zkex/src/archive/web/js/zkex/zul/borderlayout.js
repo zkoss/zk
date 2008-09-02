@@ -348,7 +348,6 @@ zkLayoutRegion2 = {
 			zk.on(cmp, "afterSlideOut", this.onAfterSlideOut);
 			zk.on(cmp, "beforeSlideOut", this.onBeforeSlideOut);
 			zk.on(cmp, "afterSlideIn", this.onAfterSlideIn);
-			zk.on(colled, "afterSlideIn", this.onAfterSlideIn);
 			zk.on(cmp, "afterSlideDown", this.onColledAfterSlideDown);
 			zk.on(cmp, "afterSlideUp", this.onColledAfterSlideUp);		
 			
@@ -403,7 +402,6 @@ zkLayoutRegion2 = {
 	},
 	// a callback function after the collapsed region slides down
 	onColledAfterSlideDown: function (cmp) {
-		//this.initAutoHide();
 		if (!cmp._slideIn)
 			cmp._slideIn = function (evt) {
 				var target = zkau.evtel(evt);
@@ -421,7 +419,6 @@ zkLayoutRegion2 = {
 	},
 	// a callback function after the collapsed region slides up
 	onColledAfterSlideUp: function (cmp) {
-		//this.initAutoHide();
 		cmp._isSilde = false;
 		cmp.style.left = cmp._original[0];
 		cmp.style.top = cmp._original[1];
@@ -609,7 +606,6 @@ zkLayoutRegion2 = {
 			zk.un(cmp, "afterSlideOut", this.onAfterSlideOut);
 			zk.un(cmp, "beforeSlideOut", this.onBeforeSlideOut);
 			zk.un(cmp, "afterSlideIn", this.onAfterSlideIn);
-			zk.un(colled, "afterSlideIn", this.onAfterSlideIn);
 			zk.un(cmp, "afterSlideDown", this.onColledAfterSlideDown);
 			zk.un(cmp, "afterSlideUp", this.onColledAfterSlideUp);
 			cmp._slideIn = null;
