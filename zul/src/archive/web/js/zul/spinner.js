@@ -166,7 +166,7 @@ zkSpinner._btnDown= function(evt){
 	zkSpinner.checkValue(cmp);
 	
 
-	var btn = zk.firstChild($e(cmp.id + "!btn"), "IMG"),		
+	var btn = zk.opera ? $e(cmp.id + "!btn") : zk.firstChild($e(cmp.id + "!btn"), "IMG"),		
 		ofs = zk.revisedOffset(btn);
 	if ((Event.pointerY(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
 		zkSpinner._increase(cmp,true);
