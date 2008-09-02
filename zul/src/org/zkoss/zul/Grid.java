@@ -505,13 +505,37 @@ public class Grid extends XulElement implements Paginated {
 		return _innerBottom;
 	}
 	//-- ListModel dependent codes --//
+	/** Returns the model associated with this grid, or null
+	 * if this grid is not associated with any list data model.
+	 *
+	 * <p>Note: if {@link setModel(GroupsModel)} was called with a
+	 * groups model, this method returns an instance of {@link ListModel}
+	 * encapsulating it.
+	 *
+	 * @see #setModel(ListModel)
+	 * @see #setModel(GroupsModel)
+	 */
+	public ListModel getModel() {
+		return _model;
+	}
 	/** Returns the list model associated with this grid, or null
 	 * if this grid is associated with a {@link GroupsModel}
 	 * or not associated with any list data model.
 	 * @see #setModel(ListModel)
+	 * @since 3.5.0
 	 */
-	public ListModel getModel() {
+	public ListModel getListModel() {
 		return _model instanceof GroupsListModel ? null: _model;
+	}
+	/** Returns the groups model associated with this grid, or null
+	 * if this grid is associated with a {@link ListModel}
+	 * or not associated with any list data model.
+	 * @since 3.5.0
+	 * @see #setModel(GroupsModel)
+	 */
+	public GroupsModel getGroupsModel() {
+		return _model instanceof GroupsListModel ?
+			((GroupsListModel)_model).getGroupsModel(): null;
 	}
 	/** Sets the list model associated with this grid.
 	 * If a non-null model is assigned, no matter whether it is the same as
@@ -520,7 +544,7 @@ public class Grid extends XulElement implements Paginated {
 	 * @param model the list model to associate, or null to dis-associate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
-	 * @see #getModel
+	 * @see #getListModel
 	 * @see #setModel(GroupsModel)
 	 */
 	public void setModel(ListModel model) {
@@ -555,16 +579,6 @@ public class Grid extends XulElement implements Paginated {
 			if (_rows != null) _rows.getChildren().clear();
 			smartUpdate("z.model", null);
 		}
-	}
-	/** Returns the groups model associated with this grid, or null
-	 * if this grid is associated with a {@link ListModel}
-	 * or not associated with any list data model.
-	 * @since 3.5.0
-	 * @see #setModel(GroupsModel)
-	 */
-	public GroupsModel getGroupsModel() {
-		return _model instanceof GroupsListModel ?
-			((GroupsListModel)_model).getGroupsModel(): null;
 	}
 	/** Sets the groups model associated with this grid.
 	 * If a non-null model is assigned, no matter whether it is the same as

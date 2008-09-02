@@ -230,7 +230,7 @@ public class Listbox extends XulElement implements Paginated {
 		}
 	}
 	/**
-	 * Returns the outline of grid whether is fixed layout.
+	 * Returns the outline of list box whether is fixed layout.
 	 * <p>Default: false.
 	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
 	 * @since 3.0.4
@@ -1473,13 +1473,37 @@ public class Listbox extends XulElement implements Paginated {
 	}
 
 	//-- ListModel dependent codes --//
-	/** Returns the list model associated with this listbox, or null
-	 * if this listbox is not associated with a {@link GroupsModel}
-	 * or not associated with any list data model.
+	/** Returns the model associated with this list box, or null
+	 * if this list box is not associated with any list data model.
+	 *
+	 * <p>Note: if {@link setModel(GroupsModel)} was called with a
+	 * groups model, this method returns an instance of {@link ListModel}
+	 * encapsulating it.
+	 *
 	 * @see #setModel(ListModel)
+	 * @see #setModel(GroupsModel)
 	 */
 	public ListModel getModel() {
+		return _model;
+	}
+	/** Returns the list model associated with this list box, or null
+	 * if this list box is associated with a {@link GroupsModel}
+	 * or not associated with any list data model.
+	 * @since 3.5.0
+	 * @see #setModel(ListModel)
+	 */
+	public ListModel getListModel() {
 		return _model instanceof GroupsListModel ? null: _model;
+	}
+	/** Returns the groups model associated with this list box, or null
+	 * if this list box is associated with a {@link ListModel}
+	 * or not associated with any list data model.
+	 * @since 3.5.0
+	 * @see #setModel(GroupsModel)
+	 */
+	public GroupsModel getGroupsModel() {
+		return _model instanceof GroupsListModel ?
+			((GroupsListModel)_model).getGroupsModel(): null;
 	}
 	/** Sets the list model associated with this listbox.
 	 * If a non-null model is assigned, no matter whether it is the same as
@@ -1488,7 +1512,7 @@ public class Listbox extends XulElement implements Paginated {
 	 * @param model the list model to associate, or null to dis-associate
 	 * any previous model.
 	 * @exception UiException if failed to initialize with the model
-	 * @see #getModel
+	 * @see #getListModel
 	 * @see #setModel(GroupsModel)
 	 */
 	public void setModel(ListModel model) {
@@ -1525,17 +1549,7 @@ public class Listbox extends XulElement implements Paginated {
 				smartUpdate("z.model", null);
 		}
 	}
-	/** Returns the groups model associated with this list box, or null
-	 * if this list boxis associated with a {@link ListModel}
-	 * or not associated with any list data model.
-	 * @since 3.5.0
-	 * @see #setModel(GroupsModel)
-	 */
-	public GroupsModel getGroupsModel() {
-		return _model instanceof GroupsListModel ?
-			((GroupsListModel)_model).getGroupsModel(): null;
-	}
-	/** Sets the groups model associated with this grid.
+	/** Sets the groups model associated with this list box.
 	 * If a non-null model is assigned, no matter whether it is the same as
 	 * the previous, it will always cause re-render.
 	 *

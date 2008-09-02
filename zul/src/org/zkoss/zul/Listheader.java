@@ -293,9 +293,14 @@ public class Listheader extends HeaderElement {
 		try {
 			final ListModel model = box.getModel();
 			if (model != null) { //live data
-				if (!(model instanceof ListModelExt))
-					throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
-				((ListModelExt)model).sort(cmpr, ascending);
+				if (model instanceof GroupsListModel) {
+					((GroupsListModel)model).sort(cmpr, ascending,
+						box.getListhead().getChildren().indexOf(this));
+				} else {
+					if (!(model instanceof ListModelExt))
+						throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
+					((ListModelExt)model).sort(cmpr, ascending);
+				}
 			} else { //not live data
 				if (getListbox().hasGroup())
 					for (Iterator it = getListbox().getGroups().iterator(); it.hasNext();) {
