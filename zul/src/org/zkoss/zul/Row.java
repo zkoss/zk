@@ -415,10 +415,9 @@ public class Row extends XulElement {
 		.append("!cell\"").append(" class=\"").append(getMoldSclass())
 		.append("-cnt");
 		if (grid.isFixedLayout())
-			sb.append(" z-overflow-hidden\">");
+			sb.append(" z-overflow-hidden");
+		sb.append("\">");
 		
-		if (this instanceof Group && this.getChildren().indexOf(child) == 0)
-			sb.append(((Group)this).getImgTag());
 		if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
 		else out.insert(0, sb.toString());
 		out.append("</div></td>");
