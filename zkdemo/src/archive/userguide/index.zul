@@ -97,7 +97,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="mijasperreport" label="JasperReports" value="/userguide/misc/jasperreport.zul"/>
 						<treeitem id="csa" label="Client side action" value="/userguide/misc/action.zul"/>
 						<treeitem id="anima" label="Animations" value="/userguide/misc/anima.zul"/>
-						<treeitem id="theme" label="Change Theme" value="/userguide/misc/changetheme.zul"/>
 						<treeitem id="captcha" label="Captcha" value="/userguide/misc/captcha.zul"/>
 						<treeitem id="mi1" label="Timer" value="/userguide/misc/timer.zul"/>
 						<treeitem id="miaudio" label="Audio" value="/userguide/misc/audio.zul"/>

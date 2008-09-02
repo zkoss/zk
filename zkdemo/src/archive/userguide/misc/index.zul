@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window xmlns:h="http://www.w3.org/1999/xhtml">
+<window use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
 	<zscript><![CDATA[
 		void doSelect(String s) {
 			Tree tree = Path.getComponent("//userGuide/toc");
@@ -41,7 +41,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="JasperReports" onClick="doSelect(&quot;mijasperreport&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Client side action" onClick="doSelect(&quot;csa&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Animation" onClick="doSelect(&quot;anima&quot;)"/></h:li>
-		<h:li><toolbarbutton label="Change Theme" onClick="doSelect(&quot;theme&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Captcha" onClick="doSelect(&quot;captcha&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Timer" onClick="doSelect(&quot;mi1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Audio" onClick="doSelect(&quot;miaudio&quot;)"/></h:li>

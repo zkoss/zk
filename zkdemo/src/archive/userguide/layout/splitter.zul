@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
 	<html><![CDATA[
 <h4>Splitters</h4>
 <p>A splitter appears before or after an element inside a hbox or vbox.

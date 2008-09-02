@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
 	<html><![CDATA[
 			<h4>Trees</h4>
 			<p>tree provides the hierarchy structure that user can browser and pick an option from. Tree can be opened or closed by clicking on the "node".</p>

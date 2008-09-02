@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
 	<html><![CDATA[
 		<h4>Messagebox</h4>
 		<p>A frequently used modal window. Messagebox is used to show some messages to 

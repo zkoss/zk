@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window xmlns:h="http://www.w3.org/1999/xhtml">
+<window use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
 	<zscript><![CDATA[
 		void doSelect(String s) {
 			Tree tree = Path.getComponent("//userGuide/toc");

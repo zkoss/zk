@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
 	<html><![CDATA[
 		<h4>Sliders</h4>
 		<p>slider is the kind of control to change an index number within a range.</p>

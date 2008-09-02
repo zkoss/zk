@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
 	<html><![CDATA[
 <h4>Drag and Drop</h4>
 <p>Demostrates drag-and-drop by allowing user to reorder the list

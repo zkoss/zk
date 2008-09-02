@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
 	<html><![CDATA[
 <h4>Tooltip and Popup Menu</h4>
 <p>Demostrates how to use customized tooltip and popup menu.</p>

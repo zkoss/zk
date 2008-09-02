@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" xmlns:h="http://www.w3.org/1999/xhtml">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
 	<html><![CDATA[
 		<h4>Event listener</h4>
 		<p>Event xyz is passed to the Event listener onXyz. For example, for a "button" component, "click" event is passed to "onClick" event listener when an end user click that button.</p>

@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
 	<html><![CDATA[
 	<h4>Demo of FCKeditor</h4>
 	<p><a href="http://www.fckeditor.net">FCKeditor</a> is a popular HTML on-line text edit developed by Frederico Caldeira Knabben.</p>
