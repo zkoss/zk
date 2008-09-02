@@ -808,8 +808,9 @@ public class Parser {
 						ifc = attval;
 					} else {
 						final String attpref = attrns != null ? attrns.getPrefix(): null;
-						if (attpref == null || (!"xmlns".equals(attpref)
-						&& !"xml".equals(attpref)))
+						if (!"xmlns".equals(attnm)
+						&& (attpref == null || (!"xmlns".equals(attpref)
+						&& !"xml".equals(attpref))))
 							warnWrongZkAttr(attr);
 					}
 				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
