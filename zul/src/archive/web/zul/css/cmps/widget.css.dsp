@@ -1,10 +1,6 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-<c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
-<c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
-<c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
-
 .z-textbox-disd, .z-decimalbox-disd, .z-intbox-disd, .z-longbox-disd, .z-doublebox-disd {
 	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
 }

@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 <c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
+<c:set var="fontSizeMS" value="11px" scope="request" if="${empty fontSizeMS}"/>
 <c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
 <c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
 

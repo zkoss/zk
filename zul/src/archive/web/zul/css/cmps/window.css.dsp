@@ -1,10 +1,6 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-<c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
-<c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
-<c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
-
 .z-window-resize-proxy {
 	border: 1px dashed #1854C2; position: absolute; overflow: hidden; left: 0; 
 	top: 0; z-index: 50000; background-color: #CBDDF3; filter: alpha(opacity=50); <%-- IE --%>
