@@ -1808,7 +1808,9 @@ public class UiEngineImpl implements UiEngine {
 					exec.createComponents(uri, _comp, null);
 			}
 
-			Events.postEvent(new FulfillEvent(Events.ON_FULFILL, _comp, evt));
+			Events.sendEvent(new FulfillEvent(Events.ON_FULFILL, _comp, evt));
+				//Use sendEvent so onFulfill will be processed before
+				//the event triggers the fulfill (i.e., evt)
 		}
 
 		//ComponentSerializationListener//

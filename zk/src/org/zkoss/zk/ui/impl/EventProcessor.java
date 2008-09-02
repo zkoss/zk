@@ -152,6 +152,7 @@ public class EventProcessor {
 		final String evtnm = _event.getName();
 
 		final Set listenerCalled = new HashSet();
+			//OK to use Set since the same listener cannot be added twice
 		boolean retry = false;
 		for (Iterator it = _comp.getListenerIterator(evtnm);;) {
 			final EventListener el = nextListener(it);
@@ -181,6 +182,7 @@ public class EventProcessor {
 		}
 
 		retry = false;
+		listenerCalled.clear();
 		for (Iterator it = _comp.getListenerIterator(evtnm);;) {
 			final EventListener el = nextListener(it);
 			if (el == null) {
