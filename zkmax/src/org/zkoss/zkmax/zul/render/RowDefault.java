@@ -48,7 +48,7 @@ public class RowDefault implements ComponentRenderer {
 			final Component child = (Component) it.next();
 			wh.write("<td z.type=\"Gcl\" id=\"").write(child.getUuid()).write("!chdextr\"")
 				.write(self.getChildAttrs(i)).write("><div id=\"").write(child.getUuid())
-				.write("!cell\" class=\"").write(self.getMoldSclass()).write("-cnt\"");
+				.write("!cell\" class=\"").write(self.getMoldSclass()).write("-cnt");
 			if (self.getGrid().isFixedLayout())
 				wh.write(" z-overflow-hidden");
 			wh.write("\">");
