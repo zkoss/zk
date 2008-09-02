@@ -56,6 +56,11 @@ if (!window.Boot_progressbox) { //not customized
 		+msg+'</div></div></div>';
 
 		zk._setOuterHTML(n, html);
+		if (mask) {
+			var mk = $e("zk_mask");
+			zk.listen(mk, "mousemove", Event.stop);
+			zk.listen(mk, "click", Event.stop);
+		}
 		
 		var el = $e("zk_loading");
 		if (center) {
@@ -77,11 +82,12 @@ if (!window.Boot_progressbox) { //not customized
  * Developer can override this method to provide a customized message box.
  * @param id the progress box's ID
  * @param msg the message
+ * @param mask sets whether show the modal_mark
  * @since 3.0.6
  */
 if (!window.AU_progressbox) {
-	AU_progressbar = function (id, msg) {
-		Boot_progressbox(id, msg, zk.innerX(), zk.innerY());
+	AU_progressbar = function (id, msg, mask) {
+		Boot_progressbox(id, msg, zk.innerX(), zk.innerY(), mask);
 	};
 }
 
@@ -1340,7 +1346,8 @@ zk.progress = function (timeout) {
 zk.progressDone = function() {
 	zk.progressing = zk.progressPrompted = false;
 	var n = $e("zk_prog");
-	if (n) n.parentNode.removeChild(n);
+	if (n) n.parentNode.removeChild(n);	
+	if (zk.dbModal) zk.restoreDisabled();
 };
 /** Generates the progressing dialog. */
 zk._progress = function () {
@@ -1353,7 +1360,8 @@ zk._progress = function () {
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
 
-			AU_progressbar("zk_prog", msg);
+			if (zk.dbModal && zk.booting) {zk.disableAll();}
+			AU_progressbar("zk_prog", msg, zk.booting);
 			zk.progressPrompted = true;
 		}
 	}
