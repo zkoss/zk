@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2072856.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  2 12:09:51 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	1.(IE7 only) Type the "abc*" words into the textbox, and then focus out the textbox.
+	<separator/>
+	2.When the warning message is shown, please resize the browser to shorten its width and cover over the warning message.
+	<separator/>
+	3. If the warning message shows the scroll bar, that is wrong.
+	
+	<textbox id="uname" value="" class="uname" constraint = "/([a-z]*[A-Z]*[
+]*[.]*[-]*[']*)*/: Only Alphabets allowed scroll is enabled"/>
+</zk>
