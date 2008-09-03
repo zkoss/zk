@@ -40,14 +40,14 @@ public class LabelImageElement extends LabelElement {
 	private String _src;
 	/** The image. _src and _image cannot be both non-null. */
 	private Image _image;
-	/** Count the version of {@link #_image} and {@link #_hoverimg}.
-	 * Odd for normal image, while even for hover image.
-	 */
-	private byte _imgver;
 	/** The hover image's src. */
 	private String _hoversrc;
 	/** The hover image. If not null, _hoversrc is generated automatically. */
 	private Image _hoverimg;
+	/** Count the version of {@link #_image}. */
+	private byte _imgver;
+	/** Count the version of {@link #_hoverimg}. */
+	private byte _hoverimgver;
 
 	/** Returns the image URI.
 	 * <p>Default: null.
@@ -98,7 +98,7 @@ public class LabelImageElement extends LabelElement {
 		if (_src != null || image != _image) {
 			_image = image;
 			_src = null;
-			if (_image != null) _imgver += 2; //enforce browser to reload image
+			if (_image != null) _imgver++; //enforce browser to reload image
 			invalidate();
 		}
 	}
@@ -160,7 +160,7 @@ public class LabelImageElement extends LabelElement {
 		if (_hoversrc != null || image != _hoverimg) {
 			_hoverimg = image;
 			_hoversrc = null;
-			if (_hoverimg != null) _imgver += 2; //enforce browser to reload image
+			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
 			smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
 		}
 	}
@@ -222,15 +222,15 @@ public class LabelImageElement extends LabelElement {
 	 */
 	public String getContentSrc() {
 		return Utils.getDynamicMediaURI(
-			this, _imgver, _image.getName(), _image.getFormat());
+			this, _imgver, "c/" + _image.getName(), _image.getFormat());
 	}
 	/** Returns the encoded src ({@link #getSrc}).
 	 */
 	private String getEncodedHoverSrc() {
 		if (_hoverimg != null)
 			return Utils.getDynamicMediaURI(
-				this, _imgver + 1, //odd
-				_hoverimg.getName(), _hoverimg.getFormat());
+				this, _hoverimgver,
+				"h/" + _hoverimg.getName(), _hoverimg.getFormat());
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
 		return dt != null && _hoversrc != null ?
@@ -259,12 +259,9 @@ public class LabelImageElement extends LabelElement {
 			if (pathInfo != null) {
 				int j = pathInfo.indexOf('/', 1);
 				if (j >= 0) {
-					try {
-						int v = Integer.parseInt(pathInfo.substring(1, j));
-						if ((v & 1) == 1)
-							return _hoverimg;
-					} catch (Throwable ex) { //ingore it
-					}
+					int k = pathInfo.indexOf('/', ++j);
+					if (k == j + 1 && pathInfo.charAt(j) == 'h')
+						return _hoverimg;
 				}
 			}
 			return _image;
