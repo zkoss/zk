@@ -715,15 +715,38 @@ public class Grid extends XulElement implements Paginated {
 				if (max < 0 || max >= oldsz) max = oldsz - 1;
 				if (max >= newsz) max = newsz - 1;
 				if (min < 0) min = 0;
-
-				//unloadRow() might detach and insert row into _rows, must make a copy for iterate.
-				for (Iterator it = new ArrayList(_rows.getChildren()).listIterator(min);
-				min <= max && it.hasNext(); ++min) {
-					final Row row = (Row)it.next();
-					if (row.isLoaded()) {
+				
+				if(_model instanceof GroupsListModel){
+					//detach all
+					ArrayList rows = new ArrayList(_rows.getChildren());
+					Row row = null;
+					Component next = null;
+					for(int i=oldsz-1;i>=min;i--){
+						row = (Row)rows.get(i);
+						if(i==oldsz-1){
+							next = row.getNextSibling();//get next row of this remove batch
+						}
+						row.detach(); //row class maybe change, always detach
+					}
+					//insert new
+					for(int i=min;i<=max;i++){
 						if (renderer == null)
 							renderer = getRealRenderer();
-						unloadRow(renderer, row, min);
+						row = newUnloadedRow(renderer, i);
+						_rows.insertBefore(row, next);
+					}
+				}else{
+					//unloadRow() might detach and insert row into _rows, must make a copy for iterate.
+					for (Iterator it = new ArrayList(_rows.getChildren()).listIterator(min);
+					min <= max && it.hasNext(); ++min) {
+						final Row row = (Row)it.next();
+						if (row.isLoaded()) {
+							if (renderer == null)
+								renderer = getRealRenderer();
+							final Component next = row.getNextSibling();
+							row.detach(); //always detach
+							_rows.insertBefore(newUnloadedRow(renderer, min), next);
+						}
 					}
 				}
 			}
@@ -824,12 +847,7 @@ public class Grid extends XulElement implements Paginated {
 		label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
 		return label;
 	}
-	/** Clears a row as if it is not loaded. */
-	private final void unloadRow(RowRenderer renderer, Row row, int index) {
-		Component next = row.getNextSibling();
-		row.detach(); //always detach
-		_rows.insertBefore(newUnloadedRow(renderer, index), next);
-	}
+
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */

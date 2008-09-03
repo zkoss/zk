@@ -1641,19 +1641,42 @@ public class Listbox extends XulElement implements Paginated {
 				if (max >= newsz) max = newsz - 1;
 				if (min < 0) min = 0;
 
-				//unloadItem() might detach item and add new item, _items must make a copy first
-				for (Iterator it = new ArrayList(_items).listIterator(min);
-				min <= max && it.hasNext(); ++min) {
-					final Listitem item = (Listitem)it.next();
-					if (item.isLoaded()) {
+				if(_model instanceof GroupsListModel){
+					//detach all
+					ArrayList items = new ArrayList(_items);
+					Listitem item = null;
+					Component next = null;
+					for(int i=oldsz-1;i>=min;i--){
+						item = (Listitem)items.get(i);
+						if(i==oldsz-1){
+							next = item.getNextSibling();//get next item of this remove batch
+						}
+						item.detach(); //row class maybe change, always detach
+					}
+					//insert new item
+					for(int i=min;i<=max;i++){
 						if (renderer == null)
 							renderer = getRealRenderer();
-						unloadItem(renderer, item, min);
+						item = newUnloadedItem(renderer, i);
+						insertBefore(item, next);
+					}
+				}else{
+					//unloadItem() might detach item and add new item, _items must make a copy first
+					for (Iterator it = new ArrayList(_items).listIterator(min);
+					min <= max && it.hasNext(); ++min) {
+						final Listitem item = (Listitem)it.next();
+						if (item.isLoaded()) {
+							if (renderer == null)
+								renderer = getRealRenderer();
+							Component next = item.getNextSibling();
+							item.detach(); //always detach
+							insertBefore(newUnloadedItem(renderer, min), next);
+						}
 					}
 				}
 			}
-
-			for (int j = newsz; j < oldsz; ++j)
+			int sz = Math.min(oldsz,getItemCount());//size maybe be reduced in groupsmodel
+			for (int j = newsz; j < sz; ++j)
 				getItemAtIndex(newsz).detach(); //detach and remove
 		}
 
@@ -1730,12 +1753,6 @@ public class Listbox extends XulElement implements Paginated {
 		}
 		cell.setParent(item);
 		return cell;
-	}
-	/** Clears a listitem as if it is not loaded. */
-	private final void unloadItem(ListitemRenderer renderer, Listitem item, int index) {
-		Component next = item.getNextSibling();
-		item.detach(); //always detach
-		insertBefore(newUnloadedItem(renderer, index), next);
 	}
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.

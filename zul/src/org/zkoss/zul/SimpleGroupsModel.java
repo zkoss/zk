@@ -55,7 +55,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	 * data[1] is elements of the second group, and so on.
 	 * Of course, each group might have different number of elements.
 	 *
-	 * <p>This contructor assumes there is no groupt foot at all.
+	 * <p>This constructor assumes there is no group foot at all.
 	 *
 	 * @param data a two-dimensional array to represent groups data,
 	 * where data[0] is the array of element of the first group,
@@ -141,7 +141,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 		for(int i=0;i<_data.length;i++){
 			sortGroupData(_heads==null?_data[i]:_heads[i],_data[i],cmpr,ascending,colIndex);
 		}
-		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,0,_data.length-1);
+		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
 	}
 
 	protected void sortGroupData(Object group,Object[] groupdata,Comparator cmpr,boolean ascending, int colIndex){

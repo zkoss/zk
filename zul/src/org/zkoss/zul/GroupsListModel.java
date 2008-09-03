@@ -61,8 +61,11 @@ import org.zkoss.zul.event.GroupsDataListener;
 			_gpfts[j] = _model.hasGroupfoot(j);
 			if (_gpfts[j]) ++_size;
 		}
-
-		_model.addGroupsDataListener(_listener = new DataListener());
+		if(_listener==null){
+			_listener = new DataListener();
+			_model.addGroupsDataListener(_listener);
+		}
+		
 	}
 
 	/*package*/ GroupsModel getGroupsModel() {
@@ -203,6 +206,7 @@ import org.zkoss.zul.event.GroupsDataListener;
 					j1 = getNextOffset(j1) - 1; //include groupfoot
 				}
 			}
+			init();//re-initialize the model information
 			fireEvent(type, j0, j1);
 		}
 	}
