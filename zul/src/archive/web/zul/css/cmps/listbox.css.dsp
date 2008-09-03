@@ -113,7 +113,20 @@ td.z-list-group-inner {
 td.z-list-group-inner div.z-list-cell-cnt {
 	color:#3764a0; font: bold ${fontSizeM} ${fontFamilyT};
 	padding: 4px 2px; width: auto;
-}<%-- Listgroupfoot --%>
+}
+.z-list-group-img-open {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});
+	background-repeat: no-repeat;
+	vertical-align: top; cursor: pointer; border: 0;
+}
+.z-list-group-img-close {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});
+	background-repeat: no-repeat;
+	vertical-align: top; cursor: pointer; border: 0;
+}
+<%-- Listgroupfoot --%>
 .z-list-group-foot{
 	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }

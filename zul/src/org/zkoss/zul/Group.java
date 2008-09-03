@@ -47,7 +47,6 @@ import org.zkoss.zul.impl.XulElement;
  * @since 3.5.0
  */
 public class Group extends Row {
-	private String _src = null;
 	private boolean _open = true;	
 	private transient List _items;
 	
@@ -131,48 +130,6 @@ public class Group extends Row {
 		final Rows rows = (Rows)getParent();
 		return (Groupfoot) rows.getChildren().get(index);
 	}
-	
-	/** Returns the image URI.
-	 * <p>Default: null.
-	 * <p>The same as {@link #getSrc}.
-	 */
-	public String getImage() {
-		return _src;
-	}
-	/** Sets the image URI.
-	 * <p>If src is changed, the component's inner is invalidate.
-	 * Thus, you want to smart-update, you have to override this method.
-	 * <p>The same as {@link #setSrc}.
-	 */
-	public void setImage(String src) {
-		if (src != null && src.length() == 0) src = null;
-		if (!Objects.equals(_src, src)) {
-			_src = src;
-			invalidate();
-
-			//_src is meaningful only if _image is null
-			//NOTE: Tom Yeh: 20051222
-			//It is possible to use smartUpdate if we always generate
-			//an image (with an ID) in getImgTag.
-			//However, it is too costly by making HTML too big, so
-			//we prefer to invalidate (it happens rarely)
-		}
-	}
-	/** Returns the src (an image URI).
-	 * <p>Default: null.
-	 * <p>The same as {@link #getImage}.
-	 */
-	public String getSrc() {
-		return getImage();
-	}
-	/** Sets the src (the image URI).
-	 * <p>If src is changed, the component's inner is invalidate.
-	 * Thus, you want to smart-update, you have to override this method.
-	 * <p>The same as {@link #setImage}.
-	 */
-	public void setSrc(String src) {
-		setImage(src);
-	}
 	/** Returns whether this container is open.
 	 * <p>Default: true.
 	 */
@@ -196,23 +153,16 @@ public class Group extends Row {
 	 * generate the HTML tag, instead of using {@link #getImage}.
 	 */
 	public String getImgTag() {
-		if (_src == null)
-			return null;
-
 		final StringBuffer sb = new StringBuffer(64)
 			.append("<img src=\"")
-			.append(getDesktop().getExecution().encodeURL(_src))
+			.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
+			.append("\" class=\"").append(getMoldSclass()).append(isOpen() ? "-img-open" : "-img-close")
 			.append("\" align=\"absmiddle\"/>");
 
 		final String label = getLabel();
 		if (label != null && label.length() > 0) sb.append(' ');
 
 		return sb.toString(); //keep a space
-	}
-	private void applyImageIfAny() {
-		if (getImage() == null) {
-			_src = (isOpen() ? "~./zul/img/tree/open.png" : "~./zul/img/tree/close.png");
-		}
 	}
 	/** Returns the value of the {@link Label} it contains, or null
 	 * if no such cell.
@@ -243,7 +193,6 @@ public class Group extends Row {
 		return _moldSclass == null ? "z-group" : super.getMoldSclass();
 	}
 	public String getOuterAttrs() {
-		applyImageIfAny();
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "z.open", isOpen());
 		HTMLs.appendAttribute(sb, "z.nostripe", true);

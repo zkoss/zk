@@ -149,10 +149,6 @@ public class Listcell extends LabelImageElement {
 			smartUpdate("colspan", Integer.toString(_span));
 		}
 	}
-
-	/*package*/ final void setImageDirectly(String src) {
-		setSrcDirectly(src);
-	}
 	
 	//-- super --//
 	public void setWidth(String width) {
@@ -168,6 +164,12 @@ public class Listcell extends LabelImageElement {
 		final Listbox listbox = getListbox();
 		if (listbox != null && item.getFirstChild() == this) {
 			final StringBuffer sb = new StringBuffer(64);
+			if (item instanceof Listgroup) {
+				sb.append("<img src=\"")
+				.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
+				.append("\" class=\"").append(item.getMoldSclass()).append(((Listgroup) item).isOpen() ? "-img-open" : "-img-close")
+				.append("\" align=\"absmiddle\"/>");
+			}
 			if (listbox.isCheckmark()) {
 				if (item.isCheckable()) {
 					sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
@@ -188,7 +190,7 @@ public class Listcell extends LabelImageElement {
 				sb.append("<a href=\"javascript:;\" id=\"").append(item.getUuid())
 					.append("!sel\" z.type=\"Lcfc\"> </a>");
 				return sb.toString();
-			}
+			} else if (sb.length() > 0) return sb.toString();
 		}
 		
 		//To make the listbox's height more correct, we have to generate &nbsp;

@@ -1468,7 +1468,8 @@ zkLitgp = {
 	},/** Opens an item */
 	_openItem: function (row, toOpen, silent) {
 		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
-		if (row._img) row._img.src = zk.rename(row._img.src, toOpen ? "open": "close");
+		if (row._img) 
+			row._img.className = zk.renType(row._img.className, toOpen ? "open": "close");
 		zkLitgp._openItemNow(row, toOpen);
 		if (!silent) 
 			zkau.send({uuid: row.id,

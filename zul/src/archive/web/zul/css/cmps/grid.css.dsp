@@ -97,6 +97,18 @@ td.z-group-inner {
 .z-group-inner {
 	color: #3764a0; font: bold ${fontSizeM} ${fontFamilyT};
 }
+.z-group-img-open {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});
+	background-repeat: no-repeat;
+	vertical-align: top; cursor: pointer; border: 0;
+}
+.z-group-img-close {
+	width: 18px; min-height: 18px; height: 100%;
+	background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});
+	background-repeat: no-repeat;
+	vertical-align: top; cursor: pointer; border: 0;
+}
 <%-- Groupfooter --%>
 .z-group-foot {
 	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;

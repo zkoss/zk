@@ -71,13 +71,6 @@ public class Listgroup extends Listitem {
 			}
 		};
 	}
-	private void applyImageIfAny() {
-		if (getFirstChild() != null) {
-			final Listcell lc = (Listcell)getFirstChild();
-			if (lc.getImage() == null)
-				lc.setImageDirectly(isOpen() ? "~./zul/img/tree/open.png" : "~./zul/img/tree/close.png");
-		}
-	}
 	/** 
 	 * Returns a list of all {@link Listitem} are grouped by this listgroup.
 	 */
@@ -138,7 +131,6 @@ public class Listgroup extends Listitem {
 		return _moldSclass == null ? "z-list-group" : super.getMoldSclass();
 	}
 	public String getOuterAttrs() {
-		applyImageIfAny();
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "z.open", isOpen());
 		HTMLs.appendAttribute(sb, "z.nostripe", true);
