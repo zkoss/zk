@@ -56,16 +56,10 @@ public class LabelImageElement extends LabelElement {
 	 */
 	public void setImage(String src) {
 		if (src != null && src.length() == 0) src = null;
-		if (!Objects.equals(_src, src)) {
+		if (_image != null || !Objects.equals(_src, src)) {
 			_src = src;
-			if (_image == null) invalidate();
-
-			//_src is meaningful only if _image is null
-			//NOTE: Tom Yeh: 20051222
-			//It is possible to use smartUpdate if we always generate
-			//an image (with an ID) in getImgTag.
-			//However, it is too costly by making HTML too big, so
-			//we prefer to invalidate (it happens rarely)
+			_image = null;
+			invalidate();
 		}
 	}
 
@@ -92,9 +86,10 @@ public class LabelImageElement extends LabelElement {
 	 * priority than {@link #getSrc}.
 	 */
 	public void setImageContent(Image image) {
-		if (image != _image) {
+		if (_src != null || image != _image) {
 			_image = image;
-			if (_image != null) ++_imgver; //enforce browser to reload image
+			_src = null;
+			if (_image != null) _imgver += 2; //enforce browser to reload image
 			invalidate();
 		}
 	}
