@@ -84,10 +84,10 @@
 }
 .z-window-embedded-cnt, .z-window-embedded-body, .z-window-overlapped-body,
 	.z-window-popup-body, .z-window-highlighted-body, .z-window-modal-body {
-	overflow: hidden; zoom: 1; position:relative
+	overflow: hidden; zoom: 1;
 }
 .z-window-overlapped-cnt, .z-window-popup-cnt {
-	margin: 0; padding: 4px; overflow: hidden; zoom: 1; background: white; position: relative;
+	margin: 0; padding: 4px; overflow: hidden; zoom: 1; background: white;
 }
 .z-window-popup-cnt {
 	border:1px solid #8DB2E3; padding: 2px; margin:0;
@@ -95,11 +95,10 @@
 .z-window-modal-cnt, .z-window-highlighted-cnt, .z-window-modal-cnt-noborder,
 	.z-window-highlighted-cnt-noborder, .z-window-overlapped-cnt-noborder {
 	margin: 0; padding: 2px; background: white; overflow: hidden; zoom: 1;
-	position: relative;
 }
 .z-window-modal-cnt-noborder, .z-window-highlighted-cnt-noborder, .z-window-embedded-cnt-noborder,
 	.z-window-overlapped-cnt-noborder, .z-window-popup-cnt-noborder {
-	border: 0; overflow: hidden; zoom: 1; position: relative;
+	border: 0; overflow: hidden; zoom: 1;
 }
 .z-window-popup-cnt-noborder {
 	margin: 0; padding: 1px; background: white;
