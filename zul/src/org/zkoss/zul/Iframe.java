@@ -43,10 +43,10 @@ import org.zkoss.zul.impl.Utils;
 public class Iframe extends XulElement {
 	private String _align, _name;
 	private String _src, _scrolling = "auto";
-	/** The media. If not null, _src is generated automatically. */
+	/** The media. _src and _media cannot be nonnull at the same time. */
 	private Media _media; 
 	/** Count the version of {@link #_media}. */
-	private int _medver;
+	private byte _medver;
 	/** Whether to hide when a popup or dropdown is placed on top of it. */
 	private boolean _autohide;
 
@@ -153,11 +153,10 @@ public class Iframe extends XulElement {
 		if (src != null && src.length() == 0)
 			src = null;
 
-		if (!Objects.equals(_src, src)) {
+		if (_media != null || !Objects.equals(_src, src)) {
 			_src = src;
-			if (_media == null)
-				smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
-				//_src is meaningful only if _media is null
+			_media = null;
+			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the encoded src ({@link #getSrc}).
@@ -176,10 +175,11 @@ public class Iframe extends XulElement {
 	 * If not null, it has higher priority than {@link #getSrc}.
 	 */
 	public void setContent(Media media) {
-		if (media != _media) {
+		if (_src != null || media != _media) {
 			_media = RepeatableMedia.getInstance(media);
 				//Use RepeatableMedia since it might be reloaded
 				//if the component is invalidated or overlapped wnd (Bug 1896797)
+			_src = null;
 			if (_media != null) ++_medver; //enforce browser to reload
 			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}

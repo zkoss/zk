@@ -38,12 +38,12 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  */
 public class LabelImageElement extends LabelElement {
 	private String _src;
-	/** The image. If not null, _src is generated automatically. */
+	/** The image. _src and _image cannot be both non-null. */
 	private Image _image;
 	/** Count the version of {@link #_image} and {@link #_hoverimg}.
 	 * Odd for normal image, while even for hover image.
 	 */
-	private short _imgver;
+	private byte _imgver;
 	/** The hover image's src. */
 	private String _hoversrc;
 	/** The hover image. If not null, _hoversrc is generated automatically. */

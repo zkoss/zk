@@ -46,10 +46,10 @@ import org.zkoss.zul.impl.Utils;
 public class Image extends XulElement {
 	private String _align, _border, _hspace, _vspace;
 	private String _src;
-	/** The image. If not null, _src is generated automatically. */
+	/** The image. _src and _image cannot be nonnull at the same time.  */
 	private org.zkoss.image.Image _image;
 	/** Count the version of {@link #_image}. */
-	private int _imgver;
+	private byte _imgver;
 
 	public Image() {
 	}
@@ -148,11 +148,10 @@ public class Image extends XulElement {
 		if (src != null && src.length() == 0)
 			src = null;
 
-		if (!Objects.equals(_src, src)) {
+		if (_image != null || !Objects.equals(_src, src)) {
 			_src = src;
-			if (_image == null)
-				smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
-				//_src is meaningful only if _image is null
+			_image = null;
+			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the encoded src ({@link #getSrc}).
@@ -171,8 +170,9 @@ public class Image extends XulElement {
 	 * priority than {@link #getSrc}.
 	 */
 	public void setContent(org.zkoss.image.Image image) {
-		if (image != _image) {
+		if (_src != null || image != _image) {
 			_image = image;
+			_src = null;
 			if (_image != null) ++_imgver; //enforce browser to reload image
 			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
 		}

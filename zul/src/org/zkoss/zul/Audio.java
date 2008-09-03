@@ -42,10 +42,10 @@ import org.zkoss.zul.impl.Utils;
 public class Audio extends XulElement {
 	private String _align, _border;
 	protected String _src;
-	/** The audio. If not null, _src is generated automatically. */
+	/** The audio. _src and _audio cannot be nonnull at the same time. */
 	private org.zkoss.sound.Audio _audio;
 	/** Count the version of {@link #_audio}. */
-	private int _audver;
+	private byte _audver;
 	private boolean _autostart, _loop;
 
 	public Audio() {
@@ -121,10 +121,10 @@ public class Audio extends XulElement {
 		if (src != null && src.length() == 0)
 			src = null;
 
-		if (!Objects.equals(_src, src)) {
+		if (_audio != null || !Objects.equals(_src, src)) {
 			_src = src;
-			if (_audio == null) updateSrc();
-				//_src is meaningful only if _audio is null
+			_audio = null;
+			updateSrc();
 		}
 	}
 	private String getEncodedSrc() {
@@ -157,8 +157,9 @@ public class Audio extends XulElement {
 	 * priority than {@link #getSrc}.
 	 */
 	public void setContent(org.zkoss.sound.Audio audio) {
-		if (audio != _audio) {
+		if (_src != null || audio != _audio) {
 			_audio = audio;
+			_src = null;
 			if (_audio != null) ++_audver; //enforce browser to reload
 			updateSrc();
 		}

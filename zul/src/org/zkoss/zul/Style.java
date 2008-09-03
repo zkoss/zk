@@ -80,10 +80,11 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Style extends AbstractComponent {
 	private String _src;
+	/** _src and _content cannot be nonnull at the same time. */
 	private String _content;
 	private boolean _dynamic;
 	/** Count the version of {@link #_content}. */
-	private int _cntver;
+	private byte _cntver;
 
 	public Style() {
 		super.setVisible(false);
@@ -138,13 +139,13 @@ public class Style extends AbstractComponent {
 	 * is used as the content of styles.
 	 * If not null, the HTML LINK tag is generated to ask the browser
 	 * to load the specified style sheet.
-	 *
-	 * <p>Note: If not null, the content of children are ignored.
 	 */
 	public String getSrc() {
 		return _src;
 	}
 	/** Sets the URI of an external style sheet.
+	 *
+	 * <p>Calling this methid implies setContent(null) was called.
 	 *
 	 * @param src the URI of an external style sheet, or null to use
 	 * the content of children ({@link Label#getValue}) instead.
@@ -152,16 +153,15 @@ public class Style extends AbstractComponent {
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)
 			src = null;
-		if (!Objects.equals(_src, src)) {
+		if (_content != null || !Objects.equals(_src, src)) {
 			_src = src;
+			_content = null;
 			invalidate();
 		}
 	}
 
 	/** Returns the content of the style element.
 	 * By content we mean the CSS rules that will be sent to the client.
-	 * Note: if {@link #setSrc} is called with a non-empty value,
-	 * this method is ignored, i.e., {@link #getSrc} has the higher priority.
 	 *
 	 * <p>Default: null.
 	 *
@@ -172,6 +172,7 @@ public class Style extends AbstractComponent {
 	}
 	/** Sets the content of the style element.
 	 * By content we mean the CSS rules that will be sent to the client.
+	 * <p>Calling this methid implies setSrc(null) was called.
 	 *
 	 * @since 3.0.0
 	 */
@@ -179,8 +180,9 @@ public class Style extends AbstractComponent {
 		if (content != null && content.length() == 0)
 			content = null;
 
-		if (!Objects.equals(_content, content)) {
+		if (_src != null || !Objects.equals(_content, content)) {
 			_content = content;
+			_src = null;
 			++_cntver;
 			invalidate();
 		}
@@ -224,6 +226,7 @@ public class Style extends AbstractComponent {
 			super.redraw(out);
 			return;	
 		}
+
 		final boolean ie = Executions.getCurrent().isExplorer();
 		if (ie) {
 			//IE: unable to look back LINK or STYLE with ID
