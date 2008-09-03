@@ -25,7 +25,6 @@ import org.zkoss.image.Images;
 import org.zkoss.util.media.Media;
 import org.zkoss.image.Image;
 
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -37,10 +36,10 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  */
 public class LabelImageElement extends LabelElement {
 	private String _src = null;
-	/** The image. If not null, _src is generated automatically. */
+	/** The image. _src and _image cannot be both non-null. */
 	private Image _image;
 	/** Count the version of {@link #_image}. */
-	private int _imgver;
+	private byte _imgver;
 
 	/** Returns the image URI.
 	 * <p>Default: null.
@@ -89,7 +88,7 @@ public class LabelImageElement extends LabelElement {
 		if (_src != null || image != _image) {
 			_image = image;
 			_src = null;
-			if (_image != null) _imgver += 2; //enforce browser to reload image
+			if (_image != null) _imgver++; //enforce browser to reload image
 			invalidate();
 		}
 	}
