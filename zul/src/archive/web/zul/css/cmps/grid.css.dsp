@@ -84,7 +84,7 @@ tr.z-row td.z-row-inner, tr.z-row td.z-group-inner, tr.z-row td.z-group-foot-inn
 	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
 tr.z-grid-odd td.z-row-inner, tr.z-grid-odd {
-	background: #EAF2F0;
+	background: #E6F8FF;
 }
 <%-- Group --%>
 td.z-group-inner {

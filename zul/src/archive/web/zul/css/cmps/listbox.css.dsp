@@ -82,7 +82,7 @@ tr.z-list-item a:hover {
 	text-decoration: underline;
 }
 tr.z-listbox-odd {
-	background: #EAF2F0;
+	background: #E6F8FF;
 }
 tr.z-list-item-disd *, td.z-list-cell-disd * {
 	color: #C5CACB !important; cursor: default!important;
@@ -97,10 +97,10 @@ tr.z-list-item-seld {
 	background: #b3c8e8; border: 1px solid #6f97d2;
 }
 tr.z-list-item-over {
-	background: #D3EFFA;
+	background: #dae7f6;
 }
 tr.z-list-item-over-seld {
-	background: #82D5F8;
+	background: #6eadff;
 }
 tr.z-list-item td.z-list-item-focus {
 	background-image: url(${c:encodeURL('~./zul/img/focusd.png')});

@@ -96,13 +96,13 @@ td.z-tree-cell-disd a:visited, td.z-tree-cell-disd a:hover {
 	border-color: #D0DEF0 !important;
 }
 tr.z-tree-row-seld {
-	background: #b3c8e8; border: 1px solid #6f97d2;
+	background: #bcd2ef; border: 1px solid #6f97d2;
 }
 tr.z-tree-row-over {
-	background: #D3EFFA;
+	background: #dae7f6;
 }
 tr.z-tree-row-over-seld {
-	background: #82D5F8;
+	background: #6eadff;
 }
 tr.z-tree-row td.z-tree-row-focus {
 	background-image: url(${c:encodeURL('~./zul/img/focusd.png')});
