@@ -24,6 +24,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.image.Images;
 import org.zkoss.util.media.Media;
 import org.zkoss.image.Image;
+import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
@@ -31,12 +32,13 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 /**
- * A HTML element with a label ({@link #getLabel})and an image ({@link #getImage}).
+ * A XUL element with a label ({@link #getLabel}) 
+ * and an image ({@link #getImage}).
  * 
  * @author tomyeh
  */
 public class LabelImageElement extends LabelElement {
-	private String _src = null;
+	private String _src;
 	/** The image. If not null, _src is generated automatically. */
 	private Image _image;
 	/** Count the version of {@link #_image}. */
@@ -88,7 +90,7 @@ public class LabelImageElement extends LabelElement {
 	}
 
 	/** Sets the content directly.
-	 * Default: null.
+	 * <p>Default: null.
 	 *
 	 * @param image the image to display. If not null, it has higher
 	 * priority than {@link #getSrc}.

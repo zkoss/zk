@@ -21,7 +21,7 @@ package org.zkoss.zul.impl;
 import org.zkoss.lang.Objects;
 
 /**
- * A HTML element with a label.
+ * A XUL element with a label.
  *
  * @author tomyeh
  */
