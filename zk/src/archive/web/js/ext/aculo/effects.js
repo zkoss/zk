@@ -75,12 +75,12 @@ Element.forceRerendering = function(element) {
 };
 
 /*--------------------------------------------------------------------------*/
-
+/* Tom M. Yeh, Potix: remove unused codes
 Array.prototype.call = function() {
   var args = arguments;
   this.each(function(f){ f.apply(this, args) });
 }
-
+*/
 /*--------------------------------------------------------------------------*/
 
 var zEffect = {
