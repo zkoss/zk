@@ -99,7 +99,7 @@ public class Clients {
 	public static final void submitForm(Component form) {
 		submitForm(form.getUuid());
 	}
-	/** Prints the current desktop (aka., browser window) to the client the printer.
+	/** Asks the client to print the current desktop (aka., browser window).
 	 */
 	public static void print() {
 		response(new AuPrint());
