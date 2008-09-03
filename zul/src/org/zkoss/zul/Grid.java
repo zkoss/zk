@@ -508,7 +508,7 @@ public class Grid extends XulElement implements Paginated {
 	/** Returns the model associated with this grid, or null
 	 * if this grid is not associated with any list data model.
 	 *
-	 * <p>Note: if {@link setModel(GroupsModel)} was called with a
+	 * <p>Note: if {@link #setModel(GroupsModel)} was called with a
 	 * groups model, this method returns an instance of {@link ListModel}
 	 * encapsulating it.
 	 *

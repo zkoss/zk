@@ -1476,7 +1476,7 @@ public class Listbox extends XulElement implements Paginated {
 	/** Returns the model associated with this list box, or null
 	 * if this list box is not associated with any list data model.
 	 *
-	 * <p>Note: if {@link setModel(GroupsModel)} was called with a
+	 * <p>Note: if {@link #setModel(GroupsModel)} was called with a
 	 * groups model, this method returns an instance of {@link ListModel}
 	 * encapsulating it.
 	 *

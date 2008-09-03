@@ -133,7 +133,8 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	}
 
 	/**
-	 * Sort each data in each group by Comparator, developer could override {@link #sortGroupData(Object, Object[], Comparator, boolean, int)
+	 * Sort each data in each group by Comparator, developer could override
+	 * {@link #sortGroupData(Object, Object[], Comparator, boolean, int)}
 	 * to customize.
 	 */
 	public void sort(Comparator cmpr, boolean ascending, int colIndex) {
