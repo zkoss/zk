@@ -3,8 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 <vbox>
-<label>Orginally, three columns are 50%,20%,30% in width;</label>
-<label>Use setWidth() in zscript caused the rightmost column been pushed down to next line.</label>
+<label value="Orginally, three columns are 50%,20%,30% in width;" />
+<label value="Use setWidth() in zscript caused the rightmost column been pushed down to next line." />
 </vbox>
 <zscript><![CDATA[ 
 //@IMPORT

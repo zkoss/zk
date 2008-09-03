@@ -10,7 +10,7 @@
 <button label="Click Me!">
 	<attribute name="onClick"><![CDATA[
 		final Window zulUI= (Window) Executions.createComponents(
-				"B30-2024223-1.zul", null, null);
+				"B30_2024223_1.zul", null, null);
 		try 
 		{
 			zulUI.doModal();
