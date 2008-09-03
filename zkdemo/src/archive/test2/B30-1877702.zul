@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<vbox>
-	Please select a comboitem, and then press the reset button, and then re-elect the previous comboitem, the onSelect event should be fired.
+	Please select a comboitem, and then press the reset button, and then re-select the previous comboitem, the onSelect event should be fired.
 	<combobox id="cb1" constraint="strict"
 		onSelect='msg.value = "onSelect is fired, " + self.selectedItem.label'>
 		<comboitem label="aaa" value="1" />

@@ -26,7 +26,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		dsc = new RowLabelComparator(false);
 	</zscript>
 	<vbox>
-		<grid mold="paging"  model="${strset}" width="300px">
+		<grid mold="paging"  model="${strset}" width="350px">
 			<columns sizable="true">
 				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"/>
 			</columns>

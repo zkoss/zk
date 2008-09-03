@@ -22,7 +22,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<separator/>
 	2. Press the &quot;remove&quot; button, and see the column disappear.
 	<separator />
-	it will pop-up error window when click remove.
+	3. it shouldn't pop-up error window when click remove.
 
 	<columnlayout id="cl">
 		<columnchildren width="200px" style="padding: 5px">
