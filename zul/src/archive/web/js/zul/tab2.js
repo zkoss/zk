@@ -631,7 +631,7 @@ _fixHgh : function (tabbox, tabs) {
 		}
 	}
 },
-onVisi : function(cmp){			
+onVisi : function(cmp){	
 	if (zk.isVertical($parent($e(cmp.id)))) {			
 		cmp.style.height = "";
 	}else{
@@ -640,14 +640,9 @@ onVisi : function(cmp){
 	zkTabs2._fixWidth(cmp.id);   	 
     zkTabs2.scrollingchk(cmp.id);    
 }, 
-onSize : function(cmp){			
-	if (zk.isVertical($parent($e(cmp.id)))) {			
-		zkTabs2._fixWidth(cmp.id);
-		zkTabs2.scrollingchk(cmp.id);		
-	}else {
-		zkTabs2._fixWidth(cmp.id);
-		zkTabs2.scrollingchk(cmp.id);
-	}    
+onSize : function(cmp){					
+	zkTabs2._fixWidth(cmp.id);
+	zkTabs2.scrollingchk(cmp.id); 
 },
 beforeSize : function(cmp){
 	if (zk.isVertical($parent($e(cmp.id)))) {			
@@ -694,7 +689,10 @@ zk.isScroll = function(tabbox){
 zk.isVertical = function(tabbox){		
     return getZKAttr(tabbox, "orient")=="v" ? true : false;
 };
-zk.forceStyle = function(cmp,attr,value){	
+zk.forceStyle = function(cmp,attr,value){
+	if ($int(value.replace("px","")) < 0){
+		return
+	}
 	switch(attr) {		
 	case "h":
 		if (zk.ie6Only) {

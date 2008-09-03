@@ -241,7 +241,7 @@
 	top:0;
 	width:18px;
 	z-index:10;
-	height:22px;
+	height:25px;
 }
 
 .z-tabbox-scrolling .z-tabbox-scrollright:hover{
@@ -257,7 +257,7 @@
 	top:0;
 	width:18px;
 	z-index:10;
-	height:22px	
+	height:25px	
 }
 
 .z-tabbox-scrolling .z-tabbox-scrollleft:hover{	

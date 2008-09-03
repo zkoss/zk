@@ -28,19 +28,19 @@
 .z-combobox .z-combobox-img {
 	background: transparent url(${c:encodeURL('~./zul/img/button/combobtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
-	border-bottom: 1px solid #B5B8C8;
+	border-bottom: 1px solid #7F9DB9;
 }
 .z-combobox-btn-over .z-combobox-img {
 	background-position: -17px 0;
-}
-.z-combobox-btn-clk .z-combobox-img {
-	background-position: -34px 0;
 }
 .z-combobox-focus .z-combobox-img {
 	background-position: -51px 0;
 }
 .z-combobox-focus .z-combobox-btn-over .z-combobox-img {
 	background-position: -68px 0;
+}
+.z-combobox-focus .z-combobox-btn-clk .z-combobox-img, .z-combobox-btn-clk .z-combobox-img {
+	background-position: -34px 0;
 }
 .z-combobox-pp {
 	display: block; position: absolute; z-index: 88000;
@@ -101,21 +101,21 @@
 	background: #ECEAE4;
 }
 .z-bandbox .z-bandbox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/bandbtn.png')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/bandbtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
 .z-bandbox-btn-over .z-bandbox-img {
 	background-position: -17px 0;
 }
-.z-bandbox-btn-clk .z-bandbox-img {
-	background-position: -34px 0;
-}
 .z-bandbox-focus .z-bandbox-img {
 	background-position: -51px 0;
 }
 .z-bandbox-focus .z-bandbox-btn-over .z-bandbox-img {
 	background-position: -68px 0;
+}
+.z-bandbox-focus .z-bandbox-btn-clk .z-bandbox-img, .z-bandbox-btn-clk .z-bandbox-img {
+	background-position: -34px 0;
 }
 .z-bandbox-pp {
 	display: block; position: absolute; z-index: 88000;
@@ -148,21 +148,21 @@
 	background: #ECEAE4;
 }
 .z-datebox .z-datebox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/datebtn.png')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/datebtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
 .z-datebox-btn-over .z-datebox-img {
 	background-position: -17px 0;
 }
-.z-datebox-btn-clk .z-datebox-img {
-	background-position: -34px 0;
-}
 .z-datebox-focus .z-datebox-img {
 	background-position: -51px 0;
 }
 .z-datebox-focus .z-datebox-btn-over .z-datebox-img {
 	background-position: -68px 0;
+}
+.z-datebox-focus .z-datebox-btn-clk .z-datebox-img, .z-datebox-btn-clk .z-datebox-img {
+	background-position: -34px 0;
 }
 .z-datebox-pp {
 	display: block; position: absolute; z-index: 88000;
@@ -194,21 +194,21 @@
 	background: #ECEAE4;
 }
 .z-timebox .z-timebox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.png')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
 .z-timebox-btn-over .z-timebox-img {
 	background-position: -17px 0;
 }
-.z-timebox-btn-clk .z-timebox-img {
-	background-position: -34px 0;
-}
 .z-timebox-focus .z-timebox-img {
 	background-position: -51px 0;
 }
 .z-timebox-focus .z-timebox-btn-over .z-timebox-img {
 	background-position: -68px 0;
+}
+.z-timebox-focus .z-timebox-btn-clk .z-timebox-img, .z-timebox-btn-clk .z-timebox-img {
+	background-position: -34px 0;
 }
 <%-- Spinner --%>
 .z-spinner-disd {
@@ -232,19 +232,19 @@
 	background: #ECEAE4;
 }
 .z-spinner .z-spinner-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.png')}) no-repeat 0 0;
+	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #B5B8C8;
 }
 .z-spinner-btn-over .z-spinner-img {
 	background-position: -17px 0;
 }
-.z-spinner-btn-clk .z-spinner-img {
-	background-position: -34px 0;
-}
 .z-spinner-focus .z-spinner-img {
 	background-position: -51px 0;
 }
 .z-spinner-focus .z-spinner-btn-over .z-spinner-img {
 	background-position: -68px 0;
+}
+.z-spinner-focus .z-spinner-btn-clk .z-spinner-img , .z-spinner-btn-clk .z-spinner-img {
+	background-position: -34px 0;
 }
