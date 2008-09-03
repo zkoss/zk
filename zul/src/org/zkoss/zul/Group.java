@@ -149,8 +149,6 @@ public class Group extends Row {
 	 *
 	 * <p>Used only for component template, not for application developers.
 	 *
-	 * <p>Note: the component template shall use this method to
-	 * generate the HTML tag, instead of using {@link #getImage}.
 	 */
 	public String getImgTag() {
 		final StringBuffer sb = new StringBuffer(64)
