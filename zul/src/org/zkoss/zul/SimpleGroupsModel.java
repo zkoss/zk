@@ -48,10 +48,18 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	protected Object[] _foots;
 	
 	/**
-	 * Constructor.
-	 * When using this constructor , {@link #getGroup(int)} will return the corresponding Object[] of data. 
-	 * {@link #hasGroupfoot(int)} will always false 
-	 * @param data a 2 dimension array to represent groups data
+	 * Constructs a groups data model with a two-dimensional array of data.
+	 * For example, if you have three groups and each of them have 5 elements,
+	 * then the data argument must be a 3 x 5 array.
+	 * Furthermore, data[0] is the array of elements of the first group,
+	 * data[1] is elements of the second group, and so on.
+	 * Of course, each group might have different number of elements.
+	 *
+	 * <p>This contructor assumes there is no groupt foot at all.
+	 *
+	 * @param data a two-dimensional array to represent groups data,
+	 * where data[0] is the array of element of the first group,
+	 * data[1] is of the second group and so on.
 	 */
 	public SimpleGroupsModel(Object[][] data){
 		this(data,null,(Object[])null);
