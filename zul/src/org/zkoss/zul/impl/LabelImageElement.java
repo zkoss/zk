@@ -63,16 +63,10 @@ public class LabelImageElement extends LabelElement {
 	 */
 	public void setImage(String src) {
 		if (src != null && src.length() == 0) src = null;
-		if (!Objects.equals(_src, src)) {
+		if (_image != null || !Objects.equals(_src, src)) {
 			_src = src;
-			if (_image == null) invalidate();
-
-			//_src is meaningful only if _image is null
-			//NOTE: Tom Yeh: 20051222
-			//It is possible to use smartUpdate if we always generate
-			//an image (with an ID) in getImgTag.
-			//However, it is too costly by making HTML too big, so
-			//we prefer to invalidate (it happens rarely)
+			_image = null;
+			invalidate();
 		}
 	}
 	protected void setSrcDirectly(String src) {
@@ -101,8 +95,9 @@ public class LabelImageElement extends LabelElement {
 	 * priority than {@link #getSrc}.
 	 */
 	public void setImageContent(Image image) {
-		if (image != _image) {
+		if (_src != null || image != _image) {
 			_image = image;
+			_src = null;
 			if (_image != null) _imgver += 2; //enforce browser to reload image
 			invalidate();
 		}
@@ -146,8 +141,9 @@ public class LabelImageElement extends LabelElement {
 	 */
 	public void setHoverImage(String src) {
 		if (src != null && src.length() == 0) src = null;
-		if (!Objects.equals(_hoversrc, src)) {
+		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
+			_hoverimg = null;
 			if (_hoverimg == null)
 				smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
 		}
@@ -161,8 +157,9 @@ public class LabelImageElement extends LabelElement {
 	 * @since 3.5.0
 	 */
 	public void setHoverImageContent(Image image) {
-		if (image != _hoverimg) {
+		if (_hoversrc != null || image != _hoverimg) {
 			_hoverimg = image;
+			_hoversrc = null;
 			if (_hoverimg != null) _imgver += 2; //enforce browser to reload image
 			smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
 		}
