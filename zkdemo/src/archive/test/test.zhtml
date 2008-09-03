@@ -1,7 +1,7 @@
 <html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns:z="http://www.zkoss.org/2005/zul">
 <head>
-<zkhead/>
 <title>ZHTML Demo</title>
+<zkhead/>
 </head>
 <body>
 	<h1>ZHTML Demo</h1>
