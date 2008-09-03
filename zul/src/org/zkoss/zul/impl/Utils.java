@@ -152,7 +152,7 @@ public class Utils {
 		if (desktop == null) return ""; //no avail at client
 
 		final StringBuffer sb = new StringBuffer(64).append('/');
-		Strings.encode(sb, version);
+		Strings.encode(sb, version & 0xffff);
 		if (name != null || format != null) {
 			sb.append('/');
 			boolean bExtRequired = true;
