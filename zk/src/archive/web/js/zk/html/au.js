@@ -1387,27 +1387,22 @@ zkau._onDocCtxMnu = function (evt) {
 	return !zk.ie || evt.returnValue;
 };
 zkau._onDocMouseover = function (evt) {
+	if (zk.progressing) return; //skip tip if in processing
+
 	if (!evt) evt = window.event;
 
-	var cmp = Event.element(evt);
-	/** Request 1628075: give up.
-	    Why? the wait cursor won't disappear until users move the cursor
-	if (cmp && cmp.style && cmp.getAttribute && $tag(cmp) != "HTML") {
-		var bk = cmp.getAttribute("z_bk4wait");
-		if (zk.progressPrompted) {
-			if (!bk) {
-				var cr = cmp.style.cursor;
-				cmp.setAttribute("z_bk4wait", cr ? cr: "nil");
-				cmp.style.cursor = "wait";
-			}
-		} else if (bk) {
-			cmp.removeAttribute("z_bk4wait");
-			cmp.style.cursor = bk == "nil" ? "": bk;
+	var cmp = Event.element(evt),
+		hvcmp = zkau._parentByZKAttr(cmp, "hvig");
+	if (hvcmp) {
+		var img = $e(hvcmp.id + "!hvig");
+		if (img) {
+			zkau._hviz = {id: img.id, src: img.src};
+			img.src = getZKAttr(hvcmp, "hvig");
 		}
-	}*/
+	}
 
 	cmp = zkau._parentByZKAttr(cmp, "tip");
-	if (cmp && !zk.progressing) { //skip tip if in processing
+	if (cmp) {
 		var tip = getZKAttr(cmp, "tip");
 		tip = zkau.getByZid(cmp, tip);
 		if (tip) {
@@ -1446,6 +1441,12 @@ zkau._onDocMouseover = function (evt) {
 /** document.onmouseout */
 zkau._onDocMouseout = function (evt) {
 	if (!evt) evt = window.event;
+
+	if (zkau._hviz) {
+		var img = $e(zkau._hviz.id);
+		if (img) img.src = zkau._hviz.src;
+		zkau._hviz = null;
+	}
 
 	if (zkau._tipz)
 		if (zkau._tipz.open) {

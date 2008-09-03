@@ -33,8 +33,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <window title="Button window" border="normal">
 	<vbox>
-<button label="Left" image="/img/folder.gif" width="125px"/>
-<button label="Right" image="/img/folder.gif" dir="reverse" width="125px"/>
+<button label="Left" image="/img/m1.gif" hoverImage="/img/m2.gif" width="125px"/>
+<button label="Right" image="/img/m2.gif" hoverImage="/img/m3.gif" dir="reverse" width="125px"/>
 <button label="Above" image="/img/folder.gif" orient="vertical" width="125px"/>
 <button label="Below" image="/img/folder.gif" orient="vertical" dir="reverse" width="125px"/>
 	</vbox>

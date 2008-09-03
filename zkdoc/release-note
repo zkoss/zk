@@ -52,6 +52,7 @@ ZK 3.5.0
   2070812: Fulfill allows to specify URI to create children from
   2075293: Allow to specify listener in metainfo/zk/config.xml
   2086401: A way to 'reset' component ID to be anonymous
+  2090533: button/listcell/menu/tab... supports the hover image
 
 * Bugs
   1953249: <borderlayout> inside <tabbox> is not visible
