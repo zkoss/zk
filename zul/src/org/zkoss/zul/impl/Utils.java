@@ -157,7 +157,12 @@ public class Utils {
 			sb.append('/');
 			boolean bExtRequired = true;
 			if (name != null && name.length() != 0) {
-				sb.append(name.replace('\\', '/'));
+				name = name.replace('\\', '/');
+				if (name.charAt(0) == '/') {
+					name = name.substring(1);
+					if (name.length() == 0) name = "ua";
+				}
+				sb.append(name);
 				bExtRequired = name.lastIndexOf('.') < 0;
 			} else {
 				sb.append(comp.getId());
