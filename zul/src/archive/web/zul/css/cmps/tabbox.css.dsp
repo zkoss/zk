@@ -2,7 +2,9 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 <%-- ZK Tabbox --%>
-
+.z-tabbox{
+	overflow:hidden;
+}
 .z-tabbox-ul a, .z-tabbox-ul em, .z-tabbox-ul span{
 	display:block;
 }
