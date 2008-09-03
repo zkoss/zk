@@ -40,12 +40,12 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	/**
 	 * member field to store group head data
 	 */
-	protected Object[] _gheads;
+	protected Object[] _heads;
 	
 	/**
 	 * member field to store group foot data
 	 */
-	protected Object[] _gfoots;
+	protected Object[] _foots;
 	
 	/**
 	 * Constructor.
@@ -85,8 +85,8 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 		if (data == null)
 			throw new NullPointerException();
 		_data = data;
-		_gheads = heads;
-		_gfoots = foots;
+		_heads = heads;
+		_foots = foots;
 	}
 
 	public Object getChild(int groupIndex, int index) {
@@ -100,7 +100,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 
 
 	public Object getGroup(int groupIndex) {
-		return  _gheads==null?_data[groupIndex]:_gheads[groupIndex];
+		return  _heads==null?_data[groupIndex]:_heads[groupIndex];
 	}
 
 
@@ -109,34 +109,34 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	}
 
 	public Object getGroupfoot(int groupIndex) {
-		return _gfoots == null ? null:_gfoots[groupIndex];
+		return _foots == null ? null:_foots[groupIndex];
 	}
 
 	public boolean hasGroupfoot(int groupIndex) {
-		return _gfoots == null ? false:_gfoots[groupIndex]!=null;
+		return _foots == null ? false:_foots[groupIndex]!=null;
 	}
 
 
 	/**
 	 * Do nothing in default implementation, however developer can override it to 
-	 * re-group by manipulating {@link #_data},{@link #_gheads},{@link #_gfoots}
+	 * re-group by manipulating {@link #_data},{@link #_heads},{@link #_foots}
 	 */
 	public void group(Comparator cmpr, boolean ascending, int colIndex) {
 	}
 
 	/**
-	 * Sort each data in each group by Comparator, developer could override {@link #sortGroupItem(Object, Object[], Comparator, boolean, int)
+	 * Sort each data in each group by Comparator, developer could override {@link #sortGroupData(Object, Object[], Comparator, boolean, int)
 	 * to customize.
 	 */
 	public void sort(Comparator cmpr, boolean ascending, int colIndex) {
 		for(int i=0;i<_data.length;i++){
-			sortGroupItem(_gheads==null?_data[i]:_gheads[i],_data[i],cmpr,ascending,colIndex);
+			sortGroupData(_heads==null?_data[i]:_heads[i],_data[i],cmpr,ascending,colIndex);
 		}
 		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,0,_data.length-1);
 	}
 
-	protected void sortGroupItem(Object group,Object[] items,Comparator cmpr,boolean ascending, int colIndex){
-		Arrays.sort(items,cmpr);
+	protected void sortGroupData(Object group,Object[] groupdata,Comparator cmpr,boolean ascending, int colIndex){
+		Arrays.sort(groupdata,cmpr);
 	}
 
 }
