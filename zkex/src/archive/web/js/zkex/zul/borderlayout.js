@@ -409,8 +409,8 @@ zkLayoutRegion2 = {
 					if (target.id == $uuid(cmp) + "!btned") {
 						zkLayoutRegion2.onColledAfterSlideUp(cmp);
 						zkLayoutRegionSplit2.open(cmp.split, true, false, false, true);
-					} else {
-						cmp._isSilde = false;
+					} else if (!cmp._isSilding) {
+						cmp._isSilding = true;
 						anima.slideUp(cmp, zkLayoutRegionSplit2.sanchors[cmp.split.pos]);
 					}
 				}
@@ -419,13 +419,13 @@ zkLayoutRegion2 = {
 	},
 	// a callback function after the collapsed region slides up
 	onColledAfterSlideUp: function (cmp) {
-		cmp._isSilde = false;
 		cmp.style.left = cmp._original[0];
 		cmp.style.top = cmp._original[1];
 		cmp._lastSize = null;// reset size
 		cmp.style.zIndex = "";
 		$e($uuid(cmp), "btn").style.display = "";
 		zk.unlisten(document, "click", cmp._slideIn);
+		cmp._isSilde = cmp._isSilding = false;
 	},
 	onColledClick: function (evt) {
 		var colled = zkau.evtel(evt), real = $real(colled);
