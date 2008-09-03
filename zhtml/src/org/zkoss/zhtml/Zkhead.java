@@ -1,4 +1,4 @@
-/* Zkheaders.java
+/* Zkhead.java
 
 {{IS_NOTE
 	Purpose:
@@ -34,8 +34,8 @@ import org.zkoss.zk.fn.ZkFns;
  * @author tomyeh
  * @since 3.5.0
  */
-public class Zkheaders extends AbstractComponent {
-	public Zkheaders() {
+public class Zkhead extends AbstractComponent {
+	public Zkhead() {
 	}
 
 	//Component//

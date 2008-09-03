@@ -1,6 +1,6 @@
 <html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns:z="http://www.zkoss.org/2005/zul">
 <head>
-<zkheaders/>
+<zkhead/>
 <title>ZHTML Demo</title>
 </head>
 <body>

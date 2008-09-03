@@ -49,9 +49,8 @@ public class Head extends AbstractTag {
 
 		final String zktags = ZkFns.outZkHtmlTags();
 		if (zktags != null) {
-			final int j = buf.lastIndexOf("</head>");
-			if (j >= 0) buf.insert(j, zktags);
-			else buf.append(zktags);
+			final int j = buf.indexOf("<head>");
+			buf.insert(j>= 0 ? j + 6: 0, zktags);
 		}
 
 		out.write(buf.toString());
