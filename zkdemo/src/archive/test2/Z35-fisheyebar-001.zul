@@ -1,4 +1,4 @@
-<window>
+<window height="600px">
 	<fisheyebar id="fish" style="position: absolute; top: 50px; left:100px;margin:20px;" attachEdge="top">
 		<fisheye image="/img/icon_browser.png" label="Web Browser"
 			onClick="alert(self.label)" />

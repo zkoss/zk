@@ -144,7 +144,7 @@ import org.zkoss.zkmax.zul.Columnchildren;
 				<panelchildren>
 					<checkbox label="3D Chart" checked="true"
 						onCheck="mychart.setThreeD(self.isChecked())" />
-					<chart id="mychart" title="Pie Chart Demo" width="320px"
+					<chart id="mychart" title="Pie Chart Demo" width="300px"
 						type="pie" threeD="true" fgAlpha="128">
 						<attribute name="onClick">
 							String areaid = event.getArea(); if (areaid

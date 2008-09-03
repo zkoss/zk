@@ -3,9 +3,16 @@
 	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
- Testing Groupbox basic functionality. Please make sure all components in groupbox are visible to you, and does not change by repeated button clicks.
+<vbox> 
+<label>
+Testing Groupbox basic functionality. 
+</label>
+
+<label>0.Please make sure all components in groupbox are visible to you, and does not change by repeated button clicks.</label>
+<label>1.Please make sure you can sort the inner list item without problem.</label>
+</vbox>
   <window title="Groupbox test" width="100%">
-    <groupbox id="gb3" width="100%">
+    <groupbox id="gb3">
       <caption image="/img/inet.png" label="Testing Group Box"/>
       <vbox>
         <listbox rows="1" mold="select">
@@ -21,7 +28,7 @@
           </listhead>
           <listitem>
             <listcell>
-              <groupbox id="gb4" width="100%">
+              <groupbox id="gb4">
                 <caption image="/img/inet.png" label="Testing Group Box IN LISTBOX"/>
                 <vbox>
                   <listbox rows="1" mold="select">

@@ -93,23 +93,6 @@ new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 1
 				<label value="2008/4/28" />
 				<label value="68KB" />
 			</groupfoot>
-			<group label="Date:Sunday 1" />
-			<groupfoot>
-				<label value="" />
-				<label value="5 emails" />
-				<label value="zk1" />
-				<label value="2008/4/28" />
-				<label value="68KB" />
-			</groupfoot>
-			<group label="Date:Sunday 1" />
-			<groupfoot>
-				<label value="" />
-				<label value="5 emails" />
-				<label value="zk1" />
-				<label value="2008/4/28" />
-				<label value="68KB" />
-			</groupfoot>
-			<group label="Date:Sunday 2" />
 		</rows>
 	</grid>
 

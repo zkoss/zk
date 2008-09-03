@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="Test the paging mold">
-	<grid width="200px" mold="paging" pageSize="3">
+<window title="Test the paging mold" width="500px">
+	<grid mold="paging" pageSize="3">
 		<columns>
 			<column label="Index"/>
 			<column label="Head 1"/>

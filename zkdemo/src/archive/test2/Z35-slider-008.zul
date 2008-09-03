@@ -20,103 +20,13 @@ Test right click for first slider, it should change a label with slider curpos v
       <vbox>
         <slider id="a02" orient="vertical" curpos="0" onScroll="a22.setCurpos(event.getPos());" maxpos="100"/>
       </vbox>
-      <vbox>
-        <slider id="a03" orient="vertical" curpos="0" onScroll="a23.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a04" orient="vertical" curpos="0" onScroll="a24.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a05" orient="vertical" curpos="0" onScroll="a25.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a06" orient="vertical" curpos="0" onScroll="a26.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a07" orient="vertical" curpos="0" onScroll="a27.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a08" orient="vertical" curpos="0" onScroll="a28.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a09" orient="vertical" curpos="0" onScroll="a29.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a10" orient="vertical" curpos="0" onScroll="a30.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a11" orient="vertical" curpos="0" onScroll="a31.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a12" orient="vertical" curpos="0" onScroll="a32.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a13" orient="vertical" curpos="0" onScroll="a33.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a14" orient="vertical" curpos="0" onScroll="a34.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a15" orient="vertical" curpos="0" onScroll="a35.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a16" orient="vertical" curpos="0" onScroll="a36.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-      <vbox>
-        <slider id="a17" orient="vertical" curpos="0" onScroll="a37.setCurpos(event.getPos());" maxpos="100"/>
-      </vbox>
-    </hbox>
+     </hbox>
     <vbox width="100%">
       <hbox>
         <slider id="a21" orient="horizontal" curpos="0" maxpos="100"/>
       </hbox>
       <hbox>
         <slider id="a22" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a23" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a24" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a25" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a26" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a27" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a28" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a29" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a30" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a31" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a32" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a33" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a34" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a35" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a36" orient="horizontal" curpos="0" maxpos="100"/>
-      </hbox>
-      <hbox>
-        <slider id="a37" orient="horizontal" curpos="0" maxpos="100"/>
       </hbox>
     </vbox>
   </window>

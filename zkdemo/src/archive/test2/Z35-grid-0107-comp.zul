@@ -1,4 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <zk>
+
 	<listbox if="${!empty arg.listbox1}" rows="1" mold="select">
 		<listitem label="option1" />
 		<listitem label="option2" />

@@ -1,4 +1,9 @@
 <zk>
+        <zscript>
+void callMe() {
+    alert("Click");
+}
+        </zscript>
 	The complex listbox should show properly.
 	<listbox width="500px" id="w_list_listbox" multiple="true" checkmark="true">
 		<listhead  >

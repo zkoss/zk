@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Grid with Group feature" border="normal">
-	1.Test Other Components in Grid
+	1.Test Other Components in Grid, each button click will add  corresponding component in row and row-detail.
 	<zscript><![CDATA[//@DECLARATION
 	                  
 	                  

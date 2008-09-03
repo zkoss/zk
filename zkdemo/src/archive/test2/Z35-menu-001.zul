@@ -116,8 +116,8 @@
 	</menubar>
 	<separator />
 	<label value="4. Use Menu in Another Window" />
-	<window width="10%" id="window1">
-		<menubar>
+	<window width="10%" id="window1" contentStyle="overflow: hidden; position: relative">
+		<menubar >
 			<menu label="Dynamically Attribute">
 				<menupopup>
 					<menuitem label="ChangeStoneToT1" onClick="changeAttribute(T1)" />
@@ -177,41 +177,5 @@
 					checked="true" disabled="true" />
 			</menupopup>
 		</menu>
-	</menubar>
-	<label value="7. Use Menu in Portal Layout" />
-	<portallayout>
-		<portalchildren width="30%">
-			<panel height="150px" title="Google Tools">
-				<panelchildren>
-					<menubar>
-						<menu label="Dynamically Attribute">
-							<menupopup>
-								<menuitem label="ChangeStoneToT1" onClick="changeAttribute(T1)" />
-								<menuitem label="ChangeStoneToT2" onClick="changeAttribute(T2)" />
-								<menuitem label="ChangeStoneToT3" onClick="changeAttribute(T3)" />
-							</menupopup>
-						</menu>
-					</menubar>
-					<menubar>
-						<menu label="Dynamically Attribute">
-							<menupopup>
-								<menuitem label="ChangeStoneToT1" onClick="changeAttribute(T1)" />
-								<menuitem label="ChangeStoneToT2" onClick="changeAttribute(T2)" />
-								<menuitem label="ChangeStoneToT3" onClick="changeAttribute(T3)" />
-							</menupopup>
-						</menu>
-					</menubar>
-					...
-				</panelchildren>
-			</panel>
-			<panel height="300px" title="LabPixies Clock">
-				<panelchildren> ...</panelchildren>
-			</panel>
-		</portalchildren>
-		<portalchildren width="30%">
-			<panel height="150px" title="Google Tools">
-				<panelchildren> ...</panelchildren>
-			</panel>
-		</portalchildren>
-	</portallayout>
+	</menubar>	
 </window>

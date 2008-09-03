@@ -31,7 +31,7 @@
 
 
 <window id="innerWin" 
-	title="width100%,Height100%" border="normal" width="100%" height="100%">
+	title="width100%,Height100%" border="normal" width="100%" height="60px">
 <button onClick='innerWin.setWidth("50%")' label="innerWin.width = 50%"/>
 <button onClick='innerWin.setHeight("50%")' label="innerWin.height = 50%"/>	
 <button onClick='innerWin.setWidth("100%")' label="innerWin.width = 100%"/>

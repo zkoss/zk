@@ -3,11 +3,15 @@
 	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
- Testing Groupbox basic functionality. If you can see all components in groupbox without truncation, it's good.
-1.Uncheck the checkbox next to "banana" (so it uses 2D Group Box)
-2.See if the groupbox is overlapped by hbox text. If so, its a bug.
+<vbox>
+<label> Testing Groupbox basic functionality. If you can see all components in groupbox without truncation, it's good.</label>
+<label> 0.Open the GroupBox by clicking the button.</label>
+<label> 1.Uncheck the checkbox next to "banana" (so inner groupbox uses 2D Group Box) </label>
+<label> 2.See if the groupbox is overlapped by hbox text. If so, its a bug.</label>
+<label> 3.Check to see if the grid at the bottom is truncated on the right border when the outer groupbox is in 2D mold.</label>
+</vbox>
   <window title="Groupbox test" width="100%">
-    <groupbox id="gb3" width="100%">
+    <groupbox id="gb3" width="100%" open="false">
       <caption image="/img/inet.png" label="Testing Group Box"/>
       <tabbox width="400px">
         <tabs>
