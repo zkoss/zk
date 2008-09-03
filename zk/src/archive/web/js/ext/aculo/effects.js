@@ -76,10 +76,12 @@ Element.forceRerendering = function(element) {
 
 /*--------------------------------------------------------------------------*/
 
+/* Robbie Cheng, Potix: remove unused codes
 Array.prototype.call = function() {
   var args = arguments;
   this.each(function(f){ f.apply(this, args) });
 }
+*/
 
 /*--------------------------------------------------------------------------*/
 
