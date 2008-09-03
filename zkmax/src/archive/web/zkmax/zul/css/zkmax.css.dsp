@@ -18,3 +18,8 @@
 .z-portal-layout-inner {
     overflow: hidden;
 }
+
+<%-- Table Layout--%>
+td.z-table-children {
+	vertical-align: top;
+}

@@ -36,11 +36,13 @@ import org.zkoss.zkmax.zul.Tablechildren;
 public class TablechildrenDefault implements ComponentRenderer{
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
-		final Tablechildren self = (Tablechildren) comp;		
+		final Tablechildren self = (Tablechildren) comp;
+		final String mcls = self.getMoldSclass();
 		int i = 0;
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();i++) {
 			final Component child = (Component) it.next();
-			wh.write("<td id=\"").write(self.getUuid()).write("\"")
+			wh.write("<td id=\"").write(self.getUuid()).write("\" class=\"")
+				.write(mcls).write("\"")
 				.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 				.write(" >");
 			child.redraw(out);
