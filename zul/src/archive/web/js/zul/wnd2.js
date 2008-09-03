@@ -243,14 +243,14 @@ zkWnd2.cleanup = function (cmp) {
 /** Fixed the content div's height. */
 zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 	zkWnd2.hideShadow(cmp);
-	zkWnd2._fixWdh(cmp);
-	zkWnd2._fixHgh(cmp);
-	zkWnd2.syncShadow(cmp);
 	if (getZKAttr(cmp, "maximized") == "true") {
 		if (!cmp._maximized)
 			zkWnd2.syncMaximized(cmp);
 		cmp._maximized = false;
 	}
+	zkWnd2._fixWdh(cmp);
+	zkWnd2._fixHgh(cmp);
+	zkWnd2.syncShadow(cmp);
 };
 zkWnd2.syncMaximized = function (cmp) {
 	var floated = !zkWnd2._embedded(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode,
@@ -588,6 +588,7 @@ zkWnd2.onmouseover = function (evt, cmp) {
 		var c = zkWnd2._insizer(cmp, Event.pointerX(evt), Event.pointerY(evt));
 		var handle = zkWnd2._embedded(cmp) ? false : $e(cmp.id + "!caption");
 		if (c) {
+			if (getZKAttr(cmp, "maximized") == "true") return; // unsupported this case.
 			zk.backupStyle(cmp, "cursor");
 			cmp.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
 				c == 3 ? 'e-resize': c == 4 ? 'se-resize':
@@ -602,6 +603,7 @@ zkWnd2.onmouseover = function (evt, cmp) {
 };
 /** Called by zkWnd2._szs[]'s ignoredrag for resizing window. */
 zkWnd2._ignoresizing = function (cmp, pointer) {
+	if (getZKAttr(cmp, "maximized") == "true") return true;
 	var dg = zkWnd2._szs[cmp.id];
 	if (dg) {
 		var v = zkWnd2._insizer(cmp, pointer[0], pointer[1]);

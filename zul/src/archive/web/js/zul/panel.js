@@ -358,14 +358,14 @@ zkPanel = {
 	/** Fixed the content div's height. */
 	onSize: function (cmp) {
 		zkPanel.hideShadow(cmp);
-		zkPanel._fixHgh(cmp);
-		zkPanel._fixWdh(cmp);
-		zkPanel.syncShadow(cmp);
 		if (getZKAttr(cmp, "maximized") == "true") {
 			if (!cmp._maximized)
 				zkPanel.syncMaximized(cmp);
 			cmp._maximized = false;
 		}
+		zkPanel._fixHgh(cmp);
+		zkPanel._fixWdh(cmp);
+		zkPanel.syncShadow(cmp);
 	}, 
 	syncMaximized: function (cmp) {
 		var floated = zkPanel.isFloatable(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode,
