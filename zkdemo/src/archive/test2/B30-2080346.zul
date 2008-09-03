@@ -2,7 +2,9 @@
 <vbox>
 1. focus combobox by clicking into it
 <separator/>
-2. type "a", than ENTER. Onchanging event fired, textbox value should be "a". (if the value is "aa", it is wrong)
+2. type "a", textbox value should be "a". (if the value is "aa", it is wrong)
+<separator/>
+3. Than ENTER. Onchanging event fired, textbox value should be "aa". (if the value is "a", it is wrong)
 </vbox>
 
 <combobox onChanging="copy.value=event.value" autodrop="true">
