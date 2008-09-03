@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z31-grid-0002.zul
+Z35-grid-0102.zul
 
 {{IS_NOTE
 	Purpose:
@@ -27,37 +27,69 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			_asc = asc;
 		}
 		public int compare(Object o1, Object o2) {
-			String s1 = o1.toString(), s2 = o2.toString();
+			//Row row1 = (Row)o1;
+			//Row row2 = (Row)o2;
+			String s1 = (String)o1;//row1.getChildren().get(0).getValue();
+			String s2 = (String)o2;//row2.getChildren().get(0).getValue();
 			int v = s1.compareTo(s2);
 			return _asc ? v: -v;
 		}
 	}
 	
+	class MyRowRenderer implements RowRenderer{
+		public void render(Row row, java.lang.Object data){
+			if(data instanceof String[]){
+				new Label(((String[])data)[0].toString()).setParent(row);
+			}else if (data instanceof String){
+				new Label(data.toString()).setParent(row);
+			}else{
+				new Label("UNKNOW:"+data.toString()).setParent(row);
+			}
+		}
+	}
+	MyRowRenderer renderer = new MyRowRenderer();
 	]]></zscript>	
 	<zscript><![CDATA[  
-		String[] data = new String[50];
-		for(int j=0; j<data.length; ++j) {
-			data[j] = "option "+j;
+	                  
+	   	
+		String[][] datas = new String[4][];
+		datas[0] = new String[5];
+		datas[1] = new String[10];
+		datas[2] = new String[7];
+		datas[3] = new String[13];
+		for(int j=0; j<datas[0].length; ++j) {
+			datas[0][j] = j+"A option "+j;
 		}
-		ListModel model1 = new SimpleGroupModel(data, new int[]{13,3,14,16});
-		ListModel model2 = new SimpleGroupModel(data, new int[]{46,0,0,0});
-		ListModel model3 = new SimpleGroupModel(data, new int[]{0,0,0,46});
-		ListModel model4 = new SimpleGroupModel(data, new int[]{23,0,0,23});
-		ListModel model5 = new SimpleGroupModel(data, new int[]{0,23,23,0});
+		for(int j=0; j<datas[1].length; ++j) {
+			datas[1][j] = j+"B option "+j;
+		}
+		for(int j=0; j<datas[2].length; ++j) {
+			datas[2][j] = j+"C option "+j;
+		}
+		for(int j=0; j<datas[3].length; ++j) {
+			datas[3][j] = j+"D option "+j;
+		}
+		GroupsModel model1 = new SimpleGroupsModel(datas);
+		GroupsModel model2 = new SimpleGroupsModel(datas,new String[]{"Group A","Group B","Group C","Group D"});
+		GroupsModel model3 = new SimpleGroupsModel(datas,new String[]{"Group A","Group B","Group C","Group D"},new String[]{"Foot A","Foot B","Foot C","Foot D"});
+		GroupsModel model4 = new SimpleGroupsModel(datas,new String[]{"Group A","Group B","Group C","Group D"},new String[]{"Foot A1",null,"Footer C1",null});
+		GroupsModel model5 = new SimpleGroupsModel(datas,new String[]{"Group A","Group B","Group C","Group D"},new String[]{null,"Foot B2",null,"Footer D2"});
 		
 		
 		Comparator asc = new RowLabelComparator(true);
 		Comparator dsc = new RowLabelComparator(false);
 	]]></zscript>	
 	<hbox>
-	<button onClick="gd1.setModel(model1);" label="model 1"/>
-	<button onClick="gd1.setModel(model2)" label="model 2"/>
-	<button onClick="gd1.setModel(model3)" label="model 3"/>
-	<button onClick="gd1.setModel(model4)" label="model 4"/>
-	<button onClick="gd1.setModel(model5)" label="model 5"/>
+	<button onClick="gd1.setModel(model1);" label="data only"/>
+	<button onClick="gd1.setModel(model2)" label="data ,head"/>
+	<button onClick="gd1.setModel(model3)" label="data,head,foot"/>
+	<button onClick="gd1.setModel(model4)" label="not all foot"/>
+	<button onClick="gd1.setModel(model5)" label="not all foot 2"/>
+	<button onClick='gd1.setMold("paging");gd1.setPageSize(7)' label="set Paging"/>
+	<button onClick="gd1.invalidate();" label="invalidate"/> 
 	</hbox> 
-	<grid width="200px" height="500px" model="${model1}" id="gd1">
-		<columns>
+	<grid width="500px" height="500px" model="${model2}" id="gd1" rowRenderer="${renderer}">
+		<columns >
 			<column label="Load on Demend  (Grid)" sortAscending="${asc}" sortDescending="${dsc}"/>
 		</columns>
 	</grid>
