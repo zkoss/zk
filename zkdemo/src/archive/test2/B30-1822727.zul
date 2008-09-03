@@ -12,7 +12,6 @@ If Henry is still selected, it is bug.<br/>
 <br/>
 it also happen when you select Mary,John,Jane at step 1(, and disselect
 Jane,John in step 4).<br/>
-
 <br/>
 ]]></html>
 	<button label="Toggle multiple" onClick="box.multiple = !box.multiple"/>
