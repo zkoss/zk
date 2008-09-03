@@ -80,7 +80,6 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Combobox extends Textbox {
 	private static final Log log = Log.lookup(Combobox.class);
-	private String _img;
 	private boolean _autodrop, _autocomplete, _btnVisible = true;
 	private transient Comboitem _selItem;
 	private ListModel _model;
@@ -424,22 +423,18 @@ public class Combobox extends Textbox {
 	/** Returns the URI of the button image.
 	 * <p>Default: null. (since 3.5.0)
 	 * @since 2.4.1
+	 * @deprecated As of release 3.5.0
 	 */
 	public String getImage() {
-		return _img;
+		return null;
 	}
 	/** Sets the URI of the button image.
 	 *
 	 * @param img the URI of the button image.
 	 * @since 2.4.1
+	 * @deprecated As of release 3.5.0
 	 */
 	public void setImage(String img) {
-		if (img != null && img.length() == 0)
-			img = null;
-		if (!Objects.equals(_img, img)) {
-			_img = img;
-			invalidate();
-		}
 	}
 
 	/** Returns a 'live' list of all {@link Comboitem}.

@@ -35,9 +35,6 @@ public class SpinnerDefault implements ComponentRenderer {
 			wh.write(" style=\"display:none\"");
 
 		wh.write("><img class=\"").write(mcls).write("-img\" onmousedown=\"return false;\"");
-		if (self.getImage() != null) 
-			wh.write(" style=\"background-image:url(").write(exec.encodeURL(self.getImage()))
-				.write(")\"");
 		wh.write(" src=\"").write(exec.encodeURL("~./img/spacer.gif")).write("\"").write("\"/></span></span>");
 		
 	}

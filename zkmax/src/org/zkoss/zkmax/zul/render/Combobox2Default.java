@@ -55,9 +55,6 @@ public class Combobox2Default implements ComponentRenderer {
 			wh.write(" style=\"display:none\"");
 
 		wh.write("><img class=\"").write(mcls).write("-img\" onmousedown=\"return false;\"");
-		if (self.getImage() != null) 
-			wh.write(" style=\"background-image:url(").write(exec.encodeURL(self.getImage()))
-				.write(")\"");
 		wh.write(" src=\"").write(exec.encodeURL("~./img/spacer.gif")).write("\"")
 			.write("\"/></span><div id=\"").write(uuid).write("!pp\" class=\"")
 			.write(mcls).write("-pp\" style=\"display:none\" tabindex=\"-1\">")

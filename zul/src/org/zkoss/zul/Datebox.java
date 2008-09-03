@@ -52,7 +52,6 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Datebox extends FormatInputElement {
-	private String _img;
 	private TimeZone _tzone;
 	private boolean _lenient = true;
 	private boolean _compact, _btnVisible = true;
@@ -142,22 +141,18 @@ public class Datebox extends FormatInputElement {
 	/** Returns the URI of the button image.
 	 * <p>Default: null. (since 3.5.0)
 	 * @since 3.0.0
+	 * @deprecated As of release 3.5.0
 	 */
 	public String getImage() {
-		return _img;
+		return null;
 	}
 	/** Sets the URI of the button image.
 	 *
 	 * @param img the URI of the button image.
 	 * @since 3.0.0
+	 * @deprecated As of release 3.5.0
 	 */
 	public void setImage(String img) {
-		if (img != null && img.length() == 0)
-			img = null;
-		if (!Objects.equals(_img, img)) {
-			_img = img;
-			invalidate();
-		}
 	}
 
 	/** Returns the value (in Date), might be null unless

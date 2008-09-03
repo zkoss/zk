@@ -58,7 +58,6 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.0.0
  */
 public class Timebox extends InputElement {
-	private String _img;
 	private TimeZone _tzone;
 	private boolean _btnVisible = true;
 	
@@ -105,21 +104,17 @@ public class Timebox extends InputElement {
 	}
 	/** Returns the URI of the button image.
 	 * <p>Default: null. (since 3.5.0)
+	 * @deprecated As of release 3.5.0
 	 */
 	public String getImage() {
-		return _img;
+		return null;
 	}
 	/** Sets the URI of the button image.
 	 *
 	 * @param img the URI of the button image.
+	 * @deprecated As of release 3.5.0
 	 */
 	public void setImage(String img) {
-		if (img != null && img.length() == 0)
-			img = null;
-		if (!Objects.equals(_img, img)) {
-			_img = img;
-			invalidate();
-		}
 	}
 	
 	public String getInnerAttrs() {

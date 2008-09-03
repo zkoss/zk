@@ -40,7 +40,6 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.5.0
  */
 public class Spinner extends NumberInputElement {
-	private String _img;
 	private int _step = 1;
 	private boolean _btnVisible = true;
 
@@ -107,24 +106,6 @@ public class Spinner extends NumberInputElement {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
 			smartUpdate("z.btnVisi", visible);
-		}
-	}
-	/** Returns the URI of the button image.
-	 */
-	public String getImage() {
-		return _img;
-	}
-	/** Sets the URI of the button image.
-	 *
-	 * @param img the URI of the button image. If null or empty, the default
-	 * URI is used.
-	 */
-	public void setImage(String img) {
-		if (img != null && img.length() == 0)
-			img = null;
-		if (!Objects.equals(_img, img)) {
-			_img = img;
-			invalidate();
 		}
 	}
 

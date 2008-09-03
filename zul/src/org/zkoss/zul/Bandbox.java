@@ -48,7 +48,6 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Bandbox extends Textbox {
 	private transient Bandpopup _drop;
-	private String _img;
 	private boolean _autodrop, _btnVisible = true;
 
 	public Bandbox() {
@@ -104,27 +103,18 @@ public class Bandbox extends Textbox {
 	/** Returns the image URI that is displayed as the button to open
 	 * {@link Bandpopup}.
 	 * Default: null. (since 3.5.0)
+	 * @deprecated As of release 3.5.0
 	 */
 	public String getImage() {
-		return _img;
+		return null;
 	}
 	/** Sets the image URI that is displayed as the button to open
 	 * {@link Bandpopup}.
 	 *
 	 * @param img the image URI.
+	 * @deprecated As of release 3.5.0
 	 */
 	public void setImage(String img) {
-		if (img != null && img.length() == 0)
-			img = null;
-		if (!Objects.equals(_img, img)) {
-			_img = img;
-			invalidate();
-			//NOTE: Tom Yeh: 20051222
-			//It is possible to use smartUpdate if we always generate
-			//an image (with an ID) in getImgTag.
-			//However, it is too costly by making HTML too big, so
-			//we prefer to invalidate (it happens rarely)
-		}
 	}
 
 	/** Drops down or closes the child.
