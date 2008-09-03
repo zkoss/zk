@@ -1733,8 +1733,9 @@ public class Listbox extends XulElement implements Paginated {
 	}
 	/** Clears a listitem as if it is not loaded. */
 	private final void unloadItem(ListitemRenderer renderer, Listitem item, int index) {
-		item.getParent().insertBefore(newUnloadedItem(renderer, index), item);
+		Component next = item.getNextSibling();
 		item.detach(); //always detach
+		insertBefore(newUnloadedItem(renderer, index), next);
 	}
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.

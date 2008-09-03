@@ -40,7 +40,7 @@ public interface GroupComparator extends Comparator {
 	 * <li>compareGroup(x, y) == 0 implies x and y is in the same group.</li>
 	 * <li>compareGroup(x, y) > 0 implies x and y is in a different group
 	 * and the order of x's group is larger than that of y's group.<li>
-	 * <li>compareGroup(x, y) < 0 implies x and y is in a different group
+	 * <li>compareGroup(x, y) &lt; 0 implies x and y is in a different group
 	 * and the order of x's group is less than that of y's group.<li>
 	 * </ul>
 	 */

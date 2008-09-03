@@ -826,8 +826,9 @@ public class Grid extends XulElement implements Paginated {
 	}
 	/** Clears a row as if it is not loaded. */
 	private final void unloadRow(RowRenderer renderer, Row row, int index) {
-		_rows.insertBefore(newUnloadedRow(renderer, index), row);
+		Component next = row.getNextSibling();
 		row.detach(); //always detach
+		_rows.insertBefore(newUnloadedRow(renderer, index), next);
 	}
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.

@@ -63,7 +63,7 @@ public class Rows extends XulElement {
 		return (Grid)getParent();
 	}
 	/**
-	 * Returns the number of Group
+	 * Returns the number of groups.
 	 * @since 3.5.0
 	 */
 	public int getGroupCount() {
