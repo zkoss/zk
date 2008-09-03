@@ -48,7 +48,8 @@ span.z-button {
 	vertical-align: middle;
 	text-align: center;
 	padding: 0 5px;
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;  
+	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;
+	white-space: nowrap; 
 }
 .z-button .z-button-cr {
 	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -129px;
