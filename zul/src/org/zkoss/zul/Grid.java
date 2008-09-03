@@ -755,19 +755,16 @@ public class Grid extends XulElement implements Paginated {
 		Row row = null;
 		if (_model instanceof GroupsListModel) {
 			final GroupsListModel model = (GroupsListModel) _model;
-			final int[] ginfo = model.getGroupInfo(index);
-			switch(ginfo[1]){
-			case 0:
+			final GroupDataInfo info = model.getDataInfo(index);
+			switch(info.type){
+			case GroupDataInfo.GROUP:
 				row = newGroup(renderer);
 				break;
-			case 1:
-				row = newRow(renderer);
-				break;
-			case 2:
+			case GroupDataInfo.GROUPFOOT:
 				row = newGroupfoot(renderer);
 				break;
 			default:
-				throw new UiException("Uknow type:"+ginfo[1]);
+				row = newRow(renderer);
 			}		
 		}else{
 			row = newRow(renderer);

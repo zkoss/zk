@@ -1670,19 +1670,16 @@ public class Listbox extends XulElement implements Paginated {
 		Listitem item = null;
 		if (_model instanceof GroupsListModel) {
 			final GroupsListModel model = (GroupsListModel) _model;
-			final int[] ginfo = model.getGroupInfo(index);
-			switch(ginfo[1]){
-			case 0:
+			final GroupDataInfo info = model.getDataInfo(index);
+			switch(info.type){
+			case GroupDataInfo.GROUP:
 				item = newListgroup(renderer);
 				break;
-			case 1:
-				item = newListitem(renderer);
-				break;
-			case 2:
+			case GroupDataInfo.GROUPFOOT:
 				item = newListgroupfoot(renderer);
 				break;
 			default:
-				throw new UiException("Uknow type:"+ginfo[1]);
+				item = newListitem(renderer);
 			}		
 		}else{
 			item = newListitem(renderer);

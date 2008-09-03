@@ -34,7 +34,7 @@ import org.zkoss.zul.event.GroupsDataListener;
  */
 /*package*/ class GroupsListModel extends AbstractListModel {
 	private final GroupsModel _model;
-	private transient int _size, _groupCount;
+	private transient int _size;
 	/** An array of the group offset.
 	 * The group offset is the offset from 0 that a group shall appear
 	 * at the client.
@@ -51,17 +51,16 @@ import org.zkoss.zul.event.GroupsDataListener;
 		init();
 	}
 	private void init() {
-		_groupCount = _model.getGroupCount();
-		_gpofs = new int[_groupCount];
-		_gpfts = new boolean[_groupCount];
+		final int groupCount = _model.getGroupCount();
+		_gpofs = new int[groupCount];
+		_gpfts = new boolean[groupCount];
 		_size = 0;
-		for (int j = 0; j < _groupCount; ++j) {
+		for (int j = 0; j < groupCount; ++j) {
 			_gpofs[j] = _size;
 			_size += 1 + _model.getChildCount(j);
 			_gpfts[j] = _model.hasGroupfoot(j);
 			if (_gpfts[j]) ++_size;
 		}
-		//_size += _groupCount;, already add 1 in above loop for group head
 
 		_model.addGroupsDataListener(_listener = new DataListener());
 	}
@@ -72,18 +71,19 @@ import org.zkoss.zul.event.GroupsDataListener;
 	/** Returns the number of groups in the data model.
 	 */
 	/*package*/ int getGroupCount() {
-		return _model.getGroupCount();
+		return _gpofs.length;
 	}
 	/** Returns the number of items belong the specified group.
 	 */
 	/*package*/ int getChildCount(int groupIndex) {
-		return _model.getChildCount(groupIndex);
+		int v = getNextOffset(groupIndex) - _gpofs[groupIndex] - 1;
+		return _gpfts[groupIndex] ? v - 1: v;
 	}
 	/**
 	 * Returns whether the Group has a Groupfoot or not.
 	 */
 	/*package*/ boolean hasGroupfoot(int groupIndex) {
-		return _model.hasGroupfoot(groupIndex);
+		return _gpfts[groupIndex];
 	}
 	/**
 	 * Groups and sorts the data by the specified column and comparator.
@@ -116,40 +116,30 @@ import org.zkoss.zul.event.GroupsDataListener;
 	 * [2] offset : the offset of index in group, only available when type is row 
 	 * [3] hasfoot : 1 if this group has foot.
 	 */
-	/*package*/ int[] getGroupInfo(int index) {
+	/*package*/ GroupDataInfo getDataInfo(int index) {
 		if (index < 0 || index >= _size)
 			throw new IndexOutOfBoundsException("Not in 0.."+_size+": "+index);
 
 		int gi = Arrays.binarySearch(_gpofs, index);
-		if (gi >= 0) {
-			return new int[]{gi, 0 , -1, (_gpfts[gi])?1:0};
-		} else {
-			gi = - gi - 2; //0 ~ _gpofs.length - 2
-			int ofs = index - _gpofs[gi] - 1;
-			if (_gpfts[gi]) {
-				if (ofs >=  getNextOffset(gi) - _gpofs[gi] -2) //child count
-					return new int[]{gi, 2, -1,(_gpfts[gi])?1:0};
-			}
-			return new int[]{gi, 1, ofs,(_gpfts[gi])?1:0};
-		}
+		if (gi >= 0)
+			return new GroupDataInfo(GroupDataInfo.GROUP, gi, 0);
+
+		gi = - gi - 2; //0 ~ _gpofs.length - 2
+		int ofs = index - _gpofs[gi] - 1;
+		if (_gpfts[gi]
+		&& ofs >=  getNextOffset(gi) - _gpofs[gi] -2) //child count
+			return new GroupDataInfo(GroupDataInfo.GROUPFOOT, gi, 0);
+
+		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs);
 	}
 	//ListModel//
 	public Object getElementAt(int index) {
-		if (index < 0 || index >= _size)
-			throw new IndexOutOfBoundsException("Not in 0.."+_size+": "+index);
-
-		int gi = Arrays.binarySearch(_gpofs, index);
-		if (gi >= 0) {
-			return _model.getGroup(gi);
-		} else {
-			gi = - gi - 2; //0 ~ _gpofs.length - 2
-			int ofs = index - _gpofs[gi] - 1;
-			if (_gpfts[gi]) {
-				if (ofs >=  getNextOffset(gi) - _gpofs[gi] -2) //child count
-					return _model.getGroupfoot(gi);
-			}
-			return _model.getChild(gi, ofs);
-		}
+		final GroupDataInfo info = getDataInfo(index);
+		if (info.type == GroupDataInfo.GROUP)
+			return _model.getGroup(info.groupIndex);
+		if (info.type == GroupDataInfo.GROUPFOOT)
+			return _model.getGroupfoot(info.groupIndex);
+		return _model.getChild(info.groupIndex, info.offset);
 	}
 	public int getSize() {
 		return _size;
@@ -185,7 +175,7 @@ import org.zkoss.zul.event.GroupsDataListener;
 			case GroupsDataEvent.INTERVAL_REMOVED:
 				final int gi = event.getGroupIndex();
 				if (gi < 0 || gi >= _gpofs.length)
-					throw new IndexOutOfBoundsException("Group index not in 0.."+_groupCount+", "+gi);
+					throw new IndexOutOfBoundsException("Group index not in 0.."+getGroupCount()+", "+gi);
 
 				int ofs = _gpofs[gi] + 1;
 				j0 = j0 >= 0 ? j0 + ofs: ofs;
@@ -204,16 +194,43 @@ import org.zkoss.zul.event.GroupsDataListener;
 				type -= GroupsDataEvent.GROUPS_CHANGED;
 				if (j0 >= 0) {
 					if (j0 >= _gpofs.length)
-						throw new IndexOutOfBoundsException("Group index not in 0.."+_groupCount+", "+j0);
+						throw new IndexOutOfBoundsException("Group index not in 0.."+getGroupCount()+", "+j0);
 					j0 = _gpofs[j0];
 				}
 				if (j1 >= 0) {
 					if (j1 >= _gpofs.length)
-						throw new IndexOutOfBoundsException("Group index not in 0.."+_groupCount+", "+j1);
+						throw new IndexOutOfBoundsException("Group index not in 0.."+getGroupCount()+", "+j1);
 					j1 = getNextOffset(j1) - 1; //include groupfoot
 				}
 			}
 			fireEvent(type, j0, j1);
 		}
+	}
+}
+/** The group infomation returned by {@link GroupsListModel#getDataInfo}.
+ */
+/*package*/ class GroupDataInfo {
+	/** Indicates the data is a group (aka., the head of the group). */
+	/*package*/ static final byte GROUP = 0;
+	/** Indicates the data is a group foot. */
+	/*package*/ static final byte GROUPFOOT = 1;
+	/** Indicates the data is an element of a group. */
+	/*package*/ static final byte ELEMENT = 2;
+
+	/** The index of the group. */
+	/*package*/ int groupIndex;
+	/** The offset of an element in a group.
+	 * It is meaningful only if {@link #type} is {@link #ELEMENT}.
+	 */
+	/*package*/ int offset;
+	/** The type of the data.
+	 * It is one of {@link #GROUP}, {@link #GROUPFOOT} and {@link #ELEMENT}.
+	 */
+	/*package*/ byte type;
+
+	/*package*/ GroupDataInfo(byte type, int groupIndex, int offset) {
+		this.type = type;
+		this.groupIndex = groupIndex;
+		this.offset = offset;
 	}
 }
