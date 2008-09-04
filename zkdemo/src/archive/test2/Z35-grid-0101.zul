@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z31-grid-0001.zul
+Z35-grid-0102.zul
 
 {{IS_NOTE
 	Purpose:
@@ -17,79 +17,81 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="Grid with Group feature" border="normal">
-	1.Test Grid with Group, and dyanmic add a new Group , Items . 2,change the column size 
-	<zscript>
-		<![CDATA[
-		String[][] datas = new String[][]{
-			// Today
-			new String[]{"1","[zk1 - Help] RE: ZK problem in dynamic menu","2008/4/29 15:47:27","12KB"},
-			new String[]{"2","[zk1 - Help] RE: FileUpload","2008/4/29 15:37:57","14KB"},
-			new String[]{"3","[zk1 - Help] RE: Datebox format","2008/4/29 15:27:31","11KB"},
-			new String[]{"4","[zk1 - Help] RE: Datebox format","2008/4/29 14:17:22","12KB"},
-			new String[]{"5","[zk1 - Help] FileUpload","2008/4/29 14:07:25","11KB"},
-			new String[]{"6","[zk1 - General] RE: Opening more than one new	browser window","2008/4/29 13:44:17","12KB"},
-			new String[]{"7","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/29 13:31:12","14KB"},
-			new String[]{"8","[zk1 - Help] RE: Times_Series Chart help","2008/4/29 13:26:37","14KB"},
-			new String[]{"9","[zk1 - Help] RE: Times_Series Chart help","2008/4/29 10:41:33","14KB"},	
-			new String[]{"10","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/29 10:14:27","14KB"},
-			// Yesterday
-			new String[]{"11","[zk1 - General] RE: Opening more than one new	browser window","2008/4/28 13:44:17","12KB"},
-			new String[]{"12","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 13:31:12","14KB"},
-			new String[]{"13","[zk1 - Help] RE: Times_Series Chart help","2008/4/28 13:26:37","14KB"},
-			new String[]{"14","[zk1 - Help] RE: Times_Series Chart help","2008/4/28 10:41:33","14KB"},	
-			new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 10:14:27","14KB"},
-			
-		};
-	]]>
-	<![CDATA[//@DECLARATION
-	void addNewGroup(){
-		Group group = new Group("Group");
-		Row row1 = new Row();
-		new Label("row1").setParent(row1);
-		Row row2 = new Row();
-		new Label("row2").setParent(row2);
-		group.setOpen(false);
-		myrows.getChildren().add(5,row2);
-		myrows.getChildren().add(5,row1);
-		myrows.getChildren().add(5,group);
+<window title="Live Data Demo" border="normal">
+	Grouping with Live Data - Different Model should has different grouping
+	
+	<zscript><![CDATA[//@DECLARATION
+	class RowLabelComparator implements Comparator {
+		boolean _asc;
+		public RowLabelComparator(boolean asc) {
+			_asc = asc;
+		}
+		public int compare(Object o1, Object o2) {
+			//Row row1 = (Row)o1;
+			//Row row2 = (Row)o2;
+			String s1 = (String)o1;//row1.getChildren().get(0).getValue();
+			String s2 = (String)o2;//row2.getChildren().get(0).getValue();
+			int v = s1.compareTo(s2);
+			return _asc ? v: -v;
+		}
 	}
-	]]>
-	</zscript>
+	
+	class MyRowRenderer implements RowRenderer{
+		public void render(Row row, java.lang.Object data){
+			if(data instanceof String[]){
+				new Label(((String[])data)[0].toString()).setParent(row);
+			}else if (data instanceof String){
+				new Label(data.toString()).setParent(row);
+			}else{
+				new Label("UNKNOW:"+data.toString()).setParent(row);
+			}
+		}
+	}
+	MyRowRenderer renderer = new MyRowRenderer();
+	]]></zscript>	
+	<zscript><![CDATA[  
+	                  
+	   	
+		String[][] datas = new String[4][];
+		datas[0] = new String[5];
+		datas[1] = new String[10];
+		datas[2] = new String[7];
+		datas[3] = new String[13];
+		for(int j=0; j<datas[0].length; ++j) {
+			datas[0][j] = j+"A option "+j;
+		}
+		for(int j=0; j<datas[1].length; ++j) {
+			datas[1][j] = j+"B option "+j;
+		}
+		for(int j=0; j<datas[2].length; ++j) {
+			datas[2][j] = j+"C option "+j;
+		}
+		for(int j=0; j<datas[3].length; ++j) {
+			datas[3][j] = j+"D option "+j;
+		}
+		GroupsModel model1 = new SimpleGroupsModel(datas);
+		GroupsModel model2 = new SimpleGroupsModel(datas,new String[]{"Group A","Group B","Group C","Group D"});
+		GroupsModel model3 = new SimpleGroupsModel(datas,new String[]{"Group A","Group B","Group C","Group D"},new String[]{"Foot A","Foot B","Foot C","Foot D"});
+		GroupsModel model4 = new SimpleGroupsModel(datas,new String[]{"Group A","Group B","Group C","Group D"},new String[]{"Foot A1",null,"Footer C1",null});
+		GroupsModel model5 = new SimpleGroupsModel(datas,new String[]{"Group A","Group B","Group C","Group D"},new String[]{null,"Foot B2",null,"Footer D2"});
+		
+		
+		Comparator asc = new RowLabelComparator(true);
+		Comparator dsc = new RowLabelComparator(false);
+	]]></zscript>	
 	<hbox>
-		<button label="1.add group at today" onClick="addNewGroup()"/>
-	</hbox>
-	<grid fixedLayout="true">
-        <columns sizable="true">
-          <column width="40px" label="From"/>
-          <column label="Subject"/>
-          <column width="150px" label="Received"/>
-          <column width="50px" label="Size"/>
-        </columns>
-        <rows id="myrows">
-          <group open="false">
-            <label value="Date:Today [From]"/>
-            <label value="[Subject]"/>
-            <label value="[Received]"/>
-            <label value="[Size]"/>
-          </group>
-          <row forEach="${datas}" forEachBegin="0" forEachEnd="9">
-            <div><image style="padding: 0px 10px" src="/img/mail_read.png"/><label value="${each[0]}"/></div>
-            <label value="${each[1]}"/>
-            <label value="${each[2]}"/>
-            <label value="${each[3]}"/>
-          </row>
-          <group label="Date:Yesterday" />
-          <row forEach="${datas}" forEachBegin="10" forEachEnd="14">
-            <div><image style="padding: 0px 10px" src="/img/mail_read.png"/><label value="${each[0]}"/></div>
-            <label value="${each[1]}"/>
-            <label value="${each[2]}"/>
-            <label value="${each[3]}"/>
-          </row>
-          <group label="Date:Sunday 1" />
-          <group label="Date:Sunday 1" />
-          <group label="Date:Sunday 2" />
-        </rows>
-      </grid>
+	<button onClick="gd1.setModel(model1);" label="data only"/>
+	<button onClick="gd1.setModel(model2)" label="data ,head"/>
+	<button onClick="gd1.setModel(model3)" label="data,head,foot"/>
+	<button onClick="gd1.setModel(model4)" label="not all foot"/>
+	<button onClick="gd1.setModel(model5)" label="not all foot 2"/>
+	<button onClick='gd1.setMold("paging");gd1.setPageSize(7)' label="set Paging"/>
+	<button onClick="gd1.invalidate();" label="invalidate"/> 
+	</hbox> 
+	<grid width="500px" height="500px" model="${model2}" id="gd1" rowRenderer="${renderer}">
+		<columns >
+			<column label="Load on Demend  (Grid)" sortAscending="${asc}" sortDescending="${dsc}"/>
+		</columns>
+	</grid>
 	
 </window>
