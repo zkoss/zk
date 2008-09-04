@@ -6,7 +6,8 @@ ZK 3.0.8
   2045810: AnnotatedDataBinderInit accept relative path in arg0
   2060367: More neat startup log for ignorable errors
   2066299: fulfill: fire onFulfill after fulfilling the children
-
+  2092356: Unwrap ForwardEvent automatically in GenericEventListener
+  
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
   2056760: Fail to change the width of Listbox
