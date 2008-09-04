@@ -7,7 +7,7 @@
 <button onClick="alert(box.getErrorMessage())" label="Show Error Message"/>
 <button onClick="cleanup()" label="Cleanup"/>
 <button onClick="cleanup2()" label="Retrieve and Cleanup"/>
-<button onClick="box.setValue(&quot;ab&quot;)" label="Cleanup by update"/>
+<button onClick="box.setValue(&quot;ab&quot;)" label='Cleanup by update (textbox will appear "ab")'/>
 <label id="info"/>
 </vbox>
 <zscript>
