@@ -33,7 +33,6 @@ import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.impl.ExecutionCarryOver;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.out.AuScript;
 
 /**
@@ -203,8 +202,6 @@ public class PollingServerPush implements ServerPush {
 
 	public boolean activate(long timeout)
 	throws InterruptedException, DesktopUnavailableException {
-		assert D.OFF || !Events.inEventListener(): "No need to activate in the event listener";
-
 		final Thread curr = Thread.currentThread();
 		if (_active != null && _active.thread.equals(curr)) { //re-activate
 			++_active.nActive;
@@ -217,20 +214,34 @@ public class PollingServerPush implements ServerPush {
 				_pending.add(info);
 		}
 
-		synchronized (info) {
-			if (_desktop != null) {
-				if (info.nActive == 0) //not granted yet
-					info.wait(timeout);
+		boolean loop;
+		do {
+			loop = false;
+			synchronized (info) {
+				if (_desktop != null) {
+					if (info.nActive == 0) //not granted yet
+						info.wait(timeout <= 0 ? 10*60*1000: timeout);
 
-				if (_desktop != null && info.nActive <= 0) { //not granted (timeout)
-					info.nActive = GIVEUP; //denote timeout (and give up)
-					synchronized (_pending) { //undo pending
-						_pending.remove(info);
+					if (info.nActive <= 0) { //not granted
+						boolean bTimeout = timeout > 0;
+						boolean bDead = _desktop == null || !_desktop.isAlive();
+						if (bTimeout || bDead) { //not timeout
+							info.nActive = GIVEUP; //denote timeout (and give up)
+							synchronized (_pending) { //undo pending
+								_pending.remove(info);
+							}
+
+							if (bDead)
+								throw new DesktopUnavailableException("Stopped");
+							return false; //timeout
+						}
+
+						log.debug("Executions.activate() took more than 10 minutes");
+						loop = true; //try again
 					}
-					return false; //timeout
 				}
 			}
-		}
+		} while (loop);
 
 		if (_desktop == null)
 			throw new DesktopUnavailableException("Stopped");
