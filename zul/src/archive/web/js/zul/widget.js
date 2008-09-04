@@ -376,8 +376,10 @@ zkButton = {
 	},
 	setAttr: function (cmp, nm, val) {
 		if ("tabindex" == nm) {
-			zkau.setAttr($real(cmp.id), nm, val);
-			return true;
+			if (zk.gecko || zk.safari) {
+				zkau.setAttr($real(cmp.id), nm, val);
+				return true;
+			}
 		}
 	}
 };
@@ -782,7 +784,7 @@ zkPop = {
 			}
 		}
 		
-		ctx.style.visibility = "inherit";
+		zk.cleanVisibility(ctx);
 		if (asap)
 			zkau.send({uuid: ctx.id, cmd: "onOpen",
 				data: ref ? [true, ref.id]: [true]});

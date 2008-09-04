@@ -223,7 +223,7 @@ zkPortalLayout = {
 				if (broadcast) zk.onSizeAt(cns[i]);
 			}
 		}
-		cmp.style.visibility = "inherit";
+		zk.cleanVisibility(cmp);
 	}
 };
 zkPortalLayout.onVisi = zkPortalLayout.onSize = zkPortalLayout.render;

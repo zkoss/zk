@@ -2520,6 +2520,24 @@ zk.setVisible = function (cmp, visible, alwaysAnima) {
 	else if (visible) action.show(cmp);
 	else action.hide(cmp);
 };
+if (zk.opera)
+	/**
+	 * Cleans up the visibility of the specified component.
+	 * Note: In Opera, "inherit" will cause a big bug of text input element, which is inside
+	 * the specified component. 
+	 * @since 3.0.8
+	 */
+	zk.cleanVisibility = function (cmp) {
+		cmp.style.visibility = "visible"; // visible will cause an other bug, but we need do it for Input element.
+	};
+else 
+	/**
+	 * Cleans up the visibility of the specified component.
+	 * @since 3.0.8
+	 */
+	zk.cleanVisibility = function (cmp) {
+		cmp.style.visibility = "inherit";
+	};
 ////
 //show & hide
 /** Shows the specified element with the effect specified in conshow,

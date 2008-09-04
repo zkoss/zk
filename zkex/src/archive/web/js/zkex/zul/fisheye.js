@@ -82,7 +82,7 @@ zk.fisheye.prototype = {
 			};
 		zk.listen(document.documentElement, "mousemove", this._onMouseMove);
 		zk.listen(document.documentElement, "mouseout", this._onBodyOut);
-		this.el.style.visibility = "inherit";
+		zk.cleanVisibility(this.el);
 	},
 	getAttachEdge: function () {
 		var edge = getZKAttr(this.el, "attachedge") || "center";
@@ -436,7 +436,7 @@ zkFisheye = {
 				meta.active = true;
 			meta._fixLab(cmp);
 		}
-		label.style.visibility = "inherit";
+		zk.cleanVisibility(label);
 	},
 	onMouseOut: function (evt) {
 		if (!evt) evt = window.event;

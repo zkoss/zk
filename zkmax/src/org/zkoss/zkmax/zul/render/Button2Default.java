@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.Out;
 import org.zkoss.zk.ui.render.SmartWriter;
@@ -55,8 +57,11 @@ public class Button2Default implements ComponentRenderer {
 			.write(mcls).write("-cl\"><button id=\"")
 			.write(uuid).write("!real\" class=\"z ")
 			.write(mcls).write("\"");
-		if (self.getTabindex() >= 0)
-			wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
+		if (self.getTabindex() >= 0) {
+			Execution exec = Executions.getCurrent();
+			if (exec.isGecko() || exec.isSafari())
+				wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
+		}
 		wh.write("></button></td><td class=\"")
 			.write(mcls).write("-cm\">");
 

@@ -22,6 +22,8 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
@@ -207,7 +209,12 @@ public class Button extends LabelImageElement {
 		appendAsapAttr(sb, Events.ON_BLUR);
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 		appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
-			//no z.lfclk since it is handled by widget.js
+		if (_tabindex >= 0) {
+			Execution exec = Executions.getCurrent();
+			if (!exec.isGecko() && !exec.isSafari())
+			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
+		}
+		
 		return sb.toString();
 	}
 

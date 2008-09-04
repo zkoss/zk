@@ -64,7 +64,7 @@ zkColumnLayout = {
 				if (broadcast) zk.onSizeAt(cns[i]);
 			}
 		}
-		cmp.style.visibility = "inherit";
+		zk.cleanVisibility(cmp);
 	}
 };
 zkColumnLayout.onVisi = zkColumnLayout.onSize = zkColumnLayout.render;

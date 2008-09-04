@@ -449,7 +449,7 @@ zkPanel = {
 	},
 	_show: function (cmp) {
 		if (getZKAttr(cmp, "visible") == "true")
-			cmp.style.visibility = "inherit";
+			zk.cleanVisibility(cmp);
 		zk.show(cmp);
 		zkPanel.syncShadow(cmp);
 	},
