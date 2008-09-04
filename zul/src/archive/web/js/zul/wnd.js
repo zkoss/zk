@@ -391,7 +391,7 @@ zkWnd._initMode = function (cmp) {
 	if (replace) {//replace with the same mode
 		delete zkWnd._clean2[cmp.id]; //and _doXxx will handle it
 		if (getZKAttr(cmp, "visible") == "true")
-			cmp.style.visibility = "inherit";
+			zk.cleanVisibility(cmp);
 	}
 	else if (zkWnd._clean2[cmp.id])
 		zkWnd._cleanMode2(cmp.id, true); //replace with a new mode
@@ -444,7 +444,7 @@ zkWnd._show = function (cmp) {
 		cmp.style.display = "none";
 		
 	if (getZKAttr(cmp, "visible") == "true")
-		cmp.style.visibility = "inherit";
+		zk.cleanVisibility(cmp);
 			//turn it on since Window.getRealStyle turn it off to
 			//have the better effect if the window contains a lot of items
 	zk.show(cmp);

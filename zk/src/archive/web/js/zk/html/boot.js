@@ -73,7 +73,7 @@ if (!window.Boot_progressbox) { //not customized
 				setZKAttr(el, "y", iy);
 			}
 		}
-		el.style.visibility = "inherit";
+		zk.cleanVisibility(el);
 		return $e(id);
 	};
 }
@@ -1476,7 +1476,7 @@ zk._domsg = function () {
 			var d = $e("zk_debugbox");
 			d.style.top = zk.innerY() + zk.innerHeight() - d.offsetHeight - 20 + "px";
 			d.style.left = zk.innerX() + zk.innerWidth() - d.offsetWidth - 20 + "px";
-			d.style.visibility = "inherit";
+			zk.cleanVisibility(d);
 		}
 		console.value = console.value + zk._msg + '\n';
 		console.scrollTop = console.scrollHeight;
