@@ -1110,7 +1110,8 @@ zkWnd2._startMove = function (cmp, handle) {
 		 cmp.style.top = cmp.offsetTop + "px";
 	if(cmp.style.left && cmp.style.left.indexOf("%") >= 0)
 		 cmp.style.left = cmp.offsetLeft + "px";
-	zkau.closeFloats(cmp, handle);
+	var real = $real(handle);
+	zkau.closeFloats(real, handle);
 };
 /** Makes a window un-movable. */
 zkWnd2._stick = function (cmp) {
