@@ -522,8 +522,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_comps = new HashMap(2); //not clear() since # of comps might huge
 		_meds = null;
 		_rque = null;
-		_sess = null;
-		_wapp = null;
+		//_sess = null; => not sure whether it can be nullify
+		//_wapp = null; => SimpleDesktopCache.desktopDestroyed depends on it
 	}
 	public boolean isAlive() {
 		return _rque != null;
