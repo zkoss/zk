@@ -281,14 +281,14 @@ zkTab2 = {
 zkTabs2 = {	
 	init : function(cmp){
 	    zkTabs2._fixWidth(cmp.id);    
-	    var btn = $e(cmp.id + "!right");
+	    var btn = $e(cmp.id + "!right");		
 		//horizontal
 	    if (btn) {
-	        zk.listen(btn, "click", zkTabs2.onClickArrow);
+	        zk.listen(btn, "click", zkTabs2.onClickArrow);									
 	    }
 	    btn = $e(cmp.id + "!left");
 	    if (btn) {
-	        zk.listen(btn, "click", zkTabs2.onClickArrow);
+	        zk.listen(btn, "click", zkTabs2.onClickArrow);						
 	    }
 		//vertical
 		btn = $e(cmp.id + "!down");
@@ -555,17 +555,16 @@ _fixWidth : function(uuid){
 		if (tbx.offsetWidth < 36) 
 			return;
 		if (zk.isScroll(tbx)) {
-			if (!tbx.style.width) {
-				zk.forceStyle(tbx,"w",tbx.offsetWidth + "px");
-				zk.forceStyle(tabs,"w",tbx.offsetWidth-2 + "px");				
+			if (!tbx.style.width) {							
+				zk.forceStyle(tbx,"w","100%");				
+				zk.forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");				
 				if (zk.hasClass(tbx, "z-tabbox-scrolling")) {
 					zk.forceStyle(head,"w",tbx.offsetWidth - 38 + "px");					
 				} else {					
-					zk.forceStyle(head,"w",tbx.offsetWidth - 2 + "px");
+					zk.forceStyle(head,"w",zk.revisedSize(head,tbx.offsetWidth)+ "px");
 				}
-			}
-			else {				
-				zk.forceStyle(tabs,"w",tbx.offsetWidth-2 + "px");	
+			}else {								
+				zk.forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");					
 				zk.forceStyle(head,"w",tabs.style.width);												
 				if (zk.hasClass(tbx, "z-tabbox-scrolling")) {					
 					zk.forceStyle(head,"w",head.offsetWidth - 36 + "px");			

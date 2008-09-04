@@ -80,7 +80,7 @@
 }
 .z-slider-scale-btn {
     width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
-    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-thumb.png')}) no-repeat 0 0;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-thumb.gif')}) no-repeat 0 0;
 }
 .z-slider-scale-btn-over {
     background-position: -14px -15px;
