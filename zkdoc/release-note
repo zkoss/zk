@@ -113,6 +113,14 @@ ZK 3.5.0
 		zPos = Position;
 	}
 
+  + org.zkoss.zkplus.databind.AnnotateDataBinderInit now implements both 
+    org.zkoss.zk.ui.util.Initiator and org.zkoss.zk.ui.util.InitiatorExt interfaces.
+    That is, the original interface method doAfterCompose(Page page) of Initiator
+	won't be called any more. Rather, the doAfterCompose(Page page, Component[] comps) 
+	of InitiatorExt is called. If you have written own class that extends 
+	AnnotateDataBinderInit and overrides doAfterCompose(Page page) method of Initiator, 
+	you probably have to do some modification accordingly.
+
 	--------
 ZK 3.0.7
 * Features
