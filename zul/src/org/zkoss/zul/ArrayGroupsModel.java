@@ -67,7 +67,7 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
 	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
 	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
-	 * In this phase it also invoke {@link #createGroupHead(Object[], int)} and {@link #createGroupFoot(Object[], int)} to create head of foot Object of each group.<br/>
+	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
 	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
 	 */
 	public ArrayGroupsModel(Object[] data,Comparator cmpr){
@@ -79,7 +79,7 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
 	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
 	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
-	 * In this phase it also invoke {@link #createGroupHead(Object[], int)} and {@link #createGroupFoot(Object[], int)} to create head of foot Object of each group.<br/>
+	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
 	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
 	 * @param col column index associate with cmpr.
 	 */
