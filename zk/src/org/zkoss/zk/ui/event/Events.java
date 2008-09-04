@@ -412,7 +412,14 @@ public class Events {
 	 * For example, if the controller object has a method named onOK,
 	 * then the onOK event is listened and the onOK method is called
 	 * when the event is received.
-
+	 * <p>Since 3.0.8, this method treats ForwardEvent specially. If the 
+	 * event argument going to be passed into the onXxx event listener is a 
+	 * ForwardEvent and the onXxx event listener defined in the controller 
+	 * specifies a specific event class as its parameter rather than generic 
+	 * Event or ForwardEvent class, then this method will unwrap the 
+	 * ForwardEvent automatically 
+	 * (see {@link org.zkoss.zk.ui.event.ForwardEvent#getOrigin()})
+	 * and pass the original forwarded event to the defined onXxx event listener.</p>
 	 * <p>This is a useful tool for MVC design practice. You can write
 	 * onXxx event handler codes in controller object and use this utility to
 	 * register the events to the specified component.</p>
@@ -430,7 +437,19 @@ public class Events {
 				if (mtd != null) {
 					if (mtd.getParameterTypes().length == 0)
 						mtd.invoke(controller, null);
-					else
+					else if (evt instanceof ForwardEvent) { //ForwardEvent
+						final Class paramcls = (Class) mtd.getParameterTypes()[0];
+						//paramcls is ForwardEvent || Event
+						if (ForwardEvent.class.isAssignableFrom(paramcls)
+						|| Event.class.equals(paramcls)) { 
+							mtd.invoke(controller, new Object[] {evt});
+						} else {
+							do {
+								evt = ((ForwardEvent)evt).getOrigin();
+							} while(evt instanceof ForwardEvent);
+							mtd.invoke(controller, new Object[] {evt});
+						}
+					} else
 						mtd.invoke(controller, new Object[] {evt});
 				}
 			}

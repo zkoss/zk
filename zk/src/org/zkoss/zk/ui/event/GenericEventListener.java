@@ -64,6 +64,14 @@ abstract public class GenericEventListener implements EventListener {
 	 *
 	 * <p>You rarely need to override this method.
 	 * Rather, provide corresponding onXxx method to handle the event.
+	 * 
+	 * <p>Since 3.0.8, this method treats ForwardEvent specially. If the 
+	 * event argument passed into this listener is a ForwardEvent and the
+	 * defined onXxx method specifies a specific event class
+	 * as its parameter rather than generic Event or ForwardEvent class, then this 
+	 * method will unwrap the ForwardEvent automatically 
+	 * (see {@link org.zkoss.zk.ui.event.ForwardEvent#getOrigin()})
+	 * and pass the original forwarded event to the onXxx method.</p>
 	 *
 	 * @see org.zkoss.zk.ui.event.EventListener#onEvent(org.zkoss.zk.ui.event.Event)
 	 */	
@@ -72,8 +80,20 @@ abstract public class GenericEventListener implements EventListener {
 		if (mtd != null) {
 			if (mtd.getParameterTypes().length == 0)
 				mtd.invoke(this, null);
-			else
-				 mtd.invoke(this, new Object[] {evt});
+			else if (evt instanceof ForwardEvent) { //ForwardEvent
+				final Class paramcls = (Class) mtd.getParameterTypes()[0];
+				//paramcls is ForwardEvent || Event
+				if (ForwardEvent.class.isAssignableFrom(paramcls)
+				|| Event.class.equals(paramcls)) { 
+					mtd.invoke(this, new Object[] {evt});
+				} else {
+					do {
+						evt = ((ForwardEvent)evt).getOrigin();
+					} while(evt instanceof ForwardEvent);
+					mtd.invoke(this, new Object[] {evt});
+				}
+			} else
+				mtd.invoke(this, new Object[] {evt});
 		}
 	}
 	
