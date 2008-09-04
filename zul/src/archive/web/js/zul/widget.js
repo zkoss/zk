@@ -631,7 +631,7 @@ if (zk.ie6Only) {
 		return zkImg._fixpng(cmp);
 	};
 	zkImg._fixpng = function (img) {
-		if (img.getAttribute("zk_alpha") && img.src
+		if (getZKAttr(img, "alpha") && img.src
 		&& img.src.toLowerCase().endsWith(".png")) {
 			var id = img.id;
 			var wd = img.width, hgh = img.height;

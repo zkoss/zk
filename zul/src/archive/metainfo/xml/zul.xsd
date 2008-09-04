@@ -441,6 +441,8 @@
 		<xs:attributeGroup ref="labelElementAttrGroup" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="imageContent" type="xs:string" use="optional" />
+		<xs:attribute name="hoverImage" type="xs:string" use="optional" />
+		<xs:attribute name="hoverImageContent" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="headerElementAttrGroup">
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
@@ -1150,10 +1152,12 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="border" type="xs:string" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="hover" type="xs:string" use="optional" />
+		<xs:attribute name="hoverContent" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="hspace" type="xs:string" use="optional" />
 		<xs:attribute name="vspace" type="xs:string" use="optional" />
-		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />

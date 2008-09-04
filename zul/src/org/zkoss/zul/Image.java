@@ -48,8 +48,14 @@ public class Image extends XulElement {
 	private String _src;
 	/** The image. _src and _image cannot be nonnull at the same time.  */
 	private org.zkoss.image.Image _image;
+	/** The hover image's src. */
+	private String _hoversrc;
+	/** The hover image. */
+	private org.zkoss.image.Image _hoverimg;
 	/** Count the version of {@link #_image}. */
 	private byte _imgver;
+	/** Count the version of {@link #_hoverimg}. */
+	private byte _hoverimgver;
 
 	public Image() {
 	}
@@ -139,10 +145,13 @@ public class Image extends XulElement {
 	}
 	/** Sets the source URI of the image.
 	 *
-	 * <p>If {@link #setContent(org.zkoss.image.Image)} is ever called with non-null,
-	 * it takes heigher priority than this method.
+	 * <p>Calling this method implies setContent(null).
+	 * In other words, the last invocation of {@link #setSrc} overrides
+	 * the previous {@link #setContent}, if any.
 	 *
 	 * @param src the URI of the image source
+	 * @see #setContent(org.zkoss.image.Image)
+	 * @see #setContent(RenderedImage)
 	 */
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)
@@ -164,10 +173,14 @@ public class Image extends XulElement {
 	}
 
 	/** Sets the content directly.
-	 * Default: null.
+	 * <p>Default: null.
 	 *
-	 * @param image the image to display. If not null, it has higher
-	 * priority than {@link #getSrc}.
+	 * <p>Calling this method implies setSrc(null).
+	 * In other words, the last invocation of {@link #setContent} overrides
+	 * the previous {@link #setSrc}, if any.
+	 *
+	 * @param image the image to display.
+	 * @see #setSrc
 	 */
 	public void setContent(org.zkoss.image.Image image) {
 		if (_src != null || image != _image) {
@@ -209,20 +222,100 @@ public class Image extends XulElement {
 	 */
 	private String getContentSrc() {
 		return Utils.getDynamicMediaURI(
-			this, _imgver, _image.getName(), _image.getFormat());
+			this, _imgver, "c/" + _image.getName(), _image.getFormat());
+	}
+	/** Returns the encoded src ({@link #getSrc}).
+	 */
+	private String getEncodedHoverSrc() {
+		if (_hoverimg != null)
+			return Utils.getDynamicMediaURI(
+				this, _hoverimgver,
+				"h/" + _hoverimg.getName(), _hoverimg.getFormat());
+
+		final Desktop dt = getDesktop(); //it might not belong to any desktop
+		return dt != null && _hoversrc != null ?
+			dt.getExecution().encodeURL(_hoversrc): null;
+	}
+
+	/** Returns the URI of the hover image.
+	 * The hover image is used when the mouse is moving over this component.
+	 * <p>Default: null.
+	 * @since 3.5.0
+	 */
+	public String getHover() {
+		return _hoversrc;
+	}
+	/** Sets the image URI.
+	 * The hover image is used when the mouse is moving over this component.
+	 * <p>Calling this method implies setHoverContent(null).
+	 * In other words, the last invocation of {@link #setHover} overrides
+	 * the previous {@link #setHoverContent}, if any.
+	 * @since 3.5.0
+	 * @see #setHoverContent(org.zkoss.image.Image)
+	 * @see #setHoverContent(RenderedImage)
+	 */
+	public void setHover(String src) {
+		if (src != null && src.length() == 0) src = null;
+		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
+			_hoversrc = src;
+			_hoverimg = null;
+			smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
+		}
+	}
+	/** Sets the content of the hover image directly.
+	 * The hover image is used when the mouse is moving over this component.
+	 * <p>Default: null.
+	 *
+	 * <p>Calling this method implies setHover(null).
+	 * In other words, the last invocation of {@link #setHoverContent} overrides
+	 * the previous {@link #setHover}, if any.
+	 * @param image the image to display.
+	 * @since 3.5.0
+	 * @see #setHover
+	 */
+	public void setHoverContent(org.zkoss.image.Image image) {
+		if (_hoversrc != null || image != _hoverimg) {
+			_hoverimg = image;
+			_hoversrc = null;
+			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
+			smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
+		}
+	}
+	/** Sets the content of the hover image directly with the rendered image.
+	 * The hover image is used when the mouse is moving over this component.
+	 *
+	 * <p>It actually encodes the rendered image to an PNG image
+	 * ({@link org.zkoss.image.Image}) with {@link Images#encode},
+	 * and then invoke {@link #setHoverContent(org.zkoss.image.Image)}.
+	 *
+	 * <p>If you want more control such as different format, quality,
+	 * and naming, you can use {@link Images} directly.
+	 * @since 3.5.0
+	 */
+	public void setHoverContent(RenderedImage image) {
+		try {
+			setHoverContent(Images.encode("hover.png", image));
+		} catch (java.io.IOException ex) {
+			throw new UiException(ex);
+		}
 	}
 
 	//-- super --//
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		final String clkattrs = getAllOnClickAttrs();
-		if (!alphafix())
+		final boolean bHover = _hoversrc != null || _hoverimg != null;
+		final boolean bAlphafix = alphafix();
+		if (!bAlphafix && !bHover)
 			return clkattrs == null ? attrs: attrs + clkattrs;
 
 		//Request 1522329
 		final StringBuffer sb = new StringBuffer(64).append(attrs);
 		if (clkattrs != null) sb.append(clkattrs);
-		sb.append(" zk_alpha=\"true\"");
+		if (bAlphafix)
+			sb.append(" z.alpha=\"true\"");
+		if (bHover)
+			HTMLs.appendAttribute(sb, "z.hvig", getEncodedHoverSrc());
 		return sb.toString();
 	}
 	/** Tests whether to apply Request 1522329.
@@ -272,6 +365,14 @@ public class Image extends XulElement {
 	implements DynamicMedia {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
+			if (pathInfo != null) {
+				int j = pathInfo.indexOf('/', 1);
+				if (j >= 0) {
+					int k = pathInfo.indexOf('/', ++j);
+					if (k == j + 1 && pathInfo.charAt(j) == 'h')
+						return _hoverimg;
+				}
+			}
 			return _image;
 		}
 	}
@@ -279,6 +380,11 @@ public class Image extends XulElement {
 	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
 		public String getValue() {
 			return getEncodedSrc();
+		}
+	}
+	private class EncodedHoverSrc implements org.zkoss.zk.ui.util.DeferredValue {
+		public String getValue() {
+			return getEncodedHoverSrc();
 		}
 	}
 }

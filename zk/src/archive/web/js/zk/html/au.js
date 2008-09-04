@@ -1395,7 +1395,7 @@ zkau._onDocMouseover = function (evt) {
 	var cmp = Event.element(evt),
 		hvcmp = zkau._parentByZKAttr(cmp, "hvig");
 	if (hvcmp) {
-		var img = $e(hvcmp.id + "!hvig");
+		var img = $tag(hvcmp) == "IMG" ? hvcmp: $e(hvcmp.id + "!hvig");
 		if (img) {
 			zkau._hviz = {id: img.id, src: img.src};
 			img.src = getZKAttr(hvcmp, "hvig");
