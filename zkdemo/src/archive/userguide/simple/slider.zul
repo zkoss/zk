@@ -39,6 +39,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<separator bar="true"/>
 		<slider id="slider2" onScroll="zoom(slider2, img2)" width="200px" mold="sphere"/>
 		<image id="img2" src="/img/sun.jpg" width="10px"/>
+		<slider id="slider3" onScroll="zoom(slider3, img3)" mold="scale"/>
+		<image id="img3" src="/img/sun.jpg" width="10px"/>
 
 		Progress meter:
 		<progressmeter id="pm" value="20" />
