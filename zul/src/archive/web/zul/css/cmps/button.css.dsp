@@ -13,7 +13,7 @@ table.z-button {
 </c:if>
 span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
-	margin: 0 1px 0 0;
+	margin: 0 1px 0 0; width: 100%;
 }
 .z-button button.z-button {
 	width: 3px !important;
