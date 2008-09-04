@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 Grid:onColSize event.getColIndex() alwyas return 1
 	<label id="lab"/>
 	<grid width="500px">
-		<columns id="cs" sizable="true" onColSize='lab.value=new java.util.Date()+"col size change:"+event+","+event.getColumn1()+",colindex:"+event.getColIndex()'>
+		<columns id="cs" sizable="true" onColSize='lab.value=new java.util.Date()+"col size change:"+event+","+event.getColumn()+",colindex:"+event.getColIndex()'>
 			<column label="AA" id="col1" />
 			<column label="BB" id="col2" />
 			<column label="CC" id="col3" />
