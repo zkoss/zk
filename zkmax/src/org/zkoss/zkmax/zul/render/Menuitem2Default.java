@@ -86,7 +86,7 @@ public class Menuitem2Default implements ComponentRenderer {
 				wh.write(exec.encodeURL(self.getHref()));
 			wh.write("\"").writeAttr("target",self.getTarget());
 			wh.write(" class=\"");
-			if (!self.isImageAssigned() && ((Menupopup)self.getParent()).isCheckmark()) {
+			if (!self.isImageAssigned() && self.isCheckmark()) {
 				if (self.isChecked()) 
 					wh.write(mcls).write("-cnt ").write(mcls).write("-cnt-ck");
 				else 

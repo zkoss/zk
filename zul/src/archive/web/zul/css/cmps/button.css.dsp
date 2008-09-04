@@ -11,10 +11,20 @@ table.z-button {
 	table-layout:fixed;
 }
 </c:if>
-span.z-button {
-	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
-	margin: 0 1px 0 0; width: 100%;
+table.z-button {
+	display: inline;
+	margin: 0px;
 }
+<c:if test="${c:isSafari()}">
+table.z-button {
+	display: inline-table;
+}
+</c:if>
+<c:if test="${c:isExplorer()}">
+table.z-button {
+	margin: 0 1px 0 0;
+}
+</c:if>
 .z-button button.z-button {
 	width: 3px !important;
 }

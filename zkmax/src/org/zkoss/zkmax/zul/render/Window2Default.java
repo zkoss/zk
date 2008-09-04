@@ -72,7 +72,7 @@ public class Window2Default implements ComponentRenderer {
 		} else if (isFrame) {
 			wh.write("<div class=\"").write(mcls).write("-tl\"><div class=\"")
 				.write(mcls).write("-tr\"><div class=\"").write(mcls)
-				.write("-tm-notitle\"></div></div></div>");
+				.write("-tm-noheader\"></div></div></div>");
 		}
 		wh.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(mcls).write("-body\">");
 		if (isFrame) {

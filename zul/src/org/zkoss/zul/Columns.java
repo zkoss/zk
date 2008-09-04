@@ -289,7 +289,6 @@ public class Columns extends HeadersElement {
 			if (cols._columnshide) {
 				final Menu columns = new Menu(Messages.get(MZul.GRID_COLUMNS) , "~./zul/img/grid/columns.gif");
 				final Menupopup menupop = new Menupopup();
-				menupop.setCheckmark(true);
 				menupop.setParent(columns);
 				columns.setParent(this);
 				for (Iterator it = cols.getChildren().iterator(); it.hasNext();) {
@@ -300,6 +299,7 @@ public class Columns extends HeadersElement {
 		private Menuitem createMenuitem(final Column col) {
 			final Menuitem item = new Menuitem(col.getLabel());
 			item.setAutocheck(true);
+			item.setCheckmark(true);
 			item.setChecked(col.isVisible());
 			item.addEventListener(Events.ON_CLICK, new EventListener() {
 				public void onEvent(Event event) throws Exception {

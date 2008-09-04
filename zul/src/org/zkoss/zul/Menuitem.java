@@ -41,6 +41,7 @@ public class Menuitem extends LabelImageElement {
 	private String _href, _target;
 	private boolean _autocheck, _checked;
 	private boolean _disabled = false;
+	private boolean _checkmark;
 
 	public Menuitem() {
 	}
@@ -53,7 +54,25 @@ public class Menuitem extends LabelImageElement {
 		setLabel(label);
 		setImage(src);
 	}
-
+	
+	/** Returns whether the check mark shall be displayed in front
+	 * of each item.
+	 * <p>Default: false.
+	 * @since 3.5.0
+	 */
+	public final boolean isCheckmark() {
+		return _checkmark;
+	}
+	/** Sets whether the check mark shall be displayed in front
+	 * of each item.
+	 * @since 3.5.0
+	 */
+	public void setCheckmark(boolean checkmark) {
+		if (_checkmark != checkmark) {
+			_checkmark = checkmark;
+			invalidate();
+		}
+	}
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
 		final String added = isDisabled() ? getMoldSclass() + "-disd" : "";
@@ -117,17 +136,14 @@ public class Menuitem extends LabelImageElement {
 		return _checked;
 	}
 	/** Sets whether it is checked.
-	 * <p> This only applies when {@link Menupopup#isCheckmark()} = true. (since 3.5.0)
+	 * <p> This only applies when {@link #isCheckmark()} = true. (since 3.5.0)
 	 */
 	public void setChecked(boolean checked) {
 		if (_checked != checked) {
 			_checked = checked;
-
-			final Component parent = getParent();
-			if (parent instanceof Menupopup)
-				parent.invalidate();
-			//CONSIDER: to use smartUpdate instead of invalidate
-			//FUTURE: to support checked for top-level menuitems
+			if (_checked)
+				setCheckmark(true);
+			invalidate();
 		}
 	}
 	/** Returns whether the menuitem check mark will update each time
@@ -207,7 +223,7 @@ public class Menuitem extends LabelImageElement {
 		if (topmost) sb.append(" z.top=\"true\"");
 		if (isDisabled())
 			HTMLs.appendAttribute(sb, "z.disd", true);
-		if (!topmost && _autocheck && ((Menupopup)getParent()).isCheckmark()) {
+		if (!topmost && _autocheck && isCheckmark()) {
 			sb.append(" z.autock=\"true\"");
 			if (_checked) sb.append(" z.checked=\"true\"");
 		}

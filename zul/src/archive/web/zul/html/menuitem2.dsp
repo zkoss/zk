@@ -41,7 +41,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:otherwise>
 <li id="${self.uuid}" z.type="Menuit2"${self.outerAttrs}${self.innerAttrs}>
 <c:choose>
-	<c:when test="${!self.imageAssigned && self.parent.checkmark}">
+	<c:when test="${!self.imageAssigned && self.checkmark}">
 		<c:choose>
 			<c:when test="${self.checked}">
 				<c:set var="class1" value="${mcls}-cnt ${mcls}-cnt-ck"/>

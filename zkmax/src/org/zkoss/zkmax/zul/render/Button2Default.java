@@ -43,14 +43,10 @@ public class Button2Default implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		String mcls = self.getMoldSclass();
 		if (mcls == null) mcls = "";
-		final String outerattrs = self.getOuterAttrs();
 		
-		wh.write("<span z.type=\"zul.widget.Button\" id=\"").write(uuid)
-			.write("\" class=\"").write(mcls).write("\"")
-			.write(ZkFns.noCSSAttrs(outerattrs))
-			.write('>').write("<table id=\"").write(uuid)
-			.write("!box\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"")						
-			.write(ZkFns.outCSSAttrs(outerattrs))
+		wh.write("<table z.type=\"zul.widget.Button\" id=\"").write(uuid)
+			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"")						
+			.write(self.getOuterAttrs())
 			.write(self.getInnerAttrs())
 			.write(">\n<tr><td class=\"").write(mcls).write("-tl\"></td>");
 		wh.write("<td class=\"").write(mcls).write("-tm\"></td><td class=\"")
@@ -83,6 +79,6 @@ public class Button2Default implements ComponentRenderer {
 			.write(mcls).write("\"></i></td></tr>\n<tr><td class=\"")
 			.write(mcls).write("-bl\"></td><td class=\"").write(mcls)
 			.write("-bm\"></td><td class=\"")
-			.write(mcls).write("-br\"></td></tr>\n</table></span>");						
+			.write(mcls).write("-br\"></td></tr>\n</table>");						
 	}
 }

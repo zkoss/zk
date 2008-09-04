@@ -94,7 +94,7 @@ ZK 3.5.0
     onDrawNewChid methods are moved from the Component interface
     to the ComponentCtrl intereface.
   + The setAutocheck and setChecked methods of Menuitem only apply
-    when Menupopup.isCheckmark is true.
+    when Menuitem.isCheckmark is true.
   + The script component now has "text/javascript" as the default type.
   + Add some new trendy layout of these components, including Borderlayout, Groupbox,
     Window, Menu, Menuitem, Menupopup, Menubar, and Menuseparator, as
