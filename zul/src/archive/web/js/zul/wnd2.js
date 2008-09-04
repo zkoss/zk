@@ -183,6 +183,7 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 				s.top = cmp._lastSize.t;
 				s.width = cmp._lastSize.w;
 				s.height = cmp._lastSize.h;
+				cmp._lastSize = null;
 			}
 			l = s.left;
 			t = s.top;
@@ -253,6 +254,7 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 	zkWnd2.syncShadow(cmp);
 };
 zkWnd2.syncMaximized = function (cmp) {
+	if (!cmp._lastSize) return;
 	var floated = !zkWnd2._embedded(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode,
 		s = cmp.style;
 		
