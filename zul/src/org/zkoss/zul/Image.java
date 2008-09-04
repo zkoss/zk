@@ -139,10 +139,13 @@ public class Image extends XulElement {
 	}
 	/** Sets the source URI of the image.
 	 *
-	 * <p>If {@link #setContent(org.zkoss.image.Image)} is ever called with non-null,
-	 * it takes heigher priority than this method.
+	 * <p>Calling this method implies setContent(null).
+	 * In other words, the last invocation of {@link #setSrc} overrides
+	 * the previous {@link #setContent}, if any.
 	 *
 	 * @param src the URI of the image source
+	 * @see #setContent(org.zkoss.image.Image)
+	 * @see #setContent(RenderedImage)
 	 */
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)
@@ -164,10 +167,14 @@ public class Image extends XulElement {
 	}
 
 	/** Sets the content directly.
-	 * Default: null.
+	 * <p>Default: null.
 	 *
-	 * @param image the image to display. If not null, it has higher
-	 * priority than {@link #getSrc}.
+	 * <p>Calling this method implies setSrc(null).
+	 * In other words, the last invocation of {@link #setContent} overrides
+	 * the previous {@link #setSrc}, if any.
+	 *
+	 * @param image the image to display.
+	 * @see #setSrc
 	 */
 	public void setContent(org.zkoss.image.Image image) {
 		if (_src != null || image != _image) {

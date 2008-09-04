@@ -145,7 +145,11 @@ public class Iframe extends XulElement {
 	}
 	/** Sets the src.
 	 *
+	 * <p>Calling this method implies setContent(null).
+	 * In other words, the last invocation of {@link #setSrc} overrides
+	 * the previous {@link #setContent}, if any.
 	 * @param src the source URL. If null or empty, nothing is included.
+	 * @see #setContent
 	 */
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)
@@ -169,8 +173,11 @@ public class Iframe extends XulElement {
 	/** Sets the content directly.
 	 * Default: null.
 	 *
+	 * <p>Calling this method implies setSrc(null).
+	 * In other words, the last invocation of {@link #setContent} overrides
+	 * the previous {@link #setSrc}, if any.
 	 * @param media the media for this inline frame.
-	 * If not null, it has higher priority than {@link #getSrc}.
+	 * @see #setSrc
 	 */
 	public void setContent(Media media) {
 		if (_src != null || media != _media) {

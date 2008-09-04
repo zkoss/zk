@@ -134,21 +134,19 @@ public class Style extends AbstractComponent {
 
 	/** Returns the URI of an external style sheet.
 	 *
-	 * <p>Default: null. If null, the children's
-	 * (must be instances of {@link Label}) value ({@link Label#getValue})
-	 * is used as the content of styles.
-	 * If not null, the HTML LINK tag is generated to ask the browser
-	 * to load the specified style sheet.
+	 * <p>Default: null.
 	 */
 	public String getSrc() {
 		return _src;
 	}
 	/** Sets the URI of an external style sheet.
 	 *
-	 * <p>Calling this methid implies setContent(null) was called.
+	 * <p>Calling this method implies setContent(null).
+	 * In other words, the last invocation of {@link #setSrc} overrides
+	 * the previous {@link #setContent}, if any.
 	 *
-	 * @param src the URI of an external style sheet, or null to use
-	 * the content of children ({@link Label#getValue}) instead.
+	 * @param src the URI of an external style sheet
+	 * @see #setContent
 	 */
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)
@@ -172,9 +170,12 @@ public class Style extends AbstractComponent {
 	}
 	/** Sets the content of the style element.
 	 * By content we mean the CSS rules that will be sent to the client.
-	 * <p>Calling this methid implies setSrc(null) was called.
 	 *
+	 * <p>Calling this method implies setSrc(null).
+	 * In other words, the last invocation of {@link #setContent} overrides
+	 * the previous {@link #setSrc}, if any.
 	 * @since 3.0.0
+	 * @see #setSrc
 	 */
 	public void setContent(String content) {
 		if (content != null && content.length() == 0)

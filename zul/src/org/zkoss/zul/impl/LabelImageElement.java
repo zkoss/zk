@@ -30,12 +30,12 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 
 /**
- * A HTML element with a label ({@link #getLabel})and an image ({@link #getImage}).
+ * A XUL element with a label ({@link #getLabel})and an image ({@link #getImage}).
  * 
  * @author tomyeh
  */
 public class LabelImageElement extends LabelElement {
-	private String _src = null;
+	private String _src;
 	/** The image. _src and _image cannot be both non-null. */
 	private Image _image;
 	/** Count the version of {@link #_image}. */
@@ -49,9 +49,14 @@ public class LabelImageElement extends LabelElement {
 		return _src;
 	}
 	/** Sets the image URI.
+	 * <p>Calling this method implies setImageContent(null).
+	 * In other words, the last invocation of {@link #setImage} overrides
+	 * the previous {@link #setImageContent}, if any.
 	 * <p>If src is changed, the component's inner is invalidate.
 	 * Thus, you want to smart-update, you have to override this method.
 	 * <p>The same as {@link #setSrc}.
+	 * @see #setImageContent(Image)
+	 * @see #setImageContent(RenderedImage)
 	 */
 	public void setImage(String src) {
 		if (src != null && src.length() == 0) src = null;
@@ -79,10 +84,13 @@ public class LabelImageElement extends LabelElement {
 	}
 
 	/** Sets the content directly.
-	 * Default: null.
+	 * <p>Default: null.
 	 *
-	 * @param image the image to display. If not null, it has higher
-	 * priority than {@link #getSrc}.
+	 * <p>Calling this method implies setImage(null).
+	 * In other words, the last invocation of {@link #setImageContent} overrides
+	 * the previous {@link #setImage}, if any.
+	 * @param image the image to display.
+	 * @see #setImage
 	 */
 	public void setImageContent(Image image) {
 		if (_src != null || image != _image) {
@@ -109,9 +117,12 @@ public class LabelImageElement extends LabelElement {
 			throw new UiException(ex);
 		}
 	}
-	/** Returns the content set by {@link #setImageContent(org.zkoss.image.Image)}.
-	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
-	 * It simply returns what is passed to {@link #setImageContent(org.zkoss.image.Image)}.
+	/** Returns the image content
+	 * set by {@link #setImageContent(Image)}
+	 * or {@link #setImageContent(RenderedImage)}.
+	 *
+	 * <p>Note: it won't load the content specified by {@link #setImage}.
+	 * Actually, it returns null if {@link #setImage} was called.
 	 */
 	public Image getImageContent() {
 		return _image;

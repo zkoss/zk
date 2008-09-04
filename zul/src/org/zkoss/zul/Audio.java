@@ -114,8 +114,10 @@ public class Audio extends XulElement {
 	}
 	/** Sets the src.
 	 *
-	 * <p>If {@link #setContent} is ever called with non-null,
-	 * it takes heigher priority than this method.
+	 * <p>Calling this method implies setContent(null).
+	 * In other words, the last invocation of {@link #setSrc} overrides
+	 * the previous {@link #setContent}, if any.
+	 * @see #setContent
 	 */
 	public void setSrc(String src) {
 		if (src != null && src.length() == 0)
@@ -151,10 +153,13 @@ public class Audio extends XulElement {
 	}
 
 	/** Sets the content directly.
-	 * Default: null.
+	 * <p>Default: null.
 	 *
-	 * @param audio the audio to display. If not null, it has higher
-	 * priority than {@link #getSrc}.
+	 * <p>Calling this method implies setSrc(null).
+	 * In other words, the last invocation of {@link #setContent} overrides
+	 * the previous {@link #setSrc}, if any.
+	 * @param audio the audio to display.
+	 * @see #setSrc
 	 */
 	public void setContent(org.zkoss.sound.Audio audio) {
 		if (_src != null || audio != _audio) {
