@@ -27,6 +27,10 @@ ZK 3.0.8
   2072856: Error scroll bar is shown on the validation message(IE 7)
   2088269: radiogroup wouldn't work before ZK finish loading
   2090731: Button... unable to setImage if setImageContent was called
+  2080346: onchaning evt of combox wrongly includes type-ahead string
+  2079837: Timebox behaves wrongly if there is scrollbar
+  2082896: ZK conflicts with Liferay 5.1.1
+  2088712: separator with bar & spacing=1px not show in IE
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
