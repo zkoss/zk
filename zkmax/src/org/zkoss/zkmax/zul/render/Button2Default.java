@@ -58,7 +58,10 @@ public class Button2Default implements ComponentRenderer {
 			.write("<tr><td class=\"")
 			.write(mcls).write("-cl\"><button id=\"")
 			.write(uuid).write("!real\" class=\"z ")
-			.write(mcls).write("\"></button></td><td class=\"")
+			.write(mcls).write("\"");
+		if (self.getTabindex() >= 0)
+			wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
+		wh.write("></button></td><td class=\"")
 			.write(mcls).write("-cm\">");
 
 		if (self.getDir().equals("reverse")) {

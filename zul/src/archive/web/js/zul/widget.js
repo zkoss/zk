@@ -389,6 +389,9 @@ zkButton = {
 		case "class":
 			zkau.setAttr($e(cmp.id + "!box"), nm, val);
 			return true;
+		case "tabindex":
+			zkau.setAttr($real(cmp.id), nm, val);
+			return true;
 		}
 	}
 };

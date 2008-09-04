@@ -28,7 +28,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<td class="${mcls}-tr"></td>
 </tr>
 <tr>
-	<td class="${mcls}-cl"><button id="${self.uuid}!real" class="z ${mcls}"></button></td>
+	<td class="${mcls}-cl"><button id="${self.uuid}!real" class="z ${mcls}" <c:if test="${self.tabindex >= 0}">tabindex="${self.tabindex}"</c:if></button></td>
 	<td class="${mcls}-cm"><c:choose trim="true">
 	<c:when test="${self.dir == 'reverse'}">
 		<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}

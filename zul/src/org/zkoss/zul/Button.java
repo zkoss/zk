@@ -208,9 +208,6 @@ public class Button extends LabelImageElement {
 		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
 		appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
 			//no z.lfclk since it is handled by widget.js
-
-		if (_tabindex >= 0)
-			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		return sb.toString();
 	}
 
