@@ -75,10 +75,7 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 	}
 	
 	public int getControls() {
-		//bug1826736, add DETACH_ON_UNLOAD to aviod such bug.
-		//That is, never reuse Listitem: Listbox will clear the kids of the 
-		//first Listcell and the binding assoicated with the kids are lost.
-		return DETACH_ON_RENDER | DETACH_ON_UNLOAD;
+		return DETACH_ON_RENDER;
 	}
 		
 	//-- ListitemRenderer --//

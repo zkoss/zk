@@ -74,9 +74,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 	}
 	
 	public int getControls() {
-		//bug 1869003: Add DETACH_ON_UNLOAD. That is, always use a new Row whenever 
-		//model is sync; otherwise Row's children is also reused.
-		return DETACH_ON_RENDER | DETACH_ON_UNLOAD;
+		return DETACH_ON_RENDER;
 	}
 		
 	//-- RowRenderer --//
