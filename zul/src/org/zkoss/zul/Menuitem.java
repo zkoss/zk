@@ -213,7 +213,7 @@ public class Menuitem extends LabelImageElement {
 		if (topmost) sb.append(" z.top=\"true\"");
 		if (isDisabled())
 			HTMLs.appendAttribute(sb, "z.disd", true);
-		if (!topmost && _autocheck && isCheckmark()) {
+		if (!topmost && _autocheck) {
 			sb.append(" z.autock=\"true\"");
 			if (_checked) sb.append(" z.checked=\"true\"");
 		}
