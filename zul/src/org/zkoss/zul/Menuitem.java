@@ -145,8 +145,7 @@ public class Menuitem extends LabelImageElement {
 	}
 	/** Sets whether the menuitem check mark will update each time
 	 * the menu item is selected.
-	 * <p> This only applies when {@link Menupopup#isCheckmark()} = true. (since 3.5.0)
-	 * 
+	 * <p> This only applies when {@link #isCheckmark()} = true. (since 3.5.0)
 	 */
 	public void setAutocheck(boolean autocheck) {
 		if (_autocheck != autocheck) {
