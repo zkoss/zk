@@ -21,10 +21,10 @@
 				</menupopup>
 			</menu>
 			<menu label="href">
-				<menupopup checkmark="true">
+				<menupopup>
 					<menu label="popup">
 						<menupopup>
-							<menuitem label="item">
+							<menuitem label="item" checkmark="true">
 							</menuitem>
 						</menupopup>
 					</menu>
