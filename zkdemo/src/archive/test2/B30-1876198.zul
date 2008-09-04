@@ -1,7 +1,8 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
 <window>
 <html><![CDATA[
-<p>It is OK if you did not see "Empty is not allowed" on the right of the textbox.</p>
+<p>1. Don't do anything.</p>
+<p>2. It is OK if you did not see "Empty is not allowed" on the right of the textbox.</p>
 ]]></html>
 <zscript>
 public class MyConstraint extends SimpleConstraint implements CustomConstraint {
