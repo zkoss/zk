@@ -126,7 +126,7 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 	}
 
 	public void group(final Comparator cmpr, boolean ascending, int col) {
-		Comparator cmprx = null;
+		Comparator cmprx;
 		if(cmpr instanceof GroupComparator){
 			cmprx = new Comparator(){
 				public int compare(Object o1, Object o2) {
