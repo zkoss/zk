@@ -301,37 +301,30 @@ public class Treeitem extends XulElement {
 		return cell;
 	}
 
-	/** Returns the src of the {@link Treecell} it contains, or null
-	 * if no such cell.
+	/** @deprecated As of release 3.5.0, it is redundant since it
+	 * the same as {@link #getImage}.
 	 */
 	public String getSrc() {
-		final Treecell cell = getFirstCell();
-		return cell != null ? cell.getSrc(): null;
+		return getImage();
 	}
-	/** Sets the src of the {@link Treecell} it contains.
-	 *
-	 * <p>If it is not created, we automatically create it.
-	 *
-	 * <p>The same as {@link #setImage}.
+	/** @deprecated As of release 3.5.0, it is redundant since it
+	 * the same as {@link #setImage}.
 	 */
 	public void setSrc(String src) {
-		autoFirstCell().setSrc(src);
+		setImage(src);
 	}
 	/** Returns the image of the {@link Treecell} it contains.
-	 *
-	 * <p>The same as {@link #getImage}.
 	 */
 	public String getImage() {
-		return getSrc();
+		final Treecell cell = getFirstCell();
+		return cell != null ? cell.getImage(): null;
 	}
 	/** Sets the image of the {@link Treecell} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
-	 *
-	 * <p>The same as {@link #setSrc}.
 	 */
 	public void setImage(String image) {
-		setSrc(image);
+		autoFirstCell().setImage(image);
 	}
 
 	/** Returns the parent tree item,

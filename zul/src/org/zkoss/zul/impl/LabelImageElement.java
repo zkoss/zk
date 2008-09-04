@@ -42,7 +42,7 @@ public class LabelImageElement extends LabelElement {
 	private Image _image;
 	/** The hover image's src. */
 	private String _hoversrc;
-	/** The hover image. If not null, _hoversrc is generated automatically. */
+	/** The hover image. */
 	private Image _hoverimg;
 	/** Count the version of {@link #_image}. */
 	private byte _imgver;
@@ -51,15 +51,18 @@ public class LabelImageElement extends LabelElement {
 
 	/** Returns the image URI.
 	 * <p>Default: null.
-	 * <p>The same as {@link #getSrc}.
 	 */
 	public String getImage() {
 		return _src;
 	}
 	/** Sets the image URI.
+	 * <p>Calling this method implies setImageContent(null).
+	 * In other words, the last invocation of {@link #setImage} overrides
+	 * the previous {@link #setImageContent}, if any.
 	 * <p>If src is changed, the component's inner is invalidate.
 	 * Thus, you want to smart-update, you have to override this method.
-	 * <p>The same as {@link #setSrc}.
+	 * @see #setImageContent(Image)
+	 * @see #setImageContent(RenderedImage)
 	 */
 	public void setImage(String src) {
 		if (src != null && src.length() == 0) src = null;
@@ -69,20 +72,14 @@ public class LabelImageElement extends LabelElement {
 			invalidate();
 		}
 	}
-	protected void setSrcDirectly(String src) {
-		_src = src;
-	}
-	/** Returns the src (an image URI).
-	 * <p>Default: null.
-	 * <p>The same as {@link #getImage}.
+	/** @deprecated As of release 3.5.0, it is redudant since
+	 * it is the same as {@link #getImage}
 	 */
 	public String getSrc() {
 		return getImage();
 	}
-	/** Sets the src (the image URI).
-	 * <p>If src is changed, the component's inner is invalidate.
-	 * Thus, you want to smart-update, you have to override this method.
-	 * <p>The same as {@link #setImage}.
+	/** @deprecated As of release 3.5.0, it is redudant since
+	 * it is the same as {@link #setImage}
 	 */
 	public void setSrc(String src) {
 		setImage(src);
@@ -91,8 +88,11 @@ public class LabelImageElement extends LabelElement {
 	/** Sets the content directly.
 	 * <p>Default: null.
 	 *
-	 * @param image the image to display. If not null, it has higher
-	 * priority than {@link #getSrc}.
+	 * <p>Calling this method implies setImage(null).
+	 * In other words, the last invocation of {@link #setImageContent} overrides
+	 * the previous {@link #setImage}, if any.
+	 * @param image the image to display.
+	 * @see #setImage
 	 */
 	public void setImageContent(Image image) {
 		if (_src != null || image != _image) {
@@ -119,9 +119,12 @@ public class LabelImageElement extends LabelElement {
 			throw new UiException(ex);
 		}
 	}
-	/** Returns the content set by {@link #setImageContent(org.zkoss.image.Image)}.
-	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
-	 * It simply returns what is passed to {@link #setImageContent(org.zkoss.image.Image)}.
+	/** Returns the image content
+	 * set by {@link #setImageContent(Image)}
+	 * or {@link #setImageContent(RenderedImage)}.
+	 *
+	 * <p>Note: it won't load the content specified by {@link #setImage}.
+	 * Actually, it returns null if {@link #setImage} was called.
 	 */
 	public Image getImageContent() {
 		return _image;
@@ -137,6 +140,9 @@ public class LabelImageElement extends LabelElement {
 	}
 	/** Sets the image URI.
 	 * The hover image is used when the mouse is moving over this component.
+	 * <p>Calling this method implies setHoverImageContent(null).
+	 * In other words, the last invocation of {@link #setHoverImage} overrides
+	 * the previous {@link #setHoverImageContent}, if any.
 	 * @since 3.5.0
 	 */
 	public void setHoverImage(String src) {
@@ -144,16 +150,17 @@ public class LabelImageElement extends LabelElement {
 		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
 			_hoverimg = null;
-			if (_hoverimg == null)
-				smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
+			smartUpdateDeferred("z.hvig", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly.
 	 * The hover image is used when the mouse is moving over this component.
 	 * <p>Default: null.
 	 *
-	 * @param image the image to display. If not null, it has higher
-	 * priority than {@link #getSrc}.
+	 * <p>Calling this method implies setHoverImage(null).
+	 * In other words, the last invocation of {@link #setHoverImageContent} overrides
+	 * the previous {@link #setHoverImage}, if any.
+	 * @param image the image to display.
 	 * @since 3.5.0
 	 */
 	public void setHoverImageContent(Image image) {
@@ -161,7 +168,7 @@ public class LabelImageElement extends LabelElement {
 			_hoverimg = image;
 			_hoversrc = null;
 			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
-			smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
+			smartUpdateDeferred("z.hvig", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly with the rendered image.
@@ -193,40 +200,65 @@ public class LabelImageElement extends LabelElement {
 	/** Returns the HTML IMG tag for the image part, or null
 	 * if no image is assigned ({@link #isImageAssigned})
 	 *
-	 * <p>Used only for component template, not for application developers.
+	 * <p>Used only for component development, not for application developers.
 	 *
 	 * <p>Note: the component template shall use this method to
 	 * generate the HTML tag, instead of using {@link #getImage}.
 	 */
 	public String getImgTag() {
-		if (_src == null && _image == null)
+		return getImgTag(null, false);
+	}
+	/** Utilities to implement {@link #getImgTag}.
+	 * By default, {@link #getImgTag()} is the same as getImageTag(null, false).
+	 * <p>Used only for component developements; not by app developers.
+	 *
+	 * @param sclass the style class of the generated image.
+	 * @param enforce whether to generate an empty pixel if no image is assigned.
+	 * By default, null is returned. However, if you prefer to generate
+	 * an image tag with an empty pixel, you can specify true here.
+	 * @since 3.5.0
+	 */
+	protected String getImgTag(String sclass, boolean enforce) {
+		if (!enforce && _src == null && _image == null)
 			return null;
 
 		final StringBuffer sb = new StringBuffer(64)
 			.append("<img src=\"")
-			.append(_image != null ? getContentSrc(): //already encoded
-				getDesktop().getExecution().encodeURL(_src))
+			.append(getEncodedImageURL(enforce))
 			.append("\" align=\"absmiddle\" id=\"")
-			.append(getUuid()).append("!hvig\"/>");
+			.append(getUuid()).append("!hvig\"");
+		HTMLs.appendAttribute(sb, "class", sclass);
+		sb.append("/>");
 
 		final String label = getLabel();
 		if (label != null && label.length() > 0)
-			sb.append(' ');
-		return sb.toString(); //keep a space
+			sb.append(' '); //keep a space
+		return sb.toString();
 	}
-	/** Returns the encoded URL for the current image content.
-	 * Don't call this method unless _image is not null;
-	 *
-	 * <p>Used only for component template, not for application developers.
-	 * @since 3.5.0 (public)
+	/** Returns the encoded URL for the image ({@link #getImage}
+	 * or {@link #getImageContent}), or null if no image.
+	 * <p>Used only for component developements; not by app developers.
+	 * <p>Note: this method can be invoked only if execution is not null.
+	 * @since 3.5.0
 	 */
-	public String getContentSrc() {
-		return Utils.getDynamicMediaURI(
-			this, _imgver, "c/" + _image.getName(), _image.getFormat());
+	public String getEncodedImageURL() {
+		return getEncodedImageURL(false);
 	}
-	/** Returns the encoded src ({@link #getSrc}).
+	private String getEncodedImageURL(boolean enforce) {
+		if (_image != null)
+			return Utils.getDynamicMediaURI( //already encoded
+				this, _imgver, "c/" + _image.getName(), _image.getFormat());
+
+		final Desktop dt = getDesktop(); //it might not belong to any desktop
+		return dt != null ?
+			_src != null ? dt.getExecution().encodeURL(_src):
+			enforce ? dt.getExecution().encodeURL("~./img/spacer.gif"):
+				null: null;
+	}
+	/** Returns the encoded URL for the hover image or null if not
+	 * available.
 	 */
-	private String getEncodedHoverSrc() {
+	private String getEncodedHoverURL() {
 		if (_hoverimg != null)
 			return Utils.getDynamicMediaURI(
 				this, _hoverimgver,
@@ -241,7 +273,7 @@ public class LabelImageElement extends LabelElement {
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 		if (_hoversrc != null || _hoverimg != null)
-			return attrs + " z.hvig=\"" + getEncodedHoverSrc() +'"';
+			return attrs + " z.hvig=\"" + getEncodedHoverURL() +'"';
 		return attrs;
 	}
 
@@ -267,9 +299,9 @@ public class LabelImageElement extends LabelElement {
 			return _image;
 		}
 	}
-	private class EncodedHoverSrc implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
 		public String getValue() {
-			return getEncodedHoverSrc();
+			return getEncodedHoverURL();
 		}
 	}
 }

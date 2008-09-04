@@ -86,7 +86,8 @@ ZK 3.5.0
   2090731: Button... unable to setImage if setImageContent was called
   2082896: ZK conflicts with Liferay 5.1.1
   2088712: separator with bar & spacing=1px not show in IE
-  
+  2092632: Session.invalidate causes an exception in Jetty
+  2092716: Desktop.isAlive always true
 
 * Upgrade Notes
   + onBookmarkChanged is renamed to onBookmarkChange

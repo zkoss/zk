@@ -160,18 +160,9 @@ public class Image extends XulElement {
 		if (_image != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_image = null;
-			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
+			smartUpdateDeferred("src", new EncodedURL()); //Bug 1850895
 		}
 	}
-	/** Returns the encoded src ({@link #getSrc}).
-	 */
-	private String getEncodedSrc() {
-		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return _image != null ? getContentSrc(): //already encoded
-			dt != null ? dt.getExecution().encodeURL(
-				_src != null ? _src: "~./img/spacer.gif"): "";
-	}
-
 	/** Sets the content directly.
 	 * <p>Default: null.
 	 *
@@ -187,7 +178,7 @@ public class Image extends XulElement {
 			_image = image;
 			_src = null;
 			if (_image != null) ++_imgver; //enforce browser to reload image
-			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
+			smartUpdateDeferred("src", new EncodedURL()); //Bug 1850895
 		}
 	}
 	/** Sets the content directly with the rendered image.
@@ -215,18 +206,20 @@ public class Image extends XulElement {
 		return _image;
 	}
 
-	/** Returns the encoded URL for the current image content.
-	 * Don't call this method unless _image is not null;
-	 *
-	 * <p>Used only for component template, not for application developers.
+	/** Returns the encoded URL of the image (never null).
 	 */
-	private String getContentSrc() {
-		return Utils.getDynamicMediaURI(
-			this, _imgver, "c/" + _image.getName(), _image.getFormat());
+	private String getEncodedURL() {
+		if (_image != null)
+			return Utils.getDynamicMediaURI( //already encoded
+				this, _imgver, "c/" + _image.getName(), _image.getFormat());
+
+		final Desktop dt = getDesktop(); //it might not belong to any desktop
+		return dt != null ? dt.getExecution()
+			.encodeURL(_src != null ? _src: "~./img/spacer.gif"): "";
 	}
-	/** Returns the encoded src ({@link #getSrc}).
+	/** Returns the encoded URL of the hover image, or null if no hover image.
 	 */
-	private String getEncodedHoverSrc() {
+	private String getgetEncodedHoverURL() {
 		if (_hoverimg != null)
 			return Utils.getDynamicMediaURI(
 				this, _hoverimgver,
@@ -259,7 +252,7 @@ public class Image extends XulElement {
 		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
 			_hoverimg = null;
-			smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
+			smartUpdateDeferred("z.hvig", new getEncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly.
@@ -278,7 +271,7 @@ public class Image extends XulElement {
 			_hoverimg = image;
 			_hoversrc = null;
 			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
-			smartUpdateDeferred("z.hvig", new EncodedHoverSrc());
+			smartUpdateDeferred("z.hvig", new getEncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly with the rendered image.
@@ -315,7 +308,7 @@ public class Image extends XulElement {
 		if (bAlphafix)
 			sb.append(" z.alpha=\"true\"");
 		if (bHover)
-			HTMLs.appendAttribute(sb, "z.hvig", getEncodedHoverSrc());
+			HTMLs.appendAttribute(sb, "z.hvig", getgetEncodedHoverURL());
 		return sb.toString();
 	}
 	/** Tests whether to apply Request 1522329.
@@ -338,7 +331,7 @@ public class Image extends XulElement {
 		HTMLs.appendAttribute(sb, "border",  _border);
 		HTMLs.appendAttribute(sb, "hspace",  _hspace);
 		HTMLs.appendAttribute(sb, "vspace",  _vspace);
-		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
+		HTMLs.appendAttribute(sb, "src",  getEncodedURL());
 		return sb.toString();
 	}
 
@@ -377,14 +370,14 @@ public class Image extends XulElement {
 		}
 	}
 
-	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedURL implements org.zkoss.zk.ui.util.DeferredValue {
 		public String getValue() {
-			return getEncodedSrc();
+			return getEncodedURL();
 		}
 	}
-	private class EncodedHoverSrc implements org.zkoss.zk.ui.util.DeferredValue {
+	private class getEncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
 		public String getValue() {
-			return getEncodedHoverSrc();
+			return getgetEncodedHoverURL();
 		}
 	}
 }

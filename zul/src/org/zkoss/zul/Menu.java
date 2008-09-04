@@ -50,17 +50,7 @@ public class Menu extends LabelImageElement {
 	}
 
 	public String getImgTag() {
-		final String src = getImageContent() != null ? getContentSrc():
-			getDesktop().getExecution().encodeURL(getSrc() != null ? getSrc() : "~./img/spacer.gif");
-			
-		final StringBuffer sb = new StringBuffer(64)
-			.append("<img class=\"").append(getMoldSclass()).append("-img\" src=\"")
-			.append(src).append("\" align=\"absmiddle\"/>");
-
-		final String label = getLabel();
-		if (label != null && label.length() > 0) sb.append(' ');
-
-		return sb.toString(); //keep a space
+		return getImgTag(getMoldSclass() + "-img", true);
 	}
 	/** Returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.

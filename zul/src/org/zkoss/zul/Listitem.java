@@ -216,37 +216,30 @@ public class Listitem extends XulElement {
 		return cell;
 	}
 
-	/** Returns the src of the {@link Listcell} it contains, or null
-	 * if no such cell.
+	/** @deprecated As of release 3.5.0, it is redundant since it
+	 * is the same {@link #getImage}.
 	 */
 	public String getSrc() {
-		final Listcell cell = (Listcell)getFirstChild();
-		return cell != null ? cell.getSrc(): null;
+		return getImage();
 	}
-	/** Sets the src of the {@link Listcell} it contains.
-	 *
-	 * <p>If it is not created, we automatically create it.
-	 *
-	 * <p>The same as {@link #setImage}.
+	/** @deprecated As of release 3.5.0, it is redundant since it
+	 * is the same {@link #getSrc}.
 	 */
 	public void setSrc(String src) {
-		autoFirstCell().setSrc(src);
+		setImage(src);
 	}
 	/** Returns the image of the {@link Listcell} it contains.
-	 *
-	 * <p>The same as {@link #getImage}.
 	 */
 	public String getImage() {
-		return getSrc();
+		final Listcell cell = (Listcell)getFirstChild();
+		return cell != null ? cell.getImage(): null;
 	}
 	/** Sets the image of the {@link Listcell} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
-	 *
-	 * <p>The same as {@link #setSrc}.
 	 */
 	public void setImage(String image) {
-		setSrc(image);
+		autoFirstCell().setImage(image);
 	}
 
 	/** Returns the index of this item (aka., the order in the listbox).

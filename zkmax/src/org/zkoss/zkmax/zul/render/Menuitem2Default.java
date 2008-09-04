@@ -62,18 +62,14 @@ public class Menuitem2Default implements ComponentRenderer {
 				wh.write("-img");
 			}
 			wh.write("\" style=\"width: auto;\"><tbody><tr><td class=\"").write(mcls).write("-btn-l\"><i>&nbsp;</i></td>");
-			String imagesrc;
-			if (self.getImageContent() != null)
-				imagesrc = "background-image:url(" + self.getContentSrc() + ")";
-			else {
-				final String src = self.getSrc();
-				if (src != null && src.length() > 0)
-					imagesrc = "background-image:url(" + exec.encodeURL(src) + ")";
-				else imagesrc = "";
-			}
 			wh.write("<td class=\"").write(mcls).write("-btn-m\"><em unselectable=\"on\"><button id=\"")
-				.write(uuid).write("!b\" type=\"button\" class=\"").write(mcls).write("-btn-text\" style=\"")
-				.write(imagesrc).write("\">");
+				.write(uuid).write("!b\" type=\"button\" class=\"").write(mcls).write("-btn-text\"");
+
+			final String imagesrc = self.getEncodedImageURL();
+			if (imagesrc != null)
+				wh.write(" style=\"background-image:url(").write(imagesrc).write(")\"");
+			wh.write('>');
+
 			new Out(self.getLabel()).render(out);
 			wh.write("</button>").writeln("</em></td><td class=\"").write(mcls).write("-btn-r\"><i>&nbsp;</i></td></tr></tbody></table></a></td>");
 		} else {

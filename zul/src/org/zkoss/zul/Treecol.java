@@ -46,7 +46,7 @@ public class Treecol extends HeaderElement {
 	 */
 	public Treecol(String label, String src) {
 		setLabel(label);
-		setSrc(src);
+		setImage(src);
 	}
 	/* Constructs a tree header with label, image and width.
 	 *
@@ -56,7 +56,7 @@ public class Treecol extends HeaderElement {
 	 */
 	public Treecol(String label, String src, String width) {
 		setLabel(label);
-		setSrc(src);
+		setImage(src);
 		setWidth(width);
 	}
 
