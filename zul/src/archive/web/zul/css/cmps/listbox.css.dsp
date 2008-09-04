@@ -107,8 +107,14 @@ tr.z-list-item td.z-list-item-focus {
 	background-repeat: no-repeat;
 }
 <%-- Listgroup --%>
+tr.z-list-group{
+	background: #E9F2FB url(${c:encodeURL('~./zul/img/grid/group_bg.gif')}) repeat-x 0 0;
+}
 td.z-list-group-inner {
-	padding-top: 2px; border-bottom: 2px solid #84A6D4;
+	padding-top: 2px;
+	border-color:  #bcd2ef;
+	border-style: solid;
+	border-width :2px 0px 1px;
 }
 td.z-list-group-inner div.z-list-cell-cnt {
 	color:#3764a0; font: bold ${fontSizeM} ${fontFamilyT};
@@ -128,7 +134,7 @@ td.z-list-group-inner div.z-list-cell-cnt {
 }
 <%-- Listgroupfoot --%>
 .z-list-group-foot{
-	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
+	background: #E7F5FC url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
 td.z-list-group-foot-inner div.z-list-cell-cnt {
 	color: #2C559C; font: bold ${fontSizeM} ${fontFamilyT};

@@ -12,7 +12,7 @@
 }
 <%-- Calendar and Datebox --%>
 .z-calendar-calyear, .z-datebox-calyear {
-	background: #eaf0f4; border: 1px solid;
+	background: #e9f1f3; border: 1px solid;
 	border-color: #f8fbff #aca899 #aca899 #f8fbff;
 }
 .z-calendar-calday, .z-datebox-calday {
@@ -31,11 +31,11 @@
 	padding: 1px 3px;
 }
 .z-calendar-calday td a:hover, .z-datebox-calday td a:hover {
-	text-decoration: underline;
+	text-decoration: underline;	
 }
 .z-calendar-calmon td.z-calendar-seld, .z-calendar-calday td.z-calendar-seld,
 .z-datebox-calmon td.z-datebox-seld, .z-datebox-calday td.z-datebox-seld {
-	background: #bbd1ed; border: 1px solid #aac6e9;
+	background: #BCD2EF; border: 1px solid #aad6e6;
 }
 .z-calendar-caldow td, .z-datebox-caldow td {
 	font-size: ${fontSizeS}; color: #333; font-weight: bold;

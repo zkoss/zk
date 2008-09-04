@@ -84,11 +84,17 @@ tr.z-row td.z-row-inner, tr.z-row td.z-group-inner, tr.z-row td.z-group-foot-inn
 	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
 tr.z-grid-odd td.z-row-inner, tr.z-grid-odd {
-	background: #E6F8FF;
+	background: #F0FAFF;
 }
 <%-- Group --%>
+tr.z-group{
+	background: #E9F2FB url(${c:encodeURL('~./zul/img/grid/group_bg.gif')}) repeat-x 0 0;
+}
 td.z-group-inner {
-	padding-top: 2px; border-bottom: 2px solid #84A6D4;
+	padding-top: 2px;
+	border-color:  #bcd2ef;
+	border-style: solid;
+	border-width :2px 0px 1px;
 }
 .z-group-inner .z-group-cnt span, .z-group-inner .z-group-cnt {
 	color:#3764a0; font: bold ${fontSizeM} ${fontFamilyT};
@@ -111,7 +117,7 @@ td.z-group-inner {
 }
 <%-- Groupfooter --%>
 .z-group-foot {
-	background: #EAEFF5 url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
+	background: #E7F5FC url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
 .z-group-foot-inner .z-group-foot-cnt span, .z-group-foot-inner .z-group-foot-cnt {
 	color: #2C559C; font: bold ${fontSizeM} ${fontFamilyT};
