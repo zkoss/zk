@@ -21,7 +21,6 @@ package org.zkoss.zul;
 import java.util.Collection;
 import java.util.AbstractCollection;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Iterator;
@@ -707,70 +706,71 @@ public class Grid extends XulElement implements Paginated {
 	 * @param max the higher index that a range of invalidated rows
 	 */
 	private void syncModel(int min, int max) {
-		RowRenderer renderer = null;
 		final int newsz = _model.getSize();
 		final int oldsz = _rows != null ? _rows.getChildren().size(): 0;
+
+		int newcnt = newsz - oldsz;
+
+		RowRenderer renderer = null;
+		Component next = null;		
 		if (oldsz > 0) {
-			if (newsz > 0 && min < oldsz) {
-				if (max < 0 || max >= oldsz) max = oldsz - 1;
-				if (max >= newsz) max = newsz - 1;
-				if (min < 0) min = 0;
-				
-				if(_model instanceof GroupsListModel){
-					//detach all
-					ArrayList rows = new ArrayList(_rows.getChildren());
-					Row row = null;
-					Component next = null;
-					for(int i=oldsz-1;i>=min;i--){
-						row = (Row)rows.get(i);
-						if(i==oldsz-1){
-							next = row.getNextSibling();//get next row of this remove batch
-						}
-						row.detach(); //row class maybe change, always detach
-					}
-					//insert new
-					for(int i=min;i<=max;i++){
+			if (min < 0) min = 0;
+			else if (min > oldsz - 1) min = oldsz - 1;
+			if (max < 0) max = oldsz - 1;
+			else if (max > oldsz - 1) max = oldsz - 1;
+			if (min > max) {
+				int t = min; min = max; max = t;
+			}
+
+			int cnt = max - min + 1; //# of affected
+			if (_model instanceof GroupsListModel) {
+			//detach all from end to front since groupfoot
+			//must be detached before group
+				newcnt += cnt; //add affected later
+				if (newcnt > 50 && !inPagingMold())
+					invalidate(); //performance is better
+
+				Component comp = (Component)_rows.getChildren().get(max);
+				next = comp.getNextSibling();
+				while (--cnt >= 0) {
+					Component p = comp.getPreviousSibling();
+					comp.detach();
+					comp = p;
+				}
+			} else { //ListModel
+				int addcnt = 0;
+				Row row = (Row)_rows.getChildren().get(min);
+				for (; --cnt >= 0; min++) {
+					next = row.getNextSibling();
+
+					if (cnt < -newcnt) { //if shrink, -newcnt > 0
+						row.detach(); //remove extra
+					} else if (row.isLoaded()) {
 						if (renderer == null)
 							renderer = getRealRenderer();
-						row = newUnloadedRow(renderer, i);
-						_rows.insertBefore(row, next);
+						row.detach(); //always detach
+						_rows.insertBefore(newUnloadedRow(renderer, min), next);
+						++addcnt;
 					}
-				}else{
-					//unloadRow() might detach and insert row into _rows, must make a copy for iterate.
-					for (Iterator it = new ArrayList(_rows.getChildren()).listIterator(min);
-					min <= max && it.hasNext(); ++min) {
-						final Row row = (Row)it.next();
-						if (row.isLoaded()) {
-							if (renderer == null)
-								renderer = getRealRenderer();
-							final Component next = row.getNextSibling();
-							row.detach(); //always detach
-							_rows.insertBefore(newUnloadedRow(renderer, min), next);
-						}
-					}
-				}
-			}
 
-			//detach and remove
-			if (oldsz > newsz) {
-				for (Iterator it = _rows.getChildren().listIterator(newsz);
-				it.hasNext();) {
-					it.next();
-					it.remove();
+					row = (Row)next;
 				}
+
+				if ((addcnt > 50 || addcnt + newcnt > 50) && !inPagingMold())
+					invalidate(); //performance is better
 			}
+		} else {
+			min = 0;
+
+			//auto create but it means <grid model="xx"><rows/>... will fail
+			if (_rows == null)
+				new Rows().setParent(this);
 		}
 
-		//auto create but it means <grid model="xx"><rows/>... will fail
-		if (_rows == null)
-			new Rows().setParent(this);
-
-		if (newsz - oldsz > 50 && !inPagingMold())
-			invalidate(); //performance is better
-		for (int j = oldsz; j < newsz; ++j) {
+		for (; --newcnt >= 0; ++min) {
 			if (renderer == null)
 				renderer = getRealRenderer();
-			newUnloadedRow(renderer, j).setParent(_rows);
+			_rows.insertBefore(newUnloadedRow(renderer, min), next);
 		}
 	}
 	/** Creates an new and unloaded row. */
@@ -899,52 +899,50 @@ public class Grid extends XulElement implements Paginated {
 	private void onListDataChange(ListDataEvent event) {
 		//when this is called _model is never null
 		final int newsz = _model.getSize(), oldsz = _rows.getChildren().size();
-		int min = event.getIndex0(), max = event.getIndex1();
-		if (min < 0) min = 0;
+		int min = event.getIndex0(), max = event.getIndex1(), cnt;
 
-		boolean done = false;
 		switch (event.getType()) {
 		case ListDataEvent.INTERVAL_ADDED:
-			if (max < 0) max = newsz - 1;
-			if ((max - min + 1) != (newsz - oldsz)) {
-				log.warning("Conflict event: number of added rows not matched: "+event);
-				break; //handle it as CONTENTS_CHANGED
-			}
+			cnt = newsz - oldsz;
+			if (cnt <= 0)
+				throw new UiException("Adding causes a smaller list?");
+			if (cnt > 50 && !inPagingMold())
+				invalidate(); //performance is better
+			if (min < 0)
+				if (max < 0) min = 0;
+				else min = max - cnt + 1;
+			if (min > oldsz) min = oldsz;
 
 			RowRenderer renderer = null;
-			final Row before =
+			final Row next =
 				min < oldsz ? (Row)_rows.getChildren().get(min): null;
-			if (max - min > 50 && !inPagingMold())
-				invalidate(); //performance is better
-			for (int j = min; j <= max; ++j) {
+			for (; --cnt >= 0; min++) {
 				if (renderer == null)
 					renderer = getRealRenderer();
-				_rows.insertBefore(newUnloadedRow(renderer, j), before);
+				_rows.insertBefore(newUnloadedRow(renderer, min), next);
 			}
-			done = true;
 			break;
 
 		case ListDataEvent.INTERVAL_REMOVED:
-			if (max < 0) max = oldsz - 1;
-			int cnt = max - min + 1;
-			if (cnt != (oldsz - newsz)) {
-				log.warning("Conflict event: number of removed rows not matched: "+event);
-				break; //handle it as CONTENTS_CHANGED
-			}
+			cnt = oldsz - newsz;
+			if (cnt <= 0)
+				throw new UiException("Removal causes a larger list?");
+			if (min >= 0) max = min + cnt - 1;
+			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
+			if (max > oldsz - 1) max = oldsz - 1;
 
-			//detach and remove
-			for (Iterator it = _rows.getChildren().listIterator(min);
-			--cnt >= 0 && it.hasNext();) {
-				it.next();
-				it.remove();
+			//detach from end (due to groopfoot issue)
+			Component comp = (Component)_rows.getChildren().get(max);
+			while (--cnt >= 0) {
+				Component p = comp.getPreviousSibling();
+				comp.detach();
+				comp = p;
 			}
-
-			done = true;
 			break;
-		}
 
-		if (!done) //CONTENTS_CHANGED
+		default: //CONTENTS_CHANGED
 			syncModel(min, max);
+		}
 
 		postOnInitRender(); //to improve performance
 	}

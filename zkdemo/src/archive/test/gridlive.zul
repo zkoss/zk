@@ -21,22 +21,24 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<zscript>
 		String[] d1 = new String[30];
 		List d2 = new LinkedList();
-		for(int j=0; j &lt; d1.length; ++j) {
-			d1[j] = "option "+j;
-			d2.add(d1[j]);
+		for(int j=0; j &lt; d1.length + 10; ++j) {
+			if (j &lt; d1.length)
+				d1[j] = "option "+j;
+			d2.add("alternative "+j);
 		}
 		ListModel model1 = new SimpleListModel(d1);
 		ListModelList model2 = new ListModelList(d2);
 	</zscript>
 
 	Live:
-	<grid width="200px" height="100px" model="${model1}">
+	<grid id="g1" width="200px" height="100px" model="${model1}">
 	</grid>
+	<button label="change model" onClick="g1.setModel(model2)"/>
 
 	<separator/>
 
 	Live with header:
-	<grid width="200px" height="100px" model="${model2}">
+	<grid id="g" width="200px" height="140px" model="${model2}">
 		<columns>
 			<column label="options"/>
 		</columns>
@@ -46,6 +48,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</grid>
 	<button label="remove 2nd" onClick="model2.remove(1)"/>
 	<button label="remove 2nd and 3rd" onClick="model2.remove(1);model2.remove(1);"/>
+	<button label="invalidate" onClick="g.invalidate()"/>
 
 	<separator/>
 	Live with header and paging:
