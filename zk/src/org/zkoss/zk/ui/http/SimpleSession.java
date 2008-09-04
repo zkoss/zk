@@ -91,6 +91,8 @@ public class SimpleSession implements Session, SessionCtrl {
 	 */
 	private long _tmLastReq = System.currentTimeMillis();
 	private boolean _invalid;
+	/** Indicates if {@link #invalidateNow} was called. */
+	private boolean _invalidated;
 
 	/** Construts a ZK session with a HTTP session.
 	 *
@@ -282,10 +284,15 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 
 	public void invalidateNow() {
-		if (_navsess instanceof HttpSession)
-			((HttpSession)_navsess).invalidate();
-		else
-			((PortletSession)_navsess).invalidate();
+		_invalid = true;
+
+		if (!_invalidated) {
+			_invalidated = true; //to avoid called twice
+			if (_navsess instanceof HttpSession)
+				((HttpSession)_navsess).invalidate();
+			else
+				((PortletSession)_navsess).invalidate();
+		}
 	}
 	public void setMaxInactiveInterval(int interval) {
 		if (_navsess instanceof HttpSession)
@@ -335,6 +342,8 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 
 	public void onDestroyed() {
+		_invalidated = _invalid = true;
+
 		final Configuration config = getWebApp().getConfiguration();
 		config.invokeSessionCleanups(this);
 

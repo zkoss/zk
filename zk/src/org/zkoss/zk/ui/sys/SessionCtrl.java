@@ -71,6 +71,9 @@ public interface SessionCtrl {
 
 	/** Returns whether this session is invalidated
 	 * (i.e., {@link org.zkoss.zk.ui.Session#invalidate} was called).
+	 *
+	 * <p>Note: ZK doesn't invalidate it immediately (until the event
+	 * has been processed), so the session might be still alive.
 	 */
 	public boolean isInvalidated();
 	/** Really invalidates the session.
