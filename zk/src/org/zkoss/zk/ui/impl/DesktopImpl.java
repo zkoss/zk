@@ -214,7 +214,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** Initialization for contructor and de-serialized. */
 	private void init() {
 		_rque = newRequestQueue();
-		_comps = new HashMap(41);
+		_comps = new HashMap(64);
 		_attrs = new HashMap();
 	}
 	/** Updates _uuidPrefix based on _id. */
@@ -425,10 +425,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_dir = dir;
 	}
 
-	public boolean isAlive() {
-		return _comps != null;
-	}
-
 	//-- DesktopCtrl --//
 	public RequestQueue getRequestQueue() {
 		return _rque;
@@ -523,9 +519,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//theorectically, the following is not necessary, but, to be safe...
 		_pages.clear();
 		_attrs.clear();
-		_comps = new HashMap(1); //not clear() since # of comps might huge
+		_comps = new HashMap(2); //not clear() since # of comps might huge
 		_meds = null;
 		_rque = null;
+		_sess = null;
+		_wapp = null;
+	}
+	public boolean isAlive() {
+		return _rque != null;
 	}
 
 	public Collection getSuspendedThreads() {

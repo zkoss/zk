@@ -24,6 +24,8 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.idom.Document;
+
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.xel.Evaluator;
@@ -533,6 +535,10 @@ public void run() {
 				throw new IllegalStateException("Before activation, the server push must be enabled for "+desktop);
 			else
 				throw new DesktopUnavailableException("Stopped");
+
+		if (Events.inEventListener())
+			throw new IllegalStateException("No need to invoke Executions.activate() in an event listener");
+
 		return spush.activate(timeout);
 	}
 	/** Deactivates a server-push thread.
