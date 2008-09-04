@@ -26,12 +26,13 @@ import java.util.List;
 import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
- * A array implementation of {@link GroupsModel}.
+ * An array implementation of {@link GroupsModel}.
  * This implementation supports regroup array to groups depends on {@link Comparator} and {@link GroupComparator}.
  * 
  * @author Dennis.Chen
  * @since 3.5.0
  * @see GroupsModel
+ * @see SimpleGroupsModel
  */
 public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModelExt{
 	
@@ -119,7 +120,7 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 	}
 
 	public void sort(Comparator cmpr, boolean ascending, int col) {
-		sortGroup(cmpr,ascending,col);
+		sortAllGroupData(cmpr,ascending,col);
 
 		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
 	}
@@ -136,31 +137,50 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 			cmprx = cmpr;
 		}
 		
-		sortNativeData(cmprx,ascending,col);//use comparator from constructor to sort native data
+		sortDataInGroupOrder(cmprx,ascending,col);//use comparator from constructor to sort native data
 		organizeGroup(cmprx,col);
-		sortGroup(cmpr,ascending,col);//sort by original comparator
+		sortAllGroupData(cmpr,ascending,col);//sort by original comparator
 		
 		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
 	}
 
 	/**
-	 * sort data in each group, the group order will not change. invoke this method doesn't fire event.
+	 * Sorts data in each group, the group order will not change. invoke this method doesn't fire event.
 	 */
-	protected void sortGroup(Comparator cmpr,boolean ascending, int col) {
+	private void sortAllGroupData(Comparator cmpr,boolean ascending, int col) {
 		for(int i=0;i<_data.length;i++){
 			sortGroupData(_heads[i],_data[i],cmpr,ascending,col);
 		}
 	}
 	
 	/**
-	 * sort data of a group. invoke this method doesn't fire event.
+	 * Sorts data within a group. Notice that this method doesn't fire event.
+	 * <p>There are three steps to re-group data:
+	 * {@link #sortDataInGroupOrder}, {@link #organizeGroup} and then
+	 * {@link #sortGroupData}.
+	 *
+	 * <p>It is the last step of grouping. It sorts data in the specified
+	 * group.
 	 */
 	protected void sortGroupData(Object group,Object[] groupdata,Comparator cmpr,boolean ascending, int col){
 		Arrays.sort(groupdata,cmpr);
 	}
 
 	/**
-	 * organize the group, the _nativedata must sorted already.
+	 * Organizes groups based sorted data.
+	 *
+	 * <p>There are three steps to re-group data:
+	 * {@link #sortDataInGroupOrder}, {@link #organizeGroup} and then
+	 * {@link #sortGroupData}.
+	 *
+	 * <p>It is the second step of grouping. It creates group data
+	 * based on the data sorted in the group order by
+	 * {@link #sortDataInGroupOrder}.
+	 *
+	 * @param cmpr the comparator used to compare data in the group order.
+	 * Notice that the comparator is never an instance of {@link GroupComparator}.
+	 * The implementation just uses {@link Comparator#compare} to sort
+	 * the data.
 	 */
 	protected void organizeGroup(Comparator cmpr, int col) {
 		List group = new ArrayList();
@@ -223,9 +243,20 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 	}
 
 	/**
-	 * sort the native data.
+	 * Sorts the native data in the group order.
+	 * After sorted, all data in the first group shall be placed in front
+	 * of the second group, and so on.
+	 *
+	 * <p>There are three steps to re-group data:
+	 * {@link #sortDataInGroupOrder}, {@link #organizeGroup} and then
+	 * {@link #sortGroupData}.
+	 *
+	 * @param cmpr the comparator used to compare data in the group order.
+	 * Notice that the comparator is never an instance of {@link GroupComparator}.
+	 * The implementation just uses {@link Comparator#compare} to sort
+	 * the data.
 	 */
-	protected void sortNativeData(Comparator cmpr, boolean ascending, int colIndex) {
+	protected void sortDataInGroupOrder(Comparator cmpr, boolean ascending, int colIndex) {
 		Arrays.sort(_nativedata,cmpr);
 	}
 

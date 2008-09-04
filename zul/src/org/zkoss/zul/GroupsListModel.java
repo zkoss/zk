@@ -113,11 +113,7 @@ import org.zkoss.zul.event.GroupsDataListener;
 	}
 
 	/**
-	 * return the group info of given index
-	 * [0] group index 
-	 * [1] type of index: 0-grouphead, 1-row, 2- groupfoot
-	 * [2] offset : the offset of index in group, only available when type is row 
-	 * [3] hasfoot : 1 if this group has foot.
+	 * Returns the group info of given index
 	 */
 	/*package*/ GroupDataInfo getDataInfo(int index) {
 		if (index < 0 || index >= _size)
