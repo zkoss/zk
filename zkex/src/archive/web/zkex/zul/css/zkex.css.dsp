@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%-- Borderlayout --%>
 .z-border-layout {
-    width:100%; height:100%; overflow:hidden; background-color:#C4DCFB;	border:0 none;
+    width:100%; height:100%; overflow:hidden; background-color:#CDE6F5;	border:0 none;
 	position: relative;	visibility: hidden;
 }
 .z-border-layout-tool {
@@ -122,11 +122,11 @@
 	float: none; margin: 3px auto;
 }
 .z-east-collapsed, .z-west-collapsed, .z-south-collapsed, .z-north-collapsed {
-	position: absolute; background-color: #D2E0F2; width: 20px; height: 20px;
+	position: absolute; background-color: #E1F1FB; width: 20px; height: 20px;
 	border: 1px solid #98C0F4; z-index:20; overflow: hidden;
 }
 .z-east-collapsed-over, .z-west-collapsed-over, .z-south-collapsed-over, .z-north-collapsed-over {
-	cursor: pointer; background-color: #D9E8FB;
+	cursor: pointer; background-color: #E8FFFC;
 }
 .z-west-collapsed {
     z-index: 12;
@@ -179,7 +179,8 @@
 	-o-text-overflow: ellipsis; text-overflow: ellipsis; white-space:nowrap;
 }
 tr.z-row td.z-detail-outer {
-	background: transparent url(${c:encodeURL('~./zul/img/grid/detail-bg.gif')}) repeat-y right;
+	background: #bae2f0 url(${c:encodeURL('~./zul/img/grid/detail-bg.gif')}) repeat-y left;
+	//background: #EFF8FB url(${c:encodeURL('~./zul/img/grid/ms_hd.gif')}) repeat-y right;
 	vertical-align: top; border-top: none; border-left: 1px solid white;
 	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }

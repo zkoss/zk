@@ -101,7 +101,7 @@ button.z {
 	background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
 .z-loading {
-	position: absolute; z-index: 21000; background-color: #A8CAF8; cursor: wait;
+	position: absolute; z-index: 21000; background-color: #6eadff; cursor: wait;
 	white-space: nowrap; border: 1px solid #83B5F7; padding:3px;
 }
 .z-loading-indicator {
@@ -247,8 +247,8 @@ div.z-drop-cnt {
 }
 <%-- ZK error message box --%>
 div.z-errbox {
-	margin: 0; padding: 1px; border: 1px outset; cursor: pointer;
-	background: #E8E0D8; position: absolute; z-index: 88000;
+	margin: 0; padding: 1px; border: 1px outset blue; cursor: pointer;
+	background: #6eafff; position: absolute; z-index: 88000;color:white;
 }
 
 <%-- Progressmeter --%>

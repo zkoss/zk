@@ -90,7 +90,7 @@
 	margin: 0; padding: 4px; overflow: hidden; zoom: 1; background: white;
 }
 .z-window-popup-cnt {
-	border:1px solid #8DB2E3; padding: 2px; margin:0;
+	border:1px solid #2c70a9; padding: 2px; margin:0;
 }
 .z-window-modal-cnt, .z-window-highlighted-cnt, .z-window-modal-cnt-noborder,
 	.z-window-highlighted-cnt-noborder, .z-window-overlapped-cnt-noborder {
