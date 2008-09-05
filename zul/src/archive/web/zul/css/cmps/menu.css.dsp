@@ -86,7 +86,7 @@
 	background: transparent url(${c:encodeURL('~./zul/img/menu2/arrow.png')}) no-repeat right;
 }
 .z-menu-cnt, .z-menu-item-cnt {
-	text-decoration: none; white-space: nowrap;
+	text-decoration: none; white-space: nowrap;  font-style: normal;
 	font-family: ${fontFamilyT}; font-size: ${fontSizeMS};
 }
 .z-menu-popup-cnt .z-menu-item-over, .z-menu-popup-cnt .z-menu-over {
