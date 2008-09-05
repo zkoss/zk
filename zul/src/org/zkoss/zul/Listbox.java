@@ -1632,60 +1632,68 @@ public class Listbox extends XulElement implements Paginated {
 	 * @param max the higher index that a range of invalidated items
 	 */
 	private void syncModel(int min, int max) {
-		ListitemRenderer renderer = null;
 		final int newsz = _model.getSize();
 		final int oldsz = getItemCount();
-		if (oldsz > 0) {
-			if (newsz > 0 && min < oldsz) {
-				if (max < 0 || max >= oldsz) max = oldsz - 1;
-				if (max >= newsz) max = newsz - 1;
-				if (min < 0) min = 0;
 
-				if(_model instanceof GroupsListModel){
-					//detach all
-					ArrayList items = new ArrayList(_items);
-					Listitem item = null;
-					Component next = null;
-					for(int i=oldsz-1;i>=min;i--){
-						item = (Listitem)items.get(i);
-						if(i==oldsz-1){
-							next = item.getNextSibling();//get next item of this remove batch
-						}
-						item.detach(); //row class maybe change, always detach
-					}
-					//insert new item
-					for(int i=min;i<=max;i++){
+		int newcnt = newsz - oldsz;
+
+		ListitemRenderer renderer = null;
+		Component next = null;		
+		if (oldsz > 0) {
+			if (min < 0) min = 0;
+			else if (min > oldsz - 1) min = oldsz - 1;
+			if (max < 0) max = oldsz - 1;
+			else if (max > oldsz - 1) max = oldsz - 1;
+			if (min > max) {
+				int t = min; min = max; max = t;
+			}
+
+			int cnt = max - min + 1; //# of affected
+			if (_model instanceof GroupsListModel) {
+			//detach all from end to front since groupfoot
+			//must be detached before group
+				newcnt += cnt; //add affected later
+				if (newcnt > 50 && !inPagingMold())
+					invalidate(); //performance is better
+
+				Component comp = (Component)getItemAtIndex(max);
+				next = comp.getNextSibling();
+				while (--cnt >= 0) {
+					Component p = comp.getPreviousSibling();
+					comp.detach();
+					comp = p;
+				}
+			} else { //ListModel
+				int addcnt = 0;
+				Listitem item = (Listitem)getItemAtIndex(min);
+				for (; --cnt >= 0; min++) {
+					next = item.getNextSibling();
+
+					if (cnt < -newcnt) { //if shrink, -newcnt > 0
+						item.detach(); //remove extra
+					} else if (item.isLoaded()) {
 						if (renderer == null)
 							renderer = getRealRenderer();
-						item = newUnloadedItem(renderer, i);
-						insertBefore(item, next);
+						item.detach(); //always detach
+						insertBefore(newUnloadedItem(renderer, min), next);
+						++addcnt;
 					}
-				}else{
-					//unloadItem() might detach item and add new item, _items must make a copy first
-					for (Iterator it = new ArrayList(_items).listIterator(min);
-					min <= max && it.hasNext(); ++min) {
-						final Listitem item = (Listitem)it.next();
-						if (item.isLoaded()) {
-							if (renderer == null)
-								renderer = getRealRenderer();
-							Component next = item.getNextSibling();
-							item.detach(); //always detach
-							insertBefore(newUnloadedItem(renderer, min), next);
-						}
-					}
+
+					item = (Listitem)next;
 				}
+
+				if ((addcnt > 50 || addcnt + newcnt > 50) && !inPagingMold())
+					invalidate(); //performance is better
 			}
-			int sz = Math.min(oldsz,getItemCount());//size maybe be reduced in groupsmodel
-			for (int j = newsz; j < sz; ++j)
-				getItemAtIndex(newsz).detach(); //detach and remove
+		} else {
+			min = 0;
+			
 		}
 
-		if (newsz - oldsz > 50 && !inPagingMold())
-			invalidate(); //performance is better
-		for (int j = oldsz; j < newsz; ++j) {
+		for (; --newcnt >= 0; ++min) {
 			if (renderer == null)
 				renderer = getRealRenderer();
-			newUnloadedItem(renderer, j).setParent(this);
+			insertBefore(newUnloadedItem(renderer, min), next);
 		}
 	}
 	/** Creates an new and unloaded listitem. */
@@ -1803,64 +1811,54 @@ public class Listbox extends XulElement implements Paginated {
 	/** Handles when the list model's content changed.
 	 */
 	private void onListDataChange(ListDataEvent event) {
-		if (inSelectMold()) {
-			invalidate();
-			syncModel(-1, -1);
-			postOnInitRender();
-			return;
-		}
-
 		//when this is called _model is never null
 		final int newsz = _model.getSize(), oldsz = getItemCount();
-		int min = event.getIndex0(), max = event.getIndex1();
-		if (min < 0) min = 0;
+		int min = event.getIndex0(), max = event.getIndex1(), cnt;
 
-		boolean done = false;
 		switch (event.getType()) {
 		case ListDataEvent.INTERVAL_ADDED:
-			if (max < 0) max = newsz - 1;
-			if ((max - min + 1) != (newsz - oldsz)) {
-				log.warning("Conflict event: number of added items not matched: "+event);
-				break; //handle it as CONTENTS_CHANGED
-			}
+			cnt = newsz - oldsz;
+			if (cnt <= 0)
+				throw new UiException("Adding causes a smaller list?");
+			if (cnt > 50 && !inPagingMold())
+				invalidate(); //performance is better
+			if (min < 0)
+				if (max < 0) min = 0;
+				else min = max - cnt + 1;
+			if (min > oldsz) min = oldsz;
 
 			ListitemRenderer renderer = null;
-			final Listitem before = min < oldsz ? getItemAtIndex(min): null;
-			if (max - min > 50 && !inPagingMold())
-				invalidate(); //performance is better
-			for (int j = min; j <= max; ++j) {
+			final Listitem next =
+				min < oldsz ? (Listitem) getItemAtIndex(min): null;
+			for (; --cnt >= 0; min++) {
 				if (renderer == null)
 					renderer = getRealRenderer();
-				insertBefore(newUnloadedItem(renderer, j), before);
+				insertBefore(newUnloadedItem(renderer, min), next);
 			}
-			done = true;
 			break;
 
 		case ListDataEvent.INTERVAL_REMOVED:
-			if (max < 0) max = oldsz - 1;
-			int cnt = max - min + 1;
-			if (cnt != (oldsz - newsz)) {
-				log.warning("Conflict event: number of removed items not matched: "+event);
-				break; //handle it as CONTENTS_CHANGED
-			}
+			cnt = oldsz - newsz;
+			if (cnt <= 0)
+				throw new UiException("Removal causes a larger list?");
+			if (min >= 0) max = min + cnt - 1;
+			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
+			if (max > oldsz - 1) max = oldsz - 1;
 
-			//detach and remove
-			for (Iterator it = getItems().listIterator(min);
-			--cnt >= 0 && it.hasNext();) {
-				it.next();
-				it.remove();
+			//detach from end (due to groopfoot issue)
+			Component comp = (Component)getItemAtIndex(max);
+			while (--cnt >= 0) {
+				Component p = comp.getPreviousSibling();
+				comp.detach();
+				comp = p;
 			}
-
-			done = true;
 			break;
+
+		default: //CONTENTS_CHANGED
+			syncModel(min, max);
 		}
 
-		if (!done) //CONTENTS_CHANGED
-			syncModel(min, max);
-
-		postOnInitRender();
-			//Bug 1823236: though fixed in JS, it improves performance
-			//to save one roundtrip
+		postOnInitRender(); //to improve performance
 	}
 
 	private static final ListitemRenderer getDefaultItemRenderer() {
