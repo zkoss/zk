@@ -25,7 +25,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</n:ol>
 	Notice that item 1's label will change to "a".
 	<window id="win" title="tree demo" width="400px" border="normal">
-		<tree id="tree" width="300px" rows="5"
+		<tree id="tree" width="300px" height="200px" rows="5"
 			onSelect="
                  tbox.detach(); 
                  tbox.setParent(win);">

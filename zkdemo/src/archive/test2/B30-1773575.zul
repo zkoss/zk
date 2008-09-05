@@ -6,8 +6,9 @@ http://www.zkoss.org/2005/zul/zul.xsd ">
 
 <window title="HashTest" onOK="setHash()">
 <html><![CDATA[
-1. click the B30-1773575.zul, you should not see "?" appended to the URL. <br/>
-2. click the B30-1773575.zul#12345, you should not see "?" in the URL. And press second time should not get js loop.<br/>
+1. Open new browser. <br/>
+2. Click the B30-1773575.zul, you should not see "?" appended to the URL. <br/>
+3. Click the B30-1773575.zul#12345, you should not see "?" in the URL. And press second time should not get js loop.<br/>
 <br/>
 ]]></html>
 
