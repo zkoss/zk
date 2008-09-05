@@ -740,7 +740,7 @@ public class Grid extends XulElement implements Paginated {
 			} else { //ListModel
 				int addcnt = 0;
 				Row row = (Row)_rows.getChildren().get(min);
-				for (; --cnt >= 0; min++) {
+				while (--cnt >= 0) {
 					next = row.getNextSibling();
 
 					if (cnt < -newcnt) { //if shrink, -newcnt > 0
@@ -749,7 +749,7 @@ public class Grid extends XulElement implements Paginated {
 						if (renderer == null)
 							renderer = getRealRenderer();
 						row.detach(); //always detach
-						_rows.insertBefore(newUnloadedRow(renderer, min), next);
+						_rows.insertBefore(newUnloadedRow(renderer, min++), next);
 						++addcnt;
 					}
 
@@ -916,10 +916,10 @@ public class Grid extends XulElement implements Paginated {
 			RowRenderer renderer = null;
 			final Row next =
 				min < oldsz ? (Row)_rows.getChildren().get(min): null;
-			for (; --cnt >= 0; min++) {
+			while (--cnt >= 0) {
 				if (renderer == null)
 					renderer = getRealRenderer();
-				_rows.insertBefore(newUnloadedRow(renderer, min), next);
+				_rows.insertBefore(newUnloadedRow(renderer, min++), next);
 			}
 			break;
 

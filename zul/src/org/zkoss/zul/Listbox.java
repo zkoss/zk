@@ -1656,7 +1656,7 @@ public class Listbox extends XulElement implements Paginated {
 				if (newcnt > 50 && !inPagingMold())
 					invalidate(); //performance is better
 
-				Component comp = (Component)getItemAtIndex(max);
+				Component comp = getItemAtIndex(max);
 				next = comp.getNextSibling();
 				while (--cnt >= 0) {
 					Component p = comp.getPreviousSibling();
@@ -1665,8 +1665,8 @@ public class Listbox extends XulElement implements Paginated {
 				}
 			} else { //ListModel
 				int addcnt = 0;
-				Listitem item = (Listitem)getItemAtIndex(min);
-				for (; --cnt >= 0; min++) {
+				Listitem item = getItemAtIndex(min);
+				while (--cnt >= 0) {
 					next = item.getNextSibling();
 
 					if (cnt < -newcnt) { //if shrink, -newcnt > 0
@@ -1675,7 +1675,7 @@ public class Listbox extends XulElement implements Paginated {
 						if (renderer == null)
 							renderer = getRealRenderer();
 						item.detach(); //always detach
-						insertBefore(newUnloadedItem(renderer, min), next);
+						insertBefore(newUnloadedItem(renderer, min++), next);
 						++addcnt;
 					}
 
@@ -1687,7 +1687,6 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		} else {
 			min = 0;
-			
 		}
 
 		for (; --newcnt >= 0; ++min) {
@@ -1829,11 +1828,11 @@ public class Listbox extends XulElement implements Paginated {
 
 			ListitemRenderer renderer = null;
 			final Listitem next =
-				min < oldsz ? (Listitem) getItemAtIndex(min): null;
-			for (; --cnt >= 0; min++) {
+				min < oldsz ? getItemAtIndex(min): null;
+			while (--cnt >= 0) {
 				if (renderer == null)
 					renderer = getRealRenderer();
-				insertBefore(newUnloadedItem(renderer, min), next);
+				insertBefore(newUnloadedItem(renderer, min++), next);
 			}
 			break;
 
@@ -1846,7 +1845,7 @@ public class Listbox extends XulElement implements Paginated {
 			if (max > oldsz - 1) max = oldsz - 1;
 
 			//detach from end (due to groopfoot issue)
-			Component comp = (Component)getItemAtIndex(max);
+			Component comp = getItemAtIndex(max);
 			while (--cnt >= 0) {
 				Component p = comp.getPreviousSibling();
 				comp.detach();
