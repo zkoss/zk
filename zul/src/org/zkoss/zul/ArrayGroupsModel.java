@@ -137,10 +137,11 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 			cmprx = cmpr;
 		}
 		
-		sortDataInGroupOrder(cmprx,ascending,col);//use comparator from constructor to sort native data
-		organizeGroup(cmprx,col);
-		sortAllGroupData(cmpr,ascending,col);//sort by original comparator
-		
+		sortDataInGroupOrder(cmprx, ascending,col);//use comparator from constructor to sort native data
+		organizeGroup(cmprx, col);
+		if (cmprx != cmpr)
+			sortAllGroupData(cmpr, ascending,col);//sort by original comparator
+
 		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
 	}
 
