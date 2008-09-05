@@ -34,7 +34,7 @@ See if the sorted result printed in console is same as the data collection displ
 	<vbox>
 		<button label="Invalidate Model" onClick="strset.invalidate()"/>
 		<button label="Invalidate Grid" onClick="g.invalidate()"/>
-		<grid id="g" mold="paging" model="${strset}">
+		<grid id="g" mold="paging" model="${strset}" width="400px" pageSize="13" activePage="10">
 			<columns sizable="true">
 				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"
 				 sortDirection="ascending"/>

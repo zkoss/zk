@@ -99,17 +99,29 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	   	ArrayList data = new ArrayList();
 		String[] datas ;
 
-		for(int j=0; j<5; ++j) {
+		for(int j=0; j<=9; ++j) {
 			data.add("A option "+j);
 		}
-		for(int j=0; j<9; ++j) {
+		for(int j=0; j<=8; ++j) {
 			data.add("B option "+j);
 		}
-		for(int j=0; j<7; ++j) {
+		for(int j=0; j<=9; ++j) {
 			data.add("C option "+j);
 		}
-		for(int j=0; j<8; ++j) {
+		for(int j=0; j<=8; ++j) {
 			data.add("D option "+j);
+		}
+for(int j=0; j<=9; ++j) {
+			data.add("E option "+j);
+		}
+		for(int j=0; j<=8; ++j) {
+			data.add("F option "+j);
+		}
+for(int j=0; j<=9; ++j) {
+			data.add("G option "+j);
+		}
+		for(int j=0; j<=8; ++j) {
+			data.add("H option "+j);
 		}
 		datas = data.toArray(new String[0]);
 		Comparator asc1 = new MyComparator(true,false);
