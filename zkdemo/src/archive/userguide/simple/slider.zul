@@ -34,14 +34,27 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <window title="slider demo" border="normal">
 	<vbox>
-		<slider id="slider1" onScroll="zoom(slider1, img1)"/>
+		Default slider:
+		<hbox width="250px">			
+			<slider id="slider1" onScroll="zoom(slider1, img1)"/>
+		</hbox>
 		<image id="img1" src="/img/sun.jpg" width="10px"/>
-		<separator bar="true"/>
-		<slider id="slider2" onScroll="zoom(slider2, img2)" width="200px" mold="sphere"/>
-		<image id="img2" src="/img/sun.jpg" width="10px"/>
+		
+		<separator />		
+		Sphere slider:
+		<hbox width="250px">			
+			<slider id="slider21" onScroll="zoom(slider21, img2);syncs(-1)" mold="sphere" />
+		</hbox>
+		<hbox width="250px">
+			<hbox width="225px">
+				<image id="img2" src="/img/sun.jpg" width="10px"/>
+			</hbox>
+			<slider id="slider22" onScroll="zoom(slider22, img2);syncs(1)" mold="sphere" orient="vertical"/>					
+		</hbox>				
+		Scale slider:
 		<slider id="slider3" onScroll="zoom(slider3, img3)" mold="scale"/>
 		<image id="img3" src="/img/sun.jpg" width="10px"/>
-
+		
 		Progress meter:
 		<progressmeter id="pm" value="20" />
 		<hbox>
@@ -55,9 +68,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		cols="2"/>
 	</vbox>
 	<zscript>
-	void zoom(Slider slider, Image img) {
+	void syncs(int slid ){
+		(slid > 0 ? slider21.setCurpos(slider22.getCurpos()):		
+		slider22.setCurpos(slider21.getCurpos()));
+	}
+	void zoom(Slider slider, Image img) {		
 		int v = slider.getCurpos();
-		img.setWidth((v*3 + 10) + "px");
+		int w = v*1.5 > 10 ? v*1.5 :10; 
+		img.setWidth(w + "px");
 	}
 	</zscript>
 </window>
