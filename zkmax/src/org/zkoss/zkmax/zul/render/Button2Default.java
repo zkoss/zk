@@ -45,24 +45,31 @@ public class Button2Default implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		String mcls = self.getMoldSclass();
 		if (mcls == null) mcls = "";
-		
-		wh.write("<table z.type=\"zul.widget.Button\" id=\"").write(uuid)
-			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"")						
-			.write(self.getOuterAttrs())
+		final String outerattrs = self.getOuterAttrs();
+		final Execution exec = Executions.getCurrent();
+		wh.write("<span z.type=\"zul.widget.Button\" id=\"").write(uuid)
+			.write("\" class=\"").write(mcls).write("\"")
+			.write(ZkFns.noCSSAttrs(outerattrs))
+			.write('>').write("<table id=\"").write(uuid)
+			.write("!box\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"");
+		if (self.getTabindex() >= 0) {
+			if (!exec.isGecko() && !exec.isSafari())
+				wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
+		}
+		wh.write(ZkFns.outCSSAttrs(outerattrs))
 			.write(self.getInnerAttrs())
-			.write(">\n<tr><td class=\"").write(mcls).write("-tl\"></td>");
-		wh.write("<td class=\"").write(mcls).write("-tm\"></td><td class=\"")
-			.write(mcls).write("-tr\"></td></tr>\n")
-			.write("<tr><td class=\"")
-			.write(mcls).write("-cl\"><button id=\"")
+			.write(">\n<tr><td class=\"").write(mcls).write("-tl\"><button id=\"")
 			.write(uuid).write("!real\" class=\"z ")
 			.write(mcls).write("\"");
 		if (self.getTabindex() >= 0) {
-			Execution exec = Executions.getCurrent();
 			if (exec.isGecko() || exec.isSafari())
 				wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
 		}
-		wh.write("></button></td><td class=\"")
+		wh.write("></button></td>");
+		wh.write("<td class=\"").write(mcls).write("-tm\"></td><td class=\"")
+			.write(mcls).write("-tr\"></td></tr>\n")
+			.write("<tr><td class=\"")
+			.write(mcls).write("-cl\"></td><td class=\"")
 			.write(mcls).write("-cm\">");
 
 		if (self.getDir().equals("reverse")) {
@@ -84,6 +91,6 @@ public class Button2Default implements ComponentRenderer {
 			.write(mcls).write("\"></i></td></tr>\n<tr><td class=\"")
 			.write(mcls).write("-bl\"></td><td class=\"").write(mcls)
 			.write("-bm\"></td><td class=\"")
-			.write(mcls).write("-br\"></td></tr>\n</table>");						
+			.write(mcls).write("-br\"></td></tr>\n</table></span>");						
 	}
 }

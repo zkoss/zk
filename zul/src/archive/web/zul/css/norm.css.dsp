@@ -90,9 +90,6 @@ button.z {
 	background: transparent !important;
 	font-size: 1px !important; width: 1px !important;
 	height: ${c:isGecko() ? 0: 1}px !important;
-	<c:if test="${c:isSafari()}"><%-- remove browser's focus effect --%>
-	position:absolute; left:0; top:-5px;
-	</c:if>
 }
 
 .z-modal-mask {
