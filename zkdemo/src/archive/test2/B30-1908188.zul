@@ -30,7 +30,7 @@
 		}
 	</zscript>
 	
-	<popup id="ResizePopup" style="border: visible" >
+	<popup id="ResizePopup" style="border: visible" width="300px">
 		<vbox>
 			<vbox spacing="1em">
 				<label value="Resize Plot" style="font-weight: bold"/>
