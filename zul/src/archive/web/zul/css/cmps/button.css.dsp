@@ -129,12 +129,30 @@ span.z-button {
 	background-position:0 -1131px;
 }
 <%-- click --%>
+.z-button-clk .z-button-tl {
+	background-position:0 -378px;
+}
 .z-button-clk .z-button-tm{
 	background-position:0 -756px;
+}
+.z-button-clk .z-button-tr {
+	background-position:0 -504px;
+}
+.z-button-clk .z-button-bl {
+	background-position:0 -501px;
 }
 .z-button-clk .z-button-bm {
 	background-position:0 -879px;	
 }
+.z-button-clk .z-button-br {
+	background-position:0 -627px;
+}
+.z-button-clk .z-button-cl {
+	background-position:0 -381px;
+}
 .z-button-clk .z-button-cm {
     background-position:0 -759px;
+}
+.z-button-clk .z-button-cr {
+	background-position:0 -507px;	
 }
