@@ -530,9 +530,9 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 }
 
 .z-tabbox-accd .z-tabpanel-accordion{
-	border-bottom:1px solid #CCCCCC;
-	border-left:1px solid #CCCCCC;
-	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #ABD6EE;
+	border-left:1px solid #ABD6EE;
+	border-right:1px solid #ABD6EE;
 	padding:5px;
 	zoom : 1;
 		

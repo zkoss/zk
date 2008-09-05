@@ -20,9 +20,10 @@
 	border-style: solid; border-color: #B1CBD5; border-width: 0; overflow: hidden;
 }
 .z-panel-header {
-	overflow: hidden; zoom: 1; color: #15428b; font: bold ${fontSizeM} ${fontFamilyT};
+	overflow: hidden; zoom: 1; color: #15428b; font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 5px 3px 4px 5px; border: 1px solid #B1CBD5; line-height: 15px; 
 	background:transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 -1px;
+	font-weight:bold;
 }
 .z-panel-children {
 	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; background: white;
@@ -44,8 +45,8 @@
 	overflow: hidden; zoom: 1;
 }
 .z-panel-tl .z-panel-header {
-	color: #15428b; font: bold ${fontSizeM} ${fontFamilyT}; padding: 5px 0 4px 0;
-	border: 0 none; background: transparent;
+	color: #15428b; font: normal ${fontSizeM} ${fontFamilyT}; padding: 5px 0 4px 0;
+	border: 0 none; background: transparent;font-weight:bold;
 }
 .z-panel-tm {
 	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 0;

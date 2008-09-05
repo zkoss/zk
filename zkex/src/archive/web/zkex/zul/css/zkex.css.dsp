@@ -62,10 +62,10 @@
 }
 .z-west-header, .z-center-header, .z-east-header,
 	.z-north-header, .z-south-header {
-	overflow: hidden; zoom: 1; color: #15428b; font: bold 11px tahoma, arial, verdana, sans-serif;
+	overflow: hidden; zoom: 1; color: #15428b; font: normal 11px tahoma, arial, verdana, sans-serif;
 	padding: 5px 3px 4px 5px; border-bottom: 1px solid #B1CBD5; line-height: 15px; 
 	background:transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 -1px;
-	white-space: nowrap;
+	white-space: nowrap;font-weight:bold;
 }
 .z-south-collapse {
 	background-position: 0 -195px;

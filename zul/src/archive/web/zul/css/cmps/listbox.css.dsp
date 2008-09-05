@@ -117,8 +117,8 @@ td.z-list-group-inner {
 	border-width :2px 0px 1px;
 }
 td.z-list-group-inner div.z-list-cell-cnt {
-	color:#3764a0; font: bold ${fontSizeM} ${fontFamilyT};
-	padding: 4px 2px; width: auto;
+	color:#3764a0; font: normal ${fontSizeM} ${fontFamilyT};
+	padding: 4px 2px; width: auto;font-weight:bold;
 }
 .z-list-group-img-open {
 	width: 18px; min-height: 18px; height: 100%;
@@ -134,8 +134,8 @@ td.z-list-group-inner div.z-list-cell-cnt {
 }
 <%-- Listgroupfoot --%>
 .z-list-group-foot{
-	background: #E7F5FC url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
+	background: #E9F2FB url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
 td.z-list-group-foot-inner div.z-list-cell-cnt {
-	color: #2C559C; font: bold ${fontSizeM} ${fontFamilyT};
+	color: #2C559C; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;
 }

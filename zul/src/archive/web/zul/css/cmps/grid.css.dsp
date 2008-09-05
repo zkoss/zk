@@ -97,11 +97,11 @@ td.z-group-inner {
 	border-width :2px 0px 1px;
 }
 .z-group-inner .z-group-cnt span, .z-group-inner .z-group-cnt {
-	color:#3764a0; font: bold ${fontSizeM} ${fontFamilyT};
-	padding: 4px 2px; width: auto;
+	color:#3764a0; font: normal ${fontSizeM} ${fontFamilyT};
+	padding: 4px 2px; width: auto;font-weight:bold;
 }
 .z-group-inner {
-	color: #3764a0; font: bold ${fontSizeM} ${fontFamilyT};
+	color: #3764a0; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;
 }
 .z-group-img-open {
 	width: 18px; min-height: 18px; height: 100%;
@@ -117,10 +117,10 @@ td.z-group-inner {
 }
 <%-- Groupfooter --%>
 .z-group-foot {
-	background: #E7F5FC url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
+	background: #E9F2FB url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
 }
 .z-group-foot-inner .z-group-foot-cnt span, .z-group-foot-inner .z-group-foot-cnt {
-	color: #2C559C; font: bold ${fontSizeM} ${fontFamilyT};
+	color: #2C559C; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;
 }
 <%-- ZK Column's menu --%>
 .z-column .z-column-cnt {
