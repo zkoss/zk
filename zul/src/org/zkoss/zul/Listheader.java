@@ -148,6 +148,16 @@ public class Listheader extends HeaderElement {
 	}
 	/** Sets the ascending sorter, or null for no sorter for
 	 * the ascending order.
+	 *
+	 * @param sorter the comparator used to sort the ascending order.
+	 * If you are using the group feature, you can pass an instance of
+	 * {@link GroupComparator} to have a better control.
+	 * If an instance of {@link GroupComparator} is passed,
+	 * {@link GroupComparator#compareGroup} is used to group elements,
+	 * and {@link GroupComparator#compare} is used to sort elements
+	 * with a group.
+	 * Otherwise, {@link Comparator#compare} is used to group elements
+	 * and sort elements within a group.
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
@@ -172,6 +182,16 @@ public class Listheader extends HeaderElement {
 	}
 	/** Sets the descending sorter, or null for no sorter for the
 	 * descending order.
+	 *
+	 * @param sorter the comparator used to sort the ascending order.
+	 * If you are using the group feature, you can pass an instance of
+	 * {@link GroupComparator} to have a better control.
+	 * If an instance of {@link GroupComparator} is passed,
+	 * {@link GroupComparator#compareGroup} is used to group elements,
+	 * and {@link GroupComparator#compare} is used to sort elements
+	 * with a group.
+	 * Otherwise, {@link Comparator#compare} is used to group elements
+	 * and sort elements within a group.
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
@@ -302,12 +322,7 @@ public class Listheader extends HeaderElement {
 					((ListModelExt)model).sort(cmpr, ascending);
 				}
 			} else { //not live data
-				if (getListbox().hasGroup())
-					for (Iterator it = getListbox().getGroups().iterator(); it.hasNext();) {
-						Listgroup g = (Listgroup)it.next();
-						Components.sort(box.getItems(), g.getIndex()+1, g.getIndex()+1 + g.getItemCount(), cmpr);
-					}
-				else Components.sort(box.getItems(), cmpr);
+				sort0(box, cmpr);
 			}
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);
@@ -321,6 +336,16 @@ public class Listheader extends HeaderElement {
 				hd != this ? "natural": ascending ? "ascending": "descending");
 		}
 		return true;
+	}
+	/** Sorts the items. If with group, each group is sorted independently.
+	 */
+	private static void sort0(Listbox box, Comparator cmpr) {
+		if (box.hasGroup())
+			for (Iterator it = box.getGroups().iterator(); it.hasNext();) {
+				Listgroup g = (Listgroup)it.next();
+				Components.sort(box.getItems(), g.getIndex()+1, g.getIndex()+1 + g.getItemCount(), cmpr);
+			}
+		else Components.sort(box.getItems(), cmpr);
 	}
 	/** Sorts the list items based on {@link #getSortAscending}
 	 * and {@link #getSortDescending}.
