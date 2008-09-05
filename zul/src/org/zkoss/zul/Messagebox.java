@@ -43,16 +43,15 @@ public class Messagebox {
 	private static String _templ = "~./zul/html/messagebox.zul";
 
 	/** A symbol consisting of a question mark in a circle. */
-	public static final String QUESTION = "~./zul/img/question.png";
+	public static final String QUESTION = "z-msgbox z-msgbox-question";
 	/** A symbol consisting of an exclamation point in a triangle with
-	 * a yellow background.
-	 */
-	public static final String EXCLAMATION  = "~./zul/img/exclamation.png";
+	 * a yellow background.*/
+	public static final String EXCLAMATION  = "z-msgbox z-msgbox-exclamation";
 	/** A symbol of a lowercase letter i in a circle.
 	 */
-	public static final String INFORMATION = "~./zul/img/information.png";
+	public static final String INFORMATION = "z-msgbox z-msgbox-imformation";
 	/** A symbol consisting of a white X in a circle with a red background. */
-	public static final String ERROR = "~./zul/img/error.png";
+	public static final String ERROR = "z-msgbox z-msgbox-error";		
 	/** Contains no symbols. */
 	public static final String NONE = null;
 

@@ -35,6 +35,7 @@
 }
 .z-combobox-focus .z-combobox-img {
 	background-position: -51px 0;
+	border-bottom: 1px solid #80B9E9;
 }
 .z-combobox-focus .z-combobox-btn-over .z-combobox-img {
 	background-position: -68px 0;
@@ -103,13 +104,14 @@
 .z-bandbox .z-bandbox-img {
 	background: transparent url(${c:encodeURL('~./zul/img/button/bandbtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
-	border-bottom: 1px solid #B5B8C8;
+	border-bottom: 1px solid #86A4BE;
 }
 .z-bandbox-btn-over .z-bandbox-img {
 	background-position: -17px 0;
 }
 .z-bandbox-focus .z-bandbox-img {
 	background-position: -51px 0;
+	border-bottom: 1px solid #80B9E9;
 }
 .z-bandbox-focus .z-bandbox-btn-over .z-bandbox-img {
 	background-position: -68px 0;
@@ -150,13 +152,14 @@
 .z-datebox .z-datebox-img {
 	background: transparent url(${c:encodeURL('~./zul/img/button/datebtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
-	border-bottom: 1px solid #B5B8C8;
+	border-bottom: 1px solid #86A4BE;
 }
 .z-datebox-btn-over .z-datebox-img {
 	background-position: -17px 0;
 }
 .z-datebox-focus .z-datebox-img {
 	background-position: -51px 0;
+	border-bottom: 1px solid #80B9E9;
 }
 .z-datebox-focus .z-datebox-btn-over .z-datebox-img {
 	background-position: -68px 0;
@@ -196,13 +199,14 @@
 .z-timebox .z-timebox-img {
 	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
-	border-bottom: 1px solid #B5B8C8;
+	border-bottom: 1px solid #86A4BE;
 }
 .z-timebox-btn-over .z-timebox-img {
 	background-position: -17px 0;
 }
 .z-timebox-focus .z-timebox-img {
 	background-position: -51px 0;
+	border-bottom: 1px solid #80B9E9;
 }
 .z-timebox-focus .z-timebox-btn-over .z-timebox-img {
 	background-position: -68px 0;
@@ -234,13 +238,14 @@
 .z-spinner .z-spinner-img {
 	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
-	border-bottom: 1px solid #B5B8C8;
+	border-bottom: 1px solid #86A4BE;
 }
 .z-spinner-btn-over .z-spinner-img {
 	background-position: -17px 0;
 }
 .z-spinner-focus .z-spinner-img {
 	background-position: -51px 0;
+	border-bottom: 1px solid #80B9E9;
 }
 .z-spinner-focus .z-spinner-btn-over .z-spinner-img {
 	background-position: -68px 0;

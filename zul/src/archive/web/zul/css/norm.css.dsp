@@ -230,7 +230,24 @@ div.z-drop-cnt {
 	font-size: ${fontSizeM};
 	font-weight: normal; font-family: ${fontFamilyC};
 }
-
+<%-- ZK Massagebox --%>
+.z-msgbox{
+	width: 32px; min-height: 32px; height: 100%;	
+	background-repeat: no-repeat;
+	vertical-align: top; cursor: pointer; border: 0;
+}
+.z-msgbox-question {
+	background-image: url(${c:encodeURL('~./zul/img/question.png')});
+}
+.z-msgbox-exclamation {
+	background-image: url(${c:encodeURL('~./zul/img/exclamation.png')});
+}
+.z-msgbox-imformation {
+	background-image: url(${c:encodeURL('~./zul/img/information.png')});
+}
+.z-msgbox-error {
+	background-image: url(${c:encodeURL('~./zul/img/error.png')});
+}
 <%-- ZK error message box --%>
 div.z-errbox {
 	margin: 0; padding: 1px; border: 1px outset; cursor: pointer;

@@ -30,12 +30,18 @@ zk.load("zul.zul"); //zul
  */
 if (!window.Validate_errorbox) { //not customized
 	window.Validate_errorbox = function (id, boxid, msg) {
+		var URI = null;
+		if (zk.ie6Only){
+			URI = '/web/zul/img/vd/arrowU.gif';
+		}else{
+			URI = '/web/zul/img/vd/arrowU.png';
+		}
 		var html =
 	'<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
 	+boxid+'" style="display:none;position:absolute" class="z-errbox"><div>'
 	+'<table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
 	+'<td width="17"><img src="'
-	+zk.getUpdateURI('/web/zul/img/vd/arrowU.png')+'" id="'+id
+	+zk.getUpdateURI(URI)+'" id="'+id
 	+'!img" onclick="zkVld._eblocate(this)" title="'+mesg.GOTO_ERROR_FIELD
 	+'"/></td><td>'+zk.encodeXML(msg, true) //Bug 1463668: security
 	+'</td><td width="16"><img src="'+zk.getUpdateURI('/web/zul/img/close-off.gif')
@@ -361,7 +367,12 @@ zkVld._fiximg = function (box) {
 		} else {
 			dir = dy < 0 ? "D": "U";
 		}
-		img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+'.png');
+		if (zk.ie6Only){
+			img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+'.gif');	
+		}else{
+			img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+'.png');	
+		}
+		
 	}
 };
 /** Makes el visible by moving away any error box covering el.

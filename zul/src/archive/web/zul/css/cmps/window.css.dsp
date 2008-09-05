@@ -80,7 +80,7 @@
 }
 <%-- Body --%>
 .z-window-embedded-cnt {
-	margin: 0; padding: 3px; border: 1px solid #8DB2E3;
+	margin: 0; padding: 3px; border: 1px solid #538BA2;
 }
 .z-window-embedded-cnt, .z-window-embedded-body, .z-window-overlapped-body,
 	.z-window-popup-body, .z-window-highlighted-body, .z-window-modal-body {

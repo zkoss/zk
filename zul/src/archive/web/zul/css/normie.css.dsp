@@ -101,6 +101,30 @@ div.z-tabpanel-accordion {
 }
 <%-- IE 6 GIF  --%>
 <c:if test="${c:isExplorer() && !c:isExplorer7()}">
+<%-- ZK Massagebox norm.css.dsp--%>
+.z-msgbox-question {
+	background-image: url(${c:encodeURL('~./zul/img/question.gif')});
+}
+.z-msgbox-exclamation {
+	background-image: url(${c:encodeURL('~./zul/img/exclamation.gif')});
+}
+.z-msgbox-imformation {
+	background-image: url(${c:encodeURL('~./zul/img/information.gif')});
+}
+.z-msgbox-error {
+	background-image: url(${c:encodeURL('~./zul/img/error.gif')});
+}
+<%-- grid.css.dsp --%>
+.z-group-img-close{
+	background-image: url(${c:encodeURL('~./zul/img/tree/close.gif')});
+}
+.z-group-img-open{
+	background-image: url(${c:encodeURL('~./zul/img/tree/open.gif')});
+}
+<%-- listbox.css.dsp --%>
+tr.z-list-item td.z-list-item-focus {
+	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
+}
 <%-- menu.css.dsp --%>
 .z-menu-cnt-img {
 	background-image:url(${c:encodeURL('~./zul/img/menu2/arrow.gif')});
@@ -157,13 +181,13 @@ div.z-tabpanel-accordion {
 	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb.gif')});
 }
 .z-slider-scale {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.gif')});
+    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
 }
 .z-slider-scale-inner {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.gif')});
+    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
 }
 .z-slider-scale-end {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.gif')});
+    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
 }
 .z-slider-scale-btn {
     background-image:url(${c: encodeURL('~./zul/img/slider2/slider-scale-thumb.gif')});
@@ -202,8 +226,7 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 tr.z-tree-row td.z-tree-row-focus {
 	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
 }
-<%-- listbox.css.dsp --%>
-tr.z-list-item td.z-list-item-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
-}
+
+
+
 </c:if>

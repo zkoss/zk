@@ -67,16 +67,16 @@
 }
 .z-slider-scale {
     padding-left: 7px; zoom:1;
-    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.png')}) no-repeat 0 -22px;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-bg.png')}) no-repeat 0 -22px;
 }
 .z-slider-scale-inner {
     position: relative; left: 0; top: 0; overflow: visible; zoom: 1;
-    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.png')}) repeat-x 0 0;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-bg.png')}) repeat-x 0 0;
     height: 22px;
 }
 .z-slider-scale-end {
     padding-right: 7px; zoom: 1;
-    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-scale-bg.png')}) no-repeat right -44px;
+    background: transparent url(${c: encodeURL('~./zul/img/slider2/slider-bg.png')}) no-repeat right -44px;
 }
 .z-slider-scale-btn {
     width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
