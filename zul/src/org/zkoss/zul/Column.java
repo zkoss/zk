@@ -18,7 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collections;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -127,6 +129,16 @@ public class Column extends HeaderElement {
 	}
 	/** Sets the ascending sorter, or null for no sorter for
 	 * the ascending order.
+	 *
+	 * @param sorter the comparator used to sort the ascending order.
+	 * If you are using the group feature, you can pass an instance of
+	 * {@link GroupComparator} to have a better control.
+	 * If an instance of {@link GroupComparator} is passed,
+	 * {@link GroupComparator#compareGroup} is used to group elements,
+	 * and {@link GroupComparator#compare} is used to sort elements
+	 * with a group.
+	 * Otherwise, {@link Comparator#compare} is used to group elements
+	 * and sort elements within a group.
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
@@ -150,6 +162,16 @@ public class Column extends HeaderElement {
 	}
 	/** Sets the descending sorter, or null for no sorter for the
 	 * descending order.
+	 *
+	 * @param sorter the comparator used to sort the ascending order.
+	 * If you are using the group feature, you can pass an instance of
+	 * {@link GroupComparator} to have a better control.
+	 * If an instance of {@link GroupComparator} is passed,
+	 * {@link GroupComparator#compareGroup} is used to group elements,
+	 * and {@link GroupComparator#compare} is used to sort elements
+	 * with a group.
+	 * Otherwise, {@link Comparator#compare} is used to group elements
+	 * and sort elements within a group.
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
@@ -238,14 +260,7 @@ public class Column extends HeaderElement {
 					//CONSIDER: provide index for sort
 				}
 			} else { //not live data
-				final Rows rows = grid.getRows();
-				if (rows.hasGroup())
-					for (Iterator it = rows.getGroups().iterator(); it.hasNext();) {
-						Group g = (Group)it.next();
-						int index = g.getIndex() + 1;
-						Components.sort(rows.getChildren(), index, index + g.getItemCount(), cmpr);
-					}
-				else Components.sort(rows.getChildren(), cmpr);
+				sort0(grid, cmpr);
 			}
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);
@@ -253,6 +268,18 @@ public class Column extends HeaderElement {
 		fixDirection(grid, ascending);
 		
 		return true;
+	}
+	/** Sorts the rows. If with group, each group is sorted independently.
+	 */
+	private static void sort0(Grid grid, Comparator cmpr) {
+		final Rows rows = grid.getRows();
+		if (rows.hasGroup())
+			for (Iterator it = rows.getGroups().iterator(); it.hasNext();) {
+				Group g = (Group)it.next();
+				int index = g.getIndex() + 1;
+				Components.sort(rows.getChildren(), index, index + g.getItemCount(), cmpr);
+			}
+		else Components.sort(rows.getChildren(), cmpr);
 	}
 	
 	private void fixDirection(Grid grid, boolean ascending) {
@@ -319,34 +346,56 @@ public class Column extends HeaderElement {
 				if (rows.hasGroup()) {
 					final List groups = new ArrayList(rows.getGroups());
 					for (Iterator it = groups.iterator(); it.hasNext();)
-						rows.removeChild((Group)it.next()); // Groupfoot is removed automatically, if any.
+						((Group)it.next()).detach(); // Groupfoot is removed automatically, if any.
 				}
 				
-				Components.sort(rows.getChildren(), cmpr);
-				
-				final List children = new ArrayList(rows.getChildren());
+				Comparator cmprx;
+				if(cmpr instanceof GroupComparator){
+					cmprx = new Comparator(){
+						public int compare(Object o1, Object o2) {
+							return ((GroupComparator)cmpr).compareGroup(o1, o2);
+						}
+					};
+				}else{
+					cmprx = cmpr;
+				}
+
+				final List children = new LinkedList(rows.getChildren());
 				rows.getChildren().clear();
-				
-				Group group = null;
+				Collections.sort(children, cmprx);
+
+				Row previous = null;
 				for (Iterator it = children.iterator(); it.hasNext();) {
 					final Row row = (Row) it.next();
-					final List child = row.getChildren();
-					if (child.size() < index)
-						throw new IndexOutOfBoundsException(
-								"Index: "+index+", Size: "+ child.size());
-					final Component cmp = (Component) child.get(index);
-					if (cmp instanceof Label) {
-						String val = ((Label)cmp).getValue();
-						if (group == null) group = new Group(val);
-						else if (!Objects.equals(group.getLabel(), val))
+					it.remove();
+					if (previous == null || cmprx.compare(previous, row) != 0) {
+						//new group
+						final List cells = row.getChildren();
+						if (cells.size() < index)
+							throw new IndexOutOfBoundsException(
+									"Index: "+index+" but size: "+ cells.size());
+						Group group;
+						Component cell = (Component)cells.get(index);
+						if (cell instanceof Label) {
+							String val = ((Label)cell).getValue();
 							group = new Group(val);
-					} else {
-						group = new Group(Messages.get(MZul.GRID_OTHER));
-					}
-					if (group.getParent() != rows)
+						} else {
+							Component cc = cell.getFirstChild();
+							if (cc instanceof Label) {
+								String val = ((Label)cc).getValue();
+								group = new Group(val);
+							} else {
+								group = new Group(Messages.get(MZul.GRID_OTHER));
+							}
+						}
 						rows.appendChild(group);
-					rows.appendChild(row);		    		
+					}
+					rows.appendChild(row);
+					previous = row;
 				}
+
+				if (cmprx != cmpr)
+					sort0(grid, cmpr); //need to sort each group
 			}
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);
