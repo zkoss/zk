@@ -9,7 +9,7 @@ border) of the panels should resize to fit the browser window size. <br/>
 left pane should not occupy the whole page, leaving no space to the right pane. <br/>
 ]]></html>
 
-<hbox >
+<hbox width="600px">
 
 <tabbox style="width:100%">
 
