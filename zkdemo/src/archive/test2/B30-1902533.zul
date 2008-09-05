@@ -19,40 +19,40 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>BorderLayout should not splittable when click on split btn.</n:p>
-	<borderlayout mold="v30" height="500px">
-	<north mold="v30" maxsize="300" size="50%" border="0" splittable="true" collapsible="true">
-		<borderlayout mold="v30">
-			<west mold="v30" size="25%" border="none" flex="true" maxsize="250" splittable="true" collapsible="true">
+	<borderlayout height="500px">
+	<north maxsize="300" size="50%" border="0" splittable="true" collapsible="true">
+		<borderlayout>
+			<west size="25%" border="none" flex="true" maxsize="250" splittable="true" collapsible="true">
 				<div style="background:#B8D335">
 					<label value="25%"
 						style="color:white;font-size:50px" />
 				</div>
 			</west>
-			<center mold="v30" border="none" flex="true">
+			<center border="none" flex="true">
 				<div style="background:#E6D92C">
 					<label value="25%"
 						style="color:white;font-size:50px" />
 				</div>
 			</center>
-			<east mold="v30" size="50%" border="none" flex="true">
+			<east size="50%" border="none" flex="true">
 				<label value="Here is a non-border"
 					style="color:gray;font-size:30px" />
 			</east>
 		</borderlayout>
 	</north>
-	<center mold="v30" border="0">
-		<borderlayout mold="v30">
-			<west mold="v30" maxsize="600" minsize="300" size="30%" flex="true" border="0" splittable="true">
+	<center border="0">
+		<borderlayout>
+			<west maxsize="600" minsize="300" size="30%" flex="true" border="0" splittable="true">
 				<div style="background:#E6D92C">
 					<label value="30%"
 						style="color:white;font-size:50px" />
 				</div>
 			</west>
-			<center mold="v30">
+			<center>
 				<label value="Here is a border"
 					style="color:gray;font-size:30px" />
 			</center>
-			<east mold="v30" size="30%" flex="true" border="0" collapsible="true">
+			<east size="30%" flex="true" border="0" collapsible="true">
 				<div style="background:#B8D335">
 					<label value="30%"
 						style="color:white;font-size:50px" />

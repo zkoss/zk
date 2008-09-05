@@ -3,7 +3,7 @@
 	1.Open any group, then open any detail .<br/>
 	2.Close groups that you opened. Then all rows and opened details in this group should be hide.<br/>
 	3.Open the group again, the rows and opened details should show again.<br/>
-	4.A un-opened detail never showup, no metter certain group be opened or closeed.<br/>
+	4.A un-opened detail never showup, no matter certain group be opened or closeed.<br/>
 	]]></html></groupbox>
 	<zscript>
 <![CDATA[
@@ -79,7 +79,7 @@ new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 1
 					</groupbox>
 				</detail>
 				<div>
-					<image style="padding: 0px 10px" src="img/mail_read.png" />
+					<image style="padding: 0px 10px" src="/img/mail_read.png" />
 					<label value="${each[0]}" />
 				</div>
 				<label value="${each[1]}" />
