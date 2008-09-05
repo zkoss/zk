@@ -1393,7 +1393,8 @@ zkau._onDocMouseover = function (evt) {
 	if (!evt) evt = window.event;
 
 	var cmp = Event.element(evt),
-		hvcmp = zkau._parentByZKAttr(cmp, "hvig");
+		cmps = zkau._parentsByZKAttrs(cmp, "hvig", "tip"),
+		hvcmp = cmps[0];
 	if (hvcmp) {
 		var img = $tag(hvcmp) == "IMG" ? hvcmp: $e(hvcmp.id + "!hvig");
 		if (img) {
@@ -1402,7 +1403,7 @@ zkau._onDocMouseover = function (evt) {
 		}
 	}
 
-	cmp = zkau._parentByZKAttr(cmp, "tip");
+	cmp = cmps[1];
 	if (cmp) {
 		var tip = getZKAttr(cmp, "tip");
 		tip = zkau.getByZid(cmp, tip);
@@ -1551,7 +1552,10 @@ zkau._tryCloseTip = function () {
 	}
 };
 
-/** Returns the target of right-click, or null if not found. */
+/** Returns the first parent who has one of the specified attributes,
+ * or null if not found.
+ * att1 and attr2 might be null.
+ */
 zkau._parentByZKAttr = function (n, attr1, attr2) {
 	for (; n; n = $parent(n)) {
 		if (attr1 && getZKAttr(n, attr1)) return n;
@@ -1560,6 +1564,25 @@ zkau._parentByZKAttr = function (n, attr1, attr2) {
 			//tooltip/popup/context might be inside the component
 	}
 	return null;
+};
+/** Retuns two parents of the specified two attributes.
+ * Both attr1 and attr2 cannot be null.
+ */
+zkau._parentsByZKAttrs = function (n, attr1, attr2) {
+	var cmp1, cmp2, cnt = 2;
+	for (; n && cnt; n = $parent(n)) {
+		if (getZKAttr(n, attr1)) {
+			--cnt;
+			cmp1 = n;
+		}
+		if (getZKAttr(n, attr2)) {
+			--cnt;
+			cmp2 = n;
+		}
+		if (getZKAttr(n, "float")) break;
+			//tooltip/popup/context might be inside the component
+	}
+	return [cmp1, cmp2];
 };
 
 /** Handles document.onkeydown. */
