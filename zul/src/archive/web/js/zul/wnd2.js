@@ -740,6 +740,8 @@ zkWnd2._initMode = function (cmp) {
 	}
 	else if (zkWnd2._clean2[cmp.id])
 		zkWnd2._cleanMode2(cmp.id, true); //replace with a new mode
+	if (mode && mode != "embedded" && !zkWnd2.getShadow(cmp))
+		zkWnd2.initShadow(cmp);
 	switch (mode) {
 	case "modal":
 	case "highlighted":
@@ -752,8 +754,6 @@ zkWnd2._initMode = function (cmp) {
 		zkWnd2._doPopup(cmp, replace);
 	//default: embedded
 	}
-	if (mode && mode != "embedded" && !zkWnd2.getShadow(cmp))
-		zkWnd2.initShadow(cmp);
 };
 zkWnd2._cleanMode = function (cmp) {
 	var mode = getZKAttr(cmp, "mode");
@@ -1029,7 +1029,7 @@ zkWnd2._center = function (cmp, zi, pos) {
 	cmp.style.position = "absolute"; //just in case
 	zk.center(cmp, pos);
 	var sw = zkWnd2.getShadow(cmp);
-	if (sw) {
+	if (pos && sw) {
 		var d = sw.getDelta(), l = cmp.offsetLeft, t = cmp.offsetTop, w = cmp.offsetWidth,
 			h = cmp.offsetHeight, s = cmp.style; 
 		if (pos.indexOf("left") >= 0 && d.l < 0) s.left = l - d.l + "px";
