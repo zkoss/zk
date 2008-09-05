@@ -27,6 +27,6 @@ Expected Result: you shall see a blue line between abc and xyz
 <label value="xyz" />
 </vbox>
 <style>
-tr.vbox-sp td {border-bottom: 1px solid blue}
+tr.z-vbox-sep td {border-bottom: 1px solid blue}
 </style>
 </window>
