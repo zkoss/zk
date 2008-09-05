@@ -522,6 +522,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 				return true;
 			}
 		}
+		break;
 	case "z.maximized":
 		zkau.setAttr(cmp, nm, val);
 		if (getZKAttr(cmp, "minimized") == "true") {
