@@ -394,11 +394,13 @@ zkLayoutRegion2 = {
 			colled.style.zIndex = ""; // reset z-index refered to the onBeforeSlideOut()
 			colled.style.visibility = "";
 			anima.slideIn(colled, zkLayoutRegionSplit2.sanchors[real.split.pos], 200);
+			real._isSilding = false;
 		}
 	},
 	// recalculates the size of the whole border layout after the component sildes in.
 	onAfterSlideIn: function (cmp) {
 		zk.Layout2.getOwnerLayout(cmp).render();
+		cmp._isSilding = false;
 	},
 	// a callback function after the collapsed region slides down
 	onColledAfterSlideDown: function (cmp) {
@@ -560,7 +562,8 @@ zkLayoutRegion2 = {
 	onBtnClick: function (evt) {
 		var btn = zkau.evtel(evt),
 			real = $real(btn);
-		if (real._isSilde) return;
+		if (real._isSilde || real._isSilding) return;
+		real._isSilding = true;
 		if (btn.id.endsWith("!btned")) {
 			real.style.visibilty = "hidden";
 			real.style.display = "";
@@ -835,8 +838,10 @@ zkLayoutRegionSplit2 = {
 	},
 	open: function (split, open, silent, enforce, nonAnima) {
 		var real = $real(split);
-		if (getZKAttr(real, "colps") != "true" || (!enforce && (getZKAttr(real, "open") != "false") == open))
+		if (getZKAttr(real, "colps") != "true" || (!enforce && (getZKAttr(real, "open") != "false") == open)) {
+			real._isSilding = false;
 			return; //nothing changed
+		}
 	
 		setZKAttr(real, "open", open ? "true": "false");
 		var vert = split.pos == "west" || split.pos == "east" ? false : true,
@@ -848,6 +853,7 @@ zkLayoutRegionSplit2 = {
 				else {
 					zk.show(real.id, open);
 					zk.show(colled.id, !open);
+					real._isSilding = false;
 				}
 			}
 		} else {
@@ -857,6 +863,7 @@ zkLayoutRegionSplit2 = {
 				if (colled)
 					zk.show(colled.id, !open);
 				zk.show(real.id, open);
+				real._isSilding = false;
 			}
 		}
 		if (nonAnima) zk.Layout2.getOwnerLayout(split).render();
