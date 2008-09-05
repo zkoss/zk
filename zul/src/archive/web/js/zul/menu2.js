@@ -309,12 +309,7 @@ zkMenu2 = { // menu
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		if (ref) zk.position(pp, ref, pos);
-		zk.show(pp); //animation effect, if any
-		
-		if (zk.ie) {
-			var ul = $e(pp.id + "!cave");
-			pp.style.width = ul.offsetWidth + zk.getFrameWidth(pp) + "px";
-		}
+		zk.show(pp); //animation effect, if any		
 		
 		if (!pp._shadow)
 			pp._shadow = new zk.Shadow(pp, {mode: "drop", autoShow: true});
