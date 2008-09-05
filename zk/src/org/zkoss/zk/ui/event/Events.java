@@ -423,35 +423,11 @@ public class Events {
 	 * @see GenericEventListener
 	 */
 	public static final void addEventListeners(Component comp, final Object controller) {
-		final Method [] mtds = controller.getClass().getMethods();
-		final EventListener evtl = new EventListener() {
-			public void onEvent(Event evt) throws Exception {		
-				final Method mtd = ComponentsCtrl.getEventMethod(controller.getClass(), evt.getName());
-				if (mtd != null) {
-					if (mtd.getParameterTypes().length == 0)
-						mtd.invoke(controller, null);
-					else if (evt instanceof ForwardEvent) { //ForwardEvent
-						final Class paramcls = (Class) mtd.getParameterTypes()[0];
-						//paramcls is ForwardEvent || Event
-						if (ForwardEvent.class.isAssignableFrom(paramcls)
-						|| Event.class.equals(paramcls)) { 
-							mtd.invoke(controller, new Object[] {evt});
-						} else {
-							do {
-								evt = ((ForwardEvent)evt).getOrigin();
-							} while(evt instanceof ForwardEvent);
-							mtd.invoke(controller, new Object[] {evt});
-						}
-					} else
-						mtd.invoke(controller, new Object[] {evt});
-				}
+		final GenericEventListener evtl = new GenericEventListener() {
+			protected Object getController() {
+				return controller;
 			}
 		};
-		
-		for(int i=0; i < mtds.length; i ++){
-			final String evtnm = mtds[i].getName();
-			if (Events.isValid(evtnm))
-				comp.addEventListener(evtnm, evtl);
-		}
+		evtl.bindComponent(comp);
 	}
 }
