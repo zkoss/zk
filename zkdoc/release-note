@@ -7,6 +7,7 @@ ZK 3.0.8
   2060367: More neat startup log for ignorable errors
   2066299: fulfill: fire onFulfill after fulfilling the children
   2092356: Unwrap ForwardEvent automatically in GenericEventListener
+  2094526: Components.wireVariables() shall wire implicit objects
   
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
@@ -34,6 +35,7 @@ ZK 3.0.8
   2079837: Timebox behaves wrongly if there is scrollbar
   2082896: ZK conflicts with Liferay 5.1.1
   2088712: separator with bar & spacing=1px not show in IE
+  2094523: Components.wireFellows() shall wire fellows then ancentors
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
