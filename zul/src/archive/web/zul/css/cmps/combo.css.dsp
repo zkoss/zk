@@ -135,6 +135,10 @@
 .z-datebox-disd * {
 	color: gray !important; cursor: default !important;
 }
+.z-datebox-over{
+	background: #dae7f6;
+}
+
 .z-datebox-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
@@ -169,7 +173,7 @@
 }
 .z-datebox-pp {
 	display: block; position: absolute; z-index: 88000;
-	background: white; border: 1px solid black; padding: 2px;
+	background: white; border: 1px solid #888888; padding: 2px;
 }
 .z-datebox-pp table.calyear {
 	background: #d8e8f0;

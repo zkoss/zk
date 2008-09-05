@@ -374,11 +374,22 @@ zkCal.onblur = function (evt) {
 
 zkCal.onover = function (evt) {
 	var el = Event.element(evt);
-	if (el.className.indexOf("-disd") == -1)
-		el.style.textDecoration = "underline";
+	if (el.className.indexOf("-disd") == -1){
+		if (el.className.indexOf("-seld") != -1) {
+			zk.addClass(el, "z-datebox-over-seld");
+		}else {
+			zk.addClass(el, "z-datebox-over");
+		}				
+	}
+		
 };
-zkCal.onout = function (evt) {
-	Event.element(evt).style.textDecoration = "";
+zkCal.onout = function (evt) {	
+	var el = Event.element(evt);
+	if (el.className.indexOf("-seld") != -1) {
+			zk.rmClass(el, "z-datebox-over-seld");
+		}else {
+			zk.rmClass(el, "z-datebox-over");
+		}
 };
 /** Returns if a cell is selected. */
 zkCal._seled = function (cell) {

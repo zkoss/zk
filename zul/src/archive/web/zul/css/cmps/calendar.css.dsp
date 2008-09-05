@@ -27,6 +27,7 @@
 	font-size: ${fontSizeS}; color: #35254F; text-align: center;
 	cursor: pointer; text-decoration: none;
 }
+
 .z-calendar-calday td, .z-datebox-calday td {
 	padding: 1px 3px;
 }
@@ -36,6 +37,9 @@
 .z-calendar-calmon td.z-calendar-seld, .z-calendar-calday td.z-calendar-seld,
 .z-datebox-calmon td.z-datebox-seld, .z-datebox-calday td.z-datebox-seld {
 	background: #BCD2EF; border: 1px solid #aad6e6;
+}
+.z-datebox-calmon td.z-datebox-over-seld,.z-datebox-calday td.z-datebox-over-seld{
+	background: #6eadff;
 }
 .z-calendar-caldow td, .z-datebox-caldow td {
 	font-size: ${fontSizeS}; color: #333; font-weight: bold;
