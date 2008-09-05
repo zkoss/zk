@@ -521,8 +521,11 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 				zkWnd2.syncShadow(cmp);
 				return true;
 			}
-		}
-		break;
+		} else 
+			zkau.setAttr(cmp, nm, val);
+			if (!zkWnd2._embedded(cmp))
+				zkWnd2.syncShadow(cmp);
+			return true;
 	case "z.maximized":
 		zkau.setAttr(cmp, nm, val);
 		if (getZKAttr(cmp, "minimized") == "true") {
