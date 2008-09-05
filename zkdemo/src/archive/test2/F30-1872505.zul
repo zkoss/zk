@@ -49,7 +49,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</hbox>
 	<div id="mapCanvas"
 		style="position:relative;height:300px;width:800px;border: 1px solid blue;">
-		<window id="win2" border="normal" width="450px" top="50px"
+		<window id="win2" border="normal" width="450px" top="50px" height="200px" style="overflow:visible;"
 			left="50px" title="InnerWindow- top=50px, left=50px- position=parent" position="parent"
 			onMove='msg.value = "Inner: " + event.top + "," + event.left;'>
 			<window id="win3" border="normal" width="300px" top="50px"
