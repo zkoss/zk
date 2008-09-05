@@ -196,7 +196,6 @@ zkSpinner._btnOut= function(evt){
 	if(inp.disabled) return;
 
 	zkSpinner._stopAutoIncProc(cmp);
-	inp.focus();
 };
 
 //inner method
