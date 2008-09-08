@@ -114,10 +114,35 @@ public class ConfigParser {
 	/** Used to provide backward compatibility to 2.3.0's richlet definition. */
 	private int _richletnm;
 
-	/** Parses metainfo/zk/config.xml placed in class-path.
+	/** Parses metainfo/zk/config.xml placed in class-path for application
+	 * dependent configurations.
+	 *
+	 * <p>There are two parts of parsing: application dependent
+	 * ({@link #parseAppConfig}) and application independent
+	 * ({@link #parseSysConfig}).
+	 *
+	 * <p>Implementation Notes:<br/>
+	 * You cannot assume which one of {@link #parseAppConfig} and
+	 * {@link #parseSysConfig} is called first.
 	 * @since 3.5.0
 	 */
-	public void parseConfigXml(Configuration config) {
+	public void parseAppConfig(Configuration config) {
+		if (config == null)
+			throw new IllegalArgumentException();
+		parseConfigXml(config);
+	}
+	/** Parses metainfo/zk/config.xml placed in class-path for application
+	 * independent configurations.
+	 *
+	 * <p>There are two parts of parsing: application dependent
+	 * ({@link #parseAppConfig}) and application independent
+	 * ({@link #parseSysConfig}).
+	 * @since 3.5.0
+	 */
+	public void parseSysConfig() {
+		parseConfigXml(null);
+	}
+	private void parseConfigXml(Configuration config) {
 		try {
 			final ClassLocator locator = new ClassLocator();
 			final List xmls = locator.getDependentXMLResources(
@@ -126,8 +151,17 @@ public class ConfigParser {
 				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 				if (log.debugable()) log.debug("Loading "+res.url);
 				try {
-					if (checkVersion(res.url, res.document))
-						parseConfigXml0(config, res.document.getRootElement());
+					if (checkVersion(res.url, res.document)) {
+						final Element el = res.document.getRootElement();
+						if (config == null) {
+							parseZScriptConfig(el);
+							parseDeviceConfig(el);
+							parseSystemConfig(el);
+							parseClientConfig(el);
+						} else {
+							parseListeners(config, el);
+						}
+					}
 				} catch (Exception ex) {
 					throw UiException.Aide.wrap(ex, "Failed to load "+res.url);
 						//abort since it is hardly to work then
@@ -136,14 +170,6 @@ public class ConfigParser {
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex); //abort
 		}
-	}
-	private static void parseConfigXml0(Configuration config, Element el)
-	throws Exception {
-		parseZScriptConfig(el);
-		parseDeviceConfig(el);
-		parseSystemConfig(el);
-		parseClientConfig(el);
-		parseListeners(config, el);
 	}
 	private static void parseZScriptConfig(Element root) {
 		for (Iterator it = root.getElements("zscript-config").iterator();

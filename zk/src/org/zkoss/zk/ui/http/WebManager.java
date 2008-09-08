@@ -109,7 +109,7 @@ public class WebManager {
 		try {
 			//load metainfo/zk/config.xml
 			final ConfigParser parser = new ConfigParser();
-			parser.parseConfigXml(config);
+			parser.parseAppConfig(config);
 
 			//load /WEB-INF/zk.xml
 			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");

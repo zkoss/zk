@@ -131,7 +131,11 @@ public class DefinitionLoaders {
 	private static void load0() {
 		final ClassLocator locator = new ClassLocator();
 
-		//1. process lang.xml (no particular dependency)
+		//1. parse config.xml
+		final ConfigParser parser = new ConfigParser();
+		parser.parseSysConfig();
+
+		//2. process lang.xml (no particular dependency)
 		try {
 			for (Enumeration en = locator.getResources("metainfo/zk/lang.xml");
 			en.hasMoreElements();) {
@@ -150,7 +154,7 @@ public class DefinitionLoaders {
 			throw UiException.Aide.wrap(ex); //abort
 		}
 
-		//2. process lang-addon.xml (with dependency)
+		//3. process lang-addon.xml (with dependency)
 		try {
 			final List xmls = locator.getDependentXMLResources(
 				"metainfo/zk/lang-addon.xml", "addon-name", "depends");
@@ -169,7 +173,7 @@ public class DefinitionLoaders {
 			//keep running
 		}
 
-		//3. process other addon (from addAddon)
+		//4. process other addon (from addAddon)
 		if (_addons != null) {
 			for (Iterator it = _addons.iterator(); it.hasNext();) {
 				final Object[] p = (Object[])it.next();
