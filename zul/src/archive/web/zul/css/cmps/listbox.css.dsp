@@ -112,9 +112,8 @@ tr.z-list-group{
 }
 td.z-list-group-inner {
 	padding-top: 2px;
-	border-color:  #bcd2ef;
-	border-style: solid;
-	border-width :2px 0px 1px;
+	border-top: 2px solid #81BAF5;
+	border-bottom: 1px solid #bcd2ef;	
 }
 td.z-list-group-inner div.z-list-cell-cnt {
 	color:#3764a0; font: normal ${fontSizeM} ${fontFamilyT};
