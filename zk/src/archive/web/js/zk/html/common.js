@@ -545,7 +545,7 @@ zk.realClass = function (el, keywords) {
  * of the specified element.
  */
 zk.hasClass = function (el, clsnm) {
-	var cn = el.className;
+	var cn = el ? el.className: "";
 	return cn && (' '+cn+' ').indexOf(' '+clsnm+' ') != -1;
 };
 
