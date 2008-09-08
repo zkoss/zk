@@ -18,6 +18,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	Please type a "%" sign into the input element, and then focus out the input element, you should see an error box.
+<vbox>
+	<label value="1. Open new browser." />
+	<label value='2. Please type a "%" sign into the input element, and then focus out the input element, you should see an error box.' />
 	<intbox/>
+</vbox>
 </zk>
