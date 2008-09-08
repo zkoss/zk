@@ -368,12 +368,24 @@ zkLayoutRegion2 = {
 			zkLayoutRegionSplit2.init(split);
 		}
 		
+		var cid = getZKAttr(cmp, "cid"),
+			isFlex = getZKAttr(cmp, "flex") == "true",
+			bodyEl = (isFlex && cid != "zk_n_a") ? $e(getZKAttr(cmp, "cid")) : $e($uuid(cmp) + "!cave");
 		if (getZKAttr(cmp, "autoscl") == "true") { 
-			var cid = getZKAttr(cmp, "cid"), bodyEl = (getZKAttr(cmp, "flex") == "true" && cid != "zk_n_a") ?
-				$e(getZKAttr(cmp, "cid")) : $e($uuid(cmp) + "!cave");
 			zk.listen(bodyEl, "scroll", zk.Layout2.onscroll);
 		}
+		if (isFlex) {
+			zk.on(bodyEl, "onOuter", this.onOuter);
+		}
 		zk.Layout2.getOwnerLayout(cmp).addRegion(pos, cmp);
+	},
+	onOuter: function (child) {
+		if (child) {
+			var cmp = $real($parentByType(child, "LayoutRegion2"));
+			if (!cmp) return;
+			cmp._lastSize = null;// reset
+			zk.Layout2.getOwnerLayout(cmp).render();
+		}
 	},
 	// invokes border layout's renderer before the component slides out
 	onBeforeSlideOut: function (cmp) {

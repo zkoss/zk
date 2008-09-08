@@ -431,10 +431,14 @@ zk.addBeforeInit(function () {
 								getZKAttr(cmp, "dsc") != "true") 
 									zk.remove($e(cmp.id + "!btn"));
 							zk.on(mpop, "close", zkCol.onMenuClose);
+							zk.on(mpop, "onOuter", zkCol.onMenuOuter);
 						}
 					});
 				}
 			}
+		},
+		onMenuOuter: function (mpop) {
+			zk.on(mpop, "close", zkCol.onMenuClose);
 		},
 		onMenuClick: function (evt) {
 			if (!evt) evt = window.event;

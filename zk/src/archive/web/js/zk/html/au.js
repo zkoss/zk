@@ -2448,7 +2448,7 @@ zkau.cmd1 = {
 	},
 	outer: function (uuid, cmp, html) {
 		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
-
+		var fns = zk.find(cmp, "onOuter");
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
 			to = cmp.nextSibling;
@@ -2457,6 +2457,13 @@ zkau.cmd1 = {
 		else zkau._initChildren(from2, to);
 
 		if (zkau.valid) zkau.valid.fixerrboxes();
+		if (fns) {
+			var ls = zk.find(cmp), fs = ls["onOuter"];
+			if (zk.debugJS && fs && fns.length != fs.length)
+				zk.error("outer: function length is not equal.");
+			ls["onOuter"] = fns;
+		}
+		zk.fire(cmp, "onOuter");
 	},
 	addAft: function (uuid, cmp, html) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore

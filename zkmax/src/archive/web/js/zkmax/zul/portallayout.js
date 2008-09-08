@@ -243,7 +243,11 @@ zkPortalChildren = {
 			cns = zk.childNodes(cave);
 		for (var i = cns.length; --i >= 0;) {
 			zk.on(cns[i], "maximize", this.onChildMaximize);
+			zk.on(cns[i], "onOuter", this.onChildOuter);
 		}
+	},
+	onChildOuter: function (child) {
+		zk.on(child, "maximize", zkPortalChildren.onChildMaximize);
 	},
 	onChildMaximize: function (child, maximized) {
 		var cave = child.parentNode, 
