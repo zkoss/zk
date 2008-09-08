@@ -141,29 +141,32 @@
     background:transparent !important;
     width:1px;
 }
-.z-tab-disd a,.z-tab-disd-seld a {
-	color:gray;
-	cursor:default;
-	opacity:0.6;
+
+.z-tab .z-tabbox-a{
+	background-position:0 -51px;
 }
-.z-tab-disd .z-tabbox-a,.z-tab-disd-seld .z-tabbox-a {
-	background-position:0pt -51px;
+.z-tab .z-tabbox-a:hover{
+	background-position:0 -101px;
 }
-.z-tab-disd .z-tabbox-close:hover , .z-tab-disd-seld .z-tabbox-close:hover{
-	opacity:0.6;
-} 
-.z-tab-disd .z-tabbox-text,.z-tab-disd-seld .z-tabbox-text{
-	cursor:default;
+.z-tab .z-tabbox-a:hover .z-tabbox-em{
+	background-position:right -401px;
+}
+.z-tab .z-tabbox-a:hover .z-tabbox-inner{
+	background-position:right -251px;
+}
+.z-tab .z-tabbox-a:hover .z-tabbox-text{
+	color:#15428B;
+}
+.z-tab .z-tabbox-text{
+	color:#416AA3;
+	cursor:pointer;
 	font-style:normal;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
-	white-space:nowrap;
+	font-size-adjust:none;
 	padding:4px 0 4px;
+	white-space:nowrap;
 }
-.z-tab-disd .z-tabbox-inner , .z-tab-disd-seld .z-tabbox-inner{
-	cursor:default;
-}
-
 .z-tab-seld .z-tabbox-a{
 	cursor:default;
 	background-position:0 0px;
@@ -200,32 +203,31 @@
 .z-tabbox-close:hover{
 	opacity:1;
 }
-
-
-.z-tab .z-tabbox-a{
-	background-position:0 -51px;
+.z-tab-disd a,.z-tab-disd-seld a {
+	color:gray;
+	cursor:default;
+	opacity:0.6;
 }
-.z-tab .z-tabbox-a:hover{
-	background-position:0 -101px;
+.z-tab-disd .z-tabbox-a,.z-tab-disd-seld .z-tabbox-a {
+	background-position:0pt -51px;
 }
-.z-tab .z-tabbox-a:hover .z-tabbox-em{
-	background-position:right -401px;
+.z-tab-disd .z-tabbox-em,.z-tab-disd-seld .z-tabbox-em{
+	background-position:right -351px;
 }
-.z-tab .z-tabbox-a:hover .z-tabbox-inner{
-	background-position:right -251px;
-}
-.z-tab .z-tabbox-a:hover .z-tabbox-text{
-	color:#15428B;
-}
-.z-tab .z-tabbox-text{
-	color:#416AA3;
-	cursor:pointer;
+.z-tab-disd .z-tabbox-close:hover , .z-tab-disd-seld .z-tabbox-close:hover{
+	opacity:0.6;
+} 
+.z-tab-disd .z-tabbox-text,.z-tab-disd-seld .z-tabbox-text{
+	cursor:default;
 	font-style:normal;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
-	font-size-adjust:none;
-	padding:4px 0 4px;
 	white-space:nowrap;
+	padding:4px 0 4px;
+}
+.z-tab-disd .z-tabbox-inner , .z-tab-disd-seld .z-tabbox-inner{
+	background-position:right -201px;
+	cursor:default;
 }
 .z-tabbox-scrolling .z-tabbox-header{	
 	margin-left: 18px;
@@ -561,8 +563,10 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
 	opacity:0.6;
 }
-.z-tabbox-accd .z-tab-disd .closebtn:hover , .z-tabbox-accd  .z-tab-disd-seld  .closebtn:hover{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.png')});
+
+.z-tabbox-accd .z-tab-disd .closebtn:hover ,
+ .z-tabbox-accd  .z-tab-disd-seld  .closebtn:hover{
+	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
 	opacity:0.8;
 }
 .z-tabbox-accd .closebtn{
@@ -598,6 +602,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.png')});
 	opacity:1;
 }
+
 
 <%-- ZK Tabbox accordion-lite --%>
 .z-tabpanels-accordion-lite{
@@ -676,9 +681,11 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
 	opacity:0.6;
 }
-.z-tabbox-accd .z-tab-disd .closebtn:hover , .z-tabbox-accd  .z-tab-disd-seld  .closebtn:hover{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.png')});
-	opacity:0.8;
+
+.z-tabbox-accdlite .z-tab-disd .closebtn:hover ,
+.z-tabbox-accdlite  .z-tab-disd-seld  .closebtn:hover{
+	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+	opacity:0.6;
 }
 .z-tabbox-accdlite .closebtn{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
@@ -708,8 +715,9 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
 	opacity:0.8;
 }
-.z-tabbox-accdlite .closebtn:hover{
+.z-tabbox-accdlite .closebtn:hover {
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.png')});
 	opacity:1;
 }
+
 

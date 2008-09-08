@@ -53,7 +53,7 @@ public class Tabs extends XulElement {
 	}
 	
 	/** Returns the alignment of tab.
-	 *
+	 *(not supported in mold accordion and version 3.5)
 	 * <p>Default: "start".
 	 *
 	 * <p>Note: only the default mold supports it (not supported in mold accordion and version 3.5).
