@@ -393,7 +393,9 @@ zkTabs2 = {
 				}
 				else { // not enough tab to scroll
 					if (cldwidth > (headwidth - 10)) {						
-						zk.addClass(tabbox, mcls + "-scrolling", true);
+						zk.addClass(tabbox, mcls + "-scrolling", true);												
+						var caveul = $e(getZKAttr(tabbox, "tabs"),"cave");
+						caveul.style.width = "5000px";
 						header.style.width = tabbox.offsetWidth - 38 + "px";						
 						if (way == "sel") {
 							var d = cldwidth - header.offsetWidth - header.scrollLeft + 2;							
@@ -533,7 +535,7 @@ zkTabs2 = {
 			 } else {
 			 	tabs.style.width = tabs._width;	
 			 }
-		} else {		
+		} else {				
 			if (tbx.offsetWidth < 36) return;
 			if (zk.isScroll(tbx)) {
 				var mcls = getZKAttr(tbx, "mcls");
@@ -623,6 +625,7 @@ zkTabs2 = {
 	onSize: function(cmp) {					
 		zkTabs2._fixWidth(cmp.id);
 		zkTabs2.scrollingchk(cmp.id); 
+		zk.cleanVisibility($parentByType(cmp, "Tabbox2"));
 	},
 	beforeSize: function(cmp) {
 		if (zk.isVertical($parent($e(cmp.id)))) {			

@@ -4,6 +4,7 @@
 <%-- ZK Tabbox --%>
 .z-tabbox{
 	overflow:hidden;
+	visibility: hidden;
 }
 .z-tabbox-ul a, .z-tabbox-ul em, .z-tabbox-ul span{
 	display:block;
@@ -27,7 +28,7 @@
 	display:block;
 	margin:0;
 	border-bottom:1px solid #8DB2E3;
-	width:5432px;
+	width:100%;
 	ZOOM: 1;
 }
 
@@ -64,10 +65,10 @@
 	padding-top:1px;
 	list-style-image:none;
 	list-style-position:outside;
-	list-style-type:none;
+	list-style-type:none;	
 	display:block;
 	margin:0;
-	width:5432px;
+	
 	ZOOM: 1;
 	border-bottom:1px solid #8DB2E3;
 	-moz-user-select:none;
