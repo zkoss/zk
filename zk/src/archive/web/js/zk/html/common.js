@@ -2592,6 +2592,7 @@ zk.hide = function (id, bHide) {
 };
 /** Shows the exterior. */
 zk._showExtr = function (n) {
+	n = $outer(n);
 	if (!getZKAttr(n, "float")) {
 		var ext = $e(n.id + "!chdextr");
 		if (ext && "true" == getZKAttr(ext, "coexist")) {
@@ -2605,6 +2606,7 @@ zk._showExtr = function (n) {
 };
 /** Hides the exterior. */
 zk._hideExtr = function (n) {
+	n = $outer(n);
 	if (!getZKAttr(n, "float")) {
 		var ext = $e(n.id + "!chdextr");
 		if (ext && "true" == getZKAttr(ext, "coexist")) {

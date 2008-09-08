@@ -381,6 +381,9 @@ zkButton = {
 	},
 	setAttr: function (cmp, nm, val) {
 		switch (nm) {
+		case "visibility":
+			zk.setVisible($e(cmp.id + "!box"), val == "true");
+			return true;
 		case "style.height":
 		case "style.width":
 		case "style":
