@@ -2449,6 +2449,7 @@ zkau.cmd1 = {
 	outer: function (uuid, cmp, html) {
 		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
 		var fns = zk.find(cmp, "onOuter");
+
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
 			to = cmp.nextSibling;
@@ -2458,9 +2459,12 @@ zkau.cmd1 = {
 
 		if (zkau.valid) zkau.valid.fixerrboxes();
 		if (fns) {
-			var ls = zk.find(cmp), fs = ls["onOuter"];
-			if (zk.debugJS && fs && fns.length != fs.length)
-				zk.error("outer: function length is not equal.");
+			var ls = zk.find(cmp);
+			if (zk.debugJS) {
+				var fs = ls["onOuter"];
+				if (fs && fs.length) //some register
+					zk.error("Registering onOuter in init not allowed");
+			}
 			ls["onOuter"] = fns;
 		}
 		zk.fire(cmp, "onOuter");
