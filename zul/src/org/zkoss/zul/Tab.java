@@ -217,21 +217,21 @@ public class Tab extends LabelImageElement {
 			sb.append(clkattrs);
 		return sb.toString();
 	}
-
-	/**
-	 * Returns the style class. 
-	 * Note: 
-	 * 1.1) if not disabled ,"z-tab" is assumed; <br/> 
-	 * 1.2) if disabled ,appends "-disd" to Class Name <br/> 
-	 * 1.3) if selected, appends "-seld" to Class Name <br/>
-	 */
+	
 	public String getMoldSclass(){				
 		String scls = super.getMoldSclass();
 		if (scls == null)
 			scls = "z-tab";
+		return scls;
+	}
+	protected String getRealSclass() {
+		String cls = super.getRealSclass();
+		String added = getMoldSclass();
 		if (isDisabled())
-			scls = scls + "-disd";
-		return isSelected() ? scls + "-seld" : scls;
+			added += "-disd";
+		if (isSelected())
+			added += "-seld";
+		return cls != null ? cls + " " + added : added;
 	}
 
 	// -- Component --//
