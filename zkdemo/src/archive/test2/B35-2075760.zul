@@ -11,7 +11,7 @@
 		<columnchildren>
 			<panel>
 				<panelchildren>
-					<window title="this is window" border="normal">
+					<window title="this is window" border="normal" width="148px">
 						<groupbox>
 							<caption label="3. modify layout" />
 							<radiogroup>
