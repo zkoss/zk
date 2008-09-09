@@ -204,7 +204,7 @@ public class Tabbox extends XulElement {
 			_seltab = tab;
 			_seltab.setSelectedDirectly(true);
 			if (!byClient)
-				response("sel", new AuInvoke(_seltab, "selTab"));
+				smartUpdate("z.sel", _seltab.getUuid());
 		}
 	}
 

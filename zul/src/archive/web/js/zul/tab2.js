@@ -19,8 +19,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 ////
 // tabbox //
 zkTabbox2 = {
+	init: function(cmp) {
+		if (zk.isAccord(cmp)) {
+			zk.cleanVisibility(cmp);
+		}
+	},
 	setAttr: function(cmp, name, value) {
 		switch (name) {
+			case "z.sel":
+				var tab = $e(value);
+				if (!zkTab2._sliding(tab)) 	
+					zkTab2.selTab(tab, true);				
+				break;
 			case "style":
 			case "style.width":
 			case "style.height":
@@ -58,7 +68,7 @@ zkTab2 = {
 		}
 		var meta = $parent(cmp);
 		if (!meta._toscroll) 
-			meta._toscroll = function () {				
+			meta._toscroll = function () {
 				zkTabs2.scrollingchk($uuid(meta));				
 			};
 		zk.addInit(meta._toscroll, false, $uuid(meta) );		
@@ -159,7 +169,7 @@ zkTab2 = {
 		if (old != tab) {
 			if (old) 
 				zkTab2._setTabSel(old, false, false, notify);
-			zkTab2._setTabSel(tab, true, notify, notify);							
+			zkTab2._setTabSel(tab, true, notify, notify);
 			//!notify is sent from the server, so no animation
 		}
 	},
@@ -249,7 +259,7 @@ zkTab2 = {
 ////
 // tabs //
 zkTabs2 = {	
-	init: function(cmp) {
+	init: function(cmp) {		
 		zkTabs2._fixWidth(cmp.id);	
 		var btn = $e(cmp.id + "!right");		
 		//horizontal
@@ -271,8 +281,8 @@ zkTabs2 = {
 		}
 		var meta = $parent(cmp);
 		if (!meta.initscroll) 
-			meta.initscroll = function () {							
-				zkTabs2.scrollingchk(cmp.id,"init");				
+			meta.initscroll = function () {
+				zkTabs2.scrollingchk(cmp.id,"init");
 			};
 		zk.addInit(meta.initscroll, false, meta.id);	
 	},
@@ -284,7 +294,7 @@ zkTabs2 = {
 	 * @param {string} : use to direct scroll to end.
 	 * @param {cmp}	   : use to scroll to specific tab
 	 */
-	scrollingchk: function(uuid, way, cmp) {				
+	scrollingchk: function(uuid, way, cmp) {
 		var tbsdiv = $e(uuid),
 			tabbox = $parentByType($e(uuid), "Tabbox2"),
 			mcls = getZKAttr(tabbox, "mcls");
@@ -484,7 +494,7 @@ zkTabs2 = {
 		}
 	},
 	
-	_tabscroll: function(uuid, to, move) {	
+	_tabscroll: function(uuid, to, move) {
 		if (move <= 0) 
 			return;	
 		var step, header = $e(uuid + "!header");
@@ -613,7 +623,7 @@ zkTabs2 = {
 			}
 		}
 	},
-	onVisi: function(cmp) {	
+	onVisi: function(cmp) {
 		if (zk.isVertical($parent($e(cmp.id)))) {			
 			cmp.style.height = "";
 		} else {

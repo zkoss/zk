@@ -4,12 +4,10 @@
 <%-- ZK Tabbox --%>
 .z-tabbox{
 	overflow:hidden;
+	visibility: hidden;
 }
 .z-tabbox-ul a, .z-tabbox-ul em, .z-tabbox-ul span{
 	display:block;
-}
-.z-tabbox-scrolling{
-	visibility: hidden;
 }
 
 .z-tabbox-tabs .z-tabbox-space{		
@@ -481,9 +479,10 @@
 	background-position:1px -18px;
 }
 <%-- Tabpanels Tabpanel --%>
-div.z-tabpanel, div.z-tabpanel-accordion {<%-- horz, accd: tabpanel --%>
-	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
-	border-bottom: 1px solid #5C6C7C; padding: 5px;
+div.z-tabpanel {<%-- horz, accd: tabpanel --%>
+	border-left: 1px solid #8DB2E3; 
+	border-right: 1px solid #8DB2E3; 
+	border-bottom: 1px solid #8DB2E3; padding: 5px;
 }
 div.z-vtabpanels {<%-- vert tabpanels --%>
 	overflow:hidden;
