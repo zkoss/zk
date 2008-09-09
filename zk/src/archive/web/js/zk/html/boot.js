@@ -392,7 +392,7 @@ function $es(id) {
 function $now() {
 	return new Date().getTime();
 }
-/** Note: it is easy to cause problem with EMBED, if we use prototype's $() since
+/** Note: it is easy to cause problem with EMBED, if we use prototype's z$() since
  * it tried to extend the element.
  * @param alias a name is postfixed with the id via the "!" word. (since 3.5.0)
  *  for example, if alias is "real", the "id!real" element is returned, if any.
