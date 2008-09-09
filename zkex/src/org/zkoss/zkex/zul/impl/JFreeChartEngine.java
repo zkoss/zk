@@ -47,6 +47,7 @@ import java.io.ByteArrayOutputStream;
 import java.awt.image.BufferedImage;
 import java.awt.Paint;
 import java.awt.Color;
+import java.awt.Transparency;
 import java.util.Iterator;
 
 
@@ -224,7 +225,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		
 		//callbacks for each area
 		ChartRenderingInfo jfinfo = new ChartRenderingInfo();
-		BufferedImage bi = jfchart.createBufferedImage(chart.getIntWidth(), chart.getIntHeight(), BufferedImage.TRANSLUCENT, jfinfo);
+		BufferedImage bi = jfchart.createBufferedImage(chart.getIntWidth(), chart.getIntHeight(), Transparency.TRANSLUCENT, jfinfo);
 		
 		//remove old areas 	
 		chart.getChildren().clear();
