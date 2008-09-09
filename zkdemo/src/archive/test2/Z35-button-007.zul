@@ -14,7 +14,6 @@ NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen 
         <row>
           <label value="File:"/>
           <button label="ClickMe" onClick='self.setLabel("Clicked OK.")' image="/img/coffee.gif"/>
-          <textbox width="99%"/>
         </row>
         <row>
           <label value="Type:"/>
@@ -49,7 +48,6 @@ NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen 
         <row>
           <label value="File:"/>
           <button label="ClickMe" onClick='self.setLabel("Clicked OK.")' image="/img/coffee.gif"/>
-          <textbox width="99%"/>
         </row>
         <row>
           <label value="Type:"/>
