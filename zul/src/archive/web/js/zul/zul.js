@@ -22,6 +22,83 @@ zk.load("zul.lang.msgzul*");
 zul = {};
 zul._movs = {}; //(id, zDraggable): movables
 
+////////
+// Drop button
+//utilities//
+/** Fixes the button align with an input box, such as combobox, datebox. for the trendy mold
+ * @since 3.5.0
+ */
+zul.fixDropBtn2 = function (cmp) {
+	//For new initial phase, we don't need to delay the function for IE. (Bug 1752477) 
+	var cmp = $e(cmp);
+	if (cmp) zul._fixdbtn2(cmp);
+};
+zul._fixdbtn2 = function (cmp) {
+	cmp = $e(cmp);
+	if (!cmp) return; //it might be gone if the user press too fast
+
+	var btn = $e(cmp.id + "!btn");
+	//note: isRealVisible handles null argument
+	if (zk.isRealVisible(btn) && btn.style.position != "relative") {
+		var inp = $real(cmp), img = zk.firstChild(btn, "IMG");
+		if (!inp.offsetHeight || !img.offsetHeight) {
+			setTimeout("zul._fixdbtn2($e('" + cmp.id +"'))", 66);
+			return;
+		}
+
+		//Bug 1738241: don't use align="xxx"
+		var v = inp.offsetHeight - img.offsetHeight;
+		if (v !== 0) {
+			var imghgh = $int(Element.getStyle(img, "height")) + v;
+			img.style.height = (imghgh < 0 ? 0 : imghgh) + "px"; 
+		}
+
+		v = inp.offsetTop - img.offsetTop;
+		btn.style.position = "relative";
+		btn.style.top = v + "px";
+		if (zk.safari) btn.style.left = "-2px";
+	}
+};
+zul.ondropbtnover = function (evt) {
+	if (!evt) evt = window.event;
+	var btn = $parentByTag(Event.element(evt), "SPAN"),
+		inp = $real(btn),
+		mcls = getZKAttr($outer(btn), "mcls");
+	if (inp && !inp.disabled && !zk.dragging)
+		zk.addClass(btn, mcls + "-btn-over");
+};
+zul.ondropbtnout = function (evt) {
+	if (!evt) evt = window.event;
+	var btn = $parentByTag(Event.element(evt), "SPAN"),
+		inp = $real(btn),
+		mcls = getZKAttr($outer(btn), "mcls");
+	if (inp && !inp.disabled && !zk.dragging)
+		zk.rmClass(btn, mcls + "-btn-over");
+};
+zul.ondropbtndown = function (evt) {
+	if (!evt) evt = window.event;
+	var btn = $parentByTag(Event.element(evt), "SPAN"),
+		inp = $real(btn),
+		mcls = getZKAttr($outer(btn), "mcls");
+	if (inp && !inp.disabled && !zk.dragging) {
+		if (zul._currentbtn) 
+			zul.ondropbtnup(evt);
+		zk.addClass(btn, mcls + "-btn-clk");
+		zk.listen(document.body, "mouseup", zul.ondropbtnup);
+		zul._currentbtn = btn;
+	}
+};
+zul.ondropbtnup = function (evt) {
+	zul._currentbtn = $e(zul._currentbtn);
+	var mcls = getZKAttr($outer(zul._currentbtn), "mcls");
+	zk.rmClass(zul._currentbtn, mcls + "-btn-clk");
+	zk.unlisten(document.body, "mouseup", zul.ondropbtnup);
+	zul._currentbtn = null;
+};
+zul.onFixDropBtn = function (cmp) {
+	zul.fixDropBtn2(cmp);
+};
+
 /////////
 // Movable
 /** Make a component movable (by moving). */

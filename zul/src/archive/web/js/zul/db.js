@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zk.load("zul.zul"); //msgzul
-zk.load("zul.widget");
+zk.load("zul.vd");
 
 //Calendar//
 zkCal = {};
@@ -399,7 +399,7 @@ zkCal._seled = function (cell) {
 //Datebox//
 zkDtbox = {};
 zkDtbox.init = function (cmp) {
-	zkDtbox.onVisi = zkDtbox.onSize = zkWgt.onFixDropBtn;
+	zkDtbox.onVisi = zkDtbox.onSize = zul.onFixDropBtn;
 	zkDtbox.onHide = zkTxbox.onHide; //widget.js is ready now
 	zkDtbox.cleanup = zkTxbox.cleanup;
 
@@ -414,9 +414,9 @@ zkDtbox.init = function (cmp) {
 			if (!inp.disabled && !zk.dragging)
 				zkDtbox.onbutton(cmp, evt);
 		});
-		zk.listen(btn, "mouseover", zkWgt.onbtnover);
-		zk.listen(btn, "mouseout", zkWgt.onbtnout);
-		zk.listen(btn, "mousedown", zkWgt.onbtndown);
+		zk.listen(btn, "mouseover", zul.ondropbtnover);
+		zk.listen(btn, "mouseout", zul.ondropbtnout);
+		zk.listen(btn, "mousedown", zul.ondropbtndown);
 	}
 	var pp = $e(cmp.id + "!pp");
 	if (pp) // Bug #1912363

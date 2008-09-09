@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zk.load("zul.widget");
+zk.load("zul.vd");
 
 ////
 //Customization
@@ -68,7 +68,7 @@ zkCmbox.onblur = function (evt) {
 };
 
 zkCmbox.init = function (cmp) {
-	zkCmbox.onVisi = zkCmbox.onSize = zkWgt.onFixDropBtn;
+	zkCmbox.onVisi = zkCmbox.onSize = zul.onFixDropBtn;
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
 	
 	var inp = $real(cmp);
@@ -87,9 +87,9 @@ zkCmbox.init = function (cmp) {
 			if (!inp.disabled && !zk.dragging)
 				zkCmbox.onbutton(cmp, evt);
 		});
-		zk.listen(btn, "mouseover", zkWgt.onbtnover);
-		zk.listen(btn, "mousedown", zkWgt.onbtndown);
-		zk.listen(btn, "mouseout", zkWgt.onbtnout);
+		zk.listen(btn, "mouseover", zul.ondropbtnover);
+		zk.listen(btn, "mousedown", zul.ondropbtndown);
+		zk.listen(btn, "mouseout", zul.ondropbtnout);
 	}
 };
 zkCmbox.cleanup = function (cmp) {
@@ -198,7 +198,7 @@ zkCmbox.setAttr = function (cmp, nm, val) {
 	} else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
 		if (btn) btn.style.display = val == "true" ? "": "none";
-		zkWgt.onFixDropBtn(cmp);
+		zul.onFixDropBtn(cmp);
 		return true;
 	} else if ("z.sel" == nm ) {
 		return zkTxbox.setAttr(cmp, nm, val);
