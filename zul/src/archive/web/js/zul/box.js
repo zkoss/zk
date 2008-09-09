@@ -365,7 +365,7 @@ zkSplt._closeAtInit = function (cmp) {
 	if (!colps || "none" == colps) return; //nothing to do
 
 	var sib = colps == "before" ? zkSplt._prev(nd, tn): zkSplt._next(nd, tn);
-	action.hide(sib, true);
+	action.hide(sib, {noCallback: true});
 	zkSplt._updcls(cmp);
 };
 zkSplt._updcls = function (cmp, open) {

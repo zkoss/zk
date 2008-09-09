@@ -433,7 +433,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		final String moldsclass = getMoldSclass();
 		final String sclass = getSclass();
 		return moldsclass == null ? sclass : 
-				sclass == null ? moldsclass : sclass + " " + moldsclass;
+				sclass == null || sclass.length() == 0 ?
+					moldsclass : sclass + " " + moldsclass;
 	}
 	/** Returns the real style that will be generated to client
 	 * (when {@link #getOuterAttrs} is called).

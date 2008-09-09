@@ -414,7 +414,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 		if (order == 1) { //with vparent
 			setZKAttr(cmp, "vvisi", visible ? 't': 'f');
 			visible = visible && zk.isRealVisible($parent($childExterior(cmp))); //Bug #1831534
-			zk.setVisible(cmp, visible, true);
+			zk.setVisible(cmp, visible, {anima: true});
 			if (visible) zk.setVParent(cmp); //Bug 1816451
 		} else {
 			//order=0: might have a child with vparent, and realVisi changed
@@ -429,7 +429,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 								if (nvisi != visible) {
 									if (!vvisi)
 										setZKAttr(n, "vvisi", nvisi ? 't': 'f');
-									zk.setVisible(n, visible, true);
+									zk.setVisible(n, visible, {anima: true});
 								}
 							}
 						}
@@ -437,7 +437,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			}
 
 			rmZKAttr(cmp, "vvisi"); //just in case
-			zk.setVisible(cmp, visible, true);
+			zk.setVisible(cmp, visible, {anima: true});
 		}
 		if (!embedded) zkau.hideCovered(); //Bug 1719826
 		

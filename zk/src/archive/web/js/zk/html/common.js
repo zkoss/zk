@@ -2511,12 +2511,15 @@ zk.doEventStop = function (evt) {
 };
 /**
  * Sets the visibility property of the specified cmp.
- * @param {Boolean} alwaysAnima if true, always invoke zk.show().
+ * @param {Object} options.anima if true, always invoke zk.show() which
+ * handles anima (animation).
  * @since 3.0.5
  */
-zk.setVisible = function (cmp, visible, alwaysAnima) {
+zk.setVisible = function (cmp, visible, options) {
 	//Bug 1896588: if cmp invisible, just don't do animation (performance in IE)
-	if (alwaysAnima || zk.isRealVisible(cmp, true)) zk.show(cmp, visible);
+	if ((options && (options.anima || options==true/*backward compatible*/))
+	|| zk.isRealVisible(cmp, true))
+		zk.show(cmp, visible);
 	else if (visible) action.show(cmp);
 	else action.hide(cmp);
 };
@@ -2543,10 +2546,11 @@ else
 /** Shows the specified element with the effect specified in conshow,
  * if any. It will call action.show if no effect is specified.
  * CSA shall not call this method. Rather, call action.show instead.
+ * @param {Object} options.noCallback if true, onVisitAt/onHideAt will not be called.
  */
-zk.show = function (id, bShow) {
+zk.show = function (id, bShow, options) {
 	if (bShow == false) {
-		zk.hide(id);
+		zk.hide(id, true, options);
 		return;
 	}
 
@@ -2561,17 +2565,18 @@ zk.show = function (id, bShow) {
 				setZKAttr(n, "conshow", js);
 			}
 		} else {
-			action.show(n);
+			action.show(n, options);
 		}
 	}
 };
 /** Hides the specified element with the effect specified in conhide,
  * if any. It will call action.hide if no effect is specified.
  * CSA shall not call this method. Rather, call action.hide instead.
+ * @param {Object} options.noCallback if true, onVisitAt/onHideAt will not be called.
  */
-zk.hide = function (id, bHide) {
+zk.hide = function (id, bHide, options) {
 	if (bHide == false) {
-		zk.show(id);
+		zk.show(id, true, options);
 		return;
 	}
 
@@ -2586,7 +2591,7 @@ zk.hide = function (id, bHide) {
 				setZKAttr(n, "conhide", js);
 			}
 		} else {
-			action.hide(n);
+			action.hide(n, options);
 		}
 	}
 };
@@ -2673,9 +2678,9 @@ comm.sendEvent = function (cmp, evt) {
  */
 action = {};
 /** Makes a component visible.
- * @param noVisiAt whether not to call onVisiAt
+ * @param {Object} options.noCallback if true, onVisitAt/onHideAt will not be called.
  */
-action.show = function (id, noVisiAt) {
+action.show = function (id, options) {
 	var n = $e(id);
 	if (n)
 		if (getZKAttr(n, "animating")) {
@@ -2683,21 +2688,25 @@ action.show = function (id, noVisiAt) {
 		} else {
 			zk._showExtr(n);  //parent visible first
 			n.style.display = "";
-			if (!noVisiAt && zk.isRealVisible(n)) zk.onVisiAt(n); //callback later
+			if ((!options || (options!=true/*backward*/ && !options.noCallback))
+			&& zk.isRealVisible(n))
+				zk.onVisiAt(n); //callback later
 				//Bug 1896588: don't do onVisiAt if not visible
 		}
 };
 
 /** Makes a component invisible.
- * @param noHideAt whether not to call onHideAt
+ * @param {Object} options.noCallback if true, onVisitAt/onHideAt will not be called.
  */
-action.hide = function (id, noHideAt) {
+action.hide = function (id, options) {
 	var n = $e(id);
 	if (n)
 		if (getZKAttr(n, "animating")) {
 			zk._addAnique(n.id, "zk.hide");
 		} else {
-			if (!noHideAt && zk.isRealVisible(n)) zk.onHideAt(n); //callback first
+			if ((!options || (options!=true/*backward*/ && !options.noCallback))
+			&& zk.isRealVisible(n))
+				zk.onHideAt(n); //callback first
 				//Bug 1896588: don't do onHideAt if not visible
 			n.style.display = "none";
 			zk._hideExtr(n); //hide parent later

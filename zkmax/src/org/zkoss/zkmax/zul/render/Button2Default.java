@@ -49,8 +49,10 @@ public class Button2Default implements ComponentRenderer {
 		final Execution exec = Executions.getCurrent();
 		wh.write("<span z.type=\"zul.widget.Button\" id=\"").write(uuid)
 			.write("\" class=\"").write(mcls).write("\"")
-			.write(ZkFns.noCSSAttrs(outerattrs))
-			.write('>').write("<table id=\"").write(uuid)
+			.write(ZkFns.noCSSAttrs(outerattrs));
+		if (!self.isVisible())
+			wh.write(" style=\"display:none\"");
+		wh.write('>').write("<table id=\"").write(uuid)
 			.write("!box\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"");
 		if (self.getTabindex() >= 0) {
 			if (!exec.isGecko() && !exec.isSafari())

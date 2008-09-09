@@ -102,9 +102,10 @@ zk.safari = zk.agent.indexOf("safari") != -1;
 zk.opera = zk.agent.indexOf("opera") != -1;
 zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
 zk.ie7 = zk.agent.indexOf("msie 7") != -1; //ie7 or later
-zk.ie6Only =  zk.ie && !zk.ie7;
+zk.ie6Only = zk.ie && !zk.ie7;
 zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
 zk.gecko3 = zk.gecko && zk.agent.indexOf("firefox/3") != -1;
+zk.gecko2Only = zk.gecko && !zk.gecko3;
 zk.windows = zk.agent.indexOf("windows") != -1;
 zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
 zk.air = zk.agent.indexOf("adobeair") != -1;
