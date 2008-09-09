@@ -323,7 +323,6 @@ public class MainLayout extends Borderlayout {
 			
 			for (int j = 0; j < ptns.length; j++) {
 				boolean m = true;
-				System.out.println("TAG: " + ptns[j]);
 				if (ptns[j].contains("!")) {
 					for (int k = 0; k < vals.length; k++) {										
 						if (ptns[j].trim().length() > 1 && (vals[k].trim().length()-1 > 1)) {
