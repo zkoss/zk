@@ -4,10 +4,12 @@
 <%-- ZK Tabbox --%>
 .z-tabbox{
 	overflow:hidden;
-	visibility: hidden;
 }
 .z-tabbox-ul a, .z-tabbox-ul em, .z-tabbox-ul span{
 	display:block;
+}
+.z-tabbox-scrolling{
+	visibility: hidden;
 }
 
 .z-tabbox-tabs .z-tabbox-space{		

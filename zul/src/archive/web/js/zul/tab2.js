@@ -622,7 +622,7 @@ zkTabs2 = {
 		zkTabs2._fixWidth(cmp.id);   	 
 		zkTabs2.scrollingchk(cmp.id);	
 	}, 
-	onSize: function(cmp) {					
+	onSize: function(cmp) {
 		zkTabs2._fixWidth(cmp.id);
 		zkTabs2.scrollingchk(cmp.id); 
 		zk.cleanVisibility($parentByType(cmp, "Tabbox2"));
