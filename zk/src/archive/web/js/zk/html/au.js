@@ -2449,8 +2449,9 @@ zkau.cmd1 = {
 	outer: function (uuid, cmp, html) {
 		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
 		var fns = zk.find(cmp, "onOuter"),
-			cf = zkau.currentFocus,
-			cfid = cf && cf.id && zk.isAncestor(cmp, cf, true) ? cf.id: null;
+			cf = zkau.currentFocus;
+		zkau.currentFocus = null; //free memory
+		cf = cf && cf.id && zk.isAncestor(cmp, cf, true) ? cf.id: null;
 
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
@@ -2459,10 +2460,8 @@ zkau.cmd1 = {
 		if (from) zkau._initSibs(from, to, true);
 		else zkau._initChildren(from2, to);
 
-		if (cfid && cf == zkau.currentFocus) {
-			zkau.currentFocus = null; //free memory
-			zk.focus($e(cfid));
-		}
+		if (cf && !zkau.currentFocus)
+			zk.focus($e(cf));
 
 		if (zkau.valid) zkau.valid.fixerrboxes();
 		if (fns) {
