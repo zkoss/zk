@@ -483,6 +483,7 @@ div.z-tabpanel {<%-- horz, accd: tabpanel --%>
 	border-left: 1px solid #8DB2E3; 
 	border-right: 1px solid #8DB2E3; 
 	border-bottom: 1px solid #8DB2E3; padding: 5px;
+	zoom: 1;
 }
 div.z-vtabpanels {<%-- vert tabpanels --%>
 	overflow:hidden;
@@ -492,6 +493,7 @@ div.z-vtabpanels {<%-- vert tabpanels --%>
 }
 div.z-vtabpanel {<%-- vert tabpanel --%>	
 	padding: 5px;
+	zoom: 1;
 }
 
 <%-- Tabbox accordion --%>
@@ -561,14 +563,12 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 .z-tabbox-accd .z-tab-disd .span-inner  , .z-tabbox-accd  .z-tab-disd-seld  .span-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-inner.png')}) repeat-x scroll 0 0;
 }
-.z-tabbox-accd .z-tab-disd .closebtn , .z-tabbox-accd  .z-tab-disd-seld  .closebtn{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+.z-tabbox-accd .z-tab-disd .closebtn , .z-tabbox-accd  .z-tab-disd-seld  .closebtn{	
 	opacity:0.6;
 }
 
 .z-tabbox-accd .z-tab-disd .closebtn:hover ,
- .z-tabbox-accd  .z-tab-disd-seld  .closebtn:hover{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+ .z-tabbox-accd  .z-tab-disd-seld  .closebtn:hover{	
 	opacity:0.8;
 }
 .z-tabbox-accd .closebtn{
@@ -596,8 +596,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 .z-tabbox-accd .z-tab-seld .span-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-inner.png')}) repeat-x scroll 0 0;
 }
-.z-tabbox-accd .z-tab-seld .closebtn{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+.z-tabbox-accd .z-tab-seld .closebtn{	
 	opacity:0.8;
 }
 .z-tabbox-accd .closebtn:hover{
@@ -679,14 +678,12 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 .z-tabbox-accdlite .z-tab-disd .span-inner  , .z-tabbox-accdlite  .z-tab-disd-seld  .span-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab-disd .closebtn , .z-tabbox-accdlite  .z-tab-disd-seld  .closebtn{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+.z-tabbox-accdlite .z-tab-disd .closebtn , .z-tabbox-accdlite  .z-tab-disd-seld  .closebtn{	
 	opacity:0.6;
 }
 
 .z-tabbox-accdlite .z-tab-disd .closebtn:hover ,
-.z-tabbox-accdlite  .z-tab-disd-seld  .closebtn:hover{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+.z-tabbox-accdlite  .z-tab-disd-seld  .closebtn:hover{	
 	opacity:0.6;
 }
 .z-tabbox-accdlite .closebtn{

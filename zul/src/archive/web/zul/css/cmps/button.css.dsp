@@ -1,6 +1,7 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-
+<c:set var="btnimg" value="~./zul/img/button/z-btn-trendy3.gif" scope="request" if="${empty btnimg}"/>
+<c:set var="btn2img" value="~./zul/img/button/z-btn-trendy2.gif" scope="request" if="${empty btn2img}"/>
 .z-button {
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM}; color: black;
@@ -37,18 +38,18 @@ button.z-button {
 }
 <%-- default --%>
 .z-button .z-button-tl {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 0;
+	background: url(${c:encodeURL(btnimg)}) no-repeat 0 0;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-tm {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -252px;		
+	background: url(${c:encodeURL(btnimg)}) repeat-x 0 -252px;		
 }
 .z-button .z-button-tr {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -126px;
+	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -126px;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-cl {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -3px;
+	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -3px;
 	width: 3px; padding: 0; margin: 0; text-align: right;
 }
 .z-button .z-button-cm {
@@ -56,25 +57,26 @@ button.z-button {
 	vertical-align: middle;
 	text-align: center;
 	padding: 0 5px;
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -255px;
+	background: url(${c:encodeURL(btnimg)}) repeat-x 0 -255px;
 	white-space: nowrap; 
 }
 .z-button .z-button-cr {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -129px;
+	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -129px;
 	width: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bl {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -123px;
+	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -123px;
 	width: 3px; height: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bm {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) repeat-x 0 -375px;
+	background: url(${c:encodeURL(btnimg)}) repeat-x 0 -375px;
 	height: 3px;
 }
 .z-button .z-button-br {
-	background: url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')}) no-repeat 0 -249px;
+	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -249px;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
+
 <%-- Mouseover --%>
 .z-button-over .z-button-tl {
 	background-position:0 -378px;

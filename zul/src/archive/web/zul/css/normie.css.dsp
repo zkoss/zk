@@ -125,6 +125,12 @@ div.z-tabpanel-accordion {
 tr.z-list-item td.z-list-item-focus {
 	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
 }
+.z-list-group-img-open{
+	background-image: url(${c:encodeURL('~./zul/img/tree/open.gif')});
+}
+.z-list-group-img-close{
+	background-image: url(${c:encodeURL('~./zul/img/tree/close.gif')});
+}
 <%-- menu.css.dsp --%>
 .z-menu-cnt-img {
 	background-image:url(${c:encodeURL('~./zul/img/menu2/arrow.gif')});
@@ -224,6 +230,10 @@ tr.z-list-item td.z-list-item-focus {
 }
 .z-slider-sphere-ver-btn {
     background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb_circle.gif')});
+}
+<%-- tabbox.css.dsp --%>
+.z-tabbox-accd .closebtn, .z-tabbox-accdlite .closebtn{
+	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.gif')});
 }
 <%-- tree.css.dsp --%>
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
