@@ -55,10 +55,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			Note: The unit is seconds (while that of web.xml is minute)
 		<session-timeout>1800</session-timeout>
 		-->
-		<!-- Turn OFF the following if you want to use the default:
-			onTimer, like any other request, resets the session-timeout counter
+		<!-- Turn on the following if you want to reset the session-timeout
+		counter when receiving, like any other request, resets 
+		<timer-keep-alive>true</timer-keep-alive>
 		-->
-		<timer-as-inactive>true</timer-as-inactive>
 	</session-config>
 
 	<!-- Turn on if you prefer to use the native (Servlet) thread
