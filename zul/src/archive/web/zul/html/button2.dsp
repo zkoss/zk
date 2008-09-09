@@ -23,12 +23,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="mcls" value="${self.moldSclass}"/>
 <span z.type="zul.btn.Button" id="${self.uuid}" class="${mcls}"${z:noCSSAttrs(self.outerAttrs)}${self.visible ? '': ' style="display:none"'}><table id="${self.uuid}!box"${self.tabindex >= 0 and !c:isGecko() and !c:isSafari()?' tabindex="self.tabindex"':''} cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
 <tr>
-	<td class="${mcls}-tl"><c:if test="${!c:isExplorer()}"><button id="${self.uuid}!real" class="z ${mcls}"${self.tabindex >= 0 and (c:isGecko() or c:isSafari())?' tabindex="self.tabindex"':''}></button></c:if></td>
+	<td class="${mcls}-tl"><c:if test="${!c:isExplorer()}"><button id="${self.uuid}!real" class="z ${mcls}"${self.disabled?' disabled="disabled"':''}${self.tabindex >= 0 and (c:isGecko() or c:isSafari())?' tabindex="self.tabindex"':''}></button></c:if></td>
 	<td class="${mcls}-tm"></td>
 	<td class="${mcls}-tr"></td>
 </tr>
 <tr>
-	<td class="${mcls}-cl"><c:if test="${c:isExplorer()}"><button id="${self.uuid}!real" class="z ${mcls}"></button></c:if></td>
+	<td class="${mcls}-cl"><c:if test="${c:isExplorer()}"><button id="${self.uuid}!real" class="z ${mcls}"${self.disabled?' disabled="disabled"':''}></button></c:if></td>
 	<td class="${mcls}-cm"><c:choose trim="true">
 	<c:when test="${self.dir == 'reverse'}">
 		<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}

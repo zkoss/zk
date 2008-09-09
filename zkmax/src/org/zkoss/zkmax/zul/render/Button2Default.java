@@ -67,6 +67,8 @@ public class Button2Default implements ComponentRenderer {
 				.write(mcls).write("\"");
 			if (self.getTabindex() >= 0 && (exec.isGecko() || exec.isSafari()))
 				wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
+			if (self.isDisabled())
+				wh.write(" disabled=\"disabled\"");
 			wh.write("></button>");
 		}
 		wh.write("</td>");
@@ -77,7 +79,10 @@ public class Button2Default implements ComponentRenderer {
 		if (exec.isExplorer()) {
 			wh.write("<button id=\"")
 				.write(uuid).write("!real\" class=\"z ")
-				.write(mcls).write("\"></button>");
+				.write(mcls).write("\"");
+			if (self.isDisabled())
+				wh.write(" disabled=\"disabled\"");
+			wh.write("></button>");
 		}
 		wh.write("</td><td class=\"")
 			.write(mcls).write("-cm\">");
