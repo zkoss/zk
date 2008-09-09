@@ -32,7 +32,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 			<attribute name="value"><![CDATA[
-<tabbox width="400px" mold="accordion">
+<zk>
+<tabbox id="tb" width="400px" mold="accordion">
 	<tabs>
 		<tab label="Tab 1"/>
 		<tab label="Tab 2"/>
@@ -62,6 +63,8 @@ The second panel
 		</tabpanel>
 	</tabpanels>
 </tabbox>
+<checkbox label="Use light mold" onCheck='tb.mold=self.checked?"accordion-lite":"accordion"'/>
+</zk>
 			]]></attribute>
 		</textbox>
 	</groupbox>
