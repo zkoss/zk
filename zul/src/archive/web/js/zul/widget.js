@@ -407,7 +407,7 @@ zkButton = {
 if (zk.ie) {
 	zkButton.onVisi = zkButton.onSize = function(cmp){
 		var box = $e(cmp.id + "!box");
-		if (box.offsetHeight) {
+		if (box.style.height && box.offsetHeight) {
 			var cellHgh = $int(Element.getStyle(box.rows[0].cells[0], "height"));
 			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
 				box.rows[1].style.height = box.offsetHeight -

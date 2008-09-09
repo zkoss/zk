@@ -60,18 +60,33 @@ public class Button2Default implements ComponentRenderer {
 		}
 		wh.write(ZkFns.outCSSAttrs(outerattrs))
 			.write(self.getInnerAttrs())
-			.write(">\n<tr><td class=\"").write(mcls).write("-tl\"><button id=\"")
-			.write(uuid).write("!real\" class=\"z ")
-			.write(mcls).write("\"");
-		if (self.getTabindex() >= 0) {
-			if (exec.isGecko() || exec.isSafari())
-				wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
+			.write(">\n<tr><td class=\"").write(mcls).write("-tl\">");
+		if (!exec.isExplorer()) {
+			wh.write("<button id=\"")
+				.write(uuid).write("!real\" class=\"z ")
+				.write(mcls).write("\"");
+			if (self.getTabindex() >= 0) {
+				if (exec.isGecko() || exec.isSafari())
+					wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
+			}
+			wh.write("></button>");
 		}
-		wh.write("></button></td>");
+		wh.write("</td>");
 		wh.write("<td class=\"").write(mcls).write("-tm\"></td><td class=\"")
 			.write(mcls).write("-tr\"></td></tr>\n")
 			.write("<tr><td class=\"")
-			.write(mcls).write("-cl\"></td><td class=\"")
+			.write(mcls).write("-cl\">");
+		if (exec.isExplorer()) {
+			wh.write("<button id=\"")
+				.write(uuid).write("!real\" class=\"z ")
+				.write(mcls).write("\"");
+			if (self.getTabindex() >= 0) {
+				if (exec.isGecko() || exec.isSafari())
+					wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
+			}
+			wh.write("></button>");
+		}
+		wh.write("</td><td class=\"")
 			.write(mcls).write("-cm\">");
 
 		if (self.getDir().equals("reverse")) {
