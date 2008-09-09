@@ -739,7 +739,7 @@ public class Grid extends XulElement implements Paginated {
 				}
 			} else { //ListModel
 				int addcnt = 0;
-				Component row = (Row)_rows.getChildren().get(min);
+				Component row = (Component)_rows.getChildren().get(min);
 				while (--cnt >= 0) {
 					next = row.getNextSibling();
 
