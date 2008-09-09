@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
@@ -87,7 +88,7 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 	public ArrayGroupsModel(Object[] data,Comparator cmpr, int col){
 		if (data == null || cmpr == null)
 			throw new IllegalArgumentException("null parameter");
-		_nativedata = Arrays.copyOf(data, data.length);
+		_nativedata = (Object[])ArraysX.duplicate(data);
 		_comparator = cmpr;
 		group(_comparator,true,col);
 	}
