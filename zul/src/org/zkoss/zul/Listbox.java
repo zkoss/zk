@@ -1664,13 +1664,13 @@ public class Listbox extends XulElement implements Paginated {
 				}
 			} else { //ListModel
 				int addcnt = 0;
-				Listitem item = getItemAtIndex(min);
+				Component item = getItemAtIndex(min);
 				while (--cnt >= 0) {
 					next = item.getNextSibling();
 
 					if (cnt < -newcnt) { //if shrink, -newcnt > 0
 						item.detach(); //remove extra
-					} else if (item.isLoaded()) {
+					} else if (((Listitem)item).isLoaded()) {
 						if (renderer == null)
 							renderer = getRealRenderer();
 						item.detach(); //always detach
@@ -1678,7 +1678,7 @@ public class Listbox extends XulElement implements Paginated {
 						++addcnt;
 					}
 
-					item = (Listitem)next;
+					item = next;//B2100338.,next item could be Paging, don't use Listitem directly
 				}
 
 				if ((addcnt > 50 || addcnt + newcnt > 50) && !inPagingMold())

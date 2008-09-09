@@ -739,13 +739,13 @@ public class Grid extends XulElement implements Paginated {
 				}
 			} else { //ListModel
 				int addcnt = 0;
-				Row row = (Row)_rows.getChildren().get(min);
+				Component row = (Row)_rows.getChildren().get(min);
 				while (--cnt >= 0) {
 					next = row.getNextSibling();
 
 					if (cnt < -newcnt) { //if shrink, -newcnt > 0
 						row.detach(); //remove extra
-					} else if (row.isLoaded()) {
+					} else if (((Row)row).isLoaded()) {
 						if (renderer == null)
 							renderer = getRealRenderer();
 						row.detach(); //always detach
@@ -753,7 +753,7 @@ public class Grid extends XulElement implements Paginated {
 						++addcnt;
 					}
 
-					row = (Row)next;
+					row = next;
 				}
 
 				if ((addcnt > 50 || addcnt + newcnt > 50) && !inPagingMold())
