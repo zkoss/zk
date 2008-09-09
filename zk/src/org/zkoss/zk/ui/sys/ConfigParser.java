@@ -133,6 +133,8 @@ public class ConfigParser {
 		}
 		if (!syscfgLoaded)
 			log.info("Loading system default");
+		else if (config == null)
+			return; //nothing to do
 
 		try {
 			final ClassLocator locator = new ClassLocator();
