@@ -10,7 +10,7 @@
 table.z-button {
 	table-layout:fixed;
 }
-button.z {<%-- remove browser's focus effect to scroll down, if any--%>
+button.z-button {<%-- remove browser's focus effect to scroll down, if any--%>
 	position: relative; top: -5px;
 }
 </c:if>
@@ -23,7 +23,7 @@ span.z-button {
 	outline: none!important;
 }
 </c:if>
-.z-button button.z-button {
+button.z-button {
 	width: 3px !important;
 }
 .z-button i.z-button {
