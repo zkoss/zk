@@ -10,6 +10,9 @@ div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
 }
 div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-color: #C7E5F1;
+	background-repeat: repeat-x;
+	
 }
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
@@ -137,5 +140,5 @@ a.z-column-btn:hover {
 	background-position: -14px center;
 }
 .z-column-over {
-	background: #DDEEFB url(${c:encodeURL('~./zul/img/grid/column-over.gif')}) repeat-x 0 0;
+	background: #B9EBFF url(${c:encodeURL('~./zul/img/grid/column-over.gif')}) repeat-x 0 0;
 }

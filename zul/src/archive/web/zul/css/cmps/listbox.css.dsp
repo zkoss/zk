@@ -11,6 +11,8 @@ div.z-listbox-header, div.z-listbox-header tr, div.z-listbox-footer {
 
 div.z-listbox-header tr.z-list-head, div.z-listbox-header tr.z-auxhead {
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-color: #C7E5F1;
+	background-repeat: repeat-x;
 }
 div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
