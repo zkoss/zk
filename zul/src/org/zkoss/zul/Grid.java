@@ -914,8 +914,8 @@ public class Grid extends XulElement implements Paginated {
 			if (min > oldsz) min = oldsz;
 
 			RowRenderer renderer = null;
-			final Row next =
-				min < oldsz ? (Row)_rows.getChildren().get(min): null;
+			final Component next =
+				min < oldsz ? (Component)_rows.getChildren().get(min): null;
 			while (--cnt >= 0) {
 				if (renderer == null)
 					renderer = getRealRenderer();

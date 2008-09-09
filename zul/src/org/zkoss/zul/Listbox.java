@@ -1826,7 +1826,7 @@ public class Listbox extends XulElement implements Paginated {
 			if (min > oldsz) min = oldsz;
 
 			ListitemRenderer renderer = null;
-			final Listitem next =
+			final Component next =
 				min < oldsz ? getItemAtIndex(min): null;
 			while (--cnt >= 0) {
 				if (renderer == null)
