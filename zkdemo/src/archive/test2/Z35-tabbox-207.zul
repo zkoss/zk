@@ -81,7 +81,7 @@ The second panel
               <radiogroup onCheck="fruit.value = self.selectedItem.label">
                 <radio label="Apple"/>
                 <radio label="Orange"/>
-                <radio label="Banana"/>
+                <radio label="Grape"/>
               </radiogroup>
             </groupbox>
             <hbox>You have selected :<label id="fruit"/>
@@ -122,12 +122,12 @@ The second panel
             <radiogroup>
               <radio label="Apple"/>
               <radio label="Orange"/>
-              <radio label="Banana"/>
+              <radio label="Grape"/>
             </radiogroup>
             <separator bar="true"/>
             <checkbox label="Apple"/>
             <checkbox label="Orange"/>
-            <checkbox label="Banana"/>
+            <checkbox label="Grape"/>
           </vbox>
         </tabpanel>
       </tabpanels>

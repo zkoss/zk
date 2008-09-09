@@ -26,7 +26,7 @@ supported.</n:p>
 	</n:ol>
 	<combobox id="cbbox">
 		<comboitem label="Apple" />
-		<comboitem label="Banana" />
+		<comboitem label="Grape" />
 		<comboitem id="c" label="Cool!" />
 		<comboitem label="Simple and Rich" />
 		<comboitem label="Thumbs Up!" />

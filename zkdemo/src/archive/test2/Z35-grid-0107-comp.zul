@@ -110,7 +110,7 @@
 			<radiogroup onCheck="fruit.value = self.selectedItem.label">
 				<radio label="Apple"/>
 				<radio label="Orange"/>
-				<radio label="Banana"/>
+				<radio label="Grape"/>
 			</radiogroup>
 		</groupbox>
 	<panel framable="true" width="200px"

@@ -29,7 +29,7 @@ Which kind of fruit do you want?
 <radiogroup onCheck="fruit.value = self.selectedItem.label">
 <radio label="Apple"/>
 <radio label="Orange"/>
-<radio label="Banana"/>
+<radio label="Grape"/>
 </radiogroup>
 
 <grid id="sGrid">

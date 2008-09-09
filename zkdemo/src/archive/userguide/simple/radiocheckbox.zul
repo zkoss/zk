@@ -37,20 +37,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<radiogroup onCheck="fruit.value = self.selectedItem.label">
 			<radio label="Apple"/>
 			<radio label="Orange"/>
-			<radio label="Banana"/>
+			<radio label="Grape"/>
 		</radiogroup>
 		<hbox>You have selected :<label id="fruit"/></hbox>
 
 		<separator bar="true"/>
 		<checkbox id="apple" label="Apple" onCheck="doChecked()" />
 		<checkbox id="orange" label="Orange" onCheck="doChecked()" />
-		<checkbox id="banana" label="Banana" onCheck="doChecked()" />
+		<checkbox id="grape" label="Grape" onCheck="doChecked()" />
 		<hbox>You have selected :<label id="fruit2"/></hbox>
 		<zscript>
 			void doChecked() {
 				fruit2.value = (apple.isChecked() ? apple.label+' ' : &quot;&quot;) 
 					+ (orange.isChecked() ? orange.label+' ' : &quot;&quot;) 
-					+ (banana.isChecked() ? banana.label+' ' : &quot;&quot;);
+					+ (grape.isChecked() ? grape.label+' ' : &quot;&quot;);
 			}
 		</zscript>
 	</vbox>

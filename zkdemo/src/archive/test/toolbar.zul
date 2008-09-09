@@ -44,7 +44,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<radiogroup>
 			<radio label="Apple"/>
 			<radio label="Orange"/>
-			<radio label="Banana"/>
+			<radio label="Grape"/>
 		</radiogroup>
 	</groupbox>
 </zk>

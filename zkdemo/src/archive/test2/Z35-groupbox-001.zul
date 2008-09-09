@@ -12,7 +12,7 @@
         <radiogroup onCheck="fruit.value = self.selectedItem.label">
           <radio label="Apple"/>
           <radio label="Orange"/>
-          <radio label="Banana"/>
+          <radio label="Grape"/>
         </radiogroup>
       </groupbox>
       <hbox>You have selected :<label id="fruit"/>

@@ -6,7 +6,7 @@
 <vbox>
 <label> Testing Groupbox basic functionality. If you can see all components in groupbox without truncation, it's good.</label>
 <label> 0.Open the GroupBox by clicking the button.</label>
-<label> 1.Uncheck the checkbox next to "banana" (so inner groupbox uses 2D Group Box) </label>
+<label> 1.Uncheck the checkbox next to "grape" (so inner groupbox uses 2D Group Box) </label>
 <label> 2.See if the groupbox is overlapped by hbox text. If so, its a bug.</label>
 <label> 3.Check to see if the grid at the bottom is truncated on the right border when the outer groupbox is in 2D mold.</label>
 </vbox>
@@ -62,7 +62,7 @@ The second panel
             <radiogroup onCheck="fruit.value = self.selectedItem.label">
               <radio label="Apple"/>
               <radio label="Orange"/>
-              <radio label="Banana"/>
+              <radio label="Grape"/>
             </radiogroup>
           </groupbox>
           <hbox>You have selected :<label id="fruit"/>
