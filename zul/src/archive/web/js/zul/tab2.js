@@ -20,9 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 // tabbox //
 zkTabbox2 = {
 	init: function(cmp) {
-		if (zk.isAccord(cmp)) {
+		if (zkTabbox2._isAccord(cmp))
 			zk.cleanVisibility(cmp);
-		}
 	},
 	setAttr: function(cmp, name, value) {
 		switch (name) {
@@ -50,6 +49,24 @@ zkTabbox2 = {
 		if (uuid) {
 			setTimeout("zkTabs2._fixWidth('" + uuid + "')", 0);	
 		}		
+	},
+	/** Returns whether the tabbox is accordion.
+	 * @since 3.5.0
+	 */
+	_isAccord: function(tabbox) {
+		return getZKAttr(tabbox, "accd");
+	},
+	/** Returns whether the tabbox is scrollable.
+	 * @since 3.5.0
+	 */
+	_isScroll: function(tabbox) {
+		return getZKAttr(tabbox, "tabscrl");
+	},
+	/** Returns whether the tabbox is vertical.
+	 * @since 3.5.0
+	 */
+	_isVert: function(tabbox) {		
+		return getZKAttr(tabbox, "orient")=="v";
 	}
 };
 ////
@@ -104,7 +121,7 @@ zkTab2 = {
 		var tabboxId = getZKAttr(tab, "box");
 		if (tabboxId) {
 			var tabbox = $e(tabboxId);
-			if (zk.isAccord(tabbox)) 
+			if (zkTabbox2._isAccord(tabbox)) 
 				return zkTab2._getSelTabFromTop(tabbox, tabboxId);
 		}
 		
@@ -128,7 +145,7 @@ zkTab2 = {
 			return false;
 		
 		var tabbox = $e(tabboxId);
-		if (!zk.isAccord(tabbox))
+		if (!zkTabbox2._isAccord(tabbox))
 			return false;
 		
 		//accordion: we must go to panel firs, and then browse its sibling
@@ -157,9 +174,9 @@ zkTab2 = {
 	/** Selects the specified tab (and unselect the current tab). */
 	selTab: function(tab, notify) {		
 		var tabbox = $e(getZKAttr(tab, "box"));
-		if (zk.isVertical(tabbox))		
+		if (zkTabbox2._isVert(tabbox))		
 			zkTabs2.scrollingchk($uuid($parent(tab)),"vsel",tab);
-		else if (!zk.isAccord(tabbox))
+		else if (!zkTabbox2._isAccord(tabbox))
 			zkTabs2.scrollingchk($uuid($parent(tab)),"sel",tab);
 		tab = $e(tab);	
 		if (!tab) 
@@ -182,7 +199,7 @@ zkTab2 = {
 		zk[toSel ? "addClass" : "rmClass"](tab, getZKAttr(tab, "mcls") + "-seld");
 			
 		var tabbox = $e(getZKAttr(tab, "box")),
-			accd = tabbox && zk.isAccord(tabbox),
+			accd = tabbox && zkTabbox2._isAccord(tabbox),
 			panel = $e(getZKAttr(tab, "panel"));
 		if (panel) 
 			if (accd && animation) {
@@ -245,10 +262,10 @@ zkTab2 = {
 			parent._toscroll = null;//clean init 
 			parent = $outer($parent(cmp));
 		var tbx = $e(getZKAttr(cmp, "box"));
-		if (!zk.isAccord(tbx)) { //if delete tab , need scroll back !			
+		if (!zkTabbox2._isAccord(tbx)) { //if delete tab , need scroll back !			
 		zk.addCleanup(function () {
 			zkTabs2.scrollingchk(parent.id, "cln", cmp);
-				if (zk.isVertical(tbx)) {
+				if (zkTabbox2._isVert(tbx)) {
 					zkTabs2._fixHgh(tbx, parent);						
 				}						
 			}, false, parent.id + "Tabbox2");		
@@ -258,7 +275,7 @@ zkTab2 = {
 
 ////
 // tabs //
-zkTabs2 = {	
+zkTabs2 = {
 	init: function(cmp) {		
 		zkTabs2._fixWidth(cmp.id);	
 		var btn = $e(cmp.id + "!right");		
@@ -301,7 +318,7 @@ zkTabs2 = {
 				
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
 		if (tbsdiv.offsetWidth < 36)  return; //tooooo small
-		if (zk.isVertical(tabbox)) {//vertical
+		if (zkTabbox2._isVert(tabbox)) {//vertical
 			if (tbsdiv.offsetHeight < 36)  return; //tooooo small
 			var header = $e(uuid , "header"),
 				ul_si = $e(uuid , "ul"),  						
@@ -358,10 +375,10 @@ zkTabs2 = {
 						}
 					}
 				}			
-		} else if(!zk.isAccord(tabbox)) {
+		} else if(!zkTabbox2._isAccord(tabbox)) {
 			var tabs = $e(uuid + "!cave"), header = $e(uuid + "!header"),
 			 a = zk.childNodes(tabs, zkTabs2.isLegalType);
-			if (zk.isScroll(tabbox)) {		
+			if (zkTabbox2._isScroll(tabbox)) {		
 				var headwidth = header.offsetWidth, cldwidth = 0;
 				for (var i = 0, count = a.length; i < count; i++)			
 					cldwidth = cldwidth + $int(a[i].offsetWidth) + 2;
@@ -535,7 +552,7 @@ zkTabs2 = {
 			tabs =  $e(uuid),
 			head = $e(uuid + "!header");
 		zkTabs2._fixHgh(tbx, tabs);
-		if (zk.isVertical(tbx)) {
+		if (zkTabbox2._isVert(tbx)) {
 			ul = zk.firstChild($e(tabs, "header"), "UL"),
 			li = zk.childNodes(ul, zkTabs2.isLegalLI);
 			var most = 0;
@@ -547,31 +564,31 @@ zkTabs2 = {
 			 }
 		} else {				
 			if (tbx.offsetWidth < 36) return;
-			if (zk.isScroll(tbx)) {
+			if (zkTabbox2._isScroll(tbx)) {
 				var mcls = getZKAttr(tbx, "mcls");
 				if (!tbx.style.width) {							
-					zk.forceStyle(tbx,"w","100%");				
-					zk.forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");				
+					zkTabs2._forceStyle(tbx,"w","100%");				
+					zkTabs2._forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");				
 					if (zk.hasClass(tbx, mcls + "-scrolling")) {
-						zk.forceStyle(head,"w",tbx.offsetWidth - 38 + "px");					
+						zkTabs2._forceStyle(head,"w",tbx.offsetWidth - 38 + "px");					
 					} else {					
-						zk.forceStyle(head,"w",zk.revisedSize(head,tbx.offsetWidth)+ "px");
+						zkTabs2._forceStyle(head,"w",zk.revisedSize(head,tbx.offsetWidth)+ "px");
 					}
 				} else {								
-					zk.forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");					
-					zk.forceStyle(head,"w",tabs.style.width);												
+					zkTabs2._forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");					
+					zkTabs2._forceStyle(head,"w",tabs.style.width);												
 					if (zk.hasClass(tbx, mcls + "-scrolling")) {					
-						zk.forceStyle(head,"w",head.offsetWidth - 36 + "px");			
+						zkTabs2._forceStyle(head,"w",head.offsetWidth - 36 + "px");			
 					} else {					
-						zk.forceStyle(head,"w",head.offsetWidth + "px");
+						zkTabs2._forceStyle(head,"w",head.offsetWidth + "px");
 					}
 				}
 			} else {
 				if (!tbx.style.width) {
-					zk.forceStyle(tbx,"w",tbx.offsetWidth + "px");
-					zk.forceStyle(tabs,"w",tbx.offsetWidth + "px");
+					zkTabs2._forceStyle(tbx,"w",tbx.offsetWidth + "px");
+					zkTabs2._forceStyle(tabs,"w",tbx.offsetWidth + "px");
 				} else {
-					zk.forceStyle(tabs,"w",tbx.offsetWidth + "px");	
+					zkTabs2._forceStyle(tabs,"w",tbx.offsetWidth + "px");	
 				}
 			}
 		}
@@ -580,30 +597,30 @@ zkTabs2 = {
 		if ($e(tabbox.id) == null || $e(tabs) == null) return;
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
-		if (zk.isVertical(tabbox)) {						
+		if (zkTabbox2._isVert(tabbox)) {						
 			var child = zk.childNodes(tabbox, function (n) {return ($tag(n) == "DIV");}),
 			ul = zk.firstChild($e(tabs, "header"), "UL"),
 			li = zk.childNodes(ul, zkTabs2.isLegalLI);		   
 			if (tabbox.style.height) {		   	
-				zk.forceStyle(tabs, "h", zk.revisedSize(tabs,tabbox.offsetHeight,true)+"px");							
+				zkTabs2._forceStyle(tabs, "h", zk.revisedSize(tabs,tabbox.offsetHeight,true)+"px");							
 			} else {
-				zk.forceStyle(tabbox,"h", li.length*35+"px");//give it default height
-				zk.forceStyle(tabs, "h", zk.revisedSize(tabs,tabbox.offsetHeight,true)+"px");				
-			}		   		
+				zkTabs2._forceStyle(tabbox,"h", li.length*35+"px");//give it default height
+				zkTabs2._forceStyle(tabs, "h", zk.revisedSize(tabs,tabbox.offsetHeight,true)+"px");				
+			}	   		
 			//coz we have to make the header full
 			if (zk.hasClass(tabbox, getZKAttr(tabbox, "mcls") + "-scrolling")) {
-				zk.forceStyle($e(tabs, "header"),"h", tabs.offsetHeight - 38 + "px");		   		
+				zkTabs2._forceStyle($e(tabs, "header"),"h", tabs.offsetHeight - 38 + "px");		   		
 			} else {
-				zk.forceStyle($e(tabs, "header"),"h", zk.revisedSize($e(tabs, "header"),tabs.offsetHeight,true) + "px");		   	   	
+				zkTabs2._forceStyle($e(tabs, "header"),"h", zk.revisedSize($e(tabs, "header"),tabs.offsetHeight,true) + "px");		   	   	
 			}
 			//separator(+border)
-			zk.forceStyle(child[1],"h",zk.revisedSize(child[1],tabs.offsetHeight,true)+"px");
+			zkTabs2._forceStyle(child[1],"h",zk.revisedSize(child[1],tabs.offsetHeight,true)+"px");
 			//tabpanels(+border)		   		   
-			zk.forceStyle(child[2],"h",zk.revisedSize(child[1],tabs.offsetHeight,true)+"px");
+			zkTabs2._forceStyle(child[2],"h",zk.revisedSize(child[1],tabs.offsetHeight,true)+"px");
 		} else {
 			$e(tabs.id,"header").style.height="";
 			var hgh = tabbox.style.height;
-			if (hgh && hgh != "auto" && !zk.isAccord(tabbox)) {
+			if (hgh && hgh != "auto" && !zkTabbox2._isAccord(tabbox)) {
 				var panels = zk.nextSibling(tabs, "DIV");
 				
 				if (panels) {
@@ -624,7 +641,7 @@ zkTabs2 = {
 		}
 	},
 	onVisi: function(cmp) {
-		if (zk.isVertical($parent($e(cmp.id)))) {			
+		if (zkTabbox2._isVert($parent($e(cmp.id)))) {			
 			cmp.style.height = "";
 		} else {
 			cmp.style.width = "";	
@@ -638,7 +655,7 @@ zkTabs2 = {
 		zk.cleanVisibility($parentByType(cmp, "Tabbox2"));
 	},
 	beforeSize: function(cmp) {
-		if (zk.isVertical($parent($e(cmp.id)))) {			
+		if (zkTabbox2._isVert($parent($e(cmp.id)))) {			
 			cmp.style.height = "";
 		}else{
 			cmp.style.width = "";	
@@ -648,43 +665,10 @@ zkTabs2 = {
 		cmp._width = null;
 		var meta = $parent(cmp);
 		if(meta) meta.initscroll = null;
-	}
-};
-if (zk.ie6Only) {
-	zkTabs2.beforeSize = function(tabs) {		
-		var tabbox = $parentByType(tabs, "Tabbox2");
-		if (!zk.isAccord(tabbox)) {
-			if (!zk.isVertical($parent(tabs))) {
-				tabs.style.width = "0px";
-			}
-			var panels = zk.nextSibling(tabs, "DIV");
-			if (panels) 
-				for (var n = panels.firstChild; n; n = n.nextSibling) 
-					if (n.id) n.style.height = "";
-		}
-	};
-}
-/** Returns whether the tabbox is accordion.
- * @since 3.0.3
- */
-zk.isAccord = function(tabbox) {
-	return getZKAttr(tabbox, "accd");
-};
-/** Returns whether the tabbox is scrollable.
- * @since 3.5.0
- */
-zk.isScroll = function(tabbox) {
-	return getZKAttr(tabbox, "tabscrl");
-};
-/** Returns whether the tabbox is vertical.
- * @since 3.5.0
- */
-zk.isVertical = function(tabbox) {		
-	return getZKAttr(tabbox, "orient")=="v" ? true : false;
-};
-zk.forceStyle = function(cmp,attr,value) {
-	if ($int(value.replace("px","")) < 0) return;
-	switch(attr) {		
+	},
+	_forceStyle: function(cmp,attr,value) {
+		if ($int(value) < 0) return;
+		switch(attr) {		
 		case "h":
 			if (zk.ie6Only) {
 				cmp.style.height = "0px";
@@ -702,5 +686,20 @@ zk.forceStyle = function(cmp,attr,value) {
 			cmp.style.width = "";
 			cmp.style.width = value;		
 			break;
-	}		
+		}		
+	}
 };
+if (zk.ie6Only) {
+	zkTabs2.beforeSize = function(tabs) {		
+		var tabbox = $parentByType(tabs, "Tabbox2");
+		if (!zkTabbox2._isAccord(tabbox)) {
+			if (!zkTabbox2._isVert($parent(tabs))) {
+				tabs.style.width = "0px";
+			}
+			var panels = zk.nextSibling(tabs, "DIV");
+			if (panels) 
+				for (var n = panels.firstChild; n; n = n.nextSibling) 
+					if (n.id) n.style.height = "";
+		}
+	};
+}
