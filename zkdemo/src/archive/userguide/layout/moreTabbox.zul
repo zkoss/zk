@@ -40,7 +40,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</tabs>
 	<tabpanels>
 		<tabpanel>
-<tabbox orient="vertical">
+<tabbox id="tb2" orient="vertical">
 <tabs width="20px">
 <tab label="A"/>
 <tab label="B"/>
@@ -56,6 +56,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <tabpanel>This is panel E</tabpanel>
 </tabpanels>
 </tabbox>
+<checkbox label="Horizonal orient" onCheck='tb2.orient=self.checked?"horizontal":"vertical"'/>
 		</tabpanel>
 		<tabpanel>
 This is panel 2
