@@ -7,11 +7,11 @@ function newWindow(url){
 </h:script>
 <h:form id="newform" target="_blank" method="post"/>
 	<borderlayout id="main" use="org.zkoss.zkdemo.test2.MainLayout">
-	<west title="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}" size="355px" border="0" collapsible="true" maxsize="600" splittable="true" flex="true">
+	<west title="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}" size="355px" collapsible="true" maxsize="600" splittable="true" flex="true">
 	<!-- ******************** Ctrl Panel ******************** -->
 			<window id="w1" contentStyle="overflow:auto;position:relative;">
 				<vbox>
-					<tabbox mold="accordion">				
+					<tabbox mold="accordion-lite">				
 						<tabs>
 							<tab label="Normal"/>
 							<tab label="Advance"/>
@@ -89,11 +89,11 @@ function newWindow(url){
 				</vbox>			
 			</window>
 	</west>
-	<center id="center" title="ZK TEST2" border="1" autoscroll="true" flex="true">			
+	<center id="center" title="ZK TEST2" autoscroll="true" flex="true">			
 		<!-- ******************** View Panel ******************** -->
 		<iframe id="ifr" height="98%" width="100%" autohide="true"/>
 	</center>
-	<south id="leftPanel" title="Code View" border="0" collapsible="true" maxsize="600" 
+	<south id="leftPanel" title="Code View" collapsible="true" maxsize="600" 
 		splittable="true" open="false" size="300px">
 		<!-- ******************** Code Panel ******************** -->
 		<window id="codeViewPanel">

@@ -406,13 +406,11 @@ zkLayoutRegion2 = {
 			colled.style.zIndex = ""; // reset z-index refered to the onBeforeSlideOut()
 			colled.style.visibility = "";
 			anima.slideIn(colled, zkLayoutRegionSplit2.sanchors[real.split.pos], 200);
-			real._isSilding = false;
 		}
 	},
 	// recalculates the size of the whole border layout after the component sildes in.
 	onAfterSlideIn: function (cmp) {
 		zk.Layout2.getOwnerLayout(cmp).render();
-		cmp._isSilding = false;
 	},
 	// a callback function after the collapsed region slides down
 	onColledAfterSlideDown: function (cmp) {
@@ -423,8 +421,7 @@ zkLayoutRegion2 = {
 					if (target.id == $uuid(cmp) + "!btned") {
 						zkLayoutRegion2.onColledAfterSlideUp(cmp);
 						zkLayoutRegionSplit2.open(cmp.split, true, false, false, true);
-					} else if (!cmp._isSilding) {
-						cmp._isSilding = true;
+					} else if (!anima.count) {
 						anima.slideUp(cmp, zkLayoutRegionSplit2.sanchors[cmp.split.pos]);
 					}
 				}
@@ -439,7 +436,7 @@ zkLayoutRegion2 = {
 		cmp.style.zIndex = "";
 		$e($uuid(cmp), "btn").style.display = "";
 		zk.unlisten(document, "click", cmp._slideIn);
-		cmp._isSilde = cmp._isSilding = false;
+		cmp._isSilde = false;
 	},
 	onColledClick: function (evt) {
 		var colled = zkau.evtel(evt), real = $real(colled);
@@ -574,8 +571,7 @@ zkLayoutRegion2 = {
 	onBtnClick: function (evt) {
 		var btn = zkau.evtel(evt),
 			real = $real(btn);
-		if (real._isSilde || real._isSilding) return;
-		real._isSilding = true;
+		if (real._isSilde || anima.count) return;
 		if (btn.id.endsWith("!btned")) {
 			real.style.visibilty = "hidden";
 			real.style.display = "";
@@ -850,10 +846,8 @@ zkLayoutRegionSplit2 = {
 	},
 	open: function (split, open, silent, enforce, nonAnima) {
 		var real = $real(split);
-		if (getZKAttr(real, "colps") != "true" || (!enforce && (getZKAttr(real, "open") != "false") == open)) {
-			real._isSilding = false;
+		if (getZKAttr(real, "colps") != "true" || (!enforce && (getZKAttr(real, "open") != "false") == open))
 			return; //nothing changed
-		}
 	
 		setZKAttr(real, "open", open ? "true": "false");
 		var vert = split.pos == "west" || split.pos == "east" ? false : true,
@@ -865,7 +859,6 @@ zkLayoutRegionSplit2 = {
 				else {
 					zk.show(real.id, open);
 					zk.show(colled.id, !open);
-					real._isSilding = false;
 				}
 			}
 		} else {
@@ -875,7 +868,6 @@ zkLayoutRegionSplit2 = {
 				if (colled)
 					zk.show(colled.id, !open);
 				zk.show(real.id, open);
-				real._isSilding = false;
 			}
 		}
 		if (nonAnima) zk.Layout2.getOwnerLayout(split).render();

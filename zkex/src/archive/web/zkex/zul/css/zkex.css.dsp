@@ -18,7 +18,7 @@
 	border:1px solid #B1CBD5; position:absolute; overflow:hidden; background-color:white;
 }
 .z-west-noborder, .z-center-noborder, .z-east-noborder,
-	.z-north-noborder, .z-south {
+	.z-north-noborder, .z-south-noborder {
 	border:0 none;
 }
 .z-west {
