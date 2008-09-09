@@ -62,6 +62,7 @@ public class ConfigParser {
 	 */
 	private static final int MAX_VERSION_SEGMENT = 4;
 	private static int[] _zkver;
+	private static boolean _syscfgLoaded;
 
 	/** Checks and returns whether the loaded document's version is correct.
 	 * @since 3.5.0
@@ -114,35 +115,25 @@ public class ConfigParser {
 	/** Used to provide backward compatibility to 2.3.0's richlet definition. */
 	private int _richletnm;
 
-	/** Parses metainfo/zk/config.xml placed in class-path for application
-	 * dependent configurations.
+	/** Parses metainfo/zk/config.xml placed in class-path.
 	 *
-	 * <p>There are two parts of parsing: application dependent
-	 * ({@link #parseAppConfig}) and application independent
-	 * ({@link #parseSysConfig}).
+	 * <p>Note: the application-independent configurations (aka.,
+	 * the system default configurations) are loaded only once,
+	 * no matter how many times this method is called.
 	 *
-	 * <p>Implementation Notes:<br/>
-	 * You cannot assume which one of {@link #parseAppConfig} and
-	 * {@link #parseSysConfig} is called first.
+	 * @param config the object to store configurations.
+	 * If null, only the application-independent configurations are parsed.
 	 * @since 3.5.0
 	 */
-	public void parseAppConfig(Configuration config) {
-		if (config == null)
-			throw new IllegalArgumentException();
-		parseConfigXml(config);
-	}
-	/** Parses metainfo/zk/config.xml placed in class-path for application
-	 * independent configurations.
-	 *
-	 * <p>There are two parts of parsing: application dependent
-	 * ({@link #parseAppConfig}) and application independent
-	 * ({@link #parseSysConfig}).
-	 * @since 3.5.0
-	 */
-	public void parseSysConfig() {
-		parseConfigXml(null);
-	}
-	private void parseConfigXml(Configuration config) {
+	public void parseConfigXml(Configuration config) {
+		boolean syscfgLoaded;
+		synchronized (ConfigParser.class) {
+			syscfgLoaded = _syscfgLoaded;
+			_syscfgLoaded = true;
+		}
+		if (!syscfgLoaded)
+			log.info("Loading system default");
+
 		try {
 			final ClassLocator locator = new ClassLocator();
 			final List xmls = locator.getDependentXMLResources(
@@ -153,12 +144,14 @@ public class ConfigParser {
 				try {
 					if (checkVersion(res.url, res.document)) {
 						final Element el = res.document.getRootElement();
-						if (config == null) {
+						if (!syscfgLoaded) {
 							parseZScriptConfig(el);
 							parseDeviceConfig(el);
 							parseSystemConfig(el);
 							parseClientConfig(el);
-						} else {
+						}
+
+						if (config != null) {
 							parseListeners(config, el);
 						}
 					}

@@ -133,7 +133,7 @@ public class DefinitionLoaders {
 
 		//1. parse config.xml
 		final ConfigParser parser = new ConfigParser();
-		parser.parseSysConfig();
+		parser.parseConfigXml(null); //only system default configs
 
 		//2. process lang.xml (no particular dependency)
 		try {
