@@ -646,7 +646,7 @@ zkTabs2 = {
 				if (panels) {
 					hgh = zk.getVflexHeight(panels);					
 					for (var pos, n = panels.firstChild; n; n = n.nextSibling) 
-						if (n.id && n.style.display != "none") { // Bug 1881553, do not resize tabpanel display none
+						if (n.id && zk.isVisible(n)) { // Bug 1881553, do not resize tabpanel display none
 										
 							if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary. 
 								pos = n.style.position;

@@ -190,7 +190,7 @@ public class Grid extends XulElement implements Paginated {
 	 */
 	public boolean isFixedLayout() {
 		final String s = (String) getAttribute("fixed-layout");
-		return s != null ? Boolean.parseBoolean(s) : _fixedLayout;
+		return s != null ? "true".equalsIgnoreCase(s) : _fixedLayout;
 	}
 	
 	/** Returns the rows.
