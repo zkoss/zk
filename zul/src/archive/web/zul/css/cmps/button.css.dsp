@@ -16,7 +16,7 @@ button.z-button {<%-- remove browser's focus effect to scroll down, if any--%>
 </c:if>
 span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
-	margin: 0 1px 0 0;
+	margin: 1px 1px 0 0;
 }
 <c:if test="${c:isSafari()}"><%-- remove browser's focus effect --%>
 .z-button :focus {

@@ -42,7 +42,7 @@ public class CheckboxDefault implements ComponentRenderer {
 		final Checkbox self = (Checkbox) comp;
 		final String uuid = self.getUuid();
 		wh.write("<span id=\"").write(uuid).write("\"");
-		wh.write(" z.type=\"zul.widget.Ckbox\"");
+		wh.write(" z.type=\"zul.btn.Ckbox\"");
 		wh.write(self.getOuterAttrs()).write("><input type=\"checkbox\" id=\"");
 		wh.write(uuid).write("!real\"").write(self.getInnerAttrs());
 		wh.write("/><label for=\"").write(uuid).write("!real\"");

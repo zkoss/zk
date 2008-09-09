@@ -36,7 +36,7 @@ public class RadioDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Radio self = (Radio)comp;
 		final String uuid = self.getUuid();
-		wh.write("<span id=\"").write(uuid).write("\" z.type=\"zul.widget.Radio\"")
+		wh.write("<span id=\"").write(uuid).write("\" z.type=\"zul.btn.Radio\"")
 			.write(self.getOuterAttrs()).write(">").write("<input type=\"radio\" id=\"")
 			.write(uuid).write("!real\"").write(self.getInnerAttrs())
 			.write("/><label for=\"").write(uuid).write("!real\"")

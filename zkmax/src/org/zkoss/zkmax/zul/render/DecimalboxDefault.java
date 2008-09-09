@@ -40,7 +40,7 @@ public class DecimalboxDefault implements ComponentRenderer {
 		final Decimalbox self = (Decimalbox) comp;
 		final String uuid = self.getUuid();
 		wh.write("<input id=\"").write(uuid).write("\"");
-        wh.write(" z.type=\"zul.widget.Dcbox\"");
+        wh.write(" z.type=\"zul.vd.Dcbox\"");
         wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("/>");
 	}
 }

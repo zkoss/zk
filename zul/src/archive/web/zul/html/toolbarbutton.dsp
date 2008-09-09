@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<a id="${self.uuid}" z.type="zul.widget.Tbtn" ${self.outerAttrs}${self.innerAttrs}><c:choose trim="true">
+<a id="${self.uuid}" z.type="zul.btn.Tbtn" ${self.outerAttrs}${self.innerAttrs}><c:choose trim="true">
 <c:when test="${self.dir == 'reverse'}">
 	<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
 </c:when>

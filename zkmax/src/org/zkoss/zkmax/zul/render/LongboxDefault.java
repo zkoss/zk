@@ -38,7 +38,7 @@ public class LongboxDefault implements ComponentRenderer {
 		final Longbox self = (Longbox)cmp; 
 	
 		wh.write("<input id=\"").write(self.getUuid());
-		wh.write("\" z.type=\"zul.widget.Lnbox\"").write(self.getOuterAttrs());
+		wh.write("\" z.type=\"zul.vd.Lnbox\"").write(self.getOuterAttrs());
 		wh.write(self.getInnerAttrs()).write("/>");
 	}
 }

@@ -40,12 +40,12 @@ public class TextboxDefault implements ComponentRenderer{
 
 		//textarea doesn't support maxlength
 		if (self.isMultiline()){
-			wh.write("<textarea id=\"").write(uuid).write("\" z.type=\"zul.widget.Txbox\"")
+			wh.write("<textarea id=\"").write(uuid).write("\" z.type=\"zul.vd.Txbox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
 			.write(self.getAreaText()).write("</textarea>");
 		}
 		else{
-			wh.write("<input id=\"").write(uuid).write("\" z.type=\"zul.widget.Txbox\"")
+			wh.write("<input id=\"").write(uuid).write("\" z.type=\"zul.vd.Txbox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("/>");
 		}
 	

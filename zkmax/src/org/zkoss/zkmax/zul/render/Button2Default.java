@@ -47,7 +47,7 @@ public class Button2Default implements ComponentRenderer {
 		if (mcls == null) mcls = "";
 		final String outerattrs = self.getOuterAttrs();
 		final Execution exec = Executions.getCurrent();
-		wh.write("<span z.type=\"zul.widget.Button\" id=\"").write(uuid)
+		wh.write("<span z.type=\"zul.btn.Button\" id=\"").write(uuid)
 			.write("\" class=\"").write(mcls).write("\"")
 			.write(ZkFns.noCSSAttrs(outerattrs));
 		if (!self.isVisible())

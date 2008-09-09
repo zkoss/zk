@@ -38,7 +38,7 @@ public class IntboxDefault implements ComponentRenderer {
 		final Intbox self = (Intbox)cmp; 
 	
 		wh.write("<input id=\"").write(self.getUuid());
-		wh.write("\" z.type=\"zul.widget.Inbox\"").write(self.getOuterAttrs());
+		wh.write("\" z.type=\"zul.vd.Inbox\"").write(self.getOuterAttrs());
 		wh.write(self.getInnerAttrs()).write("/>");
 	}
 }

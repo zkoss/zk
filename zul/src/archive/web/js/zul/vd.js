@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Thu Oct 20 11:30:21     2005, Created by tomyeh
+		Thu Oct 20 11:30:21	 2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -464,4 +464,299 @@ zkVld.addHideCovered = function (ary) {
 		var el = $e(zkVld._ebs[j]);
 		if (el) ary.push(el);
 	}
+};
+
+////
+// textbox //
+zkTxbox = {};
+zkau.textbox = zkTxbox; //zkau depends on it
+zkTxbox._intervals = {};
+_zktbau = {
+	setAttr: zkau.setAttr
+};
+zkau.setAttr = function (cmp, nm, val) {
+	if ("disabled" == nm || "readOnly" == nm) {
+		var inp = $real(cmp), type = inp.type ? inp.type.toUpperCase() : "";
+		if (type == "TEXT" || type == "TEXTAREA") {
+			var outer = $outer(cmp),
+				mcls = getZKAttr(outer, "mcls");
+			if ("disabled" == nm)
+				zk[val == "true" ? "addClass" : "rmClass"](outer, mcls + "-disd");
+			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? mcls + "-text-disd" : mcls + "-readonly");
+		}
+	}
+	return _zktbau.setAttr(cmp, nm, val);
+};
+zkTxbox.init = function (cmp, onfocus, onblur) {
+	zk.listen(cmp, "focus", onfocus ? onfocus: zkTxbox.onfocus);
+	zk.listen(cmp, "blur", onblur ? onblur: zkTxbox.onblur);
+	zk.listen(cmp, "select", zkTxbox.onselect);
+	if ($tag(cmp) == "TEXTAREA")
+		zk.listen(cmp, "keyup", zkTxbox.onkey);
+		
+	zk.listen(cmp, "keydown", zkTxbox.onkeydown);
+
+	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
+	//at the server
+	var sa = getZKAttr($outer(cmp), "srvald");
+	if (sa && sa != "fmt") {
+		var old = cmp.value;
+		cmp.defaultValue = old + "-";
+		if (old != cmp.value) cmp.value = old; //Bug 1490079
+	}
+	var outer = $outer(cmp),
+		mcls = getZKAttr(outer, "mcls");
+	if (cmp.readOnly) {
+		zk.addClass(cmp, mcls + "-readonly");
+	}
+	if (cmp.disabled) {
+		zk.addClass(cmp, mcls + "-text-disd");
+		zk.addClass(outer, mcls + "-disd");
+	}
+};
+zkTxbox.cleanup = zkTxbox.onHide = function (cmp) {
+	var inp = $real(cmp);
+	if (inp) zkVld.closeErrbox(inp.id, true);
+};
+
+zkTxbox.onselect = function (evt) {
+	var inp = zkau.evtel(evt); //backward compatible (2.4 or before)
+	var cmp = $outer(inp);
+	if (zkau.asap(cmp, "onSelection")) {
+		var sr = zk.getSelectionRange(inp);
+		zkau.send({uuid: cmp.id, cmd: "onSelection",
+				data: [sr[0], sr[1], inp.value.substring(sr[0], sr[1])]},
+		 	100);
+	}
+};
+/** Handles onblur for text input.
+ * Note: we don't use onChange because it won't work if user uses IE' auto-fill
+ */
+zkTxbox.onblur = function (evt) {
+	var inp = zkau.evtel(evt), //backward compatible (2.4 or before)
+		noonblur = zkTxbox._noonblur(inp);
+	zkTxbox._scanStop(inp);
+	zkTxbox.updateChange(inp, noonblur);
+	zkau.onblur(evt, noonblur); //fire onBlur after onChange
+	var cmp = $outer(inp),
+		mcls = getZKAttr(cmp, "mcls");
+	zk.rmClass(cmp, mcls + "-focus");
+};
+zkTxbox._scanStop = function (inp) {	
+	//stop the scanning of onChaning first
+	var interval = zkTxbox._intervals[inp.id];
+	if (interval) {
+		clearInterval(interval);
+		delete zkTxbox._intervals[inp.id];
+	}
+	if (inp.removeAttribute) {
+		inp.removeAttribute("zk_changing_last");
+		inp.removeAttribute("zk_changing_selbk");
+		inp.removeAttribute("zk_typeAhead");
+	}
+};
+/** check any change.
+ * @return false if failed (wrong data).
+ */
+zkTxbox.updateChange = function (inp, noonblur) {
+	if (zkVld.validating) return true; //to avoid deadloop (when both fields are invalid)
+
+	if (inp && inp.id) {
+		var msg = !noonblur ? zkVld.validate(inp.id): null;
+			//It is too annoying (especial when checking non-empty)
+			//if we alert user for something he doesn't input yet
+		if (msg) {
+			zkVld.errbox(inp.id, msg);
+			inp.setAttribute("zk_err", "true");
+			zkau.send({uuid: $uuid(inp), cmd: "onError",
+				data: [inp.value, msg]}, -1);
+			return false; //failed
+		}
+		zkVld.closeErrbox(inp.id);
+	}
+
+	if (!noonblur) zkTxbox.onupdate(inp);
+	return true;
+};
+/** Tests whether NOT to do onblur (if inp currentFocus are in the same
+ * component).
+ */
+zkTxbox._noonblur = function (inp) {
+	if (zk.alerting) return true;
+
+	var cf = zkau.currentFocus;
+	if (inp && cf && inp != cf) {
+		var el = inp;
+		for (;; el = el.parentNode) {
+			if (!el) return false;
+			if (getZKAttr(el, "combo") == "true")
+				break;
+			if (getZKAttr(el, "type"))
+				return false;
+		}
+
+		for (; cf; cf = $parent(cf))
+			if (cf == el)
+				return true;
+	}
+	return false;
+};
+
+/** Called if a component updates a text programmingly. Eg., datebox.
+ * It checks whether the content is really changed and sends event if so.
+ */
+zkTxbox.onupdate = function (inp) {
+	var newval = inp.value;
+	if (newval != inp.defaultValue) { //changed
+		inp.defaultValue = newval;
+		var uuid = $uuid(inp);			
+		var sr = zk.getSelectionRange(inp);	
+		zkau.sendasap({uuid: uuid, cmd: "onChange", data: [newval, false, sr[0]]},
+			zk.delayTime_onChange ? zk.delayTime_onChange : 150);
+	} else if (inp.getAttribute("zk_err")) {
+		inp.removeAttribute("zk_err");
+		zkau.send({uuid: $uuid(inp), cmd: "onError",
+			data: [newval, null]}, -1); //clear error (even if not changed)
+	}
+};
+zkTxbox.onkey = function (evt) {
+	//Request 1565288 and 1738246: support maxlength for Textarea
+	var inp = Event.element(evt);
+	var maxlen = getZKAttr(inp, "maxlen");
+	if (maxlen) {
+		maxlen = $int(maxlen);
+		if (maxlen > 0 && inp.value != inp.defaultValue
+		&& inp.value.length > maxlen)
+			inp.value = inp.value.substring(0, maxlen);
+	}
+};
+zkTxbox.onkeydown = function (evt) {
+	var inp = Event.element(evt),
+		uuid = $uuid(inp),
+		cmp = $e(uuid),
+		keyCode = Event.keyCode(evt);
+	if ((keyCode == 13 && zkau.asap(cmp, "onOK"))
+	|| (keyCode == 27 && zkau.asap(cmp, "onCancel"))) {
+		zkTxbox._scanStop(inp);
+		zkTxbox.updateChange(inp, false);
+		//Bug 1858869: no need to send onOK here since zkau._onDocKeydown will do
+	}
+};
+zkTxbox.onfocus = function (evt) {
+	var inp = zkau.evtel(evt), //backward compatible (2.4 or before)
+		cmp = $outer(inp);
+	if ($tag(inp) != "INPUT") return;
+	if (zkau.onfocus0(evt)
+	&& inp && inp.id && zkau.asap(cmp, "onChanging")) {
+		//handling onChanging
+		inp.setAttribute("zk_changing_last", inp.value);
+		if (!zkTxbox._intervals[inp.id])
+			zkTxbox._intervals[inp.id] =
+				setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
+	}
+	zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
+};
+/** Scans whether any changes. */
+zkTxbox._scanChanging = function (id) {
+	var inp = $e(id);
+	var value = inp.getAttribute("zk_typeAhead") || inp.value;
+	if (inp && zkau.asap($outer(inp), "onChanging")
+	&& inp.getAttribute("zk_changing_last") != value) {
+		zkTxbox.sendOnChanging(inp, value);
+	}
+};
+/**
+ * Send the onChanging event to server.
+ * @param {Object} inp
+ * @param {Object} value the correct value of input element, if any.
+ * @since 3.0.5
+ */
+zkTxbox.sendOnChanging = function (inp, value) {
+	value = value || inp.value;
+	inp.setAttribute("zk_changing_last", value);
+	var selbk = inp.getAttribute("zk_changing_selbk");
+	inp.removeAttribute("zk_changing_selbk");		
+	var sr = zk.getSelectionRange(inp);
+	zkau.send({uuid: $uuid(inp),
+		cmd: "onChanging", data: [value, selbk == value, sr[0]],
+		ignorable: true}, 100);
+};
+zkTxbox.setAttr = function (cmp, nm, val) {
+	if("z.sel" == nm){
+		var inp = $real(cmp);
+		if ("all" == val) {
+			zk.asyncSelect(inp.id, zk.ie ? 150 : 0);
+			return true; //done
+		}
+
+		var ary = val.split(",");
+		var start = $int(ary[0]), end = $int(ary[1]),
+			len = inp.value.length;
+		if (start < 0) start = 0;
+		if (start > len) start = len;
+		if (end < 0) end = 0;
+		if (end > len) end = len;
+		
+		if (inp.setSelectionRange) {
+			inp.setSelectionRange(start, end);
+			inp.focus();
+		} else if (inp.createTextRange) {
+			var range = inp.createTextRange();
+			if(start != end){
+				range.moveEnd('character', end - range.text.length);
+				range.moveStart('character', start);
+			}else{
+				range.move('character', start);
+			}
+			range.select();
+		}
+		return true;
+	}
+	return false;
+};
+
+////
+//intbox/longbox/decimalbox/doublebox//
+zkInbox = {};
+zkLnbox = {};
+zkDcbox = {};
+zkDbbox = {};
+zkInpEl = {};
+zkInpEl.baseChars = "+0123456789" + zk.MINUS + zk.PERCENT + zk.GROUPING;
+zkInpEl.ignoreKeys = function (evt, keys) {
+	var k = Event.keyCode(evt);
+	if(!zk.ie && (Event.isSpecialKey(evt) || k == 8 || k == 46)) return;
+	var c = Event.charCode(evt);
+	if(keys.indexOf(String.fromCharCode(c)) === -1){
+		Event.stop(evt);
+	}
+};
+zkInbox.init = zkLnbox.init = function (cmp) {	
+	zk.listen(cmp, "keypress", zkInbox.onkeypress);
+	zkTxbox.init(cmp);
+};
+zkInbox.onkeypress = function (evt) {
+	zkInpEl.ignoreKeys(evt, zkInpEl.baseChars);
+};
+zkDcbox.init = zkDbbox.init = function (cmp) {	
+	zk.listen(cmp, "keypress", zkDcbox.onkeypress);
+	zkTxbox.init(cmp);
+};
+zkDcbox.onkeypress = function (evt) {
+	zkInpEl.ignoreKeys(evt, zkInpEl.baseChars + zk.DECIMAL);
+};
+zkInbox.setAttr = zkLnbox.setAttr = zkDcbox.setAttr = zkDbbox.setAttr = zkTxbox.setAttr ;
+zkInbox.onHide = zkLnbox.onHide = zkDcbox.onHide = zkDbbox.onHide = zkTxbox.onHide;
+zkInbox.cleanup = zkLnbox.cleanup = zkDcbox.cleanup = zkDbbox.cleanup = zkTxbox.cleanup;
+zkInbox.validate = function (cmp) {
+	return zkVld.onlyInt(cmp.id);
+};
+zkLnbox.validate = function (cmp) {
+	return zkVld.onlyLong(cmp.id);
+};
+zkDcbox.validate = function (cmp) {
+	return zkVld.onlyNum(cmp.id);
+};
+zkDbbox.validate = function (cmp) {
+	return zkVld.onlyNum(cmp.id);
 };

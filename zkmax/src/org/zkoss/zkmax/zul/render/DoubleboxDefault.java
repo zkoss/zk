@@ -40,7 +40,7 @@ public class DoubleboxDefault implements ComponentRenderer {
 		final Doublebox self = (Doublebox) comp;
 		final String uuid = self.getUuid();
 		wh.write("<input id=\"").write(uuid).write("\"");
-		wh.write(" z.type=\"zul.widget.Dbbox\"");
+		wh.write(" z.type=\"zul.vd.Dbbox\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write("/>");
 	}
 }

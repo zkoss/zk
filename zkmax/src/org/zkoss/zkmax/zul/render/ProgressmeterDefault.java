@@ -37,7 +37,7 @@ public class ProgressmeterDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Progressmeter self = (Progressmeter)comp;
 	
-		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.PMeter\"");
+		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.btn.PMeter\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<span id=\"").write(self.getUuid()).write("!img\" class=\"")
 			.write(self.getMoldSclass()).write("-img\"></span></div>");

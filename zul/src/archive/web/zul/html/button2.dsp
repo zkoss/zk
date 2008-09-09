@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="mcls" value="${self.moldSclass}"/>
-<span z.type="zul.widget.Button" id="${self.uuid}" class="${mcls}"${z:noCSSAttrs(self.outerAttrs)}${self.visible ? '': ' style="display:none"'}><table id="${self.uuid}!box"${self.tabindex >= 0 and !c:isGecko() and !c:isSafari()?' tabindex="self.tabindex"':''} cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
+<span z.type="zul.btn.Button" id="${self.uuid}" class="${mcls}"${z:noCSSAttrs(self.outerAttrs)}${self.visible ? '': ' style="display:none"'}><table id="${self.uuid}!box"${self.tabindex >= 0 and !c:isGecko() and !c:isSafari()?' tabindex="self.tabindex"':''} cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
 <tr>
 	<td class="${mcls}-tl"><c:if test="${!c:isExplorer()}"><button id="${self.uuid}!real" class="z ${mcls}"${self.tabindex >= 0 and (c:isGecko() or c:isSafari())?' tabindex="self.tabindex"':''}></button></c:if></td>
 	<td class="${mcls}-tm"></td>
