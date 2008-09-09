@@ -129,6 +129,15 @@ tr.z-list-item td.z-list-item-focus {
 .z-menu-cnt-img {
 	background-image:url(${c:encodeURL('~./zul/img/menu2/arrow.gif')});
 }
+.z-menu-btn .z-menu-btn-m em, .z-menu-btn-text-img .z-menu-btn-m em {
+	background-image: url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')});
+}
+.z-menubar-ver .z-menu-btn .z-menu-btn-m em, .z-menubar-ver .z-menu-btn-text-img .z-menu-btn-m em {
+	background-image: url(${c:encodeURL('~./zul/img/button/tb-btn-arrow-ver.gif')});
+}
+.z-menu-item-cnt-unck .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/menu2/unchecked.gif')});
+}
 <%-- panel.css.dsp --%>
 .z-panel-tl{
 	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
