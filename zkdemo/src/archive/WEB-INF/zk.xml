@@ -56,7 +56,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<session-timeout>1800</session-timeout>
 		-->
 		<!-- Turn on the following if you want to reset the session-timeout
-		counter when receiving, like any other request, resets 
+		counter when receiving onTimer, like any other request
+		In other words, the session is never timeoout if the desktop has
+		a timer.
 		<timer-keep-alive>true</timer-keep-alive>
 		-->
 	</session-config>
