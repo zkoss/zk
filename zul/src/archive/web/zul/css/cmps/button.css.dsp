@@ -41,7 +41,7 @@ button.z-button {
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-tm {
-	background: url(${c:encodeURL(btnimg)}) repeat-x 0 -252px;		
+	background: url(${c:encodeURL(btnimg)}) repeat-x 0 -252px;
 }
 .z-button .z-button-tr {
 	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -126px;
@@ -81,7 +81,7 @@ button.z-button {
 	background-position:0 -378px;
 }
 .z-button-over .z-button-tm {
-	background-position:0 -630px;	
+	background-position:0 -630px;
 }
 .z-button-over .z-button-tr {
 	background-position:0 -504px;
@@ -93,13 +93,13 @@ button.z-button {
   background-position:0 -633px;    
 }
 .z-button-over .z-button-cr {
-	background-position:0 -507px;	
+	background-position:0 -507px;
 }
 .z-button-over .z-button-bl {
 	background-position:0 -501px;
 }
 .z-button-over .z-button-bm {
-	background-position:0 -753px;	
+	background-position:0 -753px;
 }
 .z-button-over .z-button-br {
 	background-position:0 -627px;
@@ -109,7 +109,7 @@ button.z-button {
 	background-position:0 -882px;
 }
 .z-button-focus .z-button-tm {
-	background-position:0 -1134px;	
+	background-position:0 -1134px;
 }
 .z-button-focus .z-button-tr {
 	background-position:0 -1008px;
@@ -118,13 +118,13 @@ button.z-button {
 	background-position:0 -885px;
 }
 .z-button-focus .z-button-cr {
-	background-position:0 -1011px;	
+	background-position:0 -1011px;
 }
 .z-button-focus .z-button-bl {
 	background-position:0 -1005px;
 }
 .z-button-focus .z-button-bm {
-	background-position:0 -1257px;	
+	background-position:0 -1257px;
 }
 .z-button-focus .z-button-br {
 	background-position:0 -1131px;
@@ -143,7 +143,7 @@ button.z-button {
 	background-position:0 -501px;
 }
 .z-button-clk .z-button-bm {
-	background-position:0 -879px;	
+	background-position:0 -879px;
 }
 .z-button-clk .z-button-br {
 	background-position:0 -627px;
@@ -155,5 +155,5 @@ button.z-button {
     background-position:0 -759px;
 }
 .z-button-clk .z-button-cr {
-	background-position:0 -507px;	
+	background-position:0 -507px;
 }
