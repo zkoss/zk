@@ -26,16 +26,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <div class="${c:cat(look,'accd')}" id="${self.uuid}"><%-- self.outerAttrs/innerAttrs gen below --%>
 	<c:if test="${!empty self.tabbox.panelSpacing and self.index!=0}">
 			<div style="margin:0;display:list-item;width:100%;height:${self.tabbox.panelSpacing};"></div>
-	</c:if>	
-	<div id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z.sel="${tab.selected}"  z.type="zul.tab2.Tab2" z.box="${tab.tabbox.uuid}" z.panel="${self.uuid}"  width="100%" border="0" cellpadding="0" cellspacing="0" z.disabled="${tab.disabled}">		
-		<div align="left" class="${c:cat(lookaccd,'header')}" >
+	</c:if>
+	<div id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z.sel="${tab.selected}"  z.type="zul.tab2.Tab2" z.box="${tab.tabbox.uuid}" z.panel="${self.uuid}"  width="100%" border="0" cellpadding="0" cellspacing="0" z.disabled="${tab.disabled}">
+		<div align="left" class="${lookaccd}header" >
 			<c:if test="${tab.closable}">
-				<a id="${tab.uuid}!close"  class="${c:cat(lookaccd,'closebtn')}"></a>
-			</c:if>		
-			<a href="javascript:;" id="${tab.uuid}!a" class="${c:cat(lookaccd,'left-tr')}">	
-				<em class="${c:cat(lookaccd,'right-tr')}">
-					<span class="${c:cat(lookaccd,'inner')}">
-						<span class="${c:cat(lookaccd,'text')}">${tab.imgTag}<c:out value="${tab.label}"/></span>
+				<a id="${tab.uuid}!close"  class="${lookaccd}closebtn"></a>
+			</c:if>
+			<a href="javascript:;" id="${tab.uuid}!a" class="${lookaccd}left-tr">
+				<em class="${lookaccd}right-tr">
+					<span class="${lookaccd}inner">
+						<span class="${lookaccd}text">${tab.imgTag}<c:out value="${tab.label}"/></span>
 					</span>
 				</em>
 			</a>

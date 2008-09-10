@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="look" value="${self.tabbox.tabLook}-"/>
 <c:set var="hghStyle" value="height:${self.height}" unless="${empty self.height}"/>
-<li id="${self.uuid}" ${c:attr('style',hghStyle)} z.type="Tab2"${self.outerAttrs}${self.innerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}" z.disabled="${self.disabled}">	
+<li id="${self.uuid}" ${c:attr('style',hghStyle)} z.type="Tab2"${self.outerAttrs}${self.innerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}" z.disabled="${self.disabled}">
 		<c:if test="${self.closable}">
 			<a class="${c:cat(look,'close')}" id="${self.uuid}!close" onclick="return false;"/>
 		</c:if>
