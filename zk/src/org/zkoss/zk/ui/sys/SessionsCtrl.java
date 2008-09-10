@@ -88,7 +88,7 @@ public class SessionsCtrl extends Sessions {
 	 */
 	public static final Session getSession(WebApp wapp, Object navsess) {
 		final Session sess = ((WebAppCtrl)wapp).getSessionCache().get(navsess);
-		if (sess != null && sess.getNativeSession() == null)
+		if (sess != null && sess.getNativeSession() != navsess)
 			((SessionCtrl)sess).recover(navsess);
 		return sess;
 	}

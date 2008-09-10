@@ -345,7 +345,13 @@ public class SimpleSession implements Session, SessionCtrl {
 		_cache = cache;
 	}
 	public void recover(Object nativeSession) {
-		sessionDidActivate((HttpSession)nativeSession);
+		if (_navsess == null)
+			sessionDidActivate((HttpSession)nativeSession);
+		else
+			_navsess = nativeSession;
+			//Session Fixation Protection might change native session
+			//Not sure it is clever to call sessionDidActivate
+			//To be safe, we recover _navsess only
 	}
 
 	public void onDestroyed() {
