@@ -23,7 +23,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <title>Upload</title>
 ${z:outDeviceStyleSheets('ajax')}
 <%-- We cannot use ${z:outLangStyleSheets()} since Executions.getCurrent()

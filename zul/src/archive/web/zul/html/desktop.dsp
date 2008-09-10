@@ -24,8 +24,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 ${z:outDocType(page)}
 <html xmlns="http://www.w3.org/1999/xhtml"${z:outRootAttributes(page)}>
 <head>
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="-1" />
 <title>${page.title}</title>
 <c:set var="zk_htmlHeadRequired" value="true" scope="request"/><%-- ask page.dsp to generate </head><body> --%>
 <c:include page="~./zul/html/page.dsp"/><%-- OC4J cannot handle relative page correctly --%>
