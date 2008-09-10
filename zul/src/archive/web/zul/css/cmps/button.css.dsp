@@ -1,7 +1,6 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<c:set var="btnimg" value="~./zul/img/button/z-btn-trendy3.gif" scope="request" if="${empty btnimg}"/>
-<c:set var="btn2img" value="~./zul/img/button/z-btn-trendy2.gif" scope="request" if="${empty btn2img}"/>
+<c:set var="btnimg" value="~./zul/img/button/z-btn-trendy.gif" scope="request" if="${empty btnimg}"/>
 .z-button {
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM}; color: black;
