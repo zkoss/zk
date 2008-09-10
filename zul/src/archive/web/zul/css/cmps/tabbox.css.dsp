@@ -693,7 +693,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	height:16px;
 	position:absolute;
 	right:10px;
-	top:5px;
+	top:3px;
 	width:17px;
 	z-index:5;
 }
@@ -714,7 +714,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	opacity:0.8;
 }
 .z-tabbox-accdlite .z-tabbox-accdlite-closebtn:hover {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on-l.gif')});
 	opacity:1;
 }
 

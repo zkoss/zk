@@ -248,7 +248,7 @@ tr.z-list-item td.z-list-item-focus {
 .z-tabbox-accd a.z-tabbox-accd-closebtn, .z-tabbox-accdlite a.z-tabbox-accdlite-closebtn{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.gif')});
 }											  
-.z-tabbox-accd a.z-tabbox-accd-closebtn:hover, .z-tabbox-accdlite a.z-tabbox-accdlite-closebtn:hover{
+.z-tabbox-accd a.z-tabbox-accd-closebtn:hover{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.gif')});
 }
 <%-- tree.css.dsp --%>
