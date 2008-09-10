@@ -33,7 +33,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<c:otherwise>
 					<span id="${self.uuid}!inner" class="${c:cat(look,'inner')}">
 				</c:otherwise>
-			</c:choose>			
+			</c:choose>
 				<span class="${c:cat(look,'text')}">${self.imgTag}<c:out value="${self.label}"/></span>
 			</span>
 		</em>
