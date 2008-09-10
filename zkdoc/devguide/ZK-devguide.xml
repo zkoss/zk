@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.0.4</subtitle>
+<subtitle>Version 3.5.0</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
@@ -17,9 +17,9 @@
 <para/>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>March 2008</para>
+<para>September 2008</para>
 <para>Potix Corporation</para>
-<para>Revision 209</para>
+<para>Revision 223</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -165,6 +165,8 @@
 <programlisting>&lt;zscript&gt;contacts = new String[] {"Monday", "Tuesday", "Wednesday"};&lt;/zscript&gt;&#13;&lt;listbox width="100px"&gt;<inlinegraphic fileref="images/100000000000006A00000037D22ADEEF.png" align="right"/>&#13;&lt;listitem label="${each}" forEach="${contacts}"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting>
 <para>When evaluating the element with the forEach attribute, the each variable is assigned one-by-one with objects from the collection, i.e., contacts in the previous example. Thus, the above ZUML page is the same as follows.</para>
 <programlisting>&lt;listbox&gt;&#13;&lt;listitem label="Monday"/&gt;&#13;&lt;listitem label="Tuesday"/&gt;&#13;&lt;listitem label="Wednesday"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting>
+<para>Alternatively, you can specify a list of items in the forEach attribute by separating them with comma.</para>
+<programlisting>&lt;listbox&gt;&#13;&lt;listitem label="${each}" forEach="Monday, Tuesday, Wednesday"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting>
 <para>In additions to forEach, you can control the iteration with forEachBegin and forEachEnd. Refer to the ZK Attributes section in the ZK User Interface Markup Language chapter for details.</para></sect1><sect1><title>The use and apply Attribute</title>
 <para>Embedding codes improperly in pages might cause maintenance headache. There are several ways to separate codes from views.</para>
 <para>First, you could listen to events you care, and then invoke the proper methods accordingly. For example, you could invoke your methods to initialize, process and cancel upon the onCreate<footnote>
@@ -191,14 +193,7 @@
 <programlisting>&lt;window apply="MyComposer"&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
 <para>The window is still created as an instance of org.zkoss.zul.Window, and it will be passed to the doAfterCompose method as the comp argument. Then, you can do any initialization you want.</para>
 <para>If you want to apply multiple composers, separate them with comma. In addition, you can use an EL expression to return the class, its name, an instance of Composer, or a collection of Composer instances.</para>
-<programlisting>&lt;window apply="MyComposer, AnotherComposer"&gt;&#13;    &lt;textbox apply="${c:mycomposer()}"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>Used with the forward Attribute</title>
-<para>A window usually consists of several buttons, menu items and other controls. For example,</para>
-<programlisting>&lt;window use="MyWindow"&gt;&#13;    ...    &#13;    &lt;button label="OK"/&gt;    &#13;    &lt;button label="Cancel"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
-<para>When the user clicks the button, the onClick event is sent to the button itself. However, these events are better to process in the window rather than scattering around these buttons. To do that, you can use the forward attribute as follows.</para>
-<programlisting>&lt;window use="MyWindow"&gt;&#13;    ...    &#13;    &lt;button label="OK" forward="onOK"/&gt;    &#13;    &lt;button label="Cancel" forward="onCancel"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
-<para>where the forward attribute of the OK button specifies that the onClick event, if received, shall be forwarded to the space owner (i.e., the window) as the onOK event. Similarly, the onClick event targeting the Cancel button is forwarded as the onCancel event. Thus, you can handle the onOK and onCancel events in the space owner, MyWindow, as follows.</para>
-<programlisting>public class MyWindow extends Window {&#13;    public void onOK() {    &#13;        //called when the OK button is clicked (or the ENTER button is pressed)        &#13;    }    &#13;    public void onCancel() {    &#13;        //called when the Cancel button is clicked (or the ESC button is pressed)        &#13;    }    &#13;}&#13;</programlisting>
-<para>In addition to forward the onClick event to the space owner, you can forward any event to any component with the forward attribute. Refer to the forward Attribute section in the ZK User Interface Markup Language chapter for more details.</para></sect2><sect2><title>Implement Java Classes in zscript</title>
+<programlisting>&lt;window apply="MyComposer, AnotherComposer"&gt;&#13;    &lt;textbox apply="${c:mycomposer()}"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>Implement Java Classes in zscript</title>
 <para>Thanks to the power of BeanShell<footnote>
 <para>http://www.beanshell.org</para>
 </footnote>, the implementation of Java classes can be done in zscript as follows.</para>
@@ -206,7 +201,14 @@
 <para>Tip: Many scripting languages, e.g., JRuby, also allow developers to define classes that are accessible by JVM. Please consult the corresponding manuals for details.</para>
 <para>To separate codes from the view, you can put all zscript codes in a separated file, say mywnd.zs, and then,</para>
 <programlisting>&lt;zscript src="/zs/mywnd.zs"/&gt;&#13;&lt;window use="MyWindow"/&gt;&#13;</programlisting>
-<para>Tip: You can use the init directive to specify a zscript file, too. The difference is the init directive is evaluated before any component is created (in the Page Initial phase). For more information, refer to the init Directive section in the ZK User Interface Markup Language chapter.</para></sect2></sect1><sect1><title>Create Components Manually</title>
+<para>Tip: You can use the init directive to specify a zscript file, too. The difference is the init directive is evaluated before any component is created (in the Page Initial phase). For more information, refer to the init Directive section in the ZK User Interface Markup Language chapter.</para></sect2></sect1><sect1><title>The forward Attribute</title>
+<para>A window usually consists of several buttons, menu items and other controls. For example,</para>
+<programlisting>&lt;window use="MyWindow"&gt;&#13;    ...    &#13;    &lt;button label="OK"/&gt;    &#13;    &lt;button label="Cancel"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
+<para>When the user clicks the button, the onClick event is sent to the button itself. However, these events are better to process in the window rather than scattering around these buttons. To do that, you can use the forward attribute as follows.</para>
+<programlisting>&lt;window use="MyWindow"&gt;&#13;    ...    &#13;    &lt;button label="OK" forward="onOK"/&gt;    &#13;    &lt;button label="Cancel" forward="onCancel"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
+<para>where the forward attribute of the OK button specifies that the onClick event, if received, shall be forwarded to the space owner (i.e., the window) as the onOK event. Similarly, the onClick event targeting the Cancel button is forwarded as the onCancel event. Thus, you can handle the onOK and onCancel events in the space owner, MyWindow, as follows.</para>
+<programlisting>public class MyWindow extends Window {&#13;    public void onOK() {    &#13;        //called when the OK button is clicked (or the ENTER button is pressed)        &#13;    }    &#13;    public void onCancel() {    &#13;        //called when the Cancel button is clicked (or the ESC button is pressed)        &#13;    }    &#13;}&#13;</programlisting>
+<para>In addition to forward the onClick event to the space owner, you can forward any event to any component with the forward attribute. Refer to the forward Attribute section in the ZK User Interface Markup Language chapter for more details.</para></sect1><sect1><title>Create Components Manually</title>
 <para>In addition to describe what components to create in ZUML pages, developers could create them manually. All component classes are concrete. You create them directly<footnote>
 <para>To make things simpler, the factory design pattern is not used.</para>
 </footnote> with their constructors.</para>
@@ -287,7 +289,7 @@
 <para>Notice that both pages and desktops are created and remove implicitly. There are no API to create or remove them. A page is create each time ZUML loads a page. A page is removed when ZK finds it is no longer referenced. A desktop is created when the first ZUML page is loaded. A desktop is removed if too many desktops are created for the specific session.</para>
 <para>The createComponents method in the org.zkoss.zk.ui.Executions class creates only components, not page, even though it loads a ZUML file (aka., page).</para></sect3></sect2><sect2><title>Forest of Trees of Components</title>
 <para>A component has at most one parent. A component might have multiple children. Some components accept only certain types of components as children. Some must be a child of certain type of components. Some don't allow any child at all. For example, Listbox in XUL accepts Listcols and Listitem only. Refer to Javadoc or XUL tutorials for details.</para>
-<para>A component without any parent is called a root component. A page might have multiple root components, which could be retrieved by the getRoots method.</para></sect2><sect2><title>Component: a Visual Presentation and a Java Object</title>
+<para>A component without any parent is called a root component. A page might have multiple root components, which could be retrieved by the getRoots method.</para></sect2><sect2><title>Component: a Visual Part and a Java Object</title>
 <para>Besides being a Java object in the server, a component has a visual part<footnote>
 <para>If the client is a browser, the visual presentation is a DOM element or a set of DOM elements.</para>
 </footnote> in the browser, if and only if it belongs to a page. When a component is attached to a page, its visual part is created<footnote>
@@ -390,7 +392,10 @@
 <chapter>
 <title>4. The Component Lifecycle</title>
 <para>This chapter describes the lifecycles of loading pages and updating pages.</para><sect1><title>The Lifecycle of Loading Pages</title>
-<para>It takes four phases for ZK loaders to load and interpret a ZUML page: the Page Initial Phase, the Component Creation Phase, the Event Processing Phase, and the Rendering Phase.</para><sect2><title>The Page Initial Phase</title>
+<para>It takes four phases for ZK loaders to load and interpret a ZUML page: the Page Initial Phase, the Component Creation Phase, the Event Processing Phase, and the Rendering Phase.</para>
+<para>If you create all components manually (with richlet<footnote>
+<para>Refer to Developing ZK Applications without ZUML.</para>
+</footnote>), then there is no Page Initial Phase.</para><sect2><title>The Page Initial Phase</title>
 <para>In this phase, ZK processes the processing instructions, called init. If none of such processing instructions are defined, this phase is skipped.</para>
 <para>For each init processing instruction with the class attribute, an instance of the specified class is constructed, and then its doInit method is called. What the class will do, of course, depends on your application requirements.</para>
 <programlisting>&lt;?init class="MyInit"?&gt;&#13;</programlisting>
@@ -776,15 +781,54 @@
 </itemizedlist><sect3><title>Auto-completion with Schema</title>
 <para>Many IDEs, such Eclipse, supports auto-completion if XML schema is specified as follows.</para>
 <programlisting>&lt;window xmlns="http://www.zkoss.org/2005/zul"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd"&gt;&#13;</programlisting>
-<para>In addition to downloading from <ulink url="http://www.zkoss.org/2005/zul/zul.xsd">http://www.zkoss.org/2005/zul/zul.xsd</ulink>, you can find zul.xsd under the dist/xsd directory in the ZK binary distribution.</para></sect3></sect2></sect1><sect1><title>Conditional Evaluation</title>
+<para>In addition to downloading from <ulink url="http://www.zkoss.org/2005/zul/zul.xsd">http://www.zkoss.org/2005/zul/zul.xsd</ulink>, you can find zul.xsd under the dist/xsd directory in the ZK binary distribution.</para></sect3></sect2></sect1><sect1><title>Conditional Evaluation</title><sect2><title>If and Unless</title>
 <para>The evaluation of an element could be conditional. By specifying the if or unless attribute or both, developers could control whether to evaluate the associated element.</para>
 <para>In the following example, the window component is created only if a is 1 and b is not 2. If an element is ignored, all of its child elements are ignored, too.</para>
 <programlisting>&lt;window if="${a==1}" unless="${b==2}"&gt;&#13;    ...    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>The following example controls when to interpret a piece of Java codes.</para>
-<programlisting>&lt;textbox id="contributor"/&gt;&#13;&lt;zscript if="${param.contributor}"&gt;&#13;    contributor.label = Executions.getCurrent().getParameter("contributor");    &#13;&lt;/zscript&gt;&#13;</programlisting></sect1><sect1><title>Iterative Evaluation</title>
+<programlisting>&lt;textbox id="contributor"/&gt;&#13;&lt;zscript if="${param.contributor}"&gt;&#13;    contributor.label = Executions.getCurrent().getParameter("contributor");    &#13;&lt;/zscript&gt;&#13;</programlisting></sect2><sect2><title>Switch and Case</title>
+<para>With the switch and case attributes of the zk element, you can evaluate a portion of a ZK page only if a variable matches a certain value.</para>
+<programlisting>&lt;zk switch="${fruit}"&gt;&#13;    &lt;zk case="apple"&gt;    &#13;    Evaluated only if ${fruit} is apple    &#13;</programlisting>
+<para>&lt;/zk&gt;</para>
+<para>&lt;zk case="${special}"&gt;</para>
+<para>Evaluated only if ${fruit} equals ${special}</para>
+<para>&lt;/zk&gt;</para>
+<para>&lt;zk&gt;</para>
+<para>Evaluated only if none of the above cases matches.</para>
+<para>&lt;/zk&gt;</para>
+<para>&lt;/zk&gt;</para>
+<para>ZK Loader will evaluate from the first case to the last case, until it matches the switch condition, which is the value specified in the switch attribute. The evaluation is mutually exclusive conditional. Only the first matched case is evaluated.</para>
+<para>The zk element without any case, is the default – i.e., it always matches and is evaluated if all cases above it failed to match.</para><sect3><title>Multiple Cases</title>
+<para>You can specify a list of cases in one case attribute, such that a portion of a ZK page has to be evaluated if one of them matches.</para>
+<programlisting>&lt;zk switch="${fruit}"&gt;&#13;    &lt;zk case="apple, ${special}"&gt;    &#13;    Evaluated if ${fruit} is either apple or ${special}    &#13;</programlisting>
+<para>&lt;/zk&gt;</para>
+<para>&lt;/zk&gt;</para></sect3><sect3><title>Regular Expression</title>
+<programlisting>&lt;zk switch="${fruit}"&gt;&#13;</programlisting>
+<para>&lt;zk case="/ap*.e/"&gt;</para>
+<para>Evaluate if the regular expression, ap*.e"., matches the switch condition.</para>
+<para>&lt;/zk&gt;</para>
+<para>&lt;/zk&gt;</para></sect3><sect3><title>Used with forEach</title>
+<para>Like other elements, you can use with the forEach attribute (so are if and unless). The forEach condition is evaluated first, so the following is the same as multiple cases.</para>
+<programlisting>&lt;zk case="${each}" forEach="apple, orange"&gt;&#13;</programlisting>
+<para>is equivalent to</para>
+<para>&lt;zk case="apple, orange"&gt;</para></sect3></sect2><sect2><title>Choose and When</title>
+<para>The choose and when attributes provide an alternative way for mutually exclusive conditional evaluation.</para>
+<programlisting>&lt;zk choose=""&gt;&#13;    &lt;zk when="${fruit == 'apple'}"&gt;    &#13;</programlisting>
+<para>Evaluated if the when condition is true.</para>
+<para>&lt;/zk&gt;</para>
+<para>&lt;zk&gt;</para>
+<para>Evaluated if none of above cases matches.</para>
+<para>&lt;/zk&gt;</para>
+<para>&lt;/zk&gt;</para>
+<para>You don't have to assign any value to the choose attribute, which is used only to identify the range of the mutually exclusive condition evaluation.</para></sect2></sect1><sect1><title>Iterative Evaluation</title>
 <para>The evaluation of an element could be iterative. By specifying a collection of objects to the forEach Attribute, developers could control how many time of the associated element shall be evaluated. For sake of description, we call an element is an iterative element if it is assigned with the forEach attribute.</para>
-<para>In the following example, the list item is created three times. Notice that you have to use EL expression to specify the collection. </para>
-<programlisting>&lt;listbox&gt;&#13;&lt;zscript&gt;&#13;grades = new String[] {"Best", "Better", "Good"};&#13;&lt;/zscript&gt;&#13;&lt;listitem label="${each}" forEach="${grades}"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting>
+<para>In the following example, the list item is created three times. Each of them has the label called "Best", "Better" and "God", respectively.</para>
+<programlisting>&lt;listbox&gt;&#13;&lt;listitem label="${each}" forEach="Best, Better, God"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting>
+<para>If you have a variable holding a collection of objects, then you can specify it directly in the forEach attribute. For example, assume you have a variable called grades as follows.</para>
+<programlisting>grades = new String[] {"Best", "Better", "Good"};&#13;</programlisting>
+<para>Then, you can iterate them by use of the forEach attribute as follows. Notice that you have to use EL expression to specify the collection. </para>
+<programlisting>&lt;listbox&gt;&#13;    &lt;listitem label="${each}" forEach="${grades}"/&gt;    &#13;</programlisting>
+<para>&lt;/listitem&gt;</para>
 <para>The iteration depends on the type of the specified value of the forEach attribute.</para>
 <itemizedlist>
 <listitem>
@@ -890,6 +934,15 @@
 <entry>
 <para>org.zkoss.zk.ui.Desktop</para>
 <para>The desktop. It is the same as self.desktop.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>execution</para>
+</entry>
+<entry>
+<para>org.zkoss.zk.ui.Execution</para>
+<para>The current execution.</para>
 </entry>
 </row>
 <row>
@@ -1074,7 +1127,12 @@
 <para>Then, other ZUML pages can share the same set of component definitions as follows.</para>
 <programlisting>&lt;?import uri="special.zul"?&gt;&#13;...&#13;&lt;special/&gt;&lt;!-- you can use the component defined in special.zul --&gt;&#13;</programlisting>
 <para>Unlike other directives, the import directives must be at the topmost level, i.e., at the the same level as the root element.</para>
-<para>For more information, refer to the Developer's Reference.</para></sect2></sect1><sect1><title>ZK Attributes</title>
+<para>For more information, refer to the Developer's Reference.</para></sect2><sect2><title>The link and meta Directives</title>
+<para>&lt;?link [href="uri"] [name0="value0"] [name1="value1"] [name2="value2"]?&gt;&lt;?meta [name0="value0"] [name1="value1"] [name2="value2"]?&gt;</para>
+<para>These are so-called header elements in HTML. Currently only HTML-based clients (so-called browsers) support them.</para>
+<para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
+<para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or servlets. Also, they are ignored if the page is a zhtml file.</para>
+<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&lt;?link rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2></sect1><sect1><title>ZK Attributes</title>
 <para>ZK attributes are used to control the associated element, other than initializing the data member.</para><sect2><title>The apply Attribute</title>
 <para>apply="a-class-name"apply="class1, class2,..."apply="${EL_returns_a_class_or_a_collection_of_classes}"apply="${EL_returns_an_instance_or_a_collection_of_Composer_instances}"</para>
 <para>It specifies a class, a collection of classes that are used to initialize the component. The class must implement the org.zkoss.zk.util.Composer interface. And then, you can do the initialization in the doAfterCompose method, since it is called after the component and all its children are instantiated.</para>
@@ -1089,26 +1147,38 @@
 <para>It specified the condition to evaluate the associated element. In other words, the associated element and all its child elements are ignored, if the condition is evaluated to false.</para></sect2><sect2><title>The unless Attribute</title>
 <para>unless="${an-EL-expr}"</para>
 <para>It specified the condition not to evaluate the associated element. In other words, the associated element and all its child elements are ignored, if the condition is evaluated to true.</para></sect2><sect2><title>The forEach Attribute</title>
-<para>forEach="${an-EL-expr}"</para>
-<para>It specifies a collection of objects, such that the associated element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para></sect2><sect2><title>The forEachBegin Attribute</title>
-<para>forEachBegin="${an-EL-expr}"</para>
+<para>forEach="${an-EL-expr}"forEach="${an-EL-expr},a-value"</para>
+<para>There are two formats. First, you specify a value without comma. The value is usually a collection of objects, such that the associated element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para>
+<para>Second, you can specify a list of values by separating them with comma. Then, the associated element will be evaluated repeatedly against each value in the list.</para></sect2><sect2><title>The forEachBegin Attribute</title>
+<para>forEachBegin="an-interger"forEachBegin="${an-EL-expr}"</para>
 <para>It is used with the forEach attribute to specify the index (starting from 0) that the iteration shall begin at. If not specified, the iteration begins at the first element, i.e., 0 is assumed.</para>
 <para>If forEachBegin is greater than or equals to the number of elements, no iteration is performed.</para>
 <para>Note: forEachStatus.index is absolute with respect to the underlying collection, array or other type. For example, if forEachBegin is 5, then the first value of forEachStatus.index with be 5.</para></sect2><sect2><title>The forEachEnd Attribute</title>
-<para>forEachEnd="${an-EL-expr}"</para>
+<para>forEachEnd="an-interger"forEachEnd="${an-EL-expr}"</para>
 <para>It is used with the forEach attribute to specify the index (starting from 0) the iteration shall ends at (inclusive). If not specified, the iterations ends at the last element.</para>
 <para>If forEachEnd is greater than or equals to the number of elements, the iteration ends at the last element.</para></sect2><sect2><title>The fulfill Attribute</title>
-<para>fulfill="event-expr"fulfill="event-expr1, event-expr2, event-expr3"</para>
-<para>where event-expr, event-expr1 and others are called event expressions. An event expression is used to identify a component. It can be one of the following formats:</para>
+<para>fulfill="event-expr"fulfill="event-expr1, event-expr2, event-expr3"fulfill="event-expr=uri-expr"fulfill="event-expr1, event-expr2=uri-expr2"fulfill="=uri_expr"</para>
+<para>where event-expr, event-expr1 and others are called event expressions. An event expression is used to identify an event that is targeting a particular component. It can be one of the following formats:</para>
 <para>event-nametarget-id.event-nameid1/id2/id3.event-name${el-expr}.event-name</para>
-<para>It is used to specify when to create the child components. By default (i.e., fulfill is not specified), the child components are created right after its parent component, at the time the ZUML page is loaded.</para>
+<para>and uri-expr is an URI or an EL expression returning URI. For example,</para>
+<para>/my/super.zul${my_super_zul}</para>
+<para>It is used to specify when to create the child components. By default (i.e., fulfill is not specified), the child components are created right after its parent component, when the ZUML page is loaded.</para>
 <para>If you want to defer the creation of the child components, you can specify the condition with the fulfill attribute. The condition consists of the event name and, optionally, the target component's identifier or path. It means that the child elements won't be processed, until the event is received by, if specified, the target component. If the identifier is omitted, the same component is assumed.</para>
 <para>If an EL expression is specified, it must return a component, an identifier or a path.</para>
-<para>Refer to the Load on Demand section for more details.</para></sect2><sect2><title>The forward Attribute</title>
-<para>forward="orginalEvent=targetId1/targetId2,targetEvent"</para>
-<para>forward="originalEvent=${el-expr},targetEvent"</para>
-<para>forward="targetEvent"</para>
-<para>It is used to forward an event, that is targeting a specific component, to another component in another event name. It is called the forward condition.</para>
+<para>Refer to the Load on Demand section for more details.</para><sect3><title>With an URI Expression</title>
+<para>If the URI expression is specified, ZK loader will create the components defined in the specified URI and assign them as the child components. To create the components defied in the specified URI, ZK actually invokes the createComponents method defined in Executions. For example, ZK loader, in the following example, will invoke Executions.createComponents("/my/super.zul", d, null) to create child components for the d div, when the b button is clicked.</para>
+<programlisting>&lt;button id="b" label="open"/&gt;&#13;&lt;div id="d" fulfill="b.onClick=/my/super.zul"&gt;&#13;&lt;/div&gt;&#13;</programlisting>
+<para>If the event expression is not specified, ZK loader creates the components immediately - after all properties are assigned and child components are created. In the following example, ZK loader creates combobox first and then create components defined in /my/super.zul.</para>
+<programlisting>&lt;div fulfill="=/my/super.zul"&gt;&#13;    &lt;combobox/&gt;    &#13;&lt;/div&gt;&#13;</programlisting></sect3><sect3><title>The onFulfill Event</title>
+<para>After ZK applies the fulfill condition, i.e., creates all descendant components, it fires the onFulfill event with an instance of org.zkoss.zk.ui.event.FulfillEvent to notify the component for further processing if any.</para>
+<para>For example, if you use the wireVariables method of the org.zkoss.zk.ui.Components class, you might have to call wireVariables again to wire the new components in the onFulfill event.</para>
+<programlisting>&lt;div fulfill="b1.onClick, b2.onOpen"&#13;onFulfill="Components.wireVariables(self, controller)"&gt;&#13;</programlisting>
+<para>...</para>
+<para>&lt;/div&gt;</para></sect3></sect2><sect2><title>The forward Attribute</title>
+<para>forward="target_event_expr"forward="oringal_event=target_event_expr"</para>
+<para>where target_event_expr is an event expressions. An event expression is used to identify an event that is targeting a particular component. It can be one of the following formats:</para>
+<para>event-nametarget-id.event-nameid1/id2/id3.event-name${el-expr}.event-name</para>
+<para>It is used to forward an event, that is targeting a particular component, to another component and to another event name. It is called the forward condition.</para>
 <para>For example, you can forward the onClick event targeting a button to the window as follows:</para>
 <programlisting>&lt;window id="w" use="MyWindow"&gt;&#13;    ...    &#13;    &lt;button lable="Submit" forward="onClick=w.onOK"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Then, you can handle the submission in the MyWindow class as follows:</para>
@@ -1116,7 +1186,16 @@
 <para>The original event is optional. If it is omitted, onClick is assumed. Similarly, the target ID is also optional. If omitted, the space owner is assumed. Thus, the above codes can be simplified to the following:</para>
 <programlisting>&lt;window id="w" use="MyWindow"&gt;&#13;    ...    &#13;    &lt;button lable="Submit" forward="onOK"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>If you want to forward several events, you can specify these conditions in the forward attribute by separating them with the comma (,):</para>
-<programlisting>&lt;textbox forward="onChanging=onUpdating, onChange=some.onUpdate"/&gt;&#13;</programlisting></sect2></sect1><sect1><title>ZK Elements</title>
+<programlisting>&lt;textbox forward="onChanging=onUpdating, onChange=some.onUpdate"/&gt;&#13;</programlisting><sect3><title>The Forward Event</title>
+<para>The forward event being sent is an instance of the org.zkoss.zk.ui.event.ForwardEvent class. You can retrieve the original event by use of the getOrigin method.</para></sect3><sect3><title>Pass Information to the Forward Event</title>
+<para>forward="orginalEvent=targetId1/targetId2.targetEvent(eventData)"</para>
+<para>You can pass the application-specific information to the forward event by surrounding it with parenthesis and appending it to the forward condition as shown above. The information can be retrieved by use of the getData method of the ForwardEvent class.</para>
+<programlisting>&lt;button forward="onCancel(abort)"/&gt;&#13;</programlisting>
+<para>The getData method will return "abort". Of course, you can specify EL expressions to pass whatever type of data you want.</para></sect3><sect3><title>EL Expressions in the Forward Condition</title>
+<para>forward="originalEvent=${el-targetPath}.targetEvent(${el-eventData})"</para>
+<para>You can use EL expressions when specifying the target ID/path and the application-specific information (aka., the event data).</para>
+<programlisting>&lt;button forward='${mainWnd}.onOK(${c:getProperty("status")})'/&gt;&#13;</programlisting>
+<para>However, you can not use EL expressions to specify the event names.</para></sect3></sect2></sect1><sect1><title>ZK Elements</title>
 <para>ZK elements are used to control ZUML pages other than creating components.</para><sect2><title>The zk Element</title>
 <para>&lt;zk&gt;...&lt;/zk&gt;</para>
 <para>It is a special element used to aggregate other components. Unlike a real component (say, hbox or div), it is not part of the component tree being created. In other words, it doesn't represent any component. For example,</para>
@@ -1165,6 +1244,47 @@
 <entry>
 <para>[Optional][Default: ignored]</para>
 <para>It specifies a collection of objects, such that the zk element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>switch</para>
+</entry>
+<entry>
+<para>[Optional][Default: none]</para>
+<para>Provide the context for mutually exclusive evaluation. The value specified in this attribute is called the switch condition.</para>
+<para>The only allowed children are the zk elements.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>case</para>
+</entry>
+<entry>
+<para>[Optional][Default: none]</para>
+<para>Provides an alternative within the switch evaluation.</para>
+<para>If the value is a string starting and ending with slash, such as /a[p]*/, it is considered as a regular expression, which is used to match the switch condition.</para>
+<para>You can specify multiple cases by separating them with comma.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>choose</para>
+</entry>
+<entry>
+<para>[Optional][Default: none]</para>
+<para>Provide the context for mutually exclusive evaluation.</para>
+<para>The only allowed children are the zk elements.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>when</para>
+</entry>
+<entry>
+<para>[Optional][Default: none]</para>
+<para>Provides an alternative within the choose evaluation.</para>
+<para>It is evaluated if the condition matches.</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3></sect2><sect2><title>The zscript Element</title>
@@ -1257,6 +1377,14 @@
 <programlisting>&lt;/zscript-config&gt;&#13;</programlisting>
 <para>Refer to the Developer's Reference for the details about WEB-INF/zk.xml. Refer to the Component Development Guide for the details about zk/config.xml.</para></sect3></sect2><sect2><title>The attribute Element</title>
 <para>It defines a XML attribute of the enclosing element. The content of the element is the attribute value, while the name attribute specifies the attribute name. It is useful if the value of an attribute is sophisticated, or the attribute is conditional.</para>
+<programlisting>&lt;window&gt;&#13;    &lt;attribute name="title" if="${new}"&gt;Untitled&lt;/attribute&gt;    &#13;    &lt;attribute name="title" unless="${new}"&gt;${title}&lt;/attribute&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
+<para>In addition, you can specify a XML fragment as the value of the attribute. The XML fragment is so-called the native content.</para>
+<programlisting>&lt;html&gt;&#13;    &lt;attribute name="content"&gt;    &#13;        &lt;ol&gt;        &#13;            &lt;li forEach="${values}"&gt;${each}&lt;/li&gt;            &#13;</programlisting>
+<para>&lt;/ol&gt;</para>
+<para>&lt;/attribute&gt;</para>
+<para>&lt;/html&gt;</para>
+<para>where ol and li are part of the native content. They are not ZK components. They will be eventually converted to a String instance and assigned to the specified attribute. If values has three elements, the above example is equivalent to the following:</para>
+<programlisting>&lt;html&gt;&#13;    &lt;attribute name="content"&gt;&lt;![CDATA[    &#13;        &lt;ol&gt;        &#13;            &lt;li&gt;${values[0]}&lt;/li&gt;            &#13;            &lt;li&gt;${values[1]}&lt;/li&gt;            &#13;            &lt;li&gt;${values[2]}&lt;/li&gt;            &#13;        &lt;/ol&gt;        &#13;    ]]&gt;&lt;/attribute&gt;    &#13;&lt;/html&gt;&#13;</programlisting>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -1314,11 +1442,21 @@
 <para>Of course, you can specify EL expressions for the values.</para>
 <programlisting>&lt;window&gt;&#13;    &lt;window id="w" title="Test"&gt;    &#13;        &lt;variables title="${w.title}"/&gt;        <inlinegraphic fileref="images/10000000000000550000003D3AB123E7.png" align="right"/>&#13;        1: ${title}        &#13;    &lt;/window&gt;    &#13;    2: ${title}    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Like Component's setVariable, you can control whether to declare variables local to the current ID space as follows. If not specified, local="false" is assumed.</para>
-<programlisting>&lt;variables simple="rich" local="true"/&gt;&#13;</programlisting><sect3><title>The null Value</title>
+<programlisting>&lt;variables simple="rich" local="true"/&gt;&#13;</programlisting><sect3><title>The List and Map Values with the composite Attribute</title>
+<para>By default, the value is assigned to the variable directly after evaluating EL expressions, if any. For example, "apple, ${more}" is evaluated to "apple, orange", if more is "orange", and assigned to the variable.</para>
+<para>If you want to specify a list of values, you can specify the composite attribute with list as follows.</para>
+<programlisting>&lt;variables simple="apple, ${more}" composite="list"/&gt;&#13;</programlisting>
+<para>Then, it is converted to a list with two elements. The first element is "apple" and the second "orange".</para>
+<para>If you want to specify a map of values, you can specify the composite attribute with map as follows.</para>
+<programlisting>&lt;variables simple="juice=apple, flavor=${more}" composite="map"/&gt;&#13;</programlisting>
+<para>Then, it is converted to a map with two entries. The first entry is ("juice", "apple") and the second ("flavor", "orange").</para></sect3><sect3><title>The null Value</title>
 <para>In the following example, var is an empty string.</para>
 <programlisting>&lt;variables var=""/&gt;&#13;</programlisting>
 <para>To define a variable with the null value, use the following statement.</para>
-<programlisting>&lt;variables var="${null}"/&gt;&#13;</programlisting></sect3></sect2><sect2><title>The custom-attributes element</title>
+<programlisting>&lt;variables var="${null}"/&gt;&#13;</programlisting></sect3><sect3><title>Assign a Variable with a Reserved Name</title>
+<para>To assign a variable with a reserved name, say, forEach, you have to specify a namespace (which can be anything but ZK namespace) as follows.</para>
+<programlisting>&lt;variables m:forEach="a value" xmlns:m="http://whatever.com"/&gt;&#13;</programlisting>
+<para>Then, forEach will be considered as a variable rather than the iterative condition.</para></sect3></sect2><sect2><title>The custom-attributes element</title>
 <para>It defines a set of custom attributes. Custom attributes are objects associated with a particular scope. Acceptable scopes include component, space, page, desktop, session and application.</para>
 <para>As depicted below, custom-attributes is convenient to assign custom attributes without programming.</para>
 <programlisting>&lt;window&gt;&#13;    &lt;custom-attributes main.rich="simple" very-simple="intuitive"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
@@ -1352,6 +1490,16 @@
 <entry>
 <para>[Optional][Default: component]</para>
 <para>Specifies what scope to associate the custom attributes to.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>composite</para>
+</entry>
+<entry>
+<para>[Optional][Default: none]</para>
+<para>Specifies the format of the value. It could be none, list or map.</para>
+<para>Refer to the variables Element section above for more information.</para>
 </entry>
 </row>
 <row>
@@ -1907,7 +2055,7 @@
 <para>The layout component is a nested component. The parent component is <code>borderlayout</code>, and its children components include <code>north</code>, <code>south</code>, <code>center</code>, <code>west</code>, and <code>east</code>. The combination of children components of <code>borderlayout</code> is free. For example, if you want to divide the area into three regions (veritically), you could try the following combination,</para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;east&gt;    &#13;         The East        &#13;    &lt;/east&gt;    &#13;    &lt;center&gt;    &#13;        The Center        &#13;    &lt;/center&gt;    &#13;    &lt;west&gt;    &#13;        The West        &#13;    &lt;/west&gt;    &#13;&lt;/borderlayout&gt;&#13;</programlisting>
 <para>or, you could divide the area into three regions(horizontally) as follows,</para>
-<programlisting>&lt;borderlayour height="500px"&gt;&#13;    &lt;north&gt;    &#13;        The North        &#13;    &lt;/north&gt;    &#13;    &lt;center&gt;    &#13;        The Center        &#13;    &lt;/center&gt;    &#13;    &lt;south&gt;    &#13;        The South        &#13;    &lt;/south&gt;    &#13;&lt;/borderlayour&gt;&#13;</programlisting>
+<programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north&gt;    &#13;        The North        &#13;    &lt;/north&gt;    &#13;    &lt;center&gt;    &#13;        The Center        &#13;    &lt;/center&gt;    &#13;    &lt;south&gt;    &#13;        The South        &#13;    &lt;/south&gt;    &#13;&lt;/borderlayout&gt;&#13;</programlisting>
 <para>And you could embed any kind of ZK components into each of these regions according to your requirement.</para><sect2><title>A Nested <code>borderlayout</code> Component</title>
 <para>Moreover, you could embed one layout component into another to divide the area into more regions as follows,</para>
 <para/>
@@ -2782,6 +2930,10 @@
 </footnote>. Notice you can use EL expressions in it.</para>
 <programlisting>&lt;window title="Html Demo"&gt;&#13;    &lt;html&gt;&lt;![CDATA[    &#13;        &lt;h4&gt;Hi, ${parent.title}&lt;/h4&gt;        &#13;        &lt;p&gt;It is the content of the html component.&lt;/p&gt;        &#13;    ]]&gt;&lt;/html&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>where &lt;h4&gt;...&lt;/p&gt; will become the content of the html element (see also the getContent method of the org.zkoss.zul.Html class).</para>
+<para>Tip: You can use the attribute element to specify the XHTML fragment instead of CDATA as follows.</para>
+<para>&lt;html&gt; &lt;attribute name="content"&gt; &lt;h4&gt;Hi, ${parent.title}&lt;/h4&gt; &lt;p&gt;It is the content of the html component.&lt;/p&gt;</para>
+<para>&lt;/attribute&gt;&lt;/html&gt;</para>
+<para>Refer to the attribute Element section in the ZK User Interface Markup Language chpater..</para>
 <para>The html component generates the HTML SPAN tag to enclose the content. In other words, it generates the following HTML tags when rendered to the browser.</para>
 <programlisting>&lt;span id="z_4a_3"&gt;&#13;    &lt;h4&gt;Hi, Html Demo&lt;/h4&gt;    &#13;    &lt;p&gt;It is the content of the html component.&lt;/p&gt;    &#13;&lt;/span&gt;&#13;</programlisting>
 <para>The html component is no different to other XUL components. For example, you specify the CSS style and change its content dynamically.</para>
@@ -2806,7 +2958,7 @@
 <para>For example, if you want to output the SVG tags directly to the client, you can specify native:native:http://www.w3.org/2000/svg as follows.</para>
 <programlisting>&lt;window&gt;&#13;    &lt;svg width="100%" height="100%" version="1.1"    &#13;xmlns="native:http://www.w3.org/2000/svg"&gt;&#13;        &lt;ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/&gt;        &#13;    &lt;/svg&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Then, the client will receive the following:</para>
-<programlisting>&lt;div id="z_lx_0c" z.type="zul.wnd.Wnd"&gt;45The real HTML output of window depends on its implementation. Here is only a simplified version.&#13;    &lt;svg width="100%" height="100%" version="1.1"    &#13;xmlns="http://www.w3.org/2000/svg"&gt;&#13;        &lt;ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/&gt;        &#13;    &lt;/svg&gt;    &#13;&lt;/div&gt;&#13;</programlisting></sect3></sect2><sect2><title>The XHTML Namespace, <ulink url="http://www/">http://www.</ulink>w3.org/1999/xhtml</title>
+<programlisting>&lt;div id="z_lx_0c" z.type="zul.wnd.Wnd"&gt;46The real HTML output of window depends on its implementation. Here is only a simplified version.&#13;    &lt;svg width="100%" height="100%" version="1.1"    &#13;xmlns="http://www.w3.org/2000/svg"&gt;&#13;        &lt;ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/&gt;        &#13;    &lt;/svg&gt;    &#13;&lt;/div&gt;&#13;</programlisting></sect3></sect2><sect2><title>The XHTML Namespace, <ulink url="http://www/">http://www.</ulink>w3.org/1999/xhtml</title>
 <ulink url="http://www/">http://www.</ulink>
 <para>The XHTML namespace represents the XHTML component set, just like the ZUL namespace (<ulink url="http://www/">http://www.</ulink>zkoss.org/2005/zul) represents the ZUL component set. Thus, a XML element specified with the XHTML namespace simply denotes a component that shall be created based on the component definition from the XHTML component set. For example, the statement blow specifies a component that shall be created as an instance of the component definition called ul, and ul belongs to the XHTML component set:</para>
 <programlisting>&lt;h:ul xmlns:h="http://www.w3.org/1999/xhtml"&gt;&#13;</programlisting>
@@ -2877,7 +3029,12 @@
 <para>This picture depicted the appearance after user uploaded an Microsoft PowerPoint file.</para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect2></sect1><sect1><title>Work with HTML FORM and Java Servlets</title>
+</informaltable><sect3><title>The onURIChange Event</title>
+<para>When the user navigates the iframe component to another URL (or bookmark), an object of the org.zkoss.zk.ui.event.URIEvent class is sent to the iframe component. This event is usually used to bookmark the status of the iframe component, such that the right content can be restored later.</para></sect3><sect3><title>Integrate with Other Technologies</title>
+<para>The onURIChange event won't be sent if the iframe component contains a non-ZK page. For example, it won't be sent if it contains a PDF page.</para>
+<para>On the other hand, if you use other technologies to put a ZK page in an iframe, you can monitor the URL by writing a JavaScript method called onIframeChange as follows.</para>
+<programlisting>//Part of your, say, PHP page&#13;&lt;script type="text/script"&gt;&#13;function onIframeChange(uuid, url) {&#13;    do_whatever_you_need_in_the_technology_you_use(uuid, url);    &#13;}&#13;&lt;/script&gt;&#13;</programlisting>
+<para>where uuid is the ID of the element that you can retrieve by document.getElementById, and url is the new URL that the iframe is navigated to. Notice that url includes the context path, while URIEvent.getURI() does not.</para></sect3></sect2></sect1><sect1><title>Work with HTML FORM and Java Servlets</title>
 <para>The event-driven model is simple and powerful, but it might not be practical to rewrite all servlets to replace with event listeners.</para><sect2><title>The name Property</title>
 <para>To work with legacy Web applications, you could specify the name property as you did for HTML pages. For example,</para>
 <programlisting>&lt;window xmlns:h="http://www.w3.org/1999/xhtml"&gt;<inlinegraphic fileref="images/10000000000002F70000003EBB733BC1.png" align="right"/>&#13;&lt;h:form method="post" action="/my-old-servlet"&gt;&#13;&lt;grid&gt;&#13;&lt;rows&gt;&#13;&lt;row&gt;When &lt;datebox name="when"/&gt; Name &lt;textbox name="name"/&gt; Department&#13;&lt;combobox name="department"&gt;&#13;&lt;comboitem label="RD"/&gt;&#13;&lt;comboitem label="Manufactory"/&gt;&#13;&lt;comboitem label="Logistics"/&gt;&#13;&lt;/combobox&gt;&#13;&lt;/row&gt;&#13;&lt;row&gt;&#13;&lt;h:input type="submit" value="Submit"/&gt;&#13;&lt;/row&gt;&#13;&lt;/rows&gt;&#13;&lt;/grid&gt;&#13;&lt;/h:form&gt;&#13;&lt;/window&gt;&#13;</programlisting>
@@ -2969,7 +3126,54 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para>Tip: For JavaScript programmers, it is common to manipulate style.display directly for visibility. However, it is not a good idea. Rather, use action.show and action.hide instead, since ZK Client Engine has to handle visual effects, bug workaround, and so on.</para></sect3><sect3><title>The anima Object</title>
+<para>Tip: For JavaScript programmers, it is common to manipulate style.display directly for visibility. However, it is not a good idea. Rather, use action.show and action.hide instead, since ZK Client Engine has to handle visual effects, bug workaround, and so on.</para></sect3><sect3><title>The comm Object</title>
+<para>Utilities to communicate with the server.</para>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Function</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>comm.onClick(cmp, info)</para>
+</entry>
+<entry>
+<para>Sends the onClick event to the server.</para>
+<para>cmp – the component. Use #{EL-expr} or this to identify it.</para>
+<para>info – a string or null to provide extra information. It will become the return value of MouseEvent's getArea.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>comm.onUser(cmp, ...)</para>
+</entry>
+<entry>
+<para>Sends the onUser event to the server</para>
+<para>cmp – the component. Use #{EL-expr} or this to identify it.</para>
+<para>other – you can provide any number of arguments.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>comm.onEvent(cmp, evt, ...)</para>
+</entry>
+<entry>
+<para>Sends the specified event to the server</para>
+<para>cmp – the component. Use #{EL-expr} or this to identify it.</para>
+<para>evt – the event name, e.g., onUser.</para>
+<para>other – you can provide any number of arguments.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>For example,</para>
+<programlisting>&lt;window title="Test of JavaScript Utilities"&gt;&#13;    &lt;html onClick='l.value = "onClick "+event.area'    &#13;        onUser='l.value ="onUser " +org.zkoss.lang.Objects.toString(event.data)'&gt;&lt;![CDATA[        &#13;        &lt;a href="javascript:;" onclick="comm.sendClick(this, 'Hi')"&gt;onClick with Hi&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendClick(this)"&gt;onClick with null&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendUser(this)"&gt;onUser with null&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendUser(this, 'One')"&gt;onUser with One&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendUser(this, 'One', 'Two')"&gt;onUser with [One, Two]&lt;/a&gt;        &#13;        &lt;a href="javascript:;" onclick="comm.sendEvent(this, 'onUser', 'XYZ')"&gt;onUser with XYZ&lt;/a&gt;        &#13;    ]]&gt;&lt;/html&gt;    &#13;    &lt;separator/&gt;    &#13;    &lt;label id="l"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect3><sect3><title>The anima Object</title>
 <para>Animation-like visual effects. It is based on the <ulink url="http://wiki.script.aculo.us/scriptaculous/show/VisualEffects">Effect</ulink> class provided by <ulink url="http://script.aculo.us/">script.aculo.us</ulink>
 <ulink url="http://script.aculo.us/">
 <footnote>
@@ -3064,7 +3268,7 @@
 <para>Event Name</para>
 </entry>
 <entry>
-<para>Components/Description</para>
+<para>Components / Description</para>
 </entry>
 </row>
 </thead><tbody>
@@ -3100,17 +3304,14 @@
 </row></tbody></tgroup>
 </informaltable></sect2><sect2><title>Keystroke Events</title>
 <informaltable frame="all">
-<tgroup cols="3">
+<tgroup cols="2">
 <thead>
 <row>
 <entry>
 <para>Event Name</para>
 </entry>
 <entry>
-<para>Components</para>
-</entry>
-<entry>
-<para>Description</para>
+<para>Components / Description</para>
 </entry>
 </row>
 </thead><tbody>
@@ -3119,9 +3320,7 @@
 <para>onOK</para>
 </entry>
 <entry>
-<para>window</para>
-</entry>
-<entry>
+<para>window textbox intbox longbox doublebox decimalbox datebox timebox combobox bandbox</para>
 <para>Event: org.zkoss.zk.ui.event.KeyEvent</para>
 <para>Denotes user has pressed the ENTER key.</para>
 </entry>
@@ -3131,9 +3330,7 @@
 <para>onCancel</para>
 </entry>
 <entry>
-<para>window</para>
-</entry>
-<entry>
+<para>window textbox intbox longbox doublebox decimalbox datebox timebox combobox bandbox</para>
 <para>Event: org.zkoss.zk.ui.event.KeyEvent</para>
 <para>Denotes user has pressed the ESC key.</para>
 </entry>
@@ -3144,8 +3341,6 @@
 </entry>
 <entry>
 <para>window</para>
-</entry>
-<entry>
 <para>Event: org.zkoss.zk.ui.event.KeyEvent</para>
 <para>Denotes user has pressed a special key, such as PgUp, Home and a key combined with the Ctrl or Alt key. Refer to the ctrlKeys Property section below for details.</para>
 </entry>
@@ -3613,7 +3808,7 @@
 </row>
 <row>
 <entry>
-<para>onBookmarkChanged</para>
+<para>onBookmarkChange</para>
 </entry>
 <entry>
 <para>root</para>
@@ -3657,6 +3852,18 @@
 <entry>
 <para>Event: org.zkoss.zul.event.UploadEvent</para>
 <para>Notifies that file(s) is uploaded, and the application can retrieve the uploaded files(s) by use of the getMedia or getMedias methods.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>onFulfill</para>
+</entry>
+<entry>
+<para>all</para>
+</entry>
+<entry>
+<para>Event: org.zkoss.zul.event.FulfillEvent</para>
+<para>Notifies that the fulfill condition has been applied to the target component. It is posted after all descendant components have been created.</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable><sect3><title>The Event Flow of radio and radiogroup</title>
@@ -3997,14 +4204,14 @@
 		</graphic> </para></sect2></sect1><sect1><title>Browser's History Management</title>
 <para>In traditional multi-page Web applications, user usually use the BACK and FORWARD button to surf around multiple pages, and bookmark them for later use. With ZK, you still can use multiple pages to represent different set of features and information, as you did in traditional Web applications.</para>
 <para>However, it is common for ZK applications to represent a lot of features in one desktop, which usually take multiple Web pages in a traditional Web application. To make user's surfing easier, ZK supports the browser's history management that enables ZK applications to manage browser's history simply in the server.</para>
-<para>The concept is simple. You add items for appropriate states of a desktop to the browser's history, and then users can use the BACK and FORWARD button to surf around different states of the same ZK desktop. When users surf around these states, an event called onBookmarkChanged is sent to notify the application.</para>
+<para>The concept is simple. You add items for appropriate states of a desktop to the browser's history, and then users can use the BACK and FORWARD button to surf around different states of the same ZK desktop. When users surf around these states, an event called onBookmarkChange is sent to notify the application.</para>
 <para>From application's viewpoint, it takes two steps to manage the browser's history:</para>
 <orderedlist>
 <listitem>
 <para>Add an item to the browser's history for each of the appropriate states of your desktop.</para>
 </listitem>
 <listitem>
-<para>Listen to the onBookmarkChanged event and manipulate the desktop accordingly.</para>
+<para>Listen to the onBookmarkChange event and manipulate the desktop accordingly.</para>
 </listitem>
 </orderedlist><sect2><title>Add the Appropriate States to Browser's History</title>
 <para>Your application has to decide what are the appropriate states to add to the browser's history. For example, in a multi-step operation, each state is a good candidate to add to browser's history, such that users can jump over these states or bookmark them for later use.</para>
@@ -4021,15 +4228,18 @@
 <graphic fileref="images/100000000000027B0000001CA1C78D7E.png">2
 			
 		</graphic>
-</para></sect2><sect2><title>Listen to the onBookmarkChanged Event and Manipulate the Desktop Accordingly</title>
-<para>After adding a state to the browser's history, users can then surf among these states such as pressing the BACK button to return the previous state. When the state is changed, ZK will notify the application by broadcasting the onBookmarkChanged event (an instance of the org.zkoss.zk.ui.event.BookmarkEvent class) to all root components in the desktop.</para>
+</para></sect2><sect2><title>Listen to the onBookmarkChange Event and Manipulate the Desktop Accordingly</title>
+<para>After adding a state to the browser's history, users can then surf among these states such as pressing the BACK button to return the previous state. When the state is changed, ZK will notify the application by broadcasting the onBookmarkChange event (an instance of the org.zkoss.zk.ui.event.BookmarkEvent class) to all root components in the desktop.</para>
 <para>Unlike traditional multi-page Web applications, you have to manipulate the ZK desktop manually when the state is changed. It is application developer's job to manipulate the desktop to reflect the state that a bookmark represented.</para>
-<para>To listen the onBookmarkChanged event, you can add an event listener to any page of the desktop, or to any of its root component.</para>
-<programlisting>&lt;window onBookmarkChanged="goto(event.bookmark)"&gt;&#13;    &lt;zscript&gt;    &#13;    void goto(String bookmark) {    &#13;        if ("Step-2".equals(bookmark)) {        &#13;            ...//create components for Step 2            &#13;        } else { //empty bookmark        &#13;            ...//create components for Step 1            &#13;        }        &#13;    &lt;/zscript&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
-<para>Like handling any other events, you can manipulate the desktop as you want, when the onBookmarkChanged event is received. A typical approach is to use the createComponents method of the org.zkoss.zk.ui.Executions class. In other words, you can represent each state with one ZUML page, and then use createComponents to create all components in it when onBookmarkChanged is received.</para>
+<para>To listen the onBookmarkChange event, you can add an event listener to any page of the desktop, or to any of its root component.</para>
+<programlisting>&lt;window onBookmarkChange="goto(event.bookmark)"&gt;&#13;    &lt;zscript&gt;    &#13;    void goto(String bookmark) {    &#13;        if ("Step-2".equals(bookmark)) {        &#13;            ...//create components for Step 2            &#13;        } else { //empty bookmark        &#13;            ...//create components for Step 1            &#13;        }        &#13;    &lt;/zscript&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
+<para>Like handling any other events, you can manipulate the desktop as you want, when the onBookmarkChange event is received. A typical approach is to use the createComponents method of the org.zkoss.zk.ui.Executions class. In other words, you can represent each state with one ZUML page, and then use createComponents to create all components in it when onBookmarkChange is received.</para>
 <programlisting>if ("Step-2".equals(bookmark)) {&#13;    //1. Remove components, if any, representing the previous state    &#13;    try {    &#13;        self.getFellow("replacable").detach();        &#13;    } catch (ComponentNotFoundException ex) {    &#13;        //not created yet        &#13;    }    &#13;&#13;    //2. Creates components belonging to Step 2    &#13;    Executions.createComponents("/bk/step2.zul", self, null);    &#13;}&#13;</programlisting></sect2><sect2><title>A Simple Example</title>
 <para>In this example, we bookmarks each tab selection.</para>
-<programlisting>&lt;window id="wnd" title="Bookmark Demo" width="400px" border="normal"&gt;&#13;    &lt;zscript&gt;    &#13;    page.addEventListener("onBookmarkChanged",    &#13;        new EventListener() {        &#13;                            public void onEvent(Event event) throws UiException {try {                            &#13;                    wnd.getFellow(wnd.desktop.bookmark).setSelected(true);                    &#13;                } catch (ComponentNotFoundException ex) {                &#13;                    tab1.setSelected(true);                    &#13;                }                &#13;            }            &#13;        });        &#13;    &lt;/zscript&gt;    &#13;&#13;    &lt;tabbox id="tbox" width="100%" onSelect="desktop.bookmark = self.selectedTab.id"&gt;    &#13;        &lt;tabs&gt;        &#13;            &lt;tab id="tab1" label="Tab 1"/&gt;            &#13;            &lt;tab id="tab2" label="Tab 2"/&gt;            &#13;            &lt;tab id="tab3" label="Tab 3"/&gt;            &#13;        &lt;/tabs&gt;        &#13;        &lt;tabpanels&gt;        &#13;            &lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;            &#13;            &lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;            &#13;            &lt;tabpanel&gt;This is panel 3&lt;/tabpanel&gt;            &#13;        &lt;/tabpanels&gt;        &#13;    &lt;/tabbox&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect2></sect1><sect1><title>Component Cloning</title>
+<programlisting>&lt;window id="wnd" title="Bookmark Demo" width="400px" border="normal"&gt;&#13;    &lt;zscript&gt;    &#13;    page.addEventListener("onBookmarkChange",    &#13;        new EventListener() {        &#13;                            public void onEvent(Event event) throws UiException {try {                            &#13;                    wnd.getFellow(wnd.desktop.bookmark).setSelected(true);                    &#13;                } catch (ComponentNotFoundException ex) {                &#13;                    tab1.setSelected(true);                    &#13;                }                &#13;            }            &#13;        });        &#13;    &lt;/zscript&gt;    &#13;&#13;    &lt;tabbox id="tbox" width="100%" onSelect="desktop.bookmark = self.selectedTab.id"&gt;    &#13;        &lt;tabs&gt;        &#13;            &lt;tab id="tab1" label="Tab 1"/&gt;            &#13;            &lt;tab id="tab2" label="Tab 2"/&gt;            &#13;            &lt;tab id="tab3" label="Tab 3"/&gt;            &#13;        &lt;/tabs&gt;        &#13;        &lt;tabpanels&gt;        &#13;            &lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;            &#13;            &lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;            &#13;            &lt;tabpanel&gt;This is panel 3&lt;/tabpanel&gt;            &#13;        &lt;/tabpanels&gt;        &#13;    &lt;/tabbox&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>Bookmarking with iframe</title>
+<para>If a page contains one or more iframe components, it is sometimes better to bookmark the status of the iframe component, too. For example, when the contained iframe was navigated to another URL, you might want to change the bookmark of the page (the container), such that you can restore to the iframe to the right content. To do this, you have to listen to the onURIChange event as follows.</para>
+<programlisting>&lt;window onURIChange="desktop.bookmark = storeURI(event.getTarget(), event.getURI())"&gt;&#13;    &lt;iframe src="${uri_depends_on_bookmark}" forward="onURIChange"/&gt;    &#13;</programlisting>
+<para>&lt;/window&gt;</para></sect2></sect1><sect1><title>Component Cloning</title>
 <para>All components are cloneable. In other words, they are implemented java.lang.Cloneable. Thus, it is simple to replicate components as follows.</para>
 <programlisting>&lt;vbox id="vb"&gt;&#13;    &lt;listbox id="src" multiple="true" width="200px"&gt;    &#13;        &lt;listhead&gt;        &#13;            &lt;listheader label="Population"/&gt;            &#13;            &lt;listheader align="right" label="%"/&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listitem value="A"&gt;        &#13;            &lt;listcell label="A. Graduate"/&gt;            &#13;            &lt;listcell label="20%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem value="B"&gt;        &#13;            &lt;listcell label="B. College"/&gt;            &#13;            &lt;listcell label="23%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem value="C"&gt;        &#13;            &lt;listcell label="C. High School"/&gt;            &#13;            &lt;listcell label="40%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;    &lt;/listbox&gt;    &#13;&#13;    &lt;zscript&gt;    &#13;    int cnt = 0;    &#13;    &lt;/zscript&gt;    &#13;    &lt;button label="Clone"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;    Listbox l = src.clone();    &#13;    l.setId("dst" + ++cnt);    &#13;    vb.insertBefore(l, self);    &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;&lt;/vbox&gt;&#13;</programlisting>
 <itemizedlist>
@@ -4789,9 +4999,9 @@
 <para>In addition to configuring the logging of the Web server, you can use the logging configuration mechanism provided by ZK. By default, it is disabled. To enable it, you have to specify the following content in WEB-INF/zk.xml. Refer to Appendix B in the Developer's Reference fore more details.</para>
 <programlisting>&lt;zk&gt;&#13;    &lt;log&gt;    &#13;    &lt;log-base&gt;org.zkoss&lt;/log-base&gt;    &#13;    &lt;/log&gt;    &#13;&lt;/zk&gt;&#13;</programlisting>
 <para>Alternatively, you can enable the logging configuration mechanism manually by invoking the init method of LogService as follows.</para>
-<programlisting>org.zkoss.util.logging.LogService.init("org.zkoss");&#13;</programlisting>
-<para>If you want to log not just org.zkoss but everything, you could specify an empty log-base.</para>
-<para>Once the mechanism is enabled, ZK looks for i3-log.conf by searching the classpath at startup. If found, ZK loads its content to initialize the log levels. Then, ZK keeps watching this file, and reloads its content if the file is modified.</para></sect2><sect2><title>Content of i3-log.conf</title>
+<programlisting>org.zkoss.util.logging.LogService.init("org.zkoss", null);&#13;</programlisting>
+<para>If you want to log not just org.zkoss but also everything, you could specify an empty value for log-base.</para>
+<para>Once the mechanism is enabled, ZK looks for i3-log.conf by searching the classpath at startup and some particular locations (see below). If found, ZK loads its content to initialize the log levels. Then, ZK keeps watching this file, and reloads its content if the file is modified.</para></sect2><sect2><title>Content of i3-log.conf</title>
 <para>An example of i3-log.conf is as follows.</para>
 <programlisting>org.zkoss.zk.ui.impl.UiEngineImpl=FINER&#13;        #Make the log level of the specified class to FINERorg.zkoss.zk.ui.http=DEBUG#Make the log level of the specified package to DEBUG        &#13;    org.zkoss.zk.au.http.DHtmlUpdateServlet=INHERIT#Clear the log level of a specified class such that it inherits what    &#13;    #has been defined above (Default: INFO)    &#13;org.zkoss.zk.ui=OFF&#13;    #Turn off the log for the specified package    &#13;org.zkoss=WARNING&#13;    #Make all log levels of ZK classes to WARNING except those specified here    &#13;</programlisting><sect3><title>Allowed Levels</title>
 <informaltable frame="all">

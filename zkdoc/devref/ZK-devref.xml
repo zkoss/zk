@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Reference</title>
-<subtitle>Version 3.0.4</subtitle>
+<subtitle>Version 3.5.0</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
@@ -16,9 +16,9 @@
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>March 2008</para>
+<para>September 2008</para>
 <para>Potix Corporation</para>
-<para>Revision 97</para>
+<para>Revision 109</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -52,7 +52,8 @@
 <para>The current item of the collection being iterated, when ZK evaluates an iterative element. An iterative element is an element with the forEach attribute.</para>
 <programlisting>&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${each}" forEach="${contacts}"/&gt;&#13;&lt;/listbox&gt;&#13;</programlisting></sect2><sect2><title>event - org.zkoss.zk.ui.event.Event or derived</title>
 <para>The current event. Available for the event listener only.</para>
-<programlisting>&lt;textbox onChanging="react(event.value)"/&gt;&#13;&lt;combobox onChanging="autoComplete()"/&gt;&#13;&lt;zscript&gt;&#13;void react(String value) {&#13;...&#13;}&#13;void autoComplete() {&#13;String value = event.getValue();&#13;...&#13;}&#13;&lt;/zscript&gt;&#13;</programlisting></sect2><sect2><title>forEachStatus – org.zkoss.zk.ui.util.ForEachStatus</title>
+<programlisting>&lt;textbox onChanging="react(event.value)"/&gt;&#13;&lt;combobox onChanging="autoComplete()"/&gt;&#13;&lt;zscript&gt;&#13;void react(String value) {&#13;...&#13;}&#13;void autoComplete() {&#13;String value = event.getValue();&#13;...&#13;}&#13;&lt;/zscript&gt;&#13;</programlisting></sect2><sect2><title>execution – org.zkoss.zk.ui.Execution</title>
+<para>The current execution.</para></sect2><sect2><title>forEachStatus – org.zkoss.zk.ui.util.ForEachStatus</title>
 <para>The status of an iteration. ZK exposes the information relative to the iteration taking place when evaluating the iterative element.</para>
 <programlisting>&lt;zk&gt;&#13;&lt;zscript&gt;&#13;grades = new String[] {"Best", "Better", "Good"};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="100px"&gt;&#13;&lt;listitem label="${forEachStatus.index}: ${each}" forEach="${grades}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
 <para>Note: forEachStatus.index is absolute with respect to the underlying collection, array or other type. For example, if forEachBegin is 5, then the first value of forEachStatus.index with be 5.</para></sect2><sect2><title>page - org.zkoss.zk.ui.Page</title>
@@ -71,7 +72,7 @@
 <para>A map of custom attributes associated with the ID space containing this component.</para></sect2></sect1><sect1><title>Processing Instructions</title>
 <para>The XML processing instructions describe how to process the ZUML page. They will be processed first before processing XML elements. </para><sect2><title>The component Directive</title>
 <para>&lt;?component name="myName" macroURI="/mypath/my.zul" [inline="true|false"] [prop1="value1"] [prop2="value2"]... ?&gt;</para>
-<para>&lt;?component name="myName" [class="myPackage.myClass"] [extend="true"] [moldName="myMoldName"] [moldURI="/myMoldURI"] [prop1="value1"] [prop2="value2"]... ?&gt;</para>
+<para>&lt;?component name="myName" [class="myPackage.myClass"] [extends="nameOfExistComponent"] [moldName="myMoldName"] [moldURI="/myMoldURI"] [prop1="value1"] [prop2="value2"]... ?&gt;</para>
 <para>Defines a new component. There are two formats: by-macro and by-class.</para><sect3><title>The by-macro Format</title>
 <para>&lt;?component name="myName" macroURI="/mypath/my.zul" [prop1="value1"] [prop2="value2"]... ?&gt;</para>
 <para>You could define a new component based on a ZUML page. It is also called the macro component. In other words, once an instance of the new component is created, it creates child components based on the specified ZUML page (the macroURI attribute).</para>
@@ -79,24 +80,25 @@
 <para>The inline attribute specifies whether it is an inline macro (inlinie="true") or a regular macro (default).</para>
 <para>An inline macro behaves like inline-expansion. ZK doesn't create a macro component if an inline macro is encountered. Rather, it inline-expands the components defined in the macro URI. In other words, it works as if you type the content of the inline macro directly to the target page.</para>
 <para>On the other hand, ZK will create a real component (called a macro component) to represent the regular macro. That is, the macro component is created as the parent of the components that are defined in the macro.</para></sect3><sect3><title>The by-class Format</title>
-<para>&lt;?component name="myName" [class="myPackage.myClass"] [extend="true"] [moldName="myMoldName"] [moldURI="/myMoldURI"] [prop1="value1"] [prop2="value2"]...?&gt;</para>
+<para>&lt;?component name="myName" [class="myPackage.myClass"] [extends="nameOfExistComponent"] [moldName="myMoldName"] [moldURI="/myMoldURI"] [prop1="value1"] [prop2="value2"]...?&gt;</para>
 <para>In addition to defining a component by a ZUML page (aka., a macro component), You could define a new component by implementing a class that implements the org.zkoss.zk.ui.Component interface. Then, use the by-class format to declare such kind of components for a page.</para>
 <para>To define a new component, you have to specify at least the class attribute, which is used by ZK to instantiate a new instance of the component.</para>
-<para>In addition to defining a new component, you can override properties of existent components by specifying extend="true". In other words, if extend="true" is specified, the previous definition of the component (with the same name) is loaded as the default value and then override only properties that are specified in this directive.</para>
+<para>In addition to defining a new component, you can override properties of existent components by specifying the extends element with the component's name to extend from (aka., extendee). In other words, if extends is specified, the definition of the extendee is loaded as the default value and then override only properties that are specified in this directive.</para>
+<para>If the name of extendee and extender are the same, it means the extender will override the definition of extendee.</para>
 <para>For example, assume you want to use MyWindow instead of the default window, org.zkoss.zul.html.Window, for all windows defined in this ZUML page. Then, you can declare it as follows.</para>
-<programlisting>&lt;?component name="window" extend="true" class="MyWindow"?&gt;&#13;...&#13;&lt;window&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
+<programlisting>&lt;?component name="window" extends="window" class="MyWindow"?&gt;&#13;...&#13;&lt;window&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
 <para>It is equivalent to the following codes.</para>
 <programlisting>&lt;window use="MyWindow"&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
 <para>In addition, you could specify the properties to initialize. For example, you want to use the style class called blue for all buttons used in this page, then you could:</para>
-<programlisting>&lt;?component name="button" extend="true" sclass="blue"?&gt;&#13;</programlisting>
+<programlisting>&lt;?component name="button" extends="button" sclass="blue"?&gt;&#13;</programlisting>
 <para>Similarly, you could use the following definition to use OK as the default label for all buttons specified in this page.</para>
-<programlisting>&lt;?component name="button" extend="true" label="OK"?&gt;&#13;</programlisting>
+<programlisting>&lt;?component name="button" extends="button" label="OK"?&gt;&#13;</programlisting>
 <para>Notice that the properties won't be applied if a component is created manually (by zscript or by Java codes). If you still want them to be applied with the initialial properties, you could invoke the applyProperties method as follows.</para>
 <para>&lt;zscript&gt;Button btn = new Button();btn.applyProperties(); //apply the initial properties&lt;/zscript&gt;</para></sect3><sect3><title>class</title>
 <para>[Optional]</para>
-<para>Used to specify the class to instantiate an instance of such kind of components. Unlike other directives, the class can be defined with zscript.</para></sect3><sect3><title>extend</title>
+<para>Used to specify the class to instantiate an instance of such kind of components. Unlike other directives, the class can be defined with zscript.</para></sect3><sect3><title>extends</title>
 <para>[Optional]</para>
-<para>If specified with "true", the existent definition will be loaded to initialize the new component definition. In other words, it extends the existent definition instead of defining a brand-new one.</para></sect3><sect3><title>macroURI</title>
+<para>Specifies the component name to extend from. The existent definition of the specified name will be loaded to initialize the new component definition. In other words, it extends the existent definition instead of defining a brand-new one.</para></sect3><sect3><title>macroURI</title>
 <para>[Required if the by-macro format is used][EL is not allowed]</para>
 <para>Used with the by-macro format to specify the URI of the ZUML page, which is used as the template to create components.</para></sect3><sect3><title>moldName</title>
 <para>[Optional][Default: default]</para>
@@ -249,7 +251,7 @@
 <para>These are so-called header elements in HTML. Currently only HTML-based clients (so-called browsers) support them.</para>
 <para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
 <para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or servlets. Also, they are ignored if the page is a zhtml file.</para>
-<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>The page Directive</title>
+<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&lt;?link rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>The page Directive</title>
 <para>&lt;?page [id="..."] [title="..."] [style="..."] [cacheable="false|true"] [language="xul/html"] [zscriptLanguage="Java"] [contentType="text/html;charset=UTF-8"] [docType="tag PUBLIC &amp;quot;doctype name&amp;quot; &amp;quot;doctype UI&amp;quot;"] [xml="version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;"] [complete="true|false"]?&gt;</para>
 <para>It specifies how a page shall be handled. The id and title arguments are the two most important ones.</para><sect3><title>cacheable</title>
 <para>[Optional][Default: false if Ajax devices, true if XML and MIL devices]</para>
@@ -348,7 +350,14 @@
 <para>It is equivalent to</para>
 <programlisting>&lt;button label="Hi" onClick="alert(&amp;quot;Hi&amp;quot;)"/&gt;&#13;</programlisting>
 <para>Another example:</para>
-<programlisting>&lt;button&gt;&#13;&lt;attribute name="label" if="${param.happy}"&gt;Hello World!&lt;/attribute&gt;&#13;&lt;/button&gt;&#13;</programlisting><sect3><title>name</title>
+<programlisting>&lt;button&gt;&#13;&lt;attribute name="label" if="${param.happy}"&gt;Hello World!&lt;/attribute&gt;&#13;&lt;/button&gt;&#13;</programlisting>
+<para>In addition, you can specify a XML fragment as the value of the attribute. The XML fragment is so-called the native content.</para>
+<programlisting>&lt;html&gt;&#13;    &lt;attribute name="content"&gt;    &#13;        &lt;ol&gt;        &#13;            &lt;li forEach="${values}"&gt;${each}&lt;/li&gt;            &#13;</programlisting>
+<para>&lt;/ol&gt;</para>
+<para>&lt;/attribute&gt;</para>
+<para>&lt;/html&gt;</para>
+<para>where ol and li are part of the native content. They are not ZK components. They will be eventually converted to a String instance and assigned to the specified attribute. If values has three elements, the above example is equivalent to the following:</para>
+<programlisting>&lt;html&gt;&#13;    &lt;attribute name="content"&gt;&lt;![CDATA[    &#13;        &lt;ol&gt;        &#13;            &lt;li&gt;${values[0]}&lt;/li&gt;            &#13;            &lt;li&gt;${values[1]}&lt;/li&gt;            &#13;            &lt;li&gt;${values[2]}&lt;/li&gt;            &#13;        &lt;/ol&gt;        &#13;    ]]&gt;&lt;/attribute&gt;    &#13;&lt;/html&gt;&#13;</programlisting><sect3><title>name</title>
 <para>[Required]</para>
 <para>Specifies the attribute name.</para></sect3><sect3><title>trim</title>
 <para>[Optional][Default: false]</para>
@@ -361,7 +370,16 @@
 <para>It defines a set of custom attributes of the specified scope. You could specify as many as attributes you want. These attributes can be retrieved by the getAttribute method of the Component interface with the specified scope.</para>
 <programlisting>&lt;custom-attributes cd="${param.cd}" a.b="ab"/&gt;&#13;</programlisting><sect3><title>scope</title>
 <para>[optional][Default: component]</para>
-<para>Specifies the scope to which the custom attributes are associated. If not specified, the component enclosing this element is the default scope to use.</para></sect3><sect3><title>if</title>
+<para>Specifies the scope to which the custom attributes are associated. If not specified, the component enclosing this element is the default scope to use.</para></sect3><sect3><title>composite</title>
+<para>[Optional][Default: none]</para>
+<para>Specifies the format of the value. It could be none, list or map.</para>
+<para>By default, the value is assigned to the attribute directly after evaluating EL expressions, if any. For example, "apple, ${more}" is evaluated to "apple, orange", if more is "orange", and assigned to the attribute.</para>
+<para>If you want to specify a list of values, you can specify the composite attribute with list as follows.</para>
+<programlisting>&lt;custom-attributes simple="apple, ${more}" composite="list"/&gt;&#13;</programlisting>
+<para>Then, it is converted to a list with two elements. The first element is "apple" and the second "orange".</para>
+<para>If you want to specify a map of values, you can specify the composite attribute with map as follows.</para>
+<programlisting>&lt;custom-attributes simple="juice=apple, flavor=${more}" composite="map"/&gt;&#13;</programlisting>
+<para>Then, it is converted to a map with two entries. The first entry is ("juice", "apple") and the second ("flavor", "orange").</para></sect3><sect3><title>if</title>
 <para>[Optional][Default: true]</para>
 <para>Specifies the condition to evaluate this element. This element is ignored if the value specified to this attribute is evaluated to false.</para></sect3><sect3><title>unless</title>
 <para>[Optional][Default: false]</para>
@@ -371,7 +389,16 @@
 <para>You could specify as many as variables you want. These variables are stored to the namespace of the ID space it belongs. Thus, they can be accessible by the interpreters and EL expressions.</para>
 <programlisting>&lt;variables cd="${param.cd}" less="more"/&gt;&#13;</programlisting><sect3><title>local</title>
 <para>[optional][Default: false]</para>
-<para>Specifies whether to store the variable always at the current ID space. By default, it is false. It means ZK will check the existence of any variable with the same name by looking up the current ID space, the parent ID space, and parent's parent, and so on. If found, the variable's value is replaced with the value specified here. If not, a local variable is created. If true is specified, it doesn't look up any parent ID space.</para></sect3><sect3><title>if</title>
+<para>Specifies whether to store the variable always at the current ID space. By default, it is false. It means ZK will check the existence of any variable with the same name by looking up the current ID space, the parent ID space, and parent's parent, and so on. If found, the variable's value is replaced with the value specified here. If not, a local variable is created. If true is specified, it doesn't look up any parent ID space.</para></sect3><sect3><title>composite</title>
+<para>[Optional][Default: none]</para>
+<para>Specifies the format of the value. It could be none, list or map.</para>
+<para>By default, the value is assigned to the variable directly after evaluating EL expressions, if any. For example, "apple, ${more}" is evaluated to "apple, orange", if more is "orange", and assigned to the variable.</para>
+<para>If you want to specify a list of values, you can specify the composite attribute with list as follows.</para>
+<programlisting>&lt;variables simple="apple, ${more}" composite="list"/&gt;&#13;</programlisting>
+<para>Then, it is converted to a list with two elements. The first element is "apple" and the second "orange".</para>
+<para>If you want to specify a map of values, you can specify the composite attribute with map as follows.</para>
+<programlisting>&lt;variables simple="juice=apple, flavor=${more}" composite="map"/&gt;&#13;</programlisting>
+<para>Then, it is converted to a map with two entries. The first entry is ("juice", "apple") and the second ("flavor", "orange").</para></sect3><sect3><title>if</title>
 <para>[Optional][Default: true]</para>
 <para>Specifies the condition to evaluate this element. This element is ignored if the value specified to this attribute is evaluated to false.</para></sect3><sect3><title>unless</title>
 <para>[Optional][Default: false]</para>
@@ -398,7 +425,26 @@
 <para>If forEachBegin is greater than or equals to the number of elements, no iteration is performed.</para></sect3><sect3><title>forEachEnd</title>
 <para>[Optional][Default: the last element]</para>
 <para>It is used with the forEach attribute to specify the index (starting from 0) the iteration shall ends at (inclusive). If not specified, the iterations ends at the last element.</para>
-<para>If forEachEnd is greater than or equals to the number of elements, the iteration ends at the last element.</para></sect3></sect2><sect2><title>The zscript Element</title>
+<para>If forEachEnd is greater than or equals to the number of elements, the iteration ends at the last element.</para></sect3><sect3><title>switch</title>
+<para>[Optional][Default: none]</para>
+<para>Provide the context for mutually exclusive evaluation. The value specified in this attribute is called the switch condition.</para>
+<programlisting>&lt;zk swtich="${condition}"/&gt;&#13;</programlisting>
+<para>The only allowed children are the zk elements.</para></sect3><sect3><title>case</title>
+<para>[Optional][Default: none]</para>
+<para>Provides an alternative within the switch evaluation.</para>
+<programlisting>&lt;zk case="apple"/&gt;&#13;</programlisting>
+<para>If the value is a string starting and ending with slash, such as /a[p]*/, it is considered as a regular expression, which is used to match the switch condition.</para>
+<programlisting>&lt;zk case="/a[a-z]*/"/&gt;&#13;</programlisting>
+<para>You can specify multiple cases by separating them with comma.</para>
+<programlisting>&lt;zk case="apple, ${special}"/&gt;&#13;</programlisting></sect3><sect3><title>choose</title>
+<para>[Optional][Default: none]</para>
+<para>Provide the context for mutually exclusive evaluation.</para>
+<programlisting>&lt;zk choose=""&gt;&#13;</programlisting>
+<para>The only allowed children are the zk elements.</para></sect3><sect3><title>when</title>
+<para>[Optional][Default: none]</para>
+<para>Provides an alternative within the choose evaluation.</para>
+<programlisting>&lt;zk when="${fruit == 'apple'}"&gt;&#13;</programlisting>
+<para>It is evaluated if the condition matches.</para></sect3></sect2><sect2><title>The zscript Element</title>
 <para>&lt;zscript [language="Java|JavaScript|Ruby|Groovy"]&gt;Scripting codes&lt;/zscript&gt;&lt;zscript src="uri" [language="Java|JavaScript|Ruby|Groovy"]/&gt;</para>
 <para>It defines a piece of scripting codes that will be interpreted when the page is evaluated. The language of the scripting codes is, by default, Java. You can select a different language by use the language attribute<footnote>
 <para>Furthermore, you can use the page directive to change the default scripting language other than Java.</para>
@@ -453,8 +499,9 @@
 <para>In addition, you specify a Composer instance, or a collection of Composer instances by use of EL expressions.</para>
 <para>Note: the EL expressions are, if specified, evaluated before the component is instantiated. So you cannot reference to the component. Moreover, the self variable references to the parent component, if any, or the current page, if it is the root component, in the EL expressions specified in this attribute.</para>
 <para>If you want more control such as handling the exception, you can also implement the org.zkoss.zk.util.ComposerExt interface. </para></sect2><sect2><title>The forEach Attribute</title>
-<para>forEach="${an-EL-expr}"</para>
-<para>It specifies a collection of objects, such that the associated element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored, and the element is evaluated only once. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para>
+<para>forEach="${an-EL-expr}"forEach="an-value, ${an-EL-expr}"</para>
+<para>There are two formats. First, you specify a value without comma. The value is usually a collection of objects, such that the associated element will be evaluated repeatedly against each object in the collection. If not specified or empty, this attribute is ignored. If non-collection object is specified, it is evaluated only once as if a single-element collection is specified.</para>
+<para>Second, you can specify a list of values by separating them with comma. Then, the associated element will be evaluated repeatedly against each value in the list.</para>
 <para>For each iteration, two variables, each and forEachStatus, are assigned automatically to let developers control how to evaluate the associated element.</para>
 <programlisting>&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;classes = new String[] {"College", "Graduate"};&#13;grades = new Object[] {&#13;new String[] {"Best", "Better"}, new String[] {"A++", "A+", "A"}&#13;};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="200px" forEach="${classes}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="${each}"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem label="${forEachStatus.previous.each}: ${each}"&#13;forEach="${grades[forEachStatus.index]}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/hbox&gt;&#13;</programlisting>
 <para>
@@ -469,17 +516,25 @@
 <para>forEachEnd="${an-EL-expr}"</para>
 <para>It is used with the forEach attribute to specify the index (starting from 0) the iteration shall ends at (inclusive). If not specified, the iterations ends at the last element.</para>
 <para>If forEachEnd is greater than or equals to the number of elements, the iteration ends at the last element.</para></sect2><sect2><title>The forward Attribute</title>
-<para>forward="orginalEvent=targetId1/targetId2,targetEvent"</para>
-<para>forward="originalEvent=${el-expr},targetEvent"</para>
-<para>forward="targetEvent"</para>
+<para>forward="orginalEvent=targetId1/targetId2.targetEvent"forward="orginalEvent=targetId1/targetId2.targetEvent(eventData)"forward="originalEvent=${el-target}.targetEvent(${el-eventdata})"forward="targetEvent"</para>
 <para>It is used to forward an event, that is targeting a specific component, to another component in another event name. It is called the forward condition.</para>
+<para>The forward event is an instance of the org.zkoss.zk.ui.event.ForwardEvent class. you can invoke the getOrigin method to retrieve the original event.</para>
 <para>The original event is optional. If it is omitted, onClick is assumed. Similarly, the target ID is also optional. If omitted, the space owner is assumed.</para>
+<para>The data specified in the parenthesis is the application-specific data, which can be retrieved by calling the getData method.</para>
+<programlisting>&lt;button forward="onCancel(abort)"/&gt;&lt;!-- "abort" is passed --&gt;&#13;</programlisting>
+<para>&lt;button forward="onPrint(${inf})"/&gt;&lt;!-- the object returned by ${inf} is passed --&gt;</para>
 <para>If you want to forward several events, you can specify these conditions in the forward attribute by separating them with the comma (,):</para>
-<para>&lt;textbox forward="onChanging=onUpdating, onChange=some.onUpdate"/&gt;</para></sect2><sect2><title>The fulfill Attribute</title>
+<para>&lt;textbox forward="onChanging=onUpdating, onChange=some.onUpdate"/&gt;</para>
+<para>The target component and the event data can be specified in EL expressions, while the event names cannot.</para></sect2><sect2><title>The fulfill Attribute</title>
 <para>fulfill="event-name"fulfill="target-id.event-name"fulfill="id1/id2/id3.event-name"fulfill="${el-expr}.event-name"</para>
 <para>It is used to specify when to create the child components. By default (i.e., fulfill is not specified), the child components are created right after its parent component, at the time the ZUML page is loaded.</para>
 <para>If you want to defer the creation of the child components, you can specify the condition with the fulfill attribute. The condition consists of the event name and, optionally, the target component's identifier or path. It means that the child elements won't be processed, until the event is received by, if specified, the target component. If the identifier is omitted, the same component is assumed.</para>
-<para>If an EL expression is specified, it must return a component, an identifier or a path.</para></sect2><sect2><title>The if Attribute</title>
+<para>If an EL expression is specified, it must return a component, an identifier or a path.</para><sect3><title>The onFulfill Event</title>
+<para>After ZK applies the fulfill condition, i.e., creates all descendant components, it fires the onFulfill event with an instance of org.zkoss.zk.ui.event.FulfillEvent to notify the component for further processing if any.</para>
+<para>For example, if you use the wireVariables method of the org.zkoss.zk.ui.Components class, you might have to call wireVariables again to wire the new components in the onFulfill event.</para>
+<programlisting>&lt;div fulfill="b1.onClick, b2.onOpen"&#13;onFulfill="Components.wireVariables(self, controller)"&gt;&#13;</programlisting>
+<para>...</para>
+<para>&lt;/div&gt;</para></sect3></sect2><sect2><title>The if Attribute</title>
 <para>if="${an-EL-expr}"</para>
 <para>It specified the condition to evaluate the associated element. In other words, the associated element and all its child elements are ignored, if the condition is evaluated to false.</para></sect2><sect2><title>The unless Attribute</title>
 <para>unless="${an-EL-expr}"</para>
@@ -4252,46 +4307,6 @@
 <entry>
 <para>
 <code>"~./zul/img/bandbtn.gif". </code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>multiline</code>
-</para>
-</entry>
-<entry>
-<para>Sets whether it is multiline. </para>
-</entry>
-<entry>
-<para>
-<code>boolean</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>false</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>rows</code>
-</para>
-</entry>
-<entry>
-<para>Sets the rows. </para>
-</entry>
-<entry>
-<para>
-<code>int</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>1</code>
 </para>
 </entry>
 </row></tbody></tgroup>
@@ -11686,7 +11701,46 @@
 <code>org.zkoss.zul.Iframe</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE </para></sect3><sect3><title>Supported Events</title>
-<para>*NONE </para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onURIChange</code>
+</para>
+</entry>
+<entry>
+<para>
+<link linkend="MouseEvent">
+<code>org.zkoss.zk.ui.event.URIEvent</code>
+</link>
+</para>
+<para>
+<code>Description:</code>
+<code> Denotes the associated URI (</code>
+<code>src</code>
+<code>) has been changed by user.</code>
+</para>
+<para>
+<code>Use </code>
+<code>getURI()</code>
+<code> to retrieve the URI being changed to</code>
+<code>.</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Properties</para>
 <informaltable frame="all">
 <tgroup cols="4">
 <thead>
@@ -11934,7 +11988,6 @@
 <code>org.zkoss.zul.Imagemap</code>
 </para></sect3><sect3><title>Supported Child Components</title>
 <para>*NONE </para></sect3><sect3><title>Supported Events</title>
-<para/>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -26715,7 +26768,7 @@
 <para>In additions to resuming normally, a suspended event processing thread might be aborted abnormally. For example, when the desktop is being destroyed, all suspended event threads will be aborted. When the suspended event processing thread is aborted, an instance is created, and the abortResume method is called in the main thread.</para>
 <para>Note: If a suspended event thread is aborted, none of the beforeResume and afterResume is called. Moreover, the cleanup and complete methods of EventThreadCleanup won't be called, either. Thus, you have to handle all necessary cleanups in abortResume.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.EventInterceptor interface</title>
 <para>It is implemented by a listener class that will be used to intercept when an event is sent, posted and processed.</para>
-<para>Like other configurations, the event interceptors registered here are application-wide. It means they will intercept all events for the whole application. If you want to intercept events only for a particular desktop, use the addEventInterceptor method of the org.zkoss.zk.ui.Desktop interface.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.WebAppInit interface</title>
+<para>Once registered, an instance is created and shared within the whole application. If you want to intercept events only for a particular desktop, use the addEventInterceptor method of the org.zkoss.zk.ui.Desktop interface.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.WebAppInit interface</title>
 <para>It is implemented by a listener class that will be used to initialize a ZK application.</para>
 <para>When a ZK application is created, it invokes the init method of this interface such that developers could plug the application-specific codes to initialize the application.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.WebAppCleanup interface</title>
 <para>It is implemented by a listener class that will be used to cleanup a ZK application that is being destroyed.</para>
@@ -26736,7 +26789,7 @@
 <para>A developer can prevent an execution from being created by throwing an exception in the init method.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.ExecutionCleanup interface</title>
 <para>It is implemented by a listener class that will be used to cleanup an execution that is being destroyed.</para>
 <para>When ZK Loader is going to destroy an execution, it invokes the cleanup method of this interface such that developers could plug the application-specific codes to cleanup an execution.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.URIInterceptor interface</title>
-<para>It is implemented by a listener class that will be used to intercept the retrieving of ZUML pages with the associated URI. Once registered, an instance of the specified class is created, and then the request method is invoked, each time the application wants to retrieve the page definition of a page based on an URI.</para>
+<para>It is implemented by a listener class that will be used to intercept the retrieving of ZUML pages with the associated URI. Once registered, an instance of the specified class is created and shared within the whole application. Then, the request method is invoked, each time the application wants to retrieve the page definition of a page based on an URI.</para>
 <para>A typical use of this interface is to ensure the current user has the authority to access the certain URI.</para>
 <para>You can register any number of URI interceptors (URIInterceptor).</para>
 <para>Note:</para>
@@ -26745,7 +26798,7 @@
 <para>Unlike ExecutionInit and many other listeners, an instance of the registered URIInterceptor is created at the time of registration, and then it is shared by the whole application. Thus, you have to make sure it can be accessed concurrently.</para>
 </listitem>
 </orderedlist></sect3><sect3><title>The org.zkoss.zk.ui.util.RequestInterceptor interface</title>
-<para>It is implemented by a listener class that will be used to intercept each request made to ZK Loader and ZK Update Engine. Once registered, an instance of the specified class is created, and then the request method is invoked, each time a request is received by ZK Loader or ZK Update Engine.</para>
+<para>It is implemented by a listener class that will be used to intercept each request made to ZK Loader and ZK Update Engine. Once registered, an instance of the specified class is created and shared within the whole application. Then, the request method is invoked, each time a request is received by ZK Loader or ZK Update Engine.</para>
 <para>A typical use of this interface is to determine the locale and/or time zone of the request. Refer to the Developer's Guide for more information.</para>
 <para>You can register any number of the request interceptors (RequestInterceptor).</para>
 <para>Note:</para>
@@ -26756,7 +26809,8 @@
 <listitem>
 <para>The request parameters will be parsed with the proper locale and character encoding, after the request method is called. It is not recommended to call the getParameter or getParameterValues methods (of javax.servlet.ServletRequest) in this method.</para>
 </listitem>
-</orderedlist></sect3><sect3><title>The org.zkoss.zk.ui.util.PerformanceMeter interface</title>
+</orderedlist></sect3><sect3><title>The org.zkoss.zk.ui.util.UiLifeCycle interface</title>
+<para>It is implemented by a listener class that will be used to handle something dependin on the life cycle of UI, such as attaching a component to a page, moving a component and so on. Once registered, an instance of the specified class is created and shared within the whole application.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.PerformanceMeter interface</title>
 <para>It is implemented by a listener that will measure the performance. Unlike other listeners, there is at most one performance meter listener for each Web application. If you like, you can chain them together manually.</para></sect3><sect3><title>The org.zkoss.zk.ui.util.Monitor interface</title>
 <para>It is implemented by a listener that will be used to monitor the statuses of ZK. Unlike other listener, there is at most one monitor listener for each Web application. If you like, you can chain them together manually.</para>
 <para>ZK provides an implementation named org.zkoss.zk.ui.util.Statistic, which accumulates the statistic data in the memory. It is a good starting point to understand the load of your ZK application.</para></sect3></sect2><sect2><title>The log Element</title>
@@ -26781,15 +26835,14 @@
 <programlisting>&lt;reload-uri&gt;&lt;/reload-uri&gt;&#13;</programlisting>
 <para>If you want to show an error message instead, specify false.</para>
 <programlisting>&lt;reload-uri&gt;false&lt;/reload-uri&gt;&#13;</programlisting></sect3><sect3><title>The keep-across-visits Element</title>
-<para>[Default: false<footnote>
-<para>Exception: the Opera browser.</para>
-</footnote>]</para>
+<para>[Default: false]</para>
 <para>It specifies whether to keep the desktop when a user reloads an URL or browses away to another URL. Since browsers won't cache HTML pages generated by ZK, ZK removes a desktop as soon as the user reloads the URL or browses to another URL.</para>
 <para>However, you have to specify keep-across-visits with true, if you use the server-side cache for the HTML pages generated by ZK. An example of the server side cache is OpenSymphony CacheFilter<footnote>
 <para>
 <ulink url="http://www.opensymphony.com/oscache/wiki/CacheFilter.html">http://www.opensymphony.com/oscache/wiki/CacheFilter.html</ulink>  </para>
 </footnote>.</para>
-<programlisting>&lt;client-config&gt;&#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting></sect3><sect3><title>The processing-prompt-delay Element</title>
+<programlisting>&lt;client-config&gt;&#13;    &lt;keep-across-visits&gt;true&lt;/keep-across-visits&gt;    &#13;&lt;/client-config&gt;&#13;</programlisting>
+<para>Note: When working with Opera, ZK always keeps the desktop (until the number of desktops exceed the allowed maximal number), since Opera is smart enough to preserve the most updated content and always reuses the cached page.</para></sect3><sect3><title>The processing-prompt-delay Element</title>
 <para>[Default: 900]</para>
 <para>It specifies the time, in milliseconds, to wait before prompting the user with a dialog indicating that the request is in processing.</para></sect3><sect3><title>The resend-delay Element</title>
 <para>[Default: 9000 if Enterprise Edition<footnote>
@@ -26800,13 +26853,16 @@
 <para>[Default: 800]</para>
 <para>It specifies the time, in milliseconds, to wait before popping up the tooltip when the user moves the mouse pointer over particular UI components.</para></sect3></sect2><sect2><title>The desktop-config Element</title>
 <para>It is used to customize how ZK handles desktops. You might have multiple desktop-config elements in one zk.xml.</para>
-<programlisting>&lt;desktop-config&gt;&#13;    &lt;desktop-timeout&gt;3600&lt;/desktop-timeout&gt;    &#13;    &lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;    &#13;    &lt;file-check-period&gt;5&lt;/file-check-period&gt;    &#13;    &lt;theme-uri&gt;/my/blue**.css&lt;/theme-uri&gt;    &#13;    &lt;theme-provider-class&gt;my.MyThemeProvider&lt;/theme-provider-class&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting><sect3><title>The desktop-timeout Element</title>
+<programlisting>&lt;desktop-config&gt;&#13;    &lt;desktop-timeout&gt;3600&lt;/desktop-timeout&gt;    &#13;    &lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;    &#13;    &lt;file-check-period&gt;5&lt;/file-check-period&gt;    &#13;    &lt;extendlet-check-period&gt;10&lt;/extendlet-check-period&gt;    &#13;    &lt;theme-uri&gt;/my/blue**.css&lt;/theme-uri&gt;    &#13;    &lt;theme-provider-class&gt;my.MyThemeProvider&lt;/theme-provider-class&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting><sect3><title>The desktop-timeout Element</title>
 <para>[Default: 3600]</para>
 <para>It specifies the time, in seconds, between client requests before a desktop is invalidated. A negative time indicates the desktop should never timeout.</para></sect3><sect3><title>The disable-theme-uri Element</title>
 <para>[Default: none]</para>
 <para>It specifies what theme URI to be disabled. The theme URI shall be one of the default theme URI. For example, the following statement disables the generation of the default theme URI for the ZK XUL component set.</para>
 <programlisting>&lt;desktop-config&gt;&#13;    &lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting>
-<para>It is usually used with the theme-uri element to replace the default theme. Refer to the Themes section of the Internationalization chapter in the Developer's Guide for details.</para></sect3><sect3><title>The file-check-period Element</title>
+<para>It is usually used with the theme-uri element to replace the default theme. Refer to the Themes section of the Internationalization chapter in the Developer's Guide for details.</para></sect3><sect3><title>The extendlet-check-period Element</title>
+<para>[Default: -1 (never expired)]</para>
+<para>It specifies the time, in seconds, to wait before checking whether a resource loaded by an extendlet is modified. An extendlet is a processor to load the resources usually located in classpath, such as ~./zul/desktop.dsp.</para>
+<para>Resources located in classpath are usually packed as a JAR file, so they are immutable and not need to check if modified. However, in a development environment, you might want to check if they are deployed without reloading the JAR files.</para></sect3><sect3><title>The file-check-period Element</title>
 <para>[Default: 5]</para>
 <para>It specifies the time, in seconds, to wait before checking whether a file is modified.</para>
 <para>For better performance, ZK has employed a cache to store parsed ZUML file. The time specified here controls how often ZK checks whether a file is modified. The larger the number the better the performance. </para></sect3><sect3><title>The theme-uri Element</title>
@@ -26875,7 +26931,7 @@
 <para>It specifies the maximal allowed number of concurrent requests per session. Each time an user types an URL at the browser, it creates a request and the request ends after the response is sent to the browser. In other words, this number controls how many concurrent requests the same user can send.</para>
 <para>A negative number means no limitation at all, but it is not recommended due to the possibility of the denial-of-service (DoS) attacks.</para></sect3></sect2><sect2><title>The system-config Element</title>
 <para>You might have multiple system-config elements in one zk.xml.</para>
-<programlisting>&lt;system-config&gt;&#13;    &lt;au-writer-class&gt;my.AuWriter&lt;/au-writer-class&gt;    &#13;    &lt;cache-provider-class&gt;my.CacheProvider&lt;/cache-provider-class&gt;    &#13;    &lt;disable-event-thread/&gt;    &#13;    &lt;engine-class&gt;my.UiEngine&lt;/engine-class&gt;    &#13;&lt;failover-manager-class&gt;my.FailoverManager&lt;/failover-manager-class&gt;&#13;    &lt;id-generator-class&gt;my.IdGenerator&lt;/id-generator-class&gt;    &#13;    &lt;max-spare-threads&gt;100&lt;/max-spare-threads&gt;    &#13;    &lt;max-suspended-threads&gt;100&lt;/max-suspended-threads&gt;    &#13;&lt;max-upload-size&gt;5120&lt;/max-upload-size&gt;&#13;    &lt;max-process-time&gt;3000&lt;/max-process-time&gt;    &#13;    &lt;response-charset&gt;UTF-8&lt;/response-charset&gt;    &#13;    &lt;upload-charset&gt;UTF-8&lt;/upload-charset&gt;    &#13;    &lt;upload-charset-finder-class&gt;my.CharsetFinder&lt;/upload-charset-finder-class&gt;    &#13;    &lt;ui-factory-class&gt;my.UiFactory&lt;/ui-factory-class&gt;    &#13;    &lt;url-encoder-class&gt;my.URLEncoder&lt;/url-encoder-class&gt;    &#13;    &lt;web-app-class&gt;my.WebApp&lt;/web-app-class&gt;    &#13;&lt;/system-config&gt;&#13;</programlisting><sect3><title>The au-writer-class Element</title>
+<programlisting>&lt;system-config&gt;&#13;    &lt;au-writer-class&gt;my.AuWriter&lt;/au-writer-class&gt;    &#13;    &lt;cache-provider-class&gt;my.CacheProvider&lt;/cache-provider-class&gt;    &#13;    &lt;disable-event-thread/&gt;    &#13;    &lt;engine-class&gt;my.UiEngine&lt;/engine-class&gt;    &#13;&lt;failover-manager-class&gt;my.FailoverManager&lt;/failover-manager-class&gt;&#13;    &lt;id-generator-class&gt;my.IdGenerator&lt;/id-generator-class&gt;    &#13;    &lt;max-spare-threads&gt;100&lt;/max-spare-threads&gt;    &#13;    &lt;max-suspended-threads&gt;100&lt;/max-suspended-threads&gt;    &#13;&lt;max-upload-size&gt;5120&lt;/max-upload-size&gt;&#13;    &lt;max-process-time&gt;3000&lt;/max-process-time&gt;    &#13;    &lt;response-charset&gt;UTF-8&lt;/response-charset&gt;    &#13;    &lt;session-cache-class&gt;my.SessionCache&lt;/session-cache-class&gt;    &#13;    &lt;upload-charset&gt;UTF-8&lt;/upload-charset&gt;    &#13;    &lt;upload-charset-finder-class&gt;my.CharsetFinder&lt;/upload-charset-finder-class&gt;    &#13;    &lt;ui-factory-class&gt;my.UiFactory&lt;/ui-factory-class&gt;    &#13;    &lt;url-encoder-class&gt;my.URLEncoder&lt;/url-encoder-class&gt;    &#13;    &lt;web-app-class&gt;my.WebApp&lt;/web-app-class&gt;    &#13;&lt;/system-config&gt;&#13;</programlisting><sect3><title>The au-writer-class Element</title>
 <para>[Default: org.zkoss.zk.au.http.HttpAuWriter for standard and professional editions, or org.zkoss.zkmax.au.http.SmartAuWriter for enterprise edition]</para>
 <para>It specifies which class used to implement the AU writer. The AU writer is used to generate the output and send it to the client. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.au.AuWriter interface.</para>
 <para>There are two built-in implementations, HttpAuWriter and SmartAuWriter. The former one send the output the client after the requests are processed completely. On the other hand, the later one will send a partial output first if the processing is taking too long (half of the value specified in the resend-delay element). By sending the partial output, the client will know the server is still alive.</para></sect3><sect3><title>The cache-provider-class Element</title>
@@ -26943,7 +26999,10 @@
 <para>[Default: UTF-8]</para>
 <para>It specifies the charset for the rendering result of a ZUML page. In other words, it is used to load the ZUML page by the ZK Loader (i.e., DHtmlLayoutServlet).</para>
 <para>If you want to use the container's default value, you can specify an empty string as follows.</para>
-<programlisting>&lt;response-charset&gt;&lt;/response-charset&gt;&#13;</programlisting></sect3><sect3><title>The upload-charset Element</title>
+<programlisting>&lt;response-charset&gt;&lt;/response-charset&gt;&#13;</programlisting></sect3><sect3><title>The session-cache-class Element</title>
+<para>[Default: org.zkoss.zk.ui.http.SimpleSessionCache]</para>
+<para>It specifies the session cache used to store ZK sessions. It must implement the org.zkoss.zk.ui.sys.SessionCache interface.</para>
+<para>By default, org.zkoss.zk.ui.http.SimpleSessionCache is used and it stores the ZK session in an attribute of the native session (i.e., HttpSession or PortletSession).</para></sect3><sect3><title>The upload-charset Element</title>
 <para>[Default: UTF-8]</para>
 <para>It specifies the charset (aka., encoding) for the uploaded text files if no charset is specified with the content type.</para>
 <para>If the uploaded file is binary, there is no encoding issue at all.</para>
@@ -27010,30 +27069,41 @@
 <para>MIL is a ZK markup language used to communicate with the mobile devices.</para>
 </footnote>. It is used to create an instance returned by the getDevice method of the Desktop intereface.</para>
 <para>The allowed child element is device-type , device-class, timeout-uri, and unavailable-message. You might have multiple device-config elements in one zk.xml.</para>
-<programlisting>&lt;device-config&gt;&lt;device-type&gt;ajax&lt;/device-type&gt;&lt;device-class&gt;my.MyAjaxDevice&lt;/device-class&gt;        &#13;    &lt;timeout-uri&gt;/my-timeout.zul&lt;/timeout-uri&gt;    &#13;    &lt;server-push-class&gt;my.ServerPush&lt;/server-push-class&gt;    &#13;        &lt;unavailable-message&gt;&lt;![CDATA[&lt;p style="color:red"&gt;Sorry, JavaScript must be enabled in order for you to use KillApp.&lt;/p&gt;]]&gt;&lt;/unavailable-message&gt;&lt;/device-config&gt;        &#13;</programlisting>
-<para>Note: Unlike most other configurations defined in WEB-INF/zk.xml, the definitions defined in device-config are applied to all Web applications sharing the same zk.jar. Refer to the zscript-config element for more information.</para><sect3><title>The device-type Element</title>
-<para>[Required]</para>
-<para>It specifies the device type. The previous implementation with the same device type will be replaced if any.</para></sect3><sect3><title>The device-class Element</title>
+<programlisting>&lt;device-config&gt;&lt;device-type&gt;ajax&lt;/device-type&gt;&lt;device-class&gt;my.MyAjaxDevice&lt;/device-class&gt;        &#13;    &lt;timeout-uri&gt;/my-timeout.zul&lt;/timeout-uri&gt;    &#13;    &lt;server-push-class&gt;my.ServerPush&lt;/server-push-class&gt;    &#13;            &lt;unavailable-message&gt;&lt;![CDATA[&lt;p style="color:red"&gt;Sorry, JavaScript must be enabled in order for you to use KillApp.&lt;/p&gt;]]&gt;&lt;/unavailable-message&gt;&lt;embed&gt;&lt;![CDATA[            &#13;&lt;script type="text/javascript"&gt;&#13;    AU_progressbar = function (id, msg) {    &#13;        Boot_progressbox(id, msg, 0, 0, true, true);        &#13;    };    &#13;&lt;/script&gt;&#13;    ]]&gt;&lt;/embed&gt;&lt;/device-config&gt;    &#13;</programlisting>
+<para>Note: Unlike most other configurations defined in WEB-INF/zk.xml, the definitions defined in device-config are applied to all Web applications sharing the same zk.jar. Refer to the zscript-config element for more information.</para><sect3><title>The device-class Element</title>
 <para>[Optional]</para>
-<para>It specifies the implementation class. The class must implement the org.zkoss.zk.device.Device interface. Instead of implementing it from scratch, you can derive from the proper implementation, such as AjaxDevice and MilDevice.</para></sect3><sect3><title>The timeout-uri Element</title>
+<para>It specifies the implementation class. The class must implement the org.zkoss.zk.device.Device interface. Instead of implementing it from scratch, you can derive from the proper implementation, such as AjaxDevice and MilDevice.</para></sect3><sect3><title>The device-type Element</title>
+<para>[Required]</para>
+<para>It specifies the device type. The previous implementation with the same device type will be replaced if any.</para></sect3><sect3><title>The embed Element</title>
+<para>[Optional][Multiple]</para>
+<para>It specifies the content that shall be added to the output generated and sent to the client when rendering a desktop. The syntax of the content depends on the client. For Ajax clients, it can be any tags that can be placed inside HTML HEAD tag, such as SCRIPT, META and others.</para>
+<para>For example, if you want to show the progress bar in the center of the browser window, you can specify the following in zk.xml.</para>
+<programlisting>&lt;device-config&gt;&#13;    &lt;device-type&gt;ajax&lt;/device-type&gt;    &#13;    &lt;embed&gt;&lt;![CDATA[    &#13;&lt;script type="text/javascript"&gt;&#13;    AU_progressbar = function (id, msg) {    &#13;        Boot_progressbox(id, msg, 0, 0, true, true);        &#13;    };    &#13;&lt;/script&gt;&#13;    ]]&gt;&lt;/embed&gt;    &#13;&lt;/device-config&gt;&#13;</programlisting>
+<para>You can specify multiple embed elements and their content be concatenated together.</para></sect3><sect3><title>The server-push-class Element</title>
+<para>[Optional][Default: depends on device and what edition you use]</para>
+<para>It specifies which class used to implement the server-push feature. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.ServerPush interface.</para>
+<programlisting>&lt;device-config&gt;&#13;        &lt;device-type&gt;ajax&lt;/device-type&gt;&lt;server-push-class&gt;my.ServerPush&lt;/server-push-class&gt;        &#13;&lt;/device-config&gt;&#13;</programlisting></sect3><sect3><title>The timeout-uri Element</title>
 <para>[Optional][Default: null]</para>
 <para>It specifies the target URI that will be used to redirect users to, when the desktop no longer exists – it is usually caused by session timeout. If this element is omitted, an error message will be shown up at the browser to alert users for what happens.</para>
 <para>To reload the same URI again, you can specify an empty content as follows.</para>
-<programlisting>&lt;device-config&gt;&#13;    &lt;device-type&gt;ajax&lt;/device-type&gt;    &#13;    &lt;timeout-uri&gt;&lt;/timeout-uri&gt;    &#13;&lt;/device-config&gt;&#13;</programlisting></sect3><sect3><title>The server-push-class Element</title>
-<para>[Optional][Default: depends on device and what edition you use]</para>
-<para>It specifies which class used to implement the server-push feature. The class must have a default constructor (without any argument), and implement the org.zkoss.zk.ui.sys.ServerPush interface.</para>
-<programlisting>&lt;device-config&gt;&#13;        &lt;device-type&gt;ajax&lt;/device-type&gt;&lt;server-push-class&gt;my.ServerPush&lt;/server-push-class&gt;        &#13;&lt;/device-config&gt;&#13;</programlisting></sect3><sect3><title>The unavailable-message Element</title>
+<programlisting>&lt;device-config&gt;&#13;    &lt;device-type&gt;ajax&lt;/device-type&gt;    &#13;    &lt;timeout-uri&gt;&lt;/timeout-uri&gt;    &#13;&lt;/device-config&gt;&#13;</programlisting></sect3><sect3><title>The unavailable-message Element</title>
 <para>[Optional][Default: depends on device]</para>
 <para>It specifies the message that will be displayed if the client doesn't support this device.</para></sect3></sect2><sect2><title>The error-page Element</title>
 <programlisting>&lt;error-page&gt;&#13;    &lt;device-type&gt;[ajax|mil]&lt;/device-type&gt;    &#13;    &lt;exception-type&gt;ClassName&lt;/exception-type&gt;    &#13;    &lt;location&gt;the error page's URI&lt;/location&gt;    &#13;&lt;/error-page&gt;&#13;</programlisting>
 <para>It specifies an error page used when an un-caught exception is thrown in updating a ZUML page (e.g., in an event listener). Each page is associated with an exception type, aka, a class deriving from java.lang.Throwable. You can specify multiple error pages, each with a different exception type. When an error occurs, ZK searches the proper error page by examing the exception type one-by-one. If none is found, it shows, by default, an alert message at the client.</para>
 <para>The device-type element is optional. If omitted, ajax is assumed. If you want to specify an error page for mobile devices, it has to be mil.</para></sect2><sect2><title>The preference Element</title>
 <programlisting>&lt;preference&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/preference&gt;&#13;</programlisting>
-<para>You can specify any number of preferences with the preference element depicted above. The name and value are application specific and you can specify whatever value you like. To avoid name conflict, it is suggested to prefix the name with your domain name, such as com.poitx.some.another.</para>
-<para>The preferences can then be retrieved back by calling the getPreference method of the org.zkoss.zk.ui.util.Configuration class. Notice that each Web application has one configuration, which can be found by use of getConfiguration method of the org.zkoss.zk.ui.WebApp interface.</para>
-<programlisting>String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;    ...    &#13;}&#13;</programlisting></sect2><sect2><title>The system-property Element</title>
+<para>Specify a preference with the preference element depicted above. The name and value are application specific and you can specify whatever value you like. Mupltie To avoid name conflict, it is suggested to prefix the name with your domain name, such as com.friend.some.another.</para>
+<para>The preferences are application-level. They are shared by a single ZK application (org.zkoss.zk.ui.WebApp).</para>
+<para>They can then be retrieved back by calling the getPreference method of the org.zkoss.zk.ui.util.Configuration class. Notice that each Web application has one configuration, which can be found by use of getConfiguration method of the org.zkoss.zk.ui.WebApp interface.</para>
+<programlisting>String value = webApp.getConfiguration().getPreference("org.zkoss.name", null);&#13;if (value != null) {&#13;    ...    &#13;}&#13;</programlisting></sect2><sect2><title>The library-property Element</title>
+<programlisting>&lt;library-property&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/library-property&gt;&#13;</programlisting>
+<para>Species a library-level property with the library-property element. The above example is equivalent to</para>
+<para>org.zkoss.lang.Library.setProperty("any name", "any value");</para>
+<para>The library properties are shared by all Java codes that use the same set of ZK libraries. If you installed ZK libraries in WEB-INF/ib of a ZK application, the library properties are shared only within the application.</para>
+<para>The library properties are easier to access than the preferences since they are static members (of org.zkoss.lang.Library). However, their scope depends on the installation.</para></sect2><sect2><title>The system-property Element</title>
 <programlisting>&lt;system-property&gt;&#13;    &lt;name&gt;any name&lt;/name&gt;    &#13;    &lt;value&gt;any value&lt;/value&gt;    &#13;&lt;/system-property&gt;&#13;</programlisting>
-<para>You can specify any number of system properties with the system-property element. The above example is equivalent to</para>
+<para>Specifies a system properties with the system-property element. The above example is equivalent to</para>
 <programlisting>System.setProperty("any name", "any value");&#13;</programlisting>
 <para/></sect2></sect1></chapter>
 </book>
