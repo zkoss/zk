@@ -710,8 +710,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 .z-tabbox-accdlite .z-tab-seld .z-tabbox-accdlite-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab-seld .z-tabbox-accdlite-closebtn{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+.z-tabbox-accdlite .z-tab-seld .z-tabbox-accdlite-closebtn{	
 	opacity:0.8;
 }
 .z-tabbox-accdlite .z-tabbox-accdlite-closebtn:hover {
