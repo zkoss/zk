@@ -2886,7 +2886,10 @@ anima = {
 			if (getZKAttr(n, "animating")) {
 				zk._addAnique(n.id, "anima.slideDown");
 			} else {
-				if (anchor && typeof anchor != "string") dur = anchor; // backward compatible
+				if (anchor && typeof anchor != "string") {
+					dur = anchor.duration; // backward compatible	
+					anchor = 't';
+				}
 				++anima.count;
 				setZKAttr(n, "animating", "show");
 				zk._showExtr(n);  //parent visible first
@@ -2915,7 +2918,10 @@ anima = {
 			if (getZKAttr(n, "animating")) {
 				zk._addAnique(n.id, "anima.slideUp");
 			} else {
-				if (anchor && typeof anchor != "string") dur = anchor; // backward compatible
+				if (anchor && typeof anchor != "string") {
+					dur = anchor.duration; // backward compatible	
+					anchor = 't';
+				}
 				++anima.count;
 				setZKAttr(n, "animating", "hide");
 				zk.onHideAt(n); //callback first
