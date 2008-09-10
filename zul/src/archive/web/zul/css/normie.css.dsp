@@ -114,6 +114,19 @@ div.z-tabpanel-accordion {
 .z-msgbox-error {
 	background-image: url(${c:encodeURL('~./zul/img/error.gif')});
 }
+<%-- box.css.dsp --%>
+.z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
+}
+.z-splitter-ver-btn-r, .z-splitter-hor-btn-r {	
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.gif')});
+}
+.z-splitter-ver-btn-t, .z-splitter-hor-btn-t {	
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.gif')});
+}
+.z-splitter-ver-btn-b, .z-splitter-hor-btn-b {	
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
+}
 <%-- grid.css.dsp --%>
 .z-group-img-close{
 	background-image: url(${c:encodeURL('~./zul/img/tree/close.gif')});
@@ -232,8 +245,11 @@ tr.z-list-item td.z-list-item-focus {
     background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb_circle.gif')});
 }
 <%-- tabbox.css.dsp --%>
-.z-tabbox-accd .closebtn, .z-tabbox-accdlite .closebtn{
+.z-tabbox-accd a.z-tabbox-accd-closebtn, .z-tabbox-accdlite a.z-tabbox-accdlite-closebtn{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.gif')});
+}											  
+.z-tabbox-accd a.z-tabbox-accd-closebtn:hover, .z-tabbox-accdlite a.z-tabbox-accdlite-closebtn:hover{
+	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.gif')});
 }
 <%-- tree.css.dsp --%>
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
@@ -245,7 +261,17 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 tr.z-tree-row td.z-tree-row-focus {
 	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
 }
-
-
-
+<%-- window.css.dsp --%>
+.z-window-embedded-tl{
+	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-l.gif')})
+}
+.z-window-embedded-tr{
+	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r.gif')})
+}
+.z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl, .z-window-popup-tl {
+	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.gif')})
+}
+.z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr, .z-window-popup-tr {
+	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.gif')})
+}
 </c:if>

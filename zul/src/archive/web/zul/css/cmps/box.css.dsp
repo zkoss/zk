@@ -106,18 +106,18 @@ tr.z-vbox-sep, tr-z-box-sep {
 
 .z-splitter-os-ver-btn-l, .z-splitter-os-hor-btn-l {
 	width: 8px; min-height: 50px; height: 50px;
-	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l-os.gif')});
 }
 .z-splitter-os-ver-btn-r, .z-splitter-os-hor-btn-r {
 	width: 8px; min-height: 50px; height: 50px;
-	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r-os.gif')});
 }
 .z-splitter-os-ver-btn-t, .z-splitter-os-hor-btn-t {
 	width: 50px; min-height: 8px; height: 8px;
-	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t-os.gif')});
 
 }
 .z-splitter-os-ver-btn-b, .z-splitter-os-hor-btn-b {
 	width: 50px; min-height: 8px; height: 8px;
-	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b-os.gif')});
 }

@@ -21,18 +21,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="tab" value="${self.linkedTab}"/>
 <c:set var="look" value="${self.tabbox.tabLook}-"/>
-<c:set var="lookaccd" value="${c:cat(look,'accd-')}"/>
+<c:set var="lookaccd" value="${c:cat(look,'accdlite-')}"/>
 <c:set var="hghStyle" value="height:${tab.height}" unless="${empty tab.height}"/>
 <div class="${c:cat(look,'accdlite')}" id="${self.uuid}"><%-- self.outerAttrs/innerAttrs gen below --%>
 	<div id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z.sel="${tab.selected}" z.type="zul.tab2.Tab2"  z.box="${tab.tabbox.uuid}" z.panel="${self.uuid}"  width="100%" border="0" cellpadding="0" cellspacing="0" z.disabled="${tab.disabled}">					
-		<div align="left" class="header">
+		<div align="left" class="${c:cat(lookaccd,'header')}">
 			<c:if test="${tab.closable}">
-				<a id="${tab.uuid}!close"  class="closebtn"></a>
+				<a id="${tab.uuid}!close"  class="${c:cat(lookaccd,'closebtn')}"></a>
 			</c:if>		
-			<a href="javascript:;" id="${tab.uuid}!a" class="left-tr">	
-				<em class="right-tr">
-					<span class="span-inner">
-						<span class="span-text">${tab.imgTag}<c:out value="${tab.label}"/></span>
+			<a href="javascript:;" id="${tab.uuid}!a" class="${c:cat(lookaccd,'left-tr')}">	
+				<em class="${c:cat(lookaccd,'right-tr')}">
+					<span class="${c:cat(lookaccd,'inner')}">
+						<span class="${c:cat(lookaccd,'text')}">${tab.imgTag}<c:out value="${tab.label}"/></span>
 					</span>
 				</em>
 			</a>

@@ -501,28 +501,28 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 .z-tabbox-accd{
 	position:relative;
 }
-.z-tabbox-accd .header{
+.z-tabbox-accd-header{
 	cursor:pointer;
 	position:relative;
 	zoom:1;
 }
-.z-tabbox-accd .left-tr {	
+.z-tabbox-accd-left-tr {	
 	text-decoration:none;
 	padding-left:6px;
 	line-height:0;
 	display:block;
 	zoom:1;
 }
-.z-tabbox-accd .right-tr {
+.z-tabbox-accd-right-tr {
 	padding-right:6px;
 	display:block;
 }
-.z-tabbox-accd .span-inner{
+.z-tabbox-accd-inner{
 	display:block;
 	padding:7px 0 6px 0;
 	overflow:hidden;
 }
-.z-tabbox-accd .span-text{
+.z-tabbox-accd-text{
 	cursor:pointer;
 	color:#373737;
 	font-family: ${fontFamilyT};
@@ -543,35 +543,35 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	zoom : 1;
 		
 }
-.z-tabbox-accd .z-tab .left-tr{	
+.z-tabbox-accd .z-tab .z-tabbox-accd-left-tr{	
 	text-decoration:none;
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.png')}) no-repeat scroll 0 0;
 }
-.z-tabbox-accd .z-tab .right-tr {
+.z-tabbox-accd .z-tab .z-tabbox-accd-right-tr {
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.png')}) no-repeat scroll right 0;
 }
-.z-tabbox-accd .z-tab .span-inner{
+.z-tabbox-accd .z-tab .z-tabbox-accd-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-inner.png')}) repeat-x scroll 0 0;
 }
 
-.z-tabbox-accd .z-tab-disd .left-tr  , .z-tabbox-accd  .z-tab-disd-seld  .left-tr{
+.z-tabbox-accd .z-tab-disd .z-tabbox-accd-left-tr  , .z-tabbox-accd  .z-tab-disd-seld  .z-tabbox-accd-left-tr{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.png')}) no-repeat scroll 0 0;
 }
-.z-tabbox-accd .z-tab-disd .right-tr  , .z-tabbox-accd  .z-tab-disd-seld  .right-tr{
+.z-tabbox-accd .z-tab-disd .z-tabbox-accd-right-tr  , .z-tabbox-accd  .z-tab-disd-seld  .z-tabbox-accd-right-tr{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.png')}) no-repeat scroll right 0;
 }
-.z-tabbox-accd .z-tab-disd .span-inner  , .z-tabbox-accd  .z-tab-disd-seld  .span-inner{
+.z-tabbox-accd .z-tab-disd .z-tabbox-accd-inner  , .z-tabbox-accd  .z-tab-disd-seld  .z-tabbox-accd-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-inner.png')}) repeat-x scroll 0 0;
 }
-.z-tabbox-accd .z-tab-disd .closebtn , .z-tabbox-accd  .z-tab-disd-seld  .closebtn{	
+.z-tabbox-accd .z-tab-disd .z-tabbox-accd-closebtn , .z-tabbox-accd  .z-tab-disd-seld  .z-tabbox-accd-closebtn{	
 	opacity:0.6;
 }
 
-.z-tabbox-accd .z-tab-disd .closebtn:hover ,
+.z-tabbox-accd .z-tab-disd .z-tabbox-accd-closebtn:hover ,
  .z-tabbox-accd  .z-tab-disd-seld  .closebtn:hover{	
 	opacity:0.8;
 }
-.z-tabbox-accd .closebtn{
+.z-tabbox-accd .z-tabbox-accd-closebtn{
 	z-index:5;
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
 	background-repeat:no-repeat;
@@ -583,23 +583,23 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	top:5px;
 	z-index:2;
 }
-.z-tabbox-accd .z-tab .closebtn{	
+.z-tabbox-accd .z-tab .z-tabbox-accd-closebtn{	
 	opacity:0.6;
 }
 
-.z-tabbox-accd .z-tab-seld .left-tr{	
+.z-tabbox-accd .z-tab-seld .z-tabbox-accd-left-tr{	
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.png')}) no-repeat scroll 0 0;
 }
-.z-tabbox-accd .z-tab-seld .right-tr{
+.z-tabbox-accd .z-tab-seld .z-tabbox-accd-right-tr{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.png')}) no-repeat scroll right 0;
 }
-.z-tabbox-accd .z-tab-seld .span-inner{
+.z-tabbox-accd .z-tab-seld .z-tabbox-accd-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-inner.png')}) repeat-x scroll 0 0;
 }
-.z-tabbox-accd .z-tab-seld .closebtn{	
+.z-tabbox-accd .z-tab-seld .z-tabbox-accd-closebtn{	
 	opacity:0.8;
 }
-.z-tabbox-accd .closebtn:hover{
+.z-tabbox-accd .z-tabbox-accd-closebtn:hover{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.png')});
 	opacity:1;
 }
@@ -614,7 +614,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 .z-tabbox-accdlite{	
 	position:relative;
 }
-.z-tabbox-accdlite .header{
+.z-tabbox-accdlite .z-tabbox-accdlite-header{
 	overflow:hidden;
 	zoom:1;
 	cursor:pointer;
@@ -624,23 +624,23 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	border-right-width:0;
 	border-left-width:0;
 }
-.z-tabbox-accdlite .left-tr {
+.z-tabbox-accdlite .z-tabbox-accdlite-left-tr {
 	zoom:1;
 	padding-left:6px;
 	line-height:0;
 	display:block;
 	text-decoration:none;
 }
-.z-tabbox-accdlite .right-tr {		
+.z-tabbox-accdlite .z-tabbox-accdlite-right-tr {		
 	padding-right:6px;
 	display:block;
 }
-.z-tabbox-accdlite .span-inner{	
+.z-tabbox-accdlite .z-tabbox-accdlite-inner{	
 	display:block;
 	padding:4px 0 3px 0;
 	overflow:hidden;
 }
-.z-tabbox-accdlite .span-text{
+.z-tabbox-accdlite .z-tabbox-accdlite-text{
 	cursor:pointer;
 	color:#373737;
 	font-family: ${fontFamilyT};
@@ -657,36 +657,36 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	zoom : 1;
 }
 
-.z-tabbox-accdlite .z-tab .left-tr{		
+.z-tabbox-accdlite .z-tab .z-tabbox-accdlite-left-tr{		
 	text-decoration:none;
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab .right-tr {
+.z-tabbox-accdlite .z-tab .z-tabbox-accdlite-right-tr {
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab .span-inner{
+.z-tabbox-accdlite .z-tab .z-tabbox-accdlite-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
 
 
-.z-tabbox-accdlite .z-tab-disd .left-tr  , .z-tabbox-accdlite  .z-tab-disd-seld  .left-tr{
+.z-tabbox-accdlite .z-tab-disd .z-tabbox-accdlite-left-tr  , .z-tabbox-accdlite  .z-tab-disd-seld  .z-tabbox-accdlite-left-tr{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab-disd .right-tr  , .z-tabbox-accdlite  .z-tab-disd-seld  .right-tr{
+.z-tabbox-accdlite .z-tab-disd .z-tabbox-accdlite-right-tr  , .z-tabbox-accdlite  .z-tab-disd-seld  .z-tabbox-accdlite-right-tr{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab-disd .span-inner  , .z-tabbox-accdlite  .z-tab-disd-seld  .span-inner{
+.z-tabbox-accdlite .z-tab-disd .z-tabbox-accdlite-inner  , .z-tabbox-accdlite  .z-tab-disd-seld  .z-tabbox-accdlite-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab-disd .closebtn , .z-tabbox-accdlite  .z-tab-disd-seld  .closebtn{	
+.z-tabbox-accdlite .z-tab-disd .z-tabbox-accdlite-closebtn , .z-tabbox-accdlite  .z-tab-disd-seld  .z-tabbox-accdlite-closebtn{	
 	opacity:0.6;
 }
 
-.z-tabbox-accdlite .z-tab-disd .closebtn:hover ,
+.z-tabbox-accdlite .z-tab-disd .z-tabbox-accdlite-closebtn:hover ,
 .z-tabbox-accdlite  .z-tab-disd-seld  .closebtn:hover{	
 	opacity:0.6;
 }
-.z-tabbox-accdlite .closebtn{
+.z-tabbox-accdlite .z-tabbox-accdlite-closebtn{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
 	background-repeat:no-repeat;
 	cursor:pointer;
@@ -697,24 +697,24 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	width:17px;
 	z-index:5;
 }
-.z-tabbox-accdlite .z-tab .closebtn{	
+.z-tabbox-accdlite .z-tab .z-tabbox-accdlite-closebtn{	
 	opacity:0.6;
 }
 	
-.z-tabbox-accdlite .z-tab-seld .left-tr{	
+.z-tabbox-accdlite .z-tab-seld .z-tabbox-accdlite-left-tr{	
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab-seld .right-tr{
+.z-tabbox-accdlite .z-tab-seld .z-tabbox-accdlite-right-tr{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab-seld .span-inner{
+.z-tabbox-accdlite .z-tab-seld .z-tabbox-accdlite-inner{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
 }
-.z-tabbox-accdlite .z-tab-seld .closebtn{
+.z-tabbox-accdlite .z-tab-seld .z-tabbox-accdlite-closebtn{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
 	opacity:0.8;
 }
-.z-tabbox-accdlite .closebtn:hover {
+.z-tabbox-accdlite .z-tabbox-accdlite-closebtn:hover {
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.png')});
 	opacity:1;
 }

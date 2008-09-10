@@ -50,6 +50,7 @@ public class Tabpanel2Accordion implements ComponentRenderer {
 		final Tabbox tabbox = self.getTabbox();
 		final String look = tabbox.getTabLook() + '-';
 		final String lookaccd = look + "accd-";
+		final String lookaccdL = look + "accdlite-";
 		String uuid = self.getUuid();
 		String tabuuid = tab.getUuid();
 		String mold = tabbox.getMold();
@@ -62,20 +63,21 @@ public class Tabpanel2Accordion implements ComponentRenderer {
 			
 			wh.write("<div id=\""+tabuuid+"\"")	
 				.write(tab.getOuterAttrs()).write(tab.getInnerAttrs())
+				.write(" z.max=\"true\"")
 				.write(" z.sel=\""+tab.isSelected()+"\"")
 				.write(" z.type=\"zul.tab2.Tab2\"")
 				.write(" z.box=\""+tabbox.getUuid()+"\"")
 				.write(" z.panel=\""+uuid+"\"")
 				.write(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"")
 				.write(" z.disabled=\""+tab.isDisabled()+"\"").writeln(">");
-				wh.writeln("<div align=\"left\" class=\"header\" >");
+				wh.writeln("<div align=\"left\" class=\""+lookaccd+"header\" >");
 					if (tab.isClosable()){
-						wh.writeln("<a id=\""+tabuuid+"!close\"  class=\"closebtn\"></a>");
+						wh.writeln("<a id=\""+tabuuid+"!close\"  class=\""+lookaccd+"closebtn\"></a>");
 					}
-					wh.writeln("<a href=\"javascript:;\" id=\""+tabuuid+"!a\" class=\"left-tr\">");
-						wh.writeln("<em class=\"right-tr\">");
-							wh.writeln("<span class=\"span-inner\">");
-								wh.writeln("<span class=\"span-text\">");
+					wh.writeln("<a href=\"javascript:;\" id=\""+tabuuid+"!a\" class=\""+lookaccd+"left-tr\">");
+						wh.writeln("<em class=\""+lookaccd+"right-tr\">");
+							wh.writeln("<span class=\""+lookaccd+"inner\">");
+								wh.writeln("<span class=\""+lookaccd+"text\">");
 									wh.write(tab.getImgTag());
 									new Out(tab.getLabel()).render(out);
 								wh.writeln("</span>");
@@ -101,14 +103,14 @@ public class Tabpanel2Accordion implements ComponentRenderer {
 				.write(" z.panel=\""+uuid+"\"")
 				.write(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"")
 				.write(" z.disabled=\""+tab.isDisabled()+"\"").writeln(">");
-				wh.writeln("<div align=\"left\" class=\"header\" >");
+				wh.writeln("<div align=\"left\" class=\""+lookaccdL+"header\" >");
 					if (tab.isClosable()){
-						wh.writeln("<a id=\""+tabuuid+"!close\"  class=\"closebtn\"></a>");
+						wh.writeln("<a id=\""+tabuuid+"!close\"  class=\""+lookaccdL+"closebtn\"></a>");
 					}
-					wh.writeln("<a href=\"javascript:;\" id=\""+tabuuid+"!a\" class=\"left-tr\">");
-						wh.writeln("<em class=\"right-tr\">");
-							wh.writeln("<span class=\"span-inner\">");
-								wh.writeln("<span class=\"span-text\">");
+					wh.writeln("<a href=\"javascript:;\" id=\""+tabuuid+"!a\" class=\""+lookaccdL+"left-tr\">");
+						wh.writeln("<em class=\""+lookaccdL+"right-tr\">");
+							wh.writeln("<span class=\""+lookaccdL+"inner\">");
+								wh.writeln("<span class=\""+lookaccdL+"text\">");
 									wh.write(tab.getImgTag());
 									new Out(tab.getLabel()).render(out);
 								wh.writeln("</span>");
