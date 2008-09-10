@@ -33,7 +33,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 			<attribute name="value"><![CDATA[
-<window title="ZScript Demo" border="normal" width="200px">
+<window title="ZScript" border="normal" width="200px">
 	<label id="mylabel" value="Hello, World!"/>
 	<zscript>
 		mylabel.value = "Hello, Script!";

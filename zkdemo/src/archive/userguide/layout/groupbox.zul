@@ -33,7 +33,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 			<attribute name="value"><![CDATA[
-<window title="Groupbox demo" border="normal">
+<window title="Groupbox" border="normal">
 	<vbox>
 		Which kind of fruit do you want?
 		<groupbox id="gb" mold="3d" width="300px">

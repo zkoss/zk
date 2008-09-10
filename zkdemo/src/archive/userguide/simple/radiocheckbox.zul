@@ -31,7 +31,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 			<attribute name="value"><![CDATA[
-<window title="radiogroup and radio demo" border="normal">
+<window title="Radiogroup and checkbox" border="normal">
 	<vbox>
 		Which kind of fruit do you want?
 		<radiogroup onCheck="fruit.value = self.selectedItem.label">

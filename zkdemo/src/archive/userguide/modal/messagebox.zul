@@ -33,7 +33,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
 			<attribute name="value"><![CDATA[
-<window title="Messagebox demo" border="normal">
+<window title="Messagebox" border="normal">
 	<button label="Warning" width="100px">
 		<attribute name="onClick">{
  			Messagebox.show("Warning is pressed", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);

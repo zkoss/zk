@@ -33,7 +33,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
 			<attribute name="value"><![CDATA[
-<window title="onScrolling event demo" border="normal">
+<window title="The onScrolling event" border="normal">
 	<vbox>
 		<slider id="slider1" onScrolling="zooming(slider1, img1)" onScroll="zooming(slider1, img1)"/>
 		<image id="img1" src="/img/sun.jpg" width="10px"/>

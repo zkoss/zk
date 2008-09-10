@@ -55,7 +55,7 @@ password=パスワード
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 			<attribute name="value"><![CDATA[
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
-<window title="Localization demo" border="normal">
+<window title="Localization" border="normal">
 	<grid>
 		<rows>
 			<row>

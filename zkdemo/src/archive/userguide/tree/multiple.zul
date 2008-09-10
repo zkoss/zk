@@ -33,7 +33,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 			<attribute name="value"><![CDATA[
-<window title="tree multiple selection demo" border="normal">
+<window title=" Tree multiple selection" border="normal">
 	<tree id="tree" width="90%" rows="5" multiple="true">
 		<treecols sizable="true">
 			<treecol label="Name"/>

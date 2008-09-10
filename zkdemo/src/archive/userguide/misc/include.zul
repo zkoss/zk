@@ -31,7 +31,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
 		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
 			<attribute name="value"><![CDATA[
-<window title="include demo" border="normal" width="300px">
+<window title="Include" border="normal" width="300px">
 	Hello, World!
 	<include src="/userguide/misc/includedHello.zul"/>
 </window>
