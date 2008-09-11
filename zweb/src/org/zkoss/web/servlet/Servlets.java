@@ -259,83 +259,191 @@ public class Servlets {
 	 * is not recognized.
 	 */
 	public static final boolean isRobot(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
+		return (req instanceof HttpServletRequest)
+			&& isRobot(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the client is a robot (such as Web crawlers).
+	 *
+	 * <p>Because there are too many robots, it returns true if the user-agent
+	 * is not recognized.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isRobot(String userAgent) {
+		if (userAgent == null)
 			return false;
 
-		agt = agt.toLowerCase();
-		return agt.indexOf("msie") < 0 && agt.indexOf("opera") < 0
-			&& agt.indexOf("gecko/") < 0 && agt.indexOf("safari") < 0;
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("msie ") < 0 && userAgent.indexOf("opera") < 0
+			&& userAgent.indexOf("gecko/") < 0 && userAgent.indexOf("safari") < 0
+			&& userAgent.indexOf("zk") < 0 && userAgent.indexOf("rmil") < 0;
 	}
 	/** Returns whether the browser is Internet Explorer.
 	 * If true, it also implies {@link #isExplorer7} is true.
 	 */
 	public static final boolean isExplorer(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
+		return (req instanceof HttpServletRequest)
+			&& isExplorer(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is Internet Explorer.
+	 * If true, it also implies {@link #isExplorer7} is true.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isExplorer(String userAgent) {
+		if (userAgent == null)
 			return false;
 
-		agt = agt.toLowerCase();
-		return agt.indexOf("msie") >= 0 && agt.indexOf("opera") < 0;
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("msie ") >= 0 && userAgent.indexOf("opera") < 0;
 	}
 	/** Returns whether the browser is Explorer 7 or later.
 	 */
 	public static final boolean isExplorer7(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
-			return false;
+		return (req instanceof HttpServletRequest)
+			&& isExplorer7(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is Explorer 7 or later.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isExplorer7(String userAgent) {
+		return getIEVer(userAgent) >= 7;
+	}
+	/** Returns whether the browser is Explorer 8 or later.
+	 * @since 3.5.1
+	 */
+	public static final boolean isExplorer8(ServletRequest req) {
+		return (req instanceof HttpServletRequest)
+			&& isExplorer8(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is Explorer 7 or later.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isExplorer8(String userAgent) {
+		return getIEVer(userAgent) >= 8;
+	}
+	private static final int getIEVer(String userAgent) {
+		if (userAgent == null) return -1;
 
-		agt = agt.toLowerCase();
-		return agt.indexOf("msie 7") >= 0;
+		userAgent = userAgent.toLowerCase();
+		int j = userAgent.indexOf("msie ");
+		if (j < 0 || userAgent.indexOf("opera") >= 0) return -1;
+
+		int ver = 0;
+		for (int k = j += 5, len = userAgent.length(); k < len;  ++k) {
+			final char cc = userAgent.charAt(k);
+			if (cc >= '0' && cc <= '9')
+				ver = ver * 10 + cc - '0';
+			else
+				break;
+		}
+		return ver;
 	}
 	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
+	 * If true, it also implies {@link #isGecko3} is true.
 	 */
 	public static final boolean isGecko(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
+		return (req instanceof HttpServletRequest)
+			&& isGecko(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
+	 * If true, it also implies {@link #isGecko3} is true.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isGecko(String userAgent) {
+		if (userAgent == null)
 			return false;
 
-		agt = agt.toLowerCase();
-		return agt.indexOf("gecko/") >= 0 && agt.indexOf("safari") < 0;
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("gecko/") >= 0 && userAgent.indexOf("safari") < 0;
 	}
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
 	 * @since 3.5.0
 	 */
 	public static final boolean isGecko3(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
-			return false;
-
-		agt = agt.toLowerCase();
-		return agt.indexOf("gecko/") >= 0 && agt.indexOf("safari") < 0
-			&& agt.indexOf("firefox/3") >= 0;
+		return (req instanceof HttpServletRequest)
+			&& isGecko3(((HttpServletRequest)req).getHeader("user-agent"));
 	}
+	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isGecko3(String userAgent) {
+		return getGeckoVer(userAgent) >= 3;
+	}
+	private static final int getGeckoVer(String userAgent) {
+		if (userAgent == null) return -1;
+
+		userAgent = userAgent.toLowerCase();
+		if (userAgent.indexOf("gecko/") >= 0 && userAgent.indexOf("safari") < 0)
+			return -1;
+
+		int j = userAgent.indexOf("firefox/");
+		if (j < 0) return -1;
+
+		int ver = 0;
+		for (int k = j += 8, len = userAgent.length(); k < len;  ++k) {
+			final char cc = userAgent.charAt(k);
+			if (cc >= '0' && cc <= '9')
+				ver = ver * 10 + cc - '0';
+			else
+				break;
+		}
+		return ver;
+	}
+
 	/** Returns whether the browser is Safari.
 	 */
 	public static final boolean isSafari(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
+		return (req instanceof HttpServletRequest)
+			&& isSafari(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is Safari.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isSafari(String userAgent) {
+		if (userAgent == null)
 			return false;
 
-		agt = agt.toLowerCase();
-		return agt.indexOf("safari") >= 0;
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("safari") >= 0;
 	}
 	/** Returns whether the browser is Opera.
 	 */
 	public static final boolean isOpera(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
+		return (req instanceof HttpServletRequest)
+			&& isOpera(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is Opera.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isOpera(String userAgent) {
+		if (userAgent == null)
 			return false;
 
-		agt = agt.toLowerCase();
-		return agt.indexOf("opera") >= 0;
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("opera") >= 0;
 	}
 
 	/** Returns whether the client is a mobile device supporting MIL
@@ -343,14 +451,23 @@ public class Servlets {
 	 * @since 2.4.0
 	 */
 	public static final boolean isMilDevice(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
+		return (req instanceof HttpServletRequest)
+			&& isMilDevice(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the client is a mobile device supporting MIL
+	 * (Mobile Interactive Language).
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isMilDevice(String userAgent) {
+		if (userAgent == null)
 			return false;
 
 		//ZK Mobile/1.0 (RMIL)
-		agt = agt.toLowerCase();
-		return agt.indexOf("zk") >= 0 && agt.indexOf("rmil") >= 0;
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("zk") >= 0 && userAgent.indexOf("rmil") >= 0;
 	}
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
@@ -362,14 +479,27 @@ public class Servlets {
 	 * @since 3.0.2
 	 */
 	public static final boolean isHilDevice(ServletRequest req) {
-		String agt = req instanceof HttpServletRequest ?
-			((HttpServletRequest)req).getHeader("user-agent"): null;
-		if (agt == null)
+		return (req instanceof HttpServletRequest)
+			&& isHilDevice(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the client is a mobile device supporting HIL
+	 * (Handset Interactive Language).
+	 *
+	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
+	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
+	 * return true.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static final boolean isHilDevice(String userAgent) {
+		if (userAgent == null)
 			return false;
 
 		//ZK Mobile for Android 1.0 (RMIL; RHIL)
-		agt = agt.toLowerCase();
-		return agt.indexOf("zk") >= 0 && agt.indexOf("rhil") >= 0;
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("zk") >= 0 && userAgent.indexOf("rhil") >= 0;
 	}
 
 	/** Returns the user-agent header, which indicates what the client is,

@@ -95,21 +95,36 @@ if (!window.AU_progressbox) {
 
 /////
 // zk
+/** Converts to an integer. It handles null and "07" */
+function $int(v, b) {
+	v = v ? parseInt(v, b || 10): 0;
+	return isNaN(v) ? 0: v;
+};
 
 /** Browser info. */
 zk.agent = navigator.userAgent.toLowerCase();
-zk.safari = zk.agent.indexOf("safari") != -1;
-zk.opera = zk.agent.indexOf("opera") != -1;
-zk.ie = zk.agent.indexOf("msie") != -1 && !zk.opera;
-zk.ie7 = zk.agent.indexOf("msie 7") != -1; //ie7 or later
-zk.ie6Only = zk.ie && !zk.ie7;
-zk.gecko = zk.agent.indexOf("gecko/") != -1 && !zk.safari && !zk.opera;
-zk.gecko3 = zk.gecko && zk.agent.indexOf("firefox/3") != -1;
-zk.gecko2Only = zk.gecko && !zk.gecko3;
-zk.windows = zk.agent.indexOf("windows") != -1;
-zk.mozilla = zk.gecko && zk.agent.indexOf("firefox/") == -1;
-zk.air = zk.agent.indexOf("adobeair") != -1;
-//zk.macintosh = zk.agent.indexOf("macintosh") != -1;
+zk.safari = zk.agent.indexOf("safari") >= 0;
+zk.opera = zk.agent.indexOf("opera") >= 0;
+zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
+if (zk.gecko) {
+	var j = zk.agent.indexOf("firefox/");
+	j = $int(zk.agent.substring(j + 8));
+	zk.gecko3 = j >= 3;
+	zk.gecko2Only = !zk.gecko3;
+} else if (!zk.opera) {
+	var j = zk.agent.indexOf("msie ");
+	zk.ie = j >= 0;
+	if (zk.ie) {
+		j = $int(zk.agent.substring(j + 5));
+		zk.ie7 = j >= 7; //ie7 or later
+		zk.ie8 = j >= 8; //ie8 or later
+		zk.ie6Only = !zk.ie7;
+	}
+}
+//zk.windows = zk.agent.indexOf("windows") >= 0;
+//zk.firefox = zk.gecko && zk.agent.indexOf("firefox/") < 0;
+zk.air = zk.agent.indexOf("adobeair") >= 0;
+//zk.mac = zk.agent.indexOf("macintosh") >= 0;
 zk._js4ld = {}; //{name, [script]}
 zk._ctpgs = []; //contained page IDs
 zk._gevts = {}; // ZK Global Events. 
@@ -585,12 +600,6 @@ function $parentByTag(el, tagName) {
 function $visible(el, strict) {
 	return el && (!el.style || (el.style.display != "none" && (!strict || el.style.visibility != "hidden")));
 }
-
-/** Converts to an integer. It handles null and "07" */
-function $int(v, b) {
-	v = v ? parseInt(v, b || 10): 0;
-	return isNaN(v) ? 0: v;
-};
 
 /** Returns the ZK attribute of the specified name.
  * Note: the name space of ZK attributes is "http://www.zkoss.org/2005/zk"
