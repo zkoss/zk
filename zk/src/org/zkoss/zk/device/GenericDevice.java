@@ -44,6 +44,12 @@ abstract public class GenericDevice implements Device {
 	public boolean isCacheable() {
 		return true;
 	}
+	/** Returns null to indicate unknown.
+	 * Deriving should override it to provide more precise information.
+	 */
+	public Boolean isCompatible(String userAgent) {
+		return null;
+	}
 	public String getUnavailableMessage() {
 		return _uamsg;
 	}

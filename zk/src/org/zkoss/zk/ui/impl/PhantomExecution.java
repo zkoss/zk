@@ -136,6 +136,9 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public boolean isBrowser() {
 		return false;
 	}
+	public boolean isBrowser(String type) {
+		return false;
+	}
 	public boolean isRobot() {
 		return false;
 	}
@@ -143,6 +146,9 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 		return false;
 	}
 	public boolean isExplorer7() {
+		return false;
+	}
+	public boolean isOpera() {
 		return false;
 	}
 	public boolean isGecko() {

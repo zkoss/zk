@@ -497,8 +497,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		if (!"rmDesktop".equals(cmdId) && !Events.ON_RENDER.equals(cmdId)
 		&& !Events.ON_TIMER.equals(cmdId) && !"dummy".equals(cmdId)) {//possible in FF due to cache
-			String uri = Devices.getTimeoutURI(
-				Servlets.isMilDevice(request) ? "mil": "ajax");
+			String uri = Devices.getTimeoutURI(getDeviceType(request));
 			final AuResponse resp;
 			if (uri != null) {
 				if (uri.length() != 0)
@@ -512,6 +511,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		out.close(request, response);
+	}
+	private static String getDeviceType(HttpServletRequest request) {
+		final String agt = request.getHeader("user-agent");
+		if (agt != null && agt.length() > 0) {
+			try {
+				return Devices.getDeviceByClient(agt).getType();
+			} catch (Throwable ex) {
+				log.warning("Unknown device for "+agt);
+			}
+		}
+		return "ajax";
 	}
 
 	/** Recovers the desktop if possible.

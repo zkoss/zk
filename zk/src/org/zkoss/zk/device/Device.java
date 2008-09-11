@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.device;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.sys.ServerPush;
 
 /**
@@ -95,6 +96,18 @@ public interface Device {
 	 * @since 3.0.0
 	 */
 	public String setTimeoutURI(String timeoutURI);
+
+	/** Returns whether this device supports the specified client.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @return Boolean.TRUE if this device supports the specified client,
+	 * Boolean.FALSE if cannot, or null if unknown.
+	 * @see org.zkoss.zk.ui.Execution#getUserAgent
+	 * @see Devices#getDeviceByClient
+	 * @since 3.5.0
+	 */
+	public Boolean isCompatible(String userAgent);
 
 	/** Returns the class that implements the server-push feature
 	 * ({@link ServerPush}) for this device, or null if the default is used.

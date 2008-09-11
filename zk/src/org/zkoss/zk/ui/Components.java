@@ -933,6 +933,9 @@ public class Components {
 			public boolean isBrowser() {
 				return exec().isBrowser();
 			}
+			public boolean isBrowser(String type) {
+				return exec().isBrowser(type);
+			}
 
 			public boolean isExplorer() {
 				return exec().isExplorer();
@@ -940,6 +943,9 @@ public class Components {
 
 			public boolean isExplorer7() {
 				return exec().isExplorer7();
+			}
+			public boolean isOpera() {
+				return exec().isOpera();
 			}
 
 			public boolean isForwarded() {

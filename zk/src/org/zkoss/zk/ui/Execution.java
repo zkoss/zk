@@ -762,8 +762,20 @@ public interface Execution  {
 	public void addAuResponse(String key, AuResponse resposne);
 
 	/** Returns whether the client is a browser.
+	 * No matter the client is Ajax, MIL or whatever, it returns true.
+	 * It returns false only if this is a 'fake' execution (aka., request).
 	 */
 	public boolean isBrowser();
+	/** Returns whether it is a browser of the specified type.
+	 *
+	 * @param type the type of the browser.
+	 * Allowed values include "robot", "ie", "ie6", "ie6Only", "ie7", "ie8",
+	 * "ie7Only", "gecko", "gecko2", "gecko3", "gecko2Only",
+	 * "opara", "safari",
+	 * "mil", "hil", "milOnly"
+	 * @since 3.5.1
+	 */
+	public boolean isBrowser(String type);
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
@@ -787,6 +799,10 @@ public interface Execution  {
 	/** Returns whether the client is Safari.
 	 */
 	public boolean isSafari();
+	/** Returns whether the client is Safari.
+	 * @since 3.5.1
+	 */
+	public boolean isOpera();
 	/** Returns whether the client is a mobile device supporting MIL
 	 * (Mobile Interactive Language).
 	 * @since 2.4.1

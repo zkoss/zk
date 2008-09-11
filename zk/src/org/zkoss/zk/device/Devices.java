@@ -18,9 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.idom.Element;
@@ -40,7 +41,7 @@ public class Devices {
 	private Devices() {}
 
 	/** Map(String type, DeviceInfo info or Device device). */
-	private static final Map _devs = new HashMap(8);
+	private static final Map _devs = new LinkedHashMap(8);
 
 	/** Returns the device for the specified desktop type.
 	 *
@@ -48,7 +49,8 @@ public class Devices {
 	 * @exception DeviceNotFoundException if not found.
 	 * @since 3.0.0
 	 */
-	public static final Device getDevice(String deviceType) {
+	public static final Device getDevice(String deviceType)
+	throws DeviceNotFoundException {
 		final Object o; //null, Device or DeviceInfo
 		synchronized (_devs) {
 			o = _devs.get(deviceType);
@@ -67,6 +69,56 @@ public class Devices {
 		}
 		return device;
 	}
+	/** Returns the device for the specified client.
+	 * It invokes {@link Device#isCompatible} to return the correct device.
+	 *If all devices returns null (means unknown), one of the devices returning
+	 *null is returned. If all devices returns Boolean.FALSE,
+	 *DeviceNotFoundException is thrown.
+	 *
+	 * @param userAgent represents a client.
+	 * It is the user-agent header for HTTP-base client.
+	 * @see org.zkoss.zk.ui.Execution#getUserAgent
+	 * @exception DeviceNotFoundException if not found.
+	 * @since 3.0.0
+	 */
+	public static final Device getDeviceByClient(String userAgent)
+	throws DeviceNotFoundException {
+		String[] devTypes;
+		synchronized (_devs) {
+			Collection c = _devs.keySet();
+			devTypes = (String[])c.toArray(new String[c.size()]);
+		}
+
+		Device device = null;
+		for (int j = 0; j < devTypes.length; ++j) {
+			Device dev;
+			try {
+				dev = getDevice(devTypes[j]);
+			} catch (Throwable ex) {
+				continue; //skip
+			}
+
+			Boolean b;
+			try {
+				b = dev.isCompatible(userAgent);
+			} catch (Throwable ex) { //backward compatible
+				b = null;
+			}
+
+			if (b != null) {
+				if (b.booleanValue())
+					return dev;
+			} else if (device == null
+			|| "ajax".equals(devTypes[j]) //ajax highest priority
+			|| "xml".equals(device.getType())) { //xml lowest priority
+				device = dev;
+			}
+		}
+		if (device == null)
+			throw new DeviceNotFoundException(userAgent, MZk.NOT_FOUND, userAgent);
+		return device;
+	}
+
 	/** Tests whether the device for the specified type exists.
 	 *
 	 * @param deviceType the device type, say, ajax.

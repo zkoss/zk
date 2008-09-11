@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
+import org.zkoss.web.servlet.Servlets;
+
 /**
  * Represents a Web browser with the Ajax support.
  *
@@ -34,6 +36,16 @@ public class AjaxDevice extends GenericDevice {
 	 */
 	public boolean isCacheable() {
 		return false;
+	}
+	public Boolean isCompatible(String userAgent) {
+		if (Servlets.isMilDevice(userAgent))
+			return Boolean.FALSE;
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("mozilla") >= 0 
+			|| userAgent.indexOf("msie ") >= 0
+			|| userAgent.indexOf("gecko/") >= 0
+			|| userAgent.indexOf("safari") >= 0
+			|| userAgent.indexOf("opera") >= 0 ? Boolean.TRUE: null;
 	}
 	/** Returns <code>text/html</code>
 	 */
