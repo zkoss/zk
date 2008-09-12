@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 <c:choose>
-	<c:when test="${empty c:getProperty('org.zkoss.zul.Separator.spaceWithMargin')}">
+	<c:when test="${empty c:property('org.zkoss.zul.Separator.spaceWithMargin')}">
 	<%-- 3.0.4 and later --%>
 .z-separator-hor, .z-separator-hor-bar {
 	height: 7px; overflow: hidden; line-height: 0pt; font-size: 0pt;

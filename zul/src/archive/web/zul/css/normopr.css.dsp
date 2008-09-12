@@ -4,7 +4,7 @@
 <c:include page="~./zul/css/norm.css.dsp"/>
 
 <c:choose>
-<c:when  test="${!empty c:getProperty('org.zkoss.zul.theme.enableZKPrefix')}">
+<c:when  test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk option {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeXS}; font-weight: normal;

@@ -1,6 +1,19 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeM')}"/>
+<c:set var="fontSizeM" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeMS')}"/>
+<c:set var="fontSizeMS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeS')}"/>
+<c:set var="fontSizeS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeXS')}"/>
+<c:set var="fontSizeXS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyT')}"/>
+<c:set var="fontFamilyT" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyC')}"/>
+<c:set var="fontFamilyC" value="${val}" scope="request" unless="${empty val}"/>
+
 <c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
 <c:set var="fontSizeMS" value="11px" scope="request" if="${empty fontSizeMS}"/>
 <c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
@@ -13,7 +26,7 @@
 
 html, body {height:100%}
 
-<c:if test="${empty c:getProperty('org.zkoss.zul.theme.browserDefault')}">
+<c:if test="${empty c:property('org.zkoss.zul.theme.browserDefault')}">
 body {
 	margin: 0px; padding: 0px 5px;
 }
@@ -21,7 +34,7 @@ body {
 
 <%-- paragraphs --%>
 <c:choose>
-<c:when test="${!empty c:getProperty('org.zkoss.zul.theme.enableZKPrefix')}">
+<c:when test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
 .zk button, .zk input.button, .zk input.file {
 	font-family: ${fontFamilyC};

@@ -1,4 +1,13 @@
 	--------
+ZK 3.5.1
+* Features
+  2106820: Change font size/family with system properties
+
+* Bugs
+
+* Upgrade Notes
+
+	--------
 ZK 3.5.0
 * Features
   1973888: Listbox support Listgroupfoot in Group

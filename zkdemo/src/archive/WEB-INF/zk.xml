@@ -213,6 +213,51 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
+	<!-- Configure the default font size in ZUL CSS file (norm*.css)
+		Default: small.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontSizeM</name>
+		<value>small</value>
+	</library-property>
+	-->
+	<!-- Configure the font size for menus in ZUL CSS file (norm*.css)
+		Default: 11px.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontSizeMS</name>
+		<value>11px</value>
+	</library-property>
+	-->
+	<!-- Configure the font size for smaller fonts, such as toolbar,
+		 in ZUL CSS file (norm*.css)
+		Default: x-small.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontSizeS</name>
+		<value>x-small</value>
+	</library-property>
+	-->
+	<!-- Configure the font size for extremely small fonts,
+		 in ZUL CSS file (norm*.css)
+		Default: xx-small.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontSizeXS</name>
+		<value>xx-small</value>
+	</library-property>
+	-->
+	<!-- Configure the font family for titles in ZUL CSS file (norm*.css)
+		Default: Verdana, Tahoma, Arial, Helvetica, sans-serif.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyT</name>
+		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+	</library-property>
+	-->
+	<!-- Configure the font family for content in ZUL CSS file (norm*.css)
+		Default: Verdana, Tahoma, Arial, serif.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyC</name>
+		<value>Verdana, Tahoma, Arial, serif</value>
+	</library-property>
+	-->
+
 	<!-- Configure ZUL to apply the zk prefix in the CSS file (norm*.css).
 		Use this only if you want to use different fonts for ZK components
 		and the rest of your Web pages
