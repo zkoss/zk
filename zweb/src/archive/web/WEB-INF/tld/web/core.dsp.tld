@@ -326,6 +326,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 
 	<function>
+		<name>browser</name>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
+		<function-signature>
+	boolean isBrowser(java.lang.String)
+		</function-signature>
+		<description>
+	Whether the current request is coming from the browser of the specified
+	type.
+	@param type the type of the browser.
+		Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
+		"ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
+		"opara", "safari",
+		"mil", "hil", "mil-".<br/>
+		Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
+		or other.
+		</description>
+	</function>
+	<function>
 		<name>isExplorer</name>
 		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>

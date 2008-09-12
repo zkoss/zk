@@ -402,25 +402,7 @@ public class ExecutionImpl extends AbstractExecution {
 		return true;
 	}
 	public boolean isBrowser(String type) {
-		if ("ie".equals(type) || "ie6".equals(type)) return isExplorer();
-		if ("ie6Only".equals(type)) return isExplorer() && !isExplorer7();
-		if ("ie7".equals(type)) return isExplorer7();
-		if ("ie7Only".equals(type)) return isExplorer7() && !isExplorer8();
-		if ("ie8".equals(type)) return isExplorer8();
-
-		if ("gecko".equals(type) || "gecko2".equals(type)) return isGecko();
-		if ("gecko2Only".equals(type)) return isGecko() && !isGecko3();
-		if ("gecko3".equals(type)) return isGecko3();
-
-		if ("safari".equals(type)) return isSafari();
-		if ("opera".equals(type)) return isOpera();
-
-		if ("mil".equals(type)) return isMilDevice();
-		if ("milOnly".equals(type)) return isMilDevice() && !isHilDevice();
-		if ("hil".equals(type)) return isHilDevice();
-
-		if ("robot".equals(type)) return isRobot();
-		return false;
+		return Servlets.isBrowser(_request, type);
 	}
 	public boolean isRobot() {
 		return Servlets.isRobot(_request);
@@ -430,9 +412,6 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public boolean isExplorer7() {
 		return Servlets.isExplorer7(_request);
-	}
-	public boolean isExplorer8() {
-		return Servlets.isExplorer8(_request);
 	}
 	public boolean isGecko() {
 		return Servlets.isGecko(_request);

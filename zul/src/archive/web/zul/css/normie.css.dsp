@@ -32,7 +32,7 @@ option {
 }
 
 <%-- tree.css.dsp, listbox.css.dsp, and grid.css.dsp --%>
-<c:if test="${c:isExplorer() && !c:isExplorer7()}">
+<c:if test="${c:browser('ie6-')}">
 div.z-listbox, div.z-tree, div.z-dottree, div.z-grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
@@ -100,7 +100,7 @@ div.z-tabpanel-accordion {
 	zoom:1;
 }
 <%-- IE 6 GIF  --%>
-<c:if test="${c:isExplorer() && !c:isExplorer7()}">
+<c:if test="${c:browser('ie6-')}">
 <%-- ZK Massagebox norm.css.dsp--%>
 .z-msgbox-question {
 	background-image: url(${c:encodeURL('~./zul/img/question.gif')});

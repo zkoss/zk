@@ -769,10 +769,12 @@ public interface Execution  {
 	/** Returns whether it is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
-	 * Allowed values include "robot", "ie", "ie6", "ie6Only", "ie7", "ie8",
-	 * "ie7Only", "gecko", "gecko2", "gecko3", "gecko2Only",
+	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
+	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
 	 * "opara", "safari",
-	 * "mil", "hil", "milOnly"
+	 * "mil", "hil", "mil-".<br/>
+	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
+	 * or other.
 	 * @since 3.5.1
 	 */
 	public boolean isBrowser(String type);

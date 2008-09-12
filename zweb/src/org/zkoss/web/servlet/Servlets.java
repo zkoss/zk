@@ -253,6 +253,55 @@ public class Servlets {
 		}
 	}
 
+	/** Returns whether the client is a browser of the specified type.
+	 *
+	 * @param type the type of the browser.
+	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
+	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
+	 * "opara", "safari",
+	 * "mil", "hil", "mil-".<br/>
+	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
+	 * or other.
+	 * @since 3.5.1
+	 */
+	public static boolean isBrowser(ServletRequest req, String type) {
+		return (req instanceof HttpServletRequest)
+			&& isBrowser(((HttpServletRequest)req).getHeader("user-agent"), type);
+	}
+	/** Returns whether the user agent is a browser of the specified type.
+	 *
+	 * @param type the type of the browser.
+	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
+	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
+	 * "opara", "safari",
+	 * "mil", "hil", "mil-".<br/>
+	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
+	 * or other.
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 */
+	public static boolean isBrowser(String userAgent, String type) {
+		if ("ie".equals(type) || "ie6".equals(type)) return isExplorer(userAgent);
+		if ("ie6-".equals(type)) return getIEVer(userAgent) == 6;
+		if ("ie7".equals(type)) return isExplorer7(userAgent);
+		if ("ie7-".equals(type)) return getIEVer(userAgent) == 7;
+		if ("ie8".equals(type)) return getIEVer(userAgent) >= 8;
+
+		if ("gecko".equals(type) || "gecko2".equals(type)) return isGecko(userAgent);
+		if ("gecko2-".equals(type)) return getGeckoVer(userAgent) == 2;
+		if ("gecko3".equals(type)) return isGecko3(userAgent);
+
+		if ("safari".equals(type)) return isSafari(userAgent);
+		if ("opera".equals(type)) return isOpera(userAgent);
+
+		if ("mil".equals(type)) return isMilDevice(userAgent);
+		if ("mil-".equals(type)) return isMilDevice(userAgent) && !isHilDevice(userAgent);
+		if ("hil".equals(type)) return isHilDevice(userAgent);
+
+		if ("robot".equals(type)) return isRobot(userAgent);
+		return false;
+	}
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
@@ -315,22 +364,6 @@ public class Servlets {
 	 */
 	public static final boolean isExplorer7(String userAgent) {
 		return getIEVer(userAgent) >= 7;
-	}
-	/** Returns whether the browser is Explorer 8 or later.
-	 * @since 3.5.1
-	 */
-	public static final boolean isExplorer8(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isExplorer8(((HttpServletRequest)req).getHeader("user-agent"));
-	}
-	/** Returns whether the browser is Explorer 7 or later.
-	 *
-	 * @param userAgent represents a client.
-	 * For HTTP clients, It is the user-agent header.
-	 * @since 3.5.1
-	 */
-	public static final boolean isExplorer8(String userAgent) {
-		return getIEVer(userAgent) >= 8;
 	}
 	private static final int getIEVer(String userAgent) {
 		if (userAgent == null) return -1;
