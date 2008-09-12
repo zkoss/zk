@@ -18,8 +18,9 @@ package org.zkoss.web.servlet.http;
 
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.Writer;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
@@ -409,10 +410,11 @@ public class Https extends Servlets {
 	void write(HttpServletRequest request, HttpServletResponse response,
 	Media media, boolean download, boolean resumable)
 	throws IOException {
-//		response.setHeader("Accept-Ranges", "bytes");
+		response.setHeader("Accept-Ranges", "bytes");
 
 		final boolean headOnly = "HEAD".equalsIgnoreCase(request.getMethod());
 		final byte[] data;
+		int from = -1, to = -1;
 		synchronized (media) { //Bug 1896797: media might be access concurr.
 			//reading an image and send it back to client
 			final String ctype = media.getContentType();
@@ -428,21 +430,36 @@ public class Https extends Servlets {
 				//response.setHeader("Content-Transfer-Encoding", "binary");
 			}
 
+			final String rs = request.getHeader("Range");
+			if (rs != null && rs.length() > 0) {
+				final int[] range = parseRange(rs);
+				if (range != null) {
+					from = range[0];
+					to = range[1];
+				}
+			}
+
 			if (!media.inMemory()) {
+				final ServletOutputStream out = response.getOutputStream();
 				if (media.isBinary()) {
 					final InputStream in = media.getStreamData();
-					if (headOnly) {
-						int cnt = 0;
-						final byte[] buf = new byte[512];
-						for (int v; (v = in.read(buf)) >= 0;)
-							cnt += v;
-						response.setContentLength(cnt);
-						return;
-					}
-
-					final ServletOutputStream out = response.getOutputStream();
 					try {
-						Files.copy(out, in);
+						if (headOnly) {
+							int cnt = 0;
+							final byte[] buf = new byte[512];
+							for (int v; (v = in.read(buf)) >= 0;)
+								cnt += v;
+							response.setContentLength(cnt);
+							return;
+						}
+
+						if (from >= 0) { //partial
+							PartialByteStream pbs = new PartialByteStream(from, to);
+							Files.copy(pbs, in);
+							pbs.responseTo(response);
+						} else {
+							Files.copy(out, in);
+						}
 					} catch (IOException ex) {
 						//browser might close the connection
 						//and reread (test case: B30-1896797.zul)
@@ -459,30 +476,26 @@ public class Https extends Servlets {
 					} finally {
 						in.close();
 					}
-					out.flush();
 				} else {
+					final String charset = getCharset(ctype);
 					final Reader in = media.getReaderData();
-					if (headOnly) {
-						String charset = "UTF-8";
-						if (ctype != null) {
-							int j = ctype.indexOf("charset=");
-							if (j >= 0) {
-								String cs = ctype.substring(j + 8).trim();
-								if (cs.length() > 0) charset = cs;
-							}
+					try {
+						if (headOnly) {
+							int cnt = 0;
+							final char[] buf = new char[256];
+							for (int v; (v = in.read(buf)) >= 0;)
+								cnt += new String(buf, 0, v).getBytes(charset).length;
+							response.setContentLength(cnt);
+							return;
 						}
 
-						int cnt = 0;
-						final char[] buf = new char[256];
-						for (int v; (v = in.read(buf)) >= 0;)
-							cnt += new String(buf, 0, v).getBytes(charset).length;
-						response.setContentLength(cnt);
-						return;
-					}
-
-					final Writer out = response.getWriter();
-					try {
-						Files.copy(out, in);
+						if (from >= 0) { //partial
+							PartialByteStream pbs = new PartialByteStream(from, to);
+							Files.copy(new OutputStreamWriter(pbs, charset), in);
+							pbs.responseTo(response);
+						} else {
+							Files.copy(new OutputStreamWriter(out, charset), in);
+						}
 					} catch (IOException ex) {
 						//browser might close the connection and reread
 						//so, read it completely, since 2nd read counts on it
@@ -498,20 +511,111 @@ public class Https extends Servlets {
 					} finally {
 						in.close();
 					}
-					out.flush();
 				}
+				out.flush();
 				return; //done;
 			}
 
 			data = media.isBinary() ? media.getByteData():
-				media.getStringData().getBytes("UTF-8");
+				media.getStringData().getBytes(getCharset(ctype));
 		}
 
-		response.setContentLength(data.length);
-		if (!headOnly) {
+		if (headOnly) {
+			response.setContentLength(data.length);
+		} else {
 			final ServletOutputStream out = response.getOutputStream();
-			out.write(data);
+			if (from >= 0) { //partial
+				response.setStatus(response.SC_PARTIAL_CONTENT);
+
+				int f = from <= data.length ? from: data.length;
+				int t = to >= 0 && to < data.length ? to: data.length;
+				int cnt = t - f + 1;
+				response.setContentLength(cnt);
+				response.setHeader("Content-Range",
+					"bytes "+f+"-"+t+"/"+data.length);
+
+				out.write(data, f, cnt);
+			} else {
+				response.setContentLength(data.length);
+				out.write(data);
+			}
 			out.flush();
 		}
+	}
+	static private String getCharset(String contentType) {
+		if (contentType != null) {
+			int j = contentType.indexOf("charset=");
+			if (j >= 0) {
+				String cs = contentType.substring(j + 8).trim();
+				if (cs.length() > 0) return cs;
+			}
+		}
+		return "UTF-8";
+	}
+	static private int[] parseRange(String range) {
+		range = range.toLowerCase();
+		for (int j = 0, k, len = range.length();
+		(k = range.indexOf("bytes", j)) >= 0;) {
+			for (k += 5; k < len;) {
+				char cc = range.charAt(k++);
+				if (cc == ' ' || cc == '\t') continue;
+				if (cc == '=') {
+					j = range.indexOf('-', k);
+					try {
+						int from = Integer.parseInt(
+							(j >= 0 ? range.substring(k, j): range.substring(k)).trim());
+						if (from >= 0) {
+							if (j >= 0) {
+								String s = range.substring(j + 1).trim();
+								if (s.length() > 0) {
+									int to = Integer.parseInt(s);
+									if (to >= from)
+										return new int[] {from, to};
+								}
+							}
+							return new int[] {from, -1};
+						}
+					} catch (Throwable ex) { //ignore
+					}
+					if (log.debugable()) log.debug("Failed to parse Range: "+range);
+					return null;
+				}
+			}
+			j = k;
+		}
+		return null;
+	}
+}
+/*package*/ class PartialByteStream extends ByteArrayOutputStream {
+	private final int _from, _to;
+	private int _ofs, _cnt;
+	/*package*/ PartialByteStream(int from, int to) {
+		super(4096);
+		_from = from;
+		_to = to;
+	}
+	/*package*/ void responseTo(HttpServletResponse response)
+	throws IOException {
+		//Note: after all content are written, _ofs is the total number
+		//while _cnt the number of bytes being written.
+		response.setStatus(response.SC_PARTIAL_CONTENT);
+		response.setContentLength(_cnt);
+
+		int from = _from <= _ofs ? _from: _ofs;
+		int to = _to >= 0 && _to <= _ofs ? _to: _ofs;
+		response.setHeader("Content-Range", "bytes "+from+"-"+to+"/"+_ofs);
+
+		writeTo(response.getOutputStream());
+	}
+	public void write(int b) {
+		int ofs = _ofs++;
+		if (ofs >= _from && (_to < 0 || ofs <= _to)) {
+			++_cnt;
+			super.write(b);
+		}
+	}
+	public void write(byte[] b, int ofs, int len) {
+		while (--len >= 0)
+			write(b[ofs++]);
 	}
 }

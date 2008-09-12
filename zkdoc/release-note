@@ -2,6 +2,7 @@
 ZK 3.5.1
 * Features
   2106820: Change font size/family with system properties
+  2058993: Fileupload supports bookmarkable and resumable download
 
 * Bugs
 
