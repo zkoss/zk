@@ -1,6 +1,5 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<c:set var="btnimg" value="~./zul/img/button/z-btn-trendy.gif" scope="request" if="${empty btnimg}"/>
 .z-button {
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM}; color: black;
@@ -36,19 +35,29 @@ button.z-button {
 	color: gray; cursor: default; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
 }
 <%-- default --%>
+.z-button .z-button-tl, .z-button .z-button-tm, .z-button .z-button-tr, 
+.z-button .z-button-cl, .z-button .z-button-cm, .z-button .z-button-cr, 
+.z-button .z-button-bl, .z-button .z-button-bm, .z-button .z-button-br {
+	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy2.gif')});
+}
+
 .z-button .z-button-tl {
-	background: url(${c:encodeURL(btnimg)}) no-repeat 0 0;
+	background-repeat: no-repeat;
+	background-position: 0 0;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-tm {
-	background: url(${c:encodeURL(btnimg)}) repeat-x 0 -252px;
+	background-repeat: repeat-x;
+	background-position: 0 -1012px;
 }
 .z-button .z-button-tr {
-	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -126px;
+	background-repeat: no-repeat;
+	background-position: 0 -506px;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-cl {
-	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -3px;
+	background-repeat: no-repeat;
+	background-position: 0 -3px;
 	width: 3px; padding: 0; margin: 0; text-align: right;
 }
 .z-button .z-button-cm {
@@ -56,104 +65,109 @@ button.z-button {
 	vertical-align: middle;
 	text-align: center;
 	padding: 0 5px;
-	background: url(${c:encodeURL(btnimg)}) repeat-x 0 -255px;
+	background-repeat: repeat-x;
+	background-position: 0 -1015px;
 	white-space: nowrap; 
 }
 .z-button .z-button-cr {
-	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -129px;
+	background-repeat: no-repeat;
+	background-position: 0 -509px;
 	width: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bl {
-	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -123px;
+	background-repeat: no-repeat;
+	background-position: 0 -503px;
 	width: 3px; height: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bm {
-	background: url(${c:encodeURL(btnimg)}) repeat-x 0 -375px;
+	background-repeat: repeat-x;
+	background-position: 0 -1515px;
 	height: 3px;
 }
 .z-button .z-button-br {
-	background: url(${c:encodeURL(btnimg)}) no-repeat 0 -249px;
+	background-repeat: no-repeat;
+	background-position: 0 -1009px;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 
 <%-- Mouseover --%>
 .z-button-over .z-button-tl {
-	background-position:0 -378px;
+	background-position:0 -1518px;
 }
 .z-button-over .z-button-tm {
-	background-position:0 -630px;
+	background-position:0 -2530px;
 }
 .z-button-over .z-button-tr {
-	background-position:0 -504px;
+	background-position:0 -2024px;
 }
 .z-button-over .z-button-cl {
-	background-position:0 -381px;
+	background-position:0 -1521px;
 }
 .z-button-over .z-button-cm {
-  background-position:0 -633px;    
+  background-position:0 -2533px;    
 }
 .z-button-over .z-button-cr {
-	background-position:0 -507px;
+	background-position:0 -2027px;
 }
 .z-button-over .z-button-bl {
-	background-position:0 -501px;
+	background-position:0 -2021px;
 }
 .z-button-over .z-button-bm {
-	background-position:0 -753px;
+	background-position:0 -3033px;
 }
 .z-button-over .z-button-br {
-	background-position:0 -627px;
+	background-position:0 -2527px;
 }
 <%-- focus --%>
 .z-button-focus .z-button-tl {
-	background-position:0 -882px;
+	background-position:0 -3542px;
 }
 .z-button-focus .z-button-tm {
-	background-position:0 -1134px;
+	background-position:0 -4554px;
 }
 .z-button-focus .z-button-tr {
-	background-position:0 -1008px;
+	background-position:0 -4048px;
 }
 .z-button-focus .z-button-cl {
-	background-position:0 -885px;
+	background-position:0 -3545px;
 }
 .z-button-focus .z-button-cr {
-	background-position:0 -1011px;
+	background-position:0 -4051px;
 }
 .z-button-focus .z-button-bl {
-	background-position:0 -1005px;
+	background-position:0 -4045px;
 }
 .z-button-focus .z-button-bm {
-	background-position:0 -1257px;
+	background-position:0 -5057px;
 }
 .z-button-focus .z-button-br {
-	background-position:0 -1131px;
+	background-position:0 -4551px;
 }
 <%-- click --%>
 .z-button-clk .z-button-tl {
-	background-position:0 -378px;
+	background-position:0 -1518px;
 }
 .z-button-clk .z-button-tm{
-	background-position:0 -756px;
+	background-position:0 -3036px;
 }
 .z-button-clk .z-button-tr {
-	background-position:0 -504px;
+	background-position:0 -2024px;
 }
 .z-button-clk .z-button-bl {
-	background-position:0 -501px;
+	background-position:0 -2021px;
 }
 .z-button-clk .z-button-bm {
-	background-position:0 -879px;
+	background-position:0 -3539px;
 }
 .z-button-clk .z-button-br {
-	background-position:0 -627px;
+	background-position:0 -2527px;
 }
 .z-button-clk .z-button-cl {
-	background-position:0 -381px;
+	background-position:0 -1521px;
 }
 .z-button-clk .z-button-cm {
-    background-position:0 -759px;
+    background-position:0 -3039px;
 }
 .z-button-clk .z-button-cr {
-	background-position:0 -507px;
+	background-position:0 -2027px;
 }
