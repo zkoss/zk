@@ -55,7 +55,10 @@ public class Tabpanel2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 
 		wh.write("<div id=\"").write(self.getUuid()).write('"')
-			.write(self.getOuterAttrs()).write('>')
+			.write(" z.type=\"zul.tab2.Tabpanel2\"")
+			.write(self.getOuterAttrs())			
+			.write(" z.box=\""+tabbox.getId()+"\"")
+			.write('>')
 			.write("<div id=\"").write(self.getUuid()).write("!real\" style=\"height:100%\"")
 			.write(self.getInnerAttrs()).write('>')
 			.writeChildren(self)

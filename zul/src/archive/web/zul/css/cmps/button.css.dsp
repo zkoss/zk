@@ -38,7 +38,7 @@ button.z-button {
 .z-button .z-button-tl, .z-button .z-button-tm, .z-button .z-button-tr, 
 .z-button .z-button-cl, .z-button .z-button-cm, .z-button .z-button-cr, 
 .z-button .z-button-bl, .z-button .z-button-bm, .z-button .z-button-br {
-	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy2.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')});
 }
 
 .z-button .z-button-tl {

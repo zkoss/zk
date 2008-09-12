@@ -639,25 +639,6 @@ zkTabs2 = {
 			zkTabs2._forceStyle(child[2],"h",zk.revisedSize(child[1],tabs.offsetHeight,true)+"px");
 		} else {
 			$e(tabs.id,"header").style.height="";
-			var hgh = tabbox.style.height;
-			if (hgh && hgh != "auto" && !zkTabbox2._isAccord(tabbox)) {
-				var panels = zk.nextSibling(tabs, "DIV");
-				
-				if (panels) {
-					hgh = zk.getVflexHeight(panels);					
-					for (var pos, n = panels.firstChild; n; n = n.nextSibling) 
-						if (n.id && zk.isVisible(n)) { // Bug 1881553, do not resize tabpanel display none
-										
-							if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary. 
-								pos = n.style.position;
-								n.style.position = "relative";
-							}
-							zk.setOffsetHeight(n, hgh);
-							if (zk.ie) 
-								n.style.position = pos;
-						}
-				}
-			}
 		}
 	},
 	
@@ -698,3 +679,39 @@ if (zk.ie6Only) {
 		}
 	};
 }
+////
+//tabpanel2//
+zkTabpanel2 = {
+	init: function(cmp) {
+		var tbx = $e(getZKAttr(cmp, "box"));
+		this._fixPanelHgh(tbx,cmp);
+	},
+	
+	onVisi: function(cmp) {
+		var tbx = $e(getZKAttr(cmp, "box"));
+		this._fixPanelHgh(tbx,cmp);//Bug 2104974
+		
+	},
+	_fixPanelHgh: function(tabbox,tabpanel){
+		var hgh = tabbox.style.height;
+		if (!zkTabbox2._isAccord(tabbox)) {
+			if (hgh && hgh != "auto" && !zkTabbox2._isAccord(tabbox)) {
+				var panels = $parent(tabpanel)
+				if (panels) {
+					hgh = zk.getVflexHeight(panels);
+					for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
+						if (n.id) {
+							if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary. 
+								pos = n.style.position;
+								n.style.position = "relative";
+							}
+							zk.setOffsetHeight(n, hgh);
+							if (zk.ie) n.style.position = pos;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+zkTabpanel2.onSize = zkTabpanel2.onVisi;
