@@ -6,8 +6,8 @@
 <c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
 <c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
 
-<c:set var="fontFamilyTitle" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
-	scope="request" if="${empty fontFamilyTitle}"/><%-- title --%>
+<c:set var="fontFamilyT" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
+	scope="request" if="${empty fontFamilyT}"/><%-- title --%>
 <c:set var="fontFamilyC" value="Verdana, Tahoma, Arial, serif"
 	scope="request" if="${empty fontFamilyC}"/><%-- content --%>
 
