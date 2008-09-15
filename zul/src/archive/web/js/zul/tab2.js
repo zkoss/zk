@@ -648,7 +648,7 @@ zkTabs2 = {
 		case "h":
 			if (zk.ie6Only) {
 				cmp.style.height = "0px";
-			}else{
+			} else {
 				cmp.style.height = "";
 			}
 			cmp.style.height = value;		
@@ -656,7 +656,7 @@ zkTabs2 = {
 		case "w":
 			if (zk.ie6Only) {
 				cmp.style.width = "0px";
-			}else{
+			} else {
 				cmp.style.width = "";	
 			}
 			cmp.style.width = "";
@@ -690,12 +690,12 @@ zkTabpanel2 = {
 	onVisi: function(cmp) {
 		var tbx = $e(getZKAttr(cmp, "box"));
 		this._fixPanelHgh(tbx,cmp);//Bug 2104974
-		
+		 if (zk.ie6Only) zk.repaint(tbx);
 	},
 	_fixPanelHgh: function(tabbox,tabpanel){
 		var hgh = tabbox.style.height;
 		if (!zkTabbox2._isAccord(tabbox)) {
-			if (hgh && hgh != "auto" && !zkTabbox2._isAccord(tabbox)) {
+			if (hgh && hgh != "auto") {
 				var panels = $parent(tabpanel)
 				if (panels) {
 					hgh = zk.getVflexHeight(panels);
