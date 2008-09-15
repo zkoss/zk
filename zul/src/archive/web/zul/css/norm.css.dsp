@@ -14,10 +14,10 @@
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyC')}"/>
 <c:set var="fontFamilyC" value="${val}" scope="request" unless="${empty val}"/>
 
-<c:set var="fontSizeM" value="small" scope="request" if="${empty fontSizeM}"/>
+<c:set var="fontSizeM" value="12px" scope="request" if="${empty fontSizeM}"/>
 <c:set var="fontSizeMS" value="11px" scope="request" if="${empty fontSizeMS}"/>
-<c:set var="fontSizeS" value="x-small" scope="request" if="${empty fontSizeS}"/>
-<c:set var="fontSizeXS" value="xx-small" scope="request" if="${empty fontSizeXS}"/>
+<c:set var="fontSizeS" value="11px" scope="request" if="${empty fontSizeS}"/>
+<c:set var="fontSizeXS" value="10px" scope="request" if="${empty fontSizeXS}"/>
 
 <c:set var="fontFamilyT" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
 	scope="request" if="${empty fontFamilyT}"/><%-- title --%>
