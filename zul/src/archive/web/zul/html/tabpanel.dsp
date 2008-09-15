@@ -23,8 +23,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}"${self.outerAttrs}>
-<div id="${self.uuid}!real"${self.innerAttrs}>
+<div id="${self.uuid}"${self.outerAttrs} z.type="zul.tab.Tabpanel">
+<div id="${self.uuid}!real"${self.innerAttrs} style="height:100%;" >
 <c:forEach var="child" items="${self.children}">
 	${z:redraw(child, null)}
 </c:forEach>

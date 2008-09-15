@@ -86,6 +86,9 @@ td.gamma {background: #F4F4F4;}
 .overflow-hidden {
 	overflow: hidden;
 }
+.z-repaint {
+	zoom: 1; background-color: transparent; -moz-outline: none;
+}
 <%-- ZK --%>
 <%-- groupbox caption --%>
 .caption input, .caption td {

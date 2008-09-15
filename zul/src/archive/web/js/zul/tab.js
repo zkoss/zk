@@ -250,7 +250,7 @@ zkTabs.init = function (cmp) {
 zkTabs.cleanup = function (cmp) {
 	zkTabs._tabs.remove(cmp.id);
 };
-zkTabs.onVisi = zkTabs.onSize = function (cmp) {
+zkTabs.onVisi = zkTabs.onSize = function (cmp) {	
 	zkTabs.fixWidth(cmp.id);
 };
 if (zk.ie6Only) zkTabs.beforeSize = function (tabs) {
@@ -263,6 +263,15 @@ if (zk.ie6Only) zkTabs.beforeSize = function (tabs) {
 	}
 };
 
+////
+// tabpanel //
+zkTabpanel = {};
+zkTabpanel.onVisi = zkTabpanel.onSize = function (cmp){//Bug 2111320
+	var tabbox = $parentByType(cmp, "Tabbox");	
+	if ( !zk.isAccord(tabbox) && zk.ie6Only  ) {		
+		zk.repaint(tabbox);
+	}
+}
 /** Returns whether the tabbox is accordion.
  * @since 3.0.3
  */
@@ -381,7 +390,7 @@ zkTabs._fixHgh = function (tabbox, tabs) {
 			hgh = zk.getVflexHeight(panels);
 
 			for (var pos, n = panels.firstChild; n; n = n.nextSibling)
-				if (n.id) {
+				if (n.id) {					
 					if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary. 
 						pos = n.style.position;
 						n.style.position = "relative";

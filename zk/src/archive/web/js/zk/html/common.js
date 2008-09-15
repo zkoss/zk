@@ -126,6 +126,21 @@ zk.override = function (obj, fn, supobj, func) {
 };
 
 /**
+ * Forces the browser to repaint the specified element via changing its css name.
+ * <p>
+ * Note: this function uses setTimeout to clean up the appended css name.
+ * @param {Object} el an element
+ * @param {Number} timeout a millisecond.  
+ * @since 3.0.8
+ */
+zk.repaint = function (el, timeout) {
+	zk.addClass(el, "z-repaint");
+	setTimeout(function() {
+		zk.rmClass(el, "z-repaint");
+	}, timeout > 0 ? timeout : 1);
+};
+
+/**
  * Fixs the layout position of the element when the style of element is "overflow:hidden" or
  * "position:relative" in IE. Because, sometimes the layout position of the element
  * will be gone or go away its original place. 
