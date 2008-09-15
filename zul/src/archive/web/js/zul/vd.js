@@ -645,7 +645,7 @@ zkTxbox.onkeydown = function (evt) {
 zkTxbox.onfocus = function (evt) {
 	var inp = zkau.evtel(evt), //backward compatible (2.4 or before)
 		cmp = $outer(inp);
-	if ($tag(inp) != "INPUT") return;
+	if (!$tag(inp)) return; //Bug 2111900
 	if (zkau.onfocus0(evt)
 	&& inp && inp.id && zkau.asap(cmp, "onChanging")) {
 		//handling onChanging
