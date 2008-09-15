@@ -7,6 +7,7 @@ ZK 3.5.1
 * Bugs
   2111900: Multiline textbox cannot fire onChanging
   2105158: Menu separator unvisible
+  2104921: Border layout collapsing can hide the wrong element
 
 * Upgrade Notes
 

@@ -418,10 +418,11 @@ zkLayoutRegion2 = {
 			cmp._slideIn = function (evt) {
 				var target = zkau.evtel(evt);
 				if (cmp._isSilde && !zk.isAncestor(cmp, target)) {
-					if (target.id == $uuid(cmp) + "!btned") {
+					var uuid = $uuid(cmp);
+					if (target.id == uuid + "!btned") {
 						zkLayoutRegion2.onColledAfterSlideUp(cmp);
 						zkLayoutRegionSplit2.open(cmp.split, true, false, false, true);
-					} else if (!anima.count) {
+					} else if ($uuid(target) != uuid || !anima.count) {
 						anima.slideUp(cmp, zkLayoutRegionSplit2.sanchors[cmp.split.pos]);
 					}
 				}
