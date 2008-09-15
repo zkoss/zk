@@ -380,11 +380,16 @@ function invoke_ant
 
 		zipjslist=$(grep '^zipjs=' deploy)
 		zipjslist=${zipjslist#zipjs=}
+		zipcsslist=$(grep '^zipcss=' deploy)
+		zipcsslist=${zipcsslist#zipcss=}
 	else
 		deploy=unknown
 	fi
 	if [ "${zipjslist}" = "" ] ; then
 		zipjslist=_na_dir_
+	fi
+	if [ "${zipcsslist}" = "" ] ; then
+		zipcsslist=_na_dir_
 	fi
 
 	prjver="$(head -1 version)"
@@ -437,6 +442,7 @@ function invoke_ant
 		-Djboss.profile="$jboss_profile" -Djboss.ear="$jboss_ear" \
 		-Djboss.home="$jboss_home" -Dtomcat.home="$tomcat_home" \
 		-Djs.trim=$jstrim -Dzipjs=$zipjslist\
+		-Dzipcss=$zipcsslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" -Dimport.libs="$import_libs" \
 		-Dproject.name="$2" -Dproject.version="$prjver" \

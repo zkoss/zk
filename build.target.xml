@@ -150,7 +150,14 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
 	</exec>
-
+	
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/zipcss"/>
+		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
+		<arg value="${src.archive.dir}/${zipcss}"/>
+		<arg value="${codegen.archive.dir}/${zipcss}"/>
+	</exec>
+	
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
 		<fileset dir="${src.archive.dir}" includes="**"
