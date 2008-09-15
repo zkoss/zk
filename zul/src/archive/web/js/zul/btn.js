@@ -48,7 +48,9 @@ zkButton = {
 	},
 	onfocus: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = $outer(Event.element(evt)),
+		var target = Event.element(evt);
+		if (!$tag(Event.element(evt))) return; // Firefox 2 will cause a focus error when resize browser.
+		var cmp = $outer(target),
 			box = $e(cmp.id + "!box");
 		zk.addClass(box, getZKAttr(cmp, "mcls") + "-focus");
 		zkau.onfocus(evt);
