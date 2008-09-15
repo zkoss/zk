@@ -5,7 +5,8 @@ ZK 3.5.1
   2058993: Fileupload supports bookmarkable and resumable download
 
 * Bugs
-  2111900: Multiline textbox cannot fire onChanging.
+  2111900: Multiline textbox cannot fire onChanging
+  2105158: Menu separator unvisible
 
 * Upgrade Notes
 
