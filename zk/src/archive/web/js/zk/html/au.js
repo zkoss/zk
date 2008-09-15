@@ -1087,10 +1087,10 @@ zkau.onfocus = function (evtel) { //accept both evt and cmp
  * @since 3.0.4
  */
 zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
-	var el = zkau.evtel(evtel);
+	var el = zkau.evtel(evtel);	
 	if (!zkau.canFocus(el)) return false;
-
-	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
+	
+	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases	
 	zkau.closeFloatsOnFocus(el);
 	if (zkau.valid) zkau.valid.uncover(el);
 
@@ -1105,7 +1105,7 @@ zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
  * @param noonblur not to send the onblur event (3.0.5)
  */
 zkau.onblur = function (evtel, noonblur) {
-	var el = zkau.evtel(evtel);
+	var el = zkau.evtel(evtel);	
 	if (el == zkau.currentFocus) zkau.currentFocus = null;
 		//Note: _onDocMousedown is called before onblur, so we have to
 		//prevent it from being cleared
@@ -1242,9 +1242,8 @@ zkau._onDocMousedown = function (evt) {
 	if (!zkau.canFocus(el)) return;
 
 	zkau._savepos(evt);
-
+	
 	zkau.currentFocus = el;
-
 	zkau.closeFloatsOnFocus(el);
 	zkau.autoZIndex(el);
 };
@@ -1590,7 +1589,7 @@ zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
 	var target = Event.element(evt),
 		zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys,
-		keycode = Event.keyCode(evt), zkcode; //zkcode used to search z.ctkeys
+		keycode = Event.keyCode(evt), zkcode; //zkcode used to search z.ctkeys	
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = $tag(target);
@@ -1635,23 +1634,24 @@ zkau._onDocKeydown = function (evt) {
 
 	if (zkcode) evtnm = "onCtrlKey";
 
-	for (var n = target, ref; n; n = $parent(n)) {
-		if (n.id && n.getAttribute) {
+	for (var n = target, ref; n; n = $parent(n)) {		
+		if (n.id && n.getAttribute) {			
 			if (!ref && n.id.indexOf("!") == -1)
-				ref = n.id;
+				ref = n.id;			
 			if (getZKAttr(n, evtnm) == "true"
 			&& (!zkcode || zkau._inCtkeys(evt, zkcode, getZKAttr(n, "ctkeys")))) {
-				var bSend = true;
+				var bSend = true;				
 				if (zkau.currentFocus) {
 					var inp = zkau.currentFocus;
 					switch ($tag(inp)) {
-					case "INPUT":
+					case "INPUT":						
 						var type = inp.type.toLowerCase();
 						if (type != "text" && type != "password")
 							break; //ignore it
 						//fall thru
 					case "TEXTAREA":
 						bSend = zkau.textbox && zkau.textbox.updateChange(inp, false);
+						
 					}
 				}
 
@@ -2449,10 +2449,9 @@ zkau.cmd1 = {
 	outer: function (uuid, cmp, html) {
 		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
 		var fns = zk.find(cmp, "onOuter"),
-			cf = zkau.currentFocus;
-		zkau.currentFocus = null; //free memory
-		cf = cf && cf.id && zk.isAncestor(cmp, cf, true) ? cf.id: null;
-
+			cf = zkau.currentFocus,
+			cfid = cf && cf.id && zk.isAncestor(cmp, cf, true) ? cf.id: null;			
+		
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
 			to = cmp.nextSibling;
@@ -2460,8 +2459,8 @@ zkau.cmd1 = {
 		if (from) zkau._initSibs(from, to, true);
 		else zkau._initChildren(from2, to);
 
-		if (cf && !zkau.currentFocus)
-			zk.focus($e(cf));
+		if (cfid && zkau.currentFocus == cf)
+			zk.focus($e(cfid));
 
 		if (zkau.valid) zkau.valid.fixerrboxes();
 		if (fns) {
