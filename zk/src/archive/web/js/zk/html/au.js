@@ -30,7 +30,7 @@ if (!window.Droppable_effect) { //define it only if not customized
 			zk.restoreStyle(e, "backgroundColor");
 		else {
 			zk.backupStyle(e, "backgroundColor");
-			e.style.backgroundColor = "#80ADE7";			
+			e.style.backgroundColor = "#80ADE7";
 		}
 	};
 }
@@ -846,7 +846,7 @@ zkau._insertAndInitBeforeEnd = function (n, html) {
 	}
 
 	var lc = n.lastChild;
-	zk.insertHTMLBeforeEnd(n, html);		
+	zk.insertHTMLBeforeEnd(n, html);
 	if (lc) zkau._initSibs(lc, null, true);
 	else zkau._initChildren(n);
 };
@@ -1087,10 +1087,10 @@ zkau.onfocus = function (evtel) { //accept both evt and cmp
  * @since 3.0.4
  */
 zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
-	var el = zkau.evtel(evtel);	
+	var el = zkau.evtel(evtel);
 	if (!zkau.canFocus(el)) return false;
-	
-	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases	
+
+	zkau.currentFocus = el; //_onDocMousedown doesn't take care all cases
 	zkau.closeFloatsOnFocus(el);
 	if (zkau.valid) zkau.valid.uncover(el);
 
@@ -1105,7 +1105,7 @@ zkau.onfocus0 = function (evtel, silent) { //accept both evt and cmp
  * @param noonblur not to send the onblur event (3.0.5)
  */
 zkau.onblur = function (evtel, noonblur) {
-	var el = zkau.evtel(evtel);	
+	var el = zkau.evtel(evtel);
 	if (el == zkau.currentFocus) zkau.currentFocus = null;
 		//Note: _onDocMousedown is called before onblur, so we have to
 		//prevent it from being cleared
@@ -1242,7 +1242,7 @@ zkau._onDocMousedown = function (evt) {
 	if (!zkau.canFocus(el)) return;
 
 	zkau._savepos(evt);
-	
+
 	zkau.currentFocus = el;
 	zkau.closeFloatsOnFocus(el);
 	zkau.autoZIndex(el);
@@ -1541,7 +1541,7 @@ zkau._tryCloseTip = function () {
 						close = true;
 					}
 				}
-				
+
 				if (close) {
 					zkau._tipz = null;
 					break;
@@ -1589,7 +1589,7 @@ zkau._onDocKeydown = function (evt) {
 	if (!evt) evt = window.event;
 	var target = Event.element(evt),
 		zkAttrSkip, evtnm, ctkeys, shkeys, alkeys, exkeys,
-		keycode = Event.keyCode(evt), zkcode; //zkcode used to search z.ctkeys	
+		keycode = Event.keyCode(evt), zkcode; //zkcode used to search z.ctkeys
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = $tag(target);
@@ -1634,24 +1634,23 @@ zkau._onDocKeydown = function (evt) {
 
 	if (zkcode) evtnm = "onCtrlKey";
 
-	for (var n = target, ref; n; n = $parent(n)) {		
-		if (n.id && n.getAttribute) {			
+	for (var n = target, ref; n; n = $parent(n)) {
+		if (n.id && n.getAttribute) {
 			if (!ref && n.id.indexOf("!") == -1)
-				ref = n.id;			
+				ref = n.id;
 			if (getZKAttr(n, evtnm) == "true"
 			&& (!zkcode || zkau._inCtkeys(evt, zkcode, getZKAttr(n, "ctkeys")))) {
-				var bSend = true;				
+				var bSend = true;
 				if (zkau.currentFocus) {
 					var inp = zkau.currentFocus;
 					switch ($tag(inp)) {
-					case "INPUT":						
+					case "INPUT":
 						var type = inp.type.toLowerCase();
 						if (type != "text" && type != "password")
 							break; //ignore it
 						//fall thru
 					case "TEXTAREA":
 						bSend = zkau.textbox && zkau.textbox.updateChange(inp, false);
-						
 					}
 				}
 
@@ -1973,14 +1972,14 @@ zkau._ignoredrag = function (el, pointer) {
 	return zk.eval(el, "ignoredrag", null, pointer);
 };
 zkau._dragging = function (dg, pointer, evt) {
-	var target = Event.element(evt);	
+	var target = Event.element(evt);
 	if (target == dg.zk_lastTarget) return;
-		
+
 	var e = zkau._getDrop(dg.z_elorg || dg.element, pointer, evt);
 	var flag = e && e == dg.zk_lastDrop;
 	if (!e || e != dg.zk_lastDrop) {
 		zkau._cleanLastDrop(dg);
-		if (e) {			
+		if (e) {
 			dg.zk_lastDrop = e;
 			Droppable_effect(e);
 			flag = true;
@@ -2055,7 +2054,7 @@ zkau._getDrop = function (cmp, pointer, evt) {
 	l_next:
 	for (; el; el = $parent(el)) {
 		if (el == cmp) return; //dropping to itself not allowed
-		var dropTypes = getZKAttr(el, "drop");	
+		var dropTypes = getZKAttr(el, "drop");
 		if (dropTypes) {
 			if (dropTypes != "true") {
 				if (dragType == "true") continue; //anonymous drag type
@@ -2103,7 +2102,7 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 	}
 	if (ghosting) {
 		zkau.beginGhostToDIV(dg);
-		var ofs = zkau._proxyXY(evt);		
+		var ofs = zkau._proxyXY(evt);
 		if (special) {
 			var msg = "";
 			var target = Event.element(evt);
@@ -2113,13 +2112,13 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 				var real = $real(target.id);
 				msg = real.textContent || real.innerText;
 			} else
-				msg = target.textContent || target.innerText;			
+				msg = target.textContent || target.innerText;
 			if (!msg) msg = "";
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
 			var el = dg.element;
-			document.body.insertAdjacentHTML("beforeend",	
+			document.body.insertAdjacentHTML("beforeend",
 				'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost!img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');				
+				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost!img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
 		}else {
 			var el  = dg.element.cloneNode(true);
 			el.id = "zk_ddghost";
@@ -2137,7 +2136,7 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 		zkau.endGhostToDIV(dg);
 		document.body.style.cursor = "";
 	}
-	return false	
+	return false;
 };
 /** Prepares to ghost dg.element to a DIV.
  * It is used when you want to ghost with a div.
@@ -2147,13 +2146,13 @@ zkau.beginGhostToDIV = function (dg) {
 	zk.dragging = true;
 	dg.delta = dg.currentDelta();
 	dg.z_elorg = dg.element;
-	
+
 	var ofs = zPos.cumulativeOffset(dg.element);
 	dg.z_scrl = zPos.realOffset(dg.element);
 	dg.z_scrl[0] -= zk.innerX(); dg.z_scrl[1] -= zk.innerY();
 		//Store scrolling offset since zDraggable.draw not handle DIV well
-	
-	ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];	
+
+	ofs[0] -= dg.z_scrl[0]; ofs[1] -= dg.z_scrl[1];
 	return ofs;
 };
 /** Returns the origin element before ghosted.
@@ -2450,8 +2449,8 @@ zkau.cmd1 = {
 		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
 		var fns = zk.find(cmp, "onOuter"),
 			cf = zkau.currentFocus,
-			cfid = cf && cf.id && zk.isAncestor(cmp, cf, true) ? cf.id: null;			
-		
+			cfid = cf && cf.id && zk.isAncestor(cmp, cf, true) ? cf.id: null;
+
 		zk.cleanupAt(cmp);
 		var from = cmp.previousSibling, from2 = cmp.parentNode,
 			to = cmp.nextSibling;
