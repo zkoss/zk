@@ -8,6 +8,8 @@ ZK 3.5.1
   2111900: Multiline textbox cannot fire onChanging
   2105158: Menu separator unvisible
   2104921: Border layout collapsing can hide the wrong element
+  2104974: tabpanel content hide when tab get selected
+  2107058: 3.5.0: textbox value reported as empty in such case
 
 * Upgrade Notes
 
@@ -104,7 +106,7 @@ ZK 3.5.0
   2092632: Session.invalidate causes an exception in Jetty
   2092716: Desktop.isAlive always true
   2094523: Components.wireFellows() shall wire fellows then ancentors
-  
+
 * Upgrade Notes
   + onBookmarkChanged is renamed to onBookmarkChange
   + The smartUpdate, response, onChildAdded, onChildRemoved and
