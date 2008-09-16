@@ -36,6 +36,7 @@ ZK 3.0.8
   2082896: ZK conflicts with Liferay 5.1.1
   2088712: separator with bar & spacing=1px not show in IE
   2094523: Components.wireFellows() shall wire fellows then ancentors
+  2111320: Borderlayout in tabpanel invisible
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
