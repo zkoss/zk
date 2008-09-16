@@ -245,12 +245,32 @@ tr.z-list-item td.z-list-item-focus {
     background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb_circle.gif')});
 }
 <%-- tabbox.css.dsp --%>
-.z-tabbox-accd a.z-tabbox-accd-closebtn, .z-tabbox-accdlite a.z-tabbox-accdlite-closebtn{
+.z-tabbox-close, .z-tabbox-v-close {
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close.gif')});
+}
+.z-tabbox-close,
+.z-tabbox-v-close{
+	filter:alpha(opacity=60);
+}
+.z-tab-seld .z-tabbox-v-close,
+.z-tab-seld .z-tabbox-close{
+	filter:alpha(opacity=80);
+}
+.z-tab-close-over{
+	filter:alpha(opacity=100);
+}
+.z-tabbox-accd a.z-tabbox-accd-closebtn,
+.z-tabbox-accdlite a.z-tabbox-accdlite-closebtn{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.gif')});
-}											  
-.z-tabbox-accd a.z-tabbox-accd-closebtn:hover{
+}
+.z-tabbox-accd a.z-tabbox-accd-closebtn:hover,
+.z-tabbox-accd a.z-tab-close-over{
 	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.gif')});
 }
+.z-tabbox-accdlite a.z-tab-close-over{
+	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on-l.gif')});
+}
+
 <%-- tree.css.dsp --%>
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
 	background-image: url(${c:encodeURL('~./zul/img/tree/open.gif')});
