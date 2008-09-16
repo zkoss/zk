@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Menupopup;
@@ -37,11 +39,14 @@ public class Menupopup2Default implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menupopup self = (Menupopup)comp;
+		final Execution exec = Executions.getCurrent();
+		final String tag = exec.isBrowser("ie") || exec.isBrowser("gecko") ? "a" : "button";
 		final String uuid = self.getUuid();
 		wh.write("<div id=\"").write(uuid).write('"')
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>')
-			.write("<a id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
-			.write(" href=\"javascript:;\" style=\"position:absolute;left:0px;top:-5px;width:0px;height:0px;line-height:1px;\"></a>")
+			.write("<").write(tag).write(" id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
+			.write(" href=\"javascript:;\" style=\"padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;\"></")
+			.write(tag).write(">")
 			.write("<ul class=\"").write(self.getMoldSclass()).write("-cnt\" id=\"").write(uuid).writeln("!cave\">")
 			.writeChildren(self)
 			.write("</ul></div>");

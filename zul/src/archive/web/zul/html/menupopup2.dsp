@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-<a id="${self.uuid}!a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:0px;top:-5px;width:0px;height:0px;line-height:1px;"></a>
+<${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'} id="${self.uuid}!a" tabindex="-1" onclick="return false;" href="javascript:;" style="padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;"></${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'}>
 <ul class="${self.moldSclass}-cnt" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
 ${z:redraw(child, null)}
