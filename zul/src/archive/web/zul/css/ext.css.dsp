@@ -1,6 +1,30 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeM')}"/>
+<c:set var="fontSizeM" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeMS')}"/>
+<c:set var="fontSizeMS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeS')}"/>
+<c:set var="fontSizeS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeXS')}"/>
+<c:set var="fontSizeXS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyT')}"/>
+<c:set var="fontFamilyT" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyC')}"/>
+<c:set var="fontFamilyC" value="${val}" scope="request" unless="${empty val}"/>
 
+<c:set var="fontSizeM" value="12px" scope="request" if="${empty fontSizeM}"/>
+<c:set var="fontSizeMS" value="11px" scope="request" if="${empty fontSizeMS}"/>
+<c:set var="fontSizeS" value="11px" scope="request" if="${empty fontSizeS}"/>
+<c:set var="fontSizeXS" value="10px" scope="request" if="${empty fontSizeXS}"/>
+
+<c:set var="fontFamilyT" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
+	scope="request" if="${empty fontFamilyT}"/><%-- title --%>
+<c:set var="fontFamilyC" value="Verdana, Tahoma, Arial, serif"
+	scope="request" if="${empty fontFamilyC}"/><%-- content --%>
+p {
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+}
 h1 {
 	font-family: Tahoma, Arial, Helvetica, sans-serif;
 	font-size: x-large; font-weight: bold; color: #250070;

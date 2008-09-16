@@ -106,7 +106,7 @@ zk.Slider.prototype = {
 		this.slidepos = this._curpos();
 
 		document.body.insertAdjacentHTML("beforeend",
-			'<div id="zul_slidetip" style="position:absolute;display:none;z-index:60000;background-color:white;border: 1px outset">'
+			'<div id="zul_slidetip" class="z-slider-pp" style="position:absolute;display:none;z-index:60000;background-color:white;border: 1px outset">'
 			+this.slidepos+'</div>');
 
 		this.slidetip =  $e("zul_slidetip");

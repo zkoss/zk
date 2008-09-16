@@ -60,6 +60,8 @@ div.z-listbox-footer {
 }
 div.z-list-footer-cnt, div.z-list-cell-cnt, div.z-list-header-cnt {
 	border: 0; margin: 0; padding: 0;
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 div.z-list-footer-cnt, div.z-list-header-cnt {
 	overflow: hidden;

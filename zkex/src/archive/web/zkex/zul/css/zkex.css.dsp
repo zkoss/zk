@@ -158,6 +158,7 @@
 }
 <%-- Fisheyebar--%>
 .z-fisheye-text {
+	font-size: ${fontSizeM}; font-weight: normal;
 	font-family: Arial, Helvetica, sans-serif; background-color: #eee; border: 2px solid #666;
 	padding: 2px; text-align: center; position: absolute; display: none;
 }

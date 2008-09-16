@@ -4,6 +4,7 @@
 <%-- Combobox --%>
 .z-combobox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-combobox-disd {
 	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
@@ -12,6 +13,7 @@
 	color: gray !important; cursor: default !important;
 }
 .z-combobox-inp {
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
@@ -47,6 +49,8 @@
 	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid #7F9DB9; padding: 2px;
 	font-size: ${fontSizeS}; overflow: auto;
+	font-family: ${fontFamilyC};
+	font-weight: normal;
 }
 <%-- Comboitem --%>
 .z-combobox-pp .z-combo-item-text, .z-combobox-pp .z-combo-item-img {
@@ -80,6 +84,7 @@
 <%-- Bandbox trendy mold --%>
 .z-bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-bandbox-disd {
 	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
@@ -128,6 +133,7 @@
 <%-- Datebox --%>
 .z-datebox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-datebox-disd {
 	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
@@ -174,6 +180,7 @@
 .z-datebox-pp {
 	display: block; position: absolute; z-index: 88000;
 	background: white; border: 1px solid #888888; padding: 2px;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-datebox-pp table.calyear {
 	background: #d8e8f0;
@@ -182,6 +189,7 @@
 <%-- Timebox --%>
 .z-timebox-disd {
 	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-timebox-disd * {
 	color: gray !important; cursor: default !important;
@@ -189,6 +197,7 @@
 .z-timebox-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-timebox-focus .z-timebox-inp {
 	border: 1px solid #90BCE6;
@@ -228,6 +237,8 @@
 .z-spinner-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-spinner-focus .z-spinner-inp {
 	border: 1px solid #90BCE6;

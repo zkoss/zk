@@ -37,9 +37,10 @@ public class LabelDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Label self = (Label)comp;
 
-		wh.write("<span id=\"").write(self.getUuid()).write("\"");
-		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
-		wh.write(">");
+		wh.write("<span id=\"").write(self.getUuid()).write("\"")
+		.write(self.getOuterAttrs()).write(self.getInnerAttrs())
+		.write(" class=\""+self.getMoldSclass()+"\"")
+		.write(">");
 
 		wh.write(self.getEncodedText());
 

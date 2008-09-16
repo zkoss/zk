@@ -59,6 +59,8 @@
 .z-window-modal-header, .z-window-popup-header, .z-window-highlighted-header,
 	.z-window-overlapped-header, .z-window-embedded-header {
 	overflow: hidden; zoom: 1; color: #222222; padding: 5px 0 4px 0;
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-window-modal-header, .z-window-popup-header, .z-window-highlighted-header,
 	.z-window-overlapped-header {

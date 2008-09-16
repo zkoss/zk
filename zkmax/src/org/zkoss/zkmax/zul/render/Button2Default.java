@@ -63,7 +63,7 @@ public class Button2Default implements ComponentRenderer {
 			.write(">\n<tr><td class=\"").write(mcls).write("-tl\">");
 		if (!exec.isExplorer()) {
 			wh.write("<button id=\"")
-				.write(uuid).write("!real\" class=\"z ")
+				.write(uuid).write("!real\" class=\"")
 				.write(mcls).write("\"");
 			if (self.getTabindex() >= 0 && (exec.isGecko() || exec.isSafari()))
 				wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
@@ -78,7 +78,7 @@ public class Button2Default implements ComponentRenderer {
 			.write(mcls).write("-cl\">");
 		if (exec.isExplorer()) {
 			wh.write("<button id=\"")
-				.write(uuid).write("!real\" class=\"z ")
+				.write(uuid).write("!real\" class=\"")
 				.write(mcls).write("\"");
 			if (self.isDisabled())
 				wh.write(" disabled=\"disabled\"");
@@ -102,10 +102,10 @@ public class Button2Default implements ComponentRenderer {
 		}		
 
 		wh.write("</td>\n<td class=\"").write(mcls)
-			.write("-cr\"><i class=\"z ")
+			.write("-cr\"><i class=\"")
 			.write(mcls).write("\"></i></td></tr>\n<tr><td class=\"")
 			.write(mcls).write("-bl\"></td><td class=\"").write(mcls)
 			.write("-bm\"></td><td class=\"")
-			.write(mcls).write("-br\"></td></tr>\n</table></span>");						
+			.write(mcls).write("-br\"></td></tr>\n</table></span>");
 	}
 }

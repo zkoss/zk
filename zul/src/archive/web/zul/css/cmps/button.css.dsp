@@ -5,6 +5,16 @@
 	font-size: ${fontSizeM}; color: black;
 	cursor: pointer; white-space: nowrap;
 }
+button.z-button {
+	padding:0 !important; margin:0 !important; border:0 !important;
+	background: transparent !important;
+	font-size: 1px !important; width: 1px !important;
+	height: ${c:isGecko() ? 0: 1}px !important;
+}
+i.z-button {
+	display: block; width: 1px !important; overflow: hidden;
+	font-size: 1px !important; line-height: 1px !important;
+}
 <c:if test="${c:isGecko() and !c:isGecko3()}">
 table.z-button {
 	table-layout:fixed;
@@ -15,6 +25,7 @@ button.z-button {<%-- remove browser's focus effect to scroll down, if any--%>
 </c:if>
 span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	margin: 1px 1px 0 0;
 }
 <c:if test="${c:isSafari()}"><%-- remove browser's focus effect --%>

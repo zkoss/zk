@@ -312,7 +312,16 @@ public class Label extends XulElement {
 		final String clkattrs = getAllOnClickAttrs();
 		return clkattrs == null ? attrs: attrs + clkattrs;
 	}
-
+	/** Returns the Style of label
+	 *
+	 * <p>Default: "z-label"
+	 */
+	public String getMoldSclass() {
+		String scls = super.getMoldSclass();
+		if (scls == null)
+			scls = "z-label";
+		return scls;
+	}
 	//-- Component --//
 	public void invalidate() {
 		if (isIdRequired()) super.invalidate();

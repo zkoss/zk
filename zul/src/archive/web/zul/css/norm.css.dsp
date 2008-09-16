@@ -55,23 +55,6 @@ body {
 .zk img {border: 0;}
 </c:when>
 <c:otherwise>
-p, div, span, label, a, input, textarea,
-button, input.button, input.file {
-	font-family: ${fontFamilyC};
-	font-size: ${fontSizeM}; font-weight: normal;
-}
-legend {
-	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM}; font-weight: normal;
-}
-th {
-	font-family: ${fontFamilyT};
-	font-weight: bold; 
-}
-thead tr {
-	font-family: ${fontFamilyT};
-	font-weight: bold;
-}
 img {border: 0;}
 </c:otherwise>
 </c:choose>
@@ -89,22 +72,11 @@ div.z-debugbox {
 }
 
 <%-- General --%>
-em.z {
-	font-style: normal; font-weight: normal;
+.z-label, .z-radio, .z-chkbox, .z-slider-pp, input.button, input.file, 
+.z-loading,.z-errbox {
 	font-family: ${fontFamilyC};
-	font-size: ${fontSizeM};
+	font-size: ${fontSizeM}; font-weight: normal;
 }
-i.z {
-	display: block; width: 1px !important; overflow: hidden;
-	font-size: 1px !important; line-height: 1px !important;
-}
-button.z {
-	padding:0 !important; margin:0 !important; border:0 !important;
-	background: transparent !important;
-	font-size: 1px !important; width: 1px !important;
-	height: ${c:isGecko() ? 0: 1}px !important;
-}
-
 .z-modal-mask {
 	position: absolute; z-index: 20000;
 	top: 0; left: 0; width: 100%; height: 100%;

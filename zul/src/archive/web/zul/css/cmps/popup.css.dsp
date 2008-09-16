@@ -3,6 +3,7 @@
 
 .z-popup {
 	position: absolute; top: 0; left: 0; visibility: hidden; z-index: 88000; border: 0 none;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-popup .z-popup-tm {
 	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-tb.png')}) repeat-x 0 0;

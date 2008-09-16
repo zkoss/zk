@@ -59,6 +59,8 @@ div.z-grid-footer {
 }
 div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-column-cnt {
 	border: 0; margin: 0; padding: 0;
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM}; font-weight: normal;
 }
 div.z-footer-cnt, div.z-column-cnt{
 	overflow: hidden;

@@ -1,6 +1,9 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
+.z-fieldset legend{
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+}
 .z-fieldset-cnt {
 	overflow: hidden;
 }
@@ -31,7 +34,9 @@
 	overflow: hidden; zoom: 1;
 }
 .z-groupbox-tl .z-groupbox-header {
-	color: #373737; font: normal ${fontSizeM} ${fontFamilyT};
+	color: #373737;
+	font-family: ${fontFamilyT};font-size: ${fontSizeM};
+	font-weight: normal;
 	padding: 5px 0 4px 0;
 	border: 0 none; background: transparent;
 }

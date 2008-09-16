@@ -10,6 +10,7 @@
 .z-textbox, .z-decimalbox, .z-intbox, .z-longbox, .z-doublebox {
 	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-textbox-focus, .z-textbox-focus input,
 .z-decimalbox-focus, .z-decimalbox-focus input,

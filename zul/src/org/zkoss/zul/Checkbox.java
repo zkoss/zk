@@ -176,7 +176,18 @@ public class Checkbox extends LabelImageElement {
 
 		return sb.toString();
 	}
-
+	/** Returns the Style of checkbox label
+	 *
+	 * <p>Default: "z-chkbox"
+	 * <p>Since 3.5.1
+	 * 
+	 */
+	public String getMoldSclass() {
+		String scls = super.getMoldSclass();
+		if (scls == null)
+			scls = "z-chkbox";
+		return scls;
+	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

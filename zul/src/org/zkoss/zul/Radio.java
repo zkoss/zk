@@ -148,7 +148,18 @@ public class Radio extends Checkbox {
 		HTMLs.appendAttribute(sb, "value",  getValue());
 		return sb.toString();
 	}
-
+	/** Returns the Style of radio label
+	 *
+	 * <p>Default: "z-radio"
+	 * <p>Since 3.5.1
+	 * 
+	 */
+	public String getMoldSclass() {
+		String scls = super.getMoldSclass();
+		if (scls == null)
+			scls = "z-radio";
+		return scls;
+	}
 	//-- Component --//
 	public void setParent(Component parent) {
 		final Radiogroup oldgp = getRadiogroup();
