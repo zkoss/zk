@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Listbox;
@@ -42,9 +44,13 @@ public class ListboxPaging implements ComponentRenderer {
 		final Listbox self = (Listbox)comp;
 		final String uuid = self.getUuid();
 		final String mcls = self.getMoldSclass();
+		final Execution exec = Executions.getCurrent();
+		final String tag = exec.isBrowser("ie") || exec.isBrowser("gecko") ? "a" : "button";
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\" z.pg=\"t\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		
+		wh.write("<").write(tag).write("  z.keyevt=\"true\" id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
+			.write(" href=\"javascript:;\" style=\"padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;\"></")
+			.write(tag).write(">");
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
 				.write("!pgit\" class=\"").write(mcls).write("-pgi-t\">")

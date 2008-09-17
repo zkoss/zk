@@ -23,6 +23,8 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tree;
@@ -39,12 +41,17 @@ public class TreeDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tree self = (Tree) comp;
+		final String uuid = self.getUuid();
 		final String mcls = self.getMoldSclass();
-		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tree.Tree\"")
+		final Execution exec = Executions.getCurrent();
+		final String tag = exec.isBrowser("ie") || exec.isBrowser("gecko") ? "a" : "button";
+		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.tree.Tree\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-
+		wh.write("<").write(tag).write("  z.keyevt=\"true\" id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
+			.write(" href=\"javascript:;\" style=\"padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;\"></")
+			.write(tag).write(">");
 		if(self.getTreecols() != null){
-			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"").write(mcls).write("-header\">")
+			wh.write("<div id=\"").write(uuid).write("!head\" class=\"").write(mcls).write("-header\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
@@ -62,7 +69,7 @@ public class TreeDefault implements ComponentRenderer {
 				.write("</table></div>");
 		}
 
-		wh.write("<div id=\"").write(self.getUuid()).write("!body\" class=\"").write(mcls).write("-body\">")
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(mcls).write("-body\">")
 			 .write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"");
 		if (self.isFixedLayout())
 			wh.write(" style=\"table-layout:fixed\"");
@@ -83,7 +90,7 @@ public class TreeDefault implements ComponentRenderer {
 			.write("</table></div>");
 
 		if(self.getTreefoot() != null){
-			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"").write(mcls).write("-footer\">")
+			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(mcls).write("-footer\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")

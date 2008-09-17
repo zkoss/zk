@@ -167,10 +167,6 @@ public class Treecell extends LabelImageElement {
 					} else {
 						sb.append("<span class=\"checkmark-spacer\" z.fc=\"t\"></span>");
 					}
-				} else if (item.isFocusRequired()) {
-					//NOTE: use Treerow's uuid! NOT Treeitem's!
-					sb.append("<a href=\"javascript:;\" id=\"").append(getParent().getUuid())
-						.append("!sel\" z.type=\"Tcfc\">  </a>");
 				}
 			}
 			String iconScls = null;

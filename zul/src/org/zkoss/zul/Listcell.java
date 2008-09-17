@@ -186,10 +186,6 @@ public class Listcell extends LabelImageElement {
 					sb.append("<span class=\"checkmark-spacer\"></span>");
 				}
 				return sb.toString();
-			} else if (isFocusRequired(listbox, item)) {
-				sb.append("<a href=\"javascript:;\" id=\"").append(item.getUuid())
-					.append("!sel\" z.type=\"Lcfc\"> </a>");
-				return sb.toString();
 			} else if (sb.length() > 0) return sb.toString();
 		}
 		
@@ -205,13 +201,6 @@ public class Listcell extends LabelImageElement {
 	 */
 	public String getColumnHtmlPostfix() {
 		return null;
-	}
-	/** Returns whether this cell requires focus.
-	 */
-	private boolean isFocusRequired(Listbox listbox, Component parent) {
-		final Listitem sel = listbox.getSelectedItem();
-		return parent == sel
-			|| (sel == null && ((Listitem)parent).getIndex() == 0);
 	}
 
 	//-- super --//

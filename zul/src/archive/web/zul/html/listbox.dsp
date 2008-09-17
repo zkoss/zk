@@ -22,6 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="mcls" value="${self.moldSclass}"/>
 <div id="${self.uuid}" z.type="zul.sel.Libox"${self.outerAttrs}${self.innerAttrs}>
+<${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'} z.keyevt="true" id="${self.uuid}!a" tabindex="-1" onclick="return false;" href="javascript:;" style="padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;"></${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'}>
 <c:if test="${!empty self.listhead}">
 	<div id="${self.uuid}!head" class="${mcls}-header">
 	<table width="${self.innerWidth}" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed">

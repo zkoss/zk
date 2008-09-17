@@ -52,9 +52,9 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 		var toOpen = !zkTree.isOpen(row); //toggle
 		this._openItem(row, target, toOpen);
 
-		var el = $e(row.id + "!sel");
-		if (!el) el = $e(el + "!cm");
-		if (el) zk.asyncFocus(el.id);
+		var el = $e(el + "!cm");
+		if (!el && !this._focusItem) this._focusItem = row;
+		if (el || (el = $e(getZKAttr(row, "rid"), "a"))) zk.asyncFocus(el.id);
 
 		Event.stop(evt);
 	},

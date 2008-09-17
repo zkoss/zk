@@ -347,21 +347,6 @@ public class Treeitem extends XulElement {
 		return null;
 	}
 
-	/** Returns whether this item shall have the default focus. */
-	/*package*/ boolean isFocusRequired() {
-		final Tree tree = getTree();
-		if (tree == null)
-			return false;
-
-		final Treeitem sel = tree.getSelectedItem();
-		if (sel != null) {
-			return sel == this;
-		} else {
-			final Iterator it = tree.getItems().iterator();
-			return it.hasNext() && it.next() == this;
-		}
-	}
-
 	//-- super --//
 
 	//this is declared to make it accessible to Treerow

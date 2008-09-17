@@ -116,6 +116,9 @@ zk.Selectable.prototype = {
 			return;
 		}
 
+		var focusEl = $e(this.id, "a");
+		zk.listen(focusEl, "keydown", this.onKeydown);
+		zk.listen(focusEl, "blur", this.onBlur);
 		var meta = this; //the nested function only see local var
 		if (!this._inited) {
 			this._inited = true;
@@ -189,11 +192,26 @@ zk.Selectable.prototype = {
 		};
 		
 	},
+	/**
+	 * Returns the current focused target. This function is used for zkau._onDocKeydown()
+	 * @since 3.5.1 
+	 */
+	getCurrentTarget: function () {
+		return this._focusItem;
+	},
+	onBlur: function (evt) {
+		var meta = zkau.getMeta($uuid(Event.element(evt)));
+		if (meta) zkSel.cmonblurTo(meta._focusItem);
+	},
+	onKeydown: function (evt) {
+		var meta = zkau.getMeta($uuid(Event.element(evt)));
+		if (meta) meta.dokeydown(evt, meta._focusItem);
+	},
 	cleanup: function ()  {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		this.element = this.body = this.head = this.bodytbl = this.headtbl
-			this.foot = this.foottbl = this.fnSubmit = this._focus = null;
+			this.foot = this.foottbl = this.fnSubmit = this._focusItem = null;
 			//in case: GC not works properly
 	},
 	/** Stripes the rows. */
@@ -237,12 +255,12 @@ zk.Selectable.prototype = {
 	},
 	/** Handles the keydown sent to the row. */
 	dokeydown: function (evt, target) {
-		if (zkSel._shallIgnoreEvent(target))
+		if (zkau.processing() || zkSel._shallIgnoreEvent(target))
 			return true;
 
 		var row = $tag(target) == "TR" ? target: zk.parentNode(target, "TR");
 		if (!row) return true;
-
+		row = $e(row); // restore for Live Data
 		var shift = evt.shiftKey, ctrl = evt.ctrlKey;
 		if (shift && !this._isMultiple())
 			shift = false; //OK to 
@@ -331,8 +349,7 @@ zk.Selectable.prototype = {
 			return;
 		var tn = $tag(target);
 		if((tn != "TR" && target.onclick)
-		|| (tn == "A" && !target.id.endsWith("!sel"))
-		|| getZKAttr(target, "lfclk") || getZKAttr(target, "dbclk"))
+		|| tn == "A" || getZKAttr(target, "lfclk") || getZKAttr(target, "dbclk"))
 			return;
 
 		var checkmark = target.id && target.id.endsWith("!cm");
@@ -407,6 +424,9 @@ zk.Selectable.prototype = {
 				return;
 			}
 		}
+		var focusEl = $e(this.id, "a");
+		if (focusEl) zk.asyncFocus(focusEl.id);
+		
 	},
 	/** Process the setAttr command sent from the server. */
 	setAttr: function (nm, val) {
@@ -564,9 +584,10 @@ zk.Selectable.prototype = {
 		if (row && zkau.canFocus(row, true)) {
 			var uuid = typeof row == 'string' ? row: row.id;
 			var el = $e(uuid + "!cm");
-			if (!el) el = $e(uuid + "!sel");
-			if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
+			if ((el && el.tabIndex != -1) || (el = $e(getZKAttr(row, "rid"), "a"))) {//disabled due to modal, see zk.disableAll
 				zk.asyncFocus(el.id);
+				zkSel.cmonfocusTo(row);
+			}
 		}
 	},
 
@@ -599,17 +620,14 @@ zk.Selectable.prototype = {
 					this._changeSelect(sel, false);
 					if (row)
 						if(toFocus) this._setFocus(sel, false);
-						else this._fixAnc(sel, false); //Bug 1505786 (called by setAttr with "selected")
 				}
-			} else {
-				if (row && toFocus) this._unsetFocusExcept(row);
 			}
+			if (row && toFocus) this._unsetFocusExcept(row);
 		}
 		//we always invoke _changeSelect to change focus
 		if (row) {
 			this._changeSelect(row, true);
 			if (toFocus) this._setFocus(row, true);
-			else this._fixAnc(row, true); //Bug 1505786
 			this._setSelectedId(row.id);
 		} else {
 			this._setSelectedId(null);
@@ -645,42 +663,23 @@ zk.Selectable.prototype = {
 	/** Changes the focus status, and return whether it is changed. */
 	_setFocus: function (row, toFocus) {
 		if (!this._isValid(row)) return false;
-		this._focus = row;
 		var changed = this._isFocus(row) != toFocus;
 		if (changed) {
-			this._fixAnc(row, toFocus);
 			if (toFocus) {
 				var el = $e(row.id + "!cm");
-				if (!el) el = $e(row.id + "!sel");
-				if (el && el.tabIndex != -1) //disabled due to modal, see zk.disableAll
+				if ((el && el.tabIndex != -1) || (el = $e(this.id, "a"))) //disabled due to modal, see zk.disableAll
 					zk.asyncFocus(el.id);
 				zkSel.cmonfocusTo(row);
 
 				if (!this.paging && zk.gecko) this._render(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
+				
+				this._focusItem = row;
 			} else {
 				zkSel.cmonblurTo(row);
 			}
 		}
 		return changed;
-	},
-	_fixAnc: function (row, toAnc) {
-		var el = $e(row.id + "!sel");
-		if (toAnc) {
-			if (!el && !$e(row.id + "!cm") && row.cells.length > 0) {
-				el = document.createElement("A");
-				el.href = "javascript:;";
-				el.id = row.id + "!sel";
-				el.innerHTML = " ";
-				el.onfocus = zkSel.cmonfocus;
-				el.onblur = zkSel.cmonblur;
-				var cave = row.cells[0].firstChild || row.cells[0];
-				if (cave.firstChild) cave.insertBefore(el, cave.firstChild); 
-				else cave.appendChild(el);
-			}
-		} else {
-			zk.remove(el);
-		}
 	},
 	/** Cleans selected except the specified one, and returns any selected status
 	 * is changed.
@@ -698,15 +697,7 @@ zk.Selectable.prototype = {
 	 * is changed.
 	 */
 	_unsetFocusExcept: function (row) {
-		return this._focus && this._focus != row ? this._setFocus(this._focus, false): this._clearDirtyFocus(row);
-	},
-	/**
-	 * The dirty focus might be created from sever side, if any.
-	 */
-	_clearDirtyFocus: function (row) {
-		if (!this._focus && this.bodyrows && this.bodyrows[0] != row)
-			zk.remove($e(this.bodyrows[0].id + "!sel"));
-		return false;
+		return this._focusItem && this._focusItem != row ? this._setFocus(this._focusItem, false): this._focusItem = null;
 	},
 	/** Renders listitems that become visible by scrolling.
 	 */
@@ -1013,7 +1004,7 @@ zk.Selectable.prototype = {
 	},
 	/** Whether an item has focus. */
 	_isFocus: function (row) {
-		return $e(row.id + "!sel") || $e(row.id + "!cm");
+		return this._focusItem == row || $e(row.id + "!cm");
 	},
 	/** Whether the component is multiple.
 	 */
@@ -1099,7 +1090,7 @@ zkSel._shallIgnoreEvent = function (el) {
 	var tn = $tag(el);
 	return !el || !zkau.canFocus(el)
 	|| ((tn == "INPUT" && !el.id.endsWith("!cm"))
-	|| tn == "TEXTAREA" || tn == "BUTTON" || tn == "SELECT" || tn == "OPTION" || $type($outer(el)) == "Button");
+	|| tn == "TEXTAREA" || (tn == "BUTTON" && getZKAttr(el, "keyevt") != "true") || tn == "SELECT" || tn == "OPTION" || $type($outer(el)) == "Button");
 };
 
 /** row's onmouseover. */

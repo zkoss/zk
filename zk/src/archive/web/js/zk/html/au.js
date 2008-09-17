@@ -1593,7 +1593,7 @@ zkau._onDocKeydown = function (evt) {
 	switch (keycode) {
 	case 13: //ENTER
 		var tn = $tag(target);
-		if (tn == "TEXTAREA" || tn == "BUTTON"
+		if (tn == "TEXTAREA" || (tn == "BUTTON" && getZKAttr(target, "keyevt") != "true")
 		|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
 			return true; //don't change button's behavior (Bug 1556836)
 		//fall thru
@@ -1633,7 +1633,9 @@ zkau._onDocKeydown = function (evt) {
 	}
 
 	if (zkcode) evtnm = "onCtrlKey";
-
+	var meta = zkau.getMeta($uuid(target));
+	if (meta && (typeof meta.getCurrentTarget == "function"))
+		target = meta.getCurrentTarget();
 	for (var n = target, ref; n; n = $parent(n)) {
 		if (n.id && n.getAttribute) {
 			if (!ref && n.id.indexOf("!") == -1)
