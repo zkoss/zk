@@ -8,7 +8,7 @@
 button.z-button {
 	padding:0 !important; margin:0 !important; border:0 !important;
 	background: transparent !important;
-	font-size: 1px !important; width: 1px !important;
+	font-size: 1px !important; width: 3px !important;
 	height: ${c:isGecko() ? 0: 1}px !important;
 }
 i.z-button {
@@ -25,17 +25,14 @@ button.z-button {<%-- remove browser's focus effect to scroll down, if any--%>
 </c:if>
 span.z-button {
 	display:-moz-inline-box; vertical-align:bottom; display:inline-block;
-	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	margin: 1px 1px 0 0;
 }
 <c:if test="${c:isSafari()}"><%-- remove browser's focus effect --%>
 .z-button :focus {
-	outline: none!important;
+	outline: none !important;
 }
 </c:if>
-button.z-button {
-	width: 3px !important;
-}
+
 .z-button i.z-button {
 	width: 3px !important;
 }
