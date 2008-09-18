@@ -248,7 +248,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_provider.sessionDidActivate(sess);
 	}
 
-	public void sessionDidDestroy(Session sess) {
+	public void sessionDestroyed(Session sess) {
 		//Note: Session Fixation Protection (such as Spring Security)
 		//might invalidate HTTP session and restore with a new one.
 		//Thus, we have to wait a while before really destroying ZK session
