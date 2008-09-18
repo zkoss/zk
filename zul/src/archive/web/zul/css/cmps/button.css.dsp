@@ -36,9 +36,6 @@ span.z-button {
 .z-button i.z-button {
 	width: 3px !important;
 }
-.z-button-disd * {
-	color: gray!important; cursor: default!important;
-}
 .z-button-disd {
 	color: gray; cursor: default; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
 }
