@@ -81,7 +81,7 @@ public interface WebAppCtrl {
 
 	/** Called when the native session of the specified session
 	 * has been destroyed
-	 * @3.0.8
+	 * @since 3.0.8
 	 */
 	void sessionDestroyed(Session sess);
 }

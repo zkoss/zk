@@ -286,7 +286,7 @@ public class WebManager {
 	 * <p>Once called the session is cleaned. All desktops are dropped.
 	 */
 	/*package*/ static final
-	void onSessionDestroyed(HttpSession hsess) {
+	void sessionDestroyed(HttpSession hsess) {
 		final WebApp wapp =
 			getWebManager(hsess.getServletContext()).getWebApp();
 		final Session sess = (Session)SessionsCtrl.getSession(wapp, hsess);
