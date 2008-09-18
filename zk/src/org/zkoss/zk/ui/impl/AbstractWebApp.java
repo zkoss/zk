@@ -228,19 +228,19 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		try {
 			getDesktopCacheProvider().sessionDestroyed(sess);
 		} catch (Throwable ex) {
-			log.error("Failed to cleanup session", ex);
+			log.warning("Failed to cleanup session", ex);
 		}
 
 		try {
 			((SessionCtrl)sess).onDestroyed();
 		} catch (Throwable ex) {
-			log.error("Failed to cleanup session", ex);
+			log.warning("Failed to cleanup session", ex);
 		}
+
 		try {
 			getSessionCache().remove(sess);
 		} catch (Throwable ex) {
-			//ignored since HTTP session was dead
-			//an IllegalStateException might be thrown
+			log.warning("Failed to cleanup session", ex);
 		}
 	}
 
