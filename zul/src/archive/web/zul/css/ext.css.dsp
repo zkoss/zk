@@ -22,7 +22,7 @@
 	scope="request" if="${empty fontFamilyT}"/><%-- title --%>
 <c:set var="fontFamilyC" value="Verdana, Tahoma, Arial, serif"
 	scope="request" if="${empty fontFamilyC}"/><%-- content --%>
-p {
+p,span {
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 h1 {
@@ -64,6 +64,7 @@ dd {
 li, dt, dd, pre, body {
 	font-family: Tahoma, Arial, serif;
 	font-weight: normal;
+	font-size: ${fontSizeM};
 }
 
 li	{margin-top: 2pt}
