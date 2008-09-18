@@ -291,19 +291,7 @@ public class WebManager {
 			getWebManager(hsess.getServletContext()).getWebApp();
 		final Session sess = (Session)SessionsCtrl.getSession(wapp, hsess);
 		if (sess != null) {
-			final WebAppCtrl wappc = (WebAppCtrl)wapp;
-			try {
-				wappc.getDesktopCacheProvider().sessionDestroyed(sess);
-			} catch (Throwable ex) {
-				log.error("Failed to cleanup session", ex);
-			}
-
-			try {
-				((SessionCtrl)sess).onDestroyed();
-			} catch (Throwable ex) {
-				log.error("Failed to cleanup session", ex);
-			}
-			wappc.getSessionCache().remove(sess);
+			((WebAppCtrl)wapp).sessionDidDestroy(sess);
 		}
 	}
 

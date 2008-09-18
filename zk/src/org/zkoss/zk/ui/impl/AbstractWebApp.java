@@ -18,9 +18,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.Iterator;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.InputStream;
 
 import org.zkoss.util.Utils;
+import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 
 import org.zkoss.zk.Version;
@@ -32,6 +39,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.ui.http.SimpleUiFactory;
 import org.zkoss.zk.ui.http.SimpleSessionCache;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
@@ -48,6 +56,8 @@ import org.zkoss.zk.ui.impl.UiEngineImpl;
  * @author tomyeh
  */
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
+	private static final Log log = Log.lookup(AbstractWebApp.class);
+
 	private String _appnm = "ZK", _build;
 	private Configuration _config;
 	private UiEngine _engine;
@@ -56,6 +66,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private FailoverManager _failover;
 	private IdGenerator _idgen;
 	private SessionCache _sesscache;
+	private Timer _timer;
+	private List _tasks;
 
 	/** Constructor.
 	 *
@@ -101,6 +113,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		final WebApp oldwapp = config.getWebApp();
 		if (oldwapp != null && oldwapp != this)
 			throw new IllegalArgumentException("config already belongs to other Web app, "+oldwapp);
+
+		_timer = new Timer();
 		_config = config;
 		_config.setWebApp(this);
 
@@ -173,6 +187,21 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_config.invokeWebAppInits();
 	}
 	public void destroy() {
+		_timer.cancel();
+		List tasks = _tasks;
+		_tasks = null;
+		if (tasks != null) {
+			for (Iterator it = tasks.iterator(); it.hasNext();) {
+				final TimerTask task = (TimerTask)it.next();
+				try {
+					task.run();
+				} catch (Throwable ex) {
+					log.error("Failed invoke "+task, ex);
+				}
+			}
+			tasks = null; //free
+		}
+
 		_config.invokeWebAppCleanups();
 
 		_config.detroyRichlets();
@@ -219,6 +248,18 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_provider.sessionDidActivate(sess);
 	}
 
+	public void sessionDidDestroy(Session sess) {
+		//Note: Session Fixation Protection (such as Spring Security)
+		//might invalidate HTTP session and restore with a new one.
+		//Thus, we have to wait a while before really destroying ZK session
+		sess.invalidate(); //not really invalidate but set a flag
+		TimerTask task = new SessionDestroyTask(sess);
+		if (_tasks == null)
+			_tasks = Collections.synchronizedList(new LinkedList());
+		_tasks.add(task);
+		_timer.schedule(task, 1000*60*5); //5 minutes later
+	}
+
 	/** Loads the build identifier. */
 	synchronized private void loadBuild() {
 		if (_build == null) {
@@ -238,6 +279,38 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 				_build = "error";
 			} finally {
 				try {is.close();} catch (Throwable ex) {}
+			}
+		}
+	}
+	private class SessionDestroyTask extends TimerTask {
+		private Session _sess;
+		private SessionDestroyTask(Session sess) {
+			_sess = sess;
+		}
+		public void run() {
+			final List tasks = _tasks;
+			if (tasks != null) tasks.remove(this);
+
+			final SessionCtrl sessCtrl = (SessionCtrl)_sess;
+			if (!sessCtrl.isInvalidated())
+				return;//recovered
+
+			try {
+				getDesktopCacheProvider().sessionDestroyed(_sess);
+			} catch (Throwable ex) {
+				log.error("Failed to cleanup session", ex);
+			}
+
+			try {
+				sessCtrl.onDestroyed();
+			} catch (Throwable ex) {
+				log.error("Failed to cleanup session", ex);
+			}
+			try {
+				getSessionCache().remove(_sess);
+			} catch (Throwable ex) {
+				//ignored since HTTP session was dead
+				//an IllegalStateException might be thrown
 			}
 		}
 	}
