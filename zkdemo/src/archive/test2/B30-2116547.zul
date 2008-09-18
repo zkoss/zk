@@ -1,33 +1,37 @@
 <window title="listbox demo" border="normal">
-	<label value="If slider look correctly in listbox, this bug is fixed!"/>
+	<label value="If slider look correctly in listbox, this bug is fixed!" />
 	<vbox>
 		<listbox rows="1" mold="select">
-			<listitem label="option1"/>
-			<listitem label="option2"/>
-			<listitem label="option3"/>
+			<listitem label="option1" />
+			<listitem label="option2" />
+			<listitem label="option3" />
 		</listbox>
-		<slider/>
-		<separator bar="true"/>
+		<slider />
+		<separator bar="true" />
 		<listbox width="250px">
 			<listhead sizable="true">
-				<listheader label="name" sort="auto"/>
-				<listheader label="gender" sort="auto"/>
+				<listheader label="name" sort="auto" />
+				<listheader label="gender" sort="auto" />
 			</listhead>
 			<listitem>
-				<listcell label="Mary"/>
-				<listcell><slider/></listcell>
+				<listcell label="Mary" />
+				<listcell>
+					<slider />
+				</listcell>
 			</listitem>
 			<listitem>
-				<listcell label="John"/>
-				<listcell><slider/></listcell>
+				<listcell label="John" />
+				<listcell>
+					<slider />
+				</listcell>
 			</listitem>
 			<listitem>
-				<listcell label="Jane"/>
-				<listcell label="FEMALE"/>
+				<listcell label="Jane" />
+				<listcell label="FEMALE" />
 			</listitem>
 			<listitem>
-				<listcell label="Henry"/>
-				<listcell label="MALE"/>
+				<listcell label="Henry" />
+				<listcell label="MALE" />
 			</listitem>
 		</listbox>
 	</vbox>
