@@ -338,6 +338,10 @@ public class SimpleSession implements Session, SessionCtrl {
 		_cache = cache;
 	}
 	public void recover(Object nativeSession) {
+		if (_invalidated)
+			throw new IllegalStateException("Recover an invalidated session, "+this);
+
+		_invalid = false; //See also AbstractWebApp.sessionDidDestroy
 		if (_navsess == null)
 			sessionDidActivate((HttpSession)nativeSession);
 		else
@@ -363,6 +367,8 @@ public class SimpleSession implements Session, SessionCtrl {
 				log.error(ex);
 			}
 		}
+
+		_navsess = null; //clean up
 	}
 
 	//--Serializable for deriving classes--//

@@ -78,4 +78,10 @@ public interface WebAppCtrl {
 	 * (aka., deserialized).
 	 */
 	public void sessionDidActivate(Session sess);
+
+	/** Called when the native session of the specified session
+	 * has been destroyed
+	 * @3.5.1
+	 */
+	void sessionDidDestroy(Session sess);
 }
