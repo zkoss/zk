@@ -83,5 +83,5 @@ public interface WebAppCtrl {
 	 * has been destroyed
 	 * @3.0.8
 	 */
-	void sessionDidDestroy(Session sess);
+	void sessionDestroyed(Session sess);
 }

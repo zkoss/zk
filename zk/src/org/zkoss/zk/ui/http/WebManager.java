@@ -291,7 +291,7 @@ public class WebManager {
 			getWebManager(hsess.getServletContext()).getWebApp();
 		final Session sess = (Session)SessionsCtrl.getSession(wapp, hsess);
 		if (sess != null) {
-			((WebAppCtrl)wapp).sessionDidDestroy(sess);
+			((WebAppCtrl)wapp).sessionDestroyed(sess);
 		}
 	}
 
