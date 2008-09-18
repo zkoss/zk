@@ -341,7 +341,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		if (_invalidated)
 			throw new IllegalStateException("Recover an invalidated session, "+this);
 
-		_invalid = false; //See also AbstractWebApp.sessionDestroyed
+		_invalid = false; //Just in case
 		if (_navsess == null)
 			sessionDidActivate((HttpSession)nativeSession);
 		else

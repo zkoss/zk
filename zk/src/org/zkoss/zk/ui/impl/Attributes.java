@@ -57,4 +57,19 @@ public class Attributes {
 	 * @since 3.0.3
 	 */
 	public static final String RESEND_DELAY = "org.zkoss.zk.au.resendDelay";
+
+	/** A session attribute used to denote that
+	 * the invalidation of a native session (such as HttpSession and
+	 * PortletSession) does not invalidate ZK session.
+	 * Rather it is intended to renew a session (and the ZK session still alive).
+	 *
+	 * <p>A typical case is so-called Session Fixation Protection.
+	 * <pre><code>hsess.setAttribute(Attributes.RENEW_NATIVE_SESSION, Boolean.True);
+	 * hsess.invalidate();
+	 * hsess.removeAttribute(Attributes.RENEW_NATIVE_SESSION);
+	 * </code></pre>
+	 *
+	 * @since 3.5.1
+	 */
+	public static final String RENEW_NATIVE_SESSION = "org.zkoss.zk.ui.renewNativeSession";
 }
