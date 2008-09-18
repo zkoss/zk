@@ -821,19 +821,19 @@ td.slider-bk {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bk.gif')});
 	height: 17px;
 	overflow: visible !important;
-	padding: 0 0px !important;
+	padding: 0 !important;
 }
 td.slider-bkl {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bkl.gif')});
 	width: 4px; height: 17px;
 	overflow: visible !important;
-	padding: 0 0px !important;
+	padding: 0 !important;
 }
 td.slider-bkr {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bkr.gif')});
 	width: 4px; height: 17px;
 	overflow: visible !important;
-	padding: 0 0px !important;
+	padding: 0 !important;
 }
 
 span.slidersph-btn {
@@ -847,19 +847,19 @@ td.slidersph-bk {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bksph.gif')});
 	height: 20px;
 	overflow: visible !important;
-	padding: 0 0px !important;
+	padding: 0 !important;
 }
 td.slidersph-bkl {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bklsph.gif')});
 	width: 4px; height: 20px;
 	overflow: visible !important;
-	padding: 0 0px !important;
+	padding: 0 !important;
 }
 td.slidersph-bkr {
 	background-image: url(${c:encodeURL('~./zul/img/slider/bkrsph.gif')});
 	width: 4px; height: 20px;
 	overflow: visible !important;
-	padding: 0 0px !important;
+	padding: 0 !important;
 }
 
 <%-- ZK menu --%>
