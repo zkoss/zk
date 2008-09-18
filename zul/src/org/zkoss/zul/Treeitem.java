@@ -467,6 +467,7 @@ public class Treeitem extends XulElement {
 			_treerow = null;
 		} else if (child instanceof Treechildren) {
 			_treechildren = null;
+			invalidate();
 		}
 		super.onChildRemoved(child);
 	}

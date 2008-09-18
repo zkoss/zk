@@ -12,6 +12,7 @@ ZK 3.5.1
   2107058: 3.5.0: textbox value reported as empty in such case
   2114122: IE6 - Tab's close button have no opacity
   1962310: Listbox first column invisble affects keystroke navigation
+  2105802: Treechildren image problem
 
 * Upgrade Notes
 
