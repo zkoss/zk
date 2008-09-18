@@ -8,6 +8,7 @@ ZK 3.0.8
   2066299: fulfill: fire onFulfill after fulfilling the children
   2092356: Unwrap ForwardEvent automatically in GenericEventListener
   2094526: Components.wireVariables() shall wire implicit objects  
+  2117539: Support Session Fixation Protection
   
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
