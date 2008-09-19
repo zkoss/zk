@@ -41,6 +41,9 @@ public interface ExecutionCleanup {
 	 * <p>If this method throws an exception, the stack trace will be logged,
 	 * and the error message will be displayed at the client.
 	 *
+	 * <p>When this method is invoked, the execution is still activated,
+	 * so you can create components here.
+	 *
 	 * @param exec the exection to clean up.
 	 * @param parent the previous execution, or null if no previous at all
 	 * @param errs a list of exceptions (java.lang.Throwable) if any exception

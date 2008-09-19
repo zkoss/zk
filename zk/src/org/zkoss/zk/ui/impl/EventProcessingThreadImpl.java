@@ -334,6 +334,9 @@ implements EventProcessingThread {
 		} catch (InterruptedException ex) {
 			throw new UiException(ex);
 		} finally {
+			//Note: newEventThreadCleanups was called in run(), i.e.,
+			//in the event thread
+
 			//_evtThdCleanups is null if //1) no listener;
 			//2) the event thread is suspended (then handled by doResume).
 			invokeEventThreadCompletes(config, comp, event);
