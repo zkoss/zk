@@ -113,8 +113,15 @@ public class Row extends XulElement {
 		}
 	}
 	public boolean setVisible(boolean visible) {
-		if (isVisible() != visible) 
+		if (isVisible() != visible) {
 			smartUpdate("z.visible", visible);
+			final Rows rows = (Rows) getParent();
+			if (rows != null) {
+				final Group g = rows.getGroup(getIndex());
+				if (g == null || g.isOpen())
+					rows.addVisibleItemCount(visible ? 1 : -1);
+			}
+		}
 		return super.setVisible(visible);
 	}
 

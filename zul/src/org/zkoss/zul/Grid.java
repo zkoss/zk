@@ -312,7 +312,7 @@ public class Grid extends XulElement implements Paginated {
 				} else { //_pgi != null
 					if (_pgi != _paging) {
 						if (_paging != null) _paging.detach();
-						_pgi.setTotalSize(_rows != null ? _rows.getChildren().size(): 0);
+						_pgi.setTotalSize(_rows != null ? _rows.getVisibleItemCount(): 0);
 						addPagingListener(_pgi);
 					}
 				}
@@ -328,7 +328,7 @@ public class Grid extends XulElement implements Paginated {
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
-		paging.setTotalSize(_rows != null ? _rows.getChildren().size(): 0);
+		paging.setTotalSize(_rows != null ? _rows.getVisibleItemCount(): 0);
 		paging.setParent(this);
 		addPagingListener(_pgi);
 	}

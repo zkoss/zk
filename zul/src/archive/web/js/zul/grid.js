@@ -569,6 +569,7 @@ zkGrwgp = {
 				if (prev)
 					zkGrwgp._openItem(prev, zkGrwgp.isOpen(prev), true);
 			}, false, row.id);
+		else zkGrwgp._openItemNow(row, true);
 	},
 	setAttr: function (cmp, nm, val) {
 		if (nm == "z.open") {

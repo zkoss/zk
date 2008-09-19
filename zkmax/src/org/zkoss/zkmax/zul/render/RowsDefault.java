@@ -20,6 +20,7 @@ package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.ListIterator;
 
 import org.zkoss.zk.ui.Component;
@@ -42,15 +43,11 @@ public class RowsDefault implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		wh.write("<tbody id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-		final int from = self.getVisibleBegin(), to = self.getVisibleEnd();
-		if (from < self.getChildren().size()) {
-			ListIterator it = self.getChildren().listIterator(from);
-			ZulFns.resetStripeClass(self);
-			for (int cnt = to - from + 1; it.hasNext() && --cnt >= 0;) {
-				final Component child = (Component) it.next();
-				ZulFns.setStripeClass(child);
-				child.redraw(out);
-			}
+		ZulFns.resetStripeClass(self);
+		for (Iterator it = self.getVisibleChildrenIterator(); it.hasNext();) {
+			final Component child = (Component) it.next();
+			ZulFns.setStripeClass(child);
+			child.redraw(out);
 		}
 		wh.writeln("</tbody>");
 	}

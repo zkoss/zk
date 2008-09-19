@@ -41,6 +41,8 @@ import org.zkoss.zul.ext.Paginal;
  * @author tomyeh
  */
 public class Rows extends XulElement {
+	private int _visibleItemCount;
+	
 	private transient List _groupsInfo, _groups;
 	public Rows() {
 		_groupsInfo = new LinkedList();
@@ -86,31 +88,35 @@ public class Rows extends XulElement {
 	}
 
 	//Paging//
-	/** Returns the index of the first visible child.
-	 * <p>Used only for component development, not for application developers.
+	/**
+	 * Returns the number of visible descendant {@link Row}.
+	 * @since 3.5.1
+	 */
+	public int getVisibleItemCount() {
+		return _visibleItemCount;
+	}
+	void addVisibleItemCount(int count) {
+		if (count != 0) {
+			_visibleItemCount += count;
+			final Grid grid = getGrid();
+			if (grid != null && grid.inPagingMold()) {
+				final Paginal pgi = grid.getPaginal();
+				pgi.setTotalSize(_visibleItemCount);
+				invalidate(); // the set of visible items might change
+			}
+		}
+	}
+	/** 
+	 * @deprecated As of release As of release 3.5.1 
 	 */
 	public int getVisibleBegin() {
-		final Grid grid = getGrid();
-		if (grid == null)
-			return 0;
-		if (grid.inSpecialMold())
-			return grid.getDrawerEngine().getRenderBegin();
-		if (!grid.inPagingMold()) return 0;
-		final Paginal pgi = grid.getPaginal();
-		return pgi.getActivePage() * pgi.getPageSize();
+		return 0;
 	}
-	/** Returns the index of the last visible child.
-	 * <p>Used only for component development, not for application developers.
+	/** 
+	 * @deprecated As of release As of release 3.5.1 
 	 */
 	public int getVisibleEnd() {
-		final Grid grid = getGrid();
-		if (grid == null)
-			return Integer.MAX_VALUE;
-		if (grid.inSpecialMold())
-			return grid.getDrawerEngine().getRenderEnd();
-		if (!grid.inPagingMold()) return Integer.MAX_VALUE;
-		final Paginal pgi = grid.getPaginal();
-		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
+		return Integer.MAX_VALUE;
 	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
@@ -284,6 +290,7 @@ public class Rows extends XulElement {
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
+		updateVisibleCount((Row) comp, false);
 		checkInvalidateForMoved(comp, false);
 	}
 	/** Callback if a child will be removed (not removed yet).
@@ -292,7 +299,51 @@ public class Rows extends XulElement {
 	 * @since 3.0.5
 	 */
 	protected void beforeRemove(Component comp) {
+		updateVisibleCount((Row) comp, true);
 		checkInvalidateForMoved(comp, true);
+	}
+	/**
+	 * Update the number of the visible item before it is removed or after it is added.
+	 */
+	private void updateVisibleCount(Row row, boolean isRemove) {
+		if (row instanceof Group || row.isVisible()) {
+			final Group g = getGroup(row.getIndex());
+			
+			// We shall update the number of the visible item in the following cases.
+			// 1) If the row is a type of Groupfoot, it is always shown.
+			// 2) If the row is a type of Group, it is always shown.
+			// 3) If the row doesn't belong to any group.
+			// 4) If the group of the row is open.
+			if (row instanceof Groupfoot || row instanceof Group || g == null || g.isOpen())
+				addVisibleItemCount(isRemove ? -1 : 1);
+			
+			if (row instanceof Group) {
+				final Group group = (Group) row;
+				
+				// If the previous group exists, we shall update the number of
+				// the visible item from the number of the visible item of the current group.
+				final Row preRow = (Row) row.getPreviousSibling();
+				if (preRow == null) {
+					if (!group.isOpen()) {
+						addVisibleItemCount(isRemove ? group.getVisibleItemCount() : -group.getVisibleItemCount());
+					}
+				} else {
+					final Group preGroup = getGroup(preRow.getIndex());
+					if (preGroup != null) {
+						if (!preGroup.isOpen() && group.isOpen())
+							addVisibleItemCount(isRemove ? -group.getVisibleItemCount() : group.getVisibleItemCount());
+						else if (preGroup.isOpen() && !group.isOpen())
+							addVisibleItemCount(isRemove ? group.getVisibleItemCount() : -group.getVisibleItemCount());
+					} else {
+						if (!group.isOpen())
+							addVisibleItemCount(isRemove ? group.getVisibleItemCount() : -group.getVisibleItemCount());
+					}
+				}
+			}
+		}
+		final Grid grid = getGrid();
+		if (grid != null && grid.inPagingMold())
+			grid.getPaginal().setTotalSize(getVisibleItemCount());
 	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
@@ -326,21 +377,68 @@ public class Rows extends XulElement {
 			invalidate();
 		}
 	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
 
+	/** Returns an iterator to iterate thru all visible children.
+	 * Unlike {@link #getVisibleItemCount}, it handles only the direct children.
+	 * Component developer only.
+	 * @since 3.5.1
+	 */
+	public Iterator getVisibleChildrenIterator() {
 		final Grid grid = getGrid();
-		if (grid != null && grid.inPagingMold())
-			grid.getPaginal().setTotalSize(getChildren().size());
+		if (grid != null && grid.inSpecialMold())
+			return grid.getDrawerEngine().getVisibleChildrenIterator();
+		return new VisibleChildrenIterator();
 	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
+	/**
+	 * An iterator used by visible children.
+	 */
+	private class VisibleChildrenIterator implements Iterator {
+		private ListIterator _it = getChildren().listIterator();
+		private Grid _grid = getGrid();
+		private int _count = 0;
+		public boolean hasNext() {
+			if (_grid == null || !_grid.inPagingMold()) return _it.hasNext();
+			
+			if (_count >= _grid.getPaginal().getPageSize()) {
+				return false;
+			}
 
-		final Grid grid = getGrid();
-		if (grid != null && grid.inPagingMold())
-			grid.getPaginal().setTotalSize(getChildren().size());
-    }
-
+			if (_count == 0) {
+				final Paginal pgi = _grid.getPaginal();
+				int begin = pgi.getActivePage() * pgi.getPageSize();
+				if (hasGroup()) {
+					for (int i = 0; i < begin && _it.hasNext();) {
+						getVisibleRow((Row)_it.next());
+						i++;
+					}
+				} else 
+					_it = getChildren().listIterator(begin);
+			}
+			return _it.hasNext();
+		}
+		private Row getVisibleRow(Row row) {
+			if (row instanceof Group) {
+				final Group g = (Group) row;
+				if (!g.isOpen()) {
+					for (int j = 0; j < g.getItemCount()
+							&& _it.hasNext(); j++)
+						_it.next();
+				}
+			}
+			while (!row.isVisible())
+				row = (Row)_it.next();
+			return row;
+		}
+		public Object next() {
+			if (_grid == null || !_grid.inPagingMold()) return _it.next();
+			_count++;
+			final Row row = (Row)_it.next();
+			return _it.hasNext() ? getVisibleRow(row) : row;
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	}
 	public String getMoldSclass() {
 		return _moldSclass == null ? "z-rows" : super.getMoldSclass();
 	}
@@ -362,7 +460,7 @@ public class Rows extends XulElement {
 				//Single page is considered as not a cropper.
 				//isCropper is called after a component is removed, so
 				//we have to test >= rather than >
-	}
+		}
 		public Set getAvailableAtClient() {
 			if (!isCropper())
 				return null;
@@ -374,10 +472,27 @@ public class Rows extends XulElement {
 			final Set avail = new LinkedHashSet(32);
 			final Paginal pgi = grid.getPaginal();
 			int pgsz = pgi.getPageSize();
-			final int ofs = pgi.getActivePage() * pgsz;
-			for (final Iterator it = getChildren().listIterator(ofs);
-			--pgsz >= 0 && it.hasNext();)
-				avail.add(it.next());
+			int ofs = pgi.getActivePage() * pgsz;
+			
+			Row row = (Row) getFirstChild();
+			while(row != null) {
+				if (pgsz == 0) break;
+				if (row.isVisible()) {
+					if (--ofs < 0) {
+						--pgsz;
+						avail.add(row);
+					}
+				}
+				if (row instanceof Group) {
+					final Group g = (Group) row;
+					if (!g.isOpen()) {
+						for (int j = 0; j < g.getItemCount(); j++)
+							row = (Row) row.getNextSibling();
+					}
+				}
+				if (row != null)
+					row = (Row) row.getNextSibling();
+			}
 			return avail;
 		}
 	}

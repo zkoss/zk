@@ -109,6 +109,21 @@ public class Group extends Row {
 		return 0;
 	}
 	/**
+	 * Returns the number of visible descendant {@link Row}.
+	 * @since 3.5.1
+	 */
+	public int getVisibleItemCount() {
+		int count = getItemCount();
+		int visibleCount = 0;
+		Row row = (Row) getNextSibling();
+		while (count-- > 0) {
+			if(row.isVisible())
+				visibleCount++;
+			row = (Row) row.getNextSibling();
+		}
+		return visibleCount;
+	}
+	/**
 	 * Returns the index of Groupfoot
 	 * <p> -1: no Groupfoot
 	 */
@@ -142,6 +157,9 @@ public class Group extends Row {
 		if (_open != open) {
 			_open = open;
 			smartUpdate("z.open", _open);
+			final Rows rows = (Rows) getParent();
+			if (rows != null)
+				rows.addVisibleItemCount(isOpen() ? getVisibleItemCount() : -getVisibleItemCount());
 		}
 	}
 	/** Returns the HTML IMG tag for the image part, or null
@@ -194,7 +212,9 @@ public class Group extends Row {
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "z.open", isOpen());
 		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		appendAsapAttr(sb, Events.ON_OPEN);
+		if (getGrid().inPagingMold())
+			HTMLs.appendAttribute(sb, "z."+Events.ON_OPEN, true);
+		else appendAsapAttr(sb, Events.ON_OPEN);
 		return sb.toString();
 	}
 	//-- ComponentCtrl --//
@@ -209,6 +229,9 @@ public class Group extends Row {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			_open = open;
+			final Rows rows = (Rows) getParent();
+			if (rows != null)
+				rows.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
 		}
 	}
 	/**
@@ -222,9 +245,8 @@ public class Group extends Row {
 			return _j < getItemCount();
 		}
 		public Object next() {
-			final Object o = _it.next();
 			++_j;
-			return o;
+			return _it.next();
 		}
 		public void remove() {
 			throw new UnsupportedOperationException();
