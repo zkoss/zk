@@ -305,7 +305,10 @@ public class ClassWebResource {
 			else {
 				char cc = jsextra.charAt(0);
 				if (cc != ';') {
-					jsextra = ';' + jsextra; //just in case
+					jsextra = "\n;" + jsextra; //comment might be at end
+					len += 2;
+				} else {
+					jsextra = '\n' + jsextra;
 					++len;
 				}
 
