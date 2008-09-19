@@ -31,6 +31,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.portlet.PortletSession;
 
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.xel.AttributesMap;
@@ -44,6 +45,7 @@ import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.SessionSerializationListener;
+import org.zkoss.zk.ui.impl.Attributes;
 
 /** A non-serializable implementation of {@link org.zkoss.zk.ui.Session}.
  * 
@@ -187,7 +189,10 @@ public class SimpleSession implements Session, SessionCtrl {
 	private final Enumeration getAttrNames() {
 		return _navsess instanceof HttpSession ?
 			((HttpSession)_navsess).getAttributeNames():
-			((PortletSession)_navsess).getAttributeNames(PortletSession.APPLICATION_SCOPE);
+			_navsess != null ?
+				((PortletSession)_navsess)
+					.getAttributeNames(PortletSession.APPLICATION_SCOPE):
+				CollectionsX.EMPTY_ENUMERATION;
 	}
 	public String getDeviceType() {
 		return _devType;
@@ -205,8 +210,11 @@ public class SimpleSession implements Session, SessionCtrl {
 
 	public Object getAttribute(String name) {
 		return _navsess instanceof HttpSession ?
-			((HttpSession)_navsess).getAttribute(name):
-			((PortletSession)_navsess).getAttribute(name, PortletSession.APPLICATION_SCOPE);
+				((HttpSession)_navsess).getAttribute(name):
+			_navsess != null ?
+				((PortletSession)_navsess)
+					.getAttribute(name, PortletSession.APPLICATION_SCOPE):
+				null;
 	}
 	public void setAttribute(String name, Object value) {
 		if (!(this instanceof Serializable || this instanceof Externalizable)) {
@@ -231,7 +239,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	private void setAttr(String name, Object value) {
 		if (_navsess instanceof HttpSession)
 			((HttpSession)_navsess).setAttribute(name, value);
-		else
+		else if (_navsess != null)
 			((PortletSession)_navsess).setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
 	}
 	public void removeAttribute(String name) {
@@ -250,7 +258,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	private void rmAttr(String name) {
 		if (_navsess instanceof HttpSession)
 			((HttpSession)_navsess).removeAttribute(name);
-		else
+		else if (_navsess != null)
 			((PortletSession)_navsess).removeAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
 	public Map getAttributes() {
@@ -288,6 +296,8 @@ public class SimpleSession implements Session, SessionCtrl {
 
 		if (!_invalidated) {
 			_invalidated = true; //to avoid called twice
+
+			rmAttr(Attributes.RENEW_NATIVE_SESSION); //See HttpSessionListener
 			if (_navsess instanceof HttpSession)
 				((HttpSession)_navsess).invalidate();
 			else
@@ -297,13 +307,15 @@ public class SimpleSession implements Session, SessionCtrl {
 	public void setMaxInactiveInterval(int interval) {
 		if (_navsess instanceof HttpSession)
 			((HttpSession)_navsess).setMaxInactiveInterval(interval);
-		else
+		else if (_navsess != null)
 			((PortletSession)_navsess).setMaxInactiveInterval(interval);
 	}
 	public int getMaxInactiveInterval() {
 		return _navsess instanceof HttpSession ?
-			((HttpSession)_navsess).getMaxInactiveInterval():
-			((PortletSession)_navsess).getMaxInactiveInterval();
+				((HttpSession)_navsess).getMaxInactiveInterval():
+			_navsess != null ? 
+				((PortletSession)_navsess).getMaxInactiveInterval():
+				-1;
 	}
 	public Object getNativeSession() {
 		return _navsess;
@@ -348,7 +360,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		if (_invalidated)
 			throw new IllegalStateException("Recover an invalidated session, "+this);
 
-		_invalid = false; //just in case
+		_invalid = false; //Just in case
 		if (_navsess == null)
 			sessionDidActivate((HttpSession)nativeSession);
 		else
