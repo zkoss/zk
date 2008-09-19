@@ -303,20 +303,17 @@ public class ClassWebResource {
 			int len = jsextra.length();
 			if (len == 0) jsextra = null;
 			else {
-				char cc = jsextra.charAt(0);
+				final StringBuffer jesb = new StringBuffer(jsextra);
+				char cc = jsextra.charAt(len - 1);
 				if (cc != ';') {
-					jsextra = "\n;" + jsextra; //comment might be at end
-					len += 2;
-				} else {
-					jsextra = '\n' + jsextra;
-					++len;
+					if (cc != ')') jesb.append("()");
+					jesb.append(';');
 				}
 
-				cc = jsextra.charAt(len - 1);
-				if (cc != ';') {
-					if (cc != ')') jsextra += "()";
-					jsextra += ';';
-				}
+				if (jsextra.charAt(0) != ';') jesb.insert(0, "\n;");
+				else jesb.insert(0, '\n');
+
+				jsextra = jesb.toString();
 			}
 		}
 
