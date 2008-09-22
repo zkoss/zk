@@ -189,11 +189,6 @@ public class AuDownloader implements AuProcessor {
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
-		process(ctx, request, response, pi);
-	}
-	public void process(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response, String pi)
-	throws ServletException, IOException {
 		String path = null, contentType = null, data = null;
 		char type = (char)0;
 		int j = pi.indexOf('/', 1);

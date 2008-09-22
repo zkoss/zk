@@ -38,9 +38,7 @@ import org.zkoss.zk.ui.Session;
 public interface AuProcessor {
 	/** Called to process the request if the session is available.
 	 *
-	 * @param sess the session (never null).
-	 * If the session is null, the request is ignored, i.e.,
-	 * this method won't be called.
+	 * @param sess the session, or null if the session is not available.
 	 * @param ctx the servlet context (never null).
 	 * @param request the request (never null).
 	 * @param response the response (never null).
@@ -51,14 +49,6 @@ public interface AuProcessor {
 	 * depending on the URI you generated to the client.
 	 */
 	public void process(Session sess, ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response, String pi)
-	throws ServletException, IOException;
-
-	/** Called to process the request if the session is not available.
-	 * If the processor doesn't work without session, it could do nothing.
-	 * @since 3.5.0
-	 */
-	public void process(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException;
 }

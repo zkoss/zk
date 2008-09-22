@@ -61,19 +61,17 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 public class AuDynaMediar implements AuProcessor {
 	private static final Log log = Log.lookup(AuDynaMediar.class);
 
-	/** Retrieves the media when the session is not available.
-	 */
-	public void process(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response, String pi)
-	throws ServletException, IOException {
-		response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
-	}
 	/** Retrieves the media from {@link DynamicMedia#getMedia}.
 	 */
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
 //		if (D.ON && log.debugable()) log.debug("View "+pi);
+		if (sess == null) {
+			response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
+			return;
+		}
+
 		int j = pi.indexOf('/', 1) + 1;
 		int k = pi.indexOf('/', j);
 		if (j <= 0 || k <= 0)

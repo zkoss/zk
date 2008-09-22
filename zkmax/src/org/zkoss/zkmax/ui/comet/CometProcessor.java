@@ -63,15 +63,15 @@ import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 	}
 
 	//AuProcessor//
-	public void process(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response, String pi)
-	throws ServletException, IOException {
-		response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
-			//Not use response.sendError to avoid being processed by browser
-	}
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
+		if (sess == null) {
+			response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
+				//Not use response.sendError to avoid being processed by browser
+			return;
+		}
+
 		final SessionCtrl sessCtrl = (SessionCtrl)sess;
 		sessCtrl.notifyClientRequest(false);
 			//note: it won't invalidate it now but set a flag

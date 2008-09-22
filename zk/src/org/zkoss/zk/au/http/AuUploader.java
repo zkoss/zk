@@ -71,16 +71,16 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 public class AuUploader implements AuProcessor {
 	private static final Log log = Log.lookup(AuUploader.class);
 
-	public void process(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response, String pathInfo)
-	throws ServletException, IOException {
-		response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pathInfo));
-	}
 	/** Processes a file uploaded from the client.
 	 */
 	public void process(Session sess, ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response, String pathInfo)
 	throws ServletException, IOException {
+		if (sess == null) {
+			response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pathInfo));
+			return;
+		}
+
 		final Map attrs = new HashMap();
 		String alert = null, uuid = null,
 			nextURI = "~./zul/html/fileupload-done.html.dsp";

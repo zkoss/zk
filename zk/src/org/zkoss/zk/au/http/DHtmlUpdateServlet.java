@@ -178,11 +178,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						public void process(Session sess, ServletContext ctx,
 						HttpServletRequest request, HttpServletResponse response, String pi)
 						throws ServletException, IOException {
-							throw new ServletException("Failed to upload."+msg);
-						}
-						public void process(ServletContext ctx,
-						HttpServletRequest request, HttpServletResponse response, String pi)
-						throws ServletException, IOException {
+							if (sess != null)
+								throw new ServletException("Failed to upload."+msg);
 						}
 					});
 			}
@@ -340,7 +337,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				final AuProcessor proc = getAuProcessorByPath(pi);
 				if (proc != null) {
 					try {
-						proc.process(_ctx, request, response, pi);
+						proc.process(null, _ctx, request, response, pi);
 					} catch (AbstractMethodError ex) { //ingore (backward compaible)
 					}
 				}
