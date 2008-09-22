@@ -597,6 +597,12 @@ public class Parser {
 					}
 				}
 
+				if (isZkSwitch(parent)) {
+					if (trimLabel.length() == 0)
+						continue;
+					throw new UiException("Only <zk> can be used in <zk switch>, "+((Item)o).getLocator());
+				}
+
 				//Ingore blank text if no need to preserved
 				if (trimLabel.length() == 0
 				&& pi != null && !pi.isBlankPreserved()
@@ -604,10 +610,6 @@ public class Parser {
 					continue;
 
 				//consider as a label
-				if (isZkSwitch(parent))
-					throw new UiException("Only <zk> can be used in <zk switch>, "+((Item)o).getLocator());
-
-
 				if (pi instanceof NativeInfo) {
 					parentInfo.appendChild(
 						new TextInfo(pgdef.getEvaluatorRef(), label));
