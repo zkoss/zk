@@ -84,9 +84,10 @@ import org.zkoss.zk.device.Device;
  *
  * <dl>
  * <dt>processor0, processor1...</dt>
- * <dd>It specifies an AU processor.
- * The first processor must be specified with the name called processor0,
- * second processor1 and so on.<br/>
+ * <dd>It specifies an AU processor ({@link AuProcessor}).
+ * The processor0 parameter specifies
+ * the first AU processor, the processor1 parameter the second AU processor,
+ * and so on.<br/>
  * The syntax of the value is<br/>
  * <code>/prefix=class</code>
  * </dd>
