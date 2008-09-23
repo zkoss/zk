@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="ZK Test" language="xul/html"?>
+<!--
+test.zul
+
+{{IS_NOTE
+	Purpose:
+		View the specified subject.
+	Description:
+		
+	History:
+		Mon May 30 19:13:47     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+-->
+<window title="${arg.title}" border="normal" width="250pt" closable="true"
+use="org.zkoss.zul.impl.MessageboxDlg">
+	<hbox>
+		<div class="${arg.icon}"/>
+		<div sclass="z-messagebox" width="210pt">
+			${arg.message}
+		</div>
+	</hbox>
+	<separator bar="true"/>
+	<hbox style="margin-left:auto; margin-right:auto">
+	<button id="btn1" identity="${arg.OK}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.OK}"/>
+	<button identity="${arg.CANCEL}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.CANCEL}"/>
+	<button identity="${arg.YES}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.YES}"/>
+	<button identity="${arg.NO}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.NO}"/>
+	<button identity="${arg.RETRY}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.RETRY}"/>
+	<button identity="${arg.ABORT}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.ABORT}"/>
+	<button identity="${arg.IGNORE}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.IGNORE}"/>
+	</hbox>
+</window>

@@ -1,0 +1,9 @@
+D.ON=true
+javadoc=~/prj/javadoc
+htmldoc=~/prj/zkweb/ptroot/WebContent/doc
+unzip=true
+debug=true
+optimize=true
+#jboss.deploy=default/deploy
+#start.service=Apache Tomcat
+version=3.5.1-FL

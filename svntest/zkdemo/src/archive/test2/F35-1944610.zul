@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<window width="800px">
+<html><![CDATA[
+<p>
+1. You should see "Cat1" in textbox and followed by a listboxes showing 
+Cat1, Cat1, Cat1 and the second Cat1 in the listbox is selected.<br/>
+2. Go to textbox and change "Cat1" to "Cat2" and press "tab" key to tab away the
+textbox.<br/>
+3. You should see the selected "Cat1" (2nd listitem) in listbox changes to "Cat2".<br/>
+4. Now select the 1st "Cat1" in listbox. You should see the textbox change to "Cat1" now.<br/>
+5. Again, Go to textbox and change "Cat1" to "Cat3" and press "tab" key to tab away the
+textbox.<br/>
+6. You should see both the selected "Cat1" (first listitme) and the "Cat1" of 
+the 3rd listitme change to "Cat3".<br/>
+7. Now select the "Cat3" of the 3rd listitem in listbox.<br/>
+8. Test again, Go to textbox and change "Cat3" to "Cat5" and press "tab" key to tab away the
+textbox.<br/>
+9. You should see both the selected "Cat3" (3rd listitem) and the "Cat3" of the 1st listitem change to "Cat5".<br/>
+10. Done.
+</p>  
+]]></html>
+<zscript><![CDATA[
+public class Persons {
+    private String category = "Cat1";
+    private String[] names = new String[4];
+    public Persons() {
+        for (int j = 0; j < names.length; ++j)
+            names[j] = "Name"+j;
+    }
+    public String[] getNames() {
+        return this.names;
+    }
+    public void setCategory(String cat) {
+        this.category = cat;
+    }
+    public String getCategory() {
+        return this.category;
+    }
+}
+Persons persons = new Persons();
+Object[] manypersons = new Object[3];
+
+//1st and 3rd are the same, 2nd is not.
+manypersons[0] = persons;
+manypersons[1] = new Persons();
+manypersons[2] = persons;
+
+Persons selected = manypersons[1];
+
+]]></zscript>
+    <textbox rows="1" cols="25" sclass="reg" value="@{selected.category}"/>
+    <listbox id="mygrid" height="200px" model="@{manypersons,distinct=false}" selectedItem="@{selected}">
+            <listitem self="@{each=xx}" label="@{xx.category}"/>
+    </listbox>
+</window>
+

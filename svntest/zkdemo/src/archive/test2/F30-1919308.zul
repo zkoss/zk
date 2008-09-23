@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1919308.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 19 15:02:48     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	Test of different date formats. It will show error massage if your don't set browser language to English.
+	<zscript>
+	String[] formats = {"MM/dd/yy G", "MM.dd.yy D", "MMM dd, yy d",
+		"w dd/MM/yy", "W dd-MM-yy", "F MM.dd.yyyy"};
+	</zscript>
+
+	<hbox forEach="${formats}">
+	<datebox format="${each}" onChange='l.value = "" + self.value'/>
+	${each}
+	</hbox>
+
+	<label id="l"/>
+</zk>

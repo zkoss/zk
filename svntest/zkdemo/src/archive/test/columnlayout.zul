@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+columnlayout.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 20 12:36:44 TST 2008, Created by liwn
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<columnlayout>
+		<columnchildren width="40%">
+			<spinner/>
+		</columnchildren>
+		<columnchildren width="20%">
+			<progressmeter value="30" />
+		</columnchildren>
+		<columnchildren width="300px">
+			<progressmeter value="30" />
+		</columnchildren>
+	</columnlayout>
+</zk>

@@ -1,0 +1,32 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+<n:p>Test the spinner with draggable=&quot;true&quot;, which is between -10~10 and each step is 2.</n:p>
+<vbox>
+<label value="When the Draggable has been set true;" />
+<label value="Click the up and down arrow rapidly and continuously, there will be a phantom spinner show up right next to mouse pointer!" />
+<label value="(that's user's manipulation issue, not a bug.)" />
+</vbox>
+
+<window title="Spinner test" border="normal" width="200px">
+<spinner id="sp" />
+<zscript><![CDATA[
+                  
+                  sp.setValue(new Integer(1));
+                  sp.setStep(2);
+                  sp.setConstraint("min -10 max 10");
+                  sp.setDraggable("true");
+                  ]]></zscript>
+
+<vbox>
+<separator />
+<label value="draggable:" />
+<radiogroup onCheck="sp.draggable = self.selectedItem.label">
+<radio label="true" selected="true"/>
+<radio label="false"/>
+</radiogroup>
+</vbox>
+</window>
+</zk>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1990036.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 11 13:05:56 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<window left="200px" top="0px" border="normal" width="550px" height="300px" sizable="true"
+mode="overlapped" title="Window One">
+Please Click "Window Three", then the "Window Three" window should be in front of the "Window One" 
+</window>
+<window border="normal" width="350px" height="200px" sizable="true"
+mode="overlapped" title="Window Two">
+<window border="normal" width="250px" height="100px" sizable="true"
+mode="overlapped" title="Window Three">
+Click Me, then the window should be in front of the "Window One" 
+</window>
+</window>
+</zk> 

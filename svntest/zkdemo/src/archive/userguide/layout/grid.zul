@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+grid.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+	<html><![CDATA[
+		<h4>Grids</h4>
+		<p>grid is used to layout components into a tabular style.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Grid" border="normal" width="100%">
+<!-- Due to the security constraint, ZK demo site doesn't allow
+	zscript to declare a class. Instead we use a pre-compiled Java class.
+	You can uncomment the following and try it in your local server.
+	<zscript>
+	class Comp implements Comparator {
+		private boolean _asc;
+		public Comp(boolean asc) {
+			_asc = asc;
+		}
+		public int compare(Object o1, Object o2) {
+			String s1 = o1.getChildren().get(0).getValue(),
+				s2 = o2.getChildren().get(0).getValue();
+			int v = s1.compareTo(s2);
+			return _asc ? v: -v;
+		}
+	}
+	Comp asc = new Comp(true), dsc = new Comp(false);
+	</zscript>
+-->
+	<zscript>
+	import org.zkoss.zkdemo.userguide.*;
+	Comparator asc = new RowLabelComparator(true),
+		dsc = new RowLabelComparator(false);
+	</zscript>
+	<grid>
+		<columns sizable="true" menupopup="auto">
+			<column label="Type" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}"/>
+			<column label="Content"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="File:"/>
+				<textbox width="98%"/>
+			</row>
+			<row>
+				<label value="Type:"/>
+				<hbox>
+					<listbox rows="1" mold="select">
+						<listitem label="Java Files,(*.java)"/>
+						<listitem label="All Files,(*.*)"/>
+					</listbox>
+					<button label="Browse..."/>
+				</hbox>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+		</rows>
+	</grid>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

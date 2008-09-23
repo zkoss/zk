@@ -1,0 +1,17 @@
+# A sample of i3-log.conf.local
+#
+# Notes:
+# 1. i3-log.conf is checked periodically, so any modification
+#	will be reflected.
+# 2. The syntax is simple:
+#	package_or_class_name=level
+#
+# Level could be ERROR, WARNING, INFO, DEBUG and NULL.
+#
+# Created by Tom M. Yeh, May 18, 2001
+# Modified by Tom M. Yeh, July 25, 2001
+#
+#
+#org.zkoss=INFO
+
+#org.zkoss.lang=DEBUG

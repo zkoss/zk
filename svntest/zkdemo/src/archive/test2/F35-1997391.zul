@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-1997391.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 26 15:12:31 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<button id="btn" label="Restore Panel" visible="false" onClick='self.visible = panel.minimized = false;'/>
+<panel id="panel" framable="true" width="500px" height="500px" title="Panel component" floatable="true" movable="true"
+	maximizable="true" minimizable="true"  border="normal" collapsible="true" closable="true">
+	<attribute name="onMinimize">
+		btn.visible = self.minimized;
+		btn.focus();
+	</attribute>
+	<attribute name="onClose">
+		alert("Panel is closed");
+	</attribute>
+	<toolbar>
+		Search:
+		<bandbox id="bd" width="350px">
+			<bandpopup>
+				<vbox>
+					<hbox>
+						Search
+						<textbox />
+					</hbox>
+					<listbox width="200px"
+						onSelect="bd.value=self.selectedItem.label; bd.closeDropdown();">
+						<listhead>
+							<listheader label="Name" />
+							<listheader label="Description" />
+						</listhead>
+						<listitem>
+							<listcell label="John" />
+							<listcell label="CEO" />
+						</listitem>
+						<listitem>
+							<listcell label="Joe" />
+							<listcell label="Engineer" />
+						</listitem>
+						<listitem>
+							<listcell label="Mary" />
+							<listcell label="Supervisor" />
+						</listitem>
+					</listbox>
+				</vbox>
+			</bandpopup>
+		</bandbox>
+	</toolbar>
+	<panelchildren style="background-color:white">
+		<vbox>
+			<div>1. Click the top toolbuttons, they should work well. (toggle, minimize, maximize, and close)</div>
+			<div>2. Move the panel, and it should show proper.</div>
+			<div>3. The panel layout should show proper.</div>
+		</vbox>
+		
+	</panelchildren>
+	<toolbar>
+		<paging/>
+	</toolbar>
+
+	<toolbar mold="panel" align="center">
+		<button label="OK" />
+		<button label="Canel" />
+	</toolbar>
+</panel>
+</zk>

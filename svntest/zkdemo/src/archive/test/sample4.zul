@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+sample4.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  6 19:39:52     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<window id="modal" title="About" left="20" top="230" width="200px" border="normal">
+		ZK - Simple and Rich.
+		<image id="image"/>
+		<separator bar="true"/>
+		<button label="Show me">
+			<attribute name="onClick">{
+	Object media = Fileupload.get();
+	if (media instanceof org.zkoss.image.Image)
+		image.setContent(media);
+	else if (media != null)
+		Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+			}</attribute>
+		</button>
+		<button label="close" onClick="modal.setVisible(false);"/>
+	</window>
+	<separator/>
+	<button label="modal" onClick="modal.doModal()"/>
+	<button label="overlapped" onClick="modal.doOverlapped();"/>
+	<separator/>
+	<button label="popup" onClick="modal.doPopup();"/>
+	<button label="embedded" onClick="modal.doEmbedded();"/>
+</window>

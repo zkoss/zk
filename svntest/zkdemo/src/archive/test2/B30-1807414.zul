@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Bug1807414.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 12 12:49:36     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of setModel with declared content" border="normal">
+	<label value="Version: ${desktop.webApp.version}"/>
+	<zscript><![CDATA[
+	import org.zkoss.util.Pair;
+	
+	List infos = new LinkedList();
+	for (int j = 0; j < 5; ++j) {
+		infos.add(new Pair("A" + j, "B" + j));
+	}
+	ListModelList model = new ListModelList(infos);
+	]]></zscript>
+	
+	<grid id="x" >
+	<rows>
+	<row>
+	<textbox value="ABC"/><textbox value="DEF"/><textbox value="YYY"/>
+	</row>
+	</rows>
+	</grid>
+	<zscript>
+	x.setModel(model);
+	</zscript>
+
+	<separator/>
+
+	<listbox id="y">
+	<listitem>
+	<listcell>
+	<textbox value="A"/>
+	</listcell>
+	<listcell>
+	<textbox value="B"/>
+	</listcell>
+	</listitem>
+	</listbox>
+	<zscript>
+	y.setModel(model);
+	</zscript>
+</window>

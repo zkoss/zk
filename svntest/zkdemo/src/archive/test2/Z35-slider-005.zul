@@ -1,0 +1,82 @@
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert (dada) -->
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+  <window title="Test Sliding Text" border="normal" width="600px">
+  Check any vertical and horzontal sliders should have sliding text be changed on scrolling.
+<groupbox>
+<vbox>
+<label value="1. Operate sliders so the values of the tooltip text is changed accordingly and smoothly."/>
+<label value="2. When you adjust many sliders, color should not lock. You need to click and hold a slider button and release it on another slider track to see this effect."/>
+</vbox>
+</groupbox>
+    <hbox width="100%">
+      <vbox>
+        <slider id="01" orient="vertical" curpos="0" maxpos="100" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())'/>
+      </vbox>
+      <vbox>
+        <slider id="02" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="03" orient="vertical" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' curpos="0" maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="04" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="05" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="06" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="07" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="08" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="09" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="10" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="11" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="12" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="13" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="14" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="15" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="16" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+      <vbox>
+        <slider id="17" orient="vertical" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </vbox>
+    </hbox>
+    <vbox width="100%">
+      <hbox>
+        <slider id="21" orient="horizontal" curpos="0" maxpos="100" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())'/>
+      </hbox>
+      <hbox>
+        <slider id="22" orient="horizontal" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="23" orient="horizontal" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="24" orient="horizontal" curpos="0" onScrolling='self.setSlidingtext("VALUE of Slide:"+event.getPos())' maxpos="100"/>
+      </hbox>
+    </vbox>
+  </window>
+</zk>

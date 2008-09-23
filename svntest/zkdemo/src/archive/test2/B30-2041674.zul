@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2041674.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 28 17:16:11 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk
+	xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<window>
+		<div>Hover mouse over disabled item, popup menu disappears(This is wrong.)</div>
+
+		<menubar autodrop="true">
+			<menu label="Popup Menu">
+				<menupopup>
+					<menuitem
+						label="Hover mouse here..."
+						href="http://www.zkoss.org"
+						disabled="true" />
+					<menuitem
+						label="OK Here"
+						href="http://www.zkoss.org" />
+				</menupopup>
+			</menu>
+		</menubar>
+	</window>
+</zk>

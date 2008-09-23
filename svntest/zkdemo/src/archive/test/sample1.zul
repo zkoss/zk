@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+sample1.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  6 19:19:13     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<listbox rows="0" multiple="true" width="200px">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="Percentage"/>
+	</listhead>
+	<listitem value="A" selected="true">
+		<listcell label="Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="B">
+		<listcell label="College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem value="C" selected="true">
+		<listcell label="High School"/>
+		<listcell label="40%"/>
+	</listitem>
+	<listitem value="D">
+		<listcell label="Others"/>
+		<listcell label="17%"/>
+	</listitem>
+</listbox>

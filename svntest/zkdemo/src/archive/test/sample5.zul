@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+sample5.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 27 14:34:43     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<tabbox mold="accordion" width="400px">
+	<tabs>
+		<tab label="AJAX"/>
+		<tab label="ZK"/>
+		<tab label="Future"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+		<html><![CDATA[
+	Accordion-type
+	<ul>
+		<li>Asynchrouns JavaScript and XML.</li>
+		<li>Rich Internet Application.</li>
+	</ul>
+	]]></html>
+		</tabpanel>
+		<tabpanel>
+		<html><![CDATA[
+	<ul>
+		<li>Potix Rich Internet Solution</li>
+		<li>Simple and Rich</li>
+	</ul>
+	]]></html>
+		</tabpanel>
+		<tabpanel>
+	Future never ends.
+		</tabpanel>
+	</tabpanels>
+</tabbox>

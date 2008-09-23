@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F31-1937237.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May  2 18:21:51 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+ Grid support vflex like Listbox and Tree
+ <window height="500px">
+	<grid vflex="true">
+		<columns sizable="true">
+			<column label="Type"/>
+			<column label="Content"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+		</rows>
+	</grid>
+	</window>
+</zk>

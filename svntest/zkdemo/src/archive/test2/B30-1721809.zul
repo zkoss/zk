@@ -1,0 +1,7 @@
+<window>
+button.onClick should always work.(Click more times)
+<separator/>
+<button label="test" onClick="label.value += &quot; click&quot;"/> 
+<textbox onChange="label.value=self.value"/> 
+<label id="label"/> 
+</window>

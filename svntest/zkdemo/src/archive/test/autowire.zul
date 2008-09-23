@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mypage"?>
+<window id="main">
+	<window id="win1" apply="org.zkoss.zkdemo.test.MyAutowireComposer">
+	    <textbox id="mytextbox"/>
+	    <label id="mylabel"/>
+	</window>
+</window>

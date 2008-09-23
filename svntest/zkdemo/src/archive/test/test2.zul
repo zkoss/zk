@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+test2.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 14 17:24:51     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="2nd test">
+	<progressmeter id="pm" value="10"/>
+	<button label="0" onClick="pm.value = 0"/>
+	<button label="50" onClick="pm.value = 50"/>
+	<button label="100" onClick="pm.value = 100"/>
+</window>

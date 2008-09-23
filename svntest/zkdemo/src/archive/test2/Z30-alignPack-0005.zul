@@ -1,0 +1,26 @@
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>1. Each space between each other is the same from the first hbox.</n:p>
+	<n:p>2. Each space between each other is the same as each label from the second hbox.</n:p>
+	
+	<label value="PACK AND ALIGN - width:" />
+	<style>
+		table.hbox{ 
+			border: solid red 1px; } 
+		.obj{
+		 height:50px;
+		 width:50px;
+		 border: solid black 1px;
+		}
+	</style>
+	<hbox width="1000px" height="200px" sclass="hbox">
+		<div sclass="obj">The same</div>
+		<div sclass="obj">The same</div>
+		<div sclass="obj">The same</div>
+	</hbox>
+	<div>widths</div>
+	<hbox widths="100px,300px,600px" height="200px" sclass="hbox">
+		<div sclass="obj">100</div>
+		<div sclass="obj">300</div>
+		<div sclass="obj">600</div>
+	</hbox>
+</zk>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+hello.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+		<h4>Live data</h4>
+		<p>listbox supports "load on demend" feature via a ListModel interface. 
+		This feature will not load data into the listbox until it is necessary</p>
+		<p>Try to scroll the listbox down and see how the value is dynamically loaded into.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Live Data" border="normal">
+	<zscript>
+		String[] data = new String[30];
+		for(int j=0; j &lt; data.length; ++j) {
+			data[j] = "option "+j;
+		}
+		ListModel strset = new SimpleListModel(data);
+	</zscript>
+	<listbox id="list" width="200px" rows="10" model="&#36;{strset}">
+		<listhead>
+			<listheader label="Load on Demend" sort="auto"/>
+		</listhead>
+	</listbox>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

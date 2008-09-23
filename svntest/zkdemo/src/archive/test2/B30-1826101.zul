@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1826101.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov  6 11:50:42 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<window>
+
+<n:ol>
+<n:li>Listbox with mold = paging:</n:li>
+<n:li>It should have scrollbar when columns do not fit in the container;</n:li>
+<n:li>It shouldn't allow to set the size of columns smaller than contents in IE6.0. </n:li>
+</n:ol>
+
+</window>
+<window title="listbox demo" border="normal" width="80px">
+
+	<listbox width="95%" mold="paging">
+		<listhead sizable="true">
+			<listheader width="200px" label="name" sort="auto" />
+			<listheader width="200px" label="gender" sort="auto" />
+		</listhead>
+		<listitem>
+			<listcell label="Mary" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="John" />
+			<listcell label="MALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Jane" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Henry" />
+			<listcell label="MALE" />
+		</listitem>
+	</listbox>
+</window>
+</zk>

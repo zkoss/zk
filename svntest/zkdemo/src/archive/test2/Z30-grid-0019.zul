@@ -1,0 +1,49 @@
+<!--
+Z30-grid-0019.zul
+
+{{IS_NOTE
+	Purpose:
+		test grid span.
+	Description:
+		
+	History:
+		Create by Dennis
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+The layout of this grid shows properly, if not, it's a bug.
+<grid>
+	<columns sizable="true">
+		<column label="Left" align="left"/><column label="Center" align="center"/>
+		<column label="Right" align="right"/><column label="Column 4"/>
+		<column label="Column 5"/><column label="Column 6"/>
+	</columns>
+	<rows>
+		<row spans="1,2,2">
+			<label value="(1,2,2)"/><label value="Item B.2"/>
+			<label value="Item B.4"/><label value="Item B.6"/>
+		</row>
+		<row spans="3">
+			<label value="(3)"/><label value="Item C.4"/>
+			<label value="Item C.5"/><label value="Item C.6"/>
+		</row>
+		<row spans=",,2,2">
+			<label value="(,,2,2)"/><label value="Item D.2"/>
+			<label value="Item D.3"/><label value="Item D.5"/>
+		</row>
+		<row>
+			<label value="()"/><label value="Item A.2"/>
+			<label value="Item A.3"/><label value="Item A.4"/>
+			<label value="Item A.5"/><label value="Item A.6"/>
+		</row>
+		<row spans="1,5">
+			<label value="(1,)"/><label value="Item X"/>
+		</row>
+	</rows>
+</grid>
+</window>

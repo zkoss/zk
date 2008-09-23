@@ -1,0 +1,44 @@
+
+
+
+<zk>
+<html><![CDATA[
+<h3>test Window Attributes</h3>
+]]></html>
+<!-- while no  -->
+<button onClick="win.setMaximized(false);" label="cancel maximize"/>
+<button onClick="win.setMinimized(false);" label="cancel minimize"/>
+<button >
+	<attribute name="onCreate"><![CDATA[ 
+		self.setLabel("DO: Win.setVisible="+(!win.isVisible()));
+	]]></attribute>
+	
+	<attribute name="onClick"><![CDATA[ 
+		win.setVisible(!win.isVisible());
+		self.setLabel("DO: Win.setVisible="+(!win.isVisible()));
+	]]></attribute>
+</button>
+<button onClick='win.setWidth("100%")' label="Win.width = 100%"/>
+<button onClick='win.setHeight("100%")' label="Win.height = 100%"/>	
+<button onClick='win.setWidth("50%")' label="Win.width = 50%"/>
+<button onClick='win.setHeight("50%")' label="Win.height = 50%"/>	
+
+
+<window id="win" title="test caption window" sizable="true"
+		minimizable="true" maximizable="true" border="normal">
+	
+		
+
+
+<window id="innerWin" 
+	title="width100%,Height100%" border="normal" width="100%" height="60px">
+<button onClick='innerWin.setWidth("50%")' label="innerWin.width = 50%"/>
+<button onClick='innerWin.setHeight("50%")' label="innerWin.height = 50%"/>	
+<button onClick='innerWin.setWidth("100%")' label="innerWin.width = 100%"/>
+<button onClick='innerWin.setHeight("100%")' label="innerWin.height = 100%"/>	
+	<!--CONTAIN-->
+	
+</window>
+
+</window>
+</zk>

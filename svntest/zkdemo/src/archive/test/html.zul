@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+html.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 08:20:30     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:table border="1">
+	<h:tr>
+		<h:td>
+	<listbox id="list" mold="select">
+		<listitem value="A" label="AA"/>
+		<listitem id="itemB" value="B" label="BB"/>
+	</listbox>
+		</h:td>
+		<h:td>
+	<tabbox width="400">
+		<tabs>
+			<tab label="Tab 1"/>
+			<tab label="Tab 2"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>This is panel 1 emebeded another HTML table
+		<h:table border="2">
+		<h:tr>
+			<h:td>Col1</h:td><h:td>Col2</h:td>
+		</h:tr>
+		</h:table>
+			</tabpanel>
+			<tabpanel>This is panel 2
+The second panel</tabpanel>
+		</tabpanels>
+	</tabbox>
+		</h:td>
+	</h:tr>
+	</h:table>
+</window>

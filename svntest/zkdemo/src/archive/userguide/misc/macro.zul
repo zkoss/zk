@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+macro.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 17 14:45:26     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+<h4>Macro components</h4>
+<p>Macros component is a way to develop new components without
+programming.
+First, use &lt;?component?&gt; to define a component by use of another ZUML page.
+Then, you could use this component anywhere as if it is a regular component.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<?component name="hello" macroURI="/userguide/misc/includedHello.zul"?>
+<window title="Macro component" border="normal" width="300px">
+	<hello/>
+	<hello message="Hi there!"/>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

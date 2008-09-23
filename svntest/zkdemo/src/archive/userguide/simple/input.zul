@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+moreInput.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<vbox width="100%">
+		<html><![CDATA[
+			<h4>More input features</h4>
+			<p>text entry with constraints are supported.
+			<ul>
+				<li>intbox: textbox which accepts only integers.</li>
+				<li>decimalbox: textbox which accepts only decimal numbers.</li>
+				<li>datebox: textbox which accepts only date format.</li>
+				<li>constraint: constraint can be used to futher contraint the input control.(e.g. intbox and decimalbox can accept only positive numbers, zero, or negative numbers, etc..)</li>
+			</ul>
+			</p>
+			<p>Let us do some small test:
+			<ul>
+				<li>Try to enter some non-integer into "int box" and tab away.</li>
+				<li>Try to enter some non-decimal into "decimal box" and tab away.</li>
+				<li>Also try to enter some non-date format string into the "date box" and tab away.</li>
+				<li>Try to enter some negative integer or zero into "positive box" and tab away.</li>
+				<li>Try to highlight the name "John" in textbox of "Selection Event" and press "Replace" button below and "John" will be replaced with "Mary".</li>
+			</ul>
+			</p>
+		]]></html>
+		<groupbox mold="3d" width="100%">
+			<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+			<window id="view">
+			</window>
+		</groupbox>
+		<groupbox id="tryView" mold="3d" open="false" width="100%">
+			<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+			<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+				<attribute name="value"><![CDATA[
+<window title="Textbox with constraints" border="normal">
+	<grid width="90%">
+	<rows>
+		<row>
+			textbox: <textbox value="text..."/>
+		</row>
+		<row>int box:<intbox/></row>
+		<row>decimal box:<decimalbox format="#,##0.##"/></row>
+		<row>date box:
+			<hbox>
+			<datebox id="db"/>
+			<listbox onSelect="db.setFormat(self.selectedItem.value)" mold="select" rows="1">
+				<listitem label="Default" value=""/>
+				<listitem label="yyyy/MM/dd" value="yyyy/MM/dd"/>
+				<listitem label="MM-dd-yy" value="MM-dd-yy"/>
+			</listbox>
+			</hbox>
+		</row>
+		<row>time box:<timebox /></row>		
+		<row>positive int box:<intbox constraint="no negative,no zero"/></row>
+		<row>e-mail:<textbox constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"/></row>
+		<row>spinner:<spinner /></row>		
+		<row>
+			multiple lines: 
+			<textbox rows="5" cols="40">
+				<attribute name="value">
+text line1...
+text line2...
+ 				</attribute>
+ 			</textbox>
+		</row>		
+		<row>
+			Selection event: 
+			<vbox>
+				<textbox id="sel" rows="5" cols="40" >
+					<attribute name="value">Welcome John !</attribute>
+					<attribute name="onSelection">
+						int start = event.start;
+						int end = event.end;
+						msg.setValue("Start: "+start+" , End:"+end);
+					</attribute>
+				</textbox>
+				<button label="Replace" onClick="replace()"/>
+				<label id="msg"/>
+			</vbox>
+		</row>
+	</rows>
+	</grid>
+<zscript>
+	int start,end;
+	void replace(){
+		sel.setSelectedText(start,end,"Mary",true);
+	}
+</zscript>
+</window>
+				]]></attribute>
+			</textbox>
+		</groupbox>
+	</vbox>
+</window>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1721273.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 11 10:23:42 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1721273 ] Event Enachment</n:h2>
+	<n:ol>
+		<n:li>Focus into the textbox, then you press the "Enter" key, you will see alert message</n:li>
+	</n:ol>
+	<textbox value="Support onOK event 1" onOK="alert(self.value);"/>
+        <textbox value="Support onOK event 2" onOK="alert(self.value);"/>
+</zk>

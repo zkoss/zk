@@ -1,0 +1,74 @@
+<zk>
+<button id="btn" label="Restore Panel" visible="false" onClick='self.visible = panel.minimized = false;'/>
+<panel id="panel" framable="true" width="500px" height="500px" title="Panel component" floatable="true" movable="true"
+	maximizable="true" minimizable="true"  border="normal" collapsible="true" closable="true">
+	<attribute name="onMinimize">
+		btn.visible = self.minimized;
+		btn.focus();
+	</attribute>
+	<attribute name="onClose">
+		alert("Panel is closed");
+	</attribute>
+	<toolbar>
+		Search:
+		<bandbox id="bd" width="350px">
+			<bandpopup>
+				<vbox>
+					<hbox>
+						Search
+						<textbox />
+					</hbox>
+					<listbox width="200px"
+						onSelect="bd.value=self.selectedItem.label; bd.closeDropdown();">
+						<listhead>
+							<listheader label="Name" />
+							<listheader label="Description" />
+						</listhead>
+						<listitem>
+							<listcell label="John" />
+							<listcell label="CEO" />
+						</listitem>
+						<listitem>
+							<listcell label="Joe" />
+							<listcell label="Engineer" />
+						</listitem>
+						<listitem>
+							<listcell label="Mary" />
+							<listcell label="Supervisor" />
+						</listitem>
+					</listbox>
+				</vbox>
+			</bandpopup>
+		</bandbox>
+	</toolbar>
+	<panelchildren>
+	<zscript>
+	List items = new org.zkoss.zkdemo.userguide.BigList(100);
+	</zscript>
+	<listbox id="listbox" height="100%" width="100%" style="border:0px;background-color:white;"
+		fixedLayout="true">
+			<listhead sizable="true">
+				<listheader label="column1" sort="auto"/>
+				<listheader label="column2" sort="auto"/>
+				<listheader label="column3" sort="auto"/>
+				<listheader label="column4" sort="auto"/>
+			</listhead>
+		<listitem forEach="&#36;{items}">
+		<listcell label="&#36;{each}-1"/>
+		<listcell label="&#36;{each}-2"/>
+		<listcell label="&#36;{each}-3"/>
+		<listcell label="&#36;{each}-4"/>
+		</listitem>
+	</listbox>
+	</panelchildren>
+	<toolbar>
+		<paging id="paging"
+			onCreate='listbox.setMold("paging");listbox.paginal=self;' />
+	</toolbar>
+
+	<toolbar mold="panel" align="center">
+		<button label="OK" />
+		<button label="Canel" />
+	</toolbar>
+</panel>
+</zk>

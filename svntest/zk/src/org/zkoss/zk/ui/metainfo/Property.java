@@ -1,0 +1,310 @@
+/* Property.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Apr 16 14:55:35     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package org.zkoss.zk.ui.metainfo;
+
+import java.lang.reflect.Method;
+
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
+
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.ConditionImpl;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
+
+/**
+ * Information about how to initialize a property (aka., a field of a component).
+ * There are two kind of properties: one is a String instance (either
+ * a string vaue or an expression), and the other is
+ * a {@link NativeInfo} instance. The later is also called the native content.
+ *
+ * @author tomyeh
+ */
+public class Property extends EvalRefStub
+implements Condition, java.io.Serializable {
+	private static final Log log = Log.lookup(Property.class);
+    private static final long serialVersionUID = 20060622L;
+
+	private final String _name;
+	/** The value if it is not the native content.
+	 * Exactly one of _value and _navval is non-null.
+	 */
+	private final ExValue _value;
+	/** The value if it is the native content.
+	 * Exactly one of _value and _navval is non-null.
+	 */
+	private final NativeInfo _navval;
+	private final ConditionImpl _cond;
+	/** Used to optimize {@link #resolve}. */
+	private transient Class _lastcls;
+	/** The method, or null if more than two methods are found
+	 * (and use {@link #_mtds} in this case).
+	 */
+	private transient Method _mtd;
+	/** Used more than two methods are found, or null if only one method
+	 * (and use {@link #_mtd} in this case).
+	 */
+	private transient Method[] _mtds;
+
+	/** Constructs a property with a class that is known in advance.
+	 * @exception IllegalArgumentException if evalr or name is null
+	 */
+	public Property(EvaluatorRef evalr, String name, String value,
+	ConditionImpl cond) {
+		this(evalr, name, value, null, cond);
+	}
+	/** Constructs a property with the native content.
+	 * The native content is represented by {@link NativeInfo},
+	 * i.e., a XML fragment (aka., a tree of {@link ComponentInfo}.
+	 * @since 3.5.0
+	 */
+	public Property(EvaluatorRef evalr, String name, NativeInfo value,
+	ConditionImpl cond) {
+		this(evalr, name, null, value, cond);
+	}
+	private Property(EvaluatorRef evalr, String name, String value,
+	NativeInfo navval, ConditionImpl cond) {
+		if (name == null || evalr == null)
+			throw new IllegalArgumentException();
+
+		_evalr = evalr;
+		_name = name;
+
+		_cond = cond;
+		_navval = navval;
+		_value = navval != null ? null: new ExValue(value, Object.class);
+			//type will be fixed when mapped to a method
+	}
+
+	/** Returns the name of the property.
+	 */
+	public String getName() {
+		return _name;
+	}
+	/** Returns the raw value of the property.
+	 * Note: it is the original value without evaluation.
+	 * In other words, it may contain EL expressions.
+	 * @exception UnsupportedOperationException if value is the native content,
+	 * i.e., it is constructed by use of {@link #Property(EvaluatorRef, String, NativeInfo, ConditionImpl)}.
+	 * @since 3.0.0
+	 */
+	public String getRawValue() {
+		if (_value == null)
+			throw new UnsupportedOperationException("native content");
+		return _value.getRawValue();
+	}
+	/** Sets the raw value of the property.
+	 * @exception UnsupportedOperationException if value is the native content,
+	 * i.e., it is constructed by use of {@link #Property(EvaluatorRef, String, NativeInfo, ConditionImpl)}.
+	 * @since 3.0.0
+	 */
+	public void setRawValue(String value) {
+		if (_value == null)
+			throw new UnsupportedOperationException("native content");
+		_value.setRawValue(value);
+	}
+
+	/** Resolves the method. */
+	private final void resolve(Class cls) {
+		final String mtdnm = Classes.toMethodName(_name, "set");
+		if (_value != null && _value.isExpression()) {
+			_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
+			if (_mtds.length == 0) {
+				if (!DynamicPropertied.class.isAssignableFrom(cls))
+					throw new PropertyNotFoundException("Method "+mtdnm+" not found for "+cls); 
+				_mtds = null;
+			} else if (_mtds.length == 1) {
+				_mtd = _mtds[0];
+				_mtds = null;
+			}
+		} else {
+		//Note: String has higher priority
+			_mtd = resolveMethod0(cls, mtdnm);
+		}
+	}
+
+	/** Evaluates the value to an Object.
+	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
+	 * the result (i.e., Object.class is assumed).
+	 */
+	public Object getValue(Component comp) {
+		if (_value != null)
+			return _value.getValue(_evalr, comp);
+
+		Desktop desktop = comp.getDesktop();
+		Page page;
+		if (desktop == null) {
+			Execution exec = Executions.getCurrent();
+			if (exec == null)
+				throw new IllegalStateException("Not attached, nor execution");
+			desktop = exec.getDesktop();
+			page = ((ExecutionCtrl)exec).getCurrentPage();
+		} else {
+			page = comp.getPage();
+		}
+		return ((WebAppCtrl)desktop.getWebApp()).getUiEngine()
+			.getNativeContent(comp, _navval.getChildren(),
+			((Native)_navval.newInstance(page, comp)).getHelper());
+	}
+	/** Evaluates the value to an Object.
+	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
+	 * the result (i.e., Object.class is assumed).
+	 * @exception UnsupportedOperationException if value is the native content,
+	 * i.e., it is constructed by use of {@link #Property(EvaluatorRef, String, NativeInfo, ConditionImpl)}.
+	 */
+	public Object getValue(Page page) {
+		if (_value == null)
+			throw new UnsupportedOperationException("native content");
+		return _value.getValue(_evalr, page);
+	}
+	/** Assigns the value of this memeber to the specified component.
+	 *
+	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
+	 */
+	public void assign(Component comp) {
+		if (!isEffective(comp))
+			return; //ignored
+
+		try {
+			final Class cls = comp.getClass();
+			if (_lastcls != cls) {
+				resolve(cls);
+				_lastcls = cls;
+			}
+
+			//Note: if _mtd and _mtds are both null, it must be dyna-attr
+			//However, if dyna-attr, _mtd or _mtds might not be null
+			final Class type =
+				_mtd != null ? _mtd.getParameterTypes()[0]: Object.class;
+			if (_value != null) _value.setExpectedType(type);
+			Object val = getValue(comp);
+
+			final Method mtd;
+			if (_mtd != null) {
+				mtd = _mtd;
+			} else if (_mtds == null) {
+				//it must be dynamic attribute
+				((DynamicPropertied)comp).setDynamicProperty(_name, val);
+				return; //done
+			} else if (val == null) { //_mtds != null but val == null
+				mtd = _mtds[0];
+				val = Classes.coerce(mtd.getParameterTypes()[0], val);
+			} else { //_mtds != null && val != null
+				for (int j = 0; ; ++j) {
+					if (j == _mtds.length) {
+						mtd = _mtds[0];
+						val = Classes.coerce(mtd.getParameterTypes()[0], val);
+						break; //pick randomly
+					}
+					if (_mtds[j].getParameterTypes()[0].isInstance(val)) {
+						mtd = _mtds[j];
+						break; //found
+					}
+				}
+			}
+
+			mtd.invoke(comp, new Object[] {val});
+		} catch (Exception ex) {
+			log.error("Failed to assign "+this+" to "+comp+"\n"+Exceptions.getMessage(ex));
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+
+	public boolean isEffective(Component comp) {
+		return _cond == null || _cond.isEffective(_evalr, comp);
+	}
+	public boolean isEffective(Page page) {
+		return _cond == null || _cond.isEffective(_evalr, page);
+	}
+	public String toString() {
+		return "["+_name+(_navval != null ? "": "="+_value)+']';
+	}
+
+	//static utilities//
+	/** Resloves the method for the specified property, or null
+	 * if {@link DynamicPropertied#setDynamicProperty} shall be used instead.
+	 *
+	 * <p>Use this method to retrieve the method when you want to assign a value
+	 * to a component's property.
+	 *
+	 * <p>Don't use the reflection directly since this method searches
+	 * more signatures.
+	 * @param name the property name, such as "title".
+	 * @exception PropertyNotFoundException if the property is not found,
+	 * i.e., no corresponding method and {@link DynamicPropertied} not
+	 * implmented.
+	 * @since 3.5.0
+	 */
+	public static final Method resolveMethod(Class cls, String name)
+	throws PropertyNotFoundException {
+		return resolveMethod0(cls, Classes.toMethodName(name, "set"));
+	}
+	private static final Method resolveMethod0(Class cls, String mtdnm)
+	throws PropertyNotFoundException {
+		try {
+			return Classes.getCloseMethod(
+				cls, mtdnm, new Class[] {String.class});
+		} catch (NoSuchMethodException ex) {
+			try {
+				return Classes.getCloseMethod(
+					cls, mtdnm, new Class[] {null});
+			} catch (NoSuchMethodException e2) {
+				if (!DynamicPropertied.class.isAssignableFrom(cls))
+					throw new PropertyNotFoundException("Method, "+mtdnm+", not found for "+cls);
+				return null;
+			}
+		}
+	}
+	/** Assigns a property.
+	 *
+	 * <p>Don't use the refelction directly since this method searches
+	 * more signatures.
+	 *
+	 * @exception PropertyNotFoundException if the property is not found,
+	 * i.e., no corresponding method and {@link DynamicPropertied} not
+	 * implmented.
+	 * @exception UiException if fail to assign
+	 * @since 3.5.0
+	 */
+	public static final void assign(Component comp, String name, String value) {
+		final Method mtd = resolveMethod(comp.getClass(), name);
+		if (mtd != null) {
+			try {
+				Object val = Classes.coerce(mtd.getParameterTypes()[0], value);
+				mtd.invoke(comp, new Object[] {val});
+			} catch (Exception ex) {
+				log.error("Failed to assign "+value+" to "+comp+"\n"+Exceptions.getMessage(ex));
+				throw UiException.Aide.wrap(ex);
+			}
+		} else {
+			((DynamicPropertied)comp).setDynamicProperty(name, value);
+		}
+	}
+}

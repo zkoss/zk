@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript><![CDATA[
+		void doSelect(String s) {
+			Tree tree = Path.getComponent("//userGuide/toc");
+			Treeitem treeitem = tree.getSpaceOwner().getFellow(s);
+			tree.selectItem(treeitem);
+			java.util.Set items = new HashSet();
+			items.add(treeitem);
+			Events.postEvent(new SelectEvent("onSelect", tree, items));
+		}
+	]]></zscript>
+	
+	<html><![CDATA[
+		<h3>Toolbar and Menus</h3>
+	]]></html>
+	<h:ul>
+		<h:li><toolbarbutton label="Toolbar and Toolbarbutton" onClick="doSelect(&quot;t1&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Menu" onClick="doSelect(&quot;t2&quot;)"/></h:li>
+		<h:li><toolbarbutton label="More Menu Features" onClick="doSelect(&quot;t3&quot;)"/></h:li>
+		<h:li><toolbarbutton label="Fisheye Menu" onClick="doSelect(&quot;t4&quot;)"/></h:li>
+	</h:ul>
+</window>

@@ -1,0 +1,32 @@
+<!--
+test.svg
+
+{{IS_NOTE
+	Purpose:
+		To test the XML output
+	Description:
+		
+	History:
+		August 23, 2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?page contentType="image/svg+xml;charset=UTF-8"
+	xml="version=&quot;1.0&quot; standalone=&quot;no&quot;"
+	docType="svg PUBLIC &quot;-//W3C//DTD SVG 1.1//EN&quot; &quot;http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd&quot;"?>
+
+<svg width="100%" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg" xmlns:z="http://www.zkoss.org/2005/zk">
+	<z:zscript><![CDATA[
+	String[] bgnds = {"purple", "blue", "yellow"};
+	int[] rads = {30, 25, 20};
+	]]></z:zscript>
+	<circle style="fill:${each}" z:forEach="${bgnds}"
+		cx="${50+rads[forEachStatus.index]}"
+		cy="${20+rads[forEachStatus.index]}"
+		r="${rads[forEachStatus.index]}"/>
+</svg> 

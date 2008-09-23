@@ -1,0 +1,33 @@
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert (dada) -->
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+  All sliders should work, horizontal sliders modified by vertical sliders.
+<groupbox>
+<vbox>
+<label value="1. Operate sliders so the values of the label is changed accordingly and only when slider button is released."/>
+<label value="2. When slider nob button is clicked and dragged away, color should not lock."/>
+</vbox>
+</groupbox>
+  <window title="Slider connections" border="normal" width="600px">
+    <hbox width="100%">
+      <label id="myLabel"/>
+      <vbox>
+Test right click for first slider, it should change a label with slider curpos value. All vertical sliders should change horizontal slider values.
+        <slider id="a01" orient="vertical" curpos="0" maxpos="100" onScroll="a21.setCurpos(event.getPos());" onRightClick='myLabel.setValue("Right Clicked OK." + self.getCurpos());'/>
+      </vbox>
+      <vbox>
+        <slider id="a02" orient="vertical" curpos="0" onScroll="a22.setCurpos(event.getPos());" maxpos="100"/>
+      </vbox>
+     </hbox>
+    <vbox width="100%">
+      <hbox>
+        <slider id="a21" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+      <hbox>
+        <slider id="a22" orient="horizontal" curpos="0" maxpos="100"/>
+      </hbox>
+    </vbox>
+  </window>
+</zk>

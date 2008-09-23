@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1735287.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 11 10:22:12 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1735287 ] Disable Toolbarbutton</n:h2>
+	<n:ol>
+		<n:li>Click the button1 and button3(gray link), then you should not see any dialog.</n:li>
+		<n:li>Click the enable btn1 and enable btn3, now you can click button1 and button3 showing alert message.</n:li>
+	</n:ol>
+	<window title="Disable Toolbarbutton" border="normal" width="300px">
+		<caption>
+			<toolbarbutton id="btn3" disabled="true" label="button3" onClick='alert("You should not see this dialog!");'/>
+			<toolbarbutton label="button4"/>
+                        <toolbarbutton label="enable btn3" onClick="btn3.disabled=false"/>
+		</caption>
+		<toolbar>
+			<toolbarbutton id="btn1" disabled="true" label="button1" onClick='alert("You should not see this dialog!");'/>
+			<toolbarbutton label="button2"/>
+                        <toolbarbutton label="enable btn1" onClick="btn1.disabled=false"/>
+		</toolbar>
+	</window>
+</zk>
