@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+checkmarks.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 11 12:37:27     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+	<h4>Tree controls with checkmarks</h4>
+	<p>The checkmark attribute controls whether to display a checkbox,
+	if multiple selection, or a radio button, if single selection,
+	in front of each tree items</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Tree checkmark" border="normal">
+	<button label="Toggle checkmark" onClick="tree.checkmark = !tree.checkmark"/>
+	<separator bar="true"/>
+	<tree id="tree" width="90%" rows="5" multiple="true" checkmark="true">
+		<treecols sizable="true">
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell label="Item 2.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3"/>
+		</treechildren>
+	</tree>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

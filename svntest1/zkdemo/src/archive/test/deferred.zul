@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+deferred.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 30 18:55:27     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="w">
+	<zscript deferred="true">
+	void add() {
+		new Label("New Label").setParent(w);
+	}
+	</zscript>
+	<button label="add" onClick="add()"/>
+</window>
+ 

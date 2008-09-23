@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="${param.pageId}" title="Upload Photo" style="${param.style}"?>
+<!--
+upload-demo.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep  8 17:24:47     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window border="normal">
+	Post your striking photos.
+	<separator/>
+
+	Page ID: <label id="${empty param.pageId ? 'some': param.pageId}" value="${self.id}"/>
+	vs ${page.id}
+	<image id="image"/>
+	<button label="Upload">
+		<attribute name="onClick">{
+	Object media = Fileupload.get();
+	if (media instanceof org.zkoss.image.Image)
+		image.setContent(media);
+	else if (media != null)
+		Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+		}</attribute>
+	</button>
+
+And the following must be arg1 (if included by include.zul): ${requestScope.abc}
+</window>

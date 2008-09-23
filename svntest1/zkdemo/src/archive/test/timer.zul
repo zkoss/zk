@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+timer.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 26 12:59:18     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Timer Demo">
+	<label id="now"/>
+	<timer id="timer" delay="1000" repeats="true"
+		onTimer="now.setValue(new Date().toString())"/>
+	<separator bar="true"/>
+	<button label="Stops timer" onClick="timer.stop()"/>
+	<button label="Starts timer" onClick="timer.start()"/>
+</window>

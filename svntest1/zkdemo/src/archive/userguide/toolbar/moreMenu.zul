@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+menu.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+		<h4>More Menu Features</h4>
+		<p>Menu supports special feature of autocheck and autodrop.</p>
+		<ul>
+			<li>autocheck make the menu item as a checkbox.</li>
+			<li>autodrop make the menu to pop up when the mouse roll over.</li>
+		</ul>
+		<p>Try to move mouse pointer over the menu. Click check1 and check2; then see what happened.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="More Menu" border="normal">
+	<menubar id="menubar" autodrop="true">
+		<menu label="File">
+			<menupopup>
+				<menuitem label="New" onClick="alert(self.label)"/>
+				<menuitem label="Open" onClick="alert(self.label)"/>
+				<menuitem label="Save" onClick="alert(self.label)"/>
+				<menuseparator/>
+				<menuitem label="Exit" onClick="alert(self.label)"/>
+			</menupopup>
+		</menu>
+		<menu label="Option">
+			<menupopup>
+				<menuitem label="Simple" autocheck="true" checkmark="true"/>
+				<menuitem label="Rich" autocheck="true" checkmark="true"/>
+			</menupopup>
+		</menu>
+		<menu label="Help">
+			<menupopup>
+				<menuitem label="Index" onClick="alert(self.label)"/>
+				<menu label="About">
+					<menupopup>
+						<menuitem label="About ZK" onClick="alert(self.label)"/>
+						<menuitem label="About Potix" onClick="alert(self.label)"/>
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+	</menubar>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

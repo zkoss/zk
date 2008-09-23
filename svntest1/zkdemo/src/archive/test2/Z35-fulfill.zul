@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z35-fulfill.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 25 14:26:25     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of fulfill with URI">
+	You shall see the content of Z35-fulfill-1.zul below
+	<div style="border:1px solid blue" fulfill="=Z35-fulfill-1.zul"/>
+	Then, click <button id="b" label="show"/> and you shall see
+	the same content below
+	<div style="border:1px solid blue" fulfill="b.onClick=Z35-fulfill-1.zul"/>
+</window>

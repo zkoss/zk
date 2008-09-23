@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+{{IS_NOTE
+	Purpose:
+		Test Grid with live data and renderer and sort
+	Description:
+		
+	History:
+	Create by Dennis	
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<h:h3> [ 1823959 ] Grid failed to re-sync model (Opera/IE/IE7)</h:h3>
+<h:pre>
+
+In IE/IE7/Opera, JavaScript error when re-sync model
+multiple times.
+
+</h:pre>
+
+	<zscript>
+		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel(1);
+	</zscript>
+	<vbox>
+		<button label="Resync Model" onClick="strset.invalidate()"/>
+		<grid model="${strset}">
+			<columns sizable="true">
+				<column label="Type"/>
+			</columns>
+		</grid>
+	</vbox>
+</zk>

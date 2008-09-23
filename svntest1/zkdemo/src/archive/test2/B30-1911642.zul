@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1911642.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 11 18:37:58 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+If you can see onCloSize alert when resize the column (by listheader) , it is fixed.
+<zscript>
+List items = new org.zkoss.zkdemo.userguide.BigList(30); //a big list of
+Integer
+</zscript>
+<listbox mold="paging">
+<listhead sizable="true" onColSize='alert("onColSize");'>
+<listheader label="Header 1"/>
+<listheader label="Header 2"/>
+<listheader label="Header 3"/>
+<listheader label="Header 4"/>
+</listhead>
+<listitem forEach="&#36;{items}">
+<listcell label="&#36;{each}-1"/>
+<listcell label="&#36;{each}-2"/>
+<listcell label="&#36;{each}-3"/>
+<listcell label="&#36;{each}-4"/>
+</listitem>
+</listbox>
+</window>

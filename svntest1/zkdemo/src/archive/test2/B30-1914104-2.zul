@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1914104-2.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 14 16:38:34     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Grid Demo" border="normal" width="360px" height="100%"
+ xmlns:n="http://www.zkoss.org/2005/zk/native">
+<div height="100%" style="border:1px solid">
+<n:h3>IE6: When resize browser, the inner window doesn't resize</n:h3>
+<n:ol>
+<n:li>open in new browser</n:li>
+<n:li>resize browser size</n:li>
+</n:ol>
+</div>
+</window>

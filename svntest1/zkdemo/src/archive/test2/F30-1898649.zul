@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1898649.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar  7 13:09:37 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1898649 ] The shading of Timebox should be the same with textbox</n:h2>
+	<n:ol>
+		<n:li>Check the timebox shadow and compare to textbox</n:li>
+		<n:li>Also check the readonly, When readonly, you can only click (cannot type)</n:li>
+		<n:li>Also check the disable, When disable, you cannot do anything</n:li>
+	</n:ol>
+<textbox/>
+<timebox id="tb"/>
+<button label="disable" onClick="tb.disabled = !tb.disabled"/>
+<button label="readonly" onClick="tb.readonly = !tb.readonly"/>
+</zk>

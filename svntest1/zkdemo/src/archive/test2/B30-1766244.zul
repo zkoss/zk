@@ -1,0 +1,27 @@
+<window title="Bug: combox in scrollable grid">
+ <grid height="105px">
+  <columns>
+   <column/><column/>
+  </columns> 
+  <rows>
+	<row>combobox
+	<combobox>
+	<comboitem label="First"/>
+	<comboitem label="Second"/>
+	<comboitem label="Third"/>
+	</combobox>
+	</row>
+	<row>datebox <datebox/></row>
+	<row>combobox
+	<combobox>
+	<comboitem label="First"/>
+	<comboitem label="Second"/>
+	<comboitem label="Third"/>
+	</combobox>
+	</row>
+	<row>combobox <combobox/></row>
+	<row>combobox <combobox/></row>
+	<row>combobox <combobox/></row>
+  </rows>
+ </grid>
+</window>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+bug1736858.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 14 10:46:21     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Memory Leak Test">
+<button label="Invalidate Session">
+	<attribute name="onClick">
+	info.value = "Then, check whether any instance of desktop remains (by use of jhat or other tools)";
+	session.invalidate();
+	</attribute>
+</button>
+<label id="info"/>
+</window>

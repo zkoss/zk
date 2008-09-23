@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1780792.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec  4 10:14:39 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1780792 ] Disable checkmarks on some node of a tree</n:h2>
+	<n:ol>
+		<n:li>Select a item on the tree/listbox, then press the UP/Down key, and then you should not select the disabled item.</n:li>
+		<n:li>you cannot select the disabled item on tree/listbox.</n:li>
+		<n:li>try hidding the checkmark. the disable behavior for previous steps should not change </n:li>
+	</n:ol>
+	<groupbox width="400px" mold="3d">
+		<caption label="Treeitem Disabled" />
+		<tree id="tree" width="90%" multiple="true" checkmark="true">
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem id="tr" disabled="true">
+					<treerow>
+						<treecell label="Item 2" />
+						<treecell label="Item 2 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem disabled="true">
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem disabled="true">
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</groupbox>
+	<groupbox width="400px" mold="3d">
+		<caption label="Listitem Disabled" />
+
+		<listbox id="list" checkmark="true" multiple="true">
+			<listitem id="li" label="option1" disabled="true" />
+			<listitem label="option2" disabled="true" />
+			<listitem label="option3" />
+		</listbox>
+	</groupbox>
+	<button label="change treeitem disabled"
+		onClick='tr.disabled = !tr.disabled' />
+	<button label="change listitem disabled"
+		onClick='li.disabled = !li.disabled' />
+	<button label="tree/listbox checkmark"
+		onClick='list.checkmark = !list.checkmark;tree.checkmark = !tree.checkmark' />
+	<button label="tree/listbox multiple"
+		onClick='list.multiple = !list.multiple;tree.multiple = !tree.multiple' />
+</zk>

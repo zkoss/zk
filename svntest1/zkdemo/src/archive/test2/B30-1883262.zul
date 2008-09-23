@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1883262.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 31 14:50:34 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>1.Please focus in and out the input element, you should not see any error dialog.</n:p>
+<n:p>2.The textbox shall disappear.</n:p>
+
+	<window id="win">	 
+	<zscript><![CDATA[
+Constraint ctt = new Constraint() {
+	public void validate(Component comp, Object value) throws WrongValueException { 
+		try {
+			throw new WrongValueException( comp, "Error" );
+		}finally{
+			Events.postEvent(new Event("onChange", comp, null));
+		}
+	} 
+} 
+	]]></zscript>
+	<textbox id="txtbox" constraint="${ctt}" onChange="self.clearErrorMessage();win.detach();"/>
+	</window>
+</zk>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1839256.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec  5 12:21:26     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of long operation">
+	Clicks the Test button and you shall see alert after 10 seconds (Bug 1839256).
+	To verify bug 1907640, test this file with Glassfish.
+	<separator/>
+	Moreover, all following clicks are ignored before alert is shown (Feature 1859533).
+	<separator/>
+	<button label="Test">
+		<attribute name="onClick">
+		org.zkoss.lang.Threads.sleep(10000);
+		alert("Everything goes fine");
+		</attribute>
+	</button>
+</window>

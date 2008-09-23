@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:h3> [ 1823278 ] Listbox selection upper bound index is -1</h:h3>
+	<h:pre>
+1.scroll listbox
+
+2.If can use keyboard Up button to upper entries, it is correct(It moves scrollbar in Safari)
+
+	</h:pre>
+<zscript><![CDATA[
+	import java.util.ArrayList;
+	ArrayList list = new ArrayList();
+	
+	for(int i=1;i<=50;i++)
+	{
+		list.add("entry "+i);
+	}
+]]></zscript>
+	<listbox width="250px" rows="6">
+		<listhead sizable="true">
+			<listheader label="name" sort="auto"/>
+		</listhead>
+		<listitem forEach="${list}" label="${each}"/>
+	</listbox>
+</zk>

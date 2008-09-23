@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+focus.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+	<html><![CDATA[
+		<h4>Focus</h4>
+		<p>Change focus to a component is easy; just call the focus() method.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Focus" border="normal">
+	<vbox>
+		<hbox>text1: <textbox id="text1"/></hbox>
+		<hbox>text2: <textbox id="text2"/></hbox>
+		<hbox><button label="change focus to text1" onClick="text1.focus();"/>
+		<button label="change focus to text2" onClick="text2.focus();"/></hbox>
+	</vbox>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

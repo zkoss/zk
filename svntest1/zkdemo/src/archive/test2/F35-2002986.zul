@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-2002986.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 26 19:11:57 TST 2008, Created by gracelin
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	1. Press the &quot;add&quot; button, and see the new column of columnlayout is 50% of right remainder width.
+	<separator/>
+	2. Press the &quot;remove&quot; button, and see the column disappear.
+
+	<columnlayout id="cl">
+		<columnchildren width="200px" style="padding: 5px">
+			<panel height="100px" title="column" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</columnchildren>
+	</columnlayout>
+	
+<zscript>
+	import org.zkoss.zkmax.zul.Columnchildren;
+	import org.zkoss.zul.Spinner;
+	
+	Columnchildren[] cc = new Columnchildren[15];
+	int count = 0;
+	
+	public void add() {
+		if (count > 14) return;
+		
+		cc[count] = new Columnchildren();
+		cc[count].setWidth("50%");
+		cc[count].setParent(cl);
+		
+		Panel p = new Panel();
+		p.setHeight("100px");
+		p.setStyle("padding: 5px");
+		p.setTitle("column " + count);
+		p.setBorder("normal");
+		
+		
+		Panelchildren pc = new Panelchildren();
+		Label l = new Label("test");
+		l.setParent(pc);
+		pc.setParent(p);
+		p.setParent(cc[count]);
+		count++;
+	}
+	public void remove() {
+		if (count > 0)
+			cc[--count].detach();
+	}
+</zscript>
+
+	<button label="add" onClick="add()" />
+	<button label="remove" onClick="remove()" />
+</window>

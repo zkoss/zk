@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Welcome to ZK Demo"?>
+	<!--
+		index.zul {{IS_NOTE Purpose: Description: History: Thu May 11 17:24:33
+		2006, Created by tomyeh }}IS_NOTE Copyright (C) 2006 Potix
+		Corporation. All Rights Reserved. {{IS_RIGHT }}IS_RIGHT
+	-->
+<window title="Menu Demo" border="normal">
+	<label value="Vertical Menu Popup position not correct" />
+	<window>
+		<menubar orient="vertical">
+			<menu
+				label="12321434564212347897413135498794123154678454674899765131549789451374897942134897">
+				<menupopup>
+					<menuitem label="1" />
+				</menupopup>
+			</menu>
+			<menu label="1">
+				<menupopup>
+					<menuitem label="1" />
+				</menupopup>
+			</menu>
+			<menu label="href">
+				<menupopup>
+					<menu label="popup">
+						<menupopup>
+							<menuitem label="item" checkmark="true">
+							</menuitem>
+						</menupopup>
+					</menu>
+					<menuitem label="checked" autocheck="true" checked="true" />
+					<menuitem label="unchecked, disabled" autocheck="true"
+						checked="false" disabled="true" />
+					<menuitem label="checked, disable" autocheck="true"
+						checked="true" disabled="true" />
+				</menupopup>
+			</menu>
+		</menubar>
+	</window>
+</window>

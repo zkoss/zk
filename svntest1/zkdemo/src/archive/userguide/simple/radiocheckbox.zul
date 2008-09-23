@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+input.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+		<h4>Radio buttons</h4>
+		<p>radiogroup and radio are used to select one option among a group of options.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Radiogroup and checkbox" border="normal">
+	<vbox>
+		Which kind of fruit do you want?
+		<radiogroup onCheck="fruit.value = self.selectedItem.label">
+			<radio label="Apple"/>
+			<radio label="Orange"/>
+			<radio label="Grape"/>
+		</radiogroup>
+		<hbox>You have selected :<label id="fruit"/></hbox>
+
+		<separator bar="true"/>
+		<checkbox id="apple" label="Apple" onCheck="doChecked()" />
+		<checkbox id="orange" label="Orange" onCheck="doChecked()" />
+		<checkbox id="grape" label="Grape" onCheck="doChecked()" />
+		<hbox>You have selected :<label id="fruit2"/></hbox>
+		<zscript>
+			void doChecked() {
+				fruit2.value = (apple.isChecked() ? apple.label+' ' : &quot;&quot;) 
+					+ (orange.isChecked() ? orange.label+' ' : &quot;&quot;) 
+					+ (grape.isChecked() ? grape.label+' ' : &quot;&quot;);
+			}
+		</zscript>
+	</vbox>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

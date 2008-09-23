@@ -1,0 +1,19 @@
+<zk>
+<vbox>
+1. focus combobox by clicking into it
+<separator/>
+2. type "a", textbox value should be "a". (if the value is "aa", it is wrong)
+<separator/>
+3. Than ENTER. Onchanging event fired, textbox value should be "aa". (if the value is "a", it is wrong)
+</vbox>
+
+<combobox onChanging="copy.value=event.value" autodrop="true">
+<comboitem label="aa" />
+<comboitem label="aabc" />
+<comboitem label="bb" />
+<comboitem label="bbde" />
+<comboitem label="cc" />
+<comboitem label="ccdf" />
+</combobox>
+<textbox id="copy" readonly="true" />
+</zk>

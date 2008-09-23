@@ -1,0 +1,46 @@
+<zk>
+		without rows with vflex, add rows dynamically
+		<button label="Set rows to 5">
+			<attribute name="onClick">
+				tree4.setRows(5);
+			</attribute>
+		</button>
+		<tree id="tree4" height="100%" vflex="true" >
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem label="Item 1" />
+				<treeitem label="Item 2" />
+				<treeitem label="Item 3" />
+				<treeitem label="Item 4" />
+				<treeitem label="Item 5" />
+				<treeitem label="Item 6" />
+				<treeitem label="Item 7" />
+				<treeitem label="Item 8" />
+				<treeitem label="Item 9" />
+				<treeitem label="Item 10" />
+				<treeitem label="Item 11" />
+				<treeitem label="Item 12" />
+				<treeitem label="Item 13" />
+				<treeitem label="Item 14" />
+				<treeitem label="Item 15" />
+				<treeitem label="Item 1" />
+				<treeitem label="Item 2" />
+				<treeitem label="Item 3" />
+				<treeitem label="Item 4" />
+				<treeitem label="Item 5" />
+				<treeitem label="Item 6" />
+				<treeitem label="Item 7" />
+				<treeitem label="Item 8" />
+				<treeitem label="Item 9" />
+				<treeitem label="Item 10" />
+				<treeitem label="Item 11" />
+				<treeitem label="Item 12" />
+				<treeitem label="Item 13" />
+				<treeitem label="Item 14" />
+				<treeitem label="Item 15" />
+			</treechildren>
+		</tree>
+</zk>

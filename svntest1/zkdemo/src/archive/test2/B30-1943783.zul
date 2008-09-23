@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1943783.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 17 09:12:33     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Press OK and you will see a messagebox is shown.
+Press ESC and you will see a messagebox is shown.
+<separator/>
+<timebox onOK='alert("OK:"+self.value)' onCancel='alert("ESC:"+self.value)' focus="true"/>
+<separator/>
+<textbox onOK='alert("OK:"+self.value)' onCancel='alert("ESC:"+self.value)'/>
+<separator/>
+<datebox onOK='alert("OK:"+self.value)' onCancel='alert("ESC:"+self.value)'/>
+</zk>

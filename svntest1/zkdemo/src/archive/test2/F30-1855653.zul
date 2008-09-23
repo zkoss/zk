@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1855653.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 24 16:05:59 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1855653 ]    Optimize Live Data with Listbox &amp; Grid</n:h2>
+	<n:ol>
+		<n:li>the showing and updating(scroll down) speed should be acceptable </n:li>
+	</n:ol>
+<window title="Live Data Demo - Listbox" border="normal">
+	<zscript>
+		List items = new org.zkoss.zkdemo.userguide.BigList(1000);
+		ListModel strset = new ListModelList(items);
+		ListitemRenderer render = new ListitemRenderer() {
+		public void render(Listitem item, Object data) {
+			new Listcell("column1 - " + item.getIndex()).setParent(item);
+			new Listcell("column2 - " + item.getIndex()).setParent(item);
+			new Listcell("column3 - " + item.getIndex()).setParent(item);
+			new Listcell("column4 - " + item.getIndex()).setParent(item);
+		}
+		};
+	</zscript>
+	<listbox id="list" width="600px" rows="20" model="&#36;{strset}" itemRenderer="${render}">
+		<listhead sizable="true">
+			<listheader label="Load on Demend1" sort="auto"/>
+			<listheader label="Load on Demend2" sort="auto"/>
+			<listheader label="Load on Demend3" sort="auto"/>
+			<listheader label="Load on Demend4" sort="auto"/>
+		</listhead>
+	</listbox>
+</window>
+</zk>			

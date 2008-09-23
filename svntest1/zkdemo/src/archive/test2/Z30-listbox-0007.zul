@@ -1,0 +1,46 @@
+<!--
+Z30-listbox-0007.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 27 21:18:02     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Test the rows property of listbox is 4.
+<listbox rows="4" width="100%">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="%"/>
+	</listhead>
+	<listitem value="A">
+		<listcell label="A. Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="B">
+		<listcell label="B. College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem value="C">
+		<listcell label="C. High School"/>
+		<listcell label="40%"/>
+	</listitem>
+	<listitem value="D">
+		<listcell label="D. Junior High School"/>
+		<listcell label="10%"/>
+	</listitem>
+	<listitem value="E">
+		<listcell label="F. Others"/>
+		<listcell label="17%"/>
+	</listitem>
+</listbox>
+</zk>

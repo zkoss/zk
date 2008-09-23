@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1895907.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 19 18:29:28 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:ol>
+	<n:li>Please resize the header to show the horizontal scrollbar, and then scroll down the scrollbar. </n:li>
+	<n:li>Resize the header to shorten again, it should show correctly. </n:li>
+	</n:ol>
+	<window title="Live Data Demo" border="normal">
+		<zscript>
+			String[][] data = new String[200][2];
+			for(int j=0; j &lt; data.length; ++j) 
+			{
+				data[j][0] = "klaslkjaSLKJasl kaJSLajslak aklsjalSKJL "+j;
+				data[j][1] = "option "+j;
+			}
+			ListModel model = new ListModelList(Arrays.asList(data));
+			ListitemRenderer renderer = new ListitemRenderer()
+			{
+				public void render(Listitem item, Object data) throws Exception
+				{
+					String[] s = (String[])data;
+					new Listcell(s[0]).setParent(item);
+					new Listcell(s[1]).setParent(item);
+				}
+			}		
+		</zscript>
+		<listbox id="list" rows="10" model="${model}" itemRenderer="${renderer}">
+			<listhead sizable="true">
+				<listheader label="Col A"/>
+				<listheader label="Col B"/>
+			</listhead>
+		</listbox>
+	</window>
+</zk>

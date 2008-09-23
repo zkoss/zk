@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+exec1.zul
+
+{{IS_NOTE
+	Purpose:
+		Created indirectly by exec.zul
+	Description:
+		
+	History:
+		Fri Jun  2 10:44:52     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<vbox>
+	<attribute name="onCreate">
+	new Label(""+event.arg.get("third")).setParent(self);
+	</attribute>
+
+	<label value="${arg.first}"/>
+	<label value="${arg.second}"/>
+	<label id="l"/>
+	<zscript>
+	l.setValue("Exec:"+Executions.getCurrent().getArg().get("first"));
+
+	void init(Label c) {
+		c.value = "onCreate is called";
+	}
+	</zscript>
+	<label onCreate="init(self)"/>
+</vbox>

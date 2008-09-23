@@ -1,0 +1,50 @@
+<zk>
+<html><![CDATA[
+1. Watch the listbox headers, there should be two headers (header1, header2) there.<br/>
+2. Press add item button, you should see first0 and last0 as the first Listitem. But the header2 appear and gone immediately. (IE show horizontal and vertical scrollbar).<br/>
+3. Press invalidate will correct the case.<br/>
+NOTE: The mentioned bug occurs only if you add item via ListModel and ListDataEvent. If you add Listitem and listcells directly, it works ok.<br/>
+]]></html>
+<zscript>
+    int count = 0;
+	List lst = new ArrayList(10);
+	ListModel lm = new ListModelList(lst);
+	
+	class Person {
+		String fn;
+		String ln;
+		public Person(String f, String l) {
+			fn = f;
+			ln = l;
+		}
+		public getFn() {
+			return fn;
+		}
+		public getLn() {
+			return ln;
+		}
+	}
+	
+	public class Rend implements ListitemRenderer {
+		public void render(Listitem item, java.lang.Object data)  {
+			new Listcell(data.getFn()).setParent(item);
+			new Listcell(data.getLn()).setParent(item);
+		}
+	}
+	
+	ListitemRenderer rend = new Rend();
+</zscript>
+<listbox id="lb" width="200px" model="${lm}" itemRenderer="${rend}">
+	<listhead>
+		<listheader label="header1"/>
+		<listheader label="header2"/>
+	</listhead>
+</listbox>
+<button label="add item">
+	<attribute name="onClick">
+	((List)lb.getModel()).add(new Person("first"+count, "last"+count));
+	++count;
+	</attribute>
+</button>
+<button label="invalidate" onClick="lb.invalidate()"/>
+</zk>

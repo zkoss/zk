@@ -1,0 +1,40 @@
+<!--
+Z30-grid007.zul
+
+{{IS_NOTE
+	Purpose:
+		other normal test on grid.
+	Description:
+		
+	History:
+		Create by Dennis
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Long label in grid.	
+<grid width="400px">
+	<columns>
+		<column label="Name"/>
+		<column label="Telephone"/>
+		<column label="Function"/>
+	</columns>
+	<rows>
+		<row>
+<label value="The Bo$$"/>
+<label value="(to be reached through his secretary)"/>
+<label value="Our gracious leader, informed, well-spoken, judicious, He Who Guides, Strong Arm of the Business, Offender of the Faithful, Protractor of the Useless, mystical, mythical, arcane, may his working days be long and his wealth increase"/>
+		</row>
+		<row>
+<label value="Dr. Markbrand"/>
+<label value="++46.32.191883"/>
+<label value="Customer Care Server"/>
+		</row>
+	</rows>
+</grid>
+
+</zk>

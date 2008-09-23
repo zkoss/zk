@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+jdbc.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+	<html><![CDATA[
+		<h4>JDBC</h4>
+		<p>Presentation components do not assume any persistent technology. 
+		This example simply demostrate the possiblility to combine presentation component and database via JDBC.</p>
+		<p>Note that we comment out the script on purpose because it will not run on our web site.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="JDBC" border="normal">
+	<zscript>{
+		import java.sql.*;
+		void submit() {
+		/*
+		//load driver and get a database connetion
+		//Note: It is usually better to use connection pool. Please consult
+		//the manual of your Web server. Or, refer to the Developer's Guide
+			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+			String url = "jdbc:odbc:Fred";
+			Connection con = DriverManager.getConnection(url,"myLogin", "myPassword");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO user values(?, ?)");
+			
+			//insert what end user entered into database table
+			stmt.setString(1, name.value);
+			stmt.setString(2, email.value);
+			
+			//execute the statement
+			stmt.executeUpdate();
+			
+			//commit
+			con.commit();
+			
+			//close the jdbc connection
+			con.close();
+			
+		*/
+		}
+	}</zscript>
+	<grid>
+	<rows>
+		<row>Name : <textbox id="name"/></row>
+		<row>Email: <textbox id="email"/></row>
+		<row><button label="submit" onClick="submit()"/></row>
+	</rows>
+	</grid>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1881573.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 29 11:59:56     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+  <n:p>	IE6 only: You shall see scrollbar after clicking the 100 button.</n:p>
+  <window id="t" title="sizing test" contentStyle="overflow:auto;background:pink" width="250px">
+	<hbox>
+	<button label="100" onClick='t.height = "100px"'/>
+	<button label="200" onClick='t.height = "200px"'/>
+	<button label="300" onClick='t.height = "300px"'/>
+	</hbox>
+	<div height="100px">abc</div>
+  </window>
+</zk>

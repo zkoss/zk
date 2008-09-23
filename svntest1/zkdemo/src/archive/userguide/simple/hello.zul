@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+hello.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+		<h4>Creating Window: Hello World</h4>
+		<p>Creating the first window: the classic "Hello World".</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" class="code" rows="10" width="100%" use="org.zkoss.zkdemo.userguide.CodeView">
+			<attribute name="value"><![CDATA[
+<window title="My First Window" border="normal" width="200px">
+Hello, World!
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

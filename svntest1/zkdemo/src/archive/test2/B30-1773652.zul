@@ -1,0 +1,5 @@
+<?init zscript="abc.zs"?>
+<window>
+	abc.zs doesn't exist and it shall show up a more readable message(File not found: abc.zs)
+	<zscript src="def.zs"/>
+</window>
