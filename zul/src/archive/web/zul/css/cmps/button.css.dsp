@@ -40,10 +40,17 @@ span.z-button {
 	color: gray; cursor: default; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
 }
 <%-- default --%>
-.z-button .z-button-tl, .z-button .z-button-tm, .z-button .z-button-tr, 
-.z-button .z-button-cl, .z-button .z-button-cm, .z-button .z-button-cr, 
-.z-button .z-button-bl, .z-button .z-button-bm, .z-button .z-button-br {
-	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy.gif')});
+.z-button .z-button-tl, .z-button .z-button-tr, .z-button .z-button-bl, .z-button .z-button-br{
+	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-corner.gif')});
+}
+.z-button .z-button-tm, .z-button .z-button-bm  {
+	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-x.gif')});
+} 
+.z-button .z-button-cl, .z-button .z-button-cr { 
+	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-y.gif')});
+}
+.z-button .z-button-cm {
+	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-ctr.gif')});
 }
 
 .z-button .z-button-tl {
@@ -53,16 +60,16 @@ span.z-button {
 }
 .z-button .z-button-tm {
 	background-repeat: repeat-x;
-	background-position: 0 -1012px;
+	background-position: 0 0;
 }
 .z-button .z-button-tr {
 	background-repeat: no-repeat;
-	background-position: 0 -506px;
+	background-position: 0 -3px;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-cl {
 	background-repeat: no-repeat;
-	background-position: 0 -3px;
+	background-position: 0 0;
 	width: 3px; padding: 0; margin: 0; text-align: right;
 }
 .z-button .z-button-cm {
@@ -71,108 +78,108 @@ span.z-button {
 	text-align: center;
 	padding: 0 5px;
 	background-repeat: repeat-x;
-	background-position: 0 -1015px;
+	background-position: 0 0;
 	white-space: nowrap; 
 }
 .z-button .z-button-cr {
 	background-repeat: no-repeat;
-	background-position: 0 -509px;
+	background-position: -3px 0px;
 	width: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bl {
 	background-repeat: no-repeat;
-	background-position: 0 -503px;
+	background-position: -3px 0px;
 	width: 3px; height: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bm {
 	background-repeat: repeat-x;
-	background-position: 0 -1515px;
+	background-position: 0 -3px;
 	height: 3px;
 }
 .z-button .z-button-br {
 	background-repeat: no-repeat;
-	background-position: 0 -1009px;
+	background-position: -3px -3px;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 
 <%-- Mouseover --%>
 .z-button-over .z-button-tl {
-	background-position:0 -1518px;
+	background-position:-6px 0;
 }
 .z-button-over .z-button-tm {
-	background-position:0 -2530px;
+	background-position:0 -6px;
 }
 .z-button-over .z-button-tr {
-	background-position:0 -2024px;
+	background-position:-9px 0;
 }
 .z-button-over .z-button-cl {
-	background-position:0 -1521px;
+	background-position:-6px 0px;
 }
 .z-button-over .z-button-cm {
-  background-position:0 -2533px;    
+  background-position:0 -500px;    
 }
 .z-button-over .z-button-cr {
-	background-position:0 -2027px;
+	background-position:-9px 0px;
 }
 .z-button-over .z-button-bl {
-	background-position:0 -2021px;
+	background-position:-6px -3px;
 }
 .z-button-over .z-button-bm {
-	background-position:0 -3033px;
+	background-position:0 -9px;
 }
 .z-button-over .z-button-br {
-	background-position:0 -2527px;
+	background-position:-9px -3px;
 }
 <%-- focus --%>
 .z-button-focus .z-button-tl {
-	background-position:0 -3542px;
+	background-position:-12px 0px;
 }
 .z-button-focus .z-button-tm {
-	background-position:0 -4554px;
+	background-position:0 -12px;
 }
 .z-button-focus .z-button-tr {
-	background-position:0 -4048px;
+	background-position:-15px 0px;
 }
 .z-button-focus .z-button-cl {
-	background-position:0 -3545px;
+	background-position:-12px 0px;
 }
 .z-button-focus .z-button-cr {
-	background-position:0 -4051px;
+	background-position:-15px 0px;
 }
 .z-button-focus .z-button-bl {
-	background-position:0 -4045px;
+	background-position:-12px -3px;
 }
 .z-button-focus .z-button-bm {
-	background-position:0 -5057px;
+	background-position:0 -15px;
 }
 .z-button-focus .z-button-br {
-	background-position:0 -4551px;
+	background-position:-15px -3px;
 }
 <%-- click --%>
 .z-button-clk .z-button-tl {
-	background-position:0 -1518px;
+	background-position:-6px 0px;
 }
 .z-button-clk .z-button-tm{
-	background-position:0 -3036px;
+	background-position:0 -18px;
 }
 .z-button-clk .z-button-tr {
-	background-position:0 -2024px;
+	background-position:-9px 0px;
 }
 .z-button-clk .z-button-bl {
-	background-position:0 -2021px;
+	background-position:-6px -3px;
 }
 .z-button-clk .z-button-bm {
-	background-position:0 -3539px;
+	background-position:0 -21px;
 }
 .z-button-clk .z-button-br {
-	background-position:0 -2527px;
+	background-position:-9px -3px;
 }
 .z-button-clk .z-button-cl {
-	background-position:0 -1521px;
+	background-position:-6px 0px;
 }
 .z-button-clk .z-button-cm {
-    background-position:0 -3039px;
+    background-position:0 -1000px;
 }
 .z-button-clk .z-button-cr {
-	background-position:0 -2027px;
+	background-position:-9px 0px;
 }
