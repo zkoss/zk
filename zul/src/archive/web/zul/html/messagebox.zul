@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window title="${arg.title}" border="normal" width="250pt" closable="true"
 use="org.zkoss.zul.impl.MessageboxDlg">
 	<hbox>
-		<image src="~./zul/img/tree/spacer.gif" class="${arg.icon}"/>
+		<div class="${arg.icon}"/>
 		<div sclass="z-messagebox" width="210pt">
 			${arg.message}
 		</div>

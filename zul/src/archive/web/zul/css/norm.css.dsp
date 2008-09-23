@@ -214,9 +214,10 @@ div.z-drop-cnt {
 }
 <%-- ZK Massagebox --%>
 .z-msgbox{
-	width: 32px; min-height: 32px; height: 100%;
+	display:-moz-inline-box; display:inline-block;
 	background-repeat: no-repeat;
 	vertical-align: top; cursor: pointer; border: 0;
+	width: 32px; height: 32px;
 }
 .z-msgbox-question {
 	background-image: url(${c:encodeURL('~./zul/img/question.png')});
@@ -230,6 +231,7 @@ div.z-drop-cnt {
 .z-msgbox-error {
 	background-image: url(${c:encodeURL('~./zul/img/error.png')});
 }
+
 <%-- ZK error message box --%>
 div.z-errbox {
 	margin: 0; padding: 1px; border: 1px outset #DD7870; cursor: pointer;

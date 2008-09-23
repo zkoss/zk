@@ -42,15 +42,22 @@ import org.zkoss.zul.impl.MessageboxDlg;
 public class Messagebox {
 	private static String _templ = "~./zul/html/messagebox.zul";
 
-	/** A symbol consisting of a question mark in a circle. */
+	/** A symbol consisting of a question mark in a circle.
+	 * <p>Since 3.5.0, they are actually style class names to display the icon.
+	 */
 	public static final String QUESTION = "z-msgbox z-msgbox-question";
 	/** A symbol consisting of an exclamation point in a triangle with
-	 * a yellow background.*/
+	 * a yellow background
+	 * <p>Since 3.5.0, they are actually style class names to display the icon.
+	 */
 	public static final String EXCLAMATION  = "z-msgbox z-msgbox-exclamation";
 	/** A symbol of a lowercase letter i in a circle.
+	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
 	public static final String INFORMATION = "z-msgbox z-msgbox-imformation";
-	/** A symbol consisting of a white X in a circle with a red background. */
+	/** A symbol consisting of a white X in a circle with a red background.
+	 * <p>Since 3.5.0, they are actually style class names to display the icon.
+	 */
 	public static final String ERROR = "z-msgbox z-msgbox-error";		
 	/** Contains no symbols. */
 	public static final String NONE = null;
@@ -77,8 +84,8 @@ public class Messagebox {
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
 	 * @param icon one of predefined images: {@link #QUESTION},
-	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any URI of
-	 * an image.
+	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any style class
+	 * name(s) to show an image.
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}).
@@ -97,8 +104,8 @@ public class Messagebox {
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
 	 * @param icon one of predefined images: {@link #QUESTION},
-	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any URI of
-	 * an image.
+	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any style class
+	 * name(s) to show an image.
 	 * @param listener the event listener which is invoked when a button
 	 * is clicked. Ignored if null.
 	 * It is useful if the event processing thread is disabled
@@ -142,8 +149,8 @@ public class Messagebox {
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
 	 * @param icon one of predefined images: {@link #QUESTION},
-	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any URI of
-	 * an image.
+	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any style class
+	 * name(s) to show an image.
 	 * @param focus one of button to have to focus. If 0, the first button
 	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -167,8 +174,8 @@ public class Messagebox {
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
 	 * and {@link #IGNORE}. If zero, {@link #OK} is assumed
 	 * @param icon one of predefined images: {@link #QUESTION},
-	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any URI of
-	 * an image.
+	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any style class
+	 * name(s) to show an image.
 	 * @param focus one of button to have to focus. If 0, the first button
 	 * will gain the focus. One of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
