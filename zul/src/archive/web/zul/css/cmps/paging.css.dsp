@@ -31,15 +31,19 @@
 }
 .z-paging-first {
 	background-image: url(${c:encodeURL('~./zul/img/paging/pg-first.gif')})!important;
+	background-position:0px 0px!important;
 }
 .z-paging-last {
 	background-image: url(${c:encodeURL('~./zul/img/paging/pg-last.gif')})!important;
+	background-position:0px 0px!important;
 }
 .z-paging-next {
 	background-image: url(${c:encodeURL('~./zul/img/paging/pg-next.gif')})!important;
+	background-position:0px 0px!important;
 }
 .z-paging-prev {
 	background-image: url(${c:encodeURL('~./zul/img/paging/pg-prev.gif')})!important;
+	background-position:0px 0px!important;
 }
 .z-paging-info{
 	position:absolute;top:5px;right:8px;color:#444;
@@ -84,16 +88,20 @@
 }
 <%-- Disable --%>
 .z-paging-disd .z-paging-first {
-	background-image: url(${c:encodeURL('~./zul/img/paging/pg-first-disd.gif')})!important;
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-first.gif')})!important;
+	background-position:-80px 0px!important;
 }
 .z-paging-disd .z-paging-last {
-	background-image: url(${c:encodeURL('~./zul/img/paging/pg-last-disd.gif')})!important;
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-last.gif')})!important;
+	background-position:-80px 0px!important;
 }
 .z-paging-disd .z-paging-next {
-	background-image: url(${c:encodeURL('~./zul/img/paging/pg-next-disd.gif')})!important;
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-next.gif')})!important;
+	background-position:-80px 0px!important;
 }
 .z-paging-disd .z-paging-prev {
-	background-image: url(${c:encodeURL('~./zul/img/paging/pg-prev-disd.gif')})!important;
+	background-image: url(${c:encodeURL('~./zul/img/paging/pg-prev.gif')})!important;
+	background-position:-80px 0px!important;
 }
 .z-paging-btn-disd .z-paging-btn {
 	opacity: .35; -moz-opacity: .35; filter: alpha(opacity=35);

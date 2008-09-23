@@ -21,7 +21,11 @@
 .z-toolbar a:hover {
 	border-color: #f8fbff #aca899 #aca899 #f8fbff;
 }
-
+.z-toolbar-button {
+	font-family: ${fontFamilyT};
+	font-size: ${fontSizeM}; 
+	font-weight: normal;
+}
 .z-caption .z-toolbar a:hover {
 	text-decoration: underline;
 }
