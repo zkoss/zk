@@ -1159,12 +1159,6 @@ zkau.onURLChange = function () {
 	if (!parent || parent == window || !ifr) //not iframe
 		return;
 
-	if (getZKAttr(ifr, "xsrc") != ifr.src) {
-		setZKAttr(ifr, "xsrc", ifr.src);
-		rmZKAttr(ifr, "xurl");
-		return; //not notify if changed by server
-	}
-
 	var l0 = parent.location, l1 = location,
 		url = l0.protocol != l1.protocol || l0.host != l1.host
 		|| l0.port != l1.port ? l1.href: l1.pathname,
@@ -1175,10 +1169,38 @@ zkau.onURLChange = function () {
 	}
 	if (l1.hash && "#" != l1.hash) url += l1.hash;
 
+	if (getZKAttr(ifr, "xsrc") != ifr.src) {//the first zul page being loaded
+		var ifrsrc = ifr.src, loc = location.pathname;
+		setZKAttr(ifr, "xsrc", ifrsrc);
+
+		//The first zul page might or might not be ifr.src
+		//We have to compare ifr.src with location
+		//Gecko/Opera/Safari: ifr.src is a complete URL (including http://)
+		//IE: ifr.src has no http://hostname/ (actually, same as server's value)
+		//Opera: location.pathname has bookmark and jsessionid
+		//Tomcat: /path;jsessionid=xxx#abc?xyz
+		ifrsrc = zkau._simplifyURL(ifrsrc);
+		loc = zkau._simplifyURL(loc);
+		if (ifrsrc.endsWith(loc)
+		|| loc.endsWith(ifrsrc)) { //the non-zul page is ifr.src
+			setZKAttr(ifr, "xurl", url);
+			return; //not notify if changed by server
+		}
+	}
+
 	if (parent.onIframeURLChange && getZKAttr(ifr, "xurl") != url) {
 		parent.onIframeURLChange(ifr.id, url);
 		setZKAttr(ifr, "xurl", url);
 	}
+};
+zkau._simplifyURL = function (url) {
+	var j = url.lastIndexOf(';');
+	if (j >= 0) url = url.substring(0, j);
+	j = url.lastIndexOf('#');
+	if (j >= 0) url = url.substring(0, j);
+	j = url.lastIndexOf('?');
+	if (j >= 0) url = url.substring(0, j);
+	return url;
 };
 
 /** Handles window.onunload. */
