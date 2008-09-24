@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.au.out.AuDownload;
 
 import org.zkoss.zkmax.au.http.AuDownloader;
+import org.zkoss.zk.ui.util.DeferredValue;
 
 /**
  * More filedownload utilities, such as resumable filedownload.
@@ -70,7 +71,7 @@ public class Filedownload extends org.zkoss.zul.Filedownload {
 	 */
 	public static void
 	saveResumable(File file, String contentType, String data) {
-		saveResumable0(AuDownloader.getDownloadURI(file, contentType, data));
+		saveResumable0(new DownloadURL(file, contentType, data));
 	}
 	/** Open a download dialog to save the resouce of the specified URL at the client.
 	 * Unlike {@link org.zkoss.zul.Filedownload#save(File,String)},
@@ -85,7 +86,7 @@ public class Filedownload extends org.zkoss.zul.Filedownload {
 	 */
 	public static void
 	saveResumable(URL url, String contentType, String data) {
-		saveResumable0(AuDownloader.getDownloadURI(url, contentType, data));
+		saveResumable0(new DownloadURL(url, contentType, data));
 	}
 	/** Open a download dialog to save the resource of the specified path at the client.
 	 * Unlike {@link org.zkoss.zul.Filedownload#save(File,String)},
@@ -101,10 +102,29 @@ public class Filedownload extends org.zkoss.zul.Filedownload {
 	 */
 	public static
 	void saveResumable(String path, String contentType, String data) {
-		saveResumable0(AuDownloader.getDownloadURI(path, contentType, data));
+		saveResumable0(new DownloadURL(path, contentType, data));
 	}
-	private static void saveResumable0(String downloadURI) {
+	private static void saveResumable0(DownloadURL downloadURL) {
 		((WebAppCtrl)Executions.getCurrent().getDesktop().getWebApp())
-			.getUiEngine().addResponse(null, new AuDownload(downloadURI));
+			.getUiEngine().addResponse(null, new AuDownload(downloadURL));
+	}
+
+	private static class DownloadURL implements DeferredValue {
+		private final Object _target;
+		private final String _contentType;
+		private final String _data;
+		private DownloadURL(Object target, String contentType, String data) {
+			_target = target;
+			_contentType = contentType;
+			_data = data;
+		}
+		public String getValue() {
+			return
+			_target instanceof File ?
+				AuDownloader.getDownloadURI((File)_target, _contentType, _data):
+			_target instanceof URL ?
+				AuDownloader.getDownloadURI((URL)_target, _contentType, _data):
+				AuDownloader.getDownloadURI((String)_target, _contentType, _data);
+		}
 	}
 }

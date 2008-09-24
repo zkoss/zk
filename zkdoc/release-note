@@ -16,6 +16,7 @@ ZK 3.5.1
   2105802: Treechildren image problem
   2107675: zk switch, zk case
   2124395: onURIChange is not fire if the first page is not ZUL
+  2114380: Filedownload bug with WebSphere 5.1.1
 
 * Upgrade Notes
 
