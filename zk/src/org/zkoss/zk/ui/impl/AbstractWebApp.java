@@ -232,13 +232,14 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		}
 
 		try {
-			((SessionCtrl)sess).onDestroyed();
+			getSessionCache().remove(sess);
 		} catch (Throwable ex) {
 			log.warning("Failed to cleanup session", ex);
 		}
 
 		try {
-			getSessionCache().remove(sess);
+			((SessionCtrl)sess).onDestroyed();
+				//after called, sess.getNativeSession() is null!
 		} catch (Throwable ex) {
 			log.warning("Failed to cleanup session", ex);
 		}
