@@ -180,11 +180,27 @@ zkSplt._fixbtn = function (cmp) {
 	if (!colps || "none" == colps) {
 		btn.style.display = "none";
 	} else {
+		mcls = getZKAttr(cmp, "mcls");
 		var vert = getZKAttr(cmp, "vert");
-		var before = colps == "before";
+		var before = colps == "before";		
 		if (getZKAttr(cmp, "open") == "false") before = !before;
-		btn.className = zk.renType(btn.className,
-			vert ? before ? 't': 'b': before ? 'l': 'r');
+
+		if (vert && before && !zk.hasClass(btn, mcls+"-btn-t")) {		
+			zk.rmClass(btn, mcls + "-btn-b");
+			zk.addClass(btn, mcls + "-btn-t");
+		}
+		else if(vert && !before && !zk.hasClass(btn, mcls+"-btn-b")) {			
+			zk.rmClass(btn, mcls+"-btn-t");
+			zk.addClass(btn, mcls+"-btn-b");
+		}		
+		else if(!vert && before && !zk.hasClass(btn, mcls+"-btn-l")) {
+			zk.rmClass(btn, mcls+"-btn-r");
+			zk.addClass(btn, mcls+"-btn-l");
+		}
+		else if(!vert && !before && !zk.hasClass(btn, mcls+"-btn-r")) {
+			zk.rmClass(btn, mcls+"-btn-l");
+			zk.addClass(btn, mcls+"-btn-r");
+		}
 		btn.style.display = "";
 	}
 };
@@ -368,12 +384,20 @@ zkSplt._closeAtInit = function (cmp) {
 	action.hide(sib, {noCallback: true});
 	zkSplt._updcls(cmp);
 };
+// TODO: ns
 zkSplt._updcls = function (cmp, open) {
-	var nm = cmp.className, j = nm.indexOf("-ns");
-	if (open) {
-		if (j >= 0) cmp.className = nm.substring(0, j);
-	} else {
-		if (j < 0) cmp.className = nm + "-ns";
+//	var nm = cmp.className, j = nm.indexOf("-ns");
+//	if (open) {
+//		if (j >= 0) cmp.className = nm.substring(0, j);
+//	} else {
+//		if (j < 0) cmp.className = nm + "-ns";
+//	}
+	mcls = getZKAttr(cmp, "mcls");
+	if(open && zk.hasClass(cmp, mcls+"-ns")) {
+		zk.rmClass(cmp, mcls+"-ns");
+	}
+	else if (!open && !zk.hasClass(cmp, mcls+"-ns")){
+		zk.addClass(cmp, mcls+"-ns");
 	}
 };
 zkSplt.open = function (cmp, open, silent, enforce) {

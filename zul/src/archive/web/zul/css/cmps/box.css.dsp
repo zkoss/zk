@@ -32,10 +32,10 @@ tr.z-vbox-sep, tr-z-box-sep {
     background-position: top center; font-size:0; max-height: 8px; height: 8px;
 }
 .z-splitter-hor-ns {
-    font-size:0; max-width: 8px; width: 8px;
+    background-image:None;background-position:None;
 }
 .z-splitter-ver-ns {
-    font-size:0; max-height: 8px; height: 8px;
+    background-image:None;background-position:None;
 }
 .z-splitter-ver-btn-l:hover, .z-splitter-ver-btn-r:hover, .z-splitter-ver-btn-t:hover, .z-splitter-ver-btn-b:hover,
 .z-splitter-hor-btn-l:hover, .z-splitter-hor-btn-r:hover, .z-splitter-hor-btn-t:hover, .z-splitter-hor-btn-b:hover {
