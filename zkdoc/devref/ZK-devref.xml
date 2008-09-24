@@ -10,7 +10,7 @@
 </copyright>
 </bookinfo>
 <para>
-<graphic fileref="">2
+<graphic fileref="images/potix.jpg">2
 			
 		</graphic>
 </para>
@@ -747,7 +747,8 @@
 <row>
 <entry>
 <para>
-<code>addEventListener(java.lang.String evtnm, EventListener listener)</code>
+<code>addEventListener(java.lang.String </code>
+<code>evtnm, EventListener listener)</code>
 </para>
 </entry>
 <entry>
@@ -2436,7 +2437,8 @@
 </para>
 <para>If you want to put attributes in a nested HTML element, you shall use the following pattern. Notice: if <code>getInnerAttrs</code> in a different tag, the tag must be named with "${self.uuid}!real". </para>
 <para>
-<code>&lt;xx id="${self.uuid}"${self.outerAttrs}&gt;</code>
+<code>&lt;xx id="${self.uuid}"$</code>
+<code>{self.outerAttrs}&gt;</code>
 </para>
 <para>
 <code>&lt;yy id="${self.uuid}!real"${self.innerAttrs}&gt;...</code>
@@ -8133,7 +8135,215 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Columns"><title>Columns</title>
+<para/></sect3></sect2><sect2 id="Columnchildren"><title>Columnchildren</title>
+<para>Child of Columnchildren only can be Panel. </para>
+<para>
+<graphic fileref="images/ColumnLayout.PNG">2
+			
+		</graphic>
+</para>
+<para/>
+<programlisting>&lt;columnlayout&gt;&#13;    &lt;columnchildren width="30%" style="padding: 5px"&gt;    &#13;        &lt;panel height="100px" style="margin-bottom:10px"        &#13;            title="column1-1" border="normal" maximizable="true" collapsible="true"&gt;            &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="100px" framable="true" title="column1-2"        &#13;            border="normal" maximizable="true" style="margin-bottom:10px"&gt;            &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="100px" title="column1-3" border="normal" closable="true"&gt;        &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/columnchildren&gt;    &#13;    &lt;columnchildren width="40%" style="padding: 10px"&gt;    &#13;        &lt;panel title="Data" maximizable="true" border="normal" style="margin-bottom:10px"&gt;        &#13;            &lt;panelchildren&gt;            &#13;                &lt;grid fixedLayout="true" style="border:0px" height="100%"&gt;                &#13;                    &lt;columns&gt;                    &#13;                        &lt;column label="category" /&gt;                        &#13;                        &lt;column label="value" /&gt;                        &#13;                    &lt;/columns&gt;                    &#13;                    &lt;rows&gt;                    &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c0" value="C/C++" /&gt;                            &#13;                            &lt;decimalbox id="v0" value="21.2"                            &#13;                                constraint="no empty" onChange="update(0)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c1" value="VB" /&gt;                            &#13;                            &lt;decimalbox id="v1" value="10.2"                            &#13;                                constraint="no empty" onChange="update(1)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c2" value="Java" /&gt;                            &#13;                            &lt;decimalbox id="v2" value="40.4"                            &#13;                                constraint="no empty" onChange="update(2)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c3" value="PHP" /&gt;                            &#13;                            &lt;decimalbox id="v3" value="28.2"                            &#13;                                constraint="no empty" onChange="update(3)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                    &lt;/rows&gt;                    &#13;                &lt;/grid&gt;                &#13;            &lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel border="normal"&gt;        &#13;            &lt;panelchildren&gt;            &#13;                &lt;checkbox label="3D Chart" checked="true"                &#13;                    onCheck="mychart.setThreeD(self.isChecked())" /&gt;                    &#13;                &lt;chart id="mychart" title="Pie Chart Demo" width="320px"                &#13;                    type="pie" threeD="true" fgAlpha="128"&gt;                    &#13;                    &lt;attribute name="onClick"&gt;                    &#13;                            String areaid = event.getArea();                             &#13;                            if (areaid!= null) {                             &#13;                            Area area = self.getFellow(areaid);                            &#13;                            alert(""+area.getAttribute("entity")+":"+area.getTooltiptext());                            &#13;                            }                            &#13;                        &lt;/attribute&gt;                        &#13;                    &lt;zscript&gt;                    &#13;                            void update(int rowIndex) {                             &#13;                            Label lb = (Label) self.getFellow("c"+rowIndex);                            &#13;                            Decimalbox db = (Decimalbox)self.getFellow("v"+rowIndex);                            &#13;                            model.setValue(lb.value, newDouble(db.getValue().doubleValue())); }                            &#13;                            PieModel model = new SimplePieModel();                            &#13;                            for(int j=0; j &amp;lt; 4; ++j) { update(j); }                            &#13;                            mychart.setModel(model);                            &#13;                        &lt;/zscript&gt;                        &#13;                &lt;/chart&gt;                &#13;            &lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/columnchildren&gt;    &#13;&lt;/columnlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkex.zul.Columnchildren</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Panel">
+<code>Panel</code>
+</link>
+</para></sect3><sect3><title>Supported Events </title>
+<para>*None</para></sect3><sect3><title>Properties</title>
+<para>*None</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>getMoldSclass() </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2><title>Columnlayout</title>
+<para>A columnlayout lays out a container which can have multiple columns, and each column may contain one or more panel.Use Columnlayout need assign width (either present or pixel) on every Columnchildren, or we cannot make sure about layout look. </para>
+<para>
+<graphic fileref="images/ColumnLayout.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;columnlayout&gt;&#13;    &lt;columnchildren width="30%" style="padding: 5px"&gt;    &#13;        &lt;panel height="100px" style="margin-bottom:10px"        &#13;            title="column1-1" border="normal" maximizable="true" collapsible="true"&gt;            &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="100px" framable="true" title="column1-2"        &#13;            border="normal" maximizable="true" style="margin-bottom:10px"&gt;            &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="100px" title="column1-3" border="normal" closable="true"&gt;        &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/columnchildren&gt;    &#13;    &lt;columnchildren width="40%" style="padding: 10px"&gt;    &#13;        &lt;panel title="Data" maximizable="true" border="normal" style="margin-bottom:10px"&gt;        &#13;            &lt;panelchildren&gt;            &#13;                &lt;grid fixedLayout="true" style="border:0px" height="100%"&gt;                &#13;                    &lt;columns&gt;                    &#13;                        &lt;column label="category" /&gt;                        &#13;                        &lt;column label="value" /&gt;                        &#13;                    &lt;/columns&gt;                    &#13;                    &lt;rows&gt;                    &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c0" value="C/C++" /&gt;                            &#13;                            &lt;decimalbox id="v0" value="21.2"                            &#13;                                constraint="no empty" onChange="update(0)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c1" value="VB" /&gt;                            &#13;                            &lt;decimalbox id="v1" value="10.2"                            &#13;                                constraint="no empty" onChange="update(1)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c2" value="Java" /&gt;                            &#13;                            &lt;decimalbox id="v2" value="40.4"                            &#13;                                constraint="no empty" onChange="update(2)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c3" value="PHP" /&gt;                            &#13;                            &lt;decimalbox id="v3" value="28.2"                            &#13;                                constraint="no empty" onChange="update(3)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                    &lt;/rows&gt;                    &#13;                &lt;/grid&gt;                &#13;            &lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel border="normal"&gt;        &#13;            &lt;panelchildren&gt;            &#13;                &lt;checkbox label="3D Chart" checked="true"                &#13;                    onCheck="mychart.setThreeD(self.isChecked())" /&gt;                    &#13;                &lt;chart id="mychart" title="Pie Chart Demo" width="320px"                &#13;                    type="pie" threeD="true" fgAlpha="128"&gt;                    &#13;                    &lt;attribute name="onClick"&gt;                    &#13;                            String areaid = event.getArea();                             &#13;                            if (areaid!= null) {                             &#13;                            Area area = self.getFellow(areaid);                            &#13;                            alert(""+area.getAttribute("entity")+":"+area.getTooltiptext());                            &#13;                            }                            &#13;                        &lt;/attribute&gt;                        &#13;                    &lt;zscript&gt;                    &#13;                            void update(int rowIndex) {                             &#13;                            Label lb = (Label) self.getFellow("c"+rowIndex);                            &#13;                            Decimalbox db = (Decimalbox)self.getFellow("v"+rowIndex);                            &#13;                            model.setValue(lb.value, newDouble(db.getValue().doubleValue())); }                            &#13;                            PieModel model = new SimplePieModel();                            &#13;                            for(int j=0; j &amp;lt; 4; ++j) { update(j); }                            &#13;                            mychart.setModel(model);                            &#13;                        &lt;/zscript&gt;                        &#13;                &lt;/chart&gt;                &#13;            &lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/columnchildren&gt;    &#13;&lt;/columnlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkex.zul.Columnlayout</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Columnchildren">
+<code>Columnchildern</code>
+</link>
+</para></sect3><sect3><title>Supported Events</title>
+<para>*None</para></sect3><sect3><title>Properties</title>
+<para>*None</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>getMoldSclass() </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Columns"><title>Columns</title>
 <para>Defines the <code>columns</code> of a <code>grid</code>. </para>
 <para>Each child of a <code>columns</code> element should be a <code>org.zkoss.zul.Column</code> element.</para>
 <para>
@@ -8757,7 +8967,8 @@
 <row>
 <entry>
 <para>
-<code>onChildRemoved(org.zkoss.zk.ui.Component) </code>
+<code>onChildRemoved(org.</code>
+<code>zkoss.zk.ui.Component) </code>
 </para>
 </entry>
 <entry>
@@ -9102,7 +9313,8 @@
 </para>
 <para>
 <code>Description:</code>
-<code> Denotes that user is selecting a portion of the text of an input component. You can retrieve the start and end position of the selected text by use of the getStart and getEnd methods.</code>
+<code> Denotes that user is selecting a portion of the text of an input component. You can retrieve the start and end </code>
+<code>position of the selected text by use of the getStart and getEnd methods.</code>
 </para>
 </entry>
 </row>
@@ -9495,7 +9707,160 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Doublebox"><title>Doublebox</title>
+<para/></sect3></sect2><sect2 id="Detail"><title>Detail</title>
+<para>The detail component is used to display a detailed section where a master row and </para>
+<para>multiple detail rows are on the same row. </para>
+<para/>
+<para>
+<graphic fileref="images/detail.png">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Please open/close the +/- button, and the layout of this page shows properly.    &#13;    &lt;grid fixedLayout="true" width="600px"&gt;    &#13;        &lt;columns&gt;        &#13;            &lt;column width="25px" /&gt;            &#13;            &lt;column&gt;Product Name&lt;/column&gt;            &#13;            &lt;column&gt;Price&lt;/column&gt;            &#13;            &lt;column&gt;Item location&lt;/column&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows&gt;        &#13;            &lt;row&gt;            &#13;                &lt;detail&gt;                &#13;                                            &lt;hbox&gt;                                            &#13;                        &lt;image width="200px" height="200px" src="/img/icon_update.png"/&gt;                        &#13;                        &lt;vbox&gt;                        &#13;                            &lt;label value="Item Specifics - Item Condition"                            &#13;                                style="font-weight:bold;font-style: italic;" /&gt;                                &#13;                        &lt;hbox&gt;                        &#13;                            &lt;label value="Condition:" /&gt;                            &#13;                            &lt;label value="Used"                            &#13;                                style="font-weight:bold;" /&gt;                                &#13;                        &lt;/hbox&gt;                        &#13;                        &lt;hbox&gt;                        &#13;                            &lt;label value="Brand:" /&gt;                            &#13;                            &lt;label value="Apple"                            &#13;                                style="font-weight:bold;" /&gt;                                &#13;                        &lt;/hbox&gt;                        &#13;                        &lt;hbox&gt;                        &#13;                            &lt;label value="Technology:" /&gt;                            &#13;                            &lt;label value="DVI"                            &#13;                                style="font-weight:bold;" /&gt;                                &#13;                        &lt;/hbox&gt;                        &#13;                        &lt;hbox&gt;                        &#13;                            &lt;label value="Monitor Type:" /&gt;                            &#13;                            &lt;label value="LCD/Flat Panel"                            &#13;                                style="font-weight:bold;" /&gt;                                &#13;                        &lt;/hbox&gt;                        &#13;                        &lt;/vbox&gt;                        &#13;                    &lt;/hbox&gt;                    &#13;                &lt;/detail&gt;                &#13;                &lt;label value="Apple 20-inch Aluminum Cinema Display M9177/A" /&gt;                &#13;                &lt;label style="color:green;float:right;" value="US $202.50" /&gt;                &#13;                &lt;label value="tulsa, ok, United States" /&gt;                &#13;            &lt;/row&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Detail</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>contentStyle</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the CSS style for the content block of the window.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>jave.lang.String </code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>image</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the URI of the button image. </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>jave.lang.String </code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>open</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether the detail is open.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="HeadersElement">org.zkoss.zul.impl.HeadersElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Doublebox"><title>Doublebox</title>
 <para>An edit box for holding an float point value (double).</para>
 <para>
 <graphic fileref="images/doublebox.png">2
@@ -9617,7 +9982,8 @@
 </para>
 <para>
 <code>Description: </code>
-<code>An input control notifies the application with the onChange event if its content is changed</code>
+<code>An input control notifies the application with the onChange event if its </code>
+<code>content is changed</code>
 </para>
 <para>
 <code>by the user.</code>
@@ -10120,7 +10486,309 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3></sect2><sect2><title/>
-<para/></sect2><sect2 id="Flash"><title>Flash</title>
+<para/></sect2><sect2><title>Fisheyebar</title>
+<para>A fisheye bar is a bar of fisheye that is a menu similar to the fish eye menu on the Mac OS.</para>
+<para/>
+<para>
+<graphic fileref="images/fisheyebar.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;window&gt;&#13;        Click "Change orient" button and move cursor over the fisheyebar before it changes.        &#13;    &lt;separator/&gt;    &#13;    Fisheyebar will be out of expected.(That is wrong)    &#13;    &lt;fisheyebar id="fish" style="position: absolute; top: 50px;    &#13;        left:100px;margin:20px;" attachEdge="top"&gt;        &#13;        &lt;fisheye image="/img/icon_browser.png" label="Web Browser"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_calendar.png" label="Calendar"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_email.png" label="Email"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_texteditor.png" label="Text Editor"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_update.png" label="Software Update"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_users.png" label="Users"        &#13;            onClick="alert(self.label)" /&gt;            &#13;    &lt;/fisheyebar&gt;    &#13;    &lt;button label="Change orient"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;            if (fish.orient.equals("horizontal")) {            &#13;                fish.orient = "vertical";                &#13;            } else {            &#13;                fish.orient = "horizontal";                &#13;            }            &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkex.zul.Fisheyebar</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*org.zkoss.zzulkex..fisheye</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>orient</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the orientation of fisheye.</code>
+</para>
+<para>
+<code>Value: </code>
+<code>horizontal</code>
+<code>|vertical</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>jave.lang.String </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>horizontal</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>attachEdge</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Returns the attach edge.</code>
+</para>
+<para>
+<code>Value: </code>
+<code>center</code>
+<code>|left|right|top|bottom</code>
+<code> </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>jave.lang.String </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>center</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>labelEdge</code>
+</para>
+</entry>
+<entry>
+<para>Returns the label edge. </para>
+<para>Value: <code>center</code>|left|right|top|bottom</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>bottom</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="HeadersElement">org.zkoss.zul.impl.HeadersElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Fisheye"><title>Fisheye</title>
+<para>A fisheye item.</para>
+<para/>
+<para>
+<graphic fileref="images/fisheyebar.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;window&gt;&#13;        Click "Change orient" button and move cursor over the fisheyebar before it changes.        &#13;    &lt;separator/&gt;    &#13;    Fisheyebar will be out of expected.(That is wrong)    &#13;    &lt;fisheyebar id="fish" style="position: absolute; top: 50px;    &#13;        left:100px;margin:20px;" attachEdge="top"&gt;        &#13;        &lt;fisheye image="/img/icon_browser.png" label="Web Browser"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_calendar.png" label="Calendar"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_email.png" label="Email"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_texteditor.png" label="Text Editor"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_update.png" label="Software Update"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_users.png" label="Users"        &#13;            onClick="alert(self.label)" /&gt;            &#13;    &lt;/fisheyebar&gt;    &#13;    &lt;button label="Change orient"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;            if (fish.orient.equals("horizontal")) {            &#13;                fish.orient = "vertical";                &#13;            } else {            &#13;                fish.orient = "horizontal";                &#13;            }            &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkex.zul.Fisheye</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*None</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>label</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the label.</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+<entry>
+<para>
+<code>jave.lang.String </code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>image</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Returns the image URI.</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+<entry>
+<para>
+<code>jave.lang.String </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>null</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="">org.zkoss.zul.impl.HeadersElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Flash"><title>Flash</title>
 <para>A generic flash component.</para>
 <para>
 <graphic fileref="images/flash.png">2
@@ -10964,7 +11632,8 @@
 <entry>
 <para>
 <code>ins</code>
-<code>ertBefore(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.Component) </code>
+<code>ertBefore(org.zkoss.zk.ui.Component, </code>
+<code>org.zkoss.zk.ui.Component) </code>
 </para>
 </entry>
 <entry>
@@ -11144,7 +11813,328 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Groupbox"><title>Groupbox</title>
+<para/></sect3></sect2><sect2><title>Group</title>
+<para>Adds the ability for single level grouping to the Grid.</para>
+<para>Default getSclass(): the same as grid's sclass. </para>
+<para>
+<graphic fileref="images/Groupfoot.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Grid support Groupfoot in Group    &#13;&#13;    &lt;grid id="grid"&gt;    &#13;        &lt;columns id="h" sizable="true"&gt;        &#13;            &lt;column id="col1" label="Type"/&gt;            &#13;            &lt;column id="col2" label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows id="rows"&gt;        &#13;            &lt;group id="gp1"&gt;            &#13;            &lt;label value="Group1: (gp1)"/&gt;            &#13;            &lt;label value="Group1:"/&gt;            &#13;            &lt;/group&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;label value="File:"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row id="row1"&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;groupfoot&gt;            &#13;                &lt;label value="2 Java Files"/&gt;                &#13;                &lt;label value="10 Files"/&gt;                &#13;            &lt;/groupfoot&gt;            &#13;            &lt;group id="gp2" label="Group 2 (gp2)" onOpen='alert("Group is open: "+self.open);'/&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;label value="Options:"/&gt;                &#13;            &lt;/row&gt;            &#13;                &lt;groupfoot&gt;                &#13;                &lt;label value="2 Options"/&gt;                &#13;                &lt;label value="10 Options"/&gt;                &#13;            &lt;/groupfoot&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Group</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events</title>
+<para>*NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>align</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the horizontal alignment of the whole grid.</code>
+</para>
+<para>
+<code>Val</code>
+<code>ue:</code>
+<code> left|center|right</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>nowrap</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the nowrap.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>sclass</code>
+</para>
+</entry>
+<entry>
+<para>Sets the style class.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>spans</code>
+</para>
+</entry>
+<entry>
+<para>Sets the spans, which is a list of numbers separated by comma. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>valign</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the vertical alignment of the whole row. </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>val</code>
+<code>ue</code>
+</para>
+</entry>
+<entry>
+<para>Sets the value.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.Object</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>label</code>
+</para>
+</entry>
+<entry>
+<para>Sets the value of the Label it contains</para>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getChildAttrs(int) </code>
+</para>
+</entry>
+<entry>
+<para>Returns the HTML attributes for the child of the specified index. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getGrid()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the grid that contains this row. </para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Grid</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onDrawNewChild(org.zkoss.zk.ui.Component, java.lang.StringBuffer) </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setStyle(java.lang.String)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Groupbox"><title>Groupbox</title>
 <para>Components: <code>groupbox</code>.</para>
 <para>A group box is used to group components together. A border is typically drawn around the components to show that they are related. The label across the top of the group box can be created by using the <code>caption</code> component. It works much like the HTML legend element. Unlike windows, a group box is not an owner of the ID space. It cannot be overlapped or popup.</para>
 <para>
@@ -11479,7 +12469,328 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Hbox"><title>Hbox</title>
+<para/></sect3></sect2><sect2><title>Groupfoot</title>
+<para>Adds the ability for single level grouping to the Grid.</para>
+<para>Default getSclass(): the same as grid's sclass. </para>
+<para>
+<graphic fileref="images/Groupfoot.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Grid support Groupfoot in Group    &#13;&#13;    &lt;grid id="grid"&gt;    &#13;        &lt;columns id="h" sizable="true"&gt;        &#13;            &lt;column id="col1" label="Type"/&gt;            &#13;            &lt;column id="col2" label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows id="rows"&gt;        &#13;            &lt;group id="gp1"&gt;            &#13;            &lt;label value="Group1: (gp1)"/&gt;            &#13;            &lt;label value="Group1:"/&gt;            &#13;            &lt;/group&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;label value="File:"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row id="row1"&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;groupfoot&gt;            &#13;                &lt;label value="2 Java Files"/&gt;                &#13;                &lt;label value="10 Files"/&gt;                &#13;            &lt;/groupfoot&gt;            &#13;            &lt;group id="gp2" label="Group 2 (gp2)" onOpen='alert("Group is open: "+self.open);'/&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;label value="Options:"/&gt;                &#13;            &lt;/row&gt;            &#13;                &lt;groupfoot&gt;                &#13;                &lt;label value="2 Options"/&gt;                &#13;                &lt;label value="10 Options"/&gt;                &#13;            &lt;/groupfoot&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Groupfoot</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events</title>
+<para>*NONE</para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>align</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the horizontal alignment of the whole grid.</code>
+</para>
+<para>
+<code>Val</code>
+<code>ue:</code>
+<code> left|center|right</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>nowrap</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the nowrap.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>boo</code>
+<code>lean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>sclass</code>
+</para>
+</entry>
+<entry>
+<para>Sets the style class.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>spans</code>
+</para>
+</entry>
+<entry>
+<para>Sets the spans, which is a list of numbers separated by comma. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>valign</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Sets the vertical alignment of the whole row. </code>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>val</code>
+<code>ue</code>
+</para>
+</entry>
+<entry>
+<para>Sets the value.</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.Object</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>label</code>
+</para>
+</entry>
+<entry>
+<para>Sets the value of the Label it contains</para>
+</entry>
+<entry>
+<para>java.lang.String</para>
+</entry>
+<entry>
+<para>
+<code>&lt;null&gt;</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getChildAttrs(int) </code>
+</para>
+</entry>
+<entry>
+<para>Returns the HTML attributes for the child of the specified index. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getGrid()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the grid that contains this row. </para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Grid</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onDrawNewChild(org.zkoss.zk.ui.Component, java.lang.StringBuffer) </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setStyle(java.lang.String)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Hbox"><title>Hbox</title>
 <para>The <code>hbox</code> component is used to create a horizontally oriented box. Each component placed in the hbox will be placed horizontally in a row.</para>
 <para/>
 <para>
@@ -13859,8 +15170,627 @@
 </para>
 </entry>
 </row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title>Listgroup</title>
+<para>Adds the ability for single level grouping to the Listbox. </para>
+<para/>
+<para>
+<graphic fileref="images/Listgroup.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Listbox support Grouping    &#13;    &lt;listbox id="listbox" width="250px"&gt;    &#13;        &lt;listhead sizable="true" id="h"&gt;        &#13;            &lt;listheader id="h1" label="name" sort="auto" /&gt;            &#13;            &lt;listheader id="h2" label="gender" sort="auto" /&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listgroup id="gp1" open="false"&gt;        &#13;            &lt;listcell label="Group1"/&gt;            &#13;            &lt;listcell label="Group2"/&gt;            &#13;        &lt;/listgroup&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="a Mary" /&gt;            &#13;            &lt;listcell label="a FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="b Mary" /&gt;            &#13;            &lt;listcell label="b FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem id="li1"&gt;        &#13;            &lt;listcell label="c Mary1" /&gt;            &#13;            &lt;listcell label="c FEMALE1" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="d Mary" /&gt;            &#13;            &lt;listcell label="d FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="e John" /&gt;            &#13;            &lt;listcell label="e MALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listgroup id="g2" label="Grouping 2" /&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="Jane" /&gt;            &#13;            &lt;listcell label="FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="Henry" /&gt;            &#13;            &lt;listcell label="MALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;&#13;    &lt;/listbox&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Listgrroup</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*org.zkoss.zul.Listcell</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>maxlength</code>
+</para>
+</entry>
+<entry>
+<para>the maximal length of this item's label.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>index</code>
+</para>
+</entry>
+<entry>
+<para>the index of this item (aka., the order in the listbox). </para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>value</code>
+</para>
+</entry>
+<entry>
+<para>The value this cell stored.</para>
+</entry>
+<entry>
+<para>
+<code>Java.lang.Object</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>label</code>
+</para>
+</entry>
+<entry>
+<para>the width which the same as <code>getListheader()</code>'s width.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>src</code>
+</para>
+</entry>
+<entry>
+<para>the src of the <code>Listcell</code> it contains, or null if no such cell.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>image</code>
+</para>
+</entry>
+<entry>
+<para>Returns the image of the <code>Listcell</code> it contains. </para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>disable</code>
+</para>
+</entry>
+<entry>
+<para>Is this <code>Listitem</code> is disabled.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>sel</code>
+<code>ected</code>
+</para>
+</entry>
+<entry>
+<para>Is this <code>Listitem</code> is selected.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Listhead"><title>Listhead</title>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getListbox()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the <code>listbox</code> that contains this column. </para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Listbox</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent) </code>
+</para>
+</entry>
+<entry>
+<para>Can only be <code>Listbox</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>Invalidate()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="">org.zkoss.zul.Listitem</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Listgroupfoot"><title>Listgroupfoot</title>
+<para>GroupFooter serves as a summary listitem of listgroup.</para>
+<para/>
+<para>
+<graphic fileref="images/Listgroupfoot.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Listbox support Grouping    &#13;    &lt;listbox id="listbox" width="250px"&gt;    &#13;        &lt;listhead sizable="true" id="h"&gt;        &#13;            &lt;listheader id="h1" label="name" sort="auto" /&gt;            &#13;            &lt;listheader id="h2" label="gender" sort="auto" /&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listgroup id="gp1" open="false"&gt;        &#13;            &lt;listcell label="Group1"/&gt;            &#13;            &lt;listcell label="Group2"/&gt;            &#13;        &lt;/listgroup&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="a Mary" /&gt;            &#13;            &lt;listcell label="a FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="b Mary" /&gt;            &#13;            &lt;listcell label="b FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem id="li1"&gt;        &#13;            &lt;listcell label="c Mary1" /&gt;            &#13;            &lt;listcell label="c FEMALE1" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="d Mary" /&gt;            &#13;            &lt;listcell label="d FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="e John" /&gt;            &#13;            &lt;listcell label="e MALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listgroupfoot id="f1"&gt;        &#13;            &lt;listcell label="10 emails" /&gt;            &#13;            &lt;listcell label="zk1" /&gt;            &#13;        &lt;/listgroupfoot&gt;        &#13;        &lt;listgroup id="g2" label="Grouping 2" /&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="Jane" /&gt;            &#13;            &lt;listcell label="FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="Henry" /&gt;            &#13;            &lt;listcell label="MALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;&#13;    &lt;/listbox&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Listgroupfoot</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*Listcell</para></sect3><sect3><title>Supported Events</title></sect3><sect3><title/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="4">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+<entry>
+<para>Default Value</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>maxlength</code>
+</para>
+</entry>
+<entry>
+<para>the maximal length of this item's label.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>index</code>
+</para>
+</entry>
+<entry>
+<para>the index of this item (aka., the order in the listbox). </para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>value</code>
+</para>
+</entry>
+<entry>
+<para>The value this cell stored.</para>
+</entry>
+<entry>
+<para>
+<code>Java.lang.Object</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>label</code>
+</para>
+</entry>
+<entry>
+<para>the width which the same as <code>getListheader()</code>'s width.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>src</code>
+</para>
+</entry>
+<entry>
+<para>the src of the <code>Listcell</code> it contains, or null if no such cell.</para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>image</code>
+</para>
+</entry>
+<entry>
+<para>Returns the image of the <code>Listcell</code> it contains. </para>
+</entry>
+<entry>
+<para>
+<code>String</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>disable</code>
+</para>
+</entry>
+<entry>
+<para>Is this <code>Listitem</code> is disabled.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>sel</code>
+<code>ected</code>
+</para>
+</entry>
+<entry>
+<para>Is this <code>Listitem</code> is selected.</para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>false</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getListbox()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the <code>listbox</code> that contains this column. </para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Listbox</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para>
+<code/>
+</para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent) </code>
+</para>
+</entry>
+<entry>
+<para>Can only be <code>Listbox</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>Invalidate()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="">org.zkoss.zul.Listitem</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Listhead"><title>Listhead</title>
 <para>A list headers used to define multi-columns and/or headers. Can only surpport <code>Listheader</code> as its child.</para>
 <para>
 <graphic fileref="images/listbox.png">2
@@ -16283,8 +18213,734 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/>
-<para/></sect2><sect2 id="Popup"><title>Popup</title>
+<para/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Panel"><title>Panel</title>
+<para>Panel is a container that has specific functionality and structural components that make it the perfect building block for application-oriented user interfaces. The Panel contains bottom, top, and foot toolbars, along with separate header, footer and body sections. It also provides built-in collapsible, closable, maximizable, and minimizable behavior, along with a variety of pre-built tool buttons that can be wired up to provide other customized behavior. Panels can be easily embedded into any kind of ZUL component that is allowed to have children or layout component. Panels also provide specific features like float and move. Unlike Window, Panels can only be floated and moved inside its parent node, which is not using zk.setVParent() function at client side. In other words, if Panel's parent node is an relative position, the floated panel is only inside its parent, not the whole page. The second difference of Window is that Panel is not an independent ID space (by implementing IdSpace), so the ID of each child can be used throughout the panel.</para>
+<para>
+<graphic fileref="images/Panel.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;panel height="100px" width="200px" style="margin-bottom:10px"&#13;    title="Panel1" border="normal" maximizable="true"    &#13;    collapsible="true"&gt;    &#13;    &lt;panelchildren&gt;PanelContent1&lt;/panelchildren&gt;    &#13;&lt;/panel&gt;&#13;&lt;panel height="100px" width="200px" framable="true" title="Panel2"&#13;    border="normal" maximizable="true" style="margin-bottom:10px"&gt;    &#13;    &lt;panelchildren&gt;PanelContent2&lt;/panelchildren&gt;    &#13;&lt;/panel&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Panel</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Panelchildren">
+<code>Panelchildren</code>
+</link>
+</para></sect3><sect3><title>Supported Events</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onMove </code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event</code>
+</link>
+</para>
+<para>Denotes the close button is pressed by a user, and the</para>
+<para>component shall detach itself.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onOpen </code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="OpenEvent">
+<code>org.zkoss.zk.ui.event.OpenEvent</code>
+</link>
+</para>
+<para>Denotes user has opened or closed a component.<code> </code>
+</para>
+<para>
+<code>Note:</code>
+</para>
+<para>Unlike <code>onClose</code>, this event is only a notification. The</para>
+<para>client sends this event after opening or closing the</para>
+<para>component.</para>
+<para>It is useful to implement load-on-demand by listening to</para>
+<para>the <code>onOpen</code> event, and creating components when the</para>
+<para>first time the component is opened.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onMaximize</code>
+<code> </code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="Event">
+<code>org.zkoss.zk.ui.event.Maximize</code>
+</link>
+</para>
+<para>Denotes user has maximize a component.<code> </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onMinimize</code>
+<code> </code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="Event">
+<code>org.zkoss.zk.ui.event.MinimizeEvent</code>
+</link>
+</para>
+<para>Denotes user has minimize a component.<code> </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onClose </code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event</code>
+</link>
+</para>
+<para>Denotes the close button is pressed by a user, and the</para>
+<para>component shall detach itself.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>border </code>
+</para>
+</entry>
+<entry>
+<para>Sets the border </para>
+<para>Values: <code>none</code> | <code>normal</code> </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.String</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>closable</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to show a close button on the title bar. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>Collapsible</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to show a toggle button on the title bar. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>Floatable</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to float the panel to display it inline where it is rendered. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>Framable</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to render the panel with custom rounded borders. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>maximizable</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to display the maximizing button and allow the user to maximize the panel, when a panel is maximized, the button will automatically change to a restore button with the appropriate behavior already built-in that will restore the panel to its previous size. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>maximized</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether the panel is maximized, and then the size of the panel will depend on it to show a appropriate size. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>minimized</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to display the minimizing button and allow the user to minimize the pane </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>minimizable</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether the panel is minimized. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>Movable</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether to move the panel to display it inline where it is rendered. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>open</code>
+</para>
+</entry>
+<entry>
+<para>Opens or closes this Panel. </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>title</code>
+</para>
+</entry>
+<entry>
+<para>Sets the title. </para>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>Visible</code>
+<code> </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>addMoved(org.zkoss.zk.ui.Component oldparent, org.zkoss.zk.ui.Page oldpg, </code>
+<code>org.zkoss.zk.ui.Page newpg) </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>addToolbar(java.lang.String name, Toolbar toolbar) </code>
+</para>
+</entry>
+<entry>
+<para>Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar". </para>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>clone()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>java.lang.Object</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getBottomToolbar()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the bottom toolbar of this panel. </para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Toolbar</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getCaption()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the caption of this panel. </para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Caption</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getFootToolbar()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Toolbar</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getMoldSclass()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>String </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getOuterAttrs()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>String </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getPanelchildren()</code>
+</para>
+</entry>
+<entry>
+<para>Returns the panelchildren of this panel. </para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Panelchildren</code>
+</para>
+<para>
+<code/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getRealSclass()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>String </code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, </code>
+</para>
+<para>
+<code>org.zkoss.zk.ui.Component insertBefore) </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>boolean</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onChildRemoved(org.zkoss.zk.ui.Component child)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onClose()</code>
+</para>
+</entry>
+<entry>
+<para>Process the onClose event sent when the close button is </para>
+<para>pressed.</para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="Panelchildren"><title>Panelchildren</title>
+<para>Panelchildren is used for Panel component to manage each child who will be shown in the body of Panel. Note that the size of Panelchildren is automatically calculated by Panel so both setWidth(String) and setHeight(String) are read-only.</para>
+<para>
+<graphic fileref="images/Panel.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;panel height="100px" width="200px" style="margin-bottom:10px"&#13;    title="Panel1" border="normal" maximizable="true"    &#13;    collapsible="true"&gt;    &#13;    &lt;panelchildren&gt;PanelContent1&lt;/panelchildren&gt;    &#13;&lt;/panel&gt;&#13;&lt;panel height="100px" width="200px" framable="true" title="Panel2"&#13;    border="normal" maximizable="true" style="margin-bottom:10px"&gt;    &#13;    &lt;panelchildren&gt;PanelContent2&lt;/panelchildren&gt;    &#13;&lt;/panel&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Panelchildren</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*ALL</para></sect3><sect3><title>Supported Events</title>
+<para>*None</para></sect3><sect3><title>Properties</title>
+<para>*None</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>getMoldSclass() </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>getRealSclass() </para>
+</entry>
+<entry>
+<para>Returns the real style class used for the content block of the panel.</para>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setHeight(java.lang.String height) </code>
+</para>
+</entry>
+<entry>
+<para> This method is unsupported. </para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setWidth(java.lang.String width) </code>
+</para>
+</entry>
+<entry>
+<para> This method is unsupported. </para>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Inherited From </para>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Popup"><title>Popup</title>
 <para>
 <code>A container that is displayed as a popup. The popup window does not have any special frame. Popups can be displayed when an element is clicked by assigning the id of the popup to either the</code>
 <code> XulElement.setPopup(java.lang.String), XulElement.setContext(java.lang.String) or XulElement.setTooltip(java.lang.String) attribute of the element. </code>
@@ -16379,8 +19035,324 @@
 </para>
 </entry>
 </row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2><title>Portallayout</title>
+<para>A portallayout lays out a container which can have multiple columns, and each column may contain one or more panel. Portallayout provides a way to drag-and-drop panel into other portalchildren from the same portallayout.</para>
+<para>Use Portallayout need assign width (either present or pixel) on every Portalchildren, or we cannot make sure about layout look.</para>
+<para>
+<graphic fileref="images/Portallayout.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;portallayout&gt;&#13;    &lt;portalchildren width="30%"&gt;    &#13;        &lt;panel height="150px" title="Google Tools"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="300px" title="LabPixies Clock"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/portalchildren&gt;    &#13;    &lt;portalchildren width="30%"&gt;    &#13;        &lt;panel height="150px" title="Google Tools"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/portalchildren&gt;    &#13;&lt;/portallayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkmax.zul.Portallayout</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Portalchildren">
+<code>Portalchildren</code>
+</link>
+</para></sect3><sect3><title>Supported Events</title>
+<para/>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Event Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>onPortalMove</code>
+</para>
+</entry>
+<entry>
+<para>Event: <link linkend="PortalMoveEvent">org.zkoss.zkmax.event.PortalMoveEvent</link>
+</para>
+<para>Represents an event caused by a portal being moved.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Properties</title>
+<para>*None</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>getMoldSclass() </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getPanel(int col, int row) </code>
+</para>
+</entry>
+<entry>
+<para>Returns the specified pnael, or null if not available. </para>
+</entry>
+<entry>
+<para>org.zkoss.zul.Panel </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getPosition(org.zkoss.zul.Panel panel) </code>
+</para>
+</entry>
+<entry>
+<para>Returns an int array[col, row] that indicates the specified panel located within this portal layout. </para>
+</entry>
+<entry>
+<para>int[]</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onChildAdded(org.zkoss.zk.ui.Component child)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onChildRemoved(org.zkoss.zk.ui.Component child) </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setPanel(org.zkoss.zul.Panel panel, int col, int row)</code> </para>
+</entry>
+<entry>
+<para>Sets the specified panel via the position(col and row). </para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Progressmeter"><title>Progressmeter</title>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Portalchildren"><title>Portalchildren</title>
+<para>The column of Portallayout. </para>
+<para>Child of Portalchildren can only be Panel.</para>
+<para>
+<graphic fileref="images/Portallayout.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;portallayout&gt;&#13;    &lt;portalchildren width="30%"&gt;    &#13;        &lt;panel height="150px" title="Google Tools"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="300px" title="LabPixies Clock"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/portalchildren&gt;    &#13;    &lt;portalchildren width="30%"&gt;    &#13;        &lt;panel height="150px" title="Google Tools"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/portalchildren&gt;    &#13;&lt;/portallayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkmax.zul.Portalchildren</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Panel">
+<code>Panel</code>
+</link>
+</para></sect3><sect3><title>Supported Events </title>
+<para>*None</para></sect3><sect3><title>Properties</title>
+<para>*None</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>getMoldSclass() </para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onChildAdded(org.zkoss.zk.ui.Component child)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>onChildRemoved(org.zkoss.zk.ui.Component child)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setParent(org.zkoss.zk.ui.Component parent)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>
+<code>void</code>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">org.zkoss.zul.impl.XulElement</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="Progressmeter"><title>Progressmeter</title>
 <para>A progress meter is a bar that indicates how much of a task has been completed. The value property must be in the range between 0 and 100.</para>
 <para>
 <graphic fileref="images/progressmeter.png">2
@@ -17866,7 +20838,218 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2><sect2 id="South"><title>South</title>
+<para/></sect3></sect2></sect1></chapter>
+<chapter>
+<title/><sect2><sect2><title>Spinner</title>
+<para>An edit box for holding a constrained integer. </para>
+<para>
+<graphic fileref="images/Spinner.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;window title="Spinner" border="normal" width="150px"&gt;&#13;    &lt;spinner /&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zul.Spinner</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*NONE </para></sect3><sect3><title>Supported Events</title>
+<para>*NONE </para></sect3><sect3><title>Properties</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Property</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>step</para>
+</entry>
+<entry>
+<para>Set the step of spinner </para>
+</entry>
+<entry>
+<para>
+<code>integer</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>val</code>
+<code>ue</code>
+</para>
+</entry>
+<entry>
+<para>Sets the text value. </para>
+</entry>
+<entry>
+<para>
+<code>integer</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>ButtonVisible</code>
+</para>
+</entry>
+<entry>
+<para>Sets whether the button (on the right of the textbox) is visible. </para>
+</entry>
+<entry>
+<para>boolean</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>coerceFromString(java.lang.String value)</code>
+</para>
+</entry>
+<entry>
+<para>Coerces the value passed to <code>InputElement.setText(java.lang.String)</code>. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.Object</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>coerceToString(java</code>
+<code>.lang.Object value)</code>
+</para>
+</entry>
+<entry>
+<para>Coerces the value passed to <code>InputElement.setText(java.lang.Stri</code>
+<code>ng)</code>. </para>
+</entry>
+<entry>
+<para>
+<code>java.lang.Object</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getMoldSclass()</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>String</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>setConstraint(java.lang.String constr) </code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>void</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="NumberInputElement">
+<code>org.zkoss.zul.NumberInputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="FormatInputElement">
+<code>org.zkoss.zul.FormatInputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="InputElement">
+<code>org.zkoss.zul.InputElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="XulElement">
+<code>org.zkoss.zul.imp.XulElement</code>
+</link>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">
+<code>org.zkoss.zk.ui.HtmlBasedComponent</code>
+</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">
+<code>org.zkoss.zk.ui.AbstractComponent </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2 id="South"><title>South</title>
 <para>This component is a south region. The default class of CSS is specified "layout-region-south".</para>
 <para/>
 <para>
@@ -18028,7 +21211,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Separator"><title>Separator</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Separator"><title>Separator</title>
 <para>
 <code>Space is a </code>
 <code>Separator</code>
@@ -18188,7 +21371,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Splitter"><title>Splitter</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Splitter"><title>Splitter</title>
 <para>
 <code>An element which should appear before or after an element inside a box (Box, Vbox and Hbox).</code>
 </para>
@@ -18363,7 +21546,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title>Style</title>
+<para/></sect3></sect2></sect2><sect2><sect2><title>Style</title>
 <para>The style component used to specify <code>CSS</code> styles for the owner desktop.</para>
 <para>Note: a <code>style </code>component can appear anywhere in a <code>ZUML</code> page, but it affects all components in the same <code>desktop</code>. </para>
 <para>
@@ -18465,7 +21648,8 @@
 <row>
 <entry>
 <para>
-<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+<code>insertBefore(org.zkoss.zk.ui.Co</code>
+<code>mponent child, org.zkoss.zk.ui.Component insertBefore)</code>
 </para>
 </entry>
 <entry>
@@ -18497,7 +21681,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Tab"><title>Tab</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Tab"><title>Tab</title>
 <para>A specific tab. Clicking on the tab brings the tab panel to the front. You could put a label and an image on it by <code>label </code>and <code>image </code>properties. </para>
 <para>By setting the <code>closable </code>property to true, a close button is shown for the tab, such that user could close the tab and the corresponding tab panel by clicking the button. Once user clicks on the close button, an <code>onClose </code>event is sent to the tab. It is processed by the <code>onClose </code>method of <code>Tab. </code>Then, <code>onClose, </code>by default, detaches the tab itself and the corresponding tab panel.</para>
 <para>
@@ -18819,8 +22003,146 @@
 </para>
 </entry>
 </row></tbody></tgroup>
+</informaltable></sect3></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2 id="TableChildren"><title>TableChildren</title>
+<para>The cell of Tablelayout. The child component of Tablechildren only can be Panel.</para>
+<para>
+<graphic fileref="images/Tablelayout.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&#13;&lt;?component name="panel" extends="panel" width="200px" height="200px" ?&gt;&#13;&#13;&lt;zk&gt;&#13;&lt;label value="3 columns, 1 colspan, 1 rowspan"/&gt;&#13;&#13;&lt;tablelayout id="tbl" columns="3"&gt;&#13;        &lt;tablechildren id="tc1" colspan="2"&gt;        &#13;            &lt;panel title="table1" border="normal"             &#13;                 maximizable="true" collapsible="true" &gt;                &#13;                     &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;                    &#13;             &lt;/panel&gt;            &#13;        &lt;/tablechildren&gt;        &#13;        &lt;tablechildren&gt;        &#13;            &lt;panel title="table2" border="normal"            &#13;                 maximizable="true" collapsible="true"&gt;                &#13;                 &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;                &#13;             &lt;/panel&gt;            &#13;        &lt;/tablechildren&gt;        &#13;&lt;/tablelayout&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkex.zul.Tablelayout</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>*None</para></sect3><sect3><title>Supported Events</title>
+<para> *None</para></sect3><sect3><title>Properties</title>
+<para>*None</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead>
+</tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Tabbox"><title>Tabbox</title>
+<para/></sect3></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2><title>TableLayout</title>
+<para>Tablelayout lay outs a container as an HTML table whose columns can be specified, and rowspan and colspan of its child can also be specified to create complex layouts within the table.</para>
+<para>
+<graphic fileref="images/Tablelayout.PNG">2
+			
+		</graphic>
+</para>
+<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&#13;&lt;?component name="panel" extends="panel" width="200px" height="200px" ?&gt;&#13;&#13;&lt;zk&gt;&#13;&lt;label value="3 columns, 1 colspan, 1 rowspan"/&gt;&#13;&#13;&lt;tablelayout id="tbl" columns="3"&gt;&#13;        &lt;tablechildren id="tc1" colspan="2"&gt;        &#13;            &lt;panel title="table1" border="normal"             &#13;                 maximizable="true" collapsible="true" &gt;                &#13;                     &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;                    &#13;             &lt;/panel&gt;            &#13;        &lt;/tablechildren&gt;        &#13;        &lt;tablechildren&gt;        &#13;            &lt;panel title="table2" border="normal"            &#13;                 maximizable="true" collapsible="true"&gt;                &#13;                 &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;                &#13;             &lt;/panel&gt;            &#13;        &lt;/tablechildren&gt;        &#13;&lt;/tablelayout&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkex.zul.Tablelayout</code>
+</para></sect3><sect3><title>Supported Child Components</title>
+<para>
+<link linkend="Center">
+<code>Tablechildren</code>
+</link> </para></sect3><sect3><title>Supported Events</title>
+<para> *None</para></sect3><sect3><title>Properties</title>
+<para>*None</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Return Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getColumns()</code>
+</para>
+</entry>
+<entry>
+<para>Returns number of rows to span this header.</para>
+</entry>
+<entry>
+<para>
+<code>int</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="HtmlBasedComponent">org.zkoss.zk.ui.HtmlBasedComponent</link> </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<link linkend="AbstractComponent">org.zkoss.zk.ui.AbstractComponent </link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Tabbox"><title>Tabbox</title>
 <para>A <code>tabbox </code>that contains the <code>tabs </code>and <code>tabpanels </code>allows developers to separate a large number of components into several groups(each group contains a <code>tab </code>and a <code>tabpanel), </code>and show one group each time, such that the user interface won't be too complicate to read. There is only one group (aka., a <code>tabpanel) </code>is visible at the same time. Once the <code>tab </code>of an invisible group is clicked, it becomes visible and the previous visible group becomes invisible.</para>
 <para>The currently selected tab component is given an additional <code>selected </code>property which is set to true. This is used to give the currently selected tab a different appearance so that it will look selected. Only one tab will have a true value for this property at a time. If none of tabs are selected, the first one is selected automatically.</para>
 <para>
@@ -19133,7 +22455,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Tabpanel"><title>Tabpanel</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Tabpanel"><title>Tabpanel</title>
 <para>A <code>tabpanel </code>is the body of a single tab panel. You would place the content for a group of components within a tab panel. The first <code>tabpanel </code>corresponds to the first <code>tab, </code>the second <code>tabpanel </code>corresponds to the second <code>tab </code>and so on.</para>
 <para>
 <link linkend="Toolbar">
@@ -19341,7 +22663,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Tabpanels"><title>Tabpanels</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Tabpanels"><title>Tabpanels</title>
 <para>A <code>tabpanels</code> is the container for the tab panels, i.e., a collection of tabpanel components.</para>
 <para>
 <link linkend="Toolbar">
@@ -19440,7 +22762,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Tabs"><title>Tabs</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Tabs"><title>Tabs</title>
 <para>A <code>tabs</code> is the container for the <code>tab</code> components.</para>
 <para>
 <link linkend="Toolbar">
@@ -19539,7 +22861,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Textbox"><title>Textbox</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Textbox"><title>Textbox</title>
 <para>A <code>textbox</code> is used to let users input text data.</para>
 <para>You colud assign <code>value, type, constraint, rows, cols </code>to a textbox by the corresponding properties. When you assigns the property <code>type </code>to a string value “password” when <code>multiline </code>is false( <code>multiline</code> will be <code>true </code>if You set rows large then 1 or sets <code>multiline </code>to true directly) then any character in this component will replace by '*'.</para>
 <para>You colud also assign a constraint value with a regular expression string or a default constraint expression(available value is “no empty”). When user change the value of textbox, will cause a validating preocess to valdate the value. If valdation fail, then a notification will poped up. </para>
@@ -19823,7 +23145,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title>Timebox</title>
+<para/></sect3></sect2></sect2><sect2><sect2><title>Timebox</title>
 <para>An edit box for holding a time (a java.util.Date Object , but only Hour &amp; Minute are used.</para>
 <para>
 <graphic fileref="images/timebox.png">2
@@ -19983,8 +23305,8 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2><title/>
-<para/></sect2><sect2 id="Timer"><title>Timer</title>
+<para/></sect3></sect2></sect2><sect2><sect2><title/>
+<para/></sect2></sect2><sect2><sect2 id="Timer"><title>Timer</title>
 <para>Timer is a special component that is invisible. It fires one or more org.zkoss.zk.ui.event.Event after a specified delay. </para>
 <para/>
 <para>Notice that the timer won't fire any event until it is attached to a page. </para>
@@ -20198,7 +23520,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Toolbar"><title>Toolbar</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Toolbar"><title>Toolbar</title>
 <para>A <code>toolbar</code> is used to place a series of buttons, such as <code>toolbarbutton </code>or <code>button. </code>The toolbar buttons could be used without toolbars, so a toolbar could be used without tool buttons. However, tool buttons change their appearance if they are placed inside a toolbar.</para>
 <para>The toolbar has two orientation: <code>horizontal </code>and <code>vertical. </code>It controls how the buttons are placed.</para>
 <para>See also : <link linkend="Button">
@@ -20354,7 +23676,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Toolbarbutton"><title>Toolbarbutton</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Toolbarbutton"><title>Toolbarbutton</title>
 <para>The behave of <code>Toolbarbutton</code> is similar to the <code>button </code>except the appearance is different. The <code>button </code>component uses HTML BUTTON tag, while <code>thetoolbarbutton </code>component uses HTML A tag.</para>
 <para>A <code>toolbarbutton </code>could be placed outside a <code>toolbar, </code>However <code>toolbarbutton</code>s change their appearance if they are placed inside a <code>toolbar. </code>
 </para>
@@ -20625,7 +23947,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Tree"><title>Tree</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Tree"><title>Tree</title>
 <para>A <code>tree </code>consists of tree parts, the set of columns, the set of footers, and the tree body. The set of columns is defined by a number of <code>treecol </code>components, one for each column. Each column will appear as a header at the top of the tree. The second part, The set of footers is defined by a number of <code>treefooter </code>components, one for each column also. Each column will appear as a footer at the bottom of the tree. The third part, the tree body, contains the data to appear in the tree and is created with a <code>treechildren </code>component.</para>
 <para>
 <link linkend="Toolbar">
@@ -21231,7 +24553,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Treecell"><title>Treecell</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Treecell"><title>Treecell</title>
 <para>
 <code>Treecell </code>represent one column in a <code>treerow </code>by sequencial. T<code>reecell</code> can contains any component in it, such as label, image, textbox etc.</para>
 <para>
@@ -21536,7 +24858,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Treechildren"><title>Treechildren</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Treechildren"><title>Treechildren</title>
 <para>
 <code>Treechildren </code>contains a collection of treeitem components. It is main body of the <code>Tree </code>and it also the main body of a <code>Treeitem</code>'s children.</para>
 <para>You can change the page size of each <code>treechildren </code>instance by modifying the <code>pageSize </code>property</para>
@@ -21863,7 +25185,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Treecol"><title>Treecol</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Treecol"><title>Treecol</title>
 <para>A <code>treecol </code>is a top column of tree, Its parent must be <code>Treecols.</code>
 </para>
 <para>
@@ -22036,7 +25358,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Treecols"><title>Treecols</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Treecols"><title>Treecols</title>
 <para>A <code>treecols </code>is main part of tree which contains set of columns. The set of columns is defined by a number of <code>treecol </code>components. Each column will appear as a column at the top of the tree.</para>
 <para>
 <link linkend="Toolbar">
@@ -22178,7 +25500,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Treefoot"><title>Treefoot</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Treefoot"><title>Treefoot</title>
 <para>A <code>treefoot </code>is main part of tree which contains set of footers. The set of footers is defined by a number of <code>treefooter </code>components. Each column will appear as a footer at the bottom of the tree.</para>
 <para>
 <link linkend="Toolbar">
@@ -22275,7 +25597,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Treefooter"><title>Treefooter</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Treefooter"><title>Treefooter</title>
 <para>A <code>treefooter </code>is a bottom column of tree, Its parent must be <code>Treefoot. </code>You colud place any child in a tree footer.</para>
 <para>
 <link linkend="Toolbar">
@@ -22461,7 +25783,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Treeitem"><title>Treeitem</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Treeitem"><title>Treeitem</title>
 <para>
 <code>Treeitem </code>contains a row of data (<code>treerow), </code>and an optional treechildren.</para>
 <para>If the component doesn't contain a <code>treechildren, </code>it is a leaf node that doesn't accept any child items.</para>
@@ -22861,7 +26183,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Treerow"><title>Treerow</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Treerow"><title>Treerow</title>
 <para>
 <code>Treerow </code>is a single row in the <code>tree, </code>it is the main content of <code>treeitem</code>. <code>Treerow </code>can contains multiple <code>treecell</code>, each <code>treecell</code> represent one column in this row by sequencial. A <code>treecell </code>can contains any component in it, such as label, image, textbox etc. </para>
 <para>
@@ -23092,7 +26414,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Vbox"><title>Vbox</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Vbox"><title>Vbox</title>
 <para>The vbox component is used to create a vertically oriented box. Added components will be placed underneath each other in a column.</para>
 <para/>
 <para>
@@ -23145,7 +26467,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="West"><title>West</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="West"><title>West</title>
 <para>This component is a west region. The default class of CSS is specified "layout-region-west".</para>
 <para/>
 <para>
@@ -23307,7 +26629,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2><sect2 id="Window"><title>Window</title>
+<para/></sect3></sect2></sect2><sect2><sect2 id="Window"><title>Window</title>
 <para>A window is, like HTML DIV tag, used to group components. Unlike other components, a window has the following characteristics. </para>
 <itemizedlist>
 <listitem>
@@ -24016,7 +27338,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect1><sect1><title>Events</title><sect2 id="CheckEvent"><title>CheckEvent</title>
+<para/></sect3></sect2></sect2><sect1><title>Events</title><sect2 id="CheckEvent"><title>CheckEvent</title>
 <para>Represents an event cause by user's check a state at the client.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.CheckEvent</code>
@@ -25062,6 +28384,93 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
+<para/></sect3></sect2><sect2 id="PortalMoveEvent"><title>PortalMoveEvent</title>
+<para>Represents an event caused by a portal being moved.</para>
+<para/><sect3><title>Class Name</title>
+<para>
+<code>org.zkoss.zkmax.event.PortalMoveEvent</code>
+</para></sect3><sect3><title>Methods</title>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Data Type</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<code>getDragged</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Returns the panel being dragged.</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>org.zkoss.zul.Panel</code>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getFrom</code>
+</para>
+</entry>
+<entry>
+<para>Returns the portalchildren from the dragged panel.</para>
+</entry>
+<entry>
+<para>org.zkoss.zkmax.zul.Portalchildren</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>getTo</code>
+</para>
+</entry>
+<entry>
+<para>
+<code>Returns the portalchildren where the dragged panel drops to.</code>
+<code> </code>
+</para>
+</entry>
+<entry>
+<para>org.zkoss.zkmax.zul.Portalchildren</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title/></sect3><sect3><title>Inherited From </title>
+<informaltable frame="all">
+<tgroup cols="1">
+<thead>
+<row>
+<entry>
+<para>Inherited From</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>
+<link linkend="Event">
+<code>org.zkoss.zk.ui.event.Event </code>
+</link>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
 <para/></sect3></sect2><sect2 id="ScrollEvent"><title>ScrollEvent</title>
 <para>Represents an event caused by that user is scrolling or has scrolled at the client. </para>
 <para>
