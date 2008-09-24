@@ -135,7 +135,11 @@ zk.Cal.prototype = {
 		for (var j = 0; j < 12; ++j) {
 			el = $e(this.id + "!m" + j);
 			if (el) { //omitted if compact
-				el.className = m == j ? mcls + "-seld": "";
+//				el.className = m == j ? mcls + "-seld": "";
+				if(m==j) 
+					zk.addClass(el, mcls+"-seld");
+				else
+					zk.rmClass(el, mcls+"-seld");
 				el.setAttribute("zk_mon", j);
 			}
 		}
@@ -167,7 +171,13 @@ zk.Cal.prototype = {
 	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
 		var mcls = getZKAttr(this.element, "mcls");
-		cell.className = !disd ? sel ? mcls + "-seld": "" : sel ? mcls + "-seld " + mcls + "-disd": mcls + "-disd";
+				
+		//cell.className = !disd ? sel ? mcls + "-seld": "" : sel ? mcls + "-seld " + mcls + "-disd": mcls + "-disd";		
+		zk.rmClass(cell, mcls+"-over");
+		zk.rmClass(cell, mcls+"-over-seld");
+		sel? zk.addClass(cell, mcls+"-seld"): zk.rmClass(cell, mcls+"-seld");
+		disd? zk.addClass(cell, mcls+"-disd"): zk.rmClass(cell, mcls+"-disd");		
+		
 		var d = cell.getAttribute("zk_day");
 		zk.setInnerHTML(cell,
 			!sel || this.popup ? d:
@@ -374,26 +384,48 @@ zkCal.onblur = function (evt) {
 
 zkCal.onover = function (evt) {
 	var el = Event.element(evt);
-	if (el.className.indexOf("-disd") == -1){
-		if (el.className.indexOf("-seld") != -1) {
-			zk.addClass(el, "z-datebox-over-seld");
-		}else {
-			zk.addClass(el, "z-datebox-over");
-		}				
+	var cmp = $outer(Event.element(evt));
+	var mcls = getZKAttr(cmp, "mcls");
+	
+	if(! zk.hasClass(el, mcls+"-disd")) {
+		if(zk.hasClass(el, mcls+"-seld") || zk.hasClass(el, mcls+"-over-seld"))
+			zk.addClass(el, mcls+"-over-seld");
+		else 
+			zk.addClass(el, mcls+"-over");		
 	}
+//	
+//	if (el.className.indexOf("-disd") == -1){
+//		if (el.className.indexOf("-seld") != -1) {
+//			zk.addClass(el, "z-datebox-over-seld");
+//		}else {
+//			zk.addClass(el, "z-datebox-over");
+//		}				
+//	}
 		
 };
 zkCal.onout = function (evt) {	
 	var el = Event.element(evt);
-	if (el.className.indexOf("-seld") != -1) {
-			zk.rmClass(el, "z-datebox-over-seld");
-		}else {
-			zk.rmClass(el, "z-datebox-over");
-		}
+//	if (el.className.indexOf("-seld") != -1) {
+//		zk.rmClass(el, "z-datebox-over-seld");
+//	}else {
+//		zk.rmClass(el, "z-datebox-over");
+//	}
+
+	var cmp = $outer(Event.element(evt));
+	var mcls = getZKAttr(cmp, "mcls");
+	
+	if(zk.hasClass(el, mcls+"-seld") || zk.hasClass(el, mcls+"-over-seld")) {
+		zk.rmClass(el, mcls+"-over-seld");
+	}
+	else {
+		zk.rmClass(el, mcls+"-over");
+	}
 };
 /** Returns if a cell is selected. */
 zkCal._seled = function (cell) {
-	return cell.className.indexOf("-seld") >= 0;
+//	return cell.className.indexOf("-seld") >= 0;
+	var mcls = getZKAttr($outer(cell), "mcls");
+	return zk.hasClass(cell, mcls+"-seld") || zk.hasClass(cell, mcls+"-over-seld");
 };
 
 //Datebox//
