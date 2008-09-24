@@ -48,9 +48,6 @@ public class ListboxPaging implements ComponentRenderer {
 		final String tag = exec.isBrowser("ie") || exec.isBrowser("gecko") ? "a" : "button";
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\" z.pg=\"t\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<").write(tag).write("  z.keyevt=\"true\" id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
-			.write(" href=\"javascript:;\" style=\"padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;\"></")
-			.write(tag).write(">");
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
 				.write("!pgit\" class=\"").write(mcls).write("-pgi-t\">")
@@ -96,17 +93,17 @@ public class ListboxPaging implements ComponentRenderer {
 			}
 			wh.write("</tr></tbody>");
 		}
-		final int from = self.getVisibleBegin(), to = self.getVisibleEnd();
-		if (from < self.getItems().size()) {
-			ListIterator it = self.getItems().listIterator(from);
-			ZulFns.resetStripeClass(self);
-			for (int cnt = to - from + 1; it.hasNext() && --cnt >= 0;) {
-				final Component child = (Component) it.next();
-				ZulFns.setStripeClass(child);
-				child.redraw(out);
-			}
+		ZulFns.resetStripeClass(self);
+		for (Iterator it = self.getVisibleChildrenIterator(); it.hasNext();) {
+			final Component child = (Component) it.next();
+			ZulFns.setStripeClass(child);
+			child.redraw(out);
 		}
-		wh.write("\n</table></div>");
+		wh.write("\n</table>");
+		wh.write("<").write(tag).write("  z.keyevt=\"true\" id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
+		.write(" href=\"javascript:;\" style=\"position: absolute;left: 0px; top: 0px;padding:0 !important; margin:0 !important; border:0 !important; background: transparent !important; font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;\"></")
+		.write(tag).write(">");
+		wh.write("</div>");
 
 		if(self.getListfoot() != null){
 			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(mcls).write("-footer\">")

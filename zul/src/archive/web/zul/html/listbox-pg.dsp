@@ -22,7 +22,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="mcls" value="${self.moldSclass}"/>
 <div id="${self.uuid}" z.type="zul.sel.Libox" z.pg="t"${self.outerAttrs}${self.innerAttrs}>
-<${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'} z.keyevt="true" id="${self.uuid}!a" tabindex="-1" onclick="return false;" href="javascript:;" style="padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;"></${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'}>
 	<c:if test="${!empty self.pagingChild && self.pagingPosition == 'top' || self.pagingPosition == 'both'}">
 	<div id="${self.uuid}!pgit" class="${mcls}-pgi-t">
 	${z:redraw(self.pagingChild, null)}
@@ -64,11 +63,11 @@ ${z:redraw(head, null)}
 		</tbody>
 		</c:if>
 ${u:resetStripeClass(self)}
-	<c:forEach var="item" items="${self.items}" begin="${self.visibleBegin}" end="${self.visibleEnd}">
+	<c:forEach var="item" items="${self.visibleChildrenIterator}">
 ${u:setStripeClass(item)}
 ${z:redraw(item, null)}
 	</c:forEach>
-	</table>
+	</table><${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'} z.keyevt="true" id="${self.uuid}!a" tabindex="-1" onclick="return false;" href="javascript:;" style="position: absolute;left: 0px; top: 0px;padding:0 !important; margin:0 !important; border:0 !important; background: transparent !important; font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;"></${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'}>
 	</div>
 <c:if test="${!empty self.listfoot}">
 	<div id="${self.uuid}!foot" class="${mcls}-footer">

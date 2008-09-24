@@ -379,7 +379,11 @@ zk.Selectable.prototype = {
 				if (last && now - last < 900)
 					return; //ignore double-click
 			}
-
+			var focusEl = $e(getZKAttr(row, "rid"), "a"),
+				offs = zk.revisedOffset(row);	
+			offs = this._toStyleOffset(focusEl, offs[0] + this.body.scrollLeft, offs[1]);
+			focusEl.style.top = offs[1] + "px";
+			focusEl.style.left = offs[0] + "px";
 			if (this._isMultiple()) {
 				if (evt && evt.shiftKey)
 					this.selectUpto(row);
@@ -397,7 +401,11 @@ zk.Selectable.prototype = {
 			//Oppositely, it disabled popup (bug 1578659)
 		}
 	},
-
+	_toStyleOffset: function (el, x, y) {	
+		var ofs1 = zk.revisedOffset(el),
+			ofs2 = zk.getStyleOffset(el);
+		return [x - ofs1[0] + ofs2[0], y  - ofs1[1] + ofs2[1]];
+	},
 	/** Returns # of rows allowed. */
 	size: function () {
 		var sz = getZKAttr(this.element, "size");
@@ -702,7 +710,7 @@ zk.Selectable.prototype = {
 	/** Renders listitems that become visible by scrolling.
 	 */
 	_render: function (timeout) {
-		if(!this.paging)
+		if(!this.paging || getZKAttr(this.element, "hasgroup"))
 			setTimeout("zkSel._renderNow('"+this.id+"')", timeout);
 	},
 	_renderNow: function () {
@@ -783,6 +791,7 @@ zk.Selectable.prototype = {
 		if (zk.isRealVisible(this.element)) {
 			this._calcSize();// Bug #1813722
 			this._render(155);
+			if (zk.ie7) zk.repaint(this.element); // Bug 2096807
 		}
 	},
 	/** Returns the visible row at the specified index. */
@@ -1438,7 +1447,8 @@ zkLitgp = {
 				span -= cells[i].colSpan;
 			if (span > 0 && cmp.cells.length) cmp.cells[cmp.cells.length - 1].colSpan += span;
 		}
-	},	ontoggle: function (evt) {
+	},
+	ontoggle: function (evt) {
 		if (!evt) evt = window.event;
 		var target = Event.element(evt);
 		var row = zk.parentNode(target, "TR");
@@ -1450,7 +1460,7 @@ zkLitgp = {
 
 		if (toOpen && meta || getZKAttr(meta.element, "model") == "true") {	
 			if (toOpen) meta.stripe();
-			meta._recalcSize();
+			if (!meta.paging) meta._recalcSize(); // group in paging will invalidate the whole items.
 		}
 		Event.stop(evt);
 	},
@@ -1491,6 +1501,7 @@ zkLitgp = {
 				if (prev)
 					zkLitgp._openItem(prev, zkLitgp.isOpen(prev), true);
 			}, false, row.id);
+		else zkLitgp._openItemNow(row, true);
 	},
 	setAttr: function (cmp, nm, val) {
 		if (nm == "z.open") {

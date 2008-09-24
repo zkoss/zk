@@ -2490,7 +2490,7 @@ zkau.cmd1 = {
 
 		if (cf && !zkau.currentFocus)
 			if (cfid) zk.focus($e(cfid));
-			else zk.focusDown($e(uuid));
+			// else zk.focusDown($e(uuid)); fails in grid with paging
 
 		if (fns) {
 			var ls = zk.find(cmp);

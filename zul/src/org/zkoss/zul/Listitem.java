@@ -287,8 +287,15 @@ public class Listitem extends XulElement {
 		_selected = selected;
 	}
 	public boolean setVisible(boolean visible) {
-		if (isVisible() != visible) 
+		if (isVisible() != visible) {
 			smartUpdate("z.visible", visible);
+			final Listbox listbox = (Listbox) getParent();
+			if (listbox != null) {
+				final Listgroup g = listbox.getListgroupAt(getIndex());
+				if (g == null || g.isOpen())
+					listbox.addVisibleItemCount(visible ? 1 : -1);
+			}
+		}
 		return super.setVisible(visible);
 	}
 

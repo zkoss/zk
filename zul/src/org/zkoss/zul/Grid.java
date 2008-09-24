@@ -1141,6 +1141,10 @@ public class Grid extends XulElement implements Paginated {
 		if (_align != null)
 			HTMLs.appendAttribute(sb, "align", _align);
 		if (_model != null) {
+			if (inPagingMold()) {
+				final Rows rows = getRows();
+				if (rows != null && rows.hasGroup()) HTMLs.appendAttribute(sb, "z.hasgroup", true);
+			}
 			HTMLs.appendAttribute(sb, "z.model", true);
 			final List rows = getRows().getChildren();
 			int index = rows.size();

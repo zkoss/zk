@@ -18,7 +18,7 @@ div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader {
 	font-size: ${fontSizeM}; font-weight: normal;
 }
 div.z-tree-body {
-	background: white; border: 0; overflow: auto; width: 100%;
+	background: white; border: 0; overflow: auto; width: 100%; position: relative;
 }
 div.z-tree-pgi-b {
 	border-top: 1px solid #AAB; overflow: hidden;

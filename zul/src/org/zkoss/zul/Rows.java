@@ -95,7 +95,7 @@ public class Rows extends XulElement {
 	public int getVisibleItemCount() {
 		return _visibleItemCount;
 	}
-	void addVisibleItemCount(int count) {
+	/*package*/ void addVisibleItemCount(int count) {
 		if (count != 0) {
 			_visibleItemCount += count;
 			final Grid grid = getGrid();
@@ -393,7 +393,7 @@ public class Rows extends XulElement {
 	 * An iterator used by visible children.
 	 */
 	private class VisibleChildrenIterator implements Iterator {
-		private ListIterator _it = getChildren().listIterator();
+		private final ListIterator _it = getChildren().listIterator();
 		private Grid _grid = getGrid();
 		private int _count = 0;
 		public boolean hasNext() {
@@ -406,13 +406,10 @@ public class Rows extends XulElement {
 			if (_count == 0) {
 				final Paginal pgi = _grid.getPaginal();
 				int begin = pgi.getActivePage() * pgi.getPageSize();
-				if (hasGroup()) {
-					for (int i = 0; i < begin && _it.hasNext();) {
-						getVisibleRow((Row)_it.next());
-						i++;
-					}
-				} else 
-					_it = getChildren().listIterator(begin);
+				for (int i = 0; i < begin && _it.hasNext();) {
+					getVisibleRow((Row)_it.next());
+					i++;
+				}
 			}
 			return _it.hasNext();
 		}
@@ -420,7 +417,7 @@ public class Rows extends XulElement {
 			if (row instanceof Group) {
 				final Group g = (Group) row;
 				if (!g.isOpen()) {
-					for (int j = 0; j < g.getItemCount()
+					for (int j = 0, len = g.getItemCount(); j < len
 							&& _it.hasNext(); j++)
 						_it.next();
 				}
@@ -486,7 +483,7 @@ public class Rows extends XulElement {
 				if (row instanceof Group) {
 					final Group g = (Group) row;
 					if (!g.isOpen()) {
-						for (int j = 0; j < g.getItemCount(); j++)
+						for (int j = 0, len = g.getItemCount(); j < len; j++)
 							row = (Row) row.getNextSibling();
 					}
 				}

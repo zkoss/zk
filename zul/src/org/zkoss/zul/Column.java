@@ -249,6 +249,8 @@ public class Column extends HeaderElement {
 		final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
 		try {
 			final ListModel model = grid.getModel();
+			boolean isPagingMold = grid.inPagingMold();
+			int activePg = isPagingMold ? grid.getPaginal().getActivePage() : 0;
 			if (model != null) { //live data
 				if (model instanceof GroupsListModel) {
 					((GroupsListModel)model).sort(cmpr, ascending,
@@ -262,6 +264,10 @@ public class Column extends HeaderElement {
 			} else { //not live data
 				sort0(grid, cmpr);
 			}
+			if (isPagingMold) grid.getPaginal().setActivePage(activePg);
+				// Because of maintaining the number of the visible item, we cause
+				// the wrong active page when dynamically add/remove the item (i.e. sorting).
+				// Therefore, we have to reset the correct active page.
 		} finally {
 			Namespaces.afterInterpret(backup, ns, true);
 		}

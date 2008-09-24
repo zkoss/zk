@@ -269,7 +269,7 @@ zk.Grid.prototype = {
 	/** Renders listitems that become visible by scrolling.
 	 */
 	_render: function (timeout) {
-		if(!this.paging)
+		if(!this.paging || getZKAttr(this.element, "hasgroup"))
 			setTimeout("zkGrid._renderNow('"+this.id+"')", timeout);
 	},
 	_renderNow: function () {
@@ -300,6 +300,7 @@ zk.Grid.prototype = {
 		if (zk.isRealVisible(this.element)) {
 			this._calcSize();// Bug #1813722
 			this._render(155);
+			if (zk.ie7) zk.repaint(this.element); // Bug 2096807
 		}
 	}
 };
@@ -314,7 +315,14 @@ zkGrid.init = function (cmp) {
 	else new zk.Grid(cmp);
 };
 /** Called when a grid becomes visible because of its parent. */
-zkGrid.childchg = zkGrid.onVisi = zkGrid.onSize = function (cmp) {
+zkGrid.childchg = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) {
+		meta.init(); // sometimes, the reference of the element has been out of date
+		meta._recalcSize();
+	}
+} ;
+zkGrid.onVisi = zkGrid.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta._recalcSize();
 };
@@ -530,7 +538,7 @@ zkGrwgp = {
 
 		if (toOpen && meta || getZKAttr(meta.element, "model") == "true") {	
 			if (toOpen) meta.stripe();
-			meta._recalcSize();
+			if (!meta.paging) meta._recalcSize(); // group in paging will invalidate the whole rows.
 		}
 		Event.stop(evt);
 	},

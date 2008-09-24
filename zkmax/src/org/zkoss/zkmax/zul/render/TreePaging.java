@@ -47,9 +47,6 @@ public class TreePaging implements ComponentRenderer {
 		final String tag = exec.isBrowser("ie") || exec.isBrowser("gecko") ? "a" : "button";
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tree.Tree\" z.pg=\"t\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<").write(tag).write("  z.keyevt=\"true\" id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
-			.write(" href=\"javascript:;\" style=\"padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;\"></")
-			.write(tag).write(">");
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
 				.write("!pgit\" class=\"").write(mcls).write("-pgi-t\">")
@@ -93,7 +90,11 @@ public class TreePaging implements ComponentRenderer {
 			wh.write("</tr></tbody>");
 		}
 		wh.writeln(self.getTreechildren())
-			.write("</table></div>");
+			.write("</table>");
+		wh.write("<").write(tag).write("  z.keyevt=\"true\" id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
+		.write(" href=\"javascript:;\" style=\"position: absolute;left: 0px; top: 0px;padding:0 !important; margin:0 !important; border:0 !important; background: transparent !important; font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;\"></")
+		.write(tag).write(">");
+		wh.write("</div>");
 
 		if(self.getTreefoot() != null){
 			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"").write(mcls).write("-footer\">")

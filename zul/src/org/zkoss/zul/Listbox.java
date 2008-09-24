@@ -152,6 +152,8 @@ public class Listbox extends XulElement implements Paginated {
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
 	private boolean _fixedLayout;
+	/** maintain the number of the visible item in Paging mold. */
+	private int _visibleItemCount;
 	
 	public Listbox() {
 		setSclass("listbox");
@@ -626,7 +628,12 @@ public class Listbox extends XulElement implements Paginated {
 		}
 
 		if (_jsel >= 0 && inPagingMold()) {
-			final int pg = _jsel / getPageSize();
+			final Listitem item = getItemAtIndex(_jsel);
+			int size = 0;
+			for (Iterator it = new VisibleChildrenIterator(true); it.hasNext(); size++)
+				if (item.equals(it.next())) break;
+
+			final int pg = size / getPageSize();
 			if (pg != getActivePage())
 				setActivePage(pg);
 		}
@@ -873,7 +880,7 @@ public class Listbox extends XulElement implements Paginated {
 				} else { //_pgi != null
 					if (_pgi != _paging) {
 						if (_paging != null) _paging.detach();
-						_pgi.setTotalSize(getItemCount());
+						_pgi.setTotalSize(getVisibleItemCount());
 						addPagingListener(_pgi);
 					}
 				}
@@ -889,7 +896,7 @@ public class Listbox extends XulElement implements Paginated {
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
-		paging.setTotalSize(getItemCount());
+		paging.setTotalSize(getVisibleItemCount());
 		paging.setParent(this);
 		addPagingListener(_pgi);
 	}
@@ -1011,27 +1018,34 @@ public class Listbox extends XulElement implements Paginated {
 		return "paging".equals(getMold());
 	}
 
-	/** Returns the index of the first visible child.
-	 * <p>Used only for component development, not for application developers.
+	/**
+	 * Returns the number of visible descendant {@link Listitem}.
+	 * @since 3.5.1
+	 */
+	public int getVisibleItemCount() {
+		return _visibleItemCount;
+	}
+	/*package*/ void addVisibleItemCount(int count) {
+		if (count != 0) {
+			_visibleItemCount += count;
+			if (inPagingMold()) {
+				final Paginal pgi = getPaginal();
+				pgi.setTotalSize(_visibleItemCount);
+				invalidate(); // the set of visible items might change
+			}
+		}
+	}
+	/** 
+	 * @deprecated As of release As of release 3.5.1 
 	 */
 	public int getVisibleBegin() {
-		if (inSpecialMold())
-			return _engine.getRenderBegin();
-		if (!inPagingMold())
-			return 0;
-		final Paginal pgi = getPaginal();
-		return pgi.getActivePage() * pgi.getPageSize();
+		return 0;
 	}
-	/** Returns the index of the last visible child.
-	 * <p>Used only for component development, not for application developers.
+	/** 
+	 * @deprecated As of release As of release 3.5.1 
 	 */
 	public int getVisibleEnd() {
-		if (inSpecialMold())
-			return _engine.getRenderEnd();
-		if (!inPagingMold())
-			return Integer.MAX_VALUE;
-		final Paginal pgi = getPaginal();
-		return (pgi.getActivePage() + 1) * pgi.getPageSize() - 1; //inclusive
+		return Integer.MAX_VALUE;
 	}
 
 	/** Returns the style class for the odd rows.
@@ -1084,8 +1098,6 @@ public class Listbox extends XulElement implements Paginated {
 		super.onChildAdded(child);
 		if (inSelectMold()) invalidate();
 			//Both IE and Mozilla are buggy if we insert options by innerHTML
-		else if(inPagingMold() && (child instanceof Listitem))
-			_pgi.setTotalSize(getItemCount());
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
@@ -1093,8 +1105,6 @@ public class Listbox extends XulElement implements Paginated {
 			//Both IE and Mozilla are buggy if we remove options by outerHTML
 			//CONSIDER: use special command to remove items
 			//Cons: if user remove a lot of items it is slower
-		else if(inPagingMold() && (child instanceof Listitem))
-			_pgi.setTotalSize(getItemCount());
 	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
@@ -1136,8 +1146,8 @@ public class Listbox extends XulElement implements Paginated {
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
-			if (newChild instanceof Listgroup && (inPagingMold() || inSelectMold()))
-				throw new UnsupportedOperationException("Unsupported Listgroup in Paging or Select mold!");
+			if (newChild instanceof Listgroup && inSelectMold())
+				throw new UnsupportedOperationException("Unsupported Listgroup in Select mold!");
 			if (newChild instanceof Listgroupfoot){
 				if (!hasGroup())
 					throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");
@@ -1146,7 +1156,7 @@ public class Listbox extends XulElement implements Paginated {
 						throw new UiException("Only one Goupfooter is allowed per Listgroup");
 					final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
 					g[2] = ((Listitem)getItems().get(getItems().size() - 1)).getIndex();
-				}else{
+				} else if (refChild instanceof Listitem) {
 					final int idx = ((Listitem)refChild).getIndex();				
 					final int[] g = getGroupsInfoAt(idx);
 					if (g == null)
@@ -1411,6 +1421,7 @@ public class Listbox extends XulElement implements Paginated {
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
+		updateVisibleCount((Listitem) comp, false);
 		checkInvalidateForMoved((Listitem)comp, false);
 	}
 	/** Callback if a list item will be removed (not removed yet).
@@ -1420,7 +1431,59 @@ public class Listbox extends XulElement implements Paginated {
 	 * @since 3.0.5
 	 */
 	protected void beforeRemove(Component comp) {
+		updateVisibleCount((Listitem) comp, true);
 		checkInvalidateForMoved((Listitem)comp, true);
+	}
+	/**
+	 * Update the number of the visible item before it is removed or after it is added.
+	 */
+	private void updateVisibleCount(Listitem item, boolean isRemove) {
+		if (item instanceof Listgroup || item.isVisible()) {
+			final Listgroup g = getListgroupAt(item.getIndex());
+			
+			// We shall update the number of the visible item in the following cases.
+			// 1) If the item is a type of Listgroupfoot, it is always shown.
+			// 2) If the item is a type of Listgroup, it is always shown.
+			// 3) If the item doesn't belong to any group.
+			// 4) If the group of the item is open.
+			if (item instanceof Listgroupfoot || item instanceof Listgroup || g == null || g.isOpen())
+				addVisibleItemCount(isRemove ? -1 : 1);
+			
+			if (item instanceof Listgroup) {
+				final Listgroup group = (Listgroup) item;
+				
+				// If the previous group exists, we shall update the number of
+				// the visible item from the number of the visible item of the current group.
+				if (item.getPreviousSibling() instanceof Listitem) {
+					final Listitem preRow = (Listitem) item.getPreviousSibling();
+					if (preRow == null) {
+						if (!group.isOpen()) {
+							addVisibleItemCount(isRemove ? group.getVisibleItemCount() :
+								-group.getVisibleItemCount());
+						}
+					} else {
+						final Listgroup preGroup = getListgroupAt(preRow.getIndex());
+						if (preGroup != null) {
+							if (!preGroup.isOpen() && group.isOpen())
+								addVisibleItemCount(isRemove ? -group.getVisibleItemCount() :
+									group.getVisibleItemCount());
+							else if (preGroup.isOpen() && !group.isOpen())
+								addVisibleItemCount(isRemove ? group.getVisibleItemCount() :
+									-group.getVisibleItemCount());
+						} else {
+							if (!group.isOpen())
+								addVisibleItemCount(isRemove ? group.getVisibleItemCount() :
+									-group.getVisibleItemCount());
+						}
+					}
+				} else if (!group.isOpen()) {
+					addVisibleItemCount(isRemove ? group.getVisibleItemCount() :
+						-group.getVisibleItemCount());
+				}
+			}
+		}
+		if (inPagingMold())
+			getPaginal().setTotalSize(getVisibleItemCount());
 	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
@@ -1444,6 +1507,68 @@ public class Listbox extends XulElement implements Paginated {
 				return; //case 1
 
 			invalidate();
+		}
+	}
+
+	/** Returns an iterator to iterate thru all visible children.
+	 * Unlike {@link #getVisibleItemCount}, it handles only the direct children.
+	 * Component developer only.
+	 * @since 3.5.1
+	 */
+	public Iterator getVisibleChildrenIterator() {
+		if (inSpecialMold())
+			return _engine.getVisibleChildrenIterator();
+		return new VisibleChildrenIterator();
+	}
+	/**
+	 * An iterator used by visible children.
+	 */
+	private class VisibleChildrenIterator implements Iterator {
+		private final ListIterator _it = getItems().listIterator();
+		private int _count = 0;
+		private boolean _isBeginning = false;
+		private VisibleChildrenIterator() {}
+		private VisibleChildrenIterator(boolean isBeginning) {
+			_isBeginning = isBeginning;
+		}
+		public boolean hasNext() {
+			if (!inPagingMold()) return _it.hasNext();
+			
+			if (_count >= getPaginal().getPageSize()) {
+				return false;
+			}
+
+			if (_count == 0 && !_isBeginning) {
+				final Paginal pgi = getPaginal();
+				int begin = pgi.getActivePage() * pgi.getPageSize();
+				for (int i = 0; i < begin && _it.hasNext();) {
+					getVisibleRow((Listitem)_it.next());
+					i++;
+				}
+			}
+			return _it.hasNext();
+		}
+		private Listitem getVisibleRow(Listitem item) {
+			if (item instanceof Listgroup) {
+				final Listgroup g = (Listgroup) item;
+				if (!g.isOpen()) {
+					for (int j = 0, len = g.getItemCount(); j < len
+							&& _it.hasNext(); j++)
+						_it.next();
+				}
+			}
+			while (!item.isVisible())
+				item = (Listitem)_it.next();
+			return item;
+		}
+		public Object next() {
+			if (!inPagingMold()) return _it.next();
+			_count++;
+			final Listitem item = (Listitem)_it.next();
+			return _it.hasNext() ? getVisibleRow(item) : item;
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 	}
 	/** Fix the selected index, _jsel, assuming there are no selected one
@@ -2052,6 +2177,7 @@ public class Listbox extends XulElement implements Paginated {
 				HTMLs.appendAttribute(sb, "z.scOddRow", getOddRowSclass());
 			
 			if (getModel() != null) {
+				if (inPagingMold() && hasGroup()) HTMLs.appendAttribute(sb, "z.hasgroup", true);
 				int index = getItemCount();
 				for(final ListIterator it = getItems().listIterator(index);
 				it.hasPrevious(); --index)
@@ -2260,10 +2386,27 @@ public class Listbox extends XulElement implements Paginated {
 	
 			final Paginal pgi = getPaginal();
 			int pgsz = pgi.getPageSize();
-			final int ofs = pgi.getActivePage() * pgsz;
-			for (final Iterator it = getItems().listIterator(ofs);
-			--pgsz >= 0 && it.hasNext();)
-				avail.add(it.next());
+			int ofs = pgi.getActivePage() * pgsz;
+			
+			Listitem item = (Listitem) getItems().get(0);
+			while(item != null) {
+				if (pgsz == 0) break;
+				if (item.isVisible()) {
+					if (--ofs < 0) {
+						--pgsz;
+						avail.add(item);
+					}
+				}
+				if (item instanceof Listgroup) {
+					final Listgroup g = (Listgroup) item;
+					if (!g.isOpen()) {
+						for (int j = 0, len = g.getItemCount(); j < len; j++)
+							item = (Listitem) item.getNextSibling();
+					}
+				}
+				if (item != null && item.getNextSibling() instanceof Listitem)
+					item = (Listitem) item.getNextSibling();
+			}
 			return avail;
 		}
 

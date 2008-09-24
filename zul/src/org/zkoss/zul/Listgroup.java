@@ -93,6 +93,24 @@ public class Listgroup extends Listitem {
 		return 0;
 	}
 	/**
+	 * Returns the number of visible descendant {@link Listitem}.
+	 * @since 3.5.1
+	 */
+	public int getVisibleItemCount() {
+		int count = getItemCount();
+		int visibleCount = 0;
+		if (getNextSibling() instanceof Listitem) {
+			Listitem item = (Listitem) getNextSibling();
+			while (count-- > 0) {
+				if (item.isVisible())
+					visibleCount++;
+				if (!(item.getNextSibling() instanceof Listitem)) break;
+				item = (Listitem) item.getNextSibling();
+			}
+		}
+		return visibleCount;
+	}
+	/**
 	 * Returns the index of Listgroupfoot
 	 * <p> -1: no Listgroupfoot
 	 */
@@ -125,6 +143,9 @@ public class Listgroup extends Listitem {
 		if (_open != open) {
 			_open = open;
 			smartUpdate("z.open", _open);
+			final Listbox listbox = getListbox();
+			if (listbox != null)
+				listbox.addVisibleItemCount(isOpen() ? getVisibleItemCount() : -getVisibleItemCount());
 		}
 	}
 	public String getMoldSclass() {
@@ -134,7 +155,9 @@ public class Listgroup extends Listitem {
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "z.open", isOpen());
 		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		appendAsapAttr(sb, Events.ON_OPEN);
+		if (getListbox().inPagingMold())
+			HTMLs.appendAttribute(sb, "z."+Events.ON_OPEN, true);
+		else appendAsapAttr(sb, Events.ON_OPEN);
 		return sb.toString();
 	}
 	public void onChildAdded(Component child) {
@@ -157,6 +180,9 @@ public class Listgroup extends Listitem {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			_open = open;
+			final Listbox listbox = getListbox();
+			if (listbox != null)
+				listbox.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
 		}
 	}
 	/**
@@ -170,9 +196,8 @@ public class Listgroup extends Listitem {
 			return _j < getItemCount();
 		}
 		public Object next() {
-			final Object o = _it.next();
 			++_j;
-			return o;
+			return _it.next();
 		}
 		public void remove() {
 			throw new UnsupportedOperationException();

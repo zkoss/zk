@@ -43,7 +43,7 @@ div.z-list-header-cnt {
 	font-family: ${fontFamilyT};
 }
 div.z-listbox-body {
-	background: white; border: 0; overflow: auto; width: 100%;
+	background: white; border: 0; overflow: auto; width: 100%; position: relative;
 }
 div.z-listbox-pgi-b {
 	border-top: 1px solid #AAB; overflow: hidden;

@@ -18,8 +18,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Set;
 
 import org.zkoss.zk.ui.event.Event;
@@ -137,7 +139,28 @@ import org.zkoss.zul.Listbox.Renderer;
 	/*package*/ int getRenderEnd() {
 		return getRenderAmount() + getRenderBegin() - 1;//inclusive
 	}
-	
+	/*package*/ Iterator getVisibleChildrenIterator() {
+		return new VisibleChildrenIterator();
+	}
+	/**
+	 * An iterator used by visible children.
+	 * @since 3.5.1
+	 */
+	private class VisibleChildrenIterator implements Iterator {
+		private ListIterator _it = _listbox.getItems().listIterator(getRenderBegin());
+		private int _end = getRenderEnd();
+		private int _count;
+		public boolean hasNext() {
+			return _count < _end;
+		}
+		public Object next() {
+			_count++;
+			return _it.next();
+		}
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	}
 	/**
 	 * Returns the renderer's extent.
 	 */
