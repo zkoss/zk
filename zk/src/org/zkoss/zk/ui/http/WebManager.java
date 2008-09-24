@@ -101,8 +101,12 @@ public class WebManager {
 
 		if (ctx == null || updateURI == null)
 			throw new IllegalArgumentException("null");
+
 		_ctx = ctx;
 		_updateURI = updateURI;
+		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
+		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
+		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
 		//load config as soon as possible since it might set some system props
 		final Configuration config = new Configuration();
@@ -135,9 +139,6 @@ public class WebManager {
 		}
 		((WebAppCtrl)_wapp).init(_ctx, config);
 
-		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
-		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
-		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 		_cwr.setDebugJS(config.isDebugJS());
 
 		//Register resource processors for each extension
