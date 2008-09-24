@@ -103,7 +103,8 @@ zkSplt.init = function (cmp) {
 	//change chdextr (see Bug 1921830)
 		if (vert) p = p.parentNode; //TR
 		if (p && p.id.endsWith("!chdextr"))
-			p.className = getZKAttr(cmp, "mcls") + "-outer";
+			//p.className = getZKAttr(cmp, "mcls") + "-outer"; 
+			zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-outer");
 	}
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var drag = zkSplt._drags[cmp.id] = {
