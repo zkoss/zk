@@ -167,7 +167,8 @@ public class Listcell extends LabelImageElement {
 			if (item instanceof Listgroup) {
 				sb.append("<img src=\"")
 				.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
-				.append("\" class=\"").append(item.getMoldSclass()).append(((Listgroup) item).isOpen() ? "-img-open" : "-img-close")
+				.append("\" class=\"").append(item.getMoldSclass()+"-img ")
+				.append(item.getMoldSclass()).append(((Listgroup) item).isOpen() ? "-img-open" : "-img-close")
 				.append("\" align=\"absmiddle\"/>");
 			}
 			if (listbox.isCheckmark()) {

@@ -547,8 +547,15 @@ zkGrwgp = {
 	},/** Opens an item */
 	_openItem: function (row, toOpen, silent) {
 		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
-		if (row._img)
-			row._img.className = zk.renType(row._img.className, toOpen ? "open": "close");
+		if (row._img) {
+			if (toOpen) {
+				zk.rmClass(row._img,getZKAttr(row, "mcls")+"-img-close");
+				zk.addClass(row._img,getZKAttr(row, "mcls")+"-img-open");
+			} else {
+				zk.rmClass(row._img,getZKAttr(row, "mcls")+"-img-open");
+				zk.addClass(row._img,getZKAttr(row, "mcls")+"-img-close");
+			}
+		}
 		zkGrwgp._openItemNow(row, toOpen);
 		if (!silent) 
 			zkau.sendasap({uuid: row.id,

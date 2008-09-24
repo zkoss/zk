@@ -123,7 +123,7 @@ td.z-list-group-inner div.z-list-cell-cnt {
 	color:#3764a0; font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 4px 2px; width: auto;font-weight:bold;
 }
-.z-list-group-img-open, .z-list-group-img-close {
+.z-list-group-img{
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/toggle.gif')});
 	background-repeat: no-repeat;

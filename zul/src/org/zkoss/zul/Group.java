@@ -172,7 +172,8 @@ public class Group extends Row {
 		final StringBuffer sb = new StringBuffer(64)
 			.append("<img src=\"")
 			.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
-			.append("\" class=\"").append(getMoldSclass()).append(isOpen() ? "-img-open" : "-img-close")
+			.append("\" class=\"").append(getMoldSclass() + "-img ")
+			.append(getMoldSclass()).append(isOpen() ? "-img-open" : "-img-close")
 			.append("\" align=\"absmiddle\"/>");
 
 		final String label = getLabel();

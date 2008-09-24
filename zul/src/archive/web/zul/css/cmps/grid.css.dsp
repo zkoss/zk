@@ -107,7 +107,7 @@ td.z-group-inner {
 .z-group-inner {
 	color: #3764a0; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;
 }
-.z-group-img-open, .z-group-img-close {
+.z-group-img {
 	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/toggle.gif')});
 	background-repeat: no-repeat;
