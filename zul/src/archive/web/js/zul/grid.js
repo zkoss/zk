@@ -280,7 +280,14 @@ zkGrid.init = function (cmp) {
 	else new zk.Grid(cmp);
 };
 /** Called when a grid becomes visible because of its parent. */
-zkGrid.childchg = zkGrid.onVisi = zkGrid.onSize = function (cmp) {
+zkGrid.childchg = function (cmp) {
+	var meta = zkau.getMeta(cmp);
+	if (meta) {
+		meta.init(); // sometimes, the reference of the element has been out of date
+		meta._recalcSize();
+	}
+} ;
+zkGrid.onVisi = zkGrid.onSize = function (cmp) {
 	var meta = zkau.getMeta(cmp);
 	if (meta) meta._recalcSize();
 };
