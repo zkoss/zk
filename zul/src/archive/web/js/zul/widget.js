@@ -115,6 +115,9 @@ zkGrfs = {
 			return;
 			
 		var cmp = $parentByTag(target, "FIELDSET");
+
+		if (getZKAttr(cmp, "closable") == "false") return; // Bug 2125673
+		
 		zkGrfs.open(cmp);
 	},
 	open: function (cmp, silent) {
