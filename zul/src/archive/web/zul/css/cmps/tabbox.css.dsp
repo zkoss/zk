@@ -569,7 +569,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 }
 .z-tabbox-accd .z-tabbox-accd-closebtn{
 	z-index:5;
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.png')});
 	background-repeat:no-repeat;
 	cursor:pointer;
 	width:17px;
@@ -596,7 +596,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	opacity:0.8;
 }
 .z-tabbox-accd .z-tabbox-accd-closebtn:hover{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on.png')});
 	opacity:1;
 }
 
@@ -683,7 +683,7 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	opacity:0.6;
 }
 .z-tabbox-accdlite-closebtn{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.png')});
 	background-repeat:no-repeat;
 	cursor:pointer;
 	height:16px;
@@ -710,6 +710,6 @@ div.z-vtabpanel {<%-- vert tabpanel --%>
 	opacity:0.8;
 }
 .z-tabbox-accdlite .z-tabbox-accdlite-closebtn:hover {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on-l.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on-l.gif')});
 	opacity:1;
 }

@@ -220,16 +220,16 @@ div.z-drop-cnt {
 	width: 32px; height: 32px;
 }
 .z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/question.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/question.png')});
 }
 .z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/exclamation.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/exclamation.png')});
 }
 .z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/information.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/information.png')});
 }
 .z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/error.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/error.png')});
 }
 
 <%-- ZK error message box --%>

@@ -103,16 +103,16 @@ div.z-tabpanel-accordion {
 <c:if test="${c:browser('ie6-')}">
 <%-- ZK Massagebox norm.css.dsp--%>
 .z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/question.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/question.gif')});
 }
 .z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/exclamation.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/exclamation.gif')});
 }
 .z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/information.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/information.gif')});
 }
 .z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/error.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/error.gif')});
 }
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
@@ -248,14 +248,14 @@ tr.z-list-item td.z-list-item-focus {
 }
 .z-tabbox-accd a.z-tabbox-accd-closebtn,
 .z-tabbox-accdlite a.z-tabbox-accdlite-closebtn{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-off.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.gif')});
 }
 .z-tabbox-accd a.z-tabbox-accd-closebtn:hover,
 .z-tabbox-accd a.z-tab-close-over{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on.gif')});
 }
 .z-tabbox-accdlite a.z-tab-close-over{
-	background-image: url(${c:encodeURL('~./zul/img/tab2/close-on-l.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on-l.gif')});
 }
 <%-- tree.css.dsp --%>
 tr.z-tree-row td.z-tree-row-focus {
