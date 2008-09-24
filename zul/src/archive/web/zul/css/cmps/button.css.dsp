@@ -64,7 +64,7 @@ span.z-button {
 }
 .z-button .z-button-tr {
 	background-repeat: no-repeat;
-	background-position: 0 -3px;
+	background-position: -3px 0px;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-cl {
@@ -88,7 +88,7 @@ span.z-button {
 }
 .z-button .z-button-bl {
 	background-repeat: no-repeat;
-	background-position: -3px 0px;
+	background-position: 0px -3px;
 	width: 3px; height: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bm {
