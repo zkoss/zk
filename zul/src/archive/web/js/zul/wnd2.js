@@ -877,10 +877,6 @@ zkWnd2.shallVParent = function (el) {
 //Modal//
 /** Makes the window as modal. */
 zkWnd2._doModal = function (cmp, replace) {
-	if (replace) {
-		zkWnd2._float(cmp);
-		return;
-	}
 	if (!getZKAttr(cmp, "conshow")) {
 		var onshow = getZKAttr(cmp, "aos") || "appear";
 		if (onshow != "z_none")
@@ -916,6 +912,12 @@ zkWnd2._doModal = function (cmp, replace) {
 			cmp.style.top = "100px";
 		}
 	}
+	
+	if (replace) {
+		zkWnd2._float(cmp);
+		return;
+	}
+	
 	zkWnd2._show(cmp); //unlike other mode, it must be visible
 
 	zkau.closeFloats(cmp);
