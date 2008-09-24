@@ -41,6 +41,7 @@ ZK 3.0.8
   2111320: Borderlayout in tabpanel invisible
   2105802: Treechildren image problem
   2116547: The Slider image problem in listbox
+  2125788: Hilighted window covered by mask when change title
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
