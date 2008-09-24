@@ -44,19 +44,19 @@ tr.z-tree-faker, tr.z-tree-faker th, tr.z-tree-faker div {
 }
 
 <%-- tree icons --%>
-span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
+span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open,
+span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tree_btn.gif')});
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
+span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
+	background-position: 0px -18px;
+}
 span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
-	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
+	background-position: 0px 0px;
 }
 span.z-tree-tee, span.z-tree-vbar, span.z-tree-last, span.z-tree-spacer, span.checkmark-spacer {
 	width: 18px; min-height: 18px; height: 100%;
@@ -152,19 +152,18 @@ tr.z-dottree-faker, tr.z-dottree-faker th, tr.z-dottree-faker div {
 	border-left: 0; border-right: 0; margin-left: 0; margin-right: 0; padding-left: 0;
 	padding-right: 0;
 }
-span.z-dottree-root-open {
+span.z-dottree-root-open,span.z-dottree-root-close {
 	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/root-open.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/dot-toggle.gif')});
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
+span.z-dottree-root-open {
+	background-position: 0px 0px;
+}
 span.z-dottree-root-close {
-	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/root-close.gif')});
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
+	background-position: 0px -18px;
 }
 span.z-dottree-tee-open {
 	width: 18px; min-height: 18px; height: 100%;

@@ -107,17 +107,17 @@ td.z-group-inner {
 .z-group-inner {
 	color: #3764a0; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;
 }
-.z-group-img-open {
+.z-group-img-open, .z-group-img-close {
 	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});
+	background-image: url(${c:encodeURL('~./zul/img/toggle.gif')});
 	background-repeat: no-repeat;
 	vertical-align: top; cursor: pointer; border: 0;
 }
+.z-group-img-open {
+	background-position: 0px 0px;
+}
 .z-group-img-close {
-	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});
-	background-repeat: no-repeat;
-	vertical-align: top; cursor: pointer; border: 0;
+	background-position: 0px -18px;
 }
 <%-- Groupfooter --%>
 .z-group-foot {
