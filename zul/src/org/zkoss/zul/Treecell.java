@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jul  6 18:56:30     2005, Created by tomyeh
 }}IS_NOTE
@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>In XUL, treecell cannot have any child, but ZUL allows it.
  * Thus, you could place any kind of children in it. They will be placed
  * right after the image and label.
- * 
+ *
  * <p>Default {@link #getZclass}: z-tree-cell.(since 3.5.0)
  * @author tomyeh
  */
@@ -50,6 +50,7 @@ public class Treecell extends LabelImageElement {
 	private static final String LAST = "last";
 	private static final String VBAR = "vbar";
 	private static final String SPACER = "spacer";
+	private static final String FIRSTSPACER = "firstspacer";
 
 	private int _span = 1;
 
@@ -71,13 +72,13 @@ public class Treecell extends LabelImageElement {
 				return (Tree)n;
 		return null;
 	}
-	
+
 	protected String getRealStyle() {
 		final Treecol h = getTreecol();
 		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
 				"display:none;" : super.getRealStyle();
 	}
-	
+
 	/** Returns the tree col associated with this cell, or null if not available.
 	 */
 	public Treecol getTreecol() {
@@ -158,8 +159,8 @@ public class Treecell extends LabelImageElement {
 						if (item.isDisabled())
 							sb.append(" disabled=\"disabled\"");
 						if (item.isSelected())
-							sb.append(" checked=\"checked\"");		
-						if (!tree.isMultiple()) 
+							sb.append(" checked=\"checked\"");
+						if (!tree.isMultiple())
 							sb.append(" name=\"").append(tree.getUuid()).append("\"");
 						//NOTE: use Treerow's uuid! NOT Treeitem's!
 						sb.append(" id=\"").append(getParent().getUuid())
@@ -179,7 +180,7 @@ public class Treecell extends LabelImageElement {
 			for (int j = 0; j < pitems.length; ++j)
 				appendIcon(sb, iconScls,
 					j == 0 || isLastChild(pitems[j]) ? SPACER: VBAR, false);
-	
+
 			if (item.isContainer()) {
 				appendIcon(sb, iconScls,
 					item.isOpen() ?
@@ -190,11 +191,11 @@ public class Treecell extends LabelImageElement {
 						true);
 			} else {
 				appendIcon(sb, iconScls,
-					pitems.length == 0 ? SPACER:
+					pitems.length == 0 ? FIRSTSPACER:
 						isLastChild(item) ? LAST: TEE, false);
 			}
 			return sb.toString();
-		} else {			
+		} else {
 			//To make the tree's height more correct, we have to generate &nbsp;
 			//for empty cell. Otherwise, IE will make the height too small
 			final boolean empty = getImage() == null && getLabel().length() == 0
@@ -247,14 +248,18 @@ public class Treecell extends LabelImageElement {
 
 	public String getZclass() {
 		return _zclass == null ? "z-tree-cell" : super.getZclass();
-	} 
+	}
 	/** Generates HTML tags for &lt;img&gt;.
 	 * @param button whether this is the button to toggle open/close
 	 */
 	private void appendIcon(StringBuffer sb, String iconScls,
 	String name, boolean button) {
-		sb.append("<span z.fc=\"t\" class=\"")
-			.append(iconScls).append('-').append(name).append('"');
+		sb.append("<span z.fc=\"t\" class=\"");
+		if (name.equals(TEE) || name.equals(LAST) || name.equals(VBAR) || name.equals(SPACER)) {
+			sb.append(iconScls+"-line ").append(iconScls).append('-').append(name).append('"');
+		} else {
+			sb.append(iconScls+"-ico ").append(iconScls).append('-').append(name).append('"');
+		}
 			//z.fc used to let tree.js know what to clone
 
 		if (button) {
@@ -290,7 +295,7 @@ public class Treecell extends LabelImageElement {
 		final String style = HTMLs.getTextRelevantStyle(getRealStyle());
 		return style.length() > 0 ? " style=\""+style+'"': "";
 	}
-	
+
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
 

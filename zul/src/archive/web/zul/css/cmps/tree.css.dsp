@@ -28,29 +28,35 @@ div.z-tree-pgi-t {
 }
 div.z-tree-body td.z-tree-cell, div.z-tree-footer td.z-tree-footer {
 	cursor: pointer; padding: 0 2px;
-	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden; 
+	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
 }
 div.z-tree-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
 
 <%-- faker uses only for grid/listbox/tree --%>
-tr.z-tree-faker, tr.z-tree-faker th, tr.z-tree-faker div {
-	height: 0px !important; 	
-	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;  
-	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;			
-	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;  	
-	<%-- these above css cannot be overrided--%>
+tr.z-tree-faker, tr.z-tree-faker th, tr.z-tree-faker div,
+tr.z-dottree-faker, tr.z-dottree-faker th, tr.z-dottree-faker div,
+tr.z-filetree-faker, tr.z-filetree-faker th, tr.z-filetree-faker div,
+tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {	
+	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;
+	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
+	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
+	height: 0px !important;
 }
-
+<%-- these above css cannot be overrided--%>
 <%-- tree icons --%>
-span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open,
-span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
-	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/tree_btn.gif')});
-	background-repeat: no-repeat;
+span.z-tree-ico, span.z-tree-line, span.checkmark-spacer {
+	width: 18px; min-height: 18px; height: 100%;	
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
+}
+span.z-tree-ico {
+	background-repeat: no-repeat;
+}
+span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open,
+span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
+	background-image: url(${c:encodeURL('~./zul/img/tree/tree_btn.gif')});
 }
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
 	background-position: 0px -18px;
@@ -58,11 +64,7 @@ span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
 span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 	background-position: 0px 0px;
 }
-span.z-tree-tee, span.z-tree-vbar, span.z-tree-last, span.z-tree-spacer, span.checkmark-spacer {
-	width: 18px; min-height: 18px; height: 100%;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
-}
+
 <%-- Treecol, Treefooter, and Treecell--%>
 div.z-tree-col-cnt {
 	font-size: ${fontSizeM}; font-weight: normal;
@@ -78,8 +80,9 @@ div.z-tree-footer-cnt, div.z-tree-col-cnt{
 }
 .z-word-wrap div.z-tree-cell-cnt, .z-word-wrap div.z-tree-footer-cnt,
 	.z-word-wrap div.z-tree-col-cnt {
-	word-wrap: break-word;	
+	word-wrap: break-word;
 }
+
 <%-- Treerow --%>
 tr.z-tree-row, tr.z-tree-row a, tr.z-tree-row a:visited {
 	font-size: ${fontSizeM}; font-weight: normal; color: black;
@@ -92,7 +95,7 @@ tr.z-tree-row-disd *, td.z-tree-cell-disd * {
 	color: #C5CACB !important; cursor: default!important;
 }
 tr.z-tree-row-disd a:visited, tr.z-tree-row-disd a:hover,
-td.z-tree-cell-disd a:visited, td.z-tree-cell-disd a:hover { 
+td.z-tree-cell-disd a:visited, td.z-tree-cell-disd a:hover {
 	text-decoration: none !important;
 	cursor: default !important;;
 	border-color: #D0DEF0 !important;
@@ -138,26 +141,19 @@ div.z-dottree-pgi-t {
 }
 div.z-dottree-body td.z-tree-cell, div.z-dottree-footer td.z-tree-footer {
 	cursor: pointer; padding: 0 2px;
-	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden; 
+	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
 }
 div.z-dottree-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
-
-<%-- faker uses only for grid/listbox/tree --%>
-tr.z-dottree-faker, tr.z-dottree-faker th, tr.z-dottree-faker div {
-	border-top: 0 !important; border-bottom: 0 !important; margin-top: 0 !important;
-	margin-bottom: 0 !important; padding-top: 0 !important;	padding-bottom: 0 !important;
-	height: 0px !important; <%-- these above css cannot be overrided--%>
-	border-left: 0; border-right: 0; margin-left: 0; margin-right: 0; padding-left: 0;
-	padding-right: 0;
-}
-span.z-dottree-root-open,span.z-dottree-root-close {
+span.z-dottree-ico, span.z-dottree-line {
 	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/dot-toggle.gif')});
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
+}
+span.z-dottree-root-open, span.z-dottree-root-close{
+	background-image: url(${c:encodeURL('~./zul/img/tree/dot-toggle.gif')});
 }
 span.z-dottree-root-open {
 	background-position: 0px 0px;
@@ -166,56 +162,138 @@ span.z-dottree-root-close {
 	background-position: 0px -18px;
 }
 span.z-dottree-tee-open {
-	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-open.gif')});
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
 }
 span.z-dottree-tee-close {
-	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-close.gif')});
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
 }
 span.z-dottree-last-open {
-	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last-open.gif')});
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
 }
 span.z-dottree-last-close {
-	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last-close.gif')});
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
 }
 span.z-dottree-tee {
-	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee.gif')});
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
 }
 span.z-dottree-vbar {
-	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/vbar.gif')});
-	background-repeat: no-repeat;
-	display:-moz-inline-box; vertical-align:top;
-	display:inline-block;
 }
 span.z-dottree-last {
-	width: 18px; min-height: 18px; height: 100%;
 	background-image: url(${c:encodeURL('~./zul/img/tree/last.gif')});
+}
+span.z-dottree-spacer, span.z-dottree-firstspacer {
+	background:none;
+}
+
+<%-- z-filetree --%>
+div.z-filetree {
+	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;
+}
+div.z-filetree-header, div.z-filetree-header tr, div.z-filetree-footer {
+	border: 0; overflow: hidden; width: 100%;
+}
+div.z-filetree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
+	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+}
+div.z-filetree-header th {
+	overflow: hidden; border: 1px solid;
+	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
+	white-space: nowrap; padding: 2px;
+	font-size: ${fontSizeM}; font-weight: normal;
+}
+div.z-filetree-body {
+	background: white; border: 0; overflow: auto; width: 100%;
+}
+div.z-filetree-pgi-b {
+	border-top: 1px solid #AAB; overflow: hidden;
+}
+div.z-filetree-pgi-t {
+	border-bottom: 1px solid #AAB; overflow: hidden;
+}
+div.z-filetree-body td.z-tree-cell, div.z-filetree-footer td.z-tree-footer {
+	cursor: pointer; padding: 0 2px;
+	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
+}
+div.z-filetree-footer {
+	background: #DAE7F6; border-top: 1px solid #9EB6CE;
+}
+span.z-filetree-line, span.z-filetree-ico, span.z-filetree-firstspacer {
+	width: 18px; min-height: 18px; height: 100%;
 	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
-span.z-dottree-spacer {
+span.z-filetree-ico,span.z-filetree-firstspacer {	
+	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.gif')});	
+}
+span.z-filetree-root-open, span.z-filetree-root-close, 
+span.z-filetree-root-open, span.z-filetree-tee-open, span.z-filetree-last-open {
+	background-position: 0px 0px;
+}
+span.z-filetree-root-close, span.z-filetree-tee-close, 
+span.z-filetree-last-close, span.z-filetree-firstspacer {
+	background-position: 0px -18px;
+}
+span.z-filetree-tee, span.z-filetree-last {
+	background-image: url(${c:encodeURL('~./zul/img/tree/entity.gif')});
+}
+span.z-filetree-vbar, span.z-filetree-spacer {
+	background:none;
+}
+
+<%-- z-vfiletree--%>
+div.z-vfiletree {
+	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;
+}
+div.z-vfiletree-header, div.z-vfiletree-header tr, div.z-vfiletree-footer {
+	border: 0; overflow: hidden; width: 100%;
+}
+div.z-vfiletree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
+	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+}
+div.z-vfiletree-header th {
+	overflow: hidden; border: 1px solid;
+	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
+	white-space: nowrap; padding: 2px;
+	font-size: ${fontSizeM}; font-weight: normal;
+}
+div.z-vfiletree-body {
+	background: white; border: 0; overflow: auto; width: 100%;
+}
+div.z-vfiletree-pgi-b {
+	border-top: 1px solid #AAB; overflow: hidden;
+}
+div.z-vfiletree-pgi-t {
+	border-bottom: 1px solid #AAB; overflow: hidden;
+}
+div.z-vfiletree-body td.z-tree-cell, div.z-vfiletree-footer td.z-tree-footer {
+	cursor: pointer; padding: 0 2px;
+	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
+}
+div.z-vfiletree-footer {
+	background: #DAE7F6; border-top: 1px solid #9EB6CE;
+}
+span.z-vfiletree-line, span.z-vfiletree-ico, span.z-vfiletree-firstspacer {
 	width: 18px; min-height: 18px; height: 100%;
+	background-repeat: no-repeat;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
+}
+span.z-vfiletree-ico,span.z-vfiletree-firstspacer {	
+	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.png')});	
+}
+span.z-vfiletree-root-open, span.z-vfiletree-root-close, 
+span.z-vfiletree-root-open, span.z-vfiletree-tee-open, span.z-vfiletree-last-open {
+	background-position: 0px 0px;
+}
+span.z-vfiletree-root-close, span.z-vfiletree-tee-close, 
+span.z-vfiletree-last-close, span.z-vfiletree-firstspacer {
+	background-position: 0px -18px;
+}
+span.z-vfiletree-tee, span.z-vfiletree-last {
+	background-image: url(${c:encodeURL('~./zul/img/tree/entity.png')});
+}
+span.z-vfiletree-vbar, span.z-vfiletree-spacer {
+	background:none;
 }

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-2127848.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 25 15:54:58 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	<window title="Test the tree" border="normal" height="800px"
+		width="400px">
+		<h:p>This function added 2 new style of tree</h:p> 
+		<h:ul>
+			<h:li>z-filetree</h:li>
+			<h:li>z-vfiletree</h:li>
+		</h:ul>
+		click the button below to see.
+		<zscript> <![CDATA[//@DECLARATION  
+		void setM(int type) {
+			switch(type) {
+			case 0:
+		    	newtree.setZclass("z-tree");
+		        break;
+		    case 1:
+		    	newtree.setZclass("z-dottree");		    	
+		        break;
+		    case 2:
+		    	newtree.setZclass("z-filetree");
+		        break;
+		    case 3:
+		    	newtree.setZclass("z-vfiletree");
+		        break;
+		    default:
+		        ;
+			} 
+		}
+		]]></zscript>
+		<hbox>
+			<button label="default" onClick="setM(0)" />
+			<button label="dot" onClick="setM(1)" />
+			<button label="file" onClick="setM(2)" />
+			<button label="vista" onClick="setM(3)" />
+		</hbox>
+
+		<tree id="newtree" width="90%" rows="5" height="500px">
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2" />
+						<treecell label="Item 2 description" />
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.1" />
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.2" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.2" />
+								<treecell
+									label="Item 2.2 is something who cares" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.2.1" />
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.2.2" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+						<treeitem label="Item 2.3" />
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell
+							label="Item 3 is something who cared" />
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 3.2.1" />
+							</treerow>
+						</treeitem>						
+					</treechildren>
+				</treeitem>
+				<treeitem label="Item 4" />
+			</treechildren>
+		</tree>
+	</window>
+</zk>
