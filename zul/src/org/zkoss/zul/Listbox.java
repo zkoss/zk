@@ -1534,7 +1534,7 @@ public class Listbox extends XulElement implements Paginated {
 		public boolean hasNext() {
 			if (!inPagingMold()) return _it.hasNext();
 			
-			if (_count >= getPaginal().getPageSize()) {
+			if (!_isBeginning && _count >= getPaginal().getPageSize()) {
 				return false;
 			}
 
