@@ -42,6 +42,7 @@ ZK 3.0.8
   2105802: Treechildren image problem
   2116547: The Slider image problem in listbox
   2125788: Hilighted window covered by mask when change title
+  2124391: Tree, attribute sequence cause wrong result.
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
