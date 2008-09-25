@@ -104,7 +104,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	#mkdir -p /tmp/zk/$srcnm/dist/lib/ext
 	mkdir -p /tmp/zk/$srcnm/bin
 	mkdir -p /tmp/zk/$srcnm/doc
-
+	chmod -R 755 $maindir
 	echo Prepare ${srcnm}.tar.gz
 	cd $maindir
 	cp bin/* /tmp/zk/$srcnm/bin
