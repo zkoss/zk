@@ -41,22 +41,22 @@ public class Menu2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menu self = (Menu)comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		final Execution exec = Executions.getCurrent();
 		if (self.isTopmost()) {
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 			wh.write("<table id=\"").write(uuid).write("!a\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"")
-				.write(mcls).write("-btn");
+				.write(zcls).write("-btn");
 			if (self.isImageAssigned()) {
-				wh.write(" ").write(mcls).write("-btn");
+				wh.write(" ").write(zcls).write("-btn");
 				if (self.getLabel().length() > 0)
 					wh.write("-text");
 				wh.write("-img");
 			}
-			wh.write("\" style=\"width: auto;\"><tbody><tr><td class=\"").write(mcls).write("-btn-l\"><i>&nbsp;</i></td>");
-			wh.write("<td class=\"").write(mcls).write("-btn-m\"><em unselectable=\"on\"><button id=\"")
-				.write(uuid).write("!b\" type=\"button\" class=\"").write(mcls).write("-btn-text\"");
+			wh.write("\" style=\"width: auto;\"><tbody><tr><td class=\"").write(zcls).write("-btn-l\"><i>&nbsp;</i></td>");
+			wh.write("<td class=\"").write(zcls).write("-btn-m\"><em unselectable=\"on\"><button id=\"")
+				.write(uuid).write("!b\" type=\"button\" class=\"").write(zcls).write("-btn-text\"");
 
 			final String imagesrc = self.getEncodedImageURL();
 			if (imagesrc != null)
@@ -65,12 +65,12 @@ public class Menu2Default implements ComponentRenderer {
 
 			new Out(self.getLabel()).render(out);
 			wh.write("</button>").write(self.getMenupopup()).write("</em></td><td class=\"")
-				.write(mcls).writeln("-btn-r\"><i>&nbsp;</i></td></tr></tbody></table></td>");
+				.write(zcls).writeln("-btn-r\"><i>&nbsp;</i></td></tr></tbody></table></td>");
 		} else {
 			wh.write("<li id=\"").write(uuid).write("\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-				.write(">\n<a href=\"javascript:;\" id=\"").write(uuid).write("!a\" class=\"").write(mcls)
-				.write("-cnt ").write(mcls).write("-cnt-img\">")
+				.write(">\n<a href=\"javascript:;\" id=\"").write(uuid).write("!a\" class=\"").write(zcls)
+				.write("-cnt ").write(zcls).write("-cnt-img\">")
 				.write(self.getImgTag());
 
 			new Out(self.getLabel()).render(out);

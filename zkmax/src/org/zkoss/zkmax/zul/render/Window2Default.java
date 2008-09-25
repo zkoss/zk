@@ -39,7 +39,7 @@ public class Window2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Window self = (Window)comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.wnd2.Wnd2\" z.autoz=\"true\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
@@ -49,20 +49,20 @@ public class Window2Default implements ComponentRenderer {
 		final boolean hasBorder = "normal".equals(self.getBorder());
 		String wcExtStyle = "";
 		if (caption != null || title.length() > 0) {
-			wh.write("<div class=\"").write(mcls).write("-tl\"><div class=\"")
-				.write(mcls).write("-tr\"><div class=\"").write(mcls).write("-tm\"><div id=\"")
-				.write(uuid).write("!caption\" class=\"").write(mcls).write("-header\">");
+			wh.write("<div class=\"").write(zcls).write("-tl\"><div class=\"")
+				.write(zcls).write("-tr\"><div class=\"").write(zcls).write("-tm\"><div id=\"")
+				.write(uuid).write("!caption\" class=\"").write(zcls).write("-header\">");
 			if (caption == null) {
 				if (self.isClosable())
-					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(mcls).write("-tool ").write(mcls).write("-close\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(zcls).write("-tool ").write(zcls).write("-close\"></div>");
 				if (self.isMaximizable()) {
-					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(mcls).write("-tool ").write(mcls).write("-maximize");
+					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(zcls).write("-tool ").write(zcls).write("-maximize");
 					if (self.isMaximized())
-							wh.write(" ").write(mcls).write("-maximized");
+							wh.write(" ").write(zcls).write("-maximized");
 					wh.write("\"></div>");
 				}
 				if (self.isMinimizable())
-					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(mcls).write("-tool ").write(mcls).write("-minimize\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(zcls).write("-tool ").write(zcls).write("-minimize\"></div>");
 				new Out(title).render(out);
 			} else {
 				wh.write(caption);
@@ -70,14 +70,14 @@ public class Window2Default implements ComponentRenderer {
 			wh.write("</div></div></div></div>");
 			wcExtStyle = "border-top:0;";
 		} else if (isFrame) {
-			wh.write("<div class=\"").write(mcls).write("-tl\"><div class=\"")
-				.write(mcls).write("-tr\"><div class=\"").write(mcls)
+			wh.write("<div class=\"").write(zcls).write("-tl\"><div class=\"")
+				.write(zcls).write("-tr\"><div class=\"").write(zcls)
 				.write("-tm-noheader\"></div></div></div>");
 		}
-		wh.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(mcls).write("-body\">");
+		wh.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(zcls).write("-body\">");
 		if (isFrame) {
-			wh.write("<div class=\"").write(mcls).write("-cl\"><div class=\"").write(mcls)
-				.write("-cr\"><div class=\"").write(mcls).write("-cm");
+			wh.write("<div class=\"").write(zcls).write("-cl\"><div class=\"").write(zcls)
+				.write("-cr\"><div class=\"").write(zcls).write("-cm");
 			if (!hasBorder) wh.write("-noborder");
 			wh.write("\">");
 		}
@@ -86,7 +86,7 @@ public class Window2Default implements ComponentRenderer {
 			wcExtStyle += cs;
 		}
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"");
-		wh.write(self.getContentSclass()).write(" ").write(mcls).write("-cnt");
+		wh.write(self.getContentSclass()).write(" ").write(zcls).write("-cnt");
 		if (!hasBorder) wh.write("-noborder");
 		wh.write("\"").writeAttr("style", wcExtStyle);
 		wh.write(">");
@@ -97,9 +97,9 @@ public class Window2Default implements ComponentRenderer {
 		}
 		wh.write("</div>");
 		if (isFrame)
-			wh.write("</div></div></div><div class=\"").write(mcls)
-				.write("-bl\"><div class=\"").write(mcls).write("-br\"><div class=\"")
-				.write(mcls).write("-bm\"></div></div></div>");
+			wh.write("</div></div></div><div class=\"").write(zcls)
+				.write("-bl\"><div class=\"").write(zcls).write("-br\"><div class=\"")
+				.write(zcls).write("-bm\"></div></div></div>");
 		wh.write("</div></div>");	
 	}
 }

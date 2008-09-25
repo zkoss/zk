@@ -41,15 +41,15 @@ public class GridDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Grid self = (Grid) comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.grid.Grid\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		if(self.getColumns() != null){
-			wh.write("<div id=\"").write(uuid).write("!head\" class=\"").write(mcls).write("-header\">")
+			wh.write("<div id=\"").write(uuid).write("!head\" class=\"").write(zcls).write("-header\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!hdfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!hdfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();
@@ -62,7 +62,7 @@ public class GridDefault implements ComponentRenderer {
 				.write("</table></div>");
 		}
 
-		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(mcls).write("-body\"");
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(zcls).write("-body\"");
 		if (self.getHeight() != null) wh.write("style=\"height:").write(self.getHeight()).write("\"");
 		wh.write("><table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"");
 		if (self.isFixedLayout())
@@ -70,7 +70,7 @@ public class GridDefault implements ComponentRenderer {
 		wh.write(">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!bdfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!bdfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();
@@ -83,11 +83,11 @@ public class GridDefault implements ComponentRenderer {
 			.write("</table></div>");
 
 		if(self.getFoot() != null){
-			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(mcls).write("-footer\">")
+			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(zcls).write("-footer\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"  style=\"table-layout:fixed\">");
 			if(self.getColumns() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!ftfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("<tr id=\"").write(self.getColumns().getUuid()).write("!ftfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getColumns().getChildren().iterator(); it.hasNext();) {
 					final Column child = (Column) it.next();

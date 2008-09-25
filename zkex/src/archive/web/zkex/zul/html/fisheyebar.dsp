@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" z.type="zkex.zul.fisheye.Fisheyebar"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave" class="${self.moldSclass}-inner"> 
+<div id="${self.uuid}" z.type="zkex.zul.fisheye.Fisheyebar"${self.outerAttrs}${self.innerAttrs}><div id="${self.uuid}!cave" class="${self.zclass}-inner"> 
 	<c:forEach var="child" items="${self.children}">
 ${z:redraw(child, null)}
 	</c:forEach>

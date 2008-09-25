@@ -20,7 +20,7 @@ package org.zkoss.zkex.zul;
 
 /**
  * This component is a east region.
- * <p>Default {@link #getMoldSclass}: z-east.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-east.(since 3.5.0)
  * 
  * <p>Default: {@link #getCmargins()} is "0,5,5,0" (since 3.5.0)</p>
  * @author jumperchen

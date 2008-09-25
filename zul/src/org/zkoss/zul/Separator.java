@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A separator.
- *  <p>Default {@link #getMoldSclass} as follows: (since 3.5.0)
+ *  <p>Default {@link #getZclass} as follows: (since 3.5.0)
  *  <ol>
  *  	<li>Case 1: If {@link #getOrient()} is vertical and {@link #isBar()} is false, "z-separator-ver" is assumed</li>
  *  	<li>Case 2: If {@link #getOrient()} is vertical and {@link #isBar()} is true, "z-separator-ver-bar" is assumed</li>
@@ -94,7 +94,7 @@ public class Separator extends XulElement {
 	public void setBar(boolean bar) {
 		if (_bar != bar) {
 			_bar = bar;
-			smartUpdate("class", getMoldSclass());
+			smartUpdate("class", getZclass());
 		}
 	}
 
@@ -170,9 +170,9 @@ public class Separator extends XulElement {
 	}
 	
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
-			"-hor" + (isBar() ? "-bar" : "")) : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
+			"-hor" + (isBar() ? "-bar" : "")) : super.getZclass();
 	}
 
 	/** Returns whether to use margins for spacing.

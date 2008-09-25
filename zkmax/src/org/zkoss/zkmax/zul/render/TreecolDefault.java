@@ -43,7 +43,7 @@ public class TreecolDefault implements ComponentRenderer {
 		wh.write("<th id=\"").write(self.getUuid()).write("\" z.type=\"Tcol\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write("><div id=\"").write(self.getUuid()).write("!cave\" class=\"")
-			.write(self.getMoldSclass()).write("-cnt\">")
+			.write(self.getZclass()).write("-cnt\">")
 			.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);	
 		wh.writeChildren(self);

@@ -454,7 +454,7 @@ zk.addBeforeInit(function () {
 				pp = zkau.getByZid(cmp.parentNode, getZKAttr(cmp.parentNode, "mpop")),
 				btn = $e(cmp, "btn");
 			if (!pp) return;
-			zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-visi");
+			zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-visi");
 			
 			if (getZKAttr(pp, "autocreate") == "true") {
 				var group = getZKAttr(cmp.parentNode, "columnsgroup") == "true",
@@ -485,25 +485,25 @@ zk.addBeforeInit(function () {
 		},
 		onMenuClose: function (pp) {
 			var cmp = $e(getZKAttr(pp, "menuId")),
-				mcls = getZKAttr(cmp, "mcls");
-			zk.rmClass(cmp, mcls + "-visi");
-			zk.rmClass(cmp, mcls + "-over");
+				zcls = getZKAttr(cmp, "zcls");
+			zk.rmClass(cmp, zcls + "-visi");
+			zk.rmClass(cmp, zcls + "-over");
 			return false; // stop event propagation
 		},
 		onHdOver: function (evt) {
 			if (!evt) evt = window.event;
 			var cmp = $parentByType(Event.element(evt), "Col");			
-			zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-over");
+			zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-over");
 			var btn = $e(cmp, "btn");
 			if (btn) btn.style.height = cmp.offsetHeight - 1 + "px";											
 		},
 		onHdOut: function (evt) {
 			if (!evt) evt = window.event;
 			var cmp = $parentByType(Event.element(evt), "Col"),
-				mcls = getZKAttr(cmp, "mcls");
-			if (!zk.hasClass(cmp, mcls + "-visi") &&
+				zcls = getZKAttr(cmp, "zcls");
+			if (!zk.hasClass(cmp, zcls + "-visi") &&
 				(!zk.ie || !zk.isAncestor(cmp, evt.relatedTarget || evt.toElement)))
-				zk.rmClass(cmp, mcls + "-over");	
+				zk.rmClass(cmp, zcls + "-over");	
 		}
 	});
 	//Columns
@@ -549,11 +549,11 @@ zkGrwgp = {
 		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
 		if (row._img) {
 			if (toOpen) {
-				zk.rmClass(row._img,getZKAttr(row, "mcls")+"-img-close");
-				zk.addClass(row._img,getZKAttr(row, "mcls")+"-img-open");
+				zk.rmClass(row._img,getZKAttr(row, "zcls")+"-img-close");
+				zk.addClass(row._img,getZKAttr(row, "zcls")+"-img-open");
 			} else {
-				zk.rmClass(row._img,getZKAttr(row, "mcls")+"-img-open");
-				zk.addClass(row._img,getZKAttr(row, "mcls")+"-img-close");
+				zk.rmClass(row._img,getZKAttr(row, "zcls")+"-img-open");
+				zk.addClass(row._img,getZKAttr(row, "zcls")+"-img-close");
 			}
 		}
 		zkGrwgp._openItemNow(row, toOpen);

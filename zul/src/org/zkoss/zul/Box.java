@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
 
 /**
  * A box.
- *<p>Default {@link #getMoldSclass}: z-box.(since 3.5.0)
+ *<p>Default {@link #getZclass}: z-box.(since 3.5.0)
  * @author tomyeh
  */
 public class Box extends XulElement {
@@ -333,7 +333,7 @@ public class Box extends XulElement {
 		final boolean vert = isVertical();
 		if (child instanceof Splitter) {
 			sb.append(" class=\"")
-				.append(((Splitter)child).getMoldSclass())
+				.append(((Splitter)child).getZclass())
 				.append("-outer\"");
 			if (!child.isVisible())
 				sb.append(" style=\"display:none\"");
@@ -360,7 +360,7 @@ public class Box extends XulElement {
 		final StringBuffer sb = new StringBuffer(64);
 		if (vert && child instanceof Splitter) {
 			sb.append(" class=\"")
-				.append(((Splitter)child).getMoldSclass())
+				.append(((Splitter)child).getZclass())
 				.append("-outer-td\"");
 			return sb.toString();
 		}
@@ -429,8 +429,8 @@ public class Box extends XulElement {
 	}
 
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-box" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-box" : super.getZclass();
 	}
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {

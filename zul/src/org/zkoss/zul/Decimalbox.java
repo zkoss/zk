@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.NumberInputElement;
 
 /**
  * An edit box for holding BigDecimal.
- * <p>Default {@link #getMoldSclass}: z-decimalbox.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-decimalbox.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -105,8 +105,8 @@ public class Decimalbox extends NumberInputElement {
 	}
 
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-decimalbox" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-decimalbox" : super.getZclass();
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);

@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A treerow.
- * <p>Default {@link #getMoldSclass}: z-tree-row.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-tree-row.(since 3.5.0)
  * @author tomyeh
  */
 public class Treerow extends XulElement {
@@ -65,14 +65,14 @@ public class Treerow extends XulElement {
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
 		final Treeitem ti = (Treeitem)getParent();
-		final String added = ti != null ? ti.isDisabled() ? getMoldSclass() + "-disd"
-				: ti.isSelected() ? getMoldSclass() + "-seld" : "" : "";
+		final String added = ti != null ? ti.isDisabled() ? getZclass() + "-disd"
+				: ti.isSelected() ? getZclass() + "-seld" : "" : "";
 		return scls != null ? scls + " " + added : added;
 	}
 
 	//-- Component --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-tree-row" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-tree-row" : super.getZclass();
 	}
 
 	/** Alwasys throws UnsupportedOperationException since developers shall

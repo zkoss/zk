@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  * 	<li>onOpen is sent when this listgroup is opened or closed by user.</li>
  * </ol>
  * 
- * <p>Default {@link #getMoldSclass}: z-group.
+ * <p>Default {@link #getZclass}: z-group.
  * 
  * <p>Note: All the child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
@@ -172,8 +172,8 @@ public class Group extends Row {
 		final StringBuffer sb = new StringBuffer(64)
 			.append("<img src=\"")
 			.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
-			.append("\" class=\"").append(getMoldSclass() + "-img ")
-			.append(getMoldSclass()).append(isOpen() ? "-img-open" : "-img-close")
+			.append("\" class=\"").append(getZclass()).append("-img ")
+			.append(getZclass()).append(isOpen() ? "-img-open" : "-img-close")
 			.append("\" align=\"absmiddle\"/>");
 
 		final String label = getLabel();
@@ -206,8 +206,8 @@ public class Group extends Row {
 		throw new UiException("Unsupported child for setLabel: "+cell);
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-group" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-group" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());

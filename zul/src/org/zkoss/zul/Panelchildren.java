@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
  * Note that the size of Panelchildren is automatically calculated by Panel so both
  * {@link #setWidth(String)} and {@link #setHeight(String)} are read-only.
  * 
- * <p>Default {@link #getMoldSclass}: z-panel-children.
+ * <p>Default {@link #getZclass}: z-panel-children.
  * 
  * @author jumperchen
  * @since 3.5.0
@@ -55,8 +55,8 @@ public class Panelchildren extends XulElement {
 	}
 
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ?  "z-panel-children" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ?  "z-panel-children" : super.getZclass();
 	}
 	
 	/** Returns the real style class used for the content block of the panel.
@@ -72,13 +72,13 @@ public class Panelchildren extends XulElement {
 	 */
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String mcls = getMoldSclass();
+		final String zcls = getZclass();
 		final Panel parent = (Panel) getParent();
 		if (parent != null) {
-			final String title = mcls != null && parent.getTitle().length() == 0 
-				&& parent.getCaption() == null ? mcls + "-noheader" : "";
+			final String title = zcls != null && parent.getTitle().length() == 0 
+				&& parent.getCaption() == null ? zcls + "-noheader" : "";
 			final String border = parent.getBorder();
-			return scls + ("normal".equals(border) ? "" : ' ' + mcls + "-noborder") + (title.length() > 0 ? ' ' + title : title);
+			return scls + ("normal".equals(border) ? "" : ' ' + zcls + "-noborder") + (title.length() > 0 ? ' ' + title : title);
 		}
 		return scls;
 			

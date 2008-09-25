@@ -241,7 +241,7 @@ zkVld._errbox = function () {
 	
 	cmp = $e(id);
 	if (cmp) {
-		zk.addClass($real(cmp), getZKAttr(cmp, "mcls") + "-text-invalid");
+		zk.addClass($real(cmp), getZKAttr(cmp, "zcls") + "-text-invalid");
 	}
 
 	if (!zk.isRealVisible(cmp, true)) return; //don't show the erro box
@@ -302,7 +302,7 @@ zkVld.closeErrbox = function (box, remaingError, coerce) {
 	if (!remaingError) {
 		var cmp = $e(id);
 		if (cmp) {
-			zk.rmClass($real(cmp), getZKAttr(cmp, "mcls") + "-text-invalid");
+			zk.rmClass($real(cmp), getZKAttr(cmp, "zcls") + "-text-invalid");
 		}
 	}
 
@@ -479,10 +479,10 @@ zkau.setAttr = function (cmp, nm, val) {
 		var inp = $real(cmp), type = inp.type ? inp.type.toUpperCase() : "";
 		if (type == "TEXT" || type == "TEXTAREA") {
 			var outer = $outer(cmp),
-				mcls = getZKAttr(outer, "mcls");
+				zcls = getZKAttr(outer, "zcls");
 			if ("disabled" == nm)
-				zk[val == "true" ? "addClass" : "rmClass"](outer, mcls + "-disd");
-			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? mcls + "-text-disd" : mcls + "-readonly");
+				zk[val == "true" ? "addClass" : "rmClass"](outer, zcls + "-disd");
+			zk[val == "true" ? "addClass" : "rmClass"](inp, "disabled" == nm ? zcls + "-text-disd" : zcls + "-readonly");
 		}
 	}
 	return _zktbau.setAttr(cmp, nm, val);
@@ -505,13 +505,13 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 		if (old != cmp.value) cmp.value = old; //Bug 1490079
 	}
 	var outer = $outer(cmp),
-		mcls = getZKAttr(outer, "mcls");
+		zcls = getZKAttr(outer, "zcls");
 	if (cmp.readOnly) {
-		zk.addClass(cmp, mcls + "-readonly");
+		zk.addClass(cmp, zcls + "-readonly");
 	}
 	if (cmp.disabled) {
-		zk.addClass(cmp, mcls + "-text-disd");
-		zk.addClass(outer, mcls + "-disd");
+		zk.addClass(cmp, zcls + "-text-disd");
+		zk.addClass(outer, zcls + "-disd");
 	}
 };
 zkTxbox.cleanup = zkTxbox.onHide = function (cmp) {
@@ -539,8 +539,8 @@ zkTxbox.onblur = function (evt) {
 	zkTxbox.updateChange(inp, noonblur);
 	zkau.onblur(evt, noonblur); //fire onBlur after onChange
 	var cmp = $outer(inp),
-		mcls = getZKAttr(cmp, "mcls");
-	zk.rmClass(cmp, mcls + "-focus");
+		zcls = getZKAttr(cmp, "zcls");
+	zk.rmClass(cmp, zcls + "-focus");
 };
 zkTxbox._scanStop = function (inp) {	
 	//stop the scanning of onChaning first
@@ -654,7 +654,7 @@ zkTxbox.onfocus = function (evt) {
 			zkTxbox._intervals[inp.id] =
 				setInterval("zkTxbox._scanChanging('"+inp.id+"')", 500);
 	}
-	zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-focus");
+	zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-focus");
 };
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {

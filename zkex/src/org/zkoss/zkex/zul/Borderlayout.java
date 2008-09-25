@@ -64,7 +64,7 @@ import org.zkoss.zk.ui.UiException;
  * 
  * </pre>
  * 
- * <p>Default {@link #getMoldSclass}: z-border-layout. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-border-layout. (since 3.5.0)
  * 
  * @author jumperchen
  * @since 3.0.0
@@ -177,8 +177,8 @@ public class Borderlayout extends HtmlBasedComponent {
 		else if (_center == child) _center = null;
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-border-layout" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-border-layout" : super.getZclass();
 	}
 	//Cloneable//
 	public Object clone() {

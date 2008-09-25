@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.XulElement;
  * The cell of Tablelayout. <br> 
  * The child component of Tablechildren only can be Panel.
  * 
- * <p>Default {@link #getMoldSclass}: z-table-children.
+ * <p>Default {@link #getZclass}: z-table-children.
  * 
  * @author robbiecheng
  * @since 3.5.0
@@ -40,7 +40,7 @@ public class Tablechildren extends XulElement{
 	private int _colspan = 1, _rowspan = 1;
 	
 	public Tablechildren() {
-		setMoldSclass("z-table-children");
+		setZclass("z-table-children");
 	}
 	
 	/** Returns number of columns to span this header.

@@ -259,8 +259,8 @@ public class Treechildren extends XulElement {
 	}
 
 	//-- Component --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-tree-children" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-tree-children" : super.getZclass();
 	}
 	public void smartUpdate(String name, String value) {
 		Component comp = getParent();

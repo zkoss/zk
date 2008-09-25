@@ -42,24 +42,24 @@ public class ComboitemDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Comboitem self = (Comboitem) comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		wh.write("<tr id=\"").write(uuid).write("\" z.type=\"Cmit\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">")
-			.write("<td class=\"").write(mcls).write("-img\">").write(self.getImgTag())
-			.write("</td>\n<td class=\"").write(mcls).write("-text\">");
+			.write("<td class=\"").write(zcls).write("-img\">").write(self.getImgTag())
+			.write("</td>\n<td class=\"").write(zcls).write("-text\">");
 
 		new Out(self.getLabel()).render(out);
 
 		String s = self.getDescription();
 		if (!Strings.isBlank(s)) {
-			wh.write("<br/>\n<span class=\"").write(mcls).write("-inner\">");
+			wh.write("<br/>\n<span class=\"").write(zcls).write("-inner\">");
 			new Out(s).render(out);
 			wh.write("</span>");
 		}
 
 		s = self.getContent();
 		if (!Strings.isBlank(s))
-			wh.write("<span class=\"").write(mcls).write("-cnt\">").write(s).write("</span>");
+			wh.write("<span class=\"").write(zcls).write("-cnt\">").write(s).write("</span>");
 			//1. don't use Out to encode since content might contain HTML tags
 			//2. Feature 1908524: no <br/>
 

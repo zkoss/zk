@@ -28,7 +28,7 @@ package org.zkoss.zkex.zul;
  * {@link #setWidth(String)}, {@link #getSize()}, {@link #setSize(String)},
  * and {@link #setVisible(boolean)}.
  * 
- * <p>Default {@link #getMoldSclass}: z-center.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-center.(since 3.5.0)
  * @author jumperchen
  * @since 3.0.0
  */

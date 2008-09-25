@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * A treecol.
- * <p>Default {@link #getMoldSclass}: z-tree-col.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-tree-col.(since 3.5.0)
  * @author tomyeh
  */
 public class Treecol extends HeaderElement {
@@ -117,8 +117,8 @@ public class Treecol extends HeaderElement {
 	}
 
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-tree-col" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-tree-col" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();

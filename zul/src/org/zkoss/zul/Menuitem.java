@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.Utils;
  * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
  * 
- * <p>Default {@link #getMoldSclass}: z-menu-item. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-menu-item. (since 3.5.0)
  * @author tomyeh
  */
 public class Menuitem extends LabelImageElement {
@@ -75,16 +75,16 @@ public class Menuitem extends LabelImageElement {
 	}
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getMoldSclass() + "-disd" : "";
+		final String added = isDisabled() ? getZclass() + "-disd" : "";
 		return scls != null && scls.length() > 0 ? scls + " " + added : added;
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-menu-item" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-menu-item" : super.getZclass();
 	}
 	
 	public String getImgTag() {
-		return getImgTag(getMoldSclass() + "-img", true);
+		return getImgTag(getZclass() + "-img", true);
 	}
 	
 	/**

@@ -39,7 +39,7 @@ public class LabelDefault implements ComponentRenderer {
 
 		wh.write("<span id=\"").write(self.getUuid()).write("\"")
 		.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-		.write(" class=\""+self.getMoldSclass()+"\"")
+		.write(" class=\""+self.getZclass()+"\"")
 		.write(">");
 
 		wh.write(self.getEncodedText());

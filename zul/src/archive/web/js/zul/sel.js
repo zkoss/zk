@@ -26,12 +26,12 @@ zk.load("zul.zul");
 if (!window.Selectable_effect) { //define it only if not customized
 	window.Selectable_effect = function (row, undo) {
 		if (undo) {
-			var mcls = getZKAttr(row, "mcls");
-			zk.rmClass(row, mcls + "-over-seld");
-			zk.rmClass(row, mcls + "-over");
+			var zcls = getZKAttr(row, "zcls");
+			zk.rmClass(row, zcls + "-over-seld");
+			zk.rmClass(row, zcls + "-over");
 		} else {
-			var mcls = getZKAttr(row, "mcls");
-			zk.addClass(row, zk.hasClass(row, mcls + "-seld") ? mcls + "-over-seld" : mcls + "-over");
+			var zcls = getZKAttr(row, "zcls");
+			zk.addClass(row, zk.hasClass(row, zcls + "-seld") ? zcls + "-over-seld" : zcls + "-over");
 		}
 	};
 }
@@ -652,15 +652,15 @@ zk.Selectable.prototype = {
 		var changed = this._isSelected(row) != toSel;
 		if (changed) {
 			var el = $e(row.id + "!cm"),
-				mcls = getZKAttr(row, "mcls");
+				zcls = getZKAttr(row, "zcls");
 			if (toSel) {
 				if (el) el.checked = true;
-				zk.addClass(row, mcls + "-seld");
+				zk.addClass(row, zcls + "-seld");
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "true");
 			} else {
 				if (el) el.checked = false;
-				zk.rmClass(row, mcls + "-seld");
+				zk.rmClass(row, zcls + "-seld");
 				zkSel.onoutTo(row);
 				setZKAttr(row, "sel", "false");
 			}
@@ -1147,15 +1147,15 @@ zkSel.cmonblur = function (evt) {
 };
 zkSel.cmonfocusTo = function (row) {
 	if (row) {
-		zk.addClass(zkSel.getVisibleFirstChildIfAny(row), getZKAttr(row, "mcls") + "-focus");
+		zk.addClass(zkSel.getVisibleFirstChildIfAny(row), getZKAttr(row, "zcls") + "-focus");
 	}
 };
 zkSel.cmonblurTo = function (row) {
 	if (row) {
-		var mcls = getZKAttr(row, "mcls");
-		zk.rmClass(row, mcls + "-focus");
+		var zcls = getZKAttr(row, "zcls");
+		zk.rmClass(row, zcls + "-focus");
 		for (var i = row.cells.length; --i >= 0;)
-			zk.rmClass(row.cells[i], mcls + "-focus");
+			zk.rmClass(row.cells[i], zcls + "-focus");
 	}
 };
 zkSel.getVisibleFirstChildIfAny = function (row) {
@@ -1471,11 +1471,11 @@ zkLitgp = {
 		setZKAttr(row, "open", toOpen ? "true": "false"); //change it value
 		if (row._img) {
 			if (toOpen) {
-				zk.rmClass(row._img,getZKAttr(row, "mcls")+"-img-close");
-				zk.addClass(row._img,getZKAttr(row, "mcls")+"-img-open");
+				zk.rmClass(row._img,getZKAttr(row, "zcls")+"-img-close");
+				zk.addClass(row._img,getZKAttr(row, "zcls")+"-img-open");
 			} else {
-				zk.rmClass(row._img,getZKAttr(row, "mcls")+"-img-open");
-				zk.addClass(row._img,getZKAttr(row, "mcls")+"-img-close");
+				zk.rmClass(row._img,getZKAttr(row, "zcls")+"-img-open");
+				zk.addClass(row._img,getZKAttr(row, "zcls")+"-img-close");
 			}
 		}			
 		zkLitgp._openItemNow(row, toOpen);

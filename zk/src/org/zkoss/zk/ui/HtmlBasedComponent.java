@@ -63,8 +63,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	private String _height;
 	/** The CSS class. */
 	private String _sclass;
-	/** The CSS class of the specific mold. */
-	protected String _moldSclass;
+	/** The ZK CSS class. */
+	protected String _zclass;
 	/** The CSS style. */
 	private String _style;
 	private String _left, _top;
@@ -174,48 +174,73 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 
+	/** @deprecated As of release 3.5.1, replaced with {@link #getZclass}.
+	 */
+	public String getMoldSclass() {
+		return getZclass();
+	}
+	/** @deprecated As of release 3.5.1, replaced with {@link #setZclass}.
+	 */
+	public void setMoldSclass(String moldSclass) {
+		setZclass(moldSclass);
+	}
 	 /**
-	  * Returns the CSS class(es) of the specific mold of the component.
+	  * Returns the ZK Cascading Style class(es) for this component.
 	  * It usually depends on the implementation of the mold (@{link #getMold}).
-	  * <p>Default: null.
-	  * @since 3.5.0
+	  *
+	  * <p>Default: null (the default value depends on element).
+	  *
+	  * <p>{@link #setZclass}) will completely replace the default style
+	  * of a component. In other words, the default style of a component
+	  * is associated with the default value of {@link #getZclass}.
+	  * Once it is changed, the default style won't be applied at all.
+	  * If you want to perform small adjustments, use {@link #setSclass}
+	  * instead.
+	  * 
+	  * @since 3.5.1
 	  * @see #getSclass
 	  * @see #getRealSclass
 	  */
-	 public String getMoldSclass() {
-		 return _moldSclass;
+	 public String getZclass() {
+		 return _zclass;
 	 }
 	 
 	 /**
-	  * Sets the CSS class of the specific mold of the component.
+	  * Sets the ZK Cascading Style class(es) for this component.
 	  * It usually depends on the implementation of the mold (@{link #getMold}).
-	  * Replacing the CSS classes with {@link #setMoldSclass} will
-	  * replace all default styles. In other words, you have to provide
-	  * a complete replacement.
-	  * On the other hand, if you want to do small adjustments,
-	  * use {@link #setSclass} instead.
-	  * 
+	  *
 	  * @since 3.5.0
 	  * @see #setSclass
+	  * @see #getZclass
 	  */
-	 public void setMoldSclass(String moldSclass) {
-		if (moldSclass != null && moldSclass.length() == 0) moldSclass = null;
-		if (!Objects.equals(_moldSclass, moldSclass)) {
-			_moldSclass = moldSclass;
+	 public void setZclass(String zclass) {
+		if (zclass != null && zclass.length() == 0) zclass = null;
+		if (!Objects.equals(_zclass, zclass)) {
+			_zclass = zclass;
 			invalidate();
 		}
 	 }
 	/** Returns the CSS class.
-	 * Due to Java's limitation, we cannot use the name called getClas.
-	 * <p>Default: null (the default value depends on element).
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>The default styles of ZK components doesn't depend on the value
+	 * of {@link #getSclass}. Rather, {@link #setSclass} is provided to
+	 * perform small adjustment, e.g., only changing the font size.
+	 * In other words, the default style is still applied if you change
+	 * the value of {@link #getSclass}, unless you override it.
+	 * To replace the default style completely, use
+	 * {@link #setZclass} instead.
+	 *
 	 * @see #getRealSclass
-	 * @see #getMoldSclass
+	 * @see #getZclass
 	 */
 	public String getSclass() {
 		return _sclass;
 	}
 	/** Sets the CSS class.
-	 * @see #setMoldSclass
+	 *
+	 * @see #setZclass
 	 */
 	public void setSclass(String sclass) {
 		if (sclass != null && sclass.length() == 0) sclass = null;
@@ -394,7 +419,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		HTMLs.appendAttribute(sb, "title", getTooltiptext());
 		HTMLs.appendAttribute(sb, "z.drag", _draggable);
 		HTMLs.appendAttribute(sb, "z.drop", _droppable);
-		HTMLs.appendAttribute(sb, "z.mcls", getMoldSclass());
+		HTMLs.appendAttribute(sb, "z.zcls", getZclass());
 
 		final Object xc = getExtraCtrl();
 		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
@@ -419,7 +444,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * (when {@link #getOuterAttrs} is called).
 	 *
 	 * <p>Default: it simply returns the catenation of {@link #getSclass}
-	 * and {@link #getMoldSclass()} (since 3.5.0).
+	 * and {@link #getZclass()} (since 3.5.0).
 	 *
 	 * <p>Derived classes might override it to provide, say, dual style classes.
 	 * For example,
@@ -427,10 +452,10 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 *return sclass != null ? sclass + " my-addon": "myaddon";</code></pre>
 	 *
 	 * @since 3.0.0
-	 * @see #getMoldSclass()
+	 * @see #getZclass()
 	 */
 	protected String getRealSclass() {
-		final String moldsclass = getMoldSclass();
+		final String moldsclass = getZclass();
 		final String sclass = getSclass();
 		return moldsclass == null ? sclass : 
 				sclass == null || sclass.length() == 0 ?

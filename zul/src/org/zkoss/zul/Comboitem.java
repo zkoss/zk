@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * <p>Non-XUL extension. Refer to {@link Combobox}.
  * 
- * <p>Default {@link #getMoldSclass}: z-combo-item. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-combo-item. (since 3.5.0)
  *
  * @author tomyeh
  * @see Combobox
@@ -61,13 +61,13 @@ public class Comboitem extends LabelImageElement {
 	// super
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getMoldSclass() + "-disd": "";
+		final String added = isDisabled() ? getZclass() + "-disd": "";
 		return scls != null && scls.length() > 0 ? scls + " " + added
 				: added;
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-combo-item" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-combo-item" : super.getZclass();
 	}
 	
 	public void setLabel(String label) {

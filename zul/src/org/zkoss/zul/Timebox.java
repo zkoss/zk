@@ -37,7 +37,7 @@ import org.zkoss.zul.mesg.MZul;
 /**
  * An input box for holding a time (a java.util.Date Object , but only Hour & Minute are used.
  *
- * <p>Default {@link #getMoldSclass}: z-timebox. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-timebox. (since 3.5.0)
  *
  * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
  * 
@@ -182,7 +182,7 @@ public class Timebox extends InputElement {
 	}
 
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ?  "z-timebox" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ?  "z-timebox" : super.getZclass();
 	}
 }

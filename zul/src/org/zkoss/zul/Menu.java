@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * of the menu will be displayed.
  * This element is also used to create submenus (of {@link Menupopup}.
  * 
- * <p>Default {@link #getMoldSclass}: z-mean. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-mean. (since 3.5.0)
  * @author tomyeh
  */
 public class Menu extends LabelImageElement {
@@ -50,7 +50,7 @@ public class Menu extends LabelImageElement {
 	}
 
 	public String getImgTag() {
-		return getImgTag(getMoldSclass() + "-img", true);
+		return getImgTag(getZclass() + "-img", true);
 	}
 	/** Returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.
@@ -66,8 +66,8 @@ public class Menu extends LabelImageElement {
 	}
 
 	//-- Component --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-menu" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-menu" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

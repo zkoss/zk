@@ -63,35 +63,35 @@ zul.ondropbtnover = function (evt) {
 	if (!evt) evt = window.event;
 	var btn = $parentByTag(Event.element(evt), "SPAN"),
 		inp = $real(btn),
-		mcls = getZKAttr($outer(btn), "mcls");
+		zcls = getZKAttr($outer(btn), "zcls");
 	if (inp && !inp.disabled && !zk.dragging)
-		zk.addClass(btn, mcls + "-btn-over");
+		zk.addClass(btn, zcls + "-btn-over");
 };
 zul.ondropbtnout = function (evt) {
 	if (!evt) evt = window.event;
 	var btn = $parentByTag(Event.element(evt), "SPAN"),
 		inp = $real(btn),
-		mcls = getZKAttr($outer(btn), "mcls");
+		zcls = getZKAttr($outer(btn), "zcls");
 	if (inp && !inp.disabled && !zk.dragging)
-		zk.rmClass(btn, mcls + "-btn-over");
+		zk.rmClass(btn, zcls + "-btn-over");
 };
 zul.ondropbtndown = function (evt) {
 	if (!evt) evt = window.event;
 	var btn = $parentByTag(Event.element(evt), "SPAN"),
 		inp = $real(btn),
-		mcls = getZKAttr($outer(btn), "mcls");
+		zcls = getZKAttr($outer(btn), "zcls");
 	if (inp && !inp.disabled && !zk.dragging) {
 		if (zul._currentbtn) 
 			zul.ondropbtnup(evt);
-		zk.addClass(btn, mcls + "-btn-clk");
+		zk.addClass(btn, zcls + "-btn-clk");
 		zk.listen(document.body, "mouseup", zul.ondropbtnup);
 		zul._currentbtn = btn;
 	}
 };
 zul.ondropbtnup = function (evt) {
 	zul._currentbtn = $e(zul._currentbtn);
-	var mcls = getZKAttr($outer(zul._currentbtn), "mcls");
-	zk.rmClass(zul._currentbtn, mcls + "-btn-clk");
+	var zcls = getZKAttr($outer(zul._currentbtn), "zcls");
+	zk.rmClass(zul._currentbtn, zcls + "-btn-clk");
 	zk.unlisten(document.body, "mouseup", zul.ondropbtnup);
 	zul._currentbtn = null;
 };
@@ -510,7 +510,7 @@ zulHdr._sortable = function (cmp) {
 /** Shows the hint, ascending or descending image.
  */
 zulHdr._show = function (cmp) {
-	var cls = getZKAttr(cmp, "mcls");
+	var cls = getZKAttr(cmp, "zcls");
 	zk.rmClass(cmp, cls + "-sort-dsc");
 	zk.rmClass(cmp, cls + "-sort-asc");
 	switch (getZKAttr(cmp, "sort")) {

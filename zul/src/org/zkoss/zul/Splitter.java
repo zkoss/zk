@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Events: onOpen
  *
- *  <p>Default {@link #getMoldSclass} as follows: (since 3.5.0)
+ *  <p>Default {@link #getZclass} as follows: (since 3.5.0)
  *  <ol>
  *  	<li>Case 1: If {@link #getOrient()} is vertical, "z-splitter-ver" is assumed</li>
  *  	<li>Case 2: If {@link #getOrient()} is horizontal, "z-splitter-hor" is assumed</li>
@@ -125,9 +125,9 @@ public class Splitter extends XulElement {
 	}
 
 	//super//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-splitter" +
-				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-splitter" +
+				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getZclass();
 	}
 	
 	public String getOuterAttrs() {

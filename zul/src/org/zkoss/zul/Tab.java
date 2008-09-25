@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 /**
  * A tab.
  * <p>
- * Default {@link #getMoldSclass}: z-tab. (since 3.5.0)
+ * Default {@link #getZclass}: z-tab. (since 3.5.0)
  * 
  * @author tomyeh
  * 
@@ -44,7 +44,7 @@ public class Tab extends LabelImageElement {
 	private boolean _disabled;
 
 	public Tab() {
-		setMoldSclass("z-tab");
+		setZclass("z-tab");
 	}
 
 	public Tab(String label) {
@@ -218,15 +218,15 @@ public class Tab extends LabelImageElement {
 		return sb.toString();
 	}
 	
-	public String getMoldSclass(){				
-		String scls = super.getMoldSclass();
+	public String getZclass(){				
+		String scls = super.getZclass();
 		if (scls == null)
 			scls = "z-tab";
 		return scls;
 	}
 	protected String getRealSclass() {
 		String cls = super.getRealSclass();
-		String added = getMoldSclass();
+		String added = getZclass();
 		if (isDisabled())
 			added += "-disd";
 		if (isSelected())

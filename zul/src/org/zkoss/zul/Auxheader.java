@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * An auxiliary header.
- * <p>Default {@link #getMoldSclass}: z-auxheader.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-auxheader.(since 3.5.0)
  *
  * @author tomyeh
  * @since 3.0.0
@@ -91,8 +91,8 @@ public class Auxheader extends HeaderElement {
 	}
 
 	//super//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-auxheader" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-auxheader" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();

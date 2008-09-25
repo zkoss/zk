@@ -39,7 +39,7 @@ public class Menuseparator2Default implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		wh.write("<li id=\"").write(uuid).write("\" z.type=\"Menusp2\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
-		wh.writeln("<span class=\"").write(self.getMoldSclass()).write("-inner\">&nbsp;</span>");
+		wh.writeln("<span class=\"").write(self.getZclass()).write("-inner\">&nbsp;</span>");
 		wh.writeln("</li>");
 	}
 }

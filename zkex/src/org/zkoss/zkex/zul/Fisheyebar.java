@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
  * A fisheye bar is a bar of {@link Fisheye} that is a menu similar to the fish 
  * eye menu on the Mac OS.
  * 
- * <p>Default {@link #getMoldSclass}: z-fisheyebar.
+ * <p>Default {@link #getZclass}: z-fisheyebar.
  * 
  * @author jumperchen
  * @since 3.5.0
@@ -175,8 +175,8 @@ public class Fisheyebar extends XulElement {
 		}
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-fisheyebar" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-fisheyebar" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

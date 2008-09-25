@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A slider.
- *  <p>Default {@link #getMoldSclass} as follows: (since 3.5.0)
+ *  <p>Default {@link #getZclass} as follows: (since 3.5.0)
  *  <ol>
  *  	<li>Case 1: If {@link #getOrient()} is vertical, "z-slider-ver" is assumed</li>
  *  	<li>Case 2: If {@link #getOrient()} is horizontal, "z-slider-hor" is assumed</li>
@@ -62,9 +62,9 @@ public class Slider extends XulElement {
 	}
 	
 	// super
-	public String getMoldSclass() {
+	public String getZclass() {
 		final String name = "z-slider";
-		if (_moldSclass == null) {
+		if (_zclass == null) {
 			if (inScaleMold())
 				return name + "-scale";
 			else if (inSphereMold())			  
@@ -72,7 +72,7 @@ public class Slider extends XulElement {
 			else
 				return name + ("horizontal".equals(getOrient()) ? "-hor" : "-ver");
 		}
-		return super.getMoldSclass();
+		return super.getZclass();
 	}
 	
 	/** Returns the orient.

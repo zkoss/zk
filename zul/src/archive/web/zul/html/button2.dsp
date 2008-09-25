@@ -20,16 +20,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<c:set var="mcls" value="${self.moldSclass}"/>
-<span z.type="zul.btn.Button" id="${self.uuid}" class="${mcls}"${z:noCSSAttrs(self.outerAttrs)}${self.visible ? '': ' style="display:none"'}><table id="${self.uuid}!box"${self.tabindex >= 0 and !c:isGecko() and !c:isSafari()?' tabindex="self.tabindex"':''} cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
+<c:set var="zcls" value="${self.zclass}"/>
+<span z.type="zul.btn.Button" id="${self.uuid}" class="${zcls}"${z:noCSSAttrs(self.outerAttrs)}${self.visible ? '': ' style="display:none"'}><table id="${self.uuid}!box"${self.tabindex >= 0 and !c:isGecko() and !c:isSafari()?' tabindex="self.tabindex"':''} cellspacing="0" cellpadding="0" border="0"${z:outCSSAttrs(self.outerAttrs)}${self.innerAttrs}>
 <tr>
-	<td class="${mcls}-tl"><c:if test="${!c:isExplorer()}"><button id="${self.uuid}!real" class="${mcls}"${self.disabled?' disabled="disabled"':''}${self.tabindex >= 0 and (c:isGecko() or c:isSafari())?' tabindex="self.tabindex"':''}></button></c:if></td>
-	<td class="${mcls}-tm"></td>
-	<td class="${mcls}-tr"></td>
+	<td class="${zcls}-tl"><c:if test="${!c:isExplorer()}"><button id="${self.uuid}!real" class="${zcls}"${self.disabled?' disabled="disabled"':''}${self.tabindex >= 0 and (c:isGecko() or c:isSafari())?' tabindex="self.tabindex"':''}></button></c:if></td>
+	<td class="${zcls}-tm"></td>
+	<td class="${zcls}-tr"></td>
 </tr>
 <tr>
-	<td class="${mcls}-cl"><c:if test="${c:isExplorer()}"><button id="${self.uuid}!real" class="${mcls}"${self.disabled?' disabled="disabled"':''}></button></c:if></td>
-	<td class="${mcls}-cm"><c:choose trim="true">
+	<td class="${zcls}-cl"><c:if test="${c:isExplorer()}"><button id="${self.uuid}!real" class="${zcls}"${self.disabled?' disabled="disabled"':''}></button></c:if></td>
+	<td class="${zcls}-cm"><c:choose trim="true">
 	<c:when test="${self.dir == 'reverse'}">
 		<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
 	</c:when>
@@ -37,11 +37,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		${self.imgTag}<c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if><c:out value="${self.label}"/>
 	</c:otherwise>
 	</c:choose></td>
-	<td class="${mcls}-cr"><i class="${mcls}"></i></td>
+	<td class="${zcls}-cr"><i class="${zcls}"></i></td>
 </tr>
 <tr>
-	<td class="${mcls}-bl"></td>
-	<td class="${mcls}-bm"></td>
-	<td class="${mcls}-br"></td>
+	<td class="${zcls}-bl"></td>
+	<td class="${zcls}-bm"></td>
+	<td class="${zcls}-br"></td>
 </tr>
 </table></span>

@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.InputElement;
  * A textbox.
  *
  * <p>See <a href="package-summary.html">Specification</a>.</p>
- * <p>Default {@link #getMoldSclass}: z-textbox.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-textbox.(since 3.5.0)
  * @author tomyeh
  */
 public class Textbox extends InputElement {
@@ -133,8 +133,8 @@ public class Textbox extends InputElement {
 	}
 
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-textbox" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-textbox" : super.getZclass();
 	}
 	public String getInnerAttrs() {
 		final String attrs = super.getInnerAttrs();

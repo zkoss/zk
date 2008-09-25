@@ -37,14 +37,14 @@ zkButton = {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			box = $e(cmp.id + "!box");
-		zk.addClass(box, getZKAttr(cmp, "mcls") + "-over");
+		zk.addClass(box, getZKAttr(cmp, "zcls") + "-over");
 	},
 	onout: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			box = $e(cmp.id + "!box");
 		if (box != zkButton.down_box)
-			zk.rmClass(box, getZKAttr(cmp, "mcls") + "-over");
+			zk.rmClass(box, getZKAttr(cmp, "zcls") + "-over");
 	},
 	onfocus: function (evt) {
 		if (!evt) evt = window.event;
@@ -52,23 +52,23 @@ zkButton = {
 		if (!$tag(Event.element(evt))) return; // Firefox 2 will cause a focus error when resize browser.
 		var cmp = $outer(target),
 			box = $e(cmp.id + "!box");
-		zk.addClass(box, getZKAttr(cmp, "mcls") + "-focus");
+		zk.addClass(box, getZKAttr(cmp, "zcls") + "-focus");
 		zkau.onfocus(evt);
 	},
 	onblur: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			box = $e(cmp.id + "!box");
-		zk.rmClass(box, getZKAttr(cmp, "mcls") + "-focus");
+		zk.rmClass(box, getZKAttr(cmp, "zcls") + "-focus");
 		zkau.onblur(evt);
 	},
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			box = $e(cmp.id + "!box"),
-			mcls = getZKAttr(cmp, "mcls");
-		zk.addClass(box, mcls + "-clk");
-		zk.addClass(box, mcls + "-over");
+			zcls = getZKAttr(cmp, "zcls");
+		zk.addClass(box, zcls + "-clk");
+		zk.addClass(box, zcls + "-over");
 		zk.asyncFocus(cmp.id + "!real", 30);
 		zkButton.down_box = box;
 		zk.listen(document.body, "mouseup", zkButton.onup);
@@ -76,9 +76,9 @@ zkButton = {
 	onup: function (evt) {
 		if (!evt) evt = window.event;
 		if (zkButton.down_box) {
-			var mcls = getZKAttr($outer(zkButton.down_box), "mcls");
-			zk.rmClass(zkButton.down_box, mcls + "-clk");
-			zk.rmClass(zkButton.down_box, mcls + "-over");
+			var zcls = getZKAttr($outer(zkButton.down_box), "zcls");
+			zk.rmClass(zkButton.down_box, zcls + "-clk");
+			zk.rmClass(zkButton.down_box, zcls + "-over");
 		}
 		zkButton.down_box = null;
 		zk.unlisten(document.body, "mouseup", zkButton.onup);

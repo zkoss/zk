@@ -103,8 +103,8 @@ zkSplt.init = function (cmp) {
 	//change chdextr (see Bug 1921830)
 		if (vert) p = p.parentNode; //TR
 		if (p && p.id.endsWith("!chdextr"))
-			//p.className = getZKAttr(cmp, "mcls") + "-outer"; 
-			zk.addClass(cmp, getZKAttr(cmp, "mcls") + "-outer");
+			//p.className = getZKAttr(cmp, "zcls") + "-outer"; 
+			zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-outer");
 	}
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var drag = zkSplt._drags[cmp.id] = {
@@ -116,13 +116,13 @@ zkSplt.init = function (cmp) {
 	};
 
 	var btn = $e(cmp.id + "!btn"),
-		mcls = getZKAttr(cmp, "mcls");
+		zcls = getZKAttr(cmp, "zcls");
 	if (zk.ie) {
-		zk.listen(btn, "mouseover", function () {zk.addClass(btn, mcls + "-btn-visi")});
-	 	zk.listen(btn, "mouseout", function () {zk.rmClass(btn, mcls + "-btn-visi")});
+		zk.listen(btn, "mouseover", function () {zk.addClass(btn, zcls + "-btn-visi")});
+	 	zk.listen(btn, "mouseout", function () {zk.rmClass(btn, zcls + "-btn-visi")});
 	}
 	zk.listen(btn, "click", function () {		
-		zk.rmClass(btn, mcls + "-btn-visi");
+		zk.rmClass(btn, zcls + "-btn-visi");
 		zkSplt.open(cmp, getZKAttr(cmp, "open") == "false");
 	});
 
@@ -181,26 +181,26 @@ zkSplt._fixbtn = function (cmp) {
 	if (!colps || "none" == colps) {
 		btn.style.display = "none";
 	} else {
-		mcls = getZKAttr(cmp, "mcls");
+		zcls = getZKAttr(cmp, "zcls");
 		var vert = getZKAttr(cmp, "vert");
 		var before = colps == "before";		
 		if (getZKAttr(cmp, "open") == "false") before = !before;
 
-		if (vert && before && !zk.hasClass(btn, mcls+"-btn-t")) {		
-			zk.rmClass(btn, mcls + "-btn-b");
-			zk.addClass(btn, mcls + "-btn-t");
+		if (vert && before && !zk.hasClass(btn, zcls+"-btn-t")) {		
+			zk.rmClass(btn, zcls + "-btn-b");
+			zk.addClass(btn, zcls + "-btn-t");
 		}
-		else if(vert && !before && !zk.hasClass(btn, mcls+"-btn-b")) {			
-			zk.rmClass(btn, mcls+"-btn-t");
-			zk.addClass(btn, mcls+"-btn-b");
+		else if(vert && !before && !zk.hasClass(btn, zcls+"-btn-b")) {			
+			zk.rmClass(btn, zcls+"-btn-t");
+			zk.addClass(btn, zcls+"-btn-b");
 		}		
-		else if(!vert && before && !zk.hasClass(btn, mcls+"-btn-l")) {
-			zk.rmClass(btn, mcls+"-btn-r");
-			zk.addClass(btn, mcls+"-btn-l");
+		else if(!vert && before && !zk.hasClass(btn, zcls+"-btn-l")) {
+			zk.rmClass(btn, zcls+"-btn-r");
+			zk.addClass(btn, zcls+"-btn-l");
 		}
-		else if(!vert && !before && !zk.hasClass(btn, mcls+"-btn-r")) {
-			zk.rmClass(btn, mcls+"-btn-l");
-			zk.addClass(btn, mcls+"-btn-r");
+		else if(!vert && !before && !zk.hasClass(btn, zcls+"-btn-r")) {
+			zk.rmClass(btn, zcls+"-btn-l");
+			zk.addClass(btn, zcls+"-btn-r");
 		}
 		btn.style.display = "";
 	}
@@ -393,12 +393,12 @@ zkSplt._updcls = function (cmp, open) {
 //	} else {
 //		if (j < 0) cmp.className = nm + "-ns";
 //	}
-	mcls = getZKAttr(cmp, "mcls");
-	if(open && zk.hasClass(cmp, mcls+"-ns")) {
-		zk.rmClass(cmp, mcls+"-ns");
+	zcls = getZKAttr(cmp, "zcls");
+	if(open && zk.hasClass(cmp, zcls+"-ns")) {
+		zk.rmClass(cmp, zcls+"-ns");
 	}
-	else if (!open && !zk.hasClass(cmp, mcls+"-ns")){
-		zk.addClass(cmp, mcls+"-ns");
+	else if (!open && !zk.hasClass(cmp, zcls+"-ns")){
+		zk.addClass(cmp, zcls+"-ns");
 	}
 };
 zkSplt.open = function (cmp, open, silent, enforce) {

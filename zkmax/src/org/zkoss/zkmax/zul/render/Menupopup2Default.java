@@ -47,7 +47,7 @@ public class Menupopup2Default implements ComponentRenderer {
 			.write("<").write(tag).write(" id=\"").write(uuid).write("!a\" tabindex=\"-1\" onclick=\"return false;\"")
 			.write(" href=\"javascript:;\" style=\"padding:0 !important; margin:0 !important; border:0 !important;	background: transparent !important;	font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;\"></")
 			.write(tag).write(">")
-			.write("<ul class=\"").write(self.getMoldSclass()).write("-cnt\" id=\"").write(uuid).writeln("!cave\">")
+			.write("<ul class=\"").write(self.getZclass()).write("-cnt\" id=\"").write(uuid).writeln("!cave\">")
 			.writeChildren(self)
 			.write("</ul></div>");
 	}

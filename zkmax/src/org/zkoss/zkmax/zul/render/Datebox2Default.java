@@ -41,22 +41,22 @@ public class Datebox2Default implements ComponentRenderer {
 		final Datebox self = (Datebox) comp;
 		final String uuid = self.getUuid();
 		final Execution exec = Executions.getCurrent();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 
 		wh.write("<span id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs())
 			.write(" z.type=\"zul.db.Dtbox\" z.combo=\"true\"><input id=\"")
 			.write(uuid).write("!real\" autocomplete=\"off\"")
-			.write(" class=\"").write(mcls).write("-inp\"")
+			.write(" class=\"").write(zcls).write("-inp\"")
 			.write(self.getInnerAttrs()).write("/><span id=\"")
-			.write(uuid).write("!btn\" class=\"").write(mcls).write("-btn\"");
+			.write(uuid).write("!btn\" class=\"").write(zcls).write("-btn\"");
 
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("><img class=\"").write(mcls).write("-img\" onmousedown=\"return false;\"");
+		wh.write("><img class=\"").write(zcls).write("-img\" onmousedown=\"return false;\"");
 		wh.write(" src=\"").write(exec.encodeURL("~./img/spacer.gif")).write("\"")
 			.write("\"/></span><div id=\"").write(uuid).write("!pp\" class=\"")
-			.write(mcls).write("-pp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
+			.write(zcls).write("-pp\" style=\"display:none\" tabindex=\"-1\"></div></span>");
 	}
 }

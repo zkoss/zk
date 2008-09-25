@@ -23,15 +23,15 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * Used to create a separator between menu items.
  *
- *<p>Default {@link #getMoldSclass}: z-menu-separator. (since 3.5.0)
+ *<p>Default {@link #getZclass}: z-menu-separator. (since 3.5.0)
  * 
  * @author tomyeh
  */
 public class Menuseparator extends XulElement {
 
 	//-- Component --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-menu-separator" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-menu-separator" : super.getZclass();
 	}
 	/** Not childable. */
 	public boolean isChildable() {

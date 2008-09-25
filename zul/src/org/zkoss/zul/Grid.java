@@ -89,7 +89,7 @@ import org.zkoss.zul.event.PagingEvent;
  * controller at different location (other than as a child component), or
  * you want to use the same controller to control multiple grids.
  *
- * <p>Default {@link #getMoldSclass}: z-grid.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-grid.(since 3.5.0)
  *
  * <p>To have a grid without stripping, you can specify a non-existent
  * style class to {@link #setOddRowSclass}.
@@ -1088,12 +1088,12 @@ public class Grid extends XulElement implements Paginated {
 
 	/** Returns the style class for the odd rows.
 	 *
-	 * <p>Default: {@link #getMoldSclass()}-odd. (since 3.5.0)
+	 * <p>Default: {@link #getZclass()}-odd. (since 3.5.0)
 	 *
 	 * @since 3.0.0
 	 */
 	public String getOddRowSclass() {
-		return _scOddRow == null ? getMoldSclass() + "-odd" : _scOddRow;
+		return _scOddRow == null ? getZclass() + "-odd" : _scOddRow;
 	}
 	/** Sets the style class for the odd rows.
 	 * If the style class doesn't exist, the striping effect disappears.
@@ -1132,8 +1132,8 @@ public class Grid extends XulElement implements Paginated {
 			}
 		}
 	}
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-grid" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-grid" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

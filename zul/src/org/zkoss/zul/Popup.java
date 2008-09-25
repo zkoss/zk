@@ -34,7 +34,7 @@ import org.zkoss.zul.au.out.AuPopup;
  * the id of the popup to either the {@link #setPopup},
  * {@link #setContext} or {@link #setTooltip} attribute of the element.
  *
- * <p>Default {@link #getMoldSclass}: z-popup.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-popup.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -111,8 +111,8 @@ public class Popup extends XulElement {
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("Use open/close instead");
 	}
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-popup" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-popup" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 	//Note: don't generate z.type here because Menupopup's z.type diff

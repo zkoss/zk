@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  * A button.
- * <p>Default {@link #getMoldSclass}: z-button.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-button.(since 3.5.0)
  * @author tomyeh
  */
 public class Button extends LabelImageElement {
@@ -171,11 +171,11 @@ public class Button extends LabelImageElement {
 	//-- super --//
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getMoldSclass() + "-disd" : "";
+		final String added = isDisabled() ? getZclass() + "-disd" : "";
 		return scls == null ? added : scls + " " + added;
 	}
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-button" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-button" : super.getZclass();
 	}
 	
 	public String getOuterAttrs() {

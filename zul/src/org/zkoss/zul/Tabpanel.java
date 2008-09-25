@@ -98,9 +98,9 @@ public class Tabpanel extends XulElement {
 	 *
 	 * @since 3.5.0
 	 */
-	public String getMoldSclass(){
+	public String getZclass(){
 		String mold = super.getMold();							
-		String scls = super.getMoldSclass();
+		String scls = super.getZclass();
 		final Tabbox tabbox = getTabbox();
 		if (scls != null) return scls;
 		final boolean vert = tabbox != null && tabbox.isVertical();

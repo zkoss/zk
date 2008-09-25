@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div z.type="zkex.zul.columnlayout.ColumnLayout" id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
-<div id="${self.uuid}!real" class="${self.moldSclass}-inner">
+<div id="${self.uuid}!real" class="${self.zclass}-inner">
 	<c:forEach var="child" items="${self.children}">
 ${z:redraw(child, null)}
 	</c:forEach>

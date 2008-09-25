@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.Utils;
  * of the grid. The row with the most child elements determines the number
  * of columns in each row.
  *
- * <p>Default {@link #getMoldSclass}: z-row. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-row. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -207,8 +207,8 @@ public class Row extends XulElement {
 		return scls + (sclx != null ? " " + sclx : "");
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-row" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-row" : super.getZclass();
 	}
 	
 	protected String getRealStyle() {
@@ -278,7 +278,7 @@ public class Row extends XulElement {
 			HTMLs.appendStyle(sb, "height", hgh);
 			style = sb.toString();
 		}
-		String clx = child instanceof Detail ? ((Detail)child).getMoldSclass() + "-outer" : getMoldSclass() + "-inner";
+		String clx = child instanceof Detail ? ((Detail)child).getZclass() + "-outer" : getZclass() + "-inner";
 		
 		if (colattrs == null && style.length() == 0 && span == 1)
 			return " class=\"" + clx + "\"";
@@ -419,7 +419,7 @@ public class Row extends XulElement {
 			sb.append(getChildAttrs(j));
 		}
 		sb.append("><div id=\"").append(child.getUuid())
-		.append("!cell\"").append(" class=\"").append(getMoldSclass())
+		.append("!cell\"").append(" class=\"").append(getZclass())
 		.append("-cnt");
 		if (grid.isFixedLayout())
 			sb.append(" z-overflow-hidden");

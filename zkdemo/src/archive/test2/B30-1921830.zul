@@ -23,10 +23,10 @@ Click the following button, and the style shall change each time you clicked
 <button label="Change style">
 <attribute name="onClick">
 String cls = "z-splitter" + ("vertical".equals(hs.getOrient()) ? "-ver" : "-hor");
-if (cls.equals(hs.getMoldSclass())) {
- hs.setMoldSclass("z-splitter-os" + ("vertical".equals(hs.getOrient()) ? "-ver" : "-hor"));
+if (cls.equals(hs.getZclass())) {
+ hs.setZclass("z-splitter-os" + ("vertical".equals(hs.getOrient()) ? "-ver" : "-hor"));
 } else {
- hs.setMoldSclass("z-splitter" + ("vertical".equals(hs.getOrient()) ? "-ver" : "-hor"));
+ hs.setZclass("z-splitter" + ("vertical".equals(hs.getOrient()) ? "-ver" : "-hor"));
 }
 </attribute>
 </button>

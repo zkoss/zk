@@ -52,7 +52,7 @@ import org.zkoss.zul.mesg.MZul;
  * <p>The use of column is mainly to define attributes for each cell
  * in the grid.
  * 
- * <p>Default {@link #getMoldSclass}: z-column. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-column. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -435,12 +435,12 @@ public class Column extends HeaderElement {
 		else if (!sort(true)) sort(false);
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-column" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-column" : super.getZclass();
 	}
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String added = _sortAsc != null || _sortDsc != null ?  getMoldSclass() + "-sort": "";
+		final String added = _sortAsc != null || _sortDsc != null ?  getZclass() + "-sort": "";
 		return scls != null ? scls + ' ' + added : added;
 	}
 	public String getOuterAttrs() {

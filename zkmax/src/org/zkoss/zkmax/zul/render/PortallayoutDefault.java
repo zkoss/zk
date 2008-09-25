@@ -39,7 +39,7 @@ public class PortallayoutDefault implements ComponentRenderer {
 				self.getOuterAttrs()).write(self.getInnerAttrs()).write(
 				" z.type=\"zkmax.zul.portallayout.PortalLayout\">");
 		wh.write("<div id=\"").write(self.getUuid() + "!real\" class=\"")
-			.write(self.getMoldSclass()).write("-inner\">");
+			.write(self.getZclass()).write("-inner\">");
 		wh.writeChildren(self);
 		wh.write("<div class=\"z-clear\"></div>");
 		wh.write("</div></div>");

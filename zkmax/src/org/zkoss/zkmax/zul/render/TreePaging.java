@@ -42,24 +42,24 @@ public class TreePaging implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tree self = (Tree) comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		final Execution exec = Executions.getCurrent();
 		final String tag = exec.isBrowser("ie") || exec.isBrowser("gecko") ? "a" : "button";
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.tree.Tree\" z.pg=\"t\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("top") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
-				.write("!pgit\" class=\"").write(mcls).write("-pgi-t\">")
+				.write("!pgit\" class=\"").write(zcls).write("-pgi-t\">")
 				.write(self.getPagingChild())
 				.write("</div>");
 		}
 		
 		if(self.getTreecols() != null){
-			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"").write(mcls).write("-header\">")
+			wh.write("<div id=\"").write(self.getUuid()).write("!head\" class=\"").write(zcls).write("-header\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!hdfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!hdfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 					final Treecol child = (Treecol) it.next();
@@ -72,7 +72,7 @@ public class TreePaging implements ComponentRenderer {
 				.write("</table></div>");
 		}
 
-		wh.write("<div id=\"").write(self.getUuid()).write("!body\" class=\"").write(mcls).write("-body\">")
+		wh.write("<div id=\"").write(self.getUuid()).write("!body\" class=\"").write(zcls).write("-body\">")
 			 .write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"");
 		if (self.isFixedLayout())
 			wh.write(" style=\"table-layout:fixed\"");
@@ -80,7 +80,7 @@ public class TreePaging implements ComponentRenderer {
 		
 		if(self.getTreecols() != null) {
 			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"").write(mcls).write("-faker\">");
+				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"").write(zcls).write("-faker\">");
 				
 			for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 				final Treecol child = (Treecol) it.next();
@@ -97,11 +97,11 @@ public class TreePaging implements ComponentRenderer {
 		wh.write("</div>");
 
 		if(self.getTreefoot() != null){
-			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"").write(mcls).write("-footer\">")
+			wh.write("<div id=\"").write(self.getUuid()).write("!foot\" class=\"").write(zcls).write("-footer\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 					final Treecol child = (Treecol) it.next();
@@ -117,7 +117,7 @@ public class TreePaging implements ComponentRenderer {
 		//Paging
 		if (self.getPagingChild() != null && self.getPagingPosition().equals("bottom") || self.getPagingPosition().equals("both")) {
 			wh.write("<div id=\"").write(uuid)
-				.write("!pgib\" class=\"").write(mcls).write("-pgi-b\">")
+				.write("!pgib\" class=\"").write(zcls).write("-pgi-b\">")
 				.write(self.getPagingChild())
 				.write("</div>");
 		}

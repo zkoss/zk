@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
  * The column of Portallayout. <br> 
  * Child of Portalchildren can only be Panel.
  * 
- * <p>Default {@link #getMoldSclass}: z-portal-children.
+ * <p>Default {@link #getZclass}: z-portal-children.
  * @author jumperchen
  * @since 3.5.0
  */
@@ -39,8 +39,8 @@ public class Portalchildren extends XulElement {
 	public Portalchildren() {
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-portal-children" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-portal-children" : super.getZclass();
 	}
 	
 	public void setParent(Component parent) {

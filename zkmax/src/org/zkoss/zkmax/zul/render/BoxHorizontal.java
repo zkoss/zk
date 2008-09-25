@@ -60,7 +60,7 @@ public class BoxHorizontal implements ComponentRenderer{
 					spstyle = "width:" + spacing;
 
 				wh.write("<td id=\"").write(child.getUuid())
-					.write("!chdextr2\" class=\"").write(self.getMoldSclass()).write("-sep\"");
+					.write("!chdextr2\" class=\"").write(self.getZclass()).write("-sep\"");
 
 				//note: we have to hide if spacing is 0
 				//since Opera will scale it up if maximized

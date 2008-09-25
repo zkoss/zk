@@ -32,13 +32,13 @@ zkWnd2 = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.addClass(btn, getZKAttr(cmp, "mcls") + "-close-over");
+		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-close-over");
 	},
 	onCloseMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.rmClass(btn, getZKAttr(cmp, "mcls") + "-close-over");
+		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-close-over");
 	},
 	onCloseClick: function (evt) {
 		if (!evt) evt = window.event;
@@ -49,19 +49,19 @@ zkWnd2 = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.addClass(btn, getZKAttr(cmp, "mcls") + "-minimize-over");
+		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-minimize-over");
 	},
 	onMinimizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.rmClass(btn, getZKAttr(cmp, "mcls") + "-minimize-over");
+		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-minimize-over");
 	},
 	onMaximizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2"), 
-			cls = getZKAttr(cmp, "mcls");
+			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.addClass(btn, cls + "-maximized-over");
 		zk.addClass(btn, cls + "-maximize-over");
@@ -70,7 +70,7 @@ zkWnd2 = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2"), 
-			cls = getZKAttr(cmp, "mcls");
+			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.rmClass(btn, cls + "-maximized-over");
 		zk.rmClass(btn, cls + "-maximize-over");
@@ -141,7 +141,7 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 		var isRealVisible = zk.isRealVisible(cmp);
 		if (!isRealVisible && maximized) return;
 		
-		var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "mcls");
+		var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "zcls");
 		if (maximized) {
 			zk.addClass($e(cmp, "maximize"), cls + "-maximized");
 			zkWnd2.hideShadow(cmp);

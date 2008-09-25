@@ -29,7 +29,7 @@ import org.zkoss.zul.mesg.MZul;
 /**
  * An edit box for holding a constrained integer.
  *
- * <p>Default {@link #getMoldSclass}: z-spinner.
+ * <p>Default {@link #getZclass}: z-spinner.
  *
  * <p>spinner supports below key events.
  * <lu>
@@ -110,8 +110,8 @@ public class Spinner extends NumberInputElement {
 	}
 
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ?  "z-spinner" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ?  "z-spinner" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super

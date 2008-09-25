@@ -25,12 +25,12 @@ zk.load("zul.vd");
  */
 if (!window.Comboitem_effect) { //define it only if not customized
 	window.Comboitem_effect = function (item, undo) {
-		var mcls = getZKAttr(item, "mcls");
+		var zcls = getZKAttr(item, "zcls");
 		if (undo) {
-			zk.rmClass(item, mcls + "-over-seld");
-			zk.rmClass(item, mcls + "-over");
+			zk.rmClass(item, zcls + "-over-seld");
+			zk.rmClass(item, zcls + "-over");
 		} else
-			zk.addClass(item, zk.hasClass(item, mcls + "-seld") ? mcls + "-over-seld": mcls + "-over");
+			zk.addClass(item, zk.hasClass(item, zcls + "-seld") ? zcls + "-over-seld": zcls + "-over");
 	};
 }
 
@@ -365,7 +365,7 @@ zkCmbox.dropdn = function (cmp, dropdown) {
 
 /** Marks an item as selected or un-selected. */
 zkCmbox._setsel = function (item, sel) {
-	zk.addClass(item, getZKAttr(item, "mcls") + "-seld", sel);
+	zk.addClass(item, getZKAttr(item, "zcls") + "-seld", sel);
 };
 
 /** Returns the text contained in the specified item. */
@@ -682,8 +682,8 @@ zkCmbox.close = function (pp, focus) {
 	if (pp._shadow) pp._shadow.hide();
 	var cb = $e(uuid),
 		btn = $e(uuid, "btn"),
-		mcls = getZKAttr(cb, "mcls");
-	if (btn) zk.rmClass(btn, mcls + "-btn-over");
+		zcls = getZKAttr(cb, "zcls");
+	if (btn) zk.rmClass(btn, zcls + "-btn-over");
 	if (cb && zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: uuid, cmd: "onOpen",
 			data: [false, null, $e(uuid + "!real").value]});

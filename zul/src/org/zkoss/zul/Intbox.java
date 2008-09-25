@@ -25,7 +25,7 @@ import org.zkoss.zul.impl.NumberInputElement;
 
 /**
  * An edit box for holding an integer.
- * <p>Default {@link #getMoldSclass}: z-intbox.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-intbox.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -60,8 +60,8 @@ public class Intbox extends NumberInputElement {
 	}
 
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-intbox" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-intbox" : super.getZclass();
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);

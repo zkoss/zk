@@ -21,6 +21,9 @@ ZK 3.5.1
   2125788: Hilighted window covered by mask when change title
 
 * Upgrade Notes
+  * getMoldSclass is deprecated and replaced with getZclass since
+    we are going to provide ZK Cascading Classes that allow developers
+    to configure the CSS with the component name.
 
 	--------
 ZK 3.5.0

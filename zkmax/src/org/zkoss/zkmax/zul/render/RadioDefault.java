@@ -41,7 +41,7 @@ public class RadioDefault implements ComponentRenderer {
 			.write(uuid).write("!real\"").write(self.getInnerAttrs())
 			.write("/><label for=\"").write(uuid).write("!real\"")
 			.write(self.getLabelAttrs())
-			.write(" class=\""+self.getMoldSclass()+"\"")
+			.write(" class=\""+self.getZclass()+"\"")
 			.write(">")
 			.write(self.getImgTag()).write(self.getLabel())
 			.write("</label>");

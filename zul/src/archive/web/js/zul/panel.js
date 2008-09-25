@@ -139,13 +139,13 @@ zkPanel = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.addClass(btn, getZKAttr(cmp, "mcls") + "-close-over");
+		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-close-over");
 	},
 	onCloseMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.rmClass(btn, getZKAttr(cmp, "mcls") + "-close-over");
+		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-close-over");
 	},
 	onCloseClick: function (evt) {
 		if (!evt) evt = window.event;
@@ -156,31 +156,31 @@ zkPanel = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.addClass(btn, getZKAttr(cmp, "mcls") + "-toggle-over");
+		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-toggle-over");
 	},
 	onToggleMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.rmClass(btn, getZKAttr(cmp, "mcls") + "-toggle-over");
+		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-toggle-over");
 	},
 	onMinimizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.addClass(btn, getZKAttr(cmp, "mcls") + "-minimize-over");
+		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-minimize-over");
 	},
 	onMinimizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.rmClass(btn, getZKAttr(cmp, "mcls") + "-minimize-over");
+		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-minimize-over");
 	},
 	onMaximizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel"), 
-			cls = getZKAttr(cmp, "mcls");
+			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.addClass(btn, cls + "-maximized-over");
 		zk.addClass(btn, cls + "-maximize-over");
@@ -189,7 +189,7 @@ zkPanel = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel"), 
-			cls = getZKAttr(cmp, "mcls");
+			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.rmClass(btn, cls + "-maximized-over");
 		zk.rmClass(btn, cls + "-maximize-over");
@@ -213,7 +213,7 @@ zkPanel = {
 			var bwrap = $e(cmp.id + "!bwrap");
 			if (bwrap && open != $visible(bwrap)
 			&& (!ignorable || !getZKAttr(bwrap, "animating"))) {
-				var cls = getZKAttr(cmp, "mcls");
+				var cls = getZKAttr(cmp, "zcls");
 				if (open) {
 					zk.rmClass(cmp, cls + "-collapsed");
 					anima.slideDown(bwrap);
@@ -252,7 +252,7 @@ zkPanel = {
 			var isRealVisible = zk.isRealVisible(cmp);
 			if (!isRealVisible && maximized) return;
 			
-			var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "mcls");
+			var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "zcls");
 			if (maximized) {
 				zk.addClass($e(cmp.id + "!maximize"), cls + "-maximized");
 				zkPanel.hideShadow(cmp);

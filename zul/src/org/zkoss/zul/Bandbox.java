@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.Utils;
  * any kind of children. For example, you could place a textbox in
  * the popup to let user search particular items.
  *
- * <p>Default {@link #getMoldSclass}: z-bandbox.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-bandbox.(since 3.5.0)
  *
  * <p>Events: onOpen<br/>
  * Developers can listen to the onOpen event and initializes it
@@ -161,8 +161,8 @@ public class Bandbox extends Textbox {
 	}
 
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-bandbox" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-bandbox" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());

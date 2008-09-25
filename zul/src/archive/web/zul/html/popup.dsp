@@ -17,8 +17,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<c:set var="mcls" value="${self.moldSclass}"/>
+<c:set var="zcls" value="${self.zclass}"/>
 <div id="${self.uuid}" z.type="zul.widget.Pop"${self.outerAttrs}${self.innerAttrs}>
-<div class="${mcls}-tl"><div class="${mcls}-tr"><div class="${mcls}-tm"></div></div></div>
-<div id="${self.uuid}!bwrap" class="${mcls}-body"><div class="${mcls}-cl"><div class="${mcls}-cr"><div class="${mcls}-cm">
-<div id="${self.uuid}!cave" class="${mcls}-cnt"><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></div></div></div></div><div class="${mcls}-bl"><div class="${mcls}-br"><div class="${mcls}-bm"></div></div></div></div></div>
+<div class="${zcls}-tl"><div class="${zcls}-tr"><div class="${zcls}-tm"></div></div></div>
+<div id="${self.uuid}!bwrap" class="${zcls}-body"><div class="${zcls}-cl"><div class="${zcls}-cr"><div class="${zcls}-cm">
+<div id="${self.uuid}!cave" class="${zcls}-cnt"><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></div></div></div></div><div class="${zcls}-bl"><div class="${zcls}-br"><div class="${zcls}-bm"></div></div></div></div></div>

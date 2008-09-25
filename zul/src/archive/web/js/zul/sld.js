@@ -207,24 +207,24 @@ zkSld = {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			btn = $e(cmp.id + "!btn");
-			mcls = getZKAttr(cmp, "mcls");
-		zk.addClass(btn, mcls + "-btn-over");
+			zcls = getZKAttr(cmp, "zcls");
+		zk.addClass(btn, zcls + "-btn-over");
 	},
 	onout: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			btn = $e(cmp.id + "!btn");
 		if (btn != zkSld.down_btn) {
-			var mcls = getZKAttr(cmp, "mcls");
-			zk.rmClass(btn, mcls + "-btn-over");
+			var zcls = getZKAttr(cmp, "zcls");
+			zk.rmClass(btn, zcls + "-btn-over");
 		}
 	},
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt)),
 			btn = $e(cmp.id + "!btn"),
-			mcls = getZKAttr(cmp, "mcls");
-		zk.addClass(btn, mcls + "-btn-drag");
+			zcls = getZKAttr(cmp, "zcls");
+		zk.addClass(btn, zcls + "-btn-drag");
 		zkSld.down_btn = btn;
 		zk.listen(document.body, "mouseup", zkSld.onup);
 	},
@@ -233,9 +233,9 @@ zkSld = {
 		var cmp = $outer(Event.element(evt));
 		var btn = zkSld.down_btn;
 		if (btn) {			
-			var mcls = getZKAttr($real(btn), "mcls");
-			zk.rmClass(btn, mcls + "-btn-drag");
-			zk.rmClass(btn, mcls + "-btn-over");
+			var zcls = getZKAttr($real(btn), "zcls");
+			zk.rmClass(btn, zcls + "-btn-drag");
+			zk.rmClass(btn, zcls + "-btn-over");
 		}
 		zkSld.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkSld.onup);

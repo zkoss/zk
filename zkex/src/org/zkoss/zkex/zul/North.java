@@ -20,7 +20,7 @@ package org.zkoss.zkex.zul;
 
 /**
  * This component is a north region.
- * <p>Default {@link #getMoldSclass}: z-north.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-north.(since 3.5.0)
  * 
  * @author jumperchen
  * @since 3.0.0

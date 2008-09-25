@@ -42,7 +42,7 @@ public class CaptionDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Caption self = (Caption) comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		final String imgTag = self.getImgTag();
 
 		if (self.isLegend()) {
@@ -56,20 +56,20 @@ public class CaptionDefault implements ComponentRenderer {
 					.write(self.getInnerAttrs());
 			wh.writeln(" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");
 			wh.writeln("<tr valign=\"middle\">");
-			wh.write("<td align=\"left\" class=\"").write(mcls).write("-l\">").write(imgTag);
+			wh.write("<td align=\"left\" class=\"").write(zcls).write("-l\">").write(imgTag);
 			new Out(self.getCompoundLabel()).setNbsp(true).render(out);
 			wh.writeln("</td>");
 
-			wh.write("<td align=\"right\" class=\"").write(mcls).write("-r\" id=\"").write(uuid).write("!cave\">")
+			wh.write("<td align=\"right\" class=\"").write(zcls).write("-r\" id=\"").write(uuid).write("!cave\">")
 				.writeChildren(self)
 				.writeln("</td>");
 
 			if (self.isClosableVisible()) {
-				final String pmcls = ((HtmlBasedComponent)self.getParent()).getMoldSclass();
+				final String pzcls = ((HtmlBasedComponent)self.getParent()).getZclass();
 				wh.write("<td width=\"16\"><div id=\"")
 					.write(self.getParent().getUuid())
 					.write("!close\" class=\"")
-					.write(pmcls).write("-tool ").write(pmcls)
+					.write(pzcls).write("-tool ").write(pzcls)
 					.write("-close\"></div></td>");
 			}
 

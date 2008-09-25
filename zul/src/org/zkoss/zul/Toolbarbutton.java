@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Non-xul extension: Toolbarbutton supports {@link #getHref}. If {@link #getHref}
  * is not null, the onClick handler is ignored and this element is degenerated
  * to HTML's A tag.
- * <p>Default {@link #getMoldSclass}: z-toolbar-button.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-toolbar-button.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -56,14 +56,14 @@ public class Toolbarbutton extends LabelImageElement {
 
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getMoldSclass() + "-disd": "";
+		final String added = isDisabled() ? getZclass() + "-disd": "";
 		return scls != null && scls.length() > 0 ? scls + " " + added
 				: added;
 	}
 
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ?  "z-toolbar-button" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ?  "z-toolbar-button" : super.getZclass();
 	}
 	
 	/**

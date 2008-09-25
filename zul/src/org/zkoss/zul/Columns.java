@@ -39,7 +39,7 @@ import org.zkoss.zul.mesg.MZul;
 /**
  * Defines the columns of a grid.
  * Each child of a columns element should be a {@link Column} element.
- * <p>Default {@link #getMoldSclass}: z-columns.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-columns.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -163,8 +163,8 @@ public class Columns extends HeadersElement {
 		return mpop;
 	}
 	//-- Component --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-columns" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-columns" : super.getZclass();
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Grid))

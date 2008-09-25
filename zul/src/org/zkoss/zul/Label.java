@@ -316,8 +316,8 @@ public class Label extends XulElement {
 	 *
 	 * <p>Default: "z-label"
 	 */
-	public String getMoldSclass() {
-		String scls = super.getMoldSclass();
+	public String getZclass() {
+		String scls = super.getZclass();
 		if (scls == null)
 			scls = "z-label";
 		return scls;

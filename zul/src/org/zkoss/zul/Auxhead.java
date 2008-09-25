@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.XulElement;
  * Used to define a collection of auxiliary headers ({@link Auxheader}).
  *
  * <p>Non XUL element.
- * <p>Default {@link #getMoldSclass}: z-auxhead.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-auxhead.(since 3.5.0)
  * 
  * @since 3.0.0
  * @author tomyeh
@@ -36,8 +36,8 @@ public class Auxhead extends XulElement {
 	public Auxhead() {
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-auxhead" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-auxhead" : super.getZclass();
 	}
 	//super//
 	public boolean insertBefore(Component child, Component insertBefore) {

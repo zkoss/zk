@@ -34,8 +34,8 @@ public class Bandpopup extends XulElement {
 	}
 
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-band-popup" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-band-popup" : super.getZclass();
 	}
 
 	public boolean setVisible(boolean visible) {

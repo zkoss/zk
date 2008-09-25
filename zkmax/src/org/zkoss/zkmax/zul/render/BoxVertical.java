@@ -56,7 +56,7 @@ public class BoxVertical implements ComponentRenderer {
 					spstyle = "height:" + spacing;
 
 				wh.write("<tr id=\"").write(child.getUuid())
-					.write("!chdextr2\" class=\"").write(self.getMoldSclass()).write("-sep\"");
+					.write("!chdextr2\" class=\"").write(self.getZclass()).write("-sep\"");
 
 				//note: we have to hide if spacing is 0
 				//since IE7 shows some space

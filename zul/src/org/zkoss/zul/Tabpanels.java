@@ -66,7 +66,7 @@ public class Tabpanels extends XulElement {
 	 * @since 3.5.0
 	 * <p>Note: the default style class is always "z-tabpanels".
 	 */
-	public String getMoldSclass(){		
+	public String getZclass(){		
 		final Tabbox tabbox = getTabbox();
 		final boolean vert = tabbox != null && tabbox.isVertical();
 		final String mold = tabbox != null ? tabbox.getMold(): null;

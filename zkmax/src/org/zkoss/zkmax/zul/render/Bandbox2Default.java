@@ -40,24 +40,24 @@ public class Bandbox2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Bandbox self = (Bandbox) comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		final Execution exec = Executions.getCurrent();
 
 		wh.write("<span id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs())
 			.write(" z.type=\"zul.cb.Bdbox\" z.combo=\"true\"><input id=\"")
 			.write(uuid).write("!real\" autocomplete=\"off\"")
-			.write(" class=\"").write(mcls).write("-inp\"")
+			.write(" class=\"").write(zcls).write("-inp\"")
 			.write(self.getInnerAttrs()).write("/><span id=\"")
-			.write(uuid).write("!btn\" class=\"").write(mcls).write("-btn\"");
+			.write(uuid).write("!btn\" class=\"").write(zcls).write("-btn\"");
 
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("><img class=\"").write(mcls).write("-img\" onmousedown=\"return false;\"");
+		wh.write("><img class=\"").write(zcls).write("-img\" onmousedown=\"return false;\"");
 		wh.write(" src=\"").write(exec.encodeURL("~./img/spacer.gif")).write("\"")
 			.write("\"/></span><div id=\"").write(uuid).write("!pp\" class=\"")
-			.write(mcls).write("-pp\" style=\"display:none\" tabindex=\"-1\">")
+			.write(zcls).write("-pp\" style=\"display:none\" tabindex=\"-1\">")
 			.write(self.getDropdown()).write("</div></span>");
 	}
 }

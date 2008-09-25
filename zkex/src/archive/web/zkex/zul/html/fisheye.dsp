@@ -17,4 +17,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" z.type="zkex.zul.fisheye.Fisheye"${self.outerAttrs}${self.innerAttrs}><img id="${self.uuid}!img" src="${c:encodeURL(self.image)}"  class="${self.moldSclass}-img"/><div id="${self.uuid}!label" style="display:none;" class="${self.moldSclass}-text"><c:out value="${self.label}"/></div></div>
+<div id="${self.uuid}" z.type="zkex.zul.fisheye.Fisheye"${self.outerAttrs}${self.innerAttrs}><img id="${self.uuid}!img" src="${c:encodeURL(self.image)}"  class="${self.zclass}-img"/><div id="${self.uuid}!label" style="display:none;" class="${self.zclass}-text"><c:out value="${self.label}"/></div></div>

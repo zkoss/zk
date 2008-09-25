@@ -54,7 +54,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Events:<br/>
  * onMove, onOpen, onZIndex, onMaximize, onMinimize, and onClose.<br/>
  * 
- * <p>Default {@link #getMoldSclass}: z-panel.
+ * <p>Default {@link #getZclass}: z-panel.
  * 
  * @author jumperchen
  * @since 3.5.0
@@ -423,12 +423,12 @@ public class Panel extends XulElement {
 
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String mcls = getMoldSclass();
-		return scls + ("normal".equals(_border) ? "" : ' ' + mcls + "-noborder")
-			+ (_open ? "" : " " + mcls + "-collapsed");
+		final String zcls = getZclass();
+		return scls + ("normal".equals(_border) ? "" : ' ' + zcls + "-noborder")
+			+ (_open ? "" : " " + zcls + "-collapsed");
 	}
-	public String getMoldSclass() {
-		return _moldSclass == null ?  "z-panel" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ?  "z-panel" : super.getZclass();
 	}	
 	public String getOuterAttrs() {
 		final StringBuffer sb =

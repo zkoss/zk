@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getMoldSclass}: z-menubar-hor, if {@link #getOrient()} == vertical,
+ * <p>Default {@link #getZclass}: z-menubar-hor, if {@link #getOrient()} == vertical,
  *  z-menubar-ver will be added.(since 3.5.0)
  *
  * @author tomyeh
@@ -89,9 +89,9 @@ public class Menubar extends XulElement {
 	}
 
 	//-- Component --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-menubar" +
-				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-menubar" +
+				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();

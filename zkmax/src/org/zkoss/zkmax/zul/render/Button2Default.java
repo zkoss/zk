@@ -43,12 +43,12 @@ public class Button2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Button self = (Button) comp;
 		final String uuid = self.getUuid();
-		String mcls = self.getMoldSclass();
-		if (mcls == null) mcls = "";
+		String zcls = self.getZclass();
+		if (zcls == null) zcls = "";
 		final String outerattrs = self.getOuterAttrs();
 		final Execution exec = Executions.getCurrent();
 		wh.write("<span z.type=\"zul.btn.Button\" id=\"").write(uuid)
-			.write("\" class=\"").write(mcls).write("\"")
+			.write("\" class=\"").write(zcls).write("\"")
 			.write(ZkFns.noCSSAttrs(outerattrs));
 		if (!self.isVisible())
 			wh.write(" style=\"display:none\"");
@@ -60,11 +60,11 @@ public class Button2Default implements ComponentRenderer {
 		}
 		wh.write(ZkFns.outCSSAttrs(outerattrs))
 			.write(self.getInnerAttrs())
-			.write(">\n<tr><td class=\"").write(mcls).write("-tl\">");
+			.write(">\n<tr><td class=\"").write(zcls).write("-tl\">");
 		if (!exec.isExplorer()) {
 			wh.write("<button id=\"")
 				.write(uuid).write("!real\" class=\"")
-				.write(mcls).write("\"");
+				.write(zcls).write("\"");
 			if (self.getTabindex() >= 0 && (exec.isGecko() || exec.isSafari()))
 				wh.write(" tabindex=\"").write(self.getTabindex()).write("\"");
 			if (self.isDisabled())
@@ -72,20 +72,20 @@ public class Button2Default implements ComponentRenderer {
 			wh.write("></button>");
 		}
 		wh.write("</td>");
-		wh.write("<td class=\"").write(mcls).write("-tm\"></td><td class=\"")
-			.write(mcls).write("-tr\"></td></tr>\n")
+		wh.write("<td class=\"").write(zcls).write("-tm\"></td><td class=\"")
+			.write(zcls).write("-tr\"></td></tr>\n")
 			.write("<tr><td class=\"")
-			.write(mcls).write("-cl\">");
+			.write(zcls).write("-cl\">");
 		if (exec.isExplorer()) {
 			wh.write("<button id=\"")
 				.write(uuid).write("!real\" class=\"")
-				.write(mcls).write("\"");
+				.write(zcls).write("\"");
 			if (self.isDisabled())
 				wh.write(" disabled=\"disabled\"");
 			wh.write("></button>");
 		}
 		wh.write("</td><td class=\"")
-			.write(mcls).write("-cm\">");
+			.write(zcls).write("-cm\">");
 
 		if (self.getDir().equals("reverse")) {
 			new Out(self.getLabel()).render(out);
@@ -101,11 +101,11 @@ public class Button2Default implements ComponentRenderer {
 			new Out(self.getLabel()).render(out);
 		}		
 
-		wh.write("</td>\n<td class=\"").write(mcls)
+		wh.write("</td>\n<td class=\"").write(zcls)
 			.write("-cr\"><i class=\"")
-			.write(mcls).write("\"></i></td></tr>\n<tr><td class=\"")
-			.write(mcls).write("-bl\"></td><td class=\"").write(mcls)
+			.write(zcls).write("\"></i></td></tr>\n<tr><td class=\"")
+			.write(zcls).write("-bl\"></td><td class=\"").write(zcls)
 			.write("-bm\"></td><td class=\"")
-			.write(mcls).write("-br\"></td></tr>\n</table></span>");
+			.write(zcls).write("-br\"></td></tr>\n</table></span>");
 	}
 }

@@ -49,7 +49,7 @@ import org.zkoss.zul.impl.Utils;
  * is more flexible than menulist, such as {@link #setAutocomplete}
  * {@link #setAutodrop}.
  *
- * <p>Default {@link #getMoldSclass}: z-combobox.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-combobox.(since 3.5.0)
  *
  * <p>Events: onOpen, onSelect<br/>
  * Developers can listen to the onOpen event and initializes it
@@ -533,8 +533,8 @@ public class Combobox extends Textbox {
 	}
 
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-combobox" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-combobox" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());

@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Events:<br/>
  * onPortalMove.<br/>
  * 
- * <p>Default {@link #getMoldSclass}: z-portal-layout.
+ * <p>Default {@link #getZclass}: z-portal-layout.
  * 
  * @author jumperchen
  * @since 3.5.0
@@ -89,8 +89,8 @@ public class Portallayout extends XulElement {
 		return pos; 
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-portal-layout" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-portal-layout" : super.getZclass();
 	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Portalchildren))

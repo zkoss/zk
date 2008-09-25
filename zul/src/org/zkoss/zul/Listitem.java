@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A list item.
  *
- * <p>Default {@link #getMoldSclass}: z-list-item.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-list-item.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -87,14 +87,14 @@ public class Listitem extends XulElement {
 	}
 	protected String getRealSclass() {
 		String scls = super.getRealSclass();
-		final String added = isDisabled() ? getMoldSclass() + "-disd" : isSelected() ? getMoldSclass() + "-seld" : "";
+		final String added = isDisabled() ? getZclass() + "-disd" : isSelected() ? getZclass() + "-seld" : "";
 		if (this instanceof Listgroup || this instanceof Listgroupfoot || !isVisible()) return scls;
 		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
 		return scls + (sclx != null ? " " + sclx : "") + " " + added ;
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-list-item" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-list-item" : super.getZclass();
 	}
 	/** Returns whether it is checkable.
 	 * <p>Default: true.

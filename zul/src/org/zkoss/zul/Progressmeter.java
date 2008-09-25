@@ -26,7 +26,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A progress meter is a bar that indicates how much of a task has been completed. 
  *
- * <p>Default {@link #getMoldSclass}: z-progressmeter. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-progressmeter. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -73,8 +73,8 @@ public class Progressmeter extends XulElement {
 	}
 
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-progressmeter" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-progressmeter" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
  * specified, and rowspan and colspan of its child can also be specified to 
  * create complex layouts within the table.
  * 
- *  <p>Default {@link #getMoldSclass}: z-table-layout.
+ *  <p>Default {@link #getZclass}: z-table-layout.
  * 
  * @author robbiecheng
  * @since 3.5.0
@@ -38,7 +38,7 @@ public class Tablelayout extends XulElement{
 	private int _columns = 1;
 	
 	public Tablelayout() {
-		setMoldSclass("z-table-layout");
+		setZclass("z-table-layout");
 	}
 	
 	/** Sets the number of columns.

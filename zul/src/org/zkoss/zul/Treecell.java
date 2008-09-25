@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * Thus, you could place any kind of children in it. They will be placed
  * right after the image and label.
  * 
- * <p>Default {@link #getMoldSclass}: z-tree-cell.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-tree-cell.(since 3.5.0)
  * @author tomyeh
  */
 public class Treecell extends LabelImageElement {
@@ -171,7 +171,7 @@ public class Treecell extends LabelImageElement {
 			}
 			String iconScls = null;
 			if (tree != null)
-				iconScls = tree.getMoldSclass();
+				iconScls = tree.getZclass();
 			if (iconScls == null)
 				iconScls = ""; //default
 
@@ -245,16 +245,16 @@ public class Treecell extends LabelImageElement {
 		return parent != null ? (Treeitem)parent.getParent(): null;
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-tree-cell" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-tree-cell" : super.getZclass();
 	} 
 	/** Generates HTML tags for &lt;img&gt;.
 	 * @param button whether this is the button to toggle open/close
 	 */
-	private void appendIcon(StringBuffer sb, String mcls,
+	private void appendIcon(StringBuffer sb, String iconScls,
 	String name, boolean button) {
 		sb.append("<span z.fc=\"t\" class=\"")
-			.append(mcls).append('-').append(name).append('"');
+			.append(iconScls).append('-').append(name).append('"');
 			//z.fc used to let tree.js know what to clone
 
 		if (button) {

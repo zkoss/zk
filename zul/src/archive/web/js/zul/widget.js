@@ -121,9 +121,9 @@ zkGrfs = {
 		zkGrfs.open(cmp);
 	},
 	open: function (cmp, silent) {
-		var mcls = getZKAttr(cmp, "mcls") + "-collapsed",
-			open = zk.hasClass(cmp, mcls);
-		zk[open ? "rmClass" : "addClass"](cmp, mcls);
+		var zcls = getZKAttr(cmp, "zcls") + "-collapsed",
+			open = zk.hasClass(cmp, zcls);
+		zk[open ? "rmClass" : "addClass"](cmp, zcls);
 		if (!silent)
 			zkau.sendasap({uuid: cmp.id, cmd: "onOpen", data: [open]});
 		if (open) zk.onSizeAt(cmp);

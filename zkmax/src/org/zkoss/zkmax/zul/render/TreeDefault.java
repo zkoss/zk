@@ -42,18 +42,18 @@ public class TreeDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tree self = (Tree) comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		final Execution exec = Executions.getCurrent();
 		final String tag = exec.isBrowser("ie") || exec.isBrowser("gecko") ? "a" : "button";
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.tree.Tree\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		if(self.getTreecols() != null){
-			wh.write("<div id=\"").write(uuid).write("!head\" class=\"").write(mcls).write("-header\">")
+			wh.write("<div id=\"").write(uuid).write("!head\" class=\"").write(zcls).write("-header\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
 					.write("<tr id=\"").write(self.getTreecols().getUuid())
-					.write("!hdfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("!hdfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 					final Treecol child = (Treecol) it.next();
@@ -66,7 +66,7 @@ public class TreeDefault implements ComponentRenderer {
 				.write("</table></div>");
 		}
 
-		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(mcls).write("-body\">")
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(zcls).write("-body\">")
 			 .write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"");
 		if (self.isFixedLayout())
 			wh.write(" style=\"table-layout:fixed\"");
@@ -74,7 +74,7 @@ public class TreeDefault implements ComponentRenderer {
 		
 		if(self.getTreecols() != null) {
 			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"").write(mcls).write("-faker\">");
+				.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!bdfaker\" class=\"").write(zcls).write("-faker\">");
 				
 			for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 				final Treecol child = (Treecol) it.next();
@@ -91,11 +91,11 @@ public class TreeDefault implements ComponentRenderer {
 		wh.write("</div>");
 
 		if(self.getTreefoot() != null){
-			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(mcls).write("-footer\">")
+			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(zcls).write("-footer\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getTreecols() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("<tr id=\"").write(self.getTreecols().getUuid()).write("!ftfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getTreecols().getChildren().iterator(); it.hasNext();) {
 					final Treecol child = (Treecol) it.next();

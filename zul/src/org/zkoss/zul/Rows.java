@@ -36,7 +36,7 @@ import org.zkoss.zul.ext.Paginal;
 /**
  * Defines the rows of a grid.
  * Each child of a rows element should be a {@link Row} element.
- * <p>Default {@link #getMoldSclass}: z-rows.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-rows.(since 3.5.0)
  *
  * @author tomyeh
  */
@@ -436,8 +436,8 @@ public class Rows extends XulElement {
 			throw new UnsupportedOperationException();
 		}
 	}
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-rows" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-rows" : super.getZclass();
 	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {

@@ -54,7 +54,7 @@ import org.zkoss.zul.impl.XulElement;
  * </dl>
  * 
  * <p>
- * <p>Default {@link #getMoldSclass}: z-tabbox. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-tabbox. (since 3.5.0)
  * 
  * @author tomyeh
  */
@@ -69,7 +69,7 @@ public class Tabbox extends XulElement {
 	/* package */transient EventListener _listener;
 
 	public Tabbox() {				
-		setMoldSclass("z-tabbox");
+		setZclass("z-tabbox");
 		init();
 	}
 	
@@ -277,7 +277,7 @@ public class Tabbox extends XulElement {
 	 * @since 3.5.0
 	 */
 	public String getTabLook() {		
-		String scls = getMoldSclass();		
+		String scls = getZclass();		
 		if ("vertical".equals(_orient)){
 			String postfix = "-v";
 			return scls != null ? scls + postfix: postfix;

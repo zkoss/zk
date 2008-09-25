@@ -42,17 +42,17 @@ public class ListboxDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Listbox self = (Listbox)comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		final Execution exec = Executions.getCurrent();
 		final String tag = exec.isBrowser("ie") || exec.isBrowser("gecko") ? "a" : "button";
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.sel.Libox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		if(self.getListhead() != null){
-			wh.write("<div id=\"").write(uuid).write("!head\" class=\"").write(mcls).write("-header\">")
+			wh.write("<div id=\"").write(uuid).write("!head\" class=\"").write(zcls).write("-header\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getListhead() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!hdfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!hdfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
 					final Listheader child = (Listheader) it.next();
@@ -64,7 +64,7 @@ public class ListboxDefault implements ComponentRenderer {
 			wh.writeComponents(self.getHeads())
 				.write("</table></div>");
 		}
-		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(mcls).write("-body\"");
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(zcls).write("-body\"");
 		if (self.getHeight() != null) wh.write(" style=\"overflow:hidden;height:").write(self.getHeight()).write("\"");
 		else if (self.getRows() > 1) wh.write(" style=\"overflow:hidden;height:").write(self.getRows() * 15).write("px\"");
 		
@@ -76,7 +76,7 @@ public class ListboxDefault implements ComponentRenderer {
 		
 		if(self.getListhead() != null) {
 			wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-				.write("<tr id=\"").write(self.getListhead().getUuid()).write("!bdfaker\" class=\"").write(mcls).write("-faker\">");
+				.write("<tr id=\"").write(self.getListhead().getUuid()).write("!bdfaker\" class=\"").write(zcls).write("-faker\">");
 				
 			for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
 				final Listheader child = (Listheader) it.next();
@@ -98,11 +98,11 @@ public class ListboxDefault implements ComponentRenderer {
 		wh.write("</div>");
 
 		if(self.getListfoot() != null){
-			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(mcls).write("-footer\">")
+			wh.write("<div id=\"").write(uuid).write("!foot\" class=\"").write(zcls).write("-footer\">")
 				.write("<table width=\"").write(self.getInnerWidth()).write("\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"table-layout:fixed\">");
 			if(self.getListhead() != null) {
 				wh.write("<tbody style=\"visibility:hidden;height:0px\">")
-					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!ftfaker\" class=\"").write(mcls).write("-faker\">");
+					.write("<tr id=\"").write(self.getListhead().getUuid()).write("!ftfaker\" class=\"").write(zcls).write("-faker\">");
 					
 				for (Iterator it = self.getListhead().getChildren().iterator(); it.hasNext();) {
 					final Listheader child = (Listheader) it.next();

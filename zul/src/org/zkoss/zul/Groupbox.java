@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * Groups a set of child elements to have a visual effect.
- * <p>Default {@link #getMoldSclass}: "z-fieldset". If {@link #getMold()} is 3d,
+ * <p>Default {@link #getZclass}: "z-fieldset". If {@link #getMold()} is 3d,
  * "z-groupbox" is assumed.(since 3.5.0)
  *
  * @author tomyeh
@@ -85,12 +85,12 @@ public class Groupbox extends XulElement {
 		}
 	}
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : super.getZclass();
 	}
 	protected String getRealSclass() {
 		final String cls = super.getRealSclass();
-		final String added = isClosable() && !isOpen() ? getMoldSclass() + "-collapsed" : "";
+		final String added = isClosable() && !isOpen() ? getZclass() + "-collapsed" : "";
 		return cls == null ? added : cls + " " + added;
 	}
 	

@@ -42,18 +42,18 @@ public class Layoutregion2Default implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		final String title = self.getTitle();
 		final String pos = self.getPosition();
-		final String mcls = self.getMoldSclass();
-		final String pmcls = ((Borderlayout)self.getParent()).getMoldSclass();
+		final String zcls = self.getZclass();
+		final String pzcls = ((Borderlayout)self.getParent()).getZclass();
 		final boolean hasTitle = title != null && title.length() > 0;
 		wh.write("<div id=\"").write(uuid).write('"')
 			.write(" z.type=\"zkex.zul.borderlayout.LayoutRegion2\">").write("<div id=\"")
 			.write(uuid).write("!real\"").write(self.getOuterAttrs())
 			.write(self.getInnerAttrs()).write(">");
 		if (hasTitle) {
-			wh.write("<div id=\"").write(uuid).write("!caption\" class=\"").write(mcls).write("-header\">");
+			wh.write("<div id=\"").write(uuid).write("!caption\" class=\"").write(zcls).write("-header\">");
 			if (!pos.equals("center")) {
-				wh.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(pmcls)
-					.write("-tool ").write(mcls).write("-collapse\"");
+				wh.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(pzcls)
+					.write("-tool ").write(zcls).write("-collapse\"");
 				if (!self.isCollapsible()) {
 					wh.write(" style=\"display:none;\"");
 				}
@@ -62,15 +62,15 @@ public class Layoutregion2Default implements ComponentRenderer {
 			new Out(title).render(out);
 			wh.write("</div>");
 		}
-		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"").write(mcls).write("-body\">")
+		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"").write(zcls).write("-body\">")
 			.writeChildren(self).write("</div></div>");
 		
 		if (!pos.equals("center")) {
-			wh.write("<div id=\"").write(uuid).write("!split\" class=\"").write(mcls).write("-split\"\"></div>");
+			wh.write("<div id=\"").write(uuid).write("!split\" class=\"").write(zcls).write("-split\"\"></div>");
 			if (hasTitle) {
-				wh.write("<div id=\"").write(uuid).write("!collapsed\" class=\"").write(mcls).write("-collapsed\" style=\"display:none\"><div id=\"")
-					.write(uuid).write("!btned\" class=\"").write(pmcls)
-					.write("-tool ").write(mcls).write("-expand\"");
+				wh.write("<div id=\"").write(uuid).write("!collapsed\" class=\"").write(zcls).write("-collapsed\" style=\"display:none\"><div id=\"")
+					.write(uuid).write("!btned\" class=\"").write(pzcls)
+					.write("-tool ").write(zcls).write("-expand\"");
 				if (!self.isCollapsible()) {
 					wh.write(" style=\"display:none;\"");
 				}

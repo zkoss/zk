@@ -22,19 +22,19 @@ public class SpinnerDefault implements ComponentRenderer {
 		final Execution exec = Executions.getCurrent();		
 		final Spinner self = (Spinner) comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		
 		wh.write("<span id=\"").write(uuid).write('"')
 			.write(self.getOuterAttrs()).write(" z.type=\"zul.spinner.Spinner\" z.combo=\"true\">")
 			.write("<input id=\"").write(uuid).write("!real\" autocomplete=\"off\"")
-			.write(" class=\"").write(mcls).write("-inp\"")
+			.write(" class=\"").write(zcls).write("-inp\"")
 			.write(self.getInnerAttrs()).write("/>")
-			.write("<span id=\"").write(uuid).write("!btn\" class=\"").write(mcls).write("-btn\"");
+			.write("<span id=\"").write(uuid).write("!btn\" class=\"").write(zcls).write("-btn\"");
 
 		if (!self.isButtonVisible())
 			wh.write(" style=\"display:none\"");
 
-		wh.write("><img class=\"").write(mcls).write("-img\" onmousedown=\"return false;\"");
+		wh.write("><img class=\"").write(zcls).write("-img\" onmousedown=\"return false;\"");
 		wh.write(" src=\"").write(exec.encodeURL("~./img/spacer.gif")).write("\"").write("\"/></span></span>");
 		
 	}

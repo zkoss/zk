@@ -225,7 +225,7 @@ zkTab2 = {
 		if ((getZKAttr(tab, "sel") == "true") == toSel)
 			return; //nothing changed
 		setZKAttr(tab, "sel", toSel ? "true" : "false");
-		zk[toSel ? "addClass" : "rmClass"](tab, getZKAttr(tab, "mcls") + "-seld");
+		zk[toSel ? "addClass" : "rmClass"](tab, getZKAttr(tab, "zcls") + "-seld");
 
 		var tabbox = $e(getZKAttr(tab, "box")),
 			accd = tabbox && zkTabbox2._isAccord(tabbox),
@@ -263,16 +263,16 @@ zkTab2 = {
 
 		var btn = $e(cmp.id + "!close"),
 			sel = getZKAttr(cmp, "sel"),
-			mcls = getZKAttr(cmp, "mcls");
+			zcls = getZKAttr(cmp, "zcls");
 
-		zk.rmClass(cmp, mcls + "-disd-seld");
-		zk.rmClass(cmp, mcls + "-disd");
+		zk.rmClass(cmp, zcls + "-disd-seld");
+		zk.rmClass(cmp, zcls + "-disd");
 		if (disabled == "true") {
 			//change style from tab/tabsel to tabdis/tabdissel
-			zk.addClass(cmp, mcls + (sel == "true" ? "-disd-seld" : "-disd"));
+			zk.addClass(cmp, zcls + (sel == "true" ? "-disd-seld" : "-disd"));
 		} else {
 			//change style from tabdis/tabdissel to tab/tabsel
-			zk[sel == "true" ? "addClass" : "rmClass"](cmp, mcls + "-seld");
+			zk[sel == "true" ? "addClass" : "rmClass"](cmp, zcls + "-seld");
 		}
 		setZKAttr(cmp, "disabled", disabled);
 	}
@@ -334,7 +334,7 @@ zkTabs2 = {
 	scrollingchk: function(uuid, way, cmp) {
 		var tbsdiv = $e(uuid),
 			tabbox = $parentByType($e(uuid), "Tabbox2"),
-			mcls = getZKAttr(tabbox, "mcls");
+			zcls = getZKAttr(tabbox, "zcls");
 
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
 		if (tbsdiv.offsetWidth < 36)  return; //tooooo small
@@ -348,9 +348,9 @@ zkTabs2 = {
 				for (var i=0,count=tab.length;i<count;i++) {
 					cldheight = cldheight + tab[i].offsetHeight;
 				}
-				if (zk.hasClass(tabbox, mcls + "-scrolling")) { //already in scrolling status
+				if (zk.hasClass(tabbox, zcls + "-scrolling")) { //already in scrolling status
 					if (cldheight <= (headheight+18)) {
-						zk.rmClass(tabbox, mcls + "-scrolling", true);
+						zk.rmClass(tabbox, zcls + "-scrolling", true);
 						header.style.height= tabbox.offsetHeight-2 + "px";
 						header.scrollTop = 0;
 					}
@@ -387,7 +387,7 @@ zkTabs2 = {
 					}
 				}else { // not enough tab to scroll
 					if (cldheight > (headheight - 18)) {
-						zk.addClass(tabbox, mcls + "-scrolling", true);
+						zk.addClass(tabbox, zcls + "-scrolling", true);
 						header.style.height = tabbox.offsetHeight - 36 + "px";
 						if (way == "end") {
 							var d = cldheight - header.offsetHeight - header.scrollTop + 2;
@@ -403,9 +403,9 @@ zkTabs2 = {
 				for (var i = 0, count = a.length; i < count; i++)
 					cldwidth = cldwidth + $int(a[i].offsetWidth) + 2;
 
-				if (zk.hasClass(tabbox, mcls + "-scrolling")) { //already in scrolling status
+				if (zk.hasClass(tabbox, zcls + "-scrolling")) { //already in scrolling status
 					if (cldwidth <= (headwidth)) {
-						zk.rmClass(tabbox, mcls + "-scrolling", true);
+						zk.rmClass(tabbox, zcls + "-scrolling", true);
 						header.style.width = tabbox.offsetWidth - 2 + "px";
 						header.scrollLeft = 0;
 					}
@@ -440,7 +440,7 @@ zkTabs2 = {
 				}
 				else { // not enough tab to scroll
 					if (cldwidth > (headwidth - 10)) {
-						zk.addClass(tabbox, mcls + "-scrolling", true);
+						zk.addClass(tabbox, zcls + "-scrolling", true);
 						var caveul = $e(getZKAttr(tabbox, "tabs"),"cave");
 						caveul.style.width = "5000px";
 						header.style.width = tabbox.offsetWidth - 38 + "px";
@@ -588,11 +588,11 @@ zkTabs2 = {
 		} else {
 			if (tbx.offsetWidth < 36) return;
 			if (zkTabbox2._isScroll(tbx)) {
-				var mcls = getZKAttr(tbx, "mcls");
+				var zcls = getZKAttr(tbx, "zcls");
 				if (!tbx.style.width) {
 					zkTabs2._forceStyle(tbx,"w","100%");
 					zkTabs2._forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");
-					if (zk.hasClass(tbx, mcls + "-scrolling")) {
+					if (zk.hasClass(tbx, zcls + "-scrolling")) {
 						zkTabs2._forceStyle(head,"w",tbx.offsetWidth - 38 + "px");
 					} else {
 						zkTabs2._forceStyle(head,"w",zk.revisedSize(head,tbx.offsetWidth)+ "px");
@@ -600,7 +600,7 @@ zkTabs2 = {
 				} else {
 					zkTabs2._forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");
 					zkTabs2._forceStyle(head,"w",tabs.style.width);
-					if (zk.hasClass(tbx, mcls + "-scrolling")) {
+					if (zk.hasClass(tbx, zcls + "-scrolling")) {
 						zkTabs2._forceStyle(head,"w",head.offsetWidth - 36 + "px");
 					} else {
 						zkTabs2._forceStyle(head,"w",head.offsetWidth + "px");
@@ -631,7 +631,7 @@ zkTabs2 = {
 				zkTabs2._forceStyle(tabs, "h", zk.revisedSize(tabs,tabbox.offsetHeight,true)+"px");
 			}
 			//coz we have to make the header full
-			if (zk.hasClass(tabbox, getZKAttr(tabbox, "mcls") + "-scrolling")) {
+			if (zk.hasClass(tabbox, getZKAttr(tabbox, "zcls") + "-scrolling")) {
 				zkTabs2._forceStyle($e(tabs, "header"),"h", tabs.offsetHeight - 38 + "px");
 			} else {
 				zkTabs2._forceStyle($e(tabs, "header"),"h", zk.revisedSize($e(tabs, "header"),tabs.offsetHeight,true) + "px");
@@ -672,14 +672,14 @@ if (zk.ie6Only) {
 	zkTab2._onMouseOver = function(evt) {
 		if (!evt) evt = window.event;
 		var cmp = Event.element(evt),
-			mcls = getZKAttr($parentByType(cmp, "Tab2"), "mcls");
-		zk.addClass(cmp, mcls + "-close-over");
+			zcls = getZKAttr($parentByType(cmp, "Tab2"), "zcls");
+		zk.addClass(cmp, zcls + "-close-over");
 	};
 	zkTab2._onMouseOut = function(evt) {
 		if (!evt) evt = window.event;
 		var cmp = Event.element(evt),
-			mcls = getZKAttr($parentByType(cmp, "Tab2"), "mcls");
-		zk.rmClass(cmp, mcls + "-close-over");
+			zcls = getZKAttr($parentByType(cmp, "Tab2"), "zcls");
+		zk.rmClass(cmp, zcls + "-close-over");
 	};
 	zkTabs2.beforeSize = function(tabs) {
 		var tabbox = $parentByType(tabs, "Tabbox2");

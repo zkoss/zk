@@ -41,7 +41,7 @@ public class ListfooterDefault implements ComponentRenderer {
 		wh.write("<td id=\"").write(self.getUuid()).write("\" ")
 		.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 		.write(" z.type=\"zul.zul.Ftr\"><div id=\"").write(self.getUuid())
-		.write("!cave\" class=\"").write(self.getMoldSclass()).write("-cnt\">");
+		.write("!cave\" class=\"").write(self.getZclass()).write("-cnt\">");
 		wh.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
 		wh.writeChildren(self);

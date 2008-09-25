@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  * 	<li>onOpen is sent when this listgroup is opened or closed by user.</li>
  * </ol>
  * 
- * <p>Default {@link #getMoldSclass}: z-list-group.
+ * <p>Default {@link #getZclass}: z-list-group.
  * @author jumperchen
  * @since 3.5.0
  */
@@ -148,8 +148,8 @@ public class Listgroup extends Listitem {
 				listbox.addVisibleItemCount(isOpen() ? getVisibleItemCount() : -getVisibleItemCount());
 		}
 	}
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-list-group" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-list-group" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());

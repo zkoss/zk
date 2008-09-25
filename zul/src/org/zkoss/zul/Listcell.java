@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 /**
  * A list cell.
  * 
- * <p>Default {@link #getMoldSclass}: z-list-cell. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-list-cell. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -66,11 +66,11 @@ public class Listcell extends LabelImageElement {
 		HtmlBasedComponent p = (HtmlBasedComponent) getParent();
 		if (!(p instanceof Listgroup) && !(p instanceof Listgroupfoot)) return super.getRealSclass();
 		String clx = super.getRealSclass();
-		return clx != null ? clx + " " + p.getMoldSclass() + "-inner" : p.getMoldSclass() + "-inner";
+		return clx != null ? clx + " " + p.getZclass() + "-inner" : p.getZclass() + "-inner";
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-list-cell" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-list-cell" : super.getZclass();
 	}
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
@@ -167,8 +167,8 @@ public class Listcell extends LabelImageElement {
 			if (item instanceof Listgroup) {
 				sb.append("<img src=\"")
 				.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
-				.append("\" class=\"").append(item.getMoldSclass()+"-img ")
-				.append(item.getMoldSclass()).append(((Listgroup) item).isOpen() ? "-img-open" : "-img-close")
+				.append("\" class=\"").append(item.getZclass()+"-img ")
+				.append(item.getZclass()).append(((Listgroup) item).isOpen() ? "-img-open" : "-img-close")
 				.append("\" align=\"absmiddle\"/>");
 			}
 			if (listbox.isCheckmark()) {

@@ -66,7 +66,7 @@ import org.zkoss.zul.impl.XulElement;
  * the selection.</li>
  * </ol>
  *
- * <p>Default {@link #getMoldSclass}: z-tree, and an other option is z-dottree. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -890,7 +890,7 @@ public class Tree extends XulElement implements Paginated {
 	 * </dl>
 	 *
 	 * @since 3.0.0
-	 * @deprecated As of release 3.5.0, replaced with {@link #getMoldSclass()}
+	 * @deprecated As of release 3.5.0, replaced with {@link #getZclass()}
 	 */
 	public String getIconSclass() {
 		return null;
@@ -899,14 +899,14 @@ public class Tree extends XulElement implements Paginated {
 	 *
 	 * @since 3.0.0
 	 * @see #getIconSclass
-	 * @deprecated As of release 3.5.0, replaced with {@link #setMoldSclass(String)}
+	 * @deprecated As of release 3.5.0, replaced with {@link #setZclass(String)}
 	 */
 	public void setIconSclass(String scls) {
 	}
 
 	//-- Component --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-tree" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-tree" : super.getZclass();
 	}
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);

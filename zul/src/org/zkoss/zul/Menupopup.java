@@ -35,14 +35,14 @@ import org.zkoss.zk.ui.event.Events;
  * and then create menuitem when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen}
  * is true.
  *
- * <p>Default {@link #getMoldSclass}: z-menu-popup. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-menu-popup. (since 3.5.0)
  *
  * @author tomyeh
  */
 public class Menupopup extends Popup {
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-menu-popup" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-menu-popup" : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

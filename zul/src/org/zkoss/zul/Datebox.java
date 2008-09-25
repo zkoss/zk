@@ -48,7 +48,7 @@ import org.zkoss.zul.impl.Utils;
  * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Locales.getCurrent).</code>
  * You might override {@link #getDefaultFormat} to provide your own default
  * format.
- * <p>Default {@link #getMoldSclass}: z-datebox.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-datebox.(since 3.5.0)
  * @author tomyeh
  */
 public class Datebox extends FormatInputElement {
@@ -321,8 +321,8 @@ public class Datebox extends FormatInputElement {
 	}
 
 	// super
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-datebox" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-datebox" : super.getZclass();
 	}
 	
 	public String getOuterAttrs() {

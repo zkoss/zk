@@ -37,17 +37,17 @@ public class PopupDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Popup self = (Popup)comp;
 		final String uuid = self.getUuid();
-		final String mcls = self.getMoldSclass();
+		final String zcls = self.getZclass();
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Pop\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
-			.write("<div class=\"").write(mcls).write("-tl\"><div class=\"").write(mcls)
-			.write("-tr\"><div class=\"").write(mcls).write("-tm\"></div></div></div>")
-			.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(mcls)
-			.write("-body\"><div class=\"").write(mcls).write("-cl\">")
-			.write("<div class=\"").write(mcls).write("-cr\"><div class=\"").write(mcls).write("-cm\"><div id=\"")
-			.write(uuid).write("!cave\" class=\"").write(mcls).write("-cnt\">")
+			.write("<div class=\"").write(zcls).write("-tl\"><div class=\"").write(zcls)
+			.write("-tr\"><div class=\"").write(zcls).write("-tm\"></div></div></div>")
+			.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(zcls)
+			.write("-body\"><div class=\"").write(zcls).write("-cl\">")
+			.write("<div class=\"").write(zcls).write("-cr\"><div class=\"").write(zcls).write("-cm\"><div id=\"")
+			.write(uuid).write("!cave\" class=\"").write(zcls).write("-cnt\">")
 			.writeChildren(self)
-			.write("</div></div></div></div><div class=\"").write(mcls).write("-bl\"><div class=\"").write(mcls).write("-br\">")
-			.write("<div class=\"").write(mcls).write("-bm\"></div></div></div></div></div>");
+			.write("</div></div></div></div><div class=\"").write(zcls).write("-bl\"><div class=\"").write(zcls).write("-br\">")
+			.write("<div class=\"").write(zcls).write("-bm\"></div></div></div></div></div>");
 	}
 }

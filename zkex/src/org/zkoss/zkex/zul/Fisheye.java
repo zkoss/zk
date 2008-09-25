@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A fisheye item.
  * 
- * <p>Default {@link #getMoldSclass}: z-fisheye.
+ * <p>Default {@link #getZclass}: z-fisheye.
  * 
  * @author jumperchen
  * @since 3.5.0
@@ -84,8 +84,8 @@ public class Fisheye extends XulElement {
 		
 	}
 	//-- super --//
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-fisheye" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-fisheye" : super.getZclass();
 	}
 	protected int getRealStyleFlags() {
 		return super.getRealStyleFlags() | RS_NO_WIDTH|RS_NO_HEIGHT;

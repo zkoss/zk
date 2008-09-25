@@ -47,7 +47,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * <li>There is no listcol in ZUL because it is merged into {@link Listheader}.
  * Reason: easier to write Listbox.</li>
  * </ol>
- * <p>Default {@link #getMoldSclass}: z-list-header.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-list-header.(since 3.5.0)
  * @author tomyeh
  */
 public class Listheader extends HeaderElement {
@@ -383,12 +383,12 @@ public class Listheader extends HeaderElement {
 	//-- super --//
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();
-		final String added = _sortAsc != null || _sortDsc != null ?  getMoldSclass() + "-sort": "";
+		final String added = _sortAsc != null || _sortDsc != null ?  getZclass() + "-sort": "";
 		return scls != null ? scls + ' ' + added : added;
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-list-header" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-list-header" : super.getZclass();
 	}
 
 	public String getOuterAttrs() {

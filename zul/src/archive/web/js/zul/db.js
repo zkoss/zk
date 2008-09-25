@@ -39,10 +39,10 @@ zk.Cal.prototype = {
 	_newCal: function() {
 		this.element = $e(this.id);
 		if (!this.element) return;
-		var mcls = getZKAttr(this.element, "mcls");
+		var zcls = getZKAttr(this.element, "zcls");
 		var compact = getZKAttr(this.element, "compact") == "true";
 		var html = this.popup ? '<table border="0" cellspacing="0" cellpadding="0" tabindex="-1">': '';
-		html += '<tr><td><table class="'+mcls+'-calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="5"></td><td align="right"><img src="'
+		html += '<tr><td><table class="'+zcls+'-calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="5"></td><td align="right"><img src="'
 			+zk.getUpdateURI('/web/zul/img/cal/arrowL.gif')
 			+'" style="cursor:pointer" onclick="zkCal.onyearofs(event,-1)" id="'
 			+this.id+'!ly"/></td>';
@@ -64,7 +64,7 @@ zk.Cal.prototype = {
 			+this.id+'!ry"/></td><td width="5"></td></tr></table></td></tr>';
 
 		if (!compact) {
-			html += '<tr><td><table class="'+mcls+'-calmon" width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
+			html += '<tr><td><table class="'+zcls+'-calmon" width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
 			for (var j = 0 ; j < 12; ++j) {
 				html += '<td id="'+this.id+'!m'+j
 					+'" onclick="zkCal.onmonclk(event)" onmouseover="zkCal.onover(event)" onmouseout="zkCal.onout(event)">'
@@ -75,7 +75,7 @@ zk.Cal.prototype = {
 		}
 		if (this.popup) html += '<tr><td height="3px"></td></tr>';
 
-		html += '<tr><td><table class="'+mcls+'-calday" width="100%" border="0" cellspacing="0" cellpadding="0"><tr class="'+mcls+'-caldow">';
+		html += '<tr><td><table class="'+zcls+'-calday" width="100%" border="0" cellspacing="0" cellpadding="0"><tr class="'+zcls+'-caldow">';
 		var sun = (7 - zk.DOW_1ST) % 7, sat = (6 + sun) % 7;
 		for (var j = 0 ; j < 7; ++j) {
 			html += '<td';
@@ -84,7 +84,7 @@ zk.Cal.prototype = {
 		}
 		html += '</tr>';
 		for (var j = 0; j < 6; ++j) { //at most 7 rows
-			html += '<tr class="'+mcls+'-calday" id="'+this.id+'!w'+j
+			html += '<tr class="'+zcls+'-calday" id="'+this.id+'!w'+j
 				+'" onclick="zkCal.ondayclk(event)" onmouseover="zkCal.onover(event)" onmouseout="zkCal.onout(event)">';
 			for (var k = 0; k < 7; ++k)
 				html += '<td></td>';
@@ -130,16 +130,15 @@ zk.Cal.prototype = {
 		var y = val.getFullYear();
 		var el = $e(this.id + "!title");
 		zk.setInnerHTML(el, zk.SMON[m] + ', ' + y);
-		var mcls = getZKAttr(this.element, "mcls");
+		var zcls = getZKAttr(this.element, "zcls");
 		//month
 		for (var j = 0; j < 12; ++j) {
 			el = $e(this.id + "!m" + j);
 			if (el) { //omitted if compact
-//				el.className = m == j ? mcls + "-seld": "";
 				if(m==j) 
-					zk.addClass(el, mcls+"-seld");
+					zk.addClass(el, zcls+"-seld");
 				else
-					zk.rmClass(el, mcls+"-seld");
+					zk.rmClass(el, zcls+"-seld");
 				el.setAttribute("zk_mon", j);
 			}
 		}
@@ -170,13 +169,12 @@ zk.Cal.prototype = {
 	},
 	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
-		var mcls = getZKAttr(this.element, "mcls");
+		var zcls = getZKAttr(this.element, "zcls");
 				
-		//cell.className = !disd ? sel ? mcls + "-seld": "" : sel ? mcls + "-seld " + mcls + "-disd": mcls + "-disd";		
-		zk.rmClass(cell, mcls+"-over");
-		zk.rmClass(cell, mcls+"-over-seld");
-		sel? zk.addClass(cell, mcls+"-seld"): zk.rmClass(cell, mcls+"-seld");
-		disd? zk.addClass(cell, mcls+"-disd"): zk.rmClass(cell, mcls+"-disd");		
+		zk.rmClass(cell, zcls+"-over");
+		zk.rmClass(cell, zcls+"-over-seld");
+		sel? zk.addClass(cell, zcls+"-seld"): zk.rmClass(cell, zcls+"-seld");
+		disd? zk.addClass(cell, zcls+"-disd"): zk.rmClass(cell, zcls+"-disd");
 		
 		var d = cell.getAttribute("zk_day");
 		zk.setInnerHTML(cell,
@@ -385,47 +383,31 @@ zkCal.onblur = function (evt) {
 zkCal.onover = function (evt) {
 	var el = Event.element(evt);
 	var cmp = $outer(Event.element(evt));
-	var mcls = getZKAttr(cmp, "mcls");
+	var zcls = getZKAttr(cmp, "zcls");
 	
-	if(! zk.hasClass(el, mcls+"-disd")) {
-		if(zk.hasClass(el, mcls+"-seld") || zk.hasClass(el, mcls+"-over-seld"))
-			zk.addClass(el, mcls+"-over-seld");
+	if(! zk.hasClass(el, zcls+"-disd")) {
+		if(zk.hasClass(el, zcls+"-seld") || zk.hasClass(el, zcls+"-over-seld"))
+			zk.addClass(el, zcls+"-over-seld");
 		else 
-			zk.addClass(el, mcls+"-over");		
+			zk.addClass(el, zcls+"-over");		
 	}
-//	
-//	if (el.className.indexOf("-disd") == -1){
-//		if (el.className.indexOf("-seld") != -1) {
-//			zk.addClass(el, "z-datebox-over-seld");
-//		}else {
-//			zk.addClass(el, "z-datebox-over");
-//		}				
-//	}
-		
 };
 zkCal.onout = function (evt) {	
 	var el = Event.element(evt);
-//	if (el.className.indexOf("-seld") != -1) {
-//		zk.rmClass(el, "z-datebox-over-seld");
-//	}else {
-//		zk.rmClass(el, "z-datebox-over");
-//	}
-
 	var cmp = $outer(Event.element(evt));
-	var mcls = getZKAttr(cmp, "mcls");
+	var zcls = getZKAttr(cmp, "zcls");
 	
-	if(zk.hasClass(el, mcls+"-seld") || zk.hasClass(el, mcls+"-over-seld")) {
-		zk.rmClass(el, mcls+"-over-seld");
+	if(zk.hasClass(el, zcls+"-seld") || zk.hasClass(el, zcls+"-over-seld")) {
+		zk.rmClass(el, zcls+"-over-seld");
 	}
 	else {
-		zk.rmClass(el, mcls+"-over");
+		zk.rmClass(el, zcls+"-over");
 	}
 };
 /** Returns if a cell is selected. */
 zkCal._seled = function (cell) {
-//	return cell.className.indexOf("-seld") >= 0;
-	var mcls = getZKAttr($outer(cell), "mcls");
-	return zk.hasClass(cell, mcls+"-seld") || zk.hasClass(cell, mcls+"-over-seld");
+	var zcls = getZKAttr($outer(cell), "zcls");
+	return zk.hasClass(cell, zcls+"-seld") || zk.hasClass(cell, zcls+"-over-seld");
 };
 
 //Datebox//
@@ -685,7 +667,7 @@ zkDtbox.close = function (pp, focus) {
 	zkau.hideCovered();
 
 	var btn = $e(uuid + "!btn");
-	if (btn) zk.rmClass(btn, getZKAttr($e(uuid), "mcls") + "-btn-over");
+	if (btn) zk.rmClass(btn, getZKAttr($e(uuid), "zcls") + "-btn-over");
 	
 	if (focus)
 		zk.asyncFocus(uuid + "!real");

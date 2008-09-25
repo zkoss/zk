@@ -357,18 +357,18 @@ public abstract class LayoutRegion extends XulElement {
 
 	protected String getRealSclass() {
 		final String cls = super.getRealSclass();
-		final String added = "normal".equals(getBorder()) ? "" : getMoldSclass() + "-noborder";
+		final String added = "normal".equals(getBorder()) ? "" : getZclass() + "-noborder";
 		return cls != null ? cls + " " + added : added; 
 	}
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-" + getPosition() : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-" + getPosition() : super.getZclass();
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 		smartUpdate("z.cid", "zk_n_a");
 		if (child instanceof Borderlayout) {
 			setFlex(false);
-			removeSclass(getMoldSclass() + "-nested");
+			removeSclass(getZclass() + "-nested");
 		}
 	}
 	public void onChildAdded(Component child) {
@@ -376,7 +376,7 @@ public abstract class LayoutRegion extends XulElement {
 		super.onChildAdded(child);
 		if (child instanceof Borderlayout) {
 			setFlex(true);
-			addSclass(getMoldSclass() + "-nested");
+			addSclass(getZclass() + "-nested");
 		}
 	}
 

@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.XulElement;
  * The column of Columnlayout. <br> 
  * Child of Columnchildren only can be Panel.
  * 
- * <p>Default {@link #getMoldSclass}: z-column-children.
+ * <p>Default {@link #getZclass}: z-column-children.
  * @author gracelin
  * @since 3.5.0
  */
@@ -36,8 +36,8 @@ public class Columnchildren extends XulElement {
 	public Columnchildren() {
 	}
 
-	public String getMoldSclass() {
-		return _moldSclass == null ? "z-column-children" : super.getMoldSclass();
+	public String getZclass() {
+		return _zclass == null ? "z-column-children" : super.getZclass();
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Columnlayout))

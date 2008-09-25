@@ -20,18 +20,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}" z.type="zkex.zul.borderlayout.LayoutRegion2">
 	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}>
 		<c:if test="${!empty self.title}">
-			<div id="${self.uuid}!caption" class="${self.moldSclass}-header"><c:if test="${self.position != 'center'}"><div id="${self.uuid}!btn" class="${self.parent.moldSclass}-tool ${self.moldSclass}-collapse" <c:if test="${!self.collapsible}">style="display:none;"</c:if>></div></c:if><c:out value="${self.title}" /></div>
+			<div id="${self.uuid}!caption" class="${self.zclass}-header"><c:if test="${self.position != 'center'}"><div id="${self.uuid}!btn" class="${self.parent.zclass}-tool ${self.zclass}-collapse" <c:if test="${!self.collapsible}">style="display:none;"</c:if>></div></c:if><c:out value="${self.title}" /></div>
 		</c:if>
-		<div id="${self.uuid}!cave" class="${self.moldSclass}-body">
+		<div id="${self.uuid}!cave" class="${self.zclass}-body">
 		<c:forEach var="child" items="${self.children}">
 			${z:redraw(child, null)}
 		</c:forEach>
 		</div>
 	</div>
 	<c:if test="${self.position != 'center'}">
-	<div id="${self.uuid}!split" class="${self.moldSclass}-split"></div>
+	<div id="${self.uuid}!split" class="${self.zclass}-split"></div>
 	<c:if test="${!empty self.title}">
-	<div id="${self.uuid}!collapsed" class="${self.moldSclass}-collapsed" style="display:none"><div id="${self.uuid}!btned" class="${self.parent.moldSclass}-tool ${self.moldSclass}-expand" <c:if test="${!self.collapsible}">style="display:none;"</c:if>></div></div>
+	<div id="${self.uuid}!collapsed" class="${self.zclass}-collapsed" style="display:none"><div id="${self.uuid}!btned" class="${self.parent.zclass}-tool ${self.zclass}-expand" <c:if test="${!self.collapsible}">style="display:none;"</c:if>></div></div>
 	</c:if>
 	</c:if>
 </div>
