@@ -267,6 +267,8 @@ public class ClassWebResource {
 		ext = ext.toLowerCase();
 		final Map filters =
 			flag == 0 || (flag & FILTER_REQUEST) != 0 ? _reqfilters: _incfilters;
+		if (filters.isEmpty()) //no need to sync
+			return null; //optimize
 
 		for (;;) {
 			FastReadArray ary;
