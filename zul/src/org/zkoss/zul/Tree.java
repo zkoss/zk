@@ -1343,7 +1343,7 @@ public class Tree extends XulElement implements Paginated {
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.0
 	 */
-	public void setModel(TreeModel model) throws Exception{
+	public void setModel(TreeModel model) {
 		if (model != null) {
 			if (_model != model) {
 				if (_model != null) {
@@ -1377,7 +1377,7 @@ public class Tree extends XulElement implements Paginated {
 	/** Synchronizes the tree to be consistent with the specified model.
 	 * <p>Author: jeffliu
 	 */
-	private void syncModel() throws Exception{
+	private void syncModel() {
 		renderTree();
 	}
 	
@@ -1394,7 +1394,10 @@ public class Tree extends XulElement implements Paginated {
 	 * @since 3.0.0
 	 */
 	public void setTreeitemRenderer(TreeitemRenderer renderer){
-		_renderer = renderer;
+		if (_renderer != renderer) {
+			_renderer = renderer;
+			syncModel();
+		}
 	}
 	
 	/** Returns the renderer to render each item, or null if the default

@@ -20,6 +20,7 @@ ZK 3.5.1
   2114380: Filedownload bug with WebSphere 5.1.1
   2125673: Groupbox default mold closable useless
   2125788: Hilighted window covered by mask when change title
+  2124391: Tree, attribute sequence cause wrong result.
 
 * Upgrade Notes
   * getMoldSclass is deprecated and replaced with getZclass since
