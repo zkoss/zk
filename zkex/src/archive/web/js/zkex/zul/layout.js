@@ -85,7 +85,7 @@ zk.Layout.prototype = {
 			cH -= cY;
 			ambit = this._resizeSplit(n, ambit, "north");
 			this._resize(n, ambit);
-		} else if (n) {
+		} else if (n && zk.isRealVisible(n.parentNode)) {
 			var ambit = this._getAmbit(n.split);			
 			ambit.width = width ;
 			ambit.x = ambit.y = 0;
@@ -103,7 +103,7 @@ zk.Layout.prototype = {
 			cH -= total;
 			ambit = this._resizeSplit(s, ambit, "south");
 			this._resize(s, ambit);
-		} else if (s) {
+		} else if (s && zk.isRealVisible(s.parentNode)) {
 			var ambit = this._getAmbit(s.split);			
 			ambit.width = width ;
 			ambit.x = 0;
@@ -122,7 +122,7 @@ zk.Layout.prototype = {
 			cW -= total;	
 			ambit = this._resizeSplit(w, ambit, "west");		
 			this._resize(w, ambit);
-		} else if (w) {
+		} else if (w && zk.isRealVisible(w.parentNode)) {
 			var ambit = this._getAmbit(w.split);			
 			ambit.height = cH ;
 			ambit.x = 0;
@@ -141,7 +141,7 @@ zk.Layout.prototype = {
 			cW -= total;
 			ambit = this._resizeSplit(e, ambit, "east");
 			this._resize(e, ambit);
-		} else if (e) {
+		} else if (e && zk.isRealVisible(e.parentNode)) {
 			var ambit = this._getAmbit(e.split);			
 			ambit.height = cH ;
 			ambit.x = width - ambit.width;
@@ -312,7 +312,8 @@ zkBorderLayout.setAttr = function (cmp, nm, val) {
 
 zkLayoutRegion.init = function (cmp) {
 	var split = $e(cmp.id + "!split");	
-	cmp = $real(cmp);	
+	cmp = $real(cmp);
+	if (!zk.isVisible(cmp)) $outer(cmp).style.display = "none";
 	var pos = getZKAttr(cmp, "pos");
 	if (split) {
 		cmp.split = split;
@@ -353,6 +354,11 @@ zkLayoutRegion.cleanup = function (cmp) {
 zkLayoutRegion.setAttr = function (cmp, nm, val) {
 	cmp = $real(cmp);
 	switch (nm) {
+		case "visibility":
+			cmp.style.display = val == "true" ? "" : "none";
+			$outer(cmp).style.display = cmp.style.display;
+			zk.Layout.getOwnerLayout(cmp).render();
+			return true;	
 		case "z.cid" :
 			setZKAttr(cmp, "cid", val); 
 			return true;
