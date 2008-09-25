@@ -1010,13 +1010,14 @@ public class Servlets {
 		}
 	}
 
-	/** Returns the file extension of the specified path (excluding dot),
+	/** Returns the file/path extension of the specified path (excluding dot),
 	 * or null if no extension at all.
 	 *
 	 * <p>Note: the extension is converted to the lower case.
 	 *
 	 * @param path the path. If path is null, null is returned.
 	 * @since 2.4.1
+	 * @see #getExtension(String, boolean)
 	 */
 	public static final String getExtension(String path) {
 		if (path != null) {
@@ -1026,6 +1027,42 @@ public class Servlets {
 				//don't worry jsessionid since it is handled by container
 		}
 		return null;
+	}
+	/** Returns the file/path extension of the specified path (excluding dot),
+	 * or null if no extension at all.
+	 *
+	 * <p>Note: the extension is converted to the lower case.
+	 *
+	 * <p>The result is the same for both {@link #getExtension(String)}
+	 * and {@link #getExtension(String, boolean)}, if the path
+	 * has only one dot. However, if there are more than one dot, e.g.,
+	 * /a/b.c.d, then {@link #getExtension(String)} retrieves the last
+	 * extension, that is, d in this example.
+	 * On the other hand, if you invoke getExtension(path, false),
+	 * it returns the complete extension, that is, c.d in this example.
+	 *
+	 * @param path the path. If path is null, null is returned.
+	 * @param lastOnly whether to return the last portion of extensioin
+	 * if there are two or more dots.
+	 * In other wors, getExtension(path) is the same as
+	 * getExtension(path, true).
+	 * @since 3.5.1
+	 */
+	public static final String getExtension(String path, boolean lastOnly) {
+		if (lastOnly)
+			return getExtension(path);
+		if (path == null)
+			return null;
+
+		int dot = -1;
+		for (int j = path.length(); --j >= 0;) {
+			final char cc = path.charAt(j);
+			if (cc == '.')
+				dot = j;
+			else if (cc == '/')
+				break;
+		}
+		return dot >= 0 ? path.substring(dot + 1).toLowerCase(): "";
 	}
 
 	/** Returns the request detail infomation.

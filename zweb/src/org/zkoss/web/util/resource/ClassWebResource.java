@@ -37,7 +37,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Objects;
 import org.zkoss.io.Files;
+import org.zkoss.util.FastReadArray;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.Locator;
@@ -77,11 +79,28 @@ public class ClassWebResource {
 	private String[] _compressExts;
 	/** Map(String ext, Extendlet). */
 	private final Map _extlets = new HashMap(4);
+	/** Filers for requests. Map(String ext, FastReadArray(Filter)). */
+	private final Map _reqfilters = new HashMap(2);
+	/** Filers for includes. Map(String ext, FastReadArray(Filter)). */
+	private final Map _incfilters = new HashMap(2);
 	/** Whether to debug JavaScript files. */
 	private boolean _debugJS;
 
 	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
+
+	/** Indicates that the filter is applicable if the request comes
+	 * directly from the client.
+	 * @see #addFilter
+	 * @since 3.5.1
+	 */
+	public static final int FILTER_REQUEST = 0x1;
+	/** Indicates that the filter is applicable if the request is dispatched
+	 * due to the inclusion. In other words, it is included by other servlet.
+	 * @see #addFilter
+	 * @since 3.5.1
+	 */
+	public static final int FILTER_INCLUDE = 0x2;
 
 	/** Returns the URL of the resource of the specified URI by searching
 	 * the class path (with {@link #PATH_PREFIX}).
@@ -158,9 +177,14 @@ public class ClassWebResource {
 	}
 
 	/** Returns the Extendlet (aka., resource processor) of the
-	 * specified extension, or null if not associated yet.
+	 * specified extension, or null if not associated.
 	 *
-	 * @param ext the extension, e.g, "js" and "css".
+	 * <p>Note: if the extension is "js.dsp", then it searches
+	 * any extendlet registered for "js.dsp". If not found, it searches
+	 * any extendlet for "dsp". In other words, "dsp" is searched only
+	 * if no extendlet is registered for "js.dsp".
+	 *
+	 * @param ext the extension, e.g, "js" and "css.dsp".
 	 * @return the Extendlet (aka., resource processor),
 	 * or null if not associated yet.
 	 * @since 2.4.1
@@ -170,11 +194,18 @@ public class ClassWebResource {
 			return null;
 
 		ext = ext.toLowerCase();
-		synchronized (_extlets) {
-			return (Extendlet)_extlets.get(ext);
+		for (;;) {
+			synchronized (_extlets) {
+				Extendlet exlet = (Extendlet)_extlets.get(ext);
+				if (exlet != null) return exlet;
+			}
+
+			int j = ext.indexOf('.');
+			if (j < 0) 	return null;
+			ext = ext.substring(j + 1);
 		}
 	}
-	/** Adds an Extendlet (aka., resource processor) to process
+	/** Adds an {@link Extendlet} (aka., resource processor) to process
 	 * the resource of the specified extension.
 	 *
 	 * @param ext the extension, e.g, "js" and "css".
@@ -197,10 +228,10 @@ public class ClassWebResource {
 			return (Extendlet)_extlets.put(ext, extlet);
 		}
 	}
-	/** Removes the Extendlet (aka., resource processor)
+	/** Removes the {@link Extendlet} (aka., resource processor)
 	 * for the specified extension.
 	 *
-	 * @param ext the extension, e.g, "js" and "css".
+	 * @param ext the extension, e.g, "js" and "css.dsp".
 	 * @return the previous Extendlet, or null if no Extendlet
 	 * was associated with the specified extension.
 	 * @since 2.4.1
@@ -213,6 +244,116 @@ public class ClassWebResource {
 		synchronized (_extlets) {
 			return (Extendlet)_extlets.remove(ext);
 		}
+	}
+
+	/** Returns an array of the filters ({@link Filter}) of the speficied
+	 *  extension, or null if not associated.
+	 *
+	 * <p>Note: if the extension is "js.dsp", then it searches
+	 * any filters registered for "js.dsp". If not found, it searches
+	 * any filters for "dsp". In other words, "dsp" is searched only
+	 * if no filter is registered for "js.dsp".
+	 *
+	 * @param ext the extension, such as "js" and "css.dsp".
+	 * @param flag either {@link #FILTER_REQUEST} or
+	 * and {@link #FILTER_INCLUDE}. If 0, {@link #FILTER_REQUEST}
+	 * is assumed.
+	 * @since 3.5.1
+	 */
+	public Filter[] getFilters(String ext, int flag) {
+		if (ext == null)
+			return null;
+
+		ext = ext.toLowerCase();
+		final Map filters =
+			flag == 0 || (flag & FILTER_REQUEST) != 0 ? _reqfilters: _incfilters;
+
+		for (;;) {
+			FastReadArray ary;
+			synchronized (filters) {
+				ary = (FastReadArray)filters.get(ext);
+			}
+			if (ary != null)
+				return (Filter[])ary.toArray();
+
+			int j = ext.indexOf('.');
+			if (j < 0) 	return null;
+			ext = ext.substring(j + 1);
+		}
+
+	}
+	/** Adds a filter ({@link Filter}) to perform filtering task for
+	 * the resource of the specified extension.
+	 *
+	 * <p>Unlike {@link #addExtendlet}, multiple filters can be applied to
+	 * the same extension. The first one being added will be called first.
+	 *
+	 * @param ext the extension
+	 * @param filter the filter
+	 * @param flags a combination of {@link #FILTER_REQUEST}
+	 * and {@link #FILTER_INCLUDE}. If 0, {@link #FILTER_REQUEST}
+	 * is assumed.
+	 * @since 3.5.1
+	 */
+	public void addFilter(String ext, Filter filter, int flags) {
+		if (ext == null || filter == null)
+			throw new IllegalArgumentException("null");
+
+		filter.init(new FilterConfig() {
+			public ExtendletContext getExtendletContext() {
+				return _cwc;
+			}
+		});
+
+		ext = ext.toLowerCase();
+		if (flags == 0 || (flags & FILTER_REQUEST) != 0)
+			addFilter(_reqfilters, ext, filter);
+		if ((flags & FILTER_INCLUDE) != 0)
+			addFilter(_incfilters, ext, filter);
+	}
+	private static void addFilter(Map filters, String ext, Filter filter) {
+		FastReadArray ary;
+		synchronized (filters) {
+			ary = (FastReadArray)filters.get(ext);
+			if (ary == null)
+				filters.put(ext, ary = new FastReadArray(Filter.class));
+		}
+		ary.add(filter);
+	}
+	/** Removes the filter ({@link Filter}) for the specified extension.
+	 * @param flags a combination of {@link #FILTER_REQUEST}
+	 * and {@link #FILTER_INCLUDE}. If 0, {@link #FILTER_REQUEST}
+	 * is assumed.
+	 * @return whether the filter has been removed successfully.
+	 * @since 3.5.1
+	 */
+	public boolean removeFilter(String ext, Filter filter, int flags) {
+		if (ext == null || filter == null)
+			return false;
+
+		ext = ext.toLowerCase();
+		boolean removed = false;
+		if (flags == 0 || (flags & FILTER_REQUEST) != 0)
+			removed = rmFilter(_reqfilters, ext, filter);
+		if ((flags & FILTER_INCLUDE) != 0)
+			removed = rmFilter(_incfilters, ext, filter) || removed;
+		return removed;
+	}
+	private static boolean rmFilter(Map filters, String ext, Filter filter) {
+		FastReadArray ary;
+		synchronized (filters) {
+			ary = (FastReadArray)filters.get(ext);
+		}
+		if (ary != null && ary.remove(filter)) {
+			if (ary.isEmpty())
+				synchronized (filters) {
+					ary = (FastReadArray)filters.remove(ext);
+					if (ary != null && !ary.isEmpty())
+						filters.put(ext, ary); //modify by other, so restore
+				}
+			return true;
+		}
+		return false;
 	}
 
 	/** Sets the extension that shall be compressed if the browser
@@ -317,7 +458,20 @@ public class ClassWebResource {
 			}
 		}
 
-		final String ext = Servlets.getExtension(pi);
+		final String ext = Servlets.getExtension(pi, false); //complete ext
+		final Filter[] filters = getFilters(ext,
+			Servlets.isIncluded(request) ? FILTER_INCLUDE: FILTER_REQUEST);
+		if (filters == null) {
+			web0(request, response, pi, ext, jsextra);
+		} else {
+			new FilterChainImpl(filters, pi, ext, jsextra)
+				.doFilter(request, response);
+		}
+	}
+	/** Processes the request without calling filter. */
+	private void web0(HttpServletRequest request,
+	HttpServletResponse response, String pi, String ext, String jsextra)
+	throws ServletException, IOException {
 		if (ext != null) {
 			//Invoke the resource processor (Extendlet)
 			final Extendlet extlet = getExtendlet(ext);
@@ -487,6 +641,33 @@ public class ClassWebResource {
 		}
 		public InputStream getResourceAsStream(String uri) {
 			return ClassWebResource.getResourceAsStream(uri);
+		}
+	}
+	private class FilterChainImpl implements FilterChain {
+		private final Filter[] _filters;
+		private final String _pi, _ext, _jsextra;
+
+		/** Which filter to process. */
+		private int _j;
+		private FilterChainImpl(
+		Filter[] filters, String pi, String ext, String jsextra)
+		throws ServletException, IOException {
+			_pi = pi;
+			_filters = filters;
+			_ext = ext;
+			_jsextra = jsextra;
+		}
+		public void doFilter(HttpServletRequest request,
+		HttpServletResponse response)
+		throws ServletException, IOException {
+			if (_j > _filters.length)
+				throw new IllegalStateException("Out of bound: "+_j+", filter="+Objects.toString(_filters));
+			final int j = _j++;
+			if (j == _filters.length) {
+				web0(request, response, _pi, _ext, _jsextra);
+			} else {
+				_filters[j].doFilter(request, response, _pi, this);
+			}
 		}
 	}
 }
