@@ -336,7 +336,8 @@ zkBorderLayout2.onVisi = zkBorderLayout2.onSize;
 zkLayoutRegion2 = {
 	init: function (cmp) {
 		var split = $e(cmp, "split"), btn = $e(cmp, "btn");
-		cmp = $real(cmp);	
+		cmp = $real(cmp);
+		if (!zk.isVisible(cmp)) $outer(cmp).style.display = "none";
 		var pos = getZKAttr(cmp, "pos");
 		if (btn) {
 			var uuid = $uuid(btn),
@@ -631,6 +632,11 @@ zkLayoutRegion2 = {
 	setAttr: function (cmp, nm, val) {
 		cmp = $real(cmp);
 		switch (nm) {
+			case "visibility":
+				cmp.style.display = val == "true" ? "" : "none";
+				$outer(cmp).style.display = cmp.style.display;
+				zk.Layout2.getOwnerLayout(cmp).render();
+				return true;			
 			case "z.cid" :
 			case "z.mars" :
 			case "z.cmars" :
