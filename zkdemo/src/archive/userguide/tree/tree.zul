@@ -32,52 +32,63 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<textbox id="codeView" class="code" rows="15" width="100%" use="org.zkoss.zkdemo.userguide.CodeView">
 			<attribute name="value"><![CDATA[
 <window title="Trees" border="normal">
-	<tree id="tree" width="90%" rows="5">
-		<treecols sizable="true">
-			<treecol label="Name"/>
-			<treecol label="Description"/>
-		</treecols>
-		<treechildren>
-			<treeitem>
-				<treerow>
-					<treecell label="Item 1"/>
-					<treecell label="Item 1 description"/>
-				</treerow>
-			</treeitem>
-			<treeitem>
-				<treerow>
-					<treecell label="Item 2"/>
-					<treecell label="Item 2 description"/>
-				</treerow>
-				<treechildren>
-					<treeitem>
-						<treerow>
-							<treecell label="Item 2.1"/>
-						</treerow>
-						<treechildren>
-							<treeitem>
-								<treerow>
-									<treecell label="Item 2.1.1"/>
-								</treerow>
-							</treeitem>
-							<treeitem>
-								<treerow>
-									<treecell label="Item 2.1.2"/>
-								</treerow>
-							</treeitem>
-						</treechildren>
-					</treeitem>
-					<treeitem>
-						<treerow>
-							<treecell label="Item 2.2"/>
-							<treecell label="Item 2.2 is something who cares"/>
-						</treerow>
-					</treeitem>
-				</treechildren>
-			</treeitem>
-			<treeitem label="Item 3"/>
-		</treechildren>
-	</tree>
+	<vbox width="100%">
+		Four style of trees :
+		<radiogroup
+			onCheck='tree.setZclass("z-"+self.selectedItem.value)'>
+			<radio label="Default" value="tree" />
+			<radio label="Dot Tree" value="dottree" />
+			<radio label="XP Explorer" value="filetree" />
+			<radio label="Vista Explorer" value="vfiletree" />
+		</radiogroup>
+		<tree id="tree" width="90%" rows="8">
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2" />
+						<treecell label="Item 2 description" />
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.1" />
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1.2" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.2" />
+								<treecell
+									label="Item 2.2 is something who cares" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem label="Item 3" />
+			</treechildren>
+		</tree>
+	</vbox>
 </window>
 			]]></attribute>
 		</textbox>

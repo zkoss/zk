@@ -158,17 +158,17 @@ tr.z-list-item td.z-list-item-focus {
 	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
 }
 <%-- popup.css.dsp --%>
-.z-popup .z-popup-tl {
-	background-image:url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')});
+.z-popup .z-popup-tl, .z-popup .z-popup-tr, .z-popup .z-popup-bl, .z-popup .z-popup-br {
+	background-image: url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')});
 }
-.z-popup .z-popup-tr {
-	background-image:url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')});
+.z-popup .z-popup-tm, .z-popup .z-popup-cm, .z-popup .z-popup-bm {
+	background-image: url(${c:encodeURL('~./zul/img/popup/pp-tb.gif')});
 }
-.z-popup .z-popup-bl {
-	background-image:url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')});
+.z-popup .z-popup-cl {
+	background-image: url(${c:encodeURL('~./zul/img/popup/pp-l.gif')});
 }
-.z-popup .z-popup-br {
-	background-image:url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')});
+.z-popup .z-popup-cr {
+	background-image: url(${c:encodeURL('~./zul/img/popup/pp-r.gif')});
 }
 <%-- slider.css.dsp --%>
 .z-slider-hor {    
@@ -260,6 +260,12 @@ tr.z-list-item td.z-list-item-focus {
 <%-- tree.css.dsp --%>
 tr.z-tree-row td.z-tree-row-focus {
 	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
+}
+span.z-vfiletree-ico,span.z-vfiletree-firstspacer {	
+	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle2.gif')});	
+}
+span.z-vfiletree-tee, span.z-vfiletree-last {
+	background-image: url(${c:encodeURL('~./zul/img/tree/entity.gif')});
 }
 <%-- window.css.dsp --%>
 .z-window-embedded-tl{
