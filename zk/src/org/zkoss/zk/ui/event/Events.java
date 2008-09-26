@@ -430,4 +430,20 @@ public class Events {
 		};
 		evtl.bindComponent(comp);
 	}
+
+	/** Returns the real origin event of a forwarded event.
+	 * By real we mean the last non-forward event in the chain of
+	 * {@link ForwardEvent#getOrigin}.
+	 * Notice that a forward event might be forwarded again, so
+	 * {@link ForwardEvent#getOrigin} might not be the real origin.
+	 * @since 3.0.8
+	 */
+	public static final Event getRealOrigin(ForwardEvent event) {
+		for (;;) {
+			Event evt = event.getOrigin();
+			if (!(evt instanceof ForwardEvent))
+				return evt;
+			event = (ForwardEvent)evt;
+		}
+	}
 }
