@@ -22,7 +22,10 @@ zkMenu = {};
 zk.FloatMenu = Class.create();
 Object.extend(Object.extend(zk.FloatMenu.prototype, zk.Floats.prototype), {
 	_close: function (el) {
-		zkMenu._close2(el); // Bug #1852304. invoke zkMenu._close function later.
+		// No longer need to invoke zkMenu._close later because it will cause another issue
+     	// when you click the item to show the menu popup, it will close at second time.
+		zkMenu._close(el);
+		//zkMenu._close2(el); // Bug #1852304. invoke zkMenu._close function later.
 	}
 });
 
@@ -159,9 +162,11 @@ zkMenu._close = function (pp) {
 			//for better performance, sent only if non-deferable
 	}
 };
+/**  // No longer need to invoke zkMenu._close later because it will cause another issue
+     // when you click the item to show the menu popup, it will close at second time.
 zkMenu._close2 = function (pp) {
 	setTimeout("zkMenu._close('"+pp.id+"')", 0);
-};
+};*/
 zkMenu.init = function (cmp) {
 	var anc = $e(cmp.id + "!a");
 	if (getZKAttr(cmp, "top") == "true") {
