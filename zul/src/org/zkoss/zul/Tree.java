@@ -1398,7 +1398,8 @@ public class Tree extends XulElement implements Paginated {
 	public void setTreeitemRenderer(TreeitemRenderer renderer){
 		if (_renderer != renderer) {
 			_renderer = renderer;
-			syncModel();
+			if (_model != null)
+				syncModel();
 		}
 	}
 	
