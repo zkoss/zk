@@ -110,6 +110,9 @@ import org.zkoss.zul.impl.XulElement;
 public class Listbox extends XulElement implements Paginated {
 	private static final Log log = Log.lookup(Listbox.class);
 
+	private static final String ATTR_ON_INIT_RENDER_POSTED =
+		"org.zkoss.zul.Listbox.onInitLaterPosted";
+
 	private transient List _items, _groupsInfo, _groups;
 	/** A list of selected items. */
 	private transient Set _selItems;
@@ -1659,7 +1662,7 @@ public class Listbox extends XulElement implements Paginated {
 			//Always syncModel because it is easier for user to enfore reload
 			syncModel(-1, -1);
 			postOnInitRender();
-			//Since user might setModel and setRender separately or repeatedly,
+			//Since user might setModel and setItemRender separately or repeatedly,
 			//we don't handle it right now until the event processing phase
 			//such that we won't render the same set of data twice
 			//--
@@ -1708,7 +1711,16 @@ public class Listbox extends XulElement implements Paginated {
 	 * @exception UiException if failed to initialize with the model
 	 */
 	public void setItemRenderer(ListitemRenderer renderer) {
-		_renderer = renderer;
+		if (_renderer != renderer) {
+			_renderer = renderer;
+
+			if ((renderer instanceof ListitemRendererExt)
+			|| (_renderer instanceof ListitemRendererExt)) {
+				syncModel(-1, -1); //we have to recreate all
+			} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+				unloadAll();
+			}
+		}
 	}
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
@@ -1819,6 +1831,31 @@ public class Listbox extends XulElement implements Paginated {
 			insertBefore(newUnloadedItem(renderer, min), next);
 		}
 	}
+	/** Unloads items.
+	 * It unloads all loaded items by recreating them.
+	 * Note: it assumes the model and renderer remains the same,
+	 * and the render doesn't implement
+	 * ListitemRenderExt (to create item in app-specific way)
+	 */
+	private void unloadAll() {
+		int cnt = getItemCount();
+		if (cnt <= 0) return; //nothing to do
+
+		ListitemRenderer renderer = null;
+		Component comp = getItemAtIndex(cnt - 1);
+		while (--cnt >= 0) {
+			Component prev = comp.getPreviousSibling();
+			if (((Listitem)comp).isLoaded()) {
+				if (renderer == null)
+					renderer = getRealRenderer();
+				Component next = comp.getNextSibling();
+				comp.detach(); //always detach
+				insertBefore(newUnloadedItem(renderer, cnt), next);
+			}
+			comp = prev;
+		}
+	}
+
 	/** Creates an new and unloaded listitem. */
 	private final Listitem newUnloadedItem(ListitemRenderer renderer, int index) {
 		Listitem item = null;
@@ -1889,7 +1926,7 @@ public class Listbox extends XulElement implements Paginated {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
 	public void onInitRender() {
-		removeAttribute("zul.Listbox.ON_INITRENDER");
+		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
 		if (inSpecialMold()) {
 			_engine.onInitRender();
 		} else {
@@ -1924,8 +1961,8 @@ public class Listbox extends XulElement implements Paginated {
 	}
 	private void postOnInitRender() {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
-		if (getAttribute("zul.Listbox.ON_INITRENDER") == null) {
-			setAttribute("zul.Listbox.ON_INITRENDER", Boolean.TRUE);
+		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			Events.postEvent("onInitRender", this, null);
 			smartUpdate("z.render", true);
 		}

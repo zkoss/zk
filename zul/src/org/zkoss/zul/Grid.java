@@ -101,6 +101,9 @@ import org.zkoss.zul.event.PagingEvent;
 public class Grid extends XulElement implements Paginated {
 	private static final Log log = Log.lookup(Grid.class);
 
+	private static final String ATTR_ON_INIT_RENDER_POSTED =
+		"org.zkoss.zul.Grid.onInitLaterPosted";
+
 	private transient Rows _rows;
 	private transient Columns _cols;
 	private transient Foot _foot;
@@ -622,7 +625,16 @@ public class Grid extends XulElement implements Paginated {
 	 * @exception UiException if failed to initialize with the model
 	 */
 	public void setRowRenderer(RowRenderer renderer) {
-		_renderer = renderer;
+		if (_renderer != renderer) {
+			_renderer = renderer;
+
+			if ((renderer instanceof RowRendererExt)
+			|| (_renderer instanceof RowRendererExt)) {
+				syncModel(-1, -1); //we have to recreate all
+			} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+				unloadAll();
+			}
+		}
 	}
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
@@ -773,6 +785,32 @@ public class Grid extends XulElement implements Paginated {
 			_rows.insertBefore(newUnloadedRow(renderer, min), next);
 		}
 	}
+	/** Unloads rows.
+	 * It unloads all loaded rows by recreating them.
+	 * Note: it assumes the model and renderer remains the same,
+	 * and the render doesn't implement
+	 * RowRenderExt (to create row in app-specific way)
+	 */
+	private void unloadAll() {
+		final List rows = _rows.getChildren();
+		int cnt = rows.size();
+		if (cnt <= 0) return; //nothing to do
+
+		RowRenderer renderer = null;
+		Component comp = (Component)rows.get(cnt - 1);
+		while (--cnt >= 0) {
+			Component prev = comp.getPreviousSibling();
+			if (((Row)comp).isLoaded()) {
+				if (renderer == null)
+					renderer = getRealRenderer();
+				Component next = comp.getNextSibling();
+				comp.detach(); //always detach
+				_rows.insertBefore(newUnloadedRow(renderer, cnt), next);
+			}
+			comp = prev;
+		}
+	}
+
 	/** Creates an new and unloaded row. */
 	private final Row newUnloadedRow(RowRenderer renderer, int index) {
 		Row row = null;
@@ -852,7 +890,7 @@ public class Grid extends XulElement implements Paginated {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
 	public void onInitRender() {
-		removeAttribute("zul.Grid.ON_INITRENDER");
+		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
 		if (inSpecialMold()) {
 			_engine.onInitRender();
 		} else {
@@ -887,8 +925,8 @@ public class Grid extends XulElement implements Paginated {
 	}
 	private void postOnInitRender() {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
-		if (getAttribute("zul.Grid.ON_INITRENDER") == null) {
-			setAttribute("zul.Grid.ON_INITRENDER", Boolean.TRUE);
+		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			Events.postEvent("onInitRender", this, null);
 			smartUpdate("z.render", true);
 		}

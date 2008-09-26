@@ -1,0 +1,57 @@
+<!-- B30-2129667.zul
+	Tom Yeh
+-->
+<window title="Live Data" border="normal">
+	<html>
+		<attribute name="content">
+		<ol>
+		<li>Click "Change Renderer 1", and you shall see "option 1",
+		"option 2", and so on in both list and grid.</li>
+		<li>Click "Change Renderer 2", and you shall see "plan 1",
+		"plan 2", and so on in both list and grid.</li>
+		</ol>
+		</attribute>
+	</html>
+	<zscript><![CDATA[
+		String[] data = new String[30];
+		for(int j=0; j < data.length; ++j) {
+			data[j] = ""+j;
+		}
+		ListModel strset = new SimpleListModel(data);
+
+		ListitemRenderer renderl1 = new ListitemRenderer() {
+			public void render(Listitem item, Object data) {
+				item.setLabel("option " + data);
+			}
+		};
+		ListitemRenderer renderl2 = new ListitemRenderer() {
+			public void render(Listitem item, Object data) {
+				item.setLabel("plan " + data);
+			}
+		};
+
+		RowRenderer renderr1 = new RowRenderer() {
+			public void render(Row row, Object data) {
+				row.appendChild(new Label("option " + data));
+			}
+		};
+		RowRenderer renderr2 = new RowRenderer() {
+			public void render(Row row, Object data) {
+				row.appendChild(new Label("plan " + data));
+			}
+		};
+	]]></zscript>
+	<hbox>
+	<listbox id="list" width="200px" rows="10" model="${strset}">
+		<listhead>
+			<listheader label="Load on Demend" sort="auto"/>
+		</listhead>
+	</listbox>
+	<grid id="grid" width="200px" height="100px" model="${strset}">
+	</grid>
+	</hbox>
+	<button label="Change Renderer 1"
+		onClick="list.setItemRenderer(renderl1); grid.setRowRenderer(renderr1);"/>
+	<button label="Change Renderer 2"
+		onClick="list.setItemRenderer(renderl2); grid.setRowRenderer(renderr2);"/>
+</window>

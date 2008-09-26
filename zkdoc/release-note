@@ -23,6 +23,7 @@ ZK 3.5.1
   2125788: Hilighted window covered by mask when change title
   2124391: Tree, attribute sequence cause wrong result
   2128058: Fails to change the visibility of Border Region dynamically
+  2129667: Listbox(&Grid).setItemRenderer shall unload loaded items
 
 * Upgrade Notes
   * getMoldSclass is deprecated and replaced with getZclass since
