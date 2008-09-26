@@ -1155,23 +1155,24 @@ function onIframeURLChange(uuid, url) {
 	zkau.sendasap({uuid: uuid, cmd: "onURIChange", data: [url]});
 };
 zkau.onURLChange = function () {
-	var ifr = window.frameElement;
-	if (!parent || parent == window || !ifr) //not iframe
-		return;
+	try {
+		var ifr = window.frameElement;
+		if (!parent || parent == window || !ifr) //not iframe
+			return;
 
-	var l0 = parent.location, l1 = location,
-		url = l0.protocol != l1.protocol || l0.host != l1.host
-		|| l0.port != l1.port ? l1.href: l1.pathname,
-		j = url.lastIndexOf(';'), k = url.lastIndexOf('?');
-	if (j >= 0 && (k < 0 || j < k)) {
-		var s = url.substring(0, j);
-		url = k < 0 ? s: s + url.substring(k);
-	}
-	if (l1.hash && "#" != l1.hash) url += l1.hash;
+		var l0 = parent.location, l1 = location,
+			url = l0.protocol != l1.protocol || l0.host != l1.host
+			|| l0.port != l1.port ? l1.href: l1.pathname,
+			j = url.lastIndexOf(';'), k = url.lastIndexOf('?');
+		if (j >= 0 && (k < 0 || j < k)) {
+			var s = url.substring(0, j);
+			url = k < 0 ? s: s + url.substring(k);
+		}
+		if (l1.hash && "#" != l1.hash) url += l1.hash;
 
-	if (getZKAttr(ifr, "xsrc") != ifr.src) {//the first zul page being loaded
-		var ifrsrc = ifr.src, loc = location.pathname;
-		setZKAttr(ifr, "xsrc", ifrsrc);
+		if (getZKAttr(ifr, "xsrc") != ifr.src) {//the first zul page being loaded
+			var ifrsrc = ifr.src, loc = location.pathname;
+			setZKAttr(ifr, "xsrc", ifrsrc);
 
 		//The first zul page might or might not be ifr.src
 		//We have to compare ifr.src with location
@@ -1179,18 +1180,21 @@ zkau.onURLChange = function () {
 		//IE: ifr.src has no http://hostname/ (actually, same as server's value)
 		//Opera: location.pathname has bookmark and jsessionid
 		//Tomcat: /path;jsessionid=xxx#abc?xyz
-		ifrsrc = zkau._simplifyURL(ifrsrc);
-		loc = zkau._simplifyURL(loc);
-		if (ifrsrc.endsWith(loc)
-		|| loc.endsWith(ifrsrc)) { //the non-zul page is ifr.src
-			setZKAttr(ifr, "xurl", url);
-			return; //not notify if changed by server
+			ifrsrc = zkau._simplifyURL(ifrsrc);
+			loc = zkau._simplifyURL(loc);
+			if (ifrsrc.endsWith(loc)
+			|| loc.endsWith(ifrsrc)) { //the non-zul page is ifr.src
+				setZKAttr(ifr, "xurl", url);
+				return; //not notify if changed by server
+			}
 		}
-	}
 
-	if (parent.onIframeURLChange && getZKAttr(ifr, "xurl") != url) {
-		parent.onIframeURLChange(ifr.id, url);
-		setZKAttr(ifr, "xurl", url);
+		if (parent.onIframeURLChange && getZKAttr(ifr, "xurl") != url) {
+			parent.onIframeURLChange(ifr.id, url);
+			setZKAttr(ifr, "xurl", url);
+		}
+	} catch (e) { //due to JS sandbox, we cannot access if not from same host
+		if (zk.debugJS) zk.debug("Unable to access parent frame");
 	}
 };
 zkau._simplifyURL = function (url) {
