@@ -238,7 +238,9 @@ zkMenuit.onclick = function (evt) {
 		if (el.id != anc.id) zk.go(anc.href, overwrite, t); // Bug #1886352
 		//Note: we cannot eat onclick. or, <a> won't work
 	}
-	zkau.closeFloats(cmp); //bug 1711822: fire onClick first
+	
+	if (!getZKAttr(cmp, "pop")) // Bug 1852304 
+		zkau.closeFloats(cmp); //bug 1711822: fire onClick first
 };
 
 zkMenusp.init = function (cmp) {
