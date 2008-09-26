@@ -44,8 +44,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	import org.zkoss.zk.ui.*;
 	import org.zkoss.zul.*;
 
-	void alert(String m) {
-		Messagebox.show(m);
+	void alert(Object m) {
+		Messagebox.show("" + m);
 	}
 	</zscript>
 
