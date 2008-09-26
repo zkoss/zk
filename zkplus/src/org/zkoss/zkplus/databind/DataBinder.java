@@ -255,10 +255,10 @@ public class DataBinder implements Serializable {
 				saveEvents = null;
 			}
 		}
-
-		if (NULLIFY.equals(access)) {
-			access = null;
-		}
+//bug 2129730. Comment out the following to solve this bug
+//		if (NULLIFY.equals(access)) {
+//			access = null;
+//		}
 		
 		if (NULLIFY.equals(converter)) {
 			converter = null;
