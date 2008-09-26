@@ -60,8 +60,10 @@ implements ComponentDefinition, java.io.Serializable {
 	private EvaluatorRef _evalr;
 	/** Either String or Class. */
 	private Object _implcls;
-	/** A map of molds (String name, ExValue moldURI). */
+	/** A map of molds (String mold, ExValue moldURI). */
 	private transient Map _molds;
+	/** A map of z2cs (String mold, ExValue). */
+	private transient Map _z2cs;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
@@ -416,7 +418,7 @@ implements ComponentDefinition, java.io.Serializable {
 		return propmap;
 	}
 
-	public void addMold(String name, String moldURI) {
+	public void addMold(String name, String moldURI, String z2cURI) {
 		if (moldURI.startsWith("class:")) {
 			final String clsnm = moldURI.substring(6);
 			try {
@@ -428,19 +430,33 @@ implements ComponentDefinition, java.io.Serializable {
 		} else {
 			if (moldURI.length() == 0)
 				throw new IllegalArgumentException();
-			addMold0(name, new ExValue(moldURI, String.class));
+			addMold0(name, new ExValue(moldURI, String.class), z2cURI);
 		}
 	}
-	public void addMold(String name, ComponentRenderer renderer) {
-		addMold0(name, renderer);
+	public void addMold(String name, ComponentRenderer renderer, String z2cURI) {
+		addMold0(name, renderer, z2cURI);
 	}
-	private void addMold0(String name, Object mold) {
+	/** @deprecated */
+	public void addMold(String name, String moldURI) {
+		addMold(name, moldURI, null);
+	}
+	/** @deprecated */
+	public void addMold(String name, ComponentRenderer renderer) {
+		addMold(name, renderer, null);
+	}
+	private void addMold0(String name, Object mold, String z2cURI) {
 		if (name == null || name.length() == 0 || mold == null)
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
 			_molds = new HashMap(4);
 		_molds.put(name, mold);
+
+		if (z2cURI != null) {
+			if (_z2cs == null)
+				_z2cs = new HashMap(4);
+			_z2cs.put(name, new ExValue(z2cURI, String.class));
+		}
 	}
 	public Object getMoldURI(Component comp, String name) {
 		final Object o = _molds.get(name);
@@ -458,6 +474,12 @@ implements ComponentDefinition, java.io.Serializable {
 	public Collection getMoldNames() {
 		return _molds != null ?
 			_molds.keySet(): (Collection)Collections.EMPTY_LIST;
+	}
+
+	public String getZ2CURI(Component comp, String name) {
+		final ExValue z2c = (ExValue)_z2cs.get(name);
+		return z2c != null ?
+			toAbsoluteURI((String)z2c.getValue(_evalr, comp)): null;
 	}
 
 	private String toAbsoluteURI(String uri) {

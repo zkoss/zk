@@ -636,7 +636,7 @@ public class LanguageDefinition {
 			ComponentDefinitionImpl.newMacroDefinition(
 				pgdef != null ? null: this, pgdef,
 				name, _macrotmpl.klass, macroURI, inline);
-		compdef.addMold("default", _macrotmpl.moldURI);
+		compdef.addMold("default", _macrotmpl.moldURI, null);
 		return compdef;
 	}
 

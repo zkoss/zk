@@ -224,7 +224,7 @@ public class DefinitionLoaders {
 
 			//if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
-			final Map pagemolds = parseMolds(root);
+			final Map pagemolds = parseSimpleMolds(root);
 			final String desktopURI = (String)pagemolds.get("desktop");
 			final String pageURI = (String)pagemolds.get("page");
 			if (desktopURI == null || desktopURI.length() == 0 || pageURI == null
@@ -414,9 +414,13 @@ public class DefinitionLoaders {
 			if (s != null && !"false".equals(s))
 				compdef.setBlankPreserved(true);
 
-			for (Iterator e = parseMolds(el).entrySet().iterator(); e.hasNext();) {
-				final Map.Entry me = (Map.Entry)e.next();
-				compdef.addMold((String)me.getKey(), (String)me.getValue());
+			for (Iterator i = el.getElements("mold").iterator(); i.hasNext();) {
+				final Element e = (Element)i.next();
+				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");
+				final String val = IDOMs.getRequiredElementValue(e, "mold-uri");
+				final String z2c = e.getElementValue("z2c-uri", true);
+				compdef.addMold(nm, val,
+					z2c != null && z2c.length() > 0 ? z2c: null);
 			}
 
 			for (Iterator e = parseCustAttrs(el).entrySet().iterator(); e.hasNext();) {
@@ -537,7 +541,8 @@ public class DefinitionLoaders {
 	private static Map parseProps(Element elm) {
 		return IDOMs.parseParams(elm, "property", "property-name", "property-value");
 	}
-	private static Map parseMolds(Element elm) {
+	/** Parses mold without z2c-uri. */
+	private static Map parseSimpleMolds(Element elm) {
 		return IDOMs.parseParams(elm, "mold", "mold-name", "mold-uri");
 	}
 	private static Map parseCustAttrs(Element elm) {

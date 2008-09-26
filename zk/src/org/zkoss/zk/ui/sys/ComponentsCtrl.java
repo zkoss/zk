@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 
@@ -413,13 +414,24 @@ public class ComponentsCtrl {
 		public Component newInstance(Class cls) {
 			throw new UnsupportedOperationException();
 		}
+		public void addMold(String name, String moldURI, String z2cURI) {
+			throw new UnsupportedOperationException();
+		}
+		public void addMold(String name, ComponentRenderer renderer, String z2cURI) {
+			throw new UnsupportedOperationException();
+		}
+		/** @deprecated */
 		public void addMold(String name, String moldURI) {
 			throw new UnsupportedOperationException();
 		}
-		public void addMold(String name, org.zkoss.zk.ui.render.ComponentRenderer renderer) {
+		/** @deprecated */
+		public void addMold(String name, ComponentRenderer renderer) {
 			throw new UnsupportedOperationException();
 		}
 		public Object getMoldURI(Component comp, String name) {
+			return null;
+		}
+		public String getZ2CURI(Component comp, String name) {
 			return null;
 		}
 		public boolean hasMold(String name) {

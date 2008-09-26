@@ -236,13 +236,27 @@ public interface ComponentDefinition extends Cloneable {
 	 * {@link #addMold(String, ComponentRenderer)}.
 	 * If not staring with "class:", it is pure an URI, and it may
 	 * contain XEL expressions.
+	 * @param z2cURI the URI of ZCS-to-CSS converter.
+	 * Ignored if null.
+	 * @since 3.5.1
 	 */
-	public void addMold(String name, String moldURI);
+	public void addMold(String name, String moldURI, String z2cURI);
 	/** Adds a mold based on {@link ComponentRenderer}.
 	 *
 	 * @param renderer a component renderer. It is shared
 	 * by all component instances belonging to this definition.
-	 * @since 3.0.0
+	 * @param z2cURI the URI of ZCS-to-CSS converter.
+	 * Ignored if null.
+	 * @since 3.5.1
+	 */
+	public void addMold(String name, ComponentRenderer renderer, String z2cURI);
+
+	/** @deprecated As of release 3.5.1, replaced with
+	 * {@link #addMold(String, String, String)}.
+	 */
+	public void addMold(String name, String moldURI);
+	/** @deprecated As of release 3.5.1, replaced with
+	 * {@link #addMold(String, ComponentRenderer, String)}.
 	 */
 	public void addMold(String name, ComponentRenderer renderer);
 
@@ -256,12 +270,20 @@ public interface ComponentDefinition extends Cloneable {
 	 * <p>If the mold URI contains an expression, it will be evaluated first
 	 * before returning.
 	 *
-	 * @param name the mold
+	 * @param name the mold name
 	 * @return an URI in String, or a {@link ComponentRenderer},
 	 * as of release 3.0.0
 	 * @see org.zkoss.zk.ui.AbstractComponent#redraw
 	 */
 	public Object getMoldURI(Component comp, String name);
+	/** Returns the URI of the ZCS-to-CSS converter for the specified mold.
+	 * <p>ZCS is ZK cacasding style that allows developers to customize
+	 * CSS with the component names.
+	 *
+	 * @param name the mold name
+	 * @since 3.5.1
+	 */
+	public String getZ2CURI(Component comp, String name);
 	/** Returns whether the specified mold exists.
 	 */
 	public boolean hasMold(String name);
