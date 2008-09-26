@@ -2301,7 +2301,7 @@ anima.appear = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
-			Effect.Appear(n, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterVisi});
+			Effect.Appear(n, {duration:dur ? dur/1000: 0.6, afterFinish: anima._afterVisi});
 		}
 	}
 };
@@ -2363,7 +2363,7 @@ anima.moveBy = function (id, pos, dur) {
 			setZKAttr(n, "animating", "show");
 			zk._showExtr(n);  //parent visible first
 			if (!pos) pos = "topleft"
-			Effect.MoveBy(n, 0, 0, {duration:dur ? dur/1000: 0.8, afterFinish: anima._afterHide, afterSetup: function(effect) {
+			Effect.MoveBy(n, 0, 0, {duration:dur ? dur/1000: 0.6, afterFinish: anima._afterHide, afterSetup: function(effect) {
 				 if (pos.indexOf("left") > -1) {
 					 effect.options.x = effect.originalLeft;
 					 effect.originalLeft = 0;
@@ -2422,7 +2422,7 @@ anima.puff = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.Puff(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
+			Effect.Puff(n, {duration:dur ? dur/1000: 0.6, afterFinish: anima._afterHide0});
 		}
 	}
 };
@@ -2438,7 +2438,7 @@ anima.dropOut = function (id, dur) {
 			++anima.count;
 			setZKAttr(n, "animating", "hide");
 			zk.onHideAt(n); //callback first
-			Effect.DropOut(n, {duration:dur ? dur/1000: 0.7, afterFinish: anima._afterHide0});
+			Effect.DropOut(n, {duration:dur ? dur/1000: 0.6, afterFinish: anima._afterHide0});
 		}
 	}
 };
