@@ -26,7 +26,6 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 import org.zkoss.zhtml.impl.AbstractTag;
-import org.zkoss.zk.fn.ZkFns;
 
 /**
  * The BODY tag.
@@ -67,11 +66,7 @@ public class Body extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		final String zktags = ZkFns.outZkHtmlTags();
-		if (zktags != null) {
-			final int j = buf.indexOf("<body");
-			buf.insert(j>= 0 ? j + 6: 0, zktags);
-		}
+		Head.addZkHtmlTags(buf, "body");
 
 		out.write(buf.toString());
 		out.write('\n');
