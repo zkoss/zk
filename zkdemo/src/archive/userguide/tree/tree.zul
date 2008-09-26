@@ -32,16 +32,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<textbox id="codeView" class="code" rows="15" width="100%" use="org.zkoss.zkdemo.userguide.CodeView">
 			<attribute name="value"><![CDATA[
 <window title="Trees" border="normal">
-	<vbox width="100%">
+	<hbox width="100%">
+                <vbox>
 		Four style of trees :
 		<radiogroup
 			onCheck='tree.setZclass("z-"+self.selectedItem.value)'>
-			<radio label="Default" value="tree" />
+                        <vbox>
+			<radio label="Default" value="tree" selected="true"/>
 			<radio label="Dot Tree" value="dottree" />
 			<radio label="XP Explorer" value="filetree" />
 			<radio label="Vista Explorer" value="vfiletree" />
+                        </vbox>
 		</radiogroup>
-		<tree id="tree" width="90%" rows="8">
+                </vbox>
+		<tree id="tree" width="400px" rows="8">
 			<treecols sizable="true">
 				<treecol label="Name" />
 				<treecol label="Description" />
@@ -88,7 +92,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<treeitem label="Item 3" />
 			</treechildren>
 		</tree>
-	</vbox>
+	</hbox>
 </window>
 			]]></attribute>
 		</textbox>
