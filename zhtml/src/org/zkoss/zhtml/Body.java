@@ -69,7 +69,7 @@ public class Body extends AbstractTag {
 
 		final String zktags = ZkFns.outZkHtmlTags();
 		if (zktags != null) {
-			final int j = buf.indexOf("<body>");
+			final int j = buf.indexOf("<body");
 			buf.insert(j>= 0 ? j + 6: 0, zktags);
 		}
 
