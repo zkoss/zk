@@ -17,8 +17,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 ////
 zk.FloatMenu = zClass.create();
 Object.extend(Object.extend(zk.FloatMenu.prototype, zk.Floats.prototype), {
-	_close: function (el) {
-		zkMenu2._close2(el); // Bug #1852304. invoke zkMenu2._close function later.
+	_close: function (el) {		
+		// No longer need to invoke zkMenu._close later because it will cause another issue
+     	// when you click the item to show the menu popup, it will close at second time.
+		zkMenu2._close(el);
+		// zkMenu2._close2(el); // Bug #1852304. invoke zkMenu2._close function later.
 	}
 });
 zkMenu2 = { // menu
@@ -353,11 +356,14 @@ zkMenu2 = { // menu
 			}
 			zk.fire(pp, "close");
 		}
-	},
+	}
+	/**,
+	// No longer need to invoke zkMenu._close later because it will cause another issue
+ 	// when you click the item to show the menu popup, it will close at second time.
 	_close2: function (pp) {
 		if (pp._shadow) pp._shadow.hide();
 		setTimeout("zkMenu2._close('"+pp.id+"')", 0);
-	}
+	}*/
 };
 if (!zkMenu2._pop)
 	zkau.floats.push(zkMenu2._pop = new zk.FloatMenu()); //hook to zkau.js
