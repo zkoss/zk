@@ -46,13 +46,28 @@ public class Head extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		final String zktags = NativeHelpers.outZKHtmlTags();
-		if (zktags != null) {
-			final int j = buf.indexOf("<head>");
-			buf.insert(j>= 0 ? j + 6: 0, zktags);
-		}
+		addZkHtmlTags(buf, "head");
 	
 		out.write(buf.toString());
 		out.write('\n');
+	}
+	/** Adds NativeHelpers.outZkHtmlTags if necessary.
+	 * @param tag the tag name, such as "head" and "body"
+	 */
+	/*package*/ static void addZkHtmlTags(StringBuffer buf, String tag) {
+		final String zktags = NativeHelpers.outZKHtmlTags();
+		if (zktags != null) {
+			int j = buf.indexOf("<" + tag);
+			if (j >= 0) {
+				j += tag.length() + 1;
+				for (int len = buf.length(); j < len; ++j) {
+					if (buf.charAt(j) == '>') {
+						buf.insert(j + 1, zktags);
+						return; //done
+					}
+				}
+			}
+			buf.append(zktags);
+		}
 	}
 }

@@ -66,11 +66,7 @@ public class Body extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		final String zktags = NativeHelpers.outZKHtmlTags();
-		if (zktags != null) {
-			final int j = buf.indexOf("<body>");
-			buf.insert(j>= 0 ? j + 6: 0, zktags);
-		}
+		Head.addZkHtmlTags(buf, "body");
 	
 		out.write(buf.toString());
 		out.write('\n');
