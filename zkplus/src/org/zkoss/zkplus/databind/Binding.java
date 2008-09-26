@@ -210,10 +210,10 @@ public class Binding implements java.io.Serializable {
 		} else if ("save".equals(access)) {
 			_loadable = false;
 			_savable = true;
-		} else if ("none".equals(access)) { //unknow access mode
+		} else if ("none".equals(access)) { 
 			_loadable = false;
 			_savable = false;
-		} else {
+		} else {//unknow access mode
 			throw new UiException("Unknown DataBinder access mode. Should be \"both\", \"load\", \"save\", or \"none\": "+access);
 		}
 	}
