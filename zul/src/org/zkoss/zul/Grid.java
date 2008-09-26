@@ -628,11 +628,13 @@ public class Grid extends XulElement implements Paginated {
 		if (_renderer != renderer) {
 			_renderer = renderer;
 
-			if ((renderer instanceof RowRendererExt)
-			|| (_renderer instanceof RowRendererExt)) {
-				syncModel(-1, -1); //we have to recreate all
-			} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
-				unloadAll();
+			if (_model != null) {
+				if ((renderer instanceof RowRendererExt)
+				|| (_renderer instanceof RowRendererExt)) {
+					syncModel(-1, -1); //we have to recreate all
+				} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+					unloadAll();
+				}
 			}
 		}
 	}

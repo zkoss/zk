@@ -1714,11 +1714,13 @@ public class Listbox extends XulElement implements Paginated {
 		if (_renderer != renderer) {
 			_renderer = renderer;
 
-			if ((renderer instanceof ListitemRendererExt)
-			|| (_renderer instanceof ListitemRendererExt)) {
-				syncModel(-1, -1); //we have to recreate all
-			} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
-				unloadAll();
+			if (_model != null) {
+				if ((renderer instanceof ListitemRendererExt)
+				|| (_renderer instanceof ListitemRendererExt)) {
+					syncModel(-1, -1); //we have to recreate all
+				} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+					unloadAll();
+				}
 			}
 		}
 	}
