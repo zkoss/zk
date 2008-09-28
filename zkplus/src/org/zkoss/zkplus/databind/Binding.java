@@ -28,6 +28,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -202,8 +203,22 @@ public class Binding implements Serializable {
 	 */
 	/*package*/ void setConverter(String cvtClsName) {
 		if (cvtClsName != null) {
+			//bug #2129992
+			Class cls = null;
+			if (_comp == null || _comp.getPage() == null) {
+				try {
+					cls = Classes.forNameByThread(cvtClsName);
+				} catch (ClassNotFoundException ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			} else {
+				cls = _comp.getPage().getZScriptClass(cvtClsName); 
+				if (cls == null) {
+					throw UiException.Aide.wrap(new ClassNotFoundException(cvtClsName));
+				}
+			}
 			try {
-				_converter = (TypeConverter) Classes.newInstanceByThread(cvtClsName);
+				_converter = (TypeConverter) cls.newInstance();
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex);
 			}
