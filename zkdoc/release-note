@@ -25,6 +25,7 @@ ZK 3.5.1
   2128058: Fails to change the visibility of Border Region dynamically
   2129667: Listbox(&Grid).setItemRenderer shall unload loaded items
   2129730: databinding fails to process access='none'
+  2129992: TypeConverter cannot be found by databind if in zscript  
  
 * Upgrade Notes
   * getMoldSclass is deprecated and replaced with getZclass since
