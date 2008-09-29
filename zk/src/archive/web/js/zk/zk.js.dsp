@@ -25,6 +25,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <c:include page="~./js/zk/html/lang/mesg*.js"/>
 <c:include page="~./js/zk/html/common.js"/>
 <c:include page="~./js/zk/html/au.js"/>
-<c:include page="~./js/zk/locale.js.dsp"/>
 
 ${z:outLocaleJavaScript()}
