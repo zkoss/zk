@@ -17,8 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zkex.Version</version-class>
-		<version-uid>3.5.1</version-uid>
-		<zk-version>3.5.1</zk-version><!-- or later -->
+		<version-uid>5.0.0</version-uid>
+		<zk-version>5.0.0</zk-version><!-- or later -->
 	</version>
 
 	<device-config>
