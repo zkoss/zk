@@ -17,6 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:include page="~./js/ext/prototype/prototype.js"/>
 <c:include page="~./js/ext/aculo/effects.js"/>
 <c:include page="~./js/ext/aculo/dragdrop.js"/>
@@ -25,3 +26,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <c:include page="~./js/zk/html/common.js"/>
 <c:include page="~./js/zk/html/au.js"/>
 <c:include page="~./js/zk/locale.js.dsp"/>
+
+${z:outLocaleJavaScript()}
