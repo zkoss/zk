@@ -40,6 +40,5 @@ zkUtil = { //static methods
 		for (var j = arguments.length; --j >= 3;)
 			args.unshift(arguments[j]);
 		setInterval(function () {method.apply(obj, args)}, period);
-	},
-
+	}
 };

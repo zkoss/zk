@@ -99,21 +99,30 @@ zk = { //static methods
 
 	/** Declares a class that extendss the specified base class.
 	 * @param baseClass the base class.
+	 * @param methods the non-static methods
+	 * @param staticMethods the static methods.
 	 */
-	$extends: function (baseClass, methods) {
+	$extends: function (baseClass, methods, staticMethods) {
 	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
 			this.$init.apply(this, arguments);
 		};
 
-		for (var p in baseClass.prototype) //inherit non-static
-			if (p.charAt(0) != '$' || p == '$init') {
-				jclass.prototype[p] = baseClass.prototype[p];
-				jclass.prototype['$' + p ] = baseClass.prototype[p];
+		for (var p in baseClass.prototype) { //inherit non-static
+			var cc = p.charAt(0);
+			if (cc != '$' || p == '$init') {
+				var m = baseClass.prototype[p];
+				jclass.prototype[p] = m;
+				if (cc != '_' && typeof m == 'function') //not private method
+					jclass.prototype['$' + p ] = m;
 			}
+		}
 
 		for (var p in methods)
 			jclass.prototype[p] = methods[p];
+
+		for (var p in staticMethods)
+			jclass[p] = staticMethods[p];
 		return jclass;
 	},
 
@@ -130,6 +139,10 @@ zk = { //static methods
 	parseInt: function (v, b) {
 		v = v ? parseInt(v, b || 10): 0;
 		return isNaN(v) ? 0: v;
+	},
+	/** Returns whether a character is a white space. */
+	isWhitespace: function (cc) {
+		return cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r';
 	},
 
 	//DEBUG//
@@ -157,7 +170,7 @@ zk = { //static methods
 				document.body.appendChild(console);
 				var html =
 '<div id="zk_dbgbox" style="text-align:right;width:50%;right:0;bottom:0;position:absolute">'
-+'<button onclick="zkDOM.detach(\'zk_dbgbox\')">close</button><br/>'
++'<button onclick="zkDOM.detach(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
 +'<textarea id="zk_dbg" style="width:100%" rows="10"></textarea></div>';
 				zkDOM.setOuterHTML(console, html);
 				console = zkDOM.$("zk_dbg");
