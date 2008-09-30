@@ -18,12 +18,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
-<c:include page="~./js/ext/prototype/prototype.js"/>
-<c:include page="~./js/ext/aculo/effects.js"/>
-<c:include page="~./js/ext/aculo/dragdrop.js"/>
-<c:include page="~./js/zk/html/boot.js"/>
-<c:include page="~./js/zk/html/lang/mesg*.js"/>
-<c:include page="~./js/zk/html/common.js"/>
-<c:include page="~./js/zk/html/au.js"/>
+if (!window.zk) {
+<c:include page="~./js/zk/ajax/zk.js"/>
+<c:include page="~./js/zk/ajax/lang/mesg*.js"/>
+<c:include page="~./js/zk/ajax/util.js"/>
+<c:include page="~./js/zk/ajax/dom.js"/>
+<c:include page="~./js/zk/ajax/widget.js"/>
+<c:include page="~./js/zk/ajax/au.js"/>
 
 ${z:outLocaleJavaScript()}
+}
