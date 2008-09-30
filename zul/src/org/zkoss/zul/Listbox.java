@@ -1465,7 +1465,8 @@ public class Listbox extends XulElement implements Paginated {
 								-group.getVisibleItemCount());
 						}
 					} else {
-						final Listgroup preGroup = getListgroupAt(preRow.getIndex());
+						final Listgroup preGroup = preRow instanceof Listgroup ?
+								(Listgroup) preRow : getListgroupAt(preRow.getIndex());
 						if (preGroup != null) {
 							if (!preGroup.isOpen() && group.isOpen())
 								addVisibleItemCount(isRemove ? -group.getVisibleItemCount() :
