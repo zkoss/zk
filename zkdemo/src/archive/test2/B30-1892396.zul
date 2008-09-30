@@ -25,7 +25,7 @@ Steps:<br/>
 2. Type "kk" to the second textbox, and you shall see kk is shown
 ]]></html>
 
-	<label style="border: 1px solid blue" id="l"/>
+	<label style="background:blue;color:white;" id="l"/>
 	<textbox id="t1" onChange="l.value = self.value"/>
 	</vbox>
 	<zscript>
