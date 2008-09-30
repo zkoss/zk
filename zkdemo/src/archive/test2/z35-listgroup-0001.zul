@@ -1,0 +1,47 @@
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<html>
+		<![CDATA[
+			1. Press "Add Group" Serveral Time. <br/>
+			2. Press "Next Page". <br/>
+			3. It should not raise Exception. <br/>
+		]]>
+	</html>
+	<zscript>
+		<![CDATA[
+			List list = new LinkedList();
+			for(int i=0;i != 15;i++) {
+				list.add(i);
+			}
+			ListModel model = new ListModelList(list, true);
+			
+			void addGroup(int rn) {
+			
+		  		Listgroup group = new Listgroup("Group");
+		  		
+		   		Listitem  row1 = new Listitem();
+		    	new Listcell("row1-1").setParent(row1);		    	
+			   	Listitem  row2 = new Listitem();
+			    new Listcell("row2-1").setParent(row2);		    	
+		  		group.setOpen(false);
+		  		rs.getChildren().add(rn,row1);
+		  		rs.getChildren().add(rn,row2);
+		  		rs.getChildren().add(rn,group);		  		
+			}
+		]]>
+	</zscript>
+	<listbox id="rs" mold="paging" pageSize="10" model="${model}">
+	</listbox>
+	<button label="set Page 5" onClick="rs.pageSize=5" />
+	<button label="set Page 10" onClick="rs.pageSize=10" />
+	<button label="set Page 15" onClick="rs.pageSize=15" />
+	<button label="set Page 20" onClick="rs.pageSize=20" />
+	<toolbarbutton label="Add Group">
+		<attribute name="onClick">
+			<![CDATA[
+				addGroup(10);			
+			]]>
+		</attribute>
+	</toolbarbutton>
+</zk>
