@@ -39,8 +39,6 @@
 		</listbox>
 		<button label="Add group on 11" onClick="addGroup(11)"/>
 		<button label="Add group on 12" onClick="addGroup(12)"/>
-		<button label="Add group on 13" onClick="addGroup(13)"/>
-		<button label="remove previous item"
-			onClick='Iterator it = model.listIterator(1); it.previous(); it.remove();' />
+		<button label="Add group on 13" onClick="addGroup(13)"/>		
 	</window>
 </zk>
