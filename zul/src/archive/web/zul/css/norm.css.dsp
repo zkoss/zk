@@ -938,6 +938,7 @@ div.progressmeter {
 	border-top: 1px solid #666; border-left: 1px solid #666;
 	border-bottom: 1px solid #bbb; border-right: 1px solid #bbb;
 	text-align: left;
+	height: 10px;
 }
 span.progressmeter-img {
 	display:-moz-inline-box; display:inline-block;

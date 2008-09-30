@@ -10,6 +10,7 @@ ZK 3.0.8
   2094526: Components.wireVariables() shall wire implicit objects  
   2117539: Support Session Fixation Protection
   2114380: Filedownload bug with WebSphere 5.1.1
+  2099562: [Opera] progressbar flattened when value = zero
   
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
