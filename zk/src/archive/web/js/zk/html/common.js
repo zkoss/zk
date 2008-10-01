@@ -2022,7 +2022,7 @@ zk.parseDate = function (txt, fmt, strict) {
 				if (y < 100) y += y > 29 ? 1900 : 2000;
 				break;
 			case 'M':
-				if (len == 3){
+				if (len == 3 && token){
 					switch (token.toLowerCase()){
 						case 'jan': 
 							m=0;
