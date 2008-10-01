@@ -42,6 +42,7 @@ import java.util.Map.Entry;
 import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.CollectionsX;
+import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.event.Event;
@@ -401,7 +402,7 @@ public class Components {
 		final Method[] mtds = cls.getMethods();
 		for (int j = 0; j < mtds.length; ++j) {
 			final Method md = mtds[j];
-			final String mdname = md.getName();
+			String mdname = md.getName();
 			if (mdname.length() > 5 && mdname.startsWith("on") 
 			&& Character.isUpperCase(mdname.charAt(2))) {
 				int k = 0;
