@@ -459,13 +459,14 @@ implements ComponentDefinition, java.io.Serializable {
 		}
 	}
 	public Object getMoldURI(Component comp, String name) {
-		final Object o = _molds.get(name);
-		if (o instanceof ExValue) {
-			final ExValue mold = _molds != null ? (ExValue)o: null;
-			return mold == null ? null:
-				toAbsoluteURI((String)mold.getValue(_evalr, comp));
+		if (_molds == null)
+			return null;
+
+		final Object mold = _molds.get(name);
+		if (mold instanceof ExValue) {
+			return toAbsoluteURI((String)((ExValue)mold).getValue(_evalr, comp));
 		} else {
-			return o;
+			return mold;
 		}
 	}
 	public boolean hasMold(String name) {
