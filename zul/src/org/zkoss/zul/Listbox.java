@@ -1120,7 +1120,7 @@ public class Listbox extends XulElement implements Paginated {
 			// if beginning is a group, we don't need to change its groupInfo, because
 			// it is not reliable.
 			if (beginning != j && o instanceof Listgroup) {
-			int[] g = getGroupsInfoAt(j + (infront ? -1 : 1), true);
+			int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
 				if (g != null) {
 					g[0] = j;
 					if (g[2] != -1) g[2] += (infront ? 1 : -1);
@@ -1136,6 +1136,20 @@ public class Listbox extends XulElement implements Paginated {
 	}
 	/*package*/ int[] getGroupsInfoAt(int index) {
 		return getGroupsInfoAt(index, false);
+	}
+	/**
+	 * Returns the last groups info which matches with the same index.
+	 * Because dynamically maintain the index of the groups will occur the same index
+	 * at the same time in the loop. 
+	 */
+	/*package*/ int[] getLastGroupsInfoAt(int index) {
+		int [] rg = null;
+		for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
+			int[] g = (int[])it.next();
+			if (index == g[0]) rg = g;
+			else if (index < g[0]) break;
+		}
+		return rg;
 	}
 	/**
 	 * Returns an int array that it has two length, one is an index of listgroup,
