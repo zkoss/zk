@@ -1118,8 +1118,8 @@ public class Listbox extends XulElement implements Paginated {
 			((Listitem)o).setIndexDirectly(j);
 			
 			// if beginning is a group, we don't need to change its groupInfo, because
-			// it is not reliable.
-			if (beginning != j && o instanceof Listgroup) {
+			// it is not reliable when infront is true.
+			if ((!infront || beginning != j) && o instanceof Listgroup) {
 			int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
 				if (g != null) {
 					g[0] = j;
