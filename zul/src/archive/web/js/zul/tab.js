@@ -396,6 +396,7 @@ zkTabs._fixHgh = function (tabbox, tabs) {
 						n.style.position = "relative";
 					}
 					zk.setOffsetHeight(n, hgh);
+					zk.addClass($e(n.id+"!real"),"tabpanel-real");
 					if (zk.ie) n.style.position = pos;
 				}
 		}

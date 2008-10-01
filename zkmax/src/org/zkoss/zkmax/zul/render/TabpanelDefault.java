@@ -55,9 +55,8 @@ public class TabpanelDefault implements ComponentRenderer {
 
 		wh.write("<div id=\"").write(self.getUuid()).write('"')
 			.write(" z.type=\"zul.tab.Tabpanel\"")
-			.write(self.getOuterAttrs()).write('>')			
+			.write(self.getOuterAttrs()).write('>')
 			.write("<div id=\"").write(self.getUuid()).write("!real\"")
-			.write(" style=\"height:100%;\"")			
 			.write(self.getInnerAttrs()).write('>')
 			.writeChildren(self)
 			.writeln("</div></div>");

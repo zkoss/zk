@@ -596,6 +596,9 @@ div.tabpanel, div.tabpanel-accordion {<%-- horz, accd: tabpanel --%>
 	border-left: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C; padding: 5px;
 }
+div.tabpanel-real{
+	height:100%;
+}
 td.vtabpanels {<%-- vert tabpanels --%>
 	border-top: 1px solid #5C6C7C; border-right: 1px solid #5C6C7C; 
 	border-bottom: 1px solid #5C6C7C;
