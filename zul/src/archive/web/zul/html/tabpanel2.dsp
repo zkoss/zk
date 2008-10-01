@@ -3,8 +3,8 @@ tabpanel2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
-	Description:		
+
+	Description:
 
 	History:
 		Tue Jul 12 10:58:38     2005, Created by tomyeh
@@ -20,5 +20,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.tab2.Tabpanel2"${self.outerAttrs} z.box="${self.tabbox.uuid}">
-	<div id="${self.uuid}!real" style="height:100%"${self.innerAttrs}><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></div>
+	<div id="${self.uuid}!real" ${self.innerAttrs}><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></div>
 </div>

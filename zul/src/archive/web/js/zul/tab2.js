@@ -721,6 +721,7 @@ zkTabpanel2 = {
 								n.style.position = "relative";
 							}
 							zk.setOffsetHeight(n, hgh);
+							zk.addClass($e(n.id+"!real"), getZKAttr(n, "zcls")+"-real");
 							if (zk.ie) n.style.position = pos;
 						}
 					}
