@@ -1187,7 +1187,17 @@ public class Listbox extends XulElement implements Paginated {
 					if (idx != (g[0] + g[1]))
 						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
 					g[2] = idx-1;
-				}							
+				} else if (refChild.getPreviousSibling() instanceof Listitem) {
+					final int idx = ((Listitem)refChild.getPreviousSibling()).getIndex();				
+					final int[] g = getGroupsInfoAt(idx);
+					if (g == null)
+						throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");				
+					if (g[2] != -1)
+						throw new UiException("Only one Goupfooter is allowed per Listgroup");
+					if (idx + 1  != (g[0] + g[1]))
+						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
+					g[2] = idx;
+				}
 			}		
 			//first: listhead or auxhead
 			//last two: listfoot and paging
