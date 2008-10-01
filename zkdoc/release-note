@@ -11,7 +11,8 @@ ZK 3.0.8
   2117539: Support Session Fixation Protection
   2114380: Filedownload bug with WebSphere 5.1.1
   2099562: [Opera] progressbar flattened when value = zero
-  
+  2139857: Components.addForward shall handle cascade $ name pattern
+
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
   2056760: Fail to change the width of Listbox
@@ -47,7 +48,8 @@ ZK 3.0.8
   2128058: Fails to change the visibility of Border Region dynamically
   2129730: databinding fails to process access='none'  
   2129992: TypeConverter cannot be found by databind if in zscript  
-  
+  2138131: GenericForwardComposer throw Exception if component inexist
+
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
   + org.zkoss.zkplus.databind.AnnotateDataBinderInit now implements both 
