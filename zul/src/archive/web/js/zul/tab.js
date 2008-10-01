@@ -250,7 +250,7 @@ zkTabs.init = function (cmp) {
 zkTabs.cleanup = function (cmp) {
 	zkTabs._tabs.remove(cmp.id);
 };
-zkTabs.onVisi = zkTabs.onSize = function (cmp) {	
+zkTabs.onVisi = zkTabs.onSize = function (cmp) {
 	zkTabs.fixWidth(cmp.id);
 };
 if (zk.ie6Only) zkTabs.beforeSize = function (tabs) {
@@ -259,7 +259,7 @@ if (zk.ie6Only) zkTabs.beforeSize = function (tabs) {
 		var panels = zk.nextSibling(tabs, "DIV");
 		if (panels)
 			for (var n = panels.firstChild; n; n = n.nextSibling)
-				if (n.id) n.style.height = "";
+				if (n.id && !n.style.height ) n.style.height = "0px";
 	}
 };
 
@@ -267,8 +267,8 @@ if (zk.ie6Only) zkTabs.beforeSize = function (tabs) {
 // tabpanel //
 zkTabpanel = {};
 zkTabpanel.onVisi = zkTabpanel.onSize = function (cmp){//Bug 2111320
-	var tabbox = $parentByType(cmp, "Tabbox");	
-	if ( !zk.isAccord(tabbox) && zk.ie6Only  ) {		
+	var tabbox = $parentByType(cmp, "Tabbox");
+	if ( !zk.isAccord(tabbox) && zk.ie6Only  ) {
 		zk.repaint(tabbox);
 	}
 }
@@ -381,24 +381,26 @@ zkTabs.fixWidth = function (uuid) {
 zkTabs._fixHgh = function (tabbox, tabs) {
 	//fix tabpanels's height if tabbox's height is specified
 	//Ignore accordion since its height is controlled by each tabpanel
-
-	var hgh = tabbox.style.height;
-	if (hgh && hgh != "auto" && !zk.isAccord(tabbox)){
+	
+	if (!zk.isAccord(tabbox)) {
+		var hgh = tabbox.style.height;
 		var panels = zk.nextSibling(tabs, "DIV");
-
 		if (panels) {
-			hgh = zk.getVflexHeight(panels);
-
-			for (var pos, n = panels.firstChild; n; n = n.nextSibling)
-				if (n.id) {					
-					if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary. 
+			for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
+				if (n.id) {
+					if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
 						pos = n.style.position;
 						n.style.position = "relative";
 					}
-					zk.setOffsetHeight(n, hgh);
-					zk.addClass($e(n.id+"!real"),"tabpanel-real");
+					if (hgh && hgh != "auto") {//tabbox has height
+						hgh = zk.getVflexHeight(panels);
+						zk.setOffsetHeight(n, hgh);
+					}
+					//let real div 100% height
+					zk.addClass($e(n.id + "!real"), "tabpanel-real");
 					if (zk.ie) n.style.position = pos;
 				}
+			}
 		}
 	}
 };
