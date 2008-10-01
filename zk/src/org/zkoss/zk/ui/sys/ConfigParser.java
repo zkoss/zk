@@ -63,7 +63,7 @@ public class ConfigParser {
 		if (url == null || config == null)
 			throw new IllegalArgumentException("null");
 		log.info("Parsing "+url);
-		parse(new SAXBuilder(false, false, true).build(url).getRootElement(),
+		parse(new SAXBuilder(true, false, true).build(url).getRootElement(),
 			config, locator);
 	}
 	/** Parses zk.xml, specified by the root element.
