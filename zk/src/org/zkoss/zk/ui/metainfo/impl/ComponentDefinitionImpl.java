@@ -63,7 +63,7 @@ implements ComponentDefinition, java.io.Serializable {
 	/** A map of molds (String mold, ExValue moldURI). */
 	private transient Map _molds;
 	/** A map of z2cs (String mold, ExValue). */
-	private transient Map _z2cs;
+	private Map _z2cs;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
