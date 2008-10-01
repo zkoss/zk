@@ -6,6 +6,7 @@ ZK 3.5.1
   2117539: Support Session Fixation Protection
   2125862: Extendlet supports filters
   2127848: New Tree style
+  2139857: Components.addForward shall handle cascade $ name pattern
 
 * Bugs
   2111900: Multiline textbox cannot fire onChanging
@@ -29,6 +30,7 @@ ZK 3.5.1
   2099562: [Opera] progressbar flattened when value = zero
   2139542: Fail to change the format of Datebox with "dd-MMM-yyyy"
   2138378: Bug "datebox" when Browser language with Spanish [es]
+  2138131: GenericForwardComposer throw Exception if component inexist
  
 * Upgrade Notes
   * getMoldSclass is deprecated and replaced with getZclass since

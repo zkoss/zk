@@ -54,6 +54,8 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  */
 public class Components {
+	private static final Log log = Log.lookup(Components.class);
+
 	protected Components() {}
 
 	/** Sorts the components in the list.
@@ -383,8 +385,12 @@ public class Components {
 	 * {@link Component#getVariable} of the specified component, so you 
 	 * don't have to specify in zul file the "forward" attribute one by one. 
 	 * If the source component cannot be looked up or the object looked up is 
-	 * not a component, we will throw an UiException.
+	 * not a component, this method will log the error and ignore it.
 	 * </p>
+	 * <p>since 3.0.8, cascade '$' will add Forwards cascadely. E.g. define method 
+	 * onClick$btn$w1 in window w2. This method will add a forward on the button 
+	 * "btn.onClick=w1.onClick$btn" and add another forward on the window w1
+	 * "w1.onClick$btn=w2.onClick$btn$w1"</p>
 	 * 
 	 * @param comp the targetComponent
 	 * @param controller the controller code with onXxx$myid event handler methods
@@ -398,18 +404,27 @@ public class Components {
 			final String mdname = md.getName();
 			if (mdname.length() > 5 && mdname.startsWith("on") 
 			&& Character.isUpperCase(mdname.charAt(2))) {
-				final int k = mdname.indexOf('$', 3);
-				if (k >= 0) { //found '$'
-					final String srcevt = mdname.substring(0, k);
-					if ((k+1) < mdname.length()) {
-						final String srccompid = mdname.substring(k+1);
-						final Object srccomp = comp.getVariable(srccompid, false);
-						if (srccomp == null || !(srccomp instanceof Component)) {
-							throw new UiException("Cannot find the associated component to forward event: "+mdname);
+				int k = 0;
+				do { //handle cascade $. e.g. onClick$btn$win1
+					k = mdname.lastIndexOf('$');
+					if (k >= 3) { //found '$'
+						final String srcevt = mdname.substring(0, k);
+						if ((k+1) < mdname.length()) {
+							final String srccompid = mdname.substring(k+1);
+							final Object srccomp = comp.getVariable(srccompid, false);
+							if (srccomp == null || !(srccomp instanceof Component)) {
+								if (log.debugable()) {
+									log.debug("Cannot find the associated component to forward event: "+mdname);
+								}
+								break;
+							} else {
+								((Component)srccomp).addForward(srcevt, comp, mdname);
+								comp = (Component) srccomp;
+								mdname = srcevt;
+							}
 						}
-						((Component)srccomp).addForward(srcevt, comp, mdname);
 					}
-				}
+				} while (k >= 3);
 			}
 		}
 	}
