@@ -690,7 +690,7 @@ if (zk.ie6Only) {
 			var panels = zk.nextSibling(tabs, "DIV");
 			if (panels)
 				for (var n = panels.firstChild; n; n = n.nextSibling)
-					if (n.id) n.style.height = "";
+					if (n.id && !n.style.height ) n.style.height = "";
 		}
 	};
 }
@@ -708,22 +708,23 @@ zkTabpanel2 = {
 		 if (zk.ie6Only) zk.repaint(tbx);
 	},
 	_fixPanelHgh: function(tabbox,tabpanel){
-		var hgh = tabbox.style.height;
 		if (!zkTabbox2._isAccord(tabbox)) {
-			if (hgh && hgh != "auto") {
-				var panels = $parent(tabpanel)
-				if (panels) {
-					hgh = zk.getVflexHeight(panels);
-					for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
-						if (n.id) {
-							if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
-								pos = n.style.position;
-								n.style.position = "relative";
-							}
-							zk.setOffsetHeight(n, hgh);
-							zk.addClass($e(n.id+"!real"), getZKAttr(n, "zcls")+"-real");
-							if (zk.ie) n.style.position = pos;
+			var hgh = tabbox.style.height;
+			var panels = $parent(tabpanel);
+			if (panels) {
+				for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
+					if (n.id) {
+						if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
+							pos = n.style.position;
+							n.style.position = "relative";
 						}
+						if (hgh && hgh != "auto") {//tabbox has height
+							hgh = zk.getVflexHeight(panels);
+							zk.setOffsetHeight(n, hgh);
+						}
+						//let real div 100% height
+						zk.addClass($e(n.id + "!real"), getZKAttr(n, "zcls") + "-real");
+						if (zk.ie) n.style.position = pos;
 					}
 				}
 			}
