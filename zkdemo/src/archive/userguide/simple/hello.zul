@@ -37,4 +37,24 @@ Hello, World!
 			]]></attribute>
 		</textbox>
 	</groupbox>
+
+	<div style="margin-top:20px;">
+	Prefer Pure Java? <toolbarbutton label="Richlet Source" onClick="richlet.visible = !richlet.visible"/>
+	</div>
+	<div id="richlet" visible="false"
+	style="width:99%;border: 1px solid #B2CCD9"
+	action="onshow:anima.slideDown(#{self});onhide:anima.fade(#{self})">
+	<html><![CDATA[
+<pre><code>import org.zkoss.zk.ui.*;
+import org.zkoss.zk.zul.*;
+
+public class HelloRichlet extends GenericRichlet {
+  public void service(Page page) {
+    Window w = new Window("My First Window", "normal", false);
+    new Label("Hello, World!").setParent(w);
+    w.setPage(page);
+  }
+}</code><pre>
+	]]></html>
+	</div>
 </window>
