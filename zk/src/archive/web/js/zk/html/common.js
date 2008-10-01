@@ -2518,7 +2518,7 @@ zk.doEventStop = function (evt) {
 zk.setVisible = function (cmp, visible, options) {
 	//Bug 1896588: if cmp invisible, just don't do animation (performance in IE)
 	if ((options && (options.anima || options==true/*backward compatible*/))
-	|| zk.isRealVisible(cmp, true))
+	|| zk.isRealVisible(cmp.parentNode, true))
 		zk.show(cmp, visible);
 	else if (visible) action.show(cmp);
 	else action.hide(cmp);
