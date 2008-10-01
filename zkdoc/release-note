@@ -29,6 +29,7 @@ ZK 3.5.1
   2129667: Listbox(&Grid).setItemRenderer shall unload loaded items
   2129730: databinding fails to process access='none'
   2129992: TypeConverter cannot be found by databind if in zscript  
+  2099562: [Opera] progressbar flattened when value = zero
  
 * Upgrade Notes
   * getMoldSclass is deprecated and replaced with getZclass since

@@ -1,0 +1,44 @@
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<html>
+		<![CDATA[
+			1. You should see listbox with item0 ~ item15.<br/>
+			2. Press buton "remove previous item" and you should see the 1st item is removed from the listbox (item0).<br/>
+			3. Press the button again, you should see item1 is removed.<br/>
+			4. Done.<br/>
+	]]>
+	</html>
+	<window>
+		<zscript>
+			<![CDATA[
+				List lst = new ArrayList(15);
+				ListModel model = new ListModelList(lst, true);
+				for(int j = 0; j < 15; ++j) {
+					lst.add("item"+ j);
+				}
+				void addGroup(int rn) {
+			
+			  		Listgroup group = new Listgroup("Group");
+			  		
+			   		Listitem  row1 = new Listitem();
+			    	new Listcell("row1-1").setParent(row1);		    	
+				   	Listitem  row2 = new Listitem();
+				    new Listcell("row2-1").setParent(row2);		    	
+			  		group.setOpen(false);
+			  		rs.getChildren().add(rn,row1);
+			  		rs.getChildren().add(rn,row2);
+			  		rs.getChildren().add(rn,group);
+				}
+			]]>
+		</zscript>
+		<listbox id="rs" width="300px" mold="paging" pageSize="10">
+			<listitem forEach="${lst}">
+				<listcell label="${each}" />
+			</listitem>
+		</listbox>
+		<button label="Add group on 11" onClick="addGroup(11)"/>
+		<button label="Add group on 12" onClick="addGroup(12)"/>
+		<button label="Add group on 13" onClick="addGroup(13)"/>		
+	</window>
+</zk>

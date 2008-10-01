@@ -142,7 +142,7 @@ public class DefinitionLoaders {
 				final URL url = (URL)en.nextElement();
 				if (log.debugable()) log.debug("Loading "+url);
 				try {
-					final Document doc = new SAXBuilder(false, false, true).build(url);
+					final Document doc = new SAXBuilder(true, false, true).build(url);
 					if (ConfigParser.checkVersion(url, doc))
 						parseLang(doc, locator, url, false);
 				} catch (Exception ex) {
@@ -197,7 +197,7 @@ public class DefinitionLoaders {
 	private static void loadAddon(Locator locator, URL url) {
 		try {
 			parseLang(
-				new SAXBuilder(false, false, true).build(url), locator, url, true);
+				new SAXBuilder(true, false, true).build(url), locator, url, true);
 		} catch (Exception ex) {
 			log.error("Failed to load addon: "+url, ex);
 			//keep running

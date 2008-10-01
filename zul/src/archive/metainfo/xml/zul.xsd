@@ -21,54 +21,19 @@
 		</xs:union>
 	</xs:simpleType>
 	<xs:simpleType name="intType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:integer" />
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
+		<xs:union memberTypes="xs:integer annotationType" />
 	</xs:simpleType>
 	<xs:simpleType name="longType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:long" />
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
+		<xs:union memberTypes="xs:long annotationType" />
 	</xs:simpleType>
 	<xs:simpleType name="doubleType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:double" />
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
+		<xs:union memberTypes="xs:double annotationType" />
 	</xs:simpleType>
 	<xs:simpleType name="decimalType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:decimal" />
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
+		<xs:union memberTypes="xs:decimal annotationType" />
 	</xs:simpleType>
 	<xs:simpleType name="dateType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:dateTime" />
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
+		<xs:union memberTypes="xs:dateTime annotationType" />
 	</xs:simpleType>
 	<xs:simpleType name="layoutBorderAttrType">
 		<xs:union>
@@ -334,6 +299,10 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="area" />
 					<xs:enumeration value="bar" />
+					<xs:enumeration value="bubble" />
+					<xs:enumeration value="candlestick" />
+					<xs:enumeration value="gantt" />
+					<xs:enumeration value="hilow" />
 					<xs:enumeration value="histogram" />
 					<xs:enumeration value="line" />
 					<xs:enumeration value="pie" />
@@ -345,7 +314,9 @@
 					<xs:enumeration value="step" />
 					<xs:enumeration value="step_area" />
 					<xs:enumeration value="time_series" />
+					<xs:enumeration value="wafermap" />
 					<xs:enumeration value="waterfall" />
+					<xs:enumeration value="wind" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
@@ -377,15 +348,16 @@
     ATTRIBUTEGROUP
     -->
 	<xs:attributeGroup name="zkAttrGroup">
-		<xs:attribute name="if" type="xs:string" use="optional" />
-		<xs:attribute name="unless" type="xs:string" use="optional" />
+		<xs:attribute name="apply" type="xs:string" use="optional" />
 		<xs:attribute name="forEach" type="xs:string" use="optional" />
 		<xs:attribute name="forEachBegin" type="xs:string" use="optional" />
 		<xs:attribute name="forEachEnd" type="xs:string" use="optional" />
-		<xs:attribute name="use" type="xs:string" use="optional" />
+		<xs:attribute name="forward" type="xs:string" use="optional" />
 		<xs:attribute name="fulfill" type="xs:string" use="optional" />
-		<xs:attribute name="apply" type="xs:string" use="optional" />
+		<xs:attribute name="if" type="xs:string" use="optional" />
 		<xs:attribute name="self" type="xs:string" use="optional" />
+		<xs:attribute name="use" type="xs:string" use="optional" />
+		<xs:attribute name="unless" type="xs:string" use="optional" />
 		<xs:anyAttribute processContents="lax" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="abstractComponentAttrGroup">
@@ -393,8 +365,7 @@
 		<xs:attribute name="id" type="xs:string" use="optional" />
 		<xs:attribute name="visible" type="booleanType" use="optional" />
 		<xs:attribute name="mold" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChange" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onFulfill" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="htmlBasedComponentAttrGroup">
 		<xs:attributeGroup ref="abstractComponentAttrGroup" />
@@ -432,7 +403,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="formatInputElementAttrGroup">
 		<xs:attributeGroup ref="inputElementAttrGroup" />
@@ -447,8 +417,7 @@
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="imageContent" type="xs:string" use="optional" />
 		<xs:attribute name="hoverImage" type="xs:string" use="optional" />
-		<xs:attribute name="hoverImageContent" type="xs:string"
-			use="optional" />
+		<xs:attribute name="hoverImageContent" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="headerElementAttrGroup">
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
@@ -463,7 +432,7 @@
 			<xs:element ref="attribute" />
 			<xs:element ref="custom-attributes" />
 			<xs:element ref="variables" />
-			<xs:any processContents="lax" />
+			<xs:any namespace="##other" processContents="lax" />
 		</xs:choice>
 	</xs:group>
 	<xs:group name="anyGroup">
@@ -510,6 +479,7 @@
 			<xs:element ref="separator" />
 			<xs:element ref="slider" />
 			<xs:element ref="space" />
+			<xs:element ref="spinner" />
 			<xs:element ref="style" />
 			<xs:element ref="tabbox" />
 			<xs:element ref="textbox" />
@@ -523,6 +493,67 @@
 			<xs:element ref="zk" />
 			<xs:element ref="zscript" />
 		</xs:choice>
+	</xs:group>
+	<xs:group name="anyGroupSingle">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element ref="audio" />
+				<xs:element ref="bandbox" />
+				<xs:element ref="borderlayout" />
+				<xs:element ref="box" />
+				<xs:element ref="button" />
+				<xs:element ref="calendar" />
+				<xs:element ref="chart" />
+				<xs:element ref="checkbox" />
+				<xs:element ref="columnlayout" />
+				<xs:element ref="combobox" />
+				<xs:element ref="datebox" />
+				<xs:element ref="decimalbox" />
+				<xs:element ref="div" />
+				<xs:element ref="doublebox" />
+				<xs:element ref="fckeditor" />
+				<xs:element ref="fisheyelist" />
+				<xs:element ref="gmaps" />
+				<xs:element ref="grid" />
+				<xs:element ref="groupbox" />
+				<xs:element ref="hbox" />
+				<xs:element ref="html" />
+				<xs:element ref="iframe" />
+				<xs:element ref="image" />
+				<xs:element ref="imagemap" />
+				<xs:element ref="include" />
+				<xs:element ref="intbox" />
+				<xs:element ref="label" />
+				<xs:element ref="listbox" />
+				<xs:element ref="longbox" />
+				<xs:element ref="menubar" />
+				<xs:element ref="menupopup" />
+				<xs:element ref="paging" />
+				<xs:element ref="popup" />
+				<xs:element ref="portallayout" />
+				<xs:element ref="progressmeter" />
+				<xs:element ref="radio" />
+				<xs:element ref="radiogroup" />
+				<xs:element ref="script" />
+				<xs:element ref="separator" />
+				<xs:element ref="slider" />
+				<xs:element ref="space" />
+				<xs:element ref="spinner" />
+				<xs:element ref="style" />
+				<xs:element ref="tabbox" />
+				<xs:element ref="textbox" />
+				<xs:element ref="timer" />
+				<xs:element ref="timebox" />
+				<xs:element ref="toolbar" />
+				<xs:element ref="toolbarbutton" />
+				<xs:element ref="tree" />
+				<xs:element ref="vbox" />
+				<xs:element ref="window" />
+				<xs:element ref="zk" />
+				<xs:element ref="zscript" />
+			</xs:choice>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 	</xs:group>
     <!--
     ELEMENT
@@ -556,8 +587,7 @@
 		<xs:attribute name="border" type="xs:string" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="autostart" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- auxhead -->
@@ -592,21 +622,14 @@
 		</xs:sequence>
 		<xs:attributeGroup ref="inputElementAttrGroup" />
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
-		<xs:attribute name="buttonVisible" type="booleanType"
-			use="optional" />
-		<xs:attribute name="constraint" type="constraintAttrType"
-			use="optional" />
+		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
+		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="onOK" type="xs:string" use="optional" />
 	</xs:complexType>
@@ -621,8 +644,7 @@
 	<xs:complexType name="borderlayoutType" mixed="true">
 		<xs:all>
 			<xs:element ref="attribute" minOccurs="0" maxOccurs="1" />
-			<xs:element ref="custom-attributes" minOccurs="0"
-				maxOccurs="1" />
+			<xs:element ref="custom-attributes" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="variables" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="north" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="south" minOccurs="0" maxOccurs="1" />
@@ -644,8 +666,7 @@
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="widths" type="xs:string" use="optional" />
 		<xs:attribute name="heights" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
@@ -662,12 +683,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- calendar -->
@@ -680,8 +696,7 @@
 		<xs:attribute name="compact" type="booleanType" use="optional" />
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- caption -->
@@ -689,28 +704,19 @@
 	<xs:complexType name="captionType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- center -->
 	<xs:element name="center" type="centerType" />
 	<xs:complexType name="centerType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
-				</xs:sequence>
-			</xs:choice>
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
 		<xs:attribute name="margins" type="xs:string" use="optional" />
 		<xs:attribute name="autoscroll" type="booleanType" use="optional" />
-		<xs:attribute name="border" type="layoutBorderAttrType"
-			use="optional" />
+		<xs:attribute name="border" type="layoutBorderAttrType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- chart -->
@@ -729,8 +735,7 @@
 		<xs:attribute name="yAxis" type="xs:string" use="optional" />
 		<xs:attribute name="threeD" type="booleanType" use="optional" />
 		<xs:attribute name="showLegend" type="booleanType" use="optional" />
-		<xs:attribute name="showTooltiptext" type="booleanType"
-			use="optional" />
+		<xs:attribute name="showTooltiptext" type="booleanType" use="optional" />
 		<xs:attribute name="paneAlpha" type="xs:string" use="optional" />
 		<xs:attribute name="paneColor" type="xs:string" use="optional" />
 		<xs:attribute name="fgAlpha" type="xs:string" use="optional" />
@@ -738,13 +743,11 @@
 		<xs:attribute name="bgColor" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
-		<xs:attribute name="period" type="chartPeriodAttrType"
-			use="optional" />
+		<xs:attribute name="period" type="chartPeriodAttrType" use="optional" />
 		<xs:attribute name="areaListener" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- checkbox -->
@@ -757,12 +760,8 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- column -->
@@ -770,13 +769,9 @@
 	<xs:complexType name="columnType">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
-		<xs:attribute name="sortDirection" type="sortDirectionAttrType"
-			use="optional" />
+		<xs:attribute name="sortDirection" type="sortDirectionAttrType" use="optional" />
 		<xs:attribute name="sortAscending" type="xs:string" use="optional" />
 		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- columnchildren -->
@@ -816,10 +811,8 @@
 		</xs:choice>
 		<xs:attributeGroup ref="inputElementAttrGroup" />
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
-		<xs:attribute name="buttonVisible" type="booleanType"
-			use="optional" />
-		<xs:attribute name="constraint" type="constraintAttrType"
-			use="optional" />
+		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
+		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
@@ -828,14 +821,9 @@
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="selectedItem" type="xs:string" use="optional" />
 		<xs:attribute name="selectedIndex" type="intType" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- comboitem -->
@@ -858,22 +846,15 @@
 	<xs:complexType name="dateboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="datetimeConstraintAttrType"
-			use="optional" />
+		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
 		<xs:attribute name="lenient" type="booleanType" use="optional" />
 		<xs:attribute name="compact" type="booleanType" use="optional" />
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
-		<xs:attribute name="buttonVisible" type="booleanType"
-			use="optional" />
+		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- decimalbox -->
@@ -881,26 +862,16 @@
 	<xs:complexType name="decimalboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="numberConstraintAttrType"
-			use="optional" />
+		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="decimalType" use="optional" />
 		<xs:attribute name="scale" type="intType" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     
     <!-- detail -->
 	<xs:element name="detail" type="detailType" />
 	<xs:complexType name="detailType">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
-		</xs:sequence>
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="contentStyle" type="xs:string" use="optional" />
@@ -917,8 +888,7 @@
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- doublebox -->
@@ -926,15 +896,9 @@
 	<xs:complexType name="doubleboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="numberConstraintAttrType"
-			use="optional" />
+		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="doubleType" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- east -->
@@ -942,12 +906,7 @@
 	<xs:complexType name="eastType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
-				</xs:sequence>
-			</xs:choice>
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
@@ -957,8 +916,7 @@
 		<xs:attribute name="margins" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="autoscroll" type="booleanType" use="optional" />
-		<xs:attribute name="border" type="layoutBorderAttrType"
-			use="optional" />
+		<xs:attribute name="border" type="layoutBorderAttrType" use="optional" />
 		<xs:attribute name="maxsize" type="intType" use="optional" />
 		<xs:attribute name="minsize" type="intType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
@@ -1027,136 +985,247 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- grid -->
 	<xs:element name="grid" type="gridType" />
 	<xs:complexType name="gridType">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="auxhead" />
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			</xs:choice>
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:element ref="columns" />
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="1">
-						<xs:sequence>
-							<xs:element ref="rows" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:sequence>
-									<xs:element ref="foot" />
-									<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-								</xs:sequence>
-							</xs:choice>
-						</xs:sequence>
-						<xs:sequence>
-							<xs:element ref="foot" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:sequence>
-									<xs:element ref="rows" />
-									<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-								</xs:sequence>
-							</xs:choice>
-						</xs:sequence>
-					</xs:choice>
-				</xs:sequence>
-				<xs:sequence>
-					<xs:element ref="rows" />
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="1">
-						<xs:sequence>
-							<xs:element ref="columns" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:sequence>
-									<xs:element ref="foot" />
-									<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-								</xs:sequence>
-							</xs:choice>
-						</xs:sequence>
-						<xs:sequence>
-							<xs:element ref="foot" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:sequence>
-									<xs:element ref="columns" />
-									<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-								</xs:sequence>
-							</xs:choice>
-						</xs:sequence>
-					</xs:choice>
-				</xs:sequence>
-				<xs:sequence>
-					<xs:element ref="foot" />
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="1">
-						<xs:sequence>
-							<xs:element ref="rows" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:element ref="columns" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-						</xs:sequence>
-						<xs:sequence>
-							<xs:element ref="columns" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
+		<xs:choice minOccurs="0" maxOccurs="1">
+			<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+				</xs:choice>
+				<xs:choice>
+					<xs:sequence>
+						<xs:element ref="columns" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:choice minOccurs="0" maxOccurs="1">
+							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="rows" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="foot" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="foot" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="rows" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+						</xs:choice>
+					</xs:sequence>
+					
+					<xs:sequence>
+						<xs:element ref="rows" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:choice minOccurs="0" maxOccurs="1">
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="columns" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="foot" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="foot" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="columns" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+						</xs:choice>
+					</xs:sequence>
+					
+					<xs:sequence>
+						<xs:element ref="foot" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:choice minOccurs="0" maxOccurs="1">
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="columns" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="rows" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="rows" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="columns" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+						</xs:choice>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			
+			<xs:sequence>
+				<xs:element ref="columns" />
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="rows" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="foot" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
 							</xs:choice>
 						</xs:sequence>
-					</xs:choice>
-				</xs:sequence>
-			</xs:choice>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="auxhead" />
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			</xs:choice>
-		</xs:sequence>
+					</xs:sequence>
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="foot" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="rows" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			
+			<xs:sequence>
+				<xs:element ref="rows" />
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="columns" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="foot" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="foot" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="columns" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			
+			<xs:sequence>
+				<xs:element ref="foot" />
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="columns" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="rows" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="rows" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="columns" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
 		<xs:attribute name="pageSize" type="intType" use="optional" />
@@ -1166,8 +1235,7 @@
 		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="oddRowSclass" type="xs:string" use="optional" />
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="preloadSize" type="intType" use="optional" />
 	</xs:complexType>
@@ -1189,8 +1257,7 @@
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- hbox -->
@@ -1232,8 +1299,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="widths" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
@@ -1244,8 +1310,7 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- iframe -->
@@ -1255,12 +1320,10 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="scrolling" type="iframeScrollingAttrType"
-			use="optional" />
+		<xs:attribute name="scrolling" type="iframeScrollingAttrType" use="optional" />
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="autohide" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="onURIChange" type="xs:string" use="optional" />
 	</xs:complexType>
@@ -1291,12 +1354,10 @@
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="hspace" type="xs:string" use="optional" />
 		<xs:attribute name="vspace" type="xs:string" use="optional" />
-		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- imagemap -->
@@ -1315,8 +1376,7 @@
 		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- include -->
@@ -1327,8 +1387,7 @@
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="localized" type="booleanType" use="optional" />
 		<xs:attribute name="progressing" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- intbox -->
@@ -1336,15 +1395,9 @@
 	<xs:complexType name="intboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="numberConstraintAttrType"
-			use="optional" />
+		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="intType" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- longbox -->
@@ -1352,15 +1405,9 @@
 	<xs:complexType name="longboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="numberConstraintAttrType"
-			use="optional" />
+		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="longType" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- label -->
@@ -1374,86 +1421,108 @@
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- listbox -->
 	<xs:element name="listbox" type="listboxType" />
 	<xs:complexType name="listboxType">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="auxhead" />
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			</xs:choice>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="listitem" />
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			</xs:choice>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="auxhead" />
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			</xs:choice>
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:element ref="listhead" />
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="listitem" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:sequence minOccurs="0" maxOccurs="1">
-						<xs:element ref="listfoot" />
-						<xs:choice minOccurs="0" maxOccurs="unbounded">
-							<xs:element ref="auxhead" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-						</xs:choice>
-						<xs:choice minOccurs="0" maxOccurs="unbounded">
-							<xs:element ref="listitem" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-						</xs:choice>
-					</xs:sequence>
-				</xs:sequence>
-				<xs:sequence>
-					<xs:element ref="listfoot" />
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="listitem" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:sequence minOccurs="0" maxOccurs="1">
+		<xs:choice minOccurs="0" maxOccurs="1">
+			<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+					<xs:element ref="listitem" />
+					<xs:element ref="listgroup" />
+					<xs:element ref="listgroupfoot" />
+				</xs:choice>
+				<xs:choice>
+					<xs:sequence>
 						<xs:element ref="listhead" />
 						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
 							<xs:element ref="auxhead" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-						</xs:choice>
-						<xs:choice minOccurs="0" maxOccurs="unbounded">
 							<xs:element ref="listitem" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element ref="listgroup" />
+							<xs:element ref="listgroupfoot" />
 						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="listfoot" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+								<xs:element ref="listitem" />
+								<xs:element ref="listgroup" />
+								<xs:element ref="listgroupfoot" />
+							</xs:choice>
+						</xs:sequence>
 					</xs:sequence>
+					
+					<xs:sequence>
+						<xs:element ref="listfoot" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+							<xs:element ref="listitem" />
+							<xs:element ref="listgroup" />
+							<xs:element ref="listgroupfoot" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="listhead" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+								<xs:element ref="listitem" />
+								<xs:element ref="listgroup" />
+								<xs:element ref="listgroupfoot" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			
+			<xs:sequence>
+				<xs:element ref="listhead" />
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+					<xs:element ref="listitem" />
+					<xs:element ref="listgroup" />
+					<xs:element ref="listgroupfoot" />
+				</xs:choice>
+				<xs:sequence minOccurs="0" maxOccurs="1">
+					<xs:element ref="listfoot" />
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
+						<xs:group ref="baseGroup" />
+						<xs:element ref="auxhead" />
+						<xs:element ref="listitem" />
+						<xs:element ref="listgroup" />
+						<xs:element ref="listgroupfoot" />
+					</xs:choice>
 				</xs:sequence>
-			</xs:choice>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="auxhead" />
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			</xs:choice>
-		</xs:sequence>
+			</xs:sequence>
+			
+			<xs:sequence>
+				<xs:element ref="listfoot" />
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+					<xs:element ref="listitem" />
+					<xs:element ref="listgroup" />
+					<xs:element ref="listgroupfoot" />
+				</xs:choice>
+				<xs:sequence minOccurs="0" maxOccurs="1">
+					<xs:element ref="listhead" />
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
+						<xs:group ref="baseGroup" />
+						<xs:element ref="auxhead" />
+						<xs:element ref="listitem" />
+						<xs:element ref="listgroup" />
+						<xs:element ref="listgroupfoot" />
+					</xs:choice>
+				</xs:sequence>
+			</xs:sequence>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="checkmark" type="booleanType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
@@ -1473,11 +1542,9 @@
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
-		<xs:attribute name="pagingPosition" type="listboxPagingPositionAttrType"
-			use="optional" />
+		<xs:attribute name="pagingPosition" type="listboxPagingPositionAttrType" use="optional" />
 		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 	</xs:complexType>
@@ -1517,9 +1584,6 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="span" type="intType" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 	</xs:complexType>
     
     <!-- listgroup -->
@@ -1572,14 +1636,10 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="sort" type="sortAttrType" use="optional" />
-		<xs:attribute name="sortDirection" type="sortDirectionAttrType"
-			use="optional" />
+		<xs:attribute name="sortDirection" type="sortDirectionAttrType" use="optional" />
 		<xs:attribute name="sortAscending" type="xs:string" use="optional" />
 		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- listitem -->
@@ -1618,8 +1678,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- menuitem -->
@@ -1634,7 +1693,6 @@
 		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- menupopup -->
 	<xs:element name="menupopup" type="menupopupType" />
@@ -1659,12 +1717,7 @@
 	<xs:complexType name="northType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
-				</xs:sequence>
-			</xs:choice>
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
@@ -1718,12 +1771,10 @@
 	<!-- panelchildren -->
 	<xs:element name="panelchildren" type="panelchildrenType" />
 	<xs:complexType name="panelchildrenType">
-		<xs:choice minOccurs="0" maxOccurs="1">
-			<xs:sequence>
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-				<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
-			</xs:sequence>
-		</xs:choice>
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- paging -->
@@ -1749,8 +1800,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- portalchildren -->
@@ -1788,9 +1838,6 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- radiogroup -->
@@ -1801,14 +1848,25 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- row -->
 	<xs:element name="row" type="rowType" />
 	<xs:complexType name="rowType" mixed="true">
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:choice minOccurs="0" maxOccurs="1" >
+			<xs:sequence>
+				<xs:group ref="anyGroup" minOccurs="1" maxOccurs="unbounded" />
+				<xs:sequence minOccurs="0" maxOccurs="1" >
+					<xs:element ref="detail" />
+					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element ref="detail" />
+				<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
 		<xs:attribute name="nowrap" type="booleanType" use="optional" />
@@ -1822,6 +1880,7 @@
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup" />
 			<xs:element ref="row" />
+			<xs:element ref="group" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
@@ -1855,8 +1914,7 @@
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="bar" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- slider -->
@@ -1872,8 +1930,7 @@
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onScroll" type="xs:string" use="optional" />
 		<xs:attribute name="onScrolling" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- south -->
@@ -1881,12 +1938,7 @@
 	<xs:complexType name="southType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
-				</xs:sequence>
-			</xs:choice>
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
@@ -1896,8 +1948,7 @@
 		<xs:attribute name="margins" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="autoscroll" type="booleanType" use="optional" />
-		<xs:attribute name="border" type="layoutBorderAttrType"
-			use="optional" />
+		<xs:attribute name="border" type="layoutBorderAttrType" use="optional" />
 		<xs:attribute name="maxsize" type="intType" use="optional" />
 		<xs:attribute name="minsize" type="intType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
@@ -1910,8 +1961,7 @@
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="bar" type="booleanType" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- spinner -->
@@ -1953,8 +2003,6 @@
 		<xs:attribute name="selected" type="booleanType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="onClose" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- tabbox -->
 	<xs:element name="tabbox" type="tabboxType" />
@@ -1973,8 +2021,7 @@
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- tabpanel -->
@@ -2026,18 +2073,12 @@
 	<xs:complexType name="textboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="inputElementAttrGroup" />
-		<xs:attribute name="constraint" type="constraintAttrType"
-			use="optional" />
+		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="multiline" type="booleanType" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- timer -->
@@ -2049,8 +2090,7 @@
 		<xs:attribute name="repeats" type="booleanType" use="optional" />
 		<xs:attribute name="running" type="booleanType" use="optional" />
 		<xs:attribute name="onTimer" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- timebox -->
@@ -2058,19 +2098,12 @@
 	<xs:complexType name="timeboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="datetimeConstraintAttrType"
-			use="optional" />
+		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
-		<xs:attribute name="buttonVisible" type="booleanType"
-			use="optional" />
+		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
-		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="onChanging" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- toolbar -->
@@ -2087,8 +2120,7 @@
 		<xs:attribute name="onClick" type="xs:string" use="optional" />
 		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- toolbarbutton -->
@@ -2102,140 +2134,249 @@
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onFocus" type="xs:string" use="optional" />
-		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- tree -->
 	<xs:element name="tree" type="treeType" />
 	<xs:complexType name="treeType">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="auxhead" />
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			</xs:choice>
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:element ref="treecols" />
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="1">
-						<xs:sequence>
-							<xs:element ref="treechildren" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:sequence>
-									<xs:element ref="treefoot" />
-									<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-								</xs:sequence>
-							</xs:choice>
-						</xs:sequence>
-						<xs:sequence>
-							<xs:element ref="treefoot" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:sequence>
-									<xs:element ref="treechildren" />
-									<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-								</xs:sequence>
-							</xs:choice>
-						</xs:sequence>
-					</xs:choice>
-				</xs:sequence>
-				<xs:sequence>
-					<xs:element ref="treechildren" />
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="1">
-						<xs:sequence>
-							<xs:element ref="treecols" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:sequence>
-									<xs:element ref="treefoot" />
-									<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-								</xs:sequence>
-							</xs:choice>
-						</xs:sequence>
-						<xs:sequence>
-							<xs:element ref="treefoot" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:sequence>
-									<xs:element ref="treecols" />
-									<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-								</xs:sequence>
-							</xs:choice>
-						</xs:sequence>
-					</xs:choice>
-				</xs:sequence>
-				<xs:sequence>
-					<xs:element ref="treefoot" />
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="auxhead" />
-						<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					</xs:choice>
-					<xs:choice minOccurs="0" maxOccurs="1">
-						<xs:sequence>
-							<xs:element ref="treechildren" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
-								<xs:element ref="treecols" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-						</xs:sequence>
-						<xs:sequence>
-							<xs:element ref="treecols" />
-							<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							<xs:choice minOccurs="0" maxOccurs="unbounded">
-								<xs:element ref="auxhead" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-							</xs:choice>
-							<xs:choice minOccurs="0" maxOccurs="1">
+		<xs:choice minOccurs="0" maxOccurs="1">
+			<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+				</xs:choice>
+				<xs:choice>
+					<xs:sequence>
+						<xs:element ref="treecols" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:choice minOccurs="0" maxOccurs="1">
+							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="treechildren" />
-								<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="treefoot" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="treefoot" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="treechildren" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+						</xs:choice>
+					</xs:sequence>
+					
+					<xs:sequence>
+						<xs:element ref="treechildren" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:choice minOccurs="0" maxOccurs="1">
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="treecols" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="treefoot" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="treefoot" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="treecols" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+						</xs:choice>
+					</xs:sequence>
+					
+					<xs:sequence>
+						<xs:element ref="treefoot" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:choice minOccurs="0" maxOccurs="1">
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="treecols" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="treechildren" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+							<xs:sequence minOccurs="0" maxOccurs="1">
+								<xs:element ref="treechildren" />
+								<xs:choice minOccurs="0" maxOccurs="unbounded">
+									<xs:group ref="baseGroup" />
+									<xs:element ref="auxhead" />
+								</xs:choice>
+								<xs:sequence minOccurs="0" maxOccurs="1">
+									<xs:element ref="treecols" />
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:group ref="baseGroup" />
+										<xs:element ref="auxhead" />
+									</xs:choice>
+								</xs:sequence>
+							</xs:sequence>
+						</xs:choice>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			
+			<xs:sequence>
+				<xs:element ref="treecols" />
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="treechildren" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="treefoot" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
 							</xs:choice>
 						</xs:sequence>
-					</xs:choice>
-				</xs:sequence>
-			</xs:choice>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="auxhead" />
-				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			</xs:choice>
-		</xs:sequence>
+					</xs:sequence>
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="treefoot" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="treechildren" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			
+			<xs:sequence>
+				<xs:element ref="treechildren" />
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="treecols" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="treefoot" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="treefoot" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="treecols" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+			
+			<xs:sequence>
+				<xs:element ref="treefoot" />
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:group ref="baseGroup" />
+					<xs:element ref="auxhead" />
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="treecols" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="treechildren" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+					<xs:sequence minOccurs="0" maxOccurs="1">
+						<xs:element ref="treechildren" />
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="baseGroup" />
+							<xs:element ref="auxhead" />
+						</xs:choice>
+						<xs:sequence minOccurs="0" maxOccurs="1">
+							<xs:element ref="treecols" />
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="baseGroup" />
+								<xs:element ref="auxhead" />
+							</xs:choice>
+						</xs:sequence>
+					</xs:sequence>
+				</xs:choice>
+			</xs:sequence>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
@@ -2244,12 +2385,10 @@
 		<xs:attribute name="vflex" type="booleanType" use="optional" />
 		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
-		<xs:attribute name="treeitemRenderer" type="xs:string"
-			use="optional" />
+		<xs:attribute name="treeitemRenderer" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- treecell -->
 	<xs:element name="treecell" type="treecellType" />
@@ -2273,9 +2412,6 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- treecols -->
 	<xs:element name="treecols" type="treecolsType" />
@@ -2302,9 +2438,6 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="span" type="intType" use="optional" />
-		<xs:attribute name="onClick" type="xs:string" use="optional" />
-		<xs:attribute name="onRightClick" type="xs:string" use="optional" />
-		<xs:attribute name="onDoubleClick" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- treeitem -->
 	<xs:element name="treeitem" type="treeitemType" />
@@ -2363,8 +2496,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 		<xs:attribute name="heights" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
@@ -2374,12 +2506,7 @@
 	<xs:complexType name="westType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:sequence>
-					<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-					<xs:group ref="anyGroup" minOccurs="0" maxOccurs="1" />
-				</xs:sequence>
-			</xs:choice>
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
@@ -2389,8 +2516,7 @@
 		<xs:attribute name="margins" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="autoscroll" type="booleanType" use="optional" />
-		<xs:attribute name="border" type="layoutBorderAttrType"
-			use="optional" />
+		<xs:attribute name="border" type="layoutBorderAttrType" use="optional" />
 		<xs:attribute name="maxsize" type="intType" use="optional" />
 		<xs:attribute name="minsize" type="intType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
@@ -2406,21 +2532,17 @@
 			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="border" type="windowBorderAttrType"
-			use="optional" />
+		<xs:attribute name="border" type="windowBorderAttrType" use="optional" />
 		<xs:attribute name="title" type="xs:string" use="optional" />
-		<xs:attribute name="ctrlKeys" type="windowCtrlKeysAttrType"
-			use="optional" />
+		<xs:attribute name="ctrlKeys" type="windowCtrlKeysAttrType" use="optional" />
 		<xs:attribute name="mode" type="windowModeAttrType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="sizable" type="booleanType" use="optional" />
-		<xs:attribute name="position" type="windowPositionAttrType"
-			use="optional" />
+		<xs:attribute name="position" type="windowPositionAttrType" use="optional" />
 		<xs:attribute name="contentStyle" type="xs:string" use="optional" />
 		<xs:attribute name="minheight" type="intType" use="optional" />
 		<xs:attribute name="minwidth" type="intType" use="optional" />
-		<xs:attribute name="defaultActionOnShow" type="windowActionOnShowAttrType"
-			use="optional" />
+		<xs:attribute name="defaultActionOnShow" type="windowActionOnShowAttrType" use="optional" />
 		<xs:attribute name="maximizable" type="booleanType" use="optional" />
 		<xs:attribute name="maximized" type="booleanType" use="optional" />
 		<xs:attribute name="minimized" type="booleanType" use="optional" />
@@ -2436,8 +2558,7 @@
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attribute name="onClose" type="xs:string" use="optional" />
 		<xs:attribute name="onZIndex" type="xs:string" use="optional" />
-		<xs:attribute name="onBookmarkChanged" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onBookmarkChange" type="xs:string" use="optional" />
 		<xs:attribute name="onClientInfo" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="windowActionOnShowAttrType">
@@ -2601,8 +2722,7 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="toolbarSet" type="xs:string" use="optional" />
 		<xs:attribute name="onSave" type="xs:string" use="optional" />
-		<xs:attribute name="customConfigurationsPath" type="xs:string"
-			use="optional" />
+		<xs:attribute name="customConfigurationsPath" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- fisheyeitem -->
 	<xs:element name="fisheyeitem" type="fisheyeitemType" />
@@ -2626,10 +2746,8 @@
 		<xs:attribute name="itemMaxHeight" type="intType" use="optional" />
 		<xs:attribute name="itemPadding" type="intType" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
-		<xs:attribute name="attachEdge" type="fisheyeEdgeAttrType"
-			use="optional" />
-		<xs:attribute name="labelEdge" type="fisheyeEdgeAttrType"
-			use="optional" />
+		<xs:attribute name="attachEdge" type="fisheyeEdgeAttrType" use="optional" />
+		<xs:attribute name="labelEdge" type="fisheyeEdgeAttrType" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="fisheyeEdgeAttrType">
 		<xs:union>
@@ -2655,13 +2773,14 @@
 			<xs:element ref="gmarker" />
 			<xs:element ref="gpolyline" />
 			<xs:element ref="gpolygon" />
+			<xs:element ref="gscreen" />
 		</xs:choice>
 	</xs:group>
     <!-- ginfo -->
 	<xs:element name="ginfo" type="ginfoType" />
 	<xs:complexType name="ginfoType" mixed="true">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="lng" type="doubleType" use="optional" />
 		<xs:attribute name="lat" type="doubleType" use="optional" />
@@ -2682,40 +2801,33 @@
 	<xs:element name="gmarker" type="gmarkerType" />
 	<xs:complexType name="gmarkerType" mixed="true">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="lng" type="doubleType" use="optional" />
 		<xs:attribute name="lat" type="doubleType" use="optional" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="iconAnchorX" type="intType" use="optional" />
 		<xs:attribute name="iconAnchorY" type="intType" use="optional" />
-		<xs:attribute name="iconDragCrossAnchorX" type="intType"
-			use="optional" />
-		<xs:attribute name="iconDragCrossAnchorY" type="intType"
-			use="optional" />
-		<xs:attribute name="iconDragCrossHeight" type="intType"
-			use="optional" />
-		<xs:attribute name="iconDragCrossImage" type="xs:string"
-			use="optional" />
-		<xs:attribute name="iconDragCrossWidth" type="intType"
-			use="optional" />
+		<xs:attribute name="iconDragCrossAnchorX" type="intType" use="optional" />
+		<xs:attribute name="iconDragCrossAnchorY" type="intType" use="optional" />
+		<xs:attribute name="iconDragCrossHeight" type="intType" use="optional" />
+		<xs:attribute name="iconDragCrossImage" type="xs:string" use="optional" />
+		<xs:attribute name="iconDragCrossWidth" type="intType" use="optional" />
 		<xs:attribute name="iconImage" type="xs:string" use="optional" />
 		<xs:attribute name="iconImageMap" type="xs:string" use="optional" />
 		<xs:attribute name="iconInfoAnchorX" type="intType" use="optional" />
 		<xs:attribute name="iconInfoAnchorY" type="intType" use="optional" />
 		<xs:attribute name="iconMaxHeight" type="intType" use="optional" />
-		<xs:attribute name="iconMozPrintImage" type="xs:string"
-			use="optional" />
+		<xs:attribute name="iconMozPrintImage" type="xs:string" use="optional" />
 		<xs:attribute name="iconPrintImage" type="xs:string" use="optional" />
-		<xs:attribute name="iconPrintShadow" type="xs:string"
-			use="optional" />
+		<xs:attribute name="iconPrintShadow" type="xs:string" use="optional" />
 		<xs:attribute name="iconShadow" type="xs:string" use="optional" />
 		<xs:attribute name="iconShadowHeight" type="intType" use="optional" />
 		<xs:attribute name="iconShadowWidth" type="intType" use="optional" />
 		<xs:attribute name="iconHeight" type="intType" use="optional" />
 		<xs:attribute name="iconWidth" type="intType" use="optional" />
-		<xs:attribute name="iconTransparent" type="xs:string"
-			use="optional" />
+		<xs:attribute name="iconTransparent" type="xs:string" use="optional" />
+		<xs:attribute name="onMapDrop" type="xs:string" use="optional" />
 		<xs:attribute name="onMarkerDrop" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- gmaps -->
@@ -2728,23 +2840,36 @@
 				<xs:group ref="gmapsGroup" minOccurs="0" maxOccurs="unbounded" />
 			</xs:sequence>
 		</xs:sequence>
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="continuousZoom" type="booleanType" use="optional" />
+		<xs:attribute name="doubleClickZoom" type="booleanType" use="optional" />
+		<xs:attribute name="enableDragging" type="booleanType" use="optional" />
+		<xs:attribute name="enableGoogleBar" type="booleanType" use="optional" />
+		<xs:attribute name="hybrid" type="booleanType" use="optional" />
+		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="lat" type="doubleType" use="optional" />
 		<xs:attribute name="lng" type="doubleType" use="optional" />
-		<xs:attribute name="zoom" type="intType" use="optional" />
-		<xs:attribute name="showLargeCtrl" type="booleanType"
-			use="optional" />
-		<xs:attribute name="showSmallCtrl" type="booleanType"
-			use="optional" />
+		<xs:attribute name="mapType" type="gmapsMapTypeAttrType" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="normal" type="booleanType" use="optional" />
+		<xs:attribute name="physical" type="booleanType" use="optional" />
+		<xs:attribute name="satellite" type="booleanType" use="optional" />
+		<xs:attribute name="scrollWheelZoom" type="booleanType" use="optional" />
+		<xs:attribute name="selectedItem" type="xs:string" use="optional" />
+		<xs:attribute name="showLargeCtrl" type="booleanType" use="optional" />
+		<xs:attribute name="showOverviewCtrl" type="booleanType" use="optional" />
+		<xs:attribute name="showScaleCtrl" type="booleanType" use="optional" />
+		<xs:attribute name="showSmallCtrl" type="booleanType" use="optional" />
 		<xs:attribute name="showTypeCtrl" type="booleanType" use="optional" />
-		<xs:attribute name="mapType" type="gmapsMapTypeAttrType"
-			use="optional" />
+		<xs:attribute name="showZoomCtrl" type="booleanType" use="optional" />
+		<xs:attribute name="zoom" type="intType" use="optional" />
 		<xs:attribute name="onMapMove" type="xs:string" use="optional" />
 		<xs:attribute name="onMapZoom" type="xs:string" use="optional" />
 		<xs:attribute name="onInfoChange" type="xs:string" use="optional" />
 		<xs:attribute name="onMapClick" type="xs:string" use="optional" />
-		<xs:attribute name="onMapDoubleClick" type="xs:string"
-			use="optional" />
+		<xs:attribute name="onMapDoubleClick" type="xs:string" use="optional" />
+		<xs:attribute name="onMapDrop" type="xs:string" use="optional" />
+		<xs:attribute name="onMapRightClick" type="xs:string" use="optional" />
 		<xs:attribute name="onMarkerDrop" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="gmapsMapTypeAttrType">
@@ -2766,7 +2891,7 @@
 	<xs:element name="gpolygon" type="gpolygonType" />
 	<xs:complexType name="gpolygonType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="points" type="xs:string" use="optional" />
 		<xs:attribute name="color" type="xs:string" use="optional" />
 		<xs:attribute name="weight" type="intType" use="optional" />
@@ -2781,12 +2906,24 @@
 	<xs:element name="gpolyline" type="gpolylineType" />
 	<xs:complexType name="gpolylineType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="points" type="xs:string" use="optional" />
 		<xs:attribute name="color" type="xs:string" use="optional" />
 		<xs:attribute name="weight" type="intType" use="optional" />
 		<xs:attribute name="opacity" type="intType" use="optional" />
 		<xs:attribute name="numLevels" type="intType" use="optional" />
+	</xs:complexType>
+    <!-- gscreen -->
+	<xs:element name="gscreen" type="gscreenType" />
+	<xs:complexType name="gscreenType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="offsetX" type="xs:string" use="optional" />
+		<xs:attribute name="offsetY" type="xs:string" use="optional" />
+		<xs:attribute name="screenX" type="xs:string" use="optional" />
+		<xs:attribute name="screenY" type="xs:string" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- jasperreport -->
 	<xs:element name="jasperreport" type="jasperreportType" />
@@ -2796,8 +2933,7 @@
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="parameters" type="xs:string" use="optional" />
 		<xs:attribute name="datasource" type="xs:string" use="optional" />
-		<xs:attribute name="type" type="jasperreportTypeAttrType"
-			use="optional" />
+		<xs:attribute name="type" type="jasperreportTypeAttrType" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="jasperreportTypeAttrType">
 		<xs:union>

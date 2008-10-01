@@ -328,7 +328,7 @@ public class Rows extends XulElement {
 						addVisibleItemCount(isRemove ? group.getVisibleItemCount() : -group.getVisibleItemCount());
 					}
 				} else {
-					final Group preGroup = getGroup(preRow.getIndex());
+					final Group preGroup = preRow instanceof Group ? (Group) preRow : getGroup(preRow.getIndex());
 					if (preGroup != null) {
 						if (!preGroup.isOpen() && group.isOpen())
 							addVisibleItemCount(isRemove ? -group.getVisibleItemCount() : group.getVisibleItemCount());

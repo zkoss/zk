@@ -1111,11 +1111,15 @@ public class Listbox extends XulElement implements Paginated {
 	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
+		final int beginning = j;
 		for (Iterator it = _items.listIterator(j);
 		it.hasNext() && (to < 0 || j <= to); ++j) {
 			Object o = it.next();
 			((Listitem)o).setIndexDirectly(j);
-			if (o instanceof Listgroup) {
+			
+			// if beginning is a group, we don't need to change its groupInfo, because
+			// it is not reliable.
+			if (beginning != j && o instanceof Listgroup) {
 			int[] g = getGroupsInfoAt(j + (infront ? -1 : 1), true);
 				if (g != null) {
 					g[0] = j;
@@ -1465,7 +1469,8 @@ public class Listbox extends XulElement implements Paginated {
 								-group.getVisibleItemCount());
 						}
 					} else {
-						final Listgroup preGroup = getListgroupAt(preRow.getIndex());
+						final Listgroup preGroup = preRow instanceof Listgroup ?
+								(Listgroup) preRow : getListgroupAt(preRow.getIndex());
 						if (preGroup != null) {
 							if (!preGroup.isOpen() && group.isOpen())
 								addVisibleItemCount(isRemove ? -group.getVisibleItemCount() :
