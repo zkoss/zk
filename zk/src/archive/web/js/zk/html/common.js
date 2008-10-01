@@ -2023,46 +2023,11 @@ zk.parseDate = function (txt, fmt, strict) {
 				break;
 			case 'M':
 				if (len == 3 && token){
-					switch (token.toLowerCase()){
-						case 'jan': 
-							m=0;
-							break;							
-						case 'feb':
-							m=1;
+					for (var index = zk.SMON.length; --index >= 0;) 
+						if (zk.SMON[index].toLowerCase() === token.toLowerCase()) {
+							m = index;
 							break;
-						case 'mar': 
-							m=2;
-							break;							
-						case 'apr':
-							m=3;
-							break;
-						case 'may': 
-							m=4;
-							break;							
-						case 'jun':
-							m=5;
-							break;
-						case 'jul': 
-							m=6;
-							break;							
-						case 'aug':
-							m=7;
-							break;
-						case 'sep': 
-							m=8;
-							break;							
-						case 'oct':
-							m=9;
-							break;
-						case 'nov': 
-							m=10;
-							break;							
-						case 'dec':
-							m=11;
-							break;
-						default:
-							if (isNaN(m)) return null; //failed
-						}		
+						}
 					break;
 				}else if (len <= 2) {
 					if (nosep && token.length > 2) {
