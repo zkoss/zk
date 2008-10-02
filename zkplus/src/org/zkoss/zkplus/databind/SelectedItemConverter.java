@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
@@ -53,7 +54,8 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 	  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
 	    				Set items = new HashSet();
 	    				items.add(item);
-	    				lbx.setAttribute("zkoss.zkplus.databind.ON_SELECT", Boolean.TRUE);
+	    				//bug #2140491
+	    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+lbx.getUuid(), Boolean.TRUE);
 	    				Events.postEvent(new SelectEvent("onSelect", lbx, items, item));
 	    			}    			
 	  				return item;
@@ -74,14 +76,15 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 	}
   
 	public Object coerceToBean(Object val, Component comp) { //save
-		Listbox lbx = (Listbox) comp;
-		if (lbx.getAttribute("zkoss.zkplus.databind.ON_SELECT") != null) {
+		final Listbox lbx = (Listbox) comp;
+		if (Executions.getCurrent().getAttribute("zkoss.zkplus.databind.ON_SELECT"+lbx.getUuid()) != null) {
+			//bug #2140491
 			//triggered by coerceToUi(), ignore this
-			lbx.removeAttribute("zkoss.zkplus.databind.ON_SELECT");
+			Executions.getCurrent().removeAttribute("zkoss.zkplus.databind.ON_SELECT"+lbx.getUuid());
 			return TypeConverter.IGNORE;
 		}
 		if (val != null) {
-			ListModel model = lbx.getModel();
+			final ListModel model = lbx.getModel();
 			//no model case, assume Listitem.value to be used with selectedItem
 		 	return model != null ? model.getElementAt(((Listitem) val).getIndex()) : ((Listitem) val).getValue();
 	  	}

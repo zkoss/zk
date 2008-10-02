@@ -49,7 +49,8 @@ ZK 3.0.8
   2129730: databinding fails to process access='none'  
   2129992: TypeConverter cannot be found by databind if in zscript  
   2138131: GenericForwardComposer throw Exception if component inexist
-
+  2140491: Set "save-when" in Listbox selectedItem does not trigger
+  
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange
   + org.zkoss.zkplus.databind.AnnotateDataBinderInit now implements both 

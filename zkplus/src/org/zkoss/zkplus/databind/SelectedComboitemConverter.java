@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
@@ -42,14 +43,15 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 	 * @since 3.0.2
 	 */
 	public Object coerceToBean(Object val, Component comp) {
-		Combobox cbbox = (Combobox) comp;
-		if (cbbox.getAttribute("zkoss.zkplus.databind.ON_SELECT") != null) {
+		final Combobox cbbox = (Combobox) comp;
+		if (Executions.getCurrent().getAttribute("zkoss.zkplus.databind.ON_SELECT"+cbbox.getUuid()) != null) {
+			//bug #2140491
 			//triggered by coerceToUi(), ignore this
-			cbbox.removeAttribute("zkoss.zkplus.databind.ON_SELECT");
+			Executions.getCurrent().removeAttribute("zkoss.zkplus.databind.ON_SELECT"+cbbox.getUuid());
 			return TypeConverter.IGNORE;
 		}
 	  	if (val != null) {
-	  		ListModel model = cbbox.getModel();
+	  		final ListModel model = cbbox.getModel();
 	  		//Bug #2010389
 	  		//1. loadAll 
 	  		//2. setModel (by 1.), post onInitRender. 
@@ -88,7 +90,8 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 	  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
 	    				Set items = new HashSet();
 	    				items.add(item);
-	    				cbbox.setAttribute("zkoss.zkplus.databind.ON_SELECT", Boolean.TRUE);
+	    				//bug #2140491
+	    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+cbbox.getUuid(), Boolean.TRUE);
 	    				Events.postEvent(new SelectEvent("onSelect", cbbox, items, item));
 	    			}		
 	  				return item;
