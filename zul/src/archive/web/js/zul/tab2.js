@@ -687,10 +687,6 @@ if (zk.ie6Only) {
 			if (!zkTabbox2._isVert($parent(tabs))) {
 				tabs.style.width = "0px";
 			}
-			var panels = zk.nextSibling(tabs, "DIV");
-			if (panels)
-				for (var n = panels.firstChild; n; n = n.nextSibling)
-					if (n.id && !n.style.height ) n.style.height = "";
 		}
 	};
 }
