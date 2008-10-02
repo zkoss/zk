@@ -125,6 +125,8 @@ zk.air = zk.agent.indexOf("adobeair") >= 0;
 //zk.mac = zk.agent.indexOf("macintosh") >= 0;
 zk._js4ld = {}; //{name, [script]}
 zk._ctpgs = []; //contained page IDs
+zk._jscnt = 0; // Global JS loading count.
+zk._jsmap = {}; // Global JS loaded map.
 zk.voidf = function () {return false;}; //always return false
 
 /** Listen a browser event.
@@ -788,7 +790,7 @@ zk._load = function (nm, modver, dtid, ckfn) {
 	e.type = "text/javascript" ;
 
 	if (ckfn) zk._ckfns.push(ckfn);
-	else prefix += "/_zcbzk.ald";
+	else prefix += "/_zcbzk.ald-" + zk._jscnt++;
 
 	if (uri.indexOf("://") > 0) {
 		if (!ckfn && zk.debugJS)
@@ -839,8 +841,10 @@ zk._bld = function () {
 	}
 };
 /** after load. */
-zk.ald = function () {
+zk.ald = function (jscnt) {
+	if (zk._jsmap[jscnt]) return; // invoked twice
 	if (--zk.loading) {
+		zk._jsmap[jscnt] = true;
 		try {
 			zk._updCnt();
 		} catch (ex) {
@@ -873,6 +877,10 @@ zk.ald = function () {
 		}
 		
 		if (zk._ready) zk._evalInit(); //zk._loadAndInit might not finish
+		
+		// reset the status of loading JS file
+		zk._jsmap = {};
+		zk._jscnt = 0;
 	}
 };
 zk._updCnt = function () {

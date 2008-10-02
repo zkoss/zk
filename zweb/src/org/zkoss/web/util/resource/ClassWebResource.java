@@ -304,7 +304,11 @@ public class ClassWebResource {
 			if (len == 0) jsextra = null;
 			else {
 				final StringBuffer jesb = new StringBuffer(jsextra);
-				char cc = jsextra.charAt(len - 1);
+				int begin = jsextra.indexOf("-");
+				if (begin > -1) {
+					jesb.replace(begin, begin+1, "(").append(")");
+				}
+				char cc = jesb.charAt(jesb.length() - 1);
 				if (cc != ';') {
 					if (cc != ')') jesb.append("()");
 					jesb.append(';');
