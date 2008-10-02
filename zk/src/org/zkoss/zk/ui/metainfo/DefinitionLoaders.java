@@ -186,8 +186,13 @@ public class DefinitionLoaders {
 		if (_exts != null) {
 			for (Iterator it = _exts.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				LanguageDefinition.addExtension((String)me.getKey(),
-					(String)me.getValue());
+				final String ext = (String)me.getKey();
+				final String lang = (String)me.getValue();
+				try {
+					LanguageDefinition.addExtension(ext, lang);
+				} catch (DefinitionNotFoundException ex) {
+					log.warning("Extension "+ext+" ignored since language "+lang+" not found");
+				}
 			}
 			_exts = null;
 		}
