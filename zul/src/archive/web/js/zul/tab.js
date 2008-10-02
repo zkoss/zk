@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 12 17:12:50     2005, Created by tomyeh
 }}IS_NOTE
@@ -180,15 +180,15 @@ zkTab.init = function (cmp) {
 	var btn = $e(cmp.id + "!close");
 	if(btn){
 		zk.listen(btn, "click", zkTab.onCloseBtnClick);
-		
+
 		if(getZKAttr(cmp, "disabled")!="true"){
 			zk.listen(btn, "mouseover", zkau.onimgover);
 			zk.listen(btn, "mouseout", zkau.onimgout);
 		}
 		if (!btn.style.cursor) btn.style.cursor = "default";
 	}
-	
-	
+
+
 };
 
 /** close button clicked**/
@@ -196,21 +196,21 @@ zkTab.onCloseBtnClick = function(evt){
 	if (!evt) evt = window.event;
 	var tab = $parentByType(Event.element(evt), "Tab");
 	if(getZKAttr(tab, "disabled")=="true") return;//return when disabled
-	zkau.sendOnClose(tab, true); 
+	zkau.sendOnClose(tab, true);
 	Event.stop(evt);
 }
 
-/** inner method, disable this tab 
+/** inner method, disable this tab
  * @param {Object} cmp tab element
  * @param {string} disabled string "true" or "false"
  */
 zkTab._disable = function(cmp, disabled){
 	var olddis = getZKAttr(cmp, "disabled");
 	if(olddis==disabled) return;
-	
+
 	var btn = $e(cmp.id + "!close");
 	var sel = getZKAttr(cmp, "sel");
-	
+
 	var clzn = cmp.className;
 	var len = clzn.length;
 	if(disabled=="true"){
@@ -253,23 +253,28 @@ zkTabs.cleanup = function (cmp) {
 zkTabs.onVisi = zkTabs.onSize = function (cmp) {
 	zkTabs.fixWidth(cmp.id);
 };
-if (zk.ie6Only) zkTabs.beforeSize = function (tabs) {
+zkTabs.beforeSize = function (tabs) {
 	var tabbox = $parentByType(tabs, "Tabbox");
 	if (!zk.isAccord(tabbox)) {
 		var panels = zk.nextSibling(tabs, "DIV");
 		if (panels)
 			for (var n = panels.firstChild; n; n = n.nextSibling)
-				if (n.id && n.style.height ) {
-					var t = n.style.height;//developer might set tabpanel's height
-					n.style.height = "0px";
-					n.style.height = t;
-				}
+				if (n.id && n._isHgh) n.style.height = "";
 	}
 };
 
 ////
 // tabpanel //
 zkTabpanel = {};
+zkTabpanel.setAttr = function (cmp, name, value) {
+	switch (name) {
+	case "style.height":
+		cmp._isHgh = false;
+		zkau.setAttr(cmp, name, value);
+		return true;
+	}
+	return false;
+}
 zkTabpanel.onVisi = zkTabpanel.onSize = function (cmp){//Bug 2111320
 	var tabbox = $parentByType(cmp, "Tabbox");
 	if ( !zk.isAccord(tabbox) && zk.ie6Only  ) {
@@ -313,7 +318,7 @@ zkTabs.fixWidth = function (uuid) {
 		setTimeout(function () {
 			switch(align){
 			default:
-				var v1 = tabbox.offsetWidth - tbl.offsetWidth; 
+				var v1 = tabbox.offsetWidth - tbl.offsetWidth;
 				var v =  v1+lt.offsetWidth;
 				if(zk.gecko && v1==0){//BUG 1825812
 					var pt = zk.parentNode(lt, "TABLE");
@@ -385,7 +390,7 @@ zkTabs.fixWidth = function (uuid) {
 zkTabs._fixHgh = function (tabbox, tabs) {
 	//fix tabpanels's height if tabbox's height is specified
 	//Ignore accordion since its height is controlled by each tabpanel
-	
+
 	if (!zk.isAccord(tabbox)) {
 		var hgh = tabbox.style.height;
 		var panels = zk.nextSibling(tabs, "DIV");
@@ -398,7 +403,10 @@ zkTabs._fixHgh = function (tabbox, tabs) {
 					}
 					if (hgh && hgh != "auto") {//tabbox has height
 						hgh = zk.getVflexHeight(panels);
-						zk.setOffsetHeight(n, hgh);
+						if (!n.style.height) {
+							zk.setOffsetHeight(n, hgh);
+							n._isHgh = true;
+						}
 					}
 					//let real div 100% height
 					zk.addClass($e(n.id + "!real"), "tabpanel-real");
