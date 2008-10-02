@@ -950,7 +950,9 @@ zk._bld = function () {
 };
 /** after load. */
 zk.ald = function (jscnt) {
-	if (zk._jsmap[jscnt]) return; // invoked twice
+	if (zk._jsmap[jscnt])
+		return; // invoked twice (possible since timeplot or other might use the same prefix _zcb... to load their modules)
+
 	if (--zk.loading) {
 		zk._jsmap[jscnt] = true;
 		try {
@@ -982,9 +984,9 @@ zk.ald = function (jscnt) {
 		} catch (ex) {
 			zk.error("Failed to stop counting. "+ex.message);
 		}
-		
+
 		if (zk._ready) zk._evalInit(); //zk._loadAndInit might not finish
-		
+
 		// reset the status of loading JS file
 		zk._jsmap = {};
 		zk._jscnt = 0;
