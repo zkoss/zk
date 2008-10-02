@@ -219,13 +219,9 @@ public class Treecell extends LabelImageElement {
 
 	/** Returns whether an item is the last child.
 	 */
-	public boolean isLastChild(Treeitem item) {
+	public static boolean isLastChild(Treeitem item) {
 		final Component parent = item.getParent();
-		if (parent == null)
-			return true;
-
-		final List sibs = parent.getChildren();
-		return sibs.get(sibs.size() - 1) == item;
+		return parent == null || parent.getLastChild() == item;
 	}
 	/** Returns an array of Treeitem from the root.
 	 */
