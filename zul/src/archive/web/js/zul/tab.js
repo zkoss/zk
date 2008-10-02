@@ -259,7 +259,11 @@ if (zk.ie6Only) zkTabs.beforeSize = function (tabs) {
 		var panels = zk.nextSibling(tabs, "DIV");
 		if (panels)
 			for (var n = panels.firstChild; n; n = n.nextSibling)
-				if (n.id && !n.style.height ) n.style.height = "0px";
+				if (n.id && n.style.height ) {
+					var t = n.style.height;//developer might set tabpanel's height
+					n.style.height = "0px";
+					n.style.height = t;
+				}
 	}
 };
 
