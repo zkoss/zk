@@ -408,20 +408,6 @@ implements Constrainted {
 			//don't use smartUpdate due to Bug 1985081
 	}
 
-	/** Returns whether the server-side formatting shall take place.
-	 *
-	 * <p>Default: false. It means the client is enough to do
-	 * the correct formatting with the server's help.
-	 *
-	 * <p>On the other hand, if true is returned, the data sent back to
-	 * the server for formatting.
-	 *
-	 * @since 3.5.0
-	 */
-	protected boolean shallServerFormat() {
-		return false;
-	}
-
 	//-- Constrainted --//
 	public void setConstraint(String constr) {
 		setConstraint(SimpleConstraint.getInstance(constr));
@@ -437,69 +423,6 @@ implements Constrainted {
 		return _constr;
 	}
 
-	public String getInnerAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getInnerAttrs());
-
-		if (isMultiline()) {
-			if (_cols > 0)
-				HTMLs.appendAttribute(sb, "cols",  _cols);
-			if (_maxlength > 0)
-				HTMLs.appendAttribute(sb, "z.maxlen",  _maxlength);
-		} else {
-			HTMLs.appendAttribute(sb, "value",  coerceToString(_value));
-			if (_cols > 0)
-				HTMLs.appendAttribute(sb, "size",  _cols);
-			if (_maxlength > 0)
-				HTMLs.appendAttribute(sb, "maxlength",  _maxlength);
-			HTMLs.appendAttribute(sb, "type", 
-				"password".equals(getType()) ? "password": "text");
-		}
-
-		if (_tabindex >= 0)
-			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
-
-		HTMLs.appendAttribute(sb, "name", _name);
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "disabled",  "disabled");
-		if (isReadonly())
-			HTMLs.appendAttribute(sb, "readonly", "readonly");
-		return sb.toString();
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_CHANGE);
-		appendAsapAttr(sb, Events.ON_CHANGING);
-		appendAsapAttr(sb, Events.ON_FOCUS);
-		appendAsapAttr(sb, Events.ON_BLUR);
-		appendAsapAttr(sb, Events.ON_SELECTION);
-
-		String serverValid = null;
-		if (_constr != null) {
-			if (_constr instanceof CustomConstraint) {
-				serverValid = "custom";
-					//validate-at-server is required and no client validation
-			} else if (_constr instanceof ClientConstraint) {
-				final ClientConstraint cc = (ClientConstraint)_constr;
-				HTMLs.appendAttribute(sb, "z.valid",
-					toJavaScript(cc.getClientValidation()));
-				HTMLs.appendAttribute(sb, "z.ermg", cc.getErrorMessage(this));
-				if (!cc.isClientComplete())
-					serverValid = "both";
-					//validate-at-server is required after the client validation
-			} else {
-				serverValid = "both";
-			}
-		}
-
-		if (serverValid == null && shallServerFormat())
-			serverValid = "fmt";
-		HTMLs.appendAttribute(sb, "z.srvald", serverValid);
-
-		return sb.toString();
-	}
 	/** Converts the client validation to JavaScript.
 	 */
 	private final String toJavaScript(String script) {
@@ -693,7 +616,7 @@ implements Constrainted {
 
 	//-- Component --//
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

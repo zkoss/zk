@@ -93,30 +93,9 @@ public class Menubar extends XulElement {
 		return _zclass == null ? "z-menubar" +
 				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		return _autodrop ?  attrs + " z.autodrop=\"true\"": attrs;
-	}
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Menu) && !(child instanceof Menuitem))
 			throw new UiException("Unsupported child for menubar: "+child);
 		return super.insertBefore(child, insertBefore);
-	}
-
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws IOException {
-		if ("vertical".equals(getOrient())) {
-			final StringBuffer sb = new StringBuffer(32)
-				.append("<tr id=\"").append(child.getUuid()).append("!chdextr\"");
-			if (child instanceof HtmlBasedComponent) {
-				final String height = ((HtmlBasedComponent)child).getHeight();
-				if (height != null)
-					sb.append(" height=\"").append(height).append('"');
-			}
-			sb.append('>');
-			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
-			else out.insert(0, sb.toString());
-			out.append("</tr>");
-		}
 	}
 }

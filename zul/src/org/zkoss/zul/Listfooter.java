@@ -99,23 +99,6 @@ public class Listfooter extends LabelImageElement {
 		}
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-
-		final Listheader header = getListheader();
-		if (header != null) sb.append(header.getColAttrs());
-
-		if (_span != 1)
-			HTMLs.appendAttribute(sb, "colspan", _span);
-
-		return sb.toString();
-	}
-
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-list-footer" : super.getZclass();

@@ -46,8 +46,6 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
-import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
@@ -382,39 +380,6 @@ import org.zkoss.zk.au.out.*;
 		return null;
 	}
 
-	/** Process {@link ChildChangedAware}
-	 */
-	private void doChildChanged() {
-		final Set ccawares = new LinkedHashSet(), checked = new HashSet(64);
-		doChildChanged(_invalidated, ccawares, checked);
-		doChildChanged(_attached, ccawares, checked);
-		doChildChanged(_smartUpdated.keySet(), ccawares, checked);
-
-		if (!ccawares.isEmpty())
-			for (Iterator it = ccawares.iterator(); it.hasNext();)
-				addSmartUpdate((Component)it.next(), "z.chchg", "true");
-	}
-	private void doChildChanged(Collection col, Set ccawares, Set checked) {
-		for (Iterator it = col.iterator(); it.hasNext();) {
-			Component comp = (Component)it.next();
-			final Page page = comp.getPage();
-			if (page == null || !_exec.isAsyncUpdate(page))
-				continue;
-
-			while ((comp = comp.getParent()) != null) {
-				if (!checked.add(comp))
-					break; //already checked
-
-				final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
-				if ((xc instanceof ChildChangedAware)
-				//&& !_invalidated.contains(comp) && !_attached.contains(comp)
-					//No need to check _invalidated... since they are optimized
-				&& ((ChildChangedAware)xc).isChildChangedAware())
-					ccawares.add(comp);
-			}
-		}
-	}
-
 	/** Prepares {@link #_pgRemoved} to contain set of pages that will
 	 * be removed.
 	 */
@@ -545,7 +510,7 @@ import org.zkoss.zk.au.out.*;
 		if (_pgInvalid != null) {
 			for (final Iterator it = _pgInvalid.iterator(); it.hasNext();) {
 				final Page page = (Page)it.next();
-				responses.add(new AuReplace(page, redraw(page)));
+				responses.add(new AuRedraw(page));
 			}
 		}
 
@@ -561,12 +526,11 @@ import org.zkoss.zk.au.out.*;
 			+"\nAttached: "+_attached+"\nSmartUpd:"+_smartUpdated);
 */
 		//4. process special interfaces
-		doChildChanged(); //ChildChangedAware
 
 		//5. generate replace for invalidated
 		for (Iterator it = _invalidated.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			responses.add(new AuReplace(comp, redraw(comp)));
+			responses.add(new AuRedraw(comp));
 		}
 
 		_ending = true; //no more addSmartUpdate...
@@ -729,11 +693,6 @@ import org.zkoss.zk.au.out.*;
 			parentCtrl != null ? parentCtrl.getExtraCtrl(): null;
 		for (Iterator it = sibs.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-
-			if ((parentxc instanceof MultiBranch)
-			&& ((MultiBranch)parentxc).inDifferentBranch(comp))
-				continue;
-
 			if (anchor != null) {
 				if (newsibs.remove(comp)) {
 					responses.add(new AuInsertAfter(anchor, drawNew(comp)));
@@ -839,25 +798,14 @@ import org.zkoss.zk.au.out.*;
 	private static String drawNew(Component comp)
 	throws IOException {
 		final StringWriter out = new StringWriter(1024*8);
-		comp.redraw(out);
-
-		final StringBuffer buf = out.getBuffer();
-		final Component parent = comp.getParent();
-		if (parent != null)
-			((ComponentCtrl)parent).onDrawNewChild(comp, buf);
-		return buf.toString();
+		((ComponentCtrl)comp).redraw(out);
+		return out.toString();
 	}
 	/** Redraw the specified component into a string.
 	 */
 	private static String redraw(Component comp) throws IOException {
 		final StringWriter out = new StringWriter(1024*8);
-		comp.redraw(out);
-		return out.toString();
-	}
-	/** Redraws the whole page. */
-	private static String redraw(Page page) throws IOException {
-		final StringWriter out = new StringWriter(1024*8);
-		((PageCtrl)page).redraw(null, out);
+		((ComponentCtrl)comp).redraw(out);
 		return out.toString();
 	}
 

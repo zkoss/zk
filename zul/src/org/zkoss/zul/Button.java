@@ -169,40 +169,14 @@ public class Button extends LabelImageElement {
 	}
 
 	//-- super --//
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getZclass() + "-disd" : "";
-		return scls == null ? added : scls + " " + added;
-	}
 	public String getZclass() {
 		return _zclass == null ? "z-button" : super.getZclass();
-	}
-	
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.href", getEncodedHref());
-		HTMLs.appendAttribute(sb, "z.target", getTarget());
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "z.disd", true);
-
-		appendAsapAttr(sb, Events.ON_FOCUS);
-		appendAsapAttr(sb, Events.ON_BLUR);
-		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-		appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
-		if (_tabindex >= 0) {
-			Execution exec = Executions.getCurrent();
-			if (!exec.isGecko() && !exec.isSafari())
-			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
-		}
-		
-		return sb.toString();
-	}
+	}	
 
 	//Component//
 	/** No child is allowed.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

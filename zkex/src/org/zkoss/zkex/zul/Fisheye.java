@@ -117,7 +117,7 @@ public class Fisheye extends XulElement {
 		super.setParent(parent);
 	}
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

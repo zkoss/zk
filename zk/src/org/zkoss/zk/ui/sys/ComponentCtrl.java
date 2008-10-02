@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Set;
 import java.util.Map;
+import java.io.Writer;
+import java.io.IOException;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
@@ -63,8 +65,7 @@ public interface ComponentCtrl {
 	 * different. Otherwise, it does nothing.
 	 *
 	 * <p>Note: {@link #onChildAdded} is called in the request-processing
-	 * phase, while {@link #onDrawNewChild} is called in the redrawing phase.
-	 * See {@link #onDrawNewChild} for more details.
+	 * phase.
 	 *
 	 * <p>It is not a good idea to throw an exception in this method, since
 	 * it is in the middle of modifying the component tree.
@@ -117,35 +118,6 @@ public interface ComponentCtrl {
 	 * @since 3.5.0
 	 */
 	public void onPageDetached(Page page);
-
-	/** Called when a new-created child is about to render.
-	 * It gives the parent a chance to fine-tune the output.
-	 * Note: it won't be called if the parent is rendered, too.
-	 * In other words, it is called only if the child is attached dynamically.
-	 *
-	 * <p>It is called in the redrawing phase by the kernel, so it is too late
-	 * to call {@link Component#invalidate()} or {@link #smartUpdate} in this method.
-	 *
-	 * <p>Note: {@link #onChildAdded} is called in the request-processing
-	 * phase, while {@link #onDrawNewChild} is called in the redrawing phase.
-	 * Component developer might do one of the follows:
-	 * <ul>
-	 * <li>Nothing, if new child can be inserted directly.</li>
-	 * <li>Overwrite {@link #onDrawNewChild} to add special tags, if
-	 * new child needs to be added an exterior with some tags before
-	 * insertion.<br>
-	 * Morever, if you shall add id="${child.uuid}!chdextr" to the added
-	 * exterior.</li>
-	 * <li>Redraw the parent, if it is too complicated.
-	 * How: overwrite {@link #onChildAdded} and calls {@link Component#invalidate()}</li>
-	 * </ul>
-	 *
-	 * @param child the child being rendered
-	 * @param out the rendered result of the child.
-	 * @since 3.5.0
-	 */
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws java.io.IOException;
 
 	/** Smart-updates a property with the specified value.
 	 * Called by component developers to do precise-update.
@@ -374,4 +346,13 @@ public interface ComponentCtrl {
 	 * @see org.zkoss.zk.au.ComponentCommand
 	 */
 	public Command getCommand(String cmdId);
+
+	/** Render (aka., redraw) this component and all its descendants.
+	 *
+	 * <p>It is called in the redrawing phase by the kernel, so it is too late
+	 * to call {@link Component#invalidate()}, {@link #smartUpdate}
+	 * or {@link #response} in this method.
+	 * @since 5.0.0
+	 */
+	public void redraw(Writer out) throws IOException;
 }

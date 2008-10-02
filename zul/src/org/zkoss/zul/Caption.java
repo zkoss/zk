@@ -85,11 +85,6 @@ public class Caption extends LabelImageElement {
 	public String getZclass() {
 		return _zclass == null ? "z-caption" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		return clkattrs == null ? attrs: attrs + clkattrs;
-	}
 
 	//-- Component --//
 	public void setParent(Component parent) {

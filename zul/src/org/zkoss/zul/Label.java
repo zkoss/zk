@@ -27,6 +27,8 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ContentRenderer;
+import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
@@ -48,6 +50,13 @@ public class Label extends XulElement {
 		setValue(value);
 	}
 
+	/** Returns the component type, zul.wgt.Label.
+	 * @since 5.0.0
+	 */
+	public String getType() {
+		return "zul.wgt.Label";
+	}
+
 	/** Returns the value.
 	 * <p>Default: "".
 	 */
@@ -61,7 +70,7 @@ public class Label extends XulElement {
 			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			invalidate();
+			smartUpdate("value", getEncodedText());
 		}
 	}
 
@@ -97,7 +106,7 @@ public class Label extends XulElement {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			invalidate();
+			smartUpdate("value", getEncodedText());
 		}
 	}
 	/** Returns whether to preserve the white spaces, such as space,
@@ -126,7 +135,7 @@ public class Label extends XulElement {
 	public void setPre(boolean pre) {
 		if (_pre != pre) {
 			_pre = pre;
-			invalidate();
+			smartUpdate("value", getEncodedText());
 		}
 	}
 	/** Returns whether to preserve the new line and the white spaces at the
@@ -145,7 +154,7 @@ public class Label extends XulElement {
 	public void setMultiline(boolean multiline) {
 		if (_multiline != multiline) {
 			_multiline = multiline;
-			invalidate();
+			smartUpdate("value", getEncodedText());
 		}
 	}
 	/** Returns whether to hyphenate a long word if maxlength is specified.
@@ -169,7 +178,7 @@ public class Label extends XulElement {
 	public void setHyphen(boolean hyphen) {
 		if (_hyphen != hyphen) {
 			_hyphen = hyphen;
-			invalidate();
+			smartUpdate("value", getEncodedText());
 		}
 	}
 
@@ -307,11 +316,6 @@ public class Label extends XulElement {
 	}
 
 	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		return clkattrs == null ? attrs: attrs + clkattrs;
-	}
 	/** Returns the Style of label
 	 *
 	 * <p>Default: "z-label"
@@ -322,19 +326,39 @@ public class Label extends XulElement {
 			scls = "z-label";
 		return scls;
 	}
-	//-- Component --//
-	public void invalidate() {
-		if (isIdRequired()) super.invalidate();
-		else getParent().invalidate();
+
+	//-- super --//
+	//super//
+	protected void renderProperties(ContentRenderer renderer) {
+		super.renderProperties(renderer);
+
+		render(renderer, "embedAs", "value");
+
+		//Note: we don't render _maxlength, _pre, ... since they are
+		//meaningful only at the server side
 	}
 	public void redraw(Writer out) throws IOException {
-		if (isIdRequired()) super.redraw(out);
-		else out.write(getEncodedText());
+		if (isIdRequired()) {
+			final JsContentRenderer renderer = new JsContentRenderer();
+			renderProperties(renderer);
+
+			out.write("<div id=\"");
+			out.write(getUuid());
+			out.write("\"><span>");
+			out.write(getEncodedText());
+			out.write("</span><script>zkau.begin({\n");
+			out.write(renderer.getBuffer().toString());
+			out.write("});</script>\n");
+			redrawChildren(out);
+			out.write("<script>zkau.end();</script></div>\n");
+		} else {
+			out.write(getEncodedText());
 			//no processing; direct output if not ZUL
+		}
 	}
 	/** No child is allowed.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

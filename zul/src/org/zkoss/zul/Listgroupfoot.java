@@ -64,11 +64,7 @@ public class Listgroupfoot extends Listitem{
 	public String getZclass() {
 		return _zclass == null ? "z-list-group-foot" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(32).append( super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		return sb.toString();
-	}
+
 	private Listcell autoFirstCell() {
 		Listcell cell = (Listcell)getFirstChild();
 		if (cell == null) {

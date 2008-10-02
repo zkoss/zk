@@ -102,7 +102,7 @@ public class Html extends XulElement {
 	//-- Component --//
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

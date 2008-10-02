@@ -69,25 +69,6 @@ public class Menu extends LabelImageElement {
 	public String getZclass() {
 		return _zclass == null ? "z-menu" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		if (_popup != null)
-			HTMLs.appendAttribute(sb, "z.mpop", _popup.getUuid());
-		if (isTopmost()) {
-			sb.append(" z.top=\"true\"");
-			final Component parent = getParent();
-			if (parent instanceof Menubar
-			&& "vertical".equals(((Menubar)parent).getOrient()))
-				sb.append(" z.vert=\"true\"");
-		}
-		return sb.toString();
-	}
-	protected String getRealStyle() {
-		final String style = super.getRealStyle();
-		return isTopmost() ?
-			style + "padding-left:4px;padding-right:4px;": style;
-	}
 
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Menubar)

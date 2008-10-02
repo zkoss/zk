@@ -14,26 +14,36 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-var _zws = [], _zw; //used to load widget
+var _zws = []; //used to load widget
 zkau = { //static methods
 	/** Begins the creation of a widget.
-	 * After called, a global variable called _zw refers to the widget.
 	 */
-	begin: function (widget, props) {
-		if (_zws.length)
-			_zws[0].appendChild(widget);
-		_zws.unshift(_zw = widget);
-
-		for (var p in props) {
-			var m = widget['set' + p.charAt(0).toUpperCase() + p.substring(1)];
-			if (m) m(props[p]);
-			else widget[p] = props[p];
+	begin: function (props) {
+		var embedAs = props.embedAs;
+		if (embedAs) {
+			var embed = zkDOM.$(props.uuid).firstChild;
+			if (embed && zkDOM.$(embed) == "SPAN")
+				props[embedAs] = embed.innerHTML;
+			else if (zk.debugJS)
+				throw "No embedAs, "+embedAs;
 		}
+
+		var wgt = new (zk.$import(props.type))(props.uuid);
+		wgt.inServer = true;
+		if (_zws.length)
+			_zws[0].appendChild(wgt);
+		_zws.unshift(wgt);
+
+		for (var p in props)
+			if (p != "type" && p != "uuid" && p != "embedAs") {
+				var m = wgt['set' + p.charAt(0).toUpperCase() + p.substring(1)];
+				if (m) m(props[p]);
+				else wgt[p] = props[p];
+			}
 	},
 	/** Ends the creation of a widget. */
 	end: function () {
-		_zw = null;
-		var w = _zws.shift();
-		if (!_zws.length) w.attach(w.id);
+		var wgt = _zws.shift();
+		if (!_zws.length) wgt.attach(wgt.uuid);
 	}
 };

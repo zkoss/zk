@@ -61,6 +61,7 @@ import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
@@ -103,7 +104,7 @@ public class ZkFns {
 		if (out == null)
 			out = getCurrentOut();
 		try {
-			comp.redraw(out);
+			((ComponentCtrl)comp).redraw(out);
 		} catch (Throwable ex) {
 			//Commons-el sometime eat exception, so show more info to debug
 			log.realCauseBriefly("Failed to redraw "+comp, ex);

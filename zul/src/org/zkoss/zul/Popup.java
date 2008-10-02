@@ -21,8 +21,6 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.Openable;
-import org.zkoss.zk.ui.ext.render.ZidRequired;
-import org.zkoss.zk.ui.ext.render.Floating;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.au.out.AuPopup;
@@ -114,12 +112,6 @@ public class Popup extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-popup" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-	//Note: don't generate z.type here because Menupopup's z.type diff
-		final StringBuffer sb = appendAsapAttr(null, Events.ON_OPEN);
-		final String attrs = super.getOuterAttrs();
-		return sb != null ? sb.append(attrs).toString(): attrs;
-	}
 
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
@@ -129,15 +121,7 @@ public class Popup extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements ZidRequired, Floating, Openable {
-		//ZidRequired//
-		public boolean isZidRequired() {
-			return !(getParent() instanceof Menu);
-		}
-		//Floating//
-		public boolean isFloating() {
-			return true;
-		}
+	implements Openable {
 		/**
 		 * @since 3.5.0
 		 */

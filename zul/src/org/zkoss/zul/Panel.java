@@ -30,8 +30,6 @@ import org.zkoss.zk.ui.ext.client.Maximizable;
 import org.zkoss.zk.ui.ext.client.Minimizable;
 import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zk.ui.ext.client.Updatable;
-import org.zkoss.zk.ui.ext.render.Floating;
-import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -310,10 +308,10 @@ public class Panel extends XulElement {
 	}
 
 	/** Returns the border.
-	 * The border actually controls via {@link Panelchildren#getRealSclass()}. 
+	 * The border actually controls via {@link Panelchildren#getSclass()}. 
 	 * In fact, the name of the border (except "normal") is generate as part of 
 	 * the style class used for the content block.
-	 * Refer to {@link Panelchildren#getRealSclass()} for more details.
+	 * Refer to {@link Panelchildren#getSclass()} for more details.
 	 *
 	 * <p>Default: "none".
 	 */
@@ -421,53 +419,9 @@ public class Panel extends XulElement {
 		return _panelchildren;
 	}
 
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String zcls = getZclass();
-		return scls + ("normal".equals(_border) ? "" : ' ' + zcls + "-noborder")
-			+ (_open ? "" : " " + zcls + "-collapsed");
-	}
 	public String getZclass() {
 		return _zclass == null ?  "z-panel" : super.getZclass();
 	}	
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_MOVE);
-		appendAsapAttr(sb, Events.ON_Z_INDEX);
-		appendAsapAttr(sb, Events.ON_OPEN);
-		appendAsapAttr(sb, Events.ON_MAXIMIZE);
-		appendAsapAttr(sb, Events.ON_MINIMIZE);
-		//no need to generate ON_CLOSE since it is always sent (as ASAP)
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-		if (_panelchildren != null)
-			HTMLs.appendAttribute(sb, "z.children", _panelchildren.getUuid());
-		if (_closable)
-			sb.append(" z.closable=\"true\"");
-		if (_floatable)
-			sb.append(" z.floatable=\"true\"");
-		if (_collapsible)
-			sb.append(" z.collapsible=\"true\"");
-		if (_framable)
-			sb.append(" z.framable=\"true\"");
-		if (_movable)
-			sb.append(" z.movable=\"true\"");
-		if (_maximizable)
-			sb.append(" z.maximizable=\"true\"");
-		if (_minimizable)
-			sb.append(" z.minimizable=\"true\"");
-		if (_maximized)
-			sb.append(" z.maximized=\"true\"");
-		if (_minimized)
-			sb.append(" z.minimized=\"true\"");
-		if (_open)
-			sb.append(" z.open=\"true\"");
-		if (isVisible())
-			HTMLs.appendAttribute(sb, "z.visible", isVisible());
-		return sb.toString();
-	}
 	
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {
@@ -559,18 +513,9 @@ public class Panel extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable, Floating, Maximizable, Minimizable, Updatable {
-		//-- MultiBranch --//
-		public boolean inDifferentBranch(Component child) {
-			return child instanceof Caption; //in different branch
-		}
-		//-- Openable --//
+	implements Openable, Maximizable, Minimizable, Updatable {
 		public void setOpenByClient(boolean open) {
 			_open = open; 
-		}
-		//Floating//
-		public boolean isFloating() {
-			return _floatable;
 		}
 		public void setMaximizedByClient(boolean maximized) {
 			_maximized = maximized;

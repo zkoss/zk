@@ -51,6 +51,13 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		_props.put("includer", this);
 	}
 
+	/** Returns the component type, zk.Macro.
+	 * @since 5.0.0
+	 */
+	public String getType() {
+		return "zk.Macro";
+	}
+
 	//-- Macro --//
 	/** Creates the child components after apply dynamic properties
 	 * {@link #setDynamicProperty}.
@@ -150,7 +157,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			super.setPage(page);
 		}
 	}
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return !isInline();
 	}
 

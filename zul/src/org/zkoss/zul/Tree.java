@@ -41,7 +41,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.Selectable;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -1079,31 +1078,6 @@ public class Tree extends XulElement implements Paginated {
 		return false;
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64)
-			.append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.name", _name);
-		HTMLs.appendAttribute(sb, "z.size",  getRows());
-		HTMLs.appendAttribute(sb, "z.selId", getSelectedId());
-		if (_multiple)
-			HTMLs.appendAttribute(sb, "z.multiple", true);
-		//if (_checkmark)
-		//	HTMLs.appendAttribute(sb, "z.checkmark",  _checkmark);
-		if (_vflex)
-			HTMLs.appendAttribute(sb, "z.vflex", true);
-		appendAsapAttr(sb, Events.ON_SELECT);
-
-		final Treechildren tc = getTreechildren();
-		if (tc != null) {
-			HTMLs.appendAttribute(sb, "z.tchsib", tc.getUuid());
-				//we have to generate first, since # of page might grow later
-		}
-
-		HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
-		return sb.toString();
-	}
-
 	//Cloneable//
 	public Object clone() {
 		int cntSel = _selItems.size();
@@ -1742,11 +1716,7 @@ public class Tree extends XulElement implements Paginated {
 	 */
 	
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, Selectable, ChildChangedAware {
-		//ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return !isFixedLayout();
-		}
+	implements InnerWidth, Selectable {
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;

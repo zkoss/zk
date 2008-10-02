@@ -136,16 +136,4 @@ public class Textbox extends InputElement {
 	public String getZclass() {
 		return _zclass == null ? "z-textbox" : super.getZclass();
 	}
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		if (!_multiline) return attrs;
-
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		HTMLs.appendAttribute(sb, "rows",  _rows);
-		return sb.toString();
-	}
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		return _multiline ? attrs + " z.skipOK=\"true\"": attrs;
-	}
 }

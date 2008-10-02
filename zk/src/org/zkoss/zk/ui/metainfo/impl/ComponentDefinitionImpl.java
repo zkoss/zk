@@ -36,7 +36,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.*;
-import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.xel.ExValue;
@@ -61,9 +60,9 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Either String or Class. */
 	private Object _implcls;
 	/** A map of molds (String mold, ExValue moldURI). */
-	private transient Map _molds;
+	private Map _molds;
 	/** A map of z2cs (String mold, ExValue). */
-	private transient Map _z2cs;
+	private Map _z2cs;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
@@ -419,38 +418,13 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 
 	public void addMold(String name, String moldURI, String z2cURI) {
-		if (moldURI.startsWith("class:")) {
-			final String clsnm = moldURI.substring(6);
-			try {
-				addMold(name,
-					(ComponentRenderer)Classes.newInstanceByThread(clsnm));
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Failed to instantiate "+clsnm);
-			}
-		} else {
-			if (moldURI.length() == 0)
-				throw new IllegalArgumentException();
-			addMold0(name, new ExValue(moldURI, String.class), z2cURI);
-		}
-	}
-	public void addMold(String name, ComponentRenderer renderer, String z2cURI) {
-		addMold0(name, renderer, z2cURI);
-	}
-	/** @deprecated */
-	public void addMold(String name, String moldURI) {
-		addMold(name, moldURI, null);
-	}
-	/** @deprecated */
-	public void addMold(String name, ComponentRenderer renderer) {
-		addMold(name, renderer, null);
-	}
-	private void addMold0(String name, Object mold, String z2cURI) {
-		if (name == null || name.length() == 0 || mold == null)
+		if (moldURI == null || moldURI.length() == 0 || name == null
+		|| name.length() == 0)
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
 			_molds = new HashMap(4);
-		_molds.put(name, mold);
+		_molds.put(name, new ExValue(moldURI, String.class));
 
 		if (z2cURI != null) {
 			if (_z2cs == null)
@@ -458,15 +432,13 @@ implements ComponentDefinition, java.io.Serializable {
 			_z2cs.put(name, new ExValue(z2cURI, String.class));
 		}
 	}
-	public Object getMoldURI(Component comp, String name) {
-		final Object o = _molds.get(name);
-		if (o instanceof ExValue) {
-			final ExValue mold = _molds != null ? (ExValue)o: null;
-			return mold == null ? null:
-				toAbsoluteURI((String)mold.getValue(_evalr, comp));
-		} else {
-			return o;
-		}
+	public String getMoldURI(Component comp, String name) {
+		if (_molds == null)
+			return null;
+
+		final ExValue mold = (ExValue)_molds.get(name);
+		return mold == null ? null:
+			toAbsoluteURI((String)mold.getValue(_evalr, comp));
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
@@ -508,21 +480,6 @@ implements ComponentDefinition, java.io.Serializable {
 		s.defaultWriteObject();
 
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
-
-		//write _molds
-		for (Iterator it = _molds.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			s.writeObject(me.getKey());
-			final Object o = me.getValue();
-			if ((o instanceof java.io.Serializable)
-			|| (o instanceof java.io.Externalizable)) {
-				s.writeObject(o);
-			} else {
-				assert o instanceof ComponentRenderer: "Unexpected "+o;
-				s.writeObject(o.getClass());
-			}
-		}
-		s.writeObject(null);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -531,23 +488,6 @@ implements ComponentDefinition, java.io.Serializable {
 		final String langnm = (String)s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
-
-		//read _molds
-		_molds = new HashMap(4);
-		for (;;) {
-			final Object nm = s.readObject();
-			if (nm == null) break; //no more
-
-			Object val = s.readObject();
-			if (val instanceof Class) {
-				try {
-					val = ((Class)val).newInstance();
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex);
-				}
-			}
-			_molds.put(nm, val);
-		}
 	}
 
 	//Object//

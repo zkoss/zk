@@ -103,21 +103,6 @@ public class Treefooter extends LabelImageElement {
 	public String getZclass() {
 		return _zclass == null ? "z-tree-footer" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-
-		final Treecol col = getTreecol();
-		if (col != null) sb.append(col.getColAttrs());
-
-		if (_span != 1)
-			HTMLs.appendAttribute(sb, "colspan", _span);
-
-		return sb.toString();
-	}
 
 	//-- Component --//
 	public void setParent(Component parent) {

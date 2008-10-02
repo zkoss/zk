@@ -29,8 +29,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
-import java.io.Writer;
-import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.lang.D;
@@ -53,8 +51,6 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
-import org.zkoss.zk.ui.ext.render.ZidRequired;
-import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.DeferredValue;
@@ -69,6 +65,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.Names;
+import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
@@ -97,7 +94,7 @@ import org.zkoss.zk.scripting.util.SimpleNamespace;
  *
  * @author tomyeh
  */
-public class AbstractComponent
+abstract public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 //	private static final Log log = Log.lookup(AbstractComponent.class);
     private static final long serialVersionUID = 20070920L;
@@ -419,13 +416,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * and the molds defined in the component definition
 	 * ({@link ComponentDefinition}).
 	 *
-	 * <p>As of release 3.0.0, it may return a String instance representing
-	 * the URI, or a {@link ComponentRenderer} instance responsible for
-	 * redrawing.
-	 *
 	 * <p>Used only for component implementation.
 	 */
-	protected Object getMoldURI() {
+	protected String getMoldURI() {
 		return _def.getMoldURI(this, getMold());
 	}
 
@@ -589,7 +582,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public void setId(String id) {
 		if (id != null && id.length() == 0)
-			throw new UiException("ID cannot be empty");
+			throw new UiException("ID cannot be empty"); //null means reset
 
 		if (!Objects.equals(_id, id)) {
 			final boolean rawId = this instanceof RawId;
@@ -626,9 +619,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (_id != null)
 				addToIdSpaces(this);
 
-			final Object xc = getExtraCtrl();
-			if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
-				smartUpdate("z.zid", _id);
+			smartUpdate("id", ComponentsCtrl.isAutoId(_id) ? null: _id);
 		}
 	}
 
@@ -902,13 +893,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static void checkParentChild(Component parent, Component child)
 	throws UiException {
 		if (parent != null) {
-			if (((AbstractComponent)parent).inAdding(child))
+			final AbstractComponent acp = (AbstractComponent)parent;
+			if (acp.inAdding(child))
 				return; //check only once
 
 			if (Components.isAncestor(child, parent))
 				throw new UiException("A child cannot be a parent of its ancestor: "+child);
-			if (!parent.isChildable())
-				throw new UiException(parent+" doesn't allow any child, "+child);
+			if (!acp.isChildable())
+				throw new UiException("Child not allowed in "+parent.getClass().getName());
 
 			final Page parentpg = parent.getPage(), childpg = child.getPage();
 			if (parentpg != null && childpg != null
@@ -1041,9 +1033,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return true;
 	}
 
-	/** Default: return true (allows to have children).
+	/** Returns whether this component can have a child.
+	 * <p>Default: return true (means it can have children).
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return true;
 	}
 	public List getChildren() {
@@ -1167,63 +1160,85 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void setMold(String mold) {
 		if (mold == null || mold.length() == 0)
 			mold = "default";
+
 		if (!Objects.equals(_mold, mold)) {
 			if (!_def.hasMold(mold))
 				throw new UiException("Unknown mold: "+mold
 					+", while allowed include "+_def.getMoldNames());
 			_mold = mold;
-			invalidate();
+			smartUpdate("mold", _mold);
 		}
 	}
 
 	//-- in the redrawing phase --//
-	/** Redraws this component.
-	 * This method implements the mold mechanism.
-	 * <ol>
-	 * <li>It first invokes {@link #getMoldURI} to retrieve the mold
-	 * to redraw. The mold is either an URI (String) or a
-	 * {@link ComponentRenderer} instance.
-	 * <li>If URI, it invokes {@link Execution#include} to generate
-	 * the output.</li>
-	 * <li>If a {@link ComponentRenderer} instance, {@link ComponentRenderer#render}
-	 * is called to generate the output.</li>
-	 * </ul>
+	/** Called by ({@link Component#redraw}) to render the
+	 * properties, excluding the enclosing tag and children.
+	 * @since 5.0.0
 	 */
-	public void redraw(Writer out) throws IOException {
-		final Object mold = getMoldURI();
-		if (mold instanceof ComponentRenderer) {
-			((ComponentRenderer)mold)
-				.render(this, out != null ? out: ZkFns.getCurrentOut());
-		} else {
-			final StringBuffer buf;
-			if (out instanceof StringWriter) {
-				buf = ((StringWriter)out).getBuffer();
-			} else if (out instanceof PrintWriterX) {
-				Writer w = ((PrintWriterX)out).getOrigin();
-				buf = w instanceof StringWriter ? ((StringWriter)w).getBuffer(): null;
-			} else {
-				buf = null;
-			}
+	protected void renderProperties(ContentRenderer renderer) {
+		render(renderer, "type", getType());
+		render(renderer, "uuid", getUuid());
 
-			final int index = buf != null ? buf.length(): 0;
+		if (!ComponentsCtrl.isAutoId(_id)) //not getId() to avoid gen ID
+			render(renderer, "id", _id);
 
-			final Map attrs = new HashMap(2);
-			attrs.put("self", this);
-			getExecution()
-				.include(out, (String)mold, attrs, Execution.PASS_THRU_ATTR);
-
-			//Trim output to have smaller output and to avoid
-			//whitespace around the separator and space components
-			if (buf != null)
-				Strings.trim(buf, index);
-		}
+		final String mold = getMold();
+		if (!"default".equals(mold))
+			render(renderer, "mold", mold);
 	}
-	/* Default: does nothing.
+	/** An utility to be called by {@link #renderProperties} to
+	 * render a string-value property.
+	 * It ignores if value is null or empty.
+	 * @since 5.0.0
 	 */
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws IOException {
+	protected void render(ContentRenderer renderer,
+	String name, String value) {
+		if (value != null && value.length() > 0)
+			renderer.render(name, value);
+	}
+	/** An utility to be called by {@link #renderProperties} to
+	 * render a string-value property.
+	 * @since 5.0.0
+	 * @param emptyIgnored whether to ignore the property if value is null
+	 * or empty.
+	 */
+	protected void render(ContentRenderer renderer,
+	String name, String value, boolean emptyIgnored) {
+		if (!emptyIgnored || (value != null & value.length() > 0))
+			renderer.render(name, value);
+	}
+	/** An utility to be called by {@link #renderProperties} to
+	 * render a boolean-value property.
+	 * @since 5.0.0
+	 * @param falseIgnored whether to ignore the property if value is false.
+	 */
+	protected void render(ContentRenderer renderer,
+	String name, boolean value, boolean falseIgnored) {
+		if (!falseIgnored || value)
+			renderer.render(name, Boolean.toString(value));
+	}
+	/** An utility to be called by {@link #renderProperties} to
+	 * render an int-value property.
+	 * @since 5.0.0
+	 */
+	protected void render(ContentRenderer renderer,
+	String name, int value) {
+		renderer.render(name, Integer.toString(value));
 	}
 
+	/** An utility to be called by {@link #renderProperties} to render
+	 * an event registered by listener(s).
+	 * @param evtnm the event name
+	 * @since 5.0.0
+	 */
+	protected void renderEvent(ContentRenderer renderer,
+	String evtnm) {
+		if (Events.isListened(this, evtnm, false))
+			render(renderer,
+				evtnm, Events.isListened(this, evtnm, true), false);
+	}
+
+	//Event//
 	/** Returns if any non-deferrable (ASAP) event listener is registered
 	 * for the specified event.
 	 * Returns true if you want the component (on the server)
@@ -1243,63 +1258,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return Events.isListened(this, evtnm, true);
 	}
 
-	/** Detects if a non-deferrable event is registered, and appends
-	 * a special attribute to denote it if true.
-	 * The format of the generated attribute is as follows:
-	 * <code>z.onChange="true"</code>.
-	 *
-	 * <p>This method is moved from {@link HtmlBasedComponent} to
-	 * {@link AbstractComponent} since 3.0.0.
-	 *
-	 * @param sb the string buffer to hold the HTML attribute. If null and
-	 * {@link #isAsapRequired} is true, a string buffer is created and returned.
-	 * @param evtnm the event name, such as onClick
-	 * @return the string buffer. If sb is null and {@link #isAsapRequired}
-	 * returns false, null is returned.
-	 * If the caller passed non-null sb, the returned value must be the same
-	 * as sb (so it usually ignores the returned value).
-	 * @see #appendAsapAttr(StringBuffer sb, String, boolean)
-	 * @since 3.0.0
-	 */
-	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm) {
-		return appendAsapAttr(sb, evtnm, false);
-	}
-	/** Appends an attribute for the specified event name, say, onChange,
-	 * if a non-deferrable listener is registered or enforce is true.
-	 * The format of the generated attribute is as follows:
-	 * <code>z.onChange="true"</code>.
-	 *
-	 * <p>appendAsapAttr(sb, evtnm) is the same as
-	 * appendAsapAttr(sb, evtnm, false).
-	 *
-	 * @param enforce whether to append the event attribute even if
-	 * {@link #isAsapRequired} returns false.
-	 * If enforce is false, this method is the same as
-	 * {@link #appendAsapAttr(StringBuffer, String)}
-	 * @since 3.0.4
-	 */
-	protected StringBuffer appendAsapAttr(StringBuffer sb, String evtnm,
-	boolean enforce) {
-		if (enforce || isAsapRequired(evtnm)) {
-			if (sb == null) sb = new StringBuffer(80);
-			HTMLs.appendAttribute(sb, getAttrOfEvent(evtnm), true);
-		}
-		return sb;
-	}
-	private static String getAttrOfEvent(String evtnm) {
-		return Events.ON_CLICK.equals(evtnm) ? "z.lfclk":
-			Events.ON_RIGHT_CLICK.equals(evtnm) ? "z.rtclk":
-			Events.ON_DOUBLE_CLICK.equals(evtnm) ? "z.dbclk":
-				"z." + evtnm;
-	}
-
 	public boolean addEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)
 			throw new IllegalArgumentException("null");
 		if (!Events.isValid(evtnm))
 			throw new IllegalArgumentException("Invalid event name: "+evtnm);
 
-		final boolean asap = isAsapRequired(evtnm);
+		final boolean oldasap = isAsapRequired(evtnm);
 
 		if (_listeners == null) _listeners = new HashMap(8);
 
@@ -1322,8 +1287,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (Events.ON_PIGGYBACK.equals(evtnm))
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
 
-			if (!asap && isAsapRequired(evtnm))
-				smartUpdate(getAttrOfEvent(evtnm), "true");
+			final boolean asap = isAsapRequired(evtnm);
+			if (l.size() == 1 || oldasap != asap)
+				smartUpdate(evtnm, asap);
 		}
 		return true;
 	}
@@ -1332,7 +1298,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("null");
 
 		if (_listeners != null) {
-			final boolean asap = isAsapRequired(evtnm);
+			final boolean oldasap = isAsapRequired(evtnm);
 			final List l = (List)_listeners.get(evtnm);
 			if (l != null) {
 				for (Iterator it = l.iterator(); it.hasNext();) {
@@ -1347,8 +1313,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						if (desktop != null) {
 							onListenerChange(desktop, false);
 
-							if (asap && !isAsapRequired(evtnm))
-								smartUpdate(getAttrOfEvent(evtnm), null);
+							if (l.isEmpty() && !Events.isListened(this, evtnm, false))
+								smartUpdate(evtnm, null); //no listener at all
+							else if (oldasap != isAsapRequired(evtnm))
+								smartUpdate(evtnm, !oldasap);
 						}
 						return true;
 					}
@@ -1705,7 +1673,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final String clsnm = getClass().getName();
 		final int j = clsnm.lastIndexOf('.');
 		return "<"+clsnm.substring(j+1)+' '
-			+(_id == null || ComponentsCtrl.isAutoId(_id) ? _uuid: _id)+'>';
+			+(ComponentsCtrl.isAutoId(_id) ? _uuid: _id)+'>';
 	}
 	public final boolean equals(Object o) { //no more override
 		return this == o;

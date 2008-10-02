@@ -73,11 +73,6 @@ public class Menuitem extends LabelImageElement {
 			invalidate();
 		}
 	}
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getZclass() + "-disd" : "";
-		return scls != null && scls.length() > 0 ? scls + " " + added : added;
-	}
 
 	public String getZclass() {
 		return _zclass == null ? "z-menu-item" : super.getZclass();
@@ -202,28 +197,6 @@ public class Menuitem extends LabelImageElement {
 		return !(getParent() instanceof Menupopup);
 	}
 
-	//-- Super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		boolean topmost = isTopmost();
-		if (!topmost && !_autocheck && !_disabled) return attrs;
-
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		if (topmost) sb.append(" z.top=\"true\"");
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "z.disd", true);
-		if (!topmost && _autocheck) {
-			sb.append(" z.autock=\"true\"");
-			if (_checked) sb.append(" z.checked=\"true\"");
-		}
-		return sb.toString();
-	}
-	protected String getRealStyle() {
-		final String style = super.getRealStyle();
-		return isTopmost() ?
-			style + "padding-left:4px;padding-right:4px;": style;
-	}
-
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Menupopup)
@@ -232,7 +205,7 @@ public class Menuitem extends LabelImageElement {
 		super.setParent(parent);
 	}
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

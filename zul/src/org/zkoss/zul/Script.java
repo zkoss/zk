@@ -173,7 +173,7 @@ public class Script extends AbstractComponent {
 
 	//-- Component --//
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {

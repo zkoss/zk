@@ -22,8 +22,6 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.event.Event;
@@ -32,10 +30,10 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.client.Movable;
 import org.zkoss.zk.ui.ext.client.Sizable;
 import org.zkoss.zk.ui.ext.client.ZIndexed;
-import org.zkoss.zk.ui.ext.render.ZidRequired;
-import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ContentRenderer;
+import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.au.out.AuFocus;
 import org.zkoss.zk.fn.ZkFns;
 
@@ -48,8 +46,6 @@ import org.zkoss.zk.fn.ZkFns;
  * <li>{@link #getSclass} and {@link #getStyle}.</li>
  * <li>{@link #getWidth}, {@link #getHeight}, {@link #getLeft},
  * {@link #getTop}, {@link #getZIndex}</li>
- * <li>{@link #getOuterAttrs}</li>
- * <li>{@link #getInnerAttrs}</li>
  * <li>{@link #focus}</li>
  * </ul>
  *
@@ -89,7 +85,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	public void setLeft(String left) {
 		if (!Objects.equals(_left, left)) {
 			_left = left;
-			smartUpdate("style.left", getLeft());
+			smartUpdate("left", getLeft());
 		}
 	}
 	/** Returns the top position.
@@ -102,7 +98,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	public void setTop(String top) {
 		if (_top != top) {
 			_top = top;
-			smartUpdate("style.top", getTop());
+			smartUpdate("top", getTop());
 		}
 	}
 	/** Returns the Z index.
@@ -118,10 +114,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			_zIndex = -1;
 		if (_zIndex != zIndex) {
 			_zIndex = zIndex;
-			if (_zIndex < 0)
-				smartUpdate("style.zIndex", null);
+			int zi = getZIndex();
+			if (zi < 0)
+				smartUpdate("zIndex", null);
 			else
-				smartUpdate("style.zIndex", _zIndex);
+				smartUpdate("zIndex", zi);
 		}
 	}
 	/** Returns the height. If null, the best fit is used.
@@ -137,7 +134,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			height = null;
 		if (!Objects.equals(_height, height)) {
 			_height = height;
-			smartUpdate("style.height", getHeight());
+			smartUpdate("height", getHeight());
 		}
 	}
 	/** Returns the width. If null, the best fit is used.
@@ -153,7 +150,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			width = null;
 		if (!Objects.equals(_width, width)) {
 			_width = width;
-			smartUpdate("style.width", getWidth());
+			smartUpdate("width", getWidth());
 		}
 	}
 
@@ -170,7 +167,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			tooltiptext = null;
 		if (!Objects.equals(_tooltiptext, tooltiptext)) {
 			_tooltiptext = tooltiptext;
-			smartUpdate("title", _tooltiptext);
+			smartUpdate("title", getTooltiptext());
 		}
 	}
 
@@ -199,7 +196,6 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	  * 
 	  * @since 3.5.1
 	  * @see #getSclass
-	  * @see #getRealSclass
 	  */
 	 public String getZclass() {
 		 return _zclass;
@@ -217,7 +213,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (zclass != null && zclass.length() == 0) zclass = null;
 		if (!Objects.equals(_zclass, zclass)) {
 			_zclass = zclass;
-			invalidate();
+			smartUpdate("zclass", getZclass());
 		}
 	 }
 	/** Returns the CSS class.
@@ -232,7 +228,6 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * To replace the default style completely, use
 	 * {@link #setZclass} instead.
 	 *
-	 * @see #getRealSclass
 	 * @see #getZclass
 	 */
 	public String getSclass() {
@@ -246,7 +241,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (sclass != null && sclass.length() == 0) sclass = null;
 		if (!Objects.equals(_sclass, sclass)) {
 			_sclass = sclass;
-			invalidate();
+			smartUpdate("sclass", getSclass());
 		}
 	}
 	/** Sets the CSS class. This method is a bit confused with Java's class,
@@ -269,7 +264,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (style != null && style.length() == 0) style = null;
 		if (!Objects.equals(_style, style)) {
 			_style = style;
-			smartUpdate("style", getRealStyle());
+			smartUpdate("style", getStyle());
 		}
 	}
 
@@ -293,13 +288,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 		if (!Objects.equals(_draggable, draggable)) {
 			_draggable = draggable;
-			smartUpdate("z.drag", _draggable);
+			smartUpdate("draggable", _draggable); //getDraggable is final
 		}
 	}
 	/** Returns the identifier of a draggable type of objects, or "false"
 	 * if not draggable (never null nor empty).
 	 */
-	public final String getDraggable() {
+	public final String getDraggable() { //Note: it is final
 		return _draggable != null ? _draggable: "false";
 	}
 	/** Sets "true" or "false" to denote whether a component is droppable,
@@ -327,13 +322,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 		if (!Objects.equals(_droppable, droppable)) {
 			_droppable = droppable;
-			smartUpdate("z.drop", _droppable);
+			smartUpdate("droppable", _droppable); //getDroppable is final
 		}
 	}
 	/** Returns the identifier of a droppable type of objects, or "false"
 	 * if not droppable (never null nor empty).
 	 */
-	public final String getDroppable() {
+	public final String getDroppable() { //Note: it is final
 		return _droppable != null ? _droppable: "false";
 	}
 
@@ -356,175 +351,66 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (focus) focus();
 	}
 
-	//-- component developer only --//
-	/** Returns the attributes for onClick, onRightClick and onDoubleClick
-	 * by checking whether the corresponding listeners are added,
-	 * or null if none is added.
+	//-- rendering --//
+	/** Redraws this component and all its decendants.
+	 * It invokes {@link #renderProperties} to render component's properties,
+	 * and {@link #redrawChildren} to redraw children (and descendants)
+	 * (by calling their {@link #redraw}.
 	 *
-	 * @since 3.0.5
+	 * <p>If a derived class renders only a subset of its children
+	 * (such as paging/cropping), it could override {@link #renderChildren}.
 	 */
-	protected String getAllOnClickAttrs() {
-		StringBuffer sb = null;
-		sb = appendAsapAttr(sb, Events.ON_CLICK);
-		sb = appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
-		sb = appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-		return sb != null ? sb.toString():  null;
-	}
-	/** Returns the exterior attributes for generating the enclosing
-	 * HTML tag; never return null.
-	 *
-	 * <p>Used only by component developers.
-	 *
-	 * <p>Default: Generates the tooltip text, style, sclass, draggable
-	 * and droppable attribute if necessary.
-	 * In other words, the corresponding attribute is generated if
-	 * {@link #getTooltiptext}, {@link #getRealStyle},
-	 * {@link #getSclass}, {@link #getDraggable}, {@link #getDroppable}
-	 * are defined.
-	 *
-	 * <p>You have to call both {@link #getOuterAttrs} and
-	 * {@link #getInnerAttrs} to generate complete attributes.
-	 *
-	 * <p>For simple components that all attributes are put on
-	 * the outest HTML element, all you need is as follows.
-	 *
-	 * <pre><code>&lt;xx id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}&gt;</code></pre>
-	 *
-	 * <p>If you want to put attributes in a nested HTML element, you
-	 * shall use the following pattern. Notice: if {@link #getInnerAttrs}
-	 * in a different tag, the tag must be named with "${self.uuid}!real".
-	 *
-	 * <pre><code>&lt;xx id="${self.uuid}"${self.outerAttrs}&gt;
-	 * &lt;yy id="${self.uuid}!real"${self.innerAttrs}&gt;...
-	 *</code></pre>
-	 *
-	 * <p>Note: This class handles non-deferrable event listeners automatically.
-	 * However, you have to invoke {@link #appendAsapAttr} for each event
-	 * the component handles in {@link #getOuterAttrs} as follows.
-	 *<pre><code>
-	 *	appendAsapAttr(sb, Events.ON_OPEN);
-	 *  appendAsapAttr(sb, Events.ON_CHANGE);
-	 *</code></pre>
-	 *
-	 * <p>Theorectically, you could put any attributes in either
-	 * {@link #getInnerAttrs} or {@link #getOuterAttrs}.
-	 * However, zkau.js assumes all attributes are put at the outer one.
-	 * If you want something different, you have to provide your own
-	 * setAttr (refer to how checkbox is implemented).
-	 */
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64);
-		HTMLs.appendAttribute(sb, "class", getRealSclass());
-		HTMLs.appendAttribute(sb, "style", getRealStyle());
-		HTMLs.appendAttribute(sb, "title", getTooltiptext());
-		HTMLs.appendAttribute(sb, "z.drag", _draggable);
-		HTMLs.appendAttribute(sb, "z.drop", _droppable);
-		HTMLs.appendAttribute(sb, "z.zcls", getZclass());
-
-		final Object xc = getExtraCtrl();
-		if ((xc instanceof ZidRequired) && ((ZidRequired)xc).isZidRequired())
-			HTMLs.appendAttribute(sb, "z.zid", getId());
-		if ((xc instanceof Floating) && ((Floating)xc).isFloating())
-			sb.append(" z.float=\"true\"");
-		return sb.toString();
-	}
-	/** Returns the interior attributes for generating the inner HTML tag;
-	 * never return null.
-	 *
-	 * <p>Used only by component developers.
-	 *
-	 * <p>Default: empty string.
-	 * Refer to {@link #getOuterAttrs} for more details.
-	 */
-	public String getInnerAttrs() {
-		return "";
-	}
-
-	/** Returns the real style class that will be generated to the client
-	 * (when {@link #getOuterAttrs} is called).
-	 *
-	 * <p>Default: it simply returns the catenation of {@link #getSclass}
-	 * and {@link #getZclass()} (since 3.5.0).
-	 *
-	 * <p>Derived classes might override it to provide, say, dual style classes.
-	 * For example,
-	 * <pre><code>final String sclass = getSclass();
-	 *return sclass != null ? sclass + " my-addon": "myaddon";</code></pre>
-	 *
-	 * @since 3.0.0
-	 * @see #getZclass()
-	 */
-	protected String getRealSclass() {
-		final String moldsclass = getZclass();
-		final String sclass = getSclass();
-		return moldsclass == null ? sclass : 
-				sclass == null || sclass.length() == 0 ?
-					moldsclass : sclass + " " + moldsclass;
-	}
-	/** Returns the real style that will be generated to client
-	 * (when {@link #getOuterAttrs} is called).
-	 *
-	 * <p>Default: this method will append width, height and others
-	 * to {@link #setStyle} (never null).
-	 *
-	 * <p>Use {@link #getRealStyleFlags} to control what attributes to
-	 * exclude.
-	 */
-	protected String getRealStyle() {
-		final int flags = getRealStyleFlags();
-		final StringBuffer sb = new StringBuffer(32);
-
-		if ((flags & RS_NO_WIDTH) == 0)
-			HTMLs.appendStyle(sb, "width", getWidth());
-		if ((flags & RS_NO_HEIGHT) == 0)
-			HTMLs.appendStyle(sb, "height", getHeight());
-
-		HTMLs.appendStyle(sb, "left", getLeft());
-		HTMLs.appendStyle(sb, "top", getTop());
-
-		final int zIndex = getZIndex();
-		if (zIndex > 0)
-			HTMLs.appendStyle(sb, "z-index", Integer.toString(zIndex));
-
-		String style = getStyle();
-		if (style != null && style.length() > 0) {
-			sb.append(style);
-			if (!style.endsWith(";")) sb.append(';');
-		}
-		if ((flags & RS_NO_DISPLAY) == 0 && !isVisible()) {
-			if (sb.length() == 0)
-				return "display:none;";
-			sb.append("display:none;");
-		}
-		return sb.toString();
-	}
-	/** Used by {@link #getRealStyleFlags} to denote that {@link #getRealStyle}
-	 * shall not generate the width style.
-	 */
-	protected static final int RS_NO_WIDTH = 0x0001;
-	/** Used by {@link #getRealStyleFlags} to denote that {@link #getRealStyle}
-	 * shall not generate the height style.
-	 */
-	protected static final int RS_NO_HEIGHT = 0x0002;
-	/** Used by {@link #getRealStyleFlags} to denote that {@link #getRealStyle}
-	 * shall not generate the display style.
-	 */
-	protected static final int RS_NO_DISPLAY = 0x0004;
-	/** Returns a combination of {@link #RS_NO_WIDTH} and {@link #RS_NO_HEIGHT}.
-	 * <p>Default: return 0.
-	 */
-	protected int getRealStyleFlags() {
-		return 0;
-	}
-
-	//-- Component --//
 	public void redraw(Writer out) throws IOException {
-		if (_prolog != null) {
-			final Writer o = out != null ? out: ZkFns.getCurrentOut();
-			if (o != null) o.write(_prolog);
-			//don't reset _prolog, since it might be redrawn later
+		final JsContentRenderer renderer = new JsContentRenderer();
+		renderProperties(renderer);
+
+		out.write("<div id=\"");
+		out.write(getUuid());
+		out.write("\">\n<script>zkau.begin({\n");
+		out.write(renderer.getBuffer().toString());
+		out.write("});</script>\n");
+		redrawChildren(out);
+		out.write("<script>zkau.end();</script></div>\n");
+	}
+	/** Redraws childrens (and then recursively descandants).
+	 * <p>Default: it invokes {@link #redraw} for all its children.
+	 * <p>If a derived class renders only a subset of its children
+	 * (such as paging/cropping), it could override {@link #renderChildren}.
+	 * @since 5.0.0
+	 */
+	protected void redrawChildren(Writer out) throws IOException {
+		for (Component child = getFirstChild(); child != null;) {
+			Component next = child.getNextSibling();
+			((ComponentCtrl)child).redraw(out);
+			child = next;
 		}
-		super.redraw(out);
+	}
+	/** Renders the content of this component, excluding the enclosing
+	 * tags and children.
+	 * @since 5.0.0
+	 */
+	protected void renderProperties(ContentRenderer renderer) {
+		super.renderProperties(renderer);
+
+		render(renderer, "tooltiptext", getTooltiptext());
+		render(renderer, "width", getWidth());
+		render(renderer, "height", getHeight());
+		render(renderer, "sclass", getSclass());
+		render(renderer, "zclass", getZclass());
+		render(renderer, "style", getStyle());
+		render(renderer, "left", getLeft());
+		render(renderer, "top", getTop());
+		render(renderer, "draggble", _draggable); //getDraggable is final
+		render(renderer, "droppable", _droppable);  //getDroppable is final
+
+		int zi = getZIndex();
+		if (zi >= 0) render(renderer, "zIndex", zi);
+
+		render(renderer, "prolog", _prolog);
+
+		renderEvent(renderer, Events.ON_CLICK);
+		renderEvent(renderer, Events.ON_DOUBLE_CLICK);
+		renderEvent(renderer, Events.ON_RIGHT_CLICK);
 	}
 
 	//--ComponentCtrl--//

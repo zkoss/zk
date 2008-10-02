@@ -209,15 +209,7 @@ public class Group extends Row {
 	public String getZclass() {
 		return _zclass == null ? "z-group" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.open", isOpen());
-		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		if (getGrid().inPagingMold())
-			HTMLs.appendAttribute(sb, "z."+Events.ON_OPEN, true);
-		else appendAsapAttr(sb, Events.ON_OPEN);
-		return sb.toString();
-	}
+
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

@@ -62,35 +62,6 @@ public class Paging extends XulElement implements Paginal {
 		setTotalSize(totalsz);
 		setPageSize(pagesz);
 	}
-
-	public void smartUpdate(String attr, String value) {
-		super.smartUpdate(attr, value);
-		invalidateWholeIfAny();
-	}
-	public void smartUpdate(String attr, int value) {
-		super.smartUpdate(attr, Integer.toString(value));
-		invalidateWholeIfAny();
-	}
-	public void smartUpdate(String attr, boolean value) {
-		super.smartUpdate(attr, Boolean.toString(value));
-		invalidateWholeIfAny();
-	}
-	public void invalidate() {
-		if (isBothPaging())
-			getParent().invalidate();
-		else
-			super.invalidate();
-	}
-	protected void invalidateWholeIfAny() {
-		if (isBothPaging())
-			getParent().invalidate();
-	}
-	private boolean isBothPaging () {
-		Component parent = getParent();
-		if (parent instanceof Paginated)
-			return "both".equals(((Paginated)parent).getPagingPosition());
-		return false;
-	}
 	
 	//Paginal//
 	public int getPageSize() {
@@ -210,19 +181,12 @@ public class Paging extends XulElement implements Paginal {
 	public String getZclass() {
 		return _zclass == null ?  "z-paging" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.actpg", _actpg);
-		HTMLs.appendAttribute(sb, "z.numpg", _npg);
-		return sb.toString();
-	}
 
 	// -- Component --//
 	public boolean isVisible() {
 		return super.isVisible() && (_npg > 1 || !_autohide);
 	}
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

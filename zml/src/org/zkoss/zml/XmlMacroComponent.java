@@ -153,7 +153,7 @@ public class XmlMacroComponent extends AbstractComponent implements Macro {
 			super.setPage(page);
 		}
 	}
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return !isInline();
 	}
 

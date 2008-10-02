@@ -36,7 +36,6 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.ext.client.Selectable;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -536,36 +535,6 @@ public class Combobox extends Textbox {
 	public String getZclass() {
 		return _zclass == null ? "z-combobox" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
-		final boolean aco = isAutocomplete(), adr = isAutodrop();
-		
-		if (!isAsapRequired(Events.ON_OPEN) && !isAsapRequired(Events.ON_SELECT) && !aco && !adr)
-			return sb.toString();
-
-		appendAsapAttr(sb, Events.ON_OPEN);
-		appendAsapAttr(sb, Events.ON_SELECT);
-		if (aco) HTMLs.appendAttribute(sb, "z.aco", "true");
-		if (adr) HTMLs.appendAttribute(sb, "z.adr", "true");
-		return sb.toString();
-	}
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		final String style = getInnerStyle();
-		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
-	}
-	private String getInnerStyle() {
-		final StringBuffer sb = new StringBuffer(32)
-			.append(HTMLs.getTextRelevantStyle(getRealStyle()));
-		HTMLs.appendStyle(sb, "width", getWidth());
-		HTMLs.appendStyle(sb, "height", getHeight());
-		return sb.toString();
-	}
-	/** Returns RS_NO_WIDTH|RS_NO_HEIGHT.
-	 */
-	protected int getRealStyleFlags() {
-		return super.getRealStyleFlags()|RS_NO_WIDTH|RS_NO_HEIGHT;
-	}
 
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {
@@ -574,7 +543,7 @@ public class Combobox extends Textbox {
 		return super.insertBefore(newChild, refChild);
 	}
 	/** Childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return true;
 	}
 	public void onChildAdded(Component child) {
@@ -635,12 +604,7 @@ public class Combobox extends Textbox {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends Textbox.ExtraCtrl
-	implements ChildChangedAware, Selectable {
-		//ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return true;
-		}
-
+	implements Selectable {
 		public void selectItemsByClient(Set selItems) {
 			_selItem = selItems != null && !selItems.isEmpty()?
 				(Comboitem)selItems.iterator().next(): null;

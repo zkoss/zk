@@ -27,7 +27,6 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.ext.render.Floating;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
@@ -322,131 +321,8 @@ public class Box extends XulElement {
 		setWidths(heights);
 	}
 
-	/** Returns the outer attributes used to wrap the children (never null).
-	 * It is used only for the vertical layout.
-	 */
-	public String getChildOuterAttrs(Component child) {
-		final StringBuffer sb = new StringBuffer(64)
-			.append(" z.coexist=\"true\"");
-			//coexist: the visibility of exterior is the same as child.
-
-		final boolean vert = isVertical();
-		if (child instanceof Splitter) {
-			sb.append(" class=\"")
-				.append(((Splitter)child).getZclass())
-				.append("-outer\"");
-			if (!child.isVisible())
-				sb.append(" style=\"display:none\"");
-			return sb.toString();
-		}
-		
-		//Note: style is handled in getChildInnerAttrs if horizontal layout
-		//so we don't need to handle valign and visible if vertical
-		if (vert) {
-			HTMLs.appendAttribute(sb, "valign", toValign(_pack));
-			if (!child.isVisible()) {
-				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
-				if (!(xc instanceof Floating) || !((Floating)xc).isFloating())
-					sb.append(" style=\"display:none\"");
-			}
-		}
-		return sb.toString();
-	}
-	/** Returns the inner attributes used to wrap the children (never null).
-	 * Used only by component development to generate HTML tags.
-	 */
-	public String getChildInnerAttrs(Component child) {
-		final boolean vert = isVertical();
-		final StringBuffer sb = new StringBuffer(64);
-		if (vert && child instanceof Splitter) {
-			sb.append(" class=\"")
-				.append(((Splitter)child).getZclass())
-				.append("-outer-td\"");
-			return sb.toString();
-		}
-
-		final String align = toHalign(vert ? _align: _pack);
-		if (align != null && align.length() > 0) {
-			HTMLs.appendAttribute(sb, "align", align);
-		}
-
-		String size = null;
-		if (_sizes != null) {
-			int j = 0;
-			for (Iterator it = getChildren().iterator(); it.hasNext();) {
-				final Object o = it.next();
-				if (child == o) {
-					size = _sizes[j];
-					break;
-				} else if (!(o instanceof Splitter)) {
-					if (++j >= _sizes.length)
-						break; //not found
-				}
-			}
-		}
-
-		final Object xc = ((ComponentCtrl)child).getExtraCtrl();
-		final boolean floating =
-			(xc instanceof Floating) && ((Floating)xc).isFloating();
-		final boolean visible = vert || floating || child.isVisible();
-			//if vert, visible is handled by getChildOutAttrs
-
-		if (size != null || floating || !visible) {
-			sb.append(" style=\"");
-			if (!visible)
-				sb.append("display:none;");
-
-			if (floating || size != null)
-				sb.append(vert ? "height": "width")
-					.append(':').append(floating ? "0": size);
-
-			sb.append('"');
-		}
-		return sb.toString();
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		for (Iterator it = getChildren().iterator(); it.hasNext();)
-			if (it.next() instanceof Splitter) {
-				HTMLs.appendAttribute(sb, "z.hasSplt", true);
-				break;
-			}
-		if ("vertical".equals(getOrient())) 
-			HTMLs.appendAttribute(sb, "z.vert", "true");
-		return sb.toString();
-	}
-	/** Returns the attributes used by the 'cave' element (never null).
-	 * Used only by component development to generate HTML tags.
-	 * @since 3.0.0
-	 */
-	public String getCaveAttrs() {
-		if (isVertical())
-			return "";
-
-		final String valign = toValign(_align);
-		return valign != null ? " valign=\"" + valign + '"': null;
-	}
-
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-box" : super.getZclass();
-	}
-	//-- Component --//
-	public boolean insertBefore(Component newChild, Component refChild) {
-		//Bug 1828702: onChildAdded not called if only moved
-		if (super.insertBefore(newChild, refChild)) {
-			invalidate();
-			return true;
-		}
-		return false;
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		invalidate();
-	}
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws IOException {
-		throw new InternalError(); //impossible since we always invalidate
 	}
 }

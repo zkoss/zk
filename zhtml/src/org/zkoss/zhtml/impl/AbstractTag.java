@@ -315,7 +315,7 @@ implements DynamicPropertied, RawId {
 			out.write("/>");
 		}
 	}
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return !HTMLs.isOrphanTag(_tagnm);
 	}
 

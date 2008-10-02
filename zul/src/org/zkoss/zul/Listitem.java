@@ -68,11 +68,6 @@ public class Listitem extends XulElement {
 		final Listbox listbox = getListbox();
 		return listbox != null && listbox.inSelectMold();
 	}
-	protected String getRealStyle() {
-		if (this instanceof Listgroup || this instanceof Listgroupfoot || !isVisible()) return super.getRealStyle();
-		final Listgroup lg = getListgroup();
-		return super.getRealStyle() + (lg != null && !lg.isOpen() ? "display:none" : "") ;
-	}
 	
 	/**
 	 * Returns the listgroup that this item belongs to, or null.
@@ -84,13 +79,6 @@ public class Listitem extends XulElement {
 		if (lb != null)
 			return lb.getListgroupAt(getIndex());
 		return null;
-	}
-	protected String getRealSclass() {
-		String scls = super.getRealSclass();
-		final String added = isDisabled() ? getZclass() + "-disd" : isSelected() ? getZclass() + "-seld" : "";
-		if (this instanceof Listgroup || this instanceof Listgroupfoot || !isVisible()) return scls;
-		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
-		return scls + (sclx != null ? " " + sclx : "") + " " + added ;
 	}
 
 	public String getZclass() {
@@ -326,43 +314,7 @@ public class Listitem extends XulElement {
 		if (inSelectMold()) invalidate(); //if HTML-select, Listcell has no client part
 		super.onChildRemoved(child);
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
 
-		if (inSelectMold()) {
-			HTMLs.appendAttribute(sb, "value",  Objects.toString(_value));
-			if (isDisabled())
-				HTMLs.appendAttribute(sb, "disabled",  "disabled");
-			if (isSelected())
-				HTMLs.appendAttribute(sb, "selected", "selected");
-		} else {
-			final Listbox listbox = getListbox();
-			if (listbox != null) {
-				if (listbox.getName() != null)
-					HTMLs.appendAttribute(sb, "z.value",  Objects.toString(_value));
-				if (listbox.getModel() != null) {
-					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
-					if (_loaded && !listbox.inPagingMold()) {
-						final Component c = getNextSibling();
-						if (c instanceof Listitem && !((Listitem)c)._loaded)
-							HTMLs.appendAttribute(sb, "z.skipsib", "true");
-					}
-				}
-			}
-
-			if (isDisabled())
-				HTMLs.appendAttribute(sb, "z.disd", true);
-			if (isSelected())
-				HTMLs.appendAttribute(sb, "z.sel", true);
-
-			final String clkattrs = getAllOnClickAttrs();
-			if (clkattrs != null) sb.append(clkattrs);
-			HTMLs.appendAttribute(sb, "z.rid", getListbox().getUuid());
-			HTMLs.appendAttribute(sb, "z.visible", isVisible());
-		}
-		return sb.toString();
-	}
 	//Clone//
 	public Object clone() {
 		final Listitem clone = (Listitem)super.clone();

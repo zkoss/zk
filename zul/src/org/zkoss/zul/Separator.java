@@ -110,11 +110,11 @@ public class Separator extends XulElement {
 	public void setSpacing(String spacing) {
 		if (spacing != null)
 			if (spacing.length() == 0) spacing = null;
-			else spacing = spacing.trim(); //getRealStyle depends on it
+			else spacing = spacing.trim();
 
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
-			smartUpdate("style", getRealStyle());
+			smartUpdate("style", getStyle());
 		}
 	}
 
@@ -128,21 +128,6 @@ public class Separator extends XulElement {
 		final String hgh = super.getHeight();
 		return isVertical() || (hgh != null && hgh.length() > 0)
 			|| isPercentInFF() || isSpaceWithMargin() ? hgh: _spacing;
-	}
-	protected String getRealStyle() {
-		final String style = super.getRealStyle();
-		final String spacing =
-			isSpaceWithMargin() ? _spacing: splitPercentInFF();
-		if (spacing == null)
-			return style;
-
-		//3.0.3-compatibility
-		final StringBuffer sb = new StringBuffer(64).append("margin:");
-		if (isVertical())
-			sb.append("0 ").append(spacing);
-		else
-			sb.append(spacing).append(" 0");
-		return sb.append(';').append(style).toString();
 	}
 	/** Bug 1526742: FF ignores the width if % is specified.
 	 * In this case we have to use margin instead.
@@ -200,7 +185,7 @@ public class Separator extends XulElement {
 	//-- Component --//
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

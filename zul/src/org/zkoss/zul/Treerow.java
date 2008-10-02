@@ -61,15 +61,6 @@ public class Treerow extends XulElement {
 		return parent != null ? ((Treeitem)parent).getTreechildren(): null;
 	}
 
-	//-- super --//
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final Treeitem ti = (Treeitem)getParent();
-		final String added = ti != null ? ti.isDisabled() ? getZclass() + "-disd"
-				: ti.isSelected() ? getZclass() + "-seld" : "" : "";
-		return scls != null ? scls + " " + added : added;
-	}
-
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-tree-row" : super.getZclass();
@@ -123,51 +114,6 @@ public class Treerow extends XulElement {
 			return super.isAsapRequired(evtnm);
 		final Treeitem ti = (Treeitem)getParent();
 		return ti != null && ti.isAsapRequired(evtnm);
-	}
-	/** Appends attributes for generating the real checkbox HTML tags
-	 * (name="val"); Used only by component developers.
-	 */
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final Treeitem item = (Treeitem)getParent();
-		if (item == null) return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-
-		final Tree tree = getTree();
-		if (tree != null && tree.getName() != null)
-			HTMLs.appendAttribute(sb, "z.value",  Objects.toString(item.getValue()));
-		HTMLs.appendAttribute(sb, "z.pitem", item.getUuid());
-		if (item.isSelected())
-			HTMLs.appendAttribute(sb, "z.sel", true);
-		if (item.isDisabled())
-			HTMLs.appendAttribute(sb, "z.disd", true);
-		HTMLs.appendAttribute(sb, "z.rid", tree.getUuid());
-		if (item.isContainer() && item.isOpen())
-			HTMLs.appendAttribute(sb, "z.open", true);
-
-		final Component gp = item.getParent(); //Treechildren
-		if (gp != null) {
-			HTMLs.appendAttribute(sb, "z.ptch", gp.getUuid());
-			Component gpitem = gp.getParent();
-			if (gpitem instanceof Treeitem)
-				HTMLs.appendAttribute(sb, "z.gpitem", gpitem.getUuid());
-		}
-
-		final Treechildren tcsib = getLinkedTreechildren();
-		if (tcsib != null) {
-			HTMLs.appendAttribute(sb, "z.tchsib", tcsib.getUuid());
-		}
-
-		if (tree != null && tree.getModel() != null && !item.isLoaded())
-			sb.append(" z.lod=\"t\""); //lod=Load-on-Demand
-		if (getTree().inPagingMold())
-			HTMLs.appendAttribute(sb, "z."+Events.ON_OPEN, true);
-		else appendAsapAttr(sb, Events.ON_OPEN);
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-		HTMLs.appendAttribute(sb, "z.visible", isBothVisible());
-		return sb.toString();
 	}
 
 	//-- Component --//

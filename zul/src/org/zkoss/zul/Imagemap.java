@@ -45,22 +45,9 @@ import org.zkoss.zk.ui.UiException;
  */
 public class Imagemap extends Image {
 	//-- super --//
-	public String getOuterAttrs() {
-		//Imagemap handles onclick by itself, so don't generate z.lfclk
-		final String attrs = super.getOuterAttrs();
-		final String attrnm = " z.lfclk=";
-		final int j = attrs.indexOf(attrnm);
-		if (j < 0) return attrs;
-		int k = attrs.indexOf('"', j + attrnm.length());
-		assert k > 0: attrs;
-		k = attrs.indexOf('"', k + 1);
-		assert k > 0: attrs;
-		return attrs.substring(0, j) + attrs.substring(k + 1);
-	}
-
 	/** Default: childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return true;
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {

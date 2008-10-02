@@ -33,6 +33,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
@@ -87,6 +88,12 @@ implements DynamicTag, Native {
 		_epilog = epilog != null ? epilog: "";
 	}
 
+	/** Returns the component type, zk.Native.
+	 * @since 5.0.0
+	 */
+	public String getType() {
+		return "zk.Native";
+	}
 	/** Returns the tag name, or null if plain text.
 	 */
 	public String getTag() {
@@ -154,8 +161,11 @@ implements DynamicTag, Native {
 		write(out, sb);
 
 		//children
-		for (Iterator it = getChildren().iterator(); it.hasNext();)
-			((Component)it.next()).redraw(out);
+		for (Component child = getFirstChild(); child != null;) {
+			Component next = child.getNextSibling();
+			((ComponentCtrl)child).redraw(out);
+			child = next;
+		}
 
 		//epilog
 		sb.append(_epilog);

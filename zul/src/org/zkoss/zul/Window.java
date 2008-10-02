@@ -32,11 +32,9 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.ext.client.Maximizable;
 import org.zkoss.zk.ui.ext.client.Minimizable;
 import org.zkoss.zk.ui.ext.client.Openable;
-import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 
@@ -834,64 +832,6 @@ public class Window extends XulElement implements IdSpace {
 		}
 		super.setDraggable(draggable);
 	}
-	protected String getRealStyle() {
-		final String style = super.getRealStyle() + (isVisible() && isMinimized() ? "display:none;" : "");
-		return _mode != EMBEDDED ? 
-			(isVisible() ? "position:absolute;visibility:hidden;" : "position:absolute;") + style: style;
-			//If no absolute, Opera ignores left and top
-			//
-			//If not embedded we always generate visibility:hidden to have
-			//better visual effect (the client will turn it on in zkWnd.init)
-	}
-	
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_MOVE);
-		appendAsapAttr(sb, Events.ON_SIZE);
-		appendAsapAttr(sb, Events.ON_Z_INDEX);
-		appendAsapAttr(sb, Events.ON_OPEN);
-		appendAsapAttr(sb, Events.ON_MAXIMIZE);
-		
-		if (inModal() || inHighlighted()) HTMLs.appendAttribute(sb, "z." + Events.ON_MINIMIZE, true);
-		else appendAsapAttr(sb, Events.ON_MINIMIZE);
-		
-		//no need to generate ON_CLOSE since it is always sent (as ASAP)
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-			//though widget.js handles onclick (if 3d), it is useful
-			//to support onClick for groupbox
-		final String aos = getDefaultActionOnShow() != null ? getDefaultActionOnShow() 
-				: getDesktop().getWebApp().getConfiguration()
-					.getPreference("org.zkoss.zul.Window.defaultActionOnShow", null);
-		if (aos != null)
-			HTMLs.appendAttribute(sb, "z.aos", aos.length() == 0 ?  "z_none" : aos);
-		if (_closable)
-			sb.append(" z.closable=\"true\"");
-		if (_sizable)
-			sb.append(" z.sizable=\"true\"");
-
-		if (_mode != EMBEDDED) {
-			if (_pos != null)
-				HTMLs.appendAttribute(sb, "z.pos", _pos);
-			HTMLs.appendAttribute(sb, "z.mode", getMode());
-			HTMLs.appendAttribute(sb, "z.visible", isVisible());
-		}
-
-		if (_maximizable)
-			sb.append(" z.maximizable=\"true\"");
-		if (_minimizable)
-			sb.append(" z.minimizable=\"true\"");
-		if (_maximized)
-			sb.append(" z.maximized=\"true\"");
-		if (_minimized)
-			sb.append(" z.minimized=\"true\"");
-
-		HTMLs.appendAttribute(sb, "z.minheight", getMinheight());
-		HTMLs.appendAttribute(sb, "z.minwidth", getMinwidth());
-		return sb.toString();
-	}
 
 	//Cloneable//
 	public Object clone() {
@@ -926,18 +866,9 @@ public class Window extends XulElement implements IdSpace {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable, Floating, Maximizable, Minimizable {
-		//-- MultiBranch --//
-		public boolean inDifferentBranch(Component child) {
-			return child instanceof Caption; //in different branch
-		}
-		//-- Openable --//
+	implements Openable, Maximizable, Minimizable {
 		public void setOpenByClient(boolean open) {
 			setVisible(open);
-		}
-		//Floating//
-		public boolean isFloating() {
-			return _mode != EMBEDDED;
 		}
 		public void setMaximizedByClient(boolean maximized) {
 			_maximized = maximized;

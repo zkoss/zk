@@ -34,11 +34,4 @@ import org.zkoss.zul.impl.XulElement;
 public class Span extends XulElement {
 	public Span() {
 	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final String clkattrs = getAllOnClickAttrs();
-		final String attrs = super.getOuterAttrs();
-		return clkattrs == null ? attrs: attrs + clkattrs;
-	}
 }

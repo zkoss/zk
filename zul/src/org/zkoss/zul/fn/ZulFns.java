@@ -37,28 +37,6 @@ import org.zkoss.zul.ext.Paginal;
  */
 public class ZulFns {
 	protected ZulFns() {}
-
-	/** Returns the column attribute of a child of a row by specifying
-	 * the index.
-	 */
-	public static final String getColAttrs(Row row, int index) {
-		return row.getChildAttrs(index);
-	}
-
-	/**
-	 * Returns the inner attributes used for the cell of the specified child
-	 * when it is placed inside of hbox/vbox.
-	 */
-	public static final String getBoxChildInnerAttrs(Component child) {
-		return ((Box)child.getParent()).getChildInnerAttrs(child);
-	}
-	/**
-	 * Returns the outer attributes used for the cell of the specified child
-	 * when it is placed inside of hbox/vbox.
-	 */
-	public static final String getBoxChildOuterAttrs(Component child) {
-		return ((Box)child.getParent()).getChildOuterAttrs(child);
-	}
 	
 	/**
 	 * Sets the stripe CSS for each row.

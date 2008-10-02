@@ -324,46 +324,4 @@ public class Datebox extends FormatInputElement {
 	public String getZclass() {
 		return _zclass == null ? "z-datebox" : super.getZclass();
 	}
-	
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
-		if (getConstraint() instanceof SimpleDateConstraint) {
-			final SimpleDateConstraint st = (SimpleDateConstraint)getConstraint();
-			Date d = st.getBeginDate();
-			if (d != null)
-				HTMLs.appendAttribute(sb, "z.bd", d.getTime() / 1000); 
-			d = st.getEndDate();
-			if (d != null)
-				HTMLs.appendAttribute(sb, "z.ed", d.getTime() / 1000);
-		}
-		if (!_lenient) sb.append(" z.lenient=\"false\"");
-		if (_compact) sb.append(" z.compact=\"true\"");
-		return sb.toString();
-	}
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		final String style = getInnerStyle();
-		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
-	}
-	private String getInnerStyle() {
-		final StringBuffer sb = new StringBuffer(32)
-			.append(HTMLs.getTextRelevantStyle(getRealStyle()));
-		HTMLs.appendStyle(sb, "width", getWidth());
-		HTMLs.appendStyle(sb, "height", getHeight());
-		return sb.toString();
-	}
-	/** Returns RS_NO_WIDTH|RS_NO_HEIGHT.
-	 */
-	protected int getRealStyleFlags() {
-		return super.getRealStyleFlags()|RS_NO_WIDTH|RS_NO_HEIGHT;
-	}
-
-	/** Returns whether the server-side formatting shall take place.
-	 * It always returns false since the client is smart enought to
-	 * handle the date format.
-	 * @since 3.5.0
-	 */
-	protected boolean shallServerFormat() {
-		return false;
-	}
 }

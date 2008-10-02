@@ -164,33 +164,6 @@ public class Bandbox extends Textbox {
 	public String getZclass() {
 		return _zclass == null ? "z-bandbox" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
-		final boolean adr = isAutodrop();
-		if (!isAsapRequired(Events.ON_OPEN) && !adr)
-			return sb.toString();
-
-		appendAsapAttr(sb, Events.ON_OPEN);
-		if (adr) HTMLs.appendAttribute(sb, "z.adr", "true");
-		return sb.toString();
-	}
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		final String style = getInnerStyle();
-		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
-	}
-	private String getInnerStyle() {
-		final StringBuffer sb = new StringBuffer(32)
-			.append(HTMLs.getTextRelevantStyle(getRealStyle()));
-		HTMLs.appendStyle(sb, "width", getWidth());
-		HTMLs.appendStyle(sb, "height", getHeight());
-		return sb.toString();
-	}
-	/** Returns RS_NO_WIDTH|RS_NO_HEIGHT.
-	 */
-	protected int getRealStyleFlags() {
-		return super.getRealStyleFlags()|RS_NO_WIDTH|RS_NO_HEIGHT;
-	}
 
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {
@@ -206,7 +179,7 @@ public class Bandbox extends Textbox {
 		return false;
 	}
 	/** Childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return true;
 	}
 	public void onChildRemoved(Component child) {

@@ -53,23 +53,4 @@ abstract public class FormatInputElement extends InputElement {
 			}
 		}
 	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String fmt = getFormat();
-		return fmt != null && fmt.length() != 0 ?
-			attrs + " z.fmt=\""+fmt+'"': attrs;
-	}
-	/** Returns whether the server-side formatting shall take place.
-	 *
-	 * <p>It returns true if and only if {@link #getFormat} is not null.
-	 * In other words, if the format is specified, ON_CHANGE is sent
-	 * back immediately to the server to retrieve back the data
-	 * in the correct format.
-	 * @since 3.5.0
-	 */
-	protected boolean shallServerFormat() {
-		return getFormat() != null;
-	}
 }

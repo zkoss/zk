@@ -30,7 +30,6 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.au.out.AuInvoke;
 
 import org.zkoss.zul.impl.XulElement;
@@ -364,22 +363,6 @@ public class Tabbox extends XulElement {
 		}
 	}
 
-	// -- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-		// no z.dbclk/z.lfclk since it is covered by both Tab and Tabpanel
-
-		if (isVertical())
-			HTMLs.appendAttribute(sb, "z.orient", "v");
-		if (_tabs != null && !inAccordionMold())
-			HTMLs.appendAttribute(sb, "z.tabs", _tabs.getUuid());
-		if (_tabscroll)
-			HTMLs.appendAttribute(sb, "z.tabscrl", _tabscroll);
-		return sb.toString();
-	}
-
 	// Cloneable//
 	public Object clone() {
 		final Tabbox clone = (Tabbox) super.clone();
@@ -429,24 +412,6 @@ public class Tabbox extends XulElement {
 
 		init();
 		afterUnmarshal(-1);
-	}
-
-	// -- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-
-	/**
-	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
-	 * component developers.
-	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements
-			ChildChangedAware {
-		// ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return !inAccordionMold();
-			// we have to adjust the width of last cell
-		}
 	}
 
 	private class Listener implements EventListener, Deferrable {

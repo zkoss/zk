@@ -115,24 +115,13 @@ public class Timer extends HtmlBasedComponent {
 		}
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.delay", _delay);
-		HTMLs.appendAttribute(sb, "z.repeats", _repeats);
-		if (!_running)
-			sb.append(" z.running=\"false\"");
-		return sb.toString();
-	}
-
 	//-- Component --//
 	/** Not allowd. */
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("timer is always invisible");
 	}
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

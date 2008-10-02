@@ -251,30 +251,10 @@ public class Slider extends XulElement {
 	}
 
 	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		if ("vertical".equals(getOrient()))
-			HTMLs.appendAttribute(sb, "z.vert", "true");
-		
-		HTMLs.appendAttribute(sb, "z.name", _name);
-		HTMLs.appendAttribute(sb, "z.curpos", _curpos);
-		HTMLs.appendAttribute(sb, "z.maxpos", _maxpos);
-		HTMLs.appendAttribute(sb, "z.pginc", _pginc);
-		HTMLs.appendAttribute(sb, "z.slidingtext", getSlidingtext());		
-		
-		appendAsapAttr(sb, Events.ON_SCROLL);
-		appendAsapAttr(sb, Events.ON_SCROLLING);
-		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-			//no z.dbclk to avoid confusion
-			//no z.lfclk since it will be supported by sld.js
-
-		return sb.toString();
-	}
 
 	//-- Component --//
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

@@ -189,23 +189,13 @@ public class Style extends AbstractComponent {
 		}
 	}
 
-	/** Returns the attributes for generating the HTML tags.
-	 */
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64);
-		HTMLs.appendAttribute(sb, "z.src",
-			_src != null ? getDesktop().getExecution().encodeURL(_src):
-			Utils.getDynamicMediaURI(this, _cntver, "css", "css"));
-		return sb.toString();
-	}
-
 	//Component//
 	/** Not allowd. */
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("style is always invisible");
 	}
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 
@@ -224,7 +214,8 @@ public class Style extends AbstractComponent {
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		if (isDynamic()) {
-			super.redraw(out);
+//TODO
+//			super.redraw(out);
 			return;	
 		}
 

@@ -65,11 +65,6 @@ public class Groupfoot extends Row{
 	public String getZclass() {
 		return _zclass == null ? "z-group-foot" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(32).append( super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		return sb.toString();
-	}
 	private Label autoFirstCell() {
 		Component cell = getFirstChild();
 		if (cell == null || cell instanceof Label) {

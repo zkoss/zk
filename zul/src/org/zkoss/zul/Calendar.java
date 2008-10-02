@@ -148,17 +148,6 @@ public class Calendar extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-calendar" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_CHANGE);
-
-		HTMLs.appendAttribute(sb, "z.name", _name);
-		HTMLs.appendAttribute(sb, "z.value", getDateFormat().format(_value));
-		if (_compact) sb.append(" z.compact=\"true\"");
-		return sb.toString();
-	}
 
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {

@@ -40,7 +40,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -1175,39 +1174,6 @@ public class Grid extends XulElement implements Paginated {
 	public String getZclass() {
 		return _zclass == null ? "z-grid" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		if (_align != null)
-			HTMLs.appendAttribute(sb, "align", _align);
-		if (_model != null) {
-			if (inPagingMold()) {
-				final Rows rows = getRows();
-				if (rows != null && rows.hasGroup()) HTMLs.appendAttribute(sb, "z.hasgroup", true);
-			}
-			HTMLs.appendAttribute(sb, "z.model", true);
-			final List rows = getRows().getChildren();
-			int index = rows.size();
-			for(final ListIterator it = rows.listIterator(index);
-			it.hasPrevious(); --index)
-				if(((Row)it.previous()).isLoaded()) break;
-			HTMLs.appendAttribute(sb, "z.lastLoadIdx", !inSpecialMold() || 
-					rows.size() <= _engine.getVisibleAmount() ? index : _engine.getVisibleAmount());
-		}
-		if (getOddRowSclass() != null)
-			HTMLs.appendAttribute(sb, "z.scOddRow", getOddRowSclass());
-		HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
-		if (inSpecialMold()) {
-			HTMLs.appendAttribute(sb, "z.cnt",  getRows().getChildren().size());
-			HTMLs.appendAttribute(sb, "z.cur",  _engine.getCurpos());
-			HTMLs.appendAttribute(sb, "z.amt",  _engine.getVisibleAmount());
-			HTMLs.appendAttribute(sb, "z.isrod",  true);
-			HTMLs.appendAttribute(sb, "z.preload",  getPreloadSize());
-		}
-		if (_vflex)
-			HTMLs.appendAttribute(sb, "z.vflex", true);
-		return sb.toString();
-	}
 
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {
@@ -1318,11 +1284,7 @@ public class Grid extends XulElement implements Paginated {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, RenderOnDemand, ChildChangedAware {
-		//ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return !isFixedLayout();
-		}
+	implements InnerWidth, RenderOnDemand {
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;

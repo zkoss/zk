@@ -171,27 +171,6 @@ public class Columns extends HeadersElement {
 			throw new UiException("Unsupported parent for columns: "+parent);
 		super.setParent(parent);
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		final Grid grid = getGrid();
-		if (grid != null)
-			HTMLs.appendAttribute(sb, "z.rid", grid.getUuid());
-
-		if (_columnsgroup)
-			HTMLs.appendAttribute(sb, "z.columnsgroup", _columnsgroup);
-		if (_columnshide)
-			HTMLs.appendAttribute(sb, "z.columnshide", _columnshide);
-		if (_mpop != null) HTMLs.appendAttribute(sb, "z.mpop", getMpopId());
-		return sb.toString();
-	}
-	public boolean setVisible(boolean visible) {
-		final boolean vis = super.setVisible(visible);
-		final Grid grid = getGrid();
-		if (grid != null)
-			grid.invalidate();
-		return vis;
-	}
 	
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (!(child instanceof Column))
@@ -315,9 +294,6 @@ public class Columns extends HeadersElement {
 				}
 			});
 			return item;
-		}
-		public String getOuterAttrs() {
-			return super.getOuterAttrs() + " z.autocreate=\"true\"";
 		}
 		public Object clone() {
 			final Columnmenupopup clone = (Columnmenupopup) super.clone();

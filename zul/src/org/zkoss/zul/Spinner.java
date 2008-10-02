@@ -113,36 +113,6 @@ public class Spinner extends NumberInputElement {
 	public String getZclass() {
 		return _zclass == null ?  "z-spinner" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		if (getConstraint() instanceof SimpleSpinnerConstraint) {
-			final SimpleSpinnerConstraint st = (SimpleSpinnerConstraint) getConstraint();
-			Integer min = st.getMin();
-			Integer max = st.getMax();
-			if (min != null)
-				HTMLs.appendAttribute(sb, "z.min", min.toString());
-			if (max != null)
-				HTMLs.appendAttribute(sb, "z.max", max.toString());
-		}
-		HTMLs.appendAttribute(sb, "z.step", _step);
-		HTMLs.appendAttribute(sb, "z.onchange", "true");
-		return sb.toString();
-	}
-	
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		final String style = getInnerStyle();
-		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
-	}
-	
-	private String getInnerStyle() {
-		final StringBuffer sb = new StringBuffer(32)
-			.append(HTMLs.getTextRelevantStyle(getRealStyle()));
-		HTMLs.appendStyle(sb, "width", getWidth());
-		HTMLs.appendStyle(sb, "height", getHeight());
-		return sb.toString();
-	}
 	
 	// -- super --//
 	public void setConstraint(String constr) {

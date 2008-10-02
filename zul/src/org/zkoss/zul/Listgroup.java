@@ -151,23 +151,7 @@ public class Listgroup extends Listitem {
 	public String getZclass() {
 		return _zclass == null ? "z-list-group" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.open", isOpen());
-		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		if (getListbox().inPagingMold())
-			HTMLs.appendAttribute(sb, "z."+Events.ON_OPEN, true);
-		else appendAsapAttr(sb, Events.ON_OPEN);
-		return sb.toString();
-	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		invalidate();
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		invalidate();
-	}
+
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

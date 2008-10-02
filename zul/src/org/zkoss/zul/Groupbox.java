@@ -25,7 +25,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.render.MultiBranch;
 import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zul.impl.XulElement;
 
@@ -87,11 +86,6 @@ public class Groupbox extends XulElement {
 	// super
 	public String getZclass() {
 		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : super.getZclass();
-	}
-	protected String getRealSclass() {
-		final String cls = super.getRealSclass();
-		final String added = isClosable() && !isOpen() ? getZclass() + "-collapsed" : "";
-		return cls == null ? added : cls + " " + added;
 	}
 	
 	/** Returns the CSS style for the content block of the groupbox.
@@ -183,21 +177,6 @@ public class Groupbox extends XulElement {
 		return null;
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_OPEN);
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-			//though widget.js handles onclick (if 3d), it is useful
-			//to support onClick for groupbox
-
-		if (!_closable)
-			sb.append(" z.closable=\"false\"");
-		return sb.toString();
-	}
-
 	//-- Component --//
 	public boolean insertBefore(Component child, Component insertBefore) {
 		if (child instanceof Caption) {
@@ -228,11 +207,7 @@ public class Groupbox extends XulElement {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable {
-		//-- MultiBranch --//
-		public boolean inDifferentBranch(Component child) {
-			return child instanceof Caption; //in different branch
-		}
+	implements Openable {
 		//-- Openable --//
 		public void setOpenByClient(boolean open) {
 			_open = open;

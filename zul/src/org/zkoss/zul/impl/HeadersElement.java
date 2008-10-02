@@ -45,18 +45,4 @@ abstract public class HeadersElement extends XulElement {
 			smartUpdate("z.sizable", sizable);
 		}
 	}
-
-	//super//
-	public String getOuterAttrs() {
-		StringBuffer sb = _sizable ? new StringBuffer(80): null;
-		sb = appendAsapAttr(sb, ZulEvents.ON_COL_SIZE);
-
-		final String attrs = super.getOuterAttrs();
-		if (sb == null) return attrs;
-
-		sb.append(attrs);
-		if (_sizable)
-			sb.append(" z.sizable=\"true\"");
-		return sb.toString();
-	}
 }

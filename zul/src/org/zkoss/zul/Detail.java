@@ -137,14 +137,7 @@ public class Detail extends XulElement {
 			throw new UiException("Unsupported parent for detail: "+parent);
 		super.setParent(parent);
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_OPEN);
-		if (_open)
-			HTMLs.appendAttribute(sb, "z.open", _open);
-		return sb.toString();
-	}
+
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

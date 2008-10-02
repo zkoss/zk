@@ -46,8 +46,6 @@ public class Row extends XulElement {
 	private Object _value;
 	private String _align, _valign;
 	private int[] _spans;
-	/** Used only to generate {@link #getChildAttrs}. */
-	private transient int _rsflags;
 	private boolean _nowrap;
 	/** whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
@@ -200,21 +198,8 @@ public class Row extends XulElement {
 		return j;
 	}
 
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		if (this instanceof Group || this instanceof Groupfoot || !isVisible()) return scls;
-		final String sclx = (String) getParent().getAttribute(Attributes.STRIPE_STATE);
-		return scls + (sclx != null ? " " + sclx : "");
-	}
-
 	public String getZclass() {
 		return _zclass == null ? "z-row" : super.getZclass();
-	}
-	
-	protected String getRealStyle() {
-		if (this instanceof Group || this instanceof Groupfoot || !isVisible()) return super.getRealStyle();
-		final Group g = getGroup();
-		return super.getRealStyle() + (g != null && !g.isOpen() ? "display:none" : "") ;
 	}
 	
 	/**
@@ -227,102 +212,7 @@ public class Row extends XulElement {
 		return (rows != null) ? rows.getGroup(getIndex()) : null;
 	}
 	
-	/** Returns the HTML attributes for the child of the specified index.
-	 */
-	public String getChildAttrs(int index) {
-		int realIndex = index, span = 1;
-		if (_spans != null) {
-			for (int j = 0; j < _spans.length; ++j) {
-				if (j == index) {
-					span = _spans[j];
-					break;
-				}
-				realIndex += _spans[j] - 1;
-			}
-		}
-
-		String colattrs = null, visible = null, hgh = null;
-		final Grid grid = getGrid();
-		if (grid != null) {
-			final Columns cols = grid.getColumns();
-			if (cols != null) {
-				final List colchds = cols.getChildren();
-				if (realIndex < colchds.size()) {
-					final Column col = (Column)colchds.get(realIndex);
-					colattrs = col.getColAttrs();
-					//if (span == 1) wd = col.getWidth();
-						//Bug 1633982: don't generate width if span > 1
-						//Side effect: the width might not be the same as specified
-					visible = col.isVisible() ? "" : "display:none";
-					hgh = col.getHeight();
-				}
-			}
-		}
-
-		final Component child = (Component)getChildren().get(index);
-		String style;
-		_rsflags = RS_NO_WIDTH|RS_NO_HEIGHT|RS_NO_DISPLAY;
-		try {
-			style = super.getRealStyle(); // since we overrode the original getRealStyle();
-
-			if (child instanceof Detail) {
-				final String wd = ((Detail) child).getWidth();
-				if (wd != null) style += "width:" + wd + ";";
-			}
-		} finally {
-			_rsflags = 0;
-		}
-
-		if (visible != null || hgh != null) {
-			final StringBuffer sb = new StringBuffer(80).append(style).append(visible);
-			HTMLs.appendStyle(sb, "height", hgh);
-			style = sb.toString();
-		}
-		String clx = child instanceof Detail ? ((Detail)child).getZclass() + "-outer" : getZclass() + "-inner";
-		
-		if (colattrs == null && style.length() == 0 && span == 1)
-			return " class=\"" + clx + "\"";
-
-		final StringBuffer sb = new StringBuffer(100);
-		if (colattrs != null)
-			sb.append(colattrs);
-		if (span != 1)
-			sb.append(" colspan=\"").append(span).append('"');
-		HTMLs.appendAttribute(sb, "style", style);
-		
-		return sb.append(" class=\"").append(clx).append('"').toString();
-	}
-
 	//-- super --//
-	protected int getRealStyleFlags() {
-		return super.getRealStyleFlags() | _rsflags;
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null)
-			sb.append(clkattrs);
-
-		HTMLs.appendAttribute(sb, "z.rid", getGrid().getUuid());
-		HTMLs.appendAttribute(sb, "align", _align);
-		HTMLs.appendAttribute(sb, "valign", _valign);
-		HTMLs.appendAttribute(sb, "z.visible", isVisible());
-		if (_nowrap)
-			HTMLs.appendAttribute(sb, "nowrap", "nowrap");
-
-		final Grid grid = getGrid();
-		if (grid != null && grid.getModel() != null) {
-			HTMLs.appendAttribute(sb, "z.loaded", _loaded);
-
-			if (_loaded && !grid.inPagingMold()) {
-				final Component c = getNextSibling();
-				if (c instanceof Row && !((Row)c)._loaded)
-					HTMLs.appendAttribute(sb, "z.skipsib", "true");
-			}
-		}
-		return sb.toString();
-	}
 	public void setStyle(String style) {
 		if (style != null && style.length() == 0) style = null;
 
@@ -402,31 +292,5 @@ public class Row extends XulElement {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		afterUnmarshal();
-	}
-	
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws IOException {
-		final StringBuffer sb = new StringBuffer(128)
-			.append("<td z.type=\"Gcl\" id=\"").append(child.getUuid())
-			.append("!chdextr\"");
-
-		final Grid grid = getGrid();
-		if (grid != null) {
-			int j = 0;
-			for (Iterator it = getChildren().iterator(); it.hasNext(); ++j)
-				if (child == it.next())
-					break;
-			sb.append(getChildAttrs(j));
-		}
-		sb.append("><div id=\"").append(child.getUuid())
-		.append("!cell\"").append(" class=\"").append(getZclass())
-		.append("-cnt");
-		if (grid.isFixedLayout())
-			sb.append(" z-overflow-hidden");
-		sb.append("\">");
-		
-		if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
-		else out.insert(0, sb.toString());
-		out.append("</div></td>");
 	}
 }

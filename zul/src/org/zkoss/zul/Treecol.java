@@ -120,16 +120,6 @@ public class Treecol extends HeaderElement {
 	public String getZclass() {
 		return _zclass == null ? "z-tree-col" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		return clkattrs == null ? attrs: attrs + clkattrs;
-	}
-	/** Invalidates the whole tree. */
-	protected void invalidateWhole() {
-		final Tree tree = getTree();
-		if (tree != null) tree.invalidate();
-	}
 
 	//-- Component --//
 	public void setParent(Component parent) {

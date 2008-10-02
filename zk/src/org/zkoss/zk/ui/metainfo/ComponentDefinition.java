@@ -24,7 +24,6 @@ import java.net.URL;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.render.ComponentRenderer;
 
 /**
  * A component definition.
@@ -231,54 +230,31 @@ public interface ComponentDefinition extends Cloneable {
 	/** Adds a mold based on an URI.
 	 *
 	 * @param moldURI an URI of the mold; never null nor empty.
-	 * If it starts with "class:", the following substring is assumed to be
-	 * the class name of {@link ComponentRenderer}, and then it invokes
-	 * {@link #addMold(String, ComponentRenderer)}.
-	 * If not staring with "class:", it is pure an URI, and it may
-	 * contain XEL expressions.
+	 * It might contain XEL expressions.
 	 * @param z2cURI the URI of ZCS-to-CSS converter.
+	 * It might contain XEL expressions.
 	 * Ignored if null.
 	 * @since 3.5.1
 	 */
 	public void addMold(String name, String moldURI, String z2cURI);
-	/** Adds a mold based on {@link ComponentRenderer}.
-	 *
-	 * @param renderer a component renderer. It is shared
-	 * by all component instances belonging to this definition.
-	 * @param z2cURI the URI of ZCS-to-CSS converter.
-	 * Ignored if null.
-	 * @since 3.5.1
-	 */
-	public void addMold(String name, ComponentRenderer renderer, String z2cURI);
 
-	/** @deprecated As of release 3.5.1, replaced with
-	 * {@link #addMold(String, String, String)}.
-	 */
-	public void addMold(String name, String moldURI);
-	/** @deprecated As of release 3.5.1, replaced with
-	 * {@link #addMold(String, ComponentRenderer, String)}.
-	 */
-	public void addMold(String name, ComponentRenderer renderer);
-
-	/** Returns the URI (String) or an instance of {@link ComponentRenderer}
-	 * of the mold, or null if no such mold available.
-	 * In other words, if a String instance is returned, it is the URI
-	 * of the mold. If a {@link ComponentRenderer}
-	 * instance is returned, it is the object responsible to handle
-	 * the generation of the component's output.
+	/** Returns the URI (String) of the mold, or null if no such mold available.
 	 *
 	 * <p>If the mold URI contains an expression, it will be evaluated first
 	 * before returning.
 	 *
 	 * @param name the mold name
-	 * @return an URI in String, or a {@link ComponentRenderer},
-	 * as of release 3.0.0
+	 * @return an URI in String
 	 * @see org.zkoss.zk.ui.AbstractComponent#redraw
 	 */
-	public Object getMoldURI(Component comp, String name);
+	public String getMoldURI(Component comp, String name);
 	/** Returns the URI of the ZCS-to-CSS converter for the specified mold.
+	 *
 	 * <p>ZCS is ZK cacasding style that allows developers to customize
 	 * CSS with the component names.
+	 *
+	 * <p>If the URI contains an expression, it will be evaluated first
+	 * before returning.
 	 *
 	 * @param name the mold name
 	 * @since 3.5.1

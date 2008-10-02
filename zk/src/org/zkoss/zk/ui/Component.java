@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
-import java.io.Writer;
-import java.io.IOException;
 
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.EventListener;
@@ -59,6 +57,12 @@ import org.zkoss.zk.scripting.Namespace;
  * @author tomyeh
  */
 public interface Component extends java.io.Serializable, Cloneable {
+	/** Returns the component type.
+	 * For example, "zul.wnd.Window".
+	 * @since 5.0.0
+	 */
+	public String getType();
+
 	/** Returns the component definition of this component (never null).
 	 */
 	public ComponentDefinition getDefinition();
@@ -704,7 +708,8 @@ public interface Component extends java.io.Serializable, Cloneable {
 	String originalEvent, String targetPath, String targetEvent);
 
 	//-- drawing --//
-	/** Returns if this component needs to be redrawn.
+	/** Returns if this component needs to be redrawn at the client.
+	 * <p>Application developers rarely need to call this method.
 	 * <p>Note:
 	 * <ol>
 	 * <li>It always returns true if it doesn't belong to any page
@@ -712,7 +717,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * <li>It always returns true if the current execution is not an
 	 * asynchroous update (so redrawn is always required).</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
-	 * too, but this method returns false since {@link #invalidate}
+	 * too, but this method returns false if {@link #invalidate}
 	 * was not called against this component.</li>
 	 * </ol>
 	 * @since 3.0.5
@@ -721,22 +726,15 @@ public interface Component extends java.io.Serializable, Cloneable {
 	/** Invalidates this component by setting the dirty flag
 	 * such that it will be redraw the whole content later.
 	 *
+	 * <p>An application developer rarely needs to call this method, unless
+	 * he wants to work around a visual-consistency bug, i.e.,
+	 * the view (at the client) is different from the component's status
+	 * at the server.
+	 *
 	 * <p>It can be called only in the request-processing and event-processing
 	 * phases; excluding the redrawing phase.
 	 */
 	public void invalidate();
-
-	/** AuRequest this component to render (aka., redraw) itself
-	 * and its children.
-	 *
-	 * <p>It is called in the redrawing phase by the kernel, so it is too late
-	 * to call {@link #invalidate()} in this method.
-	 */
-	public void redraw(Writer out) throws IOException;
-
-	/** Returns whether this component allows to have any child.
-	 */
-	public boolean isChildable();
 
 	/** Returns the namespace to store variables and functions belonging
 	 * to the ID space of this component.

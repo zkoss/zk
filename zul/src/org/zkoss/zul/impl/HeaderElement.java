@@ -41,7 +41,7 @@ abstract public class HeaderElement extends LabelImageElement {
 	public void setAlign(String align) {
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			invalidateWhole();
+			smartUpdate("align", _align);
 		}
 	}
 	/** Returns the vertical alignment of this grid.
@@ -55,36 +55,7 @@ abstract public class HeaderElement extends LabelImageElement {
 	public void setValign(String valign) {
 		if (!Objects.equals(_valign, valign)) {
 			_valign = valign;
-			invalidateWhole();
+			smartUpdate("valign", _valign);
 		}
 	}
-	/** Called when this component's content is changed.
-	 *
-	 * <p>Derived must override it to either do nothing, or invalidate
-	 * parent or others.
-	 */
-	abstract protected void invalidateWhole();
-
-	/** Returns the attributes used to generate HTML TD tag for each
-	 * cell of the rows contained in the parent control,
-	 * e.g., {@link org.zkoss.zul.Listcell}.
-	 * <p>Used by component developers.
-	 */
-	public String getColAttrs() {
-		final StringBuffer sb = new StringBuffer(32);
-		HTMLs.appendAttribute(sb, "align", _align);
-		HTMLs.appendAttribute(sb, "valign", _valign);
-		return sb.toString();
-	}
-
-	//-- super --//
-	public boolean setVisible(boolean visible) {
-		final boolean vis = super.setVisible(visible);
-		invalidateWhole();
-		return vis;
-	}
-	public String getOuterAttrs() {
-		return super.getOuterAttrs() + getColAttrs();
-	}
-
 }

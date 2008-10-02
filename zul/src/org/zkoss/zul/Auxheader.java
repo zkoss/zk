@@ -94,27 +94,6 @@ public class Auxheader extends HeaderElement {
 	public String getZclass() {
 		return _zclass == null ? "z-auxheader" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs == null && _colspan == 1 && _rowspan == 1)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		if (clkattrs != null) sb.append(clkattrs);
-		if (_colspan != 1) HTMLs.appendAttribute(sb, "colspan", _colspan);
-		if (_rowspan != 1) HTMLs.appendAttribute(sb, "rowspan", _rowspan);
-		return sb.toString();
-	}
-
-	protected void invalidateWhole() {
-		Component p = getParent();
-		if (p != null) {
-			p = p.getParent();
-			if (p != null)
-				p.invalidate();
-		}
-	}
 
 	//Component//
 	public void setParent(Component parent) {

@@ -58,29 +58,4 @@ public class Panelchildren extends XulElement {
 	public String getZclass() {
 		return _zclass == null ?  "z-panel-children" : super.getZclass();
 	}
-	
-	/** Returns the real style class used for the content block of the panel.
-	 *
-	 * <p>If {@link #setSclass} was called with a non-empty value,
-	 * say, "z-panel-children", then
-	 * <ol>
-	 * <li>Case 1: If {@link Panel#getBorder} is "normal", "z-panel-children" is returned.</li>
-	 * <li>Case 2: Otherwise, "z-panel-children-noborder" is returned.</li>
-	 * <li>Case 3: If {@link Panel#getTitle()} and {@link Panel#getCaption()} are
-	 * null, "z-panel-children-noheader" is returned with above cases.</li>
-	 * </ol>
-	 */
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String zcls = getZclass();
-		final Panel parent = (Panel) getParent();
-		if (parent != null) {
-			final String title = zcls != null && parent.getTitle().length() == 0 
-				&& parent.getCaption() == null ? zcls + "-noheader" : "";
-			final String border = parent.getBorder();
-			return scls + ("normal".equals(border) ? "" : ' ' + zcls + "-noborder") + (title.length() > 0 ? ' ' + title : title);
-		}
-		return scls;
-			
-	}
 }

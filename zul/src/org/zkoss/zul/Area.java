@@ -107,21 +107,8 @@ public class Area extends AbstractComponent {
 			tooltiptext = null;
 		if (!Objects.equals(_tooltiptext, tooltiptext)) {
 			_tooltiptext = tooltiptext;
-			smartUpdate("title", _tooltiptext);
+			smartUpdate("title", getTooltiptext());
 		}
-	}
-	/** Returns the attributes for generating the  HTML tag; never return null.
-	 *
-	 * <p>Used only by component developers.
-	 */
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64)
-			.append(" href=\"javascript:;\"");
-		HTMLs.appendAttribute(sb, "shape", _shape);
-		HTMLs.appendAttribute(sb, "coords", _coords);
-		HTMLs.appendAttribute(sb, "title", _tooltiptext);
-		HTMLs.appendAttribute(sb, "z.aid", getId());
-		return sb.toString();
 	}
 
 	//-- super --//
@@ -136,5 +123,8 @@ public class Area extends AbstractComponent {
 		if (parent != null && !(parent instanceof Imagemap))
 			throw new UiException("Area's parent must be imagemap, not "+parent);
 		super.setParent(parent);
+	}
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		//TODO
 	}
 }

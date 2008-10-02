@@ -20,6 +20,8 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
+
+import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -36,6 +38,13 @@ import org.zkoss.zul.impl.XulElement;
 public class Div extends XulElement {
 	private String _align;
 
+	/** Returns the component type, zul.wgt.Div.
+	 * @since 5.0.0
+	 */
+	public String getType() {
+		return "zul.wgt.Div";
+	}
+
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
 	 */
@@ -50,20 +59,14 @@ public class Div extends XulElement {
 
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			smartUpdate("align", _align);
+			smartUpdate("align", getAlign());
 		}
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final String clkattrs = getAllOnClickAttrs();
-		final String attrs = super.getOuterAttrs();
-		if (_align == null && clkattrs == null)
-			return attrs;
+	//super//
+	protected void renderProperties(ContentRenderer renderer) {
+		super.renderProperties(renderer);
 
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		HTMLs.appendAttribute(sb, "align",  _align);
-		if (clkattrs != null) sb.append(clkattrs);
-		return sb.toString();
+		render(renderer, "align", getAlign());
 	}
 }

@@ -76,15 +76,9 @@ public class Progressmeter extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-progressmeter" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.value", _val);
-		return sb.toString();
-	}
 
 	//-- Component --//
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

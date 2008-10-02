@@ -39,6 +39,25 @@ public class HTMLs {
 			sb.append(' ').append(name).append("=\"")
 				.append(XMLs.encodeAttribute(val)).append('"');
 	}
+	/** Appends an attribute to the string buffer for HTML/XML (name="val").
+	 * If emptyIgnored is true and val is null or empty (if String),
+	 * nothing is generated.
+	 *
+	 * <p>Note: {@link XMLs#encodeAttribute} is called automatically
+	 * to encode val.
+	 *
+	 * @param emptyIgnored whether to ignore a null or empty string.
+	 * If false, it is always generated (null is generated as "null").
+	 * @since 5.0.0
+	 */
+	public static final
+	void appendAttribute(StringBuffer sb, String name, String val,
+	boolean emptyIgnored) {
+		if (!emptyIgnored || (val != null && val.length() != 0))
+			sb.append(' ').append(name).append("=\"")
+				.append(val != null ? XMLs.encodeAttribute(val): null)
+				.append('"');
+	}
 	/** Appends an attribute with a int value to the string buffer for HTML/XML (name="val").
 	 */
 	public static final

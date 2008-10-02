@@ -103,7 +103,7 @@ public class Text extends AbstractComponent implements RawId {
 		if (idRequired)
 			out.write("</span>");
 	}
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

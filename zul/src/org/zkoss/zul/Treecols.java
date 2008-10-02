@@ -45,14 +45,6 @@ public class Treecols extends HeadersElement {
 			tree.invalidate();
 		return vis;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		final Tree tree = getTree();
-		if (tree != null)
-			HTMLs.appendAttribute(sb, "z.rid", tree.getUuid());
-		return sb.toString();
-	}
 
 	public String getZclass() {
 		return _zclass == null ? "z-tree-cols" : super.getZclass();

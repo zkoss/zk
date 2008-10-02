@@ -130,19 +130,6 @@ public class Splitter extends XulElement {
 				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getZclass();
 	}
 	
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_OPEN);
-
-		if ("vertical".equals(getOrient()))
-			HTMLs.appendAttribute(sb, "z.vert", "true");
-		
-		if (!"none".equals(_collapse))
-			HTMLs.appendAttribute(sb, "z.colps", _collapse);
-		if (!_open) sb.append(" z.open=\"false\"");
-		return sb.toString();
-	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Box))
 			throw new UiException("Wrong parent: "+parent);
@@ -150,7 +137,7 @@ public class Splitter extends XulElement {
 	}
 	/** Not allow any children.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

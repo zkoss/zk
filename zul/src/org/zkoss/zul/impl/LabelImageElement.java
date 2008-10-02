@@ -269,14 +269,6 @@ public class LabelImageElement extends LabelElement {
 			dt.getExecution().encodeURL(_hoversrc): null;
 	}
 
-	//super//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if (_hoversrc != null || _hoverimg != null)
-			return attrs + " z.hvig=\"" + getEncodedHoverURL() +'"';
-		return attrs;
-	}
-
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

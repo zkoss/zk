@@ -46,7 +46,6 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.client.InnerWidth;
 import org.zkoss.zk.ui.ext.client.RenderOnDemand;
 import org.zkoss.zk.ui.ext.client.Selectable;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -2188,63 +2187,6 @@ public class Listbox extends XulElement implements Paginated {
 	public String getZclass() {
 		return _zclass == null ? "z-listbox" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-
-		if (inSelectMold()) {
-			HTMLs.appendAttribute(sb, "name", _name);
-			HTMLs.appendAttribute(sb, "size",  getRows());
-
-			if (isMultiple())
-				HTMLs.appendAttribute(sb, "multiple",  "multiple");
-			if (_disabled)
-				HTMLs.appendAttribute(sb, "disabled",  "disabled");
-			if (_tabindex >= 0)
-				HTMLs.appendAttribute(sb, "tabindex", _tabindex);
-		} else {
-			HTMLs.appendAttribute(sb, "z.name", _name);
-			HTMLs.appendAttribute(sb, "z.size",  _rows);
-			if (_disabled)
-				HTMLs.appendAttribute(sb, "z.disabled",  true);
-			if (_multiple)
-				HTMLs.appendAttribute(sb, "z.multiple", true);
-			HTMLs.appendAttribute(sb, "z.selId", getSelectedId());
-			//if (_checkmark)
-			//	HTMLs.appendAttribute(sb, "z.checkmark",  true);
-			if (_vflex)
-				HTMLs.appendAttribute(sb, "z.vflex", true);
-			if (_model != null)
-				HTMLs.appendAttribute(sb, "z.model", true);
-
-			if (getOddRowSclass() != null)
-				HTMLs.appendAttribute(sb, "z.scOddRow", getOddRowSclass());
-			
-			if (getModel() != null) {
-				if (inPagingMold() && hasGroup()) HTMLs.appendAttribute(sb, "z.hasgroup", true);
-				int index = getItemCount();
-				for(final ListIterator it = getItems().listIterator(index);
-				it.hasPrevious(); --index)
-					if(((Listitem)it.previous()).isLoaded())
-						break;
-				
-				HTMLs.appendAttribute(sb, "z.lastLoadIdx", !inSpecialMold() || 
-						getItemCount() <= _engine.getVisibleAmount() ? index : _engine.getVisibleAmount());
-			}
-			HTMLs.appendAttribute(sb, "z.fixed", isFixedLayout());
-			if (inSpecialMold()) {
-				HTMLs.appendAttribute(sb, "z.cnt",  getItemCount());
-				HTMLs.appendAttribute(sb, "z.cur",  _engine.getCurpos());
-				HTMLs.appendAttribute(sb, "z.amt",  _engine.getVisibleAmount());
-				HTMLs.appendAttribute(sb, "z.isrod",  true);
-				HTMLs.appendAttribute(sb, "z.preload",  getPreloadSize());
-			}
-		}
-
-		appendAsapAttr(sb, Events.ON_SELECT);
-		return sb.toString();
-	}
-
 	private class ItemIter implements ListIterator, java.io.Serializable {
 		private ListIterator _it;
 		private int _j;
@@ -2358,11 +2300,7 @@ public class Listbox extends XulElement implements Paginated {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, Selectable, Cropper, RenderOnDemand, ChildChangedAware {
-		//ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return !inSelectMold() && !isFixedLayout();
-		}
+	implements InnerWidth, Selectable, Cropper, RenderOnDemand {
 		//InnerWidth//
 		public void setInnerWidthByClient(String width) {
 			_innerWidth = width == null ? "100%": width;

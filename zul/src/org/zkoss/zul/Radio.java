@@ -138,16 +138,6 @@ public class Radio extends Checkbox {
 		return group != null ? group.getName(): getUuid();
 	}
 
-	/** Returns the inner attributes for generating the HTML radio tag
-	 * (the name and value attribute).
-	 * <p>Used only by component developers.
-	 */
-	public String getInnerAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getInnerAttrs());
-		HTMLs.appendAttribute(sb, "value",  getValue());
-		return sb.toString();
-	}
 	/** Returns the Style of radio label
 	 *
 	 * <p>Default: "z-radio"

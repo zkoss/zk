@@ -293,58 +293,11 @@ public class Image extends XulElement {
 		}
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		final boolean bHover = _hoversrc != null || _hoverimg != null;
-		final boolean bAlphafix = alphafix();
-		if (!bAlphafix && !bHover)
-			return clkattrs == null ? attrs: attrs + clkattrs;
-
-		//Request 1522329
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		if (clkattrs != null) sb.append(clkattrs);
-		if (bAlphafix)
-			sb.append(" z.alpha=\"true\"");
-		if (bHover)
-			HTMLs.appendAttribute(sb, "z.hvig", getgetEncodedHoverURL());
-		return sb.toString();
-	}
-	/** Tests whether to apply Request 1522329.
-	 * To limit the side effect, enable it only if mold is alphafix (and IE6).
-	 */
-	private boolean alphafix() {
-		if ("alphafix".equals(getMold())) {
-			final Desktop dt = getDesktop();
-			if (dt != null) {
-				final Execution exec = dt.getExecution();
-				return exec != null && exec.isExplorer() && !exec.isExplorer7();
-			}
-		}
-		return false;		
-	}
-	public String getInnerAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getInnerAttrs());
-		HTMLs.appendAttribute(sb, "align",  _align);
-		HTMLs.appendAttribute(sb, "border",  _border);
-		HTMLs.appendAttribute(sb, "hspace",  _hspace);
-		HTMLs.appendAttribute(sb, "vspace",  _vspace);
-		HTMLs.appendAttribute(sb, "src",  getEncodedURL());
-		return sb.toString();
-	}
-
 	//-- Component --//
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
-	}
-	public void smartUpdate(String attr, String value) {
-		//Request 1522329: to simplify the client, we always invalidate if alphafix
-		if (alphafix()) invalidate();
-		else super.smartUpdate(attr, value);
 	}
 
 	//-- ComponentCtrl --//

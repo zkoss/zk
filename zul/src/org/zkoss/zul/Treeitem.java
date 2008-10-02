@@ -401,9 +401,6 @@ public class Treeitem extends XulElement {
 			tc.addVisibleItemCount(count);
 	}
 	
-	//impl note: no getOuterAttrs, ON_OPEN..., since treeitem is virtual
-	//and the related codes are in treerow
-
 	//-- Component --//
 	public void setParent(Component parent) {
 		final Component oldp = getParent();

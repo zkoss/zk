@@ -44,19 +44,6 @@ public class Menupopup extends Popup {
 	public String getZclass() {
 		return _zclass == null ? "z-menu-popup" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_OPEN);
-		if (typeRequired())
-				sb.append(" z.type=\"zul.menu2.Mpop2\"");
-			//to minimize HTML's size, generate z.type only if necessary
-		return sb.toString();
-	}
-	private boolean typeRequired() {
-		return !(getParent() instanceof Menu);
-	}
 
 	//-- Component --//
 	public boolean insertBefore(Component child, Component insertBefore) {

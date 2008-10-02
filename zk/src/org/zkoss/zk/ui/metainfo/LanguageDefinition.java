@@ -613,8 +613,7 @@ public class LanguageDefinition {
 
 	/** Sets the macro template.
 	 *
-	 * @param moldURI the mold URI. If it starts with "class:", it
-	 * means a class that implements {@link org.zkoss.zk.ui.render.ComponentRenderer}.
+	 * @param moldURI the mold URI.
 	 */
 	public void setMacroTemplate(Class klass, String moldURI) {
 		_macrotmpl = klass != null ? new MacroTemplate(klass, moldURI): null;

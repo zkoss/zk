@@ -189,23 +189,10 @@ public class Audio extends XulElement {
 			this, _audver, _audio.getName(), _audio.getFormat());
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
-		HTMLs.appendAttribute(sb, "autostart",  _autostart);
-		HTMLs.appendAttribute(sb, "loop",  _loop);
-		HTMLs.appendAttribute(sb, "align",  _align);
-		HTMLs.appendAttribute(sb, "border",  _border);
-		sb.append(" z.autohide=\"true\"");
-		return sb.toString();
-	}
-
 	//-- Component --//
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

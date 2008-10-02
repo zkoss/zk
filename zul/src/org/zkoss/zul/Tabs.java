@@ -155,17 +155,4 @@ public class Tabs extends XulElement {
 		if (tabbox != null && tabbox.inAccordionMold())
 			tabbox.invalidate();
 	}
-	
-	//-- super --//
-	public String getOuterAttrs() {
-		Tabbox tabbox = getTabbox();
-		if(!tabbox.inAccordionMold()){
-			final StringBuffer sb =
-				new StringBuffer(64).append(super.getOuterAttrs());
-			if (!"start".equals(_align))
-				HTMLs.appendAttribute(sb, "z.align", _align.substring(0,1));
-			return sb.toString();
-		}
-		return super.getOuterAttrs();
-	}
 }

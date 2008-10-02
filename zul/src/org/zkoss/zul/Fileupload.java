@@ -72,7 +72,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	private boolean _native;
 
 	/** No child is allowed. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

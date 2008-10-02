@@ -132,50 +132,7 @@ public class Checkbox extends LabelImageElement {
 		}
 	}
 
-	/** Returns the attributes used by the embedded HTML LABEL tag.
-	 * It returns text-relevant styles only.
-	 * <p>Used only by component developer.
-	 */
-	public String getLabelAttrs() {
-		final String style = HTMLs.getTextRelevantStyle(getRealStyle());
-		return style.length() > 0 ? " style=\""+style+'"': "";
-	}
-
 	//-- super --//
-	/** Appends interior attributes for generating the HTML checkbox tag
-	 * (the name, disabled and other attribute).
-	 * <p>Used only by component developers.
-	 */
-	public String getInnerAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getInnerAttrs());
-
-		HTMLs.appendAttribute(sb, "name", getName());
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "disabled",  "disabled");
-		if (isChecked())
-			HTMLs.appendAttribute(sb, "checked",  "checked");
-		if (_tabindex >= 0)
-			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
-		return sb.toString();
-	}
-	/** Appends exterior attributes for generating the HTML span tag
-	 * (the event relevant attribute).
-	 * <p>Used only by component developers.
-	 */
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_FOCUS);
-		appendAsapAttr(sb, Events.ON_BLUR);
-		appendAsapAttr(sb, Events.ON_CHECK);
-		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-		appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
-			//no z.lfclk since it is handled by widget.js
-
-		return sb.toString();
-	}
 	/** Returns the Style of checkbox label
 	 *
 	 * <p>Default: "z-chkbox"

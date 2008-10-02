@@ -207,47 +207,18 @@ public class Tab extends LabelImageElement {
 	}
 
 	// -- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_SELECT);
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null)
-			sb.append(clkattrs);
-		return sb.toString();
-	}
-	
 	public String getZclass(){				
 		String scls = super.getZclass();
 		if (scls == null)
 			scls = "z-tab";
 		return scls;
 	}
-	protected String getRealSclass() {
-		String cls = super.getRealSclass();
-		String added = getZclass();
-		if (isDisabled())
-			added += "-disd";
-		if (isSelected())
-			added += "-seld";
-		return cls != null ? cls + " " + added : added;
-	}
 
 	// -- Component --//
-	public void invalidate() {
-		final Tabbox tabbox = getTabbox();
-		if (tabbox != null && tabbox.inAccordionMold()) {
-			tabbox.invalidate();			
-		} else {			
-			super.invalidate();
-		}
-	}
-
 	/**
 	 * No child is allowed.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

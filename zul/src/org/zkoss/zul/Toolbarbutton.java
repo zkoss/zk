@@ -54,13 +54,6 @@ public class Toolbarbutton extends LabelImageElement {
 		setImage(image);
 	}
 
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getZclass() + "-disd": "";
-		return scls != null && scls.length() > 0 ? scls + " " + added
-				: added;
-	}
-
 	// super
 	public String getZclass() {
 		return _zclass == null ?  "z-toolbar-button" : super.getZclass();
@@ -179,37 +172,10 @@ public class Toolbarbutton extends LabelImageElement {
 	}
 
 	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_FOCUS);
-		appendAsapAttr(sb, Events.ON_BLUR);
-		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-			//no z.dbclk to avoid confusing
-			//no z.lfclk since it is handled by widget.js
-
-		if (_href == null) {
-			sb.append(" href=\"javascript:;\"");
-		} else {
-			sb.append(" href=\"")
-				.append(getDesktop().getExecution().encodeURL(_href))
-				.append('"');
-				//When hyper to other page, we always show progress dlg
-		}
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "z.disd", true);
-		HTMLs.appendAttribute(sb, "target", _target);
-
-		if (_tabindex >= 0)
-			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
-		return sb.toString();
-	}
-
 	//Component//
 	/** No child is allowed.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

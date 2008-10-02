@@ -34,7 +34,7 @@ public class Menuseparator extends XulElement {
 		return _zclass == null ? "z-menu-separator" : super.getZclass();
 	}
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

@@ -114,11 +114,4 @@ public class Toolbar extends XulElement {
 			invalidate();
 		}
 	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		return clkattrs == null ? attrs: attrs + clkattrs;
-	}
 }

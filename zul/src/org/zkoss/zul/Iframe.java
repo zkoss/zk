@@ -207,32 +207,10 @@ public class Iframe extends XulElement {
 			this, _medver, _media.getName(), _media.getFormat());
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs())
-			.append(" frameborder=\"0\"");
-			//frameborder is default to 0
-			//User has to use style to customize the border
-
-		HTMLs.appendAttribute(sb, "align", _align);
-		HTMLs.appendAttribute(sb, "name", _name);
-		HTMLs.appendAttribute(sb, "src", getEncodedSrc());
-		appendAsapAttr(sb, Events.ON_URI_CHANGE);
-
-		if (!"auto".equals(_scrolling))
-			HTMLs.appendAttribute(sb, "scrolling", 
-				"true".equals(_scrolling) ? "yes":
-				"false".equals(_scrolling) ? "no": _scrolling);
-		if (_autohide)
-			HTMLs.appendAttribute(sb, "z.autohide", _autohide);
-		return sb.toString();
-	}
-
 	//-- Component --//
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 

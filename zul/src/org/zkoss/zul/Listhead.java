@@ -56,14 +56,6 @@ public class Listhead extends HeadersElement {
 	public String getZclass() {
 		return _zclass == null ? "z-list-head" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		final Listbox listbox = getListbox();
-		if (listbox != null)
-			HTMLs.appendAttribute(sb, "z.rid", listbox.getUuid());
-		return sb.toString();
-	}
 
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))

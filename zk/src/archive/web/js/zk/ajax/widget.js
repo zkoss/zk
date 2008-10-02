@@ -15,8 +15,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zk.Widget = zk.$extends(zk.Object, {
-	/** The identifier. */
-	id: null,
+	/** The UUID. */
+	uuid: null,
 	/** The next sibling (readonly). */
 	nextSibling: null,
 	/** The previous sibling widget (readonly). */
@@ -29,9 +29,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** The last child widget (readonly). */
 	lastChild: null,
 
+	/** Whether this widget has a copy at the server (readonly). */
+	inServer: false,
+
 	/** Constructor. */
-	$init: function (id) {
-		this.id = id ? id: zk.Widget.nextId();
+	$init: function (uuid) {
+		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 	},
 	/** Appends a child widget.
 	 */
@@ -98,15 +101,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	/** Attaches the widget to the DOM tree.
+	 * @param id the DOM element's ID.
 	 */
 	attach: function (id, options) {
-		zk.debug("attach", this.id, id);
+		zk.debug("attach", this.uuid, id);
 	}
 }, {
-	/** Returns the next unquie widget ID.
+	/** Returns the next unquie widget UUID.
 	 */
-	nextId: function () {
-		return "_z_" + this._nextId++;
+	nextUuid: function () {
+		return "_z_" + this._nextUuid++;
 	},
-	_nextId: 0
+	_nextUuid: 0
 });

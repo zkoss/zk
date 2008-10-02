@@ -56,18 +56,6 @@ public class Listcell extends LabelImageElement {
 		final Component comp = getParent();
 		return comp != null ? (Listbox)comp.getParent(): null;
 	}
-	
-	protected String getRealStyle() {
-		final Listheader h = getListheader();
-		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
-				"display:none;" : super.getRealStyle();
-	}
-	public String getRealSclass() {
-		HtmlBasedComponent p = (HtmlBasedComponent) getParent();
-		if (!(p instanceof Listgroup) && !(p instanceof Listgroupfoot)) return super.getRealSclass();
-		String clx = super.getRealSclass();
-		return clx != null ? clx + " " + p.getZclass() + "-inner" : p.getZclass() + "-inner";
-	}
 
 	public String getZclass() {
 		return _zclass == null ? "z-list-cell" : super.getZclass();
@@ -155,94 +143,10 @@ public class Listcell extends LabelImageElement {
 		throw new UnsupportedOperationException("Set listheader's width instead");
 	}
 
-	//-- Internal use only --//
-	/** Returns the prefix of the first column (in HTML tags), null if this
-	 * is not first column. Called only by listcell.dsp.
-	 */
-	public String getColumnHtmlPrefix() {
-		final Listitem item = (Listitem)getParent();
-		final Listbox listbox = getListbox();
-		if (listbox != null && item.getFirstChild() == this) {
-			final StringBuffer sb = new StringBuffer(64);
-			if (item instanceof Listgroup) {
-				sb.append("<img src=\"")
-				.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
-				.append("\" class=\"").append(item.getZclass()+"-img ")
-				.append(item.getZclass()).append(((Listgroup) item).isOpen() ? "-img-open" : "-img-close")
-				.append("\" align=\"absmiddle\"/>");
-			}
-			if (listbox.isCheckmark()) {
-				if (item.isCheckable()) {
-					sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
-						.append('"');
-					if (item.isDisabled())
-						sb.append(" disabled=\"disabled\"");
-					if (item.isSelected())
-						sb.append(" checked=\"checked\"");
-					if (!listbox.isMultiple()) 
-						sb.append(" name=\"").append(listbox.getUuid()).append("\"");
-					sb.append(" id=\"").append(item.getUuid())
-						.append("!cm\" z.type=\"Lcfc\"/>");
-				} else {
-					sb.append("<span class=\"checkmark-spacer\"></span>");
-				}
-				return sb.toString();
-			} else if (sb.length() > 0) return sb.toString();
-		}
-		
-		//To make the listbox's height more correct, we have to generate &nbsp;
-		//for empty cell. Otherwise, IE will make the height too small
-		final boolean empty = getImage() == null
-		&& getLabel().length() == 0 && getChildren().isEmpty();
-		return empty ? "&nbsp;": null;
-		
-	}
-	/** Returns the postfix of the first column (in HTML tags), null if this
-	 * is not first column. Called only by listcell.jsp.
-	 */
-	public String getColumnHtmlPostfix() {
-		return null;
-	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-
-		final Listheader header = getListheader();
-		final String clkattrs = getAllOnClickAttrs();
-		if (header == null && clkattrs == null && _span == 1)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		if (header != null) sb.append(header.getColAttrs());
-		if (clkattrs != null) sb.append(clkattrs);
-		if (_span != 1) HTMLs.appendAttribute(sb, "colspan", _span);
-
-		return sb.toString();
-	}
-
-	/** Returns the attributes used by the embedded HTML LABEL tag.
-	 * It returns text-relevant styles only.
-	 * <p>Used only by component developer.
-	 */
-	public String getLabelAttrs() {
-		final String style = HTMLs.getTextRelevantStyle(getRealStyle());
-		return style.length() > 0 ? " style=\""+style+'"': "";
-	}
-	
 	//-- Component --//
  	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listitem))
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
-	}
-	public void invalidate() {
-		final Listbox listbox = getListbox();
-		if (listbox != null && listbox.inSelectMold()) {
-			getParent().invalidate();
-			//if HTML select, the cell doesn't exists in client
-		} else {
-			super.invalidate();
-		}
 	}
 }

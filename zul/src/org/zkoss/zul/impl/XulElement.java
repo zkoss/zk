@@ -421,47 +421,6 @@ abstract public class XulElement extends HtmlBasedComponent {
 		return sb.toString();
 	}
 
-	/**
-	 * @deprecated As of release 3.0.5, replaced with {@link HtmlBasedComponent#getAllOnClickAttrs}.
-	 * If you want to generate only onDoubleClick and onRightClick, use
-	 * <pre><code>
-	 *appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
-	 *appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-	 *</code></pre>
-	 */
-	protected String getAllOnClickAttrs(boolean ignoreOnClick) {
-		StringBuffer sb = null;
-		if (!ignoreOnClick) sb = appendAsapAttr(sb, Events.ON_CLICK);
-		sb = appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
-		sb = appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-		return sb != null ? sb.toString():  null;
-	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String ctx = getContext(), popup = getPopup(), tip = getTooltip();
-			//Let derives (e.g., treerow has a chance to override it)
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		if (ctx != null) HTMLs.appendAttribute(sb, "z.ctx", ctx);
-		if (popup != null) HTMLs.appendAttribute(sb, "z.pop", popup);
-		if (tip != null) HTMLs.appendAttribute(sb, "z.tip", tip);
-		appendAsapAttr(sb, Events.ON_OK);
-		appendAsapAttr(sb, Events.ON_CANCEL);
-		appendAsapAttr(sb, Events.ON_CTRL_KEY);
-		HTMLs.appendAttribute(sb, "z.ctkeys", _ctkeys);
-		return sb.toString();
-	}
-
-	/** Generates the Client-Side-Action attributes to the interior tag.
-	 * Reason: onfocus is the main use.
-	 */
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		return _action == null ? attrs: attrs + getActionAttrs();
-	}
-
 	/** Returns a map of actions (String name, String javascript).
 	 */
 	private static final Map parseAction(String action) {

@@ -438,32 +438,6 @@ public class Column extends HeaderElement {
 	public String getZclass() {
 		return _zclass == null ? "z-column" : super.getZclass();
 	}
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = _sortAsc != null || _sortDsc != null ?  getZclass() + "-sort": "";
-		return scls != null ? scls + ' ' + added : added;
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(80);
-		if (_sortAsc != null) sb.append(" z.asc=\"true\"");
-		if (_sortDsc != null) sb.append(" z.dsc=\"true\"");
-
-		if (!"natural".equals(_sortDir))
-			HTMLs.appendAttribute(sb, "z.sort", _sortDir);
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-
-		final String attrs = super.getOuterAttrs();
-		if (sb.length() == 0) return attrs;
-		return sb.insert(0, attrs).toString();
-	}
-
-	/** Invalidates the whole grid. */
-	protected void invalidateWhole() {
-		final Grid grid = getGrid();
-		if (grid != null) grid.invalidate();
-	}
 
 	//-- Component --//
 	public void setParent(Component parent) {

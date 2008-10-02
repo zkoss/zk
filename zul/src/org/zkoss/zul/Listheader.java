@@ -381,32 +381,9 @@ public class Listheader extends HeaderElement {
 	}
 
 	//-- super --//
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = _sortAsc != null || _sortDsc != null ?  getZclass() + "-sort": "";
-		return scls != null ? scls + ' ' + added : added;
-	}
-
 	public String getZclass() {
 		return _zclass == null ? "z-list-header" : super.getZclass();
 	}
-
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(80);
-		if (_sortAsc != null) sb.append(" z.asc=\"true\"");
-		if (_sortDsc != null) sb.append(" z.dsc=\"true\"");
-		
-		if (!"natural".equals(_sortDir))
-			HTMLs.appendAttribute(sb, "z.sort", _sortDir);
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-
-		final String attrs = super.getOuterAttrs();
-		if (sb.length() == 0) return attrs;
-		return sb.insert(0, attrs).toString();
-	}
-
 
 	//-- Internal use only --//
 	/** Returns the prefix of the first column (in HTML tags), null if this
@@ -426,12 +403,6 @@ public class Listheader extends HeaderElement {
 		return null;
 	}
 	
-	/** Invalidates the whole box. */
-	protected void invalidateWhole() {
-		final Listbox box = getListbox();
-		if (box != null) box.invalidate();
-	}
-
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listhead))

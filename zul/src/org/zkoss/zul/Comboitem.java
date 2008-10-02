@@ -59,13 +59,6 @@ public class Comboitem extends LabelImageElement {
 
 
 	// super
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getZclass() + "-disd": "";
-		return scls != null && scls.length() > 0 ? scls + " " + added
-				: added;
-	}
-
 	public String getZclass() {
 		return _zclass == null ? "z-combo-item" : super.getZclass();
 	}
@@ -206,17 +199,7 @@ public class Comboitem extends LabelImageElement {
 	} 
 
 	/** No child is allowed. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
-	}
-	
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if (isDisabled()) {
-			final StringBuffer sb = new StringBuffer(60).append(attrs);
-			HTMLs.appendAttribute(sb, "z.disd", true);
-			return sb.toString();
-		}
-		return attrs;
 	}
 }

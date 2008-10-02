@@ -238,7 +238,7 @@ public class Include extends XulElement implements DynamicPropertied {
 
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 	public void redraw(Writer out) throws IOException {
@@ -249,8 +249,7 @@ public class Include extends XulElement implements DynamicPropertied {
 			out.write("<div id=\"");
 			out.write(getUuid());
 			out.write('"');
-			out.write(getOuterAttrs());
-			out.write(getInnerAttrs());
+//TODO: outer/inner attributes
 			out.write(">\n");
 			if (_progressStatus == 1) {
 				_progressStatus = 2;
