@@ -1,4 +1,4 @@
-/* AuRedraw.java
+/* AuOuter.java
 
 {{IS_NOTE
 	Purpose:
@@ -23,19 +23,20 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.au.AuResponse;
 
 /**
- * A response to ask client to redraw the view of the specified
- * component or page.
+ * A response to ask client to 'outer' the widgets and all its
+ * descendants of the associatethe specified component or page.
  *
- * <p>data[0]: the uuid of the component or page to redraw
+ * <p>data[0]: the uuid of the component or page to outer
+ * data[1]: the new content
  *
  * @author tomyeh
  * @since 5.0.0
  */
-public class AuRedraw extends AuResponse {
-	public AuRedraw(Component comp) {
-		super("redraw", comp, new String[] {comp.getUuid()});
+public class AuOuter extends AuResponse {
+	public AuOuter(Component comp, String content) {
+		super("outer", comp, new String[] {comp.getUuid(), content});
 	}
-	public AuRedraw(Page page) {
-		super("redraw", page, new String[] {page.getUuid()});
+	public AuOuter(Page page, String content) {
+		super("outer", page, new String[] {page.getUuid(), content});
 	}
 }

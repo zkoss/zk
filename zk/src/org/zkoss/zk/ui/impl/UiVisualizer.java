@@ -510,7 +510,7 @@ import org.zkoss.zk.au.out.*;
 		if (_pgInvalid != null) {
 			for (final Iterator it = _pgInvalid.iterator(); it.hasNext();) {
 				final Page page = (Page)it.next();
-				responses.add(new AuRedraw(page));
+				responses.add(new AuOuter(page, redraw(page)));
 			}
 		}
 
@@ -530,7 +530,7 @@ import org.zkoss.zk.au.out.*;
 		//5. generate replace for invalidated
 		for (Iterator it = _invalidated.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
-			responses.add(new AuRedraw(comp));
+			responses.add(new AuOuter(comp, redraw(comp)));
 		}
 
 		_ending = true; //no more addSmartUpdate...
@@ -695,7 +695,7 @@ import org.zkoss.zk.au.out.*;
 			final Component comp = (Component)it.next();
 			if (anchor != null) {
 				if (newsibs.remove(comp)) {
-					responses.add(new AuInsertAfter(anchor, drawNew(comp)));
+					responses.add(new AuInsertAfter(anchor, redraw(comp)));
 					if (newsibs.isEmpty())
 						return; //done (all newsibs are processed)
 					anchor = comp;
@@ -710,7 +710,7 @@ import org.zkoss.zk.au.out.*;
 				for (ListIterator i2 = before.listIterator(before.size());
 				i2.hasPrevious();) {
 					final Component c = (Component)i2.previous();
-					responses.add(new AuInsertBefore(anchor, drawNew(c)));
+					responses.add(new AuInsertBefore(anchor, redraw(c)));
 					anchor = c;
 				}
 				if (newsibs.isEmpty())
@@ -727,12 +727,12 @@ import org.zkoss.zk.au.out.*;
 			anchor = (Component)it.next();
 			responses.add(
 				parent != null ?
-					new AuAppendChild(parent, drawNew(anchor)):
-					new AuAppendChild(page, drawNew(anchor)));
+					new AuAppendChild(parent, redraw(anchor)):
+					new AuAppendChild(page, redraw(anchor)));
 
 			while (it.hasNext()) {
 				final Component comp = (Component)it.next();
-				responses.add(new AuInsertAfter(anchor, drawNew(comp)));
+				responses.add(new AuInsertAfter(anchor, redraw(comp)));
 				anchor = comp;
 			}
 		}
@@ -793,19 +793,17 @@ import org.zkoss.zk.au.out.*;
 		}
 	}
 
-	/** Draws a new attached component into a string.
-	 */
-	private static String drawNew(Component comp)
-	throws IOException {
-		final StringWriter out = new StringWriter(1024*8);
-		((ComponentCtrl)comp).redraw(out);
-		return out.toString();
-	}
 	/** Redraw the specified component into a string.
 	 */
 	private static String redraw(Component comp) throws IOException {
 		final StringWriter out = new StringWriter(1024*8);
 		((ComponentCtrl)comp).redraw(out);
+		return out.toString();
+	}
+	/** Redraws the whole page. */
+	private static String redraw(Page page) throws IOException {
+		final StringWriter out = new StringWriter(1024*8);
+		((PageCtrl)page).redraw(null, out);
 		return out.toString();
 	}
 
