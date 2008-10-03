@@ -534,6 +534,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				if (failover.isRecoverable(sess, dtid)) {
 					desktop = WebManager.getWebManager(_ctx)
 						.getDesktop(sess, request, response, null, true);
+					if (desktop == null) //forward or redirect
+						throw new IllegalStateException("sendRediect or forward not allowed in recovering");
+
 					wappc.getUiEngine().execRecover(
 						new ExecutionImpl(_ctx, request, response, desktop, null),
 						failover);

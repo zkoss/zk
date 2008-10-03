@@ -1,4 +1,4 @@
-/* B1881921.java
+/* B2143479.java
 
 {{IS_NOTE
 	Purpose:
@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Wed Jan 30 14:26:11     2008, Created by tomyeh
+		Fri Oct  3 10:16:18     2008, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
@@ -18,21 +18,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkdemo.test2;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.util.DesktopInit;
-import org.zkoss.zk.ui.util.DesktopCleanup;
 
 /**
- * Used to verify Bug 1881921: the execution order of DesktopInit and
- * DesktopCleanup.
- *
+ * Used to verify Bug 2143479: whether able to sendRedirect in desktopInit.
+ * 
  * @author tomyeh
  */
-public class B1881921 implements DesktopInit, DesktopCleanup {
+public class B2143479 implements DesktopInit {
 	public void init(Desktop desktop,  Object request) throws Exception {
-		System.out.println("init "+desktop);
-	}
-	public void cleanup(Desktop desktop) throws Exception {
-		System.out.println("cleanup "+desktop);
+		final String path = desktop.getRequestPath();
+		if (path != null && path.indexOf("B30-2143479.zul") >= 0) {
+			System.out.println("sendRedirect "+path);
+			Executions.getCurrent().sendRedirect("B30-2143479-1.zul");
+		}
 	}
 }

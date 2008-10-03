@@ -181,6 +181,9 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final HttpServletRequest httpreq = RenderHttpServletRequest.getInstance(request);
 		final HttpServletResponse httpres = RenderHttpServletResponse.getInstance(response);
 		final Desktop desktop = webman.getDesktop(sess, httpreq, httpres, path, true);
+		if (desktop == null) //forward or redirect
+			return true;
+
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, httpreq, PageDefinitions.getLocator(wapp, path));
 		((SessionCtrl)sess).notifyClientRequest(true);

@@ -125,6 +125,9 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 		final Desktop desktop =
 			getWebManager().getDesktop(sess, request, response, path, true);
+		if (desktop == null) //forward or redirect
+			return;
+
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request, PageDefinitions.getLocator(wapp, path));
 

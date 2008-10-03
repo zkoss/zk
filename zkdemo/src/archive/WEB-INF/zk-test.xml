@@ -42,4 +42,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.zkdemo.test2.B1881921</listener-class>
 	</listener>
+
+	<!-- Used to test Bug 2143479. -->
+	<listener>
+		<listener-class>org.zkoss.zkdemo.test2.B2143479</listener-class>
+	</listener>
 </zk>

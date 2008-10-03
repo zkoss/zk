@@ -200,6 +200,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			updateUuidPrefix();
 
 			config.invokeDesktopInits(this, request); //it might throw exception
+			if (exec.isVoided()) return; //sendredirect or forward
 
 			dc.addDesktop(this); //add to cache after invokeDesktopInits
 
