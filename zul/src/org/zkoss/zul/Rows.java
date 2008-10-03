@@ -124,7 +124,7 @@ public class Rows extends XulElement {
 		it.hasNext() && (to < 0 || j <= to); ++j) {
 			Object o = it.next();
 			if (o instanceof Group) {
-				int[] g = getGroupsInfoAt(j + (infront ? -1 : 1), true);
+				int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
 				if (g != null) {
 					g[0] = j;
 					if (g[2] != -1) g[2] += (infront ? 1 : -1);
@@ -140,6 +140,20 @@ public class Rows extends XulElement {
 	}
 	/*package*/ int[] getGroupsInfoAt(int index) {
 		return getGroupsInfoAt(index, false);
+	}
+	/**
+	 * Returns the last groups info which matches with the same index.
+	 * Because dynamically maintain the index of the groups will occur the same index
+	 * at the same time in the loop. 
+	 */
+	/*package*/ int[] getLastGroupsInfoAt(int index) {
+		int [] rg = null;
+		for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
+			int[] g = (int[])it.next();
+			if (index == g[0]) rg = g;
+			else if (index < g[0]) break;
+		}
+		return rg;
 	}
 	/**
 	 * Returns an int array that it has two length, one is an index of Group,
@@ -217,7 +231,8 @@ public class Rows extends XulElement {
 						int leng = index - prev[0], 
 							size = prev[1] - leng + 1;
 						prev[1] = leng;
-						_groupsInfo.add(idx, new int[]{index, size, -1});	
+						_groupsInfo.add(idx, new int[]{index, size, prev[2]});
+						prev[2] = -1; // reset groupfoot
 					} else if (next != null) {
 						_groupsInfo.add(idx, new int[]{index, next[0] - index, -1});
 					}

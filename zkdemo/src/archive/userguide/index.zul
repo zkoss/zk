@@ -59,6 +59,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="l6" label="Grid's Grouping" value="/userguide/layout/gridGrouping.zul"/>
 						<treeitem id="l8" label="Grid's Master-Details" value="/userguide/layout/detail.zul"/>
 						<treeitem id="l7" label="Panel" value="/userguide/layout/panel.zul"/>
+						<treeitem id="l9" label="Auxiliary Headers" value="/userguide/layout/auxheaders.zul"/>
 					</treechildren>
 				</treeitem>
 				<treeitem label="Toolbar and Menus" value="/userguide/toolbar/index.zul">

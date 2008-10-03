@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.net.URL;
+import java.io.Writer;
+import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -301,7 +303,8 @@ public class WebManager {
 	}
 
 	/** Returns the desktop of the specified request, or null
-	 * if not found and autocreate is false.
+	 * if not found and autocreate is false, or it has been redirect
+	 * or forward to other page.
 	 * @param path the path of the ZUML page.
 	 * @param autocreate whether to create one if not found
 	 * @since 3.0.0
@@ -317,7 +320,7 @@ public class WebManager {
 		return desktop;
 	}
 	/** Creates an desktop. */
-	/*package*/ Desktop newDesktop(Session sess, ServletRequest request,
+	private Desktop newDesktop(Session sess, ServletRequest request,
 	ServletResponse response, String path) {
 		final Locator loc = PageDefinitions.getLocator(_wapp, path);
 			//we have to retrieve locator before setting execution,
@@ -325,18 +328,18 @@ public class WebManager {
 			//which is true except this moment (before desktop is created)
 
 		final Execution exec = ExecutionsCtrl.getCurrent();
-		if (exec == null) //it shall be null, but, just in case,
-			ExecutionsCtrl.setCurrent(
-				new ExecutionImpl(
-					_ctx, (HttpServletRequest)request,
-					(HttpServletResponse)response, null, null));
+		final DonutExecution de = new DonutExecution(
+			_ctx, (HttpServletRequest)request,
+			(HttpServletResponse)response, null);
+		ExecutionsCtrl.setCurrent(de);
 		try {
-			return ((WebAppCtrl)_wapp).getUiFactory().newDesktop(
+			Desktop desktop =
+				((WebAppCtrl)_wapp).getUiFactory().newDesktop(
 				new RequestInfoImpl(_wapp, sess, null, request, loc),
 				_updateURI, path);
+			return !de.isVoided() ? desktop: null;
 		} finally {
-			if (exec == null)
-				ExecutionsCtrl.setCurrent(null);
+			ExecutionsCtrl.setCurrent(exec);
 		}
 	}
 	/** Sets the desktop to the specified request.
@@ -352,7 +355,7 @@ public class WebManager {
 	}
 	/** Creates a page.
 	 * It invokes {@link UiFactory#newPage}. However, it prepares
-	 * {@link Executions#getCurrent} for {@link org.zkoss.zk.ui.sys.IdGenerator#nextPageUuid}
+	 * {@link ExecutionsCtrl#getCurrent} for {@link org.zkoss.zk.ui.sys.IdGenerator#nextPageUuid}
 	 *
 	 * <p>Note: Use this method to create a page, rather than invoking
 	 * {@link UiFactory#newPage} directly.
@@ -360,27 +363,25 @@ public class WebManager {
 	/*package*/ static
 	Page newPage(UiFactory uf, RequestInfo ri, PageDefinition pagedef,
 	ServletResponse response, String path) {
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
 		final Execution exec = ExecutionsCtrl.getCurrent();
-		if (exec == null) { //it shall be null, but, just in case,
-			final ExecutionImpl ei = new ExecutionImpl(
-				(ServletContext)ri.getWebApp().getNativeContext(),
-				(HttpServletRequest)ri.getNativeRequest(),
-				(HttpServletResponse)response, ri.getDesktop(), null);
-			((DesktopCtrl)ri.getDesktop()).setExecution(ei);
-			ExecutionsCtrl.setCurrent(ei);
-		}
+		DonutExecution de = new DonutExecution(
+			(ServletContext)ri.getWebApp().getNativeContext(),
+			(HttpServletRequest)ri.getNativeRequest(),
+			(HttpServletResponse)response, ri.getDesktop());
+		desktopCtrl.setExecution(de);
+		ExecutionsCtrl.setCurrent(de);
 		try {
 			return uf.newPage(ri, pagedef, path);
+				//de won't be voided since no DesktopInit-like plugin
 		} finally {
-			if (exec == null) {
-				ExecutionsCtrl.setCurrent(null);
-				((DesktopCtrl)ri.getDesktop()).setExecution(null);
-			}
+			ExecutionsCtrl.setCurrent(exec);
+			desktopCtrl.setExecution(exec);
 		}
 	}
 	/** Creates a page.
 	 * It invokes {@link UiFactory#newPage}. However, it prepares
-	 * {@link Executions#getCurrent} for {@link org.zkoss.zk.ui.sys.IdGenerator#nextPageUuid}
+	 * {@link ExecutionsCtrl#getCurrent} for {@link org.zkoss.zk.ui.sys.IdGenerator#nextPageUuid}
 	 *
 	 * <p>Note: Use this method to create a page, rather than invoking
 	 * {@link UiFactory#newPage} directly.
@@ -388,22 +389,57 @@ public class WebManager {
 	/*package*/ static
 	Page newPage(UiFactory uf, RequestInfo ri, Richlet richlet,
 	ServletResponse response, String path) {
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
 		final Execution exec = ExecutionsCtrl.getCurrent();
-		if (exec == null) { //it shall be null, but, just in case,
-			final ExecutionImpl ei = new ExecutionImpl(
-				(ServletContext)ri.getWebApp().getNativeContext(),
-				(HttpServletRequest)ri.getNativeRequest(),
-				(HttpServletResponse)response, ri.getDesktop(), null);
-			((DesktopCtrl)ri.getDesktop()).setExecution(ei);
-			ExecutionsCtrl.setCurrent(ei);
-		}
+		DonutExecution de = new DonutExecution(
+			(ServletContext)ri.getWebApp().getNativeContext(),
+			(HttpServletRequest)ri.getNativeRequest(),
+			(HttpServletResponse)response, ri.getDesktop());
+		desktopCtrl.setExecution(de);
+		ExecutionsCtrl.setCurrent(de);
 		try {
 			return uf.newPage(ri, richlet, path);
+				//de won't be voided since no DesktopInit-like plugin
 		} finally {
-			if (exec == null) {
-				ExecutionsCtrl.setCurrent(null);
-				((DesktopCtrl)ri.getDesktop()).setExecution(null);
+			ExecutionsCtrl.setCurrent(exec);
+			desktopCtrl.setExecution(exec);
+		}
+	}
+
+	/** A 'fake' execution for creating a new page and desktop.
+	 * It doesn't have UiVisualizer and UiEngine.
+	 */
+	private static class DonutExecution extends ExecutionImpl {
+		public DonutExecution(ServletContext ctx, HttpServletRequest request,
+		HttpServletResponse response, Desktop desktop) {
+			super(ctx, request, response, desktop, null);
+		}
+		public void sendRedirect(String uri) { //getUiEngine not ready yet
+			try {
+				((HttpServletResponse)getNativeResponse()).sendRedirect(
+					uri != null ? uri: "");
+				setVoided(true);
+			} catch (IOException ex) {
+				throw new UiException(ex);
 			}
+		}
+		public void sendRedirect(String uri, String target) {
+			sendRedirect(uri); //target is ignored (not supported)
+		}
+		public void forward(Writer out, String page, Map params, int mode)
+		throws IOException {
+			final Execution exec = ExecutionsCtrl.getCurrent();
+			ExecutionsCtrl.setCurrent(null);
+				//It is fake one and shall not be re-used by forward
+			try {
+				super.forward(out, page, params, mode);
+			} finally {
+				ExecutionsCtrl.setCurrent(exec);
+			}
+		}
+		public void include(Writer out, String page, Map params, int mode)
+		throws IOException {
+			throw new IllegalStateException("include not allowd in DesktopInit");
 		}
 	}
 }

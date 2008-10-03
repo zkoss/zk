@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2143479.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct  3 10:38:11     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<html><![CDATA[
+	Something wrong if you see this page.<br/>
+	Remember to add the listener:
+	<code>org.zkoss.zkdemo.test2.B2143479</code>
+]]></html>

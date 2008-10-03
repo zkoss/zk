@@ -95,6 +95,12 @@ span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-
 .z-panel-bbar {
 	position: relative;
 }
+<%-- groupbox.css.dsp --%>
+<c:if test="${c:isExplorer7()}">
+.z-groupbox-body {
+	zoom: 1;
+}
+</c:if>
 <%-- tabbox.css.dsp --%>
 div.z-tabpanel-accordion {
 	zoom:1;

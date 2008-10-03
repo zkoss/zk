@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<window id="window" width="100%" height="100%">
+<html>
+<![CDATA[
+<ol>
+<li>select "minny" from the first listbox.</li>
+<li>You shall see the "minny" and "2" appear on the bottom beside "save" button.</li> 
+<li>Select the listbox by the "save" button from "2" to "5".</li> 
+<li>You shall not see any change in the first listbox.</li>
+<li>Now click the "save" button.</li>
+<li>You shall see on the first listbox the second column of "minny" changes from "2" to "5".</li>
+<li>Done</li>
+</ol>
+]]>
+</html>
+		<zscript>
+		<![CDATA[
+			class Foo{
+				String bar,item;
+				
+				public Foo(){
+				}
+				
+				public Foo(String bar,String item){
+					this.bar = bar;
+					this.item = item;
+				}
+				
+				public void setBar(String s){
+					bar = s;
+				}
+				
+				public String getBar(){
+					return bar;
+				}
+				
+				public void setItem(String s){
+					item = s;
+				}
+				
+				public String getItem(){
+					return item;
+				}
+				
+				public String toString(){
+					return "bar :" + bar + "  item:"+item;
+				}
+			}
+			
+			List fooList = new ArrayList();
+			fooList.add(new Foo("goofy","1"));
+			fooList.add(new Foo("minny","2"));
+			fooList.add(new Foo("pluto","3"));
+			
+			List itemsList = new ArrayList();
+			itemsList.add("1");
+			itemsList.add("2");
+			itemsList.add("3");
+			itemsList.add("4");
+			itemsList.add("5");
+			itemsList.add("6");
+			itemsList.add("7");
+			
+		]]>
+		</zscript>
+		<listbox id="listbox"  model="@{fooList}"  height="200px" selectedItem="@{selectedFoo}">
+			<listhead sizable="true">
+					<listheader label="bar"/>
+					<listheader label="item"/>
+				</listhead>
+				<listitem self="@{each=str}" value="@{str}">
+					<listcell label="@{str.bar}"/>
+					<listcell label="@{str.item}"/>
+				</listitem>
+		</listbox>
+		<textbox id="textboxDesc" value="@{selectedFoo.bar,save-when='saveButton.onClick'}"/>
+		<listbox model="@{itemsList}" selectedItem="@{selectedFoo.item,save-when='saveButton.onClick'}" mold="select">
+			<listitem self="@{each=is}" value="@{is}" label="@{is}"></listitem>
+		</listbox>
+		<button id="saveButton" label="save"></button>
+</window>

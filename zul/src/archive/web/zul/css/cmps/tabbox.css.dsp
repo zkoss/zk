@@ -482,6 +482,9 @@ div.z-tabpanel {<%-- horz, accd: tabpanel --%>
 	border-bottom: 1px solid #8DB2E3; padding: 5px;
 	zoom: 1;
 }
+div.z-tabpanel-real{ <%-- Bug 2104974 --%>
+	height:100%;
+}
 div.z-vtabpanels {<%-- vert tabpanels --%>
 	overflow:hidden;
 	border-top: 1px solid #8DB2E3; 
