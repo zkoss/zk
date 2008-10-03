@@ -418,12 +418,13 @@ zkLayoutRegion2 = {
 		if (!cmp._slideIn)
 			cmp._slideIn = function (evt) {
 				var target = zkau.evtel(evt);
-				if (cmp._isSilde && !zk.isAncestor(cmp, target)) {
+				if (cmp._isSlide && !zk.isAncestor(cmp, target)) {
 					var uuid = $uuid(cmp);
 					if (target.id == uuid + "!btned") {
 						zkLayoutRegion2.onColledAfterSlideUp(cmp);
 						zkLayoutRegionSplit2.open(cmp.split, true, false, false, true);
-					} else if ($uuid(target) != uuid || !anima.count) {
+					} else if ((!cmp._isSlideUp && $uuid(target) != uuid) || !anima.count) {
+						cmp._isSlideUp = true;
 						anima.slideUp(cmp, zkLayoutRegionSplit2.sanchors[cmp.split.pos]);
 					}
 				}
@@ -438,12 +439,13 @@ zkLayoutRegion2 = {
 		cmp.style.zIndex = "";
 		$e($uuid(cmp), "btn").style.display = "";
 		zk.unlisten(document, "click", cmp._slideIn);
-		cmp._isSilde = false;
+		cmp._isSlideUp = cmp._isSlide = false;
+		
 	},
 	onColledClick: function (evt) {
 		var colled = zkau.evtel(evt), real = $real(colled);
-		if (!colled.id.endsWith("!collapsed") || real._isSilde) return;
-		real._isSilde = true;
+		if (!colled.id.endsWith("!collapsed") || real._isSlide) return;
+		real._isSlide = true;
 		var pos = getZKAttr(real, "pos");
 		real.style.visibilty = "hidden";
 		real.style.display = "";
@@ -573,7 +575,7 @@ zkLayoutRegion2 = {
 	onBtnClick: function (evt) {
 		var btn = zkau.evtel(evt),
 			real = $real(btn);
-		if (real._isSilde || anima.count) return;
+		if (real._isSlide || anima.count) return;
 		if (btn.id.endsWith("!btned")) {
 			real.style.visibilty = "hidden";
 			real.style.display = "";
