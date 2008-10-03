@@ -32,7 +32,7 @@ ZK 3.5.1
   2138378: Bug "datebox" when Browser language with Spanish [es]
   2138131: GenericForwardComposer throw Exception if component inexist
   2140491: Set "save-when" in Listbox selectedItem does not trigger
-  2143479: Failed to invoke sendRedirect in DesktopInit
+  2143479: Failed to invoke sendRedirect or forward in DesktopInit
 
 * Upgrade Notes
   * getMoldSclass is deprecated and replaced with getZclass since
