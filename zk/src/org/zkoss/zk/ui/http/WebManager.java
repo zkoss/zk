@@ -297,7 +297,8 @@ public class WebManager {
 	}
 
 	/** Returns the desktop of the specified request, or null
-	 * if not found and autocreate is false.
+	 * if not found and autocreate is false, or it has been redirect
+	 * or forward to other page.
 	 * @param path the path of the ZUML page.
 	 * @param autocreate whether to create one if not found
 	 * @since 3.0.0
@@ -312,8 +313,7 @@ public class WebManager {
 		}
 		return desktop;
 	}
-	/** Returns the desktop of the specified request, or null if not found.
-	 * @deprecated As of release 3.0.0, replaced by
+	/** @deprecated As of release 3.0.0, replaced by
 	 * {@link #getDesktop(Session,ServletRequest,ServletResponse,String,boolean)}.
 	 */
 	public Desktop getDesktop(Session sess, ServletRequest request,
@@ -321,7 +321,7 @@ public class WebManager {
 		return getDesktop(sess, request, null, path, autocreate);
 	}
 	/** Creates an desktop. */
-	/*package*/ Desktop newDesktop(Session sess, ServletRequest request,
+	private Desktop newDesktop(Session sess, ServletRequest request,
 	ServletResponse response, String path) {
 		final Locator loc = PageDefinitions.getLocator(_wapp, path);
 			//we have to retrieve locator before setting execution,
@@ -329,15 +329,18 @@ public class WebManager {
 			//which is true except this moment (before desktop is created)
 
 		final Execution exec = ExecutionsCtrl.getCurrent();
+		DonutExecution de = null;
 		if (exec == null) //it shall be null, but, just in case,
 			ExecutionsCtrl.setCurrent(
-				new ExecutionImpl(
+				de = new DonutExecution(
 					_ctx, (HttpServletRequest)request,
-					(HttpServletResponse)response, null, null));
+					(HttpServletResponse)response, null));
 		try {
-			return ((WebAppCtrl)_wapp).getUiFactory().newDesktop(
+			Desktop desktop =
+				((WebAppCtrl)_wapp).getUiFactory().newDesktop(
 				new RequestInfoImpl(_wapp, sess, null, request, loc),
 				_updateURI, path);
+			return de == null || !de.isVoided() ? desktop: null;
 		} finally {
 			if (exec == null)
 				ExecutionsCtrl.setCurrent(null);
@@ -366,15 +369,16 @@ public class WebManager {
 	ServletResponse response, String path) {
 		final Execution exec = ExecutionsCtrl.getCurrent();
 		if (exec == null) { //it shall be null, but, just in case,
-			final ExecutionImpl ei = new ExecutionImpl(
+			DonutExecution de = new DonutExecution(
 				(ServletContext)ri.getWebApp().getNativeContext(),
 				(HttpServletRequest)ri.getNativeRequest(),
-				(HttpServletResponse)response, ri.getDesktop(), null);
-			((DesktopCtrl)ri.getDesktop()).setExecution(ei);
-			ExecutionsCtrl.setCurrent(ei);
+				(HttpServletResponse)response, ri.getDesktop());
+			((DesktopCtrl)ri.getDesktop()).setExecution(de);
+			ExecutionsCtrl.setCurrent(de);
 		}
 		try {
 			return uf.newPage(ri, pagedef, path);
+				//de won't be voided since no DesktopInit-like plugin
 		} finally {
 			if (exec == null) {
 				ExecutionsCtrl.setCurrent(null);
@@ -394,20 +398,43 @@ public class WebManager {
 	ServletResponse response, String path) {
 		final Execution exec = ExecutionsCtrl.getCurrent();
 		if (exec == null) { //it shall be null, but, just in case,
-			final ExecutionImpl ei = new ExecutionImpl(
+			DonutExecution de = new DonutExecution(
 				(ServletContext)ri.getWebApp().getNativeContext(),
 				(HttpServletRequest)ri.getNativeRequest(),
-				(HttpServletResponse)response, ri.getDesktop(), null);
-			((DesktopCtrl)ri.getDesktop()).setExecution(ei);
-			ExecutionsCtrl.setCurrent(ei);
+				(HttpServletResponse)response, ri.getDesktop());
+			((DesktopCtrl)ri.getDesktop()).setExecution(de);
+			ExecutionsCtrl.setCurrent(de);
 		}
 		try {
 			return uf.newPage(ri, richlet, path);
+				//de won't be voided since no DesktopInit-like plugin
 		} finally {
 			if (exec == null) {
 				ExecutionsCtrl.setCurrent(null);
 				((DesktopCtrl)ri.getDesktop()).setExecution(null);
 			}
+		}
+	}
+
+	/** A 'fake' execution for creating a new page and desktop.
+	 * It doesn't have UiVisualizer and UiEngine.
+	 */
+	private static class DonutExecution extends ExecutionImpl {
+		public DonutExecution(ServletContext ctx, HttpServletRequest request,
+		HttpServletResponse response, Desktop desktop) {
+			super(ctx, request, response, desktop, null);
+		}
+		public void sendRedirect(String uri) { //getUiEngine not ready yet
+			try {
+				((HttpServletResponse)getNativeResponse()).sendRedirect(
+					uri != null ? uri: "");
+				setVoided(true);
+			} catch (java.io.IOException ex) {
+				throw new UiException(ex);
+			}
+		}
+		public void sendRedirect(String uri, String target) {
+			sendRedirect(uri); //target is ignored (not supported)
 		}
 	}
 }

@@ -196,6 +196,9 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 		final Desktop desktop =
 			_webman.getDesktop(sess, request, response, path, true);
+		if (desktop == null) //forward or redirect
+			return true;
+
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));

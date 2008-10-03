@@ -90,6 +90,9 @@ public class DHtmlLayoutFilter implements Filter {
 			final String path = Https.getThisServletPath(request);
 			final Desktop desktop =
 				webman.getDesktop(sess, request, response, path, true);
+			if (desktop == null) //forward or redirect
+				return;
+
 			final RequestInfo ri = new RequestInfoImpl(
 				wapp, sess, desktop, request, null);
 			((SessionCtrl)sess).notifyClientRequest(true);
