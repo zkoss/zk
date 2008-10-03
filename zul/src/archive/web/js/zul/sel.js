@@ -315,6 +315,7 @@ zk.Selectable.prototype = {
 		if (lastrow) {
 			if (ctrl) this.focus(lastrow);
 			else this.select(lastrow);
+			this._syncFocus(lastrow);			
 			zk.scrollIntoView(this.body, lastrow); // Bug #1823947 and #1823278
 		}
 
@@ -379,11 +380,7 @@ zk.Selectable.prototype = {
 				if (last && now - last < 900)
 					return; //ignore double-click
 			}
-			var focusEl = $e(getZKAttr(row, "rid"), "a"),
-				offs = zk.revisedOffset(row);	
-			offs = this._toStyleOffset(focusEl, offs[0] + this.body.scrollLeft, offs[1]);
-			focusEl.style.top = offs[1] + "px";
-			focusEl.style.left = offs[0] + "px";
+			this._syncFocus(row);
 			if (this._isMultiple()) {
 				if (evt && evt.shiftKey)
 					this.selectUpto(row);
@@ -400,6 +397,14 @@ zk.Selectable.prototype = {
 			//No much reason to eat the event.
 			//Oppositely, it disabled popup (bug 1578659)
 		}
+	},
+	/** maintain the offset of the focus proxy*/
+	_syncFocus: function (row) {
+		var focusEl = $e(getZKAttr(row, "rid"), "a"),
+			offs = zk.revisedOffset(row);
+		offs = this._toStyleOffset(focusEl, offs[0] + this.body.scrollLeft, offs[1]);
+		focusEl.style.top = offs[1] + "px";
+		focusEl.style.left = offs[0] + "px";
 	},
 	_toStyleOffset: function (el, x, y) {	
 		var ofs1 = zk.revisedOffset(el),
