@@ -231,7 +231,8 @@ public class Rows extends XulElement {
 						int leng = index - prev[0], 
 							size = prev[1] - leng + 1;
 						prev[1] = leng;
-						_groupsInfo.add(idx, new int[]{index, size, -1});	
+						_groupsInfo.add(idx, new int[]{index, size, prev[2]});
+						prev[2] = -1; // reset groupfoot
 					} else if (next != null) {
 						_groupsInfo.add(idx, new int[]{index, next[0] - index, -1});
 					}
