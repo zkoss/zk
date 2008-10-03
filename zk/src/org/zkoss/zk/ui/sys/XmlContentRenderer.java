@@ -39,4 +39,28 @@ public class XmlContentRenderer implements ContentRenderer {
 	public void render(String name, String value) {
 		HTMLs.appendAttribute(_buf, name, value, false);
 	}
+	public void render(String name, int value) {
+		HTMLs.appendAttribute(_buf, name, value);
+	}
+	/** Renders a boolean property.
+	 * @param name the property name. Note: it must be a legal JavaScript
+	 * variable name.
+	 */
+	public void render(String name, boolean value) {
+		HTMLs.appendAttribute(_buf, name, value);
+	}
+	/** Renders a double property.
+	 * @param name the property name. Note: it must be a legal JavaScript
+	 * variable name.
+	 */
+	public void render(String name, double value) {
+		HTMLs.appendAttribute(_buf, name, value);
+	}
+	/** Renders a char property.
+	 * @param name the property name. Note: it must be a legal JavaScript
+	 * variable name.
+	 */
+	public void render(String name, char value) {
+		HTMLs.appendAttribute(_buf, name, "" + value);
+	}
 }

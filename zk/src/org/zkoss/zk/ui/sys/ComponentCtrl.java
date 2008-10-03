@@ -132,7 +132,7 @@ public interface ComponentCtrl {
 	 * this components can be ignored,
 	 *
 	 * <p>Once this method is called, all invocations to {@link #smartUpdate}
-	 * will then be ignored, and {@link Component#redraw} will be invoked later.
+	 * will then be ignored, and {@link #redraw} will be invoked later.
 	 *
 	 * <p>It can be called only in the request-processing and event-processing
 	 * phases; excluding the redrawing phase.

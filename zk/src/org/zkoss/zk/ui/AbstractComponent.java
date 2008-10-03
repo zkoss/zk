@@ -1171,14 +1171,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	//-- in the redrawing phase --//
-	/** Called by ({@link Component#redraw}) to render the
+	/** Called by ({@link ComponentCtrl#redraw}) to render the
 	 * properties, excluding the enclosing tag and children.
+	 *
+	 * <p>Note: it doesn't render {@link #getType} and {@link #getUuid}
+	 * which are caller's job.
+	 *
 	 * @since 5.0.0
 	 */
 	protected void renderProperties(ContentRenderer renderer) {
-		render(renderer, "type", getType());
-		render(renderer, "uuid", getUuid());
-
 		if (!ComponentsCtrl.isAutoId(_id)) //not getId() to avoid gen ID
 			render(renderer, "id", _id);
 
@@ -1189,6 +1190,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.
 	 * It ignores if value is null or empty.
+	 * If you want to render it even if null/empty, invoke
+	 * {@link ContentRenderer#render(String, String)} directly.
 	 * @since 5.0.0
 	 */
 	protected void render(ContentRenderer renderer,
@@ -1197,33 +1200,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			renderer.render(name, value);
 	}
 	/** An utility to be called by {@link #renderProperties} to
-	 * render a string-value property.
-	 * @since 5.0.0
-	 * @param emptyIgnored whether to ignore the property if value is null
-	 * or empty.
-	 */
-	protected void render(ContentRenderer renderer,
-	String name, String value, boolean emptyIgnored) {
-		if (!emptyIgnored || (value != null & value.length() > 0))
-			renderer.render(name, value);
-	}
-	/** An utility to be called by {@link #renderProperties} to
-	 * render a boolean-value property.
-	 * @since 5.0.0
-	 * @param falseIgnored whether to ignore the property if value is false.
-	 */
-	protected void render(ContentRenderer renderer,
-	String name, boolean value, boolean falseIgnored) {
-		if (!falseIgnored || value)
-			renderer.render(name, Boolean.toString(value));
-	}
-	/** An utility to be called by {@link #renderProperties} to
-	 * render an int-value property.
+	 * render a boolean-value property if it is true.
+	 * If you want to render it no matter true or false, use
+	 * {@link ContentRenderer#render(String, boolean)} directly.
 	 * @since 5.0.0
 	 */
 	protected void render(ContentRenderer renderer,
-	String name, int value) {
-		renderer.render(name, Integer.toString(value));
+	String name, boolean value) {
+		if (value)
+			renderer.render(name, true);
 	}
 
 	/** An utility to be called by {@link #renderProperties} to render
@@ -1234,8 +1219,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void renderEvent(ContentRenderer renderer,
 	String evtnm) {
 		if (Events.isListened(this, evtnm, false))
-			render(renderer,
-				evtnm, Events.isListened(this, evtnm, true), false);
+			renderer.render(evtnm, Events.isListened(this, evtnm, true));
 	}
 
 	//Event//

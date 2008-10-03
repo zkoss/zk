@@ -35,13 +35,13 @@ public class JsContentRenderer implements ContentRenderer {
 	public StringBuffer getBuffer() {
 		return _buf;
 	}
-	/** Renders a property.
+	/** Renders a string property.
 	 * @param name the property name. Note: it must be a legal JavaScript
 	 * variable name.
 	 */
 	public void render(String name, String value) {
-		if (_buf.length() > 0) _buf.append(',');
-		_buf.append(name).append(':');
+		renderName(name);
+
 		if (value == null) _buf.append((String)null);
 		else {
 			_buf.append('\'');
@@ -59,5 +59,51 @@ public class JsContentRenderer implements ContentRenderer {
 			}
 			_buf.append('\'');
 		}
+	}
+	private void renderName(String name) {
+		if (_buf.length() > 0) _buf.append(',');
+		_buf.append(name).append(':');
+	}
+	/** Renders an integer property.
+	 * @param name the property name. Note: it must be a legal JavaScript
+	 * variable name.
+	 */
+	public void render(String name, int value) {
+		renderName(name);
+		_buf.append(value);
+	}
+	/** Renders a boolean property.
+	 * @param name the property name. Note: it must be a legal JavaScript
+	 * variable name.
+	 */
+	public void render(String name, boolean value) {
+		renderName(name);
+		_buf.append(value);
+	}
+	/** Renders a double property.
+	 * @param name the property name. Note: it must be a legal JavaScript
+	 * variable name.
+	 */
+	public void render(String name, double value) {
+		renderName(name);
+		_buf.append(value);
+	}
+	/** Renders a char property.
+	 * @param name the property name. Note: it must be a legal JavaScript
+	 * variable name.
+	 */
+	public void render(String name, char value) {
+		renderName(name);
+
+		_buf.append('\'');
+		switch (value) {
+		case '\'':
+		case '\\': _buf.append('\\'); break;
+		case '\n': _buf.append('\\'); value = 'n'; break;
+		case '\t': _buf.append('\\'); value = 't'; break;
+		case '\r': _buf.append('\\'); value = 'r'; break;
+		case '\f': _buf.append('\\'); value = 'f'; break;
+		}
+		_buf.append(value).append('\'');
 	}
 }

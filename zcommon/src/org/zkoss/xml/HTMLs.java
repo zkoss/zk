@@ -71,6 +71,13 @@ public class HTMLs {
 	void appendAttribute(StringBuffer sb, String name, long val) {
 		sb.append(' ').append(name).append("=\"").append(val).append('"');
 	}
+	/** Appends an attribute with a long value to the string buffer for HTML/XML (name="val").
+	 * @since 5.0.0
+	 */
+	public static final
+	void appendAttribute(StringBuffer sb, String name, double val) {
+		sb.append(' ').append(name).append("=\"").append(val).append('"');
+	}
 	/** Appends an attribute with a short value to the string buffer for HTML/XML (name="val").
 	 * @since 3.0.2
 	 */

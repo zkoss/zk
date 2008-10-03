@@ -18,28 +18,26 @@ var _zws = []; //used to load widget
 zkau = { //static methods
 	/** Begins the creation of a widget.
 	 */
-	begin: function (props) {
-		var embedAs = props.embedAs;
+	begin: function (type, uuid, props, embedAs) {
 		if (embedAs) {
-			var embed = zkDOM.$(props.uuid).firstChild;
+			var embed = zkDOM.$(uuid).firstChild;
 			if (embed && zkDOM.$(embed) == "SPAN")
 				props[embedAs] = embed.innerHTML;
 			else if (zk.debugJS)
 				throw "No embedAs, "+embedAs;
 		}
 
-		var wgt = new (zk.$import(props.type))(props.uuid);
+		var wgt = new (zk.$import(type))(uuid);
 		wgt.inServer = true;
 		if (_zws.length)
 			_zws[0].appendChild(wgt);
 		_zws.unshift(wgt);
 
-		for (var p in props)
-			if (p != "type" && p != "uuid" && p != "embedAs") {
-				var m = wgt['set' + p.charAt(0).toUpperCase() + p.substring(1)];
-				if (m) m(props[p]);
-				else wgt[p] = props[p];
-			}
+		for (var p in props) {
+			var m = wgt['set' + p.charAt(0).toUpperCase() + p.substring(1)];
+			if (m) m(props[p]);
+			else wgt[p] = props[p];
+		}
 	},
 	/** Ends the creation of a widget. */
 	end: function () {

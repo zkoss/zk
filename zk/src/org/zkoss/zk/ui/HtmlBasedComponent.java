@@ -358,7 +358,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * (by calling their {@link #redraw}.
 	 *
 	 * <p>If a derived class renders only a subset of its children
-	 * (such as paging/cropping), it could override {@link #renderChildren}.
+	 * (such as paging/cropping), it could override {@link #redrawChildren}.
 	 */
 	public void redraw(Writer out) throws IOException {
 		final JsContentRenderer renderer = new JsContentRenderer();
@@ -366,16 +366,25 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 		out.write("<div id=\"");
 		out.write(getUuid());
-		out.write("\">\n<script>zkau.begin({\n");
+		out.write("\">\n<script>zkau.begin('");
+		out.write(getType());
+		out.write("','");
+		out.write(getUuid());
+		out.write("',{\n");
 		out.write(renderer.getBuffer().toString());
-		out.write("});</script>\n");
-		redrawChildren(out);
-		out.write("<script>zkau.end();</script></div>\n");
+
+		if (isChildable()) {
+			out.write("});</script>\n");
+			redrawChildren(out);
+			out.write("<script>zkau.end();</script></div>\n");
+		} else {
+			out.write("});zkau.end();</script></div>\n");
+		}
 	}
 	/** Redraws childrens (and then recursively descandants).
 	 * <p>Default: it invokes {@link #redraw} for all its children.
 	 * <p>If a derived class renders only a subset of its children
-	 * (such as paging/cropping), it could override {@link #renderChildren}.
+	 * (such as paging/cropping), it could override {@link #redrawChildren}.
 	 * @since 5.0.0
 	 */
 	protected void redrawChildren(Writer out) throws IOException {
@@ -404,7 +413,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		render(renderer, "droppable", _droppable);  //getDroppable is final
 
 		int zi = getZIndex();
-		if (zi >= 0) render(renderer, "zIndex", zi);
+		if (zi >= 0) renderer.render("zIndex", zi);
 
 		render(renderer, "prolog", _prolog);
 

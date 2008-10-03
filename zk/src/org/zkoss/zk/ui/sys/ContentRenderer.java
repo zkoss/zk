@@ -19,13 +19,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 /**
- * Used with {@link org.zkoss.zk.ui.AbstractComponent#renderContent}
+ * Used with {@link org.zkoss.zk.ui.AbstractComponent#renderProperties}
  * to generate the component content that will be sent to the client.
  *
  * @author tomyeh
  * @since 5.0.0
  */
 public interface ContentRenderer {
-	/** Renders a property. */
+	/** Renders a string property. */
 	public void render(String name, String value);
+	/** Renders an integer property. */
+	public void render(String name, int value);
+	/** Renders a boolean property. */
+	public void render(String name, boolean value);
+	/** Renders a double property. */
+	public void render(String name, double value);
+	/** Renders a char property. */
+	public void render(String name, char value);
 }

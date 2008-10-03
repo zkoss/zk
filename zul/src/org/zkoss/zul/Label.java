@@ -22,7 +22,7 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -42,7 +42,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Label extends XulElement {
 	private String _value = "";
 	private int _maxlength;
-	private boolean _pre, _hyphen, _multiline;
+	private boolean _multiline;
 
 	public Label() {
 	}
@@ -70,80 +70,27 @@ public class Label extends XulElement {
 			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			smartUpdate("value", getEncodedText());
+			smartUpdate("value", getValue());
 		}
 	}
 
 	/** Returns the maximal length of the label.
-	 *
-	 * <p>Noteice:
-	 * <dl>
-	 * <dt>hyphen="false" and pre="false"</dt>
-	 * <dd>maxlength is the maximal length to display. Exceeding part is truncated.</dd>
-	 * <dt>hyphen="true"</dt>
-	 * <dd>maxlength is the maximal length of each line, and hyphenation is added
-	 * if a line exceeds maxlength.</dd>
-	 * <dt>hyphen="false" and pre="true"</dt>
-	 * <dd>maxlength has no effect.</dd>
-	 * <dt>maxlength=0</dt>
-	 * <dd>hyphen has no effect</dd>
-	 * </dl>
-	 *
-	 * <p>Since 3.0.4, you can set the style class (@{link #setSclass})
-	 * to "word-wrap" to wrap a long word instead of using the hyphen
-	 * and maxlength property. However, word-wrap is not applicable to
-	 * Opera (it works fine with FF, IE and Safari).
+	 * <p>Default: 0 (means no limitation)
 	 */
 	public int getMaxlength() {
 		return _maxlength;
 	}
 	/** Sets the maximal length of the label.
-	 *
-	 * <p>See {@link #getMaxlength} for the relationship among pre, hyphen and
-	 * maxlength.
 	 */
 	public void setMaxlength(int maxlength) {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			smartUpdate("value", getEncodedText());
-		}
-	}
-	/** Returns whether to preserve the white spaces, such as space,
-	 * tab and new line.
-	 *
-	 * <p>It is the same as style="white-space:pre". However, IE has a bug when
-	 * handling such style if the content is updated dynamically.
-	 * Refer to Bug 1455584.
-	 *
-	 * <p>See {@link #getMaxlength} for the relationship among pre, hyphen and
-	 * maxlength.
-	 *
-	 * <p>Note: the new line is preserved either {@link #isPre} or
-	 * {@link #isMultiline} returns true.
-	 * In other words, <code>pre</code> implies <code>multiline</code>
-	 */
-	public boolean isPre() {
-		return _pre;
-	}
-	/** Sets whether to preserve the white spaces, such as space,
-	 * tab and new line.
-	 *
-	 * <p>See {@link #getMaxlength} for the relationship among pre, hyphen and
-	 * maxlength.
-	 */
-	public void setPre(boolean pre) {
-		if (_pre != pre) {
-			_pre = pre;
-			smartUpdate("value", getEncodedText());
+			smartUpdate("maxlength", getMaxlength());
 		}
 	}
 	/** Returns whether to preserve the new line and the white spaces at the
 	 * begining of each line.
-	 *
-	 * <p>Note: the new line is preserved either {@link #isPre} or
-	 * {@link #isMultiline} returns true.
-	 * In other words, <code>pre</code> implies <code>multiline</code>
 	 */
 	public boolean isMultiline() {
 		return _multiline;
@@ -154,32 +101,35 @@ public class Label extends XulElement {
 	public void setMultiline(boolean multiline) {
 		if (_multiline != multiline) {
 			_multiline = multiline;
-			smartUpdate("value", getEncodedText());
+			smartUpdate("multiline", isMultiline());
 		}
 	}
-	/** Returns whether to hyphenate a long word if maxlength is specified.
+	/** @deprecated As of release 5.0.0, use CSS instead.
+	 */
+	public boolean isPre() {
+		return false;
+	}
+	/** @deprecated As of release 5.0.0, use CSS instead.
 	 *
-	 * <p>Since 3.0.4, you can set the style class (@{link #setSclass})
-	 * to "word-wrap" to wrap a long word instead of using the hyphen
-	 * and maxlength property. However, word-wrap is not applicable to
-	 * Opera (it works fine with FF, IE and Safari).
+	 * <p>Use the CSS style called "white-spacing: pre" to have the
+	 * similar effect.
 	 *
-	 * <p>See {@link #getMaxlength} for the relationship among pre, hyphen and
-	 * maxlength.
+	 */
+	public void setPre(boolean pre) {
+	}
+	/** @deprecated As of release 5.0.0, use CSS instead.
 	 */
 	public boolean isHyphen() {
-		return _hyphen;
+		return false;
 	}
-	/** Sets whether to hyphen a long word if maxlength is specified.
+	/** @deprecated As of release 5.0.0, use CSS instead.
 	 *
-	 * <p>See {@link #getMaxlength} for the relationship among pre, hyphen and
-	 * maxlength.
+	 * <p>Use the CSS style called "word-wrap: word-break"
+	 * to have similar effect.
+	 * Unfortunately, word-wrap is not applicable to
+	 * FF and Opera(it works fine with IE and Safari).
 	 */
 	public void setHyphen(boolean hyphen) {
-		if (_hyphen != hyphen) {
-			_hyphen = hyphen;
-			smartUpdate("value", getEncodedText());
-		}
 	}
 
 	/** Whether to generate the value directly without ID.
@@ -211,108 +161,44 @@ public class Label extends XulElement {
 		return langdef != null && langdef.isRawLabel();
 	}
 
-	/** Returns the text for generating HTML tags (Internal Use Only).
-	 *
-	 * <p>Used only for component generation. Not for applications.
+	/** Returns the text for generating HTML content.
 	 */
-	public String getEncodedText() {
+	private String getEncodedText() {
 		StringBuffer sb = null;
 		final int len = _value.length();
-		if (_pre || _multiline) {
+		if (_multiline) {
+			int outcnt = Integer.MAX_VALUE/2; //avoid overflow (algorithm issue)
+			if (_maxlength > 0 && _maxlength < outcnt) outcnt = _maxlength;
+
 			for (int j = 0, k;; j = k + 1) {
 				k = _value.indexOf('\n', j);
 				if (k < 0) {
-					sb = encodeLine(sb, j, len);
-					break;
+					final int v = j + outcnt;
+					sb = XMLs.encodeText(sb, _value, j, len > v ? v: len);
+					break; //done
 				}
 
 				if (sb == null) {
 					assert j == 0;
-					sb = new StringBuffer(_value.length() + 10);
+					sb = new StringBuffer(len + 10);
 				}
-				sb = encodeLine(sb, j,
-					k > j && _value.charAt(k - 1) == '\r' ? k - 1: k);
+
+				final int l = k > j && _value.charAt(k - 1) == '\r' ? k - 1: k;
+				final int v = l - j;
+				if (v >= outcnt) {
+					sb = XMLs.encodeText(sb, _value, j, j + outcnt);
+					break; //done
+				}
+
+				outcnt -= v;
+				sb = XMLs.encodeText(sb, _value, j, l);
 				sb.append("<br/>");
 			}
 		} else {
-			sb = encodeLine(null, 0, len);
+			sb = XMLs.encodeText(sb, _value, 0,
+				_maxlength > 0 && len > _maxlength ? _maxlength: len);
 		}
 		return sb != null ? sb.toString(): _value;
-	}
-	/*
-	 * @param k excluded
-	 */
-	private StringBuffer encodeLine(StringBuffer sb, int b, int e) {
-		boolean prews = _pre || _multiline;
-		int linesz = 0;
-		if (_maxlength > 0) {
-			int deta = e - b;
-			if (deta > _maxlength) {
-				if (_hyphen) {
-					linesz = _maxlength;
-				} else if (!prews) {
-					assert b == 0;
-					int j = _maxlength;
-					while (j > 0 && Character.isWhitespace(_value.charAt(j - 1)))
-						--j;
-					return new StringBuffer(j + 3)
-						.append(_value.substring(0, j)).append("...");
-				}
-			}
-		}
-
-		l_linebreak:
-		for (int cnt = 0, j = b; j < e; ++j) {
-			final char cc = _value.charAt(j);
-			String val = null;
-			if (linesz > 0  && ++cnt > linesz && j + 1 < e) {
-				sb = alloc(sb, j);
-				if (Character.isLetterOrDigit(cc)
-				&& Character.isLetterOrDigit(_value.charAt(j+1))) {
-					cnt = 0;
-					for (int k = sb.length(); cnt < 3; ++cnt) {
-						if (!Character.isLetterOrDigit(sb.charAt(--k))) {
-							sb.insert(k + 1, "<br/>");
-							--j;
-							continue l_linebreak;
-						}
-					}
-					sb.append('-').append("<br/>").append(cc);
-					cnt = 1;
-					continue;
-				} else if (!Character.isWhitespace(cc)) {
-					sb.append(cc);
-				}
-				sb.append("<br/>");
-				cnt = 0;
-				continue;
-			}
-
-			if (cc == '\t') {
-				if (prews) val = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-			} else if (cc == ' ' || cc == '\f') {
-				if (prews) val = "&nbsp;";
-			} else {
-				if (_multiline) prews = false;
-
-				switch (cc) {
-				case '<': val = "&lt;"; break;
-				case '>': val = "&gt;"; break;
-				case '&': val = "&amp;"; break;
-				}
-			}
-
-			if (val != null) sb = alloc(sb, j).append(val);
-			else if (sb != null) sb.append(cc);
-		}
-		return sb;
-	}
-	private StringBuffer alloc(StringBuffer sb, int e) {
-		if (sb == null) {
-			sb = new StringBuffer(_value.length() + 10);
-			sb.append(_value.substring(0, e));
-		}
-		return sb;
 	}
 
 	//-- super --//
@@ -332,10 +218,9 @@ public class Label extends XulElement {
 	protected void renderProperties(ContentRenderer renderer) {
 		super.renderProperties(renderer);
 
-		render(renderer, "embedAs", "value");
-
-		//Note: we don't render _maxlength, _pre, ... since they are
-		//meaningful only at the server side
+		int maxlen = getMaxlength();
+		if (maxlen > 0) renderer.render("maxlength", maxlen);
+		render(renderer, "multiline", isMultiline());
 	}
 	public void redraw(Writer out) throws IOException {
 		if (isIdRequired()) {
@@ -345,12 +230,14 @@ public class Label extends XulElement {
 			out.write("<div id=\"");
 			out.write(getUuid());
 			out.write("\"><span>");
-			out.write(getEncodedText());
-			out.write("</span><script>zkau.begin({\n");
+			out.write(XMLs.encodeText(getValue()));
+			out.write("</span><script>zkau.begin('");
+			out.write(getType());
+			out.write("','");
+			out.write(getUuid());
+			out.write("',{\n");
 			out.write(renderer.getBuffer().toString());
-			out.write("});</script>\n");
-			redrawChildren(out);
-			out.write("<script>zkau.end();</script></div>\n");
+			out.write("},'value');zkau.end();</script></div>\n");
 		} else {
 			out.write(getEncodedText());
 			//no processing; direct output if not ZUL
