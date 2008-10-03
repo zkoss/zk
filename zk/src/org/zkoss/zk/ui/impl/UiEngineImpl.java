@@ -1203,7 +1203,8 @@ public class UiEngineImpl implements UiEngine {
 				errs.add(ex);
 				cleanups = config.newEventThreadCleanups(comp, event, errs);
 
-				throw UiException.Aide.wrap(ex);
+				if (!errs.isEmpty())
+					throw UiException.Aide.wrap((Throwable)errs.get(0));
 			} finally {
 				EventProcessor.inEventListener(false);
 				if (errs == null) //not cleanup yet
