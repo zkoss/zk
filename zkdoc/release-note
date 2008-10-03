@@ -50,7 +50,7 @@ ZK 3.0.8
   2129992: TypeConverter cannot be found by databind if in zscript  
   2138131: GenericForwardComposer throw Exception if component inexist
   2140491: Set "save-when" in Listbox selectedItem does not trigger
-  2143479: Failed to invoke sendRedirect in DesktopInit
+  2143479: Failed to invoke sendRedirect or forward in DesktopInit
   
 * Upgrade Notes:
   + onBookmarkChanged is renamed to onBookmarkChange

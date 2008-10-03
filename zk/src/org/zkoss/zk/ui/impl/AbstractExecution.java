@@ -267,7 +267,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public void setDesktop(Desktop desktop) {
 		if (desktop == null) throw new IllegalArgumentException("null");
-		if (_desktop != null) throw new IllegalStateException();
+		if (_desktop != null && _desktop != desktop)
+			throw new IllegalStateException("assign diff desktop");
+
 		_desktop = desktop;
 	}
 

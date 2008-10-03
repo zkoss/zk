@@ -62,6 +62,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
 import org.zkoss.zk.xel.impl.ExecutionResolver;
+import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
@@ -244,7 +245,9 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public void forward(Writer out, String page, Map params, int mode)
 	throws IOException {
-		if (getVisualizer().isEverAsyncUpdate())
+		final Visualizer uv = getVisualizer();
+			//uv is null if it is called in DesktopInit (with DonutExecution)
+		if (uv != null && uv.isEverAsyncUpdate())
 			throw new IllegalStateException("Use sendRedirect instead when processing user's request");
 
 		setVoided(true);
