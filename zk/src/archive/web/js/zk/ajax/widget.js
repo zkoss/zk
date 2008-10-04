@@ -15,26 +15,27 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zk.Widget = zk.$extends(zk.Object, {
-	/** The UUID. */
-	uuid: null,
+	/** The UUID (readonly if inServer). */
+	//uuid: null,
 	/** The next sibling (readonly). */
-	nextSibling: null,
+	//nextSibling: null,
 	/** The previous sibling widget (readonly). */
-	previousSibling: null,
+	//previousSibling: null,
 	/** The parent (readonly).
 	 */
-	parent: null,
+	//parent: null,
 	/** The first child widget (readonly). */
-	firstChild: null,
+	//firstChild: null,
 	/** The last child widget (readonly). */
-	lastChild: null,
+	//lastChild: null,
 
 	/** Whether this widget has a copy at the server (readonly). */
 	inServer: false,
 
 	/** Constructor. */
-	$init: function (uuid) {
+	$init: function (uuid, mold) {
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
+		this.mold = mold ? mold: "default";
 	},
 	/** Appends a child widget.
 	 */

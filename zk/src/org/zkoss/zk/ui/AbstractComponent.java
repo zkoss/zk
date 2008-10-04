@@ -1174,18 +1174,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Called by ({@link ComponentCtrl#redraw}) to render the
 	 * properties, excluding the enclosing tag and children.
 	 *
-	 * <p>Note: it doesn't render {@link #getType} and {@link #getUuid}
-	 * which are caller's job.
+	 * <p>Note: it doesn't render {@link #getType}, {@link #getUuid}
+	 * and {@link #getMold}, which are caller's job.
 	 *
 	 * @since 5.0.0
 	 */
 	protected void renderProperties(ContentRenderer renderer) {
 		if (!ComponentsCtrl.isAutoId(_id)) //not getId() to avoid gen ID
 			render(renderer, "id", _id);
-
-		final String mold = getMold();
-		if (!"default".equals(mold))
-			render(renderer, "mold", mold);
 	}
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.

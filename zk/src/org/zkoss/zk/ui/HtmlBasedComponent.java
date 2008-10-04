@@ -353,23 +353,34 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 	//-- rendering --//
 	/** Redraws this component and all its decendants.
-	 * It invokes {@link #renderProperties} to render component's properties,
+	 * <p>Default: It generates DIV tag to enclose all information.
+	 * To generate all information, it first invokes {@link #redrawContent}
+	 * then invokes {@link #renderProperties} to render component's
+	 * properties,
 	 * and {@link #redrawChildren} to redraw children (and descendants)
 	 * (by calling their {@link #redraw}.
 	 *
+	 * <p>If a dervied class wants to render more content, it can override
+	 * {@link #renderProperties} or {@link #redrawContent}.
 	 * <p>If a derived class renders only a subset of its children
 	 * (such as paging/cropping), it could override {@link #redrawChildren}.
 	 */
 	public void redraw(Writer out) throws IOException {
-		final JsContentRenderer renderer = new JsContentRenderer();
-		renderProperties(renderer);
-
 		out.write("<div id=\"");
 		out.write(getUuid());
-		out.write("\">\n<script>zkau.begin('");
+		out.write("\">");
+		redrawContent(out);
+
+		final JsContentRenderer renderer = new JsContentRenderer();
+		renderProperties(renderer);
+		out.write("<script>zkau.begin('");
 		out.write(getType());
 		out.write("','");
 		out.write(getUuid());
+		out.write("','");
+		final String mold = getMold();
+		if (!"default".equals(mold))
+			out.write(mold);
 		out.write("',{\n");
 		out.write(renderer.getBuffer().toString());
 
@@ -381,11 +392,23 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			out.write("});zkau.end();</script></div>\n");
 		}
 	}
+	/** Redraw the content of this component.
+	 * <p>Default: does nothing.
+	 * <p>It is designed to allow derived class to insert more information
+	 * before SCRIPT tag. Usually you generate the content here that
+	 * can be crawled by the search engine. For example, a label
+	 * shall generate the value here so the search engine are able to index it.
+	 * @since 5.0.0
+	 * @see #redraw
+	 */
+	protected void redrawContent(Writer out) throws IOException {
+	}
 	/** Redraws childrens (and then recursively descandants).
 	 * <p>Default: it invokes {@link #redraw} for all its children.
 	 * <p>If a derived class renders only a subset of its children
 	 * (such as paging/cropping), it could override {@link #redrawChildren}.
 	 * @since 5.0.0
+	 * @see #redraw
 	 */
 	protected void redrawChildren(Writer out) throws IOException {
 		for (Component child = getFirstChild(); child != null;) {

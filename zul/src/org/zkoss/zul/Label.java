@@ -138,7 +138,7 @@ public class Label extends XulElement {
 	 */
 	public boolean isIdRequired() {
 		final Component p = getParent();
-		return p == null || !isVisible() 
+		return p == null || !isVisible()
 			|| !isRawLabel(p) || !Components.isAutoId(getId())
 			|| isAsapRequired(Events.ON_CLICK)
 			|| !isEmpty(getStyle()) || !isEmpty(getSclass())
@@ -150,7 +150,8 @@ public class Label extends XulElement {
 			|| !isEmpty(getAction())
 			|| !isEmpty(getLeft()) || !isEmpty(getTop())
 			|| !isEmpty(getWidth()) || !isEmpty(getHeight())
-			|| isAsapRequired(Events.ON_DOUBLE_CLICK);
+			|| isAsapRequired(Events.ON_DOUBLE_CLICK)
+			|| !"default".equals(getMold());
 	}
 	private static boolean isEmpty(String s) {
 		return s == null || s.length() == 0;
@@ -222,22 +223,15 @@ public class Label extends XulElement {
 		if (maxlen > 0) renderer.render("maxlength", maxlen);
 		render(renderer, "multiline", isMultiline());
 	}
+	protected void redrawContent(Writer out) throws IOException {
+		out.write("<span>");
+		out.write(XMLs.encodeText(getValue()));
+		out.write("</span>");
+		super.redrawContent(out);
+	}
 	public void redraw(Writer out) throws IOException {
 		if (isIdRequired()) {
-			final JsContentRenderer renderer = new JsContentRenderer();
-			renderProperties(renderer);
-
-			out.write("<div id=\"");
-			out.write(getUuid());
-			out.write("\"><span>");
-			out.write(XMLs.encodeText(getValue()));
-			out.write("</span><script>zkau.begin('");
-			out.write(getType());
-			out.write("','");
-			out.write(getUuid());
-			out.write("',{\n");
-			out.write(renderer.getBuffer().toString());
-			out.write("},'value');zkau.end();</script></div>\n");
+			super.redraw(out);
 		} else {
 			out.write(getEncodedText());
 			//no processing; direct output if not ZUL

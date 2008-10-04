@@ -18,7 +18,7 @@ var _zws = []; //used to load widget
 zkau = { //static methods
 	/** Begins the creation of a widget.
 	 */
-	begin: function (type, uuid, props, embedAs) {
+	begin: function (type, uuid, mold, props, embedAs) {
 		if (embedAs) {
 			var embed = zkDOM.$(uuid).firstChild;
 			if (embed && zkDOM.$(embed) == "SPAN")
@@ -27,7 +27,7 @@ zkau = { //static methods
 				throw "No embedAs, "+embedAs;
 		}
 
-		var wgt = new (zk.$import(type))(uuid);
+		var wgt = new (zk.$import(type))(uuid, mold);
 		wgt.inServer = true;
 		if (_zws.length)
 			_zws[0].appendChild(wgt);
