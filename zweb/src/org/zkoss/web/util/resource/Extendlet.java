@@ -42,8 +42,7 @@ public interface Extendlet {
 	/** Process the specified request.
 	 *
 	 * @param path the path mapped to this resource processor.
-	 * @param extra an additional string to output (to response.getWriter).
-	 * Ignored if null.
+	 * @param extra deprecated (actually always null) since 5.0.0.
 	 */
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)

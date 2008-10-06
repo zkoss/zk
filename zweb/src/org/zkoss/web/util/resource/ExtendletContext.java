@@ -77,10 +77,20 @@ public interface ExtendletContext {
 	public RequestDispatcher getRequestDispatcher(String uri);
 
 	/** Returns the URL of the specified URI, or null if not found.
+	 *
+	 * <p>Unlike {@link #getLocator}, {@link #getResourceAsStream}
+	 * handles the JavaScript debugging. In other words,
+	 * if the JavaScript debugging is turned on, it will try to load
+	 * the non-compressed version.
 	 */
 	public URL getResource(String uri);
 	/** Returns the resource of the specified URI as input stream,
 	 * or null if not found.
+	 *
+	 * <p>Unlike {@link #getLocator}, {@link #getResourceAsStream}
+	 * handles the JavaScript debugging. In other words,
+	 * if the JavaScript debugging is turned on, it will try to load
+	 * the non-compressed version.
 	 */
 	public InputStream getResourceAsStream(String uri);
 
@@ -88,6 +98,9 @@ public interface ExtendletContext {
 	 */
 	public ServletContext getServletContext();
 	/** Returns the locator of this context used to locate resorces.
+	 *
+	 * <p>Unlike {@link #getResource} and {@link #getResourceAsStream},
+	 * {@link #getLocator} doesn't handle the JavaScript debugging.
 	 */
 	public Locator getLocator();
 	/** Tests whether to compress the specified extension, e.g, "js" and

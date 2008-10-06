@@ -89,9 +89,6 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
-		if (extra != null)
-			log.warning("extra is not supported by ZumlExtendlet: "+extra);
-
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		final PageDefinition pagedef = (PageDefinition)_cache.get(path);
 		if (pagedef == null) {

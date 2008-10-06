@@ -84,14 +84,14 @@ zk = { //static methods
 	 * var cooler = new Cooler();
 	 * </code></pre>
 	 * @param name the package name (a String object).
+	 * @return the package or class being imported, or null if not found
 	 */
 	$import: function (name) {
 		for (var j = 0, ref = window;;) {
 			var k = name.indexOf('.', j),
 				nm = k >= 0 ? name.substring(j, k): name.substring(j);
 			var nxt = ref[nm];
-			if (!nxt) throw "Unknown package/class: "+name;
-			if (k < 0) return nxt;
+			if (k < 0 || !nxt) return nxt;
 			ref = nxt;
 			j = k + 1;
 		}

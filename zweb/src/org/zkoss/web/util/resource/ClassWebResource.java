@@ -430,59 +430,25 @@ public class ClassWebResource {
 			else log.warning("Unknown path info: "+pi);
 		}
 
-		//Notify the browser by calling back the code specified with /_zcb
-		String jsextra = null;
-		final String ZCB = "/_zcb"; //denote callback is required
-		if (pi.startsWith(ZCB)) {
-			final int j = pi.indexOf('/', ZCB.length());
-			if (j >= 0) {
-				jsextra = pi.substring(ZCB.length(), j);
-				pi = pi.substring(j);
-			} else {
-				jsextra = pi.substring(ZCB.length());
-				log.warning("Unknown path info: "+pi);
-			}
-
-			int len = jsextra.length();
-			if (len == 0) jsextra = null;
-			else {
-				final StringBuffer jesb = new StringBuffer(jsextra);
-				int begin = jsextra.indexOf("-");
-				if (begin > -1) {
-					jesb.replace(begin, begin+1, "(").append(")");
-				}
-				char cc = jesb.charAt(jesb.length() - 1);
-				if (cc != ';') {
-					if (cc != ')') jesb.append("()");
-					jesb.append(';');
-				}
-
-				if (jsextra.charAt(0) != ';') jesb.insert(0, "\n;");
-				else jesb.insert(0, '\n');
-
-				jsextra = jesb.toString();
-			}
-		}
-
 		final String ext = Servlets.getExtension(pi, false); //complete ext
 		final Filter[] filters = getFilters(ext,
 			Servlets.isIncluded(request) ? FILTER_INCLUDE: FILTER_REQUEST);
 		if (filters == null) {
-			web0(request, response, pi, ext, jsextra);
+			web0(request, response, pi, ext);
 		} else {
-			new FilterChainImpl(filters, pi, ext, jsextra)
+			new FilterChainImpl(filters, pi, ext)
 				.doFilter(request, response);
 		}
 	}
 	/** Processes the request without calling filter. */
 	private void web0(HttpServletRequest request,
-	HttpServletResponse response, String pi, String ext, String jsextra)
+	HttpServletResponse response, String pi, String ext)
 	throws ServletException, IOException {
 		if (ext != null) {
 			//Invoke the resource processor (Extendlet)
 			final Extendlet extlet = getExtendlet(ext);
 			if (extlet != null) {
-				extlet.service(request, response, pi, jsextra);
+				extlet.service(request, response, pi, null);
 				return;
 			}
 		}
@@ -508,7 +474,6 @@ public class ClassWebResource {
 			response.setContentType(ctype);
 		}
 
-		byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
 		InputStream is = null;
 
 		if (_debugJS && "js".equals(ext)) {
@@ -539,9 +504,9 @@ public class ClassWebResource {
 		} else {
 			//Note: don't compress images
 			data = shallCompress(request, ext) ?
-				Https.gzip(request, response, is, extra): null;
-			if (data != null) extra = null; //extra is compressed and output
-			else data = Files.readAll(is);
+				Https.gzip(request, response, is, null): null;
+			if (data == null)
+				data = Files.readAll(is);
 				//since what is embedded in the jar is not big, so load completely
 
 			try {
@@ -551,12 +516,10 @@ public class ClassWebResource {
 		}
 
 		int len = data.length;
-		if (extra != null) len += extra.length;
 		response.setContentLength(len);
 
 		final ServletOutputStream out = response.getOutputStream();
 		out.write(data);
-		if (extra != null) out.write(extra);
 		out.flush();
 	}
 	private boolean shallCompress(ServletRequest request, String ext) {
@@ -582,6 +545,7 @@ public class ClassWebResource {
 			}
 			public InputStream getResourceAsStream(String name) {
 				return ClassWebResource.getResourceAsStream(name);
+					//Note: it doesn't handle _debugJS
 			}
 		};
 
@@ -643,25 +607,34 @@ public class ClassWebResource {
 			return _ctx.getRequestDispatcher(_mappingURI + PATH_PREFIX + uri);
 		}
 		public URL getResource(String uri) {
+			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
+				String orgpi = uri.substring(0, uri.length() - 3) + ".org.js";
+				URL url = ClassWebResource.getResource(orgpi);
+				if (url != null) return url;
+			}
 			return ClassWebResource.getResource(uri);
 		}
 		public InputStream getResourceAsStream(String uri) {
+			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
+				String orgpi = uri.substring(0, uri.length() - 3) + ".org.js";
+				InputStream is = ClassWebResource.getResourceAsStream(orgpi);
+				if (is != null) return is;
+			}
 			return ClassWebResource.getResourceAsStream(uri);
 		}
 	}
 	private class FilterChainImpl implements FilterChain {
 		private final Filter[] _filters;
-		private final String _pi, _ext, _jsextra;
+		private final String _pi, _ext;
 
 		/** Which filter to process. */
 		private int _j;
 		private FilterChainImpl(
-		Filter[] filters, String pi, String ext, String jsextra)
+		Filter[] filters, String pi, String ext)
 		throws ServletException, IOException {
 			_pi = pi;
 			_filters = filters;
 			_ext = ext;
-			_jsextra = jsextra;
 		}
 		public void doFilter(HttpServletRequest request,
 		HttpServletResponse response)
@@ -670,7 +643,7 @@ public class ClassWebResource {
 				throw new IllegalStateException("Out of bound: "+_j+", filter="+Objects.toString(_filters));
 			final int j = _j++;
 			if (j == _filters.length) {
-				web0(request, response, _pi, _ext, _jsextra);
+				web0(request, response, _pi, _ext);
 			} else {
 				_filters[j].doFilter(request, response, _pi, this);
 			}

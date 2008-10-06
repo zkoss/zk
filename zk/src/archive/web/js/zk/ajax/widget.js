@@ -113,5 +113,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	nextUuid: function () {
 		return "_z_" + this._nextUuid++;
 	},
-	_nextUuid: 0
+	_nextUuid: 0,
+
+	/** Called after the whole package is declared.
+	 * It must be the last statement in a JavaScript file.
+	 */
+	packageEnd: function (lang, pkg, wgts) {
+		pkg = zk.$import(pkg);
+		for (var j = wgts.length; --j >= 0;)
+			pkg[wgts[j]].prototype.language = lang;
+
+		//TODO: tell zkau the JS file is loaded
+	} 
 });

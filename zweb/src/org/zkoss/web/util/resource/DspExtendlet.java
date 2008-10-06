@@ -86,8 +86,6 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 		cnt.interpret(new ServletDspContext(
 			_webctx.getServletContext(), request, response,
 			sw, _webctx.getLocator()));
-		if (extra != null)
-			(sw != null ? (Writer)sw: response.getWriter()).write(extra);
 
 		if (sw != null) {
 			final String result = sw.toString();

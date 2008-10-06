@@ -724,15 +724,17 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public boolean isInvalidated();
 	/** Invalidates this component by setting the dirty flag
-	 * such that it will be redraw the whole content later.
+	 * such that it will be redraw the whole content of this
+	 * component and its decendances later.
+	 * And, the widget associated with this component and all its
+	 * descendant at the client will be deleted and recreated, too.
 	 *
-	 * <p>An application developer rarely needs to call this method, unless
-	 * he wants to work around a visual-consistency bug, i.e.,
-	 * the view (at the client) is different from the component's status
-	 * at the server.
+	 * <p>If the application is totally controlled by the server side
+	 * (i.e., you don't write client codes), you rarely need to access
+	 * this method.
 	 *
 	 * <p>It can be called only in the request-processing and event-processing
-	 * phases; excluding the redrawing phase.
+	 * phases. However, it is NOT allowed in the rendering phase.
 	 */
 	public void invalidate();
 

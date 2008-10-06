@@ -142,6 +142,7 @@ public class WebManager {
 		((WebAppCtrl)_wapp).init(_ctx, config);
 
 		_cwr.setDebugJS(config.isDebugJS());
+		_cwr.addExtendlet("wpd", new WpdExtendlet());
 
 		//Register resource processors for each extension
 		//FUTURE: Extendlet can be specified in zk.xml
