@@ -34,6 +34,7 @@ ZK 3.5.1
   2140491: Set "save-when" in Listbox selectedItem does not trigger
   2143479: Failed to invoke sendRedirect or forward in DesktopInit
   2149043: Fisheye can't change image dynamically
+  2148979: Window: maxim and minim buttons disappear using caption
 
 * Upgrade Notes
   * getMoldSclass is deprecated and replaced with getZclass since

@@ -20,12 +20,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="zcls" value="${self.zclass}"/>
+<c:set var="pzcls" value="${self.parent.zclass}"/>
+<c:set var="puuid" value="${self.parent.uuid}"/>
 <table id="${self.uuid}" z.type="zul.widget.Capt"${self.outerAttrs}${self.innerAttrs} width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr valign="middle">
 	<td align="left" class="${zcls}-l">${self.imgTag}<c:out value="${self.compoundLabel}" nbsp="true"/></td><%-- bug 1688261: nbsp is required --%>
 	<td align="right" class="${zcls}-r" id="${self.uuid}!cave"><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></td>
+<c:if test="${self.minimizableVisible}">
+	<td width="16"><div id="${puuid}!minimize" class="${pzcls}-tool ${pzcls}-minimize"></div></td>
+</c:if>
+<c:if test="${self.maximizableVisible}">
+	<td width="16"><div id="${puuid}!maximize" class="${pzcls}-tool ${pzcls}-maximize <c:if test="${self.parent.maximized}">${pzcls}-maximized</c:if>"></div></td>
+</c:if>
 <c:if test="${self.closableVisible}">
-	<td width="16"><div id="${self.parent.uuid}!close" class="${self.parent.zclass}-tool ${self.parent.zclass}-close"></div></td>
+	<td width="16"><div id="${puuid}!close" class="${pzcls}-tool ${pzcls}-close"></div></td>
 </c:if>
 </tr>
 </table>

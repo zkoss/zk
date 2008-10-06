@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Caption;
+import org.zkoss.zul.Window;
 
 /**
  * {@link Caption}'s default mold.
@@ -51,6 +52,8 @@ public class CaptionDefault implements ComponentRenderer {
 			wh.writeChildren(self);
 			wh.writeln("</legend>");
 		} else {
+			final String pzcls = ((HtmlBasedComponent)self.getParent()).getZclass();
+			final String puuid = self.getParent().getUuid();
 			wh.write("<table id=\"").write(uuid).write("\" ");
 			wh.write("z.type=\"zul.widget.Capt\"").write(self.getOuterAttrs())
 					.write(self.getInnerAttrs());
@@ -63,16 +66,30 @@ public class CaptionDefault implements ComponentRenderer {
 			wh.write("<td align=\"right\" class=\"").write(zcls).write("-r\" id=\"").write(uuid).write("!cave\">")
 				.writeChildren(self)
 				.writeln("</td>");
-
-			if (self.isClosableVisible()) {
-				final String pzcls = ((HtmlBasedComponent)self.getParent()).getZclass();
+			if (self.isMinimizableVisible()) {
 				wh.write("<td width=\"16\"><div id=\"")
-					.write(self.getParent().getUuid())
+					.write(puuid)
+					.write("!minimize\" class=\"")
+					.write(pzcls).write("-tool ").write(pzcls)
+					.write("-minimize\"></div></td>");
+			}
+			if (self.isMaximizableVisible()) {
+				wh.write("<td width=\"16\"><div id=\"")
+					.write(puuid)
+					.write("!maximize\" class=\"")
+					.write(pzcls).write("-tool ").write(pzcls)
+					.write("-maximize");
+				if (((Window)self.getParent()).isMaximized())
+					wh.write(" ").write(pzcls).write("-maximized");
+				wh.write("\"></div></td>");
+			}
+			if (self.isClosableVisible()) {
+				wh.write("<td width=\"16\"><div id=\"")
+					.write(puuid)
 					.write("!close\" class=\"")
 					.write(pzcls).write("-tool ").write(pzcls)
 					.write("-close\"></div></td>");
 			}
-
 			wh.write("</tr></table>");
 		}
 	}
