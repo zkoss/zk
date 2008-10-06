@@ -381,22 +381,28 @@ zkFisheyebar = {
 	},
 	setAttr: function (cmp, nm, val) {
 		var meta = zkau.getMeta(cmp);
-		switch (nm) {
-			case "z.childchg":
-			case "z.itemwidth":
-			case "z.itemheight":
-			case "z.itemmaxwidth":
-			case "z.itemmaxheight":
-			case "z.itempadding":
-			case "z.attachedge":
-			case "z.labeledge":
-			case "z.orient":
-				zkau.setAttr(cmp, nm, val);
-				meta.syncAttr();
-				meta.onSize();
-				return true;
+		if (meta) {
+			switch (nm) {
+				case "z.childchg":
+				case "z.itemwidth":
+				case "z.itemheight":
+				case "z.itemmaxwidth":
+				case "z.itemmaxheight":
+				case "z.itempadding":
+				case "z.attachedge":
+				case "z.labeledge":
+				case "z.orient":
+					zkau.setAttr(cmp, nm, val);
+					meta.syncAttr();
+					meta.onSize();
+					return true;
+			}
 		}
 		return false;
+	},
+	childchg: function (cmp) {
+		var meta = zkau.getMeta(cmp);
+		if (meta) meta.syncAttr();
 	}
 };
 /**
