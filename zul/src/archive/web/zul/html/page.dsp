@@ -29,7 +29,7 @@ ${z:outLangJavaScripts(null)}
 <c:set var="zk_htmlHeadRequired" value="" scope="request"/>
 ${z:outHeaders(page)}
 </head>
-<body${c:attr('style', page.style)}>
+<body>
 </c:if>
 <div${z:outPageAttrs(page)}>
 <c:forEach var="root" items="${page.roots}">${z:redraw(root, null)}</c:forEach>
