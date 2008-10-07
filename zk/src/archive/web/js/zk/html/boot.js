@@ -615,16 +615,16 @@ function getZKAttr(el, nm) {
 	} catch (e) {
 		return null; //IE6: failed if el is TABLE and attribute not there
 	}
-};
+}
 /** Sets the ZK attribute of the specified name with the specified value.
  */
 function setZKAttr(el, nm, val) {
 	if (el && el.setAttribute) el.setAttribute("z." + nm, val);
-};
+}
 function rmZKAttr(el, nm) {
 	if (el && el.removeAttribute) el.removeAttribute("z." + nm);
 	else setZKAttr(el, nm, "");
-};
+}
 
 /** Returns the version of the specified module name.
  */
