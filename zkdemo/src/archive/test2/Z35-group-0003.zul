@@ -3,9 +3,8 @@
 <zk>
 	<html>
 		<![CDATA[
-			Test Case: Add Group on Listbox dynamically ! <br />
+			Test Case: Add/Remove Group/Groupfoot on Listbox dynamically ! <br />
 			<br/>
-			Press "Add Group on 4" and "Add Group on 5" serval times, <br /> 
 			They should work currently!	
 		]]>
 	</html>
@@ -35,10 +34,11 @@
 					Groupfoot groupfoot = new Groupfoot("foot");
 					rs.getChildren().add(rn, groupfoot);									
 				}
-				void addGroupFootEnd(int rn) {
-					 Groupfoot grouptfoot = new Groupfoot("foot");
-					rs.getChildren().add(rs.getItemCount() - rn, groupfoot);
-				}				
+				void removeChild(int rn) {
+					if (rn >= rs.getChildren().size())
+						alert("wrong index!");
+					rs.getChildren().remove(rn);
+				}
 			]]>
 		</zscript>
 		<grid id="rsg" width="300px" mold="paging" pageSize="10">
@@ -47,12 +47,11 @@
 					<label value="${each}" />
 				</row>
 			</rows>
-		</grid>	
-		<button label="add group on 4" onClick="addGroup(4);" />
-		<button label="add group on 5" onClick="addGroup(5);" />
-		<button label="add foot on 5" onClick="addGroupFoot(5);" />
-		<button label="add foot on 15" onClick="addGroupFoot(15);" />
-		<button label="add foot on 23" onClick="addGroupFoot(23);" />
+		</grid>
+		<hbox>Index: <intbox id="rn" value="0"/></hbox>
+		<button label="add group at index" onClick="addGroup(rn.value);" />
+		<button label="add foot at index(must be the end of group)" onClick="addGroupFoot(rn.value);" />
+		<button label="remove child at index" onClick="removeChild(rn.value);" />
 		<button onClick="rs.getChildren().clear();" label="Any time clear() wont cause exceptions" />		
 	</window>
 </zk>
