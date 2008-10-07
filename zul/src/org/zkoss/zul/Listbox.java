@@ -37,6 +37,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -180,6 +181,17 @@ public class Listbox extends XulElement implements Paginated {
 				if (_paging != null) --sz;
 				return sz;
 			}
+			/**
+			 * override for Listgroup
+			 * @since 3.5.1
+			 */
+		    protected void removeRange(int fromIndex, int toIndex) {
+		        ListIterator it = listIterator(toIndex);
+		        for (int n = toIndex - fromIndex; --n >= 0;) {
+		            it.previous();
+		            it.remove();
+		        }
+		    }
 		};
 		_selItems = new LinkedHashSet(5);
 		_roSelItems = Collections.unmodifiableSet(_selItems);
@@ -205,6 +217,24 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		};
 	}
+	
+	/**
+	 * Returns the instance of component's children.
+	 * <p>It is mainly used for component implementation.
+	 * @since 3.5.1
+	 */
+	protected List getChildrenInstance() {
+		return new ChildrenList();
+	}
+	protected class ChildrenList extends AbstractComponent.ChildrenList {
+	    protected void removeRange(int fromIndex, int toIndex) {
+	        ListIterator it = listIterator(toIndex);
+	        for (int n = toIndex - fromIndex; --n >= 0;) {
+	            it.previous();
+	            it.remove();
+	        }
+	    }
+	};
 	/** Initializes _dataListener and register the listener to the model
 	 */
 	private void initDataListener() {
@@ -1278,8 +1308,8 @@ public class Listbox extends XulElement implements Paginated {
 							int leng = lg.getIndex() - prev[0], 
 								size = prev[1] - leng + 1;
 							prev[1] = leng;
-							_groupsInfo.add(idx, new int[]{lg.getIndex(), size, prev[2]});
-							prev[2] = -1; // reset listgroupfoot
+							_groupsInfo.add(idx, new int[]{lg.getIndex(), size, size > 1 ? prev[2] : -1});
+							if (size > 1) prev[2] = -1; // reset listgroupfoot
 						} else if (next != null) {
 							_groupsInfo.add(idx, new int[]{lg.getIndex(), next[0] - lg.getIndex(), -1});
 						} 

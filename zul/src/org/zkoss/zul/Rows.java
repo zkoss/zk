@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.Cropper;
@@ -231,8 +232,8 @@ public class Rows extends XulElement {
 						int leng = index - prev[0], 
 							size = prev[1] - leng + 1;
 						prev[1] = leng;
-						_groupsInfo.add(idx, new int[]{index, size, prev[2]});
-						prev[2] = -1; // reset groupfoot
+						_groupsInfo.add(idx, new int[]{index, size, size > 1 ? prev[2] : -1});
+						if (size > 1) prev[2] = -1; // reset groupfoot
 					} else if (next != null) {
 						_groupsInfo.add(idx, new int[]{index, next[0] - index, -1});
 					}
@@ -457,6 +458,24 @@ public class Rows extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-rows" : super.getZclass();
 	}
+	
+	/**
+	 * Returns the instance of component's children.
+	 * <p>It is mainly used for component implementation.
+	 * @since 3.5.1
+	 */
+	protected List getChildrenInstance() {
+		return new ChildrenList();
+	}
+	protected class ChildrenList extends AbstractComponent.ChildrenList {
+	    protected void removeRange(int fromIndex, int toIndex) {
+	        ListIterator it = listIterator(toIndex);
+	        for (int n = toIndex - fromIndex; --n >= 0;) {
+	            it.previous();
+	            it.remove();
+	        }
+	    }
+	};
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
