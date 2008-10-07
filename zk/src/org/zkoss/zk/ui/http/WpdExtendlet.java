@@ -96,11 +96,11 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 
 		final StringBuffer sb = new StringBuffer(256);
 		sb.append("_z='").append(name)
-			.append("';if(!zk.$import(_z)){var p=zk.$package(_z);\n");
+			.append("';if(!zk.$import(_z)){zk.$package(_z);\n");
 		write(out, sb);
 
 		sb.append(";zk.Widget.packageEnd('")
-			.append(lang).append("',_p,[");
+			.append(lang).append("',_z,[");
 		final String pathpref = path.substring(0, path.lastIndexOf('/') + 1);
 		final byte[] lf = {'\n'};
 		for (Iterator it = root.getElements("widget").iterator(); it.hasNext();) {

@@ -124,5 +124,18 @@ zk.Widget = zk.$extends(zk.Object, {
 			pkg[wgts[j]].prototype.language = lang;
 
 		//TODO: tell zkau the JS file is loaded
-	} 
+	},
+	/** Loads the specified package.
+	 */
+	packageLoad: function (pkg) {
+		var zw = zk.Widget;
+		if (!zw._pkgLds[pkg]) {
+		}
+	},
+	_pkgLds: {}
+});
+
+zk.Desktop = zk.$extends(zk.Object, {
+	$init: function () {
+	}
 });

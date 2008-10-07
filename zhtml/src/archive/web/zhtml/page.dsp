@@ -28,11 +28,7 @@ ${z:outLangStyleSheets()}
 ${z:outLangJavaScripts(null)}
 	</c:if>
 
-<div${z:outPageAttrs(page)}>
-	<c:forEach var="root" items="${page.roots}">
-${z:redraw(root, null)}
-	</c:forEach>
-</div>
+${z:redrawPageInHtml(page, null)}
 ${z:outResponseJavaScripts(arg.responses)}
 </c:when>
 

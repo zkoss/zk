@@ -48,6 +48,7 @@ import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -660,11 +661,12 @@ public class ZkFns {
 		_datejs.setLifetime(24*60*60*1000);
 	}
 
-	/** Returns the attributes to render a page.
+	/** Returns the HTML content representing a page.
 	 * Used only in HTML devices.
-	 * @since 3.0.6
+	 * @since 5.0.0
 	 */
-	public static final String outPageAttrs(Page page) {
+	public static final void redrawPageInHtml(Page page, Writer out)
+	throws IOException {
 		final Desktop desktop = page.getDesktop();
 		final PageCtrl pageCtrl = (PageCtrl)page;
 		final Component owner = pageCtrl.getOwner();
@@ -703,23 +705,40 @@ public class ZkFns {
 			style = sb.toString();
 		}
 
-		final StringBuffer sb = new StringBuffer(100)
-			.append(" class=\"zk\"");
-		HTMLs.appendAttribute(sb, "id", page.getUuid());
-		HTMLs.appendAttribute(sb, "z.dtid", desktop.getId());
-		HTMLs.appendAttribute(sb, "style", style);
-		HTMLs.appendAttribute(sb, "z.zidsp", contained ? "ctpage": "page");
-		if (owner == null)
-			HTMLs.appendAttribute(sb, "z.au", desktop.getUpdateURI(null));
+		if (out == null)
+			out = getCurrentOut();
+		out.write("<div class=\"zk\"");
+		writeAttr(out, "id", page.getUuid());
+		writeAttr(out, "style", style);
+		out.write(">\n<script>new zk.Desktop('");
+		out.write(desktop.getId());
+		out.write("',");
+		out.write(Boolean.toString(contained));
+		if (owner == null) {
+			out.write(",'");
+			out.write(desktop.getUpdateURI(null));
+			out.write('\'');
+		}
+		out.write(");</script>\n");
 
-		return sb.toString();
+		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
+			((ComponentCtrl)it.next()).redraw(out);
+		out.write("\n</div>");
+	}
+	private static final void writeAttr(Writer out, String name, String value)
+	throws IOException {
+		out.write(' ');
+		out.write(name);
+		out.write("=\"");
+		out.write(XMLs.encodeAttribute(value));
+		out.write('"');
 	}
 	/** Returns the desktop info to render a desktop.
-	 * It must be called if {@link #outPageAttrs} might not be called.
+	 * It must be called if {@link #redrawPageInHtml} might not be called.
 	 * On the other hand, {@link #outDesktopInfo} does nothing if
-	 * {@link #outPageAttrs} was called.
+	 * {@link #redrawPageInHtml} was called.
 	 *
-	 * <p>It is OK to call both {@link #outPageAttrs}
+	 * <p>It is OK to call both {@link #redrawPageInHtml}
 	 * and {@link #outDesktopInfo}.
 	 * @since 3.5.0.
 	 */

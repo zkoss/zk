@@ -162,13 +162,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 
 	<function>
-		<name>outPageAttrs</name>
+		<name>redrawPageInHtml</name>
 		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>
-	java.lang.String outPageAttrs(org.zkoss.zk.ui.Page)
+	void redrawPageInHtml(org.zkoss.zk.ui.Page, java.io.Writer)
 		</function-signature>
 		<description>
-	Returns the attributes to render a page.
+	Generates the HTML content representing a page to the specified writer.
 		</description>
 	</function>
 
@@ -179,8 +179,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	java.lang.String outZkHtmlTags()
 		</function-signature>
 		<description>
-	Returns the desktop info to render a desktop.
-	It is required only if outPageAttrs might not be called
+	Returns the ZK HTML content representing a desktop.
+	It is required only if redrawPageInHtml might not be called
 		</description>
 	</function>
 
