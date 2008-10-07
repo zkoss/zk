@@ -1460,6 +1460,7 @@ zkLitgp = {
 		if (!row) return; //incomplete structure
 
 		var meta = zkau.getMeta(getZKAttr(row, "rid"));
+		if (meta) meta._syncFocus(row);
 		var toOpen = !zkLitgp.isOpen(row); //toggle
 		zkLitgp._openItem(row, toOpen);
 

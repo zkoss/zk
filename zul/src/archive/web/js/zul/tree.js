@@ -49,6 +49,7 @@ Object.extend(Object.extend(zk.Tree.prototype, zk.Selectable.prototype), {
 		var row = zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
+		this._syncFocus(row); // Bug 2149511
 		var toOpen = !zkTree.isOpen(row); //toggle
 		this._openItem(row, target, toOpen);
 
