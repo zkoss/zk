@@ -604,7 +604,6 @@ function $visible(el, strict) {
 }
 
 /** Returns the ZK attribute of the specified name.
- * Note: the name space of ZK attributes is "http://www.zkoss.org/2005/zk"
  */
 function getZKAttr(el, nm) {
 	//20061120:
