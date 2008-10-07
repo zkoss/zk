@@ -99,7 +99,7 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 			.append("';if(!zk.$import(_z)){zk.$package(_z);\n");
 		write(out, sb);
 
-		sb.append(";zk.Widget.packageEnd('")
+		sb.append(";zkPkg.end('")
 			.append(lang).append("',_z,[");
 		final String pathpref = path.substring(0, path.lastIndexOf('/') + 1);
 		final byte[] lf = {'\n'};

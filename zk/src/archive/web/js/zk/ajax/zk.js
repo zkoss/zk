@@ -52,6 +52,22 @@ Array.prototype.contains = function (o) {
 	}
 	return false;
 };
+/** Adds the specified object to the end of the array.
+ * @param overwrite overwrite if the object is already in the array.
+ * @return true if added successfully.
+ */
+Array.prototype.add = function (o, overwrite) {
+	if (overwrite)
+		for (var j = 0, tl = this.length; j < tl; ++j) {
+			if (o == this[j]) {
+				this[j] = o;
+				return false;
+			}
+		}
+
+	this.push(o);
+	return true;
+};
 
 //zk//
 zk = { //static methods

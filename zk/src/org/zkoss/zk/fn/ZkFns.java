@@ -128,7 +128,7 @@ public class ZkFns {
 		if (responses == null || responses.isEmpty()) return "";
 
 		final StringBuffer sb = new StringBuffer(256)
-			.append("\n<script type=\"text/javascript\">\n")
+			.append("\n<script>")
 			.append("zk.addInit(function(){\n");
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
@@ -178,7 +178,7 @@ public class ZkFns {
 		for (Iterator it = jses.iterator(); it.hasNext();)
 			append(sb, (JavaScript)it.next());
 
-		sb.append("\n<script type=\"text/javascript\">\n")
+		sb.append("\n<script>\n")
 			.append("zk_ver='").append(wapp.getVersion())
 			.append("';\nzk.build='").append(wapp.getBuild())
 			.append("';\nzk_procto=")
@@ -201,20 +201,22 @@ public class ZkFns {
 		if (config.getPerformanceMeter() != null)
 			sb.append("zk.pfmeter=true;\n");
 
-		sb.append("zk.eru={");
 		final int[] cers = config.getClientErrorReloadCodes();
-		boolean first = true;
-		for (int j = 0; j < cers.length; ++j) {
-			final String uri = config.getClientErrorReload(cers[j]);
-			if (uri != null) {
-				if (first) first = false;
-				else sb.append(',');
-
-				sb.append("e").append(cers[j]).append(":'")
-					.append(Strings.escape(uri, "'\\")).append('\'');
+		if (cers.length > 0) {
+			final int k = sb.length();
+			for (int j = 0; j < cers.length; ++j) {
+				final String uri = config.getClientErrorReload(cers[j]);
+				if (uri != null) {
+					if (k != sb.length()) sb.append(',');
+					sb.append(cers[j]).append(",'")
+						.append(Strings.escape(uri, "'\\")).append('\'');
+				}
+			}
+			if (k != sb.length()) {
+				sb.insert(k, "zkau.setErrorURI(");
+				sb.append(");\n");
 			}
 		}
-		sb.append("};\n");
 
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
@@ -223,10 +225,16 @@ public class ZkFns {
 			//Generate module versions
 			final Set mods = langdef.getJavaScriptModules().entrySet();
 			if (!mods.isEmpty()) {
+				final int k = sb.length();
 				for (Iterator e = mods.iterator(); e.hasNext();) {
 					final Map.Entry me = (Map.Entry)e.next();
-					sb.append("\nzk.mods[\"").append(me.getKey())
-						.append("\"]=\"").append(me.getValue()).append("\";");
+					if (k != sb.length()) sb.append(',');
+					sb.append('\'').append(me.getKey())
+						.append("','").append(me.getValue()).append('\'');
+				}
+				if (k != sb.length()) {
+					sb.insert(k, "zkPkg.setVersion(");
+					sb.append(");");
 				}
 			}
 		}
@@ -670,7 +678,9 @@ public class ZkFns {
 		final Desktop desktop = page.getDesktop();
 		final PageCtrl pageCtrl = (PageCtrl)page;
 		final Component owner = pageCtrl.getOwner();
-		boolean contained = false; //included by non-ZK servlet
+		boolean contained = false;
+			//a standalong page (i.e., no owner), and being included by
+			//non-ZK page (e.g., JSP).
 		if (owner == null) {
 			//Bug 2001707: Don't use exec.isIncluded() though
 			//exec.getNativeRequest reutrns the original request
@@ -710,8 +720,10 @@ public class ZkFns {
 		out.write("<div class=\"zk\"");
 		writeAttr(out, "id", page.getUuid());
 		writeAttr(out, "style", style);
-		out.write(">\n<script>new zk.Desktop('");
+		out.write(">\n<script>zkau.pageBegin('");
 		out.write(desktop.getId());
+		out.write("','");
+		out.write(page.getUuid());
 		out.write("',");
 		out.write(Boolean.toString(contained));
 		if (owner == null) {
@@ -737,21 +749,15 @@ public class ZkFns {
 	 * It must be called if {@link #redrawPageInHtml} might not be called.
 	 * On the other hand, {@link #outDesktopInfo} does nothing if
 	 * {@link #redrawPageInHtml} was called.
-	 *
-	 * <p>It is OK to call both {@link #redrawPageInHtml}
-	 * and {@link #outDesktopInfo}.
-	 * @since 3.5.0.
 	 */
-	public static final String outDesktopInfo(Desktop desktop) {
+	private static final String outDesktopInfo(Desktop desktop) {
 		final ServletRequest request = ServletFns.getCurrentRequest();
 		if (WebManager.getRequestLocal(request, ATTR_DESKTOP_INFO_GENED) != null)
 			return ""; //nothing to generate
 		WebManager.setRequestLocal(request, ATTR_DESKTOP_INFO_GENED, Boolean.TRUE);
 
-		return "<script type=\"text/javascript\">\n"
-			+"zkau.addDesktop(\""+desktop.getId()+"\");"
-			+"zkau.addURI(\""+desktop.getId()+"\",\""+desktop.getUpdateURI(null)
-			+"\");\n</script>\n";
+		return "<script>zkau.desktopBegin('"+desktop.getId()+"','"
+			+desktop.getUpdateURI(null)+"');</script>\n";
 	}
 
 	/** Generates and returns the ZK specific HTML tags for

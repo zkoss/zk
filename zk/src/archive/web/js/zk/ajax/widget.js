@@ -113,29 +113,54 @@ zk.Widget = zk.$extends(zk.Object, {
 	nextUuid: function () {
 		return "_z_" + this._nextUuid++;
 	},
-	_nextUuid: 0,
-
-	/** Called after the whole package is declared.
-	 * It must be the last statement in a JavaScript file.
-	 */
-	packageEnd: function (lang, pkg, wgts) {
-		pkg = zk.$import(pkg);
-		for (var j = wgts.length; --j >= 0;)
-			pkg[wgts[j]].prototype.language = lang;
-
-		//TODO: tell zkau the JS file is loaded
-	},
-	/** Loads the specified package.
-	 */
-	packageLoad: function (pkg) {
-		var zw = zk.Widget;
-		if (!zw._pkgLds[pkg]) {
-		}
-	},
-	_pkgLds: {}
+	_nextUuid: 0
 });
 
+/** A ZK desktop. */
 zk.Desktop = zk.$extends(zk.Object, {
-	$init: function () {
+	$init: function (dtid, updateURI) {
+		var zdt = zk.Desktop, dt = zdt._dts[dtid];
+		if (!dt) {
+			this.id = dtid;
+			this.updateURI = updateURI;
+			zdt._dts[dtid] = this;
+			++zdt._ndt;
+		} else if (updateURI)
+			dt.updateURI = updateURI;
 	}
+},{
+	/** Returns the desktop of the specified ID.
+	 */
+	ofId: function (dtid) {
+		return zk.Desktop._dts[dtid];
+	},
+	/** Returns the desktop containing the specified node.
+	 */
+	of: function (n) {
+		var zdt = zk.Desktop;
+		if (zdt._ndt == 1)
+			for (dtid in zdt._dts)
+				return zdt._dts[dtid];
+
+		for (n = zkDOM.$(n); n; n = zkDOM.getParent(n)) {
+			var id = getZKAttr(n, "dtid");
+			if (id) return zdt.ofId(id);
+		}
+	},
+	_dts: {},
+	_ndt: 0
+});
+
+/** A ZK page. */
+zk.Page = zk.$extends(zk.Object, {
+	$init: function (pgid) {
+		this.id = pgid;
+		this.node = zkDOM.$(pgid);
+		zk.Page.contained.add(this, true);
+	}
+},{
+	/** An list of contained page (i.e., standalone but not covering
+	 * the whole browser window.
+	 */
+	contained: []
 });

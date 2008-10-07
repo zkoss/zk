@@ -142,9 +142,6 @@ public class Configuration {
 	/** Contructor.
 	 */
 	public Configuration() {
-		_errURIs.put(new Integer(302), "");
-		_errURIs.put(new Integer(401), "");
-		_errURIs.put(new Integer(403), "");
 		_resendDelay = getInitResendDelay();
 	}
 	private static int getInitResendDelay() {
@@ -1308,6 +1305,8 @@ public class Configuration {
 	/** Adds the URI to redirect to, when ZK Client Engine receives
 	 * an error.
 	 *
+	 * <p>If not specified, it shows up an error message at client.
+	 *
 	 * @param errCode the error code.
 	 * @param uri the URI to redirect to. It cannot be null.
 	 * If empty, the client will reload the same page again.
@@ -1340,7 +1339,9 @@ public class Configuration {
 	/** Returns a readonly array of all error codes that are associated
 	 * with URI to redirect to.
 	 *
-	 * <p>Default: 302, 401 and 403 are associated with an empty URI.
+	 * <p>If not specified, it shows up an error message at client.
+	 *
+	 * <p>Default: none.
 	 * @since 3.0.0
 	 */
 	public int[] getClientErrorReloadCodes() {

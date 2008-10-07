@@ -22,6 +22,9 @@ zkDOM = { //static methods
 			id ? document.getElementById(id): null: id;
 			//strange but getElementById("") fails in IE7
 	},
+	getParent: function (n) {
+		return n.parentNode; //TODO: handle vparent
+	},
 	/** Returns the tag name of the specified node. */
 	tag: function (n) {
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
@@ -132,4 +135,26 @@ if (zk.ie) {
 		}
 		return ns;
 	};
+}
+
+/** Returns the ZK attribute of the specified name.
+ */
+function getZKAttr(el, nm) {
+	//20061120:
+	//1) getAttributeNS doesn't work properly to retrieve attribute back
+	//2) setAttribute("z:nm", val) doesn't work in Safari
+	try {
+		return el && el.getAttribute ? el.getAttribute("z." + nm): null;
+	} catch (e) {
+		return null; //IE6: failed if el is TABLE and attribute not there
+	}
+}
+/** Sets the ZK attribute of the specified name with the specified value.
+ */
+function setZKAttr(el, nm, val) {
+	if (el && el.setAttribute) el.setAttribute("z." + nm, val);
+}
+function rmZKAttr(el, nm) {
+	if (el && el.removeAttribute) el.removeAttribute("z." + nm);
+	else setZKAttr(el, nm, "");
 }
