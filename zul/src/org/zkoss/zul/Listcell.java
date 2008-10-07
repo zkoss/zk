@@ -238,7 +238,7 @@ public class Listcell extends LabelImageElement {
 	}
 	public void invalidate() {
 		final Listbox listbox = getListbox();
-		if (listbox != null && listbox.inSelectMold()) {
+		if ((listbox != null && listbox.inSelectMold()) || getParent() instanceof Listgroup) {
 			getParent().invalidate();
 			//if HTML select, the cell doesn't exists in client
 		} else {

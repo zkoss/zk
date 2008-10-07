@@ -1422,7 +1422,13 @@ public class Listbox extends XulElement implements Paginated {
 					prev[1] += remove[1] - 1;
 				}
 				fixGroupIndex(index, -1, false);
-				_groupsInfo.remove(remove);
+				if (remove != null) {
+					_groupsInfo.remove(remove);
+					final int idx = remove[2];
+					if (idx != -1) {
+						removeChild((Component) getChildren().get(idx -1));
+					}
+				}
 			} else if (!_groupsInfo.isEmpty()) {
 				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
@@ -1430,11 +1436,12 @@ public class Listbox extends XulElement implements Paginated {
 					if (g[2] != -1) g[2]--;
 					fixGroupIndex(index, -1, false);
 				} else fixGroupIndex(index, -1, false);
+				
+				if (child instanceof Listgroupfoot) {
+					final int[] g1 = getGroupsInfoAt(index);
+					g1[2] = -1;
+				}
 			} else fixItemIndices(index, -1);
-			if (child instanceof Groupfoot){
-				final int[] g = getGroupsInfoAt(index);
-				g[2] = -1;
-			}
 			return true;
 		} else if (_paging == child) {
 			_paging = null;

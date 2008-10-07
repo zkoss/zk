@@ -274,11 +274,14 @@ public class Rows extends XulElement {
 					prev[1] += remove[1] - 1;
 				}
 				fixGroupIndex(index, -1, false);
-				_groupsInfo.remove(remove);
-				final int idx = remove[2];
-				if (idx != -1){				
-					final Component gft = (Component) getChildren().get(idx -1);
-					remove[2] = -1;
+				if (remove != null) {
+					_groupsInfo.remove(remove);
+					final int idx = remove[2];
+					if (idx != -1) {
+						removeChild((Component) getChildren().get(idx -1));
+							// Because the fixGroupIndex will skip the first groupinfo,
+							// we need to subtract 1 from the idx variable
+					}
 				}
 			} else if (hasGroup()) {
 				final int[] g = getGroupsInfoAt(index);
@@ -288,11 +291,11 @@ public class Rows extends XulElement {
 					fixGroupIndex(index, -1, false);
 				}
 				else fixGroupIndex(index, -1, false);
-			}
-			if (child instanceof Groupfoot){
-				final int[] g = getGroupsInfoAt(index);	
-				if(g != null){ // group info maybe remove cause of grouphead removed in previous op
-					g[2] = -1;
+				if (child instanceof Groupfoot){
+					final int[] g1 = getGroupsInfoAt(index);	
+					if(g1 != null){ // group info maybe remove cause of grouphead removed in previous op
+						g1[2] = -1;
+					}
 				}
 			}
 			return true;
