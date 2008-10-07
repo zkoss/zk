@@ -218,15 +218,10 @@ public class Listbox extends XulElement implements Paginated {
 		};
 	}
 	
-	/**
-	 * Returns the instance of component's children.
-	 * <p>It is mainly used for component implementation.
-	 * @since 3.5.1
-	 */
-	protected List getChildrenInstance() {
-		return new ChildrenList();
+	protected List newChildren() {
+		return new Children();
 	}
-	protected class ChildrenList extends AbstractComponent.ChildrenList {
+	protected class Children extends AbstractComponent.Children {
 	    protected void removeRange(int fromIndex, int toIndex) {
 	        ListIterator it = listIterator(toIndex);
 	        for (int n = toIndex - fromIndex; --n >= 0;) {

@@ -243,27 +243,33 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @param cloning whether this method is called by clone()
 	 */
 	private void init(boolean cloning) {
-		_apiChildren = getChildrenInstance(); 
+		_apiChildren = newChildren(); 
 
 		if (!cloning)
 			_attrs = new HashMap(4);
 	}
 	/**
-	 * Returns the instance of component's children.
-	 * <p>It is mainly used for component implementation.
+	 * Creates and returns the instance for storing child components.
+	 * <p>Default: it instantiates {@link AbstractComponent.Children}.
 	 * @since 3.5.1
 	 */
-	protected List getChildrenInstance() {
-		return new ChildrenList();
+	protected List newChildren() {
+		return new Children();
 	}
-	protected class ChildrenList extends AbstractSequentialList {
+	/** The default implementation for {@link #newChildren}.
+	 * It is suggested to extend this class if you want to override
+	 * {@link #newChildren} to instantiate your own instance.
+	 * @since 3.5.1
+	 */
+	protected class Children extends AbstractSequentialList {
 		public int size() {
 			return _nChild;
 		}
 		public ListIterator listIterator(int index) {
 			return new ChildIter(index);
 		}
-	};
+	}
+
 	/** Adds to the ID spaces, if any, when ID is changed.
 	 * Caller has to make sure the uniqueness (and not auto id).
 	 */
