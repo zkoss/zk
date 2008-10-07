@@ -405,6 +405,7 @@ public class Components {
 			String mdname = md.getName();
 			if (mdname.length() > 5 && mdname.startsWith("on") 
 			&& Character.isUpperCase(mdname.charAt(2))) {
+				Component xcomp = comp;
 				int k = 0;
 				do { //handle cascade $. e.g. onClick$btn$win1
 					k = mdname.lastIndexOf('$');
@@ -412,15 +413,15 @@ public class Components {
 						final String srcevt = mdname.substring(0, k);
 						if ((k+1) < mdname.length()) {
 							final String srccompid = mdname.substring(k+1);
-							final Object srccomp = comp.getVariable(srccompid, false);
+							final Object srccomp = xcomp.getVariable(srccompid, false);
 							if (srccomp == null || !(srccomp instanceof Component)) {
 								if (log.debugable()) {
 									log.debug("Cannot find the associated component to forward event: "+mdname);
 								}
 								break;
 							} else {
-								((Component)srccomp).addForward(srcevt, comp, mdname);
-								comp = (Component) srccomp;
+								((Component)srccomp).addForward(srcevt, xcomp, mdname);
+								xcomp = (Component) srccomp;
 								mdname = srcevt;
 							}
 						}
