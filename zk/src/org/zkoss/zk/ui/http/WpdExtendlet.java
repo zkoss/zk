@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.util.Iterator;
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
@@ -102,20 +103,34 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 		sb.append(";zkPkg.end('")
 			.append(lang).append("',_z,[");
 		final String pathpref = path.substring(0, path.lastIndexOf('/') + 1);
-		final byte[] lf = {'\n'};
-		for (Iterator it = root.getElements("widget").iterator(); it.hasNext();) {
+		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
-			final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
-			final String jspath = pathpref + wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-			final InputStream wis = _webctx.getResourceAsStream(jspath);
-			if (wis == null) {
-				log.error("Failed to load "+wgtnm+"; "+jspath+" not found");
-				return null;
-			}
-			Files.copy(out, wis);
-			out.write(lf, 0, 1);
+			final String elnm = el.getName();
+			if ("widget".equals(elnm)) {
+				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
+				final String jspath = pathpref + wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
+				if (!writeResource(out, jspath))
+					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
+				sb.append('\'').append(wgtnm).append("',");
+			} else if ("script".equals(elnm)) {
+				String jspath = el.getAttributeValue("src");
+				if (jspath != null && jspath.length() > 0) {
+					if (jspath.startsWith("~./")) jspath = jspath.substring(2);
+					else if (jspath.charAt(0) != '/') {
+						jspath = new File(pathpref, jspath).getCanonicalPath();
+					}
+					if (!writeResource(out, jspath))
+						log.error("Failed to load script "+jspath+", "+el.getLocator());
+				}
 
-			sb.append('\'').append(wgtnm).append("',");
+				String s = el.getText(true);
+				if (s != null) {
+					write(out, s);
+					writeln(out);
+				}
+			} else {
+				log.warning("Unknown element "+elnm+", "+el.getLocator());
+			}
 		}
 		if (sb.length() > 0 && sb.charAt(sb.length() - 1) == ',')
 			sb.setLength(sb.length() - 1);
@@ -123,13 +138,31 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 		write(out, sb);
 		return out.toByteArray();
 	}
+	private boolean writeResource(OutputStream out, String path)
+	throws IOException {
+		final InputStream is = _webctx.getResourceAsStream(path);
+		if (is == null)
+			return false;
 
-	private static void write(ByteArrayOutputStream out, StringBuffer sb)
+		Files.copy(out, is);
+		writeln(out);
+		return true;
+	}
+	private void write(OutputStream out, String s) throws IOException {
+		final byte[] bs = s.getBytes("UTF-8");
+		out.write(bs, 0, bs.length);
+	}
+	private static void write(OutputStream out, StringBuffer sb)
 	throws IOException {
 		final byte[] bs = sb.toString().getBytes("UTF-8");
 		out.write(bs, 0, bs.length);
 		sb.setLength(0);
 	}
+	private void writeln(OutputStream out) throws IOException {
+		final byte[] lf = {'\n'};
+		out.write(lf, 0, 1);
+	}
+
 	private class WpdLoader extends ExtendletLoader {
 		private WpdLoader() {
 		}
