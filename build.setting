@@ -1,5 +1,5 @@
 D.ON=true
-javadoc=~/prj/javadoc
+javadoc=~/prj/javadoc30
 htmldoc=~/prj/zkweb/ptroot/WebContent/doc/3.0
 unzip=true
 debug=true
