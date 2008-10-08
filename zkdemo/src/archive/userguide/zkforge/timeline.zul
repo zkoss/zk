@@ -20,7 +20,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
     <html><![CDATA[
   <h4>Demo of SIMILE Timeline</h4>
-  <p><a href="http://simile.mit.edu/timeline/">Timeline</a> is a DHTML-based AJAXy 
+  <p><a href="http://simile.mit.edu/timeline/">Timeline</a> is a DHTML-based Ajax 
   widget for visualizing time-based events developed by SIMILE project of MIT. 
   It is like Google Maps for time-based information.</p>
   <p>In this demo, You can pan the upper "Month" timeline around Jun 2006 by dragging it horizontally. See how
