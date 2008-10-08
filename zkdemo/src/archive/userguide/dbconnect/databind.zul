@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+databind.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  8 09:52:31     2008, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+	<html><![CDATA[
+		<h4>Annotate Data Binding</h4>
+		<p>This example demostrates how to bind data beans to ZK components via annotation.</p>
+		<p>In this example, we have a Person bean with firstName and lastName fields and 
+		associated setters and getters like following: </p>
+		<pre>
+		public class Person {
+			private String firstName;
+			private String lastName;
+
+			public Person(String f, String l) {
+				setFirstName(f);
+				setLastName(l);
+			}
+			
+			//getters and setters ...
+		}
+		</pre>
+		<p>Take a look of the source code and see how easy it can be.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./mywin"?>
+<window id="mywin" title="Hibernate" border="normal">
+	<zscript>
+	//init example data beans
+	import org.zkoss.zkdemo.userguide.Person;
+	List persons = new ArrayList();
+	persons.add(new Person("Balu", "Haben"));
+	persons.add(new Person("Sadira", "Jobs"));
+	persons.add(new Person("Dacey", "Obert"));
+	persons.add(new Person("Gabby", "Taffy"));
+	Person selected = persons.get(0);
+	</zscript>
+	
+	<listbox model="@{persons}" selectedItem="@{selected}" rows="5">
+		<listitem self="@{each=person}" label="@{person.fullName}" />
+	</listbox>
+	<grid>
+		<columns>
+			<column label="First Name" />
+			<column label="Last Name" />
+			<column label="Full Name" />
+		</columns>
+		<rows>
+			<row>
+				<textbox value="@{selected.firstName}" />
+				<textbox value="@{selected.lastName}" />
+				<label value="@{selected.fullName}" />
+			</row>
+		</rows>
+	</grid>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>
