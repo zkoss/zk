@@ -142,9 +142,6 @@ public class Configuration {
 	/** Contructor.
 	 */
 	public Configuration() {
-		_errURIs.put(new Integer(302), "");
-		_errURIs.put(new Integer(401), "");
-		_errURIs.put(new Integer(403), "");
 		_resendDelay = getInitResendDelay();
 	}
 	private static int getInitResendDelay() {
@@ -1340,7 +1337,8 @@ public class Configuration {
 	/** Returns a readonly array of all error codes that are associated
 	 * with URI to redirect to.
 	 *
-	 * <p>Default: 302, 401 and 403 are associated with an empty URI.
+	 * <p>Default: none (since 3.6.0;
+	 * older version: 302, 401 and 403 are associated with an empty URI).
 	 * @since 3.0.0
 	 */
 	public int[] getClientErrorReloadCodes() {
