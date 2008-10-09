@@ -33,6 +33,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<h3>Database connection</h3>
 	]]></html>
 	<h:ul>
+		<h:li><toolbarbutton label="Annotate Data Binding" onClick="doSelect(&quot;d3&quot;)"/></h:li>
 		<h:li><toolbarbutton label="JDBC" onClick="doSelect(&quot;d1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Hibernate" onClick="doSelect(&quot;d2&quot;)"/></h:li>
 	</h:ul>
